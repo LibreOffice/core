@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-27 13:23:30 $
+ *  last change: $Author: mtg $ $Date: 2001-08-13 15:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,8 +312,7 @@ sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rI
     }
     else
     {
-        if(!xNumFmtAgg.is())
-            GetNumberFormatter();
+        GetNumberFormatter();
         Any aNumTunnel = xNumFmtAgg->queryAggregation(::getCppuType((Reference<XUnoTunnel>*)0));
         Reference<XUnoTunnel> xNumTunnel;
         aNumTunnel >>= xNumTunnel;
@@ -338,8 +337,7 @@ Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType ) throw(Run
     }
     if(aRet.getValueType() == getVoidCppuType())
     {
-        if(!xNumFmtAgg.is())
-            GetNumberFormatter();
+        GetNumberFormatter();
         if(xNumFmtAgg.is())
             aRet = xNumFmtAgg->queryAggregation(rType);
     }
@@ -375,8 +373,7 @@ Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes() throw(RuntimeExceptio
     Sequence< uno::Type > aTextTypes = SwXTextDocumentBaseClass::getTypes();
 
     Sequence< uno::Type > aNumTypes;
-    if(!xNumFmtAgg.is())
-        GetNumberFormatter();
+    GetNumberFormatter();
     if(xNumFmtAgg.is())
     {
         const uno::Type& rProvType = ::getCppuType((Reference<XTypeProvider>*) 0);
