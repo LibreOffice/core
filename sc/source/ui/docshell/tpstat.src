@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpstat.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-30 13:48:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,21 +186,21 @@ TabPage RID_SCPAGE_STAT
         Text [ english_us ] = "Document: " ;
         Text [ dutch ] = "Document:  " ;
         Text [ italian ] = "Documento: " ;
-        Text [ spanish ] = "Documento:  " ;
+        Text [ spanish ] = "Documento: " ;
         Text [ french ] = "Document : " ;
-        Text [ swedish ] = "Dokument:  " ;
+        Text [ swedish ] = "Dokument: " ;
         Text [ danish ] = "Dokument: " ;
         Text [ portuguese_brazilian ] = "Dokument: " ;
         Text [ portuguese ] = "Documento: " ;
         Text[ chinese_simplified ] = "ÎÄµµ£º ";
         Text[ russian ] = "Äîêóìåíò:  ";
-        Text[ polish ] = "Dokument:   ";
+        Text[ polish ] = "Dokument:";
         Text[ japanese ] = "ÄÞ·­ÒÝÄ: ";
         Text[ chinese_traditional ] = "¤å¥ó¡G ";
         Text[ arabic ] = "ÇáãÓÊäÏ: ";
         Text[ dutch ] = "Document:  ";
         Text[ chinese_simplified ] = "ÎÄµµ£º ";
-        Text[ greek ] = "¸ããñáöï:  ";
+        Text[ greek ] = "¸ããñáöï:";
         Text[ korean ] = "¹®¼­: ";
         Text[ turkish ] = "Belge: ";
         Text[ language_user1 ] = " ";
@@ -208,3 +208,4 @@ TabPage RID_SCPAGE_STAT
         Text[ finnish ] = "Asiakirja: ";
     };
 };
+
