@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-23 11:28:11 $
+ *  last change: $Author: mib $ $Date: 2000-10-26 09:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -890,7 +890,8 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
                                                 xAttrList, bOrdered );
         break;
     case XML_TOK_TABLE_TABLE:
-        if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType )
+        if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType ||
+             XML_TEXT_TYPE_HEADER_FOOTER == eType )
             pContext = CreateTableChildContext( rImport, nPrefix, rLocalName,
                                                 xAttrList );
         break;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: dvo $ $Date: 2000-10-16 13:01:58 $
+#   last change: $Author: mib $ $Date: 2000-10-26 09:25:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,7 +112,8 @@ CXXFILES = \
         XMLTextMasterPageExport.cxx \
         XMLTextMasterStylesContext.cxx \
         XMLTextNumRuleInfo.cxx \
-        XMLTextPropertySetContext.cxx
+        XMLTextPropertySetContext.cxx \
+        XMLTextTableContext.cxx
 
 SLOFILES =	\
         $(SLO)$/txtdrope.obj \
@@ -150,7 +151,8 @@ SLOFILES =	\
         $(SLO)$/XMLTextMasterPageExport.obj \
         $(SLO)$/XMLTextMasterStylesContext.obj \
         $(SLO)$/XMLTextNumRuleInfo.obj \
-        $(SLO)$/XMLTextPropertySetContext.obj
+        $(SLO)$/XMLTextPropertySetContext.obj \
+        $(SLO)$/XMLTextTableContext.obj
 
 
 # --- Tagets -------------------------------------------------------

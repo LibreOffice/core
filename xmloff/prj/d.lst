@@ -78,3 +78,4 @@ hedabu: ..\inc\PageMasterStyleMap.hxx %_DEST%\inc%_EXT%\xmloff\PageMasterStyleMa
 hedabu: ..\inc\XMLTextMasterPageExport.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextMasterPageExport.hxx
 hedabu: ..\inc\XMLTextMasterStylesContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextMasterStylesContext.hxx
 hedabu: ..\inc\XMLTextMasterPageContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextMasterPageContext.hxx
+hedabu: ..\inc\XMLTextTableContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextTableContext.hxx

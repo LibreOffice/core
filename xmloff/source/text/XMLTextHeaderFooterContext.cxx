@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-23 11:56:25 $
+ *  last change: $Author: mib $ $Date: 2000-10-26 09:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XRELATIVETEXTCONTENTREMOVE_HPP_
+#include <com/sun/star/text/XRelativeTextContentRemove.hpp>
+#endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
 #endif
@@ -73,6 +76,9 @@
 #endif
 #ifndef _XMLOFF_TEXTHEADERFOOTERCONTEXT_HXX_
 #include "XMLTextHeaderFooterContext.hxx"
+#endif
+#ifndef _XMLOFF_TEXTTABLECONTEXT_HXX_
+#include "XMLTextTableContext.hxx"
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -103,7 +109,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
     xPropSet( rPageStylePropSet ),
     sOn( OUString::createFromAscii( bFooter ? "FooterIsOn" : "HeaderIsOn" ) ),
     sShareContent( OUString::createFromAscii( bFooter ? "FooterIsShared"
-                                                      : "HeaderShared" ) ),
+                                                      : "HeaderIsShared" ) ),
     sText( OUString::createFromAscii( bFooter ? "FooterText" : "HeaderText" ) ),
     sTextLeft( OUString::createFromAscii( bFooter ? "FooterTextLeft"
                                                      : "HeaderTextLeft" ) ),
@@ -207,10 +213,16 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
         }
 
         pContext =
-            GetImport().GetTextImport()->CreateTextChildContext(GetImport(),
-                                                                   nPrefix,
-                                                                   rLocalName,
-                                                                   xAttrList);
+            GetImport().GetTextImport()->CreateTextChildContext(
+                GetImport(), nPrefix, rLocalName, xAttrList,
+                XML_TEXT_TYPE_HEADER_FOOTER );
+        if( pContext && pContext->ISA( XMLTextTableContext ) )
+        {
+            xTextContent = PTR_CAST( XMLTextTableContext, pContext )
+                ->GetXTextContent();
+        }
+        else
+            xTextContent = 0;
     }
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
@@ -229,6 +241,17 @@ void XMLTextHeaderFooterContext::EndElement()
                 GetImport().GetTextImport()->GetCursorAsRange(), sEmpty,
                 sal_True );
         }
+        else if( xTextContent.is() )
+        {
+            Reference< XRelativeTextContentRemove > xRemove(
+                    GetImport().GetTextImport()->GetText(), UNO_QUERY );
+            if( xRemove.is() )
+            {
+                GetImport().GetTextImport()->ResetCursor();
+                xRemove->removeTextContentAfter( xTextContent );
+            }
+        }
+
         GetImport().GetTextImport()->SetCursor( xOldTextCursor );
     }
     else if( !bLeft )
