@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-28 17:02:08 $
+ *  last change: $Author: sab $ $Date: 2000-10-11 15:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include "document.hxx"
 #include "cellsuno.hxx"
 #include "docuno.hxx"
+#include "unonames.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlkywd.hxx>
@@ -98,6 +99,9 @@
 
 #ifndef _COM_SUN_STAR_UTIL_XMERGEABLE_HPP_
 #include <com/sun/star/util/XMergeable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XSHEETCONDITION_HPP_
+#include <com/sun/star/sheet/XSheetCondition.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TABLE_XCELLRANGE_HPP_
 #include <com/sun/star/table/XCellRange.hpp>
@@ -187,6 +191,11 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             case XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME:
                 {
                     sStyleName = sValue;
+                }
+                break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME:
+                {
+                    sContentValidationName = sValue;
                 }
                 break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS:
@@ -744,6 +753,60 @@ void ScXMLTableRowCellContext::ParseFormula(OUString& sFormula, sal_Bool bIsForm
     sFormula = sBuffer.makeStringAndClear();
 }
 
+void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet)
+{
+    if (sContentValidationName.getLength())
+    {
+        ScMyImportValidation aValidation;
+        if (GetScImport().GetValidation(sContentValidationName, aValidation))
+        {
+            uno::Any aAny = xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIDAT)));
+            uno::Reference<beans::XPropertySet> xPropertySet;
+            if (aAny >>= xPropertySet)
+            {
+                if (aValidation.sErrorMessage.getLength())
+                {
+                    aAny <<= aValidation.sErrorMessage;
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRMESS)), aAny);
+                }
+                if (aValidation.sErrorTitle.getLength())
+                {
+                    aAny <<= aValidation.sErrorTitle;
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRTITLE)), aAny);
+                }
+                if (aValidation.sImputMessage.getLength())
+                {
+                    aAny <<= aValidation.sImputMessage;
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPMESS)), aAny);
+                }
+                if (aValidation.sImputTitle.getLength())
+                {
+                    aAny <<= aValidation.sImputTitle;
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPTITLE)), aAny);
+                }
+                aAny <<= aValidation.bShowErrorMessage;
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWERR)), aAny);
+                aAny <<= aValidation.bShowImputMessage;
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWINP)), aAny);
+                aAny <<= aValidation.aValidationType;
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)), aAny);
+                aAny <<= aValidation.bIgnoreBlanks;
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_IGNOREBL)), aAny);
+                aAny <<= aValidation.aAlertStyle;
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRALSTY)), aAny);
+                uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);
+                if (xCondition.is())
+                {
+                     xCondition->setFormula1(aValidation.sFormula1);
+                     xCondition->setFormula2(aValidation.sFormula2);
+                     xCondition->setOperator(aValidation.aOperator);
+                     xCondition->setSourcePosition(aValidation.aBaseCellAddress);
+                }
+            }
+        }
+    }
+}
+
 void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCellRange>& xCellRange,
                                                 const table::CellAddress& aCellAddress)
 {
@@ -778,6 +841,7 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
                 aStyleName <<= sStyleName;
                 xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CELLSTYLE)), aStyleName);
             }
+            SetContentValidation(xProperties);
         }
     }
 }
@@ -805,6 +869,7 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
             aStyleName <<= sStyleName;
             xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CELLSTYLE)), aStyleName);
         }
+        SetContentValidation(xProperties);
     }
 }
 

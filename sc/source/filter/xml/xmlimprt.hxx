@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-11 14:30:02 $
+ *  last change: $Author: sab $ $Date: 2000-10-11 15:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,18 @@
 #include "global.hxx"
 #ifndef _XMLSTYLE_HXX
 #include "xmlstyle.hxx"
+#endif
+#ifndef _COM_SUN_STAR_SHEET_VALIDATIONALERTSTYLE_HPP_
+#include <com/sun/star/sheet/ValidationAlertStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_VALIDATIONTYPE_HPP_
+#include <com/sun/star/sheet/ValidationType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_CONDITIONOPERATOR_HPP_
+#include <com/sun/star/sheet/ConditionOperator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TABLE_CELLADDRESS_HPP_
+#include <com/sun/star/table/CellAddress.hpp>
 #endif
 
 class ScRangeList;
@@ -239,6 +251,7 @@ enum ScXMLTableRowCellTokens
 enum ScXMLTableRowCellAttrTokens
 {
     XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME,
+    XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME,
     XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS,
     XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS,
     XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS,
@@ -525,6 +538,26 @@ struct ScMyNamedExpression
 
 typedef std::list<const ScMyNamedExpression*> ScMyNamedExpressions;
 
+struct ScMyImportValidation
+{
+    rtl::OUString                                   sName;
+    rtl::OUString                                   sImputTitle;
+    rtl::OUString                                   sImputMessage;
+    rtl::OUString                                   sErrorTitle;
+    rtl::OUString                                   sErrorMessage;
+    rtl::OUString                                   sFormula1;
+    rtl::OUString                                   sFormula2;
+    com::sun::star::table::CellAddress              aBaseCellAddress;
+    com::sun::star::sheet::ValidationAlertStyle     aAlertStyle;
+    com::sun::star::sheet::ValidationType           aValidationType;
+    com::sun::star::sheet::ConditionOperator        aOperator;
+    sal_Bool                                        bShowErrorMessage;
+    sal_Bool                                        bShowImputMessage;
+    sal_Bool                                        bIgnoreBlanks;
+};
+
+typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
+
 class ScXMLImport: public SvXMLImport
 {
 //  ScDocument&             rDoc;
@@ -604,6 +637,7 @@ class ScXMLImport: public SvXMLImport
     ScMyTables              aTables;
 
     ScMyNamedExpressions    aMyNamedExpressions;
+    ScMyImportValidations   aValidations;
 
 protected:
 
@@ -726,6 +760,9 @@ public:
 
     void    AddNamedExpression(const ScMyNamedExpression* pMyNamedExpression) { aMyNamedExpressions.insert(aMyNamedExpressions.end(), pMyNamedExpression); }
     ScMyNamedExpressions* GetNamedExpressions() { return &aMyNamedExpressions; }
+
+    void AddValidation(const ScMyImportValidation& aValidation) { aValidations.push_back(aValidation); }
+    sal_Bool GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation);
 
     void        GetRangeFromString( const rtl::OUString& rRangeStr, ScRange& rRange );
     void        GetRangeListFromString( const rtl::OUString& rRangeListStr, ScRangeList& rRangeList );

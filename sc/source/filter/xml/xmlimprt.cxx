@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-11 14:30:02 $
+ *  last change: $Author: sab $ $Date: 2000-10-11 15:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,20 +286,21 @@ static __FAR_DATA SvXMLTokenMapEntry aTableRowCellTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aTableRowCellAttrTokenMap[] =
 {
-    { XML_NAMESPACE_TABLE, sXML_style_name,                     XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME          },
-    { XML_NAMESPACE_TABLE, sXML_number_rows_spanned,            XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS        },
-    { XML_NAMESPACE_TABLE, sXML_number_columns_spanned,         XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS        },
-    { XML_NAMESPACE_TABLE, sXML_number_matrix_columns_spanned,  XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS },
-    { XML_NAMESPACE_TABLE, sXML_number_matrix_rows_spanned,     XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS },
-    { XML_NAMESPACE_TABLE, sXML_number_columns_repeated,        XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED            },
-    { XML_NAMESPACE_TABLE, sXML_value_type,                     XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE          },
-    { XML_NAMESPACE_TABLE, sXML_value,                          XML_TOK_TABLE_ROW_CELL_ATTR_VALUE               },
-    { XML_NAMESPACE_TABLE, sXML_date_value,                     XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE          },
-    { XML_NAMESPACE_TABLE, sXML_time_value,                     XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE          },
-    { XML_NAMESPACE_TABLE, sXML_string_value,                   XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE        },
-    { XML_NAMESPACE_TABLE, sXML_boolean_value,                  XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE       },
-    { XML_NAMESPACE_TABLE, sXML_formula,                        XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA             },
-    { XML_NAMESPACE_TABLE, sXML_currency,                       XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY            },
+    { XML_NAMESPACE_TABLE, sXML_style_name,                     XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME              },
+    { XML_NAMESPACE_TABLE, sXML_content_validation_name,        XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME },
+    { XML_NAMESPACE_TABLE, sXML_number_rows_spanned,            XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS            },
+    { XML_NAMESPACE_TABLE, sXML_number_columns_spanned,         XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS            },
+    { XML_NAMESPACE_TABLE, sXML_number_matrix_columns_spanned,  XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS     },
+    { XML_NAMESPACE_TABLE, sXML_number_matrix_rows_spanned,     XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS     },
+    { XML_NAMESPACE_TABLE, sXML_number_columns_repeated,        XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED                },
+    { XML_NAMESPACE_TABLE, sXML_value_type,                     XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE              },
+    { XML_NAMESPACE_TABLE, sXML_value,                          XML_TOK_TABLE_ROW_CELL_ATTR_VALUE                   },
+    { XML_NAMESPACE_TABLE, sXML_date_value,                     XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE              },
+    { XML_NAMESPACE_TABLE, sXML_time_value,                     XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE              },
+    { XML_NAMESPACE_TABLE, sXML_string_value,                   XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE            },
+    { XML_NAMESPACE_TABLE, sXML_boolean_value,                  XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE           },
+    { XML_NAMESPACE_TABLE, sXML_formula,                        XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA                 },
+    { XML_NAMESPACE_TABLE, sXML_currency,                       XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY                },
     XML_TOKEN_MAP_END
 };
 
@@ -1127,6 +1128,7 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
     pDataPilotMemberAttrTokenMap( 0 ),
     aTables(*this),
     aMyNamedExpressions(),
+    aValidations(),
 //  pScAutoStylePool(new SvXMLAutoStylePoolP),
     pScPropHdlFactory(0L),
     pCellStylesPropertySetMapper(0L),
@@ -1338,6 +1340,22 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
                                               rLocalName );
 
     return pContext;
+}
+
+sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation)
+{
+    sal_Bool bFound(sal_False);
+    ScMyImportValidations::iterator aItr = aValidations.begin();
+    while(aItr != aValidations.end() && !bFound)
+    {
+        if (aItr->sName == sName)
+            bFound = sal_True;
+        else
+            aItr++;
+    }
+    if (bFound)
+        aValidation = *aItr;
+    return bFound;
 }
 
 void ScXMLImport::GetRangeFromString( const rtl::OUString& rRangeStr, ScRange& rRange )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: sab $ $Date: 2000-10-11 15:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,15 @@ struct ScMyAnnotation
 
 class ScXMLTableRowCellContext : public SvXMLImportContext
 {
+    rtl::OUString sOUText;
+    rtl::OUString sOUDateValue;
+    rtl::OUString sOUTimeValue;
+    rtl::OUString sOUBooleanValue;
+    rtl::OUString sOUTextValue;
+    rtl::OUString sOUFormula;
+    rtl::OUString sCurrencySymbol;
+    rtl::OUString sStyleName;
+    rtl::OUString sContentValidationName;
     sal_Int32   nMergedRows, nMergedCols;
     sal_Int32   nMatrixRows, nMatrixCols;
     sal_Bool    bIsMerged;
@@ -113,14 +122,6 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     sal_Int16   nCellType;
     sal_Int32   nRepeatedRows;
     double  fValue;
-    rtl::OUString sOUText;
-    rtl::OUString sOUDateValue;
-    rtl::OUString sOUTimeValue;
-    rtl::OUString sOUBooleanValue;
-    rtl::OUString sOUTextValue;
-    rtl::OUString sOUFormula;
-    rtl::OUString sCurrencySymbol;
-    rtl::OUString sStyleName;
     ScMyAnnotation  aMyAnnotation;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -141,6 +142,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     void DoMerge(const com::sun::star::table::CellAddress& aCellPos,
                  const sal_Int32 nCols, const sal_Int32 nRows) const;
 
+    void SetContentValidation(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet);
     void SetCellProperties(const com::sun::star::uno::Reference<com::sun::star::table::XCellRange>& xCellRange,
                                                 const com::sun::star::table::CellAddress& aCellAddress);
     void SetCellProperties(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
