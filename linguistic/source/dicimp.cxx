@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-05 17:28:36 $
+ *  last change: $Author: tl $ $Date: 2001-06-18 11:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
         try
         {
             ::ucb::Content aContent( rMainURL ,
-                Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+                    Reference< ::com::sun::star::ucb::XCommandEnvironment >());
             bExists = aContent.isDocument();
             if( bExists )
             {
@@ -191,7 +191,7 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
                 aAny >>= bIsReadonly;
             }
         }
-        catch( ::com::sun::star::uno::Exception )
+        catch(Exception &)
         {
         }
 
@@ -205,6 +205,7 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
             // (Note: empty dictionaries are not just empty files!)
             saveEntries( rMainURL );
             bNeedEntries = FALSE;
+            bIsReadonly = isReadonly_Impl();
         }
     }
     else
@@ -991,12 +992,12 @@ BOOL DictionaryNeo::isReadonly_Impl()
     {
         try
         {
-            Reference< com::sun::star::ucb::XCommandEnvironment > xCmdEnv;
+            Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv;
             ::ucb::Content aContent( getLocation(), xCmdEnv );
             Any aAny( aContent.getPropertyValue( A2OU( "IsReadOnly" ) ) );
             aAny >>= bRes;
         }
-        catch (::com::sun::star::ucb::ContentCreationException &)
+        catch (/*::com::sun::star::ucb::ContentCreation*/Exception &)
         {
             bRes = TRUE;
         }
