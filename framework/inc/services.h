@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:23:42 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 12:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ namespace framework{
 #define SERVICENAME_STATUSINDICATORFACTORY                      DECLARE_ASCII("com.sun.star.task.StatusIndicatorFactory"            )
 #define SERVICENAME_UIINTERACTIONHANDLER                        DECLARE_ASCII("com.sun.star.task.InteractionHandler"                )
 #define SERVICENAME_JOBEXECUTOR                                 DECLARE_ASCII("com.sun.star.task.JobExecutor"                       )
+#define SERVICENAME_JOB                                         DECLARE_ASCII("com.sun.star.task.Job"                               )
 #define SERVICENAME_DISPATCHRECORDERSUPPLIER                    DECLARE_ASCII("com.sun.star.frame.DispatchRecorderSupplier"         )
 #define SERVICENAME_DISPATCHRECORDER                            DECLARE_ASCII("com.sun.star.frame.DispatchRecorder"                 )
 #define SERVICENAME_SYSTEMSHELLEXECUTE                          DECLARE_ASCII("com.sun.star.system.SystemShellExecute"              )
@@ -143,13 +144,15 @@ namespace framework{
 #define SERVICENAME_PACKAGESTRUCTURECREATOR                     DECLARE_ASCII("com.sun.star.embed.PackageStructureCreator"          )
 #define SERVICENAME_TOOLBARFACTORY                              DECLARE_ASCII("com.sun.star.ui.ToolBarFactory"               )
 #define SERVICENAME_TOOLBARCONTROLLERFACTORY                    DECLARE_ASCII("com.sun.star.frame.ToolBarControllerFactory"         )
-#define SERVICENAME_LICENSE                                     DECLARE_ASCII("com.sun.star.task.Job"                       )
+#define SERVICENAME_LICENSE                                     SERVICENAME_JOB
 #define SERVICENAME_AUTORECOVERY                                DECLARE_ASCII("com.sun.star.frame.AutoRecovery"                     )
 #define SERVICENAME_GLOBALEVENTBROADCASTER                      DECLARE_ASCII("com.sun.star.frame.GlobalEventBroadcaster"           )
 #define SERVICENAME_STATUSBARFACTORY                            DECLARE_ASCII("com.sun.star.ui.StatusBarFactory"             )
 #define SERVICENAME_UICATEGORYDESCRIPTION                       DECLARE_ASCII("com.sun.star.ui.UICategoryDescription"               )
 #define SERVICENAME_STATUSBARCONTROLLERFACTORY                  DECLARE_ASCII("com.sun.star.frame.StatusbarControllerFactory"       )
 #define SERVICENAME_SESSIONLISTENER                             DECLARE_ASCII("com.sun.star.frame.SessionListener"                  )
+#define SERVICENAME_STATUSBARCONTROLLER                         DECLARE_ASCII("com.sun.star.frame.StatusbarController"              )
+
 //_________________________________________________________________________________________________________________
 //  used implementationnames by framework
 //_________________________________________________________________________________________________________________
@@ -217,6 +220,9 @@ namespace framework{
 #define IMPLEMENTATIONNAME_UICATEGORYDESCRIPTION                DECLARE_ASCII("com.sun.star.comp.framework.UICategoryDescription"   )
 #define IMPLEMENTATIONNAME_APPDISPATCHPROVIDER                  DECLARE_ASCII("com.sun.star.comp.sfx2.AppDispatchProvider"          )
 #define IMPLEMENTATIONNAME_SESSIONLISTENER                      DECLARE_ASCII("com.sun.star.comp.frame.SessionListener"             )
+#define IMPLEMENTATIONNAME_HELPONSTARTUP                        DECLARE_ASCII("com.sun.star.comp.framework.HelpOnStartup"           )
+#define IMPLEMENTATIONNAME_LOGOIMAGESTATUSBARCONTROLLER         DECLARE_ASCII("com.sun.star.comp.framework.LogoImageStatusbarController" )
+#define IMPLEMENTATIONNAME_LOGOTEXTSTATUSBARCONTROLLER          DECLARE_ASCII("com.sun.star.comp.framework.LogoTextStatusbarController" )
 
 }       //  namespace framework
 
