@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-12 07:26:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2440,21 +2440,20 @@ void SmSymDefineDialog::SetFont(const XubString &rFontName, const XubString &rSt
     pSubsetMap = new SubsetMap( &aFontCharMap );
     //
     aFontsSubsetLB.Clear();
-    if (pSubsetMap->GetSubsetCount() > 0)
+    bool bFirst = true;
+    const Subset* pSubset;
+    while( NULL != (pSubset = pSubsetMap->GetNextSubset( bFirst )) )
     {
-        const Subset* pSubset = 0;
-        for (USHORT i = 0;  0 != (pSubset = pSubsetMap->GetSubsetByIndex(i));  ++i)
-        {
-            USHORT nPos = aFontsSubsetLB.InsertEntry( pSubset->GetName());
-            aFontsSubsetLB.SetEntryData( nPos, (void *) pSubset );
-            // subset must live at least as long as the selected font !!!
-        }
-        aFontsSubsetLB.SelectEntryPos( 0 );
-        BOOL bEnable = aFontsSubsetLB.GetEntryCount() > 1;
-        if (!bEnable)
-            aFontsSubsetLB.SetNoSelection();
-        aFontsSubsetLB.Enable( bEnable );
+        USHORT nPos = aFontsSubsetLB.InsertEntry( pSubset->GetName());
+        aFontsSubsetLB.SetEntryData( nPos, (void *) pSubset );
+        // subset must live at least as long as the selected font !!!
+        if( bFirst )
+        aFontsSubsetLB.SelectEntryPos( nPos );
+        bFirst = false;
     }
+    if( bFirst )
+        aFontsSubsetLB.SetNoSelection();
+    aFontsSubsetLB.Enable( !bFirst );
 }
 
 
