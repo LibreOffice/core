@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flstitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:04:05 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <com/sun/star/uno/Sequence.h>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // class SvxFontListItem -------------------------------------------------
 
 class FontList;
@@ -85,7 +89,7 @@ class FontList;
     Die Fontliste wird nicht kopiert und nicht geloescht!
 */
 
-class SvxFontListItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxFontListItem : public SfxPoolItem
 {
 private:
     const FontList*                                 pFontList;
