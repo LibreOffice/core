@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageNumberType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:26 $
+ *  last change: $Author: os $ $Date: 2001-08-31 10:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,38 +69,25 @@
 //=============================================================================
 
 // DocMerge from xml: enum com::sun::star::text::PageNumberType
-/** only the offset is used.
-
-
-
-
-
-
-
-
-
-
-
-    @deprecated
+/** determines which page number is displayed in a page number text field.
  */
 enum PageNumberType
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR PageNumberType::   PREV,
-
-    // DocMerge: empty anyway
+    /** The number of the previous page is displayed if there is any otherwise the
+     field is empty.
+     */
     PREV,
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR PageNumberType::   CURRENT,
-
-    // DocMerge: empty anyway
+    /** The number of the current page is displayed.
+     */
     CURRENT,
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR PageNumberType::   NEXT
-
-    // DocMerge: empty anyway
+    /** The number of the next page is displayed if there is any otherwise the
+     field is empty.
+     */
     NEXT
 
 };
@@ -109,24 +96,4 @@ enum PageNumberType
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:36:02  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:53:00  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/31 11:53:56  os
-    #74034# Documentation changed
-
-    Revision 1.2  2000/02/07 11:25:01  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif
