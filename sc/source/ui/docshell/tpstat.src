@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpstat.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:51:39 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ TabPage RID_SCPAGE_STAT
         Text [ portuguese_brazilian ] = "N�mero de planilhas:" ;
         Text [ portuguese ] = "N�mero de tabelas:" ;
         Text [ finnish ] = "Taulukoiden m��r�:" ;
-        Text [ danish ] = "Antal tabeller:" ;
+        Text [ danish ] = "Antal ark:" ;
         Text [ french ] = "Nombre de feuilles :" ;
         Text [ swedish ] = "Antal tabeller:" ;
         Text [ dutch ] = "Aantal werkbladen:" ;
@@ -101,6 +101,8 @@ TabPage RID_SCPAGE_STAT
         Text[ hebrew ] = "Anzahl Tabellen:";
         Text[ hindi ] = "शीटों की संख्या:";
         Text[ slovak ] = "Počet listov:";
+        Text[ hungarian ] = "Munkalapok száma:";
+        Text[ slovenian ] = "Število listov:";
     };
     FixedText FT_TABLES
     {
@@ -143,6 +145,8 @@ TabPage RID_SCPAGE_STAT
         Text[ hebrew ] = "Anzahl Zellen:";
         Text[ hindi ] = "कोष्ठों की संख्या:";
         Text[ slovak ] = "Počet buniek:";
+        Text[ hungarian ] = "Cellák száma:";
+        Text[ slovenian ] = "Število celic:";
     };
     FixedText FT_CELLS
     {
@@ -185,6 +189,8 @@ TabPage RID_SCPAGE_STAT
         Text[ hebrew ] = "‮מספר הדפים‬:";
         Text[ hindi ] = "पृष्ठों की संख्या:";
         Text[ slovak ] = "Počet strán:";
+        Text[ hungarian ] = "Oldalak száma:";
+        Text[ slovenian ] = "Število strani:";
     };
     FixedText FT_PAGES
     {
@@ -226,8 +232,11 @@ TabPage RID_SCPAGE_STAT
         Text[ hebrew ] = "Dokument:";
         Text[ hindi ] = "लेखपत्र: ";
         Text[ slovak ] = "Dokument: ";
+        Text[ hungarian ] = "Dokumentum:";
+        Text[ slovenian ] = "Dokument:";
     };
 };
+
 
 
 
