@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-17 07:37:42 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,9 +243,9 @@ void XMLSectionImportContext::StartElement(
                     xPropSet->setPropertyValue( sCondition, aAny );
                 }
 
-                // insert X and paragraph mark; then insert
-                // section over the space character, and delete the
-                // last paragraph when closing a section.
+                // insert X, <paragraph>, X; then insert
+                // section over the first X character, and delete the
+                // last paragraph (and X) when closing a section.
                 Reference<XTextRange> xStart =
                     rHelper->GetCursor()->getStart();
                 OUString sMarkerString(RTL_CONSTASCII_USTRINGPARAM("X"));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtsecte.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-17 15:41:29 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
     sal_Bool bAutoStyles)
 {
     Reference<XTextSection> xNextSection;
+    Reference<XDocumentIndex> xNextIndex;
 
     // first: get current XTextSection
     Reference<XPropertySet> xPropSet(rNextSectionContent, UNO_QUERY);
@@ -207,22 +208,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             aAny >>= xNextSection;
         }
         // else: no current section
-
-        // check for document index
-        // TODO: replace by real index export
-        if (xPropSet->getPropertySetInfo()->hasPropertyByName(sDocumentIndex))
-        {
-            Any aAny = xPropSet->getPropertyValue(sDocumentIndex);
-            Reference<XDocumentIndex> xDocumentIndex;
-            aAny >>= xDocumentIndex;
-
-            if (xDocumentIndex.is() && !rPrevSection.is())
-            {
-                pSectionExport->ExportIndexStart(xDocumentIndex, bAutoStyles);
-            }
-        }
     }
-
 
     exportListAndSectionChange(rPrevSection, xNextSection,
                                rPrevRule, rNextRule, bAutoStyles);
@@ -286,12 +272,23 @@ void XMLTextParagraphExport::exportListAndSectionChange(
                 aNew++;
             }
 
-            // close all elements of aOld, open all of aNew
-            while (aOld != aOldStack.rend())
+            // close all elements of aOld ...
+            // (order: newest to oldest)
+            vector<Reference<XTextSection> > ::iterator aOldForward =
+                aOldStack.begin();
+            while ((aOldForward != aOldStack.end()) &&
+                   (*aOldForward != *aOld))
             {
-                pSectionExport->ExportSectionEnd(*aOld, bAutoStyles);
-                aOld++;
+                pSectionExport->ExportSectionEnd(*aOldForward, bAutoStyles);
+                aOldForward++;
             }
+            if (aOldForward != aOldStack.end())
+            {
+                pSectionExport->ExportSectionEnd(*aOldForward, bAutoStyles);
+            }
+
+            // ...then open all of aNew
+            // (order: oldest to newest)
             while (aNew != aNewStack.rend())
             {
                 pSectionExport->ExportSectionStart(*aNew, bAutoStyles);

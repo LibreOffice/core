@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLIndexTOCContext.hxx,v $
+ *  $RCSfile: XMLIndexBodyContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
  *
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
-#define _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
+#ifndef _XMLOFF_XMLINDEXBODYCONTEXT_HXX_
+#define _XMLOFF_XMLINDEXBODYCONTEXT_HXX_
 
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include "xmlictxt.hxx"
@@ -77,62 +77,26 @@ namespace com { namespace sun { namespace star {
 } } }
 namespace rtl { class OUString; }
 
-
-enum IndexTypeEnum
-{
-    TEXT_INDEX_TOC,
-    TEXT_INDEX_ALPHABETICAL,
-    TEXT_INDEX_TABLE,
-    TEXT_INDEX_OBJECT,
-    TEXT_INDEX_BIBLIOGRAPHY,
-    TEXT_INDEX_USER,
-    TEXT_INDEX_ILLUSTRATION,
-
-    TEXT_INDEX_UNKNOWN
-};
-
-
 /**
- * Import all indices.
+ * Import index body.
  *
- * Originally, this class would import only the TOC (table of
- * content), but now it's role has been expanded to handle all
- * indices, and hence is named inappropriately. Depending on the
- * element name it decides which index source element context to create.
+ * This class basically delegates all CreateChildContext() calls to
+ * the text import and doesn't do much else.
  */
-class XMLIndexTOCContext : public SvXMLImportContext
+class XMLIndexBodyContext : public SvXMLImportContext
 {
-    const ::rtl::OUString sTitle;
-
-    /** XPropertySet of the index */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xTOCPropertySet;
-
-    enum IndexTypeEnum eIndexType;
-
-    /** source element name (for CreateChildContext) */
-    const sal_Char* pSourceElementName;
-
-    sal_Bool bValid;
-
 public:
 
     TYPEINFO();
 
-    XMLIndexTOCContext(
+    XMLIndexBodyContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName );
 
-    ~XMLIndexTOCContext();
+    ~XMLIndexBodyContext();
 
 protected:
-
-    virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
-
-    virtual void EndElement();
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,

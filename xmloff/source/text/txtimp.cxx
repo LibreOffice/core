@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-27 13:37:09 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,22 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_DRAW, sXML_foreign_object, XML_TOK_TEXT_FOREIGN_OBJECT },
     { XML_NAMESPACE_DRAW, sXML_a,               XML_TOK_DRAW_A },
 
+    // index marks
+    { XML_NAMESPACE_TEXT, sXML_toc_mark, XML_TOK_TEXT_TOC_MARK },
+    { XML_NAMESPACE_TEXT, sXML_toc_mark_start, XML_TOK_TEXT_TOC_MARK_START },
+    { XML_NAMESPACE_TEXT, sXML_toc_mark_end, XML_TOK_TEXT_TOC_MARK_END },
+    { XML_NAMESPACE_TEXT, sXML_user_index_mark, XML_TOK_TEXT_USER_INDEX_MARK },
+    { XML_NAMESPACE_TEXT, sXML_user_index_mark_start,
+      XML_TOK_TEXT_USER_INDEX_MARK_START },
+    { XML_NAMESPACE_TEXT, sXML_user_index_mark_end,
+      XML_TOK_TEXT_USER_INDEX_MARK_END },
+    { XML_NAMESPACE_TEXT, sXML_alphabetical_index_mark,
+      XML_TOK_TEXT_ALPHA_INDEX_MARK },
+    { XML_NAMESPACE_TEXT, sXML_alphabetical_index_mark_start,
+      XML_TOK_TEXT_ALPHA_INDEX_MARK_START },
+    { XML_NAMESPACE_TEXT, sXML_alphabetical_index_mark_end,
+      XML_TOK_TEXT_ALPHA_INDEX_MARK_END },
+
     // sender fields
     { XML_NAMESPACE_TEXT, sXML_sender_firstname,XML_TOK_TEXT_SENDER_FIRSTNAME},
     { XML_NAMESPACE_TEXT, sXML_sender_lastname, XML_TOK_TEXT_SENDER_LASTNAME },
@@ -356,6 +372,8 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_sequence_ref, XML_TOK_TEXT_SEQUENCE_REF },
     { XML_NAMESPACE_TEXT, sXML_footnote_ref, XML_TOK_TEXT_FOOTNOTE_REF },
     { XML_NAMESPACE_TEXT, sXML_endnote_ref, XML_TOK_TEXT_ENDNOTE_REF },
+    { XML_NAMESPACE_TEXT, sXML_bibliography_mark,
+      XML_TOK_TEXT_BIBLIOGRAPHY_MARK },
 
     // Calc fields
     { XML_NAMESPACE_TEXT, sXML_sheet_name, XML_TOK_TEXT_SHEET_NAME },

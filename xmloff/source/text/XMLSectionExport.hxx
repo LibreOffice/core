@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-21 11:53:19 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,8 @@ class XMLSectionExport
     const ::rtl::OUString sIsAutomaticUpdate;
     const ::rtl::OUString sIsRelativeTabstops;
     const ::rtl::OUString sCreateFromLevelParagraphStyles;
+    const ::rtl::OUString sDocumentIndex;
+    const ::rtl::OUString sContentSection;
 
     const ::rtl::OUString sTableOfContent;
     const ::rtl::OUString sIllustrationIndex;
@@ -174,6 +176,7 @@ class XMLSectionExport
     const ::rtl::OUString sObjectIndex;
     const ::rtl::OUString sBibliography;
     const ::rtl::OUString sUserIndex;
+    const ::rtl::OUString sIndexBody;
 
     const ::rtl::OUString sEmpty;
 
@@ -202,23 +205,6 @@ public:
             ::com::sun::star::text::XTextSection > & rSection,
         sal_Bool bAutoStyles);
 
-    /**
-     * export an index start element. This method should eventually be replaced
-     * by calls to ExportSectionStart. Also handle section styles.
-     *
-     * @deprecated Once the API allows to recognize an index section
-     * as index, this method should be removed.
-     */
-    void ExportIndexStart(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XDocumentIndex > & rSection,
-        sal_Bool bAutoStyles);
-
-    /** @deprecated see ExportIndexStart */
-    void ExportIndexEnd(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XDocumentIndex > & rSection,
-        sal_Bool bAutoStyles);
 
 protected:
 
@@ -226,6 +212,11 @@ protected:
     inline XMLTextParagraphExport& GetParaExport() { return rParaExport; }
 
     // export methods for section and index start:
+
+    /// export an index start element. This method is to be called
+    void ExportIndexStart(
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::text::XDocumentIndex > & rSection);
 
     /// export a proper section (and source elements)
     void ExportRegularSectionStart(
@@ -269,6 +260,16 @@ protected:
 
 
     // helper methods:
+
+    /**
+     * If this section is an index, return the index; else return an
+     * empty reference.
+     */
+    void GetIndex(
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::text::XTextSection > & rSection,
+        ::com::sun::star::uno::Reference <
+            ::com::sun::star::text::XDocumentIndex > & rIndex);
 
     /// map service name to section type
     enum SectionTypeEnum MapSectionType(const ::rtl::OUString& rSectionName);

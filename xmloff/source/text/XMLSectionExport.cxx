@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-21 11:53:19 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,8 @@ XMLSectionExport::XMLSectionExport(
         sIsRelativeTabstops(RTL_CONSTASCII_USTRINGPARAM("IsRelativeTabstops")),
         sCreateFromLevelParagraphStyles(
             RTL_CONSTASCII_USTRINGPARAM("CreateFromLevelParagraphStyles")),
+        sDocumentIndex(RTL_CONSTASCII_USTRINGPARAM("DocumentIndex")),
+        sContentSection(RTL_CONSTASCII_USTRINGPARAM("ContentSection")),
         sTableOfContent(RTL_CONSTASCII_USTRINGPARAM(sXML_table_of_content)),
         sIllustrationIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_illustration_index)),
         sAlphabeticalIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_alphabetical_index)),
@@ -242,6 +244,7 @@ XMLSectionExport::XMLSectionExport(
         sObjectIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_object_index)),
         sBibliography(RTL_CONSTASCII_USTRINGPARAM(sXML_bibliography)),
         sUserIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_user_index)),
+        sIndexBody(RTL_CONSTASCII_USTRINGPARAM(sXML_index_body)),
         sEmpty()
 {
 }
@@ -250,91 +253,203 @@ void XMLSectionExport::ExportSectionStart(
     const Reference<XTextSection> & rSection,
     sal_Bool bAutoStyles)
 {
+    Reference<XPropertySet> xPropertySet(rSection, UNO_QUERY);
+
+    // always export section (auto) style
     if (bAutoStyles)
     {
         // get PropertySet and add section style
-        Reference<XPropertySet> xPropertySet(rSection, UNO_QUERY);
         GetParaExport().Add( XML_STYLE_FAMILY_TEXT_SECTION, xPropertySet );
     }
     else
     {
-        ExportRegularSectionStart(rSection);
+        // always export section style
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_style_name,
+                                 GetParaExport().Find(
+                                     XML_STYLE_FAMILY_TEXT_SECTION,
+                                     xPropertySet, sEmpty ));
+
+        // export index or regular section
+        Reference<XDocumentIndex> xIndex;
+        GetIndex(rSection, xIndex);
+        if (xIndex.is())
+        {
+            // we are an index
+            ExportIndexStart(xIndex);
+        }
+        else
+        {
+            // we are not an index
+            ExportRegularSectionStart(rSection);
+        }
     }
 }
+
+void XMLSectionExport::GetIndex(
+    const Reference<XTextSection> & rSection,
+    Reference<XDocumentIndex> & rIndex)
+{
+    // first, reset result
+    rIndex = NULL;
+
+    // get section Properties
+    Reference<XPropertySet> xSectionPropSet(rSection, UNO_QUERY);
+
+    // then check if this section happens to be inside an index
+    if (xSectionPropSet->getPropertySetInfo()->
+                                    hasPropertyByName(sDocumentIndex))
+    {
+        Any aAny = xSectionPropSet->getPropertyValue(sDocumentIndex);
+        Reference<XDocumentIndex> xDocumentIndex;
+        aAny >>= xDocumentIndex;
+
+        // OK, are we inside of an index
+        if (xDocumentIndex.is())
+        {
+            // is the enclosing index identical with "our" section?
+            Reference<XPropertySet> xIndexPropSet(xDocumentIndex, UNO_QUERY);
+            aAny = xIndexPropSet->getPropertyValue(sContentSection);
+            Reference<XTextSection> xEnclosingSection;
+            aAny >>= xEnclosingSection;
+
+            // if the enclosing section is "our" section, then we are an index!
+            if (rSection == xEnclosingSection)
+            {
+                rIndex = xDocumentIndex;
+            }
+            // else: we are no index
+        }
+        // else: we aren't even inside of an index
+    }
+    // else: we don't even know what an index is.
+}
+
 
 void XMLSectionExport::ExportSectionEnd(
     const Reference<XTextSection> & rSection,
     sal_Bool bAutoStyles)
 {
-    // any old attributes?
-    GetExport().CheckAttrList();
+    // no end section for styles
+    if (!bAutoStyles)
+    {
+        sal_Char* pElementName = NULL;
 
-    // TODO: end element section dependent
+        // export index or regular section end
+        Reference<XDocumentIndex> xIndex;
+        GetIndex(rSection, xIndex);
+        if (xIndex.is())
+        {
 
-    // export end of element
-    GetExport().GetDocHandler()->ignorableWhitespace( GetExport().sWS );
-    GetExport().GetDocHandler()->endElement(
-        GetExport().GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TEXT,
-                                                    sSection) );
-    GetExport().GetDocHandler()->ignorableWhitespace( GetExport().sWS );
+            // index end: close index body element
+            GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
+            GetExport().GetDocHandler()->endElement(
+                GetExport().GetNamespaceMap().GetQNameByKey(
+                    XML_NAMESPACE_TEXT, sIndexBody));
+            GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
+
+            switch (MapSectionType(xIndex->getServiceName()))
+            {
+                case TEXT_SECTION_TYPE_TOC:
+                    pElementName = sXML_table_of_content;
+                    break;
+
+                case TEXT_SECTION_TYPE_ILLUSTRATION:
+                    pElementName = sXML_illustration_index;
+                    break;
+
+                case TEXT_SECTION_TYPE_ALPHABETICAL:
+                    pElementName = sXML_alphabetical_index;
+                    break;
+
+                case TEXT_SECTION_TYPE_TABLE:
+                    pElementName = sXML_table_index;
+                    break;
+
+                case TEXT_SECTION_TYPE_OBJECT:
+                    pElementName = sXML_object_index;
+                    break;
+
+                case TEXT_SECTION_TYPE_USER:
+                    pElementName = sXML_user_index;
+                    break;
+
+                case TEXT_SECTION_TYPE_BIBLIOGRAPHY:
+                    pElementName = sXML_bibliography;
+                    break;
+
+                default:
+                    DBG_ERROR("unknown index type");
+                    // default: skip index!
+                    break;
+            }
+        }
+        else
+        {
+            pElementName = sXML_section;
+        }
+
+        if (NULL != pElementName)
+        {
+            // any old attributes?
+            GetExport().CheckAttrList();
+
+            // element surrounded by whitespace
+            GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
+            GetExport().GetDocHandler()->endElement(
+                GetExport().GetNamespaceMap().GetQNameByKey(
+                    XML_NAMESPACE_TEXT,
+                    OUString::createFromAscii(pElementName)));
+            GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
+        }
+        else
+        {
+            DBG_ERROR("Need element name!");
+        }
+    }
+    // else: autostyles -> ignore
 }
 
 void XMLSectionExport::ExportIndexStart(
-    const Reference<XDocumentIndex> & rIndex,
-    sal_Bool bAutoStyles)
+    const Reference<XDocumentIndex> & rIndex)
 {
-    // HACK: disable index export until all problems have been resolved:
-    return;
-
     // get PropertySet
     Reference<XPropertySet> xPropertySet(rIndex, UNO_QUERY);
 
-    if (bAutoStyles)
+    switch (MapSectionType(rIndex->getServiceName()))
     {
-        // treat index as section style
-        GetParaExport().Add( XML_STYLE_FAMILY_TEXT_SECTION, xPropertySet );
+        case TEXT_SECTION_TYPE_TOC:
+            ExportTableOfContentStart(xPropertySet);
+            break;
+
+        case TEXT_SECTION_TYPE_ILLUSTRATION:
+            ExportIllustrationIndexStart(xPropertySet);
+            break;
+
+        case TEXT_SECTION_TYPE_ALPHABETICAL:
+            ExportAlphabeticalIndexStart(xPropertySet);
+            break;
+
+        case TEXT_SECTION_TYPE_TABLE:
+            ExportTableIndexStart(xPropertySet);
+            break;
+
+        case TEXT_SECTION_TYPE_OBJECT:
+            ExportObjectIndexStart(xPropertySet);
+            break;
+
+        case TEXT_SECTION_TYPE_USER:
+            ExportUserIndexStart(xPropertySet);
+            break;
+
+        case TEXT_SECTION_TYPE_BIBLIOGRAPHY:
+            ExportBibliographyStart(xPropertySet);
+            break;
+
+        default:
+            // skip index
+            DBG_ERROR("unknown index type");
+            break;
     }
-    else
-    {
-        switch (MapSectionType(rIndex->getServiceName()))
-        {
-            case TEXT_SECTION_TYPE_TOC:
-                ExportTableOfContentStart(xPropertySet);
-                break;
-
-            case TEXT_SECTION_TYPE_ILLUSTRATION:
-                ExportIllustrationIndexStart(xPropertySet);
-                break;
-
-            case TEXT_SECTION_TYPE_ALPHABETICAL:
-                ExportAlphabeticalIndexStart(xPropertySet);
-                break;
-
-            case TEXT_SECTION_TYPE_TABLE:
-                ExportTableIndexStart(xPropertySet);
-                break;
-
-            case TEXT_SECTION_TYPE_OBJECT:
-                ExportObjectIndexStart(xPropertySet);
-                break;
-
-            case TEXT_SECTION_TYPE_USER:
-                ExportUserIndexStart(xPropertySet);
-                break;
-
-            case TEXT_SECTION_TYPE_BIBLIOGRAPHY:
-                ExportBibliographyStart(xPropertySet);
-                break;
-
-            default:
-                // skip index
-                DBG_ERROR("unknown index type");
-                break;
-        }
-    }
-
-    // TODO: remove when proper solution found
-    ExportIndexEnd(rIndex, bAutoStyles);
 }
 
 
@@ -366,70 +481,10 @@ enum SectionTypeEnum XMLSectionExport::MapSectionType(
     return eType;
 }
 
-void XMLSectionExport::ExportIndexEnd(
-    const Reference<XDocumentIndex> & rIndex,
-    sal_Bool bAutoStyles)
-{
-    // HACK: disable index export until all problems have been resolved:
-    return;
-
-    if (! bAutoStyles)
-    {
-        sal_Char* pElementName = NULL;
-
-        switch (MapSectionType(rIndex->getServiceName()))
-        {
-            case TEXT_SECTION_TYPE_TOC:
-                pElementName = sXML_table_of_content;
-                break;
-
-            case TEXT_SECTION_TYPE_ILLUSTRATION:
-                pElementName = sXML_illustration_index;
-                break;
-
-            case TEXT_SECTION_TYPE_ALPHABETICAL:
-                pElementName = sXML_alphabetical_index;
-                break;
-
-            case TEXT_SECTION_TYPE_TABLE:
-                pElementName = sXML_table_index;
-                break;
-
-            case TEXT_SECTION_TYPE_OBJECT:
-                pElementName = sXML_object_index;
-                break;
-
-            case TEXT_SECTION_TYPE_USER:
-                pElementName = sXML_user_index;
-                break;
-
-            case TEXT_SECTION_TYPE_BIBLIOGRAPHY:
-                pElementName = sXML_bibliography;
-                break;
-
-            default:
-                DBG_ERROR("unknown index type");
-                // default: skip index!
-                break;
-        }
-
-        if (NULL != pElementName)
-        {
-            // TODO: remove, if end handling is made proper
-            GetExport().GetDocHandler()->endElement(
-                GetExport().GetNamespaceMap().GetQNameByKey(
-                    XML_NAMESPACE_TEXT,
-                    OUString::createFromAscii(pElementName)));
-            GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
-        }
-    }
-}
-
 void XMLSectionExport::ExportRegularSectionStart(
     const Reference<XTextSection> & rSection)
 {
-    // any old attributes?
-    GetExport().CheckAttrList();
+    // style name already handled in ExportSectionStart(...)
 
     Reference<XNamed> xName(rSection, UNO_QUERY);
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_name,
@@ -438,12 +493,6 @@ void XMLSectionExport::ExportRegularSectionStart(
     // get XPropertySet for other values
     Reference<XPropertySet> xPropSet(rSection, UNO_QUERY);
     Any aAny;
-
-    // style name
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_style_name,
-                             GetParaExport().Find(
-                                 XML_STYLE_FAMILY_TEXT_SECTION,
-                                 xPropSet, sEmpty ));
 
     // condition and display
     aAny = xPropSet->getPropertyValue(sCondition);
@@ -761,11 +810,7 @@ void XMLSectionExport::ExportBaseIndexStart(
     const OUString sElementName,
     const Reference<XPropertySet> & rPropertySet)
 {
-    // section style name
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_style_name,
-                             GetParaExport().Find(
-                                 XML_STYLE_FAMILY_TEXT_SECTION,
-                                 rPropertySet, sEmpty ));
+    // rPropertySet not used any more; should be removed
 
     // index  Element start
     GetExport().GetDocHandler()->ignorableWhitespace( GetExport().sWS );
@@ -889,10 +934,19 @@ void XMLSectionExport::ExportBaseIndexBody(
     DBG_ASSERT(eType >= TEXT_SECTION_TYPE_TOC, "illegal index type");
     DBG_ASSERT(eType <= TEXT_SECTION_TYPE_BIBLIOGRAPHY, "illegal index type");
 
-    SvXMLElementExport aIndexBody(GetExport(),
-                                  XML_NAMESPACE_TEXT,
-                                  sXML_index_body,
-                                  sal_True, sal_True);
+    // export start only
+
+    // any old attributes?
+    GetExport().CheckAttrList();
+
+    // start surrounded by whitespace
+    GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
+    GetExport().GetDocHandler()->startElement(
+        GetExport().GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TEXT,
+                                                    sIndexBody),
+        GetExport().GetXAttrList() );
+    GetExport().ClearAttrList();
+    GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
 }
 
 void XMLSectionExport::ExportTableAndIllustrationIndexSourceAttributes(

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+#   last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,8 +99,10 @@ CXXFILES = \
         XMLIndexAlphabeticalSourceContext.cxx \
         XMLIndexBibliographyEntryContext.cxx \
         XMLIndexBibliographySourceContext.cxx \
+        XMLIndexBodyContext.cxx \
         XMLIndexChapterInfoEntryContext.cxx \
         XMLIndexIllustrationSourceContext.cxx \
+        XMLIndexMarkExport.cxx \
         XMLIndexObjectSourceContext.cxx \
         XMLIndexSimpleEntryContext.cxx \
         XMLIndexSpanEntryContext.cxx \
@@ -156,10 +158,12 @@ SLOFILES =	\
         $(SLO)$/XMLFootnoteConfigurationImportContext.obj \
         $(SLO)$/XMLFootnoteImportContext.obj \
         $(SLO)$/XMLIndexAlphabeticalSourceContext.obj \
+        $(SLO)$/XMLIndexBodyContext.obj \
         $(SLO)$/XMLIndexBibliographyEntryContext.obj \
         $(SLO)$/XMLIndexBibliographySourceContext.obj \
         $(SLO)$/XMLIndexChapterInfoEntryContext.obj \
         $(SLO)$/XMLIndexIllustrationSourceContext.obj \
+        $(SLO)$/XMLIndexMarkExport.obj \
         $(SLO)$/XMLIndexObjectSourceContext.obj \
         $(SLO)$/XMLIndexSimpleEntryContext.obj \
         $(SLO)$/XMLIndexSpanEntryContext.obj \

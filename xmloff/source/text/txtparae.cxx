@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-29 14:32:08 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,9 @@
 #endif
 #ifndef _XMLOFF_XMLSECTIONEXPORT_HXX_
 #include "XMLSectionExport.hxx"
+#endif
+#ifndef _XMLOFF_XMLINDEXMARKEXPORT_HXX_
+#include "XMLIndexMarkExport.hxx"
 #endif
 
 
@@ -611,6 +614,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     pFrameGraphicIdxs( 0 ),
     pFrameEmbeddedIdxs( 0 ),
     pSectionExport( NULL ),
+    pIndexMarkExport( NULL ),
     pFrameShapeIdxs( 0 ),
     sParagraphService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Paragraph")),
     sTableService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextTable")),
@@ -729,10 +733,12 @@ XMLTextParagraphExport::XMLTextParagraphExport(
 
     pFieldExport = new XMLTextFieldExport( rExp );
     pSectionExport = new XMLSectionExport( rExp, *this );
+    pIndexMarkExport = new XMLIndexMarkExport( rExp, *this );
 }
 
 XMLTextParagraphExport::~XMLTextParagraphExport()
 {
+    delete pIndexMarkExport;
     delete pSectionExport;
     delete pFieldExport;
     delete pListElements;
@@ -1255,8 +1261,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sDocumentIndexMark))
             {
-                exportIndexMark(xPropSet,
-                                bAutoStyles);
+                pIndexMarkExport->ExportIndexMark(xPropSet, bAutoStyles);
             }
             else
                 DBG_ERROR("unknown text portion type");
@@ -1376,12 +1381,6 @@ void XMLTextParagraphExport::exportTextMark(
     // else: no styles. (see above)
 }
 
-void XMLTextParagraphExport::exportIndexMark(
-    const Reference < XPropertySet > & rPropSet,
-    sal_Bool bAutoStyles)
-{
-    // TODO: export index mark
-}
 
 sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     const Reference < XPropertySet >& rPropSet,

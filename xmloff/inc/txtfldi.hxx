@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-12 15:56:45 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace text { class XTextField; }
-    namespace beans { class XPropertySet; }
+    namespace beans { class XPropertySet; struct PropertyValue; }
 } } }
 
 namespace rtl
@@ -1285,6 +1285,43 @@ protected:
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
+};
+
+/** import bibliography info fields (<text:bibliography-mark>) */
+class XMLBibliographyFieldImportContext : public XMLTextFieldImportContext
+{
+
+    const ::rtl::OUString sPropertyFields;
+
+    ::std::vector< ::com::sun::star::beans::PropertyValue> aValues;
+
+public:
+
+    TYPEINFO();
+
+    XMLBibliographyFieldImportContext(SvXMLImport& rImport,
+                                      XMLTextImportHelper& rHlp,
+                                      sal_uInt16 nPrfx,
+                                      const ::rtl::OUString& sLocalName);
+
+protected:
+
+    /// process attributes (fill aValues)
+    virtual void StartElement(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+
+    /// empty method; all attributes are handled in StartElement
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const ::rtl::OUString& sAttrValue );
+
+    /// convert aValues into sequence and set property
+    virtual void PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+
+    static const sal_Char* MapBibliographyFieldName(::rtl::OUString sName);
+
 };
 
 

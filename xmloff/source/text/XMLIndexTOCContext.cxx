@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,14 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_TEXT_XTEXTSECTION_HPP_
+#include <com/sun/star/text/XTextSection.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TEXT_XRELATIVETEXTCONTENTINSERT_HPP_
+#include <com/sun/star/text/XRelativeTextContentInsert.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -106,6 +114,10 @@
 
 #ifndef _XMLOFF_XMLINDEXILLUSTRATIONSOURCECONTEXT_HXX_
 #include "XMLIndexIllustrationSourceContext.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLINDEXBODYCONTEXT_HXX_
+#include "XMLIndexBodyContext.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLICTXT_HXX
@@ -206,7 +218,8 @@ XMLIndexTOCContext::XMLIndexTOCContext(
     const OUString& rLocalName ) :
         SvXMLImportContext(rImport, nPrfx, rLocalName),
         pSourceElementName(NULL),
-        bValid(sal_False)
+        bValid(sal_False),
+        sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
 {
     if (XML_NAMESPACE_TEXT == nPrfx)
     {
@@ -247,11 +260,118 @@ void XMLIndexTOCContext::StartElement(
                     OUString::createFromAscii(aIndexServiceMap[eIndexType]));
             if( xIfc.is() )
             {
+                // get Property set
+                Reference<XPropertySet> xPropSet(xIfc, UNO_QUERY);
+                xTOCPropertySet = xPropSet;
+
+// second attempt: without index header section
+                // insert section
+                // a) insert section
+                //    The inserted index consists of an empty paragraph
+                //    only, as well as an empty paragraph *after* the index
+                // b) insert marker after index, and put Cursor inside of the
+                //    index
+
+                // preliminaries
+                OUString sMarker(RTL_CONSTASCII_USTRINGPARAM("Y"));
+                UniReference<XMLTextImportHelper> rImport =
+                    GetImport().GetTextImport();
+
+                // a) insert index
                 Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);
                 GetImport().GetTextImport()->InsertTextContent(xTextContent);
 
-                Reference<XPropertySet> xPropSet(xIfc, UNO_QUERY);
-                xTOCPropertySet = xPropSet;
+                // b) insert marker and move cursor
+                rImport->InsertString(sMarker);
+                rImport->GetCursor()->goLeft(2, sal_False);
+
+// first attempt; with index header section; somewhat longer
+
+//              // insert section
+//              // a) set dummy title to create title section
+//              //    (one letter only due to funny hack in the core)
+//              // b) insert section
+//              //    The inserted section consists of the title section
+//              //    (with an empty paragraph) and the body section (with
+//              //    the title section and another empty paragraph).
+//              // c) remove title
+//              //    (because we can't be sure there will be a header
+//              //     template that would normally do the job)
+//              // d) insert marker before, in, and after the index title
+//              //    (use letter Y for marker; before the title the marker
+//              //     needs to be embedded in a paragraph of its own)
+
+//              // preliminaries
+//              OUString sMarker(RTL_CONSTASCII_USTRINGPARAM("Y"));
+//              OUString sEmpty;
+//              UniReference<XMLTextImportHelper> rImport =
+//                  GetImport().GetTextImport();
+
+//              // a) set title
+//              Any aAny;
+//              aAny <<= sMarker;
+//              xPropSet->setPropertyValue(sTitle, aAny);
+
+//              // b) insert section
+//              Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);
+//              GetImport().GetTextImport()->InsertTextContent(xTextContent);
+
+//              // c) set title
+//              aAny <<= sEmpty;
+//              xPropSet->setPropertyValue(sTitle, aAny);
+
+//              // d) insert markers
+//              // d1) after
+//              rImport->GetCursor()->goLeft(1, sal_False);
+//              rImport->InsertString(sMarker);
+//              // d2) in
+//              rImport->GetCursor()->goLeft(2, sal_False);
+//              rImport->InsertString(sMarker);
+//              // d3) before (via its own paragraph and XRelTextContentInsert)
+//              OUString sParagraphService(RTL_CONSTASCII_USTRINGPARAM(
+//                  "com.sun.star.text.Paragraph"));
+//              xIfc = xFactory->createInstance(sParagraphService);
+//              if (xIfc.is())
+//              {
+//                  // create paragraph and XRelativeBlaBlaInsert
+//                  Reference<XTextContent> xParagraph(xIfc, UNO_QUERY);
+//                  Reference<XRelativeTextContentInsert> xRelInsert(
+//                      rImport->GetText(), UNO_QUERY);
+//                  if (xRelInsert.is())
+//                  {
+//                      // the current text section
+//                      OUString sTextSection(RTL_CONSTASCII_USTRINGPARAM(
+//                          "TextSection"));
+//                      Reference<XPropertySet> xCursorProps(
+//                          rImport->GetCursor(), UNO_QUERY);
+//                      Any aAny =xCursorProps->getPropertyValue(sTextSection);
+//                      Reference<XTextSection> xSection;
+//                      aAny >>= xSection;
+//                      Reference<XTextContent> xSectionContent(xSection,
+//                                                              UNO_QUERY);
+//                      // Puuh. Now we can insert the paragraph
+//                      xRelInsert->insertTextContentBefore(xParagraph,
+//                                                          xSectionContent);
+//                      // insert marker into the new paragraph
+//                      rImport->GetCursor()->goLeft(2, sal_False);
+//                      rImport->InsertString(sMarker);
+
+//                      // prelim: go to just after the
+//                      rImport->GetCursor()->goRight(5, sal_False);
+//                  }
+//                  else
+//                  {
+//                      DBG_ERROR("Can't create XRelativeTextContentInsert!");
+//                      // ignore? erraneous input?!?
+
+//                      // TODO: think of recovery; e.g. inserting to additional characters before
+//                  }
+//              }
+//              else
+//              {
+//                  DBG_ERROR("Can't create paragraph!");
+//                  // ignore? erraneous input?!?
+//              }
             }
         }
 
@@ -281,7 +401,21 @@ void XMLIndexTOCContext::StartElement(
 
 void XMLIndexTOCContext::EndElement()
 {
-    // nothing left
+    // preliminaries
+    OUString sEmpty;
+    UniReference<XMLTextImportHelper> rHelper = GetImport().GetTextImport();
+
+    // get rid of last paragraph
+    rHelper->GetCursor()->goRight(1, sal_False);
+    rHelper->GetCursor()->goLeft(1, sal_True);
+    rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
+                                     sEmpty, sal_True);
+
+    // and delete second marker
+    rHelper->GetCursor()->goRight(1, sal_True);
+    rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
+                                     sEmpty, sal_True);
+
 }
 
 SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
@@ -298,11 +432,12 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
             if (rLocalName.equalsAsciiL(sXML_index_body,
                                         sizeof(sXML_index_body)-1))
             {
-                // TODO: text content
+                pContext = new XMLIndexBodyContext(GetImport(), nPrefix,
+                                                   rLocalName);
             }
             else if (0 == rLocalName.compareToAscii(pSourceElementName))
             {
-                // instantiate source context for this index type
+                // instantiate source context for the appropriate index type
                 switch (eIndexType)
                 {
                     case TEXT_INDEX_TOC:

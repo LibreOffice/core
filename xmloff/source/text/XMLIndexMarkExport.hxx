@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLIndexTOCContext.hxx,v $
+ *  $RCSfile: XMLIndexMarkExport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
  *
@@ -59,86 +59,94 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
-#define _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
+#ifndef _XMLOFF_XMLINDEXMARKEXPORT_HXX_
+#define _XMLOFF_XMLINDEXMARKEXPORT_HXX_
 
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
 
-
+class SvXMLExport;
+class XMLTextParagraphExport;
 namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { class XPropertySet; }
-} } }
-namespace rtl { class OUString; }
-
-
-enum IndexTypeEnum
-{
-    TEXT_INDEX_TOC,
-    TEXT_INDEX_ALPHABETICAL,
-    TEXT_INDEX_TABLE,
-    TEXT_INDEX_OBJECT,
-    TEXT_INDEX_BIBLIOGRAPHY,
-    TEXT_INDEX_USER,
-    TEXT_INDEX_ILLUSTRATION,
-
-    TEXT_INDEX_UNKNOWN
-};
+ } } }
+namespace rtl {
+    class OUString;
+    class OUStringBuffer;
+}
 
 
 /**
- * Import all indices.
+ * This class handles the export of index marks for table of content,
+ * alphabetical and user index.
  *
- * Originally, this class would import only the TOC (table of
- * content), but now it's role has been expanded to handle all
- * indices, and hence is named inappropriately. Depending on the
- * element name it decides which index source element context to create.
+ * Marks for bibliography indices are internally modelled as text
+ * fields and thus handled in txtparae.cxx
  */
-class XMLIndexTOCContext : public SvXMLImportContext
+class XMLIndexMarkExport
 {
-    const ::rtl::OUString sTitle;
+    ::rtl::OUString sLevel;
+    ::rtl::OUString sUserIndexName;
+    ::rtl::OUString sPrimaryKey;
+    ::rtl::OUString sSecondaryKey;
+    ::rtl::OUString sDocumentIndexMark;
+    ::rtl::OUString sIsStart;
+    ::rtl::OUString sIsCollapsed;
+    ::rtl::OUString sAlternativeText;
 
-    /** XPropertySet of the index */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xTOCPropertySet;
-
-    enum IndexTypeEnum eIndexType;
-
-    /** source element name (for CreateChildContext) */
-    const sal_Char* pSourceElementName;
-
-    sal_Bool bValid;
+    SvXMLExport& rExport;
+    XMLTextParagraphExport& rParaExport;
 
 public:
+    XMLIndexMarkExport(SvXMLExport& rExp,
+                       XMLTextParagraphExport& rParaExp);
 
-    TYPEINFO();
+    ~XMLIndexMarkExport();
 
-    XMLIndexTOCContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
-
-    ~XMLIndexTOCContext();
+    /**
+     * export by the property set of its *text* *portion*.
+     *
+     * The text portion supplies us with the properties of the index
+     * mark itself, as well as the information whether we are at the
+     * start or end of an index mark, or whether the index mark is
+     * collapsed.
+     */
+    void ExportIndexMark(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet> & rPropSet,
+        sal_Bool bAutoStyles);
 
 protected:
 
-    virtual void StartElement(
+    /// export attributes of table-of-content index marks
+    void ExportTOCMarkAttributes(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+            ::com::sun::star::beans::XPropertySet> & rPropSet);
 
-    virtual void EndElement();
-
-    virtual SvXMLImportContext *CreateChildContext(
-        sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+    /// export attributes of user index marks
+    void ExportUserIndexMarkAttributes(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
+            ::com::sun::star::beans::XPropertySet> & rPropSet);
+
+    /// export attributes of alphabetical  index marks
+    void ExportAlphabeticalIndexMarkAttributes(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet> & rPropSet);
+
+    /// create a numerical ID for this index mark
+    /// (represented by its properties)
+    void GetID(
+        ::rtl::OUStringBuffer& sBuffer,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet> & rPropSet);
+
 };
 
 #endif

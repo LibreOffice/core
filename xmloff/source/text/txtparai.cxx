@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-27 13:37:09 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _COM_SUN_STAR_TEXT_CONTROLCHARACTER_HPP_
 #include <com/sun/star/text/ControlCharacter.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
+#include <com/sun/star/container/XIndexReplace.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
 #endif
@@ -118,6 +121,9 @@
 #ifndef _XMLOFF_TXTFLDI_HXX
 #include "txtfldi.hxx"
 #endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include "xmluconv.hxx"
+#endif
 #ifndef _XMLOFF_XMLFOOTNOTEIMPORTCONTEXT_HXX
 #include "XMLFootnoteImportContext.hxx"
 #endif
@@ -144,6 +150,7 @@ using namespace ::com::sun::star::drawing;
 #define XML_HINT_REFERENCE 2
 #define XML_HINT_HYPERLINK 3
 #define XML_HINT_RUBY 4
+#define XML_HINT_INDEX_MARK 5
 
 
 class XMLHint_Impl
@@ -183,6 +190,7 @@ public:
     sal_Bool IsStyle() { return XML_HINT_STYLE==nType; }
     sal_Bool IsReference() { return XML_HINT_REFERENCE==nType; }
     sal_Bool IsHyperlink() { return XML_HINT_HYPERLINK==nType; }
+    sal_Bool IsIndexMark() { return XML_HINT_INDEX_MARK==nType; }
 };
 
 class XMLStyleHint_Impl : public XMLHint_Impl
@@ -210,7 +218,7 @@ public:
 
     XMLReferenceHint_Impl( const OUString& rRefName,
                              const Reference < XTextRange > & rPos ) :
-        XMLHint_Impl( XML_HINT_REFERENCE, rPos ),
+        XMLHint_Impl( XML_HINT_REFERENCE, rPos, rPos ),
         sRefName( rRefName )
     {
     }
@@ -247,6 +255,38 @@ public:
     const OUString& GetStyleName() const { return sStyleName; }
     void SetVisitedStyleName( const OUString& s ) { sVisitedStyleName = s; }
     const OUString& GetVisitedStyleName() const { return sVisitedStyleName; }
+};
+
+class XMLIndexMarkHint_Impl : public XMLHint_Impl
+{
+    const Reference<beans::XPropertySet> xIndexMarkPropSet;
+
+    const OUString sID;
+
+public:
+
+    XMLIndexMarkHint_Impl( const Reference < beans::XPropertySet > & rPropSet,
+                           const Reference < XTextRange > & rPos ) :
+        XMLHint_Impl( XML_HINT_INDEX_MARK, rPos, rPos ),
+        xIndexMarkPropSet( rPropSet ),
+        sID()
+    {
+    }
+
+    XMLIndexMarkHint_Impl( const Reference < beans::XPropertySet > & rPropSet,
+                           const Reference < XTextRange > & rPos,
+                           OUString sIDString) :
+        XMLHint_Impl( XML_HINT_INDEX_MARK, rPos, rPos ),
+        xIndexMarkPropSet( rPropSet ),
+        sID(sIDString)
+    {
+    }
+
+    virtual ~XMLIndexMarkHint_Impl() {}
+
+    const Reference<beans::XPropertySet> & GetMark() const
+        { return xIndexMarkPropSet; }
+    const OUString& GetID() const { return sID; }
 };
 
 class XMLRubyHint_Impl : public XMLHint_Impl
@@ -848,6 +888,495 @@ SvXMLImportContext *XMLImpRubyContext_Impl::CreateChildContext(
 
 // ---------------------------------------------------------------------
 
+
+/**
+ * Process index marks.
+ *
+ * All *-mark-end index marks should instantiate *this* class (because
+ * it doesn't process attributes other than ID), while the *-mark and
+ * *-mark-start classes should instantiate the apporpiate subclasses.
+ */
+class XMLIndexMarkImportContext_Impl : public SvXMLImportContext
+{
+    const OUString sAlternativeText;
+
+    XMLHints_Impl& rHints;
+    const enum XMLTextPElemTokens eToken;
+    OUString sID;
+
+public:
+    TYPEINFO();
+
+    XMLIndexMarkImportContext_Impl(
+        SvXMLImport& rImport,
+        sal_uInt16 nPrefix,
+        const String& rLocalName,
+        enum XMLTextPElemTokens nTok,
+        XMLHints_Impl& rHnts);
+
+    void StartElement(const Reference<xml::sax::XAttributeList> & xAttrList);
+
+protected:
+
+    /// process all attributes
+    void ProcessAttributes(const Reference<xml::sax::XAttributeList> & xAttrList,
+                           Reference<beans::XPropertySet>& rPropSet);
+
+    /**
+     * All marks can be created immediatly. Since we don't care about
+     * the element content, ProcessAttribute should set the properties
+     * immediatly.
+     *
+     * This method tolerates an empty PropertySet; subclasses however
+     * are not expected to.
+     */
+    virtual void ProcessAttribute(sal_uInt16 nNamespace,
+                                  OUString sLocalName,
+                                  OUString sValue,
+                                  Reference<beans::XPropertySet>& rPropSet);
+
+    static void GetServiceName(OUString& sServiceName,
+                               enum XMLTextPElemTokens nToken);
+
+    sal_Bool CreateMark(Reference<beans::XPropertySet>& rPropSet,
+                        const OUString& rServiceName);
+};
+
+
+TYPEINIT1( XMLIndexMarkImportContext_Impl, SvXMLImportContext );
+
+XMLIndexMarkImportContext_Impl::XMLIndexMarkImportContext_Impl(
+    SvXMLImport& rImport,
+    sal_uInt16 nPrefix,
+    const String& rLocalName,
+    enum XMLTextPElemTokens eTok,
+    XMLHints_Impl& rHnts) :
+        SvXMLImportContext(rImport, nPrefix, rLocalName),
+        rHints(rHnts),
+        eToken(eTok),
+        sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")),
+        sID()
+{
+}
+
+void XMLIndexMarkImportContext_Impl::StartElement(
+    const Reference<xml::sax::XAttributeList> & xAttrList)
+{
+    // get Cursor position (needed for all cases)
+    Reference<XTextRange> xPos =
+        GetImport().GetTextImport()->GetCursor()->getStart();
+    Reference<beans::XPropertySet> xMark;
+
+    switch (eToken)
+    {
+        case XML_TOK_TEXT_TOC_MARK:
+        case XML_TOK_TEXT_USER_INDEX_MARK:
+        case XML_TOK_TEXT_ALPHA_INDEX_MARK:
+        {
+            // single mark: create mark and insert
+            OUString sService;
+            GetServiceName(sService, eToken);
+            if (CreateMark(xMark, sService))
+            {
+                ProcessAttributes(xAttrList, xMark);
+                XMLHint_Impl* pHint = new XMLIndexMarkHint_Impl(xMark, xPos);
+                rHints.Insert(pHint, rHints.Count());
+            }
+            // else: can't create mark -> ignore
+            break;
+        }
+
+        case XML_TOK_TEXT_TOC_MARK_START:
+        case XML_TOK_TEXT_USER_INDEX_MARK_START:
+        case XML_TOK_TEXT_ALPHA_INDEX_MARK_START:
+        {
+            // start: create mark and insert (if ID is found)
+            OUString sService;
+            GetServiceName(sService, eToken);
+            if (CreateMark(xMark, sService))
+            {
+                ProcessAttributes(xAttrList, xMark);
+                if (sID.getLength() > 0)
+                {
+                    // process only if we find an ID
+                    XMLHint_Impl* pHint =
+                        new XMLIndexMarkHint_Impl(xMark, xPos, sID);
+                    rHints.Insert(pHint, rHints.Count());
+                }
+                // else: no ID -> we'll never find the end -> ignore
+            }
+            // else: can't create mark -> ignore
+            break;
+        }
+
+        case XML_TOK_TEXT_TOC_MARK_END:
+        case XML_TOK_TEXT_USER_INDEX_MARK_END:
+        case XML_TOK_TEXT_ALPHA_INDEX_MARK_END:
+        {
+            // end: search for ID and set end of mark
+
+            // call process attributes with empty XPropertySet:
+            ProcessAttributes(xAttrList, xMark);
+            if (sID.getLength() > 0)
+            {
+                // if we have an ID, find the hint and set the end position
+                sal_uInt16 nCount = rHints.Count();
+                for(sal_uInt16 nPos = 0; nPos < nCount; nPos++)
+                {
+                    XMLHint_Impl *pHint = rHints[nPos];
+                    if ( pHint->IsIndexMark() &&
+                         sID.equals(
+                             ((XMLIndexMarkHint_Impl *)pHint)->GetID()) )
+                    {
+                        // set end and stop searching
+                        pHint->SetEnd(xPos);
+                        break;
+                    }
+                }
+            }
+            // else: no ID -> ignore
+            break;
+        }
+
+        default:
+            DBG_ERROR("unknown index mark type!");
+            break;
+    }
+}
+
+void XMLIndexMarkImportContext_Impl::ProcessAttributes(
+    const Reference<xml::sax::XAttributeList> & xAttrList,
+    Reference<beans::XPropertySet>& rPropSet)
+{
+    // process attributes
+    sal_Int32 nLength = xAttrList->getLength();
+    for(sal_Int32 i=0; i<nLength; i++)
+    {
+        OUString sLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
+
+        ProcessAttribute(nPrefix, sLocalName,
+                         xAttrList->getValueByIndex(i),
+                         rPropSet);
+    }
+}
+
+void XMLIndexMarkImportContext_Impl::ProcessAttribute(
+    sal_uInt16 nNamespace,
+    OUString sLocalName,
+    OUString sValue,
+    Reference<beans::XPropertySet>& rPropSet)
+{
+    // we only know ID + string-value attribute;
+    // (former: marks, latter: -start + -end-marks)
+    // the remainder is handled in sub-classes
+    switch (eToken)
+    {
+        case XML_TOK_TEXT_TOC_MARK:
+        case XML_TOK_TEXT_USER_INDEX_MARK:
+        case XML_TOK_TEXT_ALPHA_INDEX_MARK:
+            if ( (XML_NAMESPACE_TEXT == nNamespace) &&
+                 sLocalName.equalsAsciiL(sXML_string_value,
+                                         sizeof(sXML_string_value)-1))
+            {
+                Any aAny;
+                aAny <<= sValue;
+                rPropSet->setPropertyValue(sAlternativeText, aAny);
+            }
+            // else: ignore!
+            break;
+
+        case XML_TOK_TEXT_TOC_MARK_START:
+        case XML_TOK_TEXT_USER_INDEX_MARK_START:
+        case XML_TOK_TEXT_ALPHA_INDEX_MARK_START:
+        case XML_TOK_TEXT_TOC_MARK_END:
+        case XML_TOK_TEXT_USER_INDEX_MARK_END:
+        case XML_TOK_TEXT_ALPHA_INDEX_MARK_END:
+            if ( (XML_NAMESPACE_TEXT == nNamespace) &&
+                 sLocalName.equalsAsciiL(sXML_id, sizeof(sXML_id)-1) )
+            {
+                sID = sValue;
+            }
+            // else: ignore
+            break;
+
+        default:
+            DBG_ERROR("unknown index mark type!");
+            break;
+    }
+}
+
+static const sal_Char sAPI_com_sun_star_text_ContentIndexMark[] =
+        "com.sun.star.text.ContentIndexMark";
+static const sal_Char sAPI_com_sun_star_text_UserIndexMark[] =
+        "com.sun.star.text.UserIndexMark";
+static const sal_Char sAPI_com_sun_star_text_DocumentIndexMark[] =
+        "com.sun.star.text.DocumentIndexMark";
+
+
+void XMLIndexMarkImportContext_Impl::GetServiceName(
+    OUString& sServiceName,
+    enum XMLTextPElemTokens eToken)
+{
+    switch (eToken)
+    {
+        case XML_TOK_TEXT_TOC_MARK:
+        case XML_TOK_TEXT_TOC_MARK_START:
+        case XML_TOK_TEXT_TOC_MARK_END:
+        {
+            OUString sTmp(RTL_CONSTASCII_USTRINGPARAM(
+                sAPI_com_sun_star_text_ContentIndexMark));
+            sServiceName = sTmp;
+            break;
+        }
+
+        case XML_TOK_TEXT_USER_INDEX_MARK:
+        case XML_TOK_TEXT_USER_INDEX_MARK_START:
+        case XML_TOK_TEXT_USER_INDEX_MARK_END:
+        {
+            OUString sTmp(RTL_CONSTASCII_USTRINGPARAM(
+                sAPI_com_sun_star_text_UserIndexMark));
+            sServiceName = sTmp;
+            break;
+        }
+
+        case XML_TOK_TEXT_ALPHA_INDEX_MARK:
+        case XML_TOK_TEXT_ALPHA_INDEX_MARK_START:
+        case XML_TOK_TEXT_ALPHA_INDEX_MARK_END:
+        {
+            OUString sTmp(RTL_CONSTASCII_USTRINGPARAM(
+                sAPI_com_sun_star_text_DocumentIndexMark));
+            sServiceName = sTmp;
+            break;
+        }
+
+        default:
+        {
+            DBG_ERROR("unknown index mark type!");
+            OUString sTmp;
+            sServiceName = sTmp;
+            break;
+        }
+    }
+}
+
+
+sal_Bool XMLIndexMarkImportContext_Impl::CreateMark(
+    Reference<beans::XPropertySet>& rPropSet,
+    const OUString& rServiceName)
+{
+    Reference<lang::XMultiServiceFactory>
+        xFactory(GetImport().GetModel(), UNO_QUERY);
+
+    if( xFactory.is() )
+    {
+        Reference<XInterface> xIfc = xFactory->createInstance(rServiceName);
+        if( xIfc.is() )
+        {
+            Reference<beans::XPropertySet> xPropSet( xIfc, UNO_QUERY );
+            if (xPropSet.is())
+                rPropSet = xPropSet;
+            return sal_True;
+        }
+    }
+
+    return sal_False;
+}
+
+
+class XMLTOCMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
+{
+    const OUString sLevel;
+
+public:
+    TYPEINFO();
+
+    XMLTOCMarkImportContext_Impl(
+        SvXMLImport& rImport,
+        sal_uInt16 nPrefix,
+        const String& rLocalName,
+        enum XMLTextPElemTokens nTok,
+        XMLHints_Impl& rHnts);
+
+protected:
+
+    /** process outline level */
+    virtual void ProcessAttribute(sal_uInt16 nNamespace,
+                                  OUString sLocalName,
+                                  OUString sValue,
+                                  Reference<beans::XPropertySet>& rPropSet);
+};
+
+TYPEINIT1( XMLTOCMarkImportContext_Impl, XMLIndexMarkImportContext_Impl );
+
+
+XMLTOCMarkImportContext_Impl::XMLTOCMarkImportContext_Impl(
+    SvXMLImport& rImport, sal_uInt16 nPrefix, const String& rLocalName,
+    enum XMLTextPElemTokens nTok, XMLHints_Impl& rHnts) :
+        XMLIndexMarkImportContext_Impl(rImport, nPrefix, rLocalName,
+                                       nTok, rHnts),
+        sLevel(RTL_CONSTASCII_USTRINGPARAM("Level"))
+{
+}
+
+void XMLTOCMarkImportContext_Impl::ProcessAttribute(
+    sal_uInt16 nNamespace,
+    OUString sLocalName,
+    OUString sValue,
+    Reference<beans::XPropertySet>& rPropSet)
+{
+    DBG_ASSERT(rPropSet.is(), "need PropertySet");
+
+    if ((XML_NAMESPACE_TEXT == nNamespace) &&
+        sLocalName.equalsAsciiL(sXML_outline_level,
+                                sizeof(sXML_outline_level)-1))
+    {
+        // ouline level: set Level property
+        sal_Int32 nTmp;
+        if (SvXMLUnitConverter::convertNumber(
+            nTmp, sValue, 0,
+            GetImport().GetTextImport()->GetChapterNumbering()->getCount()))
+        {
+            Any aAny;
+            aAny <<= (sal_Int16)nTmp;
+            rPropSet->setPropertyValue(sLevel, aAny);
+        }
+        // else: value out of range -> ignore
+    }
+    else
+    {
+        // else: delegate to superclass
+        XMLIndexMarkImportContext_Impl::ProcessAttribute(
+            nNamespace, sLocalName, sValue, rPropSet);
+    }
+}
+
+class XMLUserIndexMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
+{
+    const OUString sUserIndexName;
+
+public:
+    TYPEINFO();
+
+    XMLUserIndexMarkImportContext_Impl(
+        SvXMLImport& rImport,
+        sal_uInt16 nPrefix,
+        const String& rLocalName,
+        enum XMLTextPElemTokens nTok,
+        XMLHints_Impl& rHnts);
+
+protected:
+
+    /** process index name */
+    virtual void ProcessAttribute(sal_uInt16 nNamespace,
+                                  OUString sLocalName,
+                                  OUString sValue,
+                                  Reference<beans::XPropertySet>& rPropSet);
+};
+
+TYPEINIT1( XMLUserIndexMarkImportContext_Impl, XMLIndexMarkImportContext_Impl);
+
+XMLUserIndexMarkImportContext_Impl::XMLUserIndexMarkImportContext_Impl(
+    SvXMLImport& rImport, sal_uInt16 nPrefix, const String& rLocalName,
+    enum XMLTextPElemTokens nTok, XMLHints_Impl& rHnts) :
+        XMLIndexMarkImportContext_Impl(rImport, nPrefix, rLocalName,
+                                       nTok, rHnts),
+        sUserIndexName(RTL_CONSTASCII_USTRINGPARAM("UserIndexName"))
+{
+}
+
+void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
+    sal_uInt16 nNamespace, OUString sLocalName, OUString sValue,
+    Reference<beans::XPropertySet>& rPropSet)
+{
+    if ((XML_NAMESPACE_TEXT == nNamespace) &&
+        (sLocalName.equalsAsciiL(sXML_index_name, sizeof(sXML_index_name)-1)))
+    {
+        Any aAny;
+        aAny <<= sValue;
+        rPropSet->setPropertyValue(sUserIndexName, aAny);
+    }
+    else
+    {
+        XMLIndexMarkImportContext_Impl::ProcessAttribute(
+            nNamespace, sLocalName, sValue, rPropSet);
+    }
+}
+
+
+class XMLAlphaIndexMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
+{
+    const OUString sPrimaryKey;
+    const OUString sSecondaryKey;
+
+public:
+    TYPEINFO();
+
+    XMLAlphaIndexMarkImportContext_Impl(
+        SvXMLImport& rImport,
+        sal_uInt16 nPrefix,
+        const String& rLocalName,
+        enum XMLTextPElemTokens nTok,
+        XMLHints_Impl& rHnts);
+
+protected:
+
+    /** process primary + secondary keys */
+    virtual void ProcessAttribute(sal_uInt16 nNamespace,
+                                  OUString sLocalName,
+                                  OUString sValue,
+                                  Reference<beans::XPropertySet>& rPropSet);
+};
+
+TYPEINIT1( XMLAlphaIndexMarkImportContext_Impl,
+           XMLIndexMarkImportContext_Impl );
+
+XMLAlphaIndexMarkImportContext_Impl::XMLAlphaIndexMarkImportContext_Impl(
+    SvXMLImport& rImport, sal_uInt16 nPrefix, const String& rLocalName,
+    enum XMLTextPElemTokens nTok, XMLHints_Impl& rHnts) :
+        XMLIndexMarkImportContext_Impl(rImport, nPrefix, rLocalName,
+                                       nTok, rHnts),
+        sPrimaryKey(RTL_CONSTASCII_USTRINGPARAM("PrimaryKey")),
+        sSecondaryKey(RTL_CONSTASCII_USTRINGPARAM("SecondaryKey"))
+{
+}
+
+void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
+    sal_uInt16 nNamespace, OUString sLocalName, OUString sValue,
+    Reference<beans::XPropertySet>& rPropSet)
+{
+    if (XML_NAMESPACE_TEXT == nNamespace)
+    {
+        if (sLocalName.equalsAsciiL(sXML_key1, sizeof(sXML_key1)))
+        {
+            Any aAny;
+            aAny <<= sValue;
+            rPropSet->setPropertyValue(sPrimaryKey, aAny);
+        }
+        else if (sLocalName.equalsAsciiL(sXML_key2, sizeof(sXML_key2)))
+        {
+            Any aAny;
+            aAny <<= sValue;
+            rPropSet->setPropertyValue(sSecondaryKey, aAny);
+        }
+        else
+        {
+            XMLIndexMarkImportContext_Impl::ProcessAttribute(
+                nNamespace, sLocalName, sValue, rPropSet);
+        }
+    }
+    else
+    {
+        XMLIndexMarkImportContext_Impl::ProcessAttribute(
+            nNamespace, sLocalName, sValue, rPropSet);
+    }
+}
+
+
+
+// ---------------------------------------------------------------------
+
 TYPEINIT1( XMLImpSpanContext_Impl, SvXMLImportContext );
 
 XMLImpSpanContext_Impl::XMLImpSpanContext_Impl(
@@ -1033,6 +1562,35 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         pContext = new XMLTextFrameHyperlinkContext( rImport, nPrefix,
                                             rLocalName, xAttrList,
                                             TextContentAnchorType_AS_CHARACTER );
+        break;
+
+    case XML_TOK_TEXT_TOC_MARK:
+    case XML_TOK_TEXT_TOC_MARK_START:
+        pContext = new XMLTOCMarkImportContext_Impl(
+            rImport, nPrefix, rLocalName,
+            (enum XMLTextPElemTokens)nToken, rHints);
+        break;
+
+    case XML_TOK_TEXT_USER_INDEX_MARK:
+    case XML_TOK_TEXT_USER_INDEX_MARK_START:
+        pContext = new XMLUserIndexMarkImportContext_Impl(
+            rImport, nPrefix, rLocalName,
+            (enum XMLTextPElemTokens)nToken, rHints);
+        break;
+
+    case XML_TOK_TEXT_ALPHA_INDEX_MARK:
+    case XML_TOK_TEXT_ALPHA_INDEX_MARK_START:
+        pContext = new XMLAlphaIndexMarkImportContext_Impl(
+            rImport, nPrefix, rLocalName,
+            (enum XMLTextPElemTokens)nToken, rHints);
+        break;
+
+    case XML_TOK_TEXT_TOC_MARK_END:
+    case XML_TOK_TEXT_USER_INDEX_MARK_END:
+    case XML_TOK_TEXT_ALPHA_INDEX_MARK_END:
+        pContext = new XMLIndexMarkImportContext_Impl(
+            rImport, nPrefix, rLocalName, (enum XMLTextPElemTokens)nToken,
+            rHints);
         break;
 
     default:
@@ -1222,6 +1780,16 @@ XMLParaContext::~XMLParaContext()
                                          pRHint->GetStyleName(),
                                          pRHint->GetTextStyleName(),
                                          pRHint->GetText() );
+                }
+                break;
+            case XML_HINT_INDEX_MARK:
+                {
+                    Reference<beans::XPropertySet> xMark(
+                        ((const XMLIndexMarkHint_Impl *)pHint)->GetMark());
+                    Reference<XTextContent> xContent(xMark, UNO_QUERY);
+                    Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
+                    xTxtImport->GetText()->insertTextContent(
+                        xRange, xContent, sal_True );
                 }
                 break;
             default:

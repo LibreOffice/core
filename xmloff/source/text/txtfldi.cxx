@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-22 13:42:43 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,18 @@
 #include <com/sun/star/document/XDocumentInfo.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TEXT_BIBLIOGRAPHYDATATYPE_HPP_
+#include <com/sun/star/text/BibliographyDataType.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TEXT_BIBLIOGRAPHYDATAFIELD_HPP_
+#include <com/sun/star/text/BibliographyDataField.hpp>
+#endif
+
 #ifndef _RTL_USTRING
 #include <rtl/ustring>
 #endif
@@ -270,6 +282,7 @@ const sal_Char sAPI_dde[]                       = "DDE";
 const sal_Char sAPI_get_reference[]             = "GetReference";
 const sal_Char sAPI_sheet_name[]                = "SheetName";
 const sal_Char sAPI_url[]                       = "URL";
+const sal_Char sAPI_bibliography[]              = "Bibliography";
 
 // property names
 const sal_Char sAPI_is_fixed[]          = "IsFixed";
@@ -460,7 +473,6 @@ void XMLTextFieldImportContext::EndElement()
             return;
         }
     }
-
 
     // in case of error: write element content
     rTextImportHelper.InsertString(GetContent());
@@ -737,6 +749,11 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
         case XML_TOK_TEXT_SHEET_NAME:
             pContext = new XMLSheetNameImportContext( rImport, rHlp,
                                                       nPrefix, rName );
+            break;
+
+        case XML_TOK_TEXT_BIBLIOGRAPHY_MARK:
+            pContext = new XMLBibliographyFieldImportContext( rImport, rHlp,
+                                                              nPrefix, rName );
             break;
 
         default:
@@ -3073,3 +3090,269 @@ void XMLUrlFieldImportContext::PrepareField(
     }
 }
 
+
+TYPEINIT1(XMLBibliographyFieldImportContext, XMLTextFieldImportContext);
+
+
+XMLBibliographyFieldImportContext::XMLBibliographyFieldImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_uInt16 nPrfx,
+    const OUString& sLocalName) :
+        XMLTextFieldImportContext(rImport, rHlp, sAPI_bibliography,
+                                  nPrfx, sLocalName),
+        sPropertyFields(RTL_CONSTASCII_USTRINGPARAM("Fields")),
+        aValues()
+{
+    bValid = sal_True;
+}
+
+// TODO: this is the same map as is used in XMLSectionExport; we need only one copy.
+SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataFieldMap[] =
+{
+    { sXML_address,             BibliographyDataField::ADDRESS },
+    { sXML_annote,              BibliographyDataField::ANNOTE },
+    { sXML_author,              BibliographyDataField::AUTHOR },
+    { sXML_bibiliographic_type, BibliographyDataField::BIBILIOGRAPHIC_TYPE },
+    { sXML_booktitle,           BibliographyDataField::BOOKTITLE },
+    { sXML_chapter,             BibliographyDataField::CHAPTER },
+    { sXML_custom1,             BibliographyDataField::CUSTOM1 },
+    { sXML_custom2,             BibliographyDataField::CUSTOM2 },
+    { sXML_custom3,             BibliographyDataField::CUSTOM3 },
+    { sXML_custom4,             BibliographyDataField::CUSTOM4 },
+    { sXML_custom5,             BibliographyDataField::CUSTOM5 },
+    { sXML_edition,             BibliographyDataField::EDITION },
+    { sXML_editor,              BibliographyDataField::EDITOR },
+    { sXML_howpublished,        BibliographyDataField::HOWPUBLISHED },
+    { sXML_identifier,          BibliographyDataField::IDENTIFIER },
+    { sXML_institution,         BibliographyDataField::INSTITUTION },
+    { sXML_isbn,                BibliographyDataField::ISBN },
+    { sXML_journal,             BibliographyDataField::JOURNAL },
+    { sXML_month,               BibliographyDataField::MONTH },
+    { sXML_note,                BibliographyDataField::NOTE },
+    { sXML_number,              BibliographyDataField::NUMBER },
+    { sXML_organizations,       BibliographyDataField::ORGANIZATIONS },
+    { sXML_pages,               BibliographyDataField::PAGES },
+    { sXML_publisher,           BibliographyDataField::PUBLISHER },
+    { sXML_report_type,         BibliographyDataField::REPORT_TYPE },
+    { sXML_school,              BibliographyDataField::SCHOOL },
+    { sXML_series,              BibliographyDataField::SERIES },
+    { sXML_title,               BibliographyDataField::TITLE },
+    { sXML_url,                 BibliographyDataField::URL },
+    { sXML_volume,              BibliographyDataField::VOLUME },
+    { sXML_year,                BibliographyDataField::YEAR },
+    { NULL, NULL }
+};
+
+// we'll process attributes on our own and forfit the standard
+// tecfield mechanism, because our attributes have zero overlp with
+// all the oher textfields.
+void XMLBibliographyFieldImportContext::StartElement(
+        const Reference<XAttributeList> & xAttrList)
+{
+    // iterate over attributes
+    sal_Int32 nLength = xAttrList->getLength();
+    for(sal_Int32 i=0; i<nLength; i++) {
+
+        OUString sLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
+
+        if (nPrefix == XML_NAMESPACE_TEXT)
+        {
+            PropertyValue aValue;
+            aValue.Name = OUString::createFromAscii(
+                MapBibliographyFieldName(sLocalName));
+            Any aAny;
+
+            // special treatment for bibliographic type
+            if (sLocalName.equalsAsciiL(sXML_bibiliographic_type,
+                                        sizeof(sXML_bibiliographic_type)-1))
+            {
+                sal_uInt16 nTmp;
+                if (SvXMLUnitConverter::convertEnum(nTmp, sLocalName,
+                                                    aBibliographyDataFieldMap))
+                {
+                    aAny <<= nTmp;
+                    aValue.Value = aAny;
+
+                    aValues.push_back(aValue);
+                }
+            }
+            else
+            {
+                aAny <<= xAttrList->getValueByIndex(i);
+                aValue.Value = aAny;
+
+                aValues.push_back(aValue);
+            }
+        }
+        // else: unknown namespace -> ignore
+    }
+}
+
+void XMLBibliographyFieldImportContext::ProcessAttribute(
+    sal_uInt16 nAttrToken,
+    const OUString& sAttrValue )
+{
+    // attributes are handled in StartElement
+    DBG_ERROR("This should not have happened.");
+}
+
+
+void XMLBibliographyFieldImportContext::PrepareField(
+    const Reference<XPropertySet> & xPropertySet)
+{
+    // convert vector into sequence
+    sal_Int32 nCount = aValues.size();
+    Sequence<PropertyValue> aValueSequence(nCount);
+    for(sal_Int32 i = 0; i < nCount; i++)
+    {
+        aValueSequence[i] = aValues[i];
+    }
+
+    // set sequence
+    Any aAny;
+    aAny <<= aValueSequence;
+    xPropertySet->setPropertyValue(sPropertyFields, aAny);
+}
+
+const sal_Char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
+    OUString sName)
+{
+    sal_Char* pName = NULL;
+
+    if (sName.equalsAsciiL(sXML_identifier, sizeof(sXML_identifier)-1))
+    {
+        pName = "Identifier";
+    }
+    else if (sName.equalsAsciiL(sXML_bibiliographic_type,
+                                sizeof(sXML_bibiliographic_type)-1))
+    {
+        pName = "BibiliographicType";
+    }
+    else if (sName.equalsAsciiL(sXML_address, sizeof(sXML_address)-1))
+    {
+        pName = "Address";
+    }
+    else if (sName.equalsAsciiL(sXML_annote, sizeof(sXML_annote)-1))
+    {
+        pName = "Annote";
+    }
+    else if (sName.equalsAsciiL(sXML_author, sizeof(sXML_author)-1))
+    {
+        pName = "Author";
+    }
+    else if (sName.equalsAsciiL(sXML_booktitle, sizeof(sXML_booktitle)-1))
+    {
+        pName = "Booktitle";
+    }
+    else if (sName.equalsAsciiL(sXML_chapter, sizeof(sXML_chapter)-1))
+    {
+        pName = "Chapter";
+    }
+    else if (sName.equalsAsciiL(sXML_edition, sizeof(sXML_edition)-1))
+    {
+        pName = "Edition";
+    }
+    else if (sName.equalsAsciiL(sXML_editor, sizeof(sXML_editor)-1))
+    {
+        pName = "Editor";
+    }
+    else if (sName.equalsAsciiL(sXML_howpublished,sizeof(sXML_howpublished)-1))
+    {
+        pName = "Howpublished";
+    }
+    else if (sName.equalsAsciiL(sXML_institution, sizeof(sXML_institution)-1))
+    {
+        pName = "Institution";
+    }
+    else if (sName.equalsAsciiL(sXML_journal, sizeof(sXML_journal)-1))
+    {
+        pName = "Journal";
+    }
+    else if (sName.equalsAsciiL(sXML_month, sizeof(sXML_month)-1))
+    {
+        pName = "Month";
+    }
+    else if (sName.equalsAsciiL(sXML_note, sizeof(sXML_note)-1))
+    {
+        pName = "Note";
+    }
+    else if (sName.equalsAsciiL(sXML_number, sizeof(sXML_number)-1))
+    {
+        pName = "Number";
+    }
+    else if (sName.equalsAsciiL(sXML_organizations,
+                                sizeof(sXML_organizations)-1))
+    {
+        pName = "Organizations";
+    }
+    else if (sName.equalsAsciiL(sXML_pages, sizeof(sXML_pages)-1))
+    {
+        pName = "Pages";
+    }
+    else if (sName.equalsAsciiL(sXML_publisher, sizeof(sXML_publisher)-1))
+    {
+        pName = "Publisher";
+    }
+    else if (sName.equalsAsciiL(sXML_school, sizeof(sXML_school)-1))
+    {
+        pName = "School";
+    }
+    else if (sName.equalsAsciiL(sXML_series, sizeof(sXML_series)-1))
+    {
+        pName = "Series";
+    }
+    else if (sName.equalsAsciiL(sXML_title, sizeof(sXML_title)-1))
+    {
+        pName = "Title";
+    }
+    else if (sName.equalsAsciiL(sXML_report_type, sizeof(sXML_report_type)-1))
+    {
+        pName = "Report_Type";
+    }
+    else if (sName.equalsAsciiL(sXML_volume, sizeof(sXML_volume)-1))
+    {
+        pName = "Volume";
+    }
+    else if (sName.equalsAsciiL(sXML_year, sizeof(sXML_year)-1))
+    {
+        pName = "Year";
+    }
+    else if (sName.equalsAsciiL(sXML_url, sizeof(sXML_url)-1))
+    {
+        pName = "URL";
+    }
+    else if (sName.equalsAsciiL(sXML_custom1, sizeof(sXML_custom1)-1))
+    {
+        pName = "Custom1";
+    }
+    else if (sName.equalsAsciiL(sXML_custom2, sizeof(sXML_custom2)-1))
+    {
+        pName = "Custom2";
+    }
+    else if (sName.equalsAsciiL(sXML_custom3, sizeof(sXML_custom3)-1))
+    {
+        pName = "Custom3";
+    }
+    else if (sName.equalsAsciiL(sXML_custom4, sizeof(sXML_custom4)-1))
+    {
+        pName = "Custom4";
+    }
+    else if (sName.equalsAsciiL(sXML_custom5, sizeof(sXML_custom5)-1))
+    {
+        pName = "Custom5";
+    }
+    else if (sName.equalsAsciiL(sXML_isbn, sizeof(sXML_isbn)-1))
+    {
+        pName = "ISBN";
+    }
+    else
+    {
+        DBG_ERROR("Unknown bibliography info data");
+        pName = NULL;
+    }
+
+    return pName;
+}

@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.7 2000-11-14 14:42:49 dvo Exp $
+	$Id: text.mod,v 1.8 2000-11-30 16:46:14 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -119,7 +119,8 @@
 				   text:bookmark-ref |
 				   text:footnote-ref |
 				   text:endnote-ref |
-				   text:sheet-name">
+				   text:sheet-name |
+				   text:bibliography-mark ">
 
 
 <!ENTITY % inline-text "(#PCDATA|
@@ -128,6 +129,12 @@
 						 text:bookmark|text:bookmark-start|text:bookmark-end|
 						 text:reference-mark|text:reference-mark-start|
 						 text:reference-mark-end|%fields;|
+						 text:toc-mark-start | text:toc-mark-end | 
+						 text:toc-mark | text:user-index-mark-start |
+						 text:user-index-mark-end | text:user-index-mark |
+						 text:alphabetical-index-mark-start |
+						 text:alphabetical-index-mark-end |
+						 text:alphabetical-index-mark |
 						 draw:a|draw:text-box|draw:image)*">
 
 <!ELEMENT text:p %inline-text;>
@@ -567,6 +574,44 @@
 
 <!ELEMENT text:sheet-name (#PCDATA)>
 
+<!ELEMENT text:bibliography-mark (#PCDATA)>
+<!ATTLIST text:bibliography-mark text:bibiliographic-type 
+	( article | book | booklet | conference | custom1 | custom2 | custom3 | 
+	  custom4 | custom5 | email | inbook | incollection | inproceedings | 
+	  journal | manual | mastersthesis | misc | phdthesis | proceedings | 
+	  techreport | unpublished | www ) #REQUIRED >
+<!ATTLIST text:bibliography-mark text:identifier CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:address CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:annote CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:author CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:booktitle CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:chapter CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:edition CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:editor CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:howpublished CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:institution CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:journal CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:month CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:note CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:number CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:organizations CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:pages CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:publisher CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:school CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:series CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:title CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:report-type CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:volume CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:year CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:url CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:custom1 CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:custom2 CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:custom3 CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:custom4 CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:custom5 CDATA #IMPLIED>
+<!ATTLIST text:bibliography-mark text:isbn CDATA #IMPLIED>
+
+
 <!ELEMENT text:bookmark EMPTY>
 <!ATTLIST text:bookmark text:name CDATA #REQUIRED>
 
@@ -633,13 +678,15 @@
 <!ELEMENT text:endnote-body (text:h|text:p|
 							 text:ordered-list|text:unordered-list)*>
 
-<!ENTITY % sectionText "((text:section-source|office:dde-source)?,
-						(text:h|text:p|text:ordered-list|
+<!ENTITY % sectionText "(text:h|text:p|text:ordered-list|
 						text:unordered-list|table:table|chart:chart|draw:page|
 						draw:a|draw:text-box|draw:image|text:section|
-						text:table-of-content)*)">
+						text:table-of-content|text:illustration-index|
+						text:table-index|text:object-index|text:user-index|
+						text:alphabetical-index|text:bibliography)*">
 
-<!ELEMENT text:section %sectionText; >
+<!ELEMENT text:section ((text:section-source|office:dde-source)?,
+						%sectionText;) >
 
 <!ATTLIST text:section text:name CDATA #REQUIRED>
 <!ATTLIST text:section text:style-name %styleName; #IMPLIED>
@@ -655,36 +702,197 @@
 <!ATTLIST text:section-source text:filter-name %string; #IMPLIED>
 
 <!ELEMENT text:table-of-content (text:table-of-content-source, 
-								 text:table-of-content-body)   >
+								 text:index-body)   >
 <!ATTLIST text:table-of-content text:style-name %styleName; #IMPLIED>
 
-<!ELEMENT text:table-of-content-body %sectionText; >
-
-<!ELEMENT text:table-of-content-source (text:index-title-template | 
-										text:index-entry-template | 
-										text:index-source-styles)* >
+<!ELEMENT text:table-of-content-source (text:index-title-template? , 
+										text:table-of-content-entry-template*,
+										text:index-source-styles* ) >
 <!ATTLIST text:table-of-content-source text:outline-level %integer; #IMPLIED>
 <!ATTLIST text:table-of-content-source text:use-index-marks %boolean; "true">
+<!ATTLIST text:table-of-content-source text:use-index-source-styles 
+															%boolean; "false">
 <!ATTLIST text:table-of-content-source text:index-scope (document|chapter) 
 														"document">
 <!ATTLIST text:table-of-content-source text:relative-tab-stop-position 
 															%boolean; "true">
 
+<!ELEMENT text:table-of-content-entry-template (text:index-entry-chapter-number |
+												text:index-entry-page-number |
+												text:index-entry-text |
+												text:index-entry-span |
+												text:index-entry-tab-stop |
+												text:index-entry-link-start |
+												text:index-entry-link-end)* >
+<!ATTLIST text:table-of-content-entry-template text:outline-level 
+						%integer; #REQUIRED>
+<!ATTLIST text:table-of-content-entry-template text:style-name 
+						%styleName; #REQUIRED>
+
+<!ELEMENT text:illustration-index 
+			(text:illustration-index-source, text:index-body)>
+<!ATTLIST text:illustration-index text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:illustration-index-source (text:index-title-template?,
+									text:illustration-index-entry-template?) >
+<!ATTLIST text:illustration-index-source text:index-scope 
+									(document|chapter) "document">
+<!ATTLIST text:illustration-index-source text:relative-tab-stop-position 
+									%boolean; "true">
+<!ATTLIST text:illustration-index-source text:use-caption %boolean; "true">
+<!ATTLIST text:illustration-index-source text:caption-sequence-name 
+									%string; #IMPLIED>
+<!ATTLIST text:illustration-index-source text:sequence-format 
+								(text|category-and-value|caption) #IMPLIED>
+
+<!ELEMENT text:illustration-index-entry-template 
+								( text:index-entry-page-number |
+								  text:index-entry-text |
+								  text:index-entry-span |
+								  text:index-entry-tab-stop )* >
+<!ATTLIST text:illustration-index-entry-template text:style-name 
+									%styleName; #REQUIRED>
+
+<!ELEMENT text:table-index (text:table-index-source, text:index-body)>
+<!ATTLIST text:table-index text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:table-index-source (text:index-title-template?, 
+									text:table-index-entry-template?) >
+<!ATTLIST text:table-index-source text:index-scope 
+									(document|chapter) "document">
+<!ATTLIST text:table-index-source text:relative-tab-stop-position 
+									%boolean; "true">
+<!ATTLIST text:table-index-source text:use-caption %boolean; "true">
+<!ATTLIST text:table-index-source text:caption-sequence-name 
+									%string; #IMPLIED>
+<!ATTLIST text:table-index-source text:sequence-format 
+								(text|category-and-value|caption) #IMPLIED>
+
+<!ELEMENT text:table-index-entry-template ( text:index-entry-page-number |
+											text:index-entry-text |
+											text:index-entry-span |
+											text:index-entry-tab-stop )* >
+<!ATTLIST text:table-index-entry-template text:style-name 
+											%styleName; #REQUIRED>
+
+<!ELEMENT text:object-index ( text:object-index-source, text:index-body ) >
+<!ATTLIST text:object-index text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:object-index-source ( text:index-title-template?,
+									 text:object-index-entry-template? ) >
+<!ATTLIST text:object-index-source text:index-scope 
+									(document|chapter) "document">
+<!ATTLIST text:object-index-source text:relative-tab-stop-position 
+									%boolean; "true">
+<!ATTLIST text:object-index-source text:use-spreadsheet-objects 
+									%boolean; "false">
+<!ATTLIST text:object-index-source text:use-draw-objects %boolean; "false">
+<!ATTLIST text:object-index-source text:use-chart-objects %boolean; "false">
+<!ATTLIST text:object-index-source text:use-other-objects %boolean; "false">
+<!ATTLIST text:object-index-source text:use-math-objects %boolean; "false">
+
+<!ELEMENT text:object-index-entry-template ( text:index-entry-page-number |
+											 text:index-entry-text |
+											 text:index-entry-span |
+											 text:index-entry-tab-stop )* >
+<!ATTLIST text:object-index-entry-template text:style-name 
+											%styleName; #REQUIRED >
+
+<!ELEMENT text:user-index (text:user-index-source, text:index-body) >
+<!ATTLIST text:user-index text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:user-index-source ( text:index-title-template?,
+								   text:user-index-entry-template*,
+								   text:index-source-styles* ) >
+<!ATTLIST text:user-index-source text:index-scope 
+									(document|chapter) "document">
+<!ATTLIST text:user-index-source text:relative-tab-stop-position
+									%boolean; "true">
+<!ATTLIST text:user-index-source text:use-index-marks %boolean; "false">
+<!ATTLIST text:user-index-source text:use-graphics %boolean; "false">
+<!ATTLIST text:user-index-source text:use-tables %boolean; "false">
+<!ATTLIST text:user-index-source text:use-floating-frames %boolean; "false">
+<!ATTLIST text:user-index-source text:use-objects %boolean; "false">
+<!ATTLIST text:user-index-source text:use-index-source-styles 
+													%boolean; "false">
+<!ATTLIST text:user-index-source text:copy-outline-level %boolean; "false">
+
+<!ELEMENT text:user-index-entry-template ( text:index-entry-chapter |
+										   text:index-entry-page-number |
+										   text:index-entry-text |
+										   text:index-entry-span |
+										   text:index-entry-tab-stop )* >
+<!ATTLIST text:user-index-entry-template text:outline-level %integer; #REQUIRED>
+<!ATTLIST text:user-index-entry-template text:style-name %styleName; #REQUIRED>
+
+<!ELEMENT text:alphabetical-index (text:alphabetical-index-source, 
+									text:index-body)>
+<!ATTLIST text:alphabetical-index text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:alphabetical-index-source ( text:index-title-template?, 
+							text:alphabetical-index-entry-template* ) >
+<!ATTLIST text:alphabetical-index-source text:index-scope 
+												(document|chapter) "document">
+<!ATTLIST text:alphabetical-index-source text:relative-tab-stop-position
+												%boolean; "true">
+<!ATTLIST text:alphabetical-index-source text:ignore-case %boolean; "false">
+<!ATTLIST text:alphabetical-index-source text:main-entry-style-name 
+												%styleName; #IMPLIED>
+<!ATTLIST text:alphabetical-index-source text:alphabetical-separators 
+												%boolean; "false">
+<!ATTLIST text:alphabetical-index-source text:combine-entries
+												%boolean; "true">
+<!ATTLIST text:alphabetical-index-source text:combine-entries-with-dash
+												%boolean; "false">
+<!ATTLIST text:alphabetical-index-source text:combine-entries-with-pp
+												%boolean; "true">
+<!ATTLIST text:alphabetical-index-source text:use-keys-as-entries 
+												%boolean; "false">
+<!ATTLIST text:alphabetical-index-source text:capitalize-entries
+												%boolean; "false">
+<!ATTLIST text:alphabetical-index-source text:comma-separated
+												%boolean; "false">
+
+<!ELEMENT text:alphabetical-index-entry-template ( text:index-entry-chapter |
+												text:index-entry-page-number |
+												text:index-entry-text |
+												text:index-entry-span |
+												text:index-entry-tab-stop )* >
+<!ATTLIST text:alphabetical-index-entry-template text:outline-level 
+												(1|2|3|separator) #REQUIRED>
+<!ATTLIST text:alphabetical-index-entry-template text:style-name 
+												%styleName; #REQUIRED>
+
+<!ELEMENT text:bibliography (text:bibliography-source, text:index-body) >
+<!ATTLIST text:bibliography text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:bibliography-source ( text:index-title-template?,
+									 text:bibliography-entry-template* ) >
+
+<!ELEMENT text:bibliography-entry-template ( text:index-entry-span |
+											 text:index-entry-tab-stop |
+											 text:index-entry-bibliography )* >
+<!ATTLIST text:bibliography-entry-template text:bibliography-type 
+				( article | book | booklet | conference | custom1 | custom2 | 
+				  custom3 | custom4 | custom5 | email | inbook | incollection |
+				  inproceedings | journal | manual | mastersthesis | misc | 
+				  phdthesis | proceedings | techreport | unpublished | www ) 
+				#REQUIRED >
+<!ATTLIST text:bibliography-entry-template text:style-name 
+													%styleName; #REQUIRED>
+
+<!ELEMENT text:index-body %sectionText; >
+
 <!ELEMENT text:index-title-template (#PCDATA)>
 <!ATTLIST text:index-title-template text:style-name %styleName; #IMPLIED>
 
-<!ELEMENT text:index-entry-template (text:index-entry-chapter | 
-									 text:index-entry-page-number |
-									 text:index-entry-text |
-									 text:index-entry-span |
-									 text:index-entry-tab-stop | 
-									 text:index-entry-link-start |
-									 text:index-entry-link-end )* >
-<!ATTLIST text:index-entry-template text:outline-level %integer; #REQUIRED>
-<!ATTLIST text:index-entry-template text:style-name %styleName; #REQUIRED>
+<!ELEMENT text:index-entry-chapter-number EMPTY>
+<!ATTLIST text:index-entry-chapter-number text:style-name %styleName; #IMPLIED>
 
 <!ELEMENT text:index-entry-chapter EMPTY>
 <!ATTLIST text:index-entry-chapter text:style-name %styleName; #IMPLIED>
+<!ATTLIST text:index-entry-chapter text:display (name|number|number-and-name) 
+															"number-and-name" >
 
 <!ELEMENT text:index-entry-text EMPTY>
 <!ATTLIST text:index-entry-text text:style-name %styleName; #IMPLIED>
@@ -694,6 +902,18 @@
 
 <!ELEMENT text:index-entry-span (#PCDATA)>
 <!ATTLIST text:index-entry-span text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:index-entry-bibliography EMPTY>
+<!ATTLIST text:index-entry-bibliography text:style-name %styleName; #IMPLIED>
+<!ATTLIST text:index-entry-bibliography text:bibliography-data-field
+							( address | annote | author | bibiliographic_type |
+							  booktitle | chapter | custom1 | custom2 | 
+							  custom3 | custom4 | custom5 | edition | editor |
+							  howpublished | identifier | institution | isbn |
+							  journal | month | note | number | organizations |
+							  pages | publisher | report_type | school | 
+							  series | title | url | volume | year ) #REQUIRED>
+
 
 <!ELEMENT text:index-entry-tab-stop EMPTY>
 <!ATTLIST text:index-entry-tab-stop text:style-name %styleName; #IMPLIED>
@@ -712,3 +932,42 @@
 
 <!ELEMENT text:index-source-style EMPTY>
 <!ATTLIST text:index-source-style text:style-name %styleName; #REQUIRED>
+
+<!ELEMENT text:toc-mark-start EMPTY>
+<!ATTLIST text:toc-mark-start text:id %string; #REQUIRED>
+<!ATTLIST text:toc-mark-start text:outline-level %integer; #IMPLIED>
+
+<!ELEMENT text:toc-mark-end EMPTY>
+<!ATTLIST text:toc-mark-end text:id %string; #REQUIRED>
+
+<!ELEMENT text:toc-mark EMPTY>
+<!ATTLIST text:toc-mark text:string-value %string; #REQUIRED>
+<!ATTLIST text:toc-mark text:outline-level %integer; #IMPLIED>
+
+<!ELEMENT text:user-index-mark-start EMPTY>
+<!ATTLIST text:user-index-mark-start text:id %string; #REQUIRED>
+<!ATTLIST text:user-index-mark-start text:outline-level %integer; #IMPLIED>
+<!ATTLIST text:user-index-mark-start text:index-name %string; #IMPLIED>
+
+<!ELEMENT text:user-index-mark-end EMPTY>
+<!ATTLIST text:user-index-mark-end text:id %string; #REQUIRED>
+
+<!ELEMENT text:user-index-mark EMPTY>
+<!ATTLIST text:user-index-mark text:string-value %string; #REQUIRED>
+<!ATTLIST text:user-index-mark text:outline-level %integer; #IMPLIED>
+<!ATTLIST text:user-index-mark text:index-name %string; #IMPLIED>
+
+<!ELEMENT text:alphabetical-index-mark-start EMPTY>
+<!ATTLIST text:alphabetical-index-mark-start text:id %string; #REQUIRED>
+<!ATTLIST text:alphabetical-index-mark-start text:key1 %string; #IMPLIED>
+<!ATTLIST text:alphabetical-index-mark-start text:key2 %string; #IMPLIED>
+<!ATTLIST text:alphabetical-index-mark-start text:main-etry %boolean; "false">
+
+<!ELEMENT text:alphabetical-index-mark-end EMPTY>
+<!ATTLIST text:alphabetical-index-mark-end text:id %string; #REQUIRED>
+
+<!ELEMENT text:alphabetical-index-mark EMPTY>
+<!ATTLIST text:alphabetical-index-mark text:string-value %string; #REQUIRED>
+<!ATTLIST text:alphabetical-index-mark text:key1 %string; #IMPLIED>
+<!ATTLIST text:alphabetical-index-mark text:key2 %string; #IMPLIED>
+<!ATTLIST text:alphabetical-index-mark text:main-etry %boolean; "false">
