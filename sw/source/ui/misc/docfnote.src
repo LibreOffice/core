@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-15 11:41:24 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ swedish ] = "Nu~mrering";
         Text[ polish ] = "Numeracja";
         Text[ portuguese_brazilian ] = "Numbering";
-        Text[ japanese ] = "”Ô†•t‚¯(~B)";
+        Text[ japanese ] = "”Ô†‚Ìí—Ş(~B)";
         Text[ korean ] = "¹øÈ£¸Å±â±â";
         Text[ chinese_simplified ] = "±àºÅ(~B)";
         Text[ chinese_traditional ] = "½s¸¹(~B)";
@@ -289,7 +289,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ swedish ] = "Räk~ning";
         Text[ polish ] = "Obliczenie";
         Text[ portuguese_brazilian ] = "Counting";
-        Text[ japanese ] = "”‚¦‚é(~C)";
+        Text[ japanese ] = "”Ô†•t‚¯(~C)";
         Text[ korean ] = "Ä«¿îÆ®";
         Text[ chinese_simplified ] = "¼ÆÊı(~C)";
         Text[ chinese_traditional ] = "­p¼Æ(~C)";
@@ -993,7 +993,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ swedish ] = "Nu~mrering";
         Text[ polish ] = "Numeracja";
         Text[ portuguese_brazilian ] = "Numbering";
-        Text[ japanese ] = "”Ô†•t‚¯(~N)";
+        Text[ japanese ] = "”Ô†‚Ìí—Ş(~N)";
         Text[ korean ] = "¹øÈ£¸Å±â±â";
         Text[ chinese_simplified ] = "±àºÅ(~N)";
         Text[ chinese_traditional ] = "½s¸¹(~N)";
@@ -1539,4 +1539,5 @@ TabPage TP_ENDNOTEOPTION
         MaxTextLength = 30 ;
     };
 };
+
 
