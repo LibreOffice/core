@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoimap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: svesik $ $Date: 2001-04-18 16:56:18 $
+ *  last change: $Author: hr $ $Date: 2001-09-12 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ class SvUnoImageMapObject : public OWeakAggObject,
 public:
     SvUnoImageMapObject( UINT16 nType, const SvEventDescription* pSupportedMacroItems );
     SvUnoImageMapObject( const IMapObject& rMapObject, const SvEventDescription* pSupportedMacroItems );
-    virtual ~SvUnoImageMapObject();
+    virtual ~SvUnoImageMapObject() throw();
 
     UNO3_GETIMPLEMENTATION_DECL( SvUnoImageMapObject )
 
@@ -331,7 +331,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
     mpEvents->acquire();
 }
 
-SvUnoImageMapObject::~SvUnoImageMapObject()
+SvUnoImageMapObject::~SvUnoImageMapObject() throw()
 {
     mpEvents->release();
 }
