@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: od $ $Date: 2002-08-28 12:55:47 $
+ *  last change: $Author: vg $ $Date: 2002-08-30 12:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1077,7 +1077,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                             ///     has no background graphic.
                             ///     Thus, check complete fly frame background
                             ///     color and *not* only its transparency value
-                            if ( (rBack.GetColor == COL_TRANSPARENT)  &&
+                            if ( (rBack.GetColor() == COL_TRANSPARENT)  &&
                             ///if( rBack.GetColor().GetTransparency() &&
                                 rBack.GetGraphicPos() == GPOS_NONE )
                             {
