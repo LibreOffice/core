@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jl $ $Date: 2001-04-18 07:01:54 $
+#   last change: $Author: jl $ $Date: 2001-04-18 15:26:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,11 @@ USE_DEFFILE=	TRUE
 # LIB1TARGET=	$(LB)$/a$(TARGET).lib
 # LIB1ARCHIV=	$(LB)$/lib$(TARGET)$(SALHELPER_MAJOR)$(COM).a
 # LIB1FILES=	$(LB)$/$(TARGET).lib
+
+#RTTI on
+.IF "$(OS)" == "WNT"
+CFLAGS+= -GR
+.ENDIF
 
 SLOFILES=	\
         $(SLO)$/dynload.obj
