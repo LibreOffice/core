@@ -67,6 +67,30 @@
         <supported-service> com.sun.star.frame.MediaTypeDetectionHelper </supported-service>
     </component-description>
 
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.SubstituteVariables </name>
+        <description>
+            Supports the substitution and resubstitution of path and language variables.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.PathSubstitution </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.PathSettings </name>
+        <description>
+            Supports the access to the Office internal path settings.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.PathSettings </supported-service>
+    </component-description>
+
     <project-build-dependency>  cppu        </project-build-dependency>
     <project-build-dependency>  cppuhelper  </project-build-dependency>
     <project-build-dependency>  comphelper  </project-build-dependency>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: as $ $Date: 2002-08-12 11:40:36 $
+ *  last change: $Author: cd $ $Date: 2002-08-20 10:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,8 @@ namespace framework{
 #define SERVICENAME_DISPATCHRECORDER                        DECLARE_ASCII("com.sun.star.frame.DispatchRecorder"                 )
 #define SERVICENAME_SYSTEMSHELLEXECUTE                      DECLARE_ASCII("com.sun.star.system.SystemShellExecute"              )
 #define SERVICENAME_PROTOCOLHANDLER                         DECLARE_ASCII("com.sun.star.frame.ProtocolHandler"                  )
+#define SERVICENAME_SUBSTITUTEPATHVARIABLES                 DECLARE_ASCII("com.sun.star.util.PathSubstitution"                  )
+#define SERVICENAME_PATHSETTINGS                            DECLARE_ASCII("com.sun.star.util.PathSettings"                      )
 
 //_________________________________________________________________________________________________________________
 //  used implementationnames by framework
@@ -140,6 +142,8 @@ namespace framework{
 #define IMPLEMENTATIONNAME_MAILTODISPATCHER                 DECLARE_ASCII("com.sun.star.comp.framework.MailToDispatcher"        )
 #define IMPLEMENTATIONNAME_SERVICEHANDLER                   DECLARE_ASCII("com.sun.star.comp.framework.ServiceHandler"          )
 #define IMPLEMENTATIONNAME_UIINTERACTIONHANDLER             DECLARE_ASCII("com.sun.star.comp.uui.UUIInteractionHandler"         )
+#define IMPLEMENTATIONNAME_SUBSTITUTEPATHVARIABLES          DECLARE_ASCII("com.sun.star.comp.framework.PathSubstitution"        )
+#define IMPLEMENTATIONNAME_PATHSETTINGS                     DECLARE_ASCII("com.sun.star.comp.framework.PathSettings"            )
 
 }       //  namespace framework
 

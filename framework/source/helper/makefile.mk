@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: as $ $Date: 2002-08-12 11:44:19 $
+#   last change: $Author: cd $ $Date: 2002-08-20 10:16:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,10 +91,11 @@ SLOFILES=			$(SLO)$/timerhelper.obj	 						\
                     $(SLO)$/xmldocproperties.obj					\
                     $(SLO)$/propertysetcontainer.obj				\
                     $(SLO)$/actiontriggerhelper.obj					\
-                    $(SLO)$/asyncloadthread.obj					\
-                    $(SLO)$/componentloader.obj					\
+                    $(SLO)$/asyncloadthread.obj						\
+                    $(SLO)$/componentloader.obj						\
                     $(SLO)$/loadeventlistener.obj					\
-                    $(SLO)$/persistentwindowstate.obj
+                    $(SLO)$/persistentwindowstate.obj				\
+                    $(SLO)$/networkdomain.obj
 
 # --- Targets ------------------------------------------------------
 

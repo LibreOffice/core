@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.65 $
+#   $Revision: 1.66 $
 #
-#   last change: $Author: as $ $Date: 2002-08-15 06:52:13 $
+#   last change: $Author: cd $ $Date: 2002-08-20 10:21:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,8 @@ LIB1OBJFILES=   $(SLO)$/wildcard.obj                            \
                 $(SLO)$/transactionmanager.obj                  \
                 $(SLO)$/filtercache.obj                         \
                 $(SLO)$/filtercachedata.obj                     \
-                $(SLO)$/protocolhandlercache.obj
+                $(SLO)$/protocolhandlercache.obj				\
+                $(SLO)$/networkdomain.obj
 
 # --- export library for sfx2 -------------------------------------------------
 
@@ -134,6 +135,14 @@ SHL1STDLIBS=    $(CPPULIB)                          \
                 $(SALLIB)                           \
                 $(TOOLSLIB)                         \
                 $(UNOTOOLSLIB)
+
+.IF "$(GUI)"=="WNT"
+SHL1STDLIBS+=\
+        uwinapi.lib \
+        unicows.lib \
+        advapi32.lib \
+        kernel32.lib
+.ENDIF
 
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 
@@ -181,7 +190,9 @@ SHL3OBJS=       $(SLO)$/contenthandlerfactory.obj   \
                 $(SLO)$/frameloaderfactory.obj		\
                 $(SLO)$/mediatypedetectionhelper.obj\
                 $(SLO)$/registertemp.obj			\
-                $(SLO)$/typedetection.obj
+                $(SLO)$/typedetection.obj			\
+                $(SLO)$/substitutepathvars.obj		\
+                $(SLO)$/pathsettings.obj
 
 SHL3STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\

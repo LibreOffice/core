@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: as $ $Date: 2002-05-23 12:54:24 $
+#   last change: $Author: cd $ $Date: 2002-08-20 10:20:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,10 +92,12 @@ SLOFILES=			\
                     $(SLO)$/attributelist.obj						\
                     $(SLO)$/saxnamespacefilter.obj					\
                     $(SLO)$/contenthandlerfactory.obj				\
-                    $(SLO)$/jobexecutor.obj
+                    $(SLO)$/jobexecutor.obj							\
+                    $(SLO)$/substitutepathvars.obj					\
+                    $(SLO)$/pathsettings.obj
 
-SRCFILES=                       logindialog.src \
-                documentlist.src
+SRCFILES=			logindialog.src \
+                    documentlist.src
 
 RESLIB1NAME=		lgd
 RESLIB1SRSFILES= 	$(SRS)$/$(TARGET).srs

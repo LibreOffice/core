@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registertemp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:40:08 $
+ *  last change: $Author: cd $ $Date: 2002-08-20 10:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,14 @@
 #include <services/contenthandlerfactory.hxx>
 #endif
 
+#ifndef __FRAMEWORK_SERVICES_SUBSTPATHVARS_HXX_
+#include <services/substitutepathvars.hxx>
+#endif
+
+#ifndef __FRAMEWORK_SERVICES_PATHSETTINGS_HXX_
+#include <services/pathsettings.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
@@ -118,11 +126,15 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    
                         COMPONENTINFO( ::framework::FilterFactory               )
                         COMPONENTINFO( ::framework::TypeDetection               )
                         COMPONENTINFO( ::framework::ContentHandlerFactory       )
+                        COMPONENTINFO( ::framework::SubstitutePathVariables     )
+                        COMPONENTINFO( ::framework::PathSettings                )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )   else
                         IFFACTORY( ::framework::FrameLoaderFactory              )   else
                         IFFACTORY( ::framework::FilterFactory                   )   else
                         IFFACTORY( ::framework::TypeDetection                   )   else
-                        IFFACTORY( ::framework::ContentHandlerFactory           )
+                        IFFACTORY( ::framework::ContentHandlerFactory           )   else
+                        IFFACTORY( ::framework::SubstitutePathVariables         )   else
+                        IFFACTORY( ::framework::PathSettings                    )
                     )
