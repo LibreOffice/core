@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-30 12:59:37 $
+ *  last change: $Author: ka $ $Date: 2000-10-31 11:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,36 +682,47 @@
 #define STR_PAGE_BACKGROUND_TITLE           (RID_APP_START+584)
 #define STR_SAVE_PACKED_DOCUMENT            (RID_APP_START+585)
 
+#define STR_GRAFCROP                        (RID_APP_START+587)
+#define STR_UNDO_GRAFMODE                   (RID_APP_START+588)
+#define STR_UNDO_GRAFRED                    (RID_APP_START+589)
+#define STR_UNDO_GRAFGREEN                  (RID_APP_START+590)
+#define STR_UNDO_GRAFBLUE                   (RID_APP_START+591)
+#define STR_UNDO_GRAFLUMINANCE              (RID_APP_START+592)
+#define STR_UNDO_GRAFCONTRAST               (RID_APP_START+593)
+#define STR_UNDO_GRAFGAMMA                  (RID_APP_START+594)
+#define STR_UNDO_GRAFTRANSPARENCY           (RID_APP_START+595)
+#define STR_UNDO_GRAFCROP                   STR_GRAFCROP
+
 // additional effects
-#define STR_EFFECT_DISCARD_SHORT            (RID_APP_START+590)
+#define STR_EFFECT_DISCARD_SHORT            (RID_APP_START+598)
 
-#define STR_EFFECT_DISCARD_FROM_UL          RID_APP_START+600
-#define STR_EFFECT_DISCARD_FROM_UR          RID_APP_START+601
-#define STR_EFFECT_DISCARD_FROM_LR          RID_APP_START+602
-#define STR_EFFECT_DISCARD_FROM_LL          RID_APP_START+603
-#define STR_EFFECT_DISCARD_S_FROM_L         RID_APP_START+604
-#define STR_EFFECT_DISCARD_S_FROM_UL        RID_APP_START+605
-#define STR_EFFECT_DISCARD_S_FROM_T         RID_APP_START+606
-#define STR_EFFECT_DISCARD_S_FROM_UR        RID_APP_START+607
-#define STR_EFFECT_DISCARD_S_FROM_R         RID_APP_START+608
-#define STR_EFFECT_DISCARD_S_FROM_LR        RID_APP_START+609
-#define STR_EFFECT_DISCARD_S_FROM_B         RID_APP_START+610
-#define STR_EFFECT_DISCARD_S_FROM_LL        RID_APP_START+611
-#define STR_EFFECT_VERTICAL_CHECKERBOARD    RID_APP_START+612
-#define STR_EFFECT_HORIZONTAL_CHECKERBOARD  RID_APP_START+613
+#define STR_EFFECT_DISCARD_FROM_UL          (RID_APP_START+600)
+#define STR_EFFECT_DISCARD_FROM_UR          (RID_APP_START+601)
+#define STR_EFFECT_DISCARD_FROM_LR          (RID_APP_START+602)
+#define STR_EFFECT_DISCARD_FROM_LL          (RID_APP_START+603)
+#define STR_EFFECT_DISCARD_S_FROM_L         (RID_APP_START+604)
+#define STR_EFFECT_DISCARD_S_FROM_UL        (RID_APP_START+605)
+#define STR_EFFECT_DISCARD_S_FROM_T         (RID_APP_START+606)
+#define STR_EFFECT_DISCARD_S_FROM_UR        (RID_APP_START+607)
+#define STR_EFFECT_DISCARD_S_FROM_R         (RID_APP_START+608)
+#define STR_EFFECT_DISCARD_S_FROM_LR        (RID_APP_START+609)
+#define STR_EFFECT_DISCARD_S_FROM_B         (RID_APP_START+610)
+#define STR_EFFECT_DISCARD_S_FROM_LL        (RID_APP_START+611)
+#define STR_EFFECT_VERTICAL_CHECKERBOARD    (RID_APP_START+612)
+#define STR_EFFECT_HORIZONTAL_CHECKERBOARD  (RID_APP_START+613)
 
-#define STR_EFFECT_MOVE_TO_UL               RID_APP_START+620
-#define STR_EFFECT_MOVE_TO_UR               RID_APP_START+621
-#define STR_EFFECT_MOVE_TO_LR               RID_APP_START+622
-#define STR_EFFECT_MOVE_TO_LL               RID_APP_START+623
-#define STR_EFFECT_MOVE_S_TO_L              RID_APP_START+625
-#define STR_EFFECT_MOVE_S_TO_UL             RID_APP_START+626
-#define STR_EFFECT_MOVE_S_TO_T              RID_APP_START+627
-#define STR_EFFECT_MOVE_S_TO_UR             RID_APP_START+628
-#define STR_EFFECT_MOVE_S_TO_R              RID_APP_START+629
-#define STR_EFFECT_MOVE_S_TO_LR             RID_APP_START+630
-#define STR_EFFECT_MOVE_S_TO_B              RID_APP_START+631
-#define STR_EFFECT_MOVE_S_TO_LL             RID_APP_START+632
+#define STR_EFFECT_MOVE_TO_UL               (RID_APP_START+620)
+#define STR_EFFECT_MOVE_TO_UR               (RID_APP_START+621)
+#define STR_EFFECT_MOVE_TO_LR               (RID_APP_START+622)
+#define STR_EFFECT_MOVE_TO_LL               (RID_APP_START+623)
+#define STR_EFFECT_MOVE_S_TO_L              (RID_APP_START+625)
+#define STR_EFFECT_MOVE_S_TO_UL             (RID_APP_START+626)
+#define STR_EFFECT_MOVE_S_TO_T              (RID_APP_START+627)
+#define STR_EFFECT_MOVE_S_TO_UR             (RID_APP_START+628)
+#define STR_EFFECT_MOVE_S_TO_R              (RID_APP_START+629)
+#define STR_EFFECT_MOVE_S_TO_LR             (RID_APP_START+630)
+#define STR_EFFECT_MOVE_S_TO_B              (RID_APP_START+631)
+#define STR_EFFECT_MOVE_S_TO_LL             (RID_APP_START+632)
 
 /******************************************************************************
 * Ab (RID_APP_START+700 beginnen die Ids in glob.hrc!
