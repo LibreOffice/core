@@ -2553,3 +2553,4 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ??1?$Reference@VXContentProvider@ucb@star@sun@com@@@uno@star@sun@com@@QAE@XZ
 ?getURL@OConnection@file@connectivity@@QBE?AVString@@XZ
 ?isCaseSensitiveParentFolder@?%O:\SRC641\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx1407524172@@YAEABVString@@0@Z
+?isCaseSensitiveParentFolder@?%O:\SRC641\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx2063410835@@YAEABVString@@0@Z
