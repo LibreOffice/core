@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-09 15:06:28 $
+ *  last change: $Author: cd $ $Date: 2002-04-22 08:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,7 +713,7 @@ void OQueryController::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Copy")]                = ID_BROWSER_COPY;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Cut")]                 = ID_BROWSER_CUT;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Paste")]               = ID_BROWSER_PASTE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAsDoc")]           = SID_SAVEASDOC;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAs")]              = SID_SAVEASDOC;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/EsacpeProcessing")] = ID_BROWSER_ESACPEPROCESSING;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ViewFunctions")]    = ID_BROWSER_QUERY_VIEW_FUNCTIONS;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ViewTables")]       = ID_BROWSER_QUERY_VIEW_TABLES;

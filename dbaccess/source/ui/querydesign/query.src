@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-02 06:35:01 $
+ *  last change: $Author: cd $ $Date: 2002-04-22 08:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1997,7 +1997,6 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
             MenuItem
             {
                 ITEM_FILE_CLOSEDOC
-                Command = ".uno:DB/Close";
             };
             MenuItem
             {
@@ -2006,12 +2005,10 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
             MenuItem
             {
                 ITEM_FILE_SAVEDOC
-                Command = ".uno:Save";
             };
             MenuItem
             {
                 ITEM_FILE_SAVEASDOC
-                Command = ".uno:SaveAsDoc";
             };
             MenuItem
             {
@@ -2019,7 +2016,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
             };
             MenuItem
             {
-            ITEM_FILE_QUITAPP
+                ITEM_FILE_QUITAPP
             };
         };
         };
@@ -2049,7 +2046,6 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
                 {
                     Identifier = ID_BROWSER_UNDO ;
                     HelpId = SID_UNDO ;
-                    Command = ".uno:Undo";
                     Text = "Rückgängig" ;
                     Text [ ENGLISH ] = "Undo" ;
                     Text[ english_us ] = "Undo";
@@ -2077,7 +2073,6 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
                 {
                     Identifier = ID_BROWSER_REDO ;
                     HelpId = SID_REDO ;
-                    Command = ".uno:Redo";
 
                     Text = "Wiederherstellen" ;
                     Text [ ENGLISH ] = "Redo" ;
@@ -2110,17 +2105,14 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
                 MenuItem
                 {
                     ITEM_EDIT_CUT
-                    Command = ".uno:Cut";
                 };
                 MenuItem
                 {
                     ITEM_EDIT_COPY
-                    Command = ".uno:Copy";
                 };
                 MenuItem
                 {
                     ITEM_EDIT_PASTE
-                    Command = ".uno:Paste";
                 };
                 MenuItem
                 {

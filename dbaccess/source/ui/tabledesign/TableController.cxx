@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2002-04-04 10:50:26 $
+ *  last change: $Author: cd $ $Date: 2002-04-22 08:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,7 +795,7 @@ void OTableController::AddSupportedFeatures()
     //  m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:BrowserMode")] = SID_BROWSER_MODE;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:HelpMenu")]        = SID_HELPMENU;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:NewDoc")]          = SID_NEWDOC;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAsDoc")]       = ID_BROWSER_SAVEASDOC;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAs")]          = ID_BROWSER_SAVEASDOC;
 
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Copy")]            = ID_BROWSER_COPY;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Cut")]             = ID_BROWSER_CUT;
@@ -803,7 +803,7 @@ void OTableController::AddSupportedFeatures()
 
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/IndexDesign")]  = SID_INDEXDESIGN;
 
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/Close")]        = SID_CLOSEDOC;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Close")]           = SID_CLOSEDOC;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/EditDoc")] = ID_BROWSER_EDITDOC;
 }
 // -----------------------------------------------------------------------------
