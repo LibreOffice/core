@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2001-05-18 08:00:38 $
+ *  last change: $Author: ssa $ $Date: 2001-06-08 16:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,9 @@ void ImplDeInitSVData()
             pSVData->maAppData.mxMSF = NULL;
         }
 
-        osl::File::remove( *pSVData->maAppData.mpMSFTempFileName );
+        ::rtl::OUString aFileUrl;
+        ::osl::File::getFileURLFromSystemPath( *pSVData->maAppData.mpMSFTempFileName, aFileUrl );
+        osl::File::remove( aFileUrl );
         delete pSVData->maAppData.mpMSFTempFileName;
         pSVData->maAppData.mpMSFTempFileName = NULL;
     }
