@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: os $ $Date: 2001-04-05 13:25:09 $
+ *  last change: $Author: os $ $Date: 2001-04-27 06:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1206,6 +1206,13 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
         const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
         if(!pCur)
             throw UnknownPropertyException();
+        if ( pCur->nFlags & PropertyAttribute::READONLY)
+        {
+            IllegalArgumentException aExcept;
+            aExcept.Message = C2U("Readonly");
+            throw aExcept;
+        }
+
         SwDoc* pDoc = pFmt->GetDoc();
         if( eType == FLYCNTTYPE_GRF &&
                     (COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ALTERNATIVE_TEXT)||
