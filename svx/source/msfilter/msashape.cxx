@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:39 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,24 @@
 #endif
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
+#endif
+#ifndef _SVX_XLNSTIT_HXX
+#include <svx/xlnstit.hxx>
+#endif
+#ifndef _SVX_XLNEDIT_HXX
+#include <svx/xlnedit.hxx>
+#endif
+#ifndef _SVX_XLNSTWIT_HXX
+#include <svx/xlnstwit.hxx>
+#endif
+#ifndef _SVX_XLNEDWIT_HXX
+#include <svx/xlnedwit.hxx>
+#endif
+#ifndef _SVX_XLNSTCIT_HXX
+#include <svx/xlnstcit.hxx>
+#endif
+#ifndef _SVX_XLNEDCIT_HXX
+#include <svx/xlnedcit.hxx>
 #endif
 
 struct SvxMSDffVertPair
@@ -5694,6 +5712,26 @@ MSO_SPT SvxMSDffAutoShape::GetShapeTypeFromSdrObject(  const SdrObject* pObj )
     return eShapeType;
 }
 
+void SvxMSDffAutoShape::SwapStartAndEndArrow( SdrObject* pObj ) //#108274
+{
+    XLineStartItem       aLineStart;
+    aLineStart.SetValue(((XLineStartItem&)pObj->GetItem( XATTR_LINEEND )).GetValue());
+    XLineStartWidthItem  aLineStartWidth(((XLineStartWidthItem&)pObj->GetItem( XATTR_LINEENDWIDTH )).GetValue());
+    XLineStartCenterItem aLineStartCenter(((XLineStartCenterItem&)pObj->GetItem( XATTR_LINEENDCENTER )).GetValue());
+
+    XLineEndItem         aLineEnd;
+    aLineEnd.SetValue(((XLineEndItem&)pObj->GetItem( XATTR_LINESTART )).GetValue());
+    XLineEndWidthItem    aLineEndWidth(((XLineEndWidthItem&)pObj->GetItem( XATTR_LINESTARTWIDTH )).GetValue());
+    XLineEndCenterItem   aLineEndCenter(((XLineEndCenterItem&)pObj->GetItem( XATTR_LINESTARTCENTER )).GetValue());
+
+    pObj->SetItem( aLineStart );
+    pObj->SetItem( aLineStartWidth );
+    pObj->SetItem( aLineStartCenter );
+    pObj->SetItem( aLineEnd );
+    pObj->SetItem( aLineEndWidth );
+    pObj->SetItem( aLineEndCenter );
+}
+
 SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, sal_Bool bSetAutoShapeAdjustItem )
 {
     SdrObject* pRet = NULL;
@@ -5812,6 +5850,11 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                 pObjCirc->SetSnapRect( aPolyArcRect );
                 pObjCirc->SetModel( pSdrModel );
                 pObjCirc->SetItemSet( rSet );
+
+                int nSwap = bFlipH ? 1 : 0;
+                nSwap ^= bFlipV ? 1 : 0;
+                if ( nSwap )
+                    SwapStartAndEndArrow( pObjCirc );
 
                 SdrRectObj* pRect = new SdrRectObj( aPolyArcRect );
                 pRect->SetSnapRect( aPolyArcRect );
