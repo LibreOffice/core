@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: lla $ $Date: 2001-03-27 07:54:08 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,15 +141,6 @@ namespace configmgr
         Name validateElementName(OUString const& sName);
     //------------------------------------------------------------------------
 
-        //--------------------------------------------------------------------
-        /// holds information about a node in the schema
-        struct NodeInfo
-        {
-            Name        aName;
-            configuration::Attributes aAttributes;
-        };
-    //-------------------------------------------------------------------------
-
     //------------------------------------------------------------------------
         /// lower-level representation a path within the configuration
         class PathRep
@@ -259,6 +250,9 @@ namespace configmgr
             /// check if this is an empty path
             bool isEmpty() const { return m_aRep.isEmpty(); }
 
+            /// Count the components of this
+            Components::size_type getDepth() const { return m_aRep.countComponents(); }
+
             /// get the local name (the last component of this path)
             Name getLocalName() const { return m_aRep.getLocalName(); }
 
@@ -348,6 +342,9 @@ namespace configmgr
 
             /// get a /-separated string representation of this
             OUString toString() const;
+
+            /// Count the components of this
+            Components::size_type getDepth() const { return m_aRep.countComponents() - REP_OFF; }
         public:
         // Iteration support
             /// get a STL style iterator to the first component
