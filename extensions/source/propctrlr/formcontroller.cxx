@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-22 09:31:29 $
+ *  last change: $Author: ab $ $Date: 2001-03-03 14:23:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,13 @@
 #ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SCRIPT_XSCRIPTEVENTSSUPPLIER_HPP_
+#include <com/sun/star/script/XScriptEventsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+
 #ifndef _MACROPG_HXX
 #include <sfx2/macropg.hxx>
 #endif
@@ -1346,12 +1353,37 @@ namespace pcr
             // the the script events for this index
             sal_uInt32 nScrEvts=0;
 
+            // For dialog editor mode, no EventManager but xEventsSupplier
+            Reference< XScriptEventsSupplier > xEventsSupplier;
+
             Sequence< ScriptEventDescriptor > aSeqScrEvts;
             if (nObjIdx>=0 && m_xEventManager.is())
             {
                  aSeqScrEvts = m_xEventManager->getScriptEvents(nObjIdx);
-                 nScrEvts = aSeqScrEvts.getLength();
             }
+            else
+            {
+                // Dialog editor mode, no EventManager
+                ::cppu::extractInterface( xEventsSupplier, m_aIntrospectee );
+                if( xEventsSupplier.is() )
+                {
+                    Reference< XNameContainer > xEventCont = xEventsSupplier->getEvents();
+                    Sequence< ::rtl::OUString > aNames = xEventCont->getElementNames();
+                    sal_Int32 nLen = aNames.getLength();
+
+                    const ::rtl::OUString* pNames = aNames.getConstArray();
+                    aSeqScrEvts.realloc( nLen );
+                    ScriptEventDescriptor* pDescs = aSeqScrEvts.getArray();
+
+                    for( sal_Int32 i = 0 ; i < nLen ; i++ )
+                    {
+                        Any aElem = xEventCont->getByName( pNames[i] );
+                        aElem >>= pDescs[i];
+                    }
+                }
+            }
+            nScrEvts = aSeqScrEvts.getLength();
+
 
             sal_uInt32 nLength = m_aObjectListenerTypes.getLength();
             const Type * pListeners = m_aObjectListenerTypes.getConstArray();
@@ -1363,13 +1395,15 @@ namespace pcr
             sal_uInt32 i;
 
             String aListener;
+            ::rtl::OUString aOUListener;
             ::rtl::OUString aListenerClassName;
             Sequence< ::rtl::OUString> aMethSeq;
 
             for (i = 0 ; i < nLength ; i++ ,++pListeners)
             {
                 // Namen besorgen
-                aListener = (*pListeners).getTypeName().getStr();
+                aOUListener = pListeners->getTypeName();
+                aListener = aOUListener;
                 sal_Int32 nTokenCount = aListener.GetTokenCount('.');
 
                 if (nTokenCount>0)
@@ -1402,7 +1436,8 @@ namespace pcr
                             {
                                 const ScriptEventDescriptor& rEvDe = pEvDes[nI];
 
-                                if (rEvDe.ListenerType == aListenerClassName && rEvDe.EventMethod == (*pMethods))
+                                if ((rEvDe.ListenerType == aListenerClassName || rEvDe.ListenerType == aOUListener )
+                                    && rEvDe.EventMethod == (*pMethods))
                                 {
                                     SvxMacro* pMacro=NULL;
 
@@ -1472,7 +1507,7 @@ namespace pcr
                     //  const Reference< XIdlClass > & (*pListeners) = pListeners[i];
 
                     // Namen besorgen
-                    aListener = (*pListeners).getTypeName().getStr();
+                    aListener = pListeners->getTypeName();
                     sal_Int32 nTokenCount=aListener.GetTokenCount('.');
 
                     if (nTokenCount>0)
@@ -1508,7 +1543,10 @@ namespace pcr
                                     aMacStr = String(pMacro->GetMacName());
                                     if (nEventIndex<nEventCount)
                                     {
-                                        pSeqScriptEvts[nEventIndex].ListenerType = aListenerClassName;
+                                        if( m_xEventManager.is() )
+                                            pSeqScriptEvts[nEventIndex].ListenerType = aListenerClassName;
+                                        else    // Dialog editor mode
+                                            pSeqScriptEvts[nEventIndex].ListenerType = aListener;
                                         pSeqScriptEvts[nEventIndex].EventMethod = *pMethods;
                                         pSeqScriptEvts[nEventIndex].ScriptType = pMacro->GetLanguage();
                                         pSeqScriptEvts[nEventIndex].ScriptCode = aMacStr;
@@ -1525,7 +1563,35 @@ namespace pcr
                 }
 
                 if (nObjIdx>=0 && m_xEventManager.is())
+                {
                     m_xEventManager->registerScriptEvents(nObjIdx,aSeqScriptEvts);
+                }
+                else if( xEventsSupplier.is() )
+                {
+                    Reference< XNameContainer > xEventCont = xEventsSupplier->getEvents();
+
+                    // Make it simple: Revove all old events...
+                    Sequence< ::rtl::OUString > aNames = xEventCont->getElementNames();
+                    sal_Int32 nLen = aNames.getLength();
+                    const ::rtl::OUString* pNames = aNames.getConstArray();
+                    for( sal_Int32 i = nLen - 1; i >= 0 ; i-- )
+                        xEventCont->removeByName( pNames[i] );
+
+                    // ... and insert the new ones
+                    const ScriptEventDescriptor* pDescs = aSeqScriptEvts.getConstArray();
+                    sal_Int32 nNewCount = aSeqScriptEvts.getLength();
+                    for( i = 0 ; i < nNewCount ; i++ )
+                    {
+                        const ScriptEventDescriptor& rDesc = pDescs[ i ];
+                        ::rtl::OUString aName = rDesc.ListenerType;
+                        aName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "::" ) );
+                        aName += rDesc.EventMethod;
+
+                        Any aEventAny;
+                        aEventAny <<= rDesc;
+                        xEventCont->insertByName( aName, aEventAny );
+                    }
+                }
             }
         }
         catch (Exception&)
@@ -1568,13 +1634,39 @@ namespace pcr
 
             // get the current script events for this index
             sal_uInt32 nScrEvts=0;
+            sal_Bool bShowEventPage = sal_False;
             Sequence< ScriptEventDescriptor > aSeqScrEvts;
             if (nObjIdx>=0 && m_xEventManager.is())
             {
-                 aSeqScrEvts = m_xEventManager->getScriptEvents(nObjIdx);
-                 nScrEvts = aSeqScrEvts.getLength();
+                aSeqScrEvts = m_xEventManager->getScriptEvents(nObjIdx);
+                bShowEventPage = sal_True;
             }
             else
+            {
+                // Dialog editor mode, no EventManager
+                Reference< XScriptEventsSupplier > xEventsSupplier;
+                ::cppu::extractInterface( xEventsSupplier, m_aIntrospectee );
+                if( xEventsSupplier.is() )
+                {
+                    Reference< XNameContainer > xEventCont = xEventsSupplier->getEvents();
+                    Sequence< ::rtl::OUString > aNames = xEventCont->getElementNames();
+                    sal_Int32 nLen = aNames.getLength();
+
+                    const ::rtl::OUString* pNames = aNames.getConstArray();
+                    aSeqScrEvts.realloc( nLen );
+                    ScriptEventDescriptor* pDescs = aSeqScrEvts.getArray();
+
+                    for( sal_Int32 i = 0 ; i < nLen ; i++ )
+                    {
+                        Any aElem = xEventCont->getByName( pNames[i] );
+                        aElem >>= pDescs[i];
+                    }
+                    bShowEventPage = sal_True;
+                }
+            }
+            nScrEvts = aSeqScrEvts.getLength();
+
+            if( !bShowEventPage )
             {   // could not obtain the position in the event attacher manager
                 // (or don't have this manager)
                 // -> no event page
@@ -1637,7 +1729,9 @@ namespace pcr
                         for (sal_uInt32 nI=0; nI<nScrEvts;nI++)
                         {
                             const ScriptEventDescriptor& rEvDe = pEvDes[nI];
-                            if (aListenerClassName.Equals((const sal_Unicode*)rEvDe.ListenerType) && pMethods->equals(rEvDe.EventMethod))
+                            if ( (aListenerClassName.Equals((const sal_Unicode*)rEvDe.ListenerType)
+                                 || aListener.Equals((const sal_Unicode*)rEvDe.ListenerType) )
+                                && pMethods->equals(rEvDe.EventMethod))
                                 aProperty.sValue = rEvDe.ScriptCode;
                         }
 
@@ -2542,6 +2636,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/02/22 09:31:29  tbe
+ *  added properties for dialog controls
+ *
  *  Revision 1.9  2001/02/20 08:49:56  fs
  *  #84111# allow number formats to be removed
  *
