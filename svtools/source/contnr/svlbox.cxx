@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 08:45:29 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 14:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1610,7 +1610,8 @@ void SvLBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 
     ReleaseMouse();
     SvLBoxEntry* pEntry = GetEntry( rPosPixel ); // GetDropTarget( rPos );
-    if( !pEntry )
+    nOldDragMode = GetDragDropMode();
+    if( !pEntry || !nOldDragMode )
     {
         DragFinished( DND_ACTION_NONE );
         return;
@@ -1620,7 +1621,6 @@ void SvLBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
     ::com::sun::star::uno::Reference<
         ::com::sun::star::datatransfer::XTransferable > xRef( pContainer );
 
-    nOldDragMode = GetDragDropMode();
     nDragDropMode = NotifyStartDrag( *pContainer, pEntry );
     if( !nDragDropMode || 0 == GetSelectionCount() )
     {
