@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-07 14:45:50 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1413,7 +1413,7 @@ void SwDocShell::StartLoadFinishedTimer()
     }
     FinishedLoading( SFX_LOADED_MAINDOCUMENT |
                     ( bSttTimer ? 0 : SFX_LOADED_IMAGES ));
-    // jetzt noch testen, ob die SourceView noch geladen werden muá
+    // jetzt noch testen, ob die SourceView noch geladen werden muss
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst(this);
     if(pVFrame)
     {
