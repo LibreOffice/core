@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 07:39:28 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ Resource RSC_DATASOURCE_TYPES
         Text[ french ] = "Adabas;JDBC;ODBC;dBase;ADO;Texte;Classeur;CarnetAdresses";
         Text[ spanish ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;Hoja de cálculo;Libreta de direcciones";
         Text[ italian ] = "Adabas;JDBC;ODBC;dBase;ADO;Testo;Foglio elettronico;Rubrica";
-        Text[ danish ] = "Adabas;JDBC;ODBC;dBase;Tekst";
+        Text[ danish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Regneark;Adressekartotek";
         Text[ swedish ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabelldokument;Adressbok";
         Text[ polish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Arkusz kalkulacyjny;Ksi¹¿ka adresowa";
         Text[ portuguese_brazilian ] = "Adabas;JDBC;ODBC;dBase;Text";
@@ -458,7 +458,7 @@ String STR_OBJECT_ALREADY_EXSISTS
     Text[ french ] = "Erreur durant le processus de création !";
     Text[ spanish ] = "¡Error al crear el objeto!";
     Text[ italian ] = "Errore nella creazione dell'oggetto";
-    Text[ danish ] = "Error while creating!";
+    Text[ danish ] = "Fejl under genereringen!";
     Text[ swedish ] = "Fel när objekt skulle skapas!";
     Text[ polish ] = "B³¹d w trakcie tworzenia!";
     Text[ portuguese_brazilian ] = "Error while creating!";
@@ -486,7 +486,7 @@ String STR_UNEXPECTED_ERROR
     Text[ spanish ] = "Ha ocurrido un error. No se puede ejecutar la operación.";
     Text[ finnish ] = "On ilmennyt odottamaton virhe. Toimintoa ei voitu suorittaa";
     Text[ italian ] = "Si è verificato un errore inaspettato. Impossibile terminare l'operazione.";
-    Text[ danish ] = "An unexpected error occured. The operation could not be completed.";
+    Text[ danish ] = "Der er opstået en uventet fejl. Operationen kan ikke udføres.";
     Text[ swedish ] = "Ett oväntat fel har uppstått. Det går inte att utföra operationen.";
     Text[ polish ] = "Wyst¹pi³ nieoczekiwany b³¹d. Operacji nie mo¿na wykonaæ.";
     Text[ portuguese_brazilian ] = "An unexpected error occured. The operation could not be completed.";
@@ -513,7 +513,7 @@ String STR_COULDNOTOPEN_LINKEDDOC
     Text[ spanish ] = "No se pudo abrir el documento\n\n$file$\n\n.";
     Text[ finnish ] = "Asiakirjan \n\n$file$\n\navaaminen ei onnistunut.";
     Text[ italian ] = "Impossibile\naprire il documento\n\n$file$.";
-    Text[ danish ] = "Th document\n\n$file$\n\ncould not be opened.";
+    Text[ danish ] = "Dokumentet\n\n$file$\n\nkunne ikke åbnes.";
     Text[ swedish ] = "Det gick inte att öppna dokumentet\n\n$file$\n\n.";
     Text[ polish ] = "Otwarcie dokumentu\n\n$file$\n\nnie powiod³o siê.";
     Text[ portuguese_brazilian ] = "Th document\n\n$file$\n\ncould not be opened.";
@@ -540,7 +540,7 @@ String STR_MISSING_TABLES_XDROP
     Text[ spanish ] = "No se puede eliminar la tabla porque la conexión con la base de datos no apoya esta acción.";
     Text[ finnish ] = "Taulukkoa ei voi poistaa, koska tietokantayhteys ei tue poistamista.";
     Text[ italian ] = "Impossibile eliminare la tabella perché non è supportata dal collegamento al database.";
-    Text[ danish ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text[ danish ] = "Tabellen kan ikke slettes, da databaseforbindelsen ikke understøtter den.";
     Text[ swedish ] = "Det går inte att radera tabellen eftersom databasförbindelsen inte stödjer den.";
     Text[ polish ] = "Tabeli nie mo¿na usun¹æ, poniewa¿ nie jest ona os³ugiwana przez po³¹czenie z baz¹ danych.";
     Text[ portuguese_brazilian ] = "The table can't be dropped, 'cause the database connection does not support this.";
@@ -569,7 +569,7 @@ String STR_BUTTON_TEXT_ALL
     Text[ spanish ] = "~Todos";
     Text[ finnish ] = "~Kaikki";
     Text[ italian ] = "~Tutti";
-    Text[ danish ] = "~All";
+    Text[ danish ] = "~Alle";
     Text[ swedish ] = "~Alla";
     Text[ polish ] = "~Wszystkie";
     Text[ portuguese_brazilian ] = "~All";
@@ -586,6 +586,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.45  2002/07/22 07:39:28  oj
+ *  #101514# remove resource entries for PLUS and MINUS
+ *
  *  Revision 1.44  2002/06/10 20:12:23  rt
  *  Merge SRX642: 10.06.02 - 22:11:58
  *
