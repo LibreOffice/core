@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:40:47 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,8 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
 //wie vor, jedoch wird nicht von der Selektion sondern von den
 //Start- EndFrms ausgegangen.
 void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
-                SwSelBoxes& rBoxes, const SwTblSearchType = TBLSEARCH_NONE );
+                SwSelBoxes& rBoxes, SwCellFrms* pCells,
+                const SwTblSearchType = TBLSEARCH_NONE );
 
 // Desgleichen nocheinmal direkt per PaM's
 void GetTblSelCrs( const SwCrsrShell& rShell, SwSelBoxes& rBoxes );
