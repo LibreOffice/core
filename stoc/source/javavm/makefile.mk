@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:29:34 $
+#   last change: $Author: kr $ $Date: 2000-09-28 17:36:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,23 +84,23 @@ CDEFS += -D__SGI_STL_BOOL_H
 .INCLUDE :  ..$/cppumaker.mk
 
 UNOTYPES= \
-    com.sun.star.uno.Exception	                                    \
-    com.sun.star.uno.XInterface		                                \
-    com.sun.star.java.XJavaVM 	                                    \
-    com.sun.star.uno.XWeak		                                    \
-    com.sun.star.uno.TypeClass	                                    \
-    com.sun.star.java.XJavaThreadRegister_11						\
-    com.sun.star.lang.XServiceInfo		                            \
-    com.sun.star.lang.XTypeProvider                                 \
-    com.sun.star.lang.XMultiServiceFactory	                        \
     com.sun.star.container.XNameAccess		                        \
+    com.sun.star.frame.XConfigManager								\
+    com.sun.star.java.XJavaThreadRegister_11						\
+    com.sun.star.java.XJavaVM 	                                    \
+    com.sun.star.lang.XMultiServiceFactory	                        \
+    com.sun.star.lang.XServiceInfo		                            \
     com.sun.star.lang.XSingleServiceFactory	                        \
-    com.sun.star.registry.XRegistryKey                              \
+    com.sun.star.lang.XTypeProvider                                 \
     com.sun.star.registry.XSimpleRegistry                           \
-    com.sun.star.frame.XConfigManager
+    com.sun.star.registry.XRegistryKey                              \
+    com.sun.star.uno.Exception	                                    \
+    com.sun.star.uno.TypeClass	                                    \
+    com.sun.star.uno.XAggregation	                                \
+    com.sun.star.uno.XInterface		                                \
+    com.sun.star.uno.XWeak
 
 SLOFILES= \
-        $(SLO)$/settings.obj	\
         $(SLO)$/javavm.obj		\
         $(SLO)$/jvmargs.obj		\
         $(SLO)$/jen_desc.obj		
