@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: hr $ $Date: 2003-11-07 15:19:09 $
+#   last change: $Author: kz $ $Date: 2004-01-28 12:55:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,6 +129,8 @@ IDLFILES=\
      FootnoteNumbering.idl\
      Footnotes.idl\
      FootnoteSettings.idl\
+    GenericTextDocument.idl\
+    GlobalDocument.idl\
      GlobalSettings.idl\
      GraphicCrop.idl\
      HoriOrientation.idl\
@@ -219,6 +221,7 @@ IDLFILES=\
       VertOrientation.idl\
       VertOrientationFormat.idl\
       ViewSettings.idl\
+    WebDocument.idl\
       WrapTextMode.idl\
       WritingMode.idl\
       WritingMode2.idl\
