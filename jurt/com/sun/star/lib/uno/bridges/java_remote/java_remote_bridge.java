@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-09 10:09:37 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 11:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ import com.sun.star.uno.Any;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.33 $ $ $Date: 2003-10-09 10:09:37 $
+ * @version     $Revision: 1.34 $ $ $Date: 2004-03-25 11:03:46 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -559,7 +559,7 @@ public class java_remote_bridge
 
         _listeners        = new Vector();
 
-        proxyFactory = new ProxyFactory(this);
+        proxyFactory = new ProxyFactory(this, this);
 
         _iThreadPool = ThreadPoolManager.create();
 
