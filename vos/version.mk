@@ -2,9 +2,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:18:10 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:50:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@
 VOS_TARGET=vos
 
 # the major 
-VOS_MAJOR=2
+VOS_MAJOR=3
 # the minor 
 VOS_MINOR=0
 # the micro 
