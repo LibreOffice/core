@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-24 10:07:58 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 14:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,7 +544,6 @@ void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName, BOOL bAc
 
             if( InsertOle( xIPObj ) && bActivate && bDoVerb )
             {
-                ASSERT( !xIPObj->IsLink(), "Link nicht aus Datei?" );
                 SfxInPlaceClientRef xCli = GetView().FindIPClient( xIPObj,
                                                     &GetView().GetEditWin());
                 if ( !xCli.Is() )
@@ -607,12 +606,6 @@ BOOL SwWrtShell::InsertOle( SvInPlaceObjectRef aRef )
         // determine source CLSID
         aRef->SvPseudoObject::FillClass( &aCLSID, &lDummy, &aDummy, &aDummy, &aDummy);
         bStarMath = SmModuleDummy::HasID( *aRef->GetSvFactory() );
-        if ( !bStarMath && aRef->IsLink() && SmModuleDummy::HasID( aCLSID ) )
-        {
-            //StarMath was the server which did the last recent work on
-            //this object.
-            bStarMath = TRUE;
-        }
 
         if( IsSelection() )
         {
@@ -688,53 +681,41 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
         SvInPlaceObjectRef xRef = GetOLEObj();
         ASSERT( xRef.Is(), "OLE not found" );
         SfxInPlaceClientRef xCli;
-        if ( !xRef->IsLink() )
+
+        //  Link fuer Daten-Highlighting im Chart zuruecksetzen
+        SvtModuleOptions aMOpt;
+        if( aMOpt.IsChart() )
         {
-            //  Link fuer Daten-Highlighting im Chart zuruecksetzen
-            SvtModuleOptions aMOpt;
-            if( aMOpt.IsChart() )
+            SvGlobalName aObjClsId( *xRef->GetSvFactory() );
+            SchMemChart* pMemChart;
+            if( SchModuleDummy::HasID( aObjClsId ) &&
+                0 != (pMemChart = SchDLL::GetChartData( xRef ) ))
             {
-                SvGlobalName aObjClsId( *xRef->GetSvFactory() );
-                SchMemChart* pMemChart;
-                if( SchModuleDummy::HasID( aObjClsId ) &&
-                    0 != (pMemChart = SchDLL::GetChartData( xRef ) ))
-                {
-                    pMemChart->SetSelectionHdl( LINK( this, SwWrtShell,
-                                                ChartSelectionHdl ) );
-                    //#60043# Damit die DataBrowseBox nicht erscheint wird das
-                    //Chart auf Readonly gesetzt wenn es eine Verbindung
-                    //zu einer Tabelle hat.
-                    if ( GetChartName( xRef ).Len() )
-                        pMemChart->SetReadOnly( TRUE );
-                }
+                pMemChart->SetSelectionHdl( LINK( this, SwWrtShell,
+                                            ChartSelectionHdl ) );
+                //#60043# Damit die DataBrowseBox nicht erscheint wird das
+                //Chart auf Readonly gesetzt wenn es eine Verbindung
+                //zu einer Tabelle hat.
+                if ( GetChartName( xRef ).Len() )
+                    pMemChart->SetReadOnly( TRUE );
             }
-
-            xCli = GetView().FindIPClient( xRef, &GetView().GetEditWin() );
-            if ( !xCli.Is() )
-                xCli = new SwOleClient( &GetView(), &GetView().GetEditWin() );
-
-            ((SwOleClient*)&xCli)->SetInDoVerb( TRUE );
-
-            xRef->DoConnect( xCli );
-            SvEmbeddedObjectRef xObj = &xRef;
-            CalcAndSetScale( xObj );
-            //#50270# Error brauchen wir nicht handeln, das erledigt das
-            //DoVerb in der SfxViewShell
-            GetView().SfxViewShell::DoVerb( xCli, nVerb );
-
-            ((SwOleClient*)&xCli)->SetInDoVerb( FALSE );
-            CalcAndSetScale( xObj );
-        }
-        else
-        {
-            ErrCode nErr;
-            SfxErrorContext aEc( ERRCTX_SO_DOVERB, &GetView().GetEditWin(),
-                                 RID_SO_ERRCTX );
-            nErr = xRef->DoVerb( nVerb );
-            if ( nErr )
-                ErrorHandler::HandleError( nErr );
         }
 
+        xCli = GetView().FindIPClient( xRef, &GetView().GetEditWin() );
+        if ( !xCli.Is() )
+            xCli = new SwOleClient( &GetView(), &GetView().GetEditWin() );
+
+        ((SwOleClient*)&xCli)->SetInDoVerb( TRUE );
+
+        xRef->DoConnect( xCli );
+        SvEmbeddedObjectRef xObj = &xRef;
+        CalcAndSetScale( xObj );
+        //#50270# Error brauchen wir nicht handeln, das erledigt das
+        //DoVerb in der SfxViewShell
+        GetView().SfxViewShell::DoVerb( xCli, nVerb );
+
+        ((SwOleClient*)&xCli)->SetInDoVerb( FALSE );
+        CalcAndSetScale( xObj );
     }
 }
 
@@ -898,16 +879,13 @@ void SwWrtShell::CalcAndSetScale( SvEmbeddedObjectRef xObj,
 void SwWrtShell::ConnectObj( SvInPlaceObjectRef xIPObj, const SwRect &rPrt,
                             const SwRect &rFrm )
 {
-    if ( !xIPObj->IsLink() )
-    {
-        SfxInPlaceClientRef xCli = GetView().FindIPClient( xIPObj,
-                                                           &GetView().GetEditWin());
-        if ( !xCli.Is() )
-            xCli = new SwOleClient( &GetView(), &GetView().GetEditWin() );
-        xIPObj->DoConnect( xCli );
-        SvEmbeddedObjectRef xObj = &xIPObj;
-        CalcAndSetScale( xObj, &rPrt, &rFrm );
-    }
+    SfxInPlaceClientRef xCli = GetView().FindIPClient( xIPObj,
+                                                        &GetView().GetEditWin());
+    if ( !xCli.Is() )
+        xCli = new SwOleClient( &GetView(), &GetView().GetEditWin() );
+    xIPObj->DoConnect( xCli );
+    SvEmbeddedObjectRef xObj = &xIPObj;
+    CalcAndSetScale( xObj, &rPrt, &rFrm );
 }
 
 IMPL_LINK( SwWrtShell, ChartSelectionHdl, ChartSelectionInfo *, pInfo )
@@ -1578,6 +1556,9 @@ void SwWrtShell::NewCoreSelection()
 /*************************************************************************
 
    $Log: not supported by cvs2svn $
+   Revision 1.10  2001/04/24 10:07:58  ama
+   Fix #77923#: Automatic contour refreshing after OLE editing
+
    Revision 1.9  2001/03/09 17:16:29  jp
    remove SvData usage
 
