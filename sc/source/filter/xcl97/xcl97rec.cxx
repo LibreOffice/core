@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:39:11 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,7 +649,7 @@ XclObjDropDown::XclObjDropDown( const XclExpRoot& rRoot, const ScAddress& rPos, 
     pEx->CloseContainer();  // ESCHER_SpContainer
 
     // old size + ftSbs + ftLbsData
-    SetRecSize( GetRecSize() + 24 + 20 );
+    AddRecSize( 24 + 20 );
 }
 
 XclObjDropDown::~XclObjDropDown()
@@ -664,9 +664,11 @@ void XclObjDropDown::WriteSubRecs( XclExpStream& rStrm )
     rStrm.EndRecord();
 
     // ftLbsData subrecord - Listbox data
+    sal_uInt16 nComboStyle = EXC_OBJ_LBS_COMBO_SIMPLE;
+    ::set_flag( nComboStyle, EXC_OBJ_LBS_FILTERED, bIsFiltered );
     rStrm.StartRecord( EXC_ID_OBJ_FTLBSDATA, 16 );
     rStrm   << (UINT32)0 << (UINT16)0 << (UINT16)0x0301 << (UINT16)0
-            << (UINT16)(bIsFiltered ? 0x000A : 0x0002) << (UINT32)0;
+            << nComboStyle << sal_uInt16( 20 ) << sal_uInt16( 130 );
     rStrm.EndRecord();
 }
 
@@ -938,7 +940,7 @@ void XclObjAny::Save( XclExpStream& rStrm )
 {
     if( mnObjType == EXC_OBJ_CMO_GROUP )
         // old size + ftGmo
-        SetRecSize( GetRecSize() + 6 );
+        AddRecSize( 6 );
 
     // content of this record
     XclObj::Save( rStrm );
@@ -1005,9 +1007,7 @@ ExcBofC8::ExcBofC8()
 ExcBundlesheet8::ExcBundlesheet8( RootData& rRootData, SCTAB nTab ) :
     ExcBundlesheetBase( rRootData, static_cast<sal_uInt16>(nTab) )
 {
-    String sTabName;
-    rRootData.pDoc->GetName( nTab, sTabName );
-    aUnicodeName.Assign( sTabName, EXC_STR_8BITLENGTH );
+    aUnicodeName.Assign( rRootData.pER->GetTabInfo().GetScTabName( nTab ), EXC_STR_8BITLENGTH );
 }
 
 
@@ -1101,9 +1101,10 @@ ULONG ExcPane8::GetLen() const
 }
 
 
-// --- class ExcWindow28 ---------------------------------------------
+// --- class XclExpWindow28 ---------------------------------------------
 
-ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, SCTAB nScTab ) :
+XclExpWindow28::XclExpWindow28( const XclExpRoot& rRoot, SCTAB nScTab ) :
+    XclExpRecord( 0x023E, 18 ),
     XclExpRoot( rRoot ),
     pPaneRec( NULL ),
     nFlags( 0 ),
@@ -1151,15 +1152,12 @@ ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, SCTAB nScTab ) :
         nFlags |= EXC_WIN2_MIRRORED;
 }
 
-
-ExcWindow28::~ExcWindow28()
+XclExpWindow28::~XclExpWindow28()
 {
-    if( pPaneRec )
-        delete pPaneRec;
+    delete pPaneRec;
 }
 
-
-void ExcWindow28::SaveCont( XclExpStream& rStrm )
+void XclExpWindow28::WriteBody( XclExpStream& rStrm )
 {
     rStrm   << nFlags
             << nTopRow
@@ -1169,10 +1167,9 @@ void ExcWindow28::SaveCont( XclExpStream& rStrm )
             << (UINT32) 0;
 }
 
-
-void ExcWindow28::Save( XclExpStream& rStrm )
+void XclExpWindow28::Save( XclExpStream& rStrm )
 {
-    ExcRecord::Save( rStrm );
+    XclExpRecord::Save( rStrm );
     if( pPaneRec )
         pPaneRec->Save( rStrm );
     ExcSelection( nActiveCol, nActiveRow, 3 ).Save( rStrm );
@@ -1183,19 +1180,6 @@ void ExcWindow28::Save( XclExpStream& rStrm )
     if( bHorSplit && bVertSplit )
         ExcSelection( nActiveCol, nActiveRow, 0 ).Save( rStrm );
 }
-
-
-UINT16 ExcWindow28::GetNum() const
-{
-    return 0x023E;
-}
-
-
-ULONG ExcWindow28::GetLen() const
-{
-    return 18;
-}
-
 
 // --- class XclObproj -----------------------------------------------
 
