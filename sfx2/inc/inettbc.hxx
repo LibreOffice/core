@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-12 05:25:12 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 10:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ friend class SfxURLBox_Impl;
     BOOL                            bModified;
     BOOL                            bTryAutoComplete: 1,
                                     bCtrlClick: 1,
-                                    bHistoryDisabled;
+                                    bHistoryDisabled : 1;
 
     BOOL                            ProcessKey( const KeyCode& rCode );
     void                            TryAutoComplete( BOOL bForward, BOOL bForce );
