@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TIndexColumns.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:01:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ OIndexColumns::OIndexColumns(   OIndexHelper* _pIndex,
 {
 }
 // -------------------------------------------------------------------------
-Reference< XNamed > OIndexColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
     ::rtl::OUString aSchema,aTable;
@@ -134,7 +134,7 @@ Reference< XNamed > OIndexColumns::createObject(const ::rtl::OUString& _rName)
         m_pIndex->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)),
         aSchema,aTable,_rName);
 
-    Reference< XNamed > xRet = NULL;
+    sdbcx::ObjectType xRet = NULL;
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -177,13 +177,10 @@ void OIndexColumns::impl_refresh() throw(RuntimeException)
     m_pIndex->refreshColumns();
 }
 // -----------------------------------------------------------------------------
-Reference< XNamed > OIndexColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+sdbcx::ObjectType OIndexColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    OIndexColumn* pColumn = new OIndexColumn(sal_True);
-    Reference<XPropertySet> xProp = pColumn;
+    Reference<XPropertySet> xProp = new OIndexColumn(sal_True);
     ::comphelper::copyProperties(_xDescriptor,xProp);
-    Reference< XNamed > xName(xProp,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName;
+    return xProp;
 }
 // -----------------------------------------------------------------------------
