@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-29 21:12:47 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2867,7 +2867,7 @@ SfxSlotInfo FN_GOTO_NEXT_REGION
     SlotName[ russian ] = "Äî ñëåäóşùåãî ğàçäåëà";
     SlotName[ dutch ] = "Naar volgend bereik";
     SlotName[ french ] = "À la section suivante";
-    SlotName[ spanish ] = "A la área siguiente";
+    SlotName[ spanish ] = "Al área siguiente";
     SlotName[ italian ] = "All'area successiva";
     SlotName[ danish ] = "Til næste område";
     SlotName[ swedish ] = "Till nästa område";
@@ -6140,7 +6140,7 @@ SfxSlotInfo FN_PREV_WORD
     SlotName[ spanish ] = "Ir a la palabra izquierda";
     SlotName[ italian ] = "Alla parola sinistra";
     SlotName[ danish ] = "Til ord til venstre";
-    SlotName[ swedish ] = "Till vänster ord";
+    SlotName[ swedish ] = "Till ord till vänster";
     SlotName[ polish ] = "Do s³owa po lewej stronie";
     SlotName[ portuguese_brazilian ] = "GoToPrevWord";
     SlotName[ japanese ] = "å˜èªã®å·¦ã¸";
@@ -6168,7 +6168,7 @@ SfxSlotInfo FN_PREV_WORD_SEL
     SlotName[ spanish ] = "Seleccionar hasta el comienzo de la palabra";
     SlotName[ italian ] = "Seleziona fino alla parola di sinistra";
     SlotName[ danish ] = "Marker til ord til venstre";
-    SlotName[ swedish ] = "Markera till vänster ord";
+    SlotName[ swedish ] = "Markera till ord till vänster";
     SlotName[ polish ] = "Zaznacz do s³owa po lewej";
     SlotName[ portuguese_brazilian ] = "WordLeftSel";
     SlotName[ japanese ] = "å˜èªã®å·¦ã¾ã§é¸æŠ";
@@ -6193,7 +6193,7 @@ SfxSlotInfo FN_PREVIEW_PRINT_OPTIONS
     SlotName[ russian ] = "Ïàğàìåòğû ïå÷àòè: âèä ñòğàíèöû";
     SlotName[ dutch ] = "Printopties afdrukvoorbeeld";
     SlotName[ french ] = "Options d'impression : aperçu";
-    SlotName[ spanish ] = "Opciones de impresión Vista preliminar";
+    SlotName[ spanish ] = "Opciones de impresión - Vista preliminar";
     SlotName[ italian ] = "Opzioni di stampa";
     SlotName[ danish ] = "Udskriftsindstillinger sidevisning";
     SlotName[ swedish ] = "Utskriftsalternativ förhandsgranskning";
