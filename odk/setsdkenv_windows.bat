@@ -23,6 +23,10 @@ REM Directory of the C++ tools.
 REM Example:set OO_SDK_CPP_HOME=C:\Programme\Microsoft Visual Studio\VC98\bin
 set OO_SDK_CPP_HOME=
 
+REM Directory of the C# and VB.NET compilers.
+REM Example:set OO_SDK_CLI_HOME=C:\WINXP\Microsoft.NET\Framework\v1.0.3705
+set OO_SDK_CLI_HOME=
+
 REM Java installation directory.
 REM Example: set OO_SDK_JAVA_HOME=c:\j2sdk1.4.1_01
 set OO_SDK_JAVA_HOME=
@@ -84,6 +88,9 @@ if defined OO_SDK_MAKE_HOME set PATH=%OO_SDK_MAKE_HOME%;%PATH%
 
 REM Add directory of the C++ tools to the path, if necessary.
 if defined OO_SDK_CPP_HOME set PATH=%OO_SDK_CPP_HOME%;%PATH%
+
+REM Add directory of the C# and VB.NET compilers to the path, if necessary.
+if defined OO_SDK_CLI_HOME set PATH=%OO_SDK_CLI_HOME%;%PATH%
 
 REM Add directory of the Java tools to the path, if necessary.
 if defined OO_SDK_JAVA_HOME set PATH=%OO_SDK_JAVA_HOME%\bin;%OO_SDK_JAVA_HOME%\jre\bin;%PATH%
