@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateConversion.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 13:11:19 $
+ *  last change: $Author: oj $ $Date: 2001-08-06 06:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ using namespace ::com::sun::star::util;
                     _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aRet;
             }
         }
-        catch ( ... )
+        catch ( const Exception&  )
         {
             OSL_ENSURE(0,"TypeConversion Error");
         }
@@ -211,7 +211,7 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
             xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString::createFromAscii("NullDate")) >>= aDate;
             return aDate;
         }
-        catch ( ... )
+        catch ( const Exception&  )
         {
         }
     }
@@ -250,7 +250,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                 // einfache Nummer dar -> anpassen
                 ::rtl::OUString sExpanded(rString);
                 static ::rtl::OUString s_sPercentSymbol = ::rtl::OUString::createFromAscii("%");
-                    // need a method to add a sal_Unicode to a string, 'til then we use a static string ...
+                    // need a method to add a sal_Unicode to a string, 'til then we use a static string const Exception&
                 sExpanded += s_sPercentSymbol;
                 fValue = xFormatter->convertStringToNumber(nKeyToUse, sExpanded);
             }
@@ -259,9 +259,10 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
             {
                 case NumberFormat::DATE:
                 case NumberFormat::DATETIME:
-                    xVariant->updateDouble(toStandardDbDate(rNullDate, fValue));
-                    break;
                 case NumberFormat::TIME:
+                    DBTypeConversion::setValue(xVariant,rNullDate,fValue,nRealUsedTypeClass);
+                    //  xVariant->updateDouble(toStandardDbDate(rNullDate, fValue));
+                    break;
                 case NumberFormat::CURRENCY:
                 case NumberFormat::NUMBER:
                 case NumberFormat::SCIENTIFIC:
@@ -273,7 +274,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                     xVariant->updateString(rString);
             }
         }
-        catch(...)
+        catch(const Exception& )
         {
             xVariant->updateString(rString);
         }
@@ -302,9 +303,13 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
     switch (nKeyType & ~NumberFormat::DEFINED)
     {
         case NumberFormat::DATE:
+            xVariant->updateDate(toDate( rValue, rNullDate));
+            break;
         case NumberFormat::DATETIME:
-        //  case NumberFormat::TIME:
-            xVariant->updateDouble(toStandardDbDate(rNullDate, rValue));
+            xVariant->updateTimestamp(toDateTime(rValue,rNullDate));
+            break;
+        case NumberFormat::TIME:
+            xVariant->updateTime(toTime(rValue));
             break;
         default:
             xVariant->updateDouble(rValue);
@@ -321,14 +326,16 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
         switch (nKeyType & ~NumberFormat::DEFINED)
         {
             case NumberFormat::DATE:
+                return toDouble( xVariant->getDate(), rNullDate);
             case NumberFormat::DATETIME:
-            //  case NumberFormat::TIME:
-                return toNullDate(rNullDate, xVariant->getDouble());
+                return toDouble(xVariant->getTimestamp(),rNullDate);
+            case NumberFormat::TIME:
+                return toDouble(xVariant->getTime());
             default:
                 return xVariant->getDouble();
         }
     }
-    catch(...)
+    catch(const Exception& )
     {
         return 0.0;
     }
@@ -339,18 +346,17 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
                                            const ::com::sun::star::lang::Locale& _rLocale,
                                            const Date& _rNullDate)
 {
-    sal_Int32 nKey;
-    sal_Int16 nKeyType;
-
     OSL_ENSURE(_xColumn.is() && _xFormatter.is(), "DBTypeConversion::getValue: invalid arg !");
     if (!_xColumn.is() || !_xFormatter.is())
         return ::rtl::OUString();
 
+    sal_Int32 nKey;
+    sal_Int16 nKeyType;
     try
     {
         _xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY)) >>= nKey;
     }
-    catch (...)
+    catch (const Exception& )
     {
     }
 
@@ -386,7 +392,7 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
                 case NumberFormat::DATE:
                 case NumberFormat::DATETIME:
                 {
-                    double fValue = xVariant->getDouble();
+                    double fValue = getValue(xVariant,rNullDate,nKeyType);
                     if (!xVariant->wasNull())
                         aString = xFormatter->convertNumberToString(nKey, toNullDate(rNullDate, fValue));
                 }   break;
@@ -413,7 +419,7 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
                     aString = xVariant->getString();
             }
         }
-        catch(...)
+        catch(const Exception& )
         {
             aString = xVariant->getString();
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 13:09:29 $
+ *  last change: $Author: oj $ $Date: 2001-08-06 06:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,13 +403,15 @@ Time DBTypeConversion::toTime(double dVal)
 
     Time xRet;
     // Zeit normalisieren
-    xRet.HundredthSeconds   = nMS/10;
-    xRet.Seconds            = xRet.HundredthSeconds / 100;
-    xRet.HundredthSeconds   = xRet.HundredthSeconds % 100;
-    xRet.Minutes            = xRet.Seconds / 60;
-    xRet.Seconds            = xRet.Seconds % 60;
-    xRet.Hours              = xRet.Minutes / 60;
-    xRet.Minutes            = xRet.Minutes % 60;
+    // we have to sal_Int32 here because otherwise we get an overflow
+    sal_Int32 nHundredthSeconds = nMS/10;
+    sal_Int32 nSeconds          = nHundredthSeconds / 100;
+    sal_Int32 nMinutes          = nSeconds / 60;
+
+    xRet.HundredthSeconds       = nHundredthSeconds % 100;
+    xRet.Seconds                = nSeconds % 60;
+    xRet.Hours                  = nMinutes / 60;
+    xRet.Minutes                = nMinutes % 60;
 
     // Zeit zusammenbauen
     sal_Int32 nTime = (sal_Int32)(xRet.HundredthSeconds + (xRet.Seconds*100) + (xRet.Minutes*10000) + (xRet.Hours*1000000)) * nSign;
@@ -422,7 +424,6 @@ Time DBTypeConversion::toTime(double dVal)
         xRet.Hours              = 23;
     }
     return xRet;
-
 }
 //------------------------------------------------------------------------------
 DateTime DBTypeConversion::toDateTime(double dVal, const Date& _rNullDate)
@@ -455,6 +456,9 @@ DateTime DBTypeConversion::toDateTime(double dVal, const Date& _rNullDate)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/05/25 13:09:29  oj
+ *  #86839# flush scanner buffer
+ *
  *  Revision 1.14  2001/05/11 17:25:49  pl
  *  rtl string api changes
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 09:11:53 $
+ *  last change: $Author: oj $ $Date: 2001-08-06 06:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,6 +326,7 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 break;
             case DataType::DATE:
                 (*this) = *(Date*)_rRH.m_aValue.m_pValue;
+                break;
             case DataType::TIME:
                 (*this) = *(Time*)_rRH.m_aValue.m_pValue;
                 break;
