@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:49:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2158,7 +2158,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
     BOOL bNewDoc = ( nDestDocNo == SC_DOC_NEW );
     if ( bNewDoc )
     {
-        nDestTab = 0;           // als erstes einfügen
+        nDestTab = 0;           // als erstes einfuegen
 
         //  ohne SFX_CALLMODE_RECORD ausfuehren, weil schon im Move-Befehl enthalten:
 
