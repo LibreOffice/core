@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-04 16:05:48 $
+#   last change: $Author: hr $ $Date: 2003-04-04 17:18:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,8 @@ TARGET=				framework
 USE_DEFFILE=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
 NO_BSYMBOLIC=		TRUE
-GEN_HID=                TRUE
+GEN_HID=            TRUE
+GEN_HID_OTHER=      TRUE
 
 # --- Settings -----------------------------------------------------
 
