@@ -2,9 +2,9 @@
 *
 *  $RCSfile: binaryreader.cxx,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: rt $ $Date: 2003-10-06 14:44:48 $
+*  last change: $Author: obo $ $Date: 2004-09-08 16:13:01 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -253,7 +253,7 @@ namespace configmgr
         OUString sMsg = OUString::createFromAscii("Cannot allocate Buffer: Too large");
         throw io:: BufferSizeExceededException(sMsg, NULL);
     }
-    // --------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
         BinaryReader_Impl::BinaryReader_Impl (rtl::OUString const & rFileUrl)
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         : m_pBuffer (0)
@@ -263,17 +263,11 @@ namespace configmgr
             osl::File aFile (rFileUrl);
 
             checkIOError( aFile.open (OpenFlag_Read) );
-
-            checkIOError( aFile.setPos (Pos_End, 0) );
-
             sal_uInt64 nLength = 0;
-            checkIOError( aFile.getPos (nLength) );
+            checkIOError( aFile.getSize (nLength) );
             if (nLength > 0xffffffff)
                 raiseBufferError();
-
             m_nLength = sal_uInt32(nLength);
-
-            checkIOError( aFile.setPos (Pos_Absolut, 0) );
 
             sal_uInt8 *pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory (m_nLength));
             if (!pBuffer)
