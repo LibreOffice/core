@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:40:55 $
+ *  last change: $Author: hdu $ $Date: 2002-11-22 17:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -758,10 +758,11 @@ void ImplRenderPath( HDC hdc, ULONG nPoints, const SalPoint* pPtAry, const BYTE*
 
 SalGraphics::SalGraphics()
 {
+    for( int i = 0; i < MAX_FALLBACK; ++i )
+        maGraphicsData.mhFonts[ i ] = 0;
     maGraphicsData.mhDC                 = 0;
     maGraphicsData.mhPen                = 0;
     maGraphicsData.mhBrush              = 0;
-    maGraphicsData.mhFont               = 0;
     maGraphicsData.mhRegion             = 0;
     maGraphicsData.mhDefPen             = 0;
     maGraphicsData.mhDefBrush           = 0;
@@ -774,17 +775,19 @@ SalGraphics::SalGraphics()
     maGraphicsData.mpFontKernPairs      = NULL;
     maGraphicsData.mnFontKernPairCount  = 0;
     maGraphicsData.mbFontKernInit       = FALSE;
-    maGraphicsData.mnFontOverhang       = 0;
     maGraphicsData.mbXORMode            = FALSE;
     maGraphicsData.mnPenWidth           = GSL_PEN_WIDTH;
-    maGraphicsData.mbCalcOverhang       = TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 SalGraphics::~SalGraphics()
 {
-    // Objekte zerstoeren
+    // free obsolete GDI objekts
+    for( int i = 0; i < MAX_FALLBACK; ++i )
+        if( maGraphicsData.mhFonts[ i ] )
+            DeleteFont( maGraphicsData.mhFonts[ i ] );
+
     if ( maGraphicsData.mhPen )
     {
         if ( !maGraphicsData.mbStockPen )
@@ -795,8 +798,6 @@ SalGraphics::~SalGraphics()
         if ( !maGraphicsData.mbStockBrush )
             DeleteBrush( maGraphicsData.mhBrush );
     }
-    if ( maGraphicsData.mhFont )
-        DeleteFont( maGraphicsData.mhFont );
 
     if ( maGraphicsData.mhRegion )
     {
@@ -956,7 +957,7 @@ BOOL SalGraphics::UnionClipRegion( long nX, long nY, long nWidth, long nHeight, 
 
 void SalGraphics::EndSetClipRegion()
 {
-    // Aus den Region-Daten muessen wir jetzt eine ClipRegion erzeugen
+    // create clip region from ClipRgnData
     if ( maGraphicsData.mpClipRgnData->rdh.nCount == 1 )
     {
         RECT* pRect = &(maGraphicsData.mpClipRgnData->rdh.rcBound);
