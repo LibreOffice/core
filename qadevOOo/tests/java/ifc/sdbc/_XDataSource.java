@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDataSource.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:54 $
+ *  last change:$Date: 2003-09-08 10:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,9 @@
 package ifc.sdbc;
 
 import lib.MultiMethodTest;
-import com.sun.star.sdbc.XDataSource;
+
 import com.sun.star.sdbc.XConnection;
+import com.sun.star.sdbc.XDataSource;
 
 /**
 * Testing <code>com.sun.star.sdbc.XDataSource</code>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDriverManager.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:52 $
+ *  last change:$Date: 2003-09-08 10:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,12 @@
 package ifc.sdbc;
 
 import lib.MultiMethodTest;
-import com.sun.star.sdbc.XDriverManager;
-import lib.StatusException;
 import lib.Status;
-import com.sun.star.sdbc.XConnection;
+import lib.StatusException;
+
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.sdbc.XConnection;
+import com.sun.star.sdbc.XDriverManager;
 
 /**
 * Testing <code>com.sun.star.sdbc.XDriverManager</code>
@@ -173,7 +174,6 @@ public class _XDriverManager extends MultiMethodTest {
      */
     public void _setLoginTimeout() {
         requiredMethod("getLoginTimeout()");
-        boolean res = true;
         final int TO = 111;
         log.println("setLoginTimeout(" + TO + ")");
         oObj.setLoginTimeout(TO);
