@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:32:33 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,6 +472,8 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
 
     SetHelpId( HID_SC_WIN_GRIDWIN );
     SetUniqueId( HID_SC_WIN_GRIDWIN );
+
+    SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
 }
 
 __EXPORT ScGridWindow::~ScGridWindow()
