@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2001-09-27 13:19:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
 #endif
+#include <list>
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -77,6 +78,7 @@ namespace psp {
 typedef int fontID;
 
 const ::rtl::OUString& getPrinterPath();
+void getPrinterPathList( std::list< rtl::OUString >& rPathList, const char* pSubDir );
 const ::rtl::OUString& getFontPath();
 
 bool convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile );
