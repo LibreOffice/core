@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePreviewTable.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 13:50:36 $
+ *  last change:$Date: 2003-02-28 13:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.util.XURLTransformer;
 import drafts.com.sun.star.accessibility.XAccessible;
 import drafts.com.sun.star.accessibility.AccessibleRole;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
+import drafts.com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.sheet.XSpreadsheet;
@@ -149,9 +151,7 @@ public class ScAccessiblePreviewTable extends TestCase {
      * Creating a Testenvironment for the interfaces to be tested.
      * Obtains the accessible object for a table in preview mode.
      */
-    public synchronized TestEnvironment createTestEnvironment
-            ( TestParameters Param, PrintWriter log )
-            throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
         XCell xCell = null;
@@ -222,9 +222,27 @@ public class ScAccessiblePreviewTable extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
+        XAccessible zoomIn = null;
+        try {
+            XAccessibleContext mainWin =
+                at.getAccessibleObjectForRole(xRoot,AccessibleRole.LAYEREDPANE);
+
+            XAccessible PageViewObjectBar = mainWin.getAccessibleChild(2);
+
+            zoomIn =
+                PageViewObjectBar.getAccessibleContext().getAccessibleChild(5);
+            log.println("Getting "+
+                            zoomIn.getAccessibleContext().getAccessibleName());
+        } catch (com.sun.star.lang.IndexOutOfBoundsException ibe) {}
+
+        final XAccessibleAction pressZoom = (XAccessibleAction)
+                    UnoRuntime.queryInterface(XAccessibleAction.class, zoomIn);
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {
+                        try {
+                            pressZoom.doAccessibleAction(0);
+                        } catch (com.sun.star.lang.IndexOutOfBoundsException ibe) {}
                 }
             });
 
