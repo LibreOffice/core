@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:39:31 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ public:
     SwDoCapitals ( SwDrawTextInfo &rInfo ) : rInf( rInfo ), pCapInf( 0 ) { }
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) = 0;
     virtual void Do() = 0;
-    inline OutputDevice *GetOut() { return rInf.GetpOut(); }
+    inline OutputDevice& GetOut() { return rInf.GetOut(); }
     inline SwDrawTextInfo& GetInf() { return rInf; }
     inline SwCapitalInfo* GetCapInf() const { return pCapInf; }
     inline void SetCapInf( SwCapitalInfo& rNew ) { pCapInf = &rNew; }
@@ -281,13 +281,13 @@ void SwDoGetCapitalBreak::Do()
             xub_StrLen nEnd = rInf.GetEnd();
             if( pExtraPos )
             {
-                nBreak = GetOut()->GetTextBreak( rInf.GetText(), nTxtWidth, '-',
+                nBreak = GetOut().GetTextBreak( rInf.GetText(), nTxtWidth, '-',
                      *pExtraPos, rInf.GetIdx(), rInf.GetLen(), rInf.GetKern() );
                 if( *pExtraPos > nEnd )
                     *pExtraPos = nEnd;
             }
             else
-                nBreak = GetOut()->GetTextBreak( rInf.GetText(), nTxtWidth,
+                nBreak = GetOut().GetTextBreak( rInf.GetText(), nTxtWidth,
                                rInf.GetIdx(), rInf.GetLen(), rInf.GetKern() );
 
             if( nBreak > nEnd )
@@ -315,8 +315,8 @@ void SwDoGetCapitalBreak::Do()
  *                    SwFont::GetCapitalBreak()
  *************************************************************************/
 
-xub_StrLen SwFont::GetCapitalBreak( ViewShell *pSh, const OutputDevice *pOut,
-    const SwScriptInfo* pScript, const XubString &rTxt, long nTextWidth,
+xub_StrLen SwFont::GetCapitalBreak( ViewShell* pSh, const OutputDevice* pOut,
+    const SwScriptInfo* pScript, const XubString& rTxt, long nTextWidth,
     xub_StrLen *pExtra, const xub_StrLen nIdx, const xub_StrLen nLen )
 {
     // Start:
@@ -405,7 +405,7 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
     if ( nDiff )
     {
         rInf.ApplyAutoColor();
-        GetOut()->DrawStretchText( aPos, nDiff,
+        GetOut().DrawStretchText( aPos, nDiff,
             XubString( sDoubleSpace, RTL_TEXTENCODING_MS_1252 ), 0, 2 );
     }
     rPos.X() = rInf.GetPos().X() + rInf.GetWidth();
@@ -476,7 +476,7 @@ void SwDoCapitalCrsrOfst::Do()
                     rInf.GetLen(), rInf.GetKern(), rInf.GetSpace(),
                     rInf.GetKanaComp() );
 #else
-            SwDrawTextInfo aDrawInf( 0, *rInf.GetpOut(),
+            SwDrawTextInfo aDrawInf( rInf.GetShell(), *rInf.GetpOut(),
                                      rInf.GetScriptInfo(),
                                      rInf.GetText(),
                                      rInf.GetIdx(),
@@ -567,10 +567,10 @@ void SwDoDrawStretchCapital::Do()
         // Optimierung:
 
         if( 1 >= rInf.GetLen() )
-            GetOut()->DrawText( rInf.GetPos(), rInf.GetText(), rInf.GetIdx(),
+            GetOut().DrawText( rInf.GetPos(), rInf.GetText(), rInf.GetIdx(),
                 rInf.GetLen() );
         else
-            GetOut()->DrawStretchText( rInf.GetPos(), nPartWidth,
+            GetOut().DrawStretchText( rInf.GetPos(), nPartWidth,
                                 rInf.GetText(), rInf.GetIdx(), rInf.GetLen() );
     }
     ((Point&)rInf.GetPos()).X() += nPartWidth;
@@ -686,8 +686,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     rDo.Init( pBigFont, pSmallFont );
     OutputDevice* pOutSize = pSmallFont->GetPrt();
     if( !pOutSize )
-        pOutSize = rDo.GetOut();
-    OutputDevice* pOldOut = rDo.GetOut();
+        pOutSize = &rDo.GetOut();
+    OutputDevice* pOldOut = &rDo.GetOut();
 
     const LanguageType eLng = LANGUAGE_DONTKNOW == GetLanguage()
                             ? LANGUAGE_SYSTEM : GetLanguage();
