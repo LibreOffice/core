@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ ToolBox RID_TOOLBOX
             /* ### ACHTUNG: Neuer Text in Resource? CommandButton einfügen : CommandButton einf³gen */
             Text[ chinese_simplified ] = "ÃüÁî°´Å¥";
             Text[ russian ] = "Êíîïêà êîìàíäû";
-            Text[ polish ] = "Przycisk polecenia";
+            Text[ polish ] = "Przycisk komendy";
             Text[ japanese ] = "ºÏİÄŞÎŞÀİ";
             Text[ chinese_traditional ] = "©R¥O«ö¶s";
             Text[ arabic ] = "ÒÑ ÖÛØ";
@@ -160,13 +160,13 @@ ToolBox RID_TOOLBOX
             Text [ spanish ] = "Casilla de verificación" ;
             Text [ french ] = "Case à cocher" ;
             Text [ dutch ] = "CheckBox" ;
-            Text [ swedish ] = "CheckBox" ;
+            Text [ swedish ] = "Markeringsfält" ;
             Text [ danish ] = "Afkrydsningsfelt" ;
             Text [ portuguese ] = "Caixa de verificação" ;
             Text [ portuguese_brazilian ] = "CheckBox" ;
             /* ### ACHTUNG: Neuer Text in Resource? CheckBox einfügen : CheckBox einf³gen */
             Text[ chinese_simplified ] = "¸´Ñ¡¿ò";
-            Text[ russian ] = "Êíîïêà ïğîâåğêè";
+            Text[ russian ] = "Îêíî ôëàæêà";
             Text[ polish ] = "Pole wyboru";
             Text[ japanese ] = "Áª¯¸ÎŞ¯¸½";
             Text[ chinese_traditional ] = "®Ö¨ú¤è¶ô";
@@ -214,7 +214,7 @@ ToolBox RID_TOOLBOX
             Text [ spanish ] = "Listado" ;
             Text [ french ] = "Zone de liste" ;
             Text [ dutch ] = "ListBox" ;
-            Text [ swedish ] = "ListBox" ;
+            Text [ swedish ] = "Listruta" ;
             Text [ danish ] = "Liste" ;
             Text [ portuguese ] = "Caixa de listagem" ;
             Text [ portuguese_brazilian ] = "ListBox" ;
@@ -237,7 +237,7 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "HScrollBar" ;
             Text [ dutch ] = "HScrollBar" ;
-            Text [ english_us ] = "Horiz. Scrollbar" ;
+            Text [ english_us ] = "Horiz. Scroll Bar" ;
             Text [ italian ] = "Barra di scorrimento oriz." ;
             Text [ spanish ] = "BarraDesplazHoriz." ;
             Text [ french ] = "Barre de défilement horiz." ;
@@ -247,7 +247,7 @@ ToolBox RID_TOOLBOX
             Text [ portuguese_brazilian ] = "HScrollBar" ;
             /* ### ACHTUNG: Neuer Text in Resource? Horizontale ScrollBar einfügen : Horizontale ScrollBar einf³gen */
             Text[ chinese_simplified ] = "Ë®Æ½Ïò¹ö¶¯À¸";
-            Text[ russian ] = "Ãîğèçîíòàëüíàÿ ïîëîñà ïğîêğóòêè";
+            Text[ russian ] = "Ãîğèç. ïîëîñà ïğîêğóòêè";
             Text[ polish ] = "Poziomy pasek przewijania";
             Text[ japanese ] = "…•½½¸Û°ÙÊŞ°";
             Text[ chinese_traditional ] = "¾î¦V¨÷¶b";
@@ -274,7 +274,7 @@ ToolBox RID_TOOLBOX
             Text [ portuguese_brazilian ] = "FrameControl" ;
             /* ### ACHTUNG: Neuer Text in Resource? GroupBox einfügen : GroupBox einf³gen */
             Text[ chinese_simplified ] = "¿ò¿ØÖÆ";
-            Text[ russian ] = "FrameControl";
+            Text[ russian ] = "İëåìåíò óïğàâëåíèÿ êàäğà";
             Text[ polish ] = "FrameControl";
             Text[ japanese ] = "ÌÚ°ÑºİÄÛ°Ù";
             Text[ chinese_traditional ] = "°T®Ø±±¨î¶µ";
@@ -358,7 +358,7 @@ ToolBox RID_TOOLBOX
             Text [ dutch ] = "Onzichtbare controle-elementen weergeven" ;
             Text[ chinese_simplified ] = "ÏÔÊ¾ÒşÈëµÄ¿ØÖÆ";
             Text[ russian ] = "Ïîêàçàòü ñêğûòûå ıëåìåíòû óïğàâëåíèÿ";
-            Text[ polish ] = "Poka¿ ukryte pola kontrolne";
+            Text[ polish ] = "Poka¿ ukryte elementy kontrolne";
             Text[ japanese ] = "”ñ•\\¦‚ÌºİÄÛ°Ù—v‘f‚ğ•\\¦";
             Text[ chinese_traditional ] = "Åã¥ÜÁô¤Jªº±±¨î¤¸¥ó";
             Text[ arabic ] = "ÅÙåÇÑ ÚäÇÕÑ ÇáÊÍßã ÇáãÎİíÉ";
@@ -379,7 +379,7 @@ ToolBox RID_TOOLBOX
             Text [ italian ] = "Pulsante di selezione" ;
             Text [ spanish ] = "Botón de selección" ;
             Text [ french ] = "Compteur" ;
-            Text [ swedish ] = "SpinButton" ;
+            Text [ swedish ] = "Rotationsknapp" ;
             Text [ danish ] = "Rulleknap" ;
             Text [ portuguese ] = "Botão de rotação" ;
             Text [ portuguese_brazilian ] = "SpinButton" ;
@@ -412,7 +412,7 @@ ToolBox RID_TOOLBOX
             Text [ portuguese_brazilian ] = "OptionButton" ;
             /* ### ACHTUNG: Neuer Text in Resource? RadioButton einfügen : RadioButton einf³gen */
             Text[ chinese_simplified ] = "Ñ¡Ïî°´Å¥";
-            Text[ russian ] = "Êíîïêà ïàğàìåòğîâ";
+            Text[ russian ] = "Ïåğåêëş÷àòåëü";
             Text[ polish ] = "Przycisk opcji";
             Text[ japanese ] = "×¼ŞµÎŞÀİ";
             Text[ chinese_traditional ] = "¿ï¶µ«ö¶s";
@@ -433,7 +433,7 @@ ToolBox RID_TOOLBOX
             Text [ italian ] = "Casella di testo" ;
             Text [ spanish ] = "Cuadro de texto" ;
             Text [ french ] = "Zone de texte" ;
-            Text [ swedish ] = "TextBox" ;
+            Text [ swedish ] = "Textfält" ;
             Text [ danish ] = "Tekstboks" ;
             Text [ portuguese ] = "Caixa de texto" ;
             Text [ portuguese_brazilian ] = "TextBox" ;
@@ -461,7 +461,7 @@ ToolBox RID_TOOLBOX
             Text [ italian ] = "Casella combinata" ;
             Text [ spanish ] = "Cuadro combinado" ;
             Text [ french ] = "Zone combinée" ;
-            Text [ swedish ] = "ComboBox" ;
+            Text [ swedish ] = "Kombinationsfält" ;
             Text [ danish ] = "Kombinationsboks" ;
             Text [ portuguese ] = "Caixa de combinação" ;
             Text [ portuguese_brazilian ] = "ComboBox" ;
@@ -483,7 +483,7 @@ ToolBox RID_TOOLBOX
             Identifier = SID_INSERT_VSCROLLBAR ;
             RadioCheck = TRUE ;
             Text = "VScrollBar" ;
-            Text [ english_us ] = "Vert. Scrollbar" ;
+            Text [ english_us ] = "Vert. Scroll Bar" ;
             Text [ italian ] = "Barra di scorrimento vert." ;
             Text [ spanish ] = "Barra de desplazamiento vert." ;
             Text [ french ] = "Barre de défilement vert." ;
@@ -494,7 +494,7 @@ ToolBox RID_TOOLBOX
             Text [ portuguese_brazilian ] = "VScrollBar" ;
             /* ### ACHTUNG: Neuer Text in Resource? Vertikale ScrollBar einfügen : Vertikale ScrollBar einf³gen */
             Text[ chinese_simplified ] = "×İÏò¹ö¶¯À¸";
-            Text[ russian ] = "Âåğòèêàëüíàÿ ïîëîñà ïğîêğóòêè";
+            Text[ russian ] = "Âåğò. ïîëîñà ïğîêğóòêè";
             Text[ polish ] = "Pionowy pasek przewijania";
             Text[ japanese ] = "‚’¼½¸Û°ÙÊŞ°";
             Text[ chinese_traditional ] = "Áa¦V¨÷¶b";
@@ -520,8 +520,8 @@ ToolBox RID_TOOLBOX
             Text [ portuguese ] = "Previsualizar" ;
             Text [ portuguese_brazilian ] = "Preview" ;
             /* ### ACHTUNG: Neuer Text in Resource? Preview einfügen : Preview einf³gen */
-            Text[ chinese_simplified ] = "Ô¤ÊÓ";
-            Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ";
+            Text[ chinese_simplified ] = "Ô¤ÀÀ";
+            Text[ russian ] = "Ïğåäâ. ïğîñìîòğ";
             Text[ polish ] = "Podgl¹d";
             Text[ japanese ] = "ÌßÚËŞ­°";
             Text[ chinese_traditional ] = "¹wÄı";
@@ -574,7 +574,7 @@ ToolBox RID_TOOLBOX
             Text [ finnish ] = "Valitse testaustila" ;
             Text [ danish ] = "Aktiver testtilstand" ;
             Text [ french ] = "Activer le mode Test" ;
-            Text [ swedish ] = "Aktivera testläget" ;
+            Text [ swedish ] = "Aktivera testläge" ;
             Text [ dutch ] = "Testmodus inschakelen" ;
             Text [ spanish ] = "Activar modo prueba" ;
             Text [ english_us ] = "Activate Test Mode" ;
@@ -598,7 +598,7 @@ ToolBox RID_TOOLBOX
             Text [ portuguese ] = "Ver caixa de diálogo para formulários" ;
             Text [ english_us ] = "Show Form Dialog" ;
             Text [ portuguese_brazilian ] = "Form-Dialog anzeigen" ;
-            Text [ swedish ] = "Visa form dialog" ;
+            Text [ swedish ] = "Visa formdialog" ;
             Text [ danish ] = "Vis form-dialog" ;
             Text [ italian ] = "Mostra dialogo per formulari" ;
             Text [ spanish ] = "Mostrar diálogo para formularios" ;
