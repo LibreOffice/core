@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WriterSelector.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 17:18:43 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 12:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -95,7 +95,10 @@ public class WriterSelector {
             // test document will be closed later
 
             System.out.println("\nPlease select something in the test document and press then \"return\" to continues the example ...");
-            System.in.read();
+            char c = 'X';
+            do{
+                c = (char) System.in.read();
+            }while ((c != 13) && (c != 10));
 
             // Getting the current frame from the OpenOffice.org Server.
             com.sun.star.frame.XFrame xframe = xDesktop.getCurrentFrame();
