@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-08-05 09:42:33 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 17:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ rtl::OString URLParameter::getByName( const char* par )
 
 rtl::OUString URLParameter::get_id()
 {
-    if( m_aId.compareToAscii( "52821" ) == 0 || m_aId.compareToAscii("start") == 0 )
+    if( m_aId.compareToAscii("start") == 0 )
     {   // module is set
         StaticModuleInformation* inf =
             m_pDatabases->getStaticInformationForModule( get_module(),
@@ -301,50 +301,67 @@ void URLParameter::init( bool bDefaultLanguageIsInitialized )
 {
     m_bBerkeleyRead = false;
     m_bStart = false;
+    m_bUseDB = true;
     m_nHitCount = 100;                // The default maximum hitcount
 }
 
 
 rtl::OUString URLParameter::get_the_tag()
 {
-    if( ! m_bBerkeleyRead )
-        readBerkeley();
+    if(m_bUseDB) {
+        if( ! m_bBerkeleyRead )
+            readBerkeley();
 
-    m_bBerkeleyRead = true;
+        m_bBerkeleyRead = true;
 
-    return m_aTag;
+        return m_aTag;
+    }
+    else
+        return rtl::OUString();
 }
 
 
 
 rtl::OUString URLParameter::get_the_path()
 {
-    if( ! m_bBerkeleyRead )
-        readBerkeley();
-    m_bBerkeleyRead = true;
+    if(m_bUseDB) {
+        if( ! m_bBerkeleyRead )
+            readBerkeley();
+        m_bBerkeleyRead = true;
 
-    return m_aPath;
+        return m_aPath;
+    }
+    else
+        return get_id();
 }
 
 
 
 rtl::OUString URLParameter::get_the_title()
 {
-    if( ! m_bBerkeleyRead )
-        readBerkeley();
-    m_bBerkeleyRead = true;
+    if(m_bUseDB) {
+        if( ! m_bBerkeleyRead )
+            readBerkeley();
+        m_bBerkeleyRead = true;
 
-    return m_aTitle;
+        return m_aTitle;
+    }
+    else
+        return rtl::OUString();
 }
 
 
 rtl::OUString URLParameter::get_the_jar()
 {
-    if( ! m_bBerkeleyRead )
-        readBerkeley();
-    m_bBerkeleyRead = true;
+    if(m_bUseDB) {
+        if( ! m_bBerkeleyRead )
+            readBerkeley();
+        m_bBerkeleyRead = true;
 
-    return m_aJar;
+        return m_aJar;
+    }
+    else
+        return get_module() + rtl::OUString::createFromAscii(".jar");
 }
 
 
@@ -555,9 +572,11 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
 }
 
 
+// #include <stdio.h>
 
 void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierException )
 {
+    // fprintf(stdout,"url send to xmlhelp: %s\n",(rtl::OUStringToOString(m_aURL,RTL_TEXTENCODING_UTF8).getStr()));
     m_aExpr = m_aURL;
 
     sal_Int32 lstIdx = m_aExpr.lastIndexOf( sal_Unicode( '#' ) );
@@ -631,7 +650,10 @@ bool URLParameter::name( bool modulePresent )
     if( length != 0 && (m_aExpr.getStr())[0] == sal_Unicode( '/' ) )
     {
         sal_Int32 idx = 1;
-        while( idx < length && isLetterOrDigit( (m_aExpr.getStr())[idx] ) )
+        while( idx < length && (m_aExpr.getStr())[idx] != '?' )
+//                ( isLetterOrDigit( (m_aExpr.getStr())[idx] )
+//                  || (m_aExpr.getStr())[idx] == '/'
+//                  || (m_aExpr.getStr())[idx] == '.' ))
             ++idx;
 
         if( idx != 1 && ! modulePresent )
@@ -643,6 +665,7 @@ bool URLParameter::name( bool modulePresent )
         }
     }
 
+//    fprintf(stdout,"id %s\n",(rtl::OUStringToOString(m_aId,RTL_TEXTENCODING_UTF8).getStr()));
     return true;
 }
 
@@ -687,6 +710,8 @@ bool URLParameter::query()
             m_aProgram = value;
         else if( parameter.compareToAscii( "Eid" ) == 0 )
             m_aEid = value;
+        else if( parameter.compareToAscii( "UseDB" ) == 0 )
+            m_bUseDB = ! ( value.compareToAscii("no") == 0 );
         else if( parameter.compareToAscii( "Query" ) == 0 )
         {
             if( ! m_aQuery.getLength() )
@@ -699,9 +724,10 @@ bool URLParameter::query()
         else if( parameter.compareToAscii( "System" ) == 0 )
             m_aSystem = value;
         else if( parameter.compareToAscii( "HelpPrefix" ) == 0 )
-            m_aPrefix = rtl::Uri::decode( value,
-                                          rtl_UriDecodeWithCharset,
-                                          RTL_TEXTENCODING_UTF8 );
+            m_aPrefix = rtl::Uri::decode(
+                value,
+                rtl_UriDecodeWithCharset,
+                RTL_TEXTENCODING_UTF8 );
         else if( parameter.compareToAscii( "HitCount" ) == 0 )
             m_nHitCount = value.toInt32();
         else if( parameter.compareToAscii( "Active" ) == 0 )
@@ -804,67 +830,72 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         // Uses the implementation detail, that rtl::OString::getStr returns a zero terminated character-array
 
-        const char* parameter[41];
-        rtl::OString parString[40];
-        int last;
+        const char* parameter[42];
+        rtl::OString parString[43];
+        int last = 0;
 
-        parString[ 0] = "Program";
-        parString[ 1] = urlParam->getByName( "Program" );
-        parString[ 2] = "Database";
-        parString[ 3] = urlParam->getByName( "Database" );
-        parString[ 4] = "Id";
-        parString[ 5] = urlParam->getByName( "Id" );
-        parString[ 6] = "Path";
-        parString[ 7] = urlParam->getByName( "Path" );
-        parString[ 8] = "Language";
-        parString[ 9] = urlParam->getByName( "Language" );
-        parString[10] = "System";
-        parString[11] = urlParam->getByName( "System" );
-        parString[12] = "productname";
-        parString[13] = rtl::OString( pDatabases->getProductName().getStr(),
-                                      pDatabases->getProductName().getLength(),
-                                      RTL_TEXTENCODING_UTF8 );
-        parString[14] = "productversion";
-        parString[15] = rtl::OString( pDatabases->getProductVersion().getStr(),
-                                      pDatabases->getProductVersion().getLength(),
-                                      RTL_TEXTENCODING_UTF8 );
+        parString[last++] = "Program";
+        parString[last++] = urlParam->getByName( "Program" );
+        parString[last++] = "Database";
+        parString[last++] = urlParam->getByName( "Database" );
+        parString[last++] = "Id";
+        parString[last++] = urlParam->getByName( "Id" );
+        parString[last++] = "Path";
+        parString[last++] = urlParam->getByName( "Path" );
+        parString[last++] = "Language";
+        parString[last++] = urlParam->getByName( "Language" );
+        parString[last++] = "System";
+        parString[last++] = urlParam->getByName( "System" );
+        parString[last++] = "productname";
+        parString[last++] = rtl::OString(
+            pDatabases->getProductName().getStr(),
+            pDatabases->getProductName().getLength(),
+            RTL_TEXTENCODING_UTF8 );
+        parString[last++] = "productversion";
+        parString[last++] =
+            rtl::OString( pDatabases->getProductVersion().getStr(),
+                          pDatabases->getProductVersion().getLength(),
+                          RTL_TEXTENCODING_UTF8 );
 
-        parString[16] = "hp";
-        parString[17] = urlParam->getByName( "HelpPrefix" );
-        last = 18;
+        parString[last++] = "imgrepos";
+        parString[last++] = pDatabases->getImagesZipFileURL();
+        parString[last++] = "hp";
+        parString[last++] = urlParam->getByName( "HelpPrefix" );
 
-        if( parString[17].getLength() )
+        if( parString[last-1].getLength() )
         {
-            parString[18] = "sm";
-            parString[19] = "vnd.sun.star.help%3A%2F%2F";
-            parString[20] = "qm";
-            parString[21] = "%3F";
-            parString[22] = "es";
-            parString[23] = "%3D";
-            parString[24] = "am";
-            parString[25] = "%26";
-            parString[26] = "cl";
-            parString[27] = "%3A";
-            parString[28] = "sl";
-            parString[29] = "%2F";
-            parString[30] = "hm";
-            parString[31] = "%23";
-            parString[32] = "cs";
-            parString[33] = "css";
+            parString[last++] = "sm";
+            parString[last++] = "vnd.sun.star.help%3A%2F%2F";
+            parString[last++] = "qm";
+            parString[last++] = "%3F";
+            parString[last++] = "es";
+            parString[last++] = "%3D";
+            parString[last++] = "am";
+            parString[last++] = "%26";
+            parString[last++] = "cl";
+            parString[last++] = "%3A";
+            parString[last++] = "sl";
+            parString[last++] = "%2F";
+            parString[last++] = "hm";
+            parString[last++] = "%23";
+            parString[last++] = "cs";
+            parString[last++] = "css";
 
-            parString[34] = "vendorname";
-            parString[35] = rtl::OString( pDatabases->getVendorName().getStr(),
-                                          pDatabases->getVendorName().getLength(),
-                                          RTL_TEXTENCODING_UTF8 );
-            parString[36] = "vendorversion";
-            parString[37] = rtl::OString( pDatabases->getVendorVersion().getStr(),
-                                          pDatabases->getVendorVersion().getLength(),
-                                          RTL_TEXTENCODING_UTF8 );
-            parString[38] = "vendorshort";
-            parString[39] = rtl::OString( pDatabases->getVendorShort().getStr(),
-                                          pDatabases->getVendorShort().getLength(),
-                                          RTL_TEXTENCODING_UTF8 );
-            last = 40;
+            parString[last++] = "vendorname";
+            parString[last++] =
+                rtl::OString( pDatabases->getVendorName().getStr(),
+                              pDatabases->getVendorName().getLength(),
+                              RTL_TEXTENCODING_UTF8 );
+            parString[last++] = "vendorversion";
+            parString[last++] =
+                rtl::OString( pDatabases->getVendorVersion().getStr(),
+                              pDatabases->getVendorVersion().getLength(),
+                              RTL_TEXTENCODING_UTF8 );
+            parString[last++] = "vendorshort";
+            parString[last++] =
+                rtl::OString( pDatabases->getVendorShort().getStr(),
+                              pDatabases->getVendorShort().getLength(),
+                              RTL_TEXTENCODING_UTF8 );
         }
 
         for( int i = 0; i < last; ++i )
@@ -1089,6 +1120,10 @@ int schemehandlergetall( void *userData,
         *byteCount = 0;
         return 0;
     }
+
+//     fprintf(stdout,"jarFile %s\n",(rtl::OUStringToOString(jar,RTL_TEXTENCODING_UTF8).getStr()));
+//     fprintf(stdout,"lang %s\n",(rtl::OUStringToOString(language,RTL_TEXTENCODING_UTF8).getStr()));
+//     fprintf(stdout,"path %s\n",(rtl::OUStringToOString(path,RTL_TEXTENCODING_UTF8).getStr()));
 
     Reference< XInputStream > xInputStream;
     Reference< XHierarchicalNameAccess > xNA = uData->m_pDatabases->jarFile( jar,language );
