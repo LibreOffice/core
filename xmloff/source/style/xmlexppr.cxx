@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-25 12:39:31 $
+ *  last change: $Author: mib $ $Date: 2000-10-30 13:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,7 +318,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                 MID_FLAG_SPECIAL_ITEM_EXPORT ) != 0 )
     {
         uno::Reference< container::XNameContainer > xAttrContainer;
-        if( rProperty.maValue >>= xAttrContainer )
+        if( (rProperty.maValue >>= xAttrContainer) && xAttrContainer.is() )
         {
             SvXMLNamespaceMap *pNewNamespaceMap = 0;
             const SvXMLNamespaceMap *pNamespaceMap = &rNamespaceMap;

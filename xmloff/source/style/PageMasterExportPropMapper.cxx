@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-26 08:35:06 $
+ *  last change: $Author: mib $ $Date: 2000-10-30 13:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,29 +104,30 @@ void XMLPageMasterExportPropMapper::handleElementItem(
     switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ) )
     {
         case CTF_PM_GRAPHICURL:
-        {
-            DBG_ASSERT( pProperties && (nIdx >= 2), "property vector missing" );
-            const Any*  pPos    = NULL;
-            const Any*  pFilter = NULL;
-            if( pProperties && (nIdx >= 2) )
             {
-                const XMLPropertyState& rPos = (*pProperties)[nIdx - 2];
-                DBG_ASSERT( getPropertySetMapper()->GetEntryContextId( rPos.mnIndex ) == CTF_PM_GRAPHICPOSITION,
-                            "invalid property map: pos expected" );
-                if( getPropertySetMapper()->GetEntryContextId( rPos.mnIndex ) == CTF_PM_GRAPHICPOSITION )
-                    pPos = &rPos.maValue;
+                DBG_ASSERT( pProperties && (nIdx >= 2), "property vector missing" );
+                const Any*  pPos    = NULL;
+                const Any*  pFilter = NULL;
+                if( pProperties && (nIdx >= 2) )
+                {
+                    const XMLPropertyState& rPos = (*pProperties)[nIdx - 2];
+                    DBG_ASSERT( getPropertySetMapper()->GetEntryContextId( rPos.mnIndex ) == CTF_PM_GRAPHICPOSITION,
+                                "invalid property map: pos expected" );
+                    if( getPropertySetMapper()->GetEntryContextId( rPos.mnIndex ) == CTF_PM_GRAPHICPOSITION )
+                        pPos = &rPos.maValue;
 
-                const XMLPropertyState& rFilter = (*pProperties)[nIdx - 1];
-                DBG_ASSERT( getPropertySetMapper()->GetEntryContextId( rFilter.mnIndex ) == CTF_PM_GRAPHICFILTER,
-                            "invalid property map: filter expected" );
-                if( getPropertySetMapper()->GetEntryContextId( rFilter.mnIndex ) == CTF_PM_GRAPHICFILTER )
-                    pFilter = &rFilter.maValue;
+                    const XMLPropertyState& rFilter = (*pProperties)[nIdx - 1];
+                    DBG_ASSERT( getPropertySetMapper()->GetEntryContextId( rFilter.mnIndex ) == CTF_PM_GRAPHICFILTER,
+                                "invalid property map: filter expected" );
+                    if( getPropertySetMapper()->GetEntryContextId( rFilter.mnIndex ) == CTF_PM_GRAPHICFILTER )
+                        pFilter = &rFilter.maValue;
+                }
+                sal_uInt32 nPropIndex = rProperty.mnIndex;
+                pThis->aBackgroundImageExport.exportXML( rProperty.maValue, pPos, pFilter,
+                    getPropertySetMapper()->GetEntryNameSpace( nPropIndex ),
+                    getPropertySetMapper()->GetEntryXMLName( nPropIndex ) );
             }
-            sal_uInt32 nPropIndex = rProperty.mnIndex;
-            pThis->aBackgroundImageExport.exportXML( rProperty.maValue, pPos, pFilter,
-                getPropertySetMapper()->GetEntryNameSpace( nPropIndex ),
-                getPropertySetMapper()->GetEntryXMLName( nPropIndex ) );
-        }
+            break;
         case CTF_PM_TEXTCOLUMNS:
             pThis->aTextColumnsExport.exportXML( rProperty.maValue );
             break;
