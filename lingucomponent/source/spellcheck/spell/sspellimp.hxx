@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sspellimp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: khendricks $ $Date: 2001-09-08 15:55:44 $
+ *  last change: $Author: khendricks $ $Date: 2001-12-03 02:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ using namespace ::com::sun::star::linguistic2;
 
 #define OU2ISO_1(rtlOUString)     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), RTL_TEXTENCODING_ISO_8859_1).getStr()
 
+#define OU2ENC(rtlOUString, rtlEncoding)     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), rtlEncoding).getStr()
+
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -119,12 +121,15 @@ class SpellChecker :
         XServiceDisplayName
     >
 {
-    Sequence< Locale >                      aSuppLocales;
+    Sequence< Locale >                 aSuppLocales;
+        MySpell **                         aSuppDicts;
+        rtl_TextEncoding *                 aSuppEncs;
+        Sequence<OUString>                 aSuppNames;
+        sal_Int32                          numdict;
+
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
     PropertyHelper_Spell *                  pPropHelper;
-        MySpell * pMS_en_US;
-        MySpell * pMS_de_DE;
     BOOL                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
@@ -222,6 +227,7 @@ inline OUString SpellChecker::getImplementationName_Static() throw()
 {
     return A2OU( "org.openoffice.lingu.MySpellSpellChecker" );
 }
+
 
 
 ///////////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sspellimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khendricks $ $Date: 2001-09-24 18:40:13 $
+ *  last change: $Author: khendricks $ $Date: 2001-12-03 02:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #endif
 
 #include <myspell.hxx>
+#include <dictmgr.hxx>
 
 #ifndef _SPELLIMP_HXX
 #include <sspellimp.hxx>
@@ -98,7 +99,6 @@
 #include <osl/file.hxx>
 
 
-#include <stdio.h>
 
 using namespace utl;
 using namespace osl;
@@ -122,28 +122,29 @@ BOOL operator == ( const Locale &rL1, const Locale &rL2 )
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 SpellChecker::SpellChecker() :
     aEvtListeners   ( GetLinguMutex() )
 {
     bDisposing = FALSE;
     pPropHelper = NULL;
-        pMS_en_US = NULL;
-        pMS_de_DE = NULL;
-
+        numdict = 0;
 }
 
 
 SpellChecker::~SpellChecker()
 {
-        if (pMS_en_US)
-      delete pMS_en_US;
-        pMS_en_US = NULL;
-        if (pMS_de_DE)
-      delete pMS_de_DE;
-        pMS_de_DE = NULL;
-    if (pPropHelper)
-        pPropHelper->RemoveAsPropListener();
+
+  for (int i = 0; i < numdict; i++) {
+         if (aSuppDicts[i]) delete aSuppDicts[i];
+         aSuppDicts[i] = NULL;
+  }
+  delete[] aSuppDicts;
+  aSuppDicts = NULL;
+  delete[] aSuppEncs;
+  aSuppEncs = NULL;
+  numdict = 0;
+  if (pPropHelper)
+     pPropHelper->RemoveAsPropListener();
 }
 
 
@@ -166,14 +167,54 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (!aSuppLocales.getLength())
-    {
-        aSuppLocales.realloc( 2 );
-        Locale *pLocale = aSuppLocales.getArray();
-        pLocale[0] = Locale( A2OU("en"), A2OU("US"), OUString() );
-        pLocale[1] = Locale( A2OU("de"), A2OU("DE"), OUString() );
+        /* this routine should return the locales supported by the installed */
+        /* dictionaries.  So here we need to parse the user edited dictionary list */
+        /* to see what dictionaries the user has installed */
 
-    }
+        SvtPathOptions aPathOpt;
+        OUString diclst = aPathOpt.GetUserDictionaryPath() + A2OU("/dictionary.lst");
+        OUString dlst;
+    osl::FileBase::getSystemPathFromFileURL(diclst,dlst);
+
+        /* invoke the dictionary manager to parse and return the dictionary list */
+    DictMgr* dMgr = new DictMgr(OU2A(dlst));
+        dictentry * pdict;
+        numdict = 0;
+        if (dMgr)
+             numdict = dMgr->get_list(&pdict);
+
+        if (numdict) {
+        aSuppDicts = new MySpell* [numdict];
+        aSuppEncs  = new rtl_TextEncoding [numdict];
+        aSuppLocales.realloc(numdict);
+            aSuppNames.realloc(numdict);
+            Locale * pLocale = aSuppLocales.getArray();
+            OUString * pNames = aSuppNames.getArray();
+            for (int i = 0; i < numdict; i++) {
+        pLocale[i] = Locale( A2OU(pdict->lang), A2OU(pdict->region), OUString() );
+                aSuppDicts[i] = NULL;
+                pNames[i] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(pdict->filename);
+                pdict++;
+            }
+
+        } else {
+            /* no dictionary.lst so just use default en_US dictionary  */
+            numdict = 1;
+            aSuppDicts = new MySpell*[1];
+                aSuppEncs  = new rtl_TextEncoding[1];
+            aSuppLocales.realloc(1);
+                aSuppNames.realloc(1);
+            Locale *pLocale = aSuppLocales.getArray();
+                OUString * pNames = aSuppNames.getArray();
+        pLocale[0] = Locale( A2OU("en"), A2OU("US"), OUString() );
+                aSuppDicts[0] = NULL;
+                pNames[0] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU("en_US");
+        }
+
+        if (dMgr) {
+              delete dMgr;
+              dMgr = NULL;
+        }
 
     return aSuppLocales;
 }
@@ -204,54 +245,56 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
 
 INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
 {
-        MySpell * pMS = NULL;
+        MySpell * pMS;
+        rtl_TextEncoding aEnc;
 
     // initialize a myspell object for each dictionary once
         // (note: mutex is held higher up in isValid)
 
     const Locale *pLocale = aSuppLocales.getConstArray();
-    if (rLocale == pLocale[0])
-    {
-          if (!pMS_en_US)
-          {
-             SvtPathOptions aPathOpt;
-             OUString dicpath = aPathOpt.GetDictionaryPath() + A2OU("/en_US.dic");
-             OUString affpath = aPathOpt.GetDictionaryPath() + A2OU("/en_US.aff");
-             OUString dict;
-             OUString aff;
-         osl::FileBase::getSystemPathFromFileURL(dicpath,dict);
-          osl::FileBase::getSystemPathFromFileURL(affpath,aff);
-             pMS_en_US = new MySpell(OU2A(aff),OU2A(dict));
-      }
-          pMS = pMS_en_US;
-        }
-
-    if (rLocale == pLocale[1])
-    {
-          if (!pMS_de_DE) {
-             SvtPathOptions aPathOpt;
-             OUString dicpath = aPathOpt.GetDictionaryPath() + A2OU("/de_DE.dic");
-             OUString affpath = aPathOpt.GetDictionaryPath() + A2OU("/de_DE.aff");
-             OUString dict;
-             OUString aff;
-         osl::FileBase::getSystemPathFromFileURL(dicpath,dict);
-          osl::FileBase::getSystemPathFromFileURL(affpath,aff);
-             pMS_de_DE = new MySpell(OU2A(aff),OU2A(dict));
-      }
-          pMS = pMS_de_DE;
-        }
+        const OUString * pNames = aSuppNames.getConstArray();
 
     INT16 nRes = -1;
     String aTmp( rWord );
 
     if (aTmp.Len())
     {
-      if (pMS)
-          {
-        int rVal = pMS->spell((char*)OU2ISO_1(rWord));
-         if (rVal != 1) nRes = SpellFailure::SPELLING_ERROR;
-      }
+
+            for (int i =0; i < numdict; i++) {
+            pMS = NULL;
+                aEnc = 0;
+
+            if (rLocale == pLocale[i])
+            {
+                   if (!aSuppDicts[i])
+                   {
+                      OUString dicpath = pNames[i] + A2OU(".dic");
+                      OUString affpath = pNames[i] + A2OU(".aff");
+                      OUString dict;
+                      OUString aff;
+                  osl::FileBase::getSystemPathFromFileURL(dicpath,dict);
+                   osl::FileBase::getSystemPathFromFileURL(affpath,aff);
+                      aSuppDicts[i] = new MySpell(OU2A(aff),OU2A(dict));
+                      MySpell * pms = aSuppDicts[i];
+                      aSuppEncs[i] = 0;
+                      if (pms)
+            aSuppEncs[i] = rtl_getTextEncodingFromUnixCharset(pms->get_dic_encoding());
+               }
+               pMS = aSuppDicts[i];
+                   aEnc = aSuppEncs[i];
         }
+            if (pMS)
+                {
+                int rVal = pMS->spell((char*)OU2ENC(rWord,aEnc));
+                 if (rVal != 1)
+                    {
+                        nRes = SpellFailure::SPELLING_ERROR;
+                    } else {
+                        return -1;
+                    }
+            }
+        }
+    }
 
     return nRes;
 }
@@ -296,7 +339,8 @@ sal_Bool SAL_CALL
         )
             nFailure = -1;
     }
-    return nFailure == -1;
+
+    return (nFailure == -1);
 }
 
 
@@ -309,47 +353,65 @@ Reference< XSpellAlternatives >
 
     Reference< XSpellAlternatives > xRes;
         // note: mutex is held by higher up by spell which covers both
-        MySpell* pMS = NULL;
 
-    const Locale *pLocale = aSuppLocales.getConstArray();
-    if (rLocale == pLocale[0])
-    {
-          pMS = pMS_en_US;
-        }
-    if (rLocale == pLocale[1])
-    {
-          pMS = pMS_de_DE;
-        }
+        MySpell* pMS;
+        rtl_TextEncoding aEnc;
+    int count;
+
+    const Locale * pLocale = aSuppLocales.getConstArray();
 
     String aTmp( rWord );
     if (aTmp.Len())
     {
         INT16 nLang = LocaleToLanguage( rLocale );
 
-        if (pMS)
-        {
-            char ** suglst = NULL;
-                int count = pMS->suggest(&suglst, (const char *)OU2ISO_1(rWord));
+            for (int i =0; i < numdict; i++) {
+            pMS = NULL;
+                aEnc = 0;
+                count = 0;
 
-               Sequence< OUString > aStr( count );
-               OUString *pStr = aStr.getArray();
-                   for (int i=0; i < count; i++)
-                   {
-              OUString cvtwrd(suglst[i],strlen(suglst[i]),RTL_TEXTENCODING_ISO_8859_1);
-              String aAlt(cvtwrd);
-              pStr[i] = aAlt;
-                      free(suglst[i]);
-               }
-                   free(suglst);
+            if (rLocale == pLocale[i])
+            {
+                    pMS = aSuppDicts[i];
+                    aEnc = aSuppEncs[i];
+                }
 
-               SpellAlternatives *pAlt = new SpellAlternatives;
-               pAlt->SetWordLanguage( aTmp, nLang );
-               pAlt->SetFailureType( SpellFailure::SPELLING_ERROR );
-               pAlt->SetAlternatives( aStr );
 
-               xRes = pAlt;
+            if (pMS)
+            {
+                char ** suglst = NULL;
+                    count = pMS->suggest(&suglst, (const char *)OU2ENC(rWord,aEnc));
 
+                    if (count) {
+                   Sequence< OUString > aStr( count );
+                   OUString *pStr = aStr.getArray();
+                       for (int i=0; i < count; i++)
+                       {
+                  OUString cvtwrd(suglst[i],strlen(suglst[i]),aEnc);
+                  String aAlt(cvtwrd);
+                  pStr[i] = aAlt;
+                          free(suglst[i]);
+                   }
+                       free(suglst);
+
+                   SpellAlternatives *pAlt = new SpellAlternatives;
+                   pAlt->SetWordLanguage( aTmp, nLang );
+                   pAlt->SetFailureType( SpellFailure::SPELLING_ERROR );
+                   pAlt->SetAlternatives( aStr );
+                   xRes = pAlt;
+                       return xRes;
+                    }
         }
+        }
+
+            /* no suggestions were found but still need to return an empty alternative */
+        Sequence< OUString > aStr( 0 );
+        SpellAlternatives *pAlt = new SpellAlternatives;
+        pAlt->SetWordLanguage( aTmp, nLang );
+        pAlt->SetFailureType( SpellFailure::SPELLING_ERROR );
+        pAlt->SetAlternatives( aStr );
+        xRes = pAlt;
+            return xRes;
     }
         return xRes;
 }
