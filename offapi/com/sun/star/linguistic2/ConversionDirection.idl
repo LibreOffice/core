@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConversionDirection.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:57:50 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** Conversion direction to be used with <type>XConversionDictionary</type>
     when looking for conversions.
+
+     @since #107627#
 */
 enum ConversionDirection
 {
