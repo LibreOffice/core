@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bootstrap.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:22:49 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,6 @@ public class Bootstrap {
      * <p>
      * @return     a freshly boostrapped service manager
      * @see        com.sun.star.lang.ServiceManager
-     * @since       UDK2.08
      */
     static public XMultiServiceFactory createSimpleServiceManager() throws Exception
     {
