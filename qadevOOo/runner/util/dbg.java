@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbg.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2004-07-23 10:43:59 $
+ *  last change:$Date: 2005-03-29 11:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,9 @@ import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.uno.ITypeDescription;
-import com.sun.star.uno.IMethodDescription;
 import java.io.PrintWriter;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 
 /**
  * This class accumulates all kinds of methods for accessing debug information
@@ -159,16 +158,13 @@ public class dbg {
      * @param aType The type of the given interface.
      * @see com.sun.star.uno.Type
      */
-    public static void printInterfaceInfo (Type aType) {
+    public static void printInterfaceInfo(Type aType) {
         try {
-            ITypeDescription tDesc =
-                                (ITypeDescription)aType.getTypeDescription();
-            int anz = tDesc.getMethodDescriptions().length;
-            for (int i=0;i<anz;i++) {
-                IMethodDescription mDesc = tDesc.getMethodDescriptions()[i];
-                System.out.print("\t"+
-                                mDesc.getReturnSignature().getTypeName()+" ");
-                System.out.println(mDesc.getName() + "()");
+            Class zClass = aType.getZClass();
+            Method[] methods = zClass.getDeclaredMethods();
+            for (int i=0; i<methods.length; i++) {
+                System.out.println("\t" + methods[i].getReturnType().getName()
+                    + " " + methods[i].getName() + "()");
             }
         }
         catch (Exception ex) {
