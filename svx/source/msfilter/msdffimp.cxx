@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-09 15:02:26 $
+ *  last change: $Author: cmc $ $Date: 2002-09-20 10:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1130,11 +1130,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
         switch( eMSO_FillType )
         {
             case mso_fillSolid :            // Fill with a solid color
-            {
                 eXFill = XFILL_SOLID;
-                if ( IsProperty( DFF_Prop_fillOpacity ) )
-                    rSet.Put( XFillTransparenceItem( sal_uInt16( 100 - ( ( GetPropertyValue( DFF_Prop_fillOpacity ) * 100 ) >> 16 ) ) ) );
-            }
             break;
             case mso_fillPattern :          // Fill with a pattern (bitmap)
             case mso_fillTexture :          // A texture (pattern with its own color map)
@@ -1151,6 +1147,9 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
 //          case mso_fillBackground :       // Use the background fill color/pattern
         }
         rSet.Put( XFillStyleItem( eXFill ) );
+
+        if (IsProperty(DFF_Prop_fillOpacity))
+            rSet.Put( XFillTransparenceItem( sal_uInt16( 100 - ( ( GetPropertyValue( DFF_Prop_fillOpacity ) * 100 ) >> 16 ) ) ) );
 
         if ( eXFill == XFILL_GRADIENT )
         {
