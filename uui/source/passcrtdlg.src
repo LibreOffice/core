@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passcrtdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-04 16:26:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,18 +89,18 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Text[ russian ] = "~Enter password";
         Text[ greek ] = "~Enter password";
         Text[ dutch ] = "~Enter password";
-        Text[ french ] = "~Enter password";
-        Text[ spanish ] = "~Enter password";
+        Text[ french ] = "Saisie du mot de passe";
+        Text[ spanish ] = "~Introduzca la contrase�a";
         Text[ finnish ] = "~Enter password";
-        Text[ italian ] = "~Enter password";
+        Text[ italian ] = "Digitate password";
         Text[ danish ] = "~Enter password";
-        Text[ swedish ] = "~Enter password";
+        Text[ swedish ] = "D~efiniera l�senord";
         Text[ polish ] = "~Enter password";
         Text[ portuguese_brazilian ] = "~Enter password";
-        Text[ japanese ] = "~Enter password";
-        Text[ korean ] = "~Enter password";
-        Text[ chinese_simplified ] = "~Enter password";
-        Text[ chinese_traditional ] = "~Enter password";
+        Text[ japanese ] = "パスワードの入力(~E)";
+        Text[ korean ] = "암호 입력";
+        Text[ chinese_simplified ] = "输入密码(~E)";
+        Text[ chinese_traditional ] = "輸入密碼(~E)";
         Text[ turkish ] = "~Enter password";
         Text[ arabic ] = "~Enter password";
         Text[ catalan ] = "~Enter password";
@@ -124,18 +124,18 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Text[ russian ] = "~Confirm password";
         Text[ greek ] = "~Confirm password";
         Text[ dutch ] = "~Confirm password";
-        Text[ french ] = "~Confirm password";
-        Text[ spanish ] = "~Confirm password";
+        Text[ french ] = "Confirmation du mot de passe";
+        Text[ spanish ] = "~Confirme la contrase�a";
         Text[ finnish ] = "~Confirm password";
-        Text[ italian ] = "~Confirm password";
+        Text[ italian ] = "~Confermate password";
         Text[ danish ] = "~Confirm password";
-        Text[ swedish ] = "~Confirm password";
+        Text[ swedish ] = "~Bekr�fta l�senord";
         Text[ polish ] = "~Confirm password";
         Text[ portuguese_brazilian ] = "~Confirm password";
-        Text[ japanese ] = "~Confirm password";
-        Text[ korean ] = "~Confirm password";
-        Text[ chinese_simplified ] = "~Confirm password";
-        Text[ chinese_traditional ] = "~Confirm password";
+        Text[ japanese ] = "パスワードの確認(~C)";
+        Text[ korean ] = "암호 확인(~C)";
+        Text[ chinese_simplified ] = "确认密码(~C)";
+        Text[ chinese_traditional ] = "確認密碼(~C)";
         Text[ turkish ] = "~Confirm password";
         Text[ arabic ] = "~Confirm password";
         Text[ catalan ] = "~Confirm password";
@@ -165,25 +165,31 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Pos = MAP_APPFONT ( 109 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text[ english_us ] = "Enter Master Password";
+    Text[ english_us ] = "Password";
     Text[ portuguese ] = "Indique a senha principal.";
     Text[ russian ] = "������ �������� ������";
     Text[ greek ] = "Please enter master password";
-    Text[ dutch ] = "Hoofwachtwoord invoeren";
-    Text[ french ] = "D�finition du mot de passe principal";
-    Text[ spanish ] = "Determinar la contrase�a principal";
-    Text[ finnish ] = "Please enter master password";
-    Text[ italian ] = "Digitate la password principale";
+    Text[ dutch ] = "Hoofdwachtwoord invoeren";
+    Text[ french ] = "Mot de passe";
+    Text[ spanish ] = "Contrase�a ";
+    Text[ finnish ] = "Anna p��salasana";
+    Text[ italian ] = "Password";
     Text[ danish ] = "Definer hovedadgangskode";
-    Text[ swedish ] = "Definiera huvudl�senord";
+    Text[ swedish ] = "L�senord";
     Text[ polish ] = "Zdefiniuj has�o g��wne";
     Text[ portuguese_brazilian ] = "Please enter master password";
-    Text[ japanese ] = "マスターパスワードの指定";
-    Text[ korean ] = "마스터 패스워드 정의";
-    Text[ chinese_simplified ] = "指定主密码";
-    Text[ chinese_traditional ] = "請輸入主密碼";
+    Text[ japanese ] = "マスターパスワードの入力";
+    Text[ korean ] = "암호";
+    Text[ chinese_simplified ] = "密码";
+    Text[ chinese_traditional ] = "密碼";
     Text[ turkish ] = "Please enter master password";
     Text[ arabic ] = "Please enter master password";
     Text[ catalan ] = "Introdu�u la contrasenya mestra";
+    Text[ thai ] = "รหัสผ่าน";
 };
+
+
+
+
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.hrc,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-31 11:08:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
 #define ERRCODE_UUI_WRONGMEDIUM (ERRCODE_AREA_UUI + 47)
 #define ERRCODE_UUI_IO_CANTCREATE_NONAME (ERRCODE_AREA_UUI + 48)
 #define ERRCODE_UUI_IO_TARGETALREADYEXISTS (ERRCODE_AREA_UUI + 49)
+#define ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE (ERRCODE_AREA_UUI + 50)
+#define ERRCODE_UUI_IO_BROKENPACKAGE (ERRCODE_AREA_UUI + 51)
+#define ERRCODE_UUI_IO_BROKENPACKAGE_CANTREPAIR (ERRCODE_AREA_UUI + 52)
 
 #define HID_DLG_LOGIN (HID_UUI_START + 0)
 #define HID_DLG_COOKIES (HID_UUI_START + 1)

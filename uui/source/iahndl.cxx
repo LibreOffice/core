@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mav $ $Date: 2002-11-28 11:49:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,9 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XINTERACTIONFILTEROPTIONS_HPP_
 #include "com/sun/star/document/XInteractionFilterOptions.hpp"
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_BROKENPACKAGEREQUEST_HPP_
+#include "com/sun/star/document/BrokenPackageRequest.hpp"
+#endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONPASSWORD_HPP_
 #include "com/sun/star/task/XInteractionPassword.hpp"
 #endif
@@ -274,6 +277,9 @@
 #ifndef _TOOLS_RC_HXX
 #include "tools/rc.hxx"
 #endif
+#ifndef __RSC
+#include "tools/errinf.hxx"
+#endif
 #ifndef _TOOLS_RCID_H
 #include "tools/rcid.h"
 #endif
@@ -297,6 +303,9 @@
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include "vos/mutex.hxx"
+#endif
+#ifndef _UNOTOOLS_CONFIGMGR_HXX
+#include <unotools/configmgr.hxx>
 #endif
 
 #ifndef INCLUDED_ALGORITHM
@@ -556,6 +565,14 @@ UUIInteractionHandler::handle(
 
         star::uno::Any aAnyRequest(rRequest->getRequest());
 
+        star::task::ErrorCodeRequest aErrorCodeRequest;
+        if (aAnyRequest >>= aErrorCodeRequest)
+        {
+            handleGenericErrorRequest(aErrorCodeRequest,
+                                        rRequest->getContinuations());
+            return;
+        }
+
         star::ucb::AuthenticationRequest aAuthenticationRequest;
         if (aAnyRequest >>= aAuthenticationRequest)
         {
@@ -659,6 +676,19 @@ UUIInteractionHandler::handle(
                                     aArguments,
                                     rRequest->getContinuations());
             }
+
+            return;
+        }
+
+        star::document::BrokenPackageRequest aBrokenPackageRequest;
+        if (aAnyRequest >>= aBrokenPackageRequest)
+        {
+            std::vector< rtl::OUString > aArguments;
+
+            if( aBrokenPackageRequest.aName.getLength() )
+                aArguments.push_back( aBrokenPackageRequest.aName );
+
+            handleBrokenPackageRequest( aArguments, rRequest->getContinuations() );
 
             return;
         }
@@ -1379,6 +1409,7 @@ UUIInteractionHandler::executeErrorDialog(
     WinBits nButtonMask)
     SAL_THROW((star::uno::RuntimeException))
 {
+
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     rtl::OUStringBuffer aText(rContext);
@@ -1429,7 +1460,28 @@ UUIInteractionHandler::executeErrorDialog(
             xBox.reset(new QueryBox(getParentProperty(),
                                     nButtonMask,
                                     aText.makeStringAndClear()));
-            break;
+
+            USHORT aResult = xBox->Execute();
+            switch( aResult )
+            {
+                case BUTTONID_OK:
+                    aResult = ERRCODE_BUTTON_OK;
+                    break;
+                case BUTTONID_CANCEL:
+                    aResult = ERRCODE_BUTTON_CANCEL;
+                    break;
+                case BUTTONID_YES:
+                    aResult = ERRCODE_BUTTON_YES;
+                    break;
+                case BUTTONID_NO:
+                    aResult = ERRCODE_BUTTON_NO;
+                    break;
+                case BUTTONID_RETRY:
+                    aResult = ERRCODE_BUTTON_RETRY;
+                    break;
+            }
+
+            return aResult;
         }
     }
     catch (std::bad_alloc const &)
@@ -1438,7 +1490,43 @@ UUIInteractionHandler::executeErrorDialog(
                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
                   *this);
     }
+
     return xBox->Execute();
+}
+
+USHORT
+UUIInteractionHandler::executeMessageBox(
+    rtl::OUString const & rTitle,
+    rtl::OUString const & rMessage,
+    WinBits nButtonMask )
+    SAL_THROW((star::uno::RuntimeException))
+{
+
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    MessBox xBox( getParentProperty(), nButtonMask, rTitle, rMessage );
+
+    USHORT aResult = xBox.Execute();
+    switch( aResult )
+    {
+        case BUTTONID_OK:
+            aResult = ERRCODE_BUTTON_OK;
+            break;
+        case BUTTONID_CANCEL:
+            aResult = ERRCODE_BUTTON_CANCEL;
+            break;
+        case BUTTONID_YES:
+            aResult = ERRCODE_BUTTON_YES;
+            break;
+        case BUTTONID_NO:
+            aResult = ERRCODE_BUTTON_NO;
+            break;
+        case BUTTONID_RETRY:
+            aResult = ERRCODE_BUTTON_RETRY;
+            break;
+    }
+
+    return aResult;
 }
 
 void
@@ -2031,6 +2119,36 @@ UUIInteractionHandler::handleAmbigousFilterRequest(
     }
 }
 
+void
+UUIInteractionHandler::handleGenericErrorRequest(
+    com::sun::star::task::ErrorCodeRequest const & rRequest,
+    com::sun::star::uno::Sequence<
+            com::sun::star::uno::Reference<
+                com::sun::star::task::XInteractionContinuation > > const &
+        rContinuations)
+    SAL_THROW((com::sun::star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+    star::uno::Reference< star::task::XInteractionApprove > xApprove;
+
+    sal_Int32 nCount = rContinuations.getLength();
+    for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
+    {
+        if( ! xAbort.is() )
+            xAbort = star::uno::Reference< star::task::XInteractionAbort >( rContinuations[nStep], star::uno::UNO_QUERY );
+
+        if( ! xApprove.is() )
+            xApprove = star::uno::Reference< star::task::XInteractionApprove >( rContinuations[nStep], star::uno::UNO_QUERY );
+    }
+
+    sal_Bool bWarning = (rRequest.ErrCode & ERRCODE_WARNING_MASK == ERRCODE_WARNING_MASK);
+    ErrorHandler::HandleError(rRequest.ErrCode);
+
+    if (xApprove.is() && bWarning)
+        xApprove->select();
+    else if (xAbort.is())
+        xAbort->select();
+}
 
 void
 UUIInteractionHandler::handleFilterOptionsRequest(
@@ -2132,6 +2250,44 @@ UUIInteractionHandler::handleFilterOptionsRequest(
     xAbort->select();
 }
 
+::rtl::OUString replaceMessageWithArguments(
+    ::rtl::OUString aMessage,
+    std::vector< rtl::OUString > const & rArguments )
+{
+    for (sal_Int32 i = 0;;)
+    {
+        i = aMessage.
+                indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(ARG")),
+                        i);
+        if (i == -1)
+            break;
+        if (aMessage.getLength() - i >= RTL_CONSTASCII_LENGTH("$(ARGx)")
+            && aMessage.getStr()[i + RTL_CONSTASCII_LENGTH("$(ARGx")] == ')')
+        {
+            sal_Unicode c
+                = aMessage.getStr()[i + RTL_CONSTASCII_LENGTH("$(ARG")];
+            if (c >= '1' && c <= '2')
+            {
+                std::vector< rtl::OUString >::size_type nIndex
+                    = static_cast< std::vector< rtl::OUString >::size_type >(
+                          c - '1');
+                if (nIndex < rArguments.size())
+                {
+                    aMessage
+                        = aMessage.replaceAt(i,
+                                             RTL_CONSTASCII_LENGTH("$(ARGx)"),
+                                             rArguments[nIndex]);
+                    i += rArguments[nIndex].getLength();
+                    continue;
+                }
+            }
+        }
+        ++i;
+    }
+
+    return aMessage;
+}
+
 
 void
 UUIInteractionHandler::handleErrorRequest(
@@ -2156,6 +2312,7 @@ UUIInteractionHandler::handleErrorRequest(
     star::uno::Reference< star::task::XInteractionAbort > xAbort;
     getContinuations(
         rContinuations, &xApprove, &xDisapprove, &xRetry, &xAbort, 0, 0);
+
     // The following mapping uses the bit mask
     //     Approve = 8,
     //     Disapprove = 4,
@@ -2177,7 +2334,7 @@ UUIInteractionHandler::handleErrorRequest(
     // Finally, it seems to be better to leave default button determination to
     // VCL (the favouring of CANCEL as default button seems to not always be
     // what the user wants)...
-    static WinBits const aButtonMask[16]
+    WinBits const aButtonMask[16]
         = { 0,
             WB_OK /*| WB_DEF_OK*/, // Abort
             0,
@@ -2195,6 +2352,7 @@ UUIInteractionHandler::handleErrorRequest(
                 // Approve, Disapprove, Abort
             0,
             0 };
+
     WinBits nButtonMask = aButtonMask[(xApprove.is() ? 8 : 0)
                                           | (xDisapprove.is() ? 4 : 0)
                                           | (xRetry.is() ? 2 : 0)
@@ -2249,39 +2407,11 @@ UUIInteractionHandler::handleErrorRequest(
         if (!ErrorResource(aResId).  getString(nErrorCode, &aMessage))
             return;
     }
-    for (sal_Int32 i = 0;;)
-    {
-        i = aMessage.
-                indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(ARG")),
-                        i);
-        if (i == -1)
-            break;
-        if (aMessage.getLength() - i >= RTL_CONSTASCII_LENGTH("$(ARGx)")
-            && aMessage.getStr()[i + RTL_CONSTASCII_LENGTH("$(ARGx")] == ')')
-        {
-            sal_Unicode c
-                = aMessage.getStr()[i + RTL_CONSTASCII_LENGTH("$(ARG")];
-            if (c >= '1' && c <= '2')
-            {
-                std::vector< rtl::OUString >::size_type nIndex
-                    = static_cast< std::vector< rtl::OUString >::size_type >(
-                          c - '1');
-                if (nIndex < rArguments.size())
-                {
-                    aMessage
-                        = aMessage.replaceAt(i,
-                                             RTL_CONSTASCII_LENGTH("$(ARGx)"),
-                                             rArguments[nIndex]);
-                    i += rArguments[nIndex].getLength();
-                    continue;
-                }
-            }
-        }
-        ++i;
-    }
+
+    aMessage = replaceMessageWithArguments( aMessage, rArguments );
 
     switch (executeErrorDialog(
-                eClassification, aContext, aMessage, nButtonMask))
+                eClassification, aContext, aMessage, nButtonMask ))
     {
     case ERRCODE_BUTTON_OK:
         OSL_ENSURE(xApprove.is() || xAbort.is(), "unexpected situation");
@@ -2301,6 +2431,87 @@ UUIInteractionHandler::handleErrorRequest(
         OSL_ENSURE(xRetry.is(), "unexpected situation");
         if (xRetry.is())
             xRetry->select();
+        break;
+
+    case ERRCODE_BUTTON_NO:
+        OSL_ENSURE(xDisapprove.is(), "unexpected situation");
+        if (xDisapprove.is())
+            xDisapprove->select();
+        break;
+
+    case ERRCODE_BUTTON_YES:
+        OSL_ENSURE(xApprove.is(), "unexpected situation");
+        if (xApprove.is())
+            xApprove->select();
+        break;
+    }
+}
+
+void
+UUIInteractionHandler::handleBrokenPackageRequest(
+    std::vector< rtl::OUString > const & rArguments,
+    star::uno::Sequence< star::uno::Reference<
+                             star::task::XInteractionContinuation > > const &
+        rContinuations)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionApprove > xApprove;
+    star::uno::Reference< star::task::XInteractionDisapprove > xDisapprove;
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+    getContinuations(
+        rContinuations, &xApprove, &xDisapprove, 0, &xAbort, 0, 0);
+
+    WinBits nButtonMask;
+    ErrCode nErrorCode;
+    if( xApprove.is() && xDisapprove.is() )
+    {
+        nErrorCode = ERRCODE_UUI_IO_BROKENPACKAGE;
+        nButtonMask = WB_YES_NO | WB_DEF_YES;
+    }
+    else if ( xAbort.is() )
+    {
+        nErrorCode = ERRCODE_UUI_IO_BROKENPACKAGE_CANTREPAIR;
+        nButtonMask = WB_OK;
+    }
+    else
+        return;
+
+    star::uno::Any aProductNameAny =
+                ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+    star::uno::Any aProductVersionAny =
+                ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+    ::rtl::OUString aProductName, aProductVersion;
+    if ( !( aProductNameAny >>= aProductName ) )
+        aProductName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice") );
+
+    ::rtl::OUString aTitle( aProductName );
+    if( aProductVersionAny >>= aProductVersion )
+    {
+        aTitle += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" ") );
+        aTitle += aProductVersion;
+    }
+
+    ::rtl::OUString aMessage;
+
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+        std::auto_ptr< ResMgr > xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        if (!xManager.get())
+            return;
+
+        ResId aResId( RID_UUI_ERRHDL, xManager.get() );
+        if ( !ErrorResource(aResId).getString(nErrorCode, &aMessage) )
+            return;
+    }
+
+    aMessage = replaceMessageWithArguments( aMessage, rArguments );
+
+    switch ( executeMessageBox( aTitle, aMessage, nButtonMask ))
+    {
+    case ERRCODE_BUTTON_OK:
+        OSL_ENSURE( xAbort.is(), "unexpected situation" );
+        if (xAbort.is())
+            xAbort->select();
         break;
 
     case ERRCODE_BUTTON_NO:

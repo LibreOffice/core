@@ -2,9 +2,9 @@
  *
  *  $RCSfile: masterpasscrtdlg.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-31 11:08:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
         Text[ polish ] = "Has�o g��wne";
         Text[ portuguese_brazilian ] = "Master ~password";
         Text[ japanese ] = "マスターパスワード";
-        Text[ korean ] = "마스터 패스워드(P)";
+        Text[ korean ] = "마스터 암호";
         Text[ chinese_simplified ] = "主密码";
         Text[ chinese_traditional ] = "主密碼";
         Text[ turkish ] = "Master ~password";
@@ -124,8 +124,8 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
         Text[ russian ] = "~����������� �������� ������";
         Text[ greek ] = "~Confirm master password";
         Text[ dutch ] = "~Hoofdwachtwoord bevestigen";
-        Text[ french ] = "~Confirmer le mot de passe principal";
-        Text[ spanish ] = "~Confirmar contrase�a principal";
+        Text[ french ] = "Confirmation du mot de passe principal";
+        Text[ spanish ] = "~Confirme la contrase�a principal";
         Text[ finnish ] = "~Confirm master password";
         Text[ italian ] = "~Conferma password principale";
         Text[ danish ] = "~Bekr�ft hovedadgangskode";
@@ -133,7 +133,7 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
         Text[ polish ] = "~Potwierd� has�o g��wne";
         Text[ portuguese_brazilian ] = "~Confirm master password";
         Text[ japanese ] = "マスターパスワードの確認(~C)";
-        Text[ korean ] = "마스터 패스워드 확인(C)";
+        Text[ korean ] = "마스터 암호 확인";
         Text[ chinese_simplified ] = "确认主密码(~C)";
         Text[ chinese_traditional ] = "確認主密碼(~C)";
         Text[ turkish ] = "~Confirm master password";
@@ -170,21 +170,26 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
     Text[ russian ] = "������ �������� ������";
     Text[ greek ] = "Please enter master password";
     Text[ dutch ] = "Hoofwachtwoord invoeren";
-    Text[ french ] = "D�finition du mot de passe principal";
-    Text[ spanish ] = "Determinar la contrase�a principal";
+    Text[ french ] = "Saisie du mot de passe principal";
+    Text[ spanish ] = "Introduzca la contrase�a principal";
     Text[ finnish ] = "Please enter master password";
     Text[ italian ] = "Digitate la password principale";
     Text[ danish ] = "Definer hovedadgangskode";
     Text[ swedish ] = "Definiera huvudl�senord";
     Text[ polish ] = "Zdefiniuj has�o g��wne";
     Text[ portuguese_brazilian ] = "Please enter master password";
-    Text[ japanese ] = "マスターパスワードの指定";
-    Text[ korean ] = "마스터 패스워드 정의";
-    Text[ chinese_simplified ] = "指定主密码";
-    Text[ chinese_traditional ] = "請輸入主密碼";
+    Text[ japanese ] = "マスターパスワードの入力";
+    Text[ korean ] = "마스터 암호 입력";
+    Text[ chinese_simplified ] = "输入主密码";
+    Text[ chinese_traditional ] = "輸入主密碼";
     Text[ turkish ] = "Please enter master password";
     Text[ arabic ] = "Please enter master password";
     Text[ catalan ] = "Introdu�u la contrasenya mestra";
     Text[ thai ] = "Enter Master Password";
 };
+
+
+
+
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-31 11:08:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_AMBIGOUSFILTERREQUEST_HPP_
 #include "com/sun/star/document/AmbigousFilterRequest.hpp"
+#endif
+#ifndef _COM_SUN_STAR_TASK_ERRORCODEREQUEST_HPP_
+#include "com/sun/star/task/ErrorCodeRequest.hpp"
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include "com/sun/star/uno/Sequence.hxx"
@@ -243,7 +246,13 @@ private:
                            eClassification,
                        rtl::OUString const & rContext,
                        rtl::OUString const & rMessage,
-                       WinBits nButtonMask)
+                       WinBits nButtonMask )
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    USHORT
+    executeMessageBox( rtl::OUString const & rTitle,
+                       rtl::OUString const & rMessage,
+                       WinBits nButtonMask )
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void
@@ -319,8 +328,27 @@ private:
         com::sun::star::uno::Sequence<
                 com::sun::star::uno::Reference<
                     com::sun::star::task::XInteractionContinuation > > const &
+            rContinuations )
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
+    handleGenericErrorRequest(
+        com::sun::star::task::ErrorCodeRequest const & rRequest,
+        com::sun::star::uno::Sequence<
+                com::sun::star::uno::Reference<
+                    com::sun::star::task::XInteractionContinuation > > const &
             rContinuations)
         SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
+    handleBrokenPackageRequest(
+        std::vector< rtl::OUString > const & rArguments,
+        ::com::sun::star::uno::Sequence<
+                ::com::sun::star::uno::Reference<
+                    ::com::sun::star::task::XInteractionContinuation > > const &
+            rContinuations)
+        SAL_THROW((::com::sun::star::uno::RuntimeException));
+
 };
 
 #endif // UUI_IAHNDL_HXX
