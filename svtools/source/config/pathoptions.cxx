@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-20 07:20:06 $
+ *  last change: $Author: pb $ $Date: 2000-11-22 13:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ using namespace com::sun::star::uno;
 #define SUBSTITUTE_LANGID               ASCII_STR("$(langid)")
 //#define SUBSTITUTE_SYSLANGID            ASCII_STR("$(syslangid)")
 #define SUBSTITUTE_VLANG                ASCII_STR("$(vlang)")
+#define SUBSTITUTE_WORKDIRURL           ASCII_STR("$(workdirurl)")
 
 // Length of SUBSTITUTE_... to replace it with real values.
 #define REPLACELENGTH_INST              7
@@ -138,6 +139,7 @@ using namespace com::sun::star::uno;
 #define REPLACELENGTH_LANGID            9
 //#define REPLACELENGTH_SYSLANGID         12
 #define REPLACELENGTH_VLANG             8
+#define REPLACELENGTH_WORKDIRURL        13
 
 // Strings to replace $(vlang)
 #define REPLACEMENT_ARABIC              ASCII_STR("arabic")
@@ -622,6 +624,15 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
                                                         break ;
             }
         }
+        else
+        // -------------------------------------------------------------------------------------------------------------------
+        // $(workdirurl)
+        if ( SUBSTITUTE_WORKDIRURL == aSubString )
+        {
+            nReplaceLength = REPLACELENGTH_WORKDIRURL;
+            INetURLObject aObj( m_aWorkPath, INET_PROT_FILE );
+            aReplacement = aObj.GetMainURL();
+        }
 
         // Have we found something to replace?
         if ( nReplaceLength > 0 )
@@ -688,7 +699,11 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
 // -----------------------------------------------------------------------
 
 SvtPathOptions_Impl::SvtPathOptions_Impl() :
+#if SUPD < 614
+    ConfigItem( ASCII_STR("Office.Common/Path") )
+#else
     ConfigItem( ASCII_STR("Office.Common/Path/Current") )
+#endif
 {
     ConfigManager* pCfgMgr = ConfigManager::GetConfigManager();
     Any aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::OFFICEINSTALL );
