@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:05:07 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,7 +828,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 
     if( pDestPers && !IsEmptyPresObj() )
     {
-        if ( !pSrcPers )
+        if ( !pSrcPers || IsEmptyPresObj() )
             // object wasn't connected, now it should
             Connect_Impl();
         else
