@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabdat.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:25:12 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include <rtl/math.hxx>
 #include <tools/debug.hxx>
 #include <tools/date.hxx>
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
@@ -80,10 +81,9 @@
 
 BOOL ScDPItemData::IsCaseInsEqual( const ScDPItemData& r ) const
 {
-    //! ApproxEqual ???
     //! pass Transliteration?
     //! inline?
-    return bHasValue ? ( r.bHasValue && fValue == r.fValue ) :
+    return bHasValue ? ( r.bHasValue && rtl::math::approxEqual( fValue, r.fValue ) ) :
                        ( !r.bHasValue &&
                         ScGlobal::pTransliteration->isEqual( aString, r.aString ) );
 }
@@ -171,6 +171,35 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
 UINT32 ScDPTableData::GetNumberFormat(long nDim)
 {
     return 0;           // default format
+}
+
+BOOL ScDPTableData::IsBaseForGroup(long nDim) const
+{
+    return FALSE;       // always false
+}
+
+long ScDPTableData::GetGroupBase(long nGroupDim) const
+{
+    return -1;          // always none
+}
+
+BOOL ScDPTableData::IsNumOrDateGroup(long nDim) const
+{
+    return FALSE;       // always false
+}
+
+BOOL ScDPTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
+                               const ScDPItemData& rBaseData, long nBaseIndex ) const
+{
+    DBG_ERROR("IsInGroup shouldn't be called for non-group data");
+    return FALSE;
+}
+
+BOOL ScDPTableData::HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
+                                      const ScDPItemData& rSecondData, long nSecondIndex ) const
+{
+    DBG_ERROR("HasCommonElement shouldn't be called for non-group data");
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
