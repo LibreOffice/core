@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-31 09:34:36 $
+ *  last change: $Author: aw $ $Date: 2002-09-18 15:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,21 +789,31 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
             rOutliner.SetMaxAutoPaperSize(Size(nWdt,nHgt));
         }
 
-        // #100801# MinAutoPaperSize needs always to be set completely
-        // when Verical
-        if(IsVerticalWriting())
+        // #103335# back to old solution, thus #100801# will be back and needs to be solved in
+        // another way.
+        if (eHAdj==SDRTEXTHORZADJUST_BLOCK)
         {
-            rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, nAnkHgt));
+            if(IsVerticalWriting())
+                rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, nAnkHgt));
+            else
+                rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, 0));
         }
 
-        if(SDRTEXTHORZADJUST_BLOCK == eHAdj)
-        {
-            // #89459#
-            if(!IsVerticalWriting())
-            {
-                rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, 0));
-            }
-        }
+//      // #100801# MinAutoPaperSize needs always to be set completely
+//      // when Verical
+//      if(IsVerticalWriting())
+//      {
+//          rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, nAnkHgt));
+//      }
+//
+//      if(SDRTEXTHORZADJUST_BLOCK == eHAdj)
+//      {
+//          // #89459#
+//          if(!IsVerticalWriting())
+//          {
+//              rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, 0));
+//          }
+//      }
     }
 
     rOutliner.SetPaperSize(aNullSize);
