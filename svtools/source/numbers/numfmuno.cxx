@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: er $ $Date: 2001-01-26 17:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ using namespace com::sun::star;
 #define PROPERTYNAME_COMMENT    "Comment"
 #define PROPERTYNAME_CURREXT    "CurrencyExtension"
 #define PROPERTYNAME_CURRSYM    "CurrencySymbol"
+#define PROPERTYNAME_CURRABB    "CurrencyAbbreviation"
 #define PROPERTYNAME_DECIMALS   "Decimals"
 #define PROPERTYNAME_LEADING    "LeadingZeros"
 #define PROPERTYNAME_NEGRED     "NegativeRed"
@@ -126,6 +127,7 @@ const SfxItemPropertyMap* lcl_GetNumberFormatPropertyMap()
         {MAP_CHAR_LEN(PROPERTYNAME_STDFORM),  0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY},
         {MAP_CHAR_LEN(PROPERTYNAME_THOUS),    0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY},
         {MAP_CHAR_LEN(PROPERTYNAME_USERDEF),  0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY},
+        {MAP_CHAR_LEN(PROPERTYNAME_CURRABB),  0, &getCppuType((rtl::OUString*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY},
         {0,0,0,0}
     };
     return aNumberFormatPropertyMap_Impl;
@@ -805,37 +807,83 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const rtl::OUString& aPro
     const SvNumberformat* pFormat = pFormatter ? pFormatter->GetEntry(nKey) : NULL;
     if (pFormat)
     {
-        String aSymbol, aExt;
-        pFormat->GetNewCurrencySymbol( aSymbol, aExt );
-        String aFmtStr = pFormat->GetFormatstring();
-        String aComment = ((SvNumberformat*)pFormat)->GetComment();
-        //! warum ist GetComment nicht const ???
-        BOOL bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
-        //! SvNumberformat Member bStandard rausreichen?
-        BOOL bUserDef = ( ( pFormat->GetType() & NUMBERFORMAT_DEFINED ) != 0 );
         BOOL bThousand, bRed;
         USHORT nDecimals, nLeading;
-        ((SvNumberformat*)pFormat)->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-        //! warum ist GetFormatSpecialInfo nicht const ???
 
         String aString = aPropertyName;
-        if (aString.EqualsAscii( PROPERTYNAME_FMTSTR ))         aRet <<= rtl::OUString( aFmtStr );
+        if (aString.EqualsAscii( PROPERTYNAME_FMTSTR ))
+        {
+            aRet <<= rtl::OUString( pFormat->GetFormatstring() );
+        }
         else if (aString.EqualsAscii( PROPERTYNAME_LOCALE ))
         {
             lang::Locale aLocale;
             lcl_FillLocale( aLocale, pFormat->GetLanguage() );
             aRet <<= aLocale;
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_TYPE ))      aRet <<= (sal_Int16)( pFormat->GetType() );
-        else if (aString.EqualsAscii( PROPERTYNAME_COMMENT ))   aRet <<= rtl::OUString( aComment );
-        else if (aString.EqualsAscii( PROPERTYNAME_STDFORM ))   aRet.setValue( &bStandard, getBooleanCppuType() );
-        else if (aString.EqualsAscii( PROPERTYNAME_USERDEF ))   aRet.setValue( &bUserDef, getBooleanCppuType() );
-        else if (aString.EqualsAscii( PROPERTYNAME_DECIMALS ))  aRet <<= (sal_Int16)( nDecimals );
-        else if (aString.EqualsAscii( PROPERTYNAME_LEADING ))   aRet <<= (sal_Int16)( nLeading );
-        else if (aString.EqualsAscii( PROPERTYNAME_NEGRED ))    aRet.setValue( &bRed, getBooleanCppuType() );
-        else if (aString.EqualsAscii( PROPERTYNAME_THOUS ))     aRet.setValue( &bThousand, getBooleanCppuType() );
-        else if (aString.EqualsAscii( PROPERTYNAME_CURRSYM ))   aRet <<= rtl::OUString( aSymbol );
-        else if (aString.EqualsAscii( PROPERTYNAME_CURREXT ))   aRet <<= rtl::OUString( aExt );
+        else if (aString.EqualsAscii( PROPERTYNAME_TYPE ))
+        {
+            aRet <<= (sal_Int16)( pFormat->GetType() );
+        }
+        else if (aString.EqualsAscii( PROPERTYNAME_COMMENT ))
+        {
+            aRet <<= rtl::OUString( pFormat->GetComment() );
+        }
+        else if (aString.EqualsAscii( PROPERTYNAME_STDFORM ))
+        {
+            //! SvNumberformat Member bStandard rausreichen?
+            BOOL bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
+            aRet.setValue( &bStandard, getBooleanCppuType() );
+        }
+        else if (aString.EqualsAscii( PROPERTYNAME_USERDEF ))
+        {
+            BOOL bUserDef = ( ( pFormat->GetType() & NUMBERFORMAT_DEFINED ) != 0 );
+            aRet.setValue( &bUserDef, getBooleanCppuType() );
+        }
+        else if (aString.EqualsAscii( PROPERTYNAME_DECIMALS ))
+        {
+            pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
+            aRet <<= (sal_Int16)( nDecimals );
+        }
+        else if (aString.EqualsAscii( PROPERTYNAME_LEADING ))
+        {
+            pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
+            aRet <<= (sal_Int16)( nLeading );
+        }
+        else if (aString.EqualsAscii( PROPERTYNAME_NEGRED ))
+        {
+            pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
+            aRet.setValue( &bRed, getBooleanCppuType() );
+        }
+        else if (aString.EqualsAscii( PROPERTYNAME_THOUS ))
+        {
+            pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
+            aRet.setValue( &bThousand, getBooleanCppuType() );
+        }
+        else if (aString.EqualsAscii( PROPERTYNAME_CURRSYM ))
+        {
+            String aSymbol, aExt;
+            pFormat->GetNewCurrencySymbol( aSymbol, aExt );
+            aRet <<= rtl::OUString( aSymbol );
+        }
+        else if (aString.EqualsAscii( PROPERTYNAME_CURREXT ))
+        {
+            String aSymbol, aExt;
+            pFormat->GetNewCurrencySymbol( aSymbol, aExt );
+            aRet <<= rtl::OUString( aExt );
+        }
+        else if (aString.EqualsAscii( PROPERTYNAME_CURRABB ))
+        {
+            String aSymbol, aExt;
+            BOOL bBank = FALSE;
+            pFormat->GetNewCurrencySymbol( aSymbol, aExt );
+            const NfCurrencyEntry* pCurr = pFormatter->GetCurrencyEntry( bBank,
+                aSymbol, aExt, pFormat->GetLanguage() );
+            if ( pCurr )
+                aRet <<= rtl::OUString( pCurr->GetBankSymbol() );
+            else
+                aRet <<= rtl::OUString();
+        }
         else
             throw beans::UnknownPropertyException();
     }
@@ -888,22 +936,26 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
     const SvNumberformat* pFormat = pFormatter ? pFormatter->GetEntry(nKey) : NULL;
     if (pFormat)
     {
-        String aSymbol, aExt;
+        String aSymbol, aExt, aAbb;
+        BOOL bBank = FALSE;
         pFormat->GetNewCurrencySymbol( aSymbol, aExt );
+        const NfCurrencyEntry* pCurr = pFormatter->GetCurrencyEntry( bBank,
+            aSymbol, aExt, pFormat->GetLanguage() );
+        if ( pCurr )
+            aAbb = pCurr->GetBankSymbol();
+
         String aFmtStr = pFormat->GetFormatstring();
-        String aComment = ((SvNumberformat*)pFormat)->GetComment();
-        //! warum ist GetComment nicht const ???
+        String aComment = pFormat->GetComment();
         BOOL bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
         //! SvNumberformat Member bStandard rausreichen?
         BOOL bUserDef = ( ( pFormat->GetType() & NUMBERFORMAT_DEFINED ) != 0 );
         BOOL bThousand, bRed;
         USHORT nDecimals, nLeading;
-        ((SvNumberformat*)pFormat)->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-        //! warum ist GetFormatSpecialInfo nicht const ???
+        pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
         lang::Locale aLocale;
         lcl_FillLocale( aLocale, pFormat->GetLanguage() );
 
-        uno::Sequence<beans::PropertyValue> aSeq(12);
+        uno::Sequence<beans::PropertyValue> aSeq(13);
         beans::PropertyValue* pArray = aSeq.getArray();
 
         pArray[0].Name = rtl::OUString::createFromAscii( PROPERTYNAME_FMTSTR );
@@ -930,6 +982,8 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         pArray[10].Value <<= rtl::OUString( aSymbol );
         pArray[11].Name = rtl::OUString::createFromAscii( PROPERTYNAME_CURREXT );
         pArray[11].Value <<= rtl::OUString( aExt );
+        pArray[12].Name = rtl::OUString::createFromAscii( PROPERTYNAME_CURRABB );
+        pArray[12].Value <<= rtl::OUString( aAbb );
 
         return aSeq;
     }
