@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:07:45 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,10 +121,18 @@
 #include "::ui:inc:unmovss.hxx"
 #include "::ui:inc:unchss.hxx"
 #include "::ui:inc:unprlout.hxx"
-#include "::ui:inc:docshell.hxx"
-#include "::ui:inc:grdocsh.hxx"
-#include "::ui:inc:viewshel.hxx"
-#include "::ui:inc:sdview.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "::ui:inc:DrawDocShell.hxx"
+#endif
+#ifndef SD_GRAPHIC_DOC_SHELL_HXX
+#include "::ui:inc:GraphicDocShell.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "::ui:inc:ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "::ui:inc:View.hxx"
+#endif
 #include "::ui:inc:cfgids.hxx"
 #include "::ui:inc:strings.hrc"
 #else
@@ -132,20 +140,36 @@
 #include "../ui/inc/unmovss.hxx"
 #include "../ui/inc/unchss.hxx"
 #include "../ui/inc/unprlout.hxx"
-#include "../ui/inc/docshell.hxx"
-#include "../ui/inc/grdocsh.hxx"
-#include "../ui/inc/viewshel.hxx"
-#include "../ui/inc/sdview.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "../ui/inc/DrawDocShell.hxx"
+#endif
+#ifndef SD_GRAPHIC_DOC_SHELL_HXX
+#include "../ui/inc/GraphicDocShell.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "../ui/inc/ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "../ui/inc/View.hxx"
+#endif
 #include "../ui/inc/cfgids.hxx"
 #include "../ui/inc/strings.hrc"
 #else
 #include "..\ui\inc\unmovss.hxx"
 #include "..\ui\inc\unchss.hxx"
 #include "..\ui\inc\unprlout.hxx"
-#include "..\ui\inc\docshell.hxx"
-#include "..\ui\inc\grdocsh.hxx"
-#include "..\ui\inc\viewshel.hxx"
-#include "..\ui\inc\sdview.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "..\ui\inc\DrawDocShell.hxx"
+#endif
+#ifndef SD_GRAPHIC_DOC_SHELL_HXX
+#include "..\ui\inc\GraphicDocShell.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "..\ui\inc\ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "..\ui\inc\View.hxx"
+#endif
 #include "..\ui\inc\cfgids.hxx"
 #include "..\ui\inc\strings.hrc"
 #endif
@@ -197,10 +221,10 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
 
             if ( pStorage->GetFormat() == SOT_FORMATSTR_ID_STARDRAW_50 )
                 // Draw
-                xBookmarkDocShRef = new SdGraphicDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
+                xBookmarkDocShRef = new ::sd::GraphicDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
             else
                 // Impress
-                xBookmarkDocShRef = new SdDrawDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
+                xBookmarkDocShRef = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
 
             if ( bOK = xBookmarkDocShRef->DoLoad(pStorage) )
                 pBookmarkDoc = xBookmarkDocShRef->GetDoc();
@@ -294,7 +318,7 @@ BOOL SdDrawDocument::InsertBookmark(
     BOOL bReplace,                  // Aktuellen Seiten (Standard&Notiz) werden ersetzt
     USHORT nInsertPos,              // Einfuegeposition fuer Seiten
     BOOL bNoDialogs,                // Keine Dialoge anzeigen
-    SdDrawDocShell* pBookmarkDocSh, // Wenn gesetzt, so ist dieses das Source-Dokument
+    ::sd::DrawDocShell* pBookmarkDocSh, // Wenn gesetzt, so ist dieses das Source-Dokument
     BOOL bCopy,                     // Seiten werden kopiert
     Point* pObjPos)                 // Einfuegeposition fuer Objekte
 {
@@ -512,7 +536,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
     BOOL bReplace,
     USHORT nInsertPos,
     BOOL bNoDialogs,
-    SdDrawDocShell* pBookmarkDocSh,
+    ::sd::DrawDocShell* pBookmarkDocSh,
     BOOL bCopy,
     BOOL bMergeMasterPages,
     BOOL bPreservePageNames)
@@ -1022,12 +1046,12 @@ BOOL SdDrawDocument::InsertBookmarkAsObject(
     List* pBookmarkList,
     List* pExchangeList,            // Liste der zu verwendenen Namen
     BOOL bLink,
-    SdDrawDocShell* pBookmarkDocSh,
+    ::sd::DrawDocShell* pBookmarkDocSh,
     Point* pObjPos)
 {
     BOOL bOK = TRUE;
     BOOL bOLEObjFound = FALSE;
-    SdView* pBMView = NULL;
+    ::sd::View* pBMView = NULL;
 
     SdDrawDocument* pBookmarkDoc = NULL;
     String aBookmarkName;
@@ -1053,7 +1077,7 @@ BOOL SdDrawDocument::InsertBookmarkAsObject(
 
     if (!pBookmarkList)
     {
-        pBMView = new SdView(pBookmarkDoc, (OutputDevice*) NULL);
+        pBMView = new ::sd::View(pBookmarkDoc, (OutputDevice*) NULL);
         pBMView->EndListening(*pBookmarkDoc);
         pBMView->MarkAll();
     }
@@ -1084,7 +1108,7 @@ BOOL SdDrawDocument::InsertBookmarkAsObject(
                 if (!pBMView)
                 {
                     // View erstmalig erzeugen
-                    pBMView = new SdView(pBookmarkDoc, (OutputDevice*) NULL);
+                    pBMView = new ::sd::View(pBookmarkDoc, (OutputDevice*) NULL);
                     pBMView->EndListening(*pBookmarkDoc);
                 }
 
@@ -1111,7 +1135,7 @@ BOOL SdDrawDocument::InsertBookmarkAsObject(
         /**********************************************************************
         * Selektierte Objekte einfuegen
         **********************************************************************/
-        SdView* pView = new SdView(this, (OutputDevice*) NULL);
+        ::sd::View* pView = new ::sd::View(this, (OutputDevice*) NULL);
         pView->EndListening(*this);
 
         // Seite bestimmen, auf der die Objekte eingefuegt werden sollen
@@ -1119,7 +1143,7 @@ BOOL SdDrawDocument::InsertBookmarkAsObject(
 
         if (pDocSh)
         {
-            SdViewShell* pViewSh = pDocSh->GetViewShell();
+            ::sd::ViewShell* pViewSh = pDocSh->GetViewShell();
 
             if (pViewSh)
             {
@@ -1441,7 +1465,7 @@ void SdDrawDocument::HandsOff()
 
 void SdDrawDocument::RemoveUnnessesaryMasterPages(SdPage* pMasterPage, BOOL bOnlyDuplicatePages, BOOL bUndo)
 {
-    SdView* pView = NULL;
+    ::sd::View* pView = NULL;
     SfxUndoManager* pUndoMgr = NULL;
 
     if (pDocSh)
