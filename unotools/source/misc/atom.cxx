@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atom.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 15:17:59 $
+ *  last change: $Author: pl $ $Date: 2001-12-12 13:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,8 @@ int AtomClient::getAtom( int atomClass, const ::rtl::OUString& description, sal_
 
 const ::rtl::OUString& AtomClient::getString( int atomClass, int atom )
 {
+    static ::rtl::OUString aEmpty;
+
     if( ! m_aProvider.hasAtom( atomClass, atom ) )
     {
         Sequence< NMSP_UTIL::AtomDescription > aSeq;
@@ -358,7 +360,7 @@ const ::rtl::OUString& AtomClient::getString( int atomClass, int atom )
         }
         catch( RuntimeException& )
         {
-            return ::rtl::OUString();
+            return aEmpty;
         }
         const NMSP_UTIL::AtomDescription* pDescriptions = aSeq.getConstArray();
         for( int i = 0; i < aSeq.getLength(); i++ )
@@ -381,7 +383,7 @@ const ::rtl::OUString& AtomClient::getString( int atomClass, int atom )
             }
             catch( RuntimeException& )
             {
-                return ::rtl::OUString();
+                return aEmpty;
             }
             if( aRet.getLength() == 1 )
                 m_aProvider.overrideAtom( atomClass, atom, aRet.getConstArray()[0] );
