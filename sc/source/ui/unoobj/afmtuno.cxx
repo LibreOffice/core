@@ -2,9 +2,9 @@
  *
  *  $RCSfile: afmtuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
+ *  last change: $Author: nn $ $Date: 2001-02-20 13:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,6 +676,11 @@ void SAL_CALL ScAutoFormatObj::setName( const rtl::OUString& aNewName )
             DBG_ERROR("AutoFormat konnte nicht eingefuegt werden");
             nFormatIndex = 0;       //! alter Index ist ungueltig
         }
+    }
+    else
+    {
+        //  not inserted or name exists
+        throw uno::RuntimeException();
     }
 }
 
