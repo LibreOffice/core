@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:48 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,13 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #ifdef PCH
 #include "ui_pch.hxx"
@@ -601,6 +608,22 @@ void ScModule::Execute( SfxRequest& rReq )
                 rReq.Done();
             }
             break;
+
+        case SID_OPEN_XML_FILTERSETTINGS:
+        {
+            try
+            {
+                com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), com::sun::star::uno::UNO_QUERY);
+                if( xDialog.is() )
+                {
+                    xDialog->execute();
+                }
+            }
+            catch( ::com::sun::star::uno::RuntimeException& )
+            {
+            }
+        }
+        break;
 
         default:
             DBG_ERROR( "ScApplication: Unknown Message." );
