@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:56:26 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _SVX_HELPID_HRC
 #define _SVX_HELPID_HRC
-
 // include ---------------------------------------------------------------
 
 #include <svtools/solar.hrc>
@@ -714,6 +713,13 @@
 #define HID_VALUESET_EXTRUSION_LIGHTING         (HID_SVX_EXT0_START + 117)
 #define HID_MENU_EXTRUSION_SURFACE              (HID_SVX_EXT0_START + 118)
 
+// Hangul Hanja extensions
+#define HID_HANGULHANJA_OPT_DLG                     (HID_SVX_EXT0_START + 119)
+#define HID_HANGULHANJA_NEWDICT_DLG                 (HID_SVX_EXT0_START + 120)
+#define HID_HANGULHANJA_EDIT_DLG                    (HID_SVX_EXT0_START + 121)
+#define HID_HANGULDLG_BUTTON_OPTIONS                (HID_SVX_EXT0_START + 122)
+#define HID_HANGULHANJA_OPT_DICTS_LB                (HID_SVX_EXT0_START + 123)
+
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
 // -----------------------------------------------------------------------
@@ -726,7 +732,7 @@
 
 // overrun check 2
 
-#define ACT_SVX_HID_END2        HID_COLORPAGE_BASICERROR_CB
+#define ACT_SVX_HID_END2        HID_HANGULHANJA_OPT_DICTS_LB
 
 #if ACT_SVX_HID2_END > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
