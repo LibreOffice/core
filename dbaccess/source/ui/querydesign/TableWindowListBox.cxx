@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 12:20:16 $
+ *  last change: $Author: oj $ $Date: 2001-12-10 11:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,11 @@ long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
             if (rCode.IsMod1() || rCode.IsMod2() || rCode.IsShift())
                 break;
             if (rCode.GetCode() != KEY_RETURN)
+            {
+                if(m_pTabWin)
+                    m_pTabWin->KeyInput(*pKeyEvent);
                 break;
+            }
 
             if (FirstSelected())
                 static_cast<OTableWindow*>(Window::GetParent())->OnEntryDoubleClicked(FirstSelected());

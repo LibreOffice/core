@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:57:11 $
+ *  last change: $Author: oj $ $Date: 2001-12-10 11:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,20 +826,17 @@ void OQueryDesignView::GetNextJoin(OQueryTableConnection* pEntryConn,::rtl::OUSt
             {
                 ::rtl::OUString aJoin;
                 GetNextJoin(pEntryConn,aJoin,static_cast<OQueryTableWindow*>(pEntryConn->GetDestWin()));
-                if(aTableListStr.getLength())
-                    aTableListStr += ::rtl::OUString(',');
-                aTableListStr += aJoin;
+
+                if(aJoin.getLength())
+                {
+                    ::rtl::OUString aStr = ::rtl::OUString::createFromAscii("{ OJ ");
+                    aStr += aJoin;
+                    aStr += ::rtl::OUString::createFromAscii(" },");
+                    aTableListStr += aStr;
+                }
             }
         }
 
-        if(aTableListStr.getLength())
-        {
-            //  aTableListStr = aTableListStr.replaceAt(aTableListStr.getLength()-1,1, ::rtl::OUString() );
-            ::rtl::OUString aStr = ::rtl::OUString::createFromAscii("{ OJ ");
-            aStr += aTableListStr;
-            aStr += ::rtl::OUString::createFromAscii(" },");
-            aTableListStr = aStr;
-        }
         // and now all inner joins
         map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aTableNames;
         aIter = pConnList->begin();
