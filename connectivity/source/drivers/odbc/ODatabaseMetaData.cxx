@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 16:10:33 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 12:34:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon)
-                        : ODatabaseMetaDataBase(_pCon)
+                        : ::connectivity::ODatabaseMetaDataBase(_pCon)
                         ,m_aConnectionHandle(_pHandle)
                         ,m_pConnection(_pCon)
 {

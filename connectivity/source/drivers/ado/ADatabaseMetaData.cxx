@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:09:51 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 12:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ using namespace com::sun::star::sdbc;
 //  using namespace connectivity;
 
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
-    :ODatabaseMetaDataBase(_pCon)
+    : ::connectivity::ODatabaseMetaDataBase(_pCon)
     ,m_pADOConnection(_pCon->getConnection())
     ,m_pConnection(_pCon)
 {

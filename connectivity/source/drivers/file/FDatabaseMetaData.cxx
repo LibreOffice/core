@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 11:29:33 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 12:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 
-ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon) : ODatabaseMetaDataBase(_pCon)
+ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon) : ::connectivity::ODatabaseMetaDataBase(_pCon)
                         ,m_pConnection(_pCon)
 {
 }
