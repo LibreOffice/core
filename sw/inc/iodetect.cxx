@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:18:53 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         // templates should not get precedence over "normal" filters (#i35508, #i33168)
         const SfxFilter* pTemplateFilter = 0;
         const SfxFilter* pOldFilter = pFCntnr->GetFilter4FilterName( rPrefFltName );
-        BOOL bLookForTemplate = pOldFilter && pOldFilter->IsAllowedAsTemplate();
+        BOOL bLookForTemplate = pOldFilter && pOldFilter->IsOwnTemplateFormat();
         if ( pMedium->IsStorage() )
         {
             uno::Reference < embed::XStorage > xStor = pMedium->GetStorage();
@@ -579,7 +579,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
                 {
                     if( 'C' == *pFilter->GetUserData().GetBuffer() && IsValidStgFilter( xStor, *pFilter ) )
                     {
-                        if ( pFilter->IsAllowedAsTemplate() && !bLookForTemplate )
+                        if ( pFilter->IsOwnTemplateFormat() && !bLookForTemplate )
                             // found template filter; maybe there's a "normal" one also
                             pTemplateFilter = pFilter;
                         else
@@ -606,7 +606,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
                 {
                     if( 'C' == *pFilter->GetUserData().GetBuffer() && IsValidStgFilter( *xStg, *pFilter ) )
                     {
-                        if ( pFilter->IsAllowedAsTemplate() && !bLookForTemplate )
+                        if ( pFilter->IsOwnTemplateFormat() && !bLookForTemplate )
                             // found template filter; maybe there's a "normal" one also
                             pTemplateFilter = pFilter;
                         else
@@ -623,7 +623,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
             }
         }
 
-        return 0;
+        return pFilter;
     }
 
     sal_Char aBuffer[4098];
