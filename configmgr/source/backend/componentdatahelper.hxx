@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:14:32 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:55:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef CONFIGMGR_BACKEND_MERGEDDATAPROVIDER_HXX
 #include "mergeddataprovider.hxx"
 #endif
+#ifndef CONFIGMGR_LOGGER_HXX_
+#include "logger.hxx"
+#endif
 #ifndef CONFIGMGR_BACKEND_REQUEST_HXX_
 #include "request.hxx"
 #endif
@@ -117,15 +120,18 @@ namespace configmgr
 
         class DataBuilderContext
         {
+            Logger                      m_aLogger;
             Stack< ISubtree * >         m_aParentStack;
             OUString                    m_aActiveComponent;
             uno::XInterface *           m_pContext;
             OUString                    m_aExpectedComponentName;
             ITemplateDataProvider *     m_aTemplateProvider;
         public:
-            DataBuilderContext();
-            explicit DataBuilderContext(uno::XInterface * _pContext , ITemplateDataProvider*  aTemplateProvider = NULL);
-            explicit DataBuilderContext(uno::XInterface * _pContext, const OUString& aExpectedComponentName,ITemplateDataProvider*  aTemplateProvider = NULL );
+            typedef uno::Reference< uno::XComponentContext > UnoContext;
+            explicit DataBuilderContext(UnoContext const & xContext);
+            DataBuilderContext(UnoContext const & xContext, uno::XInterface * _pContext , ITemplateDataProvider*  aTemplateProvider = NULL);
+            DataBuilderContext(UnoContext const & xContext, uno::XInterface * _pContext, const OUString& aExpectedComponentName,ITemplateDataProvider*  aTemplateProvider = NULL );
+            DataBuilderContext(DataBuilderContext const & aBaseContext, uno::XInterface * _pContext);
             ~DataBuilderContext();
 
             bool        isDone() const;
@@ -144,6 +150,9 @@ namespace configmgr
             node::Attributes    getCurrentAttributes() const
                 CFG_UNO_THROW1( configuration::backend::MalformedDataException )
                 { return implGetCurrentParent().getAttributes(); }
+
+            ITemplateDataProvider * getTemplateProvider() const
+            { return  m_aTemplateProvider; }
 
             OUString getTemplateComponent(TemplateIdentifier const & aItemType ) const;
 
@@ -188,6 +197,13 @@ namespace configmgr
             ValueNode * addPropertyToCurrent(std::auto_ptr<ValueNode> _aNode, bool _bMayReplace = false)
                 CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
+            // Logging support
+            Logger const & getLogger() const { return m_aLogger; }
+
+            OUString getNodeParentagePath() const;
+            OUString getNodePath(OUString const & aNodeName) const;
+
+            // Exception support
             void raiseMalformedDataException    (sal_Char const * _pText) const
                 CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             void raiseNoSupportException        (sal_Char const * _pText) const
@@ -210,6 +226,9 @@ namespace configmgr
         private:
             INode * findChild(OUString const & _aName)
                 CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+
+            OUString makeMessageWithPath(sal_Char const * _pText) const
+                CFG_UNO_THROW_RTE(  );
 
             OUString makeMessageWithName(sal_Char const * _pText, OUString const & _aName) const
                 CFG_UNO_THROW_RTE(  );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:16:17 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
 namespace configmgr
@@ -102,10 +102,10 @@ namespace configmgr
         :   public LayerMergeHandler_Base
         {
         public:
-            typedef uno::Reference< lang::XMultiServiceFactory > ServiceFactory;
+            typedef uno::Reference< uno::XComponentContext > Context;
 
             explicit
-            LayerMergeHandler(ServiceFactory const & _xServiceFactory , MergedComponentData & _rData, ITemplateDataProvider* aTemplateProvider = NULL);
+            LayerMergeHandler(Context const & _xContext, MergedComponentData & _rData, ITemplateDataProvider* aTemplateProvider = NULL);
             virtual ~LayerMergeHandler();
 
         // prepare merging
