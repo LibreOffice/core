@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:37:32 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,7 +689,9 @@ void ViewShell::ChgAllPageOrientation( USHORT eOri )
 
     for( USHORT i = 0; i < nAll; ++ i )
     {
-        const SwPageDesc& rOld = GetDoc()->GetPageDesc( i );
+        const SwPageDesc& rOld =
+            const_cast<const SwDoc *>(GetDoc())->GetPageDesc( i );
+
         if( rOld.GetLandscape() != bNewOri )
         {
             SwPageDesc aNew( rOld );
@@ -731,7 +733,9 @@ void ViewShell::ChgAllPageSize( Size &rSz )
     for( USHORT i = 0; i < nAll; ++i )
     {
         // Fuer WIN95 als Pointer anlegen! (falsche Optimierung!!)
-        SwPageDesc* pNew = new SwPageDesc( pDoc->GetPageDesc( i ) );
+        SwPageDesc* pNew =
+            new SwPageDesc( const_cast<const SwDoc *>(pDoc)->
+                            GetPageDesc( i ) );
         SwFrmFmt& rPgFmt = pNew->GetMaster();
         Size aSz( rSz );
         const BOOL bOri = pNew->GetLandscape();
