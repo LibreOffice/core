@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2000-10-25 13:09:19 $
+ *  last change: $Author: mib $ $Date: 2000-10-31 08:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2242,7 +2242,8 @@ void SwXNumberingRules::removeVetoableChangeListener(
 OUString SwXNumberingRules::getName() throw( RuntimeException )
 {
     if(pNumRule)
-        return pNumRule->GetName();
+        return SwXStyleFamilies::GetProgrammaticName(pNumRule->GetName(),
+                                                     SFX_STYLE_FAMILY_PSEUDO );
     else
         return sCreatedNumRuleName;
 }
