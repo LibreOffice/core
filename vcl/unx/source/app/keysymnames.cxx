@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-25 17:37:02 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 14:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,12 +90,13 @@
 #include <fcntl.h>
 #include <deflt.h>
 #include <unistd.h>
-#include <string.h>
 #include <stdlib.h>
 #ifndef KB_USB // compile with too old headers
 #define KB_USB 6
 #endif
 #endif
+
+#include <string.h>
 
 namespace vcl_sal {
 
