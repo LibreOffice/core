@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:52:35 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ BOOL LngParser::CreateSDF(
     if ( !aSDFStream.IsOpen()) {
         nError = SDF_COULD_NOT_OPEN;
     }
+    aSDFStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
     nError = SDF_OK;
     DirEntry aEntry( String( sSource, RTL_TEXTENCODING_ASCII_US ));
     aEntry.ToAbs();
@@ -190,6 +191,11 @@ BOOL LngParser::CreateSDF(
             ByteString sAct = rText_inout[ sCur ];
             if ( !sAct.Len() && sCur.Len() )
                 sAct = rText_inout[ ByteString("de") ];
+
+            //if( sCur.EqualsIgnoreCaseAscii("de") ){
+            //    sAct = UTF8Converter::ConvertToUTF8( sAct, RTL_TEXTENCODING_MS_1252 );
+            //}
+
             ByteString sOutput( rPrj ); sOutput += "\t";
             if ( rRoot.Len())
                 sOutput += sActFileName;
@@ -199,6 +205,10 @@ BOOL LngParser::CreateSDF(
             sOutput += sCur; sOutput += "\t";
             sOutput += sAct; sOutput += "\t\t\t\t";
             sOutput += sTimeStamp;
+            //if( sCur.EqualsIgnoreCaseAscii("de") ){
+            //    sOutput = UTF8Converter::ConvertToUTF8( sOutput , RTL_TEXTENCODING_MS_1252 );
+            //}
+
             aSDFStream.WriteLine( sOutput );
         }
     }
