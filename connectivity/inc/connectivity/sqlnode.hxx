@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:27:26 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,9 @@ namespace connectivity
             value_exp_primary,
             value_exp,
             selection,
+            fold,
+            char_substring_fct,
+            factor,
             rule_count                      // letzter_wert
         };
 
