@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-16 08:01:52 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@
 #ifndef _CELLFRM_HXX //autogen
 #include <cellfrm.hxx>
 #endif
+#ifndef _ROWFRM_HXX
+#include <rowfrm.hxx>
+#endif
 
 // setze Crsr in die naechsten/vorherigen Celle
 FASTBOOL SwCrsrShell::GoNextCell( BOOL bAppendLine )
@@ -204,7 +207,7 @@ FASTBOOL SwCrsrShell::GotoTblBox( const String& rName )
 }
 
 
-FASTBOOL SwCrsrShell::SelTblRow()
+FASTBOOL SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
 {
     // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
     SwFrm *pFrm = GetCurrFrm();
@@ -215,16 +218,48 @@ FASTBOOL SwCrsrShell::SelTblRow()
 
     SET_CURR_SHELL( this );
 
-    // lasse ueber das Layout die Boxen suchen
-    SwSelBoxes aBoxes;
+    SwTableBox* pStt = 0;
+    SwTableBox* pEnd = 0;
 
-    SwTblSearchType eType = TBLSEARCH_ROW;
-    if( !IsReadOnlyAvailable() )
-        eType = (SwTblSearchType)(eType | TBLSEARCH_PROTECT);
-    GetTblSel( *this, aBoxes, eType );
+    if ( !bRowSimple )
+    {
+        // lasse ueber das Layout die Boxen suchen
+        SwSelBoxes aBoxes;
 
-    if( !aBoxes.Count() )
-        return FALSE;
+        SwTblSearchType eType = bRow ? TBLSEARCH_ROW : TBLSEARCH_COL;
+
+        if( !IsReadOnlyAvailable() )
+            eType = (SwTblSearchType)(eType | TBLSEARCH_PROTECT);
+
+        GetTblSel( *this, aBoxes, eType );
+
+        if( !aBoxes.Count() )
+            return FALSE;
+
+        pStt = aBoxes[0];
+        pEnd = aBoxes[aBoxes.Count() - 1];
+    }
+    // --> FME 2004-07-30 #i32329# Enhanced table selection
+    else
+    {
+        // find most upper row frame:
+        while ( true )
+        {
+            if (  pFrm->IsRowFrm() &&
+                  pFrm->GetUpper()->IsTabFrm() &&
+                 !pFrm->GetUpper()->GetUpper()->IsInTab() )
+                 break;
+            pFrm = pFrm->GetUpper();
+        }
+
+        ASSERT( pFrm->IsRowFrm() &&
+                pFrm->GetUpper()->IsTabFrm(), "weired table structur" )
+
+        const SwTableLine* pLine = static_cast<SwRowFrm*>(pFrm)->GetTabLine();
+        pStt = pLine->GetTabBoxes()[ 0 ];
+        pEnd = pLine->GetTabBoxes()[ pLine->GetTabBoxes().Count() - 1 ];
+    }
+    // <--
 
     // noch kein Tabellen-Cursor vorhanden, dann erzeuge einen
     if( !pTblCrsr )
@@ -234,40 +269,29 @@ FASTBOOL SwCrsrShell::SelTblRow()
         pCurCrsr->SwSelPaintRects::Hide();
     }
 
-//  SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
     pTblCrsr->DeleteMark();
     // dann setze mal Anfang und Ende der Spalte
-    pTblCrsr->GetPoint()->nNode = *aBoxes[0]->GetSttNd();
-    pTblCrsr->Move( fnMoveForward, fnGoCntnt );
+    pTblCrsr->GetPoint()->nNode = *pStt->GetSttNd()->EndOfSectionNode();
+    pTblCrsr->Move( fnMoveBackward, fnGoCntnt );
     pTblCrsr->SetMark();
-    pTblCrsr->GetPoint()->nNode = *aBoxes[aBoxes.Count()-1]->GetSttNd();
+    pTblCrsr->GetPoint()->nNode = *pEnd->GetSttNd();
     pTblCrsr->Move( fnMoveForward, fnGoCntnt );
     UpdateCrsr();                 // und den akt. Updaten
     return TRUE;
 }
 
-
-FASTBOOL SwCrsrShell::SelTblCol()
+FASTBOOL SwCrsrShell::SelTbl()
 {
+    // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm->IsInTab() )
         return FALSE;
 
-    const SwTabFrm *pTblFrm = pFrm->ImplFindTabFrm();
+    SwTabFrm *pTblFrm = pFrm->ImplFindTabFrm();
+    SwTableNode* pTblNd = pTblFrm->GetTable()->GetTableNode();
 
     SET_CURR_SHELL( this );
 
-    // lasse ueber das Layout die Boxen suchen
-    SwSelBoxes aBoxes;
-    SwTblSearchType eType = TBLSEARCH_COL;
-    if( !IsReadOnlyAvailable() )
-        eType = (SwTblSearchType)(eType | TBLSEARCH_PROTECT);
-    GetTblSel( *this, aBoxes, eType );
-
-    if( !aBoxes.Count() )
-        return FALSE;
-
-    // noch kein Tabellen-Cursor vorhanden, dann erzeuge einen
     if( !pTblCrsr )
     {
         pTblCrsr = new SwShellTableCrsr( *this, *pCurCrsr->GetPoint() );
@@ -275,14 +299,12 @@ FASTBOOL SwCrsrShell::SelTblCol()
         pCurCrsr->SwSelPaintRects::Hide();
     }
 
-//  SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
     pTblCrsr->DeleteMark();
-    // dann setze mal Anfang und Ende der Spalte
-    pTblCrsr->GetPoint()->nNode = *aBoxes[0]->GetSttNd();
+    pTblCrsr->GetPoint()->nNode = *pTblNd;
     pTblCrsr->Move( fnMoveForward, fnGoCntnt );
     pTblCrsr->SetMark();
-    pTblCrsr->GetPoint()->nNode = *aBoxes[aBoxes.Count()-1]->GetSttNd();
-    pTblCrsr->Move( fnMoveForward, fnGoCntnt );
+    pTblCrsr->GetPoint()->nNode = *pTblNd->EndOfSectionNode();
+    pTblCrsr->Move( fnMoveBackward, fnGoCntnt );
     UpdateCrsr();                 // und den akt. Updaten
     return TRUE;
 }
