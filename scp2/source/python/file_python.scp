@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_python.scp,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 10:19:12 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 13:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,12 +105,14 @@ File gid_File_Py_Pythonloader
     Styles = (PACKED);
 End
 
+#ifndef SYSTEM_PYTHON
 File gid_File_Py_Python_Core
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT3(python-core-,PYVERSION,.zip));
     Styles = (ARCHIVE);
 End
+#endif
 
 // Items for Python Scripting Framework Runtime 
 // Scripting Framework ScriptProvider for Python
@@ -167,12 +169,14 @@ File gid_File_Registry_Spool_Oo_Scripting_Python_Xcu
     Name = "/registry/spool/org/openoffice/Office/Scripting-python.xcu";
 End
 
+#ifndef SYSTEM_PYTHON
 File gid_File_Lib_Python_So
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = STRING(PY_FULL_DLL_NAME);
     Styles = (PACKED);
 End
+#endif
 
 #ifdef UNX
 
@@ -183,12 +187,14 @@ File gid_File_Pyuno
     Styles = (PACKED);
 End
 
+#ifndef SYSTEM_PYTHON
 File gid_File_Python_Sh
     BIN_FILE_BODY;
     Name = "python.sh";
     Dir = gid_Dir_Program;
     Styles = (PACKED);
 End
+#endif
 
 #endif
 
