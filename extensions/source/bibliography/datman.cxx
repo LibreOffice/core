@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-11-15 15:54:56 $
+ *  last change: $Author: os $ $Date: 2000-11-20 12:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,37 +241,6 @@ using namespace ::ucb;
 #define PAIR_TOKEN ':'
 
 
-/* -----------------------------15.06.00 16:12--------------------------------
-
- ---------------------------------------------------------------------------*/
-BOOL lcl_IsCaseSensitive(const String& rPathURL)
-{
-    BOOL bCaseSensitive = FALSE;
-#ifdef DBG_UTIL
-    static BOOL bFirstCall = TRUE;
-    if(bFirstCall)
-    {
-        DBG_ERROR("No case checking due to #76253#")
-        bFirstCall = FALSE;
-    }
-#endif
-/*  Reference< lang::XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
-    INetURLObject aTempObj(rPathURL);
-    try
-    {
-        aTempObj.SetBase(aTempObj.GetBase().ToLowerAscii());
-        Reference<XContentIdentifier> xRef1 = new ::ucb::ContentIdentifier( xMSF, aTempObj.GetMainURL());
-        aTempObj.SetBase(aTempObj.GetBase().ToUpperAscii());
-        Reference<XContentIdentifier> xRef2 = new ::ucb::ContentIdentifier( xMSF, aTempObj.GetMainURL());
-
-        ContentBroker& rBroker = *ContentBroker::get();
-        Reference<XContentProvider > xProv = rBroker.getContentProviderInterface();
-        sal_Int32 nCompare = xProv->compareContentIds( xRef1, xRef2 );
-        bCaseSensitive = nCompare != 0;
-    }
-    catch(Exception& rEx){}
-*/  return bCaseSensitive;
-}
 /* -----------------17.01.00 14:38-------------------
 
  --------------------------------------------------*/
@@ -721,12 +690,13 @@ class DBChangeDialog_Impl : public ModalDialog
     SvTabListBox    aSelectionLB;
     HeaderBar       aSelectionHB;
 
+    DBChangeDialogConfig_Impl   aConfig;
     String          aEntryST;
     String          aURLST;
 
     BibDataManager* pDatMan;
 
-    DECL_LINK(EndDragHdl, HeaderBar*);
+//  DECL_LINK(EndDragHdl, HeaderBar*);
     DECL_LINK(DoubleClickHdl, SvTabListBox*);
 public:
     DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan );
@@ -751,28 +721,21 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
     pDatMan(pMan)
 {
     FreeResource();
-    aSelectionHB.SetEndDragHdl( LINK(this, DBChangeDialog_Impl, EndDragHdl));
+//  aSelectionHB.SetEndDragHdl( LINK(this, DBChangeDialog_Impl, EndDragHdl));
     aSelectionLB.SetDoubleClickHdl( LINK(this, DBChangeDialog_Impl, DoubleClickHdl));
     try
     {
         Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
 
-//      Reference< data::XDatabaseFavorites >  xFav(xMgr->createInstance( C2U("com.sun.star.data.DatabaseEngine") ), UNO_QUERY );
-//      // TODO : XDatabaseFavorites is an obsolete interface, the whole dialog has to be based on
-//      // the sdb::DatabaseAccessContext service
-
-//      Sequence< beans::PropertyValue > aFavs = xFav->getFavorites();
-//      const beans::PropertyValue* pValues = aFavs.getConstArray();
-
         Size aSize = aSelectionHB.GetSizePixel();
-        long nTabs[3];
-        nTabs[0] = 2;// Number of Tabs
-        nTabs[1] = 0;
-        nTabs[2] = aSize.Width() / 4;
+        long nTabs[2];
+        nTabs[0] = 1;// Number of Tabs
+//      nTabs[1] = 0;
+        nTabs[1] = aSize.Width() / 4;
 
         aSelectionHB.SetStyle(aSelectionHB.GetStyle()|WB_STDHEADERBAR);
-        aSelectionHB.InsertItem( 1, aEntryST, nTabs[2]);
-        aSelectionHB.InsertItem( 2, aURLST,  aSize.Width() - nTabs[2]);
+        aSelectionHB.InsertItem( 1, aEntryST, aSize.Width());
+//      aSelectionHB.InsertItem( 2, aURLST,  aSize.Width() - nTabs[2]);
         aSelectionHB.SetSizePixel(aSelectionHB.CalcWindowSizePixel());
         aSelectionHB.Show();
 
@@ -782,26 +745,18 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
         //aSelectionLB.SetSelectHdl(LINK(this, SwGlossaryGroupDlg, SelectHdl));
         aSelectionLB.GetModel()->SetSortMode(SortAscending);
 
-//      String sActiveURL = pDatMan->getActiveDataSource();
-//      sActiveURL = URIHelper::SmartRelToAbs(sActiveURL);
-//      for(int i = 0; i < aFavs.getLength(); i++)
-//      {
-//          String sTemp(pValues[i].Name);
-//          sTemp += '\t';
-//          String sSource = *(OUString*)pValues[i].Value.getValue();
-//          sTemp += sSource;
-//          SvLBoxEntry* pEntry = aSelectionLB.InsertEntry(sTemp);
-//          String sTempPath = INetURLObject(sSource).PathToFileName();
-//          sal_Bool bCaseSensitive = lcl_IsCaseSensitive(sSource);
-//          sal_Bool bCaseSensitive = DirEntry(sTempPath).IsCaseSensitive();
-//          if((bCaseSensitive && sActiveURL == sSource)||
-//              !bCaseSensitive && COMPARE_EQUAL == sActiveURL.CompareTo(sSource))
-//          {
-//              aSelectionLB.Select(pEntry);
-//          }
-//      }
-//      aSelectionLB.GetModel()->Resort();
-
+        OUString sActiveSource = pDatMan->getActiveDataSource();
+        const Sequence<OUString>& rSources = aConfig.GetDataSourceNames();
+        const OUString* pSourceNames = rSources.getConstArray();
+        for(int i = 0; i < rSources.getLength(); i++)
+        {
+            SvLBoxEntry* pEntry = aSelectionLB.InsertEntry(pSourceNames[i]);
+            if(pSourceNames[i] == sActiveSource)
+            {
+                aSelectionLB.Select(pEntry);
+            }
+        }
+        aSelectionLB.GetModel()->Resort();
     }
 #ifdef DBG_UTIL
         catch(Exception& e )
@@ -825,7 +780,7 @@ IMPL_LINK(DBChangeDialog_Impl, DoubleClickHdl, SvTabListBox*, pLB)
 /* -----------------18.11.99 11:17-------------------
 
  --------------------------------------------------*/
-IMPL_LINK(DBChangeDialog_Impl, EndDragHdl, HeaderBar*, pHB)
+/*IMPL_LINK(DBChangeDialog_Impl, EndDragHdl, HeaderBar*, pHB)
 {
     long nTabs[3];
     nTabs[0] = 2;// Number of Tabs
@@ -833,7 +788,7 @@ IMPL_LINK(DBChangeDialog_Impl, EndDragHdl, HeaderBar*, pHB)
     nTabs[2] = pHB->GetItemSize( 1 );
     aSelectionLB.SetTabs( &nTabs[0], MAP_PIXEL );
     return 0;
-};
+};*/
 
 /*-- 18.11.99 10:35:20---------------------------------------------------
 
@@ -850,7 +805,7 @@ String  DBChangeDialog_Impl::GetCurrentURL()const
     SvLBoxEntry* pEntry = aSelectionLB.FirstSelected();
     if(pEntry)
     {
-        sRet = aSelectionLB.GetEntryText(pEntry, 1);
+        sRet = aSelectionLB.GetEntryText(pEntry, 0);
     }
     return sRet;
 }
@@ -1313,12 +1268,15 @@ void BibDataManager::setActiveDataSource(const rtl::OUString& rURL)
     {
         Reference< XComponent >  xOldConnection;
         aPropertySet->getPropertyValue(C2U("ActiveConnection")) >>= xOldConnection;
-        if(xOldConnection.is())
-            xOldConnection->dispose();
 
         Reference< sdbc::XConnection >  xConnection = getConnection(rURL);
         Any aVal; aVal <<= xConnection;
         aPropertySet->setPropertyValue(C2U("ActiveConnection"), aVal);
+        Reference< sdb::XSQLQueryComposerFactory >  xFactory(xConnection, UNO_QUERY);
+        xParser = xFactory->createQueryComposer();
+
+        if(xOldConnection.is())
+            xOldConnection->dispose();
 
         Sequence<rtl::OUString> aTableNameSeq;
         Reference< sdbcx::XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
@@ -2036,5 +1994,14 @@ const OUString& BibDataManager::GetIdentifierMapping()
         }
     }
     return sIdentifierMapping;
+}
+/* -----------------------------20.11.00 10:31--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void BibDataManager::SetToolbar(BibToolBar* pSet)
+{
+    pToolbar = pSet;
+    if(pToolbar)
+        pToolbar->SetDatMan(*this);
 }
 

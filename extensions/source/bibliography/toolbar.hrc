@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:45 $
+ *  last change: $Author: os $ $Date: 2000-11-20 12:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,4 +74,5 @@
 #define TBC_BT_UPDATE       12
 #define TBC_BT_MAIL         13
 #define TBC_BT_URL          14
-
+#define TBC_BT_COL_ASSIGN   15
+#define TBC_BT_CHANGESOURCE 16

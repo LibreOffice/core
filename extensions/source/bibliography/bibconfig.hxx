@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-15 11:03:41 $
+ *  last change: $Author: os $ $Date: 2000-11-20 12:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,5 +150,21 @@ public:
 
     const rtl::OUString&    GetDefColumnName(sal_uInt16 nIndex) const
                                             {return aColumnDefaults[nIndex];}
+};
+/* -----------------------------20.11.00 11:47--------------------------------
+
+ ---------------------------------------------------------------------------*/
+class DBChangeDialogConfig_Impl : public utl::ConfigItem
+{
+    com::sun::star::uno::Sequence<rtl::OUString> aSourceNames;
+public:
+    DBChangeDialogConfig_Impl();
+    ~DBChangeDialogConfig_Impl();
+
+    virtual void    Commit();
+
+    const com::sun::star::uno::Sequence<rtl::OUString>& GetDataSourceNames() const
+                                        {return aSourceNames;}
+
 };
 #endif

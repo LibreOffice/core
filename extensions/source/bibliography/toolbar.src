@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:45 $
+ *  last change: $Author: os $ $Date: 2000-11-20 12:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,63 @@ ToolBox RID_BIB_TOOLBAR
             Text[ chinese_traditional ] = "§R°£¿z¿ï";
             Text[ arabic ] = "ÅÒÇáÉ İáÊÑ";
             Text[ turkish ] = "Filtreyi kaldır";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            Identifier = TBC_BT_COL_ASSIGN ;
+            HelpId = HID_BIB_MAPPINGDLG;
+            Text = "Spaltenzuordnung" ;
+            Text[ English ] = "Column assignment" ;
+//          Command = ".uno:Bib/Mapping" ;
+//            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
+            Text[ english_us ] = "Column Arrangement";
+            Text[ portuguese ] = "Dispor colunas";
+            Text[ russian ] = "Ğàñïîëîæåíèå êîëîíîê";
+            Text[ greek ] = "Áíôéóôïß÷éóç óôŞëçò";
+            Text[ dutch ] = "Kolomindeling";
+            Text[ french ] = "Assignation de colonnes";
+            Text[ spanish ] = "Asignación de columnas";
+            Text[ italian ] = "Assegnazione colonne";
+            Text[ danish ] = "Kolonnetildeling";
+            Text[ swedish ] = "Kolumntilldelning";
+            Text[ polish ] = "Przyporz¹dkowanie kolumn";
+            Text[ portuguese_brazilian ] = "Column assignment";
+            Text[ japanese ] = "—ñ‚Ì•ª—Ş(C)";
+            Text[ korean ] = "¿­ ¹èÁ¤(C)";
+            Text[ chinese_simplified ] = "±àÅÅÁĞ(C)";
+            Text[ chinese_traditional ] = "½s±ÆÄæ(C)";
+            Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ";
+            Text[ turkish ] = "Sütun düzeni";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            Identifier = TBC_BT_CHANGESOURCE ;
+            HelpId = HID_BIB_CHANGESOURCE;
+            Text = "Datenquelle" ;
+            Text[ English ] = "Data source" ;
+//          Command = ".uno:Bib/sdbsource" ;
+//            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
+            Checkable=TRUE;
+            Text[ english_us ] = "Data Source";
+            Text[ portuguese ] = "Fonte de dados";
+            Text[ russian ] = "Èñõîäíûå äàííûå";
+            Text[ greek ] = "Ğñïİëåõóç äåäïìİíùí";
+            Text[ dutch ] = "Gegevensbron";
+            Text[ french ] = "Source de données";
+            Text[ spanish ] = "Fuente de datos";
+            Text[ italian ] = "Sorgente dati";
+            Text[ danish ] = "Datakilde";
+            Text[ swedish ] = "Datakälla";
+            Text[ polish ] = "ród³o danych";
+            Text[ portuguese_brazilian ] = "Data source";
+            Text[ japanese ] = "ÃŞ°À¿°½(D)";
+            Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º(D)";
+            Text[ chinese_simplified ] = "Êı¾İÀ´Ô´(D)";
+            Text[ chinese_traditional ] = "¼ÆÕu·½(D)";
+            Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
+            Text[ turkish ] = "Veri kaynağı";
             Text[ language_user1 ] = " ";
         };
 /*

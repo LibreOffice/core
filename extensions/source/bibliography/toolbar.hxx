@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
+ *  last change: $Author: os $ $Date: 2000-11-20 12:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #endif
 
-
+class BibDataManager;
 class BibToolBar;
 
 class BibToolBarListener: public cppu::WeakImplHelper1 < ::com::sun::star::frame::XStatusListener>
@@ -191,6 +191,8 @@ class BibToolBar:   public ToolBox
         sal_uInt16              nMenuId;
         sal_uInt16              nSelMenuItem;
         rtl::OUString           aQueryField;
+
+        BibDataManager*         pDatMan;
         DECL_LINK( SelHdl, ListBox* );
         DECL_LINK( SendSelHdl, Timer* );
         DECL_LINK( MenuHdl, Timer* );
@@ -226,6 +228,8 @@ class BibToolBar:   public ToolBox
 
         void    statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
                                             throw( ::com::sun::star::uno::RuntimeException );
+
+        void    SetDatMan(BibDataManager& rDatMan) {pDatMan = &rDatMan;}
 };
 
 

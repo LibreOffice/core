@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
+ *  last change: $Author: os $ $Date: 2000-11-20 12:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ public:
 
         void                        SetView(BibView* pView) {pBibView = pView;}
 
-        void                        SetToolbar(BibToolBar* pSet) {pToolbar = pSet;}
+        void                        SetToolbar(BibToolBar* pSet);
         void                        SetGridWin(BibGridwin* pSet) {pGridWin = pSet;}
 
         const rtl::OUString&        GetIdentifierMapping();

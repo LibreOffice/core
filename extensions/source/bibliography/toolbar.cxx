@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 11:06:35 $
+ *  last change: $Author: os $ $Date: 2000-11-20 12:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,9 @@
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
-
+#ifndef _BIB_DATMAN_HXX
+#include <datman.hxx>
+#endif
 
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
@@ -408,6 +410,20 @@ void BibToolBar::Click()
     if(nId==TBC_BT_AUTOFILTER)
     {
         aMenuTimer.Start();
+    }
+    else if(nId == TBC_BT_COL_ASSIGN )
+    {
+        if(pDatMan)
+            pDatMan->CreateMappingDialog(GetParent());
+    }
+    else if(nId == TBC_BT_CHANGESOURCE)
+    {
+        if(pDatMan)
+        {
+            OUString sNew = pDatMan->CreateDBChangeDialog(GetParent());
+            if(sNew.getLength())
+                pDatMan->setActiveDataSource(sNew);
+        }
     }
 }
 

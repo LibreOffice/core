@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-15 11:03:41 $
+ *  last change: $Author: os $ $Date: 2000-11-20 12:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,243 +372,26 @@ void BibConfig::SetMapping(const BibDBDescriptor& rDesc, const Mapping* pSetMapp
     Mapping* pNew = new Mapping(*pSetMapping);
     pMappingsArr->Insert(pNew, pMappingsArr->Count());
     SetModified();
-
-/*  SfxAppIniManagerProperty aProp;
-    GetpApp()->Property( aProp );
-    SfxIniManager* pIniMan = aProp.GetIniManager();
-    if(pIniMan)
-    {
-        //kill all old entries an rewrite all mappings
-        String sTempEntry;
-        sal_uInt16 nIdx = USHRT_MAX;
-        do
-        {
-            String sDBKey(C2S(BIBLIOGRAPHY_INI_DB_ENTRY));
-            String sMapKey = C2S(BIBLIOGRAPHY_INI_MAPPING);
-            if(USHRT_MAX != nIdx)
-            {
-                sDBKey += nIdx;
-                sMapKey += nIdx;
-            }
-            sTempEntry = pIniMan->ReadKey( C2S(BIBLIOGRAPHY_INI_GROUP),
-                                            sDBKey );
-            pIniMan->DeleteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sDBKey);
-            pIniMan->DeleteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sMapKey);
-            nIdx = USHRT_MAX == nIdx ? 0 : nIdx +1;
-        }while(sTempEntry.Len());
-
-        nIdx = USHRT_MAX;
-        for(sal_uInt16 i = 0; i < pMappingsArr->Count(); i++)
-        {
-            const Mapping* pMapping = pMappingsArr->GetObject(i);
-
-            String sDataTableEntry(pMapping->sURL);
-            sDataTableEntry = pIniMan->UsePathVars( sDataTableEntry );
-            sDataTableEntry += ';';
-            sDataTableEntry += pMapping->sTableName;
-
-            String sDBKey = C2S(BIBLIOGRAPHY_INI_DB_ENTRY);
-            String sMapKey = C2S(BIBLIOGRAPHY_INI_MAPPING);
-            if(USHRT_MAX != nIdx)
-            {
-                sDBKey += nIdx;
-                sMapKey += nIdx;
-            }
-            pIniMan->WriteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sDBKey, sDataTableEntry );
-
-            String sEntry;
-            for(sal_uInt16 nColumn = 0; nColumn < COLUMN_COUNT; nColumn++)
-            {
-                if(!pMapping->aColumnPairs[nColumn].sLogicalColumnName.Len() ||
-                    !pMapping->aColumnPairs[nColumn].sRealColumnName.Len())
-                    break;
-                sEntry += pMapping->aColumnPairs[nColumn].sLogicalColumnName;
-                sEntry += PAIR_TOKEN;
-                sEntry += pMapping->aColumnPairs[nColumn].sRealColumnName;
-                sEntry += MAP_TOKEN;
-            }
-            pIniMan->WriteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sMapKey, sEntry );
-
-            nIdx = USHRT_MAX == nIdx ? 0 : nIdx +1;
-        }
-        pIniMan->Flush();
-    }*/
 }
-/*
+/* -----------------------------20.11.00 11:56--------------------------------
 
-    SfxAppIniManagerProperty aProp;
-    GetpApp()->Property( aProp );
-
-    SfxIniManager* pIniMan = aProp.GetIniManager();
-    if(pIniMan)
-    {
-        String  sBibMapping;
-        sal_uInt16 nIdx = USHRT_MAX;
-        String sEntry;
-        do
-        {
-            String sKey(C2S(BIBLIOGRAPHY_INI_DB_ENTRY));
-            String sMapKey = C2S(BIBLIOGRAPHY_INI_MAPPING);
-            if(USHRT_MAX != nIdx)
-            {
-                sKey += nIdx;
-                sMapKey += nIdx;
-            }
-
-            sEntry = pIniMan->ReadKey( C2S(BIBLIOGRAPHY_INI_GROUP),
-                                            sKey );
-            String sURL = sEntry.GetToken(0, ';');
-            sURL = pIniMan->SubstPathVars( sURL );
-
-            sURL = URIHelper::SmartRelToAbs(sURL);
-
-
-            String sTableName = sEntry.GetToken(1, ';');
-
-            sBibMapping = pIniMan->ReadKey( C2S(BIBLIOGRAPHY_INI_GROUP),
-                                            sMapKey );
-            if(sTableName.Len())
-            {
-                Mapping* pNew = new Mapping;
-                pNew->sTableName = sTableName;
-                pNew->sURL = sURL;
-                sal_uInt16 nMapTokens = sBibMapping.GetTokenCount(MAP_TOKEN);
-                for(sal_uInt16 i = 0; i < nMapTokens && i < COLUMN_COUNT; i++)
-                {
-                    String sPair = sBibMapping.GetToken(i, MAP_TOKEN);
-                    pNew->aColumnPairs[i].sLogicalColumnName = sPair.GetToken(0, PAIR_TOKEN);
-                    pNew->aColumnPairs[i].sRealColumnName = sPair.GetToken(1, PAIR_TOKEN);
-                }
-                pMappingsArr->Insert(pNew, pMappingsArr->Count());
-            }
-            nIdx = USHRT_MAX == nIdx ? 0 : nIdx + 1;
-        }
-        while(sEntry.Len());
-    }
-
-
-// -----------------12.11.99 14:26-------------------
-
-// --------------------------------------------------
-const Mapping*  BibDataManager::GetMapping(const rtl::OUString& rTableName, const rtl::OUString& sDataSourceURL) const
+ ---------------------------------------------------------------------------*/
+DBChangeDialogConfig_Impl::DBChangeDialogConfig_Impl() :
+    ConfigItem(C2U("Office.DataAccess/DataSources"))
 {
-    String sTable(rTableName);
-    String sURL(sDataSourceURL);
-    for(sal_uInt16 i = 0; i < pMappingsArr->Count(); i++)
-    {
-        sal_Bool bCaseSensitive = sal_True;
-        INetURLObject aTempURL(sURL);
-        if(INET_PROT_FILE == aTempURL.GetProtocol())
-        {
-            sal_Bool bCaseSensitive = lcl_IsCaseSensitive(aTempURL.GetMainURL());
-//          DirEntry aEnt(aTempURL.GetPath());
-//          bCaseSensitive = aEnt.IsCaseSensitive();
-        }
-
-        const Mapping* pMapping = pMappingsArr->GetObject(i);
-        sal_Bool bURLEqual = bCaseSensitive ?
-                sURL.Equals(pMapping->sURL) :
-                    sURL.EqualsIgnoreCaseAscii(pMapping->sURL);
-
-        if(sTable == pMapping->sTableName && bURLEqual)
-            return pMapping;
-    }
-    return 0;
+    aSourceNames = GetNodeNames(OUString());
 }
-// -----------------12.11.99 14:26-------------------
+/* -----------------------------20.11.00 11:57--------------------------------
 
-//--------------------------------------------------
-void BibDataManager::SetMapping(const rtl::OUString& rTableName, const Mapping* pSetMapping)
+ ---------------------------------------------------------------------------*/
+DBChangeDialogConfig_Impl::~DBChangeDialogConfig_Impl()
 {
-    ResetIdentifierMapping();
-    String sTable(rTableName);
-    const String sURL(aDataSourceURL);
-    for(sal_uInt16 i = 0; i < pMappingsArr->Count(); i++)
-    {
-        const Mapping* pMapping = pMappingsArr->GetObject(i);
+}
+/* -----------------------------20.11.00 11:57--------------------------------
 
-        sal_Bool bCaseSensitive = sal_True;
-        INetURLObject aTempURL(sURL);
-        if(INET_PROT_FILE == aTempURL.GetProtocol())
-        {
-            sal_Bool bCaseSensitive = lcl_IsCaseSensitive(aTempURL.GetMainURL());
-//          DirEntry aEnt(aTempURL.GetPath());
-//          bCaseSensitive = aEnt.IsCaseSensitive();
-        }
-
-        sal_Bool bURLEqual = bCaseSensitive ?
-                sURL.Equals(pMapping->sURL) :
-                    sURL.EqualsIgnoreCaseAscii(pMapping->sURL);
-
-        if(sTable == pMapping->sTableName && bURLEqual)
-        {
-            pMappingsArr->DeleteAndDestroy(i, 1);
-            break;
-        }
-    }
-    Mapping* pNew = new Mapping(*pSetMapping);
-    pMappingsArr->Insert(pNew, pMappingsArr->Count());
-
-    SfxAppIniManagerProperty aProp;
-    GetpApp()->Property( aProp );
-    SfxIniManager* pIniMan = aProp.GetIniManager();
-    if(pIniMan)
-    {
-        //kill all old entries an rewrite all mappings
-        String sTempEntry;
-        sal_uInt16 nIdx = USHRT_MAX;
-        do
-        {
-            String sDBKey(C2S(BIBLIOGRAPHY_INI_DB_ENTRY));
-            String sMapKey = C2S(BIBLIOGRAPHY_INI_MAPPING);
-            if(USHRT_MAX != nIdx)
-            {
-                sDBKey += nIdx;
-                sMapKey += nIdx;
-            }
-            sTempEntry = pIniMan->ReadKey( C2S(BIBLIOGRAPHY_INI_GROUP),
-                                            sDBKey );
-            pIniMan->DeleteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sDBKey);
-            pIniMan->DeleteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sMapKey);
-            nIdx = USHRT_MAX == nIdx ? 0 : nIdx +1;
-        }while(sTempEntry.Len());
-
-        nIdx = USHRT_MAX;
-        for(sal_uInt16 i = 0; i < pMappingsArr->Count(); i++)
-        {
-            const Mapping* pMapping = pMappingsArr->GetObject(i);
-
-            String sDataTableEntry(pMapping->sURL);
-            sDataTableEntry = pIniMan->UsePathVars( sDataTableEntry );
-            sDataTableEntry += ';';
-            sDataTableEntry += pMapping->sTableName;
-
-            String sDBKey = C2S(BIBLIOGRAPHY_INI_DB_ENTRY);
-            String sMapKey = C2S(BIBLIOGRAPHY_INI_MAPPING);
-            if(USHRT_MAX != nIdx)
-            {
-                sDBKey += nIdx;
-                sMapKey += nIdx;
-            }
-            pIniMan->WriteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sDBKey, sDataTableEntry );
-
-            String sEntry;
-            for(sal_uInt16 nColumn = 0; nColumn < COLUMN_COUNT; nColumn++)
-            {
-                if(!pMapping->aColumnPairs[nColumn].sLogicalColumnName.Len() ||
-                    !pMapping->aColumnPairs[nColumn].sRealColumnName.Len())
-                    break;
-                sEntry += pMapping->aColumnPairs[nColumn].sLogicalColumnName;
-                sEntry += PAIR_TOKEN;
-                sEntry += pMapping->aColumnPairs[nColumn].sRealColumnName;
-                sEntry += MAP_TOKEN;
-            }
-            pIniMan->WriteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sMapKey, sEntry );
-
-            nIdx = USHRT_MAX == nIdx ? 0 : nIdx +1;
-        }
-        pIniMan->Flush();
-    }
+ ---------------------------------------------------------------------------*/
+void    DBChangeDialogConfig_Impl::Commit()
+{
+    // read only
 }
 
-*/
