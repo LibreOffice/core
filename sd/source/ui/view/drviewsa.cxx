@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:58:57 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     aTabControl.SetSplitHdl( LINK( this, DrawViewShell, TabSplitHdl ) );
     aLayerTab.SetSplitHdl( LINK( this, DrawViewShell, TabSplitHdl ) );
 
-    aPageBtn.SetImage( Image( Bitmap( SdResId( BMP_TAB_PAGEMODE ) ), IMAGE_STDBTN_COLOR ) );
+    aPageBtn.SetModeImage( Image( Bitmap( SdResId( BMP_TAB_PAGEMODE ) ), IMAGE_STDBTN_COLOR ) );
     aPageBtn.SetModeImage( Image( Bitmap( SdResId( BMP_TAB_PAGEMODE_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
     aPageBtn.SetClickHdl(LINK(this, DrawViewShell, TabModeBtnHdl));
     aPageBtn.SetQuickHelpText( String( SdResId( STR_PAGEMODE ) ) );
@@ -554,7 +554,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     aPageBtn.SetAccessibleName (String(SdResId(STR_PAGEMODE)));
     aPageBtn.Show();
 
-    aMasterPageBtn.SetImage( Image( Bitmap( SdResId( BMP_TAB_MASTERPAGE ) ), IMAGE_STDBTN_COLOR ) );
+    aMasterPageBtn.SetModeImage( Image( Bitmap( SdResId( BMP_TAB_MASTERPAGE ) ), IMAGE_STDBTN_COLOR ) );
     aMasterPageBtn.SetModeImage( Image( Bitmap( SdResId( BMP_TAB_MASTERPAGE_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
     aMasterPageBtn.SetClickHdl(LINK(this, DrawViewShell, TabModeBtnHdl));
     aMasterPageBtn.SetQuickHelpText( String( SdResId( STR_MASTERPAGEMODE ) ) );
@@ -562,7 +562,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     aMasterPageBtn.SetAccessibleName (String(SdResId(STR_MASTERPAGEMODE)));
     aMasterPageBtn.Show();
 
-    aLayerBtn.SetImage( Image( Bitmap( SdResId( BMP_TAB_LAYERMODE ) ), IMAGE_STDBTN_COLOR ) );
+    aLayerBtn.SetModeImage( Image( Bitmap( SdResId( BMP_TAB_LAYERMODE ) ), IMAGE_STDBTN_COLOR ) );
     aLayerBtn.SetModeImage( Image( Bitmap( SdResId( BMP_TAB_LAYERMODE_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
     aLayerBtn.SetClickHdl(LINK(this, DrawViewShell, TabModeBtnHdl));
     aLayerBtn.SetQuickHelpText( String( SdResId( STR_LAYERMODE ) ) );
