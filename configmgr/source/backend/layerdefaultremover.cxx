@@ -2,9 +2,9 @@
 *
 *  $RCSfile: layerdefaultremover.cxx,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: ssmith $ $Date: 2002-11-11 13:18:02 $
+*  last change: $Author: rt $ $Date: 2003-04-17 13:15:44 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -96,7 +96,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::startLayer(  )
-            throw (backenduno::MalformedDataException, uno::RuntimeException)
+            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             clearPendingProperty();
             m_xResultHandler->startLayer();
@@ -104,7 +104,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::endLayer(  )
-            throw (backenduno::MalformedDataException, lang::IllegalAccessException, uno::RuntimeException)
+            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             if (hasPendingProperty())
             {
@@ -122,8 +122,8 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerDefaultRemover::overrideNode( const OUString& aName, sal_Int16 aAttributes )
-            throw (backenduno::MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+        void SAL_CALL LayerDefaultRemover::overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             if (hasPendingProperty())
             {
@@ -131,20 +131,20 @@ namespace configmgr
                 "LayerDefaultRemover: Illegal property started operation";
                 raiseMalformedDataException(pMsg);
             }
-            if (aAttributes == 0)
+            if (aAttributes == 0 && !bClear)
             {
                 m_aNodeStack.push_back(aName);
             }
             else
             {
                 playBackNodeStack();
-                m_xResultHandler->overrideNode(aName,aAttributes);
+                m_xResultHandler->overrideNode(aName,aAttributes,bClear);
             }
         }
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
-            throw (backenduno::MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             playBackNodeStack();
             m_xResultHandler->addOrReplaceNode(aName, aAttributes);
@@ -152,7 +152,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::addOrReplaceNodeFromTemplate( const OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-            throw (backenduno::MalformedDataException, container::NoSuchElementException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             playBackNodeStack();
             m_xResultHandler->addOrReplaceNodeFromTemplate(aName,aTemplate,aAttributes);
@@ -160,7 +160,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::endNode(  )
-            throw (backenduno::MalformedDataException, uno::RuntimeException)
+            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             if (hasPendingProperty())
             {
@@ -180,7 +180,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::dropNode( const OUString& aName )
-            throw (backenduno::MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             playBackNodeStack();
             m_xResultHandler->dropNode(aName);
@@ -188,7 +188,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-            throw (backenduno::MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             playBackNodeStack();
             m_xResultHandler->addProperty (aName,aAttributes,aType);
@@ -196,15 +196,15 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-            throw (backenduno::MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             playBackNodeStack();
             m_xResultHandler->addPropertyWithValue(aName,aAttributes,aValue);
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerDefaultRemover::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-            throw (backenduno::MalformedDataException, beans::UnknownPropertyException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+        void SAL_CALL LayerDefaultRemover::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             if (hasPendingProperty())
             {
@@ -212,11 +212,11 @@ namespace configmgr
                 "LayerDefaultRemover: Illegal property started operation";
                 raiseMalformedDataException(pMsg);
             }
-            if (aAttributes != 0)
+            if (aAttributes != 0 || bClear)
             {
                 m_aPropName.Name=OUString();
                 playBackNodeStack();
-                m_xResultHandler->overrideProperty(aName,aAttributes,aType);
+                m_xResultHandler->overrideProperty(aName,aAttributes,aType,bClear);
             }
             else
             {
@@ -227,7 +227,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::endProperty(  )
-            throw (backenduno::MalformedDataException, uno::RuntimeException)
+            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             if (hasPendingProperty())
             {
@@ -239,7 +239,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::setPropertyValue( const uno::Any& aValue )
-            throw (backenduno::MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             playBackNodeStack(true);
             m_xResultHandler->setPropertyValue(aValue);
@@ -247,7 +247,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
-            throw (backenduno::MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             playBackNodeStack(true);
             m_xResultHandler->setPropertyValueForLocale(aValue,aLocale);
@@ -273,7 +273,7 @@ namespace configmgr
                 for (NodeStack::iterator aIter = m_aNodeStack.begin();
                      aIter != m_aNodeStack.end(); aIter++)
                 {
-                    m_xResultHandler->overrideNode(*aIter, 0);
+                    m_xResultHandler->overrideNode(*aIter, 0,false);
                 }
                 m_aNodeStack.clear();
             }
@@ -281,7 +281,7 @@ namespace configmgr
             {
                 if (hasPendingProperty())
                 {
-                    m_xResultHandler->overrideProperty(m_aPropName.Name,0,m_aPropName.Type);
+                    m_xResultHandler->overrideProperty(m_aPropName.Name,0,m_aPropName.Type,false);
                     clearPendingProperty();
                 }
             }
@@ -293,7 +293,7 @@ namespace configmgr
             OSL_ASSERT(pMsg);
             OUString sMsg = OUString::createFromAscii(pMsg);
 
-            throw backenduno::MalformedDataException( sMsg, *this );
+            throw backenduno::MalformedDataException( sMsg, *this, uno::Any() );
         }
 
         // -----------------------------------------------------------------------------
