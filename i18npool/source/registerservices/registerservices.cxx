@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:59:11 $
+ *  last change: $Author: hr $ $Date: 2003-04-22 16:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@
 
 #include <textconversionImpl.hxx>
 #include <textconversion.hxx>
+#include <textsearch.hxx>
 
 #define IMPL_CREATEINSTANCE( ImplName ) \
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   \
@@ -637,7 +638,6 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToCharIndic_hi),
     IMPL_TRANSLITERATION_ITEM (NumToChar_th),
 
-    IMPL_TRANSLITERATION_ITEM (CharToNum),
     IMPL_TRANSLITERATION_ITEM (CharToNumUpper_zh_CN),
     IMPL_TRANSLITERATION_ITEM (CharToNumLower_zh_CN),
     IMPL_TRANSLITERATION_ITEM (CharToNumUpper_zh_TW),
@@ -672,7 +672,6 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToTextFormalLower_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextFormalUpper_ko),
 
-    IMPL_TRANSLITERATION_ITEM (TextToNum),
     IMPL_TRANSLITERATION_ITEM (TextToNumUpper_zh_CN),
     IMPL_TRANSLITERATION_ITEM (TextToNumLower_zh_CN),
     IMPL_TRANSLITERATION_ITEM (TextToNumUpper_zh_TW),

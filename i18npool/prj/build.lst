@@ -16,5 +16,8 @@ inp  i18npool\source\indexentry    		 nmake   -   all inp_index inp_utypes NULL
 inp  i18npool\source\collator    		 nmake   -   all inp_collator inp_utypes NULL
 inp  i18npool\source\inputchecker    		 nmake   -   all inp_inputchecker inp_utypes NULL
 inp  i18npool\source\textconversion    		 nmake   -   all inp_textconversion inp_utypes NULL
-inp  i18npool\util                               nmake   -   all inp_util inp_brkit inp_dict inp_chclass inp_translit inp_cal inp_dnum inp_natnum inp_localedata inp_locdata_data inp_numformat inp_rserv inp_index inp_collator inp_inputchecker inp_textconversion NULL
+inp  i18npool\source\utility                    nmake   -   all inp_utility NULL
+inp  i18npool\source\regexp                     nmake   -   all inp_regexp inp_utypes NULL
+inp  i18npool\source\search                     nmake   -   all inp_search inp_utypes NULL
+inp  i18npool\util                               nmake   -   all inp_util inp_brkit inp_dict inp_chclass inp_translit inp_cal inp_dnum inp_natnum inp_localedata inp_locdata_data inp_numformat inp_rserv inp_index inp_collator inp_inputchecker inp_textconversion inp_utility inp_regexp inp_search NULL
 
