@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctabl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-02-13 10:48:59 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <cppuhelper/implbase2.hxx>
 
 #include "xtable.hxx"
+#include "unoshcol.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -306,6 +307,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
         {
             registry::XRegistryKey *pKey = reinterpret_cast< registry::XRegistryKey * >( pRegistryKey );
 
+            writeInfo( pKey, SvxShapeCollection::getImplementationName_Static(), SvxShapeCollection::getSupportedServiceNames_Static() );
             writeInfo( pKey, SvxUnoColorTable::getImplementationName_Static(), SvxUnoColorTable::getSupportedServiceNames_Static() );
 #ifndef SVX_LIGHT
             writeInfo( pKey, svx::GraphicExporter_getImplementationName(), svx::GraphicExporter_getSupportedServiceNames() );
@@ -333,6 +335,13 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 SvxUnoColorTable::getImplementationName_Static(),
                 SvxUnoColorTable_createInstance,
                 SvxUnoColorTable::getSupportedServiceNames_Static() );
+        }
+        else if( rtl_str_compare( pImplName, "com.sun.star.drawing.SvxShapeCollection" ) == 0 )
+        {
+            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                SvxShapeCollection::getImplementationName_Static(),
+                SvxShapeCollection_createInstance,
+                SvxShapeCollection::getSupportedServiceNames_Static() );
         }
 #ifndef SVX_LIGHT
         else if( svx::GraphicExporter_getImplementationName().equalsAscii( pImplName ) )
