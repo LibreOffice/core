@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-05 09:18:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,17 +392,17 @@ void ScXMLTableRowsContext::EndElement()
     else if (bGroup)
     {
         nGroupEndRow = rXMLImport.GetTables().GetCurrentRow();
-        sal_Int16 nSheet = rXMLImport.GetTables().GetCurrentSheet();
+        sal_Int32 nSheet = rXMLImport.GetTables().GetCurrentSheet();
         if (nGroupStartRow <= nGroupEndRow)
         {
             ScDocument* pDoc = GetScImport().GetDocument();
             if (pDoc)
             {
                 GetScImport().LockSolarMutex();
-                ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(nSheet, sal_True);
+                ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(static_cast<SCTAB>(nSheet), sal_True);
                 ScOutlineArray* pRowArray = pOutlineTable->GetRowArray();
                 sal_Bool bResized;
-                pRowArray->Insert(static_cast<USHORT>(nGroupStartRow), static_cast<USHORT>(nGroupEndRow), bResized, !bGroupDisplay, sal_True);
+                pRowArray->Insert(static_cast<SCROW>(nGroupStartRow), static_cast<SCROW>(nGroupEndRow), bResized, !bGroupDisplay, sal_True);
                 GetScImport().UnlockSolarMutex();
             }
         }
