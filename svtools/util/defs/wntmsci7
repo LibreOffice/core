@@ -8422,3 +8422,14 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ?resetAgentIgnoreURLCounter@SvtHelpOptions@@QAEXABVOUString@rtl@@@Z
 ?GetGraphicManagerObjectReleaseTime@SvtCacheOptions@@QBEJXZ
 ?SetGraphicManagerObjectReleaseTime@SvtCacheOptions@@QAEXJ@Z
+??0HelpAgentWindow@svt@@QAE@PAVWindow@@@Z
+??1HelpAgentWindow@svt@@UAE@XZ
+?MouseButtonUp@HelpAgentWindow@svt@@MAEXABVMouseEvent@@@Z
+?OnButtonClicked@HelpAgentWindow@svt@@IAEJPAVWindow@@@Z
+?Paint@HelpAgentWindow@svt@@MAEXABVRectangle@@@Z
+?Resize@HelpAgentWindow@svt@@MAEXXZ
+?implOptimalButtonSize@HelpAgentWindow@svt@@AAE?AVSize@@ABVImage@@@Z
+?CopyGraphic@TransferDataContainer@@QAEXABVGraphic@@@Z
+?CopyINetImage@TransferDataContainer@@QAEXABVINetImage@@@Z
+?CopyImageMap@TransferDataContainer@@QAEXABVImageMap@@@Z
+?CopyString@TransferDataContainer@@QAEXABVString@@@Z
