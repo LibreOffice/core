@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:05:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _SBA_BWRCTRLR_HXX
 #define _SBA_BWRCTRLR_HXX
 
+#ifndef DBAUI_GENERICCONTROLLER_HXX
+#include "genericcontroller.hxx"
+#endif
 #ifndef _SBX_BRWVIEW_HXX
 #include "brwview.hxx"
 #endif
@@ -124,9 +127,6 @@
 #endif
 #ifndef _CPPUHELPER_IMPLBASE8_HXX_
 #include <cppuhelper/implbase8.hxx>
-#endif
-#ifndef DBAUI_GENERICCONTROLLER_HXX
-#include "genericcontroller.hxx"
 #endif
 #ifndef _CLIPLISTENER_HXX
 #include <svtools/cliplistener.hxx>
@@ -311,7 +311,7 @@ namespace dbaui
         // --------------------
         // our own overridables
         // all the features which should be handled by this class
-        virtual void            AddSupportedFeatures();
+        virtual void            describeSupportedFeatures();
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const;
         // execute a feature
