@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktree.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:48:15 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:36:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,18 +75,22 @@
 //.........................................................................
 namespace dbaui
 {
+    using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 //.........................................................................
 #define SPACEBETWEENENTRIES     4
 //========================================================================
 //= OMarkableTreeListBox
 //========================================================================
 //------------------------------------------------------------------------
-OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, WinBits nWinStyle ) : SvTreeListBox(pParent,nWinStyle)
+OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nWinStyle )
+    : DBTreeListBox(pParent,_rxORB,nWinStyle)
 {
     InitButtonData();
 }
 //------------------------------------------------------------------------
-OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const ResId& rResId) : SvTreeListBox(pParent,rResId)
+OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, const ResId& rResId)
+    : DBTreeListBox(pParent,_rxORB,rResId)
 {
     InitButtonData();
 }
@@ -94,11 +98,6 @@ OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const ResId& rResId
 OMarkableTreeListBox::~OMarkableTreeListBox()
 {
     delete m_pCheckButton;
-}
-// -----------------------------------------------------------------------------
-void OMarkableTreeListBox::notifyHiContrastChanged()
-{
-    // old actions now done in SvTreeListBox::DataChanged() / InitSettings()
 }
 //------------------------------------------------------------------------
 void OMarkableTreeListBox::Paint(const Rectangle& _rRect)
@@ -112,21 +111,16 @@ void OMarkableTreeListBox::Paint(const Rectangle& _rRect)
         aNewFont.SetColor(aSystemStyle.GetDisableColor());
 
         SetFont(aNewFont);
-        SvTreeListBox::Paint(_rRect);
+        DBTreeListBox::Paint(_rRect);
         SetFont(aOldFont);
     }
     else
-        SvTreeListBox::Paint(_rRect);
+        DBTreeListBox::Paint(_rRect);
 }
 //------------------------------------------------------------------------
 void OMarkableTreeListBox::InitButtonData()
 {
-    USHORT nSize = SPACEBETWEENENTRIES;
-    SetSpaceBetweenEntries(nSize);
-    SetNodeDefaultImages( );
-
     m_pCheckButton = new SvLBoxButtonData( this );
-    OMarkableTreeListBox::notifyHiContrastChanged();
     EnableCheckButton( m_pCheckButton );
 }
 //------------------------------------------------------------------------
@@ -147,10 +141,10 @@ void OMarkableTreeListBox::KeyInput( const KeyEvent& rKEvt )
             CheckButtonHdl();
         }
         else
-            SvTreeListBox::KeyInput(rKEvt);
+            DBTreeListBox::KeyInput(rKEvt);
     }
     else
-        SvTreeListBox::KeyInput(rKEvt);
+        DBTreeListBox::KeyInput(rKEvt);
 
 }
 //------------------------------------------------------------------------
@@ -161,7 +155,7 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvLBoxEntry* _pEntry)
         // nothing to do in this bottom-up routine if there are no children ...
         return eState;
 #ifdef DBG_UTIL
-    String sEntryText = GetEntryText(_pEntry);
+    String sEntryText  =GetEntryText(_pEntry);
 #endif
 
     // loop through the children and check their states
@@ -172,7 +166,7 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvLBoxEntry* _pEntry)
     while (pChildLoop)
     {
 #ifdef DBG_UTIL
-        String sChildText = GetEntryText(pChildLoop);
+        String sChildText  =GetEntryText(pChildLoop);
 #endif
         SvButtonState eChildState = implDetermineState(pChildLoop);
         if (SV_BUTTON_TRISTATE == eChildState)
@@ -344,15 +338,6 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
 }
 
 //------------------------------------------------------------------------
-SvLBoxEntry* OMarkableTreeListBox::GetEntryPosByName(const String& aName,SvLBoxEntry* pStart) const
-{
-    SvLBoxEntry* pEntry = pStart ? GetModel()->FirstChild(pStart) : GetModel()->First();
-    while(pEntry && !GetEntryText(pEntry).Equals(aName))
-        pEntry = GetModel()->Next(pEntry);
-
-    return pEntry;
-}
-
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
