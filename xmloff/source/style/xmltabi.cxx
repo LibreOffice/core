@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-21 09:46:22 $
+ *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,10 @@ enum SvXMLTokenMapAttrs
 
 static __FAR_DATA SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE, sXML_tabstop_position, XML_TOK_TABSTOP_POSITION },
-    { XML_NAMESPACE_STYLE, sXML_tabstop_type,     XML_TOK_TABSTOP_TYPE },
-    { XML_NAMESPACE_STYLE, sXML_tabstop_char,     XML_TOK_TABSTOP_CHAR },
-    { XML_NAMESPACE_STYLE, sXML_tabstop_leader,   XML_TOK_TABSTOP_LEADER },
+    { XML_NAMESPACE_STYLE, sXML_position,    XML_TOK_TABSTOP_POSITION },
+    { XML_NAMESPACE_STYLE, sXML_type,        XML_TOK_TABSTOP_TYPE },
+    { XML_NAMESPACE_STYLE, sXML_char,        XML_TOK_TABSTOP_CHAR },
+    { XML_NAMESPACE_STYLE, sXML_leader_char, XML_TOK_TABSTOP_LEADER },
     XML_TOKEN_MAP_END
 };
 
@@ -263,7 +263,7 @@ SvXMLImportContext *SvxXMLTabStopImportContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        0 == rLocalName.equalsAsciiL( sXML_tabstop_tab_stop , sizeof( sXML_tabstop_tab_stop ) ) )
+        0 == rLocalName.equalsAsciiL( sXML_tab_stop , sizeof( sXML_tab_stop ) ) )
     {
         // create new tabstop import context
         SvxXMLTabStopContext_Impl *pTabStopContext =

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-30 12:04:28 $
+ *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // RES_PARATR_WIDOWS
     M_E( "ParaWidows",          FO,     widows,             XML_TYPE_NUMBER8, 0 ),
     // RES_PARATR_TABSTOP
-    M_E( "ParaTabStops",        STYLE,  tabstop_tab_stops,  MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_TABSTOP, CTF_TABSTOP ), // this is not realy a string!
+    M_E( "ParaTabStops",        STYLE,  tab_stops,          MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_TABSTOP, CTF_TABSTOP ), // this is not realy a string!
     // RES_PARATR_HYPHENZONE
     M_E( "ParaIsHyphenation",   FO,     hyphenate,          XML_TYPE_BOOL, 0 ),
     M_E( "ParaHyphenationMaxLeadingChars", FO, hyphenation_remain_char_count, XML_TYPE_NUMBER, 0 ),
@@ -504,6 +504,7 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
 XMLPropertyMapEntry aXMLSectionPropMap[] =
 {
     M_E( "TextColumns",         STYLE,  columns,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_COLUMNS, CTF_TEXTCOLUMNS ),
+    M_E( "IsProtected",         STYLE,  protect,    XML_TYPE_BOOL, 0 ),
     { 0, 0, 0, 0 }
 };
 

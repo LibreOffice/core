@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-19 10:25:01 $
+ *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,18 +142,22 @@ TYPEINIT1( XMLSectionImportContext, SvXMLImportContext );
 
 const sal_Char sAPI_TextSection[] = "com.sun.star.text.TextSection";
 const sal_Char sAPI_IsProtected[] = "IsProtected";
+const sal_Char sAPI_Condition[] = "Condition";
+const sal_Char sAPI_IsVisible[] = "IsVisible";
 
 enum XMLSectionToken {
     XML_TOK_SECTION_STYLE_NAME,
     XML_TOK_SECTION_NAME,
-    XML_TOK_SECTION_PROTECTED
+    XML_TOK_SECTION_CONDITION,
+    XML_TOK_SECTION_DISPLAY
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aSectionTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, sXML_style_name, XML_TOK_SECTION_STYLE_NAME },
     { XML_NAMESPACE_TEXT, sXML_name, XML_TOK_SECTION_NAME },
-    { XML_NAMESPACE_TEXT, sXML_protected, XML_TOK_SECTION_PROTECTED },
+    { XML_NAMESPACE_TEXT, sXML_condition, XML_TOK_SECTION_CONDITION },
+    { XML_NAMESPACE_TEXT, sXML_display, XML_TOK_SECTION_DISPLAY },
     XML_TOKEN_MAP_END
 };
 
@@ -172,12 +176,15 @@ XMLSectionImportContext::XMLSectionImportContext(
         xEndRange(),
         xSectionPropertySet(),
         sTextSection(RTL_CONSTASCII_USTRINGPARAM(sAPI_TextSection)),
-        sIsProtected(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsProtected)),
+        sCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_Condition)),
+        sIsVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsVisible)),
         sStyleName(),
         sName(),
+        sCond(),
         sEmpty(),
         bValid(sal_False),
-        bProtected(sal_False)
+        bCondOK(sal_False),
+        bIsVisible(sal_True)
 {
 }
 
@@ -214,11 +221,6 @@ void XMLSectionImportContext::StartElement(
                 Reference<XNamed> xNamed(xPropSet, UNO_QUERY);
                 xNamed->setName(sName);
 
-                // protected?
-                Any aAny;
-                aAny.setValue( &bProtected, ::getBooleanCppuType() );
-                xPropSet->setPropertyValue( sIsProtected, aAny );
-
                 // stylename?
                 if (sStyleName.getLength() > 0)
                 {
@@ -229,6 +231,16 @@ void XMLSectionImportContext::StartElement(
                     {
                         pStyle->FillPropertySet( xPropSet );
                     }
+                }
+
+                // IsVisible and condition
+                Any aAny;
+                aAny.setValue( &bIsVisible, ::getBooleanCppuType() );
+                xPropSet->setPropertyValue( sIsVisible, aAny );
+                if (bCondOK)
+                {
+                    aAny <<= sCond;
+                    xPropSet->setPropertyValue( sCondition, aAny );
                 }
 
                 // insert X and paragraph mark; then insert
@@ -274,23 +286,33 @@ void XMLSectionImportContext::ProcessAttributes(
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
             GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
+        OUString sAttr = xAttrList->getValueByIndex(nAttr);
 
         switch (aTokenMap.Get(nPrefix, sLocalName))
         {
             case XML_TOK_SECTION_STYLE_NAME:
-                sStyleName = xAttrList->getValueByIndex(nAttr);
+                sStyleName = sAttr;
                 break;
             case XML_TOK_SECTION_NAME:
-                sName = xAttrList->getValueByIndex(nAttr);
+                sName = sAttr;
                 bValid = sal_True;
                 break;
-            case XML_TOK_SECTION_PROTECTED:
-                sal_Bool bTmp;
-                if (SvXMLUnitConverter::convertBool(bTmp,
-                                     xAttrList->getValueByIndex(nAttr)))
+            case XML_TOK_SECTION_CONDITION:
+                sCond = sAttr;
+                bCondOK = sal_True;
+                break;
+            case XML_TOK_SECTION_DISPLAY:
+                if (sAttr.equalsAsciiL(sXML_true, sizeof(sXML_true)-1))
                 {
-                    bProtected = bTmp;
+                    bIsVisible = sal_True;
                 }
+                else if ( sAttr.equalsAsciiL(sXML_none, sizeof(sXML_none)-1) ||
+                          sAttr.equalsAsciiL(sXML_condition,
+                                             sizeof(sXML_condition)-1) )
+                {
+                    bIsVisible = sal_False;
+                }
+                // else: ignore
                 break;
             default:
                 ; // ignore

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLSectionImportContext.hxx,v $
+ *  $RCSfile: XMLIndexTemplateContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
  *
@@ -59,65 +59,93 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLSECTIONIMPORTCONTEXT_HXX_
-#define _XMLOFF_XMLSECTIONIMPORTCONTEXT_HXX_
+#ifndef _XMLOFF_XMLINDEXTEMPLATECONTEXT_HXX_
+#define _XMLOFF_XMLINDEXTEMPLATECONTEXT_HXX_
 
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include "xmlictxt.hxx"
+#endif
+
+#ifndef __SGI_STL_VECTOR
+#include <stl/vector>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
+#include <com/sun/star/beans/PropertyValues.hpp>
+#endif
+
+
 namespace com { namespace sun { namespace star {
-    namespace text { class XTextRange;  }
-    namespace beans { class XPropertySet; }
     namespace xml { namespace sax { class XAttributeList; } }
+    namespace beans { class XPropertySet; }
 } } }
 namespace rtl { class OUString; }
-class XMLTextImportHelper;
 
 
 /**
- * Import text sections.
+ * Import index entry templates
  */
-class XMLSectionImportContext : public SvXMLImportContext
+class XMLIndexTemplateContext : public SvXMLImportContext
 {
-    /// start position; ranges aquired via getStart(),getEnd() don't move
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextRange> xStartRange;
-
-    /// end position
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextRange> xEndRange;
-
-    /// TextSection (as XPropertySet) for passing down to data source elements
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xSectionPropertySet;
-
-    const ::rtl::OUString sTextSection;
-    const ::rtl::OUString sCondition;
-    const ::rtl::OUString sIsVisible;
-    const ::rtl::OUString sEmpty;
+    // pick up PropertyValues to be turned into a sequence.
+    ::std::vector< ::com::sun::star::beans::PropertyValues > aValueVector;
 
     ::rtl::OUString sStyleName;
-    ::rtl::OUString sName;
-    ::rtl::OUString sCond;
-    sal_Bool bCondOK;
-    sal_Bool bIsVisible;
-    sal_Bool bValid;
+    sal_Int32 nOutlineLevel;
+    sal_Bool bStyleNameOK;
+    sal_Bool bOutlineLevelOK;
+
+    // PropertySet of current index
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & rPropertySet;
 
 public:
 
+    // constants made available to other contexts (template entry
+    // contexts, in particular)
+    const ::rtl::OUString sTokenEntryNumber;
+    const ::rtl::OUString sTokenEntryText;
+    const ::rtl::OUString sTokenTabStop;
+    const ::rtl::OUString sTokenText;
+    const ::rtl::OUString sTokenPageNumber;
+    const ::rtl::OUString sTokenChapterInfo;
+    const ::rtl::OUString sTokenHyperlinkStart;
+    const ::rtl::OUString sTokenHyperlinkEnd;
+    const ::rtl::OUString sTokenBibliographyDataField;
+
+    const ::rtl::OUString sCharacterStyleName;
+    const ::rtl::OUString sTokenType;
+    const ::rtl::OUString sText;
+    const ::rtl::OUString sTabStopRightAligned;
+    const ::rtl::OUString sTabStopPosition;
+    const ::rtl::OUString sTabStopFillCharacter;
+
+    const ::rtl::OUString sLevelFormat;
+    const ::rtl::OUString sParaStyleLevel;
+
+
     TYPEINFO();
 
-    XMLSectionImportContext(
+    XMLIndexTemplateContext(
         SvXMLImport& rImport,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet> & rPropSet,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName );
 
-    ~XMLSectionImportContext();
+    ~XMLIndexTemplateContext();
+
+    /** add template; to be called by child template entry contexts */
+    void addTemplateEntry(
+        const ::com::sun::star::beans::PropertyValues& aValues);
 
 protected:
 
@@ -130,10 +158,6 @@ protected:
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
-
-    void ProcessAttributes(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };

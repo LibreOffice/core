@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mib $ $Date: 2000-10-26 09:25:33 $
+#   last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,16 +89,25 @@ CXXFILES = \
         txtparai.cxx \
         txtprhdl.cxx \
         txtprmap.cxx \
+        txtsecte.cxx \
         txtstyle.cxx \
         txtstyli.cxx \
         txtvfldi.cxx \
         XMLFootnoteBodyImportContext.cxx \
         XMLFootnoteConfigurationImportContext.cxx \
         XMLFootnoteImportContext.cxx \
+        XMLIndexSimpleEntryContext.cxx \
+        XMLIndexSpanEntryContext.cxx \
+        XMLIndexTabStopEntryContext.cxx \
+        XMLIndexTOCContext.cxx \
+        XMLIndexTOCSourceContext.cxx \
+        XMLIndexTOCStylesContext.cxx \
+        XMLIndexTemplateContext.cxx \
+        XMLIndexTitleTemplateContext.cxx \
         XMLPropertyBackpatcher.cxx \
         XMLSectionImportContext.cxx \
-        XMLSectionSourceImportContext.cxx \
         XMLSectionSourceDDEImportContext.cxx \
+        XMLSectionSourceImportContext.cxx \
         XMLTextColumnsContext.cxx \
         XMLTextColumnsExport.cxx \
         XMLTextFrameContext.cxx \
@@ -128,16 +137,25 @@ SLOFILES =	\
         $(SLO)$/txtparai.obj \
         $(SLO)$/txtprhdl.obj \
         $(SLO)$/txtprmap.obj \
+        $(SLO)$/txtsecte.obj \
         $(SLO)$/txtstyle.obj \
         $(SLO)$/txtstyli.obj \
         $(SLO)$/txtvfldi.obj \
         $(SLO)$/XMLFootnoteBodyImportContext.obj \
         $(SLO)$/XMLFootnoteConfigurationImportContext.obj \
         $(SLO)$/XMLFootnoteImportContext.obj \
+        $(SLO)$/XMLIndexSimpleEntryContext.obj \
+        $(SLO)$/XMLIndexSpanEntryContext.obj \
+        $(SLO)$/XMLIndexTOCContext.obj \
+        $(SLO)$/XMLIndexTOCSourceContext.obj \
+        $(SLO)$/XMLIndexTOCStylesContext.obj \
+        $(SLO)$/XMLIndexTabStopEntryContext.obj \
+        $(SLO)$/XMLIndexTemplateContext.obj \
+        $(SLO)$/XMLIndexTitleTemplateContext.obj \
         $(SLO)$/XMLPropertyBackpatcher.obj \
         $(SLO)$/XMLSectionImportContext.obj \
-        $(SLO)$/XMLSectionSourceImportContext.obj \
         $(SLO)$/XMLSectionSourceDDEImportContext.obj \
+        $(SLO)$/XMLSectionSourceImportContext.obj \
         $(SLO)$/XMLTextColumnsContext.obj \
         $(SLO)$/XMLTextColumnsExport.obj \
         $(SLO)$/XMLTextFrameContext.obj \

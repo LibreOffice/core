@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-20 12:45:07 $
+ *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,7 @@ const sal_Char sAPI_macro[]                     = "Macro";
 const sal_Char sAPI_dde[]                       = "DDE";
 const sal_Char sAPI_get_reference[]             = "GetReference";
 const sal_Char sAPI_sheet_name[]                = "SheetName";
+const sal_Char sAPI_url[]                       = "URL";
 
 // property names
 const sal_Char sAPI_is_fixed[]          = "IsFixed";
@@ -313,6 +314,8 @@ const sal_Char sAPI_reference_field_source[] = "ReferenceFieldSource";
 const sal_Char sAPI_dde_command_type[]  = "DDECommandType";
 const sal_Char sAPI_dde_command_file[]  = "DDECommandFile";
 const sal_Char sAPI_dde_command_element[] = "DDECommandElement";
+// sAPI_url: also used as service name
+const sal_Char sAPI_target_frame[]      = "TargetFrame";
 
 const sal_Char sAPI_true[] = "TRUE";
 
@@ -365,6 +368,10 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_ref_name, XML_TOK_TEXTFIELD_REF_NAME },
     { XML_NAMESPACE_TEXT, sXML_connection_name,
       XML_TOK_TEXTFIELD_CONNECTION_NAME },
+    { XML_NAMESPACE_XLINK, sXML_href, XML_TOK_TEXTFIELD_HREF },
+    { XML_NAMESPACE_OFFICE, sXML_target_frame_name,
+      XML_TOK_TEXTFIELD_TARGET_FRAME },
+
     XML_TOKEN_MAP_END
 };
 
@@ -2984,3 +2991,59 @@ void XMLSheetNameImportContext::PrepareField(
 {
     // no attributes -> nothing to be done
 }
+
+
+//
+// URL fields (Calc, Impress, Draw)
+//
+
+TYPEINIT1(XMLUrlFieldImportContext, XMLTextFieldImportContext);
+
+XMLUrlFieldImportContext::XMLUrlFieldImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_uInt16 nPrfx,
+    const OUString& sLocalName) :
+        XMLTextFieldImportContext(rImport, rHlp, sAPI_url,
+                                  nPrfx, sLocalName),
+        sPropertyURL(RTL_CONSTASCII_USTRINGPARAM(sAPI_url)),
+        sPropertyTargetFrame(RTL_CONSTASCII_USTRINGPARAM(sAPI_target_frame)),
+        bFrameOK(sal_False)
+{
+}
+
+void XMLUrlFieldImportContext::ProcessAttribute(
+    sal_uInt16 nAttrToken,
+    const OUString& sAttrValue )
+{
+    switch (nAttrToken)
+    {
+        case XML_TOK_TEXTFIELD_HREF:
+            sURL = sAttrValue;
+            bValid = sal_True;
+            break;
+        case XML_TOK_TEXTFIELD_TARGET_FRAME:
+            sFrame = sAttrValue;
+            bFrameOK = sal_True;
+            break;
+        default:
+            // ignore
+            break;
+    }
+}
+
+void XMLUrlFieldImportContext::PrepareField(
+    const Reference<XPropertySet> & xPropertySet)
+{
+    Any aAny;
+
+    aAny <<= sURL;
+    xPropertySet->setPropertyValue(sPropertyURL, aAny);
+
+    if (bFrameOK)
+    {
+        aAny <<= sFrame;
+        xPropertySet->setPropertyValue(sPropertyTargetFrame, aAny);
+    }
+}
+

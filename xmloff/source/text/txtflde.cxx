@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-20 12:45:07 $
+ *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,7 @@ static sal_Char __READONLY_DATA FIELD_SERVICE_SHEET_NAME[] = "SheetName";
 static sal_Char __READONLY_DATA FIELD_SERVICE_MACRO[] = "Macro";
 static sal_Char __READONLY_DATA FIELD_SERVICE_GET_REFERENCE[] = "GetReference";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DDE[] = "DDE";
+static sal_Char __READONLY_DATA FIELD_SERVICE_URL[] = "URL";
 
 
 SvXMLEnumMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
@@ -325,12 +326,11 @@ SvXMLEnumMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
 
     // non-writer fields
     { FIELD_SERVICE_SHEET_NAME,             FIELD_ID_SHEET_NAME },
+    { FIELD_SERVICE_URL,                    FIELD_ID_URL },
 
     { 0,                                    0 }
 };
 
-
-// TODO: enable asserts (#77364#) when all fields are implemented
 
 
 // property accessor helper functions
@@ -414,7 +414,9 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp )
       sPropertyIsAutomaticUpdate(
           RTL_CONSTASCII_USTRINGPARAM("IsAutomaticUpdate")),
       sPropertyDependentTextFields(
-          RTL_CONSTASCII_USTRINGPARAM("DependentTextFields"))
+          RTL_CONSTASCII_USTRINGPARAM("DependentTextFields")),
+      sPropertyURL(RTL_CONSTASCII_USTRINGPARAM("URL")),
+      sPropertyTargetFrame(RTL_CONSTASCII_USTRINGPARAM("TargetFrame"))
 {
 }
 
@@ -477,8 +479,7 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
             nTmp, sFieldName, aFieldServiceNameMapping);
 
         // check return
-        // #77364#: no assert, unless all fields are implemented
-        // DBG_ASSERT(bRet, "Unknown field service name encountered!");
+        DBG_ASSERT(bRet, "Unknown field service name encountered!");
         if (! bRet)
         {
             nToken = FIELD_ID_UNKNOWN;
@@ -637,6 +638,7 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
         case FIELD_ID_CHAPTER:
         case FIELD_ID_FILE_NAME:
         case FIELD_ID_SHEET_NAME:
+        case FIELD_ID_URL:
             ; // these field IDs are final
             break;
 
@@ -736,6 +738,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_AUTHOR:
     case FIELD_ID_PAGESTRING:
     case FIELD_ID_SHEET_NAME:
+    case FIELD_ID_URL:
         // always string:
         return sal_True;
 
@@ -853,13 +856,13 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_CHAPTER:
     case FIELD_ID_FILE_NAME:
     case FIELD_ID_SHEET_NAME:
+    case FIELD_ID_URL:
         ; // no formats for these fields!
         break;
 
     case FIELD_ID_UNKNOWN:
     default:
-        // #77364#: no assert, unless all fields are implemented
-        //      DBG_ERROR("unkown field type!");
+        DBG_ERROR("unkown field type!");
         // ignore -> no format for unkowns
         break;
     }
@@ -1407,10 +1410,32 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
         ExportElement(sXML_sheet_name, sPresentation);
         break;
 
+    case FIELD_ID_URL:
+    {
+        // this field is a special case because it gets mapped onto a
+        // hyperlink, rather than one of the regular text field. We
+        // can't use our helper functions, as the assume namespace
+        // text.
+        OUString sHref = GetStringProperty(sPropertyURL, xPropSet);
+        if (sHref.getLength()>0)
+        {
+            rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sHref);
+        }
+        OUString sTarget = GetStringProperty(sPropertyTargetFrame,xPropSet);
+        if (sTarget.getLength()>0)
+        {
+            rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_target_frame_name,
+                                 sTarget);
+        }
+        SvXMLElementExport aUrlField(rExport, XML_NAMESPACE_TEXT, sXML_a,
+                                     sal_False, sal_False);
+        GetExport().GetDocHandler()->characters(sPresentation);
+        break;
+    }
+
     case FIELD_ID_UNKNOWN:
     default:
-        // #77364#: no assert, unless all fields are implemented
-        //      DBG_ERROR("unkown field type encountered!");
+        DBG_ERROR("unkown field type encountered!");
         // always export content
         GetExport().GetDocHandler()->characters(sPresentation);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-30 12:47:14 $
+ *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,7 +435,12 @@ void XMLTextColumnsContext::EndElement( )
         return;
 
     Reference< XTextColumns > xColumns( xIfc, UNO_QUERY );
-    if( pColumns && pColumns->Count() == (sal_uInt16)nCount )
+    if ( 0 == nCount )
+    {
+        // zero columns = no columns -> 1 column
+        xColumns->setColumnCount( 1 );
+    }
+    else if( pColumns && pColumns->Count() == (sal_uInt16)nCount )
     {
         sal_Int32 nRelWidth = 0;
         sal_uInt16 nColumnsWithWidth = 0;

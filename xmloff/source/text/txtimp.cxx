@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-31 09:00:40 $
+ *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,9 @@
 #ifndef _XMLOFF_XMLSECTIONIMPORTCONTEXT_HXX_
 #include "XMLSectionImportContext.hxx"
 #endif
+#ifndef _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
+#include "XMLIndexTOCContext.hxx"
+#endif
 
 
 using namespace ::rtl;
@@ -190,6 +193,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_sequence_decls,  XML_TOK_TEXT_SEQUENCE_DECLS },
     { XML_NAMESPACE_TEXT, sXML_dde_connection_decls, XML_TOK_TEXT_DDE_DECLS },
     { XML_NAMESPACE_TEXT, sXML_section,         XML_TOK_TEXT_SECTION },
+    { XML_NAMESPACE_TEXT, sXML_table_of_content, XML_TOK_TEXT_TOC },
 
     XML_TOKEN_MAP_END
 };
@@ -956,11 +960,13 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         }
         break;
 
-// disable sections until section implementation is sufficient
-//  case XML_TOK_TEXT_SECTION:
-//      pContext = new XMLSectionImportContext( rImport, nPrefix, rLocalName );
-//      break;
+    case XML_TOK_TEXT_SECTION:
+        pContext = new XMLSectionImportContext( rImport, nPrefix, rLocalName );
+        break;
 
+    case XML_TOK_TEXT_TOC:
+        pContext = new XMLIndexTOCContext( rImport, nPrefix, rLocalName );
+        break;
     }
 
 //  if( !pContext )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-20 12:45:05 $
+ *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,9 @@ enum XMLTextFieldAttrTokens
     XML_TOK_TEXTFIELD_REFERENCE_FORMAT,
     XML_TOK_TEXTFIELD_REF_NAME,
     XML_TOK_TEXTFIELD_CONNECTION_NAME,
+
+    XML_TOK_TEXTFIELD_HREF,
+    XML_TOK_TEXTFIELD_TARGET_FRAME,
 
     XML_TOK_TEXTFIELD_UNKNOWN
 };
@@ -1233,6 +1236,38 @@ public:
                               XMLTextImportHelper& rHlp,
                               sal_uInt16 nPrfx,
                               const ::rtl::OUString& sLocalName);
+
+protected:
+
+    /// no attributes -> empty method
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const ::rtl::OUString& sAttrValue );
+
+    /// no atributes -> empty method
+    virtual void PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+};
+
+/** import hyperlinks as URL fields (Calc, Impress, Draw) (<office:a>) */
+class XMLUrlFieldImportContext : public XMLTextFieldImportContext
+{
+
+    const ::rtl::OUString sPropertyURL;
+    const ::rtl::OUString sPropertyTargetFrame;
+
+    ::rtl::OUString sURL;
+    ::rtl::OUString sFrame;
+    sal_Bool bFrameOK;
+
+public:
+
+    TYPEINFO();
+
+    XMLUrlFieldImportContext(SvXMLImport& rImport,
+                             XMLTextImportHelper& rHlp,
+                             sal_uInt16 nPrfx,
+                             const ::rtl::OUString& sLocalName);
 
 protected:
 

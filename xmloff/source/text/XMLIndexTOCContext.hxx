@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLSectionImportContext.hxx,v $
+ *  $RCSfile: XMLIndexTOCContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
  *
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLSECTIONIMPORTCONTEXT_HXX_
-#define _XMLOFF_XMLSECTIONIMPORTCONTEXT_HXX_
+#ifndef _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
+#define _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
 
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include "xmlictxt.hxx"
@@ -70,54 +70,34 @@
 #include <com/sun/star/uno/Reference.h>
 #endif
 
+
 namespace com { namespace sun { namespace star {
-    namespace text { class XTextRange;  }
-    namespace beans { class XPropertySet; }
     namespace xml { namespace sax { class XAttributeList; } }
+    namespace beans { class XPropertySet; }
 } } }
 namespace rtl { class OUString; }
-class XMLTextImportHelper;
 
 
 /**
- * Import text sections.
+ * Import table of context
  */
-class XMLSectionImportContext : public SvXMLImportContext
+class XMLIndexTOCContext : public SvXMLImportContext
 {
-    /// start position; ranges aquired via getStart(),getEnd() don't move
+
+    /** XPropertySet of the index */
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextRange> xStartRange;
-
-    /// end position
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextRange> xEndRange;
-
-    /// TextSection (as XPropertySet) for passing down to data source elements
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xSectionPropertySet;
-
-    const ::rtl::OUString sTextSection;
-    const ::rtl::OUString sCondition;
-    const ::rtl::OUString sIsVisible;
-    const ::rtl::OUString sEmpty;
-
-    ::rtl::OUString sStyleName;
-    ::rtl::OUString sName;
-    ::rtl::OUString sCond;
-    sal_Bool bCondOK;
-    sal_Bool bIsVisible;
-    sal_Bool bValid;
+        ::com::sun::star::beans::XPropertySet> xTOCPropertySet;
 
 public:
 
     TYPEINFO();
 
-    XMLSectionImportContext(
+    XMLIndexTOCContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName );
 
-    ~XMLSectionImportContext();
+    ~XMLIndexTOCContext();
 
 protected:
 
@@ -130,10 +110,6 @@ protected:
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
-
-    void ProcessAttributes(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };

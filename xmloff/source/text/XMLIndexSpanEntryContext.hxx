@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLSectionImportContext.hxx,v $
+ *  $RCSfile: XMLIndexSpanEntryContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
  *
@@ -59,83 +59,62 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLSECTIONIMPORTCONTEXT_HXX_
-#define _XMLOFF_XMLSECTIONIMPORTCONTEXT_HXX_
+#ifndef _XMLOFF_XMLINDEXSPANENTRYCONTEXT_HXX_
+#define _XMLOFF_XMLINDEXSPANENTRYCONTEXT_HXX_
 
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#ifndef _XMLOFF_XMLINDEXSIMPLEENTRYCONTEXT_HXX_
+#include "XMLIndexSimpleEntryContext.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
 namespace com { namespace sun { namespace star {
-    namespace text { class XTextRange;  }
-    namespace beans { class XPropertySet; }
     namespace xml { namespace sax { class XAttributeList; } }
 } } }
 namespace rtl { class OUString; }
-class XMLTextImportHelper;
-
 
 /**
- * Import text sections.
+ * Import index entry templates
  */
-class XMLSectionImportContext : public SvXMLImportContext
+class XMLIndexSpanEntryContext : public XMLIndexSimpleEntryContext
 {
-    /// start position; ranges aquired via getStart(),getEnd() don't move
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextRange> xStartRange;
-
-    /// end position
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextRange> xEndRange;
-
-    /// TextSection (as XPropertySet) for passing down to data source elements
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xSectionPropertySet;
-
-    const ::rtl::OUString sTextSection;
-    const ::rtl::OUString sCondition;
-    const ::rtl::OUString sIsVisible;
-    const ::rtl::OUString sEmpty;
-
-    ::rtl::OUString sStyleName;
-    ::rtl::OUString sName;
-    ::rtl::OUString sCond;
-    sal_Bool bCondOK;
-    sal_Bool bIsVisible;
-    sal_Bool bValid;
+    ::rtl::OUStringBuffer sContent;
 
 public:
 
     TYPEINFO();
 
-    XMLSectionImportContext(
+    XMLIndexSpanEntryContext(
         SvXMLImport& rImport,
+        XMLIndexTemplateContext& rTemplate,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName );
 
-    ~XMLSectionImportContext();
+    ~XMLIndexSpanEntryContext();
 
 protected:
 
-    virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+    /// Collect element contents
+    virtual void Characters(const ::rtl::OUString& sString);
 
-    virtual void EndElement();
-
-    virtual SvXMLImportContext *CreateChildContext(
-        sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
-
-    void ProcessAttributes(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
+    /// add Text PropertyValue
+    virtual void FillPropertyValues(
+        ::com::sun::star::uno::Sequence<
+            ::com::sun::star::beans::PropertyValue> & rValues);
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-20 12:45:05 $
+ *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ enum FieldIdEnum {
     FIELD_ID_DDE,                   // DDE field
 
     FIELD_ID_SHEET_NAME,            // name of current (spread-)sheet
+    FIELD_ID_URL,                   // URL field (only Calc, Draw, Impress)
 
     FIELD_ID_UNKNOWN        // invalid or unknown field type!
 };
@@ -413,6 +414,8 @@ private:
     const ::rtl::OUString sPropertyDDECommandFile;
     const ::rtl::OUString sPropertyDDECommandElement;
     const ::rtl::OUString sPropertySequenceValue;
+    const ::rtl::OUString sPropertyURL;
+    const ::rtl::OUString sPropertyTargetFrame;
 
     const ::rtl::OUString sEmpty;
 };

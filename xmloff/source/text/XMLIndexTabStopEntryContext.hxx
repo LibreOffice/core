@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLSectionImportContext.hxx,v $
+ *  $RCSfile: XMLIndexTabStopEntryContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
  *
@@ -59,65 +59,59 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLSECTIONIMPORTCONTEXT_HXX_
-#define _XMLOFF_XMLSECTIONIMPORTCONTEXT_HXX_
+#ifndef _XMLOFF_XMLINDEXTABSTOPENTRYCONTEXT_HXX_
+#define _XMLOFF_XMLINDEXTABSTOPENTRYCONTEXT_HXX_
 
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include "xmlictxt.hxx"
+#endif
+
+#ifndef _RTL_USTRING_
+#include <rtl/ustring>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+
 namespace com { namespace sun { namespace star {
-    namespace text { class XTextRange;  }
-    namespace beans { class XPropertySet; }
     namespace xml { namespace sax { class XAttributeList; } }
 } } }
-namespace rtl { class OUString; }
-class XMLTextImportHelper;
-
+class XMLIndexTemplateContext;
 
 /**
- * Import text sections.
+ * Import index entry templates
  */
-class XMLSectionImportContext : public SvXMLImportContext
+class XMLIndexTabStopEntryContext : public SvXMLImportContext
 {
-    /// start position; ranges aquired via getStart(),getEnd() don't move
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextRange> xStartRange;
+    XMLIndexTemplateContext& rTemplateContext;
 
-    /// end position
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextRange> xEndRange;
-
-    /// TextSection (as XPropertySet) for passing down to data source elements
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xSectionPropertySet;
-
-    const ::rtl::OUString sTextSection;
-    const ::rtl::OUString sCondition;
-    const ::rtl::OUString sIsVisible;
-    const ::rtl::OUString sEmpty;
-
-    ::rtl::OUString sStyleName;
-    ::rtl::OUString sName;
-    ::rtl::OUString sCond;
-    sal_Bool bCondOK;
-    sal_Bool bIsVisible;
-    sal_Bool bValid;
+    ::rtl::OUString sLeaderChar;    /// fill ("leader") character
+    sal_Int32 nTabPosition;         /// tab position
+    sal_Bool bTabPositionOK;        /// is tab right aligned?
+    sal_Bool bTabRightAligned;      /// is nTabPosition valid?
+    sal_Bool bLeaderCharOK;         /// is sLeaderChar valid?
 
 public:
 
     TYPEINFO();
 
-    XMLSectionImportContext(
+    XMLIndexTabStopEntryContext(
         SvXMLImport& rImport,
+        XMLIndexTemplateContext& rTemplate,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName );
 
-    ~XMLSectionImportContext();
+    ~XMLIndexTabStopEntryContext();
 
 protected:
 
@@ -126,16 +120,6 @@ protected:
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
     virtual void EndElement();
-
-    virtual SvXMLImportContext *CreateChildContext(
-        sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
-
-    void ProcessAttributes(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };
 
 #endif

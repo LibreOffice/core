@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-31 09:00:40 $
+ *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,245 +526,6 @@ void XMLTextParagraphExport::exportListChange(
 }
 
 
-void XMLTextParagraphExport::exportListAndSectionChange(
-    Reference<XTextSection> & rPrevSection,
-    const Reference<XTextContent> & rNextSectionContent,
-    const XMLTextNumRuleInfo& rPrevRule,
-    const XMLTextNumRuleInfo& rNextRule,
-    sal_Bool bAutoStyles)
-{
-    // currently, section import does not work properly; thus, we also
-    // disable section import. Simply call exportSectionChange
-
-    if (!bAutoStyles)
-    {
-        exportListChange(rPrevRule, rNextRule);
-    }
-
-
-//  Reference<XTextSection> xNextSection;
-//
-//  // first: get current XTextSection
-//  Reference<XPropertySet> xPropSet(rNextSectionContent, UNO_QUERY);
-//  if (xPropSet.is())
-//  {
-//      if (xPropSet->getPropertySetInfo()->hasPropertyByName(sTextSection))
-//      {
-//          Any aAny = xPropSet->getPropertyValue(sTextSection);
-//          aAny >>= xNextSection;
-//      }
-//      // else: no current section
-//  }
-//  // else: no current section
-//
-//  // careful: exportListChange may only be called for (!bAutoStyles)
-//  // I'd like a cleaner solution! Maybe export all section styles upfront.
-//  if ( bAutoStyles )
-//  {
-//      if ( xNextSection.is() )
-//      {
-//          Reference<XPropertySet> xPropSet( xNextSection, UNO_QUERY);
-//          Add( XML_STYLE_FAMILY_TEXT_SECTION, xPropSet );
-//      }
-//  }
-//  else
-//  {
-//      // old != new? -> start/equal?
-//      if (rPrevSection != xNextSection)
-//      {
-//          // a new section started, or an old one gets closed!
-//
-//          // close old list
-//          XMLTextNumRuleInfo aEmptyNumRule;
-//          exportListChange(rPrevRule, aEmptyNumRule);
-//
-//          // build stacks of old and new sections
-//          vector<Reference<XTextSection> > aOldStack;
-//          Reference<XTextSection> aCurrent = rPrevSection;
-//          while(aCurrent.is())
-//          {
-//              aOldStack.push_back(aCurrent);
-//              aCurrent = aCurrent->getParentSection();
-//          }
-//
-//          vector<Reference<XTextSection> > aNewStack;
-//          aCurrent = xNextSection;
-//          while(aCurrent.is())
-//          {
-//              aNewStack.push_back(aCurrent);
-//              aCurrent = aCurrent->getParentSection();
-//          }
-//
-//          // compare the two stacks
-//          vector<Reference<XTextSection> > ::reverse_iterator aOld =
-//              aOldStack.rbegin();
-//          vector<Reference<XTextSection> > ::reverse_iterator aNew =
-//              aNewStack.rbegin();
-//          while ( (aOld != aOldStack.rend()) &&
-//                  (aNew != aNewStack.rend()) &&
-//                  (*aOld) == (*aNew) )
-//          {
-//              aOld++;
-//              aNew++;
-//          }
-//
-//          // close all elements of aOld, open all of aNew
-//          while (aOld != aOldStack.rend())
-//          {
-//              Reference<XNamed> xName(*aOld, UNO_QUERY);
-//              GetExport().GetDocHandler()->endElement(sText_Section);
-//              GetExport().GetDocHandler()->ignorableWhitespace(
-//                  GetExport().sWS );
-//              aOld++;
-//          }
-//
-//          while (aNew != aNewStack.rend())
-//          {
-//              exportSectionStart(*aNew);
-//              aNew++;
-//          }
-//
-//          // start new list
-//          exportListChange(aEmptyNumRule, rNextRule);
-//      }
-//      else
-//      {
-//          // list change, if sections have not changed
-//          exportListChange(rPrevRule, rNextRule);
-//      }
-//  }
-//
-//  // save old section (old numRule gets saved in calling method
-//  rPrevSection = xNextSection;
-}
-
-void XMLTextParagraphExport::exportSectionStart(
-    const ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextSection > & rSection)
-{
-    // any old attributes?
-    GetExport().CheckAttrList();
-
-    Reference<XNamed> xName(rSection, UNO_QUERY);
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_name,
-                             xName->getName());
-
-    // get XPropertySet for other values
-    Reference<XPropertySet> xPropSet(rSection, UNO_QUERY);
-    Any aAny;
-
-    // style name
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_style_name,
-                             Find( XML_STYLE_FAMILY_TEXT_SECTION,
-                                   xPropSet, sEmpty ));
-
-    // protected
-    aAny = xPropSet->getPropertyValue(sIsProtected);
-    if (*(sal_Bool*)aAny.getValue())
-    {
-        GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                      sXML_protected, sXML_true);
-    }
-
-    // condition and display
-    aAny = xPropSet->getPropertyValue(sCondition);
-    OUString sCond;
-    aAny >>= sCond;
-    sal_Char* pDisplay;
-    if (sCond.getLength() > 0)
-    {
-        GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_condition,
-                                 sCond);
-        pDisplay = sXML_condition;
-    }
-    else
-    {
-        pDisplay = sXML_none;
-    }
-    aAny = xPropSet->getPropertyValue(sIsVisible);
-    if (! *(sal_Bool*)aAny.getValue())
-    {
-        GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT, sXML_display,
-                                      pDisplay);
-    }
-
-    // export element
-    GetExport().GetDocHandler()->ignorableWhitespace( GetExport().sWS );
-    GetExport().GetDocHandler()->startElement( sText_Section,
-                                               GetExport().GetXAttrList() );
-    GetExport().ClearAttrList();
-
-    // data source
-    // unfortunately, we have to test all relevant strings for non-zero length
-    aAny = xPropSet->getPropertyValue(sFileLink);
-    SectionFileLink aFileLink;
-    aAny >>= aFileLink;
-
-    aAny = xPropSet->getPropertyValue(sLinkRegion);
-    OUString sRegionName;
-    aAny >>= sRegionName;
-
-    if ( (aFileLink.FileURL.getLength() > 0) ||
-         (aFileLink.FilterName.getLength() > 0) ||
-         (sRegionName.getLength() > 0) )
-    {
-        if (aFileLink.FileURL.getLength() > 0)
-        {
-            GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href,
-                                     aFileLink.FileURL);
-        }
-
-        if (aFileLink.FilterName.getLength() > 0)
-        {
-            GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_filter_name,
-                                     aFileLink.FilterName);
-        }
-
-        if (sRegionName.getLength() > 0)
-        {
-            GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_section_name,
-                                     sRegionName);
-        }
-
-        SvXMLElementExport aElem(GetExport(),
-                                 XML_NAMESPACE_TEXT, sXML_section_source,
-                                 sal_True, sal_True);
-    }
-    else
-    {
-        // data source DDE
-        // unfortunately, we have to test all relevant strings for
-        // non-zero length
-        aAny = xPropSet->getPropertyValue(sDdeCommandFile);
-        OUString sApplication;
-        aAny >>= sApplication;
-        aAny = xPropSet->getPropertyValue(sDdeCommandType);
-        OUString sTopic;
-        aAny >>= sTopic;
-        aAny = xPropSet->getPropertyValue(sDdeCommandElement);
-        OUString sItem;
-        aAny >>= sItem;
-
-        if ( (sApplication.getLength() > 0) ||
-             (sTopic.getLength() > 0) ||
-             (sItem.getLength() > 0 )   )
-        {
-            GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_dde_application,
-                                     sApplication);
-            GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_dde_topic,
-                                     sTopic);
-            GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_dde_item,
-                                     sItem);
-
-            SvXMLElementExport aElem(GetExport(),
-                                     XML_NAMESPACE_TEXT,
-                                     sXML_section_source_dde,
-                                     sal_True, sal_True);
-        }
-        // else: no data source
-    }
-}
-
 XMLTextParagraphExport::XMLTextParagraphExport(
         SvXMLExport& rExp,
         SvXMLAutoStylePoolP & rASP ) :
@@ -849,6 +610,16 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sDdeCommandFile(RTL_CONSTASCII_USTRINGPARAM("DDECommandFile")),
     sDdeCommandType(RTL_CONSTASCII_USTRINGPARAM("DDECommandType")),
     sDdeCommandElement(RTL_CONSTASCII_USTRINGPARAM("DDECommandElement")),
+    sDocumentIndex(RTL_CONSTASCII_USTRINGPARAM("DocumentIndex")),
+    sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM("CreateFromOutline")),
+    sLevel(RTL_CONSTASCII_USTRINGPARAM("Level")),
+    sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM("CreateFromMarks")),
+    sCreateFromChapter(RTL_CONSTASCII_USTRINGPARAM("CreateFromChapter")),
+    sLevelFormat(RTL_CONSTASCII_USTRINGPARAM("LevelFormat")),
+    sTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
+    sParaStyleHeading(RTL_CONSTASCII_USTRINGPARAM("ParaStyleHeading")),
+    sParaStyleLevel(RTL_CONSTASCII_USTRINGPARAM("ParaStyleLevel")),
+    sLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM("LevelParagraphStyles")),
     sEmpty()
 {
     sText_Section = GetExport().GetNamespaceMap().GetQNameByKey(

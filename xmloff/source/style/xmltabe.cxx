@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabe.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
 
     // position attribute
     mrUnitConv.convertMeasure( sBuffer, pTabStop->Position );
-    AddAttribute( XML_NAMESPACE_STYLE, sXML_tabstop_position,
+    AddAttribute( XML_NAMESPACE_STYLE, sXML_position,
                   sBuffer.makeStringAndClear() );
 
     // type attribute
@@ -125,7 +125,7 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
     {
         mrUnitConv.convertEnum( sBuffer, pTabStop->Alignment,
                                    psXML_tabstop_style );
-        AddAttribute( XML_NAMESPACE_STYLE, sXML_tabstop_type,
+        AddAttribute( XML_NAMESPACE_STYLE, sXML_type,
                       sBuffer.makeStringAndClear() );
     }
 
@@ -133,7 +133,7 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
     if( style::TabAlign_DECIMAL == pTabStop->Alignment )
     {
         sBuffer.append( pTabStop->DecimalChar );
-        AddAttribute( XML_NAMESPACE_STYLE, sXML_tabstop_char,
+        AddAttribute( XML_NAMESPACE_STYLE, sXML_char,
                       sBuffer.makeStringAndClear() );
     }
 
@@ -141,11 +141,11 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
     if( ' ' != pTabStop->FillChar )
     {
         sBuffer.append( pTabStop->FillChar );
-        AddAttribute( XML_NAMESPACE_STYLE, sXML_tabstop_leader,
+        AddAttribute( XML_NAMESPACE_STYLE, sXML_leader_char,
                       sBuffer.makeStringAndClear() );
     }
 
-    OUString sElem = GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii(sXML_tabstop_tab_stop) );
+    OUString sElem = GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii(sXML_tab_stop) );
     mxHandler->ignorableWhitespace( msWS );
     mxHandler->startElement( sElem, mxAttrList );
     ClearAttrList();
@@ -225,7 +225,7 @@ void SvxXMLTabStopExport::Export( const uno::Any& rAny,
             return;
 
         OUString sElem = GetQNameByKey( XML_NAMESPACE_STYLE,
-                                       OUString::createFromAscii(sXML_tabstop_tab_stops) );
+                                       OUString::createFromAscii(sXML_tab_stops) );
         mxHandler->ignorableWhitespace( msWS );
         mxHandler->startElement( sElem, mxAttrList );
         ClearAttrList();

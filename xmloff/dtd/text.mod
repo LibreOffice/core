@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.5 2000-10-31 09:40:33 dvo Exp $
+	$Id: text.mod,v 1.6 2000-11-02 15:51:17 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -124,7 +124,7 @@
 
 <!ENTITY % inline-text "(#PCDATA|
 						 text:span|text:tab-stop|text:s|text:line-break|
-						 text:footnote|text:endnote|
+						 text:footnote|text:endnote|text:a|
 						 text:bookmark|text:bookmark-start|text:bookmark-end|
 						 text:reference-mark|text:reference-mark-start|
 						 text:reference-mark-end|%fields;|
@@ -142,6 +142,17 @@
 
 <!ELEMENT text:span %inline-text;>
 <!ATTLIST text:span text:style-name %styleName; #REQUIRED>
+
+<!ELEMENT text:a %inline-text;>
+<!ATTLIST text:a xlink:href %uriReference; #REQUIRED>
+<!ATTLIST text:a xlink:type (simple) #FIXED "simple">
+<!ATTLIST text:a xlink:actuate (onRequest) "onRequest">
+<!ATTLIST text:a xlink:show (new|replace) "replace">
+<!ATTLIST text:a office:name %string; #IMPLIED>
+<!ATTLIST text:a office:target-frame-name %string; #IMPLIED>
+<!ATTLIST text:a text:style-name %styleName; #IMPLIED>
+<!ATTLIST text:a text:visited-style-name %styleName; #IMPLIED>
+
 
 <!ELEMENT text:s EMPTY>
 <!ATTLIST text:s text:c %positiveInteger; "1">
@@ -622,10 +633,14 @@
 <!ELEMENT text:endnote-body (text:h|text:p|
 							 text:ordered-list|text:unordered-list)*>
 
-<!ELEMENT text:section ((text:section-source|text:section-source-dde)?,
+<!ENTITY % sectionText "((text:section-source|text:section-source-dde)?,
 						(text:h|text:p|text:ordered-list|
 						text:unordered-list|table:table|chart:chart|draw:page|
-						draw:a|draw:text-box|draw:image|text:section)*)>
+						draw:a|draw:text-box|draw:image|text:section|
+						text:table-of-content)*)">
+
+<!ELEMENT text:section %sectionText; >
+
 <!ATTLIST text:section text:name CDATA #REQUIRED>
 <!ATTLIST text:section text:style-name %styleName; #IMPLIED>
 <!ATTLIST text:section text:protected %boolean; "false">
@@ -643,3 +658,62 @@
 <!ATTLIST text:section-source-dde text:dde-application CDATA #IMPLIED>
 <!ATTLIST text:section-source-dde text:dde-topic CDATA #IMPLIED>
 <!ATTLIST text:section-source-dde text:dde-item CDATA #IMPLIED>
+
+<!ELEMENT text:table-of-content (text:table-of-content-source, 
+								 text:table-of-content-body)   >
+<!ATTLIST text:table-of-content text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:table-of-content-body %sectionText; >
+
+<!ELEMENT text:table-of-content-source (text:index-title-template | 
+										text:index-entry-template | 
+										text:index-source-styles)* >
+<!ATTLIST text:table-of-content-source text:outline-level %integer; #IMPLIED>
+<!ATTLIST text:table-of-content-source text:use-index-marks %boolean; "true">
+<!ATTLIST text:table-of-content-source text:index-scope (document|chapter) 
+														"document">
+<!ATTLIST text:table-of-content-source text:relative-tab-stop-position 
+															%boolean; "true">
+
+<!ELEMENT text:index-title-template (#PCDATA)>
+<!ATTLIST text:index-title-template text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:index-entry-template (text:index-entry-chapter | 
+									 text:index-entry-page-number |
+									 text:index-entry-text |
+									 text:index-entry-span |
+									 text:index-entry-tab-stop | 
+									 text:index-entry-link-start |
+									 text:index-entry-link-end )* >
+<!ATTLIST text:index-entry-template text:outline-level %integer; #REQUIRED>
+<!ATTLIST text:index-entry-template text:style-name %styleName; #REQUIRED>
+
+<!ELEMENT text:index-entry-chapter EMPTY>
+<!ATTLIST text:index-entry-chapter text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:index-entry-text EMPTY>
+<!ATTLIST text:index-entry-text text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:index-entry-page-number EMPTY>
+<!ATTLIST text:index-entry-page-number text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:index-entry-span (#PCDATA)>
+<!ATTLIST text:index-entry-span text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:index-entry-tab-stop EMPTY>
+<!ATTLIST text:index-entry-tab-stop text:style-name %styleName; #IMPLIED>
+<!ATTLIST text:index-entry-tab-stop style:leader-char %character; " ">
+<!ATTLIST text:index-entry-tab-stop style:type (left|right) "left">
+<!ATTLIST text:index-entry-tab-stop style:position %length; #IMPLIED>
+
+<!ELEMENT text:index-entry-link-start EMPTY>
+<!ATTLIST text:index-entry-link-start text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:index-entry-link-end EMPTY>
+<!ATTLIST text:index-entry-link-end text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:index-source-styles (text:index-source-style)*>
+<!ATTLIST text:index-source-styles text:outline-level %integer; #REQUIRED>
+
+<!ELEMENT text:index-source-style EMPTY>
+<!ATTLIST text:index-source-style text:style-name %styleName; #REQUIRED>

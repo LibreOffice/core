@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLSectionImportContext.hxx,v $
+ *  $RCSfile: XMLIndexTOCStylesContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
  *
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLSECTIONIMPORTCONTEXT_HXX_
-#define _XMLOFF_XMLSECTIONIMPORTCONTEXT_HXX_
+#ifndef _XMLOFF_XMLINDEXTOCSTYLESCONTEXT_HXX_
+#define _XMLOFF_XMLINDEXTOCSTYLESCONTEXT_HXX_
 
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include "xmlictxt.hxx"
@@ -70,54 +70,53 @@
 #include <com/sun/star/uno/Reference.h>
 #endif
 
+#ifndef __SGI_STL_VECTOR
+#include <stl/vector>
+#endif
+
+
 namespace com { namespace sun { namespace star {
-    namespace text { class XTextRange;  }
-    namespace beans { class XPropertySet; }
     namespace xml { namespace sax { class XAttributeList; } }
+    namespace beans { class XPropertySet; }
 } } }
 namespace rtl { class OUString; }
-class XMLTextImportHelper;
 
 
 /**
- * Import text sections.
+ * Import <test:index-source-styles> elements and their children
+ *
+ * (Small hackery here: Because there's only one type of child
+ * elements with only one interesting attribute, we completely handle
+ * them inside the CreateChildContext method, rather than creating a
+ * new import class for them. This must be changed if children become
+ * more complex in future versions.)
  */
-class XMLSectionImportContext : public SvXMLImportContext
+class XMLIndexTOCStylesContext : public SvXMLImportContext
 {
-    /// start position; ranges aquired via getStart(),getEnd() don't move
+    const ::rtl::OUString sLevelParagraphStyles;
+
+    /// XPropertySet of the index
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextRange> xStartRange;
+        ::com::sun::star::beans::XPropertySet> & rTOCPropertySet;
 
-    /// end position
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextRange> xEndRange;
+    /// style names for this level
+    ::std::vector<::rtl::OUString> aStyleNames;
 
-    /// TextSection (as XPropertySet) for passing down to data source elements
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xSectionPropertySet;
-
-    const ::rtl::OUString sTextSection;
-    const ::rtl::OUString sCondition;
-    const ::rtl::OUString sIsVisible;
-    const ::rtl::OUString sEmpty;
-
-    ::rtl::OUString sStyleName;
-    ::rtl::OUString sName;
-    ::rtl::OUString sCond;
-    sal_Bool bCondOK;
-    sal_Bool bIsVisible;
-    sal_Bool bValid;
+    /// outline level
+    sal_Int32 nOutlineLevel;
 
 public:
 
     TYPEINFO();
 
-    XMLSectionImportContext(
+    XMLIndexTOCStylesContext(
         SvXMLImport& rImport,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet> & rPropSet,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName );
 
-    ~XMLSectionImportContext();
+    ~XMLIndexTOCStylesContext();
 
 protected:
 
@@ -130,10 +129,6 @@ protected:
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
-
-    void ProcessAttributes(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-26 09:18:20 $
+ *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,12 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTCURSOR_HPP_
 #include <com/sun/star/text/XTextCursor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_CONTROLCHARACTER_HPP_
 #include <com/sun/star/text/ControlCharacter.hpp>
@@ -673,11 +679,33 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         break;
 
     case XML_TOK_TEXT_HYPERLINK:
-        pContext = new XMLImpHyperlinkContext_Impl( rImport, nPrefix,
-                                               rLocalName, xAttrList,
-                                               rHints,
-                                               rIgnoreLeadingSpace );
+    {
+        // test for HyperLinkURL property. If present, insert link as
+        // text property (StarWriter), else try to insert as text
+        // field (StarCalc, StarDraw, ...)
+        Reference<beans::XPropertySet> xPropSet(
+            rImport.GetTextImport()->GetCursor(),
+            UNO_QUERY );
+
+        const OUString sHyperLinkURL(
+            RTL_CONSTASCII_USTRINGPARAM("HyperLinkURL"));
+
+        if (xPropSet->getPropertySetInfo()->hasPropertyByName(sHyperLinkURL))
+        {
+            pContext = new XMLImpHyperlinkContext_Impl( rImport, nPrefix,
+                                                        rLocalName, xAttrList,
+                                                        rHints,
+                                                        rIgnoreLeadingSpace );
+        }
+        else
+        {
+            pContext = new XMLUrlFieldImportContext( rImport,
+                                              *rImport.GetTextImport().get(),
+                                                     nPrefix, rLocalName);
+
+        }
         break;
+    }
 
     case XML_TOK_TEXT_ENDNOTE:
     case XML_TOK_TEXT_FOOTNOTE:
