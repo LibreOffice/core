@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-25 12:03:20 $
+ *  last change: $Author: tbe $ $Date: 2002-08-20 14:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,8 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
                         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":button-type") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-src") ) );
-    readAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageAlign") ),
-                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-align") ) );
+    readImageAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageAlign") ),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-align") ) );
 
     // State
     sal_Int16 nState;
