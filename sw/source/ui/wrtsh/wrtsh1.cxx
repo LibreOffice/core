@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:02:39 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,8 @@
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
+#include <ndtxt.hxx>
+#include <svx/acorrcfg.hxx>
 
 // -> #111827#
 #include <SwRewriter.hxx>
@@ -1176,29 +1178,48 @@ void SwWrtShell::SplitNode( BOOL bAutoFmt, BOOL bCheckTableStart )
 // zum Testen der CharFormate an der Numerierung
 // extern void SetNumChrFmt( SwWrtShell*, SwNumRules& );
 
-void SwWrtShell::NumOn()
+// -> #i29560#
+void SwWrtShell::NumOrBulletOn(BOOL bNum)
 {
-    // #115901#
-    const SwNumRule * pNumRule =
-        GetDoc()->SearchNumRule(*GetCrsr()->GetPoint(), FALSE, TRUE, 0);
-
-    if (pNumRule)
-        SetCurNumRule(*pNumRule);
-    else
+    const SwNumRule* pCurRule = GetCurNumRule();
+    if( !pCurRule || !pCurRule->IsOutlineRule())
     {
-        SwNumRule aNumRule(GetUniqueNumRuleName());
+        const SwNumRule * pNumRule =
+            GetDoc()->SearchNumRule(*GetCrsr()->GetPoint(), FALSE, bNum, FALSE,
+                                    0);
 
-        const SwNumRule* pCurRule = GetCurNumRule();
-        if( !pCurRule )
+        if (pNumRule)
+            SetCurNumRule(*pNumRule);
+        else
         {
+            SwNumRule aNumRule(GetUniqueNumRuleName());
             // Zeichenvorlage an die Numerierung haengen
-            SwCharFmt* pChrFmt = GetCharFmtFromPool( RES_POOLCHR_NUM_LEVEL );
+            SwCharFmt* pChrFmt;
             SwDocShell* pDocSh = GetView().GetDocShell();
+            const Font* pFnt = &SwNumRule::GetDefBulletFont();
+
+            if (bNum)
+            {
+                pChrFmt = GetCharFmtFromPool( RES_POOLCHR_NUM_LEVEL );
+            }
+            else
+            {
+                pChrFmt = GetCharFmtFromPool( RES_POOLCHR_BUL_LEVEL );
+            }
+
             BOOL bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
             for( BYTE nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
             {
                 SwNumFmt aFmt( aNumRule.Get( nLvl ) );
                 aFmt.SetCharFmt( pChrFmt );
+
+                if (! bNum)
+                {
+                    aFmt.SetBulletFont( pFnt );
+                    aFmt.SetBulletChar( cBulletChar );
+                    aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                }
+
                 if(bHtml && nLvl)
                 {
                     // 1/2" fuer HTML
@@ -1210,7 +1231,78 @@ void SwWrtShell::NumOn()
             SetCurNumRule( aNumRule );
         }
     }
+    else if (pCurRule && pCurRule->IsOutlineRule())
+    {
+        SwNumRule aNumRule(*pCurRule);
+
+        SwTxtNode * pTxtNode =
+            GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
+
+        if (pTxtNode)
+        {
+            const SwNodeNum * pNum = pTxtNode->GetNum();
+
+            if (pNum)
+            {
+                SwNumFmt aFmt(aNumRule.Get(pNum->GetRealLevel()));
+
+                if (bNum)
+                    aFmt.SetNumberingType(SVX_NUM_ARABIC);
+                else
+                {
+                    const Font* pFnt = &SwNumRule::GetDefBulletFont();
+                    aFmt.SetBulletFont( pFnt );
+                    aFmt.SetBulletChar( cBulletChar );
+                    aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                }
+                aNumRule.Set(pNum->GetRealLevel(), aFmt);
+
+                SetCurNumRule(aNumRule);
+            }
+        }
+    }
 }
+
+void SwWrtShell::NumOn()
+{
+    NumOrBulletOn(TRUE);
+}
+
+void SwWrtShell::NumOrBulletOff()
+{
+    const SwNumRule * pCurNumRule = GetCurNumRule();
+
+    if (pCurNumRule)
+    {
+        if (pCurNumRule->IsOutlineRule())
+        {
+            SwNumRule aNumRule(*pCurNumRule);
+
+            SwTxtNode * pTxtNode =
+                GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
+
+            if (pTxtNode)
+            {
+                const SwNodeNum * pNum = pTxtNode->GetNum();
+
+                if (pNum)
+                {
+                    SwNumFmt aFmt(aNumRule.Get(pNum->GetRealLevel()));
+
+                    aFmt.SetNumberingType(SVX_NUM_NUMBER_NONE);
+                    aNumRule.Set(pNum->GetRealLevel(), aFmt);
+
+                    SetCurNumRule(aNumRule);
+                }
+            }
+        }
+        else
+        {
+            DelNumRules();
+        }
+    }
+}
+// <- #i29560#
 
 /*------------------------------------------------------------------------
  Beschreibung:  Default-Bulletliste erfragen
@@ -1218,40 +1310,9 @@ void SwWrtShell::NumOn()
 
 void SwWrtShell::BulletOn()
 {
-    // #115901#
-    const SwNumRule * pNumRule =
-        GetDoc()->SearchNumRule(*GetCrsr()->GetPoint(),
-                                FALSE, FALSE, 0);
-
-    if (pNumRule)
-        SetCurNumRule(*pNumRule);
-    else
-    {
-        SwNumRule aRule( GetUniqueNumRuleName() );
-
-        SwCharFmt* pChrFmt = GetCharFmtFromPool( RES_POOLCHR_BUL_LEVEL );
-        const Font* pFnt = &SwNumRule::GetDefBulletFont();
-
-        SwDocShell* pDocSh = GetView().GetDocShell();
-        BOOL bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
-        for( BYTE n = 0; n < MAXLEVEL; ++n )
-        {
-            SwNumFmt aFmt( aRule.Get( n ) );
-            aFmt.SetBulletFont( pFnt );
-            aFmt.SetBulletChar( cBulletChar );
-            aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
-            aFmt.SetCharFmt( pChrFmt );
-            if(bHtml && n)
-            {
-                // 1/2" fuer HTML
-                aFmt.SetLSpace(720);
-                aFmt.SetAbsLSpace(n * 720);
-            }
-            aRule.Set( n, aFmt );
-        }
-        SetCurNumRule( aRule );
-    }
+    NumOrBulletOn(FALSE);
 }
+
 
 /*--------------------------------------------------
 
