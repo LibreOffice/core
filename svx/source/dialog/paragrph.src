@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: os $ $Date: 2002-10-07 15:21:18 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 18:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Left = TRUE ;
         Text = "H~inter Text" ;
         Text [ english ] = "After paragraph" ;
-        Text [ english_us ] = "Aft~er paragraph" ;
+        Text [ english_us ] = "After text" ;
         Text[ portuguese ] = "~Inferior";
         Text[ russian ] = "—ÌËÁÛ";
         Text[ greek ] = " ‹Ù˘";
@@ -2019,6 +2019,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ arabic ] = "T~ype";
         Text[ catalan ] = "~Tipus";
         Text[ thai ] = "~‡∏ä‡∏ô‡∏¥‡∏î";
+        Text[ portuguese_brazilian ] = "~Tipo";
     };
     ListBox LB_BREAKTYPE
     {
@@ -2141,6 +2142,11 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
          < "‡∏†‡∏≤‡∏û‡∏ô‡∏¥‡πà‡∏á" ; 0; > ;
         < "‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå" ; 1; > ;
     };
+    StringList [ portuguese_brazilian ] =
+    {
+         < "P??GINA" ; 0; > ;
+        < "Coluna" ; 1; > ;
+    };
     };
     FixedText FT_BREAKPOSITION
     {
@@ -2168,6 +2174,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "O~rtala";
         Text[ arabic ] = "«·„Ê÷⁄";
         Text[ thai ] = "~‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á";
+        Text[ portuguese_brazilian ] = "PosiÁ„o";
+        Text[ catalan ] = "P~osiciÛ";
     };
     ListBox LB_BREAKPOSITION
     {
