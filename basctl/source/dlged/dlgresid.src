@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgresid.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:17:09 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,16 +166,19 @@ String RID_STR_BRWTITLE_PROPERTIES
     Text[ danish ] = "Egenskaber: ";
     Text[ swedish ] = "Egenskaper: ";
     Text[ polish ] = "W�a�ciwo�ci: ";
-    Text[ portuguese_brazilian ] = "Properties: ";
+    Text[ portuguese_brazilian ] = "Propriedades: ";
     Text[ japanese ] = "プロパティ: ";
     Text[ korean ] = "등록 정보: ";
     Text[ chinese_simplified ] = "属性：";
     Text[ chinese_traditional ] = "屬性：";
-    Text[ turkish ] = "Properties: ";
+    Text[ turkish ] = "�zellikler: ";
     Text[ arabic ] = "�������: ";
     Text[ finnish ] = "Ominaisuudet: ";
     Text[ catalan ] = "Propietats: ";
     Text[ thai ] = "คุณสมบัติ: ";
+    Text[ czech ] = "Vlastnosti: ";
+    Text[ hebrew ] = "‮מאפינים:‬";
+    Text[ hindi ] = "विशेषतायें: ";
 };
 String RID_STR_BRWTITLE_NO_PROPERTIES
 {
@@ -192,16 +195,19 @@ String RID_STR_BRWTITLE_NO_PROPERTIES
     Text[ danish ] = "Der er ikke markeret noget kontrolelement";
     Text[ swedish ] = "Inget kontrollelement markerat";
     Text[ polish ] = "Nie zaznaczono formantu";
-    Text[ portuguese_brazilian ] = "No Control marked";
+    Text[ portuguese_brazilian ] = "Nenhum Controle marcado";
     Text[ japanese ] = "コントロール要素の選択なし";
     Text[ korean ] = "컨트롤이 선택되지 않음";
     Text[ chinese_simplified ] = "没有选择控制单元";
     Text[ chinese_traditional ] = "沒有選取控制單元";
-    Text[ turkish ] = "No Control marked";
+    Text[ turkish ] = "��aretli kontrol alan� yok";
     Text[ arabic ] = "�� ��� ����� ���� ����";
     Text[ finnish ] = "Ei merkitty� ohjausobjektia";
     Text[ catalan ] = "Sense marques de control";
     Text[ thai ] = "ไม่ได้ทำเครื่องหมายตัวควบคุมไว้";
+    Text[ czech ] = "Není označeno žádné ovládací pole";
+    Text[ hebrew ] = "Kein Kontrollelement markiert";
+    Text[ hindi ] = "कोई नियंत्रण सूचित नहीं किया है";
 };
 String RID_STR_BRWTITLE_MULTISELECT
 {
@@ -218,19 +224,36 @@ String RID_STR_BRWTITLE_MULTISELECT
     Text[ danish ] = "Multimarkering";
     Text[ swedish ] = "Multimarkering";
     Text[ polish ] = "Wyb�r wielokrotny";
-    Text[ portuguese_brazilian ] = "Multiselection";
+    Text[ portuguese_brazilian ] = "Multi sele��o";
     Text[ japanese ] = "複数選択";
     Text[ korean ] = "다중 선택";
     Text[ chinese_simplified ] = "多重选择";
     Text[ chinese_traditional ] = "多重選取";
-    Text[ turkish ] = "Multiselection";
+    Text[ turkish ] = "�oklu se�im";
     Text[ arabic ] = "����� �����";
     Text[ finnish ] = "Monivalinta";
     Text[ catalan ] = "Selecci� m�ltiple";
     Text[ thai ] = "เลือกหลายส่วน";
+    Text[ czech ] = "Vícenásobný výběr";
+    Text[ hebrew ] = "‮בחירה מרובה‬";
+    Text[ hindi ] = "बहुमुखी चुनाव";
 };
 
 // -----------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
