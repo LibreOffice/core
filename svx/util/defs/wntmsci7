@@ -24036,3 +24036,11 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?scaleFontWidth@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx2870215315@@YAXAAVFont@@ABVOutputDevice@@AAJ@Z
 ?setFont@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx2870215315@@YAXABVSvxFont@@AAV2@@Z
 ?setFontSize@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx2870215315@@YAXAAVFont@@@Z
+?__query@BaseReference@uno@star@sun@com@@KAPAVXInterface@2345@PAV62345@ABVType@2345@@Z
+?pHighContrastSet@SdrHdl@@0PAVSdrHdlBitmapSet@@A
+?SetPosAndSize@?%O:\SRC664\src\svx\source\fmcomp\gridctrl.cxx2331613003@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?getColumnPropertyFromPeer@?%O:\SRC664\src\svx\source\fmcomp\fmgridcl.cxx1522513016@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
+??1?$_Vector_base@VPolyPolygon@@V?$allocator@VPolyPolygon@@@_STL@@@_STL@@QAE@XZ
+??1?$vector@VPolyPolygon@@V?$allocator@VPolyPolygon@@@_STL@@@_STL@@QAE@XZ
+?XOutGetTextOutlines@@YAEAAV?$vector@VPolyPolygon@@V?$allocator@VPolyPolygon@@@_STL@@@_STL@@ABVString@@AAVOutputDevice@@GGG@Z
+?deallocate@?$allocator@VPolyPolygon@@@_STL@@QBEXPAVPolyPolygon@@I@Z
