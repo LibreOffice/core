@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_InsertLegend.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:25 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,19 +70,8 @@ ModalDialog DLG_LEGEND
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 135 , 90 ) ;
-    Text = "Legende" ;
-    Text [ ENGLISH ] = "Legend" ;
-    Text [ norwegian ] = "Legend" ;
-    Text [ italian ] = "Legenda" ;
-    Text [ portuguese_brazilian ] = "Legenda" ;
-    Text [ portuguese ] = "Legenda" ;
-    Text [ finnish ] = "Selite" ;
-    Text [ danish ] = "Forklaring" ;
-    Text [ french ] = "LÈgende" ;
-    Text [ swedish ] = "Fˆrklaring" ;
-    Text [ dutch ] = "Legenda" ;
-    Text [ spanish ] = "Leyenda" ;
-    Text [ english_us ] = "Legend" ;
+    Text [ de ] = "Legende" ;
+    Text [ en-US ] = "Legend" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     BUTTONS_OK_CANCEL_HELP_STACKED( 79 )
@@ -90,88 +79,21 @@ ModalDialog DLG_LEGEND
     {
         Pos = MAP_APPFONT ( 6 , 21  ) ;
         Size = MAP_APPFONT ( 67 , 8 ) ;
-        Text = "Position" ;
-        Text [ ENGLISH ] = "Show" ;
-        Text [ norwegian ] = "Show" ;
-        Text [ italian ] = "Posizione" ;
-        Text [ portuguese_brazilian ] = "PosiÁ„o" ;
-        Text [ portuguese ] = "PosiÁ„o" ;
-        Text [ finnish ] = "Sijainti" ;
-        Text [ danish ] = "Stilling" ;
-        Text [ french ] = "Position" ;
-        Text [ swedish ] = "Placering" ;
-        Text [ dutch ] = "Positie" ;
-        Text [ spanish ] = "PosiciÛn" ;
-        Text [ english_us ] = "Position" ;
-        Text[ chinese_simplified ] = "‰ΩçÁΩÆ";
-        Text[ russian ] = "œÓÎÓÊÂÌËÂ";
-        Text[ polish ] = "Pozycja";
-        Text[ japanese ] = "Ë°®Á§∫‰ΩçÁΩÆ";
-        Text[ chinese_traditional ] = "‰ΩçÁΩÆ";
-        Text[ arabic ] = "≈ŸÂ«—";
-        Text[ greek ] = "»›ÛÁ";
-        Text[ korean ] = "ÌëúÏãú ÏúÑÏπò";
-        Text[ turkish ] = "Konum";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mostra";
-        Text[ thai ] = "‡πÅ‡∏™‡∏î‡∏á‡∏ú‡∏•";
-        Text[ czech ] = "Um√≠stƒõn√≠";
-        Text[ hebrew ] = "‚ÄÆ◊û◊ô◊ß◊ï◊ù‚Ä¨";
-        Text[ hindi ] = "‡§∏‡•ç‡§•‡§æ‡§®";
-        Text[ slovak ] = "Umiestnenie";
+        Text [ de ] = "Position" ;
+        Text [ en-US ] = "Position" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CBX_SHOW
     {
         Pos = MAP_APPFONT ( 6 , 6  ) ;
         Size = MAP_APPFONT ( 67 , 12 ) ;
-        Text = "~Anzeigen" ;
-        Text [ ENGLISH ] = "~None" ;
-        Text [ norwegian ] = "~Ingen " ;
-        Text [ italian ] = "~Mostra" ;
-        Text [ portuguese_brazilian ] = "~Exibir" ;
-        Text [ portuguese ] = "~Mostrar" ;
-        Text [ finnish ] = "~N‰yt‰" ;
-        Text [ danish ] = "~Vis" ;
-        Text [ french ] = "~Afficher" ;
-        Text [ swedish ] = "Vis~a" ;
-        Text [ dutch ] = "~Weergeven" ;
-        Text [ spanish ] = "~Mostrar" ;
-        Text [ english_us ] = "~Display" ;
+        Text [ de ] = "~Anzeigen" ;
+        Text [ en-US ] = "~Display" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÊòæÁ§∫(~D)";
-        Text[ russian ] = "~œÓÍ‡Á‡Ú¸";
-        Text[ polish ] = "~Wyúwietl";
-        Text[ japanese ] = "Ë°®Á§∫„Åô„Çã(~D)";
-        Text[ chinese_traditional ] = "È°ØÁ§∫(~D)";
-        Text[ arabic ] = "»œÊ‰";
-        Text[ greek ] = "–ÒÔ‚ÔÎﬁ";
-        Text[ korean ] = "ÌëúÏãú(~D)";
-        Text[ turkish ] = "~Gˆster";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cap";
-        Text[ thai ] = "‡πÑ~‡∏°‡πà‡∏°‡∏µ";
-        Text[ czech ] = "Displej";
-        Text[ hebrew ] = "~Anzeigen";
-        Text[ hindi ] = "~‡§¶‡§ø‡§ñ‡§æ‡§ì";
-        Text[ slovak ] = "~Displej";
+        Text [ x-comment ] = " ";
     };
     RESOURCE_LEGENDPOSITION( 32 )
-    Text[ chinese_simplified ] = "Âõæ‰æã";
-    Text[ russian ] = "ÀÂ„ÂÌ‰‡";
-    Text[ polish ] = "Legenda";
-    Text[ japanese ] = "Âá°‰æã";
-    Text[ chinese_traditional ] = "Âúñ‰æã";
-    Text[ arabic ] = "„› «Õ —”„ »Ì«‰Ì";
-    Text[ greek ] = "’¸ÏÌÁÏ·";
-    Text[ korean ] = "Î≤îÎ°Ä";
-    Text[ turkish ] = "AÁ˝klama";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Llegenda";
-    Text[ thai ] = "‡∏Ñ‡∏≥‡∏≠‡∏ò‡∏¥‡∏ö‡∏≤‡∏¢";
-    Text[ czech ] = "Legenda";
-    Text[ hebrew ] = "Legende";
-    Text[ hindi ] = "‡§≤‡•á‡§ú‡•á‡§®‡•ç‡§°‡§º";
-    Text[ slovak ] = "Legenda";
+    Text [ x-comment ] = " ";
 };
 
 

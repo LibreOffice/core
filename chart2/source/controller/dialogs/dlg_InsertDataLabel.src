@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_InsertDataLabel.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:25 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,19 +70,8 @@ ModalDialog DLG_DATA_DESCR
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 200 , 86 ) ;
-    Text = "Datenbeschriftung" ;
-    Text [ ENGLISH ] = "Data Description" ;
-    Text [ norwegian ] = "Data Description" ;
-    Text [ italian ] = "Dicitura dati" ;
-    Text [ portuguese_brazilian ] = "Rótulos dos Dados" ;
-    Text [ portuguese ] = "Legenda para dados" ;
-    Text [ finnish ] = "Tietoselitteet" ;
-    Text [ danish ] = "Dataetiketter" ;
-    Text [ french ] = "Étiquetage des données" ;
-    Text [ swedish ] = "Dataetiketter" ;
-    Text [ dutch ] = "Gegevenslabels" ;
-    Text [ spanish ] = "Etiqueta de datos" ;
-    Text [ english_us ] = "Data Labels" ;
+    Text [ de ] = "Datenbeschriftung" ;
+    Text [ en-US ] = "Data Labels" ;
     Moveable = TRUE ;
     BUTTONS_OK_CANCEL_HELP_STACKED(144)
     RESOURCE_DATALABEL( 12, 14 )
@@ -90,52 +79,11 @@ ModalDialog DLG_DATA_DESCR
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text = "Datenbeschriftung" ;
-        Text [ ENGLISH ] = "Data Description" ;
-        Text [ norwegian ] = "Data Description" ;
-        Text [ italian ] = "Dicitura dati" ;
-        Text [ portuguese_brazilian ] = "Rótulos de dados" ;
-        Text [ portuguese ] = "Etiqueta de dados" ;
-        Text [ finnish ] = "Tietoselitteet" ;
-        Text [ danish ] = "Dataetiketter" ;
-        Text [ french ] = "Étiquetage des données" ;
-        Text [ swedish ] = "Dataetikett" ;
-        Text [ dutch ] = "Gegevenslabels" ;
-        Text [ spanish ] = "Etiqueta de datos" ;
-        Text [ english_us ] = "Data labels" ;
-        Text[ chinese_simplified ] = "æ•°æ®æ ‡å¿—";
-        Text[ russian ] = "Ïîäïèñè äàííûõ";
-        Text[ polish ] = "Etykiety danych";
-        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ©ãƒ™ãƒ«";
-        Text[ chinese_traditional ] = "è³‡æ–™æ¨™ç±¤";
-        Text[ arabic ] = "ÚäæäÉ ÇáÈíÇäÇÊ";
-        Text[ greek ] = "ÅğéãñáöŞ äåäïìİíùí";
-        Text[ korean ] = "ë°ì´í„° ë ˆì´ë¸”";
-        Text[ turkish ] = "Veri etiketleri";
-        Text[ catalan ] = "Etiqueta de dades";
-        Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "Popisky dat";
-        Text[ hebrew ] = "Datenbeschriftung";
-        Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤²à¥‡à¤¬à¤¿à¤²à¥‡à¤‚";
-        Text[ slovak ] = "Popisy dÃ¡t";
+        Text [ de ] = "Datenbeschriftung" ;
+        Text [ en-US ] = "Data labels" ;
     };
 
-    Text[ chinese_simplified ] = "æ•°æ®æ ‡å¿—";
-    Text[ russian ] = "Ïîäïèñè äàííûõ";
-    Text[ polish ] = "Etykiety danych";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ©ãƒ™ãƒ«";
-    Text[ chinese_traditional ] = "è³‡æ–™æ¨™ç±¤";
-    Text[ arabic ] = "ÚäæäÉ ÇáÈíÇäÇÊ";
-    Text[ greek ] = "ÅğéãñáöŞ äåäïìİíùí";
-    Text[ korean ] = "ë°ì´í„° ë ˆì´ë¸”";
-    Text[ turkish ] = "Veri etiketi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Etiquetes de dades";
-    Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "Popisky dat";
-    Text[ hebrew ] = "Datenbeschriftung";
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤²à¥‡à¤¬à¤¿à¤²à¥‡à¤‚";
-    Text[ slovak ] = "Popisy dÃ¡t";
+    Text [ x-comment ] = " ";
 };
 
 

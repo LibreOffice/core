@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_InsertTitle.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:26 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,19 +69,8 @@ ModalDialog DLG_TITLE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 240 , 88 ) ;
-    Text = "Titel" ;
-    Text [ ENGLISH ] = "Title" ;
-    Text [ norwegian ] = "Tittel" ;
-    Text [ italian ] = "Titolo" ;
-    Text [ portuguese_brazilian ] = "TÌtulos" ;
-    Text [ portuguese ] = "TÌtulo" ;
-    Text [ finnish ] = "Otsikot" ;
-    Text [ danish ] = "Titel" ;
-    Text [ french ] = "Titre" ;
-    Text [ swedish ] = "Rubrik" ;
-    Text [ dutch ] = "Titel" ;
-    Text [ spanish ] = "TÌtulo" ;
-    Text [ english_us ] = "Titles" ;
+    Text [ de ] = "Titel" ;
+    Text [ en-US ] = "Titles" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     BUTTONS_OK_CANCEL_HELP_STACKED(184)
@@ -124,193 +113,48 @@ ModalDialog DLG_TITLE
     {
         Pos = MAP_APPFONT ( 6 , 6  ) ;
         Size = MAP_APPFONT ( 68 , 12 ) ;
-        Text = "~Haupttitel" ;
-        Text [ ENGLISH ] = "~Main Title" ;
-        Text [ norwegian ] = "~Main Title" ;
-        Text [ italian ] = "Titolo principale" ;
-        Text [ portuguese_brazilian ] = "TÌtulo ~Principal" ;
-        Text [ portuguese ] = "TÌtulo ~principal" ;
-        Text [ finnish ] = "~P‰‰otsikko" ;
-        Text [ danish ] = "Overskrift" ;
-        Text [ french ] = "Titre ~principal" ;
-        Text [ swedish ] = "Huvud~rubrik" ;
-        Text [ dutch ] = "~Hoofdtitel" ;
-        Text [ spanish ] = "~TÌtulo principal" ;
-        Text [ english_us ] = "~Main Title" ;
+        Text [ de ] = "~Haupttitel" ;
+        Text [ en-US ] = "~Main Title" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "‰∏ªÊ†áÈ¢ò(~M)";
-        Text[ russian ] = "√Î‡‚Ì˚È Á‡„ÓÎÓ‚ÓÍ";
-        Text[ polish ] = "Tytu≥ ~g≥Ûwny";
-        Text[ japanese ] = "„É°„Ç§„É≥„Çø„Ç§„Éà„É´(~M)";
-        Text[ chinese_traditional ] = "‰∏ªÊ®ôÈ°å(~M)";
-        Text[ arabic ] = "«·⁄‰Ê«‰ «·—∆Ì”Ì";
-        Text[ greek ] = "~ ˝ÒÈÔÚ ÙﬂÙÎÔÚ";
-        Text[ korean ] = "Ï£º Ï†úÎ™©(~M)";
-        Text[ turkish ] = "~Ana ba˛l˝k";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~TÌtol principal";
-        Text[ thai ] = "‡∏ä‡∏∑‡πà‡∏≠~‡∏´‡∏•‡∏±‡∏Å";
-        Text[ czech ] = "Titul";
-        Text[ hebrew ] = "~Haupttitel";
-        Text[ hindi ] = "~‡§™‡•ç‡§∞‡§ß‡§æ‡§® ‡§∂‡•Ä‡§∞‡•ç‡§∑‡§ï";
-        Text[ slovak ] = "~Hlavn√Ω nadpis";
+        Text [ x-comment ] = " ";
     };
     CheckBox CBX_SUBTITLE
     {
         Pos = MAP_APPFONT ( 6 , 22  ) ;
         Size = MAP_APPFONT ( 68 , 12 ) ;
-        Text = "~Untertitel" ;
-        Text [ ENGLISH ] = "~Sub Title" ;
-        Text [ norwegian ] = "~Sub Title" ;
-        Text [ italian ] = "Sottotitolo" ;
-        Text [ portuguese_brazilian ] = "~Sub-tÌtulo" ;
-        Text [ portuguese ] = "~SubtÌtulo" ;
-        Text [ finnish ] = "~Alaotsikko" ;
-        Text [ danish ] = "Undertitel" ;
-        Text [ french ] = "~Sous-titre" ;
-        Text [ swedish ] = "~Underrubrik" ;
-        Text [ dutch ] = "~Subtitel" ;
-        Text [ spanish ] = "~SubtÌtulo" ;
-        Text [ english_us ] = "~Subtitle" ;
+        Text [ de ] = "~Untertitel" ;
+        Text [ en-US ] = "~Subtitle" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÂàÜÊ†áÈ¢ò(~S)";
-        Text[ russian ] = "œÓ‰Á‡„ÓÎÓ‚ÓÍ";
-        Text[ polish ] = "~Podtytu≥";
-        Text[ japanese ] = "„Çµ„Éñ„Çø„Ç§„Éà„É´(~S)";
-        Text[ chinese_traditional ] = "ÂàÜÊ®ôÈ°å(~S)";
-        Text[ arabic ] = "«·⁄‰Ê«‰ «·›—⁄Ì";
-        Text[ greek ] = "’¸ÙÈÙÎÔÚ";
-        Text[ korean ] = "Î∂ÄÏ†ú(~S)";
-        Text[ turkish ] = "~Alt ba˛l˝k";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~SubtÌtol";
-        Text[ thai ] = "‡∏ä‡∏∑‡πà‡∏≠~‡∏£‡∏≠‡∏á";
-        Text[ czech ] = "Podtitul";
-        Text[ hebrew ] = "~Untertitel";
-        Text[ hindi ] = "~‡§â‡§™‡§∂‡•Ä‡§∞‡•ç‡§∑‡§ï";
-        Text[ slovak ] = "P~odnadpis";
+        Text [ x-comment ] = " ";
     };
     CheckBox CBX_TITLE_X_AXIS
     {
         Pos = MAP_APPFONT ( 6 , 38  ) ;
         Size = MAP_APPFONT ( 68 , 12 ) ;
-        Text = "~X-Achse" ;
-        Text [ ENGLISH ] = "~X-Axis" ;
-        Text [ norwegian ] = "~X-Axis" ;
-        Text [ italian ] = "Asse ~X" ;
-        Text [ portuguese_brazilian ] = "Eixo ~X" ;
-        Text [ portuguese ] = "~Eixo X" ;
-        Text [ finnish ] = "~X-akseli" ;
-        Text [ danish ] = "X-akse" ;
-        Text [ french ] = "Axe X" ;
-        Text [ swedish ] = "~X-axel" ;
-        Text [ dutch ] = "~X-as" ;
-        Text [ spanish ] = "Eje ~X" ;
-        Text [ english_us ] = "~X axis" ;
+        Text [ de ] = "~X-Achse" ;
+        Text [ en-US ] = "~X axis" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "~X ËΩ¥";
-        Text[ russian ] = "ŒÒ¸ X";
-        Text[ polish ] = "Oú ~X";
-        Text[ japanese ] = "~X Ëª∏";
-        Text[ chinese_traditional ] = "~X Ëª∏";
-        Text[ arabic ] = "«·„ÕÊ— ”";
-        Text[ greek ] = "¢ÓÔÌ·Ú X";
-        Text[ korean ] = "~X Ï∂ï";
-        Text[ turkish ] = "~X ekseni";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Eix ~X";
-        Text[ thai ] = "‡πÅ‡∏Å‡∏ô~X ";
-        Text[ czech ] = "Osa X";
-        Text[ hebrew ] = "~X-Achse";
-        Text[ hindi ] = "~X ‡§Ö‡§ï‡•ç‡§∑";
-        Text[ slovak ] = "Os ~X";
+        Text [ x-comment ] = " ";
     };
     CheckBox CBX_TITLE_Y_AXIS
     {
         Pos = MAP_APPFONT ( 6 , 54  ) ;
         Size = MAP_APPFONT ( 68 , 12 ) ;
-        Text = "~Y-Achse" ;
-        Text [ ENGLISH ] = "~Y-Axis" ;
-        Text [ norwegian ] = "~Y-Axis" ;
-        Text [ italian ] = "Asse ~Y" ;
-        Text [ portuguese_brazilian ] = "Eixo ~Y" ;
-        Text [ portuguese ] = "~Eixo Y" ;
-        Text [ finnish ] = "~Y-akseli" ;
-        Text [ danish ] = "Y-akse" ;
-        Text [ french ] = "Axe ~Y" ;
-        Text [ swedish ] = "~Y-axel" ;
-        Text [ dutch ] = "~Y-as" ;
-        Text [ spanish ] = "Eje ~Y" ;
-        Text [ english_us ] = "~Y axis" ;
+        Text [ de ] = "~Y-Achse" ;
+        Text [ en-US ] = "~Y axis" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "~Y ËΩ¥";
-        Text[ russian ] = "ŒÒ¸ Y";
-        Text[ polish ] = "Oú ~Y";
-        Text[ japanese ] = "~Y Ëª∏";
-        Text[ chinese_traditional ] = "~Y Ëª∏";
-        Text[ arabic ] = "«·„ÕÊ— ’";
-        Text[ greek ] = "¢ÓÔÌ·Ú ~’";
-        Text[ korean ] = "~Y Ï∂ï";
-        Text[ turkish ] = "~Y ekseni";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Eix ~Y";
-        Text[ thai ] = "‡πÅ‡∏Å‡∏ô~Y ";
-        Text[ czech ] = "Osa Y";
-        Text[ hebrew ] = "~Y-Achse";
-        Text[ hindi ] = "~Y ‡§Ö‡§ï‡•ç‡§∑";
-        Text[ slovak ] = "Os ~Y";
+        Text [ x-comment ] = " ";
     };
     CheckBox CBX_TITLE_Z_AXIS
     {
         Pos = MAP_APPFONT ( 6 , 70  ) ;
         Size = MAP_APPFONT ( 68 , 12 ) ;
-        Text = "~Z-Achse" ;
-        Text [ ENGLISH ] = "~Z-Axis" ;
-        Text [ norwegian ] = "~Z-Axis" ;
-        Text [ italian ] = "Asse ~Z" ;
-        Text [ portuguese_brazilian ] = "Eixo ~Z" ;
-        Text [ portuguese ] = "Eixo ~Z" ;
-        Text [ finnish ] = "~Z-akseli" ;
-        Text [ danish ] = "Z-akse" ;
-        Text [ french ] = "Axe ~Z" ;
-        Text [ swedish ] = "~Z-axel" ;
-        Text [ dutch ] = "~Z-as" ;
-        Text [ spanish ] = "Eje ~Z" ;
-        Text [ english_us ] = "~Z axis" ;
+        Text [ de ] = "~Z-Achse" ;
+        Text [ en-US ] = "~Z axis" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "~Z ËΩ¥";
-        Text[ russian ] = "ŒÒ¸ Z";
-        Text[ polish ] = "Oú ~Z";
-        Text[ japanese ] = "~Z Ëª∏";
-        Text[ chinese_traditional ] = "~Z Ëª∏";
-        Text[ arabic ] = "«·„ÕÊ— ⁄";
-        Text[ greek ] = "¢ÓÔÌ·Ú Z";
-        Text[ korean ] = "~Z Ï∂ï";
-        Text[ turkish ] = "~Z ekseni";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Eix ~Z";
-        Text[ thai ] = "‡πÅ‡∏Å‡∏ô~Z ";
-        Text[ czech ] = "Osa Z";
-        Text[ hebrew ] = "~Z-Achse";
-        Text[ hindi ] = "~Z ‡§Ö‡§ï‡•ç‡§∑";
-        Text[ slovak ] = "Os ~Z";
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "Ê†áÈ¢ò";
-    Text[ russian ] = "«‡„ÓÎÓ‚ÍË";
-    Text[ polish ] = "Tytu≥";
-    Text[ japanese ] = "„Çø„Ç§„Éà„É´";
-    Text[ chinese_traditional ] = "Ê®ôÈ°å";
-    Text[ arabic ] = "⁄‰«ÊÌ‰";
-    Text[ greek ] = "‘ﬂÙÎÔÚ";
-    Text[ korean ] = "Ï†úÎ™©";
-    Text[ turkish ] = "Ba˛l˝k";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "TÌtol";
-    Text[ thai ] = "‡∏ä‡∏∑‡πà‡∏≠";
-    Text[ czech ] = "Tituly";
-    Text[ hebrew ] = "Titel";
-    Text[ hindi ] = "‡§∂‡•Ä‡§∞‡•ç‡§∑‡§ï";
-    Text[ slovak ] = "Nadpisy";
+    Text [ x-comment ] = " ";
 };
 
 
