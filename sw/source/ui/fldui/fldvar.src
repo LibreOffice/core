@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:56:09 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ TabPage TP_FLD_VAR
         Text [ portuguese_brazilian ] = "~Tipo" ;
         Text [ portuguese ] = "Tipo de ~campo" ;
         Text [ finnish ] = "~Tyyppi" ;
-        Text [ danish ] = "Felttype" ;
+        Text [ danish ] = "~Type" ;
         Text [ french ] = "~Type de champ" ;
         Text [ swedish ] = "~F�lttyp" ;
         Text [ dutch ] = "~Veldtype" ;
@@ -105,6 +105,8 @@ TabPage TP_FLD_VAR
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "~Typ";
+        Text[ hungarian ] = "~Típus";
+        Text[ slovenian ] = "~Vrsta";
     };
     ListBox LB_VARTYPE
     {
@@ -148,6 +150,8 @@ TabPage TP_FLD_VAR
         Text[ hebrew ] = "‮בחירה‬";
         Text[ hindi ] = "चु~नाव";
         Text[ slovak ] = "Výb~er";
+        Text[ hungarian ] = "K~ijelölés";
+        Text[ slovenian ] = "~Izbor";
     };
     ListBox LB_VARSELECTION
     {
@@ -190,6 +194,8 @@ TabPage TP_FLD_VAR
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
         Text[ slovak ] = "Formát";
+        Text[ hungarian ] = "Formátum";
+        Text[ slovenian ] = "Oblika";
     };
     ListBox LB_VARFORMAT
     {
@@ -241,6 +247,8 @@ TabPage TP_FLD_VAR
         TEXT[ hebrew ] = "~Unsichtbar";
         TEXT[ hindi ] = "अ~गोचर";
         TEXT[ slovak ] = "Nevi~diteľný";
+        TEXT[ hungarian ] = "~Láthatatlan";
+        TEXT[ slovenian ] = "~Nevidno";
     };
     FixedText FT_VARCHAPTERHEADER
     {
@@ -275,6 +283,8 @@ TabPage TP_FLD_VAR
         Text[ hebrew ] = "Kapitelweise Nummerierung";
         Text[ hindi ] = "अध्याय के अनुसार संख्या देना ";
         Text[ slovak ] = "Číslovanie podľa kapitol";
+        Text[ hungarian ] = "Fejezet szerinti számozás";
+        Text[ slovenian ] = "Oštevilčevanje po poglavjih";
     };
     FixedText FT_VARCHAPTERLEVEL
     {
@@ -286,7 +296,7 @@ TabPage TP_FLD_VAR
         Text [ english_us ] = "~Level" ;
         Text [ portuguese_brazilian ] = "~N�vel" ;
         Text [ swedish ] = "~Niv�" ;
-        Text [ danish ] = "Niveau" ;
+        Text [ danish ] = "~Niveau" ;
         Text [ italian ] = "Li~vello" ;
         Text [ spanish ] = "~Nivel" ;
         Text [ french ] = "Ni~veau" ;
@@ -309,6 +319,8 @@ TabPage TP_FLD_VAR
         Text[ hebrew ] = "E~bene";
         Text[ hindi ] = "~स्तर";
         Text[ slovak ] = "Úro~veň";
+        Text[ hungarian ] = "~Szint";
+        Text[ slovenian ] = "~Raven";
     };
     ListBox LB_VARCHAPTERLEVEL
     {
@@ -430,6 +442,14 @@ TabPage TP_FLD_VAR
     {
          < "Žiadne" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Semmi" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Brez" ; > ;
+    };
     };
     FixedText FT_VARSEPARATOR
     {
@@ -441,7 +461,7 @@ TabPage TP_FLD_VAR
         Text [ english_us ] = "~Separator" ;
         Text [ portuguese_brazilian ] = "~Separador" ;
         Text [ swedish ] = "Skilje~tecken" ;
-        Text [ danish ] = "Separator" ;
+        Text [ danish ] = "~Separator" ;
         Text [ italian ] = "~Separatore" ;
         Text [ spanish ] = "~Separador" ;
         Text [ french ] = "~S�parateur" ;
@@ -464,6 +484,8 @@ TabPage TP_FLD_VAR
         Text[ hebrew ] = "~Trenner";
         Text[ hindi ] = "~अलगानेवाला";
         Text[ slovak ] = "O~ddeľovač";
+        Text[ hungarian ] = "~Elválasztó";
+        Text[ slovenian ] = "~Ločilo";
     };
     Edit ED_VARSEPARATOR
     {
@@ -484,11 +506,11 @@ TabPage TP_FLD_VAR
         Text [ english_us ] = "Na~me" ;
         Text [ portuguese_brazilian ] = "~Nome" ;
         Text [ swedish ] = "Na~mn" ;
-        Text [ danish ] = "Navn" ;
+        Text [ danish ] = "Na~vn" ;
         Text [ italian ] = "No~me" ;
         Text [ spanish ] = "~Nombre" ;
         Text [ french ] = "Nom" ;
-        Text [ dutch ] = "Na~am" ;
+        Text [ dutch ] = "N~aam" ;
         Text [ portuguese ] = "No~me" ;
         Text[ chinese_simplified ] = "名称(~M)";
         Text[ russian ] = "���";
@@ -507,6 +529,8 @@ TabPage TP_FLD_VAR
         Text[ hebrew ] = "Na~me";
         Text[ hindi ] = "ना~म";
         Text[ slovak ] = "~Názov";
+        Text[ hungarian ] = "~Név";
+        Text[ slovenian ] = "I~me";
     };
     Edit ED_VARNAME
     {
@@ -527,7 +551,7 @@ TabPage TP_FLD_VAR
         Text [ portuguese_brazilian ] = "~Valor" ;
         Text [ portuguese ] = "~Valor" ;
         Text [ finnish ] = "~Arvo" ;
-        Text [ danish ] = "V�rdi" ;
+        Text [ danish ] = "~V�rdi" ;
         Text [ french ] = "~Valeur" ;
         Text [ swedish ] = "~V�rde" ;
         Text [ dutch ] = "~Waarde" ;
@@ -550,6 +574,8 @@ TabPage TP_FLD_VAR
         Text[ hebrew ] = "~Wert";
         Text[ hindi ] = "~मूल्य";
         Text[ slovak ] = "Ho~dnota";
+        Text[ hungarian ] = "É~rték";
+        Text[ slovenian ] = "~Vrednost";
     };
     Edit ED_VARVALUE
     {
@@ -604,6 +630,8 @@ TabPage TP_FLD_VAR
                 Text[ hebrew ] = "‮יישום‬";
                 Text[ hindi ] = "लागू करो";
                 Text[ slovak ] = "Použiť";
+                Text[ hungarian ] = "Alkalmaz";
+                Text[ slovenian ] = "Uporabi";
             };
             ToolBoxItem
             {
@@ -643,6 +671,8 @@ TabPage TP_FLD_VAR
                 Text[ hebrew ] = "‮מחיקה‬";
                 Text[ hindi ] = "मिटाओ";
                 Text[ slovak ] = "Zmazať";
+                Text[ hungarian ] = "Törlés";
+                Text[ slovenian ] = "Izbriši";
             };
         };
     };
@@ -672,7 +702,10 @@ TabPage TP_FLD_VAR
     Text[ hebrew ] = "Variablen";
     Text[ hindi ] = "वेरिऐबल";
     Text[ slovak ] = "Premenné";
+    Text[ hungarian ] = "Változók";
+    Text[ slovenian ] = "Spremenljivke";
 };
+
 
 
 
