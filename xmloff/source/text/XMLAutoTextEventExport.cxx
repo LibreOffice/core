@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventExport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 11:51:27 $
+ *  last change: $Author: dvo $ $Date: 2001-02-06 16:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,10 +208,6 @@ void XMLAutoTextEventExport::exportAutoTextContainer(
     {
         GetDocHandler()->startDocument();
 
-        // office:class = ...
-        if( pClass )
-            AddAttributeASCII( XML_NAMESPACE_OFFICE, sXML_class, pClass );
-
     // do we really want all namespaces ?
 //  sal_uInt16 nPos = pNamespaceMap->GetFirstIndex();
 //  while( USHRT_MAX != nPos )
@@ -222,7 +218,7 @@ void XMLAutoTextEventExport::exportAutoTextContainer(
 //      nPos = pNamespaceMap->GetNextIndex( nPos );
 //  }
 
-        // namespaces for office:, text: and sript:
+        // namespaces for office:, text: and script:
         GetAttrList().AddAttribute(
             GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_TEXT ),
             sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_TEXT ) );
@@ -234,9 +230,9 @@ void XMLAutoTextEventExport::exportAutoTextContainer(
             sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_OFFICE ) );
 
         {
-            // office document
-            SvXMLElementExport aDocumentElement(
-                *this, XML_NAMESPACE_OFFICE, sXML_document,
+            // container element
+            SvXMLElementExport aContainerElement(
+                *this, XML_NAMESPACE_TEXT, sXML_auto_text_events,
                 sal_True, sal_True);
 
             // iterate over container and process all groups

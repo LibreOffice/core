@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLAutoTextEventImport.cxx,v $
+ *  $RCSfile: XMLAutoTextContainerEventImport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2001-02-06 16:34:29 $
  *
@@ -59,8 +59,12 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLAUTOTEXTEVENTIMPORT_HXX
-#include "XMLAutoTextEventImport.hxx"
+#ifndef _XMLOFF_XMLAUTOTEXTCONTAINEREVENTIMPORT_HXX
+#include "XMLAutoTextContainerEventImport.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLAUTOTEXTGROUPEVENTIMPORT_HXX
+#include "XMLAutoTextGroupEventImport.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
@@ -75,118 +79,62 @@
 #include <com/sun/star/text/XAutoTextContainer.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_XAUTOTEXTGROUP_HPP_
-#include <com/sun/star/text/XAutoTextGroup.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XAUTOTEXTGROUP_HPP_
-#include <com/sun/star/text/XAutoTextGroup.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
-#include <com/sun/star/uno/XInterface.hpp>
-#endif
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLAUTOTEXTGROUPEVENTIMPORT_HXX
-#include "XMLAutoTextGroupEventImport.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLAUTOTEXTCONTAINEREVENTIMPORT_HXX
-#include "XMLAutoTextContainerEventImport.hxx"
+#ifndef _XMLOFF_XMLIMP_HXX
+#include "xmlimp.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
 
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include "nmspmap.hxx"
+#endif
+
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
 #endif
 
+
 using namespace ::com::sun::star;
 
 using ::rtl::OUString;
-using ::comphelper::getProcessServiceFactory;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::uno::Exception;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::text::XAutoTextContainer;
-using ::com::sun::star::lang::XMultiServiceFactory;
-
-const sal_Char sAPI_AutoText[] = "com.sun.star.text.AutoTextContainer";
 
 
-XMLAutoTextEventImport::XMLAutoTextEventImport() throw() :
-    SvXMLImport()
-{
-    // instantiate AutoTextContainer via factory
-    Reference<XMultiServiceFactory> xFactory = getProcessServiceFactory();
-    if (xFactory.is())
-    {
-        OUString sService(RTL_CONSTASCII_USTRINGPARAM(sAPI_AutoText));
-        Reference<XAutoTextContainer> xContainer(
-            xFactory->createInstance(sService), uno::UNO_QUERY);
 
-        xAutoTextContainer = xContainer;
-    }
+TYPEINIT1(XMLAutoTextContainerEventImport, SvXMLImportContext);
 
-}
 
-XMLAutoTextEventImport::~XMLAutoTextEventImport()
+XMLAutoTextContainerEventImport::XMLAutoTextContainerEventImport(
+    SvXMLImport& rImport,
+    USHORT nPrfx,
+    const OUString& rLName,
+    const Reference<XAutoTextContainer > & rContnr ) :
+        SvXMLImportContext(rImport, nPrfx, rLName),
+        rContainer(rContnr)
 {
 }
 
+XMLAutoTextContainerEventImport::~XMLAutoTextContainerEventImport()
+{
+}
 
-SvXMLImportContext* XMLAutoTextEventImport::CreateContext(
-    sal_uInt16 nPrefix,
+SvXMLImportContext* XMLAutoTextContainerEventImport::CreateChildContext(
+    USHORT nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList > & xAttrList )
+    const Reference<XAttributeList> & xAttrList )
 {
-    if ( xAutoTextContainer.is() &&
-         (XML_NAMESPACE_TEXT == nPrefix) &&
-         rLocalName.equalsAsciiL(sXML_auto_text_events,
-                                 sizeof(sXML_auto_text_events)-1) )
+    if ((XML_NAMESPACE_TEXT == nPrefix) &&
+        rLocalName.equalsAsciiL(sXML_auto_text_group,
+                                sizeof(sXML_auto_text_group)-1))
     {
-        return new XMLAutoTextContainerEventImport(*this, nPrefix, rLocalName,
-                                                   xAutoTextContainer);
+        return new XMLAutoTextGroupEventImport(GetImport(), nPrefix,
+                                               rLocalName, rContainer);
     }
     else
-    {
-        return SvXMLImport::CreateContext(nPrefix, rLocalName, xAttrList);
-    }
+        return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
 }
-
-
-
-Sequence< OUString > SAL_CALL
-    XMLAutoTextEventImport_getSupportedServiceNames()
-        throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.office.sax.importer.AutoTextEventReader" ) );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL XMLAutoTextEventImport_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "XMLAutoTextEventImport" ) );
-}
-
-Reference< XInterface > SAL_CALL XMLAutoTextEventImport_createInstance(
-        const Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
-{
-    return (cppu::OWeakObject*)new XMLAutoTextEventImport;
-}
-

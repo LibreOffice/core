@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 11:51:26 $
+ *  last change: $Author: dvo $ $Date: 2001-02-06 16:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,7 @@ XML_CONSTASCII_ACTION( sXML_auto_grow_height, "auto-grow-height" );
 XML_CONSTASCII_ACTION( sXML_auto_grow_width, "auto-grow-width" );
 XML_CONSTASCII_ACTION( sXML_auto_reload, "auto-reload" );
 XML_CONSTASCII_ACTION( sXML_auto_text, "auto-text" );
+XML_CONSTASCII_ACTION( sXML_auto_text_events, "auto-text-events" );
 XML_CONSTASCII_ACTION( sXML_auto_text_group, "auto-text-group" );
 XML_CONSTASCII_ACTION( sXML_auto_text_indent, "auto-text-indent" );
 XML_CONSTASCII_ACTION( sXML_up, "up" );
