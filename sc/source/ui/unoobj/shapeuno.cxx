@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:56:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape )
 
         mxShapeAgg->setDelegator( (cppu::OWeakObject*)this );
 
-        xShape = uno::Reference<drawing::XShape>( mxShapeAgg, uno::UNO_QUERY );
+        xShape.set(uno::Reference<drawing::XShape>( mxShapeAgg, uno::UNO_QUERY ));
 
         bIsTextShape = ( SvxUnoTextBase::getImplementation( mxShapeAgg ) != NULL );
     }
@@ -177,7 +177,7 @@ uno::Any SAL_CALL ScShapeObj::queryInterface( const uno::Type& rType )
     }
     SC_QUERYINTERFACE( lang::XTypeProvider )
 
-    uno::Any aRet = OWeakObject::queryInterface( rType );
+    uno::Any aRet(OWeakObject::queryInterface( rType ));
     if ( !aRet.hasValue() && mxShapeAgg.is() )
         aRet = mxShapeAgg->queryAggregation( rType );
 
@@ -251,12 +251,12 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScShapeObj::getPropertySetInfo(
 
     //  mix own and aggregated properties:
     uno::Reference<beans::XPropertySetInfo> xRet;
-    uno::Reference<beans::XPropertySet> xAggProp = lcl_GetPropertySet(mxShapeAgg);
+    uno::Reference<beans::XPropertySet> xAggProp(lcl_GetPropertySet(mxShapeAgg));
     if ( xAggProp.is() )
     {
-        uno::Reference<beans::XPropertySetInfo> xAggInfo = xAggProp->getPropertySetInfo();
-        const uno::Sequence<beans::Property> aPropSeq = xAggInfo->getProperties();
-        xRet = new SfxExtItemPropertySetInfo( lcl_GetShapeMap(), aPropSeq );
+        uno::Reference<beans::XPropertySetInfo> xAggInfo(xAggProp->getPropertySetInfo());
+        const uno::Sequence<beans::Property> aPropSeq(xAggInfo->getProperties());
+        xRet.set(new SfxExtItemPropertySetInfo( lcl_GetShapeMap(), aPropSeq ));
     }
     return xRet;
 }
@@ -368,7 +368,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
 
     if ( aNameString.EqualsAscii( SC_UNONAME_ANCHOR ) )
     {
@@ -473,8 +473,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
         if ( pObj )
         {
             ImageMap aImageMap;
-            uno::Reference< uno::XInterface > xImageMapInt;
-            aValue >>= xImageMapInt;
+            uno::Reference< uno::XInterface > xImageMapInt(aValue, uno::UNO_QUERY);
 
             if( !xImageMapInt.is() || !SvUnoImageMap_fillImageMap( xImageMapInt, aImageMap ) )
                 throw lang::IllegalArgumentException();
@@ -657,7 +656,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
     }
     else
     {
-        uno::Reference<beans::XPropertySet> xAggProp = lcl_GetPropertySet(mxShapeAgg);
+        uno::Reference<beans::XPropertySet> xAggProp(lcl_GetPropertySet(mxShapeAgg));
         if ( xAggProp.is() )
             xAggProp->setPropertyValue( aPropertyName, aValue );
     }
@@ -725,7 +724,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
             if( pIMapInfo )
             {
                 const ImageMap& rIMap = pIMapInfo->GetImageMap();
-                xImageMap = SvUnoImageMap_createInstance( rIMap, GetSupportedMacroItems() );
+                xImageMap.set(SvUnoImageMap_createInstance( rIMap, GetSupportedMacroItems() ));
             }
             else
                 xImageMap = SvUnoImageMap_createInstance( GetSupportedMacroItems() );
@@ -838,7 +837,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
     }
     else
     {
-        uno::Reference<beans::XPropertySet> xAggProp = lcl_GetPropertySet(mxShapeAgg);
+        uno::Reference<beans::XPropertySet> xAggProp(lcl_GetPropertySet(mxShapeAgg));
         if ( xAggProp.is() )
             aAny = xAggProp->getPropertyValue( aPropertyName );
     }
@@ -853,7 +852,7 @@ void SAL_CALL ScShapeObj::addPropertyChangeListener( const rtl::OUString& aPrope
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<beans::XPropertySet> xAggProp = lcl_GetPropertySet(mxShapeAgg);
+    uno::Reference<beans::XPropertySet> xAggProp(lcl_GetPropertySet(mxShapeAgg));
     if ( xAggProp.is() )
         xAggProp->addPropertyChangeListener( aPropertyName, aListener );
 }
@@ -865,7 +864,7 @@ void SAL_CALL ScShapeObj::removePropertyChangeListener( const rtl::OUString& aPr
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<beans::XPropertySet> xAggProp = lcl_GetPropertySet(mxShapeAgg);
+    uno::Reference<beans::XPropertySet> xAggProp(lcl_GetPropertySet(mxShapeAgg));
     if ( xAggProp.is() )
         xAggProp->removePropertyChangeListener( aPropertyName, aListener );
 }
@@ -877,7 +876,7 @@ void SAL_CALL ScShapeObj::addVetoableChangeListener( const rtl::OUString& aPrope
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<beans::XPropertySet> xAggProp = lcl_GetPropertySet(mxShapeAgg);
+    uno::Reference<beans::XPropertySet> xAggProp(lcl_GetPropertySet(mxShapeAgg));
     if ( xAggProp.is() )
         xAggProp->addVetoableChangeListener( aPropertyName, aListener );
 }
@@ -889,7 +888,7 @@ void SAL_CALL ScShapeObj::removeVetoableChangeListener( const rtl::OUString& aPr
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<beans::XPropertySet> xAggProp = lcl_GetPropertySet(mxShapeAgg);
+    uno::Reference<beans::XPropertySet> xAggProp(lcl_GetPropertySet(mxShapeAgg));
     if ( xAggProp.is() )
         xAggProp->removeVetoableChangeListener( aPropertyName, aListener );
 }
@@ -900,16 +899,28 @@ beans::PropertyState SAL_CALL ScShapeObj::getPropertyState( const rtl::OUString&
                                 throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
 
     beans::PropertyState eRet = beans::PropertyState_DIRECT_VALUE;
     if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
     {
         // ImageMap is always "direct"
     }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_ANCHOR ) )
+    {
+        // Anchor is always "direct"
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_HORIPOS ) )
+    {
+        // HoriPos is always "direct"
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_VERTPOS ) )
+    {
+        // VertPos is always "direct"
+    }
     else
     {
-        uno::Reference<beans::XPropertyState> xAggState = lcl_GetPropertyState(mxShapeAgg);
+        uno::Reference<beans::XPropertyState> xAggState(lcl_GetPropertyState(mxShapeAgg));
         if ( xAggState.is() )
             eRet = xAggState->getPropertyState( aPropertyName );
     }
@@ -937,7 +948,7 @@ void SAL_CALL ScShapeObj::setPropertyToDefault( const rtl::OUString& aPropertyNa
                             throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
 
     if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
     {
@@ -958,7 +969,7 @@ void SAL_CALL ScShapeObj::setPropertyToDefault( const rtl::OUString& aPropertyNa
     }
     else
     {
-        uno::Reference<beans::XPropertyState> xAggState = lcl_GetPropertyState(mxShapeAgg);
+        uno::Reference<beans::XPropertyState> xAggState(lcl_GetPropertyState(mxShapeAgg));
         if ( xAggState.is() )
             xAggState->setPropertyToDefault( aPropertyName );
     }
@@ -975,12 +986,12 @@ uno::Any SAL_CALL ScShapeObj::getPropertyDefault( const rtl::OUString& aProperty
     if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
     {
         //  default: empty ImageMap
-        uno::Reference< uno::XInterface > xImageMap = SvUnoImageMap_createInstance( GetSupportedMacroItems() );
+        uno::Reference< uno::XInterface > xImageMap(SvUnoImageMap_createInstance( GetSupportedMacroItems() ));
         aAny <<= uno::Reference< container::XIndexContainer >::query( xImageMap );
     }
     else
     {
-        uno::Reference<beans::XPropertyState> xAggState = lcl_GetPropertyState(mxShapeAgg);
+        uno::Reference<beans::XPropertyState> xAggState(lcl_GetPropertyState(mxShapeAgg));
         if ( xAggState.is() )
             aAny = xAggState->getPropertyDefault( aPropertyName );
     }
@@ -1022,12 +1033,12 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getAnchor() throw(uno::Run
                     SCTAB nTab = 0;
                     if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
                     {
-                        Point aPos = pObj->GetCurrentBoundRect().TopLeft();
-                        ScRange aRange = pDoc->GetRange( nTab, Rectangle( aPos, aPos ) );
+                        Point aPos(pObj->GetCurrentBoundRect().TopLeft());
+                        ScRange aRange(pDoc->GetRange( nTab, Rectangle( aPos, aPos ) ));
 
                         //  anchor is always the cell
 
-                        xRet = new ScCellObj( pDocSh, aRange.aStart );
+                        xRet.set(new ScCellObj( pDocSh, aRange.aStart ));
                     }
                 }
             }
@@ -1043,7 +1054,7 @@ void SAL_CALL ScShapeObj::dispose() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<lang::XComponent> xAggComp = lcl_GetComponent(mxShapeAgg);
+    uno::Reference<lang::XComponent> xAggComp(lcl_GetComponent(mxShapeAgg));
     if ( xAggComp.is() )
         xAggComp->dispose();
 }
@@ -1054,7 +1065,7 @@ void SAL_CALL ScShapeObj::addEventListener(
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<lang::XComponent> xAggComp = lcl_GetComponent(mxShapeAgg);
+    uno::Reference<lang::XComponent> xAggComp(lcl_GetComponent(mxShapeAgg));
     if ( xAggComp.is() )
         xAggComp->addEventListener(xListener);
 }
@@ -1065,7 +1076,7 @@ void SAL_CALL ScShapeObj::removeEventListener(
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<lang::XComponent> xAggComp = lcl_GetComponent(mxShapeAgg);
+    uno::Reference<lang::XComponent> xAggComp(lcl_GetComponent(mxShapeAgg));
     if ( xAggComp.is() )
         xAggComp->removeEventListener(xListener);
 }
@@ -1075,11 +1086,10 @@ void SAL_CALL ScShapeObj::removeEventListener(
 
 void lcl_CopyOneProperty( beans::XPropertySet& rDest, beans::XPropertySet& rSource, const sal_Char* pName )
 {
-    rtl::OUString aNameStr = rtl::OUString::createFromAscii(pName);
+    rtl::OUString aNameStr(rtl::OUString::createFromAscii(pName));
     try
     {
-        uno::Any aValue = rSource.getPropertyValue( aNameStr );
-        rDest.setPropertyValue( aNameStr, aValue );
+        rDest.setPropertyValue( aNameStr, rSource.getPropertyValue( aNameStr ) );
     }
     catch (uno::Exception&)
     {
@@ -1104,15 +1114,15 @@ void SAL_CALL ScShapeObj::insertTextContent( const uno::Reference<text::XTextRan
         //  The ScCellFieldObj object is left in non-inserted state.
 
         SvxUnoTextField* pDrawField = new SvxUnoTextField( ID_URLFIELD );
-        xEffContent = pDrawField;
+        xEffContent.set(pDrawField);
         lcl_CopyOneProperty( *pDrawField, *pCellField, SC_UNONAME_URL );
         lcl_CopyOneProperty( *pDrawField, *pCellField, SC_UNONAME_REPR );
         lcl_CopyOneProperty( *pDrawField, *pCellField, SC_UNONAME_TARGET );
     }
     else
-        xEffContent = xContent;
+        xEffContent.set(xContent);
 
-    uno::Reference<text::XText> xAggText = lcl_GetText(mxShapeAgg);
+    uno::Reference<text::XText> xAggText(lcl_GetText(mxShapeAgg));
     if ( xAggText.is() )
         xAggText->insertTextContent( xRange, xEffContent, bAbsorb );
 }
@@ -1124,7 +1134,7 @@ void SAL_CALL ScShapeObj::removeTextContent( const uno::Reference<text::XTextCon
 
     //  ScCellFieldObj can't be used here.
 
-    uno::Reference<text::XText> xAggText = lcl_GetText(mxShapeAgg);
+    uno::Reference<text::XText> xAggText(lcl_GetText(mxShapeAgg));
     if ( xAggText.is() )
         xAggText->removeTextContent( xContent );
 }
@@ -1179,7 +1189,7 @@ void SAL_CALL ScShapeObj::insertString( const uno::Reference<text::XTextRange>& 
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<text::XSimpleText> xAggSimpleText = lcl_GetSimpleText(mxShapeAgg);
+    uno::Reference<text::XSimpleText> xAggSimpleText(lcl_GetSimpleText(mxShapeAgg));
     if ( xAggSimpleText.is() )
         xAggSimpleText->insertString( xRange, aString, bAbsorb );
     else
@@ -1192,7 +1202,7 @@ void SAL_CALL ScShapeObj::insertControlCharacter( const uno::Reference<text::XTe
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<text::XSimpleText> xAggSimpleText = lcl_GetSimpleText(mxShapeAgg);
+    uno::Reference<text::XSimpleText> xAggSimpleText(lcl_GetSimpleText(mxShapeAgg));
     if ( xAggSimpleText.is() )
         xAggSimpleText->insertControlCharacter( xRange, nControlCharacter, bAbsorb );
     else
@@ -1212,7 +1222,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getStart() throw(uno::Runt
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<text::XTextRange> xAggTextRange = lcl_GetTextRange(mxShapeAgg);
+    uno::Reference<text::XTextRange> xAggTextRange(lcl_GetTextRange(mxShapeAgg));
     if ( xAggTextRange.is() )
         return xAggTextRange->getStart();
     else
@@ -1225,7 +1235,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getEnd() throw(uno::Runtim
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<text::XTextRange> xAggTextRange = lcl_GetTextRange(mxShapeAgg);
+    uno::Reference<text::XTextRange> xAggTextRange(lcl_GetTextRange(mxShapeAgg));
     if ( xAggTextRange.is() )
         return xAggTextRange->getEnd();
     else
@@ -1238,7 +1248,7 @@ rtl::OUString SAL_CALL ScShapeObj::getString() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<text::XTextRange> xAggTextRange = lcl_GetTextRange(mxShapeAgg);
+    uno::Reference<text::XTextRange> xAggTextRange(lcl_GetTextRange(mxShapeAgg));
     if ( xAggTextRange.is() )
         return xAggTextRange->getString();
     else
@@ -1251,7 +1261,7 @@ void SAL_CALL ScShapeObj::setString( const rtl::OUString& aText ) throw(uno::Run
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<text::XTextRange> xAggTextRange = lcl_GetTextRange(mxShapeAgg);
+    uno::Reference<text::XTextRange> xAggTextRange(lcl_GetTextRange(mxShapeAgg));
     if ( xAggTextRange.is() )
         xAggTextRange->setString( aText );
     else
