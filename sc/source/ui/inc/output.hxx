@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-08 19:26:36 $
+ *  last change: $Author: nn $ $Date: 2001-05-09 19:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ public:
     void    SetSnapPixel( BOOL bSet = TRUE );
 
     void    DrawGrid( BOOL bGrid, BOOL bPage );
-    void    DrawStrings();
+    void    DrawStrings( BOOL bPixelToLogic = FALSE );
     void    DrawBackground();
     void    DrawShadow();
     void    DrawExtraShadow(BOOL bLeft, BOOL bTop, BOOL bRight, BOOL bBottom);
