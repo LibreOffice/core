@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-07 19:05:34 $
+ *  last change: $Author: sab $ $Date: 2001-06-13 17:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,9 +368,11 @@ class ScCellTextData : public SfxListener
     ScAddress               aCellPos;
     ScEditEngineDefaulter*  pEditEngine;
     SvxEditEngineForwarder* pForwarder;
+    ScSharedCellEditSource* pOriginalSource;
     BOOL                    bDataValid;
     BOOL                    bInUpdate;
-    ScSharedCellEditSource* pOriginalSource;
+    BOOL                    bDirty;
+    BOOL                    bDoUpdate;
 
 public:
                             ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP);
@@ -388,6 +390,10 @@ public:
                             // used for ScCellEditSource:
     ScDocShell*             GetDocShell() const     { return pDocShell; }
     const ScAddress&        GetCellPos() const      { return aCellPos; }
+
+    void                    SetDirty(BOOL bValue)   { bDirty = bValue; }
+    BOOL                    IsDirty() const         { return bDirty; }
+    void                    SetDoUpdate(BOOL bValue)    { bDoUpdate = bValue; }
 };
 
 class ScCellTextObj : public ScCellTextData, public SvxUnoText

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-07 19:06:48 $
+ *  last change: $Author: sab $ $Date: 2001-06-13 17:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,7 +799,9 @@ ScCellTextData::ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP) :
     pForwarder( NULL ),
     bDataValid( FALSE ),
     bInUpdate( FALSE ),
-    pOriginalSource( NULL )
+    pOriginalSource( NULL ),
+    bDirty( FALSE ),
+    bDoUpdate( TRUE )
 {
     if (pDocShell)
         pDocShell->GetDocument()->AddUnoObject(*this);
@@ -887,19 +889,25 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
 
 void ScCellTextData::UpdateData()
 {
-    if ( pDocShell && pEditEngine )
+    if ( bDoUpdate )
     {
-        //  during the own UpdateData call, bDataValid must not be reset,
-        //  or things like attributes after the text would be lost
-        //  (are not stored in the cell)
+        if ( pDocShell && pEditEngine )
+        {
+            //  during the own UpdateData call, bDataValid must not be reset,
+            //  or things like attributes after the text would be lost
+            //  (are not stored in the cell)
 
-        bInUpdate = TRUE;   // prevents bDataValid from being reset
+            bInUpdate = TRUE;   // prevents bDataValid from being reset
 
-        ScDocFunc aFunc(*pDocShell);
-        aFunc.PutData( aCellPos, *pEditEngine, FALSE, TRUE );   // always as text
+            ScDocFunc aFunc(*pDocShell);
+            aFunc.PutData( aCellPos, *pEditEngine, FALSE, TRUE );   // always as text
 
-        bInUpdate = FALSE;
+            bInUpdate = FALSE;
+            bDirty = FALSE;
+        }
     }
+    else
+        bDirty = TRUE;
 }
 
 void ScCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
