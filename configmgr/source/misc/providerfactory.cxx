@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-12 16:44:14 $
+ *  last change: $Author: jb $ $Date: 2002-07-03 15:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,16 +309,17 @@ namespace configmgr
         // detect a plugin session. Can be specified only as argument
         sal_Bool bIsPluginSession = aThisRoundSettings.isPlugin();
 
-        if (bIsPluginSession)
-        {
-            OSL_ENSURE(!aThisRoundSettings.isSourcePathValid(),"Invalid Argument: No explicit source path should be specified for plugin session");
-            bUseBootstrapData = true;
-        }
+        OSL_ASSERT(bUseBootstrapData || !bIsPluginSession);
+        OSL_ENSURE(!bIsPluginSession || !aThisRoundSettings.isSourcePathValid(),"Invalid Argument: No explicit source path should be specified for plugin session");
 
         // use bootstrap data if necessary
         if (bUseBootstrapData)
         {
             ensureBootstrapSettings();
+
+            // hack to disable 'plugin' behavior for new-style sessions
+            if (bIsPluginSession && m_pPureSettings->settings.isUnoBackend())
+                return this->createProvider(); //--> use default provider
 
             ConnectionSettings aMergedSettings = m_pPureSettings->settings;
             aMergedSettings.mergeOverrides(aThisRoundSettings);
@@ -431,6 +432,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2002/06/12 16:44:14  jb
+ *  #98489# Initial support for new UNO-based backends
+ *
  *  Revision 1.15  2001/11/09 12:03:36  jb
  *  #86080# Corrected exception thrown for creation failures
  *

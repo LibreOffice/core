@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-12 16:44:14 $
+ *  last change: $Author: jb $ $Date: 2002-07-03 15:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,8 @@ namespace configmgr
         SETTING_SERVER, SETTING_SERVICE, SETTING_PORT,
         SETTING_TIMEOUT,
         SETTING_LOCALE, SETTING_ASYNC,
-        SETTING_SOURCEPATH, SETTING_UPDATEPATH, SETTING_REINITIALIZE
+        SETTING_SOURCEPATH, SETTING_UPDATEPATH, SETTING_REINITIALIZE,
+        SETTING_UNOSERVICE, SETTING_UNOWRAPPER, SETTING_OFFLINE
     };
 
 // ---------------------------------------------------------------------------------------
