@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:44:42 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,13 +190,6 @@ namespace sd {
 
 BOOL DrawViewShell::bPipette = FALSE;
 
-// Use magenta as transparency color instead of the standard gray that is
-// imported from vcl/image.hxx
-#undef IMAGE_STDBTN_COLOR
-#undef IMAGE_STDBTN_COLOR_HC
-#define IMAGE_STDBTN_COLOR Color(0xff,0x00,0xff)
-#define IMAGE_STDBTN_COLOR_HC Color(0xff,0x00,0xff)
-
 // ------------------------
 // - ScannerEventListener -
 // ------------------------
@@ -370,14 +363,10 @@ DrawViewShell::~DrawViewShell()
         }
     }
 
-    /*af
-    pViewShell->RemoveSubShell();
-
     // Umschaltung der ObjectBarShells unterdruecken, sonst versucht die
     // sterbende Funktion eventuell die ObjectBars zu wechseln. Die
     // entsprechende Shell ist aber schon vom SFX vom Dispatcher-Stack
     // genommen worden.
-    */
     GetObjectBarManager().DisableObjectBarSwitching();
 
     if ( pClipEvtLstnr )
@@ -388,6 +377,9 @@ DrawViewShell::~DrawViewShell()
     }
 
     delete pDrView;
+    // Set mpView to NULL so that the destructor of the ViewShell base class
+    // does not access it.
+    mpView = pDrView = NULL;
 
     pFrameView->Disconnect();
     delete pXPolygon;
@@ -446,7 +438,10 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     mpView = pDrView;            // Pointer der Basisklasse ViewShell
     pDrView->SetSwapAsynchron(TRUE); // Asynchrones Laden von Graphiken
 
-    ePageKind = eInitialPageKind; //af pFrameView->GetPageKind();
+    // We do not read the page kind from the frame view anymore so we have
+    // to set it in order to resync frame view and this view.
+    pFrameView->SetPageKind(eInitialPageKind);
+    ePageKind = eInitialPageKind;
     eEditMode = EM_PAGE;
     DocumentType eDocType = GetDoc()->GetDocumentType(); // RTTI fasst hier noch nicht
     switch (ePageKind)
@@ -463,12 +458,6 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
             meShellType = ST_HANDOUT;
             break;
     }
-
-    // Create the object bars and register them at the sub shell
-    // manager.
-    GetObjectBarManager().EnableObjectBarSwitching();
-    // Activate the relevant object bars.
-    GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
 
     Size aPageSize = GetDoc()->GetSdPage(0, ePageKind)->GetSize();
     Point aPageOrg = Point(aPageSize.Width(), aPageSize.Height() / 2);
@@ -606,6 +595,18 @@ void DrawViewShell::Init (void)
     ViewShell::Init ();
 
     StartListening (*GetDocSh());
+
+    // Now that the controller that is used by at least the FormShell we can
+    // allow the switching of object bars and switch to the default object
+    // bar.
+    ObjectBarManager& rObjectBarManager (GetObjectBarManager());
+    if (GetShellType() == ViewShell::ST_DRAW)
+        rObjectBarManager.SetDefaultObjectBarId(RID_DRAW_OBJ_TOOLBOX);
+    else
+        rObjectBarManager.SetDefaultObjectBarId(RID_DRAW_TEXT_TOOLBOX);
+    rObjectBarManager.EnableObjectBarSwitching();
+    rObjectBarManager.SwitchObjectBar (
+        rObjectBarManager.GetDefaultObjectBarId());
 }
 
 
