@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseAccess.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 21:35:40 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,88 +80,66 @@
  published interface XCompletedConnection;
 
 
-// DocMerge from xml: service com::sun::star::sdb::DatabaseAccess
 /** specifies a component, which controls DatabaseAccessConnections and acts like a
     shared DataSource.
+
+    @deprecated
  */
 published service DatabaseAccess
 {
     // gives access to the properties.
     interface com::sun::star::beans::XPropertySet;
 
-
-    // DocMerge from xml: service com::sun::star::sdb::DatabaseAccess: interface com::sun::star::sdb::XDatabaseAccess
     /** controls the establishing of the connections.
      */
     interface XDatabaseAccess;
 
-
-    // DocMerge from xml: service com::sun::star::sdb::DatabaseAccess: interface com::sun::star::sdb::XCompletedConnection
     /** establishing a connection with user interaction, the implementation
              is optional.
      */
     [optional] interface XCompletedConnection;
 
-
-    // DocMerge from xml: property com::sun::star::sdb::DatabaseAccess::URL
     /** is the URL of the bean.
      */
     [readonly, property] string URL;
 
-
-    // DocMerge from xml: property com::sun::star::sdb::DatabaseAccess::Title
     /** is the title of the bean.
      */
     [property] string Title;
 
-
-    // DocMerge from xml: property com::sun::star::sdb::DatabaseAccess::ConnectURL
     /** indicates a database url of the form <br>
         <code> jdbc:<em>subprotocol</em>:<em>subname</em></code> or
         <code> sdbc:<em>subprotocol</em>:<em>subname</em></code>
      */
     [property] string ConnectURL;
 
-
-    // DocMerge from idl: property com::sun::star::sdb::DatabaseAccess::ConnectInfo
     /** is a list of arbitrary string tag/value pairs as
              connection arguments; normally at least a "user" and
              "password" property should be included.
      */
     [property] sequence<com::sun::star::beans::PropertyValue> ConnectInfo;
 
-
-    // DocMerge from xml: property com::sun::star::sdb::DatabaseAccess::IsReadOnly
     /** determines whether modifications on the data access bean are allowed
         or not.
      */
     [readonly, property] boolean IsReadOnly;
 
-
-    // DocMerge from xml: property com::sun::star::sdb::DatabaseAccess::NumberFormatsSupplier
     /** provides an object for formatting numbers.
      */
     [property] com::sun::star::util::XNumberFormatsSupplier
                         NumberFormatsSupplier;
 
-
-    // DocMerge from xml: property com::sun::star::sdb::DatabaseAccess::IsPasswordRequired
     /** indicates that a password is always necessary.
      */
     [optional, property] boolean IsPasswordRequired;
 
-
-    // DocMerge from idl: property com::sun::star::sdb::DatabaseAccess::TableFilter
     /** defines a list of tables, on which the bean should have it's focus.
         If empty, all tables are rejected.
     */
     [optional, property] sequence<string> TableFilter;
 
-
-    // DocMerge from idl: property com::sun::star::sdb::DatabaseAccess::TableTypeFilter
     /** defines a list of table types, on which the bean should have it's focus.
          If empty, all tables types are rejected.
-
      */
     [optional, property] sequence<string> TableTypeFilter;
 };
