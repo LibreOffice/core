@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:58:08 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::connection;
 
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
 ClassData2 WeakImplHelper2< ::com::sun::star::connection::XConnection, ::com::sun::star::connection::XConnectionBroadcaster >::s_aCD(1);
 ClassData2 WeakImplHelper2<com::sun::star::connection::XConnector, com::sun::star::lang::XServiceInfo>::s_aCD(1);
 ClassData1 WeakImplHelper1<com::sun::star::connection::XConnection>::s_aCD(1);
