@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: svesik $ $Date: 2000-10-26 16:29:17 $
+#   last change: $Author: svesik $ $Date: 2000-10-26 21:18:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -128,7 +128,7 @@ RC_SUBDIRS =  \
 	offmgr \
 	offuh \
 	rdbmaker \
-	readlicence \
+	readlicense \
 	registry \
 	remotebridges \
 	rsc \
@@ -221,7 +221,7 @@ goodies : so3
 i18n : bridges stoc svtools unotools
 idl : tools
 inet : tools ldapber
-instsetoo : UnoControls chaos configmgr cpputools dbaccess desktop eventattacher extensions extras forms framework i18n io remotebridges sax scaddins scp wizards readlicence
+instsetoo : UnoControls chaos configmgr cpputools dbaccess desktop eventattacher extensions extras forms framework i18n io remotebridges sax scaddins scp wizards readlicense
 io : rdbmaker xml2cmp
 javaunohelper : bridges cppuhelper unoil
 jurt : codemaker sandbox
