@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-18 09:21:16 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 20:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,12 +777,12 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ dutch ] = "Opmaakprofielen voor presentatieobjecten" ;
             Text [ swedish ] = "Presentationsobjektmallar" ;
             Text [ danish ] = "Præsentationsobjekttypografier" ;
-            Text [ portuguese_brazilian ] = "Präsentationsobjektvorlagen" ;
+            Text [ portuguese_brazilian ] = "Pr?sentationsobjektvorlagen" ;
             Text [ portuguese ] = "Estilos de objectos de apresentação" ;
             Text[ chinese_simplified ] = "ÑİÊ¾ÎÄ¸å¶ÔÏóÑùÊ½";
             Text[ russian ] = "Ñòèëè ïğåçåíòàöèè";
             Text[ polish ] = "Style obiektów prezentacji";
-            Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İ µÌŞ¼Şª¸Ä ½À²Ù";
+            Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İµÌŞ¼Şª¸Ä½À²Ù";
             Text[ chinese_traditional ] = "Â²³ø¼Ë¦¡";
             Text[ arabic ] = "ÃäãÇØ ßÇÆä ÚÑÖ ÊŞÏíãí";
             Text[ greek ] = "Ğñüôõğá áíôéêåéìİíùí ğáñïõóßáóçò";
