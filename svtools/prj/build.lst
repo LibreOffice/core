@@ -3,7 +3,6 @@ st	svtools						usr1	-	all	st_mkout NULL
 st	svtools\inc					get	-	all	st_inc NULL
 st	svtools\inc\sane				get	-	all	st_incsa NULL
 st	svtools\prj					get	-	all	st_prj NULL
-st	svtools\jobs					get	-	all	st_jobs NULL
 st	svtools\res					get	-	all	st_res NULL
 st	svtools\win\inc					get	-	all	st_winc NULL
 st	svtools\win\res					get	-	all	st_wres NULL

@@ -3,7 +3,6 @@ tl	tools								usr1	-	all	tl_mkout NULL
 tl	tools\bootstrp\isdll				get		-	all	tl_bsisdll NULL
 tl	tools\bootstrp\addexes				get		-	all	tl_bsexes NULL
 tl	tools\inc							get		-	all	tl_inc NULL
-tl	tools\jobs							get		-	all	tl_jobs NULL
 tl	tools\mac\inc						get		-	all	tl_mcinc NULL
 tl	tools\os2\inc						get		-	all	tl_o2inc NULL
 tl	tools\prj							get		-	all	tl_prj NULL

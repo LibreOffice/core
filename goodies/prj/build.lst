@@ -2,7 +2,6 @@ go	goodies	:	so3 NULL
 go	goodies									usr1	-	all	g_mkout NULL
 go	goodies\inc								get		-	all	g_inc NULL
 go	goodies\prj								get		-	all	g_prj NULL
-go	goodies\jobs							get		-	all	g_jobs NULL
 go	goodies\source\base3d					nmake	-	all	g_base3d NULL
 go	goodies\source\base2d					nmake	-	all	g_base2d NULL
 go	goodies\source\graphic					nmake	-	all	g_graph NULL
