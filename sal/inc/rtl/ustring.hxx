@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 08:42:56 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,8 +561,8 @@ public:
         if ( pData->length != asciiStrLength )
             return sal_False;
 
-        return rtl_ustr_asciil_reverseCompare_WithLength( pData->buffer, pData->length,
-                                                          asciiStr, asciiStrLength ) == 0;
+        return rtl_ustr_asciil_reverseEquals_WithLength(
+                    pData->buffer, asciiStr, asciiStrLength );
     }
 
     /**
