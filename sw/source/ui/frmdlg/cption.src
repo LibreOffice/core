@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:46:23 $
+ *  last change: $Author: os $ $Date: 2001-06-27 09:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ ModalDialog DLG_CAPTION
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 82 , 43 ) ;
-        Size = MAP_APPFONT ( 100 , 61 ) ;
+        Size = MAP_APPFONT ( 100 , 83 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
     };
