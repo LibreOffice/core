@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:06:31 $
+#   last change: $Author: gh $ $Date: 2001-05-17 14:02:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,75 +74,35 @@ GEN_HID=TRUE
 
 
 
-SBLLINK=sbllink
-
 .IF "$(depend)" == ""
 all:    \
     $(SRS)$/hidother.hid    \
-    mksbldir \
-    link \
-    printlog \
     ALLTAR
 
+#$(SRS)$/hidother.hid: hidother.src
+#.IF "$(GUI)$(CPU)"=="WNTI"
+#	@+copy hidother.src ..$/$(INPATH)$/srs$/hidother.hid
+#.ELSE
+#	@+echo nix
+#.ENDIF
+
+
 $(SRS)$/hidother.hid: hidother.src
-.IF "$(GUI)$(CPU)"=="WNTI"
-    @+copy hidother.src ..$/$(INPATH)$/srs$/hidother.hid
+.IF "$(GUI)" =="WNT"
+.IF "$(BUILD_SOSL)"==""
+    @+echo
+    @+echo  NO HIDS!
+    @+echo
+    +mhids hidother.src ..$/$(INPATH)$/srs sw hidother
+.ENDIF
 .ELSE
-    @+echo nix
+    @echo wnt only
 .ENDIF
 
-.IF "$(GUI)"!="WNT"
-
-
-klausbl:
-    +$(COPY) $(UPDATE) $(PRJ)$/wntmsci.pro$/sbl$/*.* $(PRJ)$/$(INPATH)$/sbl
-
-.ENDIF                  # "$(GUI)"!="WNT"
 
 .ENDIF # no depend
 # --- Targets ------------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-link: \
-    $(MISC)$/soffice.lnk \
-    mksbldir
-    $(SBLLINK) /Link:$(MISC)$/soffice.lnk
-    @echo Log File:
-    @+-$(TYPE) $(MISC)$/*.log
-
-dump: \
-    $(MISC)$/soffice.lnk
-    $(SBLLINK) /Dump:$(MISC)$/soffice.lnk
-
-dumpout: \
-    $(MISC)$/soffice.lnk
-    $(SBLLINK) /Dump:$(MISC)$/soffice.lnk
-    @echo Log File:
-    @+-$(TYPE) $(MISC)$/*.log
-
-kill:
-    del $(OUT)$/sbl\
-
-killall: kill
-
-
-dummytarget:
-    @echo done > $(MISC)$/dummy.don
-
-mksbldir :
-    +-$(MKDIRHIER) $(PRJ)$/$(INPATH)$/sbl >& $(NULLDEV)
-
-printlog :
-    @echo Log File:
-    @+-$(TYPE) $(MISC)$/*.log
-
-$(MISC)$/soffice.lnk : soffice.lnk
-.IF "$(GUI)"=="UNX"
-    +-tr -d "\015" < $< > $@
-.ELSE
-    @+$(COPY) soffice.lnk $@
-.ENDIF
-
-$(MISC)$/$(TARGET).hid: $(BIN)$/iwz$(UPD)49.res
 
