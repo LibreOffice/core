@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-10 11:13:16 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 14:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1215,6 +1215,7 @@ sal_Bool ConfigItem::getUniqueSetElementName( const ::rtl::OUString& _rSetNode, 
                     {
                         _rName = sThisRoundTrial;
                         bRet =  sal_True;
+                        break;
                     }
                 }
             }
