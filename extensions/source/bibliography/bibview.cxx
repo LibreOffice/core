@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:45:22 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,12 +152,19 @@ namespace bib
             if ( ( aModified >>= bFlag ) && bFlag )
             {
 
-                Any aNew = xProps->getPropertyValue( C2U( "IsNew" ) );
-                aNew >>= bFlag;
-                if ( bFlag )
-                    xResUpd->insertRow();
-                else
-                    xResUpd->updateRow();
+                try
+                {
+                    Any aNew = xProps->getPropertyValue( C2U( "IsNew" ) );
+                    aNew >>= bFlag;
+                    if ( bFlag )
+                        xResUpd->insertRow();
+                    else
+                        xResUpd->updateRow();
+                }
+                catch( const uno::Exception& rEx)
+                {
+                    rEx;
+                }
             }
         }
 
