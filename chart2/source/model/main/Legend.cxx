@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Legend.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-26 16:32:16 $
+ *  last change: $Author: bm $ $Date: 2003-11-27 13:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ static const ::rtl::OUString lcl_aServiceName(
 
 enum
 {
-    PROP_LEGEND_AUTO_POSITION,
+    PROP_LEGEND_ANCHOR_POSITION,
     PROP_LEGEND_PREFERRED_EXPANSION,
     PROP_LEGEND_SHOW,
     PROP_LEGEND_REF_PAGE_SIZE,
@@ -121,8 +121,8 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "AutoPosition" ),
-                  PROP_LEGEND_AUTO_POSITION,
+        Property( C2U( "AnchorPosition" ),
+                  PROP_LEGEND_ANCHOR_POSITION,
                   ::getCppuType( reinterpret_cast< const chart2::LegendPosition * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -158,8 +158,8 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::helper::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_AUTO_POSITION ));
-    rOutMap[ PROP_LEGEND_AUTO_POSITION ] =
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_ANCHOR_POSITION ));
+    rOutMap[ PROP_LEGEND_ANCHOR_POSITION ] =
         uno::makeAny( chart2::LegendPosition_LINE_END );
 
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_SHOW ));
