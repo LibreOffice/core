@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 15:14:31 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1140,7 +1140,7 @@ String RID_GRAPHIC_OBJECTBAR
     Text[ polish ] = "Pasek obiektσw graficznych";
     Text[ portuguese_brazilian ] = "Toolbar for graphic objects";
     Text[ japanese ] = "ΈήΧΜ¨―ΈµΜήΌήªΈΔΚή°";
-    Text[ korean ] = "Toolbar for graphic objects";
+    Text[ korean ] = "±Χ·΅ΗΘ °³ΓΌΏ΅ ΄λΗΡ ΕψΉΩ";
     Text[ chinese_simplified ] = "ΝΌΠΞ¶ΤΟσΐΈ";
     Text[ chinese_traditional ] = "ΉΟ¤ωª«¥σ¦C";
     Text[ turkish ] = "Toolbar for graphic objects";
@@ -1396,7 +1396,7 @@ String RID_POPUP_DRAW
     Text[ chinese_simplified ] = "»ζΝΌµ―³φΚ½²Λµ¥";
     Text[ russian ] = "Βρολϋβΰώωεε μενώ δλÿ γπΰτθχερκθυ ξαϊεκςξβ";
     Text[ polish ] = "Menu podrκczne dla obiektσw rysunkowych";
-    Text[ japanese ] = "•`‰ζΒ°ΩΞή―Έ½—pΞί―Μί±―ΜίÒΖ­°";
+    Text[ japanese ] = "•`‰ζΒ°ΩΞή―Έ½‚ΜΞί―Μί±―ΜίÒΖ­°";
     Text[ chinese_traditional ] = "ΓΈΉΟ§ΦΕγ¥\\―ΰªν";
     Text[ arabic ] = "ήΗΖγΙ γδΘΛήΙ ααίΗΖδΗΚ ΗαΡΣζγνΙ";
     Text[ greek ] = "Αναδυόμενο μενού για αντικείμενα σχεδίασης";
@@ -1549,7 +1549,7 @@ Menu RID_POPUP_CHART
             Text[ chinese_simplified ] = "ΈόΈΔΚύΎέΗψΣς(~M)...";
                                                 Text[ russian ] = "Θημενθςό ξαλΰρςό δΰννϋυ...";
                                                 Text[ polish ] = "Zmieρ obszar danych..";
-                                                Text[ japanese ] = "Γή°ΐ—Μζ‚Μ•ΟX(~M)...";
+                                                Text[ japanese ] = "Γή°ΐ”ΝΝ‚Μ•ΟX(~M)...";
                                                 Text[ chinese_traditional ] = "­Χ§οΈκ®Ζ°Ο°μ(~M)...";
                                                 Text[ arabic ] = "...ΚΪΟνα δΨΗή ΗαΘνΗδΗΚ";
                                                 Text[ greek ] = "Αλλαγή περιοχής ~δεδομένων...";
@@ -1585,7 +1585,7 @@ String RID_POPUP_DRAWTEXT
     Text[ chinese_simplified ] = "ΞΔΧΦ¶ΤΟσµΔµ―³φΚ½²Λµ¥";
                                         Text[ russian ] = "Βρολϋβΰώωεε μενώ δλÿ ξαϊεκςξβ ςεκρςΰ";
                                         Text[ polish ] = "Menu podrκczne dla obiektσw tekstowych";
-                                        Text[ japanese ] = "Γ·½ΔµΜήΌήªΈΔ—pΞί―Μί±―ΜίÒΖ­°";
+                                        Text[ japanese ] = "Γ·½ΔµΜήΌήªΈΔ‚ΜΞί―Μί±―ΜίÒΖ­°";
                                         Text[ chinese_traditional ] = "¤ε¦rª«¥σ§ΦΕγ¥\\―ΰªν";
                                         Text[ arabic ] = "ήΗΖγΙ γδΘΛήΙ ααίΗΖδΗΚ ΗαδΥνΙ";
                                         Text[ greek ] = "Αναδυόμενο μενού για αντκείμενα κειμένου";
