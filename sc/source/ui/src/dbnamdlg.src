@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:29:13 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ swedish ] = "Innehеller ~kolumnhuvuden" ;
         Text [ dutch ] = "bevat ~kolomkoppen" ;
         Text [ spanish ] = "Contiene tнtulos de ~columnas" ;
-        Text [ english_us ] = "~Contains column headers" ;
+        Text [ english_us ] = "Co~ntains column headers" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "°ьє¬БР±кМв(~H)";
         Text[ russian ] = "Содержит заголовки столбцов";
