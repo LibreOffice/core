@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForBeanShell.java,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: rt $ $Date: 2004-10-22 14:49:31 $
+*  last change: $Author: kz $ $Date: 2005-03-01 13:07:38 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -335,20 +335,20 @@ class ScriptImpl implements XScript
                 ScriptEditorForBeanShell editor =
                     ScriptEditorForBeanShell.getEditor(
                        sourceUrl );
+
                 if ( editor != null )
                 {
-                    editor.execute();
+                    result = editor.execute();
+
+                    if (result == null)
+                    {
+                        return new Any(new Type(), null);
+                    }
+                    return result;
                 }
 
-                if (editor != null && editor.isModified())
-                {
-                    source = editor.getText();
-                }
-                else
-                {
-                    metaData.loadSource();
-                    source = metaData.getSource();
-                }
+                metaData.loadSource();
+                source = metaData.getSource();
 
                 if ( source == null || source.length() == 0 )
                 {
