@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-22 08:37:02 $
+ *  last change: $Author: ssa $ $Date: 2001-06-22 14:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2216,6 +2216,30 @@ void ImplRemoteWindowFrameProc( ExtRmEvent* pEvent )
                                   pData->nCode,
                                   pData->bHorz );
         };
+        break;
+        case RMEVENT_STARTEXTTEXTINPUT:
+        {
+            // ???
+        }
+        break;
+        case RMEVENT_EXTTEXTINPUT:
+        {
+            RmExtTextInputData* pData = (RmExtTextInputData*)pEvent->GetData();
+            ImplHandleExtTextInput( pEvent->GetWindow(), pData->nSysTime,
+                                           pData->aText, pData->pTextAttr,
+                                           pData->nCursorPos, pData->nCursorFlags );
+        }
+        break;
+        case RMEVENT_ENDEXTTEXTINPUT:
+        {
+            ImplHandleEndExtTextInput( pEvent->GetWindow() );
+        }
+        break;
+        case RMEVENT_INPUTCONTEXTCHANGE:
+        {
+            LanguageType *pL = (LanguageType*)pEvent->GetData();
+            ImplHandleInputContextChange( pEvent->GetWindow(), *pL );
+        }
         break;
     }
 }

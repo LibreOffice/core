@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: th $ $Date: 2001-06-07 16:52:11 $
+ *  last change: $Author: ssa $ $Date: 2001-06-22 14:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1549,61 +1549,69 @@ void SalFrame::Sync()
 
 // -----------------------------------------------------------------------
 
-void SalFrame::SetInputContext( SalInputContext* pContext )
+static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pContext )
 {
-    BOOL bIME = (pContext->mnOptions & SAL_INPUTCONTEXT_TEXT) != 0;
+    SalFrame*   pFrame = GetWindowPtr( hWnd );
+    BOOL        bIME = (pContext->mnOptions & SAL_INPUTCONTEXT_TEXT) != 0;
     if ( bIME )
     {
-        if ( !maFrameData.mbIME )
+        if ( !pFrame->maFrameData.mbIME )
         {
-            maFrameData.mbIME = TRUE;
+            pFrame->maFrameData.mbIME = TRUE;
 
-            if ( maFrameData.mhDefIMEContext )
+            if ( pFrame->maFrameData.mhDefIMEContext )
             {
-                ImmAssociateContext( maFrameData.mhWnd, maFrameData.mhDefIMEContext );
+                ImmAssociateContext( pFrame->maFrameData.mhWnd, pFrame->maFrameData.mhDefIMEContext );
                 UINT nImeProps = ImmGetProperty( GetKeyboardLayout( 0 ), IGP_PROPERTY );
-                maFrameData.mbSpezIME = (nImeProps & IME_PROP_SPECIAL_UI) != 0;
-                maFrameData.mbAtCursorIME = (nImeProps & IME_PROP_AT_CARET) != 0;
-                maFrameData.mbHandleIME = !maFrameData.mbSpezIME;
+                pFrame->maFrameData.mbSpezIME = (nImeProps & IME_PROP_SPECIAL_UI) != 0;
+                pFrame->maFrameData.mbAtCursorIME = (nImeProps & IME_PROP_AT_CARET) != 0;
+                pFrame->maFrameData.mbHandleIME = !pFrame->maFrameData.mbSpezIME;
             }
         }
 
         // When the application can't handle IME messages, then the
         // System should handle the IME handling
         if ( !(pContext->mnOptions & SAL_INPUTCONTEXT_EXTTEXTINPUT) )
-            maFrameData.mbHandleIME = FALSE;
+            pFrame->maFrameData.mbHandleIME = FALSE;
 
         // Set the Font for IME Handling
         if ( pContext->mpFont )
         {
-            HIMC hIMC = ImmGetContext( maFrameData.mhWnd );
+            HIMC hIMC = ImmGetContext( pFrame->maFrameData.mhWnd );
             if ( hIMC )
             {
                 LOGFONTW aLogFont;
-                HDC hDC = GetDC( maFrameData.mhWnd );
+                HDC hDC = GetDC( pFrame->maFrameData.mhWnd );
                 ImplGetLogFontFromFontSelect( hDC, pContext->mpFont, aLogFont );
-                ReleaseDC( maFrameData.mhWnd, hDC );
+                ReleaseDC( pFrame->maFrameData.mhWnd, hDC );
                 ImmSetCompositionFontW( hIMC, &aLogFont );
-                ImmReleaseContext( maFrameData.mhWnd, hIMC );
+                ImmReleaseContext( pFrame->maFrameData.mhWnd, hIMC );
             }
         }
     }
     else
     {
-        if ( maFrameData.mbIME )
+        if ( pFrame->maFrameData.mbIME )
         {
-            maFrameData.mbIME = FALSE;
-            maFrameData.mbHandleIME = FALSE;
-            ImmAssociateContext( maFrameData.mhWnd, 0 );
+            pFrame->maFrameData.mbIME = FALSE;
+            pFrame->maFrameData.mbHandleIME = FALSE;
+            ImmAssociateContext( pFrame->maFrameData.mhWnd, 0 );
         }
     }
 }
 
 // -----------------------------------------------------------------------
 
-void SalFrame::EndExtTextInput( USHORT nFlags )
+void SalFrame::SetInputContext( SalInputContext* pContext )
 {
-    HWND hWnd = maFrameData.mhWnd;
+    // Must be called in the main thread!
+    ImplSendMessage( maFrameData.mhWnd, SAL_MSG_SETINPUTCONTEXT, 0, (LPARAM)(void*)pContext );
+}
+
+// -----------------------------------------------------------------------
+
+static void ImplSalFrameEndExtTextInput( HWND hWnd, USHORT nFlags )
+{
     HIMC hIMC = ImmGetContext( hWnd );
     if ( hIMC )
     {
@@ -1616,6 +1624,14 @@ void SalFrame::EndExtTextInput( USHORT nFlags )
         ImmNotifyIME( hIMC, NI_COMPOSITIONSTR, nIndex, 0 );
         ImmReleaseContext( hWnd, hIMC );
     }
+}
+
+// -----------------------------------------------------------------------
+
+void SalFrame::EndExtTextInput( USHORT nFlags )
+{
+    // Must be called in the main thread!
+    ImplSendMessage( maFrameData.mhWnd, SAL_MSG_ENDEXTTEXTINPUT, (WPARAM)nFlags, 0 );
 }
 
 // -----------------------------------------------------------------------
@@ -4097,6 +4113,14 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             break;
         case SAL_MSG_SHOW:
             ImplSalShow( hWnd, (BOOL)wParam );
+            rDef = FALSE;
+            break;
+        case SAL_MSG_SETINPUTCONTEXT:
+            ImplSalFrameSetInputContext( hWnd, (const SalInputContext*)(void*)lParam );
+            rDef = FALSE;
+            break;
+        case SAL_MSG_ENDEXTTEXTINPUT:
+            ImplSalFrameEndExtTextInput( hWnd, (USHORT)(ULONG)(void*)wParam );
             rDef = FALSE;
             break;
 

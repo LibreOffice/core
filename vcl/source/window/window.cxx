@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-18 08:54:03 $
+ *  last change: $Author: ssa $ $Date: 2001-06-22 14:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,9 @@
 #include "xevthdl.hxx"
 #include "rmevents.hxx"
 #include "rmoutdev.hxx"
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 #endif
 
 #include <unowrap.hxx>
@@ -3874,7 +3877,9 @@ void Window::ImplNewInputContext()
     if ( pFontEntry )
         pFocusWin->mpFontCache->Release( pFontEntry );
 #else
-    // !!!
+    const Font& rFont       = rInputContext.GetFont();
+    UniString strLanguage   = ConvertLanguageToIsoString( rFont.GetLanguage() );
+    pFocusWin->ImplGetFrame()->SetInputContext( rFont, strLanguage, rInputContext.GetOptions() );
 #endif
 }
 
@@ -4899,10 +4904,8 @@ void Window::EndExtTextInput( USHORT nFlags )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-#ifndef REMOTE_APPSERVER
     if ( mbExtTextInput )
         ImplGetFrame()->EndExtTextInput( nFlags );
-#endif
 }
 
 // -----------------------------------------------------------------------

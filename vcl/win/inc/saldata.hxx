@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-06-07 16:47:20 $
+ *  last change: $Author: ssa $ $Date: 2001-06-22 14:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_MSG_POSTPAINT           (WM_USER+138)
 // wParam == 0; lParam == pFrame; lResult 0
 #define SAL_MSG_FORCEPALETTE        (WM_USER+139)
-// wParam == 0; lParam == 0;
+// wParam == 0; lParam == 0
 #define SAL_MSG_CAPTUREMOUSE        (WM_USER+140)
 // wParam == 0; lParam == 0
 #define SAL_MSG_RELEASEMOUSE        (WM_USER+141)
@@ -322,6 +322,10 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_MSG_TOTOP               (WM_USER+142)
 // wParam == bVisible; lParam == 0
 #define SAL_MSG_SHOW                (WM_USER+143)
+// wParam == 0; lParam == SalInputContext
+#define SAL_MSG_SETINPUTCONTEXT     (WM_USER+144)
+// wParam == nFlags; lParam == 0
+#define SAL_MSG_ENDEXTTEXTINPUT     (WM_USER+145)
 
 // SysChild-ToTop; wParam = 0; lParam = 0
 #define SALOBJ_MSG_TOTOP            (WM_USER+160)
