@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-06 10:59:20 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,12 @@
 #define WND_FIELD               15
 #define WND_FIELD_SPACE         16
 #define WND_HSCROLL             17
+#define WND_PAGE                18
 #define FT_COL                  31
 #define FT_ROW                  32
 #define FT_DATA                 33
 #define STR_SELECT              34
+#define FT_PAGE                 35
 
 #define PTR_FIELD               18
 #define FT_INFO                 19
