@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chaptercollator.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:49:40 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ ChapterCollator::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int
     if( ans != 0 )
         return ans;
 
-    OUString &aAddAllowed = OUString::createFromAscii("?");
+    const OUString &aAddAllowed = OUString::createFromAscii("?");
     ParseResult res1, res2;
     // Bug #100323#, since parseAnyToken does not take length as parameter, we have to copy
     // it to a temp. string.
