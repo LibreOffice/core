@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pickerhistory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:38:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace svt
             if ( !_rxPicker.is() )
                 return;
 
-            //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+            //=============================================================
             // first, check which of the objects we hold in s_aHistory can be removed
             {
                 InterfaceArray aCleanedHistory;
@@ -122,7 +122,7 @@ namespace svt
                 _rHistory.swap( aCleanedHistory );
             }
 
-            //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+            //=============================================================
             // then push_back the picker
             _rHistory.push_back( InterfaceAdapter( _rxPicker ) );
         }
@@ -132,7 +132,7 @@ namespace svt
         {
             Reference< XInterface > xTopMostAlive;
 
-            //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+            //=============================================================
             // search the first picker which is still alive ...
             for (   InterfaceArray::const_reverse_iterator aLoop = _rHistory.rbegin();
                     ( aLoop != _rHistory.rend() ) && !xTopMostAlive.is();
