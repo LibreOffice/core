@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 10:19:45 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 14:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2340,9 +2340,9 @@ BOOL SwFmtLineNumber::PutValue( const uno::Any& rVal, BYTE nMemberId )
  *************************************************************************/
 
 SwTextGridItem::SwTextGridItem()
-    : aColor( COL_LIGHTGRAY ), nLines( 0 ), nBaseHeight( 240 ),
-      nRubyHeight( 120 ), eGridType( GRID_NONE ), bRubyTextBelow( 0 ),
-      bPrintGrid( 1 ), bDisplayGrid( 1 )
+    : SfxPoolItem( RES_TEXTGRID ), aColor( COL_LIGHTGRAY ), nLines( 0 ),
+      nBaseHeight( 240 ), nRubyHeight( 120 ), eGridType( GRID_NONE ),
+      bRubyTextBelow( 0 ), bPrintGrid( 1 ), bDisplayGrid( 1 )
 {
 }
 
