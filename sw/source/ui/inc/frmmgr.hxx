@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:08:06 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ public:
 
     inline USHORT       GetHeightPercent() const;
 
-    void                SetSizeType(SwFrmSize eType);
+    void                SetHeightSizeType(SwFrmSize eType);
 
     // Abstand zum Inhalt
     void                SetLRSpace( long nLeft  = LONG_MAX,
@@ -213,7 +213,8 @@ struct SwFrmValid
     SvxFrameVertOrient  eVert;
     SwRelationOrient    eHRel;
     SwRelationOrient    eVRel;
-    BOOL                bAuto;
+    BOOL                bAutoHeight;
+    BOOL                bAutoWidth;
     BOOL                bMirror;
     // OD 18.09.2003 #i18732#
     bool                bFollowTextFlow;
