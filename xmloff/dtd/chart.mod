@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.15 2001-04-11 10:23:11 bm Exp $
+	$Id: chart.mod,v 1.16 2001-04-25 16:32:36 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -146,6 +146,8 @@
 		  dr3d:ambient-color %color; #IMPLIED
 		  dr3d:lighting-mode %boolean; #IMPLIED >
 
+<!ATTLIST style:properties
+		  chart:reinterpret-data-in-rows %boolean; "false" >
 
 <!ELEMENT chart:wall EMPTY>
 <!ATTLIST chart:wall
