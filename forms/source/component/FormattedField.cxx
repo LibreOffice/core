@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 14:08:34 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 16:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ void OFormattedControl::disposing(const EventObject& _rSource) throw(RuntimeExce
 }
 
 //------------------------------------------------------------------------------
-void OFormattedControl::keyPressed(const KeyEvent& e)
+void OFormattedControl::keyPressed(const KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( e.KeyCode != KEY_RETURN || e.Modifiers != 0 )
         return;
@@ -334,7 +334,7 @@ void OFormattedControl::keyPressed(const KeyEvent& e)
 }
 
 //------------------------------------------------------------------------------
-void OFormattedControl::keyReleased(const KeyEvent& e)
+void OFormattedControl::keyReleased(const KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
 }
 
@@ -363,7 +363,7 @@ StringSequence  OFormattedControl::getSupportedServiceNames() throw()
 }
 
 //------------------------------------------------------------------------------
-void OFormattedControl::setDesignMode(sal_Bool bOn)
+void OFormattedControl::setDesignMode(sal_Bool bOn) throw ( ::com::sun::star::uno::RuntimeException)
 {
     OBoundControl::setDesignMode(bOn);
 }
@@ -501,7 +501,7 @@ Sequence< Type > OFormattedModel::_getTypes()
 
 // XPersistObject
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFormattedModel::getServiceName()
+::rtl::OUString SAL_CALL OFormattedModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString(FRM_COMPONENT_EDIT);
 //  return ::rtl::OUString(FRM_COMPONENT_FORMATTEDFIELD);   // old (non-sun) name for compatibility !
@@ -565,7 +565,7 @@ void OFormattedModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
 }
 
 //------------------------------------------------------------------------------
-void OFormattedModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue)
+void OFormattedModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( ::com::sun::star::uno::Exception)
 {
     OEditBaseModel::setFastPropertyValue_NoBroadcast(nHandle, rValue);
 }
@@ -745,7 +745,7 @@ void OFormattedModel::getFormatDescription(::rtl::OUString& sFormat, LanguageTyp
 
 // XBoundComponent
 //------------------------------------------------------------------------------
-void OFormattedModel::loaded(const EventObject& rEvent)
+void OFormattedModel::loaded(const EventObject& rEvent) throw ( ::com::sun::star::uno::RuntimeException)
 {
     // HACK : our _loaded accesses our NumberFormatter which locks the solar mutex (as it doesn't have
     // an own one). To prevent deadlocks with other threads which may request a property from us in an
@@ -891,7 +891,7 @@ void OFormattedModel::_unloaded()
 }
 
 //------------------------------------------------------------------------------
-void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OEditBaseModel::write(_rxOutStream);
     _rxOutStream->writeShort(0x0003);
@@ -1001,7 +1001,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 }
 
 //------------------------------------------------------------------------------
-void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream)
+void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OEditBaseModel::read(_rxInStream);
     sal_uInt16 nVersion = _rxInStream->readShort();
