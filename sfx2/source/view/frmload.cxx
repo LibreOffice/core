@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-18 13:09:40 $
+ *  last change: $Author: mba $ $Date: 2000-10-25 13:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,44 +381,61 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         TransformParameters( SID_OPENDOC, aArgumentlist, *pSet );
 
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-#if SUPD<609
-        SfxMedium aMedium( sURL, (STREAM_READ | STREAM_SHARE_DENYNONE), sal_False, sal_True, NULL, pSet );
-#else
         SfxMedium aMedium( sURL, (STREAM_READ | STREAM_SHARE_DENYNONE), sal_False, NULL, pSet );
-#endif
         if ( aMedium.IsStorage() )
             aMedium.GetStorage();
         else
             aMedium.GetInStream();
 
-/*      String aMime;
-        aMedium.GetMIMEAndRedirect( aMime );
-        if( aMime.Len() )
-            pFilter = rMatcher.GetFilter4Mime( aMime );
-*/
-        const SfxFilter* pOldFilter = pFilter;
-        ErrCode nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
-        if ( !pFilter || pOldFilter == pFilter && nErr != ERRCODE_NONE )
+        // Access to Medium was successfull ?
+        if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
-            pFilter = NULL;
-            SvStorageRef aStor = aMedium.GetStorage();
-            if ( aStor.Is() )
-                pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat() );
-            if ( pFilter )
+    /*      String aMime;
+            aMedium.GetMIMEAndRedirect( aMime );
+            if( aMime.Len() )
+                pFilter = rMatcher.GetFilter4Mime( aMime );
+    */
+            const SfxFilter* pOldFilter = pFilter;
+            SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
+            ErrCode nErr = ERRCODE_ABORT;
+            if ( ( (pFilter)->GetFilterFlags() & nMust ) == nMust && ( (pFilter)->GetFilterFlags() & nDont ) == 0 )
                 nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
-        }
+            else
+                // filterflags not suitable
+                pFilter = NULL;
 
-        if ( !pFilter || pOldFilter == pFilter && nErr != ERRCODE_NONE )
-        {
-            pFilter = NULL;
-            nErr = rMatcher.GetFilter4Content( aMedium, &pFilter );
-        }
+            // No error while reading from medium ?
+            if ( aMedium.GetErrorCode() == ERRCODE_NONE )
+            {
+                if ( !pFilter || pOldFilter == pFilter && nErr != ERRCODE_NONE )
+                {
+                    // try simplest file lookup: clipboard format in storage
+                    pFilter = NULL;
+                    SvStorageRef aStor = aMedium.GetStorage();
+                    if ( aStor.Is() )
+                        pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat() );
+                    if ( pFilter )
+                        nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
+                }
 
-        if ( pFilter )
-            pFilter = rMatcher.ResolveRedirection( pFilter, aMedium );
+                // No error while reading from medium ?
+                if ( aMedium.GetErrorCode() == ERRCODE_NONE )
+                {
+                    if ( !pFilter || pOldFilter == pFilter && nErr != ERRCODE_NONE )
+                    {
+                        pFilter = NULL;
+                        nErr = rMatcher.GetFilter4Content( aMedium, &pFilter );
+                    }
+                }
+            }
+        }
 
         if ( aMedium.GetErrorCode() != ERRCODE_NONE )
+        {
+            // when access to medium gives an error, the filter can't be valid
+            pFilter = NULL;
             ErrorHandler::HandleError( aMedium.GetError() );
+        }
     }
 
     if ( !pFilter )
