@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:28:07 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #include <bmpacc.hxx>
 #include <salbmp.hxx>
 #include <glyphcache.hxx>
+#include <impfont.hxx>
+#include <outfont.hxx>
 #include <svapp.hxx>
 
 #include <stdlib.h>
@@ -601,6 +603,49 @@ String PspGraphics::FaxPhoneComment( const String& rOrig, xub_StrLen nIndex, xub
     return aRet;
 }
 
+//==========================================================================
+
+class ImplPspFontData : public ImplFontData
+{
+private:
+    enum { PSPFD_MAGIC = 0xb5bf01f0 };
+    int                     mnFontId;
+
+public:
+                            ImplPspFontData( const psp::FastPrintFontInfo& );
+    virtual                 ~ImplPspFontData();
+    virtual int             GetFontId() const { return mnFontId; }
+    virtual ImplFontData*   Clone() const { return new ImplPspFontData( *this ); }
+    virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
+    static bool             CheckFontData( const ImplFontData& r ) { return r.CheckMagic( PSPFD_MAGIC ); }
+};
+
+//--------------------------------------------------------------------------
+
+ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )
+:   ImplFontData( PspGraphics::Info2DevFontAttributes(rInfo), PSPFD_MAGIC ),
+    mnFontId( rInfo.m_nID )
+{}
+
+//--------------------------------------------------------------------------
+
+ImplPspFontData::~ImplPspFontData()
+{
+    // TODO: better integration with GlyphCache
+    int nFontId = GetFontId();
+    GlyphCache::GetInstance().RemoveFont( nFontId );
+}
+
+//--------------------------------------------------------------------------
+
+ImplFontEntry* ImplPspFontData::CreateFontInstance( ImplFontSelectData& rFSD ) const
+{
+    ImplServerFontEntry* pEntry = new ImplServerFontEntry( rFSD );
+    return pEntry;
+}
+
+//==========================================================================
+
 class PspFontLayout : public GenericSalLayout
 {
 public:
@@ -792,27 +837,29 @@ void PspFontLayout::DrawText( SalGraphics& ) const
 
 void PspGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 {
-#ifdef USE_BUILTIN_RASTERIZER
     // print complex text
     DrawPrinterLayout( rLayout, *m_pPrinterGfx );
-#endif
 }
 
-ULONG PspGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
-
+ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
 {
-    ULONG nPairs = 0;
-#ifdef USE_BUILTIN_RASTERIZER
+    // TODO: get ImplFontCharMap directly from fonts
+    int nPairCount = 0;
     if( m_pServerFont[0] )
-        nPairs = m_pServerFont[0]->GetFontCodeRanges( pCodePairs );
-#endif //USE_BUILTIN_RASTERIZER
-    return nPairs;
+        nPairCount = m_pServerFont[0]->GetFontCodeRanges( NULL );
+    if( !nPairCount )
+        return NULL;
+
+    sal_uInt32* pCodePairs = new sal_uInt32[ 2 * nPairCount ];
+    if( m_pServerFont[0] )
+        m_pServerFont[0]->GetFontCodeRanges( pCodePairs );
+    return new ImplFontCharMap( nPairCount, pCodePairs );
 }
 
 USHORT PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
 {
     sal_Bool bVertical = pEntry->mbVertical;
-    sal_Int32 nID = pEntry->mpFontData ? (sal_Int32)pEntry->mpFontData->mpSysData : 0;
+    sal_Int32 nID = pEntry->mpFontData ? (sal_Int32)pEntry->mpFontData->GetFontId() : 0;
 
     bool bArtItalic = false;
     bool bArtBold = false;
@@ -876,69 +923,22 @@ void PspGraphics::SetTextColor( SalColor nSalColor )
     m_pPrinterGfx->SetTextColor (aColor);
 }
 
-ImplFontData* PspGraphics::AddTempDevFont(const String& rFileURL, const String& rFontName )
+bool PspGraphics::AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName )
 {
-    return NULL;
+    return false;
 }
 
 void PspGraphics::GetDevFontList( ImplDevFontList *pList )
 {
-    const char* pLangBoost = NULL;
-    const LanguageType aLang = Application::GetSettings().GetUILanguage();
-    switch( aLang )
-    {
-        case LANGUAGE_JAPANESE:
-            pLangBoost = "jan";    // japanese is default
-            break;
-        case LANGUAGE_CHINESE:
-        case LANGUAGE_CHINESE_SIMPLIFIED:
-        case LANGUAGE_CHINESE_SINGAPORE:
-            pLangBoost = "zhs";
-            break;
-        case LANGUAGE_CHINESE_TRADITIONAL:
-        case LANGUAGE_CHINESE_HONGKONG:
-        case LANGUAGE_CHINESE_MACAU:
-            pLangBoost = "zht";
-            break;
-        case LANGUAGE_KOREAN:
-        case LANGUAGE_KOREAN_JOHAB:
-            pLangBoost = "kor";
-            break;
-    }
-
     ::std::list< psp::fontID > aList;
     const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     rMgr.getFontList( aList, m_pJobData->m_pParser );
 
     ::std::list< psp::fontID >::iterator it;
+    psp::FastPrintFontInfo aInfo;
     for (it = aList.begin(); it != aList.end(); ++it)
-    {
-        psp::FastPrintFontInfo aInfo;
         if (rMgr.getFontFastInfo (*it, aInfo))
-        {
-            ImplFontData *pFontData = new ImplFontData;
-            SetImplFontData( aInfo, *pFontData );
-            pFontData->mpSysData = (void*)*it;
-            if( pFontData->maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
-                pFontData->maName = pFontData->maName.Copy( 4 );
-            if( aInfo.m_eType == psp::fonttype::TrueType )
-            {
-                // prefer truetype fonts
-                pFontData->mnQuality += 10;
-                // asian type 1 fonts are not known
-                ByteString aFileName( rMgr.getFontFileSysPath( *it ) );
-                int nPos = aFileName.SearchBackward( '_' );
-                if( nPos == STRING_NOTFOUND || aFileName.GetChar( nPos+1 ) == '.' )
-                    pFontData->mnQuality += 5;
-                else
-                {
-                    if( pLangBoost && aFileName.Copy( nPos+1, 3 ).EqualsIgnoreCaseAscii( pLangBoost ) )
-                        pFontData->mnQuality += 10;
-                }
-            }
-            pList->Add( pFontData );
-        }
-    }
+            AnnounceFonts( pList, aInfo );
 }
 
 void PspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
@@ -958,31 +958,24 @@ void PspGraphics::GetFontMetric( ImplFontMetricData *pMetric )
 
     if (rMgr.getFontInfo (m_pPrinterGfx->GetFontID(), aInfo))
     {
+        ImplDevFontAttributes aDFA = Info2DevFontAttributes( aInfo );
+        static_cast<ImplFontAttributes&>(*pMetric) = aDFA;
+        pMetric->mbDevice       = aDFA.mbDevice;
+        pMetric->mbScalableFont = true;
+
+        pMetric->mnOrientation  = m_pPrinterGfx->GetFontAngle();
+        pMetric->mnSlant        = 0;
+
         sal_Int32 nTextHeight   = m_pPrinterGfx->GetFontHeight();
         sal_Int32 nTextWidth    = m_pPrinterGfx->GetFontWidth();
         if( ! nTextWidth )
             nTextWidth = nTextHeight;
 
-        pMetric->mnOrientation  = m_pPrinterGfx->GetFontAngle();
-        pMetric->mnSlant        = 0;
-        pMetric->mbDevice       = aInfo.m_eType == psp::fonttype::Builtin ? sal_True : sal_False;
-
-        pMetric->meCharSet      = aInfo.m_aEncoding;
-
-        pMetric->meFamily       = ToFontFamily (aInfo.m_eFamilyStyle);
-        pMetric->meWeight       = ToFontWeight (aInfo.m_eWeight);
-        pMetric->mePitch        = ToFontPitch  (aInfo.m_ePitch);
-        pMetric->meItalic       = ToFontItalic (aInfo.m_eItalic);
-        pMetric->meType         = TYPE_SCALABLE;
-
-        pMetric->mnFirstChar    =   0;
-        pMetric->mnLastChar     = 255;
-
         pMetric->mnWidth        = nTextWidth;
         pMetric->mnAscent       = ( aInfo.m_nAscend * nTextHeight + 500 ) / 1000;
         pMetric->mnDescent      = ( aInfo.m_nDescend * nTextHeight + 500 ) / 1000;
-        pMetric->mnIntLeading       = ( aInfo.m_nLeading * nTextHeight + 500 ) / 1000;
-        pMetric->mnExtLeading       = 0; //TODO!!!
+        pMetric->mnIntLeading   = ( aInfo.m_nLeading * nTextHeight + 500 ) / 1000;
+        pMetric->mnExtLeading   = 0;
     }
 }
 
@@ -1060,6 +1053,7 @@ SalLayout* PspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
 
     return pLayout;
 }
+
 //--------------------------------------------------------------------------
 
 BOOL PspGraphics::CreateFontSubset(
@@ -1072,12 +1066,12 @@ BOOL PspGraphics::CreateFontSubset(
                                    FontSubsetInfo& rInfo
                                    )
 {
-    // in this context the sysdata member of pFont should
-    // contain a fontID as the X fonts should be filtered
-    // out of the font list available to PDF export (for
+    // in this context the pFont->GetFontId() is a valid PSP
+    // font since they are the only ones left after the PDF
+    // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
-    psp::fontID aFont = (psp::fontID)pFont->mpSysData;
+    psp::fontID aFont = pFont->GetFontId();
     return PspGraphics::DoCreateFontSubset( rToFile, aFont, pGlyphIDs, pEncoding, pWidths, nGlyphs, rInfo );
 }
 
@@ -1085,12 +1079,12 @@ BOOL PspGraphics::CreateFontSubset(
 
 const void* PspGraphics::GetEmbedFontData( ImplFontData* pFont, const sal_Unicode* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
 {
-    // in this context the sysdata member of pFont should
-    // contain a fontID as the X fonts should be filtered
-    // out of the font list available to PDF export (for
+    // in this context the pFont->GetFontId() is a valid PSP
+    // font since they are the only ones left after the PDF
+    // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
-    psp::fontID aFont = (psp::fontID)pFont->mpSysData;
+    psp::fontID aFont = pFont->GetFontId();
     return PspGraphics::DoGetEmbedFontData( aFont, pUnicodes, pWidths, rInfo, pDataLen );
 }
 
@@ -1105,12 +1099,12 @@ void PspGraphics::FreeEmbedFontData( const void* pData, long nLen )
 
 const std::map< sal_Unicode, sal_Int32 >* PspGraphics::GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** pNonEncoded )
 {
-    // in this context the sysdata member of pFont should
-    // contain a fontID as the X fonts should be filtered
-    // out of the font list available to PDF export (for
+    // in this context the pFont->GetFontId() is a valid PSP
+    // font since they are the only ones left after the PDF
+    // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
-    psp::fontID aFont = (psp::fontID)pFont->mpSysData;
+    psp::fontID aFont = pFont->GetFontId();
     return PspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
 }
 
@@ -1240,50 +1234,7 @@ const std::map< sal_Unicode, sal_Int32 >* PspGraphics::DoGetFontEncodingVector( 
     return rMgr.getEncodingMap( aFont, pNonEncoded );
 }
 
-void PspGraphics::SetImplFontData( const psp::FastPrintFontInfo& aInfo, ImplFontData& rData )
-{
-    rData.meFamily      = ToFontFamily (aInfo.m_eFamilyStyle);
-    rData.meWeight      = ToFontWeight (aInfo.m_eWeight);
-
-    rData.meItalic      = ToFontItalic (aInfo.m_eItalic);
-    rData.meWidthType   = ToFontWidth  (aInfo.m_eWidth);
-    rData.mePitch       = ToFontPitch  (aInfo.m_ePitch);
-    rData.meCharSet     = aInfo.m_aEncoding;
-    rData.maName        = aInfo.m_aFamilyName;
-    // rData.meScript       = SCRIPT_DONTKNOW;
-    /*rData.maStyleName = XXX */
-
-    rData.mnWidth       = 0;
-    rData.mnHeight      = 0;
-    rData.mbOrientation = TRUE;
-    rData.mnQuality     = (aInfo.m_eType == psp::fonttype::Builtin ? 1024 : 0);
-    rData.mnVerticalOrientation= 0;
-    rData.meType        = TYPE_SCALABLE;
-    rData.mbDevice      = (aInfo.m_eType == psp::fonttype::Builtin);
-    String aMapNames;
-    for( ::std::list< OUString >::const_iterator it = aInfo.m_aAliases.begin(); it != aInfo.m_aAliases.end(); ++it )
-    {
-        if( it != aInfo.m_aAliases.begin() )
-            aMapNames.Append(';');
-        aMapNames.Append( String( *it ) );
-    }
-    rData.maMapNames    = aMapNames;
-    switch( aInfo.m_eType )
-    {
-        case psp::fonttype::TrueType:
-            rData.mbSubsettable = TRUE;
-            rData.mbEmbeddable  = FALSE;
-            break;
-        case psp::fonttype::Type1:
-            rData.mbSubsettable = FALSE;
-            rData.mbEmbeddable  = TRUE;
-            break;
-        default:
-            rData.mbSubsettable = FALSE;
-            rData.mbEmbeddable  = FALSE;
-            break;
-    }
-}
+// ----------------------------------------------------------------------------
 
 FontWidth PspGraphics::ToFontWidth (psp::width::type eWidth)
 {
@@ -1353,4 +1304,128 @@ FontFamily PspGraphics::ToFontFamily (psp::family::type eFamily)
         case psp::family::System:     return FAMILY_SYSTEM;
     }
     return FAMILY_DONTKNOW;
+}
+
+ImplDevFontAttributes PspGraphics::Info2DevFontAttributes( const psp::FastPrintFontInfo& rInfo )
+{
+    ImplDevFontAttributes aDFA;
+    aDFA.maName         = rInfo.m_aFamilyName;
+    //aDFA.maStyleName  = ???
+    aDFA.meFamily       = ToFontFamily (rInfo.m_eFamilyStyle);
+    aDFA.meWeight       = ToFontWeight (rInfo.m_eWeight);
+    aDFA.meItalic       = ToFontItalic (rInfo.m_eItalic);
+    aDFA.meWidthType    = ToFontWidth (rInfo.m_eWidth);
+    aDFA.mePitch        = ToFontPitch (rInfo.m_ePitch);
+    aDFA.mbSymbolFlag   = (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL);
+
+    // special case for the ghostscript fonts
+    if( aDFA.maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
+        aDFA.maName = aDFA.maName.Copy( 4 );
+
+    switch( rInfo.m_eType )
+    {
+        case psp::fonttype::Builtin:
+            aDFA.mnQuality       = 1024;
+            aDFA.mbDevice        = true;
+            aDFA.mbSubsettable   = false;
+            aDFA.mbEmbeddable    = false;
+            break;
+        case psp::fonttype::TrueType:
+            aDFA.mnQuality       = 512;
+            aDFA.mbDevice        = false;
+            aDFA.mbSubsettable   = true;
+            aDFA.mbEmbeddable    = false;
+            break;
+        case psp::fonttype::Type1:
+            aDFA.mnQuality       = 0;
+            aDFA.mbDevice        = false;
+            aDFA.mbSubsettable   = false;
+            aDFA.mbEmbeddable    = true;
+            break;
+        default:
+            aDFA.mnQuality       = 0;
+            aDFA.mbDevice        = false;
+            aDFA.mbSubsettable   = false;
+            aDFA.mbEmbeddable    = false;
+            break;
+    }
+
+    aDFA.mbOrientation   = true;
+
+    // add font family name aliases
+    ::std::list< OUString >::const_iterator it = rInfo.m_aAliases.begin();
+    bool bHasMapNames = false;
+    for(; it != rInfo.m_aAliases.end(); ++it )
+    {
+        if( bHasMapNames )
+            aDFA.maMapNames.Append( ';' );
+        aDFA.maMapNames.Append( (*it).getStr() );
+    }
+
+#if OSL_DEBUG_LEVEL > 2
+    if( bHasMapNames )
+    {
+        ByteString aOrigName( aDFA.maName, osl_getThreadTextEncoding() );
+        ByteString aAliasNames( aDFA.maMapNames, osl_getThreadTextEncoding() );
+        fprintf( stderr, "using alias names \"%s\" for font family \"%s\"\n",
+            aAliasNames.GetBuffer(), aOrigName.GetBuffer() );
+    }
+#endif
+
+    return aDFA;
+}
+
+// -----------------------------------------------------------------------
+
+void PspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastPrintFontInfo& aInfo )
+{
+    int nQuality = 0;
+
+    if( aInfo.m_eType == psp::fonttype::TrueType )
+    {
+        // asian type 1 fonts are not known
+        psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+        ByteString aFileName( rMgr.getFontFileSysPath( aInfo.m_nID ) );
+        int nPos = aFileName.SearchBackward( '_' );
+        if( nPos == STRING_NOTFOUND || aFileName.GetChar( nPos+1 ) == '.' )
+            nQuality += 5;
+        else
+        {
+            static const char* pLangBoost = NULL;
+            static bool bOnce = true;
+            if( bOnce )
+            {
+                bOnce = false;
+                const LanguageType aLang = Application::GetSettings().GetUILanguage();
+                switch( aLang )
+                {
+                    case LANGUAGE_JAPANESE:
+                        pLangBoost = "jan";
+                        break;
+                    case LANGUAGE_CHINESE:
+                    case LANGUAGE_CHINESE_SIMPLIFIED:
+                    case LANGUAGE_CHINESE_SINGAPORE:
+                        pLangBoost = "zhs";
+                        break;
+                    case LANGUAGE_CHINESE_TRADITIONAL:
+                    case LANGUAGE_CHINESE_HONGKONG:
+                    case LANGUAGE_CHINESE_MACAU:
+                        pLangBoost = "zht";
+                        break;
+                    case LANGUAGE_KOREAN:
+                    case LANGUAGE_KOREAN_JOHAB:
+                        pLangBoost = "kor";
+                        break;
+                }
+            }
+
+            if( pLangBoost )
+                if( aFileName.Copy( nPos+1, 3 ).EqualsIgnoreCaseAscii( pLangBoost ) )
+                    nQuality += 10;
+        }
+    }
+
+    ImplPspFontData* pFD = new ImplPspFontData( aInfo );
+    pFD->mnQuality += nQuality;
+    pFontList->Add( pFD );
 }
