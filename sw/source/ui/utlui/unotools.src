@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:45:04 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ ModalDialog DLG_RENAME_XNAMED
         Text[ danish ] = "Nyt navn";
         Text[ swedish ] = "Nytt namn";
         Text[ polish ] = "Nowa nazwa";
-        Text[ portuguese_brazilian ] = "New name";
+        Text[ portuguese_brazilian ] = "Novo nome";
         Text[ japanese ] = "新しい名前";
         Text[ korean ] = "새 이름";
         Text[ chinese_simplified ] = "新名称";
@@ -100,6 +100,9 @@ ModalDialog DLG_RENAME_XNAMED
         Text[ catalan ] = "Nom nou";
         Text[ finnish ] = "Uusi nimi";
         Text[ thai ] = "ชื่อใหม่";
+        Text[ czech ] = "Nový název";
+        Text[ hebrew ] = "Neuer Name";
+        Text[ hindi ] = "नया नाम";
     };
     Edit ED_NEW_NAME
     {
@@ -124,17 +127,20 @@ ModalDialog DLG_RENAME_XNAMED
         Text[ danish ] = "Rediger navn";
         Text[ swedish ] = "�ndra namn";
         Text[ polish ] = "Zmie� nazw�";
-        Text[ portuguese_brazilian ] = "Change name";
+        Text[ portuguese_brazilian ] = "Alterar o nome";
         Text[ japanese ] = "名前の変更";
         Text[ korean ] = "이름 변경";
         Text[ chinese_simplified ] = "更改名称";
         Text[ chinese_traditional ] = "變更名稱";
         Text[ arabic ] = "����� �����";
-        Text[ turkish ] = "Ad� de�i�tir";
+        Text[ turkish ] = "�sim de�i�tir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Canvia el nom";
         Text[ finnish ] = "Muuta nimi";
         Text[ thai ] = "เปลี่ยนชื่อ";
+        Text[ czech ] = "Změnit název";
+        Text[ hebrew ] = "Name ändern";
+        Text[ hindi ] = "नाम बदलो";
     };
     OKButton PB_OK
     {
@@ -169,7 +175,7 @@ ModalDialog DLG_RENAME_XNAMED
     Text[ danish ] = "Omd�b objekt: ";
     Text[ swedish ] = "Byt namn p� objekt:  ";
     Text[ polish ] = "Zmie� nazw� obiektu: ";
-    Text[ portuguese_brazilian ] = "Rename object: ";
+    Text[ portuguese_brazilian ] = "Renomear objeto: ";
     Text[ japanese ] = "オブジェクト名の変更: ";
     Text[ korean ] = "개체 이름 바꾸기: ";
     Text[ chinese_simplified ] = "重命名对象： ";
@@ -180,6 +186,9 @@ ModalDialog DLG_RENAME_XNAMED
     Text[ catalan ] = "Reanomena l'objecte: ";
     Text[ finnish ] = "Nime� objekti uudelleen: ";
     Text[ thai ] = "เปลี่ยนชื่อวัตถุ: ";
+    Text[ czech ] = "Přejmenovat objekt:";
+    Text[ hebrew ] = "Objekt umbenennen:";
+    Text[ hindi ] = "वस्तु को पुनः नाम दो: ";
 };
 String STR_SERVICE_UNAVAILABLE
 {
@@ -195,18 +204,21 @@ String STR_SERVICE_UNAVAILABLE
     Text[ italian ] = "Il seguente servizio non � disponibile. ";
     Text[ danish ] = "F�lgende service er ikke tilg�ngelig: ";
     Text[ swedish ] = "F�ljande service �r inte tillg�nglig:  ";
-    Text[ polish ] = "Nast�puj�cy serwis jest niedost�pny: ";
-    Text[ portuguese_brazilian ] = "The following service is not available: ";
+    Text[ polish ] = "Nast�puj�ca us�uga jest niedost�pna: ";
+    Text[ portuguese_brazilian ] = "O seguinte servi�o est� indispon�vel: ";
     Text[ japanese ] = "次のサービスは使用できません: ";
     Text[ korean ] = "다음과 같은 서비스는 사용할 수 없습니다: ";
     Text[ chinese_simplified ] = "不存在下列服务功能： ";
     Text[ chinese_traditional ] = "這個服務功能不存在： ";
     Text[ arabic ] = "������ ������� ��� ������: ";
-    Text[ turkish ] = "A�a��daki hizmet kullan�lam�yor: ";
+    Text[ turkish ] = "A�a��daki servis bulunmamaktad�r: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El seg�ent servei no est� disponible: ";
     Text[ finnish ] = "Seuraava palvelu ei ole k�ytett�viss�: ";
     Text[ thai ] = "บริการนี้ใช้ไม่ได้: ";
+    Text[ czech ] = "Tato služba není dostupná: ";
+    Text[ hebrew ] = "Der folgende Service ist nicht verfügbar:";
+    Text[ hindi ] = "निम्नलिखित सेवा उपलब्ध नहीं है: ";
 };
 Resource RES_FRMEX_MENU
 {
@@ -292,15 +304,15 @@ Resource RES_FRMEX_MENU
     };
     ItemList [ polish ] =
     {
-            < "~Skala" ;        ST_MENU_ZOOM; > ;
-        < "Do g�ry" ;   ST_MENU_UP;     > ;
-        < "Na d�" ;    ST_MENU_DOWN; > ;
+            < "~Powi�kszenie" ;         ST_MENU_ZOOM; > ;
+        < "W ~g�r�" ;   ST_MENU_UP;     > ;
+        < "W ~d�" ;    ST_MENU_DOWN; > ;
     };
     ItemList [ portuguese_brazilian ] =
     {
-            < "~Ma?stab" ;      ST_MENU_ZOOM; > ;
-        < "Nach ~oben" ;    ST_MENU_UP;     > ;
-        < "Nach ~unten" ;   ST_MENU_DOWN; > ;
+            < "~Zoom" ;         ST_MENU_ZOOM; > ;
+        < "Para ~cima" ;    ST_MENU_UP;     > ;
+        < "Para ~baixo" ;   ST_MENU_DOWN; > ;
     };
     ItemList [ japanese ] =
     {
@@ -335,7 +347,7 @@ Resource RES_FRMEX_MENU
     ItemList [ turkish ] =
     {
             < "~Yak�nla�t�r" ;      ST_MENU_ZOOM; > ;
-        < "Y~ukar�" ;   ST_MENU_UP;     > ;
+        < "~Yukar�" ;   ST_MENU_UP;     > ;
         < "A~�a��" ;    ST_MENU_DOWN; > ;
     };
     ItemList [ catalan ] =
@@ -356,8 +368,35 @@ Resource RES_FRMEX_MENU
         < "Nach ~oben" ;    ST_MENU_UP;     > ;
         < "Nach ~unten" ;   ST_MENU_DOWN; > ;
     };
+    ItemList [ czech ] =
+    {
+         < "Zvětšení" ;      ST_MENU_ZOOM; > ;
+        < "Nahoru" ;    ST_MENU_UP;     > ;
+        < "Dolů" ;     ST_MENU_DOWN; > ;
+    };
+    ItemList [ hebrew ] =
+    {
+         < "‮זום‬" ;         ST_MENU_ZOOM; > ;
+        < "Nach ~oben" ;    ST_MENU_UP;     > ;
+        < "Nach ~unten" ;   ST_MENU_DOWN; > ;
+    };
+    ItemList [ hindi ] =
+    {
+         < "~Maï¿½stab" ;        ST_MENU_ZOOM; > ;
+        < "~ऊपर की ओर" ;  ST_MENU_UP;     > ;
+        < "~नीचे की ओर" ;   ST_MENU_DOWN; > ;
+    };
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 
