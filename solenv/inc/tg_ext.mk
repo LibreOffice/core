@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:44:13 $
+#   last change: $Author: vg $ $Date: 2003-06-04 10:40:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,6 +61,8 @@
 #*************************************************************************
 
 .IF "$(L10N_framework)"==""
+
+.EXPORT : CC CXX
 
 # setup INCLUDE variable for use by VC++
 .IF "$(GUI)"=="WNT"
