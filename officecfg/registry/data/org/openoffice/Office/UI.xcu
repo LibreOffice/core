@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcu,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:26:30 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
                         <value xml:lang="en-US">Text documents</value>
                     </prop>
                     <prop oor:name="Filters">
-                        <value oor:separator=";">HTML (StarWriter);MS WinWord 2.x (W4W);MS WinWord 6.0;MS Word 95;MS Word 95 Vorlage;MS Word 97;MS Word 97 Vorlage;StarOffice XML (Writer);StarWriter 3.0;StarWriter 3.0 Vorlage/Template;StarWriter 4.0;StarWriter 4.0 Vorlage/Template;StarWriter 5.0;StarWriter 5.0 Vorlage/Template;writer_StarOffice_XML_Writer_Template;Text</value>
+                        <value oor:separator=";">HTML (StarWriter);MS WinWord 2.x (W4W);MS WinWord 6.0;MS Word 95;MS Word 95 Vorlage;MS Word 97;MS Word 97 Vorlage;StarOffice XML (Writer);StarWriter 3.0;StarWriter 3.0 Vorlage/Template;StarWriter 4.0;StarWriter 4.0 Vorlage/Template;StarWriter 5.0;StarWriter 5.0 Vorlage/Template;writer_StarOffice_XML_Writer_Template;Text;WordPerfect</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">
