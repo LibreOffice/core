@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 12:15:47 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ bool X11SalOpenGL::IsValid()
                         GLX_DOUBLEBUFFER, &nDoubleBuffer );
             if( nHaveGL && ! nDoubleBuffer )
             {
-                SalDisplay* pSalDisplay = GetSalData()->GetDefDisp();
+                SalDisplay* pSalDisplay = GetSalData()->GetDisplay();
                 BOOL bPreviousState =
                     pSalDisplay->GetXLib()->GetIgnoreXErrors();
                 pSalDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
