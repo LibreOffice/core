@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-09 17:30:17 $
+ *  last change: $Author: obo $ $Date: 2000-11-13 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-
+#include <algorithm>
 static void usingRegisterImpl()
 {
     fprintf(stderr, "\nusing: regcomp -register|revoke -r registryfile -c locationUrl [-br registryfile] [-l componentLoaderUrl]\n");
