@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:00:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1145,11 +1145,24 @@ sal_Bool SAL_CALL ORowSetBase::rowDeleted(  ) throw(SQLException, RuntimeExcepti
 // XWarningsSupplier
 Any SAL_CALL ORowSetBase::getWarnings(  ) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( *m_pMutex );
+    checkCache();
+
+    Reference< XWarningsSupplier > xWarnings( m_pCache->m_xSet.get(), UNO_QUERY );
+    if ( xWarnings.is() )
+        return xWarnings->getWarnings();
+
     return Any();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetBase::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( *m_pMutex );
+    checkCache();
+
+    Reference< XWarningsSupplier > xWarnings( m_pCache->m_xSet.get(), UNO_QUERY );
+    if ( xWarnings.is() )
+        xWarnings->clearWarnings();
 }
 // -------------------------------------------------------------------------
 void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
