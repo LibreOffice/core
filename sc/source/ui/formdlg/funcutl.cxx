@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcutl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-26 13:37:32 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,17 +127,6 @@ void ValWnd::SetValue( const String& rStrVal )
 
 //============================================================================
 // class ArgEdit
-//----------------------------------------------------------------------------
-
-ArgEdit::ArgEdit( Window* pParent, WinBits nWinStyle )
-    :   ScRefEdit( pParent, nWinStyle ),
-        pSlider ( NULL ),
-        pEdPrev ( NULL ),
-        pEdNext ( NULL ),
-        nArgs   ( 0 )
-{
-}
-
 //----------------------------------------------------------------------------
 
 ArgEdit::ArgEdit( Window* pParent, const ResId& rResId )
