@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:09:42 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:04:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _WRTSH_HXX
 #define _WRTSH_HXX
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _FESH_HXX
 #include <fesh.hxx>
 #endif
@@ -103,7 +106,7 @@ namespace com { namespace sun { namespace star { namespace util {
 } } } }
 
 
-class SwWrtShell: public SwFEShell
+class SW_DLLPUBLIC SwWrtShell: public SwFEShell
 {
 public:
     typedef long (SwWrtShell::*SELECTFUNC)(const Point *, BOOL bProp );
@@ -463,12 +466,12 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
 
 private:
 
-    void    OpenMark();
-    void    CloseMark( BOOL bOkFlag );
+    SW_DLLPRIVATE void  OpenMark();
+    SW_DLLPRIVATE void  CloseMark( BOOL bOkFlag );
 
-    String  GetWrdDelim();
-    String  GetSDelim();
-    String  GetBothDelim();
+    SW_DLLPRIVATE String    GetWrdDelim();
+    SW_DLLPRIVATE String    GetSDelim();
+    SW_DLLPRIVATE String    GetBothDelim();
 
     struct ModeStack
     {
@@ -514,18 +517,18 @@ private:
     Point   aDest;
     BOOL    bDestOnStack;
     BOOL    HasCrsrStack() const { return 0 != pCrsrStack; }
-    BOOL    PushCrsr(SwTwips lOffset, BOOL bSelect);
-    BOOL    PopCrsr(BOOL bUpdate, BOOL bSelect = FALSE);
+    SW_DLLPRIVATE BOOL  PushCrsr(SwTwips lOffset, BOOL bSelect);
+    SW_DLLPRIVATE BOOL  PopCrsr(BOOL bUpdate, BOOL bSelect = FALSE);
 
     // ENDE Cursor bei PageUp / -Down mitnehmen
-    FASTBOOL _SttWrd();
-    FASTBOOL _EndWrd();
-    FASTBOOL _NxtWrd();
-    FASTBOOL _PrvWrd();
-    FASTBOOL _FwdSentence();
-    FASTBOOL _BwdSentence();
-    FASTBOOL _FwdPara();
-    FASTBOOL _BwdPara();
+    SW_DLLPRIVATE FASTBOOL _SttWrd();
+    SW_DLLPRIVATE FASTBOOL _EndWrd();
+    SW_DLLPRIVATE FASTBOOL _NxtWrd();
+    SW_DLLPRIVATE FASTBOOL _PrvWrd();
+    SW_DLLPRIVATE FASTBOOL _FwdSentence();
+    SW_DLLPRIVATE FASTBOOL _BwdSentence();
+    SW_DLLPRIVATE FASTBOOL _FwdPara();
+    SW_DLLPRIVATE FASTBOOL _BwdPara();
 
         //  Selektionen
     BOOL    bIns            :1;
@@ -546,39 +549,39 @@ private:
     SELECTFUNC  fnLeaveSelect;
 
     //setzt den Cursorstack nach dem Bewegen mit PageUp/-Down zurueck.
-    void    _ResetCursorStack();
+    SW_DLLPRIVATE void  _ResetCursorStack();
 
-    void    SttDragDrop(Timer *);
-    long    SetCrsr(const Point *, BOOL bProp=FALSE );
-    long    SetCrsrKillSel(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE void  SttDragDrop(Timer *);
+    SW_DLLPRIVATE long  SetCrsr(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  SetCrsrKillSel(const Point *, BOOL bProp=FALSE );
 
-    long    StdSelect(const Point *, BOOL bProp=FALSE );
-    long    BeginDrag(const Point *, BOOL bProp=FALSE );
-    long    Drag(const Point *, BOOL bProp=FALSE );
-    long    EndDrag(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  StdSelect(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  BeginDrag(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  Drag(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  EndDrag(const Point *, BOOL bProp=FALSE );
 
-    long    ExtSelWrd(const Point *, BOOL bProp=FALSE );
-    long    ExtSelLn(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  ExtSelWrd(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  ExtSelLn(const Point *, BOOL bProp=FALSE );
 
     //Verschieben von Text aus Drag and Drop; Point ist
     //Destination fuer alle Selektionen.
-    long    MoveText(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  MoveText(const Point *, BOOL bProp=FALSE );
 
-    long    BeginFrmDrag(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  BeginFrmDrag(const Point *, BOOL bProp=FALSE );
 
     //nach SSize/Move eines Frames Update; Point ist Destination.
-    long    UpdateLayoutFrm(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  UpdateLayoutFrm(const Point *, BOOL bProp=FALSE );
 
-    long    SttLeaveSelect(const Point *, BOOL bProp=FALSE );
-    long    AddLeaveSelect(const Point *, BOOL bProp=FALSE );
-    long    Ignore(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  SttLeaveSelect(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  AddLeaveSelect(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  Ignore(const Point *, BOOL bProp=FALSE );
 
-    void    LeaveExtSel() { bSelWrd = bSelLn = FALSE;}
-    BOOL    _CanInsert();
+    SW_DLLPRIVATE void  LeaveExtSel() { bSelWrd = bSelLn = FALSE;}
+    SW_DLLPRIVATE BOOL  _CanInsert();
 
-    BOOL    GoStart(BOOL KeepArea = FALSE, BOOL * = 0,
+    SW_DLLPRIVATE BOOL  GoStart(BOOL KeepArea = FALSE, BOOL * = 0,
             BOOL bSelect = FALSE, BOOL bDontMoveRegion = FALSE);
-    BOOL    GoEnd(BOOL KeepArea = FALSE, BOOL * = 0);
+    SW_DLLPRIVATE BOOL  GoEnd(BOOL KeepArea = FALSE, BOOL * = 0);
 
     enum BookMarkMove
     {
@@ -588,7 +591,7 @@ private:
         BOOKMARK_LAST_LAST_ENTRY
     };
 
-    FASTBOOL MoveBookMark(  BookMarkMove eFuncId,
+    SW_DLLPRIVATE FASTBOOL MoveBookMark(    BookMarkMove eFuncId,
                             USHORT nPos = 0,
                             BOOL bStart = TRUE );
 
