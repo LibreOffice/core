@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:36:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,12 +381,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
     if( SID_SIGNATURE == nId || SID_MACRO_SIGNATURE == nId )
     {
-//      Reference< com::sun::star::embed::XStorage > xStore;
-//      Reference< com::sun::star::security::XDocumentDigitalSignatures > xD(
-//          comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), UNO_QUERY );
-//      if( xD.is() )
-//          xD->ShowPackageSignatures( xStore );
-
         if ( QueryHiddenInformation( WhenSigning, NULL ) == RET_YES )
             ( SID_SIGNATURE == nId ) ? SignDocumentContent() : SignScriptingContent();
         return;
@@ -1394,9 +1388,11 @@ sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
                 {
                     ::com::sun::star::uno::Sequence< security::DocumentSignaturesInformation > aInfos;
                     if ( bScriptingContent )
-                        aInfos = xD->VerifyScriptingContentSignatures( GetMedium()->GetStorage() );
+                        aInfos = xD->verifyScriptingContentSignatures( GetMedium()->GetLastCommitReadStorage_Impl(),
+                                                                        uno::Reference< io::XInputStream >() );
                     else
-                        aInfos = xD->VerifyDocumentContentSignatures( GetMedium()->GetStorage() );
+                        aInfos = xD->verifyDocumentContentSignatures( GetMedium()->GetLastCommitReadStorage_Impl(),
+                                                                        uno::Reference< io::XInputStream >() );
 
                     int nInfos = aInfos.getLength();
                     if( nInfos )
@@ -1452,19 +1448,20 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
         return;
     }
 
-    GetMedium()->SignContents_Impl( bScriptingContent );
+    if ( GetMedium()->SignContents_Impl( bScriptingContent ) )
+    {
+        if ( bScriptingContent )
+            pImp->nScriptingSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
+        else
+            pImp->nDocumentSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
 
-    if ( bScriptingContent )
-        pImp->nScriptingSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
-    else
-        pImp->nDocumentSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
+        // Doc was not modified befor, and signature is already in the storage...
+        SetModified( FALSE );
 
-    // Doc was not modified befor, and signature is already in the storage...
-    SetModified( FALSE );
-
-    Invalidate( SID_SIGNATURE );
-    Invalidate( SID_MACRO_SIGNATURE );
-    Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
+        Invalidate( SID_SIGNATURE );
+        Invalidate( SID_MACRO_SIGNATURE );
+        Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
+    }
 }
 
 sal_uInt16 SfxObjectShell::GetDocumentSignatureState()
