@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-16 09:47:41 $
+ *  last change: $Author: mba $ $Date: 2002-10-28 12:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -979,7 +979,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 
         const SfxPoolItem *pRet=0;
         SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:user") );
-        SfxStringItem aTarget( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
+        SfxStringItem aTarget( SID_TARGETNAME, DEFINE_CONST_UNICODE("_default") );
         if ( aTemplateFileName.Len() )
         {
             INetURLObject aObj( aTemplateFileName );
