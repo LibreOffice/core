@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:35:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1933,7 +1933,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     {
         SwFmtHoriOrient aHori = (const SwFmtHoriOrient &)(rFlySet.Get(
             RES_HORI_ORIENT));
-        aHori.SetPos(GetSafePos(aHori.GetPos()-nOutside));
+        aHori.SetPos(MakeSafePositioningValue(aHori.GetPos()-nOutside));
         rFlySet.Put(aHori);
 
         SwFmtVertOrient aVert = (const SwFmtVertOrient &)(rFlySet.Get(
@@ -2620,8 +2620,8 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         }
 #endif
 
-        SwFmtHoriOrient aHoriOri(GetSafePos(pFSPA->nXaLeft), eHoriOri,
-            eHoriRel);
+        SwFmtHoriOrient aHoriOri(MakeSafePositioningValue(pFSPA->nXaLeft),
+            eHoriOri, eHoriRel);
         if( 4 <= nXAlign )
             aHoriOri.SetPosToggle(true);
         rFlySet.Put( aHoriOri );
@@ -2659,7 +2659,8 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         if ((eVertRel == REL_CHAR) && (eVertOri == VERT_NONE))
             nYPos = -nYPos;
 
-        rFlySet.Put(SwFmtVertOrient(GetSafePos(nYPos), eVertOri, eVertRel));
+        rFlySet.Put(SwFmtVertOrient(MakeSafePositioningValue(pFSPA->nYaTop),
+            eVertOri, eVertRel));
 
         if (
             (pFSPA->nYaTop < 0) && (eVertOri == VERT_NONE) &&
@@ -2671,17 +2672,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     }
 
     return eAnchor;
-}
-
-// #i9245 clips the text box to the min or max position if it is outside our min or max boundry
-long SwWW8ImplReader::GetSafePos(long nPos)
-{
-    if(nPos > SHRT_MAX)
-        nPos = SHRT_MAX;
-    else if(nPos < SHRT_MIN)
-        nPos = SHRT_MIN;
-
-    return nPos;
 }
 
 SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
@@ -3000,6 +2990,15 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
 SwFrmFmt *SwWW8ImplReader::AddAutoAnchor(SwFrmFmt *pFmt)
 {
+    if (pFmt && (pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT))
+    {
+        sal_uInt16 nTextAreaWidth = maSectionManager.GetPageWidth() -
+            maSectionManager.GetPageRight() - maSectionManager.GetPageLeft();
+
+        if (pFmt->GetFrmSize().GetSize().Width() > nTextAreaWidth)
+            maTracer.Log(sw::log::eTooWideAsChar);
+    }
+
     /*
      * anchored to character at the current position will move along the
      * paragraph as text is added because we are at the insertion point.
