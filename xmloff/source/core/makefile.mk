@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2001-11-29 12:22:07 $
+#   last change: $Author: hr $ $Date: 2004-11-09 12:26:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,7 +106,8 @@ SLOFILES =	\
         $(SLO)$/XMLEmbeddedObjectExportFilter.obj \
         $(SLO)$/XMLEmbeddedObjectImportContext.obj \
         $(SLO)$/XMLBase64Export.obj \
-        $(SLO)$/XMLBase64ImportContext.obj
+        $(SLO)$/XMLBase64ImportContext.obj \
+        $(SLO)$/XMLBasicExportFilter.obj
 
 SVXLIGHTOBJFILES =	\
         $(OBJ)$/facreg.obj		\
