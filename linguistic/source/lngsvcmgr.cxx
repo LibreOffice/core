@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-17 06:56:02 $
+ *  last change: $Author: tl $ $Date: 2001-08-17 12:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ static Sequence< Locale > GetAvailLocales(
         Locale *pRes = aRes.getArray();
         for (i = 0;  i < nLanguages;  ++i)
         {
-            INT16 nLang = aLanguages[i];
+            INT16 nLang = aLanguages[(USHORT) i];
             pRes[i] = CreateLocale( nLang );
         }
     }
@@ -409,6 +409,8 @@ public:
                         const Reference< XLinguServiceEventBroadcaster > &rxBroadcaster );
     BOOL    RemoveLngSvcEvtBroadcaster(
                         const Reference< XLinguServiceEventBroadcaster > &rxBroadcaster );
+
+    void    AddLngSvcEvt( INT16 nLngSvcEvt );
 };
 
 
@@ -479,15 +481,20 @@ IMPL_LINK( LngSvcMgrListenerHelper, TimeOut, Timer*, pTimer )
 }
 
 
+void LngSvcMgrListenerHelper::AddLngSvcEvt( INT16 nLngSvcEvt )
+{
+    nCombinedLngSvcEvt |= nLngSvcEvt;
+    aLaunchTimer.Start();
+}
+
+
 void SAL_CALL
     LngSvcMgrListenerHelper::processLinguServiceEvent(
             const LinguServiceEvent& rLngSvcEvent )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-
-    nCombinedLngSvcEvt |= rLngSvcEvent.nEvent;
-    aLaunchTimer.Start();
+    AddLngSvcEvt( rLngSvcEvent.nEvent );
 }
 
 
@@ -1162,6 +1169,27 @@ Sequence< Locale > SAL_CALL
     return aRes;
 }
 
+static BOOL IsEqSvcList( const Sequence< OUString > &rList1,
+                        const Sequence< OUString > &rList2 )
+{
+    // returns TRUE iff both sequences are equal
+
+    BOOL bRes = FALSE;
+    INT32 nLen = rList1.getLength();
+    if (rList2.getLength() == nLen)
+    {
+        const OUString *pStr1 = rList1.getConstArray();
+        const OUString *pStr2 = rList2.getConstArray();
+        bRes = TRUE;
+        for (INT32 i = 0;  i < nLen  &&  bRes;  ++i)
+        {
+            if (*pStr1++ != *pStr2++)
+                bRes = FALSE;
+        }
+    }
+    return bRes;
+}
+
 
 void SAL_CALL
     LngSvcMgr::setConfiguredServices(
@@ -1183,15 +1211,28 @@ void SAL_CALL
         {
             if (!xSpellDsp.is())
                 GetSpellCheckerDsp_Impl();
+            BOOL bChanged = !IsEqSvcList( rServiceImplNames,
+                                          pSpellDsp->GetServiceList( rLocale ) );
             pSpellDsp->SetServiceList( rLocale, rServiceImplNames );
             SaveCfgSvcs( A2OU( SN_SPELLCHECKER ) );
+
+            if (pListenerHelper  &&  bChanged)
+                pListenerHelper->AddLngSvcEvt(
+                        LinguServiceEventFlags::SPELL_CORRECT_WORDS_AGAIN |
+                        LinguServiceEventFlags::SPELL_WRONG_WORDS_AGAIN );
         }
         else if (0 == rServiceName.compareToAscii( SN_HYPHENATOR ))
         {
             if (!xHyphDsp.is())
                 GetHyphenatorDsp_Impl();
+            BOOL bChanged = !IsEqSvcList( rServiceImplNames,
+                                          pHyphDsp->GetServiceList( rLocale ) );
             pHyphDsp->SetServiceList( rLocale, rServiceImplNames );
             SaveCfgSvcs( A2OU( SN_HYPHENATOR ) );
+
+            if (pListenerHelper  &&  bChanged)
+                pListenerHelper->AddLngSvcEvt(
+                        LinguServiceEventFlags::HYPHENATE_AGAIN );
         }
         else if (0 == rServiceName.compareToAscii( SN_THESAURUS ))
         {
