@@ -24,7 +24,7 @@ OBJCFLAGS=
 CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-CFLAGSCXX=-pipe -fno-for-scope -fpermissive
+CFLAGSCXX=-pipe -fno-for-scope -fpermissive -fno-operator-names
 
 CFLAGSOBJGUIST=-fPIC
 CFLAGSOBJCUIST=-fPIC
