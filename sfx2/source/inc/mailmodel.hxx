@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-18 15:46:29 $
+ *  last change: $Author: cd $ $Date: 2002-08-26 08:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,20 @@ public:
         ROLE_BCC
     };
 
+    enum MailDocType
+    {
+        TYPE_SELF,
+        TYPE_ASPDF
+    };
+
 private:
+    enum SaveResult
+    {
+        SAVE_SUCCESSFULL,
+        SAVE_CANCELLED,
+        SAVE_ERROR
+    };
+
     AddressList_Impl*   mpToList;
     AddressList_Impl*   mpCcList;
     AddressList_Impl*   mpBccList;
@@ -100,11 +113,19 @@ private:
 
     void                ClearList( AddressList_Impl* pList );
     void                MakeValueList( AddressList_Impl* pList, String& rValueList );
-    BOOL                SaveDocument( String& rFileName, String& rType );
+    SaveResult          SaveDocument( String& rFileName, String& rType );
+    SaveResult          SaveDocAsPDF( String& rFileName, String& rType );
 
     DECL_LINK( DoneHdl, void* );
 
 public:
+    enum SendMailResult
+    {
+        SEND_MAIL_OK,
+        SEND_MAIL_CANCELLED,
+        SEND_MAIL_ERROR
+    };
+
     SfxMailModel_Impl( SfxBindings* pBinds );
     ~SfxMailModel_Impl();
 
@@ -113,7 +134,7 @@ public:
     void                SetSubject( const String& rSubject )        { maSubject = rSubject; }
     void                SetPriority( MailPriority ePrio )           { mePriority = ePrio; }
 
-    sal_Bool            Send();
+    SendMailResult      Send( MailDocType );
 };
 
 BOOL CreateFromAddress_Impl( String& rFrom );
