@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-09 15:40:22 $
+ *  last change: $Author: ab $ $Date: 2001-11-07 18:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,13 +153,21 @@ struct LibraryImport
     : public ::cppu::WeakImplHelper1< xml::XImporter >
 {
     friend class LibrariesElement;
+    friend class LibraryElement;
 
     LibDescriptorArray* mpLibArray;
+    LibDescriptor*      mpLibDesc;      // Single library mode
 
 public:
     inline LibraryImport( LibDescriptorArray* pLibArray )
         SAL_THROW( () )
-        : mpLibArray( pLibArray ) {}
+        : mpLibArray( pLibArray )
+        , mpLibDesc( NULL ) {}
+    // Single library mode
+    inline LibraryImport( LibDescriptor* pLibDesc )
+        SAL_THROW( () )
+        : mpLibArray( NULL )
+        , mpLibDesc( pLibDesc ) {}
     virtual ~LibraryImport()
         SAL_THROW( () );
 
