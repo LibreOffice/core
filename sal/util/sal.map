@@ -96,6 +96,7 @@ UDK_3_0_0 {
         osl_getVolumeInformation;
         osl_incrementInterlockedCount;
         osl_isAdministrator;
+        osl_isEndOfFile;
         osl_isEqualSocketAddr;
         osl_isExceptionPending;
         osl_isInSocketSet;
