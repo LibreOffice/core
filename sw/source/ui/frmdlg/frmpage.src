@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:59:42 $
+ *  last change: $Author: os $ $Date: 2001-09-28 11:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2089,55 +2089,15 @@ TabPage TP_FRM_URL
     {
         Pos = MAP_APPFONT ( 12 , 75 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text = "~Server Site Image Map" ;
-        Text[ ENGLISH ] = "~Server Site Image Map" ;
-        Text[ english_us ] = "~Server site image map";
-        Text[ portuguese ] = "~Server Site Image Map";
-        Text[ russian ] = "Ñåğâåğ Site Image Map";
-        Text[ greek ] = "ÄéáêïìéóôŞò";
-        Text[ dutch ] = "~Server";
-        Text[ french ] = "~Server Site Image Map";
-        Text[ spanish ] = "~Servidor site image map";
-        Text[ finnish ] = "~Palvelin";
-        Text[ italian ] = "~Server Site Image Map";
-        Text[ danish ] = "Server";
-        Text[ swedish ] = "~Server site image map";
-        Text[ polish ] = "~Server Site Image Map";
-        Text[ portuguese_brazilian ] = "~Server";
-        Text[ japanese ] = "»°ÊŞ°»²Ä ²Ò°¼ŞÏ¯Ìß(~S)";
-        Text[ korean ] = "¼­¹ö ½ÎÀÌÆ® ÀÌ¹ÌÁö¸Ê(~S)";
-        Text[ chinese_simplified ] = "·şÎñÆ÷Í¼ÏñÓ³Éä(~S)";
-        Text[ chinese_traditional ] = "¦øªA¾¹­¶­±¼v¹³¬M®g(~S)";
-        Text[ turkish ] = "~Sunucu";
-        Text[ arabic ] = "ÇáãÒæøÏ";
-        Text[ catalan ] = "~Servidor";
+        Text = "~Server-side Image Map" ;
+        Text[ ENGLISH ] = "~Server-side Image Map" ;
     };
     CheckBox CB_CLIENT
     {
         Pos = MAP_APPFONT ( 12 , 89 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text = "~Client Site Image Map" ;
-        Text [ ENGLISH ] = "~Client Site Image Map" ;
-        Text[ english_us ] = "~Client site image map";
-        Text[ portuguese ] = "~Client Site Image Map";
-        Text[ russian ] = "Êëèåíò Site Image Map";
-        Text[ greek ] = "ĞåëÜôçò Site Image Map";
-        Text[ dutch ] = "~Cliënt";
-        Text[ french ] = "Client Site Image Map";
-        Text[ spanish ] = "~Cliente Site Image Map";
-        Text[ finnish ] = "~Työasema";
-        Text[ italian ] = "~Client Site Image Map";
-        Text[ danish ] = "Klient";
-        Text[ swedish ] = "~Client site image map";
-        Text[ polish ] = "Klient Site Image Map";
-        Text[ portuguese_brazilian ] = "~Client";
-        Text[ japanese ] = "¸×²±İÄ»²Ä ²Ò°¼ŞÏ¯Ìß(~C)";
-        Text[ korean ] = "Å¬¶óÀÌ¾ğÆ® ½ÎÀÌÆ® ÀÌ¹ÌÁö¸Ê(~C)";
-        Text[ chinese_simplified ] = "¿Í»§¶ËÍ¼ÏñÓ³Éä(~C)";
-        Text[ chinese_traditional ] = "¥Î¤áºİ­¶­±¼v¹³¬M®g(~C)";
-        Text[ turkish ] = "~İstemci";
-        Text[ arabic ] = "ÇáÚãíá";
-        Text[ catalan ] = "~Cliente";
+        Text = "~Client-side Image Map" ;
+        Text [ ENGLISH ] = "~Client-side Image Map" ;
     };
     FixedLine FL_IMAGE
     {
