@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:36:55 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 21:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,7 @@ String STR_CENTER_VERT
     Text[ chinese_simplified ] = "÷–(~E)";
     Text[ russian ] = "ѕо середине";
     Text[ polish ] = "WyЬrodkuj";
-    Text[ japanese ] = "ТЖРS(~E)";
+    Text[ japanese ] = "ТЖЙЫ(~E)";
     Text[ chinese_traditional ] = "Єm§§(~E)";
     Text[ arabic ] = "«бж”Ў";
     Text[ greek ] = " Ёнфсп";
@@ -1378,7 +1378,7 @@ InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
     MESSAGE[ chinese_simplified ] = "Ѕ–ЉдЄфћЂіу£ђ≥ђєэЅ–«ш”т°£";
     MESSAGE[ russian ] = "–ассто€ние между колонками слишком большое дл€ ширины колонок.";
     MESSAGE[ polish ] = "Odstкp miкdzy kolumnami jest za duњy dla ich szerokoЬci.";
-    MESSAGE[ japanese ] = "ЧсВћК‘КuВ™ЧсВћХЭВ…СќВµВƒНLВЈВђВ№ВЈ";
+    MESSAGE[ japanese ] = "ЧсВћК‘КuВ™ЧсХЭВ…СќВµВƒНLВЈВђВ№ВЈ";
     MESSAGE[ chinese_traditional ] = "ƒжґ°єj§”§j°AґWєLƒж∞ѕ∞м°C";
     MESSAGE[ arabic ] = "нЁжё  »«Џѕ «б√Џгѕ… Џ—÷е«.";
     MESSAGE[ greek ] = "« брьуфбуз уфзлюн хресвбяней фп рл№фпт фзт уфёлзт.";
