@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 11:57:02 $
+ *  last change: $Author: fs $ $Date: 2002-05-27 12:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,8 +453,8 @@ namespace svxform
                     aContextMenu.EnableItem( SID_FM_DELETE, !m_bRootSelected );
 
                     // 'Cut', 'Copy' and 'Paste'
-                    aContextMenu.EnableItem( SID_CUT, implAllowExchange( DND_ACTION_MOVE ) );
-                    aContextMenu.EnableItem( SID_COPY, implAllowExchange( DND_ACTION_COPY ) );
+                    aContextMenu.EnableItem( SID_CUT, !m_bRootSelected && implAllowExchange( DND_ACTION_MOVE ) );
+                    aContextMenu.EnableItem( SID_COPY, !m_bRootSelected && implAllowExchange( DND_ACTION_COPY ) );
                     aContextMenu.EnableItem( SID_PASTE, implAcceptPaste( ) );
 
                     // der TabDialog, wenn es genau ein Formular ist ...
@@ -1258,6 +1258,9 @@ namespace svxform
         // to update itself accordingly
         if( pFormShell && pFormShell->GetImpl() && pFormShell->GetFormView() )
             pFormShell->GetImpl()->DetermineSelection( pFormShell->GetFormView()->GetMarkList() );
+
+        if ( m_aControlExchange.isClipboardOwner() && ( DND_ACTION_MOVE == _nAction ) )
+            m_aControlExchange->clear();
 
         return _nAction;
     }
@@ -2206,6 +2209,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2002/05/17 11:57:02  fs
+ *  #98725# draw icons if to-be-cut images semi-transparent
+ *
  *  Revision 1.3  2002/05/17 08:41:57  fs
  *  high contrast support #99375#
  *
