@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemaparser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-13 10:00:26 $
+ *  last change: $Author: jb $ $Date: 2002-08-23 11:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,8 +181,11 @@ void SAL_CALL SchemaParser::startElement( const OUString& aName, const uno::Refe
         break;
 
     default: // skip unknown elements
+        OSL_ENSURE( aInfo.type <= ElementType::other, "Schema XML parser - Error: invalid element type value\n");
         OSL_ENSURE( aInfo.type >= ElementType::other, "Schema XML parser - Unexpected: found layer element in schema data\n");
-        OSL_ENSURE( aInfo.type <  ElementType::other, "Schema XML parser - Warning: ignoring unknown element tag\n");
+    // accept (and skip) unknown (ElementType::other) tags in schema to allow documentation and constraints to pass without assertion
+      //OSL_ENSURE( aInfo.type <  ElementType::other, "Schema XML parser - Warning: ignoring unknown element tag\n");
+
         this->startSkipping( aName, xAttribs );
         OSL_ASSERT( this->isSkipping() );
         return;
