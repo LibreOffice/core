@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StandaloneDocumentInfo.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 18:46:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
     First action on this service must be to specify which document should be handled.
     Otherwise all supported properties of <type>DocumentInfo</type> will be set to
     void values. Loading of a document doesn't mean - loading all. It means reading
-    of special part only, which includes searched informations. Same procedure for saving
+    of special part only, which includes searched information. Same procedure for saving
     of may changed values back to the document.
     </p>
 
