@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-28 12:34:49 $
+ *  last change: $Author: pl $ $Date: 2002-10-30 16:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #define _SV_TOOLBOX_CXX
 
 #include <string.h>
+
+#include <vector>
 
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
@@ -123,6 +125,7 @@
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
 #endif
+
 // =======================================================================
 
 DBG_NAMEEX( Window );
@@ -182,7 +185,6 @@ DBG_NAMEEX( Window );
 #define DOCK_LINELEFT           ((USHORT)0x4000)
 #define DOCK_LINETOP            ((USHORT)0x8000)
 #define DOCK_LINEOFFSET         3
-
 
 // -----------------------------------------------------------------------
 
@@ -618,25 +620,26 @@ static void ImplCalcFloatSizes( ToolBox* pThis )
     // min. Groesse berechnen
     long            nCalcSize = pThis->mnItemWidth;
     ImplToolItem*   pItem;
-    pItem = pThis->mpItemList->First();
-    while ( pItem )
+
+    std::vector< ImplToolItem >::const_iterator it;
+    it = pThis->mpData->m_aItems.begin();
+    while ( it != pThis->mpData->m_aItems.end() )
     {
-        if ( pItem->mbVisible )
+        if ( it->mbVisible )
         {
-            if ( pItem->mpWindow )
+            if ( it->mpWindow )
             {
-                long nTempSize = pItem->mpWindow->GetSizePixel().Width();
+                long nTempSize = it->mpWindow->GetSizePixel().Width();
                 if ( nTempSize > nCalcSize )
                     nCalcSize = nTempSize;
             }
-            else if ( pItem->mnNonStdSize )
+            else if ( it->mnNonStdSize )
             {
-                if ( pItem->mnNonStdSize > nCalcSize )
-                    nCalcSize = pItem->mnNonStdSize;
+                if ( it->mnNonStdSize > nCalcSize )
+                    nCalcSize = it->mnNonStdSize;
             }
         }
-
-        pItem = pThis->mpItemList->Next();
+        ++it;
     }
 
     USHORT  i;
@@ -874,50 +877,50 @@ static USHORT ImplFindItemPos( ToolBox* pBox, const Point& rPos )
         aPos.Y() = aSize.Height()-TB_BORDER_OFFSET1;
 
     // Item suchen, das geklickt wurde
-    ImplToolItem* pItem = pBox->mpItemList->First();
-    while ( pItem )
+    std::vector< ImplToolItem >::const_iterator it = pBox->mpData->m_aItems.begin();
+    while ( it != pBox->mpData->m_aItems.end() )
     {
-        if ( pItem->mbVisible )
+        if ( it->mbVisible )
         {
-            if ( nLast || !pItem->maRect.IsEmpty() )
+            if ( nLast || !it->maRect.IsEmpty() )
             {
                 if ( pBox->mbHorz )
                 {
                     if ( nLast &&
-                         ((nLast < pItem->maRect.Top()) || pItem->maRect.IsEmpty()) )
+                         ((nLast < it->maRect.Top()) || it->maRect.IsEmpty()) )
                         return nPos;
 
-                    if ( aPos.Y() <= pItem->maRect.Bottom() )
+                    if ( aPos.Y() <= it->maRect.Bottom() )
                     {
-                        if ( aPos.X() < pItem->maRect.Left() )
+                        if ( aPos.X() < it->maRect.Left() )
                             return nPos;
-                        else if ( aPos.X() < pItem->maRect.Right() )
+                        else if ( aPos.X() < it->maRect.Right() )
                             return nPos+1;
                         else if ( !nLast )
-                            nLast = pItem->maRect.Bottom();
+                            nLast = it->maRect.Bottom();
                     }
                 }
                 else
                 {
                     if ( nLast &&
-                         ((nLast < pItem->maRect.Left()) || pItem->maRect.IsEmpty()) )
+                         ((nLast < it->maRect.Left()) || it->maRect.IsEmpty()) )
                         return nPos;
 
-                    if ( aPos.X() <= pItem->maRect.Right() )
+                    if ( aPos.X() <= it->maRect.Right() )
                     {
-                        if ( aPos.Y() < pItem->maRect.Top() )
+                        if ( aPos.Y() < it->maRect.Top() )
                             return nPos;
-                        else if ( aPos.Y() < pItem->maRect.Bottom() )
+                        else if ( aPos.Y() < it->maRect.Bottom() )
                             return nPos+1;
                         else if ( !nLast )
-                            nLast = pItem->maRect.Right();
+                            nLast = it->maRect.Right();
                     }
                 }
             }
         }
 
         nPos++;
-        pItem = pBox->mpItemList->Next();
+        ++it;
     }
 
     return nPos;
@@ -1440,7 +1443,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mbToolBox         = TRUE;
     mpBtnDev          = NULL;
     mpFloatSizeAry    = NULL;
-    mpItemList        = new ImplToolItemList;
+    mpData              = new ImplToolBoxPrivateData;
     mpFloatWin        = NULL;
     mnDX              = 0;
     mnDY              = 0;
@@ -1649,16 +1652,8 @@ ToolBox::~ToolBox()
     if ( mpFloatWin )
         mpFloatWin->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
 
-    // Items aus der Liste loeschen
-    ImplToolItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        delete pItem;
-        pItem = mpItemList->Next();
-    }
-
-    // Itemlist loeschen
-    delete mpItemList;
+    // delete private data
+    delete mpData;
 
     // FloatSizeAry gegebenenfalls loeschen
     if ( mpFloatSizeAry )
@@ -1698,13 +1693,12 @@ ToolBox::~ToolBox()
 
 ImplToolItem* ToolBox::ImplGetItem( USHORT nItemId ) const
 {
-    ImplToolItem* pItem = mpItemList->First();
-    while ( pItem )
+    std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
+    while ( it != mpData->m_aItems.end() )
     {
-        if ( pItem->mnId == nItemId )
-            return pItem;
-
-        pItem = mpItemList->Next();
+        if ( it->mnId == nItemId )
+            return &(*it);
+        ++it;
     }
 
     return NULL;
@@ -1720,7 +1714,6 @@ BOOL ToolBox::ImplCalcItem()
     if ( !mbCalc )
         return FALSE;
 
-    ImplToolItem*   pItem;
     long            nDefWidth;
     long            nDefHeight;
     long            nDefLeftWidth;
@@ -1754,75 +1747,75 @@ BOOL ToolBox::ImplCalcItem()
         nDefLeftHeight  = nDefHeight-DEF_IMAGE_HEIGHT;
     }
 
-    if ( mpItemList->Count() )
+    if ( ! mpData->m_aItems.empty() )
     {
         nMaxWidth  = DEF_MIN_WIDTH;
         nMaxHeight = DEF_MIN_HEIGHT;
         mnWinHeight = 0;
 
-        pItem = mpItemList->First();
-        while ( pItem )
+        std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
+        while ( it != mpData->m_aItems.end() )
         {
-            if ( pItem->meType == TOOLBOXITEM_BUTTON )
+            if ( it->meType == TOOLBOXITEM_BUTTON )
             {
-                if ( !(pItem->maImage) )
+                if ( !(it->maImage) )
                     bImage = FALSE;
                 else
                     bImage = TRUE;
-                if ( !pItem->maText.Len() )
+                if ( !it->maText.Len() )
                     bText = FALSE;
                 else
                     bText = TRUE;
 
                 if ( bImage || bText )
                 {
-                    pItem->mbEmptyBtn = FALSE;
+                    it->mbEmptyBtn = FALSE;
 
                     if ( meButtonType == BUTTON_SYMBOL )
                     {
                         if ( bImage || !bText )
                         {
-                            aItemSize = pItem->maImage.GetSizePixel();
-                            pItem->mnNonStdSize = 0;
+                            aItemSize = it->maImage.GetSizePixel();
+                            it->mnNonStdSize = 0;
                         }
                         else
                         {
                             aItemSize.Width() = 0;
                             aItemSize.Height() = GetTextHeight();
-                            pItem->mnNonStdSize = GetCtrlTextWidth( pItem->maText )+TB_TEXTOFFSET;
+                            it->mnNonStdSize = GetCtrlTextWidth( it->maText )+TB_TEXTOFFSET;
                         }
                     }
                     else if ( meButtonType == BUTTON_TEXT )
                     {
                         if ( bText || !bImage )
                         {
-                            aItemSize.Width() = GetCtrlTextWidth( pItem->maText )+TB_TEXTOFFSET;
+                            aItemSize.Width() = GetCtrlTextWidth( it->maText )+TB_TEXTOFFSET;
                             aItemSize.Height() = GetTextHeight();
-                            pItem->mnNonStdSize = 0;
+                            it->mnNonStdSize = 0;
                         }
                         else
                         {
-                            Size aImageSize = pItem->maImage.GetSizePixel();
+                            Size aImageSize = it->maImage.GetSizePixel();
                             if ( mbHorz )
                             {
                                 aItemSize.Width()  = 0;
                                 aItemSize.Height() = aImageSize.Height();
-                                pItem->mnNonStdSize = aImageSize.Width();
+                                it->mnNonStdSize = aImageSize.Width();
                             }
                             else
                             {
                                 aItemSize.Width()  = aImageSize.Width();
                                 aItemSize.Height() = 0;
-                                pItem->mnNonStdSize = aImageSize.Height();
+                                it->mnNonStdSize = aImageSize.Height();
                             }
                         }
                     }
                     else
                     {
-                        aItemSize.Width() = GetCtrlTextWidth( pItem->maText )+TB_TEXTOFFSET;
+                        aItemSize.Width() = GetCtrlTextWidth( it->maText )+TB_TEXTOFFSET;
                         aItemSize.Height() = GetTextHeight();
-                        Size aImageSize = pItem->maImage.GetSizePixel();
-                        if ( pItem->mnBits & TIB_LEFT )
+                        Size aImageSize = it->maImage.GetSizePixel();
+                        if ( it->mnBits & TIB_LEFT )
                         {
                             aItemSize.Width() += aImageSize.Width();
                             if ( aImageSize.Height() > aItemSize.Height() )
@@ -1834,18 +1827,18 @@ BOOL ToolBox::ImplCalcItem()
                             if ( aImageSize.Width() > aItemSize.Width() )
                                 aItemSize.Width() = aImageSize.Width();
                         }
-                        pItem->mnNonStdSize = 0;
+                        it->mnNonStdSize = 0;
                     }
 
-                    if ( !pItem->mnNonStdSize && (pItem->mnBits & TIB_AUTOSIZE) )
+                    if ( !it->mnNonStdSize && (it->mnBits & TIB_AUTOSIZE) )
                     {
-                        pItem->mnNonStdSize = aItemSize.Width();
+                        it->mnNonStdSize = aItemSize.Width();
                         aItemSize.Width() = 0;
                     }
                 }
                 else
                 {
-                    if ( pItem->mnBits & TIB_LEFT )
+                    if ( it->mnBits & TIB_LEFT )
                     {
                         aItemSize.Width()  = nDefLeftWidth;
                         aItemSize.Height() = nDefLeftHeight;
@@ -1855,7 +1848,7 @@ BOOL ToolBox::ImplCalcItem()
                         aItemSize.Width()  = nDefWidth;
                         aItemSize.Height() = nDefHeight;
                     }
-                    pItem->mbEmptyBtn = TRUE;
+                    it->mbEmptyBtn = TRUE;
                 }
 
                 if ( aItemSize.Width() > nMaxWidth )
@@ -1863,24 +1856,24 @@ BOOL ToolBox::ImplCalcItem()
                 if ( aItemSize.Height() > nMaxHeight )
                     nMaxHeight = aItemSize.Height();
 
-                if ( pItem->mnNonStdSize )
+                if ( it->mnNonStdSize )
                 {
                     if ( mbHorz )
-                        pItem->mnNonStdSize += SMALLBUTTON_HSIZE;
+                        it->mnNonStdSize += SMALLBUTTON_HSIZE;
                     else
-                        pItem->mnNonStdSize += SMALLBUTTON_VSIZE;
+                        it->mnNonStdSize += SMALLBUTTON_VSIZE;
                 }
 
                 // Gegebenenfalls die Fensterhoehe mit beruecksichtigen
-                if ( pItem->mpWindow )
+                if ( it->mpWindow )
                 {
-                    nHeight = pItem->mpWindow->GetSizePixel().Height();
+                    nHeight = it->mpWindow->GetSizePixel().Height();
                     if ( nHeight > mnWinHeight )
                         mnWinHeight = nHeight;
                 }
             }
 
-            pItem = mpItemList->Next();
+            ++it;
         }
     }
     else
@@ -1929,7 +1922,6 @@ BOOL ToolBox::ImplCalcItem()
 
 USHORT ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, BOOL bCalcHorz )
 {
-    ImplToolItem*   pItem;
     ULONG           nLineStart = 0;
     ULONG           nGroupStart = 0;
     long            nLineWidth = 0;
@@ -1940,22 +1932,22 @@ USHORT ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, BOOL bCalcHorz
     BOOL            bWindow;
     BOOL            bBreak = FALSE;
 
-    pItem = mpItemList->First();
-    while ( pItem )
+    std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
+    while ( it != mpData->m_aItems.end() )
     {
-        pItem->mbBreak = bBreak;
+        it->mbBreak = bBreak;
         bBreak = FALSE;
 
-        if ( pItem->mbVisible )
+        if ( it->mbVisible )
         {
             bWindow     = FALSE;
             bBreak      = FALSE;
             nCurWidth   = 0;
 
-            if ( pItem->meType == TOOLBOXITEM_BUTTON )
+            if ( it->meType == TOOLBOXITEM_BUTTON )
             {
-                if ( pItem->mnNonStdSize )
-                    nCurWidth = pItem->mnNonStdSize;
+                if ( it->mnNonStdSize )
+                    nCurWidth = it->mnNonStdSize;
                 else
                 {
                     if ( bCalcHorz )
@@ -1964,9 +1956,9 @@ USHORT ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, BOOL bCalcHorz
                         nCurWidth = mnItemHeight;
                 }
 
-                if ( pItem->mpWindow && bCalcHorz )
+                if ( it->mpWindow && bCalcHorz )
                 {
-                    long nWinItemWidth = pItem->mpWindow->GetSizePixel().Width();
+                    long nWinItemWidth = it->mpWindow->GetSizePixel().Width();
                     if ( !mbScroll || (nWinItemWidth <= nWidth) )
                     {
                         nCurWidth = nWinItemWidth;
@@ -1974,7 +1966,7 @@ USHORT ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, BOOL bCalcHorz
                     }
                     else
                     {
-                        if ( pItem->mbEmptyBtn )
+                        if ( it->mbEmptyBtn )
                         {
                             nCurWidth = 0;
                         }
@@ -1984,11 +1976,11 @@ USHORT ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, BOOL bCalcHorz
                 if ( (nLineWidth+nCurWidth > nWidth) && mbScroll )
                     bBreak = TRUE;
             }
-            else if ( pItem->meType == TOOLBOXITEM_SPACE )
+            else if ( it->meType == TOOLBOXITEM_SPACE )
                 nCurWidth = mnItemWidth;
-            else if ( pItem->meType == TOOLBOXITEM_SEPARATOR )
-                nCurWidth = pItem->mnSepSize;
-            else if ( pItem->meType == TOOLBOXITEM_BREAK )
+            else if ( it->meType == TOOLBOXITEM_SEPARATOR )
+                nCurWidth = it->mnSepSize;
+            else if ( it->meType == TOOLBOXITEM_BREAK )
                 bBreak = TRUE;
 
             if ( bBreak )
@@ -1996,16 +1988,16 @@ USHORT ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, BOOL bCalcHorz
                 nLines++;
 
                 // Gruppe auseinanderbrechen oder ganze Gruppe umbrechen?
-                if ( (pItem->meType == TOOLBOXITEM_BREAK) ||
+                if ( (it->meType == TOOLBOXITEM_BREAK) ||
                      (nLineStart == nGroupStart) )
                 {
                     if ( nLineWidth > nMaxLineWidth )
                         nMaxLineWidth = nLineWidth;
 
                     nLineWidth = 0;
-                    nLineStart = mpItemList->GetCurPos();
+                    nLineStart = it - mpData->m_aItems.begin();
                     nGroupStart = nLineStart;
-                    pItem->mbBreak = TRUE;
+                    it->mbBreak = TRUE;
                     bBreak = FALSE;
                 }
                 else
@@ -2017,16 +2009,16 @@ USHORT ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, BOOL bCalcHorz
                     // Zeilenanfang setzen und wieder neu berechnen
                     nLineWidth = 0;
                     nLineStart = nGroupStart;
-                    pItem = mpItemList->Seek( nGroupStart );
+                    it = mpData->m_aItems.begin() + nGroupStart;
                     continue;
                 }
             }
             else
             {
-                if ( (pItem->meType != TOOLBOXITEM_BUTTON) || bWindow )
+                if ( (it->meType != TOOLBOXITEM_BUTTON) || bWindow )
                 {
                     nLastGroupLineWidth = nLineWidth;
-                    nGroupStart = mpItemList->GetCurPos();
+                    nGroupStart = it - mpData->m_aItems.begin();
                     if ( !bWindow )
                         nGroupStart++;
                 }
@@ -2035,7 +2027,7 @@ USHORT ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, BOOL bCalcHorz
             nLineWidth += nCurWidth;
         }
 
-        pItem = mpItemList->Next();
+        ++it;
     }
 
     if ( pMaxLineWidth )
@@ -2062,10 +2054,10 @@ void ToolBox::ImplFormat( BOOL bResize )
     if ( !mbFormat )
         return;
 
+    mpData->ImplClearLayoutData();
+
     // Positionen/Groessen berechnen
     Rectangle       aEmptyRect;
-    ImplToolItem*   pItem;
-    ImplToolItem*   pTempItem;
     long            nLineSize;
     long            nLeft;
     long            nTop;
@@ -2077,6 +2069,9 @@ void ToolBox::ImplFormat( BOOL bResize )
     USHORT          nFormatLine;
     BOOL            bMustFullPaint;
     BOOL            bLastSep;
+
+    std::vector< ImplToolItem >::iterator   it;
+    std::vector< ImplToolItem >::iterator   temp_it;
 
     // FloatSizeAry gegebenenfalls loeschen
     if ( mpFloatSizeAry )
@@ -2187,18 +2182,18 @@ void ToolBox::ImplFormat( BOOL bResize )
         mnCurLine    = 1;
         mnCurLines   = 1;
 
-        pItem = mpItemList->First();
-        while ( pItem )
+        it = mpData->m_aItems.begin();
+        while ( it != mpData->m_aItems.end() )
         {
-            pItem->maRect = aEmptyRect;
+            it->maRect = aEmptyRect;
 
             // For items not visible, release resources only needed during
             // painting the items (on Win98, for example, these are system-wide
             // resources that are easily exhausted, so be nice):
-            pItem->maImage.ClearCaches();
-            pItem->maHighImage.ClearCaches();
+            it->maImage.ClearCaches();
+            it->maHighImage.ClearCaches();
 
-            pItem = mpItemList->Next();
+            ++it;
         }
 
         maLowerRect = aEmptyRect;
@@ -2241,7 +2236,7 @@ void ToolBox::ImplFormat( BOOL bResize )
         }
 
         // Haben wir ueberhaupt Items
-        if ( mpItemList->GetObject( 0 ) )
+        if ( !mpData->m_aItems.empty() )
         {
             // Umbrueche und sichtbare Zeilen berechnen
             mnCurLines = ImplCalcBreaks( nMax, NULL, mbHorz );
@@ -2280,40 +2275,38 @@ void ToolBox::ImplFormat( BOOL bResize )
             else if ( mnCurLine+mnVisLines-1 > mnCurLines )
                 mnCurLine = mnCurLines - (mnVisLines-1);
 
-            pItem = mpItemList->First();
-            while ( pItem )
+            it = mpData->m_aItems.begin();
+            while ( it != mpData->m_aItems.end() )
             {
                 // Doppelte Separatoren hiden
-                if ( pItem->meType == TOOLBOXITEM_SEPARATOR )
+                if ( it->meType == TOOLBOXITEM_SEPARATOR )
                 {
-                    pItem->mbVisible = FALSE;
+                    it->mbVisible = FALSE;
                     if ( !bLastSep )
                     {
                         // Feststellen ob dahinter ueberhaupt noch
                         // ein Item sichtbar ist
-                        ULONG nTempPos = mpItemList->GetCurPos()+1;
-                        ULONG nCount = mpItemList->Count();
-                        while ( nTempPos < nCount )
+                        temp_it = it+1;
+                        while ( temp_it != mpData->m_aItems.end() )
                         {
-                            pTempItem = mpItemList->GetObject( nTempPos );
-                            if ( (pTempItem->meType == TOOLBOXITEM_SEPARATOR) ||
-                                 ((pTempItem->meType == TOOLBOXITEM_BUTTON) &&
-                                  pTempItem->mbVisible) )
+                            if ( (temp_it->meType == TOOLBOXITEM_SEPARATOR) ||
+                                 ((temp_it->meType == TOOLBOXITEM_BUTTON) &&
+                                  temp_it->mbVisible) )
                             {
-                                pItem->mbVisible = TRUE;
+                                it->mbVisible = TRUE;
                                 break;
                             }
-                            nTempPos++;
+                            ++temp_it;
                         }
                     }
                     bLastSep = TRUE;
                 }
-                else if ( pItem->mbVisible )
+                else if ( it->mbVisible )
                     bLastSep = FALSE;
 
-                pItem->mbShowWindow = FALSE;
+                it->mbShowWindow = FALSE;
 
-                if ( pItem->mbBreak )
+                if ( it->mbBreak )
                 {
                     nFormatLine++;
 
@@ -2339,25 +2332,25 @@ void ToolBox::ImplFormat( BOOL bResize )
                     }
                 }
 
-                if ( !pItem->mbVisible || (nFormatLine < mnCurLine) ||
+                if ( !it->mbVisible || (nFormatLine < mnCurLine) ||
                      (nFormatLine > mnCurLine+mnVisLines-1) )
-                    pItem->maCalcRect = aEmptyRect;
+                    it->maCalcRect = aEmptyRect;
                 else
                 {
-                    if ( (pItem->meType == TOOLBOXITEM_BUTTON) ||
-                         (pItem->meType == TOOLBOXITEM_SPACE) )
+                    if ( (it->meType == TOOLBOXITEM_BUTTON) ||
+                         (it->meType == TOOLBOXITEM_SPACE) )
                     {
-                        if ( pItem->mnNonStdSize )
+                        if ( it->mnNonStdSize )
                         {
                             if ( mbHorz )
                             {
-                                nCurWidth   = pItem->mnNonStdSize;
+                                nCurWidth   = it->mnNonStdSize;
                                 nCurHeight  = mnItemHeight;
                             }
                             else
                             {
                                 nCurWidth   = mnItemWidth;
-                                nCurHeight  = pItem->mnNonStdSize;
+                                nCurHeight  = it->mnNonStdSize;
                             }
                         }
                         else
@@ -2366,18 +2359,18 @@ void ToolBox::ImplFormat( BOOL bResize )
                             nCurHeight  = mnItemHeight;
                         }
 
-                        if ( pItem->mpWindow && mbHorz )
+                        if ( it->mpWindow && mbHorz )
                         {
-                            Size aWinSize = pItem->mpWindow->GetSizePixel();
+                            Size aWinSize = it->mpWindow->GetSizePixel();
                             if ( !mbScroll || (aWinSize.Width() <= nMax) )
                             {
                                 nCurWidth   = aWinSize.Width();
                                 nCurHeight  = aWinSize.Height();
-                                pItem->mbShowWindow = TRUE;
+                                it->mbShowWindow = TRUE;
                             }
                             else
                             {
-                                if ( pItem->mbEmptyBtn )
+                                if ( it->mbEmptyBtn )
                                 {
                                     nCurWidth   = 0;
                                     nCurHeight  = 0;
@@ -2385,20 +2378,20 @@ void ToolBox::ImplFormat( BOOL bResize )
                             }
                         }
                     }
-                    else if ( pItem->meType == TOOLBOXITEM_SEPARATOR )
+                    else if ( it->meType == TOOLBOXITEM_SEPARATOR )
                     {
                         if ( mbHorz )
                         {
-                            nCurWidth   = pItem->mnSepSize;
+                            nCurWidth   = it->mnSepSize;
                             nCurHeight  = mnItemHeight;
                         }
                         else
                         {
                             nCurWidth   = mnItemWidth;
-                            nCurHeight  = pItem->mnSepSize;
+                            nCurHeight  = it->mnSepSize;
                         }
                     }
-                    else if ( pItem->meType == TOOLBOXITEM_BREAK )
+                    else if ( it->meType == TOOLBOXITEM_BREAK )
                     {
                         nCurWidth   = 0;
                         nCurHeight  = 0;
@@ -2406,36 +2399,36 @@ void ToolBox::ImplFormat( BOOL bResize )
 
                     if ( mbHorz )
                     {
-                        pItem->maCalcRect.Left()     = nX;
-                        pItem->maCalcRect.Top()      = nY+(nLineSize-nCurHeight)/2;
-                        pItem->maCalcRect.Right()    = nX+nCurWidth-1;
-                        pItem->maCalcRect.Bottom()   = pItem->maCalcRect.Top()+nCurHeight-1;
+                        it->maCalcRect.Left()     = nX;
+                        it->maCalcRect.Top()      = nY+(nLineSize-nCurHeight)/2;
+                        it->maCalcRect.Right()    = nX+nCurWidth-1;
+                        it->maCalcRect.Bottom()   = it->maCalcRect.Top()+nCurHeight-1;
                         nX += nCurWidth;
                     }
                     else
                     {
-                        pItem->maCalcRect.Left()     = nX+(nLineSize-nCurWidth)/2;;
-                        pItem->maCalcRect.Top()      = nY;
-                        pItem->maCalcRect.Right()    = pItem->maCalcRect.Left()+nCurWidth-1;
-                        pItem->maCalcRect.Bottom()   = nY+nCurHeight-1;
+                        it->maCalcRect.Left()     = nX+(nLineSize-nCurWidth)/2;;
+                        it->maCalcRect.Top()      = nY;
+                        it->maCalcRect.Right()    = it->maCalcRect.Left()+nCurWidth-1;
+                        it->maCalcRect.Bottom()   = nY+nCurHeight-1;
                         nY += nCurHeight;
                     }
                 }
 
-                if ( pItem->mpWindow )
+                if ( it->mpWindow )
                 {
-                    if ( pItem->mbShowWindow )
+                    if ( it->mbShowWindow )
                     {
-                        Point aPos( pItem->maCalcRect.Left(), pItem->maCalcRect.Top() );
-                        pItem->mpWindow->SetPosPixel( aPos );
+                        Point aPos( it->maCalcRect.Left(), it->maCalcRect.Top() );
+                        it->mpWindow->SetPosPixel( aPos );
                         if ( !mbCustomizeMode )
-                            pItem->mpWindow->Show();
+                            it->mpWindow->Show();
                     }
                     else
-                        pItem->mpWindow->Hide();
+                        it->mpWindow->Hide();
                 }
 
-                pItem = mpItemList->Next();
+                ++it;
             }
         }
         else
@@ -2467,15 +2460,15 @@ void ToolBox::ImplFormat( BOOL bResize )
                     maPaintRect.Union( aOldNextToolRect );
                 }
 
-                pItem = mpItemList->First();
-                while ( pItem )
+                it = mpData->m_aItems.begin();
+                while ( it != mpData->m_aItems.end() )
                 {
-                    if ( pItem->maRect != pItem->maCalcRect )
+                    if ( it->maRect != it->maCalcRect )
                     {
-                        maPaintRect.Union( pItem->maRect );
-                        maPaintRect.Union( pItem->maCalcRect );
+                        maPaintRect.Union( it->maRect );
+                        maPaintRect.Union( it->maCalcRect );
                     }
-                    pItem = mpItemList->Next();
+                    ++it;
                 }
             }
 
@@ -2485,19 +2478,19 @@ void ToolBox::ImplFormat( BOOL bResize )
         // Neu berechnete Rectangles uebertragen
         maPaintRect = aEmptyRect;
         Rectangle aVisibleRect(Point(0, 0), GetOutputSizePixel());
-        pItem = mpItemList->First();
-        while ( pItem )
+        it = mpData->m_aItems.begin();
+        while ( it != mpData->m_aItems.end() )
         {
-            pItem->maRect = pItem->maCalcRect;
-            if (!pItem->maRect.IsOver(aVisibleRect))
+            it->maRect = it->maCalcRect;
+            if (!it->maRect.IsOver(aVisibleRect))
             {
                 // For items not visible, release resources only needed during
                 // painting the items (on Win98, for example, these are system-
                 // wide resources that are easily exhausted, so be nice):
-                pItem->maImage.ClearCaches();
-                pItem->maHighImage.ClearCaches();
+                it->maImage.ClearCaches();
+                it->maHighImage.ClearCaches();
             }
-            pItem = mpItemList->Next();
+            ++it;
         }
     }
 
@@ -2706,11 +2699,16 @@ void ToolBox::ImplDrawNext( BOOL bIn )
 
 // -----------------------------------------------------------------------
 
-void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
+void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLayout )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    ImplToolItem* pItem = mpItemList->GetObject( nPos );
+    if( nPos >= mpData->m_aItems.size() )
+        return;
+
+    ImplToolItem* pItem = &mpData->m_aItems[nPos];
+    MetricVector* pVector = bLayout ? &mpData->m_pLayoutData->m_aUnicodeBoundRects : NULL;
+    String* pDisplayText = bLayout ? &mpData->m_pLayoutData->m_aDisplayText : NULL;
 
     // Falls Rechteck ausserhalb des sichbaren Bereichs liegt
     if ( pItem->maRect.IsEmpty() )
@@ -2724,17 +2722,19 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
         bHighContrastWhite = TRUE;
 
     // Im flachen Style werden auch Separatoren gezeichnet
-    if ( (mnOutStyle & TOOLBOX_STYLE_FLAT) &&
-         (pItem->meType == TOOLBOXITEM_SEPARATOR) )
+    if ( !bLayout &&
+         (mnOutStyle & TOOLBOX_STYLE_FLAT) &&
+         (pItem->meType == TOOLBOXITEM_SEPARATOR) &&
+         nPos > 0
+         )
     {
         // Strich wird nicht gemalt, wenn vor oder hinter Fenstern
         // oder bei einem Umbruch
-        ImplToolItem* pTempItem = mpItemList->GetObject( nPos );
-        pTempItem = mpItemList->GetObject( nPos-1 );
-        if ( pTempItem && !pTempItem->mbShowWindow )
+        ImplToolItem* pTempItem = &mpData->m_aItems[nPos-1];
+        if ( pTempItem && !pTempItem->mbShowWindow && nPos < mpData->m_aItems.size()-1 )
         {
-            pTempItem = mpItemList->GetObject( nPos+1 );
-            if ( pTempItem && !pTempItem->mbShowWindow && !pTempItem->mbBreak )
+            pTempItem = &mpData->m_aItems[nPos+1];
+            if ( !pTempItem->mbShowWindow && !pTempItem->mbBreak )
             {
                 long nCenterPos;
                 SetLineColor( rStyleSettings.GetShadowColor() );
@@ -2790,7 +2790,8 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
         SetLineColor( Color( COL_BLACK ) );
         SetFillColor( rStyleSettings.GetFieldColor() );
         SetTextColor( rStyleSettings.GetFieldTextColor() );
-        DrawRect( pItem->maRect );
+        if( !bLayout )
+            DrawRect( pItem->maRect );
 
         Size aSize( GetCtrlTextWidth( pItem->maText ), GetTextHeight() );
         Point aPos( pItem->maRect.Left()+2, pItem->maRect.Top() );
@@ -2807,14 +2808,20 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
         }
         else
             bClip = FALSE;
-        DrawCtrlText( aPos, pItem->maText );
+        if( bLayout )
+        {
+            mpData->m_pLayoutData->m_aLineIndices.push_back( mpData->m_pLayoutData->m_aDisplayText.Len() );
+            mpData->m_pLayoutData->m_aLineItemIds.push_back( pItem->mnId );
+            mpData->m_pLayoutData->m_aLineItemPositions.push_back( nPos );
+        }
+        DrawCtrlText( aPos, pItem->maText, 0, STRING_LEN, TEXT_DRAW_MNEMONIC, pVector, pDisplayText );
         if ( bClip )
             SetClipRegion();
         SetFont( aOldFont );
         SetTextColor( aOldTextColor );
 
         // Gegebenenfalls noch Config-Frame zeichnen
-        if ( pMgr )
+        if ( pMgr && !bLayout)
             pMgr->UpdateDragRect();
         return;
     }
@@ -2859,32 +2866,35 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
         }
     }
 
-    if ( mnOutStyle & TOOLBOX_STYLE_FLAT )
+    if( ! bLayout )
     {
-        if ( (pItem->meState != STATE_NOCHECK) || !bPaint )
+        if ( mnOutStyle & TOOLBOX_STYLE_FLAT )
         {
-            if ( pItem->meState != STATE_NOCHECK )
+            if ( (pItem->meState != STATE_NOCHECK) || !bPaint )
             {
-                SetLineColor();
-                SetFillColor( rStyleSettings.GetCheckedColor() );
-                DrawRect( pItem->maRect );
+                if ( pItem->meState != STATE_NOCHECK )
+                {
+                    SetLineColor();
+                    SetFillColor( rStyleSettings.GetCheckedColor() );
+                    DrawRect( pItem->maRect );
+                }
+                else
+                    Erase( pItem->maRect );
             }
-            else
-                Erase( pItem->maRect );
         }
-    }
-    else
-    {
-        if ( !pItem->mnNonStdSize )
-            DrawOutDev( pItem->maRect.TopLeft(), aBtnSize, aBtnPos, aBtnSize, *mpBtnDev );
         else
         {
-            if ( mnOutStyle & TOOLBOX_STYLE_OUTBUTTON )
-                ImplDrawOutButton( this, pItem->maRect, nStyle );
+            if ( !pItem->mnNonStdSize )
+                DrawOutDev( pItem->maRect.TopLeft(), aBtnSize, aBtnPos, aBtnSize, *mpBtnDev );
             else
             {
-                DecorationView aDecoView( this );
-                aDecoView.DrawButton( pItem->maRect, nStyle );
+                if ( mnOutStyle & TOOLBOX_STYLE_OUTBUTTON )
+                    ImplDrawOutButton( this, pItem->maRect, nStyle );
+                else
+                {
+                    DecorationView aDecoView( this );
+                    aDecoView.DrawButton( pItem->maRect, nStyle );
+                }
             }
         }
     }
@@ -2939,7 +2949,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
         aTxtSize.Height() = GetTextHeight();
     }
 
-    if ( bImage )
+    if ( bImage && ! bLayout )
     {
         const Image* pImage;
         if ( bHighlight && (!(pItem->maHighImage)) == FALSE )
@@ -3057,18 +3067,26 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
         }
 
         // draw selection only if not already draw during imgae output (see above)
-        if ( !bImage && (bHighlight || (pItem->meState == STATE_CHECK) ) )
+        if ( !bLayout && !bImage && (bHighlight || (pItem->meState == STATE_CHECK) ) )
             DrawSelectionBackground( pItem->maRect, bHighlight, pItem->meState == STATE_CHECK, TRUE, pItem->mpWindow ? TRUE : FALSE );
 
         USHORT nTextStyle = 0;
         if ( !pItem->mbEnabled )
             nTextStyle |= TEXT_DRAW_DISABLE;
+        if( bLayout )
+        {
+            mpData->m_pLayoutData->m_aLineIndices.push_back( mpData->m_pLayoutData->m_aDisplayText.Len() );
+            mpData->m_pLayoutData->m_aLineItemIds.push_back( pItem->mnId );
+            mpData->m_pLayoutData->m_aLineItemPositions.push_back( nPos );
+        }
         DrawCtrlText( Point( nTempOffX, nTempOffY ), pItem->maText,
-                      0, STRING_LEN, nTextStyle );
-
+                      0, STRING_LEN, nTextStyle, pVector, pDisplayText );
         if ( bRotate )
             SetFont( aOldFont );
     }
+
+    if( bLayout )
+        return;
 
     // Evt. noch Pfeil rechts/oben in der Ecke zeichnen
     if ( pItem->mnBits & TIB_DROPDOWN )
@@ -3160,18 +3178,20 @@ void ToolBox::ImplStartCustomizeMode()
 {
     mbCustomizeMode = TRUE;
 
-    ImplToolItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        if ( pItem->mbShowWindow )
-        {
-            pItem->mpWindow->Hide();
+    mpData->ImplClearLayoutData();
 
-            if ( !(pItem->maRect.IsEmpty()) )
-                Invalidate( pItem->maRect );
+    std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+    while ( it != mpData->m_aItems.end() )
+    {
+        if ( it->mbShowWindow )
+        {
+            it->mpWindow->Hide();
+
+            if ( !(it->maRect.IsEmpty()) )
+                Invalidate( it->maRect );
         }
 
-        pItem = mpItemList->Next();
+        ++it;
     }
 }
 
@@ -3189,18 +3209,20 @@ void ToolBox::ImplEndCustomizeMode()
 {
     mbCustomizeMode = FALSE;
 
-    ImplToolItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        if ( pItem->mbShowWindow )
-        {
-            if ( !(pItem->maRect.IsEmpty()) )
-                Invalidate( pItem->maRect );
+    mpData->ImplClearLayoutData();
 
-            pItem->mpWindow->Show();
+    std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+    while ( it != mpData->m_aItems.end() )
+    {
+        if ( it->mbShowWindow )
+        {
+            if ( !(it->maRect.IsEmpty()) )
+                Invalidate( it->maRect );
+
+            it->mpWindow->Show();
         }
 
-        pItem = mpItemList->Next();
+        ++it;
     }
 }
 
@@ -3259,7 +3281,7 @@ BOOL ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, BOOL bRepeat )
     if ( mbDrag && mnCurPos != TOOLBOX_ITEM_NOTFOUND )
     {
         // Befindet sich Maus ueber dem Item
-        ImplToolItem* pItem = mpItemList->GetObject( mnCurPos );
+        ImplToolItem* pItem = &mpData->m_aItems[mnCurPos];
         if ( pItem->maRect.IsInside( aMousePos ) )
         {
             if ( !mnCurItemId )
@@ -3348,60 +3370,63 @@ BOOL ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, BOOL bCancel )
         }
 
         // Wurde Maus ueber dem Item losgelassen
-        ImplToolItem* pItem = mpItemList->GetObject( mnCurPos );
-        if ( pItem && pItem->maRect.IsInside( rMEvt.GetPosPixel() ) )
+        if( mnCurPos < mpData->m_aItems.size() )
         {
-            mnCurItemId = pItem->mnId;
-            if ( !bCancel )
+            ImplToolItem* pItem = &mpData->m_aItems[mnCurPos];
+            if ( pItem->maRect.IsInside( rMEvt.GetPosPixel() ) )
             {
-                // Gegebenenfalls ein AutoCheck durchfuehren
-                if ( pItem->mnBits & TIB_AUTOCHECK )
+                mnCurItemId = pItem->mnId;
+                if ( !bCancel )
                 {
-                    if ( pItem->mnBits & TIB_RADIOCHECK )
+                    // Gegebenenfalls ein AutoCheck durchfuehren
+                    if ( pItem->mnBits & TIB_AUTOCHECK )
                     {
-                        if ( pItem->meState != STATE_CHECK )
-                            SetItemState( pItem->mnId, STATE_CHECK );
-                    }
-                    else
-                    {
-                        if ( pItem->meState != STATE_CHECK )
-                            pItem->meState = STATE_CHECK;
+                        if ( pItem->mnBits & TIB_RADIOCHECK )
+                        {
+                            if ( pItem->meState != STATE_CHECK )
+                                SetItemState( pItem->mnId, STATE_CHECK );
+                        }
                         else
-                            pItem->meState = STATE_NOCHECK;
+                        {
+                            if ( pItem->meState != STATE_CHECK )
+                                pItem->meState = STATE_CHECK;
+                            else
+                                pItem->meState = STATE_NOCHECK;
+                        }
+                    }
+
+                    // Select nicht bei Repeat ausloesen, da dies schon im
+                    // MouseButtonDown ausgeloest wurde
+                    if ( !(pItem->mnBits & TIB_REPEAT) )
+                    {
+                        // Gegen zerstoeren im Select-Handler sichern
+                        ImplDelData aDelData;
+                        ImplAddDel( &aDelData );
+                        Select();
+                        if ( aDelData.IsDelete() )
+                            return TRUE;
+                        ImplRemoveDel( &aDelData );
                     }
                 }
 
-                // Select nicht bei Repeat ausloesen, da dies schon im
-                // MouseButtonDown ausgeloest wurde
-                if ( !(pItem->mnBits & TIB_REPEAT) )
                 {
-                    // Gegen zerstoeren im Select-Handler sichern
-                    ImplDelData aDelData;
-                    ImplAddDel( &aDelData );
-                    Select();
-                    if ( aDelData.IsDelete() )
-                        return TRUE;
-                    ImplRemoveDel( &aDelData );
+                    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
                 }
-            }
 
-            {
-            DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-            }
-
-            // Items nicht geloescht, im Select-Handler
-            if ( mnCurItemId )
-            {
-                BOOL bHighlight;
-                if ( (mnCurItemId == mnHighItemId) && (mnOutStyle & TOOLBOX_STYLE_FLAT) )
-                    bHighlight = 2;
-                else
-                    bHighlight = FALSE;
-                // Get current pos for the case that items are inserted/removed
-                // in the toolBox
-                mnCurPos = GetItemPos( mnCurItemId );
-                if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
-                    ImplDrawItem( mnCurPos, bHighlight );
+                // Items nicht geloescht, im Select-Handler
+                if ( mnCurItemId )
+                {
+                    BOOL bHighlight;
+                    if ( (mnCurItemId == mnHighItemId) && (mnOutStyle & TOOLBOX_STYLE_FLAT) )
+                        bHighlight = 2;
+                    else
+                        bHighlight = FALSE;
+                    // Get current pos for the case that items are inserted/removed
+                    // in the toolBox
+                    mnCurPos = GetItemPos( mnCurItemId );
+                    if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
+                        ImplDrawItem( mnCurPos, bHighlight );
+                }
             }
         }
 
@@ -3475,19 +3500,19 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         USHORT  nNewPos = TOOLBOX_ITEM_NOTFOUND;
 
         // Item suchen, das geklickt wurde
-        ImplToolItem* pItem = mpItemList->First();
-        while ( pItem )
+        std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+        while ( it != mpData->m_aItems.end() )
         {
             // Wenn Mausposition in diesem Item vorhanden, kann die
             // Suche abgebrochen werden
-            if ( pItem->maRect.IsInside( aMousePos ) )
+            if ( it->maRect.IsInside( aMousePos ) )
             {
                 // Wenn es ein Button ist, dann wird er selektiert
-                if ( pItem->meType == TOOLBOXITEM_BUTTON )
+                if ( it->meType == TOOLBOXITEM_BUTTON )
                 {
                     // Wenn er disablet ist, findet keine Aenderung
                     // statt
-                    if ( !pItem->mbEnabled || pItem->mbShowWindow )
+                    if ( !it->mbEnabled || it->mbShowWindow )
                         nNewPos = mnCurPos;
                     else
                         nNewPos = i;
@@ -3497,12 +3522,12 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             }
 
             i++;
-            pItem = mpItemList->Next();
+            ++it;
         }
 
         // was a new entery selected ?
-        // don't  change selection if keyboard selection is active and mouse leaves
-        // the tolbox
+        // don't  change selection if keyboard selection is active and
+        // mouse leaves the toolbox
         if ( nNewPos != mnCurPos && !( HasFocus() && nNewPos == TOOLBOX_ITEM_NOTFOUND ) )
         {
             if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
@@ -3514,7 +3539,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             mnCurPos = nNewPos;
             if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
             {
-                mnCurItemId = mnHighItemId = pItem->mnId;
+                mnCurItemId = mnHighItemId = it->mnId;
                 ImplDrawItem( mnCurPos, 2 /*TRUE*/ ); // always use shadow effect (2)
             }
             else
@@ -3558,22 +3583,22 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     if ( (eStyle == POINTER_ARROW) && mbCustomizeMode )
     {
         // Item suchen, das geklickt wurde
-        ImplToolItem* pItem = mpItemList->First();
-        while ( pItem )
+        std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+        while ( it != mpData->m_aItems.end() )
         {
             // Wenn es ein Customize-Window ist, gegebenenfalls den
             // Resize-Pointer anzeigen
-            if ( pItem->mbShowWindow )
+            if ( it->mbShowWindow )
             {
-                if ( pItem->maRect.IsInside( aMousePos ) )
+                if ( it->maRect.IsInside( aMousePos ) )
                 {
-                    if ( pItem->maRect.Right()-TB_RESIZE_OFFSET <= aMousePos.X() )
+                    if ( it->maRect.Right()-TB_RESIZE_OFFSET <= aMousePos.X() )
                         eStyle = POINTER_HSIZEBAR;
                     break;
                 }
             }
 
-            pItem = mpItemList->Next();
+            ++it;
         }
     }
 
@@ -3584,19 +3609,19 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         BOOL bClearHigh = TRUE;
         if ( !rMEvt.IsLeaveWindow() && (mnCurPos == TOOLBOX_ITEM_NOTFOUND) )
         {
-            ImplToolItem* pItem = mpItemList->First();
-            while ( pItem )
+            std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+            while ( it != mpData->m_aItems.end() )
             {
-                if ( pItem->maRect.IsInside( aMousePos ) )
+                if ( it->maRect.IsInside( aMousePos ) )
                 {
-                    if ( (pItem->meType == TOOLBOXITEM_BUTTON) && pItem->mbEnabled )
+                    if ( (it->meType == TOOLBOXITEM_BUTTON) && it->mbEnabled )
                     {
                         if ( !mnOutStyle || (mnOutStyle & TOOLBOX_STYLE_FLAT) )
                         {
                             bClearHigh = FALSE;
-                            if ( mnHighItemId != pItem->mnId )
+                            if ( mnHighItemId != it->mnId )
                             {
-                                USHORT nTempPos = (USHORT)mpItemList->GetCurPos();
+                                USHORT nTempPos = it - mpData->m_aItems.begin();
                                 if ( mnHighItemId )
                                 {
                                     ImplHideFocus();
@@ -3604,7 +3629,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                                     ImplDrawItem( nPos );
                                     ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, (void*) nPos );
                                 }
-                                mnHighItemId = pItem->mnId;
+                                mnHighItemId = it->mnId;
                                 ImplDrawItem( nTempPos, 2 );
                                 ImplShowFocus();
                                 ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
@@ -3616,7 +3641,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                     break;
                 }
 
-                pItem = mpItemList->Next();
+                ++it;
             }
         }
 
@@ -3669,23 +3694,23 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
         USHORT nNewPos = TOOLBOX_ITEM_NOTFOUND;
 
         // Item suchen, das geklickt wurde
-        ImplToolItem* pItem = mpItemList->First();
-        while ( pItem )
+        std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+        while ( it != mpData->m_aItems.end() )
         {
             // Ist es dieses Item
-            if ( pItem->maRect.IsInside( aMousePos ) )
+            if ( it->maRect.IsInside( aMousePos ) )
             {
                 // Ist es ein Separator oder ist das Item disabled,
                 // dann mache nichts
-                if ( (pItem->meType == TOOLBOXITEM_BUTTON) &&
-                     (!pItem->mbShowWindow || mbCustomizeMode) )
+                if ( (it->meType == TOOLBOXITEM_BUTTON) &&
+                     (!it->mbShowWindow || mbCustomizeMode) )
                     nNewPos = i;
 
                 break;
             }
 
             i++;
-            pItem = mpItemList->Next();
+            ++it;
         }
 
         // Item gefunden
@@ -3698,12 +3723,12 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                     Deactivate();
 
                     ImplTBDragMgr* pMgr = ImplGetTBDragMgr();
-                    Rectangle aItemRect = GetItemRect( pItem->mnId );
-                    mnConfigItem = pItem->mnId;
+                    Rectangle aItemRect = GetItemRect( it->mnId );
+                    mnConfigItem = it->mnId;
 
                     BOOL bResizeItem;
-                    if ( mbCustomizeMode && pItem->mbShowWindow &&
-                         (pItem->maRect.Right()-TB_RESIZE_OFFSET <= aMousePos.X()) )
+                    if ( mbCustomizeMode && it->mbShowWindow &&
+                         (it->maRect.Right()-TB_RESIZE_OFFSET <= aMousePos.X()) )
                         bResizeItem = TRUE;
                     else
                         bResizeItem = FALSE;
@@ -3712,7 +3737,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                 }
             }
 
-            if ( !pItem->mbEnabled )
+            if ( !it->mbEnabled )
             {
                 Sound::Beep( SOUND_DISABLE, this );
                 Deactivate();
@@ -3722,11 +3747,11 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             // Aktuelle Daten setzen
             USHORT nTrackFlags = 0;
             mnCurPos         = i;
-            mnCurItemId      = pItem->mnId;
+            mnCurItemId      = it->mnId;
             mnDownItemId     = mnCurItemId;
             mnMouseClicks    = rMEvt.GetClicks();
             mnMouseModifier  = rMEvt.GetModifier();
-            if ( pItem->mnBits & TIB_REPEAT )
+            if ( it->mnBits & TIB_REPEAT )
                 nTrackFlags |= STARTTRACK_BUTTONREPEAT;
 
             if ( mbSelection )
@@ -3895,10 +3920,10 @@ void ToolBox::Paint( const Rectangle& rPaintRect )
         nHighPos = GetItemPos( mnHighItemId );
     else
         nHighPos = TOOLBOX_ITEM_NOTFOUND;
-    USHORT nCount = (USHORT)mpItemList->Count();
+    USHORT nCount = (USHORT)mpData->m_aItems.size();
     for( USHORT i = 0; i < nCount; i++ )
     {
-        ImplToolItem* pItem = mpItemList->GetObject( i );
+        ImplToolItem* pItem = &mpData->m_aItems[i];
 
         // Nur malen, wenn Rechteck im PaintRectangle liegt
         if ( !pItem->maRect.IsEmpty() && rPaintRect.IsOver( pItem->maRect ) )
@@ -4111,19 +4136,19 @@ long ToolBox::Notify( NotifyEvent& rNEvt )
         {
             // a child window got the focus so update current item to
             // allow for proper lose focus handling in keyboard navigation
-            ImplToolItem*   pItem = mpItemList->First();
-            while ( pItem )
+            std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+            while( it != mpData->m_aItems.end() )
             {
-                if ( pItem->mbVisible )
+                if ( it->mbVisible )
                 {
-                    if ( pItem->mpWindow && pItem->mpWindow->ImplIsWindowOrChild( rNEvt.GetWindow() ) )
+                    if ( it->mpWindow && it->mpWindow->ImplIsWindowOrChild( rNEvt.GetWindow() ) )
                     {
-                        mnHighItemId = pItem->mnId;
+                        mnHighItemId = it->mnId;
                         break;
                     }
                 }
 
-                pItem = mpItemList->Next();
+                ++it;
             }
             return DockingWindow::Notify( rNEvt );
         }
@@ -4156,21 +4181,21 @@ void ToolBox::Command( const CommandEvent& rCEvt )
         if ( mbCustomizeMode )
         {
             Point           aMousePos = rCEvt.GetMousePosPixel();
-            ImplToolItem*   pItem = mpItemList->First();
-            while ( pItem )
+            std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+            while ( it != mpData->m_aItems.end() )
             {
                 // Ist es dieses Item
-                if ( pItem->maRect.IsInside( aMousePos ) )
+                if ( it->maRect.IsInside( aMousePos ) )
                 {
                     // Ist es ein Separator oder ist das Item disabled,
                     // dann mache nichts
-                    if ( (pItem->meType == TOOLBOXITEM_BUTTON) &&
-                         !pItem->mbShowWindow )
+                    if ( (it->meType == TOOLBOXITEM_BUTTON) &&
+                         !it->mbShowWindow )
                         mbCommandDrag = TRUE;
                     break;
                 }
 
-                pItem = mpItemList->Next();
+                ++it;
             }
 
             if ( mbCommandDrag )
@@ -4912,15 +4937,15 @@ static bool ImplIsFixedControl( ImplToolItem *pItem )
 // returns the current toolbox line of the item
 USHORT ToolBox::ImplGetItemLine( ImplToolItem* pCurrentItem )
 {
-    ImplToolItem *pItem = mpItemList->First();
+    std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
     USHORT nLine = 1;
-    while( pItem )
+    while( it != mpData->m_aItems.end() )
     {
-        if ( pItem->meType == TOOLBOXITEM_BREAK || pItem->mbBreak )
+        if ( it->meType == TOOLBOXITEM_BREAK || it->mbBreak )
             nLine++;
-        if( pItem == pCurrentItem)
+        if( &(*it) == pCurrentItem)
             break;
-        pItem = mpItemList->Next();
+        ++it;
     }
     return nLine;
 }
@@ -4932,28 +4957,29 @@ ImplToolItem* ToolBox::ImplGetFirstValidItem( USHORT nLine )
         return NULL;
 
     nLine--;
-    ImplToolItem *pItem = mpItemList->First();
-    while( pItem )
+
+    std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
+    while( it != mpData->m_aItems.end() )
     {
         // find correct line
-        if ( pItem->meType == TOOLBOXITEM_BREAK || pItem->mbBreak )
+        if ( it->meType == TOOLBOXITEM_BREAK || it->mbBreak )
             nLine--;
         if( !nLine )
         {
             // find first useful item
-            while( pItem && ((pItem->meType != TOOLBOXITEM_BUTTON) ||
-                !pItem->mbEnabled || !pItem->mbVisible || ImplIsFixedControl( pItem )) )
+            while( it != mpData->m_aItems.end() && ((it->meType != TOOLBOXITEM_BUTTON) ||
+                !it->mbEnabled || !it->mbVisible || ImplIsFixedControl( &(*it) )) )
             {
-                pItem = mpItemList->Next();
-                if( !pItem || pItem->mbBreak )
+                ++it;
+                if( it == mpData->m_aItems.end() || it->mbBreak )
                     return NULL;    // no valid items in this line
             }
-            return pItem;
+            return &(*it);
         }
-        pItem = mpItemList->Next();
+        ++it;
     }
 
-    return pItem;
+    return (it == mpData->m_aItems.end()) ? NULL : &(*it);
 }
 
 // returns the last displayable item in the given line
@@ -4964,32 +4990,41 @@ ImplToolItem* ToolBox::ImplGetLastValidItem( USHORT nLine )
 
     nLine--;
     ImplToolItem *pFound = NULL;
-    ImplToolItem *pItem = mpItemList->First();
-    while( pItem )
+    std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
+    while( it != mpData->m_aItems.end() )
     {
         // find correct line
-        if ( pItem->meType == TOOLBOXITEM_BREAK || pItem->mbBreak )
+        if ( it->meType == TOOLBOXITEM_BREAK || it->mbBreak )
             nLine--;
         if( !nLine )
         {
             // find last useful item
-            while( pItem && ((pItem->meType == TOOLBOXITEM_BUTTON) &&
-                pItem->mbEnabled && pItem->mbVisible && !ImplIsFixedControl( pItem )) )
+            while( it != mpData->m_aItems.end() && ((it->meType == TOOLBOXITEM_BUTTON) &&
+                it->mbEnabled && it->mbVisible && !ImplIsFixedControl( &(*it) )) )
             {
-                pFound = pItem;
-                pItem = mpItemList->Next();
-                if( !pItem || pItem->mbBreak )
+                pFound = &(*it);
+                ++it;
+                if( it == mpData->m_aItems.end() || it->mbBreak )
                     return pFound;    // end of line: return last useful item
             }
             return pFound;
         }
-        pItem = mpItemList->Next();
+        ++it;
     }
 
     return pFound;
 }
 
 // -----------------------------------------------------------------------
+
+static USHORT ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem > rList )
+{
+    USHORT nPos;
+    for( nPos = 0; nPos < rList.size(); nPos++ )
+        if( &rList[ nPos ] == pItem )
+            return nPos;
+    return TOOLBOX_ITEM_NOTFOUND;
+}
 
 void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
 {
@@ -5009,7 +5044,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
         ImplDrawItem( nPos, FALSE );
         ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, (void*) nPos );
         pOldItem = ImplGetItem( mnHighItemId );
-        oldPos = (USHORT) mpItemList->GetPos( pOldItem );
+        oldPos = ImplFindItemPos( pOldItem, mpData->m_aItems );
     }
 
     if( !bNoGrabFocus && pItem != pOldItem && pOldItem && pOldItem->mpWindow )
@@ -5020,7 +5055,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
 
     if( pItem )
     {
-        USHORT aPos = (USHORT) mpItemList->GetPos( pItem );
+        USHORT aPos = ImplFindItemPos( pItem, mpData->m_aItems );
         if( aPos != TOOLBOX_ITEM_NOTFOUND)
         {
             // check for line breaks
@@ -5073,30 +5108,32 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
         if( bUp )
         {
             // Select first valid item
-            pItem = mpItemList->First();
-            while( pItem )
+            std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
+            while( it != mpData->m_aItems.end() )
             {
-                if ( (pItem->meType == TOOLBOXITEM_BUTTON) &&
-                    pItem->mbEnabled && pItem->mbVisible && !ImplIsFixedControl( pItem ))
+                if ( (it->meType == TOOLBOXITEM_BUTTON) &&
+                    it->mbEnabled && pItem->mbVisible && !ImplIsFixedControl( &(*it) ))
                     break;
-                else
-                    pItem = mpItemList->Next();
+                ++it;
             }
 
-            ImplChangeHighlight( pItem );
+            ImplChangeHighlight( (it != mpData->m_aItems.end()) ? &(*it) : NULL );
             return TRUE;
         }
         else
         {
             // Select last valid item
-            pItem = mpItemList->Last();
-            while( pItem )
+            std::vector< ImplToolItem >::iterator it = mpData->m_aItems.end();
+            ImplToolItem* pItem = NULL;
+            while( it != mpData->m_aItems.begin() )
             {
+                --it;
                 if ( (pItem->meType == TOOLBOXITEM_BUTTON) &&
-                    pItem->mbEnabled && pItem->mbVisible && !ImplIsFixedControl( pItem ) )
+                    it->mbEnabled && it->mbVisible && !ImplIsFixedControl( pItem ) )
+                {
+                    pItem = &(*it);
                     break;
-                else
-                    pItem = mpItemList->Prev();
+                }
             }
 
             ImplChangeHighlight( pItem );
@@ -5107,8 +5144,8 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
     ImplToolItem* pOldItem = pItem;
     if( pItem )
     {
-        ULONG pos = mpItemList->GetPos( pItem );
-        ULONG nCount = mpItemList->Count();
+        ULONG pos = ImplFindItemPos( pItem, mpData->m_aItems );
+        ULONG nCount = mpData->m_aItems.size();
         ULONG i=0;
         do
         {
@@ -5131,7 +5168,7 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
                 }
             }
 
-            pItem = mpItemList->GetObject( pos );
+            pItem = &mpData->m_aItems[pos];
             if ( (pItem->meType == TOOLBOXITEM_BUTTON) &&
                 pItem->mbEnabled && pItem->mbVisible && !ImplIsFixedControl( pItem ) )
                 break;
