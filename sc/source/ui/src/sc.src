@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 11:31:19 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // StarCalc Applikations Resource
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2000-12-01 11:31:19 $ $Revision: 1.4 $
+ // $Author: kz $ $Date: 2001-05-04 20:53:10 $ $Revision: 1.5 $
  // $Logfile:   T:/sc/source/ui/src/sc.srv  $ $Workfile:   sc.src  $
  //==================================================================
 
@@ -104,6 +104,7 @@ String RID_APPTITLE
     Text[ korean ] = "%PRODUCTNAME Calc";
     Text[ turkish ] = "%PRODUCTNAME Calc";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%PRODUCTNAME Calc";
 };
 
  // About-Dialog --------------------------------------------------------------
