@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *  last change: $Author: os $ $Date: 2000-09-21 14:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,11 +188,6 @@
 #ifndef _WRTSH_HRC
 #include <wrtsh.hrc>
 #endif
-
-
-void lcl_LoadUrl( const String& rURL, const String& rTargetFrameName,
-                const String& rReferer, USHORT nFilter, SfxFrameItem& );
-
 
 /*------------------------------------------------------------------------
         Beschreibung:
@@ -443,8 +438,8 @@ BOOL SwWrtShell::ClickToINetGrf( const Point& rDocPt, USHORT nFilter )
 void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
               const String *pTargetFrameName )
 {
-    ASSERT( rURL.Len(), "was soll hier geladen werden?" );
-    if( !rURL.Len() )
+    ASSERT( rURL.Len() && pVSh, "was soll hier geladen werden?" );
+    if( !rURL.Len() || !pVSh )
         return ;
 
     // die Shell kann auch 0 sein !!!!!
@@ -454,6 +449,8 @@ void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
         //Eine CrsrShell ist auch immer eine WrtShell
         pSh = (SwWrtShell*)pVSh;
     }
+    else
+        return;
 
     String sTargetFrame;
     if( pTargetFrameName && pTargetFrameName->Len() )
@@ -462,27 +459,14 @@ void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
         sTargetFrame = pSh->GetDoc()->GetInfo()->GetDefaultTarget();
 
     String sReferer;
-    SfxFrame* pViewFrm = 0;
-    if( pSh )
-    {
-        SwDocShell* pDShell = pSh->GetView().GetDocShell();
-        if( pDShell && pDShell->GetMedium() )
-            sReferer = pDShell->GetMedium()->GetName();
-        pViewFrm = pSh->GetView().GetViewFrame()->GetFrame();
-    }
-
+    SwDocShell* pDShell = pSh->GetView().GetDocShell();
+    if( pDShell && pDShell->GetMedium() )
+        sReferer = pDShell->GetMedium()->GetName();
+    SfxViewFrame* pViewFrm = pSh->GetView().GetViewFrame();
     SfxFrameItem aView( SID_DOCFRAME, pViewFrm );
-    ::lcl_LoadUrl( rURL, sTargetFrame, sReferer, nFilter,
-                    aView );
-}
-
-void lcl_LoadUrl( const String& rURL, const String& rTargetFrameName,
-                    const String& rReferer, USHORT nFilter,
-                    SfxFrameItem& rView )
-{
     SfxStringItem aName( SID_FILE_NAME, rURL );
-    SfxStringItem aTargetFrameName( SID_TARGETNAME, rTargetFrameName );
-    SfxStringItem aReferer( SID_REFERER, rReferer );
+    SfxStringItem aTargetFrameName( SID_TARGETNAME, sTargetFrame );
+    SfxStringItem aReferer( SID_REFERER, sReferer );
 
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, FALSE );
     //#39076# Silent kann lt. SFX entfernt werden.
@@ -505,13 +489,13 @@ void lcl_LoadUrl( const String& rURL, const String& rTargetFrameName,
     if( nFilter & URLLOAD_NEWVIEW )
         aTargetFrameName.SetValue( String::CreateFromAscii("_blank") );
 
-    ((SfxViewFrame*)rView.GetFrame())->GetDispatcher()->Execute( SID_OPENDOC,
+    pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
             SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD,
                             &aName,
                             &aFilter,
                             &aNewView, /*&aSilent,*/ &aReadOnly,
                             &aReferer,
-                            &rView, &aTargetFrameName,
+                            &aView, &aTargetFrameName,
                             0L );
 }
 
@@ -573,233 +557,5 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk, const DropEve
         }
     }
 }
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.137  2000/09/18 16:06:27  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.136  2000/09/07 15:59:36  os
-      change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-      Revision 1.135  2000/08/31 11:31:37  jp
-      add missing include
-
-      Revision 1.134  2000/06/26 13:04:50  os
-      INetURLObject::SmartRelToAbs removed
-
-      Revision 1.133  2000/04/19 11:18:25  os
-      UNICODE
-
-      Revision 1.132  2000/03/03 12:29:37  mib
-      Removed JavaScript
-
-      Revision 1.131  2000/02/11 15:03:35  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.130  1999/10/15 09:58:25  jp
-      Bug #69145#: NavigatorPaste: copy embedded Section without undo
-
-      Revision 1.129  1999/08/17 11:59:18  OS
-      extended indexes: get/set section attributes
-
-
-      Rev 1.128   17 Aug 1999 13:59:18   OS
-   extended indexes: get/set section attributes
-
-      Rev 1.127   27 Apr 1999 16:50:36   JP
-   Bug #65314#: neu: IsJavaScriptEnabled
-
-      Rev 1.126   19 Apr 1999 13:00:42   OS
-   #64960# GetURLObject()->GetURLNoMark statt GetPhysicalName
-
-      Rev 1.125   15 Apr 1999 16:48:32   JP
-   Bug #64841#: LoadURL: URL-Attrs ohne URL ignorieren
-
-      Rev 1.124   12 Oct 1998 10:01:38   OM
-   #57790# Dialog nicht mehr AppModal
-
-      Rev 1.123   01 Jul 1998 16:37:48   JP
-   Bug #51378#: Return String von JavaScript auswerten
-
-      Rev 1.122   19 Jun 1998 18:57:48   JP
-   Bug #51378#: LoadURL CallbackHdl - JavaReturnWert auswerten
-
-      Rev 1.121   19 May 1998 12:45:06   OM
-   SvxMacro-Umstellung
-
-      Rev 1.120   13 Feb 1998 17:46:50   HJS
-   falsche ifdef SOLAR_JAVE aufgeloest
-
-      Rev 1.119   02 Feb 1998 15:04:18   OM
-   #46781# Macrofelder auch ausfuehren, wenn Dateiname mehr als 1 Punkt enthaelt
-
-      Rev 1.118   02 Dec 1997 14:21:40   MA
-   includes
-
-      Rev 1.117   24 Nov 1997 14:35:08   MA
-   includes
-
-      Rev 1.116   03 Nov 1997 14:02:56   MA
-   precomp entfernt
-
-      Rev 1.115   24 Oct 1997 18:30:08   JP
-   ClickToINetGrf: BOOL returnen - ob wirklich eine Grafik getroffen wurde
-
-      Rev 1.114   01 Sep 1997 13:22:00   OS
-   DLL-Umstellung
-
-      Rev 1.113   15 Aug 1997 12:15:42   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.112   11 Aug 1997 10:54:18   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.111   08 Aug 1997 17:28:40   OM
-   Headerfile-Umstellung
-
-      Rev 1.110   07 Aug 1997 14:59:36   OM
-   Headerfile-Umstellung
-
-      Rev 1.109   05 Aug 1997 13:40:10   MH
-   chg: header
-
-      Rev 1.108   23 Jul 1997 21:46:28   HJS
-   includes
-
-      Rev 1.107   23 Jul 1997 10:19:04   OM
-   Inputfields in Selektion updaten
-
-      Rev 1.106   27 Jun 1997 17:27:06   JP
-   Bug #38115#: nicht nur Top sondern auch den akt. Frame merken
-
-      Rev 1.105   26 Jun 1997 15:59:24   OS
-   BulletOn jetzt in wrtsh1.cxx
-
-      Rev 1.104   09 Jun 1997 16:21:08   JP
-   ClickINetURL/ClickToINetGrf: falls JavaScript abgeschaltet ist LoadURL trotzdem rufen
-
-      Rev 1.103   09 Jun 1997 15:28:04   NF
-   Define raus, da SfxModalDialog unbekannt
-
-      Rev 1.102   09 Jun 1997 11:47:46   JP
-   InsertFld: Abpruefung auf den FeldTypen entfernt - ueberflussig
-
-      Rev 1.101   23 Apr 1997 14:44:36   OS
-   FrameItem anlegen fuer VA3.0
-
-      Rev 1.100   21 Apr 1997 18:22:12   MA
-   #39076# kein Silent
-
-      Rev 1.99   19 Apr 1997 09:39:32   OS
-   NavigatorPaste: GetPhysicalName am Medium!
-
-      Rev 1.98   15 Apr 1997 15:12:38   JP
-   Bug #37980#: LoadURL - bei Events mit JavaScript immer asynchron callen
-
-      Rev 1.97   11 Apr 1997 08:48:52   MA
-   includes
-
-      Rev 1.96   09 Apr 1997 15:34:40   JP
-   ClickToINetGrf/ClickToINetAttr - handelt das asynchron JavaScript und Laden einer URL
-
-      Rev 1.95   07 Apr 1997 13:47:12   MH
-   chg: header
-
-      Rev 1.94   20 Mar 1997 08:02:40   OS
-   Bookmark nicht mit GetToken(#), sondern mit Compare behandeln
-
-      Rev 1.93   18 Feb 1997 23:29:30   NF
-   SID_FILE_CONVERT wech...
-
-      Rev 1.92   18 Feb 1997 23:26:56   NF
-   SID_FILE_CONVERT wech...
-
-      Rev 1.91   12 Feb 1997 18:22:32   MA
-   chg: LoadURL, Historie auch bei newview erhalten (kopieren)
-
-      Rev 1.90   07 Feb 1997 12:04:18   OS
-   Navigator benutzt eigenes Drag-Format
-
-      Rev 1.89   28 Jan 1997 14:11:10   JP
-   ClickToINet: CallEvent statt ExecMac rufen
-
-      Rev 1.88   16 Jan 1997 09:59:46   MA
-   Umstellung Frame
-
-      Rev 1.87   15 Jan 1997 16:09:00   OM
-   Neue OLE-Dialoge
-
-      Rev 1.86   04 Dec 1996 15:11:22   JP
-   SW_EVENT -> SVX_EVENT/SFX_EVENT
-
-      Rev 1.85   28 Nov 1996 17:15:40   OS
-   ChildWindow testen
-
-      Rev 1.84   19 Nov 1996 16:15:26   OS
-   Navigatorumstellung
-
-      Rev 1.83   06 Nov 1996 10:54:20   MA
-   chg: URL per Dokument; Draw+Calc eingebunden (ifdef)
-
-      Rev 1.82   05 Nov 1996 15:34:12   JP
-   GotoRefMark: Parameter erweitert fuer erweiterte RefMarks
-
-      Rev 1.81   17 Oct 1996 14:45:42   MH
-   Syntax
-
-      Rev 1.80   17 Oct 1996 14:37:08   MH
-   add: include
-
-      Rev 1.79   11 Oct 1996 14:52:58   NF
-   clooks
-
-      Rev 1.78   25 Sep 1996 10:36:46   PL
-   IRIX
-
-      Rev 1.77   05 Sep 1996 16:53:20   OS
-   Tasten fuer NavigatorPaste auswerten
-
-      Rev 1.76   02 Sep 1996 18:43:22   JP
-   INetFeld entfernt
-
-      Rev 1.75   30 Aug 1996 12:40:20   OS
-   InputFldDlg mit Next-Button
-
-      Rev 1.74   29 Aug 1996 09:26:02   OS
-   includes
-
-      Rev 1.73   19 Aug 1996 22:22:24   JP
-   LoadURL: neue View darf auch keinen TargetNamen haben
-
-      Rev 1.72   14 Aug 1996 16:54:54   JP
-   Bug #30332#: am FieldInputWin das TopWindow der Applikation setzen
-
-      Rev 1.71   14 Aug 1996 09:35:02   JP
-   neu: NavigatorPaste - Paste aus dem Navigator ins Doc (Code aus dataex hierher verschoben)
-
-      Rev 1.70   12 Aug 1996 18:10:46   JP
-   LoadURL: das ViewItem darf nicht uebergeben werden
-
-      Rev 1.69   12 Aug 1996 16:56:36   JP
-   neues FilterFlag: neue Ansicht beim LoadURL oeffnen
-
-      Rev 1.68   08 Aug 1996 10:04:02   JP
-   neu: ClickToINetAttr - entspricht dem ClickToFld
-
-      Rev 1.67   29 Jul 1996 11:06:10   JP
-   ueberfluessige Methode entfernt
-
-      Rev 1.66   23 Jul 1996 19:45:24   MIB
-   Default-Target-Frame aus Dokinfo holen
-
-      Rev 1.65   19 Jul 1996 15:38:12   JP
-   Umstellung Numerierung
-
-      Rev 1.64   26 Jun 1996 15:22:58   OS
-   Aufruf von Dispatcher.Execute an 324 angepasst
-
-*************************************************************************/
 
 
