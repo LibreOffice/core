@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlContainer.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-01-05 20:45:38 $
+ *  last change:$Date: 2004-05-03 08:49:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 package mod._toolkit;
 
+import com.sun.star.awt.PosSize;
+import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XControlModel;
@@ -236,6 +238,7 @@ public class UnoControlContainer extends TestCase {
 
             ctrlCont = (XControlContainer) UnoRuntime.queryInterface(
                                XControlContainer.class, oObj);
+            ctrlCont.addControl("jupp", access.getControl(aShape.getControl()));
         } catch (Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create UnoControlContainer", e);
@@ -245,6 +248,10 @@ public class UnoControlContainer extends TestCase {
                 "creating a new environment for UnoControlContainer object");
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, oObj);
+        Rectangle ps = xWindow.getPosSize();
+        xWindow.setPosSize(ps.X+10, ps.Y+10, ps.Width+10, ps.Height+10, PosSize.POSSIZE);
 
         String objName = "UnoControlContainer";
         tEnv.addObjRelation("OBJNAME", "toolkit." + objName);
