@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.78 $
- *  last change: $Author: hdu $ $Date: 2002-10-11 13:32:23 $
+ *  $Revision: 1.79 $
+ *  last change: $Author: hdu $ $Date: 2002-10-17 07:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -905,11 +905,8 @@ bool FreetypeServerFont::GetAntialiasAdvice( void ) const
 {
     if( GetFontSelData().mbNonAntialiased )
         return false;
-    // TODO: also use GASP & EBDT tables
-    bool bAdviseAA = (mnLoadFlags & FT_LOAD_NO_HINTING) != 0;
-    int nHeight = GetFontSelData().mnHeight;
-    bAdviseAA |= (nHeight > 12);
-    bAdviseAA |= (nHeight < 8);
+    bool bAdviseAA = true;
+    // TODO: also use GASP info
     return bAdviseAA;
 }
 
