@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.134 $
+#   $Revision: 1.135 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-09 07:28:25 $
+#   last change: $Author: vg $ $Date: 2003-04-24 13:00:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2195,12 +2195,12 @@ $(IMGLSTTARGET): $(IMGLST_SRS)
 .IF "$(common_build_reslib)"!=""
     @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
     @-+$(MKDIR) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
-    +$(BMP) $(SRS)$/$(@:b:s/_img/ /:1).srs $(BMP_OUT)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(lang_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) -I $(BMP_IN) -I $(SOLARSRC)$/res -f $@
-    -+$(GNUCOPY) -pub $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))})$/* $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
-    +-$(RM) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))})$/*.b*~
+    +$(BMP) $(SRS)$/$(@:b:s/_img/ /:1).srs $(BMP_OUT)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(lang_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) -I $(BMP_IN) -I $(SOLARSRC)$/res -f $@
+    -+$(GNUCOPY) -pu $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))})/* $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
+    +-$(RM) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))})$/*.*~
 .ELSE			# "$(common_build_reslib)"!=""
     @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
-    +$(BMP) $(SRS)$/$(@:b:s/_img/ /:1).srs $(BMP_OUT)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(lang_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) -I $(BMP_IN) -I $(SOLARSRC)$/res -f $@
+    +$(BMP) $(SRS)$/$(@:b:s/_img/ /:1).srs $(BMP_OUT)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(lang_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) -I $(BMP_IN) -I $(SOLARSRC)$/res -f $@
 .ENDIF			# "$(common_build_reslib)"!=""
 .IF "$(BMP_WRITES_FLAG)"==""
     @+echo > $@
@@ -2967,6 +2967,14 @@ $(REMOTE_DEPEND):
 .ENDIF			# "$(REMOTE_DEPEND)"!=""
 
 .ENDIF			# "$(depend)" == ""
+
+%officenames.mk : "$(SRC_ROOT)$/officenames$/%officenames.mk"
+    @+$(COPY) $< $(SOLARVERSION)$/$(INPATH)$/inc$(EXT_UPDMINOR)$/$@ 
+.IF "$(depend)"==""	
+.INCLUDE .IGNORE : officenames.mk
+.INCLUDE .IGNORE : _officenames.mk
+.ENDIF			# "$(depend)"==""	
+
 
 .IF "$(SUBDIRS)"!=""
 
