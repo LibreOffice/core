@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:49:16 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,15 +84,22 @@ namespace dbaui
     //=========================================================================
     class OGeneralPage : public OGenericAdministrationPage
     {
-        OGeneralPage(Window* pParent, const SfxItemSet& _rItems);
+        OGeneralPage(Window* pParent, const SfxItemSet& _rItems, sal_Bool _bDBWizardMode = sal_False);
+        // OGeneralPage(Window* pParent, const SfxItemSet& _rItems, sal_Bool _bDBWizardMode = false);
 
     private:
         // dialog controls
+        FixedText           m_aFTHeaderText;        FixedText           m_aFTHelpText;
+        FixedText           m_aFT_DatasourceTypeHeader;        RadioButton         m_aRB_CreateDatabase;        RadioButton         m_aRB_GetExistingDatabase;
         FixedText           m_aTypePreLabel;
         FixedText           m_aDatasourceTypeLabel;
         ListBox             m_aDatasourceType;
-        FixedText           m_aTypePostLabel;
+        FixedText           m_aFTDataSourceAppendix;       FixedText           m_aTypePostLabel;
         FixedText           m_aSpecialMessage;
+        sal_Bool            m_DBWizardMode;
+        String              m_sMySQLEntry;
+        sal_Bool            m_bEntryCreationMode : 1;
+
 
         ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
         DECLARE_STL_MAP(DATASOURCE_TYPE, String, ::std::less< DATASOURCE_TYPE >, SelectionHistory);
@@ -108,15 +115,20 @@ namespace dbaui
         SPECIAL_MESSAGE     m_eLastMessage;
 
         Link                m_aTypeSelectHandler;   /// to be called if a new type is selected
-
+        Link                m_aCreationModeHandler; /// to be called if a new type is selected
         sal_Bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
         sal_Bool            m_bUserGrabFocus : 1;
+        String              VerifyDisplayName(DATASOURCE_TYPE eType, String _sDisplayName);
+        void                insertDatasourceTypeEntryData(DATASOURCE_TYPE eType, String sDisplayName);
 
     public:
-        static SfxTabPage*  Create(Window* pParent, const SfxItemSet& _rAttrSet);
+        static SfxTabPage*  Create(Window* pParent, const SfxItemSet& _rAttrSet, sal_Bool _bDBWizardMode = sal_False);
 
         /// set a handler which gets called every time the user selects a new type
         void            SetTypeSelectHandler(const Link& _rHandler) { m_aTypeSelectHandler = _rHandler; }
+        void            SetClickHandler(const Link& _rHandler) { m_aCreationModeHandler = _rHandler; }
+        sal_Bool        IsDatabaseToBeCreated();
+        void            SetToCreationMode(sal_Bool _bCreate);
 
         /// get the currently selected datasource type
         DATASOURCE_TYPE GetSelectedType() const { return m_eCurrentSelection; }
@@ -149,6 +161,7 @@ namespace dbaui
         void setParentTitle(DATASOURCE_TYPE _eSelectedType);
 
         DECL_LINK(OnDatasourceTypeSelected, ListBox*);
+        DECL_LINK(OnSetupModeSelected, RadioButton*);
     };
 
 //.........................................................................
