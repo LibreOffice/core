@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-03-18 10:14:56 $
+ *  last change: $Author: af $ $Date: 2002-04-11 12:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
 #include "AccessibleShape.hxx"
 #endif
@@ -70,6 +69,9 @@
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_ROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_STATE_TYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -87,6 +89,12 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #endif
 
+#ifndef _SVX_UNOEDSRC_HXX
+#include "unoedsrc.hxx"
+#endif
+#ifndef SVX_UNOSHTXT_HXX
+#include "unoshtxt.hxx"
+#endif
 #include "svdobj.hxx"
 #include "svdmodel.hxx"
 #include "unoapi.hxx"
@@ -105,6 +113,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
+using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
@@ -115,45 +124,14 @@ AccessibleShape::AccessibleShape (const uno::Reference<drawing::XShape>& rxShape
     AccessibleShapeTreeInfo& rShapeTreeInfo,
     long nIndex)
     : AccessibleContextBase (rxParent,AccessibleRole::SHAPE),
+      mpChildrenManager(NULL),
       mxShape (rxShape),
       mrShapeTreeInfo (rShapeTreeInfo),
-      mnIndex (nIndex)
+      mnIndex (nIndex),
+      mpText (NULL)
 {
-    // Create a children manager when this shape has children of its own.
-    uno::Reference<drawing::XShapes> xShapes (mxShape, uno::UNO_QUERY);
-    if (xShapes.is() && xShapes->getCount() > 0)
-    {
-        mpChildrenManager = new ChildrenManager (this, rShapeTreeInfo, *this);
-        Rectangle aBBox (mxShape->getPosition().X, mxShape->getPosition().Y,
-            mxShape->getSize().Width, mxShape->getSize().Height);
-        mpChildrenManager->Update (xShapes, aBBox);
-
-    }
-    else
-        mpChildrenManager = NULL;
-    mxChildrenManager = uno::Reference<uno::XInterface> (
-        static_cast<uno::XWeak*>(mpChildrenManager));
-
-    // Register as accessible event listener at document window.
-    uno::Reference<XAccessibleEventBroadcaster> xBroadcaster (
-        mrShapeTreeInfo.GetDocumentWindow(), uno::UNO_QUERY);
-    if (xBroadcaster.is())
-        xBroadcaster->addEventListener (uno::Reference<XAccessibleEventListener>(this));
-
-    // Register at shape as property change listener.
-    uno::Reference<beans::XPropertySet> xShapeProperties (mxShape, uno::UNO_QUERY);
-    if (xShapeProperties.is())
-        xShapeProperties->addPropertyChangeListener (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("")),
-            uno::Reference<beans::XPropertyChangeListener>(this));
-
-    // Register at controller as property change listener.
-    uno::Reference<beans::XPropertySet> xControllerProperties (
-        mrShapeTreeInfo.GetControllerProperties(), uno::UNO_QUERY);
-    if (xControllerProperties.is())
-        xControllerProperties->addPropertyChangeListener (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("VisibleArea")),
-            uno::Reference<beans::XPropertyChangeListener>(this));
+    // The main part of the initialization is done in the init method which
+    // has to be called from this constructor's caller.
 }
 
 
@@ -161,28 +139,46 @@ AccessibleShape::AccessibleShape (const uno::Reference<drawing::XShape>& rxShape
 
 AccessibleShape::~AccessibleShape (void)
 {
-    // mpChildrenManager is not deleted because that is handled by the
-    // mxChildrenManager reference.
+    if (mpChildrenManager != NULL)
+        delete mpChildrenManager;
     OSL_TRACE ("~AccessibleShape");
 
-    // Unregister from the various broadcasters.
-    uno::Reference<XAccessibleEventBroadcaster> xBroadcaster (
-        mrShapeTreeInfo.GetDocumentWindow(), uno::UNO_QUERY);
-    if (xBroadcaster.is())
-        xBroadcaster->removeEventListener (uno::Reference<XAccessibleEventListener>(this));
+    // Unregistering from the various broadcasters should be unnecessary
+    // since this destructor would not have been called if one of the
+    // broadcasters would still hold a strong reference to this object.
+}
 
-    uno::Reference<beans::XPropertySet> xShapeProperties (mxShape, uno::UNO_QUERY);
-    if (xShapeProperties.is())
-        xShapeProperties->removePropertyChangeListener (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("")),
-            uno::Reference<beans::XPropertyChangeListener>(this));
 
-    uno::Reference<beans::XPropertySet> xControllerProperties (
-        mrShapeTreeInfo.GetControllerProperties(), uno::UNO_QUERY);
-    if (xControllerProperties.is())
-        xControllerProperties->removePropertyChangeListener (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("VisibleArea")),
-            uno::Reference<beans::XPropertyChangeListener>(this));
+
+
+void AccessibleShape::Init (void)
+{
+    // Create a children manager when this shape has children of its own.
+    Reference<drawing::XShapes> xShapes (mxShape, uno::UNO_QUERY);
+    if (xShapes.is() && xShapes->getCount() > 0)
+        mpChildrenManager = new ChildrenManager (
+            this, xShapes, mrShapeTreeInfo, *this);
+    if (mpChildrenManager != NULL)
+        mpChildrenManager->Update();
+
+    // Register at shape as dispose listener.
+    Reference<lang::XComponent> xComponent (mxShape, uno::UNO_QUERY);
+    if (xComponent.is())
+        xComponent->addEventListener (this);
+
+    // Beware! Here we leave the paths of the UNO API and descend into the
+    // depths of the core.  Necessary for makeing the edit engine accessible.
+
+    SdrView* pView = mrShapeTreeInfo.GetSdrView ();
+    const Window* pWindow = mrShapeTreeInfo.GetWindow ();
+    if (pView != NULL && pWindow != NULL)
+    {
+        SvxEditSource* pEditSource = new SvxTextEditSource (
+            *GetSdrObjectFromXShape (mxShape), *pView, *pWindow);
+        mpText = new SvxAccessibleTextHelper (
+            this,
+            ::std::auto_ptr<SvxEditSource>(pEditSource));
+    }
 }
 
 
@@ -198,26 +194,24 @@ bool AccessibleShape::operator== (const AccessibleShape& rShape)
 
 //=====  XAccessibleContext  ==================================================
 
-uno::Reference<XAccessible> SAL_CALL
-    AccessibleShape::getAccessibleParent (void)
-    throw (uno::RuntimeException)
-{
-    return AccessibleContextBase::getAccessibleParent();
-}
-
-
-
-
-/** Return the number of children of the original shape.
+/** The children of this shape come from two sources: The children from
+    group or scene shapes and the paragraphs of text.
 */
 sal_Int32 SAL_CALL
        AccessibleShape::getAccessibleChildCount (void)
     throw ()
 {
+    CheckDisposedState ();
+    sal_Int32 nChildCount = 0;
+
+    // Add the number of shapes that are children of this shape.
     if (mpChildrenManager != NULL)
-        return mpChildrenManager->GetChildCount ();
-    else
-        return 0;
+        nChildCount += mpChildrenManager->GetChildCount ();
+    // Add the number text paragraphs.
+    if (mpText != NULL)
+        nChildCount += mpText->GetChildCount ();
+
+    return nChildCount;
 }
 
 
@@ -230,12 +224,27 @@ uno::Reference<XAccessible> SAL_CALL
     AccessibleShape::getAccessibleChild (long nIndex)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    if (mpChildrenManager != NULL)
-        return mpChildrenManager->GetChild (nIndex);
-    else
-        throw lang::IndexOutOfBoundsException (
-            ::rtl::OUString::createFromAscii ("shape has no child"),
-            NULL);
+    CheckDisposedState ();
+    if (nIndex >= 0)
+    {
+        if (mpChildrenManager != NULL)
+            if (nIndex < mpChildrenManager->GetChildCount())
+                return mpChildrenManager->GetChild (nIndex);
+            else
+            {
+                // Adapt index to children (paragraphs) of the edit engine.
+                nIndex -= mpChildrenManager->GetChildCount();
+            }
+        if (mpText != NULL)
+        {
+            if (nIndex < mpText->GetChildCount())
+                return mpText->GetChild (nIndex);
+        }
+    }
+
+    throw lang::IndexOutOfBoundsException (
+        ::rtl::OUString::createFromAscii ("shape has no child with index ")+nIndex,
+        static_cast<uno::XWeak*>(this));
 }
 
 
@@ -246,14 +255,40 @@ uno::Reference<XAccessible> SAL_CALL
 awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    awt::Point aP = mxShape->getPosition ();
-    awt::Point aPosition (mrShapeTreeInfo.PointToPixel (aP));
-    awt::Size aSize (mrShapeTreeInfo.SizeToPixel (mxShape->getSize ()));
-    return awt::Rectangle (
-        aPosition.X,
-        aPosition.Y,
-        aSize.Width,
-        aSize.Height);
+    CheckDisposedState ();
+    awt::Rectangle aBoundingBox;
+
+    ::awt::Point aPixelPosition (getLocationOnScreen());
+    ::awt::Size aPixelSize (getSize());
+    Reference<XAccessibleComponent> xParentComponent (getAccessibleParent(), uno::UNO_QUERY);
+    if (xParentComponent.is())
+    {
+        ::Rectangle aBBox (
+            aPixelPosition.X,
+            aPixelPosition.Y,
+            aPixelPosition.X + aPixelSize.Width,
+            aPixelPosition.Y + aPixelSize.Height);
+        awt::Rectangle aParentBoundingBox (xParentComponent->getBounds());
+        ::Rectangle aParentBBox (
+            aParentBoundingBox.X,
+            aParentBoundingBox.Y,
+            aParentBoundingBox.X + aParentBoundingBox.Width,
+            aParentBoundingBox.Y + aParentBoundingBox.Height);
+        aBBox = aBBox.GetIntersection (aParentBBox);
+        aBoundingBox = awt::Rectangle (
+            aBBox.getX(),
+            aBBox.getY(),
+            aBBox.getWidth(),
+            aBBox.getHeight());
+    }
+    else
+        aBoundingBox = awt::Rectangle (
+            aPixelPosition.X,
+            aPixelPosition.Y,
+            aPixelSize.Width,
+            aPixelSize.Height);
+
+    return aBoundingBox;
 }
 
 
@@ -262,8 +297,23 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
 awt::Point SAL_CALL AccessibleShape::getLocation (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    awt::Rectangle aBBox = getBounds();
-    return awt::Point (aBBox.X, aBBox.Y);
+    CheckDisposedState ();
+    // Get absolute position...
+    awt::Point aLocation (getLocationOnScreen ());
+
+    // ... and subtract absolute position of the parent.
+    uno::Reference<XAccessibleComponent> xParentComponent (
+        getAccessibleParent(), uno::UNO_QUERY);
+    if (xParentComponent.is())
+    {
+        awt::Point aParentLocation (xParentComponent->getLocationOnScreen());
+        aLocation.X -= aParentLocation.X;
+        aLocation.Y -= aParentLocation.Y;
+    }
+    else
+        OSL_TRACE ("getLocation: parent does not support XAccessibleComponent");
+
+    return aLocation;
 }
 
 
@@ -272,28 +322,70 @@ awt::Point SAL_CALL AccessibleShape::getLocation (void)
 awt::Point SAL_CALL AccessibleShape::getLocationOnScreen (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    awt::Point aLocation (getLocation ());
-
-    // Get the screen location of the parent and add it to this object's
-    // location.
-    if (mrShapeTreeInfo.GetDocumentWindow().is())
+    CheckDisposedState ();
+    ::Point aPixelPoint;
+    if (mxShape.is())
     {
-        awt::Point aParentLocation (mrShapeTreeInfo.GetDocumentWindow()->getLocationOnScreen ());
-        aLocation.X += aParentLocation.X;
-        aLocation.Y += aParentLocation.Y;
+        awt::Point aLogicalPoint (mxShape->getPosition());
+        if (mrShapeTreeInfo.GetViewForwarder() != NULL)
+            aPixelPoint = mrShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+                ::Point (aLogicalPoint.X, aLogicalPoint.Y));
     }
-
-    return aLocation;
+    return awt::Point (aPixelPoint.X(), aPixelPoint.Y());
 }
 
 
 
 
-::com::sun::star::awt::Size SAL_CALL AccessibleShape::getSize (void)
-    throw (::com::sun::star::uno::RuntimeException)
+awt::Size SAL_CALL AccessibleShape::getSize (void)
+    throw (uno::RuntimeException)
 {
-    awt::Rectangle aBBox = getBounds();
-    return awt::Size (aBBox.Width, aBBox.Height);
+    CheckDisposedState ();
+    ::Size aPixelSize;
+    if (mxShape.is())
+    {
+        /*
+        Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
+        if (xSet.is())
+        {
+            try
+            {
+                uno::Any aValue = xSet->getPropertyValue (
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BoundingBox")));
+                awt::Rectangle aBBox;
+                aValue >>= aBBox;
+                return awt::Size (aBBox.Width, aBBox.Height);
+            }
+            catch (beans::UnknownPropertyException e)
+            {
+            }
+        }
+        */
+        awt::Size aSize (mxShape->getSize());
+        if (mrShapeTreeInfo.GetViewForwarder() != NULL)
+            aPixelSize = mrShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+                ::Size (aSize.Width, aSize.Height));
+    }
+    return awt::Size (aPixelSize.Width(), aPixelSize.Height());
+
+}
+
+
+
+
+sal_Bool SAL_CALL AccessibleShape::isShowing (void)
+    throw (uno::RuntimeException)
+{
+    return mxStateSet->contains (AccessibleStateType::SHOWING);
+}
+
+
+
+
+sal_Bool SAL_CALL AccessibleShape::isVisible (void)
+    throw (uno::RuntimeException)
+{
+    return mxStateSet->contains (AccessibleStateType::VISIBLE);
 }
 
 
@@ -304,6 +396,7 @@ awt::Point SAL_CALL AccessibleShape::getLocationOnScreen (void)
 sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    CheckDisposedState ();
     sal_Int32 nColor (0x0ffffffL);
 
     try
@@ -329,6 +422,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
 sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    CheckDisposedState ();
     sal_Int32 nColor (0x0ffffffL);
 
     try
@@ -362,10 +456,11 @@ com::sun::star::uno::Any SAL_CALL
         aReturn = ::cppu::queryInterface (rType,
             static_cast<XAccessibleComponent*>(this),
             static_cast<XAccessibleExtendedComponent*>(this),
-            static_cast<XAccessibleEventListener*>(this),
-            static_cast<beans::XPropertyChangeListener*>(this));
+            static_cast<lang::XEventListener*>(this)
+            );
     return aReturn;
 }
+
 
 
 
@@ -375,6 +470,7 @@ void SAL_CALL
 {
     AccessibleContextBase::acquire ();
 }
+
 
 
 
@@ -394,7 +490,8 @@ void SAL_CALL
     AccessibleShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("AccessibleShape"));
+    CheckDisposedState ();
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleShape"));
 }
 
 
@@ -404,6 +501,7 @@ void SAL_CALL
     AccessibleShape::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    CheckDisposedState ();
     return AccessibleContextBase::getSupportedServiceNames();
 }
 
@@ -417,27 +515,25 @@ uno::Sequence<uno::Type> SAL_CALL
     AccessibleShape::getTypes (void)
     throw (uno::RuntimeException)
 {
+    CheckDisposedState ();
     // Get list of types from the context base implementation, ...
     uno::Sequence<uno::Type> aTypeList (AccessibleContextBase::getTypes());
     // ... get list of types from component base implementation, ...
     uno::Sequence<uno::Type> aComponentTypeList (AccessibleComponentBase::getTypes());
     // ... define local types, ...
     const uno::Type aEventListenerType =
-        ::getCppuType((const uno::Reference<XAccessibleEventListener>*)0);
-    const uno::Type aPropertyChangeListenerType =
-        ::getCppuType((const uno::Reference<beans::XPropertyChangeListener>*)0);
+        ::getCppuType((const uno::Reference<lang::XEventListener>*)0);
+    //    const uno::Type aStateSetType =
+    //      ::getCppuType((const uno::Reference<XAccessibleStateSet>*)0);
 
     // ... and merge them all into one list.
     sal_Int32 nTypeCount (aTypeList.getLength()),
         nComponentTypeCount (aComponentTypeList.getLength());
-    aTypeList.realloc (nTypeCount + nComponentTypeCount + 2);
+    aTypeList.realloc (nTypeCount + nComponentTypeCount + 1);
     int i;
     for (i=0; i<nComponentTypeCount; i++)
-    {
         aTypeList[nTypeCount + i] = aComponentTypeList[i];
-    }
     aTypeList[nTypeCount + i] = aEventListenerType;
-    aTypeList[nTypeCount + i + 1] = aPropertyChangeListenerType;
 
     return aTypeList;
 }
@@ -451,13 +547,21 @@ void SAL_CALL
     AccessibleShape::disposing (const ::com::sun::star::lang::EventObject& aEvent)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    CheckDisposedState ();
     OSL_TRACE ("AccessibleShape::disposing");
+
+    if (aEvent.Source == mxShape)
+    {
+        uno::Reference<beans::XPropertySet> xShapeProperties (mxShape, uno::UNO_QUERY);
+        SetState (AccessibleStateType::DEFUNC);
+        mxShape = NULL;
+    }
 
     // Either the document window, the shape, or the controller has been
     // disposed.  Each one leads at least to not being able to determine the
-    // accessible shapes coordinates.  Therefore dispose this object.
-
-    dispose ();
+    // accessible shapes coordinates.
+    // Best thing would be to dispose this object.  That is not possible
+    // because we are not the owner of ourselves.
 }
 
 
@@ -468,133 +572,45 @@ void SAL_CALL
 void AccessibleShape::dispose (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    CheckDisposedState ();
     OSL_TRACE ("AccessibleShape::dispose");
 
     // Unregister listeners.
-    uno::Reference<XAccessibleEventBroadcaster> xBroadcaster (
-        mrShapeTreeInfo.GetDocumentWindow(), uno::UNO_QUERY);
-    xBroadcaster->removeEventListener (uno::Reference<XAccessibleEventListener>(this));
-
-    uno::Reference<beans::XPropertySet> xShapeProperties (mxShape, uno::UNO_QUERY);
-    if (xShapeProperties.is())
-        xShapeProperties->removePropertyChangeListener (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("")),
-            uno::Reference<beans::XPropertyChangeListener>(this));
-
-    uno::Reference<beans::XPropertySet> xControllerProperties (
-        mrShapeTreeInfo.GetControllerProperties(), uno::UNO_QUERY);
-    if (xControllerProperties.is())
-        xControllerProperties->removePropertyChangeListener (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("VisibleArea")),
-            uno::Reference<beans::XPropertyChangeListener>(this));
+    Reference<lang::XComponent> xComponent (mxShape, uno::UNO_QUERY);
+    if (xComponent.is())
+        xComponent->removeEventListener (this);
 
     // Cleanup.
     mxShape = NULL;
 
-    // Call disposing on all listeners.
-    uno::Reference<XAccessibleEventListener>* aListeners;
-    int nListenerCount;
-    EventListenerListType::iterator I;
-
-    {
-        // Guarded by the mutex copy list of listeners into a local list.
-        // This is necessary to be able to call the listeners outside the
-        // scope of the mutex and to not to be disturbed by outside changes
-        // to the list of listeners.
-        ::vos::OGuard aGuard (maMutex);
-        nListenerCount = mxEventListeners.size();
-        aListeners = new uno::Reference<XAccessibleEventListener>[nListenerCount];
-        int i=0;
-        for (I=mxEventListeners.begin(); I!=mxEventListeners.end(); I++)
-        {
-            aListeners[i++] = *I;
-        }
-    }
-
-    // Now call the listeners.
-    lang::EventObject aEvent (static_cast<uno::XWeak*>(this));
-    for (int i=0; i<nListenerCount; i++)
-        if (aListeners[i].is())
-            aListeners[i]->disposing (aEvent);
-
-    delete [] aListeners;
+    // Call base classes.
+    AccessibleContextBase::dispose ();
 }
 
 
 
 
-//=====  XAccessibleEventListener  ============================================
+//=====  IAccessibleViewForwarderListener  ====================================
 
-void SAL_CALL
-    AccessibleShape::notifyEvent (const AccessibleEventObject& aEvent)
-    throw (::com::sun::star::uno::RuntimeException)
+void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
+        const IAccessibleViewForwarder* pViewForwarder)
 {
-    OSL_TRACE ("AccessibleShape::notifyEvent %d", aEvent.EventId);
-    if (aEvent.EventId == AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT)
-    {
-        // Visual appearance changed.  This includes size and position in
-        // which we are interested.
-        CommitChange (AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT,
-            uno::Any(),uno::Any());
-    }
+    // Inform all listeners that the graphical representation (i.e. size
+    // and/or position) of the shape has changed.
+    CommitChange (AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT,
+        uno::Any(),
+        uno::Any());
+
+    // Tell children manager of the modified view forwarder.
+    if (mpChildrenManager != NULL)
+        mpChildrenManager->ViewForwarderChanged (aChangeType, pViewForwarder);
+
 }
 
 
 
 
-
-//=====  XPropertyChangeListener  =============================================
-
-void SAL_CALL
-    AccessibleShape::propertyChange (const beans::PropertyChangeEvent& rEvent)
-    throw (uno::RuntimeException)
-{
-    OSL_TRACE ("AccessibleShape::propertyChange");
-    if (rEvent.Source == mxShape)
-    {
-        // Event came from the shape.  It therefore very likely affects the
-        // appearance of the shape.  Send one VISUAL_DATA and a
-        // DESCRIPTION event, because the description depends on some
-        // of the graphical attributes.
-        CommitChange (AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT,
-            uno::Any(),uno::Any());
-
-        SetAccessibleDescription (CreateAccessibleDescription());
-        CommitChange (AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT,
-            uno::Any(),uno::Any());
-    }
-    else if (rEvent.Source == mrShapeTreeInfo.GetControllerProperties())
-    {
-        OSL_TRACE ("    controller property change of %s",
-            rtl::OUStringToOString (rEvent.PropertyName, RTL_TEXTENCODING_ASCII_US).getStr());
-        uno::Reference<beans::XPropertySet> xSet (rEvent.Source, uno::UNO_QUERY);
-        awt::Rectangle aVisibleArea;
-        try{
-        if (xSet.is())
-        {
-            uno::Any aVA = xSet->getPropertyValue (
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("VisibleArea")));
-            aVA >>= aVisibleArea;
-        }
-        }catch (uno::RuntimeException& e)
-        {
-            OSL_TRACE ("    VisibleArea property not known");
-        }
-        OSL_TRACE ("    visible area is now %d %d %d %d",
-            aVisibleArea.X, aVisibleArea.Y,aVisibleArea.Width, aVisibleArea.Height);
-        // Event came from the controller.  That means that the visible area
-        // changed.
-        mrShapeTreeInfo.CalcCSChangeTransformation();
-        CommitChange (AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT,
-            uno::Any(),uno::Any());
-    }
-    else
-        OSL_TRACE ("unknown property event change source");
-}
-
-
-
-
+//=====  protected internal  ==================================================
 /// Set this object's name if is different to the current name.
 ::rtl::OUString
     AccessibleShape::CreateAccessibleBaseName (void)
@@ -606,79 +622,79 @@ void SAL_CALL
     switch (nShapeType)
     {
         case DRAWING_RECTANGLE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("RectangleShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("RectangleShape"));
             break;
         case DRAWING_ELLIPSE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("EllipseShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("EllipseShape"));
             break;
         case DRAWING_CONTROL:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ConrolShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ConrolShape"));
             break;
         case DRAWING_CONNECTOR:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ConnectorShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ConnectorShape"));
             break;
         case DRAWING_MEASURE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("MeasureShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("MeasureShape"));
             break;
         case DRAWING_LINE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("LineShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("LineShape"));
             break;
         case DRAWING_POLY_POLYGON:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("PolyPolygonShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyPolygonShape"));
             break;
         case DRAWING_POLY_LINE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("PolyLineShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyLineShape"));
             break;
         case DRAWING_OPEN_BEZIER:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("OpenBezierShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("OpenBezierShape"));
             break;
         case DRAWING_CLOSED_BEZIER:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ClosedBezierShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ClosedBezierShape"));
             break;
         case DRAWING_OPEN_FREEHAND:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("OpenFreehandShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("OpenFreehandShape"));
             break;
         case DRAWING_CLOSED_FREEHAND:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ClosedFreehandShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ClosedFreehandShape"));
             break;
         case DRAWING_POLY_POLYGON_PATH:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("PolyPolygonPathShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyPolygonPathShape"));
             break;
         case DRAWING_POLY_LINE_PATH:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("PolyLinePathShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyLinePathShape"));
             break;
         case DRAWING_GROUP:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("GroupShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("GroupShape"));
             break;
         case DRAWING_TEXT:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("TextShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("TextShape"));
             break;
         case DRAWING_PAGE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("PageShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PageShape"));
             break;
         case DRAWING_3D_SCENE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("3DSceneShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DSceneShape"));
             break;
         case DRAWING_3D_CUBE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("3DCubeShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DCubeShape"));
             break;
         case DRAWING_3D_SPHERE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("3DSphereShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DSphereShape"));
             break;
         case DRAWING_3D_LATHE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("3DLatheShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DLatheShape"));
             break;
         case DRAWING_3D_EXTRUDE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("3DExtrudeShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DExtrudeShape"));
             break;
         case DRAWING_3D_POLYGON:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("3DPolygonShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DPolygonShape"));
             break;
         default:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("UnknownAccessibleShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("UnknownAccessibleShape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
-                sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM (": "))
+                sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM(": "))
                     + xDescriptor->getShapeType();
     }
 
@@ -696,18 +712,30 @@ void SAL_CALL
 
     // Append the shape's index to the name to disambiguate between shapes
     // of the same type.  If such an index where not given to the
-    // constructor then use the z-order instead.
+    // constructor then use the z-order instead.  If even that does not exist
+    // we throw an exception.
     long nIndex = mnIndex;
-    /*    if (nIndex == -1)
+    if (nIndex == -1)
     {
-        uno::Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
-        if (xSet.is())
+        try
         {
-            uno::Any aZOrder (xSet->getPropertyValue (::rtl::OUString::createFromAscii ("ZOrder")));
-            aZOrder >>= nIndex;
+            uno::Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                uno::Any aZOrder (xSet->getPropertyValue (::rtl::OUString::createFromAscii ("ZOrder")));
+                aZOrder >>= nIndex;
+            }
         }
+        catch (beans::UnknownPropertyException)
+        {
+            // We throw our own exception that is a bit more informative.
+            throw uno::RuntimeException (::rtl::OUString (
+                RTL_CONSTASCII_USTRINGPARAM("AccessibleShape has invalid index and no ZOrder property")),
+                static_cast<uno::XWeak*>(this));
+        }
+
     }
-    */    sName += OUString::valueOf (nIndex);
+    sName += OUString::valueOf (nIndex);
 
     return sName;
 }
@@ -829,7 +857,7 @@ void SAL_CALL
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {
-                aDG.AppendString (::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("service name=")));
+                aDG.AppendString (::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("service name=")));
                 aDG.AppendString (xDescriptor->getShapeType());
             }
     }
