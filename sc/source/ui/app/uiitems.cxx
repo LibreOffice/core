@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiitems.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:48 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,15 @@ SfxPoolItem* __EXPORT ScSortItem::Clone( SfxItemPool * ) const
     return new ScSortItem( *this );
 }
 
+//------------------------------------------------------------------------
+
+sal_Bool ScSortItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberUd ) const
+{
+    // Return empty value as there is no useful conversion
+    rVal = com::sun::star::uno::Any();
+    return sal_True;
+}
+
 // -----------------------------------------------------------------------
 //      ScQueryItem - Daten fuer den Filterdialog
 // -----------------------------------------------------------------------
@@ -423,6 +432,15 @@ int __EXPORT ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
 SfxPoolItem* __EXPORT ScSubTotalItem::Clone( SfxItemPool * ) const
 {
     return new ScSubTotalItem( *this );
+}
+
+//------------------------------------------------------------------------
+
+sal_Bool ScSubTotalItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberUd ) const
+{
+    // Return empty value as there is no useful conversion
+    rVal = com::sun::star::uno::Any();
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
