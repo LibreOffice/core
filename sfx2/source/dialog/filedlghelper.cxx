@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 12:45:14 $
+ *  last change: $Author: dv $ $Date: 2001-05-11 12:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,7 +471,7 @@ ErrCode FileDialogHelper_Impl::execute( const String&   rPath,
                 {
                     Any aValue = xCtrlAccess->getValue( FilePickerElementID::CBX_READONLY );
                     sal_Bool bReadOnly = sal_False;
-                    if ( aValue >>= bReadOnly )
+                    if ( ( aValue >>= bReadOnly ) && bReadOnly )
                         rpSet->Put( SfxBoolItem( SID_DOC_READONLY, bReadOnly ) );
                 }
                 catch( IllegalArgumentException ){}
@@ -604,17 +604,26 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
     SfxFilterMatcherIter aIter( mpMatcher, nFilterFlags, SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG );
     const SfxFilter* pDef = aIter.First();
 
+    // when in file open mode, we have to check, wether there is a filter named <ALL>
+    if ( WB_OPEN == ( nFlags & WB_OPEN ) )
+    {
+        for ( const SfxFilter* pFilter = pDef; pFilter; pFilter = aIter.Next() )
+        {
+            OUString aUIName( pFilter->GetUIName() );
+            if ( aUIName == aAllFilterName )
+                bHasAll = sal_True;
+        }
+
+        // Add the filter for displaying all files, if there is none
+        if ( !bHasAll )
+            xFltMgr->appendFilter( aAllFilterName, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+    }
+
     for ( const SfxFilter* pFilter = pDef; pFilter; pFilter = aIter.Next() )
     {
         aUIName = pFilter->GetUIName();
         xFltMgr->appendFilter( aUIName, pFilter->GetWildcard().GetWildCard() );
-        if ( aUIName == aAllFilterName )
-            bHasAll = sal_True;
     }
-
-    // Add the filter for displaying all files, if there is none
-    if ( !bHasAll )
-        xFltMgr->appendFilter( aAllFilterName, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
 }
 
 // ------------------------------------------------------------------------
