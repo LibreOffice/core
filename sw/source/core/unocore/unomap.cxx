@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: os $ $Date: 2001-04-03 14:16:14 $
+ *  last change: $Author: mtg $ $Date: 2001-04-03 14:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1841,17 +1841,20 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aPrintSettingsMap_Impl[] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_PRINT_ANNOTATION_MODE)  ,    WID_PRTSET_ANNOTATION_MODE , &::getCppuType((const sal_Int16*)0),  PROPERTY_NONE,   0},
-                    {SW_PROP_NAME(UNO_NAME_PRINT_BLACK_FONTS)      ,    WID_PRTSET_BLACK_FONTS     , &::getBooleanCppuType(),   PROPERTY_NONE,  0},
-                    {SW_PROP_NAME(UNO_NAME_PRINT_CONTROLS)         ,    WID_PRTSET_CONTROLS        , &::getBooleanCppuType(), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_PRINT_DRAWINGS)         ,    WID_PRTSET_DRAWINGS        , &::getBooleanCppuType(), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_PRINT_GRAPHICS)         ,    WID_PRTSET_GRAPHICS        , &::getBooleanCppuType(), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_PRINT_LEFT_PAGES)    ,       WID_PRTSET_LEFT_PAGES       ,   &::getBooleanCppuType(), PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_PRINT_PAGE_BACKGROUND)  ,    WID_PRTSET_PAGE_BACKGROUND , &::getBooleanCppuType(), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_PRINT_PROSPECT)         ,    WID_PRTSET_PROSPECT        , &::getBooleanCppuType(), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_PRINT_REVERSED)    ,         WID_PRTSET_REVERSED         ,   &::getBooleanCppuType(), PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_PRING_RIGHT_PAGES) ,         WID_PRTSET_RIGHT_PAGES      ,   &::getBooleanCppuType(), PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_PRINT_TABLES)           ,    WID_PRTSET_TABLES          , &::getBooleanCppuType(), PROPERTY_NONE,    0},
+                    {SW_PROP_NAME(UNO_NAME_PRINT_ANNOTATION_MODE)  ,    WID_PRTSET_ANNOTATION_MODE  , &::getCppuType((const sal_Int16*)0),  PROPERTY_NONE,  0},
+                    {SW_PROP_NAME(UNO_NAME_PRINT_BLACK_FONTS)      ,    WID_PRTSET_BLACK_FONTS      , &::getBooleanCppuType(),  PROPERTY_NONE,  0},
+                    {SW_PROP_NAME(UNO_NAME_PRINT_CONTROLS)         ,    WID_PRTSET_CONTROLS         , &::getBooleanCppuType(), PROPERTY_NONE,   0},
+                    {SW_PROP_NAME(UNO_NAME_PRINT_DRAWINGS)         ,    WID_PRTSET_DRAWINGS         , &::getBooleanCppuType(), PROPERTY_NONE,   0},
+                    {SW_PROP_NAME(UNO_NAME_PRINT_GRAPHICS)         ,    WID_PRTSET_GRAPHICS         , &::getBooleanCppuType(), PROPERTY_NONE,   0},
+                    {SW_PROP_NAME(UNO_NAME_PRINT_LEFT_PAGES)    ,       WID_PRTSET_LEFT_PAGES       , &::getBooleanCppuType(), PROPERTY_NONE,   0},
+                    {SW_PROP_NAME(UNO_NAME_PRINT_PAGE_BACKGROUND)  ,    WID_PRTSET_PAGE_BACKGROUND  , &::getBooleanCppuType(), PROPERTY_NONE,   0},
+                    {SW_PROP_NAME(UNO_NAME_PRINT_PROSPECT)         ,    WID_PRTSET_PROSPECT         , &::getBooleanCppuType(), PROPERTY_NONE,   0},
+                    {SW_PROP_NAME(UNO_NAME_PRINT_REVERSED)    ,         WID_PRTSET_REVERSED         , &::getBooleanCppuType(), PROPERTY_NONE,   0},
+                    {SW_PROP_NAME(UNO_NAME_PRINT_RIGHT_PAGES) ,         WID_PRTSET_RIGHT_PAGES      , &::getBooleanCppuType(), PROPERTY_NONE,   0},
+                    {SW_PROP_NAME(UNO_NAME_PRINT_LEFT_PAGES) ,          WID_PRTSET_LEFT_PAGES       , &::getBooleanCppuType(), PROPERTY_NONE,   0},
+                    {SW_PROP_NAME(UNO_NAME_PRINT_FAX_NAME) ,            WID_PRTSET_FAX_NAME         , &::getCppuType((OUString*)0), PROPERTY_NONE,  0},
+                    {SW_PROP_NAME(UNO_NAME_PRINT_PAPER_FROM_SETUP) ,    WID_PRTSET_PAPER_FROM_SETUP , &::getBooleanCppuType(), PROPERTY_NONE,   0},
+                    {SW_PROP_NAME(UNO_NAME_PRINT_TABLES)           ,    WID_PRTSET_TABLES           , &::getBooleanCppuType(), PROPERTY_NONE,   0},
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aPrintSettingsMap_Impl;
