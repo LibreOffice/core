@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-11 12:33:11 $
+ *  last change: $Author: thb $ $Date: 2002-02-15 09:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,12 +352,6 @@ LanguageType SvxEditEngineForwarder::GetLanguage( USHORT nPara, USHORT nIndex ) 
     return rEditEngine.GetLanguage(nPara, nIndex);
 }
 
-sal_Bool SvxEditEngineForwarder::IsPointInPara( USHORT, const awt::Point& ) const
-{
-    // TODO
-    return sal_False;
-}
-
 sal_Bool SvxEditEngineForwarder::GetSelection( ESelection& rSelection ) const
 {
     EditView* pView = GetView();
@@ -371,7 +365,13 @@ sal_Bool SvxEditEngineForwarder::GetSelection( ESelection& rSelection ) const
     return sal_False;
 }
 
-awt::Rectangle SvxEditEngineForwarder::GetTextBounds( const ESelection& ) const
+awt::Rectangle SvxEditEngineForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
+{
+    // TODO
+    return awt::Rectangle();
+}
+
+awt::Rectangle SvxEditEngineForwarder::GetParaBounds( USHORT nPara ) const
 {
     // TODO
     return awt::Rectangle();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-11 12:33:11 $
+ *  last change: $Author: thb $ $Date: 2002-02-15 09:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2240,18 +2240,20 @@ LanguageType SvxDummyTextSource::GetLanguage( USHORT nPara, USHORT nIndex ) cons
     return LANGUAGE_DONTKNOW;
 }
 
-sal_Bool SvxDummyTextSource::IsPointInPara( USHORT, const awt::Point& ) const
-{
-    return sal_False;
-}
-
 sal_Bool SvxDummyTextSource::GetSelection( ESelection& rSelection ) const
 {
     return sal_False;
 }
 
-awt::Rectangle SvxDummyTextSource::GetTextBounds( const ESelection& ) const
+awt::Rectangle SvxDummyTextSource::GetCharBounds( USHORT nPara, USHORT nIndex ) const
 {
+    // TODO
+    return awt::Rectangle();
+}
+
+awt::Rectangle SvxDummyTextSource::GetParaBounds( USHORT nPara ) const
+{
+    // TODO
     return awt::Rectangle();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-11 12:33:11 $
+ *  last change: $Author: thb $ $Date: 2002-02-15 09:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,12 +318,6 @@ LanguageType SvxOutlinerForwarder::GetLanguage( USHORT nPara, USHORT nIndex ) co
     return rOutliner.GetLanguage(nPara, nIndex);
 }
 
-sal_Bool SvxOutlinerForwarder::IsPointInPara( USHORT, const awt::Point& ) const
-{
-    // TODO
-    return sal_False;
-}
-
 sal_Bool SvxOutlinerForwarder::GetSelection( ESelection& rSelection ) const
 {
     OutlinerView* pView = GetView();
@@ -337,7 +331,13 @@ sal_Bool SvxOutlinerForwarder::GetSelection( ESelection& rSelection ) const
     return sal_False;
 }
 
-awt::Rectangle SvxOutlinerForwarder::GetTextBounds( const ESelection& ) const
+awt::Rectangle SvxOutlinerForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
+{
+    // TODO
+    return awt::Rectangle();
+}
+
+awt::Rectangle SvxOutlinerForwarder::GetParaBounds( USHORT nPara ) const
 {
     // TODO
     return awt::Rectangle();
@@ -357,7 +357,7 @@ sal_Bool SvxOutlinerForwarder::GetWordIndices( USHORT nPara, USHORT nIndex, USHO
 
 USHORT SvxOutlinerForwarder::GetLineCount( USHORT nPara ) const
 {
-    return rOutliner.GetLineCount(nPara);
+    return static_cast < USHORT >( rOutliner.GetLineCount(nPara) );
 }
 
 USHORT SvxOutlinerForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
