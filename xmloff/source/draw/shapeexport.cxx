@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-08 11:37:46 $
+ *  last change: $Author: cl $ $Date: 2001-08-22 10:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,10 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         sal_Int32 nCount = 0;
         if( !bIsEmptyPresObj &&
             (aShapeInfo.meShapeType != XmlShapeTypeDrawChartShape) &&
-            (aShapeInfo.meShapeType != XmlShapeTypeDrawTableShape))
+            (aShapeInfo.meShapeType != XmlShapeTypeDrawTableShape) &&
+            (aShapeInfo.meShapeType != XmlShapeTypePresChartShape) &&
+            (aShapeInfo.meShapeType != XmlShapeTypePresTableShape)
+            )
         {
             xPropStates = GetPropertySetMapper()->Filter( xPropSet );
 
