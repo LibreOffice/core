@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-29 09:28:21 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #include <tools/datetime.hxx>
 #endif
 
+#ifndef _EXCFORM_HXX
+#include "excform.hxx"
+#endif
 #ifndef _EXCIMP8_HXX
 #include "excimp8.hxx"
 #endif
@@ -82,7 +85,6 @@
 
 //___________________________________________________________________
 
-class ExcelToSc8;
 class ScBaseCell;
 class ScChangeAction;
 class ScChangeTrack;
@@ -106,11 +108,12 @@ private:
     String                      sOldUsername;
 
     ScChangeTrack*              pChangeTrack;
-    SvStream*                   pStrm;
-    ExcelToSc8*                 pFrmConv;
+    SvStream*                   pInStrm;        // input stream
+    SvMemoryStream*             pContStrm;      // memory stream for continue recs
+    UINT32List                  aCutPosList;    // cut positions for string input
+    SvStream*                   pStrm;          // either pInStrm or pContStrm
     sal_Int32                   nBytesLeft;
     sal_uInt16                  nTabIdCount;
-    sal_uInt16                  nTab;
 
     void                        DoAcceptRejectAction( ScChangeAction* pAction );
     void                        DoAcceptRejectAction( sal_uInt32 nFirst, sal_uInt32 nLast );
@@ -120,17 +123,22 @@ private:
 
     inline sal_Bool             CheckSize( sal_Int32 nBytes );
     inline void                 IgnoreBytes( sal_uInt32 nBytes );
+    inline sal_uInt8            ReaduInt8();
+    inline sal_uInt8            LookAtuInt8();
     inline sal_uInt16           ReaduInt16();
     inline sal_uInt32           ReaduInt32();
     inline double               ReadDouble();
     inline double               ReadRK();
     inline sal_Bool             ReadBool();
-    inline void                 ReadString( String& rString );
-    inline void                 IgnoreString();
     inline void                 Read2DAddress( ScAddress& rAddress );
     inline void                 Read2DRange( ScRange& rRange );
     inline sal_uInt16           ReadTabNum();
     void                        ReadDateTime( DateTime& rDateTime );
+
+    sal_Bool                    ReadStringHeader( sal_uInt16& rSize, sal_Bool& r16Bit );
+    void                        ReadString( String& rString );
+    void                        IgnoreString();
+    void                        CopyFromStreamToStream( SvStream& rFromStrm, SvStream& rToStrm, sal_uInt16 nBytes );
 
     sal_Bool                    ReadRecordHeader();
     sal_Bool                    CheckRecord(
@@ -139,7 +147,7 @@ private:
                                     sal_Int32 nMaxSize = -1 );
 
     sal_Bool                    ReadFormula(
-                                    const ScTokenArray*& rpTokenArray,
+                                    ScTokenArray*& rpTokenArray,
                                     const ScAddress& rPosition );
     void                        ReadCell(
                                     ScBaseCell*& rpCell,
@@ -154,11 +162,22 @@ private:
     void                        ReadChTrMoveRange();        // 0x0140
     void                        ReadChTrInsertTab();        // 0x014D
 
+                                // creates continue stream, if cont record present
+                                // return: position of next regular record
+    sal_uInt32                  PrepareReadRecord( sal_uInt16 nRecLen );
+                                // destroys continue stream, sets input stream
+                                // to next record
+    void                        EndReadRecord( sal_uInt32 nNextPos );
+
     void                        ReadStream();
 
 public:
                                 XclImpChangeTrack( RootData* pRootData );
                                 ~XclImpChangeTrack();
+
+                                // reads extended 3D ref info following the formulas, returns sc tab nums
+                                // ( called by XclImpChTrFmlConverter::Read3DTabReference() )
+    sal_Bool                    Read3DTabRefInfo( sal_uInt16& rFirstTab, sal_uInt16& rLastTab );
 
     void                        Apply();
 };
@@ -173,6 +192,22 @@ inline void XclImpChangeTrack::IgnoreBytes( sal_uInt32 nBytes )
 {
     pStrm->SeekRel( nBytes );
     nBytesLeft -= nBytes;
+}
+
+inline sal_uInt8 XclImpChangeTrack::ReaduInt8()
+{
+    sal_uInt8 nValue;
+    *pStrm >> nValue;
+    nBytesLeft--;
+    return nValue;
+}
+
+inline sal_uInt8 XclImpChangeTrack::LookAtuInt8()
+{
+    sal_uInt8 nValue;
+    *pStrm >> nValue;
+    pStrm->SeekRel( -1 );
+    return nValue;
 }
 
 inline sal_uInt16 XclImpChangeTrack::ReaduInt16()
@@ -211,20 +246,6 @@ inline sal_Bool XclImpChangeTrack::ReadBool()
     return (nBoolValue != 0);
 }
 
-inline void XclImpChangeTrack::ReadString( String& rString )
-{
-    if( CheckSize( 3 ) )
-        rString = ::ReadUnicodeString( *pStrm, nBytesLeft, *pExcRoot->pCharset );
-    else
-        rString.Erase();
-}
-
-inline void XclImpChangeTrack::IgnoreString()
-{
-    if( CheckSize( 3 ) )
-        ::ReadUnicodeString( *pStrm, nBytesLeft, *pExcRoot->pCharset );
-}
-
 inline void XclImpChangeTrack::Read2DAddress( ScAddress& rAddress )
 {
     rAddress.SetRow( ReaduInt16() );
@@ -245,6 +266,35 @@ inline sal_uInt16 XclImpChangeTrack::ReadTabNum()
     return pExcRoot->pImpTabIdBuffer->GetIndex( nTab, nTabIdCount );
 }
 
+//___________________________________________________________________
+// derived class for special 3D ref handling
+
+class XclImpChTrFmlConverter : public ExcelToSc8
+{
+private:
+    XclImpChangeTrack&          rChangeTrack;
+    UINT16                      nDummy;
+
+    virtual BOOL                Read3DTabReference( UINT16& rFirstTab, UINT16& rLastTab );
+
+public:
+    inline                      XclImpChTrFmlConverter(
+                                    RootData* pRootData,
+                                    SvStream& rStrm,
+                                    XclImpChangeTrack& rXclChTr );
+    virtual                     ~XclImpChTrFmlConverter();
+};
+
+inline XclImpChTrFmlConverter::XclImpChTrFmlConverter(
+        RootData* pRootData,
+        SvStream& rStrm,
+        XclImpChangeTrack& rXclChTr ) :
+    ExcelToSc8( pRootData, rStrm, nDummy ),
+    rChangeTrack( rXclChTr )
+{
+}
+
+//___________________________________________________________________
 
 #endif // _SC_XCLIMPCHANGETRACK_HXX
 
