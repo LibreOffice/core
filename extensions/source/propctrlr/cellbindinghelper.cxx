@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellbindinghelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 13:02:20 $
+ *  last change: $Author: obo $ $Date: 2004-11-30 08:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,8 +207,8 @@ namespace pcr
             while ( ( xParentAsForm.is() || xParentAsGrid.is() ) && xCheck.is() )
             {
                 xCheck = xCheck.query( xCheck->getParent() );
-                xParentAsForm = xParentAsForm.query( xCheck.is() ? xCheck->getParent() : Reference< XForm >() );
-                xParentAsGrid = xParentAsGrid.query( xCheck.is() ? xCheck->getParent() : Reference< XGridColumnFactory >() );
+                xParentAsForm = xParentAsForm.query( xCheck.is() ? xCheck->getParent() : (Reference< XInterface >) Reference< XForm >() );
+                xParentAsGrid = xParentAsGrid.query( xCheck.is() ? xCheck->getParent() : (Reference< XInterface >) Reference< XGridColumnFactory >() );
             }
             Reference< XInterface > xFormsCollection( xCheck.is() ? xCheck->getParent() : Reference< XInterface >() );
 
