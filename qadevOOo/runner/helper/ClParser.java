@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClParser.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-03-26 14:53:53 $
+ *  last change:$Date: 2003-05-27 12:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,29 +75,35 @@ public class ClParser {
      */
     public void getCommandLineParameter(TestParameters param,String[] args) {
         Properties mapping = getMapping();
-        int j = 0;
         boolean isTestJob = false;
-        while ((!isTestJob) && j<args.length) {
-            String pName = "";
+        for (int i=0; i<args.length;) {
+            String pName = getParameterFor(mapping,args[i]).trim();
             String pValue = "";
-            if (args.length > j+1) {
-                pName = getParameterFor(mapping,args[j]);
-                pValue = args[j+1];
-                isTestJob = pName.equals("TestJob");
+            if (pName.equals("TestJob")) {
+                pValue = args[i].trim()+" "+args[i+1].trim();
+                i+=2;
+            }
+            else{
+                if (i+1<args.length) {
+                    pValue = args[i+1].trim();
+                    if (pValue.startsWith("-")) {
+                        i++;
+                        pValue="yes";
+                    }
+                    else {
+                        i+=2;
+                    }
+                    if (pName.equals("TestDocumentPath")) {
+                        System.setProperty("DOCPTH",pValue);
+                    }
+                }
+                else {
+                    pValue="yes";
+                    i++;
+                }
             }
             param.put(pName,pValue);
-            if (pName.equals("TestDocumentPath")) {
-                System.setProperty("DOCPTH",pValue);
-            }
-            if (!isTestJob) {
-                j=j+2;
-            }
         }
-        String job="";
-        for (int k=j;k<args.length;k++) {
-            job += args[k]+" ";
-        }
-        param.put("TestJob",job);
     }
 
     /*
