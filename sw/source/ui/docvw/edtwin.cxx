@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:04:40 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,12 +332,11 @@
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
 #endif
-
 // OD 18.09.2003 #i18732#
 #ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
 #endif
-
+#include <toolkit/helper/vclunohelper.hxx>
 #include <charfmt.hxx>
 #include <numrule.hxx>
 #include <pagedesc.hxx>
@@ -4250,7 +4249,26 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     const Point aPixPos = LogicToPixel( aDocPos );
 
                     if ( rView.GetDocShell()->IsReadOnly() )
-                        SwReadOnlyPopup( aDocPos, rView ).Execute( this, aPixPos );
+                    {
+                        SwReadOnlyPopup* pROPopup = new SwReadOnlyPopup( aDocPos, rView );
+
+                        ::com::sun::star::ui::ContextMenuExecuteEvent aEvent;
+                        aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
+                        aEvent.ExecutePosition.X = aPixPos.X();
+                        aEvent.ExecutePosition.Y = aPixPos.Y();
+                        Menu* pMenu = 0;
+                        if( GetView().TryContextMenuInterception( *pROPopup, pMenu, aEvent ) )
+                        {
+                            if ( pMenu )
+                            {
+                                USHORT nId = ((PopupMenu*)pMenu)->Execute(this, aPixPos);
+                                pROPopup->Execute(this, nId);
+                            }
+                            else
+                                pROPopup->Execute(this, aPixPos);
+                        }
+                        delete pROPopup;
+                    }
                     else if ( !rView.ExecSpellPopup( aDocPos ) )
                         GetView().GetViewFrame()->GetDispatcher()->ExecutePopup( 0, this, &aPixPos);
                 }
