@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:46:58 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,39 +274,41 @@ ScBaseCell* XclImpStringHelper::CreateCell(
 
 // Header/footer conversion ===================================================
 
-const sal_uInt16 EXC_HF_LEFT        = 0;
-const sal_uInt16 EXC_HF_CENTER      = 1;
-const sal_uInt16 EXC_HF_RIGHT       = 2;
+XclImpHFConverter::XclImpHFPortionInfo::XclImpHFPortionInfo() :
+    mnHeight( 0 ),
+    mnMaxLineHt( 0 )
+{
+    maSel.nStartPara = maSel.nEndPara = 0;
+    maSel.nStartPos = maSel.nEndPos = 0;
+}
+
+// ----------------------------------------------------------------------------
 
 XclImpHFConverter::XclImpHFConverter( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     mrEE( rRoot.GetHFEditEngine() ),
-    mpFontData( new XclFontData )
+    mxFontData( new XclFontData ),
+    meCurrObj( EXC_HF_CENTER )
 {
 }
 
 XclImpHFConverter::~XclImpHFConverter()
 {
-    // EditTextObject is incomplete in header
 }
 
 void XclImpHFConverter::ParseString( const String& rHFString )
 {
     // edit engine objects
     mrEE.SetText( EMPTY_STRING );
-    mppObjs[ EXC_HF_LEFT ].reset( mrEE.CreateTextObject() );
-    mppObjs[ EXC_HF_CENTER ].reset( mrEE.CreateTextObject() );
-    mppObjs[ EXC_HF_RIGHT ].reset( mrEE.CreateTextObject() );
-    mpSels[ EXC_HF_LEFT ].nStartPara = mpSels[ EXC_HF_LEFT ].nEndPara = 0;
-    mpSels[ EXC_HF_LEFT ].nStartPos = mpSels[ EXC_HF_LEFT ].nEndPos = 0;
-    mpSels[ EXC_HF_RIGHT ] = mpSels[ EXC_HF_CENTER ] = mpSels[ EXC_HF_LEFT ];
-    mnCurrObj = EXC_HF_CENTER;
+    maInfos.clear();
+    maInfos.resize( EXC_HF_PORTION_COUNT );
+    meCurrObj = EXC_HF_CENTER;
 
     // parser temporaries
     maCurrText.Erase();
     String aReadFont;           // current font name
     String aReadStyle;          // current font style
-    sal_uInt16 nReadHeight;     // current font height
+    sal_uInt16 nReadHeight = 0; // current font height
     ResetFontData();
 
     /** State of the parser. */
@@ -379,26 +381,26 @@ void XclImpHFConverter::ParseString( const String& rHFString )
 
                     case 'U':           // underline
                         SetAttribs();
-                        mpFontData->mnUnderline = (mpFontData->mnUnderline == EXC_FONTUNDERL_SINGLE) ?
+                        mxFontData->mnUnderline = (mxFontData->mnUnderline == EXC_FONTUNDERL_SINGLE) ?
                             EXC_FONTUNDERL_NONE : EXC_FONTUNDERL_SINGLE;
                     break;
                     case 'E':           // double underline
                         SetAttribs();
-                        mpFontData->mnUnderline = (mpFontData->mnUnderline == EXC_FONTUNDERL_DOUBLE) ?
+                        mxFontData->mnUnderline = (mxFontData->mnUnderline == EXC_FONTUNDERL_DOUBLE) ?
                             EXC_FONTUNDERL_NONE : EXC_FONTUNDERL_DOUBLE;
                     break;
                     case 'S':           // strikeout
                         SetAttribs();
-                        mpFontData->mbStrikeout = !mpFontData->mbStrikeout;
+                        mxFontData->mbStrikeout = !mxFontData->mbStrikeout;
                     break;
                     case 'X':           // superscript
                         SetAttribs();
-                        mpFontData->mnEscapem = (mpFontData->mnEscapem == EXC_FONTESC_SUPER) ?
+                        mxFontData->mnEscapem = (mxFontData->mnEscapem == EXC_FONTESC_SUPER) ?
                             EXC_FONTESC_NONE : EXC_FONTESC_SUPER;
                     break;
                     case 'Y':           // subsrcipt
                         SetAttribs();
-                        mpFontData->mnEscapem = (mpFontData->mnEscapem == EXC_FONTESC_SUB) ?
+                        mxFontData->mnEscapem = (mxFontData->mnEscapem == EXC_FONTESC_SUB) ?
                             EXC_FONTESC_NONE : EXC_FONTESC_SUB;
                     break;
 
@@ -444,8 +446,8 @@ void XclImpHFConverter::ParseString( const String& rHFString )
                     case '\"':
                         SetAttribs();
                         if( aReadFont.Len() )
-                            mpFontData->maName = aReadFont;
-                        mpFontData->maStyle = aReadStyle;
+                            mxFontData->maName = aReadFont;
+                        mxFontData->maStyle = aReadStyle;
                         eState = xlPSText;
                     break;
                     default:
@@ -473,7 +475,7 @@ void XclImpHFConverter::ParseString( const String& rHFString )
                     if( (nReadHeight != 0) && (nReadHeight != 0xFFFF) )
                     {
                         SetAttribs();
-                        mpFontData->mnHeight = nReadHeight * 20;
+                        mxFontData->mnHeight = nReadHeight * 20;
                     }
                     --pChar;
                     eState = xlPSText;
@@ -483,19 +485,54 @@ void XclImpHFConverter::ParseString( const String& rHFString )
         }
         ++pChar;
     }
+
+    // finalize
     CreateCurrObject();
+    maInfos[ EXC_HF_LEFT   ].mnHeight += GetMaxLineHeight( EXC_HF_LEFT );
+    maInfos[ EXC_HF_CENTER ].mnHeight += GetMaxLineHeight( EXC_HF_CENTER );
+    maInfos[ EXC_HF_RIGHT  ].mnHeight += GetMaxLineHeight( EXC_HF_RIGHT );
 }
 
-void XclImpHFConverter::FillToItemSet( SfxItemSet& rItemSet, sal_uInt16 nWhichId )
+void XclImpHFConverter::FillToItemSet( SfxItemSet& rItemSet, sal_uInt16 nWhichId ) const
 {
     ScPageHFItem aHFItem( nWhichId );
-    if( mppObjs[ 0 ].get() )
-        aHFItem.SetLeftArea( *mppObjs[ 0 ] );
-    if( mppObjs[ 1 ].get() )
-        aHFItem.SetCenterArea( *mppObjs[ 1 ] );
-    if( mppObjs[ 2 ].get() )
-        aHFItem.SetRightArea( *mppObjs[ 2 ] );
+    if( maInfos[ EXC_HF_LEFT ].mxObj.get() )
+        aHFItem.SetLeftArea( *maInfos[ EXC_HF_LEFT ].mxObj );
+    if( maInfos[ EXC_HF_CENTER ].mxObj.get() )
+        aHFItem.SetCenterArea( *maInfos[ EXC_HF_CENTER ].mxObj );
+    if( maInfos[ EXC_HF_RIGHT ].mxObj.get() )
+        aHFItem.SetRightArea( *maInfos[ EXC_HF_RIGHT ].mxObj );
     rItemSet.Put( aHFItem );
+}
+
+sal_Int32 XclImpHFConverter::GetTotalHeight() const
+{
+    return ::std::max( maInfos[ EXC_HF_LEFT ].mnHeight,
+        ::std::max( maInfos[ EXC_HF_CENTER ].mnHeight, maInfos[ EXC_HF_RIGHT ].mnHeight ) );
+}
+
+// private --------------------------------------------------------------------
+
+sal_uInt16 XclImpHFConverter::GetMaxLineHeight( XclImpHFPortion ePortion ) const
+{
+    sal_uInt16 nMaxHt = maInfos[ ePortion ].mnMaxLineHt;
+    return (nMaxHt == 0) ? mxFontData->mnHeight : nMaxHt;
+}
+
+sal_uInt16 XclImpHFConverter::GetCurrMaxLineHeight() const
+{
+    return GetMaxLineHeight( meCurrObj );
+}
+
+void XclImpHFConverter::UpdateMaxLineHeight( XclImpHFPortion ePortion )
+{
+    sal_uInt16& rnMaxHt = maInfos[ ePortion ].mnMaxLineHt;
+    rnMaxHt = ::std::max( rnMaxHt, mxFontData->mnHeight );
+}
+
+void XclImpHFConverter::UpdateCurrMaxLineHeight()
+{
+    UpdateMaxLineHeight( meCurrObj );
 }
 
 void XclImpHFConverter::SetAttribs()
@@ -504,7 +541,7 @@ void XclImpHFConverter::SetAttribs()
     if( (rSel.nStartPara != rSel.nEndPara) || (rSel.nStartPos != rSel.nEndPos) )
     {
         SfxItemSet aItemSet( mrEE.GetEmptyItemSet() );
-        XclImpFont aFont( *this, *mpFontData );
+        XclImpFont aFont( *this, *mxFontData );
         aFont.FillToItemSet( aItemSet, xlFontHFIDs );
         mrEE.QuickSetAttribs( aItemSet, rSel );
         rSel.nStartPara = rSel.nEndPara;
@@ -515,11 +552,11 @@ void XclImpHFConverter::SetAttribs()
 void XclImpHFConverter::ResetFontData()
 {
     if( const XclImpFont* pFirstFont = GetFontBuffer().GetFont( EXC_FONT_APP ) )
-        *mpFontData = pFirstFont->GetFontData();
+        *mxFontData = pFirstFont->GetFontData();
     else
     {
-        mpFontData->Clear();
-        mpFontData->mnHeight = 200;
+        mxFontData->Clear();
+        mxFontData->mnHeight = 200;
     }
 }
 
@@ -531,7 +568,16 @@ void XclImpHFConverter::InsertText()
         mrEE.QuickInsertText( maCurrText, ESelection( rSel.nEndPara, rSel.nEndPos, rSel.nEndPara, rSel.nEndPos ) );
         rSel.nEndPos += maCurrText.Len();
         maCurrText.Erase();
+        UpdateCurrMaxLineHeight();
     }
+}
+
+void XclImpHFConverter::InsertField( const SvxFieldItem& rFieldItem )
+{
+    ESelection& rSel = GetCurrSel();
+    mrEE.QuickInsertField( rFieldItem, ESelection( rSel.nEndPara, rSel.nEndPos, rSel.nEndPara, rSel.nEndPos ) );
+    ++rSel.nEndPos;
+    UpdateCurrMaxLineHeight();
 }
 
 void XclImpHFConverter::InsertLineBreak()
@@ -540,13 +586,8 @@ void XclImpHFConverter::InsertLineBreak()
     mrEE.QuickInsertText( String( '\n' ), ESelection( rSel.nEndPara, rSel.nEndPos, rSel.nEndPara, rSel.nEndPos ) );
     ++rSel.nEndPara;
     rSel.nEndPos = 0;
-}
-
-void XclImpHFConverter::InsertField( const SvxFieldItem& rFieldItem )
-{
-    ESelection& rSel = GetCurrSel();
-    mrEE.QuickInsertField( rFieldItem, ESelection( rSel.nEndPara, rSel.nEndPos, rSel.nEndPara, rSel.nEndPos ) );
-    ++rSel.nEndPos;
+    GetCurrInfo().mnHeight += GetCurrMaxLineHeight();
+    GetCurrInfo().mnMaxLineHt = 0;
 }
 
 void XclImpHFConverter::CreateCurrObject()
@@ -556,12 +597,12 @@ void XclImpHFConverter::CreateCurrObject()
     GetCurrObj().reset( mrEE.CreateTextObject() );
 }
 
-void XclImpHFConverter::SetNewPortion( sal_uInt16 nNew )
+void XclImpHFConverter::SetNewPortion( XclImpHFPortion eNew )
 {
-    if( nNew != mnCurrObj )
+    if( eNew != meCurrObj )
     {
         CreateCurrObject();
-        mnCurrObj = nNew;
+        meCurrObj = eNew;
         if( GetCurrObj().get() )
             mrEE.SetText( *GetCurrObj() );
         else
