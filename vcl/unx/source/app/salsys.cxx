@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:08:33 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,21 +59,50 @@
  *
  ************************************************************************/
 
-#include <salsys.hxx>
 #include <stacktrace.hxx>
-
-#include <stdio.h>
-
 #include <salunx.h>
-#include <saldisp.hxx>
+#include <salsys.hxx>
 #include <dtint.hxx>
 #include <msgbox.hxx>
 #include <button.hxx>
 #include <svdata.hxx>
+#include <salinst.h>
+#include <saldisp.hxx>
+#include <cstdio>
+
+
+class X11SalSystem : public SalSystem
+{
+public:
+    X11SalSystem() {}
+    virtual ~X11SalSystem();
+
+    // overload pure virtual methods
+    virtual String GetSalSummarySystemInfos( ULONG nFlags );
+    virtual bool GetSalSystemDisplayInfo( System::DisplayInfo& rInfo );
+    virtual int ShowNativeDialog( const String& rTitle,
+                                  const String& rMessage,
+                                  const std::list< String >& rButtons,
+                                  int nDefButton );
+    virtual int ShowNativeMessageBox( const String& rTitle,
+                                      const String& rMessage,
+                                      int nButtonCombination,
+                                      int nDefaultButton);
+};
+
+SalSystem* X11SalInstance::CreateSalSystem()
+{
+    return new X11SalSystem();
+}
+
 
 // -----------------------------------------------------------------------
 
-String GetSalSummarySystemInfos( ULONG nFlags )
+X11SalSystem::~X11SalSystem()
+{
+}
+
+String X11SalSystem::GetSalSummarySystemInfos( ULONG nFlags )
 {
     sal_PostMortem aPostMortem;
 
@@ -103,7 +132,7 @@ String GetSalSummarySystemInfos( ULONG nFlags )
     return String( aRet, RTL_TEXTENCODING_ISO_8859_1 );
 }
 
-bool GetSalSystemDisplayInfo( System::DisplayInfo& rInfo )
+bool X11SalSystem::GetSalSystemDisplayInfo( System::DisplayInfo& rInfo )
 {
     bool bSuccess = false;
     Display* pDisplay = XOpenDisplay( NULL );
@@ -128,7 +157,7 @@ bool GetSalSystemDisplayInfo( System::DisplayInfo& rInfo )
     return bSuccess;
 }
 
-int ImplShowNativeDialog( const String& rTitle, const String& rMessage, const std::list< String >& rButtons, int nDefButton )
+int X11SalSystem::ShowNativeDialog( const String& rTitle, const String& rMessage, const std::list< String >& rButtons, int nDefButton )
 {
     int nRet = -1;
 
@@ -136,7 +165,7 @@ int ImplShowNativeDialog( const String& rTitle, const String& rMessage, const st
     if( pSVData->mpIntroWindow )
         pSVData->mpIntroWindow->Hide();
 
-    DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator( NULL );
+    DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator();
     if( pIntegrator->GetDtType() == DtGNOME )
     {
         ByteString aCmdLine( "msgbox-gnome ");
@@ -195,7 +224,7 @@ int ImplShowNativeDialog( const String& rTitle, const String& rMessage, const st
     return nRet;
 }
 
-int ImplShowNativeMessageBox(const String& rTitle, const String& rMessage, int nButtonCombination, int nDefaultButton)
+int X11SalSystem::ShowNativeMessageBox(const String& rTitle, const String& rMessage, int nButtonCombination, int nDefaultButton)
 {
     int nDefButton = 0;
     std::list< String > aButtons;
@@ -245,7 +274,7 @@ int ImplShowNativeMessageBox(const String& rTitle, const String& rMessage, int n
             case SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE: nDefButton = 2;break;
         }
     }
-    int nResult = ImplShowNativeDialog( rTitle, rMessage, aButtons, nDefButton );
+    int nResult = ShowNativeDialog( rTitle, rMessage, aButtons, nDefButton );
 
     return nResult != -1 ? nButtonIds[ nResult ] : 0;
 }
