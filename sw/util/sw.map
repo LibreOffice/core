@@ -8,6 +8,9 @@ SW_1_0 {
         CreateObjSwGlobalDocShellDll;
         InitSwDll;
         DeInitSwDll;
+        component_getImplementationEnvironment;
+        component_writeInfo;
+        component_getFactory;
     local:
         *;
 };
