@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:48:11 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,9 +578,9 @@ Rectangle TabControl::ImplGetTabRect( USHORT nPos, long nWidth, long nHeight )
 
             if ( nLines )
             {
-                long    nDX;
-                long    nModDX;
-                long    nIDX;
+                long    nDX = 0;
+                long    nModDX = 0;
+                long    nIDX = 0;
                 USHORT  i;
                 USHORT  n;
                 long    nLineHeightAry[100];
