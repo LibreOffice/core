@@ -22733,3 +22733,11 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?release@AccessibleControlShape@accessibility@@WFM@AAXXZ
 ?release@AccessibleControlShape@accessibility@@WHE@AAXXZ
 ?release@AccessibleControlShape@accessibility@@WHI@AAXXZ
+?DrawGrid@SdrPageView@@QAEXAAVOutputDevice@@ABVRectangle@@VColor@@@Z
+?GetGridColor@SdrPaintView@@QBE?AVColor@@XZ
+?SetGridColor@SdrPaintView@@QAEXVColor@@@Z
+?getColorConfig@SdrPaintView@@QBEABVColorConfig@svx@@XZ
+?onChangeColorConfig@SdrPaintView@@UAEXXZ
+?SetPosAndSize@?%O:\SRX642\src\svx\source\fmcomp\gridctrl.cxx1250120934@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?setCheckBoxState@?%O:\SRX642\src\svx\source\fmcomp\gridcell.cxx215298226@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx267813241@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
