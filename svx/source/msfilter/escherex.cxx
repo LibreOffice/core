@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-13 14:26:29 $
+ *  last change: $Author: sj $ $Date: 2000-12-15 16:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCE_HPP_
 #include <com/sun/star/drawing/PointSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_HATCH_HPP_
+#include <com/sun/star/drawing/Hatch.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XGRAPHICS_HPP_
 #include <com/sun/star/awt/XGraphics.hpp>
@@ -436,6 +439,24 @@ void EscherPropertyContainer::CreateFillProperties(
             }
             break;
             case ::com::sun::star::drawing::FillStyle_HATCH :
+            {
+                if ( EscherPropertyValueHelper::GetPropertyValue(
+                    aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillHatch" ) ), sal_True ) )
+                {
+                    ::com::sun::star::drawing::Hatch aHatch;
+                    if ( aAny >>= aHatch )
+                    {
+                        sal_uInt32 nFillColor = ImplGetColor( aHatch.Color );
+                        nFillBackColor = nFillColor ^ 0xffffff;
+                        AddOpt( ESCHER_Prop_fillColor, nFillColor );
+
+                        // hatches are not supported by ms
+                        // to do: generate a bitmap or something similar
+
+                    }
+                }
+            }
+            break;
             case ::com::sun::star::drawing::FillStyle_SOLID :
             default:
             {
