@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: ka $ $Date: 2002-02-05 13:10:10 $
+#   last change: $Author: af $ $Date: 2002-12-02 13:19:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,6 +129,7 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         drtxtob1.cxx 	\
         sdruler.cxx 	\
         sdoutl.cxx		\
+        SdOutlinerIterator.cxx \
         frmview.cxx 	\
         clview.cxx		\
         zoomlist.cxx	\
@@ -198,6 +199,7 @@ SLOFILES =	\
         $(SLO)$/drtxtob1.obj	\
         $(SLO)$/sdruler.obj	\
         $(SLO)$/sdoutl.obj  \
+        $(SLO)$/SdOutlinerIterator.obj \
         $(SLO)$/frmview.obj	\
         $(SLO)$/clview.obj  \
         $(SLO)$/zoomlist.obj	\
