@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpgui.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-10 13:56:14 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,7 @@ void BmpApp::Main( )
     }
 
     if( EXIT_NOERROR != cExitCode )
-        raise( SIGABRT );
+        std::raise( SIGABRT );
 
     return;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: g2g.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-01-10 10:08:41 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ void G2GApp::Message( const String& rText, BYTE cExitCode )
 
     ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
     aText.Append( "\r\n" );
-    fprintf( stderr, aText.GetBuffer() );
+    std::fprintf( stderr, aText.GetBuffer() );
 }
 
 // -----------------------------------------------------------------------------
@@ -244,7 +244,7 @@ void G2GApp::Main( )
         ShowUsage();
 
     if( EXIT_NOERROR != cExitCode )
-        raise( SIGABRT );
+        std::raise( SIGABRT );
 }
 
 // ---------------
