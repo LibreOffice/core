@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-20 09:35:42 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ namespace cppu
 //  ----------------------------------------------------
 //  class OComponentHelper
 //  ----------------------------------------------------
-OComponentHelper::OComponentHelper( Mutex & rMutex )
+OComponentHelper::OComponentHelper( Mutex & rMutex ) SAL_THROW( () )
     : rBHelper( rMutex )
 {
 }
@@ -88,7 +88,7 @@ OComponentHelper::OComponentHelper( Mutex & rMutex )
 /**
  * Call dispose if not previous called.
  */
-OComponentHelper::~OComponentHelper()
+OComponentHelper::~OComponentHelper() SAL_THROW( (RuntimeException) )
 {
 }
 
@@ -191,7 +191,8 @@ void OComponentHelper::dispose()
 }
 
 // XComponent
-void OComponentHelper::addEventListener(const Reference<XEventListener > & rxListener)
+void OComponentHelper::addEventListener(
+    const Reference<XEventListener > & rxListener )
     throw(::com::sun::star::uno::RuntimeException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
@@ -205,7 +206,8 @@ void OComponentHelper::addEventListener(const Reference<XEventListener > & rxLis
 }
 
 // XComponent
-void OComponentHelper::removeEventListener(const Reference<XEventListener > & rxListener)
+void OComponentHelper::removeEventListener(
+    const Reference<XEventListener > & rxListener )
     throw(::com::sun::star::uno::RuntimeException)
 {
     rBHelper.removeListener( ::getCppuType( &rxListener ) , rxListener );

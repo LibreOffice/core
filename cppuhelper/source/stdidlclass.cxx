@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdidlclass.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:10 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ public:
                     const OUString & sImplementationName ,
                     const Reference < XIdlClass > & rSuperClass,
                     const Sequence < OUString > &seq
-                );
+                ) SAL_THROW( () );
 
     // XInterface
     Any                 SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
@@ -98,7 +98,8 @@ public:
     void                SAL_CALL release()                       { OWeakObject::release(); }
 
     // XIdlClassProvider
-    Sequence< Reference < XIdlClass > > SAL_CALL getIdlClasses(void);
+    Sequence< Reference < XIdlClass > > SAL_CALL getIdlClasses(void)
+        throw (RuntimeException);
 
     // XIdlClass
     virtual Sequence< Reference< XIdlClass > > SAL_CALL getClasses(  ) throw(RuntimeException)
@@ -146,7 +147,7 @@ OStdIdlClass::OStdIdlClass(
                     const OUString & sImplementationName ,
                     const Reference < XIdlClass > & rSuperClass,
                     const Sequence < OUString > &seq
-                          ) :
+                          ) SAL_THROW( () ) :
                 m_rSMgr( rSMgr ) ,
                 m_sImplementationName( sImplementationName ) ,
                 m_seqSupportedInterface( seq )
@@ -192,6 +193,7 @@ Sequence< Reference< XIdlClass > > SAL_CALL OStdIdlClass::getInterfaces(  ) thro
 
 // XIdlClassProvider
 Sequence< Reference < XIdlClass > > SAL_CALL OStdIdlClass::getIdlClasses(void)
+    throw (RuntimeException)
 {
     // weak reference to cache the standard class
     static WeakReference< XIdlClass >   weakRef;
@@ -225,6 +227,7 @@ XIdlClass *  SAL_CALL createStandardClassWithSequence(
                     const OUString & sImplementationName ,
                     const Reference < XIdlClass > & rSuperClass,
                     const Sequence < OUString > &seqInterfaceNames )
+    SAL_THROW( () )
 {
     return SAL_STATIC_CAST(
                         XIdlClass * ,

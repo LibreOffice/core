@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-10-06 15:15:09 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ using namespace com::sun::star::lang;
 namespace cppu
 {
 //==================================================================================================
-Mutex & SAL_CALL getImplHelperInitMutex(void)
+Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW( () )
 {
     static Mutex * s_pMutex = 0;
     if (! s_pMutex)
@@ -97,7 +97,7 @@ Mutex & SAL_CALL getImplHelperInitMutex(void)
 
 // ClassDataBase
 //__________________________________________________________________________________________________
-ClassDataBase::ClassDataBase()
+ClassDataBase::ClassDataBase() SAL_THROW( () )
     : bOffsetsInit( sal_False )
     , nType2Offset( 0 )
     , nClassCode( 0 )
@@ -106,7 +106,7 @@ ClassDataBase::ClassDataBase()
 {
 }
 //__________________________________________________________________________________________________
-ClassDataBase::ClassDataBase( sal_Int32 nClassCode_ )
+ClassDataBase::ClassDataBase( sal_Int32 nClassCode_ ) SAL_THROW( () )
     : bOffsetsInit( sal_False )
     , nType2Offset( 0 )
     , nClassCode( nClassCode_ )
@@ -115,7 +115,7 @@ ClassDataBase::ClassDataBase( sal_Int32 nClassCode_ )
 {
 }
 //__________________________________________________________________________________________________
-ClassDataBase::~ClassDataBase()
+ClassDataBase::~ClassDataBase() SAL_THROW( () )
 {
     delete pTypes;
     delete pId;
@@ -129,7 +129,7 @@ ClassDataBase::~ClassDataBase()
 
 // ClassData
 //__________________________________________________________________________________________________
-void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset )
+void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset ) SAL_THROW( () )
 {
     arType2Offset[nType2Offset].nOffset = nOffset;
 
@@ -149,7 +149,7 @@ void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset )
 #endif
 }
 //__________________________________________________________________________________________________
-void ClassData::initTypeProvider()
+void ClassData::initTypeProvider() SAL_THROW( () )
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if (! pTypes)
@@ -190,14 +190,14 @@ void ClassData::initTypeProvider()
     }
 }
 //__________________________________________________________________________________________________
-Sequence< Type > ClassData::getTypes()
+Sequence< Type > ClassData::getTypes() SAL_THROW( () )
 {
     if (! pTypes)
         initTypeProvider();
     return *pTypes;
 }
 //__________________________________________________________________________________________________
-Sequence< sal_Int8 > ClassData::getImplementationId()
+Sequence< sal_Int8 > ClassData::getImplementationId() SAL_THROW( () )
 {
     if (! pTypes)
         initTypeProvider();
@@ -205,15 +205,16 @@ Sequence< sal_Int8 > ClassData::getImplementationId()
 }
 
 //--------------------------------------------------------------------------------------------------
-static inline sal_Bool td_equals( typelib_TypeDescription * pTD,
-                         typelib_TypeDescriptionReference * pType )
+static inline sal_Bool td_equals(
+    typelib_TypeDescription * pTD, typelib_TypeDescriptionReference * pType )
+    SAL_THROW( () )
 {
     return (pTD->pWeakRef == pType ||
             (pTD->pTypeName->length == pType->pTypeName->length &&
              rtl_ustr_compare( pTD->pTypeName->buffer, pType->pTypeName->buffer ) == 0));
 }
 //__________________________________________________________________________________________________
-Any ClassData::query( const Type & rType, XTypeProvider * pBase )
+Any ClassData::query( const Type & rType, XTypeProvider * pBase ) SAL_THROW( () )
 {
     if (rType == ::getCppuType( (const Reference< XInterface > *)0 ))
         return Any( &pBase, ::getCppuType( (const Reference< XInterface > *)0 ) );

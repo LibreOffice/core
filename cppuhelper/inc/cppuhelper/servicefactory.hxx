@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 13:21:08 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,11 +100,12 @@ namespace cppu
  *                              path.
  */
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
-    createRegistryServiceFactory( const ::rtl::OUString & rWriteRegistryFile,
-                                  const ::rtl::OUString & rReadRegistryFile,
-                                  sal_Bool bReadOnly = sal_False,
-                                  const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
-        throw( ::com::sun::star::uno::Exception );
+createRegistryServiceFactory(
+    const ::rtl::OUString & rWriteRegistryFile,
+    const ::rtl::OUString & rReadRegistryFile,
+    sal_Bool bReadOnly = sal_False,
+    const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
+    SAL_THROW( (::com::sun::star::uno::Exception) );
 
 
 /**
@@ -117,10 +118,11 @@ namespace cppu
  *                              will not be created if not exist.
  */
 inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
-    createRegistryServiceFactory( const ::rtl::OUString & rRegistryFile,
-                                  sal_Bool bReadOnly = sal_False,
-                                  const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
-        throw( ::com::sun::star::uno::Exception )
+createRegistryServiceFactory(
+    const ::rtl::OUString & rRegistryFile,
+    sal_Bool bReadOnly = sal_False,
+    const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
+    SAL_THROW( (::com::sun::star::uno::Exception) )
 {
     return ::cppu::createRegistryServiceFactory( rRegistryFile, ::rtl::OUString(), bReadOnly, rBootstrapPath );
 }
@@ -130,8 +132,9 @@ inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFa
  * This bootstraps a service factory without initialize a registry.
  */
 inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
-    createServiceFactory(const ::rtl::OUString & rBootstrapPath = ::rtl::OUString())
-        throw( ::com::sun::star::uno::Exception )
+createServiceFactory(
+    const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
+    SAL_THROW( (::com::sun::star::uno::Exception) )
 {
     return ::cppu::createRegistryServiceFactory( ::rtl::OUString(), ::rtl::OUString(), sal_False, rBootstrapPath );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeprovider.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:10 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,12 +69,12 @@ namespace cppu
 {
 
 //__________________________________________________________________________________________________
-OImplementationId::~OImplementationId()
+OImplementationId::~OImplementationId() SAL_THROW( () )
 {
     delete _pSeq;
 }
 //__________________________________________________________________________________________________
-Sequence< sal_Int8 > OImplementationId::getImplementationId() const
+Sequence< sal_Int8 > OImplementationId::getImplementationId() const SAL_THROW( () )
 {
     if (! _pSeq)
     {
@@ -91,6 +91,7 @@ Sequence< sal_Int8 > OImplementationId::getImplementationId() const
 
 //--------------------------------------------------------------------------------------------------
 static inline void copy( Sequence< Type > & rDest, const Sequence< Type > & rSource, sal_Int32 nOffset )
+    SAL_THROW( () )
 {
     Type * pDest = rDest.getArray();
     const Type * pSource = rSource.getConstArray();
@@ -103,6 +104,7 @@ static inline void copy( Sequence< Type > & rDest, const Sequence< Type > & rSou
 OTypeCollection::OTypeCollection(
     const Type & rType1,
     const Sequence< Type > & rAddTypes )
+    SAL_THROW( () )
     : _aTypes( 1 + rAddTypes.getLength() )
 {
     _aTypes[0] = rType1;
@@ -113,6 +115,7 @@ OTypeCollection::OTypeCollection(
     const Type & rType1,
     const Type & rType2,
     const Sequence< Type > & rAddTypes )
+    SAL_THROW( () )
     : _aTypes( 2 + rAddTypes.getLength() )
 {
     _aTypes[0] = rType1;
@@ -125,6 +128,7 @@ OTypeCollection::OTypeCollection(
     const Type & rType2,
     const Type & rType3,
     const Sequence< Type > & rAddTypes )
+    SAL_THROW( () )
     : _aTypes( 3 + rAddTypes.getLength() )
 {
     _aTypes[0] = rType1;
@@ -139,6 +143,7 @@ OTypeCollection::OTypeCollection(
     const Type & rType3,
     const Type & rType4,
     const Sequence< Type > & rAddTypes )
+    SAL_THROW( () )
     : _aTypes( 4 + rAddTypes.getLength() )
 {
     _aTypes[0] = rType1;
@@ -155,6 +160,7 @@ OTypeCollection::OTypeCollection(
     const Type & rType4,
     const Type & rType5,
     const Sequence< Type > & rAddTypes )
+    SAL_THROW( () )
     : _aTypes( 5 + rAddTypes.getLength() )
 {
     _aTypes[0] = rType1;
@@ -173,6 +179,7 @@ OTypeCollection::OTypeCollection(
     const Type & rType5,
     const Type & rType6,
     const Sequence< Type > & rAddTypes )
+    SAL_THROW( () )
     : _aTypes( 6 + rAddTypes.getLength() )
 {
     _aTypes[0] = rType1;
@@ -193,6 +200,7 @@ OTypeCollection::OTypeCollection(
     const Type & rType6,
     const Type & rType7,
     const Sequence< Type > & rAddTypes )
+    SAL_THROW( () )
     : _aTypes( 7 + rAddTypes.getLength() )
 {
     _aTypes[0] = rType1;
@@ -215,6 +223,7 @@ OTypeCollection::OTypeCollection(
     const Type & rType7,
     const Type & rType8,
     const Sequence< Type > & rAddTypes )
+    SAL_THROW( () )
     : _aTypes( 8 + rAddTypes.getLength() )
 {
     _aTypes[0] = rType1;
@@ -239,6 +248,7 @@ OTypeCollection::OTypeCollection(
     const Type & rType8,
     const Type & rType9,
     const Sequence< Type > & rAddTypes )
+    SAL_THROW( () )
     : _aTypes( 9 + rAddTypes.getLength() )
 {
     _aTypes[0] = rType1;
@@ -265,6 +275,7 @@ OTypeCollection::OTypeCollection(
     const Type & rType9,
     const Type & rType10,
     const Sequence< Type > & rAddTypes )
+    SAL_THROW( () )
     : _aTypes( 10 + rAddTypes.getLength() )
 {
     _aTypes[0] = rType1;
@@ -293,6 +304,7 @@ OTypeCollection::OTypeCollection(
     const Type & rType10,
     const Type & rType11,
     const Sequence< Type > & rAddTypes )
+    SAL_THROW( () )
     : _aTypes( 11 + rAddTypes.getLength() )
 {
     _aTypes[0] = rType1;
@@ -323,6 +335,7 @@ OTypeCollection::OTypeCollection(
     const Type & rType11,
     const Type & rType12,
     const Sequence< Type > & rAddTypes )
+    SAL_THROW( () )
     : _aTypes( 12 + rAddTypes.getLength() )
 {
     _aTypes[0] = rType1;

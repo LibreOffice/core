@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-19 14:59:20 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ SAL_CALL loadSharedLibComponentFactory(
     ::rtl::OUString const & rImplName,
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
     ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey )
-    throw (::com::sun::star::loader::CannotActivateFactoryException);
+    SAL_THROW( (::com::sun::star::loader::CannotActivateFactoryException) );
 
 /** Invokes component_writeInfo() function of specified component library.
     You can give either a fully qualified libname or single lib name.
@@ -122,7 +122,7 @@ SAL_CALL writeSharedLibComponentInfo(
     ::rtl::OUString const & rLibName, ::rtl::OUString const & rPath,
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
     ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey )
-    throw (::com::sun::star::registry::CannotRegisterImplementationException);
+    SAL_THROW( (::com::sun::star::registry::CannotRegisterImplementationException) );
 
 } // end namespace cppu
 

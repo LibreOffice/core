@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-06 16:00:30 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ protected: \
     virtual void SAL_CALL disposing() \
         {} \
 public: \
-    WeakComponentImplHelper##N( ::osl::Mutex & rMutex ) \
+    WeakComponentImplHelper##N( ::osl::Mutex & rMutex ) SAL_THROW( () ) \
         : rBHelper( rMutex ) \
         {} \
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) \
@@ -154,7 +154,7 @@ protected: \
     virtual void SAL_CALL disposing() \
         {} \
 public: \
-    WeakAggComponentImplHelper##N( ::osl::Mutex & rMutex ) \
+    WeakAggComponentImplHelper##N( ::osl::Mutex & rMutex ) SAL_THROW( () ) \
         : rBHelper( rMutex ) \
         {} \
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) \

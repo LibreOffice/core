@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pluby $ $Date: 2001-02-10 17:52:00 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ namespace cppu
 
 #ifdef DEBUG
 //==================================================================================================
-static inline void out( const char * p ) throw ()
+static inline void out( const char * p ) SAL_THROW( () )
 {
     ::fprintf( stderr, p );
 }
@@ -101,7 +101,7 @@ static inline void out( const OUString & r ) throw ()
 #endif
 
 //==================================================================================================
-static const ::std::vector< OUString > * getAccessDPath() throw ()
+static const ::std::vector< OUString > * getAccessDPath() SAL_THROW( () )
 {
     static ::std::vector< OUString > * s_p = 0;
     static bool s_bInit = false;
@@ -143,6 +143,13 @@ static const ::std::vector< OUString > * getAccessDPath() throw ()
 #endif
                 s_p = & s_v;
             }
+            else
+            {
+                // no access path env set
+#ifdef DEBUG
+                out( "=> no CPLD_ACCESSPATH set.\n" );
+#endif
+            }
             s_bInit = true;
         }
     }
@@ -153,12 +160,6 @@ static const ::std::vector< OUString > * getAccessDPath() throw ()
 //==================================================================================================
 static bool checkAccessPath( OUString * pComp ) throw ()
 {
-#ifdef DEBUG
-    out( "> trying to access module: \"" );
-    out( *pComp );
-    out( "\"\n" );
-#endif
-
     const ::std::vector< OUString > * pPath = getAccessDPath();
 
     if (pPath)
@@ -221,15 +222,12 @@ static bool checkAccessPath( OUString * pComp ) throw ()
     else
     {
         // no access path env set
-#ifdef DEBUG
-        out( "=> no CPLD_ACCESSPATH set.\n" );
-#endif
         return true;
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-static inline sal_Int32 endsWith( const OUString & rText, const OUString & rEnd ) throw ()
+static inline sal_Int32 endsWith( const OUString & rText, const OUString & rEnd ) SAL_THROW( () )
 {
     if (rText.getLength() >= rEnd.getLength() &&
         rEnd.equalsIgnoreCase( rText.copy( rText.getLength() - rEnd.getLength() ) ))
@@ -239,9 +237,7 @@ static inline sal_Int32 endsWith( const OUString & rText, const OUString & rEnd 
     return -1;
 }
 //==================================================================================================
-static OUString makeComponentPath(
-    const OUString & rLibName, const OUString & rPath
-    ) throw ()
+static OUString makeComponentPath( const OUString & rLibName, const OUString & rPath ) SAL_THROW( () )
 {
     OUStringBuffer buf( rPath.getLength() + 32 );
 
@@ -307,7 +303,7 @@ Reference< XSingleServiceFactory > SAL_CALL loadSharedLibComponentFactory(
     OUString const & rImplName,
     Reference< XMultiServiceFactory > const & xMgr,
     Reference< XRegistryKey > const & xKey )
-    throw (CannotActivateFactoryException)
+    SAL_THROW( (CannotActivateFactoryException) )
 {
     OUString aModulePath( makeComponentPath( rLibName, rPath ) );
 
@@ -451,7 +447,9 @@ Reference< XSingleServiceFactory > SAL_CALL loadSharedLibComponentFactory(
     {
         ::osl_unloadModule( lib );
 #ifdef DEBUG
+        out( "### cannot activate factory: " );
         out( aExcMsg );
+        out( "\n" );
 #endif
         throw CannotActivateFactoryException( aExcMsg, Reference< XInterface >() );
     }
@@ -464,7 +462,7 @@ void SAL_CALL writeSharedLibComponentInfo(
     OUString const & rLibName, OUString const & rPath,
     Reference< XMultiServiceFactory > const & xMgr,
     Reference< XRegistryKey > const & xKey )
-    throw (CannotRegisterImplementationException)
+    SAL_THROW( (CannotRegisterImplementationException) )
 {
     OUString aModulePath( makeComponentPath( rLibName, rPath ) );
 
@@ -603,7 +601,9 @@ void SAL_CALL writeSharedLibComponentInfo(
     {
         ::osl_unloadModule( lib );
 #ifdef DEBUG
+        out( "### cannot write component info: " );
         out( aExcMsg );
+        out( "\n" );
 #endif
         throw CannotRegisterImplementationException( aExcMsg, Reference< XInterface >() );
     }

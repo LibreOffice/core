@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proptypehlp.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:09 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,14 @@ namespace cppu {
 
 template < class target >
 inline void SAL_CALL convertPropertyValue( target &value , const  ::com::sun::star::uno::Any & a);
-//      throw (::com::sun::star::lang::IllegalArgumentException);
+//      SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
+        ;
 
 // This template is needed at least for msci4 compiler
 template < class target >
 inline void SAL_CALL convertPropertyValue( target &value ,  ::com::sun::star::uno::Any & a);
-//      throw (::com::sun::star::lang::IllegalArgumentException);
+//      SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
+        ;
 
 /****
 *
@@ -90,25 +92,25 @@ inline void SAL_CALL convertPropertyValue( target &value ,  ::com::sun::star::un
 *
 *****/
 inline void SAL_CALL convertPropertyValue( sal_Int64 & target ,  const ::com::sun::star::uno::Any & source )
-    throw (::com::sun::star::lang::IllegalArgumentException);
+    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 inline void SAL_CALL convertPropertyValue( sal_uInt64 & target, const ::com::sun::star::uno::Any & source )
-    throw (::com::sun::star::lang::IllegalArgumentException);
+    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 inline void SAL_CALL convertPropertyValue( sal_Int32 & target , const ::com::sun::star::uno::Any & source )
-    throw (::com::sun::star::lang::IllegalArgumentException);
+    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 inline void SAL_CALL convertPropertyValue( sal_uInt32 & target, const ::com::sun::star::uno::Any & source )
-    throw (::com::sun::star::lang::IllegalArgumentException);
+    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 inline void SAL_CALL convertPropertyValue( sal_Int16 & target , const ::com::sun::star::uno::Any & source )
-    throw( ::com::sun::star::lang::IllegalArgumentException);
+    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 inline void SAL_CALL convertPropertyValue( sal_uInt16 & target, const ::com::sun::star::uno::Any & source )
-    throw( ::com::sun::star::lang::IllegalArgumentException);
+    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 inline void SAL_CALL convertPropertyValue( sal_Int8 & target     , const ::com::sun::star::uno::Any & source )
-    throw( ::com::sun::star::lang::IllegalArgumentException);
+    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 inline void SAL_CALL convertPropertyValue( float & target     , const ::com::sun::star::uno::Any & source )
-    throw( ::com::sun::star::lang::IllegalArgumentException);
+    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 inline void SAL_CALL convertPropertyValue( double &target     , const ::com::sun::star::uno::Any &source )
-    throw( ::com::sun::star::lang::IllegalArgumentException);
+    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 inline void SAL_CALL convertPropertyValue( ::rtl::OUString &target  , const ::com::sun::star::uno::Any &source )
-    throw( ::com::sun::star::lang::IllegalArgumentException);
+    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 
 } // end namespace cppu
 

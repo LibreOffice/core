@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-10-06 15:15:09 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,25 +92,29 @@ struct ClassDataBase
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > * pTypes;
     ::com::sun::star::uno::Sequence< sal_Int8 > * pId;
 
-    ClassDataBase();
-    ClassDataBase( sal_Int32 nClassCode );
-    ~ClassDataBase();
+    ClassDataBase() SAL_THROW( () );
+    ClassDataBase( sal_Int32 nClassCode ) SAL_THROW( () );
+    ~ClassDataBase() SAL_THROW( () );
 };
 struct ClassData : public ClassDataBase
 {
     Type_Offset arType2Offset[1];
 
-    void SAL_CALL initTypeProvider();
-    void SAL_CALL writeTypeOffset( const ::com::sun::star::uno::Type & rType, sal_Int32 nOffset );
+    void SAL_CALL initTypeProvider() SAL_THROW( () );
+    void SAL_CALL writeTypeOffset( const ::com::sun::star::uno::Type & rType, sal_Int32 nOffset )
+        SAL_THROW( () );
 
     ::com::sun::star::uno::Any SAL_CALL query(
-        const ::com::sun::star::uno::Type & rType, ::com::sun::star::lang::XTypeProvider * pBase );
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes();
-    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId();
+        const ::com::sun::star::uno::Type & rType, ::com::sun::star::lang::XTypeProvider * pBase )
+        SAL_THROW( () );
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
+        SAL_THROW( () );
+    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        SAL_THROW( () );
 };
 
 //==================================================================================================
-::osl::Mutex & SAL_CALL getImplHelperInitMutex(void);
+::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW( () );
 }
 
 //
@@ -124,7 +128,7 @@ namespace cppu \
 struct ClassData##N : public ClassDataBase \
 { \
     Type_Offset arType2Offset[ N ]; \
-    ClassData##N( sal_Int32 nClassCode ) \
+    ClassData##N( sal_Int32 nClassCode ) SAL_THROW( () ) \
         : ClassDataBase( nClassCode ) \
         {} \
 }; \
@@ -133,7 +137,7 @@ class ImplHelperBase##N \
     : public ::com::sun::star::lang::XTypeProvider, __PUBLIC_IFC##N \
 { \
 protected: \
-    ClassData & SAL_CALL getClassData( ClassDataBase & s_aCD ) \
+    ClassData & SAL_CALL getClassData( ClassDataBase & s_aCD ) SAL_THROW( () ) \
     { \
         ClassData & rCD = * static_cast< ClassData * >( &s_aCD ); \
         if (! rCD.bOffsetsInit) \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propshlp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 09:40:45 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,14 @@ class IPropertyArrayHelper
 {
 public:
     // these are here to force memory de/allocation to sal lib.
-    static void * SAL_CALL operator new( size_t nSize ) throw()
+    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    static void SAL_CALL operator delete( void * pMem ) throw()
+    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
+    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
+        { return pMem; }
+    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
+        {}
 
     /**
      * Folowing the rule, the first virtual method impies the virtual destructor.
@@ -157,9 +161,11 @@ public:
      * @param nElements is the number of properties in the pProps structure.
      * @param bSorted   indicates that the elements are sorted.
       *********/
-    OPropertyArrayHelper( ::com::sun::star::beans::Property *pProps,
-                          sal_Int32 nElements ,
-                          sal_Bool bSorted = sal_True );
+    OPropertyArrayHelper(
+        ::com::sun::star::beans::Property *pProps,
+        sal_Int32 nElements ,
+        sal_Bool bSorted = sal_True )
+        SAL_THROW( () );
 
      /*********
      * Create an object which supports the common property interfaces.
@@ -167,12 +173,15 @@ public:
      *                   The sequence aProps should be sorted.
      * @param bSorted    indicates that the elements are sorted.
      *********/
-    OPropertyArrayHelper( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > & aProps,
-                          sal_Bool bSorted = sal_True );
+    OPropertyArrayHelper(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > & aProps,
+        sal_Bool bSorted = sal_True )
+        SAL_THROW( () );
+
     /**
      * Return the number of properties.
      */
-    sal_Int32 SAL_CALL getCount() const;
+    sal_Int32 SAL_CALL getCount() const SAL_THROW( () );
     /**
      * Return the property members Name and Attribute from the handle nHandle.
      * @param nHandle   the handle of a property. If the values of the handles
@@ -190,37 +199,38 @@ public:
     /**
      * Return the sequence of properties. The sequence is sorted by name.
      */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(void);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(void);
     /**
      * Return the property with the name rPropertyName.
      * @param rPropertyName the name of the property.
      * @exception UnknownPropertyException  thrown if the property name is unknown.
      */
-    ::com::sun::star::beans::Property SAL_CALL getPropertyByName(const ::rtl::OUString& rPropertyName)
+    virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName(
+        const ::rtl::OUString& rPropertyName )
         throw (::com::sun::star::beans::UnknownPropertyException);
     /**
      * Return true if the property with the name rPropertyName exist, otherwise false.
      * @param rPropertyName the name of the property.
      */
-    sal_Bool SAL_CALL hasPropertyByName(const ::rtl::OUString& rPropertyName);
+    virtual sal_Bool SAL_CALL hasPropertyByName(const ::rtl::OUString& rPropertyName);
     /**
      * Return the handle of the property with the name rPropertyName.
      * If the property does not exist -1 is returned.
      * @param rPropertyName the name of the property.
      */
-    sal_Int32 SAL_CALL getHandleByName( const ::rtl::OUString & rPropertyName );
+    virtual sal_Int32 SAL_CALL getHandleByName( const ::rtl::OUString & rPropertyName );
     /**
      * Fill the array with the handles of the properties.
      * @return the handles of the names from the pHandles array. -1
      * indicates an unknown property name.
      */
-    sal_Int32 SAL_CALL fillHandles(
+    virtual sal_Int32 SAL_CALL fillHandles(
         /*out*/sal_Int32 * pHandles, const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rPropNames );
 private:
-    void init( sal_Bool bSorted );
+    void init( sal_Bool bSorted ) SAL_THROW( () );
 
     /** The sequence generstet from the pProperties array. */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >        aInfos;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aInfos;
     /**
      * True, If the values of the handles are sorted in the same way as the names
      * and the highest handle value is getCount() -1, otherwise false.
@@ -255,14 +265,14 @@ private:
 
 struct equalInt32_Impl
 {
-    bool operator()(const sal_Int32 & i1 , const sal_Int32 & i2) const
+    bool operator()(const sal_Int32 & i1 , const sal_Int32 & i2) const SAL_THROW( () )
         { return i1 == i2; }
 };
 
 
 struct hashInt32_Impl
 {
-    size_t operator()(const sal_Int32 & i) const
+    size_t operator()(const sal_Int32 & i) const SAL_THROW( () )
         { return i; }
 };
 typedef OMultiTypeInterfaceContainerHelperVar< sal_Int32, hashInt32_Impl, equalInt32_Impl >
@@ -282,18 +292,19 @@ public:
      *                  The lifetime must be longer as the lifetime
      *                  of this object. Stored in the variable rBHelper.
      */
-    OPropertySetHelper( OBroadcastHelper & rBHelper );
+    OPropertySetHelper( OBroadcastHelper & rBHelper ) SAL_THROW( () );
     /**
      * You must call disposing before destruction.
      */
-    ~OPropertySetHelper();
+    ~OPropertySetHelper() SAL_THROW( () );
 
     /**
      * Only return a reference to XMultiPropertySet, XFastPropertySet, XPropertySet and
      * XEventListener.
      * <B>Do not return a reference to XInterface.</B>
      */
-    ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType );
+    ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
+        throw (::com::sun::star::uno::RuntimeException);
 
     /**
      * Send a disposing notification to the listeners in the conatiners aBoundLC
@@ -301,7 +312,7 @@ public:
      *
      * @see OComponentHelper
      */
-    void SAL_CALL disposing();
+    void SAL_CALL disposing() SAL_THROW( () );
 
     // XPropertySet
     //XPropertySetInfoRef getPropertySetInfo() const;
@@ -310,32 +321,34 @@ public:
      * rPropertyName does not exist or is readonly. Otherwise rPropertyName is changed to its handle
      * value and setFastPropertyValue is called.
      */
-    void SAL_CALL setPropertyValue(const ::rtl::OUString& rPropertyName, const ::com::sun::star::uno::Any& aValue);
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& rPropertyName, const ::com::sun::star::uno::Any& aValue )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     /**
      * Throw UnknownPropertyException if the property with the name
      * rPropertyName does not exist.
      */
-    ::com::sun::star::uno::Any SAL_CALL getPropertyValue(const ::rtl::OUString& aPropertyName);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(const ::rtl::OUString& aPropertyName)
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     /** Ignored if the property is not bound. */
-    void SAL_CALL addPropertyChangeListener(
+    virtual void SAL_CALL addPropertyChangeListener(
         const ::rtl::OUString& aPropertyName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener)
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     /** Ignored if the property is not bound. */
-    void SAL_CALL removePropertyChangeListener(
+    virtual void SAL_CALL removePropertyChangeListener(
         const ::rtl::OUString& aPropertyName,
         const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertyChangeListener >& aListener)
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     /** Ignored if the property is not constrained. */
-    void SAL_CALL addVetoableChangeListener(
+    virtual void SAL_CALL addVetoableChangeListener(
         const ::rtl::OUString& aPropertyName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener)
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     /** Ignored if the property is not constrained. */
-    void SAL_CALL removeVetoableChangeListener(
+    virtual void SAL_CALL removeVetoableChangeListener(
         const ::rtl::OUString& aPropertyName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & aListener )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -348,38 +361,44 @@ public:
      * is changed with the setFastPropertyValue_NoBroadcast method and the bound listeners are
      * notified.
      */
-    void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
+    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     /**
      * Throw UnknownPropertyException if the property with the handle
      * nHandle does not exist.
      */
-    ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle )
+    virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XMultiPropertySet
-    void SAL_CALL setPropertyValues(
+    virtual void SAL_CALL setPropertyValues(
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values );
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values )
+        throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyValues(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyValues(
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames )
+        throw(::com::sun::star::uno::RuntimeException);
 
-    void SAL_CALL addPropertiesChangeListener(
+    virtual void SAL_CALL addPropertiesChangeListener(
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& Listener );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& Listener )
+        throw(::com::sun::star::uno::RuntimeException);
 
-    void SAL_CALL removePropertiesChangeListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& Listener );
-    void SAL_CALL firePropertiesChangeEvent(
+    virtual void SAL_CALL removePropertiesChangeListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& Listener )
+        throw(::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL firePropertiesChangeEvent(
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener > & Listener );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener > & Listener )
+        throw(::com::sun::star::uno::RuntimeException);
     /**
      * The property sequence is create in the call. The interface isn't used after the call.
      */
-    static ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo >
-        SAL_CALL createPropertySetInfo( IPropertyArrayHelper & rProperties );
+    static ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+        createPropertySetInfo( IPropertyArrayHelper & rProperties ) SAL_THROW( () );
 protected:
     /**
      * This method fire events to all registered property listeners.
@@ -390,11 +409,12 @@ protected:
      * @param bVetoable true means fire to VetoableChangeListener, false means fire to
      *          XPropertyChangedListener and XMultiPropertyChangedListener.
      */
-    void SAL_CALL fire( sal_Int32 * pnHandles,
-                        const ::com::sun::star::uno::Any * pNewValues,
-                        const ::com::sun::star::uno::Any * pOldValues,
-                        sal_Int32 nCount,
-                        sal_Bool bVetoable );
+    void SAL_CALL fire(
+        sal_Int32 * pnHandles,
+        const ::com::sun::star::uno::Any * pNewValues,
+        const ::com::sun::star::uno::Any * pOldValues,
+        sal_Int32 nCount,
+        sal_Bool bVetoable );
 
     /**
      * Set multible properties with the handles.
@@ -405,11 +425,12 @@ protected:
      * @param pValues the values of the properties.
      * @param nHitCount the number of valid entries in the handle array.
      */
-    void SAL_CALL setFastPropertyValues( sal_Int32 nSeqLen,
-                                         sal_Int32 * pHandles,
-                                         const ::com::sun::star::uno::Any * pValues,
-                                         sal_Int32 nHitCount )
-        throw (::com::sun::star::uno::Exception);
+    void SAL_CALL setFastPropertyValues(
+        sal_Int32 nSeqLen,
+        sal_Int32 * pHandles,
+        const ::com::sun::star::uno::Any * pValues,
+        sal_Int32 nHitCount )
+        SAL_THROW( (::com::sun::star::uno::Exception) );
 
     /**
      * This abstract method must return the name to index table. This table contains all property
@@ -468,8 +489,8 @@ protected:
      */
     OMultiTypeInterfaceContainerHelperInt32 aVetoableLC;
 private:
-    OPropertySetHelper( const OPropertySetHelper & );
-    OPropertySetHelper &    operator = ( const OPropertySetHelper & );
+    OPropertySetHelper( const OPropertySetHelper & ) SAL_THROW( () );
+    OPropertySetHelper &    operator = ( const OPropertySetHelper & ) SAL_THROW( () );
 };
 
 } // end namespace cppuhelper

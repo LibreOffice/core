@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-02-05 13:21:38 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ namespace cppu
  * Reallocate the sequence.
  */
 static void realloc( Sequence< Reference< XInterface > > & rSeq, sal_Int32 nNewLen )
+    SAL_THROW( () )
 {
     Sequence< Reference< XInterface > > aNewSeq( nNewLen );
     Reference< XInterface > * pDest = aNewSeq.getArray();
@@ -100,6 +101,7 @@ static void realloc( Sequence< Reference< XInterface > > & rSeq, sal_Int32 nNewL
  * Remove an element from an interface sequence.
  */
 static void sequenceRemoveElementAt( Sequence< Reference< XInterface > > & rSeq, sal_Int32 index )
+    SAL_THROW( () )
 {
     sal_Int32 nNewLen = rSeq.getLength() - 1;
 
@@ -127,6 +129,7 @@ static void sequenceRemoveElementAt( Sequence< Reference< XInterface > > & rSeq,
 //===================================================================
 //===================================================================
 OInterfaceIteratorHelper::OInterfaceIteratorHelper( OInterfaceContainerHelper & rCont_ )
+    SAL_THROW( () )
     : rCont( rCont_ )
 {
     MutexGuard aGuard( rCont.rMutex );
@@ -149,7 +152,7 @@ OInterfaceIteratorHelper::OInterfaceIteratorHelper( OInterfaceContainerHelper & 
         nRemain = 0;
 }
 
-OInterfaceIteratorHelper::~OInterfaceIteratorHelper()
+OInterfaceIteratorHelper::~OInterfaceIteratorHelper() SAL_THROW( () )
 {
     sal_Bool bShared;
     {
@@ -174,7 +177,7 @@ OInterfaceIteratorHelper::~OInterfaceIteratorHelper()
     }
 }
 
-XInterface * OInterfaceIteratorHelper::next()
+XInterface * OInterfaceIteratorHelper::next() SAL_THROW( () )
 {
     if( nRemain )
     {
@@ -189,7 +192,7 @@ XInterface * OInterfaceIteratorHelper::next()
     return 0;
 }
 
-void OInterfaceIteratorHelper::remove()
+void OInterfaceIteratorHelper::remove() SAL_THROW( () )
 {
     if( bIsList )
     {
@@ -211,7 +214,7 @@ void OInterfaceIteratorHelper::remove()
 //===================================================================
 
 
-OInterfaceContainerHelper::OInterfaceContainerHelper( Mutex & rMutex_ )
+OInterfaceContainerHelper::OInterfaceContainerHelper( Mutex & rMutex_ ) SAL_THROW( () )
     : rMutex( rMutex_ )
     , bInUse( sal_False )
     , bIsList( sal_False )
@@ -219,7 +222,7 @@ OInterfaceContainerHelper::OInterfaceContainerHelper( Mutex & rMutex_ )
 {
 }
 
-OInterfaceContainerHelper::~OInterfaceContainerHelper()
+OInterfaceContainerHelper::~OInterfaceContainerHelper() SAL_THROW( () )
 {
     OSL_ENSHURE( !bInUse, "~OInterfaceContainerHelper but is in use" );
     if( bIsList )
@@ -228,7 +231,7 @@ OInterfaceContainerHelper::~OInterfaceContainerHelper()
         ((XInterface*)pData)->release();
 }
 
-sal_Int32   OInterfaceContainerHelper::getLength() const
+sal_Int32 OInterfaceContainerHelper::getLength() const SAL_THROW( () )
 {
     MutexGuard aGuard( rMutex );
     if( bIsList )
@@ -238,7 +241,7 @@ sal_Int32   OInterfaceContainerHelper::getLength() const
     return 0;
 }
 
-Sequence< Reference<XInterface> > OInterfaceContainerHelper::getElements() const
+Sequence< Reference<XInterface> > OInterfaceContainerHelper::getElements() const SAL_THROW( () )
 {
     MutexGuard aGuard( rMutex );
     if( bIsList )
@@ -251,7 +254,7 @@ Sequence< Reference<XInterface> > OInterfaceContainerHelper::getElements() const
     return Sequence< Reference< XInterface > >();
 }
 
-void OInterfaceContainerHelper::copyAndResetInUse()
+void OInterfaceContainerHelper::copyAndResetInUse() SAL_THROW( () )
 {
     OSL_ENSHURE( bInUse, "OInterfaceContainerHelper not in use" );
     if( bInUse )
@@ -267,7 +270,7 @@ void OInterfaceContainerHelper::copyAndResetInUse()
     }
 }
 
-sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> & rListener )
+sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> & rListener ) SAL_THROW( () )
 {
     assert( rListener.is() );
     MutexGuard aGuard( rMutex );
@@ -301,7 +304,7 @@ sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> &
     }
 }
 
-sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface> & rListener )
+sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface> & rListener ) SAL_THROW( () )
 {
     assert( rListener.is() );
     MutexGuard aGuard( rMutex );
@@ -357,7 +360,7 @@ sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface
     return pData ? 1 : 0;
 }
 
-void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt )
+void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt ) SAL_THROW( () )
 {
     ClearableMutexGuard aGuard( rMutex );
     OInterfaceIteratorHelper aIt( *this );
@@ -387,7 +390,7 @@ void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt )
 }
 
 
-void OInterfaceContainerHelper::clear( )
+void OInterfaceContainerHelper::clear() SAL_THROW( () )
 {
     ClearableMutexGuard aGuard( rMutex );
     OInterfaceIteratorHelper aIt( *this );

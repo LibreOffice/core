@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryinterface.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:09 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ template< class Interface1 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     const ::com::sun::star::uno::Type & rType,
     Interface1 * p1 )
+    SAL_THROW( () )
 {
     if (rType == ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *)0 ))
         return ::com::sun::star::uno::Any( &p1, rType );
@@ -99,6 +100,7 @@ template< class Interface1, class Interface2 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     const ::com::sun::star::uno::Type & rType,
     Interface1 * p1, Interface2 * p2 )
+    SAL_THROW( () )
 {
     if (rType == ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *)0 ))
         return ::com::sun::star::uno::Any( &p1, rType );
@@ -119,6 +121,7 @@ template< class Interface1, class Interface2, class Interface3 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     const ::com::sun::star::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3 )
+    SAL_THROW( () )
 {
     if (rType == ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *)0 ))
         return ::com::sun::star::uno::Any( &p1, rType );
@@ -142,6 +145,7 @@ template< class Interface1, class Interface2, class Interface3, class Interface4
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     const ::com::sun::star::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4 )
+    SAL_THROW( () )
 {
     if (rType == ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *)0 ))
         return ::com::sun::star::uno::Any( &p1, rType );
@@ -168,6 +172,7 @@ template< class Interface1, class Interface2, class Interface3, class Interface4
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     const ::com::sun::star::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5 )
+    SAL_THROW( () )
 {
     if (rType == ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *)0 ))
         return ::com::sun::star::uno::Any( &p1, rType );
@@ -199,6 +204,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     const ::com::sun::star::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6 )
+    SAL_THROW( () )
 {
     if (rType == ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *)0 ))
         return ::com::sun::star::uno::Any( &p1, rType );
@@ -233,6 +239,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     const ::com::sun::star::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7 )
+    SAL_THROW( () )
 {
     if (rType == ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *)0 ))
         return ::com::sun::star::uno::Any( &p1, rType );
@@ -270,6 +277,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     const ::com::sun::star::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8 )
+    SAL_THROW( () )
 {
     if (rType == ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *)0 ))
         return ::com::sun::star::uno::Any( &p1, rType );
@@ -310,6 +318,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     const ::com::sun::star::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9 )
+    SAL_THROW( () )
 {
     if (rType == ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *)0 ))
         return ::com::sun::star::uno::Any( &p1, rType );
@@ -353,6 +362,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     const ::com::sun::star::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10 )
+    SAL_THROW( () )
 {
     if (rType == ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *)0 ))
         return ::com::sun::star::uno::Any( &p1, rType );
@@ -401,6 +411,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10,
     Interface11 * p11 )
+    SAL_THROW( () )
 {
     if (rType == ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *)0 ))
         return ::com::sun::star::uno::Any( &p1, rType );
@@ -452,6 +463,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10,
     Interface11 * p11, Interface12 * p12 )
+    SAL_THROW( () )
 {
     if (rType == ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *)0 ))
         return ::com::sun::star::uno::Any( &p1, rType );

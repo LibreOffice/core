@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weak.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-14 10:17:30 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,37 +99,41 @@ protected:
     /**
      * Call the destructor is only allowed if the reference count is zero.
      */
-    virtual ~OWeakObject() throw(::com::sun::star::uno::RuntimeException);
+    virtual ~OWeakObject() SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
     /**
      * The reference counter.
      */
-    oslInterlockedCount         m_refCount;
+    oslInterlockedCount m_refCount;
 
     /**
      * The container of all weak reference listeners and the connection point
      * from the weak reference. Increment the reference count at m_pWeakConnectionPoint
      * object does not affect the
      */
-    OWeakConnectionPoint *      m_pWeakConnectionPoint;
+    OWeakConnectionPoint * m_pWeakConnectionPoint;
 public:
     // these are here to force memory de/allocation to sal lib.
-    static void * SAL_CALL operator new( size_t nSize ) throw()
+    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    static void SAL_CALL operator delete( void * pMem ) throw()
+    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
+    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
+        { return pMem; }
+    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
+        {}
 
     /**
      * Set the reference count to zero.
      */
-    OWeakObject() throw()
+    OWeakObject() SAL_THROW( () )
         : m_refCount( 0 )
         , m_pWeakConnectionPoint( 0 )
         {}
     /**
      * Set the reference count to zero.
      */
-    OWeakObject( const OWeakObject & rObj ) throw()
+    OWeakObject( const OWeakObject & rObj ) SAL_THROW( () )
         : m_refCount( 0 )
         , m_pWeakConnectionPoint( 0 )
         {}
@@ -137,20 +141,24 @@ public:
      * The assignement does not affect the reference count and the weak references
      * of this object.
      */
-    inline OWeakObject & SAL_CALL operator = ( const OWeakObject & rObj) throw()
+    inline OWeakObject & SAL_CALL operator = ( const OWeakObject & rObj) SAL_THROW( () )
         { return *this; }
 
     // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        const ::com::sun::star::uno::Type & rType )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire()
+        throw ();
+    virtual void SAL_CALL release()
+        throw ();
 
     // XWeak
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAdapter > SAL_CALL queryAdapter()
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Avoid ambigous cast error from compiler.
-    inline SAL_CALL operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > () throw()
+    inline SAL_CALL operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > () SAL_THROW( () )
         { return this; }
 };
 

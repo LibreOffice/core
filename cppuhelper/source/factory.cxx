@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2000-12-06 09:36:29 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,12 @@ class OSingleFactoryHelper
     , public XSingleServiceFactory
 {
 public:
-    OSingleFactoryHelper( const Reference<XMultiServiceFactory > & rServiceManager,
-                          const OUString & rImplementationName_,
-                          ComponentInstantiation pCreateFunction_,
-                          const Sequence< OUString > * pServiceNames_ )
+    OSingleFactoryHelper(
+        const Reference<XMultiServiceFactory > & rServiceManager,
+        const OUString & rImplementationName_,
+        ComponentInstantiation pCreateFunction_,
+        const Sequence< OUString > * pServiceNames_ )
+        SAL_THROW( () )
         : xSMgr( rServiceManager )
         , aImplementationName( rImplementationName_ )
         , pCreateFunction( pCreateFunction_ )
@@ -121,20 +123,21 @@ public:
         }
 
     // old function, only for backward compatibility
-    OSingleFactoryHelper( const Reference<XMultiServiceFactory > & rServiceManager,
-                          const OUString & rImplementationName_ )
+    OSingleFactoryHelper(
+        const Reference<XMultiServiceFactory > & rServiceManager,
+        const OUString & rImplementationName_ )
+        SAL_THROW( () )
         : xSMgr( rServiceManager )
         , aImplementationName( rImplementationName_ )
         , pCreateFunction( NULL )
-        {
-        }
+        {}
 
     // XInterface
     Any SAL_CALL queryInterface( const Type & rType )
         throw(::com::sun::star::uno::RuntimeException);
 
     // XSingleServiceFactory
-    Reference<XInterface > SAL_CALL createInstance(void)
+    Reference<XInterface > SAL_CALL createInstance()
         throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual Reference<XInterface > SAL_CALL createInstanceWithArguments(const Sequence<Any>& Arguments)
         throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
@@ -249,11 +252,13 @@ class OFactoryComponentHelper
     , public OSingleFactoryHelper
 {
 public:
-    OFactoryComponentHelper( const Reference<XMultiServiceFactory > & rServiceManager,
-                             const OUString & rImplementationName_,
-                             ComponentInstantiation pCreateFunction_,
-                             const Sequence< OUString > * pServiceNames_,
-                             sal_Bool bOneInstance_ = sal_False )
+    OFactoryComponentHelper(
+        const Reference<XMultiServiceFactory > & rServiceManager,
+        const OUString & rImplementationName_,
+        ComponentInstantiation pCreateFunction_,
+        const Sequence< OUString > * pServiceNames_,
+        sal_Bool bOneInstance_ = sal_False )
+        SAL_THROW( () )
         : OComponentHelper( aMutex )
         , OSingleFactoryHelper( rServiceManager, rImplementationName_, pCreateFunction_, pServiceNames_ )
         , bOneInstance( bOneInstance_ )
@@ -261,9 +266,11 @@ public:
         }
 
     // old function, only for backward compatibility
-    OFactoryComponentHelper( const Reference<XMultiServiceFactory > & rServiceManager,
-                             const OUString & rImplementationName_,
-                             sal_Bool bOneInstance_ = sal_False )
+    OFactoryComponentHelper(
+        const Reference<XMultiServiceFactory > & rServiceManager,
+        const OUString & rImplementationName_,
+        sal_Bool bOneInstance_ = sal_False )
+        SAL_THROW( () )
         : OComponentHelper( aMutex )
         , OSingleFactoryHelper( rServiceManager, rImplementationName_ )
         , bOneInstance( bOneInstance_ )
@@ -397,10 +404,12 @@ class ORegistryFactoryHelper
     : public OFactoryComponentHelper
 {
 public:
-    ORegistryFactoryHelper( const Reference<XMultiServiceFactory > & rServiceManager,
-                            const OUString & rImplementationName_,
-                            const Reference<XRegistryKey > & xImplementationKey_,
-                            sal_Bool bOneInstance_ = sal_False )
+    ORegistryFactoryHelper(
+        const Reference<XMultiServiceFactory > & rServiceManager,
+        const OUString & rImplementationName_,
+        const Reference<XRegistryKey > & xImplementationKey_,
+        sal_Bool bOneInstance_ = sal_False )
+        SAL_THROW( () )
         : OFactoryComponentHelper( rServiceManager, rImplementationName_, 0, 0, bOneInstance_ )
         , xImplementationKey( xImplementationKey_ )
         {}
@@ -595,8 +604,10 @@ class OFactoryProxyHelper : public WeakImplHelper2< XServiceInfo, XSingleService
 
 public:
 
-    OFactoryProxyHelper( const Reference<XMultiServiceFactory > & /*rServiceManager*/,
-                         const Reference<XSingleServiceFactory > & rFactory )
+    OFactoryProxyHelper(
+        const Reference<XMultiServiceFactory > & /*rServiceManager*/,
+        const Reference<XSingleServiceFactory > & rFactory )
+        SAL_THROW( () )
         : xFactory( rFactory )
         {}
 
@@ -666,60 +677,55 @@ Sequence< OUString > OFactoryProxyHelper::getSupportedServiceNames(void)
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 // global function
-Reference<XSingleServiceFactory > SAL_CALL createSingleFactory
-(
+Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,
     const OUString & rImplementationName,
     ComponentInstantiation pCreateFunction,
-    const Sequence< OUString > & rServiceNames
-)
+    const Sequence< OUString > & rServiceNames )
+    SAL_THROW( () )
 {
     return new OFactoryComponentHelper( rServiceManager, rImplementationName,
                                         pCreateFunction, &rServiceNames, sal_False );
 }
 
 // global function
-Reference<XSingleServiceFactory > SAL_CALL createFactoryProxy
-(
+Reference<XSingleServiceFactory > SAL_CALL createFactoryProxy(
     const Reference<XMultiServiceFactory > & rServiceManager,
-    const Reference<XSingleServiceFactory > & rFactory
-)
+    const Reference<XSingleServiceFactory > & rFactory )
+    SAL_THROW( () )
 {
     return new OFactoryProxyHelper( rServiceManager, rFactory );
 }
 
 // global function
-Reference<XSingleServiceFactory > SAL_CALL createOneInstanceFactory
-(
+Reference<XSingleServiceFactory > SAL_CALL createOneInstanceFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,
     const OUString & rImplementationName,
     ComponentInstantiation pCreateFunction,
-    const Sequence< OUString > & rServiceNames
-)
+    const Sequence< OUString > & rServiceNames )
+    SAL_THROW( () )
 {
     return new OFactoryComponentHelper( rServiceManager, rImplementationName,
                                         pCreateFunction, &rServiceNames, sal_True );
 }
 
 // global function
-SAL_DLLEXPORT Reference<XSingleServiceFactory > SAL_CALL createSingleRegistryFactory
-(
+Reference<XSingleServiceFactory > SAL_CALL createSingleRegistryFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,
     const OUString & rImplementationName,
-    const Reference<XRegistryKey > & rImplementationKey
-)
+    const Reference<XRegistryKey > & rImplementationKey )
+    SAL_THROW( () )
 {
     return new ORegistryFactoryHelper( rServiceManager, rImplementationName,
                                        rImplementationKey, sal_False );
 }
 
 // global function
-Reference<XSingleServiceFactory > SAL_CALL createOneInstanceRegistryFactory
-(
+Reference<XSingleServiceFactory > SAL_CALL createOneInstanceRegistryFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,
     const OUString & rImplementationName,
-    const Reference<XRegistryKey > & rImplementationKey
-)
+    const Reference<XRegistryKey > & rImplementationKey )
+    SAL_THROW( () )
 {
     return new ORegistryFactoryHelper( rServiceManager, rImplementationName,
                                        rImplementationKey, sal_True );

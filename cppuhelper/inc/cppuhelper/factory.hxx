@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:09 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,20 +134,6 @@ typedef void * (SAL_CALL * component_getFactoryFunc)(
 
 //##################################################################################################
 
-#define WRITE_COMPONENT_INFO_FUNCTION       "writeComponentInfo"
-#define CREATE_COMPONENT_FACTORY_FUNCTION   "createComponentFactory"
-
-/** This function pointer describes a function to write needed administrativ information
- *  about a component into the registry.
- */
-typedef sal_Bool (SAL_CALL * WriteComponentInfoFunc)( uno_Interface * pXKey );
-
-/** This function pointer describes a function to create a factory for one or more components.
- */
-typedef uno_Interface* (SAL_CALL * CreateComponentFactoryFunc)(
-    const sal_Unicode *, uno_Interface * pXSMgr, uno_Interface * pXKey );
-
-
 /** */ //for docpp
 namespace cppu
 {
@@ -157,10 +143,8 @@ namespace cppu
  * @see createSingleFactory
  * @see createOneInstanceFactory
  */
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SAL_CALL * ComponentInstantiation)
-(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager
-);
+typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SAL_CALL * ComponentInstantiation)(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager );
 
 /**
  * Create a single service factory.<BR>
@@ -175,13 +159,13 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SA
  *
  * @see createOneInstanceFactory
  */
-::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL createSingleFactory
-(
+::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
+createSingleFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rImplementationName,
     ComponentInstantiation pCreateFunction,
-    const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rServiceNames
-);
+    const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rServiceNames )
+    SAL_THROW( () );
 
 /**
  * Create a factory, that wrappes another one.<BR>
@@ -197,11 +181,11 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SA
  *
  * @see createSingleFactory
  */
-::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL createFactoryProxy
-(
+::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
+createFactoryProxy(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > & rFactory
-);
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > & rFactory )
+    SAL_THROW( () );
 
 /**
  * Create a single service factory which hold the instance created. If the
@@ -218,13 +202,13 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SA
  *
  * @see createSingleFactory
  */
-::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL createOneInstanceFactory
-(
+::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
+createOneInstanceFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rComponentName,
     ComponentInstantiation pCreateFunction,
-    const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rServiceNames
-);
+    const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rServiceNames )
+    SAL_THROW( () );
 
 /**
  * Create a single service factory.<BR>
@@ -237,12 +221,11 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SA
  * @return a factory that support the interfaces XServiceProvider, XServiceInfo
  *          XSingleServiceFactory and XComponent.
  */
-SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL createSingleRegistryFactory
-(
+::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL createSingleRegistryFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rImplementationName,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > & rImplementationKey
-);
+    const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > & rImplementationKey )
+    SAL_THROW( () );
 
 /**
  * Create a single service factory which hold the instance created. If the
@@ -259,12 +242,11 @@ SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleS
  *
  * @see createSingleRegistryFactory
  */
-::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL createOneInstanceRegistryFactory
-(
+::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL createOneInstanceRegistryFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rComponentName,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > & rImplementationKey
-);
+    const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > & rImplementationKey )
+    SAL_THROW( () );
 
 }
 

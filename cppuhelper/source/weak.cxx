@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weak.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-14 10:17:32 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ inline static Mutex & getWeakMutex() throw()
 */
 
 // due to static Reflection destruction from usr, ther must be a mutex leak (#73272#)
-inline static Mutex & getWeakMutex() throw()
+inline static Mutex & getWeakMutex() SAL_THROW( () )
 {
     static Mutex * s_pMutex = 0;
     if (! s_pMutex)
@@ -120,7 +120,7 @@ public:
     /**
         Hold the weak object without an acquire (only the pointer).
      */
-    OWeakConnectionPoint( OWeakObject* pObj ) throw()
+    OWeakConnectionPoint( OWeakObject* pObj ) SAL_THROW( () )
         : m_aRefCount( 0 )
         , m_pObject(pObj)
         , m_aReferences( getWeakMutex() )
@@ -252,7 +252,7 @@ void SAL_CALL OWeakObject::release() throw()
     }
 }
 
-OWeakObject::~OWeakObject() throw(::com::sun::star::uno::RuntimeException)
+OWeakObject::~OWeakObject() SAL_THROW( (::com::sun::star::uno::RuntimeException) )
 {
 }
 
@@ -279,7 +279,7 @@ Reference< XAdapter > SAL_CALL OWeakObject::queryAdapter()
 //-- OWeakAggObject ----------------------------------------------------
 //------------------------------------------------------------------------
 OWeakAggObject::~OWeakAggObject()
-    throw (::com::sun::star::uno::RuntimeException)
+    SAL_THROW( (::com::sun::star::uno::RuntimeException)  )
 {
 }
 
@@ -358,13 +358,13 @@ namespace uno
 class OWeakRefListener : public XReference
 {
 public:
-    OWeakRefListener();
-    OWeakRefListener(const OWeakRefListener& rRef);
-    OWeakRefListener(const Reference< XInterface >& xInt);
-    ~OWeakRefListener();
+    OWeakRefListener() SAL_THROW( () );
+    OWeakRefListener(const OWeakRefListener& rRef) SAL_THROW( () );
+    OWeakRefListener(const Reference< XInterface >& xInt) SAL_THROW( () );
+    ~OWeakRefListener() SAL_THROW( () );
 
     // XInterface
-    Any SAL_CALL queryInterface( const Type & rType ) throw();
+    Any SAL_CALL queryInterface( const Type & rType ) throw(RuntimeException);
     void SAL_CALL acquire() throw();
     void SAL_CALL release() throw();
 
@@ -377,15 +377,15 @@ public:
     Reference< XAdapter >       m_XWeakConnectionPoint;
 
 private:
-    OWeakRefListener& SAL_CALL operator=(const OWeakRefListener& rRef);
+    OWeakRefListener& SAL_CALL operator=(const OWeakRefListener& rRef) SAL_THROW( () );
 };
 
-OWeakRefListener::OWeakRefListener()
+OWeakRefListener::OWeakRefListener() SAL_THROW( () )
     : m_aRefCount( 0 )
 {
 }
 
-OWeakRefListener::OWeakRefListener(const OWeakRefListener& rRef)
+OWeakRefListener::OWeakRefListener(const OWeakRefListener& rRef) SAL_THROW( () )
     : m_aRefCount( 0 )
 {
     m_XWeakConnectionPoint = rRef.m_XWeakConnectionPoint;
@@ -394,7 +394,7 @@ OWeakRefListener::OWeakRefListener(const OWeakRefListener& rRef)
         m_XWeakConnectionPoint->addReference((XReference*)this);
 }
 
-OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt)
+OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt) SAL_THROW( () )
     : m_aRefCount( 0 )
 {
     Reference< XWeak > xWeak( Reference< XWeak >::query( xInt ) );
@@ -410,7 +410,7 @@ OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt)
     }
 }
 
-OWeakRefListener::~OWeakRefListener()
+OWeakRefListener::~OWeakRefListener() SAL_THROW( () )
 {
     acquire(); // dont die again
     if (m_XWeakConnectionPoint.is())
@@ -418,7 +418,7 @@ OWeakRefListener::~OWeakRefListener()
 }
 
 // XInterface
-Any SAL_CALL OWeakRefListener::queryInterface( const Type & rType ) throw()
+Any SAL_CALL OWeakRefListener::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     return ::cppu::queryInterface(
         rType, static_cast< XReference * >( this ), static_cast< XInterface * >( this ) );
@@ -457,7 +457,7 @@ void SAL_CALL OWeakRefListener::dispose()
 //------------------------------------------------------------------------
 //-- WeakReferenceHelper ----------------------------------------------------------
 //------------------------------------------------------------------------
-WeakReferenceHelper::WeakReferenceHelper(const Reference< XInterface >& xInt)
+WeakReferenceHelper::WeakReferenceHelper(const Reference< XInterface >& xInt) SAL_THROW( () )
     : m_pImpl( 0 )
 {
     if (xInt.is())
@@ -467,7 +467,7 @@ WeakReferenceHelper::WeakReferenceHelper(const Reference< XInterface >& xInt)
     }
 }
 
-WeakReferenceHelper::WeakReferenceHelper(const WeakReferenceHelper& rWeakRef)
+WeakReferenceHelper::WeakReferenceHelper(const WeakReferenceHelper& rWeakRef) SAL_THROW( () )
     : m_pImpl( 0 )
 {
     Reference< XInterface > xInt( rWeakRef.get() );
@@ -478,7 +478,7 @@ WeakReferenceHelper::WeakReferenceHelper(const WeakReferenceHelper& rWeakRef)
     }
 }
 
-WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& rWeakRef)
+WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& rWeakRef) SAL_THROW( () )
 {
     if (this != &rWeakRef)
     {
@@ -502,7 +502,7 @@ WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& r
     return *this;
 }
 
-WeakReferenceHelper::~WeakReferenceHelper()
+WeakReferenceHelper::~WeakReferenceHelper() SAL_THROW( () )
 {
     if (m_pImpl)
     {
@@ -516,7 +516,7 @@ WeakReferenceHelper::~WeakReferenceHelper()
     }
 }
 
-Reference< XInterface > WeakReferenceHelper::get() const
+Reference< XInterface > WeakReferenceHelper::get() const SAL_THROW( () )
 {
     Reference< XAdapter > xAdp;
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exc_hlp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:09 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ namespace cppu
  * @param rExc exception to be thrown.
  */
 void SAL_CALL throwException( const ::com::sun::star::uno::Any & rExc )
-    throw (::com::sun::star::uno::Exception);
+    SAL_THROW( (::com::sun::star::uno::Exception) );
 
 }
 

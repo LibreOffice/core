@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exc_thrower.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-25 14:44:37 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,11 +90,13 @@ class XThrower : public ::com::sun::star::uno::XInterface
 public:
 
     // Methods
-    virtual void SAL_CALL throwException( const ::com::sun::star::uno::Any& rExc ) throw(::com::sun::star::uno::Exception) = 0;
+    virtual void SAL_CALL throwException( const ::com::sun::star::uno::Any& rExc )
+        SAL_THROW( (::com::sun::star::uno::Exception) ) = 0;
 };
 
 static
 const ::com::sun::star::uno::Type& getCppuType( const ::com::sun::star::uno::Reference< ::cppu::XThrower >* )
+    SAL_THROW( () )
 {
     static ::com::sun::star::uno::Type * pType_cppu_XThrower = 0;
 
@@ -164,15 +166,17 @@ struct ExceptionThrower : public uno_Interface
 {
     oslInterlockedCount         nRef;
 
-    inline ExceptionThrower();
+    inline ExceptionThrower() SAL_THROW( () );
 };
+extern "C"
+{
 //--------------------------------------------------------------------------------------------------
-void SAL_CALL ExceptionThrower_acquire( uno_Interface * pUnoI )
+static void SAL_CALL ExceptionThrower_acquire( uno_Interface * pUnoI ) SAL_THROW( () )
 {
     osl_incrementInterlockedCount( & SAL_STATIC_CAST( ExceptionThrower *, pUnoI )->nRef );
 }
 //--------------------------------------------------------------------------------------------------
-void SAL_CALL ExceptionThrower_release( uno_Interface * pUnoI )
+static void SAL_CALL ExceptionThrower_release( uno_Interface * pUnoI ) SAL_THROW( () )
 {
     if (! osl_decrementInterlockedCount( & SAL_STATIC_CAST( ExceptionThrower *, pUnoI )->nRef ))
         delete SAL_STATIC_CAST( ExceptionThrower *, pUnoI );
@@ -181,6 +185,7 @@ void SAL_CALL ExceptionThrower_release( uno_Interface * pUnoI )
 static void SAL_CALL ExceptionThrower_dispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberType,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
+    SAL_THROW( () )
 {
     OSL_ASSERT( pMemberType->eTypeClass == typelib_TypeClass_INTERFACE_METHOD );
 
@@ -231,8 +236,9 @@ static void SAL_CALL ExceptionThrower_dispatch(
         OSL_ENSHURE( sal_False, "### illegal member called!" );
     }
 }
+} // extern "C"
 //__________________________________________________________________________________________________
-inline ExceptionThrower::ExceptionThrower()
+inline ExceptionThrower::ExceptionThrower() SAL_THROW( () )
     : nRef( 0 )
 {
     uno_Interface::acquire = ExceptionThrower_acquire;
@@ -241,8 +247,7 @@ inline ExceptionThrower::ExceptionThrower()
 }
 
 //==================================================================================================
-void SAL_CALL throwException( const Any & rExc )
-    throw (Exception)
+void SAL_CALL throwException( const Any & rExc ) SAL_THROW( (Exception) )
 {
     if (rExc.getValueTypeClass() == TypeClass_EXCEPTION)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:09 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,13 +100,13 @@ public:
      *                  The lifetime must be longer than the lifetime
      *                  of this object.
      */
-    OComponentHelper( ::osl::Mutex & rMutex );
+    OComponentHelper( ::osl::Mutex & rMutex ) SAL_THROW( () );
     /**
      * If dispose is not previous called, first acquire is called to protect against
      * double delete and than call dispose.<BR> Note in this situation no destructor
      * of derived classes are called.
      */
-    ~OComponentHelper();
+    ~OComponentHelper() SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
     // XInterface
     virtual void SAL_CALL release() throw();
@@ -115,7 +115,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException) = 0;
 
     // XComponent
-    virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL dispose()
+        throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addEventListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
         throw(::com::sun::star::uno::RuntimeException);
@@ -137,8 +138,8 @@ protected:
      */
     OBroadcastHelper    rBHelper;
 private:
-                        OComponentHelper( const OComponentHelper & );
-    OComponentHelper &  operator = ( const OComponentHelper & );
+                        OComponentHelper( const OComponentHelper & ) SAL_THROW( () );
+    OComponentHelper &  operator = ( const OComponentHelper & ) SAL_THROW( () );
 };
 
 }

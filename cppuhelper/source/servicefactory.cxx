@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-15 11:46:17 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ static Reference< XMultiServiceFactory > createImplServiceFactory(
     const OUString & rReadRegistry,
     sal_Bool bReadOnly,
     const OUString & rBootstrapPath )
-    throw( ::com::sun::star::uno::Exception )
+    SAL_THROW( (::com::sun::star::uno::Exception) )
 {
     Reference< XSingleServiceFactory > xSMFac( loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("smgr") ),
@@ -370,7 +370,7 @@ Reference< XMultiServiceFactory > SAL_CALL createRegistryServiceFactory(
     const OUString & rReadRegistry,
     sal_Bool bReadOnly,
     const OUString & rBootstrapPath )
-    throw( ::com::sun::star::uno::Exception )
+    SAL_THROW( (::com::sun::star::uno::Exception) )
 {
     return createImplServiceFactory( rWriteRegistry, rReadRegistry, bReadOnly, rBootstrapPath );
 }

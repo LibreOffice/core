@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weakagg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-14 10:17:30 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,15 @@ namespace cppu
  * @author  Markus Meyer
  * @since   98/04/12
  */
-class OWeakAggObject : public ::cppu::OWeakObject, public ::com::sun::star::uno::XAggregation
+class OWeakAggObject
+    : public ::cppu::OWeakObject
+    , public ::com::sun::star::uno::XAggregation
 {
 public:
     /**
      * Set the delegator to null.
      */
-    OWeakAggObject()
+    OWeakAggObject() SAL_THROW( () )
         {}
 
     // XInterface
@@ -132,7 +134,7 @@ protected:
      * Call the destructor is only allowed if the reference count is zero.
      */
     virtual ~OWeakAggObject()
-        throw (::com::sun::star::uno::RuntimeException);
+        SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
     /**
      * The delegator set with setDelegator.
@@ -140,9 +142,9 @@ protected:
      */
     ::com::sun::star::uno::WeakReferenceHelper xDelegator;
 private:
-    OWeakAggObject( const OWeakObject & rObj );
+    OWeakAggObject( const OWeakObject & rObj ) SAL_THROW( () );
 
-    OWeakObject &  operator = ( const OWeakObject & rObj );
+    OWeakObject &  operator = ( const OWeakObject & rObj ) SAL_THROW( () );
 };
 
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdidlclass.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:09 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,8 @@ namespace cppu {
     const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr ,
     const ::rtl::OUString & sImplementationName ,
     const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > & rSuperClass,
-    const ::com::sun::star::uno::Sequence < ::rtl::OUString > &seq );
+    const ::com::sun::star::uno::Sequence < ::rtl::OUString > &seq )
+    SAL_THROW( () );
 
 
 
@@ -130,6 +131,7 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
                          const Interface1 *p1
                      )
+    SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(1);
     seqInterface.getArray()[0] =
@@ -154,6 +156,7 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
                          const Interface1 *p1 ,
                          const Interface2 *p2
                      )
+    SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(2);
     seqInterface.getArray()[0] =
@@ -184,6 +187,7 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
                          const Interface2 *p2 ,
                          const Interface3 *p3
                      )
+    SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(3);
     seqInterface.getArray()[0] =
@@ -218,6 +222,7 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
                          const Interface3 *p3 ,
                          const Interface4 *p4
                      )
+    SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(4);
     seqInterface.getArray()[0] =
@@ -258,6 +263,7 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
                          const Interface4 *p4 ,
                          const Interface5 *p5
                      )
+    SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(5);
     seqInterface.getArray()[0] =
@@ -300,6 +306,7 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
                          const Interface5 *p5 ,
                          const Interface6 *p6
                      )
+    SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(6);
     seqInterface.getArray()[0] =
@@ -347,6 +354,7 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
                          const Interface6 *p6 ,
                          const Interface7 *p7
                      )
+    SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(7);
     seqInterface.getArray()[0] =
@@ -399,6 +407,7 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
                          const Interface7 *p7 ,
                          const Interface8 *p8
                      )
+    SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(8);
     seqInterface.getArray()[0] =
@@ -453,6 +462,7 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
                          const Interface8 *p8 ,
                          const Interface9 *p9
                      )
+    SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(9);
     seqInterface.getArray()[0] =
@@ -509,6 +519,7 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
                          const Interface9 *p9 ,
                          const Interface10 *p10
                      )
+    SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(10);
     seqInterface.getArray()[0] =
