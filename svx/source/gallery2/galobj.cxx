@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:47:12 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,11 +494,17 @@ BOOL SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
     {
         VirtualDevice aVDev;
 
-        aVDev.SetOutputSizePixel( Size( S_THUMB, S_THUMB ) );
+        aVDev.SetOutputSizePixel( Size( S_THUMB*2, S_THUMB*2 ) );
 
         if( bRet = DrawCentered( &aVDev, rModel ) )
         {
             aThumbBmp = aVDev.GetBitmap( Point(), aVDev.GetOutputSizePixel() );
+
+            Size aMS( 2, 2 );
+            BmpFilterParam aParam( aMS );
+            aThumbBmp.Filter( BMP_FILTER_MOSAIC, &aParam );
+            aThumbBmp.Scale( Size( S_THUMB, S_THUMB ) );
+
             aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
         }
     }
