@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-12 14:06:25 $
+ *  last change: $Author: oj $ $Date: 2001-03-12 14:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,10 +516,13 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
         }
         if(!m_xConnection.is()) // so what should otherwise
         {
-            String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
-            ODataView* pWindow = getView();
-            InfoBox(pWindow, aMessage).Execute();
+            {
+                String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
+                ODataView* pWindow = getView();
+                InfoBox(pWindow, aMessage).Execute();
+            }
             dispose();
+            return;
         }
 
         assignTable();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-20 11:25:52 $
+ *  last change: $Author: oj $ $Date: 2001-03-12 14:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,13 @@ OTableRow::OTableRow( const OTableRow& rRow, long nPosition ) :
     ,m_bReadOnly(rRow.IsReadOnly())
     ,m_bFirstNameModify(rRow.IsFirstNameModify())
     ,m_bFirstDescrModify(rRow.IsFirstDescrModify())
+    ,m_pActFieldDescr(NULL)
 {
     DBG_CTOR(OTableRow,NULL);
 
-    m_pActFieldDescr = new OFieldDescription(*rRow.GetActFieldDescr());
+    OFieldDescription* pSrcField = rRow.GetActFieldDescr();
+    if(pSrcField)
+        m_pActFieldDescr = new OFieldDescription(*pSrcField);
 }
 
 //------------------------------------------------------------------------------
