@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-16 11:37:18 $
+ *  last change: $Author: rt $ $Date: 2003-07-31 10:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2340,7 +2340,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
 
                 PrintDialog* pDlg = pPrintHint->GetPrintDialog();
                 Printer* pPrinter = pPrintHint->GetPrinter();
-                ::rtl::OUString aPrintFile ( pPrinter ? pPrinter->GetPrintFile() : String() );
+                ::rtl::OUString aPrintFile ( ( pPrinter && pPrinter->IsPrintFileEnabled() ) ? pPrinter->GetPrintFile() : String() );
                 ::rtl::OUString aRangeText ( ( pDlg && pDlg->IsRangeChecked(PRINTDIALOG_RANGE) ) ? pDlg->GetRangeText() : String() );
                 sal_Bool bSelectionOnly = ( ( pDlg && pDlg->IsRangeChecked(PRINTDIALOG_SELECTION) ) ? sal_True : sal_False );
 
@@ -2381,7 +2381,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                     sal_Int32 nAdd = pPrintHint->GetAdditionalOptions().getLength();
                     m_pData->m_aPrintOptions.realloc(  nOld + nAdd );
                     for ( sal_Int32 n=0; n<nAdd; n++ )
-                            m_pData->m_aPrintOptions[ nOld+n ] = pPrintHint->GetAdditionalOptions()[n];
+                        m_pData->m_aPrintOptions[ nOld+n ] = pPrintHint->GetAdditionalOptions()[n];
             }
             else if ( pPrintHint->GetWhich() != -2 )
             {
