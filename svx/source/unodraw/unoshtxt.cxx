@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-20 14:52:25 $
+ *  last change: $Author: cl $ $Date: 2001-08-22 14:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,20 +351,6 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
 
                 if(mpObject->GetStyleSheet())
                     mpOutliner->SetStyleSheet( 0, mpObject->GetStyleSheet());
-
-                // Beim setzen der harten Attribute an den ersten Absatz muss
-                // der Parent pOutlAttr (=die Vorlage) temporaer entfernt
-                // werden, da sonst bei SetParaAttribs() auch alle in diesem
-                // Parent enthaltenen Items hart am Absatz attributiert werden.
-                // -> BugID 22467
-                const SfxItemSet& rSet = mpObject->GetItemSet();
-                SdrOutlinerSetItem aOutlSetItem(rSet.GetPool());
-                aOutlSetItem.GetItemSet().Put(rSet);
-                const SfxItemSet* pTmpSet = &aOutlSetItem.GetItemSet();
-                const SfxItemSet* pParentMerk = pTmpSet->GetParent();
-                ((SfxItemSet*)pTmpSet)->SetParent(NULL);
-                mpOutliner->SetParaAttribs(0,*pTmpSet);
-                ((SfxItemSet*)pTmpSet)->SetParent(pParentMerk);
             }
         }
 
