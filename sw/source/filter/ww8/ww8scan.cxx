@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-21 09:21:16 $
+ *  last change: $Author: cmc $ $Date: 2001-05-23 12:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1667,7 +1667,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp( BYTE nFibVer, SvStream* pSt, SvStream* pDataSt,
                     USHORT nSpId = WW8GetSprmId( nVersion, pTmpGrpprl->pData );
                     if( 0x6645 == nSpId || 0x6646 == nSpId )
                     {
-                        UINT32 nPos  = *(UINT32*)(pTmpGrpprl->pData + 2);
+                        UINT32 nPos  = SVBT32ToLong(pTmpGrpprl->pData + 2);
                         UINT32 nCurr = pDataSt->Tell();
                         pDataSt->Seek( nPos );
                         *pDataSt >> pTmpGrpprl->nLen;
@@ -6372,11 +6372,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.15 2001-05-21 09:21:16 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.16 2001-05-23 12:58:24 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.15  2001/05/21 09:21:16  cmc
+      ##912## #86778# Document shows that fastsaved chp properties should not be searched for like pap properties
+
       Revision 1.14  2001/04/25 14:06:21  cmc
       ##775## ##776## Update PLCF save/restore for cp based era
 
