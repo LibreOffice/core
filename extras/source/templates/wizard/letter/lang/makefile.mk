@@ -74,7 +74,7 @@ TARGET=templateswizardletter
 ZIPFLAGS                =
 ZIP1TARGET      = $(TEMPLATE_WIZARD_LETTER_TARGET)
 
-ZIP1LIST	= english_us$/* german$/*
+ZIP1LIST	= en-US$/* de$/*
 
 
 
