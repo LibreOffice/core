@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-10 10:47:03 $
+ *  last change: $Author: pl $ $Date: 2001-07-10 16:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1640,7 +1640,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
     if( ! m_xDragSourceListener.is() )
         return;
 
-    ClearableMutexGuard aGuard(m_aMutex);
+    ResettableMutexGuard aGuard(m_aMutex);
 
     // for shortcut
     ::std::hash_map< Window, DropTargetEntry >::const_iterator it =
@@ -1750,11 +1750,10 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
         }
         updateDragWindow( root_x, root_y, root );
 
-        ClearableMutexGuard aSecondGuard(m_aMutex);
+        aGuard.reset();
         if( m_nCurrentProtocolVersion >= 0 && m_aDropProxy != None )
         {
             aGuard.clear();
-            aSecondGuard.clear();
             sendDropPosition( bForce, rMessage.type == MotionNotify ? rMessage.xmotion.time : rMessage.xcrossing.time );
         }
     }
@@ -2072,7 +2071,7 @@ int SelectionManager::getXdndVersion( Window aWindow, Window& rProxy )
 
 void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
 {
-    ClearableMutexGuard aGuard( m_aMutex );
+    ResettableMutexGuard aGuard( m_aMutex );
 
     Reference< XDragSourceListener > xListener( m_xDragSourceListener );
 
@@ -2131,7 +2130,6 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
 
         if( m_aDropWindow != None )
         {
-            ClearableMutexGuard aSecondGuard(m_aMutex);
             it = m_aDropTargets.find( m_aDropWindow );
             if( it != m_aDropTargets.end() )
                 // shortcut for own drop targets
@@ -2139,8 +2137,8 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
                 DropTargetEvent dte;
                 dte.Source  = static_cast< OWeakObject* >( it->second.m_pTarget );
                 aGuard.clear();
-                aSecondGuard.clear();
                 it->second.m_pTarget->dragExit( dte );
+                aGuard.reset();
             }
             else
             {
@@ -2155,13 +2153,14 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
                 aEvent.xclient.data.l[1]        = 0;
                 XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
             }
-            aGuard.clear();
-            aSecondGuard.clear();
             if( xListener.is() )
+            {
+                aGuard.clear();
                 xListener->dragExit( dsde );
+                aGuard.reset();
+            }
         }
 
-        ClearableMutexGuard aSecondGuard(m_aMutex);
         m_nCurrentProtocolVersion   = nNewProtocolVersion;
         m_aDropWindow               = aNewCurrentWindow;
         m_aDropProxy                = aNewProxy != None ? aNewProxy : m_aDropWindow;
@@ -2170,14 +2169,12 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
         if( it != m_aDropTargets.end() && ! it->second.m_pTarget->m_bActive )
             m_aDropProxy = None;
 
-        if( m_aDropProxy != None )
+        if( m_aDropProxy != None && xListener.is() )
         {
             aGuard.clear();
-            aSecondGuard.clear();
-            if( xListener.is() )
-                xListener->dragEnter( dsde );
+            xListener->dragEnter( dsde );
+            aGuard.reset();
         }
-        ClearableMutexGuard aThirdGuard(m_aMutex);
         // send XdndEnter
         if( m_aDropProxy != None && m_nCurrentProtocolVersion >= 0 )
         {
@@ -2194,9 +2191,8 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
                 dtde.SourceActions          = m_nSourceActions;
                 dtde.SupportedDataFlavors   = m_xDragSourceTransferable->getTransferDataFlavors();
                 aGuard.clear();
-                aSecondGuard.clear();
-                aThirdGuard.clear();
                 it->second.m_pTarget->dragEnter( dtde );
+                aGuard.reset();
             }
             else
             {
@@ -2220,15 +2216,13 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
                 XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
             }
         }
-        MutexGuard aFourthGuard(m_aMutex);
         m_nNoPosX = m_nNoPosY = m_nNoPosWidth = m_nNoPosHeight = 0;
     }
-    else if( m_aDropProxy != None )
+    else if( m_aDropProxy != None && xListener.is() )
     {
         aGuard.clear();
         // drag over for XdndAware windows comes when receiving XdndStatus
-        if( xListener.is() )
-            xListener->dragOver( dsde );
+        xListener->dragOver( dsde );
     }
 }
 
@@ -2384,7 +2378,38 @@ void SelectionManager::startDrag(
     }
 
     m_aDragRunning.set();
-    m_aDragExecuteThread = osl_createThread( runDragExecute, this );
+    m_aDragExecuteThread = osl_createSuspendedThread( runDragExecute, this );
+    if( m_aDragExecuteThread )
+        osl_resumeThread( m_aDragExecuteThread );
+    else
+    {
+#ifdef DEBUG
+        fprintf( stderr, "osl_createSuspendedThread failed for drag execute\n" );
+#endif
+        m_xDragSourceListener.clear();
+        m_xDragSourceTransferable.clear();
+
+        m_bDropSent                         = false;
+        m_bDropSuccess                      = false;
+        m_bWaitingForPrimaryConversion      = false;
+        m_aDropWindow                       = None;
+        m_aDropProxy                        = None;
+        m_nCurrentProtocolVersion           = nXdndProtocolRevision;
+        m_nNoPosX                           = 0;
+        m_nNoPosY                           = 0;
+        m_nNoPosWidth                       = 0;
+        m_nNoPosHeight                      = 0;
+        m_aCurrentCursor                    = None;
+
+        XUngrabPointer( m_pDisplay, CurrentTime );
+        XUngrabKeyboard( m_pDisplay, CurrentTime );
+        XFlush( m_pDisplay );
+
+        m_aDragRunning.reset();
+
+        if( listener.is() )
+            listener->dragDropEnd( aDragFailedEvent );
+    }
 }
 
 void SelectionManager::runDragExecute( void* pThis )
@@ -2401,15 +2426,15 @@ void SelectionManager::dragDoDispatch()
 #ifdef DEBUG
     fprintf( stderr, "begin executeDrag dispatching\n" );
 #endif
+    oslThread aThread = m_aDragExecuteThread;
     osl_yieldThread();
-    while( m_xDragSourceListener.is() && ( ! m_bDropSent || time(NULL)-m_nDropTimeout < 5 ) && osl_scheduleThread( m_aDragExecuteThread ) )
+    while( m_xDragSourceListener.is() && ( ! m_bDropSent || time(NULL)-m_nDropTimeout < 5 ) && osl_scheduleThread( aThread ) )
     {
         osl_yieldThread();
         // let the thread in the run method do the dispatching
         // just look occasionally here whether drop timed out or is completed
         poll( NULL, 0, 200 );
     }
-    oslThread aThread = m_aDragExecuteThread;
 #ifdef DEBUG
     fprintf( stderr, "end executeDrag dispatching\n" );
 #endif
@@ -2634,7 +2659,7 @@ void SelectionManager::dispatchEvent( int millisec )
     {
         // now acquire the mutex to prevent other threads
         // from using the same X connection
-        ClearableMutexGuard aOuterGuard(m_aMutex);
+        ResettableMutexGuard aGuard(m_aMutex);
 
         // prevent that another thread already ate the input
         // this can happen if e.g. another thread does
@@ -2644,16 +2669,15 @@ void SelectionManager::dispatchEvent( int millisec )
         if( poll( &aPollFD, 1, 0 ) > 0 )
         {
             int nPending = 1;
-            aOuterGuard.clear();
             while( nPending )
             {
-                ClearableMutexGuard aLoopGuard(m_aMutex);
                 nPending = XPending( m_pDisplay );
                 if( nPending )
                 {
                     XNextEvent( m_pDisplay, &event );
-                    aLoopGuard.clear();
+                    aGuard.clear();
                     handleXEvent( event );
+                    aGuard.reset();
                 }
             }
         }
