@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AliasProgrammaticPair.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:58:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ module com {  module sun {  module star {  module util {
 /** represents an entry from a component which implements the
     <type>XLocalizedAliases</type>.
  */
-struct AliasProgrammaticPair
+published struct AliasProgrammaticPair
 {
     /** determines the name which is registered as an alias for a programmatic name.
      */
