@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 12:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ void SAL_CALL ScannerManager::release() throw( RuntimeException )
 
 // -----------------------------------------------------------------------------
 
-SEQ( sal_Int8 ) SAL_CALL ScannerManager::getMaskDIB()
+SEQ( sal_Int8 ) SAL_CALL ScannerManager::getMaskDIB() throw()
 {
     return SEQ( sal_Int8 )();
 }

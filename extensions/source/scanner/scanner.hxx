@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 12:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,16 +140,16 @@ public:
     virtual void SAL_CALL                   release() throw( RuntimeException );
 
     // XScannerManager
-    virtual SEQ( ScannerContext ) SAL_CALL  getAvailableScanners();
+    virtual SEQ( ScannerContext ) SAL_CALL  getAvailableScanners() throw();
     virtual BOOL SAL_CALL                   configureScanner( ScannerContext& scanner_context ) throw( ScannerException );
     virtual void SAL_CALL                   startScan( const ScannerContext& scanner_context, const REF( com::sun::star::lang::XEventListener )& rxListener ) throw( ScannerException );
     virtual ScanError SAL_CALL              getError( const ScannerContext& scanner_context ) throw( ScannerException );
     virtual REF( AWT::XBitmap ) SAL_CALL    getBitmap( const ScannerContext& scanner_context ) throw( ScannerException );
 
     // XBitmap
-    virtual AWT::Size SAL_CALL              getSize();
-    virtual SEQ( sal_Int8 ) SAL_CALL        getDIB();
-    virtual SEQ( sal_Int8 ) SAL_CALL        getMaskDIB();
+    virtual AWT::Size SAL_CALL              getSize() throw();
+    virtual SEQ( sal_Int8 ) SAL_CALL        getDIB() throw();
+    virtual SEQ( sal_Int8 ) SAL_CALL        getMaskDIB() throw();
 
     // Misc
     OUString                                getImplementationName() throw();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanunx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-07 13:19:04 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 12:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ ANY SAL_CALL BitmapTransporter::queryInterface( const Type& rType ) throw( Runti
 
 // -----------------------------------------------------------------------------
 
-AWT::Size BitmapTransporter::getSize()
+AWT::Size BitmapTransporter::getSize() throw()
 {
     vos::OGuard aGuard( m_aProtector );
     int         nPreviousPos = m_aStream.Tell();
@@ -116,7 +116,7 @@ AWT::Size BitmapTransporter::getSize()
 
 // -----------------------------------------------------------------------------
 
-SEQ( sal_Int8 ) BitmapTransporter::getDIB()
+SEQ( sal_Int8 ) BitmapTransporter::getDIB() throw()
 {
     vos::OGuard aGuard( m_aProtector );
     int         nPreviousPos = m_aStream.Tell();
@@ -225,7 +225,7 @@ void ScannerManager::DestroyData()
 
 // -----------------------------------------------------------------------------
 
-AWT::Size ScannerManager::getSize()
+AWT::Size ScannerManager::getSize() throw()
 {
     AWT::Size aRet;
     aRet.Width = aRet.Height = 0;
@@ -234,14 +234,14 @@ AWT::Size ScannerManager::getSize()
 
 // -----------------------------------------------------------------------------
 
-SEQ( sal_Int8 ) ScannerManager::getDIB()
+SEQ( sal_Int8 ) ScannerManager::getDIB() throw()
 {
     return SEQ( sal_Int8 )();
 }
 
 // -----------------------------------------------------------------------------
 
-SEQ( ScannerContext ) ScannerManager::getAvailableScanners()
+SEQ( ScannerContext ) ScannerManager::getAvailableScanners() throw()
 {
     vos::OGuard aGuard( aSaneProtector );
 

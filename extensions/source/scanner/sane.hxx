@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sane.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-07 13:19:04 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 12:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,9 @@ public:
     virtual void SAL_CALL               acquire() throw( RuntimeException ) { OWeakObject::acquire(); }
     virtual void SAL_CALL               release() throw( RuntimeException ) { OWeakObject::release(); }
 
-    virtual AWT::Size SAL_CALL          getSize();
-    virtual SEQ( sal_Int8 ) SAL_CALL    getDIB();
-    virtual SEQ( sal_Int8 ) SAL_CALL    getMaskDIB() { return SEQ( sal_Int8 )(); }
+    virtual AWT::Size SAL_CALL          getSize() throw();
+    virtual SEQ( sal_Int8 ) SAL_CALL    getDIB() throw();
+    virtual SEQ( sal_Int8 ) SAL_CALL    getMaskDIB() throw() { return SEQ( sal_Int8 )(); }
 
     // Misc
     void                                lock() { m_aProtector.acquire(); }
