@@ -1,0 +1,278 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dbadmin2.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:44:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
+#endif
+#ifndef _DBAUI_DBADMIN_HRC_
+#include "dbadmin.hrc"
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
+#ifndef DBAUI_TOOLBOX_HXX
+#include "toolbox.hrc"
+#endif
+
+#define CHECKBOX_HEIGHT     8
+#define FIXEDTEXT_HEIGHT    8
+#define RELATED_CONTROLS    4
+#define UNRELATED_CONTROLS  7
+#define EDIT_HEIGHT         12
+
+//.........................................................................
+
+String STR_ENTER_CONNECTION_PASSWORD
+{
+    Text [ de ] ="Die Verbindung zur Datenquelle \"$name$\" erfordert die Eingabe eines Passwortes.";
+    Text [ en-US ] = "A password is needed to connect to the data source \"$name$\".";
+};
+
+WarningBox WARN_SAVEFORQUERIES
+{
+    Message [ de ] = "Um die $objects$ einer Datenquelle zu administrieren, muss diese gespeichert werden.\n"
+        "Sollen sämtliche bis jetzt in diesem Dialog vorgenommene Änderungen jetzt gespeichert werden?";
+    Message [ en-US ] = "To administrate the $objects$ of a data source, that data source must be saved.\nShould all changes made in this dialog be saved now?";
+
+    Buttons = WB_YES_NO;
+    DefButton = WB_DEF_YES;
+
+    Message[ x-comment ] = "For ; For ; For $objects$, there will be used one of the strings STR_QUERY_OBJECTS and STR_DOCUMENT_OBJECTS.";
+};
+
+ErrorBox ERR_CANTADMINQUERIES
+{
+    Message [ de ] = "Um die $objects$ einer Datenquelle zu administrieren, muss diese gespeichert werden.\n"
+        "Allerdings erlauben die aktuellen Eingaben es nicht, die Änderungen zu speichern (es gibt Namenskonflikte).\n\n"
+        "Sie können die $objects$ nicht administrieren, solange diese Konflikte nicht gelöst sind und die Änderungen gespeichert wurden.";
+    Message [ en-US ] = "To administrate the $objects$ of a data source, the data source must be saved.\nHowever, the current settings do not allow you to save the changes (due to conflicting names).\n\nYou will not be able to administrate the $objects$ until these conflicts are resolved and the changes are saved.";
+
+    Message[ x-comment ] = "For ; For ; For $objects$, there will be used one of the strings STR_QUERY_OBJECTS and STR_DOCUMENT_OBJECTS.";
+};
+
+String STR_QUERY_OBJECTS
+{
+    Text [ de ] ="Abfragen";
+    Text [ en-US ] = "queries";
+};
+
+String STR_QUERY_DROP_ALL
+{
+    Text [ de ] ="Wollen Sie die alle Selektierten löschen?";
+    Text[ en-US ] = "Do you want to delete all selected items?";
+};
+
+String STR_ASK_FOR_DIRECTORY_CREATION
+{
+    Text [ de ] ="Das Verzeichnis\n\n$path$\n\nexistiert nicht. Soll es angelegt werden?";
+    Text [ en-US ] = "The directory\n\n$path$\n\ndoes not exist. Should it be created?";
+};
+
+String STR_COULD_NOT_CREATE_DIRECTORY
+{
+    Text [ de ] ="Das Verzeichnis $name$ konnte nicht angelegt werden.";
+    Text [ en-US ] = "The directory $name$ could not be created.";
+};
+
+QueryBox QUERY_NEED_TO_SAVE_FILTER
+{
+    Message [ de ] = "Um diese Aktion auszuführen, müssen die bis jetzt in diesem Dialog vorgenommene Änderungen gespeichert werden.\nWollen Sie fortfahren?";
+    Message [ en-US ] = "In order to perform this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
+
+    Buttons = WB_YES_NO;
+    DefButton = WB_DEF_YES;
+};
+String STR_ADDRESSBOOK_SYSTEM
+{
+    Text [ de ] ="Windows Adressbuch";
+    Text[ en-US ] = "Windows address book";
+};
+String STR_ADDRESSBOOK_OUTLOOK
+{
+    Text [ de ] ="MS Outlook";
+    Text[ en-US ] = "MS Outlook";
+};
+String STR_ADDRESSBOOK_MOZILLA
+{
+    Text [ de ] ="Mozilla Adressbuch";
+    Text[ en-US ] = "Mozilla address book";
+};
+String STR_ADDRESSBOOK_EVOLUTION
+{
+    Text [ de ] ="Evolution address book";
+    Text[ en-US ] = "Evolution address book";
+};
+String STR_ADDRESSBOOK_LDAP
+{
+    Text [ de ] ="LDAP Adressbuch";
+    Text[ en-US ] = "LDAP address book";
+};
+String STR_CALCDOC_DOESNOTEXIST
+{
+    Text [ de ] ="Die Datei \"$file$\" existiert nicht.";
+    Text[ en-US ] = "The file \"$file$\" does not exist.";
+};
+
+String STR_HINT_READONLY_CONNECTION
+{
+    Text [ de ] ="(Verbindung ist nur-lesend)";
+    Text [ en-US ] = "(Connection is read-only)";
+};
+
+String STR_HINT_CONNECTION_NOT_CAPABLE
+{
+    Text [ de ] ="(nicht unterstützt von dieser Verbindung)";
+    Text [ en-US ] = "(Not supported by this connection)";
+};
+
+#define EDIT_SIZE_X     50
+#define FT_SIZE_X       90
+#define WIN_X           220
+#define WIN_Y           72
+
+ModalDialog DLG_DOMAINPASSWORD
+{
+    Border = TRUE ;
+    Moveable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
+    Text [ de ] ="Datenbank konvertieren";
+    Text[ en-US ] = "Convert Database";
+
+    FixedLine FT_PASSWORD
+    {
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( WIN_X - 3 - 6 - 6 - 50 , 8 ) ;
+        Text [ de ] ="Bitte geben Sie das ~Kennwort für den Benutzer 'DOMAIN' ein" ;
+        Text[ en-US ] = "Please enter the ~password for the user 'DOMAIN'.";
+    };
+
+    Edit ET_PASSWORD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 + FT_SIZE_X , 16 ) ;
+        Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;
+        PassWord = TRUE ;
+    };
+    OKButton BTN_PASSWORD_OK
+    {
+        Pos = MAP_APPFONT ( WIN_X - 56 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_PASSWORD_CANCEL
+    {
+        Pos = MAP_APPFONT ( WIN_X - 56 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_PASSWORD_HELP
+    {
+        Pos = MAP_APPFONT ( WIN_X - 56 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+
+#define PAGE_X_T  (PAGE_X -80)
+#define PAGE_Y_T  (PAGE_Y -50)
+
+TabPage PAGE_TABLESUBSCRIPTION
+{
+    SVLook = TRUE ;
+    Hide = TRUE;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( PAGE_X_T, PAGE_Y_T) ;
+    HelpId = HID_DSADMIN_TABLE_SUBSCRIPTION;
+
+    Text [ de ] ="Tabellen Filter" ;
+    Text [ en-US ] = "Tables Filter" ;
+
+    FixedLine FL_SEPARATOR1
+    {
+        Pos = MAP_APPFONT ( RELATED_CONTROLS , UNRELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X_T - 2* RELATED_CONTROLS, FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="Tabellen und Tabellenfilter";
+        Text [ en-US ] = "Tables and table filter";
+    };
+    Control CTL_TABLESUBSCRIPTION
+    {
+        Pos     = MAP_APPFONT ( UNRELATED_CONTROLS , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS) ;
+        Size    = MAP_APPFONT ( PAGE_X_T - 2*UNRELATED_CONTROLS , 81 ) ;
+        Group   = TRUE;
+        Border  = TRUE ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_TABLE_SELECTOR;
+    };
+    FixedText FT_FILTER_EXPLANATION
+    {
+        Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 2*UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS + 81 ) ;
+        Size    = MAP_APPFONT ( PAGE_X_T - 2*UNRELATED_CONTROLS , 16 ) ;
+        HelpId = HID_DSADMIN_FILTER_EXPLANATION;
+        WordBreak = TRUE;
+        Text [ de ] ="Markieren Sie diejenigen Tabellen, die für die Applikationen sichtbar sein sollen.";
+        Text [ en-US ] = "Mark the tables that should be visible for the applications.";
+    };
+};
+
