@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 15:06:30 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1876,38 +1876,45 @@ OUString SwXTextDocument::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXTextDocument");
 }
-/* -----------------18.03.99 11:32-------------------
+/* -----------------05.11.03 09:59-------------------
  *
  * --------------------------------------------------*/
 sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    BOOL bWebDoc    = 0 != PTR_CAST(SwWebDocShell,    pDocShell);
-    BOOL bGlobalDoc = 0 != PTR_CAST(SwGlobalDocShell, pDocShell);
-    sal_Bool bRet = sal_False;
-    if( rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.TextDocument" ) ) ||
-        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.document.OfficeDocument" ) ) ||
-        (bWebDoc && rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.WebDocument" ) )) ||
-        (bGlobalDoc && rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.GlobalDocument" ) )) )
-        bRet = sal_True;
-    return bRet;
+    if (
+        (rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.document.OfficeDocument" ))) ||
+        (rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.GenericTextDocument")))
+       )
+    return sal_True;
+
+    BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
+    BOOL bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
+    BOOL bTextDoc   = (!bWebDoc && !bGlobalDoc);
+
+    return (
+            (bWebDoc    && rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.WebDocument"   ))) ||
+            (bGlobalDoc && rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.GlobalDocument"))) ||
+            (bTextDoc   && rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument"  )))
+           );
 }
 /* -----------------18.03.99 11:32-------------------
  *
  * --------------------------------------------------*/
 Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    BOOL bWebDoc    = 0 != PTR_CAST(SwWebDocShell,    pDocShell);
-    BOOL bGlobalDoc = 0 != PTR_CAST(SwGlobalDocShell, pDocShell);
-    INT32 nCnt = (bWebDoc || bGlobalDoc) ? 3 : 2;
-    Sequence< OUString > aRet ( nCnt );
+    BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
+    BOOL bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
+
+    Sequence< OUString > aRet ( 1 );
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.TextDocument" ) ) );
-    pArray[1] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.document.OfficeDocument" ) ) );
-    if (3 == nCnt)
-    {   OUString aTmp( bWebDoc ? C2U("com.sun.star.text.WebDocument")
-                               : C2U("com.sun.star.text.GlobalDocument"));
-        pArray[2] = aTmp;
-    }
+
+    if ( bWebDoc )
+        pArray[0] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.WebDocument" ) ) );
+    else if ( bGlobalDoc )
+        pArray[0] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.GlobalDocument" ) ) );
+    else
+        pArray[0] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.TextDocument" ) ) );
+
     return aRet;
 }
 /* -----------------05.05.99 12:10-------------------
