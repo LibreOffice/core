@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:58:21 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,9 +421,11 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
                     {
                         short nOff = GetCurField()->GetPar2().ToInt32();
                         if( TYP_NEXTPAGEFLD == nTypeId && 1 != nOff )
-                            aValueED.SetText( nOff - 1 );
+                            aValueED.SetText(
+                                String::CreateFromInt32(nOff - 1) );
                         else if( TYP_PREVPAGEFLD == nTypeId && -1 != nOff )
-                            aValueED.SetText( nOff + 1 );
+                            aValueED.SetText(
+                                String::CreateFromInt32(nOff + 1) );
                         else
                             aValueED.SetText(aEmptyStr);
                     }
