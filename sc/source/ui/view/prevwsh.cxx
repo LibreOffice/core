@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:24:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 
         ScTabViewShell* pTabViewShell = ((ScTabViewShell*)pOldSh);
         ScViewData* pData = pTabViewShell->GetViewData();
-        pData->WriteUserData( aSourceData );
+        pData->WriteUserDataSequence( aSourceData );
         InitStartTable( pData->GetTabNo() );
 
         //  #106334# also have to store the TabView's DesignMode state
@@ -818,16 +818,6 @@ void __EXPORT ScPreviewShell::WriteUserData(String& rData, BOOL bBrowse)
     rData =  String::CreateFromInt32(pPreview->GetZoom());
     rData += (sal_Unicode) SC_USERDATA_SEP;
     rData += String::CreateFromInt32(pPreview->GetPageNo());
-
-    if ( aSourceData.Len() )
-    {
-        //  add settings from tabview in parentheses
-
-        rData += (sal_Unicode) SC_USERDATA_SEP;
-        rData += (sal_Unicode) '(';
-        rData += aSourceData;
-        rData += (sal_Unicode) ')';
-    }
 }
 
 void __EXPORT ScPreviewShell::ReadUserData(const String& rData, BOOL bBrowse)
@@ -839,19 +829,6 @@ void __EXPORT ScPreviewShell::ReadUserData(const String& rData, BOOL bBrowse)
         pPreview->SetZoom((USHORT)rData.GetToken( 0, SC_USERDATA_SEP, nIndex ).ToInt32());
         pPreview->SetPageNo(rData.GetToken( 0, SC_USERDATA_SEP, nIndex ).ToInt32());
         eZoom = SVX_ZOOM_PERCENT;
-
-        //  tabview data is enclosed in parentheses
-
-        String aTabStr = rData.Copy( nIndex );
-        if ( aTabStr.GetChar(0) == '(' )
-        {
-            xub_StrLen nParPos = aTabStr.Search( ')' );
-            if ( nParPos != STRING_NOTFOUND )
-            {
-                //  get the string in the parentheses
-                aSourceData = aTabStr.Copy( 1, nParPos - 1 );
-            }
-        }
     }
 }
 
