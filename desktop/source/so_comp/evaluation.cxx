@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evaluation.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:00:07 $
+ *  last change: $Author: rt $ $Date: 2004-06-03 16:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ Any SAL_CALL SOEvaluation::getMaterial() throw( RuntimeException )
     // provide a com::sun::star::util::Date with the time bomb date.
     Any a;
 
-    // change here to force recompile 00001
+    // change here to force recompile 00002
 #ifdef TIMEBOMB
     // Code for extracting/providing time bomb date!
     int nDay   = TIMEBOMB % 100;
