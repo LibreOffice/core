@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-06 09:30:56 $
+ *  last change: $Author: kso $ $Date: 2001-07-11 10:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,31 +847,41 @@ void SAL_CALL Content::addProperty( const rtl::OUString& Name,
                             beans::PropertySetInfoChange::PROPERTY_INSERTED );
         notifyPropertySetInfoChange( evt );
     }
-    catch ( DAVException const & )
+    catch ( DAVException const & e )
     {
-        try
+        if ( e.getStatus() == 403 /* FORBIDDEN */ )
         {
-            DAVCapabilities caps;
-            m_xResAccess->OPTIONS( caps, xEnv );
+            // Support for setting arbitrary dead properties is optional!
 
-            if ( caps.class1 )
+            // Store property locally.
+            ContentImplHelper::addProperty( Name, Attributes, DefaultValue );
+        }
+        else
+        {
+            try
             {
-                // DAV resource!
+                DAVCapabilities caps;
+                m_xResAccess->OPTIONS( caps, xEnv );
+
+                if ( caps.class1 )
+                {
+                    // DAV resource!
+                    throw lang::IllegalArgumentException();
+                }
+                else
+                {
+                    // HTTP resource!
+
+                    // Store property locally.
+                    ContentImplHelper::addProperty(
+                                            Name, Attributes, DefaultValue );
+                }
+            }
+            catch ( DAVException const & )
+            {
                 throw lang::IllegalArgumentException();
             }
-            else
-            {
-                // HTTP resource!
-
-                // Store property locally.
-                ContentImplHelper::addProperty(
-                                        Name, Attributes, DefaultValue );
-            }
         }
-        catch ( DAVException const & )
-        {
-            throw lang::IllegalArgumentException();
-          }
     }
 }
 
@@ -931,30 +941,40 @@ void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
                             beans::PropertySetInfoChange::PROPERTY_REMOVED );
         notifyPropertySetInfoChange( evt );
     }
-    catch ( DAVException const & )
+    catch ( DAVException const & e )
     {
-        try
+        if ( e.getStatus() == 403 /* FORBIDDEN */ )
         {
-            DAVCapabilities caps;
-            m_xResAccess->OPTIONS( caps, xEnv );
+            // Support for setting arbitrary dead properties is optional!
 
-            if ( caps.class1 )
+            // Try to remove property from local store.
+            ContentImplHelper::removeProperty( Name );
+        }
+        else
+        {
+            try
             {
-                // DAV resource!
+                DAVCapabilities caps;
+                m_xResAccess->OPTIONS( caps, xEnv );
+
+                if ( caps.class1 )
+                {
+                    // DAV resource!
+                    throw beans::UnknownPropertyException();
+                }
+                else
+                {
+                    // HTTP resource!
+
+                    // Try to remove property from local store.
+                    ContentImplHelper::removeProperty( Name );
+                }
+            }
+            catch ( DAVException const & )
+            {
                 throw beans::UnknownPropertyException();
             }
-            else
-            {
-                // HTTP resource!
-
-                // Try to remove property from local store.
-                ContentImplHelper::removeProperty( Name );
-            }
         }
-        catch ( DAVException const & )
-        {
-            throw beans::UnknownPropertyException();
-          }
     }
 }
 
