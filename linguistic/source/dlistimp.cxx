@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlistimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:34 $
+ *  last change: $Author: tl $ $Date: 2000-11-29 16:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include "dlistimp.hxx"
 #include "dicimp.hxx"
+#include "lngopt.hxx"
 
 #ifndef _FSYS_HXX
 #include <tools/fsys.hxx>
@@ -236,6 +237,7 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
                 || xDicEntry.is(),
                 "lng : missing dictionary entry" );
 
+    BOOL bActiveDicsModified = FALSE;
     //
     // evaluate DictionaryEvents and update data for next DictionaryListEvent
     //
@@ -337,6 +339,12 @@ INT16 DicEvtListenerHelper::FlushEvents()
             xRef->processDictionaryListEvent( aEvent );
     }
 
+    if ( (nCondensedEvt & DictionaryListEventFlags::ACTIVATE_POS_DIC)   ||
+         (nCondensedEvt & DictionaryListEventFlags::DEACTIVATE_POS_DIC) ||
+         (nCondensedEvt & DictionaryListEventFlags::ACTIVATE_NEG_DIC)   ||
+         (nCondensedEvt & DictionaryListEventFlags::DEACTIVATE_NEG_DIC) )
+        LinguOptions().SetCfgActiveDictionaries( xMyDicList );
+
     // clear "list" of events
     nCondensedEvt = 0;
     aCollectDicEvt.realloc( 0 );
@@ -403,6 +411,12 @@ DicList::DicList() :
     pExitListener->Activate();
 
     // evaluate list of dictionaries to be activated from configuration
+    //
+    //! to suppress overwriting the list of active dictionaries in the
+    //! configuration with incorrect arguments during the following
+    //! activation of the dictionaries
+    pDicEvtLstnrHelper->BeginCollectEvents();
+    //
     const Sequence< OUString > aActiveDics( aOpt.GetCfgActiveDictionaries() );
     const OUString *pActiveDic = aActiveDics.getConstArray();
     INT32 nLen = aActiveDics.getLength();
@@ -415,6 +429,7 @@ DicList::DicList() :
                 xDic->setActive( TRUE );
         }
     }
+    pDicEvtLstnrHelper->EndCollectEvents();
 }
 
 DicList::~DicList()
@@ -732,9 +747,6 @@ void SAL_CALL
             if (xDic.is())
                 xDic->removeDictionaryEventListener( xDicEvtLstnrHelper );
         }
-
-        // set list of active dictionaries in configuration
-        aOpt.SetCfgActiveDictionaries( Reference< XDictionaryList >( this ));
     }
 }
 
@@ -757,7 +769,6 @@ void SAL_CALL
     if (!bDisposing && rxListener.is())
         aEvtListeners.removeInterface( rxListener );
 }
-
 
 ///////////////////////////////////////////////////////////////////////////
 // Service specific part
