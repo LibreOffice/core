@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-29 14:46:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ void java_sql_Driver::saveClassRef( jclass pClass )
     theClass = pClass;
 }
 // -----------------------------------------------------------------------------
-void java_sql_Driver::loadDriverFromProperties(const Sequence< PropertyValue >& info,::rtl::OUString& _rsGeneratedValueStatement,sal_Bool& _rbAutoRetrievingEnabled,sal_Bool& _bParameterSubstitution)
+void java_sql_Driver::loadDriverFromProperties(const Sequence< PropertyValue >& info,::rtl::OUString& _rsGeneratedValueStatement,sal_Bool& _rbAutoRetrievingEnabled,sal_Bool& _bParameterSubstitution,sal_Bool& _bIgnoreDriverPrivileges)
 {
     // first try if the jdbc driver is alraedy registered at the driver manager
     SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
@@ -220,6 +220,10 @@ void java_sql_Driver::loadDriverFromProperties(const Sequence< PropertyValue >& 
             {
                 pBegin->Value >>= _bParameterSubstitution;
             }
+            else if(!pBegin->Name.compareToAscii("IgnoreDriverPrivileges"))
+            {
+                pBegin->Value >>= _bIgnoreDriverPrivileges;
+            }
         }
     }
     catch(SQLException& e)
@@ -254,7 +258,8 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
     ::rtl::OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
     sal_Bool            bAutoRetrievingEnabled = sal_False; // set to <TRUE/> when we should allow to query for generated values
     sal_Bool            bParameterSubstitution = sal_False; // set to <TRUE/> when we should subsitute named paramteres
-    loadDriverFromProperties(info,sGeneratedValueStatement,bAutoRetrievingEnabled,bParameterSubstitution);
+    sal_Bool            bIgnoreDriverPrivileges= sal_False;
+    loadDriverFromProperties(info,sGeneratedValueStatement,bAutoRetrievingEnabled,bParameterSubstitution,bIgnoreDriverPrivileges);
     jobject out(0);
 
     if( t.pEnv )
@@ -310,7 +315,7 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     Reference< XConnection > xOut;
-    return out==0 ? 0 : new java_sql_Connection( t.pEnv, out,this,sGeneratedValueStatement,bAutoRetrievingEnabled,bParameterSubstitution );
+    return out==0 ? 0 : new java_sql_Connection( t.pEnv, out,this,sGeneratedValueStatement,bAutoRetrievingEnabled,bParameterSubstitution ,bIgnoreDriverPrivileges);
     //  return xOut;
 }
 // -------------------------------------------------------------------------
@@ -336,7 +341,8 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
         ::rtl::OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
         sal_Bool            bAutoRetrievingEnabled = sal_False; // set to when we should allow to query for generated values
         sal_Bool            bParameterSubstitution = sal_False; // set to <TRUE/> when we should subsitute named paramteres
-        loadDriverFromProperties(info,sGeneratedValueStatement,bAutoRetrievingEnabled,bParameterSubstitution);
+        sal_Bool            bIgnoreDriverPrivileges= sal_False;
+        loadDriverFromProperties(info,sGeneratedValueStatement,bAutoRetrievingEnabled,bParameterSubstitution,bIgnoreDriverPrivileges);
     }
 
     if(!object)
