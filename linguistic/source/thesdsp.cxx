@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdsp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-21 09:00:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
     else
     {
         OUString aChkWord( rTerm );
+        aChkWord = aChkWord.replace( SVT_HARD_SPACE, ' ' );
         RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             RemoveControlChars( aChkWord );
