@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 13:17:25 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 #include "validate.hrc"
 #include "validate.hxx"
 #include "compiler.hxx"
-
+#include "opcode.hxx" //CHINA001
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
@@ -294,7 +294,8 @@ ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rAr
     FreeResource();
 
     // list separator in formulas
-    const String& rListSep = ScCompiler::pSymbolTableNative[ ocSep ];
+    //CHINA001 const String& rListSep = ScCompiler::pSymbolTableNative[ ocSep ];
+    const String& rListSep = ::GetScCompilerpSymbolTableNative()[ocSep]; //CHINA001
     DBG_ASSERT( rListSep.Len() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
     mcFmlaSep = rListSep.Len() ? rListSep.GetChar( 0 ) : ';';
 }
