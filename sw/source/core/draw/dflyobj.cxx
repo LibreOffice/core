@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2002-08-14 09:48:09 $
+ *  last change: $Author: ama $ $Date: 2002-09-11 15:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,14 +605,11 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
     SWRECTFNX( pTmpFrm )
     const Point aNewPos( bVertX ? aOutRect.Right() + 1 : aOutRect.Left(),
                          aOutRect.Top() );
-    SwTwips nWidth = aOutRect.Right() - aOutRect.Left() + 1;
-    SwTwips nHeight = aOutRect.Bottom()- aOutRect.Top() + 1;
-    Size aSz = bVert ? Size( nHeight, nWidth ) : Size( nWidth, nHeight );
 #else
     const Point aNewPos( aOutRect.TopLeft() );
+#endif
     Size aSz( aOutRect.Right() - aOutRect.Left() + 1,
               aOutRect.Bottom()- aOutRect.Top()  + 1 );
-#endif
     if( aSz != GetFlyFrm()->Frm().SSize() )
     {
         //Die Breite darf bei Spalten nicht zu schmal werden

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-09 12:48:48 $
+ *  last change: $Author: ama $ $Date: 2002-09-11 15:21:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1084,11 +1084,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
         SwTwips nNewY = bVert ? rNewPos.X() : rNewPos.Y();
         SwTwips nTmpY = nNewY == LONG_MAX ? 0 : nNewY;
         if( bVert )
-        {
             nTmpY = -nTmpY;
-            if( IsVertical() )
-                nTmpY -= Frm().Width();
-        }
         SfxItemSet aSet( pFmt->GetDoc()->GetAttrPool(),
                          RES_VERT_ORIENT, RES_HORI_ORIENT);
 
@@ -1133,8 +1129,6 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
         {
             SwTwips nNewX = bVert ? rNewPos.Y() : rNewPos.X();
             SwTwips nTmpX = nNewX == LONG_MAX ? 0 : nNewX;
-            if( !bVert && IsVertical() )
-                nTmpX += Frm().Width();
             SwFmtHoriOrient aHori( pFmt->GetHoriOrient() );
             if( IsFlyAtCntFrm() || HORI_NONE != aHori.GetHoriOrient() )
             {
