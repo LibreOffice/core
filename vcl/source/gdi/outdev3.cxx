@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: th $ $Date: 2001-03-23 11:45:44 $
+ *  last change: $Author: th $ $Date: 2001-03-28 10:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@
 
 #include <unohelp.hxx>
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HDL_
+#include <com/sun/star/beans/PropertyValues.hdl>
+#endif
 #ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #endif
@@ -4629,7 +4632,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
         ::rtl::OUString aText( rStr );
         uno::Reference < i18n::XBreakIterator > xBI;
         uno::Reference< linguistic2::XHyphenator > xHyph;
-        i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
+        i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, uno::Sequence <beans::PropertyValue>(), 1 );
         i18n::LineBreakUserOptions aUserOptions;
 
         xub_StrLen nPos = 0;
