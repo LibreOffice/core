@@ -1,0 +1,113 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ValidatableBindableControlModel.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:39:39 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_validation_ValidatableBindableControlModel_idl__
+#define __com_sun_star_form_validation_ValidatableBindableControlModel_idl__
+
+#ifndef __com_sun_star_form_validation_ValidatableControlModel_idl__
+#include <com/sun/star/form/validation/ValidatableControlModel.idl>
+#endif
+
+#ifndef __com_sun_star_form_binding_BindableControlModel_idl__
+#include <com/sun/star/form/binding/BindableControlModel.idl>
+#endif
+//=============================================================================
+
+module com {  module sun {  module star {  module form { module validation {
+
+/** specifies a control model which supports both binding to an external value supplier,
+    and to an external validator.
+
+    <p>There are two methods how the value which is represented by a control model
+    can interact with other components (well, except the trivial ones accessible
+    by using <type scope="com::sun::star::beans">XPropertySet</type>):
+    <ul><li>binding the value to an external component via <type scope="com::sun::star::form::binding">XBindableValue</type></li>
+        <li>validating the current value by an external component, via <type>XValidatable</type> and <type>XValidator</type></li>
+    </ul></p>
+
+    <p>The <type>ValidatableBindableControlModel</type> services describes the interaction of these concepts
+    for control models which support both of them.</p>
+*/
+service ValidatableBindableControlModel
+{
+    /** specifies support for validating the current value of the control
+    */
+    service ValidatableControlModel;
+
+    /** specifies support for binding the control value to an external component
+
+        <p>If a value binding is established at the control model (by using
+        <member scope="com::sun::star::form::binding">XBindableValue::setValueBinding</member> with a non-<NULL/>
+        binding), this binding is analyzed for validation support. If it is present (read: if the
+        binding also supports the <type>XValidator</type> interface), the binding is also
+        established as validator, as if it has been passed to <member>XValidatable::setValidator</member>.<br/>
+        If, while this binding is active (in both its roles as value binding and validator),
+        an attempt is made to establish another validator, this is blocked with raising a
+        <type scope="com::sun::star::util">VetoException</type> upon calling <member>XValidatable::setValidator</member>.</p>
+    */
+    service com::sun::star::form::binding::BindableControlModel;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
