@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-16 11:30:17 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,11 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
 
     aTsbAutoPosV.SetClickHdl( LINK( this, SvxMeasurePage, ClickAutoPosHdl_Impl ) );
     aTsbAutoPosH.SetClickHdl( LINK( this, SvxMeasurePage, ClickAutoPosHdl_Impl ) );
+
+    // set background and border of iconchoicectrl
+    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
+    aCtlPreview.SetBackground ( rStyles.GetWindowColor() );
+    aCtlPreview.SetBorderStyle(WINDOW_BORDER_MONO);
 
     Link aLink( LINK( this, SvxMeasurePage, ChangeAttrHdl_Impl ) );
     aMtrFldLineDist.SetModifyHdl( aLink );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,9 @@ SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttr
         aMtrFldLine2.SetSpinSize( 50 );
         aMtrFldLine3.SetSpinSize( 50 );
     }
+
+    // disable 3D border
+    aCtlPreview.SetBorderStyle(WINDOW_BORDER_MONO);
 
     Link aLink( LINK( this, SvxConnectionPage, ChangeAttrHdl_Impl ) );
     aMtrFldHorz1.SetModifyHdl( aLink );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-18 17:25:25 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,10 +193,6 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     mbIsHTMLDoc     ( sal_False ),
     mbReadOnly      ( sal_False )
 {
-    // set background of iconchoicectrl
-    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    SetCtrlColor ( rStyles.GetWorkspaceColor() );
-
     // insert pages
     Image aImage;
     String aStrTitle;

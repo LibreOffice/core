@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-15 16:58:27 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2274,7 +2274,12 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
     if( p == &aTsbStepCount )
     {
         if( aTsbStepCount.GetState() == STATE_NOCHECK )
+        {
+            if( aNumFldStepCount.GetText().Len() == 0 )
+                aNumFldStepCount.SetText( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "64") ));
+
             aNumFldStepCount.Enable();
+        }
         else
             aNumFldStepCount.Disable();
     }

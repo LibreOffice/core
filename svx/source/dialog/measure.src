@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:00:11 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ TabPage RID_SVXPAGE_MEASURE
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text = "Line" ;
+        Text = "Linie" ;
         Text [ ENGLISH ] = "Line" ;
         Text[ english_us ] = "Line";
         Text[ portuguese ] = "Line";
@@ -393,7 +393,7 @@ TabPage RID_SVXPAGE_MEASURE
     FixedText FT_POSITION
     {
         Pos = MAP_APPFONT ( 141 , 15  ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 116 , 8 ) ;
         Text = "~Textposition" ;
         Text [ ENGLISH ] = "Text position" ;
         Text [ dutch ] = "Tekstpositie" ;
@@ -428,7 +428,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     TriStateBox TSB_AUTOPOSV
     {
-        Pos = MAP_APPFONT ( 147 , 72  ) ;
+        Pos = MAP_APPFONT ( 149 , 72  ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         Text = "Automatisch ~Vertikal" ;
@@ -457,7 +457,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     TriStateBox TSB_AUTOPOSH
     {
-        Pos = MAP_APPFONT ( 147 , 86  ) ;
+        Pos = MAP_APPFONT ( 149 , 86  ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         Text = "Automatisch ~Horizontal" ;
@@ -556,7 +556,6 @@ TabPage RID_SVXPAGE_MEASURE
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 132 ) ;
         Size = MAP_APPFONT ( 247, 48 ) ;
-        TabStop = TRUE ;
     };
     String STR_MEASURE_AUTOMATIC
     {
