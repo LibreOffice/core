@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:33:23 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,8 +381,8 @@ ModalDialog RID_SCDLG_INSCELL
         Text [ portuguese ] = "Mover cÈlulas para a ~direita" ;
         Text [ finnish ] = "Siirr‰ ~solut oikealle" ;
         Text [ danish ] = "Flyt celler mod h¯jre" ;
-        Text [ french ] = "DÈplacer les cellules vers la ~droite" ;
-        Text [ swedish ] = "Flytta celler Ât hˆge~r" ;
+        Text [ french ] = "DÈplacer les cellules vers la droite" ;
+        Text [ swedish ] = "Flytta celler Ât hˆg~er" ;
         Text [ dutch ] = "Cellen naar ~rechts verplaatsen" ;
         Text [ spanish ] = "Desplazar celdas a la ~derecha" ;
         Text [ english_us ] = "Shift cells ~right" ;
@@ -590,7 +590,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text [ portuguese ] = "N˙meros" ;
         Text [ finnish ] = "~Numerot" ;
         Text [ danish ] = "Tal" ;
-        Text [ french ] = "Nom~bres" ;
+        Text [ french ] = "Nombres" ;
         Text [ swedish ] = "~Siffror" ;
         Text [ dutch ] = "~Getallen" ;
         Text [ spanish ] = "N˙m~eros" ;
@@ -620,7 +620,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text [ portuguese ] = "~Data & Hora" ;
         Text [ finnish ] = "~P‰iv‰m‰‰r‰ ja kellonaika" ;
         Text [ danish ] = "~Dato og klokkeslÊt" ;
-        Text [ french ] = "~Date & heure" ;
+        Text [ french ] = "Date & heure" ;
         Text [ swedish ] = "~Datum och tid" ;
         Text [ dutch ] = "~Datum & tijd" ;
         Text [ spanish ] = "Fecha y ~hora" ;
@@ -680,7 +680,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text [ portuguese ] = "Forma~tos" ;
         Text [ finnish ] = "Muo~dot" ;
         Text [ danish ] = "Formater" ;
-        Text [ french ] = "For~mats" ;
+        Text [ french ] = "Formats" ;
         Text [ swedish ] = "Forma~t" ;
         Text [ dutch ] = "~Opmaakprofielen" ;
         Text [ spanish ] = "~Formatos" ;
@@ -710,7 +710,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text [ portuguese ] = "ObservaÁıes" ;
         Text [ finnish ] = "Huomau~tukset" ;
         Text [ danish ] = "Noter" ;
-        Text [ french ] = "~Notes" ;
+        Text [ french ] = "Notes" ;
         Text [ swedish ] = "A~nteckningar" ;
         Text [ dutch ] = "~Aantekeningen" ;
         Text [ spanish ] = "N~otas" ;
@@ -854,7 +854,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ portuguese ] = "Inserir ~tudo" ;
         Text [ finnish ] = "~Liit‰ kaikki" ;
         Text [ danish ] = "IndsÊt alt" ;
-        Text [ french ] = "~InsÈrer tout" ;
+        Text [ french ] = "InsÈrer tout" ;
         Text [ swedish ] = "Klistra in ~allt" ;
         Text [ dutch ] = "Alle ~invoegen" ;
         Text [ spanish ] = "~Pegar todo" ;
@@ -914,7 +914,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ portuguese ] = "~N˙meros" ;
         Text [ finnish ] = "~Numerot" ;
         Text [ danish ] = "Tal" ;
-        Text [ french ] = "~Nombres" ;
+        Text [ french ] = "Nombres" ;
         Text [ swedish ] = "~Siffror" ;
         Text [ dutch ] = "~Getallen" ;
         Text [ spanish ] = "N˙m~eros" ;
@@ -944,7 +944,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ portuguese ] = "~Data & Hora" ;
         Text [ finnish ] = "~P‰iv‰m‰‰r‰ ja kellonaika" ;
         Text [ danish ] = "~Dato og klokkeslÊt" ;
-        Text [ french ] = "~Date & heure" ;
+        Text [ french ] = "Date & heure" ;
         Text [ swedish ] = "~Datum och tid" ;
         Text [ dutch ] = "~Datum & tijd" ;
         Text [ spanish ] = "Fecha y ~hora" ;
@@ -1004,7 +1004,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ portuguese ] = "Forma~tos" ;
         Text [ finnish ] = "Muo~dot" ;
         Text [ danish ] = "Formater" ;
-        Text [ french ] = "Forma~ts" ;
+        Text [ french ] = "Formats" ;
         Text [ swedish ] = "Forma~t" ;
         Text [ dutch ] = "~Opmaakprofielen" ;
         Text [ spanish ] = "~Formatos" ;
@@ -1034,7 +1034,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ portuguese ] = "~AnotaÁıes" ;
         Text [ finnish ] = "Huomau~tukset" ;
         Text [ danish ] = "Noter" ;
-        Text [ french ] = "~Notes" ;
+        Text [ french ] = "Notes" ;
         Text [ swedish ] = "Ante~ckningar" ;
         Text [ dutch ] = "~Aantekeningen" ;
         Text [ spanish ] = "N~otas" ;
@@ -1090,8 +1090,8 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ dutch ] = "~Geen" ;
         Text [ english_us ] = "Non~e" ;
         Text [ italian ] = "S~enza" ;
-        Text [ spanish ] = "Ning~una" ;
-        Text [ french ] = "~Aucune" ;
+        Text [ spanish ] = "Ninguna" ;
+        Text [ french ] = "Aucune" ;
         Text [ swedish ] = "Ing~en" ;
         Text [ danish ] = "Ingen" ;
         Text [ portuguese_brazilian ] = "Kei~ne" ;
@@ -1119,7 +1119,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ english_us ] = "~Add" ;
         Text [ italian ] = "Sommare" ;
         Text [ spanish ] = "~Sumar" ;
-        Text [ french ] = "~Addition" ;
+        Text [ french ] = "Addition" ;
         Text [ swedish ] = "Adde~ra" ;
         Text [ danish ] = "Adder" ;
         Text [ portuguese_brazilian ] = "Addie~ren" ;
@@ -1146,7 +1146,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ dutch ] = "~Aftrekken" ;
         Text [ english_us ] = "S~ubtract" ;
         Text [ italian ] = "Sottrai" ;
-        Text [ spanish ] = "S~ustraer" ;
+        Text [ spanish ] = "Sustraer" ;
         Text [ french ] = "~Soustraction" ;
         Text [ swedish ] = "Su~btrahera" ;
         Text [ danish ] = "Subtraher" ;
@@ -1203,7 +1203,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ english_us ] = "Di~vide" ;
         Text [ italian ] = "Dividere" ;
         Text [ spanish ] = "~Dividir" ;
-        Text [ french ] = "D~ivision" ;
+        Text [ french ] = "Division" ;
         Text [ swedish ] = "Di~videra" ;
         Text [ danish ] = "Divider" ;
         Text [ portuguese_brazilian ] = "D~ividieren" ;
@@ -1260,7 +1260,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ english_us ] = "S~kip empty cells" ;
         Text [ italian ] = "Salta righe vuote" ;
         Text [ spanish ] = "Ignorar ~celdas vacÌas" ;
-        Text [ french ] = "~Ignorer les cellules vides" ;
+        Text [ french ] = "Ignorer les cellules vides" ;
         Text [ swedish ] = "Ho~ppa ˆver tomma celler" ;
         Text [ danish ] = "Spring tomme celler over" ;
         Text [ portuguese ] = "~Saltar cÈlulas vazias" ;
@@ -1287,7 +1287,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ english_us ] = "~Transpose" ;
         Text [ italian ] = "~Trasponi" ;
         Text [ spanish ] = "~Transponer" ;
-        Text [ french ] = "~Transposer" ;
+        Text [ french ] = "Transposer" ;
         Text [ dutch ] = "~Transponeren" ;
         Text [ swedish ] = "Transp~onera" ;
         Text [ danish ] = "Transponer" ;
@@ -1375,7 +1375,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ danish ] = "Ikke flytte" ;
         Text [ italian ] = "Non ~spostare" ;
         Text [ spanish ] = "~No desplazar" ;
-        Text [ french ] = "~Ne pas dÈplacer" ;
+        Text [ french ] = "Ne pas dÈplacer" ;
         Text [ dutch ] = "~Niet verplaatsen" ;
         Text [ portuguese ] = "~N„o mover" ;
         Text[ chinese_simplified ] = "‰∏çÁßªÂä®(~I)";
@@ -1431,7 +1431,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ danish ] = "Mod h¯jre" ;
         Text [ italian ] = "Verso ~destra" ;
         Text [ spanish ] = "Hacia la de~recha" ;
-        Text [ french ] = "DÈplacer vers la ~droite" ;
+        Text [ french ] = "Vers la droite" ;
         Text [ dutch ] = "Naar re~chts" ;
         Text [ portuguese ] = "Para a ~direita" ;
         Text[ chinese_simplified ] = "ÂêëÂè≥(~R)";
@@ -1880,7 +1880,7 @@ ModalDialog RID_SCDLG_COL_MAN
         Text [ english_us ] = "~Default value" ;
         Text [ dutch ] = "~Standaardwaarde" ;
         Text [ spanish ] = "Valor ~predetermin." ;
-        Text [ french ] = "Valeur par ~dÈfaut" ;
+        Text [ french ] = "Valeur par dÈfaut" ;
         Text [ swedish ] = "~Standardv‰rde" ;
         Text [ danish ] = "StandardvÊrdi" ;
         Text[ chinese_simplified ] = "ÈªòËÆ§ÂÄº(~D)";
@@ -2004,7 +2004,7 @@ ModalDialog RID_SCDLG_COL_OPT
         Text [ english_us ] = "~Default value" ;
         Text [ dutch ] = "~Standaardwaarde" ;
         Text [ spanish ] = "Valor ~predetermin." ;
-        Text [ french ] = "Valeur par ~dÈfaut" ;
+        Text [ french ] = "Valeur par dÈfaut" ;
         Text [ swedish ] = "~Standardv‰rde" ;
         Text [ danish ] = "StandardvÊrdi" ;
         Text[ chinese_simplified ] = "ÈªòËÆ§ÂÄº(~D)";
@@ -2128,7 +2128,7 @@ ModalDialog RID_SCDLG_ROW_MAN
         Text [ english_us ] = "~Default value" ;
         Text [ dutch ] = "~Standaardwaarde" ;
         Text [ spanish ] = "Valor ~predetermin." ;
-        Text [ french ] = "Valeur par ~dÈfaut" ;
+        Text [ french ] = "Valeur par dÈfaut" ;
         Text [ swedish ] = "~Standardv‰rde" ;
         Text [ danish ] = "StandardvÊrdi" ;
         Text[ chinese_simplified ] = "ÈªòËÆ§ÂÄº(~D)";
@@ -2251,7 +2251,7 @@ ModalDialog RID_SCDLG_ROW_OPT
         Text [ english_us ] = "~Default value" ;
         Text [ dutch ] = "~Standaardwaarde" ;
         Text [ spanish ] = "Valor ~predetermin." ;
-        Text [ french ] = "Valeur par ~dÈfaut" ;
+        Text [ french ] = "Valeur par dÈfaut" ;
         Text [ swedish ] = "~Standardv‰rde" ;
         Text [ danish ] = "StandardvÊrdi" ;
         Text[ chinese_simplified ] = "ÈªòËÆ§ÂÄº(~D)";
@@ -2507,7 +2507,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ portuguese ] = "Dia da ~semana" ;
         Text [ finnish ] = "~Viikonp‰iv‰" ;
         Text [ danish ] = "Ugedag" ;
-        Text [ french ] = "Jour ~de la semaine" ;
+        Text [ french ] = "Jour de la semaine" ;
         Text [ swedish ] = "Vec~kodag" ;
         Text [ dutch ] = "~Dag van de week" ;
         Text [ spanish ] = "DÌa de la s~emana" ;
@@ -2567,7 +2567,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ portuguese ] = "~Ano" ;
         Text [ finnish ] = "Vuo~si" ;
         Text [ danish ] = "≈r" ;
-        Text [ french ] = "~AnnÈe" ;
+        Text [ french ] = "AnnÈe" ;
         Text [ swedish ] = "~≈r" ;
         Text [ dutch ] = "~Jaar" ;
         Text [ spanish ] = "~AÒo" ;
@@ -2626,10 +2626,10 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ portuguese ] = "~Direita" ;
         Text [ finnish ] = "~Oikea" ;
         Text [ danish ] = "H¯jre" ;
-        Text [ french ] = "~¿ droite" ;
+        Text [ french ] = "¿ droite" ;
         Text [ swedish ] = "Hˆ~ger" ;
         Text [ dutch ] = "~Rechts" ;
-        Text [ spanish ] = "Derec~ha" ;
+        Text [ spanish ] = "Derecha" ;
         Text [ english_us ] = "~Right" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÂêëÂè≥(~R)";
@@ -2656,10 +2656,10 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ portuguese ] = "~Esquerda" ;
         Text [ finnish ] = "~Vasen:" ;
         Text [ danish ] = "Venstre" ;
-        Text [ french ] = "~¿ gauche" ;
+        Text [ french ] = "¿ gauche" ;
         Text [ swedish ] = "~V‰nster" ;
         Text [ dutch ] = "~Links" ;
-        Text [ spanish ] = "~Izquierda" ;
+        Text [ spanish ] = "Izquierda" ;
         Text [ english_us ] = "~Left" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÂêëÂ∑¶(~L)";
@@ -2686,10 +2686,10 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ portuguese ] = "~Superior" ;
         Text [ finnish ] = "~Ylˆs" ;
         Text [ danish ] = "ÿverst" ;
-        Text [ french ] = "~En haut" ;
+        Text [ french ] = "En haut" ;
         Text [ swedish ] = "~UppÂt" ;
         Text [ dutch ] = "~Boven" ;
-        Text [ spanish ] = "A~rriba" ;
+        Text [ spanish ] = "Arriba" ;
         Text [ english_us ] = "~Up" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "Âêë‰∏ä(~U)";
@@ -2716,7 +2716,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ portuguese ] = "~Inferior" ;
         Text [ finnish ] = "~Alas" ;
         Text [ danish ] = "Nederst" ;
-        Text [ french ] = "En b~as" ;
+        Text [ french ] = "En bas" ;
         Text [ swedish ] = "~NedÂt" ;
         Text [ dutch ] = "~Onder" ;
         Text [ spanish ] = "A~bajo" ;
@@ -2775,7 +2775,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ portuguese ] = "~AritmÈtico" ;
         Text [ finnish ] = "Li~neaarinen" ;
         Text [ danish ] = "Aritmetisk" ;
-        Text [ french ] = "~ArithmÈtique" ;
+        Text [ french ] = "ArithmÈtique" ;
         Text [ swedish ] = "~Aritmetisk" ;
         Text [ dutch ] = "~Rekenkundig" ;
         Text [ spanish ] = "AritmÈtic~o" ;
@@ -2830,15 +2830,15 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text = "~Datum" ;
         Text [ ENGLISH ] = "Da~te" ;
         Text [ norwegian ] = "Da~te" ;
-        Text [ italian ] = "~Data" ;
+        Text [ italian ] = "Data" ;
         Text [ portuguese_brazilian ] = "Da~ta" ;
         Text [ portuguese ] = "Da~ta" ;
         Text [ finnish ] = "P‰iv‰~m‰‰r‰" ;
         Text [ danish ] = "~Dato" ;
-        Text [ french ] = "~Date" ;
+        Text [ french ] = "Date" ;
         Text [ swedish ] = "Da~tum" ;
         Text [ dutch ] = "~Datum" ;
-        Text [ spanish ] = "~Fecha" ;
+        Text [ spanish ] = "Fecha" ;
         Text [ english_us ] = "Da~te" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "Êó•Êúü(~T)";
@@ -2930,7 +2930,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text = "~Startwert" ;
         Text [ english ] = "~Min. value" ;
         Text [ english_us ] = "~Start value" ;
-        Text [ FRENCH ] = "Valeur ~initiale" ;
+        Text [ FRENCH ] = "Valeur initiale" ;
         Text [ portuguese_brazilian ] = "~Startwert" ;
         Text [ swedish ] = "~Startv‰rde" ;
         Text [ danish ] = "StartvÊrdi" ;
@@ -2969,7 +2969,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ ENGLISH_US ] = "End ~value" ;
         Text [ SPANISH ] = "Valor ~final" ;
         Text [ FINNISH ] = "Lopetus~arvo" ;
-        Text [ FRENCH ] = "Valeur ~finale" ;
+        Text [ FRENCH ] = "Valeur finale" ;
         Text [ ITALIAN ] = "Valore limite" ;
         Text [ DUTCH ] = "~Eindwaarde" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Valor max." ;
@@ -3121,7 +3121,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     Text = "Z~eilen" ; \
     Text [ ENGLISH ] = "~Rows" ; \
     Text [ norwegian ] = "~Rows" ; \
-    Text [ italian ] = "~Righe" ; \
+    Text [ italian ] = "Righe" ; \
     Text [ portuguese_brazilian ] = "Filei~ras" ; \
     Text [ portuguese ] = "~Linhas" ; \
     Text [ finnish ] = "~Rivit" ; \
@@ -3434,7 +3434,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text [ english_us ] = "~Right column" ;
         Text [ italian ] = "Colonna destra" ;
         Text [ spanish ] = "Columna ~derecha" ;
-        Text [ french ] = "Colonne ~droite" ;
+        Text [ french ] = "Colonne droite" ;
         Text [ dutch ] = "~Rechterkolom" ;
         Text [ swedish ] = "Hˆg~ra kolumnen" ;
         Text [ danish ] = "H¯jre kolonne" ;
