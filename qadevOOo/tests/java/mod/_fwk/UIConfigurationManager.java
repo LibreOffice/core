@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UIConfigurationManager.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Date: 2005-02-24 17:45:20 $
+ *  last change: $Date: 2005-03-01 20:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
+import com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
 import ifc.ui._XUIConfiguration;
 import java.io.PrintWriter;
 import com.sun.star.lang.EventObject;
@@ -81,13 +81,13 @@ import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.util.XCloseable;
-import drafts.com.sun.star.ui.ConfigurationEvent;
-import drafts.com.sun.star.ui.UIElementType;
-import drafts.com.sun.star.ui.XUIConfigurationManager;
-import drafts.com.sun.star.ui.XUIConfigurationManagerSupplier;
-import drafts.com.sun.star.ui.XUIConfigurationStorage;
-import drafts.com.sun.star.ui.XUIElement;
-import drafts.com.sun.star.ui.XUIElementFactory;
+import com.sun.star.ui.ConfigurationEvent;
+import com.sun.star.ui.UIElementType;
+import com.sun.star.ui.XUIConfigurationManager;
+import com.sun.star.ui.XUIConfigurationManagerSupplier;
+import com.sun.star.ui.XUIConfigurationStorage;
+import com.sun.star.ui.XUIElement;
+import com.sun.star.ui.XUIElementFactory;
 import ifc.ui._XUIConfigurationManager;
 import lib.StatusException;
 import lib.TestCase;
@@ -159,9 +159,9 @@ public class UIConfigurationManager extends TestCase {
             new ConfigurationListener(log, xManager, xMSF));
 
         // the short cut manager service name
-        // 2do: correct the service name when it's no longer in drafts
+        // 2do: correct the service name when it's no longer in
         tEnv.addObjRelation("XConfigurationManager.ShortCutManager",
-            "drafts.com.sun.star.ui.DocumentAcceleratorConfiguration");
+            "com.sun.star.ui.DocumentAcceleratorConfiguration");
         return tEnv;
     }
 
