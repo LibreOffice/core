@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:35 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 16:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ constants ColumnType
 {
 
     // DocMerge from idl: value com::sun::star::sdbc::ColumnType::UNKNOWN
-    /** indicates that this column may or may not be a pseudo column.
+    /** indicates that this column may or may not be a pseudo-column.
              A possible value for the column
              <code>PSEUDO_COLUMN</code>
              in the <code>XResultSet</code> object
@@ -81,7 +81,7 @@ constants ColumnType
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::sdbc::ColumnType::NOT_PSEUDO
-    /** indicates that this column is NOT a pseudo column.
+    /** indicates that this column is NOT a pseudo-column.
              A possible value for the column
              <code>PSEUDO_COLUMN</code>
              in the <code>XResultSet</code> object
@@ -91,7 +91,7 @@ constants ColumnType
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::sdbc::ColumnType::PSEUDO
-    /** indicates that this column is a pseudo column.
+    /** indicates that this column is a pseudo-column.
              A possible value for the column
              <code>PSEUDO_COLUMN</code>
              in the <code>XResultSet</code> object
@@ -106,6 +106,9 @@ constants ColumnType
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:39  hjs
     initial import
 

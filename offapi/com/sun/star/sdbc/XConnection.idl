@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnection.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 16:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ interface XConnection: com::sun::star::sdbc::XCloseable
 
         <p>
         <b>Note:</b> This method cannot be called while in the
-        middle of a transaction; calling setReadOnly with <TRUE/> does not
+        middle of a transaction. Calling setReadOnly with <TRUE/> does not
         necessarily cause writes to be prohibited.
         </p>
      */
@@ -323,9 +323,9 @@ interface XConnection: com::sun::star::sdbc::XCloseable
 
     // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getTypeMap
     /** gets the type map object associated with this connection. Only drivers
-        how implement the custom type mapping facility will return an object otherwise
+        which implement the custom type mapping facility will return an object otherwise
         NULL could be returned.
-
+<!-- JRH: changed "how implement" to "which implement"  -->
 
         <p>Unless the application has added an entry to the type map, the map
         returned will be empty.
@@ -340,8 +340,7 @@ interface XConnection: com::sun::star::sdbc::XCloseable
         and distinct types.
 
 
-        <p>Only if the driver supports custom type mapping the setting of a map is
-        allowed.
+        <p>Only if the driver supports custom type mapping is the setting of a map allowed.
         </p>
      */
     void setTypeMap([in]com::sun::star::container::XNameAccess typeMap)
@@ -354,6 +353,9 @@ interface XConnection: com::sun::star::sdbc::XCloseable
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 16:41:35  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/19 16:03:44  mi
     documentations syntax errors fixed
 

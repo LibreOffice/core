@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRowSetListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 16:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 // DocMerge from xml: interface com::sun::star::sdbc::XRowSetListener
 /** is used for receiving "cursorMoved", "rowChanged", and "rowSetChanged" events
-    posted by e.g. by a rowset.
+    posted by, for example, a rowset.
  */
 interface XRowSetListener: com::sun::star::lang::XEventListener
 {
@@ -100,6 +100,9 @@ interface XRowSetListener: com::sun::star::lang::XEventListener
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/16 16:41:35  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

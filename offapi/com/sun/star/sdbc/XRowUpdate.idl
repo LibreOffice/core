@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRowUpdate.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 16:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,13 +137,13 @@ interface XRowUpdate: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateDouble
-    /** updates a column with a Double value.
+    /** updates a column with a double value.
      */
     void updateDouble([in]long columnIndex, [in]double x) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateString
-    /** updates a column with a String value.
+    /** updates a column with a string value.
      */
     void updateString([in]long columnIndex, [in]string x) raises (SQLException);
     //-------------------------------------------------------------------------
@@ -155,21 +155,21 @@ interface XRowUpdate: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateDate
-    /** updates a column with a Date value.
+    /** updates a column with a date value.
      */
     void updateDate([in]long columnIndex, [in]com::sun::star::util::Date x)
         raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateTime
-    /** updates a column with a Time value.
+    /** updates a column with a time value.
      */
     void updateTime([in]long columnIndex, [in]com::sun::star::util::Time x)
         raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateTimestamp
-    /** updates a column with a Timestamp value.
+    /** updates a column with a timestamp value.
      */
     void updateTimestamp([in]long columnIndex,
                          [in]com::sun::star::util::DateTime x)
@@ -193,14 +193,14 @@ interface XRowUpdate: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateObject
-    /** updates a column with an Object value.
+    /** updates a column with an object value.
      */
     void updateObject([in]long columnIndex, [in]any x)
       raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateNumericObject
-    /** updates a column with an Object value.
+    /** updates a column with an object value.
      */
     void updateNumericObject([in]long columnIndex, [in]any x, [in]long scale)
       raises (SQLException);
@@ -212,6 +212,9 @@ interface XRowUpdate: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/16 16:41:35  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

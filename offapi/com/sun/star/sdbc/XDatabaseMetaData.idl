@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseMetaData.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 16:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::allProceduresAreCallable
     /** Can all the procedures returned by getProcedures be called by the
         current user?
+
+<!-- JRH:/MI: These questions are unclear, see "@return\<TRUE>..." examples in this document for a better solution. -->
      */
     boolean allProceduresAreCallable() raises (SQLException);
     //-------------------------------------------------------------------------
@@ -127,20 +129,20 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::isReadOnly
-    /** check, if the database in read-only mode.
+    /** checks if the database in read-only mode.
      */
     boolean isReadOnly() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::nullsAreSortedHigh
-    /** Are NULL values sorted high ?
-     */
+    /** Are NULL values sorted high?
+<!-- JRH: meaning sorted to start of file? -->*/
     boolean nullsAreSortedHigh() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::nullsAreSortedLow
-    /** Are NULL values sorted low ?
-     */
+    /** Are NULL values sorted low?
+<!-- JRH: meaning to end of file? -->*/
     boolean nullsAreSortedLow() raises (SQLException);
     //-------------------------------------------------------------------------
 
@@ -151,7 +153,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::nullsAreSortedAtEnd
-    /** Are NULL values sorted at the end regardless of sort order?
+    /**  Are NULL values sorted at the end, regardless of sort order?
      */
     boolean nullsAreSortedAtEnd() raises (SQLException);
     //-------------------------------------------------------------------------
@@ -261,20 +263,20 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getIdentifierQuoteString
     /** What's the string used to quote SQL identifiers?
-        This returns a space " " if identifier quoting isn't supported.
+        This returns a space " " if identifier quoting is not supported.
      */
     string getIdentifierQuoteString() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getSQLKeywords
-    /** Gets a comma-separated list of all a database's SQL keywords
+    /** gets a comma-separated list of all a database's SQL keywords
         that are NOT also SQL92 keywords.
      */
     string getSQLKeywords() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getNumericFunctions
-    /** Gets a comma-separated list of math functions.  These are the
+    /** gets a comma-separated list of math functions.  These are the
         X/Open CLI math function names used in the SDBC function escape
         clause.
      */
@@ -282,7 +284,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getStringFunctions
-    /** Gets a comma-separated list of string functions.  These are the
+    /** gets a comma-separated list of string functions.  These are the
         X/Open CLI string function names used in the SDBC function escape
         clause.
      */
@@ -290,7 +292,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getSystemFunctions
-    /** Gets a comma-separated list of system functions.  These are the
+    /** gets a comma-separated list of system functions.  These are the
         X/Open CLI system function names used in the SDBC function escape
         clause.
      */
@@ -298,13 +300,13 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getTimeDateFunctions
-    /** Gets a comma-separated list of time and date functions.
+    /** gets a comma-separated list of time and date functions.
      */
     string getTimeDateFunctions() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getSearchStringEscape
-    /** Gets the string that can be used to escape wildcard characters.
+    /** gets the string that can be used to escape wildcard characters.
         This is the string that can be used to escape '_' or '%' in
         the string pattern style catalog search parameters.
 
@@ -319,26 +321,26 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getExtraNameCharacters
-    /** Gets all the "extra" characters that can be used in unquoted
+    /** gets all the "extra" characters that can be used in unquoted
         identifier names (those beyond a-z, A-Z, 0-9 and _).
      */
     string getExtraNameCharacters() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsAlterTableWithAddColumn
-    /** support the Database "ALTER TABLE" with add column ?
+    /** support the Database "ALTER TABLE" with add column?
      */
     boolean supportsAlterTableWithAddColumn() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsAlterTableWithDropColumn
-    /** support the Database  "ALTER TABLE" with drop column ?
+    /** support the Database  "ALTER TABLE" with drop column?
      */
     boolean supportsAlterTableWithDropColumn() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsColumnAliasing
-    /** support the Database column aliasing ?
+    /** support the Database column aliasing?
 
 
         <p>The SQL AS clause can be used to provide names for
@@ -355,13 +357,17 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsTypeConversion
-    /** Support the Database the CONVERT function between SQL types ?
+    /** @returns
+            <TRUE>, if the Database supports the CONVERT function between SQL types,
+            otherwise <FALSE>.
      */
     boolean supportsTypeConversion() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsConvert
-    /** Support the Database the CONVERT between the given SQL types ?
+    /** @returns
+            <TRUE>, if the Database supports the CONVERT between the given SQL types
+            otherwise <FALSE>.
      */
     boolean supportsConvert([in]long fromType, [in]long toType)
         raises (SQLException);
@@ -438,62 +444,83 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsMinimumSQLGrammar
-    /** support the Database ODBC Minimum SQL grammar ?
+    /** @returns
+            <TRUE>, if the database supports ODBC Minimum SQL grammar,
+            otherwise <FALSE>.
      */
     boolean supportsMinimumSQLGrammar() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsCoreSQLGrammar
-    /** support the Database ODBC Core SQL grammar ?
+    /** @returns
+            <TRUE>, if the database supports ODBC Core SQL grammar,
+            otherwise <FALSE>.
+     */
      */
     boolean supportsCoreSQLGrammar() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsExtendedSQLGrammar
-    /** support the Database ODBC Extended SQL grammar ?
+    /** @returns
+            <TRUE>, if the database supports ODBC Extended SQL grammar,
+            otherwise <FALSE>.
      */
     boolean supportsExtendedSQLGrammar() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsANSI92EntryLevelSQL
-    /** support the Database ANSI92 entry level SQL grammar ?
+    /** @returns
+            <TRUE>, if the database supports ANSI92 entry level SQL grammar,
+            otherwise <FALSE>.
      */
     boolean supportsANSI92EntryLevelSQL() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsANSI92IntermediateSQL
-    /** Support the Database ANSI92 intermediate SQL grammar ?
+    /** @returns
+            <TRUE>, if the database supports ANSI92 intermediate SQL grammar,
+            otherwise <FALSE>.
      */
     boolean supportsANSI92IntermediateSQL() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsANSI92FullSQL
-    /** Support the Database ANSI92 full SQL grammar ?
+    /** @returns
+            <TRUE>, if the database supports ANSI92 full SQL grammar,
+            otherwise <FALSE>.
      */
     boolean supportsANSI92FullSQL() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsIntegrityEnhancementFacility
-    /** support the Database SQL Integrity Enhancement Facility ?
+    /** returns
+            <TRUE>, if the Database supports SQL Integrity Enhancement Facility,
+            otherwise <FALSE>.
      */
     boolean supportsIntegrityEnhancementFacility() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsOuterJoins
-    /** Is some form of outer join supported?
+    /** @returns
+            <TRUE>, if some form of outer join is supported,
+            otherwise <FALSE>.
      */
     boolean supportsOuterJoins() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsFullOuterJoins
-    /** Are full nested outer joins supported?
+    /** @returns
+            <TRUE>, if full nested outer joins are supported,
+            otherwise <FALSE>.
      */
     boolean supportsFullOuterJoins() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsLimitedOuterJoins
-    /** Is there limited support for outer joins?  (This will be true
-        if supportFullOuterJoins is true.)
+    /** @returns
+            <TRUE>, if there is limited support for outer joins.
+            (This will be true if supportFullOuterJoins is true.)
+            <FALSE> is returned otherwise.
      */
     boolean supportsLimitedOuterJoins() raises (SQLException);
     //-------------------------------------------------------------------------
@@ -818,7 +845,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsTransactions
-    /** support the Database transactions ?
+    /** support the Database transactions?
         If not, invoking the method <code>commit</code> is a noop and the
         isolation level is TransactionIsolation_NONE.
      */
@@ -826,7 +853,8 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsTransactionIsolationLevel
-    /** Does this database support the given transaction isolation level?@see com::sun::star::sdbc::Connection
+    /** Does this database support the given transaction isolation level?
+ @see com::sun::star::sdbc::Connection
      */
     boolean supportsTransactionIsolationLevel([in]long level)
                             raises (SQLException);
@@ -835,7 +863,14 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions
     /** support the Database both data definition and data manipulation statements
         within a transaction?
-     */
+<!-- JRH: Unclear on the intent of these many support questions.
+        If asking, it should state, "Does the Database support both ....?
+        If declaring, it should state something like the following:
+
+        metadata:   supportsDataDefinitionAndDataManipulationTransactions
+
+    "provides support for both data definition and data manipulation statements within a transaction."
+ -->     */
     boolean supportsDataDefinitionAndDataManipulationTransactions()
                              raises (SQLException);
     //-------------------------------------------------------------------------
@@ -1005,8 +1040,8 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
 
         <p>Only table descriptions matching the catalog, schema, table
-        name and type criteria are returned.  They are ordered by
-        TABLE_TYPE, TABLE_SCHEM and TABLE_NAME.
+        name, and type criteria are returned.  They are ordered by
+        TABLE_TYPE, TABLE_SCHEM, and TABLE_NAME.
         </p>
         <p>Each table description has the following columns:
         </p>
@@ -1096,7 +1131,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
         <p>Only column descriptions matching the catalog, schema, table
         and column name criteria are returned.  They are ordered by
-        TABLE_SCHEM, TABLE_NAME and ORDINAL_POSITION.
+        TABLE_SCHEM, TABLE_NAME, and ORDINAL_POSITION.
         </p>
         <p>Each column description has the following columns:
         </p>
@@ -1424,7 +1459,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         <li>
         <b>PKCOLUMN_NAME</b> string =&amp;gt; primary key column name
-        eing imported
+        being imported
         </li>
         <li>
         <b>FKTABLE_CAT</b> string =&amp;gt; foreign key table catalog (may be null)
@@ -1978,8 +2013,8 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
         or DISTINCT.
 
 
-        <p>Only types matching the catalog, schema, type name and type
-        criteria are returned.  They are ordered by DATA_TYPE, TYPE_SCHEM
+        <p>Only types matching the catalog, schema, type name, and type
+        criteria are returned.  They are ordered by DATA_TYPE, TYPE_SCHEM,
         and TYPE_NAME.  The type name parameter may be a fully-qualified
         name.  In this case, the catalog and schemaPattern parameters are
         ignored.
@@ -2029,6 +2064,9 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/16 16:41:35  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2000/12/14 12:53:39  mi
     <true></true> -> <TRUE/> and same with FALSE
 

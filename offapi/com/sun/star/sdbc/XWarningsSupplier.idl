@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XWarningsSupplier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 16:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 
 
 // DocMerge from xml: interface com::sun::star::sdbc::XWarningsSupplier
-/** should be implemented of objects which may report warnings or not critical
+/** should be implemented of objects which may report warnings or non critical
     errors .@see com::sun::star::sdbc::SQLWarning
  */
 interface XWarningsSupplier: com::sun::star::uno::XInterface
@@ -111,6 +111,9 @@ interface XWarningsSupplier: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/16 16:41:35  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2000/12/19 13:59:40  mi
     syntax errors in documentation fixed
 
