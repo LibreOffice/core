@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-26 09:32:09 $
+ *  last change: $Author: kso $ $Date: 2000-10-26 15:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef __HASH_MAP__
 #include <stl/hash_map>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
@@ -94,6 +97,7 @@
 #endif
 
 using namespace rtl;
+using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
@@ -419,6 +423,9 @@ sal_Bool ContentProviderImplHelper::renameAdditionalPropertySet(
                                                       const OUString& rNewKey,
                                                       sal_Bool bRecursive )
 {
+    if ( rOldKey == rNewKey )
+        return sal_True;
+
     vos::OGuard aGuard( m_aMutex );
 
     if ( bRecursive )
@@ -475,6 +482,153 @@ sal_Bool ContentProviderImplHelper::renameAdditionalPropertySet(
             }
             else
                 return sal_False;
+        }
+    }
+    return sal_True;
+}
+
+//=========================================================================
+sal_Bool ContentProviderImplHelper::copyAdditionalPropertySet(
+                                                  const OUString& rSourceKey,
+                                                  const OUString& rTargetKey,
+                                                  sal_Bool bRecursive )
+{
+    if ( rSourceKey == rTargetKey )
+        return sal_True;
+
+    vos::OGuard aGuard( m_aMutex );
+
+    if ( bRecursive )
+    {
+        // Get propertyset registry.
+        getAdditionalPropertySetRegistry();
+
+        if ( m_pImpl->m_xPropertySetRegistry.is() )
+        {
+            Reference< XNameAccess > xNameAccess(
+                            m_pImpl->m_xPropertySetRegistry, UNO_QUERY );
+            if ( xNameAccess.is() )
+            {
+                Sequence< OUString > aKeys = xNameAccess->getElementNames();
+                sal_Int32 nCount = aKeys.getLength();
+                if ( nCount > 0 )
+                {
+                    const OUString* pKeys = aKeys.getConstArray();
+                    for ( sal_Int32 n = 0; n < nCount; ++n )
+                    {
+                        const OUString& rKey = pKeys[ n ];
+                        if ( rKey.compareTo(
+                                    rSourceKey, rSourceKey.getLength() ) == 0 )
+                        {
+                            OUString aNewKey
+                                = rKey.replaceAt(
+                                    0, rSourceKey.getLength(), rTargetKey );
+                            if ( !copyAdditionalPropertySet(
+                                    rKey, aNewKey, sal_False ) )
+                                return sal_False;
+                        }
+                    }
+                }
+            }
+            else
+                return sal_False;
+        }
+        else
+            return sal_False;
+    }
+    else
+    {
+        // Get old property set, if exists.
+        Reference< XPersistentPropertySet > xOldPropSet
+                        = getAdditionalPropertySet( rSourceKey, sal_False );
+        if ( !xOldPropSet.is() )
+            return sal_False;
+
+        Reference< XPropertySetInfo > xPropSetInfo =
+                                        xOldPropSet->getPropertySetInfo();
+        if ( !xPropSetInfo.is() )
+            return sal_False;
+
+        Reference< XPropertyAccess > xOldPropAccess( xOldPropSet, UNO_QUERY );
+        if ( !xOldPropAccess.is() )
+            return sal_False;
+
+        // Obtain all values from old set.
+        Sequence< PropertyValue > aValues = xOldPropAccess->getPropertyValues();
+        sal_Int32 nCount = aValues.getLength();
+
+        Sequence< Property > aProps = xPropSetInfo->getProperties();
+
+        if ( nCount )
+        {
+            // Fail, if property set with new key already exists.
+            Reference< XPersistentPropertySet > xNewPropSet
+                        = getAdditionalPropertySet( rTargetKey, sal_False );
+            if ( xNewPropSet.is() )
+                return sal_False;
+
+            // Create new, empty set.
+            xNewPropSet = getAdditionalPropertySet( rTargetKey, sal_True );
+            if ( !xNewPropSet.is() )
+                return sal_False;
+
+            Reference< XPropertyContainer > xNewPropContainer(
+                                                xNewPropSet, UNO_QUERY );
+            if ( !xNewPropContainer.is() )
+                return sal_False;
+/*
+            Reference< XPropertyAccess > xNewPropAccess(
+                                                xNewPropSet, UNO_QUERY );
+            if ( !xNewPropAccess.is() )
+                return sal_False;
+*/
+            for ( sal_Int32 n = 0; n < nCount; ++n )
+            {
+                const PropertyValue& rValue = aValues[ n ];
+
+                sal_Int16 nAttribs = 0;
+                for ( sal_Int32 m = 0; m < aProps.getLength(); ++m )
+                {
+                    if ( aProps[ m ].Name == rValue.Name )
+                    {
+                        nAttribs = aProps[ m ].Attributes;
+                        break;
+                    }
+                }
+
+                try
+                {
+                    xNewPropContainer->addProperty(
+                                        rValue.Name, nAttribs, rValue.Value );
+                }
+                catch ( PropertyExistException & )
+                {
+                }
+                   catch ( IllegalTypeException & )
+                {
+                }
+                catch ( IllegalArgumentException & )
+                {
+                }
+            }
+/*
+            try
+            {
+                xNewPropAccess->setPropertyValues( aValues );
+            }
+            catch( UnknownPropertyException& )
+            {
+            }
+            catch( PropertyVetoException& )
+            {
+            }
+            catch( IllegalArgumentException& )
+            {
+            }
+            catch( WrappedTargetException& )
+            {
+            }
+*/
         }
     }
     return sal_True;

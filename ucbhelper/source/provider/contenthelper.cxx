@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contenthelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: kso $ $Date: 2000-10-26 15:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -989,6 +989,16 @@ sal_Bool ContentImplHelper::renameAdditionalPropertySet(
 {
     return m_xProvider->renameAdditionalPropertySet(
                                             rOldKey, rNewKey, bRecursive );
+}
+
+//=========================================================================
+sal_Bool ContentImplHelper::copyAdditionalPropertySet(
+                                                  const OUString& rSourceKey,
+                                                  const OUString& rTargetKey,
+                                                  sal_Bool bRecursive )
+{
+    return m_xProvider->copyAdditionalPropertySet(
+                                        rSourceKey, rTargetKey, bRecursive );
 }
 
 //=========================================================================

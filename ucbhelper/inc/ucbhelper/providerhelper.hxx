@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerhelper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: kso $ $Date: 2000-10-26 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,20 @@ public:
     sal_Bool renameAdditionalPropertySet( const ::rtl::OUString& rOldKey,
                                           const ::rtl::OUString& rNewKey,
                                           sal_Bool bRecursive );
+
+    /**
+      * This method copies the propertyset containing the Additional Core
+      * Properties of a content.
+      *
+      * @param  rSourceKey is the key of the source propertyset.
+      * @param  rTargetKey is the key of the target propertyset.
+      * @param  bRecursive is a flag indicating whether propertysets for
+      *         children described by rSourceKey shall be copied, too.
+      * @return True, if the operation succeeded - False, otherwise.
+      */
+    sal_Bool copyAdditionalPropertySet( const ::rtl::OUString& rSourceKey,
+                                        const ::rtl::OUString& rTargetKey,
+                                        sal_Bool bRecursive );
 
     /**
       * This method removes the propertyset containing the Additional Core
