@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinetab.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: dr $ $Date: 2002-09-18 13:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,22 +138,28 @@ public:
     USHORT                  GetDepth() const         { return nDepth; }
 
     BOOL                    FindTouchedLevel( USHORT nBlockStart, USHORT nBockEnd,
-                                                USHORT& rFindLevel );
+                                                USHORT& rFindLevel ) const;
 
     BOOL                    Insert( USHORT nStartCol, USHORT nEndCol, BOOL& rSizeChanged,
                                     BOOL bHidden = FALSE, BOOL bVisible = TRUE );
     BOOL                    Remove( USHORT nBlockStart, USHORT nBlockEnd, BOOL& rSizeChanged );
 
-    ScOutlineEntry*         GetEntry( USHORT nLevel, USHORT nIndex );
-    USHORT                  GetCount( USHORT nLevel );
-    ScOutlineEntry*         GetEntryByPos( USHORT nLevel, USHORT nPos );
+    ScOutlineEntry*         GetEntry( USHORT nLevel, USHORT nIndex ) const;
+    USHORT                  GetCount( USHORT nLevel ) const;
+    ScOutlineEntry*         GetEntryByPos( USHORT nLevel, USHORT nPos ) const;
+
+    BOOL                    GetEntryIndex( USHORT nLevel, USHORT nPos, USHORT& rnIndex ) const;
+    BOOL                    GetEntryIndexInRange(
+                                USHORT nLevel, USHORT nBlockStart, USHORT nBlockEnd,
+                                USHORT& rnIndex ) const;
+
     void                    SetVisibleBelow( USHORT nLevel, USHORT nEntry, BOOL bValue,
                                                 BOOL bSkipHidden = FALSE );
 
-    void                    GetRange( USHORT& rStart, USHORT& rEnd );
+    void                    GetRange( USHORT& rStart, USHORT& rEnd ) const;
     void                    ExtendBlock( USHORT nLevel, USHORT& rBlkStart, USHORT& rBlkEnd );
 
-    BOOL                    TestInsertSpace( USHORT nSize, USHORT nMaxVal );
+    BOOL                    TestInsertSpace( USHORT nSize, USHORT nMaxVal ) const;
     void                    InsertSpace( USHORT nStartPos, USHORT nSize );
     BOOL                    DeleteSpace( USHORT nStartPos, USHORT nSize );
 
