@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvmain.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:53 $
+ *  last change: $Author: sj $ $Date: 2001-02-21 18:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,10 +322,9 @@ public:
     BYTE        GrfFlg;       // (SD20) 0=nSGF 1=Pcx 2=Hpgl 4=Raw $FF=Undef(für Fix in DrawBmp)
 
     INetURLObject aFltPath;     // Für GraphicFilter
-    INetURLObject aCfgPath;     // Für GraphicFilter
     friend SvStream& operator>>(SvStream& rIStream, BmapType& rBmap);
     virtual void Draw(OutputDevice& rOut);
-    void SetPaths(const INetURLObject rFltPath, const INetURLObject rCfgPath);
+    void SetPaths( const INetURLObject rFltPath );
 };
 
 

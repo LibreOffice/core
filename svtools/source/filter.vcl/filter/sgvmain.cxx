@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvmain.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-09 19:48:11 $
+ *  last change: $Author: sj $ $Date: 2001-02-21 18:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,7 +432,7 @@ Color Sgv2SvFarbe(BYTE nFrb1, BYTE nFrb2, BYTE nInts)
     r1=(UINT16)((UINT32)r1*nInts/100+(UINT32)r2*nInt2/100);
     g1=(UINT16)((UINT32)g1*nInts/100+(UINT32)g2*nInt2/100);
     b1=(UINT16)((UINT32)b1*nInts/100+(UINT32)b2*nInt2/100);
-    Color aColor(r1,g1,b1);
+    Color aColor( (sal_uInt8)r1, (sal_uInt8)g1, (sal_uInt8)b1 );
     return aColor;
 }
 
@@ -874,10 +874,9 @@ void CircType::Draw(OutputDevice& rOut)
 |*
 *************************************************************************/
 
-void BmapType::SetPaths(const INetURLObject rFltPath, const INetURLObject rCfgPath)
+void BmapType::SetPaths(const INetURLObject rFltPath )
 {
     aFltPath = rFltPath;
-    aCfgPath = rCfgPath;
 }
 
 void BmapType::Draw(OutputDevice& rOut)
@@ -898,7 +897,6 @@ void BmapType::Draw(OutputDevice& rOut)
                 Graphic aGrf;
                 USHORT nRet;
                 aFlt.SetFilterPath(aFltPath);
-                aFlt.SetConfigPath(aCfgPath);
                 nRet=aFlt.ImportGraphic(aGrf,aFNam);
                 aGrf.Draw(&rOut,Point(Pos1.x,Pos1.y),Size(Pos2.x-Pos1.x,Pos2.y-Pos1.y));
             } break;
@@ -950,7 +948,7 @@ UINT32 GrupType::GetSubPtr()
 |*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
-void DrawObjkList(SvStream& rInp, OutputDevice& rOut, const INetURLObject& rFltPath, const INetURLObject& rCfgPath)
+void DrawObjkList( SvStream& rInp, OutputDevice& rOut, const INetURLObject& rFltPath )
 {
     ObjkType aObjk;
     USHORT nGrpCnt=0;
@@ -976,7 +974,7 @@ void DrawObjkList(SvStream& rInp, OutputDevice& rOut, const INetURLObject& rFltP
                     BmapType aBmap;
                     rInp>>aBmap;
                     if (!rInp.GetError()) {
-                        aBmap.SetPaths( rFltPath, rCfgPath );
+                        aBmap.SetPaths( rFltPath );
                         aBmap.Draw(rOut);
                     }
                 } break;
@@ -1011,7 +1009,7 @@ void DrawObjkList(SvStream& rInp, OutputDevice& rOut, const INetURLObject& rFltP
                     rInp>>aGrup;
                     if (!rInp.GetError()) {
                         rInp.Seek(rInp.Tell()+aGrup.Last); // Obj-Anhängsel
-                        if(aGrup.GetSubPtr()!=0L) nGrpCnt++;// DrawObjkList(rInp,rOut,rFltPath,rCfgPath);
+                        if(aGrup.GetSubPtr()!=0L) nGrpCnt++;// DrawObjkList(rInp,rOut,rFltPath );
                     }
                 } break;
                 default: {
@@ -1066,7 +1064,7 @@ void SkipObjkList(SvStream& rInp)
 |*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
-BOOL SgfFilterSDrw(SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf, const INetURLObject& rFltPath, const INetURLObject& rCfgPath)
+BOOL SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf, const INetURLObject& rFltPath )
 {
     BOOL          bRet = FALSE;
     ObjkType      aObjk;
@@ -1100,12 +1098,12 @@ BOOL SgfFilterSDrw(SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf, con
         Num--;
       }
       rInp>>aPage;
-      if(Num==1 && aPage.nList!=0L) DrawObjkList(rInp,*pOutDev,rFltPath,rCfgPath);
+      if(Num==1 && aPage.nList!=0L) DrawObjkList( rInp,*pOutDev,rFltPath );
       rInp.Seek(nZchPos);
       nZchPos=rInp.Tell();
       rInp>>aPage;
     }
-    if (aPage.nList!=0L) DrawObjkList(rInp,*pOutDev,rFltPath,rCfgPath);
+    if (aPage.nList!=0L) DrawObjkList(rInp,*pOutDev,rFltPath );
 
     rMtf.Stop();
     rMtf.WindStart();
@@ -1127,7 +1125,7 @@ BOOL SgfFilterSDrw(SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf, con
 |*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
-BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath, const INetURLObject& rFltPath, const INetURLObject& rCfgPath)
+BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath, const INetURLObject& rFltPath )
 {
 #ifdef DEBUG  // Recordgrößen checken. Neuer Compiler hat vielleichte anderes Allignment!
     if (sizeof(ObjTextType)!=ObjTextTypeSize)  return FALSE;
@@ -1155,7 +1153,7 @@ BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath, co
             rInp>>aEntr;
             nNext=aEntr.GetOffset();
             if (aEntr.Typ==aHead.Typ) {
-                bRet=SgfFilterSDrw(rInp,aHead,aEntr,rMtf,rFltPath,rCfgPath);
+                bRet=SgfFilterSDrw( rInp,aHead,aEntr,rMtf,rFltPath );
             }
         } // while(nNext)
         if (bRdFlag) {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgffilt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:53 $
+ *  last change: $Author: sj $ $Date: 2001-02-21 18:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 BYTE CheckSgfTyp(SvStream& rInp, USHORT& nVersion);
 BOOL SgfBMapFilter(SvStream& rInp, SvStream& rOut);
 BOOL SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf);
-BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath, const INetURLObject& rFltPath, const INetURLObject& rCfgPath);
+BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath, const INetURLObject& rFltPath );
 
 // Konstanten fÅr CheckSgfTyp()
 #define SGF_BITIMAGE   1     /* Bitmap                      */
