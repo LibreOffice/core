@@ -18,6 +18,11 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.frame.XModel;
+import com.sun.star.frame.FrameSearchFlag;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XDispatchHelper;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.util.XURLTransformer;
 import com.sun.star.beans.*;
 import com.sun.star.script.XInvocation;
 
@@ -110,17 +115,18 @@ public class ScriptSelector {
 
             closeButton = new JButton("Close");
 
+            editButton = new JButton("Edit");
+            editButton.setEnabled(false);
+
             JPanel northButtons =
                 new JPanel(new GridLayout(2, 1, MED_GAP, MED_GAP));
 
-            northButtons.add(runButton);
+            // northButtons.add(runButton);
+            northButtons.add(editButton);
             northButtons.add(closeButton);
 
             assignButton = new JButton("Assign");
             assignButton.setEnabled(false);
-
-            editButton = new JButton("Edit");
-            editButton.setEnabled(false);
 
             deleteButton = new JButton("Delete");
             deleteButton.setEnabled(false);
@@ -129,7 +135,7 @@ public class ScriptSelector {
                 new JPanel(new GridLayout(3, 1, MED_GAP, MED_GAP));
 
             // southButtons.add(assignButton);
-            southButtons.add(editButton);
+            // southButtons.add(editButton);
             // southButtons.add(deleteButton);
 
             selectorPanel.tree.addTreeSelectionListener(
@@ -141,6 +147,19 @@ public class ScriptSelector {
 
                         checkEnabled(props, "Deletable", deleteButton);
                         checkEnabled(props, "Editable", editButton);
+
+                        try {
+                            if (props != null) {
+                                String str = AnyConverter.toString(
+                                    props.getPropertyValue("URI"));
+                                if (str.indexOf("language=Basic") != -1) {
+                                    editButton.setEnabled(true);
+                                }
+                            }
+                        }
+                        catch (Exception ignore) {
+                            editButton.setEnabled(false);
+                        }
 
                         if (xbn.getType() == BrowseNodeTypes.SCRIPT)
                         {
@@ -178,22 +197,19 @@ public class ScriptSelector {
                         client.dispose();
                     }
                     else if (event.getSource() == editButton) {
-                        DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-                            selectorPanel.tree.getLastSelectedPathComponent();
+                        String uri = selectorPanel.textField.getText();
 
-                        if (node == null) return;
-
-                        Object obj = node.getUserObject();
-                        XInvocation inv =
-                            (XInvocation)UnoRuntime.queryInterface(
-                            XInvocation.class, obj);
-                        Object[] args = new Object[] { ctxt };
-                        try {
-                            inv.invoke("Editable", args,
-                                new short[0][0], new Object[0][0]);
+                        if (uri.indexOf("language=Basic") != -1) {
+                            showBasicEditor(ctxt);
                         }
-                        catch (Exception e) {
-                            e.printStackTrace();
+                        else {
+                            DefaultMutableTreeNode node =
+                              (DefaultMutableTreeNode)
+                              selectorPanel.tree.getLastSelectedPathComponent();
+
+                            if (node == null) return;
+
+                            showEditor(ctxt, node);
                         }
                     }
                     else if (event.getSource() == assignButton) {
@@ -229,6 +245,50 @@ public class ScriptSelector {
             rue.printStackTrace();
         }
         catch (java.lang.Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void showEditor(
+        XScriptContext ctxt, DefaultMutableTreeNode node)
+    {
+        Object obj = node.getUserObject();
+        XInvocation inv =
+            (XInvocation)UnoRuntime.queryInterface(
+            XInvocation.class, obj);
+        Object[] args = new Object[] { ctxt };
+        try {
+            inv.invoke("Editable", args,
+                new short[0][0], new Object[0][0]);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void showBasicEditor(XScriptContext ctxt) {
+        XComponentContext xcc = ctxt.getComponentContext();
+        XModel doc = ctxt.getDocument();
+
+        System.err.println("let's start the Basic IDE");
+
+        try {
+            XDispatchProvider xProvider = (XDispatchProvider)
+                UnoRuntime.queryInterface(XDispatchProvider.class,
+                    doc.getCurrentController().getFrame());
+
+            Object obj = xcc.getServiceManager().createInstanceWithContext(
+                "com.sun.star.frame.DispatchHelper", xcc);
+
+            XDispatchHelper xDispatchHelper =
+                (XDispatchHelper)UnoRuntime.queryInterface(
+                    XDispatchHelper.class, obj);
+
+            xDispatchHelper.executeDispatch(xProvider,
+                ".uno:BasicIDEAppear", "", 0,
+                new com.sun.star.beans.PropertyValue[0]);
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
