@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:37 $
+ *  last change: $Author: aw $ $Date: 2004-01-16 14:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ namespace basegfx
         return aPerpendicular;
     }
 
-    B2DVector operator*( const B2DHomMatrix& rMat, const B2DVector& rVec )
+    B2DVector operator*( const ::basegfx::B2DHomMatrix& rMat, const B2DVector& rVec )
     {
         B2DVector aRes( rVec );
         return aRes*=rMat;

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: b3ibox.hxx,v $
+ *  $RCSfile: b3dvolume.hxx,v $
  *
  *  $Revision: 1.1 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-15 19:58:01 $
+ *  last change: $Author: aw $ $Date: 2004-01-16 14:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,20 +59,20 @@
  *
  ************************************************************************/
 
-#ifndef _BGFX_RANGE_B3IBOX_HXX
-#define _BGFX_RANGE_B3IBOX_HXX
+#ifndef _BGFX_RANGE_B3DBOX_HXX
+#define _BGFX_RANGE_B3DBOX_HXX
 
-#ifndef _BGFX_RANGE_B3IRANGE_HXX
-#include <basegfx/range/b3irange.hxx>
+#ifndef _BGFX_RANGE_B3DRANGE_HXX
+#include <basegfx/range/b3drange.hxx>
 #endif
 
 namespace basegfx
 {
-    // syntactic sugar: a B3IRange exactly models a Box in 3D, thus,
+    // syntactic sugar: a B3DRange exactly models a Volume in 3D, thus,
     // for interface clarity, we provide an alias name
 
     /// Alias name for interface clarity (not everybody is aware of the identity)
-    typedef B3IRange B3IBox;
+    typedef B3DRange B3DVolume;
 }
 
-#endif // _BGFX_RANGE_B3IBOX_HXX
+#endif // _BGFX_RANGE_B3DBOX_HXX

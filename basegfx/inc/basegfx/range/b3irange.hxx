@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3irange.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 13:40:26 $
+ *  last change: $Author: aw $ $Date: 2004-01-16 14:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,20 @@ namespace basegfx
             maRangeX.reset();
             maRangeY.reset();
             maRangeZ.reset();
+        }
+
+        bool operator==( const B3IRange& rRange ) const
+        {
+            return (maRangeX == rRange.maRangeX
+                && maRangeY == rRange.maRangeY
+                && maRangeZ == rRange.maRangeZ);
+        }
+
+        bool operator!=( const B3IRange& rRange ) const
+        {
+            return (maRangeX != rRange.maRangeX
+                || maRangeY != rRange.maRangeY
+                || maRangeZ != rRange.maRangeZ);
         }
 
         void operator=(const B3IRange& rRange)

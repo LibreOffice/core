@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicrange.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:10 $
+ *  last change: $Author: aw $ $Date: 2004-01-16 14:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,16 @@ namespace basegfx
             return !((rRange.mnMinimum < mnMinimum) || (rRange.mnMaximum > mnMaximum));
         }
 
+        bool operator==( const BasicRange& rRange ) const
+        {
+            return (mnMinimum == rRange.mnMinimum && mnMaximum == rRange.mnMaximum);
+        }
+
+        bool operator!=( const BasicRange& rRange ) const
+        {
+            return (mnMinimum != rRange.mnMinimum || mnMaximum != rRange.mnMaximum);
+        }
+
         void operator=(const BasicRange& rRange)
         {
             mnMinimum = rRange.mnMinimum;
@@ -164,11 +174,31 @@ namespace basegfx
             }
         }
 
+        void grow(T nValue)
+        {
+            bool bLessThanZero(nValue < 0);
+
+            if(nValue > 0 || bLessThanZero)
+            {
+                mnMinimum -= nValue;
+                mnMaximum += nValue;
+
+                if(bLessThanZero)
+                {
+                    // test if range did collapse
+                    if(mnMinimum > mnMaximum)
+                    {
+                        // if yes, collapse to center
+                        mnMinimum = mnMaximum = (mnMinimum + mnMaximum) / 2.0;
+                    }
+                }
+            }
+        }
+
         typename Traits::DifferenceType getRange() const
         {
             return (mnMaximum - mnMinimum);
         }
-
     };
 
     // some pre-fabricated traits

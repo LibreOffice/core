@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dvector.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:16 $
+ *  last change: $Author: aw $ $Date: 2004-01-16 14:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ namespace basegfx
         return aNew;
     }
 
-    B3DVector& B3DVector::operator*=( const B3DHomMatrix& rMat )
+    B3DVector& B3DVector::operator*=( const ::basegfx::B3DHomMatrix& rMat )
     {
         const double fTempX( rMat.get(0,0)*mfX + rMat.get(0,1)*mfY + rMat.get(0,2)*mfZ );
         const double fTempY( rMat.get(1,0)*mfX + rMat.get(1,1)*mfY + rMat.get(1,2)*mfZ );
@@ -126,7 +126,7 @@ namespace basegfx
         return *this;
     }
 
-    B3DVector operator*( const B3DHomMatrix& rMat, const B3DVector& rVec )
+    B3DVector operator*( const ::basegfx::B3DHomMatrix& rMat, const B3DVector& rVec )
     {
         B3DVector aRes( rVec );
         return aRes*=rMat;

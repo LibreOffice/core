@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2drange.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 13:40:18 $
+ *  last change: $Author: aw $ $Date: 2004-01-16 14:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,18 @@ namespace basegfx
             maRangeY.reset();
         }
 
+        bool operator==( const B2DRange& rRange ) const
+        {
+            return (maRangeX == rRange.maRangeX
+                && maRangeY == rRange.maRangeY);
+        }
+
+        bool operator!=( const B2DRange& rRange ) const
+        {
+            return (maRangeX != rRange.maRangeX
+                || maRangeY != rRange.maRangeY);
+        }
+
         void operator=(const B2DRange& rRange)
         {
             maRangeX = rRange.maRangeX;
@@ -231,6 +243,12 @@ namespace basegfx
         {
             maRangeX.expand(rRange.maRangeX);
             maRangeY.expand(rRange.maRangeY);
+        }
+
+        void grow(double fValue)
+        {
+            maRangeX.grow(fValue);
+            maRangeY.grow(fValue);
         }
     };
 

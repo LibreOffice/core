@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpoint.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:33:55 $
+ *  last change: $Author: aw $ $Date: 2004-01-16 14:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,17 @@ namespace basegfx
             return (const B2DPoint&) ::basegfx::B2DTuple::getEmptyTuple();
         }
     };
+
+    // external operators
+    //////////////////////////////////////////////////////////////////////////
+
+    /** Transform B2DPoint by given transformation matrix.
+
+        Since this is a Point, translational components of the
+        matrix are used.
+    */
+    B2DPoint operator*( const B2DHomMatrix& rMat, const B2DPoint& rPoint );
+
 } // end of namespace basegfx
 
 #endif //  _BGFX_POINT_B2DPOINT_HXX

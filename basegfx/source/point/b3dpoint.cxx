@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpoint.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:04 $
+ *  last change: $Author: aw $ $Date: 2004-01-16 14:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,12 @@ namespace basegfx
         mfZ = fTempZ;
 
         return *this;
+    }
+
+    B3DPoint operator*( const ::basegfx::B3DHomMatrix& rMat, const B3DPoint& rPoint )
+    {
+        B3DPoint aRes( rPoint );
+        return aRes *= rMat;
     }
 } // end of namespace basegfx
 

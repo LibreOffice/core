@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpoint.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:04 $
+ *  last change: $Author: aw $ $Date: 2004-01-16 14:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,12 @@ namespace basegfx
         mfY = fTempY;
 
         return *this;
+    }
+
+    B2DPoint operator*( const ::basegfx::B2DHomMatrix& rMat, const B2DPoint& rPoint )
+    {
+        B2DPoint aRes( rPoint );
+        return aRes *= rMat;
     }
 } // end of namespace basegfx
 

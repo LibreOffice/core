@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2irange.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 13:40:21 $
+ *  last change: $Author: aw $ $Date: 2004-01-16 14:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,18 @@ namespace basegfx
         {
             maRangeX.reset();
             maRangeY.reset();
+        }
+
+        bool operator==( const B2IRange& rRange ) const
+        {
+            return (maRangeX == rRange.maRangeX
+                && maRangeY == rRange.maRangeY);
+        }
+
+        bool operator!=( const B2IRange& rRange ) const
+        {
+            return (maRangeX != rRange.maRangeX
+                || maRangeY != rRange.maRangeY);
         }
 
         void operator=(const B2IRange& rRange)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b1irange.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-15 19:57:00 $
+ *  last change: $Author: aw $ $Date: 2004-01-16 14:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,16 @@ namespace basegfx
         void reset()
         {
             maRange.reset();
+        }
+
+        bool operator==( const B1IRange& rRange ) const
+        {
+            return (maRange == rRange.maRange);
+        }
+
+        bool operator!=( const B1IRange& rRange ) const
+        {
+            return (maRange != rRange.maRange);
         }
 
         void operator=(const B1IRange& rRange)

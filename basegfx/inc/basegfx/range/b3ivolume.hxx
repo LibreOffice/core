@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: b1drange.hxx,v $
+ *  $RCSfile: b3ivolume.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: aw $ $Date: 2004-01-16 14:30:00 $
+ *  last change: $Author: aw $ $Date: 2004-01-16 14:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,116 +59,20 @@
  *
  ************************************************************************/
 
-#ifndef _BGFX_RANGE_B1DRANGE_HXX
-#define _BGFX_RANGE_B1DRANGE_HXX
+#ifndef _BGFX_RANGE_B3IBOX_HXX
+#define _BGFX_RANGE_B3IBOX_HXX
 
-#ifndef _BGFX_RANGE_BASICRANGE_HXX
-#include <basegfx/range/basicrange.hxx>
+#ifndef _BGFX_RANGE_B3IRANGE_HXX
+#include <basegfx/range/b3irange.hxx>
 #endif
-
 
 namespace basegfx
 {
-    class B1DRange
-    {
-        ::basegfx::BasicRange< double, DoubleTraits >   maRange;
+    // syntactic sugar: a B3IRange exactly models a Box in 3D, thus,
+    // for interface clarity, we provide an alias name
 
-    public:
-        B1DRange()
-        {
-        }
+    /// Alias name for interface clarity (not everybody is aware of the identity)
+    typedef B3IRange B3IBox;
+}
 
-        explicit B1DRange(double fStartValue)
-        :   maRange(fStartValue)
-        {
-        }
-
-        B1DRange(double fStartValue1, double fStartValue2)
-        :   maRange(fStartValue1)
-        {
-            expand(fStartValue2);
-        }
-
-        B1DRange(const B1DRange& rRange)
-        :   maRange(rRange.maRange)
-        {
-        }
-
-        bool isEmpty() const
-        {
-            return maRange.isEmpty();
-        }
-
-        void reset()
-        {
-            maRange.reset();
-        }
-
-        bool operator==( const B1DRange& rRange ) const
-        {
-            return (maRange == rRange.maRange);
-        }
-
-        bool operator!=( const B1DRange& rRange ) const
-        {
-            return (maRange != rRange.maRange);
-        }
-
-        void operator=(const B1DRange& rRange)
-        {
-            maRange = rRange.maRange;
-        }
-
-        double getMinimum() const
-        {
-            return maRange.getMinimum();
-        }
-
-        double getMaximum() const
-        {
-            return maRange.getMaximum();
-        }
-
-        double getRange() const
-        {
-            return maRange.getRange();
-        }
-
-        double getCenter() const
-        {
-            return maRange.getCenter();
-        }
-
-        bool isInside(double fValue) const
-        {
-            return maRange.isInside(fValue);
-        }
-
-        bool isInside(const B1DRange& rRange) const
-        {
-            return maRange.isInside(rRange.maRange);
-        }
-
-        bool overlaps(const B1DRange& rRange) const
-        {
-            return maRange.overlaps(rRange.maRange);
-        }
-
-        void expand(double fValue)
-        {
-            maRange.expand(fValue);
-        }
-
-        void expand(const B1DRange& rRange)
-        {
-            maRange.expand(rRange.maRange);
-        }
-
-        void grow(double fValue)
-        {
-            maRange.grow(fValue);
-        }
-    };
-} // end of namespace basegfx
-
-#endif //   _BGFX_RANGE_B1DRANGE_HXX
+#endif // _BGFX_RANGE_B3IBOX_HXX
