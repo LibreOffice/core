@@ -2,9 +2,9 @@
  *
  *  $RCSfile: static_types.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:45:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,7 @@ void init(
     typelib_TypeClass eTypeClass, const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
-    sal_Bool * pParameterizedTypes)
+    sal_Bool const * pParameterizedTypes)
 {
     OSL_ENSURE( typelib_TypeClass_STRUCT == eTypeClass ||
                  typelib_TypeClass_EXCEPTION == eTypeClass, "### unexpected type class!" );
@@ -515,7 +515,7 @@ void SAL_CALL typelib_static_struct_type_init(
     typelib_TypeDescriptionReference ** ppRef, const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
-    sal_Bool * pParameterizedTypes )
+    sal_Bool const * pParameterizedTypes )
     SAL_THROW_EXTERN_C()
 {
     init(
