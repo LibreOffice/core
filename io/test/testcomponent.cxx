@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcomponent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-19 10:20:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,6 @@
 #include <com/sun/star/test/XSimpleTest.hpp>
 
 #include <cppuhelper/servicefactory.hxx>
-
-
-#include <assert.h>
-
 
 using namespace ::rtl;
 using namespace ::cppu;
