@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-08 14:37:58 $
+ *  last change: $Author: dbo $ $Date: 2001-03-08 14:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-#define SAL_THROW( exc ) throw exc
 
 #include <alloca.h>
 #include <map>
@@ -301,7 +300,8 @@ static void cpp_call(
 extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
-    SAL_THROW( () )
+    throw ()
+//      SAL_THROW( () )
 {
     // is my surrogate
     cppu_unoInterfaceProxy * pThis = (cppu_unoInterfaceProxy *)pUnoI;

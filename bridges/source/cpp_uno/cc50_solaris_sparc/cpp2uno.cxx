@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-08 14:37:58 $
+ *  last change: $Author: dbo $ $Date: 2001-03-08 14:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-#define SAL_THROW( exc ) throw exc
 
 #define LEAK_STATIC_DATA
 //  #define TRACE(x) OSL_TRACE(x)
@@ -601,7 +600,8 @@ void MediateClassData::createVTable( ClassDataBuffer* pBuffer, typelib_Interface
 //==================================================================================================
 extern "C" void SAL_CALL cppu_cppInterfaceProxy_patchVtable(
     XInterface * pCppI, typelib_InterfaceTypeDescription * pTypeDescr )
-    SAL_THROW( () )
+    throw ()
+//      SAL_THROW( () )
 {
     static MediateClassData * s_pMediateClassData = 0;
     if (! s_pMediateClassData)
@@ -624,14 +624,16 @@ extern "C" void SAL_CALL cppu_cppInterfaceProxy_patchVtable(
 
 //##################################################################################################
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pCppEnv )
-    SAL_THROW( () )
+    throw ()
+//      SAL_THROW( () )
 {
     CPPU_CURRENT_NAMESPACE::cppu_cppenv_initEnvironment( pCppEnv );
 }
 //##################################################################################################
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
-    SAL_THROW( () )
+    throw ()
+//      SAL_THROW( () )
 {
     CPPU_CURRENT_NAMESPACE::cppu_ext_getMapping( ppMapping, pFrom, pTo );
 }
