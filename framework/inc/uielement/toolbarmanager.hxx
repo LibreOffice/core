@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:53:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XSUBTOOLBARCONTROLLER_HPP_
+#include <com/sun/star/frame/XSubToolbarController.hpp>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -183,9 +186,16 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         void CheckAndUpdateImages();
         void RefreshImages();
         void FillToolbar( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rToolBarData );
+        void notifyRegisteredControllers( const rtl::OUString& aUIElementName, const rtl::OUString& aCommand );
         static sal_Int16 GetCurrentSymbolSize();
 
     protected:
+        struct ControllerParams
+        {
+            sal_Int16 nWidth;
+        };
+        typedef std::vector< ControllerParams > ControllerParamsVector;
+
         DECL_LINK( Click, ToolBox * );
         DECL_LINK( DropdownClick, ToolBox * );
         DECL_LINK( DoubleClick, ToolBox * );
@@ -202,7 +212,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
 
         void RemoveControllers();
         rtl::OUString RetrieveLabelFromCommand( const rtl::OUString& aCmdURL );
-        void CreateControllers();
+        void CreateControllers( const ControllerParamsVector& );
         void UpdateControllers();
         void AddFrameActionListener();
         void AddImageOrientationListener();
@@ -222,8 +232,10 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
                         bRotated  : 1;
         };
 
-        typedef std::vector< ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > > ToolBarControllerVector;
-        typedef BaseHash< CommandInfo >                                                                   CommandToInfoMap;
+        typedef std::vector< ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > >           ToolBarControllerVector;
+        typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XSubToolbarController > > SubToolBarControllerVector;
+        typedef BaseHash< CommandInfo >                                                                             CommandToInfoMap;
+        typedef BaseHash< SubToolBarControllerVector >                                                              SubToolBarToSubToolBarControllerMap;
 
         sal_Bool                                                                                        m_bDisposed : 1,
                                                                                                         m_bIsHiContrast : 1,
@@ -249,6 +261,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XImageManager >                 m_xDocImageManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >                          m_xImageOrientationListener;
         CommandToInfoMap                                                                                m_aCommandMap;
+        SubToolBarToSubToolBarControllerMap                                                             m_aSubToolBarControllerMap;
 };
 
 }
