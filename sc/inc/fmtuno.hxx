@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtuno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-21 09:34:00 $
+ *  last change: $Author: nn $ $Date: 2000-11-01 17:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,11 +135,12 @@ private:
 
 public:
                             ScTableConditionalFormat();
-                            ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey, BOOL bEnglish);
+                            ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
+                                                        BOOL bEnglish, BOOL bCompileXML);
     virtual                 ~ScTableConditionalFormat();
 
     void                    FillFormat( ScConditionalFormat& rFormat,
-                                            ScDocument* pDoc, BOOL bEnglish ) const;
+                                            ScDocument* pDoc, BOOL bEnglish, BOOL bCompileXML ) const;
     void                    DataChanged();
 
                             // XSheetConditionalEntries
@@ -278,10 +279,12 @@ private:
 
 public:
                             ScTableValidationObj();
-                            ScTableValidationObj(ScDocument* pDoc, ULONG nKey, BOOL bEnglish);
+                            ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
+                                                BOOL bEnglish, BOOL bCompileXML);
     virtual                 ~ScTableValidationObj();
 
-    ScValidationData*       CreateValidationData( ScDocument* pDoc, BOOL bEnglish ) const;
+    ScValidationData*       CreateValidationData( ScDocument* pDoc,
+                                                BOOL bEnglish, BOOL bCompileXML ) const;
     void                    DataChanged();
 
                             // XSheetCondition
