@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StaticSet.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 12:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@ Sequence< sal_Int32 > SAL_CALL OStaticSet::deleteRows( const Sequence< Any >& ro
     const Any* pEnd     = pBegin + rows.getLength();
     for(sal_Int32 i=0;pBegin != pEnd; ++pBegin,++i)
     {
-        deleteRow(*(m_aSet.begin() + connectivity::getINT32(*pBegin)),_xTable);
+        deleteRow(*(m_aSet.begin() + comphelper::getINT32(*pBegin)),_xTable);
         aRet.getArray()[i] = m_bDeleted;
     }
     return aRet;
@@ -386,6 +386,9 @@ void SAL_CALL OStaticSet::moveToCurrentRow(  ) throw(SQLException, RuntimeExcept
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/01/24 09:50:49  oj
+    #82628# rowset modifications
+
     Revision 1.7  2001/01/22 07:38:24  oj
     #82632# change member
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:47:51 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 12:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,13 +828,13 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
         aSql += ::dbtools::quoteName( aQuote,::comphelper::getString(descriptor->getPropertyValue(PROPERTY_NAME)));
         aSql += ::rtl::OUString::createFromAscii(" ");
 
-        sal_Int32 nType = connectivity::getINT32(descriptor->getPropertyValue(PROPERTY_TYPE));
+        sal_Int32 nType = comphelper::getINT32(descriptor->getPropertyValue(PROPERTY_TYPE));
         Any aTypeName = descriptor->getPropertyValue(PROPERTY_TYPENAME);
-        if(aTypeName.hasValue() && connectivity::getString(aTypeName).getLength())
-            aSql += connectivity::getString(aTypeName);
+        if(aTypeName.hasValue() && comphelper::getString(aTypeName).getLength())
+            aSql += comphelper::getString(aTypeName);
         else
         {
-            sal_Int32 nPrec     = connectivity::getINT32(descriptor->getPropertyValue(PROPERTY_PRECISION));
+            sal_Int32 nPrec     = comphelper::getINT32(descriptor->getPropertyValue(PROPERTY_PRECISION));
             ::rtl::OUString aTypeName;
             //  sal_Int32 nScale    = getINT32(descriptor->getPropertyValue(PROPERTY_SCALE));
             Reference<XResultSet> xTypes(m_pTable->getMetaData()->getTypeInfo());
@@ -856,25 +856,25 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
             case DataType::BINARY:
             case DataType::VARBINARY:
                 aSql += ::rtl::OUString::createFromAscii("(")
-                        + ::rtl::OUString::valueOf(connectivity::getINT32(descriptor->getPropertyValue(PROPERTY_PRECISION)))
+                        + ::rtl::OUString::valueOf(comphelper::getINT32(descriptor->getPropertyValue(PROPERTY_PRECISION)))
                         + ::rtl::OUString::createFromAscii(")");
                 break;
 
             case DataType::DECIMAL:
             case DataType::NUMERIC:
                 aSql += ::rtl::OUString::createFromAscii("(")
-                            + ::rtl::OUString::valueOf(connectivity::getINT32(descriptor->getPropertyValue(PROPERTY_PRECISION)))
+                            + ::rtl::OUString::valueOf(comphelper::getINT32(descriptor->getPropertyValue(PROPERTY_PRECISION)))
                             + ::rtl::OUString::createFromAscii(",")
-                            + ::rtl::OUString::valueOf(connectivity::getINT32(descriptor->getPropertyValue(PROPERTY_SCALE)))
+                            + ::rtl::OUString::valueOf(comphelper::getINT32(descriptor->getPropertyValue(PROPERTY_SCALE)))
                             + ::rtl::OUString::createFromAscii(")");
                 break;
         }
-        ::rtl::OUString aDefault = connectivity::getString(descriptor->getPropertyValue(PROPERTY_DEFAULTVALUE));
+        ::rtl::OUString aDefault = comphelper::getString(descriptor->getPropertyValue(PROPERTY_DEFAULTVALUE));
 
         if(aDefault.getLength())
             aSql += ::rtl::OUString::createFromAscii(" DEFAULT ") + aDefault;
 
-        if(connectivity::getINT32(descriptor->getPropertyValue(PROPERTY_ISNULLABLE)) == ColumnValue::NO_NULLS)
+        if(comphelper::getINT32(descriptor->getPropertyValue(PROPERTY_ISNULLABLE)) == ColumnValue::NO_NULLS)
             aSql += ::rtl::OUString::createFromAscii(" NOT NULL");
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
