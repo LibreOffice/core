@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:32:58 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,6 @@
 #ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
 #endif
-#ifndef SC_XLTRACER_HXX
-#include "xltracer.hxx"
-#endif
 
 // Page settings ==============================================================
 
@@ -156,7 +153,6 @@ void XclImpPageSettings::ReadSetup( XclImpStream& rStrm )
         maData.mbPrintNotes = ::get_flag( nFlags, EXC_SETUP_PRINTNOTES );
         maData.mbManualStart = ::get_flag( nFlags, EXC_SETUP_STARTPAGE );
     }
-    GetTracer().TracePrintFitToPages(maData.mnFitToWidth);
 }
 
 void XclImpPageSettings::ReadMargin( XclImpStream& rStrm )
@@ -227,12 +223,12 @@ void XclImpPageSettings::ReadPageBreaks( XclImpStream& rStrm )
     }
 }
 
-void XclImpPageSettings::ReadPrintheaders( XclImpStream& rStrm )
+void XclImpPageSettings::ReadPrintHeaders( XclImpStream& rStrm )
 {
     maData.mbPrintHeadings = (rStrm.ReaduInt16() != 0);
 }
 
-void XclImpPageSettings::ReadPrintgridlines( XclImpStream& rStrm )
+void XclImpPageSettings::ReadPrintGridLines( XclImpStream& rStrm )
 {
     maData.mbPrintGrid = (rStrm.ReaduInt16() != 0);
 }
