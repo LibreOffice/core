@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 09:58:28 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:30:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,7 @@ SLOFILES=	\
     $(SLO)$/simplereferenceobject.obj
 
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)$(CVER)"=="MACOSXC295"
 SLOFILES+=$(SLO)$/staticmb.obj
 .ENDIF
 
