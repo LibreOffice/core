@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:56:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@ class ExtSheetBuffer;
 class ExcelToSc;
 class ExcExternDup;
 
-class XclImpPivotCacheList;
 class XclImpAutoFilterBuffer;
 class _ScRangeListTabs;
 
@@ -108,7 +107,6 @@ class XclExpCellMerging;
 class ExcNameList;
 class XclObjList;
 class XclEscher;
-class XclPivotCacheList;
 class SfxStyleSheet;
 class ExcRecordList;
 class XclExpHyperlink;
@@ -141,7 +139,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 
     // Biff8
     SvStorage*              pPivotCacheStorage;
-    XclImpPivotCacheList*   pImpPivotCacheList;     // pivot caches for import
     XclImpAutoFilterBuffer* pAutoFilterBuffer;      // ranges for autofilter and advanced filter
     _ScRangeListTabs*       pPrintRanges;
     _ScRangeListTabs*       pPrintTitles;
@@ -160,8 +157,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     XclObjList*         pObjRecs;
     String              sAddNoteText;       // text to append at current note (multiple hyperlinks)
     XclEscher*          pEscher;
-
-    XclPivotCacheList*  pPivotCacheList;
 
     BOOL                bWriteVBAStorage;
 
