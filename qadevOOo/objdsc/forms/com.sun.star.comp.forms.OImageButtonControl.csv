@@ -1,3 +1,5 @@
+"OImageButtonControl";"com::sun::star::form::submission::XVetoableSubmission";"addSubmissionVetoListener()"
+"OImageButtonControl";"com::sun::star::form::submission::XVetoableSubmission";"removeSubmissionVetoListener()"
 "OImageButtonControl";"com::sun::star::awt::XLayoutConstrains";"getMinimumSize()"
 "OImageButtonControl";"com::sun::star::awt::XLayoutConstrains";"getPreferredSize()"
 "OImageButtonControl";"com::sun::star::awt::XLayoutConstrains";"calcAdjustedSize()"
@@ -9,6 +11,7 @@
 "OImageButtonControl";"com::sun::star::lang::XComponent";"dispose()"
 "OImageButtonControl";"com::sun::star::lang::XComponent";"addEventListener()"
 "OImageButtonControl";"com::sun::star::lang::XComponent";"removeEventListener()"
+"OImageButtonControl";"com::sun::star::form::submission::XSubmission";"submit()"
 "OImageButtonControl";"com::sun::star::awt::XControl";"setContext()"
 "OImageButtonControl";"com::sun::star::awt::XControl";"getContext()"
 "OImageButtonControl";"com::sun::star::awt::XControl";"createPeer()"
