@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 18:16:12 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1341,7 +1341,7 @@ void Desktop::Main()
     aTitle += DEFINE_CONST_UNICODE(" [");
     String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
     aTitle += aVerId;
-    aTitle += 0x005D ; // 5Dh ^= ']'
+    aTitle += ']';
 #endif
     SetSplashScreenProgress(20);
     SetDisplayName( aTitle );
