@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsize.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:33:26 $
+ *  last change: $Author: fs $ $Date: 2002-05-24 12:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ namespace dbaui
 #define DEF_COL_WIDTH   227
 
 //==================================================================
-DlgSize::DlgSize(Window * pParent, sal_Int32 nVal, sal_Bool bRow)
+DlgSize::DlgSize( Window* pParent, sal_Int32 nVal, sal_Bool bRow, sal_Int32 _nAlternativeStandard )
         :ModalDialog( pParent, ModuleRes(bRow ? DLG_ROWHEIGHT : DLG_COLWIDTH))
         ,aFT_VALUE(this,    ResId( FT_VALUE))
         ,aMF_VALUE(this,    ResId( MF_VALUE))
@@ -92,6 +92,8 @@ DlgSize::DlgSize(Window * pParent, sal_Int32 nVal, sal_Bool bRow)
         ,m_nPrevValue(nVal)
         ,m_nStandard(bRow ? DEF_ROW_HEIGHT : DEF_COL_WIDTH)
 {
+    if ( _nAlternativeStandard > 0 )
+        m_nStandard = _nAlternativeStandard;
     aCB_STANDARD.SetClickHdl(LINK(this,DlgSize,CbClickHdl));
 
     aMF_VALUE.EnableEmptyFieldValue(sal_True);
