@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:51:08 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,10 @@ ModalDialog DLG_ASCII_FILTER
         Text[ swedish ] = "Teckenupps�ttning";
         Text[ polish ] = "Z~estaw znak�w";
         Text[ portuguese_brazilian ] = "~Conjunto de caracteres";
-        Text[ japanese ] = "文字列(~F)";
-        Text[ korean ] = "문자집합(~F)";
-        Text[ chinese_simplified ] = "字符集(~F)";
-        Text[ chinese_traditional ] = "字型(~F)";
+        Text[ japanese ] = "文字列(~C)";
+        Text[ korean ] = "문자집합(~C)";
+        Text[ chinese_simplified ] = "字符集(~C)";
+        Text[ chinese_traditional ] = "字型(~C)";
         Text[ turkish ] = "Karakter k�mesi";
         Text[ arabic ] = "������ ����";
         Text[ catalan ] = "~Lletra";
@@ -439,6 +439,7 @@ ModalDialog DLG_ASCII_FILTER
     Text[ hindi ] = "ASCII फिल्टर विकल्प";
     Text[ slovak ] = "Nastavenia pre ASCII filter";
 };
+
 
 
 
