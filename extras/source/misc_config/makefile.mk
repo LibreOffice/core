@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 09:03:10 $
+#   last change: $Author: tv $ $Date: 2000-09-29 13:42:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,6 @@ TARGET=miscconfiggeneral
 
 ZIP1TARGET      = $(CONFIG_SERVER_NOLANG_TARGET)
 ZIP1LIST        = alarm.wav                     \
-                = gpm.ini                       \
                 = SOFFICE.CFG                   \
                 = ssimport.ini                  \
                 = srcheng.ini
