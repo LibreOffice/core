@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: cl $ $Date: 2002-01-24 15:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,7 @@ void SdViewShell::UpdateScrollBars()
         UpdateHRuler();
         UpdateVRuler();
     }
+
 }
 /*************************************************************************
 |*
@@ -2178,3 +2179,8 @@ void SdViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence <
     }
 }
 #undef NUM_VIEW_SETTINGS
+
+void SdViewShell::VisAreaChanged(const Rectangle& rRect)
+{
+    SfxViewShell::VisAreaChanged(rRect);
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: aw $ $Date: 2002-01-18 13:46:41 $
+ *  last change: $Author: cl $ $Date: 2002-01-24 15:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@
 #include "preview.hxx"
 #include "prevchld.hxx"
 #include "fuslshow.hxx"
+#include "SdUnoOutlineView.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -247,6 +248,13 @@ void SdOutlineViewShell::Construct(SdDrawDocShell* pDocSh)
 
     SetZoom(69);
 
+    // create uno view
+    pController = new SdUnoOutlineView(pView, this);
+
+    uno::Reference< awt::XWindow > aTmpRef;
+    GetViewFrame()->GetFrame()->GetFrameInterface()->setComponent( aTmpRef, pController );
+
+
     // Shells fuer Object Bars erzeugen
     SfxShell* pObjBarShell = new SdDrawTextObjectBar( this, pDoc->GetPool(), pOlView );
     aShellTable.Insert( RID_DRAW_TEXT_TOOLBOX, pObjBarShell );
@@ -286,7 +294,8 @@ SdOutlineViewShell::SdOutlineViewShell(SfxViewFrame* pFrame, SfxViewShell* pOldS
     pOlView(NULL),
     pLastPage( NULL ),
     pClipEvtLstnr(NULL),
-    bPastePossible(FALSE)
+    bPastePossible(FALSE),
+    pController(NULL)
 {
     if (pOldShell)
     {
@@ -319,7 +328,8 @@ SdOutlineViewShell::SdOutlineViewShell(SfxViewFrame* pFrame,
     pOlView(NULL),
     pLastPage( NULL ),
     pClipEvtLstnr(NULL),
-    bPastePossible(FALSE)
+    bPastePossible(FALSE),
+    pController(NULL)
 {
     pFrameView = new FrameView(pDoc);
     pFrameView->Connect();
@@ -2442,4 +2452,14 @@ void SdOutlineViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Seq
     SdViewShell::ReadUserDataSequence( rSequence, bBrowse );
 
     ReadFrameViewData( pFrameView );
+}
+
+void SdOutlineViewShell::VisAreaChanged(const Rectangle& rRect)
+{
+    SdViewShell::VisAreaChanged( rRect );
+
+    if( pController )
+    {
+        pController->fireVisAreaChanged( rRect );
+    }
 }
