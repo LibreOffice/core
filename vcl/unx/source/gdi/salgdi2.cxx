@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:44:48 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include <stdio.h>
 
 #include <salunx.h>
+#include <poll.h>
 
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
@@ -446,7 +447,24 @@ void X11SalGraphics::YieldGraphicsExpose( Display* pDisplay, SalFrame* pFrame, D
 
     do
     {
-        XIfEvent( pDisplay, &aEvent, GraphicsExposePredicate, (XPointer)aWindow );
+        if( ! XCheckIfEvent( pDisplay, &aEvent, GraphicsExposePredicate, (XPointer)aWindow ) )
+        {
+            // wait for some event to arrive
+            struct pollfd aFD;
+            aFD.fd = ConnectionNumber(pDisplay);
+            aFD.events = POLLIN;
+            aFD.revents = 0;
+            poll( &aFD, 1, 1000 );
+            if( ! XCheckIfEvent( pDisplay, &aEvent, GraphicsExposePredicate, (XPointer)aWindow ) )
+            {
+                poll( &aFD, 1, 1000 ); // try once more for a packet of events from the Xserver
+                if( ! XCheckIfEvent( pDisplay, &aEvent, GraphicsExposePredicate, (XPointer)aWindow ) )
+                {
+                    // this should not happen at all; still sometimes it happens
+                    break;
+                }
+            }
+        }
         if( aEvent.type == NoExpose )
             break;
 
