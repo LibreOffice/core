@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-27 13:26:18 $
+ *  last change: $Author: bm $ $Date: 2001-12-04 13:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,13 +146,13 @@ SvxCachedItemPropertySetInfo::SvxCachedItemPropertySetInfo(const SfxItemProperty
 
 void SAL_CALL SvxCachedItemPropertySetInfo::release() throw ()
 {
-    SfxItemPropertySetInfo::release();
     SvxInfoSetCache* pCache = mpCache;
-    if( pCache && m_refCount == 1 )
+    if( pCache && m_refCount == 2 )
     {
         mpCache = NULL;
         pCache->dispose( this );
     }
+    SfxItemPropertySetInfo::release();
 }
 
 ::osl::Mutex SvxInfoSetCache::maMutex;
