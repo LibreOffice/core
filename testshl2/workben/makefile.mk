@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-08-07 15:08:19 $
+#   last change: $Author: obo $ $Date: 2004-03-19 14:43:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,13 +122,33 @@ APP3LIBS=
 
 #-------------------------------------------------------------------------------
 
-APP5TARGET= test_very_long_names
-APP5OBJS=$(OBJ)$/test_very_long_names.obj
+# APP5TARGET= test_very_long_names
+# APP5OBJS=$(OBJ)$/test_very_long_names.obj
+# 
+# APP5STDLIBS=$(SALLIB)
+# 
+# APP5DEPN=
+# APP5LIBS= 
 
-APP5STDLIBS=$(SALLIB)
 
-APP5DEPN=
-APP5LIBS= 
+#-------------------------------------------------------------------------------
+
+APP6TARGET= test_string
+APP6OBJS=$(OBJ)$/test_string.obj
+
+APP6STDLIBS=$(SALLIB)
+
+APP6DEPN=
+APP6LIBS= 
+#-------------------------------------------------------------------------------
+
+APP7TARGET= test_printf
+APP7OBJS=$(OBJ)$/test_printf.obj
+
+APP7STDLIBS=$(SALLIB)
+
+APP7DEPN=
+APP7LIBS= 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
