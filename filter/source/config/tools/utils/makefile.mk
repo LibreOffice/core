@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Date: 2004-02-05 14:27:11 $
+#   last change: $Date: 2004-07-23 15:12:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,6 @@ PACKAGE = com$/sun$/star$/filter$/config$/tools$/utils
 #----- compile .java files -----------------------------------------
 
 JARFILES        =   \
-                    sandbox.jar     \
                     ridl.jar        \
                     unoil.jar       \
                     jurt.jar        \
