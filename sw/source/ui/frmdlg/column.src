@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:47:39 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ TabPage TP_COLUMN
         Text[ japanese ] = "’i”(~A)";
         Text[ korean ] = "°³¼ö(~A)";
         Text[ chinese_simplified ] = "ÁĞ";
-        Text[ chinese_traditional ] = "¼Æ¥Ø(~A)";
+        Text[ chinese_traditional ] = "Äæ";
         Text[ turkish ] = "S~ayı";
         Text[ arabic ] = "ÇáÚÏÏ";
         Text[ catalan ] = "~Cantidad";
@@ -174,7 +174,7 @@ TabPage TP_COLUMN
         Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
         Text[ greek ] = "ĞñïåğéëïãŞ";
         Text[ dutch ] = "Kolommen";
-        Text[ french ] = "Colonnes";
+        Text[ french ] = "Définitions";
         Text[ spanish ] = "Columnas";
         Text[ finnish ] = "Sarakkeet";
         Text[ italian ] = "Colonne";
@@ -185,7 +185,7 @@ TabPage TP_COLUMN
         Text[ japanese ] = "’i‘g‚İ";
         Text[ korean ] = "¿­";
         Text[ chinese_simplified ] = "Ô¤ÖÃ";
-        Text[ chinese_traditional ] = "Äæ";
+        Text[ chinese_traditional ] = "¹w³]";
         Text[ turkish ] = "Sütun";
         Text[ arabic ] = "ÇáÃÚãÏÉ";
         Text[ catalan ] = "Columnas";
@@ -213,7 +213,7 @@ TabPage TP_COLUMN
         Text[ japanese ] = "’i";
         Text[ korean ] = "Column";
         Text[ chinese_simplified ] = "ÁĞ";
-        Text[ chinese_traditional ] = "Column";
+        Text[ chinese_traditional ] = "Äæ";
         Text[ turkish ] = "Column";
         Text[ arabic ] = "Column";
         Text[ catalan ] = "Column";
@@ -467,7 +467,7 @@ TabPage TP_COLUMN
         Text[ japanese ] = "’i‚Ì•‚ÆŠÔŠu";
         Text[ korean ] = "¿­ ³Êºñ";
         Text[ chinese_simplified ] = "À¸¿íºÍ¼ä¸ô";
-        Text[ chinese_traditional ] = "Äæ¼e";
+        Text[ chinese_traditional ] = "Äæ¼e¤Î¶¡¹j";
         Text[ turkish ] = "Sütun genişliği";
         Text[ arabic ] = "ÚÑÖ ÇáÚãæÏ";
         Text[ catalan ] = "Ancho de columna";
@@ -1174,4 +1174,5 @@ ModalDialog DLG_COLUMN
     Text[ catalan ] = "Columnas";
     Text[ finnish ] = "Sarakkeet";
 };
+
 
