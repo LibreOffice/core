@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 16:01:55 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,8 +391,9 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
                 SdrObject* pNew = pClpDoc->CloneSdrObj( *pObj, FALSE, TRUE );
 
 //JP 07.01.00: why move??
-//              pNew->NbcMove( aSiz );
-                   pClpDoc->Insert( SwPaM( aPos ), *pNew, &aSet );
+//              pNew->NbcMove(aSiz);
+                   SwPaM aTemp(aPos);
+                   pClpDoc->Insert(aTemp, *pNew, &aSet);
             }
             else
             {
