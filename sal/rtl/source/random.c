@@ -2,9 +2,9 @@
  *
  *  $RCSfile: random.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:45:36 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _RTL_RANDOM_C_ "$Revision: 1.3 $"
+#define _RTL_RANDOM_C_ "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -146,12 +146,12 @@ static sal_Bool __rtl_random_initPool (
 /** __rtl_random_seedPool.
  */
 static void __rtl_random_seedPool (
-    RandomPool_Impl *pImpl, const sal_uInt8 *pBuffer, sal_uInt32 nBufLen);
+    RandomPool_Impl *pImpl, const sal_uInt8 *pBuffer, sal_Size nBufLen);
 
 /** __rtl_random_readPool.
  */
 static void __rtl_random_readPool (
-    RandomPool_Impl *pImpl, sal_uInt8 *pBuffer, sal_uInt32 nBufLen);
+    RandomPool_Impl *pImpl, sal_uInt8 *pBuffer, sal_Size nBufLen);
 
 /*
  * __rtl_random_data.
@@ -221,10 +221,10 @@ static sal_Bool __rtl_random_initPool (RandomPool_Impl *pImpl)
  * __rtl_random_seedPool.
  */
 static void __rtl_random_seedPool (
-    RandomPool_Impl *pImpl, const sal_uInt8 *pBuffer, sal_uInt32 nBufLen)
+    RandomPool_Impl *pImpl, const sal_uInt8 *pBuffer, sal_Size nBufLen)
 {
-    sal_uInt32 i;
-    sal_Int32  j, k;
+    sal_Size i;
+    sal_sSize  j, k;
 
     for (i = 0; i < nBufLen; i += RTL_RANDOM_SIZE_DIGEST)
     {
@@ -273,7 +273,7 @@ static void __rtl_random_seedPool (
  * __rtl_random_readPool.
  */
 static void __rtl_random_readPool (
-    RandomPool_Impl *pImpl, sal_uInt8 *pBuffer, sal_uInt32 nBufLen)
+    RandomPool_Impl *pImpl, sal_uInt8 *pBuffer, sal_Size nBufLen)
 {
     sal_Int32 j, k;
 
@@ -362,7 +362,7 @@ void SAL_CALL rtl_random_destroyPool (rtlRandomPool Pool)
  * rtl_random_addBytes.
  */
 rtlRandomError SAL_CALL rtl_random_addBytes (
-    rtlRandomPool Pool, const void *Buffer, sal_uInt32 Bytes)
+    rtlRandomPool Pool, const void *Buffer, sal_Size Bytes)
 {
     RandomPool_Impl *pImpl   = (RandomPool_Impl *)Pool;
     const sal_uInt8 *pBuffer = (const sal_uInt8 *)Buffer;
@@ -378,7 +378,7 @@ rtlRandomError SAL_CALL rtl_random_addBytes (
  * rtl_random_getBytes.
  */
 rtlRandomError SAL_CALL rtl_random_getBytes (
-    rtlRandomPool Pool, void *Buffer, sal_uInt32 Bytes)
+    rtlRandomPool Pool, void *Buffer, sal_Size Bytes)
 {
     RandomPool_Impl *pImpl   = (RandomPool_Impl *)Pool;
     sal_uInt8       *pBuffer = (sal_uInt8 *)Buffer;
