@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astoperation.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@ sal_Bool AstOperation::dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index)
                         break;
                     case DIR_INOUT :
                         paramMode = RT_PARAM_INOUT;
+                        break;
+                    default:
+                        paramMode = RT_PARAM_INVALID;
                         break;
                 }
 
