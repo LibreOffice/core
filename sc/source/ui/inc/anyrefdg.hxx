@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:11:11 $
+ *  last change: $Author: nn $ $Date: 2001-11-28 11:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ public:
     virtual BOOL    IsDocAllowed(SfxObjectShell* pDocSh) const;
 
     void            ShowReference( const XubString& rStr );
-    void            HideReference();
+    void            HideReference( BOOL bDoneRefMode = TRUE );
 
     void            ViewShellChanged(ScTabViewShell* pScViewShell);
     void            SwitchToDocument();

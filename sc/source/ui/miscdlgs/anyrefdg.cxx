@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:36:52 $
+ *  last change: $Author: nn $ $Date: 2001-11-28 11:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,7 +762,7 @@ void ScAnyRefDlg::ShowFormulaReference( const XubString& rStr )
     }
 }
 
-void ScAnyRefDlg::HideReference()
+void ScAnyRefDlg::HideReference( BOOL bDoneRefMode )
 {
     ScViewData* pViewData=ScDocShell::GetViewData();
 
@@ -773,7 +773,11 @@ void ScAnyRefDlg::HideReference()
 
         if(pTabViewShell!=NULL)
         {
-            pTabViewShell->DoneRefMode( FALSE );
+            //  bDoneRefMode is FALSE when called from before SetReference.
+            //  In that case, RefMode was just started and must not be ended now.
+
+            if ( bDoneRefMode )
+                pTabViewShell->DoneRefMode( FALSE );
             pTabViewShell->ClearHighlightRanges();
         }
         bHighLightRef=FALSE;
