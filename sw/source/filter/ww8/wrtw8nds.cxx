@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-23 11:44:59 $
+ *  last change: $Author: cmc $ $Date: 2002-10-14 14:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,9 +290,13 @@ private:
     typedef std::pair<UTextOffset, bool> Entry;
     std::vector<Entry> maDirChanges;
     typedef std::vector<Entry>::const_iterator myciter;
-    myciter aIter;
+    myciter maBiDiIter;
     bool mbCharIsRTL;
     bool mbParaIsRTL;
+
+    std::vector<const SwFrmFmt*> maFlyFrms;     // #i2916#
+    typedef std::vector<const SwFrmFmt*>::iterator myflyiter;
+    myflyiter maFlyIter;
 
     xub_StrLen SearchNext( xub_StrLen nStartPos );
     void SetCharSet(const SwTxtAttr& rTxtAttr, bool bStart);
@@ -327,6 +331,24 @@ public:
 
     bool IsCharRTL() const {return mbCharIsRTL; }
     bool IsParaRTL() const {return mbParaIsRTL; }
+};
+
+class sortautoflys :
+    public std::binary_function<const SwFrmFmt*, const SwFrmFmt*, bool>
+{
+public:
+    bool operator()(const SwFrmFmt* pOne, const SwFrmFmt* pTwo) const
+    {
+        ASSERT(pOne->GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT,
+            "Only for auto anchored flys!");
+        ASSERT(pTwo->GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT,
+            "Only for auto anchored flys!");
+
+        const SwPosition* pPosOne = pOne->GetAnchor().GetCntntAnchor();
+        const SwPosition* pPosTwo = pTwo->GetAnchor().GetCntntAnchor();
+        ASSERT(pPosOne && pPosTwo, "shouldn't be possible");
+        return pPosOne->nContent.GetIndex() < pPosTwo->nContent.GetIndex();
+    }
 };
 
 WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
@@ -386,9 +408,36 @@ WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
         }
         ubidi_close(pBidi);
     }
-    aIter = maDirChanges.begin();
+    maBiDiIter = maDirChanges.begin();
 
-    if( rWrt.pDoc->GetRedlineTbl().Count() )
+    /*
+     #i2916#
+     Create list of any graphics which may be anchored in this paragraph.
+    */
+    SwPosFlyFrms aAllFlys;
+    rWrt.pDoc->GetAllFlyFmts(aAllFlys,
+        rWrt.bWriteAll ? 0 : rWrt.GetEndPaM(), rWrt.bWrtWW8);
+    ULONG nCurPos = rNd.GetIndex();
+
+    for (USHORT n = aAllFlys.Count(); n > 0;)
+    {
+        ULONG nFlyNdPos = aAllFlys[--n]->GetNdIndex().GetIndex();
+
+        if (nFlyNdPos == nCurPos)
+        {
+            const SwFrmFmt* pEntry = &aAllFlys[n]->GetFmt();
+            if (pEntry->GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT)
+                maFlyFrms.push_back(pEntry);
+        }
+
+        delete aAllFlys[n];
+    }
+
+    ::std::sort(maFlyFrms.begin(), maFlyFrms.end(), sortautoflys());
+
+    maFlyIter = maFlyFrms.begin();
+
+    if (rWrt.pDoc->GetRedlineTbl().Count())
     {
         SwPosition aPos( rNd, SwIndex( (SwTxtNode*)&rNd ) );
         pCurRedline = rWrt.pDoc->GetRedline( aPos, &nCurRedlinePos );
@@ -488,14 +537,37 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
         }
     }
 
-    if (aIter != maDirChanges.end())
+    if (maBiDiIter != maDirChanges.end())
     {
-        if (aIter->first <= nMinPos)
+        if (maBiDiIter->first <= nMinPos)
         {
-            nMinPos = aIter->first;
-            mbCharIsRTL = aIter->second;
-            ++aIter;
+            nMinPos = maBiDiIter->first;
+            mbCharIsRTL = maBiDiIter->second;
+            ++maBiDiIter;
         }
+    }
+
+    /*
+     #i2916#
+     Check to see if there are any graphics anchored to characters in this
+     paragraph's text.  Set nMinPos to 1 past the placement because anchors in
+     Word appear after the character they are anchored to.
+    */
+    if (maFlyIter != maFlyFrms.end())
+    {
+        const SwPosition* pAnchor = (*maFlyIter)->GetAnchor().GetCntntAnchor();
+        ASSERT(pAnchor, "not expected, panic!");
+        if (!pAnchor)
+            return nMinPos;
+
+        nPos = pAnchor->nContent.GetIndex();
+        if (nPos >= nStartPos && nPos <= nMinPos)
+            nMinPos = nPos;
+
+        nPos++;
+
+        if (nPos >= nStartPos && nPos <= nMinPos)
+            nMinPos = nPos;
     }
 
     return nMinPos;
@@ -584,6 +656,31 @@ void WW8_SwAttrIter::OutAttr( xub_StrLen nSwPos )
         rWrt.pOutFmtNode = pOldMod;
     }
 
+    /*
+     #i2916#
+     May have an anchored graphic to be placed, loop through sorted array
+     and output all at this position
+    */
+    while (maFlyIter != maFlyFrms.end())
+    {
+        const SwPosition* pAnchor = (*maFlyIter)->GetAnchor().GetCntntAnchor();
+        ASSERT(pAnchor, "Not expected, panic!");
+        if (!pAnchor)
+            break;
+        xub_StrLen nPos = pAnchor->nContent.GetIndex();
+
+        if (nPos != nSwPos)
+            break;
+        else
+        {
+            // OutWW8FlyFrm will flush the attributes for the anchored
+            // character.
+            Point aNdPos = rNd.FindLayoutRect(false, &aNdPos).Pos();
+            rWrt.OutWW8FlyFrm(*(*maFlyIter), aNdPos);
+            ++maFlyIter;
+        }
+    }
+
     OutRedlines( nSwPos );
 }
 
@@ -601,6 +698,7 @@ bool WW8_SwAttrIter::IsTxtAttr( xub_StrLen nSwPos )
                 return true;
         }
     }
+
     return false;
 }
 
@@ -2327,7 +2425,16 @@ void SwWW8Writer::OutFlyFrms( const SwCntntNode& rNode )
                 pLayPos = &aNdPos;
             }
 
-            OutWW8FlyFrm( rFmt, *pLayPos );
+            /*
+             #i2916#
+             Anchored Escher objects should be dealt with by the Attribute
+             Iterator as part of the text processing, in a similar manner to
+             inline graphics, rather than simply writing them all out at the
+             start of the paragraph.
+            */
+            if (rFmt.GetAnchor().GetAnchorId() != FLY_AUTO_CNTNT)
+                OutWW8FlyFrm(rFmt, *pLayPos);
+
             ++n;
          }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-14 10:29:59 $
+ *  last change: $Author: cmc $ $Date: 2002-10-14 14:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1562,6 +1562,7 @@ void SwBasicEscherEx::WritePictures()
 
         delete pPictStrm, pPictStrm = 0;
         rWrt.GetStorage().Remove(msEscherPictStream);
+        rWrt.GetStorage().Commit();
     }
 }
 
@@ -1692,7 +1693,8 @@ void SwEscherEx::FinishEscher()
     *rWrt.pTableStrm << *pEscherStrm;
 
     delete pEscherStrm, pEscherStrm = 0;
-    rWrt.GetStorage().Remove( sEscherStream );
+    rWrt.GetStorage().Remove(sEscherStream);
+    rWrt.GetStorage().Commit();
 
     /*#82587# Everytime MS 2000 creates an escher stream there is always an
      ObjectPool dir (even if empty). It turns out that if a copy of MS 2000 is
@@ -2010,6 +2012,22 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt, bool bBROKEN)
                 0x01070010,
                 0x01070140,
                 0x01070230,
+    // i2916
+    // RndStdIds: FLY_AUTO_CNTNT: 1
+    //
+    // As for FLY_AT_CNTNT with the addition
+    // of following.
+    //
+    // SwRelationOrient: REL_CHAR: 8
+    //               |
+                0x01080013,
+                0x01080113,
+                0x01080233,
+                0x01080333,
+                0x01080423,
+                0x01080503,
+
+
                 0x01070350,
                 0x01070420,
                 0x01070500,
