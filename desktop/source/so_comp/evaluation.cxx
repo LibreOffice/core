@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evaluation.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-03 16:35:14 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,110 +194,20 @@ rtl::OUString SAL_CALL SOEvaluation::getExactName( const rtl::OUString& rApproxi
         {
             // this is an evaluation version, because it provides "material"
             bExpired = sal_True;
-
-            // determine current locale
-            ::rtl::OUString aLocale;
-            ::rtl::OUString aTmp;
-            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
-            aRet >>= aLocale;
-
             sal_Int32 nCount = aSeq.getLength();
-            if ( nCount )
+            for (int i=0; i<aSeq.getLength(); i++ )
             {
-                // first entry is for expiry
-                const NamedValue& rValue = aSeq[0];
+                NamedValue& rValue = aSeq[i];
                 if ( rValue.Name.equalsAscii("expired") )
                     rValue.Value >>= bExpired;
+                else if (rValue.Name.equalsAscii("title") )
+                    rValue.Value >>= aEval;
             }
-
-            // find string for matching locale
-            sal_Int32 n;
-            for ( n=0; n<nCount; n++ )
-            {
-                const NamedValue& rValue = aSeq[n];
-                if ( rValue.Name == aLocale )
-                {
-                    rValue.Value >>= aTmp;
-                    aEval = aTmp;
-                    break;
-                }
-            }
-
-            if ( n == nCount )
-            {
-                // try matching only first part of locale, if tab service provides it
-                ::rtl::OUString aShortLocale;
-                sal_Int32 nPos = aLocale.indexOf('_');
-                if ( nPos > 0 )
-                {
-                    aShortLocale = aLocale.copy( 0, nPos );
-                    for ( n=0; n<nCount; n++ )
-                    {
-                        const NamedValue& rValue = aSeq[n];
-                        if ( rValue.Name == aShortLocale )
-                        {
-                            rValue.Value >>= aTmp;
-                            aEval = aTmp;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if ( n == nCount )
-            {
-                // current locale is unknown for service, use default english
-                sal_Int32 nCount = aSeq.getLength();
-                for ( n=0; n<nCount; n++ )
-                {
-                    const NamedValue& rValue = aSeq[n];
-                    if ( rValue.Name.equalsAscii("en") )
-                    {
-                        rValue.Value >>= aTmp;
-                        aEval = aTmp;
-                        break;
-                    }
-                }
-
-                if ( n == nCount )
-                    // strange version, no english string
-                    bExpired = sal_True;
-            }
+            // append eval string to title
+            aTitle += OUString::createFromAscii(" ") + aEval;
+            if ( bExpired )
+                throw RuntimeException();
         }
-    }
-
-    if ( aEval.getLength() )
-    {
-        OUStringBuffer aBuf( aTitle.getLength() + aEval.getLength() + 1 );
-
-        aBuf.append( aTitle );
-        const sal_Unicode* pStr = aTitle.getStr();
-        if ( pStr[ aTitle.getLength()-1 ] != (sal_Unicode)' ' )
-            aBuf.appendAscii( " " );
-        aBuf.append( aEval );
-        aTitle = aBuf.makeStringAndClear();
-    }
-
-    if ( bExpired )
-    {
-        // get destop resource manager
-        ResMgr* pResMgr = ResMgr::CreateResMgr(
-                OString("dkt")+OString::valueOf((long int)SUPD));
-        InfoBox* pBox;
-        if(pResMgr != NULL){
-            pBox = new InfoBox( NULL, ResId(INFOBOX_EXPIRED, pResMgr));
-            String aText(ResId(STR_TITLE_EXPIRED, pResMgr));
-            pBox->SetText(aText);
-        } else {
-            pBox = new InfoBox( NULL, aTitle);
-        }
-
-        pBox->Execute();
-
-        delete pBox;
-        delete pResMgr;
-
-        throw RuntimeException();
     }
 
     return aTitle;
