@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-24 16:11:27 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,9 +133,9 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
 
     :   SfxTabPage      ( pParent, ScResId( nResId ), rCoreAttrs ),
 
-        aWndLeft        ( this, ScResId( WND_LEFT ) ),
-        aWndCenter      ( this, ScResId( WND_CENTER ) ),
-        aWndRight       ( this, ScResId( WND_RIGHT ) ),
+        aWndLeft        ( this, ScResId( WND_LEFT ), Left ),
+        aWndCenter      ( this, ScResId( WND_CENTER ), Center ),
+        aWndRight       ( this, ScResId( WND_RIGHT ), Right ),
         aFtLeft         ( this, ScResId( FT_LEFT ) ),
         aFtCenter       ( this, ScResId( FT_CENTER ) ),
         aFtRight        ( this, ScResId( FT_RIGHT ) ),
@@ -425,8 +425,9 @@ void lcl_GetFieldData( ScHeaderFieldData& rData )
 // class ScEditWindow
 //========================================================================
 
-ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId )
+ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLocation eLoc )
     :   Control( pParent, rResId ),
+    eLocation(eLoc),
     pAcc(NULL)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -651,7 +652,31 @@ void __EXPORT ScEditWindow::LoseFocus()
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > ScEditWindow::CreateAccessible()
 {
-    pAcc = new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), pEdView, this, sal_True);
+    String sName;
+    String sDescription;
+    switch (eLocation)
+    {
+    case Left:
+        {
+            sName = String(ScResId(STR_ACC_LEFTAREA_NAME));
+            sDescription = String(ScResId(STR_ACC_LEFTAREA_DESCR));
+        }
+        break;
+    case Center:
+        {
+            sName = String(ScResId(STR_ACC_CENTERAREA_NAME));
+            sDescription = String(ScResId(STR_ACC_CENTERAREA_DESCR));
+        }
+        break;
+    case Right:
+        {
+            sName = String(ScResId(STR_ACC_RIGHTAREA_NAME));
+            sDescription = String(ScResId(STR_ACC_RIGHTAREA_DESCR));
+        }
+        break;
+    }
+    pAcc = new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), pEdView, this,
+        rtl::OUString(sName), rtl::OUString(sDescription), EditControl);
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAccessible = pAcc;
     xAcc = xAccessible;
     return pAcc;
