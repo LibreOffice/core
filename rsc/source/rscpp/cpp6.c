@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp6.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:59:51 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include        <stdio.h>
 #include        <ctype.h>
+#include        <string.h>
 #include        "cppdef.h"
 #include        "cpp.h"
 
@@ -230,7 +231,7 @@ void InitCpp6()
 
 
 
-skipnl()
+void skipnl()
 /*
  * Skip to the end of the current input line.
  */
@@ -260,7 +261,7 @@ skipws()
         return (c);
 }
 
-scanid(c)
+void scanid(c)
 register int    c;                              /* First char of id     */
 /*
  * Get the next token (an id) into the token buffer.
@@ -373,9 +374,9 @@ int
 scanstring(delim, outfun)
 register int    delim;                  /* ' or "                       */
 #ifndef _NO_PROTO
-int             (*outfun)( int ); /* BP */    /* Output function              */
+void             (*outfun)( int ); /* BP */    /* Output function              */
 #else
-int             (*outfun)(); /* BP */
+void         (*outfun)(); /* BP */
 #endif
 
 /*
@@ -409,12 +410,12 @@ int             (*outfun)(); /* BP */
         }
 }
 
-scannumber(c, outfun)
+void scannumber(c, outfun)
 register int    c;                              /* First char of number */
 #ifndef _NO_PROTO
-register int    (*outfun)( int );  /* BP */    /* Output/store func    */
+register void    (*outfun)( int );  /* BP */    /* Output/store func    */
 #else
-register int    (*outfun)(); /* BP */
+register void    (*outfun)(); /* BP */
 #endif
 
 /*
@@ -540,7 +541,7 @@ nomore: unget();                                /* Not part of a number */
             cwarn("Illegal digit in octal number", NULLST);
 }
 
-save(c)
+void save(c)
 register int    c;
 {
         if (workp >= &work[NWORK]) {
@@ -601,9 +602,6 @@ int             size;
 {
         register char   *result;
 
-#if !defined( ZTC ) && !defined( WNT ) /* BP */ && !defined(BLC) /* ER */
-        extern char     *malloc();
-#endif
         if ((result = malloc((unsigned) size)) == NULL)
             cfatal("Out of memory", NULLST);
         return (result);
@@ -702,7 +700,7 @@ int             delete;                 /* TRUE to delete a symbol      */
 
 #if OSL_DEBUG_LEVEL > 1
 
-dumpdef(why)
+void dumpdef(why)
 char            *why;
 {
         register DEFBUF         *dp;
@@ -730,7 +728,7 @@ char            *why;
         }
 }
 
-dumpadef(why, dp)
+void dumpadef(why, dp)
 char            *why;                   /* Notation                     */
 register DEFBUF *dp;
 {
@@ -1033,10 +1031,32 @@ newline:
         }
         else if (c == '\f' || c == VT)          /* Form Feed, Vertical  */
             c = ' ';                            /* Tab are whitespace   */
+        else if (c == 0xef)                     /* eat up UTF-8 BOM */
+        {
+            if((c = get()) == 0xbb)
+            {
+                if((c = get()) == 0xbf)
+                {
+                    c = get();
+                    return c;
+                }
+                else
+                {
+                    unget();
+                    unget();
+                    return 0xef;
+                }
+            }
+            else
+            {
+                unget();
+                return 0xef;
+            }
+        }
         return (c);                             /* Just return the char */
 }
 
-unget()
+void unget()
 /*
  * Backup the pointer to reread the last character.  Fatal error
  * (code bug) if we backup too far.  unget() may be called,
@@ -1054,7 +1074,7 @@ unget()
             --line;                     /* Unget the line number, too   */
 }
 
-ungetstring(text)
+void ungetstring(text)
 char            *text;
 /*
  * Push a string back on the input stream.  This is done by treating
@@ -1095,8 +1115,7 @@ cget()
  * are shorter than  char *'s.
  */
 
-static
-domsg(severity, format, arg)
+static void domsg(severity, format, arg)
 char            *severity;              /* "Error", "Warning", "Fatal"  */
 char            *format;                /* Format for the error message */
 void            *arg;                   /* Something for the message    */
@@ -1136,7 +1155,7 @@ void            *arg;                   /* Something for the message    */
         }
 }
 
-cerror(format, sarg)
+void cerror(format, sarg)
 char            *format;
 char            *sarg;          /* Single string argument               */
 /*
@@ -1147,7 +1166,7 @@ char            *sarg;          /* Single string argument               */
         errors++;
 }
 
-cierror(format, narg)
+void cierror(format, narg)
 char            *format;
 int             narg;           /* Single numeric argument              */
 /*
@@ -1158,7 +1177,7 @@ int             narg;           /* Single numeric argument              */
         errors++;
 }
 
-cfatal(format, sarg)
+void cfatal(format, sarg)
 char            *format;
 char            *sarg;                  /* Single string argument       */
 /*
@@ -1169,7 +1188,7 @@ char            *sarg;                  /* Single string argument       */
         exit(IO_ERROR);
 }
 
-cwarn(format, sarg)
+void cwarn(format, sarg)
 char            *format;
 char            *sarg;                  /* Single string argument       */
 /*
@@ -1179,7 +1198,7 @@ char            *sarg;                  /* Single string argument       */
         domsg("SWarning", format, sarg);
 }
 
-ciwarn(format, narg)
+void ciwarn(format, narg)
 char            *format;
 int             narg;                   /* Single numeric argument      */
 /*
