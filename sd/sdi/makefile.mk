@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 13:43:07 $
+#   last change: $Author: obo $ $Date: 2004-08-12 09:12:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ SVSDI1DEPEND= \
     drgrfob.sdi \
     _drvwsh.sdi \
     drviewsh.sdi \
+    mediaob.sdi \
     outlnvsh.sdi \
     slidvish.sdi \
     SlideSorterController.sdi \
@@ -108,6 +109,7 @@ SVSDI2DEPEND= \
     drgrfob.sdi \
     _drvwsh.sdi \
     grviewsh.sdi \
+    mediaob.sdi \
     outlnvsh.sdi \
     slidvish.sdi \
     ViewShellBase.sdi \
