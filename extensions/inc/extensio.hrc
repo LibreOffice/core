@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:03:39 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,7 @@
 #define HID_PROP_SHOW_FILTERSORT                (HID_FORMS_START +  163)
 #define HID_PROP_AUTOLINEBREAK                  (HID_FORMS_START +  164)
 #define HID_PROP_TEXTTYPE                       (HID_FORMS_START +  165)
+#define HID_PROP_LINEEND_FORMAT                 (HID_FORMS_START +  166)
 
 // ----------------------------------------------------------------------------
 #define UID_PROP_DLG_FONT_TYPE                  (HID_FORMS_START +  180)
@@ -235,5 +236,77 @@
 #define UID_PROP_DLG_FILTER                     (HID_FORMS_START +  192)
 #define UID_PROP_DLG_ORDER                      (HID_FORMS_START +  193)
 #define UID_PROP_DLG_SELECTION                  (HID_FORMS_START +  194)
+#define UID_EVT_MACRODLG                        (HID_FORMS_START +  195)
+
+#define UID_BRWEVT_APPROVEACTIONPERFORMED       (HID_FORMS_START +  196)
+#define UID_BRWEVT_ACTIONPERFORMED              (HID_FORMS_START +  197)
+#define UID_BRWEVT_CHANGED                      (HID_FORMS_START +  198)
+#define UID_BRWEVT_TEXTCHANGED                  (HID_FORMS_START +  199)
+#define UID_BRWEVT_ITEMSTATECHANGED             (HID_FORMS_START +  200)
+#define UID_BRWEVT_FOCUSGAINED                  (HID_FORMS_START +  201)
+#define UID_BRWEVT_FOCUSLOST                    (HID_FORMS_START +  202)
+#define UID_BRWEVT_KEYTYPED                     (HID_FORMS_START +  203)
+#define UID_BRWEVT_KEYUP                        (HID_FORMS_START +  204)
+#define UID_BRWEVT_MOUSEENTERED                 (HID_FORMS_START +  205)
+#define UID_BRWEVT_MOUSEDRAGGED                 (HID_FORMS_START +  206)
+#define UID_BRWEVT_MOUSEMOVED                   (HID_FORMS_START +  207)
+#define UID_BRWEVT_MOUSEPRESSED                 (HID_FORMS_START +  208)
+#define UID_BRWEVT_MOUSERELEASED                (HID_FORMS_START +  209)
+#define UID_BRWEVT_MOUSEEXITED                  (HID_FORMS_START +  210)
+#define UID_BRWEVT_APPROVERESETTED              (HID_FORMS_START +  211)
+#define UID_BRWEVT_RESETTED                     (HID_FORMS_START +  212)
+#define UID_BRWEVT_SUBMITTED                    (HID_FORMS_START +  213)
+#define UID_BRWEVT_BEFOREUPDATE                 (HID_FORMS_START +  214)
+#define UID_BRWEVT_AFTERUPDATE                  (HID_FORMS_START +  215)
+#define UID_BRWEVT_LOADED                       (HID_FORMS_START +  216)
+#define UID_BRWEVT_RELOADING                    (HID_FORMS_START +  217)
+#define UID_BRWEVT_RELOADED                     (HID_FORMS_START +  218)
+#define UID_BRWEVT_UNLOADING                    (HID_FORMS_START +  219)
+#define UID_BRWEVT_UNLOADED                     (HID_FORMS_START +  220)
+#define UID_BRWEVT_CONFIRMDELETE                (HID_FORMS_START +  221)
+#define UID_BRWEVT_APPROVEROWCHANGE             (HID_FORMS_START +  222)
+#define UID_BRWEVT_ROWCHANGE                    (HID_FORMS_START +  223)
+#define UID_BRWEVT_POSITIONING                  (HID_FORMS_START +  224)
+#define UID_BRWEVT_POSITIONED                   (HID_FORMS_START +  225)
+#define UID_BRWEVT_APPROVEPARAMETER             (HID_FORMS_START +  226)
+#define UID_BRWEVT_ERROROCCURED                 (HID_FORMS_START +  227)
+#define UID_BRWEVT_ADJUSTMENTVALUECHANGED       (HID_FORMS_START +  228)
+
+#define HID_PROP_AUTOLINEBREAK                  (HID_FORMS_START +  229)
+#define HID_PROP_TEXTTYPE                       (HID_FORMS_START +  230)
+
+#define HID_EVT_ACTIONPERFORMED                 (HID_FORMS_START + 300)
+#define HID_EVT_AFTERUPDATE                     (HID_FORMS_START + 301)
+#define HID_EVT_BEFOREUPDATE                    (HID_FORMS_START + 302)
+#define HID_EVT_CONFIRMDELETE                   (HID_FORMS_START + 303)
+#define HID_EVT_ERROROCCURED                    (HID_FORMS_START + 304)
+#define HID_EVT_FOCUSGAINED                     (HID_FORMS_START + 305)
+#define HID_EVT_FOCUSLOST                       (HID_FORMS_START + 306)
+#define HID_EVT_ITEMSTATECHANGED                (HID_FORMS_START + 307)
+#define HID_EVT_KEYTYPED                        (HID_FORMS_START + 308)
+#define HID_EVT_LOADED                          (HID_FORMS_START + 309)
+#define HID_EVT_MOUSEDRAGGED                    (HID_FORMS_START + 310)
+#define HID_EVT_MOUSEENTERED                    (HID_FORMS_START + 311)
+#define HID_EVT_MOUSEEXITED                     (HID_FORMS_START + 312)
+#define HID_EVT_MOUSEMOVED                      (HID_FORMS_START + 313)
+#define HID_EVT_MOUSEPRESSED                    (HID_FORMS_START + 314)
+#define HID_EVT_MOUSERELEASED                   (HID_FORMS_START + 315)
+#define HID_EVT_POSITIONED                      (HID_FORMS_START + 316)
+#define HID_EVT_RESETTED                        (HID_FORMS_START + 317)
+#define HID_EVT_SUBMITTED                       (HID_FORMS_START + 318)
+#define HID_EVT_TEXTCHANGED                     (HID_FORMS_START + 319)
+#define HID_EVT_UNLOADED                        (HID_FORMS_START + 320)
+#define HID_EVT_CHANGED                         (HID_FORMS_START + 321)
+#define HID_EVT_APPROVEACTIONPERFORMED          (HID_FORMS_START + 322)
+#define HID_EVT_APPROVERESETTED                 (HID_FORMS_START + 323)
+#define HID_EVT_KEYUP                           (HID_FORMS_START + 324)
+#define HID_EVT_APPROVEPARAMETER                (HID_FORMS_START + 325)
+#define HID_EVT_POSITIONING                     (HID_FORMS_START + 326)
+#define HID_EVT_RELOADED                        (HID_FORMS_START + 327)
+#define HID_EVT_APPROVEROWCHANGE                (HID_FORMS_START + 328)
+#define HID_EVT_ROWCHANGE                       (HID_FORMS_START + 329)
+#define HID_EVT_RELOADING                       (HID_FORMS_START + 330)
+#define HID_EVT_UNLOADING                       (HID_FORMS_START + 331)
+#define HID_EVT_ADJUSTMENTVALUECHANGED          (HID_FORMS_START + 332)
 
 #endif
