@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-16 13:05:14 $
+ *  last change: $Author: kz $ $Date: 2002-05-21 09:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ dutch ] = "Kolom";
         Text[ chinese_simplified ] = "åˆ—";
         Text[ greek ] = "ÓôÞëç";
-        Text[ korean ] = "ì—´";
+        Text[ korean ] = "ë‹¨";
         Text[ turkish ] = "Sütun";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Columna";
