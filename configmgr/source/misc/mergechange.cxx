@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:15:40 $
+ *  last change: $Author: jb $ $Date: 2001-04-11 05:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,42 +195,103 @@ namespace configmgr
     // -----------------------------------------------------------------------------
     class OMergeValueChange : private ChangeTreeModification
     {
-        const ValueChange& m_aValueChange;
+        SubtreeChange&      m_rTargetParent;
+        const ValueChange&  m_aValueChange;
     public:
-        OMergeValueChange(const ValueChange& _aValueChange)
-                :m_aValueChange(_aValueChange)
-            {
+        OMergeValueChange(SubtreeChange& _rTargetParent, const ValueChange& _aValueChange)
+                :m_rTargetParent(_rTargetParent)
+                ,m_aValueChange(_aValueChange)
+        {
 
-            }
+        }
         void handleChange(Change &_rNode)
-            {
-                applyToChange(_rNode);
-            }
+        {
+            applyToChange(_rNode);
+        }
     private:
         virtual void handle(ValueChange& _rValueChange)
-            {
-                // POST: Handle ValueChange
-                _rValueChange.setNewValue(m_aValueChange.getNewValue(), m_aValueChange.getMode());
-            }
+        {
+            // POST: Handle ValueChange
+            _rValueChange.setNewValue(m_aValueChange.getNewValue(), m_aValueChange.getMode());
+        }
         virtual void handle(RemoveNode& _rRemoveNode)
-            {
-                OSL_ENSURE(false, "OMergeValueChange::handle(ValueChange): have a ValueChange for a removed node!");
-                // should never happen. How did the user change a value for a node which is obviously flagged as removed?
-            }
+        {
+            OSL_ENSURE(false, "OMergeValueChange::handle(ValueChange): have a ValueChange for a removed node!");
+            // should never happen. How did the user change a value for a node which is obviously flagged as removed?
+        }
         virtual void handle(AddNode& _rAddNode)
+        {
+            // POST: Handle ValueChange in AddNode
+            INode* pINode = _rAddNode.getAddedNode();
+
+            if (ValueNode *pValueNode = pINode->asValueNode())
+                pValueNode->setValue( m_aValueChange.getNewValue() );
+
+            else if (ISubtree* pValueSetNode = pINode->asISubtree() )
             {
-                // POST: Handle ValueChange in AddNode
-                INode* pINode = _rAddNode.getAddedNode();
-                ValueNode *pValueNode = pINode->asValueNode();
-                if (pValueNode)
-                    pValueNode->setValue(m_aValueChange.getNewValue());
+                if ( isLocalizedValueSet(*pValueSetNode) )
+                {
+                    std::auto_ptr<ValueNode> pNewValueNode = createNodeFromChange(m_aValueChange);
+                    if (pNewValueNode.get())
+                    {
+                        OSL_ENSURE(pNewValueNode->isLocalized(), "OMergeValueChange:handle(AddNode): have a non-localized ValueChange a for a localized node!");
+
+                        std::auto_ptr<INode> pNewNode(pNewValueNode.release());
+                        std::auto_ptr<Change> pNewChange( new AddNode(pNewNode,m_aValueChange.getNodeName()) );
+
+                        replaceExistingEntry(pNewChange);
+                    }
+                    else
+                        OSL_ENSURE(false, "OMergeValueChange:handle(SubtreeChange): Creating a NULL node to replace a localized value set not yet supported");
+
+                }
                 else
                     OSL_ENSURE(sal_False, "OMergeValueChange:handle(AddNode): have a ValueChange a for non-value node!");
             }
+            else
+                OSL_ENSURE(sal_False, "OMergeValueChange:handle(AddNode): Found unknown node type!");
+        }
         virtual void handle(SubtreeChange& _rSubtree)
+        {
+            if ( isLocalizedValueSet(_rSubtree) )
             {
-                OSL_ENSURE(false, "OMergeValueChange:handle(SubtreeChange): have a ValueChange for a sub tree!");
+                std::auto_ptr<ValueChange> pNewValueChange( new ValueChange(m_aValueChange) );
+                OSL_ENSURE(pNewValueChange->isLocalized(), "OMergeValueChange:handle(AddNode): have a non-localized ValueChange a for a localized node!");
+
+                std::auto_ptr<Change> pNewChange( pNewValueChange.release() );
+
+                replaceExistingEntry(pNewChange);
             }
+            else
+                OSL_ENSURE(false, "OMergeValueChange:handle(SubtreeChange): have a ValueChange for a sub tree!");
+        }
+
+        void replaceExistingEntry(std::auto_ptr<Change> pNewChange)
+        {
+            m_rTargetParent.removeChange(pNewChange->getNodeName());
+            m_rTargetParent.addChange(pNewChange);
+        }
+        static std::auto_ptr<ValueNode> createNodeFromChange(ValueChange const& rChange)
+        {
+            std::auto_ptr<ValueNode> aRet;
+
+            uno::Any aNewValue = rChange.getNewValue();
+
+            // currently not supporting change modes !
+            if (aNewValue.hasValue())
+                aRet.reset( new ValueNode(rChange.getNodeName(), aNewValue, rChange.getAttributes()) );
+
+            else  // NULL - try to find out the type
+            {
+                uno::Any aOldValue = rChange.getOldValue();
+                if (aOldValue.hasValue())
+                    aRet.reset( new ValueNode(rChange.getNodeName(), aOldValue.getValueType(), rChange.getAttributes()) );
+                else
+                    OSL_ENSURE(false, "Cannot recover type for change to NULL");
+            }
+            return aRet;
+        }
+
     };
 
     // -----------------------------------------------------------------------------
@@ -404,7 +465,7 @@ namespace configmgr
     // the merge is contructed with helper classes because, it's possible that we
     // are a ValueChange but in the TreeChangeList this change is an AddNode, so
     // we have something to do.
-
+    // New: For a value change we may also encounter
     void OMergeTreeChangeList::handle(ValueChange const& _rValueNode)
     {
         // Handle a ValueChange,
@@ -414,7 +475,7 @@ namespace configmgr
         if (pChange)
         {
             // Value found, merge content
-            OMergeValueChange a(_rValueNode);
+            OMergeValueChange a(*m_pCurrentParent,_rValueNode);
             a.handleChange(*pChange);
         }
         else
@@ -662,7 +723,7 @@ namespace configmgr
         if (pChange)
         {
             // Value found, merge content
-            OMergeValueChange a(_rValueNode);
+            OMergeValueChange a(*m_pCurrentParent,_rValueNode);
             a.handleChange(*pChange);
         }
         else
