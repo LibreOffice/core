@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-29 15:26:02 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,12 +90,32 @@ BOOL SgaObject::CreateThumb( const Graphic& rGraphic )
 
     if( rGraphic.GetType() == GRAPHIC_BITMAP )
     {
-        const BitmapEx  aBmpEx( rGraphic.GetBitmapEx() );
-        const Size      aBmpSize( aBmpEx.GetSizePixel() );
+        BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
+        Size        aBmpSize( aBmpEx.GetSizePixel() );
 
         if( aBmpSize.Width() && aBmpSize.Height() )
         {
             const Color aWhite( COL_WHITE );
+
+            if( aBmpEx.GetPrefMapMode().GetMapUnit() != MAP_PIXEL &&
+                aBmpEx.GetPrefSize().Width() > 0 &&
+                aBmpEx.GetPrefSize().Height() > 0 )
+            {
+                Size aLogSize( OutputDevice::LogicToLogic( aBmpEx.GetPrefSize(), aBmpEx.GetPrefMapMode(), MAP_100TH_MM ) );
+
+                if( aLogSize.Width() > 0 && aLogSize.Height() > 0 )
+                {
+                    double  fFactorLog = static_cast< double >( aLogSize.Width() ) / aLogSize.Height();
+                    double  fFactorPix = static_cast< double >( aBmpSize.Width() ) / aBmpSize.Height();
+
+                    if( fFactorPix > fFactorLog )
+                        aBmpSize.Width() = FRound( aBmpSize.Height() * fFactorLog );
+                    else
+                        aBmpSize.Height() = FRound( aBmpSize.Width() / fFactorLog );
+
+                    aBmpEx.SetSizePixel( aBmpSize );
+                }
+            }
 
             aThumbBmp = aBmpEx.GetBitmap( &aWhite );
 
