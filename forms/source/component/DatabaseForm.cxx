@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 13:04:25 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 09:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,8 +592,7 @@ sal_Int32 SAL_CALL OParametersImpl::getCount() throw( RuntimeException )
 //------------------------------------------------------------------------------
 Any SAL_CALL OParametersImpl::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
-    if (_nIndex < 0 ||
-        _nIndex >= m_aParameters.size())
+    if ((_nIndex < 0) || (_nIndex >= (sal_Int32)m_aParameters.size()))
         throw IndexOutOfBoundsException();
 
     return makeAny(m_aParameters[_nIndex]);
@@ -765,7 +764,7 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         ,m_bAllowInsert(sal_True)
         ,m_pLoadTimer(NULL)
         ,m_nResetsPending(0)
-        ,m_bOwnConnection(sal_True)
+        ,m_bForwardingConnection(sal_False)
 {
     DBG_CTOR(ODatabaseForm,NULL);
 
@@ -1591,7 +1590,7 @@ OParameterInfoImpl* ODatabaseForm::createParameterInfo() const
 
             // get the position of the parameter
             sal_Int32 nPos = rParamMapping[sName];
-            if (m_aParameterVisited.size() > nPos && m_aParameterVisited[nPos] == true)
+            if ((sal_Int32)m_aParameterVisited.size() > nPos && m_aParameterVisited[nPos] == true)
             {
                 // parameter already set from outside
                 OParametersImpl::ParametersIterator aPos = rParams.begin() + j;
@@ -1664,7 +1663,7 @@ bool ODatabaseForm::fillParameters(ReusableMutexGuard& _rClearForNotifies, const
     OParametersImpl::Parameters& rParams = m_pParameterInfo->pParameters->getParameters();
 
     // do we have to fill the parent parameters?
-    if (m_pParameterInfo->nCount > rParams.size())
+    if (m_pParameterInfo->nCount > (sal_Int32)rParams.size())
     {
         Reference<XColumnsSupplier>  xParentColsSuppl(m_xParent, UNO_QUERY);
         if (xParentColsSuppl.is())
@@ -1904,17 +1903,9 @@ void ODatabaseForm::disposing()
         m_xAggregateAsRowSet->removeRowSetListener(this);
 
     // dispose the active connection
-    Reference<XComponent>  xConnection;
-    if (m_xAggregateSet.is())
-        ::cppu::extractInterface(xConnection, m_xAggregateSet->getPropertyValue(PROPERTY_ACTIVE_CONNECTION));
-
     Reference<XComponent>  xAggregationComponent;
     if (query_aggregation(m_xAggregate, xAggregationComponent))
         xAggregationComponent->dispose();
-
-    // dispose it after the rowset and only when it is our own
-    if(m_bOwnConnection && xConnection.is())
-        xConnection->dispose();
 }
 
 //------------------------------------------------------------------------------
@@ -1947,13 +1938,13 @@ void ODatabaseForm::fillProperties(
             // we remove and re-declare the DataSourceName property, 'cause we want it to be constrained, and the
             // original property of our aggregate isn't
 
-        DECL_IFACE_PROP2(ACTIVE_CONNECTION,         XConnection,        TRANSIENT,MAYBEVOID);
+        DECL_IFACE_PROP3(ACTIVE_CONNECTION,         XConnection,    BOUND, TRANSIENT, MAYBEVOID);
         DECL_PROP1(NAME,            ::rtl::OUString,                BOUND);
         DECL_PROP1(MASTERFIELDS,    StringSequence,                 BOUND);
         DECL_PROP1(DETAILFIELDS,    StringSequence,                 BOUND);
         DECL_PROP2(DATASOURCE,      ::rtl::OUString,                BOUND, CONSTRAINED);
-        DECL_PROP3(CYCLE,           TabulatorCycle,     BOUND, MAYBEVOID, MAYBEDEFAULT);
-        DECL_PROP1(NAVIGATION,      NavigationBarMode,  BOUND);
+        DECL_PROP3(CYCLE,           TabulatorCycle,                 BOUND, MAYBEVOID, MAYBEDEFAULT);
+        DECL_PROP1(NAVIGATION,      NavigationBarMode,              BOUND);
         DECL_BOOL_PROP1(ALLOWADDITIONS,                             BOUND);
         DECL_BOOL_PROP1(ALLOWEDITS,                                 BOUND);
         DECL_BOOL_PROP1(ALLOWDELETIONS,                             BOUND);
@@ -2165,15 +2156,15 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
             try
             {
                 m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCE, rValue);
-                m_bOwnConnection = sal_True;
             }
             catch(Exception&) { }
             break;
         case PROPERTY_ID_ACTIVE_CONNECTION:
             try
             {
+                m_bForwardingConnection = sal_True;
                 m_xAggregateSet->setPropertyValue(PROPERTY_ACTIVE_CONNECTION, rValue);
-                m_bOwnConnection = sal_False;
+                m_bForwardingConnection = sal_False;
             }
             catch(Exception&) { }
             break;
@@ -2694,10 +2685,20 @@ void SAL_CALL ODatabaseForm::removeSQLErrorListener(const Reference<XSQLErrorLis
 //------------------------------------------------------------------------------
 void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException )
 {
-    // if the statement has changed we have to delete the parameter info
-    ::osl::MutexGuard aGuard(m_aMutex);
-    DELETEZ(m_pParameterInfo);
-    clearParameters();
+    if ((0 == evt.PropertyName.compareToAscii(PROPERTY_ACTIVE_CONNECTION.pZeroTerminatedName)) && !m_bForwardingConnection)
+    {
+        // the rowset changed it's active connection itself (without interaction from our side), so
+        // we need to fire this event, too
+        sal_Int32 nHandle = PROPERTY_ID_ACTIVE_CONNECTION;
+        fire(&nHandle, &evt.OldValue, &evt.NewValue, 1, sal_False);
+    }
+    else    // it was one of the statement relevant props
+    {
+        // if the statement has changed we have to delete the parameter info
+        ::osl::MutexGuard aGuard(m_aMutex);
+        DELETEZ(m_pParameterInfo);
+        clearParameters();
+    }
 }
 
 //==============================================================================
@@ -3606,7 +3607,7 @@ Sequence<sal_Int32> SAL_CALL ODatabaseForm::deleteRows(const Sequence<Any>& rows
     if (query_aggregation( m_xAggregate, xParameters))                  \
         xParameters->method;                                            \
                                                                         \
-    if (m_aParameterVisited.size() < parameterIndex)                    \
+    if ((sal_Int32)m_aParameterVisited.size() < parameterIndex)                 \
     {                                                                   \
         for (sal_Int32 i = 0; i < parameterIndex; i++)                  \
             m_aParameterVisited.push_back(false);                       \
@@ -3916,7 +3917,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     {
         sal_Int32 nCycle;
         ::cppu::enum2int(nCycle, m_aCycle);
-        _rxOutStream->writeShort(nCycle);
+        _rxOutStream->writeShort((sal_Int16)nCycle);
     }
 }
 
