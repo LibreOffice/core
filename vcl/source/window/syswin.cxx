@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:22:26 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,12 +691,9 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
 
         mpFrame->SetWindowState( &aState );
 
-        // Syncrones Resize ausloesen, damit wir nach Moeglichkeit gleich
-        // mit der richtigen Groesse rechnen
-        long nNewWidth;
-        long nNewHeight;
-        pWindow->mpFrame->GetClientSize( nNewWidth, nNewHeight );
-        ImplHandleResize( pWindow, nNewWidth, nNewHeight );
+        // do a synchronous resize for layout reasons
+        if( rData.GetMask() & (WINDOWSTATE_MASK_WIDTH|WINDOWSTATE_MASK_HEIGHT) )
+            ImplHandleResize( pWindow, rData.GetWidth(), rData.GetHeight() );
     }
     else
     {
