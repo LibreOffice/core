@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-19 09:27:03 $
+ *  last change: $Author: mba $ $Date: 2001-09-19 09:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,8 +827,13 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStrea
     return xLockBytes;
 }
 
+#if SUPD<640
+UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xContent, const Sequence < PropertyValue >& rProps,
+        const Reference < XInputStream >& xPostData, const Reference < XInteractionHandler >& xInteractionHandler, UcbLockBytesHandler* pHandler )
+#else
 UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xContent, const ::rtl::OUString& rReferer, const ::rtl::OUString& rMediaType,
         const Reference < XInputStream >& xPostData, const Reference < XInteractionHandler >& xInteractionHandler, UcbLockBytesHandler* pHandler )
+#endif
 {
     if( !xContent.is() )
         return NULL;;
@@ -837,11 +842,28 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     xLockBytes->SetSynchronMode( !pHandler );
     Reference< XActiveDataControl > xSink = (XActiveDataControl*) new UcbDataSink_Impl( xLockBytes );
 
+#if SUPD<640
+    if ( rProps.getLength() )
+    {
+        Reference < XCommandProcessor > xProcessor( xContent, UNO_QUERY );
+        Command aCommand;
+        aCommand.Name     = ::rtl::OUString::createFromAscii("setPropertyValues");
+        aCommand.Handle   = -1; /* unknown */
+        aCommand.Argument <<= rProps;
+        xProcessor->execute( aCommand, 0, Reference < XCommandEnvironment >() );
+    }
+
+    PostCommandArgument aArgument;
+    aArgument.Source = xPostData;
+    aArgument.Sink = xSink;
+
+#else
     PostCommandArgument2 aArgument;
     aArgument.Source = xPostData;
     aArgument.Sink = xSink;
     aArgument.MediaType = rMediaType;
     aArgument.Referer = rReferer;
+#endif
 
     Command aCommand;
     aCommand.Name = ::rtl::OUString::createFromAscii ("post");
