@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 17:27:51 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 15:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,13 +161,15 @@ sal_uInt32 SwXMLWriter::_Write()
 
     if( pStg )
     {
-        // export graphics and objects only in packages
-
         pGraphicHelper = SvXMLGraphicHelper::Create( *pStg,
                                                      GRAPHICHELPER_MODE_WRITE,
                                                      sal_False );
-        xGraphicResolver = pGraphicHelper;
     }
+    else
+    {
+        pGraphicHelper = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_WRITE );
+    }
+    xGraphicResolver = pGraphicHelper;
 
     SvPersist *pPersist = pDoc->GetPersist();
     if( pPersist )
@@ -599,11 +601,17 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.32 2001-06-18 17:27:51 dvo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.33 2001-06-19 15:30:45 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.32  2001/06/18 17:27:51  dvo
+      #86004#
+      - changed SvXMLItemMaps to use XMLTokenEnum
+      - removed remaining xmlkywd.hxx inclusions and usages
+      -> sw is now xmlkywd.hxx-free!
+
       Revision 1.31  2001/05/29 12:55:39  mib
       #87530#: Load/Save layout
 

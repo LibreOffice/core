@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-30 09:30:26 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 15:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,43 +381,50 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         pStorage = pMedium->GetStorage();
     else
         pStorage = pStg;
+    if( !pStorage )
+    {
+        if( pMedium )
+        {
+            // if there is a medium and if this medium has a load environment,
+            // we get an active data source from the medium.
+            pMedium->GetInStream()->Seek( 0 );
+            xSource = pMedium->GetDataSource();
+            ASSERT( xSource.is(), "XMLReader:: got no data source from medium" );
+            if( !xSource.is() )
+                return ERR_SWG_READ_ERROR;
+
+            // get a pipe for connecting the data source to the parser
+            xPipe = xServiceFactory->createInstance(
+                    OUString::createFromAscii("com.sun.star.io.Pipe") );
+            ASSERT( xPipe.is(),
+                    "XMLReader::Read: com.sun.star.io.Pipe service missing" );
+            if( !xPipe.is() )
+                return ERR_SWG_READ_ERROR;
+
+            // connect pipe's output stream to the data source
+            Reference< io::XOutputStream > xPipeOutput( xPipe, UNO_QUERY );
+            xSource->setOutputStream( xPipeOutput );
+
+            xInputStream = Reference< io::XInputStream >( xPipe, UNO_QUERY );
+        }
+        else
+        {
+            pStrm->SetBufferSize( 16*1024 );
+            xInputStream = new utl::OInputStreamWrapper( *pStrm );
+        }
+    }
+
     if( pStorage )
     {
         pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage,
                                                      GRAPHICHELPER_MODE_READ,
                                                      sal_False );
-        xGraphicResolver = pGraphicHelper;
-
-    }
-    else if( pMedium )
-    {
-        // if there is a medium and if this medium has a load environment,
-        // we get an active data source from the medium.
-        pMedium->GetInStream()->Seek( 0 );
-        xSource = pMedium->GetDataSource();
-        ASSERT( xSource.is(), "XMLReader:: got no data source from medium" );
-        if( !xSource.is() )
-            return ERR_SWG_READ_ERROR;
-
-        // get a pipe for connecting the data source to the parser
-        xPipe = xServiceFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.io.Pipe") );
-        ASSERT( xPipe.is(),
-                "XMLReader::Read: com.sun.star.io.Pipe service missing" );
-        if( !xPipe.is() )
-            return ERR_SWG_READ_ERROR;
-
-        // connect pipe's output stream to the data source
-        Reference< io::XOutputStream > xPipeOutput( xPipe, UNO_QUERY );
-        xSource->setOutputStream( xPipeOutput );
-
-        xInputStream = Reference< io::XInputStream >( xPipe, UNO_QUERY );
     }
     else
     {
-        pStrm->SetBufferSize( 16*1024 );
-        xInputStream = new utl::OInputStreamWrapper( *pStrm );
+        pGraphicHelper = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
     }
+    xGraphicResolver = pGraphicHelper;
     SvPersist *pPersist = rDoc.GetPersist();
     if( pPersist )
     {
