@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:15 $
+ *  last change: $Author: as $ $Date: 2001-05-02 12:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,9 @@
 #include <services/desktop.hxx>
 #endif
 
-#ifndef __FRAMEWORK_FRAME_HXX_
-#include <services/frame.hxx>
-#endif
+//#ifndef __FRAMEWORK_FRAME_HXX_
+//#include <services/frame.hxx>
+//#endif
 
 #ifndef __FRAMEWORK_OTASKSACCESS_HXX_
 #include <helper/otasksaccess.hxx>

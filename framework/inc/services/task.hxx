@@ -2,9 +2,9 @@
  *
  *  $RCSfile: task.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
+ *  last change: $Author: as $ $Date: 2001-05-02 12:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,10 +146,8 @@ namespace framework{
                 OPropertySet
 *//*-*************************************************************************************************************/
 
-class Task  :   public css::frame::XTask            ,   // => XFrame => XComponent
-                public Frame                        ,   // Order of baseclasses is neccessary for right initialization!
-                public ::cppu::OBroadcastHelper     ,
-                public ::cppu::OPropertySetHelper
+class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
+                public Frame                    // Order of baseclasses is neccessary for right initialization!
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -516,12 +514,12 @@ class Task  :   public css::frame::XTask            ,   // => XFrame => XCompone
 
             @onerror    IllegalArgumentException, if you call this with an invalid argument
         *//*-*****************************************************************************************************/
-
+/*
         virtual sal_Bool SAL_CALL convertFastPropertyValue(         css::uno::Any&      aConvertedValue ,
                                                                       css::uno::Any&        aOldValue       ,
                                                                     sal_Int32           nHandle         ,
                                                             const   css::uno::Any&      aValue          ) throw( css::lang::IllegalArgumentException );
-
+*/
         /*-****************************************************************************************************//**
             @short      set value of a transient property
             @descr      This method is calling from helperclass "OPropertySetHelper".
@@ -538,10 +536,10 @@ class Task  :   public css::frame::XTask            ,   // => XFrame => XCompone
 
             @onerror    An exception is thrown.
         *//*-*****************************************************************************************************/
-
+/*
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(         sal_Int32       nHandle ,
                                                                   const css::uno::Any&  aValue  ) throw( css::uno::Exception );
-
+*/
         /*-****************************************************************************************************//**
             @short      get value of a transient property
             @descr      This method is calling from helperclass "OPropertySetHelper".
@@ -556,10 +554,10 @@ class Task  :   public css::frame::XTask            ,   // => XFrame => XCompone
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
+/*
         virtual void SAL_CALL getFastPropertyValue( css::uno::Any&  aValue  ,
                                                       sal_Int32     nHandle ) const;
-
+*/
         /*-****************************************************************************************************//**
             @short      return structure and information about transient properties
             @descr      This method is calling from helperclass "OPropertySetHelper".
@@ -573,9 +571,9 @@ class Task  :   public css::frame::XTask            ,   // => XFrame => XCompone
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
+/*
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
+*/
         /*-****************************************************************************************************//**
             @short      return propertysetinfo
             @descr      You can call this method to get information about transient properties
@@ -591,9 +589,9 @@ class Task  :   public css::frame::XTask            ,   // => XFrame => XCompone
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
+/*
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo();
-
+*/
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
@@ -602,20 +600,7 @@ class Task  :   public css::frame::XTask            ,   // => XFrame => XCompone
 
         DECL_LINK( Close_Impl, void* );
 
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        sal_Bool impl_tryToChangeProperty(          sal_Bool            bProperty       ,
+/*      sal_Bool impl_tryToChangeProperty(          sal_Bool            bProperty       ,
                                             const   css::uno::Any&      aValue          ,
                                                     css::uno::Any&      aOldValue       ,
                                                     css::uno::Any&      aConvertedValue ) throw( css::lang::IllegalArgumentException );
@@ -632,20 +617,8 @@ class Task  :   public css::frame::XTask            ,   // => XFrame => XCompone
                                                     css::uno::Any&      aOldValue       ,
                                                     css::uno::Any&      aConvertedValue ) throw( css::lang::IllegalArgumentException );
 
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
         static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
+*/
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
@@ -692,7 +665,6 @@ class Task  :   public css::frame::XTask            ,   // => XFrame => XCompone
         sal_Bool            m_bIsFloating       ;
         css::awt::Point     m_aPosition         ;
         css::awt::Size      m_aSize             ;
-        ::rtl::OUString     m_sTitle            ;
         ::vcl::EventPoster  m_aPoster           ;
 
 };      //  class Tasks
