@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-05-29 14:27:29 $
+ *  last change: $Author: fme $ $Date: 2002-06-27 11:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,17 @@ public:
     ~SwPrtOptSave();
 };
 
-
+// saves some settings from the draw view
+class SwDrawViewSave
+{
+    String sLayerNm;
+    SdrView* pDV;
+    sal_Bool bPrintDraft;
+    sal_Bool bPrintControls;
+public:
+    SwDrawViewSave( SdrView* pSdrView );
+    ~SwDrawViewSave();
+};
 
 
 void SwPaintQueue::Add( ViewShell *pNew, const SwRect &rNew )
@@ -984,6 +994,9 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
     if( pOpt->IsReadonly() )
         pShell->pOpt->SetReadonly( TRUE );
 
+    // save options at draw view:
+    SwDrawViewSave aDrawViewSave( pShell->GetDrawView() );
+
     pShell->PrepareForPrint( rOptions );
 
     // gibt es versteckte Absatzfelder, braucht nicht beruecksichtigt werden,
@@ -1532,6 +1545,36 @@ SwPrtOptSave::~SwPrtOptSave()
 }
 
 
+/******************************************************************************
+ *  SwDrawViewSave
+ *
+ *  Saves some settings at the draw view
+ ******************************************************************************/
+
+SwDrawViewSave::SwDrawViewSave( SdrView* pSdrView )
+    : pDV( pSdrView )
+{
+    if ( pDV )
+    {
+        bPrintDraft = pDV->IsLineDraftPrn();
+        sLayerNm.AssignAscii( RTL_CONSTASCII_STRINGPARAM("Controls" ) );
+        bPrintControls = pDV->IsLayerPrintable( sLayerNm );
+    }
+}
+
+SwDrawViewSave::~SwDrawViewSave()
+{
+    if ( pDV )
+    {
+        pDV->SetLineDraftPrn( bPrintDraft );
+        pDV->SetFillDraftPrn( bPrintDraft );
+        pDV->SetGrafDraftPrn( bPrintDraft );
+        pDV->SetTextDraftPrn( bPrintDraft );
+        pDV->SetLayerPrintable( sLayerNm, bPrintControls );
+    }
+}
+
+
 
 void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
 {
@@ -1551,12 +1594,19 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
         pDrawView->SetFillDraftPrn( !bDraw );
         pDrawView->SetGrafDraftPrn( !bDraw );
         pDrawView->SetTextDraftPrn( !bDraw );
+
+        String sLayerNm;
+        sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Controls" ));
+        pDrawView->SetLayerPrintable( sLayerNm, rOptions.bPrintControl );
     }
 }
 
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2002/05/29 14:27:29  os
+      #99649# 'single print job' corrected
+
       Revision 1.6  2001/05/10 08:45:10  os
       store print options at the document
 
