@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewDemo.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:53:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,24 +40,21 @@
 
 // __________ Imports __________
 
-// base classes
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.*;
+import com.sun.star.lang.XComponent;
 
-// property access
-import com.sun.star.beans.*;
+import com.sun.star.beans.Property;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.XPropertySetInfo;
 
-// name access
-import com.sun.star.container.*;
+import com.sun.star.container.XIndexAccess;
 
-// application specific classes
-import com.sun.star.drawing.*;
+import com.sun.star.document.XViewDataSupplier;
 
-// XModel, XController
-import com.sun.star.frame.*;
+import com.sun.star.frame.XModel;
+import com.sun.star.frame.XController;
 
-// XViewDataSupplier
-import com.sun.star.document.*;
 
 
 // __________ Implementation __________
@@ -72,74 +69,79 @@ public class DrawViewDemo
     {
         if ( args.length < 1 )
         {
-            System.out.println( "usage: DrawViewDemo SourceURL [ connection ]" );
+            System.out.println( "usage: DrawViewDemo SourceURL" );
+            System.exit(1);
         }
-        else
+
+        XComponent xComponent = null;
+        try
         {
-            XComponent xComponent = null;
-            try
+            // get the remote office context of a running office (a new office
+            // instance is started if necessary)
+            com.sun.star.uno.XComponentContext xOfficeContext = Helper.connect();
+
+            // suppress Presentation Autopilot when opening the document
+            // properties are the same as described for
+            // com.sun.star.document.MediaDescriptor
+            PropertyValue[] pPropValues = new PropertyValue[ 1 ];
+            pPropValues[ 0 ] = new PropertyValue();
+            pPropValues[ 0 ].Name = "Silent";
+            pPropValues[ 0 ].Value = new Boolean( true );
+
+            java.io.File sourceFile = new java.io.File(args[0]);
+            StringBuffer sUrl = new StringBuffer("file:///");
+            sUrl.append(sourceFile.getCanonicalPath().replace('\\', '/'));
+
+            xComponent = Helper.createDocument( xOfficeContext,
+                                                sUrl.toString(), "_blank", 0,
+                                                pPropValues );
+            XModel xModel =
+                (XModel)UnoRuntime.queryInterface(
+                    XModel.class, xComponent );
+
+
+            // print all available properties of first view
+            System.out.println("*** print all available properties of first view");
+            XViewDataSupplier xViewDataSupplier =
+                (XViewDataSupplier)UnoRuntime.queryInterface(
+                    XViewDataSupplier.class, xModel );
+            XIndexAccess xIndexAccess = xViewDataSupplier.getViewData();
+            if ( xIndexAccess.getCount() != 0 )
             {
-                String sConnection;
-                if ( args.length >= 2 )
-                    sConnection = args[ 1 ];
-                else
-                    sConnection = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
-                XMultiServiceFactory xServiceFactory =
-                    Helper.connect( sConnection );
+                PropertyValue[] aPropSeq = (PropertyValue[])
+                    xIndexAccess.getByIndex( 0 );
 
-                // suppress Presentation Autopilot when opening the document
-                // properties are the same as described for com.sun.star.document.MediaDescriptor
-                PropertyValue[] pPropValues = new PropertyValue[ 1 ];
-                pPropValues[ 0 ] = new PropertyValue();
-                pPropValues[ 0 ].Name = "Silent";
-                pPropValues[ 0 ].Value = new Boolean( true );
-
-                java.io.File sourceFile = new java.io.File(args[0]);
-                StringBuffer sUrl = new StringBuffer("file:///");
-                sUrl.append(sourceFile.getCanonicalPath().replace('\\', '/'));
-
-                xComponent = Helper.createDocument( xServiceFactory,
-                    sUrl.toString(), "_blank", 0, pPropValues );
-                XModel xModel =
-                    (XModel)UnoRuntime.queryInterface(
-                        XModel.class, xComponent );
-
-
-                // print all available properties of first view
-                XViewDataSupplier xViewDataSupplier =
-                    (XViewDataSupplier)UnoRuntime.queryInterface(
-                        XViewDataSupplier.class, xModel );
-                XIndexAccess xIndexAccess = xViewDataSupplier.getViewData();
-                if ( xIndexAccess.getCount() != 0 )
-                {
-                  PropertyValue[] aPropSeq = (PropertyValue[])xIndexAccess.getByIndex( 0 );
-                    for( int i = 0; i < aPropSeq.length; i++ )
-                    {
-                        System.out.println( aPropSeq[ i ].Name + " = " + aPropSeq[ i ].Value );
-                    }
-                }
-
-
-                // print all properties that are supported by the controller
-                // and change into masterpage mode
-                XController xController = xModel.getCurrentController();
-                XPropertySet xPropSet =
-                    (XPropertySet)UnoRuntime.queryInterface(
-                        XPropertySet.class, xController );
-                XPropertySetInfo xPropSetInfo = xPropSet.getPropertySetInfo();
-                Property[] aPropSeq = xPropSetInfo.getProperties();
                 for( int i = 0; i < aPropSeq.length; i++ )
                 {
-                    System.out.println( aPropSeq[ i ].Name );
+                    System.out.println( aPropSeq[ i ].Name + " = " +
+                                        aPropSeq[ i ].Value );
                 }
-                xPropSet.setPropertyValue( "IsMasterPageMode", new Boolean( true ) );
+            }
 
-            }
-            catch( Exception ex )
+
+            // print all properties that are supported by the controller
+            // and change into masterpage mode
+            System.out.println("*** print all properties that are supported by the controller");
+            XController xController = xModel.getCurrentController();
+            XPropertySet xPropSet =
+                (XPropertySet)UnoRuntime.queryInterface(
+                    XPropertySet.class, xController );
+            XPropertySetInfo xPropSetInfo = xPropSet.getPropertySetInfo();
+            Property[] aPropSeq = xPropSetInfo.getProperties();
+            for( int i = 0; i < aPropSeq.length; i++ )
             {
-                System.out.println( ex );
+                System.out.println( aPropSeq[ i ].Name );
             }
+            System.out.println("*** change into masterpage mode");
+            xPropSet.setPropertyValue( "IsMasterPageMode", new Boolean( true ) );
+
         }
+        catch( Exception ex )
+        {
+            System.out.println( ex.getMessage() );
+            ex.printStackTrace(System.out);
+        }
+
         System.exit( 0 );
     }
 }

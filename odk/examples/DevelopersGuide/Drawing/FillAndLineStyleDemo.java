@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FillAndLineStyleDemo.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:54:16 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,25 +40,21 @@
 
 // __________ Imports __________
 
-// base classes
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.*;
+import com.sun.star.lang.XComponent;
 
-// property access
-import com.sun.star.beans.*;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 
-// name access
-import com.sun.star.container.*;
+import com.sun.star.drawing.LineDash;
+import com.sun.star.drawing.XShape;
+import com.sun.star.drawing.XShapes;
+import com.sun.star.drawing.XDrawPage;
 
-// application specific classes
-import com.sun.star.drawing.*;
-
-// presentation specific classes
-import com.sun.star.presentation.*;
-
-// Point, Size, ..
-import com.sun.star.awt.*;
-import java.io.File;
+import com.sun.star.awt.Gradient;
+import com.sun.star.awt.GradientStyle;
+import com.sun.star.awt.Point;
+import com.sun.star.awt.Size;
 
 
 // __________ Implementation __________
@@ -74,22 +70,19 @@ public class FillAndLineStyleDemo
         XComponent xDrawDoc = null;
         try
         {
-            String sConnection;
-            if ( args.length >= 1 )
-                sConnection = args[ 1 ];
-            else
-                sConnection = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
-            XMultiServiceFactory xServiceFactory =
-                Helper.connect( sConnection );
+            // get the remote office context of a running office (a new office
+            // instance is started if necessary)
+            com.sun.star.uno.XComponentContext xOfficeContext = Helper.connect();
 
             // suppress Presentation Autopilot when opening the document
-            // properties are the same as described for com.sun.star.document.MediaDescriptor
+            // properties are the same as described for
+            // com.sun.star.document.MediaDescriptor
             PropertyValue[] pPropValues = new PropertyValue[ 1 ];
             pPropValues[ 0 ] = new PropertyValue();
             pPropValues[ 0 ].Name = "Silent";
             pPropValues[ 0 ].Value = new Boolean( true );
 
-            xDrawDoc = Helper.createDocument( xServiceFactory,
+            xDrawDoc = Helper.createDocument( xOfficeContext,
                 "private:factory/sdraw", "_blank", 0, pPropValues );
 
             XDrawPage xPage = PageHelper.getDrawPageByIndex( xDrawDoc, 0 );
@@ -108,7 +101,8 @@ public class FillAndLineStyleDemo
 
             /* apply a gradient fill style that goes from top left to bottom
                right and is changing its color from green to yellow */
-            xPropSet.setPropertyValue( "FillStyle", com.sun.star.drawing.FillStyle.GRADIENT );
+            xPropSet.setPropertyValue( "FillStyle",
+                                       com.sun.star.drawing.FillStyle.GRADIENT );
             Gradient aGradient = new Gradient();
             aGradient.Style = GradientStyle.LINEAR;
             aGradient.StartColor = 0x00ff00;
@@ -123,7 +117,8 @@ public class FillAndLineStyleDemo
             xPropSet.setPropertyValue( "FillGradient", aGradient );
 
             /* create a blue line with dashes and dots */
-            xPropSet.setPropertyValue( "LineStyle", com.sun.star.drawing.LineStyle.DASH );
+            xPropSet.setPropertyValue( "LineStyle",
+                                       com.sun.star.drawing.LineStyle.DASH );
             LineDash aLineDash = new LineDash();
             aLineDash.Dots = 3;
             aLineDash.DotLen = 150;
