@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseAccess.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:09:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,14 @@
 #endif
 
  module com {  module sun {  module star {  module task {
-interface XInteractionHandler;
+ published interface XInteractionHandler;
 };};};};
 
 //=============================================================================
 
  module com {  module sun {  module star {  module sdb {
 
-interface XDatabaseAccessListener;
+ published interface XDatabaseAccessListener;
 
 //=============================================================================
 
@@ -90,7 +90,7 @@ interface XDatabaseAccessListener;
     database connection and provides additional information related to the connection
     such as forms, reports, or queries.
  */
-interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
+published interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
 {
 
     // DocMerge from xml: method com::sun::star::task::com::sun::star::sdb::XDatabaseAccess::hasConnections
