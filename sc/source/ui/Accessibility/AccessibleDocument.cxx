@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-12 12:41:39 $
+ *  last change: $Author: sab $ $Date: 2002-08-07 10:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,9 +613,19 @@ void ScChildrenShapes::DeselectAll()
     if (!xSelectionSupplier.is())
         throw uno::RuntimeException();
 
-    xSelectionSupplier->select(uno::Any()); //deselects all
+    sal_Bool bSomethingSelected(sal_True);
+    try
+    {
+        xSelectionSupplier->select(uno::Any()); //deselects all
+    }
+    catch (lang::IllegalArgumentException&)
+    {
+        DBG_ERRORFILE("nothing selected before");
+        bSomethingSelected = sal_False;
+    }
 
-    std::for_each(maSortedShapes.begin(), maSortedShapes.end(), DeselectShape());
+    if (bSomethingSelected)
+        std::for_each(maSortedShapes.begin(), maSortedShapes.end(), DeselectShape());
 }
 
 void ScChildrenShapes::SelectAll()
@@ -626,12 +636,15 @@ void ScChildrenShapes::SelectAll()
     if (maShapes.empty())
         GetCount(); // fill list with filtered shapes (no internal shapes)
 
-    uno::Reference<drawing::XShapes> xShapes;
-    xShapes = new SvxShapeCollection();
+    if (!maShapes.empty())
+    {
+        uno::Reference<drawing::XShapes> xShapes;
+        xShapes = new SvxShapeCollection();
 
-    std::for_each(maSortedShapes.begin(), maSortedShapes.end(), SelectShape(xShapes));
+        std::for_each(maSortedShapes.begin(), maSortedShapes.end(), SelectShape(xShapes));
 
-    xSelectionSupplier->select(uno::makeAny(xShapes));
+        xSelectionSupplier->select(uno::makeAny(xShapes));
+    }
 }
 
 sal_Int32 ScChildrenShapes::GetSelectedCount() const
