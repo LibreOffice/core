@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-28 16:24:08 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:41:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 #ifndef _ZIP_PACKAGE_BUFFER_HXX
 #include <ZipPackageBuffer.hxx>
 #endif
+#include <string.h> // for memcpy
+
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
@@ -83,29 +85,7 @@ ZipPackageBuffer::ZipPackageBuffer(Sequence < sal_Int8 > &nNewBuffer )
 ZipPackageBuffer::~ZipPackageBuffer(void)
 {
 }
-Any SAL_CALL  ZipPackageBuffer::queryInterface( const Type& rType )
-        throw(RuntimeException)
-{
-    return ::cppu::queryInterface ( rType                                       ,
-                                        // OWeakObject interfaces
-                                        reinterpret_cast< XInterface*       > ( this )  ,
-                                        static_cast< XWeak*         > ( this )  ,
-                                        // my interfaces
-                                        static_cast< XInputStream*      > ( this )  ,
-                                        static_cast< XSeekable*     > ( this )  ,
-                                        static_cast< XOutputStream*     > ( this ) );
 
-}
-void SAL_CALL  ZipPackageBuffer::acquire(void)
-    throw()
-{
-    OWeakObject::acquire();
-}
-void SAL_CALL  ZipPackageBuffer::release(void)
-    throw()
-{
-    OWeakObject::release();
-}
 sal_Int32 SAL_CALL ZipPackageBuffer::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
