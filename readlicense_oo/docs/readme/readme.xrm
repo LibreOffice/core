@@ -6,21 +6,32 @@
 			<Text id="a" xml:lang="en-US">Welcome</Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">Last updated 2003 October 13</Text>
+			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-02-14 11:40:14 $</Text>
 		</Paragraph>
 		<Paragraph id="A3" style="H1">
-			<Text id="a" xml:lang="en-US">OpenOffice.org 1.x/2.0 ReadMe</Text>
+			<Text id="a" xml:lang="en-US">OpenOffice.org 2.0 ReadMe</Text>
 		</Paragraph>
 		<Paragraph id="A4">
 			<Text id="a" xml:lang="en-US" url="ahead">For latest updates to this readme file, see </Text>
 		<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/welcome/readme.html</Text>
-		<Text id="empty" xml:lang="en-US"/><Text id="empty" xml:lang="cs"/><Text id="empty" xml:lang="sk"/><Text id="c" xml:lang="en-US">Dear User</Text>
-		<Text id="empty" xml:lang="en-US"/><Text id="d" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</Text>
+        </Paragraph>
+        <Paragraph/>
+        <Paragraph id="A5">
+          <Text id="empty" xml:lang="en-US"/><Text id="c" xml:lang="en-US">Dear User</Text>
+        </Paragraph>
+        <Paragraph id="A6">
+		  <Text id="d" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</Text>
 		</Paragraph>
 		<Paragraph id="A7">
-			<Text id="a" xml:lang="en-US" url="ahead">The OpenOffice.org community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the OpenOffice.org site with helpful user information at </Text>
-		<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/about_us/introduction.html </Text>
-		<Text id="c" xml:lang="en-US">Also read the sections below of getting involved the OpenOffice.org project. </Text>
+            <Text id="a" xml:lang="en-US" url="ahead">The OpenOffice.org Community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the OpenOffice.org site with helpful user information at </Text>
+        </Paragraph>
+        <Paragraph id="A8">
+            <Text id="empty" xml:lang="en-US"/>
+            <Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/about_us/introduction.html </Text>
+        </Paragraph>
+         <Paragraph id="A9">
+             <Text id="empty" xml:lang="en-US"/>
+             <Text id="c" xml:lang="en-US">Also read the sections below about getting involved in the OpenOffice.org project. </Text>
 		</Paragraph>
 	</Section>
 	<Section id="Error">
@@ -47,7 +58,6 @@
 		<Paragraph id="B4" os="none">
 			<Text id="sdf3sd2" xml:lang="de">Die folgenden Einschränkungen sind nur gültig für OpenOffice.org. Bitte lesen die diese Informationen sehr genau durch.</Text>
 			<Text id="sdf3sd2" xml:lang="en-US">The following limitations are only valid for OpenOffice.org. Please read this information very carefully.</Text>
->>>>>>> 1.4.4.1
 		</Paragraph>
 		<Paragraph id="B5Win" os="none" gui="WNT">
 			<Text id="sdf3sd24" xml:lang="de">Microsoft Outlook Express oder Microsoft Outlook muss auf Ihrem System installiert und muss als Standard (MAPI) E-Mail Programm konfiguriert sein, um Fehlerberichte senden zu können. Mozilla 1.0, 1.2, 1.3 und Netscape 6.x können Fehlerberichte nicht senden und geben keine Fehlermeldung aus.</Text>
@@ -216,10 +226,10 @@
 			<Text id="dfgferd34" xml:lang="en-US">The versions mentioned above are the minimum requirements, newer (higher) version numbers are also allowed.</Text>
 		</Paragraph>
 		<Paragraph id="B2l3">
-			<Text id="erter343534" xml:lang="de">OpenOffice.org 1.x kann parallel zu einer älteren Version von OpenOffice.org installiert werden. Im Falle einer späteren Deinstallation des alten OpenOffice.org muss das Installationsprogramm Programm der neuen Version aufgerufen und eine Reparatur durchgeführt werden. Dadurch wird sichergestellt, dass die aktuelle Version korrekt im System angemeldet ist.</Text>
-			<Text id="erter343534" xml:lang="en-US">You can install OpenOffice.org 1.x along side of an older version of OpenOffice.org. If you later choose to deinstall the older version of OpenOffice.org, you must call the installation program of the newer version and choose &apos;Repair&apos;. This ensures that the new version is correctly registered in your system.</Text>
-		<Text id="erter34353ew4" xml:lang="de" Wrap="true">Bitte beachten Sie, dass das Kopieren und Einfügen über die Zwischenablage zwischen OpenOffice.org 1.0 und OpenOffice.org 1.x im OpenOffice.org-Format teilweise nicht funktioniert. Rufen Sie in einem solchem Fall den Dialog Bearbeiten-Inhalte einfügen auf und wählen Sie ein anderes Format als OpenOffice.org aus oder öffnen Sie stattdessen das betreffende Dokument in OpenOffice.org 1.x direkt.</Text>
-			<Text id="erter34353ew4" xml:lang="en-US" Wrap="true">Please note that copy and paste via clipboard between OpenOffice.org 1.0 and OpenOffice.org 1.x might not work in OpenOffice.org format. If that happens, choose &apos;Edit - Paste Special&apos; and choose a format other than OpenOffice.org, or open the document in OpenOffice.org 1.x directly.</Text>
+			<Text id="erter343534" xml:lang="de">OpenOffice.org 2.0 kann parallel zu einer älteren Version von OpenOffice.org installiert werden. Im Falle einer späteren Deinstallation des alten OpenOffice.org muss das Installationsprogramm Programm der neuen Version aufgerufen und eine Reparatur durchgeführt werden. Dadurch wird sichergestellt, dass die aktuelle Version korrekt im System angemeldet ist.</Text>
+			<Text id="erter343534" xml:lang="en-US">You can install OpenOffice.org 2.0 alongside of an older version of OpenOffice.org. If you later choose to deinstall the older version of OpenOffice.org, you must call the installation program of the newer version and choose &apos;Repair&apos;. This ensures that the new version is correctly registered in your system.</Text>
+		<Text id="erter34353ew4" xml:lang="de" Wrap="true">Bitte beachten Sie, dass das Kopieren und Einfügen über die Zwischenablage zwischen OpenOffice.org 1.0 und OpenOffice.org 2.0 im OpenOffice.org-Format teilweise nicht funktioniert. Rufen Sie in einem solchem Fall den Dialog Bearbeiten-Inhalte einfügen auf und wählen Sie ein anderes Format als OpenOffice.org aus oder öffnen Sie stattdessen das betreffende Dokument in OpenOffice.org 2.0 direkt.</Text>
+			<Text id="erter34353ew4" xml:lang="en-US" Wrap="true">Please note that copy and paste via clipboard between OpenOffice.org 2.0 and OpenOffice.org 2.0 might not work in OpenOffice.org format. If that happens, choose &apos;Edit - Paste Special&apos; and choose a format other than OpenOffice.org, or open the document in OpenOffice.org 2.0 directly.</Text>
 		</Paragraph>
 		<Paragraph id="B3">
 			<Text id="erte53t434534" xml:lang="de">Bitte stellen Sie sicher, dass genügend freier Speicherplatz im temporären Verzeichnis Ihres Systems vorhanden ist und dass für dieses Verzeichnis Schreib-, Lese- und Ausführungsrechte gesetzt sind. Bitte beachten Sie, dass während der Installation kein anderes Programm ausgeführt werden darf.</Text>
@@ -233,7 +243,7 @@
 		</Paragraph>
 		<Paragraph id="s2" os="WNT">
 			<Text id="dew32f" xml:lang="de">Sollte es während des Systemstarts zu Problemen beim Aufruf des OpenOffice.org Schnellstarters kommen (üngültige Verknüpfung), so liegt dieses wahrscheinlich darin begründet, dass das Netzwerklaufwerk, auf dem die dazugehörige Netzwerkinstallation installiert wurde, nicht oder noch nicht zur Verfügung steht.</Text>
-			<Text id="dew32f" xml:lang="en-US">If, when starting the system, problems should occur in calling the OpenOffice.org Quickstarter (e.g. invalid link), this is probably due to the fact that the network drive on which the network installation is installed is not or not yet available.</Text>
+			<Text id="dew32f" xml:lang="en-US">If, when starting the system, problems should occur in calling the OpenOffice.org Quickstarter (e.g. invalid link), this is probably due to the fact that the network drive on which the network installation is installed is not yet available.</Text>
 		</Paragraph>
 		<Paragraph id="d2" os="WNT">
 			<Text id="df3df" xml:lang="de">In den meisten Fällen geschieht dieses, wenn die Anmeldung der Netzwerklaufwerke über ein Login-Script erfolgt und so die Verbindung der Netzwerklaufwerke parallel mit dem Ausführen der Programme der Autostartgruppe stattfindet, aus der auch der Schnellstarter gestartet wird.</Text>
@@ -254,8 +264,8 @@
 			<Text id="asd3" xml:lang="en-US">The shortcuts set in the CDE in a network installation are not automatically removed during deinstallation. Before deinstallation, enter as Administrator (root) the following command line to remove the shortcuts from the CDE: /usr/dt/bin/dtappintegrate -u -s [path to OpenOffice.org].</Text>
 		</Paragraph>
 		<Paragraph id="df3d" os="SOLARIS">
-			<Text id="ef3s" xml:lang="de">Beispiel: /usr/dt/bin/dtappintegrate -u -s /usr/local/OpenOffice.org1.x</Text>
-			<Text id="ef3s" xml:lang="en-US">Example: /usr/dt/bin/dtappintegrate -u -s /usr/local/OpenOffice.org1.x</Text>
+			<Text id="ef3s" xml:lang="de">Beispiel: /usr/dt/bin/dtappintegrate -u -s /usr/local/OpenOffice.org2.0</Text>
+			<Text id="ef3s" xml:lang="en-US">Example: /usr/dt/bin/dtappintegrate -u -s /usr/local/OpenOffice.org2.0</Text>
 		</Paragraph>
 	</Section>
 	<Section id="SessionManager">
@@ -278,60 +288,14 @@
 			<Text id="abdfe2" xml:lang="en-US">If the user interface of the Arabic or Hebrew versions shows blanks or squares instead of text, please install the most recent Java Runtime Environment (JRE 1.4.1) before running the OpenOffice.org Installation Program. The JRE will install the fonts required for Arabic and Hebrew versions.</Text>
 		</Paragraph>
 	</Section>
-	<Section id="AsianVersions">
-		<Paragraph id="F2ad" style="H2" os="LINUX">
-			<Text id="abdfe" xml:lang="de">Wichtige Informationen für asiatische Versionen</Text>
-			<Text id="abdfe" xml:lang="en-US">Important Information for Asian Versions</Text>
-		</Paragraph>
-		<Paragraph id="F2bd" style="H3" os="LINUX">
-			<Text id="abdfe2" xml:lang="de">Überprüfen der Eingabesequenz für thailändisch</Text>
-			<Text id="abdfe2" xml:lang="en-US">Thai Input-Sequence Checking</Text>
-		</Paragraph>
-		<Paragraph id="F2cd" os="LINUX">
-			<Text id="abdfe3" xml:lang="de">In einem “th_TH” Gebietsschema führt der Thai XIM die Prüfung der Eingangssequenz selbst durch. Dadurch ist OpenOffice.org nicht in der Lage, die Normalisierung und Autokorrektur der Eingabesequenz selbst vorzunehmen. </Text>
-			<Text id="abdfe3" xml:lang="en-US">In a “th_TH” locale, the Thai XIM will carry out the input sequence check. That means that OpenOffice.org is not able to normalize and auto-correct the Thai input sequences.</Text>
-		</Paragraph>
-		<Paragraph id="F2dd" os="LINUX">
-			<Text id="abdfe4" xml:lang="de">Bitte ändern Sie folgende Zeilen in Ihren User Environment-Einstellungen bevor Sie die Applikation starten.</Text>
-			<Text id="abdfe4" xml:lang="en-US">Please change the following lines in your user environment settings before running the application.</Text>
-		</Paragraph>
-		<Paragraph id="F2ed" os="LINUX">
-			<Text id="abdfe4" xml:lang="de">XMODIFIERS="@im=BasicCheck” oder XMODIFIERS="@im=Strict”</Text>
-			<Text id="abdfe4" xml:lang="en-US">XMODIFIERS=&quot;@im=BasicCheck” or XMODIFIERS=&quot;@im=Strict”</Text>
-		</Paragraph>
-		<Paragraph id="F2fd" os="LINUX">
-			<Text id="abdfe5" xml:lang="de">in (bzw. fügen Sie die folgenden Zeilen hinzu, sollten sie nicht existieren)</Text>
-			<Text id="abdfe5" xml:lang="en-US">to (or add the following lines if they do not exist at all):</Text>
-		</Paragraph>
-		<Paragraph id="F2gd" os="LINUX" localized="false">
-			<Text id="abdfe6" xml:lang="de">XMODIFIERS="@im=none"</Text>
-			<Text id="abdfe6" xml:lang="en-US">XMODIFIERS="@im=none"</Text>
-			<Text id="wabdfe6" xml:lang="de" Wrap="true">export </Text>
-			<Text id="wabdfe6" xml:lang="en-US" Wrap="true">export </Text>
-			<Text id="ewabdfe6" xml:lang="de" Wrap="true">XMODIFIERS</Text>
-			<Text id="ewabdfe6" xml:lang="en-US" Wrap="true">XMODIFIERS</Text>
-		</Paragraph>
-	</Section>
-	<Section id="JavaAccessibility">
-		<Paragraph id="aw44" style="H2">
-			<Text id="aw22" xml:lang="de">Wichtige Hinweise zur Zugänglichkeit (Accessibility)</Text>
-			<Text id="aw22" xml:lang="en-US">Important Accessibility Notes</Text>
-		</Paragraph>
-		<Paragraph id="aw344">
-			<Text id="aw453" xml:lang="de">Durch ein Problem der Java(TM) Access Bridge ist es notwendig, die Sprache (das Gebietsschema) des Betriebssystems auf “Englisch (United States)“ (bzw. “EN-us“) einzustellen, um die Zusammenarbeit mit Programmen wie z.B. ZoomText zu ermöglichen. (Hinweis: Das Programm WindowEyes funktioniert nicht mit OpenOffice.org, da es die Java Accessibility API nicht unterstützt.)</Text>
-			<Text id="aw453" xml:lang="en-US">Due to a problem within the Java(TM) Access Bridge, you have to set the operating system locale to &quot;English (United States)&quot; or &quot;(EN-us)&quot;. Only this setting enables you to work with programs like ZoomText. (Note: The program WindowEyes does not work with OpenOffice.org, because it does not support the Java Accessibility API.)</Text>
-		<Text id="aw4333" xml:lang="de">Die Java(TM) Access Bridge, die mit dieser Early Access Version installiert wird, arbeitet  unter Umständen nicht richtig mit normalen Java Anwendung zusammen.</Text>
-			<Text id="aw4333" xml:lang="en-US">The Java(TM) Access Bridge installed with this early access version does not work properly with conventional Java applications.</Text>
-		</Paragraph>
-	</Section>
 	<Section id="Zoomtext">
 		<Paragraph id="aw" style="H2" os="WNT">
 			<Text id="aw2" xml:lang="de">Ai Squared ZoomText 7.11 </Text>
 			<Text id="aw2" xml:lang="en-US">Ai Squared ZoomText 7.11</Text>
 		</Paragraph>
 		<Paragraph id="aw3" os="WNT">
-			<Text id="aw4" xml:lang="de">Für eine Zusammenarbeit mit OpenOffice.org 1.x wird Ai Squared ZoomText 7.11 oder höher benötigt. Das Herunterladen dieser Version muss nach dem 12. Juni 2002 erfolgt sein, damit die nötigen Erweiterungen im Programm enthalten sind.</Text>
-			<Text id="aw4" xml:lang="en-US">If you want to use Ai Squared ZoomText with OpenOffice.org 1.x , you need version 7.11 or higher. The date of the Ai Squared ZoomText download must be after June 12, 2002 for it to contain all the necessary program enhancements.</Text>
+			<Text id="aw4" xml:lang="de">Für eine Zusammenarbeit mit OpenOffice.org 2.0 wird Ai Squared ZoomText 7.11 oder höher benötigt. Das Herunterladen dieser Version muss nach dem 12. Juni 2002 erfolgt sein, damit die nötigen Erweiterungen im Programm enthalten sind.</Text>
+			<Text id="aw4" xml:lang="en-US">If you want to use Ai Squared ZoomText with OpenOffice.org 2.0 , you need version 7.11 or higher. The date of the Ai Squared ZoomText download must be after June 12, 2002 for it to contain all the necessary program enhancements.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Netscape">
@@ -351,7 +315,7 @@
 		</Paragraph>
 		<Paragraph id="abc1">
 			<Text id="w32e" xml:lang="de">OpenOffice.org bietet die Möglichkeit, Schriften für die Anzeige und den Druck in OpenOffice.org durch eine andere auf dem System installierte Schriftart zu ersetzen. Dies geschieht mit Hilfe der Funktion 'Schriftersetzung', die Sie über das Menü Extras - Optionen - OpenOffice.org - Register Schriftersetzung erreichen.</Text>
-			<Text id="w32e" xml:lang="en-US">In OpenOffice.org you can change the font used for screen display and printing by replacing it with a different font installed on your system. This can be done using the font replacement function. Choose Tools - Options - OpenOffice.org - Font Replacement to access this function.</Text>
+			<Text id="w32e" xml:lang="en-US">In OpenOffice.org you can change the font used for screen display and printing by replacing it with a different font installed on your system. This can be done using the font replacement function. Choose 'Tools - Options - OpenOffice.org - Fonts' to access the font replacement table.</Text>
 		</Paragraph>
 		<Paragraph id="abc2">
 			<Text id="asw3" xml:lang="de">Um die Schriftart der Benutzeroberfläche von OpenOffice.org zu ändern, muss dort die Schrift "Andale Sans UI", die standardmäßig für die Benutzeroberfläche von OpenOffice.org verwendet wird, gegen eine beliebige andere Schriftart ersetzt und die Einstellung "immer" für die Ersetzung ausgewählt werden.</Text>
@@ -369,17 +333,7 @@
 		</Paragraph>
 		<Paragraph id="abc12">
 			<Text id="w32e1" xml:lang="de">In OpenOffice.org können nur Tastenkombinationen benutzt werden, die nicht vom Betriebssystem verwendet werden. Sollte in OpenOffice.org eine Tastenkombination nicht wie in der OpenOffice.org-Hilfe beschrieben funktionieren, muss überprüft werden, ob diese Kombination bereits vom Betriebssystem verwendet wird. Um diesen Konflikt aufzuheben, kann die Belegung des Betriebssystems umdefiniert bzw. aufgehoben werden. Weiterhin bietet auch OpenOffice.org die Möglichkeit, die meisten Tastaturbelegungen von OpenOffice.org zu ändern. Weitere Hinweise zu diesem Thema bietet die OpenOffice.org-Hilfe sowie die Hilfe des Betriebssystems.</Text>
-			<Text id="w32e1" xml:lang="en-US">Only shortcut keys (key combinations) not used by the operating system can be used in OpenOffice.org. If a key combination in OpenOffice.org does not work as described in the OpenOffice.org Help, check if that shortcut is already used by the operating system. To rectify such conflicts, you can change the keys assigned by your operating system. Alternatively, you can change almost any key assignment in OpenOffice.org. For more information on this topic, refer to the OpenOffice.org Help or the Help documention of your operating system.</Text>
-		</Paragraph>
-	</Section>
-	<Section id="ReiserFS">
-		<Paragraph id="F12" style="H2" gui="UNX">
-			<Text id="sdf3" xml:lang="de">Dateisystem ReiserFS: OpenOffice.org startet nicht bei Benutzer-ID größer als 65535</Text>
-			<Text id="sdf3" xml:lang="en-US">File System ReiserFS: OpenOffice.org Will Not Start for User IDs Larger Than 65535</Text>
-		</Paragraph>
-		<Paragraph id="F22" gui="UNX">
-			<Text id="scs2" xml:lang="de">Das Dateisystem ReiserFS in einer Version kleiner als 3.6 führt zu Problemen, sobald die Benutzer-ID größer als 65535 ist. Diese äußern sich darin, dass von OpenOffice.org angelegte temporäre Dateien nicht mehr vom Programm selbst, sondern nur noch vom Systemadministrator entfernt werden können ( z.B. /tmp/OSL_PIPE_xxx ). Dies führt dazu, dass OpenOffice.org nicht mehr gestartet werden kann. Das geschilderte Verhalten ist ein Problem des Dateisystems ReiserFS und ist in Version 3.6 und höher behoben.</Text>
-			<Text id="scs2" xml:lang="en-US">In versions lower than 3.6, the file system ReiserFS causes a problem as soon as the user ID is larger than 65535. The problem is that files temporarily saved by OpenOffice.org can no longer be removed by the program itself, but rather only by the system administrator (e.g. /tmp/OSL_PIPE_xxx ). The result is that OpenOffice.org cannot be started. The problem is in the ReiserFS file system and has been fixed in version 3.6 and higher.</Text>
+			<Text id="w32e1" xml:lang="en-US">Only shortcut keys (key combinations) not used by the operating system can be used in OpenOffice.org. If a key combination in OpenOffice.org does not work as described in the OpenOffice.org Help, check if that shortcut is already used by the operating system. To rectify such conflicts, you can change the keys assigned by your operating system. Alternatively, you can change almost any key assignment in OpenOffice.org. For more information on this topic, refer to the OpenOffice.org Help or the Help documentation of your operating system.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="FileLocking">
@@ -406,16 +360,6 @@
 			<Text id="pji76w" xml:lang="en-US">When sending a document via &apos;File - Send - Document as E-mail&apos; or &apos;Document as PDF Attachment&apos; problems might occur (program crashes or hangs). This is due to the Windows system file &quot;Mapi&quot; (Messaging Application Programming Interface) which causes problems in some file versions. Unfortunately, the problem cannot be narrowed down to a certain version number. For more information visit http://www.microsoft.com to search the Microsoft Knowledge Base for &quot;mapi dll&quot;.</Text>
 		</Paragraph>
 	</Section>
-	<Section id="Info-ZIP">
-		<Paragraph id="G51" style="H2">
-			<Text id="sdff34343few" xml:lang="de">Verwendung von Info-ZIP</Text>
-			<Text id="sdff34343few" xml:lang="en-US">Using Info-ZIP</Text>
-		</Paragraph>
-		<Paragraph id="G23">
-			<Text id="a" xml:lang="de">OpenOffice.org benutzt Info-ZIP zum Erstellen und Entpacken der OpenOffice.org Installation, sowie zum Packen und Entpacken des OpenOffice.org XML Dateiformats. Info-ZIP Programme (ZIP, UnZip und weitere Utilities) sind frei verfügbar und können im Source Code und als ausführbares Programm von verschiedenen Anonymous-FTP Seiten wie z.B. ftp.uu.net:/pub/archiving/zip/*. bezogen werden.</Text>
-			<Text id="a" xml:lang="en-US">OpenOffice.org uses Info-ZIP to create and unpack the OpenOffice.org installation, as well as for packing and unpacking the OpenOffice.org XML file format. Info-ZIP programs (ZIP, UnZip and other utilities) are available free of charge and can be used in the source code and as an executable program. They can be attained by visiting Anonymous FTP sites such as ftp.uu.net:/pub/archiving/zip/*.</Text>
-		</Paragraph>
-	</Section>
 	<Section id="ModifiedSourceCode">
 		<Paragraph id="HH1" style="H2">
 			<Text id="sdffd23r3cefwefew" xml:lang="de">Verwendeter / modifizierter Quelltext (Source Code)</Text>
@@ -434,7 +378,7 @@
 			<Text id="a" xml:lang="en-US">The OpenOffice.org Community would very much benefit from your active participation in the development of this important open source project.</Text>
 		</Paragraph>
 		<Paragraph id="A3">
-			<Text id="a" xml:lang="en-US" url="ahead">As a User, you are already a valuable part of the suite's development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the Community. Please join and checkout the user page at: </Text>
+			<Text id="a" xml:lang="en-US" url="ahead">As a user, you are already a valuable part of the suite's development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the community. Please join and check out the user page at: </Text>
 		<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org </Text>
 		</Paragraph>
 		<Paragraph id="A4"/>
@@ -444,7 +388,7 @@
 			<Text id="a" xml:lang="en-US">Registration </Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the Community to make an even better software suite and address User needs directly. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at </Text>
+			<Text id="a" xml:lang="en-US" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the community to make an even better software suite and address user needs directly. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at </Text>
 		<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/welcome/registration-site.html </Text>
 		</Paragraph>
 	</Section>
@@ -461,7 +405,7 @@
 			<Text id="a" xml:lang="en-US">Report Bugs &amp; Issues </Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">The OpenOffice.org Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all Users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the User Community can make to the ongoing development and improvement of the suite. </Text>
+			<Text id="a" xml:lang="en-US">The OpenOffice.org Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the user community can make to the ongoing development and improvement of the suite. </Text>
 		</Paragraph>
 	</Section>
 	<Section id="Subscribe">
@@ -474,12 +418,12 @@
 		</Paragraph>
 		<Paragraph id="A3">
 			<List>
-				<Text id="a" xml:lang="en-US">News: announce@openoffice.org *recommended to all users* (light traffic)</Text>
-		<Text id="b" xml:lang="en-US">User support: users@openoffice.org *recommended to new users* (moderate traffic) </Text>
-		<Text id="c" xml:lang="en-US">Main user forum: discuss@openoffice.org *Easy way to lurk on discussions* (heavy) </Text>
-		<Text id="d" xml:lang="en-US">Marketing project: dev@marketing.openoffice.org*beyond development* (getting heavy) </Text>
+				<Text id="a" xml:lang="en-US">News: announce@openoffice.org *recommended to all users* (light traffic) </Text>
+		<Text id="b" xml:lang="en-US">User support: users@openoffice.org *recommended to new users* (heavy traffic) </Text>
+		<Text id="c" xml:lang="en-US">Main user forum: discuss@openoffice.org *easy way to lurk on discussions* (heavy) </Text>
+		<Text id="d" xml:lang="en-US">Marketing project: dev@marketing.openoffice.org *beyond development* (getting heavy) </Text>
 		<Text id="e" xml:lang="en-US">General code contributor list: dev@openoffice.org (moderate/heavy) </Text>
-		<Text id="f" xml:lang="en-US">Groupware: groupware@whiteboard.openoffice.org (moderate) </Text>
+		<Text id="f" xml:lang="en-US">Groupware: dev@groupware.openoffice.org  (moderate) </Text>
 		</List>
 		</Paragraph>
 	</Section>
@@ -493,7 +437,7 @@
 		<Paragraph id="A3">
 			<Text id="a" xml:lang="en-US" url="ahead">At </Text>
 			<Text id="a" xml:lang="en-US" url="true">http://projects.openoffice.org/index.html</Text>
-			<Text id="a" xml:lang="en-US"> you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just be spreading the word and telling a friend about this office suite.</Text>
+			<Text id="a" xml:lang="en-US"> you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just by spreading the word and telling a friend about this office suite.</Text>
 		</Paragraph>
 		<Paragraph id="A4">
 			<Text id="a" xml:lang="en-US" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here: </Text>
@@ -506,12 +450,12 @@
 			<Text id="a" xml:lang="en-US">User Support</Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US" url="ahead">For help with the OpenOffice.org 1.x office suite, take a look at the archieves to questions already answered on the 'users@openoffice.org' mailing list at </Text>
+			<Text id="a" xml:lang="en-US" url="ahead">For help with the OpenOffice.org 2.0 office suite, take a look at the archives to find questions already answered on the 'users@openoffice.org' mailing list at </Text>
 		<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/mail_list.html</Text>
-		<Text id="c" xml:lang="en-US">. Alternativeely, you can send in your questions to users@openoffice.org. Remember to subscribe to the list to get an email response.</Text>
+		<Text id="c" xml:lang="en-US">. Alternatively, you can send in your questions to users@openoffice.org. Remember to subscribe to the list to get an email response.</Text>
 		</Paragraph>
 		<Paragraph id="A3">
-			<Text id="a" xml:lang="en-US">Also check the FAQ section, found on left hand navigation bar of the OpenOffice.org homepage. Frequently asked questions are posted here.</Text>
+			<Text id="a" xml:lang="en-US">Also check the FAQ section, located on left hand navigation bar of the OpenOffice.org homepage. Frequently asked questions are posted here.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="WayToStart">
@@ -519,18 +463,18 @@
 			<Text id="a" xml:lang="en-US">Way to Start</Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the OpenOffice.org source code was released back in October 2000. When you're comfortable, all you need to do is make an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at </Text>
-		<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/dev_docs/todos.html</Text>
+			<Text id="a" xml:lang="en-US" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the OpenOffice.org source code was released back in October 2000. When you're comfortable, all you need to do is send an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at </Text>
+            <Text id="b" xml:lang="en-US" url="true" path="url">http://development.openoffice.org/todo.html</Text>
 		<Text id="c" xml:lang="en-US">.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Credits">
 		<Paragraph id="emptyparagraph" localized="false"/>
 		<Paragraph id="A1">
-			<Text id="a" xml:lang="en-US">We hope you enjoy working with the new OpenOffice.org 1.x and join us online.</Text>
+			<Text id="a" xml:lang="en-US">We hope you enjoy working with the new OpenOffice.org 2.0 and will join us online.</Text>
 			</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">The OpenOffice.org community</Text>
+			<Text id="a" xml:lang="en-US">The OpenOffice.org Community</Text>
 			</Paragraph>
 		<Paragraph id="A3" localized="false">
 			<Text id="a" xml:lang="en-US"/>
