@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdevstate.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:30:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,20 +69,20 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_STRINGCONTEXT_HPP__
-#include <drafts/com/sun/star/rendering/StringContext.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_STRINGCONTEXT_HPP__
+#include <com/sun/star/rendering/StringContext.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <drafts/com/sun/star/rendering/RenderState.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
+#include <com/sun/star/rendering/RenderState.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
-#include <drafts/com/sun/star/rendering/XPolyPolygon2D.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVASFONT_HPP__
-#include <drafts/com/sun/star/rendering/XCanvasFont.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XCANVASFONT_HPP__
+#include <com/sun/star/rendering/XCanvasFont.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP__
-#include <drafts/com/sun/star/rendering/TextDirection.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP__
+#include <com/sun/star/rendering/TextDirection.hpp>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
@@ -126,7 +126,7 @@ namespace cppcanvas
 
                 textEmphasisMarkStyle(EMPHASISMARK_NONE),
                 pushFlags(PUSH_ALL),
-                textDirection(::drafts::com::sun::star::rendering::TextDirection::WEAK_LEFT_TO_RIGHT),
+                textDirection(::com::sun::star::rendering::TextDirection::WEAK_LEFT_TO_RIGHT),
                 textAlignment(0), // TODO(Q2): Synchronize with implrenderer
                                   // and possibly new rendering::TextAlignment
                 textReliefStyle(RELIEF_NONE),
@@ -148,7 +148,7 @@ namespace cppcanvas
 
             ::basegfx::B2DPolyPolygon                                                               clip;
             ::Rectangle                                                                             clipRect;
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D > xClipPoly;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >         xClipPoly;
 
             ::com::sun::star::uno::Sequence< double >                                               lineColor;
             ::com::sun::star::uno::Sequence< double >                                               fillColor;
@@ -161,7 +161,7 @@ namespace cppcanvas
                 @attention Beware, this member can be NULL, and
                 nevertheless text output is generated.
              */
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCanvasFont >    xFont;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont >    xFont;
             ::basegfx::B2DHomMatrix                                                                 transform;
             ::basegfx::B2DHomMatrix                                                                 fontTransform;
 
