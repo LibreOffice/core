@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:19:01 $
+ *  last change: $Author: fs $ $Date: 2001-01-12 11:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,8 +215,9 @@ void ODataSettings_Base::loadFrom(const OConfigurationNode& _rConfigLocation)
     OSL_VERIFY(_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_ORDER)        >>= m_sOrder);
     OSL_VERIFY(_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_APPLYFILTER)  >>= m_bApplyFilter);
 
-    OSL_VERIFY(_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_NAME)    >>= m_aFont.Name);
-    if(m_aFont.Name.getLength())
+    if  (   (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_NAME) >>= m_aFont.Name)
+        &&  m_aFont.Name.getLength()
+        )
     {
         _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_HEIGHT)         >>= m_aFont.Height;
         _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_WIDTH)          >>= m_aFont.Width;
