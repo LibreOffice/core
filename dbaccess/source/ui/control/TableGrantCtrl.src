@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:08:06 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,10 @@ String STR_TABLE_PRIV_INSERT
     Text[ENGLISH] = "Insert data";
     Text[ english_us ] = "Insert data";
     Text[ portuguese ] = "Inserir dados";
-    Text[ russian ] = "¬ставить";
+    Text[ russian ] = "¬ставить данные";
     Text[ greek ] = "–спуиёкз";
     Text[ dutch ] = "Gegevens invoegen";
-    Text[ french ] = "Insйrer";
+    Text[ french ] = "Insйrer des donnйes";
     Text[ spanish ] = "Insertar datos";
     Text[ finnish ] = "Insert";
     Text[ italian ] = "Inserisci dati";
@@ -121,10 +121,10 @@ String STR_TABLE_PRIV_DELETE
     Text[ENGLISH] = "Delete data";
     Text[ english_us ] = "Delete data";
     Text[ portuguese ] = "Eliminar";
-    Text[ russian ] = "”далить";
+    Text[ russian ] = "”далить данные";
     Text[ greek ] = "ƒйбгсбцё";
     Text[ dutch ] = "Gegevens wissen";
-    Text[ french ] = "Supprimer";
+    Text[ french ] = "Supprimer les donnйes";
     Text[ spanish ] = "Eliminar datos";
     Text[ finnish ] = "Delete";
     Text[ italian ] = "Elimina dati";
@@ -147,10 +147,10 @@ String STR_TABLE_PRIV_UPDATE
     Text[ENGLISH] = "Update data";
     Text[ english_us ] = "Modify data";
     Text[ portuguese ] = "Modificar dados";
-    Text[ russian ] = "»зменить";
+    Text[ russian ] = "»зменить данные";
     Text[ greek ] = "Ѕллбгё";
     Text[ dutch ] = "Gegevens wijzigen";
-    Text[ french ] = "Modifier";
+    Text[ french ] = "Modifier les donnйes";
     Text[ spanish ] = "Modificar datos";
     Text[ finnish ] = "Modify";
     Text[ italian ] = "Cambia dati";
@@ -198,10 +198,10 @@ String STR_TABLE_PRIV_SELECT
     Text[ENGLISH] = "Select data";
     Text[ english_us ] = "Read data";
     Text[ portuguese ] = "Ler dados";
-    Text[ russian ] = "„итать";
+    Text[ russian ] = "„итать данные";
     Text[ greek ] = "Ѕн№гнщуз";
     Text[ dutch ] = "Gegevens lezen";
-    Text[ french ] = "Lire";
+    Text[ french ] = "Lire les donnйes";
     Text[ spanish ] = "Leer datos";
     Text[ finnish ] = "Read";
     Text[ italian ] = "Leggi dati";
@@ -250,10 +250,10 @@ String STR_TABLE_PRIV_DROP
     Text[ENGLISH] = "Drop structure";
     Text[ english_us ] = "Drop structure";
     Text[ portuguese ] = "Eliminar estrutura";
-    Text[ russian ] = "Droping";
+    Text[ russian ] = "”далить структуру";
     Text[ greek ] = "Droping";
     Text[ dutch ] = "Structuur wissen";
-    Text[ french ] = "Droping";
+    Text[ french ] = "Supprimer la structure";
     Text[ spanish ] = "Eliminar estructura";
     Text[ finnish ] = "Droping";
     Text[ italian ] = "Elimina struttura";
@@ -269,6 +269,7 @@ String STR_TABLE_PRIV_DROP
     Text[ arabic ] = "Droping";
     Text[ catalan ] = "Droping";
 };
+
 
 
 
