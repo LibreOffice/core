@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:39:38 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 12:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,13 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9.24.2  2003/11/24 15:12:04  obo
+ *  undo last change
+ *
+ *  Revision 1.9  2003/10/21 08:39:38  obo
+ *  INTEGRATION: CWS formcelllinkage (1.8.188); FILE MERGED
+ *  2003/10/01 09:55:21 fs 1.8.188.1: #i18994# merging the changes from the CWS fs002
+ *
  *  Revision 1.8.188.1  2003/10/01 09:55:21  fs
  *  #i18994# merging the changes from the CWS fs002
  *
