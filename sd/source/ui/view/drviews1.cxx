@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:28:31 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,8 +159,8 @@
 #ifndef SD_PREVIEW_CHILD_WINDOW_HXX
 #include "PreviewChildWindow.hxx"
 #endif
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #include "optsitem.hxx"
 #ifndef SD_FU_SEARCH_HXX
@@ -281,9 +281,6 @@ void DrawViewShell::SelectionHasChanged (void)
     // Um die Performance zu steigern wird jetzt die komplette
     // Shell invalidiert statt alle Slots einzeln
     Invalidate();
-
-    // Damit das Effekte-Window auch einen aktuellen Status bekommt
-    UpdateEffectWindow();
 
     //Update3DWindow(); // 3D-Controller
     SfxBoolItem aItem( SID_3D_STATE, TRUE );
@@ -446,12 +443,15 @@ USHORT DrawViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
         PreviewChildWindow::GetChildWindowId() );
     BOOL            bRet = TRUE;
 
+/*
     if( pFuSlideShow )
     {
         pFuSlideShow->Terminate();
         bRet = FALSE;
     }
+*/
 
+/*
     if( pPreviewChild && pPreviewChild->GetWindow() )
     {
         PreviewWindow* pPreviewWin = static_cast<PreviewWindow*>(
@@ -465,6 +465,7 @@ USHORT DrawViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
             pShow->Destroy ();
         }
     }
+*/
 
     if( bRet && pFuActual )
     {
@@ -1101,7 +1102,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
         // nie auf eine Masterpage)
         GetDoc()->SetSelected(pActualPage, TRUE);
 
-        if( !pFuSlideShow || ( pFuSlideShow->GetAnimationMode() != ANIMATIONMODE_SHOW ) )
+        if( !mpSlideShow || ( mpSlideShow->getAnimationMode() != ANIMATIONMODE_SHOW ) )
         {
             // VisArea zuziehen, um ggf. Objekte zu deaktivieren
             // !!! only if we are not in presentation mode (#96279) !!!
@@ -1291,15 +1292,12 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
         // Damit der Navigator (und das Effekte-Window) das mitbekommt (/-men)
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME, TRUE, FALSE);
-        rBindings.Invalidate(SID_EFFECT_STATE, TRUE, FALSE);
         rBindings.Invalidate(SID_STATUS_PAGE, TRUE, FALSE);
-        UpdateSlideChangeWindow();
         UpdatePreview( pActualPage );
 
-        if (pDrView->GetSlideShow())
-        {
-            pDrView->SetAnimationMode(TRUE);
-        }
+
+//      if (pDrView->GetSlideShow())
+//          pDrView->SetAnimationMode(TRUE);
 
         GetDoc()->SetChanged(bIsChanged);
     }
@@ -1599,13 +1597,8 @@ sal_Int8 DrawViewShell::AcceptDrop (
     if( nPage != SDRPAGE_NOTFOUND )
         nPage = GetDoc()->GetSdPage( nPage, ePageKind )->GetPageNum();
 
-    if( pFuSlideShow )
-    {
-        if( !pFuSlideShow->IsLivePresentation() )
-        {
-            return DND_ACTION_NONE;
-        }
-    }
+    if( mpSlideShow )
+        return DND_ACTION_NONE;
 
     return pDrView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer );
 }
@@ -1626,13 +1619,8 @@ sal_Int8 DrawViewShell::ExecuteDrop (
     if( nPage != SDRPAGE_NOTFOUND )
         nPage = GetDoc()->GetSdPage( nPage, ePageKind )->GetPageNum();
 
-    if( pFuSlideShow )
-    {
-        if( !pFuSlideShow->IsLivePresentation() )
-        {
-            return DND_ACTION_NONE;
-        }
-    }
+    if( mpSlideShow )
+        return DND_ACTION_NONE;
 
     return pDrView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer );
 }
