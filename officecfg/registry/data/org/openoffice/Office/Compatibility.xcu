@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Compatibility.xcu,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2003-10-01 13:10:02 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,18 +64,48 @@
     <node oor:name="AllFileFormats">
         <node oor:name="_default" oor:op="replace">
             <prop oor:name="Module">
-                <value>swriter/web</value>
+                <value>swriter</value>
             </prop>
-            <prop oor:name="Options">
-                <value>35</value>
+            <prop oor:name="UsePrinterMetrics">
+                <value>false</value>
+            </prop>
+            <prop oor:name="AddSpacing">
+                <value>false</value>
+            </prop>
+            <prop oor:name="AddSpacingAtPages">
+                <value>false</value>
+            </prop>
+            <prop oor:name="UseOurTabStopFormat">
+                <value>false</value>
+            </prop>
+            <prop oor:name="NoExternalLeading">
+                <value>false</value>
+            </prop>
+            <prop oor:name="UseLineSpacing">
+                <value>false</value>
             </prop>
         </node>
         <node oor:name="_user" oor:op="replace">
             <prop oor:name="Module">
                 <value>swriter</value>
             </prop>
-            <prop oor:name="Options">
-                <value>0</value>
+            <prop oor:name="UsePrinterMetrics">
+                <value>false</value>
+            </prop>
+            <prop oor:name="AddSpacing">
+                <value>false</value>
+            </prop>
+            <prop oor:name="AddSpacingAtPages">
+                <value>false</value>
+            </prop>
+            <prop oor:name="UseOurTabStopFormat">
+                <value>false</value>
+            </prop>
+            <prop oor:name="NoExternalLeading">
+                <value>false</value>
+            </prop>
+            <prop oor:name="UseLineSpacing">
+                <value>false</value>
             </prop>
         </node>
     </node>
