@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-08 10:19:04 $
+ *  last change: $Author: dvo $ $Date: 2002-06-11 12:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,10 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
+#endif
+
 #ifndef _RTL_USTRING
 #include <rtl/ustring>
 #endif
@@ -176,7 +180,7 @@ static const sal_Char sAPI_data_column_name[]   = "DataColumnName";
 static const sal_Char sAPI_is_data_base_format[]    = "DataBaseFormat";
 static const sal_Char sAPI_current_presentation[]   = "CurrentPresentation";
 static const sal_Char sAPI_sequence_value[]     = "SequenceValue";
-
+static const sal_Char sAPI_data_command_type[]  = "DataCommandType";
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -1152,13 +1156,17 @@ XMLDatabaseDisplayImportContext::XMLDatabaseDisplayImportContext(
                                       nPrfx, rLocalName),
         aValueHelper(rImport, rHlp, sal_False, sal_True, sal_False, sal_False),
         sColumnName(),
+        nCommandType( sdb::CommandType::TABLE ),
         bColumnOK(sal_False),
+        bCommandTypeOK(sal_False),
         sPropertyColumnName(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_data_column_name)),
         sPropertyDatabaseFormat(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_is_data_base_format)),
         sPropertyCurrentPresentation(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation))
+            RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation)),
+        sPropertyDataCommandType(
+            RTL_CONSTASCII_USTRINGPARAM(sAPI_data_command_type))
 {
 }
 
@@ -1170,6 +1178,23 @@ void XMLDatabaseDisplayImportContext::ProcessAttribute(
         case XML_TOK_TEXTFIELD_COLUMN_NAME:
             sColumnName = sAttrValue;
             bColumnOK = sal_True;
+            break;
+        case XML_TOK_TEXTFIELD_COMMAND_TYPE:
+            if( IsXMLToken( sAttrValue, XML_TABLE ) )
+            {
+                nCommandType = sdb::CommandType::TABLE;
+                bCommandTypeOK = sal_True;
+            }
+            else if( IsXMLToken( sAttrValue, XML_QUERY ) )
+            {
+                nCommandType = sdb::CommandType::QUERY;
+                bCommandTypeOK = sal_True;
+            }
+            else if( IsXMLToken( sAttrValue, XML_COMMAND ) )
+            {
+                nCommandType = sdb::CommandType::COMMAND;
+                bCommandTypeOK = sal_True;
+            }
             break;
         case XML_TOK_TEXTFIELD_DATABASE_NAME:
         case XML_TOK_TEXTFIELD_TABLE_NAME:
@@ -1207,6 +1232,13 @@ void XMLDatabaseDisplayImportContext::EndElement()
             Any aAny;
             aAny <<= sColumnName;
             xMaster->setPropertyValue(sPropertyColumnName, aAny);
+
+            // #99980# also read command type; must still read old files
+            if( bCommandTypeOK )
+            {
+                aAny <<= nCommandType;
+                xMaster->setPropertyValue( sPropertyDataCommandType, aAny );
+            }
 
             // fieldmaster takes database, table and column name
             XMLDatabaseFieldImportContext::PrepareField(xMaster);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: bm $ $Date: 2002-05-06 07:24:33 $
+ *  last change: $Author: dvo $ $Date: 2002-06-11 12:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2112,6 +2112,8 @@ namespace xmloff { namespace token {
 
         TOKEN( "regression-curve" ),           // XML_REGRESSION_CURVE
         TOKEN( "error-indicator" ),            // XML_ERROR_INDICATOR
+
+        TOKEN( "command-type" ),               // XML_COMMAND_TYPE
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dvo $ $Date: 2002-01-18 11:08:29 $
+ *  last change: $Author: dvo $ $Date: 2002-06-11 12:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,10 @@
 
 #ifndef _COM_SUN_STAR_TEXT_BIBLIOGRAPHYDATATYPE_HPP_
 #include <com/sun/star/text/BibliographyDataType.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -473,6 +477,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
       sPropertyInstanceName(RTL_CONSTASCII_USTRINGPARAM("InstanceName")),
       sPropertyIsHidden(RTL_CONSTASCII_USTRINGPARAM("IsHidden")),
       sPropertyIsConditionTrue(RTL_CONSTASCII_USTRINGPARAM("IsConditionTrue")),
+      sPropertyDataCommandType(RTL_CONSTASCII_USTRINGPARAM("DataCommandType")),
       pCombinedCharactersPropertyState(pCombinedCharState)
 {
     SetExportOnlyUsedFieldDeclarations();
@@ -1415,6 +1420,8 @@ void XMLTextFieldExport::ExportFieldHelper(
                       GetStringProperty(sPropertyDataTableName, xMaster));
         ProcessString(XML_COLUMN_NAME,
                       GetStringProperty(sPropertyDataColumnName, xMaster));
+        ProcessCommandType(
+                      GetInt16Property(sPropertyDataCommandType, xMaster));
         // export number format if available (happens only for numbers!)
         if (!GetBoolProperty(sPropertyIsDataBaseFormat, rPropSet))
         {
@@ -2565,6 +2572,22 @@ void XMLTextFieldExport::ProcessBibliographyData(
             }
         }
     }
+}
+
+/// export CommandTypeAttribute
+void XMLTextFieldExport::ProcessCommandType(
+    sal_Int16 nCommandType)
+{
+    enum XMLTokenEnum eToken = XML_TOKEN_INVALID;
+    switch( nCommandType )
+    {
+        case sdb::CommandType::TABLE:   eToken = XML_TABLE; break;
+        case sdb::CommandType::QUERY:   eToken = XML_QUERY; break;
+        case sdb::CommandType::COMMAND: eToken = XML_COMMAND; break;
+    }
+
+    if( eToken != XML_TOKEN_INVALID )
+        rExport.AddAttribute( XML_NAMESPACE_TEXT, XML_COMMAND_TYPE, eToken );
 }
 
 

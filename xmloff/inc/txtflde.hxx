@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 12:37:11 $
+ *  last change: $Author: dvo $ $Date: 2002-06-11 12:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,6 +399,10 @@ protected:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > & rPropertySet);
 
+    /// export CommandTypeAttribute
+    void ProcessCommandType(
+        sal_Int16 nCommandType);        /// com::sun::star::sdb::CommandType
+
     /// for XDependentTextFields, get PropertySet of FieldMaster
     ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >
     GetMasterPropertySet(const ::com::sun::star::uno::Reference <
@@ -512,6 +516,7 @@ private:
     const ::rtl::OUString sPropertyInstanceName;
     const ::rtl::OUString sPropertyIsHidden;
     const ::rtl::OUString sPropertyIsConditionTrue;
+    const ::rtl::OUString sPropertyDataCommandType;
 
     const ::rtl::OUString sEmpty;
 
