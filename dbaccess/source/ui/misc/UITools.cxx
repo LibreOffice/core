@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 12:46:24 $
+ *  last change: $Author: oj $ $Date: 2001-10-22 11:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,7 +620,6 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
             {
                 Reference<XResultSet> xRes = _xMetaData->getCatalogs();
                 Reference<XRow> xRow(xRes,UNO_QUERY);
-                ::rtl::OUString sCatalog;
                 while(xRes.is() && xRes->next())
                 {
                     sCatalog = xRow->getString(1);
