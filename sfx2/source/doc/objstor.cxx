@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:02:26 $
+ *  last change: $Author: mav $ $Date: 2002-05-29 16:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,15 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
 #include <com/sun/star/document/XExporter.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_FILTEROPTIONSREQUEST_HPP_
+#include <com/sun/star/document/FilterOptionsRequest.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XINTERACTIONFILTEROPTIONS_HPP_
+#include <com/sun/star/document/XInteractionFilterOptions.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
 
 #ifndef  _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -112,6 +121,26 @@
 #endif
 #ifndef  _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #pragma hdrstop
@@ -175,6 +204,7 @@
 #include "filedlghelper.hxx"
 #include "scriptcont.hxx"
 #include "event.hxx"
+#include "fltoptint.hxx"
 
 #define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
@@ -182,11 +212,14 @@
 extern sal_uInt32 CheckPasswd_Impl( Window*, SfxItemPool&, SfxMedium* );
 
 
+using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::document;
 using namespace ::rtl;
 using namespace ::cppu;
 
@@ -527,7 +560,102 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         }
     }
 
-    if ( bHasStorage && !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
+    Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+    Reference< XNameAccess > xFilterCFG;
+    if( xServiceManager.is() )
+    {
+        xFilterCFG = Reference< XNameAccess >(
+            xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+            UNO_QUERY );
+    }
+
+    SFX_ITEMSET_ARG( pSet, pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
+    SFX_ITEMSET_ARG( pSet, pData, SfxUsrAnyItem, SID_FILTER_DATA, sal_False );
+    if ( pData || pOptions )
+        bOk = sal_True;
+    else if( xFilterCFG.is() )
+    {
+        try {
+            Sequence < PropertyValue > aProps;
+            Any aAny = xFilterCFG->getByName( pFilter->GetName() );
+            if ( aAny >>= aProps )
+            {
+                ::rtl::OUString aServiceName;
+                sal_Int32 nPropertyCount = aProps.getLength();
+                for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+                    if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
+                    {
+                        ::rtl::OUString aServiceName;
+                        aProps[nProperty].Value >>= aServiceName;
+                        if( aServiceName.getLength() )
+                        {
+                            SfxItemSet* pSet = pMedium->GetItemSet();
+                            Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
+                            if( rHandler.is() )
+                            {
+                                Sequence< PropertyValue > rProperties;
+                                TransformItems( SID_OPENDOC, *GetMedium()->GetItemSet(), rProperties, NULL );
+                                RequestFilterOptions* pFORequest = new RequestFilterOptions( GetModel(), rProperties );
+
+                                Reference< XInteractionRequest > rRequest( pFORequest );
+                                rHandler->handle( rRequest );
+
+                                if ( !pFORequest->isAbort() )
+                                {
+                                       SfxAllItemSet aNewParams( GetPool() );
+                                       TransformParameters( SID_OPENDOC,
+                                                         pFORequest->getFilterOptions(),
+                                                         aNewParams,
+                                                         NULL );
+
+                                       SFX_ITEMSET_ARG( &aNewParams,
+                                                     pOptions,
+                                                     SfxStringItem,
+                                                     SID_FILE_FILTEROPTIONS,
+                                                     sal_False );
+                                       if ( pOptions )
+                                    {
+                                           GetMedium()->GetItemSet()->Put( *pOptions );
+                                        bOk = sal_True;
+                                    }
+
+                                       SFX_ITEMSET_ARG( &aNewParams,
+                                                     pData,
+                                                     SfxUsrAnyItem,
+                                                     SID_FILTER_DATA,
+                                                     sal_False );
+                                       if ( pData )
+                                    {
+                                           GetMedium()->GetItemSet()->Put( *pData );
+                                        bOk = sal_True;
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+            }
+
+            if( !bOk )
+            {
+                // filter options were not entered
+                SetError( ERRCODE_ABORT );
+            }
+        }
+        catch( NoSuchElementException& )
+        {
+            // the filter name is unknown
+            SetError( ERRCODE_IO_INVALIDPARAMETER );
+        }
+        catch( Exception& )
+        {
+            SetError( ERRCODE_ABORT );
+        }
+    }
+
+
+    if ( bOk && bHasStorage && !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
     {
         SvStorageRef xStor( pMed->GetStorage() );
         DBG_ASSERT( pFilter, "No filter for storage found!" );
@@ -589,7 +717,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 SetError( ERRCODE_ABORT );
         }
     }
-    else if ( InitNew(0) )
+    else if ( bOk && InitNew(0) )
     {
         // Name vor ConvertFrom setzen, damit GetSbxObject() schon funktioniert
         bHasName = sal_True;
@@ -1780,9 +1908,9 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         pSet->ClearItem( SID_CHARSET );
         pSet->ClearItem( SID_FILTER_NAME );
         pSet->ClearItem( SID_OPTIONS );
-        pSet->ClearItem( SID_FILE_FILTEROPTIONS );
+        //pSet->ClearItem( SID_FILE_FILTEROPTIONS );
         pSet->ClearItem( SID_VERSION );
-        pSet->ClearItem( SID_USE_FILTEROPTIONS );
+        //pSet->ClearItem( SID_USE_FILTEROPTIONS );
 
         SFX_ITEMSET_GET( (*aParams), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
         if ( pFilterItem )
