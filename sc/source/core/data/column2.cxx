@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-18 19:41:13 $
+ *  last change: $Author: nn $ $Date: 2001-06-18 16:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -806,6 +806,7 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
             // am Dokument speichern ?
             ScEditEngineDefaulter* pEngine = new ScFieldEditEngine(
                 pDocument->GetEnginePool(), pDocument->GetEditPool() );
+            pEngine->SetUpdateMode( FALSE );
             MapMode aOld = pDev->GetMapMode();
             pDev->SetMapMode( aHMMMode );
             pEngine->SetRefDevice( pDev );
@@ -859,6 +860,8 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
                                             TRUE, rOptions.bFormula, ftCheck );
                 pEngine->SetText(aString);
             }
+
+            pEngine->SetUpdateMode( TRUE );
 
             BOOL bEdWidth = bWidth;
             if ( eOrient != SVX_ORIENTATION_STANDARD && eOrient != SVX_ORIENTATION_STACKED )

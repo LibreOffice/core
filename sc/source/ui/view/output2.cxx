@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-07 11:34:40 $
+ *  last change: $Author: nn $ $Date: 2001-06-18 16:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,9 +551,8 @@ void lcl_SetEditColor( EditEngine& rEngine, const Color& rColor )
     ESelection aSel( 0, 0, rEngine.GetParagraphCount(), 0 );
     SfxItemSet aSet( rEngine.GetEmptyItemSet() );
     aSet.Put( SvxColorItem( rColor, EE_CHAR_COLOR ) );
-    rEngine.SetUpdateMode( FALSE );
     rEngine.QuickSetAttribs( aSet, aSel );
-    rEngine.SetUpdateMode( TRUE );
+    // function is called with update mode set to FALSE
 }
 
 void ScOutputData::SetEditSyntaxColor( EditEngine& rEngine, ScBaseCell* pCell )
@@ -1556,6 +1555,8 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
 
 void lcl_ClearEdit( EditEngine& rEngine )       // Text und Attribute
 {
+    rEngine.SetUpdateMode( FALSE );
+
     rEngine.SetText(EMPTY_STRING);
     //  keine Para-Attribute uebrigbehalten...
     const SfxItemSet& rPara = rEngine.GetParaAttribs(0);
@@ -1632,6 +1633,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             //  Ein RefDevice muss auf jeden Fall gesetzt werden,
                             //  sonst legt sich die EditEngine ein VirtualDevice an!
                             pEngine = new ScFieldEditEngine( pDoc->GetEnginePool() );
+                            pEngine->SetUpdateMode( FALSE );
                             pEngine->SetRefDevice( pFmtDevice );    // always set
                             ULONG nCtrl = pEngine->GetControlWord();
                             if ( bShowSpellErrors )
@@ -1642,7 +1644,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             pEngine->SetForbiddenCharsTable( pDoc->GetForbiddenCharacters() );
                         }
                         else
-                            lcl_ClearEdit( *pEngine );
+                            lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(FALSE)
 
                         long nPosY = nRowPosY;
                         BOOL bVisChanged = FALSE;
@@ -1997,6 +1999,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             else
                                 DBG_ERROR("pCell == NULL");
 
+                            pEngine->SetUpdateMode( TRUE );     // after SetText, before CalcTextWidth/GetTextHeight
+
                             long nEngineWidth;
                             if ( bBreak && eOrient != SVX_ORIENTATION_STACKED )
                                 nEngineWidth = 0;
@@ -2239,6 +2243,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                             eHorJust==SVX_HOR_JUSTIFY_CENTER ||
                                             (eHorJust==SVX_HOR_JUSTIFY_STANDARD && bIsValue) )
                                         {
+                                            pEngine->SetUpdateMode( FALSE );
+
                                             SvxAdjust eSvxAdjust =
                                                 (eHorJust==SVX_HOR_JUSTIFY_CENTER) ?
                                                     SVX_ADJUST_CENTER : SVX_ADJUST_RIGHT;
@@ -2253,6 +2259,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                                 pEngine->SetPaperSize(pRefDevice->PixelToLogic(aPaperSize));
                                             else
                                                 pEngine->SetPaperSize(aPaperSize);
+
+                                            pEngine->SetUpdateMode( TRUE );
                                         }
                                     }
                                     else
@@ -2398,6 +2406,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                             //  Ein RefDevice muss auf jeden Fall gesetzt werden,
                             //  sonst legt sich die EditEngine ein VirtualDevice an!
                             pEngine = new ScFieldEditEngine( pDoc->GetEnginePool() );
+                            pEngine->SetUpdateMode( FALSE );
                             pEngine->SetRefDevice( pFmtDevice );    // always set
                             ULONG nCtrl = pEngine->GetControlWord();
                             if ( bShowSpellErrors )
@@ -2408,7 +2417,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                             pEngine->SetForbiddenCharsTable( pDoc->GetForbiddenCharacters() );
                         }
                         else
-                            lcl_ClearEdit( *pEngine );
+                            lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(FALSE)
 
                         long nPosY = nRowPosY;
                         BOOL bVisChanged = FALSE;
@@ -2678,6 +2687,8 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                             else
                                 DBG_ERROR("pCell == NULL");
 
+                            pEngine->SetUpdateMode( TRUE );     // after SetText, before CalcTextWidth/GetTextHeight
+
                             long nEngineWidth  = (long) pEngine->CalcTextWidth();
                             long nEngineHeight = pEngine->GetTextHeight();
 
@@ -2921,6 +2932,8 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                         if (eHorJust==SVX_HOR_JUSTIFY_RIGHT ||
                                             eHorJust==SVX_HOR_JUSTIFY_CENTER)
                                         {
+                                            pEngine->SetUpdateMode( FALSE );
+
                                             SvxAdjust eSvxAdjust =
                                                 (eHorJust==SVX_HOR_JUSTIFY_RIGHT) ?
                                                     SVX_ADJUST_RIGHT : SVX_ADJUST_CENTER;
@@ -2932,6 +2945,8 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                                 pEngine->SetPaperSize(pRefDevice->PixelToLogic(aPaperSize));
                                             else
                                                 pEngine->SetPaperSize(aPaperSize);
+
+                                            pEngine->SetUpdateMode( TRUE );
                                         }
                                     }
                                     else
