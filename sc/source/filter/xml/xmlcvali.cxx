@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:53:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:48:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,12 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
                 sName = sValue;
             break;
             case XML_TOK_CONTENT_VALIDATION_CONDITION:
-                sCondition = sValue;
+                {
+                    sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                            GetKeyByAttrName( sValue, &sCondition );
+                    if (XML_NAMESPACE_OOOC != nPrefix)
+                        sCondition = sValue;
+                }
             break;
             case XML_TOK_CONTENT_VALIDATION_BASE_CELL_ADDRESS:
                 sBaseCellAddress = sValue;
@@ -775,9 +780,13 @@ SvXMLImportContext *ScXMLErrorMacroContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext *pContext = NULL;
 
+    if ((nPrefix == XML_NAMESPACE_OFFICE) && IsXMLToken(rLName, XML_EVENT_LISTENERS))
+    {
+        pContext = new XMLEventsImportContext(GetImport(), nPrefix, rLName);
+        xEventContext = pContext;
+    }
     if ((nPrefix == XML_NAMESPACE_SCRIPT) && IsXMLToken(rLName, XML_EVENTS))
     {
-        DBG_ASSERT(!sName.getLength(), "here is something wrong in the file");
         pContext = new XMLEventsImportContext(GetImport(), nPrefix, rLName);
         xEventContext = pContext;
     }
@@ -809,7 +818,6 @@ void ScXMLErrorMacroContext::EndElement()
             }
         }
     }
-    else
     DBG_ASSERT(sName.getLength(), "no macro name given");
     pValidationContext->SetErrorMacro(sName, bExecute);
 }
