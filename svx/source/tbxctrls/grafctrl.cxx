@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-23 11:27:22 $
+ *  last change: $Author: ka $ $Date: 2001-02-19 16:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1028,7 +1028,9 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
         {
             SdrGrafObj* pObj = (SdrGrafObj*) rView.GetMarkList().GetMark( 0 )->GetObj();
 
-            if( pObj && pObj->ISA( SdrGrafObj ) )
+            if( pObj && pObj->ISA( SdrGrafObj ) &&
+                ( pObj->GetGraphicType() != GRAPHIC_NONE ) &&
+                ( pObj->GetGraphicType() != GRAPHIC_DEFAULT ) )
             {
                 SfxItemSet          aGrfAttr( rPool, SDRATTR_GRAFCROP, SDRATTR_GRAFCROP, 0 );
                 const SfxMapUnit    eOldMetric = rPool.GetMetric( 0 );
@@ -1258,7 +1260,15 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
 
                     if( pObj && pObj->ISA( SdrGrafObj ) )
-                        bDisable = FALSE;
+                    {
+                        SdrGrafObj* pGrafObj = (SdrGrafObj*) pObj;
+
+                        if( ( pGrafObj->GetGraphicType() != GRAPHIC_NONE ) &&
+                            ( pGrafObj->GetGraphicType() != GRAPHIC_DEFAULT ) )
+                        {
+                            bDisable = FALSE;
+                        }
+                    }
                 }
 
                 if( bDisable )
