@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:44:00 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ chinese_traditional ] = "»sªí²Å(~T)";
         TEXT[ arabic ] = "ÚáÇãÉ ÌÏæáÉ";
         TEXT[ greek ] = "Ó~ôçëïèİôçò";
-        TEXT[ korean ] = "ÅÇ";
+        TEXT[ korean ] = "ÅÇ(~T)";
         TEXT[ turkish ] = "~Sekme";
         TEXT[ language_user1 ] = " ";
     };
@@ -139,7 +139,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ chinese_traditional ] = "¤À¸¹(~S)";
         TEXT[ arabic ] = "ÇáİÇÕáÉ ÇáãäŞæØÉ";
         TEXT[ greek ] = "¢íù ôå~ëåßá";
-        TEXT[ korean ] = "¼¼¹ÌÄİ·Ğ";
+        TEXT[ korean ] = "¼¼¹ÌÄİ·Ğ(~S)";
         TEXT[ turkish ] = "N~oktalı virgül";
         TEXT[ language_user1 ] = " ";
     };
@@ -168,7 +168,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ chinese_traditional ] = "¬q¸¨(~P)";
         TEXT[ arabic ] = "ÇáİŞÑÉ";
         TEXT[ greek ] = "Ğ~áñÜãñáöïò";
-        TEXT[ korean ] = "´Ü¶ô";
+        TEXT[ korean ] = "´Ü¶ô(~P)";
         TEXT[ turkish ] = "~Paragraf";
         TEXT[ language_user1 ] = " ";
     };
@@ -194,7 +194,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ chinese_traditional ] = "¨ä¥L(~O)";
         Text[ arabic ] = "ÛíÑ Ğáß: ";
         Text[ greek ] = "¢ëëá: ";
-        Text[ korean ] = "±âÅ¸";
+        Text[ korean ] = "±âÅ¸(~O)";
         Text[ turkish ] = "Di~ğer: ";
         Text[ language_user1 ] = " ";
     };
@@ -306,14 +306,14 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ dutch ] = "Op iedere pagina ~herhalen";
         Text[ spanish ] = "~Repetir en cada página";
         Text[ english_us ] = "~Repeat header";
-        Text[ chinese_simplified ] = "ÔÚÃ¿Ò³ÉÏÖØ¸´ÏÔÊ¾";
+        Text[ chinese_simplified ] = "ÔÚÃ¿Ò³ÉÏÖØ¸´ÏÔÊ¾(~R)";
         Text[ russian ] = "Ïîâòîğ íà êàæäîé ñòğàíèöå";
         Text[ polish ] = "Powtórz na ~ka¿dej stronie";
-        Text[ japanese ] = "ŠeÍß°¼Ş‚ÉŒJ‚è•Ô‚µ";
-        Text[ chinese_traditional ] = "¦b¨C­¶¤W­«½ÆÅã¥Ü";
+        Text[ japanese ] = "ŠeÍß°¼Ş‚ÉŒJ‚è•Ô‚µ(~R)";
+        Text[ chinese_traditional ] = "¦b¨C­¶¤W­«½ÆÅã¥Ü(~R)";
         Text[ arabic ] = "ÊßÑÇÑ İí ßá ÕİÍÉ";
         Text[ greek ] = "Åì~öÜíéóç óå êÜèå óåëßäá";
-        Text[ korean ] = "¸ğµç¡¡ÂÊ¿¡¼­¡¡¹İº¹";
+        Text[ korean ] = "¸ğµç¡¡ÂÊ¿¡¼­¡¡¹İº¹(~R)";
         Text[ turkish ] = "İlk satırı her sayfada yi~nele";
         Text[ language_user1 ] = " ";
     };
