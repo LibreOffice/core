@@ -270,7 +270,7 @@ $(SHL1TARGETN) : \
         $(LINKFLAGSSHL) $(SHL1BASEX)		\
         /DEBUG /PDB:NONE \
         $(SHL1STACK) -out:$(BIN)$/_$(SHL1TARGET).dll	\
-        -map:$(MISC)$/$(@:B).map				\
+        -map:$(MISC)$/_$(@:B).map				\
         $(LB)$/$(SHL1IMPLIB).exp				\
         $(STDOBJ)							\
         $(SHL1OBJS) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ)    \
@@ -677,7 +677,7 @@ $(SHL2TARGETN) : \
         $(LINKFLAGSSHL) $(SHL2BASEX)		\
         /DEBUG /PDB:NONE \
         $(SHL2STACK) -out:$(BIN)$/_$(SHL2TARGET).dll	\
-        -map:$(MISC)$/$(@:B).map				\
+        -map:$(MISC)$/_$(@:B).map				\
         $(LB)$/$(SHL2IMPLIB).exp				\
         $(STDOBJ)							\
         $(SHL2OBJS) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ)    \
@@ -1084,7 +1084,7 @@ $(SHL3TARGETN) : \
         $(LINKFLAGSSHL) $(SHL3BASEX)		\
         /DEBUG /PDB:NONE \
         $(SHL3STACK) -out:$(BIN)$/_$(SHL3TARGET).dll	\
-        -map:$(MISC)$/$(@:B).map				\
+        -map:$(MISC)$/_$(@:B).map				\
         $(LB)$/$(SHL3IMPLIB).exp				\
         $(STDOBJ)							\
         $(SHL3OBJS) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ)    \
@@ -1491,7 +1491,7 @@ $(SHL4TARGETN) : \
         $(LINKFLAGSSHL) $(SHL4BASEX)		\
         /DEBUG /PDB:NONE \
         $(SHL4STACK) -out:$(BIN)$/_$(SHL4TARGET).dll	\
-        -map:$(MISC)$/$(@:B).map				\
+        -map:$(MISC)$/_$(@:B).map				\
         $(LB)$/$(SHL4IMPLIB).exp				\
         $(STDOBJ)							\
         $(SHL4OBJS) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ)    \
@@ -1898,7 +1898,7 @@ $(SHL5TARGETN) : \
         $(LINKFLAGSSHL) $(SHL5BASEX)		\
         /DEBUG /PDB:NONE \
         $(SHL5STACK) -out:$(BIN)$/_$(SHL5TARGET).dll	\
-        -map:$(MISC)$/$(@:B).map				\
+        -map:$(MISC)$/_$(@:B).map				\
         $(LB)$/$(SHL5IMPLIB).exp				\
         $(STDOBJ)							\
         $(SHL5OBJS) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ)    \
@@ -2305,7 +2305,7 @@ $(SHL6TARGETN) : \
         $(LINKFLAGSSHL) $(SHL6BASEX)		\
         /DEBUG /PDB:NONE \
         $(SHL6STACK) -out:$(BIN)$/_$(SHL6TARGET).dll	\
-        -map:$(MISC)$/$(@:B).map				\
+        -map:$(MISC)$/_$(@:B).map				\
         $(LB)$/$(SHL6IMPLIB).exp				\
         $(STDOBJ)							\
         $(SHL6OBJS) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ)    \
@@ -2712,7 +2712,7 @@ $(SHL7TARGETN) : \
         $(LINKFLAGSSHL) $(SHL7BASEX)		\
         /DEBUG /PDB:NONE \
         $(SHL7STACK) -out:$(BIN)$/_$(SHL7TARGET).dll	\
-        -map:$(MISC)$/$(@:B).map				\
+        -map:$(MISC)$/_$(@:B).map				\
         $(LB)$/$(SHL7IMPLIB).exp				\
         $(STDOBJ)							\
         $(SHL7OBJS) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ)    \
@@ -3119,7 +3119,7 @@ $(SHL8TARGETN) : \
         $(LINKFLAGSSHL) $(SHL8BASEX)		\
         /DEBUG /PDB:NONE \
         $(SHL8STACK) -out:$(BIN)$/_$(SHL8TARGET).dll	\
-        -map:$(MISC)$/$(@:B).map				\
+        -map:$(MISC)$/_$(@:B).map				\
         $(LB)$/$(SHL8IMPLIB).exp				\
         $(STDOBJ)							\
         $(SHL8OBJS) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ)    \
@@ -3526,7 +3526,7 @@ $(SHL9TARGETN) : \
         $(LINKFLAGSSHL) $(SHL9BASEX)		\
         /DEBUG /PDB:NONE \
         $(SHL9STACK) -out:$(BIN)$/_$(SHL9TARGET).dll	\
-        -map:$(MISC)$/$(@:B).map				\
+        -map:$(MISC)$/_$(@:B).map				\
         $(LB)$/$(SHL9IMPLIB).exp				\
         $(STDOBJ)							\
         $(SHL9OBJS) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ)    \
@@ -3933,7 +3933,7 @@ $(SHL10TARGETN) : \
         $(LINKFLAGSSHL) $(SHL10BASEX)		\
         /DEBUG /PDB:NONE \
         $(SHL10STACK) -out:$(BIN)$/_$(SHL10TARGET).dll	\
-        -map:$(MISC)$/$(@:B).map				\
+        -map:$(MISC)$/_$(@:B).map				\
         $(LB)$/$(SHL10IMPLIB).exp				\
         $(STDOBJ)							\
         $(SHL10OBJS) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ)    \
