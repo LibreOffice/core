@@ -3,9 +3,9 @@
  *
  *  $RCSfile: corbamaker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 13:15:47 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:19:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
  ************************************************************************/
 
 #include <stdio.h>
+
+#include "sal/main.h"
 
 #ifndef _CODEMAKER_TYPEMANAGER_HXX_
 #include <codemaker/typemanager.hxx>
@@ -123,11 +125,7 @@ sal_Bool produceAllTypes(const OString& typeName,
     return sal_True;
 }
 
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int _cdecl main( int argc, char * argv[] )
-#endif
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     CorbaOptions options;
 
