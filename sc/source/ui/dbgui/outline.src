@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-03-27 08:48:22 $
+ *  last change: $Author: os $ $Date: 2002-04-04 09:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 ImageList RID_OUTLINEBITMAPS
 {
-    ImageBitmap = Bitmap { File = "ou_tline.bmp" ; };
+    ImageBitmap = Bitmap { File = "outline.bmp" ; };
     IdList = { 1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8 ; 9 ; 10 ; };
     IdCount = { 10 ; };
 };
