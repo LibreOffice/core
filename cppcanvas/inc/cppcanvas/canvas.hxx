@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvas.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:56:53 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,19 @@ namespace cppcanvas
     class Canvas
     {
     public:
+        enum
+        {
+            /** Extra pixel used when canvas anti-aliases.
+
+                Enlarge the bounding box of drawing primitives by this
+                amount in both dimensions, and on both sides of the
+                bounds, to account for extra pixel touched outside the
+                actual primitive bounding box, when the canvas
+                performs anti-aliasing.
+             */
+            ANTIALIASING_EXTRA_SIZE=2
+        };
+
         virtual ~Canvas() {}
 
         virtual void                        setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) = 0;
@@ -125,7 +138,7 @@ namespace cppcanvas
 
         virtual ColorSharedPtr              createColor() const = 0;
 
-        virtual CanvasSharedPtr             cloneCanvas() const = 0;
+        virtual CanvasSharedPtr             clone() const = 0;
 
         // this should be considered private. if RTTI gets enabled
         // someday, remove that to a separate interface
