@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-06 08:34:56 $
+ *  last change: $Author: dl $ $Date: 2001-03-26 14:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,10 +863,8 @@ BOOL FuText::KeyInput(const KeyEvent& rKEvt)
 
         pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
 
-        if ( pTextObj )
-        {
-            pTextObj->SetEmptyPresObj(FALSE);
-        }
+//      if ( pTextObj )
+//          pTextObj->SetEmptyPresObj(FALSE);
     }
     else if (aKeyCode == KEY_ESCAPE)
     {
@@ -1101,49 +1099,52 @@ BOOL FuText::RestoreDefaultText()
 {
     BOOL bRestored = FALSE;
 
-    if ( pTextObj && !pTextObj->HasText() && (pTextObj == pView->GetTextEditObject()) )
+    if ( pTextObj && (pTextObj == pView->GetTextEditObject()) )
     {
-        SdPage* pPage = (SdPage*) pTextObj->GetPage();
-
-        if (pPage)
+        if( !pTextObj->HasText() )
         {
-            PresObjKind ePresObjKind = pPage->GetPresObjKind(pTextObj);
+            SdPage* pPage = (SdPage*) pTextObj->GetPage();
 
-            if (ePresObjKind == PRESOBJ_TITLE   ||
-                ePresObjKind == PRESOBJ_OUTLINE ||
-                ePresObjKind == PRESOBJ_NOTES   ||
-                ePresObjKind == PRESOBJ_TEXT)
+            if (pPage)
             {
-                String aString = pPage->GetPresObjText(ePresObjKind);
+                PresObjKind ePresObjKind = pPage->GetPresObjKind(pTextObj);
 
-                if (aString.Len())
+                if (ePresObjKind == PRESOBJ_TITLE   ||
+                    ePresObjKind == PRESOBJ_OUTLINE ||
+                    ePresObjKind == PRESOBJ_NOTES   ||
+                    ePresObjKind == PRESOBJ_TEXT)
                 {
-                    SdOutliner* pInternalOutl = pDoc->GetInternalOutliner();
-                    pInternalOutl->SetMinDepth(0);
+                    String aString = pPage->GetPresObjText(ePresObjKind);
 
-                    BOOL bVertical = FALSE;
-                    OutlinerParaObject* pOldPara = pTextObj->GetOutlinerParaObject();
-                    if( pOldPara )
-                        bVertical = pOldPara->IsVertical();  // is old para object vertical?
+                    if (aString.Len())
+                    {
+                        SdOutliner* pInternalOutl = pDoc->GetInternalOutliner();
+                        pInternalOutl->SetMinDepth(0);
 
-                    pPage->SetObjText( pTextObj, pInternalOutl, ePresObjKind, aString );
+                        BOOL bVertical = FALSE;
+                        OutlinerParaObject* pOldPara = pTextObj->GetOutlinerParaObject();
+                        if( pOldPara )
+                            bVertical = pOldPara->IsVertical();  // is old para object vertical?
 
-                    if( pOldPara )
-                        pTextObj->SetVerticalWriting( bVertical );
+                        pPage->SetObjText( pTextObj, pInternalOutl, ePresObjKind, aString );
 
-                    SdrOutliner* pOutliner = pView->GetTextEditOutliner();
-                    pTextObj->SetTextEditOutliner( NULL );  // to make stylesheet settings work
-                    pTextObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj(ePresObjKind), TRUE );
-                    pTextObj->SetTextEditOutliner( pOutliner );
+                        if( pOldPara )
+                            pTextObj->SetVerticalWriting( bVertical );
 
-                    pInternalOutl->Clear();
-                    OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+                        SdrOutliner* pOutliner = pView->GetTextEditOutliner();
+                        pTextObj->SetTextEditOutliner( NULL );  // to make stylesheet settings work
+                        pTextObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj(ePresObjKind), TRUE );
+                        pTextObj->SetTextEditOutliner( pOutliner );
 
-                    if (pOutliner)
-                        pOutliner->SetText(*pParaObj);
+                        pInternalOutl->Clear();
+                        OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
 
-                    pTextObj->SetEmptyPresObj(TRUE);
-                    bRestored = TRUE;
+                        if (pOutliner)
+                            pOutliner->SetText(*pParaObj);
+
+                        pTextObj->SetEmptyPresObj(TRUE);
+                        bRestored = TRUE;
+                    }
                 }
             }
         }

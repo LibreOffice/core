@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:24:32 $
+ *  last change: $Author: dl $ $Date: 2001-03-26 14:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,36 +455,30 @@ SdrEndTextEditKind SdView::EndTextEdit(BOOL bDontDeleteReally)
 
         if ( pFunc && pFunc->ISA(FuText) )
         {
+            SdrTextObj* pTextObj = ( (FuText*) pFunc)->GetTextObj();
             BOOL bDefaultTextRestored = ( (FuText*) pFunc)->RestoreDefaultText();
-
             eKind = FmFormView::EndTextEdit(bDontDeleteReally);
 
-            SdrTextObj* pTextObj = ( (FuText*) pFunc)->GetTextObj();
+            if( bDefaultTextRestored )
+                pTextObj->SetEmptyPresObj( TRUE );
 
-            if (pViewShell && pTextObj)
+            pTextObj = ( (FuText*) pFunc)->GetTextObj();
+
+            if ( pTextObj && pViewShell )
             {
                 FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
-
                 if (pFuSlideShow)
-                {
                     pFuSlideShow->EndTextEdit(pTextObj);
-                }
             }
 
             if (eKind == SDRENDTEXTEDIT_CHANGED && !bDefaultTextRestored)
-            {
                 ( (FuText*) pFunc)->ObjectChanged();
-            }
         }
         else
-        {
             eKind = FmFormView::EndTextEdit(bDontDeleteReally);
-        }
     }
     else
-    {
         eKind = FmFormView::EndTextEdit(bDontDeleteReally);
-    }
 
     if (bIsTextEdit)
     {
