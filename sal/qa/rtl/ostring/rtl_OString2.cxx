@@ -12,7 +12,7 @@ class valueOf : public CppUnit::TestFixture
         {
             rtl::OString sValue;
             sValue = rtl::OString::valueOf( _nValue );
-            printf("# nFloat := %.9f  sValue := %s\n", _nValue, sValue.getStr());
+            t_print("nFloat := %.9f  sValue := %s\n", _nValue, sValue.getStr());
 
             float nValueATOF = atof( sValue.getStr() );
 
@@ -90,7 +90,7 @@ private:
         {
             rtl::OString sValue;
             sValue = rtl::OString::valueOf( _nValue );
-            printf("# nDouble := %.20f  sValue := %s\n", _nValue, sValue.getStr());
+            t_print("nDouble := %.20f  sValue := %s\n", _nValue, sValue.getStr());
 
             double nValueATOF = atof( sValue.getStr() );
 
@@ -223,7 +223,7 @@ public:
     // insert your test code here.
     void toDouble_selftest()
         {
-            printf("# Start selftest:\n");
+            t_print("Start selftest:\n");
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.01) == false);
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.001) == false);
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.0001) == false);
@@ -240,7 +240,7 @@ public:
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000000000001) == true);
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000000000001) == true);
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000000000000001) == true);
-            printf("# Selftest done.\n");
+            t_print("Selftest done.\n");
         }
 
     void toDouble_test_3()
