@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrope.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
         // style:style-name
         if( rStyleName.getLength() )
             rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_STYLE_NAME,
-                                  rStyleName );
+                                  rExport.EncodeStyleName( rStyleName ) );
     }
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_DROP_CAP,
