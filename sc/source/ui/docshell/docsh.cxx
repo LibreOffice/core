@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 10:52:08 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ SO2_DECL_REF(SvStorageStream)
 #include "scextopt.hxx"
 #include "compiler.hxx"
 #include "cfgids.hxx"
+#include "warnpassword.hxx"
 
 #include "docsh.hxx"
 
@@ -1873,17 +1874,25 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
     {
         WaitObject aWait( GetDialogParent() );
 
+        BOOL bDo = TRUE;
         ScTabViewShell* pViewShell = GetBestViewShell();
         if( pViewShell )
         {
             ScExtDocOptions* pExtDocOpt = aDocument.GetExtDocOptions();
             if( !pExtDocOpt )
-                aDocument.SetExtDocOptions( pExtDocOpt = new ScExtDocOptions );
+                        aDocument.SetExtDocOptions( pExtDocOpt = new ScExtDocOptions );
             pViewShell->GetViewData()->WriteExtOptions( *pExtDocOpt );
+
+            // if the imported document contained an encrypted
+            // password - determineif we should save without it.
+            if(pExtDocOpt && pExtDocOpt->IsWinEncrypted() )
+                        bDo = ScWarnPassword::WarningOnPassword( rMed );
         }
 
-        BOOL bFake97 = ( aFltName.EqualsAscii(pFilterExcel97) || aFltName.EqualsAscii(pFilterEx97Temp) );
-        FltError eError = ScExportExcel5( rMed, &aDocument, bFake97, RTL_TEXTENCODING_MS_1252 );
+        if(bDo)
+        {
+            BOOL bFake97 = ( aFltName.EqualsAscii(pFilterExcel97) || aFltName.EqualsAscii(pFilterEx97Temp) );
+            FltError eError = ScExportExcel5( rMed, &aDocument, bFake97, RTL_TEXTENCODING_MS_1252 );
 
         if (eError && !GetError())
             SetError(eError);
@@ -1892,6 +1901,9 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
             bRet = TRUE;
         else
             bRet = eError == eERR_OK;
+        }
+    else
+        SetError(ERRCODE_ABORT);
     }
     else if (aFltName.EqualsAscii(pFilterAscii))
     {
