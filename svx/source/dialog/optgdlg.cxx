@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:51:41 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,7 +497,8 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     a3DShowFullCB       ( this, ResId( CB_3D_SHOWFULL ) ),
     aWorkingSetBox      ( this, ResId( GB_WORKINGSET ) ),
     aDocViewBtn         ( this, ResId( BTN_DOCVIEW ) ),
-    aOpenWinBtn         ( this, ResId( BTN_OPENWIN ) )
+    aOpenWinBtn         ( this, ResId( BTN_OPENWIN ) ),
+    pAppearanceCfg(new SvtTabAppearanceCfg)
 {
     a3DOpenGLCB.SetClickHdl( LINK( this, OfaViewTabPage, OpenGLHdl ) );
 
@@ -561,6 +562,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
 OfaViewTabPage::~OfaViewTabPage()
 {
+    delete pAppearanceCfg;
 }
 
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
@@ -616,54 +618,53 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
         aMiscOptions.SetSymbolSet( eSet );
     }
 
-    SvtTabAppearanceCfg aAppearanceCfg;
     BOOL bAppearanceChanged = FALSE;
 
 
     // Screen Scaling
-    UINT16 nOldScale = aAppearanceCfg.GetScaleFactor();
+    UINT16 nOldScale = pAppearanceCfg->GetScaleFactor();
     UINT16 nNewScale = (UINT16)aWindowSizeMF.GetValue();
 
     if ( nNewScale != nOldScale )
     {
-        aAppearanceCfg.SetScaleFactor(nNewScale);
+        pAppearanceCfg->SetScaleFactor(nNewScale);
         bAppearanceChanged = TRUE;
     }
 
     // Mouse Snap Mode
-    short eOldSnap = aAppearanceCfg.GetSnapMode();
+    short eOldSnap = pAppearanceCfg->GetSnapMode();
     short eNewSnap = aMousePosLB.GetSelectEntryPos();
     if(eNewSnap > 2)
         eNewSnap = 2;
 
     if ( eNewSnap != eOldSnap )
     {
-        aAppearanceCfg.SetSnapMode(eNewSnap );
+        pAppearanceCfg->SetSnapMode(eNewSnap );
         bAppearanceChanged = TRUE;
     }
 
     // Middle Mouse Button
-    short eOldMiddleMouse = aAppearanceCfg.GetMiddleMouseButton();
+    short eOldMiddleMouse = pAppearanceCfg->GetMiddleMouseButton();
     short eNewMiddleMouse = aMouseMiddleLB.GetSelectEntryPos();
     if(eNewMiddleMouse > 2)
         eNewMiddleMouse = 2;
 
     if ( eNewMiddleMouse != eOldMiddleMouse )
     {
-        aAppearanceCfg.SetMiddleMouseButton( eNewMiddleMouse );
+        pAppearanceCfg->SetMiddleMouseButton( eNewMiddleMouse );
         bAppearanceChanged = TRUE;
     }
 
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
     if ( aFontAntiAliasing.IsChecked() != aFontAntiAliasing.GetSavedValue() )
     {
-        aAppearanceCfg.SetFontAntiAliasing( aFontAntiAliasing.IsChecked() );
+        pAppearanceCfg->SetFontAntiAliasing( aFontAntiAliasing.IsChecked() );
         bAppearanceChanged = TRUE;
     }
 
     if ( aAAPointLimit.GetValue() != aAAPointLimit.GetSavedValue().ToInt32() )
     {
-        aAppearanceCfg.SetFontAntialiasingMinPixelHeight( aAAPointLimit.GetValue() );
+        pAppearanceCfg->SetFontAntialiasingMinPixelHeight( aAAPointLimit.GetValue() );
         bAppearanceChanged = TRUE;
     }
 #endif
@@ -694,7 +695,8 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
     }
     if ( bAppearanceChanged )
     {
-        aAppearanceCfg.SetApplicationDefaults ( GetpApp() );
+        pAppearanceCfg->Commit();
+        pAppearanceCfg->SetApplicationDefaults ( GetpApp() );
     }
     // Workingset
     SvtSaveOptions aSaveOptions;
@@ -771,19 +773,18 @@ void OfaViewTabPage::Reset( const SfxItemSet& rSet )
     aIconSizeLB.SaveValue();
 
     // Screen Scaling
-    SvtTabAppearanceCfg aAppearanceCfg;
-    aWindowSizeMF.SetValue ( aAppearanceCfg.GetScaleFactor() );
+    aWindowSizeMF.SetValue ( pAppearanceCfg->GetScaleFactor() );
     // Mouse Snap
-    aMousePosLB.SelectEntryPos(aAppearanceCfg.GetSnapMode());
+    aMousePosLB.SelectEntryPos(pAppearanceCfg->GetSnapMode());
     aMousePosLB.SaveValue();
 
     // Mouse Snap
-    aMouseMiddleLB.SelectEntryPos(aAppearanceCfg.GetMiddleMouseButton());
+    aMouseMiddleLB.SelectEntryPos(pAppearanceCfg->GetMiddleMouseButton());
     aMouseMiddleLB.SaveValue();
 
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-    aFontAntiAliasing.Check( aAppearanceCfg.IsFontAntiAliasing() );
-    aAAPointLimit.SetValue( aAppearanceCfg.GetFontAntialiasingMinPixelHeight() );
+    aFontAntiAliasing.Check( pAppearanceCfg->IsFontAntiAliasing() );
+    aAAPointLimit.SetValue( pAppearanceCfg->GetFontAntialiasingMinPixelHeight() );
 #endif
 
     // WorkingSet
