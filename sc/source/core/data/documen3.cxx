@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 16:28:14 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,12 @@ void ScDocument::GetScenarioData( USHORT nTab, String& rComment,
         rColor = pTab[nTab]->GetScenarioColor();
         rFlags = pTab[nTab]->GetScenarioFlags();
     }
+}
+
+void ScDocument::GetScenarioFlags( USHORT nTab, USHORT& rFlags ) const
+{
+    if (VALIDTAB(nTab) && pTab[nTab] && pTab[nTab]->IsScenario())
+        rFlags = pTab[nTab]->GetScenarioFlags();
 }
 
 BOOL ScDocument::IsLinked( USHORT nTab ) const
