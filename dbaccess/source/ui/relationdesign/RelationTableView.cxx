@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 09:24:02 $
+ *  last change: $Author: oj $ $Date: 2002-03-26 07:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,23 +218,26 @@ void ORelationTableView::ReSync()
     for(;aConIter != pTabConnDataList->rend();++aConIter)
     {
         ORelationTableConnectionData* pTabConnData = static_cast<ORelationTableConnectionData*>(*aConIter);
-        // gibt es die beiden Tabellen zur Connection ?
-        ::rtl::OUString strTabExistenceTest = pTabConnData->GetSourceWinName();
-        sal_Bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
-        strTabExistenceTest = pTabConnData->GetDestWinName();
-        bInvalid |= ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
+        if ( !arrInvalidTables.empty() )
+        {
+            // gibt es die beiden Tabellen zur Connection ?
+            ::rtl::OUString strTabExistenceTest = pTabConnData->GetSourceWinName();
+            sal_Bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
+            strTabExistenceTest = pTabConnData->GetDestWinName();
+            bInvalid |= ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
 
-        if (bInvalid)
-        {   // nein -> Pech gehabt, die Connection faellt weg
-            pTabConnDataList->erase( ::std::find(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter) );
-            delete pTabConnData;
-            continue;
+            if (bInvalid)
+            {   // nein -> Pech gehabt, die Connection faellt weg
+                pTabConnDataList->erase( ::std::find(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter) );
+                delete pTabConnData;
+                continue;
+            }
         }
 
-        addConnection( new ORelationTableConnection(this, pTabConnData) );
+        addConnection( new ORelationTableConnection(this, pTabConnData), sal_False ); // don't add the data again
     }
 
-    if(!GetTabWinMap()->empty())
+    if ( !GetTabWinMap()->empty() )
         GetTabWinMap()->begin()->second->GrabFocus();
 }
 //------------------------------------------------------------------------------
