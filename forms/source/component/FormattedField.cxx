@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:45:14 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,12 @@
 #ifndef _COMPHELPER_STREAMSECTION_HXX_
 #include <comphelper/streamsection.hxx>
 #endif
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
+#endif
+#ifndef UNOTOOLS_INC_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
+#include <unotools/desktopterminationobserver.hxx>
+#endif
 
 using namespace dbtools;
 using namespace ::com::sun::star::uno;
@@ -178,22 +184,29 @@ namespace frm
 
 /*************************************************************************/
 
-class StandardFormatsSupplier : protected SvNumberFormatsSupplierObj
+class StandardFormatsSupplier : protected SvNumberFormatsSupplierObj, public ::utl::ITerminationListener
 {
 protected:
-    SvNumberFormatter*  m_pMyPrivateFormatter;
+            SvNumberFormatter*                       m_pMyPrivateFormatter;
+    static  WeakReference< XNumberFormatsSupplier >  s_xDefaultFormatsSupplier;
 
 public:
-    StandardFormatsSupplier(const Reference<XMultiServiceFactory>& _rxFactory,LanguageType _eSysLanguage);
+    static Reference< XNumberFormatsSupplier > get( const Reference< XMultiServiceFactory >& _rxORB );
 
-    operator Reference<XNumberFormatsSupplier> ();
     SvNumberFormatsSupplierObj::operator new;
     SvNumberFormatsSupplierObj::operator delete;
 
 protected:
-    ~StandardFormatsSupplier() { if (m_pMyPrivateFormatter) delete m_pMyPrivateFormatter; }
+    StandardFormatsSupplier(const Reference<XMultiServiceFactory>& _rxFactory,LanguageType _eSysLanguage);
+    ~StandardFormatsSupplier();
+
+protected:
+    virtual bool    queryTermination() const;
+    virtual void    notifyTermination();
 };
 
+//------------------------------------------------------------------
+WeakReference< XNumberFormatsSupplier > StandardFormatsSupplier::s_xDefaultFormatsSupplier;
 
 //------------------------------------------------------------------
 StandardFormatsSupplier::StandardFormatsSupplier(const Reference< XMultiServiceFactory > & _rxFactory,LanguageType _eSysLanguage)
@@ -201,16 +214,72 @@ StandardFormatsSupplier::StandardFormatsSupplier(const Reference< XMultiServiceF
     ,m_pMyPrivateFormatter(new SvNumberFormatter(_rxFactory, _eSysLanguage))
 {
     SetNumberFormatter(m_pMyPrivateFormatter);
+
+    // #i29147# - 2004-06-18 - fs@openoffice.org
+    ::utl::DesktopTerminationObserver::registerTerminationListener( this );
 }
 
 //------------------------------------------------------------------
-StandardFormatsSupplier::operator Reference<XNumberFormatsSupplier> ()
+StandardFormatsSupplier::~StandardFormatsSupplier()
 {
-    return static_cast<XNumberFormatsSupplier*>(static_cast<SvNumberFormatsSupplierObj*>(this));
+    ::utl::DesktopTerminationObserver::revokeTerminationListener( this );
+
+    DELETEZ( m_pMyPrivateFormatter );
 }
 
 //------------------------------------------------------------------
-Reference<XNumberFormatsSupplier>  OFormattedModel::s_xDefaultFormatter;
+Reference< XNumberFormatsSupplier > StandardFormatsSupplier::get( const Reference< XMultiServiceFactory >& _rxORB )
+{
+    LanguageType eSysLanguage = LANGUAGE_SYSTEM;
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        Reference< XNumberFormatsSupplier > xSupplier = s_xDefaultFormatsSupplier;
+        if ( xSupplier.is() )
+            return xSupplier;
+
+        // get the Office's UI locale
+        const Locale& rSysLocale = SvtSysLocale().GetLocaleData().getLocale();
+        // translate
+        eSysLanguage = ConvertIsoNamesToLanguage( rSysLocale.Language, rSysLocale.Country );
+    }
+
+    StandardFormatsSupplier* pSupplier = new StandardFormatsSupplier( _rxORB, eSysLanguage );
+    Reference< XNumberFormatsSupplier > xNewlyCreatedSupplier( pSupplier );
+
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        Reference< XNumberFormatsSupplier > xSupplier = s_xDefaultFormatsSupplier;
+        if ( xSupplier.is() )
+            // somebody used the small time frame where the mutex was not locked to create and set
+            // the supplier
+            return xSupplier;
+
+        s_xDefaultFormatsSupplier = xNewlyCreatedSupplier;
+    }
+//
+//  s_xDefaultFormatsSupplier = static_cast< XNumberFormatsSupplier* >( static_cast< SvNumberFormatsSupplierObj* >( pSupplier ) );
+
+    return xNewlyCreatedSupplier;
+}
+
+//------------------------------------------------------------------
+bool StandardFormatsSupplier::queryTermination() const
+{
+    return true;
+}
+
+//------------------------------------------------------------------
+void StandardFormatsSupplier::notifyTermination()
+{
+    Reference< XNumberFormatsSupplier > xKeepAlive = this;
+    // when the application is terminating, release our static reference so that we are cleared/destructed
+    // earlier than upon unloading the library
+    // #i29147# - 2004-06-18 - fs@openoffice.org
+    s_xDefaultFormatsSupplier = WeakReference< XNumberFormatsSupplier >( );
+
+    SetNumberFormatter( NULL );
+    DELETEZ( m_pMyPrivateFormatter );
+}
 
 /*************************************************************************/
 //------------------------------------------------------------------
@@ -687,17 +756,9 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
 }
 
 //------------------------------------------------------------------------------
-Reference<XNumberFormatsSupplier>  OFormattedModel::calcDefaultFormatsSupplier() const
+Reference< XNumberFormatsSupplier > OFormattedModel::calcDefaultFormatsSupplier() const
 {
-    if ( !s_xDefaultFormatter.is() )
-    {
-        // get the Office's UI locale
-        const Locale& rSysLocale = SvtSysLocale().GetLocaleData().getLocale();
-        // translate
-        LanguageType eSysLanguage = ConvertIsoNamesToLanguage( rSysLocale.Language, rSysLocale.Country );
-        s_xDefaultFormatter = *new StandardFormatsSupplier(m_xServiceFactory,eSysLanguage);
-    }
-    return s_xDefaultFormatter;
+    return StandardFormatsSupplier::get( m_xServiceFactory );
 }
 
 //------------------------------------------------------------------------------
