@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetforquery.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-17 09:58:55 $
+ *  last change: $Author: abi $ $Date: 2001-05-17 15:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,12 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
     sal_Int32 hitCount = m_aURLParameter.get_hitCount();
 
     QueryStatement queryStatement( hitCount,queryList,scope );
-    QueryProcessor queryProcessor( rtl::OUString::createFromAscii( "//./e:/index/" ) );
+    QueryProcessor queryProcessor( Databases::getInstallPath()              +
+                                   m_aURLParameter.get_language()           +
+                                   rtl::OUString::createFromAscii( "/" ) +
+                                   m_aURLParameter.get_module()             +
+                                   rtl::OUString::createFromAscii( ".idx/" ) );
+
     QueryResults *queryResults = queryProcessor.processQuery( queryStatement );
 
     sal_Int32 replIdx = rtl::OUString::createFromAscii( "#HLP#" ).getLength();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-17 09:58:55 $
+ *  last change: $Author: abi $ $Date: 2001-05-17 15:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,12 @@
  *
  ************************************************************************/
 
+#ifndef _VOS_DIAGNOSE_HXX_
+#include <vos/diagnose.hxx>
+#endif
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
+#endif
 #ifndef _DB_CXX_H_
 #include <berkeleydb/db_cxx.h>
 #endif
@@ -68,7 +74,27 @@
 #ifndef _DATABASES_HXX_
 #include <provider/databases.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
+#include <com/sun/star/io/XActiveDataSink.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
+#include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDPROCESSOR_HPP_
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENTIDENTIFIER_HPP_
+#include <com/sun/star/ucb/XContentIdentifier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
+#include <com/sun/star/ucb/XContentProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENTIDENTIFIERFACTORY_HPP_
+#include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
+#endif
 
 namespace chelp {
 
@@ -90,6 +116,10 @@ namespace chelp {
 
 }
 
+using namespace com::sun::star::io;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::ucb;
 using namespace chelp;
 
 
@@ -364,6 +394,74 @@ void URLParameter::readBerkeley()
         m_aTag   = converter.getHash();
     }
 }
+
+
+
+
+void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
+                         const Command& command,
+                         sal_Int32 CommandId,
+                         const Reference< XCommandEnvironment >& Environment )
+{
+    rtl::OUString service = rtl::OUString::createFromAscii( "com.sun.star.ucb.UniversalContentBroker" );
+
+    Reference< XContentProvider > provider( rxSMgr->createInstance( service ),UNO_QUERY );
+    Reference< XContentIdentifierFactory > factory( provider,UNO_QUERY );
+
+    rtl::OUString url = rtl::OUString::createFromAscii( "vnd.sun.star.pkg://" );
+    rtl::OUString jar =
+        Databases::getInstallPathAsURL()         +
+        get_language()                           +
+        rtl::OUString::createFromAscii( "/" )    +
+        get_module()                             +
+        rtl::OUString::createFromAscii( ".jar" );
+
+    url+= rtl::Uri::encode( jar,
+                            rtl_UriCharClassUricNoSlash,
+                            rtl_UriEncodeIgnoreEscapes,
+                            RTL_TEXTENCODING_UTF8 );
+
+    url += ( rtl::OUString::createFromAscii( "/" ) + get_path() );
+
+    Reference< XContentIdentifier > xIdentifier = factory->createContentIdentifier( url );
+    Reference< XContent > xContent = provider->queryContent( xIdentifier );
+
+    Reference< XCommandProcessor > processor( xContent,UNO_QUERY );
+
+    if( isRoot() )
+    {
+//      getPicture( HelpDatabases.getCssSheet(),m_xOutputStream);
+    }
+    else if( isPicture() )
+    {
+//      getPicture( m_xParameter.getInputFromJarFile(),m_xOutputStream );
+    }
+    else if( isActive() )
+    {   // This is a Helptext
+//      m_xOutputStream.setBigBuffer( m_xParameter.getByteArrayText() );
+    }
+    else
+    {
+        processor->execute( command,
+                            CommandId,
+                             Environment );
+//          OpenCommandArgument2 aOpenCommand;
+
+//          if ( !( command.Argument >>= aOpenCommand ) )
+//          {
+//              VOS_ENSURE( sal_False,
+//                          "Content::execute - invalid parameter!" );
+//          }
+
+//          Reference< XActiveDataSink > xActiveDataSink( aOpenCommand.Sink,UNO_QUERY );
+//          Reference< XInputStream> ref = xActiveDataSink->getInputStream();
+//          Sequence< sal_Int8 > aD;
+//          sal_Int32 du = ref->readBytes( aD,
+//                                         1000000 );
+//          rtl::OUString bla( reinterpret_cast< const char* >(aD.getConstArray()),du,RTL_TEXTENCODING_UTF8 );
+    }
+}
+
 
 
 void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierException )

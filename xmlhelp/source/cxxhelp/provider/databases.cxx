@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-16 14:53:27 $
+ *  last change: $Author: abi $ $Date: 2001-05-17 15:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _VOS_DIAGNOSE_HXX_
+#include <vos/diagnose.hxx>
+#endif
 #ifndef _DATABASES_HXX_
 #include <provider/databases.hxx>
 #endif
@@ -81,16 +84,24 @@ using namespace com::sun::star::uno;
 
 
 osl::Mutex                  Databases::m_aMutex;
-rtl::OUString               Databases::m_aInstallDirectory;  // Installation directory
-Databases::DatabasesTable   Databases::m_aDatabases;         // Language and module dependent databases
-Databases::LangSetTable     Databases::m_aLangSet;           // Mapping to of lang-country to lang
-Databases::ModInfoTable     Databases::m_aModInfo;           // Module information
+rtl::OUString               Databases::m_aInstallDirectory;              // Installation directory
+rtl::OUString               Databases::m_aInstallDirectoryAsSystemPath;  // Installation directory
+rtl::OUString               Databases::m_aInstallDirectoryAsURL;         // Installation directory
+Databases::DatabasesTable   Databases::m_aDatabases;                     // Language and module dependent databases
+Databases::LangSetTable     Databases::m_aLangSet;                       // Mapping to of lang-country to lang
+Databases::ModInfoTable     Databases::m_aModInfo;                       // Module information
 Databases::KeywordInfoTable Databases::m_aKeywordInfo;
 
-void Databases::setInstallPath( const rtl::OUString& aInstallDirectory )
+
+void Databases::setInstallPath( const rtl::OUString& aInstDir )
 {
     osl::MutexGuard aGuard( m_aMutex );
-    m_aInstallDirectory = aInstallDirectory;
+
+    if( osl::FileBase::E_None != osl::FileBase::normalizePath( aInstDir,m_aInstallDirectory ) )
+        ;
+
+    if( m_aInstallDirectory.lastIndexOf( sal_Unicode( "/" ) ) != m_aInstallDirectory.getLength() - 1 )
+        m_aInstallDirectory += rtl::OUString::createFromAscii( "/" );
 }
 
 
@@ -98,17 +109,48 @@ rtl::OUString Databases::getInstallPath()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    return rtl::OUString::createFromAscii( "//./e:/src630c/help/" );
-
-
-    // return m_aInstallDirectory;
+    return m_aInstallDirectory;
 }
+
+
+rtl::OUString Databases::getInstallPathAsSystemPath()
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    if( ! m_aInstallDirectoryAsSystemPath.getLength() )
+    {
+        bool bla =
+            osl::FileBase::E_None ==
+            osl::FileBase::getSystemPathFromNormalizedPath( m_aInstallDirectory,m_aInstallDirectoryAsSystemPath );
+        VOS_ENSURE( bla,
+                    "HelpProvider, no installpath" );
+    }
+
+    return m_aInstallDirectoryAsSystemPath;
+}
+
+
+rtl::OUString Databases::getInstallPathAsURL()
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    if( ! m_aInstallDirectoryAsURL.getLength() )
+    {
+        bool bla =
+            osl::FileBase::E_None ==
+            osl::FileBase::getFileURLFromNormalizedPath( m_aInstallDirectory,m_aInstallDirectoryAsURL );
+        VOS_ENSURE( bla,
+                    "HelpProvider, no installpath" );
+    }
+
+    return m_aInstallDirectoryAsURL;
+}
+
 
 
 rtl::OUString Databases::getURLMode()
 {
     return rtl::OUString::createFromAscii( "with-jars" );
-    // return rtl::OUString::createFromAscii( "with-files" );
 }
 
 
@@ -279,7 +321,7 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
         Db* table = it->second = new Db( 0,0 );
 
         rtl::OUString fileNameOU =
-            getInstallPath() +
+            getInstallPathAsSystemPath() +
             key +
             rtl::OUString::createFromAscii( ".db" );
 
@@ -472,7 +514,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
         std::hash_map< rtl::OUString,rtl::OUString,ha,eq > internalHash;
 
         rtl::OUString fileNameOU =
-            getInstallPath() +
+            getInstallPathAsSystemPath() +
             key +
             rtl::OUString::createFromAscii( ".key" );
 

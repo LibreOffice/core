@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-17 09:58:55 $
+ *  last change: $Author: abi $ $Date: 2001-05-17 15:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDINFO_HPP_
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
+#include <com/sun/star/io/XActiveDataSink.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XPERSISTENTPROPERTYSET_HPP_
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
 #endif
@@ -121,7 +124,7 @@
 #include <provider/resultsetforquery.hxx>
 #endif
 
-
+using namespace com::sun::star::io;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -407,6 +410,12 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                         "Content::execute - invalid parameter!" );
             throw CommandAbortedException();
         }
+
+
+        Reference< XActiveDataSink > xActiveDataSink( aOpenCommand.Sink,UNO_QUERY );
+        if( xActiveDataSink.is() )
+            m_aURLParameter.open( m_xSMgr,aCommand,CommandId,Environment );
+
 
         if( m_aURLParameter.isRoot() )
         {

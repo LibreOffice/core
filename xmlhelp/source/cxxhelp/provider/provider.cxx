@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-16 14:53:27 $
+ *  last change: $Author: abi $ $Date: 2001-05-17 15:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,28 @@
 #ifndef _CONTENT_HXX
 #include <provider/content.hxx>
 #endif
+#ifndef _DATABASES_HXX_
+#include <provider/databases.hxx>
+#endif
+#ifndef COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
+#include <com/sun/star/frame/XConfigManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
+#include <com/sun/star/beans/PropertyState.hpp>
+#endif
 
+using namespace com::sun::star::frame;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
@@ -187,8 +208,53 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent( const Reference< X
 
 void ContentProvider::init()
 {
-    //t
-    // Get installation path, for example
+    rtl::OUString sProviderService =
+        rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
+
+    // New access to configuration
+    Any aAny;
+    aAny <<= rtl::OUString::createFromAscii( "plugin" );
+    PropertyValue aProp( rtl::OUString::createFromAscii( "servertype" ),
+                         -1,
+                         aAny,
+                         PropertyState_DIRECT_VALUE );
+
+    Sequence< Any > seq(1);
+    seq[0] <<= aProp;
+
+    Reference< XMultiServiceFactory >
+        sProvider(
+            m_xSMgr->createInstanceWithArguments( sProviderService,seq ),
+            UNO_QUERY );
+
+    rtl::OUString sReaderService =
+        rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
+
+    seq[0] <<= rtl::OUString::createFromAscii( "org.openoffice.Office.Common" );
+
+    Reference< XHierarchicalNameAccess > xHierAccess(
+        sProvider->createInstanceWithArguments( sReaderService,seq ),UNO_QUERY );
+
+    aAny =
+        xHierAccess->getByHierarchicalName( rtl::OUString::createFromAscii("Path/Current/Help") );
+
+    rtl::OUString instPath;
+    if( ! ( aAny >>= instPath ) )
+        ;
+    else
+        instPath = rtl::OUString::createFromAscii( "$(instpath)/help" );
+
+    Reference< XConfigManager > xCfgMgr(
+        m_xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" ) ),
+        UNO_QUERY );
+
+    VOS_ENSURE( xCfgMgr.is(),
+                "FileProvider::FileProvider - No Config Manager!" );
+
+    if( xCfgMgr.is() )
+        instPath = xCfgMgr->substituteVariables( instPath );
+
+    Databases::setInstallPath( instPath );
 
     isInitialized = true;
 }
