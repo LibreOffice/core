@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:12:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ struct ImplRulerHitTest
     BOOL        bSizeBar;
     BOOL        bExpandTest;
     ImplRulerHitTest() :
-        bExpandTest(FALSE) {}
+        bExpandTest( FALSE ) {}
 };
 
 // =======================================================================
@@ -1673,6 +1673,13 @@ BOOL Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
         nY = rPos.X();
     }
     nHitBottom = mnVirHeight+(RULER_OFF*2);
+
+    // --> FME 2004-08-05 #i32608#
+    pHitTest->nAryPos = 0;
+    pHitTest->mnDragSize = 0;
+    pHitTest->bSize = FALSE;
+    pHitTest->bSizeBar = FALSE;
+    // <--
 
     // Damit ueberstehende Tabs und Einzuege mit beruecksichtigt werden
     long nXExtraOff;
