@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:16:47 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:01:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@ class ScPosWnd : public ComboBox, public SfxListener        // Positionsanzeige
 private:
     String          aPosStr;
     Accelerator*    pAccel;
+    ULONG           nTipVisible;
     BOOL            bFormulaMode;
     BOOL            bTopHadFocus;
 
@@ -174,6 +175,7 @@ public:
 
 protected:
     virtual void    Select();
+    virtual void    Modify();
 
     virtual long    Notify( NotifyEvent& rNEvt );
 
@@ -184,6 +186,7 @@ private:
     void            FillRangeNames();
     void            FillFunctions();
     void            DoEnter();
+    void            HideTip();
 
     void            ReleaseFocus_Impl();
 };
