@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-19 18:49:33 $
+ *  last change: $Author: nn $ $Date: 2001-04-24 17:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <svx/cntritem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/crsditem.hxx>
+#include <svx/emphitem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/forbiddenruleitem.hxx>
@@ -232,6 +233,7 @@ void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction*
     FontStrikeout eStrike;
     BOOL bOutline;
     BOOL bShadow;
+    FontEmphasisMark eEmphasis;
     Color aColor;
 
     USHORT nFontId, nHeightId, nWeightId, nPostureId;
@@ -293,6 +295,10 @@ void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction*
             pItem = &rMySet.Get( ATTR_FONT_SHADOWED );
         bShadow = ((const SvxShadowedItem*)pItem)->GetValue();
 
+        if ( pCondSet->GetItemState( ATTR_FONT_EMPHASISMARK, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_FONT_EMPHASISMARK );
+        eEmphasis = ((const SvxEmphasisMarkItem*)pItem)->GetEmphasisMark();
+
         if ( pCondSet->GetItemState( ATTR_FONT_COLOR, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT_COLOR );
         aColor = ((const SvxColorItem*)pItem)->GetValue();
@@ -314,6 +320,8 @@ void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction*
                         rMySet.Get( ATTR_FONT_CONTOUR )).GetValue();
         bShadow = ((const SvxShadowedItem&)
                         rMySet.Get( ATTR_FONT_SHADOWED )).GetValue();
+        eEmphasis = ((const SvxEmphasisMarkItem&)
+                        rMySet.Get( ATTR_FONT_EMPHASISMARK )).GetEmphasisMark();
         aColor = ((const SvxColorItem&)
                         rMySet.Get( ATTR_FONT_COLOR )).GetValue();
     }
@@ -375,6 +383,8 @@ void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction*
         rFont.SetOutline( bOutline );
     if (rFont.IsShadow() != bShadow)
         rFont.SetShadow( bShadow );
+    if (rFont.GetEmphasisMark() != eEmphasis)
+        rFont.SetEmphasisMark( eEmphasis );
     if (rFont.GetColor() != aColor)
         rFont.SetColor( aColor );
     if (!rFont.IsTransparent())
@@ -399,6 +409,7 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     BOOL            bOutline;
     BOOL            bShadow;
     BOOL            bForbidden;
+    FontEmphasisMark eEmphasis;
     LanguageType    eLang, eCjkLang, eCtlLang;
 
     //! additional parameter to control if language is needed?
@@ -471,6 +482,10 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
             pItem = &rMySet.Get( ATTR_FORBIDDEN_RULES );
         bForbidden = ((const SvxForbiddenRuleItem*)pItem)->GetValue();
 
+        if ( pCondSet->GetItemState( ATTR_FONT_EMPHASISMARK, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_FONT_EMPHASISMARK );
+        eEmphasis = ((const SvxEmphasisMarkItem*)pItem)->GetEmphasisMark();
+
         if ( pCondSet->GetItemState( ATTR_FONT_LANGUAGE, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT_LANGUAGE );
         eLang = ((const SvxLanguageItem*)pItem)->GetLanguage();
@@ -515,6 +530,8 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
                         rMySet.Get( ATTR_FONT_SHADOWED )).GetValue();
         bForbidden = ((const SvxForbiddenRuleItem&)
                         rMySet.Get( ATTR_FORBIDDEN_RULES )).GetValue();
+        eEmphasis = ((const SvxEmphasisMarkItem&)
+                        rMySet.Get( ATTR_FONT_EMPHASISMARK )).GetEmphasisMark();
         eLang = ((const SvxLanguageItem&)
                         rMySet.Get( ATTR_FONT_LANGUAGE )).GetLanguage();
         eCjkLang = ((const SvxLanguageItem&)
@@ -549,6 +566,7 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     pEditSet->Put( SvxContourItem   ( bOutline,     EE_CHAR_OUTLINE ) );
     pEditSet->Put( SvxShadowedItem  ( bShadow,      EE_CHAR_SHADOW ) );
     pEditSet->Put( SfxBoolItem      ( EE_PARA_FORBIDDENRULES, bForbidden ) );
+    pEditSet->Put( SvxEmphasisMarkItem( eEmphasis,  EE_CHAR_EMPHASISMARK ) );
     pEditSet->Put( SvxLanguageItem  ( eLang,        EE_CHAR_LANGUAGE ) );
     pEditSet->Put( SvxLanguageItem  ( eCjkLang,     EE_CHAR_LANGUAGE_CJK ) );
     pEditSet->Put( SvxLanguageItem  ( eCtlLang,     EE_CHAR_LANGUAGE_CTL ) );
@@ -612,6 +630,9 @@ void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
     if (pEditSet->GetItemState(EE_CHAR_SHADOW,TRUE,&pItem) == SFX_ITEM_SET)
         rMySet.Put( SvxShadowedItem( ((const SvxShadowedItem*)pItem)->GetValue(),
                         ATTR_FONT_SHADOWED) );
+    if (pEditSet->GetItemState(EE_CHAR_EMPHASISMARK,TRUE,&pItem) == SFX_ITEM_SET)
+        rMySet.Put( SvxEmphasisMarkItem( ((const SvxEmphasisMarkItem*)pItem)->GetEmphasisMark(),
+                        ATTR_FONT_EMPHASISMARK) );
 
     if (pEditSet->GetItemState(EE_PARA_JUST,TRUE,&pItem) == SFX_ITEM_SET)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-30 20:26:07 $
+ *  last change: $Author: nn $ $Date: 2001-04-24 17:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ static SfxItemInfo __READONLY_DATA  aItemInfos[] =
     { SID_ATTR_CHAR_CTL_WEIGHT,     SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_WEIGHT     from 614
     { SID_ATTR_CHAR_CTL_POSTURE,    SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_POSTURE    from 614
     { SID_ATTR_CHAR_CTL_LANGUAGE,   SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_LANGUAGE   from 614
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_FONT_EMPHASISMARK   from 614
+    { SID_ATTR_CHAR_EMPHASISMARK,   SFX_ITEM_POOLABLE },    // ATTR_FONT_EMPHASISMARK   from 614
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_FONT_TWOLINES       from 614
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_SCRIPTSPACE         from 614d
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_HANGPUNCTUATION     from 614d

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 14:31:24 $
+ *  last change: $Author: nn $ $Date: 2001-04-24 17:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <svx/algitem.hxx>
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
+#include <svx/emphitem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/forbiddencharacterstable.hxx>
 #include <svx/rotmodit.hxx>
@@ -1056,6 +1057,14 @@ USHORT lcl_GetAttribHeight( const ScPatternAttr& rPattern, USHORT nFontHeightId 
     const SvxMarginItem* pMargin = (const SvxMarginItem*) &rPattern.GetItem(ATTR_MARGIN);
     nHeight += nHeight / 5;
     //  gibt bei 10pt 240
+
+    if ( ((const SvxEmphasisMarkItem&)rPattern.
+            GetItem(ATTR_FONT_EMPHASISMARK)).GetEmphasisMark() != EMPHASISMARK_NONE )
+    {
+        //  add height for emphasis marks
+        //! font metrics should be used instead
+        nHeight += nHeight / 4;
+    }
 
     if ( nHeight + 240 > ScGlobal::nDefFontHeight )
     {
