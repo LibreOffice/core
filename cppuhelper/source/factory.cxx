@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-17 12:06:19 $
+ *  last change: $Author: jbu $ $Date: 2001-05-18 15:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,7 +842,8 @@ Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,
     const OUString & rImplementationName,
     ComponentInstantiation pCreateFunction,
-    const Sequence< OUString > & rServiceNames )
+    const Sequence< OUString > & rServiceNames,
+    rtl_ModuleCount *pModCount )
     SAL_THROW( () )
 {
     return new OFactoryComponentHelper(
@@ -864,7 +865,8 @@ Reference<XSingleServiceFactory > SAL_CALL createOneInstanceFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,
     const OUString & rImplementationName,
     ComponentInstantiation pCreateFunction,
-    const Sequence< OUString > & rServiceNames )
+    const Sequence< OUString > & rServiceNames,
+    rtl_ModuleCount *pModCount )
     SAL_THROW( () )
 {
     return new OFactoryComponentHelper(
@@ -897,7 +899,8 @@ Reference<XSingleServiceFactory > SAL_CALL createOneInstanceRegistryFactory(
 Reference< lang::XSingleComponentFactory > SAL_CALL createSingleComponentFactory(
     ComponentFactoryFunc fptr,
     OUString const & rImplementationName,
-    Sequence< OUString > const & rServiceNames )
+    Sequence< OUString > const & rServiceNames,
+    rtl_ModuleCount * pModCount)
     SAL_THROW( () )
 {
     return new OFactoryComponentHelper(
