@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:18:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1175,6 +1175,10 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_SHAPE_TRANSFORMATION_IN_HORI_L2R (FN_PARAM2+23)
 // com::sun::star::text::Shape::PositionLayoutDir property
 #define FN_SHAPE_POSITION_LAYOUT_DIR    (FN_PARAM2+24)
+// <--
+// --> OD 2004-10-28 #i36248#
+#define FN_SHAPE_STARTPOSITION_IN_HORI_L2R (FN_PARAM2+25)
+#define FN_SHAPE_ENDPOSITION_IN_HORI_L2R   (FN_PARAM2+26)
 // <--
 /*--------------------------------------------------------------------
     Bereich: Druckoptionen
