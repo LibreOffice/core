@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:04:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 10:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,6 +623,7 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
             pFmt->SetAbsLSpace( lNumIndent + SwNumRule::GetNumIndent( n ) );
             pFmt->SetFirstLineOffset( lNumFirstLineOffset );
             pFmt->SetSuffix( aDotStr );
+            pFmt->SetBulletChar( GetBulletChar(n));
             SwNumRule::aBaseFmts[ NUM_RULE ][ n ] = pFmt;
         }
 
@@ -636,6 +637,7 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
             pFmt->SetIncludeUpperLevels( MAXLEVEL );
 //            pFmt->eType = ARABIC;
             pFmt->SetStart( 1 );
+            pFmt->SetBulletChar( GetBulletChar(n));
             SwNumRule::aBaseFmts[ OUTLINE_RULE ][ n ] = pFmt;
         }
     }
@@ -791,6 +793,7 @@ void SwNumRule::Set( USHORT i, const SwNumFmt& rNumFmt )
         delete aFmts[ i ];
         aFmts[ i ] = new SwNumFmt( rNumFmt );
         bInvalidRuleFlag = TRUE;
+
     }
 }
 
@@ -1038,4 +1041,16 @@ void SwNumRule::Indent(short nAmount, int nLevel, int nReferenceLevel,
 
     if (bGotInvalid)
         SetInvalidRule(bGotInvalid);
+}
+
+sal_Unicode GetBulletChar(BYTE nLevel)
+{
+    static sal_Unicode nLevelChars[MAXLEVEL] =
+        { 0x25cf, 0x25cb, 0x25a0, 0x25cf, 0x25cb,
+          0x25a0, 0x25cf, 0x25cb, 0x25a0, 0x25cf };
+
+    if (nLevel > MAXLEVEL)
+        nLevel = MAXLEVEL;
+
+    return nLevelChars[nLevel];
 }
