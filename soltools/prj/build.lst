@@ -6,4 +6,4 @@ so	soltools\checkdll						nmake	-	u	so_chkdl NULL
 so	soltools\cpp							nmake	-	all	so_cpp__ NULL
 so	soltools\javadep						nmake	-	all	so_jvdep NULL
 so	soltools\support						nmake	-	all	so_supp NULL
-so	soltools\giparser						nmake	-	all	so_gip NULL
+so	soltools\giparser						nmake	-	all	so_gip so_supp NULL
