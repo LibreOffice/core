@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgmacros.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 11:17:00 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,26 +60,27 @@
  ************************************************************************/
 
 #include <windows.h>
+#include <stdio.h>
 
 #ifndef DBGMACROS_HXX_INCLUDED
 #include "internal/dbgmacros.hxx"
 #endif
 
-void DbgAssert(bool condition, const char* message)
+void DbgAssert(bool /*condition*/, const char* /*message*/)
 {
-    /*
-    if (!condition)
-    {
-        char msg[1024];
 
-        wsnprintf(msg, 1024, "Assertion in file %s at line %d\n%s", __FILE__, __LINE__, message);
+    //if (!condition)
+    //{
+    //  char msg[1024];
+    //
+    //  sprintf(msg, "Assertion in file %s at line %d\n%s", __FILE__, __LINE__, message);
 
-        int nRet = MessageBox(
-            0,
-            msg,
-            "Assertion violation",
-            MB_ICONEXCLAMATION | MB_ABORTRETRYIGNORE);
-    }
-    */
+    //  int nRet = MessageBoxA(
+    //      0,
+    //      msg,
+    //      "Assertion violation",
+    //      MB_ICONEXCLAMATION | MB_ABORTRETRYIGNORE);
+    //}
+
 }
 
