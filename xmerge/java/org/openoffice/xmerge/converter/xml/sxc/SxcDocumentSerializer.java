@@ -615,7 +615,6 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             //
             Debug.log(Debug.INFO,
             "TextNode, DateNode, TimeNode or BooleanNode\n");
-            fmt.clearFormatting();
 
             if (node.hasChildNodes()) {
                 NodeList childList = node.getChildNodes();
@@ -736,7 +735,6 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         int col = colID;
         int row = rowID;
 
-        Debug.log(Debug.TRACE, "SxcDocumentSerializer:addCell() " + cellValue);
         for (int i = 0; i < rowsRepeated; i++) {
 
             // Log the columns when there are rowsRepeated.
