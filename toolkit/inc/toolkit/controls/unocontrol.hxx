@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:08 $
+ *  last change: $Author: mt $ $Date: 2001-01-25 13:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,9 @@ protected:
 public:
                 UnoControl();
                 ~UnoControl();
+
+                UnoControlComponentInfos&           GetComponentInfos() { return maComponentInfos; }
+
 
     virtual ::rtl::OUString GetComponentServiceName();
 
