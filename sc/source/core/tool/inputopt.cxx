@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputopt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 10:48:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,8 @@ void ScInputOptions::SetDefaults()
     bRangeFinder    = TRUE;
     bExpandRefs     = FALSE;
     bMarkHeader     = TRUE;
-    bUseTabCol      = FALSE;        //! ja wie denn nun?
-    bTextWysiwyg    = TRUE;
+    bUseTabCol      = FALSE;
+    bTextWysiwyg    = FALSE;
     bReplCellsWarn  = TRUE;
 }
 
