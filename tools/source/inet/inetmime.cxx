@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetmime.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:07 $
+ *  last change: $Author: sb $ $Date: 2000-12-20 17:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1146,7 +1146,7 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
 
         sal_Char const * pAttributeBegin = skipLinearWhiteSpaceComment(p,
                                                                        pEnd);
-        sal_Char const * p = pAttributeBegin;
+        p = pAttributeBegin;
         bool bDowncaseAttribute = false;
         while (p != pEnd && isTokenChar(*p) && *p != '*')
         {
@@ -1348,7 +1348,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
 
         sal_Unicode const * pAttributeBegin
             = skipLinearWhiteSpaceComment(p, pEnd);
-        sal_Unicode const * p = pAttributeBegin;
+        p = pAttributeBegin;
         bool bDowncaseAttribute = false;
         while (p != pEnd && isTokenChar(*p) && *p != '*')
         {
