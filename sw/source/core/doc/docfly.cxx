@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:49:48 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,7 +706,7 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                     pOldAnch = pContact->GetAnchor();
                 }
                 pOldAnch->Calc();
-                pObj->ImpSetAnchorPos( pOldAnch->GetAnchorPos() );
+                pObj->ImpSetAnchorPos( pOldAnch->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
             }
 
             if ( bSameOnly )
@@ -860,19 +860,26 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
 
             if( bChanges && pNewAnch )
             {
+                // SetAttr() removes the ParaPortion of pNewAnch, which is required by
+                // GetFrmAnchorPos. Therefore aTmpPoint has to be calculated before
+                // the call of SetAttr().
+                const Point aTmpPoint( pNewAnch->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
                 SetAttr( aNewAnch, *pContact->GetFmt() );
                 if( bPosCorr )
                 {
-                    const Point aTmpRel( aPt - pNewAnch->GetAnchorPos() );
+                    const Point aTmpRel( aPt - pObj->GetAnchorPos() );
 
                     // #102344# Use SetRelativePos here so that eventually
                     // connectors cobnnected to this object get the necessary refresh.
                     pObj->SetRelativePos( aTmpRel );
                 }
+
 #ifndef PRODUCT
-                const Point aIstA( pObj->GetAnchorPos() );
-                ASSERT( aIstA == pNewAnch->GetAnchorPos(),
-                                "ChgAnchor: Wrong Anchor-Pos." );
+                {
+                    const Point aIstA( pObj->GetAnchorPos() );
+                    ASSERT( pOldAnch == pNewAnch ||
+                            aIstA == aTmpPoint, "ChgAnchor: Wrong Anchor-Pos." );
+                }
 #endif
             }
 
