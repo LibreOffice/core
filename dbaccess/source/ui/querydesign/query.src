@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:32:41 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,8 +232,8 @@ String STR_QUERY_UNDO_MOVETABWIN
 };
 String STR_QUERY_UNDO_INSERTCONNECTION
 {
-    Text = "Verbindung einfügen" ;
-    Text [ ENGLISH ] = "insert connection" ;
+    Text = "Verknüpfung einfügen" ;
+    Text [ ENGLISH ] = "Insert Join" ;
     Text [ english_us ] = "Insert Join" ;
     Text [ portuguese_brazilian ] = "Inserir união" ;
     Text [ swedish ] = "Infoga sammanslagning" ;
@@ -268,8 +268,8 @@ String STR_QUERY_UNDO_INSERTCONNECTION
 
 String STR_QUERY_UNDO_REMOVECONNECTION
 {
-    Text = "Verbindung löschen" ;
-    Text [ ENGLISH ] = "delete connection" ;
+    Text = "Verknüpfung löschen" ;
+    Text [ ENGLISH ] = "Delete Join" ;
     Text [ english_us ] = "Delete Join" ;
     Text [ portuguese_brazilian ] = "Excluir união" ;
     Text [ swedish ] = "Radera sammanslagning" ;
