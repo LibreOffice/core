@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-01 08:40:10 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,24 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Size = MAP_APPFONT ( GB_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Systemeinstellungen in Kontrastdarstellung verwenden" ;
         Text [ English ] = "Use system settings in high contrast appearance" ;
-        Text[ english_us ] = "Use system settings in high contrast appearance";
+        Text[ english_us ] = "Use settings for high contrast appearance";
+        Text[ portuguese ] = "Settings for high contrast appearance";
+        Text[ russian ] = "Settings for high contrast appearance";
+        Text[ greek ] = "Settings for high contrast appearance";
+        Text[ dutch ] = "Settings for high contrast appearance";
+        Text[ french ] = "Utiliser les param�tres pour l'affichage du contraste �lev�";
+        Text[ spanish ] = "Utilizar configuraci�n de la visualizaci�n del contraste";
+        Text[ finnish ] = "Settings for high contrast appearance";
+        Text[ italian ] = "Impostazioni per immagine schermo a contrasto elevato";
+        Text[ danish ] = "Settings for high contrast appearance";
+        Text[ swedish ] = "Anv�nd inst�llningar f�r h�gkontrastvisning";
+        Text[ polish ] = "Settings for high contrast appearance";
+        Text[ japanese ] = "ハイコントラスト設定の使用";
+        Text[ korean ] = "고대비 디스플레이 설정 사용";
+        Text[ chinese_simplified ] = "使用高对比度的设定";
+        Text[ chinese_traditional ] = "使用高對比度的設定";
+        Text[ turkish ] = "Settings for high contrast appearance";
+        Text[ arabic ] = "Settings for high contrast appearance";
     };
     CheckBox CB_DRAWINGS
     {
@@ -127,7 +144,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ swedish ] = "F�r ~inramningar och skugga f�r sidor, stycken, tabeller och ramar";
         Text[ polish ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
         Text[ portuguese_brazilian ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
-        Text[ japanese ] = "ページ、段落、表および枠に外枠や影を使用";
+        Text[ japanese ] = "ページ、段落、表、および枠の、外枠と影に使用";
         Text[ korean ] = "페이지의 테두리와 음영, 단락과 표 및 프레임 사용";
         Text[ chinese_simplified ] = "用于页面的、段落的、表格的和文本框的边框及阴影(~B)";
         Text[ chinese_traditional ] = "用於頁面的、段落的、表格的和文字方塊的邊框及陰影";
@@ -184,14 +201,14 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ swedish ] = "�vriga alternativ";
         Text[ polish ] = "Miscellaneous options";
         Text[ portuguese_brazilian ] = "Miscellaneous options";
-        Text[ japanese ] = "詳細オプション";
+        Text[ japanese ] = "その他のオプション";
         Text[ korean ] = "기타 옵션";
         Text[ chinese_simplified ] = "其他选项";
         Text[ chinese_traditional ] = "其他選項";
         Text[ turkish ] = "Miscellaneous options";
         Text[ arabic ] = "Miscellaneous options";
-        Text[ catalan ] = "Miscellaneous options";
-        Text[ thai ] = "Miscellaneous options";
+        Text[ catalan ] = "Altres opcions";
+        Text[ thai ] = "ตัวเลือกเบ็ดเตล็ด";
     };
     CheckBox CB_TIPHELP
     {
@@ -260,8 +277,8 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ chinese_traditional ] = "秒";
         Text[ turkish ] = "seconds";
         Text[ arabic ] = "seconds";
-        Text[ catalan ] = "seconds";
-        Text[ thai ] = "seconds";
+        Text[ catalan ] = "segons";
+        Text[ thai ] = "ชช:นน:วว";
     };
     CheckBox CB_ANIMATED_GRAPHICS
     {
@@ -283,7 +300,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ swedish ] = "Till�t animerad ~grafik";
         Text[ polish ] = "Allow animated ~graphics";
         Text[ portuguese_brazilian ] = "Allow animated ~graphics";
-        Text[ japanese ] = "アニメーション画像を入れる";
+        Text[ japanese ] = "アニメーション画像を許可する";
         Text[ korean ] = "애니메이션된 그래픽 허용";
         Text[ chinese_simplified ] = "允许动画图形";
         Text[ chinese_traditional ] = "允許動畫圖形";
@@ -312,7 +329,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ swedish ] = "Till�t animerad te~xt";
         Text[ polish ] = "Allow animated ~text";
         Text[ portuguese_brazilian ] = "Allow animated ~text";
-        Text[ japanese ] = "アニメーションテキストを入れる";
+        Text[ japanese ] = "アニメーションテキストを許可する";
         Text[ korean ] = "애니메이션된 텍스트 허용";
         Text[ chinese_simplified ] = "允许动画文字(~T)";
         Text[ chinese_traditional ] = "允許動畫文字";
@@ -341,7 +358,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ swedish ] = "Automatisk tecken~f�rg f�r bildsk�rmsvisning";
         Text[ polish ] = "Always use automatic font ~color for screen display";
         Text[ portuguese_brazilian ] = "Always use automatic font ~color for screen display";
-        Text[ japanese ] = "常に自動画面表示用フォントの色を使用";
+        Text[ japanese ] = "画面表示用フォント色を自動的に使用";
         Text[ korean ] = "화면 표시용으로 항상 자동 글꼴 색상 사용 ";
         Text[ chinese_simplified ] = "屏幕自动显示字体颜色";
         Text[ chinese_traditional ] = "熒幕自動顯示字型顏色";
@@ -370,7 +387,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ swedish ] = "Anv�nd ~systemteckensnitt f�r anv�ndargr�nssnittet";
         Text[ polish ] = "Use system ~font for user interface";
         Text[ portuguese_brazilian ] = "Use system ~font for user interface";
-        Text[ japanese ] = "ユーザーインターフェースのシステムフォントを使用";
+        Text[ japanese ] = "ユーザーインターフェースにシステムフォントを使用";
         Text[ korean ] = "시스템 글꼴을 사용자 인터페이스용으로 사용";
         Text[ chinese_simplified ] = "采用使用者界面的系统字体";
         Text[ chinese_traditional ] = "採用使用者介面的系統字型";
