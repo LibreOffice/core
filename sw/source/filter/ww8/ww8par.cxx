@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:50:38 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,77 +739,6 @@ bool SwWW8FltRefStack::IsFtnEdnBkmField(const SwFmtFld& rFmtFld, USHORT& rBkmNo)
                 ((SwGetRefField*)pFld)->GetSetRefName() ))));
 }
 
-#ifdef DEBUG
-String lcl_GetSelTxt(const SwPaM &rPaM);
-#endif
-
-Position::Position(const SwPaM &rPaM)
-    : maMkNode(rPaM.GetMark()->nNode),
-    maPtNode(rPaM.GetPoint()->nNode),
-    mnMkCntnt(rPaM.GetMark()->nContent.GetIndex()),
-    mnPtCntnt(rPaM.GetPoint()->nContent.GetIndex())
-{
-}
-
-Position::Position(const Position &rEntry)
-    : maMkNode(rEntry.maMkNode), maPtNode(rEntry.maPtNode),
-    mnMkCntnt(rEntry.mnMkCntnt), mnPtCntnt(rEntry.mnPtCntnt)
-{
-}
-
-class DeletePaM
-{
-private:
-    SwDoc &mrDoc;
-public:
-    explicit DeletePaM(SwDoc &rDoc) : mrDoc(rDoc) {}
-    void operator()(const Position &rPaM);
-private:
-    //No assignment
-    DeletePaM& operator=(const DeletePaM&);
-};
-
-SwWW8FltRefStack::~SwWW8FltRefStack()
-{
-    std::for_each(maScheduledForDelete.begin(), maScheduledForDelete.end(),
-        DeletePaM(*pDoc));
-}
-
-void DeletePaM::operator()(const Position &rPaM)
-{
-    SwPaM aPaM(rPaM.maMkNode, rPaM.mnMkCntnt, rPaM.maPtNode, rPaM.mnPtCntnt);
-#ifdef DEBUG
-    String aStr(lcl_GetSelTxt(aPaM));
-    aStr = aStr;
-#endif
-    mrDoc.Delete(aPaM);
-}
-
-bool lcl_ShouldMakeHidden(const SwFltStackEntry* pEntry, const SwPaM &rPaM)
-{
-    bool bEmpty = true;
-    if (pEntry->nMkNode.GetIndex() == pEntry->nPtNode.GetIndex())
-    {
-        bEmpty = false;
-        /*
-        An empty paragraph that is hidden is acceptable, otherwise it only
-        makes sense to make it hidden if there is something to hide.  and if
-        there is some "hidden" content already, e.g. #110465# we will retain it
-        this way.
-        */
-        if (pEntry->nMkCntnt == pEntry->nPtCntnt && !pEntry->nPtCntnt)
-            bEmpty = false;
-        else if (const SwTxtNode *pDest = rPaM.GetNode()->GetTxtNode())
-        {
-            String sString = pDest->GetExpandTxt(pEntry->nMkCntnt,
-                pEntry->nPtCntnt-pEntry->nMkCntnt);
-            if (!sString.Len())
-                bEmpty = true;
-        }
-    }
-    return bEmpty;
-}
-
 void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
         SwFltStackEntry* pEntry)
 {
@@ -828,8 +757,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
             SwFmtFld& rFmtFld   = *(SwFmtFld*)pEntry->pAttr;
             SwField* pFld = rFmtFld.GetFld();
 
-            bool bIsHidden = RangeToHidden(pFld, pEntry, aPaM);
-            if ((!bIsHidden) && (!RefToVar(pFld,pEntry)))
+            if (RefToVar(pFld,pEntry))
             {
                 USHORT nBkmNo;
                 if( IsFtnEdnBkmField(rFmtFld, nBkmNo) )
@@ -856,21 +784,8 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 }
             }
 
-            bool bEmpty = false;
-            if (bIsHidden)
-                bEmpty = lcl_ShouldMakeHidden(pEntry, aPaM);
-
-            if (!bEmpty)
-            {
-                if (bIsHidden)
-                {
-                    maScheduledForDelete.push_front(Position(aPaM));
-                    aPaM.DeleteMark();
-                }
-
-                pDoc->Insert(aPaM, *pEntry->pAttr);
-                MoveAttrs(*aPaM.GetPoint());
-            }
+            pDoc->Insert(aPaM, *pEntry->pAttr);
+            MoveAttrs(*aPaM.GetPoint());
         }
         break;
         case RES_FLTR_TOX:
