@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-14 16:04:17 $
+ *  last change: $Author: tbe $ $Date: 2001-06-26 08:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,8 @@ protected:
     virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
     virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
 
-    virtual DragDropMode    NotifyBeginDrag( SvLBoxEntry* );
-    virtual BOOL    NotifyQueryDrop( SvLBoxEntry* );
+    virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData, SvLBoxEntry* pEntry );
+    virtual BOOL            NotifyAcceptDrop( SvLBoxEntry* pEntry );
 
     virtual BOOL    NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos );
@@ -150,7 +150,6 @@ protected:
 public:
     ExtBasicTreeListBox( Window* pParent, const ResId& rRes );
     ~ExtBasicTreeListBox();
-
 };
 
 #define LIBMODE_CHOOSER     1

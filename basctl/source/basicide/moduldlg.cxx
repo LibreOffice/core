@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-22 14:45:08 $
+ *  last change: $Author: tbe $ $Date: 2001-06-26 09:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,30 +175,29 @@ BOOL __EXPORT ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const Strin
 }
 
 
-
-DragDropMode __EXPORT ExtBasicTreeListBox::NotifyBeginDrag( SvLBoxEntry* pEntry )
+DragDropMode __EXPORT ExtBasicTreeListBox::NotifyStartDrag( TransferDataContainer& rData, SvLBoxEntry* pEntry )
 {
     USHORT nDepth = pEntry ? GetModel()->GetDepth( pEntry ) : 0;
     return nDepth == 2 ? GetDragDropMode() : 0;
 }
 
 
-
-BOOL __EXPORT ExtBasicTreeListBox::NotifyQueryDrop( SvLBoxEntry* pEntry )
+BOOL __EXPORT ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
 {
+    // don't drop on a BasicManager (nDepth == 0)
     USHORT nDepth = pEntry ? GetModel()->GetDepth( pEntry ) : 0;
-    BOOL bValid = nDepth ? TRUE : FALSE;    // uebrall hin, nur nicht auf einen BasMgr
+    BOOL bValid = nDepth ? TRUE : FALSE;
+
+    // don't drop in the same library
     SvLBoxEntry* pSelected = FirstSelected();
-    // nicht innerhalb einer Lib:
     if ( ( nDepth == 1 ) && ( pEntry == GetParent( pSelected ) ) )
         bValid = FALSE;
     else if ( ( nDepth == 2 ) && ( GetParent( pEntry ) == GetParent( pSelected ) ) )
         bValid = FALSE;
 
+    // don't drop on a library, which is not loaded or password protected
     if ( bValid && ( nDepth == 1 ) )
     {
-        // Es darf nicht auf eine geschuetzte oder nicht geladene
-        // Libary gedroppt werden.
         String aLib = GetEntryText( pEntry );
         String aMgr = GetEntryText( GetParent( pEntry ) );
         BasicManager* pBasicManager = BasicIDE::FindBasicManager( aMgr );
@@ -214,11 +213,51 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyQueryDrop( SvLBoxEntry* pEntry )
         }
         else
             bValid = FALSE;
-
     }
+
+    // check, if module/dialog with this name is already existing in target library
+    if ( bValid && ( nDepth == 1 || nDepth == 2 ) )
+    {
+        // get target parent
+        SvLBoxEntry* pNewParent;
+        if ( nDepth == 1 )
+        {
+            pNewParent = pEntry;
+        }
+        else if ( nDepth == 2 )
+        {
+            pNewParent = GetParent( pEntry );
+        }
+
+        // get target basic
+        SbxVariable* pVar = FindVariable( pNewParent ); // parent is Basic
+        DBG_ASSERT( pVar && pVar->ISA( StarBASIC ), "Parent ist kein Basic!" );
+        StarBASIC* pDestBasic = (StarBASIC*)pVar;
+
+        // get target shell and target library name
+        String aDestLibName = pDestBasic->GetName();
+        SfxObjectShell* pDestShell = 0;
+        BasicManager* pDestBasMgr = BasicIDE::FindBasicManager( pDestBasic );
+        if ( pDestBasMgr )
+            pDestShell = BasicIDE::FindDocShell( pDestBasMgr );
+
+        // a module/dialog is copied/moved
+        SbxItem aSbxItem = GetSbxItem( pSelected );
+        pVar = (SbxVariable*)aSbxItem.GetSbx();
+
+        // get source module/dialog name
+        String aSourceName = aSbxItem.GetName();
+
+        // module/dialog already existing?
+        if ( ( pVar && pVar->ISA( SbModule ) && pDestBasic->FindModule( pVar->GetName() ) ) ||
+             ( aSbxItem.GetType() == BASICIDE_TYPE_DIALOG && BasicIDE::HasDialog( pDestShell, aDestLibName, aSourceName ) ) )
+        {
+            bValid = FALSE;
+        }
+    }
+
     return bValid;
 }
-
 
 
 BOOL __EXPORT ExtBasicTreeListBox::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
@@ -229,7 +268,6 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEnt
 }
 
 
-
 BOOL __EXPORT ExtBasicTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos )
 {
@@ -237,7 +275,6 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEn
     return NotifyCopyingMoving( pTarget, pEntry,
                                     rpNewParent, rNewChildPos, FALSE );
 }
-
 
 
 BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
@@ -274,10 +311,9 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
     if ( pDestBasMgr )
         pDestShell = BasicIDE::FindDocShell( pDestBasMgr );
 
-    // a module/dialog is copied/moved
+    // get sbx item
     SbxItem aSbxItem = GetSbxItem( FirstSelected() );
-    pVar = (SbxVariable*)aSbxItem.GetSbx();
-    SbxObject* pObj = (SbxObject*)pVar;
+    SbxObject* pObj = (SbxObject*)aSbxItem.GetSbx();
 
     // get source shell, library name and module/dialog name
     SfxObjectShell* pSourceShell = aSbxItem.GetShell();
@@ -302,15 +338,6 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
             pSourceBasic = pSourceBasMgr->GetLib( aSourceLibName );
     }
     DBG_ASSERT( pSourceBasic, "Woher kommt das Object?" );
-
-    // Pruefen, ob mit dem Namen vorhanden...
-    // Nicht im QueryDrop, zu Aufwendig!
-    if ( ( pVar && pVar->ISA( SbModule ) && pDestBasic->FindModule( pVar->GetName() ) ) ||
-         ( aSbxItem.GetType() == BASICIDE_TYPE_DIALOG && BasicIDE::HasDialog( pDestShell, aDestLibName, aSourceName ) ) )
-    {
-        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
-        return FALSE;
-    }
 
     // get dispatcher
     SfxViewFrame* pCurFrame = SfxViewFrame::Current();
@@ -423,14 +450,12 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
         }
     }
 
-    // create target dialog window
+    // create target module/dialog window
     if ( pSourceBasic != pDestBasic )
     {
         // set sbxitem to target lib
         aSbxItem.SetShell( pDestShell );
         aSbxItem.SetLibName( aDestLibName );
-        aSbxItem.SetName( aSourceName );
-        aSbxItem.SetType( BASICIDE_TYPE_DIALOG );
 
         if( pDispatcher )
         {
