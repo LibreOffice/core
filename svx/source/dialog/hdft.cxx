@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 12:20:14 $
+ *  last change: $Author: ma $ $Date: 2001-03-26 11:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,9 +203,9 @@ SvxHFPage::SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rAttr, U
     aRMLbl          ( this, ResId( FT_RMARGIN ) ),
     aRMEdit         ( this, ResId( ED_RMARGIN ) ),
     aCntSharedBox   ( this, ResId( CB_SHARED ) ),
-    aFrm            ( this, ResId( GB_FRAME ) ),
+    aFrm            ( this, ResId( FL_FRAME ) ),
     aBspWin         ( this, ResId( WN_BSP ) ),
-    aBspFrm         ( this, ResId( GB_BSP ) ),
+    aBspFrm         ( this, ResId( FL_BSP ) ),
     aBackgroundBtn  ( this, ResId( BTN_EXTRAS ) ),
 
     pBBSet                      ( NULL ),

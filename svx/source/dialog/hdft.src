@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:48:45 $
+ *  last change: $Author: ma $ $Date: 2001-03-26 11:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ TabPage RID_SVXPAGE_HEADER
     Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox CB_TURNON
     {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Pos = MAP_APPFONT ( 7 , 14 ) ;
         Size = MAP_APPFONT ( 145 , 10 ) ;
         Text = "~Kopfzeile einschalten" ;
         Text [ ENGLISH ] = "~Turn on header" ;
@@ -111,121 +111,37 @@ TabPage RID_SVXPAGE_HEADER
         Text[ turkish ] = "~Üstbilgi oluştur";
         Text[ language_user1 ] = " ";
     };
-    FixedText FT_DIST
+    CheckBox CB_SHARED
     {
-        Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text = "A~bstand" ;
-        Text [ English ] = "~Distance" ;
-        Text [ english_us ] = "~Spacing" ;
-        Text [ portuguese_brazilian ] = "~Höhe" ;
-        Text [ swedish ] = "A~vstånd" ;
-        Text [ danish ] = "Afstand" ;
-        Text [ italian ] = "~Distanza" ;
-        Text [ spanish ] = "~Espacio" ;
-        Text [ french ] = "~Écart" ;
-        Text [ dutch ] = "~Afstand" ;
-        Text [ portuguese ] = "~Espaçamento" ;
-        Text[ chinese_simplified ] = "¼ä¸ô(~S)";
-        Text[ russian ] = "Èíòåğâàë";
-        Text[ polish ] = "Odstêp";
-        Text[ japanese ] = "ŠÔŠu(~S)";
-        Text[ chinese_traditional ] = "¶¡¹j(~S)";
-        Text[ arabic ] = "ÇáÊÈÇÚÏ";
-        Text[ greek ] = "Á~ğüóôáóç";
-        Text[ korean ] = "°£°İ(~S)";
-        Text[ turkish ] = "U~zaklık";
-        Text[ language_user1 ] = " ";
-    };
-    MetricField ED_DIST
-    {
-        Disable = TRUE ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 117 , 30 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        Left = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 9999 ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_CM ;
-        Last = 9999 ;
-        SpinSize = 10 ;
-    };
-    FixedText FT_HEIGHT
-    {
-        Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text = "~Höhe" ;
-        Text [ ENGLISH ] = "~Height" ;
-        Text [ english_us ] = "~Height" ;
-        Text [ portuguese_brazilian ] = "~Höhe" ;
-        Text [ swedish ] = "~Höjd" ;
-        Text [ danish ] = "Højde" ;
-        Text [ italian ] = "~Altezza" ;
-        Text [ spanish ] = "A~ltura" ;
-        Text [ french ] = "~Hauteur" ;
-        Text [ dutch ] = "~Hoogte" ;
-        Text [ portuguese ] = "~Altura" ;
-        Text[ chinese_simplified ] = "¸ß¶È(~H)";
-        Text[ russian ] = "Âûñîòà";
-        Text[ polish ] = "Wys.";
-        Text[ japanese ] = "‚‚³(~H)";
-        Text[ chinese_traditional ] = "°ª«×(~H)";
-        Text[ arabic ] = "ÇáÇÑÊİÇÚ";
-        Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ(~H)";
-        Text[ turkish ] = "Y~ükseklik";
-        Text[ language_user1 ] = " ";
-    };
-    MetricField ED_HEIGHT
-    {
-        Disable = TRUE ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 117 , 45 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        Left = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 50 ;
-        Maximum = 9999 ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_CM ;
-        First = 50 ;
-        Last = 9999 ;
-        SpinSize = 10 ;
-    };
-    CheckBox CB_HEIGHT_DYN
-    {
-        Pos = MAP_APPFONT ( 12 , 63 ) ;
+        Pos = MAP_APPFONT ( 7 , 31 ) ;
         Size = MAP_APPFONT ( 145 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Höhe ~dynamisch anpassen : H÷he ~dynamisch anpassen */
-        /* ### ACHTUNG: Neuer Text in Resource? Höhe ~dynamisch anpassen : H÷he ~dynamisch anpassen */
-        Text = "Höhe ~dynamisch anpassen" ;
-        Text [ ENGLISH ] = "~Dynamic height adjustment" ;
-        Text [ dutch ] = "Hoogte ~dynamisch aanpassen" ;
-        Text [ english_us ] = "~AutoFit height" ;
-        Text [ swedish ] = "An~passa höjd dynamiskt" ;
-        Text [ danish ] = "Juster højde dynamisk" ;
-        Text [ italian ] = "Adatta altezza din~amicamente" ;
-        Text [ spanish ] = "Ajus~te dinámico de la altura" ;
-        Text [ french ] = "Adaptation ~dynamique de la hauteur" ;
-        Text [ portuguese ] = "Ajuste ~dinâmico da altura" ;
-        Text [ portuguese_brazilian ] = "Höhe ~dynamisch anpassen" ;
-        Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¸ß¶È(~A)";
-        Text[ russian ] = "Àâòîïîäáîğ âûñîòû";
-        Text[ polish ] = "Autodopasowanie wysokoœci";
-        Text[ japanese ] = "‚‚³©“®’²®(~A)";
-        Text[ chinese_traditional ] = "¦Û°Ê³Ì¾A½Õ¾ã°ª«×(~A)";
-        Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ÊáŞÇÆíÇğ";
-        Text[ greek ] = "ÄõíáìéêŞ ğñïóáñìïãŞ ıøïõò";
-        Text[ korean ] = "³ôÀÌ ÀÚµ¿ ¸ÂÃã(~A)";
-        Text[ turkish ] = "Yüksekliği oto~matik olarak ayarla";
+        Text = "~Inhalt links/rechts gleich" ;
+        Text [ ENGLISH ] = "Same ~content left/right" ;
+        Text [ norwegian ] = "Same ~content left/right" ;
+        Text [ italian ] = "~Contenuto uguale destra/sinistra" ;
+        Text [ portuguese_brazilian ] = "Mesmo ~conteúdo esquerda/direita" ;
+        Text [ portuguese ] = "Mesmo ~conteúdo esquerda/direita" ;
+        Text [ finnish ] = "Sama ~sisältö vasemmalla/oikealla" ;
+        Text [ danish ] = "Ens indhold venstre/højre" ;
+        Text [ french ] = "~Contenu identique gauche/droite" ;
+        Text [ swedish ] = "Samma ~innehåll höger/vänster" ;
+        Text [ dutch ] = "Links/rechts dezelfde ~inhoud" ;
+        Text [ spanish ] = "~Contenido a la izquierda/derecha igual" ;
+        Text [ english_us ] = "Same ~content left/right" ;
+        Text[ chinese_simplified ] = "×óÓÒÄÚÈİÏàÍ¬(~C)";
+        Text[ russian ] = "Îäèíàêîâîå ñîäåğæèìîå ñëåâà/ñïğàâà";
+        Text[ polish ] = "Zawarto~œæ z lewej i z prawej jest taka sama";
+        Text[ japanese ] = "¶‰EÍß°¼Ş“¯ˆê€–Ú(~C)";
+        Text[ chinese_traditional ] = "¤º®e¥ª¥k¬Û¦P(~C)";
+        Text[ arabic ] = "äİÓ ÇáãÍÊæíÇÊ Úáì ÇáíÓÇÑ/Çáíãíä";
+        Text[ greek ] = "ºäéï ğåñéå÷üìåíï áñéóôåñÜ/äåîéÜ";
+        Text[ korean ] = "³»¿ë ¿ŞÂÊ/¿À¸¥ÂÊ °°°Ô(~C)";
+        Text[ turkish ] = "Sol/sağ içerik ay~nı";
         Text[ language_user1 ] = " ";
     };
     FixedText FT_LMARGIN
     {
-        Pos = MAP_APPFONT ( 12 , 80 ) ;
+        Pos = MAP_APPFONT ( 7 , 50 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "~Linker Rand" ;
         Text [ ENGLISH ] = "~Left Margin" ;
@@ -255,7 +171,7 @@ TabPage RID_SVXPAGE_HEADER
     MetricField ED_LMARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 117 , 79 ) ;
+        Pos = MAP_APPFONT ( 117 , 48 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -269,7 +185,7 @@ TabPage RID_SVXPAGE_HEADER
     };
     FixedText FT_RMARGIN
     {
-        Pos = MAP_APPFONT ( 12 , 95 ) ;
+        Pos = MAP_APPFONT ( 7 , 66 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "~Rechter Rand" ;
         Text [ ENGLISH ] = "R~ight Margin" ;
@@ -299,7 +215,7 @@ TabPage RID_SVXPAGE_HEADER
     MetricField ED_RMARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 117 , 94 ) ;
+        Pos = MAP_APPFONT ( 117 , 64 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -311,38 +227,123 @@ TabPage RID_SVXPAGE_HEADER
         Last = 9999 ;
         SpinSize = 10 ;
     };
-    CheckBox CB_SHARED
+
+    FixedText FT_DIST
     {
-        Pos = MAP_APPFONT ( 12 , 112 ) ;
-        Size = MAP_APPFONT ( 145 , 10 ) ;
-        Text = "~Inhalt links/rechts gleich" ;
-        Text [ ENGLISH ] = "Same ~content left/right" ;
-        Text [ norwegian ] = "Same ~content left/right" ;
-        Text [ italian ] = "~Contenuto uguale destra/sinistra" ;
-        Text [ portuguese_brazilian ] = "Mesmo ~conteúdo esquerda/direita" ;
-        Text [ portuguese ] = "Mesmo ~conteúdo esquerda/direita" ;
-        Text [ finnish ] = "Sama ~sisältö vasemmalla/oikealla" ;
-        Text [ danish ] = "Ens indhold venstre/højre" ;
-        Text [ french ] = "~Contenu identique gauche/droite" ;
-        Text [ swedish ] = "Samma ~innehåll höger/vänster" ;
-        Text [ dutch ] = "Links/rechts dezelfde ~inhoud" ;
-        Text [ spanish ] = "~Contenido a la izquierda/derecha igual" ;
-        Text [ english_us ] = "Same ~content left/right" ;
-        Text[ chinese_simplified ] = "×óÓÒÄÚÈİÏàÍ¬(~C)";
-        Text[ russian ] = "Îäèíàêîâîå ñîäåğæèìîå ñëåâà/ñïğàâà";
-        Text[ polish ] = "Zawarto~œæ z lewej i z prawej jest taka sama";
-        Text[ japanese ] = "¶‰EÍß°¼Ş“¯ˆê€–Ú(~C)";
-        Text[ chinese_traditional ] = "¤º®e¥ª¥k¬Û¦P(~C)";
-        Text[ arabic ] = "äİÓ ÇáãÍÊæíÇÊ Úáì ÇáíÓÇÑ/Çáíãíä";
-        Text[ greek ] = "ºäéï ğåñéå÷üìåíï áñéóôåñÜ/äåîéÜ";
-        Text[ korean ] = "³»¿ë ¿ŞÂÊ/¿À¸¥ÂÊ °°°Ô(~C)";
-        Text[ turkish ] = "Sol/sağ içerik ay~nı";
+        Pos = MAP_APPFONT ( 7 , 85 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
+        Text = "A~bstand" ;
+        Text [ English ] = "~Distance" ;
+        Text [ english_us ] = "~Spacing" ;
+        Text [ portuguese_brazilian ] = "~Höhe" ;
+        Text [ swedish ] = "A~vstånd" ;
+        Text [ danish ] = "Afstand" ;
+        Text [ italian ] = "~Distanza" ;
+        Text [ spanish ] = "~Espacio" ;
+        Text [ french ] = "~Écart" ;
+        Text [ dutch ] = "~Afstand" ;
+        Text [ portuguese ] = "~Espaçamento" ;
+        Text[ chinese_simplified ] = "¼ä¸ô(~S)";
+        Text[ russian ] = "Èíòåğâàë";
+        Text[ polish ] = "Odstêp";
+        Text[ japanese ] = "ŠÔŠu(~S)";
+        Text[ chinese_traditional ] = "¶¡¹j(~S)";
+        Text[ arabic ] = "ÇáÊÈÇÚÏ";
+        Text[ greek ] = "Á~ğüóôáóç";
+        Text[ korean ] = "°£°İ(~S)";
+        Text[ turkish ] = "U~zaklık";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GB_FRAME
+    MetricField ED_DIST
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 157 , 146 ) ;
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 117 , 83 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_HEIGHT
+    {
+        Pos = MAP_APPFONT ( 7 , 101 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
+        Text = "~Höhe" ;
+        Text [ ENGLISH ] = "~Height" ;
+        Text [ english_us ] = "~Height" ;
+        Text [ portuguese_brazilian ] = "~Höhe" ;
+        Text [ swedish ] = "~Höjd" ;
+        Text [ danish ] = "Højde" ;
+        Text [ italian ] = "~Altezza" ;
+        Text [ spanish ] = "A~ltura" ;
+        Text [ french ] = "~Hauteur" ;
+        Text [ dutch ] = "~Hoogte" ;
+        Text [ portuguese ] = "~Altura" ;
+        Text[ chinese_simplified ] = "¸ß¶È(~H)";
+        Text[ russian ] = "Âûñîòà";
+        Text[ polish ] = "Wys.";
+        Text[ japanese ] = "‚‚³(~H)";
+        Text[ chinese_traditional ] = "°ª«×(~H)";
+        Text[ arabic ] = "ÇáÇÑÊİÇÚ";
+        Text[ greek ] = "¾øïò";
+        Text[ korean ] = "³ôÀÌ(~H)";
+        Text[ turkish ] = "Y~ükseklik";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_HEIGHT
+    {
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 117 , 99 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 50 ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 50 ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    CheckBox CB_HEIGHT_DYN
+    {
+        Pos = MAP_APPFONT ( 7 , 115 ) ;
+        Size = MAP_APPFONT ( 145 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Höhe ~dynamisch anpassen : H÷he ~dynamisch anpassen */
+        /* ### ACHTUNG: Neuer Text in Resource? Höhe ~dynamisch anpassen : H÷he ~dynamisch anpassen */
+        Text = "Höhe ~dynamisch anpassen" ;
+        Text [ ENGLISH ] = "~Dynamic height adjustment" ;
+        Text [ dutch ] = "Hoogte ~dynamisch aanpassen" ;
+        Text [ english_us ] = "~AutoFit height" ;
+        Text [ swedish ] = "An~passa höjd dynamiskt" ;
+        Text [ danish ] = "Juster højde dynamisk" ;
+        Text [ italian ] = "Adatta altezza din~amicamente" ;
+        Text [ spanish ] = "Ajus~te dinámico de la altura" ;
+        Text [ french ] = "Adaptation ~dynamique de la hauteur" ;
+        Text [ portuguese ] = "Ajuste ~dinâmico da altura" ;
+        Text [ portuguese_brazilian ] = "Höhe ~dynamisch anpassen" ;
+        Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¸ß¶È(~A)";
+        Text[ russian ] = "Àâòîïîäáîğ âûñîòû";
+        Text[ polish ] = "Autodopasowanie wysokoœci";
+        Text[ japanese ] = "‚‚³©“®’²®(~A)";
+        Text[ chinese_traditional ] = "¦Û°Ê³Ì¾A½Õ¾ã°ª«×(~A)";
+        Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ÊáŞÇÆíÇğ";
+        Text[ greek ] = "ÄõíáìéêŞ ğñïóáñìïãŞ ıøïõò";
+        Text[ korean ] = "³ôÀÌ ÀÚµ¿ ¸ÂÃã(~A)";
+        Text[ turkish ] = "Yüksekliği oto~matik olarak ayarla";
+        Text[ language_user1 ] = " ";
+    };
+    FixedLine FL_FRAME
+    {
+        Pos = MAP_APPFONT ( 4 , 3 ) ;
+        Size = MAP_APPFONT ( 157 , 8 ) ;
         Text = "Kopfzeile" ;
         Text [ ENGLISH ] = "Header" ;
         Text [ norwegian ] = "Header" ;
@@ -369,13 +370,13 @@ TabPage RID_SVXPAGE_HEADER
     };
     Window WN_BSP
     {
-        Pos = MAP_APPFONT ( 176 , 14 ) ;
-        Size = MAP_APPFONT ( 72 , 129 ) ;
+        Pos = MAP_APPFONT ( 176 , 12 ) ;
+        Size = MAP_APPFONT ( 72 , 41 ) ;
     };
-    GroupBox GB_BSP
+    FixedLine FL_BSP
     {
         Pos = MAP_APPFONT ( 171 , 3 ) ;
-        Size = MAP_APPFONT ( 83 , 146 ) ;
+        Size = MAP_APPFONT ( 83 , 8 ) ;
         Text = "Vorschau" ;
         Text [ ENGLISH ] = "Example" ;
         Text [ norwegian ] = "Eksempel" ;
@@ -402,7 +403,7 @@ TabPage RID_SVXPAGE_HEADER
     };
     PushButton BTN_EXTRAS
     {
-        Pos = MAP_APPFONT ( 12 , 129 ) ;
+        Pos = MAP_APPFONT ( 7 , 140 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "Zus~ätze..." ;
         Text [ ENGLISH ] = "Option~s..." ;
@@ -460,7 +461,7 @@ TabPage RID_SVXPAGE_FOOTER
     Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox CB_TURNON
     {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Pos = MAP_APPFONT ( 7 , 14 ) ;
         Size = MAP_APPFONT ( 145 , 10 ) ;
         Text = "~Fußzeile einschalten" ;
         Text [ ENGLISH ] = "~Turn on Footer" ;
@@ -486,124 +487,37 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ turkish ] = "A~ltbilgi oluştur";
         Text[ language_user1 ] = " ";
     };
-    FixedText FT_DIST
+    CheckBox CB_SHARED
     {
-        Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text = "A~bstand" ;
-        Text [ English ] = "~Distance" ;
-        Text [ english_us ] = "~Spacing" ;
-        Text [ portuguese_brazilian ] = "~Höhe" ;
-        Text [ swedish ] = "A~vstånd" ;
-        Text [ danish ] = "Afstand" ;
-        Text [ italian ] = "~Distanza" ;
-        Text [ spanish ] = "Es~pacio" ;
-        Text [ french ] = "~Écart" ;
-        Text [ dutch ] = "~Afstand" ;
-        Text [ portuguese ] = "~Espaçamento" ;
-        Text[ chinese_simplified ] = "¼ä¸ô(~S)";
-        Text[ russian ] = "Èíòåğâàë";
-        Text[ polish ] = "Odstêp";
-        Text[ japanese ] = "ŠÔŠu(~S)";
-        Text[ chinese_traditional ] = "¶¡¹j(~S)";
-        Text[ arabic ] = "ÇáÊÈÇÚÏ";
-        Text[ greek ] = "Á~ğüóôáóç";
-        Text[ korean ] = "°£°İ(~S)";
-        Text[ turkish ] = "~Uzaklık";
-        Text[ language_user1 ] = " ";
-    };
-    MetricField ED_DIST
-    {
-        Disable = TRUE ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 117 , 30 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        Left = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 9999 ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_CM ;
-        Last = 9999 ;
-        SpinSize = 10 ;
-    };
-    FixedText FT_HEIGHT
-    {
-        Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text = "~Höhe" ;
-        Text [ ENGLISH ] = "~Height" ;
-        Disable = TRUE ;
-        Text [ english_us ] = "~Height" ;
-        Text [ portuguese_brazilian ] = "~Höhe" ;
-        Text [ swedish ] = "~Höjd" ;
-        Text [ danish ] = "Højde" ;
-        Text [ italian ] = "~Altezza" ;
-        Text [ spanish ] = "A~ltura" ;
-        Text [ french ] = "~Hauteur" ;
-        Text [ dutch ] = "~Hoogte" ;
-        Text [ portuguese ] = "~Altura" ;
-        Text[ chinese_simplified ] = "¸ß¶È(~H)";
-        Text[ russian ] = "Âûñîòà";
-        Text[ polish ] = "Wys.";
-        Text[ japanese ] = "‚‚³(~H)";
-        Text[ chinese_traditional ] = "°ª«×(~H)";
-        Text[ arabic ] = "ÇáÇÑÊİÇÚ";
-        Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ(~H)";
-        Text[ turkish ] = "Y~ükseklik";
-        Text[ language_user1 ] = " ";
-    };
-    MetricField ED_HEIGHT
-    {
-        Disable = TRUE ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 117 , 45 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        Left = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 50 ;
-        Maximum = 9999 ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_CM ;
-        First = 50 ;
-        Last = 9999 ;
-        SpinSize = 10 ;
-    };
-    CheckBox CB_HEIGHT_DYN
-    {
-        Pos = MAP_APPFONT ( 12 , 63 ) ;
+        Pos = MAP_APPFONT ( 7 , 31 ) ;
         Size = MAP_APPFONT ( 145 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Höhe ~dynamisch anpassen : H÷he ~dynamisch anpassen */
-        /* ### ACHTUNG: Neuer Text in Resource? Höhe ~dynamisch anpassen : H÷he ~dynamisch anpassen */
-        Text = "Höhe ~dynamisch anpassen" ;
-        Text [ ENGLISH ] = "~Dynamic height adjustment" ;
-        Text [ norwegian ] = "Footer height ~dynamic" ;
-        Text [ italian ] = "Adatta altezza din~amicamente" ;
-        Text [ portuguese_brazilian ] = "Rodapé dinâmica da ~altura" ;
-        Text [ portuguese ] = "Ajuste dinâmico da altura" ;
-        Text [ finnish ] = "Alatekstin korkeus ~dynaaminen" ;
-        Text [ danish ] = "Juster højde dynamisk" ;
-        Text [ french ] = "Adaptation ~dynamique de la hauteur" ;
-        Text [ swedish ] = "An~passa höjd dynamiskt" ;
-        Text [ dutch ] = "Hoogte ~dynamisch aanpassen" ;
-        Text [ spanish ] = "Aj~uste dinámico de la altura" ;
-        Text [ english_us ] = "~AutoFit height" ;
-        Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¸ß¶È(~A)";
-        Text[ russian ] = "Àâòîïîäáîğ âûñîòû";
-        Text[ polish ] = "Autodopasowanie wysokoœci";
-        Text[ japanese ] = "‚‚³©“®’²®(~A)";
-        Text[ chinese_traditional ] = "¦Û°Ê³Ì¾A½Õ¾ã°ª«×(~A)";
-        Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ÊáŞÇÆíÇğ";
-        Text[ greek ] = "ÄõíáìéêŞ ğñïóáñìïãŞ ıøïõò";
-        Text[ korean ] = "³ôÀÌ ÀÚµ¿Á¶Àı(~A)";
-        Text[ turkish ] = "Yüksekliği oto~matik olarak ayarla";
+        Text = "~Inhalt links/rechts gleich" ;
+        Text [ ENGLISH ] = "Same ~content left/right" ;
+        Text [ norwegian ] = "Same ~content left/right" ;
+        Text [ italian ] = "~Contenuto uguale destra/sinistra" ;
+        Text [ portuguese_brazilian ] = "Mesmo ~conteúdo esquerda/direita" ;
+        Text [ portuguese ] = "Mesmo ~conteúdo esquerda/direita" ;
+        Text [ finnish ] = "Sama ~sisältö vasemmalla/oikealla" ;
+        Text [ danish ] = "Ens indhold venstre/højre" ;
+        Text [ french ] = "~Contenu identique gauche/droite" ;
+        Text [ swedish ] = "Samma ~innehåll höger/vänster" ;
+        Text [ dutch ] = "Links/rechts dezelfde ~inhoud" ;
+        Text [ spanish ] = "Igual ~contenido a la izquierda/derecha" ;
+        Text [ english_us ] = "Same ~content left/right" ;
+        Text[ chinese_simplified ] = "×óÓÒÄÚÈİÏàÍ¬(~C)";
+        Text[ russian ] = "Îäèíàêîâîå ñîäåğæèìîå ñëåâà/ñïğàâà";
+        Text[ polish ] = "Zawartoœæ z prawej i z lewej jest ta~ka sama";
+        Text[ japanese ] = "¶‰EÍß°¼Ş“¯ˆê€–Ú(~C)";
+        Text[ chinese_traditional ] = "¤º®e¥ª¥k¬Û¦P(~C)";
+        Text[ arabic ] = "äİÓ ÇáãÍÊæíÇÊ Úáì ÇáíÓÇÑ/Çáíãíä";
+        Text[ greek ] = "ºäéï ğåñéå÷üìåíï áñéóôåñÜ/äåîéÜ";
+        Text[ korean ] = "³»¿ë ¿ŞÂÊ/¿À¸¥ÂÊ °°°Ô(~C)";
+        Text[ turkish ] = "Sol/sağ içerik ay~nı";
         Text[ language_user1 ] = " ";
     };
     FixedText FT_LMARGIN
     {
-        Pos = MAP_APPFONT ( 12 , 80 ) ;
+        Pos = MAP_APPFONT ( 7 , 50 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "~Linker Rand" ;
         Text [ ENGLISH ] = "~Left Margin" ;
@@ -633,7 +547,7 @@ TabPage RID_SVXPAGE_FOOTER
     MetricField ED_LMARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 117 , 79 ) ;
+        Pos = MAP_APPFONT ( 117 , 48 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -647,7 +561,7 @@ TabPage RID_SVXPAGE_FOOTER
     };
     FixedText FT_RMARGIN
     {
-        Pos = MAP_APPFONT ( 12 , 95 ) ;
+        Pos = MAP_APPFONT ( 7 , 66 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "~Rechter Rand" ;
         Text [ ENGLISH ] = "R~ight Margin" ;
@@ -677,7 +591,7 @@ TabPage RID_SVXPAGE_FOOTER
     MetricField ED_RMARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 117 , 94 ) ;
+        Pos = MAP_APPFONT ( 117 , 64 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -689,38 +603,126 @@ TabPage RID_SVXPAGE_FOOTER
         Last = 9999 ;
         SpinSize = 10 ;
     };
-    CheckBox CB_SHARED
+    FixedText FT_DIST
     {
-        Pos = MAP_APPFONT ( 12 , 112 ) ;
-        Size = MAP_APPFONT ( 145 , 10 ) ;
-        Text = "~Inhalt links/rechts gleich" ;
-        Text [ ENGLISH ] = "Same ~content left/right" ;
-        Text [ norwegian ] = "Same ~content left/right" ;
-        Text [ italian ] = "~Contenuto uguale destra/sinistra" ;
-        Text [ portuguese_brazilian ] = "Mesmo ~conteúdo esquerda/direita" ;
-        Text [ portuguese ] = "Mesmo ~conteúdo esquerda/direita" ;
-        Text [ finnish ] = "Sama ~sisältö vasemmalla/oikealla" ;
-        Text [ danish ] = "Ens indhold venstre/højre" ;
-        Text [ french ] = "~Contenu identique gauche/droite" ;
-        Text [ swedish ] = "Samma ~innehåll höger/vänster" ;
-        Text [ dutch ] = "Links/rechts dezelfde ~inhoud" ;
-        Text [ spanish ] = "Igual ~contenido a la izquierda/derecha" ;
-        Text [ english_us ] = "Same ~content left/right" ;
-        Text[ chinese_simplified ] = "×óÓÒÄÚÈİÏàÍ¬(~C)";
-        Text[ russian ] = "Îäèíàêîâîå ñîäåğæèìîå ñëåâà/ñïğàâà";
-        Text[ polish ] = "Zawartoœæ z prawej i z lewej jest ta~ka sama";
-        Text[ japanese ] = "¶‰EÍß°¼Ş“¯ˆê€–Ú(~C)";
-        Text[ chinese_traditional ] = "¤º®e¥ª¥k¬Û¦P(~C)";
-        Text[ arabic ] = "äİÓ ÇáãÍÊæíÇÊ Úáì ÇáíÓÇÑ/Çáíãíä";
-        Text[ greek ] = "ºäéï ğåñéå÷üìåíï áñéóôåñÜ/äåîéÜ";
-        Text[ korean ] = "³»¿ë ¿ŞÂÊ/¿À¸¥ÂÊ °°°Ô(~C)";
-        Text[ turkish ] = "Sol/sağ içerik ay~nı";
+        Pos = MAP_APPFONT ( 7 , 85 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
+        Text = "A~bstand" ;
+        Text [ English ] = "~Distance" ;
+        Text [ english_us ] = "~Spacing" ;
+        Text [ portuguese_brazilian ] = "~Höhe" ;
+        Text [ swedish ] = "A~vstånd" ;
+        Text [ danish ] = "Afstand" ;
+        Text [ italian ] = "~Distanza" ;
+        Text [ spanish ] = "Es~pacio" ;
+        Text [ french ] = "~Écart" ;
+        Text [ dutch ] = "~Afstand" ;
+        Text [ portuguese ] = "~Espaçamento" ;
+        Text[ chinese_simplified ] = "¼ä¸ô(~S)";
+        Text[ russian ] = "Èíòåğâàë";
+        Text[ polish ] = "Odstêp";
+        Text[ japanese ] = "ŠÔŠu(~S)";
+        Text[ chinese_traditional ] = "¶¡¹j(~S)";
+        Text[ arabic ] = "ÇáÊÈÇÚÏ";
+        Text[ greek ] = "Á~ğüóôáóç";
+        Text[ korean ] = "°£°İ(~S)";
+        Text[ turkish ] = "~Uzaklık";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GB_FRAME
+    MetricField ED_DIST
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 157 , 146 ) ;
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 117 , 83 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_HEIGHT
+    {
+        Pos = MAP_APPFONT ( 7 , 101 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
+        Text = "~Höhe" ;
+        Text [ ENGLISH ] = "~Height" ;
+        Disable = TRUE ;
+        Text [ english_us ] = "~Height" ;
+        Text [ portuguese_brazilian ] = "~Höhe" ;
+        Text [ swedish ] = "~Höjd" ;
+        Text [ danish ] = "Højde" ;
+        Text [ italian ] = "~Altezza" ;
+        Text [ spanish ] = "A~ltura" ;
+        Text [ french ] = "~Hauteur" ;
+        Text [ dutch ] = "~Hoogte" ;
+        Text [ portuguese ] = "~Altura" ;
+        Text[ chinese_simplified ] = "¸ß¶È(~H)";
+        Text[ russian ] = "Âûñîòà";
+        Text[ polish ] = "Wys.";
+        Text[ japanese ] = "‚‚³(~H)";
+        Text[ chinese_traditional ] = "°ª«×(~H)";
+        Text[ arabic ] = "ÇáÇÑÊİÇÚ";
+        Text[ greek ] = "¾øïò";
+        Text[ korean ] = "³ôÀÌ(~H)";
+        Text[ turkish ] = "Y~ükseklik";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_HEIGHT
+    {
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 117 , 99 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 50 ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 50 ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    CheckBox CB_HEIGHT_DYN
+    {
+        Pos = MAP_APPFONT ( 7 , 115 ) ;
+        Size = MAP_APPFONT ( 145 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Höhe ~dynamisch anpassen : H÷he ~dynamisch anpassen */
+        /* ### ACHTUNG: Neuer Text in Resource? Höhe ~dynamisch anpassen : H÷he ~dynamisch anpassen */
+        Text = "Höhe ~dynamisch anpassen" ;
+        Text [ ENGLISH ] = "~Dynamic height adjustment" ;
+        Text [ norwegian ] = "Footer height ~dynamic" ;
+        Text [ italian ] = "Adatta altezza din~amicamente" ;
+        Text [ portuguese_brazilian ] = "Rodapé dinâmica da ~altura" ;
+        Text [ portuguese ] = "Ajuste dinâmico da altura" ;
+        Text [ finnish ] = "Alatekstin korkeus ~dynaaminen" ;
+        Text [ danish ] = "Juster højde dynamisk" ;
+        Text [ french ] = "Adaptation ~dynamique de la hauteur" ;
+        Text [ swedish ] = "An~passa höjd dynamiskt" ;
+        Text [ dutch ] = "Hoogte ~dynamisch aanpassen" ;
+        Text [ spanish ] = "Aj~uste dinámico de la altura" ;
+        Text [ english_us ] = "~AutoFit height" ;
+        Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¸ß¶È(~A)";
+        Text[ russian ] = "Àâòîïîäáîğ âûñîòû";
+        Text[ polish ] = "Autodopasowanie wysokoœci";
+        Text[ japanese ] = "‚‚³©“®’²®(~A)";
+        Text[ chinese_traditional ] = "¦Û°Ê³Ì¾A½Õ¾ã°ª«×(~A)";
+        Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ÊáŞÇÆíÇğ";
+        Text[ greek ] = "ÄõíáìéêŞ ğñïóáñìïãŞ ıøïõò";
+        Text[ korean ] = "³ôÀÌ ÀÚµ¿Á¶Àı(~A)";
+        Text[ turkish ] = "Yüksekliği oto~matik olarak ayarla";
+        Text[ language_user1 ] = " ";
+    };
+
+    FixedLine FL_FRAME
+    {
+        Pos = MAP_APPFONT ( 4 , 3 ) ;
+        Size = MAP_APPFONT ( 157 , 8 ) ;
         Text = "Fußzeile" ;
         Text [ ENGLISH ] = "Footer" ;
         Text [ norwegian ] = "Footer" ;
@@ -747,13 +749,13 @@ TabPage RID_SVXPAGE_FOOTER
     };
     Window WN_BSP
     {
-        Pos = MAP_APPFONT ( 176 , 14 ) ;
-        Size = MAP_APPFONT ( 72 , 129 ) ;
+        Pos = MAP_APPFONT ( 176 , 12 ) ;
+        Size = MAP_APPFONT ( 72 , 41 ) ;
     };
-    GroupBox GB_BSP
+    FixedLine FL_BSP
     {
         Pos = MAP_APPFONT ( 171 , 3 ) ;
-        Size = MAP_APPFONT ( 83 , 146 ) ;
+        Size = MAP_APPFONT ( 83 , 8 ) ;
         Text = "Vorschau" ;
         Text [ ENGLISH ] = "Example" ;
         Text [ norwegian ] = "Eksempel" ;
@@ -780,7 +782,7 @@ TabPage RID_SVXPAGE_FOOTER
     };
     PushButton BTN_EXTRAS
     {
-        Pos = MAP_APPFONT ( 12 , 129 ) ;
+        Pos = MAP_APPFONT ( 7 , 140 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "Zus~ätze..." ;
         Text [ ENGLISH ] = "~Options..." ;
@@ -822,8 +824,8 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
     /* ### ACHTUNG: Neuer Text in Resource? Das Ausschalten der Kopf- oder Fußzeilen löscht vorhandenen Text.\nMöchten Sie den Inhalt löschen? : Das Ausschalten der Kopf- oder Fu˜zeilen l÷scht vorhandenen Text.\nM÷chten Sie den Inhalt l÷schen? */
-    Message = "Das Ausschalten der Kopf- oder Fußzeilen löscht vorhandenen Text.\nMöchten Sie den Inhalt löschen?" ;
-    Message [ English ] = "Turn off the header or footer delete its contents.\nAre you sure you want to delete this text?" ;
+    Message = "Das Ausschalten der Kopf- oder Fußzeilen löscht vorhandenen Inhalt.\nMöchten Sie den Inhalt löschen?" ;
+    Message [ English ] = "Turn off the header or footer delete its contents.\nAre you sure you want to delete this content?" ;
     Message [ norwegian ] = "Turn off the header or footer delete its contents.\nAre you sure you want to delete this text?" ;
     Message [ italian ] = "Disattivando l'intestazione o il piè di pagina il testo esistente verrà cancellato.\nCancellare il contenuto?" ;
     Message [ portuguese_brazilian ] = "Desativar o cabeçalho ou o rodapé apagar seu conteúdo.\nTem certeza que deseja apagar este texto?" ;

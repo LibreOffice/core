@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: ma $ $Date: 2001-03-26 11:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,10 @@
 #define FT_RMARGIN      18
 #define ED_RMARGIN      19
 #define CB_SHARED       20
-#define GB_FRAME        21
+#define FL_FRAME        21
 
 #define WN_BSP          30
-#define GB_BSP          31
+#define FL_BSP          31
 
 #define BTN_EXTRAS      40
 
