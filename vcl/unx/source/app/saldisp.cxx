@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 14:48:55 $
+ *  last change: $Author: pl $ $Date: 2001-02-14 14:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,9 +262,6 @@ extern "C" { int gethostname(char*,int); }
 #endif
 #ifndef _SV_SALSYS_HXX
 #include <salsys.hxx>
-#endif
-#ifndef _SV_DTINT_HXX
-#include <dtint.hxx>
 #endif
 #ifndef _SV_SALOGL_HXX
 #include <salogl.hxx>
@@ -2671,7 +2668,6 @@ final long SalDisplay::Dispatch( XEvent *pEvent )
       if ( mpInputMethod->FilterEvent( pEvent, None ) )
         return 0;
 
-    // DtIntegrator::HandleXEvent( pEvent );
     SalInstance* pInstance = GetSalData()->pFirstInstance_;
     if( pInstance->maInstData.mpEventCallback )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: pl $ $Date: 2001-02-14 14:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,6 @@ struct XEvent;
 class DtIntegrator;
 
 DECLARE_LIST( DtIntegratorList, DtIntegrator* );
-DECLARE_LIST( DtSalFrameList, SalFrame* );
-DECLARE_LIST( StringList, String* );
 
 struct SystemLookInfo
 {
@@ -163,47 +161,6 @@ enum DtType {
     DtIRIX
 };
 
-enum DtDataType {
-    DtTypeUrl,
-    DtTypeText,
-    DtTypeKnown
-};
-
-struct DtData
-{
-    DtDataType          meType;
-    int                 mnX, mnY; // used for Drop data
-    void*               mpFrame;  // dito
-    int                 mnBytes;
-    unsigned char*      mpBytes;
-    unsigned char*      mpType;
-
-    DtData() : meType( DtTypeText ), mnX( -1 ), mnY( -1 ), mpFrame( 0 ),
-        mnBytes( 0 ), mpBytes( 0 ), mpType( NULL ) {}
-    ~DtData()
-    {
-        if( mpBytes )
-            delete mpBytes;
-    }
-};
-
-enum DtDropAction
-{
-    DtDropNone = 0,
-    DtDropCopy = 1,
-    DtDropMove = 2,
-    DtDropLink = 4,
-    DtDropAny  = 7
-};
-
-struct DtDropQuery
-{
-    int             m_nX;
-    int             m_nY;
-    DtDropAction    m_eAction;
-    void*           m_pFrame; // really a SalFrame*
-};
-
 class DtIntegrator
 {
 protected:
@@ -216,125 +173,20 @@ protected:
     SalFrame*           mpSalFrame;
     int                 mnRefCount;
 
-    XLIB_Window         maSelectionWindow;
-    Atom                maExPropertyAtom;
-
-    Atom                mnXdndAware;
-    Atom                mnXdndSelection;
-    Atom                mnXdndEnter;
-    Atom                mnXdndLeave;
-    Atom                mnXdndStatus;
-    Atom                mnXdndTypeList;
-    Atom                mnXdndPosition;
-    Atom                mnXdndDrop;
-    Atom                mnXdndActionCopy;
-    Atom                mnXdndActionMove;
-    Atom                mnXdndActionLink;
-    Atom                mnXdndActionAsk;
-    Atom                mnXdndActionPrivate;
-    Atom                mnXdndActionList;
-    Atom                mnXdndActionDescription;
-    Atom                mnXdndFinished;
-
-    int                 mnDropDataTime;
-    int                 mnLastDropX;
-    int                 mnLastDropY;
-    XLIB_Window         maDropSource;
-    SalFrame*           mpDropTarget;
-    StringList          maDropTypes;
-
-    Link                maDropFinishHdl;
-    Link                maQueryDropHdl;
-    Link                maBeginDropHdl;
-
-    DtDragState         meDragState;
-    int                 mnLastDragX;
-    int                 mnLastDragY;
-    int                 mnLastDragTimestamp;
-    int                 mnWaitTimestamp;
-    Link                maQueryDragDataHdl;
-    XLIB_Window         maDragSource;
-    XLIB_Window         maDragTarget;
-    StringList          maDragTypes;
 
     DtIntegrator( SalFrame* );
-
-    DtSalFrameList      maDropzones;
-
-    Link                maClipboardChangedHdl;
-    Atom                mnClipboardAtom;
-    Atom                mnTargetsAtom;
-    Atom                mnCompoundAtom;
-    DtData*             mpLastData;
-
-    virtual void ImplRegisterDropzone( SalFrame* );
-    virtual void ImplUnregisterDropzone( SalFrame* );
-    virtual void ImplHandleXEvent( XEvent* );
 
     BOOL LaunchProcess( const String&, const String& rDirectory = String() );
 
     static DtIntegratorList aIntegratorList;
     static String           aHomeDir;
 
-    // helper functions
-    XLIB_Window GetXdndAwareWindowBeneathPointer( int& rVersion, XEvent* );
-    void SendXdndLeave();
-    void SendXdndEnter();
-    void SendXdndPosition( XEvent* );
-    void CheckXdndTimeout( int );
-
 public:
     static DtIntegrator* CreateDtIntegrator( SalFrame* );
-
-    static void HandleXEvent( XEvent* );
 
     virtual ~DtIntegrator();
 
     virtual BOOL    StartProcess( String&, String&, const String& rDir = String() );
-
-    // functions for Clipboard
-    inline Link             SetClipboardChangedHdl( const Link& );
-    const Link&             GetClipboardChangedHdl()
-        { return maClipboardChangedHdl; }
-    void                    Copy( DtData* );    // copy to system
-    DtData*                 Paste();            // copy from system
-    BOOL                    CheckUnxClipboardChanged();
-
-    // functions for Dnd
-    void                    RegisterDropzone( SalFrame* );
-    void                    UnregisterDropzone( SalFrame* );
-    DtDropAction            ExecuteDrag( const StringList &, SalFrame* pFrame );
-    DtData* DropFinish( const String& rType );
-    StringList& GetDropTypes() { return maDropTypes; }
-
-    const Link& GetDropFinishHdl() { return maDropFinishHdl; }
-    Link SetDropFinishHdl( const Link& rNewLink )
-        {
-            Link aRet = maDropFinishHdl;
-            maDropFinishHdl = rNewLink;
-            return aRet;
-        }
-    const Link& GetQueryDropHdl() { return maDropFinishHdl; }
-    Link SetQueryDropHdl( const Link& rNewLink )
-        {
-            Link aRet = maQueryDropHdl;
-            maQueryDropHdl = rNewLink;
-            return aRet;
-        }
-    const Link& GetBeginDropHdl() { return maBeginDropHdl; }
-    Link SetBeginDropHdl( const Link& rNewLink )
-        {
-            Link aRet = maBeginDropHdl;
-            maBeginDropHdl = rNewLink;
-            return aRet;
-        }
-    const Link& GetQueryDragDataHdl() { return maQueryDragDataHdl; }
-    Link SetQueryDragDataHdl( const Link& rNewLink )
-        {
-            Link aRet = maQueryDragDataHdl;
-            maQueryDragDataHdl = rNewLink;
-            return aRet;
-        }
 
     // SystemLook
     virtual BOOL GetSystemLook( SystemLookInfo& rInfo );
@@ -356,13 +208,6 @@ inline void DtIntegrator::Release()
         aIntegratorList.Remove( this );
         delete this;
     }
-}
-
-inline Link DtIntegrator::SetClipboardChangedHdl( const Link& rLink )
-{
-    Link aOldLink = maClipboardChangedHdl;
-    maClipboardChangedHdl = rLink;
-    return aOldLink;
 }
 
 // helper funktions for dynamic loading
