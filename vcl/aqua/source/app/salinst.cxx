@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-19 02:37:03 $
+ *  last change: $Author: pluby $ $Date: 2000-11-20 05:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,11 @@
 #ifndef _SV_SALOBJ_HXX
 #include <salobj.hxx>
 #endif
-#ifndef _SV_SALSYS_H
+#ifndef _SV_SALSYS_HXX
 #include <salsys.hxx>
+#endif
+#ifndef _SV_DIALOG_HXX
+#include <dialog.hxx>
 #endif
 #ifndef _SV_VCLAPPLICATION_H
 #include <VCLApplication.h>
@@ -176,12 +179,31 @@ void SalInstance::AcquireYieldMutex( ULONG nCount )
 
 void SalInstance::Yield( BOOL bWait )
 {
-    // Start the event queue. Note that VCLApplication_run() will not return
-    // until the application shuts down. On other platforms, this function
-    // returns after each event is pulled off the event queue and dispatched.
-    // Instead, we have enter this method only once and let VCLApplication_run
-    // do all of the pulling and dispatching of events.
-    VCLApplication_run();
+    ImplSVData* pSVData = ImplGetSVData();
+
+    // Check if this is a request from a modal window
+    if ( pSVData->maAppData.mnModalMode )
+    {
+        // If this is a request from a modal window, run a modal session.
+        // Note that VCLApplication_runModalForWindow will not return until
+        // the modal session has ended.
+        Dialog *pDialog = pSVData->maWinData.mpLastExecuteDlg;
+        if ( pDialog ) {
+            SalFrame *pFrame = pDialog->ImplGetFrame();
+            if ( pFrame && pFrame->maFrameData.mhWnd )
+                VCLApplication_runModalForWindow( pFrame->maFrameData.mhWnd );
+        }
+    }
+    else
+    {
+        // If this is not a request from a modal window, start the event queue.
+        // Note that VCLApplication_run() will not return until the
+        // application shuts down. On other platforms, this function returns
+        // after each event is pulled off the event queue and dispatched.
+        // Instead, we have enter this method only once and let
+        // VCLApplication_run do all of the pulling and dispatching of events.
+        VCLApplication_run();
+    }
 }
 
 // -----------------------------------------------------------------------
