@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:19:26 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 11:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,6 +591,14 @@ void BrowseBox::SetColumnPos( USHORT nColumnId, USHORT nPos )
         else
             pDataWin->Window::Invalidate( INVALIDATE_NOCHILDREN );
 
+        // adjust header bar positions
+        if ( ((BrowserDataWin*)pDataWin)->pHeaderBar )
+        {
+            USHORT nNewPos = nPos;
+            if ( !GetColumnId(0) )
+                --nNewPos;
+            ((BrowserDataWin*)pDataWin)->pHeaderBar->MoveItem(nColumnId,nNewPos);
+        }
         // remember the column selection
         SetToggledSelectedColumn(nSelectedColId);
 
