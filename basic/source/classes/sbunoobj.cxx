@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 07:42:55 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@ static String ID_DBG_METHODS( RTL_CONSTASCII_USTRINGPARAM("Dbg_Methods") );
 
 static String aIllegalArgumentExceptionName
     ( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.IllegalArgumentException" ) );
+static OUString aSeqLevelStr( RTL_CONSTASCII_USTRINGPARAM("[]") );
 
 
 Reference< XComponentContext > getComponentContext_Impl( void )
@@ -198,6 +199,23 @@ Reference< XIdlReflection > getCoreReflection_Impl( void )
         }
     }
     return xCoreReflection;
+}
+
+// CoreReflection statisch speichern
+Reference< XHierarchicalNameAccess > getCoreReflection_HierarchicalNameAccess_Impl( void )
+{
+    static Reference< XHierarchicalNameAccess > xCoreReflection_HierarchicalNameAccess;
+
+    if( !xCoreReflection_HierarchicalNameAccess.is() )
+    {
+        Reference< XIdlReflection > xCoreReflection = getCoreReflection_Impl();
+        if( xCoreReflection.is() )
+        {
+            xCoreReflection_HierarchicalNameAccess =
+                Reference< XHierarchicalNameAccess >( xCoreReflection, UNO_QUERY );
+        }
+    }
+    return xCoreReflection_HierarchicalNameAccess;
 }
 
 // Hold TypeProvider statically
@@ -281,9 +299,12 @@ SbUnoObject* createOLEObject_Impl( const String& aType )
     if( xOLEFactory.is() )
     {
         Reference< XInterface > xOLEObject = xOLEFactory->createInstance( aType );
-        Any aAny;
-        aAny <<= xOLEObject;
-        pUnoObj = new SbUnoObject( aType, aAny );
+        if( xOLEObject.is() )
+        {
+            Any aAny;
+            aAny <<= xOLEObject;
+            pUnoObj = new SbUnoObject( aType, aAny );
+        }
     }
     return pUnoObj;
 }
@@ -717,13 +738,15 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
             SbxBase* pObj = (SbxBase*)xObj;
             SbxDimArray* pArray = (SbxDimArray*)pObj;
 
-            // es muss ein eindimensionales Array sein
-            sal_Int32 nLower, nUpper;
-            if( pArray->GetDims() == 1 && pArray->GetDim32( 1, nLower, nUpper ) )
-            {
-                Type aElementType = getUnoTypeForSbxBaseType( (SbxDataType)(pArray->GetType() & 0xfff) );
+            short nDims = pArray->GetDims();
+            Type aElementType = getUnoTypeForSbxBaseType( (SbxDataType)(pArray->GetType() & 0xfff) );
+            TypeClass eElementTypeClass = aElementType.getTypeClass();
 
-                if( aElementType.getTypeClass() == TypeClass_VOID )
+            // Normal case: One dimensional array
+            sal_Int32 nLower, nUpper;
+            if( nDims == 1 && pArray->GetDim32( 1, nLower, nUpper ) )
+            {
+                if( eElementTypeClass == TypeClass_VOID || eElementTypeClass == TypeClass_ANY )
                 {
                     // Wenn alle Elemente des Arrays vom gleichen Typ sind, wird
                     // der genommen, sonst wird das ganze als Any-Sequence betrachtet
@@ -757,11 +780,50 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                     }
                 }
 
-                OUString aSeqTypeName( RTL_CONSTASCII_USTRINGPARAM("[]") );
+                OUString aSeqTypeName( aSeqLevelStr );
                 aSeqTypeName += aElementType.getTypeName();
                 aRetType = Type( TypeClass_SEQUENCE, aSeqTypeName );
             }
-            // Ein Array mit Dim > 1 wird nicht konvertiert -> default==void liefern
+            // #i33795 Map also multi dimensional arrays to corresponding sequences
+            else if( nDims > 1 )
+            {
+                if( eElementTypeClass == TypeClass_VOID || eElementTypeClass == TypeClass_ANY )
+                {
+                    // For this check the array's dim structure does not matter
+                    UINT32 nFlatArraySize = pArray->Count32();
+
+                    sal_Bool bNeedsInit = sal_True;
+                    for( UINT32 i = 0 ; i < nFlatArraySize ; i++ )
+                    {
+                        SbxVariableRef xVar = pArray->SbxArray::Get32( i );
+                        Type aType = getUnoTypeForSbxValue( (SbxVariable*)xVar );
+                        if( bNeedsInit )
+                        {
+                            if( aType.getTypeClass() == TypeClass_VOID )
+                            {
+                                // if only first element is void: different types  -> []any
+                                // if all elements are void: []void is not allowed -> []any
+                                aElementType = getCppuType( (Any*)0 );
+                                break;
+                            }
+                            aElementType = aType;
+                            bNeedsInit = sal_False;
+                        }
+                        else if( aElementType != aType )
+                        {
+                            // Verschiedene Typen -> AnySequence
+                            aElementType = getCppuType( (Any*)0 );
+                            break;
+                        }
+                    }
+                }
+
+                OUString aSeqTypeName;
+                for( short iDim = 0 ; iDim < nDims ; iDim++ )
+                    aSeqTypeName += aSeqLevelStr;
+                aSeqTypeName += aElementType.getTypeName();
+                aRetType = Type( TypeClass_SEQUENCE, aSeqTypeName );
+            }
         }
         // Kein Array, sondern...
         else if( xObj->ISA(SbUnoObject) )
@@ -857,6 +919,69 @@ Any sbxToUnoValueImpl( SbxVariable* pVar, bool bBlockConversionToSmallestType = 
     }
 
     return sbxToUnoValue( pVar, aType );
+}
+
+
+
+// Helper function for StepREDIMP
+static Any implRekMultiDimArrayToSequence( SbxDimArray* pArray,
+    const Type& aElemType, short nMaxDimIndex, short nActualDim,
+    sal_Int32* pActualIndices, sal_Int32* pLowerBounds, sal_Int32* pUpperBounds )
+{
+    sal_Int32 nSeqLevel = nMaxDimIndex - nActualDim + 1;
+    OUString aSeqTypeName;
+    sal_Int32 i;
+    for( i = 0 ; i < nSeqLevel ; i++ )
+        aSeqTypeName += aSeqLevelStr;
+
+    aSeqTypeName += aElemType.getTypeName();
+    Type aSeqType( TypeClass_SEQUENCE, aSeqTypeName );
+
+    // Create Sequence instance
+    Any aRetVal;
+    Reference< XIdlClass > xIdlTargetClass = TypeToIdlClass( aSeqType );
+    xIdlTargetClass->createObject( aRetVal );
+
+    // Alloc sequence according to array bounds
+    sal_Int32 nUpper = pUpperBounds[nActualDim];
+    sal_Int32 nLower = pLowerBounds[nActualDim];
+    sal_Int32 nSeqSize = nUpper - nLower + 1;
+    Reference< XIdlArray > xArray = xIdlTargetClass->getArray();
+    xArray->realloc( aRetVal, nSeqSize );
+
+    sal_Int32& ri = pActualIndices[nActualDim];
+
+    for( ri = nLower,i = 0 ; ri <= nUpper ; ri++,i++ )
+    {
+        Any aElementVal;
+
+        if( nActualDim < nMaxDimIndex )
+        {
+            aElementVal = implRekMultiDimArrayToSequence( pArray, aElemType,
+                nMaxDimIndex, nActualDim + 1, pActualIndices, pLowerBounds, pUpperBounds );
+        }
+        else
+        {
+            SbxVariable* pSource = pArray->Get32( pActualIndices );
+            aElementVal = sbxToUnoValue( pSource, aElemType );
+        }
+
+        try
+        {
+            // In die Sequence uebernehmen
+            xArray->set( aRetVal, i, aElementVal );
+        }
+        catch( IllegalArgumentException& e1 )
+        {
+            StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
+                implGetExceptionMsg( e1, aIllegalArgumentExceptionName ) );
+        }
+        catch (IndexOutOfBoundsException& e2)
+        {
+            StarBASIC::Error( SbERR_OUT_OF_RANGE );
+        }
+    }
+    return aRetVal;
 }
 
 // Map old interface
@@ -979,16 +1104,17 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                 SbxBase* pObj = (SbxBase*)xObj;
                 SbxDimArray* pArray = (SbxDimArray*)pObj;
 
-                // Instanz der geforderten Sequence erzeugen
-                Reference< XIdlClass > xIdlTargetClass = TypeToIdlClass( rType );
-                xIdlTargetClass->createObject( aRetVal );
+                short nDims = pArray->GetDims();
 
-                // es muss ein eindimensionales Array sein
+                // Normal case: One dimensional array
                 sal_Int32 nLower, nUpper;
-                if( pArray->GetDims() == 1 && pArray->GetDim32( 1, nLower, nUpper ) )
+                if( nDims == 1 && pArray->GetDim32( 1, nLower, nUpper ) )
                 {
                     sal_Int32 nSeqSize = nUpper - nLower + 1;
 
+                    // Instanz der geforderten Sequence erzeugen
+                    Reference< XIdlClass > xIdlTargetClass = TypeToIdlClass( rType );
+                    xIdlTargetClass->createObject( aRetVal );
                     Reference< XIdlArray > xArray = xIdlTargetClass->getArray();
                     xArray->realloc( aRetVal, nSeqSize );
 
@@ -997,14 +1123,8 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                     typelib_TypeDescription * pSeqTD = 0;
                     typelib_typedescription_getByName( &pSeqTD, aClassName.pData );
                     OSL_ASSERT( pSeqTD );
-#if SUPD > 600
                     Type aElemType( ((typelib_IndirectTypeDescription *)pSeqTD)->pType );
-#else
-                    typelib_TypeDescription * pElementTD =
-                        ((typelib_IndirectTypeDescription *)pSeqTD)->pType;
-                    Type aElemType( pElementTD->pWeakRef );
-#endif
-                    Reference< XIdlClass > xElementClass = TypeToIdlClass( aElemType );
+                    // Reference< XIdlClass > xElementClass = TypeToIdlClass( aElemType );
 
                     // Alle Array-Member umwandeln und eintragen
                     sal_Int32 nIdx = nLower;
@@ -1029,6 +1149,55 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                         {
                             StarBASIC::Error( SbERR_OUT_OF_RANGE );
                         }
+                    }
+                }
+                // #i33795 Map also multi dimensional arrays to corresponding sequences
+                else if( nDims > 1 )
+                {
+                    // Element-Type
+                    typelib_TypeDescription * pSeqTD = 0;
+                    Type aCurType( rType );
+                    sal_Int32 nSeqLevel = 0;
+                    Type aElemType;
+                    do
+                    {
+                        OUString aTypeName = aCurType.getTypeName();
+                        typelib_typedescription_getByName( &pSeqTD, aTypeName.pData );
+                        OSL_ASSERT( pSeqTD );
+                        if( pSeqTD->eTypeClass == typelib_TypeClass_SEQUENCE )
+                        {
+                            aCurType = Type( ((typelib_IndirectTypeDescription *)pSeqTD)->pType );
+                            nSeqLevel++;
+                        }
+                        else
+                        {
+                            aElemType = aCurType;
+                            break;
+                        }
+                    }
+                    while( true );
+
+                    if( nSeqLevel == nDims )
+                    {
+                        sal_Int32* pLowerBounds = new sal_Int32[nDims];
+                        sal_Int32* pUpperBounds = new sal_Int32[nDims];
+                        sal_Int32* pActualIndices = new sal_Int32[nDims];
+                        for( short i = 1 ; i <= nDims ; i++ )
+                        {
+                            sal_Int32 lBound, uBound;
+                            pArray->GetDim32( i, lBound, uBound );
+
+                            short j = i - 1;
+                            pActualIndices[j] = pLowerBounds[j] = lBound;
+                            pUpperBounds[j] = uBound;
+                        }
+
+                        aRetVal = implRekMultiDimArrayToSequence( pArray, aElemType,
+                            nDims - 1, 0, pActualIndices, pLowerBounds, pUpperBounds );
+
+                        delete[] pUpperBounds;
+                        delete[] pLowerBounds;
+                        delete[] pActualIndices;
                     }
                 }
             }
@@ -2386,7 +2555,11 @@ SbUnoObject* Impl_CreateUnoStruct( const String& aClassName )
         return NULL;
 
     // Klasse suchen
-    Reference< XIdlClass > xClass = xCoreReflection->forName( aClassName );
+    Reference< XIdlClass > xClass;
+    Reference< XHierarchicalNameAccess > xHarryName =
+        getCoreReflection_HierarchicalNameAccess_Impl();
+    if( xHarryName.is() && xHarryName->hasByHierarchicalName( aClassName ) )
+        xClass = xCoreReflection->forName( aClassName );
     if( !xClass.is() )
         return NULL;
 
