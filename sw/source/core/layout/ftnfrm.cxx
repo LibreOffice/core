@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-22 09:36:16 $
+ *  last change: $Author: ama $ $Date: 2001-11-22 12:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3170,7 +3170,8 @@ SwSaveFtnHeight::~SwSaveFtnHeight()
 const SwCntntFrm* SwFtnFrm::GetRef() const
 {
     const SwCntntFrm* pRefAttr = GetRefFromAttr();
-    ASSERT( pRef == pRefAttr || pRef->GetFollow() == pRefAttr,
+    ASSERT( pRef == pRefAttr || pRef->GetFollow() == pRefAttr
+            || pRefAttr->GetFollow() == pRef,
             "access to deleted Frame? pRef != pAttr->GetRef()" );
     return pRef;
 }
@@ -3178,7 +3179,8 @@ const SwCntntFrm* SwFtnFrm::GetRef() const
 SwCntntFrm* SwFtnFrm::GetRef()
 {
     const SwCntntFrm* pRefAttr = GetRefFromAttr();
-    ASSERT( pRef == pRefAttr || pRef->GetFollow() == pRefAttr,
+    ASSERT( pRef == pRefAttr || pRef->GetFollow() == pRefAttr
+            || pRefAttr->GetFollow() == pRef,
             "access to deleted Frame? pRef != pAttr->GetRef()" );
     return pRef;
 }
