@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 12:15:28 $
+ *  last change: $Author: fs $ $Date: 2001-08-16 10:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,6 @@
  ************************************************************************/
 
 
-#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
-#include <com/sun/star/sdbcx/Privilege.hpp>
-#endif
 #ifndef _SBA_BWRCTRLR_HXX
 #include "brwctrlr.hxx"
 #endif
@@ -162,6 +159,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
+#include <com/sun/star/sdbcx/Privilege.hpp>
+#endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
@@ -249,6 +249,7 @@ using namespace ::com::sun::star::container;
 using namespace ::dbtools;
 using namespace ::comphelper;
 using namespace ::svt;
+using namespace ::svx;
 
 #define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
     try                                                                     \
@@ -1972,10 +1973,6 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
         case ID_BROWSER_REFRESH:
             if (SaveData(sal_True, sal_False))
             {
-                // check if the signature of the object to be reloaded changed
-                // TODO
-
-                // reload
                 if (!reloadForm(Reference< XLoadable >(getRowSet(), UNO_QUERY)))
                     criticalFail();
             }
@@ -2348,7 +2345,7 @@ void SbaXDataBrowserController::criticalFail()
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::LoadFinished(sal_Bool /*bWasSynch*/)
 {
-    if (isValid() && !m_bLoadCanceled)
+    if (isValid() && !loadingCancelled())
     {
         // --------------------------------
         // switch the control to alive mode
@@ -2381,9 +2378,10 @@ void SbaXDataBrowserController::LoadFinished(sal_Bool /*bWasSynch*/)
             m_xParser = NULL;
             // no further handling, we ignore the error
         }
-        ;
 
+        // -------------------------------
         InvalidateAll();
+
         // -------------------------------
         // start the clipboard invalidator
         m_aInvalidateClipboard.SetTimeoutHdl(LINK(this, SbaXDataBrowserController, OnInvalidateClipboard));

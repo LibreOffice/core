@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 12:12:43 $
+ *  last change: $Author: fs $ $Date: 2001-08-16 10:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
 #include <com/sun/star/form/XFormController.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
+#include <com/sun/star/form/XLoadable.hpp>
+#endif
 #ifndef _SBA_FORMADAPTER_HXX
 #include "formadapter.hxx"
 #endif
@@ -94,6 +97,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::form;
 using namespace dbaui;
 
 //==============================================================================
@@ -444,8 +448,14 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
     {
         // at this point we have to reset the formatter for the new form
         initFormatter();
-        // assume that the master form is already loaded, we have no chance to check this
-        m_bLoadCanceled = sal_False;
+        // assume that the master form is already loaded
+#ifdef _DEBUG
+        {
+            Reference< XLoadable > xLoadable( xMaster, UNO_QUERY );
+            OSL_ENSURE( xLoadable.is() && xLoadable->isLoaded(), "SbaExternalSourceBrowser::Attach: master is not loaded!" );
+        }
+#endif
+
         LoadFinished(sal_True);
 
         Reference< XResultSetUpdate >  xUpdate(xMaster, UNO_QUERY);
