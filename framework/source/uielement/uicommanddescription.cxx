@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uicommanddescription.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 17:02:30 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@ static const char CONFIGURATION_ROOT_ACCESS[]           = "/org.openoffice.Offic
 static const char CONFIGURATION_CMD_ELEMENT_ACCESS[]    = "/UserInterface/Commands";
 static const char CONFIGURATION_POP_ELEMENT_ACCESS[]    = "/UserInterface/Popups";
 static const char CONFIGURATION_PROPERTY_LABEL[]        = "Label";
+static const char CONFIGURATION_PROPERTY_CONTEXT_LABEL[] = "ContextLabel";
 
 // Property names of the resulting Property Set
 static const char PROPSET_LABEL[]                       = "Label";
@@ -233,6 +234,7 @@ class ConfigurationAccess_UICommand : // interfaces
                              nProperties( 0 ) {}
 
             rtl::OUString       aLabel;
+            rtl::OUString       aContextLabel;
             rtl::OUString       aCommandName;
             sal_Bool            bPopup : 1,
                                 bCommandNameCreated : 1;
@@ -258,6 +260,7 @@ class ConfigurationAccess_UICommand : // interfaces
         rtl::OUString                     m_aConfigCmdAccess;
         rtl::OUString                     m_aConfigPopupAccess;
         rtl::OUString                     m_aPropUILabel;
+        rtl::OUString                     m_aPropUIContextLabel;
         rtl::OUString                     m_aPropLabel;
         rtl::OUString                     m_aPropName;
         rtl::OUString                     m_aPropPopup;
@@ -305,6 +308,7 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const rtl::OUStrin
     ThreadHelpBase(),
     m_xServiceManager( rServiceManager ),
     m_aPropUILabel( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_PROPERTY_LABEL )),
+    m_aPropUIContextLabel( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_PROPERTY_CONTEXT_LABEL )),
     m_bConfigAccessInitialized( sal_False ),
     m_bCacheFilled( sal_False ),
     m_aConfigCmdAccess( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_ROOT_ACCESS )),
@@ -436,7 +440,8 @@ Any ConfigurationAccess_UICommand::getSequenceFromCache( const OUString& aComman
 
         Sequence< PropertyValue > aPropSeq( 3 );
         aPropSeq[0].Name  = m_aPropLabel;
-        aPropSeq[0].Value = makeAny( pIter->second.aLabel );
+        aPropSeq[0].Value = pIter->second.aContextLabel.getLength() ?
+                makeAny( pIter->second.aContextLabel ): makeAny( pIter->second.aLabel );
         aPropSeq[1].Name  = m_aPropName;
         aPropSeq[1].Value = makeAny( pIter->second.aCommandName );
         aPropSeq[2].Name  = m_aPropPopup;
@@ -479,6 +484,8 @@ sal_Bool ConfigurationAccess_UICommand::fillCache()
 
                 a = xNameAccess->getByName( m_aPropUILabel );
                 a >>= aCmdToInfo.aLabel;
+                a = xNameAccess->getByName( m_aPropUIContextLabel );
+                a >>= aCmdToInfo.aContextLabel;
                 a = xNameAccess->getByName( m_aPropProperties );
                 a >>= aCmdToInfo.nProperties;
 
@@ -514,6 +521,8 @@ sal_Bool ConfigurationAccess_UICommand::fillCache()
                 aCmdToInfo.bPopup = sal_True;
                 a = xNameAccess->getByName( m_aPropUILabel );
                 a >>= aCmdToInfo.aLabel;
+                a = xNameAccess->getByName( m_aPropUIContextLabel );
+                a >>= aCmdToInfo.aContextLabel;
                 a = xNameAccess->getByName( m_aPropProperties );
                 a >>= aCmdToInfo.nProperties;
 
