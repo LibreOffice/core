@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-30 12:00:24 $
+ *  last change: $Author: dvo $ $Date: 2002-08-30 17:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,9 @@ sal_uInt16 lcl_ConvertFNToRES(sal_uInt16 nFNId)
         break;
         case FN_UNO_FOOTER_HEIGHT:
         case FN_UNO_HEADER_HEIGHT:          nRes = SID_ATTR_PAGE_SIZE;
+        break;
+        case FN_UNO_FOOTER_EAT_SPACING:
+        case FN_UNO_HEADER_EAT_SPACING:   nRes = RES_HEADER_FOOTER_EAT_SPACING;
         break;
     }
     return nRes;
