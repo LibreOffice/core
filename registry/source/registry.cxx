@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 15:37:46 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,11 +145,7 @@ OString getTempName()
                                        + RTL_CONSTASCII_LENGTH("/reg_XXXXXX") ) );
     strncat(tmpPattern, "/reg_XXXXXX", sizeof(tmpPattern)-1-strlen(tmpPattern));
 
-#if defined(FREEBSD) || defined(MACOSX)
-    pTmpName = mkstemp(tmpPattern);
-#else
     pTmpName = mktemp(tmpPattern);
-#endif
 #endif
 
     return OString(pTmpName);
