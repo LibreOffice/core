@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:39:52 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,13 +138,12 @@ public:
     inline const String*        GetRepr() const { return mpRepr.get(); }
 
 private:
-    /** Builds path and file name from the passed URL object.
-        @param rName  (out) The path + file name for export.
-        @param rnLevel  (out) The parent directory level.
-        @param rbRel  (out) true = path is relative. */
-    void                        BuildFileName(
-                                    String& rName, sal_uInt16& rnLevel, bool& rbRel,
-                                    const INetURLObject& rUrlObj, const XclExpRoot& rRoot ) const;
+    /** Builds file name from the passed file URL. Tries to convert to relative file name.
+        @param rnLevel  (out-param) The parent directory level.
+        @param rbRel  (out-param) true = path is relative. */
+    String                      BuildFileName(
+                                    sal_uInt16& rnLevel, bool& rbRel,
+                                    const String& rUrl, const XclExpRoot& rRoot ) const;
 
     /** Writes the body of the HLINK record. */
     virtual void                WriteBody( XclExpStream& rStrm );
@@ -181,8 +180,8 @@ private:
     /** Fills the specified range list with all label headers of the current sheet.
         @param rRanges  The cell range list to fill.
         @param xLabelRangesRef  The core range list with all ranges.
-        @param nTab  The current sheet index. */
-    void                        FillRangeList( ScRangeList& rRanges, ScRangePairListRef xLabelRangesRef, sal_uInt16 nTab );
+        @param nScTab  The current Calc sheet index. */
+    void                        FillRangeList( ScRangeList& rRanges, ScRangePairListRef xLabelRangesRef, USHORT nScTab );
 
     /** Writes the body of the LABELRANGES record. */
     virtual void                WriteBody( XclExpStream& rStrm );
