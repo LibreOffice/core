@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arguments.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2002-06-21 08:38:40 $
+ *  last change: $Author: mav $ $Date: 2002-07-09 04:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ namespace framework{
 #define ARGUMENTNAME_STATUSINDICATOR                        DECLARE_ASCII("StatusIndicator"     )   // Reference< XStatusIndicator >
 #define ARGUMENTNAME_INTERACTIONHANDLER                     DECLARE_ASCII("InteractionHandler"  )   // Reference< XInteractionHandler >
 #define ARGUMENTNAME_MACROEXECUTIONMODE                     DECLARE_ASCII("MacroExecutionMode"  )   // int16
+#define ARGUMENTNAME_UPDATEDOCFROMTEMP                      DECLARE_ASCII("UpdateDocFromTemplate"  )   // int16
 
 /*-************************************************************************************************************//**
     @short          define our argument mask
@@ -193,7 +194,8 @@ enum EArgument
     E_TYPENAME              = ARGUMENTLAYER_2 | ARGUMENTFLAG_5  ,
     E_STATUSINDICATOR       = ARGUMENTLAYER_2 | ARGUMENTFLAG_6  ,
     E_INTERACTIONHANDLER    = ARGUMENTLAYER_2 | ARGUMENTFLAG_7  ,
-    E_MACROEXECUTIONMODE    = ARGUMENTLAYER_2 | ARGUMENTFLAG_8
+    E_MACROEXECUTIONMODE    = ARGUMENTLAYER_2 | ARGUMENTFLAG_8  ,
+    E_UPDATEDOCFROMTEMP     = ARGUMENTLAYER_2 | ARGUMENTFLAG_9
 };
 
 }       //  namespace framework
