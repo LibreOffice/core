@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-22 23:59:46 $
+ *  last change: $Author: rt $ $Date: 2001-11-28 23:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -13264,7 +13264,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Potenziert eine Zahl mit einer anderen." ;
             Text [ english ] = "Returns the result of a number raised to a power." ;
             Text [ norwegian ] = "Potenziert eine Zahl mit einer anderen." ;
-            Text [ italian ] = "Restituisce il risultato del un numero elevato alla potenza indicata." ;
+            Text [ italian ] = "Restituisce il risultato di un numero elevato alla potenza indicata." ;
             Text [ portuguese_brazilian ] = "Potenziert eine Zahl mit einer anderen." ;
             Text [ portuguese ] = "Devolve o valor de um n˙mero elevado a uma potÍncia." ;
             Text [ finnish ] = "Korottaa luvun potenssiin (joka m‰‰r‰ytyy toisen luvun perusteella)." ;
@@ -13299,7 +13299,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Basis" ;
             Text [ english ] = "base" ;
             Text [ norwegian ] = "Basis" ;
-            Text [ italian ] = "base" ;
+            Text [ italian ] = "Base " ;
             Text [ portuguese_brazilian ] = "Basis" ;
             Text [ portuguese ] = "Base" ;
             Text [ finnish ] = "Kanta" ;
@@ -13328,7 +13328,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Zahl, die potenziert wird." ;
             Text [ english ] = "is the base number." ;
             Text [ norwegian ] = "Die Zahl, die potenziert wird." ;
-            Text [ italian ] = "Ë il numero della base." ;
+            Text [ italian ] = "Numero della base." ;
             Text [ portuguese_brazilian ] = "Die Zahl, die potenziert wird." ;
             Text [ portuguese ] = "È o n˙mero a ser elevado." ;
             Text [ finnish ] = "Luku, joka korotetaan potenssiin." ;
@@ -13357,7 +13357,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Potenz" ;
             Text [ english ] = "power" ;
             Text [ norwegian ] = "Potenz" ;
-            Text [ italian ] = "potenza" ;
+            Text [ italian ] = "Potenza " ;
             Text [ portuguese_brazilian ] = "Potenz" ;
             Text [ portuguese ] = "PotÍncia" ;
             Text [ finnish ] = "Potenssim‰‰ritys" ;
@@ -13386,7 +13386,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Hochzahl, mit der die Zahl potenziert wird." ;
             Text [ english ] = "is the exponent, to which the base number is raised." ;
             Text [ norwegian ] = "Die Hochzahl, mit der die Zahl potenziert wird." ;
-            Text [ italian ] = "Ë l'esponente a cui Ë elevato il numero della base." ;
+            Text [ italian ] = "Esponente a cui Ë elevato il numero della base." ;
             Text [ portuguese_brazilian ] = "Die Hochzahl, mit der die Zahl potenziert wird." ;
             Text [ portuguese ] = "È o expoente com o qual a base È elevada." ;
             Text [ finnish ] = "Potenssi, johon luku korotetaan." ;
@@ -13590,7 +13590,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl " ;
             Text [ english ] = "number " ;
             Text [ norwegian ] = "Zahl " ;
-            Text [ italian ] = "numero " ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl " ;
             Text [ portuguese ] = "N˙mero " ;
             Text [ finnish ] = "luku" ;
@@ -13619,7 +13619,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl 1;Zahl 2;... sind 1 bis 30 Argumente, deren Summe berechnet werden soll." ;
             Text [ english ] = "are 1 to 30 arguments for which you want the sum." ;
             Text [ norwegian ] = "Zahl 1;Zahl 2;... sind 1 bis 30 Argumente, deren Summe berechnet werden soll." ;
-            Text [ italian ] = "sono da 1 a 30 argomenti di cui si desidera la somma." ;
+            Text [ italian ] = "Argomenti da 1 a 30 di cui si desidera la somma." ;
             Text [ portuguese_brazilian ] = "Zahl 1;Zahl 2;... sind 1 bis 30 Argumente, deren Summe berechnet werden soll." ;
             Text [ portuguese ] = "N˙m1, n˙m2,...    s„o os argumentos entre 1 e 30 que se desejam somar." ;
             Text [ finnish ] = "Luku 1, luku 2 ja niin edelleen ovat 1 - 30 argumenttia, joiden summa lasketaan." ;
@@ -13687,7 +13687,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl " ;
             Text [ english ] = "number " ;
             Text [ norwegian ] = "Zahl " ;
-            Text [ italian ] = "numero " ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl " ;
             Text [ portuguese ] = "N˙mero " ;
             Text [ finnish ] = "luku" ;
@@ -13716,7 +13716,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl 1;Zahl 2;... sind 1 bis 30 Argumente, deren Quadratesumme berechnet werden soll." ;
             Text [ english ] = "are 1 to 30 arguments for which you want the sum of the squares." ;
             Text [ norwegian ] = "Zahl 1;Zahl 2;... sind 1 bis 30 Argumente, deren Quadratesumme berechnet werden soll." ;
-            Text [ italian ] = "sono da 1 a 30 argomenti di cui si desidera la somma dei quadrati." ;
+            Text [ italian ] = "Argomenti da 1 a 30 di cui si desidera la somma dei quadrati." ;
             Text [ portuguese_brazilian ] = "Zahl 1;Zahl 2;... sind 1 bis 30 Argumente, deren Quadratesumme berechnet werden soll." ;
             Text [ portuguese ] = "N˙m1, n˙m2,...  s„o argumentos entre 1 e 30 para os quais deseja a soma dos quadrados." ;
             Text [ finnish ] = "Luku 1, luku 2 ja niin edelleen ovat 1 - 30 argumenttia, joiden neliˆiden summa lasketaan." ;
@@ -13813,7 +13813,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl 1;Zahl 2;... sind 1 bis 30 Argumente, deren Produkt berechnet werden soll." ;
             Text [ english ] = "are 1 to 30 numbers that you want to multiply." ;
             Text [ norwegian ] = "Zahl 1;Zahl 2;... sind 1 bis 30 Argumente, deren Produkt berechnet werden soll." ;
-            Text [ italian ] = "sono da 1 a 30 numeri che si desidera moltiplicare." ;
+            Text [ italian ] = "Serie di numeri da 1 a 30 che si desidera moltiplicare." ;
             Text [ portuguese_brazilian ] = "Zahl 1;Zahl 2;... sind 1 bis 30 Argumente, deren Produkt berechnet werden soll." ;
             Text [ portuguese ] = "È de 1 atÈ 30 argumentos, cujo produto se deseja calcular." ;
             Text [ finnish ] = "Luku 1, luku 2 ja niin edelleen ovat 1 - 30 kesken‰‰n kerrottavaa argumenttia, joiden tulo palautetaan." ;
@@ -13882,7 +13882,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Bereich" ;
             Text [ english ] = "range" ;
             Text [ norwegian ] = "Bereich" ;
-            Text [ italian ] = "area" ;
+            Text [ italian ] = "Intervallo" ;
             Text [ portuguese_brazilian ] = "Bereich" ;
             Text [ portuguese ] = "Intervalo" ;
             Text [ finnish ] = "alue" ;
@@ -13911,7 +13911,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Bereich, auf den die Kriterien angewendet werden." ;
             Text [ english ] = "is the range of cells you want evaluated." ;
             Text [ norwegian ] = "Bereich, auf den die Kriterien angewendet werden." ;
-            Text [ italian ] = "Ë l'area alla quale vengono applicati i criteri." ;
+            Text [ italian ] = "Intervallo di celle al quale vengono applicati i criteri." ;
             Text [ portuguese_brazilian ] = "Bereich, auf den die Kriterien angewendet werden." ;
             Text [ portuguese ] = "È o intervalo de cÈlulas ao qual se aplicam os critÈrios dados." ;
             Text [ finnish ] = "Alue, joka tarkistetaan m‰‰ritetyll‰ ehdolla." ;
@@ -13969,7 +13969,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zellbereich, in dem die Suchkriterien angegeben sind." ;
             Text [ english ] = "is the criteria in the form of a number, expression, or text that defines which cells will be added." ;
             Text [ norwegian ] = "Zellbereich, in dem die Suchkriterien angegeben sind." ;
-            Text [ italian ] = "Area di celle in cui sono specificati i criteri di ricerca." ;
+            Text [ italian ] = "Intervallo di celle in cui sono specificati i criteri di ricerca." ;
             Text [ portuguese_brazilian ] = "Zellbereich, in dem die Suchkriterien angegeben sind." ;
             Text [ portuguese ] = "s„o os critÈrios na forma de n˙mero, express„o ou texto, que definem quais as cÈlulas a adicionar." ;
             Text [ finnish ] = "Soluvalinta, jossa hakuehdot ovat." ;
@@ -13998,7 +13998,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Summenbereich" ;
             Text [ english ] = "sum_range" ;
             Text [ norwegian ] = "Summenbereich" ;
-            Text [ italian ] = "int_somma" ;
+            Text [ italian ] = "Intervallo somma" ;
             Text [ portuguese_brazilian ] = "Summenbereich" ;
             Text [ portuguese ] = "Intervalo_soma" ;
             Text [ finnish ] = "summa_alue" ;
@@ -14027,7 +14027,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Bereich, aus dem die Werte summiert werden." ;
             Text [ english ] = "are the actual cells to sum." ;
             Text [ norwegian ] = "Bereich, aus dem die Werte summiert werden." ;
-            Text [ italian ] = "Ë l'area contenente i valori da sommare." ;
+            Text [ italian ] = "Intervallo di celle contenente i valori da sommare." ;
             Text [ portuguese_brazilian ] = "Bereich, aus dem die Werte summiert werden." ;
             Text [ portuguese ] = "È o intervalo de cÈlulas cujos valores ser„o somados." ;
             Text [ finnish ] = "Alue, jonka arvot lasketaan yhteen." ;
@@ -14125,7 +14125,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Bereich, auf den die Kriterien angewendet werden." ;
             Text [ english ] = "is the range of cells from which you want to count cells." ;
             Text [ norwegian ] = "Bereich, auf den die Kriterien angewendet werden." ;
-            Text [ italian ] = "» l'intervallo al quale vengono applicati i criteri." ;
+            Text [ italian ] = "Intervallo al quale vengono applicati i criteri." ;
             Text [ portuguese_brazilian ] = "Bereich, auf den die Kriterien angewendet werden." ;
             Text [ portuguese ] = "È o intervalo de cÈlulas, ao qual se deseja aplicar os critÈrios." ;
             Text [ finnish ] = "Soluvalinta, johon ehtoa sovelletaan." ;
@@ -14183,7 +14183,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zellbereich, in dem die Suchkriterien angegeben sind." ;
             Text [ english ] = "is the criteria in the form of a number, expression, or text that defines which cells will be counted." ;
             Text [ norwegian ] = "Zellbereich, in dem die Suchkriterien angegeben sind." ;
-            Text [ italian ] = "» l'area di celle in cui sono specificati i criteri di ricerca." ;
+            Text [ italian ] = "Intervallo di celle in cui sono specificati i criteri di ricerca." ;
             Text [ portuguese_brazilian ] = "Zellbereich, in dem die Suchkriterien angegeben sind." ;
             Text [ portuguese ] = "È o critÈrio na forma de um n˙mero, express„o ou texto que define quais as cÈlulas que ser„o contadas." ;
             Text [ finnish ] = "Soluvalinta, jossa hakuehdot ovat." ;
@@ -14252,7 +14252,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "luku" ;
@@ -14282,7 +14282,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Ein positiver Wert, dessen Quadratwurzel berechnet werden soll." ;
             Text [ english ] = "is the number for which you want the square root." ;
             Text [ norwegian ] = "Ein positiver Wert, dessen Quadratwurzel berechnet werden soll." ;
-            Text [ italian ] = "Ë il numero di cui si desidera calcolare la radice quadrata." ;
+            Text [ italian ] = "Numero di cui si desidera calcolare la radice quadrata." ;
             Text [ portuguese_brazilian ] = "Ein positiver Wert, dessen Quadratwurzel berechnet werden soll." ;
             Text [ portuguese ] = "È o n˙mero do qual deseja calcular a raiz quadrada." ;
             Text [ finnish ] = "Positiivinen arvo, jonka neliˆ lasketaan." ;
@@ -14585,7 +14585,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Anzahl_1" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Anzahl 1" ;
-            Text [ italian ] = "num_1" ;
+            Text [ italian ] = "Numero 1 " ;
             Text [ portuguese_brazilian ] = "Anzahl 1" ;
             Text [ portuguese ] = "N˙mero_1" ;
             Text [ finnish ] = "luku_1" ;
@@ -14614,7 +14614,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Gesamtanzahl der Elemente." ;
             Text [ english ] = "is the number of objects." ;
             Text [ norwegian ] = "Gesamtanzahl der Elemente." ;
-            Text [ italian ] = "Ë il numero degli oggetti." ;
+            Text [ italian ] = "Numero degli elementi." ;
             Text [ portuguese_brazilian ] = "Gesamtanzahl der Elemente." ;
             Text [ portuguese ] = "È a quantidade total de elementos." ;
             Text [ finnish ] = "Elementtien kokonaism‰‰r‰." ;
@@ -14643,7 +14643,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Anzahl_2" ;
             Text [ english ] = "number_chosen" ;
             Text [ norwegian ] = "Anzahl 2" ;
-            Text [ italian ] = "num_2" ;
+            Text [ italian ] = "Numero 2 " ;
             Text [ portuguese_brazilian ] = "Anzahl 2" ;
             Text [ portuguese ] = "N˙mero_2" ;
             Text [ finnish ] = "luku_2" ;
@@ -14672,7 +14672,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Auswahlanzahl aus den Elementen." ;
             Text [ english ] = "is the number of objects in each combination." ;
             Text [ norwegian ] = "Auswahlanzahl aus den Elementen." ;
-            Text [ italian ] = "Ë il numero degli oggetti in ciascuna combinazione." ;
+            Text [ italian ] = "Numero degli oggetti in ciascuna combinazione." ;
             Text [ portuguese_brazilian ] = "Auswahlanzahl aus den Elementen." ;
             Text [ portuguese ] = "È o n˙mero de elementos em cada combinaÁ„o." ;
             Text [ finnish ] = "Valittujen elementtien m‰‰r‰." ;
@@ -14740,7 +14740,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Anzahl_1" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Anzahl 1" ;
-            Text [ italian ] = "num_1" ;
+            Text [ italian ] = "Numero 1 " ;
             Text [ portuguese_brazilian ] = "Anzahl 1" ;
             Text [ portuguese ] = "N˙mero_1" ;
             Text [ finnish ] = "luku_1" ;
@@ -14798,7 +14798,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Anzahl_2" ;
             Text [ english ] = "number_chosen" ;
             Text [ norwegian ] = "Anzahl 2" ;
-            Text [ italian ] = "quantit‡_2" ;
+            Text [ italian ] = "Quantit‡ 2" ;
             Text [ portuguese_brazilian ] = "Anzahl 2" ;
             Text [ portuguese ] = "N˙mero_2" ;
             Text [ finnish ] = "luku_2" ;
@@ -15789,7 +15789,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "luku" ;
@@ -15819,7 +15819,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Winkel im Bogenmaﬂ (Radiant), dessen Sinus berechnet werden soll." ;
             Text [ english ] = "is the angle in radians for which you want the sine." ;
             Text [ norwegian ] = "Der Winkel im Bogenmaﬂ (Radiant), dessen Sinus berechnet werden soll." ;
-            Text [ italian ] = "Ë l'angolo espresso in radianti di cui si desidera il seno." ;
+            Text [ italian ] = "Angolo espresso in radianti di cui si desidera il seno." ;
             Text [ portuguese_brazilian ] = "Der Winkel im Bogenma? (Radiant), dessen Sinus berechnet werden soll." ;
             Text [ portuguese ] = "È o ‚ngulo em radianos cujo seno se deseja calcular." ;
             Text [ finnish ] = "Kulma (radiaaneina), jonka sini lasketaan." ;
@@ -15888,7 +15888,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -15987,7 +15987,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "luku" ;
@@ -16017,7 +16017,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Winkel im Bogenmaﬂ (Radiant), dessen Tangens berechnet werden soll." ;
             Text [ english ] = "is the angle in radians for which you want the tangent." ;
             Text [ norwegian ] = "Der Winkel im Bogenmaﬂ (Radiant), dessen Tangens berechnet werden soll." ;
-            Text [ italian ] = "Ë l'angolo espresso in radianti di cui si desidera la tangente." ;
+            Text [ italian ] = "Angolo espresso in radianti di cui si desidera la tangente." ;
             Text [ portuguese_brazilian ] = "Der Winkel im Bogenma? (Radiant), dessen Tangens berechnet werden soll." ;
             Text [ portuguese ] = "È o ‚ngulo em radianos para o qual deseja uma tangente." ;
             Text [ finnish ] = "Kulma (radiaaneina), jonka tangentti lasketaan." ;
@@ -16086,7 +16086,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -16116,7 +16116,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Wert, dessen Hyperbelkosinus berechnet werden soll." ;
             Text [ english ] = "is any real number." ;
             Text [ norwegian ] = "Der Wert, dessen Hyperbelkosinus berechnet werden soll." ;
-            Text [ italian ] = "» il numero di cui si desidera calcolare il coseno iperbolico." ;
+            Text [ italian ] = "Numero di cui si desidera calcolare il coseno iperbolico." ;
             Text [ portuguese_brazilian ] = "Der Wert, dessen Hyperbelkosinus berechnet werden soll." ;
             Text [ portuguese ] = "È qualquer n˙mero real maior ou igual a 1." ;
             Text [ finnish ] = "Luku, jonka hyperbolinen kosini palautetaan." ;
@@ -16249,7 +16249,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Berechnet den Hyperbelkotangens (hyperbolischer Kotangens) einer Zahl." ;
             Text [ english ] = "Returns the hyperbolic cotangent of the given angle." ;
             Text [ norwegian ] = "Berechnet den Hyperbelkotangens (hyperbolischer Kotangens) einer Zahl." ;
-            Text [ italian ] = "Restituisce la cotangente iperbolica di un angolo dato." ;
+            Text [ italian ] = "Restituisce la cotangente iperbolica di un numero dato." ;
             Text [ portuguese_brazilian ] = "Berechnet den Hyperbelkotangens (hyperbolischer Kotangens) einer Zahl." ;
             Text [ portuguese ] = "Devolve a cotangente hiperbÛlica de um determinado ‚ngulo." ;
             Text [ finnish ] = "Palauttaa luvun hyperbolisen kotangentin." ;
@@ -16284,7 +16284,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -16314,7 +16314,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Ein Wert ungleich 0, dessen Hyperbelkotangens berechnet werden soll." ;
             Text [ english ] = "is any real number." ;
             Text [ norwegian ] = "Ein Wert ungleich 0, dessen Hyperbelkotangens berechnet werden soll." ;
-            Text [ italian ] = "» un valore diverso da 0 di cui si desidera calcolare la cotangente iperbolica." ;
+            Text [ italian ] = "Valore diverso da 0 di cui si desidera calcolare la cotangente iperbolica." ;
             Text [ portuguese_brazilian ] = "Ein Wert ungleich 0, dessen Hyperbelkotangens berechnet werden soll." ;
             Text [ portuguese ] = "È um valor diferente de 0, cuja cotangente hiperbÛlica deseja obter." ;
             Text [ finnish ] = "Luku (ei nolla), jonka hyperbolinen kotangentti palautetaan." ;
@@ -16348,7 +16348,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Berechnet den Hyperbeltangens (hyperbolischer Tangens) einer Zahl." ;
             Text [ english ] = "Returns the hyperbolic tangent of a number." ;
             Text [ norwegian ] = "Berechnet den Hyperbeltangens (hyperbolischer Tangens) einer Zahl." ;
-            Text [ italian ] = "Restituisce la tangente iperbolica dell'angolo specficato." ;
+            Text [ italian ] = "Restituisce la tangente iperbolica di un numero." ;
             Text [ portuguese_brazilian ] = "Berechnet den Hyperbeltangens (hyperbolischer Tangens) einer Zahl." ;
             Text [ portuguese ] = "Devolve a tangente hiperbÛlica de um n˙mero." ;
             Text [ finnish ] = "Palauttaa luvun hyperbolisen tangentin." ;
@@ -16383,7 +16383,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "luku" ;
@@ -16413,7 +16413,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Wert, dessen Hyperbeltangens berechnet werden soll." ;
             Text [ english ] = "is any real number." ;
             Text [ norwegian ] = "Der Wert, dessen Hyperbeltangens berechnet werden soll." ;
-            Text [ italian ] = "Ë un numero reale qualsiasi" ;
+            Text [ italian ] = "Un numero reale qualsiasi" ;
             Text [ portuguese_brazilian ] = "Der Wert, dessen Hyperbeltangens berechnet werden soll." ;
             Text [ portuguese ] = "È qualquer n˙mero real." ;
             Text [ finnish ] = "Arvo, jonka hyperbolinen tangentti lasketaan." ;
@@ -16640,7 +16640,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -16670,7 +16670,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Winkel im Bogenmaﬂ (Radiant)." ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Der Winkel im Bogenmaﬂ (Radiant)." ;
-            Text [ italian ] = "» l'angolo espresso in radianti." ;
+            Text [ italian ] = "Angolo espresso in radianti." ;
             Text [ portuguese_brazilian ] = "Der Winkel im Bogenma? (Radiant)." ;
             Text [ portuguese ] = "È o ‚ngulo em radianos." ;
             Text [ finnish ] = "Kulma radiaaneina" ;
@@ -16739,7 +16739,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "gradi" ;
+            Text [ italian ] = "Gradi " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -16837,7 +16837,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -16866,7 +16866,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Exponent zur Basis e." ;
             Text [ english ] = "is the exponent applied to the base e." ;
             Text [ norwegian ] = "Der Exponent zur Basis e." ;
-            Text [ italian ] = "» l'esponente applicato alla base e." ;
+            Text [ italian ] = "Esponente applicato alla base e." ;
             Text [ portuguese_brazilian ] = "Der Exponent zur Basis e." ;
             Text [ portuguese ] = "È o expoente aplicado ‡ base e." ;
             Text [ finnish ] = "E-kannan eksponentti." ;
@@ -16935,7 +16935,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -16965,7 +16965,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Ein Wert grˆﬂer als 0, dessen Logarithmus berechnet wird." ;
             Text [ english ] = "is the positive real number for which you want the logarithm." ;
             Text [ norwegian ] = "Ein Wert grˆﬂer als 0, dessen Logarithmus berechnet wird." ;
-            Text [ italian ] = "Ë il numero reale positivo di cui si desidera calcolare il logaritmo." ;
+            Text [ italian ] = "Numero reale positivo di cui si desidera calcolare il logaritmo." ;
             Text [ portuguese_brazilian ] = "Ein Wert gr?er als 0, dessen Logarithmus berechnet wird." ;
             Text [ portuguese ] = "È um n˙mero real maior que 0 para o qual deseja calcular o logaritmo." ;
             Text [ finnish ] = "Luku (suurempi kuin 0), jonka logaritmi lasketaan." ;
@@ -16994,7 +16994,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Basis" ;
             Text [ english ] = "base" ;
             Text [ norwegian ] = "Basis" ;
-            Text [ italian ] = "Base" ;
+            Text [ italian ] = "Base " ;
             Text [ portuguese_brazilian ] = "Basis" ;
             Text [ portuguese ] = "Base" ;
             Text [ finnish ] = "Kanta" ;
@@ -17024,7 +17024,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Basis f¸r die Logarithmusberechnung." ;
             Text [ english ] = "is the base of the logarithm." ;
             Text [ norwegian ] = "Die Basis f¸r die Logarithmusberechnung." ;
-            Text [ italian ] = "Ë la base del logaritmo." ;
+            Text [ italian ] = "Base del logaritmo." ;
             Text [ portuguese_brazilian ] = "Die Basis f? die Logarithmusberechnung." ;
             Text [ portuguese ] = "È a base para o c·lculo do logaritmo." ;
             Text [ finnish ] = "Logaritmin kantaluku." ;
@@ -17093,7 +17093,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -17123,7 +17123,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Ein Wert grˆﬂer als 0, dessen nat¸rlicher Logarithmus berechnet wird." ;
             Text [ english ] = "is the positive real number for which you want the natural logarithm." ;
             Text [ norwegian ] = "Ein Wert grˆﬂer als 0, dessen nat¸rlicher Logarithmus berechnet wird." ;
-            Text [ italian ] = "Ë il numero reale positivo di cui si desidera calcolare il logaritmo naturale." ;
+            Text [ italian ] = "Numero reale positivo di cui si desidera calcolare il logaritmo naturale." ;
             Text [ portuguese_brazilian ] = "Ein Wert gr?er als 0, dessen nat?licher Logarithmus berechnet wird." ;
             Text [ portuguese ] = "È um n˙mero real maior que 0 para o qual deseja calcular o logaritmo." ;
             Text [ finnish ] = "Luku (suurempi kuin 0), jonka luonnollinen logaritmi lasketaan." ;
@@ -17192,7 +17192,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -17222,7 +17222,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Ein Wert grˆﬂer als 0, dessen Logarithmus berechnet wird." ;
             Text [ english ] = "is the positive real number for which you want the base-10 logarithm." ;
             Text [ norwegian ] = "Ein Wert grˆﬂer als 0, dessen Logarithmus berechnet wird." ;
-            Text [ italian ] = "Ë il numero reale positivo di cui si desidera calcolare il logaritmo in base 10." ;
+            Text [ italian ] = "Numero reale positivo di cui si desidera calcolare il logaritmo in base 10." ;
             Text [ portuguese_brazilian ] = "Ein Wert gr?er als 0, dessen Logarithmus berechnet wird." ;
             Text [ portuguese ] = "È um n˙mero real maior que 0 para o qual deseja calcular o logaritmo." ;
             Text [ finnish ] = "Luku (suurempi kuin 0), jonka logaritmi lasketaan." ;
@@ -17291,7 +17291,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -17321,7 +17321,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Zahl, deren Fakult‰t berechnet wird." ;
             Text [ english ] = "is the nonnegative number you want the factorial of. If number is not an integer, it is truncated." ;
             Text [ norwegian ] = "Die Zahl, deren Fakult‰t berechnet wird." ;
-            Text [ italian ] = "» il numero di cui si desidera calcolare il fattoriale." ;
+            Text [ italian ] = "Numero di cui si desidera calcolare il fattoriale." ;
             Text [ portuguese_brazilian ] = "Die Zahl, deren Fakult?t berechnet wird." ;
             Text [ portuguese ] = "È um n˙mero positivo do qual deseja obter o factorial." ;
             Text [ finnish ] = "Luku, jonka kertoma lasketaan." ;
@@ -17389,7 +17389,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Dividend" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Divident" ;
-            Text [ italian ] = "dividendo" ;
+            Text [ italian ] = "Dividendo" ;
             Text [ portuguese_brazilian ] = "Divident" ;
             Text [ portuguese ] = "Dividendo" ;
             Text [ finnish ] = "Osoittaja" ;
@@ -17418,7 +17418,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Zahl, die geteilt wird." ;
             Text [ english ] = "is the number for which you want to find the remainder." ;
             Text [ norwegian ] = "Die Zahl, die geteilt wird." ;
-            Text [ italian ] = "Ë il numero che viene diviso." ;
+            Text [ italian ] = "Numero che viene diviso." ;
             Text [ portuguese_brazilian ] = "Die Zahl, die geteilt wird." ;
             Text [ portuguese ] = "È o n˙mero a ser dividido." ;
             Text [ finnish ] = "Jaettava luku." ;
@@ -17447,7 +17447,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Divisor" ;
             Text [ english ] = "divisor" ;
             Text [ norwegian ] = "Divisor" ;
-            Text [ italian ] = "divisore" ;
+            Text [ italian ] = "Divisore" ;
             Text [ portuguese_brazilian ] = "Divisor" ;
             Text [ portuguese ] = "Divisor" ;
             Text [ finnish ] = "Jakaja" ;
@@ -17476,7 +17476,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Zahl, durch die geteilt wird." ;
             Text [ english ] = "is the number by which you want to divide number." ;
             Text [ norwegian ] = "Die Zahl, durch die geteilt wird." ;
-            Text [ italian ] = "Ë il numero per il quale si desidera dividere il dividendo." ;
+            Text [ italian ] = "Numero per il quale si desidera dividere il dividendo." ;
             Text [ portuguese_brazilian ] = "Die Zahl, durch die geteilt wird." ;
             Text [ portuguese ] = "È o n˙mero de divis„o." ;
             Text [ finnish ] = "Luku, jolla osoittaja jaetaan." ;
@@ -17545,7 +17545,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -17574,7 +17574,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Zahl, deren Vorzeichen bestimmt wird." ;
             Text [ english ] = "is any real number." ;
             Text [ norwegian ] = "Die Zahl, deren Vorzeichen bestimmt wird." ;
-            Text [ italian ] = "Ë un numero reale qualsiasi." ;
+            Text [ italian ] = "Un numero reale qualsiasi." ;
             Text [ portuguese_brazilian ] = "Die Zahl, deren Vorzeichen bestimmt wird." ;
             Text [ portuguese ] = "È qualquer n˙mero real." ;
             Text [ finnish ] = "Luku, jonka etumerkki (plus/miinus) m‰‰ritet‰‰n." ;
@@ -17642,7 +17642,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Funktion" ;
             Text [ english ] = "function_num" ;
             Text [ norwegian ] = "Funktion" ;
-            Text [ italian ] = "num_funzione" ;
+            Text [ italian ] = "Numero funzione" ;
             Text [ portuguese_brazilian ] = "Funktion" ;
             Text [ portuguese ] = "N˙m_funÁ„o" ;
             Text [ finnish ] = "Funktio" ;
@@ -17672,7 +17672,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Funktionsindex. Ist ein Index auf die mˆglichen Funktion Summe, Max, ..." ;
             Text [ english ] = "is the number 1 to 11 that specifies which function to use in calculating subtotals within a list." ;
             Text [ norwegian ] = "Funktionsindex. Ist ein Index auf die mˆglichen Funktion Summe, Max, ..." ;
-            Text [ italian ] = "Ë l'indice che specifica quale delle funzioni possibili utilizzare" ;
+            Text [ italian ] = "Numero che corrisponde a un indice delle funzioni possibili: somma, max..." ;
             Text [ portuguese_brazilian ] = "Funktionsindex. Ist ein Index auf die m?lichen Funktion Summe, Max, ..." ;
             Text [ portuguese ] = "È um n˙mero de 1 a 11 que determina qual a funÁ„o a ser usada para o c·lculo dos subtotais de uma lista." ;
             Text [ finnish ] = "Funktiohakemisto. K‰ytett‰viss‰ olevien funktioiden hakemisto (summa, enimm‰isarvo...)" ;
@@ -17701,7 +17701,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Bereich " ;
             Text [ english ] = "ref1" ;
             Text [ norwegian ] = "Bereich " ;
-            Text [ italian ] = "Area " ;
+            Text [ italian ] = "Intervallo " ;
             Text [ portuguese_brazilian ] = "Bereich " ;
             Text [ portuguese ] = "Intervalo " ;
             Text [ finnish ] = "alue" ;
@@ -17731,7 +17731,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Bereich, dessen Zellen ber¸cksichtigt werden." ;
             Text [ english ] = "is range or reference for which you want the subtotal." ;
             Text [ norwegian ] = "Der Bereich, dessen Zellen ber¸cksichtigt werden." ;
-            Text [ italian ] = "L'area le cui celle devono essere prese in considerazione." ;
+            Text [ italian ] = "Intervallo delle celle da considerare." ;
             Text [ portuguese_brazilian ] = "Der Bereich, dessen Zellen ber?ksichtigt werden." ;
             Text [ portuguese ] = "È o intervalo ou a referÍncia dos quais se deseja calcular o subtotal." ;
             Text [ finnish ] = "Huomioitavan solualueen solut." ;
@@ -17800,7 +17800,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -17829,7 +17829,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Zahl, die abgerundet wird." ;
             Text [ english ] = "is the real number you want to round down to an integer." ;
             Text [ norwegian ] = "Die Zahl, die abgerundet wird." ;
-            Text [ italian ] = "Ë il numero reale che si desidera arrotondare per difetto ad un intero." ;
+            Text [ italian ] = "Numero reale che si desidera arrotondare per difetto ad un intero." ;
             Text [ portuguese_brazilian ] = "Die Zahl, die abgerundet wird." ;
             Text [ portuguese ] = "È o valor numÈrico a arredondar para baixo." ;
             Text [ finnish ] = "Alasp‰in pyˆristett‰v‰ luku." ;
@@ -17897,7 +17897,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "luku" ;
@@ -17926,7 +17926,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Zahl, deren Nachkommastellen abgeschnitten werden." ;
             Text [ english ] = "is the number you want to truncate." ;
             Text [ norwegian ] = "Die Zahl, deren Nachkommastellen abgeschnitten werden." ;
-            Text [ italian ] = "Ë il numero che si desidera troncare." ;
+            Text [ italian ] = "Numero di cui si vuole eliminare la parte decimale." ;
             Text [ portuguese_brazilian ] = "Die Zahl, deren Nachkommastellen abgeschnitten werden." ;
             Text [ portuguese ] = "È o n˙mero cuja casa decimal deseja truncar." ;
             Text [ finnish ] = "Katkaistava luku." ;
@@ -17955,7 +17955,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Anzahl" ;
             Text [ english ] = "num_digits" ;
             Text [ norwegian ] = "Anzahl" ;
-            Text [ italian ] = "num_cifre" ;
+            Text [ italian ] = "Numero cifre " ;
             Text [ portuguese_brazilian ] = "Anzahl" ;
             Text [ portuguese ] = "N˙m_dÌgitos" ;
             Text [ finnish ] = "lukum‰‰r‰" ;
@@ -17984,7 +17984,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Anzahl der Nachkommastellen, die nicht abgeschnitten werden." ;
             Text [ english ] = "is a number specifying the precision of the truncation." ;
             Text [ norwegian ] = "Die Anzahl der Nachkommastellen, die nicht abgeschnitten werden." ;
-            Text [ italian ] = "Ë un numero che specifica le cifre decimali da non troncare." ;
+            Text [ italian ] = "Numero che specifica le cifre decimali da non troncare." ;
             Text [ portuguese_brazilian ] = "Die Anzahl der Nachkommastellen, die nicht abgeschnitten werden." ;
             Text [ portuguese ] = "È um n˙mero de casas decimais que aparecem ‡ direita da vÌrgula." ;
             Text [ finnish ] = "Niiden pilkun j‰lkeisten desimaalien m‰‰r‰, joita ei katkaista." ;
@@ -18017,7 +18017,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Runden einer Zahl auf eine vorgegebene Genauigkeit." ;
             Text [ english ] = "Rounds a number to a specified number of digits." ;
             Text [ norwegian ] = "Runden einer Zahl auf eine vorgegebene Genauigkeit." ;
-            Text [ italian ] = "Arrotonda un numero ad una precisione data." ;
+            Text [ italian ] = "Arrotonda un numero a un numero di cifre specificato." ;
             Text [ portuguese_brazilian ] = "Runden einer Zahl auf eine vorgegebene Genauigkeit." ;
             Text [ portuguese ] = "Arredonda um n˙mero atÈ uma uantidade de dÌgitos dada." ;
             Text [ finnish ] = "Pyˆrist‰‰ luvun ennalta m‰‰ritettyyn tarkkuuteen." ;
@@ -18052,7 +18052,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "luku" ;
@@ -18081,7 +18081,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Zahl, die gerundet werden soll." ;
             Text [ english ] = "is the number you want to round." ;
             Text [ norwegian ] = "Die Zahl, die gerundet werden soll." ;
-            Text [ italian ] = "Ë il numero che si desidera arrotondare." ;
+            Text [ italian ] = "Numero che si desidera arrotondare." ;
             Text [ portuguese_brazilian ] = "Die Zahl, die gerundet werden soll." ;
             Text [ portuguese ] = "È o n˙mero que se deseja arredondar." ;
             Text [ finnish ] = "Pyˆristett‰v‰ luku." ;
@@ -18110,7 +18110,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Anzahl" ;
             Text [ english ] = "num_digits" ;
             Text [ norwegian ] = "Anzahl" ;
-            Text [ italian ] = "num_cifre" ;
+            Text [ italian ] = "Numero cifre " ;
             Text [ portuguese_brazilian ] = "Anzahl" ;
             Text [ portuguese ] = "N˙m_dÌgitos" ;
             Text [ finnish ] = "lukum‰‰r‰" ;
@@ -18139,7 +18139,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Anzahl der Stellen, auf die gerundet werden soll." ;
             Text [ english ] = "specifies the number of digits to which you want to round number." ;
             Text [ norwegian ] = "Die Anzahl der Stellen, auf die gerundet werden soll." ;
-            Text [ italian ] = "specifica il numero di cifre a cui si desidera arrotondare num." ;
+            Text [ italian ] = "Specifica il numero di cifre a cui si desidera arrotondare il numero." ;
             Text [ portuguese_brazilian ] = "Die Anzahl der Stellen, auf die gerundet werden soll." ;
             Text [ portuguese ] = "determina a quantidade de dÌgitos para a qual se deseja arredondar." ;
             Text [ finnish ] = "Pyˆristystarkkuus (desimaaleja)." ;
@@ -18518,7 +18518,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -18547,7 +18547,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Zahl, die aufgerundet wird." ;
             Text [ english ] = "is the value to round." ;
             Text [ norwegian ] = "Die Zahl, die aufgerundet wird." ;
-            Text [ italian ] = "» il valore da arrotondare." ;
+            Text [ italian ] = "Valore da arrotondare." ;
             Text [ portuguese_brazilian ] = "Die Zahl, die aufgerundet wird." ;
             Text [ portuguese ] = "È o valor a ser arredondado." ;
             Text [ finnish ] = "Ylˆsp‰in pyˆristett‰v‰ luku." ;
@@ -18616,7 +18616,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -18645,7 +18645,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Zahl, die aufgerundet wird." ;
             Text [ english ] = "is the value to round." ;
             Text [ norwegian ] = "Die Zahl, die aufgerundet wird." ;
-            Text [ italian ] = "Ë il valore da arrotondare." ;
+            Text [ italian ] = "Valore da arrotondare." ;
             Text [ portuguese_brazilian ] = "Die Zahl, die aufgerundet wird." ;
             Text [ portuguese ] = "È o valor a ser arredondado." ;
             Text [ finnish ] = "Ylˆsp‰in pyˆristett‰v‰ luku." ;
@@ -18714,7 +18714,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero " ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -18743,7 +18743,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Zahl, die aufgerundet wird." ;
             Text [ english ] = "is the value you want to round." ;
             Text [ norwegian ] = "Die Zahl, die aufgerundet wird." ;
-            Text [ italian ] = "» il valore che si desidera arrotondare." ;
+            Text [ italian ] = "Valore che si desidera arrotondare." ;
             Text [ portuguese_brazilian ] = "Die Zahl, die aufgerundet wird." ;
             Text [ portuguese ] = "È o valor que deseja arredondar." ;
             Text [ finnish ] = "Ylˆsp‰in pyˆristett‰v‰ luku." ;
@@ -18772,7 +18772,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Schrittweite" ;
             Text [ english ] = "significance" ;
             Text [ norwegian ] = "Schrittweite" ;
-            Text [ italian ] = "Peso" ;
+            Text [ italian ] = "Peso " ;
             Text [ portuguese_brazilian ] = "Schrittweite" ;
             Text [ portuguese ] = "Signific‚ncia" ;
             Text [ finnish ] = "Merkitys" ;
@@ -18801,7 +18801,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Zahl, auf deren Vielfaches der Wert aufgerundet wird." ;
             Text [ english ] = "is the multiple to which you want to round." ;
             Text [ norwegian ] = "Die Zahl, auf deren Vielfaches der Wert aufgerundet wird." ;
-            Text [ italian ] = "» il multiplo per il quale si desidera arrotondare." ;
+            Text [ italian ] = "Multiplo per il quale si desidera arrotondare." ;
             Text [ portuguese_brazilian ] = "Die Zahl, auf deren Vielfaches der Wert aufgerundet wird." ;
             Text [ portuguese ] = "È o m˙ltiplo para o qual o valor È arredondado." ;
             Text [ finnish ] = "Luku, jonka monikertaan arvo pyˆristet‰‰n." ;
@@ -18834,7 +18834,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ portuguese_brazilian ] = "Modus" ;
             Text [ swedish ] = "l‰ge" ;
             Text [ danish ] = "Modus" ;
-            Text [ italian ] = "Modo" ;
+            Text [ italian ] = "Modo " ;
             Text [ spanish ] = "Modo" ;
             Text [ french ] = "Mode" ;
             Text [ dutch ] = "Modus" ;
@@ -18926,7 +18926,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "N˙mero" ;
             Text [ finnish ] = "Luku" ;
@@ -18955,7 +18955,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Zahl, die abgerundet wird." ;
             Text [ english ] = "is the numeric value you want to round." ;
             Text [ norwegian ] = "Die Zahl, die abgerundet wird." ;
-            Text [ italian ] = "» il numero che si desidera arrotondare." ;
+            Text [ italian ] = "Numero che si desidera arrotondare." ;
             Text [ portuguese_brazilian ] = "Die Zahl, die abgerundet wird." ;
             Text [ portuguese ] = "È o valor numÈrico a ser arredondado." ;
             Text [ finnish ] = "Alasp‰in pyˆristett‰v‰ luku." ;
@@ -19013,7 +19013,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Zahl, auf deren Vielfaches der Wert abgerundet wird." ;
             Text [ english ] = "is the multiple to which you want to round." ;
             Text [ norwegian ] = "Die Zahl, auf deren Vielfaches der Wert abgerundet wird." ;
-            Text [ italian ] = "» il multiplo per il quale si desidera arrotondare." ;
+            Text [ italian ] = "Multiplo per il quale si desidera arrotondare." ;
             Text [ portuguese_brazilian ] = "Die Zahl, auf deren Vielfaches der Wert abgerundet wird." ;
             Text [ portuguese ] = "È o m˙ltiplo do valor que deseja arredondar." ;
             Text [ finnish ] = "Luku, jonka monikertaan arvo pyˆristet‰‰n (alasp‰in)." ;
@@ -19430,7 +19430,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Matrix" ;
             Text [ english ] = "array 1" ;
             Text [ norwegian ] = "Matrix" ;
-            Text [ italian ] = "matrice 1" ;
+            Text [ italian ] = "Matrice 1" ;
             Text [ portuguese_brazilian ] = "Matrix" ;
             Text [ portuguese ] = "Matriz 1" ;
             Text [ finnish ] = "matriisi" ;
@@ -19460,7 +19460,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die erste Matrix f¸r das Matrixprodukt." ;
             Text [ english ] = "are the arrays you want to multiply." ;
             Text [ norwegian ] = "Die erste Matrix f¸r das Matrixprodukt." ;
-            Text [ italian ] = "la prima matrice che si desidera moltiplicare." ;
+            Text [ italian ] = "La prima matrice che si desidera moltiplicare." ;
             Text [ portuguese_brazilian ] = "Die erste Matrix f? das Matrixprodukt." ;
             Text [ portuguese ] = "È a primeira matriz para obter o produto matricial." ;
             Text [ finnish ] = "Matriisitulon ensimm‰inen matriisi." ;
@@ -19489,7 +19489,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Matrix" ;
             Text [ english ] = "array 2" ;
             Text [ norwegian ] = "Matrix" ;
-            Text [ italian ] = "matrice 2" ;
+            Text [ italian ] = "Matrice 2" ;
             Text [ portuguese_brazilian ] = "Matrix" ;
             Text [ portuguese ] = "Matriz 2" ;
             Text [ finnish ] = "matriisi" ;
@@ -19586,7 +19586,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Matrix" ;
             Text [ english ] = "array" ;
             Text [ norwegian ] = "Matrix" ;
-            Text [ italian ] = "matrice" ;
+            Text [ italian ] = "Matrice" ;
             Text [ portuguese_brazilian ] = "Matrix" ;
             Text [ portuguese ] = "Matriz" ;
             Text [ finnish ] = "matriisi" ;
@@ -19615,7 +19615,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Matrix, deren Determinante bestimmt wird." ;
             Text [ english ] = "is a numeric array with an equal number of rows and columns." ;
             Text [ norwegian ] = "Die Matrix, deren Determinante bestimmt wird." ;
-            Text [ italian ] = "Ë la matrice della quale calcolare il determinante." ;
+            Text [ italian ] = "Matrice della quale si vuole calcolare il determinante." ;
             Text [ portuguese_brazilian ] = "Die Matrix, deren Determinante bestimmt wird." ;
             Text [ portuguese ] = "È uma matriz numÈrica com um n˙mero igual de linhas e colunas." ;
             Text [ finnish ] = "Matriisi, jonka determinantti lasketaan." ;
@@ -19683,7 +19683,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Matrix" ;
             Text [ english ] = "array" ;
             Text [ norwegian ] = "Matrix" ;
-            Text [ italian ] = "matrice" ;
+            Text [ italian ] = "Matrice" ;
             Text [ portuguese_brazilian ] = "Matrix" ;
             Text [ portuguese ] = "Matriz" ;
             Text [ finnish ] = "matriisi" ;
@@ -19712,7 +19712,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Die Matrix, die invertiert wird." ;
             Text [ english ] = "is a numeric array with an equal number of rows and columns." ;
             Text [ norwegian ] = "Die Matrix, die invertiert wird." ;
-            Text [ italian ] = "Ë la matrice da invertire." ;
+            Text [ italian ] = "Matrice da invertire." ;
             Text [ portuguese_brazilian ] = "Die Matrix, die invertiert wird." ;
             Text [ portuguese ] = "È a matriz que ser· invertida." ;
             Text [ finnish ] = "K‰‰nnett‰v‰ matriisi." ;
@@ -19879,7 +19879,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Matrix " ;
             Text [ english ] = "array " ;
             Text [ norwegian ] = "Matrix " ;
-            Text [ italian ] = "matrice " ;
+            Text [ italian ] = "Matrice " ;
             Text [ portuguese_brazilian ] = "Matrix " ;
             Text [ portuguese ] = "Matriz " ;
             Text [ finnish ] = "Matriisi" ;
@@ -19908,7 +19908,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Matrix 1; Matrix 2,... sind bis zu 30 Matrizen, deren Argumente multipliziert werden." ;
             Text [ english ] = "are 2 to 30 arrays whose components you want to multiply and then add." ;
             Text [ norwegian ] = "Matrix 1; Matrix 2,... sind bis zu 30 Matrizen, deren Argumente multipliziert werden." ;
-            Text [ italian ] = "sono da 2 a 30 matrici di cui si desidera moltiplicare gli elementi." ;
+            Text [ italian ] = "Sono da 2 a 30 matrici di cui si desidera moltiplicare gli elementi." ;
             Text [ portuguese_brazilian ] = "Matrix 1; Matrix 2,... sind bis zu 30 Matrizen, deren Argumente multipliziert werden." ;
             Text [ portuguese ] = "Matriz1, matriz2,...  s„o matrizes atÈ 30, cujos componentes se desejam multiplicar e depois somar." ;
             Text [ finnish ] = "Matriisi 1, matriisi 2 ja niin edelleen ovat 1 - 30 matriisia, joiden argumentit kerrotaan." ;
@@ -19976,7 +19976,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Matrix_X" ;
             Text [ english ] = "array_x" ;
             Text [ norwegian ] = "Matrix X" ;
-            Text [ italian ] = "matrice_x" ;
+            Text [ italian ] = "Matrice X" ;
             Text [ portuguese_brazilian ] = "Matrix X" ;
             Text [ portuguese ] = "Matriz_X" ;
             Text [ finnish ] = "matriisi_x" ;
@@ -20005,7 +20005,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Erste Matrix, deren Argumente quadriert summiert werden." ;
             Text [ english ] = "is the first array or range of values." ;
             Text [ norwegian ] = "Erste Matrix, deren Argumente quadriert summiert werden." ;
-            Text [ italian ] = "Ë la prima matrice o il primo intervallo di valori." ;
+            Text [ italian ] = "Prima matrice di cui si deve aggiungere l'elemento al quadrato." ;
             Text [ portuguese_brazilian ] = "Erste Matrix, deren Argumente quadriert summiert werden." ;
             Text [ portuguese ] = "È a primeira matriz ou intervalo de valores." ;
             Text [ finnish ] = "Ensimm‰inen matriisi, jonka argumenttien neliˆt lasketaan yhteen." ;
@@ -20034,7 +20034,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Matrix_Y" ;
             Text [ english ] = "array_y" ;
             Text [ norwegian ] = "Matrix Y" ;
-            Text [ italian ] = "matrice_y" ;
+            Text [ italian ] = "Matrice Y" ;
             Text [ portuguese_brazilian ] = "Matrix Y" ;
             Text [ portuguese ] = "Matriz_Y" ;
             Text [ finnish ] = "matriisi_y" ;
@@ -20063,7 +20063,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zweite Matrix, deren Argumente quadriert abgezogen werden." ;
             Text [ english ] = "is the second array or range of values." ;
             Text [ norwegian ] = "Zweite Matrix, deren Argumente quadriert abgezogen werden." ;
-            Text [ italian ] = "Ë la seconda matrice o il secondo intervallo di valori." ;
+            Text [ italian ] = "Seconda matrice di cui si deve sottrarre l'elemento al quadrato." ;
             Text [ portuguese_brazilian ] = "Zweite Matrix, deren Argumente quadriert abgezogen werden." ;
             Text [ portuguese ] = "È a segunda matriz ou intervalo de valores." ;
             Text [ finnish ] = "Toinen matriisi, jonka argumenttien neliˆt v‰hennet‰‰n toisistaan." ;
@@ -20131,7 +20131,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Matrix_X" ;
             Text [ english ] = "array_x" ;
             Text [ norwegian ] = "Matrix X" ;
-            Text [ italian ] = "matrice_x" ;
+            Text [ italian ] = "Matrice X" ;
             Text [ portuguese_brazilian ] = "Matrix X" ;
             Text [ portuguese ] = "Matriz_X" ;
             Text [ finnish ] = "matriisi_x" ;
@@ -20160,7 +20160,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Erste Matrix, deren Argumente quadriert summiert werden." ;
             Text [ english ] = "is the first array or range of values." ;
             Text [ norwegian ] = "Erste Matrix, deren Argumente quadriert summiert werden." ;
-            Text [ italian ] = "Ë la prima matrice o il primo intervallo di valori." ;
+            Text [ italian ] = "Prima matrice di cui si deve aggiundere l'elemento al quadrato." ;
             Text [ portuguese_brazilian ] = "Erste Matrix, deren Argumente quadriert summiert werden." ;
             Text [ portuguese ] = "È a primeira matriz ou intervalo de valores." ;
             Text [ finnish ] = "Ensimm‰inen matriisi, jonka argumenttien neliˆt lasketaan yhteen." ;
@@ -20189,7 +20189,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Matrix_Y" ;
             Text [ english ] = "array_y" ;
             Text [ norwegian ] = "Matrix Y" ;
-            Text [ italian ] = "matrice_y" ;
+            Text [ italian ] = "Matrice Y" ;
             Text [ portuguese_brazilian ] = "Matrix Y" ;
             Text [ portuguese ] = "Matriz _Y" ;
             Text [ finnish ] = "matriisi_y" ;
@@ -20218,7 +20218,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zweite Matrix, deren Argumente quadriert summiert werden." ;
             Text [ english ] = "is the second array or range of values." ;
             Text [ norwegian ] = "Zweite Matrix, deren Argumente quadriert summiert werden." ;
-            Text [ italian ] = "Ë la seconda matrice i cui argomenti al quadrato vengono sommati." ;
+            Text [ italian ] = "Seconda matrice di cui si deve sottrarre l'elemento al quadrato." ;
             Text [ portuguese_brazilian ] = "Zweite Matrix, deren Argumente quadriert summiert werden." ;
             Text [ portuguese ] = "È a segunda matriz ou intervalo de valores." ;
             Text [ finnish ] = "Toinen matriisi, jonka argumenttien neliˆt lasketaan yhteen." ;
@@ -20286,7 +20286,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Matrix_X" ;
             Text [ english ] = "array_x" ;
             Text [ norwegian ] = "Matrix X" ;
-            Text [ italian ] = "matrice_x" ;
+            Text [ italian ] = "Matrice X" ;
             Text [ portuguese_brazilian ] = "Matrix X" ;
             Text [ portuguese ] = "Matriz_X" ;
             Text [ finnish ] = "matriisi_x" ;
@@ -20315,7 +20315,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Erste Matrix zur Bildung der Argumentdifferenzen." ;
             Text [ english ] = "is the first array or range of values." ;
             Text [ norwegian ] = "Erste Matrix zur Bildung der Argumentdifferenzen." ;
-            Text [ italian ] = "» la prima matrice per il calcolo delle differenze tra gli elementi." ;
+            Text [ italian ] = "Prima matrice per il calcolo delle differenze tra gli elementi." ;
             Text [ portuguese_brazilian ] = "Erste Matrix zur Bildung der Argumentdifferenzen." ;
             Text [ portuguese ] = "È a primeira matriz ou intervalo de valores." ;
             Text [ finnish ] = "Ensimm‰inen matriisi argumenttien erojen tutkimista varten." ;
@@ -20344,7 +20344,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Matrix_Y" ;
             Text [ english ] = "array_y" ;
             Text [ norwegian ] = "Matrix Y" ;
-            Text [ italian ] = "matrice_y" ;
+            Text [ italian ] = "Matrice Y" ;
             Text [ portuguese_brazilian ] = "Matrix Y" ;
             Text [ portuguese ] = "Matriz_Y" ;
             Text [ finnish ] = "matriisi_y" ;
@@ -20373,7 +20373,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zweite Matrix zur Bildung der Argumentdifferenzen." ;
             Text [ english ] = "is the second array or range of values." ;
             Text [ norwegian ] = "Zweite Matrix zur Bildung der Argumentdifferenzen." ;
-            Text [ italian ] = "» la seconda matrice per il calcolo delle differenze tra gli argomenti." ;
+            Text [ italian ] = "Seconda matrice per il calcolo delle differenze tra gli argomenti." ;
             Text [ portuguese_brazilian ] = "Zweite Matrix zur Bildung der Argumentdifferenzen." ;
             Text [ portuguese ] = "È a segunda matriz ou intervalo de valores." ;
             Text [ finnish ] = "Toinen matriisi argumenttien erojen tutkimista varten." ;
@@ -20476,7 +20476,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der Daten." ;
             Text [ english ] = "is an array of or reference to a set of values for which you want to count frequencies." ;
             Text [ norwegian ] = "Die Matrix der Daten." ;
-            Text [ italian ] = "Ë una matrice o un riferimento ad un insieme di valori di cui si desidera calcolare la frequenza." ;
+            Text [ italian ] = "Matrice dei dati." ;
             Text [ portuguese_brazilian ] = "Die Matrix der Daten." ;
             Text [ portuguese ] = "È uma matriz ou  referÍncia a um conjunto de valores, dos quais deseja contar as frequÍncias.." ;
             Text [ finnish ] = "Tietomatriisi." ;
@@ -20505,7 +20505,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Klassen" ;
             Text [ english ] = "bins_array" ;
             Text [ norwegian ] = "Klassen" ;
-            Text [ italian ] = "matrice_classi" ;
+            Text [ italian ] = "Classi" ;
             Text [ portuguese_brazilian ] = "Klassen" ;
             Text [ portuguese ] = "Matriz_grupo" ;
             Text [ finnish ] = "luokat" ;
@@ -20534,7 +20534,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix zur Klassenbildung." ;
             Text [ english ] = "is an array of or reference to intervals into which you want to group the values in data_array." ;
             Text [ norwegian ] = "Die Matrix zur Klassenbildung." ;
-            Text [ italian ] = "Ë una matrice o un riferimento agli intervalli in cui si desidera raggruppare i valori contenuti in matrice_dati." ;
+            Text [ italian ] = "La matrice per formare classi di valori" ;
             Text [ portuguese_brazilian ] = "Die Matrix zur Klassenbildung." ;
             Text [ portuguese ] = "È uma matriz ou referÍncia a intervalos de dados nos quais deseja agrupar os valores da matriz_dados." ;
             Text [ finnish ] = "Luokkien muodostusmatriisit." ;
@@ -20568,7 +20568,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Berechnet Kenngrˆﬂen der linearen Regression als Matrix." ;
             Text [ english ] = "Uses the least squares method to calculate a straight line that best fits your data and returns an array that describes the line." ;
             Text [ norwegian ] = "Berechnet Kenngrˆﬂen der linearen Regression als Matrix." ;
-            Text [ italian ] = "Restituisce le grandezze caratteristiche della regressione lineare sotto forma di matrice." ;
+            Text [ italian ] = "Restituisce i parametri della regressione lineare sotto forma di matrice." ;
             Text [ portuguese_brazilian ] = "Berechnet Kenngr?en der linearen Regression als Matrix." ;
             Text [ portuguese ] = "Devolve os par‚metros de uma tendÍncia linear." ;
             Text [ finnish ] = "Laskee lineaarisen regression parametrit matriisina." ;
@@ -20603,7 +20603,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "Dati_y" ;
+            Text [ italian ] = "Dati Y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "tiedot_Y" ;
@@ -20632,7 +20632,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der Y-Daten." ;
             Text [ english ] = "is the set of y-values you already know in the relationship y = mx + b." ;
             Text [ norwegian ] = "Die Matrix der Y-Daten." ;
-            Text [ italian ] = "Ë l'insieme dei valori y gi‡ noti dalla relazione y = mx + b." ;
+            Text [ italian ] = "Matrice dei valori Y." ;
             Text [ portuguese_brazilian ] = "Die Matrix der Y-Daten." ;
             Text [ portuguese ] = "È o conjunto de valores j· conhecidos na relaÁ„o y = mx + b." ;
             Text [ finnish ] = "Tietomatriisi Y." ;
@@ -20661,7 +20661,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "Dati_x" ;
+            Text [ italian ] = "Dati X" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "tiedot_X" ;
@@ -20690,7 +20690,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der X-Daten." ;
             Text [ english ] = "is an optional set of x-values that you may already know in the relationship y = mx + b." ;
             Text [ norwegian ] = "Die Matrix der X-Daten." ;
-            Text [ italian ] = "Ë un insieme facoltativo di valori x" ;
+            Text [ italian ] = "Matrice dei dati X" ;
             Text [ portuguese_brazilian ] = "Die Matrix der X-Daten." ;
             Text [ portuguese ] = "È um conjunto facultativo de valores de x  j· conhecidos na relaÁ„o y = mx + b." ;
             Text [ finnish ] = "Tietomatriisi X." ;
@@ -20719,7 +20719,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Art_der_Geraden" ;
             Text [ english ] = "const" ;
             Text [ norwegian ] = "Art der Geraden" ;
-            Text [ italian ] = "Tipo_rette" ;
+            Text [ italian ] = "Tipo rette" ;
             Text [ portuguese_brazilian ] = "Art der Geraden" ;
             Text [ portuguese ] = "Tipo_de_rectas" ;
             Text [ finnish ] = "Lineaarinen_tyyppi" ;
@@ -20748,7 +20748,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Ist Art=0, so werden Geraden durch den Nullpunkt berechnet, sonst auch verschobene Geraden." ;
             Text [ english ] = "is a logical value specifying whether to force the constant b to equal 0." ;
             Text [ norwegian ] = "Ist Art=0, so werden Geraden durch den Nullpunkt berechnet, sonst auch verschobene Geraden." ;
-            Text [ italian ] = "Ë un valore logico che specifica se la costante b deve essere uguale a 0." ;
+            Text [ italian ] = "Se Tipo =0 le rette vengono calcolate attraverso lo zero; altrimenti anche le rette spostate." ;
             Text [ portuguese_brazilian ] = "Ist Art=0, so werden Geraden durch den Nullpunkt berechnet, sonst auch verschobene Geraden." ;
             Text [ portuguese ] = "È um valor lÛgico que determina se a constante b deve ser igual a 0." ;
             Text [ finnish ] = "Jos tyyppi = 0, lineaarit lasketaan origon kautta. Muutoin lineaarit siirret‰‰n." ;
@@ -20756,7 +20756,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ french ] = "Calcule les droites par le point zÈro si Type = 0 ; sinon droites dÈcalÈes." ;
             Text [ swedish ] = "Om typ=0 ber‰knas linjer genom nollpunkten, annars ‰ven fˆrflyttade linjer." ;
             Text [ dutch ] = "Indien type=0 dan worden de lijnen door het nulpunt berekend; verschoven lijnen zijn ook mogelijk." ;
-            Text [ spanish ] = "es un valor lÛgico que especifica si la constante b debe ser igual a 0." ;
+            Text [ spanish ] = "Si el tipo = 0 las lÌneas rectas se calcular·n mediante el punto cero, sino como lÌneas de regresiÛn." ;
             Text [ english_us ] = "If type = 0 the linears will be calculated through the zero point, or else moved linears." ;
             Text[ chinese_simplified ] = "Â¶ÇÊûútype=0ÔºåÈÇ£‰πàÁõ¥Á∫øÁªèËøáÈõ∂ÁÇπ„ÄÇ";
             Text[ russian ] = "ÀÓ„Ë˜ÂÒÍÓÂ ÁÌ‡˜ÂÌËÂ, ÍÓÚÓÓÂ ÛÍ‡Á˚‚‡ÂÚ, ÚÂ·ÛÂÚÒˇ ÎË, ˜ÚÓ·˚ ÍÓÌÒÚ‡ÌÚ‡ b ·˚Î‡ ‡‚Ì‡ 0.";
@@ -20778,7 +20778,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Kenngrˆﬂen" ;
             Text [ english ] = "stats" ;
             Text [ norwegian ] = "Kenngrˆﬂen" ;
-            Text [ italian ] = "stat" ;
+            Text [ italian ] = "Parametri" ;
             Text [ portuguese_brazilian ] = "Kenngr?en" ;
             Text [ portuguese ] = "EstatÌstica" ;
             Text [ finnish ] = "tilastot" ;
@@ -20808,7 +20808,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Ist Kenngrˆﬂen=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte." ;
             Text [ english ] = "is a logical value specifying whether to return additional regression statistics." ;
             Text [ norwegian ] = "Ist Kenngrˆﬂen=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte." ;
-            Text [ italian ] = "Ë un valore logico che specifica se restituire statistiche aggiuntive di regressione." ;
+            Text [ italian ] = "Se il parametro = 0 verranno calcolati solo i coefficienti di regressione, altrimenti verranno calcolati anche altri valori." ;
             Text [ portuguese_brazilian ] = "Ist Kenngr?en=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte." ;
             Text [ portuguese ] = "È um valor lÛgico que determina se estatÌsticas adicionais de regress„o ser„o calculadas ou n„o." ;
             Text [ finnish ] = "Jos parametri = 0, niin vain regression kerroin lasketaan. Muutoin lasketaan myˆs muut arvot." ;
@@ -20842,7 +20842,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Berechnet Kenngrˆﬂen der exponentiellen Regression als Matrix." ;
             Text [ english ] = "Calculates an exponential curve that fits your data and returns an array that describes the curve." ;
             Text [ norwegian ] = "Berechnet Kenngrˆﬂen der exponentiellen Regression als Matrix." ;
-            Text [ italian ] = "Restituisce le grandezze caratteristiche della regressione esponenziale sotto forma di matrice." ;
+            Text [ italian ] = "Restituisce i parametri della regressione esponenziale sotto forma di matrice." ;
             Text [ portuguese_brazilian ] = "Berechnet Kenngr?en der exponentiellen Regression als Matrix." ;
             Text [ portuguese ] = "Calcula os par‚metros da curva de regress„o exponencial na forma de matriz." ;
             Text [ finnish ] = "Laskee eksponentiaalisen regressiok‰yr‰n parametrit matriisina." ;
@@ -20877,7 +20877,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "Dati_y" ;
+            Text [ italian ] = "Dati Y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "tiedot_Y" ;
@@ -20906,7 +20906,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der Y-Daten." ;
             Text [ english ] = "is the set of y-values you already know in the relationship y = b*m^x." ;
             Text [ norwegian ] = "Die Matrix der Y-Daten." ;
-            Text [ italian ] = "Ë l'insieme dei valori y gi‡ noti dalla relazione y = b*m^x." ;
+            Text [ italian ] = "La matrice dei dati Y." ;
             Text [ portuguese_brazilian ] = "Die Matrix der Y-Daten." ;
             Text [ portuguese ] = "È o conjunto dos valores y." ;
             Text [ finnish ] = "Tietomatriisi Y." ;
@@ -20935,7 +20935,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "Dati_x" ;
+            Text [ italian ] = "Dati X" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "tiedot_X" ;
@@ -20964,7 +20964,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der X-Daten." ;
             Text [ english ] = "is an optional set of x-values that you may already know in the relationship y = b*m^x." ;
             Text [ norwegian ] = "Die Matrix der X-Daten." ;
-            Text [ italian ] = "Ë un insieme facoltativo di valori x che possono essere gi‡ noti dalla relazione y = b*m^x." ;
+            Text [ italian ] = "La matrice dei dati X." ;
             Text [ portuguese_brazilian ] = "Die Matrix der X-Daten." ;
             Text [ portuguese ] = "È um conjunto facultativo de valores x." ;
             Text [ finnish ] = "Tietomatriisi X." ;
@@ -20993,7 +20993,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Art_der_Funktion" ;
             Text [ english ] = "const" ;
             Text [ norwegian ] = "Art der Funktion" ;
-            Text [ italian ] = "tipo_funzione" ;
+            Text [ italian ] = "Tipo funzione" ;
             Text [ portuguese_brazilian ] = "Art der Funktion" ;
             Text [ portuguese ] = "Tipo_de_funÁ„o" ;
             Text [ finnish ] = "Toiminnon_tyyppi" ;
@@ -21022,7 +21022,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Ist Art=0, so werden Funktionen der Form y=m^x berechnet, sonst auch Funktionen y=b*m^x." ;
             Text [ english ] = "is a logical value specifying whether to force the constant b to equal 1." ;
             Text [ norwegian ] = "Ist Art=0, so werden Funktionen der Form y=m^x berechnet, sonst auch Funktionen y=b*m^x." ;
-            Text [ italian ] = "Ë un valore logico che specifica se la costante b deve essere uguale a 1." ;
+            Text [ italian ] = "Se il tipo Ë = 0, vengono calcolate le funzioni y = m^x, altrimenti anche le funzioni y = b*m^x." ;
             Text [ portuguese_brazilian ] = "Ist Art=0, so werden Funktionen der Form y=m^x berechnet, sonst auch Funktionen y=b*m^x." ;
             Text [ portuguese ] = "È um valor lÛgico que determina se a constante b deve ser igual a 0." ;
             Text [ finnish ] = "Jos tyyppi = 0, niin funktiot lasketaan muodossa y=m^x tai y=b*m^x." ;
@@ -21052,7 +21052,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Kenngrˆﬂen" ;
             Text [ english ] = "stats" ;
             Text [ norwegian ] = "Kenngrˆﬂen" ;
-            Text [ italian ] = "stat" ;
+            Text [ italian ] = "Parametri" ;
             Text [ portuguese_brazilian ] = "Kenngr?en" ;
             Text [ portuguese ] = "EstatÌstica" ;
             Text [ finnish ] = "tilastot" ;
@@ -21082,7 +21082,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Ist Kenngrˆﬂen=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte." ;
             Text [ english ] = "is a logical value specifying whether to return additional regression statistics." ;
             Text [ norwegian ] = "Ist Kenngrˆﬂen=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte." ;
-            Text [ italian ] = "Ë un valore logico che specifica se restituire statistiche aggiuntive di regressione." ;
+            Text [ italian ] = "Se il parametro = 0 verranno calcolati solo i coefficienti di regressione, altrimenti verranno considerati altri valori." ;
             Text [ portuguese_brazilian ] = "Ist Kenngr?en=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte." ;
             Text [ portuguese ] = "È um valor lÛgico que determina se estatÌsticas adicionais de regress„o ser„o calculadas ou n„o." ;
             Text [ finnish ] = "Jos parametri = 0, niin vain regression kerroin lasketaan. Muutoin lasketaan myˆs muut arvot." ;
@@ -21150,7 +21150,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "Dati_y" ;
+            Text [ italian ] = "Dati Y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "tiedot_Y" ;
@@ -21179,7 +21179,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der Y-Daten." ;
             Text [ english ] = "is the set of y-values you already know in the relationship y = mx + b." ;
             Text [ norwegian ] = "Die Matrix der Y-Daten." ;
-            Text [ italian ] = "» la matrice dei dati y." ;
+            Text [ italian ] = "Matrice dei dati Y." ;
             Text [ portuguese_brazilian ] = "Die Matrix der Y-Daten." ;
             Text [ portuguese ] = "È o conjunto de valores j· conhecidos na relaÁ„o y = mx + b." ;
             Text [ finnish ] = "Tietomatriisi Y." ;
@@ -21208,7 +21208,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "Dati_x" ;
+            Text [ italian ] = "Dati X" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "tiedot_X" ;
@@ -21237,7 +21237,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der X-Daten als Grundlage zur Regression." ;
             Text [ english ] = "is an optional set of x-values that you may already know in the relationship y = mx + b." ;
             Text [ norwegian ] = "Die Matrix der X-Daten als Grundlage zur Regression." ;
-            Text [ italian ] = "» la matrice dei dati x come base per la regressione." ;
+            Text [ italian ] = "Matrice dei dati X come base per la regressione." ;
             Text [ portuguese_brazilian ] = "Die Matrix der X-Daten als Grundlage zur Regression." ;
             Text [ portuguese ] = "È um conjunto facultativo de valores x  j· conhecidos na relaÁ„o y = mx + b." ;
             Text [ finnish ] = "Regression perustiedot sis‰lt‰v‰ tietomatriisi X." ;
@@ -21266,7 +21266,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Neue_Daten_X" ;
             Text [ english ] = "new_x's" ;
             Text [ norwegian ] = "Neue Daten X" ;
-            Text [ italian ] = "Nuovi_dati_x" ;
+            Text [ italian ] = "Nuovi dati X" ;
             Text [ portuguese_brazilian ] = "Neue Daten X" ;
             Text [ portuguese ] = "Novos_dados_X" ;
             Text [ finnish ] = "uusi tieto_X" ;
@@ -21295,7 +21295,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der X-Daten zur Neuberechnung von Werten." ;
             Text [ english ] = "are new x-values for which you want TREND to return corresponding y-values." ;
             Text [ norwegian ] = "Die Matrix der X-Daten zur Neuberechnung von Werten." ;
-            Text [ italian ] = "» la matrice dei dati x per il ricalcolo dei valori." ;
+            Text [ italian ] = "Matrice dei dati X per il ricalcolo dei valori." ;
             Text [ portuguese_brazilian ] = "Die Matrix der X-Daten zur Neuberechnung von Werten." ;
             Text [ portuguese ] = "s„o novos valores de x para os quais deseja que TEND NCIA devolva valores de y correspondentes." ;
             Text [ finnish ] = "Arvojen uudelleenlaskennan tietomatriisi X." ;
@@ -21324,7 +21324,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Art_der_Geraden" ;
             Text [ english ] = "const" ;
             Text [ norwegian ] = "Art der Geraden" ;
-            Text [ italian ] = "Tipo_rette" ;
+            Text [ italian ] = "Tipo rette" ;
             Text [ portuguese_brazilian ] = "Art der Geraden" ;
             Text [ portuguese ] = "Tipo_de_rectas" ;
             Text [ finnish ] = "Lineaarinen_tyyppi" ;
@@ -21361,7 +21361,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ french ] = "Calcule les droites par le point zÈro si Type = 0 ; sinon droites dÈcalÈes." ;
             Text [ swedish ] = "Om typ=0 ber‰knas linjer genom nollpunkten, annars ‰ven flyttade linjer." ;
             Text [ dutch ] = "Indien type=0 dan worden de lijnen door het nulpunt berekend. Ook verschoven lijnen zijn mogelijk." ;
-            Text [ spanish ] = "es un valor lÛgico qque especifica si la constante debe ser igual a 0." ;
+            Text [ spanish ] = "Si el tipo = 0 las lÌneas rectas se calcular·n mediante el punto cero, sino como lÌneas de regresiÛn." ;
             Text [ english_us ] = "If type = 0 the linears will be calculated through the zero point, or else moved linears." ;
             Text[ chinese_simplified ] = "Â¶ÇÊûú type=0ÔºåÈÇ£‰πàÁõ¥Á∫øÂΩì‰ΩúÁªèËøáÈõ∂ÁÇπËÆ°ÁÆó„ÄÇ";
             Text[ russian ] = "ÀÓ„Ë˜ÂÒÍÓÂ ÁÌ‡˜ÂÌËÂ, ÍÓÚÓÓÂ ÛÍ‡Á˚‚‡ÂÚ, ÚÂ·ÛÂÚÒˇ ÎË, ˜ÚÓ·˚ ÍÓÌÒÚ‡ÌÚ‡ b ·˚Î‡ ‡‚Ì‡ 0.";
@@ -21421,7 +21421,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "Dati_y" ;
+            Text [ italian ] = "Dati Y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "tiedot_Y" ;
@@ -21450,7 +21450,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der Y-Daten." ;
             Text [ english ] = "is the set of y-values you already know in the relationship y = b*m^x." ;
             Text [ norwegian ] = "Die Matrix der Y-Daten." ;
-            Text [ italian ] = "Ë l'insieme dei valori y" ;
+            Text [ italian ] = "La matrice dei valori Y." ;
             Text [ portuguese_brazilian ] = "Die Matrix der Y-Daten." ;
             Text [ portuguese ] = "È o conjunto de valores y na relaÁ„o y = b*m^x." ;
             Text [ finnish ] = "Tietomatriisi Y." ;
@@ -21479,7 +21479,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "Dati_x" ;
+            Text [ italian ] = "Dati X" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "tiedot_X" ;
@@ -21508,7 +21508,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der X-Daten als Grundlage zur Regression." ;
             Text [ english ] = "is an optional set of x-values that you may already know in the relationship y = b*m^x." ;
             Text [ norwegian ] = "Die Matrix der X-Daten als Grundlage zur Regression." ;
-            Text [ italian ] = "Ë un insieme facoltativo di valori x che possono essere gi‡ noti dalla relazione y = b*m^x." ;
+            Text [ italian ] = "La matrice dei dati X come base per la regressione." ;
             Text [ portuguese_brazilian ] = "Die Matrix der X-Daten als Grundlage zur Regression." ;
             Text [ portuguese ] = "È um conjunto opcional de valores x  na relaÁ„o y = b*m^x." ;
             Text [ finnish ] = "Regression perustiedot sis‰lt‰v‰ tietomatriisi X." ;
@@ -21537,7 +21537,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Neue_Daten_X" ;
             Text [ english ] = "new_x's" ;
             Text [ norwegian ] = "Neue Daten X" ;
-            Text [ italian ] = "Nuovi_dati_x" ;
+            Text [ italian ] = "Nuovi dati X" ;
             Text [ portuguese_brazilian ] = "Neue Daten X" ;
             Text [ portuguese ] = "Novos_valores_X" ;
             Text [ finnish ] = "uusi_tieto_X" ;
@@ -21566,7 +21566,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der X-Daten zur Neuberechnung von Werten." ;
             Text [ english ] = "are new x-values for which you want GROWTH to return corresponding y-values." ;
             Text [ norwegian ] = "Die Matrix der X-Daten zur Neuberechnung von Werten." ;
-            Text [ italian ] = "sono i nuovi valori x per i quali CRESCITA restituir‡ i valori y corrispondenti." ;
+            Text [ italian ] = "La matrice dei dati X per un ricalcolo dei valori." ;
             Text [ portuguese_brazilian ] = "Die Matrix der X-Daten zur Neuberechnung von Werten." ;
             Text [ portuguese ] = "s„o novas vari·veis x para as quais deseja que CRESCIMENTO forneÁa os valores y correspondentes." ;
             Text [ finnish ] = "Arvojen uudelleenlaskennan tietomatriisi X." ;
@@ -21595,7 +21595,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Art_der_Funktion" ;
             Text [ english ] = "const" ;
             Text [ norwegian ] = "Art der Funktion" ;
-            Text [ italian ] = "tipo_funzione" ;
+            Text [ italian ] = "Tipo funzione" ;
             Text [ portuguese_brazilian ] = "Art der Funktion" ;
             Text [ portuguese ] = "Tipo_de_funÁ„o" ;
             Text [ finnish ] = "Toiminnon_tyyppi" ;
@@ -21624,7 +21624,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Ist Art=0, so werden Funktionen der Form y=m^x berechnet, sonst auch Funktionen y=b*m^x." ;
             Text [ english ] = "is a logical value specifying whether to force the constant b to equal 1." ;
             Text [ norwegian ] = "Ist Art=0, so werden Funktionen der Form y=m^x berechnet, sonst auch Funktionen y=b*m^x." ;
-            Text [ italian ] = "Ë un valore logico che specifica se la costante b deve essere uguale a 1." ;
+            Text [ italian ] = "Se il tipo = 0 verranno calcolate le funzioni y=m^x, altrimenti anche le funzioni y=b*m^x." ;
             Text [ portuguese_brazilian ] = "Ist Art=0, so werden Funktionen der Form y=m^x berechnet, sonst auch Funktionen y=b*m^x." ;
             Text [ portuguese ] = "È um valor lÛgico que especifica se a constante b deve ser igual a 1." ;
             Text [ finnish ] = "Jos tyyppi = 0, niin funktiot lasketaan muodossa y=m^x tai y=b*m^x." ;
@@ -25408,7 +25408,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ËÆ°ÁÆó‰∫åÈ°πÂºèÂàÜÂ∏ÉÁöÑËØïÈ™åÁªìÊûúÊ¶ÇÁéá„ÄÇ";
             Text[ russian ] = "¬˚˜ËÒÎˇÂÚ ÁÌ‡˜ÂÌËÂ ‚ÂÓˇÚÌÓÒÚË ÂÁÛÎ¸Ú‡Ú‡ ËÒÔ˚Ú‡ÌËÈ Ò ·ËÌÓÏË‡Î¸Ì˚Ï ‡ÒÔÂ‰ÂÎÂÌËÂÏ.";
             Text[ polish ] = "Oblicza pojedynczy sk≥adnik wartoúÊ prawdopodobieÒstwa dla rozk≥adu dwumianowego.";
-            Text[ japanese ] = "ÂÄãÂà•È†Ö„ÅÆ‰∫åÈ†ÖÂàÜÂ∏É„ÅÆÁ¢∫Áéá„ÇíËøî„Åó„Åæ„Åô„ÄÇ";
+            Text[ japanese ] = "‰∫åÈ†ÖÂàÜÂ∏É„ÅÆË©¶Ë°å„ÅåÊàêÂäü„Åô„ÇãÁ¢∫Áéá„ÇíËøî„Åó„Åæ„Åô";
             Text[ chinese_traditional ] = "Ë®àÁÆó‰∫åÈ†ÖÂºèÂàÜ‰ΩàÁöÑË©¶È©óÁµêÊûúÊ¶ÇÁéá„ÄÇ";
             Text[ arabic ] = " Õ”» «Õ „«· ‰ ÌÃ…  Ã—»… » Ê“Ì⁄ –Ì ÕœÌ‰.";
             Text[ dutch ] = "Berekent de kans op succes bij een test met de binomiale verdeling.";
@@ -41234,7 +41234,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Tekst";
             Text[ french ] = "Texte";
             Text[ spanish ] = "Texto";
-            Text[ italian ] = "testo";
+            Text[ italian ] = "Testo";
             Text[ danish ] = "Tekst";
             Text[ swedish ] = "text";
             Text[ polish ] = "tekst";
@@ -41562,6 +41562,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
 #if defined(U2S)
 #undef U2S
 #endif
+
 
 
 
