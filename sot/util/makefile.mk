@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mba $ $Date: 2001-09-06 07:40:09 $
+#   last change: $Author: mba $ $Date: 2002-01-10 10:31:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,6 +133,7 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
 .IF "$(GUI)"!="UNX"
     @+echo CT??_R0?AV>>$@
     @+echo CTA2?AV>>$@
+        @+echo CTA3?AV>>$@
 .ENDIF
 .IF "$(GUI)"=="OS2"
     @+echo __alloc>>$@
