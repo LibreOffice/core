@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-03 13:33:33 $
+ *  last change: $Author: oj $ $Date: 2002-07-01 07:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
             *((sal_Int32*)_pData) = *(sal_Int32*)_pValue;
             *pLen = sizeof(sal_Int32);
             break;
+        case SQL_FLOAT:
         case SQL_REAL:
             *((float*)_pData) = *(float*)_pValue;
             *pLen = sizeof(float);
@@ -386,6 +387,7 @@ void OTools::bindValue( OConnection* _pConnection,
                     *((sal_Int32*)_pData) = *(sal_Int32*)_pValue;
                     *pLen = sizeof(sal_Int32);
                     break;
+                case SQL_FLOAT:
                 case SQL_REAL:
                     *((float*)_pData) = *(float*)_pValue;
                     *pLen = sizeof(float);
