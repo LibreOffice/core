@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 15:11:27 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,6 @@ public:
 };
 
 typedef wwString<sal_uInt16> ww8String;
-typedef wwString<sal_uInt8> ww6String;
 
 //simple template that manages a static [] array by sorting at construction
 template<class C> class wwSortedArray;
@@ -182,11 +181,6 @@ public:
 
     //The minimum acceptable sprm len possible for this type of parser
     int MinSprmLen() const { return (mnVersion < 8) ? 2 : 3; }
-
-    //Count the number of sprms in this byte sequence optionally ignoring any
-    //listed in the SprmSequence
-    int CountSprms(const sal_uInt8 * pSp, long nSprmSiz,
-        const wwSprmSequence *pIgnoreSprms=0) const;
 };
 
 //--Line abovewhich the code has meaningful comments
@@ -437,8 +431,6 @@ public:
     bool GetDirty() const {return bDirty;}
 };
 
-enum eCutT { CUT_NONE = 0, CUT_START, CUT_END, CUT_BOTH };
-
 class WW8PLCFx_PCDAttrs : public WW8PLCFx
 {
 private:
@@ -499,7 +491,6 @@ public:
         bIsUnicodeAddress = 0 == (0x40000000 & nfc);
         return bIsUnicodeAddress ?  nfc : (nfc & 0x3fffFFFF) / 2;
     }
-    bool IsVersion67() const { return bVer67; }
 };
 
 /*
@@ -745,7 +736,7 @@ public:
     bool GetPara(long nIdx, WW8FieldDesc& rF);
 };
 
-enum eBookStatus { BOOK_NORMAL = 0, BOOK_IGNORE = 0x1, BOOK_ONLY_REF = 0x2 };
+enum eBookStatus { BOOK_NORMAL = 0, BOOK_IGNORE = 0x1 };
 
 // Iterator for Booknotes
 class WW8PLCFx_Book : public WW8PLCFx
@@ -872,9 +863,8 @@ private:
                                     //drawboxes we want the true offsets
 
     WW8PLCFxDesc aD[MAN_ANZ_PLCF];
-    WW8PLCFxDesc *pChp, *pPap, *pSep, *pFld, *pFldTxbx, *pFldTxbxHdft,
-                 *pFtn, *pEdn,
-                 *pBkm, *pPcd, *pPcdA, *pAnd;
+    WW8PLCFxDesc *pChp, *pPap, *pSep, *pFld, *pFtn, *pEdn, *pBkm, *pPcd,
+        *pPcdA, *pAnd;
     WW8PLCFspecial *pFdoa, *pTxbx, *pTxbxBkd,*pMagicTables;
 
     const WW8Fib* pWwFib;
@@ -1651,6 +1641,10 @@ public:
     INT16 hpsZoonFontPag;
     INT16 dywDispPag;
 
+    UINT32 fUnknown1:2;
+    UINT32 fDontUseHTMLAutoSpacing:1;
+    UINT32 fUnknown2:29;
+
     // 2. Initialisier-Dummy:
     BYTE    nDataEnd;
 
@@ -1662,6 +1656,7 @@ public:
     bool Write(SvStream& rStrm, WW8Fib& rFib) const;
 private:
     UINT32 GetCompatabilityOptions() const;
+    void SetCompatabilityOptions(UINT32 a32Bit);
 };
 
 class WW8PLCF_HdFt
