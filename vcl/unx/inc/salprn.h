@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:20:47 $
+ *  last change: $Author: rt $ $Date: 2005-02-01 13:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ public:
 class Timer;
 
 namespace vcl_sal {
-class PrinterUpdate
+class VCL_DLLPUBLIC PrinterUpdate
 {
     static Timer*           pPrinterUpdateTimer;
     static int              nActiveJobs;
