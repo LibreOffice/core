@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:34:39 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,15 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_EMBED_VERBDESCRIPTOR_HPP_
+#include <com/sun/star/embed/VerbDescriptor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_VERBATTRIBUTES_HPP_
+#include <com/sun/star/embed/VerbAttributes.hpp>
+#endif
+
 #ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
-#endif
-#ifndef _PSEUDO_HXX //autogen
-#include <so3/pseudo.hxx>
 #endif
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
@@ -116,19 +120,17 @@ typedef SfxSlot* SfxSlotPtr;
 SV_DECL_PTRARR_DEL( SfxVerbSlotArr_Impl, SfxSlotPtr, 4, 4);
 SV_IMPL_PTRARR( SfxVerbSlotArr_Impl, SfxSlotPtr);
 
-struct SfxVerbList
-{
-    SfxVerbSlotArr_Impl       aSlotArr;
-    SvVerbList                aVerbList;
-};
+using namespace com::sun::star;
 
+//=========================================================================
+// SfxShell_Impl
+//=========================================================================
 struct SfxShell_Impl: public SfxBroadcaster
 {
     String                      aObjectName;// Name des Sbx-Objects
     SfxItemArray_Impl           aItems;     // Datenaustausch auf Item-Basis
     SfxViewShell*               pViewSh;    // SfxViewShell falls Shell ViewFrame/ViewShell/SubShell ist
     SfxViewFrame*               pFrame;     // Frame, falls <UI-aktiv>
-    SfxVerbList*                pVerbs;
     SfxRepeatTarget*            pRepeatTarget;
 //    SbxObjectRef                xParent;
     BOOL                        bInAppBASIC;
@@ -137,6 +139,8 @@ struct SfxShell_Impl: public SfxBroadcaster
     ULONG                       nHelpId;
     svtools::AsynchronLink*     pExecuter;
     svtools::AsynchronLink*     pUpdater;
+    SfxVerbSlotArr_Impl         aSlotArr;
+    com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor > aVerbList;
     SfxShell_Impl()  : pExecuter( 0 ), pUpdater( 0 ) {}
     ~SfxShell_Impl() { delete pExecuter; delete pUpdater;}
 };
@@ -166,6 +170,10 @@ String SfxShellIdent_Impl( const SfxShell *pSh )
 #endif
 //====================================================================
 
+//=========================================================================
+// SfxShell
+//=========================================================================
+
 void __EXPORT SfxShell::EmptyExecStub(SfxShell *, SfxRequest &)
 {
 }
@@ -191,7 +199,6 @@ SfxShell::SfxShell()
     pImp = new SfxShell_Impl;
     pImp->pViewSh = 0;
     pImp->pFrame = 0;
-    pImp->pVerbs = 0;
     pImp->pRepeatTarget = 0;
     pImp->bInAppBASIC = FALSE;
     pImp->nHelpId = 0L;
@@ -218,7 +225,6 @@ SfxShell::SfxShell( SfxViewShell *pViewSh )
     pImp = new SfxShell_Impl;
     pImp->pViewSh = pViewSh;
     pImp->pFrame = 0;
-    pImp->pVerbs = 0;
     pImp->pRepeatTarget = 0;
     pImp->bInAppBASIC = FALSE;
     pImp->nHelpId = 0L;
@@ -238,7 +244,6 @@ SfxShell::~SfxShell()
 
 {
     DBG_DTOR(SfxShell, 0);
-    delete pImp->pVerbs;
     delete pImp;
 }
 
@@ -1351,74 +1356,65 @@ const SfxPoolItem* SfxShell::GetSlotState
 SFX_EXEC_STUB(SfxShell, VerbExec)
 SFX_STATE_STUB(SfxShell, VerbState)
 
-
-void SfxShell::SetVerbs(const SvVerbList* pVerbs)
+void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs)
 {
     SfxViewShell *pViewSh = PTR_CAST ( SfxViewShell, this);
 
     DBG_ASSERT(pViewSh, "SetVerbs nur an der ViewShell aufrufen!");
+    if ( !pViewSh )
+        return;
 
-    if (pImp->pVerbs)
+    // Zun"achst alle Statecaches dirty machen, damit keiner mehr versucht,
+    // die Slots zu benutzen
+
+    SfxBindings *pBindings =
+        pViewSh->GetViewFrame()->GetDispatcher()->GetBindings();
+    USHORT nCount = pImp->aSlotArr.Count();
+    for (USHORT n1=0; n1<nCount ; n1++)
     {
-        // Zun"achst alle Statecaches dirty machen, damit keiner mehr versucht,
-        // die Slots zu benutzen
-
-        SfxBindings *pBindings =
-            pViewSh->GetViewFrame()->GetDispatcher()->GetBindings();
-        USHORT nCount = pImp->pVerbs->aSlotArr.Count();
-        for (USHORT n=0; n<nCount ; n++)
-        {
-            USHORT nId = SID_VERB_START + n;
-            pBindings->Invalidate(nId, FALSE, TRUE);
-        }
-
-        DELETEZ (pImp->pVerbs);
+        USHORT nId = SID_VERB_START + n1;
+        pBindings->Invalidate(nId, FALSE, TRUE);
     }
 
-    if (pVerbs)
-        pImp->pVerbs = new SfxVerbList();
-
-    if (pVerbs)
+    USHORT nr=0;
+    for (sal_Int32 n=0; n<aVerbs.getLength(); n++)
     {
-        USHORT nr=0;
-        for (USHORT n=0; n<pVerbs->Count(); n++)
+        SfxSlot *pNewSlot = new SfxSlot;
+        USHORT nSlotId = SID_VERB_START + nr++;
+        DBG_ASSERT(nSlotId <= SID_VERB_END, "Zuviele Verben!");
+        if (nSlotId > SID_VERB_END)
+            break;
+
+        pNewSlot->nSlotId = nSlotId;
+        pNewSlot->nGroupId = 0;
+
+        // Verb-Slots m"ussen asynchron ausgef"uhrt werden, da sie w"ahrend
+        // des Ausf"uhrens zerst"ort werden k"onnten
+        pNewSlot->nFlags = SFX_SLOT_ASYNCHRON;
+        pNewSlot->nMasterSlotId = 0;
+        pNewSlot->nValue = 0;
+        pNewSlot->fnExec = SFX_STUB_PTR(SfxShell,VerbExec);
+        pNewSlot->fnState = SFX_STUB_PTR(SfxShell,VerbState);
+        pNewSlot->pType = 0; HACK(SFX_TYPE(SfxVoidItem))
+        pNewSlot->pName = U2S(aVerbs[n].VerbName);
+        pNewSlot->pLinkedSlot = 0;
+        pNewSlot->nArgDefCount = 0;
+        pNewSlot->pFirstArgDef = 0;
+        pNewSlot->pUnoName = 0;
+
+        if (pImp->aSlotArr.Count())
         {
-            SfxSlot *pNewSlot = new SfxSlot;
-            USHORT nSlotId = SID_VERB_START + nr++;
-            DBG_ASSERT(nSlotId <= SID_VERB_END, "Zuviele Verben!");
-            if (nSlotId > SID_VERB_END)
-                break;
-
-            pNewSlot->nSlotId = nSlotId;
-            pNewSlot->nGroupId = 0;
-
-            // Verb-Slots m"ussen asynchron ausgef"uhrt werden, da sie w"ahrend
-            // des Ausf"uhrens zerst"ort werden k"onnten
-            pNewSlot->nFlags = SFX_SLOT_ASYNCHRON;
-            pNewSlot->nMasterSlotId = 0;
-            pNewSlot->nValue = 0;
-            pNewSlot->fnExec = SFX_STUB_PTR(SfxShell,VerbExec);
-            pNewSlot->fnState = SFX_STUB_PTR(SfxShell,VerbState);
-            pNewSlot->pType = 0; HACK(SFX_TYPE(SfxVoidItem))
-            pNewSlot->pName = U2S((*pVerbs)[n].GetName()).getStr();
-            pNewSlot->pLinkedSlot = 0;
-            pNewSlot->nArgDefCount = 0;
-            pNewSlot->pFirstArgDef = 0;
-            pNewSlot->pUnoName = 0;
-
-            if (pImp->pVerbs->aSlotArr.Count())
-            {
-                SfxSlot *pSlot = (pImp->pVerbs->aSlotArr)[0];
-                pNewSlot->pNextSlot = pSlot->pNextSlot;
-                pSlot->pNextSlot = pNewSlot;
-            }
-            else
-                pNewSlot->pNextSlot = pNewSlot;
-
-            pImp->pVerbs->aSlotArr.Insert(pNewSlot, n);
-            pImp->pVerbs->aVerbList.Insert((*pVerbs)[n], n);
+            SfxSlot *pSlot = (pImp->aSlotArr)[0];
+            pNewSlot->pNextSlot = pSlot->pNextSlot;
+            pSlot->pNextSlot = pNewSlot;
         }
+        else
+            pNewSlot->pNextSlot = pNewSlot;
+
+        pImp->aSlotArr.Insert(pNewSlot, (USHORT) n);
     }
+
+    pImp->aVerbList = aVerbs;
 
     if (pViewSh)
     {
@@ -1432,9 +1428,9 @@ void SfxShell::SetVerbs(const SvVerbList* pVerbs)
 
 //--------------------------------------------------------------------
 
-const SvVerbList* SfxShell::GetVerbs() const
+const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& SfxShell::GetVerbs() const
 {
-    return pImp->pVerbs ? &pImp->pVerbs->aVerbList : 0;
+    return pImp->aVerbList;
 }
 
 //--------------------------------------------------------------------
@@ -1445,13 +1441,21 @@ void SfxShell::VerbExec(SfxRequest& rReq)
     SfxViewShell *pViewShell = GetViewShell();
     if ( pViewShell )
     {
-        const SvVerbList* pList = pViewShell->GetVerbs();
-
-        for (USHORT n=0; n<pList->Count(); n++)
+        BOOL bReadOnly = pViewShell->GetObjectShell()->IsReadOnly();
+        com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor > aList = pViewShell->GetVerbs();
+        for (sal_Int32 n=0, nVerb=0; n<aList.getLength(); n++)
         {
-            if (nId == SID_VERB_START + n)
+            // check for ReadOnly verbs
+            if ( bReadOnly && !(aList[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_NEVERDIRTIES) )
+                continue;
+
+            // check for verbs that shouldn't appear in the menu
+            if ( !(aList[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU) )
+                continue;
+
+            if (nId == SID_VERB_START + nVerb++)
             {
-                pViewShell->DoVerb((*pList)[n].GetId());
+                pViewShell->DoVerb(aList[n].VerbID);
                 rReq.Done();
                 return;
             }
@@ -1469,18 +1473,14 @@ void SfxShell::VerbState(SfxItemSet &rSet)
 
 const SfxSlot* SfxShell::GetVerbSlot_Impl(USHORT nId) const
 {
-//    DBG_ASSERT(pImp->pVerbs, "Keine Verben bekannt!");
-    if (!pImp->pVerbs)
-        return 0;
-
-    const SvVerbList& rList = pImp->pVerbs->aVerbList;
+    com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor > rList = pImp->aVerbList;
 
     DBG_ASSERT(nId >= SID_VERB_START && nId <= SID_VERB_END,"Falsche VerbId!");
     USHORT nIndex = nId - SID_VERB_START;
-    DBG_ASSERT(nIndex < rList.Count(),"Falsche VerbId!");
+    DBG_ASSERT(nIndex < rList.getLength(),"Falsche VerbId!");
 
-    if (nIndex < rList.Count())
-        return pImp->pVerbs->aSlotArr[nIndex];
+    if (nIndex < rList.getLength())
+        return pImp->aSlotArr[nIndex];
     else
         return 0;
 }
