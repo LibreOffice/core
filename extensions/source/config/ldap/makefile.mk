@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-18 10:40:10 $
+#   last change: $Author: rt $ $Date: 2005-03-30 11:41:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,17 +75,18 @@ LDAP_MAJOR=2
 .INCLUDE : settings.mk
 DLLPRE =
 
-.IF "$(LDAPSDKINCLUDES)" == ""
-
-.IF "$(WITH_MOZILLA)" == "NO"
-# This logic (when to not build the ldapbe lib) needs to be reflected
-# in scp2/source/ooo/makefile.mk for defining WITHOUT_LDAP
-all:
-    @echo "         Build of LDAP configuration backend skipped - disabled"
+.IF "$(WITH_MOZILLA)" == "NO" && "$(WITH_OPENLDAP)" != "YES"
+@all:
+    @echo "Mozilla disabled and no OpenLDAP wanted -> LDAP disabled."
 .ENDIF
 
-# TODO: Add support for SYSTEM_MOZILLA
+.IF "$(LDAPSDKINCLUDES)" == ""
+
+.IF "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_OPENLDAP)" != "YES"
+LDAPSDKINCLUDES = $(MOZ_LDAP_CFLAGS)
+.ELSE
 LDAPSDKINCLUDES = -I$(SOLARINCDIR)$/mozilla
+.ENDIF
 .ENDIF
 
 .IF "$(WITH_OPENLDAP)" == "YES"
@@ -119,6 +120,10 @@ SHL1STDLIBS=    \
         $(SALLIB)
 .IF "$(OS)"=="FREEBSD"
 SHL1STDLIBS+=-lcompat
+# workaround for FreeBSD, which needs -llber50, too
+.IF "$(WITH_OPENLDAP)" != "YES"
+SHL1STDLIBS+=-llber50
+.ENDIF
 .ENDIF
 
 DEF1NAME=$(SHL1TARGET)
