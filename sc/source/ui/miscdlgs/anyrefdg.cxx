@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-31 12:46:01 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,6 @@ void lcl_EnableInput( BOOL bEnable )
 
 void lcl_InvalidateWindows()
 {
-//  Application::GetAppWindow()->Invalidate(); //Weils so schoen ist!
-
     TypeId aType(TYPE(ScDocShell));
     ScDocShell* pDocShell = (ScDocShell*)SfxObjectShell::GetFirst(&aType);
     while( pDocShell )
@@ -473,7 +471,6 @@ ScAnyRefDlg::~ScAnyRefDlg()
         pInputHdl->ResetDelayTimer();   // noch laufen koennte, Reset ausloesen.
 
     //SFX_APPWINDOW->Enable(TRUE,TRUE);
-//  Application::GetAppWindow()->Invalidate(); //Weils so schoen ist!
     lcl_InvalidateWindows();
 }
 
@@ -557,7 +554,6 @@ BOOL __EXPORT ScAnyRefDlg::DoClose( USHORT nId )
             pWin->Enable();
         }
     }
-    //Application::GetAppWindow()->Enable();
 
     // find parent view frame to close dialog
     SfxViewFrame* pMyViewFrm = NULL;
