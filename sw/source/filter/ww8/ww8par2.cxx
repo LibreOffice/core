@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:57:33 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:51:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,8 @@ WW8TabBandDesc::~WW8TabBandDesc()
 
 class WW8TabDesc
 {
-    ::std::vector<String> aNumRuleNames;
+    std::vector<String> aNumRuleNames;
+    wwRedlineStack *mpOldRedlineStack;
 
     SwWW8ImplReader* pIo;
 
@@ -496,6 +497,9 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
             {
                 pPaM->GetPoint()->nContent.Assign( pTNd, 0 );
                 pPaM->SetMark();
+                // Strip out tabs we may have inserted on export #i24762#
+                if (pTNd->GetTxt().GetChar(1) == 0x09)
+                    pPaM->GetMark()->nContent++;
                 pPaM->GetMark()->nContent++;
                 pRefStck->Delete(*pPaM);
                 rDoc.Delete( *pPaM );
@@ -1626,12 +1630,13 @@ const BYTE *HasTabCellSprm(WW8PLCFx_Cp_FKP* pPap, bool bVer67)
 }
 
 WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
-    : pIo(pIoClass), pFirstBand(0), pActBand(0), pTmpPos(0), pTblNd(0),
-    pTabLines(0), pTabLine(0), pTabBoxes(0), pTabBox(0), pMergeGroups(0),
-    pAktWWCell(0), nRows(0), nDefaultSwCols(0), nBands(0), nMinLeft(0),
-    nConvertedLeft(0), nMaxRight(0), nSwWidth(0), bOk(true), bHeader(false),
-    bClaimLineFmt(false), eOri(HORI_NONE), bIsBiDi(false), nAktRow(0),
-    nAktBandRow(0), nAktCol(0), pTable(0), pParentPos(0), pFlyFmt(0),
+    : mpOldRedlineStack(0), pIo(pIoClass), pFirstBand(0), pActBand(0),
+    pTmpPos(0), pTblNd(0), pTabLines(0), pTabLine(0), pTabBoxes(0), pTabBox(0),
+    pMergeGroups(0), pAktWWCell(0), nRows(0), nDefaultSwCols(0), nBands(0),
+    nMinLeft(0), nConvertedLeft(0), nMaxRight(0), nSwWidth(0), bOk(true),
+    bHeader(false), bClaimLineFmt(false), eOri(HORI_NONE), bIsBiDi(false),
+    nAktRow(0), nAktBandRow(0), nAktCol(0), pTable(0), pParentPos(0),
+    pFlyFmt(0),
     aItemSet(pIo->rDoc.GetAttrPool(),RES_FRMATR_BEGIN,RES_FRMATR_END-1)
 {
     pIo->bAktAND_fNumberAcross = false;
@@ -2378,6 +2383,9 @@ void WW8TabDesc::CreateSwTable()
             aItemSet.Put(aL);
         }
     }
+
+    mpOldRedlineStack = pIo->mpRedlineStack;
+    pIo->mpRedlineStack = new wwRedlineStack(pIo->rDoc);
 }
 
 void WW8TabDesc::UseSwTable()
@@ -2590,6 +2598,11 @@ void WW8TabDesc::MoveOutsideTable()
 
 void WW8TabDesc::FinishSwTable()
 {
+    pIo->mpRedlineStack->closeall(*pIo->pPaM->GetPoint());
+    delete pIo->mpRedlineStack;
+    pIo->mpRedlineStack = mpOldRedlineStack;
+    mpOldRedlineStack = 0;
+
     WW8DupProperties aDup(pIo->rDoc,pIo->pCtrlStck);
     pIo->pCtrlStck->SetAttr( *pIo->pPaM->GetPoint(), 0, false);
 
@@ -2745,7 +2758,7 @@ void WW8TabDesc::FinishSwTable()
                     // die Target-Box in die Tabelle an die Stelle der oberen
                     // linken Box.
                     {
-                        const SwTableBox* pBox  = (*pActMGroup)[ 1 ];
+                        const SwTableBox* pBox  = (*pActMGroup)[ nActBoxCount - 1  ];
                         SwTableLine*      pLine = (SwTableLine*)pBox->GetUpper();
 
                         USHORT nPos = pLine->GetTabBoxes().GetPos( pBox );
@@ -3761,12 +3774,7 @@ void WW8RStyle::Import1Style( USHORT nNr )
         }
     }
     else if( pIo->mbNewDoc && bStyExist )
-    {
-        if( pStd->sgc == 1 )
-            pSI->pFmt->SetDerivedFrom( pIo->pStandardFmtColl );
-        else
-            pSI->pFmt->SetDerivedFrom( pIo->rDoc.GetDfltCharFmt() );
-    }
+        pSI->pFmt->SetDerivedFrom(0);
 
     pSI->nFollow = pStd->istdNext;              // Follow merken
 
