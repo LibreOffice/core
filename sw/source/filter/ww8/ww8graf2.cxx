@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:21 $
+ *  last change: $Author: cmc $ $Date: 2002-07-15 12:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,14 +248,22 @@ void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
 // neuen Objekte am Ende landen ( Einfuegen ist dann schneller )
 USHORT wwZOrderer::GetDrawingObjectPos(short nWwHeight)
 {
-    USHORT nMax = maDrawHeight.Count();
+    USHORT nInsertPos, nMax;
+    nInsertPos = nMax = maDrawHeight.Count();
     // lineare Suche: langsam
     for (USHORT i=0; i < nMax; i++)
     {
         if ( (maDrawHeight.GetObject(i) & 0x1fff) > (nWwHeight & 0x1fff) )
-            return i;           // vor i-tem Objekt einfuegen
+        {
+            nInsertPos = i;
+            break;
+        }
     }
-    return nMax;                // am Ende anhaengen
+
+    maDrawHeight.Insert(nWwHeight, nPos);
+
+    return nInsertPos;
+
 }
 
 #ifdef __WW8_NEEDS_COPY
