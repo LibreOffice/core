@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleObjectFactory.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obr $ $Date: 2002-09-18 11:20:15 $
+ *  last change: $Author: obr $ $Date: 2002-10-02 07:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,10 @@ import javax.accessibility.AccessibleStateSet;
 
 import com.sun.star.uno.*;
 import drafts.com.sun.star.accessibility.AccessibleRole;
+import drafts.com.sun.star.accessibility.AccessibleStateType;
 import drafts.com.sun.star.accessibility.XAccessible;
 import drafts.com.sun.star.accessibility.XAccessibleContext;
+import drafts.com.sun.star.accessibility.XAccessibleStateSet;
 
 /**
 */
@@ -158,165 +160,171 @@ public class AccessibleObjectFactory {
         }
 
         if( o == null && create ) {
-            AccessibleContextInfo info = infoProvider.getAccessibleContextInfo(xAccessibleContext);
+            try {
+                short role = xAccessibleContext.getAccessibleRole();
+                XAccessibleStateSet xStateSet = null;
 
-            switch(info.Role) {
-                case AccessibleRole.CHECKBOX:
-                    o = new AccessibleButton(
-                        javax.accessibility.AccessibleRole.CHECK_BOX,
-                        javax.accessibility.AccessibleState.CHECKED,
-                        xAccessibleContext
+                switch(role) {
+                    case AccessibleRole.CHECKBOX:
+                        o = new AccessibleButton(
+                            javax.accessibility.AccessibleRole.CHECK_BOX,
+                            javax.accessibility.AccessibleState.CHECKED,
+                            xAccessibleContext
+                            );
+                        break;
+                    case AccessibleRole.COMBOBOX:
+                        o = new AccessibleComboBox(xAccessibleContext);
+                        break;
+                    case AccessibleRole.LIST:
+                        o = new AccessibleList(xAccessibleContext);
+                        break;
+                    case AccessibleRole.MENUBAR:
+                    case AccessibleRole.POPUPMENU:
+                        o = new AccessibleContainer(
+                            AccessibleRoleMap.toAccessibleRole(role),
+                            xAccessibleContext
                         );
-                    break;
-                case AccessibleRole.COMBOBOX:
-                    o = new AccessibleComboBox(xAccessibleContext);
-                    break;
-                case AccessibleRole.LIST:
-                    o = new AccessibleList(xAccessibleContext);
-                    break;
-                case AccessibleRole.MENUBAR:
-                case AccessibleRole.POPUPMENU:
-                    o = new AccessibleContainer(
-                        AccessibleRoleMap.toAccessibleRole(info.Role),
-                        xAccessibleContext
-                    );
-                    break;
-                case AccessibleRole.LABEL:
-                case AccessibleRole.TABLE_CELL:
-                    if((info.States & AccessibleState.TRANSIENT) != 0) {
-                        o = new AccessibleFixedText(info.IndexInParent, xAccessibleContext);
-                    } else {
-                        o = new AccessibleLabel(xAccessibleContext);
-                    }
-                    break;
-                case AccessibleRole.DIALOG:
-                case AccessibleRole.FRAME:
-                    o = new AccessibleFrame(
-                        AccessibleRoleMap.toAccessibleRole(info.Role),
-                        xAccessibleContext
-                    );
-                    break;
-                case AccessibleRole.ICON:
-                case AccessibleRole.GRAPHIC:
-                case AccessibleRole.SHAPE:
-                case AccessibleRole.EMBEDDED_OBJECT:
-                    o = new AccessibleImage(xAccessibleContext);
-                    break;
-                case AccessibleRole.LISTITEM:
-                    o = new AccessibleListItem(xAccessibleContext);
-                    break;
-                case AccessibleRole.MENU:
-                    o = new AccessibleMenu(xAccessibleContext);
-                    break;
-                case AccessibleRole.MENUITEM:
-                    o = new AccessibleMenuItem(xAccessibleContext);
-                    break;
-                case AccessibleRole.PARAGRAPH:
-                    o = new AccessibleParagraph(xAccessibleContext);
-                    break;
-                case AccessibleRole.PUSHBUTTON:
-                    o = new AccessibleButton(
-                        javax.accessibility.AccessibleRole.PUSH_BUTTON,
-                        javax.accessibility.AccessibleState.SELECTED,
-                        xAccessibleContext
+                        break;
+                    case AccessibleRole.LABEL:
+                    case AccessibleRole.TABLE_CELL:
+                        xStateSet = xAccessibleContext.getAccessibleStateSet();
+                        if( xStateSet != null && ! xStateSet.contains(AccessibleStateType.TRANSIENT)) {
+                            o = new AccessibleLabel(xAccessibleContext);
+                        } else {
+                            o = new AccessibleFixedText(xAccessibleContext);
+                        }
+                        break;
+                    case AccessibleRole.DIALOG:
+                    case AccessibleRole.FRAME:
+                        o = new AccessibleFrame(
+                            AccessibleRoleMap.toAccessibleRole(role),
+                            xAccessibleContext
                         );
-                    break;
-                case AccessibleRole.RADIOBUTTON:
-                    o = new AccessibleButton(
-                        javax.accessibility.AccessibleRole.RADIO_BUTTON,
-                        javax.accessibility.AccessibleState.CHECKED,
-                        xAccessibleContext
+                        break;
+                    case AccessibleRole.ICON:
+                    case AccessibleRole.GRAPHIC:
+                    case AccessibleRole.SHAPE:
+                    case AccessibleRole.EMBEDDED_OBJECT:
+                        o = new AccessibleImage(xAccessibleContext);
+                        break;
+                    case AccessibleRole.LISTITEM:
+                        o = new AccessibleListItem(xAccessibleContext);
+                        break;
+                    case AccessibleRole.MENU:
+                        o = new AccessibleMenu(xAccessibleContext);
+                        break;
+                    case AccessibleRole.MENUITEM:
+                        o = new AccessibleMenuItem(xAccessibleContext);
+                        break;
+                    case AccessibleRole.PARAGRAPH:
+                        o = new AccessibleParagraph(xAccessibleContext);
+                        break;
+                    case AccessibleRole.PUSHBUTTON:
+                        o = new AccessibleButton(
+                            javax.accessibility.AccessibleRole.PUSH_BUTTON,
+                            javax.accessibility.AccessibleState.SELECTED,
+                            xAccessibleContext
+                            );
+                        break;
+                    case AccessibleRole.RADIOBUTTON:
+                        o = new AccessibleButton(
+                            javax.accessibility.AccessibleRole.RADIO_BUTTON,
+                            javax.accessibility.AccessibleState.CHECKED,
+                            xAccessibleContext
+                            );
+                        break;
+                    case AccessibleRole.SCROLLBAR:
+                        o = new AccessibleScrollBar(xAccessibleContext);
+                        break;
+                    case AccessibleRole.SEPARATOR:
+                        o = new AccessibleSeparator(xAccessibleContext);
+                        break;
+                    case AccessibleRole.TABLE:
+                        xStateSet = xAccessibleContext.getAccessibleStateSet();
+                        if(xStateSet != null && ! xStateSet.contains(AccessibleStateType.CHILDREN_TRANSIENT)) {
+                            o = new AccessibleTextTable(xAccessibleContext);
+                        } else {
+                            o = new AccessibleSpreadsheet(xAccessibleContext);
+                        }
+                        break;
+                    case AccessibleRole.TEXT:
+                        o = new AccessibleEditLine(xAccessibleContext);
+                        break;
+                    case AccessibleRole.TREE:
+                        o = new AccessibleTreeList(xAccessibleContext);
+                        break;
+                    case AccessibleRole.CANVAS:
+                    case AccessibleRole.DOCUMENT:
+                    case AccessibleRole.ENDNOTE:
+                    case AccessibleRole.FILLER:
+                    case AccessibleRole.FOOTER:
+                    case AccessibleRole.FOOTNOTE:
+                    case AccessibleRole.HEADER:
+                    case AccessibleRole.LAYEREDPANE:
+                    case AccessibleRole.OPTIONPANE:
+                    case AccessibleRole.PAGETAB:
+                    case AccessibleRole.PANEL:
+                    case AccessibleRole.ROOTPANE:
+                    case AccessibleRole.SCROLLPANE:
+                    case AccessibleRole.SPLITPANE:
+                    case AccessibleRole.STATUSBAR:
+                    case AccessibleRole.TOOLBAR:
+                    case AccessibleRole.WINDOW:
+                        o = new AccessibleWindow(
+                            AccessibleRoleMap.toAccessibleRole(role),
+                            xAccessibleContext
                         );
-                    break;
-                case AccessibleRole.SCROLLBAR:
-                    o = new AccessibleScrollBar(xAccessibleContext);
-                    break;
-                case AccessibleRole.SEPARATOR:
-                    o = new AccessibleSeparator(xAccessibleContext);
-                    break;
-                case AccessibleRole.TABLE:
-                    if((info.States & AccessibleState.CHILDREN_TRANSIENT) != 0) {
-                        o = new AccessibleSpreadsheet(xAccessibleContext);
-                    } else {
-                        o = new AccessibleTextTable(xAccessibleContext);
-                    }
-                    break;
-                case AccessibleRole.TEXT:
-                    o = new AccessibleEditLine(xAccessibleContext);
-                    break;
-                case AccessibleRole.TREE:
-                    o = new AccessibleTreeList(xAccessibleContext);
-                    break;
-                case AccessibleRole.CANVAS:
-                case AccessibleRole.DOCUMENT:
-                case AccessibleRole.ENDNOTE:
-                case AccessibleRole.FILLER:
-                case AccessibleRole.FOOTER:
-                case AccessibleRole.FOOTNOTE:
-                case AccessibleRole.HEADER:
-                case AccessibleRole.LAYEREDPANE:
-                case AccessibleRole.OPTIONPANE:
-                case AccessibleRole.PAGETAB:
-                case AccessibleRole.PANEL:
-                case AccessibleRole.ROOTPANE:
-                case AccessibleRole.SCROLLPANE:
-                case AccessibleRole.SPLITPANE:
-                case AccessibleRole.STATUSBAR:
-                case AccessibleRole.TOOLBAR:
-                case AccessibleRole.WINDOW:
-                    o = new AccessibleWindow(
-                        AccessibleRoleMap.toAccessibleRole(info.Role),
-                        xAccessibleContext
-                    );
-                    break;
-                default:
-                    if( Build.DEBUG) {
-                        System.out.println("Unmapped role: " + AccessibleRoleMap.toAccessibleRole(info.Role)
-                         + " (id = " + info.Role + ")");
-                    }
-                    o = new AccessibleWindow(
-                        AccessibleRoleMap.toAccessibleRole(info.Role),
-                        xAccessibleContext
-                    );
-                    break;
-            }
+                        break;
+                    default:
+                        if( Build.DEBUG) {
+                            System.out.println("Unmapped role: " + AccessibleRoleMap.toAccessibleRole(role)
+                             + " (id = " + role + ")");
+                        }
+                        o = new AccessibleWindow(
+                            AccessibleRoleMap.toAccessibleRole(role),
+                            xAccessibleContext
+                        );
+                        break;
+                }
 
-            // Add the newly created object to the cache list
-            synchronized (objectList) {
-                objectList.put(oid, new WeakReference(o));
-                if( Build.DEBUG ) {
-//                  System.out.println("Object cache now contains " + objectList.size() + " objects.");
+                // Add the newly created object to the cache list
+                synchronized (objectList) {
+                    objectList.put(oid, new WeakReference(o));
+                    if( Build.DEBUG ) {
+    //                  System.out.println("Object cache now contains " + objectList.size() + " objects.");
+                    }
+                }
+
+                // Register as event listener if possible
+                AccessibleEventListener listener = null;
+                if( o instanceof AccessibleEventListener ) {
+                    listener = (AccessibleEventListener) o;
+                }
+
+                /* The accessible event broadcaster will never be removed by a removeEventListener
+                 * call. This requires that the UNO accessibility objects get activly destructed
+                 * using dispose().
+                 */
+                o.initialize(infoProvider.getAccessibleContextInfo(xAccessibleContext, listener));
+
+                // Create generic parent if parent is null
+                if( parent == null && o.getAccessibleIndexInParent() != -1 ) {
+                    parent = new GenericAccessibleParent(o, xAccessibleContext);
+                }
+
+                // Finaly set accessible parent object
+                if( parent != null ) {
+                    o.setAccessibleParent(parent);
+                }
+
+                // Add the child to the internal list if parent is AccessibleWindow
+                if( parent instanceof AccessibleWindow ) {
+                    AccessibleWindow w = (AccessibleWindow) parent;
+                    w.addAccessibleChild(o);
                 }
             }
 
-            // Register as event listener if possible
-            AccessibleEventListener listener = null;
-            if(o instanceof AccessibleEventListener && (info.States & AccessibleState.TRANSIENT) == 0) {
-                listener = (AccessibleEventListener) o;
-            }
-
-            /* The accessible event broadcaster will never be removed by a removeEventListener
-             * call. This requires that the UNO accessibility objects get activly destructed
-             * using dispose().
-             */
-            synchronized (o) {
-                o.initialize(infoProvider.getAccessibleComponentInfo(xAccessibleContext, listener));
-            }
-
-            // Create generic parent if parent is null
-            if( parent == null && info.IndexInParent != -1 ) {
-                parent = new GenericAccessibleParent(o, xAccessibleContext);
-            }
-
-            // Finaly set accessible parent object
-            if( parent != null ) {
-                o.setAccessibleParent(parent);
-            }
-
-            // Add the child to the internal list if parent is AccessibleWindow
-            if( ((info.States & AccessibleState.CHILDREN_TRANSIENT) == 0) && (parent instanceof AccessibleWindow) ) {
-                AccessibleWindow w = (AccessibleWindow) parent;
-                w.addAccessibleChild(o);
+            catch(com.sun.star.uno.RuntimeException e) {
             }
         }
 

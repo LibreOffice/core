@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextImpl.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-10-01 07:16:39 $
+ *  last change: $Author: obr $ $Date: 2002-10-02 07:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
 
         if( unoAccessibleText != null ) {
             text = unoAccessibleText.getText();
+        } else {
+            text = "";
         }
     }
 
@@ -118,7 +120,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
 
         switch (part) {
             case AccessibleText.CHARACTER:
-                start = index = 1;
+                start = index + 1;
                 end = index + 2;
                 break;
             case AccessibleText.WORD:
@@ -195,8 +197,24 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
     public int getIndexAtPoint(java.awt.Point point) {
         int ret = -1;
 
-        if( unoAccessibleText != null ) {
-            ret = unoAccessibleText.getIndexAtPoint(new Point( point.x, point.y ));
+        try {
+            if( unoAccessibleText != null ) {
+                ret = unoAccessibleText.getIndexAtPoint(new Point( point.x, point.y ));
+            }
+        }
+
+        catch(com.sun.star.uno.RuntimeException e) {
+            if( Build.DEBUG ) {
+                AccessibleObject.printDebugString("Exception caught for getIndexAtPoint(" + point.x + ", " + point.y + ")");
+                AccessibleObject.printDebugString(e.getMessage());
+            }
+        }
+
+        catch(Exception e) {
+            if( Build.DEBUG ) {
+                AccessibleObject.printDebugString("Exception caught for getIndexAtPoint(" + point.x + ", " + point.y + ")");
+                AccessibleObject.printDebugString(e.getMessage());
+            }
         }
 
         return ret;
@@ -302,19 +320,21 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
 
     /** Determines the bounding box of the character at the given index into the string */
     public java.awt.Rectangle getCharacterBounds(int index) {
-        try {
-            Rectangle unoRect = unoAccessibleText.getCharacterBounds(index);
-            return new java.awt.Rectangle(unoRect.X, unoRect.Y, unoRect.Width, unoRect.Height);
+        if( index < text.length() ) {
+            try {
+                Rectangle unoRect = unoAccessibleText.getCharacterBounds(index);
+                return new java.awt.Rectangle(unoRect.X, unoRect.Y, unoRect.Width, unoRect.Height);
+            }
+
+            catch ( com.sun.star.lang.IndexOutOfBoundsException exception ) {
+                // FIXME: The java AccessBridge currently does not handle such exceptions gracefully
+                //          throw new IndexOutOfBoundsException( exception.getMessage() );
+            }
+
+            catch ( NullPointerException e ) {
+            }
         }
 
-        catch ( com.sun.star.lang.IndexOutOfBoundsException exception ) {
-            // FIXME: The java AccessBridge currently does not handle such exceptions gracefully
-//          throw new IndexOutOfBoundsException( exception.getMessage() );
-                    return null;
-        }
-
-        catch ( NullPointerException e ) {
-            return null;
-        }
+        return new java.awt.Rectangle();
     }
 }
