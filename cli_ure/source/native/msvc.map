@@ -1,0 +1,7 @@
+UDK_3.1 {
+    global:
+    ?ServiceFactory_load@util@uno@@YA?AV?$Reference@VXSingleComponentFactory@lang@star@sun@com@@@2star@sun@com@@ABVOUString@rtl@@@Z;
+    ?ServiceFactory_writeInfo@util@uno@@YAXABVOUString@rtl@@ABV?$Reference@VXRegistryKey@registry@star@sun@com@@@2star@sun@com@@@Z;
+    local:
+    *;
+};
