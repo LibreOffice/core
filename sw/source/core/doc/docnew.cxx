@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:27:57 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,68 +280,68 @@ BOOL lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
  */
 
 SwDoc::SwDoc() :
-    aAttrPool( this ),
     aNodes( this ),
     aUndoNodes( this ),
-    pFrmFmtTbl( new SwFrmFmts() ),
-    pCharFmtTbl( new SwCharFmts() ),
-    pSpzFrmFmtTbl( new SwSpzFrmFmts() ),
-    pTblFrmFmtTbl( new SwFrmFmts() ),
+    aAttrPool( this ),
     pDfltFrmFmt( new SwFrmFmt( aAttrPool, sFrmFmtStr, 0 ) ),
     pEmptyPageFmt( new SwFrmFmt( aAttrPool, sEmptyPageStr, pDfltFrmFmt ) ),
     pColumnContFmt( new SwFrmFmt( aAttrPool, sColumnCntStr, pDfltFrmFmt ) ),
     pDfltCharFmt( new SwCharFmt( aAttrPool, sCharFmtStr, 0 ) ),
     pDfltTxtFmtColl( new SwTxtFmtColl( aAttrPool, sTxtCollStr ) ),
-    pTxtFmtCollTbl( new SwTxtFmtColls() ),
     pDfltGrfFmtColl( new SwGrfFmtColl( aAttrPool, sGrfCollStr ) ),
-    pGrfFmtCollTbl( new SwGrfFmtColls() ),
+    pFrmFmtTbl( new SwFrmFmts() ),
+    pCharFmtTbl( new SwCharFmts() ),
+    pSpzFrmFmtTbl( new SwSpzFrmFmts() ),
     pSectionFmtTbl( new SwSectionFmts() ),
-    pFldTypes( new SwFldTypes() ),
+    pTblFrmFmtTbl( new SwFrmFmts() ),
+    pTxtFmtCollTbl( new SwTxtFmtColls() ),
+    pGrfFmtCollTbl( new SwGrfFmtColls() ),
     pBookmarkTbl( new SwBookmarks( 0, 16 ) ),
     pTOXTypes( new SwTOXTypes() ),
     pDefTOXBases( new SwDefTOXBase_Impl() ),
-    nLinkCt( 0 ),
-    pGlossaryDoc( 0 ),
-    nUndoPos( 0 ),
-    nUndoSavePos( 0 ),
-    nUndoCnt( 0 ),
-    nUndoSttEnd( 0 ),
-    pOutlineRule( 0 ),
     pLayout( 0 ),                   // Rootframe des spezifischen Layouts.
+    pDrawModel( 0 ),
+    pUndos( new SwUndos( 0, 20 ) ),
+    pUpdtFlds( new SwDocUpdtFld() ),
+    pFldTypes( new SwFldTypes() ),
     pPrt( 0 ),
     pPrtData( 0 ),
-    pUndos( new SwUndos( 0, 20 ) ),
-    pExtInputRing( 0 ),
-    pLayouter( 0 ),
-    pLayoutCache( 0 ),
-    nLockExpFld( 0 ),
-    pDocShell( 0 ),
-    pDrawModel( 0 ),
-    pUpdtFlds( new SwDocUpdtFld() ),
-    pLinkMgr( new SvxLinkManager( 0 ) ),
-    pSwgInfo( 0 ),
-    pDocShRef( 0 ),
-    pACEWord( 0 ),
-    pURLStateChgd( 0 ),
-    pNumberFormatter( 0 ),
+    pGlossaryDoc( 0 ),
+    pOutlineRule( 0 ),
     pFtnInfo( new SwFtnInfo ),
     pEndNoteInfo( new SwEndNoteInfo ),
     pLineNumberInfo( new SwLineNumberInfo ),
     pFtnIdxs( new SwFtnIdxs ),
     pDocStat( new SwDocStat ),
+    pSwgInfo( 0 ),
+    pDocShell( 0 ),
+    pDocShRef( 0 ),
+    pLinkMgr( new SvxLinkManager( 0 ) ),
+    pACEWord( 0 ),
+    pURLStateChgd( 0 ),
+    pNumberFormatter( 0 ),
     pNumRuleTbl( new SwNumRuleTbl ),
-    eRedlineMode( SwRedlineMode(REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE) ),
     pRedlineTbl( new SwRedlineTbl ),
+    pAutoFmtRedlnComment( 0 ),
     pUnoCrsrTbl( new SwUnoCrsrTbl( 0, 16 ) ),
     pPgPViewPrtData( 0 ),
-    pAutoFmtRedlnComment( 0 ),
+    pExtInputRing( 0 ),
+    pLayouter( 0 ),
+    pLayoutCache( 0 ),
     pUnoCallBack(new SwUnoCallBack(0)),
+    nUndoPos( 0 ),
+    nUndoSavePos( 0 ),
+    nUndoCnt( 0 ),
+    nUndoSttEnd( 0 ),
     nAutoFmtRedlnCommentNo( 0 ),
-    eChrCmprType( CHARCOMPRESS_NONE ),
-    n32Dummy1( 0 ), n32Dummy2( 0 ), n8Dummy1( 0x80 ), n8Dummy2( 0x06 ),
     nLinkUpdMode( GLOBALSETTING ),
     nFldUpdMode( AUTOUPD_GLOBALSETTING ),
-    bReadlineChecked(sal_False)
+    eRedlineMode( SwRedlineMode(REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE) ),
+    eChrCmprType( CHARCOMPRESS_NONE ),
+    nLinkCt( 0 ),
+    nLockExpFld( 0 ),
+    bReadlineChecked(sal_False),
+    n32Dummy1( 0 ), n32Dummy2( 0 ), n8Dummy1( 0x80 ), n8Dummy2( 0x06 )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
 
@@ -904,8 +904,8 @@ void SwDoc::ClearDoc()
 
     // stehen noch FlyFrames rum, loesche auch diese
     USHORT n;
-    while( n = GetSpzFrmFmts()->Count() )
-        DelLayoutFmt( (*pSpzFrmFmtTbl)[ n-1 ] );
+    while ((n = GetSpzFrmFmts()->Count()))
+        DelLayoutFmt((*pSpzFrmFmtTbl)[n-1]);
     ASSERT( !pDrawModel || !pDrawModel->GetPage(0)->GetObjCount(),
                 "not all DrawObjects removed from the page" );
 
