@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:01:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 
 #include "textsearch.hxx"
 #include "levdis.hxx"
-#include "../regexp/exprclas.hxx"
+#include <regexp/reclass.hxx>
 
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -92,6 +92,16 @@
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#endif
+#ifndef _CPPUHELPER_FACTORY_HXX_
+#include <cppuhelper/factory.hxx>
+#endif
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
+
 #ifdef _MSC_VER
 // get rid of that dumb compiler warning
 // identifier was truncated to '255' characters in the debug information
@@ -103,7 +113,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
-using namespace ::drafts::com::sun::star::i18n;
 using namespace ::rtl;
 
 TextSearch::TextSearch(const Reference < XMultiServiceFactory > & rxMSF)
@@ -752,26 +761,107 @@ SearchResult TextSearch::ApproxSrchBkwrd( const OUString& searchStr,
     return aRet;
 }
 
-OUString SAL_CALL
-TextSearch::getImplementationName(void)
-                throw( RuntimeException )
+
+static const sal_Char cSearchName[] = "com.sun.star.util.TextSearch";
+static const sal_Char cSearchImpl[] = "com.sun.star.util.TextSearch_i18n";
+
+static OUString getServiceName_Static()
 {
-    return OUString::createFromAscii("com.sun.star.i18n.TextSearch");
+    return OUString::createFromAscii( cSearchName );
 }
 
-const sal_Char cSearch[] = "com.sun.star.i18n.TextSearch";
+static OUString getImplementationName_Static()
+{
+    return OUString::createFromAscii( cSearchImpl );
+}
+
+OUString SAL_CALL
+TextSearch::getImplementationName()
+                throw( RuntimeException )
+{
+    return getImplementationName_Static();
+}
 
 sal_Bool SAL_CALL
 TextSearch::supportsService(const OUString& rServiceName)
                 throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii(cSearch);
+    return !rServiceName.compareToAscii( cSearchName );
 }
 
 Sequence< OUString > SAL_CALL
 TextSearch::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(cSearch);
+    aRet[0] = getServiceName_Static();
     return aRet;
 }
+
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+SAL_CALL TextSearch_CreateInstance(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::lang::XMultiServiceFactory >& rxMSF )
+{
+    return ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XInterface >(
+                (::cppu::OWeakObject*) new TextSearch( rxMSF ) );
+}
+
+extern "C"
+{
+
+void SAL_CALL component_getImplementationEnvironment(
+        const sal_Char** ppEnvTypeName, uno_Environment** ppEnv )
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+sal_Bool SAL_CALL component_writeInfo(
+        void* _pServiceManager, void* _pRegistryKey )
+{
+    if (_pRegistryKey)
+    {
+        ::com::sun::star::registry::XRegistryKey * pRegistryKey =
+            reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >(
+                                _pRegistryKey );
+        ::com::sun::star::uno::Reference<
+                        ::com::sun::star::registry::XRegistryKey > xNewKey;
+
+        xNewKey = pRegistryKey->createKey( getImplementationName_Static() );
+        xNewKey = xNewKey->createKey(
+                ::rtl::OUString::createFromAscii( "/UNO/SERVICES" ) );
+        xNewKey->createKey( getServiceName_Static() );
+    }
+    return sal_True;
+}
+
+void* SAL_CALL component_getFactory( const sal_Char* sImplementationName,
+        void* _pServiceManager, void* _pRegistryKey )
+{
+    void* pRet = NULL;
+
+    ::com::sun::star::lang::XMultiServiceFactory* pServiceManager =
+        reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >
+            ( _pServiceManager );
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XSingleServiceFactory > xFactory;
+
+    if ( 0 == rtl_str_compare( sImplementationName, cSearchImpl) )
+    {
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
+        aServiceNames[0] = getServiceName_Static();
+        xFactory = ::cppu::createSingleFactory(
+                pServiceManager, getImplementationName_Static(),
+                &TextSearch_CreateInstance, aServiceNames );
+    }
+
+    if ( xFactory.is() )
+    {
+        xFactory->acquire();
+        pRet = xFactory.get();
+    }
+
+    return pRet;
+}
+
+} // extern "C"
