@@ -1,8 +1,13 @@
 #!/bin/sh
+if [ -d $SOLARSRC/qadevOOo ]; then
+	QADEV=$SOLARSRC/qadevOOo
+else 
+	QADEV=$SOLARSRC/qadevOOo.lnk
+fi
+
 JARFOLDER=$SOLARVERSION/$INPATH/bin$UPDMINOREXT
-echo $JARFOLDER
-RUNNER=$SOLARSRC/qadevOOo/$INPATH/class/OOoRunner.jar:$SOLARSRC/qadevOOo/$INPATH/class
+RUNNER=$QADEV/$INPATH/class/OOoRunner.jar:$QADEV/$INPATH/class
 JARS=$JARFOLDER/ridl.jar:$JARFOLDER/unoil.jar:$JARFOLDER/sandbox.jar:$JARFOLDER/jurt.jar:$JARFOLDER/juh.jar:$JARFOLDER/java_uno.jar
 CLASSPATH=$JARS:$RUNNER
 echo $CLASSPATH
-java -Xmx120m -cp $CLASSPATH org.openoffice.Runner -tdoc $SOLARSRC/qadevOOo/testdocs $*
+java -Xmx120m -cp $CLASSPATH org.openoffice.Runner -tdoc $QADEV/testdocs $*
