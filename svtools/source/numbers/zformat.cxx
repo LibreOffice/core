@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: er $ $Date: 2001-08-02 14:53:08 $
+ *  last change: $Author: er $ $Date: 2001-08-27 15:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2322,9 +2322,9 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
             {
                 if ( !bCalendarSet )
                 {
-                    DateTime aDateTime( *(rScan.GetNullDate()) );
-                    aDateTime += fNumberOrig;
-                    GetCal().setGregorianDateTime( aDateTime );
+                    double fDiff = DateTime(*(rScan.GetNullDate())) - GetCal().getEpochStart();
+                    fDiff += fNumberOrig;
+                    GetCal().setDateTime( fDiff );
                     bCalendarSet = TRUE;
                 }
                 if (cAmPm == 'a')
@@ -2474,10 +2474,10 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
         OutString = rScan.GetErrorString();
         return FALSE;
     }
-    long nNum = (long) floor(fNumber);
-    Date aDate = *(rScan.GetNullDate()) + nNum;
     CalendarWrapper& rCal = GetCal();
-    rCal.setGregorianDateTime( aDate );
+    double fDiff = DateTime(*(rScan.GetNullDate())) - rCal.getEpochStart();
+    fDiff += floor( fNumber );
+    rCal.setDateTime( fDiff );
     String aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
     BOOL bOtherCalendar = IsOtherCalendar( NumFor[nIx] );
@@ -2550,14 +2550,22 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             case NF_KEY_Q:                  // Q
             {
                 OutString += 'Q';
-                USHORT nMonth = aDate.GetMonth();
-                OutString += sal_Unicode( '1' + ((nMonth-1) / 3) );
+                if ( bOtherCalendar )
+                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
+                OutString += sal_Unicode( '1' + (nVal / 3) );
+                if ( bOtherCalendar )
+                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_QQ:                 // QQ
             {
-                USHORT nMonth = aDate.GetMonth();
-                OutString += rLoc().getQuarterWord( (nMonth-1) / 3 );
+                if ( bOtherCalendar )
+                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
+                OutString += rLoc().getQuarterWord( nVal / 3 );
+                if ( bOtherCalendar )
+                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_D:                  // D
@@ -2596,7 +2604,6 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             break;
             case NF_KEY_YY:                 // YY
             {
-//! TODO: what about negative values? abs and append era?
                 if ( bOtherCalendar )
                     SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
@@ -2609,7 +2616,6 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             break;
             case NF_KEY_YYYY:               // YYYY
             {
-//! TODO: what about negative values? abs and append era?
                 if ( bOtherCalendar )
                     SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
@@ -2620,7 +2626,6 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             break;
             case NF_KEY_EC:                 // E
             {
-//! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 OutString += IntToString( nIx, nVal );
             }
@@ -2628,7 +2633,6 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             case NF_KEY_EEC:                // EE
             case NF_KEY_R:                  // R
             {
-//! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 OutString += IntToString( nIx, nVal, 2 );
             }
@@ -2685,7 +2689,6 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
                 OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA,
                     nVal, 1 );
-//! TODO: what about negative values? abs and append era?
                 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 OutString += IntToString( nIx, nVal, 2 );
             }
@@ -2712,10 +2715,10 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     double fNum2 = fNumber - fNum1;         // -> Zeit
     long nNum1 = (long) fNum1;
 
-    DateTime aDateTime( *(rScan.GetNullDate()) );
-    aDateTime += fNumber;
     CalendarWrapper& rCal = GetCal();
-    rCal.setGregorianDateTime( aDateTime );
+    double fDiff = DateTime(*(rScan.GetNullDate())) - rCal.getEpochStart();
+    fDiff += fNumber;
+    rCal.setDateTime( fDiff );
     String aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
     BOOL bOtherCalendar = IsOtherCalendar( NumFor[nIx] );
@@ -2909,15 +2912,24 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             }
             break;
             case NF_KEY_Q:                  // Q
+            {
+                OutString += 'Q';
+                if ( bOtherCalendar )
+                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
+                OutString += sal_Unicode( '1' + (nVal / 3) );
+                if ( bOtherCalendar )
+                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+            }
+            break;
             case NF_KEY_QQ:                 // QQ
             {
-                USHORT nMonth = aDateTime.GetMonth();
-                OutString += rLoc().getQuarterWord( (nMonth-1) / 3 );
-                if (rInfo.nTypeArray[i] == NF_KEY_QQ)
-                {
-                    OutString += ' ';
-                    OutString += IntToString( nIx, aDateTime.GetYear() );
-                }
+                if ( bOtherCalendar )
+                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
+                OutString += rLoc().getQuarterWord( nVal / 3 );
+                if ( bOtherCalendar )
+                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_D:                  // D
@@ -2956,7 +2968,6 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             break;
             case NF_KEY_YY:                 // YY
             {
-//! TODO: what about negative values? abs and append era?
                 if ( bOtherCalendar )
                     SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
@@ -2969,7 +2980,6 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             break;
             case NF_KEY_YYYY:               // YYYY
             {
-//! TODO: what about negative values? abs and append era?
                 if ( bOtherCalendar )
                     SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
@@ -2980,7 +2990,6 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             break;
             case NF_KEY_EC:                 // E
             {
-//! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 OutString += IntToString( nIx, nVal );
             }
@@ -2988,7 +2997,6 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             case NF_KEY_EEC:                // EE
             case NF_KEY_R:                  // R
             {
-//! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 OutString += IntToString( nIx, nVal, 2 );
             }
@@ -3043,7 +3051,6 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
                 OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA,
                     nVal, 1 );
-//! TODO: what about negative values? abs and append era?
                 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 OutString += IntToString( nIx, nVal, 2 );
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: er $ $Date: 2001-08-27 11:54:14 $
+ *  last change: $Author: er $ $Date: 2001-08-27 15:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,7 +884,7 @@ USHORT ImpSvNumberInputScan::ImplGetYear( USHORT nIndex )
 //---------------------------------------------------------------------------
 //      GetDateRef
 
-BOOL ImpSvNumberInputScan::GetDateRef( Date& aDt, USHORT& nCounter,
+BOOL ImpSvNumberInputScan::GetDateRef( double& fDays, USHORT& nCounter,
         const SvNumberformat* pFormat )
 {
     using namespace ::com::sun::star::i18n;
@@ -914,7 +914,7 @@ BOOL ImpSvNumberInputScan::GetDateRef( Date& aDt, USHORT& nCounter,
     CalendarWrapper* pCal = pFormatter->GetCalendar();
     for ( int nTryOrder = 1; nTryOrder <= nFormatOrder; nTryOrder++ )
     {
-        pCal->setGregorianDateTime( aDt );
+        pCal->setGregorianDateTime( Date() );       // today
         DateFormat DateFmt;
         switch ( eEDF )
         {
@@ -1157,14 +1157,13 @@ BOOL ImpSvNumberInputScan::GetDateRef( Date& aDt, USHORT& nCounter,
 
         if ( res && pCal->isValid() )
         {
-            aDt = pCal->getGregorianDateTime();
+            double fDiff = DateTime(*pNullDate) - pCal->getEpochStart();
+            fDays = floor( pCal->getDateTime() );
+            fDays -= fDiff;
             nTryOrder = nFormatOrder;   // break for
         }
         else
-        {
             res = FALSE;
-            aDt = Date();               // next try
-        }
     }
 
     return res;
@@ -2251,28 +2250,20 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
 
             case NUMBERFORMAT_DATE:
             {
-                Date aDt;                                   // today
                 USHORT nCounter = 0;                        // dummy here
-                res = GetDateRef(aDt, nCounter, pFormat);   // date->aDt
-                if ( res )
-                {
-                    long nDate = (long) (aDt - *pNullDate);
-                    fOutNumber = (double) nDate;
-                }
+                res = GetDateRef( fOutNumber, nCounter, pFormat );
             }
             break;
 
             case NUMBERFORMAT_DATETIME:
             {
-                Date aDt;                                   // today
-                USHORT nCounter;                            // needed here
-                res = GetDateRef(aDt, nCounter, pFormat);   // date->aDt
-                double fTime;
-                GetTimeRef(fTime, nCounter, nAnzNums-nCounter);
+                USHORT nCounter = 0;                        // needed here
+                res = GetDateRef( fOutNumber, nCounter, pFormat );
                 if ( res )
                 {
-                    long nDate = (long) (aDt - *pNullDate);
-                    fOutNumber = (double) nDate + fTime;
+                    double fTime;
+                    GetTimeRef( fTime, nCounter, nAnzNums - nCounter );
+                    fOutNumber += fTime;
                 }
             }
             break;

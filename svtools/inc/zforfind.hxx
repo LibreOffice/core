@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-07-06 16:09:35 $
+ *  last change: $Author: er $ $Date: 2001-08-27 15:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,8 +256,8 @@ private:
     USHORT ImplGetDay  ( USHORT nIndex );       // Day input, 0 if no match
     USHORT ImplGetMonth( USHORT nIndex );       // Month input, zero based return, NumberOfMonths if no match
     USHORT ImplGetYear ( USHORT nIndex );       // Year input, 0 if no match
-    BOOL GetDateRef(                            // Conversion of date to class Date
-            Date& aDt,
+    BOOL GetDateRef(                            // Conversion of date to number
+            double& fDays,                      // OUT: days diff to null date
             USHORT& nCounter,                   // Count of date substrings
             const SvNumberformat* pFormat = NULL ); // optional number format to match against
 
