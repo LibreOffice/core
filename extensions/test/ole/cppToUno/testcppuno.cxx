@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppuno.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-24 09:34:19 $
+ *  last change: $Author: jl $ $Date: 2001-12-06 08:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,12 +159,18 @@ HRESULT doTest()
 
         // two dimensional array
         SAFEARRAYBOUND bounds[2];
+        // least significant dimension first, Dimension 1
         bounds[0].cElements= 3;
         bounds[0].lLbound= 0;
+        // Dimension 2
         bounds[1].cElements= 2;
         bounds[1].lLbound= 0;
         par= SafeArrayCreate( VT_I4, 2, bounds );
 
+        long uBound1;
+        long uBound2;
+        hr= SafeArrayGetUBound( par, 1, &uBound1);
+        hr= SafeArrayGetUBound( par, 2, &uBound2);
 
         long index2[2];
         memset( index2, 0, 2 * sizeof( long) );
@@ -174,8 +180,20 @@ HRESULT doTest()
         do
         {
             data= index2[1] * 3 + index2[0] +1;
-            SafeArrayPutElement( par, index2, &data);
+            hr= SafeArrayPutElement( par, index2, &data);
         }while( incrementMultidimensionalIndex( 2, dimLengths, index2) );
+
+        long* pdata;
+        long (*dataL)[2][3];
+        hr= SafeArrayAccessData( par, (void**)&pdata);
+        dataL= (long(*)[2][3])pdata;
+
+        for (long i= 0; i < 2; i ++)
+        {
+            for(long j= 0; j < 3; j++)
+                data= (*dataL)[i][j];
+        }
+        hr= SafeArrayUnaccessData(par);
 
         result.Clear();
         param1.vt= VT_ARRAY | VT_I4;
