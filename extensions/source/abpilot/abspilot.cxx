@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:00:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-02 08:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,10 @@ namespace abp
         {
             case AST_MORK:
                 m_aNewDataSource = aContext.createNewMORK( m_aSettings.sDataSourceName );
+                break;
+
+            case AST_EVOLUTION:
+                m_aNewDataSource = aContext.createNewEvolution( m_aSettings.sDataSourceName );
                 break;
 
             case AST_LDAP:
