@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2001-09-03 17:30:15 $
+ *  last change: $Author: mt $ $Date: 2001-09-27 17:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1690,9 +1690,9 @@ void ImplListBoxWindow::SetTopEntry( USHORT nTop )
     if ( nTop != mnTop )
     {
         long nDiff = ( mnTop - nTop ) * mnMaxHeight;
-        mnTop = nTop;
         Update();
         ImplHideFocusRect();
+        mnTop = nTop;
         Scroll( 0, nDiff );
         Update();
         maFocusRect.Top() += nDiff;
