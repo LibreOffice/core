@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:20:50 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 16:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,9 +769,10 @@ BaseContent::createNewContent(
 
         if ( xRow->wasNull() )
         {
-            VOS_ENSURE( false,
-                        "BaseContent::createNewContent - Property value was null!" );
-            return Reference< XContent >();
+            IsDocument = false;
+//          VOS_ENSURE( false,
+//                      "BaseContent::createNewContent - Property value was null!" );
+//          return Reference< XContent >();
         }
     }
     catch ( sdbc::SQLException const & )
@@ -848,7 +849,8 @@ BaseContent::getParent(
 
     try
     {
-            return Reference< XInterface >( m_pMyShell->m_pProvider->queryContent( Identifier ) );
+        Reference< XContent > content = m_pMyShell->m_pProvider->queryContent( Identifier );
+        return Reference<XInterface>(content,UNO_QUERY);
     }
     catch( IllegalIdentifierException )
     {
