@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-23 10:27:16 $
+ *  last change: $Author: tbe $ $Date: 2002-09-09 15:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@
 //#ifndef _SFX_HELP_HXX //autogen
 //#include <sfx2/sfxhelp.hxx>
 //#endif
+
+#ifndef _SVTOOLS_SOURCEVIEWCONFIG_HXX
+#include <svtools/sourceviewconfig.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
@@ -341,6 +345,7 @@ EditorWindow::EditorWindow( Window* pParent ) :
     pModulWindow = 0;
     pEditView = 0;
     pEditEngine = 0;
+    pSourceViewConfig = new svt::SourceViewConfig;
     bHighlightning = FALSE;
     pProgress = 0;
     nCurTextWidth = 0;
@@ -349,12 +354,17 @@ EditorWindow::EditorWindow( Window* pParent ) :
     SetPointer( Pointer( POINTER_TEXT ) );
 
     SetHelpId( HID_BASICIDE_EDITORWINDOW );
+
+    StartListening( *pSourceViewConfig );
 }
 
 
 
 __EXPORT EditorWindow::~EditorWindow()
 {
+    EndListening( *pSourceViewConfig );
+    delete pSourceViewConfig;
+
     aSyntaxIdleTimer.Stop();
     aHelpAgentTimer.Stop();
 
@@ -709,17 +719,7 @@ void EditorWindow::CreateEditEngine()
     pEditEngine->SetUpdateMode( FALSE );
     pEditEngine->InsertView( pEditView );
 
-    Font aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0 , this ) );
-    aFont.SetTransparent( FALSE );
-    aFont.SetColor(GetSettings().GetStyleSettings().GetFieldTextColor());
-    Size aFontSize( 0, 10 );    // Points
-
-    aFont.SetSize( aFontSize );
-    SetPointFont( aFont );
-    aFont = GetFont();
-
-    pModulWindow->GetBreakPointWindow().SetFont( aFont );
-    pEditEngine->SetFont( aFont );
+    ImplSetFont();
 
     aSyntaxIdleTimer.SetTimeout( 200 );
     aSyntaxIdleTimer.SetTimeoutHdl( LINK( this, EditorWindow, SyntaxTimerHdl ) );
@@ -867,8 +867,11 @@ void EditorWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             DoDelayedSyntaxHighlight( rTextHint.GetValue() );
         }
     }
+    else if ( &rBC == pSourceViewConfig )
+    {
+        ImplSetFont();
+    }
 }
-
 
 void EditorWindow::SetScrollBarRanges()
 {
@@ -930,6 +933,34 @@ void EditorWindow::ImpDoHighlight( ULONG nLine )
 
     // Das Highlighten soll kein Modify setzen
     pEditEngine->SetModified( bWasModified );
+}
+
+void EditorWindow::ImplSetFont()
+{
+    if ( pSourceViewConfig )
+    {
+        String sFontName = pSourceViewConfig->GetFontName();
+        if ( !sFontName.Len() )
+        {
+            Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0 , this ) );
+            sFontName = aTmpFont.GetName();
+        }
+        Size aFontSize( 0, pSourceViewConfig->GetFontHeight() );
+        Font aFont( sFontName, aFontSize );
+        aFont.SetColor( GetSettings().GetStyleSettings().GetFieldTextColor() );
+        SetPointFont( aFont );
+        aFont = GetFont();
+
+        if ( pModulWindow )
+            pModulWindow->GetBreakPointWindow().SetFont( aFont );
+
+        if ( pEditEngine )
+        {
+            BOOL bModified = pEditEngine->IsModified();
+            pEditEngine->SetFont( aFont );
+            pEditEngine->SetModified( bModified );
+        }
+    }
 }
 
 void EditorWindow::DoSyntaxHighlight( ULONG nPara )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-24 13:01:27 $
+ *  last change: $Author: tbe $ $Date: 2002-09-09 15:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,11 +151,18 @@ inline void ProgressInfo::StepProgress()
     SetState( ++nCurState );
 }
 
+
+namespace svt {
+class SourceViewConfig;
+}
+
 class EditorWindow : public Window, public SfxListener
 {
 private:
     ExtTextView*    pEditView;
     ExtTextEngine*  pEditEngine;
+
+    svt::SourceViewConfig* pSourceViewConfig;
 
     long            nCurTextWidth;
 
@@ -174,6 +181,8 @@ private:
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     void            ImpDoHighlight( ULONG nLineOff );
+    void            ImplSetFont();
+
     BOOL            bHighlightning;
     BOOL            bDoSyntaxHighlight;
     BOOL            bDelayHighlight;
