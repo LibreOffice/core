@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:31:41 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,9 +179,9 @@ public:
     static XclBoolError         ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sal_uInt8 nValue );
 
     /** Calculates an X position in Calc twips from Excel anchor position. */
-    static sal_Int32            CalcX( sal_uInt16 nTab, sal_uInt16 nCol, sal_uInt16 nColOffset, double fScale, ScDocument* pDoc );
+    static sal_Int32            CalcX( ScDocument& rDoc, sal_uInt16 nTab, sal_uInt16 nCol, sal_uInt16 nColOffset, double fScale );
     /** Calculates an Y position in Calc twips from Excel anchor position. */
-    static sal_Int32            CalcY( sal_uInt16 nTab, sal_uInt16 nRow, sal_uInt16 nRowOffset, double fScale, ScDocument* pDoc );
+    static sal_Int32            CalcY( ScDocument& rDoc, sal_uInt16 nTab, sal_uInt16 nRow, sal_uInt16 nRowOffset, double fScale );
 
     /** Returns the length in twips calculated from a length in inches. */
     static sal_uInt16           GetTwipsFromInch( double fInches );
@@ -284,6 +284,13 @@ struct XclFormatRun
     explicit inline             XclFormatRun( sal_uInt16 nChar, sal_uInt16 nFontIx ) :
                                     mnChar( nChar ), mnFontIx( nFontIx ) {}
 };
+
+/** Reads a single formatting run from the stream. */
+XclImpStream& operator>>( XclImpStream& rStrm, XclFormatRun& rRun );
+
+/** Writes a single formatting run to the stream. */
+XclExpStream& operator<<( XclExpStream& rStrm, const XclFormatRun& rRun );
+
 
 /** A vector with all formatting runs for a rich-string. */
 typedef ::std::vector< XclFormatRun > XclFormatRunVec;
