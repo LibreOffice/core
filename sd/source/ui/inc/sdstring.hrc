@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:58 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,16 @@
  ************************************************************************/
 #include <sfx2/sfx.hrc>
 #define SID_SD_STRING_START         RID_APP_START+300
+
+#undef STR_SOLID
+#undef STR_LINESTYLE
+#undef STR_DESC_LINESTYLE
+#undef STR_DEL_LINESTYLE
+#undef STR_ASK_DEL_LINESTYLE
+#undef STR_INVISIBLE
+#undef STR_COLOR
+#undef STR_HATCH
+#undef STR_CHANGE
 
 #define STR_SOLID                   SID_SD_STRING_START+0
 
