@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbreak.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:50:12 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ ModalDialog DLG_BREAK
         Text [ portuguese_brazilian ] = "Quebra de ~linha" ;
         Text [ portuguese ] = "~Quebra de linha" ;
         Text [ finnish ] = "~Rivinvaihto" ;
-        Text [ danish ] = "Linjeskift" ;
+        Text [ danish ] = "~Linjeskift" ;
         Text [ french ] = "Retour � la ligne" ;
         Text [ swedish ] = "~Radbrytning" ;
         Text [ dutch ] = "~Regeleinde" ;
@@ -142,6 +142,8 @@ ModalDialog DLG_BREAK
         Text[ hebrew ] = "~Zeilenumbruch";
         Text[ hindi ] = "~रेखा खण्डन";
         Text[ slovak ] = "Zalomenie ~riadku";
+        Text[ hungarian ] = "Sor~törés";
+        Text[ slovenian ] = "Prelom ~vrstice";
     };
     RadioButton RB_PAGE
     {
@@ -154,7 +156,7 @@ ModalDialog DLG_BREAK
         Text [ portuguese_brazilian ] = "Quebra de ~p�gina" ;
         Text [ portuguese ] = "~Quebra de p�gina" ;
         Text [ finnish ] = "~Sivunvaihto" ;
-        Text [ danish ] = "Sideskift" ;
+        Text [ danish ] = "~Sideskift" ;
         Text [ french ] = "Saut de p~age" ;
         Text [ swedish ] = "~Sidbrytning" ;
         Text [ dutch ] = "~Pagina-einde" ;
@@ -178,6 +180,8 @@ ModalDialog DLG_BREAK
         Text[ hebrew ] = "~Seitenumbruch";
         Text[ hindi ] = "पृष्ठ ~खण्डन";
         Text[ slovak ] = "Zalomenie ~stránky";
+        Text[ hungarian ] = "~Oldaltörés";
+        Text[ slovenian ] = "Prelom s~trani";
     };
     RadioButton RB_COL
     {
@@ -190,7 +194,7 @@ ModalDialog DLG_BREAK
         Text [ portuguese_brazilian ] = "Quebra de ~Coluna" ;
         Text [ portuguese ] = "~Quebra de coluna" ;
         Text [ finnish ] = "Palstan ~vaihto" ;
-        Text [ danish ] = "Spalteskift" ;
+        Text [ danish ] = "~Kolonneskift" ;
         Text [ french ] = "Saut de ~colonne" ;
         Text [ swedish ] = "Kolumnbrytning" ;
         Text [ dutch ] = "~Kolomeinde" ;
@@ -213,6 +217,8 @@ ModalDialog DLG_BREAK
         Text[ hebrew ] = "S~paltenumbruch";
         Text[ hindi ] = "स्तं~भ खण्डन ";
         Text[ slovak ] = "Zalomenie ~stĺpca";
+        Text[ hungarian ] = "~Hasábtörés";
+        Text[ slovenian ] = "Prelom ~stolpca";
     };
     FixedLine FL_BREAK
     {
@@ -225,7 +231,7 @@ ModalDialog DLG_BREAK
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "Tipo" ;
         Text [ finnish ] = "Tyyppi" ;
-        Text [ danish ] = "V�RDITYPE" ;
+        Text [ danish ] = "Type" ;
         Text [ french ] = "Type" ;
         Text [ swedish ] = "Typ" ;
         Text [ dutch ] = "Type" ;
@@ -247,6 +253,8 @@ ModalDialog DLG_BREAK
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "वर्ग";
         Text[ slovak ] = "Typ";
+        Text[ hungarian ] = "Típus";
+        Text[ slovenian ] = "Vrsta";
     };
     FixedText FT_COLL
     {
@@ -259,7 +267,7 @@ ModalDialog DLG_BREAK
         Text [ portuguese_brazilian ] = "~Estilo" ;
         Text [ portuguese ] = "~Estilo" ;
         Text [ finnish ] = "T~yyli" ;
-        Text [ danish ] = "Typografi" ;
+        Text [ danish ] = "~Typografi" ;
         Text [ french ] = "Style" ;
         Text [ swedish ] = "~Formatmall" ;
         Text [ dutch ] = "~Profiel" ;
@@ -283,6 +291,8 @@ ModalDialog DLG_BREAK
         Text[ hebrew ] = "~Vorlage";
         Text[ hindi ] = "~शैली";
         Text[ slovak ] = "Š~týl";
+        Text[ hungarian ] = "Stíl~us";
+        Text[ slovenian ] = "~Slog";
     };
     ListBox LB_COLL
     {
@@ -321,7 +331,7 @@ ModalDialog DLG_BREAK
         };
         StringList [ danish ] =
         {
-            < "[Uden]" ; > ;
+            < "[Ingen]" ; > ;
         };
         StringList [ french ] =
         {
@@ -407,6 +417,14 @@ ModalDialog DLG_BREAK
     {
          < "[žiaden]" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "[Nincs]" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "[brez]" ; > ;
+    };
     };
     CheckBox CB_PAGENUM
     {
@@ -443,6 +461,8 @@ ModalDialog DLG_BREAK
         Text[ hebrew ] = "Seitennummer ~ändern";
         Text[ hindi ] = "पृष्ठ ~संख्या बदलो";
         Text[ slovak ] = "Zmeniť číslo ~stránky";
+        Text[ hungarian ] = "Ol~dalszám megváltoztatása";
+        Text[ slovenian ] = "Spremeni š~tevilko strani";
     };
     NumericField ED_PAGENUM
     {
@@ -475,7 +495,10 @@ ModalDialog DLG_BREAK
     Text[ hebrew ] = "Umbruch einfügen";
     Text[ hindi ] = "खण्डन जोड़ो";
     Text[ slovak ] = "Vložiť zalomenie";
+    Text[ hungarian ] = "Töréspont beszúrása";
+    Text[ slovenian ] = "Vstavi prelom";
 };
+
 
 
 
