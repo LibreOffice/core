@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propimp0.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: pw $ $Date: 2000-10-26 14:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
+#endif
+
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
 #endif
 
 using namespace ::rtl;
@@ -179,5 +183,61 @@ sal_Bool XMLDurationPropertyHdl::exportXML(
 
     return sal_False;
 }
+
+//////////////////////////////////////////////////////////////////////////////
+// implementation of an opacity property handler
+
+
+XMLOpacityPropertyHdl::~XMLOpacityPropertyHdl()
+{
+}
+
+sal_Bool XMLOpacityPropertyHdl::importXML(
+    const OUString& rStrImpValue,
+    ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_Int32 nValue = 0;
+
+    if( rStrImpValue.indexOf( sal_Unicode('%') ) != -1 )
+    {
+        if( rUnitConverter.convertPercent( nValue, rStrImpValue ) )
+        {
+            rValue <<= sal_uInt16( nValue );
+            bRet = sal_True;
+        }
+    }
+    else
+    {
+        const String aStr( rStrImpValue );
+        double fVal = aStr.ToDouble() * 100.0;
+        rValue <<= sal_uInt16( fVal );
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
+
+sal_Bool XMLOpacityPropertyHdl::exportXML(
+    OUString& rStrExpValue,
+    const ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_uInt16 nVal;
+
+    if( rValue >>= nVal )
+    {
+        OUStringBuffer aOut;
+
+        rUnitConverter.convertPercent( aOut, nVal );
+        rStrExpValue = aOut.makeStringAndClear();
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
+
 
 

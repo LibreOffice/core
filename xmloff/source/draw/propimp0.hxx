@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propimp0.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: pw $ $Date: 2000-10-26 14:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,14 @@ class XMLDurationPropertyHdl : public XMLPropertyHandler
 {
 public:
     virtual ~XMLDurationPropertyHdl();
+    virtual sal_Bool importXML( const rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+class XMLOpacityPropertyHdl : public XMLPropertyHandler
+{
+public:
+    virtual ~XMLOpacityPropertyHdl();
     virtual sal_Bool importXML( const rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
