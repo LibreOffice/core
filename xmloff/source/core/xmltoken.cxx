@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:59:07 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2143,6 +2143,12 @@ namespace xmloff { namespace token {
         TOKEN( "current-selected" ),            // XML_CURRENT_SELECTED
 
         TOKEN( "join-border" ),                // XML_JOIN_BORDER
+
+        TOKEN( "show-list" ),                   // XML_SHOW_LIST
+        TOKEN( "no" ),                          // XML_NO
+        TOKEN( "unsorted" ),                    // XML_UNSORTED
+        TOKEN( "sorted-ascending" ),            // XML_SORTED_ASCENDING
+
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
