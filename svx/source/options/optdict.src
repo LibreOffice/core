@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:20:55 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ portuguese_brazilian ] = "~Nome" ;
         Text [ portuguese ] = "~Nome" ;
         Text [ finnish ] = "~Nimi" ;
-        Text [ danish ] = "Navn" ;
+        Text [ danish ] = "~Navn" ;
         Text [ french ] = "Nom" ;
         Text [ swedish ] = "~Namn" ;
         Text [ dutch ] = "~Naam" ;
@@ -132,6 +132,8 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ hebrew ] = "‮שם‬";
         Text[ hindi ] = "~नाम";
         Text[ slovak ] = "~Názov";
+        Text[ hungarian ] = "~Név";
+        Text[ slovenian ] = "~Ime";
     };
     Edit ED_DICTNAME
     {
@@ -151,7 +153,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ portuguese_brazilian ] = "~Idioma" ;
         Text [ portuguese ] = "~L�ngua" ;
         Text [ finnish ] = "~Kieli" ;
-        Text [ danish ] = "Sprog" ;
+        Text [ danish ] = "S~prog" ;
         Text [ french ] = "Langue" ;
         Text [ swedish ] = "~Spr�k" ;
         Text [ dutch ] = "~Taal" ;
@@ -174,6 +176,8 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "~भाषा";
         Text[ slovak ] = "~Jazyk";
+        Text[ hungarian ] = "Ny~elv";
+        Text[ slovenian ] = "~Jezik";
     };
     ListBox LB_DICTLANG
     {
@@ -193,7 +197,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ portuguese_brazilian ] = "~Exce��o (-)" ;
         Text [ portuguese ] = "~Excep��o (-)" ;
         Text [ finnish ] = "~Poikkeus (-)" ;
-        Text [ danish ] = "Undtagelse (-)" ;
+        Text [ danish ] = "~Undtagelse (-)" ;
         Text [ french ] = "~Exception (-)" ;
         Text [ swedish ] = "~Undantag (-)" ;
         Text [ dutch ] = "~Uitzondering (-)" ;
@@ -215,6 +219,8 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ hebrew ] = "‮חריג (-)‬";
         Text[ hindi ] = "~अक्षेप (-)";
         Text[ slovak ] = "~Výnimka (-)";
+        Text[ hungarian ] = "~Kivétel (-)";
+        Text[ slovenian ] = "~Izjema (-)";
     };
     FixedLine GB_NEWDICT
     {
@@ -251,6 +257,8 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ hebrew ] = "‮מילון‬";
         Text[ hindi ] = "शब्दकोश";
         Text[ slovak ] = "Slovník";
+        Text[ hungarian ] = "Szótár";
+        Text[ slovenian ] = "Slovar";
     };
     OKButton BTN_NEWDICT_OK
     {
@@ -275,6 +283,8 @@ ModalDialog RID_SFXDLG_NEWDICT
     Text[ hebrew ] = "‮מילון חדש‬";
     Text[ hindi ] = "नया शब्दकोश";
     Text[ slovak ] = "Nový slovník";
+    Text[ hungarian ] = "Új szótár";
+    Text[ slovenian ] = "Nov slovar";
 };
 
  // RID_SFXDLG_EDITDICT ---------------------------------------------------
@@ -315,7 +325,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ spanish ] = "~Libro" ;
         Text [ french ] = "Livre" ;
         Text [ swedish ] = "~Bok" ;
-        Text [ danish ] = "Bog" ;
+        Text [ danish ] = "~Bog" ;
         Text [ portuguese ] = "~Livro" ;
         Text [ portuguese_brazilian ] = "~Livro" ;
         Text[ chinese_simplified ] = "书籍(~B)";
@@ -335,6 +345,8 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ hebrew ] = "‮ספר‬";
         Text[ hindi ] = "~पुस्तक";
         Text[ slovak ] = "~Kniha";
+        Text[ hungarian ] = "Szótá~r";
+        Text[ slovenian ] = "~Knjiga";
     };
     ListBox LB_ALLDICTS
     {
@@ -355,7 +367,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ spanish ] = "I~dioma" ;
         Text [ french ] = "Langue" ;
         Text [ swedish ] = "S~pr�k" ;
-        Text [ danish ] = "Sprog" ;
+        Text [ danish ] = "S~prog" ;
         Text [ portuguese_brazilian ] = "I~dioma" ;
         Text [ portuguese ] = "~L�ngua" ;
         Text[ chinese_simplified ] = "语言(~L)";
@@ -375,6 +387,8 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "~भाषा";
         Text[ slovak ] = "~Jazyk";
+        Text[ hungarian ] = "~Nyelv";
+        Text[ slovenian ] = "~Jezik";
     };
     ListBox LB_DICTLANG
     {
@@ -404,7 +418,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ french ] = "Mot";
         Text[ spanish ] = "~Palabra";
         Text[ italian ] = "Parola";
-        Text[ danish ] = "Ord";
+        Text[ danish ] = "~Ord";
         Text[ swedish ] = "~Ord";
         Text[ polish ] = "~Wyraz";
         Text[ portuguese_brazilian ] = "~Palavra";
@@ -423,6 +437,8 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ hebrew ] = "‮מילה‬";
         Text[ hindi ] = "~शब्द";
         Text[ slovak ] = "~Slovo";
+        Text[ hungarian ] = "S~zó";
+        Text[ slovenian ] = "~Beseda";
     };
     Edit ED_WORD
     {
@@ -444,7 +460,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ french ] = "Suggestion";
         Text[ spanish ] = "~Sugerencia";
         Text[ italian ] = "Proposta";
-        Text[ danish ] = "Forslag";
+        Text[ danish ] = "Erstatningsforslag";
         Text[ swedish ] = "~F�rslag";
         Text[ polish ] = "Zamie� ~na:";
         Text[ portuguese_brazilian ] = "Substituir ~Por:";
@@ -463,6 +479,8 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ hebrew ] = "‮החלפה בידי:‬";
         Text[ hindi ] = "~से प्रतिस्थापित करो:";
         Text[ slovak ] = "Nahradiť čí~m:";
+        Text[ hungarian ] = "M~ire cserél:";
+        Text[ slovenian ] = "Zamenjaj ~z:";
     };
 
     Edit ED_REPLACE
@@ -486,7 +504,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ french ] = "~Nouveau" ;
         Text [ dutch ] = "~Nieuw" ;
         Text [ swedish ] = "~Nytt" ;
-        Text [ danish ] = "Ny" ;
+        Text [ danish ] = "~Ny(t)" ;
         Text [ portuguese_brazilian ] = "~Novo" ;
         Text [ portuguese ] = "~Novo" ;
         Text[ chinese_simplified ] = "新字词(~N)";
@@ -506,6 +524,8 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ hebrew ] = "‮חדש‬";
         Text[ hindi ] = "~नया";
         Text[ slovak ] = "~Nový";
+        Text[ hungarian ] = "Ú~j";
+        Text[ slovenian ] = "~Nov";
     };
     PushButton PB_DELETE_REPLACE
     {
@@ -520,7 +540,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ french ] = "Supprimer" ;
         Text [ dutch ] = "~Wissen" ;
         Text [ swedish ] = "~Radera" ;
-        Text [ danish ] = "Slet" ;
+        Text [ danish ] = "~Slet" ;
         Text [ portuguese_brazilian ] = "E~xcluir" ;
         Text [ portuguese ] = "E~liminar" ;
         Text[ chinese_simplified ] = "删除(~D)";
@@ -540,6 +560,8 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "मि~टाओ";
         Text[ slovak ] = "~Zmazať";
+        Text[ hungarian ] = "~Törlés";
+        Text[ slovenian ] = "~Izbriši";
     };
     Control TLB_REPLACE
     {
@@ -558,7 +580,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ portuguese_brazilian ] = "~Substituir" ;
         Text [ portuguese ] = "~Substituir" ;
         Text [ finnish ] = "~Korvaa" ;
-        Text [ danish ] = "Erstat" ;
+        Text [ danish ] = "~Erstat" ;
         Text [ french ] = "Remplacer" ;
         Text [ swedish ] = "~Ers�tt" ;
         Text [ dutch ] = "~Vervangen" ;
@@ -580,6 +602,8 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ hebrew ] = "‮החלפה‬";
         Text[ hindi ] = "प्रतिस्थापित ~करो";
         Text[ slovak ] = "Nah~radiť";
+        Text[ hungarian ] = "~Csere";
+        Text[ slovenian ] = "~Zamenjaj";
     };
 
 
@@ -604,7 +628,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ portuguese_brazilian ] = "~Fechar" ;
         Text [ portuguese ] = "Fechar" ;
         Text [ finnish ] = "~Sulje" ;
-        Text [ danish ] = "Luk" ;
+        Text [ danish ] = "~Luk" ;
         Text [ french ] = "Fermer" ;
         Text [ swedish ] = "~St�ng" ;
         Text [ dutch ] = "~Sluiten" ;
@@ -626,6 +650,8 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
         Text[ slovak ] = "~Zavrieť";
+        Text[ hungarian ] = "~Bezárás";
+        Text[ slovenian ] = "~Zapri";
     };
     Text[ russian ] = "������ ������� ������������";
     Text[ polish ] = "Edytuj s�ownik niestandardowy";
@@ -642,6 +668,8 @@ ModalDialog RID_SFXDLG_EDITDICT
     Text[ hebrew ] = "‮עריכת מילון מוגדר משתמש‬";
     Text[ hindi ] = "कस्टम् शब्दकोश का संपादन";
     Text[ slovak ] = "Upraviť vlastný slovník";
+    Text[ hungarian ] = "Felhasználói szótár szerkesztése";
+    Text[ slovenian ] = "Uredi slovar po meri";
 };
 
  // Strings ---------------------------------------------------------------
@@ -675,6 +703,8 @@ String RID_SVXSTR_OPT_DOUBLE_DICTS
     Text[ hebrew ] = "‮השם שצויין כבר קיים.\nנא להקליד שם אחר.‬";
     Text[ hindi ] = "निर्दिष्ट किया हुआ नाम पहिले से ही अस्तित्व में है ।\nकृपया एक नया नाम को प्रविष्ट कीजिए ।";
     Text[ slovak ] = "Uvedené meno už existuje.\nProsím zadajte nové meno.";
+    Text[ hungarian ] = "A megadott név már létezik. \nAdjon meg egy új nevet.";
+    Text[ slovenian ] = "Navedeno ime že obstaja.\nVnesite novo ime";
 };
  // RID_SFXQB_SET_LANGUAGE ------------------------------------------------
 QueryBox RID_SFXQB_SET_LANGUAGE
@@ -713,8 +743,12 @@ QueryBox RID_SFXQB_SET_LANGUAGE
     Message[ hebrew ] = "‮האם לשנות את שפת המילון ה '%1'?‬";
     Message[ hindi ] = "आप '%1' शब्दकोश भाषा को बदलना चाहते है?";
     Message[ slovak ] = "Prajete si zmeniť slovník jazyka '%1'?";
+    Message[ hungarian ] = "Szeretné megváltoztatni a(z) ''%1' szótár nyelvét?";
+    Message[ slovenian ] = "Ali želite spremeniti '%1' kot jezik slovarja?";
 };
  // ********************************************************************** EOF
+
+
 
 
 
