@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-25 08:39:16 $
+ *  last change: $Author: ka $ $Date: 2001-05-11 10:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,7 +575,6 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, USHORT
             if( aRect.IsInside( pOLV->GetWindow()->PixelToLogic( rEvt.maPosPixel ) ) )
             {
                 bIsInsideOutlinerView = TRUE;
-                //!!!DND nRet = ( (OutlinerView*) pOLV )->AcceptDrop( rEvt, pWin, nPage, nLayer );
             }
         }
 
@@ -716,7 +715,6 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHO
             if( aRect.IsInside( aPos ) )
             {
                 bIsInsideOutlinerView = TRUE;
-                //!!!DND nRet = ( (OutlinerView*) pOLV)->ExecuteDrop( nDropAction, rPointerPos, nDnDSourceActions, rxTransferable, pWin, nPage, nLayer );
             }
         }
 
