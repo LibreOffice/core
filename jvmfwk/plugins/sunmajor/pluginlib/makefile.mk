@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jl $ $Date: 2004-05-07 14:58:33 $
+#   last change: $Author: hr $ $Date: 2004-07-23 11:51:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,7 @@ DLLPRE =
 # ------------------------------------------------------------------
 
 #.INCLUDE :  ..$/cppumaker.mk
-.IF "$(SOLAR_JAVA)"!=""
+.IF "$(SOLAR_JAVA)"!="" && "$(OS)"!="MACOSX"
 
 UNOTYPES = \
     com.sun.star.uno.TypeClass \
@@ -88,15 +88,14 @@ UNOTYPES = \
 
 SLOFILES= \
     $(SLO)$/sunjavaplugin.obj \
-    $(SLO)$/javainfo.obj \
     $(SLO)$/sunversion.obj \
-    $(SLO)$/windows.obj
+    $(SLO)$/vendorbase.obj \
+    $(SLO)$/util.obj \
+    $(SLO)$/sunjre.obj \
+    $(SLO)$/vendorlist.obj \
+    $(SLO)$/otherjre.obj 
 
-LIB1OBJFILES=	\
-    $(SLO)$/sunjavaplugin.obj \
-    $(SLO)$/javainfo.obj \
-    $(SLO)$/sunversion.obj \
-    $(SLO)$/windows.obj
+LIB1OBJFILES= $(SLOFILES)
 
 
 
@@ -106,7 +105,8 @@ SHL1TARGET=	$(UNOCOMPONENT1)
 SHL1STDLIBS= \
         $(CPPULIB) \
         $(CPPUHELPER) \
-        $(SALLIB)
+        $(SALLIB) \
+        $(SALHELPERLIB)
 
 .IF "$(OS)" == "WNT"
 SHL1STDLIBS += advapi32.lib
@@ -118,6 +118,12 @@ SHL1IMPLIB=	i$(UNOCOMPONENT1)
 SHL1LIBS=	$(LIB1TARGET) 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
+
+
+JAVACLASSFILES= \
+    $(CLASSDIR)$/JREProperties.class					
+
+JAVAFILES = $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 .ENDIF
 
 # --- Targets ------------------------------------------------------
