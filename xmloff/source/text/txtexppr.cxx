@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-28 10:01:52 $
+ *  last change: $Author: dvo $ $Date: 2002-08-29 17:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,11 +135,19 @@ void XMLTextExportPropertySetMapper::handleElementItem(
 
     case CTF_BACKGROUND_URL:
         {
-            DBG_ASSERT( pProperties && nIdx >= 2,
+            DBG_ASSERT( pProperties && nIdx >= 3,
                         "property vector missing" );
-            const Any *pPos = 0, *pFilter = 0;
-            if( pProperties && nIdx >= 2 )
+            const Any *pPos = 0, *pFilter = 0, *pTrans = 0;
+            if( pProperties && nIdx >= 3 )
             {
+                const XMLPropertyState& rTrans = (*pProperties)[nIdx-3];
+                DBG_ASSERT( CTF_BACKGROUND_TRANSPARENCY == getPropertySetMapper()
+                        ->GetEntryContextId( rTrans.mnIndex ),
+                         "invalid property map: pos expected" );
+                if( CTF_BACKGROUND_TRANSPARENCY == getPropertySetMapper()
+                        ->GetEntryContextId( rTrans.mnIndex ) )
+                    pTrans = &rTrans.maValue;
+
                 const XMLPropertyState& rPos = (*pProperties)[nIdx-2];
                 DBG_ASSERT( CTF_BACKGROUND_POS == getPropertySetMapper()
                         ->GetEntryContextId( rPos.mnIndex ),
@@ -158,7 +166,7 @@ void XMLTextExportPropertySetMapper::handleElementItem(
             }
             sal_uInt32 nPropIndex = rProperty.mnIndex;
             pThis->maBackgroundImageExport.exportXML(
-                    rProperty.maValue, pPos, pFilter,
+                    rProperty.maValue, pPos, pFilter, pTrans,
                     getPropertySetMapper()->GetEntryNameSpace( nPropIndex ),
                     getPropertySetMapper()->GetEntryXMLName( nPropIndex ) );
         }
@@ -209,6 +217,7 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
     case CTF_OLDTEXTBACKGROUND:
     case CTF_BACKGROUND_POS:
     case CTF_BACKGROUND_FILTER:
+    case CTF_BACKGROUND_TRANSPARENCY:
     case CTF_SECTION_FOOTNOTE_NUM_OWN:
     case CTF_SECTION_FOOTNOTE_NUM_RESTART:
     case CTF_SECTION_FOOTNOTE_NUM_RESTART_AT:

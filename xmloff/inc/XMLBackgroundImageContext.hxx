@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 15:04:44 $
+ *  last change: $Author: dvo $ $Date: 2002-08-29 17:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,12 @@ class XMLBackgroundImageContext : public XMLElementPropertyContext
 {
     XMLPropertyState aPosProp;
     XMLPropertyState aFilterProp;
+    XMLPropertyState aTransparencyProp;
 
     ::com::sun::star::style::GraphicLocation ePos;
     ::rtl::OUString sURL;
     ::rtl::OUString sFilter;
+    sal_Int8 nTransparency;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xBase64Stream;
 
@@ -102,6 +104,7 @@ public:
         const XMLPropertyState& rProp,
         sal_Int32 nPosIdx,
         sal_Int32 nFilterIdx,
+        sal_Int32 nTransparencyIdx,
         ::std::vector< XMLPropertyState > &rProps );
 
     virtual ~XMLBackgroundImageContext();

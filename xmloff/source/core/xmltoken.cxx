@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dvo $ $Date: 2002-07-03 16:18:43 $
+ *  last change: $Author: dvo $ $Date: 2002-08-29 17:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2125,6 +2125,9 @@ namespace xmloff { namespace token {
         TOKEN( "key1-phonetic" ),              // XML_KEY1_PHONETIC
         TOKEN( "key2-phonetic" ),              // XML_KEY2_PHONETIC
         TOKEN( "string-value-phonetic" ),      // XML_STRING_VALUE_PHONETIC
+
+        TOKEN( "background-transparency" ),    // XML_BACKGROUND_OPACITY
+        TOKEN( "background-image-transparency" ), // XML_BACKGROUND_IMAGE_OPACITY
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PagePropertySetContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-24 17:06:09 $
+ *  last change: $Author: dvo $ $Date: 2002-08-29 17:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
                                            rProp,
                                            rProp.mnIndex-2,
                                            rProp.mnIndex-1,
+                                           -1,
                                            rProperties );
         break;
 

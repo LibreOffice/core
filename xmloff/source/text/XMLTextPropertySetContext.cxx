@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPropertySetContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-24 17:06:09 $
+ *  last change: $Author: dvo $ $Date: 2002-08-29 17:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,9 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
 
     case CTF_BACKGROUND_URL:
         DBG_ASSERT( rProp.mnIndex >= 2 &&
+                    CTF_BACKGROUND_TRANSPARENCY ==
+                        xMapper->getPropertySetMapper()
+                        ->GetEntryContextId( rProp.mnIndex-3 ) &&
                     CTF_BACKGROUND_POS  == xMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-2 ) &&
                     CTF_BACKGROUND_FILTER  == xMapper->getPropertySetMapper()
@@ -164,6 +167,7 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
                                            rProp,
                                            rProp.mnIndex-2,
                                            rProp.mnIndex-1,
+                                           rProp.mnIndex-3,
                                            rProperties );
         break;
 #ifndef SVX_LIGHT

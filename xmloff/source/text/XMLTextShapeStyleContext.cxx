@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2002-08-29 17:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,10 @@ SvXMLImportContext *XMLTextShapePropertySetContext_Impl::CreateChildContext(
         break;
 
     case CTF_BACKGROUND_URL:
-        DBG_ASSERT( rProp.mnIndex >= 2 &&
+        DBG_ASSERT( rProp.mnIndex >= 3 &&
+                    CTF_BACKGROUND_TRANSPARENCY ==
+                        xMapper->getPropertySetMapper()
+                        ->GetEntryContextId( rProp.mnIndex-3 ) &&
                     CTF_BACKGROUND_POS  == xMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-2 ) &&
                     CTF_BACKGROUND_FILTER  == xMapper->getPropertySetMapper()
@@ -169,6 +172,7 @@ SvXMLImportContext *XMLTextShapePropertySetContext_Impl::CreateChildContext(
                                            rProp,
                                            rProp.mnIndex-2,
                                            rProp.mnIndex-1,
+                                           rProp.mnIndex-3,
                                            rProperties );
         break;
     }

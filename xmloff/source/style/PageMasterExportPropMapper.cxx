@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-23 13:56:56 $
+ *  last change: $Author: dvo $ $Date: 2002-08-29 17:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ void XMLPageMasterExportPropMapper::handleElementItem(
                         pFilter = &rFilter.maValue;
                 }
                 sal_uInt32 nPropIndex = rProperty.mnIndex;
-                pThis->aBackgroundImageExport.exportXML( rProperty.maValue, pPos, pFilter,
+                pThis->aBackgroundImageExport.exportXML( rProperty.maValue, pPos, pFilter, NULL,
                     getPropertySetMapper()->GetEntryNameSpace( nPropIndex ),
                     getPropertySetMapper()->GetEntryXMLName( nPropIndex ) );
             }

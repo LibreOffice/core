@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageExport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: dvo $ $Date: 2002-08-29 17:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _XMLBACKGROUNDIMAGEEXPORT_HXX
 #include "XMLBackgroundImageExport.hxx"
 #endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include "xmluconv.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -97,6 +100,7 @@ XMLBackgroundImageExport::~XMLBackgroundImageExport()
 void XMLBackgroundImageExport::exportXML( const Any& rURL,
             const Any *pPos,
             const Any *pFilter,
+            const Any *pTransparency,
             sal_uInt16 nPrefix,
             const ::rtl::OUString& rLocalName )
 {
@@ -184,6 +188,18 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
             if( sFilter.getLength() )
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_FILTER_NAME,
                                           sFilter );
+        }
+
+        if( pTransparency )
+        {
+            sal_Int8 nTransparency;
+            if( (*pTransparency) >>= nTransparency )
+            {
+                OUStringBuffer aOut;
+                SvXMLUnitConverter::convertPercent( aOut, nTransparency );
+                GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_TRANSPARENCY,
+                                          aOut.makeStringAndClear() );
+            }
         }
     }
 

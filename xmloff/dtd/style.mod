@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.53 2002-04-23 08:40:06 dvo Exp $
+	$Id: style.mod,v 1.54 2002-08-29 17:44:32 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -279,6 +279,7 @@
 <!ATTLIST style:properties fo:break-before (auto|column|page) #IMPLIED>
 <!ATTLIST style:properties fo:break-after (auto|column|page) #IMPLIED>
 <!ATTLIST style:properties fo:background-color %transparentOrColor; #IMPLIED>
+<!ATTLIST style:properties style:background-transparency %percentage; #IMPLIED>
 
 <!ELEMENT style:background-image (office:binary-data?)>
 <!ATTLIST style:background-image xlink:type (simple) #IMPLIED>
@@ -289,6 +290,7 @@
 								 "repeat">
 <!ATTLIST style:background-image style:position CDATA "center">
 <!ATTLIST style:background-image style:filter-name %string; #IMPLIED>
+<!ATTLIST style:background-image draw:transparency %percentage; #IMPLIED>
 
 <!ELEMENT style:symbol-image (office:binary-data?)>
 <!ATTLIST style:symbol-image xlink:type (simple) #IMPLIED>

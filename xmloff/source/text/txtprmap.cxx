@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-19 13:09:48 $
+ *  last change: $Author: dvo $ $Date: 2002-08-29 17:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,11 +598,15 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // RES_ANCHOR
     // see above
     // RES_BACKGROUND
-    M_ED( "BackColor",  FO, BACKGROUND_COLOR,       XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+    M_ED( "BackColorRGB",   FO, BACKGROUND_COLOR,       XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
     M_ED( "BackTransparent",    FO, BACKGROUND_COLOR,       XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    M_ED( "BackColorTransparency", STYLE, BACKGROUND_TRANSPARENCY, XML_TYPE_PERCENT8, 0 ),
+
+    M_E( "BackGraphicTransparency", STYLE, BACKGROUND_IMAGE_TRANSPARENCY, MID_FLAG_SPECIAL_ITEM|XML_TYPE_PERCENT8, CTF_BACKGROUND_TRANSPARENCY ),
     M_E( "BackGraphicLocation", STYLE,  POSITION,   MID_FLAG_SPECIAL_ITEM|XML_TYPE_BUILDIN_CMP_ONLY, CTF_BACKGROUND_POS  ),
     M_E( "BackGraphicFilter",STYLE, FILTER_NAME,    MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_FILTER ),
     M_E( "BackGraphicURL",  STYLE,  BACKGROUND_IMAGE,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_URL ),
+
     // RES_BOX
     M_ED( "LeftBorder",         STYLE,  BORDER_LINE_WIDTH,        XML_TYPE_BORDER_WIDTH, CTF_ALLBORDERWIDTH ),
     M_ED( "LeftBorder",         STYLE,  BORDER_LINE_WIDTH_LEFT,   XML_TYPE_BORDER_WIDTH, CTF_LEFTBORDERWIDTH ),

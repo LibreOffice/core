@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-14 08:58:16 $
+ *  last change: $Author: dvo $ $Date: 2002-08-29 17:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_BGIMG_POSITION,
     XML_TOK_BGIMG_REPEAT,
     XML_TOK_BGIMG_FILTER,
+    XML_TOK_BGIMG_TRANSPARENCY,
     XML_TOK_NGIMG_END=XML_TOK_UNKNOWN
 };
 
@@ -121,6 +122,7 @@ static __FAR_DATA SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
     { XML_NAMESPACE_STYLE, XML_POSITION,    XML_TOK_BGIMG_POSITION  },
     { XML_NAMESPACE_STYLE, XML_REPEAT,      XML_TOK_BGIMG_REPEAT    },
     { XML_NAMESPACE_STYLE, XML_FILTER_NAME, XML_TOK_BGIMG_FILTER    },
+    { XML_NAMESPACE_DRAW,  XML_TRANSPARENCY,XML_TOK_BGIMG_TRANSPARENCY },
     XML_TOKEN_MAP_END
 };
 
@@ -361,6 +363,17 @@ void XMLBackgroundImageContext::ProcessAttrs(
         case XML_TOK_BGIMG_FILTER:
             sFilter = rValue;
             break;
+        case XML_TOK_BGIMG_TRANSPARENCY:
+            {
+                sal_Int32 nTmp;
+                // convert from percent and clip
+                if( SvXMLUnitConverter::convertPercent( nTmp, rValue ) )
+                {
+                    if( (nTmp >= 0) && (nTmp <= 100) )
+                        nTransparency = static_cast<sal_Int8>( nTmp );
+                }
+            }
+            break;
         }
     }
 
@@ -373,10 +386,13 @@ XMLBackgroundImageContext::XMLBackgroundImageContext(
         const XMLPropertyState& rProp,
         sal_Int32 nPosIdx,
         sal_Int32 nFilterIdx,
+        sal_Int32 nTransparencyIdx,
         ::std::vector< XMLPropertyState > &rProps ) :
     XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps ),
     aPosProp( nPosIdx ),
-    aFilterProp( nFilterIdx )
+    aFilterProp( nFilterIdx ),
+    aTransparencyProp( nTransparencyIdx ),
+    nTransparency( 0 )
 {
     ProcessAttrs( xAttrList );
 }
@@ -431,6 +447,7 @@ void XMLBackgroundImageContext::EndElement()
     aProp.maValue <<= sURL;
     aPosProp.maValue <<= ePos;
     aFilterProp.maValue <<= sFilter;
+    aTransparencyProp.maValue <<= nTransparency;
 
     SetInsert( sal_True );
     XMLElementPropertyContext::EndElement();
@@ -439,4 +456,6 @@ void XMLBackgroundImageContext::EndElement()
         rProperties.push_back( aPosProp );
     if( -1 != aFilterProp.mnIndex )
         rProperties.push_back( aFilterProp );
+    if( -1 != aTransparencyProp.mnIndex )
+        rProperties.push_back( aTransparencyProp );
 }

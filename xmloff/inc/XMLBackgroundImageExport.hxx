@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageExport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-19 14:24:56 $
+ *  last change: $Author: dvo $ $Date: 2002-08-29 17:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ public:
     void exportXML( const ::com::sun::star::uno::Any& rURL,
                     const ::com::sun::star::uno::Any *pPos,
                     const ::com::sun::star::uno::Any *pFilter,
+                    const ::com::sun::star::uno::Any *pTransparency,
                     sal_uInt16 nPrefix,
                     const ::rtl::OUString& rLocalName );
 };
