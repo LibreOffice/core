@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-09 15:33:00 $
+ *  last change: $Author: mt $ $Date: 2001-01-30 16:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1252,6 +1252,14 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, sal_Bool
                 EditLine* pNew = pLine->Clone();
                 pX->aLines.Insert( pNew, pX->aLines.Count() );
             }
+#ifdef DBG_UTIL
+            USHORT nTest, nTPLen = 0, nTxtLen = 0;
+            for ( nTest = pParaPortion->GetTextPortions().Count(); nTest; )
+                nTPLen += pParaPortion->GetTextPortions().GetObject( --nTest )->GetLen();
+            for ( nTest = pParaPortion->GetLines().Count(); nTest; )
+                nTxtLen += pParaPortion->GetLines().GetObject( --nTest )->GetLen();
+            DBG_ASSERT( ( nTPLen == pParaPortion->GetNode()->Len() ) && ( nTxtLen == pParaPortion->GetNode()->Len() ), "CreateBinTextObject: ParaPortion not completely formatted!" );
+#endif
         }
     }
     return pTxtObj;
@@ -1426,6 +1434,14 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
                     pNew->SetInvalid(); // neu Painten!
                     pParaPortion->GetLines().Insert( pNew, m );
                 }
+#ifdef DBG_UTIL
+                USHORT nTest, nTPLen = 0, nTxtLen = 0;
+                for ( nTest = pParaPortion->GetTextPortions().Count(); nTest; )
+                    nTPLen += pParaPortion->GetTextPortions().GetObject( --nTest )->GetLen();
+                for ( nTest = pParaPortion->GetLines().Count(); nTest; )
+                    nTxtLen += pParaPortion->GetLines().GetObject( --nTest )->GetLen();
+                DBG_ASSERT( ( nTPLen == pParaPortion->GetNode()->Len() ) && ( nTxtLen == pParaPortion->GetNode()->Len() ), "InsertBinTextObject: ParaPortion not completely formatted!" );
+#endif
             }
         }
         if ( !bParaAttribs ) // DefFont wird bei FastInsertParagraph nicht berechnet
