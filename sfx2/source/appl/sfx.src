@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:42 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,15 +78,18 @@ String STR_NONAME
     Text [ english_us ] = "Untitled" ;
     Text[ chinese_simplified ] = "未命名";
     Text[ russian ] = "��������";
-    Text[ polish ] = "Bez nazwy";
+    Text[ polish ] = "Bez tytu�u";
     Text[ japanese ] = "無題";
     Text[ chinese_traditional ] = "未命名";
     Text[ arabic ] = "���� �����";
     Text[ greek ] = "����� �����";
     Text[ korean ] = "제목 없음";
-    Text[ turkish ] = "Ads�z";
+    Text[ turkish ] = "�simsiz";
     Text[ catalan ] = "Sense nom";
     Text[ thai ] = "ไม่มีชื่อ";
+    Text[ czech ] = "Nepojmenovaný";
+    Text[ hebrew ] = "‮ללא כותרת‬";
+    Text[ hindi ] = "नाम रहित";
 };
 
 String STR_NONE
@@ -115,6 +118,9 @@ String STR_NONE
     Text[ turkish ] = "- Yok -";
     Text[ catalan ] = "- cap -";
     Text[ thai ] = "- ไม่มี -";
+    Text[ czech ] = "- žádná -";
+    Text[ hebrew ] = "‮- ללא -‬";
+    Text[ hindi ] = "- कोई नहीं -";
 };
 
 String STR_CLOSE
@@ -143,6 +149,9 @@ String STR_CLOSE
     Text[ turkish ] = "Kapat";
     Text[ catalan ] = "Tanca";
     Text[ thai ] = "ปิด";
+    Text[ czech ] = "Zavřít";
+    Text[ hebrew ] = "‮סגירה‬";
+    Text[ hindi ] = "बन्द करो";
 };
 
 String STR_STYLE_FILTER_AUTO
@@ -151,7 +160,7 @@ String STR_STYLE_FILTER_AUTO
     TEXT [ English ] = "Automatic" ;
     TEXT [ norwegian ] = "Automatic" ;
     TEXT [ italian ] = "Automatico" ;
-    TEXT [ portuguese_brazilian ] = "Autom?tico" ;
+    TEXT [ portuguese_brazilian ] = "Autom�tico" ;
     TEXT [ portuguese ] = "Autom�tico" ;
     TEXT [ finnish ] = "Automaattinen" ;
     TEXT [ danish ] = "Automatisk" ;
@@ -171,6 +180,9 @@ String STR_STYLE_FILTER_AUTO
     TEXT[ turkish ] = "Otomatik";
     TEXT[ catalan ] = "Autom�tic";
     TEXT[ thai ] = "อัตโนมัติ";
+    TEXT[ czech ] = "Automaticky";
+    TEXT[ hebrew ] = "‮אוטומטי‬";
+    TEXT[ hindi ] = "स्वचालित";
 };
 
 String STR_STYLE_FILTER_USED
@@ -179,7 +191,7 @@ String STR_STYLE_FILTER_USED
     TEXT [ English ] = "Used styles" ;
     TEXT [ norwegian ] = "Brukte stiler" ;
     TEXT [ italian ] = "Modelli usati" ;
-    TEXT [ portuguese_brazilian ] = "Estilos usados" ;
+    TEXT [ portuguese_brazilian ] = "Estilos aplicados" ;
     TEXT [ portuguese ] = "Estilos usados" ;
     TEXT [ finnish ] = "K�ytetyt tyylit" ;
     TEXT [ danish ] = "Anvendte typografier" ;
@@ -190,7 +202,7 @@ String STR_STYLE_FILTER_USED
     TEXT [ english_us ] = "Applied Styles" ;
     TEXT[ chinese_simplified ] = "使用的样式";
     TEXT[ russian ] = "������������ �����";
-    TEXT[ polish ] = "U�ywane style";
+    TEXT[ polish ] = "Zastosowane style";
     TEXT[ japanese ] = "使用したスタイル";
     TEXT[ chinese_traditional ] = "使用的樣式";
     TEXT[ arabic ] = "����� ��� ���������";
@@ -199,6 +211,9 @@ String STR_STYLE_FILTER_USED
     TEXT[ turkish ] = "Kullan�lan bi�imler";
     TEXT[ catalan ] = "Estils aplicats";
     TEXT[ thai ] = "ลักษณะประยุกต์";
+    TEXT[ czech ] = "Použité styly";
+    TEXT[ hebrew ] = "‮סגנונות מיושמים‬";
+    TEXT[ hindi ] = "लागू किया हुआ शैलियाँ";
 };
 
 
@@ -209,7 +224,7 @@ String STR_STYLE_FILTER_USERDEF
     TEXT [ English ] = "User styles" ;
     TEXT [ norwegian ] = "Brukerstiler" ;
     TEXT [ italian ] = "Modelli utente" ;
-    TEXT [ portuguese_brazilian ] = "Estilos do usu?rio" ;
+    TEXT [ portuguese_brazilian ] = "Estilos personalizados" ;
     TEXT [ portuguese ] = "Estilos do utilizador" ;
     TEXT [ finnish ] = "Mukautetut tyylit" ;
     TEXT [ danish ] = "Brugertypografier" ;
@@ -220,7 +235,7 @@ String STR_STYLE_FILTER_USERDEF
     TEXT [ english_us ] = "Custom Styles" ;
     TEXT[ chinese_simplified ] = "使用者样式";
     TEXT[ russian ] = "����� ������������";
-    TEXT[ polish ] = "Style indywidualne";
+    TEXT[ polish ] = "Style niestandardowe";
     TEXT[ japanese ] = "ユーザー定義のスタイル";
     TEXT[ chinese_traditional ] = "自訂樣式";
     TEXT[ arabic ] = "����� �����";
@@ -229,6 +244,9 @@ String STR_STYLE_FILTER_USERDEF
     TEXT[ turkish ] = "Kullan�c� tan�ml� bi�imler";
     TEXT[ catalan ] = "Estils personalitzats";
     TEXT[ thai ] = "ลักษณะกำหนดเอง";
+    TEXT[ czech ] = "Vlastní styly";
+    TEXT[ hebrew ] = "‮סגנונות מותאמים‬";
+    TEXT[ hindi ] = "शैलियों को व्यवस्था करो";
 };
 
 String STR_STYLE_FILTER_ALL
@@ -257,6 +275,9 @@ String STR_STYLE_FILTER_ALL
     TEXT[ turkish ] = "T�m bi�imler";
     TEXT[ catalan ] = "Tots els estils";
     TEXT[ thai ] = "ลักษณะทั้งหมด";
+    TEXT[ czech ] = "Všechny styly";
+    TEXT[ hebrew ] = "‮כל הסגנונות‬";
+    TEXT[ hindi ] = "सब शैलियाँ";
 };
 
 String STR_STANDARD
@@ -273,8 +294,8 @@ String STR_STANDARD
     Text[ italian ] = "Standard";
     Text[ danish ] = "Standard";
     Text[ swedish ] = "Standard";
-    Text[ polish ] = "Domy�lnie";
-    Text[ portuguese_brazilian ] = "Padr?o";
+    Text[ polish ] = "Standardowy";
+    Text[ portuguese_brazilian ] = "Padr�o";
     Text[ japanese ] = "標準";
     Text[ korean ] = "표준";
     Text[ chinese_simplified ] = "标准";
@@ -284,6 +305,9 @@ String STR_STANDARD
     Text[ catalan ] = "Predeterminat";
     Text[ finnish ] = "Vakio";
     Text[ thai ] = "มาตรฐาน";
+    Text[ czech ] = "Standardní";
+    Text[ hebrew ] = "‮רגיל‬";
+    Text[ hindi ] = "स्टान्डार्ड";
 };
 String STR_STANDARD_SHORTCUT
 {
@@ -302,7 +326,7 @@ String STR_STANDARD_SHORTCUT
     Text[ swedish ] = "Standard";
     Text[ polish ] = "Domy�lnie";
     Text[ japanese ] = "標準";
-    Text[ korean ] = "기본 값";
+    Text[ korean ] = "표준";
     Text[ chinese_simplified ] = "标准";
     Text[ chinese_traditional ] = "標準";
     Text[ turkish ] = "Standart";
@@ -310,6 +334,9 @@ String STR_STANDARD_SHORTCUT
     Text[ catalan ] = "~Est�ndard";
     Text[ thai ] = "~ค่าเริ่มต้น";
     Text[ portuguese_brazilian ] = "~Definir como impressora padr�o";
+    Text[ czech ] = "Standardní";
+    Text[ hebrew ] = "‮רגיל‬";
+    Text[ hindi ] = "Standard";
 };
 
 String STR_FILTERNAME_ALL
@@ -328,15 +355,18 @@ String STR_FILTERNAME_ALL
     Text[ danish ] = "Alle filer (*.*)";
     Text[ swedish ] = "Alla filer (*.*)";
     Text[ polish ] = "Wszystkie pliki (*.*)";
-    Text[ portuguese_brazilian ] = "<Tudo>";
+    Text[ portuguese_brazilian ] = "Todos os arquivos (*.*)";
     Text[ japanese ] = "すべてのファイル (*.*)";
     Text[ korean ] = "모든 파일(*.*)";
     Text[ chinese_simplified ] = "全部文件 (*.*)";
     Text[ chinese_traditional ] = "全部的檔案(*.*)";
-    Text[ turkish ] = "<T�m�>";
+    Text[ turkish ] = "T�m dosyalar (*.*)";
     Text[ arabic ] = "<����>";
     Text[ catalan ] = "<Tot>";
     Text[ thai ] = "ทุกไฟล์ (*.*)";
+    Text[ czech ] = "Všechny soubory (*.*)";
+    Text[ hebrew ] = "‮כל הקבצים (*.*)‬";
+    Text[ hindi ] = "सब फाइलें (*.*)";
 };
 
 String STR_HUMAN_APPNAME
@@ -359,7 +389,7 @@ String STR_BYTES
     Text [ portuguese ] = "Bytes" ;
     Text[ chinese_simplified ] = "字节";
     Text[ russian ] = "����";
-    Text[ polish ] = "Bajty";
+    Text[ polish ] = "B";
     Text[ japanese ] = "バイト";
     Text[ chinese_traditional ] = "Bytes";
     Text[ arabic ] = "����";
@@ -369,6 +399,9 @@ String STR_BYTES
     Text[ catalan ] = "Bytes";
     Text[ finnish ] = "Tavua";
     Text[ thai ] = "ไบต์";
+    Text[ czech ] = "Bajtů";
+    Text[ hebrew ] = "‮בתים‬";
+    Text[ hindi ] = "बइट्स";
 };
 
 String STR_KB
@@ -396,6 +429,9 @@ String STR_KB
     Text[ catalan ] = "kB";
     Text[ finnish ] = "Kt";
     Text[ thai ] = "KB";
+    Text[ czech ] = "KB";
+    Text[ hebrew ] = "‮KB‬";
+    Text[ hindi ] = "KB";
 };
 
 String STR_MB
@@ -423,6 +459,9 @@ String STR_MB
     Text[ catalan ] = "MB";
     Text[ finnish ] = "Mt";
     Text[ thai ] = "MB";
+    Text[ czech ] = "MB";
+    Text[ hebrew ] = "MB";
+    Text[ hindi ] = "MB";
 };
 
 
@@ -451,6 +490,9 @@ String STR_GB
     Text[ catalan ] = "GB";
     Text[ finnish ] = "Gt";
     Text[ thai ] = "GB";
+    Text[ czech ] = "GB";
+    Text[ hebrew ] = "‮GB‬";
+    Text[ hindi ] = "GB";
 };
 
 String STR_UNDO
@@ -460,7 +502,7 @@ String STR_UNDO
     Text [ English ] = "Undo " ;
     Text [ norwegian ] = "Angre " ;
     Text [ italian ] = "Annulla " ;
-    Text [ portuguese_brazilian ] = "Desfazer " ;
+    Text [ portuguese_brazilian ] = "Desfazer: " ;
     Text [ portuguese ] = "Anular: " ;
     Text [ finnish ] = "Kumoa: " ;
     Text [ danish ] = "Fortryd: " ;
@@ -471,7 +513,7 @@ String STR_UNDO
     Text [ english_us ] = "Undo: " ;
     Text[ chinese_simplified ] = "撤消命令： ";
     Text[ russian ] = "��������:  ";
-    Text[ polish ] = "Cofnij:  ";
+    Text[ polish ] = "Co~fnij: ";
     Text[ japanese ] = "元に戻す: ";
     Text[ chinese_traditional ] = "復原：";
     Text[ arabic ] = "�����: ";
@@ -480,6 +522,9 @@ String STR_UNDO
     Text[ turkish ] = "Geri al: ";
     Text[ catalan ] = "Desf�s: ";
     Text[ thai ] = "เลิกทำ: ";
+    Text[ czech ] = "Zpět: ";
+    Text[ hebrew ] = "‮ביטול פעולה:‬";
+    Text[ hindi ] = "अनावृत्ति: ";
 };
 
 String STR_REDO
@@ -488,7 +533,7 @@ String STR_REDO
     Text [ English ] = "Redo: " ;
     Text [ english_us ] = "Re~do: " ;
     Text [ portuguese ] = "Restaurar: " ;
-    Text [ portuguese_brazilian ] = "Refazer " ;
+    Text [ portuguese_brazilian ] = "Refazer: " ;
     Text [ swedish ] = "�terst�ll:  " ;
     Text [ danish ] = "Gendan: " ;
     Text [ italian ] = "Ripristina: " ;
@@ -497,7 +542,7 @@ String STR_REDO
     Text [ dutch ] = "Herstellen:" ;
     Text[ chinese_simplified ] = "恢复撤消命令 (~D)";
     Text[ russian ] = "�������: ";
-    Text[ polish ] = "Przywr��: ";
+    Text[ polish ] = "Pon�w: ";
     Text[ japanese ] = "やり直し(~D):";
     Text[ chinese_traditional ] = "恢復撤消指令(~D):";
     Text[ arabic ] = "�����: ";
@@ -507,6 +552,9 @@ String STR_REDO
     Text[ catalan ] = "Restaurar: ";
     Text[ finnish ] = "Tois~ta: ";
     Text[ thai ] = "~ทำซ้ำ: ";
+    Text[ czech ] = "Znovu: ";
+    Text[ hebrew ] = "‮שחזור פעולה:‬";
+    Text[ hindi ] = "फ़िर से ~करो: ";
 };
 
 String STR_REPEAT
@@ -515,7 +563,7 @@ String STR_REPEAT
     Text [ English ] = "~Repeat: " ;
     Text [ english_us ] = "~Repeat: " ;
     Text [ portuguese ] = "~Repetir: " ;
-    Text [ portuguese_brazilian ] = "Repetir " ;
+    Text [ portuguese_brazilian ] = "~Repetir: " ;
     Text [ swedish ] = "Senaste ~kommando:  " ;
     Text [ danish ] = "Sidste ~kommado: " ;
     Text [ italian ] = "Ultimo ~comando: " ;
@@ -524,7 +572,7 @@ String STR_REPEAT
     Text [ dutch ] = "~Herhalen:" ;
     Text[ chinese_simplified ] = "上一个命令(~R)";
     Text[ russian ] = "���������:  ";
-    Text[ polish ] = "Ostatnie polecenie:  ";
+    Text[ polish ] = "Powt�~rz: ";
     Text[ japanese ] = "繰り返し(~R):";
     Text[ chinese_traditional ] = "上一個指令(~R)";
     Text[ arabic ] = "����� ������: ";
@@ -534,6 +582,9 @@ String STR_REPEAT
     Text[ catalan ] = "~Repeteix: ";
     Text[ finnish ] = "~Toista: ";
     Text[ thai ] = "~ซ้ำ: ";
+    Text[ czech ] = "Opakovat: ";
+    Text[ hebrew ] = "‮בצוע חוזר:‬";
+    Text[ hindi ] = "~दुहराना: ";
 };
 
 String RID_STR_NEW_TASK
@@ -550,7 +601,7 @@ String RID_STR_NEW_TASK
     Text[ danish ] = "Ny opgave";
     Text[ swedish ] = "Ny aktivitet";
     Text[ polish ] = "Nowe zadanie";
-    Text[ portuguese_brazilian ] = "New task";
+    Text[ portuguese_brazilian ] = "Nova tarefa";
     Text[ japanese ] = "新しいウィンドウ";
     Text[ chinese_simplified ] = "新增视窗";
     Text[ chinese_traditional ] = "開新檔案";
@@ -561,6 +612,9 @@ String RID_STR_NEW_TASK
     Text[ catalan ] = "Tasca nova";
     Text[ finnish ] = "Uusi teht�v�";
     Text[ thai ] = "งานใหม่";
+    Text[ czech ] = "Nový úkol";
+    Text[ hebrew ] = "‮משימה חדשה‬";
+    Text[ hindi ] = "नया कार्य";
 };
 QueryBox MSG_QUERY_LASTVERSION
 {
@@ -571,7 +625,7 @@ QueryBox MSG_QUERY_LASTVERSION
     Message [ English ] = "Cancel all changes?" ;
     Message [ norwegian ] = "Slett alle endringer?" ;
     Message [ italian ] = "Volete annullare tutte le modifiche?" ;
-    Message [ portuguese_brazilian ] = "Cancelar todas as modifica??s?" ;
+    Message [ portuguese_brazilian ] = "Cancelar todas as altera��es?" ;
     Message [ portuguese ] = "Cancelar todas as modifica��es?" ;
     Message [ finnish ] = "Peruutetaanko kaikki muutokset?" ;
     Message [ danish ] = "Vil du annullere alle �ndringer?" ;
@@ -582,7 +636,7 @@ QueryBox MSG_QUERY_LASTVERSION
     Message [ english_us ] = "Cancel all changes?" ;
     Message[ chinese_simplified ] = "要取消更改?";
     Message[ russian ] = "�������� ��� ���������?";
-    Message[ polish ] = "Usun�� wszystkie zmiany?";
+    Message[ polish ] = "Anulowa� wszystkie zmiany?";
     Message[ japanese ] = "すべての変更を解除しますか。";
     Message[ chinese_traditional ] = "取消所有的變更？";
     Message[ greek ] = "������� ���� ��� �������;";
@@ -591,7 +645,19 @@ QueryBox MSG_QUERY_LASTVERSION
     Message[ turkish ] = "T�m de�i�iklikleri iptal et?";
     Message[ catalan ] = "Cancel.la tots els canvis?";
     Message[ thai ] = "ยกเลิกการเปลี่ยนแปลงหรือไม่?";
+    Message[ czech ] = "Zrušit všechny změny?";
+    Message[ hebrew ] = "‮האם לבטל כל השינויים?‬";
+    Message[ hindi ] = "सब परिवर्तनों को रद्द करना है?";
 };
+
+
+
+
+
+
+
+
+
 
 
 
