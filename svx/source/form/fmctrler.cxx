@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-19 13:12:39 $
+ *  last change: $Author: fs $ $Date: 2002-07-29 14:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1921,7 +1921,8 @@ IMPL_LINK(FmXFormController, OnUpdateDispatchers, void*, EMPTYARG)
 
     if (!xFrame.is())
     {   // same as in interceptedQueryDispatch, try again
-        m_nUpdateDispatcherEvent = Application::PostUserEvent(LINK(this, FmXFormController, OnUpdateDispatchers));
+        if ( m_aControlDispatchInterceptors.size() )
+            m_nUpdateDispatcherEvent = Application::PostUserEvent(LINK(this, FmXFormController, OnUpdateDispatchers));
         return 0L;
     }
 
@@ -3336,6 +3337,12 @@ void FmXFormController::deleteInterceptor(const Reference< ::com::sun::star::fra
 
     // remove the interceptor from our array
     m_aControlDispatchInterceptors.erase(aIter);
+
+    if ( !m_aControlDispatchInterceptors.size() && m_nUpdateDispatcherEvent)
+    {
+        Application::RemoveUserEvent( m_nUpdateDispatcherEvent );
+        m_nUpdateDispatcherEvent = 0;
+    }
 }
 
 
