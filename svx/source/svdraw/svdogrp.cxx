@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:52:47 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@
 #include <svx/sdr/contact/viewcontactofgroup.hxx>
 #endif
 
-#ifndef SVX_LIGHT
+//BFS01#ifndef SVX_LIGHT
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -143,74 +143,74 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ImpSdrObjGroupLink: public sfx2::SvBaseLink
-{
-    SdrObject* pSdrObj;
-public:
-    ImpSdrObjGroupLink( SdrObject* pObj1 )
-        : ::sfx2::SvBaseLink( sfx2::LINKUPDATE_ONCALL, FORMAT_FILE ),
-        pSdrObj( pObj1 )
-    {}
-    virtual ~ImpSdrObjGroupLink();
-    virtual void Closed();
-    virtual void DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue );
-
-    FASTBOOL     Connect() { return 0 != GetRealObject(); }
-};
+//BFS01class ImpSdrObjGroupLink: public so3::SvBaseLink
+//BFS01{
+//BFS01 SdrObject* pSdrObj;
+//BFS01public:
+//BFS01 ImpSdrObjGroupLink( SdrObject* pObj1 )
+//BFS01     : ::so3::SvBaseLink( so3::LINKUPDATE_ONCALL, FORMAT_FILE ),
+//BFS01     pSdrObj( pObj1 )
+//BFS01 {}
+//BFS01 virtual ~ImpSdrObjGroupLink();
+//BFS01 virtual void Closed();
+//BFS01 virtual void DataChanged( const String& rMimeType,
+//BFS01                             const ::com::sun::star::uno::Any & rValue );
+//BFS01
+//BFS01 FASTBOOL     Connect() { return 0 != GetRealObject(); }
+//BFS01};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-ImpSdrObjGroupLink::~ImpSdrObjGroupLink()
-{
-}
+//BFS01ImpSdrObjGroupLink::~ImpSdrObjGroupLink()
+//BFS01{
+//BFS01}
 
 // Closed() wird gerufen, wenn die Verknüpfung geloesst wird.
 
-void ImpSdrObjGroupLink::Closed()
-{
-    if (pSdrObj!=NULL) {
-        // pLink des Objekts auf NULL setzen, da die Link-Instanz ja gerade destruiert wird.
-        ImpSdrObjGroupLinkUserData* pData=((SdrObjGroup*)pSdrObj)->GetLinkUserData();
-        if (pData!=NULL) pData->pLink=NULL;
-        ((SdrObjGroup*)pSdrObj)->ReleaseGroupLink();
-    }
-    SvBaseLink::Closed();
-}
+//BFS01void ImpSdrObjGroupLink::Closed()
+//BFS01{
+//BFS01 if (pSdrObj!=NULL) {
+//BFS01     // pLink des Objekts auf NULL setzen, da die Link-Instanz ja gerade destruiert wird.
+//BFS01     ImpSdrObjGroupLinkUserData* pData=((SdrObjGroup*)pSdrObj)->GetLinkUserData();
+//BFS01     if (pData!=NULL) pData->pLink=NULL;
+//BFS01     ((SdrObjGroup*)pSdrObj)->ReleaseGroupLink();
+//BFS01 }
+//BFS01 SvBaseLink::Closed();
+//BFS01}
 
 
-void ImpSdrObjGroupLink::DataChanged( const String& ,
-                                      const ::com::sun::star::uno::Any& )
-{
-    FASTBOOL bForceReload=FALSE;
-    SdrModel* pModel = pSdrObj ? pSdrObj->GetModel() : 0;
-    SvxLinkManager* pLinkManager= pModel ? pModel->GetLinkManager() : 0;
-    if( pLinkManager )
-    {
-        ImpSdrObjGroupLinkUserData* pData=
-                                ((SdrObjGroup*)pSdrObj)->GetLinkUserData();
-        if( pData )
-        {
-            String aFile;
-            String aName;
-            pLinkManager->GetDisplayNames( this, 0, &aFile, &aName, 0 );
+//BFS01void ImpSdrObjGroupLink::DataChanged( const String& ,
+//BFS01                                   const ::com::sun::star::uno::Any& )
+//BFS01{
+//BFS01 FASTBOOL bForceReload=FALSE;
+//BFS01 SdrModel* pModel = pSdrObj ? pSdrObj->GetModel() : 0;
+//BFS01 SvxLinkManager* pLinkManager= pModel ? pModel->GetLinkManager() : 0;
+//BFS01 if( pLinkManager )
+//BFS01 {
+//BFS01     ImpSdrObjGroupLinkUserData* pData=
+//BFS01                             ((SdrObjGroup*)pSdrObj)->GetLinkUserData();
+//BFS01     if( pData )
+//BFS01     {
+//BFS01         String aFile;
+//BFS01         String aName;
+//BFS01         pLinkManager->GetDisplayNames( this, 0, &aFile, &aName, 0 );
+//BFS01
+//BFS01         if( !pData->aFileName.Equals( aFile ) ||
+//BFS01             !pData->aObjName.Equals( aName ))
+//BFS01         {
+//BFS01             pData->aFileName=aFile;
+//BFS01             pData->aObjName=aName;
+//BFS01             pSdrObj->SetChanged();
+//BFS01             bForceReload=TRUE;
+//BFS01         }
+//BFS01     }
+//BFS01 }
+//BFS01 if( pSdrObj )
+//BFS01     ((SdrObjGroup*)pSdrObj)->ReloadLinkedGroup( bForceReload );
+//BFS01}
 
-            if( !pData->aFileName.Equals( aFile ) ||
-                !pData->aObjName.Equals( aName ))
-            {
-                pData->aFileName=aFile;
-                pData->aObjName=aName;
-                pSdrObj->SetChanged();
-                bForceReload=TRUE;
-            }
-        }
-    }
-    if( pSdrObj )
-        ((SdrObjGroup*)pSdrObj)->ReloadLinkedGroup( bForceReload );
-}
-
-#endif // SVX_LIGHT
+//BFS01#endif // SVX_LIGHT
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -222,146 +222,146 @@ void ImpSdrObjGroupLink::DataChanged( const String& ,
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(ImpSdrObjGroupLinkUserData,SdrObjUserData);
+//BFS01TYPEINIT1(ImpSdrObjGroupLinkUserData,SdrObjUserData);
 
 
-ImpSdrObjGroupLinkUserData::ImpSdrObjGroupLinkUserData(SdrObject* pObj1):
-    SdrObjUserData(SdrInventor,SDRUSERDATA_OBJGROUPLINK,0),
-    pObj(pObj1),
-    nDrehWink0(0),
-    nShearWink0(0),
-    pLink(NULL),
-    nObjNum(0),
-    nPageNum(0),
-    bMasterPage(FALSE),
-    bOrigPos(FALSE),
-    bOrigSize(FALSE),
-    bOrigRotate(FALSE),
-    bOrigShear(FALSE)
-{
-}
+//BFS01ImpSdrObjGroupLinkUserData::ImpSdrObjGroupLinkUserData(SdrObject* pObj1):
+//BFS01 SdrObjUserData(SdrInventor,SDRUSERDATA_OBJGROUPLINK,0),
+//BFS01 pObj(pObj1),
+//BFS01 nDrehWink0(0),
+//BFS01 nShearWink0(0),
+//BFS01 pLink(NULL),
+//BFS01 nObjNum(0),
+//BFS01 nPageNum(0),
+//BFS01 bMasterPage(FALSE),
+//BFS01 bOrigPos(FALSE),
+//BFS01 bOrigSize(FALSE),
+//BFS01 bOrigRotate(FALSE),
+//BFS01 bOrigShear(FALSE)
+//BFS01{
+//BFS01}
 
 
-ImpSdrObjGroupLinkUserData::~ImpSdrObjGroupLinkUserData()
-{
-#ifndef SVX_LIGHT
-    delete pLink;
-#endif
-}
+//BFS01ImpSdrObjGroupLinkUserData::~ImpSdrObjGroupLinkUserData()
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01 delete pLink;
+//BFS01#endif
+//BFS01}
 
 
-SdrObjUserData* ImpSdrObjGroupLinkUserData::Clone(SdrObject* pObj1) const
-{
-    ImpSdrObjGroupLinkUserData* pData=new ImpSdrObjGroupLinkUserData(pObj1);
-    pData->aFileName  =aFileName;
-    pData->aObjName   =aObjName;
-    pData->aFileDate0 =aFileDate0;
-    pData->aSnapRect0 =aSnapRect0;
-    pData->nDrehWink0 =nDrehWink0;
-    pData->nShearWink0=nShearWink0;
-    pData->nObjNum    =nObjNum;
-    pData->nPageNum   =nPageNum;
-    pData->bMasterPage=bMasterPage;
-    pData->bOrigPos   =bOrigPos;
-    pData->bOrigSize  =bOrigSize;
-    pData->bOrigRotate=bOrigRotate;
-    pData->bOrigShear =bOrigShear;
-    pData->pLink=NULL;
-    //pObj1->ImpLinkAnmeldung();
-    return pData;
-}
+//BFS01SdrObjUserData* ImpSdrObjGroupLinkUserData::Clone(SdrObject* pObj1) const
+//BFS01{
+//BFS01 ImpSdrObjGroupLinkUserData* pData=new ImpSdrObjGroupLinkUserData(pObj1);
+//BFS01 pData->aFileName  =aFileName;
+//BFS01 pData->aObjName   =aObjName;
+//BFS01 pData->aFileDate0 =aFileDate0;
+//BFS01 pData->aSnapRect0 =aSnapRect0;
+//BFS01 pData->nDrehWink0 =nDrehWink0;
+//BFS01 pData->nShearWink0=nShearWink0;
+//BFS01 pData->nObjNum    =nObjNum;
+//BFS01 pData->nPageNum   =nPageNum;
+//BFS01 pData->bMasterPage=bMasterPage;
+//BFS01 pData->bOrigPos   =bOrigPos;
+//BFS01 pData->bOrigSize  =bOrigSize;
+//BFS01 pData->bOrigRotate=bOrigRotate;
+//BFS01 pData->bOrigShear =bOrigShear;
+//BFS01 pData->pLink=NULL;
+//BFS01 //pObj1->ImpLinkAnmeldung();
+//BFS01 return pData;
+//BFS01}
 
 
-void ImpSdrObjGroupLinkUserData::WriteData(SvStream& rOut)
-{
-    SdrObjUserData::WriteData(rOut);
+//BFS01void ImpSdrObjGroupLinkUserData::WriteData(SvStream& rOut)
+//BFS01{
+//BFS01 SdrObjUserData::WriteData(rOut);
+//BFS01
+//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
+//BFS01
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("ImpSdrObjGroupLinkUserData");
+//BFS01#endif
+//BFS01
+//BFS01 String aRelFileName;
+//BFS01
+//BFS01 if( aFileName.Len() )
+//BFS01 {
+//BFS01     aRelFileName = INetURLObject::AbsToRel( aFileName,
+//BFS01                                             INetURLObject::WAS_ENCODED,
+//BFS01                                             INetURLObject::DECODE_UNAMBIGUOUS );
+//BFS01 }
+//BFS01
+//BFS01 rOut.WriteByteString( aRelFileName );
+//BFS01
+//BFS01 // UNICODE: rOut << aObjName;
+//BFS01 rOut.WriteByteString(aObjName);
+//BFS01
+//BFS01 rOut << UINT32(aFileDate0.GetDate());
+//BFS01 rOut << UINT32(aFileDate0.GetTime());
+//BFS01 rOut << aSnapRect0;
+//BFS01 rOut << nDrehWink0;
+//BFS01 rOut << nShearWink0;
+//BFS01 rOut << BOOL(bMasterPage);
+//BFS01 rOut << nPageNum;
+//BFS01 rOut << nObjNum;
+//BFS01 rOut << BOOL(bOrigPos);
+//BFS01 rOut << BOOL(bOrigSize);
+//BFS01 rOut << BOOL(bOrigRotate);
+//BFS01 rOut << BOOL(bOrigShear);
+//BFS01}
 
-    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-    SdrDownCompat aCompat(rOut, STREAM_WRITE);
-
-#ifdef DBG_UTIL
-    aCompat.SetID("ImpSdrObjGroupLinkUserData");
-#endif
-
-    String aRelFileName;
-
-    if( aFileName.Len() )
-    {
-        aRelFileName = INetURLObject::AbsToRel( aFileName,
-                                                INetURLObject::WAS_ENCODED,
-                                                INetURLObject::DECODE_UNAMBIGUOUS );
-    }
-
-    rOut.WriteByteString( aRelFileName );
-
-    // UNICODE: rOut << aObjName;
-    rOut.WriteByteString(aObjName);
-
-    rOut << UINT32(aFileDate0.GetDate());
-    rOut << UINT32(aFileDate0.GetTime());
-    rOut << aSnapRect0;
-    rOut << nDrehWink0;
-    rOut << nShearWink0;
-    rOut << BOOL(bMasterPage);
-    rOut << nPageNum;
-    rOut << nObjNum;
-    rOut << BOOL(bOrigPos);
-    rOut << BOOL(bOrigSize);
-    rOut << BOOL(bOrigRotate);
-    rOut << BOOL(bOrigShear);
-}
-
-void ImpSdrObjGroupLinkUserData::ReadData(SvStream& rIn)
-{
-    SdrObjUserData::ReadData(rIn);
-    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-    SdrDownCompat aCompat(rIn, STREAM_READ);
-
-#ifdef DBG_UTIL
-    aCompat.SetID("ImpSdrObjGroupLinkUserData");
-#endif
-
-    BOOL bTmp;
-    UINT32 nTmp32;
-    String aFileNameRel;
-
-    rIn.ReadByteString(aFileNameRel);
-
-    if( aFileNameRel.Len() )
-    {
-        aFileName = ::URIHelper::SmartRelToAbs( aFileNameRel, FALSE,
-                                                INetURLObject::WAS_ENCODED,
-                                                INetURLObject::DECODE_UNAMBIGUOUS );
-    }
-    else
-        aFileName.Erase();
-
-    // UNICODE: rIn >> aObjName;
-    rIn.ReadByteString(aObjName);
-
-    rIn >> nTmp32; aFileDate0.SetDate(nTmp32);
-    rIn >> nTmp32; aFileDate0.SetTime(nTmp32);
-    rIn >> aSnapRect0;
-    rIn >> nDrehWink0;
-    rIn >> nShearWink0;
-    rIn >> bTmp; bMasterPage=bTmp;
-    rIn >> nPageNum;
-    rIn >> nObjNum;
-    rIn >> bTmp; bOrigPos   =bTmp;
-    rIn >> bTmp; bOrigSize  =bTmp;
-    rIn >> bTmp; bOrigRotate=bTmp;
-    rIn >> bTmp; bOrigShear =bTmp;
-}
+//BFS01void ImpSdrObjGroupLinkUserData::ReadData(SvStream& rIn)
+//BFS01{
+//BFS01 SdrObjUserData::ReadData(rIn);
+//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01 SdrDownCompat aCompat(rIn, STREAM_READ);
+//BFS01
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("ImpSdrObjGroupLinkUserData");
+//BFS01#endif
+//BFS01
+//BFS01 BOOL bTmp;
+//BFS01 UINT32 nTmp32;
+//BFS01 String aFileNameRel;
+//BFS01
+//BFS01 rIn.ReadByteString(aFileNameRel);
+//BFS01
+//BFS01 if( aFileNameRel.Len() )
+//BFS01 {
+//BFS01     aFileName = ::URIHelper::SmartRelToAbs( aFileNameRel, FALSE,
+//BFS01                                             INetURLObject::WAS_ENCODED,
+//BFS01                                             INetURLObject::DECODE_UNAMBIGUOUS );
+//BFS01 }
+//BFS01 else
+//BFS01     aFileName.Erase();
+//BFS01
+//BFS01 // UNICODE: rIn >> aObjName;
+//BFS01 rIn.ReadByteString(aObjName);
+//BFS01
+//BFS01 rIn >> nTmp32; aFileDate0.SetDate(nTmp32);
+//BFS01 rIn >> nTmp32; aFileDate0.SetTime(nTmp32);
+//BFS01 rIn >> aSnapRect0;
+//BFS01 rIn >> nDrehWink0;
+//BFS01 rIn >> nShearWink0;
+//BFS01 rIn >> bTmp; bMasterPage=bTmp;
+//BFS01 rIn >> nPageNum;
+//BFS01 rIn >> nObjNum;
+//BFS01 rIn >> bTmp; bOrigPos   =bTmp;
+//BFS01 rIn >> bTmp; bOrigSize  =bTmp;
+//BFS01 rIn >> bTmp; bOrigRotate=bTmp;
+//BFS01 rIn >> bTmp; bOrigShear =bTmp;
+//BFS01}
 
 
-void ImpSdrObjGroupLinkUserData::AfterRead()
-{
-    if (pObj!=NULL) {
-        ((SdrObjGroup*)pObj)->ImpLinkAnmeldung();
-        // lt. Anweisung von MB kein automatisches Reload mehr
-        //((SdrObjGroup*)pObj)->ReloadLinkedGroup();
-    }
-}
+//BFS01void ImpSdrObjGroupLinkUserData::AfterRead()
+//BFS01{
+//BFS01 if (pObj!=NULL) {
+//BFS01     ((SdrObjGroup*)pObj)->ImpLinkAnmeldung();
+//BFS01     // lt. Anweisung von MB kein automatisches Reload mehr
+//BFS01     //((SdrObjGroup*)pObj)->ReloadLinkedGroup();
+//BFS01 }
+//BFS01}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -407,229 +407,229 @@ SdrObjGroup::SdrObjGroup()
 
 SdrObjGroup::~SdrObjGroup()
 {
-    ReleaseGroupLink();
+    //BFS01ReleaseGroupLink();
     delete pSub;
 }
 
 
-void SdrObjGroup::SetGroupLink(const String& rFileName, const String& rObjName)
-{
-    ImpSdrObjGroupLinkUserData* pData=GetLinkUserData();
-    if (pData!=NULL) {
-        nDrehWink-=pData->nDrehWink0;
-        nShearWink-=pData->nShearWink0;
-        ReleaseGroupLink();
-    }
-    aName=rObjName;
-    pData=new ImpSdrObjGroupLinkUserData(this);
-    pData->aFileName=rFileName;
-    pData->aObjName=rObjName;
-    InsertUserData(pData);
-    ImpLinkAnmeldung();
-}
+//BFS01void SdrObjGroup::SetGroupLink(const String& rFileName, const String& rObjName)
+//BFS01{
+//BFS01 ImpSdrObjGroupLinkUserData* pData=GetLinkUserData();
+//BFS01 if (pData!=NULL) {
+//BFS01     nDrehWink-=pData->nDrehWink0;
+//BFS01     nShearWink-=pData->nShearWink0;
+//BFS01     ReleaseGroupLink();
+//BFS01 }
+//BFS01 aName=rObjName;
+//BFS01 pData=new ImpSdrObjGroupLinkUserData(this);
+//BFS01 pData->aFileName=rFileName;
+//BFS01 pData->aObjName=rObjName;
+//BFS01 InsertUserData(pData);
+//BFS01 ImpLinkAnmeldung();
+//BFS01}
 
 
-void SdrObjGroup::ReleaseGroupLink()
-{
-    ImpLinkAbmeldung();
-    USHORT nAnz=GetUserDataCount();
-    for (USHORT nNum=nAnz; nNum>0;) {
-        nNum--;
-        SdrObjUserData* pData=GetUserData(nNum);
-        if (pData->GetInventor()==SdrInventor && pData->GetId()==SDRUSERDATA_OBJGROUPLINK) {
-            DeleteUserData(nNum);
-        }
-    }
-}
+//BFS01void SdrObjGroup::ReleaseGroupLink()
+//BFS01{
+//BFS01 ImpLinkAbmeldung();
+//BFS01 USHORT nAnz=GetUserDataCount();
+//BFS01 for (USHORT nNum=nAnz; nNum>0;) {
+//BFS01     nNum--;
+//BFS01     SdrObjUserData* pData=GetUserData(nNum);
+//BFS01     if (pData->GetInventor()==SdrInventor && pData->GetId()==SDRUSERDATA_OBJGROUPLINK) {
+//BFS01         DeleteUserData(nNum);
+//BFS01     }
+//BFS01 }
+//BFS01}
 
 
-ImpSdrObjGroupLinkUserData* SdrObjGroup::GetLinkUserData() const
-{
-    ImpSdrObjGroupLinkUserData* pData=NULL;
-    USHORT nAnz=GetUserDataCount();
-    for (USHORT nNum=nAnz; nNum>0 && pData==NULL;) {
-        nNum--;
-        pData=(ImpSdrObjGroupLinkUserData*)GetUserData(nNum);
-        if (pData->GetInventor()!=SdrInventor || pData->GetId()!=SDRUSERDATA_OBJGROUPLINK) {
-            pData=NULL;
-        }
-    }
-    return pData;
-}
+//BFS01ImpSdrObjGroupLinkUserData* SdrObjGroup::GetLinkUserData() const
+//BFS01{
+//BFS01 ImpSdrObjGroupLinkUserData* pData=NULL;
+//BFS01 USHORT nAnz=GetUserDataCount();
+//BFS01 for (USHORT nNum=nAnz; nNum>0 && pData==NULL;) {
+//BFS01     nNum--;
+//BFS01     pData=(ImpSdrObjGroupLinkUserData*)GetUserData(nNum);
+//BFS01     if (pData->GetInventor()!=SdrInventor || pData->GetId()!=SDRUSERDATA_OBJGROUPLINK) {
+//BFS01         pData=NULL;
+//BFS01     }
+//BFS01 }
+//BFS01 return pData;
+//BFS01}
 
 
-FASTBOOL SdrObjGroup::ReloadLinkedGroup(FASTBOOL bForceLoad)
-{
-    ImpSdrObjGroupLinkUserData* pData=GetLinkUserData();
-    FASTBOOL                    bRet=TRUE;
-
-    if( pData )
-    {
-        ::ucb::ContentBroker*   pBroker = ::ucb::ContentBroker::get();
-        DateTime                aFileDT;
-        BOOL                    bExists = FALSE, bLoad = FALSE;
-
-        if( pBroker )
-        {
-            bExists = TRUE;
-
-            try
-            {
-                INetURLObject aURL( pData->aFileName );
-                DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-
-                ::ucb::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
-                ::com::sun::star::uno::Any aAny( aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ) ) );
-                ::com::sun::star::util::DateTime aDateTime;
-
-                aAny >>= aDateTime;
-                ::utl::typeConvert( aDateTime, aFileDT );
-            }
-            catch( ... )
-            {
-                bExists = FALSE;
-            }
-        }
-
-        if( bExists )
-        {
-            if( bForceLoad )
-                bLoad = TRUE;
-            else
-                bLoad = ( aFileDT > pData->aFileDate0 );
-
-            pData->aFileDate0 = aFileDT;
-        }
-        else
-            bLoad = ( pModel!=NULL && pModel->LoadModel(pData->aFileName)!=NULL );
-
-        if( bLoad )
-        {
-            Rectangle aMyRect(GetSnapRect());
-            bRet=LoadGroup(pData->aFileName,pData->aObjName,&pData->nPageNum,&pData->bMasterPage,&pData->nObjNum);
-            Rectangle aOrgRect(GetSnapRect());
-            if (bRet && !aMyRect.IsEmpty() && !aOrgRect.IsEmpty())
-            { // und nun noch zurechttransformieren
-                if (aMyRect!=aOrgRect)
-                {
-                    // erstmal karo-einfach
-                    NbcSetSnapRect(aMyRect);
-                }
-            }
-            pData->aSnapRect0=aOrgRect; // letzte bekannte Groesse des Originalobjekts merken
-        }
-    }
-    return bRet;
-}
-
-
-FASTBOOL SdrObjGroup::LoadGroup(const String& rFileName, const String& rObjName, USHORT* pnPgNum, FASTBOOL* pbMasterPg, ULONG* pnObjNum)
-{
-    FASTBOOL bRet=FALSE;
-
-    if(pModel && rFileName.Len() && rObjName.Len())
-    {
-        const SdrModel* pTempModel=pModel->LoadModel(rFileName);
-        if (pTempModel!=NULL) {
-            SdrObjGroup* pRef=NULL;
-            for (FASTBOOL bMPg=FALSE; bMPg!=TRUE && pRef==NULL;) {
-                USHORT nPgAnz=bMPg ? pTempModel->GetMasterPageCount() : pTempModel->GetPageCount();
-                for (USHORT nPgNum=0; nPgNum<nPgAnz && pRef==NULL; nPgNum++) {
-                    const SdrPage* pPg=bMPg ? pTempModel->GetMasterPage(nPgNum) : pTempModel->GetPage(nPgNum);
-                    ULONG nObjAnz=pPg->GetObjCount();
-                    for (USHORT nObjNum=0; nObjNum<nObjAnz && pRef==NULL; nObjNum++) {
-                        SdrObject* pObj=pPg->GetObj(nObjNum);
-                        SdrObjGroup* pGrp=PTR_CAST(SdrObjGroup,pObj);
-
-                        if(pGrp && pGrp->GetName().Equals(rObjName))
-                        {
-                            pRef = pGrp;
-
-                            if(pnPgNum)
-                                *pnPgNum = nPgNum;
-
-                            if(pbMasterPg)
-                                *pbMasterPg = bMPg;
-
-                            if(pnObjNum)
-                                *pnObjNum = nObjNum;
-
-                            bRet = TRUE;
-                        }
-                    }
-                }
-                bMPg=TRUE; // soz. von FALSE auf TRUE inkrementieren (fuer die obige for-Schleife)
-            }
-            if (pRef!=NULL) {
-                Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-                // #110094#-14 SendRepaintBroadcast();
-                // zunaechst diverse Daten des Obj kopieren
-                nLayerId=pRef->GetLayer(); // hier noch ueberarbeiten !!!
-                aAnchor =pRef->aAnchor;
-                bVirtObj=pRef->bVirtObj;
-                bSizProt=pRef->bSizProt;
-                bMovProt=pRef->bMovProt;
-                bNoPrint=pRef->bNoPrint;
-                bEmptyPresObj=pRef->bEmptyPresObj;
-                bNotVisibleAsMaster=pRef->bNotVisibleAsMaster;
-                // und nun die Objekte rueberhohlen
-                pSub->Clear();
-                pSub->CopyObjects(*pRef->GetSubList());
-                SetChanged();
-                BroadcastObjectChange();
-                SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-            }
-            //delete pTempModel;
-        }
-        if (!pModel->IsLoading()) pModel->DisposeLoadedModels();
-    }
-    return bRet;
-}
+//BFS01FASTBOOL SdrObjGroup::ReloadLinkedGroup(FASTBOOL bForceLoad)
+//BFS01{
+//BFS01 ImpSdrObjGroupLinkUserData* pData=GetLinkUserData();
+//BFS01 FASTBOOL                    bRet=TRUE;
+//BFS01
+//BFS01 if( pData )
+//BFS01 {
+//BFS01     ::ucb::ContentBroker*   pBroker = ::ucb::ContentBroker::get();
+//BFS01     DateTime                aFileDT;
+//BFS01     BOOL                    bExists = FALSE, bLoad = FALSE;
+//BFS01
+//BFS01     if( pBroker )
+//BFS01     {
+//BFS01         bExists = TRUE;
+//BFS01
+//BFS01         try
+//BFS01         {
+//BFS01             INetURLObject aURL( pData->aFileName );
+//BFS01             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+//BFS01
+//BFS01             ::ucb::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+//BFS01             ::com::sun::star::uno::Any aAny( aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ) ) );
+//BFS01             ::com::sun::star::util::DateTime aDateTime;
+//BFS01
+//BFS01             aAny >>= aDateTime;
+//BFS01             ::utl::typeConvert( aDateTime, aFileDT );
+//BFS01         }
+//BFS01         catch( ... )
+//BFS01         {
+//BFS01             bExists = FALSE;
+//BFS01         }
+//BFS01     }
+//BFS01
+//BFS01     if( bExists )
+//BFS01     {
+//BFS01         if( bForceLoad )
+//BFS01             bLoad = TRUE;
+//BFS01         else
+//BFS01             bLoad = ( aFileDT > pData->aFileDate0 );
+//BFS01
+//BFS01         pData->aFileDate0 = aFileDT;
+//BFS01     }
+//BFS01     else
+//BFS01         bLoad = ( pModel!=NULL && pModel->LoadModel(pData->aFileName)!=NULL );
+//BFS01
+//BFS01     if( bLoad )
+//BFS01     {
+//BFS01         Rectangle aMyRect(GetSnapRect());
+//BFS01         bRet=LoadGroup(pData->aFileName,pData->aObjName,&pData->nPageNum,&pData->bMasterPage,&pData->nObjNum);
+//BFS01         Rectangle aOrgRect(GetSnapRect());
+//BFS01         if (bRet && !aMyRect.IsEmpty() && !aOrgRect.IsEmpty())
+//BFS01         { // und nun noch zurechttransformieren
+//BFS01             if (aMyRect!=aOrgRect)
+//BFS01             {
+//BFS01                 // erstmal karo-einfach
+//BFS01                 NbcSetSnapRect(aMyRect);
+//BFS01             }
+//BFS01         }
+//BFS01         pData->aSnapRect0=aOrgRect; // letzte bekannte Groesse des Originalobjekts merken
+//BFS01     }
+//BFS01 }
+//BFS01 return bRet;
+//BFS01}
 
 
-void SdrObjGroup::ImpLinkAnmeldung()
-{
-#ifndef SVX_LIGHT
-    ImpSdrObjGroupLinkUserData* pData=GetLinkUserData();
-    SvxLinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
-    if ( pLinkManager         &&
-         pData!=NULL          &&
-         pData->pLink == NULL &&
-         pModel->GetPersist() )
-    {
-        // Nicht 2x Anmelden
-        INetURLObject aURLObj( ::URIHelper::SmartRelToAbs( String() /*pModel->GetPersist()->GetFileName()*/, FALSE,
-                                                           INetURLObject::WAS_ENCODED,
-                                                           INetURLObject::DECODE_UNAMBIGUOUS ) );
-        INetURLObject aLinkURLObj( ::URIHelper::SmartRelToAbs( pData->aFileName, FALSE,
-                                                               INetURLObject::WAS_ENCODED,
-                                                               INetURLObject::DECODE_UNAMBIGUOUS ) );
+//BFS01FASTBOOL SdrObjGroup::LoadGroup(const String& rFileName, const String& rObjName, USHORT* pnPgNum, FASTBOOL* pbMasterPg, ULONG* pnObjNum)
+//BFS01{
+//BFS01 FASTBOOL bRet=FALSE;
+//BFS01
+//BFS01 if(pModel && rFileName.Len() && rObjName.Len())
+//BFS01 {
+//BFS01     const SdrModel* pTempModel=pModel->LoadModel(rFileName);
+//BFS01     if (pTempModel!=NULL) {
+//BFS01         SdrObjGroup* pRef=NULL;
+//BFS01         for (FASTBOOL bMPg=FALSE; bMPg!=TRUE && pRef==NULL;) {
+//BFS01             USHORT nPgAnz=bMPg ? pTempModel->GetMasterPageCount() : pTempModel->GetPageCount();
+//BFS01             for (USHORT nPgNum=0; nPgNum<nPgAnz && pRef==NULL; nPgNum++) {
+//BFS01                 const SdrPage* pPg=bMPg ? pTempModel->GetMasterPage(nPgNum) : pTempModel->GetPage(nPgNum);
+//BFS01                 ULONG nObjAnz=pPg->GetObjCount();
+//BFS01                 for (USHORT nObjNum=0; nObjNum<nObjAnz && pRef==NULL; nObjNum++) {
+//BFS01                     SdrObject* pObj=pPg->GetObj(nObjNum);
+//BFS01                     SdrObjGroup* pGrp=PTR_CAST(SdrObjGroup,pObj);
+//BFS01
+//BFS01                     if(pGrp && pGrp->GetName().Equals(rObjName))
+//BFS01                     {
+//BFS01                         pRef = pGrp;
+//BFS01
+//BFS01                         if(pnPgNum)
+//BFS01                             *pnPgNum = nPgNum;
+//BFS01
+//BFS01                         if(pbMasterPg)
+//BFS01                             *pbMasterPg = bMPg;
+//BFS01
+//BFS01                         if(pnObjNum)
+//BFS01                             *pnObjNum = nObjNum;
+//BFS01
+//BFS01                         bRet = TRUE;
+//BFS01                     }
+//BFS01                 }
+//BFS01             }
+//BFS01             bMPg=TRUE; // soz. von FALSE auf TRUE inkrementieren (fuer die obige for-Schleife)
+//BFS01         }
+//BFS01         if (pRef!=NULL) {
+//BFS01             Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+//BFS01             // #110094#-14 SendRepaintBroadcast();
+//BFS01             // zunaechst diverse Daten des Obj kopieren
+//BFS01             nLayerId=pRef->GetLayer(); // hier noch ueberarbeiten !!!
+//BFS01             aAnchor =pRef->aAnchor;
+//BFS01             bVirtObj=pRef->bVirtObj;
+//BFS01             bSizProt=pRef->bSizProt;
+//BFS01             bMovProt=pRef->bMovProt;
+//BFS01             bNoPrint=pRef->bNoPrint;
+//BFS01             bEmptyPresObj=pRef->bEmptyPresObj;
+//BFS01             bNotVisibleAsMaster=pRef->bNotVisibleAsMaster;
+//BFS01             // und nun die Objekte rueberhohlen
+//BFS01             pSub->Clear();
+//BFS01             pSub->CopyObjects(*pRef->GetSubList());
+//BFS01             SetChanged();
+//BFS01             BroadcastObjectChange();
+//BFS01             SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+//BFS01         }
+//BFS01         //delete pTempModel;
+//BFS01     }
+//BFS01     if (!pModel->IsLoading()) pModel->DisposeLoadedModels();
+//BFS01 }
+//BFS01 return bRet;
+//BFS01}
 
-        if( !aURLObj.GetMainURL( INetURLObject::NO_DECODE ).Equals( aLinkURLObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
-        {
-            // Keine gelinkten Objekte im eigenen Model
-            pData->pLink = new ImpSdrObjGroupLink(this);
-            pLinkManager->InsertFileLink(*pData->pLink,OBJECT_CLIENT_FILE,
-                                         pData->aFileName,NULL,&pData->aObjName);
-            pData->pLink->Connect();
-        }
-    }
-#endif // SVX_LIGHT
-}
+
+//BFS01void SdrObjGroup::ImpLinkAnmeldung()
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01 ImpSdrObjGroupLinkUserData* pData=GetLinkUserData();
+//BFS01 SvxLinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
+//BFS01 if ( pLinkManager         &&
+//BFS01      pData!=NULL          &&
+//BFS01      pData->pLink == NULL &&
+//BFS01      pModel->GetPersist() )
+//BFS01 {
+//BFS01     // Nicht 2x Anmelden
+//BFS01     INetURLObject aURLObj( ::URIHelper::SmartRelToAbs( pModel->GetPersist()->GetFileName(), FALSE,
+//BFS01                                                        INetURLObject::WAS_ENCODED,
+//BFS01                                                        INetURLObject::DECODE_UNAMBIGUOUS ) );
+//BFS01     INetURLObject aLinkURLObj( ::URIHelper::SmartRelToAbs( pData->aFileName, FALSE,
+//BFS01                                                            INetURLObject::WAS_ENCODED,
+//BFS01                                                            INetURLObject::DECODE_UNAMBIGUOUS ) );
+//BFS01
+//BFS01     if( !aURLObj.GetMainURL( INetURLObject::NO_DECODE ).Equals( aLinkURLObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
+//BFS01     {
+//BFS01         // Keine gelinkten Objekte im eigenen Model
+//BFS01         pData->pLink = new ImpSdrObjGroupLink(this);
+//BFS01         pLinkManager->InsertFileLink(*pData->pLink,OBJECT_CLIENT_FILE,
+//BFS01                                      pData->aFileName,NULL,&pData->aObjName);
+//BFS01         pData->pLink->Connect();
+//BFS01     }
+//BFS01 }
+//BFS01#endif // SVX_LIGHT
+//BFS01}
 
 
-void SdrObjGroup::ImpLinkAbmeldung()
-{
-#ifndef SVX_LIGHT
-    ImpSdrObjGroupLinkUserData* pData=GetLinkUserData();
-    SvxLinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
-    if (pLinkManager!=NULL && pData!=NULL && pData->pLink!=NULL) { // Nicht 2x Abmelden
-        // Bei Remove wird *pLink implizit deleted
-        pLinkManager->Remove( pData->pLink );
-        pData->pLink=NULL;
-    }
-#endif // SVX_LIGHT
-}
+//BFS01void SdrObjGroup::ImpLinkAbmeldung()
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01 ImpSdrObjGroupLinkUserData* pData=GetLinkUserData();
+//BFS01 SvxLinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
+//BFS01 if (pLinkManager!=NULL && pData!=NULL && pData->pLink!=NULL) { // Nicht 2x Abmelden
+//BFS01     // Bei Remove wird *pLink implizit deleted
+//BFS01     pLinkManager->Remove( pData->pLink );
+//BFS01     pData->pLink=NULL;
+//BFS01 }
+//BFS01#endif // SVX_LIGHT
+//BFS01}
 
 
 void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
@@ -684,28 +684,28 @@ void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
         rInfo.bTransparenceAllowed = FALSE;
         rInfo.bGradientAllowed = FALSE;
     }
-    if (pPlusData!=NULL && nObjAnz!=0) {
-        ImpSdrObjGroupLinkUserData* pData=GetLinkUserData();
-        if (pData!=NULL) {
-            if (pData->bOrigPos   ) rInfo.bMoveAllowed =FALSE;
-            if (pData->bOrigSize  ) { rInfo.bResizeFreeAllowed=FALSE; rInfo.bResizePropAllowed=FALSE; }
-            if (pData->bOrigRotate) rInfo.bMoveAllowed =FALSE;
-            if (pData->bOrigShear ) rInfo.bMoveAllowed =FALSE;
-            // erstmal alles abschalten
-            //rInfo.bResizeFreeAllowed=FALSE;
-            //rInfo.bResizePropAllowed=FALSE;
-            rInfo.bRotateFreeAllowed=FALSE;
-            rInfo.bRotate90Allowed  =FALSE;
-            rInfo.bMirrorFreeAllowed=FALSE;
-            rInfo.bMirror45Allowed=FALSE;
-            rInfo.bMirror90Allowed=FALSE;
-            rInfo.bShearAllowed=FALSE;
-            rInfo.bShearAllowed=FALSE;
-            rInfo.bNoContortion=TRUE;
-            // default: Proportionen beibehalten
-            rInfo.bNoOrthoDesired=FALSE;
-        }
-    }
+    //BFS01if (pPlusData!=NULL && nObjAnz!=0) {
+    //BFS01 ImpSdrObjGroupLinkUserData* pData=GetLinkUserData();
+    //BFS01 if (pData!=NULL) {
+    //BFS01     if (pData->bOrigPos   ) rInfo.bMoveAllowed =FALSE;
+    //BFS01     if (pData->bOrigSize  ) { rInfo.bResizeFreeAllowed=FALSE; rInfo.bResizePropAllowed=FALSE; }
+    //BFS01     if (pData->bOrigRotate) rInfo.bMoveAllowed =FALSE;
+    //BFS01     if (pData->bOrigShear ) rInfo.bMoveAllowed =FALSE;
+    //BFS01     // erstmal alles abschalten
+    //BFS01     //rInfo.bResizeFreeAllowed=FALSE;
+    //BFS01     //rInfo.bResizePropAllowed=FALSE;
+    //BFS01     rInfo.bRotateFreeAllowed=FALSE;
+    //BFS01     rInfo.bRotate90Allowed  =FALSE;
+    //BFS01     rInfo.bMirrorFreeAllowed=FALSE;
+    //BFS01     rInfo.bMirror45Allowed=FALSE;
+    //BFS01     rInfo.bMirror90Allowed=FALSE;
+    //BFS01     rInfo.bShearAllowed=FALSE;
+    //BFS01     rInfo.bShearAllowed=FALSE;
+    //BFS01     rInfo.bNoContortion=TRUE;
+    //BFS01     // default: Proportionen beibehalten
+    //BFS01     rInfo.bNoOrthoDesired=FALSE;
+    //BFS01 }
+    //BFS01}
 }
 
 
@@ -750,20 +750,20 @@ void SdrObjGroup::SetObjList(SdrObjList* pNewObjList)
 
 void SdrObjGroup::SetPage(SdrPage* pNewPage)
 {
-    FASTBOOL bLinked=IsLinkedGroup();
+    //BFS01FASTBOOL bLinked=IsLinkedGroup();
     FASTBOOL bRemove=pNewPage==NULL && pPage!=NULL;
     FASTBOOL bInsert=pNewPage!=NULL && pPage==NULL;
 
-    if (bLinked && bRemove) {
-        ImpLinkAbmeldung();
-    }
+    //BFS01if (bLinked && bRemove) {
+    //BFS01 ImpLinkAbmeldung();
+    //BFS01}
 
     SdrObject::SetPage(pNewPage);
     pSub->SetPage(pNewPage);
 
-    if (bLinked && bInsert) {
-        ImpLinkAnmeldung();
-    }
+    //BFS01if (bLinked && bInsert) {
+    //BFS01 ImpLinkAnmeldung();
+    //BFS01}
 }
 
 
@@ -776,18 +776,18 @@ void SdrObjGroup::SetModel(SdrModel* pNewModel)
     // SdrObjGroups which reference the old pool which might
     // be destroyed (as the bug shows).
     SdrModel* pOldModel = pModel;
-    const sal_Bool bLinked(IsLinkedGroup());
+    //BFS01const sal_Bool bLinked(IsLinkedGroup());
     const sal_Bool bChg(pNewModel!=pModel);
 
-    if(bLinked && bChg)
-    {
-        ImpLinkAbmeldung();
-    }
+    //BFS01if(bLinked && bChg)
+    //BFS01{
+    //BFS01 ImpLinkAbmeldung();
+    //BFS01}
 
     // test for correct pool in ItemSet; move to new pool if necessary
-    if(pNewModel && GetItemPool() && GetItemPool() != &pNewModel->GetItemPool())
+    if(pNewModel && GetObjectItemPool() && GetObjectItemPool() != &pNewModel->GetItemPool())
     {
-        MigrateItemPool(GetItemPool(), &pNewModel->GetItemPool(), pNewModel);
+        MigrateItemPool(GetObjectItemPool(), &pNewModel->GetItemPool(), pNewModel);
     }
 
     // call parent
@@ -796,10 +796,10 @@ void SdrObjGroup::SetModel(SdrModel* pNewModel)
     // set new model at content
     pSub->SetModel(pNewModel);
 
-    if(bLinked && bChg)
-    {
-        ImpLinkAnmeldung();
-    }
+    //BFS01if(bLinked && bChg)
+    //BFS01{
+    //BFS01 ImpLinkAnmeldung();
+    //BFS01}
 
     // modify properties
     GetProperties().SetModel(pOldModel, pNewModel);
@@ -920,11 +920,12 @@ void SdrObjGroup::operator=(const SdrObject& rObj)
 
 void SdrObjGroup::TakeObjNameSingul(XubString& rName) const
 {
-    if(IsLinkedGroup())
-    {
-        rName = ImpGetResStr(STR_ObjNameSingulGRUPLNK);
-    }
-    else if(!pSub->GetObjCount())
+    //BFS01if(IsLinkedGroup())
+    //BFS01{
+    //BFS01 rName = ImpGetResStr(STR_ObjNameSingulGRUPLNK);
+    //BFS01}
+    //BFS01else
+    if(!pSub->GetObjCount())
     {
         rName = ImpGetResStr(STR_ObjNameSingulGRUPEMPTY);
     }
@@ -945,9 +946,10 @@ void SdrObjGroup::TakeObjNameSingul(XubString& rName) const
 
 void SdrObjGroup::TakeObjNamePlural(XubString& rName) const
 {
-    if (IsLinkedGroup()) {
-        rName=ImpGetResStr(STR_ObjNamePluralGRUPLNK);
-    } else if (pSub->GetObjCount()==0) {
+    //BFS01if (IsLinkedGroup()) {
+    //BFS01 rName=ImpGetResStr(STR_ObjNamePluralGRUPLNK);
+    //BFS01} else
+    if (pSub->GetObjCount()==0) {
         rName=ImpGetResStr(STR_ObjNamePluralGRUPEMPTY);
     } else {
         rName=ImpGetResStr(STR_ObjNamePluralGRUP);
@@ -1414,63 +1416,64 @@ SdrObject* SdrObjGroup::DoConvertToPolyObj(BOOL bBezier) const
 }
 
 
-void SdrObjGroup::WriteData(SvStream& rOut) const
-{
-    SdrObject::WriteData(rOut);
-    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-    SdrDownCompat aCompat(rOut, STREAM_WRITE);
-
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrObjGroup");
-#endif
-
-    // UNICODE: rOut << aName;
-    rOut.WriteByteString(aName);
-
-    UINT8 nTemp = bRefPoint; rOut << nTemp;
-    rOut << aRefPoint;
-    pSub->Save(rOut);
-    rOut << INT32(nDrehWink);
-    rOut << INT32(nShearWink);
-}
-
-
-void SdrObjGroup::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    if(rIn.GetError())
-        return;
-
-    SdrObject::ReadData(rHead, rIn);
-    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-    SdrDownCompat aCompat(rIn, STREAM_READ);
-
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrObjGroup");
-#endif
-
-    // UNICODE: rIn >> aName;
-    rIn.ReadByteString(aName);
-
-    UINT8 nTemp; rIn >> nTemp; bRefPoint = nTemp;
-    rIn >> aRefPoint;
-    pSub->Load(rIn, *pPage);
-
-    if(rHead.GetVersion() >= 2)
-    {
-        INT32 n32;
-
-        rIn >> n32; nDrehWink = n32;
-        rIn >> n32; nShearWink = n32;
-    }
-}
+//BFS01void SdrObjGroup::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 SdrObject::WriteData(rOut);
+//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
+//BFS01
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrObjGroup");
+//BFS01#endif
+//BFS01
+//BFS01 // UNICODE: rOut << aName;
+//BFS01 rOut.WriteByteString(aName);
+//BFS01
+//BFS01 UINT8 nTemp = bRefPoint; rOut << nTemp;
+//BFS01 rOut << aRefPoint;
+//BFS01 pSub->Save(rOut);
+//BFS01 rOut << INT32(nDrehWink);
+//BFS01 rOut << INT32(nShearWink);
+//BFS01}
 
 
-void SdrObjGroup::AfterRead()
-{
-    SdrObject::AfterRead();
-    pSub->AfterRead();
+//BFS01void SdrObjGroup::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if(rIn.GetError())
+//BFS01     return;
+//BFS01
+//BFS01 SdrObject::ReadData(rHead, rIn);
+//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01 SdrDownCompat aCompat(rIn, STREAM_READ);
+//BFS01
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrObjGroup");
+//BFS01#endif
+//BFS01
+//BFS01 // UNICODE: rIn >> aName;
+//BFS01 rIn.ReadByteString(aName);
+//BFS01
+//BFS01 UINT8 nTemp; rIn >> nTemp; bRefPoint = nTemp;
+//BFS01 rIn >> aRefPoint;
+//BFS01 pSub->Load(rIn, *pPage);
+//BFS01
+//BFS01 if(rHead.GetVersion() >= 2)
+//BFS01 {
+//BFS01     INT32 n32;
+//BFS01
+//BFS01     rIn >> n32; nDrehWink = n32;
+//BFS01     rIn >> n32; nShearWink = n32;
+//BFS01 }
+//BFS01}
 
-    // #80049# as fix for errors after #69055#
-    if(aAnchor.X() || aAnchor.Y())
-        NbcSetAnchorPos(aAnchor);
-}
+//BFS01void SdrObjGroup::AfterRead()
+//BFS01{
+//BFS01 SdrObject::AfterRead();
+//BFS01 pSub->AfterRead();
+//BFS01
+//BFS01 // #80049# as fix for errors after #69055#
+//BFS01 if(aAnchor.X() || aAnchor.Y())
+//BFS01     NbcSetAnchorPos(aAnchor);
+//BFS01}
+
+// eof
