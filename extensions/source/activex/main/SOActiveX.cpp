@@ -411,7 +411,7 @@ HRESULT CSOActiveX::CallLoadComponentFromURL1PBool( OLECHAR* sUrl, OLECHAR* sArg
     OLECHAR*    sPropMemberNames[2] = { L"Name", L"Value" };
     CComVariant pPropVar[2];
     pPropVar[0] = CComVariant( sArgName );
-    pPropVar[1] = CComVariant(); pPropVar[1].vt = VT_BOOL; pPropVar[1].boolVal = sArgVal ? VARIANT_TRUE : VARIANT_FALSE ;
+    pPropVar[1].vt = VT_BOOL; pPropVar[1].boolVal = sArgVal ? VARIANT_TRUE : VARIANT_FALSE ;
     hr = PutPropertiesToIDisp( pdispPropVal, sPropMemberNames, pPropVar, 2 );
     if( !SUCCEEDED( hr ) ) return hr;
 
@@ -422,7 +422,7 @@ HRESULT CSOActiveX::CallLoadComponentFromURL1PBool( OLECHAR* sUrl, OLECHAR* sArg
     aDispArgs[2] = CComVariant( L"_self" );
     aDispArgs[1] = CComVariant( 0 );
     // aDispArgs[0] = CComVariant( pPropVals ); such constructor is not defined ??!
-    aDispArgs[0] = CComVariant(); aDispArgs[0].vt = VT_ARRAY | VT_DISPATCH; aDispArgs[0].parray = pPropVals;
+    aDispArgs[0].vt = VT_ARRAY | VT_DISPATCH; aDispArgs[0].parray = pPropVals;
 
     CComVariant dummyResult;
     hr = ExecuteFunc( mpDispFrame, L"loadComponentFromURL", aDispArgs, 4, &dummyResult );
@@ -485,8 +485,8 @@ HRESULT CSOActiveX::LoadURLToFrame( )
 {
     CComVariant aArgNames[2] = { L"ReadOnly", L"ViewOnly" };
     CComVariant aArgVals[2];
-    aArgVals[0] = CComVariant(); aArgVals[0].vt = VT_BOOL; aArgVals[0].boolVal = mbViewOnly ? VARIANT_TRUE : VARIANT_FALSE;
-    aArgVals[1] = CComVariant(); aArgVals[1].vt = VT_BOOL; aArgVals[1].boolVal = mbViewOnly ? VARIANT_TRUE : VARIANT_FALSE;
+    aArgVals[0].vt = VT_BOOL; aArgVals[0].boolVal = mbViewOnly ? VARIANT_TRUE : VARIANT_FALSE;
+    aArgVals[1].vt = VT_BOOL; aArgVals[1].boolVal = mbViewOnly ? VARIANT_TRUE : VARIANT_FALSE;
     HRESULT hr = CallDispatchMethod( mCurFileUrl, aArgNames, aArgVals, 2 );
     if( !SUCCEEDED( hr ) ) return hr;
 
