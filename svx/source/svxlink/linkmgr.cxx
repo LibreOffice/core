@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:15:00 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,10 +380,14 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
         while( pShell )
         {
             if( !sTmp.Len() )
+            {
                 sTmp = pShell->GetTitle( SFX_TITLE_FULLNAME );
+                sTmp = lcl_DDE_RelToAbs(sTmp);
+            }
+
 
             aCC.toLower( sTmp );
-            if( sTmp == sNm || sTmp == sNmURL )     // die wollen wir haben
+            if( sTmp == sNmURL )        // die wollen wir haben
             {
                 pFndShell = pShell;
                 break;
