@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:51:27 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,10 +172,6 @@ const ULONG ExcDummy_00::nMyLen = sizeof( ExcDummy_00::pMyData );
 
 //-------------------------------------------------------- class ExcDummy_04x -
 const BYTE      ExcDummy_040::pMyData[] = {
-    0x13, 0x00, 0x02, 0x00, 0x00, 0x00,                     // PASSWORD
-    0x3d, 0x00, 0x12, 0x00, 0xe0, 0x01, 0x5a, 0x00, 0xcf,   // WINDOW1
-    0x3f, 0x4e, 0x2a, 0x38, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x01, 0x00, 0x58, 0x02,
     0x40, 0x00, 0x02, 0x00, 0x00, 0x00,                     // BACKUP
     0x8d, 0x00, 0x02, 0x00, 0x00, 0x00,                     // HIDEOBJ
 };
@@ -466,7 +462,7 @@ UINT16 Exc1904::GetNum( void ) const
 //------------------------------------------------------ class ExcBundlesheet -
 
 ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, UINT16 nTab ) :
-    nGrbit( rRootData.pDoc->IsVisible( nTab ) ? 0x0000 : 0x0001 ),
+    nGrbit( rRootData.pER->GetTabInfo().IsVisibleTab( nTab ) ? 0x0000 : 0x0001 ),
     nOwnPos( STREAM_SEEK_TO_END ),
     nStrPos( STREAM_SEEK_TO_END )
 {
@@ -1584,7 +1580,7 @@ ExcNameListEntry::ExcNameListEntry() :
 ExcNameListEntry::ExcNameListEntry( RootData& rRootData, UINT16 nScTab, UINT8 nKey ) :
     pData( NULL ),
     nFormLen( 0 ),
-    nTabNum( rRootData.pER->GetTabIdBuffer().GetXclTab( nScTab ) + 1 ),
+    nTabNum( rRootData.pER->GetTabInfo().GetXclTab( nScTab ) + 1 ),
     nBuiltInKey( nKey ),
     bDummy( FALSE )
 {
@@ -1895,14 +1891,15 @@ XclPrintRange::XclPrintRange( RootData& rRootData, UINT16 nScTab ) :
 XclPrintTitles::XclPrintTitles( RootData& rRootData, UINT16 nScTab ) :
         XclBuildInName( rRootData, nScTab, EXC_BUILTIN_PRINTTITLES )
 {
+    UINT16 nXclTab = rRootData.pER->GetTabInfo().GetXclTab( nScTab );
     const ScRange* pRange = rRootData.pDoc->GetRepeatColRange( nScTab );
     if( pRange )
-        Append( ScRange( pRange->aStart.Col(), 0, nScTab,
-            pRange->aEnd.Col(), rRootData.nRowMax, nScTab ) );
+        Append( ScRange( pRange->aStart.Col(), 0, nXclTab,
+            pRange->aEnd.Col(), rRootData.nRowMax, nXclTab ) );
     pRange = rRootData.pDoc->GetRepeatRowRange( nScTab );
     if( pRange )
-        Append( ScRange( 0, pRange->aStart.Row(), nScTab,
-            rRootData.nColMax, pRange->aEnd.Row(), nScTab ) );
+        Append( ScRange( 0, pRange->aStart.Row(), nXclTab,
+            rRootData.nColMax, pRange->aEnd.Row(), nXclTab ) );
     CreateFormula( rRootData );
 }
 
@@ -1916,23 +1913,23 @@ ExcNameList::ExcNameList( RootData& rRootData ) :
     nFirstOtherNameIx( 0 )
 {
     ScDocument&         rDoc = *rRootData.pDoc;
-    XclExpTabIdBuffer&  rTabBuffer = rRootData.pER->GetTabIdBuffer();
+    XclExpTabInfo&      rTabInfo = rRootData.pER->GetTabInfo();
     USHORT              nCount, nIndex;
     UINT16              nScTab, nTab, nExpIx;
 
     // print ranges and print titles, insert in table name sort order
-    UINT16 nScTabCount = rTabBuffer.GetScTabCount();
+    UINT16 nScTabCount = rTabInfo.GetScTabCount();
     for( nTab = 0; nTab < nScTabCount; ++nTab )
     {
-        nScTab = rTabBuffer.GetRealScTab( nTab ); // sorted -> real
-        if( rTabBuffer.IsExportTable( nScTab ) )
+        nScTab = rTabInfo.GetRealScTab( nTab ); // sorted -> real
+        if( rTabInfo.IsExportTab( nScTab ) )
             Append( new XclPrintRange( rRootData, nScTab ) );
     }
     nFirstPrintTitleIx = List::Count();
     for( nTab = 0; nTab < nScTabCount; ++nTab )
     {
-        nScTab = rTabBuffer.GetRealScTab( nTab ); // sorted -> real
-        if( rTabBuffer.IsExportTable( nScTab ) )
+        nScTab = rTabInfo.GetRealScTab( nTab ); // sorted -> real
+        if( rTabInfo.IsExportTab( nScTab ) )
             Append( new XclPrintTitles( rRootData, nScTab ) );
     }
     nFirstOtherNameIx = List::Count();
@@ -2008,7 +2005,7 @@ UINT16 ExcNameList::Append( ExcNameListEntry* pName )
 void ExcNameList::InsertSorted( RootData& rRootData, ExcNameListEntry* pName, sal_uInt16 nScTab )
 {
     // real -> sorted
-    sal_uInt32 nSortIx = rRootData.pER->GetTabIdBuffer().GetSortedScTab( nScTab );
+    sal_uInt32 nSortIx = rRootData.pER->GetTabInfo().GetSortedScTab( nScTab );
     List::Insert( pName, maNextInsVec[ nSortIx ] );
     for( sal_uInt32 nCount = maNextInsVec.size(); nSortIx < nCount; ++nSortIx )
         ++maNextInsVec[ nSortIx ];
@@ -2195,7 +2192,7 @@ ULONG ExcEGuts::GetLen() const
 
 //-------------------------------------------------------------- class ExcRow -
 
-ExcRow::ExcRow( UINT16 nRow, UINT16 nTab, UINT16 nFCol, UINT16 nLCol,
+ExcRow::ExcRow( const XclExpRoot& rRoot, UINT16 nRow, UINT16 nTab, UINT16 nFCol, UINT16 nLCol,
                 sal_uInt32 nXFId, ScDocument& rDoc, ExcEOutline& rOutline, ExcTable& rTab ) :
         nNum( nRow ),
         mnXFId( nXFId ),
@@ -2206,7 +2203,14 @@ ExcRow::ExcRow( UINT16 nRow, UINT16 nTab, UINT16 nFCol, UINT16 nLCol,
     BOOL    bUserHeight = TRUEBOOL( nRowOptions & CR_MANUALSIZE );
 
     SetRange( nFCol, nLCol );
+    // #109751# if we have a multi-line text in a merged cell,
+    // and the resulting row height has not been confirmed,
+    // we need to force the bUserHeight to be true to ensure
+    // excel works correctly.
+    if(!bUserHeight)
+        bUserHeight = ForceUserHeightFlag(rRoot, rDoc, nRow, nTab);
     SetHeight( rDoc.GetRowHeight( nRow, nTab ), bUserHeight );
+
 
     if( TRUEBOOL( nRowOptions & CR_HIDDEN ) )
         nOptions |= EXC_ROW_ZEROHEIGHT;
@@ -2244,6 +2248,40 @@ void ExcRow::SetHeight( UINT16 nNewHeight, BOOL bUser )
 //      nHeight |= EXC_ROW_FLAGDEFHEIGHT;   // default height
 }
 
+BOOL ExcRow::ForceUserHeightFlag( const XclExpRoot& rRoot, ScDocument& rDoc,
+                                      sal_uInt16 nRow, sal_uInt16 nTab)
+{
+    for(sal_uInt16 nCol = nFirstCol; nCol <= nLastCol; nCol++)
+    {
+        const ScPatternAttr* pPattern = rDoc.GetPattern( nCol, nRow, nTab );
+        if(pPattern && rDoc.HasStringData(nCol, nRow, nTab))
+        {
+            ScMergeAttr& rItem = (ScMergeAttr&)pPattern->GetItem(ATTR_MERGE);
+            if(rItem.IsMerged())
+            {
+                ScAddress aScPos( nCol, nRow, nTab );
+                if(ScBaseCell* pAktScCell = const_cast< ScBaseCell* >(rDoc.GetCell(aScPos)))
+                {
+                    if(pAktScCell->GetCellType() == CELLTYPE_EDIT)
+                    {
+                        ScEditCell& rEditCell = *static_cast< ScEditCell* >(pAktScCell) ;
+                        // Use the EditEngine to determine if this is a multi-line text object
+                        // Paragraph Count > 1 indicates a multi-line cell content.
+                        if(const EditTextObject* pEditObj = rEditCell.GetData())
+                        {
+                            ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
+                            rEE.SetText( *pEditObj );
+                            sal_uInt16 nParaCount = rEE.GetParagraphCount();
+                            if(nParaCount > 1)
+                                return TRUE;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return FALSE;
+}
 
 void ExcRow::SaveCont( XclExpStream& rStrm )
 {
@@ -2389,7 +2427,7 @@ ExcExterncount::ExcExterncount( RootData* pRD, const BOOL bTableNew ) :
 
 void ExcExterncount::SaveCont( XclExpStream& rStrm )
 {
-    UINT16  nNumTabs = pExcRoot->pER->GetTabIdBuffer().GetXclTabCount();
+    UINT16  nNumTabs = pExcRoot->pER->GetTabInfo().GetXclTabCount();
 
     if( nNumTabs && bTable )
         nNumTabs--;
