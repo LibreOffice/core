@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:44:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,7 +716,8 @@ void SfxDocumentPage::ImplUpdateSignatures()
             {
                 String s;
                 Sequence< security::DocumentSignaturesInformation > aInfos;
-                aInfos = xD->VerifyDocumentContentSignatures( pMedium->GetStorage() );
+                aInfos = xD->verifyDocumentContentSignatures( pMedium->GetLastCommitReadStorage_Impl(),
+                                                                uno::Reference< io::XInputStream >() );
                 if( aInfos.getLength() > 1 )
                 {
                     s = aMultiSignedStr;
