@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInsertObjectDialog.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:39:30 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,8 @@ interface XInsertObjectDialog: com::sun::star::uno::XInterface
 
         <p>
         The dialog allows for user to do a number of choices that are container
-        related. This infomation will be stored in the aDialogChoice parameter.
+        related. This infomation will be returned in the
+        <type>InsertedObjectInfo</type> object.
         <p>
 
         @param xStorage
