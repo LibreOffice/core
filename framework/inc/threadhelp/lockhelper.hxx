@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-06-26 05:28:51 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,7 @@ class LockHelper : public  IMutex
         mutable ::osl::Mutex*   m_pOwnMutex             ;
         mutable ::vos::IMutex*  m_pSolarMutex           ;
         mutable ::osl::Mutex*   m_pShareableOslMutex    ;
+        mutable sal_Bool        m_bDummySolarMutex      ;
 };
 
 }       //  namespace framework
