@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-26 11:44:25 $
+ *  last change: $Author: tra $ $Date: 2001-09-28 12:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,29 +153,35 @@ CWinClipbImpl::~CWinClipbImpl( )
 
 Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( RuntimeException )
 {
-    Reference< XTransferable > rClipContent;
-
     // use the shotcut or create a transferable from
     // system clipboard
+    ClearableMutexGuard aGuard( m_ClipContentMutex );
+
     if ( NULL != m_pCurrentClipContent )
-        rClipContent = m_pCurrentClipContent->m_XTransferable;
-    else
     {
-        // get the current dataobject from clipboard
-        IDataObjectPtr pIDataObject;
-        HRESULT hr = m_MtaOleClipboard.getClipboard( &pIDataObject );
+        return m_pCurrentClipContent->m_XTransferable;
+    }
 
-        if ( SUCCEEDED( hr ) )
-        {
-            // create an apartment neutral dataobject and initialize it with a
-            // com smart pointer to the IDataObject from clipboard
-            IDataObjectPtr pIDo( new CAPNDataObject( pIDataObject ) );
+    // release the mutex, so that the variable may be
+    // changed by other threads
+    aGuard.clear( );
 
-            CDTransObjFactory objFactory;
+    Reference< XTransferable > rClipContent;
 
-            // remeber pIDo destroys itself due to the smart pointer
-            rClipContent = objFactory.createTransferableFromDataObj( m_pWinClipboard->m_SrvMgr, pIDo );
-        }
+    // get the current dataobject from clipboard
+    IDataObjectPtr pIDataObject;
+    HRESULT hr = m_MtaOleClipboard.getClipboard( &pIDataObject );
+
+    if ( SUCCEEDED( hr ) )
+    {
+        // create an apartment neutral dataobject and initialize it with a
+        // com smart pointer to the IDataObject from clipboard
+        IDataObjectPtr pIDo( new CAPNDataObject( pIDataObject ) );
+
+        CDTransObjFactory objFactory;
+
+        // remeber pIDo destroys itself due to the smart pointer
+        rClipContent = objFactory.createTransferableFromDataObj( m_pWinClipboard->m_SrvMgr, pIDo );
     }
 
     return rClipContent;
@@ -195,11 +201,15 @@ void SAL_CALL CWinClipbImpl::setContents(
 
     if ( xTransferable.is( ) )
     {
+        ClearableMutexGuard aGuard( m_ClipContentMutex );
+
         m_pCurrentClipContent = new CXNotifyingDataObject(
             objFactory.createDataObjFromTransferable( m_pWinClipboard->m_SrvMgr , xTransferable ),
             xTransferable,
             xClipboardOwner,
             this );
+
+        aGuard.clear( );
 
         pIDataObj = IDataObjectPtr( m_pCurrentClipContent );
     }
@@ -231,6 +241,17 @@ sal_Int8 SAL_CALL CWinClipbImpl::getRenderingCapabilities(  ) throw( RuntimeExce
 
 void SAL_CALL CWinClipbImpl::flushClipboard( ) throw( RuntimeException )
 {
+    // sollte eigentlich hier stehen: ClearableMutexGuard aGuard( m_ClipContentMutex );
+    // geht aber nicht, da FlushClipboard zurückruft und das DataObject
+    // freigibt und damit würde es einen Deadlock in onReleaseDataObject geben
+    // FlushClipboard muß synchron sein, damit das runterfahren ggf. erst weitergeht,
+    // wenn alle Clipboard-Formate gerendert wurden
+    // die Abfrage ist nötig, damit nur geflusht wird, wenn wir wirklich Clipboardowner
+    // sind (ich weiss nicht genau was passiert, wenn man flusht und nicht Clipboard
+    // owner ist).
+    // eventuell kann man aber die Abfrage in den Clipboard STA Thread verlagern, indem
+    // man sich dort das DataObject merkt und vor dem flushen OleIsCurrentClipboard ruft
+
     if ( NULL != m_pCurrentClipContent )
         m_MtaOleClipboard.flushClipboard( );
 }
@@ -289,6 +310,8 @@ void SAL_CALL CWinClipbImpl::onReleaseDataObject( CXNotifyingDataObject* theCall
     // if the current caller is the one we currently
     // hold, then set it to NULL because an external
     // source must be the clipboardowner now
+    MutexGuard aGuard( m_ClipContentMutex );
+
     if ( m_pCurrentClipContent == theCaller )
         m_pCurrentClipContent = NULL;
 }
