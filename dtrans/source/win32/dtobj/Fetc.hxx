@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Fetc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-19 13:02:18 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
