@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basdoc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:29:18 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,19 @@ class BasicDocShell: public SfxObjectShell
 
 protected:
     virtual void        FillStatusBar( StatusBar& rBar);
-
+    virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
+                          USHORT nAspect = ASPECT_CONTENT );
+    virtual void    FillClass( SvGlobalName * pClassName,
+                               sal_uInt32 * pFormat,
+                               String * pAppName,
+                               String * pFullTypeName,
+                               String * pShortTypeName,
+                               sal_Int32 nVersion ) const;
 
 public:
                         TYPEINFO();
 
-                        SFX_DECL_SIMPLE_OBJECTFACTORY( BasicDocShell );
+                        SFX_DECL_OBJECTFACTORY();
                         SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_DOCSH );
                         BasicDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_STANDARD );
                         ~BasicDocShell();
