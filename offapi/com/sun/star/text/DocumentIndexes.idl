@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentIndexes.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-02 11:57:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 /** provides access to all indexes in a document.
  */
-service DocumentIndexes
+published service DocumentIndexes
 {
     /** This interface makes it possible to access all <type>BaseIndex</type>
                 instances within this context (e.g., a document) by its name.
