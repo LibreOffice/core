@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:24:42 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,7 +568,7 @@ ModalDialog DLG_COPY
         Text [ danish ] = "Start" ;
         Text [ portuguese ] = "~Início" ;
         Text [ portuguese_brazilian ] = "~Anfang" ;
-        Text[ chinese_simplified ] = "Ê×¶Ë(~S)";
+        Text[ chinese_simplified ] = "¿ªÊ¼(~S)";
         Text[ russian ] = "~Íà÷àëî";
         Text[ polish ] = "Pocz¹tek";
         Text[ japanese ] = "n‚ß(~S)";
@@ -605,11 +605,11 @@ ModalDialog DLG_COPY
         Text [ danish ] = "Slut" ;
         Text [ portuguese ] = "~Fim" ;
         Text [ portuguese_brazilian ] = "~Ende" ;
-        Text[ chinese_simplified ] = "Î²¶Ë(~E)";
+        Text[ chinese_simplified ] = "½áÊø(~E)";
         Text[ russian ] = "Êîíåö";
         Text[ polish ] = "Koniec";
         Text[ japanese ] = "I‚è(~E)";
-        Text[ chinese_traditional ] = "§Àºİ(~E)";
+        Text[ chinese_traditional ] = "µ²§ô(~E)";
         Text[ arabic ] = "ÇáäåÇíÉ";
         Text[ greek ] = "Ôİëïò";
         Text[ korean ] = "³¡(~E)";
@@ -630,6 +630,7 @@ ModalDialog DLG_COPY
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Duplicar";
 };
+
 
 
 
