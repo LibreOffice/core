@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 15:05:21 $
+ *  last change: $Author: os $ $Date: 2001-04-23 06:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1334,7 +1334,7 @@ BOOL    SwGlobalTree::Update(BOOL bHard)
 {
     SwView* pActView = GetParentWindow()->GetCreateView();
     BOOL bRet = FALSE;
-    if(pActView)
+    if(pActView && pActView->GetWrtShellPtr())
     {
         const SwWrtShell* pOldShell = pActiveShell;
         pActiveShell = pActView->GetWrtShellPtr();
