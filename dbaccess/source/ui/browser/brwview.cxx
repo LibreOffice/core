@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-02 07:10:09 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 10:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,6 +382,9 @@ long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
             {
                 if ( m_pTreeView && m_pVclControl && m_pTreeView->HasChildPathFocus() )
                     m_pVclControl->GrabFocus();
+                else if ( m_pTreeView && m_pVclControl && m_pVclControl->HasChildPathFocus() )
+                    m_pTreeView->GrabFocus();
+
                 nDone = 1L;
             }
         }
