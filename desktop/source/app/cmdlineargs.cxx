@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-10 14:00:16 $
+ *  last change: $Author: mav $ $Date: 2001-09-26 09:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,6 +283,12 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         m_bClientDisplay = sal_True;
         return sal_True;
     }
+    else if ( aArgStr.Copy(0, 9).EqualsIgnoreCaseAscii( "-version=" ))
+    {
+        m_aVersionString = aArgStr.Copy( 9 );
+        m_bVersionString = sal_True;
+        return sal_True;
+    }
 
     return sal_False;
 }
@@ -304,6 +310,7 @@ void CommandLineArgs::ResetParamValues()
     m_bUserDir              = sal_False;
     m_bClientDisplay        = sal_False;
     m_bTerminateAfterInit   = sal_False;
+    m_bVersionString        = sal_False;
 }
 
 } // namespace desktop

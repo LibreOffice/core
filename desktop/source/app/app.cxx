@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cd $ $Date: 2001-09-25 11:25:35 $
+ *  last change: $Author: mav $ $Date: 2001-09-26 09:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -993,11 +993,16 @@ void Desktop::Main()
             {
                 RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (cd100003) create PluginAcceptThread" );
 
-                OUString    aAcceptString( RTL_CONSTASCII_USTRINGPARAM( "pipe,name=soffice_plugin" ));
-                OUString    aUserIdent;
                 OSecurity   aSecurity;
+                OUString    aUserIdent;
+                OUString    aVersionStr;
 
                 aSecurity.getUserIdent( aUserIdent );
+
+                OSL_ENSURE( pCmdLineArgs->GetVersionString( aVersionStr ), "No plugin version is specified!\n" );
+
+                OUString    aAcceptString( RTL_CONSTASCII_USTRINGPARAM( "pipe,name=soffice_plugin" ));
+                aAcceptString += aVersionStr;
                 aAcceptString += aUserIdent;
 
                 pPluginAcceptThread = new PluginAcceptThread(   xSMgr,

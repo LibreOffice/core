@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-10 14:00:16 $
+ *  last change: $Author: mav $ $Date: 2001-09-26 09:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,12 +95,14 @@ class CommandLineArgs
         sal_Bool            m_bUserDir;
         sal_Bool            m_bClientDisplay;
         sal_Bool            m_bTerminateAfterInit;
+        sal_Bool            m_bVersionString;
         ::rtl::OUString     m_aOpenList;
         ::rtl::OUString     m_aPrintList;
         ::rtl::OUString     m_aPortalConnectString;
         ::rtl::OUString     m_aAcceptString;
         ::rtl::OUString     m_aUserDir;
         ::rtl::OUString     m_aClientDisplay;
+        ::rtl::OUString     m_aVersionString;
 
     public:
         CommandLineArgs();
@@ -123,6 +125,7 @@ class CommandLineArgs
         sal_Bool        GetClientDisplay( ::rtl::OUString& rPara){ rPara = m_aClientDisplay; return m_bClientDisplay; }
         sal_Bool        GetOpenList( ::rtl::OUString& rPara){ rPara = m_aOpenList; return m_bOpenList; }
         sal_Bool        GetPrintList( ::rtl::OUString& rPara){ rPara = m_aPrintList; return m_bPrintList; }
+        sal_Bool        GetVersionString( ::rtl::OUString& rPara){ rPara =  m_aVersionString; return m_bVersionString; }
 };
 
 }
