@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_migration.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:11:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:48:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ class MigrationImpl : public ::cppu::WeakImplHelper2<
     };
 
     const Reference<XComponentContext> m_xContext;
-    OUString m_oldUserDir;
+    OUString m_userData;
 
 public:
     virtual ~MigrationImpl();
@@ -138,12 +138,12 @@ MigrationImpl::MigrationImpl(
 {
     for ( sal_Int32 pos = args.getLength(); pos--; )
     {
-        const beans::NamedValue nv( args[pos].get<beans::NamedValue>() );
-        if (nv.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("OldUserDir") ))
-            m_oldUserDir = nv.Value.get<OUString>();
+        const beans::NamedValue nv(args[pos].get<beans::NamedValue>());
+        if (nv.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("UserData") ))
+            m_userData = nv.Value.get<OUString>();
     }
-    if (m_oldUserDir.getLength() == 0)
-        throw lang::IllegalArgumentException( OUSTR("missing OldUserDir!"), 0,
+    if (m_userData.getLength() == 0)
+        throw lang::IllegalArgumentException( OUSTR("missing UserData!"), 0,
                                               static_cast<sal_Int16>(-1) );
 }
 
@@ -175,7 +175,7 @@ Any MigrationImpl::execute( Sequence<beans::NamedValue> const & )
             m_xContext )->getPackageManager( OUSTR("user") ) );
     ::ucb::Content packagesDir;
     if (create_ucb_content( &packagesDir,
-                            makeURL( m_oldUserDir, OUSTR("user/uno_packages") ),
+                            makeURL( m_userData, OUSTR("user/uno_packages") ),
                             Reference<XCommandEnvironment>(),
                             false /* no throw */ ))
     {
