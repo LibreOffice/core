@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:27:15 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,14 @@
 #include <flyfrms.hxx>
 #endif
 
+// AW, OD 2004-04-30 #i28501#
+#ifndef _SDR_CONTACT_OBJECTCONTACTOFOBJLISTPAINTER_HXX
+#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#endif
+#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
+#include <svx/sdr/contact/displayinfo.hxx>
+#endif
+
 // OD 18.06.2003 #108784#
 #include <algorithm>
 
@@ -196,7 +204,7 @@ SwFrmFmt *FindFrmFmt( SdrObject *pObj )
 
     if ( pObj->ISA(SwVirtFlyDrawObj) )
     {
-        pRetval = ((SwVirtFlyDrawObj*)pObj)->GetFmt();
+       pRetval = ((SwVirtFlyDrawObj*)pObj)->GetFmt();
     }
     else
     {
@@ -206,6 +214,11 @@ SwFrmFmt *FindFrmFmt( SdrObject *pObj )
             pRetval = pContact->GetFmt();
         }
     }
+
+#if OSL_DEBUG_LEVEL > 1
+    ASSERT( pRetval,
+            "<::FindFrmFmt(..)> - no frame format found for given object. Please inform OD." );
+#endif
 
     return pRetval;
 }
@@ -245,36 +258,16 @@ SwRect GetBoundRect( const SdrObject* pObj )
     return aRet;
 }
 
-/*****************************************************************************
- *
- *  Moves a SdrObj so that it fits to a given frame
- *
- *****************************************************************************/
-
-void CaptureDrawObj( SdrObject& rObj, const SwRect& rFrm )
-{
-    Rectangle aRect( rObj.GetCurrentBoundRect() );
-    if ( aRect.Right() >= rFrm.Right() + 10 )
-    {
-        Size aSize( rFrm.Right() - aRect.Right(), 0 );
-        rObj.Move( aSize );
-        aRect = rObj.GetCurrentBoundRect();
-    }
-
-    if ( aRect.Left() + 10 <= rFrm.Left() )
-    {
-        Size aSize( rFrm.Left() - aRect.Left(), 0 );
-        rObj.Move( aSize );
-    }
-}
-
 //Liefert den UserCall ggf. vom Gruppenobjekt
-SdrObjUserCall* GetUserCall( const SdrObject* pObj )
+// OD 2004-03-31 #i26791# - change return type
+SwContact* GetUserCall( const SdrObject* pObj )
 {
     SdrObject *pTmp;
     while ( !pObj->GetUserCall() && 0 != (pTmp = pObj->GetUpGroup()) )
         pObj = pTmp;
-    return pObj->GetUserCall();
+    ASSERT( !pObj->GetUserCall() || pObj->GetUserCall()->ISA(SwContact),
+            "<::GetUserCall(..)> - wrong type of found object user call." );
+    return static_cast<SwContact*>(pObj->GetUserCall());
 }
 
 // liefert TRUE falls das SrdObject ein Marquee-Object (Lauftext) ist
@@ -296,27 +289,16 @@ FASTBOOL IsMarqueeTextObj( const SdrObject& rObj )
 |*
 |*************************************************************************/
 
-SwContact::SwContact( SwFrmFmt *pToRegisterIn, SdrObject *pObj ) :
+SwContact::SwContact( SwFrmFmt *pToRegisterIn ) :
     SwClient( pToRegisterIn ),
-    pMasterObj( pObj ),
     // OD 05.09.2003 #112039# - init member <mbInDTOR>
     mbInDTOR( false )
-{
-    pObj->SetUserCall( this );
-}
+{}
 
 SwContact::~SwContact()
 {
     // OD 05.09.2003 #112039# - set <mbInDTOR>
     SetInDTOR();
-
-    if ( pMasterObj )
-    {
-        pMasterObj->SetUserCall( 0 );   //Soll mir nicht in den Ruecken fallen.
-        if ( pMasterObj->GetPage() )    //Der SdrPage die Verantwortung entziehen.
-            pMasterObj->GetPage()->RemoveObject( pMasterObj->GetOrdNum() );
-        delete pMasterObj;
-    }
 }
 
 // OD 05.09.2003 #112039# - accessor for member <mbInDTOR>
@@ -329,21 +311,6 @@ const bool SwContact::IsInDTOR() const
 void SwContact::SetInDTOR()
 {
     mbInDTOR = true;
-}
-
-// OD 13.05.2003 #108784# - copied inline-implementation of <GetMaster()> and
-// <SetMaster()>
-const SdrObject* SwContact::GetMaster() const
-{
-    return pMasterObj;
-}
-SdrObject* SwContact::GetMaster()
-{
-    return pMasterObj;
-}
-void SwContact::SetMaster( SdrObject* pNew )
-{
-    pMasterObj = pNew;
 }
 
 /** method to move drawing object to corresponding visible layer
@@ -493,9 +460,90 @@ const SwIndex& SwContact::GetCntntAnchorIndex() const
 SwFlyDrawContact::SwFlyDrawContact( SwFlyFrmFmt *pToRegisterIn, SdrModel *pMod ) :
     SwContact( pToRegisterIn )
 {
-    SetMaster( new SwFlyDrawObj() );
-    GetMaster()->SetOrdNum( 0xFFFFFFFE );
-    GetMaster()->SetUserCall( this );
+    // OD 2004-04-01 #i26791# - class <SwFlyDrawContact> contains the 'master'
+    // drawing object of type <SwFlyDrawObj> on its own.
+    mpMasterObj = new SwFlyDrawObj;
+    mpMasterObj->SetOrdNum( 0xFFFFFFFE );
+    mpMasterObj->SetUserCall( this );
+}
+
+SwFlyDrawContact::SwFlyDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ):
+    SwContact( pToRegisterIn )
+{
+#if OSL_DEBUG_LEVEL > 1
+    ASSERT( pObj, "<SwFlyDrawContact::SwFlyDrawContact(..)> - no <SdrObject> provided. Please inform OD." );
+#endif
+    ASSERT( !pObj || pObj->ISA(SwFlyDrawObj),
+            "<SwFlyDrawContact::SwFlyDrawContact(..)> - wrong type of <SdrObject>." );
+    mpMasterObj = static_cast<SwFlyDrawObj*>(pObj);
+    mpMasterObj->SetUserCall( this );
+}
+
+SwFlyDrawContact::~SwFlyDrawContact()
+{
+    if ( mpMasterObj )
+    {
+        mpMasterObj->SetUserCall( 0 );
+        if ( mpMasterObj->GetPage() )
+            mpMasterObj->GetPage()->RemoveObject( mpMasterObj->GetOrdNum() );
+        delete mpMasterObj;
+    }
+}
+
+// OD 2004-03-29 #i26791#
+const SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj( const SdrObject* _pSdrObj ) const
+{
+    ASSERT( _pSdrObj,
+            "<SwFlyDrawContact::GetAnchoredObj(..)> - no object provided" );
+    ASSERT( _pSdrObj->ISA(SwVirtFlyDrawObj),
+            "<SwFlyDrawContact::GetAnchoredObj(..)> - wrong object type object provided" );
+    ASSERT( GetUserCall( _pSdrObj ) == const_cast<SwFlyDrawContact*>(this),
+            "<SwFlyDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
+
+    const SwAnchoredObject* pRetAnchoredObj = 0L;
+
+    if ( _pSdrObj && _pSdrObj->ISA(SwVirtFlyDrawObj) )
+    {
+        pRetAnchoredObj = static_cast<const SwVirtFlyDrawObj*>(_pSdrObj)->GetFlyFrm();
+    }
+
+    return pRetAnchoredObj;
+}
+
+SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj( SdrObject* _pSdrObj )
+{
+    ASSERT( _pSdrObj,
+            "<SwFlyDrawContact::GetAnchoredObj(..)> - no object provided" );
+    ASSERT( _pSdrObj->ISA(SwVirtFlyDrawObj),
+            "<SwFlyDrawContact::GetAnchoredObj(..)> - wrong object type provided" );
+    ASSERT( GetUserCall( _pSdrObj ) == this,
+            "<SwFlyDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
+
+    SwAnchoredObject* pRetAnchoredObj = 0L;
+
+    if ( _pSdrObj && _pSdrObj->ISA(SwVirtFlyDrawObj) )
+    {
+        pRetAnchoredObj = static_cast<SwVirtFlyDrawObj*>(_pSdrObj)->GetFlyFrm();
+    }
+
+    return pRetAnchoredObj;
+}
+
+const SdrObject* SwFlyDrawContact::GetMaster() const
+{
+    return mpMasterObj;
+}
+
+SdrObject* SwFlyDrawContact::GetMaster()
+{
+    return mpMasterObj;
+}
+
+void SwFlyDrawContact::SetMaster( SdrObject* _pNewMaster )
+{
+    ASSERT( _pNewMaster->ISA(SwFlyDrawObj),
+            "<SwFlyDrawContact::SetMaster(..)> - wrong type of new master object" );
+    mpMasterObj = static_cast<SwFlyDrawObj *>(_pNewMaster);
 }
 
 /*************************************************************************
@@ -557,7 +605,7 @@ void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 
     // OD 2004-02-12 #110582#-2 - insert columns, if necessary
     pFlyFrm->InsertColumns();
-    pFlyFrm->Chain( pFlyFrm->GetAnchor() );
+    pFlyFrm->Chain( pFlyFrm->AnchorFrm() );
     pFlyFrm->InsertCnt();
     if ( pFlyFrm->GetDrawObjs() )
     {
@@ -643,15 +691,16 @@ bool CheckControlLayer( const SdrObject *pObj )
     return false;
 }
 
-SwDrawContact::SwDrawContact( SwFrmFmt *pToRegisterIn, SdrObject *pObj ) :
-    SwContact( pToRegisterIn, pObj ),
-    pAnchor( 0 ),
-    pPage( 0 ),
+SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
+    SwContact( pToRegisterIn ),
+    maAnchoredDrawObj(),
+    mbMasterObjCleared( false ),
+    mpPageFrm( 0 ),
     // OD 10.10.2003 #112299#
     mbDisconnectInProgress( false )
 {
     // clear vector containing 'virtual' drawing objects.
-   maDrawVirtObjs.clear();
+    maDrawVirtObjs.clear();
 
     //Controls muessen immer im Control-Layer liegen. Das gilt auch fuer
     //Gruppenobjekte, wenn diese Controls enthalten.
@@ -660,6 +709,10 @@ SwDrawContact::SwDrawContact( SwFrmFmt *pToRegisterIn, SdrObject *pObj ) :
         // OD 25.06.2003 #108784# - set layer of object to corresponding invisible layer.
         pObj->SetLayer( pToRegisterIn->GetDoc()->GetInvisibleControlsId() );
     }
+
+    // OD 2004-03-29 #i26791#
+    pObj->SetUserCall( this );
+    maAnchoredDrawObj.SetDrawObj( *pObj );
 }
 
 SwDrawContact::~SwDrawContact()
@@ -674,6 +727,155 @@ SwDrawContact::~SwDrawContact()
 
     // remove and destroy 'virtual' drawing objects.
     RemoveAllVirtObjs();
+
+    if ( !mbMasterObjCleared )
+    {
+        delete maAnchoredDrawObj.GetDrawObj();
+    }
+}
+
+// OD 2004-03-29 #i26791#
+const SwAnchoredObject* SwDrawContact::GetAnchoredObj( const SdrObject* _pSdrObj ) const
+{
+    // handle default parameter value
+    if ( !_pSdrObj )
+    {
+        _pSdrObj = GetMaster();
+    }
+
+    ASSERT( _pSdrObj,
+            "<SwDrawContact::GetAnchoredObj(..)> - no object provided" );
+    ASSERT( _pSdrObj->ISA(SwDrawVirtObj) ||
+            ( !_pSdrObj->ISA(SdrVirtObj) && !_pSdrObj->ISA(SwDrawVirtObj) ),
+            "<SwDrawContact::GetAnchoredObj(..)> - wrong object type object provided" );
+    ASSERT( GetUserCall( _pSdrObj ) == const_cast<SwDrawContact*>(this) ||
+            _pSdrObj == GetMaster(),
+            "<SwDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
+
+    const SwAnchoredObject* pRetAnchoredObj = 0L;
+
+    if ( _pSdrObj )
+    {
+        if ( _pSdrObj->ISA(SwDrawVirtObj) )
+        {
+            pRetAnchoredObj = static_cast<const SwDrawVirtObj*>(_pSdrObj)->GetAnchoredObj();
+        }
+        else if ( !_pSdrObj->ISA(SdrVirtObj) && !_pSdrObj->ISA(SwDrawVirtObj) )
+        {
+            pRetAnchoredObj = &maAnchoredDrawObj;
+        }
+    }
+
+    return pRetAnchoredObj;
+}
+
+SwAnchoredObject* SwDrawContact::GetAnchoredObj( SdrObject* _pSdrObj )
+{
+    // handle default parameter value
+    if ( !_pSdrObj )
+    {
+        _pSdrObj = GetMaster();
+    }
+
+    ASSERT( _pSdrObj,
+            "<SwDrawContact::GetAnchoredObj(..)> - no object provided" );
+    ASSERT( _pSdrObj->ISA(SwDrawVirtObj) ||
+            ( !_pSdrObj->ISA(SdrVirtObj) && !_pSdrObj->ISA(SwDrawVirtObj) ),
+            "<SwDrawContact::GetAnchoredObj(..)> - wrong object type object provided" );
+    ASSERT( GetUserCall( _pSdrObj ) == this || _pSdrObj == GetMaster(),
+            "<SwDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
+
+    SwAnchoredObject* pRetAnchoredObj = 0L;
+
+    if ( _pSdrObj )
+    {
+        if ( _pSdrObj->ISA(SwDrawVirtObj) )
+        {
+            pRetAnchoredObj = static_cast<SwDrawVirtObj*>(_pSdrObj)->AnchoredObj();
+        }
+        else if ( !_pSdrObj->ISA(SdrVirtObj) && !_pSdrObj->ISA(SwDrawVirtObj) )
+        {
+            pRetAnchoredObj = &maAnchoredDrawObj;
+        }
+    }
+
+    return pRetAnchoredObj;
+}
+
+const SdrObject* SwDrawContact::GetMaster() const
+{
+    return !mbMasterObjCleared
+           ? maAnchoredDrawObj.GetDrawObj()
+           : 0L;
+}
+
+SdrObject* SwDrawContact::GetMaster()
+{
+    return !mbMasterObjCleared
+           ? maAnchoredDrawObj.DrawObj()
+           : 0L;
+}
+
+// OD 16.05.2003 #108784# - overload <SwContact::SetMaster(..)> in order to
+// assert, if the 'master' drawing object is replaced.
+// OD 10.07.2003 #110742# - replace of master object correctly handled, if
+// handled by method <SwDrawContact::ChangeMasterObject(..)>. Thus, assert
+// only, if a debug level is given.
+void SwDrawContact::SetMaster( SdrObject* _pNewMaster )
+{
+    if ( _pNewMaster )
+    {
+#if OSL_DEBUG_LEVEL > 1
+        ASSERT( false, "debug notification - master replaced!" );
+#endif
+        maAnchoredDrawObj.SetDrawObj( *_pNewMaster );
+    }
+    else
+    {
+        mbMasterObjCleared = true;
+    }
+}
+
+const SwFrm* SwDrawContact::GetAnchorFrm( const SdrObject* _pDrawObj ) const
+{
+    const SwFrm* pAnchorFrm = 0L;
+    if ( !_pDrawObj ||
+         _pDrawObj == GetMaster() ||
+         ( !_pDrawObj->GetUserCall() &&
+           GetUserCall( _pDrawObj ) == static_cast<const SwContact* const>(this) ) )
+    {
+        pAnchorFrm = maAnchoredDrawObj.GetAnchorFrm();
+    }
+    else if ( _pDrawObj->ISA(SwDrawVirtObj) )
+    {
+        pAnchorFrm = static_cast<const SwDrawVirtObj*>(_pDrawObj)->GetAnchorFrm();
+    }
+    else
+    {
+        ASSERT( false,
+                "<SwDrawContact::GetAnchorFrm(..)> - unknown drawing object." )
+    }
+
+    return pAnchorFrm;
+}
+SwFrm* SwDrawContact::GetAnchorFrm( SdrObject* _pDrawObj )
+{
+    SwFrm* pAnchorFrm = 0L;
+    if ( !_pDrawObj ||
+         _pDrawObj == GetMaster() ||
+         ( !_pDrawObj->GetUserCall() &&
+           GetUserCall( _pDrawObj ) == this ) )
+    {
+        pAnchorFrm = maAnchoredDrawObj.AnchorFrm();
+    }
+    else
+    {
+        ASSERT( _pDrawObj->ISA(SwDrawVirtObj),
+                "<SwDrawContact::GetAnchorFrm(..)> - unknown drawing object." )
+        pAnchorFrm = static_cast<SwDrawVirtObj*>(_pDrawObj)->AnchorFrm();
+    }
+
+    return pAnchorFrm;
 }
 
 // OD 23.06.2003 #108784# - method to create a new 'virtual' drawing object.
@@ -745,17 +947,38 @@ void SwDrawContact::RemoveAllVirtObjs()
     maDrawVirtObjs.clear();
 }
 
-// OD 16.05.2003 #108784# - overload <SwContact::SetMaster(..)> in order to
-// assert, if the 'master' drawing object is replaced.
-// OD 10.07.2003 #110742# - replace of master object correctly handled, if
-// handled by method <SwDrawContact::ChangeMasterObject(..)>. Thus, assert
-// only, if a debug level is given.
-void SwDrawContact::SetMaster( SdrObject* pNew )
+SwDrawContact::VirtObjAnchoredAtFrmPred::VirtObjAnchoredAtFrmPred(
+                                                const SwFrm& _rAnchorFrm )
+    : mpAnchorFrm( &_rAnchorFrm )
 {
-#if OSL_DEBUG_LEVEL > 1
-    ASSERT( !pNew, "debug notification - master replaced!" );
-#endif
-    SwContact::SetMaster( pNew );
+    if ( mpAnchorFrm->IsCntntFrm() )
+    {
+        const SwCntntFrm* pTmpFrm =
+                            static_cast<const SwCntntFrm*>( mpAnchorFrm );
+        while ( pTmpFrm->IsFollow() )
+        {
+            pTmpFrm = pTmpFrm->FindMaster();
+        }
+        mpAnchorFrm = pTmpFrm;
+    }
+}
+
+// OD 2004-04-14 #i26791# - compare with master frame
+bool SwDrawContact::VirtObjAnchoredAtFrmPred::operator() ( const SwDrawVirtObj* _pDrawVirtObj )
+{
+    const SwFrm* pObjAnchorFrm = _pDrawVirtObj->GetAnchorFrm();
+    if ( pObjAnchorFrm && pObjAnchorFrm->IsCntntFrm() )
+    {
+        const SwCntntFrm* pTmpFrm =
+                            static_cast<const SwCntntFrm*>( pObjAnchorFrm );
+        while ( pTmpFrm->IsFollow() )
+        {
+            pTmpFrm = pTmpFrm->FindMaster();
+        }
+        pObjAnchorFrm = pTmpFrm;
+    }
+
+    return ( pObjAnchorFrm == mpAnchorFrm );
 }
 
 // OD 19.06.2003 #108784# - get drawing object ('master' or 'virtual') by frame.
@@ -763,7 +986,32 @@ SdrObject* SwDrawContact::GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm )
 {
     SdrObject* pRetDrawObj = 0L;
 
-    if ( GetAnchor() && GetAnchor() == &_rAnchorFrm )
+    // OD 2004-04-14 #i26791# - compare master frames instead of direct frames
+    const SwFrm* pProposedAnchorFrm = &_rAnchorFrm;
+    if ( pProposedAnchorFrm->IsCntntFrm() )
+    {
+        const SwCntntFrm* pTmpFrm =
+                            static_cast<const SwCntntFrm*>( pProposedAnchorFrm );
+        while ( pTmpFrm->IsFollow() )
+        {
+            pTmpFrm = pTmpFrm->FindMaster();
+        }
+        pProposedAnchorFrm = pTmpFrm;
+    }
+
+    const SwFrm* pMasterObjAnchorFrm = GetAnchorFrm();
+    if ( pMasterObjAnchorFrm && pMasterObjAnchorFrm->IsCntntFrm() )
+    {
+        const SwCntntFrm* pTmpFrm =
+                            static_cast<const SwCntntFrm*>( pMasterObjAnchorFrm );
+        while ( pTmpFrm->IsFollow() )
+        {
+            pTmpFrm = pTmpFrm->FindMaster();
+        }
+        pMasterObjAnchorFrm = pTmpFrm;
+    }
+
+    if ( pMasterObjAnchorFrm && pMasterObjAnchorFrm == pProposedAnchorFrm )
     {
         pRetDrawObj = GetMaster();
     }
@@ -771,7 +1019,7 @@ SdrObject* SwDrawContact::GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm )
     {
         std::list<SwDrawVirtObj*>::const_iterator aFoundVirtObjIter =
                 std::find_if( maDrawVirtObjs.begin(), maDrawVirtObjs.end(),
-                              VirtObjAnchoredAtFrmPred( _rAnchorFrm ) );
+                              VirtObjAnchoredAtFrmPred( *pProposedAnchorFrm ) );
 
         if ( aFoundVirtObjIter != maDrawVirtObjs.end() )
         {
@@ -791,35 +1039,6 @@ SdrObject* SwDrawContact::GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm )
 |*
 |*************************************************************************/
 
-void lcl_Notify( SwDrawContact* pThis, const Rectangle* pOldBoundRect )
-{
-    SwFrm *pAnch = pThis->GetAnchor();
-    if( pAnch )
-    {
-        SwPageFrm *pPage = pAnch->FindPageFrm();
-        ASSERT( GetUserCall(pThis->GetMaster()) == pThis, "Wrong Master" );
-        if( pOldBoundRect && pPage )
-        {
-            SwRect aOldRect( *pOldBoundRect );
-            if( aOldRect.HasArea() )
-                Notify_Background( pThis->GetMaster(),pPage, aOldRect,
-                                    PREP_FLY_LEAVE,TRUE);
-        }
-        SwRect aRect( pThis->GetMaster()->GetCurrentBoundRect() );
-        if( aRect.HasArea() )
-        {
-            SwPageFrm *pPg = pThis->FindPage( aRect );
-            if( pPg )
-                Notify_Background( pThis->GetMaster(), pPg, aRect,
-                                    PREP_FLY_ARRIVE, TRUE );
-        }
-        ClrContourCache( pThis->GetMaster() );
-
-        // OD 03.07.2003 #108784# - notify background of all 'virtual' drawing objects
-        pThis->NotifyBackgrdOfAllVirtObjs( pOldBoundRect );
-    }
-}
-
 // OD 03.07.2003 #108784#
 void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
 {
@@ -830,13 +1049,13 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
         SwDrawVirtObj* pDrawVirtObj = (*aDrawVirtObjIter);
         if ( pDrawVirtObj->GetAnchorFrm() )
         {
-            SwPageFrm* pPage = pDrawVirtObj->GetAnchorFrm()->FindPageFrm();
+            SwPageFrm* pPage = pDrawVirtObj->AnchorFrm()->FindPageFrm();
             if( pOldBoundRect && pPage )
             {
                 SwRect aOldRect( *pOldBoundRect );
                 aOldRect.Pos() += pDrawVirtObj->GetOffset();
                 if( aOldRect.HasArea() )
-                    Notify_Background( pDrawVirtObj ,pPage,
+                    ::Notify_Background( pDrawVirtObj ,pPage,
                                        aOldRect, PREP_FLY_LEAVE,TRUE);
             }
             SwRect aRect( pDrawVirtObj->GetCurrentBoundRect() );
@@ -844,15 +1063,44 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
             {
                 SwPageFrm *pPg = pDrawVirtObj->GetPageFrm();
                 if ( !pPg )
-                    pPg = pDrawVirtObj->GetAnchorFrm()->FindPageFrm();
+                    pPg = pDrawVirtObj->AnchorFrm()->FindPageFrm();
                 if ( pPg )
                     pPg = (SwPageFrm*)::FindPage( aRect, pPg );
                 if( pPg )
-                    Notify_Background( pDrawVirtObj, pPg, aRect,
+                    ::Notify_Background( pDrawVirtObj, pPg, aRect,
                                         PREP_FLY_ARRIVE, TRUE );
             }
-            ClrContourCache( pDrawVirtObj );
+            ::ClrContourCache( pDrawVirtObj );
         }
+    }
+}
+
+// OD 2004-04-08 #i26791# - local method to notify the background for a drawing object
+void lcl_NotifyBackgroundOfObj( SwDrawContact& _rDrawContact,
+                                const SdrObject& _rObj,
+                                const Rectangle* _pOldObjRect )
+{
+    if ( _rDrawContact.GetAnchorFrm( &_rObj ) )
+    {
+        SwPageFrm* pPageFrm = const_cast<SwPageFrm*>(
+                            _rDrawContact.GetAnchorFrm( &_rObj )->FindPageFrm() );
+        if( _pOldObjRect && pPageFrm )
+        {
+            SwRect aOldRect( *_pOldObjRect );
+            if( aOldRect.HasArea() )
+            {
+                ::Notify_Background( &_rObj, pPageFrm, aOldRect,
+                                     PREP_FLY_LEAVE, TRUE);
+            }
+        }
+        SwRect aNewRect( _rObj.GetCurrentBoundRect() );
+        if( aNewRect.HasArea() && pPageFrm )
+        {
+            pPageFrm = (SwPageFrm*)::FindPage( aNewRect, pPageFrm );
+            ::Notify_Background( &_rObj, pPageFrm, aNewRect,
+                                 PREP_FLY_ARRIVE, TRUE );
+        }
+        ClrContourCache( &_rObj );
     }
 }
 
@@ -860,9 +1108,17 @@ void SwDrawContact::Changed( const SdrObject& rObj,
                              SdrUserCallType eType,
                              const Rectangle& rOldBoundRect )
 {
+    // OD 2004-06-01 #i26791# - no event handling, if existing <ViewShell>
+    // is in contruction
+    SwDoc* pDoc = GetFmt()->GetDoc();
+    if ( pDoc->GetRootFrm() &&
+         pDoc->GetRootFrm()->GetCurrShell()->IsInConstructor() )
+    {
+        return;
+    }
+
     //Action aufsetzen, aber nicht wenn gerade irgendwo eine Action laeuft.
     ViewShell *pSh = 0, *pOrg;
-    SwDoc *pDoc = GetFmt()->GetDoc();
     if ( pDoc->GetRootFrm() && pDoc->GetRootFrm()->IsCallbackActionEnabled() )
     {
         pDoc->GetEditShell( &pOrg );
@@ -891,17 +1147,18 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                               SdrUserCallType eType,
                               const Rectangle* pOldBoundRect )
 {
-    BOOL bInCntnt = FLY_IN_CNTNT == GetFmt()->GetAnchor().GetAnchorId();
     /// OD 05.08.2002 #100843# - do *not* notify, if document is destructing
-    BOOL bNotify = !bInCntnt &&
-                   !(GetFmt()->GetDoc()->IsInDtor()) &&
-                   ( SURROUND_THROUGHT != GetFmt()->GetSurround().GetSurround() );
+    const bool bNotify = !(GetFmt()->GetDoc()->IsInDtor()) &&
+                         ( SURROUND_THROUGHT != GetFmt()->GetSurround().GetSurround() ||
+                           ObjAnchoredAsChar() );
     switch( eType )
     {
         case SDRUSERCALL_DELETE:
             {
-                if( bNotify )
-                    lcl_Notify( this, pOldBoundRect );
+                if ( bNotify )
+                {
+                    lcl_NotifyBackgroundOfObj( *this, rObj, pOldBoundRect );
+                }
                 DisconnectFromLayout( false );
                 SetMaster( NULL );
                 delete this;
@@ -918,15 +1175,19 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 else
                 {
                     ConnectToLayout();
-                    if( bNotify )
-                        lcl_Notify( this, pOldBoundRect );
+                    if ( bNotify )
+                    {
+                        lcl_NotifyBackgroundOfObj( *this, rObj, pOldBoundRect );
+                    }
                 }
                 break;
             }
         case SDRUSERCALL_REMOVED:
             {
-                if( bNotify )
-                    lcl_Notify( this, pOldBoundRect );
+                if ( bNotify )
+                {
+                    lcl_NotifyBackgroundOfObj( *this, rObj, pOldBoundRect );
+                }
                 DisconnectFromLayout( false );
                 break;
             }
@@ -939,53 +1200,116 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
         case SDRUSERCALL_CHILD_COPY :
         case SDRUSERCALL_CHILD_INSERTED :
         case SDRUSERCALL_CHILD_REMOVED :
-            if( bInCntnt )
+        {
+            const Rectangle& aOldObjRect =
+                        static_cast<const SwAnchoredDrawObject*>(
+                                    GetAnchoredObj( &rObj ))->GetLastObjRect();
+            // OD 2004-04-06 #i26791# - adjust positioning and alignment attributes,
+            // if positioning of drawing object isn't in progress.
+            if ( !GetAnchoredObj( &rObj )->IsPositioningInProgress() )
             {
-                SwFrm *pAnch = GetAnchor();
-                // OD 10.10.2003 #112299# - do not try to connect to layout,
-                // if disconnection from layout is in progress.
-                // Note: Such a usercall can be initiated during disconnection
-                //       of the group object, if a member 'connector' object is
-                //       formatted, because the object, its 'connected' to is
-                //       disconnected from layout.
-                if ( !pAnch && !mbDisconnectInProgress )
+                const SwFrm* pAnchorFrm = GetAnchorFrm( &rObj );
+                if ( pAnchorFrm )
                 {
-                    ConnectToLayout();
-                    pAnch = GetAnchor();
-                }
-                if( pAnch && !((SwTxtFrm*)pAnch)->IsLocked() &&
-                    &rObj == GetMaster() )
-                {
-                    SwFrmFmt *pFmt = GetFmt();
-                    const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
-                    SwTwips nRel;
-                    if( pAnch->IsVertical() )
+                    const bool bVert = pAnchorFrm->IsVertical();
+                    const bool bR2L = pAnchorFrm->IsRightToLeft();
+                    // use geometry of drawing object
+                    SwRect aObjRect( rObj.GetSnapRect() );
+                    // If drawing object is a member of a group, the adjustment
+                    // of the positioning and the alignment attributes has to
+                    // be done for the top group object.
+                    if ( rObj.GetUpGroup() )
                     {
-                        nRel = rObj.GetRelativePos().X();
-                        if( !pAnch->IsReverse() )
-                            nRel = - nRel - rObj.GetSnapRect().GetWidth();
+                        const SdrObject* pGroupObj = rObj.GetUpGroup();
+                        while ( pGroupObj->GetUpGroup() )
+                        {
+                            pGroupObj = pGroupObj->GetUpGroup();
+                        }
+                        // use geometry of drawing object
+                        aObjRect = pGroupObj->GetSnapRect();
+                    }
+                    SwTwips nXPosDiff(0L);
+                    SwTwips nYPosDiff(0L);
+                    if ( bVert )
+                    {
+                        nXPosDiff = aObjRect.Top() - aOldObjRect.Top();
+                        nYPosDiff = aOldObjRect.Right() - aObjRect.Right();
+                    }
+                    else if ( bR2L )
+                    {
+                        nXPosDiff = aOldObjRect.Right() - aObjRect.Right();
+                        nYPosDiff = aObjRect.Top() - aOldObjRect.Top();
                     }
                     else
                     {
-                        nRel = rObj.GetRelativePos().Y();
+                        nXPosDiff = aObjRect.Left() - aOldObjRect.Left();
+                        nYPosDiff = aObjRect.Top() - aOldObjRect.Top();
                     }
-                    if( rVert.GetPos() != nRel )
+                    SfxItemSet aSet( GetFmt()->GetDoc()->GetAttrPool(),
+                                     RES_VERT_ORIENT, RES_HORI_ORIENT, 0 );
+                    const SwFmtVertOrient& rVert = GetFmt()->GetVertOrient();
+                    if ( nYPosDiff != 0 )
                     {
-                        SwFmtVertOrient aVert( rVert );
-                        aVert.SetVertOrient( VERT_NONE );
-                        aVert.SetPos( nRel );
-                        pFmt->SetAttr( aVert );
+
+                        if ( rVert.GetRelationOrient() == REL_CHAR ||
+                             rVert.GetRelationOrient() == REL_VERT_LINE )
+                        {
+                            nYPosDiff = -nYPosDiff;
+                        }
+                        aSet.Put( SwFmtVertOrient( rVert.GetPos()+nYPosDiff,
+                                                   VERT_NONE,
+                                                   rVert.GetRelationOrient() ) );
                     }
-                    ((SwTxtFrm*)pAnch)->Prepare();
-                    InvalidateAnchorOfVirtObjs();
+
+                    const SwFmtHoriOrient& rHori = GetFmt()->GetHoriOrient();
+                    if ( !ObjAnchoredAsChar() && nXPosDiff != 0 )
+                    {
+                        aSet.Put( SwFmtHoriOrient( rHori.GetPos()+nXPosDiff,
+                                                   HORI_NONE,
+                                                   rHori.GetRelationOrient() ) );
+                    }
+
+                    if ( nYPosDiff ||
+                         ( !ObjAnchoredAsChar() && nXPosDiff != 0 ) )
+                    {
+                        GetFmt()->GetDoc()->SetFlyFrmAttr( *(GetFmt()), aSet );
+                        // keep new object rectangle, to avoid multiple
+                        // changes of the attributes by multiple event from
+                        // the drawing layer - e.g. group objects and its members
+                        static_cast<SwAnchoredDrawObject*>(
+                            GetAnchoredObj( &(const_cast<SdrObject&>(rObj) )))
+                                ->LastObjRect() = aObjRect.SVRect();
+                    }
+                    else if ( aObjRect.SSize() != aOldObjRect.GetSize() )
+                    {
+                        _InvalidateObjs();
+                    }
+                }
+                else
+                {
+                    static_cast<SwAnchoredDrawObject*>(
+                            GetAnchoredObj( GetMaster() ))->SetPositioningAttr();
                 }
             }
-            else if( bNotify )
-                lcl_Notify( this, pOldBoundRect );
-            break;
+            if ( bNotify )
+            {
+                Rectangle* pOldRect = new Rectangle( aOldObjRect );;
+                if ( rObj.ISA(SwDrawVirtObj) )
+                {
+                    const Point aOffset = static_cast<const SwDrawVirtObj&>(rObj).GetOffset();
+                    pOldRect->Move( -aOffset.X(), -aOffset.Y() );
+                }
+                lcl_NotifyBackgroundOfObj( *this, *GetMaster(), pOldRect );
+                NotifyBackgrdOfAllVirtObjs( pOldRect );
+                delete pOldRect;
+            }
+        }
+        break;
         case SDRUSERCALL_CHGATTR:
-            if( bNotify )
-                lcl_Notify( this, pOldBoundRect );
+            if ( bNotify )
+            {
+                lcl_NotifyBackgroundOfObj( *this, rObj, pOldBoundRect );
+            }
             break;
     }
 }
@@ -1005,81 +1329,91 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     ASSERT( !mbDisconnectInProgress,
             "<SwDrawContact::Modify(..)> called during disconnection.");
 
-    //Es kommen immer Sets herein.
-    //MA 03. Dec. 95: Falsch es kommen nicht immer Sets herein
-    //(siehe SwRootFrm::AssertPageFlys()
     USHORT nWhich = pNew ? pNew->Which() : 0;
-    SwFmtAnchor *pAnch = 0;
-    if( RES_ATTRSET_CHG == nWhich )
+    SwFmtAnchor* pAnchorFmt = 0L;
+    if ( RES_ATTRSET_CHG == nWhich )
     {
-        if( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                            RES_ANCHOR, FALSE, (const SfxPoolItem**)&pAnch ))
-        ;       // Beim GetItemState wird der AnkerPointer gesetzt !
-        else if( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
-                                 GetItemState( RES_VERT_ORIENT, FALSE ))
+        if ( SFX_ITEM_SET == static_cast<SwAttrSetChg*>(pNew)->GetChgSet()->
+                GetItemState( RES_ANCHOR, FALSE, (const SfxPoolItem**)&pAnchorFmt ) )
         {
-            SwFrm* pFrm = GetAnchor();
-            // OD 10.10.2003 #112299# - do not try to connect to layout during
-            // disconnection from layout.
-            if ( !pFrm && !mbDisconnectInProgress )
-            {
-                ConnectToLayout();
-                pFrm = GetAnchor();
-            }
-            if( pFrm && pFrm->IsTxtFrm() )
-                ((SwTxtFrm*)pFrm)->Prepare();
+            // <pAnchorFmt> is set and will be handled below
         }
     }
-    else if( RES_ANCHOR == nWhich )
-        pAnch = (SwFmtAnchor*)pNew;
+    else if ( RES_ANCHOR == nWhich )
+    {
+        pAnchorFmt = static_cast<SwFmtAnchor*>(pNew);
+    }
 
-    if ( pAnch )
+    if ( pAnchorFmt )
     {
         // JP 10.04.95: nicht auf ein Reset Anchor reagieren !!!!!
-        if ( SFX_ITEM_SET == ((SwFrmFmt*)pRegisteredIn)->GetAttrSet().
-            GetItemState( RES_ANCHOR, FALSE ) )
+        if ( SFX_ITEM_SET ==
+                //((SwFrmFmt*)pRegisteredIn)->GetAttrSet().GetItemState( RES_ANCHOR, FALSE ) )
+                GetFmt()->GetAttrSet().GetItemState( RES_ANCHOR, FALSE ) )
         {
             // OD 10.10.2003 #112299# - no connect to layout during disconnection
             if ( !mbDisconnectInProgress )
             {
-                if( !FLY_IN_CNTNT == pAnch->GetAnchorId() )
-                    ((SwFrmFmt*)pRegisteredIn)->ResetAttr( RES_VERT_ORIENT );
-
-                SwFrm *pOldAnch = GetAnchor();
-                SwPageFrm *pPg = NULL;
-                SwRect aOldRect;
-                if( pOldAnch )
+                // determine old object retangle of 'master' drawing object
+                // for notification
+                const Rectangle* pOldRect = 0L;
+                if ( GetAnchorFrm() )
                 {
-                    pPg = pOldAnch->FindPageFrm();
-                    aOldRect = SwRect( GetMaster()->GetCurrentBoundRect() );
+                    pOldRect = &GetMaster()->GetCurrentBoundRect();
                 }
-                ConnectToLayout( pAnch );
-                if( pPg && aOldRect.HasArea() )
-                    Notify_Background(GetMaster(),pPg,aOldRect,PREP_FLY_LEAVE,TRUE);
-                lcl_Notify( this, NULL );
-
-                // #86973#
-                if(GetMaster())
-                {
-                    GetMaster()->SetChanged();
-                    GetMaster()->BroadcastObjectChange();
-                }
+                // re-connect to layout due to anchor format change
+                ConnectToLayout( pAnchorFmt );
+                // notify background of drawing objects
+                lcl_NotifyBackgroundOfObj( *this, *GetMaster(), pOldRect );
+                NotifyBackgrdOfAllVirtObjs( pOldRect );
             }
         }
         else
             DisconnectFromLayout();
     }
-    else if( RES_SURROUND == nWhich || RES_UL_SPACE == nWhich ||
-             RES_LR_SPACE == nWhich ||
-             ( RES_ATTRSET_CHG == nWhich &&
-               ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+    else if ( RES_SURROUND == nWhich ||
+              RES_UL_SPACE == nWhich || RES_LR_SPACE == nWhich ||
+              ( RES_ATTRSET_CHG == nWhich &&
+                ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
                             RES_SURROUND, FALSE ) ||
-                 SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
                             RES_LR_SPACE, FALSE ) ||
-                 SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
                             RES_UL_SPACE, FALSE ) ) ) )
-        lcl_Notify( this, NULL );
+    {
+        lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
+        NotifyBackgrdOfAllVirtObjs( 0L );
+        _InvalidateObjs();
+    }
+    else if ( RES_HORI_ORIENT == nWhich || RES_VERT_ORIENT == nWhich ||
+              ( RES_ATTRSET_CHG == nWhich &&
+                ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                            RES_HORI_ORIENT, FALSE ) ||
+                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                            RES_VERT_ORIENT, FALSE ) ) ) )
+    {
+        lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
+        NotifyBackgrdOfAllVirtObjs( 0L );
+        _InvalidateObjs();
+    }
 }
+
+// OD 2004-03-31 #i26791#
+void SwDrawContact::_InvalidateObjs()
+{
+    // invalidate position of existing 'virtual' drawing objects
+    for ( std::list<SwDrawVirtObj*>::iterator aDisconnectIter = maDrawVirtObjs.begin();
+          aDisconnectIter != maDrawVirtObjs.end();
+          ++aDisconnectIter )
+    {
+        SwDrawVirtObj* pDrawVirtObj = (*aDisconnectIter);
+        pDrawVirtObj->AnchoredObj()->InvalidateObjPos();
+    }
+
+    // invalidate position of 'master' drawing object
+    GetAnchoredObj()->InvalidateObjPos();
+}
+
 
 
 /*************************************************************************
@@ -1107,9 +1441,9 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
         pDrawVirtObj->RemoveFromDrawingPage();
     }
 
-    if ( pAnchor )
+    if ( GetAnchorFrm() )
     {
-        pAnchor->RemoveDrawObj( this );
+        GetAnchorFrm()->RemoveDrawObj( this );
     }
 
     if ( _bMoveMasterToInvisibleLayer && GetMaster() && GetMaster()->IsInserted() )
@@ -1177,21 +1511,15 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
             // replace found 'virtual' drawing object by 'master' drawing
             // object and disconnect the 'virtual' one
             SwDrawVirtObj* pDrawVirtObj = (*aFoundVirtObjIter);
-            SwFrm* pNewAnchorFrmOfMaster = pDrawVirtObj->GetAnchorFrm();
-            Point aNewAnchorPos = pDrawVirtObj->GetAnchorPos();
+            SwFrm* pNewAnchorFrmOfMaster = pDrawVirtObj->AnchorFrm();
             // disconnect 'virtual' drawing object
             pDrawVirtObj->RemoveFromWriterLayout();
             pDrawVirtObj->RemoveFromDrawingPage();
             // disconnect 'master' drawing object from current frame
-            pAnchor->RemoveDrawObj( this );
+            GetAnchorFrm()->RemoveDrawObj( this );
             // re-connect 'master' drawing object to frame of found 'virtual'
             // drawing object.
             pNewAnchorFrmOfMaster->AppendDrawObj( this );
-            // set anchor position at 'master' virtual drawing object to the
-            // one of the found 'virtual' drawing object.
-            GetMaster()->SetAnchorPos( aNewAnchorPos );
-            // restore positions of remaining 'virtual' drawing objects
-            CorrectRelativePosOfVirtObjs();
         }
         else
         {
@@ -1253,8 +1581,6 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
         pAnch = &(pDrawFrmFmt->GetAnchor());
     }
 
-    bool bSetAnchorPos = true;
-
     switch ( pAnch->GetAnchorId() )
     {
         case FLY_PAGE:
@@ -1269,7 +1595,6 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
 
                 if ( pPage )
                 {
-                    bSetAnchorPos = false;
                     pPage->SwFrm::AppendDrawObj( this );
                 }
                 else
@@ -1391,79 +1716,18 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                         {
                             pFrm->InvalidatePrt();
                         }
-
-                        bSetAnchorPos = false;
                     }
                 }
             }
             break;
-/*
-        case FLY_AT_FLY:
-            {
-                if( pAnch->GetCntntAnchor() ) // LAYER_IMPL
-                {
-                    SwFrm *pAnchor = 0;
-                    //Erst einmal ueber den Inhalt suchen, weil konstant schnell. Kann
-                    //Bei verketteten Rahmen aber auch schief gehen, weil dann evtl.
-                    //niemals ein Frame zu dem Inhalt existiert. Dann muss leider noch
-                    //die Suche vom StartNode zum FrameFormat sein.
-                    SwNodeIndex aIdx( pAnch->GetCntntAnchor()->nNode );
-                    SwCntntNode *pCNd = pFmt->GetDoc()->GetNodes().GoNext( &aIdx );
-                    if ( pCNd && 0 != (pAnchor = pCNd->GetFrm( 0, 0, FALSE ) ) )
-                        pAnchor = pAnchor->FindFlyFrm();
-                    else
-                    {
-                        const SwNodeIndex &rIdx = pAnch->GetCntntAnchor()->nNode;
-                        SwSpzFrmFmts& rFmts = *pFmt->GetDoc()->GetSpzFrmFmts();
-                        for( USHORT i = 0; i < rFmts.Count(); ++i )
-                        {
-                            SwFrmFmt *pFmt = rFmts[i];
-                            SwFlyFrmFmt* pFlyFmt;
-                            if( 0 != (pFlyFmt = PTR_CAST( SwFlyFrmFmt, pFmt )) &&
-                                pFlyFmt->GetCntnt().GetCntntIdx() && //#57390#, Reader
-                                rIdx == *pFlyFmt->GetCntnt().GetCntntIdx() )
-                            {
-                                pAnchor = pFlyFmt->GetFrm( 0, FALSE );
-                                break;
-                            }
-                        }
-                    }
-                    if ( pAnchor )  //Kann sein, dass der Anker noch nicht existiert
-                    {
-                        pAnchor->FindFlyFrm()->AppendDrawObj( this );
-                        bSetAnchorPos = false;
-                    }
-                }
-            }
-            break;
-*/
-/*
-        case FLY_IN_CNTNT:
-            {
-                ClrContourCache( GetMaster() );
-                SwCntntNode *pNode = GetFmt()->GetDoc()->
-                        GetNodes()[pAnch->GetCntntAnchor()->nNode]->GetCntntNode();
-                SwCntntFrm *pCntnt = pNode->GetFrm( 0, 0, FALSE );
-                if ( pCntnt )
-                {
-                    //Kann sein, dass der Anker noch nicht existiert
-                    pCntnt->AppendDrawObj( this );
-                    pCntnt->InvalidatePrt();
-                }
-                bSetAnchorPos = false;
-            }
-            break;
-*/
 #ifndef PRODUCT
         default:    ASSERT( FALSE, "Unknown Anchor." );
 #endif
     }
-    if ( GetAnchor() )
+    if ( GetAnchorFrm() )
     {
-        if( bSetAnchorPos )
-        {
-            GetMaster()->SetAnchorPos( GetAnchor()->GetFrmAnchorPos( ::HasWrap( GetMaster() ) ) );
-    }
+        // OD 2004-04-01 #i26791# - invalidate objects instead of direct positioning
+        _InvalidateObjs();
         // OD 21.08.2003 #i18447# - in order to consider group object correct
         // use new method <SwDrawContact::MoveObjToVisibleLayer(..)>
         MoveObjToVisibleLayer( GetMaster() );
@@ -1481,50 +1745,6 @@ void SwDrawContact::InsertMasterIntoDrawPage()
     GetMaster()->SetUserCall( this );
 }
 
-// OD 20.06.2003 #108784# - method in order to correct relative positioning of
-// 'virtual' drawing objects, e.g. caused by a <NbcSetAnchorPos(..)> at the
-// 'master' drawing object.
-void SwDrawContact::CorrectRelativePosOfVirtObjs()
-{
-    for ( std::list<SwDrawVirtObj*>::iterator aDrawVirtObjIter = maDrawVirtObjs.begin();
-          aDrawVirtObjIter != maDrawVirtObjs.end();
-          ++aDrawVirtObjIter )
-    {
-        SwDrawVirtObj* pDrawVirtObj = (*aDrawVirtObjIter);
-        pDrawVirtObj->AdjustRelativePosToReference();
-    }
-}
-
-// OD 20.06.2003 #108784# - correct in-direct movements of the 'virtual'
-// drawing objects, e.g. caused by a <NbcMove(..)> at the 'master' drawing object
-void SwDrawContact::MoveOffsetOfVirtObjs( const Size& _rMoveSize )
-{
-    for ( std::list<SwDrawVirtObj*>::iterator aDrawVirtObjIter = maDrawVirtObjs.begin();
-          aDrawVirtObjIter != maDrawVirtObjs.end();
-          ++aDrawVirtObjIter )
-    {
-        SwDrawVirtObj* pDrawVirtObj = (*aDrawVirtObjIter);
-        pDrawVirtObj->SetOffset( pDrawVirtObj->GetOffset() - Point(_rMoveSize.Width(), _rMoveSize.Height()) );
-    }
-}
-
-// OD 26.06.2003 #108784# - invalidate anchor frames of 'virtual' drawing objects.
-// Needed for, e.g., 'as character' anchored drawing objects and a change of the
-// 'master' drawing object.
-void SwDrawContact::InvalidateAnchorOfVirtObjs()
-{
-    for ( std::list<SwDrawVirtObj*>::iterator aDrawVirtObjIter = maDrawVirtObjs.begin();
-          aDrawVirtObjIter != maDrawVirtObjs.end();
-          ++aDrawVirtObjIter )
-    {
-        SwDrawVirtObj* pDrawVirtObj = (*aDrawVirtObjIter);
-        if ( pDrawVirtObj->GetAnchorFrm() )
-        {
-            pDrawVirtObj->GetAnchorFrm()->Prepare();
-        }
-    }
-}
-
 /*************************************************************************
 |*
 |*  SwDrawContact::FindPage(), ChkPage()
@@ -1536,9 +1756,9 @@ void SwDrawContact::InvalidateAnchorOfVirtObjs()
 
 SwPageFrm* SwDrawContact::FindPage( const SwRect &rRect )
 {
-    SwPageFrm *pPg = pPage;
-    if ( !pPg && pAnchor )
-        pPg = pAnchor->FindPageFrm();
+    SwPageFrm* pPg = GetPageFrm();
+    if ( !pPg && GetAnchorFrm() )
+        pPg = GetAnchorFrm()->FindPageFrm();
     if ( pPg )
         pPg = (SwPageFrm*)::FindPage( rRect, pPg );
     return pPg;
@@ -1554,21 +1774,21 @@ void SwDrawContact::ChkPage()
         return;
     }
 
-    SwPageFrm* pPg = pAnchor && pAnchor->IsPageFrm() ?
-        pPage : FindPage( GetMaster()->GetCurrentBoundRect() );
-    if ( pPage != pPg )
+    SwPageFrm* pPg = GetAnchorFrm() && GetAnchorFrm()->IsPageFrm() ?
+        GetPageFrm() : FindPage( GetMaster()->GetCurrentBoundRect() );
+    if ( GetPageFrm() != pPg )
     {
         // OD 27.06.2003 #108784# - if drawing object is anchor in header/footer
         // a change of the page is a dramatic change. Thus, completely re-connect
         // to the layout
-        if ( pAnchor && pAnchor->FindFooterOrHeader() )
+        if ( GetAnchorFrm() && GetAnchorFrm()->FindFooterOrHeader() )
         {
             ConnectToLayout();
         }
         else
         {
-            if ( pPage )
-                pPage->SwPageFrm::RemoveDrawObj( this );
+            if ( GetPageFrm() )
+                GetPageFrm()->SwPageFrm::RemoveDrawObj( this );
             pPg->SwPageFrm::AppendDrawObj( this );
             ChgPage( pPg );
         }
@@ -1590,7 +1810,7 @@ void SwDrawContact::ChkPage()
 //       returns a frame), if method is called.
 void SwDrawContact::ChangeMasterObject( SdrObject *pNewMaster )
 {
-    const SwFrm& rAnchorFrmOfMaster = *GetAnchor();
+    const SwFrm& rAnchorFrmOfMaster = *GetAnchorFrm();
 
     DisconnectFromLayout( false );
     // OD 10.07.2003 #110742# - consider 'virtual' drawing objects
@@ -1600,26 +1820,7 @@ void SwDrawContact::ChangeMasterObject( SdrObject *pNewMaster )
     SetMaster( pNewMaster );
     GetMaster()->SetUserCall( this );
 
-    Point aNewAnchor( rAnchorFrmOfMaster.GetFrmAnchorPos( ::HasWrap( GetMaster() ) ) );
-    GetMaster()->NbcSetRelativePos( GetMaster()->GetSnapRect().TopLeft() -
-                                    aNewAnchor );
-    GetMaster()->NbcSetAnchorPos( aNewAnchor );
-
-    // OD 10.07.2003 #110742# - connecting to layout not needed, because the
-    // connection to the layout has to be done by the caller.
-    // In current implementation this is <SwDPage::ReplaceObject(..)>, which
-    // causes an <SDRUSERCALL_INSERTED>. This takes care of the connection to
-    // layout.
-    /*
-    //Hier wird der neue Master ggf. in die Page eingefuegt, was das Drawing
-    //aber gar nicht gut haben kann. Deshalb nehmen wir das Objekt hinterher
-    //gleich wieder aus der Seite heraus.
-    FASTBOOL bInserted = pNewMaster->IsInserted();
-    ConnectToLayout();
-    if ( !bInserted && pNewMaster->IsInserted() )
-        ((SwFrmFmt*)pRegisteredIn)->GetDoc()->GetDrawModel()->GetPage(0)->
-                                    RemoveObject( GetMaster()->GetOrdNum() );
-    */
+    _InvalidateObjs();
 }
 
 // =============================================================================
@@ -1637,44 +1838,42 @@ TYPEINIT1(SwDrawVirtObj,SdrVirtObj);
 SwDrawVirtObj::SwDrawVirtObj( SdrObject&        _rNewObj,
                               SwDrawContact&    _rDrawContact )
     : SdrVirtObj( _rNewObj ),
-      mpAnchorFrm( 0 ),
+      // OD 2004-03-29 #i26791# - init new member <maAnchoredDrawObj>
+      maAnchoredDrawObj(),
       mpPageFrm( 0 ),
       mrDrawContact( _rDrawContact )
-{}
+{
+    // OD 2004-03-29 #i26791#
+    maAnchoredDrawObj.SetDrawObj( *this );
+}
 
 SwDrawVirtObj::SwDrawVirtObj( SdrObject&        _rNewObj,
                               const Point&      _rAnchorPos,
                               SwDrawContact&    _rDrawContact )
     : SdrVirtObj( _rNewObj, _rAnchorPos ),
-      mpAnchorFrm( 0 ),
+      // OD 2004-03-29 #i26791# - init new member <maAnchoredDrawObj>
+      maAnchoredDrawObj(),
       mpPageFrm( 0 ),
       mrDrawContact( _rDrawContact )
-{}
+{
+    // OD 2004-03-29 #i26791#
+    maAnchoredDrawObj.SetDrawObj( *this );
+}
 
 SwDrawVirtObj::~SwDrawVirtObj()
 {}
 
-void SwDrawVirtObj::SetOffset(const Point& rNewOffset)
-{
-    maOffset = rNewOffset;
-    SetRectsDirty();
-}
-
 const Point SwDrawVirtObj::GetOffset() const
 {
-    return maOffset;
+    return GetLastBoundRect().TopLeft() -
+           GetReferencedObj().GetLastBoundRect().TopLeft();
 }
 
 void SwDrawVirtObj::operator=( const SdrObject& rObj )
 {
-
     SdrVirtObj::operator=(rObj);
-
-    // copy local offset
-    if ( rObj.ISA(SwDrawVirtObj) )
-    {
-        maOffset = static_cast<const SwDrawVirtObj&>(rObj).maOffset;
-    }
+    // Note: Members <maAnchoredDrawObj>, <mpPageFrm> and <mrDrawContact>
+    //       haven't to be considered.
 }
 
 SdrObject* SwDrawVirtObj::Clone() const
@@ -1684,26 +1883,42 @@ SdrObject* SwDrawVirtObj::Clone() const
     if ( pObj )
     {
         pObj->operator=(static_cast<const SdrObject&>(*this));
-    //*pObj = *this;
-
-        // members <mpAnchorFrm> and <mpPageFrm> not cloned.
+        // Note: Members <maAnchoredDrawObj> and <mpPageFrm> haven't to be considered.
     }
 
     return pObj;
 }
 
 // --------------------------------------------------------------------
-// connection to writer layout: <SetAnchorFrm(..)>, <GetAnchorFrm()>,
-// <SetPageFrm(..)>, <GetPageFrm()> and <RemoveFromWriterLayout()>
+// connection to writer layout: <GetAnchoredObj()>, <SetAnchorFrm(..)>,
+// <GetAnchorFrm()>, <SetPageFrm(..)>, <GetPageFrm()> and <RemoveFromWriterLayout()>
 // --------------------------------------------------------------------
-void SwDrawVirtObj::SetAnchorFrm( SwFrm* _pNewAnchorFrm )
+const SwAnchoredObject* SwDrawVirtObj::GetAnchoredObj() const
 {
-    mpAnchorFrm = _pNewAnchorFrm;
+    return &maAnchoredDrawObj;
 }
 
-SwFrm* SwDrawVirtObj::GetAnchorFrm() const
+SwAnchoredObject* SwDrawVirtObj::AnchoredObj()
 {
-    return mpAnchorFrm;
+    return &maAnchoredDrawObj;
+}
+
+void SwDrawVirtObj::SetAnchorFrm( SwFrm* _pNewAnchorFrm )
+{
+    // OD 2004-03-29 #i26791# - use new member <maAnchoredDrawObj>
+    maAnchoredDrawObj.ChgAnchorFrm( _pNewAnchorFrm );
+}
+
+const SwFrm* SwDrawVirtObj::GetAnchorFrm() const
+{
+    // OD 2004-03-29 #i26791# - use new member <maAnchoredDrawObj>
+    return maAnchoredDrawObj.GetAnchorFrm();
+}
+
+SwFrm* SwDrawVirtObj::AnchorFrm()
+{
+    // OD 2004-03-29 #i26791# - use new member <maAnchoredDrawObj>
+    return maAnchoredDrawObj.AnchorFrm();
 }
 
 void SwDrawVirtObj::SetPageFrm( SwPageFrm* _pNewPageFrm )
@@ -1711,7 +1926,7 @@ void SwDrawVirtObj::SetPageFrm( SwPageFrm* _pNewPageFrm )
     mpPageFrm = _pNewPageFrm;
 }
 
-SwPageFrm* SwDrawVirtObj::GetPageFrm() const
+SwPageFrm* SwDrawVirtObj::GetPageFrm()
 {
     return mpPageFrm;
 }
@@ -1719,9 +1934,10 @@ SwPageFrm* SwDrawVirtObj::GetPageFrm() const
 void SwDrawVirtObj::RemoveFromWriterLayout()
 {
     // remove contact object from frame for 'virtual' drawing object
-    if ( GetAnchorFrm() )
+    // OD 2004-03-29 #i26791# - use new member <maAnchoredDrawObj>
+    if ( maAnchoredDrawObj.GetAnchorFrm() )
     {
-        GetAnchorFrm()->RemoveVirtDrawObj( &mrDrawContact, this );
+        maAnchoredDrawObj.AnchorFrm()->RemoveVirtDrawObj( &mrDrawContact, this );
     }
 }
 
@@ -1760,88 +1976,89 @@ bool SwDrawVirtObj::IsConnected() const
     return bRetVal;
 }
 
-// OD 19.06.2003 #108784# - adjust the relative postion of the 'virtual'
-// drawing object to the reference object
-void SwDrawVirtObj::AdjustRelativePosToReference()
-{
-    Point aVirtRelPos = GetRelativePos();
-    Point aOrigialRelativePos = GetReferencedObj().GetRelativePos();
-    Point aDiff = aVirtRelPos - aOrigialRelativePos;
-    if( aDiff.X() || aDiff.Y() )
-    {
-        SetOffset( GetOffset() - aDiff );
-    }
-}
-
-// #108784#
-// All AnchorPos influencing methods which shall not change the
-// original object positions.
-
-void SwDrawVirtObj::NbcSetRelativePos(const Point& rPnt)
-{
-    ReferencedObj().NbcSetRelativePos( rPnt );
-}
-
-void SwDrawVirtObj::NbcSetAnchorPos(const Point& rPnt)
-{
-    Point aDelta(rPnt - aAnchor);
-
-    aAnchor = rPnt;
-    maOffset += aDelta;
-    SetRectsDirty();
-}
-
-// #108784#
-// All overloaded methods which need to use the offset to move
-// the object position virtually.
-
 const Rectangle& SwDrawVirtObj::GetCurrentBoundRect() const
 {
-    ((SwDrawVirtObj*)this)->aOutRect = rRefObj.GetCurrentBoundRect(); // Hier noch optimieren
-    ((SwDrawVirtObj*)this)->aOutRect += maOffset;
-
+//    ((SwDrawVirtObj*)this)->aOutRect = rRefObj.GetCurrentBoundRect(); // Hier noch optimieren
+//    ((SwDrawVirtObj*)this)->aOutRect += GetOffset();
+    if (bBoundRectDirty)
+    {
+        const_cast<SwDrawVirtObj*>(this)->RecalcBoundRect();
+        const_cast<SwDrawVirtObj*>(this)->bBoundRectDirty = FALSE;
+    }
     return aOutRect;
 }
 
 const Rectangle& SwDrawVirtObj::GetLastBoundRect() const
 {
-    ((SwDrawVirtObj*)this)->aOutRect = rRefObj.GetLastBoundRect(); // Hier noch optimieren
-    ((SwDrawVirtObj*)this)->aOutRect += maOffset;
+//    ((SwDrawVirtObj*)this)->aOutRect = rRefObj.GetLastBoundRect(); // Hier noch optimieren
+//    ((SwDrawVirtObj*)this)->aOutRect += GetOffset();
 
     return aOutRect;
 }
 
 void SwDrawVirtObj::RecalcBoundRect()
 {
-    aOutRect = rRefObj.GetCurrentBoundRect();
-    aOutRect += maOffset;
+    // OD 2004-04-05 #i26791# - switch order of calling <GetOffset()> and
+    // <ReferencedObj().GetCurrentBoundRect()>, because <GetOffset()> calculates
+    // its value by the 'BoundRect' of the referenced object.
+    //aOutRect = rRefObj.GetCurrentBoundRect();
+    //aOutRect += GetOffset();
+    Point aOffset = GetOffset();
+    aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
 }
 
-sal_Bool SwDrawVirtObj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
-{
-    FASTBOOL bRet;
+sal_Bool SwDrawVirtObj::DoPaintObject( ExtOutputDevice& rOut,
+                                       const SdrPaintInfoRec& rInfoRec ) const
 
-    Point aOfs(rOut.GetOffset());
-    rOut.SetOffset(aOfs + maOffset);
-    if ( GetSubList() && GetSubList()->GetObjCount() )
+{
+    sal_Bool bRetval;
+    const SdrObject& rReferencedObject = GetReferencedObj();
+
+    // rescue offset and set new one
+    const Point aOfs(rOut.GetOffset());
+    const Point aLocalOffset(GetOffset());
+    rOut.SetOffset(aOfs + aLocalOffset);
+    if ( rReferencedObject.ISA(SdrObjGroup) )
     {
-        SdrPaintInfoRec aCopyInfoRec = rInfoRec;
-        aCopyInfoRec.aCheckRect.Move( -maOffset.X(), -maOffset.Y() );
-        aCopyInfoRec.aDirtyRect.Move( -maOffset.X(), -maOffset.Y() );
-        bRet = rRefObj.DoPaintObject(rOut, aCopyInfoRec);
+
+        // If it's a group object, paint the whole group content
+        // using a temporary ObjectContactOfObjListPainter
+        sdr::contact::SdrObjectVector aObjectVector;
+        aObjectVector.push_back(&((SdrObject&)rReferencedObject));
+
+        sdr::contact::ObjectContactOfObjListPainter aPainter(aObjectVector);
+        sdr::contact::DisplayInfo aDisplayInfo;
+        SdrPaintInfoRec aCopyInfoRec(rInfoRec);
+        aCopyInfoRec.aCheckRect.Move( -aLocalOffset.X(), -aLocalOffset.Y() );
+        aCopyInfoRec.aDirtyRect.Move( -aLocalOffset.X(), -aLocalOffset.Y() );
+        aDisplayInfo.SetExtendedOutputDevice(&rOut);
+        aDisplayInfo.SetPaintInfoRec(&aCopyInfoRec);
+        aDisplayInfo.SetOutputDevice(rOut.GetOutDev());
+
+        // keep draw hierarchy up-to-date
+        aPainter.PreProcessDisplay(aDisplayInfo);
+
+        // do processing
+        aPainter.ProcessDisplay(aDisplayInfo);
+
+        // prepare delete
+        aPainter.PrepareDelete();
     }
     else
     {
-        bRet = rRefObj.DoPaintObject(rOut, rInfoRec);
+        // If it's a single object, paint it
+        bRetval = rRefObj.DoPaintObject(rOut, rInfoRec);
     }
+
+    // restore offset
     rOut.SetOffset(aOfs);
 
-    return bRet;
+    return bRetval;
 }
 
 SdrObject* SwDrawVirtObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
-    Point aPnt(rPnt - maOffset);
+    Point aPnt(rPnt - GetOffset());
     FASTBOOL bRet = rRefObj.CheckHit(aPnt, nTol, pVisiLayer) != NULL;
 
     return bRet ? (SdrObject*)this : NULL;
@@ -1850,19 +2067,19 @@ SdrObject* SwDrawVirtObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfBy
 void SwDrawVirtObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
 {
     rRefObj.TakeXorPoly(rPoly, bDetail);
-    rPoly.Move(maOffset.X(), maOffset.Y());
+    rPoly.Move(GetOffset().X(), GetOffset().Y());
 }
 
 void SwDrawVirtObj::TakeContour(XPolyPolygon& rPoly) const
 {
     rRefObj.TakeContour(rPoly);
-    rPoly.Move(maOffset.X(), maOffset.Y());
+    rPoly.Move(GetOffset().X(), GetOffset().Y());
 }
 
 SdrHdl* SwDrawVirtObj::GetHdl(USHORT nHdlNum) const
 {
     SdrHdl* pHdl = rRefObj.GetHdl(nHdlNum);
-    Point aP(pHdl->GetPos() + maOffset);
+    Point aP(pHdl->GetPos() + GetOffset());
     pHdl->SetPos(aP);
 
     return pHdl;
@@ -1871,47 +2088,49 @@ SdrHdl* SwDrawVirtObj::GetHdl(USHORT nHdlNum) const
 SdrHdl* SwDrawVirtObj::GetPlusHdl(const SdrHdl& rHdl, USHORT nPlNum) const
 {
     SdrHdl* pHdl = rRefObj.GetPlusHdl(rHdl, nPlNum);
-    pHdl->SetPos(pHdl->GetPos() + maOffset);
+    pHdl->SetPos(pHdl->GetPos() + GetOffset());
 
     return pHdl;
 }
 
 void SwDrawVirtObj::NbcMove(const Size& rSiz)
 {
-    rRefObj.NbcMove( rSiz );
-    SetRectsDirty();
+    SdrObject::NbcMove( rSiz );
+//    rRefObj.NbcMove( rSiz );
+//    SetRectsDirty();
 }
 
 void SwDrawVirtObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    rRefObj.NbcResize(rRef - maOffset, xFact, yFact);
+    rRefObj.NbcResize(rRef - GetOffset(), xFact, yFact);
     SetRectsDirty();
 }
 
 void SwDrawVirtObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 {
-    rRefObj.NbcRotate(rRef - maOffset, nWink, sn, cs);
+    rRefObj.NbcRotate(rRef - GetOffset(), nWink, sn, cs);
     SetRectsDirty();
 }
 
 void SwDrawVirtObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
-    rRefObj.NbcMirror(rRef1 - maOffset, rRef2 - maOffset);
+    rRefObj.NbcMirror(rRef1 - GetOffset(), rRef2 - GetOffset());
     SetRectsDirty();
 }
 
 void SwDrawVirtObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
 {
-    rRefObj.NbcShear(rRef - maOffset, nWink, tn, bVShear);
+    rRefObj.NbcShear(rRef - GetOffset(), nWink, tn, bVShear);
     SetRectsDirty();
 }
 
 void SwDrawVirtObj::Move(const Size& rSiz)
 {
-    Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
-    rRefObj.Move( rSiz );
-    SetRectsDirty();
-    SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
+    SdrObject::Move( rSiz );
+//    Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
+//    rRefObj.Move( rSiz );
+//    SetRectsDirty();
+//    SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
 }
 
 void SwDrawVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
@@ -1919,7 +2138,7 @@ void SwDrawVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fract
     if(xFact.GetNumerator() != xFact.GetDenominator() || yFact.GetNumerator() != yFact.GetDenominator())
     {
         Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
-        rRefObj.Resize(rRef - maOffset, xFact, yFact);
+        rRefObj.Resize(rRef - GetOffset(), xFact, yFact);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
     }
@@ -1930,7 +2149,7 @@ void SwDrawVirtObj::Rotate(const Point& rRef, long nWink, double sn, double cs)
     if(nWink)
     {
         Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
-        rRefObj.Rotate(rRef - maOffset, nWink, sn, cs);
+        rRefObj.Rotate(rRef - GetOffset(), nWink, sn, cs);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
     }
@@ -1939,7 +2158,7 @@ void SwDrawVirtObj::Rotate(const Point& rRef, long nWink, double sn, double cs)
 void SwDrawVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
 {
     Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
-    rRefObj.Mirror(rRef1 - maOffset, rRef2 - maOffset);
+    rRefObj.Mirror(rRef1 - GetOffset(), rRef2 - GetOffset());
     SetRectsDirty();
     SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
 }
@@ -1949,7 +2168,7 @@ void SwDrawVirtObj::Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVS
     if(nWink)
     {
         Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
-        rRefObj.Shear(rRef - maOffset, nWink, tn, bVShear);
+        rRefObj.Shear(rRef - GetOffset(), nWink, tn, bVShear);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
     }
@@ -1958,13 +2177,13 @@ void SwDrawVirtObj::Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVS
 void SwDrawVirtObj::RecalcSnapRect()
 {
     aSnapRect = rRefObj.GetSnapRect();
-    aSnapRect += maOffset;
+    aSnapRect += GetOffset();
 }
 
 const Rectangle& SwDrawVirtObj::GetSnapRect() const
 {
     ((SwDrawVirtObj*)this)->aSnapRect = rRefObj.GetSnapRect();
-    ((SwDrawVirtObj*)this)->aSnapRect += maOffset;
+    ((SwDrawVirtObj*)this)->aSnapRect += GetOffset();
 
     return aSnapRect;
 }
@@ -1973,7 +2192,7 @@ void SwDrawVirtObj::SetSnapRect(const Rectangle& rRect)
 {
     Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
     Rectangle aR(rRect);
-    aR -= maOffset;
+    aR -= GetOffset();
     rRefObj.SetSnapRect(aR);
     SetRectsDirty();
     SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
@@ -1982,7 +2201,7 @@ void SwDrawVirtObj::SetSnapRect(const Rectangle& rRect)
 void SwDrawVirtObj::NbcSetSnapRect(const Rectangle& rRect)
 {
     Rectangle aR(rRect);
-    aR -= maOffset;
+    aR -= GetOffset();
     SetRectsDirty();
     rRefObj.NbcSetSnapRect(aR);
 }
@@ -1990,7 +2209,7 @@ void SwDrawVirtObj::NbcSetSnapRect(const Rectangle& rRect)
 const Rectangle& SwDrawVirtObj::GetLogicRect() const
 {
     ((SwDrawVirtObj*)this)->aSnapRect = rRefObj.GetLogicRect();
-    ((SwDrawVirtObj*)this)->aSnapRect += maOffset;
+    ((SwDrawVirtObj*)this)->aSnapRect += GetOffset();
 
     return aSnapRect;
 }
@@ -1999,7 +2218,7 @@ void SwDrawVirtObj::SetLogicRect(const Rectangle& rRect)
 {
     Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
     Rectangle aR(rRect);
-    aR -= maOffset;
+    aR -= GetOffset();
     rRefObj.SetLogicRect(aR);
     SetRectsDirty();
     SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
@@ -2008,7 +2227,7 @@ void SwDrawVirtObj::SetLogicRect(const Rectangle& rRect)
 void SwDrawVirtObj::NbcSetLogicRect(const Rectangle& rRect)
 {
     Rectangle aR(rRect);
-    aR -= maOffset;
+    aR -= GetOffset();
     rRefObj.NbcSetLogicRect(aR);
     SetRectsDirty();
 }
@@ -2016,7 +2235,7 @@ void SwDrawVirtObj::NbcSetLogicRect(const Rectangle& rRect)
 Point SwDrawVirtObj::GetSnapPoint(USHORT i) const
 {
     Point aP(rRefObj.GetSnapPoint(i));
-    aP += maOffset;
+    aP += GetOffset();
 
     return aP;
 }
@@ -2024,7 +2243,7 @@ Point SwDrawVirtObj::GetSnapPoint(USHORT i) const
 const Point& SwDrawVirtObj::GetPoint(USHORT i) const
 {
     ((SwDrawVirtObj*)this)->aHack = rRefObj.GetPoint(i);
-    ((SwDrawVirtObj*)this)->aHack += maOffset;
+    ((SwDrawVirtObj*)this)->aHack += GetOffset();
 
     return aHack;
 }
@@ -2032,7 +2251,7 @@ const Point& SwDrawVirtObj::GetPoint(USHORT i) const
 void SwDrawVirtObj::NbcSetPoint(const Point& rPnt, USHORT i)
 {
     Point aP(rPnt);
-    aP -= maOffset;
+    aP -= GetOffset();
     rRefObj.SetPoint(aP, i);
     SetRectsDirty();
 }
@@ -2046,7 +2265,6 @@ FASTBOOL SwDrawVirtObj::HasTextEdit() const
 // OD 18.06.2003 #108784# - overloaded 'layer' methods for 'virtual' drawing
 // object to assure, that layer of 'virtual' object is the layer of the referenced
 // object.
-// NOTE: member <
 SdrLayerID SwDrawVirtObj::GetLayer() const
 {
     return GetReferencedObj().GetLayer();
