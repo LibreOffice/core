@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: tbe $ $Date: 2001-04-10 15:15:15 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:46:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,25 +68,10 @@ AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-.IF "$(header)" == ""
-
-CXXFILES=	dlged.cxx		\
-            dlgedfunc.cxx	\
-            dlgedfac.cxx	\
-            dlgedmod.cxx	\
-            dlgedpage.cxx	\
-            dlgedview.cxx	\
-            dlgedobj.cxx	\
-            dlgedlist.cxx	\
-            dlgedclip.cxx	\
-            propbrw.cxx
 
 SLOFILES=	$(SLO)$/dlged.obj		\
             $(SLO)$/dlgedfunc.obj	\
@@ -105,10 +90,10 @@ EXCEPTIONSFILES=$(SLO)$/dlged.obj	\
                 $(SLO)$/dlgedclip.obj	\
                 $(SLO)$/propbrw.obj
 
-SRCFILES=	dlgresid.src
-
-.ENDIF
+SRS1NAME=$(TARGET)
+SRC1FILES=	dlgresid.src
 
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
+
