@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:40:03 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 15:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ struct ScConsolidateParam;
 class ScDPObject;
 class ScDPCollection;
 class ScMatrix;
+class ScScriptTypeData;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -350,6 +351,7 @@ private:
     ScChangeTrack*      pChangeTrack;
     SfxBroadcaster*     pUnoBroadcaster;
     ScChangeViewSettings* pChangeViewSettings;
+    ScScriptTypeData*   pScriptTypeData;
 
     Link                aColorLink;                     // fuer Farben in Z.Formaten
     String              aProtectPass;
