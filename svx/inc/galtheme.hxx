@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:52:13 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include <svtools/brdcst.hxx>
 #include <svtools/lstner.hxx>
 #include <svtools/transfer.hxx>
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 #include "galobj.hxx"
 #include "galmisc.hxx"
 #include "gallery1.hxx"
@@ -125,7 +125,7 @@ private:
 
     GalleryObjectList           aObjectList;
     String                      aImportName;
-    SvStorageRef                aSvDrawStorageRef;
+    SotStorageRef               aSvDrawStorageRef;
     Gallery*                    pParent;
     GalleryThemeEntry*          pThm;
     ULONG                       mnLockCount;
@@ -196,7 +196,7 @@ public:
     void                        AbortActualize() { bAbortActualize = TRUE; }
 
     Gallery*                    GetParent() const { return pParent; }
-    SvStorageRef                GetSvDrawStorage() const { return aSvDrawStorageRef; }
+    SotStorageRef               GetSvDrawStorage() const { return aSvDrawStorageRef; }
 
 public:
 
