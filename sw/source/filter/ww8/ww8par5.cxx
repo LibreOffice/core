@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mh $ $Date: 2002-10-24 09:02:24 $
+ *  last change: $Author: cmc $ $Date: 2002-10-24 12:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,11 +727,44 @@ void SwWW8ImplReader::UpdateFields()
     rDoc.SetInitDBFields(true);             // Datenbank-Felder auch
 }
 
+void SwWW8ImplReader::End_Field()
+{
+    if (nIniFlags & WW8FL_NO_FLD)
+        return;
+
+    WW8PLCFx_FLD* pF = pPlcxMan->GetFld();
+    ASSERT(pF, "WW8PLCFx_FLD - Pointer nicht da");
+    if (!pF || !pF->EndPosIsFieldEnd())
+        return;
+
+    ASSERT(!maFieldStack.empty(), "Empty field stack\n");
+    if (!maFieldStack.empty())
+    {
+        /*
+        only hyperlinks currently need to be handled like this, for the other
+        cases we have inserted a field not an attribute with an unknown end
+        point
+        */
+        switch(maFieldStack.top())
+        {
+            case 88:
+                pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_TXTATR_INETFMT);
+            break;
+            default:
+            break;
+        }
+        maFieldStack.pop();
+    }
+}
+
 // Read_Field liest ein Feld ein oder, wenn es nicht gelesen werden kann,
 // wird 0 zurueckgegeben, so dass das Feld vom Aufrufer textuell gelesen wird.
 // Returnwert: Gesamtlaenge des Feldes ( zum UEberlesen )
 long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 {
+    if (nIniFlags & WW8FL_NO_FLD)
+        return 0;
+
     typedef eF_ResT (SwWW8ImplReader:: *FNReadField)( WW8FieldDesc*, String& );
     static FNReadField aWW8FieldTab[93] =
     {
@@ -836,17 +869,22 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 
     ASSERT( ( sizeof( aWW8FieldTab ) / sizeof( *aWW8FieldTab ) == 93 ),
             "FeldFunc-Tabelle stimmt nicht" );
-    if( nIniFlags & WW8FL_NO_FLD )
-        return 0;
-
-    WW8FieldDesc aF;
 
     WW8PLCFx_FLD* pF = pPlcxMan->GetFld();
     ASSERT(pF, "WW8PLCFx_FLD - Pointer nicht da");
-    if( !pF )
+
+    if (!pF || !pF->StartPosIsFieldStart())
         return 0;
 
-    bool bOk = pF->GetPara( pRes->nCp2OrIdx, aF );
+    bool bNested = false;
+    if (!maFieldStack.empty())
+    {
+        if (maFieldStack.top() != 88)
+            bNested = true;
+    }
+
+    WW8FieldDesc aF;
+    bool bOk = pF->GetPara(pRes->nCp2OrIdx, aF);
 
     ASSERT(bOk, "WW8: Bad Field!\n");
 
@@ -862,16 +900,16 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     if( !bOk || !aF.nId )                   // Feld kaputt
         return aF.nLen;                     // -> ignorieren
 
-    if( aF.nId > 91
-//      || ( aF.nOpt & 0x40 )               // 0x40-Result Nest -> OK
-                             )              // WW: Nested Field
+    if( aF.nId > 91)                        // WW: Nested Field
+    {
         if( nFieldTagBad[nI] & nMask )      // Flag: Tag it when bad
             return Read_F_Tag( &aF );       // Resultat nicht als Text
         else
             return aF.nLen;
+    }
 
-    if( aWW8FieldTab[aF.nId] == 0           // keine Routine vorhanden
-        || aF.bCodeNest )
+    // keine Routine vorhanden
+    if (bNested || !aWW8FieldTab[aF.nId] || aF.bCodeNest)
     {
         if( nFieldTagBad[nI] & nMask )      // Flag: Tag it when bad
             return Read_F_Tag( &aF );       // Resultat nicht als Text
@@ -881,7 +919,6 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 
         return aF.nLen - aF.nLRes - 1;  // so viele ueberlesen, das Resultfeld
                                         // wird wie Haupttext eingelesen
-
     }
     else
     {                                   // Lies Feld

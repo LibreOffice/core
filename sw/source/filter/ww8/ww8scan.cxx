@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-23 10:29:29 $
+ *  last change: $Author: cmc $ $Date: 2002-10-24 12:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1829,13 +1829,16 @@ static bool WW8SkipField(WW8PLCFspecial& rPLCF)
             return false;
     }
 
-    if((((BYTE*)pData)[0] & 0x1f ) == 0x14 ){       // Field Separator ?
+    if((((BYTE*)pData)[0] & 0x1f ) == 0x14 )
+    {
+
+        // Field Separator ?
         rPLCF++;
 
         if( !rPLCF.Get( nP, pData ) )
             return false;
 
-        while((((BYTE*)pData)[0] & 0x1f ) == 0x13 )
+        while ((((BYTE*)pData)[0] & 0x1f ) == 0x13)
         {
             // immer noch neue (nested) Anfaenge ?
             WW8SkipField( rPLCF );          // nested Field im Resultatteil
@@ -3695,6 +3698,39 @@ WW8_CP WW8PLCFx_FLD::Where()
     return pPLCF ? pPLCF->Where() : LONG_MAX;
 }
 
+bool WW8PLCFx_FLD::StartPosIsFieldStart()
+{
+    void* pData;
+    long nTest;
+    if (
+         (!pPLCF || !pPLCF->Get(nTest, pData) ||
+         ((((BYTE*)pData)[0] & 0x1f) != 0x13))
+       )
+        return false;
+    return true;
+}
+
+bool WW8PLCFx_FLD::EndPosIsFieldEnd()
+{
+    bool bRet = false;
+
+    if (pPLCF)
+    {
+        long n = pPLCF->GetIdx();
+
+        (*pPLCF)++;
+
+        void* pData;
+        long nTest;
+        if ( pPLCF->Get(nTest, pData) && ((((BYTE*)pData)[0] & 0x1f) == 0x15) )
+            bRet = true;
+
+        pPLCF->SetIdx(n);
+    }
+
+    return bRet;
+}
+
 void WW8PLCFx_FLD::GetSprms(WW8PLCFxDesc* p)
 {
     p->nStartPos = p->nEndPos = LONG_MAX;
@@ -3702,27 +3738,41 @@ void WW8PLCFx_FLD::GetSprms(WW8PLCFxDesc* p)
     p->nSprmsLen = 0;
     p->bRealLineEnd = false;
 
-    if ( !pPLCF )
+    if (!pPLCF)
     {
         p->nStartPos = LONG_MAX;                    // Es gibt keine Felder
         return;
     }
 
-    WW8FieldDesc aF;
-    if (!GetPara(pPLCF->GetIdx(), aF))
+    long n = pPLCF->GetIdx();
+
+    long nP;
+    void *pData;
+    if (!pPLCF->Get(nP, pData))             // Ende des PLCFspecial ?
     {
-        p->nStartPos = LONG_MAX;                    // PLCF fertig abgearbeitet
+        p->nStartPos = LONG_MAX;            // PLCF fertig abgearbeitet
         return;
     }
-    p->nStartPos = aF.nSCode-1;
-    p->nEndPos = p->nStartPos + aF.nLen;
+
+    p->nStartPos = nP;
+
+    (*pPLCF)++;
+    if (!pPLCF->Get(nP, pData))             // Ende des PLCFspecial ?
+    {
+        p->nStartPos = LONG_MAX;            // PLCF fertig abgearbeitet
+        return;
+    }
+
+    p->nEndPos = nP;
+
+    pPLCF->SetIdx(n);
 
     p->nCp2OrIdx = pPLCF->GetIdx();
 }
 
 WW8PLCFx& WW8PLCFx_FLD::operator ++( int )
 {
-    WW8SkipField( *pPLCF );                     // gehe zum naechsten Feld
+    (*pPLCF)++;
     return *this;
 }
 

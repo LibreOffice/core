@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-11 14:16:56 $
+ *  last change: $Author: cmc $ $Date: 2002-10-24 12:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5121,7 +5121,7 @@ long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
     #*************************************************************************/
     typedef long (SwWW8ImplReader:: *FNReadRecordExt)(WW8PLCFManResult*);
 
-    static const FNReadRecordExt aWwSprmTab2[] =
+    static const FNReadRecordExt aWwSprmTab[] =
     {
         /* 0 (256) */   &SwWW8ImplReader::Read_Ftn,     // FootNote
         /* 1 (257) */   &SwWW8ImplReader::Read_Ftn,     // EndNote
@@ -5133,9 +5133,9 @@ long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
     if( pRes->nSprmId < 280 )
     {
         BYTE nIdx = pRes->nSprmId - eFTN;
-        if( nIdx < sizeof( aWwSprmTab2 ) / sizeof( *aWwSprmTab2 )
-            && aWwSprmTab2[nIdx] )
-            return (this->*aWwSprmTab2[nIdx])(pRes);
+        if( nIdx < sizeof( aWwSprmTab ) / sizeof( *aWwSprmTab )
+            && aWwSprmTab[nIdx] )
+            return (this->*aWwSprmTab[nIdx])(pRes);
         else
             return 0;
     }
@@ -5145,23 +5145,23 @@ long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
 
 void SwWW8ImplReader::EndExtSprm(USHORT nSprmId)
 {
-    ASSERT(nSprmId == eFLD, "Only one fake sprm known currently");
-    ASSERT(!maFieldStack.empty(), "Empty field stack\n");
-    if (nSprmId == eFLD || !maFieldStack.empty())
+    typedef void (SwWW8ImplReader:: *FNReadRecordExt)();
+
+    static const FNReadRecordExt aWwSprmTab[] =
     {
-        //only hyperlinks currently need to be handled like this, for the
-        //other cases we have inserted a field not an attribute with an
-        //unknown end point
-        switch(maFieldStack.top())
-        {
-            case 88:
-                pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_TXTATR_INETFMT);
-            break;
-            default:
-            break;
-        }
-        maFieldStack.pop();
-    }
+        /* 0 (256) */   0,      // FootNote
+        /* 1 (257) */   0,      // EndNote
+        /* 2 (258) */   &SwWW8ImplReader::End_Field,  // Feld
+        /* 3 (259) */   0,   // Bookmark
+        /* 4 (260) */   0     // Annotation
+    };
+
+    ASSERT(nSprmId == eFLD, "Only one fake sprm known currently");
+
+    BYTE nIdx = nSprmId - eFTN;
+    if( nIdx < sizeof( aWwSprmTab ) / sizeof( *aWwSprmTab )
+        && aWwSprmTab[nIdx] )
+        (this->*aWwSprmTab[nIdx])();
 }
 
 /***************************************************************************

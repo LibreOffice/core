@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-23 10:29:31 $
+ *  last change: $Author: cmc $ $Date: 2002-10-24 12:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,6 +716,8 @@ public:
     virtual long Where();
     virtual void GetSprms(WW8PLCFxDesc* p);
     virtual WW8PLCFx& operator ++( int );
+    bool StartPosIsFieldStart();
+    bool EndPosIsFieldEnd();
     bool GetPara(long nIdx, WW8FieldDesc& rF);
 };
 

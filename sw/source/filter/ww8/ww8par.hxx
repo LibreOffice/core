@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-11 12:51:27 $
+ *  last change: $Author: cmc $ $Date: 2002-10-24 12:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1153,6 +1153,7 @@ public:     // eigentlich private, geht aber leider nur public
 
     long Read_Ftn(WW8PLCFManResult* pRes);
     long Read_Field(WW8PLCFManResult* pRes);
+    void End_Field();
     long Read_Book(WW8PLCFManResult*);
     long Read_And(WW8PLCFManResult* pRes);
 
