@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-31 12:46:42 $
+ *  last change: $Author: dbo $ $Date: 2001-06-01 11:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifdef _DEBUG
+#include <stdio.h>
+#endif
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -66,6 +70,9 @@
 #include <osl/mutex.hxx>
 #endif
 
+#ifndef _CPPUHELPER_IMPLBASE1_HXX
+#include <cppuhelper/implbase1.hxx>
+#endif
 #ifndef _CPPUHELPER_COMPBASE1_HXX
 #include <cppuhelper/compbase1.hxx>
 #endif
@@ -87,6 +94,29 @@ using namespace ::com::sun::star;
 
 namespace cppu
 {
+
+//==================================================================================================
+class Disposer_Impl
+    : public WeakImplHelper1< lang::XEventListener >
+{
+    Reference< lang::XComponent > m_xTarget;
+
+public:
+    inline Disposer_Impl( Reference< lang::XComponent > const & xTarget )
+        SAL_THROW( () )
+        : m_xTarget( xTarget )
+        { OSL_ASSERT( m_xTarget.is() ); }
+
+    virtual void SAL_CALL disposing( lang::EventObject const & rSource )
+        throw (RuntimeException);
+};
+//__________________________________________________________________________________________________
+void Disposer_Impl::disposing( lang::EventObject const & rSource )
+    throw (RuntimeException)
+{
+    m_xTarget->dispose();
+    m_xTarget.clear();
+}
 
 //==================================================================================================
 struct MutexHolder
@@ -114,6 +144,9 @@ class ComponentContext
     t_map m_map;
 
     Reference< lang::XMultiComponentFactory > m_xSMgr;
+    // denotes if service manager has to be disposed by this context,
+    // else it was retieved from a delegate which itself has to dispose it
+    bool m_bDisposeSMgr;
 
 protected:
     virtual void SAL_CALL disposing();
@@ -170,7 +203,7 @@ Any ComponentContext::getValueByName( OUString const & rName )
 #ifdef _DEBUG
                         else
                         {
-                            OSL_TRACE( "### no service manager given for instanciating singletons!" );
+                            ::fprintf( stderr, "### no service manager given for instanciating singletons!\n" );
                         }
 #endif
                     }
@@ -209,7 +242,7 @@ Any ComponentContext::getValueByName( OUString const & rName )
 #ifdef _DEBUG
                 OString aStr( OUStringToOString( rName, RTL_TEXTENCODING_ASCII_US ) );
                 OString aStr2( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-                OSL_TRACE( "### exception occured raising singleton %s: %s\n", aStr.getStr(), aStr2.getStr() );
+                ::fprintf( stderr, "### exception occured raising singleton %s: %s\n", aStr.getStr(), aStr2.getStr() );
 #endif
             }
         }
@@ -237,10 +270,17 @@ Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
 //__________________________________________________________________________________________________
 ComponentContext::~ComponentContext()
 {
+#ifdef DEBUG
+    ::fprintf( stderr, "> destructed context %p\n", this );
+#endif
 }
 //__________________________________________________________________________________________________
 void ComponentContext::disposing()
 {
+#ifdef DEBUG
+    ::fprintf( stderr, "> disposing context %p\n", this );
+#endif
+
     // dispose all context objects
     t_map::const_iterator iPos( m_map.begin() );
     for ( ; iPos != m_map.end(); ++iPos )
@@ -266,10 +306,13 @@ void ComponentContext::disposing()
     }
 
     // dispose service manager
-    Reference< lang::XComponent > xComp( m_xSMgr, UNO_QUERY );
-    if (xComp.is())
+    if (m_bDisposeSMgr)
     {
-        xComp->dispose();
+        Reference< lang::XComponent > xComp( m_xSMgr, UNO_QUERY );
+        if (xComp.is())
+        {
+            xComp->dispose();
+        }
     }
 
     // everything is disposed, hopefully nobody accesses the context anymore...
@@ -298,9 +341,24 @@ ComponentContext::ComponentContext(
         }
         m_map[ rEntry.name ] = new ContextEntry( rEntry.bLateInitService, rEntry.value );
     }
-    if (!m_xSMgr.is() && m_xDelegate.is())
+
+    if (m_xDelegate.is())
     {
-        m_xSMgr = m_xDelegate->getServiceManager();
+        Reference< lang::XComponent > xComp( m_xDelegate, UNO_QUERY );
+        OSL_ENSURE( xComp.is(), "### component context should export lang::XComponent!" );
+        if (xComp.is())
+        {
+            xComp->addEventListener( new Disposer_Impl( this ) );
+        }
+        if (m_xSMgr.is())
+        {
+            m_bDisposeSMgr = true;
+        }
+        else
+        {
+            m_bDisposeSMgr = false;
+            m_xSMgr = m_xDelegate->getServiceManager();
+        }
     }
 }
 //__________________________________________________________________________________________________
@@ -347,7 +405,7 @@ ComponentContext::ComponentContext(
 #ifdef _DEBUG
                         OString aStr( OUStringToOString( xKey->getKeyName().copy( 11 ), RTL_TEXTENCODING_ASCII_US ) );
                         OString aStr2( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-                        OSL_TRACE( "### failed reading singleton [%s] service name from registry: %s", aStr.getStr(), aStr2.getStr() );
+                        ::fprintf( stderr, "### failed reading singleton [%s] service name from registry: %s\n", aStr.getStr(), aStr2.getStr() );
 #endif
                     }
                 }
@@ -371,7 +429,14 @@ Reference< XComponentContext > SAL_CALL createComponentContext(
     Reference< XComponentContext > const & xDelegate )
     SAL_THROW( () )
 {
-    return new ComponentContext( pEntries, nEntries, xDelegate );
+    if (nEntries > 0)
+    {
+        return new ComponentContext( pEntries, nEntries, xDelegate );
+    }
+    else
+    {
+        return xDelegate;
+    }
 }
 
 }
