@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleexp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:23:30 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,13 @@ sal_Bool XMLStyleExport::exportStyle(
         sName = *pPrefix;
     sName += rStyle->getName();
 
-    GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, sName );
+    sal_Bool bEncoded = sal_False;
+    GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
+                              GetExport().EncodeStyleName( sName, &bEncoded ) );
+
+    if( bEncoded )
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME,
+                                   sName);
 
     // style:family="..."
     if( rXMLFamily.getLength() > 0 )
@@ -223,7 +229,7 @@ sal_Bool XMLStyleExport::exportStyle(
 
     if( sParent.getLength() )
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_PARENT_STYLE_NAME,
-                                    sParent );
+                                    GetExport().EncodeStyleName( sParent ) );
 
     // style:next-style-name="..." (paragraph styles only)
     if( xPropSetInfo->hasPropertyByName( sFollowStyle ) )
@@ -234,7 +240,7 @@ sal_Bool XMLStyleExport::exportStyle(
         if( sName != sNextName )
         {
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NEXT_STYLE_NAME,
-                          sNextName );
+                          GetExport().EncodeStyleName( sNextName ) );
         }
     }
 
@@ -260,8 +266,9 @@ sal_Bool XMLStyleExport::exportStyle(
                 OUString sListName;
                 aAny >>= sListName;
                 if( sListName.getLength() )
-                    GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_LIST_STYLE_NAME,
-                                  sListName );
+                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                              XML_LIST_STYLE_NAME,
+                              GetExport().EncodeStyleName( sListName ) );
             }
         }
     }
