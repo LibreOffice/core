@@ -15,6 +15,7 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 
 ..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\soffice.exe
 ..\%__SRC%\bin\wrp?????.dll %_DEST%\bin%_EXT%\wrp?????.dll
+..\%__SRC%\lib\libwrp?????.so %_DEST%\lib%_EXT%\libwrp?????.so
 
 ..\%__SRC%\bin\soffice %_DEST%\bin%_EXT%\soffice.bin
 ..\%__SRC%\bin\sweb %_DEST%\bin%_EXT%\sweb.bin
