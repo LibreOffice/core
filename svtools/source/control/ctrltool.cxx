@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 15:51:30 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,6 +442,13 @@ FontList::~FontList()
         delete pData;
         pData = pNext;
     }
+}
+// -----------------------------------------------------------------------
+FontList* FontList::Clone() const
+{
+    FontList* pReturn = new FontList(
+            mpDev, mpDev2, GetFontNameCount() == mpDev->GetDevFontCount());
+    return pReturn;
 }
 
 // -----------------------------------------------------------------------
