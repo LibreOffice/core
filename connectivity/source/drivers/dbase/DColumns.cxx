@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DColumns.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 06:12:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
 typedef file::OColumns ODbaseColumns_BASE;
-Reference< XNamed > ODbaseColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType ODbaseColumns::createObject(const ::rtl::OUString& _rName)
 {
 
     ODbaseTable* pTable = (ODbaseTable*)m_pTable;
@@ -94,9 +94,9 @@ Reference< XNamed > ODbaseColumns::createObject(const ::rtl::OUString& _rName)
     ::vos::ORef<OSQLColumns> aCols = pTable->getTableColumns();
     OSQLColumns::const_iterator aIter = find(aCols->begin(),aCols->end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
 
-    Reference< XNamed > xRet;
+    sdbcx::ObjectType xRet;
     if(aIter != aCols->end())
-        xRet = Reference< XNamed >(*aIter,UNO_QUERY);
+        xRet = sdbcx::ObjectType(*aIter,UNO_QUERY);
     return xRet;
 }
 
@@ -127,22 +127,16 @@ void ODbaseColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementNa
         m_pTable->dropColumn(_nPos);
 }
 // -----------------------------------------------------------------------------
-Reference< XNamed > ODbaseColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+sdbcx::ObjectType ODbaseColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
     if(m_pTable->isNew())
     {
-        sdbcx::OColumn* pColumn = new sdbcx::OColumn(isCaseSensitive());
-        Reference<XPropertySet> xProp = pColumn;
+        Reference<XPropertySet> xProp = new sdbcx::OColumn(isCaseSensitive());
         ::comphelper::copyProperties(_xDescriptor,xProp);
-        Reference< XNamed > xName(xProp,UNO_QUERY);
-        OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-        return xName;
+        return xProp;
     }
 
-    ::rtl::OUString sColumnName;
-    if(_xDescriptor.is())
-        _xDescriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sColumnName;
-    return createObject(sColumnName);
+    return ODbaseColumns_BASE::cloneObject(_xDescriptor);
 }
 // -----------------------------------------------------------------------------
 
