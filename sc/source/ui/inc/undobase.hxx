@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-09 10:58:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 class ScDocument;
 class ScDocShell;
 class SdrUndoAction;
@@ -95,7 +99,7 @@ protected:
     void            BeginRedo();
     void            EndRedo();
 
-    static void     ShowTable( USHORT nTab );
+    static void     ShowTable( SCTAB nTab );
     static void     ShowTable( const ScRange& rRange );
 };
 
