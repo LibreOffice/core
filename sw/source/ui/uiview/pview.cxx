@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:41:45 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1894,7 +1894,7 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pFrame, SfxViewShell* pOldSh):
     pPageUpBtn(0),
     pPageDownBtn(0),
     pScrollFill(new ScrollBarBox( &pFrame->GetWindow(),
-        GetDocShell()->IsInFrame()? 0 : WB_SIZEABLE )),
+        pFrame->GetFrame()->GetParentFrame() ? 0 : WB_SIZEABLE )),
     sPageStr( SW_RES(STR_PAGE) ),
     mnPageCount( 0 ),
     nNewPage(USHRT_MAX),
