@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:34:16 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ ModalDialog DLG_SAVE_AS
         Text [ english_us ] = "Please enter a name for the object to be created:";
         Text[ portuguese ] = "Indique o nome para o objecto a ser criado:";
         Text[ russian ] = "Ηΰδΰιςε, οξζΰλσιρςΰ, θμÿ δλÿ ρξηδΰβΰεμξγξ ξαϊεκςΰ:";
-        Text[ greek ] = "Please enter the name of the object to be created:";
+        Text[ greek ] = "Παρακαλώ εισάγετε το όνομα του αντικειμένου που θα δημιουργηθεί:";
         Text[ dutch ] = "Vul een naam in voor het object dat u wil  creλren:";
         Text[ french ] = "Saisissez un nom pour l'objet ΰ crιer :";
         Text[ spanish ] = "Indique un nombre para el objeto a crear:";
@@ -128,7 +128,7 @@ ModalDialog DLG_SAVE_AS
         Text[ polish ] = "Katalog";
         Text[ portuguese_brazilian ] = "~Catalog";
         Text[ japanese ] = "¶ΐΫΈή(~C)";
-        Text[ korean ] = "~Δ«ΕΈ·Ο";
+        Text[ korean ] = "Δ«ΕΈ·Ξ±Χ";
         Text[ chinese_simplified ] = "·Φΐΰ(~C)";
         Text[ chinese_traditional ] = "¤ΐΓώ(~C)";
         Text[ turkish ] = "~Catalog";
@@ -163,7 +163,7 @@ ModalDialog DLG_SAVE_AS
         Text[ polish ] = "~Schemat";
         Text[ portuguese_brazilian ] = "~Schema";
         Text[ japanese ] = "‚Π‚Θ^(~S)";
-        Text[ korean ] = "~µµ½Δ";
+        Text[ korean ] = "µµ½Δ";
         Text[ chinese_simplified ] = "ΒΤΝΌ(~S)";
         Text[ chinese_traditional ] = "²¤ΉΟ(~S)";
         Text[ turkish ] = "~Schema";
@@ -397,7 +397,7 @@ ModalDialog DLG_SAVE_AS
         Text [ english_us ] = "Insert as";
         Text[ portuguese ] = "Inserir como";
         Text[ russian ] = "Βρςΰβθςό κΰκ";
-        Text[ greek ] = "Paste as";
+        Text[ greek ] = "Εισαγωγή ως";
         Text[ dutch ] = "Invoegen als";
         Text[ french ] = "Insιrer comme";
         Text[ spanish ] = "Pegar como";
