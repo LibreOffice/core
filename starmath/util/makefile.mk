@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 11:30:18 $
+#   last change: $Author: kz $ $Date: 2004-10-04 18:05:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,6 @@ DEF1NAME=		$(SHL1TARGET)
 SHL1STDLIBS= \
             $(SVXLIB) \
             $(SFX2LIB) \
-            $(SO2LIB) \
             $(XMLOFFLIB) \
             $(SVTOOLLIB) \
             $(TKLIB) \
@@ -116,6 +115,7 @@ SHL2STDLIBS= \
             $(SVTOOLLIB) \
             $(SVLLIB) \
             $(VCLLIB) \
+            $(SOTLIB) \
             $(TOOLSLIB) \
             $(UCBHELPERLIB) \
             $(CPPUHELPERLIB) \
