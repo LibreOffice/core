@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-08 14:08:31 $
+ *  last change: $Author: oj $ $Date: 2001-01-30 16:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
             for(sal_Int32 i=0;i<xColumns->getCount();++i)
             {
                 xColumns->getByIndex(i) >>= xColProp;
-                aSql = aSql + aQuote + getString(xColProp->getPropertyValue(PROPERTY_REFERENCEDCOLUMN)) + aQuote
+                aSql = aSql + aQuote + getString(xColProp->getPropertyValue(PROPERTY_RELATEDCOLUMN)) + aQuote
                             +   ::rtl::OUString::createFromAscii(",");
             }
             aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
