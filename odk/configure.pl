@@ -9,7 +9,7 @@ use IO::File;
 $main::OO_SDK_NAME=readSDKName();
 $main::currentWorkingDir = `pwd`;
 chop ($main::currentWorkingDir);
-$main::operatingSystem = `uname -s`;
+$main::operatingSystem = `./config.guess | cut -d"-" -f3,4`;
 chop ($main::operatingSystem);
 $main::OO_SDK_HOME = "";
 $main::OO_SDK_HOME_SUGGESTION = $main::currentWorkingDir;
@@ -54,7 +54,7 @@ $main::zipVersion = "2.3";
 $main::OO_SDK_CPP_HOME = "";
 $main::cppName = "gcc";
 $main::cppVersion = "3.0.1";
-if ( $main::operatingSystem eq "SunOS" )
+if ( $main::operatingSystem =~ m/solaris/ )
 {
     $main::cppName = "CC";
     $main::cppVersion = "5.2";
