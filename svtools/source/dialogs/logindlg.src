@@ -1,19 +1,63 @@
-/*===========================================================================
-#*
-#*    Ersterstellung  PB  11.02.98
-#*    Letzte Aenderung  $Author: fs $ $Date: 2000-10-09 06:50:28 $
-#*    $Revision: 1.1 $
-#*
-#*    Copyright (c) 1996 - 2000, Star Division GmbH, Hamburg, Germany
-#*
-#==========================================================================*/
-
-//#ifndef _CNTIDS_HRC
-//#include <cntids.hrc>
-//#endif
-//#ifndef _CNTRIDS_HRC
-//#include <cntrids.hrc>
-//#endif
+/*************************************************************************
+ *
+ *  $RCSfile: logindlg.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: fs $ $Date: 2000-10-09 06:51:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
 
 #ifndef _SVTOOLS_HRC
 #include "svtools.hrc"
@@ -342,55 +386,3 @@ ModalDialog DLG_LOGIN
     Text[ arabic ] = "„ÿ·Ê» ≈œŒ«· «”„ «·„” Œœ„ Êﬂ·„… «·”—";
     Text[ turkish ] = "Kullan˝c˝ ad˝ ve ˛ifre gerekli";
 };
-
-/*----------------------------------------------------------------------------
-  $Log: not supported by cvs2svn $
-  Revision 1.16  2000/05/03 19:05:26  kz
-  Merge SRC569: 05/03/00 - 21:05:03
-
-  Revision 1.15  2000/04/17 19:34:42  rt
-  Merge SRC569: 17.04.00 - 21:34:35
-
-  Revision 1.14  2000/04/10 19:13:53  kz
-  Merge SRC569: 10.04.00 - 21:13:47
-
-  Revision 1.13  2000/04/04 20:11:11  obo
-  Merge SRC569: 04.04.00 - 22:11:03
-
-  Revision 1.12  2000/03/30 19:13:27  sub
-  Merge SRC569: 30.03.00 - 21:13:23
-
-  Revision 1.11  2000/03/29 19:10:46  rt
-  Merge SRC569: 29.03.00 - 21:10:28
-
-  Revision 1.10  2000/03/15 09:31:25  kz
-  Merge SRC569: 15.03.00 - 10:31:14
-
-  Revision 1.9  2000/02/11 20:06:36  kz
-  Merge SRC567: 02/11/00 - 21:06:25 (NoBranch)
-
-  Revision 1.8  2000/02/03 15:46:24  kz
-  Merge SRC566: 03.02.00 - 16:46:18 (NoBranch)
-
-  Revision 1.7  2000/01/05 20:04:38  kz
-  Merge SRC562: 05.01.00 - 21:04:34 (NoBranch)
-
-  Revision 1.6  1999/12/17 14:24:49  mh
-  Merge SRC561: 17.12.99 - 15:24:41 (NoBranch)
-
-  Revision 1.5  1999/12/17 11:36:48  sub
-  Merge SRC561: 17.12.99 - 12:36:42 (NoBranch)
-
-  Revision 1.4  1999/12/02 23:03:22  hjs
-  Merge SRC560: 12/03/99 - 00:03:17 (NoBranch)
-
-  Revision 1.3  1999/11/24 20:15:29  kz
-  Merge SRC558: 24.11.99 - 21:15:23 (NoBranch)
-
-  Revision 1.2  1999/11/19 10:57:47  rt
-  Merge SRC557: 19.11.99 - 11:57:36 (NoBranch)
-
-  Revision 1.1  1999/11/15 13:18:32  sb
-  Universal Content Broker user interface.
-
-----------------------------------------------------------------------------*/
