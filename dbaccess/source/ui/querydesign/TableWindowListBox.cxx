@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 06:56:48 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 11:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,6 @@ DBG_NAME(OTableWindowListBox);
 //------------------------------------------------------------------------------
 OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent, const String& rDatabaseName, const String& rTableName ) :
      SvTreeListBox( pParent, WB_HASBUTTONS | WB_BORDER)
-#if SUPD<627
-    ,DragSourceHelper(this)
-    ,DropTargetHelper(this)
-#endif
     ,m_pTabWin( pParent )
     ,m_aMousePos( Point(0,0) )
     ,m_bReallyScrolled( sal_False )
@@ -256,7 +252,7 @@ IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, pBox )
 void OTableWindowListBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {
     OQueryTableView* pCont = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
-    if (!pCont->getDesignView()->getController()->isReadOnly())
+    if (!pCont->getDesignView()->getController()->isReadOnly() && pCont->getDesignView()->getController()->getConnection().is())
     {
         EndSelection();
 
