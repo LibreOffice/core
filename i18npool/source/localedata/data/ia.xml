@@ -222,6 +222,13 @@
   </LC_FORMAT>
   <LC_COLLATION ref="en_US"/>
   <LC_SEARCH ref="en_US"/>
+  <LC_INDEX>
+    <IndexKey unoid="alphanumeric" default="true" phonetic="false">A-Z</IndexKey>
+    <UnicodeScript>0</UnicodeScript>
+    <UnicodeScript>1</UnicodeScript>
+    <FollowPageWord> s.</FollowPageWord>
+    <FollowPageWord> ss.</FollowPageWord>
+  </LC_INDEX>
   <LC_CALENDAR>
     <Calendar unoid="gregorian" default="true">
       <DaysOfWeek>
@@ -372,13 +379,6 @@
       <quarter4Abbreviation>T4</quarter4Abbreviation>
     </ReservedWords>
   </LC_MISC>
-  <LC_INDEX>
-    <IndexKey unoid="alphanumeric" default="true" phonetic="false">A-Z</IndexKey>
-    <UnicodeScript>0</UnicodeScript>
-    <UnicodeScript>1</UnicodeScript>
-    <FollowPageWord> s.</FollowPageWord>
-    <FollowPageWord> ss.</FollowPageWord>
-  </LC_INDEX>
   <LC_NumberingLevel ref="en_US"/>
   <LC_OutLineNumberingLevel ref="en_US"/>
 </Locale>

@@ -222,6 +222,12 @@
 </LC_FORMAT>
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
+<LC_INDEX>
+<IndexKey unoid="alphanumeric" default="true" phonetic="false">А-Й К-О Ө П-У Ү Ф-Ь Э-Я</IndexKey>
+<UnicodeScript>8</UnicodeScript>
+<FollowPageWord>p.</FollowPageWord>
+<FollowPageWord>pp.</FollowPageWord>
+</LC_INDEX>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek>
@@ -367,12 +373,6 @@
 <quarter4Abbreviation>4/4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
-<LC_INDEX>
-<IndexKey unoid="alphanumeric" default="true" phonetic="false">А-Й К-О Ө П-У Ү Ф-Ь Э-Я</IndexKey>
-<UnicodeScript>8</UnicodeScript>
-<FollowPageWord>p.</FollowPageWord>
-<FollowPageWord>pp.</FollowPageWord>
-</LC_INDEX>
 <LC_NumberingLevel ref="en_US"/>
 <LC_OutLineNumberingLevel ref="en_US"/>
 </Locale>
