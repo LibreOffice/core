@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pageproperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:31:46 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@ namespace sdr
 
             // get the installed StyleSheet
             virtual SfxStyleSheet* GetStyleSheet() const;
+
+            // clear single item
+            virtual void ClearObjectItem(const sal_uInt16 nWhich = 0);
         };
     } // end of namespace properties
 } // end of namespace sdr
