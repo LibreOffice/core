@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pl $ $Date: 2001-10-24 17:21:47 $
+#   last change: $Author: hr $ $Date: 2001-11-09 16:01:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,14 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
-CFLAGSCXX= -pipe -mcpu=pentiumpro -fno-for-scope -fpermissive -fno-rtti
+CFLAGSCXX= -pipe -mcpu=pentiumpro -fno-for-scope -fpermissive -fno-rtti 
+
+# HACK: enable Hamburg developers to build on glibc-2.2 machines but compile vs. glibc-2.1 headers
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"==""
+CFLAGSCXX+=-include preinclude.h
+.ENDIF
+.ENDIF
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
