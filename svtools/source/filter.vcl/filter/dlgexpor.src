@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-19 05:10:54 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 19:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,11 @@ ModalDialog DLG_EXPORT_PIX
         Text [ spanish ] = "Resolución del color" ;
         Text [ french ] = "Résolution couleur" ;
         Text [ dutch ] = "Kleurdichtheid" ;
-        Text[ chinese_simplified ] = "ÑÕÉ«·Ö±æÂÊ";
+        Text[ chinese_simplified ] = "²ÊÉ«·Ö±æÂÊ";
         Text[ russian ] = "Öâåòîâîå ğàçğåøåíèå";
         Text[ polish ] = "Rozdzielczoœæ kolorów";
         Text[ japanese ] = "F‚Ì‰ğ‘œ“x";
-        Text[ chinese_traditional ] = "ÃC¦â¸ÑªR«×";
+        Text[ chinese_traditional ] = "±m¦â¸ÑªR«×";
         Text[ arabic ] = "ÇÓÊÈÇäÉ Çááæä";
         Text[ greek ] = "ÁíÜëõóç ÷ñùìÜôùí";
         Text[ korean ] = "ÄÃ·¯ ÇØ»óµµ";
@@ -250,11 +250,11 @@ ModalDialog DLG_EXPORT_PIX
     StringList [ polish ] =
     {
             < "Orygina³" ; Default ; > ;
-        < "Warto?æ progowa - 1bit" ; Default ; > ;
+        < "Wartoœæ progowa - 1bit" ; Default ; > ;
         < "Rozsiewanie - 1 bit" ; Default ; > ;
-        < "Paleta odcieni szaro?ci - 4bity" ; Default ; > ;
+        < "Paleta odcieni szaroœci - 4bity" ; Default ; > ;
         < "Paleta kolorów - 4bity" ; Default ; > ;
-        < "Paleta odcieni szaro?ci - 8bitów" ; Default ; > ;
+        < "Paleta odcieni szaroœci - 8bitów" ; Default ; > ;
         < "Paleta kolorów - 8bitów" ; Default ; > ;
         < "True Color - 24bity" ; Default ; > ;
     };
@@ -462,7 +462,7 @@ ModalDialog DLG_EXPORT_PIX
         Text [ portuguese_brazilian ] = "~Aufl?ung" ;
         Text[ chinese_simplified ] = "·Ö±æÂÊ(~R)";
         Text[ russian ] = "Ğàçğåøåíèå";
-        Text[ polish ] = "Rozdzielczo?æ";
+        Text[ polish ] = "Rozdzielczoœæ";
         Text[ japanese ] = "‰ğ‘œ“x(~R)";
         Text[ chinese_traditional ] = "¸ÑªR«×(~R)";
         Text[ arabic ] = "ÇáÇÓÊÈÇäÉ";
