@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-08 14:44:43 $
+ *  last change: $Author: cl $ $Date: 2002-12-11 16:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1773,4 +1773,9 @@ uno::Reference< uno::XInterface > SdDrawDocument::createUnoModel()
     }
 
     return xModel;
+}
+
+SvxNumType SdDrawDocument::GetPageNumType() const
+{
+    return ePageNumType;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-19 18:02:25 $
+ *  last change: $Author: cl $ $Date: 2002-12-11 16:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ public:
     LanguageType        GetLanguage( const USHORT nId ) const;
     void                SetLanguage( const LanguageType eLang, const USHORT nId );
 
-    SvxNumType          GetPageNumType() const { return ePageNumType; }
+    SvxNumType          GetPageNumType() const;
     void                SetPageNumType(SvxNumType eType) { ePageNumType = eType; }
     String              CreatePageNumValue(USHORT nNum) const;
 
