@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwStyleNameMapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:29 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <tools/string.hxx>
 #endif
 #include <hash_map>
+#include <stringhash.hxx>
 
 
 /* This class holds all data about the names of styles used in the user
@@ -120,55 +121,6 @@
 class SvStringsDtor;
 class String;
 struct SwTableEntry;
-struct StringEq
-{
-    sal_Bool operator() ( const String *r1,
-                            const String *r2) const
-    {
-        return r1->Equals(*r2);
-    }
-};
-
-struct StringHash
-{
-    size_t operator() ( const String *rString) const
-    {
-        sal_Int32 h, nLen;
-        h = nLen = rString->Len();
-        const sal_Unicode *pStr = rString->GetBuffer();
-
-        if ( nLen < 16 )
-            while ( nLen-- > 0 )
-                h = (h*37) + *(pStr++);
-        else
-        {
-            sal_Int32               nSkip;
-            const sal_Unicode* pEndStr = pStr+nLen-5;
-
-            /* only sample some characters */
-            /* the first 3, some characters between, and the last 5 */
-            h = (h*39) + *(pStr++);
-            h = (h*39) + *(pStr++);
-            h = (h*39) + *(pStr++);
-
-            nSkip = nLen / nLen < 32 ? 4 : 8;
-            nLen -= 8;
-            while ( nLen > 0 )
-            {
-                h = (h*39) + ( *pStr );
-                pStr += nSkip;
-                nLen -= nSkip;
-            }
-
-            h = (h*39) + *(pEndStr++);
-            h = (h*39) + *(pEndStr++);
-            h = (h*39) + *(pEndStr++);
-            h = (h*39) + *(pEndStr++);
-            h = (h*39) + *(pEndStr++);
-        }
-        return h;
-    }
-};
 
 
 typedef ::std::hash_map < const String*, sal_uInt16, StringHash, StringEq > NameToIdHash;
