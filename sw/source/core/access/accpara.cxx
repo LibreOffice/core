@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:37 $
+ *  last change: $Author: mib $ $Date: 2002-05-03 12:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -950,7 +950,7 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( XAccessibleText );
 
     sal_Int32 nRet = GetCaretPos();
     {
@@ -972,7 +972,7 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( XAccessibleText );
 
     OUString sText( GetString() );
 
@@ -991,7 +991,7 @@ Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
 {
 
     vos::OGuard aGuard(Application::GetSolarMutex());
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( XAccessibleText );
 
     const OUString& rText = GetString();
 
@@ -1038,7 +1038,7 @@ com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext ); // we have a frame?
+    CHECK_FOR_DEFUNC( XAccessibleText );
 
     if( ! IsValidChar( nIndex, GetString().getLength() ) )
         throw IndexOutOfBoundsException();
@@ -1077,7 +1077,7 @@ sal_Int32 SwAccessibleParagraph::getCharacterCount()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( XAccessibleText );
 
     return GetString().getLength();
 }
@@ -1087,7 +1087,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const com::sun::star::awt::Poi
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( XAccessibleText );
 
     // construct SwPosition (where GetCrsrOfst() will put the result into)
     SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
@@ -1119,7 +1119,7 @@ OUString SwAccessibleParagraph::getSelectedText()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext ); // we have a frame?
+    CHECK_FOR_DEFUNC( XAccessibleText );
 
     sal_Int32 nStart, nEnd;
     sal_Bool bSelected = GetSelection( nStart, nEnd );
@@ -1131,7 +1131,7 @@ sal_Int32 SwAccessibleParagraph::getSelectionStart()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext ); // we have a frame?
+    CHECK_FOR_DEFUNC( XAccessibleText );
 
     sal_Int32 nStart, nEnd;
     GetSelection( nStart, nEnd );
@@ -1143,7 +1143,7 @@ sal_Int32 SwAccessibleParagraph::getSelectionEnd()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext ); // we have a frame?
+    CHECK_FOR_DEFUNC( XAccessibleText );
 
     sal_Int32 nStart, nEnd;
     GetSelection( nStart, nEnd );
@@ -1155,7 +1155,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( XAccessibleText );
 
     // parameter checking
     sal_Int32 nLength = GetString().getLength();
@@ -1193,7 +1193,7 @@ OUString SwAccessibleParagraph::getText()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( XAccessibleText );
 
     return GetString();
 }
@@ -1204,7 +1204,7 @@ OUString SwAccessibleParagraph::getTextRange(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( XAccessibleText );
 
     OUString sText( GetString() );
 
@@ -1223,7 +1223,7 @@ OUString SwAccessibleParagraph::getTextAtIndex(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( XAccessibleText );
 
     const OUString rText = GetString();
 
@@ -1246,7 +1246,7 @@ OUString SwAccessibleParagraph::getTextBeforeIndex(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( XAccessibleText );
 
     const OUString rText = GetString();
 
@@ -1276,7 +1276,7 @@ OUString SwAccessibleParagraph::getTextBehindIndex(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( XAccessibleText );
 
     const OUString rText = GetString();
 
@@ -1301,7 +1301,7 @@ OUString SwAccessibleParagraph::getTextBehindIndex(
 sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( XAccessibleText );
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     // select and copy (through dispatch mechanism)
@@ -1318,7 +1318,7 @@ sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
 sal_Bool SwAccessibleParagraph::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( XAccessibleEditableText );
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     // select and cut (through dispatch mechanism)
@@ -1330,7 +1330,7 @@ sal_Bool SwAccessibleParagraph::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIn
 sal_Bool SwAccessibleParagraph::pasteText( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( XAccessibleEditableText );
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     // select and paste (through dispatch mechanism)
@@ -1358,7 +1358,7 @@ sal_Bool SwAccessibleParagraph::replaceText(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext );     // check for live frame
+    CHECK_FOR_DEFUNC( XAccessibleEditableText );
 
     const OUString& rText = GetString();
 
@@ -1414,7 +1414,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( XAccessibleEditableText );
 
     const OUString& rText = GetString();
 
@@ -1476,6 +1476,8 @@ void SwAccessibleParagraph::selectAccessibleChild(
     throw ( IndexOutOfBoundsException,
             RuntimeException )
 {
+    CHECK_FOR_DEFUNC( XAccessibleSelection );
+
     aSelectionHelper.selectAccessibleChild(nChildIndex);
 }
 
@@ -1484,24 +1486,32 @@ sal_Bool SwAccessibleParagraph::isAccessibleChildSelected(
     throw ( IndexOutOfBoundsException,
             RuntimeException )
 {
+    CHECK_FOR_DEFUNC( XAccessibleSelection );
+
     return aSelectionHelper.isAccessibleChildSelected(nChildIndex);
 }
 
 void SwAccessibleParagraph::clearAccessibleSelection(  )
     throw ( RuntimeException )
 {
+    CHECK_FOR_DEFUNC( XAccessibleSelection );
+
     aSelectionHelper.clearAccessibleSelection();
 }
 
 void SwAccessibleParagraph::selectAllAccessible(  )
     throw ( RuntimeException )
 {
+    CHECK_FOR_DEFUNC( XAccessibleSelection );
+
     aSelectionHelper.selectAllAccessible();
 }
 
 sal_Int32 SwAccessibleParagraph::getSelectedAccessibleChildCount(  )
     throw ( RuntimeException )
 {
+    CHECK_FOR_DEFUNC( XAccessibleSelection );
+
     return aSelectionHelper.getSelectedAccessibleChildCount();
 }
 
@@ -1510,6 +1520,8 @@ Reference<XAccessible> SwAccessibleParagraph::getSelectedAccessibleChild(
     throw ( IndexOutOfBoundsException,
             RuntimeException)
 {
+    CHECK_FOR_DEFUNC( XAccessibleSelection );
+
     return aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
@@ -1518,5 +1530,7 @@ void SwAccessibleParagraph::deselectSelectedAccessibleChild(
     throw ( IndexOutOfBoundsException,
             RuntimeException )
 {
+    CHECK_FOR_DEFUNC( XAccessibleSelection );
+
     aSelectionHelper.deselectSelectedAccessibleChild(nSelectedChildIndex);
 }

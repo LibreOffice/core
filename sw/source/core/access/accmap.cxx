@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-24 15:27:21 $
+ *  last change: $Author: mib $ $Date: 2002-05-03 12:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,8 +207,9 @@ public:
         meType( eT ), mxAcc( pA ), maFrmOrObj( rFrmOrObj ), maOldBox( rR ),
         mnStates( 0 )
     {
-        ASSERT( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType,
-                "wrong event constructor, CHILD_POS_CHANGED only" );
+        ASSERT( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType ||
+                SwAccessibleEvent_Impl::POS_CHANGED == meType,
+                "wrong event constructor, (CHILD_)POS_CHANGED only" );
     }
     SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
                             const SwFrmOrObj& rFrmOrObj, sal_uInt8 nSt  ) :
@@ -470,6 +471,7 @@ SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
     mnFootnote( 1 ),
     mnEndnote( 1 )
 {
+    pSh->GetLayout()->AddAccessibleShell();
 }
 
 SwAccessibleMap::~SwAccessibleMap()
@@ -508,6 +510,7 @@ SwAccessibleMap::~SwAccessibleMap()
                     SwAccessibleContext *pTmp =
                         static_cast< SwAccessibleContext * >( xTmp.get() );
                 }
+                ++aIter;
             }
         }
 #endif
@@ -523,6 +526,7 @@ SwAccessibleMap::~SwAccessibleMap()
         delete mpEvents;
         mpEvents = 0;
     }
+    mpVSh->GetLayout()->RemoveAccessibleShell();
 }
 
 Reference< XAccessible > SwAccessibleMap::GetDocumentView()

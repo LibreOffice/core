@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
+ *  last change: $Author: mib $ $Date: 2002-05-03 12:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,7 @@ void SwAccessibleCell::Dispose( sal_Bool bRecursive )
             GetMap()->GetContextImpl( pParent, sal_False ) );
     if( xAccImpl.isValid() )
         xAccImpl->DisposeChild( GetFrm(), bRecursive );
+    SwAccessibleContext::Dispose( bRecursive );
 }
 
 void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
@@ -322,4 +323,5 @@ void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
             GetMap()->GetContextImpl( pParent, sal_False ) );
     if( xAccImpl.isValid() )
         xAccImpl->InvalidateChildPosOrSize( GetFrm(), rOldBox );
+    SwAccessibleContext::InvalidatePosOrSize( rOldBox );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
+ *  last change: $Author: mib $ $Date: 2002-05-03 12:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,21 +75,15 @@
 
 class SwTabFrm;
 class SwAccessibleTableData_Impl;
-class SwAccessibleTableEventList_Impl;
 
 class SwAccessibleTable :
         public  SwAccessibleContext,
         public  ::drafts::com::sun::star::accessibility::XAccessibleTable
 {
     SwAccessibleTableData_Impl *mpTableData;    // the table's data, prot by Sol-Mutex
-    SwAccessibleTableEventList_Impl *mpEvents;  // the table's data, prot by Sol-Mutex
     const SwSelBoxes *GetSelBoxes() const;
 
-    void AppendEvent( const SwFrm *pFrm, const SwRect& rBox );
-    inline void AppendDisposeEvent( const SwFrm *pFrm);
-    inline void AppendPosOrSizeEvent( const SwFrm *pFrm, const SwRect& rBox );
-
-    void FireTableChangeEvent( const SwAccessibleTableData_Impl *pTableData=0 );
+    void FireTableChangeEvent( const SwAccessibleTableData_Impl& rTableData );
 
 protected:
 
@@ -238,18 +232,6 @@ public:
     virtual void InvalidateChildPosOrSize( const SwFrm *pFrm,
                                         const SwRect& rFrm );
 };
-
-
-inline void SwAccessibleTable::AppendDisposeEvent( const SwFrm *pFrm )
-{
-    AppendEvent( 0, pFrm->Frm() );
-}
-
-inline void SwAccessibleTable::AppendPosOrSizeEvent( const SwFrm *pFrm,
-                                                     const SwRect& rBox )
-{
-    AppendEvent( pFrm, rBox );
-}
 
 inline SwAccessibleTableData_Impl& SwAccessibleTable::GetTableData()
 {

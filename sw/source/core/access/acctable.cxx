@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2002-04-19 12:59:38 $
+ *  last change: $Author: mib $ $Date: 2002-05-03 12:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,50 +136,11 @@ using namespace ::rtl;
 const sal_Char sServiceName[] = "com.sun.star.table.AccessibleTableView";
 const sal_Char sImplementationName[] = "SwAccessibleTable";
 
-class SwAccessibleTableEvent_Impl
-{
-    const SwFrm *mpFrm;
-    sal_Int32 mnRow;
-    sal_Int32 mnColumn;
-    sal_Int32 mnRowExtent;
-    sal_Int32 mnColumnExtent;
-
-public:
-
-    inline SwAccessibleTableEvent_Impl( const SwFrm *pFrm,
-                                 sal_Int32 nRow, sal_Int32 nColumn,
-                                 sal_Int32 nRowExtent,
-                                 sal_Int32 nColumnExtent );
-    const SwFrm *GetFrm() const { return mpFrm; }
-
-    const sal_Int32 GetRow() const { return mnRow; }
-    const sal_Int32 GetColumn() const { return mnColumn; }
-
-    const sal_Int32 GetRowExtent() const { return mnRowExtent; }
-    const sal_Int32 GetColumnExtent() const { return mnColumnExtent; }
-};
-
-inline SwAccessibleTableEvent_Impl::SwAccessibleTableEvent_Impl(
-        const SwFrm *pFrm,
-        sal_Int32 nRow, sal_Int32 nColumn,
-        sal_Int32 nRowExtent,
-        sal_Int32 nColumnExtent ) :
-    mpFrm( pFrm ), mnRow( nRow ), mnColumn( nColumn ),
-    mnRowExtent( nRowExtent ), mnColumnExtent( nColumnExtent )
-{
-}
-
-typedef ::std::list < SwAccessibleTableEvent_Impl > _SwAccessibleTableEventList_Impl;
-class SwAccessibleTableEventList_Impl : public _SwAccessibleTableEventList_Impl
-{
-public:
-    SwAccessibleTableEventList_Impl() : _SwAccessibleTableEventList_Impl() {}
-};
-
-//------------------------------------------------------------------------------
-
 typedef ::std::less < sal_Int32 > Int32Less_Impl;
 typedef ::std::set < sal_Int32, Int32Less_Impl > Int32Set_Impl;
+
+typedef ::std::pair < sal_Int32, sal_Int32 > Int32Pair_Impl;
+typedef ::std::list < Int32Pair_Impl > Int32PairList_Impl;
 
 class SwAccTableSelHander_Impl
 {
@@ -194,10 +155,15 @@ class SwAccessibleTableData_Impl
 {
     Int32Set_Impl   maRows;
     Int32Set_Impl   maColumns;
+    Int32PairList_Impl maExtents;   // cell extends for event processing only
     Point   maTabFrmPos;
     const SwTabFrm *mpTabFrm;
 
-    void CollectData( const Point& rPos, const SwFrm *pFrm );
+    void CollectData( const SwFrm *pFrm );
+    void CollectExtents( const SwFrm *pFrm );
+    sal_Bool CompareExtents( const SwFrm *pFrm,
+        Int32PairList_Impl::const_iterator& rIter,
+        const Int32PairList_Impl::const_iterator& rEndIter ) const;
 
     sal_Bool FindCell( const Point& rPos, const SwFrm *pFrm ,
                            sal_Bool bExact, const SwFrm *& rFrm ) const;
@@ -223,6 +189,7 @@ public:
                                          sal_Bool bExact ) const;
     inline sal_Int32 GetRowCount() const;
     inline sal_Int32 GetColumnCount() const;
+    sal_Bool CompareExtents( const SwAccessibleTableData_Impl& r ) const;
 
     void GetSelection( sal_Int32 nStart, sal_Int32 nEnd,
                        const SwSelBoxes& rSelBoxes,
@@ -235,15 +202,14 @@ public:
 
     void GetRowColumnAndExtent( const SwRect& rBox,
                                   sal_Int32& rRow, sal_Int32& rColumn,
-                                  sal_Int32& rRowExtend,
-                                  sal_Int32& rColumnExtend );
+                                  sal_Int32& rRowExtent,
+                                  sal_Int32& rColumnExtent ) const;
 
     const Point& GetTablePos() const { return maTabFrmPos; }
     void SetTablePos( const Point& rPos ) { maTabFrmPos = rPos; }
 };
 
-void SwAccessibleTableData_Impl::CollectData( const Point& rPos,
-                                              const SwFrm *pFrm )
+void SwAccessibleTableData_Impl::CollectData( const SwFrm *pFrm )
 {
     const SwFrmOrObjSList aList( pFrm );
     SwFrmOrObjSList::const_iterator aIter( aList.begin() );
@@ -256,20 +222,93 @@ void SwAccessibleTableData_Impl::CollectData( const Point& rPos,
         {
             if( pLower->IsRowFrm() )
             {
-                maRows.insert( pLower->Frm().Top() - rPos.Y() );
-                CollectData( rPos, pLower );
+                maRows.insert( pLower->Frm().Top() - maTabFrmPos.Y() );
+                CollectData( pLower );
             }
             else if( pLower->IsCellFrm() && rLower.IsAccessible() )
             {
-                maColumns.insert( pLower->Frm().Left() - rPos.X() );
+                maColumns.insert( pLower->Frm().Left() - maTabFrmPos.X() );
             }
             else
             {
-                CollectData( rPos, pLower );
+                CollectData( pLower );
             }
         }
         ++aIter;
     }
+}
+
+void SwAccessibleTableData_Impl::CollectExtents( const SwFrm *pFrm )
+{
+    const SwFrmOrObjSList aList( pFrm );
+    SwFrmOrObjSList::const_iterator aIter( aList.begin() );
+    SwFrmOrObjSList::const_iterator aEndIter( aList.end() );
+    while( aIter != aEndIter )
+    {
+        const SwFrmOrObj& rLower = *aIter;
+        const SwFrm *pLower = rLower.GetSwFrm();
+        if( pLower )
+        {
+            if( pLower->IsCellFrm() && rLower.IsAccessible() )
+            {
+                sal_Int32 nRow, nCol;
+                Int32Pair_Impl aCellExtents;
+                GetRowColumnAndExtent( pLower->Frm(), nRow, nCol,
+                                       aCellExtents.first,
+                                       aCellExtents.second );
+
+                maExtents.push_back( aCellExtents );
+            }
+            else
+            {
+                CollectExtents( pLower );
+            }
+        }
+        ++aIter;
+    }
+}
+
+sal_Bool SwAccessibleTableData_Impl::CompareExtents( const SwFrm *pFrm,
+        Int32PairList_Impl::const_iterator& rIter,
+        const Int32PairList_Impl::const_iterator& rEndIter ) const
+{
+    sal_Bool bRet = sal_True;
+
+    const SwFrmOrObjSList aList( pFrm );
+    SwFrmOrObjSList::const_iterator aIter( aList.begin() );
+    SwFrmOrObjSList::const_iterator aEndIter( aList.end() );
+    while( bRet && aIter != aEndIter )
+    {
+        const SwFrmOrObj& rLower = *aIter;
+        const SwFrm *pLower = rLower.GetSwFrm();
+        if( pLower )
+        {
+            if( pLower->IsCellFrm() && rLower.IsAccessible() )
+            {
+                sal_Int32 nRow, nCol;
+                Int32Pair_Impl aCellExtents;
+                GetRowColumnAndExtent( pLower->Frm(), nRow, nCol,
+                                       aCellExtents.first,
+                                       aCellExtents.second );
+                if( rIter == rEndIter ||
+                    *rIter != aCellExtents )
+                {
+                    bRet = sal_False;
+                }
+                else
+                {
+                    rIter++;
+                }
+            }
+            else
+            {
+                bRet = CompareExtents( pLower, rIter, rEndIter );
+            }
+        }
+        ++aIter;
+    }
+
+    return bRet;
 }
 
 sal_Bool SwAccessibleTableData_Impl::FindCell(
@@ -445,12 +484,34 @@ inline sal_Int32 SwAccessibleTableData_Impl::GetColumnCount() const
     return static_cast< sal_Int32 >( maColumns.size() );
 }
 
+sal_Bool SwAccessibleTableData_Impl::CompareExtents(
+                                const SwAccessibleTableData_Impl& rCmp ) const
+{
+    if( maExtents.size() != rCmp.maExtents.size() )
+        return sal_False;
+
+    Int32PairList_Impl::const_iterator aIter( maExtents.begin() );
+    Int32PairList_Impl::const_iterator aEndIter( maExtents.end() );
+    Int32PairList_Impl::const_iterator aCmpIter( rCmp.maExtents.begin() );
+    while( aIter != aEndIter )
+    {
+        if( *aIter != *aCmpIter )
+            return sal_False;
+
+        ++aIter;
+        ++aCmpIter;
+    }
+
+    return sal_True;
+}
+
 SwAccessibleTableData_Impl::SwAccessibleTableData_Impl(
         const SwTabFrm *pTabFrm ) :
     mpTabFrm( pTabFrm ),
     maTabFrmPos( pTabFrm->Frm().Pos() )
 {
-    CollectData( mpTabFrm->Frm().Pos(), mpTabFrm );
+    CollectData( mpTabFrm );
+    CollectExtents( mpTabFrm );
 }
 
 inline Int32Set_Impl::const_iterator SwAccessibleTableData_Impl::GetRowIter(
@@ -496,7 +557,7 @@ void SwAccessibleTableData_Impl::CheckRowAndCol(
 void SwAccessibleTableData_Impl::GetRowColumnAndExtent(
         const SwRect& rBox,
         sal_Int32& rRow, sal_Int32& rColumn,
-        sal_Int32& rRowExtent, sal_Int32& rColumnExtent )
+        sal_Int32& rRowExtent, sal_Int32& rColumnExtent ) const
 {
     Int32Set_Impl::const_iterator aStt(
                 maRows.lower_bound( rBox.Top() - maTabFrmPos.Y() ) );
@@ -621,29 +682,15 @@ const SwSelBoxes *SwAccessibleTable::GetSelBoxes() const
     return pSelBoxes;
 }
 
-void SwAccessibleTable::AppendEvent( const SwFrm *pFrm, const SwRect& rBox )
-{
-    sal_Int32 nRow, nCol, nRowExt, nColExt;
-    mpTableData->GetRowColumnAndExtent( rBox, nRow, nCol, nRowExt, nColExt );
-
-    if( !mpEvents )
-        mpEvents = new SwAccessibleTableEventList_Impl;
-    SwAccessibleTableEvent_Impl aEvent( pFrm, nRow, nCol, nRowExt, nColExt );
-    mpEvents->push_back( aEvent );
-}
-
 void SwAccessibleTable::FireTableChangeEvent(
-        const SwAccessibleTableData_Impl *pTableData )
+        const SwAccessibleTableData_Impl& rTableData )
 {
-    if( !pTableData )
-        pTableData = &GetTableData();
-
     AccessibleTableModelChange aModelChange;
     aModelChange.Type = AccessibleTableModelChangeType::UPDATE;
     aModelChange.FirstRow = 0;
-    aModelChange.LastRow = pTableData->GetRowCount() - 1;
+    aModelChange.LastRow = rTableData.GetRowCount() - 1;
     aModelChange.FirstColumn = 0;
-    aModelChange.LastColumn = pTableData->GetColumnCount() - 1;
+    aModelChange.LastColumn = rTableData.GetColumnCount() - 1;
 
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACCESSIBLE_TABLE_MODEL_CHANGED;
@@ -662,8 +709,7 @@ SwAccessibleTable::SwAccessibleTable(
         SwAccessibleMap *pMap,
         const SwTabFrm *pTabFrm ) :
     SwAccessibleContext( pMap, AccessibleRole::TABLE, pTabFrm ),
-    mpTableData( 0 ),
-    mpEvents( 0 )
+    mpTableData( 0 )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -682,8 +728,6 @@ SwAccessibleTable::~SwAccessibleTable()
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     delete mpTableData;
-    ASSERT( !mpEvents, "events are existing" );
-    delete mpEvents;
 }
 
 Any SwAccessibleTable::queryInterface( const Type& rType )
@@ -692,8 +736,8 @@ Any SwAccessibleTable::queryInterface( const Type& rType )
     Any aRet;
     if ( rType == ::getCppuType((Reference<XAccessibleTable> *)0) )
     {
-//        Reference<XAccessibleTable> xThis( this );
-//       aRet <<= xThis;
+        Reference<XAccessibleTable> xThis( this );
+           aRet <<= xThis;
     }
     else
     {
@@ -709,16 +753,12 @@ void SwAccessibleTable::UpdateTableData()
 
     delete mpTableData;
     mpTableData = new SwAccessibleTableData_Impl( pTabFrm );
-    delete mpEvents;
-    mpEvents = 0;
 }
 
 void SwAccessibleTable::ClearTableData()
 {
     delete mpTableData;
     mpTableData = 0;
-    delete mpEvents;
-    mpEvents = 0;
 }
 
 OUString SAL_CALL SwAccessibleTable::getAccessibleDescription (void)
@@ -1109,59 +1149,7 @@ void SwAccessibleTable::InvalidatePosOrSize( const SwRect& rOldBox )
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     if( HasTableData() )
-    {
         GetTableData().SetTablePos( GetFrm()->Frm().Pos() );
-
-        const SwTabFrm* pTabFrm = static_cast<const SwTabFrm*>( GetFrm() );
-
-        SwAccessibleTableData_Impl *pOldTableData = mpTableData;
-
-        if( mpEvents )
-        {
-            mpTableData = new SwAccessibleTableData_Impl( pTabFrm );
-            sal_Bool bFireEvent = sal_False;
-
-            SwAccessibleTableEventList_Impl::const_iterator aIter( mpEvents->begin() );
-            SwAccessibleTableEventList_Impl::const_iterator aEndIter( mpEvents->end() );
-            while( !bFireEvent && aIter != aEndIter )
-            {
-                const SwAccessibleTableEvent_Impl& rEvent = *aIter;
-                if( rEvent.GetFrm() && rEvent.GetRowExtent() > 0 &&
-                    rEvent.GetColumnExtent() > 0 )
-                {
-                    // the frame did extist before.
-                    sal_Int32 nRow, nCol, nRowExt, nColExt;
-                    mpTableData->GetRowColumnAndExtent(
-                            rEvent.GetFrm()->Frm(), nRow, nCol, nRowExt, nColExt );
-                    if( nRow != rEvent.GetRow() || nCol != rEvent.GetColumn() ||
-                        nRowExt != rEvent.GetRowExtent() ||
-                        nColExt != rEvent.GetColumnExtent() )
-                    {
-                        bFireEvent = sal_True;
-                    }
-                }
-                else
-                {
-                    // in any other case currently change the whole model.
-                    bFireEvent = sal_True;
-                }
-
-                ++aIter;
-            }
-
-            if( bFireEvent )
-                FireTableChangeEvent( pOldTableData );
-
-            delete mpEvents;
-            mpEvents = 0;
-        }
-        else
-        {
-            mpTableData = 0;
-        }
-
-        delete pOldTableData;
-    }
 
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
 }
@@ -1173,18 +1161,8 @@ void SwAccessibleTable::DisposeChild( const SwFrm *pFrm,
 
     if( HasTableData() )
     {
-        if( GetMap()->GetShell()->ActionPend() )
-        {
-            AppendDisposeEvent( pFrm );
-        }
-        else
-        {
-            const SwTabFrm* pTabFrm = static_cast<const SwTabFrm*>( GetFrm() );
-            SwAccessibleTableData_Impl *pOldTableData = mpTableData;
-            mpTableData = new SwAccessibleTableData_Impl( pTabFrm );
-            FireTableChangeEvent( pOldTableData );
-            delete pOldTableData;
-        }
+        FireTableChangeEvent( GetTableData() );
+        ClearTableData();
     }
 
     // There are two reason why this method has been called. The first one
@@ -1204,17 +1182,24 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwFrm *pFrm,
 
     if( HasTableData() )
     {
-        if( GetMap()->GetShell()->ActionPend() )
-        {
-            AppendPosOrSizeEvent( pFrm, rOldBox );
-        }
-        else
+        ASSERT( !HasTableData() ||
+                GetFrm()->Frm().Pos() == GetTableData().GetTablePos(),
+                "table has invalid position" );
+        if( HasTableData() )
         {
             const SwTabFrm* pTabFrm = static_cast<const SwTabFrm*>( GetFrm() );
-            SwAccessibleTableData_Impl *pOldTableData = mpTableData;
-            mpTableData = new SwAccessibleTableData_Impl( pTabFrm );
-            FireTableChangeEvent( pOldTableData );
-            delete pOldTableData;
+            SwAccessibleTableData_Impl *pNewTableData =
+                new SwAccessibleTableData_Impl( pTabFrm );
+            if( !pNewTableData->CompareExtents( GetTableData() ) )
+            {
+                FireTableChangeEvent( GetTableData() );
+                ClearTableData();
+                mpTableData = pNewTableData;
+            }
+            else
+            {
+                delete pNewTableData;
+            }
         }
     }
 

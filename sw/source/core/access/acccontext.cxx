@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-24 15:27:21 $
+ *  last change: $Author: mib $ $Date: 2002-05-03 12:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,6 +687,10 @@ Reference<XAccessibleStateSet> SAL_CALL
     SwAccessibleContext::getAccessibleStateSet (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleContext )
+
     ::utl::AccessibleStateSetHelper *pStateSet =
         new ::utl::AccessibleStateSetHelper;
 
