@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:35:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 
 namespace com { namespace sun { namespace star { namespace awt {
@@ -107,12 +110,12 @@ namespace comphelper
         The comparison is deep, means if one of the Any's contains an Any which contains an Any ..., this is resolved <br/>
         Other types recognized currently : FontDescriptor, ::com::sun::star::util::Date/Tim/DateTime, staruno::Sequence<sal_Int8>
     */
-    sal_Bool compare(const staruno::Any& rLeft, const staruno::Any& rRight);
+    COMPHELPER_DLLPUBLIC sal_Bool compare(const staruno::Any& rLeft, const staruno::Any& rRight);
 
     //-------------------------------------------------------------------------
     /** compare two FontDescriptor's
     */
-            sal_Bool    operator ==(const starawt::FontDescriptor& _rLeft, const starawt::FontDescriptor& _rRight);
+    COMPHELPER_DLLPUBLIC sal_Bool   operator ==(const starawt::FontDescriptor& _rLeft, const starawt::FontDescriptor& _rRight);
     inline  sal_Bool    operator !=(const starawt::FontDescriptor& _rLeft, const starawt::FontDescriptor& _rRight)
     {
         return !(_rLeft == _rRight);
@@ -120,7 +123,7 @@ namespace comphelper
 
     //-------------------------------------------------------------------------
     /// returns sal_True if objects of the types given are "compatible"
-    sal_Bool isAssignableFrom(const staruno::Type& _rAssignable, const staruno::Type& _rFrom);
+    COMPHELPER_DLLPUBLIC sal_Bool isAssignableFrom(const staruno::Type& _rAssignable, const staruno::Type& _rFrom);
 
     //-------------------------------------------------------------------------
     /** just a small shortcut ...
@@ -195,11 +198,11 @@ namespace comphelper
         the XXX_DONTKNOW enum values (which isn't the case if you instantiate it
         via the default constructor)
     */
-    starawt::FontDescriptor getDefaultFont();
+    COMPHELPER_DLLPUBLIC starawt::FontDescriptor    getDefaultFont();
 
     /** examine a sequence for the <type scope="com.sun.star.uno">Type</type> of it's elements.
     */
-    staruno::Type getSequenceElementType(const staruno::Type& _rSequenceType);
+    COMPHELPER_DLLPUBLIC staruno::Type getSequenceElementType(const staruno::Type& _rSequenceType);
 
 //=========================================================================
 //= replacement of the former UsrAny.getXXX methods
@@ -209,14 +212,14 @@ namespace comphelper
     // no, we don't use templates here. This would lead to a lot of implicit uses of the conversion methods,
     // which would be difficult to trace ...
 
-    sal_Int32       getINT32(const staruno::Any& _rAny);
-    sal_Int16       getINT16(const staruno::Any& _rAny);
-    double          getDouble(const staruno::Any& _rAny);
-    float           getFloat(const staruno::Any& _rAny);
-    ::rtl::OUString getString(const staruno::Any& _rAny);
-    sal_Bool        getBOOL(const staruno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC sal_Int32      getINT32(const staruno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC sal_Int16      getINT16(const staruno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC double         getDouble(const staruno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC float          getFloat(const staruno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC ::rtl::OUString    getString(const staruno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC sal_Bool       getBOOL(const staruno::Any& _rAny);
 
-    sal_Int32       getEnumAsINT32(const staruno::Any& _rAny) throw(starlang::IllegalArgumentException);
+    COMPHELPER_DLLPUBLIC sal_Int32      getEnumAsINT32(const staruno::Any& _rAny) throw(starlang::IllegalArgumentException);
 
 //= replacement of some former UsrAny.setXXX methods - can be used with rvalues
     inline void setBOOL(staruno::Any& _rAny, sal_Bool _b)
