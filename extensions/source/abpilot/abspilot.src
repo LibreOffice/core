@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 12:28:35 $
+ *  last change: $Author: kz $ $Date: 2001-09-06 20:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     Text[ italian ] = "Pilota automatico della sorgente dati della ribrica";
     Text[ danish ] = "Autopilot Address Book Data Source";
     Text[ swedish ] = "AutoPilot f�r adressdatak�llor";
-    Text[ polish ] = "Autopilot Address Book Data Source";
+    Text[ polish ] = "AutoPilot: �r�d�o danych adresowych";
     Text[ portuguese_brazilian ] = "Autopilot Address Book Data Source";
     Text[ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄ ｱﾄﾞﾚｽ帳ﾃﾞｰﾀｿｰｽ";
     Text[ korean ] = "자동 파일럿 주소- 데이터 소스";
@@ -131,7 +131,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ italian ] = "%PRODUCTNAME vi permette di accedere a dati della rubrica gi� presenti nel vostro sistema.\nA questo scopo viene creata una sorgente dati %PRODUCTNAME con la quale avrete accesso alle rubriche sotto forma di tabelle.\n\nQuesto Pilota automatico vi sar� di sostegno durante l'impostazione della sorgente dati.";
         Text[ danish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
         Text[ swedish ] = "%PRODUCTNAME ger dig m�jlighet att ha tillg�ng till adressdata som redan finns i ditt system.\nF�r att du ska kunna g�ra detta skapas en ny %PRODUCTNAME-datak�lla d�r dina adressb�cker �r tillg�ngliga som tabeller.\n\nDen h�r autopiloten hj�lper dig att skapa datak�llan.";
-        Text[ polish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ polish ] = "%PRODUCTNAME umo�liwia dost�p do danych adresowych istniej�cych ju� w systemie komputera.\nUtworzone zostanie w tym celu �r�d�o danych %PRODUCTNAME, udost�pniaj�ce ksi��ki adresowe u�ytkownika w postaci tabel.\n\nW tworzeniu �r�d�a danych pomocny b�dzie niniejszy AutoPilot.";
         Text[ portuguese_brazilian ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
         Text[ japanese ] = "%PRODUCTNAME がお使いのｼｽﾃﾑに既存するｱﾄﾞﾚｽ帳ﾃﾞｰﾀへのｱｸｾｽを可能にします。\nそれには既存するｱﾄﾞﾚｽ帳へﾃｰﾌﾞﾙとしてｱｸｾｽできるように %PRODUCTNAME ﾃﾞｰﾀｿｰｽを格納します。\n\nこのﾃﾞｰﾀｿｰｽの設定をｵｰﾄﾊﾟｲﾛｯﾄがお手伝いします。";
         Text[ korean ] = "%PRODUCTNAME에서는 사용자의 시스템이 있는 주소 데이터를 액세스할 수 있습니다.\n이 작업을 위해 새 %PRODUCTNAME 데이터 소스가 생성되며, 이 데이터 소스에서 주소 데이터를 테이블로 사용할 수 있습니다.\n\n이 자동 파일럿이 이 데이터 소스의 생성 작업을 지원합니다.";
@@ -160,7 +160,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ italian ] = "Selezionate il tipo di rubrica esterna:";
         Text[ danish ] = "Please choose the type of your external address book:";
         Text[ swedish ] = "V�lj typen f�r din externa adressbok:";
-        Text[ polish ] = "Please choose the type of your external address book:";
+        Text[ polish ] = "Wybierz typ swojej zewn�trznej ksi��ki adresowej:";
         Text[ portuguese_brazilian ] = "Please choose the type of your external address book:";
         Text[ japanese ] = "お使いの外部ｱﾄﾞﾚｽ帳の種類を選択してください。";
         Text[ korean ] = "외부 주소록의 유형을 선택하십시오:";
@@ -218,7 +218,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ italian ] = "Dati rubrica LDAP";
         Text[ danish ] = "LDAP address data";
         Text[ swedish ] = "LDAP-adressdata";
-        Text[ polish ] = "LDAP address data";
+        Text[ polish ] = "Zbi�r danych LDAP";
         Text[ portuguese_brazilian ] = "LDAP address data";
         Text[ japanese ] = "LDAP ｱﾄﾞﾚｽ帳ﾃﾞｰﾀ";
         Text[ korean ] = "LDAP 주소 데이터";
@@ -246,7 +246,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ italian ] = "Rubrica Outlook";
         Text[ danish ] = "Outlook address book";
         Text[ swedish ] = "Outlook-adressbok";
-        Text[ polish ] = "Outlook address book";
+        Text[ polish ] = "Ksi��ka adresowa Outlook";
         Text[ portuguese_brazilian ] = "Outlook address book";
         Text[ japanese ] = "Outlook ｱﾄﾞﾚｽ帳";
         Text[ korean ] = "Outlook 주소록";
@@ -274,7 +274,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ italian ] = "Rubrica di sistema Windows";
         Text[ danish ] = "Windows system address book";
         Text[ swedish ] = "Windowssystemets adressbok";
-        Text[ polish ] = "Windows system address book";
+        Text[ polish ] = "Ksi��ka adresowa systemu Windows";
         Text[ portuguese_brazilian ] = "Windows system address book";
         Text[ japanese ] = "Windows ｼｽﾃﾑのｱﾄﾞﾚｽ帳";
         Text[ korean ] = "Windows 시스템 주소록";
@@ -302,7 +302,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ italian ] = "Altre sorgenti dati esterne";
         Text[ danish ] = "other external data source";
         Text[ swedish ] = "Annan extern datak�lla";
-        Text[ polish ] = "other external data source";
+        Text[ polish ] = "inne zewn�trzne �r�d�o danych";
         Text[ portuguese_brazilian ] = "other external data source";
         Text[ japanese ] = "その他の外部ﾃﾞｰﾀｿｰｽ";
         Text[ korean ] = "기타 외부 데이터 소스";
@@ -322,7 +322,7 @@ TabPage RID_PAGE_SELECTABTYPE
     Text[ italian ] = "Benvenuti nel Pilota automatico per la sorgente dati della Rubrica";
     Text[ danish ] = "Welcome to the Address Data Source AutoPilot";
     Text[ swedish ] = "V�lkommen till AutoPiloten f�r adressdatak�llor";
-    Text[ polish ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ polish ] = "Wita AutoPilot �r�d�a danych adresowych";
     Text[ portuguese_brazilian ] = "Welcome to the Address Data Source AutoPilot";
     Text[ japanese ] = "ｱﾄﾞﾚｽ帳ﾃﾞｰﾀｿｰｽのｵｰﾄﾊﾟｲﾛｯﾄへようこそ";
     Text[ korean ] = "주소 데이터 소스 자동 파일럿에 오신 것을 환영합니다.";
@@ -349,7 +349,7 @@ TabPage RID_PAGE_ADMININVOKATION
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 48 ) ;
         WordBreak = TRUE;
 
-        Text = "Um die neue Datenquelle einzurichten, sind noch weitergehende Angaben notwendig.\n\n"
+        Text = "Um die neue Datenquelle einzurichten, sind noch Weiter gehende Angaben notwendig.\n\n"
             "Daf�r wird, sobald Sie die unten befindliche Schaltfl�che bet�tigen, ein weiterer Dialog ge�ffnet. "
             "Nehmen Sie dort bitte die fehlenden Einstellungen vor.";
         Text [ english ] = "To set up the new data source, some additional information is needed.\n\n"
@@ -366,7 +366,7 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ italian ] = "Per impostare la nuova sorgente dati sono necessarie ancora alcune informazioni.\n\nCliccando il pulsante sotto si aprir� un altro dialogo in cui potete inserire le informazioni mancanti.";
         Text[ danish ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
         Text[ swedish ] = "Du m�ste g�ra fler inst�llningar f�r den nya datak�llan.\n\nOm du klickar p� kommandoknappen nedan �ppnas en annan dialogruta d�r du g�r inst�llningarna som saknas.";
-        Text[ polish ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ polish ] = "Konfiguracja nowego �r�d�a danych wymaga dodatkowych ustawie�.\n\nNale�y w tym celu klikn�� poni�szy przycisk. Wy�wietlone zostanie okno dialogowe, w kt�rym nale�y dokona� brakuj�cych ustawie�.";
         Text[ portuguese_brazilian ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
         Text[ japanese ] = "新しいﾃﾞｰﾀｿｰｽの設定には、まだいくつかの項目を指定する必要があります。\n\n下にあるﾎﾞﾀﾝをｸﾘｯｸして、次のﾀﾞｲｱﾛｸﾞを開きそこでまだ指定されてない項目の設定を行います。";
         Text[ korean ] = "새 데이터 소스를 설정하려면 추가 정보가 필요합니다.\n\n아래 있는 버튼을 누르면 이 작업을 수행할 또 하나의 대화상자가 표시됩니다. 이 대화상자에서 아직 설정하지 않은 설정 항목들을 지정하십시오.";
@@ -395,7 +395,7 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ italian ] = "Impostazioni";
         Text[ danish ] = "Settings";
         Text[ swedish ] = "Inst�llningar";
-        Text[ polish ] = "Settings";
+        Text[ polish ] = "Ustawienia";
         Text[ portuguese_brazilian ] = "Settings";
         Text[ japanese ] = "設定";
         Text[ korean ] = "Settings";
@@ -429,7 +429,7 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ italian ] = "Impossibile realizzare il collegamento alla sorgente dati.\nPrima di proseguire vi consigliamo di verificare le impostazioni appena fatte oppure selezionate un altro tipo di sorgente dati per la rubrica nella pagina precedente.";
         Text[ danish ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
         Text[ swedish ] = "Det gick inte att koppla till datak�llan.\nKontrollera de gjorda inst�llningarna innan du forts�tter eller v�lj en annan typ f�r din adressdatak�lla (p� f�reg�ende sida).";
-        Text[ polish ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ polish ] = "Brak po��czenia ze �r�d�em danych.\nPrzed kontynuacj� operacji nale�y sprawdzi� dokonane ustawienia lub wybra� (na poprzedniej stronie) inny typ �r�d�a danych adresowych.";
         Text[ portuguese_brazilian ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
         Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽへは接続できませんでした。\n続行する前に、もう一度選択した設定を確認するか、あるいは前ﾍﾟｰｼﾞでお使いのｱﾄﾞﾚｽ帳ﾃﾞｰﾀｿｰｽの種類に別のものを選択します。";
         Text[ korean ] = "데이터 소스 연결이 설정되지 못했습니다.\n진행하기 전에 설정 모드를 확인하거나 이전 페이지에서 다른 주소 데이터 형식을 선택하십시오.";
@@ -449,7 +449,7 @@ TabPage RID_PAGE_ADMININVOKATION
     Text[ italian ] = "Ulteriori impostazioni";
     Text[ danish ] = "Additional Settings";
     Text[ swedish ] = "Ytterligare inst�llningar";
-    Text[ polish ] = "Additional Settings";
+    Text[ polish ] = "Dodatkowe ustawienia";
     Text[ portuguese_brazilian ] = "Additional Settings";
     Text[ japanese ] = "詳細設定";
     Text[ korean ] = "추가 설정";
@@ -491,7 +491,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ italian ] = "La sorgente dati esterna selezionata contiene diversi indirizzi.\nSelezionate quelli con cui volete lavorare:";
         Text[ danish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
         Text[ swedish ] = "Den externa datak�llan som du har valt inneh�ller flera adressupps�ttningar.\nV�lj den som du huvudsakligen vill arbeta med:";
-        Text[ polish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ polish ] = "Podane zewn�trzne �r�d�o danych zawiera kilka zbior�w adres�w.\nNale�y wybra� zbi�r, kt�ry b�dzie g�ownie u�ywany:";
         Text[ portuguese_brazilian ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
         Text[ japanese ] = "選択した外部ﾃﾞｰﾀｿｰｽには複数のｱﾄﾞﾚｽ帳ﾃﾞｰﾀが含まれています。\n主に作業に必要なものをその中から選択してください。";
         Text[ korean ] = "선택한 외부 데이터 소스에 두 개 이상의 주소록(또는 각 테이블)이 들어 있습니다.\n기본으로 사용할 주소록을 선택하십시오:";
@@ -522,7 +522,7 @@ TabPage RID_PAGE_TABLESELECTION
     Text[ italian ] = "Seleziona tabella";
     Text[ danish ] = "Select Table";
     Text[ swedish ] = "V�lj tabell";
-    Text[ polish ] = "Select Table";
+    Text[ polish ] = "Wybierz tabel�";
     Text[ portuguese_brazilian ] = "Select Table";
     Text[ japanese ] = "ﾃｰﾌﾞﾙの選択";
     Text[ korean ] = "테이블 선택";
@@ -559,22 +559,22 @@ TabPage RID_PAGE_FIELDMAPPING
             "For instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\n"
             "When you press the button below, another dialog will be opened, where you can do this field assignment for your "
             "data source.";
-        Text [ english_us ] = "To incorporate the address data in your templates, %PRODUCTNAME has to know which fields contain which data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"email\", or \"E-mail\" or \"EM\" - or something completely different.\n\nClick the button below to open another dialog where you can enter the setting for your data source.";
-        Text[ portuguese ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text [ english_us ] = "To incorporate the address data in your templates, %PRODUCTNAME has to know which fields contain which data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"email\", or \"E-mail\" or \"EM\" - or something completely different.\n\nClick the button below to open another dialog where you can enter the settings for your data source.";
+        Text[ portuguese ] = "Para poder utilizar os dados dos endere�os nos seus modelos de documentos, o %PRODUCTNAME tem de reconhecer os campos que cont�m os dados concretos.\n\nExemplo: os endere�os electr�nicos podem estar guardados num determinado campo com o nome que lhe parecer mais conveniente (e-mail, email ou EM, etc.)\n\nUtilize o bot�o abaixo para abrir outra caixa de di�logo que lhe permite definir estes par�metros para a fonte de dados.";
         Text[ russian ] = "��� ����������� ������������� �������� ������ � ��������, %PRODUCTNAME ������ \"�����\" ���� � ���������� ������, ������� ���������� � ���� �����.\n\n��������, ������ ����������� ����� ����� ���� ��������� � ���� � ������ \"E-Mail\" ��� \"����������� �����\" ��� ���������� � ������ ������.\n\n���� ������ �� ������, ����������� �����, �� ��������� ������, � ������� ����������� ��� ���������.";
         Text[ greek ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
         Text[ dutch ] = "Om de adresgegevens in uw sjabloondocumenten te kunnen gebruiken moet %PRODUCTNAME weten welke velden welke concrete gegevens bevatten.\n\nU kunt bijvoorbeeld de e-mailadressen hebben opgeslagen in een veld met de naam \"E-mail\", \"EMail\", of \"EM\" - of onder een andere naam.\n\nAls u op de knop hieronder klikt wordt er een dialoog geopend waarin u de instellingen voor uw gegevensbron kunt aangeven.";
         Text[ french ] = "Afin de pouvoir utiliser les donn�es des adresses dans les mod�les, %PRODUCTNAME doit reconna�tre les champs contenant les donn�es concr�tes.\n\nExemple : les adresses e-mail doivent �tre stock�es dans un champ pr�cis que vous pouvez nommer comme bon vous semble (e-mail, email, EM ...).\n\nUtilisez le bouton ci-dessous pour appeler une autre bo�te de dialogue permettant de d�finir ces param�tres pour la source de donn�es.";
-        Text[ spanish ] = "Para poder usar los datos de direcciones en sus plantillas, %PRODUCTNAME debe saber qu� campos contienen qu� datos.\n\nPor ejemplo usted puede haber guardado las direcciones electr�nicas en un campo con el nombre \"e-mail\", \"em\" u otro.\n\nEn cuanto pulse el bot�n que se encuentra m�s abajo, se abrir� un di�logo en el que podr� realizar esta configuraci�n para su fuente de datos.";
+        Text[ spanish ] = "Para poder usar los datos de direcciones en sus plantillas, %PRODUCTNAME debe saber qu� campos contienen qu� datos.\n\nPor ejemplo usted puede haber guardado las direcciones electr�nicas en un campo con el nombre \"e-mail\", \"em\" u otro.\n\nEn cuanto pulse el bot�n que se encuentra m�s abajo, se abrir� otro di�logo en el que podr� realizar esta configuraci�n para su fuente de datos.";
         Text[ finnish ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
         Text[ italian ] = "Per poter utilizzare i dati della Rubrica nei vostri modelli � necessario che %PRODUCTNAME riconosca i campi contenenti dati concreti.\n\nSupponiamo che abbiate salvato i vostri indirizzi eMail in un campo chiamato \"E-Mail\", \"eMail\", \"EM\" o un qualsiasi altro nome.\n\nPremendo il pulsante in basso si aprir� un altro dialogo in cui potrete impostare la sorgente dati.";
         Text[ danish ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
-        Text[ swedish ] = "F�r att adressdata i dina malldokument ska kunna anv�ndas m�ste %PRODUCTNAME veta vilka f�lt som inneh�ller vilka konkreta data.\n\nDu kan till exempel ha sparat e-postadresser i ett f�lt som kallas \"E-Mail\" eller \"e-mail\" eller \"EM\" - eller n�got helt annat.\n\nOm du klickar p� kommandoknappen nedan �ppnas en ytterligare dialogruta d�r du kan g�ra de h�r inst�llningarna f�r din datak�lla.";
-        Text[ polish ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ swedish ] = "F�r att adressdata i dina malldokument ska kunna anv�ndas m�ste %PRODUCTNAME veta vilka f�lt som inneh�ller vilka konkreta data.\n\nDu kan till exempel ha sparat e-postadresser i ett f�lt som kallas \"E-Mail\" eller \"Email\" eller \"EM\" - eller n�got helt annat.\n\nOm du klickar p� kommandoknappen nedan �ppnas en ytterligare dialogruta d�r du kan g�ra de h�r inst�llningarna f�r din datak�lla.";
+        Text[ polish ] = "Aby m�c zastoswa� dane adresowe w szablonach, program %PRODUCTNAME musi wiedzie�, w jakich polach znajduj� si� okre�lone dane.\n\nMo�na np. zapisa� adresy u�ywane w poczcie elektronicznej w polu \"e-mail\" lub w polu o innej nazwie.\n\nPo klikni�ciu poni�szego przycisku wy�wietlone zostanie nowe okno dialogowe, w kt�rym mo�na dokona� odpowiednich ustawie� �r�d�a danych.";
         Text[ portuguese_brazilian ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
-        Text[ japanese ] = "ｱﾄﾞﾚｽ帳ﾃﾞｰﾀがﾃﾝﾌﾟﾚｰﾄのﾄﾞｷｭﾒﾝﾄにも使用できるように、どのﾌｨｰﾙﾄﾞにどのﾃﾞｰﾀを入力するか %PRODUCTNAME が読み取れるようにしておく必要があります。\n\nたとえば、E-mail ｱﾄﾞﾚｽの名前が「EMail」、「E-Mail」、「EM」、あるいは全く異なった名前で保存されている可能性もあります。\n\n下にあるﾎﾞﾀﾝをｸﾘｯｸすると、ﾃﾞｰﾀｿｰｽの設定に必要なその他のﾀﾞｲｱﾛｸﾞが開かれます。";
+        Text[ japanese ] = "ｱﾄﾞﾚｽ帳ﾃﾞｰﾀがﾃﾝﾌﾟﾚｰﾄのﾄﾞｷｭﾒﾝﾄにも使用できるように、どのﾌｨｰﾙﾄﾞにどのﾃﾞｰﾀを入力するか %PRODUCTNAME が読み取れるようにしておく必要があります。\n\nたとえば、E-mail ｱﾄﾞﾚｽの名前が「E-Mail」、「EMail」、「EM」、あるいは全く異なった名前で保存されている可能性もあります。\n\n下にあるﾎﾞﾀﾝをｸﾘｯｸすると、ﾃﾞｰﾀｿｰｽの設定に必要なその他のﾀﾞｲｱﾛｸﾞが開かれます。";
         Text[ korean ] = "서식파일 문서 안에 주소 데이터를 통합하려면 어떤 필드가 어떤 구체적인 데이터를 함유하는지 %PRODUCTNAME에서 어떤 필드에 구체적인 데이터가 포함되는지 알아야 합니다.\n\n예를 들면, E 메일 주소를 \"E-Mail\", \"E-Mail\", \"EM\" 또는 전혀 다른 이름의 필드에 저장했을 수 있습니다.\n\n아래 버튼을 누르면 또 하나의 대화상자가 열립니다. 이 대화상자에서는 데이터 소스에 대해 이 필드 할당을 수행할 수 있습니다.";
-        Text[ chinese_simplified ] = "要在文档样式内正确使用通讯簿数据，就必须让 %PRODUCTNAME 知道哪些字段含有何种数据。\n\n例如，您可以在一个自己设定名称的字段内，或者在一个采用字段名称\"EMail\"，或\"E-Mail\" 或\"EM\"的字段之内保存电子邮件地址。\n\n点击下方的按钮，就会打开一个提供进行数据源设定的对话框。";
+        Text[ chinese_simplified ] = "要在文档样式内正确使用通讯簿数据，就必须让 %PRODUCTNAME 知道哪些字段含有何种数据。\n\n例如，您可以在一个自己设定名称的字段内，或者在一个采用字段名称\"EMail\"，或\"E-Mail\" 或\"EM\"的字段之内保存电子邮件地址。\n\n点击下方的按钮后，就会打开一个提供进行数据源设定的对话框。";
         Text[ chinese_traditional ] = "要在文件樣式之中正確使用通訊錄資料就必須讓 %PRODUCTNAME 知道哪些欄位含有何種資料。\n\n例如，可以在一個自訂名稱的欄位之内或在一個採用欄位名稱<EMail>，或<E-Mail>或<EM>欄位之内儲存電子郵件地址。\n\n按下方的按鈕，就會開啓一個提供設定資料源的對話方塊。";
         Text[ turkish ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
         Text[ arabic ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
@@ -599,7 +599,7 @@ TabPage RID_PAGE_FIELDMAPPING
         Text[ italian ] = "Assegnazione campo";
         Text[ danish ] = "Field assignment";
         Text[ swedish ] = "F�lttilldelning";
-        Text[ polish ] = "Field assignment";
+        Text[ polish ] = "Przyporz�dkowanie p�l";
         Text[ portuguese_brazilian ] = "Field assignment";
         Text[ japanese ] = "ﾌｨｰﾙﾄﾞの割り当て";
         Text[ korean ] = "필드 할당";
@@ -625,7 +625,7 @@ TabPage RID_PAGE_FIELDMAPPING
     Text[ italian ] = "Assegnazione campo";
     Text[ danish ] = "Field Assignment";
     Text[ swedish ] = "F�lttilldelning";
-    Text[ polish ] = "Field Assignment";
+    Text[ polish ] = "Przyporz�dkowanie p�l";
     Text[ portuguese_brazilian ] = "Field Assignment";
     Text[ japanese ] = "ﾌｨｰﾙﾄﾞの割り当て";
     Text[ korean ] = "필드 할당";
@@ -667,10 +667,10 @@ TabPage RID_PAGE_FINAL
         Text[ italian ] = "Queste informazioni erano necessarie per integrare i dati della rubrica in %PRODUCTNAME.\n\nIndicate ancora il nome con cui volete registrare la sorgente dati in %PRODUCTNAME.";
         Text[ danish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
         Text[ swedish ] = "Detta var alla uppgifter som beh�vs f�t att dina adressdata ska kunna integreras i %PRODUCTNAME.\n\nAnge nu namnet som datak�llan i %PRODUCTNAME ska registreras med.";
-        Text[ polish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ polish ] = "Podano wszystkie dane wymagane do integracji danych adresowych w programie %PRODUCTNAME.\n\nTeraz nale�y wpisa� jeszcze nazw�, pod kt�r� �r�d�o danych zarejestrowane zostanie w programie %PRODUCTNAME.";
         Text[ portuguese_brazilian ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
         Text[ japanese ] = "これでお使いのｱﾄﾞﾚｽ帳ﾃﾞｰﾀを %PRODUCTNAME に統合する準備が整いました。\n\n最後に %PRODUCTNAME のﾃﾞｰﾀｿｰｽに登録する名前を入力します。";
-        Text[ korean ] = "이 정보 모두가는 %PRODUCTNAME에 주소 데이터를 통합하는데 필요한 데이터입니다.\n\n이제  %PRODUCTNAME에 데이터 소스를 등록하는데 사용할 이름을 입력하십시오.";
+        Text[ korean ] = "이 정보 모두가는 %PRODUCTNAME에 주소 데이터를 통합하는데 필요한 데이터입니다.\n\n이제 %PRODUCTNAME에 데이터 소스를 등록하는데 사용할 이름을 입력하십시오.";
         Text[ chinese_simplified ] = "您已经完成所有的 %PRODUCTNAME 整合通讯簿数据的设定。\n\n现在您只需要输入 %PRODUCTNAME 用来登记这个数据源的名称。";
         Text[ chinese_traditional ] = "您已經完成所有必須的 %PRODUCTNAME 整合通訊錄資料的設定。\n\n現在您只需要輸入 %PRODUCTNAME 用來登記和使用這個資料源的名稱。";
         Text[ turkish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
@@ -697,7 +697,7 @@ TabPage RID_PAGE_FINAL
         Text[ italian ] = "Titolo";
         Text[ danish ] = "Title";
         Text[ swedish ] = "Rubrik";
-        Text[ polish ] = "Title";
+        Text[ polish ] = "Nazwa";
         Text[ portuguese_brazilian ] = "Title";
 Text[ japanese ] = "ﾀｲﾄﾙ";
         Text[ korean ] = "제목";
@@ -736,7 +736,7 @@ Text[ japanese ] = "ﾀｲﾄﾙ";
         Text [ italian ] = "Esiste gi� una sorgente dati con questo nome. Poich� il nome delle sorgenti di dati dev'essere univoco, � necesario scegliere un altro nome.";
         Text [ danish ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
         Text [ swedish ] = "Det finns redan en datak�lla med det h�r namnet. Eftersom namn p� datak�llor m�ste vara globalt unika m�ste du v�lja ett annat namn.";
-        Text [ polish ] = "Istnieje inne �r�d�o danych o tej samej nazwie. Poniewa� nazwy �rode� danych musz� by� globalnie jednoznaczne, nale�y wybra� inn� nazw�.";
+        Text [ polish ] = "Istnieje inne �r�d�o danych o tej samej nazwie. Nale�y wybra� inn� nazw�.";
         Text [ portuguese_brazilian ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
         Text [ japanese ] = "この名前の付いた別のﾃﾞｰﾀｿｰｽがすでにあります。ﾃﾞｰﾀｿｰｽ名をはっきりと区別するためには、ほかの名前を選択する必要があります。";
         Text [ korean ] = "이미 동일한 이름의 다른 데이터 소스가 있습니다. 데이터 소스 이름은 전세계적으로 유일해야 하므로 다른 이름을 선택해야 합니다.";
@@ -757,7 +757,7 @@ Text[ japanese ] = "ﾀｲﾄﾙ";
     Text[ italian ] = "Sorgenti dati Titel";
     Text[ danish ] = "Data Source Title";
     Text[ swedish ] = "Datak�llrubrik";
-    Text[ polish ] = "Data Source Title";
+    Text[ polish ] = "Nazwa �r�d�a danych";
     Text[ portuguese_brazilian ] = "Data Source Title";
     Text[ japanese ] = "ﾃﾞｰﾀｿｰｽのﾀｲﾄﾙ";
     Text[ korean ] = "데이터 소스 제목";
@@ -786,7 +786,7 @@ ErrorBox RID_ERR_NEEDTYPESELECTION
     Message[ italian ] = "Selezionate un tipo di rubrica adatto";
     Message[ danish ] = "Bitte w�hlen sie einen Adressbuch-Typ aus";
     Message[ swedish ] = "V�lj en typ av adressbok";
-    Message[ polish ] = "Bitte w�hlen sie einen Adressbuch-Typ aus";
+    Message[ polish ] = "Wybierz typ ksi��ki adresowej";
     Message[ portuguese_brazilian ] = "Bitte w�hlen sie einen Adressbuch-Typ aus";
     Message[ japanese ] = "ｱﾄﾞﾚｽ帳の種類をひとつ選択してください";
     Message[ korean ] = "주소록 유형을 선택하십시오";
@@ -818,7 +818,7 @@ QueryBox RID_QRY_NOTABLES
     Message[ italian ] = "La sorgente dati non contiene tabelle.\nVolete comunque impostarla come sorgente dati della rubrica?";
     Message[ danish ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
     Message[ swedish ] = "Datak�llan inneh�ller inga tabeller.\nVill du �nd� installera den som adress-datak�lla?";
-    Message[ polish ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ polish ] = "�r�d�o danych nie zawiera �adnych tabel.\nCzy pomimo tego utworzy� �r�d�o danych adresowych?";
     Message[ portuguese_brazilian ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
     Message[ japanese ] = "このﾃﾞｰﾀｿｰｽにはﾃｰﾌﾞﾙがひとつもありません。\nそれでもｱﾄﾞﾚｽ帳ﾃﾞｰﾀｿｰｽとして設定しますか。";
     Message[ korean ] = "데이터 소스에 테이블이 들어 있지 않습니다.\n그래도 데이터 소스를 주소 데이터 소스로서 설치하시겠습니까?";
@@ -845,7 +845,7 @@ String RID_STR_DEFAULT_NAME
     Text[ italian ] = "Indirizzi";
     Text[ danish ] = "Addresses";
     Text[ swedish ] = "Adresser";
-    Text[ polish ] = "Addresses";
+    Text[ polish ] = "Adresy";
     Text[ portuguese_brazilian ] = "Addresses";
     Text[ japanese ] = "ｱﾄﾞﾚｽ";
     Text[ korean ] = "주소";
@@ -871,7 +871,7 @@ String RID_STR_ADMINDIALOGTITLE
     Text[ italian ] = "Crea indirizzi sorgente dati";
     Text[ danish ] = "Create Address Data Source";
     Text[ swedish ] = "Skapa adressdatak�lla";
-    Text[ polish ] = "Create Address Data Source";
+    Text[ polish ] = "Utw�rz �r�d�o danych adresowych";
     Text[ portuguese_brazilian ] = "Create Address Data Source";
     Text[ japanese ] = "ｱﾄﾞﾚｽ帳ﾃﾞｰﾀｿｰｽの格納";
     Text[ korean ] = "주소 데이터 소스 만들기";
@@ -897,7 +897,7 @@ String RID_STR_NOCONNECTION
     Text[ italian ] = "Impossibile realizzare il collegamento.";
     Text[ danish ] = "The connection could not be established.";
     Text[ swedish ] = "Det gick inte att koppla.";
-    Text[ polish ] = "The connection could not be established.";
+    Text[ polish ] = "Brak po��czenia.";
     Text[ portuguese_brazilian ] = "The connection could not be established.";
     Text[ japanese ] = "接続できませんでした。";
     Text[ korean ] = "연결이 설정되지 못했습니다.";
@@ -923,7 +923,7 @@ String RID_STR_PLEASECHECKSETTINGS
     Text[ italian ] = "Verificate le impostazioni della sorgente dati.";
     Text[ danish ] = "Please check the settings made for the data source.";
     Text[ swedish ] = "Kontrollera inst�llningarna f�r datak�llan.";
-    Text[ polish ] = "Please check the settings made for the data source.";
+    Text[ polish ] = "Sprawd� ustawienia �r�d�a danych.";
     Text[ portuguese_brazilian ] = "Please check the settings made for the data source.";
     Text[ japanese ] = "ﾃﾞｰﾀｿｰｽの設定項目をもう一度確認してください。";
     Text[ korean ] = "데이터 소스에 대한 설정을 확인하십시오.";
@@ -949,7 +949,7 @@ String RID_STR_FIELDDIALOGTITLE
     Text[ italian ] = "Dati della Rubrica - Assegnazione campi";
     Text[ danish ] = "Address data - field assignment";
     Text[ swedish ] = "Adressdata - f�lttilldelning";
-    Text[ polish ] = "Address data - field assignment";
+    Text[ polish ] = "Dane adresowe - przyporz�dkowanie p�l";
     Text[ portuguese_brazilian ] = "Address data - field assignment";
     Text[ japanese ] = "ｱﾄﾞﾚｽ帳ﾃﾞｰﾀとﾌｨｰﾙﾄﾞの割り当て";
     Text[ korean ] = "주소 데이터 필드 할당";
@@ -980,7 +980,7 @@ String RID_STR_NOFIELDSASSIGNED
     Text[ italian ] = "Al momento non � assegnato alcun campo.\nSe preferite non fare assegnazioni al momento, potete farlo in un secondo momento:\nMenu \"File - Modelli di documenti - Sorgente rubrica...\"";
     Text[ danish ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
     Text[ swedish ] = "F�r n�rvarande �r inga f�lt tilldelade.\nDu kan g�ra tilldelningen nu eller senare om du v�ljer:\n\"Arkiv - Dokumentmall - Adressboksk�lla ...\"";
-    Text[ polish ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ polish ] = "Brak przyporz�dkowanych p�l.\nPola mo�na przyporz�dkowa� r�wnie� p�niej,\nwybieraj�c sekwencj� \"Plik - Szablon dokumentu - �r�d�o danych adresowych...\"";
     Text[ portuguese_brazilian ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
     Text[ japanese ] = "現在、ﾌｨｰﾙﾄﾞの割り当てはされていません。\n今すぐに割り当てが決められなければ、あとからでも割り当てできます。\nそのときはﾒﾆｭｰの ﾌｧｲﾙ → ﾄﾞｷｭﾒﾝﾄﾃﾝﾌﾟﾚｰﾄ → ｱﾄﾞﾚｽ帳ｿｰｽ... ｺﾏﾝﾄﾞで実行します。";
     Text[ korean ] = "현재는 할당된 필드가 없습니다.\n지금 할당하기를 원치 않을 경우 나중에 언제라도\n메뉴 \"파일 - 서직파일 - 주소록 소스 ...\" 메뉴를 사용하여 할당할 수 있습니다.";
@@ -1008,7 +1008,7 @@ String RID_STR_ABP_SUCCESS
     Text[ italian ] = "La vostra rubrica esterna � stata registrata in %PRODUCTNAME.\nAdesso potete utilizzare i dati della rubrica come qualsiasi altra sorgente dati.";
     Text[ danish ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
     Text[ swedish ] = "Din externa adressbok har registrerats i %PRODUCTNAME.\nDu kan nu anv�nda dina adressdata som vilken annan datak�lla som helst.";
-    Text[ polish ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
+    Text[ polish ] = "Zewn�trzna ksi��ka adresowa zosta�a zarejestrowana w programie %PRODUCTNAME.\nDanych adresowych mo�na teraz u�ywa� tak jak innego �r�d�a danych.";
     Text[ portuguese_brazilian ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
     Text[ japanese ] = "外部ｱﾄﾞﾚｽ帳の %PRODUCTNAME への登録は正常に完了しました。\nこれからはｱﾄﾞﾚｽ帳ﾃﾞｰﾀもほかのﾃﾞｰﾀｿｰｽと同じように使用が可能です。";
     Text[ korean ] = "외부 주소록이 성공적으로 %PRODUCTNAME에 등록되었습니다.\n이제 주소 데이터를 다른 임의의 데이터 소스처럼 액세스할 수 있습니다.";
@@ -1029,6 +1029,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/08/30 12:28:35  fs
+ *  #91359# spelling
+ *
  *  Revision 1.12  2001/08/28 06:25:57  fs
  *  #90840# small spelling errors
  *
@@ -1068,6 +1071,7 @@ Bitmap BMP_HEADERIMAGE
  *
  *  Revision 1.0 26.07.01 09:03:45  fs
  ************************************************************************/
+
 
 
 
