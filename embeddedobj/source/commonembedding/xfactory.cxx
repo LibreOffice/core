@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-12 12:51:25 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::impl_static
 uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const ::rtl::OUString& sEntName,
-                                                                    sal_Bool bIsReadonly,
+                                                                    const uno::Sequence< beans::PropertyValue >& aMediaDescr,
                                                                     const uno::Sequence< beans::PropertyValue >& lObjArgs )
     throw ( lang::IllegalArgumentException,
             container::NoSuchElementException,
@@ -172,7 +172,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     {
         // the object must be based on storage
         uno::Reference< embed::XStorage > xSubStorage =
-                xStorage->openStorageElement( sEntName, embed::ElementModes::ELEMENT_READ );
+                xStorage->openStorageElement( sEntName, embed::ElementModes::READ );
 
         uno::Reference< beans::XPropertySet > xPropSet( xSubStorage, uno::UNO_QUERY );
         if ( !xPropSet.is() )
@@ -228,8 +228,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
-                                    embed::EntryInitModes::ENTRY_DEFAULT_INIT,
-                                    uno::Sequence< beans::PropertyValue >(),
+                                    embed::EntryInitModes::DEFAULT_INIT,
+                                    aMediaDescr,
                                     lObjArgs );
 
     return xResult;
@@ -314,7 +314,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
-                                    embed::EntryInitModes::ENTRY_MEDIA_DESCRIPTOR_INIT,
+                                    embed::EntryInitModes::MEDIA_DESCRIPTOR_INIT,
                                     aTempMedDescr,
                                     lObjArgs );
 
@@ -370,7 +370,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
-                                    embed::EntryInitModes::ENTRY_TRUNCATE_INIT,
+                                    embed::EntryInitModes::TRUNCATE_INIT,
                                     uno::Sequence< beans::PropertyValue >(),
                                     lObjArgs );
 
@@ -603,7 +603,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     {
         xPersist->setPersistentEntry( xStorage,
                                     sEntName,
-                                    embed::EntryInitModes::ENTRY_MEDIA_DESCRIPTOR_INIT,
+                                    embed::EntryInitModes::MEDIA_DESCRIPTOR_INIT,
                                     uno::Sequence< beans::PropertyValue >(),
                                     lObjArgs );
 
