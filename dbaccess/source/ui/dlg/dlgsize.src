@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsize.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:48:37 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  // JN
  //
  // Letzte Aenderung:
- // $Author: kz $ $Date: 2001-07-03 22:48:37 $ $Revision: 1.11 $
+ // $Author: kz $ $Date: 2001-07-13 21:19:21 $ $Revision: 1.12 $
  //
  //---------------------------------------------------------------------------
 
@@ -112,7 +112,7 @@ ModalDialog DLG_ROWHEIGHT
         Text[ chinese_traditional ] = "°ª«×(~H)";
         Text[ arabic ] = "ÇáÇÑÊÝÇÚ";
         Text[ greek ] = "¾~øïò";
-        Text[ korean ] = "³ôÀÌ";
+        Text[ korean ] = "³ôÀÌ(~H)";
         Text[ turkish ] = "Yükseklik";
         Text[ catalan ] = "~Altura";
         Text[ finnish ] = "~Korkeus";
@@ -150,7 +150,7 @@ ModalDialog DLG_ROWHEIGHT
         Text[ polish ] = "Automatycznie";
         Text[ portuguese_brazilian ] = "~Standardwert";
         Text[ japanese ] = "Ž©“®(~A)";
-        Text[ korean ] = "ÀÚµ¿À¸·Î";
+        Text[ korean ] = "ÀÚµ¿À¸·Î(~A)";
         Text[ chinese_simplified ] = "×Ô¶¯(~A)";
         Text[ chinese_traditional ] = "¦Û°Ê(~A)";
         Text[ arabic ] = "ÊáÞÇÆí";
@@ -230,7 +230,7 @@ ModalDialog DLG_COLWIDTH
         Text[ chinese_traditional ] = "¼e«×(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ÐëÜôïò";
-        Text[ korean ] = "³Êºñ";
+        Text[ korean ] = "³Êºñ(~W)";
         Text[ turkish ] = "Geniþlik";
         Text[ catalan ] = "An~cho";
         Text[ finnish ] = "Le~veys";
@@ -268,7 +268,7 @@ ModalDialog DLG_COLWIDTH
         Text[ polish ] = "Automatycznie";
         Text[ portuguese_brazilian ] = "~Standardwert";
         Text[ japanese ] = "Ž©“®(~A)";
-        Text[ korean ] = "ÀÚµ¿À¸·Î";
+        Text[ korean ] = "ÀÚµ¿À¸·Î(~A)";
         Text[ chinese_simplified ] = "×Ô¶¯(~A)";
         Text[ chinese_traditional ] = "¦Û°Ê(~A)";
         Text[ arabic ] = "ÊáÞÇÆí";
@@ -316,5 +316,6 @@ ModalDialog DLG_COLWIDTH
     Text[ catalan ] = "Ancho de columna";
     Text[ finnish ] = "Sarakkeen leveys";
 };
+
 
 
