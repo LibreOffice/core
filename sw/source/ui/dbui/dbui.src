@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:30:48 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,14 +105,14 @@ ModalDialog DLG_DBSELECTION
     Text [ danish ] = "Databaseudvalg" ;
     Text [ portuguese_brazilian ] = "Datenbankauswahl" ;
     Text [ portuguese ] = "Seleccionar base de dados" ;
-    Text[ chinese_simplified ] = "Ñ¡ÔñÊı¾İ¿â";
+    Text[ chinese_simplified ] = "é€‰æ‹©æ•°æ®åº“";
     Text[ russian ] = "Âûáîğ áàçû äàííûõ";
     Text[ polish ] = "Wybór bazy danych";
-    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚Ì‘I‘ğ";
-    Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ®w";
+    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ã®é¸æŠ";
+    Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™åº«";
     Text[ arabic ] = "ÇÎÊíÇÑ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
     Text[ greek ] = "ÅğéëïãŞ âÜóçò äåäïìİíùí";
-    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¼±ÅÃ";
+    Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ì„ íƒ";
     Text[ turkish ] = "Veritabanı seçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Seleccionar base de datos";
@@ -169,14 +169,14 @@ ModelessDialog DLG_PRINTMONITOR
         Text [ french ] = "en cours d'impression sur" ;
         Text [ dutch ] = "wordt afgedrukt als" ;
         Text [ portuguese ] = "está a ser impresso na" ;
-        Text[ chinese_simplified ] = "Êä³öÖÁ";
+        Text[ chinese_simplified ] = "è¾“å‡ºè‡³";
         Text[ russian ] = "Áóäåò íàïå÷àòàíî êàê";
         Text[ polish ] = "zostanie wydrukowany jako";
-        Text[ japanese ] = "ˆóü’†";
-        Text[ chinese_traditional ] = "¶Ç°e¨ì";
+        Text[ japanese ] = "å°åˆ·ä¸­";
+        Text[ chinese_traditional ] = "å‚³é€åˆ°";
         Text[ arabic ] = "íÊã ØÈÇÚÊå ßÜ";
         Text[ greek ] = "åêôõğşíåôáé ùò";
-        Text[ korean ] = "Ãâ·Â Çü½Ä";
+        Text[ korean ] = "ì¶œë ¥ í˜•ì‹";
         Text[ turkish ] = "Çıktı türü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "se está imprimiendo en";
@@ -205,14 +205,14 @@ ModelessDialog DLG_PRINTMONITOR
         TEXT[ dutch ] = "wordt verzonden aan";
         TEXT[ spanish ] = "se envía a";
         TEXT[ english_us ] = "is being send to";
-        TEXT[ chinese_simplified ] = "¼Ä·¢¸ø";
+        TEXT[ chinese_simplified ] = "å¯„å‘ç»™";
         TEXT[ russian ] = "Áóäåò îòïğàâëåíî";
         TEXT[ polish ] = "zostanie przes³any do";
-        TEXT[ japanese ] = "ˆ¶æ‚É‘—M’†";
-        TEXT[ chinese_traditional ] = "±Hµoµ¹";
+        TEXT[ japanese ] = "å®›å…ˆã«é€ä¿¡ä¸­";
+        TEXT[ chinese_traditional ] = "å¯„ç™¼çµ¦";
         TEXT[ arabic ] = "íÊã ÅÑÓÇáå Åáì";
         TEXT[ greek ] = "áğïóôİëëåôáé ğñïò";
-        TEXT[ korean ] = "£®£®¿¡ Àü¼Û";
+        TEXT[ korean ] = "ï¼ï¼ì— ì „ì†¡";
         TEXT[ turkish ] = "Alıcı";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "se envía a";
@@ -270,14 +270,14 @@ ModelessDialog DLG_PRINTMONITOR
         Text[ dutch ] = "Monitor verzenden";
         Text[ spanish ] = "Enviar-Monitor";
         Text[ english_us ] = "Send-Monitor";
-        Text[ chinese_simplified ] = "¼Ä·¢-¼àÊÓÆ÷";
+        Text[ chinese_simplified ] = "å¯„å‘-ç›‘è§†å™¨";
         Text[ russian ] = "Îòïğàâêà òåêóùåãî èçîáğàæåíèÿ";
         Text[ polish ] = "Pokaz stanu przesy³ania";
-        Text[ japanese ] = "‘—MÓÆÀ°";
-        Text[ chinese_traditional ] = "±Hµo-ºÊµø¾¹";
+        Text[ japanese ] = "é€ä¿¡ï¾“ï¾†ï¾€ï½°";
+        Text[ chinese_traditional ] = "å¯„ç™¼-ç›£è¦–å™¨";
         Text[ arabic ] = "ãÑÇŞÈ ÇáÅÑÓÇá";
         Text[ greek ] = "ÁğïóôïëŞ-Ïèüíç";
-        Text[ korean ] = "Àü¼Û ¸ğ´ÏÅÍ";
+        Text[ korean ] = "ì „ì†¡ ëª¨ë‹ˆí„°";
         Text[ turkish ] = "Gönderme ekranı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Enviar-Monitor";
@@ -292,15 +292,15 @@ ModelessDialog DLG_PRINTMONITOR
     Text [ spanish ] = "Monitor de impresión" ;
     Text [ french ] = "Moniteur d'impression" ;
     Text [ dutch ] = "Opslaan-monitor" ;
-    Text[ chinese_simplified ] = "´òÓ¡¼àÊÓ";
+    Text[ chinese_simplified ] = "æ‰“å°ç›‘è§†";
     Text[ russian ] = "Ñîõğàíåíèå òåêóùåãî èçîáğàæåíèÿ";
     Text[ polish ] = "Pokaz stanu zapisu";
-    Text[ japanese ] = "ÒÓØÓÆÀ°";
-    Text[ chinese_traditional ] = "¦C¦LºÊµø";
+    Text[ japanese ] = "ï¾’ï¾“ï¾˜ï¾“ï¾†ï¾€ï½°";
+    Text[ chinese_traditional ] = "åˆ—å°ç›£è¦–";
     Text[ arabic ] = "ãÑÇŞÈ ÇáÍİÙ";
     Text[ language_user1 ] = " ";
     Text[ greek ] = "ÁğïèŞêåõóç-Ïèüíç";
-    Text[ korean ] = "ÀúÀå ¸ğ´ÏÅÍ";
+    Text[ korean ] = "ì €ì¥ ëª¨ë‹ˆí„°";
     Text[ turkish ] = "Yazdırma ekranı";
     Text[ catalan ] = "Monitor de impresión";
     Text[ finnish ] = "Tulostuksenvalvonta";
@@ -319,19 +319,20 @@ String STR_DB_EMAIL
     Text[ swedish ] = "E-post";
     Text[ dutch ] = "E-mail";
     Text[ spanish ] = "E-mail";
-    Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş";
+    Text[ chinese_simplified ] = "ç”µå­é‚®ä»¶";
     Text[ russian ] = "İëåêòğîííàÿ ïî÷òà";
     Text[ polish ] = "e-mail";
     Text[ japanese ] = "E-mail";
-    Text[ chinese_traditional ] = "¹q¤l¶l¥ó";
+    Text[ chinese_traditional ] = "é›»å­éƒµä»¶";
     Text[ arabic ] = "ÈÑíÏ ÅáßÊÑæäí";
     Text[ greek ] = "E-mail";
-    Text[ korean ] = "£Å-£Íail";
+    Text[ korean ] = "ï¼¥-ï¼­ail";
     Text[ turkish ] = "E-posta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "E-mail";
     Text[ finnish ] = "Sähköposti";
 };
+
 
 
 
