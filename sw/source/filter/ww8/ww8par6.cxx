@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-16 16:22:47 $
+ *  last change: $Author: cmc $ $Date: 2002-05-22 14:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2393,19 +2393,21 @@ BOOL WW8FlyPara::ReadFull( const BYTE* pSprm29, SwWW8ImplReader* pIo )
                 break;                              // Ende des APO
             }
             USHORT nColl = pPap->GetIstd();
-            if( nColl >= pIo->nColls || !pIo->pCollA[nColl].pFmt
-                || !pIo->pCollA[nColl].bColl )
-                nColl = 0;                          // Unguelige Style-Id
+            WW8FlyPara *pNowStyleApo=0;
+            while (nColl < pIo->nColls &&
+                !(pNowStyleApo = pIo->pCollA[nColl].pWWFly))
+            {
+                nColl = pIo->pCollA[nColl].nBase;
+            }
 
-            BOOL bNowStyleApo = pIo->pCollA[nColl].pWWFly != 0; // Apo in StyleDef
-            WW8FlyPara aF( bVer67, bNowStyleApo ? pIo->pCollA[nColl].pWWFly : 0 );
-                                                    // Neuer FlaPara zum Vergleich
-            aF.Read( pS, pPap );                    // WWPara fuer neuen Para
-            if( !( aF == *this ) )                  // selber APO ? ( oder neuer ? )
-                bGrafApo = TRUE;                    // nein -> 1-zeiliger APO
-                                                    //      -> Grafik-APO
+            WW8FlyPara aF(bVer67, pNowStyleApo);
+                                                // Neuer FlaPara zum Vergleich
+            aF.Read( pS, pPap );                // WWPara fuer neuen Para
+            if( !( aF == *this ) )              // selber APO ? ( oder neuer ? )
+                bGrafApo = TRUE;                // nein -> 1-zeiliger APO
+                                                //      -> Grafik-APO
         }
-        while( 0 );                                 // Block zum rausspringen
+        while( 0 );                             // Block zum rausspringen
 
         pPlcxMan->GetPap()->Restore( aSave );
         pIoStrm->Seek( nPos );
@@ -2881,20 +2883,19 @@ void SwWW8ImplReader::MoveOutsideFly(const SwFrmFmt *pFlyFmt,
     aDup.Insert(*pPaM->GetPoint());
 }
 
-BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo,
-    WW8_TablePos *pTabPos)
+BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29,
+    const WW8FlyPara *pNowStyleApo, WW8_TablePos *pTabPos)
 {
-    ASSERT(pSprm29 || pTabPos || bNowStyleApo,
+    ASSERT(pSprm29 || pTabPos || pNowStyleApo,
         "If no frame found, *MUST* be in a table");
 
-    pWFlyPara = new WW8FlyPara ( bVer67, bNowStyleApo  ?
-        pCollA[nAktColl].pWWFly : 0 );
+    pWFlyPara = new WW8FlyPara(bVer67, pNowStyleApo);
 
     // APO-Parameter ermitteln und Test auf bGrafApo
-    if( pSprm29 || bNowStyleApo)
+    if (pSprm29 || pNowStyleApo)
     {
         BOOL bOk = pWFlyPara->ReadFull( pSprm29, this );
-        if (!bOk && !bNowStyleApo)
+        if (!bOk && !pNowStyleApo)
         {
             DELETEZ( pWFlyPara );
             return FALSE;
@@ -3053,8 +3054,8 @@ void SwWW8ImplReader::StopApo()
 }
 
 // TestSameApo() beantwortet die Frage, ob es dasselbe APO oder ein neues ist
-BOOL SwWW8ImplReader::TestSameApo( const BYTE* pSprm29, BOOL bNowStyleApo,
-    WW8_TablePos *pTabPos)
+BOOL SwWW8ImplReader::TestSameApo( const BYTE* pSprm29,
+   const WW8FlyPara *pNowStyleApo, WW8_TablePos *pTabPos)
 {
     if( !pWFlyPara )
     {
@@ -3068,9 +3069,9 @@ BOOL SwWW8ImplReader::TestSameApo( const BYTE* pSprm29, BOOL bNowStyleApo,
     // die harten Attrs angewendet, und dann verglichen
 
     // Zum Vergleich
-    WW8FlyPara aF( bVer67, bNowStyleApo ? pCollA[nAktColl].pWWFly : 0 );
+    WW8FlyPara aF(bVer67, pNowStyleApo);
     // WWPara fuer akt. Para
-    if (pSprm29 || bNowStyleApo)
+    if (pSprm29 || pNowStyleApo)
         aF.Read( pSprm29, pPlcxMan->GetPapPLCF() );
     aF.ApplyTabPos(pTabPos,pSprm29);
 

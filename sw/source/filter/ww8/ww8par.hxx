@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-22 13:04:56 $
+ *  last change: $Author: cmc $ $Date: 2002-05-22 14:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,12 +919,14 @@ friend class WW8FormulaControl;
     void SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord, SwFrmFmt *pFlyFmt,
         WW8_FSPA *pF );
 
-    BOOL StartApo(const BYTE* pSprm29,BOOL bNowStyleApo,WW8_TablePos *pTabPos);
-    void StopApo();
-    BOOL TestSameApo( const BYTE* pSprm29, BOOL bNowStyleApo,
+    BOOL StartApo(const BYTE* pSprm29, const WW8FlyPara *pNowStyleApo,
         WW8_TablePos *pTabPos);
-    const BYTE* TestApo( BOOL& rbStartApo, BOOL& rbStopApo, BOOL& rbNowStyleApo,
-        int nInTable, BOOL bTableRowEnd, WW8_TablePos *pTabPos);
+    void StopApo();
+    BOOL TestSameApo( const BYTE* pSprm29, const WW8FlyPara *pNowStyleApo,
+        WW8_TablePos *pTabPos);
+    const BYTE* TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
+        WW8FlyPara* &pbNowStyleApo, int nInTable, BOOL bTableRowEnd,
+        WW8_TablePos *pTabPos);
 
     BOOL ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStartCp );
     USHORT TabCellSprm(int nLevel) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-22 13:04:56 $
+ *  last change: $Author: cmc $ $Date: 2002-05-22 14:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1468,9 +1468,9 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync,
 
 //  then look if we are in an Apo
 
-    BOOL bStartApo, bStopApo, bNowStyleApo;
-
-    const BYTE* pSprm29 = TestApo( bStartApo, bStopApo, bNowStyleApo, nTable,
+    BOOL bStartApo, bStopApo;
+    WW8FlyPara *pNowStyleApo=0;
+    const BYTE* pSprm29 = TestApo( bStartApo, bStopApo, pNowStyleApo, nTable,
         bTableRowEnd && bTableInApo, pTabPos);
 
     //look to see if we are in a Table, but Table in foot/end note not allowed
@@ -1525,7 +1525,7 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync,
 
     if( bStartApo && !( nIniFlags & WW8FL_NO_APO ) )
     {
-        bApo = StartApo(pSprm29, bNowStyleApo, pTabPos);
+        bApo = StartApo(pSprm29, pNowStyleApo, pTabPos);
         *pbReSync = TRUE;                   // nach StartApo ist ein ReSync
                                             // noetig ( eigentlich nur, falls
                                             // die Apo ueber eine FKP-Grenze

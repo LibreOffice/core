@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-16 16:22:47 $
+ *  last change: $Author: cmc $ $Date: 2002-05-22 14:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,17 +486,24 @@ BOOL SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
 // TestApo() ist die aus ProcessSpecial() herausgeloeste Apo-Abfrage.
 // sie wird auch beim Aufbau der Tabellen-Struktur (ww8par6.cxx)
 // verwendet.
-// Die Parameter rbStartApo, rbStopApo und rbNowStyleApo sind reine
+// Die Parameter rbStartApo, rbStopApo und rpNowStyleApo sind reine
 // Rueckgabeparameter
-const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
-    BOOL& rbNowStyleApo, int nInTable, BOOL bTableRowEnd,
+const BYTE* SwWW8ImplReader::TestApo(BOOL& rbStartApo, BOOL &rbStopApo,
+    WW8FlyPara* &rpNowStyleApo, int nInTable, BOOL bTableRowEnd,
     WW8_TablePos *pTabPos)
 {
     const BYTE* pSprm37;
     const BYTE* pSprm29;
     // Frame in Style Definition (word appears to ignore them if
     // inside an text autoshape, e.g. #94418#)
-    rbNowStyleApo = (0 != pCollA[nAktColl].pWWFly && !bTxbxFlySection);
+    rpNowStyleApo = 0;
+    if (!bTxbxFlySection)
+    {
+        USHORT nIstd = nAktColl;
+        while (nIstd < nColls && !(rpNowStyleApo = pCollA[nIstd].pWWFly))
+            nIstd = pCollA[nIstd].nBase;
+    }
+
     rbStartApo = rbStopApo  = FALSE;
 
     /*
@@ -519,11 +526,11 @@ const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
     to see if we are still in that frame.
     */
 
-    if( !bApo && nInTable && rbNowStyleApo && (!(pTableDesc && pTableDesc->GetAktCol())))
+    if( !bApo && nInTable && rpNowStyleApo && (!(pTableDesc && pTableDesc->GetAktCol())))
     {
         pSprm37       = 0;
         pSprm29       = 0;
-        rbNowStyleApo = FALSE;
+        rpNowStyleApo = 0;
     }
     else
     {
@@ -532,7 +539,7 @@ const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
     }
 
     // Is there some frame data here
-    BOOL bNowApo = rbNowStyleApo || pSprm29 || pSprm37 || pTabPos;
+    BOOL bNowApo = rpNowStyleApo || pSprm29 || pSprm37 || pTabPos;
 
     BOOL bTestAllowed = (!bTxbxFlySection) && (!bTableRowEnd) &&
         (!(nInTable && pTableDesc && pTableDesc->GetAktCol()));
@@ -551,7 +558,7 @@ const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
         if (bTestAllowed)
         {
             // two bordering eachother
-            if (!TestSameApo( pSprm29, rbNowStyleApo, pTabPos))
+            if (!TestSameApo( pSprm29, rpNowStyleApo, pTabPos))
                 rbStopApo = rbStartApo = TRUE;
         }
     }
@@ -569,7 +576,7 @@ const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
     */
     if( bApo && bNowApo && !bTableRowEnd
         && !bApoContinuedInTabCell2ndParagraph
-        && !TestSameApo( pSprm29, rbNowStyleApo ) )
+        && !TestSameApo( pSprm29, rpNowStyleApo ) )
     {
         rbStopApo = rbStartApo = TRUE;              // aneinandergrenzende APOs
     };
@@ -1681,8 +1688,9 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
             break;
         }
 
-        BOOL bStartApo, bStopApo, bNowStyleApo;
-        pIo->TestApo(bStartApo,bStopApo,bNowStyleApo,TRUE,FALSE,pTabPos);
+        BOOL bStartApo, bStopApo;
+        WW8FlyPara *rpNowStyleApo=0;
+        pIo->TestApo(bStartApo,bStopApo,rpNowStyleApo,TRUE,FALSE,pTabPos);
 
         /*
         ##513##, #79474# If this is not sufficent, then we should look at
