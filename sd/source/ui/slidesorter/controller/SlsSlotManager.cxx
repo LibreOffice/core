@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:57:01 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,8 +225,17 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
                 rShell.GetViewFrame()->SetChildWindow(
                     SlideChangeChildWindow::GetChildWindowId(), TRUE);
             }
-            else if (rRequest.GetSlot() == SID_DIA_AUTO)
-                rShell.Invalidate (SID_DIA_TIME);
+            else
+            {
+                rShell.SetCurrentFunction(
+                    new SlideParameterFunction (
+                        mrController,
+                        rRequest));
+                if (rRequest.GetSlot() == SID_DIA_AUTO)
+                    rShell.Invalidate (SID_DIA_TIME);
+                // Reinstall pFuOld.
+                rShell.Cancel();
+            }
             rRequest.Done();
             break;
 
