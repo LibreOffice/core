@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XRemoteContentProviderActivator.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:35 $
+ *  last change:$Date: 2003-05-27 12:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.ucb;
 
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XContentProviderManager;
 import com.sun.star.ucb.XRemoteContentProviderAcceptor;
 import com.sun.star.ucb.XRemoteContentProviderActivator;
@@ -99,7 +100,7 @@ public class _XRemoteContentProviderActivator extends MultiMethodTest {
         XRemoteContentProviderAcceptor xRCPA = (XRemoteContentProviderAcceptor)
                                                     tEnv.getObjRelation("RCPA");
         String[] template = new String[]{"file"};
-        xRCPA.addRemoteContentProvider("ContentID",tParam.getMSF(),template,null);
+        xRCPA.addRemoteContentProvider("ContentID",(XMultiServiceFactory)tParam.getMSF(),template,null);
         XContentProviderManager CPM = oObj.activateRemoteContentProviders();
         res = (CPM != null);
         xRCPA.removeRemoteContentProvider("ContentID");

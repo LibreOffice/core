@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSimpleFileAccess.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:35 $
+ *  last change:$Date: 2003-05-27 12:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.ucb;
 
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.task.XInteractionHandler;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
@@ -103,7 +104,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
         try {
             String copiedFile = "";
             String dirname = util.utils.getFullTestURL("XSimpleFileAccess");
-            String dirnameTo = util.utils.getOfficeTemp(tParam.getMSF()) ;
+            String dirnameTo = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
             String filename = dirname+"XSimpleFileAccess.txt";
             copiedFile = dirnameTo + "XSimpleFileAccess_copy.txt";
 
@@ -133,7 +134,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
         try {
             String copiedFile = "";
             String dirname = util.utils.getFullTestURL("XSimpleFileAccess");
-            String dirnameTo = util.utils.getOfficeTemp(tParam.getMSF()) ;
+            String dirnameTo = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
             String filename = dirname+"XSimpleFileAccess.txt";
             copiedFile = dirnameTo + "XSimpleFileAccess_copy.txt";
 
@@ -165,7 +166,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
         try {
             String copiedFile = "";
             String dirname = util.utils.getFullTestURL("XSimpleFileAccess");
-            String dirnameTo = util.utils.getOfficeTemp(tParam.getMSF()) ;
+            String dirnameTo = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
             String filename = dirname+"XSimpleFileAccess.txt";
             copiedFile = dirnameTo + "XSimpleFileAccess_copy.txt";
 
@@ -223,7 +224,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
             String filename = dirname+"XSimpleFileAccess.txt";
             boolean result = true;
 
-            String dirnameTo = util.utils.getOfficeTemp(tParam.getMSF()) ;
+            String dirnameTo = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
             String readonlyCopy = dirnameTo + "XSimpleFileAccess_copy.txt" ;
 
             if (oObj.exists(readonlyCopy))
@@ -269,7 +270,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
             String dirname = util.utils.getFullTestURL("XSimpleFileAccess");
             String filename = dirname+"XSimpleFileAccess.txt";
 
-            String dirnameTo = util.utils.getOfficeTemp(tParam.getMSF()) ;
+            String dirnameTo = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
             String readonlyCopy = dirnameTo + "XSimpleFileAccess_copy.txt" ;
 
             if (oObj.exists(readonlyCopy))
@@ -299,7 +300,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
      */
     public void _createFolder() {
         try {
-            String tmpdirname = util.utils.getOfficeTemp(tParam.getMSF()) ;
+            String tmpdirname = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
             String newFolder = tmpdirname+"SimpleSubFolder";
 
             if (oObj.exists(newFolder))
@@ -491,7 +492,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
     */
     public void _openFileWrite() {
         try {
-            String tmpdirname = util.utils.getOfficeTemp(tParam.getMSF()) ;
+            String tmpdirname = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
 
             String copiedFile = tmpdirname+"XSimpleFileAccess_openWrite.txt";
 
@@ -522,7 +523,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
     */
     public void _openFileReadWrite() {
         try {
-            String dirnameTo = util.utils.getOfficeTemp(tParam.getMSF()) ;
+            String dirnameTo = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
             String copiedFile = dirnameTo + "XSimpleFileAccess2.txt" ;
 
             if (oObj.exists(copiedFile))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSimpleFileAccess2.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:34 $
+ *  last change:$Date: 2003-05-27 12:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package ifc.ucb;
 
 import com.sun.star.io.XInputStream;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XSimpleFileAccess2;
 import lib.MultiMethodTest;
 
@@ -83,7 +84,7 @@ public class _XSimpleFileAccess2 extends MultiMethodTest {
     public void _writeFile() {
         boolean result = true;
         try {
-            String dirnameTo = util.utils.getOfficeTemp(tParam.getMSF()) ;
+            String dirnameTo = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
             String fileURL = dirnameTo + "XSimpleFileAccess_new.txt";
             String dirname = util.utils.getFullTestURL("XSimpleFileAccess");
             String filename = dirname+"XSimpleFileAccess.txt";
