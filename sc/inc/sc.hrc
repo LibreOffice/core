@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:26:49 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,7 +580,7 @@
 
 #define SID_CHOOSE_DESIGN       (SC_VIEW_START + 82)
 #define SID_EURO_CONVERTER      (SC_VIEW_START + 83)
-#define SID_CHG_PROTECT         (SC_VIEW_START + 84)
+//#define SID_CHG_PROTECT         (SC_VIEW_START + 84)      -> moved to SVX
 #define SID_EXTERNAL_SOURCE     (SC_VIEW_START + 85)
 
 #define SID_SC_INPUT_TEXTWYSIWYG        (SC_VIEW_START + 86)
@@ -691,7 +691,7 @@
 #define SID_DEL_ROWS            (EDIT_MENU_START + 16)//JN
 #define SID_DEL_COLS            (EDIT_MENU_START + 17)//JN
 
-#define FID_CHG_RECORD          (EDIT_MENU_START + 18)
+//#define   FID_CHG_RECORD          (EDIT_MENU_START + 18)  -> moved to SVX
 #define FID_CHG_SHOW            (EDIT_MENU_START + 19)
 
 #define EDIT_MENU_END           (EDIT_MENU_START + 20)
