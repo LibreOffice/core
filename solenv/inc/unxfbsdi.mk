@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxfbsdi.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:07:58 $
+#   last change: $Author: svesik $ $Date: 2004-04-21 13:54:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -211,7 +211,7 @@ STDSHLCUIMT=$(PTHREAD_LIBS) -lm
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
 # STLport always needs pthread.
-LIBSTLPORT=$(DYNAMIC) -lstlport_gcc $(PTHREAD_LIBS)
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc $(STDLIBCPP) $(PTHREAD_LIBS)
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC) $(PTHREAD_LIBS)
 
 # name of library manager
