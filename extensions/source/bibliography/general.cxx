@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:58:26 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,12 +147,13 @@ using namespace ::rtl;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 #define C2S(cChar) String::CreateFromAscii(cChar)
+#define DISTANCE_CONTROL_TO_FIXEDTEXT 5
 
 ::Point lcl_MovePoint(const FixedText& rFixedText)
 {
     ::Point aRet(rFixedText.GetPosPixel());
     aRet.X() += rFixedText.GetSizePixel().Width();
-    aRet.X() += 5;
+    aRet.X() += DISTANCE_CONTROL_TO_FIXEDTEXT;
     return aRet;
 }
 
@@ -319,6 +320,9 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     aCustom3FT(&aControlParentWin,      ResId(FT_CUSTOM3        )),
     aCustom4FT(&aControlParentWin,      ResId(FT_CUSTOM4        )),
     aCustom5FT(&aControlParentWin,      ResId(FT_CUSTOM5        )),
+    aFirstFL(&aControlParentWin,        ResId(FL_1        )),
+    aSecondFL(&aControlParentWin,       ResId(FL_2        )),
+    aThirdFL(&aControlParentWin,        ResId(FL_3        )),
     aHoriScroll(this, WB_HORZ),
     aVertScroll(this, WB_VERT),
     sErrorPrefix(ResId(ST_ERROR_PREFIX))
@@ -385,106 +389,109 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     xCtrlContnr = VCLUnoHelper::CreateControlContainer(&aControlParentWin);
 
     xMgr = comphelper::getProcessServiceFactory();
+    // the control should be a bit smaller than the fixed text
+    Size aControlSize(aIdentifierFT.GetSizePixel());
+    aControlSize.Width() = aControlSize.Width() * 8 / 10;
 
     AddControlWithError( lcl_GetColumnName( pMapping, IDENTIFIER_POS ), lcl_MovePoint( aIdentifierFT ),
-        aIdentifierFT.GetSizePixel(), sTableErrorString, aIdentifierFT.GetText(),
+        aControlSize, sTableErrorString, aIdentifierFT.GetText(),
         HID_BIB_IDENTIFIER_POS, 0 );
 
     sTypeColumnName = lcl_GetColumnName(pMapping, AUTHORITYTYPE_POS);
 
-    AddControlWithError( sTypeColumnName, lcl_MovePoint(aAuthTypeFT ), aAuthTypeFT.GetSizePixel(), sTableErrorString,
+    AddControlWithError( sTypeColumnName, lcl_MovePoint(aAuthTypeFT ), aControlSize, sTableErrorString,
         aAuthTypeFT.GetText(), HID_BIB_AUTHORITYTYPE_POS, 1 );
 
     ::Point aYearPos = lcl_MovePoint(aYearFT);
-    AddControlWithError( lcl_GetColumnName( pMapping, YEAR_POS ),
-        aYearPos, aYearFT.GetSizePixel(), sTableErrorString, aYearFT.GetText(), HID_BIB_YEAR_POS, 4 );
+    AddControlWithError( lcl_GetColumnName( pMapping, YEAR_POS ), aYearPos,
+        aControlSize, sTableErrorString, aYearFT.GetText(), HID_BIB_YEAR_POS, 4 );
 
     AddControlWithError( lcl_GetColumnName(pMapping, AUTHOR_POS), lcl_MovePoint(aAuthorFT),
-        aAuthorFT.GetSizePixel(), sTableErrorString, aAuthorFT.GetText(), HID_BIB_AUTHOR_POS, 2 );
+        aControlSize, sTableErrorString, aAuthorFT.GetText(), HID_BIB_AUTHOR_POS, 2 );
 
     ::Point aTitlePos( lcl_MovePoint( aTitleFT ) );
     ::Size aTitleSize = aTitleFT.GetSizePixel();
-    aTitleSize.Width() = aYearPos.X() + aYearFT.GetSizePixel().Width() - aTitlePos.X();
+    aTitleSize.Width() = aYearPos.X() + aControlSize.Width() - aTitlePos.X();
     AddControlWithError( lcl_GetColumnName(pMapping, TITLE_POS), aTitlePos, aTitleSize, sTableErrorString,
         aTitleFT.GetText(), HID_BIB_TITLE_POS, 22 );
 
     AddControlWithError( lcl_GetColumnName( pMapping, PUBLISHER_POS ), lcl_MovePoint( aPublisherFT),
-        aPublisherFT.GetSizePixel(), sTableErrorString, aPublisherFT.GetText(), HID_BIB_PUBLISHER_POS, 5 );
+        aControlSize, sTableErrorString, aPublisherFT.GetText(), HID_BIB_PUBLISHER_POS, 5 );
 
     AddControlWithError( lcl_GetColumnName( pMapping, ADDRESS_POS ), lcl_MovePoint( aAddressFT ),
-        aAddressFT.GetSizePixel(), sTableErrorString, aAddressFT.GetText(), HID_BIB_ADDRESS_POS, 7 );
+        aControlSize, sTableErrorString, aAddressFT.GetText(), HID_BIB_ADDRESS_POS, 7 );
 
     AddControlWithError( lcl_GetColumnName( pMapping, ISBN_POS ), lcl_MovePoint( aISBNFT ),
-        aISBNFT.GetSizePixel(), sTableErrorString, aISBNFT.GetText(), HID_BIB_ISBN_POS, 6 );
+        aControlSize, sTableErrorString, aISBNFT.GetText(), HID_BIB_ISBN_POS, 6 );
 
     AddControlWithError( lcl_GetColumnName( pMapping, CHAPTER_POS ), lcl_MovePoint(aChapterFT),
-        aChapterFT.GetSizePixel(), sTableErrorString, aChapterFT.GetText(), HID_BIB_CHAPTER_POS, 10 );
+        aControlSize, sTableErrorString, aChapterFT.GetText(), HID_BIB_CHAPTER_POS, 10 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, PAGES_POS ), lcl_MovePoint( aPagesFT ), aPagesFT.GetSizePixel(),
-        sTableErrorString, aPagesFT.GetText(), HID_BIB_PAGES_POS, 19 );
+    AddControlWithError( lcl_GetColumnName( pMapping, PAGES_POS ), lcl_MovePoint( aPagesFT ),
+        aControlSize, sTableErrorString, aPagesFT.GetText(), HID_BIB_PAGES_POS, 19 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, EDITOR_POS ), lcl_MovePoint( aEditorFT ), aEditorFT.GetSizePixel(),
-        sTableErrorString, aEditorFT.GetText(), HID_BIB_EDITOR_POS, 12 );
+    AddControlWithError( lcl_GetColumnName( pMapping, EDITOR_POS ), lcl_MovePoint( aEditorFT ),
+        aControlSize, sTableErrorString, aEditorFT.GetText(), HID_BIB_EDITOR_POS, 12 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, EDITION_POS ), lcl_MovePoint(aEditionFT), aEditionFT.GetSizePixel(),
-        sTableErrorString, aEditionFT.GetText(), HID_BIB_EDITION_POS, 11 );
+    AddControlWithError( lcl_GetColumnName( pMapping, EDITION_POS ), lcl_MovePoint(aEditionFT),
+        aControlSize, sTableErrorString, aEditionFT.GetText(), HID_BIB_EDITION_POS, 11 );
 
     AddControlWithError( lcl_GetColumnName(pMapping, BOOKTITLE_POS), lcl_MovePoint(aBooktitleFT),
-        aBooktitleFT.GetSizePixel(), sTableErrorString, aBooktitleFT.GetText(), HID_BIB_BOOKTITLE_POS, 9 );
+        aControlSize, sTableErrorString, aBooktitleFT.GetText(), HID_BIB_BOOKTITLE_POS, 9 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, VOLUME_POS ), lcl_MovePoint( aVolumeFT ), aVolumeFT.GetSizePixel(),
-        sTableErrorString, aVolumeFT.GetText(), HID_BIB_VOLUME_POS, 24 );
+    AddControlWithError( lcl_GetColumnName( pMapping, VOLUME_POS ), lcl_MovePoint( aVolumeFT ),
+        aControlSize, sTableErrorString, aVolumeFT.GetText(), HID_BIB_VOLUME_POS, 24 );
 
     AddControlWithError( lcl_GetColumnName( pMapping, HOWPUBLISHED_POS ), lcl_MovePoint( aHowpublishedFT ),
-        aHowpublishedFT.GetSizePixel(), sTableErrorString, aHowpublishedFT.GetText(), HID_BIB_HOWPUBLISHED_POS, 13 );
+        aControlSize, sTableErrorString, aHowpublishedFT.GetText(), HID_BIB_HOWPUBLISHED_POS, 13 );
 
     AddControlWithError( lcl_GetColumnName( pMapping, ORGANIZATIONS_POS ), lcl_MovePoint( aOrganizationsFT ),
-        aOrganizationsFT.GetSizePixel(), sTableErrorString, aOrganizationsFT.GetText(), HID_BIB_ORGANIZATIONS_POS, 18 );
+        aControlSize, sTableErrorString, aOrganizationsFT.GetText(), HID_BIB_ORGANIZATIONS_POS, 18 );
 
     AddControlWithError( lcl_GetColumnName( pMapping, INSTITUTION_POS ), lcl_MovePoint( aInstitutionFT ),
-        aInstitutionFT.GetSizePixel(), sTableErrorString, aInstitutionFT.GetText(), HID_BIB_INSTITUTION_POS, 14 );
+        aControlSize, sTableErrorString, aInstitutionFT.GetText(), HID_BIB_INSTITUTION_POS, 14 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, SCHOOL_POS ), lcl_MovePoint( aSchoolFT ), aSchoolFT.GetSizePixel(),
-        sTableErrorString, aSchoolFT.GetText(), HID_BIB_SCHOOL_POS, 20 );
+    AddControlWithError( lcl_GetColumnName( pMapping, SCHOOL_POS ), lcl_MovePoint( aSchoolFT ),
+        aControlSize, sTableErrorString, aSchoolFT.GetText(), HID_BIB_SCHOOL_POS, 20 );
 
     AddControlWithError( lcl_GetColumnName( pMapping, REPORTTYPE_POS ), lcl_MovePoint( aReportTypeFT ),
-        aReportTypeFT.GetSizePixel(), sTableErrorString, aReportTypeFT.GetText(), HID_BIB_REPORTTYPE_POS, 23 );
+        aControlSize, sTableErrorString, aReportTypeFT.GetText(), HID_BIB_REPORTTYPE_POS, 23 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, MONTH_POS ), lcl_MovePoint( aMonthFT ), aMonthFT.GetSizePixel(),
-        sTableErrorString, aMonthFT.GetText(), HID_BIB_MONTH_POS, 3 );
+    AddControlWithError( lcl_GetColumnName( pMapping, MONTH_POS ), lcl_MovePoint( aMonthFT ),
+        aControlSize, sTableErrorString, aMonthFT.GetText(), HID_BIB_MONTH_POS, 3 );
 
     AddControlWithError( lcl_GetColumnName( pMapping, JOURNAL_POS ), lcl_MovePoint( aJournalFT ),
-        aJournalFT.GetSizePixel(), sTableErrorString, aJournalFT.GetText(), HID_BIB_JOURNAL_POS, 15 );
+        aControlSize, sTableErrorString, aJournalFT.GetText(), HID_BIB_JOURNAL_POS, 15 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, NUMBER_POS ), lcl_MovePoint( aNumberFT ), aNumberFT.GetSizePixel(),
-        sTableErrorString, aNumberFT.GetText(), HID_BIB_NUMBER_POS, 17 );
+    AddControlWithError( lcl_GetColumnName( pMapping, NUMBER_POS ), lcl_MovePoint( aNumberFT ),
+        aControlSize, sTableErrorString, aNumberFT.GetText(), HID_BIB_NUMBER_POS, 17 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, SERIES_POS ), lcl_MovePoint( aSeriesFT ), aSeriesFT.GetSizePixel(),
-        sTableErrorString, aSeriesFT.GetText(), HID_BIB_SERIES_POS, 21 );
+    AddControlWithError( lcl_GetColumnName( pMapping, SERIES_POS ), lcl_MovePoint( aSeriesFT ),
+        aControlSize, sTableErrorString, aSeriesFT.GetText(), HID_BIB_SERIES_POS, 21 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, ANNOTE_POS ), lcl_MovePoint( aAnnoteFT ), aAnnoteFT.GetSizePixel(),
-        sTableErrorString, aAnnoteFT.GetText(), HID_BIB_ANNOTE_POS, 8 );
+    AddControlWithError( lcl_GetColumnName( pMapping, ANNOTE_POS ), lcl_MovePoint( aAnnoteFT ),
+        aControlSize, sTableErrorString, aAnnoteFT.GetText(), HID_BIB_ANNOTE_POS, 8 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, NOTE_POS ), lcl_MovePoint( aNoteFT ), aNoteFT.GetSizePixel(),
-        sTableErrorString, aNoteFT.GetText(), HID_BIB_NOTE_POS, 16 );
+    AddControlWithError( lcl_GetColumnName( pMapping, NOTE_POS ), lcl_MovePoint( aNoteFT ),
+        aControlSize, sTableErrorString, aNoteFT.GetText(), HID_BIB_NOTE_POS, 16 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, URL_POS ), lcl_MovePoint( aURLFT ), aURLFT.GetSizePixel(),
-        sTableErrorString, aURLFT.GetText(), HID_BIB_URL_POS, 25 );
+    AddControlWithError( lcl_GetColumnName( pMapping, URL_POS ), lcl_MovePoint( aURLFT ),
+        aControlSize, sTableErrorString, aURLFT.GetText(), HID_BIB_URL_POS, 25 );
 
     AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM1_POS ), lcl_MovePoint( aCustom1FT ),
-        aCustom1FT.GetSizePixel(), sTableErrorString, aCustom1FT.GetText(), HID_BIB_CUSTOM1_POS, 26 );
+        aControlSize, sTableErrorString, aCustom1FT.GetText(), HID_BIB_CUSTOM1_POS, 26 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM2_POS ), lcl_MovePoint( aCustom2FT ), aCustom2FT.GetSizePixel(),
-        sTableErrorString, aCustom2FT.GetText(), HID_BIB_CUSTOM2_POS, 27 );
+    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM2_POS ), lcl_MovePoint( aCustom2FT ),
+        aControlSize, sTableErrorString, aCustom2FT.GetText(), HID_BIB_CUSTOM2_POS, 27 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM3_POS ), lcl_MovePoint( aCustom3FT ), aCustom3FT.GetSizePixel(),
-        sTableErrorString, aCustom3FT.GetText(), HID_BIB_CUSTOM3_POS, 28 );
+    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM3_POS ), lcl_MovePoint( aCustom3FT ),
+        aControlSize, sTableErrorString, aCustom3FT.GetText(), HID_BIB_CUSTOM3_POS, 28 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM4_POS ), lcl_MovePoint( aCustom4FT ), aCustom4FT.GetSizePixel(),
-        sTableErrorString, aCustom4FT.GetText(), HID_BIB_CUSTOM4_POS, 29 );
+    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM4_POS ), lcl_MovePoint( aCustom4FT ),
+        aControlSize, sTableErrorString, aCustom4FT.GetText(), HID_BIB_CUSTOM4_POS, 29 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM5_POS ), lcl_MovePoint( aCustom5FT ), aCustom5FT.GetSizePixel(),
-        sTableErrorString, aCustom5FT.GetText(), HID_BIB_CUSTOM5_POS, 30 );
+    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM5_POS ), lcl_MovePoint( aCustom5FT ),
+        aControlSize, sTableErrorString, aCustom5FT.GetText(), HID_BIB_CUSTOM5_POS, 30 );
 
     xPosListener = new BibPosListener(this);
     uno::Reference< sdbc::XRowSet >  xRowSet(pDatMan->getForm(), UNO_QUERY);
