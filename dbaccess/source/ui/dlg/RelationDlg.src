@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.34 2003-07-03 17:59:27 hr Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.35 2003-07-17 12:15:02 hr Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: hr $ $Date: 2003-07-03 17:59:27 $ $Revision: 1.34 $
+ //  $Author: hr $ $Date: 2003-07-17 12:15:02 $ $Revision: 1.35 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -518,6 +518,8 @@ ModalDialog DLG_REL_PROPERTIES
     Text[ hindi ] = "सम्बन्धें";
     Text[ slovak ] = "Relácie";
 };
+
+
 
 
 
