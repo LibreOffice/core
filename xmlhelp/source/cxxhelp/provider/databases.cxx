@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: abi $ $Date: 2001-08-21 11:51:58 $
+ *  last change: $Author: abi $ $Date: 2001-08-21 13:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,24 +608,24 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
 
 
 
-Reference< XInputStream > Databases::getFromURL( const rtl::OUString& url )
-{
-    osl::MutexGuard aGuard( m_aMutex );
+//  Reference< XInputStream > Databases::getFromURL( const rtl::OUString& url )
+//  {
+//      osl::MutexGuard aGuard( m_aMutex );
 
-    Reference< XInputStream > xStream = m_aInputStreamTable[ url ];
-    if( xStream.is() )
-        m_aInputStreamTable[ url ] = Reference< XInputStream >( 0 );
+//      Reference< XInputStream > xStream = m_aInputStreamTable[ url ];
+//      if( xStream.is() )
+//          m_aInputStreamTable[ url ] = Reference< XInputStream >( 0 );
 
-    return xStream;
-}
+//      return xStream;
+//  }
 
 
-void Databases::setFromURL( const rtl::OUString& url,const Reference< XInputStream >& xStream  )
-{
-    osl::MutexGuard aGuard( m_aMutex );
+//  void Databases::setFromURL( const rtl::OUString& url,const Reference< XInputStream >& xStream  )
+//  {
+//      osl::MutexGuard aGuard( m_aMutex );
 
-    m_aInputStreamTable[ url ] = xStream;
-}
+//      m_aInputStreamTable[ url ] = xStream;
+//  }
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-19 13:41:05 $
+ *  last change: $Author: abi $ $Date: 2001-08-21 13:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,20 @@ URLParameter::URLParameter( const rtl::OUString&  aURL,
 }
 
 
+bool URLParameter::isErrorDocument()
+{
+    if( isFile() )
+    {
+        Reference< XHierarchicalNameAccess > xNA = m_pDatabases->jarFile( get_jar(),
+                                                                          get_language() );
+
+        return ! ( xNA.is() && xNA->hasByHierarchicalName( get_path() ) );
+    }
+
+    return false;
+}
+
+
 rtl::OString URLParameter::getByName( const char* par )
 {
     rtl::OUString val;
@@ -256,7 +270,7 @@ rtl::OUString URLParameter::get_language()
 
 rtl::OUString URLParameter::get_program()
 {
-    if( m_aProgram.compareToAscii( "" ) != 0 )
+    if( ! m_aProgram.getLength() )
     {
         StaticModuleInformation* inf =
             m_pDatabases->getStaticInformationForModule( get_module(),
@@ -881,6 +895,8 @@ void InputStreamTransformer::addToBuffer( const char* buffer_,int len_ )
     delete tmp;
     len += len_;
 }
+
+
 
 
 

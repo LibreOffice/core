@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-19 12:52:39 $
+ *  last change: $Author: abi $ $Date: 2001-08-21 13:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,120 +384,120 @@ public:
 
 // virtual
 Any SAL_CALL Content::execute( const Command& aCommand,
-                   sal_Int32 CommandId,
-                   const Reference<
-                   XCommandEnvironment >& Environment )
-  throw( Exception, CommandAbortedException, RuntimeException )
+                               sal_Int32 CommandId,
+                               const Reference<
+                               XCommandEnvironment >& Environment )
+    throw( Exception, CommandAbortedException, RuntimeException )
 {
-  Any aRet;
+    Any aRet;
 
-  if ( aCommand.Name.compareToAscii( "getPropertyValues" ) == 0 )
+    if ( aCommand.Name.compareToAscii( "getPropertyValues" ) == 0 )
     {
-      Sequence< Property > Properties;
-      if ( !( aCommand.Argument >>= Properties ) )
-    {
-      VOS_ENSURE( sal_False, "Wrong argument type!" );
-      return aRet;
-    }
-
-      aRet <<= getPropertyValues( Properties );
-    }
-  else if ( aCommand.Name.compareToAscii( "setPropertyValues" ) == 0 )
-    {
-      // No properties can be set
-    }
-  else if ( aCommand.Name.compareToAscii( "getPropertySetInfo" ) == 0 )
-    {
-      // Note: Implemented by base class.
-      aRet <<= getPropertySetInfo( Environment );
-    }
-  else if ( aCommand.Name.compareToAscii( "getCommandInfo" ) == 0 )
-    {
-      // Note: Implemented by base class.
-      aRet <<= getCommandInfo( Environment );
-    }
-  else if ( aCommand.Name.compareToAscii( "open" ) == 0 )
-    {
-      OpenCommandArgument2 aOpenCommand;
-      if ( !( aCommand.Argument >>= aOpenCommand ) )
-    {
-      VOS_ENSURE( sal_False,
-              "Content::execute - invalid parameter!" );
-      throw CommandAbortedException();
-    }
-
-      Reference< XActiveDataSink > xActiveDataSink( aOpenCommand.Sink,UNO_QUERY );
-      if( xActiveDataSink.is() )
-    {
-      Reference< XInputStream > xInputStream;
-
-      // Necessary to avoid closing the fileinputstream
-      if( ! m_aURLParameter.isRoot() )
-        xInputStream = m_pDatabases->getFromURL( m_aURLParameter.get_url() );
-
-      if( ! xInputStream.is() )
+        Sequence< Property > Properties;
+        if ( !( aCommand.Argument >>= Properties ) )
         {
-          m_aURLParameter.open( m_xSMgr,aCommand,CommandId,Environment,xActiveDataSink );
-          m_pDatabases->setFromURL( m_aURLParameter.get_url(),
-                    xActiveDataSink->getInputStream() );
+            VOS_ENSURE( sal_False, "Wrong argument type!" );
+            return aRet;
         }
-      else
-        xActiveDataSink->setInputStream( xInputStream );
+
+        aRet <<= getPropertyValues( Properties );
     }
-
-      Reference< XActiveDataStreamer > activeDataStreamer( aOpenCommand.Sink,UNO_QUERY );
-      if( activeDataStreamer.is() )
-    throw UnsupportedDataSinkException();
-
-      Reference< XOutputStream > outputStream( aOpenCommand.Sink,UNO_QUERY );
-      if( outputStream.is() )
-    throw UnsupportedDataSinkException();
-
-
-      if( m_aURLParameter.isRoot() )
+    else if ( aCommand.Name.compareToAscii( "setPropertyValues" ) == 0 )
     {
-      Reference< XDynamicResultSet > xSet
-        = new DynamicResultSet( m_xSMgr,
-                    this,
-                    aOpenCommand,
-                    Environment,
-                    new ResultSetForRootFactory( m_xSMgr,
-                                     m_xProvider.getBodyPtr(),
-                                     aOpenCommand.Mode,
-                                     aOpenCommand.Properties,
-                                     aOpenCommand.SortingInfo,
-                                     m_aURLParameter,
-                                     m_pDatabases ) );
-      aRet <<= xSet;
+        // No properties can be set
     }
-      else if( m_aURLParameter.isQuery() )
+    else if ( aCommand.Name.compareToAscii( "getPropertySetInfo" ) == 0 )
     {
-      Reference< XDynamicResultSet > xSet
-        = new DynamicResultSet( m_xSMgr,
-                    this,
-                    aOpenCommand,
-                    Environment,
-                    new ResultSetForQueryFactory( m_xSMgr,
-                                      m_xProvider.getBodyPtr(),
-                                      aOpenCommand.Mode,
-                                      aOpenCommand.Properties,
-                                      aOpenCommand.SortingInfo,
-                                      m_aURLParameter,
-                                      m_pDatabases ) );
-      aRet <<= xSet;
+        // Note: Implemented by base class.
+        aRet <<= getPropertySetInfo( Environment );
     }
-    }
-  else
+    else if ( aCommand.Name.compareToAscii( "getCommandInfo" ) == 0 )
     {
-      //////////////////////////////////////////////////////////////////
-      // Unsupported command
-      //////////////////////////////////////////////////////////////////
+        // Note: Implemented by base class.
+        aRet <<= getCommandInfo( Environment );
+    }
+    else if ( aCommand.Name.compareToAscii( "open" ) == 0 )
+    {
+        OpenCommandArgument2 aOpenCommand;
+        if ( !( aCommand.Argument >>= aOpenCommand ) )
+        {
+            VOS_ENSURE( sal_False,
+                        "Content::execute - invalid parameter!" );
+            throw IllegalArgumentException();
+        }
 
-      VOS_ENSURE( sal_False, "Content::execute - unsupported command!" );
-      throw CommandAbortedException();
+        Reference< XActiveDataSink > xActiveDataSink( aOpenCommand.Sink,UNO_QUERY );
+        if( xActiveDataSink.is() )
+        {
+//              Reference< XInputStream > xInputStream;
+
+//              // Necessary to avoid closing the fileinputstream
+//              if( ! m_aURLParameter.isRoot() )
+//                  xInputStream = m_pDatabases->getFromURL( m_aURLParameter.get_url() );
+
+//              if( ! xInputStream.is() )
+//              {
+                m_aURLParameter.open( m_xSMgr,aCommand,CommandId,Environment,xActiveDataSink );
+//                  m_pDatabases->setFromURL( m_aURLParameter.get_url(),
+//                                            xActiveDataSink->getInputStream() );
+//              }
+//              else
+//                  xActiveDataSink->setInputStream( xInputStream );
+        }
+
+        Reference< XActiveDataStreamer > activeDataStreamer( aOpenCommand.Sink,UNO_QUERY );
+        if( activeDataStreamer.is() )
+            throw UnsupportedDataSinkException();
+
+        Reference< XOutputStream > outputStream( aOpenCommand.Sink,UNO_QUERY );
+        if( outputStream.is() )
+            throw UnsupportedDataSinkException();
+
+
+        if( m_aURLParameter.isRoot() )
+        {
+            Reference< XDynamicResultSet > xSet
+                = new DynamicResultSet( m_xSMgr,
+                                        this,
+                                        aOpenCommand,
+                                        Environment,
+                                        new ResultSetForRootFactory( m_xSMgr,
+                                                                     m_xProvider.getBodyPtr(),
+                                                                     aOpenCommand.Mode,
+                                                                     aOpenCommand.Properties,
+                                                                     aOpenCommand.SortingInfo,
+                                                                     m_aURLParameter,
+                                                                     m_pDatabases ) );
+            aRet <<= xSet;
+        }
+        else if( m_aURLParameter.isQuery() )
+        {
+            Reference< XDynamicResultSet > xSet
+                = new DynamicResultSet( m_xSMgr,
+                                        this,
+                                        aOpenCommand,
+                                        Environment,
+                                        new ResultSetForQueryFactory( m_xSMgr,
+                                                                      m_xProvider.getBodyPtr(),
+                                                                      aOpenCommand.Mode,
+                                                                      aOpenCommand.Properties,
+                                                                      aOpenCommand.SortingInfo,
+                                                                      m_aURLParameter,
+                                                                      m_pDatabases ) );
+            aRet <<= xSet;
+        }
+    }
+    else
+    {
+        //////////////////////////////////////////////////////////////////
+        // Unsupported command
+        //////////////////////////////////////////////////////////////////
+
+//      VOS_ENSURE( sal_False, "Content::execute - unsupported command!" );
+        throw CommandAbortedException();
     }
 
-  return aRet;
+    return aRet;
 }
 
 
@@ -524,6 +524,8 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
             xRow->appendBoolean( rProp,m_aURLParameter.isFile() || m_aURLParameter.isRoot() );
         else if( rProp.Name.compareToAscii( "IsFolder" ) == 0 )
             xRow->appendBoolean( rProp, ! m_aURLParameter.isFile() || m_aURLParameter.isRoot() );
+        else if( rProp.Name.compareToAscii( "IsErrorDocument" ) == 0 )
+            xRow->appendBoolean( rProp, m_aURLParameter.isErrorDocument() );
         else if( rProp.Name.compareToAscii( "MediaType" ) == 0  )
             if( m_aURLParameter.isPicture() )
                 xRow->appendString( rProp,rtl::OUString::createFromAscii( "image/gif" ) );
