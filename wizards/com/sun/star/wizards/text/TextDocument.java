@@ -2,9 +2,9 @@
 *
 *  $RCSfile: TextDocument.java,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: kz $ $Date: 2004-11-27 09:07:23 $
+*  last change: $Author: vg $ $Date: 2005-02-21 14:02:37 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -58,7 +58,6 @@
 *
 */
 package com.sun.star.wizards.text;
-
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -89,6 +88,8 @@ import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.task.XStatusIndicatorFactory;
 import com.sun.star.text.XPageCursor;
 import com.sun.star.text.XSimpleText;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextViewCursor;
@@ -112,6 +113,7 @@ public class TextDocument {
     public com.sun.star.document.XDocumentInfo xDocInfo;
     public com.sun.star.task.XStatusIndicator xProgressBar;
     public com.sun.star.frame.XFrame xFrame;
+    public XText xText;
     public XMultiServiceFactory xMSFDoc;
     public XMultiServiceFactory xMSF;
     public com.sun.star.util.XNumberFormatsSupplier xNumberFormatsSupplier;
@@ -163,6 +165,7 @@ public class TextDocument {
         xDocInfo = xDocInfoSuppl.getDocumentInfo();
         CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
         xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, xTextDocument);
+        xText = xTextDocument.getText();
     }
 
 
@@ -190,6 +193,7 @@ public class TextDocument {
         XDocumentInfoSupplier xDocInfoSuppl = (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDocument);
         xDocInfo = xDocInfoSuppl.getDocumentInfo();
         CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
+        xText = xTextDocument.getText();
     }
 
 
@@ -364,6 +368,24 @@ public class TextDocument {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }
+    }
+
+
+
+    /**
+     * removes an arbitrary Object which supports the  'XTextContent' interface
+     * @param oTextContent
+     * @return
+     */
+    public boolean removeTextContent(Object oTextContent){
+        try {
+            XTextContent xTextContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, oTextContent);
+            xText.removeTextContent(xTextContent);
+            return true;
+        } catch (NoSuchElementException e) {
+            e.printStackTrace(System.out);
+            return false;
         }
     }
 
