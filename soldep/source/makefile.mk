@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: obo $ $Date: 2004-02-26 14:50:38 $
+#   last change: $Author: obo $ $Date: 2004-02-26 16:37:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,10 +62,10 @@
 
 # --- Globals ------------------------------------------------------
 
-PRJ             = ..$/..$/..
+PRJ             = ..
 PRJINC			= $(PRJ)$/source
-PRJNAME         = devtools
-TARGET          = depper
+PRJNAME         = soldep
+TARGET          = soldep
 
 
 # --- Settings -----------------------------------------------------
@@ -90,11 +90,11 @@ SRC1FILES = \
 RES1TARGET = dep
 SRS1NAME=$(TARGET)
 SRS1FILES = \
-    $(SRS)$/depper.srs
+    $(SRS)$/soldep.srs
 
 RESLIB1NAME = dep
 RESLIB1SRSFILES = \
-    $(SRS)$/depper.srs
+    $(SRS)$/soldep.srs
 
 
 OBJFILES        = \
