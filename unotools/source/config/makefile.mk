@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: fs $ $Date: 2001-08-21 12:53:59 $
+#   last change: $Author: mh $ $Date: 2001-11-06 20:28:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 #UNOTYPES=
 
-UNOTYPES+= com.sun.star.configuration.XTemplateContainer
+UNOTYPES+= com.sun.star.configuration.XTemplateContainer \
+            com.sun.star.util.XChangesListener  \
+            com.sun.star.util.XChangesNotifier  \
+            com.sun.star.util.XStringEscape     \
+            com.sun.star.util.XChangesBatch     \
+            com.sun.star.uno.XWeak              \
+            com.sun.star.uno.XAggregation
 
 #.INCLUDE : $(PRJINC)$/unotools$/unotools.mk
 
