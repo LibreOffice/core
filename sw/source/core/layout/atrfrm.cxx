@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:10:28 $
+ *  last change: $Author: vg $ $Date: 2003-07-25 11:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2779,31 +2779,32 @@ void SwFlyFrmFmt::MakeFrms()
         return;
 
     SwModify *pModify = 0;
-    const SwFmtAnchor &rAnch = GetAnchor();
-    switch( rAnch.GetAnchorId() )
+    // OD 24.07.2003 #111032# - create local copy of anchor attribute for possible changes.
+    SwFmtAnchor aAnchorAttr( GetAnchor() );
+    switch( aAnchorAttr.GetAnchorId() )
     {
     case FLY_IN_CNTNT:
     case FLY_AT_CNTNT:
     case FLY_AUTO_CNTNT:
-        if( rAnch.GetCntntAnchor() )
-            pModify = rAnch.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
+        if( aAnchorAttr.GetCntntAnchor() )
+            pModify = aAnchorAttr.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
         break;
 
     case FLY_AT_FLY:
-        if( rAnch.GetCntntAnchor() )
+        if( aAnchorAttr.GetCntntAnchor() )
         {
             //Erst einmal ueber den Inhalt suchen, weil konstant schnell. Kann
             //Bei verketteten Rahmen aber auch schief gehen, weil dann evtl.
             //niemals ein ::com::sun::star::frame::Frame zu dem Inhalt existiert. Dann muss leider noch
             //die Suche vom StartNode zum FrameFormat sein.
-            SwNodeIndex aIdx( rAnch.GetCntntAnchor()->nNode );
+            SwNodeIndex aIdx( aAnchorAttr.GetCntntAnchor()->nNode );
             SwCntntNode *pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
             SwClientIter aIter( *pCNd );
             if ( aIter.First( TYPE(SwFrm) ) )
                 pModify = pCNd;
             else
             {
-                const SwNodeIndex &rIdx = rAnch.GetCntntAnchor()->nNode;
+                const SwNodeIndex &rIdx = aAnchorAttr.GetCntntAnchor()->nNode;
                 SwSpzFrmFmts& rFmts = *GetDoc()->GetSpzFrmFmts();
                 for( sal_uInt16 i = 0; i < rFmts.Count(); ++i )
                 {
@@ -2821,12 +2822,12 @@ void SwFlyFrmFmt::MakeFrms()
 
     case FLY_PAGE:
         {
-            sal_uInt16 nPgNum = rAnch.GetPageNum();
+            sal_uInt16 nPgNum = aAnchorAttr.GetPageNum();
             SwPageFrm *pPage = (SwPageFrm*)GetDoc()->GetRootFrm()->Lower();
-            if( !nPgNum && rAnch.GetCntntAnchor() )
+            if( !nPgNum && aAnchorAttr.GetCntntAnchor() )
             {
                 SwCntntNode *pCNd =
-                    rAnch.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
+                    aAnchorAttr.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
                 SwClientIter aIter( *pCNd );
                 do
                 {
@@ -2834,7 +2835,13 @@ void SwFlyFrmFmt::MakeFrms()
                     {
                         pPage = ((SwFrm*)aIter())->FindPageFrm();
                         if( pPage )
+                        {
                             nPgNum = pPage->GetPhyPageNum();
+                            // OD 24.07.2003 #111032# - update anchor attribute
+                            aAnchorAttr.SetPageNum( nPgNum );
+                            aAnchorAttr.SetAnchor( 0 );
+                            SetAttr( aAnchorAttr );
+                        }
                         break;
                     }
                 } while ( aIter++ );
@@ -2843,7 +2850,7 @@ void SwFlyFrmFmt::MakeFrms()
             {
                 if ( pPage->GetPhyPageNum() == nPgNum )
                 {
-                    pPage->PlaceFly( 0, this, &rAnch );
+                    pPage->PlaceFly( 0, this, &aAnchorAttr );
                     break;
                 }
                 pPage = (SwPageFrm*)pPage->GetNext();
@@ -2862,7 +2869,7 @@ void SwFlyFrmFmt::MakeFrms()
             FASTBOOL bAdd = !pFrm->IsCntntFrm() ||
                             !((SwCntntFrm*)pFrm)->IsFollow();
 
-            if ( FLY_AT_FLY == rAnch.GetAnchorId() && !pFrm->IsFlyFrm() )
+            if ( FLY_AT_FLY == aAnchorAttr.GetAnchorId() && !pFrm->IsFlyFrm() )
                 pFrm = pFrm->FindFlyFrm();
 
             if( pFrm->GetDrawObjs() )
@@ -2883,7 +2890,7 @@ void SwFlyFrmFmt::MakeFrms()
             if( bAdd )
             {
                 SwFlyFrm *pFly = 0;
-                switch( rAnch.GetAnchorId() )
+                switch( aAnchorAttr.GetAnchorId() )
                 {
                 case FLY_AT_FLY:
                     pFly = new SwFlyLayFrm( this, pFrm );
