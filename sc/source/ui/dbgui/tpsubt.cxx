@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsubt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-15 13:27:20 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,6 @@
 #endif
 
 #pragma hdrstop
-
-#ifndef PCH
-#include <vcl/system.hxx>
-#endif
-
-//#include <checklbx.hxx>
 
 #include "scitems.hxx"
 #include "uiitems.hxx"
