@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:16 $
+ *  last change: $Author: cmc $ $Date: 2002-07-05 13:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,6 +355,9 @@ public:
 // PLCF-Typ:
 enum ePLCFT{ CHP=0, PAP, SEP, /*HED, FNR, ENR,*/ PLCF_END };
 
+//Its hardcoded that eFTN be the first one: A very poor hack, needs to be fixed
+enum eExtSprm { eFTN = 256, eEDN = 257, eFLD = 258, eBKN = 259, eAND = 260 };
+
 /*
     pure virtual:
 */
@@ -669,7 +672,7 @@ public:
     virtual void SetIdx( ULONG nIdx );
     virtual BOOL SeekPos( WW8_CP nCpPos );
     virtual long Where();
-    virtual long GetNoSprms( long& rStart, long&, long& rLen );
+    virtual void GetSprms(WW8PLCFxDesc* p);
     virtual WW8PLCFx& operator ++( int );
     BOOL GetPara( long nIdx, WW8FieldDesc& rF );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 12:00:20 $
+ *  last change: $Author: cmc $ $Date: 2002-07-05 13:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,9 +151,6 @@
 #endif
 #ifndef _FMTINFMT_HXX
 #include <fmtinfmt.hxx>
-#endif
-#ifndef _FMTURL_HXX
-#include <fmturl.hxx>
 #endif
 #ifndef _CHPFLD_HXX
 #include <chpfld.hxx>
@@ -400,14 +397,8 @@ BOOL _ReadFieldParams::GetTokenSttFromTo(USHORT* pFrom, USHORT* pTo, USHORT nMax
 //              Bookmarks
 //----------------------------------------
 
-long SwWW8ImplReader::Read_Book(WW8PLCFManResult*, BOOL bStartAttr)
+long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
 {
-    if( !bStartAttr )
-    {
-        ASSERT( bStartAttr, "Read_Book::Nanu ?" );
-        pRefStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_BOOKMARK );
-        return 0;
-    }
     // muesste auch ueber pRes.nCo2OrIdx gehen
     WW8PLCFx_Book* pB = pPlcxMan->GetBook();
     if( !pB )
@@ -809,7 +800,7 @@ static FNReadField aWW8FieldTab[93] = {
 // Read_Field liest ein Feld ein oder, wenn es nicht gelesen werden kann,
 // wird 0 zurueckgegeben, so dass das Feld vom Aufrufer textuell gelesen wird.
 // Returnwert: Gesamtlaenge des Feldes ( zum UEberlesen )
-long SwWW8ImplReader::Read_Field( WW8PLCFManResult* pRes, BOOL )
+long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 {
     ASSERT( ( sizeof( aWW8FieldTab ) / sizeof( *aWW8FieldTab ) == 93 ),
             "FeldFunc-Tabelle stimmt nicht" );
@@ -824,6 +815,10 @@ long SwWW8ImplReader::Read_Field( WW8PLCFManResult* pRes, BOOL )
         return 0;
 
     BOOL bOk = pF->GetPara( pRes->nCp2OrIdx, aF );
+
+    ASSERT(bOk, "WW8: Bad Field!\n");
+
+    maFieldStack.push(aF.nId);
 
     USHORT n = ( aF.nId <= 91 ) ? aF.nId : 92; // alle > 91 werden 92
     USHORT nI = n / 32;                     // # des UINT32
@@ -2970,82 +2965,21 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
             }
     }
 
-    String sDef( GetFieldResult( pF ) );                // das Resultat uebernehmen
+    // das Resultat uebernehmen
+    String sDef(GetFieldResult(pF));
     if( ( sURL.Len() || sMark.Len() ) && sDef.Len() )
     {
         if( sMark.Len() )
             ( sURL += INET_MARK_TOKEN ) += sMark;
 
-        const xub_StrLen nLen = sDef.Len();
-        long nBegin = 0;
-        if( 4 < nLen
-            && 0x13 == sDef.GetChar( 0 )
-            && 0x14 == sDef.GetChar( nLen-3 )
-            && 0x01 == sDef.GetChar( nLen-2 )
-            && 0x15 == sDef.GetChar( nLen-1 ) )
-        {
-            //if theres an embedded link which results
-            //in a graphic, make the result of that
-            //field into a linked graphic
-            nBegin = pF->nSRes+pF->nLRes-2;
-        }
-        else if (1 == nLen && 0x01 == sDef.GetChar( 0 ))
-        {
-            //if the result text is a graphic on its own
-            //then do the graphic into linked graphic
-            //trick
-            nBegin = pF->nSRes;
-        }
+        SwFmtINetFmt aURL( sURL, sTarget );
 
-        if (nBegin)
-        {
-            // rettet Flags u.ae. u. setzt sie zurueck
-            WW8ReaderSave aSave( this );
-            bInHyperlink = TRUE;
-            ReadText( nBegin, 1, pPlcxMan->GetManType() );
-            aSave.Restore( this );
-
-            if( pFmtOfJustInsertedGraphicOrOLE )
-            {
-                SwFmtURL aURL;
-                aURL.SetTargetFrameName( sTarget );
-                aURL.SetURL( sURL, FALSE );
-                pFmtOfJustInsertedGraphicOrOLE->SetAttr( aURL );
-                pFmtOfJustInsertedGraphicOrOLE = 0;
-            }
-        }
-        else
-        {
-            SwFmtINetFmt aURL( sURL, sTarget );
-            pCtrlStck->NewAttr( *pPaM->GetPoint(), aURL );
-
-            // das Ende als "relative" Pos auf den Stack setzen
-            pPaM->SetMark();
-            pPaM->GetMark()->nContent += sDef.Len();
-
-            /*#83156#
-            We need to know the length of this content field here, but we
-            do not truly know the length of the final result as we may
-            have nested fields, but we have fundamental problems with
-            nested fields both in OOo and in this filter, we cannot handle
-            them properly. So for now we have to dump the raw content of the
-            field, field commands and all, as the payload of the hyperlink.
-
-            We also know in advance that characters less that 0x20 will not
-            be inserted in the document, as they will be stripped out, e.g
-            the field codes themselves 0x13,0x14,0x15. So we must adjust our
-            expected length by these.
-
-            */
-            for(xub_StrLen i=sDef.Len();i>0;i--)
-                if (sDef.GetChar(i-1) < 0x20)
-                    pPaM->GetMark()->nContent--;
-
-            pCtrlStck->SetAttr( *pPaM->GetMark(), RES_TXTATR_INETFMT, FALSE );
-            pPaM->DeleteMark();
-
-            eRet = FLD_TEXT;
-        }
+        //As an attribute this needs to be closed, and that'll happen
+        //from EndExtSprm in conjunction with the maFieldStack
+        //If there are are flyfrms between the start and begin, their
+        //hyperlinks will be set at that time as well.
+        pCtrlStck->NewAttr( *pPaM->GetPoint(), aURL );
+        eRet = FLD_TEXT;
     }
     return eRet;
 }

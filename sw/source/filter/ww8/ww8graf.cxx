@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-01 15:34:26 $
+ *  last change: $Author: cmc $ $Date: 2002-07-05 13:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,7 +734,7 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
                 }
             }
             else if ( aRes.nSprmId && (
-                (256 >  aRes.nSprmId) || (0x0800 <= aRes.nSprmId) ) )
+                (eFTN >  aRes.nSprmId) || (0x0800 <= aRes.nSprmId) ) )
             {
                 //Here place them onto our usual stack and we will pop them
                 //off and convert them later
@@ -2559,7 +2559,7 @@ SwFrmFmt *SwWW8ImplReader::AddAutoAnchor(SwFrmFmt *pFmt)
 {
     /*
      * anchored to character at the current position will move along the
-     * aragraph as text is added because we are at the insertion point.
+     * paragraph as text is added because we are at the insertion point.
      *
      * Leave to later and set the correct location then.
      */

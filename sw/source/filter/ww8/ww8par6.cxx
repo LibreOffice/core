@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-01 11:19:40 $
+ *  last change: $Author: cmc $ $Date: 2002-07-05 13:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3367,6 +3367,40 @@ void SwWW8ImplReader::Read_SubSuper( USHORT, const BYTE* pData, short nLen )
     NewAttr( SvxEscapementItem( nEs, nProp ) );
 }
 
+SwFrmFmt *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion)
+{
+    /*
+    #92489# & #92946#
+    For inline graphics and objects word has a hacked in feature to use
+    subscripting to force the graphic into a centered position on the line, so
+    we must check when applying sub/super to see if it the subscript range
+    contains only a single graphic, and if that graphic is anchored as
+    FLY_IN_CNTNT and then we can change its anchoring to centered in the line.
+    */
+    SwFrmFmt *pRet=0;
+    SwNodeIndex aBegin(rRegion.Start()->nNode);
+    xub_StrLen nBegin(rRegion.Start()->nContent.GetIndex());
+    SwNodeIndex aEnd(rRegion.End()->nNode);
+    xub_StrLen nEnd(rRegion.End()->nContent.GetIndex());
+    const SwTxtNode* pTNd;
+    const SwTxtAttr* pTFlyAttr;
+    if (
+         aBegin == aEnd && nBegin == nEnd - 1 &&
+         (pTNd = aBegin.GetNode().GetTxtNode()) &&
+         (pTFlyAttr = pTNd->GetTxtAttr(nBegin, RES_TXTATR_FLYCNT))
+       )
+    {
+        const SwFmtFlyCnt& rFly = pTFlyAttr->GetFlyCnt();
+        SwFrmFmt *pFlyFmt = rFly.GetFrmFmt();
+        if( pFlyFmt &&
+            FLY_IN_CNTNT == pFlyFmt->GetAnchor().GetAnchorId() )
+        {
+            pRet = pFlyFmt;
+        }
+    }
+    return pRet;
+}
+
 BOOL SwWW8ImplReader::ConvertSubToGraphicPlacement()
 {
     /*
@@ -3381,31 +3415,20 @@ BOOL SwWW8ImplReader::ConvertSubToGraphicPlacement()
     USHORT nPos;
     if (pCtrlStck->GetFmtStackAttr(RES_CHRATR_ESCAPEMENT, &nPos))
     {
-        SwFltStackEntry* pEntry = (*pCtrlStck)[nPos];
-        const SwNodeIndex* pNodeIndex = &pEntry->nMkNode;
-        if( pNodeIndex )
+        SwPaM aRegion(*pPaM->GetPoint());
+
+        SwFltStackEntry aEntry = *((*pCtrlStck)[nPos]);
+        aEntry.SetEndPos(*pPaM->GetPoint());
+
+        SwFrmFmt *pFlyFmt = 0;
+        if (
+             aEntry.MakeRegion(&rDoc,aRegion,FALSE) &&
+             (pFlyFmt = ContainsSingleInlineGraphic(aRegion))
+           )
         {
-            SwNodeIndex aBegin( *pNodeIndex, 1 );
-            xub_StrLen nBegin = pEntry->nMkCntnt;
-            const SwTxtNode* pTNd;
-            const SwTxtAttr* pTFlyAttr;
-            if( aBegin == pPaM->GetPoint()->nNode &&
-                nBegin == pPaM->GetPoint()->nContent.GetIndex() - 1 &&
-                0 != ( pTNd = aBegin.GetNode().GetTxtNode() ) &&
-                0 != ( pTFlyAttr =
-                            pTNd->GetTxtAttr( nBegin, RES_TXTATR_FLYCNT )) )
-            {
-                const SwFmtFlyCnt& rFly = pTFlyAttr->GetFlyCnt();
-                SwFrmFmt *pFlyFmt = rFly.GetFrmFmt();
-                if( pFlyFmt &&
-                    FLY_IN_CNTNT == pFlyFmt->GetAnchor().GetAnchorId() )
-                {
-                    pCtrlStck->DeleteAndDestroy( nPos );
-                    bIsGraphicPlacementHack=TRUE;
-                    pFlyFmt->SetAttr( SwFmtVertOrient( 0,
-                                                VERT_CHAR_CENTER,REL_CHAR));
-                }
-            }
+            pCtrlStck->DeleteAndDestroy(nPos);
+            pFlyFmt->SetAttr( SwFmtVertOrient(0, VERT_CHAR_CENTER,REL_CHAR));
+            bIsGraphicPlacementHack=TRUE;
         }
     }
     return bIsGraphicPlacementHack;
@@ -4914,7 +4937,7 @@ BOOL SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
 /***************************************************************************
 #       Arrays zum Lesen der erweiterten ( selbstdefinierten ) SPRMs
 #**************************************************************************/
-typedef long (SwWW8ImplReader:: *FNReadRecordExt)( WW8PLCFManResult*, BOOL );
+typedef long (SwWW8ImplReader:: *FNReadRecordExt)(WW8PLCFManResult*);
 
 static FNReadRecordExt aWwSprmTab2[] = {
 /* 0 (256) */   &SwWW8ImplReader::Read_Ftn,     // FootNote
@@ -4924,19 +4947,40 @@ static FNReadRecordExt aWwSprmTab2[] = {
 /* 4 (260) */   &SwWW8ImplReader::Read_And     // Annotation
 };
 
-long SwWW8ImplReader::ImportExtSprm( WW8PLCFManResult* pRes, BOOL bStart )
+long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
 {
     if( pRes->nSprmId < 280 )
     {
-        BYTE nIdx = pRes->nSprmId - 256;
+        BYTE nIdx = pRes->nSprmId - eFTN;
         if( nIdx < sizeof( aWwSprmTab2 ) / sizeof( *aWwSprmTab2 )
             && aWwSprmTab2[nIdx] )
-            return (this->*aWwSprmTab2[nIdx])( pRes, bStart );
+            return (this->*aWwSprmTab2[nIdx])(pRes);
         else
             return 0;
     }
     else
         return 0;
+}
+
+void SwWW8ImplReader::EndExtSprm(USHORT nSprmId)
+{
+    ASSERT(nSprmId == eFLD, "Only one fake sprm known currently");
+    ASSERT(!maFieldStack.empty(), "Empty field stack\n");
+    if (nSprmId == eFLD || !maFieldStack.empty())
+    {
+        //only hyperlinks currently need to be handled like this, for the
+        //other cases we have inserted a field not an attribute with an
+        //unknown end point
+        switch(maFieldStack.top())
+        {
+            case 88:
+                pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_TXTATR_INETFMT);
+            break;
+            default:
+            break;
+        }
+        maFieldStack.pop();
+    }
 }
 
 /***************************************************************************

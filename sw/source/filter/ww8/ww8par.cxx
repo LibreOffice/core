@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:14 $
+ *  last change: $Author: cmc $ $Date: 2002-07-05 13:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,12 @@
 
 #ifndef _FMTFLD_HXX
 #include <fmtfld.hxx>
+#endif
+#ifndef _FMTURL_HXX
+#include <fmturl.hxx>
+#endif
+#ifndef _FMTINFMT_HXX
+#include <fmtinfmt.hxx>
 #endif
 #ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
@@ -390,48 +396,72 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     switch( pEntry->pAttr->Which() )
     {
         case RES_LR_SPACE:
-        {
-            SwPaM aRegion( rTmpPos );
-            if (pEntry->MakeRegion(pDoc, aRegion, FALSE))
             {
-                SvxLRSpaceItem aLR( *(SvxLRSpaceItem*)pEntry->pAttr );
-                BOOL bChange1stLine = 1 == aLR.GetTxtFirstLineOfst();
-                ULONG nStart = aRegion.Start()->nNode.GetIndex();
-                ULONG nEnd   = aRegion.End()->nNode.GetIndex();
-                const SwNumRule* pRule;
-                const SwNodeNum* pNum;
-                for(; nStart <= nEnd; ++nStart)
+                SwPaM aRegion( rTmpPos );
+                if (pEntry->MakeRegion(pDoc, aRegion, FALSE))
                 {
-                    SwNode* pNode = pDoc->GetNodes()[ nStart ];
-                    if( pNode->IsTxtNode() )
+                    SvxLRSpaceItem aLR( *(SvxLRSpaceItem*)pEntry->pAttr );
+                    BOOL bChange1stLine = 1 == aLR.GetTxtFirstLineOfst();
+                    ULONG nStart = aRegion.Start()->nNode.GetIndex();
+                    ULONG nEnd   = aRegion.End()->nNode.GetIndex();
+                    const SwNumRule* pRule;
+                    const SwNodeNum* pNum;
+                    for(; nStart <= nEnd; ++nStart)
                     {
-                        if( bChange1stLine )
+                        SwNode* pNode = pDoc->GetNodes()[ nStart ];
+                        if (pNode->IsTxtNode())
                         {
-                            if ( (pNum = ((SwTxtNode*)pNode)->GetNum()) &&
-                                (MAXLEVEL > pNum->GetLevel()) &&
-                                (pRule = ((SwTxtNode*)pNode)->GetNumRule()) )
+                            if( bChange1stLine )
                             {
-                                const SwNumFmt rNumFmt =
-                                    pRule->Get(pNum->GetLevel());
-                                aLR.SetTxtFirstLineOfst(
-                                    rNumFmt.GetFirstLineOffset());
+                                if ( (pNum = ((SwTxtNode*)pNode)->GetNum()) &&
+                                    (MAXLEVEL > pNum->GetLevel()) &&
+                                    (pRule = ((SwTxtNode*)pNode)->GetNumRule())
+                                   )
+                                {
+                                    const SwNumFmt rNumFmt =
+                                        pRule->Get(pNum->GetLevel());
+                                    aLR.SetTxtFirstLineOfst(
+                                        rNumFmt.GetFirstLineOffset());
+                                }
+                                else
+                                    aLR.SetTxtFirstLineOfst( 0 );
                             }
-                            else
-                                aLR.SetTxtFirstLineOfst( 0 );
-                        }
-                        ((SwCntntNode*)pNode)->SetAttr( aLR );
+                            ((SwCntntNode*)pNode)->SetAttr( aLR );
 
-                        // wenn wir dies nicht tun, ueberschreibt die NumRule
-                        // uns alle harten L-Randeinstellungen
-                        pNode->SetNumLSpace( FALSE );
+                            // wenn wir dies nicht tun, ueberschreibt die
+                            // NumRule uns alle harten L-Randeinstellungen
+                            pNode->SetNumLSpace( FALSE );
+                        }
                     }
                 }
             }
-        }
             break;
         case RES_TXTATR_FIELD:
             ASSERT(0,"What is a field doing in the control stack,"
                 "probably should have been in the endstack");
+            break;
+        case RES_TXTATR_INETFMT:
+            {
+                SwPaM aRegion(rTmpPos);
+                if (pEntry->MakeRegion(pDoc, aRegion, FALSE))
+                {
+                    SwFrmFmt *pFrm;
+                    //If we have just one single inline graphic then
+                    //don't insert a field for the single frame, set
+                    //the frames hyperlink field attribute directly.
+                    if (pFrm = rReader.ContainsSingleInlineGraphic(aRegion))
+                    {
+                        const SwFmtINetFmt *pAttr = (const SwFmtINetFmt *)
+                            pEntry->pAttr;
+                        SwFmtURL aURL;
+                        aURL.SetURL(pAttr->GetValue(), FALSE);
+                        aURL.SetTargetFrameName(pAttr->GetTargetFrame());
+                        pFrm->SetAttr(aURL);
+                    }
+                    else
+                        pDoc->Insert(aRegion, *pEntry->pAttr);
+                }
+            }
             break;
         default:
             SwFltControlStack::SetAttrInDoc(rTmpPos, pEntry);
@@ -954,7 +984,7 @@ void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx,
 }
 
 //Use authornames, if not available fall back to initials.
-long SwWW8ImplReader::Read_And( WW8PLCFManResult* pRes, BOOL )
+long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 {
     WW8PLCFx_SubDoc* pSD = pPlcxMan->GetAtn();
     if( !pSD )
@@ -1933,7 +1963,7 @@ long SwWW8ImplReader::ReadTextAttr( long& rTxtPos, BOOL& rbStartLine )
 
     if( 0 < aRes.nSprmId )                      // leere Attrs ignorieren
     {
-        if( ( 256 > aRes.nSprmId ) || ( 0x0800 <= aRes.nSprmId ) )
+        if( ( eFTN > aRes.nSprmId ) || ( 0x0800 <= aRes.nSprmId ) )
         {
             if( bStartAttr )                            // WW-Attribute
             {
@@ -1945,13 +1975,21 @@ long SwWW8ImplReader::ReadTextAttr( long& rTxtPos, BOOL& rbStartLine )
         }
         else if( aRes.nSprmId < 0x800 ) // eigene Hilfs-Attribute
         {
-            nSkipChars = ImportExtSprm( &aRes, bStartAttr );
-            if( 256 <= aRes.nSprmId && 258 >= aRes.nSprmId )
+            if( bStartAttr )
             {
-                // Felder/Ftn-/End-Note hier ueberlesen
-                rTxtPos += nSkipChars;
-                nSkipPos = rTxtPos-1;
+                nSkipChars = ImportExtSprm(&aRes);
+                if (
+                    (aRes.nSprmId == eFTN) || (aRes.nSprmId == eEDN) ||
+                    (aRes.nSprmId == eFLD)
+                   )
+                {
+                    // Felder/Ftn-/End-Note hier ueberlesen
+                    rTxtPos += nSkipChars;
+                    nSkipPos = rTxtPos-1;
+                }
             }
+            else
+                EndExtSprm( aRes.nSprmId );
         }
     }
 
@@ -2031,7 +2069,7 @@ void SwWW8ImplReader::ReadAttrEnds( long& rNext, long& rTxtPos )
 
         if(    !b
             && (aRes.nSprmId >=  0)     // nur Attributenden noch bearbeiten,
-            && (    (aRes.nSprmId <     256)
+            && (    (aRes.nSprmId <     eFTN)
                  || (aRes.nSprmId >= 0x0800) )
             )
         {                                                           // Anfaenge gehoeren zum naechsten Spezialtext

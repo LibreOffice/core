@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:14 $
+ *  last change: $Author: cmc $ $Date: 2002-07-05 13:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ public:
     void SetNumRuleName( const String& rName );
 };
 
-long SwWW8ImplReader::Read_Ftn( WW8PLCFManResult* pRes, BOOL )
+long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
 {
     BOOL bFtEdOk = FALSE;
 
@@ -355,7 +355,7 @@ long SwWW8ImplReader::Read_Ftn( WW8PLCFManResult* pRes, BOOL )
 
     USHORT nType;
     BOOL bAutoNum = TRUE;
-    if( 257 == pRes->nSprmId )
+    if( eEDN == pRes->nSprmId )
     {
         nType = MAN_EDN;
         if( pPlcxMan->GetEdn() )
@@ -372,7 +372,7 @@ long SwWW8ImplReader::Read_Ftn( WW8PLCFManResult* pRes, BOOL )
     pPlcxMan->SaveAllPLCFx( aSave );
     WW8PLCFMan* pOldPlcxMan = pPlcxMan;
 
-    SwFmtFtn aFtn( 257 == pRes->nSprmId ) ;         // erzeuge Fussnote
+    SwFmtFtn aFtn( eEDN == pRes->nSprmId ) ;            // erzeuge Fussnote
     //rDoc.Insert( *pPaM, aFtn );
 
     SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();

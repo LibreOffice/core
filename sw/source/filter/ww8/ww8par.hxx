@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:14 $
+ *  last change: $Author: cmc $ $Date: 2002-07-05 13:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,6 +606,18 @@ friend class WW8FormulaControl;
     SwWW8FltAnchorStack* pAnchorStck;
 
     /*
+    A stack of fields identifiers to keep track of any open fields that need
+    to be closed. Generally word fields are inserted as writer fields as soon
+    as they are encountered, and so their end point is normally unimportant.
+    But hyperlink fields need to be applied as attributes to text and it is
+    far easier and safer to set the end point of an attribute when we
+    encounter the end marker of the field instead of caculating in advance
+    where the end point will fall, to do so fully correctly duplicates the
+    main logic of the filter itself.
+    */
+    ::std::stack<USHORT> maFieldStack;
+
+    /*
     Knows how to split a series of bytes into sprms and their arguments
     */
     wwSprmParser *mpSprmParser;
@@ -1067,7 +1079,8 @@ friend class WW8FormulaControl;
     void ConvertFFileName( String& rName, const String& rRaw );
     long Read_F_Tag( WW8FieldDesc* pF );
     void InsertTagField( const USHORT nId, const String& rTagText );
-    long ImportExtSprm( WW8PLCFManResult* pRes, BOOL bStart );
+    long ImportExtSprm(WW8PLCFManResult* pRes);
+    void EndExtSprm(USHORT nSprmId);
     void ReadDocInfo();
 
 // Ver8-Listen
@@ -1109,12 +1122,12 @@ friend class WW8FormulaControl;
 public:     // eigentlich private, geht aber leider nur public
     void ConvertUFName( String& rName );
 
-    long Read_Ftn(WW8PLCFManResult* pRes, BOOL);
-    long Read_Field(WW8PLCFManResult* pRes, BOOL);
-    long Read_Book(WW8PLCFManResult*, BOOL bStartAttr);
-    long Read_And(WW8PLCFManResult* pRes, BOOL bStartAttr);
+    long Read_Ftn(WW8PLCFManResult* pRes);
+    long Read_Field(WW8PLCFManResult* pRes);
+    long Read_Book(WW8PLCFManResult*);
+    long Read_And(WW8PLCFManResult* pRes);
 
-                                        // Attribute
+    // Attribute
 
     void Read_Special(USHORT, const BYTE*, short nLen);
     void Read_Obj(USHORT, const BYTE*, short nLen);
@@ -1122,6 +1135,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_BoldUsw(          USHORT nId, const BYTE*, short nLen );
     void Read_SubSuper(         USHORT, const BYTE*, short nLen );
     BOOL ConvertSubToGraphicPlacement();
+    SwFrmFmt *ContainsSingleInlineGraphic(const SwPaM &rRegion);
     void Read_SubSuperProp(     USHORT, const BYTE*, short nLen );
     void Read_Underline(        USHORT, const BYTE*, short nLen );
     void Read_TxtColor(         USHORT, const BYTE*, short nLen );

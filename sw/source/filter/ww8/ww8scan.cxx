@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:15 $
+ *  last change: $Author: cmc $ $Date: 2002-07-05 13:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3447,7 +3447,7 @@ WW8PLCFx& WW8PLCFx_SubDoc::operator ++( int )
 //-----------------------------------------
 
 WW8PLCFx_FLD::WW8PLCFx_FLD( SvStream* pSt, const WW8Fib& rMyFib, short nType)
-    : WW8PLCFx( rMyFib.nVersion, FALSE ), rFib( rMyFib ), pPLCF( 0 )
+    : WW8PLCFx(rMyFib.nVersion, TRUE), rFib( rMyFib ), pPLCF( 0 )
 {
     long nFc, nLen;
 
@@ -3513,29 +3513,29 @@ WW8_CP WW8PLCFx_FLD::Where()
     return pPLCF ? pPLCF->Where() : LONG_MAX;
 }
 
-long WW8PLCFx_FLD::GetNoSprms( WW8_CP& rStart, long& rEnd, long& rLen )
+void WW8PLCFx_FLD::GetSprms(WW8PLCFxDesc* p)
 {
-    void* pData;
-    long nIdx;
-
-    rLen = 0;
-    rEnd = LONG_MAX;                            // Es gibt keine Ende
+    p->nStartPos = p->nEndPos = LONG_MAX;
+    p->pMemPos = 0;
+    p->nSprmsLen = 0;
+    p->bRealLineEnd = FALSE;
 
     if ( !pPLCF )
     {
-        rStart = LONG_MAX;                      // Es gibt keine Felder
-        return -1;
+        p->nStartPos = LONG_MAX;                    // Es gibt keine Felder
+        return;
     }
 
-    if (!pPLCF->Get( rStart, pData ))
+    WW8FieldDesc aF;
+    if (!GetPara(pPLCF->GetIdx(), aF))
     {
-        rStart = LONG_MAX;                      // PLCF fertig abgearbeitet
-        return -1;
+        p->nStartPos = LONG_MAX;                    // PLCF fertig abgearbeitet
+        return;
     }
+    p->nStartPos = aF.nSCode-1;
+    p->nEndPos = p->nStartPos + aF.nLen;
 
-    nIdx = pPLCF->GetIdx();
-
-    return nIdx;
+    p->nCp2OrIdx = pPLCF->GetIdx();
 }
 
 WW8PLCFx& WW8PLCFx_FLD::operator ++( int )
@@ -4008,7 +4008,9 @@ USHORT WW8PLCFMan::GetId(const WW8PLCFxDesc* p) const
 {
     USHORT nId;
 
-    if (p->nSprmsLen > 0)
+    if (p == pFld)
+        nId = eFLD;
+    else if (p->nSprmsLen > 0)
         nId = maSprmParser.GetSprmId(p->pMemPos);
     else
         nId = 0;        // Id = 0 for empty attributes
@@ -4312,6 +4314,7 @@ void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
     }
     pRes->pMemPos = p->pMemPos;
     pRes->nSprmId = GetId(p);
+    pRes->nCp2OrIdx = p->nCp2OrIdx;
     if (p->nSprmsLen)
     {
         // Length of actual sprm
@@ -4343,15 +4346,15 @@ void WW8PLCFMan::GetNoSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
     pRes->nCp2OrIdx = p->nCp2OrIdx;
 
     if( p == pFld )
-        pRes->nSprmId = 258;
+        pRes->nSprmId = eFLD;
     else if( p == pFtn )
-        pRes->nSprmId = 256;
+        pRes->nSprmId = eFTN;
     else if( p == pEdn )
-        pRes->nSprmId = 257;
+        pRes->nSprmId = eEDN;
     else if( p == pBkm )
-        pRes->nSprmId = 259;
+        pRes->nSprmId = eBKN;
     else if( p == pAnd )
-        pRes->nSprmId = 260;
+        pRes->nSprmId = eAND;
     else if( p == pPcd )
     {
         //We slave the piece table attributes to the piece table, the piece
@@ -4367,7 +4370,7 @@ void WW8PLCFMan::GetNoSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
     pRes->nMemLen = -1;     // Ende-Kennzeichen
 
     if( &aD[nIdx] == pBkm )
-        pRes->nSprmId = 259;
+        pRes->nSprmId = eBKN;
     else if( &aD[nIdx] == pPcd )
     {
         //We slave the piece table attributes to the piece table, the piece
