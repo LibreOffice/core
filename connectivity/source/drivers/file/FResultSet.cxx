@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 15:20:06 $
+ *  last change: $Author: oj $ $Date: 2001-12-10 11:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1319,6 +1319,8 @@ BOOL OResultSet::OpenImpl()
         {
             if(isCount())
             {
+                if(m_xColumns->size() > 1)
+                    throw throwGenericSQLException(::rtl::OUString::createFromAscii("Count can only be used as single column!"),*this );
                 m_nRowCountResult = 0;
                 // Vorlaeufig einfach ueber alle Datensaetze iterieren und
                 // dabei die Aktionen bearbeiten (bzw. einfach nur zaehlen):
