@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-29 20:26:12 $
+ *  last change: $Author: kz $ $Date: 2002-05-16 14:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,7 +819,7 @@ ModalDialog RID_PADIALOG
         Text[ polish ] = "Strona pr�bna";
         Text[ portuguese_brazilian ] = "test ~page";
         Text[ japanese ] = "テストページ(~P)";
-        Text[ korean ] = "테스트 페이지(~P)";
+        Text[ korean ] = "인쇄 테스트(~P)";
         Text[ chinese_simplified ] = "试印(~P)";
         Text[ chinese_traditional ] = "試列印(~P)";
         Text[ turkish ] = "test ~page";
@@ -848,7 +848,7 @@ ModalDialog RID_PADIALOG
         Text[ polish ] = "Czcionki...";
         Text[ portuguese_brazilian ] = "Add\nfon~ts..";
         Text[ japanese ] = "フォント(~T)...";
-        Text[ korean ] = "글꼴.(~T).";
+        Text[ korean ] = "글꼴(~T)...";
         Text[ chinese_simplified ] = "字体(~T)...";
         Text[ chinese_traditional ] = "字型(~T)...";
         Text[ turkish ] = "Add\nfon~ts..";
