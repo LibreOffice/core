@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-12 15:27:57 $
+ *  last change: $Author: mba $ $Date: 2001-12-19 17:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1809,6 +1809,10 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             if ( pChild->pWin == pWin )
             break;
     }
+
+    if ( n == aSortedList.Count() )
+        // sometimes called while toggeling float mode
+        return;
 
     nPos = aSortedList[n];
 
