@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:53:43 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,8 @@ class SwFEShell : public SwEditShell
     // get list of marked SdrObjects;
     // helper method for GetSelFrmType, IsSelContainsControl
     const SdrMarkList* _GetMarkList() const;
+
+    BOOL CheckHeadline( bool bRepeat ) const;
 
 public:
     TYPEINFO();
@@ -681,10 +683,11 @@ public:
                                 BOOL* pFullTblProtection = 0 );
     BOOL CanUnProtectCells() const;
 
-    void SetHeadlineRepeat( BOOL bSet );//TRUE: Headline soll widerholt werden.
-    BOOL IsHeadlineRepeat() const;
-    BOOL IsInRepeatedHeadline() const;
-    BOOL IsInHeadline() const;
+    USHORT GetRowsToRepeat() const;
+    void SetRowsToRepeat( USHORT nNumOfRows );
+
+    BOOL IsInRepeatedHeadline() const { return CheckHeadline( true ); }
+    BOOL IsInHeadline() const { return CheckHeadline( false ); }
 
     //Stellt die Breiten der Zellen so ein, dass der Inhalt moeglichst
     //nicht umgebrochen werden muss.
