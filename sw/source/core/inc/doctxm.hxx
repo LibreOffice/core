@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 10:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <section.hxx>
 #endif
 
-class  International;
+class  SwTOXInternational;
 class  SvUShorts;
 class  SvStringsDtor;
 class  SvPtrarr;
@@ -94,7 +94,7 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
 {
     SwTOXSortTabBases aSortArr;
 
-    void    UpdateMarks( const International& rIntl,
+    void    UpdateMarks( const SwTOXInternational& rIntl,
                             const SwTxtNode* pOwnChapterNode );
     void    UpdateOutline( const SwTxtNode* pOwnChapterNode );
     void    UpdateTemplate( const SwTxtNode* pOwnChapterNode );
@@ -103,14 +103,14 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
     void    UpdateTable( const SwTxtNode* pOwnChapterNode );
     void    UpdateSequence( const SwTxtNode* pOwnChapterNode );
     void    UpdateAuthorities( const SwTxtNode* pOwnChapterNode,
-                                        const International& rIntl );
+                                        const SwTOXInternational& rIntl );
     void    UpdateAll();
 
     // Sortiert einfuegen ins Array fuer die Generierung
     void    InsertSorted(SwTOXSortTabBase* pBase);
 
     // Alpha-Trennzeichen bei der Generierung einfuegen
-    void    InsertAlphaDelimitter( const International& rIntl );
+    void    InsertAlphaDelimitter( const SwTOXInternational& rIntl );
 
     // Textrumpf generieren
     void GenerateText( USHORT nArrayIdx, USHORT nCount, SvStringsDtor& );
@@ -119,11 +119,12 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
     void    _UpdatePageNum( SwTxtNode* pNd,
                             const SvUShorts& rNums,
                             const SvPtrarr &rDescs,
-                            const SvUShorts* pMainEntryNums );
+                            const SvUShorts* pMainEntryNums,
+                            const SwTOXInternational& rIntl );
 
     // Bereich fuer Stichwort einfuegen suchen
     Range GetKeyRange(const String& rStr, USHORT nLevel, const Range& rRange,
-                        const International& rIntl );
+                        const SwTOXInternational& rIntl );
 
     // returne die TextCollection ueber den Namen / aus Format-Pool
     SwTxtFmtColl* GetTxtFmtColl( USHORT nLevel );

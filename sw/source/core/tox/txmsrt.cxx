@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 10:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,17 @@
 
 #pragma hdrstop
 
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
 #ifndef _TOOLS_RESID_HXX
 #include <tools/resid.hxx>
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
 #endif
 
 #ifndef _DOC_HXX
@@ -143,6 +146,35 @@ USHORT SwTOXSortTabBase::nOpt = 0;
 SV_IMPL_VARARR( SwTOXSources, SwTOXSource )
 
 
+SwTOXInternational::SwTOXInternational( LanguageType nLang )
+    : eLang( nLang )
+{
+    pIntl = new International( eLang );
+    pCharClass = new CharClass( SvxCreateLocale( eLang ));
+}
+
+SwTOXInternational::SwTOXInternational( const SwTOXInternational& rIntl )
+    : eLang( rIntl.eLang )
+{
+    pIntl = new International( *rIntl.pIntl );
+    pCharClass = new CharClass( SvxCreateLocale( rIntl.eLang ));
+}
+
+SwTOXInternational::~SwTOXInternational()
+{
+    delete pCharClass;
+    delete pIntl;
+}
+
+String SwTOXInternational::ToUpper( const String& rStr, xub_StrLen nPos ) const
+{
+    return pCharClass->toUpper( rStr, nPos, 1 );
+}
+inline BOOL SwTOXInternational::IsNumeric( const String& rStr ) const
+{
+    return pCharClass->isNumeric( rStr );
+}
+
 /*--------------------------------------------------------------------
      Beschreibung:  SortierElement fuer Verzeichniseintraege
  --------------------------------------------------------------------*/
@@ -150,12 +182,13 @@ SV_IMPL_VARARR( SwTOXSources, SwTOXSource )
 
 SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
                                     const SwTxtTOXMark* pMark,
-                                    const International* pInter )
+                                    const SwTOXInternational* pInter )
     : pTxtMark( pMark ), pTOXNd( 0 ), nPos( 0 ), nType( nTyp ),
-    pIntl( pInter ), bValidTxt( FALSE ), nCntPos( 0 )
+    pTOXIntl( pInter ), bValidTxt( FALSE ), nCntPos( 0 )
 {
     if( pNd )
     {
+        DBG_ASSERT(pTOXIntl, "No SwTOXInternational" );
         xub_StrLen n = 0;
         if( pTxtMark )
             n = *pTxtMark->GetStart();
@@ -229,8 +262,8 @@ BOOL SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
                                 *pEndCmp = rCmp.pTxtMark->GetEnd();
 
             bRet = ( ( pEnd && pEndCmp ) || ( !pEnd && !pEndCmp ) ) &&
-                    COMPARE_EQUAL == pIntl->Compare( GetTxt(),
-                                rCmp.GetTxt(), INTN_COMPARE_IGNORECASE );
+                    pTOXIntl->IsEqual( GetTxt(), rCmp.GetTxt(),
+                                        INTN_COMPARE_IGNORECASE );
         }
     }
     return bRet;
@@ -266,8 +299,8 @@ BOOL SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
                         // beide Pointer vorhanden -> vergleiche Text
                         // beide Pointer nicht vorhanden -> vergleiche AlternativText
                         if( ( pEnd && pEndCmp ) || ( !pEnd && !pEndCmp ) )
-                            return COMPARE_LESS == pIntl->Compare( GetTxt(),
-                                    rCmp.GetTxt(), INTN_COMPARE_IGNORECASE );
+                            return pTOXIntl->IsLess( GetTxt(), rCmp.GetTxt(),
+                                                    INTN_COMPARE_IGNORECASE );
 
                         if( pEnd && !pEndCmp )
                             return TRUE;
@@ -292,7 +325,7 @@ BOOL SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
 SwTOXIndex::SwTOXIndex( const SwTxtNode& rNd,
                                 const SwTxtTOXMark* pMark, USHORT nOptions,
                                 BYTE nKyLevel,
-                                const International& rIntl )
+                                const SwTOXInternational& rIntl )
     : SwTOXSortTabBase( TOX_SORT_INDEX, &rNd, pMark, &rIntl ),
     nKeyLevel(nKyLevel)
 {
@@ -315,15 +348,15 @@ BOOL SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
         return FALSE;
 
     String sMyTxt( GetTxt() ), sOtherTxt( rCmp.GetTxt() );
-    sMyTxt.Insert( pIntl->GetIndexChar( sMyTxt ), 0 );
-    sOtherTxt.Insert( pIntl->GetIndexChar( sOtherTxt ), 0 );
+    sMyTxt.Insert( pTOXIntl->GetIndexChar( sMyTxt ), 0 );
+    sOtherTxt.Insert( pTOXIntl->GetIndexChar( sOtherTxt ), 0 );
 
     USHORT nCmpFlags;
     if( GetOptions() & TOI_CASE_SENSITIVE )
         nCmpFlags = 0;
     else
         nCmpFlags = INTN_COMPARE_IGNORECASE;
-    bRet = COMPARE_EQUAL == pIntl->Compare( sMyTxt, sOtherTxt, nCmpFlags );
+    bRet = pTOXIntl->IsEqual( sMyTxt, sOtherTxt, nCmpFlags );
 
     // Wenn nicht zusammengefasst wird muss die Pos aus gewertet werden
     if(bRet && !(GetOptions() & TOI_SAME_ENTRY))
@@ -345,15 +378,15 @@ BOOL SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
     USHORT nFlag = GetOptions() & TOI_CASE_SENSITIVE ? 0 : INTN_COMPARE_IGNORECASE;
 
     String sMyTxt( GetTxt() ), sOtherTxt( rCmp.GetTxt() );
-    sMyTxt.Insert( pIntl->GetIndexChar( sMyTxt ), 0 );
-    sOtherTxt.Insert( pIntl->GetIndexChar( sOtherTxt ), 0 );
+    sMyTxt.Insert( pTOXIntl->GetIndexChar( sMyTxt ), 0 );
+    sOtherTxt.Insert( pTOXIntl->GetIndexChar( sOtherTxt ), 0 );
 
-    BOOL bRet = COMPARE_LESS == pIntl->Compare( sMyTxt, sOtherTxt, nFlag ) &&
+    BOOL bRet = pTOXIntl->IsLess( sMyTxt, sOtherTxt, nFlag ) &&
                 GetLevel() == rCmp.GetLevel();
 
     // Wenn nicht zusammengefasst wird muss die Pos aus gewertet werden
     if( !bRet && !(GetOptions() & TOI_SAME_ENTRY) )
-        bRet =  COMPARE_EQUAL == pIntl->Compare( sMyTxt, sOtherTxt, nFlag ) &&
+        bRet = pTOXIntl->IsEqual( sMyTxt, sOtherTxt, nFlag ) &&
                 nPos < rCmp.nPos;
 
     return bRet;
@@ -382,9 +415,10 @@ void SwTOXIndex::_GetText( String& rTxt )
         break;
     }
     // if TOI_INITIAL_CAPS is set, first character is to be capitalized
-    if(TOI_INITIAL_CAPS&nOpt && pIntl)
+    if( TOI_INITIAL_CAPS & nOpt && pTOXIntl )
     {
-        rTxt.SetChar(0, pIntl->Upper(rTxt.GetChar(0)));
+        String sUpper( pTOXIntl->ToUpper( rTxt, 0 ));
+        rTxt.Erase( 0, 1 ).Insert( sUpper, 0 );
     }
 }
 
@@ -398,9 +432,10 @@ void SwTOXIndex::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) cons
         sTmp = ((SwTxtNode*)aTOXSources[0].pNd)->GetExpandTxt(
                             *pTxtMark->GetStart(),
                             *pEnd - *pTxtMark->GetStart());
-        if(TOI_INITIAL_CAPS&nOpt && pIntl)
+        if(TOI_INITIAL_CAPS&nOpt && pTOXIntl)
         {
-            sTmp.SetChar(0, pIntl->Upper(sTmp.GetChar(0)));
+            String sUpper( pTOXIntl->ToUpper( sTmp, 0 ));
+            sTmp.Erase( 0, 1 ).Insert( sUpper, 0 );
         }
     }
     else
@@ -433,7 +468,7 @@ USHORT SwTOXIndex::GetLevel() const
 
 
 SwTOXCustom::SwTOXCustom(const String& rStr, USHORT nLevel,
-                            const International& rIntl )
+                            const SwTOXInternational& rIntl )
     : SwTOXSortTabBase( TOX_SORT_CUSTOM, 0, 0, &rIntl ),
     aKey(rStr), nLev(nLevel)
 {
@@ -442,14 +477,14 @@ SwTOXCustom::SwTOXCustom(const String& rStr, USHORT nLevel,
 
 BOOL SwTOXCustom::operator==(const SwTOXSortTabBase& rCmpBase)
 {
-    return COMPARE_EQUAL == pIntl->Compare( GetTxt(), rCmpBase.GetTxt() ) &&
+    return pTOXIntl->IsEqual( GetTxt(), rCmpBase.GetTxt(), 0 ) &&
             GetLevel() == rCmpBase.GetLevel();
 }
 
 
 BOOL SwTOXCustom::operator < (const SwTOXSortTabBase& rCmpBase)
 {
-    return COMPARE_LESS == pIntl->Compare( GetTxt(), rCmpBase.GetTxt() ) &&
+    return pTOXIntl->IsLess( GetTxt(), rCmpBase.GetTxt(), 0 ) &&
             GetLevel() <= rCmpBase.GetLevel();
 }
 
@@ -471,7 +506,7 @@ void SwTOXCustom::_GetText( String& rTxt )
 
 
 SwTOXContent::SwTOXContent( const SwTxtNode& rNd, const SwTxtTOXMark* pMark,
-                        const International& rIntl)
+                        const SwTOXInternational& rIntl)
     : SwTOXSortTabBase( TOX_SORT_CONTENT, &rNd, pMark, &rIntl )
 {
 }
@@ -719,7 +754,7 @@ String SwTOXTable::GetURL() const
   -----------------------------------------------------------------------*/
 
 SwTOXAuthority::SwTOXAuthority( const SwCntntNode& rNd,
-                SwFmtFld& rField, const International& rIntl ) :
+                SwFmtFld& rField, const SwTOXInternational& rIntl ) :
     SwTOXSortTabBase( TOX_SORT_AUTHORITY, &rNd, 0, &rIntl ),
     m_rField(rField)
 {
@@ -730,7 +765,7 @@ USHORT  SwTOXAuthority::GetLevel() const
     String sText(((SwAuthorityField*)m_rField.GetFld())->
                         GetFieldText(AUTH_FIELD_AUTHORITY_TYPE));
     USHORT nRet = 0;
-    if( pIntl->IsNumeric( sText ) )
+    if( pTOXIntl->IsNumeric( sText ) )
     {
         nRet = sText.ToInt32();
         nRet++;
@@ -796,7 +831,6 @@ BOOL    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
         SwAuthorityField* pCmpField = (SwAuthorityField*)
                         ((SwTOXAuthority&)rBase).m_rField.GetFld();
 
-        DBG_ASSERT(pIntl, "No International?")
 
         for(USHORT i = 0; i < pType->GetSortKeyCount(); i++)
         {
@@ -804,12 +838,13 @@ BOOL    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
             String sText1 = pField->GetFieldText(pKey->eField);
             String sText2 = pCmpField->GetFieldText(pKey->eField);
 
-            StringCompare eComp = pIntl->Compare( sText1, sText2,
+            StringCompare eComp = pTOXIntl->Compare( sText1, sText2,
                                              INTN_COMPARE_IGNORECASE);
-            if(COMPARE_EQUAL == eComp)
-                continue;
-            bRet = (COMPARE_LESS == eComp) == pKey->bSortAscending;
-            break;
+            if( COMPARE_EQUAL != eComp )
+            {
+                bRet = (COMPARE_LESS == eComp) == pKey->bSortAscending;
+                break;
+            }
         }
     }
     return bRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:07:35 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 10:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,14 +904,8 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr)
     pDoc->SetModified();
 
     // get current Language
-    const International* pIntl = &Application::GetAppInternational();
-    LanguageType eLang = ((const SvxLanguageItem&)pDoc->GetAttrPool().
-                        GetDefaultItem(RES_CHRATR_LANGUAGE )).GetLanguage();
-
-    if( !( eLang == ::GetSystemLanguage() &&
-        LANGUAGE_SYSTEM == pIntl->GetLanguage() ) &&
-        eLang != pIntl->GetLanguage() )
-        pIntl = new International( eLang );
+    SwTOXInternational aIntl(  ((const SvxLanguageItem&)pDoc->GetAttrPool().
+                        GetDefaultItem(RES_CHRATR_LANGUAGE )).GetLanguage() );
 
     aSortArr.DeleteAndDestroy( 0, aSortArr.Count() );
 
@@ -987,7 +981,7 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
     pDoc->UpdateNumRule();
 
     if( GetCreateType() & TOX_MARK )
-        UpdateMarks( *pIntl, pOwnChapterNode );
+        UpdateMarks( aIntl, pOwnChapterNode );
 
     if( GetCreateType() & TOX_OUTLINELEVEL )
         UpdateOutline( pOwnChapterNode );
@@ -1016,13 +1010,13 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
         UpdateCntnt( TOX_FRAME, pOwnChapterNode );
 
     if(TOX_AUTHORITIES == SwTOXBase::GetType())
-        UpdateAuthorities( pOwnChapterNode, *pIntl );
+        UpdateAuthorities( pOwnChapterNode, aIntl );
 
     // Bei Bedarf Alphadelimitter einfuegen (nur bei Stichwoertern)
     //
     if( TOX_INDEX == SwTOXBase::GetType() &&
         ( GetOptions() & TOI_ALPHA_DELIMITTER ) )
-        InsertAlphaDelimitter( *pIntl );
+        InsertAlphaDelimitter( aIntl );
 
     // sortierte Liste aller Verzeichnismarken und Verzeichnisbereiche
     void* p = 0;
@@ -1112,10 +1106,6 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
     SwFrm::CheckPageDescs( (SwPageFrm*)pDoc->GetRootFrm()->Lower() );
 
     SetProtect( SwTOXBase::IsProtected() );
-
-    // ggfs. noch die International Klasse loeschen
-    if( pIntl != &Application::GetAppInternational() )
-        delete (International*)pIntl;
 }
 
 /*--------------------------------------------------------------------
@@ -1123,7 +1113,7 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
  --------------------------------------------------------------------*/
 
 
-void SwTOXBaseSection::InsertAlphaDelimitter( const International& rIntl )
+void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
     sal_Unicode nDeli, nLastDeli = 0;
@@ -1217,7 +1207,7 @@ SwTxtFmtColl* SwTOXBaseSection::GetTxtFmtColl( USHORT nLevel )
      Beschreibung: Aus Markierungen erzeugen
  --------------------------------------------------------------------*/
 
-void SwTOXBaseSection::UpdateMarks( const International& rIntl,
+void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                                     const SwTxtNode* pOwnChapterNode )
 {
     const SwModify* pType = SwTOXBase::GetRegisteredIn();
@@ -1394,7 +1384,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
 
  --------------------------------------------------*/
 void SwTOXBaseSection::UpdateAuthorities( const SwTxtNode* pOwnChapterNode,
-                                            const International& rIntl )
+                                            const SwTOXInternational& rIntl )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
     SwFieldType* pAuthFld = pDoc->GetFldType(RES_AUTHORITY, aEmptyStr);
@@ -1872,10 +1862,17 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx, USHORT nCount,
 
 void SwTOXBaseSection::UpdatePageNum()
 {
+    if( !aSortArr.Count() )
+        return ;
+
     // die aktuellen Seitennummern ins Verzeichnis eintragen
     SwPageFrm*  pAktPage    = 0;
     USHORT      nPage       = 0;
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
+
+    SwTOXInternational aIntl(  ((const SvxLanguageItem&)pDoc->GetAttrPool().
+                        GetDefaultItem(RES_CHRATR_LANGUAGE )).GetLanguage() );
+
     for( USHORT nCnt = 0; nCnt < aSortArr.Count(); ++nCnt )
     {
         // Schleife ueber alle SourceNodes
@@ -1957,7 +1954,8 @@ void SwTOXBaseSection::UpdatePageNum()
                 const SwTxtNode* pTxtNd = pBase->pTOXNd->GetTxtNode();
                 ASSERT( pTxtNd, "kein TextNode, falsches Verzeichnis" );
 
-                _UpdatePageNum( (SwTxtNode*)pTxtNd, aNums, aDescs, pMainNums );
+                _UpdatePageNum( (SwTxtNode*)pTxtNd, aNums, aDescs, pMainNums,
+                                aIntl );
             }
             DELETEZ(pMainNums);
             aNums.Remove(0, aNums.Count());
@@ -1985,7 +1983,8 @@ BOOL lcl_HasMainEntry( const SvUShorts* pMainEntryNums, USHORT nToFind )
 void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                                     const SvUShorts& rNums,
                                     const SvPtrarr & rDescs,
-                                    const SvUShorts* pMainEntryNums)
+                                    const SvUShorts* pMainEntryNums,
+                                    const SwTOXInternational& rIntl )
 {
     //collect starts end ends of main entry character style
     SvUShorts* pCharStyleIdx = pMainEntryNums ? new SvUShorts : 0;
@@ -2052,10 +2051,9 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                 {
                     if ( nCount >= 1 )
                     {
-                        FollowingText eText = nCount > 1 ? FOLLOWTEXT_PAGES
-                                                         : FOLLOWTEXT_PAGE;
-                        aNumStr += Application::GetAppInternational().
-                                            GetFollowingText( eText );
+                        USHORT eText = nCount > 1 ? FOLLOWTEXT_PAGES
+                                                     : FOLLOWTEXT_PAGE;
+                        aNumStr += rIntl.GetFollowingText( eText );
                     }
                 }
                 else
@@ -2095,10 +2093,9 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         {
             if( nCount >= 1 )
             {
-                FollowingText eText = nCount > 1 ? FOLLOWTEXT_PAGES
+                USHORT eText = nCount > 1 ? FOLLOWTEXT_PAGES
                                                     : FOLLOWTEXT_PAGE;
-                aNumStr += Application::GetAppInternational().
-                                        GetFollowingText( eText );
+                aNumStr += rIntl.GetFollowingText( eText );
             }
         }
         else
@@ -2170,10 +2167,10 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
             rMark.GetPrimaryKey().Len() )
         {
             aRange = GetKeyRange( rMark.GetPrimaryKey(), FORM_PRIMARY_KEY,
-                                    aRange, *pNew->pIntl );
+                                    aRange, *pNew->pTOXIntl );
             if( rMark.GetSecondaryKey().Len() )
                 aRange = GetKeyRange( rMark.GetSecondaryKey(), FORM_SECONDARY_KEY,
-                                      aRange, *pNew->pIntl );
+                                      aRange, *pNew->pTOXIntl );
         }
     }
     // Pos suchen und einfuegen
@@ -2240,11 +2237,14 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
 Range SwTOXBaseSection::GetKeyRange(const   String& rStr,
                                      USHORT nLevel,
                                      const  Range& rRange,
-                                     const International& rIntl )
+                                     const SwTOXInternational& rIntl )
 {
     String sToCompare(rStr);
-    if(0 != (TOI_INITIAL_CAPS & GetOptions()))
-        sToCompare.SetChar(0, rIntl.Upper(sToCompare.GetChar(0)));
+    if( 0 != (TOI_INITIAL_CAPS & GetOptions()) )
+    {
+        String sUpper( rIntl.ToUpper( sToCompare, 0 ));
+        sToCompare.Erase( 0, 1 ).Insert( sUpper, 0 );
+    }
 
     ASSERT(rRange.Min() >= 0 && rRange.Max() >= 0, "Min Max < 0");
 
@@ -2258,7 +2258,7 @@ Range SwTOXBaseSection::GetKeyRange(const   String& rStr,
     {
         SwTOXSortTabBase* pBase = aSortArr[i];
         String aTmp = pBase->GetTxt();
-        if( rIntl.CompareEqual( aTmp, sToCompare, nCmpFlags )  &&
+        if( rIntl.IsEqual( aTmp, sToCompare, nCmpFlags )  &&
                 pBase->GetLevel() == nLevel &&
                     pBase->GetType() == TOX_SORT_CUSTOM)
             break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 10:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,18 @@
 #ifndef _TXMSRT_HXX
 #define _TXMSRT_HXX
 
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
+#endif
+#ifndef _INTN_HXX
+#include <tools/intn.hxx>
+#endif
 #ifndef _TOX_HXX
 #include <tox.hxx>
 #endif
 
 class International;
+class CharClass;
 class SwCntntNode;
 class SwTxtNode;
 class SwTxtTOXMark;
@@ -96,6 +103,43 @@ struct SwTOXSource
 
 SV_DECL_VARARR( SwTOXSources, SwTOXSource, 0, 10 )
 
+class SwTOXInternational
+{
+    International* pIntl;
+    CharClass* pCharClass;
+    LanguageType eLang;
+
+public:
+    SwTOXInternational( LanguageType nLang );
+    SwTOXInternational( const SwTOXInternational& );
+    ~SwTOXInternational();
+
+    inline BOOL IsEqual( const String& rTxt1, const String& rTxt2,
+                            USHORT nFlags ) const
+    {
+        return COMPARE_EQUAL == pIntl->Compare( rTxt1, rTxt2, nFlags );
+    }
+    inline BOOL IsLess( const String& rTxt1, const String& rTxt2,
+                            USHORT nFlags ) const
+    {
+        return COMPARE_LESS == pIntl->Compare( rTxt1, rTxt2, nFlags );
+    }
+    inline StringCompare Compare( const String& rTxt1, const String& rTxt2,
+                                    USHORT nFlags ) const
+    {
+        return pIntl->Compare( rTxt1, rTxt2, nFlags );
+    }
+
+    inline sal_Unicode GetIndexChar( const String& rTxt ) const
+    {   return pIntl->GetIndexChar( rTxt ); }
+
+    inline String GetFollowingText( USHORT nType ) const
+    {   return pIntl->GetFollowingText( (FollowingText)nType ); }
+
+    String ToUpper( const String& rStr, xub_StrLen nPos ) const;
+    inline BOOL IsNumeric( const String& rStr ) const;
+};
+
 /*--------------------------------------------------------------------
      Beschreibung: Klassen fuer die Sortierung der Verzeichnisse
  --------------------------------------------------------------------*/
@@ -105,7 +149,7 @@ struct SwTOXSortTabBase
     SwTOXSources aTOXSources;
     const SwTxtNode* pTOXNd;
     const SwTxtTOXMark* pTxtMark;
-    const International* pIntl;
+    const SwTOXInternational* pTOXIntl;
     ULONG nPos;
     xub_StrLen nCntPos;
     USHORT nType, nLanguage;
@@ -114,7 +158,7 @@ struct SwTOXSortTabBase
     SwTOXSortTabBase( TOXSortType nType,
                       const SwCntntNode* pTOXSrc,
                       const SwTxtTOXMark* pTxtMark,
-                      const International* pIntl );
+                      const SwTOXInternational* pIntl );
 
     USHORT  GetType() const         { return nType; }
     USHORT  GetOptions() const      { return nOpt; }
@@ -151,7 +195,7 @@ inline const String& SwTOXSortTabBase::GetTxt() const
 struct SwTOXIndex : public SwTOXSortTabBase
 {
     SwTOXIndex( const SwTxtNode&, const SwTxtTOXMark*, USHORT nOptions, BYTE nKeyLevel,
-                    const International& rIntl );
+                    const SwTOXInternational& rIntl );
 
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
     virtual USHORT  GetLevel() const;
@@ -165,7 +209,7 @@ private:
 
 struct SwTOXCustom : public SwTOXSortTabBase
 {
-    SwTOXCustom(const String& rKey, USHORT nLevel, const International& rIntl );
+    SwTOXCustom(const String& rKey, USHORT nLevel, const SwTOXInternational& rIntl );
 
     virtual USHORT GetLevel() const;
     virtual BOOL   operator==( const SwTOXSortTabBase& );
@@ -184,7 +228,7 @@ private:
 struct SwTOXContent : public SwTOXSortTabBase
 {
     SwTOXContent( const SwTxtNode&, const SwTxtTOXMark*,
-                const International& rIntl );
+                const SwTOXInternational& rIntl );
 
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
     virtual USHORT  GetLevel() const;
@@ -231,7 +275,7 @@ private:
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
     virtual void _GetText( String& );
 public:
-    SwTOXAuthority( const SwCntntNode& rNd, SwFmtFld& rField, const International& rIntl );
+    SwTOXAuthority( const SwCntntNode& rNd, SwFmtFld& rField, const SwTOXInternational& rIntl );
     SwFmtFld& GetFldFmt() {return m_rField;}
 
     virtual BOOL    operator==( const SwTOXSortTabBase& );
