@@ -4674,3 +4674,4 @@ __CTA2?AVbad_alloc@std@@
 ??0MenuConfiguration@framework@@QAE@ABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@@Z
 ?LoadEventsConfig@EventsConfiguration@framework@@SAEABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@AAVSvStream@@AAUEventsConfig@2@@Z
 ?StoreEventsConfig@EventsConfiguration@framework@@SAEABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@AAVSvStream@@ABUEventsConfig@2@@Z
+?GetSizePixel@BitmapEx@@QBEABVSize@@XZ
