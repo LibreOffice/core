@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawDocShell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:11:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,17 +133,16 @@ public:
     virtual void            Activate( BOOL bMDI );
     virtual void            Deactivate( BOOL bMDI );
     virtual BOOL            InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    virtual BOOL            Load( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    virtual BOOL            LoadFrom( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual BOOL            ConvertFrom( SfxMedium &rMedium );
-    //virtual void            HandsOff();
     virtual BOOL            Save();
-    virtual BOOL            SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual BOOL            SaveAsOwnFormat( SfxMedium& rMedium );
     virtual BOOL            ConvertTo( SfxMedium &rMedium );
     virtual BOOL            SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    //virtual void            UIActivate( BOOL bActive );
-    //virtual void            SetVisArea(const Rectangle& rRect);
+
+    virtual sal_Bool        Load( SfxMedium &rMedium  );
+    virtual sal_Bool        LoadFrom( SfxMedium& rMedium );
+    virtual sal_Bool        SaveAs( SfxMedium &rMedium  );
+
     virtual Rectangle       GetVisArea(USHORT nAspect) const;
     virtual void            Draw(OutputDevice*, const JobSetup& rSetup, USHORT nAspect = ASPECT_CONTENT);
     virtual SfxUndoManager* GetUndoManager();
