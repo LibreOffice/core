@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-07 13:03:54 $
+ *  last change: $Author: ka $ $Date: 2001-05-16 13:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ public:
 
     SdrObject* GetObj(const String& rObjName) const;
 
-    USHORT  GetPageByName(const String& rPgName) const;
+    USHORT  GetPageByName(const String& rPgName, BOOL& rbIsMasterPage ) const;
     SdPage* GetSdPage(USHORT nPgNum, PageKind ePgKind) const;
     USHORT  GetSdPageCount(PageKind ePgKind) const;
     void    SetSelected(SdPage* pPage, BOOL bSelect);
