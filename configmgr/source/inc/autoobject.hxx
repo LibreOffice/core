@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: autoreferencemap.hxx,v $
+ *  $RCSfile: autoobject.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: jb $ $Date: 2002-03-28 08:41:26 $
  *
@@ -59,19 +59,14 @@
  *
  ************************************************************************/
 
-#ifndef CONFIGMGR_AUTOREFERENCEMAP_HXX
-#define CONFIGMGR_AUTOREFERENCEMAP_HXX
+#ifndef CONFIGMGR_AUTOOBJECT_HXX
+#define CONFIGMGR_AUTOOBJECT_HXX
 
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
+#endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _RTL_REF_HXX_
-#include <rtl/ref.hxx>
-#endif
-
-#ifndef INCLUDED_MAP
-#include <map>
-#define INCLUDED_MAP
 #endif
 
 namespace configmgr
@@ -81,95 +76,63 @@ namespace configmgr
 
 //-----------------------------------------------------------------------------
 
-    template < class Key, class Object, class KeyCompare = std::less<Key> >
-    class AutoReferenceMap
+    template < class Object >
+    class AutoObject : Noncopyable
     {
     public:
-        typedef rtl::Reference<Object>         Ref;
-        typedef std::map<Key,Ref,KeyCompare>   Map;
-
         typedef Object      object_type;
-        typedef Key         key_type;
-        typedef KeyCompare  key_compare;
-
-        typedef typename Map::value_type value_type;
+        typedef Object *    Ptr;
     public:
-        AutoReferenceMap()  {}
-        ~AutoReferenceMap() {}
+        AutoObject() : m_pObject(NULL) {}
+        AutoObject(Object * _obj) : m_pObject(_obj) {}
+        ~AutoObject() { delete m_pObject; }
 
-        void swap(Map & _rOtherData)
-        {
-            m_aMap.swap( _rOtherData );
-        }
-        void swap(AutoReferenceMap & _rOther)
-        {
-            this->swap( _rOther.m_aMap );
-        }
-
-
-        bool has(Key const & _aKey) const;
-        Ref get(Key const & _aKey) const;
-
-        Ref insert(Key const & _aKey, Ref const & _anEntry);
-        Ref remove(Key const & _aKey);
+        bool is()   const;
+        Ptr get()   const;
+        Ptr getOrCreate();
 
         osl::Mutex & mutex() const { return m_aMutex; }
     private:
-        Ref internalGet(Key const & _aKey) const
-        {
-            typename Map::const_iterator it = m_aMap.find(_aKey);
-
-            return it != m_aMap.end() ? it->second : Ref();
-        }
-
-        Ref internalAdd(Key const & _aKey, Ref const & _aNewRef)
-        {
-            return m_aMap[_aKey] = _aNewRef;
-        }
-
-        void internalDrop(Key const & _aKey)
-        {
-            m_aMap.erase(_aKey);
-        }
+        Ptr internalCreate();
     private:
         mutable osl::Mutex  m_aMutex;
-        Map                 m_aMap;
+        Ptr  m_pObject;
     };
 //-----------------------------------------------------------------------------
 
-    template < class Key, class Object, class KeyCompare >
-    bool AutoReferenceMap<Key,Object,KeyCompare>::has(Key const & _aKey) const
+    template < class Object >
+    inline
+    Object * AutoObject<Object>::get() const
     {
-        osl::MutexGuard aGuard(m_aMutex);
-        return internalGet(_aKey).is();
+        // osl::MutexGuard aGuard(m_aMutex);
+        return m_pObject;
     }
 //-----------------------------------------------------------------------------
 
-    template < class Key, class Object, class KeyCompare >
-    rtl::Reference<Object> AutoReferenceMap<Key,Object,KeyCompare>::get(Key const & _aKey) const
+    template < class Object >
+    inline
+    bool AutoObject<Object>::is() const
     {
-        osl::MutexGuard aGuard(m_aMutex);
-        return internalGet(_aKey);
+        return get() != NULL;
     }
 //-----------------------------------------------------------------------------
 
-    template < class Key, class Object, class KeyCompare >
-    rtl::Reference<Object> AutoReferenceMap<Key,Object,KeyCompare>::insert(Key const & _aKey, Ref const & _anEntry)
+    template < class Object >
+    Object * AutoObject<Object>::getOrCreate()
     {
-        osl::MutexGuard aGuard(m_aMutex);
-        Ref aRef = internalAdd(_aKey,_anEntry);
-        return aRef;
-
+        Object * p = get();
+        return p ? p : internalCreate();
     }
 //-----------------------------------------------------------------------------
 
-    template < class Key, class Object, class KeyCompare >
-    rtl::Reference<Object> AutoReferenceMap<Key,Object,KeyCompare>::remove(Key const & _aKey)
+    template < class Object >
+    Object * AutoObject<Object>::internalCreate()
     {
         osl::MutexGuard aGuard(m_aMutex);
-        Ref aRef = internalGet(_aKey);
-        internalDrop(_aKey);
-        return aRef;
+        if (m_pObject == NULL)
+            m_pObject = new Object();
+        return m_pObject;
+
     }
 //-----------------------------------------------------------------------------
 
