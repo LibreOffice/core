@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_registry.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:08:09 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,26 +59,25 @@
  *
  ************************************************************************/
 
+#include "dp_registry.hrc"
 #include "dp_misc.h"
+#include "dp_resource.h"
+#include "dp_interact.h"
 #include "dp_ucb.h"
 #include "osl/diagnose.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/uri.hxx"
-#include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/compbase3.hxx"
-#include "ucbhelper/content.hxx"
-#include "comphelper/anytostring.hxx"
+#include "cppuhelper/exc_hlp.hxx"
 #include "com/sun/star/uno/DeploymentException.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
+#include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/container/XContentEnumerationAccess.hpp"
-#include "com/sun/star/deployment/XPackageRegistry.hpp"
-
+#include "com/sun/star/deployment/PackageRegistry.hpp"
 #include <vector>
 #include <hash_map>
 #include <memory>
@@ -100,7 +99,7 @@ typedef ::cppu::WeakComponentImplHelper3<
 //==============================================================================
 class PackageRegistryImpl : private MutexHolder, public t_helper
 {
-    Reference< XComponentContext > m_xComponentContext;
+    Reference<XComponentContext> m_xComponentContext;
 
     struct ci_string_hash
     {
@@ -114,29 +113,28 @@ class PackageRegistryImpl : private MutexHolder, public t_helper
             { return str1.equalsIgnoreAsciiCase( str2 ); }
     };
     typedef ::std::hash_map<
-        OUString,
-        Reference< deployment::XPackageRegistry >,
+        OUString, Reference<deployment::XPackageRegistry>,
         ci_string_hash, ci_string_equals > t_string2registry;
     t_string2registry m_media2backend;
 
     typedef ::std::vector<
-        Reference< deployment::XPackageRegistry > > t_registryvec;
+        Reference<deployment::XPackageRegistry> > t_registryvec;
     t_registryvec m_backends;
 
 protected:
-    inline void check() const;
+    inline void check();
     virtual void SAL_CALL disposing();
 
-    virtual ~PackageRegistryImpl();
 public:
+    virtual ~PackageRegistryImpl();
     inline PackageRegistryImpl(
-        Reference< XComponentContext > const & xComponentContext )
+        Reference<XComponentContext> const & xComponentContext )
         : t_helper( getMutex() ),
           m_xComponentContext( xComponentContext )
         {}
 
     // XInitialization
-    void SAL_CALL initialize( Sequence< Any > const & args )
+    void SAL_CALL initialize( Sequence<Any> const & args )
         throw (Exception);
 
     // XServiceInfo
@@ -148,30 +146,24 @@ public:
         throw (RuntimeException);
 
     // XPackageRegistry
-    virtual sal_Bool SAL_CALL bindPackage(
-        Reference< deployment::XPackage > & xPackage,
-        OUString const & url,
-        OUString const & mediaType,
-        Reference< XCommandEnvironment > const & xCmdEnv )
-        throw (deployment::DeploymentException, RuntimeException);
-    virtual OUString SAL_CALL detectMediaType( OUString const & url )
+    virtual Reference<deployment::XPackage> SAL_CALL bindPackage(
+        OUString const & url, OUString const & mediaType,
+        Reference<XCommandEnvironment> const & xCmdEnv )
+        throw (deployment::DeploymentException, CommandFailedException,
+               lang::IllegalArgumentException, RuntimeException);
+    virtual Sequence<OUString> SAL_CALL getSupportedMediaTypes()
         throw (RuntimeException);
-    virtual sal_Bool SAL_CALL repair(
-        Reference< XCommandEnvironment > const & xCmdEnv )
-        throw (deployment::DeploymentException, RuntimeException);
 };
 
 //______________________________________________________________________________
-inline void PackageRegistryImpl::check() const
+inline void PackageRegistryImpl::check()
 {
-    // xxx todo guard?
-//     ::osl::MutexGuard guard( getMutex() );
+    ::osl::MutexGuard guard( getMutex() );
     if (rBHelper.bInDispose || rBHelper.bDisposed)
     {
         throw lang::DisposedException(
             OUSTR("PackageRegistry instance has already been disposed!"),
-            static_cast< OWeakObject * >(
-                const_cast< PackageRegistryImpl * >(this) ) );
+            static_cast<OWeakObject *>(this) );
     }
 }
 
@@ -211,130 +203,116 @@ static OUString normalizeMediaType( OUString const & mediaType )
 
 // XInitialization
 //______________________________________________________________________________
-void PackageRegistryImpl::initialize( Sequence< Any > const & args )
+void PackageRegistryImpl::initialize( Sequence<Any> const & args )
     throw (Exception)
 {
     check();
-    OUString cache_path;
-    if (args.getLength() > 0)
-        cache_path = extract_throw< OUString >( args[ 0 ] );
-
-    try
+    OUString context( extract_throw<OUString>( args[ 0 ] ) );
+    OUString cachePath;
+    sal_Bool readOnly = false;
+    if (args.getLength() > 1)
     {
-        // auto-detect all registered package registries:
-        Reference< container::XEnumeration > xEnum(
-            Reference< container::XContentEnumerationAccess >(
-                m_xComponentContext->getServiceManager(),
-                UNO_QUERY_THROW )->createContentEnumeration(
-                    OUSTR("com.sun.star.deployment.PackageRegistryBackend") ) );
-        if (xEnum.is())
+        extract_throw( &cachePath, args[ 1 ] );
+        if (args.getLength() > 2)
+            extract_throw( &readOnly, args[ 2 ] );
+    }
+
+    // auto-detect all registered package registries:
+    Reference<container::XEnumeration> xEnum(
+        Reference<container::XContentEnumerationAccess>(
+            m_xComponentContext->getServiceManager(),
+            UNO_QUERY_THROW )->createContentEnumeration(
+                OUSTR("com.sun.star.deployment.PackageRegistryBackend") ) );
+    if (xEnum.is())
+    {
+        while (xEnum->hasMoreElements())
         {
-            while (xEnum->hasMoreElements())
+            Any element( xEnum->nextElement() );
+            Sequence<Any> registryArgs( 2 );
+            registryArgs[ 0 ] <<=
+                Reference<deployment::XPackageRegistry>(this);
+            registryArgs[ 1 ] <<= context;
+            if (cachePath.getLength() > 0)
             {
-                Any element( xEnum->nextElement() );
-                Sequence< Any > registry_args( 1 );
-                registry_args[ 0 ] <<=
-                    Reference< deployment::XPackageRegistry >(this);
-                if (cache_path.getLength() > 0)
-                {
-                    Reference< lang::XServiceInfo > xServiceInfo(
-                        element, UNO_QUERY_THROW );
-                    OUString registry_cache_path(
-                        make_url( cache_path,
-                                  ::rtl::Uri::encode(
-                                      xServiceInfo->getImplementationName(),
-                                      rtl_UriCharClassPchar,
-                                      rtl_UriEncodeIgnoreEscapes,
-                                      RTL_TEXTENCODING_UTF8 ) ) );
-                    create_folder( 0, registry_cache_path );
-                    registry_args.realloc( 1 + args.getLength() );
-                    Any * pregistry_args = registry_args.getArray();
-                    pregistry_args[ 1 ] <<= registry_cache_path;
-                    Any const * pargs = args.getConstArray();
-                    // append all args:
-                    for ( sal_Int32 pos = 1; pos < args.getLength(); ++pos )
-                        pregistry_args[ 1 + pos ] = pargs[ pos ];
-                }
+                Reference<lang::XServiceInfo> xServiceInfo(
+                    element, UNO_QUERY_THROW );
+                OUString registryCachePath(
+                    make_url( cachePath,
+                              ::rtl::Uri::encode(
+                                  xServiceInfo->getImplementationName(),
+                                  rtl_UriCharClassPchar,
+                                  rtl_UriEncodeIgnoreEscapes,
+                                  RTL_TEXTENCODING_UTF8 ) ) );
+                if (! readOnly)
+                    create_folder( 0, registryCachePath,
+                                   Reference<XCommandEnvironment>() );
+                registryArgs.realloc( registryArgs.getLength() + 2 );
+                registryArgs[ registryArgs.getLength() - 2 ] <<=
+                    registryCachePath;
+                registryArgs[ registryArgs.getLength() - 1 ] <<= readOnly;
+            }
 
-                Reference< deployment::XPackageRegistry > xBackend;
-                Reference< lang::XSingleComponentFactory > xFac(
-                    element, UNO_QUERY );
-                if (xFac.is())
-                {
-                    xBackend.set(
-                        xFac->createInstanceWithArgumentsAndContext(
-                            registry_args, m_xComponentContext ), UNO_QUERY );
-                }
-                else
-                {
-                    Reference< lang::XSingleServiceFactory >
-                        xSingleServiceFactory( element, UNO_QUERY_THROW );
-                    xBackend.set(
-                        xSingleServiceFactory->createInstanceWithArguments(
-                            registry_args ), UNO_QUERY );
-                }
+            Reference<deployment::XPackageRegistry> xBackend;
+            Reference<lang::XSingleComponentFactory> xFac(
+                element, UNO_QUERY );
+            if (xFac.is())
+            {
+                xBackend.set(
+                    xFac->createInstanceWithArgumentsAndContext(
+                        registryArgs, m_xComponentContext ), UNO_QUERY );
+            }
+            else
+            {
+                Reference<lang::XSingleServiceFactory> xSingleServiceFac(
+                    element, UNO_QUERY_THROW );
+                xBackend.set(
+                    xSingleServiceFac->createInstanceWithArguments(
+                        registryArgs ), UNO_QUERY );
+            }
 
-                if (! xBackend.is())
-                {
-                    throw DeploymentException(
-                        OUSTR("cannot instantiate PackageRegistryBackend "
-                              "service: ") +
-                        Reference< lang::XServiceInfo >(
-                            element, UNO_QUERY_THROW )->getImplementationName(),
-                        static_cast< OWeakObject * >(this) );
-                }
-                m_backends.push_back( xBackend );
+            if (! xBackend.is())
+            {
+                throw DeploymentException(
+                    OUSTR("cannot instantiate PackageRegistryBackend service: ")
+                    + Reference<lang::XServiceInfo>(
+                        element, UNO_QUERY_THROW )->getImplementationName(),
+                    static_cast<OWeakObject *>(this) );
+            }
+            m_backends.push_back( xBackend );
 
-                Sequence< OUString > mtypes(
-                    extract_throw< Sequence< OUString > >(
-                        Reference< beans::XPropertySet >(
-                            xBackend, UNO_QUERY_THROW )->getPropertyValue(
-                                OUSTR("SupportedMediaTypes") ) ) );
+            Sequence<OUString> mtypes( xBackend->getSupportedMediaTypes() );
+            OUString const * pmtypes = mtypes.getConstArray();
+            sal_Int32 len = mtypes.getLength();
+            for ( sal_Int32 pos = 0; pos < len; ++pos )
+            {
+                OUString mediaType( normalizeMediaType( pmtypes[ pos ] ) );
 
-                OUString const * pmtypes = mtypes.getConstArray();
-                sal_Int32 len = mtypes.getLength();
-                for ( sal_Int32 pos = 0; pos < len; ++pos )
-                {
-                    OUString mediaType( normalizeMediaType( pmtypes[ pos ] ) );
-
-                    ::std::pair< t_string2registry::iterator, bool >
-                          mr_insertion(
-                              m_media2backend.insert(
-                                  t_string2registry::value_type(
-                                      mediaType, xBackend ) ) );
+                ::std::pair< t_string2registry::iterator, bool >
+                      mr_insertion(
+                          m_media2backend.insert(
+                              t_string2registry::value_type(
+                                  mediaType, xBackend ) ) );
 #if OSL_DEBUG_LEVEL > 0
-                    if (! mr_insertion.second)
-                    {
-                        ::rtl::OUStringBuffer buf;
-                        buf.appendAscii(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "more than one PackageRegistryBackend for "
-                                "media-type=\"") );
-                        buf.append( mediaType );
-                        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" => ") );
-                        buf.append( Reference< lang::XServiceInfo >(
-                                        xBackend, UNO_QUERY_THROW )->
-                                    getImplementationName() );
-                        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
-                        OSL_ENSURE( 0, ::rtl::OUStringToOString(
-                                        buf.makeStringAndClear(),
-                                        RTL_TEXTENCODING_UTF8 ) );
-                    }
-#endif
+                if (! mr_insertion.second)
+                {
+                    ::rtl::OUStringBuffer buf;
+                    buf.appendAscii(
+                        RTL_CONSTASCII_STRINGPARAM(
+                            "more than one PackageRegistryBackend for "
+                            "media-type=\"") );
+                    buf.append( mediaType );
+                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" => ") );
+                    buf.append( Reference<lang::XServiceInfo>(
+                                    xBackend, UNO_QUERY_THROW )->
+                                getImplementationName() );
+                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
+                    OSL_ENSURE( 0, ::rtl::OUStringToOString(
+                                    buf.makeStringAndClear(),
+                                    RTL_TEXTENCODING_UTF8 ) );
                 }
+#endif
             }
         }
-    }
-    catch (RuntimeException &)
-    {
-        throw;
-    }
-    catch (Exception &)
-    {
-        Any exc( ::cppu::getCaughtException() );
-        throw lang::WrappedTargetRuntimeException(
-            OUSTR("caught unexpected exception!"),
-            Reference< XInterface >(), exc );
     }
 }
 
@@ -345,15 +323,15 @@ OUString SAL_CALL getImplementationName()
 }
 
 //==============================================================================
-Sequence< OUString > SAL_CALL getSupportedServiceNames()
+Sequence<OUString> SAL_CALL getSupportedServiceNames()
 {
-    OUString str_name = OUSTR("com.sun.star.deployment.PackageRegistry");
-    return Sequence< OUString >( &str_name, 1 );
+    OUString strName = OUSTR("com.sun.star.deployment.PackageRegistry");
+    return Sequence<OUString>( &strName, 1 );
 }
 
 //==============================================================================
-Reference< XInterface > SAL_CALL create(
-    Reference< XComponentContext > const & xComponentContext )
+Reference<XInterface> SAL_CALL create(
+    Reference<XComponentContext> const & xComponentContext )
     SAL_THROW( (Exception) )
 {
     return static_cast< ::cppu::OWeakObject * >(
@@ -375,7 +353,7 @@ sal_Bool PackageRegistryImpl::supportsService(
     throw (RuntimeException)
 {
 //     check();
-    Sequence< OUString > supported_services( getSupportedServiceNames() );
+    Sequence<OUString> supported_services( getSupportedServiceNames() );
     OUString const * ar = supported_services.getConstArray();
     for ( sal_Int32 pos = supported_services.getLength(); pos--; )
     {
@@ -395,25 +373,34 @@ Sequence< OUString > PackageRegistryImpl::getSupportedServiceNames()
 
 // XPackageRegistry
 //______________________________________________________________________________
-sal_Bool PackageRegistryImpl::bindPackage(
-    Reference< deployment::XPackage > & xPackage,
-    OUString const & url,
-    OUString const & mediaType_,
-    Reference< XCommandEnvironment > const & xCmdEnv )
-    throw (deployment::DeploymentException, RuntimeException)
+Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
+    OUString const & url, OUString const & mediaType,
+    Reference<XCommandEnvironment> const & xCmdEnv )
+    throw (deployment::DeploymentException, CommandFailedException,
+           lang::IllegalArgumentException, RuntimeException)
 {
-    try
+    check();
+    if (mediaType.getLength() == 0)
     {
-        OUString mediaType( mediaType_ );
-        if (mediaType.getLength() == 0)
+        // iterate all backends:
+        t_registryvec::const_iterator iPos( m_backends.begin() );
+        t_registryvec::const_iterator const iEnd( m_backends.end() );
+        for ( ; iPos != iEnd; ++iPos )
         {
-            // auto-detect media-type:
-            mediaType = detectMediaType( url );
-            if (mediaType.getLength() == 0)
-                throw Exception /* xxx todo: what exception */(
-                    OUSTR("Cannot detect media-type of ") + url, 0 );
+            try
+            {
+                return (*iPos)->bindPackage( url, mediaType, xCmdEnv );
+            }
+            catch (lang::IllegalArgumentException &)
+            {
+            }
         }
-
+        throw lang::IllegalArgumentException(
+            getResourceString(RID_STR_CANNOT_DETECT_MEDIA_TYPE) + url,
+            static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
+    }
+    else
+    {
         // get backend:
         t_string2registry::const_iterator iFind(
             m_media2backend.find( normalizeMediaType(mediaType) ) );
@@ -427,112 +414,30 @@ sal_Bool PackageRegistryImpl::bindPackage(
                     normalizeMediaType(
                         /* cut parameters: */ mediaType.copy( 0, q ) ) );
             }
-            if (iFind == m_media2backend.end())
-            {
-                throw container::NoSuchElementException(
-                    OUSTR("No PackageRegistryBackend for media-type ") +
-                    mediaType, static_cast< OWeakObject * >(this) );
-            }
         }
-        return (iFind->second->bindPackage(
-                    xPackage, url, mediaType, xCmdEnv ) != sal_False);
-    }
-    catch (RuntimeException &)
-    {
-        throw;
-    }
-    catch (deployment::DeploymentException &)
-    {
-        throw;
-    }
-    catch (Exception &)
-    {
-        Any exc( ::cppu::getCaughtException() );
-        ::rtl::OUStringBuffer buf;
-        buf.append( static_cast< sal_Unicode >('[') );
-        buf.append( getImplementationName() );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] cannot bind package ") );
-        buf.append( url );
-        buf.append( static_cast< sal_Unicode >('!') );
-        handle_error( deployment::DeploymentException(
-                          buf.makeStringAndClear(),
-                          static_cast< OWeakObject * >(this), exc ),
-                      xCmdEnv );
-        return false;
+        if (iFind == m_media2backend.end())
+        {
+            throw lang::IllegalArgumentException(
+                getResourceString(RID_STR_UNSUPPORTED_MEDIA_TYPE) + mediaType,
+                static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
+        }
+        return iFind->second->bindPackage( url, mediaType, xCmdEnv );
     }
 }
 
 //______________________________________________________________________________
-OUString PackageRegistryImpl::detectMediaType( OUString const & url )
+Sequence<OUString> PackageRegistryImpl::getSupportedMediaTypes()
     throw (RuntimeException)
 {
-    try
-    {
-        ::ucb::Content ucb_content(
-            url, Reference< XCommandEnvironment >() );
-
-        OUString mediaType;
-        try
-        {
-            ucb_content.getPropertyValue(
-                OUSTR("MediaType") ) >>= mediaType;
-        }
-        catch (beans::UnknownPropertyException &)
-        {
-        }
-        if (mediaType.getLength() == 0)
-        {
-            // iterator all backends:
-            t_registryvec::const_iterator iPos( m_backends.begin() );
-            t_registryvec::const_iterator const iEnd( m_backends.end() );
-            for ( ; iPos != iEnd; ++iPos )
-            {
-                mediaType = (*iPos)->detectMediaType( url );
-                if (mediaType.getLength() > 0)
-                    break;
-            }
-        }
-        return mediaType;
-    }
-    catch (RuntimeException &)
-    {
-        throw;
-    }
-    catch (Exception &)
-    {
-        Any exc( ::cppu::getCaughtException() );
-        throw lang::WrappedTargetRuntimeException(
-            OUSTR("caught exception while detecting media-type of ") + url,
-            static_cast< OWeakObject * >(this), exc );
-    }
-}
-
-//______________________________________________________________________________
-sal_Bool PackageRegistryImpl::repair(
-    Reference< XCommandEnvironment > const & xCmdEnv )
-    throw (deployment::DeploymentException, RuntimeException)
-{
-    bool success = true;
-    t_registryvec::const_iterator iPos( m_backends.begin() );
-    t_registryvec::const_iterator const iEnd( m_backends.end() );
+    check();
+    Sequence<OUString> ret( m_media2backend.size() );
+    OUString * pret = ret.getArray();
+    t_string2registry::const_iterator iPos( m_media2backend.begin() );
+    t_string2registry::const_iterator const iEnd( m_media2backend.end() );
+    sal_Int32 index = 0;
     for ( ; iPos != iEnd; ++iPos )
-    {
-        try
-        {
-            success &= ((*iPos)->repair( xCmdEnv ) != sal_False);
-        }
-        catch (deployment::DeploymentException & exc)
-        {
-            ::rtl::OUStringBuffer buf;
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("ERROR: ") );
-            buf.append( exc.Message );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\nCause: ") );
-            buf.append( ::comphelper::anyToString(exc.Cause) );
-            ProgressLevel progress( xCmdEnv, buf.makeStringAndClear() );
-            success = false;
-        }
-    }
-    return success;
+        pret[ index++ ] = iPos->first;
+    return ret;
 }
 
 }
