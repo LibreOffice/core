@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-10-18 10:35:34 $
+ *  last change: $Author: os $ $Date: 2002-11-07 10:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,10 @@
 #include "tstpitem.hxx"
 #include "lrspitem.hxx"
 #include "protitem.hxx"
+
+#ifndef RULER_TAB_RTL
+#define RULER_TAB_RTL           ((USHORT)0x0010)
+#endif
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -3285,6 +3289,7 @@ void SvxRuler::Command( const CommandEvent& rCEvt )
     if ( COMMAND_CONTEXTMENU == rCEvt.GetCommand() )
     {
         CancelDrag();
+        BOOL bRTL = pRuler_Imp->pTextRTLItem && pRuler_Imp->pTextRTLItem->GetValue();
         if ( pTabs &&
              RULER_TYPE_TAB ==
              GetType( rCEvt.GetMousePosPixel(), &pRuler_Imp->nIdx ) &&
@@ -3300,7 +3305,9 @@ void SvxRuler::Command( const CommandEvent& rCEvt )
 
             for ( USHORT i = RULER_TAB_LEFT; i < RULER_TAB_DEFAULT; ++i )
             {
-                DrawTab(&aDev, aPt, i);
+                USHORT nStyle = bRTL ? i|RULER_TAB_RTL : i;
+                nStyle |= bHorz ? WB_HORZ : WB_VERT;
+                DrawTab(&aDev, aPt, nStyle);
                 aMenu.InsertItem(i+1,
                                  String(ResId(RID_SVXSTR_RULER_START+i, DIALOG_MGR())),
                                  Image(aDev.GetBitmap(Point(), aSz), Color(COL_WHITE)));
