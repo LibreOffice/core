@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-03 17:12:51 $
+ *  last change: $Author: lla $ $Date: 2001-01-26 07:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,14 +145,14 @@ void RegisterService(
 struct ProviderRequest
 {
     Reference< XSingleServiceFactory > xRet;
-    Reference< XMultiServiceFactory > const xServiceManager;
+    Reference< XMultiServiceFactory > const m_xServiceManager;
     OUString const sImplementationName;
 
     ProviderRequest(
         void* pServiceManager,
         sal_Char const* pImplementationName
     )
-    : xServiceManager(reinterpret_cast<XMultiServiceFactory*>(pServiceManager))
+    : m_xServiceManager(reinterpret_cast<XMultiServiceFactory*>(pServiceManager))
     , sImplementationName(OUString::createFromAscii(pImplementationName))
     {
     }
@@ -172,7 +172,7 @@ struct ProviderRequest
             if (xRet.is())
                 xRet->release();
 
-            xRet = creator( xServiceManager, sImplementationName,Factory, Services);
+            xRet = creator( m_xServiceManager, sImplementationName,Factory, Services);
             OSL_ENSHURE(xRet.is(), "CREATE_PROVIDER : invalid return value !");
 
             if (xRet.is())
@@ -201,7 +201,7 @@ struct ProviderRequest
         {
             const Sequence< OUString > Services=  configmgr::ServiceComponentImpl::getServiceNames(pInfo);
 
-            xRet = creator( xServiceManager, OUString::createFromAscii(pInfo->implementationName),Factory, Services);
+            xRet = creator( m_xServiceManager, OUString::createFromAscii(pInfo->implementationName),Factory, Services);
             OSL_ENSHURE(xRet.is(), "CreateProvider : WHERE IS THE return value !");
 
             if (xRet.is())

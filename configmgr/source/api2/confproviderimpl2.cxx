@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-20 21:16:56 $
+ *  last change: $Author: lla $ $Date: 2001-01-26 07:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,9 @@ namespace configmgr
         ::rtl::OUString sUser, sPath, sLocale;
         sal_Int32 nLevels;
         bool bNoCache;
+        bool bLasyWrite; // no need here
 
-        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bNoCache);
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bNoCache, bLasyWrite);
 
         vos::ORef<OOptions> xOptions = new OOptions(getDefaultOptions());
 
@@ -205,9 +206,18 @@ namespace configmgr
         ::rtl::OUString sUser, sPath, sLocale;
         sal_Int32 nLevels;
         bool bNoCache;
+        bool bLasyWrite;
 
-        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bNoCache);
-
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bNoCache, bLasyWrite);
+#ifdef DEBUG
+        // HACK for Test only
+        ConfigurationName aName(sPath);
+        if (!aName.isEmpty() && aName.moduleName().equalsIgnoreCase(ASCII("org.openoffice.Office.Common")))
+        {
+            // bLasyWrite = true;
+        }
+        bLasyWrite = true;
+#endif
         vos::ORef<OOptions> xOptions = new OOptions(getDefaultOptions());
 
         if (sUser.getLength())
@@ -239,6 +249,7 @@ namespace configmgr
 
         if (sLocale.getLength())    xOptions->setLocale(sLocale);
         if (bNoCache)               xOptions->setNoCache(bNoCache);
+        if (bLasyWrite)             xOptions->setLasyWrite(bLasyWrite);
 
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-01 13:53:17 $
+ *  last change: $Author: lla $ $Date: 2001-01-26 07:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include <cppuhelper/factory.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
+#endif
+
 //........................................................................
 namespace configmgr
 {
@@ -103,11 +107,15 @@ namespace configmgr
     /** a special factory for the configuration provider, which implements some kind of
         "shared multiple instances" factory.
     */
+
     class OProviderFactory : public OProviderFactory_Base
     {
+        friend class ODisposingListener;
     protected:
         ::osl::Mutex                        m_aMutex;
         ::cppu::ComponentInstantiation      m_pObjectCreator;
+        ::com::sun::star::uno::Reference<::com::sun::star::lang::XEventListener> m_xEventListener; // must be the first uno::object
+
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                             m_xORB;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
@@ -143,6 +151,7 @@ namespace configmgr
 
         // to be called with m:aMutex locked
         void ensureSettings();
+        void disposing(com::sun::star::lang::EventObject const& rEvt) throw();
     };
 
 //........................................................................
@@ -154,6 +163,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/12/01 13:53:17  fs
+ *  initial checkin - afctory for configuration provider(s)
+ *
  *
  *  Revision 1.0 30.11.00 19:03:57  fs
  ************************************************************************/

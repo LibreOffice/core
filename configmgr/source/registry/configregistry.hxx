@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configregistry.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:42 $
+ *  last change: $Author: lla $ $Date: 2001-01-26 07:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,9 @@ public:
     virtual void SAL_CALL removeFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw(::com::sun::star::uno::RuntimeException);
 
 protected:
-    virtual void SAL_CALL disposing() { ServiceComponentImpl::disposing(); }
+    virtual void SAL_CALL disposing() {
+        ServiceComponentImpl::disposing();
+    }
     /// translates the given URL into a nodepath which may be used with the configuration provider
     ::rtl::OUString getNodePathFromURL(const ::rtl::OUString& _rURL);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-18 14:54:04 $
+ *  last change: $Author: lla $ $Date: 2001-01-26 07:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,16 @@ namespace configmgr
         }
         m_xDefaultOptions->setDefaultLocale(sDefaultLocale);
         m_xDefaultOptions->setDefaultUser(sDefaultUser);
+
+        OProviderImplDisposingListener *pListener = new OProviderImplDisposingListener(*this);
+        m_xEventListener = pListener;
+
+        uno::Reference<com::sun::star::lang::XComponent> xComponent(_rModule.getServiceManager(), uno::UNO_QUERY);
+        if (xComponent.is())
+        {
+            xComponent->addEventListener(m_xEventListener);
+            // CFG_TRACE_INFO("insert disposeListener.");
+        }
     }
 
     //-----------------------------------------------------------------------------
@@ -203,6 +213,14 @@ namespace configmgr
         delete m_pNewProviders;
         m_pTreeMgr->release();
         m_pTreeMgr = NULL;
+    }
+
+    // --------------------------------- disposing ---------------------------------
+
+    void SAL_CALL OProviderImpl::disposing(com::sun::star::lang::EventObject const& rEvt) throw()
+    {
+        // stop lasy writing
+        m_pTreeMgr->disableAsync();
     }
 
     //-----------------------------------------------------------------------------
@@ -440,6 +458,7 @@ namespace configmgr
     rtl::OUString OProviderImpl::FactoryArguments::sDepth(ASCII("depth"));
     rtl::OUString OProviderImpl::FactoryArguments::sLocale(ASCII("locale"));
     rtl::OUString OProviderImpl::FactoryArguments::sNoCache(ASCII("nocache"));
+    rtl::OUString OProviderImpl::FactoryArguments::sLasyWrite(ASCII("lasywrite"));
 
 #ifdef DBG_UTIL
     //-----------------------------------------------------------------------------
@@ -454,6 +473,7 @@ namespace configmgr
             aArgs.insert(OProviderImpl::FactoryArguments::sDepth);
             aArgs.insert(OProviderImpl::FactoryArguments::sLocale);
             aArgs.insert(OProviderImpl::FactoryArguments::sNoCache);
+            aArgs.insert(OProviderImpl::FactoryArguments::sLasyWrite);
         }
 
         HashSet::const_iterator it = aArgs.find(rName);
@@ -500,7 +520,8 @@ namespace configmgr
                                                       OUString& /* [out] */ _rUser,
                                                       OUString& /* [out] */ _rLocale,
                                                       sal_Int32& /* [out] */ _nLevels,
-                                                      bool& /* [out] */ _bNoCache)
+                                                      bool& /* [out] */ _bNoCache,
+                                                      bool& /* [out] */ _bLasyWrite)
         throw (lang::IllegalArgumentException)
     {
 
@@ -510,6 +531,7 @@ namespace configmgr
         ::rtl::OUString sUser, sPath, sLocale;
         sal_Int32 nLevelDepth = ITreeProvider::ALL_LEVELS;
         sal_Bool bNoCache = sal_False;
+        sal_Bool bLasyWrite = sal_False;
 
         // the args have to be a sequence of property values, currently three property names are recognized
         beans::PropertyValue aCurrent;
@@ -530,6 +552,8 @@ namespace configmgr
                     bExtractSuccess = (aCurrent.Value >>= sLocale);
                 else if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sNoCache))
                     bExtractSuccess = (aCurrent.Value >>= bNoCache);
+                else if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sLasyWrite))
+                    bExtractSuccess = (aCurrent.Value >>= bLasyWrite);
 /*
 #ifdef DBG_UTIL
                 else
@@ -579,6 +603,7 @@ namespace configmgr
         _rLocale = sLocale;
         _rUser = sUser;
         _bNoCache = (bNoCache != sal_False);
+        _bLasyWrite = bLasyWrite;
     }
 // class OOptions
     //..........................................................................
