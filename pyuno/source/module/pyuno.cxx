@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2003-05-24 11:00:56 $
+ *  last change: $Author: jbu $ $Date: 2003-05-24 23:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,6 +364,78 @@ PyObject *PyUNO_repr( PyObject  * self )
     return ret;
 }
 
+PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
+{
+    PyRef ret;
+    try
+    {
+        Runtime runtime;
+
+        PyRef paras,callable;
+        if( PyObject_IsInstance( object, getPyUnoClass( runtime ).get() ) )
+        {
+            PyUNO* me = (PyUNO*) object;
+            OUString attrName = OUString::createFromAscii(name);
+            if (! me->members->xInvocation->hasMethod (attrName))
+            {
+                OUStringBuffer buf;
+                buf.appendAscii( "Attribute " );
+                buf.append( attrName );
+                buf.appendAscii( " unknown" );
+                throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > () );
+            }
+            callable = PyUNO_callable_new (
+                me->members->xInvocation,
+                attrName,
+                runtime.getImpl()->cargo->xInvocation,
+                runtime.getImpl()->cargo->xTypeConverter,
+                ACCEPT_UNO_ANY);
+            paras = args;
+        }
+        else
+        {
+            // clean the tuple from uno.Any !
+            int size = PyTuple_Size( args );
+            paras = PyRef(PyTuple_New( size ), SAL_NO_ACQUIRE);
+            for( int i = 0 ; i < size ;i ++ )
+            {
+                PyObject * element = PyTuple_GetItem( args , i );
+                if( PyObject_IsInstance( element , getAnyClass( runtime ).get() ) )
+                {
+                    element = PyObject_GetAttrString( element, "value" );
+                }
+                else
+                {
+                    Py_XINCREF( element );
+                }
+                PyTuple_SetItem( paras.get(), i , element );
+            }
+            callable = PyRef( PyObject_GetAttrString( object , (char*)name ), SAL_NO_ACQUIRE );
+            if( !callable.is() )
+                return 0;
+        }
+        ret = PyRef( PyObject_CallObject( callable.get(), paras.get() ), SAL_NO_ACQUIRE );
+    }
+    catch (::com::sun::star::lang::IllegalArgumentException &e)
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+    catch (::com::sun::star::script::CannotConvertException &e)
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+    catch (::com::sun::star::uno::RuntimeException &e)
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+    catch (::com::sun::star::uno::Exception &e)
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+
+    return ret.getAcquired();
+}
+
 PyObject *PyUNO_str( PyObject * self )
 {
     PyUNO *me = ( PyUNO * ) self;
@@ -397,7 +469,6 @@ PyObject *PyUNO_str( PyObject * self )
     return PyString_FromString( buf.getStr());
 }
 
-static OUString constPrint( RTL_CONSTASCII_USTRINGPARAM( "print" ) );
 PyObject* PyUNO_getattr (PyObject* self, char* name)
 {
     PyUNO* me;
@@ -419,19 +490,7 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
             for (int i = 0; i < oo_member_list.getLength (); i++)
             {
                 Any a;
-                //Nobody has a bad thing to say about python, eh?
-                //This hack makes anything called "print" become "_print"
-                //because python won't let you get any attribute called "print".
-
-                if (oo_member_list [i] == constPrint)
-                {
-                    a <<= OUString::createFromAscii ("_print");
-                }
-                else
-                {
-                    a <<= oo_member_list [i];
-                }
-
+                a <<= oo_member_list [i];
                 PyList_SetItem (member_list, i, runtime.any2PyObject (a).get());
             }
             return member_list;
@@ -475,17 +534,7 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
             return ret.get();
 
         }
-        //Hack to fix python's "print" member handling...!
-        if (strcmp (name, "_print") == 0 && me->members->xInvocation->hasMethod (constPrint))
-        {
-            PyRef ret = PyUNO_callable_new (
-                me->members->xInvocation,
-                constPrint,
-                runtime.getImpl()->cargo->xInvocation,
-                runtime.getImpl()->cargo->xTypeConverter);
-            Py_XDECREF( ret.get() );
-            return ret.get();
-        }
+
         //or a property
         if (me->members->xInvocation->hasProperty ( attrName))
         {
@@ -499,17 +548,7 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
             Py_XINCREF( ret.get() );
             return ret.get();
         }
-        if (strcmp (name, "_print") == 0 && me->members->xInvocation->hasProperty (constPrint))
-        {
-            Any anyRet;
-            {
-                PyThreadDetach antiguard;
-                anyRet = me->members->xInvocation->getValue(constPrint);
-            }
-            PyRef ret = runtime.any2PyObject ( anyRet );
-            Py_XINCREF( ret.get() );
-            return ret.get();
-        }
+
         //or else...
         PyErr_SetString (PyExc_AttributeError, name);
     }
