@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-26 16:16:05 $
+ *  last change: $Author: thb $ $Date: 2002-10-23 14:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,6 +380,24 @@ namespace accessibility
     {
         // AFAIK, none.
         return uno::Any();
+    }
+
+    sal_Int32 SAL_CALL AccessibleImageBullet::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        // #104444# Added to XAccessibleComponent interface
+        UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
+        return static_cast<sal_Int32>(nColor);
+    }
+
+    sal_Int32 SAL_CALL AccessibleImageBullet::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        // #104444# Added to XAccessibleComponent interface
+        Color aColor( Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor() );
+
+        // the background is transparent
+        aColor.SetTransparency( 0xFF);
+
+        return static_cast<sal_Int32>( aColor.GetColor() );
     }
 
     ::rtl::OUString SAL_CALL AccessibleImageBullet::getImplementationName (void) throw (uno::RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-22 15:41:17 $
+ *  last change: $Author: thb $ $Date: 2002-10-23 14:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,6 +1019,24 @@ namespace accessibility
         return uno::Any();
     }
 
+    sal_Int32 SAL_CALL AccessibleEditableTextPara::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        // #104444# Added to XAccessibleComponent interface
+        UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
+        return static_cast<sal_Int32>(nColor);
+    }
+
+    sal_Int32 SAL_CALL AccessibleEditableTextPara::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        // #104444# Added to XAccessibleComponent interface
+        Color aColor( Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor() );
+
+        // the background is transparent
+        aColor.SetTransparency( 0xFF);
+
+        return static_cast<sal_Int32>( aColor.GetColor() );
+    }
+
     // XAccessibleText
     sal_Int32 SAL_CALL AccessibleEditableTextPara::getCaretPosition() throw (uno::RuntimeException)
     {
@@ -1300,7 +1318,7 @@ namespace accessibility
                     if( nCurIndex > nIndex )
                         return GetTextRange( nCurIndex - rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine), nCurIndex );
                 }
-                break;
+                return ::rtl::OUString();
             }
 
             default:
@@ -1356,7 +1374,7 @@ namespace accessibility
                         return GetTextRange( nLastIndex - nCurLineLen, static_cast< USHORT >( nLastIndex ) );
                     }
                 }
-                break;
+                return ::rtl::OUString();
             }
 
             default:
@@ -1410,7 +1428,7 @@ namespace accessibility
                         return GetTextRange( nCurIndex, nCurIndex + rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine+1) );
                     }
                 }
-                break;
+                return ::rtl::OUString();
             }
 
             default:
