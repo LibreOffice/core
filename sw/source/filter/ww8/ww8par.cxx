@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: jp $ $Date: 2000-11-15 14:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,27 +255,25 @@ SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
                         rRdr.pStrm ),
     rReader( rRdr )
 {
-    const OfaFilterOptions* pOpt = OFF_APP()->GetFilterOptions();
-#if SUPD>593
-    nSvxMSDffOLEConvFlags = GetFilterFlags();
-#endif
+    nSvxMSDffOLEConvFlags = SwMSDffManager::GetFilterFlags();
 }
 
 UINT32 SwMSDffManager::GetFilterFlags()
 {
-#if SUPD>593
-    UINT32 nFlags;
+    UINT32 nFlags = 0;
     const OfaFilterOptions* pOpt = OFF_APP()->GetFilterOptions();
     if( pOpt->IsMathType2StarMath() )
         nFlags |= OLE_MATHTYPE_2_STARMATH;
+/*
+    // !! don't convert the OLE-Object into the own format
     if( pOpt->IsWinWord2StarWriter() )
         nFlags |= OLE_WINWORD_2_STARWRITER;
+*/
     if( pOpt->IsExcel2StarCalc() )
         nFlags |= OLE_EXCEL_2_STARCALC;
     if( pOpt->IsPowerPoint2StarImpress() )
         nFlags |= OLE_POWERPOINT_2_STARIMPRESS;
     return nFlags;
-#endif
 }
 /***************************************************************************
 #  Spezial FastSave - Attribute
@@ -2853,11 +2851,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.2 2000-11-15 14:31:46 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:58  hr
+      initial import
+
       Revision 1.143  2000/09/18 16:04:59  willem.vandorp
       OpenOffice header added.
 
