@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:37:33 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ SdPresLayoutDlg::~SdPresLayoutDlg()
 void SdPresLayoutDlg::Reset()
 {
     const SfxPoolItem *pPoolItem = NULL;
+    long nName;
 
     // MasterPage austauschen
     if( rOutAttrs.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE, FALSE, &pPoolItem ) == SFX_ITEM_SET )
@@ -162,7 +163,7 @@ void SdPresLayoutDlg::Reset()
     FillValueSet();
 
     nLayoutCount = pLayoutNames->Count();
-    for( long nName = 0; nName < nLayoutCount; nName++ )
+    for( nName = 0; nName < nLayoutCount; nName++ )
     {
         if (*((String*)pLayoutNames->GetObject(nName)) == aName)
             break;
