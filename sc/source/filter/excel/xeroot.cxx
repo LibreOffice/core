@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:00:46 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XEROOT_HXX
 #include "xeroot.hxx"
 #endif
@@ -75,6 +73,9 @@
 
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
+#endif
+#ifndef SC_XEHELPER_HXX
+#include "xehelper.hxx"
 #endif
 #ifndef SC_XELINK_HXX
 #include "xelink.hxx"
@@ -107,58 +108,66 @@ XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
     XclRoot( rExpRootData ),
     mrExpData( rExpRootData )
 {
-    mrExpData.mpPalette.reset( new XclExpPalette( GetRoot() ) );
-    mrExpData.mpFontBuffer.reset( new XclExpFontBuffer( GetRoot() ) );
-    mrExpData.mpNumFmtBuffer.reset( new XclExpNumFmtBuffer( GetRoot() ) );
-    mrExpData.mpXFBuffer.reset( new XclExpXFBuffer( GetRoot() ) );
-    mrExpData.mpTabInfo.reset( new XclExpTabInfo( GetRoot() ) );
-    mrExpData.mpLinkManager.reset( new XclExpLinkManager( GetRoot() ) );
+    mrExpData.mxProgress.reset( new XclExpProgressBar( GetRoot() ) );
+    mrExpData.mxPalette.reset( new XclExpPalette( GetRoot() ) );
+    mrExpData.mxFontBfr.reset( new XclExpFontBuffer( GetRoot() ) );
+    mrExpData.mxNumFmtBfr.reset( new XclExpNumFmtBuffer( GetRoot() ) );
+    mrExpData.mxXFBfr.reset( new XclExpXFBuffer( GetRoot() ) );
+    mrExpData.mxTabInfo.reset( new XclExpTabInfo( GetRoot() ) );
+    mrExpData.mxLinkMgr.reset( new XclExpLinkManager( GetRoot() ) );
 
-    mrExpData.mpXFBuffer->InitDefaults();
+    // initialization of objects needing complete root data
+    mrExpData.mxProgress->Initialize();
+    mrExpData.mxXFBfr->InitDefaults();
+}
+
+XclExpProgressBar& XclExpRoot::GetProgressBar() const
+{
+    return *mrExpData.mxProgress;
 }
 
 XclExpSst& XclExpRoot::GetSst() const
 {
-    if( !mrExpData.mpSst.get() )
-        mrExpData.mpSst.reset( new XclExpSst );
-    return *mrExpData.mpSst;
+    if( !mrExpData.mxSst.get() )
+        mrExpData.mxSst.reset( new XclExpSst );
+    return *mrExpData.mxSst;
 }
 
 XclExpPalette& XclExpRoot::GetPalette() const
 {
-    return *mrExpData.mpPalette;
+    return *mrExpData.mxPalette;
 }
 
 XclExpFontBuffer& XclExpRoot::GetFontBuffer() const
 {
-    return *mrExpData.mpFontBuffer;
+    return *mrExpData.mxFontBfr;
 }
 
 XclExpNumFmtBuffer& XclExpRoot::GetNumFmtBuffer() const
 {
-    return *mrExpData.mpNumFmtBuffer;
+    return *mrExpData.mxNumFmtBfr;
 }
 
 XclExpXFBuffer& XclExpRoot::GetXFBuffer() const
 {
-    return *mrExpData.mpXFBuffer;
+    return *mrExpData.mxXFBfr;
 }
 
 XclExpTabInfo& XclExpRoot::GetTabInfo() const
 {
-    return *mrExpData.mpTabInfo;
+    return *mrExpData.mxTabInfo;
 }
 
 XclExpLinkManager& XclExpRoot::GetLinkManager() const
 {
-    return *mrExpData.mpLinkManager;
+    return *mrExpData.mxLinkMgr;
 }
 
 XclExpPivotTableManager& XclExpRoot::GetPivotTableManager() const
 {
-    if( !mrExpData.mpPTManager.get() )
-        mrExpData.mpPTManager.reset( new XclExpPivotTableManager( GetRoot() ) );
-    return *mrExpData.mpPTManager;
+    if( !mrExpData.mxPTableMgr.get() )
+        mrExpData.mxPTableMgr.reset( new XclExpPivotTableManager( GetRoot() ) );
+    return *mrExpData.mxPTableMgr;
 }
 
 String XclExpRoot::GetXclAddInName( const String& rScName ) const
