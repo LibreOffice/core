@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-23 05:54:33 $
+ *  last change: $Author: oj $ $Date: 2002-09-20 11:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ IMPLEMENT_SERVICE_INFO2(OViewContainer, "com.sun.star.sdb.dbaccess.OViewContaine
 Reference< XNamed > OViewContainer::createObject(const ::rtl::OUString& _rName)
 {
     Reference< XNamed > xProp;
-    if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName))
+    if ( m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName) )
         m_xMasterContainer->getByName(_rName) >>= xProp;
 
     if ( !xProp.is() )
@@ -294,7 +294,13 @@ void SAL_CALL OViewContainer::elementInserted( const ContainerEvent& Event ) thr
     ::osl::MutexGuard aGuard(m_rMutex);
     ::rtl::OUString sName;
     if ( (Event.Accessor >>= sName) && !hasByName(sName) )
-        insertElement(sName,createObject(sName));
+    {
+        Reference<XPropertySet> xProp(Event.Element,UNO_QUERY);
+        ::rtl::OUString sType;
+        xProp->getPropertyValue(PROPERTY_TYPE) >>= sType;
+        if ( sType == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")) )
+            insertElement(sName,createObject(sName));
+    }
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OViewContainer::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
