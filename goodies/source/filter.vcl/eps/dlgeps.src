@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-15 21:39:13 $
+ *  last change: $Author: kz $ $Date: 2001-06-21 21:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,13 +556,13 @@ ModalDialog DLG_EXPORT_EPS
     };
     StringList [ swedish ] =
     {
-            < "Exportera alltid glyfkonturer (glyph outlines)" ; > ;
-        < "Exportera aldrig glyfkonturer (glyph outlines)" ; > ;
+            < "Exportera alltid glyfkonturer" ; > ;
+        < "Exportera aldrig glyfkonturer" ; > ;
     };
     StringList [ polish ] =
     {
-            < "Zawsze eksportuj kontury glifów (glyph outlines)" ; > ;
-        < "Nigdy nie eksportuj konturów glifów (glyph outlines)" ; > ;
+            < "Eksportuj zawsze kontury glifów (glyph outlines)" ; > ;
+        < "Nie nigdy eksportuj konturów glifów (glyph outlines)" ; > ;
     };
     StringList [ portuguese_brazilian ] =
     {
@@ -636,6 +636,7 @@ ModalDialog DLG_EXPORT_EPS
     Text[ finnish ] = "EPS-vientiasetukset";
     Text[ catalan ] = "Opciones Exportación EPS";
 };
+
 
 
 
