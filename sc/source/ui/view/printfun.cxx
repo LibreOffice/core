@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:58:39 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2726,17 +2726,30 @@ void ScPrintFunc::ApplyPrintSettings()
         //
 
         Size aEnumSize = aPageSize;
-        USHORT nPaperBin = ((const SvxPaperBinItem&)pParamSet->Get(ATTR_PAGE_PAPERBIN)).GetValue();
+
 
         pPrinter->SetOrientation( bLandscape ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT );
+        if ( bLandscape )
+        {
+                // landscape is always interpreted as a rotation by 90 degrees !
+                // this leads to non WYSIWIG but at least it prints!
+                // #i21775#
+                long nTemp = aEnumSize.Width();
+                aEnumSize.Width() = aEnumSize.Height();
+                aEnumSize.Height() = nTemp;
+        }
+        Paper ePaper = SvxPaperInfo::GetSvPaper( aEnumSize, MAP_TWIP, TRUE );
+        USHORT nPaperBin = ((const SvxPaperBinItem&)pParamSet->Get(ATTR_PAGE_PAPERBIN)).GetValue();
 
-        MapMode aPrinterMode = pPrinter->GetMapMode();
-        MapMode aLocalMode( MAP_TWIP );
-        pPrinter->SetMapMode( aLocalMode );
-
-        // Let VCL decide which printer paper should be used for printing
-        pPrinter->SetPaperSizeUser( aEnumSize );
-        pPrinter->SetMapMode( aPrinterMode );
+        pPrinter->SetPaper( ePaper );
+        if ( PAPER_USER == ePaper )
+        {
+            MapMode aPrinterMode = pPrinter->GetMapMode();
+            MapMode aLocalMode( MAP_TWIP );
+            pPrinter->SetMapMode( aLocalMode );
+            pPrinter->SetPaperSizeUser( aEnumSize );
+            pPrinter->SetMapMode( aPrinterMode );
+        }
 
         pPrinter->SetPaperBin( nPaperBin );
     }
