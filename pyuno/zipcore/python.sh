@@ -111,6 +111,11 @@ case $sd_platform in
     export LD_LIBRARYN32_PATH
     ;;
 
+  darwin*)
+    DYLD_LIBRARY_PATH="$sd_progsub":"$sd_prog":$DYLD_LIBRARY_PATH
+    export DYLD_LIBRARY_PATH
+    ;;
+
   *)
     LD_LIBRARY_PATH="$sd_progsub":"$sd_prog":$LD_LIBRARY_PATH
     export LD_LIBRARY_PATH
