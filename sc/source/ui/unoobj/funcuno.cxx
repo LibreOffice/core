@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-11-21 16:17:20 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScFunctionAccess_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& )
 {
     ScUnoGuard aGuard;
-    SC_DLL()->Load();       // load module
+    ScDLL::Init();
     static uno::Reference< uno::XInterface > xInst = (::cppu::OWeakObject*) new ScFunctionAccess;
     return xInst;
 }
