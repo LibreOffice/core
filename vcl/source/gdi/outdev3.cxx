@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.193 $
+ *  $Revision: 1.194 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:23:33 $
+ *  last change: $Author: kz $ $Date: 2005-02-23 18:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6080,7 +6080,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
 
     // do glyph fallback if needed
     // #105768# avoid fallback for very small font sizes
-    if( aLayoutArgs.PrepareFallback() )
+    if( aLayoutArgs.NeedFallback() )
         if( mpFontEntry && (mpFontEntry->maFontSelData.mnHeight >= 6) )
             pSalLayout = ImplGlyphFallbackLayout( pSalLayout, aLayoutArgs );
 
@@ -6107,6 +6107,13 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
 
 SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLayoutArgs& rLayoutArgs ) const
 {
+    // prepare multi level glyph fallback
+    MultiSalLayout* pMultiSalLayout = NULL;
+    ImplLayoutRuns aLayoutRuns = rLayoutArgs.maRuns;
+    rLayoutArgs.PrepareFallback();
+    rLayoutArgs.mnFlags |= SAL_LAYOUT_FOR_FALLBACK;
+
+
 #if defined(HDU_DEBUG)
     {
         int nCharPos = -1;
@@ -6119,10 +6126,6 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     }
 #endif
 
-    // prepare multi level glyph fallback
-    MultiSalLayout* pMultiSalLayout = NULL;
-    rLayoutArgs.mnFlags |= SAL_LAYOUT_FOR_FALLBACK;
-
     ImplFontSelectData aFontSelData = mpFontEntry->maFontSelData;
     Size aFontSize( aFontSelData.mnWidth, aFontSelData.mnHeight );
 
@@ -6134,7 +6137,6 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
         nDevSpecificFallback = 1;
 
     // try if fallback fonts support the missing unicodes
-    ImplLayoutRuns aLayoutRuns = rLayoutArgs.maRuns;
     for( int nFallbackLevel = 1; nFallbackLevel < MAX_FALLBACK; ++nFallbackLevel )
     {
         // find a font family suited for glyph fallback
@@ -6147,7 +6149,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
         aFontSelData.mpFontData = pFallbackFont->maFontSelData.mpFontData;
         if( mpFontEntry )
         {
-            // ignore falling font if it is the same as the original font
+            // ignore fallback font if it is the same as the original font
             if( mpFontEntry->maFontSelData.mpFontData == aFontSelData.mpFontData )
             {
                 mpFontCache->Release( pFallbackFont );
@@ -6186,17 +6188,17 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
 
         mpFontCache->Release( pFallbackFont );
 
-        // break when this fallback was sufficient
+    // break when this fallback was sufficient
         if( !rLayoutArgs.PrepareFallback() )
             break;
     }
 
+    if( pMultiSalLayout && pMultiSalLayout->LayoutText( rLayoutArgs ) )
+        pSalLayout = pMultiSalLayout;
+
     // restore orig font settings
     pSalLayout->InitFont();
     rLayoutArgs.maRuns = aLayoutRuns;
-
-    if( pMultiSalLayout && pMultiSalLayout->LayoutText( rLayoutArgs ) )
-        pSalLayout = pMultiSalLayout;
 
     return pSalLayout;
 }
