@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_OUStringBuffer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:25:17 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1739,7 +1739,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_appendAsciis(
 extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer( hTestResult hRtlTestResult )
 {
 
-    c_rtl_tres_state_start(hRtlTestResult, "rtl_OUString" );
+    c_rtl_tres_state_start(hRtlTestResult, "rtl_OUStringBuffer" );
 
     test_rtl_OUStringBuffer_ctors( hRtlTestResult );
     test_rtl_OUStringBuffer_makeStringAndClear( hRtlTestResult );
@@ -1754,7 +1754,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer( hTestResult hRt
     test_rtl_OUStringBuffer_appends( hRtlTestResult );
     test_rtl_OUStringBuffer_appendAsciis( hRtlTestResult );
 
-    c_rtl_tres_state_end(hRtlTestResult, "rtl_OUString");
+    c_rtl_tres_state_end(hRtlTestResult, "rtl_OUStringBuffer");
 }
 
 // -----------------------------------------------------------------------------
