@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStateType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:05:08 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 10:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@ module com { module sun { module star { module accessibility {
     for this is that IDL enums may not be extended.  Therefore, in order to
     include future extensions to the set of roles we have to use constants
     here.</p>
+
+    @since #107627#
 */
 constants AccessibleStateType
 {
