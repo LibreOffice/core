@@ -37,9 +37,9 @@
  *
  *  $RCSfile: parseAFM.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-20 15:21:19 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:49:26 $
  *
  ************************************************************************/
 
@@ -655,8 +655,7 @@ static int parseCharWidths( FILE* fp, register int* cwi)
  */
 
 static int
-reallocFontMetrics( void **pp_fontmetrics, int *p_oldcount, unsigned int n_newcount,
-                    unsigned int n_size )
+reallocFontMetrics( void **pp_fontmetrics, int *p_oldcount, int n_newcount, unsigned int n_size )
 {
     char *p_tmpmetrics = NULL;
 
