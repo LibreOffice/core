@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:21:38 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ russian ] = "Áåç çàïèñè";
         Text[ polish ] = "Nie ma wpisu";
         Text[ japanese ] = "“ü—Í‚È‚µ";
-        Text[ chinese_traditional ] = "µL¶µ¥Ø";
+        Text[ chinese_traditional ] = "µL±ø¥Ø";
         Text[ arabic ] = "áÇ íæÌÏ ÅÏÎÇá";
         Text[ dutch ] = "Geen item";
         Text[ chinese_simplified ] = "ÎŞÌõÄ¿";
@@ -647,7 +647,7 @@ Menu RID_POPUP_CHANGES
             Text[ russian ] = "Ïğàâêà êîììåíòàğèÿ...";
             Text[ polish ] = "Edytuj komentarz...";
             Text[ japanese ] = "ºÒİÄ‚Ì•ÒW...";
-            Text[ chinese_traditional ] = "½s¿èª`¸Ñ...";
+            Text[ chinese_traditional ] = "½s¿èµù¸Ñ...";
             Text[ arabic ] = "ÊÍÑíÑ ÊÚáíŞ...";
             Text[ dutch ] = "Commentaar bewerken...";
             Text[ chinese_simplified ] = "±à¼­×¢½â...";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:21:28 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ DockingWindow FID_FUNCTION_BOX
             < "Statistique" ; Default ; > ;
             < "Classeur" ; Default ; > ;
             < "Texte" ; Default ; > ;
-            < "Add-In" ; Default ; > ;
+            < "Add-in" ; Default ; > ;
              //         < "Défini par l'utilisateur"; Default; >;
         };
         StringList [ swedish ] =
