@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:27:24 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2812,13 +2812,7 @@ void SwPagePreView::ShowHScrollbar(sal_Bool bShow)
     pHScrollbar->Show(bShow);
     InvalidateBorder();
 }
-/* -----------------------------2002/06/26 14:30------------------------------
 
- ---------------------------------------------------------------------------*/
-sal_Bool SwPagePreView::IsHScrollbarVisible()const
-{
-    return     pVScrollbar->IsVisible();
-}
 /* -----------------------------2002/06/26 14:30------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -2827,13 +2821,7 @@ void SwPagePreView::ShowVScrollbar(sal_Bool bShow)
     pVScrollbar->Show(bShow);
     InvalidateBorder();
 }
-/* -----------------------------2002/06/26 14:30------------------------------
 
- ---------------------------------------------------------------------------*/
-sal_Bool SwPagePreView::IsVScrollbarVisible()const
-{
-    return pVScrollbar->IsVisible();
-}
 /* -----------------25.11.2002 16:36-----------------
  *
  * --------------------------------------------------*/
