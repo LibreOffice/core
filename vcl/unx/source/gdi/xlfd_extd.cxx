@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cp $ $Date: 2002-01-25 18:09:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
 #endif
+
+#include <algorithm>
 
 // --------------------------------------------------------------------------
 //
@@ -393,6 +395,219 @@ ExtendedXlfd::GetWidth() const
     return (FontWidth)pWidthAttr->GetValue();
 }
 
+struct CodeRange
+{
+    sal_uInt32 mnMin, mnEnd;
+    bool operator<( const CodeRange& b ) const { return mnMin < b.mnMin; }
+};
+
+int ExtendedXlfd::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
+{
+    int nRangeCount = 0;
+
+    // approximate unicode ranges from encodings
+    sal_uInt32* pRange = pCodePairs;
+    for( unsigned short i = 0; i < mnEncodings; ++i )
+    {
+        sal_uInt32 pBuffer[32];
+        if( !pCodePairs )
+            pRange = pBuffer;
+        sal_uInt32* pOldRange = pRange;
+
+        // TODO: move encoding -> unicode range mapping to RTL
+        // NOTE: for now only some are VERY roughly approximated
+        switch( mpEncodingInfo[i].mnEncoding )
+        {
+            case RTL_TEXTENCODING_SYMBOL: // postscript symbol encoding
+                *(pRange++) = 0xF020; *(pRange++) = 0xF100;
+                break;
+            case RTL_TEXTENCODING_ISO_8859_15:
+                *(pRange++) = 0x20AC; *(pRange++) = 0x20AD; // Euro currency symbol
+                // fall through
+            case RTL_TEXTENCODING_APPLE_ROMAN:
+            case RTL_TEXTENCODING_ISO_8859_1:
+            case RTL_TEXTENCODING_MS_1252:
+            case RTL_TEXTENCODING_IBM_437:
+            case RTL_TEXTENCODING_IBM_852:
+                *(pRange++) = 0x0020; *(pRange++) = 0x0080;
+                *(pRange++) = 0x00A0; *(pRange++) = 0x0100;
+                break;
+
+            // Cyrillic
+            case RTL_TEXTENCODING_APPLE_CYRILLIC:
+            case RTL_TEXTENCODING_APPLE_UKRAINIAN:
+            case RTL_TEXTENCODING_ISO_8859_5:
+            case RTL_TEXTENCODING_KOI8_R:
+            case RTL_TEXTENCODING_IBM_855:
+            case RTL_TEXTENCODING_IBM_866:
+                *(pRange++) = 0x0020; *(pRange++) = 0x0080;
+                *(pRange++) = 0x0400; *(pRange++) = 0x04AF;
+                *(pRange++) = 0x2116; *(pRange++) = 0x2117;
+                break;
+
+            // Greek
+            case RTL_TEXTENCODING_APPLE_GREEK:
+            case RTL_TEXTENCODING_ISO_8859_7:
+            case RTL_TEXTENCODING_IBM_737:
+            case RTL_TEXTENCODING_IBM_869:
+            case RTL_TEXTENCODING_MS_1253:
+                *(pRange++) = 0x0020; *(pRange++) = 0x0080;
+                *(pRange++) = 0x00A0; *(pRange++) = 0x0100;
+                *(pRange++) = 0x0370; *(pRange++) = 0x0400;
+                *(pRange++) = 0x2015; *(pRange++) = 0x2020;
+                break;
+
+            // Turkish
+            case RTL_TEXTENCODING_APPLE_TURKISH:
+            case RTL_TEXTENCODING_IBM_857:
+            case RTL_TEXTENCODING_ISO_8859_9:
+            case RTL_TEXTENCODING_MS_1254:
+                *(pRange++) = 0x0020; *(pRange++) = 0x0080;
+                *(pRange++) = 0x00A0; *(pRange++) = 0x0160;
+                break;
+
+            // misc 8bit encodings
+            case RTL_TEXTENCODING_APPLE_CENTEURO:
+            case RTL_TEXTENCODING_APPLE_CROATIAN:
+            case RTL_TEXTENCODING_APPLE_ICELAND:
+            case RTL_TEXTENCODING_APPLE_ROMANIAN:
+            case RTL_TEXTENCODING_ISO_8859_2:
+            case RTL_TEXTENCODING_ISO_8859_3:
+            case RTL_TEXTENCODING_ISO_8859_4:
+            case RTL_TEXTENCODING_ISO_8859_10:
+            case RTL_TEXTENCODING_ISO_8859_13:
+            case RTL_TEXTENCODING_IBM_775:
+            case RTL_TEXTENCODING_IBM_850:
+            case RTL_TEXTENCODING_IBM_860:
+            case RTL_TEXTENCODING_IBM_861:
+            case RTL_TEXTENCODING_IBM_863:
+            case RTL_TEXTENCODING_IBM_865:
+            case RTL_TEXTENCODING_MS_1250:
+            case RTL_TEXTENCODING_MS_1251:
+            case RTL_TEXTENCODING_MS_1257:
+            case RTL_TEXTENCODING_MS_1258:
+                *(pRange++) = 0x0020; *(pRange++) = 0x0080;
+                *(pRange++) = 0x00A0; *(pRange++) = 0x02EA;
+                break;
+
+            case RTL_TEXTENCODING_ISO_8859_14:
+                *(pRange++) = 0x0020; *(pRange++) = 0x0080;
+                *(pRange++) = 0x00A0; *(pRange++) = 0x0100;
+                *(pRange++) = 0x1E00; *(pRange++) = 0x1F00;
+                break;
+
+            // Traditional, Simplified, Japanese
+            case RTL_TEXTENCODING_APPLE_CHINSIMP:
+            case RTL_TEXTENCODING_APPLE_CHINTRAD:
+            case RTL_TEXTENCODING_APPLE_JAPANESE:
+            case RTL_TEXTENCODING_SHIFT_JIS:
+            case RTL_TEXTENCODING_GB_2312:
+            case RTL_TEXTENCODING_GBT_12345:
+            case RTL_TEXTENCODING_GBK:
+            case RTL_TEXTENCODING_BIG5:
+            case RTL_TEXTENCODING_EUC_JP:
+            case RTL_TEXTENCODING_EUC_CN:
+            case RTL_TEXTENCODING_EUC_TW:
+            case RTL_TEXTENCODING_ISO_2022_JP:
+            case RTL_TEXTENCODING_ISO_2022_CN:
+            case RTL_TEXTENCODING_GB_18030:
+            case RTL_TEXTENCODING_BIG5_HKSCS:
+            case RTL_TEXTENCODING_JIS_X_0201:
+            case RTL_TEXTENCODING_JIS_X_0208:
+            case RTL_TEXTENCODING_JIS_X_0212:
+            case RTL_TEXTENCODING_MS_932:
+            case RTL_TEXTENCODING_MS_936:
+            case RTL_TEXTENCODING_MS_950:
+                *(pRange++) = 0x3000; *(pRange++) = 0xA000;
+                *(pRange++) = 0xF900; *(pRange++) = 0xFB00;
+                break;
+
+            // Korean
+            case RTL_TEXTENCODING_APPLE_KOREAN:
+            case RTL_TEXTENCODING_MS_949:
+            case RTL_TEXTENCODING_MS_1361:
+            case RTL_TEXTENCODING_EUC_KR:
+            case RTL_TEXTENCODING_ISO_2022_KR:
+                *(pRange++) = 0x1100; *(pRange++) = 0x1200;
+                *(pRange++) = 0x3130; *(pRange++) = 0x3190;
+                *(pRange++) = 0xAC00; *(pRange++) = 0xD7A4;
+                break;
+
+            // Arabic
+            case RTL_TEXTENCODING_APPLE_ARABIC:
+            case RTL_TEXTENCODING_APPLE_FARSI:
+            case RTL_TEXTENCODING_ISO_8859_6:
+            case RTL_TEXTENCODING_IBM_864:
+            case RTL_TEXTENCODING_MS_1256:
+                *(pRange++) = 0x0600; *(pRange++) = 0x0700;
+                *(pRange++) = 0xFB50; *(pRange++) = 0xFE00;
+                *(pRange++) = 0xFE70; *(pRange++) = 0xFF00;
+                break;
+
+            // Hebrew
+            case RTL_TEXTENCODING_APPLE_HEBREW:
+            case RTL_TEXTENCODING_ISO_8859_8:
+            case RTL_TEXTENCODING_IBM_862:
+            case RTL_TEXTENCODING_MS_1255:
+                *(pRange++) = 0x0590; *(pRange++) = 0x0600;
+                *(pRange++) = 0xFB1D; *(pRange++) = 0xFB50;
+                break;
+
+            // Indic
+            case RTL_TEXTENCODING_APPLE_GURMUKHI:
+            case RTL_TEXTENCODING_APPLE_DEVANAGARI:
+            case RTL_TEXTENCODING_APPLE_GUJARATI:
+                *(pRange++) = 0x0900; *(pRange++) = 0x0B00;
+                break;
+
+            // Thai
+            case RTL_TEXTENCODING_APPLE_THAI:
+            case RTL_TEXTENCODING_TIS_620:
+            case RTL_TEXTENCODING_MS_874:
+                *(pRange++) = 0x0E00; *(pRange++) = 0x0E80;
+                break;
+
+            // Unicode
+            case RTL_TEXTENCODING_UNICODE:
+            case RTL_TEXTENCODING_UTF7:
+            case RTL_TEXTENCODING_UTF8:
+                *(pRange++) = 0x0020; *(pRange++) = 0xFFFF;
+                break;
+
+            case RTL_TEXTENCODING_DONTKNOW:
+                *(pRange++) = 0x0020; *(pRange++) = 0xFFFF;
+                break;
+            default:
+                // *(pRange++) = 0x0020; *(pRange++) = 0xFFFF;
+                break;
+        }
+
+        nRangeCount += (pRange - pOldRange) / 2;
+    }
+
+    // sort and merge the code pairs
+    if( pCodePairs && nRangeCount )
+    {
+        CodeRange* pSrc = (CodeRange*)pCodePairs;
+        CodeRange* pEnd = pSrc + nRangeCount;
+        ::std::sort( pSrc, pEnd );
+        for( CodeRange* pDst = pSrc; ++pSrc < pEnd; )
+        {
+            if( pDst->mnEnd < pSrc->mnMin )
+                ++pDst;
+            else
+            {
+                // merge overlapping ranges
+                if( pDst->mnEnd < pSrc->mnEnd )
+                    pDst->mnEnd = pSrc->mnEnd;
+                --nRangeCount;
+            }
+        }
+    }
+
+    return nRangeCount;
+}
+
 #ifdef DEBUG
 void
 ExtendedXlfd::Dump() const
@@ -555,9 +770,7 @@ BitmapXlfd::ToString( ByteString &rString,
 
     ExtendedXlfd::ToString( rString, nPixelSize, nEncoding );
     EncodingInfo& rInfo = mpEncodingInfo[ nIdx ];
-
     AppendAttribute( mpFactory->RetrieveAddstyle(rInfo.mnAddstyle), rString );
-
     rString += '-';
     rString += ByteString::CreateFromInt32( mnPixelSize );
     #ifdef __notdef__
@@ -601,12 +814,10 @@ BitmapXlfd::ToImplFontData( ImplFontData *pFontData ) const
 // ------ class to handle true scalable fonts --------------------------------
 
 ScalableXlfd::ScalableXlfd()
-{
-}
+{}
 
 ScalableXlfd::~ScalableXlfd()
-{
-}
+{}
 
 void
 ScalableXlfd::ToString( ByteString &rString,
