@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-29 14:24:33 $
+ *  last change: $Author: cl $ $Date: 2001-04-03 10:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,8 +423,10 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
             FilterPropertiesInfo aFilterInfo;
             sal_Bool bInfoValid = sal_False;
 
-            Reference < XTypeProvider > xTypeProv( xPropSet, UNO_QUERY );
             FilterPropertiesInfo *pFilterInfo = 0;
+
+/* temporary disabled this optimization
+            Reference < XTypeProvider > xTypeProv( xPropSet, UNO_QUERY );
             if( xTypeProv.is() )
             {
                 Sequence< sal_Int8  > aImplId( xTypeProv->getImplementationId() );
@@ -450,6 +452,7 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
                     }
                 }
             }
+*/
             if( !pFilterInfo )
                 pFilterInfo = &aFilterInfo;
 
