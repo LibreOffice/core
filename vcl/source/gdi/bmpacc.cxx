@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpacc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:31:03 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 14:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,22 +327,19 @@ USHORT BitmapReadAccess::GetBestPaletteIndex( const BitmapColor& rBitmapColor ) 
 // - BitmapWriteAccess -
 // ---------------------
 
-BitmapWriteAccess::~BitmapWriteAccess()
+BitmapWriteAccess::BitmapWriteAccess( Bitmap& rBitmap ) :
+            BitmapReadAccess( rBitmap, TRUE ),
+            mpLineColor     ( NULL ),
+            mpFillColor     ( NULL )
 {
 }
 
 // ------------------------------------------------------------------
 
-void BitmapWriteAccess::ImplInitDraw()
+BitmapWriteAccess::~BitmapWriteAccess()
 {
-    if( HasPalette() )
-    {
-        if( !maLineColor.IsIndex() )
-            maLineColor = (BYTE) GetBestPaletteIndex( maLineColor );
-
-        if( !maFillColor.IsIndex() )
-            maFillColor = (BYTE) GetBestPaletteIndex( maFillColor );
-    }
+    delete mpLineColor;
+    delete mpFillColor;
 }
 
 // ------------------------------------------------------------------
