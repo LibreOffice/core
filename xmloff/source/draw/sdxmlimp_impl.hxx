@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 19:31:38 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,10 @@ enum SdXMLMasterPageAttrTokenMap
     XML_TOK_MASTERPAGE_DISPLAY_NAME,
     XML_TOK_MASTERPAGE_PAGE_MASTER_NAME,
     XML_TOK_MASTERPAGE_STYLE_NAME,
-    XML_TOK_MASTERPAGE_PAGE_LAYOUT_NAME
+    XML_TOK_MASTERPAGE_PAGE_LAYOUT_NAME,
+    XML_TOK_MASTERPAGE_USE_HEADER_NAME,
+    XML_TOK_MASTERPAGE_USE_FOOTER_NAME,
+    XML_TOK_MASTERPAGE_USE_DATE_TIME_NAME
 };
 
 enum SdXMLPageMasterAttrTokenMap
@@ -175,7 +178,10 @@ enum SdXMLDrawPageAttrTokenMap
     XML_TOK_DRAWPAGE_MASTER_PAGE_NAME,
     XML_TOK_DRAWPAGE_PAGE_LAYOUT_NAME,
     XML_TOK_DRAWPAGE_ID,
-    XML_TOK_DRAWPAGE_HREF
+    XML_TOK_DRAWPAGE_HREF,
+    XML_TOK_DRAWPAGE_USE_HEADER_NAME,
+    XML_TOK_DRAWPAGE_USE_FOOTER_NAME,
+    XML_TOK_DRAWPAGE_USE_DATE_TIME_NAME
 };
 
 enum SdXMLDrawPageElemTokenMap
@@ -213,6 +219,20 @@ class XMLPropertySetMapper;
 class XMLPropStyleContext;
 class SdXMLStylesContext;
 class SdXMLMasterStylesContext;
+
+//////////////////////////////////////////////////////////////////////////////
+
+struct DateTimeDeclContextImpl
+{
+    rtl::OUString maStrText;
+    sal_Bool mbFixed;
+    rtl::OUString maStrDateTimeFormat;
+
+    DateTimeDeclContextImpl() : mbFixed(sal_True) {}
+};
+
+DECLARE_STL_USTRINGACCESS_MAP( ::rtl::OUString, HeaderFooterDeclMap );
+DECLARE_STL_USTRINGACCESS_MAP( DateTimeDeclContextImpl, DateTimeDeclMap );
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -254,6 +274,10 @@ class SdXMLImport: public SvXMLImport
 
     ::rtl::OUString             msPageLayouts;
     ::rtl::OUString             msPreview;
+
+    HeaderFooterDeclMap         maHeaderDeclsMap;
+    HeaderFooterDeclMap         maFooterDeclsMap;
+    DateTimeDeclMap             maDateTimeDeclsMap;
 
 protected:
     // This method is called after the namespace map has been updated, but
@@ -343,6 +367,15 @@ public:
 
     // XServiceInfo ( : SvXMLExport )
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+
+    void AddHeaderDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText );
+    void AddFooterDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText );
+    void AddDateTimeDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText, sal_Bool bFixed, const ::rtl::OUString& rDateTimeFormat );
+
+    ::rtl::OUString GetHeaderDecl( const ::rtl::OUString& rName ) const;
+    ::rtl::OUString GetFooterDecl( const ::rtl::OUString& rName ) const;
+    ::rtl::OUString GetDateTimeDecl( const ::rtl::OUString& rName, sal_Bool& rbFixed, ::rtl::OUString& rDateTimeFormat );
+
 };
 
 #endif  //  _SDXMLIMP_HXX
