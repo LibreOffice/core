@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTabStopEntryContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-02 10:18:42 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ class XMLIndexTabStopEntryContext : public XMLIndexSimpleEntryContext
     sal_Bool bTabPositionOK;        /// is tab right aligned?
     sal_Bool bTabRightAligned;      /// is nTabPosition valid?
     sal_Bool bLeaderCharOK;         /// is sLeaderChar valid?
+    sal_Bool bWithTab;              /// is tab char present? #i21237#
 
 public:
 
