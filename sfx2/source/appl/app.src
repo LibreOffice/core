@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-27 12:32:58 $
+ *  last change: $Author: pb $ $Date: 2001-06-29 08:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3566,38 +3566,6 @@ String STR_KEY_BASIC_PATH
     Text = "BASIC" ;
 };
 
-#if (SUPD <= 614)
-String STR_KEY_DATABASE_PATH
-{
-    Text = "Datenbankanfragen" ;
-    Text [ English ] = "Database queries" ;
-    Text [ norwegian ] = "Database" ;
-    Text [ italian ] = "Ricerca database" ;
-    Text [ portuguese_brazilian ] = "Base de Dados" ;
-    Text [ portuguese ] = "Consultas à base de dados" ;
-    Text [ finnish ] = "Tietokantakyselyt" ;
-    Text [ danish ] = "Databaseforespørgsler" ;
-    Text [ french ] = "Interrogations de BD" ;
-    Text [ swedish ] = "Databasförfrågningar" ;
-    Text [ dutch ] = "Database query's" ;
-    Text [ spanish ] = "Consultas de base de datos" ;
-    Text [ english_us ] = "Database Queries" ;
-    Text[ chinese_simplified ] = "²éÑ¯Êý¾Ý¿â";
-    Text[ russian ] = "Çàïðîñû áàçû äàííûõ";
-    Text[ polish ] = "Kwerendy bazy danych";
-    Text[ japanese ] = "ÃÞ°ÀÍÞ°½¸´Ø°";
-    Text[ chinese_traditional ] = "¬d¸ß¸ê®Æ®w";
-    Text[ arabic ] = "ÇÓÊÚáÇãÇÊ ÞÇÚÏÉ ÇáÈíÇäÇÊ";
-    Text[ dutch ] = "Database query's";
-    Text[ chinese_simplified ] = "²éÑ¯Êý¾Ý¿â";
-    Text[ greek ] = "ÅñùôÞìáôá âÜóçò äåäïìÝíùí";
-    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÁúÀÇ";
-    Text[ turkish ] = "Veritabaný sorgularý";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Consultas de base de datos";
-};
-#endif
-
 String STR_KEY_PALETTE_PATH
 {
     Text = "Paletten" ;
@@ -3824,65 +3792,6 @@ String STR_KEY_GALLERY_DIR
     Text[ catalan ] = "Gallery";
     Text[ finnish ] = "Galleria";
 };
-String STR_KEY_NEW_DIR
-{
-    Text = "Standardvorlagen" ;
-    Text [ English ] = "standard templates" ;
-    Text [ dutch ] = "Standaardsjablonen" ;
-    Text [ english_us ] = "Default Templates" ;
-    Text [ swedish ] = "Standardmallar" ;
-    Text [ danish ] = "Standardskabeloner" ;
-    Text [ italian ] = "Modelli standard" ;
-    Text [ spanish ] = "Plantillas predeterminadas" ;
-    Text [ french ] = "Modèles par défaut" ;
-    Text [ portuguese ] = "Modelos padrão" ;
-    Text [ portuguese_brazilian ] = "Standardvorlagen" ;
-    Text[ chinese_simplified ] = "±ê×¼ÑùÊ½";
-    Text[ russian ] = "Ñòàíäàðòíûå øàáëîíû";
-    Text[ polish ] = "Szablony standardowe";
-    Text[ japanese ] = "•W€½À²Ù";
-    Text[ chinese_traditional ] = "¼Ð·Ç¼Ë¦¡";
-    Text[ arabic ] = "ÞæÇáÈ ÞíÇÓíÉ";
-    Text[ dutch ] = "Standaardsjablonen";
-    Text[ chinese_simplified ] = "±ê×¼ÑùÊ½";
-    Text[ greek ] = "Ðñüôõðá ðñïåðéëïãÞò";
-    Text[ korean ] = "±âº» ÅÛÇÃ¸´";
-    Text[ turkish ] = "Standart þablonlar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Plantillas predeterminadas";
-    Text[ finnish ] = "Oletusmallipohjat";
-};
-
-#if (SUPD <= 614)
-String STR_KEY_TRASH_DIR
-{
-    Text = "Papierkorb" ;
-    Text [ English ] = "Trash" ;
-    Text [ English_US ] = "Recycle Bin" ;
-    Text [ portuguese ] = "Reciclagem" ;
-    Text [ portuguese_brazilian ] = "M?leimer" ;
-    Text [ swedish ] = "Papperskorg" ;
-    Text [ danish ] = "Papirkurv" ;
-    Text [ italian ] = "Cestino" ;
-    Text [ spanish ] = "Papelera" ;
-    Text [ french ] = "Corbeille" ;
-    Text [ dutch ] = "Prullenbak" ;
-    Text[ chinese_simplified ] = "»ØÊÕÕ¾";
-    Text[ russian ] = "Êîðçèíà";
-    Text[ polish ] = "Kosz";
-    Text[ japanese ] = "‚²‚Ý” ";
-    Text[ chinese_traditional ] = "¸ê·½¦^¦¬µ©";
-    Text[ arabic ] = "ÓáÉ ÇáãÍÐæÝÇÊ";
-    Text[ dutch ] = "Prullenbak";
-    Text[ chinese_simplified ] = "»ØÊÕÕ¾";
-    Text[ greek ] = "ÊÜäïò áíáêýêëùóçò";
-    Text[ korean ] = "ÈÞÁöÅë";
-    Text[ turkish ] = "Çöp kutusu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Papelera";
-    Text[ finnish ] = "Roskakori";
-};
-#endif
 
 String STR_KEY_STORAGE_DIR
 {
@@ -3916,34 +3825,6 @@ String STR_KEY_TEMP_PATH
 {
     Text = "" ;
     Text[ language_user1 ] = "PB: only an empty string";
-};
-String STR_KEY_AUTOPILOT_DIR
-{
-    Text = "Autopiloten" ;
-    Text [ English ] = "Autopilots" ;
-    Text [ portuguese ] = "AutoPilotos" ;
-    Text [ english_us ] = "AutoPilots" ;
-    Text [ portuguese_brazilian ] = "Autopiloten" ;
-    Text [ swedish ] = "Autopiloter" ;
-    Text [ danish ] = "AutoPiloter" ;
-    Text [ italian ] = "Piloti automatici" ;
-    Text [ spanish ] = "AutoPilotos" ;
-    Text [ french ] = "AutoPilotes" ;
-    Text [ dutch ] = "AutoPiloot" ;
-    Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼þÖúÀí";
-    Text[ russian ] = "Àâòîïèëîòû";
-    Text[ polish ] = "AutoPiloci";
-    Text[ japanese ] = "µ°ÄÊß²Û¯Ä";
-    Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z";
-    Text[ arabic ] = "ãÑÔÏæä Âáíæä";
-    Text[ dutch ] = "AutoPiloot";
-    Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼þÖúÀí";
-    Text[ greek ] = "ÁõôïÐéëüôïé";
-    Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ";
-    Text[ turkish ] = "Otopilot";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "AutoPilotos";
-    Text[ finnish ] = "Automaattiset ohjaukset";
 };
 String STR_KEY_PLUGINS_PATH
 {
