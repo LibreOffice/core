@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-13 09:10:13 $
+ *  last change: $Author: abi $ $Date: 2001-06-13 10:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,29 +81,15 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::container;
 
-// The same for the jar files
-//  private static final Hashtable _jarHash = new Hashtable();
-
-
-//  public static final Hashtable _modInfo = new Hashtable();
-
-
-//  osl::Mutex                  Databases::m_aMutex;
-//  rtl::OUString               Databases::m_aInstallDirectory;              // Installation directory
-//  rtl::OUString               Databases::m_aInstallDirectoryAsSystemPath;  // Installation directory
-//  rtl::OUString               Databases::m_aInstallDirectoryAsURL;         // Installation directory
-//  Databases::DatabasesTable   Databases::m_aDatabases;                     // Language and module dependent databases
-//  Databases::LangSetTable     Databases::m_aLangSet;                       // Mapping to of lang-country to lang
-//  Databases::ModInfoTable     Databases::m_aModInfo;                       // Module information
-//  Databases::KeywordInfoTable Databases::m_aKeywordInfo;
-//  Databases::JarFileTable     Databases::m_aJarFileTable;                  // open jar files
 
 
 Databases::Databases( const rtl::OUString& instPath,
                       com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xSMgr )
     : m_xSMgr( xSMgr ),
       m_nErrorDocLength( 0 ),
-      m_pErrorDoc( 0 )
+      m_pErrorDoc( 0 ),
+      m_nCustomCSSDocLength( 0 ),
+      m_pCustomCSSDoc( 0 )
 {
     setInstallPath( instPath );
 }
@@ -111,6 +97,10 @@ Databases::Databases( const rtl::OUString& instPath,
 
 Databases::~Databases()
 {
+    // release stylesheet
+
+    delete[] m_pCustomCSSDoc;
+
     // release errorDocument
 
     delete[] m_pErrorDoc;
@@ -642,15 +632,12 @@ void Databases::errorDocument( const rtl::OUString& Language,
                                char** buffer,
                                int* byteCount )
 {
-    m_nErrorDocLength;
-
     if( ! m_pErrorDoc )
     {
         rtl::OUString fileURL =
             getInstallPathAsURL()
             + lang( Language )
-            + rtl::OUString::createFromAscii( "/" )
-            + rtl::OUString::createFromAscii( "err.html" );
+            + rtl::OUString::createFromAscii( "/err.html" );
 
         osl::DirectoryItem aDirItem;
         osl::File aFile( fileURL );
@@ -681,6 +668,64 @@ void Databases::errorDocument( const rtl::OUString& Language,
     *buffer = new char[ 1 + *byteCount ];
     (*buffer)[*byteCount] = 0;
     rtl_copyMemory( *buffer,m_pErrorDoc,m_nErrorDocLength );
+}
+
+
+
+void Databases::cascadingStylesheet( const rtl::OUString& Language,
+                                     char** buffer,
+                                     int* byteCount )
+{
+    if( ! m_pCustomCSSDoc )
+    {
+        int retry = 2;
+        bool error = true;
+        rtl::OUString fileURL;
+
+        while( error && retry )
+        {
+            if( retry == 2 )
+                fileURL =
+                    getInstallPathAsURL()  +
+                    lang( Language )       +
+                    rtl::OUString::createFromAscii( "/custom.css" );
+            else if( retry == 1 )
+                fileURL =
+                    getInstallPathAsURL()  +
+                    rtl::OUString::createFromAscii( "custom.css" );
+
+            osl::DirectoryItem aDirItem;
+            osl::File aFile( fileURL );
+            osl::FileStatus aStatus( FileStatusMask_FileSize );
+
+            if( osl::FileBase::E_None == osl::DirectoryItem::get( fileURL,aDirItem ) &&
+                osl::FileBase::E_None == aFile.open( OpenFlag_Read )                 &&
+                osl::FileBase::E_None == aDirItem.getFileStatus( aStatus ) )
+            {
+                m_nCustomCSSDocLength = int( aStatus.getFileSize() );
+                m_pCustomCSSDoc = new char[ 1 + m_nCustomCSSDocLength ];
+                m_pCustomCSSDoc[ m_nCustomCSSDocLength ] = 0;
+                sal_uInt64 a = m_nCustomCSSDocLength,b = m_nCustomCSSDocLength;
+                aFile.read( m_pCustomCSSDoc,a,b );
+                aFile.close();
+                error = false;
+            }
+
+            --retry;
+        }
+
+        if( error )
+        {
+            m_nCustomCSSDocLength = 0;
+            m_pCustomCSSDoc = new char[ 0 ];
+        }
+    }
+
+    *byteCount = m_nCustomCSSDocLength;
+    *buffer = new char[ 1 + *byteCount ];
+    (*buffer)[*byteCount] = 0;
+    rtl_copyMemory( *buffer,m_pCustomCSSDoc,m_nCustomCSSDocLength );
+
 }
 
 

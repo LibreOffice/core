@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-13 09:10:13 $
+ *  last change: $Author: abi $ $Date: 2001-06-13 10:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,8 @@ class InputStreamTransformer
 public:
 
     InputStreamTransformer( URLParameter* urlParam,
-                            Databases*    pDatatabases );
+                            Databases*    pDatatabases,
+                            bool isRoot = false );
 
     ~InputStreamTransformer();
 
@@ -419,59 +420,32 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
                          const Reference< XCommandEnvironment >& Environment,
                          const Reference< XActiveDataSink >& xDataSink )
 {
-    bool IsRoot;
-
-    if( ( IsRoot = isRoot() ) || isPicture() )
+    if( isPicture() )
     {
-        rtl::OUString url;
+        Reference< XInputStream > xStream;
+        Reference< XHierarchicalNameAccess > xNA =
+            m_pDatabases->jarFile( rtl::OUString::createFromAscii( "picture.jar" ),
+                                   get_language() );
 
-        if( IsRoot )
+        rtl::OUString path = get_path();
+        if( xNA.is() )
         {
-            // error handling is missing
-            // better not to open the file every time it is requested
-
-            url =
-                m_pDatabases->getInstallPathAsURL()         +
-                rtl::OUString::createFromAscii( "custom.css" );
-
-            rtl::OUString service = rtl::OUString::createFromAscii( "com.sun.star.ucb.UniversalContentBroker" );
-            Reference< XContentProvider > provider( rxSMgr->createInstance( service ),UNO_QUERY );
-            Reference< XContentIdentifierFactory > factory( provider,UNO_QUERY );
-            Reference< XContentIdentifier > xIdentifier = factory->createContentIdentifier( url );
-            Reference< XContent > xContent = provider->queryContent( xIdentifier );
-            Reference< XCommandProcessor > processor( xContent,UNO_QUERY );
-
-            processor->execute( aCommand,
-                                CommandId,
-                                Environment );
-        }
-        else
-        {   // a picture
-            Reference< XInputStream > xStream;
-            Reference< XHierarchicalNameAccess > xNA =
-                m_pDatabases->jarFile( rtl::OUString::createFromAscii( "picture.jar" ),
-                                       get_language() );
-
-            rtl::OUString path = get_path();
-            if( xNA.is() )
+            try
             {
-                try
-                {
-                    Any aEntry = xNA->getByHierarchicalName( path );
-                    Reference< XActiveDataSink > xSink;
-                    if( ( aEntry >>= xSink ) && xSink.is() )
-                        xStream = xSink->getInputStream();
-                }
-                catch ( NoSuchElementException & )
-                {
-                }
+                Any aEntry = xNA->getByHierarchicalName( path );
+                Reference< XActiveDataSink > xSink;
+                if( ( aEntry >>= xSink ) && xSink.is() )
+                    xStream = xSink->getInputStream();
             }
-            xDataSink->setInputStream( xStream );
+            catch ( NoSuchElementException & )
+            {
+            }
         }
+        xDataSink->setInputStream( xStream );
     }
     else
         // a standard document or else an active help text, plug in the new input stream
-        xDataSink->setInputStream( new InputStreamTransformer( this,m_pDatabases ) );
+        xDataSink->setInputStream( new InputStreamTransformer( this,m_pDatabases,isRoot() ) );
 }
 
 
@@ -682,12 +656,20 @@ struct UserData {
 
 
 InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
-                                                Databases*    pDatabases )
+                                                Databases*    pDatabases,
+                                                bool isRoot )
     : len( 0 ),
       pos( 0 ),
       buffer( new char[0] )
 {
-    if( urlParam->isActive() )
+    if( isRoot )
+    {
+        delete[] buffer;
+        pDatabases->cascadingStylesheet( urlParam->get_language(),
+                                         &buffer,
+                                         &len );
+    }
+    else if( urlParam->isActive() )
     {
         delete[] buffer;
         pDatabases->setActiveText( urlParam->get_module(),
@@ -1099,3 +1081,24 @@ int schemehandlerclose( void *userData,
 
 //      Reference< XInputStream > m_xInputStream;
 //  };
+
+
+
+
+            // error handling is missing
+            // better not to open the file every time it is requested
+
+//              url =
+//                  m_pDatabases->getInstallPathAsURL()         +
+//                  rtl::OUString::createFromAscii( "custom.css" );
+
+//              rtl::OUString service = rtl::OUString::createFromAscii( "com.sun.star.ucb.UniversalContentBroker" );
+//              Reference< XContentProvider > provider( rxSMgr->createInstance( service ),UNO_QUERY );
+//              Reference< XContentIdentifierFactory > factory( provider,UNO_QUERY );
+//              Reference< XContentIdentifier > xIdentifier = factory->createContentIdentifier( url );
+//              Reference< XContent > xContent = provider->queryContent( xIdentifier );
+//              Reference< XCommandProcessor > processor( xContent,UNO_QUERY );
+
+//              processor->execute( aCommand,
+//                                  CommandId,
+//                                  Environment );
