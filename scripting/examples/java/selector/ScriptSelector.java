@@ -206,6 +206,18 @@ public class ScriptSelector {
         }
     }
 
+    public void showOrganizer(final XScriptContext ctxt,
+        final com.sun.star.awt.MouseEvent e)
+    {
+        showOrganizer(ctxt);
+    }
+
+    public void showOrganizer(final XScriptContext ctxt,
+        final com.sun.star.awt.ActionEvent e)
+    {
+        showOrganizer(ctxt);
+    }
+
     private void doDelete(
         XScriptContext ctxt, DefaultMutableTreeNode node)
     {
