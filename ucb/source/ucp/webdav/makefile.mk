@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 17:06:16 $
+#   last change: $Author: obo $ $Date: 2005-01-27 12:14:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,7 +136,7 @@ SHL1STDLIBS=\
         $(VOSLIB)               \
         $(UCBHELPERLIB)         \
         $(NEON3RDLIB)           \
-    $(EXPATASCII3RDLIB)
+        $(XML2LIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= wsock32.lib
