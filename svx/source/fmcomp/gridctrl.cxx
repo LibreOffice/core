@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:20:48 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1642,8 +1642,6 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
             m_nMode &= ~BROWSER_MULTISELECTION;
 
         adjustModeForScrollbars( m_nMode, m_bNavigationBar, m_bHideScrollbars );
-
-        ReserveControlArea();
 
         Reference< XColumnsSupplier >  xSupplyColumns(_xCursor, UNO_QUERY);
         if (xSupplyColumns.is())
