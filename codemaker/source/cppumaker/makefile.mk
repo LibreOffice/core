@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2001-03-13 12:04:24 $
+#   last change: $Author: hr $ $Date: 2001-06-01 18:11:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,8 +90,7 @@ APP1OBJS=   $(OBJ)$/cppumaker.obj	\
 APP1STDLIBS=\
             $(SALLIB) \
             $(SALHELPERLIB) \
-            $(REGLIB) \
-            $(STDLIBCPP)
+            $(REGLIB) 
 
 .IF "$(GUI)"=="WNT"
 APP1STDLIBS+= \

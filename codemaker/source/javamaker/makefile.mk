@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-14 16:47:26 $
+#   last change: $Author: hr $ $Date: 2001-06-01 18:11:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,8 +88,7 @@ APP1OBJS=   $(OBJ)$/javamaker.obj	\
 APP1STDLIBS=\
             $(SALLIB) \
             $(SALHELPERLIB)	\
-            $(REGLIB) \
-            $(STDLIBCPP)
+            $(REGLIB)
 
 .IF "$(GUI)"=="WNT"
 APP1STDLIBS+= \
