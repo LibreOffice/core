@@ -2,15 +2,15 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-30 00:01:54 $
+ *  last change: $Author: pluby $ $Date: 2000-12-24 01:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
+ *       - GNU Lesser General Public License Version 2.1
+ *       - Sun Industry Standards Source License Version 1.1
  *
  *  Sun Microsystems Inc., October, 2000
  *
@@ -61,15 +61,6 @@
 
 #define _SV_SALVD_CXX
 
-#ifndef _SV_SALDATA_HXX
-#include <saldata.hxx>
-#endif
-#ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
-#endif
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
-#endif
 #ifndef _SV_SALVD_HXX
 #include <salvd.hxx>
 #endif
@@ -78,6 +69,10 @@
 
 SalVirtualDevice::SalVirtualDevice()
 {
+    maVirDevData.mpGraphics = NULL;
+    maVirDevData.mnWidth = 0;
+    maVirDevData.mnHeight = 0;
+    maVirDevData.mbGraphics = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -90,17 +85,28 @@ SalVirtualDevice::~SalVirtualDevice()
 
 SalGraphics* SalVirtualDevice::GetGraphics()
 {
-    return NULL;
+    if ( maVirDevData.mbGraphics )
+        return NULL;
+
+    if ( !maVirDevData.mpGraphics )
+        maVirDevData.mpGraphics = NULL;
+
+    maVirDevData.mbGraphics = FALSE;
+
+    return maVirDevData.mpGraphics;
+
 }
 
 // -----------------------------------------------------------------------
 
-void SalVirtualDevice::ReleaseGraphics( SalGraphics* )
+void SalVirtualDevice::ReleaseGraphics( SalGraphics *pGraphics )
 {
+    maVirDevData.mbGraphics = FALSE;
 }
 
 // -----------------------------------------------------------------------
 
 BOOL SalVirtualDevice::SetSize( long nDX, long nDY )
 {
+    return FALSE;
 }

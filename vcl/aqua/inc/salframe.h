@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-04 20:35:17 $
+ *  last change: $Author: pluby $ $Date: 2000-12-24 01:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,34 +85,9 @@ struct SalFrameData
     SalFrame*               mpParent;               // pointer to parent frame
     void*                   mpInst;                 // instance handle for callback
     SALFRAMEPROC            mpProc;                 // callback proc
-    struct SystemEnvData    maSysData;              // system data
-    struct SalFrameState    maState;                // frame state
-    int                     mnShowState;            // show state
-    long                    mnWidth;                // client width in pixeln
-    long                    mnHeight;               // client height in pixeln
-    int                     mnFullScreenShowState;  // fullscreen restore show state
-    UINT32                  mnInputLang;            // current Input Language
-    UINT32                  mnInputCodePage;        // current Input CodePage
-    USHORT                  mnStyle;                // style
-    BOOL                    mbGraphics;             // is Graphics used
-    BOOL                    mbCaption;              // has window a caption
-    BOOL                    mbBorder;               // has window a border
-    BOOL                    mbSizeBorder;           // has window a sizeable border
-    BOOL                    mbFullScreen;           // TRUE: in full screen mode
-    BOOL                    mbPresentation;         // TRUE: Presentation Mode running
-    BOOL                    mbInShow;               // innerhalb eines Show-Aufrufs
-    BOOL                    mbRestoreMaximize;      // Restore-Maximize
-    BOOL                    mbInMoveMsg;            // Move-Message wird verarbeitet
-    BOOL                    mbInSizeMsg;            // Size-Message wird verarbeitet
-    BOOL                    mbFullScreenToolWin;    // WS_EX_TOOLWINDOW reset in FullScreenMode
-    BOOL                    mbDefPos;               // default-position
-    BOOL                    mbOverwriteState;       // TRUE: WindowState darf umgesetzt werden
-    BOOL                    mbIME;                  // TRUE: We are in IME Mode
-    BOOL                    mbHandleIME;            // TRUE: Wir handeln die IME-Messages
-    BOOL                    mbSpezIME;              // TRUE: Spez IME
-    BOOL                    mbAtCursorIME;          // TRUE: Wir behandeln nur einige IME-Messages
-    BOOL                    mbCompositionMode;      // TRUE: Wir befinden uns im Composition-Modus
-    BOOL                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
+    long                    mnWidth;                // client width in pixels
+    long                    mnHeight;               // client height in pixels
+    BOOL                    mbGraphics;             // is Graphics used?
 };
 
 #endif // _SV_SALFRAME_H

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:27 $
+ *  last change: $Author: pluby $ $Date: 2000-12-24 01:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 #ifndef _SV_SV_H
 #include <sv.h>
 #endif
-
+#ifndef _SV_SALGDI_HXX
+#include <salgdi.hxx>
+#endif
 
 // -----------------
 // - SalVirDevData -
@@ -73,11 +75,10 @@
 
 struct SalVirDevData
 {
-    VCLVIEW                 mhDC;                   // VCLVIEW or 0 for Cache Device
     SalGraphics*            mpGraphics;             // current VirDev graphics
-    SalVirtualDevice*       mpNext;                 // next VirDev
-    USHORT                  mnBitCount;             // BitCount (0 or 1)
-    BOOL                    mbGraphics;             // is Graphics used
+    long                    mnWidth;                // GWorld width
+    long                    mnHeight;               // GWorld height
+    BOOL                    mbGraphics;             // is Graphics used?
 };
 
 #endif // _SV_SALVD_H

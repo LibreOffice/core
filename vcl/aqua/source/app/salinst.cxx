@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-22 06:25:03 $
+ *  last change: $Author: pluby $ $Date: 2000-12-24 01:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,9 @@ void SalInstance::DestroyObject( SalObject* pObject )
 SalVirtualDevice* SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     long nDX, long nDY, USHORT nBitCount )
 {
-    return new SalVirtualDevice();
+    SalVirtualDevice *pVirDev = new SalVirtualDevice;
+
+    return pVirDev;
 }
 
 // -----------------------------------------------------------------------

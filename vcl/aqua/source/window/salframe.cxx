@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-22 17:57:06 $
+ *  last change: $Author: pluby $ $Date: 2000-12-24 01:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,29 +96,9 @@ SalFrame::SalFrame()
     maFrameData.mpGraphics          = NULL;
     maFrameData.mpInst              = NULL;
     maFrameData.mpProc              = ImplSalFrameCallbackDummy;
-    maFrameData.mnInputLang         = 0;
-    maFrameData.mnInputCodePage     = 0;
+    maFrameData.mnWidth             = 0;
+    maFrameData.mnHeight            = 0;
     maFrameData.mbGraphics          = FALSE;
-    maFrameData.mbCaption           = FALSE;
-    maFrameData.mbBorder            = FALSE;
-    maFrameData.mbSizeBorder        = FALSE;
-    maFrameData.mbFullScreen        = FALSE;
-    maFrameData.mbPresentation      = FALSE;
-    maFrameData.mbInShow            = FALSE;
-    maFrameData.mbRestoreMaximize   = FALSE;
-    maFrameData.mbInMoveMsg         = FALSE;
-    maFrameData.mbInSizeMsg         = FALSE;
-    maFrameData.mbFullScreenToolWin = FALSE;
-    maFrameData.mbDefPos            = TRUE;
-    maFrameData.mbOverwriteState    = TRUE;
-    maFrameData.mbIME               = FALSE;
-    maFrameData.mbHandleIME         = FALSE;
-    maFrameData.mbSpezIME           = FALSE;
-    maFrameData.mbAtCursorIME       = FALSE;
-    maFrameData.mbCompositionMode   = FALSE;
-    maFrameData.mbCandidateMode     = FALSE;
-    memset( &maFrameData.maState, 0, sizeof( SalFrameState ) );
-    maFrameData.maSysData.nSize     = sizeof( SystemEnvData );
 
     // insert frame in framelist
     maFrameData.mpNextFrame = pSalData->mpFirstFrame;
