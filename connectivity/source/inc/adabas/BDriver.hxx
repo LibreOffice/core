@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 15:54:20 $
+ *  last change: $Author: oj $ $Date: 2001-10-29 10:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            ODriver();
+            ODriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
             virtual ~ODriver();
 
             virtual void* getOdbcFunction(sal_Int32 _nIndex)  const;

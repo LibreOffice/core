@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 14:51:15 $
+ *  last change: $Author: oj $ $Date: 2001-10-29 10:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1120,7 +1120,26 @@ Any getNumberFormatProperty(const Reference< ::com::sun::star::util::XNumberForm
     return Any();
 }
 // -----------------------------------------------------------------------------
+void OSQLParseNode::substituteParameterNames(OSQLParseNode* _pNode)
+{
+    sal_Int32 nCount = _pNode->count();
+    for(sal_Int32 i=0;i < nCount;++i)
+    {
+        OSQLParseNode* pChildNode = _pNode->getChild(i);
+        if(SQL_ISRULE(pChildNode,parameter) && pChildNode->count() > 1)
+        {
+            OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString::createFromAscii("?") ,SQL_NODE_PUNCTUATION,0);
+            delete pChildNode->replace(pChildNode->getChild(0),pNewNode);
+            sal_Int32 nChildCount = pChildNode->count();
+            for(sal_Int32 j=1;j < nChildCount;++j)
+                delete pChildNode->removeAt(1);
+        }
+        else
+            substituteParameterNames(pChildNode);
 
+    }
+}
+// -----------------------------------------------------------------------------
 
 
 

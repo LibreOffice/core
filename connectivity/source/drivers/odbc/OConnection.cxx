@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 14:55:06 $
+ *  last change: $Author: oj $ $Date: 2001-10-29 10:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,14 +112,15 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 // --------------------------------------------------------------------------------
 OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
-                         : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
-                         m_pDriverHandleCopy(_pDriverHandle),
-                         m_pDriver(_pDriver),
-                         m_bClosed(sal_True),
-                         m_xMetaData(NULL),
-                         m_bUseCatalog(sal_False),
-                         m_bUseOldDateFormat(sal_False),
-                         m_nStatementCount(0)
+                         : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
+                         ,m_pDriverHandleCopy(_pDriverHandle)
+                         ,m_pDriver(_pDriver)
+                         ,m_bClosed(sal_True)
+                         ,m_xMetaData(NULL)
+                         ,m_bUseCatalog(sal_False)
+                         ,m_bUseOldDateFormat(sal_False)
+                         ,m_nStatementCount(0)
+                         ,m_bParameterSubstitution(sal_False)
 {
     m_pDriver->acquire();
     ModuleContext::AddRef();
@@ -240,6 +241,7 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
     const char* pUseCatalog = "UseCatalog";
     const char* pSysDrv     = "SystemDriverSettings";
     const char* pCharSet    = "CharSet";
+    const char* pParaName   = "ParameterNameSubstitution";
 
     sal_Int32 nTimeout = 20;
     sal_Bool bSilent = sal_True;
@@ -251,6 +253,8 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
             pBegin->Value >>= nTimeout;
         else if(!pBegin->Name.compareToAscii(pSilent))
             pBegin->Value >>= bSilent;
+        else if(!pBegin->Name.compareToAscii(pParaName))
+            pBegin->Value >>= m_bParameterSubstitution;
         else if(!pBegin->Name.compareToAscii(pUser))
         {
             pBegin->Value >>= aUID;
@@ -263,7 +267,7 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
         }
         else if(!pBegin->Name.compareToAscii(pUseCatalog))
         {
-            m_bUseCatalog = ::cppu::any2bool(pBegin->Value);
+             pBegin->Value >>= m_bUseCatalog;
         }
         else if(!pBegin->Name.compareToAscii(pSysDrv))
         {

@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.33 2001-09-28 09:25:10 obo Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.34 2001-10-29 10:23:32 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: obo $ $Date: 2001-09-28 09:25:10 $ $Revision: 1.33 $
+//	$Author: oj $ $Date: 2001-10-29 10:23:32 $ $Revision: 1.34 $
 //
 // Description:
 //
@@ -242,7 +242,7 @@ using namespace connectivity;
 %type <pParseNode> char_value_exp concatenation char_factor char_primary string_value_fct char_substring_fct fold
 %type <pParseNode> form_conversion char_translation trim_fct trim_operands trim_spec bit_value_fct bit_substring_fct op_column_commalist
 %type <pParseNode> /*bit_concatenation*/ bit_value_exp bit_factor bit_primary collate_clause char_value_fct unique_spec value_exp_commalist in_predicate_value unique_test update_source
-%type <pParseNode> all query_primary as not for_length upper_lower comparison column_val  cross_union /*opt_schema_element_list*/
+%type <pParseNode> all query_primary as sql_not for_length upper_lower comparison column_val  cross_union /*opt_schema_element_list*/
 %type <pParseNode> /*op_authorization op_schema*/ nil_fkt schema_element base_table_def base_table_element base_table_element_commalist
 %type <pParseNode> column_def odbc_fct_spec	odbc_call_spec odbc_fct_type op_parameter union_statement
 %type <pParseNode> op_odbc_call_parameter odbc_parameter_commalist odbc_parameter
@@ -650,7 +650,7 @@ manipulative_statement_list:
 		{$$ = SQL_NEW_LISTRULE;}
 	;
 */
-not:
+sql_not:
 	{$$ = SQL_NEW_RULE;}
 	|	SQL_TOKEN_NOT
 	;
@@ -1393,7 +1393,7 @@ opt_escape:
 	;
 
 test_for_null:
-		row_value_constructor SQL_TOKEN_IS not SQL_TOKEN_NULL
+		row_value_constructor SQL_TOKEN_IS sql_not SQL_TOKEN_NULL
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1401,7 +1401,7 @@ test_for_null:
 			$$->append($3);
 			$$->append($4);
 		}
-	|	SQL_TOKEN_IS not SQL_TOKEN_NULL
+	|	SQL_TOKEN_IS sql_not SQL_TOKEN_NULL
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
@@ -1431,7 +1431,7 @@ in_predicate_value:
 		}
 	;
 in_predicate:
-		row_value_constructor not SQL_TOKEN_IN in_predicate_value
+		row_value_constructor sql_not SQL_TOKEN_IN in_predicate_value
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -3535,7 +3535,7 @@ sal_uInt32 OSQLParser::RuleID(OSQLParseNode::Rule eRule)
 				s_nRuleIDs[eRule] = StrToRuleID("joined_table"); break;
 			case OSQLParseNode::boolean_factor:
 				s_nRuleIDs[eRule] = StrToRuleID("boolean_factor"); break;
-			case OSQLParseNode::not:
+			case OSQLParseNode::sql_not:
 				s_nRuleIDs[eRule] = StrToRuleID("not"); break;
 			case OSQLParseNode::boolean_test:
 				s_nRuleIDs[eRule] = StrToRuleID("boolean_test"); break;

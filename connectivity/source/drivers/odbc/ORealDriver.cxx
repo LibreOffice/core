@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ORealDriver.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 14:53:47 $
+ *  last change: $Author: oj $ $Date: 2001-10-29 10:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ namespace connectivity
             virtual void* getOdbcFunction(sal_Int32 _nIndex)  const;
             virtual SQLHANDLE   EnvironmentHandle(::rtl::OUString &_rPath);
         public:
-            ORealObdcDriver(){}
+            ORealObdcDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) : ODBCDriver(_rxFactory) {}
         };
 
         //------------------------------------------------------------------
@@ -373,7 +373,7 @@ void* ORealObdcDriver::getOdbcFunction(sal_Int32 _nIndex) const
 //------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL ODBCDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
-    return *(new ORealObdcDriver());
+    return *(new ORealObdcDriver(_rxFactory));
 }
 // -----------------------------------------------------------------------------
 // ODBC Environment (gemeinsam fuer alle Connections):

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODriver.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 06:40:12 $
+ *  last change: $Author: oj $ $Date: 2001-10-29 10:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,10 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 // --------------------------------------------------------------------------------
-ODBCDriver::ODBCDriver()
+ODBCDriver::ODBCDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
     : ODriver_BASE(m_aMutex)
     ,m_pDriverHandle(SQL_NULL_HANDLE)
+    ,m_xORB(_rxFactory)
 {
 }
 // --------------------------------------------------------------------------------

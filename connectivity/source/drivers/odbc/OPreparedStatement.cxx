@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 14:55:07 $
+ *  last change: $Author: oj $ $Date: 2001-10-29 10:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _CONNECTIVITY_OTOOLS_HXX_
 #include "odbc/OTools.hxx"
 #endif
+#ifndef _CONNECTIVITY_ODBC_ODRIVER_HXX_
+#include "odbc/ODriver.hxx"
+#endif
 #ifndef _CONNECTIVITY_ODBC_ORESULTSETMETADATA_HXX_
 #include "odbc/OResultSetMetaData.hxx"
 #endif
@@ -99,6 +102,9 @@
 #endif
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 #include "connectivity/FValue.hxx"
+#endif
+#ifndef _CONNECTIVITY_SQLPARSE_HXX
+#include "connectivity/sqlparse.hxx"
 #endif
 
 using namespace ::comphelper;
@@ -127,6 +133,27 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
     ,m_bPrepared(sal_False)
     ,m_sSqlStatement(sql)
 {
+    try
+    {
+        if(_pConnection->isParameterSubstitutionEnabled())
+        {
+            OSQLParser aParser(_pConnection->getDriver()->getORB());
+            ::rtl::OUString sErrorMessage;
+            ::rtl::OUString sNewSql;
+            OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,sql);
+            if(pNode)
+            {   // special handling for parameters
+                // we recusive replace all occurences of ? in the statement and replace them with name like "æ¬å"
+                OSQLParseNode::substituteParameterNames(pNode);
+                pNode->parseNodeToStr(sNewSql,_pConnection->getMetaData());
+                delete pNode;
+                m_sSqlStatement = sNewSql;
+            }
+        }
+    }
+    catch(Exception&)
+    {
+    }
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OPreparedStatement::acquire() throw()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:15:42 $
+ *  last change: $Author: oj $ $Date: 2001-10-29 10:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ namespace connectivity
             join_condition,
             joined_table,
             boolean_factor,
-            not,
+            sql_not,
             boolean_test,
             manipulative_statement,
             subquery,
@@ -364,6 +364,10 @@ namespace connectivity
                                             ::com::sun::star::uno::Any &_rCatalog,
                                             ::rtl::OUString &_rSchema,
                                             ::rtl::OUString &_rTable);
+
+        // susbtitute all occurences of :var or [name] into the dynamic parameter ?
+        // _pNode will be modified if parameters exists
+        static void substituteParameterNames(OSQLParseNode* _pNode);
 
     protected:
         // ParseNodeToStr konkateniert alle Token (Blaetter) des ParseNodes

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 16:21:37 $
+ *  last change: $Author: oj $ $Date: 2001-10-29 10:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ using namespace ::com::sun::star::lang;
     sal_Bool LoadLibrary_ADABAS(::rtl::OUString &_rPath);
 
 // --------------------------------------------------------------------------------
-ODriver::ODriver()
+ODriver::ODriver(const Reference< XMultiServiceFactory >& _rxFactory) : ODBCDriver(_rxFactory)
 {
 }
 //------------------------------------------------------------------------------
@@ -207,9 +207,9 @@ Any SAL_CALL ODriver::queryInterface( const Type & rType ) throw(RuntimeExceptio
     return aRet.hasValue() ? aRet : ODriver_BASE::queryInterface(rType);
 }
 //------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL ODriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ) throw( ::com::sun::star::uno::Exception )
+Reference< XInterface >  SAL_CALL ODriver_CreateInstance(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFac) throw( Exception )
 {
-    return *(new ODriver());
+    return *(new ODriver(_rxFac));
 }
 // --------------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
