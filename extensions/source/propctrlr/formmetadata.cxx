@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:23:06 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _EXTENSIONS_PROPCTRLR_FORMMETADATA_HXX_
 #include "formmetadata.hxx"
 #endif
@@ -110,10 +109,10 @@ namespace pcr
     OPropertyInfoImpl::OPropertyInfoImpl(const ::rtl::OUString& _rName, sal_Int32 _nId,
                                    const String& aString, sal_uInt16 nP, sal_uInt32 nHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
-       ,nId(_nId)
        ,sTranslation(aString)
-       ,nPos(nP)
        ,nHelpId(nHid)
+       ,nId(_nId)
+       ,nPos(nP)
        ,nUIFlags(_nUIFlags)
     {
     }
