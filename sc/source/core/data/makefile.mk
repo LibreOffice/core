@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 20:05:27 $
+#   last change: $Author: kz $ $Date: 2005-01-18 16:16:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,6 +154,9 @@ NOOPTFILES= \
 .ENDIF
 
 EXCEPTIONSFILES= \
+    $(SLO)$/cell.obj \
+    $(SLO)$/postit.obj \
+    $(SLO)$/documen3.obj \
     $(SLO)$/documen5.obj \
     $(SLO)$/documen6.obj \
     $(SLO)$/documen9.obj \
