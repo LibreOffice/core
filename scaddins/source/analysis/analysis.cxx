@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-21 13:31:16 $
+ *  last change: $Author: gt $ $Date: 2001-06-29 14:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ AnalysisAddIn::~AnalysisAddIn()
         delete pFD;
 
     if( pFactDoubles )
-        delete pFactDoubles;
+        delete[] pFactDoubles;
 
     if( pCDL )
         delete pCDL;
@@ -281,7 +281,7 @@ AnalysisAddIn::~AnalysisAddIn()
 //      delete pResMgr;
 
     if( pDefLocales )
-        delete pDefLocales;
+        delete[] pDefLocales;
 }
 
 
@@ -641,7 +641,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( constREFXPS& xOptions,
             if( GetDayOfWeek( nActDate ) < 5 )
             {
                 if( !aSrtLst.Find( nActDate ) )
-                    nDays--;
+                    nDays++;
             }
             else
                 nActDate--;     // jump over weekend
