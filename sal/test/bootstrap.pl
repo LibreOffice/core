@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: bootstrap.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kr $ $Date: 2001-10-11 13:14:37 $
+#   last change: $Author: kr $ $Date: 2001-11-01 16:44:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -177,15 +177,20 @@ if (!$rc) {
 delete $ENV{MYBOOTSTRAPTESTVALUE};
 
 
-$rc = system "./testbootstrap", "default", "-env:INIFILENAME=";
+$rc = system "./testbootstrap", "defaultvalue", "-env:INIFILENAME=", "-env:Default=defaultvalue";
 if (!$rc) {
-    $comment = $comment . "exe custom ini test 2 not passed\n";
+    $comment = $comment . "default test from parameter not passed\n";
     $state = 0;
 }
 
-$rc = system "./testbootstrap",  "default", "-env:MYBOOTSTRAPTESTVALUE2=1", "-env:INIFILENAME=";
+if ($ENV{GUI} eq "WNT") {
+    $rc = system "./testbootstrap",  "defaultValue", "-env:iniName=default.ini", "-env:INIFILENAME=";
+}
+else {
+    $rc = system "./testbootstrap",  "defaultValue", "-env:iniName=defaultrc", "-env:INIFILENAME=";
+}
 if (!$rc) {
-    $comment = $comment . "exe custom ini test 3 not passed\n";
+    $comment = $comment . "default test from custom ini not passed\n";
     $state = 0;
 }
 
@@ -215,15 +220,23 @@ if (!$rc) {
 
 # simple ini access
 $rc = system "./testbootstrap",
-    "TheKeysValue",
-    '-env:MYBOOTSTRAPTESTVALUE=${./bootstraptest.ini:TheSection:TheKey}';
+    "TheIniKeysValue",
+    '-env:MYBOOTSTRAPTESTVALUE=${./bootstraptest.ini:TheIniKey}';
 if (!$rc) {
     $comment = $comment . "simple macro ini access test not passed\n";
     $state = 0;
 }
 
+# simple profile access
+$rc = system "./testbootstrap",
+    "TheKeysValue",
+    '-env:MYBOOTSTRAPTESTVALUE=${./bootstraptest.ini:TheSection:TheKey}';
+if (!$rc) {
+    $comment = $comment . "simple macro profile access test not passed\n";
+    $state = 0;
+}
 
-# ini access with simple macro expansion
+# profile access with simple macro expansion
 $rc = system "./testbootstrap",
     "TheKeysValue",
     "-env:ININAME=./bootstraptest.ini",
@@ -231,17 +244,17 @@ $rc = system "./testbootstrap",
     "-env:KEYNAME=TheKey",
     '-env:MYBOOTSTRAPTESTVALUE=${$ININAME:$SECTIONNAME:$KEYNAME}';
 if (!$rc) {
-    $comment = $comment . "ini access with simple macro expansion test not passed\n";
+    $comment = $comment . "profile access with simple macro expansion test not passed\n";
     $state = 0;
 }
 
-# ini access with complex macro expansion
+# profile access with complex macro expansion
 $rc = system "./testbootstrap",
     "TheKeysValue",
     "-env:ININAME=./bootstraptest.ini",
     '-env:MYBOOTSTRAPTESTVALUE=${$ININAME:${$ININAME:SecondSection:IndirectSection}:${$ININAME:SecondSection:IndirectKey}}';
 if (!$rc) {
-    $comment = $comment . "ini access with complex macro expansion test not passed\n";
+    $comment = $comment . "profile access with complex macro expansion test not passed\n";
     $state = 0;
 }
 

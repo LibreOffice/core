@@ -33,7 +33,7 @@ int main( int argc, char *argv[] )
     OUString iniName;
     Bootstrap::get(OUString(RTL_CONSTASCII_USTRINGPARAM("iniName")), iniName, OUString());
 
-    if(iniName.getLength())
+     if(iniName.getLength())
     {
         OString tmp_iniName = OUStringToOString(iniName, RTL_TEXTENCODING_ASCII_US);
         fprintf(stderr, "using ini: %s\n", tmp_iniName.getStr());
@@ -43,7 +43,7 @@ int main( int argc, char *argv[] )
 
 
     OUString name( RTL_CONSTASCII_USTRINGPARAM( "MYBOOTSTRAPTESTVALUE" ));
-    OUString myDefault( RTL_CONSTASCII_USTRINGPARAM( "default" ));
+    OUString myDefault( RTL_CONSTASCII_USTRINGPARAM("$Default"));
 
     OUString value;
 
