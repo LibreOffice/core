@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-06 15:06:02 $
+ *  last change: $Author: hdu $ $Date: 2002-09-12 08:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1810,7 +1810,11 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
 #ifdef USE_BUILTIN_RASTERIZER
         aX11GlyphPeer.SetDisplay( maGraphicsData.GetXDisplay(),
             maGraphicsData.GetDisplay()->GetVisual()->GetVisual() );
+#ifdef MACOSX
+        GlyphCache::EnsureInstance( aX11GlyphPeer, true );
+#else
         GlyphCache::EnsureInstance( aX11GlyphPeer, false );
+#endif
         GlyphCache& rGC = GlyphCache::GetInstance();
 
         const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
@@ -2096,64 +2100,23 @@ ULONG SalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 
 // ---------------------------------------------------------------------------
 
-#ifdef ENABLE_CTL
-BOOL SalGraphics::GetGlyphBoundRect( long nGlyphIndex, bool bIsGlyphIndex, Rectangle& rRect, const OutputDevice* )
+BOOL SalGraphics::GetGlyphBoundRect( long nGlyphIndex, bool /*bIsGlyphIndex*/, Rectangle& rRect, const OutputDevice* )
 {
 #ifdef USE_BUILTIN_RASTERIZER
     if( maGraphicsData.mpServerSideFont != NULL )
     {
-        if( !bIsGlyphIndex )
-            return FALSE;
         ServerFont& rSF = *maGraphicsData.mpServerSideFont;
         const GlyphMetric& rGM = rSF.GetGlyphMetric( nGlyphIndex );
-
-        long rFactor;
-        ImplFontMetricData rTo;
-        rSF.FetchFontMetric( rTo, rFactor );
-
-        Point aPoint = rGM.GetOffset();
-        aPoint += Point( 0, rTo.mnAscent );
-        rRect = Rectangle( aPoint, rGM.GetSize() );
+        rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
         return TRUE;
     }
 #endif //USE_BUILTIN_RASTERIZER
 
     return FALSE;
 }
-
-#else // ENABLE_CTL
-
-BOOL
-SalGraphics::GetGlyphBoundRect( xub_Unicode cChar,
-        long *pX, long *pY, long *pDX, long *pDY )
-{
-#ifdef USE_BUILTIN_RASTERIZER
-    if( maGraphicsData.mpServerSideFont != NULL )
-    {
-        ServerFont& rSF = *maGraphicsData.mpServerSideFont;
-        const int nGlyphIndex = rSF.GetGlyphIndex( cChar );
-        const GlyphMetric& rGM = rSF.GetGlyphMetric( nGlyphIndex );
-
-        long rFactor;
-        ImplFontMetricData rTo;
-        rSF.FetchFontMetric( rTo, rFactor );
-
-        *pX = rGM.GetOffset().X();
-        *pY = rTo.mnAscent + rGM.GetOffset().Y();
-        *pDX = rGM.GetSize().Width();
-        *pDY = rGM.GetSize().Height();
-
-        return TRUE;
-    }
-#endif //USE_BUILTIN_RASTERIZER
-
-    return FALSE;
-}
-#endif // ENABLE_CTL
 
 // ---------------------------------------------------------------------------
 
-#ifdef ENABLE_CTL
 BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, bool bIsGlyphIndex, PolyPolygon& rPolyPoly, const OutputDevice* )
 {
     BOOL bRet = FALSE;
@@ -2169,61 +2132,6 @@ BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, bool bIsGlyphIndex, PolyPol
 
     return bRet;
 }
-
-#else // ENABLE_CTL
-
-ULONG
-SalGraphics::GetGlyphOutline( xub_Unicode cChar,
-    USHORT **ppPolySizes, SalPoint **ppPoints, BYTE **ppFlags )
-{
-#ifdef USE_BUILTIN_RASTERIZER
-    if( maGraphicsData.mpServerSideFont != NULL )
-    {
-        PolyPolygon rPolyPoly;
-        ServerFont& rSF = *maGraphicsData.mpServerSideFont;
-        const int nGlyphIndex = rSF.GetGlyphIndex( cChar );
-        bool bRet = rSF.GetGlyphOutline( nGlyphIndex, rPolyPoly );
-        if( !bRet )
-            return 0;
-
-        // translate PolyPolygon into ancient format
-        const unsigned nPolygons = rPolyPoly.Count();
-        unsigned nPoints = 0;
-        unsigned i;
-        for( i = 0; i < nPolygons; ++i )
-            nPoints += rPolyPoly[ i].GetSize();
-
-        USHORT* const pPolySizes    = new USHORT[ nPolygons ];
-        SalPoint* const pPoints     = new SalPoint[ nPoints ];
-        BYTE* const pFlags          = new BYTE[ nPoints ];
-
-        *ppPolySizes = pPolySizes;
-        *ppPoints   = pPoints;
-        *ppFlags    = pFlags;
-
-        unsigned nDestIndex = 0;
-        for( i = 0; i < nPolygons; ++i )
-        {
-            const Polygon& rPolygon = rPolyPoly[ i ];
-            const int nPoints = rPolygon.GetSize();
-            pPolySizes[ i ] = nPoints;
-            for( unsigned j = 0; j < nPoints; ++j )
-            {
-                const Point& aPoint = rPolygon[ j ];
-                pPoints[ nDestIndex ].mnX   = aPoint.X();
-                pPoints[ nDestIndex ].mnY   = aPoint.Y();
-                pFlags[ nDestIndex ]        = rPolygon.GetFlags( j );
-                ++nDestIndex;
-            }
-        }
-
-        return nPolygons;
-    }
-#endif // USE_BUILTIN_RASTERIZER
-
-    return 0;
-}
-#endif // ENABLE_CTL
 
 //--------------------------------------------------------------------------
 
