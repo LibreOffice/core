@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-09 07:43:12 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,16 @@ public:
     void setORB(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xORB);
 
     virtual void Init();
+
+    // IAccessibleTableProvider
+    /** Creates the accessible object of a data table cell.
+        @param nRow  The row index of the cell.
+        @param nColumnId  The column ID of the cell.
+        @return  The XAccessible interface of the specified cell. */
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible >
+    CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId );
+
 protected:
     virtual void Resize();
 
