@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:49:19 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,6 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
                 SfxChildWindow *pCW, Window* pParent ) :
         SfxDockingWindow    ( pInBindings, pCW, pParent,
                                     SVX_RES( RID_SVXFLOAT_3D ) ),
-        aBtnFavorites       ( this, SVX_RES( BTN_FAVORITES ) ),
         aBtnGeo             ( this, SVX_RES( BTN_GEO ) ),
         aBtnRepresentation  ( this, SVX_RES( BTN_REPRESENTATION ) ),
         aBtnLight           ( this, SVX_RES( BTN_LIGHT ) ),
@@ -180,12 +179,6 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aBtnMaterial        ( this, SVX_RES( BTN_MATERIAL ) ),
         aBtnUpdate          ( this, SVX_RES( BTN_UPDATE ) ),
         aBtnAssign          ( this, SVX_RES( BTN_ASSIGN ) ),
-
-        // Favoriten
-        aCtlFavorites       ( this, SVX_RES( CTL_FAVORITES ) ),
-        aFLFavorites        ( this, SVX_RES( FL_FAVORITES ) ),
-        aBtnOnly3D          ( this, SVX_RES( BTN_ONLY_3D ) ),
-        aBtnAllAttributes   ( this, SVX_RES( BTN_ALL_ATTRIBUTES ) ),
 
         // Geometrie
         aFtHorizontal       ( this, SVX_RES( FT_HORIZONTAL ) ),
@@ -304,7 +297,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
 
         pLightGroup         ( NULL ),
         bUpdate             ( FALSE ),
-        eViewType           ( VIEWTYPE_FAVORITES ),
+        eViewType           ( VIEWTYPE_GEO ),
 
         pModel              ( NULL ),
         pFmPage             ( NULL ),
@@ -319,7 +312,6 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         mpRemember2DAttributes(NULL),
         bOnly3DChanged      ( FALSE )
 {
-    SETHCIMAGE( aBtnFavorites, BMP_FAVORITES_H );
     SETHCIMAGE( aBtnGeo, BMP_GEO_H );
     SETHCIMAGE( aBtnRepresentation, BMP_REPRESENTATION_H );
     SETHCIMAGE( aBtnLight, BMP_3DLIGHT_H );
@@ -327,8 +319,6 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     SETHCIMAGE( aBtnMaterial, BMP_MATERIAL_H );
     SETHCIMAGE( aBtnUpdate, BMP_UPDATE_H );
     SETHCIMAGE( aBtnAssign, BMP_ASSIGN_H );
-    SETHCIMAGE( aBtnOnly3D, BMP_ONLY_3D_H );
-    SETHCIMAGE( aBtnAllAttributes, BMP_ALL_ATTRIBUTES_H );
     SETHCIMAGE( aBtnNormalsObj, BMP_NORMALS_OBJ_H );
     SETHCIMAGE( aBtnNormalsFlat, BMP_NORMALS_FLAT_H );
     SETHCIMAGE( aBtnNormalsSphere, BMP_NORMALS_SPHERE_H );
@@ -384,7 +374,6 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     aBtnUpdate.SetClickHdl( LINK( this, Svx3DWin, ClickUpdateHdl ) );
 
     Link aLink( LINK( this, Svx3DWin, ClickViewTypeHdl ) );
-    aBtnFavorites.SetClickHdl( aLink );
     aBtnGeo.SetClickHdl( aLink );
     aBtnRepresentation.SetClickHdl( aLink );
     aBtnLight.SetClickHdl( aLink );
@@ -395,9 +384,6 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     aBtnPerspective.SetClickHdl( aLink );
     aBtnConvertTo3D.SetClickHdl( aLink );
     aBtnLatheObject.SetClickHdl( aLink );
-
-    aBtnOnly3D.SetClickHdl( aLink );
-    aBtnAllAttributes.SetClickHdl( aLink );
 
     // Geometrie
     aBtnNormalsObj.SetClickHdl( aLink );
@@ -465,13 +451,6 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     aNumVertical.SetModifyHdl( aLink );
     aMtrSlant.SetModifyHdl( aLink );
 
-    aLink = LINK( this, Svx3DWin, DoubleClickHdl );
-    aCtlFavorites.SetDoubleClickHdl( aLink );
-    aCtlFavorites.SetStyle( aCtlFavorites.GetStyle() | WB_FLATVALUESET );
-
-    aLink = LINK( this, Svx3DWin, ClickFavoriteHdl );
-    aCtlFavorites.SetSelectHdl( aLink );
-
     // Preview-Callback
     aLink = LINK( this, Svx3DWin, ChangeLightCallbackHdl );
     aCtlLightPreview.SetUserInteractiveChangeCallback( aLink );
@@ -514,6 +493,7 @@ __EXPORT Svx3DWin::~Svx3DWin()
 // -----------------------------------------------------------------------
 void Svx3DWin::Construct()
 {
+/*
     // Ueber die Gallery werden die Favoriten eingelesen
     ULONG nFavCount = GalleryExplorer::GetSdrObjCount( GALLERY_THEME_3D );
 
@@ -564,6 +544,11 @@ void Svx3DWin::Construct()
         // Keine Favoriten vorhanden
         eViewType = VIEWTYPE_GEO;
     }
+*/
+
+    aBtnGeo.Check();
+    Link aLink( LINK( this, Svx3DWin, ClickViewTypeHdl ) );
+    aLink.Call( &aBtnGeo );
 
     aCtlLightPreview.Hide();
     pLightGroup = new B3dLightGroup();
@@ -574,17 +559,6 @@ void Svx3DWin::Construct()
 void Svx3DWin::Reset()
 {
     // Diverse Initialisierungen, default ist AllAttributes
-    aBtnAllAttributes.Check();
-    aLbMatFavorites.SelectEntryPos( 0 ); // UserDefined
-
-    if( eViewType == VIEWTYPE_FAVORITES )
-        ClickViewTypeHdl( &aBtnFavorites );
-    else
-    {
-        ClickViewTypeHdl( &aBtnGeo );
-        aBtnFavorites.Enable( FALSE );
-    }
-
     aLbShademode.SelectEntryPos( 0 );
     aMtrMatSpecularIntensity.SetValue( 50 );
 
@@ -2458,7 +2432,6 @@ void __EXPORT Svx3DWin::Resize()
             aCtlPreview.Hide();
             aCtlLightPreview.Hide();
 
-            aFLFavorites.Hide();
             aFLGeometrie.Hide();
             aFLRepresentation.Hide();
             aFLLight.Hide();
@@ -2477,9 +2450,8 @@ void __EXPORT Svx3DWin::Resize()
             aCtlLightPreview.SetOutputSizePixel( aObjSize );
 
             // Groups
-            aObjSize = aFLFavorites.GetOutputSizePixel();
+            aObjSize = aFLGeometrie.GetOutputSizePixel();
             aObjSize.Width() += aDiffSize.Width();
-            aFLFavorites.SetOutputSizePixel( aObjSize );
             aFLGeometrie.SetOutputSizePixel( aObjSize );
             aFLSegments.SetOutputSizePixel( aObjSize );
             aFLShadow.SetOutputSizePixel( aObjSize );
@@ -2502,8 +2474,6 @@ void __EXPORT Svx3DWin::Resize()
             aBtnLatheObject.Show();
             aBtnPerspective.Show();
 
-            if( aBtnFavorites.IsChecked() )
-                ClickViewTypeHdl( &aBtnFavorites );
             if( aBtnGeo.IsChecked() )
                 ClickViewTypeHdl( &aBtnGeo );
             if( aBtnRepresentation.IsChecked() )
@@ -2567,15 +2537,12 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
         // Da das permanente Updaten der Preview zu teuer waere
         BOOL bUpdatePreview = aBtnLight.IsChecked();
 
-        aBtnFavorites.Check( &aBtnFavorites == pBtn );
         aBtnGeo.Check( &aBtnGeo == pBtn );
         aBtnRepresentation.Check( &aBtnRepresentation == pBtn );
         aBtnLight.Check( &aBtnLight == pBtn );
         aBtnTexture.Check( &aBtnTexture == pBtn );
         aBtnMaterial.Check( &aBtnMaterial == pBtn );
 
-        if( aBtnFavorites.IsChecked() )
-            eViewType = VIEWTYPE_FAVORITES;
         if( aBtnGeo.IsChecked() )
             eViewType = VIEWTYPE_GEO;
         if( aBtnRepresentation.IsChecked() )
@@ -2586,22 +2553,6 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
             eViewType = VIEWTYPE_TEXTURE;
         if( aBtnMaterial.IsChecked() )
             eViewType = VIEWTYPE_MATERIAL;
-
-        // Favoriten
-        if( eViewType == VIEWTYPE_FAVORITES )
-        {
-            aCtlFavorites.Show();
-            aFLFavorites.Show();
-            aBtnOnly3D.Show();
-            aBtnAllAttributes.Show();
-        }
-        else
-        {
-            aCtlFavorites.Hide();
-            aFLFavorites.Hide();
-            aBtnOnly3D.Hide();
-            aBtnAllAttributes.Hide();
-        }
 
         // Geometrie
         if( eViewType == VIEWTYPE_GEO )
@@ -2836,7 +2787,6 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
     }
     else
     {
-        aBtnFavorites.Check( eViewType == VIEWTYPE_FAVORITES );
         aBtnGeo.Check( eViewType == VIEWTYPE_GEO );
         aBtnRepresentation.Check( eViewType == VIEWTYPE_REPRESENTATION );
         aBtnLight.Check( eViewType == VIEWTYPE_LIGHT );
@@ -2862,15 +2812,6 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
         else if( pBtn == &aBtnLatheObject )
         {
             nSId = SID_CONVERT_TO_3D_LATHE_FAST;
-        }
-        // Favoriten
-        else if( pBtn == &aBtnOnly3D ||
-                 pBtn == &aBtnAllAttributes )
-        {
-            bOnly3DChanged = TRUE;
-            aBtnOnly3D.Check( pBtn == &aBtnOnly3D );
-            aBtnAllAttributes.Check( pBtn == &aBtnAllAttributes );
-            bUpdatePreview = TRUE;
         }
         // Geometrie
         else if( pBtn == &aBtnNormalsObj ||
@@ -3050,70 +2991,7 @@ IMPL_LINK( Svx3DWin, SelectHdl, void *, p )
         Color aColor;
         BOOL bUpdatePreview = FALSE;
 
-        // Material
-        if( p == &aLbMatFavorites )
-        {
-            Color aColObj( COL_WHITE );
-            Color aColEmis( COL_BLACK );
-            Color aColSpec( COL_WHITE );
-            USHORT nSpecIntens = 20;
-
-            USHORT nPos = aLbMatFavorites.GetSelectEntryPos();
-            switch( nPos )
-            {
-                case 1: // Metall
-                {
-                    aColObj = Color(230,230,255);
-                    aColEmis = Color(10,10,30);
-                    aColSpec = Color(200,200,200);
-                    nSpecIntens = 20;
-                }
-                break;
-
-                case 2: // Gold
-                {
-                    aColObj = Color(230,255,0);
-                    aColEmis = Color(51,0,0);
-                    aColSpec = Color(255,255,240);
-                    nSpecIntens = 20;
-                }
-                break;
-
-                case 3: // Chrom
-                {
-                    aColObj = Color(36,117,153);
-                    aColEmis = Color(18,30,51);
-                    aColSpec = Color(230,230,255);
-                    nSpecIntens = 2;
-                }
-                break;
-
-                case 4: // Plastik
-                {
-                    aColObj = Color(255,48,57);
-                    aColEmis = Color(35,0,0);
-                    aColSpec = Color(179,202,204);
-                    nSpecIntens = 60;
-                }
-                break;
-
-                case 5: // Holz
-                {
-                    aColObj = Color(153,71,1);
-                    aColEmis = Color(21,22,0);
-                    aColSpec = Color(255,255,153);
-                    nSpecIntens = 75;
-                }
-                break;
-            }
-            LBSelectColor( &aLbMatColor, aColObj );
-            LBSelectColor( &aLbMatEmission, aColEmis );
-            LBSelectColor( &aLbMatSpecular, aColSpec );
-            aMtrMatSpecularIntensity.SetValue( nSpecIntens );
-
-            bUpdatePreview = TRUE;
-        }
-        else if( p == &aLbMatColor ||
+        if( p == &aLbMatColor ||
                  p == &aLbMatEmission ||
                  p == &aLbMatSpecular )
         {
@@ -3255,108 +3133,6 @@ IMPL_LINK( Svx3DWin, DoubleClickHdl, void*, p )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( Svx3DWin, ClickFavoriteHdl, void*, p )
-{
-    USHORT nItemId = aCtlFavorites.GetSelectItemId();
-
-    if( nItemId > 0 )
-    {
-        // neues, leeres Model generieren
-        if(pModel)
-            delete pModel;
-        pModel = new FmFormModel();
-        pModel->GetItemPool().FreezeIdRanges();
-
-        if( GalleryExplorer::GetSdrObj( GALLERY_THEME_3D, nItemId-1, pModel ) )
-        {
-            // VDev
-            if(!pVDev)
-            {
-                pVDev = new VirtualDevice();
-                MapMode aMapMode( MAP_100TH_MM );
-                pVDev->SetMapMode( aMapMode );
-            }
-
-            // 3D View
-            E3dView a3DView( pModel, pVDev );
-            a3DView.SetMarkHdlHidden(TRUE);
-
-            // PageView
-            SdrPageView* pPageView = a3DView.ShowPagePgNum( 0, Point() );
-            a3DView.MarkAll();
-
-            // Status der Selektion am Preview setzen, SYNCHRON
-            SfxBoolItem aItem( SID_3D_STATE, TRUE );
-            SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
-                SID_3D_STATE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
-
-            // Attribute des Favoriten holen und setzen
-            SfxItemSet aFavoriteItemSet = a3DView.Get3DAttributes();
-
-            if( aBtnOnly3D.IsChecked())
-            {
-                // throw out 2d attributes
-                for(sal_uInt16 a(SDRATTR_START); a < SDRATTR_3D_FIRST; a++)
-                {
-                    if(a != SDRATTR_SHADOW
-                        // #100997# let the linestyle attribute set as in the favourite
-                        // since the default for 3d objects is different from 2d objects
-                        && a != XATTR_LINESTYLE)
-                    {
-                        aFavoriteItemSet.ClearItem(a);
-                    }
-                }
-            }
-
-            // #61783# Remove distance and focus from prototypes
-            aFavoriteItemSet.ClearItem(SDRATTR_3DSCENE_DISTANCE);
-            aFavoriteItemSet.ClearItem(SDRATTR_3DSCENE_FOCAL_LENGTH);
-
-            // set ItemSet
-            BOOL bOldUpdate(bUpdate);
-            bUpdate = FALSE;
-
-            if(mpRemember2DAttributes)
-            {
-                SfxItemSet aNewItemSet(*mpRemember2DAttributes);
-                SfxWhichIter aIter(aFavoriteItemSet);
-                sal_uInt16 nWhich(aIter.FirstWhich());
-
-                // #83024# remember original distance and focus
-                sal_uInt32 nDVal = ((const Svx3DDistanceItem&)aNewItemSet.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue();
-                sal_uInt32 nFVal = ((const Svx3DFocalLengthItem&)aNewItemSet.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
-
-                while(nWhich)
-                {
-                    SfxItemState eState = aFavoriteItemSet.GetItemState(nWhich, FALSE);
-                    if(SFX_ITEM_DONTCARE == eState)
-                        aNewItemSet.InvalidateItem(nWhich);
-                    else if(SFX_ITEM_SET == eState)
-                        aNewItemSet.Put(aFavoriteItemSet.Get(nWhich, FALSE));
-                    else
-                        aNewItemSet.ClearItem(nWhich);
-
-                    nWhich = aIter.NextWhich();
-                }
-
-                // #83024# restore original distance and focus
-                aNewItemSet.Put(Svx3DDistanceItem(nDVal));
-                aNewItemSet.Put(Svx3DFocalLengthItem(nFVal));
-
-                Update(aNewItemSet);
-            }
-            else
-            {
-                Update(aFavoriteItemSet);
-            }
-
-            bUpdate = bOldUpdate;
-        }
-    }
-    return( 0L );
-}
-
-// -----------------------------------------------------------------------
 
 IMPL_LINK( Svx3DWin, ChangeLightCallbackHdl, void*, p )
 {
@@ -3481,9 +3257,6 @@ void Svx3DWin::UpdatePreview()
             SID_3D_STATE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
         // Flag zuruecksetzen
         bOnly3DChanged = FALSE;
-
-        // Favorit nochmals anwenden
-        ClickFavoriteHdl(0);
     }
 
     // ItemSet besorgen
@@ -3492,7 +3265,6 @@ void Svx3DWin::UpdatePreview()
     // Attribute holen und im Preview setzen
     GetAttr( aSet );
     aCtlPreview.Set3DAttributes( aSet );
-    aCtlFavorites.SetNoSelection();
 }
 
 //////////////////////////////////////////////////////////////////////////////
