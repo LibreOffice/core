@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteGrabber.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-31 09:46:36 $
+ *  last change: $Author: mtg $ $Date: 2001-08-08 18:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_Int8& rInt8)
     if (xStream->readBytes(aSequence,1) != 1)
         rInt8 = 0;
     else
-        rInt8 = pSequence[0] & 0xFF;
+        rInt8 = aSequence[0] & 0xFF;
     return *this;
 }
 ByteGrabber& ByteGrabber::operator >> (sal_Int16& rInt16)
@@ -158,9 +158,12 @@ ByteGrabber& ByteGrabber::operator >> (sal_Int16& rInt16)
     if (xStream->readBytes ( aSequence, 2) != 2)
         rInt16 = 0;
     else
+    {
+        pSequence = aSequence.getConstArray();
         rInt16 = static_cast <sal_Int16>
                ( pSequence[0] & 0xFF
               | (pSequence[1] & 0xFF) << 8);
+    }
     return *this;
 }
 ByteGrabber& ByteGrabber::operator >> (sal_Int32& rInt32)
@@ -168,11 +171,14 @@ ByteGrabber& ByteGrabber::operator >> (sal_Int32& rInt32)
     if (xStream->readBytes(aSequence, 4) != 4)
         rInt32 = 0;
     else
+    {
+        pSequence = aSequence.getConstArray();
         rInt32 = static_cast < sal_Int32 >
                 ( pSequence[0] & 0xFF
               | ( pSequence[1] & 0xFF ) << 8
               | ( pSequence[2] & 0xFF ) << 16
               | ( pSequence[3] & 0xFF ) << 24 );
+    }
     return *this;
 }
 
@@ -181,7 +187,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_uInt8& rInt8)
     if (xStream->readBytes(aSequence,1) != 1)
         rInt8 = 0;
     else
-        rInt8 = static_cast < sal_uInt8 > (pSequence[0] & 0xFF );
+        rInt8 = static_cast < sal_uInt8 > (aSequence[0] & 0xFF );
     return *this;
 }
 ByteGrabber& ByteGrabber::operator >> (sal_uInt16& rInt16)
@@ -189,9 +195,12 @@ ByteGrabber& ByteGrabber::operator >> (sal_uInt16& rInt16)
     if (xStream->readBytes(aSequence, 2) != 2)
         rInt16 = 0;
     else
+    {
+        pSequence = aSequence.getConstArray();
         rInt16 = static_cast <sal_uInt16>
                ( pSequence[0] & 0xFF
               | (pSequence[1] & 0xFF) << 8);
+    }
     return *this;
 }
 ByteGrabber& ByteGrabber::operator >> (sal_uInt32& ruInt32)
@@ -199,10 +208,13 @@ ByteGrabber& ByteGrabber::operator >> (sal_uInt32& ruInt32)
     if (xStream->readBytes(aSequence, 4) != 4)
         ruInt32 = 0;
     else
+    {
+        pSequence = aSequence.getConstArray();
         ruInt32 = static_cast < sal_uInt32 >
                 ( pSequence[0] & 0xFF
               | ( pSequence[1] & 0xFF ) << 8
               | ( pSequence[2] & 0xFF ) << 16
               | ( pSequence[3] & 0xFF ) << 24 );
+    }
     return *this;
 }
