@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bootstrap_Test.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-21 15:30:35 $
+ *  last change: $Author: dbo $ $Date: 2002-10-23 09:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ public class Bootstrap_Test {
         System.out.println("usage:");
         System.out.println("java com.sun.star.comp.helper.Bootstrap_Test ini-file name=value ...");
         System.out.println("example:");
-        System.out.println("java com.sun.star.comp.helper.Bootstrap_Test file:///c:/ooo10/program/uno.ini BINDIR=file:///c:/ooo10/program");
+        System.out.println("java com.sun.star.comp.helper.Bootstrap_Test file:///c:/ooo10/program/uno.ini SYSBINDIR=file:///c:/ooo10/program");
         System.exit( -1 );
     }
 
