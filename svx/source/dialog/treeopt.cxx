@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:41:03 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 13:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,12 @@
 
 #include <comphelper/processfactory.hxx>
 
+#ifndef _SV_HELP_HXX
+#include <vcl/help.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
+#include <svtools/helpopt.hxx>
+#endif
 #ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
@@ -1125,8 +1131,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                 SID_ATTR_YEAR2000, SID_ATTR_YEAR2000,
                 0 );
 
-            SfxItemSet aOptSet(SFX_APP()->GetPool(),
-                    SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER);
+            SfxItemSet aOptSet( SFX_APP()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER );
             SFX_APP()->GetOptions(aOptSet);
             pRet->Put(aOptSet);
 
@@ -1272,17 +1277,15 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         {
             SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
             const SfxPoolItem* pItem;
-            SfxItemSet aOptSet(SFX_APP()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER);
+            SfxItemSet aOptSet(SFX_APP()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER );
             aOptSet.Put(rSet);
             if(aOptSet.Count())
                 SFX_APP()->SetOptions( aOptSet );
-    // Dispatcher neu holen, weil SetOptions() ggf. den Dispatcher zerst"ort hat
+            // Dispatcher neu holen, weil SetOptions() ggf. den Dispatcher zerst"ort hat
             SfxViewFrame *pViewFrame = SfxViewFrame::Current();
-
 // -------------------------------------------------------------------------
 //          Year2000 auswerten
 // -------------------------------------------------------------------------
-
             USHORT nY2K = USHRT_MAX;
             if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_YEAR2000, sal_False, &pItem ) )
                 nY2K = ((const SfxUInt16Item*)pItem)->GetValue();
@@ -1291,12 +1294,12 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
                 pDispatch->Execute( SID_ATTR_YEAR2000, SFX_CALLMODE_ASYNCHRON, pItem, 0L);
             }
+
             pMisc->SetYear2000(nY2K);
 
 // -------------------------------------------------------------------------
 //          Drucken auswerten
 // -------------------------------------------------------------------------
-
             if(SFX_ITEM_SET == rSet.GetItemState(SID_PRINTER_NOTFOUND_WARN, sal_False, &pItem))
                 pMisc->SetNotFoundWarning(((const SfxBoolItem*)pItem)->GetValue());
 
@@ -1306,7 +1309,13 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
                 pMisc->SetPaperSizeWarning(0 != (pFlag->GetValue() &  SFX_PRINTER_CHG_SIZE ));
                 pMisc->SetPaperOrientationWarning(0 !=  (pFlag->GetValue() & SFX_PRINTER_CHG_ORIENTATION ));
             }
-
+// -------------------------------------------------------------------------
+//          evaluate help options
+// -------------------------------------------------------------------------
+            if ( SvtHelpOptions().IsHelpTips() != Help::IsQuickHelpEnabled() )
+                SvtHelpOptions().IsHelpTips() ? Help::EnableQuickHelp() : Help::DisableQuickHelp();
+            if ( SvtHelpOptions().IsExtendedHelp() != Help::IsBalloonHelpEnabled() )
+                SvtHelpOptions().IsExtendedHelp() ? Help::EnableBalloonHelp() : Help::DisableBalloonHelp();
         }
         break;
         case SID_LANGUAGE_OPTIONS :
