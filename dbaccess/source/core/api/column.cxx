@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,7 +709,14 @@ Reference< XPropertySet > OColumns::createEmptyObject()
 // -------------------------------------------------------------------------
 Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    if(!m_pTable || (m_pTable && !m_pTable->isNew()))
+    Any aRet;
+    if(m_xDrvColumns.is())
+    {
+        aRet = m_xDrvColumns->queryInterface(rType);
+        if(aRet.hasValue())
+            aRet = OColumns_BASE::queryInterface( rType);
+    }
+    else if(!m_pTable || (m_pTable && !m_pTable->isNew()))
     {
         if(!m_bAddColumn    && rType == getCppuType( (Reference<XAppend>*)0))
             return Any();
@@ -722,14 +729,40 @@ Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeExcepti
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
 {
-    Type aAppendType = getCppuType( (Reference<XAppend>*)0);
-    Type aDropType = getCppuType( (Reference<XDrop>*)0);
+    sal_Bool bAppendFound = sal_False,bDropFound = sal_False;
 
+    sal_Int32 nSize = 0;
+    Type aAppendType = getCppuType( (Reference<XAppend>*)0);
+    Type aDropType   = getCppuType( (Reference<XDrop>*)0);
+    if(m_xDrvColumns.is())
+    {
+        Reference<XTypeProvider> xTypes(m_xDrvColumns,UNO_QUERY);
+        Sequence< Type > aTypes(xTypes->getTypes());
+
+        Sequence< Type > aSecTypes(OColumns_BASE::getTypes());
+
+
+        const Type* pBegin = aTypes.getConstArray();
+        const Type* pEnd = pBegin + aTypes.getLength();
+        for (;pBegin != pEnd ; ++pBegin)
+        {
+            if(aAppendType == *pBegin)
+                bAppendFound = sal_True;
+            else if(aDropType == *pBegin)
+                bDropFound = sal_True;
+        }
+        nSize = (bDropFound ? (bAppendFound ? 0 : 1) : (bAppendFound ? 1 : 2));
+    }
+    else
+    {
+        nSize = ((m_pTable && m_pTable->isNew()) ? 0 :
+                    ((m_bDropColumn ?
+                        (m_bAddColumn ? 0 : 1) : (m_bAddColumn ? 1 : 2))));
+        bDropFound      = (m_pTable && m_pTable->isNew()) || m_bDropColumn;
+        bAppendFound    = (m_pTable && m_pTable->isNew()) || m_bAddColumn;
+    }
     Sequence< Type > aTypes(OColumns_BASE::getTypes());
-    Sequence< Type > aRet(aTypes.getLength() -
-        ((m_pTable && m_pTable->isNew()) ? 0 :
-            ((m_bDropColumn ?
-                (m_bAddColumn ? 0 : 1) : (m_bAddColumn ? 1 : 2)))));
+    Sequence< Type > aRet(aTypes.getLength() - nSize);
 
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
@@ -737,9 +770,9 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
     {
         if(*pBegin != aAppendType && *pBegin != aDropType)
             aRet.getArray()[i++] = *pBegin;
-        else if((m_pTable && m_pTable->isNew()) || (m_bDropColumn && *pBegin == aDropType))
+        else if(bDropFound && *pBegin == aDropType)
             aRet.getArray()[i++] = *pBegin;
-        else if((m_pTable && m_pTable->isNew()) || (m_bAddColumn && *pBegin == aAppendType))
+        else if(bAppendFound && *pBegin == aAppendType)
             aRet.getArray()[i++] = *pBegin;
     }
     return aRet;
@@ -748,9 +781,6 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
 // XAppend
 void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
 {
-    if(m_pTable && !m_pTable->isNew() && !m_bAddColumn)
-        throw SQLException();
-
     ::osl::MutexGuard aGuard(m_rMutex);
 
     Reference<XAppend> xAppend(m_xDrvColumns,UNO_QUERY);
@@ -758,7 +788,7 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
     {
         xAppend->appendByDescriptor(descriptor);
     }
-    else if(m_pTable && !m_pTable->isNew())
+    else if(m_pTable && !m_pTable->isNew() && m_bAddColumn)
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
         ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
@@ -831,6 +861,8 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
     }
+    else if(m_pTable && !m_pTable->isNew() && !m_bAddColumn)
+        throw SQLException();
 
     OColumns_BASE::appendByDescriptor(descriptor);
 }
@@ -838,11 +870,14 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
 // XDrop
 void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
-    if(m_pTable && !m_pTable->isNew() && !m_bDropColumn)
-        throw SQLException();
-
     ::osl::MutexGuard aGuard(m_rMutex);
-    if(m_pTable && !m_pTable->isNew())
+
+    Reference<XDrop> xDrop(m_xDrvColumns,UNO_QUERY);
+    if(xDrop.is())
+    {
+        xDrop->dropByName(elementName);
+    }
+    else if(m_pTable && !m_pTable->isNew() && m_bDropColumn)
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
         ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
@@ -866,6 +901,8 @@ void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(S
         if(xStmt.is())
             xStmt->execute(aSql);
     }
+    else if(m_pTable && !m_pTable->isNew() && !m_bDropColumn)
+        throw SQLException();
 
     OColumns_BASE::dropByName(elementName);
 }

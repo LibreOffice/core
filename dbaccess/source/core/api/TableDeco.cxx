@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,7 @@ void ODBTableDecorator::construct()
                     &m_nPrivileges, ::getCppuType(static_cast<sal_Int32*>(NULL)));
 }
 // -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* ODBTableDecorator::createArrayHelper() const
+::cppu::IPropertyArrayHelper* ODBTableDecorator::createArrayHelper(sal_Int32 _nId) const
 {
     Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
     Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
@@ -381,7 +381,10 @@ void ODBTableDecorator::construct()
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & SAL_CALL ODBTableDecorator::getInfoHelper()
 {
-    return *ODBTableDecorator_PROP::getArrayHelper();
+    Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
+    Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
+
+    return *ODBTableDecorator_PROP::getArrayHelper((xInfo->getPropertyByName(PROPERTY_NAME).Attributes & PropertyAttribute::READONLY) == PropertyAttribute::READONLY ? 1 : 0);
 }
 // -------------------------------------------------------------------------
 // XServiceInfo

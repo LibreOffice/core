@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 07:13:59 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
 
         if(_rUpdateTableName.getLength() && xTables->hasByName(_rUpdateTableName))
             xTables->getByName(_rUpdateTableName) >>= m_aUpdateTable;
-        else
+        else if(xTables->getElementNames().getLength())
         {
             aUpdateTableName = xTables->getElementNames()[0];
             xTables->getByName(aUpdateTableName) >>= m_aUpdateTable;
@@ -1807,6 +1807,9 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.31  2001/04/19 07:13:59  fs
+    throwFunctionSequenceException instead of throw FunctionSequenceException (bridge problems)
+
     Revision 1.30  2001/04/06 10:51:29  oj
     #85825# initialize pcache=NULL
 

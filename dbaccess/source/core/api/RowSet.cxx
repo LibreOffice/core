@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 11:44:05 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,10 +372,6 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
                 m_aActiveConnection >>= xNewConnection;
                 setActiveConnection(xNewConnection, sal_False);
             }
-
-            // if we owned the connection, dispose it
-            if(m_bOwnConnection)
-                ::comphelper::disposeComponent(m_xActiveConnection);
 
             m_bOwnConnection        = sal_False;
             m_bCreateStatement      = sal_True;
