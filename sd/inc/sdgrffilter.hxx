@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdgrffilter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:17:37 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@ public:
         sal_Bool bShowProgress );
     virtual ~SdGRFFilter (void);
 
-    virtual sal_Bool        Import();
-    virtual sal_Bool        Export();
+    sal_Bool        Import();
+    sal_Bool        Export();
 
     static void             HandleGraphicFilterError( USHORT nFilterError, ULONG nStreamError = ERRCODE_NONE );
 
