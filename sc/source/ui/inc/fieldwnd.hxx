@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:31:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:33:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #define SC_FIELDWND_HXX
 
 #include <vector>
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
 #ifndef _SV_CTRL_HXX
 #include <vcl/ctrl.hxx>
@@ -143,7 +147,7 @@ private:
     /** @return  TRUE, if the field with the given index exists. */
     bool                    IsExistingIndex( size_t nIndex ) const;
     /** @return  The new selection index after moving to the given direction. */
-    size_t                  CalcNewFieldIndex( short nDX, short nDY ) const;
+    size_t                  CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const;
 
     /** Sets selection to the field with index nIndex. */
     void                    SetSelection( size_t nIndex );
@@ -152,12 +156,12 @@ private:
     /** Sets selection to last field. */
     void                    SetSelectionEnd();
     /** Sets selection to new position relative to current. */
-    void                    MoveSelection( USHORT nKeyCode, short nDX, short nDY );
+    void                    MoveSelection( USHORT nKeyCode, SCsCOL nDX, SCsROW nDY );
 
     /** Moves the selected field to nDestIndex. */
     void                    MoveField( size_t nDestIndex );
     /** Moves the selected field to the given direction. */
-    void                    MoveFieldRel( short nDX, short nDY );
+    void                    MoveFieldRel( SCsCOL nDX, SCsROW nDY );
 
 protected:
     virtual void            Paint( const Rectangle& rRect );
