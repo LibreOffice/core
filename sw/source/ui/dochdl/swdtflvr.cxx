@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-10 13:03:07 $
+ *  last change: $Author: jp $ $Date: 2001-10-10 13:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2658,10 +2658,6 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh,
 
     USHORT nDest = SwTransferable::GetSotDestination( rSh );
 
-    // Vorhandene Formate in die ListBox eintragen
-    if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_SVXB, nDest ))
-        pDlg->Insert( SOT_FORMATSTR_ID_SVXB, aEmptyStr );
-
     SwTransferable *pClipboard = SW_MOD()->pClipboard;
     if( pClipboard )
     {
@@ -2743,10 +2739,6 @@ void SwTransferable::FillClipFmtItem( SwWrtShell& rSh,
                                 SvxClipboardFmtItem & rToFill )
 {
     USHORT nDest = SwTransferable::GetSotDestination( rSh );
-    // Vorhandene Formate in die ListBox eintragen
-    if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_SVXB, nDest ))
-        rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_SVXB );
-
     SwTransferable *pClipboard = SW_MOD()->pClipboard;
     if( pClipboard )
     {
