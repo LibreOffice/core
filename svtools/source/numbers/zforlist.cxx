@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2001-01-16 15:48:10 $
+ *  last change: $Author: er $ $Date: 2001-01-26 17:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,19 +196,23 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     SysLnge = eLang;
     ActLnge = eLang;
     eEvalDateFormat = NF_EVALDATEFORMAT_INTL;
+    nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
     nDefaultCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
-    if ( !International::IsFormatAvailable( eLang ) )
-        eLang = UNKNOWN_SUBSTITUTE;
-    pIntl = new International( eLang );
+
     aLocale = ConvertLanguageToLocale( eLang );
     pCharClass = new CharClass( xServiceManager, aLocale );
     pLocaleData = new LocaleDataWrapper( xServiceManager, aLocale );
     pCalendar = new CalendarWrapper( xServiceManager );
     pCalendar->loadDefaultCalendar( aLocale );
+
+    if ( !International::IsFormatAvailable( eLang ) )
+        eLang = UNKNOWN_SUBSTITUTE;
+    pIntl = new International( eLang );
+
     pStringScanner = new ImpSvNumberInputScan( this );
     pFormatScanner = new ImpSvNumberformatScan( this );
     pFormatTable = NULL;
-    ImpGenerateFormats(0);                      // 0 .. 999 fuer SystemEinst.
+    ImpGenerateFormats( 0, FALSE );     // 0 .. 999 for System formats
     MaxCLOffset = 0;
     pMergeTable = new SvULONGTable;
     bNoZero = FALSE;
@@ -220,16 +224,18 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
 {
     if (ActLnge != eLnge)
     {
-        delete pIntl;
         ActLnge = eLnge;
-        if ( !International::IsFormatAvailable( eLnge ) )
-            eLnge = UNKNOWN_SUBSTITUTE;
-        pIntl = new International( eLnge );
+        nDefaultCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
         aLocale = ConvertLanguageToLocale( eLnge );
         pCharClass->setLocale( aLocale );
         pLocaleData->setLocale( aLocale );
         pCalendar->loadDefaultCalendar( aLocale );
+
+        delete pIntl;
+        if ( !International::IsFormatAvailable( eLnge ) )
+            eLnge = UNKNOWN_SUBSTITUTE;
+        pIntl = new International( eLnge );
 
         pFormatScanner->ChangeIntl();
         pStringScanner->ChangeIntl();
@@ -281,7 +287,7 @@ short SvNumberFormatter::GetStandardPrec()
     return pFormatScanner->GetStandardPrec();
 }
 
-void SvNumberFormatter::ImpChangeSysCL(LanguageType eLnge)
+void SvNumberFormatter::ImpChangeSysCL( LanguageType eLnge, BOOL bLoadingSO5 )
 {
     if (eLnge == LANGUAGE_DONTKNOW)
         eLnge = UNKNOWN_SUBSTITUTE;
@@ -290,13 +296,24 @@ void SvNumberFormatter::ImpChangeSysCL(LanguageType eLnge)
         SysLnge = eLnge;
         ChangeIntl(eLnge);
         SvNumberformat* pEntry = aFTable.First();
-        while (pEntry)                          // alte Formate loeschen
+        while (pEntry)                          // delete old formats
         {
             pEntry = (SvNumberformat*) aFTable.Remove(aFTable.GetCurKey());
             delete pEntry;
             pEntry = (SvNumberformat*) aFTable.First();
         }
-        ImpGenerateFormats(0);                      // wieder neue Standardformate
+        ImpGenerateFormats( 0, bLoadingSO5 );   // new standard formats
+    }
+    else if ( bLoadingSO5 )
+    {   // delete additional standard formats
+        ULONG nKey;
+        aFTable.Seek( SV_MAX_ANZ_STANDARD_FORMATE );
+        while ( (nKey = aFTable.GetCurKey()) >= SV_MAX_ANZ_STANDARD_FORMATE &&
+                nKey < SV_COUNTRY_LANGUAGE_OFFSET )
+        {
+            SvNumberformat* pEntry = (SvNumberformat*) aFTable.Remove( nKey );
+            delete pEntry;
+        }
     }
 }
 
@@ -361,11 +378,9 @@ BOOL SvNumberFormatter::PutEntry(String& rString,
             delete p_Entry;
         else
         {
-            bCheck = TRUE;
             SvNumberformat* pStdFormat =
                      (SvNumberformat*) aFTable.Get(CLOffset + ZF_STANDARD);
             ULONG nPos = CLOffset + pStdFormat->GetLastInsertKey();
-//          ULONG nPos = ImpGetLastCLEntryKey(CLOffset, eLge);
             if (nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
             {
                 Sound::Beep();
@@ -376,6 +391,7 @@ BOOL SvNumberFormatter::PutEntry(String& rString,
                 delete p_Entry;
             else
             {
+                bCheck = TRUE;
                 nKey = nPos+1;
                 pStdFormat->SetLastInsertKey((USHORT) (nKey-CLOffset));
             }
@@ -462,14 +478,14 @@ BOOL SvNumberFormatter::Load( SvStream& rStream )
     eSaveSysLang = (nVersion < SV_NUMBERFORMATTER_VERSION_SYSTORE ?
         LANGUAGE_SYSTEM : (LanguageType) nSysOnStore);
     LanguageType eLnge = (LanguageType) eLge;
-    ImpChangeSysCL(eLnge);
+    ImpChangeSysCL( eLnge, TRUE );
 
     rStream >> nPos;
     while (nPos != NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
         rStream >> eDummy >> eLge;
         eLnge = (LanguageType) eLge;
-        ImpGenerateCL(eLnge);           // ggfs. neue Standardformate anlegen
+        ImpGenerateCL( eLnge, TRUE );           // ggfs. neue Standardformate anlegen
 
         ULONG nOffset = nPos % SV_COUNTRY_LANGUAGE_OFFSET;      // relativIndex
         BOOL bUserDefined = (nOffset > SV_MAX_ANZ_STANDARD_FORMATE);
@@ -627,6 +643,22 @@ BOOL SvNumberFormatter::Load( SvStream& rStream )
 
     if ( pConverter )
         delete pConverter;
+
+    // generate additional i18n standard formats for all used locales
+    LanguageType eOldLanguage = ActLnge;
+    NumberFormatCodeWrapper aNumberFormatCode( xServiceManager, GetLocale() );
+    SvUShorts aList;
+    GetUsedLanguages( aList );
+    USHORT nCount = aList.Count();
+    for ( USHORT j=0; j<nCount; j++ )
+    {
+        LanguageType eLang = aList[j];
+        ChangeIntl( eLang );
+        ULONG CLOffset = ImpGetCLOffset( eLang );
+        ImpGenerateAdditionalFormats( CLOffset, aNumberFormatCode );
+    }
+    ChangeIntl( eOldLanguage );
+
     if (rStream.GetError())
         return FALSE;
     else
@@ -759,24 +791,6 @@ ULONG SvNumberFormatter::ImpIsEntry(const String& rString,
     return res;
 }
 
-/*
-ULONG SvNumberFormatter::ImpGetLastCLEntryKey(ULONG nCLOffset,
-                                           LanguageType eLnge)
-{
-        // Diese Funktion ist ueberfluesssig geworden 3.3.95
-    ULONG res = 0;
-    SvNumberformat* pEntry;
-    pEntry = (SvNumberformat*) aFTable.Seek(nCLOffset);
-    while (pEntry && pEntry->GetLanguage() == eLnge)
-    {
-        res = aFTable.GetCurKey();
-        pEntry = (SvNumberformat*) aFTable.Next();
-    }
-    if (res < nCLOffset + SV_MAX_ANZ_STANDARD_FORMATE) // nie bei den Standard-
-        res = nCLOffset + SV_MAX_ANZ_STANDARD_FORMATE; // formaten
-    return res;
-}
-*/
 
 SvNumberFormatTable& SvNumberFormatter::GetFirstEntryTable(
                                                       short& eType,
@@ -818,7 +832,7 @@ SvNumberFormatTable& SvNumberFormatter::GetFirstEntryTable(
     return GetEntryTable(eTypetmp, FIndex, rLnge);
 }
 
-ULONG SvNumberFormatter::ImpGenerateCL(LanguageType eLnge)
+ULONG SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, BOOL bLoadingSO5 )
 {
     ChangeIntl(eLnge);
     ULONG CLOffset = ImpGetCLOffset(ActLnge);
@@ -864,7 +878,7 @@ ULONG SvNumberFormatter::ImpGenerateCL(LanguageType eLnge)
         }
 #endif
         MaxCLOffset += SV_COUNTRY_LANGUAGE_OFFSET;
-        ImpGenerateFormats(MaxCLOffset);
+        ImpGenerateFormats( MaxCLOffset, bLoadingSO5 );
         CLOffset = MaxCLOffset;
     }
     return CLOffset;
@@ -1050,7 +1064,7 @@ ULONG SvNumberFormatter::GetStandardFormat( short eType, LanguageType eLnge )
             if ( eLnge == LANGUAGE_SYSTEM )
                 return ImpGetDefaultSystemCurrencyFormat();
             else
-                return CLOffset + ZF_STANDARD_CURRENCY+3;
+                return ImpGetDefaultCurrencyFormat();
         }
         case NUMBERFORMAT_PERCENT   : return CLOffset + ZF_STANDARD_PERCENT+1;
         case NUMBERFORMAT_SCIENTIFIC: return CLOffset + ZF_STANDARD_SCIENTIFIC;
@@ -1397,7 +1411,9 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
 #ifndef PRODUCT
             if ( rCode.Index != NF_CURRENCY_1000DEC2_CCC )
             {
-                ByteString aMsg( "ImpInsertFormat: no [$...] on currency: " );
+                ByteString aMsg( "ImpInsertFormat: no [$...] on currency format code, index " );
+                aMsg += ByteString::CreateFromInt32( rCode.Index );
+                aMsg += ":\n";
                 aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
                 DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
             }
@@ -1413,20 +1429,53 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
     if ( !pFormat || nCheckPos > 0 )
     {
 #ifndef PRODUCT
-        ByteString aMsg( "ImpInsertFormat: bad numberformat code: " );
+        ByteString aMsg( "ImpInsertFormat: bad format code, index " );
+        aMsg += ByteString::CreateFromInt32( rCode.Index );
+        aMsg += '\n';
         aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
 #endif
         delete pFormat;
-        return NULL;;
+        return NULL;
+    }
+    if ( rCode.Index >= NF_INDEX_TABLE_ENTRIES )
+    {
+        ULONG nCLOffset = nPos - (nPos % SV_COUNTRY_LANGUAGE_OFFSET);
+        ULONG nKey = ImpIsEntry( aCodeStr, nCLOffset, ActLnge );
+        if ( nKey != NUMBERFORMAT_ENTRY_NOT_FOUND )
+        {
+#ifndef PRODUCT
+             ByteString aMsg( "ImpInsertFormat: dup format code, index " );
+            aMsg += ByteString::CreateFromInt32( rCode.Index );
+            aMsg += '\n';
+            aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
+            DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
+#endif
+            delete pFormat;
+            return NULL;
+        }
+        else if ( nPos - nCLOffset >= SV_COUNTRY_LANGUAGE_OFFSET )
+        {
+#ifndef PRODUCT
+            ByteString aMsg( "ImpInsertFormat: too many format codes, index " );
+            aMsg += ByteString::CreateFromInt32( rCode.Index );
+            aMsg += '\n';
+            aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
+            DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
+#endif
+            delete pFormat;
+            return NULL;
+        }
     }
     if ( !aFTable.Insert( nPos, pFormat ) )
     {
 #ifndef PRODUCT
-        ByteString aMsg( "ImpInsertFormat: can't insert number format key: " );
+        ByteString aMsg( "ImpInsertFormat: can't insert number format key pos: " );
         aMsg += ByteString::CreateFromInt32( nPos );
-        aMsg.Append( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-        aMsg += ByteString( aCodeStr, RTL_TEXTENCODING_UTF8 );
+        aMsg.Append( RTL_CONSTASCII_STRINGPARAM( ", code index " ) );
+        aMsg += ByteString::CreateFromInt32( rCode.Index );
+        aMsg += '\n';
+        aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
 #endif
         delete pFormat;
@@ -1439,7 +1488,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
     return pFormat;
 }
 
-void SvNumberFormatter::ImpInsertNewStandardFormat(
+SvNumberformat* SvNumberFormatter::ImpInsertNewStandardFormat(
             const ::com::sun::star::i18n::NumberFormatCode& rCode,
             ULONG nPos, USHORT nVersion )
 {
@@ -1447,6 +1496,7 @@ void SvNumberFormatter::ImpInsertNewStandardFormat(
     if (pNewFormat)
         pNewFormat->SetNewStandardDefined( nVersion );
         // so that it gets saved, displayed properly, and converted by old versions
+    return pNewFormat;
 }
 
 void SvNumberFormatter::GetFormatSpecialInfo(ULONG nFormat,
@@ -1518,7 +1568,7 @@ inline ULONG SetIndexTable( NfIndexTableOffset nTabOff, ULONG nIndOff )
 }
 
 
-sal_Int32 SvNumberFormatter::GetFormatCodeIndex(
+sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
             ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode >& rSeq,
             const NfIndexTableOffset nTabOff )
 {
@@ -1533,7 +1583,7 @@ sal_Int32 SvNumberFormatter::GetFormatCodeIndex(
       || nTabOff == NF_CURRENCY_1000INT || nTabOff == NF_CURRENCY_1000INT_RED
       || nTabOff == NF_CURRENCY_1000DEC2_CCC )
     {   // currency entries with decimals might not exist, e.g. Italian Lira
-        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "GetFormatCodeIndex: not found: " ) );
+        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "ImpGetFormatCodeIndex: not found: " ) );
         aMsg += ByteString::CreateFromInt32( nTabOff );
         DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
     }
@@ -1578,7 +1628,7 @@ sal_Int32 SvNumberFormatter::GetFormatCodeIndex(
 }
 
 
-void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
+void SvNumberFormatter::ImpGenerateFormats( ULONG CLOffset, BOOL bLoadingSO5 )
 {
     using namespace ::com::sun::star;
 
@@ -1609,16 +1659,23 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 
     // General
     aFormatCode = pFormatScanner->GetStandardName();
-    pNewFormat = new SvNumberformat( aFormatCode,
+    SvNumberformat* pStdFormat = new SvNumberformat( aFormatCode,
         pFormatScanner, pStringScanner, nCheckPos, ActLnge );
-    pNewFormat->SetType(NUMBERFORMAT_NUMBER);
-    pNewFormat->SetStandard();
+    pStdFormat->SetType( NUMBERFORMAT_NUMBER );
+    pStdFormat->SetStandard();
     if ( !aFTable.Insert(
             CLOffset + SetIndexTable( NF_NUMBER_STANDARD, ZF_STANDARD ),
-            pNewFormat))
-        delete pNewFormat;
+            pStdFormat ) )
+    {
+#ifndef PRODUCT
+         ByteString aMsg( "ImpGenerateFormats: General format not insertable, nothing will work" );
+        DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
+#endif
+        delete pStdFormat;
+        pStdFormat = NULL;
+    }
     else
-        pNewFormat->SetLastInsertKey(SV_MAX_ANZ_STANDARD_FORMATE);
+        pStdFormat->SetLastInsertKey( SV_MAX_ANZ_STANDARD_FORMATE );
 
     // Boolean
     aFormatCode = pFormatScanner->GetBooleanString();
@@ -1649,27 +1706,27 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
         = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::FIXED_NUMBER );
 
     // 0
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_NUMBER_INT );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_NUMBER_INT );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_NUMBER_INT, ZF_STANDARD+1 ));
 
     // 0.00
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_NUMBER_DEC2 );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_NUMBER_DEC2 );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_NUMBER_DEC2, ZF_STANDARD+2 ));
 
     // #,##0
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_NUMBER_1000INT );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_NUMBER_1000INT );
     ImpInsertFormat( aFormatSeq[nIdx],
             CLOffset + SetIndexTable( NF_NUMBER_1000INT, ZF_STANDARD+3 ));
 
     // #,##0.00
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_NUMBER_1000DEC2 );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_NUMBER_1000DEC2 );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_NUMBER_1000DEC2, ZF_STANDARD+4 ));
 
     // #.##0,00 System country/language dependent   since number formatter version 6
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_NUMBER_SYSTEM );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_NUMBER_SYSTEM );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_NUMBER_SYSTEM, ZF_STANDARD+5 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
@@ -1679,12 +1736,12 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::PERCENT_NUMBER );
 
     // 0%
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_PERCENT_INT );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_PERCENT_INT );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_PERCENT_INT, ZF_STANDARD_PERCENT ));
 
     // 0.00%
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_PERCENT_DEC2 );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_PERCENT_DEC2 );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_PERCENT_DEC2, ZF_STANDARD_PERCENT+1 ));
 
@@ -1694,7 +1751,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::CURRENCY );
 
     // #,##0
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT );
     bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertFormat( aFormatSeq[nIdx],
@@ -1702,7 +1759,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq[nIdx].Default = bDefault;
 
     // #,##0.00
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2 );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2 );
     bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertFormat( aFormatSeq[nIdx],
@@ -1711,7 +1768,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq[nIdx].Default = bDefault;
 
     // #,##0 negative red
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT_RED );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT_RED );
     bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertFormat( aFormatSeq[nIdx],
@@ -1719,7 +1776,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq[nIdx].Default = bDefault;
 
     // #,##0.00 negative red
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_RED );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_RED );
     bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertFormat( aFormatSeq[nIdx],
@@ -1727,7 +1784,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq[nIdx].Default = bDefault;
 
     // #,##0.00 USD   since number formatter version 3
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_CCC );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_CCC );
     bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = sal_False;
     pNewFormat = ImpInsertFormat( aFormatSeq[nIdx],
@@ -1737,7 +1794,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq[nIdx].Default = bDefault;
 
     // #.##0,--   since number formatter version 6
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_DASHED );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_DASHED );
     bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
@@ -1778,51 +1835,51 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::DATE );
 
     // DD.MM.YY   System
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYSTEM_SHORT );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYSTEM_SHORT );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYSTEM_SHORT, ZF_STANDARD_DATE ));
 
     // NN DD.MMM YY
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_DEF_NNDDMMMYY );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DEF_NNDDMMMYY );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DEF_NNDDMMMYY, ZF_STANDARD_DATE+1 ));
 
     // DD.MM.YY   def/System
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_MMYY );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_MMYY );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_MMYY, ZF_STANDARD_DATE+2 ));
 
     // DD MMM
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMM );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMM );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DDMMM, ZF_STANDARD_DATE+3 ));
 
     // MMMM
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_MMMM );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_MMMM );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_MMMM, ZF_STANDARD_DATE+4 ));
 
     // QQ YY
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_QQJJ );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_QQJJ );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_QQJJ, ZF_STANDARD_DATE+5 ));
 
     // DD.MM.YYYY   since number formatter version 2, was DD.MM.[YY]YY
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMYYYY );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMYYYY );
     pNewFormat = ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DDMMYYYY, ZF_STANDARD_DATE+6 ));
     if ( pNewFormat )
         pNewFormat->SetUsed(TRUE);      // must be saved for older versions
 
     // DD.MM.YY   def/System, since number formatter version 6
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMYY );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DDMMYY, ZF_STANDARD_DATE+7 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // NNN, D. MMMM YYYY   System
     // Long day of week: "NNNN" instead of "NNN," because of compatibility
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYSTEM_LONG );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYSTEM_LONG );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYSTEM_LONG, ZF_STANDARD_DATE+8 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
@@ -1831,7 +1888,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     // since numberformatter version 6
 
     // D. MMM YY   def/System
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMYY );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DMMMYY, ZF_STANDARD_DATE+9 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
@@ -1841,31 +1898,31 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     //! Therefore they are inserted with nNewExtended++ (which is also limited)
 
     // D. MMM YYYY   def/System
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMYYYY );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMYYYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // D. MMMM YYYY   def/System
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMMYYYY );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMMYYYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DMMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // NN, D. MMM YY   def/System
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNDMMMYY );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNDMMMYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_NNDMMMYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // NN, D. MMMM YYYY   def/System
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNDMMMMYYYY );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNDMMMMYYYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_NNDMMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // NNN, D. MMMM YYYY   def/System
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNNNDMMMMYYYY );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNNNDMMMMYYYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_NNNNDMMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
@@ -1873,31 +1930,31 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     // Hard coded DIN (Deutsche Industrie Norm) and EN (European Norm) date formats
 
     // D. MMM. YYYY   DIN/EN
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_DMMMYYYY );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_DMMMYYYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DIN_DMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // D. MMMM YYYY   DIN/EN
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_DMMMMYYYY );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_DMMMMYYYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DIN_DMMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // MM-DD   DIN/EN
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_MMDD );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_MMDD );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DIN_MMDD, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // YY-MM-DD   DIN/EN
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_YYMMDD );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_YYMMDD );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DIN_YYMMDD, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // YYYY-MM-DD   DIN/EN
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_YYYYMMDD );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_YYYYMMDD );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DIN_YYYYMMDD, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
@@ -1908,37 +1965,37 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::TIME );
 
     // HH:MM
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMM );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_TIME_HHMM );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HHMM, ZF_STANDARD_TIME ));
 
     // HH:MM:SS
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMMSS );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_TIME_HHMMSS );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HHMMSS, ZF_STANDARD_TIME+1 ));
 
     // HH:MM AM/PM
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMMAMPM );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_TIME_HHMMAMPM );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HHMMAMPM, ZF_STANDARD_TIME+2 ));
 
     // HH:MM:SS AM/PM
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMMSSAMPM );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_TIME_HHMMSSAMPM );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HHMMSSAMPM, ZF_STANDARD_TIME+3 ));
 
     // [HH]:MM:SS
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_TIME_HH_MMSS );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_TIME_HH_MMSS );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HH_MMSS, ZF_STANDARD_TIME+4 ));
 
     // MM:SS,00
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_TIME_MMSS00 );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_TIME_MMSS00 );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_MMSS00, ZF_STANDARD_TIME+5 ));
 
     // [HH]:MM:SS,00
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_TIME_HH_MMSS00 );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_TIME_HH_MMSS00 );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HH_MMSS00, ZF_STANDARD_TIME+6 ),
         SV_NUMBERFORMATTER_VERSION_NF_TIME_HH_MMSS00 );
@@ -1949,12 +2006,12 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::DATE_TIME );
 
     // DD.MM.YY HH:MM   System
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATETIME_SYSTEM_SHORT_HHMM );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATETIME_SYSTEM_SHORT_HHMM );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATETIME_SYSTEM_SHORT_HHMM, ZF_STANDARD_DATETIME ));
 
     // DD.MM.YYYY HH:MM:SS   System
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATETIME_SYS_DDMMYYYY_HHMMSS );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATETIME_SYS_DDMMYYYY_HHMMSS );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, ZF_STANDARD_DATETIME+1 ),
         SV_NUMBERFORMATTER_VERSION_NF_DATETIME_SYS_DDMMYYYY_HHMMSS );
@@ -1965,12 +2022,12 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER );
 
     // 0.00E+000
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_SCIENTIFIC_000E000 );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_SCIENTIFIC_000E000 );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_SCIENTIFIC_000E000, ZF_STANDARD_SCIENTIFIC ));
 
     // 0.00E+00
-    nIdx = GetFormatCodeIndex( aFormatSeq, NF_SCIENTIFIC_000E00 );
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_SCIENTIFIC_000E00 );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_SCIENTIFIC_000E00, ZF_STANDARD_SCIENTIFIC+1 ));
 
@@ -2001,10 +2058,75 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 
 
     bIndexTableInitialized = TRUE;
+    DBG_ASSERT( nNewExtended <= ZF_STANDARD_NEWEXTENDEDMAX,
+        "ImpGenerateFormats: overflow of nNewExtended standard formats" );
+
+    // Now all additional format codes provided by I18N, but only if not
+    // loading from old SO5 file format, then they are appended last.
+    if ( !bLoadingSO5 )
+        ImpGenerateAdditionalFormats( CLOffset, aNumberFormatCode );
+
     if (bOldConvertMode)
         pFormatScanner->SetConvertMode(TRUE);
-    DBG_ASSERT( nNewExtended <= ZF_STANDARD_NEWEXTENDEDMAX,
-        "ImpGenerateFormtas: overflow of nNewExtended standard formats" );
+}
+
+
+void SvNumberFormatter::ImpGenerateAdditionalFormats( ULONG CLOffset,
+            NumberFormatCodeWrapper& rNumberFormatCode )
+{
+    using namespace ::com::sun::star;
+
+    SvNumberformat* pStdFormat =
+        (SvNumberformat*) aFTable.Get( CLOffset + ZF_STANDARD );
+    if ( !pStdFormat )
+    {
+        DBG_ERRORFILE( "ImpGenerateAdditionalFormats: no GENERAL format" );
+        return ;
+    }
+    ULONG nPos = CLOffset + pStdFormat->GetLastInsertKey();
+    rNumberFormatCode.setLocale( GetLocale() );
+    sal_Int32 j;
+
+    // All currencies, this time with [$...] which was stripped in
+    // ImpGenerateFormats for old "automatic" currency formats.
+    uno::Sequence< i18n::NumberFormatCode > aFormatSeq =
+        rNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::CURRENCY );
+    sal_Int32 nCodes = aFormatSeq.getLength();
+    for ( j = 0; j < nCodes; j++ )
+    {
+        if ( nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET )
+        {
+            DBG_ERRORFILE( "ImpGenerateAdditionalFormats: too many formats" );
+            break;  // for
+        }
+        if ( aFormatSeq[j].Index < NF_INDEX_TABLE_ENTRIES &&
+                aFormatSeq[j].Index != NF_CURRENCY_1000DEC2_CCC )
+        {   // Insert only if not already inserted, but internal index must be
+            // above so ImpInsertFormat can distinguish it.
+            aFormatSeq[j].Index += nCodes + NF_INDEX_TABLE_ENTRIES;
+            if ( ImpInsertNewStandardFormat( aFormatSeq[j], nPos+1,
+                    SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS ) )
+                nPos++;
+        }
+    }
+
+    // all additional format codes provided by I18N that are not old standard index
+    aFormatSeq = rNumberFormatCode.getAllFormatCodes();
+    nCodes = aFormatSeq.getLength();
+    for ( j = 0; j < nCodes; j++ )
+    {
+        if ( nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET )
+        {
+            DBG_ERRORFILE( "ImpGenerateAdditionalFormats: too many formats" );
+            break;  // for
+        }
+        if ( aFormatSeq[j].Index >= NF_INDEX_TABLE_ENTRIES )
+            if ( ImpInsertNewStandardFormat( aFormatSeq[j], nPos+1,
+                    SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS ) )
+                nPos++;
+    }
+
+    pStdFormat->SetLastInsertKey( (USHORT)(nPos - CLOffset) );
 }
 
 
@@ -2382,23 +2504,123 @@ const NfCurrencyEntry& SvNumberFormatter::GetCurrencyEntry( LanguageType eLang )
 
 ULONG SvNumberFormatter::ImpGetDefaultSystemCurrencyFormat()
 {
-    if ( nDefaultCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
+    if ( nDefaultSystemCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
         xub_StrLen nCheck;
         short nType;
         NfWSStringsDtor aCurrList;
         USHORT nDefault = GetCurrencyFormatStrings( aCurrList,
             GetCurrencyEntry( LANGUAGE_SYSTEM ), FALSE );
-        DBG_ASSERT( nDefault < aCurrList.Count(), "wo ist das NewCurrency Standard Format?!?" );
-        // wenn bereits geladen oder userdefined wird nDefaultCurrencyFormat
-        // hierbei auf den richtigen Wert gesetzt
+        DBG_ASSERT( aCurrList.Count(), "where is the NewCurrency System standard format?!?" );
+        // if already loaded or user defined nDefaultSystemCurrencyFormat
+        // will be set to the right value
         PutEntry( *aCurrList.GetObject( nDefault ), nCheck, nType,
-            nDefaultCurrencyFormat, LANGUAGE_SYSTEM );
+            nDefaultSystemCurrencyFormat, LANGUAGE_SYSTEM );
         DBG_ASSERT( nCheck == 0, "NewCurrency CheckError" );
-        DBG_ASSERT( nDefaultCurrencyFormat != NUMBERFORMAT_ENTRY_NOT_FOUND,
-            "nDefaultCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND" );
+        DBG_ASSERT( nDefaultSystemCurrencyFormat != NUMBERFORMAT_ENTRY_NOT_FOUND,
+            "nDefaultSystemCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND" );
+    }
+    return nDefaultSystemCurrencyFormat;
+}
+
+
+ULONG SvNumberFormatter::ImpGetDefaultCurrencyFormat()
+{
+    if ( nDefaultCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
+    {
+        ULONG CLOffset = ImpGetCLOffset( ActLnge );
+        // look for a defined standard
+        ULONG nStopKey = CLOffset + SV_COUNTRY_LANGUAGE_OFFSET;
+        ULONG nKey;
+        aFTable.Seek( CLOffset );
+        while ( (nKey = aFTable.GetCurKey()) >= CLOffset && nKey < nStopKey )
+        {
+            const SvNumberformat* pEntry =
+                (const SvNumberformat*) aFTable.GetCurObject();
+            if ( pEntry->IsStandard() && (pEntry->GetType() & NUMBERFORMAT_CURRENCY) )
+            {
+                nDefaultCurrencyFormat = nKey;
+                break;  // while
+            }
+            aFTable.Next();
+        }
+
+        if ( nDefaultCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
+        {   // none found, create one
+            xub_StrLen nCheck;
+            short nType;
+            NfWSStringsDtor aCurrList;
+            USHORT nDefault = GetCurrencyFormatStrings( aCurrList,
+                GetCurrencyEntry( ActLnge ), FALSE );
+            DBG_ASSERT( aCurrList.Count(), "where is the NewCurrency standard format?" );
+            if ( aCurrList.Count() )
+            {
+                // if already loaded or user defined nDefaultSystemCurrencyFormat
+                // will be set to the right value
+                PutEntry( *aCurrList.GetObject( nDefault ), nCheck, nType,
+                    nDefaultCurrencyFormat, ActLnge );
+                DBG_ASSERT( nCheck == 0, "NewCurrency CheckError" );
+                DBG_ASSERT( nDefaultCurrencyFormat != NUMBERFORMAT_ENTRY_NOT_FOUND,
+                    "nDefaultCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND" );
+            }
+            // old automatic currency format as a last resort
+            if ( nDefaultCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
+                nDefaultCurrencyFormat = CLOffset + ZF_STANDARD_CURRENCY+3;
+            else
+            {   // mark as standard so that it is found next time
+                SvNumberformat* pEntry = aFTable.Get( nDefaultCurrencyFormat );
+                if ( pEntry )
+                    pEntry->SetStandard();
+            }
+        }
     }
     return nDefaultCurrencyFormat;
+}
+
+
+// try to make it inline if possible since this a loop body
+// TRUE: continue; FALSE: break loop, if pFoundEntry==NULL dupe found
+#ifdef PRODUCT
+inline
+#endif
+    BOOL SvNumberFormatter::ImpLookupCurrencyEntryLoopBody(
+        const NfCurrencyEntry*& pFoundEntry, BOOL& bFoundBank,
+        const NfCurrencyEntry* pData, USHORT nPos, const String& rSymbol ) const
+{
+    BOOL bFound;
+    if ( pData->GetSymbol() == rSymbol )
+    {
+        bFound = TRUE;
+        bFoundBank = FALSE;
+    }
+    else if ( pData->GetBankSymbol() == rSymbol )
+    {
+        bFound = TRUE;
+        bFoundBank = TRUE;
+    }
+    else
+        bFound = FALSE;
+    if ( bFound )
+    {
+        if ( pFoundEntry && pFoundEntry != pData )
+        {
+            pFoundEntry = NULL;
+            return FALSE;   // break loop, not unique
+        }
+        if ( nPos == 0 )
+        {   // first entry is SYSTEM
+            pFoundEntry = MatchSystemCurrency();
+            if ( pFoundEntry )
+                return FALSE;   // break loop
+                // even if there are more matching entries
+                // this one is propably the one we are looking for
+            else
+                pFoundEntry = pData;
+        }
+        else
+            pFoundEntry = pData;
+    }
+    return TRUE;
 }
 
 
@@ -2417,66 +2639,13 @@ BOOL SvNumberFormatter::GetNewCurrencySymbolString( ULONG nFormat,
         String aSymbol, aExtension;
         if ( pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
         {
-            xub_StrLen nExtLen = aExtension.Len();
             if ( ppEntry )
             {
-                LanguageType eExtLang;
-                if ( nExtLen )
-                {
-                    ByteString aTmp( aExtension, 1, nExtLen-1, gsl_getSystemTextEncoding() );
-                    char* pEnd;
-                    long nExtLang = strtol( aTmp.GetBuffer(), &pEnd, 16 );
-                    eExtLang = (LanguageType) (
-                        (*pEnd || nExtLang == LONG_MIN || nExtLang == LONG_MAX) ?
-                        LANGUAGE_DONTKNOW : nExtLang );
-                }
-                else
-                    eExtLang = LANGUAGE_DONTKNOW;
-                const NfCurrencyEntry* pFoundEntry = NULL;
                 BOOL bFoundBank = FALSE;
-                const NfCurrencyTable& rTable = GetTheCurrencyTable();
-                USHORT nCount = rTable.Count();
-                const NfCurrencyEntryPtr* ppData = rTable.GetData();
-                for ( USHORT j = 0; j < nCount; j++, ppData++ )
-                {
-                    LanguageType eLang = (*ppData)->GetLanguage();
-                    if ( !nExtLen || eLang == eExtLang ||
-                            (eLang == LANGUAGE_SYSTEM && eExtLang == LANGUAGE_DONTKNOW) )
-                    {
-                        BOOL bFound;
-                        if ( (*ppData)->GetSymbol() == aSymbol )
-                        {
-                            bFound = TRUE;
-                            bFoundBank = FALSE;
-                        }
-                        else if ( (*ppData)->GetBankSymbol() == aSymbol )
-                        {
-                            bFound = TRUE;
-                            bFoundBank = TRUE;
-                        }
-                        else
-                            bFound = FALSE;
-                        if ( bFound )
-                        {
-                            if ( pFoundEntry && pFoundEntry != *ppData )
-                            {
-                                pFoundEntry = NULL;
-                                break;  // for, nicht eindeutig
-                            }
-                            if ( j == 0 )
-                            {   // erster Eintrag System
-                                pFoundEntry = MatchSystemCurrency();
-                                if ( pFoundEntry )
-                                    break;  // for, selbst wenn es mehrere
-                                    // geben sollte, wird dieser gemeint sein
-                                else
-                                    pFoundEntry = *ppData;
-                            }
-                            else
-                                pFoundEntry = *ppData;
-                        }
-                    }
-                }
+                // we definiteley need an entry matching the format code string
+                const NfCurrencyEntry* pFoundEntry = GetCurrencyEntry(
+                    bFoundBank, aSymbol, aExtension, pFormat->GetLanguage(),
+                    TRUE );
                 if ( pFoundEntry )
                 {
                     *ppEntry = pFoundEntry;
@@ -2498,7 +2667,7 @@ BOOL SvNumberFormatter::GetNewCurrencySymbolString( ULONG nFormat,
                 }
                 else
                     rStr += aSymbol;
-                if ( nExtLen )
+                if ( aExtension.Len() )
                     rStr += aExtension;
                 rStr += ']';
             }
@@ -2506,6 +2675,86 @@ BOOL SvNumberFormatter::GetNewCurrencySymbolString( ULONG nFormat,
         }
     }
     return FALSE;
+}
+
+
+const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( BOOL & bFoundBank,
+            const String& rSymbol, const String& rExtension,
+            LanguageType eFormatLanguage, BOOL bOnlyStringLanguage ) const
+{
+    xub_StrLen nExtLen = rExtension.Len();
+    LanguageType eExtLang;
+    if ( nExtLen )
+    {
+        sal_Int32 nExtLang = ::rtl::OUString( rExtension ).toInt32( 16 );
+        if ( !nExtLang )
+            eExtLang = LANGUAGE_DONTKNOW;
+        else
+            eExtLang = (LanguageType) ((nExtLang < 0) ?
+                -nExtLang : nExtLang);
+    }
+    else
+        eExtLang = LANGUAGE_DONTKNOW;
+    const NfCurrencyEntry* pFoundEntry = NULL;
+    const NfCurrencyTable& rTable = GetTheCurrencyTable();
+    USHORT nCount = rTable.Count();
+    BOOL bCont = TRUE;
+
+    // first try with given extension language/country
+    if ( nExtLen )
+    {
+        const NfCurrencyEntryPtr* ppData = rTable.GetData();
+        for ( USHORT j = 0; j < nCount && bCont; j++, ppData++ )
+        {
+            LanguageType eLang = (*ppData)->GetLanguage();
+            if ( eLang == eExtLang ||
+                    ((eExtLang == LANGUAGE_DONTKNOW) &&
+                    (eLang == LANGUAGE_SYSTEM))
+                )
+            {
+                bCont = ImpLookupCurrencyEntryLoopBody( pFoundEntry, bFoundBank,
+                    *ppData, j, rSymbol );
+            }
+        }
+    }
+
+    // ok?
+    if ( pFoundEntry || !bCont || (bOnlyStringLanguage && nExtLen) )
+        return pFoundEntry;
+
+    if ( !bOnlyStringLanguage )
+    {
+        // now try the language/country of the number format
+        const NfCurrencyEntryPtr* ppData = rTable.GetData();
+        for ( USHORT j = 0; j < nCount && bCont; j++, ppData++ )
+        {
+            LanguageType eLang = (*ppData)->GetLanguage();
+            if ( eLang == eFormatLanguage ||
+                    ((eFormatLanguage == LANGUAGE_DONTKNOW) &&
+                    (eLang == LANGUAGE_SYSTEM))
+                )
+            {
+                bCont = ImpLookupCurrencyEntryLoopBody( pFoundEntry, bFoundBank,
+                    *ppData, j, rSymbol );
+            }
+        }
+
+        // ok?
+        if ( pFoundEntry || !bCont )
+            return pFoundEntry;
+    }
+
+    // then try without language/country
+    {
+        const NfCurrencyEntryPtr* ppData = rTable.GetData();
+        for ( USHORT j = 0; j < nCount && bCont; j++, ppData++ )
+        {
+            bCont = ImpLookupCurrencyEntryLoopBody( pFoundEntry, bFoundBank,
+                *ppData, j, rSymbol );
+        }
+    }
+
+    return pFoundEntry;
 }
 
 
@@ -2625,14 +2874,19 @@ void SvNumberFormatter::ImpInitCurrencyTable() const
     pLocaleData->setLocale( ConvertLanguageToLocale( eSysLang ) );
     pEntry = new NfCurrencyEntry( *pLocaleData, LANGUAGE_SYSTEM );
     theCurrencyTable.Insert( pEntry, 0 );
+    // insert country independent EURo at second position
+    pEntry = new NfCurrencyEntry;
+    pEntry->SetEuro();
+    theCurrencyTable.Insert( pEntry, nCurrencyTableEuroPosition );
+    USHORT nCurrencyPos = nCurrencyTableEuroPosition + 1;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xLoc =
         LocaleDataWrapper::getInstalledLocaleNames();
-    sal_Int32 nCount = xLoc.getLength();
-    for ( sal_Int32 j = 0; j < nCount; j++ )
+    sal_Int32 nLocaleCount = xLoc.getLength();
+    for ( sal_Int32 nLocale = 0; nLocale < nLocaleCount; nLocale++ )
     {
-        LanguageType eLang = ConvertIsoNamesToLanguage( xLoc[j].Language,
-            xLoc[j].Country );
+        LanguageType eLang = ConvertIsoNamesToLanguage( xLoc[nLocale].Language,
+            xLoc[nLocale].Country );
 #ifdef DEBUG
         LanguageType eReal = International::GetRealLanguage( eLang );
         LanguageType eNeut = International::GetNeutralLanguage( eLang );
@@ -2641,30 +2895,64 @@ void SvNumberFormatter::ImpInitCurrencyTable() const
         if ( eNeut != eLang )
             BOOL bBreak = TRUE;
 #endif
-        pLocaleData->setLocale( xLoc[j] );
+        pLocaleData->setLocale( xLoc[nLocale] );
+        // one default currency for each locale
         pEntry = new NfCurrencyEntry( *pLocaleData, eLang );
+        // but don't insert multiple EURo entries
+        BOOL bInsert = !pEntry->IsEuro();
+        if ( !bInsert )
+            delete pEntry;
+        else
+        {
 #ifndef PRODUCT
-        lcl_CheckCurrencySymbolPosition( *pEntry );
+            lcl_CheckCurrencySymbolPosition( *pEntry );
 #endif
-        theCurrencyTable.Insert( pEntry, j+1 );
-        if ( !nSystemCurrencyPosition && pEntry->GetLanguage() == eSysLang )
-            nSystemCurrencyPosition = j+1;
+            theCurrencyTable.Insert( pEntry, nCurrencyPos++ );
+            if ( !nSystemCurrencyPosition && pEntry->GetLanguage() == eSysLang )
+                nSystemCurrencyPosition = nCurrencyPos-1;
+        }
+
+        // all available currencies for each locale
+        Sequence< Currency > aCurrSeq = pLocaleData->getAllCurrencies();
+        sal_Int32 nCurrencyCount = aCurrSeq.getLength();
+        if ( nCurrencyCount > 1 )
+        {
+            sal_Int32 nCurrency;
+            for ( nCurrency = 0; nCurrency < nCurrencyCount; nCurrency++ )
+            {
+                pEntry = new NfCurrencyEntry( aCurrSeq[nCurrency], *pLocaleData, eLang );
+                // no dupes, and don't insert multiple EURo entries
+                BOOL bInsert = !pEntry->IsEuro();
+                if ( bInsert )
+                {
+                    NfCurrencyEntry const * const * pData = theCurrencyTable.GetData();
+                    USHORT n = theCurrencyTable.Count();
+                    pData++;        // skip first SYSTEM entry
+                    for ( USHORT j=1; j<n; j++ )
+                    {
+                        if ( *(*pData++) == *pEntry )
+                        {
+                            bInsert = FALSE;
+                            break;  // for
+                        }
+                    }
+                }
+                if ( !bInsert )
+                    delete pEntry;
+                else
+                {
+                    theCurrencyTable.Insert( pEntry, nCurrencyPos++ );
+                    if ( !nSystemCurrencyPosition && pEntry->GetLanguage() == eSysLang )
+                        nSystemCurrencyPosition = nCurrencyPos-1;
+                }
+            }
+        }
     }
     pLocaleData->setLocale( aSaveLocale );
-    DBG_ASSERT( theCurrencyTable.Count(),
-        "SvNumberFormatter::ImpInitCurrencyTable: no NfCurrencyEntry ?!?" );
     // first entry is System
-    // insert country independent EURo at second position
-    pEntry = new NfCurrencyEntry;
-    pEntry->SetEuro();
-    theCurrencyTable.Insert( pEntry, nCurrencyTableEuroPosition );
-    DBG_ASSERT( theCurrencyTable[0]->GetLanguage() == LANGUAGE_SYSTEM,
-        "SvNumberFormatter::ImpInitCurrencyTable: first entry is not System" );
-    DBG_ASSERT( nSystemCurrencyPosition, "system language_country locale not in TH's International format tables" );
+    DBG_ASSERT( nSystemCurrencyPosition, "system language_country locale not in I18N format tables" );
     if ( nSystemCurrencyPosition )
     {
-        if ( nSystemCurrencyPosition >= nCurrencyTableEuroPosition )
-            nSystemCurrencyPosition++;
         if ( theCurrencyTable[nSystemCurrencyPosition]->GetSymbol() !=
                 theCurrencyTable[0]->GetSymbol() )
         {
@@ -2673,9 +2961,8 @@ void SvNumberFormatter::ImpInitCurrencyTable() const
             else
                 nSystemCurrencyPosition = 0;
         }
-        if ( nSystemCurrencyPosition )
-            theCurrencyTable[nSystemCurrencyPosition]->ApplyVariableInformation(
-                *theCurrencyTable[0] );
+        theCurrencyTable[nSystemCurrencyPosition]->ApplyVariableInformation(
+            *theCurrencyTable[0] );
     }
     bCurrencyTableInitialized = TRUE;
     bInitializing = FALSE;
@@ -2797,6 +3084,29 @@ NfCurrencyEntry::NfCurrencyEntry( const LocaleDataWrapper& rLocaleData, Language
 }
 
 
+NfCurrencyEntry::NfCurrencyEntry( const ::com::sun::star::i18n::Currency & rCurr,
+            const LocaleDataWrapper& rLocaleData, LanguageType eLang )
+{
+    aSymbol         = rCurr.Symbol;
+    aBankSymbol     = rCurr.BankSymbol;
+    eLanguage       = eLang;
+//!TODO: shouldn't the format information be provided by the Currency itself?
+    nPositiveFormat = rLocaleData.getCurrPositiveFormat();
+    nNegativeFormat = rLocaleData.getCurrNegativeFormat();
+    nDigits         = rLocaleData.getCurrDigits();
+    cZeroChar       = rLocaleData.getCurrZeroChar();
+}
+
+
+BOOL NfCurrencyEntry::operator==( const NfCurrencyEntry& r ) const
+{
+    return aSymbol      == r.aSymbol
+        && aBankSymbol  == r.aBankSymbol
+        && eLanguage    == r.eLanguage
+        ;
+}
+
+
 void NfCurrencyEntry::SetEuro()
 {
     aSymbol = NfCurrencyEntry::GetEuroSymbol();
@@ -2847,7 +3157,7 @@ void NfCurrencyEntry::BuildSymbolString( String& rStr, BOOL bBank,
         if ( !bWithoutExtension && eLanguage != LANGUAGE_DONTKNOW && eLanguage != LANGUAGE_SYSTEM )
         {
             rStr += '-';
-            rStr += String::CreateFromInt32( sal_Int32( eLanguage ), 16 );
+            rStr += String::CreateFromInt32( sal_Int32( eLanguage ), 16 ).ToUpperAscii();
         }
     }
     rStr += ']';
