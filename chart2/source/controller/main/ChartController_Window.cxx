@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-11 09:30:02 $
+ *  last change: $Author: iha $ $Date: 2003-12-12 20:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -745,7 +745,6 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                         if( xProp.is() && (xProp->getPropertyValue( C2U( "SceneProperties" ) )>>=aSceneDescriptor) )
                         {
                             Rotation::getRotationAxisAngleFromMatrixRepresentation( aSceneDescriptor.aDirection, aSceneDescriptor.fRotationAngle, aSceneMatrix );
-                            Matrix4D aTestM4 = Rotation::getRotationMatrixFromAxisAngleRepresentation( aSceneDescriptor.aDirection, aSceneDescriptor.fRotationAngle );
                             xProp->setPropertyValue( C2U( "SceneProperties" ), uno::makeAny(aSceneDescriptor) );
                         }
                     }
