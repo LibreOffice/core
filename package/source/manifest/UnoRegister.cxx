@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoRegister.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:27:43 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 09:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@
 #include <ZipPackage.hxx>
 #endif
 
+#include <zipfileaccess.hxx>
+
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -148,7 +150,12 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* p
                ManifestWriter::static_getSupportedServiceNames() ) &&
     writeInfo (pRegistryKey,
                ZipPackage::static_getImplementationName(),
-               ZipPackage::static_getSupportedServiceNames() );
+               ZipPackage::static_getSupportedServiceNames() ) &&
+
+    writeInfo (pRegistryKey,
+               OZipFileAccess::impl_staticGetImplementationName(),
+               OZipFileAccess::impl_staticGetSupportedServiceNames() );
+
 }
 
 
@@ -173,6 +180,11 @@ extern "C" void * SAL_CALL component_getFactory(
         xFactory = ManifestWriter::createServiceFactory ( xSMgr );
     else if (ZipPackage::static_getImplementationName().compareToAscii( pImplName ) == 0)
         xFactory = ZipPackage::createServiceFactory ( xSMgr );
+    else if ( OZipFileAccess::impl_staticGetImplementationName().compareToAscii( pImplName ) == 0 )
+        xFactory = ::cppu::createSingleFactory( xSMgr,
+                                           OZipFileAccess::impl_staticGetImplementationName(),
+                                           OZipFileAccess::impl_staticCreateSelfInstance,
+                                           OZipFileAccess::impl_staticGetSupportedServiceNames() );
 
     if ( xFactory.is() )
     {
