@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmmergepage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-29 09:32:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,8 @@ SwMailMergeMergePage::SwMailMergeMergePage( SwMailMergeWizard* _pParent) :
     m_aEditPB.SetClickHdl( LINK( this, SwMailMergeMergePage, EditDocumentHdl_Impl));
     m_aFindPB.SetClickHdl( LINK( this, SwMailMergeMergePage, FindHdl_Impl ));
 
+    m_aFindED.SetReturnActionLink( LINK(this, SwMailMergeMergePage, EnteredFindStringHdl_Impl ));
+
 }
 /*-- 02.04.2004 16:38:45---------------------------------------------------
 
@@ -149,7 +151,7 @@ IMPL_LINK( SwMailMergeMergePage, FindHdl_Impl, PushButton*, pButton)
 {
     SvxSearchItem aSearchItem( SID_SEARCH_ITEM );
 
-    SfxBoolItem aQuiet( SID_SEARCH_QUIET, sal_True );
+    SfxBoolItem aQuiet( SID_SEARCH_QUIET, sal_False );
     aSearchItem.SetSearchString(m_aFindED.GetText());
 
     aSearchItem.SetWordOnly(m_aWholeWordsCB.IsChecked());
@@ -166,5 +168,8 @@ IMPL_LINK( SwMailMergeMergePage, FindHdl_Impl, PushButton*, pButton)
 
     return 0;
 }
-
-
+IMPL_LINK( SwMailMergeMergePage, EnteredFindStringHdl_Impl, void*, EMPTYARG )
+{
+    m_aFindPB.GetClickHdl().Call( &m_aFindPB );
+    return 0;
+}
