@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 14:06:43 $
+#   last change: $Author: hr $ $Date: 2003-06-30 15:51:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ CXXFILES = \
         expfld.cxx \
         fldbas.cxx \
         flddat.cxx \
+        flddropdown.cxx \
         scrptfld.cxx \
         macrofld.cxx \
         fldlst.cxx \
@@ -106,6 +107,7 @@ SLOFILES =	\
         $(SLO)$/expfld.obj \
         $(SLO)$/fldbas.obj \
         $(SLO)$/flddat.obj \
+        $(SLO)$/flddropdown.obj \
         $(SLO)$/fldlst.obj \
         $(SLO)$/scrptfld.obj \
         $(SLO)$/macrofld.obj \
