@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.189 $
+ *  $Revision: 1.190 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:05:01 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1052,6 +1052,10 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
             }
         }
 
+        // update NET_WM_STATE which may have been deleted due to earlier Show(FALSE)
+        if( nShowState_ == SHOWSTATE_HIDDEN )
+            GetDisplay()->getWMAdaptor()->frameIsMapping( this );
+
         /*
          *  #95097#
          *  Actually this is rather exotic and currently happens only in conjunction
@@ -1181,7 +1185,7 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
          */
         if( mpParent && ! (nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
             XDeleteProperty( GetXDisplay(), GetShellWindow(), GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::WM_TRANSIENT_FOR ) );
-        XWithdrawWindow( GetXDisplay(), GetWindow(), GetDisplay()->GetScreenNumber() );
+        XWithdrawWindow( GetXDisplay(), GetShellWindow(), GetDisplay()->GetScreenNumber() );
         nShowState_ = SHOWSTATE_HIDDEN;
         if( IsFloatGrabWindow() && nVisibleFloats )
         {
@@ -1202,6 +1206,7 @@ void X11SalFrame::ToTop( USHORT nFlags )
         && nShowState_ != SHOWSTATE_UNKNOWN
         )
     {
+        GetDisplay()->getWMAdaptor()->frameIsMapping( this );
         if( GetWindow() != GetShellWindow() )
             XMapWindow( GetXDisplay(), GetShellWindow() );
         XMapWindow( GetXDisplay(), GetWindow() );
@@ -1439,6 +1444,9 @@ void X11SalFrame::SetAlwaysOnTop( BOOL bOnTop )
 #define _FRAMESTATE_MASK_GEOMETRY \
      (SAL_FRAMESTATE_MASK_X     | SAL_FRAMESTATE_MASK_Y |   \
       SAL_FRAMESTATE_MASK_WIDTH | SAL_FRAMESTATE_MASK_HEIGHT)
+#define _FRAMESTATE_MASK_MAXIMIZED_GEOMETRY \
+     (SAL_FRAMESTATE_MASK_MAXIMIZED_X     | SAL_FRAMESTATE_MASK_MAXIMIZED_Y |   \
+      SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH | SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT)
 
 void X11SalFrame::SetWindowState( const SalFrameState *pState )
 {
@@ -1449,78 +1457,117 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
     if (pState->mnMask & _FRAMESTATE_MASK_GEOMETRY)
     {
         Rectangle aPosSize;
+        bool bDoAdjust = false;
 
-        // initialize with current geometry
-        if ((pState->mnMask & _FRAMESTATE_MASK_GEOMETRY) != _FRAMESTATE_MASK_GEOMETRY)
-            GetPosSize (aPosSize);
-
-        // change requested properties
-        if (pState->mnMask & SAL_FRAMESTATE_MASK_X)
+        /* #i44325#
+         * if maximized, set restore size and guess maximized size from last time
+         * in state change below maximize window
+         */
+        if( (pState->mnMask & SAL_FRAMESTATE_MASK_STATE) &&
+            (pState->mnState & SAL_FRAMESTATE_MAXIMIZED) &&
+            (pState->mnMask & _FRAMESTATE_MASK_GEOMETRY) == _FRAMESTATE_MASK_GEOMETRY &&
+            (pState->mnMask & _FRAMESTATE_MASK_MAXIMIZED_GEOMETRY) == _FRAMESTATE_MASK_MAXIMIZED_GEOMETRY
+            )
         {
-            aPosSize.setX (pState->mnX);
+            XSizeHints* pHints = XAllocSizeHints();
+            long nSupplied = 0;
+            XGetWMNormalHints( GetXDisplay(),
+                               GetShellWindow(),
+                               pHints,
+                               &nSupplied );
+            pHints->flags |= PPosition | PWinGravity;
+            pHints->x           = pState->mnX;
+            pHints->y           = pState->mnY;
+            pHints->win_gravity = pDisplay_->getWMAdaptor()->getPositionWinGravity();
+            XSetWMNormalHints( GetXDisplay(),
+                               GetShellWindow(),
+                               pHints );
+            XFree( pHints );
+
+            XMoveResizeWindow( GetXDisplay(), GetShellWindow(),
+                               pState->mnX, pState->mnY,
+                               pState->mnWidth, pState->mnHeight );
+            // guess maximized geometry from last time
+            maGeometry.nX      = pState->mnMaximizedX;
+            maGeometry.nY      = pState->mnMaximizedY;
+            maGeometry.nWidth  = pState->mnMaximizedWidth;
+            maGeometry.nHeight = pState->mnMaximizedHeight;
         }
-        if (pState->mnMask & SAL_FRAMESTATE_MASK_Y)
+        else
         {
-            aPosSize.setY (pState->mnY);
-        }
-        if (pState->mnMask & SAL_FRAMESTATE_MASK_WIDTH)
-        {
-            long nWidth = pState->mnWidth > 0 ? pState->mnWidth  - 1 : 0;
-            aPosSize.setWidth (nWidth);
-        }
-        if (pState->mnMask & SAL_FRAMESTATE_MASK_HEIGHT)
-        {
-            int nHeight = pState->mnHeight > 0 ? pState->mnHeight - 1 : 0;
-            aPosSize.setHeight (nHeight);
-        }
+            // initialize with current geometry
+            if ((pState->mnMask & _FRAMESTATE_MASK_GEOMETRY) != _FRAMESTATE_MASK_GEOMETRY)
+                GetPosSize (aPosSize);
 
-        const Size& rScreenSize( pDisplay_->GetScreenSize() );
-        const WMAdaptor *pWM = GetDisplay()->getWMAdaptor();
-
-        if( pState->mnMask & ( SAL_FRAMESTATE_MASK_HEIGHT | SAL_FRAMESTATE_MASK_WIDTH )
-            && aPosSize.GetWidth() <= rScreenSize.Width()
-            && aPosSize.GetHeight() <= rScreenSize.Height() )
-        {
-            SalFrameGeometry aGeom = maGeometry;
-
-            if( ! (nStyle_ & ( SAL_FRAME_STYLE_FLOAT | SAL_FRAME_STYLE_CHILD ) ) &&
-               mpParent &&
-                aGeom.nLeftDecoration == 0 &&
-                aGeom.nTopDecoration == 0 )
+            // change requested properties
+            if (pState->mnMask & SAL_FRAMESTATE_MASK_X)
             {
-                aGeom = mpParent->maGeometry;
-                if( aGeom.nLeftDecoration == 0 &&
-                    aGeom.nTopDecoration == 0 )
-                {
-                    aGeom.nLeftDecoration = 5;
-                    aGeom.nTopDecoration = 20;
-                    aGeom.nRightDecoration = 5;
-                    aGeom.nBottomDecoration = 5;
-                }
+                aPosSize.setX (pState->mnX);
+            }
+            if (pState->mnMask & SAL_FRAMESTATE_MASK_Y)
+            {
+                aPosSize.setY (pState->mnY);
+            }
+            if (pState->mnMask & SAL_FRAMESTATE_MASK_WIDTH)
+            {
+                long nWidth = pState->mnWidth > 0 ? pState->mnWidth  - 1 : 0;
+                aPosSize.setWidth (nWidth);
+                bDoAdjust = true;
+            }
+            if (pState->mnMask & SAL_FRAMESTATE_MASK_HEIGHT)
+            {
+                int nHeight = pState->mnHeight > 0 ? pState->mnHeight - 1 : 0;
+                aPosSize.setHeight (nHeight);
+                bDoAdjust = true;
             }
 
-            // adjust position so that frame fits onto screen
-            if( aPosSize.Right()+(long)aGeom.nRightDecoration > rScreenSize.Width()-1 )
-                aPosSize.Move( (long)rScreenSize.Width() - (long)aPosSize.Right() - (long)aGeom.nRightDecoration, 0 );
-            if( aPosSize.Bottom()+(long)aGeom.nBottomDecoration > rScreenSize.Height()-1 )
-                aPosSize.Move( 0, (long)rScreenSize.Height() - (long)aPosSize.Bottom() - (long)aGeom.nBottomDecoration );
-            if( aPosSize.Left() < (long)aGeom.nLeftDecoration )
-                aPosSize.Move( (long)aGeom.nLeftDecoration - (long)aPosSize.Left(), 0 );
-            if( aPosSize.Top() < (long)aGeom.nTopDecoration )
-                aPosSize.Move( 0, (long)aGeom.nTopDecoration - (long)aPosSize.Top() );
-        }
+            const Size& rScreenSize( pDisplay_->GetScreenSize() );
+            const WMAdaptor *pWM = GetDisplay()->getWMAdaptor();
 
-         // resize with new args
-         if (pWM->supportsICCCMPos())
-         {
-             if( mpParent )
-                 aPosSize.Move( -mpParent->maGeometry.nX,
-                                -mpParent->maGeometry.nY );
-             SetPosSize( aPosSize );
-             bDefaultPosition_ = False;
-         }
-         else
-             SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
+            if( bDoAdjust && aPosSize.GetWidth() <= rScreenSize.Width()
+                && aPosSize.GetHeight() <= rScreenSize.Height() )
+            {
+                SalFrameGeometry aGeom = maGeometry;
+
+                if( ! (nStyle_ & ( SAL_FRAME_STYLE_FLOAT | SAL_FRAME_STYLE_CHILD ) ) &&
+                    mpParent &&
+                aGeom.nLeftDecoration == 0 &&
+                aGeom.nTopDecoration == 0 )
+                {
+                    aGeom = mpParent->maGeometry;
+                    if( aGeom.nLeftDecoration == 0 &&
+                        aGeom.nTopDecoration == 0 )
+                    {
+                        aGeom.nLeftDecoration = 5;
+                        aGeom.nTopDecoration = 20;
+                        aGeom.nRightDecoration = 5;
+                        aGeom.nBottomDecoration = 5;
+                    }
+                }
+
+                // adjust position so that frame fits onto screen
+                if( aPosSize.Right()+(long)aGeom.nRightDecoration > rScreenSize.Width()-1 )
+                    aPosSize.Move( (long)rScreenSize.Width() - (long)aPosSize.Right() - (long)aGeom.nRightDecoration, 0 );
+                if( aPosSize.Bottom()+(long)aGeom.nBottomDecoration > rScreenSize.Height()-1 )
+                    aPosSize.Move( 0, (long)rScreenSize.Height() - (long)aPosSize.Bottom() - (long)aGeom.nBottomDecoration );
+                if( aPosSize.Left() < (long)aGeom.nLeftDecoration )
+                    aPosSize.Move( (long)aGeom.nLeftDecoration - (long)aPosSize.Left(), 0 );
+                if( aPosSize.Top() < (long)aGeom.nTopDecoration )
+                    aPosSize.Move( 0, (long)aGeom.nTopDecoration - (long)aPosSize.Top() );
+            }
+
+            // resize with new args
+            if (pWM->supportsICCCMPos())
+            {
+                if( mpParent )
+                    aPosSize.Move( -mpParent->maGeometry.nX,
+                -mpParent->maGeometry.nY );
+                SetPosSize( aPosSize );
+                bDefaultPosition_ = False;
+            }
+            else
+                SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
+        }
     }
 
     // request for status change
@@ -1537,6 +1584,10 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
                 bool bVert = (pState->mnState & SAL_FRAMESTATE_MAXIMIZED_VERT) ? true : false;
                 GetDisplay()->getWMAdaptor()->maximizeFrame( this, bHorz, bVert );
             }
+            maRestorePosSize.Left() = pState->mnX;
+            maRestorePosSize.Top() = pState->mnY;
+            maRestorePosSize.Right() = maRestorePosSize.Left() + pState->mnWidth;
+            maRestorePosSize.Right() = maRestorePosSize.Left() + pState->mnHeight;
         }
         else if( mbMaximizedHorz || mbMaximizedVert )
             GetDisplay()->getWMAdaptor()->maximizeFrame( this, false, false );
@@ -1566,15 +1617,11 @@ BOOL X11SalFrame::GetWindowState( SalFrameState* pState )
         pState->mnState = SAL_FRAMESTATE_NORMAL;
 
     Rectangle aPosSize;
-    if (! maRestorePosSize.IsEmpty() )
-    {
-        aPosSize = maRestorePosSize;
-        pState->mnState |= SAL_FRAMESTATE_MAXIMIZED;
-    }
-    else
-    {
+    if( maRestorePosSize.IsEmpty() )
         GetPosSize( aPosSize );
-    }
+    else
+        aPosSize = maRestorePosSize;
+
     if( mbMaximizedHorz )
         pState->mnState |= SAL_FRAMESTATE_MAXIMIZED_HORZ;
     if( mbMaximizedVert )
@@ -1588,6 +1635,18 @@ BOOL X11SalFrame::GetWindowState( SalFrameState* pState )
     pState->mnHeight = aPosSize.GetHeight();
 
     pState->mnMask   = _FRAMESTATE_MASK_GEOMETRY | SAL_FRAMESTATE_MASK_STATE;
+
+
+    if (! maRestorePosSize.IsEmpty() )
+    {
+        GetPosSize( aPosSize );
+        pState->mnState |= SAL_FRAMESTATE_MAXIMIZED;
+        pState->mnMaximizedX      = aPosSize.Left();
+        pState->mnMaximizedY      = aPosSize.Top();
+        pState->mnMaximizedWidth  = aPosSize.GetWidth();
+        pState->mnMaximizedHeight = aPosSize.GetHeight();
+        pState->mnMask |= _FRAMESTATE_MASK_MAXIMIZED_GEOMETRY;
+    }
 
     return TRUE;
 }
@@ -1826,6 +1885,7 @@ void X11SalFrame::Maximize()
 {
     if( SHOWSTATE_MINIMIZED == nShowState_ )
     {
+        GetDisplay()->getWMAdaptor()->frameIsMapping( this );
         XMapWindow( GetXDisplay(), GetShellWindow() );
         nShowState_ = SHOWSTATE_NORMAL;
     }
@@ -1844,6 +1904,7 @@ void X11SalFrame::Restore()
 
     if( SHOWSTATE_MINIMIZED == nShowState_ )
     {
+        GetDisplay()->getWMAdaptor()->frameIsMapping( this );
         XMapWindow( GetXDisplay(), GetShellWindow() );
         nShowState_ = SHOWSTATE_NORMAL;
     }
@@ -2928,8 +2989,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
         if( FocusIn == pEvent->type )
         {
 #ifndef _USE_PRINT_EXTENSION_
-            if( static_cast< X11SalInstance* >(GetSalData()->pInstance_)->isPrinterInit() )
-                vcl_sal::PrinterUpdate::update();
+            vcl_sal::PrinterUpdate::update();
 #endif
             mbInputFocus = True;
             ImplSVData* pSVData = ImplGetSVData();
