@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataAwareFields.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:10:19 $
+ *  last change: $Author: kz $  $Date: 2004-11-27 09:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,12 @@ import java.lang.reflect.Field;
 import com.sun.star.uno.Any;
 
 /**
- * @author rpiterman
+ * This class is a factory for Value objects for different types of
+ * memebers.
+ * Other than some Value implementations classes this class contains static
+ * type conversion methods and factory methods.
  *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * @see com.sun.star.wizards.ui.event.DataAware.Value
  */
 public class DataAwareFields {
     private static final String TRUE = "true";
@@ -110,7 +112,10 @@ public class DataAwareFields {
         }
     }
 
-
+    /**
+     * an abstract implementation of DataAware.Value to access
+     * object memebers (fields) usign reflection.
+     */
     private static abstract class FieldValue implements DataAware.Value {
         Field field;
 
@@ -365,5 +370,4 @@ public class DataAwareFields {
         else
             throw new IllegalArgumentException("Cannot convert to the given Number type.");
     }
-
 }
