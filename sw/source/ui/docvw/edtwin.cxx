@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2002-04-23 08:52:54 $
+ *  last change: $Author: os $ $Date: 2002-04-23 13:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1079,6 +1079,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     KS_AutoFmtByInput, KS_DontExpand,
                     KS_NextObject, KS_PrevObject,
                     KS_KeyToView,
+                    KS_LaunchOLEObject,
                     KS_CheckDocReadOnlyKeys,
                     KS_CheckAutoCorrect, KS_EditFormula,
                     KS_ColLeftBig, KS_ColRightBig,
@@ -1341,7 +1342,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_RETURN:                // Return
                     if( !rSh.HasReadonlySel() )
                     {
-                        if( aTmpQHD.HasCntnt() && !rSh.HasSelection() &&
+                        const int nSelectionType = rSh.GetSelectionType();
+                        if(nSelectionType & SwWrtShell::SEL_OLE)
+                            eKeyState = KS_LaunchOLEObject;
+                        else if( aTmpQHD.HasCntnt() && !rSh.HasSelection() &&
                             aTmpQHD.bIsAutoText )
                             eKeyState = KS_GlossaryExpand;
 
@@ -1352,7 +1356,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
                         //RETURN fuer neuen Absatz mit AutoFormatierung
                         else if( pACfg && pACfg->IsAutoFmtByInput() &&
-                                !(rSh.GetSelectionType() & (SwWrtShell::SEL_GRF |
+                                !(nSelectionType & (SwWrtShell::SEL_GRF |
                                     SwWrtShell::SEL_OLE | SwWrtShell::SEL_FRM |
                                     SwWrtShell::SEL_TBL_CELLS | SwWrtShell::SEL_DRW |
                                     SwWrtShell::SEL_DRW_TXT)) )
@@ -1585,7 +1589,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 }
             }
             break;
-
+        case KS_LaunchOLEObject:
+            rSh.LaunchOLEObj();
+            eKeyState = KS_Ende;
+        break;
         case KS_InsTab:
             if( rView.ISA( SwWebView ))     //Kein Tabulator fuer Web!
             {
