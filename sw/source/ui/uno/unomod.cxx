@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: os $ $Date: 2001-01-25 10:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ OUString SwXModule::getImplementationName(void) throw( RuntimeException )
  ---------------------------------------------------------------------------*/
 BOOL SwXModule::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.Module") == rServiceName;
+    return C2U("com.sun.star.text.GlobalSettings") == rServiceName;
 }
 /* -----------------------------06.04.00 10:59--------------------------------
 
@@ -198,7 +198,7 @@ Sequence< OUString > SwXModule::getSupportedServiceNames(void) throw( RuntimeExc
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.Module");
+    pArray[0] = C2U("com.sun.star.text.GlobalSettings");
     return aRet;
 }
 
@@ -650,6 +650,9 @@ Sequence< OUString > SwXViewSettings::getSupportedServiceNames(void) throw( Runt
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:49  hr
+    initial import
+
     Revision 1.40  2000/09/18 16:06:15  willem.vandorp
     OpenOffice header added.
 
