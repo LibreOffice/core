@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:47:35 $
+ *  last change: $Author: hr $ $Date: 2004-05-12 11:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,7 +632,7 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
 
     // Screen Scaling
     UINT16 nOldScale = aAppearanceCfg.GetScaleFactor();
-    UINT16 nNewScale = (UINT16)aScalingMF.GetValue();
+    UINT16 nNewScale = (UINT16)aWindowSizeMF.GetValue();
 
     if ( nNewScale != nOldScale )
     {
@@ -678,7 +678,6 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
     }
 #endif
 
->>>>>>> 1.4.16.3
     if ( aFontShowCB.IsChecked() != aFontShowCB.GetSavedValue() )
     {
         aFontOpt.EnableFontWYSIWYG( aFontShowCB.IsChecked() );
@@ -782,6 +781,7 @@ void OfaViewTabPage::Reset( const SfxItemSet& rSet )
     aIconSizeLB.SaveValue();
 
     // Screen Scaling
+    SvtTabAppearanceCfg aAppearanceCfg;
     aWindowSizeMF.SetValue ( aAppearanceCfg.GetScaleFactor() );
     // Mouse Snap
     aMousePosLB.SelectEntryPos(aAppearanceCfg.GetSnapMode());
