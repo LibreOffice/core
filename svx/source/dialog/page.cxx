@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-12 09:40:02 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 09:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,19 @@ long ConvertLong_Impl( const long nIn, SfxMapUnit eUnit )
     return OutputDevice::LogicToLogic( nIn, (MapUnit)eUnit, MAP_TWIP );
 }
 
+BOOL IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
+{
+    if ( pSize )
+    {
+        Size aSize = pSize->GetSize();
+        long nDiffW = Abs( rSize.Width () - aSize.Width () );
+        long nDiffH = Abs( rSize.Height() - aSize.Height() );
+        return ( nDiffW < 10 && nDiffH < 10 );
+    }
+    else
+        return FALSE;
+}
+
 // class SvxPageDescPage --------------------------------------------------
 
 // gibt den Bereich der Which-Werte zur"uck
@@ -272,7 +285,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
     Init_Impl();
 
-    FieldUnit eFUnit = GetModuleFieldUnit();
+    FieldUnit eFUnit = GetModuleFieldUnit( &rAttr );
     SetFieldUnit( aLeftMarginEdit, eFUnit );
     SetFieldUnit( aRightMarginEdit, eFUnit );
     SetFieldUnit( aTopMarginEdit, eFUnit );
@@ -1505,10 +1518,8 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* pSet )
                     GetCoreValue( aPaperHeightEdit, eUnit ) );
 
         // putten, wenn aktuelle Gr"o/se unterschiedlich zum Wert in pSet
-        const SvxSizeItem* pSize =
-            (const SvxSizeItem*)GetItem( *pSet, SID_ATTR_PAGE_SIZE );
-
-        if ( aSize.Width() && ( !pSize || pSize->GetSize() != aSize ) )
+        const SvxSizeItem* pSize = (const SvxSizeItem*)GetItem( *pSet, SID_ATTR_PAGE_SIZE );
+        if ( aSize.Width() && ( !pSize || !IsEqualSize_Impl( pSize, aSize ) ) )
             pSet->Put( SvxSizeItem( nWh, aSize ) );
     }
     return LEAVE_PAGE;
