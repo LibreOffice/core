@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 11:26:27 $
+ *  last change: $Author: oj $ $Date: 2002-10-04 12:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,96 @@ extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
 
 namespace dbaui
 {
+    using namespace ::connectivity;
+#ifdef DEBUG
+    namespace
+    {
+        // -----------------------------------------------------------------------------
+        void insertParseTree(SvTreeListBox* _pBox,::connectivity::OSQLParseNode* _pNode,SvLBoxEntry* _pParent = NULL)
+        {
+            ::rtl::OUString rString;
+            if (!_pNode->isToken())
+            {
+                // Regelnamen als rule: ...
+                rString = ::rtl::OUString::createFromAscii("RULE_ID: ");
+                rString += ::rtl::OUString::valueOf( (sal_Int32)_pNode->getRuleID());
+                rString+= ::rtl::OUString::createFromAscii("(");
+                rString += OSQLParser::RuleIDToStr(_pNode->getRuleID());
+                rString+= ::rtl::OUString::createFromAscii(")");
+
+
+                _pParent = _pBox->InsertEntry(rString,_pParent);
+
+                // einmal auswerten wieviel Subtrees dieser Knoten besitzt
+                sal_uInt32 nStop = _pNode->count();
+                // hol dir den ersten Subtree
+                for(sal_uInt32 i=0;i<nStop;++i)
+                    insertParseTree(_pBox,_pNode->getChild(i),_pParent);
+            }
+            else
+            {
+                // ein Token gefunden
+                // tabs fuer das Einruecken entsprechend nLevel
+
+                switch (_pNode->getNodeType())
+                {
+
+                case SQL_NODE_KEYWORD:
+                    {rString+= ::rtl::OUString::createFromAscii("SQL_KEYWORD:");
+                     rString += ::rtl::OUString::createFromAscii(OSQLParser::TokenIDToStr(_pNode->getTokenID()).getStr());
+
+                     break;}
+
+                case SQL_NODE_COMPARISON:
+                    {rString+= ::rtl::OUString::createFromAscii("SQL_COMPARISON:");
+                    rString += _pNode->getTokenValue(); // haenge Nodevalue an
+                            // und beginne neu Zeile
+                    break;}
+
+                case SQL_NODE_NAME:
+                    {rString+= ::rtl::OUString::createFromAscii("SQL_NAME:");
+                     rString+= ::rtl::OUString::createFromAscii("\"");
+                     rString += _pNode->getTokenValue();
+                     rString+= ::rtl::OUString::createFromAscii("\"");
+
+                     break;}
+
+                case SQL_NODE_STRING:
+                    {rString += ::rtl::OUString::createFromAscii("SQL_STRING:'");
+                     rString += _pNode->getTokenValue();
+                     break;}
+
+                case SQL_NODE_INTNUM:
+                    {rString += ::rtl::OUString::createFromAscii("SQL_INTNUM:");
+                     rString += _pNode->getTokenValue();
+                     break;}
+
+                case SQL_NODE_APPROXNUM:
+                    {rString += ::rtl::OUString::createFromAscii("SQL_APPROXNUM:");
+                     rString += _pNode->getTokenValue();
+                     break;}
+
+                case SQL_NODE_PUNCTUATION:
+                    {rString += ::rtl::OUString::createFromAscii("SQL_PUNCTUATION:");
+                    rString += _pNode->getTokenValue(); // haenge Nodevalue an
+                    break;}
+
+                case SQL_NODE_AMMSC:
+                    {rString += ::rtl::OUString::createFromAscii("SQL_AMMSC:");
+                    rString += _pNode->getTokenValue(); // haenge Nodevalue an
+
+                    break;}
+
+                default:
+                    OSL_ASSERT("OSQLParser::ShowParseTree: unzulaessiger NodeType");
+                    rString += _pNode->getTokenValue();
+                }
+                _pBox->InsertEntry(rString,_pParent);
+            }
+        }
+
+    }
+#endif // DEBUG
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -226,7 +316,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::awt;
-using namespace ::connectivity;
 using namespace ::dbtools;
 
 using namespace ::comphelper;
@@ -381,6 +470,10 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
         case ID_BROWSER_QUERY_EXECUTE:
             aReturn.bEnabled = sal_True;
             break;
+#ifdef DEBUG
+        case ID_EDIT_QUERY_SQL:
+            break;
+#endif
         case ID_BROWSER_ADDTABLE:
             if ( !m_bDesign )
             {
@@ -541,6 +634,32 @@ void OQueryController::Execute(sal_uInt16 _nId)
 //              static_cast<OQueryViewSwitch*>(getView())->zoomTableView(m_aZoom);
             }
             break;
+#ifdef DEBUG
+        case ID_EDIT_QUERY_SQL:
+            {
+                ::rtl::OUString aErrorMsg;
+                m_sStatement = getContainer()->getStatement();
+                ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree( aErrorMsg, m_sStatement, m_bDesign );
+                if ( pNode )
+                {
+                    Window* pView = getView();
+                    ModalDialog* pWindow = new ModalDialog(pView);
+                    pWindow->SetPosSizePixel(Point(0,0),pView->GetSizePixel());
+                    SvTreeListBox* pTreeBox = new SvTreeListBox(pWindow);
+                    pTreeBox->SetPosSizePixel(Point(0,0),pView->GetSizePixel());
+
+                    insertParseTree(pTreeBox,pNode);
+
+                    pTreeBox->Show();
+                    pWindow->Execute();
+
+                    delete pTreeBox;
+                    delete pWindow;
+                    delete pNode;
+                }
+                break;
+            }
+#endif
         default:
             OJoinController::Execute(_nId);
             return; // else we would invalidate twice
@@ -737,6 +856,9 @@ void OQueryController::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ClearQuery")]       = ID_BROWSER_CLEAR_QUERY;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ExecuteQuery")]     = ID_BROWSER_QUERY_EXECUTE;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddRelation")]      = ID_RELATION_ADD_RELATION;
+#ifdef DEBUG
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ShowParseTree")]    = ID_EDIT_QUERY_SQL;
+#endif
 }
 // -----------------------------------------------------------------------------
 ToolBox* OQueryController::CreateToolBox(Window* _pParent)
