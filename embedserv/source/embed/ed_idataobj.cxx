@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_idataobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-10 16:08:37 $
+ *  last change: $Author: mav $ $Date: 2003-03-12 15:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ sal_uInt64 EmbedDocument_Impl::getMetaFileHandle_Impl( sal_Bool isEnhMeta )
 {
     sal_uInt64 pResult = NULL;
 
-    uno::Reference< datatransfer::XTransferable > xTransferable( m_xDocument, uno::UNO_QUERY );
+    uno::Reference< datatransfer::XTransferable > xTransferable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
     if ( xTransferable.is() )
     {
         uno::Sequence< sal_Int8 > aMetaBuffer;

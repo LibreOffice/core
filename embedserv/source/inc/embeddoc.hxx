@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddoc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-10 16:04:11 $
+ *  last change: $Author: mav $ $Date: 2003-03-12 15:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/SEQUENCE.h>
 #endif
+
+#include "docholder.hxx"
 
 typedef ::std::hash_map< DWORD, IAdviseSink* > AdviseSinkHashMap;
 typedef ::std::hash_map< DWORD, IAdviseSink* >::iterator AdviseSinkHashMapIterator;
@@ -153,7 +155,8 @@ protected:
     oslInterlockedCount                 m_refCount;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDocument;
+
+    DocumentHolder*                     m_pDocHolder;
 
     CComPtr< IStorage >                 m_pMasterStorage;
     CComPtr< IStream >                  m_pOwnStream;

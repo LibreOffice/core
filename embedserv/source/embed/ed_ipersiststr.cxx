@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-11 13:03:46 $
+ *  last change: $Author: mav $ $Date: 2003-03-12 15:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,20 +226,14 @@ EmbedDocument_Impl::EmbedDocument_Impl( const uno::Reference< lang::XMultiServic
 , m_bIsDirty( sal_False )
 , m_nAdviseNum( 0 )
 {
+    m_pDocHolder = new DocumentHolder();
+    m_pDocHolder->acquire();
 }
 
 EmbedDocument_Impl::~EmbedDocument_Impl()
 {
-    if ( m_xDocument.is() )
-    {
-        uno::Reference< lang::XComponent > xComponent( m_xDocument, uno::UNO_QUERY );
-
-        OSL_ENSURE( xComponent.is(), "Can not dispose created model!\n" );
-        if ( xComponent.is() )
-            xComponent->dispose();
-
-        m_xDocument = uno::Reference< frame::XModel >();
-    }
+    m_pDocHolder->CloseDocument();
+    m_pDocHolder->release();
 }
 
 uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Impl( uno::Reference< io::XInputStream > xStream, DWORD nStreamMode )
@@ -372,7 +366,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 {
     HRESULT hr = CO_E_ALREADYINITIALIZED;
 
-    if ( !m_xDocument.is() )
+    if ( !m_pDocHolder->GetDocument().is() )
     {
 
         STATSTG aStat;
@@ -384,12 +378,14 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
         hr = E_FAIL;
         if ( m_xFactory.is() && pStg )
         {
-            m_xDocument = uno::Reference< frame::XModel >(
+            uno::Reference< frame::XModel > aDocument(
                             m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
                             uno::UNO_QUERY );
-            if ( m_xDocument.is() )
+            if ( aDocument.is() )
             {
-                uno::Reference< frame::XLoadable > xLoadable( m_xDocument, uno::UNO_QUERY );
+                m_pDocHolder->SetDocument( aDocument );
+
+                uno::Reference< frame::XLoadable > xLoadable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
                 if( xLoadable.is() )
                 {
                     try
@@ -432,15 +428,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
                 }
 
                 if ( hr != S_OK )
-                {
-                    uno::Reference< lang::XComponent > xComponent( m_xDocument, uno::UNO_QUERY );
-
-                    OSL_ENSURE( xComponent.is(), "Can not dispose created model!\n" );
-                    if ( xComponent.is() )
-                        xComponent->dispose();
-
-                    m_xDocument = uno::Reference< frame::XModel >();
-                }
+                    m_pDocHolder->CloseDocument();
             }
         }
     }
@@ -451,7 +439,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
 {
 
-    if ( m_xDocument.is() )
+    if ( m_pDocHolder->GetDocument().is() )
         return CO_E_ALREADYINITIALIZED;
 
     if ( !m_xFactory.is() || !pStg )
@@ -476,12 +464,14 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
     uno::Reference < io::XInputStream > xTempIn = createTempXInStreamFromIStream( m_xFactory, m_pOwnStream );
     if ( xTempIn.is() )
     {
-        m_xDocument = uno::Reference< frame::XModel >(
+        uno::Reference< frame::XModel > aDocument(
                                             m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
                                             uno::UNO_QUERY );
-        if ( m_xDocument.is() )
+        if ( aDocument.is() )
         {
-            uno::Reference< frame::XLoadable > xLoadable( m_xDocument, uno::UNO_QUERY );
+            m_pDocHolder->SetDocument( aDocument );
+
+            uno::Reference< frame::XLoadable > xLoadable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
             if( xLoadable.is() )
             {
                 try
@@ -496,15 +486,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
             }
 
             if ( FAILED( hr ) )
-            {
-                uno::Reference< lang::XComponent > xComponent( m_xDocument, uno::UNO_QUERY );
-
-                OSL_ENSURE( xComponent.is(), "Can not dispose created model!\n" );
-                if ( xComponent.is() )
-                    xComponent->dispose();
-
-                m_xDocument = uno::Reference< frame::XModel >();
-            }
+                m_pDocHolder->CloseDocument();
         }
     }
 
@@ -523,7 +505,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
 
 STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
 {
-    if ( !m_xDocument.is() || !m_xFactory.is() || !pStgSave || !m_pOwnStream )
+    if ( !m_pDocHolder->GetDocument().is() || !m_xFactory.is() || !pStgSave || !m_pOwnStream )
         return E_FAIL;
 
     CComPtr< IStream > pTargetStream;
@@ -558,7 +540,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
 
     if ( xTempOut.is() )
     {
-        uno::Reference< frame::XStorable > xStorable( m_xDocument, uno::UNO_QUERY );
+        uno::Reference< frame::XStorable > xStorable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
         if( xStorable.is() )
         {
             try

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mav $ $Date: 2003-03-05 15:48:29 $
+#   last change: $Author: mav $ $Date: 2003-03-12 15:38:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ SHL1IMPLIB= emserimp
 SHL1OBJS= \
         $(SLO)$/register.obj \
         $(SLO)$/servprov.obj \
+        $(SLO)$/docholder.obj \
         $(SLO)$/ed_ipersiststr.obj \
         $(SLO)$/ed_idataobj.obj \
         $(SLO)$/ed_ioleobject.obj \
