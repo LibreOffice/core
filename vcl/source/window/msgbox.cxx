@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:39:12 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_MSGBOX_CXX
-
 #ifndef _SV_SVIDS_HRC
 #include <svids.hrc>
 #endif
@@ -92,7 +90,7 @@
 #include <button.hxx>
 #endif
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_MNEMONIC_HXX
 #include <mnemonic.hxx>
@@ -226,7 +224,7 @@ MessBox::MessBox( Window* pParent, const ResId& rResId ) :
     USHORT nLoDefButton = ReadShortRes();
     USHORT nHiHelpId    = ReadShortRes();
     USHORT nLoHelpId    = ReadShortRes();
-    USHORT bSysModal    = ReadShortRes();
+    /* USHORT bSysModal = */ ReadShortRes();
     SetHelpId( ((ULONG)nHiHelpId << 16) + nLoHelpId );
     WinBits nBits = (((ULONG)nHiButtons << 16) + nLoButtons) |
                     (((ULONG)nHiDefButton << 16) + nLoDefButton);
