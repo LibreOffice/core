@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-07 14:50:07 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 15:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <com/sun/star/io/IOException.hpp>
 #endif
 
+#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/document/XImporter.hpp>
+
+
 #include <tools/errcode.hxx>
 #include <so3/svstor.hxx>
 #include <svtools/cntwids.hrc>
@@ -86,6 +90,7 @@
 #include <svtools/intitem.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/adrparse.hxx>
+#include <unotools/streamwrap.hxx>
 
 #include "objuno.hxx"
 #include "sfx.hrc"
@@ -108,6 +113,7 @@
 #include <vos/mutex.hxx>
 
 using namespace vos;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
@@ -794,6 +800,7 @@ SFX_IMPL_SINGLEFACTORY( SfxStandaloneDocumentInfoObject )
 SfxStandaloneDocumentInfoObject::SfxStandaloneDocumentInfoObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
     : SfxDocumentInfoObject( sal_True )
     , _pMedium( NULL )
+    , _xFactory( xFactory )
 {
 }
 
@@ -873,14 +880,57 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
 {
     sal_Bool bOK = sal_False;
     String aName( aURL );
-    SvStorage* pStor = GetStorage_Impl( aName, sal_False );
-    if ( pStor )
+    SvStorage* pStorage = GetStorage_Impl( aName, sal_False );
+    if ( pStorage )
     {
         if ( !_pInfo )
             _pInfo = new SfxDocumentInfo;
 
-        // DocInfo laden
-        bOK = _pInfo->Load( pStor );
+        if ( pStorage->GetVersion() >= SOFFICE_FILEFORMAT_60 )
+        {
+            // import from XML meta data using SAX parser
+            uno::Reference< XInterface > xXMLParser = _xFactory->createInstance(
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" )) );
+            if( xXMLParser.is() )
+            {
+                // create input source for SAX parser
+                xml::sax::InputSource aParserInput;
+                aParserInput.sSystemId = aURL;
+
+                SvStorageStreamRef xDocStream;
+                String sDocName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta.xml")) );
+                if ( pStorage->IsStream(sDocName) )
+                    xDocStream = pStorage->OpenStream( sDocName, STREAM_READ | STREAM_NOCREATE );
+                xDocStream->SetBufferSize( 16*1024 );
+                aParserInput.aInputStream = new ::utl::OInputStreamWrapper( *xDocStream );
+
+                // create importer service
+                Reference < xml::sax::XDocumentHandler > xDocHandler( _xFactory->createInstanceWithArguments(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.XMLMetaImporter")),
+                        Sequence < Any >() ), UNO_QUERY );
+
+                // connect importer with this object
+                Reference < document::XImporter > xImporter( xDocHandler, UNO_QUERY );
+                if ( xImporter.is() )
+                    xImporter->setTargetDocument( this );
+
+                // connect parser and filter
+                Reference < xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
+                xParser->setDocumentHandler( xDocHandler );
+
+                // parse
+                try
+                {
+                    xParser->parseStream( aParserInput );
+                    bOK = sal_True;
+                }
+                catch( ::com::sun::star::uno::Exception& )
+                {
+                }
+            }
+        }
+        else
+            bOK = _pInfo->Load( pStorage );
     }
 
     DELETEZ( _pMedium );
