@@ -2,9 +2,9 @@
  *
  *  $RCSfile: headbar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:21:13 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:24:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1024,6 +1024,12 @@ void HeaderBar::Paint( const Rectangle& rRect )
             DrawLine( Point( 0, 0 ), Point( mnDX-1, 0 ) );
         if ( mnBorderOff2 )
             DrawLine( Point( 0, mnDY-1 ), Point( mnDX-1, mnDY-1 ) );
+        // #i40393# draw left and right border, if WB_BORDER was set in ImplInit()
+        if ( mnBorderOff1 && mnBorderOff2 )
+        {
+            DrawLine( Point( 0, 0 ), Point( 0, mnDY-1 ) );
+            DrawLine( Point( mnDX-1, 0 ), Point( mnDX-1, mnDY-1 ) );
+        }
     }
 
     USHORT nCurItemPos;
@@ -1065,6 +1071,12 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                 pDev->DrawLine( aRect.TopLeft(), Point( aRect.Right(), aRect.Top() ) );
             if ( mnBorderOff2 )
                 pDev->DrawLine( Point( aRect.Left(), aRect.Bottom() ), Point( aRect.Right(), aRect.Bottom() ) );
+            // #i40393# draw left and right border, if WB_BORDER was set in ImplInit()
+            if ( mnBorderOff1 && mnBorderOff2 )
+            {
+                pDev->DrawLine( aRect.TopLeft(), Point( aRect.Left(), aRect.Bottom() ) );
+                pDev->DrawLine( Point( aRect.Right(), aRect.Top() ), Point( aRect.Right(), aRect.Bottom() ) );
+            }
         }
     }
 
