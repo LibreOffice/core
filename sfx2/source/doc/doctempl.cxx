@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-24 07:36:10 $
+ *  last change: $Author: mav $ $Date: 2002-10-28 14:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1290,13 +1290,40 @@ BOOL SfxDocumentTemplates::CopyFrom
 
     if( bTemplateAdded )
     {
-        if ( nIdx == USHRT_MAX )
-            nIdx = 0;
+        INetURLObject aTemplObj( pTargetRgn->GetHierarchyURL() );
+        aTemplObj.insertName( aTitle, false,
+                              INetURLObject::LAST_SEGMENT, true,
+                              INetURLObject::ENCODE_ALL );
+        OUString aTemplURL = aTemplObj.GetMainURL( INetURLObject::NO_DECODE );
+
+        Reference< XCommandEnvironment > aCmdEnv;
+        Content aTemplCont;
+
+        if( Content::create( aTemplURL, aCmdEnv, aTemplCont ) )
+        {
+            OUString aTemplName;
+            OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ) );
+
+            if( getTextProperty_Impl( aTemplCont, aPropName, aTemplName ) )
+            {
+                if ( nIdx == USHRT_MAX )
+                    nIdx = 0;
+                else
+                    nIdx += 1;
+
+                pTargetRgn->AddEntry( aTitle, aTemplName, &nIdx );
+                rName = aTitle;
+                return TRUE;
+            }
+            else
+            {
+                DBG_ASSERT( sal_False, "CopyFrom(): The content should contain target URL!" );
+            }
+        }
         else
-            nIdx += 1;
-        pTargetRgn->AddEntry( aTitle, rName, &nIdx );
-        rName = aTitle;
-        return TRUE;
+        {
+            DBG_ASSERT( sal_False, "CopyFrom(): The content just was created!" );
+        }
     }
 
     return FALSE;
