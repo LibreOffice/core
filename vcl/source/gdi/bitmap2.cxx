@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: ka $ $Date: 2001-03-29 13:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,6 @@
 #ifndef _SV_BITMAP_HXX
 #include <bitmap.hxx>
 #endif
-
-#define USE_ZCODEC
 
 // -----------
 // - Defines -
@@ -230,7 +228,6 @@ BOOL Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset )
             else
                 nColors = 0;
 
-#ifdef USE_ZCODEC
             if( ZCOMPRESS == aHeader.nCompression )
             {
                 ZCodec  aCodec;
@@ -257,7 +254,6 @@ BOOL Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset )
                 nOffset = 0;
             }
             else
-#endif // USE_ZCODEC
                 pIStm = &rIStm;
 
             // read palette
@@ -711,6 +707,7 @@ BOOL Bitmap::Write( SvStream& rOStm, BOOL bCompressed, BOOL bFileHeader ) const
 
 BOOL Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompressed ) const
 {
+    const MapMode   aMapPixel( MAP_PIXEL );
     DIBInfoHeader   aHeader;
     ULONG           nImageSizePos;
     ULONG           nEndPos;
@@ -749,19 +746,17 @@ BOOL Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompre
         break;
     }
 
-#ifdef USE_ZCODEC
     if( ( rOStm.GetCompressMode() & COMPRESSMODE_ZBITMAP ) &&
         ( rOStm.GetVersion() >= SOFFICE_FILEFORMAT_40 ) )
     {
         aHeader.nCompression = ZCOMPRESS;
     }
     else
-#endif // USE_ZCODEC
         aHeader.nCompression = nCompression;
 
     aHeader.nSizeImage = rAcc.Height() * rAcc.GetScanlineSize();
 
-    if( maPrefSize.Width() && maPrefSize.Height() )
+    if( maPrefSize.Width() && maPrefSize.Height() && ( maPrefMapMode != aMapPixel ) )
     {
         const Size aSize100( OutputDevice::LogicToLogic( maPrefSize, maPrefMapMode, MAP_100TH_MM ) );
 
@@ -790,7 +785,6 @@ BOOL Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompre
     rOStm << aHeader.nColsUsed;
     rOStm << aHeader.nColsImportant;
 
-#ifdef USE_ZCODEC
     if( aHeader.nCompression == ZCOMPRESS )
     {
         ZCodec          aCodec;
@@ -826,7 +820,6 @@ BOOL Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompre
             bRet = ( rOStm.GetError() == ERRCODE_NONE );
     }
     else
-#endif // USE_ZCODEC
     {
         if( aHeader.nColsUsed )
             ImplWriteDIBPalette( rOStm, rAcc );
