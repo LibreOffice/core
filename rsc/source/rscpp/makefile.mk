@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 15:50:48 $
+#   last change: $Author: hr $ $Date: 2004-12-14 14:36:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,14 @@ APP1STACK=  32768
 
 .IF "$(GUI)"=="UNX"
 CDEFS+=-Dunix
+.ENDIF
+
+.IF "$(OS)$(CPU)"=="SOLARISI"
+# cc: Sun C 5.5 Patch 112761-10 2004/08/10
+# Solaris x86 compiler ICE
+# "cpp6.c", [get]:ube: internal error
+# remove after compiler upgrade
+NOOPTFILES=$(OBJ)$/cpp6.obj
 .ENDIF
 
 # --- Targets ------------------------------------------------------
