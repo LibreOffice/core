@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:34:11 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #endif
 
 #include <svtools/saveopt.hxx>
+#include <svtools/misccfg.hxx>
 
 #ifndef GCC
 #pragma hdrstop
@@ -97,14 +98,10 @@
 #include "arrdecl.hxx"
 #include "sfxresid.hxx"
 #include "newhdl.hxx"
-#include "cfgmgr.hxx"
-#include "accmgr.hxx"
 #include "event.hxx"
 #include "macrconf.hxx"
 #include "mnumgr.hxx"
-#include "imgmgr.hxx"
 #include "templdlg.hxx"
-#include "tbxconf.hxx"
 #include "msgpool.hxx"
 #include "docfile.hxx"
 #include "sfxtypes.hxx"
@@ -119,7 +116,6 @@
 #include "objsh.hxx"
 #include "dlgcont.hxx"
 #include "scriptcont.hxx"
-#include <svtools/misccfg.hxx>
 #include "docfac.hxx"
 
 #ifndef PRODUCT
@@ -150,7 +146,6 @@ BOOL SfxApplication::QueryExit_Impl()
 */
 
 {
-    SaveConfiguration();
     BOOL bQuit = TRUE;
 
 /*
@@ -256,8 +251,6 @@ void SfxApplication::Deinitialize()
 
     // Controller u."a. freigeben
     // dabei sollten auch restliche Komponenten ( Beamer! ) verschwinden
-    DELETEZ(pMenuMgr);
-    DELETEZ(pAcceleratorMgr);
     DELETEZ( pBasMgr );
     SetAppBasicManager( NULL );
 
