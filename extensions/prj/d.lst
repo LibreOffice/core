@@ -1,7 +1,8 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\xml%_EXT%\uiconfig
-mkdir: %_DEST%\xml%_EXT%\uiconfig\sbibliography
-mkdir: %_DEST%\xml%_EXT%\uiconfig\sbibliography\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography\menubar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
@@ -14,6 +15,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\sbibliography\menubar
 ..\%__SRC%\bin\nsplugin %_DEST%\bin%_EXT%\nsplugin
 
 
-..\source\bibliography\uiconfig\sbibliography\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\sbibliography\menubar\*.xml
+..\source\bibliography\uiconfig\sbibliography\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography\menubar\*.xml
 
 
