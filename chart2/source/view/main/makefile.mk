@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: iha $ $Date: 2003-11-13 09:51:48 $
+#   last change: $Author: iha $ $Date: 2003-12-15 19:36:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ SLOFILES =  \
             $(SLO)$/ShapeFactory.obj \
             $(SLO)$/DataPointSymbolSupplier.obj \
             $(SLO)$/Linear3DTransformation.obj \
+            $(SLO)$/Clipping.obj \
             $(SLO)$/PlottingPositionHelper.obj \
             $(SLO)$/PlotterBase.obj \
             $(SLO)$/VDataSeries.obj \

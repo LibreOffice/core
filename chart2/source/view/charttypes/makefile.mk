@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: iha $ $Date: 2003-11-08 22:55:08 $
+#   last change: $Author: iha $ $Date: 2003-12-15 19:32:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,8 +74,7 @@ ENABLE_EXCEPTIONS=	TRUE
 # --- export library -------------------------------------------------
 
 #object files to build and link together to lib $(SLB)$/$(TARGET).lib
-SLOFILES =  $(SLO)$/Clipping.obj \
-            $(SLO)$/Splines.obj \
+SLOFILES =  $(SLO)$/Splines.obj \
             $(SLO)$/TransformationHelper.obj \
             $(SLO)$/CategoryPositionHelper.obj \
             $(SLO)$/VSeriesPlotter.obj \
