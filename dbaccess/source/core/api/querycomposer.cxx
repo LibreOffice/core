@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-23 11:28:26 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 12:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,7 +637,8 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
 
     ::rtl::OUString aSql;
     ::rtl::OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
-    if(m_pColumns->hasByName(aName))
+
+    if ( m_pColumns->hasByName(aName) )
     {
         Reference<XPropertySet> xColumn;
         m_pColumns->getByName(aName) >>= xColumn;
@@ -706,6 +707,25 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
                         throw SQLException(::rtl::OUString::createFromAscii("Column value isn't from type Sequence<sal_Int8>!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
                 }
                 break;
+            case DataType::BIT:
+                {
+                    ::rtl::OUString sTmpName = aSql;
+
+
+                    sal_Bool bValue = sal_False;
+                    m_xTypeConverter->convertToSimpleType(aValue, TypeClass_BOOLEAN) >>= bValue;
+                    if ( bValue )
+                    {
+                        aSql = ::rtl::OUString::createFromAscii(" NOT ( ");
+                        aSql += sTmpName;
+                        aSql += STR_EQUAL;
+                        aSql += ::rtl::OUString::createFromAscii("0");
+                        aSql += ::rtl::OUString::createFromAscii(" OR ");
+                        aSql += sTmpName;
+                        aSql += ::rtl::OUString::createFromAscii(" IS NULL )") ;
+                        break;
+                    } // else run through
+                }
             default:
                 aSql += STR_EQUAL;
                 aSql += DBTypeConversion::toSQLString(nType,aValue,sal_True,m_xTypeConverter);
