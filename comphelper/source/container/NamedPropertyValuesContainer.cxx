@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NamedPropertyValuesContainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-09 19:20:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,8 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
-#ifndef __SGI_STL_MAP
+
 #include <map>
-#endif
 
 
 using namespace com::sun::star;
@@ -155,7 +154,7 @@ void SAL_CALL NamedPropertyValuesContainer::insertByName( const rtl::OUString& a
     if( !(aElement >>= aProps ) )
         throw lang::IllegalArgumentException();
 
-    maProperties[ aName ] = aProps;
+    maProperties.insert(  NamedPropertyValues::value_type(aName ,aProps) );
 }
 
 void SAL_CALL NamedPropertyValuesContainer::removeByName( const ::rtl::OUString& Name )
@@ -235,7 +234,7 @@ sal_Bool SAL_CALL NamedPropertyValuesContainer::hasByName( const ::rtl::OUString
 sal_Bool SAL_CALL NamedPropertyValuesContainer::hasElements(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return maProperties.size() != 0;
+    return !maProperties.empty();
 }
 
 //XServiceInfo

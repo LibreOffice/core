@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecomponenthelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2002-09-03 12:16:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,19 +252,4 @@ namespace comphelper
 }   // namespace comphelper
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2002/05/08 15:38:36  fs
- *  #99218# allow abstract external locks in addition to the own mutex
- *
- *  Revision 1.2  2002/04/26 11:03:48  fs
- *  #98750# corrected size calculation
- *
- *  Revision 1.1  2002/04/23 11:10:21  fs
- *  initial checkin - helper for implementing an XAccessible(Extended)Component
- *
- *
- *  Revision 1.0 18.04.2002 11:54:56  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namecontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-21 10:18:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ void SAL_CALL NameContainer::insertByName( const rtl::OUString& aName, const Any
     if( aElement.getValueType() != maType )
         throw IllegalArgumentException();
 
-    maProperties[ aName ] = aElement;
+    maProperties.insert( SvGenericNameContainerMapImpl::value_type(aName,aElement));
 }
 
 void SAL_CALL NameContainer::removeByName( const ::rtl::OUString& Name )
@@ -242,7 +242,7 @@ sal_Bool SAL_CALL NameContainer::hasElements(  )
 {
     MutexGuard aGuard( maMutex );
 
-    return maProperties.size() != 0;
+    return !maProperties.empty();
 }
 
 Type SAL_CALL NameContainer::getElementType()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 14:52:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,11 +133,23 @@ public:
 
 private:
     // comparing two property descriptions
-    struct PropertyDescriptionCompareByHandle : public ::std::binary_function< PropertyDescription, PropertyDescription, sal_Bool >
+    struct PropertyDescriptionCompareByHandle : public ::std::binary_function< PropertyDescription, PropertyDescription, bool >
     {
         bool operator() (const PropertyDescription& x, const PropertyDescription& y) const
         {
             return x.nHandle < y.nHandle;
+        }
+    };
+    // comparing two property descriptions
+    struct PropertyDescriptionHandleCompare : public ::std::binary_function< PropertyDescription, sal_Int32, bool >
+    {
+        bool operator() (const PropertyDescription& x, const sal_Int32& y) const
+        {
+            return x.nHandle < y;
+        }
+        bool operator() (const sal_Int32& x, const PropertyDescription& y) const
+        {
+            return x < y.nHandle;
         }
     };
 
@@ -246,19 +258,4 @@ private:
 
 #endif // _COMPHELPER_PROPERTYCONTAINER_HXX_
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2000/10/13 12:09:55  oj
- *  impl dtor to avoid wrong delete call
- *
- *  Revision 1.1.1.1  2000/09/29 11:28:15  fs
- *  initial import
- *
- *  Revision 1.1  2000/09/21 08:51:34  fs
- *  base class for classes which are simple property containers
- *
- *
- *  Revision 1.0 21.09.00 08:16:18  fs
- ************************************************************************/
 

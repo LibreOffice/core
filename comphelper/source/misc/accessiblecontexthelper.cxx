@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-06 13:00:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,16 @@ namespace comphelper
     //---------------------------------------------------------------------
     void SAL_CALL OAccessibleContextHelper::addEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
     {
-        OContextEntryGuard aGuard( this );
+        OMutexGuard aGuard( getExternalLock() );
+            // don't use the OContextEntryGuard - it will throw an exception if we're not alive
+            // anymore, while the most recent specification for XComponent states that we should
+            // silently ignore the call in such a situation
+        if ( !isAlive() )
+        {
+            if ( _rxListener.is() )
+                _rxListener->disposing( EventObject( *this ) );
+            return;
+        }
 
         if ( _rxListener.is() )
         {
@@ -210,7 +219,12 @@ namespace comphelper
     //---------------------------------------------------------------------
     void SAL_CALL OAccessibleContextHelper::removeEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
     {
-        OContextEntryGuard aGuard( this );
+        OMutexGuard aGuard( getExternalLock() );
+            // don't use the OContextEntryGuard - it will throw an exception if we're not alive
+            // anymore, while the most recent specification for XComponent states that we should
+            // silently ignore the call in such a situation
+        if ( !isAlive() )
+            return;
 
         if ( _rxListener.is() )
         {
@@ -387,40 +401,4 @@ namespace comphelper
 }   // namespace comphelper
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.10  2002/11/22 13:52:03  tbe
- *  #105058# make NotifyAccessibleEvent virtual
- *
- *  Revision 1.9  2002/08/14 12:00:00  obr
- *  #100201# removed state change event to DEFUNC
- *
- *  Revision 1.8  2002/07/22 07:00:37  sb
- *  #100004# Added second NotifyAccessibleEvent with AccessibleEventBuffer.
- *
- *  Revision 1.7  2002/05/08 15:38:36  fs
- *  #99218# allow abstract external locks in addition to the own mutex
- *
- *  Revision 1.6  2002/05/08 07:54:46  fs
- *  #98750# no use the context (not the XAccessible) as event source, again, as usual in the UNO world
- *
- *  Revision 1.5  2002/04/30 07:42:27  hr
- *  #65293#: removed not needed vcl/svapp.hxx includes to reduce dependencies
- *
- *  Revision 1.4  2002/04/26 14:24:28  fs
- *  #98750# +getAccessibleCreator / use the creator (XAccessible) as event source
- *
- *  Revision 1.3  2002/04/26 07:25:50  fs
- *  #98750# corrected NotifyAccessibleEvent
- *
- *  Revision 1.2  2002/04/26 05:52:18  fs
- *  #98750# use correct broadcasthelper (in the WeagAggComponentImpl* base)
- *
- *  Revision 1.1  2002/04/23 11:10:30  fs
- *  initial checkin - helper for implementing an XAccessibleContext
- *
- *
- *  Revision 1.0 17.04.2002 16:06:46  fs
- ************************************************************************/
 

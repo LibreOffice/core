@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enumhelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,10 +135,4 @@ staruno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
 }   // namespace comphelper
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 29.09.00 08:47:37  fs
- ************************************************************************/
 

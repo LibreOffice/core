@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-18 13:53:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,7 @@
 #include <comphelper/propstate.hxx>
 #endif
 
-#ifndef __SGI_STL_MAP
 #include <map>
-#endif
 
 //=========================================================================
 //= property helper classes

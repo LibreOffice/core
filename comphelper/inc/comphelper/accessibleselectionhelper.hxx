@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleselectionhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-30 06:10:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,10 +174,3 @@ namespace comphelper
 
 #endif // COMPHELPER_ACCESSIBLE_SELECTION_HELPER_HXX
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2002/05/06 09:58:52  ka
- *  #95585#: added AccessibleSelection helper
- *
- ************************************************************************/

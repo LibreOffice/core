@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mav $ $Date: 2002-01-11 17:46:39 $
+#   last change: $Author: hr $ $Date: 2003-03-19 15:58:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,17 +84,15 @@ LIB1FILES=	$(SLB)$/container.lib		\
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 
-SHL1TARGET=$(COMPHLP_TARGET)$(COMPHLP_MAJOR)
-SHL1STDLIBS=\
-    $(CPPULIB)					\
-    $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
-    $(OSLLIB)					\
-    $(SALLIB)					\
-    $(CPPRTLLIB)
+SHL1TARGET=$(COMPHLP_TARGET)$(COMPHLP_MAJOR)$(COMID)
+SHL1STDLIBS= \
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    $(VOSLIB) \
+    $(SALLIB)
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(SHL1TARGET)
+SHL1IMPLIB=	i$(COMPHLP_TARGET)
 
 SHL1LIBS=	$(LIB1TARGET)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weakeventlistener.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-27 11:58:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,10 +208,4 @@ namespace comphelper
 
 #endif// COMPHELPER_WEAKEVENTLISTENER_HXX
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 22.08.2002 11:18:14  fs
- ************************************************************************/
 

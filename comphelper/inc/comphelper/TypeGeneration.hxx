@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeGeneration.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-08 14:09:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,10 +134,14 @@ namespace comphelper
         CPPUTYPE_REFTXTFIELD,       //getCppuType( (Reference<text::XTextField>*)0)
         CPPUTYPE_REFTXTRANGE,       //getCppuType( (Reference<text::XTextRange>*)0)
         CPPUTYPE_REFTXTTABLE,       //getCppuType( (Reference<text::XTextTable>*)0)
-
         CPPUTYPE_AWTPOINT,          //getCppuType( (awt::Point*)0 )
         CPPUTYPE_REFLIBCONTAINER,   //getCppuType( (Reference< script::XLibraryContainer >*)0)
+        CPPUTYPE_SEQANY,            //getCppuType( (Sequence< uno::Any >*)0)
+        CPPUTYPE_REFRESULTSET,      //getCppuType( (Reference< sdbc::XResultSet >*)0)
+        CPPUTYPE_REFCONNECTION,     //getCppuType( (Reference< sdbc::XConnection >*)0)
+        CPPUTYPE_REFMODEL,          //getCppuType( (Reference< frame::XModel >*)0)
 
+        CPPUTYPE_OUSTRINGS,         //getCppuType( (Sequence<OUString>*)0 )
         CPPUTYPE_END
     };
     void GenerateCppuType ( sal_uInt16 eType, const com::sun::star::uno::Type*& pType );

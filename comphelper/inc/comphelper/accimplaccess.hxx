@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accimplaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-26 05:53:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,16 +201,4 @@ namespace comphelper
 
 #endif // COMPHELPER_ACCIMPLACCESS_HXX
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2002/04/23 11:02:25  fs
- *  #98750# removed the unnecessary new/delete operators
- *
- *  Revision 1.1  2002/04/17 08:37:53  fs
- *  initial checkin - helper class for tunneling an XAccessibleContext implementation
- *
- *
- *  Revision 1.0 16.04.2002 15:30:25  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 13:32:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,24 +80,13 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
 
+#include <algorithm>
+
 //.........................................................................
 namespace comphelper
 {
 
     namespace starlang = ::com::sun::star::lang;
-
-//------------------------------------------------------------------
-int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
-_Optlink
-#endif
-    PropertyCompare( const void* pFirst, const void* pSecond)
-{
-    return ((starbeans::Property*)pFirst)->Name.compareTo(((starbeans::Property*)pSecond)->Name);
-}
 
 //------------------------------------------------------------------
 void copyProperties(const staruno::Reference<starbeans::XPropertySet>& _rxSource,
@@ -151,13 +140,11 @@ void RemoveProperty(staruno::Sequence<starbeans::Property>& _rProps, const rtl::
     sal_Int32 nLen = _rProps.getLength();
 
     // binaere Suche
-    starbeans::Property aSearchDummy(_rPropName, 0, ::getCppuType(reinterpret_cast<sal_Int32*>(NULL))/*doesn't matter*/, 0);
     const starbeans::Property* pProperties = _rProps.getConstArray();
-    starbeans::Property* pResult = (starbeans::Property*) bsearch(&aSearchDummy, (void*)pProperties, nLen, sizeof(starbeans::Property),
-        &PropertyCompare);
+    const starbeans::Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen, _rPropName,PropertyStringLessFunctor());
 
     // gefunden ?
-    if (pResult)
+    if ( pResult && (pResult != pProperties + nLen) && (pResult->Name == _rPropName) )
     {
         OSL_ENSURE(pResult->Name.equals(_rPropName), "::RemoveProperty Properties nicht sortiert");
         removeElementAt(_rProps, pResult - pProperties);
@@ -170,12 +157,11 @@ void ModifyPropertyAttributes(staruno::Sequence<starbeans::Property>& seqProps, 
     sal_Int32 nLen = seqProps.getLength();
 
     // binaere Suche
-    starbeans::Property aSearchDummy(sPropName, 0, ::getCppuType(reinterpret_cast<sal_Int32*>(NULL))/*doesn't matter*/, 0);
-    starbeans::Property* pResult = (starbeans::Property*) bsearch(&aSearchDummy, (void*)seqProps.getArray(), nLen, sizeof(starbeans::Property),
-        &PropertyCompare);
+    starbeans::Property* pProperties = seqProps.getArray();
+    starbeans::Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen,sPropName, PropertyStringLessFunctor());
 
     // gefunden ?
-    if (pResult)
+    if ( pResult && (pResult != pProperties + nLen) && (pResult->Name == sPropName) )
     {
         pResult->Attributes |= nAddAttrib;
         pResult->Attributes &= ~nRemoveAttrib;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interaction.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 13:30:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,16 +117,4 @@ namespace comphelper
 }   // namespace comphelper
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2000/10/31 08:30:33  fs
- *  OInteraction* (concret interaction continuations) are templates now
- *
- *  Revision 1.1  2000/10/25 12:46:18  fs
- *  initial checkin - helper for implementing using XInteractionContinution and XInteractionRequest
- *
- *
- *  Revision 1.0 25.10.00 12:23:29  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+#   last change: $Author: hr $ $Date: 2003-03-19 15:58:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,7 @@
 COMPHLP_TARGET=comphelp
 
 # the major 
-COMPHLP_MAJOR=2
+COMPHLP_MAJOR=3
 # the minor 
 COMPHLP_MINOR=0
 # the micro 

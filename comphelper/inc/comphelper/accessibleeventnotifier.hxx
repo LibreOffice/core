@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleeventnotifier.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-06 16:50:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,7 @@ namespace comphelper
     //=====================================================================
     //= AccessibleEventNotifier
     //=====================================================================
-    typedef ::osl::Thread AccessibleEventNotifier_BASE;
-
-    class AccessibleEventNotifier : protected AccessibleEventNotifier_BASE
+    class AccessibleEventNotifier
     {
     // typedefs
     public:
@@ -101,38 +99,19 @@ namespace comphelper
     private:
         typedef ::std::pair< TClientId, ::drafts::com::sun::star::accessibility::AccessibleEventObject >
                                                                                     ClientEvent;
-        typedef ::std::list< ClientEvent >                                          EventQueue;
 
         typedef ::cppu::OInterfaceContainerHelper                                   EventListeners;
         typedef ::std::map< TClientId, EventListeners*, ::std::less< TClientId > >  ClientMap;
 
     // members
     private:
-        static  ::osl::Mutex        s_aMutex;
-
-        // event administration
-                ::osl::Condition    m_aEventGuard;
-                EventQueue          m_aEvents;
-
         // client administration
-                ClientMap           m_aClients;         // known clients
-                ClientMap           m_aDisposedClients; // clients which are disposed, but still have events in the queue
-
-        // runtime control
-                sal_Bool            m_bTerminateRequested;
-
-        static  AccessibleEventNotifier*    s_pNotifier;
+        static ::osl::Mutex     s_aMutex;
+        static ClientMap        s_aClients;
 
     protected:
-
-        // ::osl::Thread
-        virtual void SAL_CALL run();
-        virtual void SAL_CALL terminate();
-        virtual void SAL_CALL onTerminated();
-
-    protected:
-        AccessibleEventNotifier( );
-        ~AccessibleEventNotifier( );
+        AccessibleEventNotifier( );     // never implemented
+        ~AccessibleEventNotifier( );    // never implemented
 
     private:
         AccessibleEventNotifier( const AccessibleEventNotifier& );              // never implemented!
@@ -217,7 +196,7 @@ namespace comphelper
 
     private:
         /// generates a new client id
-        TClientId   generateId();
+        static  TClientId   generateId();
 
         /** looks up a client in our client map, asserts if it cannot find it or no event thread is present
 
@@ -234,58 +213,6 @@ namespace comphelper
                 it's position
         */
         static  sal_Bool    implLookupClient( const TClientId _nClient, ClientMap::iterator& _rPos );
-
-        /** removes all events for a given client id from the queue
-
-            @precond
-                to be called with our mutex locked
-            @precond
-                the notifier thread has to be alive, especially, <member>s_pNotifier</member> must not
-                be <NULL/>
-
-            @param _nClient
-                the id of the client which's pending events should be removed
-            @param _rEnsureAlive
-                will, upon return, contain all the collected EventObject.Source values for all events
-                which have been removed from the queue.<br/>
-                The intention is to _not_ release these objects within the method, with our mutex locked.
-                In case the release is non-trivial (because it's the last reference, so the object is
-                deleted upon calling release), we certainly do _not_ want to do this call into the foreign
-                component with a locked mutex.
-        */
-        static  void        implRemoveEventsForClient(
-                                const TClientId _nClient,
-                                ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rEnsureAlive
-                            );
-
-        /** terminates the notifier, if it does not have clients anymore
-
-            @precond
-                <member>s_pNotifier</member> must not be <NULL/>
-            @precond
-                <member>s_aMutex</member> is locked
-
-            @postcond
-                <member>s_pNotifier</member> is NULL, or there are clients left
-            @postcond
-                if the there are no clients left, then the thread referred to by s_pNotifier
-                (at the moment the method was entered) will awake as soon as possible (i.e.
-                as soon as it get's the mutex), and terminate immediately and smoothly
-                (no hard killing)
-        */
-        static  void        implCleanupNotifier( );
-
-        /** adds an AccessibleEvent to the event queue
-
-            @precond
-                <member>s_pNotifier</member> must not be <NULL/>
-            @precond
-                <member>s_aMutex</member> is locked
-        */
-        static  void        implPushBackEvent(
-                                const TClientId _nClient,
-                                const ::drafts::com::sun::star::accessibility::AccessibleEventObject& _rEvent
-                            );
     };
 
 //.........................................................................
@@ -294,13 +221,4 @@ namespace comphelper
 
 #endif // COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2002/12/06 12:55:45  fs
- *  initial checkin - notifying accessible events asynchronously
- *
- *
- *  Revision 1.0 05.12.2002 11:05:27  fs
- ************************************************************************/
 

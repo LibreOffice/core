@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventattachermgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-13 16:01:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,7 +636,7 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvent
                         (*aObjIt).aHelper, ScriptEvent.ListenerType,
                         ScriptEvent.AddListenerParam, ScriptEvent.EventMethod );
         }
-        catch( ... )
+        catch( Exception& )
         {
         }
 
@@ -757,12 +757,15 @@ void SAL_CALL ImplEventAttacherManager::insertEntry(sal_Int32 nIndex)
     if( nIndex < 0 )
         throw IllegalArgumentException();
 
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin();
-    while( nIndex-- )
-        aIt++;
+//    ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin();
+//    while( nIndex-- )
+//        aIt++;
+
+    if ( static_cast< ::std::deque< AttacherIndex_Impl >::size_type>(nIndex) >= aIndex.size() )
+        aIndex.resize(nIndex+1);
 
     AttacherIndex_Impl aTmp;
-    aIndex.insert( aIt, aTmp );
+    aIndex.insert( aIndex.begin() + nIndex, aTmp );
 }
 
 //-----------------------------------------------------------------------------
@@ -790,7 +793,7 @@ Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEv
 
     ::std::deque< ScriptEventDescriptor >::iterator aEvtIt =    (*aIt).aEventList.begin();
     ::std::deque< ScriptEventDescriptor >::iterator aEvtEnd =   (*aIt).aEventList.end();
-    i = 0;
+    sal_Int32 i = 0;
     while( aEvtIt != aEvtEnd )
     {
         pArray[i++] = *aEvtIt;
@@ -810,12 +813,7 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
     if( nIndex < 0 || !xObject.is() )
         throw IllegalArgumentException();
 
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin();
-    sal_Int32 i;
-    for( i = 0; i < nIndex; i++ )
-        aIt++;
-
-    if( aIt == aIndex.end() )
+    if( static_cast< ::std::deque< AttacherIndex_Impl >::size_type>(nIndex) >= aIndex.size() )
     {
         // alte Dateien lesen
         if( nVersion == 1 )
@@ -828,24 +826,26 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
             throw IllegalArgumentException();
     }
 
+    ::std::deque< AttacherIndex_Impl >::iterator aCurrentPosition = aIndex.begin() + nIndex;
+
     AttachedObject_Impl aTmp;
     aTmp.xTarget = xObject;
     aTmp.aHelper = Helper;
-    (*aIt).aObjList.push_back( aTmp );
+    aCurrentPosition->aObjList.push_back( aTmp );
 
     //::std::deque< AttachedObject_Impl >::iterator aObjIt = (*aIt).aObjList.back();
-    AttachedObject_Impl & rCurObj = (*aIt).aObjList.back();
+    AttachedObject_Impl & rCurObj = aCurrentPosition->aObjList.back();
 #ifdef DEQUE_OK
-    rCurObj.aAttachedListenerSeq = Sequence< Reference< XEventListener > >( (*aIt).aEventList.size() );
+    rCurObj.aAttachedListenerSeq = Sequence< Reference< XEventListener > >( aCurrentPosition->aEventList.size() );
 #else
-    rCurObj.aAttachedListenerSeq = Sequence< Reference< XEventListener > >( (*aIt).aEventList.getLength() );
+    rCurObj.aAttachedListenerSeq = Sequence< Reference< XEventListener > >( aCurrentPosition->aEventList.getLength() );
 #endif
     Reference< XEventListener > * pArray = rCurObj.aAttachedListenerSeq.getArray();
 
 #ifdef DEQUE_OK
-    ::std::deque< ScriptEventDescriptor >::iterator aEvtIt =    (*aIt).aEventList.begin();
-    ::std::deque< ScriptEventDescriptor >::iterator aEvtEnd =   (*aIt).aEventList.end();
-    i = 0;
+    ::std::deque< ScriptEventDescriptor >::iterator aEvtIt =    aCurrentPosition->aEventList.begin();
+    ::std::deque< ScriptEventDescriptor >::iterator aEvtEnd =   aCurrentPosition->aEventList.end();
+    sal_Int32 i = 0;
     while( aEvtIt != aEvtEnd )
     {
         Reference< XAllListener > xAll =
@@ -857,7 +857,7 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
                         rCurObj.aHelper, (*aEvtIt).ScriptType,
                         (*aEvtIt).AddListenerParam, (*aEvtIt).EventMethod );
         }
-        catch( ... )
+        catch( Exception& )
         {
         }
 
@@ -865,9 +865,9 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
         aEvtIt++;
     }
 #else
-    sal_Int32 nLen = (*aIt).aEventList.getLength();
-    ScriptEventDescriptor * pEL = (*aIt).aEventList.getArray();
-    for( i = 0; i < nLen; i++ )
+    sal_Int32 nLen = aCurrentPosition->aEventList.getLength();
+    ScriptEventDescriptor * pEL = aCurrentPosition->aEventList.getArray();
+    for(sal_Int32 i = 0; i < nLen; ++i )
     {
         Reference< XAllListener > xAll =
             new AttacherAllListener_Impl( this, pEL[i].ScriptType, pEL[i].ScriptCode );
@@ -878,7 +878,7 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
                         rCurObj.aHelper, pEL[i].ListenerType,
                         pEL[i].AddListenerParam, pEL[i].EventMethod );
         }
-        catch( ... )
+        catch( Exception& )
         {
         }
 
@@ -893,18 +893,12 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
 {
     Guard< Mutex > aGuard( aLock );
     //return;
-    if( nIndex < 0  || !xObject.is() )
+    if( nIndex < 0 || static_cast< ::std::deque< AttacherIndex_Impl >::size_type>(nIndex) >= aIndex.size() || !xObject.is() )
         throw IllegalArgumentException();
 
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin();
-    for( sal_Int32 i = 0; i < nIndex; i++ )
-        aIt++;
-
-    if( aIt == aIndex.end() )
-        throw IllegalArgumentException();
-
-    ::std::deque< AttachedObject_Impl >::iterator aObjIt =  (*aIt).aObjList.begin();
-    ::std::deque< AttachedObject_Impl >::iterator aObjEnd = (*aIt).aObjList.end();
+    ::std::deque< AttacherIndex_Impl >::iterator aCurrentPosition = aIndex.begin() + nIndex;
+    ::std::deque< AttachedObject_Impl >::iterator aObjIt =  aCurrentPosition->aObjList.begin();
+    ::std::deque< AttachedObject_Impl >::iterator aObjEnd = aCurrentPosition->aObjList.end();
     while( aObjIt != aObjEnd )
     {
         if( (*aObjIt).xTarget == xObject )
@@ -912,9 +906,9 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
             Reference< XEventListener > * pArray = (*aObjIt).aAttachedListenerSeq.getArray();
 #ifdef DEQUE_OK
 
-            ::std::deque< ScriptEventDescriptor >::iterator aEvtIt =    (*aIt).aEventList.begin();
-            ::std::deque< ScriptEventDescriptor >::iterator aEvtEnd =   (*aIt).aEventList.end();
-            i = 0;
+            ::std::deque< ScriptEventDescriptor >::iterator aEvtIt =    aCurrentPosition->aEventList.begin();
+            ::std::deque< ScriptEventDescriptor >::iterator aEvtEnd =   aCurrentPosition->aEventList.end();
+            sal_Int32 i = 0;
             while( aEvtIt != aEvtEnd )
             {
                 if( pArray[i].is() )
@@ -924,7 +918,7 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
                     xAttacher->removeListener( (*aObjIt).xTarget, (*aEvtIt).ListenerType,
                                                 (*aEvtIt).AddListenerParam, pArray[i] );
                     }
-                    catch( ... )
+                    catch( Exception& )
                     {
                     }
                 }
@@ -932,8 +926,8 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
                 aEvtIt++;
             }
 #else
-            sal_Int32 nLen = (*aIt).aEventList.getLength();
-            ScriptEventDescriptor * pEL = (*aIt).aEventList.getArray();
+            sal_Int32 nLen = aCurrentPosition->aEventList.getLength();
+            ScriptEventDescriptor * pEL = aCurrentPosition->aEventList.getArray();
             for( sal_Int32 i = 0; i < nLen; i++ )
             {
                 if( pArray[i].is() )
@@ -943,13 +937,13 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
                     xAttacher->removeListener( (*aObjIt).xTarget, pEL[i].ListenerType,
                                                 pEL[i].AddListenerParam, pArray[i] );
                     }
-                    catch( ... )
+                    catch( Exception& )
                     {
                     }
                 }
             }
 #endif
-            (*aIt).aObjList.erase( aObjIt );
+            aCurrentPosition->aObjList.erase( aObjIt );
             break;
         }
         aObjIt++;
@@ -1111,20 +1105,4 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
 
 } // namesapce comphelper
 
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2001/08/07 07:01:18  fs
- *  #90621# corrected revokeScriptEvent
- *
- *  Revision 1.2  2001/03/15 07:46:02  fs
- *  NAMESPACE_STD(\:i) => ::std::\1
- *
- *  Revision 1.1.1.1  2000/09/29 11:28:15  fs
- *  initial import
- *
- *
- *  Revision 1.0 29.09.00 09:06:41  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-12 16:04:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,15 +469,13 @@ void OPropertyContainer::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) 
 OPropertyContainer::PropertiesIterator OPropertyContainer::searchHandle(sal_Int32 _nHandle)
 {
     PropertyDescriptionCompareByHandle aCompareOp;
-    PropertyDescription aSearch;
-    aSearch.nHandle = _nHandle;
 
     // search a lower bound
     PropertiesIterator aLowerBound = ::std::lower_bound(
         m_aProperties.begin(),
         m_aProperties.end(),
-        aSearch,
-        aCompareOp);
+        _nHandle,
+        PropertyDescriptionHandleCompare());
 
     // check for identity
     if ((aLowerBound != m_aProperties.end()) && aLowerBound->nHandle != _nHandle)
@@ -504,16 +502,6 @@ void OPropertyContainer::modifyAttributes(sal_Int32 _nHandle, sal_Int32 _nAddAtt
     aPos->nHandle &= ~_nRemoveAttrib;
 }
 
-//--------------------------------------------------------------------------
-// comparing two property instances
-struct PropertyCompareByName : public ::std::binary_function< Property, Property, sal_Bool >
-{
-    bool operator() (const Property& x, const Property& y) const
-    {
-        return x.Name < y.Name ? true : false;
-    }
-};
-
 //..........................................................................
 void OPropertyContainer::describeProperties(Sequence< Property >& _rProps) const
 {
@@ -532,7 +520,7 @@ void OPropertyContainer::describeProperties(Sequence< Property >& _rProps) const
     }
 
     // as our property vector is sorted by handles, not by name, we have to sort aOwnProps
-    qsort(aOwnProps.getArray(), aOwnProps.getLength(), sizeof(Property), PropertyCompare);
+    ::std::sort(aOwnProps.getArray(), aOwnProps.getArray() + aOwnProps.getLength(), PropertyCompareByName());
 
     // unfortunally the STL merge function does not allow the output range to overlap one of the input ranges,
     // so we need an extra sequence
@@ -553,41 +541,4 @@ void OPropertyContainer::describeProperties(Sequence< Property >& _rProps) const
 }   // namespace comphelper
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.11  2002/08/14 15:10:09  fs
- *  #102329# convertFastPropertyValue: when the value is stored in an Any, and the property type is some XInterface-derivee, allow for queryInterface-calls, too (necessary for Java-calls)
- *
- *  Revision 1.10  2002/01/09 15:05:39  fs
- *  #96068# uno_type_assignData instead of uno_type_copyData
- *
- *  Revision 1.9  2001/09/27 11:14:04  hr
- *  #65293#: includes
- *
- *  Revision 1.8  2001/08/17 09:07:32  fs
- *  #91038# convertFastPropertyValue: allow for assigning different XInterface derivees
- *
- *  Revision 1.7  2001/06/12 06:05:20  fs
- *  added some assertions
- *
- *  Revision 1.6  2001/03/22 13:32:35  jl
- *  OSL_ENSHURE replaced by OSL_ENSHURE
- *
- *  Revision 1.5  2000/11/29 08:18:43  fs
- *  arghhh ... build the correct attributes in registerMayBeVoidProperty now (hopefully ...)
- *
- *  Revision 1.4  2000/11/19 10:24:07  fs
- *  registerMayBeVoidProperty: don't corrupt _nAttributes anymore
- *
- *  Revision 1.3  2000/10/13 12:10:21  oj
- *  impl dtor to avoid wrong delete call
- *
- *  Revision 1.2  2000/10/06 14:43:54  fs
- *  uno_typ_equalData instead of uno_typ_equal
- *
- *  Revision 1.1  2000/09/21 08:52:22  fs
- *  base class for classes which are simple property containers
- *
- ************************************************************************/
 

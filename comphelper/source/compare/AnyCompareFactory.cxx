@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AnyCompareFactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2002-01-14 09:44:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ public:
 
     }
 
-    virtual sal_Int16 SAL_CALL compare( const Any& any1, const Any& any2 ) throw();
+    virtual sal_Int16 SAL_CALL compare( const Any& any1, const Any& any2 ) throw(RuntimeException);
 };
 
 //=============================================================================
@@ -144,7 +144,7 @@ public:
     }
 
     // XAnyCompareFactory
-    virtual Reference< XAnyCompare > SAL_CALL createAnyCompareByName ( const OUString& aPropertyName ) throw();
+    virtual Reference< XAnyCompare > SAL_CALL createAnyCompareByName ( const OUString& aPropertyName ) throw(::com::sun::star::uno::RuntimeException);
 
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
@@ -158,7 +158,7 @@ public:
 
 //===========================================================================================
 
-sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 ) throw()
+sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 ) throw(::com::sun::star::uno::RuntimeException)
 {
     sal_Int16 aResult = 0;
 
@@ -178,7 +178,7 @@ sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 ) throw
 
 //===========================================================================================
 
-Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( const OUString& aPropertyName ) throw()
+Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( const OUString& aPropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     // for now only OUString properties compare is implemented
     // so no check for the property name is done

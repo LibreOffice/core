@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecomponenthelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-08 15:37:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,13 +184,4 @@ namespace comphelper
 
 #endif // COMPHELPER_ACCESSIBLE_COMPONENT_HELPER_HXX
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2002/04/23 11:08:57  fs
- *  initial checkin - helper for implementing an XAccessible(Extended)Component
- *
- *
- *  Revision 1.0 18.04.2002 11:47:39  fs
- ************************************************************************/
 

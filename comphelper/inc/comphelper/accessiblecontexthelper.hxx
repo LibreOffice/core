@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-22 13:48:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,31 +414,4 @@ namespace comphelper
 
 #endif // COMPHELPER_ACCESSIBLE_CONTEXT_HELPER_HXX
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.7  2002/09/23 10:31:41  tbe
- *  #102438# OExternalLockGuard: only lock the external mutex
- *
- *  Revision 1.6  2002/07/22 07:01:31  sb
- *  #100004# Added second NotifyAccessibleEvent with AccessibleEventBuffer.
- *
- *  Revision 1.5  2002/05/08 15:37:22  fs
- *  #99218# allow abstract external locks in addition to the own mutex
- *
- *  Revision 1.4  2002/04/30 16:11:04  fs
- *  #98750# corrected the access control
- *
- *  Revision 1.3  2002/04/26 14:21:46  fs
- *  #98750# +getAccessibleCreator
- *
- *  Revision 1.2  2002/04/26 05:51:23  fs
- *  #98750# use correct broadcasthelper (in the WeagAggComponentImpl* base)
- *
- *  Revision 1.1  2002/04/23 11:07:38  fs
- *  initial checkin - helper for implementing an XAccessibleContext
- *
- *
- *  Revision 1.0 17.04.2002 15:47:54  fs
- ************************************************************************/
 

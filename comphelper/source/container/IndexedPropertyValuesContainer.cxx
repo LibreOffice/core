@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IndexedPropertyValuesContainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-09 19:20:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ sal_Int32 SAL_CALL IndexedPropertyValuesContainer::getCount(  )
 sal_Bool SAL_CALL IndexedPropertyValuesContainer::hasElements(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return maProperties.size() != 0;
+    return !maProperties.empty();
 }
 
 //XServiceInfo

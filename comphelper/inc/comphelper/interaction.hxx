@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interaction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 08:30:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,13 +190,4 @@ namespace comphelper
 
 #endif // _COMPHELPER_INTERACTION_HXX_
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2000/10/25 12:45:52  fs
- *  initial checkin - helper for implementing using XInteractionContinution and XInteractionRequest
- *
- *
- *  Revision 1.0 25.10.00 12:23:23  fs
- ************************************************************************/
 

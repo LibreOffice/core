@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accimplaccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-26 05:54:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,16 +226,4 @@ namespace comphelper
 }   // namespace comphelper
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2002/04/23 11:03:40  fs
- *  #98750# implemented getForeignControlledState
- *
- *  Revision 1.1  2002/04/17 08:39:28  fs
- *  initial checkin - helper class for tunneling an XAccessibleContext implementation
- *
- *
- *  Revision 1.0 16.04.2002 15:34:21  fs
- ************************************************************************/
 

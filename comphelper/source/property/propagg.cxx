@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mh $ $Date: 2002-10-29 15:19:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,10 @@
  ************************************************************************/
 
 #ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
-#include <comphelper/propagg.hxx>
+#include "comphelper/propagg.hxx"
 #endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
-#include <comphelper/property.hxx>
+#include "comphelper/property.hxx"
 #endif
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
@@ -75,7 +75,7 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-
+#include <algorithm>
 
 //.........................................................................
 namespace comphelper
@@ -93,11 +93,13 @@ namespace comphelper
     {
         const Property* lcl_findPropertyByName( const Sequence< Property >& _rProps, const ::rtl::OUString& _rName )
         {
-            Property aSearch;
-            aSearch.Name = _rName;
+            sal_Int32 nLen = _rProps.getLength();
+            const Property* pProperties = _rProps.getConstArray();
+            const Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen,_rName, ::comphelper::PropertyStringLessFunctor());
+            if ( pResult && ( pResult == pProperties + nLen || pResult->Name != _rName) )
+                pResult = NULL;
 
-            const void* pUntyped = _rProps.getConstArray();
-            return static_cast< Property* >( bsearch( &aSearch, pUntyped, _rProps.getLength(), sizeof( Property ), &PropertyCompare ) );
+            return pResult;
         }
     }
 //==================================================================
@@ -161,7 +163,9 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
     pMergedProps = m_aProperties.getArray();    // reset, needed again below
 
     // sortieren der Properties nach Namen
-    qsort( (void*)pMergedProps, nMergedProps, sizeof( Property), &PropertyCompare);
+    ::std::sort( pMergedProps, pMergedProps+nMergedProps, PropertyCompareByName());
+
+    pMergedProps = m_aProperties.getArray();
 
     // Positionen in der Map abgleichen
     for ( nMPLoop = 0; nMPLoop < nMergedProps; ++nMPLoop, ++pMergedProps )
@@ -365,11 +369,9 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
 //------------------------------------------------------------------------------
  ::com::sun::star::uno::Any SAL_CALL OPropertySetAggregationHelper::queryInterface(const  ::com::sun::star::uno::Type& _rType) throw( ::com::sun::star::uno::RuntimeException)
 {
-     ::com::sun::star::uno::Any aReturn;
+     ::com::sun::star::uno::Any aReturn = OPropertyStateHelper::queryInterface(_rType);
 
-    aReturn = OPropertyStateHelper::queryInterface(_rType);
-
-    if (!aReturn.hasValue())
+    if ( !aReturn.hasValue() )
         aReturn = cppu::queryInterface(_rType
         ,static_cast< ::com::sun::star::beans::XPropertiesChangeListener*>(this)
         ,static_cast< ::com::sun::star::beans::XVetoableChangeListener*>(this)
@@ -384,7 +386,7 @@ void OPropertySetAggregationHelper::disposing()
 {
     osl::MutexGuard aGuard(rBHelper.rMutex);
 
-    if (m_xAggregateSet.is() && m_bListening)
+    if ( m_xAggregateSet.is() && m_bListening )
     {
         // als einziger Listener anmelden
         m_xAggregateMultiSet->removePropertiesChangeListener(this);
@@ -627,7 +629,10 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
         {
             OPropertyArrayAggregationHelper::PropertyOrigin ePropOrg = rPH.classifyProperty( *pNames );
             if ( OPropertyArrayAggregationHelper::UNKNOWN_PROPERTY == ePropOrg )
-                throw UnknownPropertyException( );
+                throw WrappedTargetException( ::rtl::OUString(), static_cast< XMultiPropertySet* >( this ), makeAny( UnknownPropertyException( ) ) );
+                // due to a flaw in the API design, this method is not allowed to throw an UnknownPropertyException
+                // so we wrap it into a WrappedTargetException
+                // #107545# - 2002-02-20 - fs@openoffice.org
 
             if ( OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY == ePropOrg )
                 ++nAggCount;

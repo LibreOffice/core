@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enumhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 15:22:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,13 +140,4 @@ public:
 #endif // _COMPHELPER_ENUMHELPER_HXX_
 
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1.1.1  2000/09/29 11:28:15  fs
- *  initial import
- *
- *
- *  Revision 1.0 29.09.00 08:49:14  fs
- ************************************************************************/
 

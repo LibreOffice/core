@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2001-03-13 18:24:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#include <functional>
 
 //=========================================================================
 //= property helper classes
@@ -89,14 +90,29 @@ namespace comphelper
 
 /** compare two properties by name
 */
-extern int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
-_Optlink
-#endif
-    PropertyCompare( const void* pFirst, const void* pSecond);
+    struct PropertyStringLessFunctor : ::std::binary_function< ::com::sun::star::beans::Property, ::rtl::OUString, bool >
+    {
+        // ................................................................
+        inline bool operator()( const ::com::sun::star::beans::Property& lhs, const ::rtl::OUString& rhs ) const
+        {
+            return lhs.Name.compareTo(rhs) < 0;
+        }
+        // ................................................................
+        inline bool operator()( const ::rtl::OUString& lhs, const ::com::sun::star::beans::Property& rhs ) const
+        {
+            return lhs.compareTo(rhs.Name) < 0;
+        }
+    };
+    //--------------------------------------------------------------------------
+    // comparing two property instances
+    struct PropertyCompareByName : public ::std::binary_function< ::com::sun::star::beans::Property, ::com::sun::star::beans::Property, bool >
+    {
+        bool operator() (const ::com::sun::star::beans::Property& x, const ::com::sun::star::beans::Property& y) const
+        {
+            return x.Name.compareTo(y.Name) < 0;// ? true : false;
+        }
+    };
+
 
 //------------------------------------------------------------------
 /// remove the property with the given name from the given sequence

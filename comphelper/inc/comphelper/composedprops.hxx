@@ -2,9 +2,9 @@
  *
  *  $RCSfile: composedprops.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-23 16:07:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,10 +171,4 @@ namespace comphelper
 
 #endif // _COMPHELPER_COMPOSEDPROPS_HXX_
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 23.01.01 14:36:38  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propstate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:25:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,11 +78,9 @@ namespace comphelper
 //------------------------------------------------------------------------------
  ::com::sun::star::uno::Any SAL_CALL OPropertyStateHelper::queryInterface(const  ::com::sun::star::uno::Type& _rType) throw( ::com::sun::star::uno::RuntimeException)
 {
-     ::com::sun::star::uno::Any aReturn;
-    // ask the base class
-    aReturn = OPropertySetHelper::queryInterface(_rType);
+     ::com::sun::star::uno::Any aReturn = OPropertySetHelper::queryInterface(_rType);
     // our own ifaces
-    if (!aReturn.hasValue())
+    if ( !aReturn.hasValue() )
         aReturn = ::cppu::queryInterface(_rType, static_cast< ::com::sun::star::beans::XPropertyState*>(this));
 
     return aReturn;
