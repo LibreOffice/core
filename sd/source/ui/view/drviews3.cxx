@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-09-24 14:02:50 $
+ *  last change: $Author: dl $ $Date: 2001-10-05 06:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,39 +595,59 @@ void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
         {
             const SvxLongULSpaceItem& rULSpace = (const SvxLongULSpaceItem&)
                     pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_ULSPACE));
-            long nUpper = Max(0L, rULSpace.GetUpper() - aPagePos.Y());
-            long nLower = Max(0L, rULSpace.GetLower() + aPagePos.Y() +
-                                  aPageSize.Height() - aViewSize.Height());
 
-            USHORT nPageCnt = pDoc->GetSdPageCount(ePageKind);
-
-            for (USHORT i = 0; i < nPageCnt; i++)
+            if( pDrView->IsTextEdit() )
             {
-                SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
-                SdUndoAction* pUndo = new SdPageULUndoAction(pDoc,
-                                        pPage,
-                                        pPage->GetUppBorder(),
-                                        pPage->GetLwrBorder(),
-                                        nUpper, nLower);
-                pUndoGroup->AddAction(pUndo);
-                pPage->SetUppBorder(nUpper);
-                pPage->SetLwrBorder(nLower);
-            }
-            nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
+                Point aPagePos = pWindow->GetViewOrigin();
+                Rectangle aRect = aMarkRect;
+                aRect.SetPos(aRect.TopLeft() + aPagePos);
+                aRect.Top()  = rULSpace.GetUpper();
+                aRect.Bottom() = aViewSize.Height() - rULSpace.GetLower();
+                aRect.SetPos(aRect.TopLeft() - aPagePos);
 
-            for (i = 0; i < nPageCnt; i++)
-            {
-                SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
-                SdUndoAction* pUndo = new SdPageULUndoAction(pDoc,
-                                        pPage,
-                                        pPage->GetUppBorder(),
-                                        pPage->GetLwrBorder(),
-                                        nUpper, nLower);
-                pUndoGroup->AddAction(pUndo);
-                pPage->SetUppBorder(nUpper);
-                pPage->SetLwrBorder(nLower);
+                if ( aRect != aMarkRect)
+                {
+                    pDrView->SetAllMarkedRect(aRect);
+                    aMarkRect = pDrView->GetAllMarkedRect();
+                    Invalidate( SID_RULER_OBJECT );
+                }
             }
-            InvalidateWindows();
+            else
+            {
+                long nUpper = Max(0L, rULSpace.GetUpper() - aPagePos.Y());
+                long nLower = Max(0L, rULSpace.GetLower() + aPagePos.Y() +
+                                      aPageSize.Height() - aViewSize.Height());
+
+                USHORT nPageCnt = pDoc->GetSdPageCount(ePageKind);
+
+                for (USHORT i = 0; i < nPageCnt; i++)
+                {
+                    SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
+                    SdUndoAction* pUndo = new SdPageULUndoAction(pDoc,
+                                            pPage,
+                                            pPage->GetUppBorder(),
+                                            pPage->GetLwrBorder(),
+                                            nUpper, nLower);
+                    pUndoGroup->AddAction(pUndo);
+                    pPage->SetUppBorder(nUpper);
+                    pPage->SetLwrBorder(nLower);
+                }
+                nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
+
+                for (i = 0; i < nPageCnt; i++)
+                {
+                    SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
+                    SdUndoAction* pUndo = new SdPageULUndoAction(pDoc,
+                                            pPage,
+                                            pPage->GetUppBorder(),
+                                            pPage->GetLwrBorder(),
+                                            nUpper, nLower);
+                    pUndoGroup->AddAction(pUndo);
+                    pPage->SetUppBorder(nUpper);
+                    pPage->SetLwrBorder(nLower);
+                }
+                InvalidateWindows();
+            }
             break;
         }
 
