@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smplmailsuppl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-15 10:47:27 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,6 @@
  *
  ************************************************************************/
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -75,10 +71,6 @@
 #include "smplmailclient.hxx"
 #endif
 
-//------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
-
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Sequence;
@@ -90,15 +82,7 @@ using osl::Mutex;
 
 using namespace cppu;
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 #define COMP_IMPL_NAME  "com.sun.star.sys.shell.SimpleSystemMail"
-
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
 
 namespace // private
 {
@@ -111,88 +95,52 @@ namespace // private
 
 } // end private namespace
 
-//-------------------------------------------------
-//
-//-------------------------------------------------
-
-CSmplMailSuppl::CSmplMailSuppl( ) :
-    WeakComponentImplHelper2< XSimpleMailClientSupplier, XServiceInfo >( m_aMutex ),
-    m_pSimpleMapi( CSimpleMapi::create( ) )
+CSmplMailSuppl::CSmplMailSuppl() :
+    WeakComponentImplHelper2<XSimpleMailClientSupplier, XServiceInfo>(m_aMutex)
 {
 }
 
-//-------------------------------------------------
-//
-//-------------------------------------------------
-
-CSmplMailSuppl::~CSmplMailSuppl( )
+CSmplMailSuppl::~CSmplMailSuppl()
 {
 }
 
-//-------------------------------------------------
-//
-//-------------------------------------------------
-
-Reference< XSimpleMailClient > SAL_CALL CSmplMailSuppl::querySimpleMailClient(  )
+Reference<XSimpleMailClient> SAL_CALL CSmplMailSuppl::querySimpleMailClient()
     throw (RuntimeException)
 {
-    // try to determine if a valid mapi mail client
-    // is available
-    // if so create and return a new instance of a
-    // simple mail client
-    // #93007# we have to set the flag MAPI_NEW_SESSION,
-    // because in the case Outlook xxx (not Outlook Express!)
-    // is installed as Exchange and Mail Client a Profile
-    // selection dialog must appear because we specify no
-    // profile name, so the user has to specify a profile
-    FLAGS flFlag = MAPI_NEW_SESSION | MAPI_LOGON_UI;
-    LHANDLE hSession;
-    ULONG ulRet = m_pSimpleMapi->MAPILogon(
-        0, NULL, NULL, flFlag, 0L, &hSession );
-
-    Reference< XSimpleMailClient > xSmplMailClient;
-
-    if ( SUCCESS_SUCCESS == ulRet )
+    /* We just try to load the MAPI dll as a test
+       if a mail client is available */
+    Reference<XSimpleMailClient> xSmplMailClient;
+    HMODULE handle = LoadLibrary("mapi32.dll");
+    if ((handle != INVALID_HANDLE_VALUE) && (handle != NULL))
     {
-        xSmplMailClient =
-            Reference< XSimpleMailClient >( new CSmplMailClient( hSession ) );
+        FreeLibrary(handle);
+        xSmplMailClient = Reference<XSimpleMailClient>(new CSmplMailClient());
     }
-
     return xSmplMailClient;
 }
 
-// -------------------------------------------------
 // XServiceInfo
-// -------------------------------------------------
 
-OUString SAL_CALL CSmplMailSuppl::getImplementationName(  )
-    throw( RuntimeException )
+OUString SAL_CALL CSmplMailSuppl::getImplementationName()
+    throw(RuntimeException)
 {
-    return OUString::createFromAscii( COMP_IMPL_NAME );
+    return OUString::createFromAscii(COMP_IMPL_NAME);
 }
 
-// -------------------------------------------------
-//  XServiceInfo
-// -------------------------------------------------
-
-sal_Bool SAL_CALL CSmplMailSuppl::supportsService( const OUString& ServiceName )
-    throw( RuntimeException )
+sal_Bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName)
+    throw(RuntimeException)
 {
-    Sequence < OUString > SupportedServicesNames = Component_getSupportedServiceNames();
+    Sequence <OUString> SupportedServicesNames = Component_getSupportedServiceNames();
 
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
+    for (sal_Int32 n = SupportedServicesNames.getLength(); n--;)
         if (SupportedServicesNames[n].compareTo(ServiceName) == 0)
             return sal_True;
 
     return sal_False;
 }
 
-// -------------------------------------------------
-//  XServiceInfo
-// -------------------------------------------------
-
-Sequence< OUString > SAL_CALL CSmplMailSuppl::getSupportedServiceNames(  )
-    throw( RuntimeException )
+Sequence<OUString> SAL_CALL CSmplMailSuppl::getSupportedServiceNames()
+    throw(RuntimeException)
 {
     return Component_getSupportedServiceNames();
 }
