@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:03:18 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 14:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ String RID_DB_COMMON_START + 6
     Text[ russian ] = "Âî âğåìÿ ğàáîòû Àâòîïèëîòà ïğîèçîøëà îøèáêà. Àâòîïèëîò áóäåò ñåé÷àñ ïğåğâàí.";
     Text[ dutch ] = "Tijdens het werken met de AutoPiloot is er een fout opgetreden. De AutoPiloot wordt gestopt.";
     Text[ french ] = "Une erreur s'est produite au cours de l'exécution de l'AutoPilote. Ce dernier va être fermé.";
-    Text[ spanish ] = "Ha ocurrido un error durante la ejecución del AutoPiloto. Se cancelará el AutoPiloto.";
+    Text[ spanish ] = "Durante la ejecución del AutoPiloto se ha producido un error. El AutoPiloto se cerrará.";
     Text[ italian ] = "Nel corso dell'esecuzione del Pilota automatico si è verificato un errore. Il Pilota automatico viene interrotto.";
     Text[ danish ] = "Der opstod en fejl under udførelse af AutoPilot. AutoPilot afsluttes.";
     Text[ swedish ] = "Ett fel uppstod när AutoPiloten kördes. AutoPiloten kommer att avslutas.";
@@ -267,7 +267,7 @@ String RID_DB_COMMON_START + 7
     Text[ russian ] = "Âî âğåìÿ ğàáîòû Àâòîïèëîòà äîëæíû áûòü çàêğûòû âñå ôîğìóëÿğû. Çàêğîéòå, ïîæàëóéñòà, ıòîò ôîğìóëÿğ.";
     Text[ dutch ] = "Tijdens het bewerken met de AutoPiloot mag er geen formulier geopend zijn. Sluit het formulier.";
     Text[ french ] = "L'AutoPilote ne peut être exécuté alors qu'un formulaire est ouvert. Veuillez fermer le formulaire.";
-    Text[ spanish ] = "Durante la ejecución del AutoPiloto no debe estar abierto ningún formulario. Cierre por favor el formulario.";
+    Text[ spanish ] = "Durante la ejecución del AutoPiloto no debe haber ningún formulario abierto. Cierre el formulario.";
     Text[ italian ] = "Durante l'esecuzione del Pilota automatico nessun formulario deve essere aperto. Chiudete il formulario.";
     Text[ danish ] = "Under udførelse af AutoPilot må der ikke være åbne formularer. Luk formularen.";
     Text[ swedish ] = "Inga formulär får vara öppna när AutoPiloten körs. Stäng formuläret.";
@@ -349,7 +349,7 @@ String RID_DB_COMMON_START + 10
     Text[ russian ] = "İòîò çàãîëîâîê óæå åñòü â áàçå äàííûõ. Âûáåğèòå, ïîæàëóéñòà, äğóãîé çàãîëîâîê.";
     Text[ dutch ] = "Deze naam bestaat reeds in de database. Kies een andere naam.";
     Text[ french ] = "Ce titre existe déjà dans la base de données. Choisissez-en un autre.";
-    Text[ spanish ] = "El título ya existe en la base de datos. Introduzca otro, por favor.";
+    Text[ spanish ] = "Este título ya existe en la base de datos. Introduzca otro.";
     Text[ italian ] = "Il titolo esiste già nel database. Sceglietene un altro.";
     Text[ danish ] = "Titlen findes allerede i databasen. Vælg en anden titel.";
     Text[ swedish ] = "Namnet finns redan i databasen. Välj ett annat namn.";
@@ -377,7 +377,7 @@ String RID_DB_COMMON_START + 11
     Text[ russian ] = "Â çàãîëîâêå íå äîëæíî áûòü íè ïğîáåëîâ, íè îñîáûõ ñèìâîëîâ.";
     Text[ dutch ] = "De naam mag geen spaties of speciale tekens bevatten.";
     Text[ french ] = "Le titre ne peut comporter ni espaces, ni caractères spéciaux.";
-    Text[ spanish ] = "El título no debe contener espacios o caracteres especiales.";
+    Text[ spanish ] = "El título no debe contener espacios ni caracteres especiales.";
     Text[ italian ] = "Il titolo non può contenere né spazi vuoti né caratteri speciali.";
     Text[ danish ] = "Titlen må ikke indeholde mellemrum eller specialtegn.";
     Text[ swedish ] = "Namnet får inte innehålla några blanksteg eller specialtecken.";
@@ -464,7 +464,7 @@ String RID_DB_COMMON_START + 14
     Text[ greek ] = "A Connection to the database could not be established";
     Text[ dutch ] = "Er kon geen verbinding met de database tot stand worden gebracht!";
     Text[ french ] = "Impossible d'établir une connexion à la base de données !";
-    Text[ spanish ] = "¡No se pudo realizar una conexión a la base de datos!";
+    Text[ spanish ] = "No se pudo realizar la conexión a la base de datos";
     Text[ finnish ] = "Yhteyden muodostaminen tietokantaan ei onnistunut.";
     Text[ italian ] = "Impossibile realizzare il collegamento al database.";
     Text[ danish ] = "Det var ikke muligt at oprette forbindelse til databasen!";
@@ -593,7 +593,7 @@ String RID_DB_COMMON_START + 32
     Text[ greek ] = "A link to the datasource will be created automatically.";
     Text[ dutch ] = "A link to the datasource will be created automatically.";
     Text[ french ] = "Un lien vers la source de données va être créé automatiquement.";
-    Text[ spanish ] = "Se creará automáticamente un vínculo hacia la fuente de datos. ";
+    Text[ spanish ] = "Se creará automáticamente un vínculo a la fuente de datos. ";
     Text[ finnish ] = "A link to the datasource will be created automatically.";
     Text[ italian ] = "Il collegamento alla sorgente dati viene creato automaticamente.";
     Text[ danish ] = "A link to the datasource will be created automatically.";
@@ -1118,7 +1118,7 @@ String RID_DB_GROUP_WIZARD_START + 14
     Text[ russian ] = "Íåò. Ïîëå íå âûáèğàòü.";
     Text[ dutch ] = "Nee, geen veld selecteren.";
     Text[ french ] = "Non, aucun.";
-    Text[ spanish ] = "No, no debe ser seleccionado ningún campo.";
+    Text[ spanish ] = "No, no se debe seleccionar ningún campo.";
     Text[ italian ] = "Non selezionare alcun campo.";
     Text[ danish ] = "Nej, der skal ikke være valgt noget felt.";
     Text[ swedish ] = "Nej, inget fält skall vara utvalt.";
@@ -1146,7 +1146,7 @@ String RID_DB_GROUP_WIZARD_START + 15
     Text[ russian ] = "Åñëè Âû âûáåğèòå õîòÿ áû îäèí ïàğàìåòğ, òî ãğóïïå ïàğàìåòğîâ áóäåò ïğèñâîåíî îïğåäåëåííîå çíà÷åíèå.";
     Text[ dutch ] = "Als u een optie kiest wordt er een bepaalde waarde toegewezen aan de optiegroep.";
     Text[ french ] = "Si vous sélectionnez une option, une valeur spécifique sera attribuée au groupe d'options.";
-    Text[ spanish ] = "Si elige una opción, se le asignará al grupo de opciones un determinado valor.";
+    Text[ spanish ] = "Al seleccionar una opción, se asignará un valor determinado al grupo de opciones.";
     Text[ italian ] = "Selezionando un'opzione, verrà assegnato un dato valore al gruppo di opzioni.";
     Text[ danish ] = "Når du vælger et alternativ, tildeles alternativgruppen en bestemt værdi.";
     Text[ swedish ] = "Om du väljer ett alternativ tilldelas alternativgruppen ett visst värde.";
@@ -1175,7 +1175,7 @@ String RID_DB_GROUP_WIZARD_START + 16
     Text[ russian ] = "Êàêîå çíà÷åíèå Âû õîòåëè áû ïğèñâîèòü êàæäîìó ïàğàìåòğó?";
     Text[ dutch ] = "Welke waarden wilt u toewijzen aan de opties ?";
     Text[ french ] = "Quelle valeur attribuer à chaque option ?";
-    Text[ spanish ] = "¿Qué valor desea asignarle a cada opción?";
+    Text[ spanish ] = "¿Qué valor desea asignar a cada opción?";
     Text[ italian ] = "Quale valore desiderate assegnare a ogni opzione?";
     Text[ danish ] = "Hvilken værdi skal tildeles hvert alternativ?";
     Text[ swedish ] = "Vilket värde vill du tilldela varje alternativ ?";
@@ -1231,7 +1231,7 @@ String RID_DB_GROUP_WIZARD_START + 18
     Text[ russian ] = "Çíà÷åíèå ãğóïïû ïàğàìåòğîâ ìîæíî ñîõğàíèòü â ïîëå áàçû äàííûõ èëè èñïîëüçîâàòü åãî äëÿ äàëüíåéøèõ îïåğàöèé.";
     Text[ dutch ] = "U kunt de waarde van de optiegroep opslaan in een databaseveld of hem een andere keer gebruiken.";
     Text[ french ] = "Vous pouvez soit enregistrer la valeur du groupe d'options dans un champ de base de données, soit l'utiliser pour une action ultérieure.";
-    Text[ spanish ] = "Puede guardar el valor del grupo de opciones en un campo de base de datos o usarlo para una acción posterior.";
+    Text[ spanish ] = "Puede guardar el valor del grupo de opciones en un campo de base de datos o utilizarlo para una acción posterior.";
     Text[ italian ] = "Potete salvare il valore del gruppo di opzioni in un campo database oppure utilizzarlo per un'operazione successiva.";
     Text[ danish ] = "Værdien fra alternativgruppen kan enten gemmes i et databasefelt eller anvendes til en senere handling.";
     Text[ swedish ] = "Du kan antingen spara alternativgruppens värde i ett databasfält eller använda det till en senare åtgärd.";
@@ -1287,7 +1287,7 @@ String RID_DB_GROUP_WIZARD_START + 20
     Text[ russian ] = "Äà. Â ñëåäóşùåì ïîëå áàçû äàííûõ :";
     Text[ dutch ] = "Ja, en wel in het volgende databaseveld :";
     Text[ french ] = "Oui, dans le champ suivant :";
-    Text[ spanish ] = "Sí, en el siguiente campo :";
+    Text[ spanish ] = "Sí, en el campo siguiente :";
     Text[ italian ] = "Sì, nel seguente campo database :";
     Text[ danish ] = "Ja, og det skal være i følgende databasefelt :";
     Text[ swedish ] = "Ja, i följande databasfält :";
@@ -1315,7 +1315,7 @@ String RID_DB_GROUP_WIZARD_START + 21
     Text[ russian ] = "Íåò. Ñîõğàíèòü ıòî çíà÷åíèå òîëüêî â ôîğìóëÿğå.";
     Text[ dutch ] = "Nee, ik wil de waarde alleen opslaan in het formulier.";
     Text[ french ] = "Non, enregistrer la valeur uniquement dans le formulaire.";
-    Text[ spanish ] = "No, deseo guardar el valor solo en el formulario.";
+    Text[ spanish ] = "No, deseo guardar el valor sólo en el formulario.";
     Text[ italian ] = "Salva il valore solo nel formulario.";
     Text[ danish ] = "Nej, værdien skal kun gemmes i formularen.";
     Text[ swedish ] = "Nej, jag vill bara spara värdet i formuläret.";
@@ -1343,7 +1343,7 @@ String RID_DB_GROUP_WIZARD_START + 22
     Text[ russian ] = "Êàêóş ïîäïèñü äîëæíà ïîëó÷èòü Âàøà ãğóïïà ïàğàìåòğîâ?";
     Text[ dutch ] = "Welk naam wilt u uw optiegroep geven ?";
     Text[ french ] = "Quelle étiquette attribuer au groupe d'options ?";
-    Text[ spanish ] = "¿Qué título debe tener el grupo de opciones?";
+    Text[ spanish ] = "¿Qué título desea asignar al grupo de opciones?";
     Text[ italian ] = "Quale dicitura volete assegnare al gruppo di opzioni ?";
     Text[ danish ] = "Hvilken etiket skal alternativgruppen have?";
     Text[ swedish ] = "Vilken beteckning skall din alternativgrupp ha?";
@@ -1371,7 +1371,7 @@ String RID_DB_GROUP_WIZARD_START + 23
     Text[ russian ] = "İòî âñå çàäàíèÿ, íåîáõîäèìûå äëÿ ñîçäàíèÿ ãğóïïû ïàğàìåòğîâ.";
     Text[ dutch ] = "De gegevens voor het maken van de optiegroep zijn nu compleet.";
     Text[ french ] = "Toutes les informations nécessaires ont été rassemblées ; le groupe d'options va pouvoir être créé.";
-    Text[ spanish ] = "Ya se dispone de las informaciones necesarias para crear el grupo de opciones.";
+    Text[ spanish ] = "Ya se dispone de la información necesaria para crear el grupo de opciones.";
     Text[ italian ] = "Tutte le informazioni necessarie per creare il gruppo di opzioni sono state indicate.";
     Text[ danish ] = "Nu har programmet alle de oplysninger, som er nødvendige for at oprette alternativgruppen.";
     Text[ swedish ] = "Detta var alla uppgifter som behövdes för att alternativgruppen ska kunna skapas.";
@@ -1429,7 +1429,7 @@ String RID_DB_FORM_WIZARD_START + 1
     Text[ russian ] = "Èñïîëüçîâàòü ıòîò çàãîëîâîê íåâîçìîæíî. Âûáåğèòå, ïîæàëóéñòà, äğóãîé çàãîëîâîê.";
     Text[ dutch ] = "De naam is niet bruikbaar, Kies een andere";
     Text[ french ] = "Impossible d'utiliser ce titre ! Choisissez-en choisir un autre.";
-    Text[ spanish ] = "No se puede usar el título. Escoja otro.";
+    Text[ spanish ] = "No se puede utilizar este título. Seleccione otro.";
     Text[ italian ] = "Il titolo non può essere utilizzato. Sceglietene un altro.";
     Text[ danish ] = "Titlen kan ikke anvendes. Vælg en anden titel.";
     Text[ swedish ] = "Namnet kan inte användas. Välj ett annat namn.";
@@ -1457,7 +1457,7 @@ String RID_DB_FORM_WIZARD_START + 2
     Text[ russian ] = "Ñîçäàòü ôîğìóëÿğ";
     Text[ dutch ] = "Formulier maken";
     Text[ french ] = "Créer un formulaire";
-    Text[ spanish ] = "Crear formulario";
+    Text[ spanish ] = "Crear un formulario";
     Text[ italian ] = "Crea formulario";
     Text[ danish ] = "Opret formular";
     Text[ swedish ] = "Skapa formulär";
@@ -2077,7 +2077,7 @@ String RID_DB_FORM_WIZARD_START + 24
     Text[ russian ] = "Èñïîëüçîâàòü äîêóìåíò ~ñğàçó";
     Text[ dutch ] = "Document ~meteen gebruiken";
     Text[ french ] = "A~fficher le document";
-    Text[ spanish ] = "~Usar documento inmediatamente";
+    Text[ spanish ] = "~Utilizar documento inmediatamente";
     Text[ italian ] = "Utili~zza subito il documento";
     Text[ danish ] = "Anvend dokument ~omgående";
     Text[ swedish ] = "Använd d~okument direkt";
@@ -2105,7 +2105,7 @@ String RID_DB_FORM_WIZARD_START + 25
     Text[ russian ] = "Ñîõğàíèòü äîêóìåíò";
     Text[ dutch ] = "document ~opslaan";
     Text[ french ] = "~Archiver le document";
-    Text[ spanish ] = "~Guardar documento";
+    Text[ spanish ] = "~Guardar el documento";
     Text[ italian ] = "~Salva il documento";
     Text[ danish ] = "~Arkiver dokument";
     Text[ swedish ] = "~Arkivera dokument";
@@ -2133,7 +2133,7 @@ String RID_DB_FORM_WIZARD_START + 26
     Text[ greek ] = "Ç öüñìá äçìéïõñãŞèçêå êáé áğïèçêåıôçêå óôç âÜóç äåäïìİíùí.";
     Text[ dutch ] = "Het formulier werd gemaakt en opgeslagen in de database.";
     Text[ french ] = "Le formulaire a été créé et archivé dans la base de données.";
-    Text[ spanish ] = "El formulario se ha creado y guardado en la base de datos.";
+    Text[ spanish ] = "El formulario se creó y guardó en la base de datos.";
     Text[ swedish ] = "Formuläret har skapats och arkiverats i databasen.";
     Text[ russian ] = "Ôîğìóëÿğ ñîçäàí è ïîìåùåí â áàçó äàííûõ.";
     Text[ italian ] = "Il formulario è stato creato e salvato nel database.";
@@ -2162,7 +2162,7 @@ String RID_DB_FORM_WIZARD_START + 27
     Text[ greek ] = "Ôï ìŞêïò ôïõ ïíüìáôïò ôçò öüñìáò äåí ğñİğåé íá õğåñâáßíåé ôïõò 32 ÷áñáêôŞñåò.";
     Text[ dutch ] = "Formuliernamen mogen maximaal 32 tekens lang zijn.";
     Text[ french ] = "Un nom de formulaire peut contenir au maximum 32 caractères.";
-    Text[ spanish ] = "Los nombres de formularios no pueden exceder los 32 caracteres.";
+    Text[ spanish ] = "Los nombres de los formularios no pueden exceder los 32 caracteres.";
     Text[ italian ] = "I nomi del formulario possono avere una lunghezza massima di 32 caratteri.";
     Text[ danish ] = "Formularnavne må højst indeholde 32 tegn.";
     Text[ swedish ] = "Formulärnamn får inte innehålla mer än 32 tecken.";
@@ -2189,7 +2189,7 @@ String RID_DB_FORM_WIZARD_START + 28
     Text[ greek ] = "Ğåñßãñáììá ğåäßïõ";
     Text[ dutch ] = "Veldomranding";
     Text[ french ] = "Bordure de champ";
-    Text[ spanish ] = "Bordes de campo";
+    Text[ spanish ] = "Borde del campo";
     Text[ italian ] = "Bordo campo";
     Text[ danish ] = "Feltramme";
     Text[ swedish ] = "Fältinramning";
@@ -3768,7 +3768,7 @@ String RID_DB_QUERY_WIZARD_START + 29
     Text[ russian ] = "Çàãîëîâîê çàïğîñà";
     Text[ dutch ] = "Naam ~query";
     Text[ french ] = "~Titre de la requête";
-    Text[ spanish ] = "Título ~de consulta";
+    Text[ spanish ] = "Título ~de la consulta";
     Text[ italian ] = "~Titolo ricerca";
     Text[ danish ] = "Forespørgsels~titel";
     Text[ swedish ] = "~Namn på sökning";
@@ -3824,7 +3824,7 @@ String RID_DB_QUERY_WIZARD_START + 31
     Text[ russian ] = "Âûïîëíèòü çàïğîñ ñğàçó";
     Text[ dutch ] = "Query meteen ~uitvoeren";
     Text[ french ] = "~Exécuter immédiatement la requête";
-    Text[ spanish ] = "~Realizar consulta inmediatamente";
+    Text[ spanish ] = "~Realizar la consulta inmediatamente";
     Text[ italian ] = "~Avvia subito la ricerca";
     Text[ danish ] = "~Udfør straks forespørgsel";
     Text[ swedish ] = "Utför sökning ~direkt";
@@ -3852,7 +3852,7 @@ String RID_DB_QUERY_WIZARD_START + 32
     Text[ russian ] = "Ñîõğàíèòü ~çàïğîñ";
     Text[ dutch ] = "Query ~opslaan";
     Text[ french ] = "~Archiver la requête";
-    Text[ spanish ] = "~Guardar consulta";
+    Text[ spanish ] = "~Guardar la consulta";
     Text[ italian ] = "~Salva ricerca";
     Text[ danish ] = "~Arkiver forespørgsel";
     Text[ swedish ] = "~Arkivera sökning";
@@ -4248,7 +4248,7 @@ String RID_DB_REPORT_WIZARD_START + 14
     Text = "Bericht speichern";
     Text [ english_us ] = "Save Report";
     Text[ french ] = "Enregistrer l'état";
-    Text[ spanish ] = "Guardar informe";
+    Text[ spanish ] = "Guardar el informe";
     Text[ italian ] = "Salva rapporto";
     Text[ swedish ] = "Spara rapport";
     Text[ portuguese_brazilian ] = "Bericht speichern";
@@ -4504,7 +4504,7 @@ String RID_DB_REPORT_WIZARD_START + 28
     Text = "Welche Felder sollen in Ihrem Bericht erscheinen?";
     Text [ english_us ] = "Which fields do you want to have in your report?";
     Text[ french ] = "Champs de l'état :";
-    Text[ spanish ] = "¿Qué campos desea que aparezcan en su informe?";
+    Text[ spanish ] = "¿Qué campos desea que aparezcan en el informe?";
     Text[ italian ] = "Quali campi volete visualizzare nel vostro rapporto?";
     Text[ swedish ] = "Vilka fält ska finnas med i din rapport?";
     Text[ portuguese_brazilian ] = "Welche Felder sollen in Ihrem Bericht erscheinen?";
@@ -4585,7 +4585,7 @@ String RID_DB_REPORT_WIZARD_START + 31
     Text = "Wie soll Ihr Bericht aussehen?";
     Text [ english_us ] = "How do you want your report to look?";
     Text[ french ] = "Apparence de l'état :";
-    Text[ spanish ] = "¿Qué aspecto desea darle a su informe?";
+    Text[ spanish ] = "¿Qué aspecto desea darle al informe?";
     Text[ italian ] = "Come volete formattare il vostro rapporto?";
     Text[ swedish ] = "Hur ska din rapport se ut?";
     Text[ portuguese_brazilian ] = "Wie soll Ihr Bericht aussehen?";
@@ -6698,7 +6698,7 @@ String RID_DB_COMBO_WIZARD_START + 14
     Text[ russian ] = "Ñîäåğæèìîå âûáğàííîãî ïîëÿ áóäåò ïîêàçàíî â ñïèñêå, åñëè ñâÿçàííûå ïîëÿ ñîâïàäàşò.";
     Text[ dutch ] = "De inhoud van het geselecteerde veld wordt in de keuzelijst weergegeven als de gekoppelde velden overeenkomen.";
     Text[ french ] = "Le contenu du champ sélectionné sera affiché dans la zone de liste à condition que les champs liés coïncident.";
-    Text[ spanish ] = "El contenido del campo seleccionado se mostrará en el listado si coinciden los campos vinculados.";
+    Text[ spanish ] = "El contenido del campo seleccionado se mostrará en el listado si los campos vinculados coinciden.";
     Text[ italian ] = "Il contenuto del campo selezionato verrà mostrato nella casella di riepilogo quando i campi collegati coincidono.";
     Text[ danish ] = "Indholdet af det valgte felt vises på rullelisten, når de kædede felter stemmer overens";
     Text[ swedish ] = "Innehållet i det utvalda fältet visas i listrutan om de länkade fälten stämmer överens.";
@@ -6810,7 +6810,7 @@ String RID_DB_COMBO_WIZARD_START + 18
     Text[ russian ] = "Çíà÷åíèå ïîëÿ ñî ñïèñêîì ìîæíî èëè ñîõğàíèòü â ïîëå áàçû äàííûõ èëè èñïîëüçîâàòü åãî äëÿ ïîêàçà.";
     Text[ dutch ] = "U kunt de waarde van het combinatieveld in een databaseveld opslaan of deze alleen laten weergeven.";
     Text[ french ] = "Vous pouvez soit enregistrer la valeur de la zone combinée dans un champ de base de données, soit l'utiliser seulement pour l'affichage.";
-    Text[ spanish ] = "Puede guardar el valor del campo combinado en un campo de base de datos o usarlo sólo para mostrarlo.";
+    Text[ spanish ] = "Puede guardar el valor del campo combinado en un campo de base de datos o utilizarlo sólo para visualizarlo.";
     Text[ italian ] = "Potete salvare il valore della casella combinata in un campo database oppure utilizzarlo solo per visualizzarlo.";
     Text[ danish ] = "Værdien fra kombinationsboksen kan enten gemmes i et databasefelt eller anvendes udelukkende til visning.";
     Text[ swedish ] = "Du kan antingen spara kombinationsfältets värde i ett databasfält eller bara använda det för visning.";
@@ -6839,7 +6839,7 @@ String RID_DB_COMBO_WIZARD_START + 19
     Text[ russian ] = "Çíà÷åíèÿ ñïèñêà ìîæíî èëè ñîõğàíèòü â ïîëå áàçû äàííûõ, èëè èñïîëüçîâàòü òîëüêî äëÿ ïîêàçà.";
     Text[ dutch ] = "U kunt de waarde van de keuzelijst in een databaseveld opslaan of deze alleen laten weergeven.";
     Text[ french ] = "Vous pouvez soit enregistrer la valeur de la zone de liste dans un champ de base de données, soit l'utiliser seulement pour l'affichage.";
-    Text[ spanish ] = "Puede guardar el valor del listado en un campo de base de datos o usarlo solo para mostrarlo.";
+    Text[ spanish ] = "Puede guardar el valor del listado en un campo de base de datos o utilizarlo sólo para visualizarlo.";
     Text[ italian ] = "Potete salvare il valore della casella di riepilogo in un campo database oppure utilizzarlo per visualizzarlo.";
     Text[ danish ] = "Værdien fra rullelisten kan enten gemmes i et databasefelt eller anvendes udelukkende til visning.";
     Text[ swedish ] = "Du kan antingen spara listrutans värde i ett databasfält eller bara använda det för visning.";
@@ -6923,7 +6923,7 @@ String RID_DB_COMBO_WIZARD_START + 22
     Text[ russian ] = "~Íåò. Èñïîëüçîâàòü çíà÷åíèå òîëüêî äëÿ ïîêàçà.";
     Text[ dutch ] = "~Nee, ik wil de waarde alleen laten weergeven.";
     Text[ french ] = "~Non, utiliser la valeur uniquement pour l'affichage";
-    Text[ spanish ] = "~No, deseo usar el valor solo para la visualización.";
+    Text[ spanish ] = "~No, deseo utilizar el valor sólo para la visualización.";
     Text[ italian ] = "~No, utilizza il valore solo per la visualizzazione.";
     Text[ danish ] = "~Nej, værdierne skal kun vises.";
     Text[ swedish ] = "~Nej, jag vill bara använda värdet för visning.";
