@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddeimp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: hro $ $Date: 2000-12-13 14:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,15 +77,21 @@
 
 #else
 
-#include <tools/svwin.h>
+#include <tools/prewin.h>
+#include <ddeml.h>
+#include <systools/win32/user9x.h>
+#include <tools/postwin.h>
+#include "ddewrap.hxx"
+
+/*
 extern "C"
 {
 #define BOOL WIN_BOOL
 #define BYTE WIN_BYTE
-#include <ddeml.h>
 #undef BOOL
 #undef BYTE
 };
+*/
 
 #endif
 

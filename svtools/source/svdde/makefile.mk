@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+#   last change: $Author: hro $ $Date: 2000-12-13 14:39:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ CXXFILES=	ddecli.cxx			\
             ddesvr.cxx			\
             ddedata.cxx 		\
             ddestrg.cxx 		\
+            ddewrap.cxx			\
             ddeinf.cxx
 
 .IF "$(GUIBASE)"=="OS2"
@@ -94,6 +95,7 @@ SLOFILES=	$(SLO)$/ddecli.obj	\
             $(SLO)$/ddesvr.obj	\
             $(SLO)$/ddedata.obj	\
             $(SLO)$/ddestrg.obj	\
+            $(SLO)$/ddewrap.obj \
             $(SLO)$/ddeinf.obj
 
 .IF "$(GUIBASE)"=="OS2"

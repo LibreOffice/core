@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddesvr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: hro $ $Date: 2000-12-13 14:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,11 @@
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
 #endif
+
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
+
 //static long         hCurConv  = 0;
 //static DWORD        hDdeInst  = NULL;
 //static short        nInstance = 0;
@@ -389,7 +394,9 @@ found:
                 aExec.pImp->hData = hData;
                 aExec.pImp->nFmt  = nCbType;
                 aExec.Lock();
-                String aName = (const sal_Unicode *)aExec.pImp->pData;
+                String aName;
+
+                aName = (const sal_Unicode *)aExec.pImp->pData;
 
                 if( pTopic->IsSystemTopic() )
                     bRes = pService->SysTopicExecute( &aName );

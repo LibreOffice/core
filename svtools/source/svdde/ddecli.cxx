@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddecli.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2000-12-12 09:52:25 $
+ *  last change: $Author: hro $ $Date: 2000-12-13 14:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,7 +477,7 @@ DdePoke::DdePoke( DdeConnection& d, const String& i, const String& rData,
                   long n ) :
             DdeTransaction( d, i, n )
 {
-    ByteString aByteStr( rData, osl_getThreadTextEncoding() );
+//  ByteString aByteStr( rData, osl_getThreadTextEncoding() );
     aDdeData = DdeData( (void*) rData.GetBuffer(), sizeof(sal_Unicode) * (rData.Len()), CF_TEXT );
     nType = XTYP_POKE;
 }
@@ -497,7 +497,7 @@ DdePoke::DdePoke( DdeConnection& d, const String& i, const DdeData& rData,
 DdeExecute::DdeExecute( DdeConnection& d, const String& rData, long n ) :
                 DdeTransaction( d, String(), n )
 {
-    ByteString aByteStr( rData, osl_getThreadTextEncoding() );
+//  ByteString aByteStr( rData, osl_getThreadTextEncoding() );
     aDdeData = DdeData( (void*)rData.GetBuffer(), sizeof(sal_Unicode) * (rData.Len() + 1), CF_TEXT );
     nType = XTYP_EXECUTE;
 }
