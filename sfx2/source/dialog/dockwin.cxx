@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-07 17:28:21 $
+ *  last change: $Author: mba $ $Date: 2001-12-19 18:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,9 +135,17 @@ void SfxDockingWindow::Resize()
         Invalidate();
         if ( pImp->bConstructed )
         {
-            if ( IsFloatingMode() && !GetFloatingWindow()->IsRollUp() )
-                SetFloatingSize(GetOutputSizePixel());
-            pImp->aWinState = GetFloatingWindow()->GetWindowState();
+            if ( IsFloatingMode() && pMgr )
+            {
+                if( !GetFloatingWindow()->IsRollUp() )
+                    SetFloatingSize( GetOutputSizePixel() );
+                pImp->aWinState = GetFloatingWindow()->GetWindowState();
+                SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
+                SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
+                if ( pImp->bSplitable )
+                    eIdent = SFX_CHILDWIN_SPLITWINDOW;
+                pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
+            }
         }
     }
 }
@@ -230,11 +238,12 @@ void SfxDockingWindow::ToggleFloatingMode()
             GetFloatingWindow()->SetWindowState( pImp->aWinState );
         else
             GetFloatingWindow()->SetOutputSizePixel( GetFloatingSize() );
-
+/*
         if ( pImp->bSplitable && !pImp->bEndDocked )
             // Wenn das Fenster vorher in einem SplitWindow lag, kommt von
             // Sv kein Show
             Show();
+*/
     }
     else
     {
