@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-21 13:35:49 $
+ *  last change: $Author: ab $ $Date: 2002-01-09 16:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         BOOL bHasMacros = FALSE;
         if ( xStor->IsOLEStorage() )
-            bHasMacros = BasicManager::HasBasicManager( *xStor );
+            bHasMacros = BasicManager::HasBasicWithModules( *xStor );
         else
             bHasMacros = xStor->IsStorage( String::CreateFromAscii("Basic") );
 
