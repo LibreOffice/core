@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SyncElement.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com {  module sun {  module star {  module sync {
 
     @deprecated
  */
-struct SyncElement
+published struct SyncElement
 {
     /** contains the ContentIdentifier of this synchronization element
      */
