@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-11 13:10:33 $
+ *  last change: $Author: tbe $ $Date: 2002-08-13 15:16:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,8 +366,18 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_NAME_EVENT, aOldValue, aNewValue );
         }
         break;
-
-        // MT: Missing event for enabled !!!
+        case VCLEVENT_WINDOW_ENABLED:
+        {
+            aNewValue <<= accessibility::AccessibleStateType::ENABLED;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+        }
+        break;
+        case VCLEVENT_WINDOW_DISABLED:
+        {
+            aOldValue <<= accessibility::AccessibleStateType::ENABLED;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+        }
+        break;
     }
 }
 
