@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-16 08:51:48 $
+ *  last change: $Author: hjs $ $Date: 2002-02-05 18:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,9 @@ namespace tracing
 #define TRACE_ALLOC( type ) tracing::AllocationTracer::registerUnit( #type );
 #define TRACE_FREE( type )  tracing::AllocationTracer::revokeUnit( #type );
 }
+#else
+#define TRACE_ALLOC( type )
+#define TRACE_FREE( type )
 #endif
 
 // -----------------------------------------------------------------------------
