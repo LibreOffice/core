@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 21:06:48 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 22:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/08/13 21:06:48  kz
+ *  Merge SRC638: 13.08.01 - 23:06:07
+ *
  *  Revision 1.20  2001/08/07 15:11:02  kz
  *  Merge SRC638: 07.08.01 - 17:10:44
  *
@@ -304,6 +307,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
  *
  *  Revision 1.0 24.10.00 09:42:47  fs
  ************************************************************************/
+
 
 
 
