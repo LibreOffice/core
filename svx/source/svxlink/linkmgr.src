@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:32:46 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@ String RID_SVXSTR_FILELINK
     Text[ hebrew ] = "‮מסמך‬";
     Text[ hindi ] = "लेखपत्र";
     Text[ slovak ] = "Dokument";
+    Text[ hungarian ] = "Dokumentum";
+    Text[ slovenian ] = "Dokument";
 };
 String RID_SVXSTR_GRAFIKLINK
 {
@@ -127,6 +129,8 @@ String RID_SVXSTR_GRAFIKLINK
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र";
     Text[ slovak ] = "Obrázok";
+    Text[ hungarian ] = "Kép";
+    Text[ slovenian ] = "Grafika";
 };
 String RID_SVXSTR_EDITGRFLINK
 {
@@ -163,6 +167,8 @@ String RID_SVXSTR_EDITGRFLINK
     Text[ hebrew ] = "‮קישור גרפיקה‬";
     Text[ hindi ] = "सुचित्र को लिंक करो";
     Text[ slovak ] = "Prepojiť obrázky";
+    Text[ hungarian ] = "Kép csatolása";
+    Text[ slovenian ] = "Poveži grafike";
 };
 String RID_SVXSTR_GRFLINKPROGRESS
 {
@@ -196,11 +202,15 @@ String RID_SVXSTR_GRFLINKPROGRESS
     Text[ hebrew ] = "‮יבוא גרפיקה‬";
     Text[ hindi ] = "सुचित्र को आयात कर रहा है...";
     Text[ slovak ] = "Importuje sa obrázok...";
+    Text[ hungarian ] = "Kép importálása";
+    Text[ slovenian ] = "Uvoz grafike...";
 };
 Bitmap RID_SVXGRF_GRAPHICLOAD
 {
     File = "grfload.bmp" ;
 };
+
+
 
 
 
