@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:31:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,14 +599,14 @@ int OutputDevice::ImplGetGraphics() const
     {
         Window* pWindow = (Window*)this;
 
-        mpGraphics = pWindow->mpFrame->GetGraphics();
+        mpGraphics = pWindow->mpWindowImpl->mpFrame->GetGraphics();
         // Wenn wir keinen bekommen haben, versuchen wir uns einen zu klauen
         if ( !mpGraphics )
         {
             OutputDevice* pReleaseOutDev = pSVData->maGDIData.mpLastWinGraphics;
             while ( pReleaseOutDev )
             {
-                if ( ((Window*)pReleaseOutDev)->mpFrame == pWindow->mpFrame )
+                if ( ((Window*)pReleaseOutDev)->mpWindowImpl->mpFrame == pWindow->mpWindowImpl->mpFrame )
                     break;
                 pReleaseOutDev = pReleaseOutDev->mpPrevGraphics;
             }
@@ -623,7 +623,7 @@ int OutputDevice::ImplGetGraphics() const
                     if ( !pSVData->maGDIData.mpLastWinGraphics )
                         break;
                     pSVData->maGDIData.mpLastWinGraphics->ImplReleaseGraphics();
-                    mpGraphics = pWindow->mpFrame->GetGraphics();
+                    mpGraphics = pWindow->mpWindowImpl->mpFrame->GetGraphics();
                 }
             }
         }
@@ -736,7 +736,7 @@ void OutputDevice::ImplReleaseGraphics( BOOL bRelease )
         Window* pWindow = (Window*)this;
 
         if ( bRelease )
-            pWindow->mpFrame->ReleaseGraphics( mpGraphics );
+            pWindow->mpWindowImpl->mpFrame->ReleaseGraphics( mpGraphics );
         if ( mpPrevGraphics )
             mpPrevGraphics->mpNextGraphics = mpNextGraphics;
         else
@@ -910,15 +910,15 @@ void OutputDevice::ImplInitClipRegion()
         Region  aRegion;
 
         // Hintergrund-Sicherung zuruecksetzen
-        if ( pWindow->mpFrameData->mpFirstBackWin )
+        if ( pWindow->mpWindowImpl->mpFrameData->mpFirstBackWin )
             pWindow->ImplInvalidateAllOverlapBackgrounds();
-        if ( pWindow->mbInPaint )
-            aRegion = *(pWindow->mpPaintRegion);
+        if ( pWindow->mpWindowImpl->mbInPaint )
+            aRegion = *(pWindow->mpWindowImpl->mpPaintRegion);
         else
         {
             aRegion = *(pWindow->ImplGetWinChildClipRegion());
             // --- RTL -- only this region is in frame coordinates, so re-mirror it
-            // the mpPaintRegion above is already correct (see ImplCallPaint()) !
+            // the mpWindowImpl->mpPaintRegion above is already correct (see ImplCallPaint()) !
             if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
                 ImplReMirror ( aRegion );
         }
@@ -1045,9 +1045,9 @@ Region OutputDevice::GetActiveClipRegion() const
     {
         Region aRegion( REGION_NULL );
         Window* pWindow = (Window*)this;
-        if ( pWindow->mbInPaint )
+        if ( pWindow->mpWindowImpl->mbInPaint )
         {
-            aRegion = *(pWindow->mpPaintRegion);
+            aRegion = *(pWindow->mpWindowImpl->mpPaintRegion);
             aRegion.Move( -mnOutOffX, -mnOutOffY );
         }
         if ( mbClipRegion )
