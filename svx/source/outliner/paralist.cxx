@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paralist.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-30 17:23:37 $
+ *  last change: $Author: mt $ $Date: 2001-06-21 13:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ Paragraph::Paragraph( USHORT nDDepth )
 {
     DBG_CTOR( Paragraph, 0 );
 
-    DBG_ASSERT( nDDepth < SVX_MAX_NUM, "Paragraph-CTOR: nDepth invalid!" );
+    DBG_ASSERT( ( nDDepth < SVX_MAX_NUM ) || ( nDDepth == 0xFFFF ), "Paragraph-CTOR: nDepth invalid!" );
 
     nDepth = nDDepth;
     nFlags = 0;

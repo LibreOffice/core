@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-20 09:08:06 $
+ *  last change: $Author: mt $ $Date: 2001-06-21 13:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,11 @@ Pointer OutlinerView::ImpGetMousePointer( MouseTarget eTarget )
         case MouseNodeButton:
         case MouseOutside:
         {
+            return Pointer(POINTER_ARROW);
+        }
+        default:
+        {
+            DBG_ERROR( "ImpGetMousePointer - Unknown Target!" );
             return Pointer(POINTER_ARROW);
         }
     }
