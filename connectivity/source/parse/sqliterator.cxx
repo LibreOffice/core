@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-03 09:05:51 $
+ *  last change: $Author: oj $ $Date: 2001-01-04 10:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include <connectivity/sqlparse.hxx>
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
@@ -87,7 +90,7 @@
 #endif
 
 using namespace connectivity;
-using namespace dbtools;
+using namespace ::dbtools;
 using namespace connectivity::parse;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -230,21 +233,11 @@ void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableNam
                 {
                     ::rtl::OUString sCatalog, sSchema, sName;
                     Reference< XRow > xCurrentRow(xRes, UNO_QUERY);
-                    sCatalog = xCurrentRow->getString(1);
-                    sSchema = xCurrentRow->getString(2);
-                    sName = xCurrentRow->getString(3);
-
-                    if(sCatalog.getLength())
-                    {
-                        aTableName = sCatalog;
-                        aTableName += m_xDatabaseMetaData->getCatalogSeparator();
-                    }
-                    if(sSchema.getLength())
-                    {
-                        aTableName += sSchema;
-                        aTableName += ::rtl::OUString::createFromAscii(".");
-                    }
-                    aTableName += sName;
+                    ::dbtools::composeTableName(m_xDatabaseMetaData, xCurrentRow->getString(1),
+                                                                     xCurrentRow->getString(2),
+                                                                     xCurrentRow->getString(3),
+                                                                     aTableName,
+                                                                     sal_False);
                 }
             }
             if(m_xTables->hasByName(aTableName)) // the name can be changed before
@@ -477,13 +470,15 @@ sal_Bool OSQLParseTreeIterator::getColumnTableRange(const OSQLParseNode* pNode, 
                     try
                     {
                         Reference< XNameAccess > xColumns = aIter->second->getColumns();
-                        Any aColumn(xColumns->getByName(aColName));
-                        Reference< XPropertySet > xColumn;
-
-                        if (aColumn >>= xColumn)
+                        if(xColumns->hasByName(aColName))
                         {
-                            aTableRange = aIter->first;
-                            break;
+                            Reference< XPropertySet > xColumn;
+                            if (xColumns->getByName(aColName) >>= xColumn)
+                            {
+                                OSL_ENSURE(xColumn.is(),"Column isn't a propertyset!");
+                                aTableRange = aIter->first;
+                                break;
+                            }
                         }
                     }
                     catch(Exception&)
@@ -1095,7 +1090,7 @@ void OSQLParseTreeIterator::appendColumns(const OSQLTable& _rTable)
             aIter = find(m_aSelectColumns->begin(),m_aSelectColumns->end(),aName,m_aCaseEqual);
         }
         Reference< XPropertySet > xColumn;
-        if((xColumns->getByName(*pBegin) >>= xColumn) && xColumn.is())
+        if(xColumns->hasByName(*pBegin) && (xColumns->getByName(*pBegin) >>= xColumn) && xColumn.is())
         {
             OParseColumn* pColumn = new OParseColumn(xColumn,m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
             //  pColumn->setTableName(aIter->first);
@@ -1140,8 +1135,9 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
                     Reference<XNameAccess> xColumns = aIter->second->getColumns();
 
                     Reference< XPropertySet > xColumn;
-                    if(xColumns->getByName(rColumnName) >>= xColumn)
+                    if(xColumns->hasByName(rColumnName) && (xColumns->getByName(rColumnName) >>= xColumn))
                     {
+                        OSL_ENSURE(xColumn.is(),"Column isn't a propertyset!");
                         ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
                         OParseColumn* pColumn = new OParseColumn(xColumn,m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
@@ -1200,7 +1196,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
             else
             {
                 Reference< XPropertySet > xColumn;
-                if (aFind->second->getColumns()->getByName(rColumnName) >>= xColumn)
+                if (aFind->second->getColumns()->hasByName(rColumnName) && (aFind->second->getColumns()->getByName(rColumnName) >>= xColumn))
                 {
                     ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
