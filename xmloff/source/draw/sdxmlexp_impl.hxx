@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:14:49 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,10 @@ protected:
     virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
 
 public:
-    SdXMLExport( sal_Bool bIsDraw, sal_uInt16 nExportFlags = EXPORT_ALL );
+    // #110680#
+    SdXMLExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        sal_Bool bIsDraw, sal_uInt16 nExportFlags = EXPORT_ALL );
     virtual ~SdXMLExport();
 
     void SetProgress(sal_Int32 nProg);
