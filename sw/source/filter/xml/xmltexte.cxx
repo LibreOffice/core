@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-10 13:32:21 $
+ *  last change: $Author: mib $ $Date: 2001-05-21 06:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,6 +624,14 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             ASSERT( xEOS.is(), "no embedded object supplier for own object" );
             Reference < XComponent > xComp = xEOS->getEmbeddedObject();
             rExport.ExportEmbeddedOwnObject( xComp );
+        }
+        break;
+    case SV_EMBEDDED_OUTPLACE:
+        if( (rExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
+        {
+            OUString sURL( sEmbeddedObjectProtocol );
+            sURL += rOLEObj.GetName();
+            GetExport().AddEmbeddedObjectAsBase64( sURL );
         }
         break;
     case SV_EMBEDDED_APPLET:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-14 12:26:47 $
+ *  last change: $Author: mib $ $Date: 2001-05-21 06:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,16 +167,22 @@ sal_uInt32 SwXMLWriter::_Write()
                                                      GRAPHICHELPER_MODE_WRITE,
                                                      sal_False );
         xGraphicResolver = pGraphicHelper;
+    }
 
-        SvPersist *pPersist = pDoc->GetPersist();
-        if( pPersist )
-        {
+    SvPersist *pPersist = pDoc->GetPersist();
+    if( pPersist )
+    {
+        if( pStg )
             pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
                                              *pStg, *pPersist,
                                              EMBEDDEDOBJECTHELPER_MODE_WRITE,
                                              sal_False );
-            xObjectResolver = pObjectHelper;
-        }
+        else
+            pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
+                                             *pPersist,
+                                             EMBEDDEDOBJECTHELPER_MODE_WRITE );
+
+        xObjectResolver = pObjectHelper;
     }
 
     // create and prepare the XPropertySet that gets passed through
@@ -251,15 +257,29 @@ sal_uInt32 SwXMLWriter::_Write()
     // - status indicator
     // - info property set
     // - else empty
-    Sequence < Any > aFilterArgs( 4 );
-    Any *pArgs = aFilterArgs.getArray();
-    *pArgs++ <<= xGraphicResolver;
-    *pArgs++ <<= xObjectResolver;
-    *pArgs++ <<= xStatusIndicator;
+    sal_Int32 nArgs = 1;
+    if( xStatusIndicator.is() )
+        nArgs++;
+
+    Sequence < Any > aEmptyArgs( nArgs );
+    Any *pArgs = aEmptyArgs.getArray();
+    if( xStatusIndicator.is() )
+        *pArgs++ <<= xStatusIndicator;
     *pArgs++ <<= xInfoSet;
-    Sequence < Any > aEmptyArgs( 2 );
-    pArgs = aEmptyArgs.getArray();
-    *pArgs++ <<= xStatusIndicator;
+
+    if( xGraphicResolver.is() )
+        nArgs++;
+    if( xObjectResolver.is() )
+        nArgs++;
+
+    Sequence < Any > aFilterArgs( nArgs );
+    pArgs = aFilterArgs.getArray();
+    if( xGraphicResolver.is() )
+        *pArgs++ <<= xGraphicResolver;
+    if( xObjectResolver.is() )
+        *pArgs++ <<= xObjectResolver;
+    if( xStatusIndicator.is() )
+        *pArgs++ <<= xStatusIndicator;
     *pArgs++ <<= xInfoSet;
 
     //Get model
@@ -318,7 +338,7 @@ sal_uInt32 SwXMLWriter::_Write()
                 if( !WriteThroughComponent(
                     xModelComp, "settings.xml", xServiceFactory,
                     "com.sun.star.comp.Writer.XMLSettingsExporter",
-                    aFilterArgs, aProps, sal_False ) )
+                    aEmptyArgs, aProps, sal_False ) )
                 {
                     if( !bWarn )
                     {
@@ -351,7 +371,7 @@ sal_uInt32 SwXMLWriter::_Write()
         bErr = !WriteThroughComponent(
                     xOut, xModelComp, xServiceFactory,
                     "com.sun.star.comp.Writer.XMLExporter",
-                    aEmptyArgs, aProps );
+                    aFilterArgs, aProps );
     }
 
     if( pGraphicHelper )
@@ -554,11 +574,15 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.29 2001-05-14 12:26:47 dvo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.30 2001-05-21 06:00:38 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.29  2001/05/14 12:26:47  dvo
+      - fixed: no settings or meta data in block mode
+      - fixed: use OUString instead of String
+
       Revision 1.28  2001/05/07 06:01:50  mib
       improved error messages for XML filter
 

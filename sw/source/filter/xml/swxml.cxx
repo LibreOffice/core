@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-15 13:09:49 $
+ *  last change: $Author: mib $ $Date: 2001-05-21 06:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,15 +388,6 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
                                                      sal_False );
         xGraphicResolver = pGraphicHelper;
 
-        SvPersist *pPersist = rDoc.GetPersist();
-        if( pPersist )
-        {
-            pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
-                                           *pStorage, *pPersist,
-                                        EMBEDDEDOBJECTHELPER_MODE_READ,
-                                        sal_False );
-            xObjectResolver = pObjectHelper;
-        }
     }
     else if( pMedium )
     {
@@ -426,6 +417,21 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     {
         pStrm->SetBufferSize( 16*1024 );
         xInputStream = new utl::OInputStreamWrapper( *pStrm );
+    }
+    SvPersist *pPersist = rDoc.GetPersist();
+    if( pPersist )
+    {
+        if( pStorage )
+            pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
+                                        *pStorage, *pPersist,
+                                        EMBEDDEDOBJECTHELPER_MODE_READ,
+                                        sal_False );
+        else
+            pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
+                                        *pPersist,
+                                        EMBEDDEDOBJECTHELPER_MODE_READ );
+
+        xObjectResolver = pObjectHelper;
     }
 
     // Get the docshell, the model, and finally the model's component
