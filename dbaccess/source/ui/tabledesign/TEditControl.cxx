@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:49:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ sal_Bool OTableEditorCtrl::SetDataPtr( long nRow )
 
     OSL_ENSURE((xub_StrLen)nRow < m_pRowList->size(),"Row is greater than size!");
     if(nRow >= (long)m_pRowList->size())
-        return NULL;
+        return sal_False;
     pActRow = (*m_pRowList)[nRow];
     return pActRow != NULL;
 }
