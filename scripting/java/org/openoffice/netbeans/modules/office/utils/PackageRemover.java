@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PackageRemover.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-06 18:23:12 $
+ *  last change: $Author: toconnor $ $Date: 2003-06-12 11:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,35 +80,38 @@ public class PackageRemover {
         BufferedReader in = new BufferedReader(new FileReader(source));
         BufferedWriter out = new BufferedWriter(new FileWriter(tmp));
 
-        String line;
-        while ((line = in.readLine()) != null) {
-            if (line.startsWith("package")) {
-                String newDeclaration = evaluate(line);
-                if (newDeclaration != null) {
-                    out.write(newDeclaration, 0, newDeclaration.length());
+        try {
+            String line;
+            while ((line = in.readLine()) != null) {
+                if (line.startsWith("package")) {
+                    String newDeclaration = evaluate(line);
+                    if (newDeclaration != null) {
+                        out.write(newDeclaration, 0, newDeclaration.length());
+                        out.newLine();
+                    }
+                }
+                else {
+                    out.write(line, 0, line.length());
                     out.newLine();
                 }
             }
-            else {
-                out.write(line, 0, line.length());
-                out.newLine();
+        }
+        finally {
+            if (in != null) {
+                in.close();
+            }
+            if (out != null) {
+                out.close();
             }
         }
-
-        while ((line = in.readLine()) != null) {
-            out.write(line, 0, line.length());
-            out.newLine();
-        }
-
-        in.close();
-        out.close();
 
         if (source.delete() == false) {
             tmp.delete();
             throw new IOException("Could not overwrite " + source);
         }
-        else
+        else {
             tmp.renameTo(source);
+        }
     }
 
     public static String evaluate(String line) {
