@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxparser.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2002-12-06 18:51:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
 #include <vos/dynload.hxx>
 #include <vos/diagnose.hxx>
 
-#include <assert.h>
 #include <tools/string.hxx>
 #include "LocaleNode.hxx"
 
