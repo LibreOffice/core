@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:11:11 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,6 @@
 #ifndef SD_SLIDE_SORTER_VIEW_SHELL_BASE_HXX
 #include "SlideSorterViewShellBase.hxx"
 #endif
-#ifndef SD_PREVIEW_VIEW_SHELL_HXX
-#include "PreviewViewShell.hxx"
-#endif
 #ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
 #endif
@@ -192,7 +189,6 @@ void SdDLL::RegisterInterfaces()
     ::sd::SlideViewShell::RegisterInterface(pMod);
     ::sd::OutlineViewShell::RegisterInterface(pMod);
     ::sd::PresentationViewShell::RegisterInterface(pMod);
-    ::sd::PreviewViewShell::RegisterInterface(pMod);
 
     // Draw ViewShell
     ::sd::GraphicViewShell::RegisterInterface(pMod);
