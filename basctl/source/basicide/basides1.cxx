@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:37:40 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,12 @@ void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                     rReq.Done();
                 }
             }
+        }
+        break;
+        case FID_SEARCH_OFF:
+        {
+            if ( pCurWin && pCurWin->ISA( ModulWindow ) )
+                pCurWin->GrabFocus();
         }
         break;
         case SID_UNDO:
