@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-10 12:08:36 $
+ *  last change: $Author: fs $ $Date: 2001-09-10 16:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1646,6 +1646,9 @@ void DbGridControl::setDataSource(const ::com::sun::star::uno::Reference< ::com:
 //------------------------------------------------------------------------------
 void DbGridControl::RemoveColumns()
 {
+    if ( IsEditing() )
+        DeactivateCell();
+
     for (sal_uInt32 i = 0; i < m_aColumns.Count(); i++)
         delete m_aColumns.GetObject(i);
     m_aColumns.Clear();
