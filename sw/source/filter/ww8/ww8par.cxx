@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:54:24 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 11:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,9 +673,10 @@ void DeletePaM::operator()(const Position &rPaM)
 
 bool lcl_ShouldMakeHidden(const SwFltStackEntry* pEntry, const SwPaM &rPaM)
 {
-    bool bEmpty = false;
+    bool bEmpty = true;
     if (pEntry->nMkNode.GetIndex() == pEntry->nPtNode.GetIndex())
     {
+        bEmpty = false;
         /*
         An empty paragraph that is hidden is acceptable, otherwise it only
         makes sense to make it hidden if there is something to hide.  and if
