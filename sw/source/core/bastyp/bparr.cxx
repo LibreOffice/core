@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bparr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:31:58 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,21 +510,6 @@ void BigPtrArray::Replace( ULONG idx, const ElementPtr& rElem)
     p->pData[ idx - p->nStart ] = rElem;
 }
 
-
-// Index eines Eintrags heraussuchen
-// Dies ist der selbe Code wie in ForEach() mit dem Unterschied,
-// dass statt einer Funktion ein Vergleich durchgefuehrt wird.
-// Man haette auch ForEach() nehmen koennen, spart aber durch
-// den fehlenden Call etwas Zeit.
-
-
-ULONG BigPtrArray::GetIndex
-    ( const ElementPtr pTest, ULONG nStart, ULONG nEnd ) const
-{
-    DBG_ASSERT( pTest == pTest->pBlock->pData[ pTest->nOffset ],
-                "Element nicht im Block" );
-    return pTest->pBlock->nStart + pTest->nOffset;
-}
 
 // Array komprimieren
 
