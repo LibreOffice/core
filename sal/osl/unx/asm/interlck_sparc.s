@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interlck_sparc.s,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-05-02 15:03:14 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ osl_decrementInterLockCountFuncPtr:
 
 .section   ".text"
 
-#if defined(NETBSD)
+#if defined(NETBSD) || defined(LINUX)
 /* add the address of the calling "call" instruction (stored in %o7) to
  * %o5 which contains _GLOBAL_OFFSET_TABLE_
  */
@@ -105,7 +105,7 @@ osl_decrementInterLockCountFuncPtr:
 
 osl_incrementInterlockedCount:
 
-#if defined(NETBSD)
+#if defined(NETBSD) || defined(LINUX)
         mov     %o7, %g1
         sethi   %hi(_GLOBAL_OFFSET_TABLE_-4), %o5
         call    .Laddoseven
@@ -128,7 +128,7 @@ osl_incrementInterlockedCount:
 
 osl_decrementInterlockedCount:
 
-#if defined(NETBSD)
+#if defined(NETBSD) || defined(LINUX)
         mov     %o7, %g1
         sethi   %hi(_GLOBAL_OFFSET_TABLE_-4), %o5
         call    .Laddoseven
@@ -136,7 +136,7 @@ osl_decrementInterlockedCount:
         mov     %g1, %o7
 #endif
         set     osl_decrementInterLockCountFuncPtr, %o1
-#if defined(NETBSD)
+#if defined(NETBSD) || defined(LINUX)
         ld      [%o1 + %o5], %o1
 #endif
         ld      [%o1], %o1
@@ -151,7 +151,7 @@ osl_decrementInterlockedCount:
 
 osl_InterlockedCountSetV9:
 
-#if defined(NETBSD)
+#if defined(NETBSD) || defined(LINUX)
         mov	    %o7, %g1
         sethi	%hi(_GLOBAL_OFFSET_TABLE_-4), %o5
         call	.Laddoseven
@@ -165,7 +165,7 @@ osl_InterlockedCountSetV9:
         nop                                             ! delay slot
         set     osl_incrementInterlockedCountV8, %o0
         set     osl_decrementInterlockedCountV8, %o3
-#if defined(NETBSD)
+#if defined(NETBSD) || defined(LINUX)
         ld      [%o0 + %o5], %o0
         ld      [%o1 + %o5], %o1
         ld      [%o2 + %o5], %o2
@@ -176,7 +176,7 @@ osl_InterlockedCountSetV9:
         st      %o0,[%o1]
 1:      set     osl_incrementInterlockedCountV9, %o0
         set     osl_decrementInterlockedCountV9, %o3
-#if defined(NETBSD)
+#if defined(NETBSD) || defined(LINUX)
         ld      [%o0 + %o5], %o0
         ld      [%o1 + %o5], %o1
         ld      [%o2 + %o5], %o2
