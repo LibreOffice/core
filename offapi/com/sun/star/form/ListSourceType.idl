@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListSourceType.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
     @see com::sun::star::form::component::ListBox
     @see com::sun::star::form::component::ComboBox
  */
-enum ListSourceType
+published enum ListSourceType
 {
     //-------------------------------------------------------------------------
 

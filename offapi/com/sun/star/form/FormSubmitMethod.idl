@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormSubmitMethod.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 /** specifies how information is sent to a program invoked by submitting a form.
  */
-enum FormSubmitMethod
+published enum FormSubmitMethod
 {
     //-------------------------------------------------------------------------
 
