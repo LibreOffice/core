@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcmain.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 13:40:57 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:21:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,13 @@
 #ifndef _IDLC_IDLC_HXX_
 #include <idlc/idlc.hxx>
 #endif
+#ifndef _SAL_MAIN_H_
+#include "sal/main.h"
+#endif
 
 using namespace ::rtl;
 
-int SAL_CALL main( int argc, char** argv )
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     Options options;
 
