@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 13:33:12 $
+ *  last change: $Author: oj $ $Date: 2001-05-30 06:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,12 @@
 #ifndef _DBAUI_ODBC_CONFIG_HXX_
 #include "odbcconfig.hxx"
 #endif
-
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
@@ -123,6 +128,9 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _DBAUI_DETAILPAGES_HXX_
+#include "detailpages.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
@@ -1163,6 +1171,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/05/29 13:33:12  oj
+ *  #87149# addressbook ui impl
+ *
  *  Revision 1.2  2001/05/29 12:28:24  fs
  *  #87403# OnDatasourceTypeSelected: no check for IsTravelSelect anymore
  *
