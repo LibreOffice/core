@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-08 13:22:03 $
+#   last change: $Author: kz $ $Date: 2003-11-18 16:39:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,3 +97,4 @@ DEF2EXPORTFILE= export.exp
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+.INCLUDE : _cppunit.mk
