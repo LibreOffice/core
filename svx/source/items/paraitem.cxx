@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:08:18 $
+ *  last change: $Author: os $ $Date: 2001-02-02 11:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1604,7 +1604,10 @@ void SvxTabStopItem::Insert( const SvxTabStopItem* pTabs, sal_uInt16 nStart,
 
 
 // class SvxFmtSplitItem -------------------------------------------------
-
+SvxFmtSplitItem::~SvxFmtSplitItem()
+{
+}
+// -----------------------------------------------------------------------
 SfxPoolItem* SvxFmtSplitItem::Clone( SfxItemPool * ) const
 {
     return new SvxFmtSplitItem( *this );
