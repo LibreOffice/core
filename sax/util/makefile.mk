@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:43:13 $
+#   last change: $Author: jbu $ $Date: 2001-08-31 13:59:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,6 @@ ENABLE_EXCEPTIONS=TRUE
 SHL1TARGET= $(TARGET)
 SHL1IMPLIB= i$(TARGET)
 
-
 SHL1STDLIBS= \
         $(SALLIB)  \
         $(CPPULIB) \
@@ -83,11 +82,9 @@ SHL1STDLIBS= \
             $(EXPAT3RDLIB)
 
 SHL1LIBS=		$(SLB)$/expatwrap.lib 
-
+SHL1VERSIONMAP=		$(SOLARENV)$/src$/component.map
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-
 DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 .INCLUDE :	target.mk
