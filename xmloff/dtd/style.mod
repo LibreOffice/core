@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.20 2000-12-18 13:52:58 mib Exp $
+	$Id: style.mod,v 1.21 2001-01-03 09:55:08 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -118,7 +118,7 @@
 <!ATTLIST style:properties svg:y %coordinate; #IMPLIED>
 <!ATTLIST style:properties style:print-content %boolean; #IMPLIED>
 <!ATTLIST style:properties style:protect %boolean; #IMPLIED>
-<!ATTLIST style:properties style:wrap (none|left|right|parallel|dynamic|run-trough) #IMPLIED>
+<!ATTLIST style:properties style:wrap (none|left|right|parallel|dynamic|run-through) #IMPLIED>
 <!ENTITY % noLimitOrPositiveInteger "CDATA">
 <!ATTLIST style:properties style:number-wrapped-paragraphs %noLimitOrPositiveInteger; #IMPLIED>
 <!ATTLIST style:properties style:wrap-contour %boolean; #IMPLIED>

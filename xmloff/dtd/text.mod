@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.16 2000-12-19 14:48:14 cl Exp $
+	$Id: text.mod,v 1.17 2001-01-03 09:55:08 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -135,14 +135,14 @@
 						 text:footnote|text:endnote|text:a|
 						 text:bookmark|text:bookmark-start|text:bookmark-end|
 						 text:reference-mark|text:reference-mark-start|
-						 text:reference-mark-end|%fields;|
+						 text:reference-mark-end|%fields;|%shape;|
 						 text:toc-mark-start | text:toc-mark-end | 
 						 text:toc-mark | text:user-index-mark-start |
 						 text:user-index-mark-end | text:user-index-mark |
 						 text:alphabetical-index-mark-start |
 						 text:alphabetical-index-mark-end |
 						 text:alphabetical-index-mark |
-						 draw:a|draw:text-box|draw:image)*">
+						 draw:a)*">
 
 <!ELEMENT text:p %inline-text;>
 <!ELEMENT text:h %inline-text;>
