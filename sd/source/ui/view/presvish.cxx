@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-18 13:58:48 $
+ *  last change: $Author: ka $ $Date: 2001-12-13 16:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ void SdPresViewShell::CreateFullScreenShow( SdViewShell* pOriginShell, SfxReques
 {
     SFX_REQUEST_ARG( rReq, pAlwaysOnTop, SfxBoolItem, ATTR_PRESENT_ALWAYS_ON_TOP, FALSE );
 
-    WorkWindow*     pWorkWindow = new WorkWindow( NULL, WB_HIDE );
+    WorkWindow*     pWorkWindow = new WorkWindow( NULL, WB_HIDE | WB_CLIPCHILDREN );
     SdDrawDocument* pDoc = pOriginShell->GetDoc();
     SdPage*         pActualPage = pOriginShell->GetActualPage();
     BOOL            bAlwaysOnTop = ( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) && pAlwaysOnTop ) ? pAlwaysOnTop->GetValue() : pDoc->GetPresAlwaysOnTop();
