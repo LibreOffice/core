@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-26 14:17:34 $
+ *  last change: $Author: ka $ $Date: 2001-11-22 17:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,7 +735,15 @@ void SdrOle2Obj::ImpAssign( const SdrObject& rObj, SdrPage* pNewPage, SdrModel* 
         SvPersist* pSrcPers = rObj.GetModel()->GetPersist();
 
         if( pDestPers && pSrcPers )
+        {
             ImpCopyObject( *pSrcPers, *pDestPers, mpImpl->aPersistName );
+
+            if( rOle2Obj.ppObjRef->Is() && ppObjRef->Is() &&
+                ( (*rOle2Obj.ppObjRef)->GetMapUnit() == (*ppObjRef)->GetMapUnit() ) )
+            {
+                    (*ppObjRef)->SetVisArea( (*rOle2Obj.ppObjRef)->GetVisArea() );
+            }
+        }
 #endif
 
         Connect();
