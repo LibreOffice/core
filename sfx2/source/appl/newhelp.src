@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 21:52:34 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 21:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,22 +294,22 @@ TabPage TP_HELP_SEARCH
         Pos = MAP_APPFONT ( 6, 34 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Nur in Titeln suchen" ;
-        Text [ english_us ] = "Find ~headings only";
+        Text [ english_us ] = "Find in ~headings only";
         Text[ portuguese ] = "~Procurar só título";
-        Text[ russian ] = "~Èñêàòü òîëüêî çàãîëîâêè";
+        Text[ russian ] = "~Èñêàòü òîëüêî â çàãîëîâêàõ";
         Text[ greek ] = "~Search headings only";
         Text[ dutch ] = "~Alleen titels zoeken";
-        Text[ french ] = "~Uniquement recherche de titres";
-        Text[ spanish ] = "~Buscar solo título";
+        Text[ french ] = "~Recherche uniquement dans les titres";
+        Text[ spanish ] = "~Buscar sólo en títulos";
         Text[ italian ] = "~Cerca solo intestazioni";
         Text[ danish ] = "~Search headings only";
-        Text[ swedish ] = "Sök bara ~rubriker";
-        Text[ polish ] = "Szukaj tylko tytu³ów";
+        Text[ swedish ] = "Sök bara i ~rubriker";
+        Text[ polish ] = "Przeszukaj tylko tytu³y";
         Text[ portuguese_brazilian ] = "~Search headings only";
         Text[ japanese ] = "À²ÄÙ‚Ì‚İ‚ÅŒŸõ";
         Text[ korean ] = "~Search headings only";
-        Text[ chinese_simplified ] = "½öËÑÑ°´ó±êÌâ";
-        Text[ chinese_traditional ] = "¶È·j´M¤j¼ĞÃD";
+        Text[ chinese_simplified ] = "½ö´ó±êÌâ·¶Î§ÄÚËÑÑ°";
+        Text[ chinese_traditional ] = "¶È¦b¤j¼ĞÃD½d³ò?·j´M";
         Text[ turkish ] = "~Search headings only";
         Text[ arabic ] = "~Search headings only";
         Text[ catalan ] = "~Search headings only";
@@ -330,7 +330,7 @@ TabPage TP_HELP_SEARCH
         Text [ english_us ] = "~Display" ;
         Text[ portuguese ] = "~Mostrar";
         Text[ russian ] = "~Ïîêàçàòü";
-        Text[ greek ] = "ÅìöÜíéóç";
+        Text[ greek ] = "ĞñïâïëŞ";
         Text[ dutch ] = "~Weergeven";
         Text[ french ] = "~Affichage";
         Text[ spanish ] = "~Visualizar";
@@ -582,5 +582,6 @@ String STR_HELP_FIRST_HTML
 {
     Text = "<html></head><body><center><br></br><br></br><p><tt>%1</tt></center></body></html>";
 };
+
 
 
