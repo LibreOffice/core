@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipIOException.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:44 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@ module com {  module sun {  module star {   module packages {  module zip {
     usualy can be thrown from XInputStream interface implementations.
     <p>This interface is an IDL version of the Java interface
     <em>java.util.zip.ZipException</em> with some minor adaptations.</p>
+
+    @since #107627#
  */
 exception ZipIOException: com::sun::star::io::IOException
 {
