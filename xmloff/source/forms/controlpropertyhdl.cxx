@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-07 12:27:21 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 12:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ namespace xmloff
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::beans;
+    using namespace ::xmloff::token;
 
     //=====================================================================
     //= OControlPropertyHandlerFactory
@@ -135,7 +136,7 @@ namespace xmloff
         {
             case XML_TYPE_TEXT_ALIGN:
                 if (!m_pTextAlignHandler)
-                    m_pTextAlignHandler = new XMLConstantsPropertyHandler(OEnumMapper::getEnumMap(OEnumMapper::epTextAlign), 0);
+                    m_pTextAlignHandler = new XMLConstantsPropertyHandler(OEnumMapper::getEnumMap(OEnumMapper::epTextAlign), XML_TOKEN_INVALID );
                 pHandler = m_pTextAlignHandler;
                 break;
 
@@ -159,13 +160,13 @@ namespace xmloff
 
             case XML_TYPE_CONTROL_TEXT_EMPHASIZE:
                 if (!m_pFontEmphasisHandler)
-                    m_pFontEmphasisHandler = new XMLConstantsPropertyHandler( OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), sXML_none );
+                    m_pFontEmphasisHandler = new XMLConstantsPropertyHandler( OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), XML_NONE );
                 pHandler = m_pFontEmphasisHandler;
                 break;
 
             case XML_TYPE_TEXT_FONT_RELIEF:
                 if (!m_pFontReliefHandler)
-                    m_pFontReliefHandler = new XMLConstantsPropertyHandler( OEnumMapper::getEnumMap(OEnumMapper::epFontRelief), sXML_none );
+                    m_pFontReliefHandler = new XMLConstantsPropertyHandler( OEnumMapper::getEnumMap(OEnumMapper::epFontRelief), XML_NONE );
                 pHandler = m_pFontEmphasisHandler;
                 break;
         }
@@ -196,7 +197,7 @@ namespace xmloff
             sal_Bool bBelow = 0 != (nFontEmphasis & FontEmphasisMark::BELOW);
 
             // convert
-            if (bSuccess = _rUnitConverter.convertEnum(aReturn, nType, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), sXML_none))
+            if (bSuccess = _rUnitConverter.convertEnum(aReturn, nType, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), XML_NONE))
             {
                 aReturn.append( (sal_Unicode)' ' );
                 aReturn.appendAscii( (const sal_Char*)(bBelow ? sXML_below : sXML_above) );
@@ -383,6 +384,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/06/07 12:27:21  fs
+ *  #86096# handler for FontEmphasis/FontRelief / substituted OEnumInt16Handler by XMLConstantsPropertyHandler
+ *
  *  Revision 1.6  2001/05/28 15:03:48  fs
  *  #86712# hold the handler as pointer, not as member instance
  *
