@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDetection.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-10-06 13:32:49 $
+ *  last change:$Date: 2003-11-18 16:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ public class TypeDetection extends TestCase {
         PropertyValue instanceProp = new PropertyValue();
         try{
             instance = (Object[]) xNA.getByName(elementName);
-            instanceProp = (PropertyValue) instance[0];
+            instanceProp = (PropertyValue) instance[6];
         } catch (com.sun.star.container.NoSuchElementException e){
             throw new StatusException(
             Status.failed("Couldn't get elements from object"));
@@ -165,8 +165,8 @@ public class TypeDetection extends TestCase {
             log.println("adding INSTANCE" + n +
                         " as obj relation to environment");
 
-            instanceProp.Value = "INSTANCE"+n;
-            instance[0] = instanceProp;
+            instanceProp.Value = "INSTANCE"+ n + System.currentTimeMillis();
+            instance[6] = instanceProp;
 
             tEnv.addObjRelation("INSTANCE" + n, instance);
         }
