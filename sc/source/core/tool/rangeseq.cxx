@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangeseq.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,9 @@ long lcl_DoubleToLong( double fVal )
 
 BOOL ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
 {
-    USHORT nTab = rRange.aStart.Tab();
-    USHORT nStartCol = rRange.aStart.Col();
-    USHORT nStartRow = rRange.aStart.Row();
+    SCTAB nTab = rRange.aStart.Tab();
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
     long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
     long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
 
@@ -107,7 +107,7 @@ BOOL ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument* pDoc, const S
         INT32* pColAry = aColSeq.getArray();
         for (long nCol = 0; nCol < nColCount; nCol++)
             pColAry[nCol] = lcl_DoubleToLong( pDoc->GetValue(
-                ScAddress( (USHORT)(nStartCol+nCol), (USHORT)(nStartRow+nRow), nTab ) ) );
+                ScAddress( (SCCOL)(nStartCol+nCol), (SCROW)(nStartRow+nRow), nTab ) ) );
 
         pRowAry[nRow] = aColSeq;
     }
@@ -122,16 +122,17 @@ BOOL ScRangeToSequence::FillLongArray( uno::Any& rAny, const ScMatrix* pMatrix )
     if (!pMatrix)
         return FALSE;
 
-    USHORT nColCount, nRowCount;
+    SCSIZE nColCount;
+    SCSIZE nRowCount;
     pMatrix->GetDimensions( nColCount, nRowCount );
 
-    uno::Sequence< uno::Sequence<INT32> > aRowSeq( nRowCount );
+    uno::Sequence< uno::Sequence<INT32> > aRowSeq( static_cast<sal_Int32>(nRowCount) );
     uno::Sequence<INT32>* pRowAry = aRowSeq.getArray();
-    for (USHORT nRow = 0; nRow < nRowCount; nRow++)
+    for (SCSIZE nRow = 0; nRow < nRowCount; nRow++)
     {
-        uno::Sequence<INT32> aColSeq( nColCount );
+        uno::Sequence<INT32> aColSeq( static_cast<sal_Int32>(nColCount) );
         INT32* pColAry = aColSeq.getArray();
-        for (USHORT nCol = 0; nCol < nColCount; nCol++)
+        for (SCSIZE nCol = 0; nCol < nColCount; nCol++)
             if ( pMatrix->IsString( nCol, nRow ) )
                 pColAry[nCol] = 0;
             else
@@ -148,9 +149,9 @@ BOOL ScRangeToSequence::FillLongArray( uno::Any& rAny, const ScMatrix* pMatrix )
 
 BOOL ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
 {
-    USHORT nTab = rRange.aStart.Tab();
-    USHORT nStartCol = rRange.aStart.Col();
-    USHORT nStartRow = rRange.aStart.Row();
+    SCTAB nTab = rRange.aStart.Tab();
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
     long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
     long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
 
@@ -162,7 +163,7 @@ BOOL ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument* pDoc, const
         double* pColAry = aColSeq.getArray();
         for (long nCol = 0; nCol < nColCount; nCol++)
             pColAry[nCol] = pDoc->GetValue(
-                ScAddress( (USHORT)(nStartCol+nCol), (USHORT)(nStartRow+nRow), nTab ) );
+                ScAddress( (SCCOL)(nStartCol+nCol), (SCROW)(nStartRow+nRow), nTab ) );
 
         pRowAry[nRow] = aColSeq;
     }
@@ -177,16 +178,17 @@ BOOL ScRangeToSequence::FillDoubleArray( uno::Any& rAny, const ScMatrix* pMatrix
     if (!pMatrix)
         return FALSE;
 
-    USHORT nColCount, nRowCount;
+    SCSIZE nColCount;
+    SCSIZE nRowCount;
     pMatrix->GetDimensions( nColCount, nRowCount );
 
-    uno::Sequence< uno::Sequence<double> > aRowSeq( nRowCount );
+    uno::Sequence< uno::Sequence<double> > aRowSeq( static_cast<sal_Int32>(nRowCount) );
     uno::Sequence<double>* pRowAry = aRowSeq.getArray();
-    for (USHORT nRow = 0; nRow < nRowCount; nRow++)
+    for (SCSIZE nRow = 0; nRow < nRowCount; nRow++)
     {
-        uno::Sequence<double> aColSeq( nColCount );
+        uno::Sequence<double> aColSeq( static_cast<sal_Int32>(nColCount) );
         double* pColAry = aColSeq.getArray();
-        for (USHORT nCol = 0; nCol < nColCount; nCol++)
+        for (SCSIZE nCol = 0; nCol < nColCount; nCol++)
             if ( pMatrix->IsString( nCol, nRow ) )
                 pColAry[nCol] = 0.0;
             else
@@ -203,9 +205,9 @@ BOOL ScRangeToSequence::FillDoubleArray( uno::Any& rAny, const ScMatrix* pMatrix
 
 BOOL ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
 {
-    USHORT nTab = rRange.aStart.Tab();
-    USHORT nStartCol = rRange.aStart.Col();
-    USHORT nStartRow = rRange.aStart.Row();
+    SCTAB nTab = rRange.aStart.Tab();
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
     long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
     long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
 
@@ -219,7 +221,7 @@ BOOL ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, const
         rtl::OUString* pColAry = aColSeq.getArray();
         for (long nCol = 0; nCol < nColCount; nCol++)
         {
-            pDoc->GetString( (USHORT)(nStartCol+nCol), (USHORT)(nStartRow+nRow), nTab, aDocStr );
+            pDoc->GetString( (SCCOL)(nStartCol+nCol), (SCROW)(nStartRow+nRow), nTab, aDocStr );
             pColAry[nCol] = rtl::OUString( aDocStr );
         }
         pRowAry[nRow] = aColSeq;
@@ -236,16 +238,17 @@ BOOL ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMatrix
     if (!pMatrix)
         return FALSE;
 
-    USHORT nColCount, nRowCount;
+    SCSIZE nColCount;
+    SCSIZE nRowCount;
     pMatrix->GetDimensions( nColCount, nRowCount );
 
-    uno::Sequence< uno::Sequence<rtl::OUString> > aRowSeq( nRowCount );
+    uno::Sequence< uno::Sequence<rtl::OUString> > aRowSeq( static_cast<sal_Int32>(nRowCount) );
     uno::Sequence<rtl::OUString>* pRowAry = aRowSeq.getArray();
-    for (USHORT nRow = 0; nRow < nRowCount; nRow++)
+    for (SCSIZE nRow = 0; nRow < nRowCount; nRow++)
     {
-        uno::Sequence<rtl::OUString> aColSeq( nColCount );
+        uno::Sequence<rtl::OUString> aColSeq( static_cast<sal_Int32>(nColCount) );
         rtl::OUString* pColAry = aColSeq.getArray();
-        for (USHORT nCol = 0; nCol < nColCount; nCol++)
+        for (SCSIZE nCol = 0; nCol < nColCount; nCol++)
         {
             String aStr;
             if ( pMatrix->IsString( nCol, nRow ) )
@@ -288,9 +291,9 @@ double lcl_GetValueFromCell( ScBaseCell& rCell )
 BOOL ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange,
                                         BOOL bAllowNV )
 {
-    USHORT nTab = rRange.aStart.Tab();
-    USHORT nStartCol = rRange.aStart.Col();
-    USHORT nStartRow = rRange.aStart.Row();
+    SCTAB nTab = rRange.aStart.Tab();
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
     long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
     long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
 
@@ -307,7 +310,7 @@ BOOL ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const 
         {
             uno::Any& rElement = pColAry[nCol];
 
-            ScAddress aPos( (USHORT)(nStartCol+nCol), (USHORT)(nStartRow+nRow), nTab );
+            ScAddress aPos( (SCCOL)(nStartCol+nCol), (SCROW)(nStartRow+nRow), nTab );
             ScBaseCell* pCell = pDoc->GetCell( aPos );
             if ( pCell )
             {
@@ -338,16 +341,17 @@ BOOL ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix 
     if (!pMatrix)
         return FALSE;
 
-    USHORT nColCount, nRowCount;
+    SCSIZE nColCount;
+    SCSIZE nRowCount;
     pMatrix->GetDimensions( nColCount, nRowCount );
 
-    uno::Sequence< uno::Sequence<uno::Any> > aRowSeq( nRowCount );
+    uno::Sequence< uno::Sequence<uno::Any> > aRowSeq( static_cast<sal_Int32>(nRowCount) );
     uno::Sequence<uno::Any>* pRowAry = aRowSeq.getArray();
-    for (USHORT nRow = 0; nRow < nRowCount; nRow++)
+    for (SCSIZE nRow = 0; nRow < nRowCount; nRow++)
     {
-        uno::Sequence<uno::Any> aColSeq( nColCount );
+        uno::Sequence<uno::Any> aColSeq( static_cast<sal_Int32>(nColCount) );
         uno::Any* pColAry = aColSeq.getArray();
-        for (USHORT nCol = 0; nCol < nColCount; nCol++)
+        for (SCSIZE nCol = 0; nCol < nColCount; nCol++)
         {
             if ( pMatrix->IsString( nCol, nRow ) )
             {
