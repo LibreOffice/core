@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 10:54:39 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1035,6 +1035,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
     #define FALLBACKFONT_UI_SANS_ARABIC "Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Interface User;Arial Unicode MS;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif"
     #define FALLBACKFONT_UI_SANS_THAI "OONaksit;Tahoma;Lucidasans;Arial Unicode MS"
     #define FALLBACKFONT_UI_SANS_KOREAN "SunGulim;Gulim;Roundgothic;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Andale Sans UI"
+    #define FALLBACKFONT_UI_SANS_CHINESE "Andale Sans UI;Tahoma;Arial Unicode MS;Kai;Ming;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;MS Sans Serif;Helv;Times;Times New Roman;Interface System"
 
     if( eLang == LANGUAGE_NONE || eLang == LANGUAGE_SYSTEM || eLang == LANGUAGE_DONTKNOW )
     {
@@ -1079,6 +1080,14 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
                 aSearch += String( RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_KOREAN ) );
                 break;
             }
+        case LANGUAGE_CHINESE:
+        case LANGUAGE_CHINESE_TRADITIONAL:
+        case LANGUAGE_CHINESE_SIMPLIFIED:
+        case LANGUAGE_CHINESE_HONGKONG:
+        case LANGUAGE_CHINESE_SINGAPORE:
+        case LANGUAGE_CHINESE_MACAU:
+            aSearch = String( RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_CHINESE ) );
+            break;
 
         default:
             break;
