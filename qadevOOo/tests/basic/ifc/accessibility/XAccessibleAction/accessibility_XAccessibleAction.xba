@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: accessibility_XAccessibleAction.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:43:25 $ 
+'*  last change:$Date: 2003-10-06 12:43:22 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -102,16 +102,18 @@ On Error Goto ErrHndl
     wend
     Test.MethodTested("getAccessibleActionDescription()",bOK)
 
-    Test.StartMethod("getAccessibleKeyBinding()")
+    Test.StartMethod("getAccessibleActionKeyBinding()")
     Dim key As Variant
     bOK = true
     i = 0
     while ( i &lt; count)
-        key = oObj.drafts_com_sun_star_accessibility_XAccessibleAction_getAccessibleKeyBinding(i)
-        bOK = bOK AND NOT isNull(key)
+        key = oObj.getAccessibleActionKeyBinding(i)
+        if not isNull(key) then
+            out.Log("Found key in " + i)
+        end if
         i = i + 1
     wend
-    Test.MethodTested("getAccessibleKeyBinding()",bOK)
+    Test.MethodTested("getAccessibleActionKeyBinding()",bOK)
 
     Test.StartMethod("doAccessibleAction()")
     bOK = true
