@@ -43,7 +43,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -62,7 +62,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -210,7 +210,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -229,7 +229,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -377,7 +377,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -396,7 +396,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -544,7 +544,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -563,7 +563,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -711,7 +711,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -730,7 +730,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -878,7 +878,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -897,7 +897,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -1045,7 +1045,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -1064,7 +1064,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -1212,7 +1212,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -1231,7 +1231,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -1379,7 +1379,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -1398,7 +1398,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -1546,7 +1546,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -1565,7 +1565,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 06:16:03 $
+#   last change: $Author: pluby $ $Date: 2001-03-03 17:27:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -238,6 +238,8 @@ $(SHL$(TNR)TARGETN) : \
                     $(USE_SHL$(TNR)VERSIONMAP)\
                     $(SHL$(TNR)RES)\
                     $(SHL$(TNR)VERSIONH)\
+.IF "$(OS)"=="MACOSX"
+.ENDIF
                     $(SHL$(TNR)DEPN)
     @echo ------------------------------
     @echo Making: $(SHL$(TNR)TARGETN)
@@ -422,7 +424,7 @@ $(SHL$(TNR)TARGETN) : \
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
         @echo "------------------------------"
         @echo "Updating static data member initializations"
-        @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+        @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -449,7 +451,7 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL$(TNR)VERSIONMAP) $@

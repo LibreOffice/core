@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_app.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-03-02 06:16:03 $
-#*    $Revision: 1.18 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-03-03 17:27:42 $
+#*    $Revision: 1.19 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_app.mkv  $
 #*
@@ -89,7 +89,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -108,7 +108,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
