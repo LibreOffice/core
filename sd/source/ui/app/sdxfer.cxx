@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-08 08:02:54 $
+ *  last change: $Author: ka $ $Date: 2001-07-02 11:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,6 @@
 #endif
 #ifndef _EDITOBJ_HXX //autogen
 #include <svx/editobj.hxx>
-#endif
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
 #endif
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>

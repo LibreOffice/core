@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-26 12:36:53 $
+ *  last change: $Author: ka $ $Date: 2001-07-02 11:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #endif
 #ifndef _SV_EXCHANGE_HXX //autogen
 #include <vcl/exchange.hxx>
-#endif
-#ifndef _SV_DRAG_HXX //autogen
-#include <vcl/drag.hxx>
 #endif
 #ifndef _SVDETC_HXX //autogen
 #include <svx/svdetc.hxx>

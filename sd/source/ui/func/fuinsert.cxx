@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-06-25 17:54:47 $
+ *  last change: $Author: ka $ $Date: 2001-07-02 11:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #include <svx/svdetc.hxx>
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
 #endif
 #ifndef _SO_CLSIDS_HXX
 #include <so3/clsids.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-26 11:30:45 $
+ *  last change: $Author: ka $ $Date: 2001-07-02 11:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,6 @@
 
 #ifndef _SOT_EXCHANGE_HXX //autogen
 #include <sot/exchange.hxx>
-#endif
-
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
 #endif
 #ifndef _SVX_RULE_HXX //autogen
 #include <svx/ruler.hxx>
