@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-13 14:49:33 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1881,7 +1881,7 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet& )
 
     sAutoMarkURL = INetURLObject::decode( rSh.GetTOIAutoMarkURL(),
                                         INET_HEX_ESCAPE,
-                                           INetURLObject::DECODE_WITH_CHARSET,
+                                           INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 );
     aFromFileCB.Check(sAutoMarkURL.Len());
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,7 @@ void SwWW8WrGrf::Write1Grf1( SvStream& rStrm, const SwGrfNode* pGrfNd,
         pGrfNd->GetFileFilterNms( &aFileN, &aFiltN );
 
         aFileN = INetURLObject::AbsToRel( aFileN, INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_WITH_CHARSET );
+                                        INetURLObject::DECODE_UNAMBIGUOUS);
         INetURLObject aUrl( aFileN );
         if( aUrl.GetProtocol() == INET_PROT_FILE )
             aFileN = aUrl.PathToFileName();
@@ -635,11 +635,14 @@ void SwWW8WrGrf::Write()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8gr.cxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8gr.cxx,v 1.2 2000-10-20 13:43:47 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:58  hr
+      initial import
+
       Revision 1.16  2000/09/18 16:04:58  willem.vandorp
       OpenOffice header added.
 

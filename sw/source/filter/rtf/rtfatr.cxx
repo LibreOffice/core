@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:43:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,7 +898,7 @@ static Writer& OutRTF_SwGrfNode( Writer& rWrt, SwCntntNode & rNode )
         if( INET_PROT_FILE==aURLObj.GetProtocol() )
         {
             String aLastName( aURLObj.GetLastName(
-                                INetURLObject::DECODE_WITH_CHARSET ) );
+                                INetURLObject::DECODE_UNAMBIGUOUS) );
             ASSERT( aLastName.Len(), "Dateiname ohne Laenge!" );
             GetAppCharClass().toLower( aLastName );
 
@@ -908,7 +908,7 @@ static Writer& OutRTF_SwGrfNode( Writer& rWrt, SwCntntNode & rNode )
         else
             aGrfNm = INetURLObject::AbsToRel( aGrfNm,
                                         INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_WITH_CHARSET );
+                                        INetURLObject::DECODE_UNAMBIGUOUS);
     }
     else
     {
@@ -916,7 +916,7 @@ static Writer& OutRTF_SwGrfNode( Writer& rWrt, SwCntntNode & rNode )
         // kommt bei relativierbaren URLs als Protokoll "unknown" raus.
         // Ist das Absicht?
         aGrfNm = INetURLObject::AbsToRel( aGrfNm, INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_WITH_CHARSET );
+                                        INetURLObject::DECODE_UNAMBIGUOUS);
         INetURLObject aUrl( aGrfNm );
         if( aUrl.GetProtocol() == INET_PROT_FILE )
             aGrfNm = aUrl.PathToFileName();
@@ -1827,7 +1827,7 @@ static Writer& OutRTF_SwTxtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
         if( INET_MARK_TOKEN != sURL.GetChar(0) )
         {
             INetURLObject aTmp( INetURLObject::AbsToRel( sURL ) );
-            sURL = aTmp.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
+            sURL = aTmp.GetURLNoMark( INetURLObject::DECODE_UNAMBIGUOUS);
 /*          if( INET_PROT_FILE == aTmp.GetProtocol() )
             {
                 // WW97 wollen keine FILE-URL haben, sondern einen normalen
@@ -3007,11 +3007,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.1.1.1 2000-09-18 17:14:56 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.2 2000-10-20 13:43:28 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:56  hr
+      initial import
+
       Revision 1.344  2000/09/18 16:04:50  willem.vandorp
       OpenOffice header added.
 

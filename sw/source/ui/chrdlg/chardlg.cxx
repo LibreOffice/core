@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
         const SwFmtINetFmt* pINetFmt = (const SwFmtINetFmt*)pItem;
         aURLED.SetText( INetURLObject::decode( pINetFmt->GetValue(),
                                         INET_HEX_ESCAPE,
-                                           INetURLObject::DECODE_WITH_CHARSET,
+                                           INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
         aURLED.SaveValue();
         aNameED.SetText(pINetFmt->GetName());
@@ -426,6 +426,9 @@ IMPL_LINK( SwCharURLPage, EventHdl, PushButton *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:32  hr
+    initial import
+
     Revision 1.213  2000/09/18 16:05:13  willem.vandorp
     OpenOffice header added.
 

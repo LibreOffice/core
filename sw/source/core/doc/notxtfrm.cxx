@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-27 17:34:31 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ inline BOOL GetRealURL( const SwGrfNode& rNd, String& rTxt )
     BOOL bRet = rNd.GetFileFilterNms( &rTxt, 0 );
     if( bRet )
         rTxt = URIHelper::removePassword( rTxt, INetURLObject::WAS_ENCODED,
-                                           INetURLObject::DECODE_WITH_CHARSET );
+                                           INetURLObject::DECODE_UNAMBIGUOUS);
     return bRet;
 }
 
@@ -451,28 +451,7 @@ void lcl_ClearArea( const SwFrm &rFrm,
                 rOut.DrawRect( aRegion[i].SVRect() );
             rOut.Pop();
         }
-
-        // JP 24.08.96: wann wird dieser Code durchlaufen??
-        //              Dann sollte fuer das OLE-Object noch zu implementieren
-        ASSERT( !bIsOLE, "was ist noch zu Painten??" )
     }
-/*  else if( bIsOLE )
-    {
-        // JP 24.08.96: Bug 29381 - OLE-Objecte koenne transparent sein.
-        //                          (z.B. Metafile). Es soll aber ein weisser
-        //                          Hintergrund hinter den OLE-Object sein!
-        Pen aOldPen( rOut.GetPen() );
-        Brush aOldBr( rOut.GetFillInBrush() );
-        Color aCol( COL_WHITE );
-        rOut.SetPen( Pen( aCol ));
-        rOut.SetFillInBrush( Brush( aCol ));
-
-        rOut.DrawRect( rPtArea.SVRect() );
-
-        rOut.SetPen( aOldPen );
-        rOut.SetFillInBrush( aOldBr );
-    }
-*/
 }
 
 /*************************************************************************

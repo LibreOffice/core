@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -892,7 +892,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     String aGrfNm( rGrfName );
     if( !HTMLOutFuncs::PrivateURLToInternalImg(aGrfNm) )
         aGrfNm = INetURLObject::AbsToRel( aGrfNm, INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_WITH_CHARSET );
+                                        INetURLObject::DECODE_UNAMBIGUOUS);
 
     const SfxPoolItem* pItem;
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
@@ -1078,7 +1078,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                 HTMLOutFuncs::Out_String( rWrt.Strm(),
                             INetURLObject::AbsToRel( aMapURL,
                                         INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_WITH_CHARSET ),
+                                        INetURLObject::DECODE_UNAMBIGUOUS),
                             rHTMLWrt.eDestEnc );
                 sOut = '\"';
             }
@@ -1318,7 +1318,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
         String s( *pLink );
         if( !HTMLOutFuncs::PrivateURLToInternalImg(s) )
             s = INetURLObject::AbsToRel( s, INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_WITH_CHARSET );
+                                        INetURLObject::DECODE_UNAMBIGUOUS);
         (sOut += sHTML_O_src) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( rWrt.Strm(), s, rHTMLWrt.eDestEnc );
@@ -1962,11 +1962,14 @@ BOOL SwHTMLPosFlyFrm::operator<( const SwHTMLPosFlyFrm& rFrm ) const
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfly.cxx,v 1.1.1.1 2000-09-18 17:14:55 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfly.cxx,v 1.2 2000-10-20 13:42:52 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:55  hr
+      initial import
+
       Revision 1.81  2000/09/18 16:04:44  willem.vandorp
       OpenOffice header added.
 

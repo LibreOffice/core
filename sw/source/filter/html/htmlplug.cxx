@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,7 +1066,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         String aURL(
             INetURLObject::AbsToRel(pPlugin->GetURL()->GetMainURL(),
                                     INetURLObject::WAS_ENCODED,
-                                    INetURLObject::DECODE_WITH_CHARSET) );
+                                    INetURLObject::DECODE_UNAMBIGUOUS) );
 
         if( aURL.Len() )
         {
@@ -1115,7 +1115,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 #endif
             String sCodeBase( INetURLObject::AbsToRel(rURL,
                                     INetURLObject::WAS_ENCODED,
-                                    INetURLObject::DECODE_WITH_CHARSET) );
+                                    INetURLObject::DECODE_UNAMBIGUOUS) );
             if( sCodeBase.Len() )
             {
                 ((sOut += ' ') += sHTML_O_codebase) += "=\"";
@@ -1317,11 +1317,14 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlplug.cxx,v 1.1.1.1 2000-09-18 17:14:55 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlplug.cxx,v 1.2 2000-10-20 13:43:09 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:55  hr
+      initial import
+
       Revision 1.95  2000/09/18 16:04:45  willem.vandorp
       OpenOffice header added.
 

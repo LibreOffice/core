@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-09 10:39:34 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@
 #include <unoprnms.hxx>
 #endif
 
-#define URL_DECODE  INetURLObject::DECODE_WITH_CHARSET
+#define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
 
 using namespace ::com::sun::star;
 using namespace ::rtl;

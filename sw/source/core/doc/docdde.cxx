@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdde.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,7 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
     rpRange = 0;
 
     String sItem( INetURLObject::decode( rStr, INET_HEX_ESCAPE,
-                                         INetURLObject::DECODE_WITH_CHARSET,
+                                         INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
 
     xub_StrLen nPos = sItem.Search( cMarkSeperator );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:36:37 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             {
                 aSet.Put( SvxBrushItem( INetURLObject::decode( sGrfNm,
                                         INET_HEX_ESCAPE,
-                                           INetURLObject::DECODE_WITH_CHARSET,
+                                           INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ),
                                         sFilterNm, GPOS_LT,
                                         SID_ATTR_GRAF_GRAPHIC ));
@@ -847,7 +847,7 @@ IMPL_LINK( SwTextShell, InitGraphicFrame, Button *, pButton )
         {
             aSet.Put( SvxBrushItem( INetURLObject::decode( sGrfNm,
                                     INET_HEX_ESCAPE,
-                                       INetURLObject::DECODE_WITH_CHARSET,
+                                       INetURLObject::DECODE_UNAMBIGUOUS,
                                     RTL_TEXTENCODING_UTF8 ),
                                     aEmptyStr, GPOS_LT,
                                     SID_ATTR_GRAF_GRAPHIC ));
@@ -916,6 +916,9 @@ IMPL_LINK( SwTextShell, InitGraphicFrame, Button *, pButton )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/06 13:36:37  jp
+    should changes: don't use IniManager
+
     Revision 1.2  2000/10/05 11:35:18  jp
     should change: remove image
 

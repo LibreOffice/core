@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,7 +659,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
         Strm() << sOut.GetBuffer();
         String aURL( *(OUString*)aTmp.getValue() );
         aURL = INetURLObject::AbsToRel( aURL, INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_WITH_CHARSET );
+                                        INetURLObject::DECODE_UNAMBIGUOUS);
         HTMLOutFuncs::Out_String( Strm(), aURL, eDestEnc );
         sOut = '\"';
     }
@@ -1092,7 +1092,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             HTMLOutFuncs::Out_String( rWrt.Strm(),
                 INetURLObject::AbsToRel( ((VCURLButton*)pVCSbxCtrl)->GetURL(),
                                         INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_WITH_CHARSET),
+                                        INetURLObject::DECODE_UNAMBIGUOUS),
                 rHTMLWrt.eDestEnc, rHTMLWrt.eDestEnc );
             sOut = '\"';
             const String& rTarget =
@@ -1169,7 +1169,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             HTMLOutFuncs::Out_String( rWrt.Strm(),
                         INetURLObject::AbsToRel( *(OUString*)aTmp.getValue(),
                                         INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_WITH_CHARSET ),
+                                        INetURLObject::DECODE_UNAMBIGUOUS),
                         rHTMLWrt.eDestEnc );
             sOut = '\"';
         }
@@ -1587,11 +1587,14 @@ HTMLControl::~HTMLControl()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlforw.cxx,v 1.1.1.1 2000-09-18 17:14:55 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlforw.cxx,v 1.2 2000-10-20 13:43:01 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:55  hr
+      initial import
+
       Revision 1.77  2000/09/18 16:04:45  willem.vandorp
       OpenOffice header added.
 

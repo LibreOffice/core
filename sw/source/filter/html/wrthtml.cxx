@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,7 +710,7 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         HTMLOutFuncs::Out_String( rHTMLWrt.Strm(),
                                   INetURLObject::AbsToRel(aURL,
                                           INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_WITH_CHARSET),
+                                        INetURLObject::DECODE_UNAMBIGUOUS),
                                   rHTMLWrt.eDestEnc );
         const sal_Char *pDelim = "&#255;";
         if( aFilter.Len() )
@@ -1262,7 +1262,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
         ByteString sOut( ' ' );
         String s( INetURLObject::AbsToRel( *pLink,
                                         INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_WITH_CHARSET ));
+                                        INetURLObject::DECODE_UNAMBIGUOUS));
         (sOut += sHTML_O_background) += "=\"";
         Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( Strm(), s, eDestEnc ) << '\"';
@@ -1432,11 +1432,14 @@ void GetHTMLWriter( const String&, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.1.1.1 2000-09-18 17:14:56 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.2 2000-10-20 13:43:17 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:56  hr
+      initial import
+
       Revision 1.163  2000/09/18 16:04:48  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2776,7 +2776,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, BOOL bOn )
         ((sOut = ' ') += sHTML_O_href) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
         aURL = INetURLObject::AbsToRel( aURL, INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_WITH_CHARSET );
+                                        INetURLObject::DECODE_UNAMBIGUOUS);
         HTMLOutFuncs::Out_String( rWrt.Strm(), aURL, rHTMLWrt.eDestEnc );
         sOut = '\"';
     }
@@ -3092,11 +3092,14 @@ SwAttrFnTab aHTMLAttrFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlatr.cxx,v 1.1.1.1 2000-09-18 17:14:55 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlatr.cxx,v 1.2 2000-10-20 13:42:43 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:55  hr
+      initial import
+
       Revision 1.246  2000/09/18 16:04:43  willem.vandorp
       OpenOffice header added.
 

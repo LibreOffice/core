@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2284,7 +2284,7 @@ IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
         aFilterName = pGrfDlg->GetCurFilter();
         aNewGrfName = INetURLObject::decode( pGrfDlg->GetPath(),
                                         INET_HEX_ESCAPE,
-                                           INetURLObject::DECODE_WITH_CHARSET,
+                                           INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 );
         aConnectED.SetModifyFlag();
         aConnectED.SetText( aNewGrfName );
@@ -2462,7 +2462,7 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
         const SwFmtURL* pFmtURL = (const SwFmtURL*)pItem;
         aURLED.SetText( INetURLObject::decode( pFmtURL->GetURL(),
                                         INET_HEX_ESCAPE,
-                                           INetURLObject::DECODE_WITH_CHARSET,
+                                           INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
         aNameED.SetText( pFmtURL->GetName());
 
@@ -2553,7 +2553,7 @@ IMPL_LINK( SwFrmURLPage, InsertFileHdl, PushButton *, pBtn )
     {
         aURLED.SetText( URIHelper::SmartRelToAbs( pFileDlg->GetPath(), FALSE,
                                         INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_WITH_CHARSET ));
+                                        INetURLObject::DECODE_UNAMBIGUOUS));
     }
     delete pFileDlg;
 
@@ -2788,6 +2788,9 @@ IMPL_LINK(SwFrmAddPage, EditModifyHdl, Edit*, EMPTYARG)
 }
 /*--------------------------------------------------------------------
    $Log: not supported by cvs2svn $
+   Revision 1.1.1.1  2000/09/18 17:14:37  hr
+   initial import
+
    Revision 1.255  2000/09/18 16:05:33  willem.vandorp
    OpenOffice header added.
 

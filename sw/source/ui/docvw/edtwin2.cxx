@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-19 13:25:31 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 sTxt = ((SfxStringItem*)aCntntAtPos.aFnd.pAttr)->GetValue();
                 sTxt = URIHelper::removePassword( sTxt,
                                         INetURLObject::WAS_ENCODED,
-                                           INetURLObject::DECODE_WITH_CHARSET );
+                                           INetURLObject::DECODE_UNAMBIGUOUS);
 
                 break;
 
@@ -458,7 +458,7 @@ aktuelle Zeichenvorlage anzeigen?
         if (sTxt.Len() && pObj)
         {
             sTxt = URIHelper::removePassword( sTxt, INetURLObject::WAS_ENCODED,
-                                           INetURLObject::DECODE_WITH_CHARSET );
+                                           INetURLObject::DECODE_UNAMBIGUOUS);
 
             Rectangle aLogicPix = LogicToPixel(pObj->GetLogicRect());
             Rectangle aScreenRect(OutputToScreenPixel(aLogicPix.TopLeft()),

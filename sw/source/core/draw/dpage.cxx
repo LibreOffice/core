@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,14 +316,14 @@ BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                     if ( !sTxt.Len() )
                         sTxt = URIHelper::removePassword( pObj->GetURL(),
                                         INetURLObject::WAS_ENCODED,
-                                           INetURLObject::DECODE_WITH_CHARSET );
+                                           INetURLObject::DECODE_UNAMBIGUOUS);
                 }
             }
             else if ( rURL.GetURL().Len() )
             {
                 sTxt = URIHelper::removePassword( rURL.GetURL(),
                                         INetURLObject::WAS_ENCODED,
-                                           INetURLObject::DECODE_WITH_CHARSET );
+                                           INetURLObject::DECODE_UNAMBIGUOUS);
 
                 if( rURL.IsServerMap() )
                 {

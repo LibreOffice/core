@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ SectRepr::SectRepr( USHORT nPos, SwSection& rSect ) :
 void SectRepr::SetFile( const String& rFile )
 {
     String sNewFile( INetURLObject::decode( rFile, INET_HEX_ESCAPE,
-                                           INetURLObject::DECODE_WITH_CHARSET,
+                                           INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
     String sOldFileName( aSection.GetLinkFileName() );
     String sSub( sOldFileName.GetToken( 2, cTokenSeperator ) );
@@ -2219,6 +2219,9 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:34  hr
+    initial import
+
     Revision 1.176  2000/09/18 16:05:21  willem.vandorp
     OpenOffice header added.
 

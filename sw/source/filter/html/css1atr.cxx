@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3205,7 +3205,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
             sOut.Append( '(' );
             sOut.Append( INetURLObject::AbsToRel( *pLink,
                                     INetURLObject::WAS_ENCODED,
-                                    INetURLObject::DECODE_WITH_CHARSET ));
+                                    INetURLObject::DECODE_UNAMBIGUOUS));
             sOut.Append( ')' );
 
             if( pRepeat )
@@ -3489,6 +3489,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:55  hr
+      initial import
+
       Revision 1.110  2000/09/18 16:04:42  willem.vandorp
       OpenOffice header added.
 
