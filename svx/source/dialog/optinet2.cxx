@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:52:32 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 10:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,36 @@
 #endif
 #ifndef _SVX_HELPID_HRC
 #include "helpid.hrc"
+#endif
+
+#ifdef UNX
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <pwd.h>
+#include <sys/types.h>
+#include <string.h>
+#include <osl/process.h>
+#include <rtl/textenc.h>
+#include <rtl/locale.h>
+#include <osl/nlsupport.h>
+#endif
+
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
+#ifndef _OSL_MODULE_HXX_
+#include <osl/module.hxx>
+#endif
+
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -1106,11 +1136,6 @@ SvxScriptingTabPage::SvxScriptingTabPage( Window* pParent, const SfxItemSet& rSe
     aJavaSecurityCB.SetClickHdl( aLink );
     aClassPathPB.SetClickHdl( LINK(this, SvxScriptingTabPage, ClassPathHdl_Impl) );
 #endif
-
-    aJavaEnableCB.Hide();
-    aClassPathFT.Hide();
-    aClassPathED.Hide();
-    aClassPathPB.Hide();
 }
 
 /*--------------------------------------------------------------------*/
@@ -1584,6 +1609,188 @@ void SvxScriptingTabPage::Reset( const SfxItemSet& )
                     aJavaSecurityCB.IsEnabled() ||
                     aClassPathED.IsEnabled());
 }
+
+//added by jmeng begin
+MozPluginTabPage::MozPluginTabPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage( pParent, ResId( RID_SVXPAGE_INET_MOZPLUGIN, DIALOG_MGR() ), rSet ),
+    aMSWordGB       ( this, ResId( GB_MOZPLUGIN     ) ),
+    aWBasicCodeCB   ( this, ResId( CB_MOZPLUGIN_CODE ) )
+{
+    FreeResource();
+}
+
+MozPluginTabPage::~MozPluginTabPage()
+{
+}
+
+SfxTabPage* MozPluginTabPage::Create( Window* pParent,
+                                        const SfxItemSet& rAttrSet )
+{
+    return new MozPluginTabPage( pParent, rAttrSet );
+}
+BOOL MozPluginTabPage::FillItemSet( SfxItemSet& )
+{
+    BOOL hasInstall = isInstalled();
+    BOOL hasChecked = aWBasicCodeCB.IsChecked();
+    if(hasInstall && (!hasChecked)){
+        //try to uninstall
+        uninstallPlugin();
+    }
+    else if((!hasInstall) && hasChecked){
+        //try to install
+        installPlugin();
+    }
+    else{
+        // do nothing
+    }
+    return TRUE;
+}
+void MozPluginTabPage::Reset( const SfxItemSet& )
+{
+        aWBasicCodeCB.Check( isInstalled());
+        aWBasicCodeCB.SaveValue();
+}
+
+#ifdef WNT
+extern "C" {
+    int lc_isInstalled(const  char* realFilePath);
+    int lc_installPlugin(const  char* realFilePath);
+    int lc_uninstallPlugin(const  char* realFilePath);
+}
+#endif
+
+#define NPP_PATH_MAX 2048
+inline ::rtl::OString getDllURL( void )
+{
+//    ::rtl::OUString libPath(rtl::OUString::createFromAscii("libcui680li.so"));
+    ::rtl::OUString dirPath/*dllPath, */;
+    osl::Module::getUrlFromAddress((void*)&getDllURL, dirPath);
+    dirPath = dirPath.copy(0, dirPath.lastIndexOf('/'));
+//    osl::FileBase::getAbsoluteFileURL(dirPath, libPath, dllPath);
+    ::rtl::OUString sysDirPath;
+    osl::FileBase::getSystemPathFromFileURL(dirPath, sysDirPath);
+    ::rtl::OString oSysDirPath;
+    oSysDirPath = OUStringToOString(sysDirPath, RTL_TEXTENCODING_ASCII_US);
+    return oSysDirPath;
+}
+
+BOOL MozPluginTabPage::isInstalled()
+{
+#ifdef UNIX
+    // get the real file referred by .so lnk file
+    char lnkFilePath[NPP_PATH_MAX] = {0};
+    char lnkReferFilePath[NPP_PATH_MAX] = {0};
+    char* pHome = getpwuid(getuid())->pw_dir;
+    strcat(lnkFilePath, pHome);
+    strcat(lnkFilePath, "/.mozilla/plugins/libnpsoplugin.so");
+
+    struct stat sBuf;
+    if (0 > lstat(lnkFilePath, &sBuf))
+        return false;
+    if (!S_ISLNK(sBuf.st_mode))
+        return false;
+    if (0 >= readlink(lnkFilePath, lnkReferFilePath, NPP_PATH_MAX))
+        return false;
+    // If the link is relative, then we regard it as non-standard
+    if (lnkReferFilePath[0] != '/')
+        return false;
+
+    // get the real file path
+    char realFilePath[NPP_PATH_MAX] = {0};
+    ::rtl::OString tempString;
+    tempString = getDllURL();
+    strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX);
+    strcat(realFilePath, "/libnpsoplugin.so");
+
+    if (0 != strcmp(lnkReferFilePath, realFilePath))
+        return false;
+    return true;
+#endif
+#ifdef WNT
+    // get the value from registry
+        BOOL ret = true;
+    ::rtl::OString tempString;
+    char realFilePath[NPP_PATH_MAX] = {0};
+    tempString = getDllURL();
+    strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX);
+    if(! lc_isInstalled(realFilePath))
+        ret =true;
+    else
+        ret = false;
+    return ret;
+#endif
+}
+
+BOOL MozPluginTabPage::installPlugin()
+{
+#ifdef UNIX
+    // get the real file referred by .so lnk file
+    char lnkFilePath[NPP_PATH_MAX] = {0};
+    char* pHome = getpwuid(getuid())->pw_dir;
+    strcat(lnkFilePath, pHome);
+    strcat(lnkFilePath, "/.mozilla/plugins/libnpsoplugin.so");
+    remove(lnkFilePath);
+
+    // create the dirs if necessary
+    struct stat buf;
+    char tmpDir[NPP_PATH_MAX] = {0};
+    sprintf(tmpDir, "%s/.mozilla", pHome);
+    if (0 > stat(lnkFilePath, &buf))
+    {
+        mkdir(tmpDir, 0755);
+        strcat(tmpDir, "/plugins");
+        mkdir(tmpDir, 0755);
+    }
+
+    // get the real file path
+    char realFilePath[NPP_PATH_MAX] = {0};
+    ::rtl::OString tempString;
+    tempString = getDllURL();
+    strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX);
+    strcat(realFilePath, "/libnpsoplugin.so");
+
+    // create the link
+    if (0 != symlink(realFilePath, lnkFilePath))
+        return false;
+    return true;
+#endif
+#ifdef WNT
+    ::rtl::OString tempString;
+    char realFilePath[NPP_PATH_MAX] = {0};
+    tempString = getDllURL();
+    strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX);
+    if( !lc_installPlugin(realFilePath))
+        return true;
+    else
+        return false;
+#endif
+}
+
+BOOL MozPluginTabPage::uninstallPlugin()
+{
+#ifdef UNIX
+    // get the real file referred by .so lnk file
+    char lnkFilePath[NPP_PATH_MAX] = {0};
+    char* pHome = getpwuid(getuid())->pw_dir;
+    strcat(lnkFilePath, pHome);
+    strcat(lnkFilePath, "/.mozilla/plugins/libnpsoplugin.so");
+
+    if(0 > remove(lnkFilePath))
+        return false;
+    return true;
+#endif
+#ifdef WNT
+    ::rtl::OString tempString;
+    char realFilePath[NPP_PATH_MAX] = {0};
+    tempString = getDllURL();
+    strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX);
+    if(!lc_uninstallPlugin(realFilePath))
+        return true;
+    else
+        return false;
+#endif
+}
+//added by jmeng end
 
 /* -------------------------------------------------------------------------*/
 
