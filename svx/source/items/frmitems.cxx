@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-19 17:15:55 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1427,7 +1427,19 @@ sal_Bool SvxShadowItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     sal_Bool bRet = QueryValue( aAny, bConvert ? CONVERT_TWIPS : 0 ) && ( aAny >>= aShadow );
     switch ( nMemberId )
     {
-        case MID_LOCATION: rVal >>= aShadow.Location; break;
+        case MID_LOCATION:
+        {
+            bRet = (rVal >>= aShadow.Location);
+            if ( !bRet )
+            {
+                sal_Int16 nVal;
+                bRet = (rVal >>= nVal);
+                aShadow.Location = (table::ShadowLocation) nVal;
+            }
+
+            break;
+        }
+
         case MID_WIDTH: rVal >>= aShadow.ShadowWidth; break;
         case MID_TRANSPARENT: rVal >>= aShadow.IsTransparent; break;
         case MID_BG_COLOR: rVal >>= aShadow.Color; break;

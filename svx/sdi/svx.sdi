@@ -1730,7 +1730,7 @@ SfxVoidItem ClearOutline SID_OUTLINE_DELETEALL
 ]
 
 //--------------------------------------------------------------------------
-SvxClipboardFmtItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS
+SfxVoidItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS( SfxUInt32Item SelectedFormat SID_CLIPBOARD_FORMAT_ITEMS )
 
 [
     /* flags: */
@@ -1746,7 +1746,8 @@ SvxClipboardFmtItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS
     RecordPerSet;
     Synchron;
 
-    Readonly = FALSE,
+    /* status: */
+    SlotType = SvxClipboardFmtItem;
 
     /* config: */
     AccelConfig = FALSE,
@@ -11149,4 +11150,86 @@ SvxCharReliefItem CharacterRelief SID_ATTR_CHAR_RELIEF
     ToolBoxConfig = FALSE,
     GroupId = GID_CONTROLS;
 ]
+
+//--------------------------------------------------------------------------
+SvxBrushItem CharacterBackgroundPattern SID_ATTR_BRUSH_CHAR
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
+SvxCharRotateItem CharacterRotation SID_ATTR_CHAR_ROTATED
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
+SvxCharScaleWidthItem CharacterWidthScalingFactor SID_ATTR_CHAR_SCALEWIDTH
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
 

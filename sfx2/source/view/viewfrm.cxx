@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-14 07:37:43 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3442,6 +3442,8 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                                     : !pTbxCfg->IsStatusBarVisible();
             pTbxCfg->SetStatusBarVisible( bShow );
             GetFrame()->GetWorkWindow_Impl()->UpdateObjectBars_Impl();
+            if ( !pShowItem )
+                rReq.AppendItem( SfxBoolItem( SID_TOGGLESTATUSBAR, bShow ) );
             rReq.Done();
             break;
         }
@@ -3460,8 +3462,13 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                     pWork->ShowFullScreenMode( bNewFullScreenMode );
                     pWork->SetMenuBarMode( bNewFullScreenMode ? MENUBAR_MODE_HIDE : MENUBAR_MODE_NORMAL );
                     GetFrame()->GetWorkWindow_Impl()->SetFullScreen_Impl( bNewFullScreenMode );
+                    if ( !pItem )
+                        rReq.AppendItem( SfxBoolItem( SID_WIN_FULLSCREEN, bNewFullScreenMode ) );
+                    rReq.Done();
                 }
             }
+            else
+                rReq.Ignore();
 
             GetDispatcher()->Update_Impl( TRUE );
             break;
@@ -3553,12 +3560,26 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     // Parameter auswerten
     USHORT nSID = rReq.GetSlot();
 
+    SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, FALSE);
     if ( nSID == SID_VIEW_DATA_SOURCE_BROWSER )
     {
         Reference < XFrame > xFrame = GetFrame()->GetTopFrame()->GetFrameInterface();
         Reference < XFrame > xBeamer( xFrame->findFrame( DEFINE_CONST_UNICODE("_beamer"), FrameSearchFlag::CHILDREN ) );
-        if ( xBeamer.is() )
+        BOOL bShow = FALSE;
+        BOOL bHasChild = xBeamer.is();
+        bShow = pShowItem ? pShowItem->GetValue() : !bHasChild;
+        if ( pShowItem )
+        {
+            if( bShow == bHasChild )
+                return;
+        }
+        else
+            rReq.AppendItem( SfxBoolItem( nSID, bShow ) );
+
+        if ( !bShow )
+        {
             SetChildWindow( SID_BROWSER, FALSE );
+        }
         else
         {
             ::com::sun::star::util::URL aTargetURL;
@@ -3580,10 +3601,10 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
             }
         }
 
+        rReq.Done();
         return;
     }
 
-    SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, FALSE);
     BOOL bShow = FALSE;
     BOOL bHasChild = HasChildWindow(nSID);
     bShow = pShowItem ? pShowItem->GetValue() : !bHasChild;
@@ -3596,9 +3617,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     GetDispatcher()->Update_Impl( TRUE );
 
     // ggf. recorden
-    if ( !rReq.IsAPI() )
-        rReq.AppendItem( SfxBoolItem( nSID, bShow ) );
-
+    rReq.AppendItem( SfxBoolItem( nSID, bShow ) );
     rReq.Done();
 }
 
@@ -3657,6 +3676,7 @@ void SfxViewFrame::ToolboxExec_Impl( SfxRequest &rReq )
     // Object-Bar-Id ermitteln
     sal_uInt16 nSID = rReq.GetSlot(), nTbxID;
     SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, sal_False);
+    BOOL bShow;
 
     if ( nSID == SID_TOGGLE_MENUBAR )
     {
@@ -3664,7 +3684,7 @@ void SfxViewFrame::ToolboxExec_Impl( SfxRequest &rReq )
         SfxTopFrame *pTop = pTopView ? pTopView->GetTopFrame_Impl() : NULL;
         if ( pTop )
         {
-            sal_Bool bShow = pShowItem ? pShowItem->GetValue() : ( pTop->GetMenuBar_Impl() == 0 );
+            bShow = pShowItem ? pShowItem->GetValue() : ( pTop->GetMenuBar_Impl() == 0 );
             pTop->SetMenuBarOn_Impl( bShow );
             GetDispatcher()->Update_Impl(sal_True);
         }
@@ -3687,14 +3707,10 @@ void SfxViewFrame::ToolboxExec_Impl( SfxRequest &rReq )
         }
 
         // Parameter auswerten
-#if SUPD<635
-        SfxToolBoxConfig *pTbxConfig = SfxToolBoxConfig::GetOrCreate();
-#else
         SfxToolBoxConfig *pTbxConfig = GetObjectShell()->GetToolBoxConfig_Impl();
-#endif
 
         // ausfuehren
-        sal_Bool bShow = pShowItem ? pShowItem->GetValue() : !pTbxConfig->IsToolBoxPositionVisible(nTbxID);
+        bShow = pShowItem ? pShowItem->GetValue() : !pTbxConfig->IsToolBoxPositionVisible(nTbxID);
         pTbxConfig->SetToolBoxPositionVisible(nTbxID, bShow);
         GetBindings().Invalidate( nSID );
 
@@ -3708,6 +3724,8 @@ void SfxViewFrame::ToolboxExec_Impl( SfxRequest &rReq )
         }
     }
 
+    if ( !pShowItem )
+        rReq.AppendItem( SfxBoolItem( nSID, bShow ) );
     rReq.Done();
 }
 
@@ -3719,11 +3737,7 @@ void SfxViewFrame::ToolboxState_Impl( SfxItemSet &rSet )
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {
-#if SUPD<635
-        SfxToolBoxConfig *pTbxConfig = SfxToolBoxConfig::GetOrCreate();
-#else
         SfxToolBoxConfig *pTbxConfig = GetObjectShell()->GetToolBoxConfig_Impl();
-#endif
         switch ( nSID )
         {
             case SID_TOGGLE_MENUBAR:

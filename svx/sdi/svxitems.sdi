@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.sdi,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-19 17:14:10 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,6 +399,7 @@ item SvxShadowLocation      SvxShadowLocationItem;
 
 //-------------------------------------------------------------------------
 
+item INT16                  SvxCharScaleWidthItem;
 item INT16                  SvxParaVertAlignItem;
 item INT16                  SvxCharReliefItem;
 item BOOL                   SvxBlinkItem;
@@ -715,6 +716,13 @@ struct SvxTabStop
     INT32   StandardTabStop  MID_STD_TAB;
 };
 item SvxTabStop SvxTabStopItem;
+
+struct SvxCharRotate
+{
+    INT16  Rotation          MID_ROTATE;
+    BOOL    FitToLine        MID_FITTOLINE;
+};
+item SvxCharRotate SvxCharRotateItem;
 
 item String                 SvxClipboardFmtItem;  // dummy
 item String                 SfxSetItem;  // dummy

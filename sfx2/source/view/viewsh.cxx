@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:19:22 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             SfxTemplateCatalog aCatalog(
                 SFX_APP()->GetTopWindow(), &GetViewFrame()->GetBindings());
             aCatalog.Execute();
+            rReq.Ignore();
             break;
         }
 
@@ -210,7 +211,10 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 {
                     InfoBox aBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERROR_SEND_MAIL ));
                     aBox.Execute();
+                    rReq.Ignore();
                 }
+                else
+                    rReq.Done();
             }
 
             break;
