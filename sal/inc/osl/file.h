@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-16 12:18:32 $
+ *  last change: $Author: obr $ $Date: 2001-05-17 09:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,7 +629,7 @@ oslFileError SAL_CALL osl_openFile( rtl_uString *strPath, oslFileHandle *pHandle
     @see    osl_getFilePos
 */
 
-oslFileError SAL_CALL osl_setFilePos( oslFileHandle Handle, sal_uInt32 uHow, sal_uInt64 uPos );
+oslFileError SAL_CALL osl_setFilePos( oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uPos );
 
 
 /** Retrieves the current position of the internal pointer of an open file.

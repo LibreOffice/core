@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-15 15:41:13 $
+ *  last change: $Author: obr $ $Date: 2001-05-17 09:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,7 +783,7 @@ public:
     #define Pos_Current osl_Pos_Current
     #define Pos_End     osl_Pos_End
 
-    inline RC setPos( sal_uInt32 uHow, sal_uInt64 uPos )
+    inline RC setPos( sal_uInt32 uHow, sal_Int64 uPos )
     {
         return (RC) osl_setFilePos( _pData, uHow, uPos );
     }
