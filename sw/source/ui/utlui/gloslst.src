@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:26:43 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
         Text[ czech ] = "Automatický text - skupina";
         Text[ hebrew ] = "AutoText - Gruppe";
         Text[ hindi ] = "स्वचालित टेक्स्ट् - समूह";
+        Text[ slovak ] = "Automatický text - skupina";
     };
     OKButton PB_OK
     {
@@ -160,7 +161,10 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
     Text[ czech ] = "Vybrat automatický text:";
     Text[ hebrew ] = "Textbaustein auswählen:";
     Text[ hindi ] = "स्वचालित टेक्स्ट् चुनो: ";
+    Text[ slovak ] = "Vybrať automatický text:";
 };
+
+
 
 
 
