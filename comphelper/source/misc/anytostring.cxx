@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anytostring.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:22:16 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "comphelper/anytostring.hxx"
 
 #include "rtl/ustring.hxx"
 #include "rtl/ustrbuf.hxx"
