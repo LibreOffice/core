@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:28:53 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1391,6 +1391,7 @@ UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
     , m_xHandler( pHandler )
     , m_nError( ERRCODE_NONE )
 {
+    SetSynchronMode( TRUE );
 }
 
 //----------------------------------------------------------------------------
