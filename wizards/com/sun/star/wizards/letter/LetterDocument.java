@@ -22,7 +22,6 @@ import com.sun.star.style.XStyle;
 public class LetterDocument extends TextDocument {
 
     XDesktop xDesktop;
-    //Size DocSize = null;
     boolean keepLogoFrame = true;
     boolean keepBendMarksFrame = true;
     boolean keepLetterSignsFrame = true;
