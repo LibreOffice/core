@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapiuno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:36:25 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,11 @@ const SfxItemPropertyMap* lcl_GetDataPilotDescriptorBaseMap()
     static SfxItemPropertyMap aDataPilotDescriptorBaseMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_COLGRAND), 0,  &getBooleanCppuType(),  0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DRILLDOWN),0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_IGNEMPROWS),0, &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_RPTEMPTY), 0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_ROWGRAND), 0,  &getBooleanCppuType(),  0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_SHOWFILT), 0,  &getBooleanCppuType(),  0, 0 },
         {0,0,0,0}
     };
     return aDataPilotDescriptorBaseMap_Impl;
@@ -783,6 +785,14 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const ::rtl::OUString
             {
                 aNewData.SetRowGrand(::cppu::any2bool( aValue ));
             }
+            else if ( aNameString.EqualsAscii( SC_UNO_SHOWFILT ) )
+            {
+                aNewData.SetFilterButton(::cppu::any2bool( aValue ));
+            }
+            else if ( aNameString.EqualsAscii( SC_UNO_DRILLDOWN ) )
+            {
+                aNewData.SetDrillDown(::cppu::any2bool( aValue ));
+            }
             else
                 throw beans::UnknownPropertyException();
 
@@ -826,6 +836,14 @@ uno::Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue(const ::rtl::OUStr
             else if ( aNameString.EqualsAscii( SC_UNO_ROWGRAND ) )
             {
                 aRet = ::cppu::bool2any( aNewData.GetRowGrand() );
+            }
+            else if ( aNameString.EqualsAscii( SC_UNO_SHOWFILT ) )
+            {
+                aRet = ::cppu::bool2any( aNewData.GetFilterButton() );
+            }
+            else if ( aNameString.EqualsAscii( SC_UNO_DRILLDOWN ) )
+            {
+                aRet = ::cppu::bool2any( aNewData.GetDrillDown() );
             }
             else
                 throw beans::UnknownPropertyException();
