@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-20 18:34:16 $
+#   last change: $Author: hjs $ $Date: 2001-06-20 18:43:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ TARGET=so_berkeleydb
 
 TARFILE_NAME=db-3.2.9
 
+# not needed for win32. comment out when causing problems...
 PATCH_FILE_NAME=db-3.2.9.patch
 
 .IF "$(GUI)"=="UNX"
@@ -117,4 +118,11 @@ OUT2CLASS=java$/classes$/db.jar
 .INCLUDE : set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
+
+TG_DELIVER : build$/$(INPATH)$/so_predeliver
+        $(DELIVER)
+
+.IF "$(BUILD_SOSL)"!=""
+ALLTAR : TG_DELIVER
+.ENDIF			# "$(BUILD_SOSL)"!=""
 
