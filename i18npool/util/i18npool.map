@@ -1,0 +1,11 @@
+UDK_3_0_0 {
+global:
+    GetVersionInfo;
+    component_getDescriptionFunc;
+    component_getImplementationEnvironment;
+    component_getFactory;
+    component_writeInfo;
+
+local:
+    *;
+};
