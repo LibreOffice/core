@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:46:42 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,17 +99,17 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText [ swedish ] = "URL-namn" ;
         QuickHelpText[ russian ] = "Èìÿ URL";
         QuickHelpText[ danish ] = "URL navn";
-        QuickHelpText[ polish ] = "Nazwa URL!";
-        QuickHelpText[ japanese ] = "URL‚Ì–¼‘O!";
+        QuickHelpText[ polish ] = "Nazwa URL";
+        QuickHelpText[ japanese ] = "URL‚Ì–¼‘O";
         QuickHelpText[ chinese_simplified ] = "URL Ãû³Æ";
         QuickHelpText[ chinese_traditional ] = "URL ¦WºÙ";
         QuickHelpText[ arabic ] = "URL ÇÓã ÇáÜ";
         QuickHelpText[ greek ] = "¼íïìá ôïõ URL";
-        QuickHelpText[ korean ] = "URL ÀÌ¸§!";
+        QuickHelpText[ korean ] = "URL ÀÌ¸§";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Name der URL";
         QuickHelpText[ catalan ] = "Nombre de la URL";
-        QuickHelpText[ finnish ] = "URL-osoitteen nimi!";
+        QuickHelpText[ finnish ] = "URL-osoitteen nimi";
     };
     FixedText FT_URL
     {
@@ -161,17 +161,17 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText [ swedish ] = "Samlingsbox till webbadresser" ;
         QuickHelpText[ russian ] = "Íàêîïèòåëü URL Èíòåğíåòà";
         QuickHelpText[ danish ] = "Samleboks til Internet URL";
-        QuickHelpText[ polish ] = "Skrzynka zbiorcza dla URL Internetu!";
-        QuickHelpText[ japanese ] = "²İÀ°È¯ÄURL‚ÌûWÎŞ¯¸½!";
+        QuickHelpText[ polish ] = "Skrzynka zbiorcza dla URL Internetu";
+        QuickHelpText[ japanese ] = "²İÀ°È¯ÄURL‚ÌûWÎŞ¯¸½";
         QuickHelpText[ chinese_simplified ] = "¹ú¼Ê»¥ÁªÍø URL µØÖ·À¸";
         QuickHelpText[ chinese_traditional ] = "Internet URL ¦ì§}¦C";
         QuickHelpText[ arabic ] = "ÇáÅäÊÑäÊ URLs ÕäÏæŞ ÌãÚ";
         QuickHelpText[ greek ] = "Ğëáßóéï óõëëïãŞò ãéá URL ôïõ Internet";
-        QuickHelpText[ korean ] = "ÀÎÅÍ³İ URL!";
+        QuickHelpText[ korean ] = "ÀÎÅÍ³İ URL";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Sammelbox für Internet-URLs";
         QuickHelpText[ catalan ] = "URLs de Internet";
-        QuickHelpText[ finnish ] = "Internetin URL-osoitteet!";
+        QuickHelpText[ finnish ] = "Internetin URL-osoitteet";
     };
     ToolBox TB
     {
@@ -412,5 +412,6 @@ QueryBox RID_SVXQB_DONTEXIST
     Message[ catalan ] = "La URL no existe.\n¿Desea insertarla de todas formas?";
     Message[ finnish ] = "URL-osoitetta ei ole olemassa. Lisätäänkö kuitenkin?";
 };
+
 
 
