@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:19:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <wmadaptor.hxx>
 #include <salbmp.h>
 #include <floatwin.hxx>
+#include <svapp.hxx>
 
 #include <prex.h>
 #include <X11/Xatom.h>
@@ -782,6 +783,8 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
     {
         if( m_pParent )
         {
+            if( Application::GetSettings().GetLayoutRTL() )
+                nX = m_pParent->maGeometry.nWidth-maGeometry.nWidth-1-nX;
             nX += m_pParent->maGeometry.nX;
             nY += m_pParent->maGeometry.nY;
         }
@@ -1363,6 +1366,10 @@ gboolean GtkSalFrame::signalButton( GtkWidget* pWidget, GdkEventButton* pEvent, 
 
     GTK_YIELD_GRAB();
 
+    // --- RTL --- (mirror mouse pos)
+    if( Application::GetSettings().GetLayoutRTL() )
+        aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
+
     vcl::DeletionListener aDel( pThis );
 
     pThis->CallCallback( nEventType, &aEvent );
@@ -1422,6 +1429,11 @@ gboolean GtkSalFrame::signalScroll( GtkWidget* pWidget, GdkEvent* pEvent, gpoint
     aEvent.mbHorz           = (pSEvent->direction == GDK_SCROLL_LEFT || pSEvent->direction == GDK_SCROLL_RIGHT);
 
     GTK_YIELD_GRAB();
+
+    // --- RTL --- (mirror mouse pos)
+    if( Application::GetSettings().GetLayoutRTL() )
+        aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
+
     pThis->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
 
     return FALSE;
@@ -1440,6 +1452,10 @@ gboolean GtkSalFrame::signalMotion( GtkWidget* pWidget, GdkEventMotion* pEvent, 
 
 
     GTK_YIELD_GRAB();
+
+    // --- RTL --- (mirror mouse pos)
+    if( Application::GetSettings().GetLayoutRTL() )
+        aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
 
     vcl::DeletionListener aDel( pThis );
 
@@ -1497,6 +1513,11 @@ gboolean GtkSalFrame::signalExpose( GtkWidget* pWidget, GdkEventExpose* pEvent, 
     aEvent.mnBoundHeight    = pEvent->area.height;
 
     GTK_YIELD_GRAB();
+
+    // --- RTL --- (mirror paint pos)
+    if( Application::GetSettings().GetLayoutRTL() )
+        aEvent.mnBoundX = pThis->maGeometry.nWidth-aEvent.mnBoundWidth-aEvent.mnBoundX;
+
     pThis->CallCallback( SALEVENT_PAINT, &aEvent );
 
     return FALSE;
@@ -1520,14 +1541,13 @@ gboolean GtkSalFrame::signalFocus( GtkWidget* pWidget, GdkEventFocus* pEvent, gp
     {
         if( pEvent->in )
         {
-            gtk_im_context_focus_in( pThis->m_pIMContext );
             gtk_im_context_reset( pThis->m_pIMContext );
+            gtk_im_context_set_client_window( pThis->m_pIMContext, GTK_WIDGET(pThis->m_pWindow)->window );
+            gtk_im_context_focus_in( pThis->m_pIMContext );
         }
         else
         {
             gtk_im_context_focus_out( pThis->m_pIMContext );
-            pThis->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
-            gtk_im_context_reset( pThis->m_pIMContext );
         }
     }
 
@@ -1931,12 +1951,12 @@ void GtkSalFrame::signalIMPreeditChanged( GtkIMContext* pContext, gpointer frame
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
     char*           pText           = NULL;
-    PangoAttrList*  pAttribs        = NULL;
+    PangoAttrList*  pAttrs          = NULL;
     gint            nCursorPos      = 0;
 
     gtk_im_context_get_preedit_string( pThis->m_pIMContext,
                                        &pText,
-                                       &pAttribs,
+                                       &pAttrs,
                                        &nCursorPos );
     SalExtTextInputEvent aTextEvent;
 
@@ -1948,14 +1968,59 @@ void GtkSalFrame::signalIMPreeditChanged( GtkIMContext* pContext, gpointer frame
     aTextEvent.mbOnlyCursor     = False;
 
     USHORT* pSalAttribs = new USHORT[ aTextEvent.maText.Len() ];
-    // FIXME: more sophisticated attributes
     for( int i = 0; i < aTextEvent.maText.Len(); ++i )
-        pSalAttribs[i] = SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
+        pSalAttribs[i] = 0;
+
+    PangoAttrIterator   *iter       = pango_attr_list_get_iterator (pAttrs);
+    do
+    {
+        GSList *attr_list = NULL;
+        GSList *tmp_list = NULL;
+        gint start, end;
+        guint sal_attr = SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
+
+        pango_attr_iterator_range (iter, &start, &end);
+        if (end == G_MAXINT)
+            end = pText ? strlen (pText) : 0;
+        if (end == start)
+            continue;
+
+        start = g_utf8_pointer_to_offset (pText, pText + start);
+        end = g_utf8_pointer_to_offset (pText, pText + end);
+
+        tmp_list = attr_list = pango_attr_iterator_get_attrs (iter);
+        while (tmp_list)
+        {
+            PangoAttribute *pango_attr = (PangoAttribute *)(tmp_list->data);
+
+            switch (pango_attr->klass->type)
+            {
+                case PANGO_ATTR_BACKGROUND:
+                sal_attr |= (SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT | SAL_EXTTEXTINPUT_CURSOR_INVISIBLE);
+                    break;
+                case PANGO_ATTR_UNDERLINE:
+                sal_attr |= SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
+                    break;
+                case PANGO_ATTR_STRIKETHROUGH:
+                    sal_attr |= SAL_EXTTEXTINPUT_ATTR_REDTEXT;
+                    break;
+                default:
+                    break;
+            }
+            pango_attribute_destroy (pango_attr);
+            tmp_list = tmp_list->next;
+        }
+        g_slist_free (attr_list);
+
+        // Set the sal attributes on our text
+        for (int i = start; i < end; i++)
+            pSalAttribs[i] |= sal_attr;
+    } while (pango_attr_iterator_next (iter));
 
     aTextEvent.mpTextAttr       = pSalAttribs;
 
     g_free( pText );
-    pango_attr_list_unref( pAttribs );
+    pango_attr_list_unref( pAttrs );
 
     GTK_YIELD_GRAB();
     pThis->m_bWasPreedit = true;
