@@ -3,9 +3,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hdu $ $Date: 2002-07-30 10:19:15 $
+ *  last change: $Author: hdu $ $Date: 2002-08-01 13:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,36 +96,7 @@ public:
 
     virtual bool    LayoutText( const ImplLayoutArgs& ) = 0;
     virtual void    Draw() const = 0;
-    virtual bool    GetOutline( SalGraphics&, PolyPolygon& ) const;
 };
-
-// -----------------------------------------------------------------------
-
-bool WinLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyPoly ) const
-{
-    bool bRet = false;
-
-    bool bHasGlyphs = HasGlyphs();
-    for( int nStart = 0;;)
-    {
-        Point aPos;
-        long nLGlyph;
-        if( !GetNextGlyphs( 1, &nLGlyph, aPos, nStart, NULL, NULL ) )
-            break;
-
-        // get outline of individual glyph
-        PolyPolygon aGlyphOutline;
-        if( rSalGraphics.GetGlyphOutline( nLGlyph, bHasGlyphs, aGlyphOutline ) )
-            bRet = true;
-
-        // insert outline at correct position
-        aGlyphOutline.Move( aPos.X(), aPos.Y() );
-        for( int j = 0; j < aGlyphOutline.Count(); ++j )
-            rPolyPoly.Insert( aGlyphOutline[j] );
-    }
-
-    return bRet;
-}
 
 // =======================================================================
 
@@ -137,13 +108,12 @@ public:
 
     virtual bool    LayoutText( const ImplLayoutArgs& );
     virtual void    Draw() const;
-//  virtual bool    GetOutline( SalGraphics&, PolyPolygon& ) const;
     virtual int     GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int&,
                         long* pGlyphAdvances, int* pCharIndexes ) const;
 
     virtual Point   GetCharPosition( int nCharIndex, bool bRTL ) const;
     virtual long    FillDXArray( long* pDXArray ) const;
-    virtual int     GetTextBreak( long nMaxWidth ) const;
+    virtual int     GetTextBreak( long nMaxWidth, long nCharExtra ) const;
     virtual bool    HasGlyphs() const { return mbEnableGlyphs; }
 
 protected:
@@ -497,7 +467,7 @@ long SimpleWinLayout::FillDXArray( long* pDXArray ) const
 
 // -----------------------------------------------------------------------
 
-int SimpleWinLayout::GetTextBreak( long nMaxWidth ) const
+int SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra ) const
 {
     long nWidth = 0;
 
@@ -505,9 +475,9 @@ int SimpleWinLayout::GetTextBreak( long nMaxWidth ) const
     {
         int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
         nWidth += mpGlyphAdvances[j];
-        nWidth += mnCharExtra;
         if( nWidth >= nMaxWidth )
             return (mnFirstCharIndex + i);
+        nWidth += nCharExtra;
     }
 
     return STRING_LEN;
@@ -639,7 +609,7 @@ public:
 
     virtual Point   GetCharPosition( int nCharIndex, bool bRTL ) const;
     virtual long    FillDXArray( long* pDXArray ) const;
-    virtual int     GetTextBreak( long nMaxWidth ) const;
+    virtual int     GetTextBreak( long nMaxWidth, long nCharExtra ) const;
 
 protected:
     void            Justify( long nNewWidth );
@@ -1244,13 +1214,12 @@ long UniscribeLayout::FillDXArray( long* pDXArray ) const
 
 // -----------------------------------------------------------------------
 
-int UniscribeLayout::GetTextBreak( long nMaxWidth ) const
+int UniscribeLayout::GetTextBreak( long nMaxWidth, long nCharExtra ) const
 {
     long nWidth = 0;
     for( int i = mnFirstCharIndex; i < mnEndCharIndex; ++i )
     {
         nWidth += mpCharWidths[ i ];
-        nWidth += mnCharExtra;
         if( nWidth >= nMaxWidth )
         {
             for(; i >= mnFirstCharIndex; --i )
@@ -1258,6 +1227,7 @@ int UniscribeLayout::GetTextBreak( long nMaxWidth ) const
                     break;
             return i;
         }
+        nWidth += nCharExtra;
     }
 
     return STRING_LEN;
@@ -1469,9 +1439,12 @@ BOOL SalGraphics::GetLayoutOutline( const SalLayout& rSalLayout, PolyPolygon& rP
 {
     rPolyPoly.Clear();
 
+    return rSalLayout.GetOutline( *this, rPolyPoly );
+/*###
     // we know the SalLayout created by this SalGraphics is a WinLayout
     const WinLayout& rWinLayout = reinterpret_cast<const WinLayout&>( rSalLayout );
     return rWinLayout.GetOutline( *this, rPolyPoly );
+*/
 }
 
 // =======================================================================
