@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:50 $
+ *  last change: $Author: cl $ $Date: 2002-04-30 11:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ void SdDrawDocShell::GetState(SfxItemSet &rSet)
                     // Es laeuft ein Effekt in der SlideShow
                     bDisabled = TRUE;
                 }
-                else if (pViewShell && pViewShell->GetView()->ISA(SdDrawView) &&
+                else if (pViewShell && pViewShell->GetView() && pViewShell->GetView()->ISA(SdDrawView) &&
                          ((SdDrawView*) pViewShell->GetView())->GetSlideShow() &&
                          ((SdDrawView*) pViewShell->GetView())->GetSlideShow()->IsInputLocked())
                 {
