@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.200 $
+ *  $Revision: 1.201 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:57:05 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1087,6 +1087,10 @@ void Window::ImplRemoveWindow( BOOL bRemoveFrameData )
 void Window::ImplCallResize()
 {
     mbCallResize = FALSE;
+
+    if( GetBackground().IsGradient() )
+        Invalidate();
+
     Resize();
 
     // Forward size to embedded java frame. As stated below, derived
@@ -5141,9 +5145,9 @@ long Window::Notify( NotifyEvent& rNEvt )
             BOOL bHit = pWrapper->GetDragArea().IsInside( pMEvt->GetPosPixel() );
             if ( pMEvt->IsLeft() )
             {
-                if ( pMEvt->GetClicks() == 2 )
+                if ( pMEvt->IsMod1() && (pMEvt->GetClicks() == 2) )
                 {
-                    // double click toggles floating mode
+                    // ctrl double click toggles floating mode
                     pWrapper->SetFloatingMode( !pWrapper->IsFloatingMode() );
                     return TRUE;
                 }
@@ -5185,6 +5189,14 @@ long Window::Notify( NotifyEvent& rNEvt )
                 rKey.IsShift() && rKey.IsMod1() )
             {
                 pWrapper->SetFloatingMode( !pWrapper->IsFloatingMode() );
+                /* At this point the floating toolbar frame does not have the
+                 * input focus since these frames don't get the focus per default
+                 * To enable keyboard handling of this toolbar set the input focus
+                 * to the frame. This needs to be done with ToTop since GrabFocus
+                 * would not notice any change since "this" already has the focus.
+                 */
+                if( pWrapper->IsFloatingMode() )
+                    ToTop( TOTOP_GRABFOCUSONLY );
                 return TRUE;
             }
         }
@@ -5587,6 +5599,10 @@ void Window::SetMouseTransparent( BOOL bTransparent )
 void Window::SetPaintTransparent( BOOL bTransparent )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+
+    // transparency is not useful for frames as the background would have to be provided by a different frame
+    if( bTransparent && mbFrame )
+        return;
 
     if ( mpBorderWindow )
         mpBorderWindow->SetPaintTransparent( bTransparent );
@@ -8789,7 +8805,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
     Color aSelectionFillCol( aSelectionBorderCol );
 
     BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
-    BOOL bBright = GetSettings().GetStyleSettings().GetFaceColor().IsBright();
+    BOOL bBright = ( GetSettings().GetStyleSettings().GetFaceColor() == Color( COL_WHITE ) );
 
     int c1 = aSelectionBorderCol.GetLuminance();
     int c2 = GetDisplayBackground().GetColor().GetLuminance();
