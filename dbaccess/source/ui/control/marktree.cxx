@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktree.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 08:10:27 $
+ *  last change: $Author: fs $ $Date: 2001-06-20 09:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvLBoxEntry* _pEntry)
     if (!GetModel()->HasChilds(_pEntry))
         // nothing to do in this bottom-up routine if there are no children ...
         return eState;
+#ifdef DBG_UTIL
+    String sEntryText = GetEntryText(_pEntry);
+#endif
 
     // loop through the children and check their states
     sal_uInt16 nCheckedChildren = 0;
@@ -166,6 +169,9 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvLBoxEntry* _pEntry)
     SvLBoxEntry* pChildLoop = GetModel()->FirstChild(_pEntry);
     while (pChildLoop)
     {
+#ifdef DBG_UTIL
+        String sChildText = GetEntryText(pChildLoop);
+#endif
         SvButtonState eChildState = implDetermineState(pChildLoop);
         if (SV_BUTTON_TRISTATE == eChildState)
             break;
@@ -178,8 +184,20 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvLBoxEntry* _pEntry)
     }
 
     if (pChildLoop)
+    {
         // we did not finish the loop because at least one of the children is in tristate
         eState = SV_BUTTON_TRISTATE;
+
+        // but this means that we did not finish all the siblings of pChildLoop, so their checking may be
+        // incorrect at the moment
+        // -> correct this
+        // 88485 - 20.06.2001 - frank.schoenheit@sun.com
+        while (pChildLoop)
+        {
+            implDetermineState(pChildLoop);
+            pChildLoop = GetModel()->NextSibling(pChildLoop);
+        }
+    }
     else
         // none if the children is in tristate
         if (nCheckedChildren)
@@ -340,6 +358,9 @@ SvLBoxEntry* OMarkableTreeListBox::GetEntryPosByName(const String& aName,SvLBoxE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/04/27 08:10:27  fs
+ *  +implDeterminedState - needed to correctly implement CheckButtons
+ *
  *  Revision 1.3  2001/01/30 08:30:11  fs
  *  +checkedButton_noBroadcast
  *
