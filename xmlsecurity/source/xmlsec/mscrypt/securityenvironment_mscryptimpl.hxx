@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmi $ $Date: 2004-08-02 04:46:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@
 #include <windows.h>
 #include <wincrypt.h>
 
+#include "xmlsec/xmlsec.h"
+
 class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper4<
     ::com::sun::star::xml::crypto::XSecurityEnvironment ,
     ::com::sun::star::lang::XInitialization ,
@@ -168,8 +170,11 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper4<
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL createCertificateFromAscii( const ::rtl::OUString& asciiCertificate ) throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
 
-    virtual ::sal_Int32 SAL_CALL verifyCertificate( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert ) throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
+        virtual ::sal_Int32 SAL_CALL verifyCertificate( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert ) throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
     virtual ::sal_Int32 SAL_CALL getCertificateCharacters( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert ) throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
+
+        virtual ::rtl::OUString SAL_CALL getSecurityEnvironmentInfo(  ) throw (::com::sun::star::uno::RuntimeException);
+
 
         //Methods from XInitialization
         virtual void SAL_CALL initialize(
@@ -240,6 +245,11 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper4<
         virtual void enableDefaultCrypt( sal_Bool enable ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         virtual sal_Bool defaultEnabled() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
+
+        //Native mehtods
+        virtual xmlSecKeysMngrPtr createKeysManager() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
+
+        virtual void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 } ;
 
 #endif  // _XSECURITYENVIRONMENT_MSCRYPTIMPL_HXX_
