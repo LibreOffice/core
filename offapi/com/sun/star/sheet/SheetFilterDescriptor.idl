@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetFilterDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ module com {  module sun {  module star {  module sheet {
     conditions (filter fields) which control the behaviour of a filter
     operation.</p>
  */
-service SheetFilterDescriptor
+published service SheetFilterDescriptor
 {
     //-------------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ service SheetFilterDescriptor
 
     //-------------------------------------------------------------------------
 
-//! service PropertySet
+//!published service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
