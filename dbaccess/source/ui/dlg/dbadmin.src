@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-15 10:44:13 $
+ *  last change: $Author: oj $ $Date: 2002-07-26 09:33:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,14 @@
 #ifndef DBAUI_TOOLBOX_HXX
 #include "toolbox.hrc"
 #endif
+
+#define PAGE_X 260
+#define PAGE_Y 185
+#define CHECKBOX_HEIGHT     8
+#define FIXEDTEXT_HEIGHT    8
+#define RELATED_CONTROLS    4
+#define UNRELATED_CONTROLS  7
+#define EDIT_HEIGHT        12
 
 #define IL_TABLESUBCRIPTION \
 \
@@ -275,6 +283,51 @@ ImageList IMG_DOCUMENTLINKS_LCH
     };
     IL_DOCUMENTLINKS ;
 };
+//-------------------------------------------------------------------------
+#define AUTO_INCREMENT_CONTROLS(AUTO_Y)                                     \
+    CheckBox CB_RETRIEVE_AUTO                                               \
+    {                                                                       \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                              \
+        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;                   \
+        TabStop = TRUE ;                                                    \
+        HelpId = HID_DSADMIN_AUTORETRIEVEENABLED;                           \
+        Text = "Generierte Werte ~ber¸cksichtigen";                         \
+        Text [ english ] = "Re~trieve generated values";                    \
+    };                                                                      \
+                                                                            \
+    FixedText FT_AUTOINCREMENTVALUE                                         \
+    {                                                                       \
+        Pos     = MAP_APPFONT ( 15 , AUTO_Y + CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;        \
+        Size = MAP_APPFONT ( PAGE_X - 15 - 6 , FIXEDTEXT_HEIGHT ) ;         \
+        Text = "~Auto-Increment-Ausdruck" ;                                 \
+        Text [ english ] = "~Auto-increment statement" ;                     \
+    };                                                                       \
+                                                                             \
+    Edit ET_AUTOINCREMENTVALUE                                               \
+    {                                                                        \
+        Border = TRUE ;                                                      \
+        Pos     = MAP_APPFONT ( 15 , AUTO_Y + CHECKBOX_HEIGHT + 2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT) ;         \
+        Size = MAP_APPFONT ( 180 , EDIT_HEIGHT ) ;                                   \
+        TabStop = TRUE ;                                                     \
+        HelpId = HID_DSADMIN_AUTOINCREMENTVALUE;                             \
+    };                                                                       \
+                                                                             \
+    FixedText FT_RETRIEVE_AUTO                                               \
+    {                                                                        \
+        Pos     = MAP_APPFONT ( 15 , AUTO_Y + CHECKBOX_HEIGHT + 3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + EDIT_HEIGHT) ;       \
+        Size = MAP_APPFONT ( PAGE_X - 15 - 6 , 10 ) ;                        \
+        Text = "Abfrage der generierten ~Werte" ;                           \
+        Text [ english ] = "~Query of generated values" ;                   \
+    };                                                                      \
+                                                                            \
+    Edit ET_RETRIEVE_AUTO                                                   \
+    {                                                                       \
+        Border = TRUE ;                                                     \
+        Pos     = MAP_APPFONT ( 15 , AUTO_Y + CHECKBOX_HEIGHT + 4*RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + EDIT_HEIGHT ) ;       \
+        Size = MAP_APPFONT ( 180, EDIT_HEIGHT ) ;                                   \
+        TabStop = TRUE ;                                                    \
+        HelpId = HID_DSADMIN_RETRIEVE_AUTO;                                 \
+    };
 
 //-------------------------------------------------------------------------
 TabDialog DLG_DATABASE_ADMINISTRATION
@@ -766,7 +819,7 @@ Image IMG_DATABASE_DELETED_SCH
 TabPage PAGE_GENERAL
 {
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_GENERAL;
 
@@ -999,29 +1052,9 @@ TabPage PAGE_GENERAL
         Pos = MAP_APPFONT ( 154 , 165 ) ;
         Size = MAP_APPFONT ( 100 , 14 ) ;
         HelpId = HID_DSADMIN_CREATEDATABASE;
-        Text = "~Neue Datenbank..." ;
-        Text [ english ] = "~new database" ;
-        Text [ english_us ] = "~New Database..." ;
-        Text [ portuguese ] = "~Nova base de dados...";
-        Text [ russian ] = "~ÕÓ‚‡ˇ ·‡Á‡ ‰‡ÌÌ˚ı...";
-        Text [ greek ] = "~new database";
-        Text [ dutch ] = "~Nieuwe database";
-        Text [ french ] = "~Nouvelle base de donnÈes...";
-        Text [ spanish ] = "~Nueva base de datos...";
-        Text [ italian ] = "~Nuovo database...";
-        Text [ danish ] = "~new database";
-        Text [ swedish ] = "~Ny databas";
-        Text [ polish ] = "Nowa baza danych...";
-        Text [ portuguese_brazilian ] = "~new database";
-        Text [ japanese ] = "Êñ∞„Åó„ÅÑ„Éá„Éº„Çø„Éô„Éº„Çπ(~N)...";
-        Text [ korean ] = "ÏÉà Îç∞Ïù¥ÌÑ∞Î≤†Ïù¥Ïä§(~N)";
-        Text [ chinese_simplified ] = "Êñ∞Â¢ûÊï∞ÊçÆÂ∫ì(~N)...";
-        Text [ chinese_traditional ] = "Êñ∞Â¢ûË≥áÊñôÂ∫´(~N)...";
-        Text [ turkish ] = "~new database";
-        Text [ arabic ] = "ﬁ«⁄œ… »Ì«‰«  ÃœÌœ…...";
-        Text[ finnish ] = "~Uusi tietokanta";
-        Text[ catalan ] = "Base de dades ~nova...";
-        Text[ thai ] = "‡∏ê‡∏≤‡∏ô‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•~‡πÉ‡∏´‡∏°‡πà...";
+        Text = "N~eue Datenbank..." ;
+        Text [ english ] = "n~ew database" ;
+        Text [ english_us ] = "N~ew Database..." ;
     };
     String STR_NAMEINVALID
     {
@@ -1163,7 +1196,7 @@ TabPage PAGE_DBASE
     SVLook = TRUE ;
     Hide = TRUE;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     HelpId = HID_DSADMIN_PAGE_DBASE;
 
     FixedLine FL_SEPARATOR1
@@ -1221,7 +1254,7 @@ TabPage PAGE_DBASE
     CheckBox CB_SHOWDELETEDROWS
     {
         Pos = MAP_APPFONT ( 7 , 63 ) ;
-        Size = MAP_APPFONT ( 200 , 10 ) ;
+        Size = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_SHOWDELETED;
         Text = "I~naktive Datens‰tze anzeigen" ;
@@ -1252,8 +1285,8 @@ TabPage PAGE_DBASE
     };
     CheckBox CB_SQL92CHECK
     {
-        Pos     = MAP_APPFONT ( 7 , 76 ) ;
-        Size    = MAP_APPFONT ( 200 , 10 ) ;
+        Pos     = MAP_APPFONT ( 7 , 63 + CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_SQL92CHECK;
         Text = "SQL92 Namensbeschr‰nkung verwenden";
@@ -1297,7 +1330,7 @@ TabPage PAGE_ADO
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_ADO;
 
@@ -1386,7 +1419,7 @@ TabPage PAGE_ADO
     CheckBox CB_PASSWORD_REQUIRED
     {
         Pos = MAP_APPFONT ( 90 , 51 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
         HelpId = HID_DSADMIN_PWDREC_ADO;
         Text = "Passwort erforderlich";
         Text [ english ] = "Password required";
@@ -1415,7 +1448,7 @@ TabPage PAGE_ADO
 
     FixedLine FL_SEPARATOR2
     {
-        Pos = MAP_APPFONT ( 4 , 64 ) ;
+        Pos = MAP_APPFONT ( 4 , 51 + CHECKBOX_HEIGHT + 3 ) ;
         Size = MAP_APPFONT ( 252 , 8 ) ;
         Text = "Allgemein";
         Text [ english ] = "General";
@@ -1423,8 +1456,8 @@ TabPage PAGE_ADO
 
     CheckBox CB_SQL92CHECK
     {
-        Pos     = MAP_APPFONT ( 6 , 75 ) ;
-        Size    = MAP_APPFONT ( 200 , 10 ) ;
+        Pos     = MAP_APPFONT ( 6 , 51 + CHECKBOX_HEIGHT + 3 + 8 + 3 ) ;
+        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_SQL92CHECK;
         Text = "SQL92 Namensbeschr‰nkung verwenden";
@@ -1437,14 +1470,14 @@ TabPage PAGE_JDBC
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_JDBC;
 
     FixedText FT_JDBCDRIVERCLASS
     {
         Pos = MAP_APPFONT ( 6 , 7 ) ;
-        Size = MAP_APPFONT ( 71 , 10 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "~JDBC Treiberklasse" ;
         Text [ english ] = "~JDBC driverclass" ;
         Text [ english_us ] = "~JDBC driver class" ;
@@ -1481,7 +1514,7 @@ TabPage PAGE_JDBC
     FixedText FT_CONNECTURL
     {
         Pos = MAP_APPFONT ( 6 , 22 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "U~RL" ;
         Text [ english ] = "U~RL" ;
         Text [ english_us ] = "U~RL" ;
@@ -1520,7 +1553,7 @@ TabPage PAGE_JDBC
     FixedText FT_USERNAME
     {
         Pos = MAP_APPFONT ( 6 , 37 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "~Benutzername" ;
         Text [ english ] = "~Username" ;
         Text [ NORWEGIAN ] = "~Username" ;
@@ -1558,7 +1591,7 @@ TabPage PAGE_JDBC
     CheckBox CB_PASSWORD_REQUIRED
     {
         Pos = MAP_APPFONT ( 90 , 51 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
         HelpId = HID_DSADMIN_PWDREC_JDBC;
         Text = "Passwort erforderlich";
         Text [ english ] = "Password required";
@@ -1586,15 +1619,18 @@ TabPage PAGE_JDBC
     };
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 4 , 64 ) ;
+        Pos = MAP_APPFONT ( 4 , 62 ) ;
         Size = MAP_APPFONT ( 252 , 8) ;
         Text = "Allgemein";
         Text [ english ] = "General";
     };
+
+    AUTO_INCREMENT_CONTROLS (73)
+
     CheckBox CB_SQL92CHECK
     {
-        Pos     = MAP_APPFONT ( 6 , 75 ) ;
-        Size    = MAP_APPFONT ( 200 , 10 ) ;
+        Pos     = MAP_APPFONT ( 6 , 73 + CHECKBOX_HEIGHT + 4*RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + 2*EDIT_HEIGHT + UNRELATED_CONTROLS) ;
+        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_SQL92CHECK;
         Text = "SQL92 Namensbeschr‰nkung verwenden";
@@ -1607,7 +1643,7 @@ TabPage PAGE_ODBC
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_ODBC;
 
@@ -1652,7 +1688,7 @@ TabPage PAGE_ODBC
     CheckBox CB_PASSWORD_REQUIRED
     {
         Pos = MAP_APPFONT ( 90 , 21 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
         Text = "Passwort erforderlich";
         Text [ english ] = "Password required";
         Text [ english_us ] = "Password required";
@@ -1680,12 +1716,12 @@ TabPage PAGE_ODBC
     };
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 4 , 34 ) ;
+        Pos = MAP_APPFONT ( 4 , 32 ) ;
         Size = MAP_APPFONT ( 252 , 1 ) ;
     };
     FixedText FT_OPTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 40 ) ;
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Treibereinstellungen" ;
         Text [ english ] = "ODBC ~options" ;
@@ -1716,14 +1752,14 @@ TabPage PAGE_ODBC
     Edit ET_OPTIONS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 91 , 39 ) ;
+        Pos = MAP_APPFONT ( 91 , 37 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_ODBC_OPTIONS;
     };
     FixedText FT_CHARSET
     {
-        Pos = MAP_APPFONT ( 6 , 55 ) ;
+        Pos = MAP_APPFONT ( 6 , 53 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Zeichensatz" ;
         Text [ english ] = "~Character set" ;
@@ -1754,13 +1790,14 @@ TabPage PAGE_ODBC
     ListBox LB_CHARSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 91 , 54 ) ;
+        Pos = MAP_APPFONT ( 91 , 52 ) ;
         Size = MAP_APPFONT ( 105 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
         HelpId = HID_DSADMIN_CHARSET_ODBC;
     };
+
     FixedLine FL_SEPARATOR1
     {
         Pos = MAP_APPFONT ( 4 , 68 ) ;
@@ -1768,19 +1805,24 @@ TabPage PAGE_ODBC
         Text = "Allgemein";
         Text [ english ] = "General";
     };
+
+    AUTO_INCREMENT_CONTROLS (80 )
+
     CheckBox CB_SQL92CHECK
     {
-        Pos     = MAP_APPFONT ( 6 , 79 ) ;
-        Size    = MAP_APPFONT ( 200 , 10 ) ;
+        Pos     = MAP_APPFONT ( 6 , 79 + CHECKBOX_HEIGHT + 4*RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + 2*EDIT_HEIGHT + UNRELATED_CONTROLS) ;
+        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_SQL92CHECK;
         Text = "SQL92 Namensbeschr‰nkung verwenden";
         Text [ english ] = "Use SQL92 naming constraints";
     };
+
     CheckBox CB_USECATALOG
     {
-        Pos     = MAP_APPFONT ( 6 , 92 ) ;
-        Size    = MAP_APPFONT ( 200 , 10 ) ;
+
+        Pos     = MAP_APPFONT ( 6 ,79 + 2*CHECKBOX_HEIGHT + 4*RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + 2*EDIT_HEIGHT + 2*UNRELATED_CONTROLS) ;
+        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_USECATALOG;
         Text = "Catalog verwenden bei dateibasierten Datenbanken";
@@ -1813,7 +1855,7 @@ TabPage PAGE_LDAP
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_LDAP;
 
@@ -1978,7 +2020,7 @@ TabPage PAGE_TEXT
     SVLook = TRUE ;
     Hide = TRUE;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     HelpId = HID_DSADMIN_PAGE_TEXT;
 
     FixedLine FL_SEPARATOR2
@@ -2463,7 +2505,7 @@ TabPage PAGE_TABLESUBSCRIPTION
     SVLook = TRUE ;
     Hide = TRUE;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     HelpId = HID_DSADMIN_TABLE_SUBSCRIPTION;
 
     FixedLine FL_SEPARATOR1
@@ -2625,7 +2667,7 @@ TabPage PAGE_QUERYADMINISTRATION
     SVLook = TRUE ;
     Hide = TRUE;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     HelpId = HID_DSADMIN_QUERYADMINISTRATION;
 
     FixedLine FL_COLLECTION
@@ -2710,7 +2752,7 @@ TabPage PAGE_DOCUMENTLINKS
     SVLook = TRUE ;
     Hide = TRUE;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     HelpId = HID_DSADMIN_DOCUMENTLINKS;
 
     FixedLine FL_COLLECTION
@@ -3112,30 +3154,11 @@ Menu RID_NEW_FORM
         };
         MenuItem
         {
-            Identifier = ID_FORM_NEW_PILOT;
-            Text = "~AutoPilot...";
-            Text [ english ] = "~AutoPilot...";
-            Text [ english_us ] = "A~utoPilot...";
-            Text[ portuguese ] = "A~utoPiloto...";
-            Text[ russian ] = "~¿‚ÚÓÔËÎÓÚ...";
-            Text[ greek ] = "~¡ıÙÔ–ÈÎ¸ÙÔÚ";
-            Text[ dutch ] = "~AutoPiloot...";
-            Text[ french ] = "~AutoPilote...";
-            Text[ spanish ] = "A~utoPiloto";
-            Text[ finnish ] = "Automaattinen ~ohjaus";
-            Text[ italian ] = "Pilota auto~matico";
-            Text[ danish ] = "A~utoPilot";
-            Text[ swedish ] = "~AutoPilot";
-            Text[ polish ] = "A~utoPilot...";
-            Text[ portuguese_brazilian ] = "A~utoPilot";
-            Text[ japanese ] = "„Ç™„Éº„Éà„Éë„Ç§„É≠„ÉÉ„Éà(~U)";
-            Text[ korean ] = "ÏûêÎèô ÌååÏùºÎüø(~U)";
-            Text[ chinese_simplified ] = "Ëá™Âä®Êñá‰ª∂Âä©ÁêÜ(~U)...";
-            Text[ chinese_traditional ] = "Ëá™ÂãïÊ™îÊ°àÂä©ÁêÜ(~U)...";
-            Text[ turkish ] = "A~utoPilot";
-            Text[ arabic ] = "A~utoPilot";
-            Text[ catalan ] = "A~utoPilot";
-            Text[ thai ] = "‡∏ô‡∏≥~‡∏£‡πà‡∏≠‡∏á‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥";
+            MID_DOCUMENT_NEW_AUTOPILOT
+        };
+        MenuItem
+        {
+            MID_DOCUMENT_CREATE_REPWIZ
         };
         MenuItem
         {
@@ -3655,6 +3678,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.102  2002/07/15 10:44:13  oj
+ *  #99921# check if datasource allows to check names
+ *
  *  Revision 1.101  2002/07/09 12:39:03  oj
  *  #99921# check if datasource allows to check names
  *

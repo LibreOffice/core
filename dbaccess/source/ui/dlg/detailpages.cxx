@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:39:05 $
+ *  last change: $Author: oj $ $Date: 2002-07-26 09:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,11 @@ namespace dbaui
         ,m_pCharsetLabel(NULL)
         ,m_pCharset(NULL)
         ,m_pIsSQL92Check(NULL)
+        ,m_pAutoIncrementLabel(NULL)
+        ,m_pAutoIncrement(NULL)
+        ,m_pAutoRetrievingEnabled(NULL)
+        ,m_pAutoRetrievingLabel(NULL)
+        ,m_pAutoRetrieving(NULL)
         ,m_nControlFlags(nControlFlags)
     {
         if ((m_nControlFlags & CBTP_USE_UIDPWD) == CBTP_USE_UIDPWD)
@@ -154,12 +159,6 @@ namespace dbaui
             m_pOptionsLabel = new FixedText(this, ResId(FT_OPTIONS));
             m_pOptions = new Edit(this, ResId(ET_OPTIONS));
             m_pOptions->SetModifyHdl(getControlModifiedLink());
-        }
-
-        if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
-        {
-            m_pIsSQL92Check = new CheckBox(this, ResId(CB_SQL92CHECK));
-            m_pIsSQL92Check->SetClickHdl(getControlModifiedLink());
         }
 
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
@@ -181,6 +180,26 @@ namespace dbaui
                 ++aLoop;
             }
         }
+
+        if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
+        {
+            m_pAutoRetrievingEnabled = new CheckBox(this, ResId(CB_RETRIEVE_AUTO));
+            m_pAutoRetrievingEnabled->SetClickHdl(LINK(this, OCommonBehaviourTabPage,OnCheckBoxClick));
+
+            m_pAutoIncrementLabel = new FixedText(this, ResId(FT_AUTOINCREMENTVALUE));
+            m_pAutoIncrement = new Edit(this, ResId(ET_AUTOINCREMENTVALUE));
+            m_pAutoIncrement->SetModifyHdl(getControlModifiedLink());
+
+            m_pAutoRetrievingLabel = new FixedText(this, ResId(FT_RETRIEVE_AUTO));
+            m_pAutoRetrieving = new Edit(this, ResId(ET_RETRIEVE_AUTO));
+            m_pAutoRetrieving->SetModifyHdl(getControlModifiedLink());
+        }
+
+        if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
+        {
+            m_pIsSQL92Check = new CheckBox(this, ResId(CB_SQL92CHECK));
+            m_pIsSQL92Check->SetClickHdl(getControlModifiedLink());
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -197,6 +216,27 @@ namespace dbaui
         DELETEZ(m_pCharset);
 
         DELETEZ(m_pIsSQL92Check);
+
+        DELETEZ(m_pAutoIncrementLabel);
+        DELETEZ(m_pAutoIncrement);
+
+        DELETEZ(m_pAutoRetrievingEnabled);
+        DELETEZ(m_pAutoRetrievingLabel);
+        DELETEZ(m_pAutoRetrieving);
+    }
+    //------------------------------------------------------------------------
+    IMPL_LINK( OCommonBehaviourTabPage, OnCheckBoxClick, CheckBox*, pCheckBox )
+    {
+        callModifiedHdl();
+        if ( pCheckBox == m_pAutoRetrievingEnabled )
+        {
+            m_pAutoRetrievingLabel->Enable(m_pAutoRetrievingEnabled->IsChecked());
+            m_pAutoRetrieving->Enable(m_pAutoRetrievingEnabled->IsChecked());
+            m_pAutoIncrementLabel->Enable(m_pAutoRetrievingEnabled->IsChecked());
+            m_pAutoIncrement->Enable(m_pAutoRetrievingEnabled->IsChecked());
+        }
+
+        return 0;
     }
 
     // -----------------------------------------------------------------------
@@ -262,6 +302,9 @@ namespace dbaui
         SFX_ITEMSET_GET(_rSet, pCharsetItem, SfxStringItem, DSID_CHARSET, sal_True);
         SFX_ITEMSET_GET(_rSet, pAllowEmptyPwd, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
         SFX_ITEMSET_GET(_rSet, pSQL92Check, SfxBoolItem, DSID_SQL92CHECK, sal_True);
+        SFX_ITEMSET_GET(_rSet, pAutoIncrementItem, SfxStringItem, DSID_AUTOINCREMENTVALUE, sal_True);
+        SFX_ITEMSET_GET(_rSet, pAutoRetrieveValueItem, SfxStringItem, DSID_AUTORETRIEVEVALUE, sal_True);
+        SFX_ITEMSET_GET(_rSet, pAutoRetrieveEnabledItem, SfxBoolItem, DSID_AUTORETRIEVEENABLED, sal_True);
 
         // forward the values to the controls
         if (bValid)
@@ -286,6 +329,30 @@ namespace dbaui
                 m_pOptions->ClearModifyFlag();
                 if (_bSaveValue)
                     m_pOptions->SaveValue();
+            }
+
+            if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
+            {
+                sal_Bool bEnabled = pAutoRetrieveEnabledItem->GetValue();
+                m_pAutoRetrievingEnabled->Check(bEnabled);
+
+                if (_bSaveValue)
+                    m_pAutoRetrievingEnabled->SaveValue();
+
+                m_pAutoIncrement->Enable(bEnabled);
+                m_pAutoIncrementLabel->Enable(bEnabled);
+                m_pAutoRetrieving->Enable(bEnabled);
+                m_pAutoRetrievingLabel->Enable(bEnabled);
+
+                m_pAutoIncrement->SetText(pAutoIncrementItem->GetValue());
+                m_pAutoIncrement->ClearModifyFlag();
+                m_pAutoRetrieving->SetText(pAutoRetrieveValueItem->GetValue());
+                m_pAutoRetrieving->ClearModifyFlag();
+                if (_bSaveValue)
+                {
+                    m_pAutoIncrement->SaveValue();
+                    m_pAutoRetrieving->SaveValue();
+                }
             }
 
             if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
@@ -344,6 +411,15 @@ namespace dbaui
                 m_pOptions->Disable();
             }
 
+            if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
+            {
+                m_pAutoIncrementLabel->Disable();
+                m_pAutoIncrement->Disable();
+                m_pAutoRetrievingEnabled->Disable();
+                m_pAutoRetrievingLabel->Disable();
+                m_pAutoRetrieving->Disable();
+            }
+
             if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
             {
                 m_pIsSQL92Check->Disable();
@@ -382,6 +458,25 @@ namespace dbaui
             if( m_pOptions->GetText() != m_pOptions->GetSavedValue() )
             {
                 _rSet.Put(SfxStringItem(DSID_ADDITIONALOPTIONS, m_pOptions->GetText()));
+                bChangedSomething = sal_True;
+            }
+        }
+
+        if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
+        {
+            if( m_pAutoIncrement->GetText() != m_pAutoIncrement->GetSavedValue() )
+            {
+                _rSet.Put(SfxStringItem(DSID_AUTOINCREMENTVALUE, m_pAutoIncrement->GetText()));
+                bChangedSomething = sal_True;
+            }
+            if (m_pAutoRetrievingEnabled->IsChecked() != m_pAutoRetrievingEnabled->GetSavedValue())
+            {
+                _rSet.Put(SfxBoolItem(DSID_AUTORETRIEVEENABLED, m_pAutoRetrievingEnabled->IsChecked()));
+                bChangedSomething = sal_True;
+            }
+            if( m_pAutoRetrieving->GetText() != m_pAutoRetrieving->GetSavedValue() )
+            {
+                _rSet.Put(SfxStringItem(DSID_AUTORETRIEVEVALUE, m_pAutoRetrieving->GetText()));
                 bChangedSomething = sal_True;
             }
         }
@@ -426,6 +521,7 @@ namespace dbaui
 
         // correct the z-order which is mixed-up because the base class constructed some controls before we did
         m_pCharset->SetZOrder(&m_aShowDeleted, WINDOW_ZORDER_BEFOR);
+        m_pIsSQL92Check->SetZOrder(&m_aShowDeleted, WINDOW_ZORDER_BEHIND);
 
         FreeResource();
     }
@@ -523,7 +619,7 @@ namespace dbaui
     //= OJdbcDetailsPage
     //========================================================================
     OJdbcDetailsPage::OJdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_JDBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_SQL92CHECK)
+        :OCommonBehaviourTabPage(pParent, PAGE_JDBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_SQL92CHECK | CBTP_USE_AUTOINCREMENT)
 
         ,m_aDriverLabel     (this, ResId(FT_JDBCDRIVERCLASS))
         ,m_aDriver          (this, ResId(ET_JDBCDRIVERCLASS))
@@ -534,8 +630,18 @@ namespace dbaui
         m_aDriver.SetModifyHdl(getControlModifiedLink());
         m_aJdbcUrl.SetModifyHdl(getControlModifiedLink());
 
-        m_pUserName->SetZOrder(&m_aJdbcUrl, WINDOW_ZORDER_BEHIND);
-        m_pPasswordRequired->SetZOrder(m_pUserName, WINDOW_ZORDER_BEHIND);
+
+        Window* pWindows[] = { &m_aJdbcUrl,
+                                m_pUserNameLabel, m_pUserName,
+                                m_pPasswordRequired,
+                                m_pAutoRetrievingEnabled,
+                                m_pAutoIncrementLabel, m_pAutoIncrement,
+                                m_pAutoRetrievingLabel, m_pAutoRetrieving,
+                                m_pIsSQL92Check };
+
+        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        for (sal_Int32 i=1; i < nCount; ++i)
+            pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
 
         FreeResource();
     }
@@ -555,6 +661,9 @@ namespace dbaui
             {
                 DSID_JDBCDRIVERCLASS,
                 DSID_SQL92CHECK,
+                DSID_AUTOINCREMENTVALUE,
+                DSID_AUTORETRIEVEVALUE,
+                DSID_AUTORETRIEVEENABLED,
                 0
             };
             pRelevantIds = nRelevantIds;
@@ -631,8 +740,14 @@ namespace dbaui
     {
         m_aAdoUrl.SetModifyHdl(getControlModifiedLink());
 
-        m_pUserName->SetZOrder(&m_aAdoUrl, WINDOW_ZORDER_BEHIND);
-        m_pPasswordRequired->SetZOrder(m_pUserName, WINDOW_ZORDER_BEHIND);
+        Window* pWindows[] = { &m_aAdoUrl,
+                                m_pUserNameLabel, m_pUserName,
+                                m_pPasswordRequired,
+                                m_pIsSQL92Check };
+
+        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        for (sal_Int32 i=1; i < nCount; ++i)
+            pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
 
         FreeResource();
     }
@@ -706,7 +821,7 @@ namespace dbaui
     //= OOdbcDetailsPage
     //========================================================================
     OOdbcDetailsPage::OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET | CBTP_USE_OPTIONS | CBTP_USE_SQL92CHECK)
+        :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET | CBTP_USE_OPTIONS | CBTP_USE_SQL92CHECK| CBTP_USE_AUTOINCREMENT)
         ,m_aSeparator1  (this, ResId(FL_SEPARATOR1))
         ,m_aUseCatalog  (this, ResId(CB_USECATALOG))
     {
@@ -732,6 +847,9 @@ namespace dbaui
                 DSID_CHARSET,
                 DSID_USECATALOG,
                 DSID_SQL92CHECK,
+                DSID_AUTOINCREMENTVALUE,
+                DSID_AUTORETRIEVEVALUE,
+                DSID_AUTORETRIEVEENABLED,
                 0
             };
             pRelevantIds = nRelevantIds;
@@ -1227,6 +1345,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2002/07/09 12:39:05  oj
+ *  #99921# check if datasource allows to check names
+ *
  *  Revision 1.13  2002/04/30 15:47:28  fs
  *  #97118# remove user/password - not used at the moment
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 13:18:55 $
+ *  last change: $Author: oj $ $Date: 2002-07-26 09:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter();
         virtual const OTypeInfo*    getTypeInfo(sal_Int32 _nPos);
         virtual const OTypeInfoMap* getTypeInfo() const;
+        virtual sal_Bool isAutoIncrementValueEnabled() const;
+        virtual ::rtl::OUString getAutoIncrementValue() const;
 
     public:
         OWizTypeSelectControl(Window* pParent, OTableDesignHelpBar* pHelpBar=NULL)
@@ -159,6 +161,8 @@ namespace dbaui
 
         Image                   m_imgPKey;
         SvStream*               m_pParserStream; // stream to read the tokens from or NULL
+        ::rtl::OUString         m_sAutoIncrementValue;
+        sal_Bool                m_bAutoIncrementEnabled;
 
         void                    fillColumnList(sal_uInt32 nRows);
         virtual SvParser*       createReader(sal_Int32 _nRows) = 0;

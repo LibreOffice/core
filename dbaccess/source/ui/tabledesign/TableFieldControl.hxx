@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldControl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 13:19:53 $
+ *  last change: $Author: oj $ $Date: 2002-07-26 09:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,8 @@ namespace dbaui
 
         virtual const OTypeInfo*    getTypeInfo(sal_Int32 _nPos);
         virtual const OTypeInfoMap* getTypeInfo() const;
+        virtual sal_Bool isAutoIncrementValueEnabled() const;
+        virtual ::rtl::OUString getAutoIncrementValue() const;
 
     public:
         OTableFieldControl( Window* pParent, OTableDesignHelpBar* pHelpBar) :OFieldDescControl(pParent,pHelpBar) {};

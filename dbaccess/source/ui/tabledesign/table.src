@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:57:01 $
+ *  last change: $Author: oj $ $Date: 2002-07-26 09:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2223,4 +2223,14 @@ QueryBox TABLE_DESIGN_ALL_ROWS_DELETED
     Message [ English ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged." ;
 };
 
+String STR_AUTOINCREMENT_VALUE
+{
+    Text = "A~uto-Increment-Ausdruck" ;
+    Text [ ENGLISH ] = "A~uto-increment statement" ;
+};
+String STR_HELP_AUTOINCREMENT_VALUE
+{
+    Text = "Geben Sie hier einen SQL Ausdruck für das Auto-Increment-Feld an.\n\nDieser Ausdruck wird beim Erzeugen der Tabelle direkt an die Datenbank übertragen." ;
+    Text [ english ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created." ;
+};
 

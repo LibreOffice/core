@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:39:07 $
+ *  last change: $Author: oj $ $Date: 2002-07-26 09:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,12 @@ namespace dbaui
     //=========================================================================
     //= OCommonBehaviourTabPage
     //=========================================================================
-    #define     CBTP_NONE           0x0000
-    #define     CBTP_USE_UIDPWD     0x0001
-    #define     CBTP_USE_CHARSET    0x0002
-    #define     CBTP_USE_OPTIONS    0x0004
-    #define     CBTP_USE_SQL92CHECK 0x0010
+    #define     CBTP_NONE                   0x0000
+    #define     CBTP_USE_UIDPWD             0x0001
+    #define     CBTP_USE_CHARSET            0x0002
+    #define     CBTP_USE_OPTIONS            0x0004
+    #define     CBTP_USE_SQL92CHECK         0x0010
+    #define     CBTP_USE_AUTOINCREMENT      0x0020
 
     /** eases the implementation of tab pages handling user/password and/or character
         set and/or generic options input
@@ -106,9 +107,17 @@ namespace dbaui
 
         CheckBox*           m_pIsSQL92Check;
 
+        CheckBox*           m_pAutoRetrievingEnabled;
+        FixedText*          m_pAutoIncrementLabel;
+        Edit*               m_pAutoIncrement;
+        FixedText*          m_pAutoRetrievingLabel;
+        Edit*               m_pAutoRetrieving;
+
         OCharsetDisplay     m_aCharsets;
 
         USHORT              m_nControlFlags;
+
+        DECL_LINK( OnCheckBoxClick, CheckBox * );
 
     public:
         virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
@@ -322,6 +331,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2002/07/09 12:39:07  oj
+ *  #99921# check if datasource allows to check names
+ *
  *  Revision 1.10  2002/04/30 15:55:26  fs
  *  #97118# remove user/password - not used at the moment
  *

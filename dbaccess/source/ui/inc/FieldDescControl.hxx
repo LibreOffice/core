@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 13:18:55 $
+ *  last change: $Author: oj $ $Date: 2002-07-26 09:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,23 +79,24 @@
 
 //------------------------------------------------------------------
 // die Spalten einer Feld-Beschreibung einer Tabelle
-#define FIELD_NAME      1
-#define FIELD_TYPE      2
-#define FIELD_DESCR     3
+#define FIELD_NAME                      1
+#define FIELD_TYPE                      2
+#define FIELD_DESCR                     3
 
-#define FIELD_FIRST_VIRTUAL_COLUMN  4
+#define FIELD_FIRST_VIRTUAL_COLUMN      4
 
-#define FIELD_PROPERTY_REQUIRED     4
-#define FIELD_PROPERTY_NUMTYPE      5
-#define FIELD_PROPERTY_AUTOINC      6
-#define FIELD_PROPERTY_DEFAULT      7
-#define FIELD_PROPERTY_TEXTLEN      8
-#define FIELD_PROPERTY_LENGTH       9
-#define FIELD_PROPERTY_SCALE        10
-#define FIELD_PROPERTY_BOOL_DEFAULT 11
-#define FIELD_PROPERTY_FORMAT       12
-#define FIELD_PRPOERTY_COLUMNNAME   13
-#define FIELD_PRPOERTY_TYPE         14
+#define FIELD_PROPERTY_REQUIRED         4
+#define FIELD_PROPERTY_NUMTYPE          5
+#define FIELD_PROPERTY_AUTOINC          6
+#define FIELD_PROPERTY_DEFAULT          7
+#define FIELD_PROPERTY_TEXTLEN          8
+#define FIELD_PROPERTY_LENGTH           9
+#define FIELD_PROPERTY_SCALE            10
+#define FIELD_PROPERTY_BOOL_DEFAULT     11
+#define FIELD_PROPERTY_FORMAT           12
+#define FIELD_PRPOERTY_COLUMNNAME       13
+#define FIELD_PRPOERTY_TYPE             14
+#define FIELD_PRPOERTY_AUTOINCREMENT    15
 
 class FixedText;
 class PushButton;
@@ -135,6 +136,7 @@ namespace dbaui
         FixedText*              pBoolDefaultText;
         FixedText*              m_pColumnNameText;
         FixedText*              m_pTypeText;
+        FixedText*              m_pAutoIncrementValueText;
 
         OPropListBoxCtrl*       pRequired;
         OPropListBoxCtrl*       pNumType;
@@ -147,6 +149,7 @@ namespace dbaui
         OPropListBoxCtrl*       pBoolDefault;
         OPropColumnEditCtrl*    m_pColumnName;
         OPropListBoxCtrl*       m_pType;
+        OPropEditCtrl*          m_pAutoIncrementValue;
 
         PushButton*             pFormat;
 
@@ -202,6 +205,9 @@ namespace dbaui
 
         virtual const OTypeInfo*    getTypeInfo(sal_Int32 _nPos)        = 0;
         virtual const OTypeInfoMap* getTypeInfo() const  = 0;
+
+        virtual sal_Bool isAutoIncrementValueEnabled() const = 0;
+        virtual ::rtl::OUString getAutoIncrementValue() const = 0;
 
         String  BoolStringPersistent(const String& rUIString) const;
         String  BoolStringUI(const String& rPersistentString) const;

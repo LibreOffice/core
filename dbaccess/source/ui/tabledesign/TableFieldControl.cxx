@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldControl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 13:19:52 $
+ *  last change: $Author: oj $ $Date: 2002-07-26 09:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,16 @@ const OTypeInfoMap* OTableFieldControl::getTypeInfo() const
 Locale OTableFieldControl::GetLocale() const
 {
     return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getLocale();
+}
+// -----------------------------------------------------------------------------
+sal_Bool OTableFieldControl::isAutoIncrementValueEnabled() const
+{
+    return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController()->isAutoIncrementValueEnabled();
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OTableFieldControl::getAutoIncrementValue() const
+{
+    return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController()->getAutoIncrementValue();
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 13:19:16 $
+ *  last change: $Author: oj $ $Date: 2002-07-26 09:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,8 @@ OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTab
     ,m_pColumnNameText(NULL)
     ,m_pType(NULL)
     ,m_pTypeText(NULL)
+    ,m_pAutoIncrementValueText(NULL)
+    ,m_pAutoIncrementValue(NULL)
     ,nPos(-1)
     ,aYes(ModuleRes(STR_VALUE_YES))
     ,aNo(ModuleRes(STR_VALUE_NO))
@@ -282,6 +284,8 @@ OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHel
     ,m_pColumnNameText(NULL)
     ,m_pType(NULL)
     ,m_pTypeText(NULL)
+    ,m_pAutoIncrementValueText(NULL)
+    ,m_pAutoIncrementValue(NULL)
     ,nPos(-1)
     ,aYes(ModuleRes(STR_VALUE_YES))
     ,aNo(ModuleRes(STR_VALUE_NO))
@@ -337,6 +341,7 @@ OFieldDescControl::~OFieldDescControl()
     DeactivateAggregate( tpBoolDefault );
     DeactivateAggregate( tpColumnName );
     DeactivateAggregate( tpType );
+    DeactivateAggregate( tpAutoIncrementValue );
 
     if(nDelayedGrabFocusEvent)
         Application::RemoveUserEvent(nDelayedGrabFocusEvent);
@@ -389,7 +394,18 @@ IMPL_LINK(OFieldDescControl, OnScroll, ScrollBar*, pBar)
     ScrollAllAggregates();
     return 0;
 }
-
+// -----------------------------------------------------------------------------
+namespace
+{
+    void getMaxXPosition(Window* _pWindow,long& _rnMaxXPosition)
+    {
+        if (_pWindow)
+        {
+            long nTemp = _pWindow->GetSizePixel().Width() + _pWindow->GetPosPixel().X();
+            _rnMaxXPosition = ::std::max(_rnMaxXPosition, nTemp);
+        }
+    }
+}
 //------------------------------------------------------------------------------
 void OFieldDescControl::CheckScrollBars()
 {
@@ -407,26 +423,9 @@ void OFieldDescControl::CheckScrollBars()
     // brauche ich ScrollBars eigentlich ?
     // horizontal :
     long lMaxXPosition = 0;
-    if (pRequired)
-        lMaxXPosition = ::std::max(lMaxXPosition, pRequired->GetSizePixel().Width() + pRequired->GetPosPixel().X());
-    if (pNumType)
-        lMaxXPosition = ::std::max(lMaxXPosition, pNumType->GetSizePixel().Width() + pNumType->GetPosPixel().X());
-    if (pAutoIncrement)
-        lMaxXPosition = ::std::max(lMaxXPosition, pAutoIncrement->GetSizePixel().Width() + pAutoIncrement->GetPosPixel().X());
-    if (pDefault)
-        lMaxXPosition = ::std::max(lMaxXPosition, pDefault->GetSizePixel().Width() + pDefault->GetPosPixel().X());
-    if (pTextLen)
-        lMaxXPosition = ::std::max(lMaxXPosition, pTextLen->GetSizePixel().Width() + pTextLen->GetPosPixel().X());
-    if (pLength)
-        lMaxXPosition = ::std::max(lMaxXPosition, pLength->GetSizePixel().Width() + pLength->GetPosPixel().X());
-    if (pScale)
-        lMaxXPosition = ::std::max(lMaxXPosition, pScale->GetSizePixel().Width() + pScale->GetPosPixel().X());
-    if (pFormat)
-        lMaxXPosition = ::std::max(lMaxXPosition, pFormat->GetSizePixel().Width() + pFormat->GetPosPixel().X());
-    if (m_pColumnName)
-        lMaxXPosition = ::std::max(lMaxXPosition, m_pColumnName->GetSizePixel().Width() + m_pColumnName->GetPosPixel().X());
-    if (m_pType)
-        lMaxXPosition = ::std::max(lMaxXPosition, m_pType->GetSizePixel().Width() + m_pType->GetPosPixel().X());
+    Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType,m_pAutoIncrementValue};
+    for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
+        getMaxXPosition(ppAggregates[i],lMaxXPosition);
 
     if (m_pHorzScroll)
         lMaxXPosition += m_pHorzScroll->GetThumbPos() * HSCROLL_STEP;
@@ -529,23 +528,29 @@ void OFieldDescControl::ScrollAllAggregates()
 
     if (nDeltaX || nDeltaY)
     {
-        ScrollAggregate(pRequiredText, pRequired, NULL, nDeltaX, nDeltaY);
-        ScrollAggregate(pNumTypeText, pNumType, NULL, nDeltaX, nDeltaY);
-        ScrollAggregate(pAutoIncrementText, pAutoIncrement, NULL, nDeltaX, nDeltaY);
-        ScrollAggregate(pDefaultText, pDefault, NULL, nDeltaX, nDeltaY);
-        ScrollAggregate(pTextLenText, pTextLen, NULL, nDeltaX, nDeltaY);
-        ScrollAggregate(pLengthText, pLength, NULL, nDeltaX, nDeltaY);
-        ScrollAggregate(pScaleText, pScale, NULL, nDeltaX, nDeltaY);
-        ScrollAggregate(pFormatText, pFormatSample, pFormat, nDeltaX, nDeltaY);
-        ScrollAggregate(m_pColumnNameText, m_pColumnName, NULL, nDeltaX, nDeltaY);
-        ScrollAggregate(m_pTypeText, m_pType, NULL, nDeltaX, nDeltaY);
+        Control* ppAggregates[]     = {   pRequired, pNumType
+                                        , pAutoIncrement, pDefault
+                                        , pTextLen, pLength
+                                        , pScale, m_pColumnName
+                                        , m_pType, m_pAutoIncrementValue};
+        Control* ppAggregatesText[] = {   pRequiredText, pNumTypeText
+                                        , pAutoIncrementText, pDefaultText
+                                        , pTextLenText, pLengthText
+                                        , pScaleText, m_pColumnNameText
+                                        , m_pTypeText, m_pAutoIncrementValueText};
+        OSL_ENSURE(sizeof(ppAggregates)/sizeof(ppAggregates[0]) == sizeof(ppAggregatesText)/sizeof(ppAggregatesText[0]),"Lists are not identical!");
+
+        for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
+            ScrollAggregate(ppAggregatesText[i],ppAggregates[i],NULL,nDeltaX, nDeltaY);
+
+        ScrollAggregate(pFormatText,pFormatSample,pFormat,nDeltaX, nDeltaY);
     }
 }
 
 //------------------------------------------------------------------------------
 sal_uInt16 OFieldDescControl::CountActiveAggregates() const
 {
-    Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType};
+    Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType,m_pAutoIncrementValue};
     sal_uInt16 nVisibleAggregates = 0;
     for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
         if (ppAggregates[i])
@@ -559,61 +564,27 @@ void OFieldDescControl::SetReadOnly( sal_Bool bReadOnly )
     DBG_CHKTHIS(OFieldDescControl,NULL);
     //////////////////////////////////////////////////////////////////////
     // Controls enablen/disablen
-    if (pDefault)
-    {
-        pDefaultText->Enable( !bReadOnly );
-        pDefault->Enable( !bReadOnly );
-    }
-    if (pBoolDefault)
-    {
-        pBoolDefaultText->Enable( !bReadOnly );
-        pBoolDefault->Enable( !bReadOnly );
-    }
-    if( pRequired )
-    {
-        pRequiredText->Enable( !bReadOnly );
-        pRequired->Enable( !bReadOnly );
-    }
-    if( pTextLen )
-    {
-        pTextLenText->Enable( !bReadOnly );
-        pTextLen->Enable( !bReadOnly );
-    }
-    if( pNumType )
-    {
-        pNumTypeText->Enable( !bReadOnly );
-        pNumType->Enable( !bReadOnly );
-    }
-    if( pFormat )
-    {
-        pFormatText->Enable( !bReadOnly );
-        pFormat->Enable( !bReadOnly );
-    }
-    if( pLength )
-    {
-        pLengthText->Enable( !bReadOnly );
-        pLength->Enable( !bReadOnly );
-    }
-    if( pScale )
-    {
-        pScaleText->Enable( !bReadOnly );
-        pScale->Enable( !bReadOnly );
-    }
-    if( pAutoIncrement )
-    {
-        pAutoIncrementText->Enable( !bReadOnly );
-        pAutoIncrement->Enable( !bReadOnly );
-    }
+    Control* ppAggregates[]     = {   pRequired, pNumType
+                                        , pAutoIncrement, pDefault
+                                        , pTextLen, pLength
+                                        , pScale, m_pColumnName
+                                        , m_pType, m_pAutoIncrementValue
+                                        , pFormat};
+    Control* ppAggregatesText[] = {   pRequiredText, pNumTypeText
+                                        , pAutoIncrementText, pDefaultText
+                                        , pTextLenText, pLengthText
+                                        , pScaleText, m_pColumnNameText
+                                        , m_pTypeText, m_pAutoIncrementValueText
+                                        , pFormatText};
 
-    if( m_pColumnName )
+    OSL_ENSURE(sizeof(ppAggregates)/sizeof(ppAggregates[0]) == sizeof(ppAggregatesText)/sizeof(ppAggregatesText[0]),"Lists are not identical!");
+
+    for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
     {
-        m_pColumnNameText->Enable( !bReadOnly );
-        m_pColumnName->Enable( !bReadOnly );
-    }
-    if( m_pType )
-    {
-        m_pTypeText->Enable( !bReadOnly );
-        m_pType->Enable( !bReadOnly );
+        if ( ppAggregatesText[i] )
+            ppAggregatesText[i]->Enable( !bReadOnly );
+        if ( ppAggregates[i] )
+            ppAggregates[i]->Enable( !bReadOnly );
     }
 }
 
@@ -667,6 +638,9 @@ String OFieldDescControl::GetControlText( sal_uInt16 nControlId )
             if(m_pType)
                 return m_pType->GetSelectEntry();
             break;
+        case FIELD_PRPOERTY_AUTOINCREMENT:
+            if(m_pAutoIncrementValue)
+                return m_pAutoIncrementValue->GetText();
     }
 
     return String();
@@ -745,7 +719,10 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const String& rTe
             if(m_pType)
                 m_pType->SelectEntry(rText);
             break;
-
+        case FIELD_PRPOERTY_AUTOINCREMENT:
+            if(m_pAutoIncrementValue)
+                m_pAutoIncrementValue->SetText(rText);
+            break;
     }
 }
 
@@ -787,111 +764,20 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, pButton )
             UpdateFormatSample(pActFieldDescr);
         }
     }
-
-//  // ------------
-//  // UNO->ItemSet
-//  static SfxItemInfo aItemInfos[] =
-//  {
-//      { 0, 0 },
-//      { SID_ATTR_NUMBERFORMAT_VALUE,      SFX_ITEM_POOLABLE },
-//      { SID_ATTR_ALIGN_HOR_JUSTIFY,       SFX_ITEM_POOLABLE },
-//      { SID_ATTR_NUMBERFORMAT_ONE_AREA,   SFX_ITEM_POOLABLE }
-//  };
-//  static sal_uInt16 aAttrMap[] =
-//  {
-//      SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY,
-//      SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
-//      0
-//  };
-//
-//  SfxPoolItem* pDefaults[] =
-//  {
-//      new SfxRangeItem(SBA_DEF_RANGEFORMAT, SBA_DEF_FMTVALUE, SBA_ATTR_ALIGN_HOR_JUSTIFY),
-//      new SfxUInt32Item(SBA_DEF_FMTVALUE),
-//      new SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, SBA_ATTR_ALIGN_HOR_JUSTIFY),
-//      new SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_False)
-//  };
-//
-//  SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
-//  pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );    // ripped, don't understand why
-//  pPool->FreezeIdRanges();                        // the same
-//
-//  SfxItemSet* pFormatDescriptor = new SfxItemSet(*pPool, aAttrMap);
-//  // fill it
-//  pFormatDescriptor->Put(SvxHorJustifyItem(rOldJustify, SBA_ATTR_ALIGN_HOR_JUSTIFY));
-//  pFormatDescriptor->Put(SfxUInt32Item(SBA_DEF_FMTVALUE, nOldFormatKey));
-//
-//  {   // want the dialog to be destroyed before our set
-//      Reference< XNumberFormatsSupplier >  xSupplier = GetFormatter()->getNumberFormatsSupplier();
-//
-//      Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
-//      SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
-//
-//      SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
-//
-//      SbaSbAttrDlg aDlg(this, pFormatDescriptor, pFormatter, TP_ATTR_ALIGN | TP_ATTR_NUMBER);
-//      if( aDlg.Execute() == RET_OK )
-//      {
-//          const SfxItemSet* pSet = aDlg.GetExampleSet();
-//              // GetExampleSet statt GetOutputItemSet, denn letzteres enthaelt nur die modifizierten Items
-//
-//          sal_Bool bModified = sal_False;
-//          // den Formatkey
-//          SfxUInt32Item& rFormatItem = (SfxUInt32Item&)pSet->Get(SBA_DEF_FMTVALUE);
-//          sal_uInt32 nNewFormatKey(rFormatItem.GetValue());
-//          if (nNewFormatKey != nOldFormatKey)
-//          {
-//              SetModified(sal_True);
-//              bModified = sal_True;
-//          }
-
-//          if (m_pFormatterShell->GetListPos4Entry(nNewFormatKey) == -1)
-//              // Das neue Format ist meiner Formatter-Shell nicht bekannt, wurde also gerade neu angelegt
-//              // (oder ist in einer anderen Sprache als die aktuell eingestellte gehalten)
-//              // Das bedeutet, das ich die Shell updaten muss, sonst laeuft UpdateFormatSample in's Leere.
-//              InitFormatterShell(nNewFormatKey);
-
-//          // die horizontale Ausrichtung
-//          SvxHorJustifyItem& rHorJustifyItem = (SvxHorJustifyItem&)pSet->Get(SBA_ATTR_ALIGN_HOR_JUSTIFY);
-//          SvxCellHorJustify rNewJustify = (SvxCellHorJustify)rHorJustifyItem.GetValue();
-//          if (rNewJustify != rOldJustify)
-//          {
-//              SetModified(sal_True);
-//              bModified = sal_True;
-//          }
-//
-//          if (bModified)
-//              CellModified(-1, FIELD_PROPERTY_FORMAT);
-//
-//          // das Setzen an der FieldDecription NACH den CellModified, da das ein Undo-::com::sun::star::chaos::Action erzeugt und die auf die Description
-//          // zurueckgreift
-//          pActFieldDescr->SetFormatKey( nNewFormatKey );
-//          pActFieldDescr->SetHorJustify(rNewJustify);
-//
-//          UpdateFormatSample(pActFieldDescr);
-//
-//          //  SFX_BINDINGS().Invalidate(SID_SAVEDOC);
-//      }
-//  }
-//  delete pFormatDescriptor;
-//  delete pPool;
-//  for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
-//      delete pDefaults[i];
-
     return 0;
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pAutoInc )
+IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
-    if(pAutoInc->GetSavedValue() == pAutoInc->GetSelectEntryPos() || !pActFieldDescr)
+    if(pListBox->GetSavedValue() == pListBox->GetSelectEntryPos() || !pActFieldDescr)
         return 0;
 
     SetModified(sal_True);
 
     // Sonderbehandlund f"ur Bool Felder
-    if(pAutoInc == pRequired && pBoolDefault )
+    if(pListBox == pRequired && pBoolDefault )
     {
         // wenn pRequired auf sal_True gesetzt ist, dann darf das sal_Bool Feld nicht den Eintrag <<keiner>> besitzen
         String sDef = BoolStringUI((pActFieldDescr->GetDefaultValue()));
@@ -912,10 +798,12 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pAutoInc )
     }
 
     // nur fuer AutoIncrement eine Sonderbehandlung
-    if (pAutoInc == pAutoIncrement)
+    if (pListBox == pAutoIncrement)
     {
-        if(pAutoInc->GetSelectEntryPos() == 1)
+        pListBox->SaveValue();
+        if(pListBox->GetSelectEntryPos() == 1)
         { // no
+            DeactivateAggregate( tpAutoIncrementValue );
             if(pActFieldDescr->IsPrimaryKey())
                 DeactivateAggregate( tpRequired );
             else if( pActFieldDescr->getTypeInfo()->bNullable )
@@ -935,35 +823,18 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pAutoInc )
         {
             DeactivateAggregate( tpRequired );
             DeactivateAggregate( tpDefault );
+            ActivateAggregate( tpAutoIncrementValue );
         }
         // und jetzt alle nach oben schieben
         ArrangeAggregates();
     }
 
-    if(pAutoInc == m_pType)
+    if(pListBox == m_pType)
     {
-        pAutoInc->SaveValue();
+        pListBox->SaveValue();
         const OTypeInfo* pTypeInfo = getTypeInfo(m_pType->GetSelectEntryPos());
         pActFieldDescr->SetType(pTypeInfo);
 
-//      OFieldDescription *pFieldDescr = new OFieldDescription();
-//      pFieldDescr->SetType(pTypeInfo);
-//
-//      pFieldDescr->SetName(pActFieldDescr->GetName());
-//      pFieldDescr->SetFormatKey(pActFieldDescr->GetFormatKey());
-//      pFieldDescr->SetPrimaryKey(pActFieldDescr->IsPrimaryKey());
-//      pFieldDescr->SetDescription(pActFieldDescr->GetDescription());
-//      pFieldDescr->SetAutoIncrement(pActFieldDescr->IsAutoIncrement());
-//      pFieldDescr->SetHorJustify(pActFieldDescr->GetHorJustify());
-//
-//      //////////////////////////////////////////////////////////////////////
-//      // Spezielle Daten
-//      if(pTypeInfo->bNullable  && pActFieldDescr->getTypeInfo()->bNullable)
-//          pFieldDescr->SetIsNullable(pActFieldDescr->IsNullable());
-//
-//      pFieldDescr->SetDefaultValue(pActFieldDescr->GetDefaultValue());
-//      delete pActFieldDescr;
-//      pActFieldDescr = pFieldDescr;
         DisplayData(pActFieldDescr);
         CellModified(-1, m_pType->GetPos());
     }
@@ -994,7 +865,8 @@ void OFieldDescControl::ArrangeAggregates()
         { pScale, pScaleText, 1 },
         { pDefault, pDefaultText, 3 },
         { pFormatSample, pFormatText, 4 },
-        { pBoolDefault, pBoolDefaultText, 1 }
+        { pBoolDefault, pBoolDefaultText, 1 },
+        { m_pAutoIncrementValue, m_pAutoIncrementValueText, 3 },
     };
 
     // und los ...
@@ -1059,6 +931,24 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
 
         pDefaultText->EnableClipSiblings();
         pDefault->EnableClipSiblings();
+        break;
+    case tpAutoIncrementValue:
+        if( m_pAutoIncrementValue || !isAutoIncrementValueEnabled() )
+            return;
+        nPos++;
+        m_pAutoIncrementValueText = new FixedText( this );
+        m_pAutoIncrementValueText->SetText( ModuleRes(STR_AUTOINCREMENT_VALUE) );
+        m_pAutoIncrementValue = new OPropEditCtrl( this, STR_HELP_AUTOINCREMENT_VALUE, FIELD_PRPOERTY_AUTOINCREMENT, WB_BORDER );
+        m_pAutoIncrementValue->SetHelpId(HID_TAB_AUTOINCREMENTVALUE);
+        SetPosSize( (Control**)&m_pAutoIncrementValueText, nPos, 0 );
+        SetPosSize( (Control**)&m_pAutoIncrementValue, nPos, 3 );
+
+        m_pAutoIncrementValue->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
+        m_pAutoIncrementValue->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
+
+        m_pAutoIncrementValueText->EnableClipSiblings();
+        m_pAutoIncrementValue->EnableClipSiblings();
+        m_pAutoIncrementValue->SetText( getAutoIncrementValue() );
         break;
 
     case tpRequired:
@@ -1348,6 +1238,18 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         pDefaultText = NULL;
         break;
 
+    case tpAutoIncrementValue:
+        if( !m_pAutoIncrementValue )
+            return;
+        nPos--;
+        m_pAutoIncrementValue->Hide();
+        m_pAutoIncrementValueText->Hide();
+        delete m_pAutoIncrementValue;
+        delete m_pAutoIncrementValueText;
+        m_pAutoIncrementValue = NULL;
+        m_pAutoIncrementValueText = NULL;
+        break;
+
     case tpColumnName:
         if( !m_pColumnName )
             return;
@@ -1534,111 +1436,6 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
     (*ppControl)->Show();
 }
 //------------------------------------------------------------------------------
-//void OFieldDescControl::DisplayData(const OColumn* pColumn)
-//{
-//  if(pActFieldDescr)
-//      delete pActFieldDescr;
-//
-//  SFX_ITEMSET_GET(*pColumn, pName, ONameItem, SBA_DEF_FLTNAME, sal_True);
-//  SFX_ITEMSET_GET(*pColumn, pType, ODataFieldTypeItem, SBA_DEF_FLTTYPE, sal_True);
-//  SFX_ITEMSET_GET(*pColumn, pLength, SfxUInt32Item, SBA_DEF_FLTLENGTH, sal_True);
-//  SFX_ITEMSET_GET(*pColumn, pRequired, SfxBoolItem, SBA_DEF_FLTREQUIRED, sal_True);
-//  SFX_ITEMSET_GET(*pColumn, pPrimary, SfxBoolItem, SBA_DEF_FLTPRIMARY, sal_True);
-//  SFX_ITEMSET_GET(*pColumn, pComment, SfxStringItem, SBA_DEF_FLTCOMMENT, sal_True);
-//  SFX_ITEMSET_GET(*pColumn, pFormat, SfxUInt32Item, SBA_DEF_FMTVALUE, sal_True);
-//  SFX_ITEMSET_GET(*pColumn, pScale, SfxUInt16Item, SBA_DEF_FLTSCALE, sal_True);
-//  SFX_ITEMSET_GET(*pColumn, pDefault, SfxStringItem, SBA_DEF_FLTDEFAULT, sal_True);
-//  SFX_ITEMSET_GET(*pColumn, pAutoIncrement, SfxBoolItem, SBA_DEF_FLTAUTOINCREMENT, sal_True);
-//  SFX_ITEMSET_GET(*pColumn, pHorJustify, SvxHorJustifyItem, SBA_ATTR_ALIGN_HOR_JUSTIFY, sal_True);
-//
-//  sal_Int32 aFieldType = pType->GetType();
-//  OFieldDescription* pFieldDescr;
-//  switch(aFieldType)
-//  {
-//      case dbNone:            // undefiniert: unbekannt
-//          pFieldDescr = new OUnknownFieldDescr(); break;
-//      case dbText:                // var. Text:
-//          pFieldDescr = new OTextFieldDescr(); break;
-//      case dbNumeric:         // Zahlen von Byte bis double:
-//          pFieldDescr = new ONumericFieldDescr(); break;
-//      case dbDateTime:            // Datumzeit:
-//          pFieldDescr = new ODateTimeFieldDescr(); break;
-//      case dbDate:                // Datum:
-//          pFieldDescr = new ODateFieldDescr(); break;
-//      case dbTime:                // Zeit:
-//          pFieldDescr = new OTimeFieldDescr(); break;
-//      case dbBool:                // Logical:
-//          pFieldDescr = new OBoolFieldDescr(); break;
-//      case dbCurrency:            // Währung:
-//          pFieldDescr = new OCurrencyFieldDescr(); break;
-//      case dbMemo:                // Langer Text:
-//          pFieldDescr = new OMemoFieldDescr(); break;
-//      case dbCounter:         // Zaehler:
-//          pFieldDescr = new OCounterFieldDescr(); break;
-//      case dbImage:           // Bilder:
-//          pFieldDescr = new OImageFieldDescr(); break;
-//      case dbChar:                // fixt. Text:
-//          pFieldDescr = new OCharFieldDescr(); break;
-//      case dbDecimal:         // decimal Werte: mit Vor und Nachkommastellen:
-//          pFieldDescr = new ODecimalFieldDescr(); break;
-//      case dbBinary:          // Binary Feld bis 255:
-//          pFieldDescr = new OBinaryFieldDescr(); break;
-//      case dbVarBinary:       // VarBinary Feld bis 255:
-//          pFieldDescr = new OVarBinaryFieldDescr(); break;
-//      case dbBigInt:          // Big integer:
-//          pFieldDescr = new OBigIntFieldDescr(); break;
-//
-//  }
-//
-//
-//  pFieldDescr->SetName(pName->GetValue());
-//  pFieldDescr->SetFormatKey(pFormat->GetValue());
-//  pFieldDescr->SetPrimaryKey(pPrimary->GetValue());
-//  pFieldDescr->SetDescription(pComment->GetValue());
-//  pFieldDescr->SetAutoIncrement(pAutoIncrement->GetValue());
-//  pFieldDescr->SetHorJustify((SvxCellHorJustify)pHorJustify->GetValue());
-//
-//  //////////////////////////////////////////////////////////////////////
-//  // Spezielle Daten
-//  if( pFieldDescr->ISA(OExtFieldDescription) )
-//  {
-//      ((OExtFieldDescription*)pFieldDescr)->SetRequired(pRequired->GetValue());
-//      ((OExtFieldDescription*)pFieldDescr)->SetDefaultValue(pDefault->GetValue());
-//  }
-//
-//  switch( pFieldDescr->GetFieldType() )
-//  {
-//  case dbText:
-//      ((OTextFieldDescr*)pFieldDescr )->SetTextLen( (xub_StrLen)(pLength->GetValue()) );
-//      break;
-//
-//  case dbNumeric:
-//      ( (ONumericFieldDescr*)pFieldDescr )->SetNumType(GetDataDef()->SizeString((ONumericSize)pLength->GetValue()) );
-//      break;
-//
-//  case dbChar:
-//      ((OCharFieldDescr*)pFieldDescr )->SetTextLen( (xub_StrLen)(pLength->GetValue()) );
-//      break;
-//
-//  case dbDecimal:
-//      {
-//          ODecimalFieldDescr* pDecFieldDescr = (ODecimalFieldDescr*)pFieldDescr;
-//          pDecFieldDescr->SetLength( (xub_StrLen)(pLength->GetValue()) );
-//          pDecFieldDescr->SetScale( String::CreateFromInt32(pScale->GetValue()) );
-//      }
-//      break;
-//  case dbBinary:
-//      ((OBinaryFieldDescr*)pFieldDescr )->SetLength( (xub_StrLen)(pLength->GetValue()) );
-//      break;
-//
-//  case dbVarBinary:
-//      ((OVarBinaryFieldDescr*)pFieldDescr )->SetLength( (xub_StrLen)(pLength->GetValue()) );
-//      break;
-//  }
-//
-//  DisplayData(pFieldDescr);
-//}
-//------------------------------------------------------------------------------
 void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
@@ -1656,6 +1453,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         DeactivateAggregate( tpBoolDefault );
         DeactivateAggregate( tpColumnName );
         DeactivateAggregate( tpType );
+        DeactivateAggregate( tpAutoIncrementValue );
         m_pPreviousType = NULL;
         //////////////////////////////////////////////////////////////////////
         // Zeiger des gespeicherten Focus zuruecksetzen
@@ -1696,15 +1494,17 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
             DeactivateAggregate( tpRequired );
 
         // 2. the autoincrement
-        if(pFieldType->bAutoIncrement)
+        if ( pFieldType->bAutoIncrement )
         {
             DeactivateAggregate( tpRequired );
             DeactivateAggregate( tpDefault );
             ActivateAggregate( tpAutoIncrement );
+            ActivateAggregate( tpAutoIncrementValue );
         }
         else
         {
             DeactivateAggregate( tpAutoIncrement );
+            DeactivateAggregate( tpAutoIncrementValue );
             if(pFieldType->bNullable)
                 ActivateAggregate( tpRequired );
             else
@@ -1829,17 +1629,21 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     // Controls initialisieren
     if( pAutoIncrement )
     {
-        if(pFieldDescr->IsAutoIncrement())
+        if ( pFieldDescr->IsAutoIncrement() )
         {
             pAutoIncrement->SelectEntryPos( 0 ); // yes
+            if ( m_pAutoIncrementValue )
+                m_pAutoIncrementValue->SetText(pFieldDescr->GetAutoIncrementValue());
             DeactivateAggregate( tpRequired );
             DeactivateAggregate( tpDefault );
         }
         else
         {
-            // hat Auswirkungen auf pRequired
+            // disable autoincrement value because it should only be visible when autoincrement is to true
+            DeactivateAggregate( tpAutoIncrementValue );
             pAutoIncrement->SelectEntryPos( 1 );        // no
             ActivateAggregate( tpDefault );
+            // hat Auswirkungen auf pRequired
             if(!pFieldDescr->IsPrimaryKey())
                 ActivateAggregate( tpRequired );
         }
@@ -1970,7 +1774,7 @@ IMPL_LINK(OFieldDescControl, OnControlFocusGot, Control*, pControl )
         ((OPropColumnEditCtrl*)pControl)->SaveValue();
         strHelpText = ((OPropColumnEditCtrl*)pControl)->GetHelp();
     }
-    else if ((pControl == pDefault) || (pControl == pFormatSample) )
+    else if ((pControl == pDefault) || (pControl == pFormatSample) || (pControl == m_pAutoIncrementValue) )
     {
         ((OPropEditCtrl*)pControl)->SaveValue();
         strHelpText = ((OPropEditCtrl*)pControl)->GetHelp();
@@ -2006,7 +1810,7 @@ IMPL_LINK(OFieldDescControl, OnControlFocusLost, Control*, pControl )
         if (pConverted->IsModified())
             CellModified(-1, pConverted->GetPos());
     }
-    else if ((pControl == pDefault) || (pControl == pFormatSample) )
+    else if ((pControl == pDefault) || (pControl == pFormatSample) || (pControl == m_pAutoIncrementValue) )
     {
         OPropEditCtrl* pConverted = (OPropEditCtrl*)pControl;
         if (pConverted->IsModified())
@@ -2032,17 +1836,18 @@ void OFieldDescControl::ActivatePropertyField(sal_uInt16 nVirtualField)
     Control** ppToActivate = NULL;
     switch (nVirtualField)
     {
-        case FIELD_PROPERTY_REQUIRED    : ppToActivate = (Control**)&pRequired; break;
-        case FIELD_PROPERTY_NUMTYPE     : ppToActivate = (Control**)&pNumType; break;
-        case FIELD_PROPERTY_AUTOINC     : ppToActivate = (Control**)&pAutoIncrement; break;
-        case FIELD_PROPERTY_DEFAULT     : ppToActivate = (Control**)&pDefault; if (!*ppToActivate) ppToActivate = (Control**)&pBoolDefault; break;
-                                                // da es immer nur eines der beiden Controls gibt, ist das hier eindeutig
-        case FIELD_PROPERTY_TEXTLEN     : ppToActivate = (Control**)&pTextLen; break;
-        case FIELD_PROPERTY_LENGTH      : ppToActivate = (Control**)&pLength; break;
-        case FIELD_PROPERTY_SCALE       : ppToActivate = (Control**)&pScale; break;
-        case FIELD_PROPERTY_FORMAT      : ppToActivate = (Control**)&pFormatSample; break;
-        case FIELD_PRPOERTY_COLUMNNAME  : ppToActivate = (Control**)&m_pColumnName; break;
-        case FIELD_PRPOERTY_TYPE        : ppToActivate = (Control**)&m_pType; break;
+        case FIELD_PROPERTY_REQUIRED        : ppToActivate = (Control**)&pRequired; break;
+        case FIELD_PROPERTY_NUMTYPE         : ppToActivate = (Control**)&pNumType; break;
+        case FIELD_PROPERTY_AUTOINC         : ppToActivate = (Control**)&pAutoIncrement; break;
+        case FIELD_PROPERTY_DEFAULT         : ppToActivate = (Control**)&pDefault; if (!*ppToActivate) ppToActivate = (Control**)&pBoolDefault; break;
+                                                    // da es immer nur eines der beiden Controls gibt, ist das hier eindeutig
+        case FIELD_PROPERTY_TEXTLEN         : ppToActivate = (Control**)&pTextLen; break;
+        case FIELD_PROPERTY_LENGTH          : ppToActivate = (Control**)&pLength; break;
+        case FIELD_PROPERTY_SCALE           : ppToActivate = (Control**)&pScale; break;
+        case FIELD_PROPERTY_FORMAT          : ppToActivate = (Control**)&pFormatSample; break;
+        case FIELD_PRPOERTY_COLUMNNAME      : ppToActivate = (Control**)&m_pColumnName; break;
+        case FIELD_PRPOERTY_TYPE            : ppToActivate = (Control**)&m_pType; break;
+        case FIELD_PRPOERTY_AUTOINCREMENT   : ppToActivate = (Control**)&m_pAutoIncrementValue; break;
 
         default:
             DBG_ERROR("OFieldDescControl::ActivatePropertyField : ungueltiger Parameter !");
@@ -2086,6 +1891,9 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
 
     if(m_pColumnName)
         pFieldDescr->SetName(m_pColumnName->GetText());
+
+    if ( m_pAutoIncrementValue )
+        pFieldDescr->SetAutoIncrementValue(m_pAutoIncrementValue->GetText());
 }
 
 //------------------------------------------------------------------------------
@@ -2186,7 +1994,8 @@ sal_Bool OFieldDescControl::isCopyAllowed()
     sal_Bool bAllowed = (m_pActFocusWindow != NULL) &&
                         (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
                         m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
-                        m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName) &&
+                        m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
+                        m_pActFocusWindow == m_pAutoIncrementValue) &&
                         reinterpret_cast<Edit*>(m_pActFocusWindow)->GetSelected().Len() != 0;
 
     return bAllowed;
@@ -2197,7 +2006,8 @@ sal_Bool OFieldDescControl::isCutAllowed()
     sal_Bool bAllowed = (m_pActFocusWindow != NULL) &&
                         (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
                         m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
-                        m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName) &&
+                        m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
+                        m_pActFocusWindow == m_pAutoIncrementValue) &&
                         reinterpret_cast<Edit*>(m_pActFocusWindow)->GetSelected().Len() != 0;
     return bAllowed;
 }
