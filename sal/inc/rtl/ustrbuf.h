@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustrbuf.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-30 13:41:07 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,26 @@ void SAL_CALL rtl_uStringbuffer_insert( /*inout*/rtl_uString ** This,
                                         const sal_Unicode * str,
                                         sal_Int32 len);
 
+/**
+   Inserts a single UTF-32 character into this string buffer.
+
+   <p>The single UTF-32 character will be represented within the string buffer
+   as either one or two UTF-16 code units.</p>
+
+   @param pThis the string buffer on which the operation is performed
+
+   @param capacity the capacity of the string buffer
+
+   @param offset the offset into this string buffer (from zero to the length
+   of this string buffer, inclusive)
+
+   @param c a well-formed UTF-32 code unit (that is, a value in the range
+   <code>0</code>&ndash;<code>0x10FFFF</code>, but excluding
+   <code>0xD800</code>&ndash;<code>0xDFFF</code>)
+ */
+void SAL_CALL rtl_uStringbuffer_insertUtf32(
+    rtl_uString ** pThis, sal_Int32 * capacity, sal_Int32 offset, sal_uInt32 c)
+    SAL_THROW_EXTERN_C();
 
 /**
     Inserts the 8-Bit ASCII string representation of the <code>str</code>
