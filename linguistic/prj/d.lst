@@ -7,10 +7,6 @@
 ..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 
 mkdir: %_DEST%\inc%_EXT%\linguistic
-..\inc\lngprops.hxx %_DEST%\inc%_EXT%\linguistic\lngprops.hxx
-..\inc\misc.hxx %_DEST%\inc%_EXT%\linguistic\misc.hxx
-..\inc\spelldta.hxx %_DEST%\inc%_EXT%\linguistic\spelldta.hxx
-..\inc\hyphdta.hxx %_DEST%\inc%_EXT%\linguistic\hyphdta.hxx
-..\inc\iprcache.hxx %_DEST%\inc%_EXT%\linguistic\iprcache.hxx
+..\inc\*.hxx %_DEST%\inc%_EXT%\linguistic\*.hxx
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
