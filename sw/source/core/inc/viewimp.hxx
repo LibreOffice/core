@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 11:14:14 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,9 +347,6 @@ public:
     // Invalidate editable state for all accessible frames
     void InvalidateAccessibleEditableState( sal_Bool bAllShells=sal_True,
                                                const SwFrm *pFrm=0 );
-
-    // Invalidate opaque state for all accessible frames
-    void InvalidateAccessibleOpaqueState();
 
     // Invalidate frame's relation set (for chained frames)
     void InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
