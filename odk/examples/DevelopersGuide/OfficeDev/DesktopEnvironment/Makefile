@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:35:03 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:25:00 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -77,11 +77,7 @@ JAVAFILES  = \
 
 CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/$(PACKAGE)/%.class,$(JAVAFILES))
 
-SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
 ifeq "$(OS)" "WIN"
@@ -109,11 +105,11 @@ $(OUT_COMP_CLASS)/%.Manifest :
 
 $(CLASSFILES) : $(JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
-$(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES) 
+$(JAR1_JAR) : $(JAR1_MANIFESTFILE) $(CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	jar cvfm $@ $< -C $(OUT_COMP_CLASS) .
+	$(SDK_JAR) cvfm $@ $< -C $(OUT_COMP_CLASS) .
 
 OfficeDevDesktopEnvExample : $(JAR1_JAR)
 	@echo --------------------------------------------------------------------------------
@@ -127,10 +123,10 @@ OfficeDevDesktopEnvExample : $(JAR1_JAR)
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(JAR1_JAR)
-	java -classpath "$(SDK_CLASSPATH)" OfficeDev.samples.DesktopEnvironment.Desk
+	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" OfficeDev.samples.DesktopEnvironment.Desk
 
 .PHONY: clean
 clean :
 	$(MAKE) -C $(SUBDIR) clean
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
-	-$(DEL) $(subst /,$(PS),$(JAR1_JAR))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(JAR1_JAR)))
