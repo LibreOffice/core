@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-06-25 14:17:05 $
+ *  last change: $Author: nn $ $Date: 2001-08-08 10:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,9 @@ void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSe
 
     SfxItemPool& rPool = *rShellSet.GetPool();
     SvxScriptSetItem aSetItem( rPool.GetSlotId(nWhichId), rPool );
-    aSetItem.GetItemSet().Put( rCoreSet, FALSE );
+    //  use PutExtended with eDefaultAs = SFX_ITEM_SET, so defaults from rCoreSet
+    //  (document pool) are read and put into rShellSet (MessagePool)
+    aSetItem.GetItemSet().PutExtended( rCoreSet, SFX_ITEM_DONTCARE, SFX_ITEM_SET );
     const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
     if (pI)
         rShellSet.Put( *pI, nWhichId );
