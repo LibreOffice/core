@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.94 $
+#   $Revision: 1.95 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-09 17:53:05 $
+#   last change: $Author: hjs $ $Date: 2002-01-14 18:24:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2216,8 +2216,8 @@ $(IMGLSTTARGET): $(IMGLST_SRS)
 XML_ISO_CODE*=-ISO99 $(L10N_framework)
 .ENDIF
 $(MISC)$/$(TARGET)_%.done : %.xrb
-    native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET)
-    @xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
+    @+-$(RM) $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
+    +native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET) && xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
     @+$(RM)  $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
