@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2001-08-03 14:07:57 $
+ *  last change: $Author: jp $ $Date: 2001-08-24 12:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1511,9 +1511,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     }
                     else if(pSelection)
                     {
-                        sal_Int32 nPos; pSelection[i] >>= nPos;
-                        sal_Int32 nPrePos; pSelection[i-1] >>= nPrePos;
-                        sal_Int32 nOldPos = 0 == i ? 0 : nPrePos;
+                        sal_Int32 nPos, nOldPos;
+                        pSelection[i] >>= nPos;
+                        if( i )
+                            pSelection[i-1] >>= nOldPos;
+                        else
+                            nOldPos = 0;
+
                         long nDiff = nPos - nOldPos;
                         while(nDiff > 0 && !bBreak)
                         {
