@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: os $ $Date: 2002-11-01 13:32:08 $
+ *  last change: $Author: od $ $Date: 2002-11-05 13:50:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4182,14 +4182,16 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
                      ( IsInSct() ? SUBCOL_SECT :
                      ( IsInFly() ? SUBCOL_FLY : SUBCOL_PAGE ) );
 
+    // OD 05.11.2002 #102406# - body frames are responsible for page/column breaks.
     BOOL bBreak = FALSE;
-    if ( GetType() & 0x0084 ) //Body oder Column
+    if ( IsBodyFrm() )
     {
         const SwCntntFrm *pCnt = ContainsCntnt();
         if ( pCnt )
         {
-            if ( FALSE == (bBreak = pCnt->IsPageBreak( TRUE )) && IsColumnFrm() )
-                bBreak = pCnt->IsColBreak( TRUE );
+            // OD 05.11.2002 #102406# - adjust setting of <bBreak>.
+            bBreak = pCnt->IsPageBreak( TRUE ) ||
+                     ( IsColBodyFrm() && pCnt->IsColBreak( TRUE ) );
         }
     }
 
