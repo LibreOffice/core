@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kso $ $Date: 2001-09-12 10:03:34 $
+ *  last change: $Author: obo $ $Date: 2001-09-28 07:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ HierarchyContent::~HierarchyContent()
 
 // virtual
 void SAL_CALL HierarchyContent::acquire()
-    throw( uno::RuntimeException )
+    throw( )
 {
     ContentImplHelper::acquire();
 }
@@ -295,7 +295,7 @@ void SAL_CALL HierarchyContent::acquire()
 //=========================================================================
 // virtual
 void SAL_CALL HierarchyContent::release()
-    throw( uno::RuntimeException )
+    throw( )
 {
     ContentImplHelper::release();
 }
