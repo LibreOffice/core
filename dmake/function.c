@@ -2,9 +2,9 @@
  *
  *  $RCSfile: function.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:04:15 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 16:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,8 +346,11 @@ char *data;
       char *newtmp;
 
       /* This call to Get_temp sets TMPFILE for subsequent expansion of file.
-       * DO NOT DELETE IT! */
-      Get_temp( &newtmp, "", FALSE ); FREE(newtmp);
+       * The contents file variable passed may include TMPFILE to be expanded. */
+      /* Using TMPFILE as an argument to mktmp is no longer supported because it is not
+       * safe to create a random filename and assume the file does not exist.  Howver,
+       * we still allow Expand() to do its job for fixed filenames */
+      /* Get_temp( &newtmp, "", FALSE ); FREE(newtmp); */
       tmpname = Expand(file);
 
       if( *tmpname ) {
@@ -562,10 +565,9 @@ char *mod1;
    cell.ce_attr   = A_PHONY|A_SILENT;
 
    if( nestlevel == 0 ) {
-      tmpnm   = tempnam(NIL(char),"mk");
       org_out = dup(1);
 
-      if( (tmp = fopen(tmpnm, "w+")) == NIL(FILE) )
+      if( (tmp = Get_temp(&tmpnm, "", "w+")) == NIL(FILE) )
      Open_temp_error( tmpnm, cname.ht_name );
 
       close(1);
