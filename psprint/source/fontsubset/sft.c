@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:54:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,9 @@
  */
 
 #if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
+#  ifndef NDEBUG
+#    define NDEBUG
+#  endif
 #endif
 #include <assert.h>
 
@@ -920,7 +922,7 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
     int i = 0, pCount = 0;
     PSPathElement *p;
 
-    int x0, y0, x1, y1, x2, y2, curx, cury;
+    int x0 = 0, y0 = 0, x1 = 0, y1 = 0, x2, y2, curx, cury;
     int lastOff = 0;                                        /*- last point was off-contour */
     int scflag = 1;                                         /*- start contour flag */
     int ecflag = 0;                                         /*- end contour flag */
@@ -931,7 +933,7 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
 
     /* if (srcCount > 0) for(;;) */
     while (srcCount > 0) {                                  /*- srcCount does not get changed inside the loop. */
-        int StartContour, EndContour;
+        int StartContour = 0, EndContour = 1;
 
         if (scflag) {
             int l = cp;
@@ -2152,10 +2154,10 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
 static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP)
 {
     GlyphOffsets *res = smalloc(sizeof(GlyphOffsets));
-    sal_uInt8 *loca;
+    sal_uInt8 *loca = 0;
     sal_uInt16 i, numTables = GetUInt16(sfntP, 4, 1);
-    sal_uInt32 locaLen;
-    sal_Int16 indexToLocFormat;
+    sal_uInt32 locaLen = 0;
+    sal_Int16 indexToLocFormat = 0;
 
     for (i = 0; i < numTables; i++) {
         sal_uInt32 tag = GetUInt32(sfntP + 12, 16 * i, 1);
