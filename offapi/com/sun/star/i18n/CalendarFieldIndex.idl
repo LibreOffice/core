@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CalendarFieldIndex.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:38 $
+ *  last change: $Author: er $ $Date: 2002-11-14 14:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,11 +81,6 @@ module com { module sun { module star { module i18n {
  */
 constants CalendarFieldIndex
 {
-    /// Get/Set time zone offset in minutes [-12*60..12*60]
-    const short ZONE_OFFSET     = 14;
-    /// Total number of fields
-    const short FIELD_COUNT     = 15;
-
     /// Get     <type>AmPmValue</type>.
     const short AM_PM           = 0;
     /// Get/Set day of month [1-31].
@@ -94,7 +89,10 @@ constants CalendarFieldIndex
     const short DAY_OF_WEEK     = 2;
     /// Get     day of  year.
     const short DAY_OF_YEAR     = 3;
-    /** Get/Set daylight saving time offset in minutes [0*60..1*60]
+    /** Get     daylight saving time offset in minutes [0*60..1*60]
+        <p> The DST offset value depends on the actual date set at the
+        calendar and is determined according to the timezone rules of
+        the locale used with the calendar. </p>
         <p> Note that there is a bug in OpenOffice.org 1.0 / StarOffice 6.0
         that prevents interpreting this value correctly. </p> */
     const short DST_OFFSET      = 4;
@@ -118,6 +116,11 @@ constants CalendarFieldIndex
     const short MONTH           = 12;
     /// Get/Set era, for example, 0:= Before Christ, 1:= After Christ.
     const short ERA             = 13;
+    /// Get/Set time zone offset in minutes [-12*60..12*60]
+    const short ZONE_OFFSET     = 14;
+
+    /// Total number of fields
+    const short FIELD_COUNT     = 15;
 };
 
 //=============================================================================
