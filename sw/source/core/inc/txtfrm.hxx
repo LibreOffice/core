@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:46:15 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,9 +322,10 @@ public:
     virtual void Prepare( const PrepareHint ePrep = PREP_CLEAR,
                           const void *pVoid = 0, sal_Bool bNotify = sal_True );
 
-    //nMaxHeight liefert die benoetigte Hoehe,
-    //bSplit sagt, obj der Absatz gesplittet werden muss.
-    virtual sal_Bool WouldFit( SwTwips &nMaxHeight, sal_Bool &bSplit );
+    // nMaxHeight is the required height
+    // bSplit indicates, that the paragraph has to be split
+    // bTst indicates, that we are currently doing a test formatting
+    virtual sal_Bool WouldFit( SwTwips &nMaxHeight, sal_Bool &bSplit, sal_Bool bTst );
 
     // Hier das WouldFit-Aequivalent fuer mal kurz probeweise
     // umgehaengte TextFrames, auch hier liefert
