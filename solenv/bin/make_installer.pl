@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2004-09-17 08:58:39 $
+#   last change: $Author: rt $ $Date: 2004-09-20 11:56:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -531,6 +531,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_Files_For_Ada_Products($filesinproductlanguageresolvedarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10a.log", $filesinproductlanguageresolvedarrayref); }
     }
+
+    # to be removed after removal of old setup
+    installer::scriptitems::set_unocomponent_flags($filesinproductlanguageresolvedarrayref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10aa.log", $filesinproductlanguageresolvedarrayref); }
 
     $filesinproductlanguageresolvedarrayref = installer::scriptitems::add_License_Files_into_Installdir($filesinproductlanguageresolvedarrayref, $languagesarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10b.log", $filesinproductlanguageresolvedarrayref); }
