@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-19 08:23:45 $
+ *  last change: $Author: oj $ $Date: 2001-04-25 06:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ namespace connectivity
 
             inline sal_Int32 GetCommandTimeout() const
             {
-                sal_Int32 nRet;
+                sal_Int32 nRet=0;
                 pInterface->get_CommandTimeout(&nRet);
                 return nRet;
             }
@@ -148,7 +148,7 @@ namespace connectivity
 
             inline sal_Int32 GetConnectionTimeout() const
             {
-                sal_Int32 nRet;
+                sal_Int32 nRet=0;
                 pInterface->get_ConnectionTimeout(&nRet);
                 return nRet;
             }
@@ -482,8 +482,12 @@ namespace connectivity
                 return aBSTR;
             }
 
-            inline sal_Int32 GetNumber() const {sal_Int32 nErrNr; pInterface->get_Number(&nErrNr);
-                                    return nErrNr;}
+            inline sal_Int32 GetNumber() const
+            {
+                sal_Int32 nErrNr=0;
+                pInterface->get_Number(&nErrNr);
+                return nErrNr;
+            }
 
             inline ::rtl::OUString GetSQLState() const
             {
