@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: ok $ $Date: 2001-09-14 09:04:52 $
+#   last change: $Author: fs $ $Date: 2001-11-07 14:28:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,8 +116,9 @@ LIB2OBJFILES=\
 
 LIB3TARGET=$(SLB)$/misc2.lib
 LIB3OBJFILES=\
+    $(SLO)$/templatefoldercache.obj	\
     $(SLO)$/helpagentwindow.obj		\
-    $(SLO)$/imagemgr.obj              \
+    $(SLO)$/imagemgr.obj			\
     $(SLO)$/agprop.obj		\
     $(SLO)$/ehdl.obj		\
     $(SLO)$/filearch.obj	\
@@ -138,11 +139,12 @@ LIB3OBJFILES=\
     $(SLO)$/stringtransfer.obj
 
 EXCEPTIONSFILES=\
-    $(SLO)$/strmadpt.obj	   \
-    $(SLO)$/transfer.obj	   \
-    $(SLO)$/transfer2.obj	   \
-    $(SLO)$/cliplistener.obj \
-    $(SLO)$/stringtransfer.obj \
+    $(SLO)$/templatefoldercache.obj	\
+    $(SLO)$/strmadpt.obj			\
+    $(SLO)$/transfer.obj			\
+    $(SLO)$/transfer2.obj			\
+    $(SLO)$/cliplistener.obj		\
+    $(SLO)$/stringtransfer.obj		\
     $(SLO)$/imagemgr.obj
 
 UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
