@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 21:17:19 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,11 +145,11 @@ TabPage TP_OPTLOAD_PAGE
         Text[ dutch ] = "~Altijd";
         Text[ spanish ] = "~Siempre";
         Text[ english_us ] = "~Always";
-        Text[ chinese_simplified ] = "×ÜÊÇ(~A)";
+        Text[ chinese_simplified ] = "×Ô¶¯¸üĞÂ(~A)";
         Text[ russian ] = "Âñåãäà";
         Text[ polish ] = "Zawsze";
         Text[ japanese ] = "í‚É‚·‚é(~A)";
-        Text[ chinese_traditional ] = "Á`¬O(~A)";
+        Text[ chinese_traditional ] = "¨C¦¸¦Û°Ê§ó·s(~A)";
     Text[ arabic ] = "ÏÇÆãÇğ";
     Text[ greek ] = "ĞÜíôá";
     Text[ korean ] = "Ç×»ó(~A)";
@@ -174,11 +174,11 @@ TabPage TP_OPTLOAD_PAGE
         Text[ dutch ] = "Op aan~vraag";
         Text[ spanish ] = "A ~petición";
         Text[ english_us ] = "~On request";
-        Text[ chinese_simplified ] = "ÔÚÇëÇóÊ±(~O)";
+        Text[ chinese_simplified ] = "ÔÚÑ¯ÎÊºó¸üĞÂ(~O)";
         Text[ russian ] = "Ïî òğåáîâàíèş";
         Text[ polish ] = "Na ¿¹danie";
         Text[ japanese ] = "Šm”F‚·‚é(~O)";
-        Text[ chinese_traditional ] = "¦b½Ğ¨D®É(~O)";
+        Text[ chinese_traditional ] = "¶È¦b¸ß°İ«á§ó·s(~O)";
         Text[ arabic ] = "ÈÚÏ ÇáÇÓÊİÓÇÑ";
         Text[ greek ] = "Óå æŞôçóç";
         Text[ korean ] = "¿äÃ»½Ã¿¡(~O)";
@@ -203,11 +203,11 @@ TabPage TP_OPTLOAD_PAGE
         Text[ dutch ] = "~Nooit";
         Text[ spanish ] = "~Nunca";
         Text[ english_us ] = "~Never";
-        Text[ chinese_simplified ] = "ÓÀÔ¶²»(~N)";
+        Text[ chinese_simplified ] = "ÓÀ²»¸üĞÂ(~N)";
         Text[ russian ] = "Íèêîãäà";
         Text[ polish ] = "Nigdy";
         Text[ japanese ] = "‚µ‚È‚¢(~N)";
-        Text[ chinese_traditional ] = "¥Ã»·¤£(~N)";
+        Text[ chinese_traditional ] = "¥Ã¤£§ó·s(~N)";
         Text[ arabic ] = "ÈÊÇÊÇğ";
         Text[ greek ] = "Ğïôİ";
         Text[ korean ] = "ÀüÇô(~N)";
@@ -224,7 +224,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ English ] = "Automatically" ;
         Text[ english_us ] = "Automatically";
         Text[ portuguese ] = "Automaticamente";
-        Text[ russian ] = "Ïîëÿ è äèàãğàììû";
+        Text[ russian ] = "Àâòîìàòè÷åñêè";
         Text[ greek ] = "Ğåäßá êáé äéáãñÜììáôá";
         Text[ dutch ] = "Velden en diagrammen actualiseren";
         Text[ french ] = "Automatique";
@@ -252,7 +252,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ English ] = "Fields" ;
         Text[ english_us ] = "~Fields";
         Text[ portuguese ] = "Ca~mpos";
-        Text[ russian ] = "Ïîëÿ àâòîìàòè÷åñêè";
+        Text[ russian ] = "Ïîëÿ";
         Text[ greek ] = "Áõôüìáôç åíçìİñùóç ~åíôïëşí ğåäßùí";
         Text[ dutch ] = "V~eldopdrachten automatisch";
         Text[ french ] = "Champs";
@@ -280,7 +280,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ English ] = "Charts" ;
         Text[ english_us ] = "~Charts";
         Text[ portuguese ] = "~Gráficos";
-        Text[ russian ] = "Äèàãğàììû àâòîìàòè÷åñêè";
+        Text[ russian ] = "Äèàãğàììû";
         Text[ greek ] = "Áõôüìáôç åíçìİñùóç äéá~ãñáììÜôùí";
         Text[ dutch ] = "~Diagrammen automatisch";
         Text[ french ] = "Diagrammes";
@@ -434,13 +434,13 @@ TabPage TP_OPTLOAD_PAGE
         Text [ dutch ] = "Maateenheid";
         Text [ spanish ] = "Unidad de medida";
         Text [ english_us ] = "Measurement unit";
-        Text[ chinese_simplified ] = "³ß´çµ¥Î»";
+        Text[ chinese_simplified ] = "¶¨Á¿µ¥Î»";
         Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
         Text[ polish ] = "Jednostka miary";
         Text[ japanese ] = "g‚¤’PˆÊ";
         Text [ norwegian ] = "Metriske Enheter" ;
         Text [ finnish ] = "Mittayksiköt" ;
-        Text[ chinese_traditional ] = "¤Ø¤o³æ¦ì";
+        Text[ chinese_traditional ] = "©w¶q³æ¦ì";
         Text[ arabic ] = "æÍÏÉ ÇáŞíÇÓ";
         Text[ greek ] = "~ÌïíÜäá ìİôñçóçò";
         Text[ korean ] = "¼öÄ¡ ´ÜÀ§";
@@ -548,7 +548,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese_brazilian ] = "Add ~distances between paragraphs and tables";
         Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚Ì’i—ŠÔŠu‚Æ•\\ŠÔŠu‚ğ‰ÁZ‚·‚é";
         Text[ chinese_simplified ] = "µ±Ç°ÎÄµµÖ®ÖĞËùÓĞ¶ÎÂäµÄ¼°±í¸ñµÄ¼ä¸ôÏà¼Ó";
-        Text[ chinese_traditional ] = "¦b·í«e¤å¥ó¤º©Ò¦³¬q¸¨¶¡¹j¤Îªí®æ¶¡¹j¬Û¥[";
+        Text[ chinese_traditional ] = "¤w¶}?¤å¥óªº©Ò¦³¬q¸¨¶¡¹j¤Îªí®æ¶¡¹j¬Û¥[";
         Text[ arabic ] = "ÅÖÇİÉ ãÓÇİÉ ÇáÊÈÇÚÏ Åáì ßá İŞÑÇÊ æÌÏÇæá ÇáãÓÊäÏ ÇáÍÇáí";
         Text[ greek ] = "¢èñïéóìá üëùí ôùí ~áğïóôÜóåùí ôùí ğáñáãñÜöùí êáé ôùí ğéíÜêùí óôï ôñİ÷ïí İããñáöï";
         Text[ korean ] = "ÇöÀç ¹®¼­¿¡ ÀÖ´Â ¸ğµç ´Ü¶ôÀÇ °£°İ°ú Å×ÀÌºí °£°İ ÇÕ»ê";
@@ -577,8 +577,8 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese_brazilian ] = "Add distances at the beginning of pages";
         Text[ japanese ] = "Íß°¼Ş‚Ìn‚ß‚É’i—ŠÔŠu‚Æ•\\ŠÔŠu‚ğ•t‚¯‚é";
         Text[ korean ] = "ÂÊ ½ÃÀÛºÎºĞÀÇ ´Ü¶ô °£°İ°ú Ç¥ °£°İ ÇÕ»ê";
-        Text[ chinese_simplified ] = "ÔÚÒ³ÃæÆğÊ¼´¦¼ÓÈë¶ÎÂäºÍ±í¸ñµÄ¼ä¸ô";
-        Text[ chinese_traditional ] = "¦b­¶¶}ÀY¦ì¸m¥[¤J¬q¸¨»Pªí®æ¤§¶¡ªº¶¡¹j";
+        Text[ chinese_simplified ] = "ÔÚÒ³Ê×Î»ÖÃ¼ÓÈë¶ÎÂäºÍ±í¸ñµÄ¼ä¸ô";
+        Text[ chinese_traditional ] = "¦b­¶­º¦ì¸m¥[¤J¬q¸¨»Pªí®æ¤§¶¡ªº¶¡¹j";
         Text[ arabic ] = "ÅÖÇİÉ ÇáİŞÑÉ æÊÈÇÚÏ ÇáÌÏÇæá Åáì ÈÏÇíÉ ÇáÕİÍÇÊ";
         Text[ turkish ] = "Paragraf ve tablo aralıklarını sayfa başlarına ekle";
         Text[ language_user1 ] = " ";
@@ -606,7 +606,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ japanese ] = "ÀÌŞ‚ÌˆÊ’u‚ğ‘µ‚¦‚é";
         Text[ korean ] = "ÅÇ Á¤Áö À§Ä¡¿¡ ¸ÂÃß±â";
         Text[ chinese_simplified ] = "µ÷ÕûÖÆ±í¼üÎ»ÖÃ";
-        Text[ chinese_traditional ] = "½Õ¾ã¨îªíÁä¦ì¸m";
+        Text[ chinese_traditional ] = "½Õ¾ã»sªíÁä¦ì¸m";
         Text[ turkish ] = "Align tab stop position";
         Text[ arabic ] = "Align tab stop position";
         Text[ catalan ] = "Align tab stop position";
@@ -1512,6 +1512,7 @@ ItemList [ catalan ] =
         < "Point" ; FUNIT_POINT ; > ;
     };
     };
+
 
 
 
