@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxfentrd.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:15 $
+ *  last change: $Author: sj $ $Date: 2002-05-29 10:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <dxfvec.hxx>
 #endif
 
+#include <deque>
+
+typedef std::deque< Point > DXFPointArray;
+
 //------------------------------------------------------------------------------
 //------------------------- Art eines Entity -----------------------------------
 //------------------------------------------------------------------------------
@@ -90,7 +94,9 @@ enum DXFEntityType {
     DXF_VERTEX,
     DXF_SEQEND,
     DXF_3DFACE,
-    DXF_DIMENSION
+    DXF_DIMENSION,
+    DXF_LWPOLYLINE,
+    DXF_HATCH
 };
 
 //------------------------------------------------------------------------------
@@ -124,6 +130,7 @@ protected:
 
 public:
 
+    virtual ~DXFBasicEntity();
     virtual void Read(DXFGroupReader & rDGR);
         // Liest die Prameter ein, bis zur naechten 0-Gruppe
 
@@ -391,6 +398,142 @@ protected:
 
     virtual void EvaluateGroup(DXFGroupReader & rDGR);
 };
+
+class DXFLWPolyLineEntity : public DXFBasicEntity
+{
+        sal_Int32   nIndex;
+
+    public :
+
+        sal_Int32   nCount;         // 90
+        sal_Int32   nFlags;         // 70   1 = closed, 128 = plinegen
+        double      fConstantWidth; // 43   (optional - default: 0, not used if fStartWidth and/or fEndWidth is used)
+        double      fStartWidth;    // 40
+        double      fEndWidth;      // 41
+
+        DXFVector*  pP;
+
+        DXFLWPolyLineEntity();
+        ~DXFLWPolyLineEntity();
+
+    protected :
+
+        virtual void EvaluateGroup( DXFGroupReader & rDGR );
+
+};
+
+//-------------------------- Hatch ---------------------------------------------
+
+struct DXFEdgeType
+{
+    sal_Int32 nEdgeType;
+
+    virtual ~DXFEdgeType(){};
+    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR ){ return sal_True; };
+
+    protected :
+
+        DXFEdgeType( sal_Int32 EdgeType ):nEdgeType(EdgeType){};
+};
+struct DXFEdgeTypeLine : public DXFEdgeType
+{
+    DXFVector aStartPoint;              // 10,20
+    DXFVector aEndPoint;                // 11,21
+    DXFEdgeTypeLine();
+    virtual ~DXFEdgeTypeLine();
+    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR );
+};
+struct DXFEdgeTypeCircularArc : public DXFEdgeType
+{
+    DXFVector aCenter;                  // 10,20
+    double    fRadius;                  // 40
+    double    fStartAngle;              // 50
+    double    fEndAngle;                // 51
+    sal_Int32 nIsCounterClockwiseFlag;  // 73
+    DXFEdgeTypeCircularArc();
+    virtual ~DXFEdgeTypeCircularArc();
+    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR );
+};
+struct DXFEdgeTypeEllipticalArc : public DXFEdgeType
+{
+    DXFVector aCenter;                  // 10,20
+    DXFVector aEndPoint;                // 11,21
+    double    fLength;                  // 40
+    double    fStartAngle;              // 50
+    double    fEndAngle;                // 51
+    sal_Int32 nIsCounterClockwiseFlag;  // 73
+
+    DXFEdgeTypeEllipticalArc();
+    virtual ~DXFEdgeTypeEllipticalArc();
+    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR );
+};
+struct DXFEdgeTypeSpline : public DXFEdgeType
+{
+    sal_Int32 nDegree;                  // 94
+    sal_Int32 nRational;                // 73
+    sal_Int32 nPeriodic;                // 74
+    sal_Int32 nKnotCount;               // 75
+    sal_Int32 nControlCount;            // 76
+
+    DXFEdgeTypeSpline();
+    virtual ~DXFEdgeTypeSpline();
+    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR );
+};
+
+typedef std::deque< DXFEdgeType* > DXFEdgeTypeArray;
+
+struct DXFBoundaryPathData
+{
+    sal_Int32           nFlags;                 // 92
+    sal_Int32           nHasBulgeFlag;          // 72
+    sal_Int32           nIsClosedFlag;          // 73
+    sal_Int32           nPointCount;            // 93
+    double              fBulge;                 // 42
+    sal_Int32           nSourceBoundaryObjects; // 97
+    sal_Int32           nEdgeCount;             // 93
+
+    sal_Bool            bIsPolyLine;
+    sal_Int32           nPointIndex;
+
+    DXFVector*          pP;
+    DXFEdgeTypeArray    aEdges;
+
+    DXFBoundaryPathData();
+    ~DXFBoundaryPathData();
+
+    sal_Bool EvaluateGroup( DXFGroupReader & rDGR );
+};
+
+class DXFHatchEntity : public DXFBasicEntity
+{
+        sal_Bool    bIsInBoundaryPathContext;
+        sal_Int32   nCurrentBoundaryPathIndex;
+
+    public :
+
+        DXFVector   aElevationPoint;
+        sal_Int32   nFlags;                         // 70 (solid fill = 1, pattern fill = 0)
+        sal_Int32   nAssociativityFlag;             // 71 (assoiciative = 1, non-associative = 0)
+        sal_Int32   nBoundaryPathCount;             // 91
+        sal_Int32   nHatchStyle;                    // 75 (odd parity = 0, outmost area = 1, entire area = 2 )
+        sal_Int32   nHatchPatternType;              // 76 (user defined = 0, predefined = 1, custom = 2)
+        double      fHatchPatternAngle;             // 52 (pattern fill only)
+        double      fHatchPatternScale;             // 41 (pattern fill only:scale or spacing)
+        sal_Int32   nHatchDoubleFlag;               // 77 (pattern fill only:double = 1, not double = 0)
+        sal_Int32   nHatchPatternDefinitionLines;   // 78
+        double      fPixelSize;                     // 47
+        sal_Int32   nNumberOfSeedPoints;            // 98
+
+        DXFBoundaryPathData* pBoundaryPathData;
+
+        DXFHatchEntity();
+        ~DXFHatchEntity();
+
+    protected :
+
+        virtual void EvaluateGroup( DXFGroupReader & rDGR );
+};
+
 
 //--------------------------Vertex----------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxf2mtf.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:14 $
+ *  last change: $Author: sj $ $Date: 2002-05-29 10:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,10 @@ private:
     void Draw3DFaceEntity(const DXF3DFaceEntity & rE, const DXFTransform & rTransform);
 
     void DrawDimensionEntity(const DXFDimensionEntity & rE, const DXFTransform & rTransform);
+
+    void DrawLWPolyLineEntity( const DXFLWPolyLineEntity & rE, const DXFTransform & rTransform );
+
+    void DrawHatchEntity( const DXFHatchEntity & rE, const DXFTransform & rTransform );
 
     void DrawEntities(const DXFEntities & rEntities,
                       const DXFTransform & rTransform,

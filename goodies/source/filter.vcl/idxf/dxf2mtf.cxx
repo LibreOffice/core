@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxf2mtf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-14 14:22:55 $
+ *  last change: $Author: sj $ $Date: 2002-05-29 10:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,6 +549,125 @@ void DXF2GDIMetaFile::DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXF
     }
 }
 
+void DXF2GDIMetaFile::DrawLWPolyLineEntity(const DXFLWPolyLineEntity & rE, const DXFTransform & rTransform )
+{
+    sal_Int32 i, nPolySize = rE.nCount;
+    if ( nPolySize && rE.pP )
+    {
+        Polygon aPoly( (sal_uInt16)nPolySize);
+        for ( i = 0; i < nPolySize; i++ )
+        {
+            rTransform.Transform( rE.pP[ (sal_uInt16)i ], aPoly[ (sal_uInt16)i ] );
+        }
+        double fW = rE.fConstantWidth;
+        if ( SetLineAttribute( rE, rTransform.TransLineWidth( fW ) ) )
+        {
+            if ( ( rE.nFlags & 1 ) != 0 )
+                pVirDev->DrawPolygon( aPoly );
+            else
+                pVirDev->DrawPolyLine( aPoly );
+        }
+    }
+}
+
+void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransform & rTransform )
+{
+    if ( rE.nBoundaryPathCount )
+    {
+        SetAreaAttribute( rE );
+        sal_Int32 i = 0;
+        PolyPolygon aPolyPoly;
+        for ( i = 0; i < rE.nBoundaryPathCount; i++ )
+        {
+            DXFPointArray aPtAry;
+            const DXFBoundaryPathData& rPathData = rE.pBoundaryPathData[ i ];
+            if ( rPathData.bIsPolyLine )
+            {
+                sal_Int32 i;
+                for( i = 0; i < rPathData.nPointCount; i++ )
+                {
+                    Point aPt;
+                    rTransform.Transform( rPathData.pP[ i ], aPt );
+                    aPtAry.push_back( aPt );
+                }
+            }
+            else
+            {
+                sal_uInt32 i;
+                for ( i = 0; i < rPathData.aEdges.size(); i++ )
+                {
+                    const DXFEdgeType* pEdge = rPathData.aEdges[ i ];
+                    switch( pEdge->nEdgeType )
+                    {
+                        case 1 :
+                        {
+                            Point aPt;
+                            rTransform.Transform( ((DXFEdgeTypeLine*)pEdge)->aStartPoint, aPt );
+                            aPtAry.push_back( aPt );
+                            rTransform.Transform( ((DXFEdgeTypeLine*)pEdge)->aEndPoint, aPt );
+                            aPtAry.push_back( aPt );
+                        }
+                        break;
+                        case 2 :
+                        {
+/*
+                            double frx,fry,fA1,fdA,fAng;
+                            USHORT nPoints,i;
+                            DXFVector aC;
+                            Point aPS,aPE;
+                            fA1=((DXFEdgeTypeCircularArc*)pEdge)->fStartAngle;
+                            fdA=((DXFEdgeTypeCircularArc*)pEdge)->fEndAngle - fA1;
+                            while ( fdA >= 360.0 )
+                                fdA -= 360.0;
+                            while ( fdA <= 0 )
+                                fdA += 360.0;
+                            rTransform.Transform(((DXFEdgeTypeCircularArc*)pEdge)->aCenter, aC);
+                            if ( fdA > 5.0 && rTransform.TransCircleToEllipse(((DXFEdgeTypeCircularArc*)pEdge)->fRadius,frx,fry ) == TRUE )
+                            {
+                                DXFVector aVS(cos(fA1/180.0*3.14159265359),sin(fA1/180.0*3.14159265359),0.0);
+                                aVS*=((DXFEdgeTypeCircularArc*)pEdge)->fRadius;
+                                aVS+=((DXFEdgeTypeCircularArc*)pEdge)->aCenter;
+                                DXFVector aVE(cos((fA1+fdA)/180.0*3.14159265359),sin((fA1+fdA)/180.0*3.14159265359),0.0);
+                                aVE*=((DXFEdgeTypeCircularArc*)pEdge)->fRadius;
+                                aVE+=((DXFEdgeTypeCircularArc*)pEdge)->aCenter;
+                                if ( rTransform.Mirror() == TRUE )
+                                {
+                                    rTransform.Transform(aVS,aPS);
+                                    rTransform.Transform(aVE,aPE);
+                                }
+                                else
+                                {
+                                    rTransform.Transform(aVS,aPE);
+                                    rTransform.Transform(aVE,aPS);
+                                }
+                                pVirDev->DrawArc(
+                                    Rectangle((long)(aC.fx-frx+0.5),(long)(aC.fy-fry+0.5),
+                                              (long)(aC.fx+frx+0.5),(long)(aC.fy+fry+0.5)),
+                                    aPS,aPE
+                                );
+                            }
+*/
+                        }
+                        break;
+                        case 3 :
+                        case 4 :
+                        break;
+                    }
+                }
+            }
+            sal_uInt16 nSize = (sal_uInt16)aPtAry.size();
+            if ( nSize )
+            {
+                Polygon aPoly( nSize );
+                for ( i = 0; i < nSize; i++ )
+                    aPoly[ (sal_uInt16)i ] = aPtAry[ i ];
+                aPolyPoly.Insert( aPoly, POLYPOLY_APPEND );
+            }
+        }
+        if ( aPolyPoly.Count() )
+            pVirDev->DrawPolyPolygon( aPolyPoly );
+    }
+}
 
 void DXF2GDIMetaFile::Draw3DFaceEntity(const DXF3DFaceEntity & rE, const DXFTransform & rTransform)
 {
@@ -654,6 +773,12 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
                 break;
             case DXF_POLYLINE:
                 DrawPolyLineEntity((DXFPolyLineEntity&)*pE,*pT);
+                break;
+            case DXF_LWPOLYLINE :
+                DrawLWPolyLineEntity((DXFLWPolyLineEntity&)*pE, *pT);
+                break;
+            case DXF_HATCH :
+                DrawHatchEntity((DXFHatchEntity&)*pE, *pT);
                 break;
             case DXF_3DFACE:
                 Draw3DFaceEntity((DXF3DFaceEntity&)*pE,*pT);
