@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenuItem.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Date: 2003-01-27 18:19:29 $
+ *  last change: $Date: 2003-03-26 12:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@ import drafts.com.sun.star.accessibility.AccessibleRole;
 import drafts.com.sun.star.accessibility.XAccessible;
 import drafts.com.sun.star.accessibility.XAccessibleAction;
 import drafts.com.sun.star.accessibility.XAccessibleComponent;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
 import drafts.com.sun.star.accessibility.XAccessibleText;
 import drafts.com.sun.star.awt.XExtendedToolkit;
 import java.io.PrintWriter;
@@ -148,20 +149,42 @@ public class AccessibleMenuItem extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 //        at.printAccessibleTree(log, xRoot);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENUITEM);
+        XAccessibleContext Menu = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENU);
+
+        try {
+            //activate File-Menu
+            XAccessibleAction act = (XAccessibleAction) UnoRuntime.queryInterface(XAccessibleAction.class, Menu);
+            act.doAccessibleAction(0);
+
+            //activate File-Autopilots submenu
+            act = (XAccessibleAction) UnoRuntime.queryInterface(
+                           XAccessibleAction.class, Menu.getAccessibleChild(0));
+            act.doAccessibleAction(0);
+
+            //get the first child of this submenu
+            oObj = Menu.getAccessibleChild(0).getAccessibleContext().getAccessibleChild(1);
+
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+
+        }
+
+        //oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENUITEM);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleComponent acomp = (XAccessibleComponent)
-                    UnoRuntime.queryInterface(XAccessibleComponent.class,oObj) ;
+        final XAccessibleAction action = (XAccessibleAction)
+                    UnoRuntime.queryInterface(XAccessibleAction.class,oObj) ;
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
                 public void fireEvent() {
-                    System.out.println("Grabbing focus ... ");
-                    acomp.grabFocus();
+                    try {
+                        action.doAccessibleAction(0);
+                    } catch (com.sun.star.lang.IndexOutOfBoundsException e){
+                    }
+
                 }
             });
 
@@ -169,6 +192,8 @@ public class AccessibleMenuItem extends TestCase {
                     UnoRuntime.queryInterface(XAccessibleText.class,oObj) ;
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
+
+        tEnv.addObjRelation("EditOnly","Can't change or select Text in MenuBarItem");
 
         return tEnv;
 
