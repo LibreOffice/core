@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: os $ $Date: 2002-10-21 14:59:31 $
+ *  last change: $Author: os $ $Date: 2002-11-05 08:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3965,6 +3965,12 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                 throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
             SwDoc* pDoc = pTblCrsr->GetDoc();
+            {
+                // remove actions to enable box selection
+                UnoActionRemoveContext aRemoveContext(pDoc);
+            }
+            SwUnoTableCrsr* pCrsr = *pTblCrsr;
+            pCrsr->MakeBoxSels();
             switch(pMap->nWID )
             {
                 case FN_UNO_TABLE_CELL_BACKGROUND:
@@ -4004,27 +4010,16 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                     }
                 }
                 break;
-                case FN_UNO_PARA_STYLE:
-                    lcl_SetTxtFmtColl(aValue, *pTblCrsr);
-                break;
-                case RES_TXTATR_CHARFMT:
-                {
-                    SfxItemSet aSet(pDoc->GetAttrPool(),
-                            RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT);
-                    lcl_setCharStyle(pDoc, aValue, aSet);
-                    SwUnoTableCrsr* pCrsr = *pTblCrsr;
-                    SwXTextCursor::SetCrsrAttr(pCrsr->GetSelRing(), aSet, sal_True);
-                }
-                break;
                 default:
                 {
                     SfxItemSet rSet(pDoc->GetAttrPool(),
                         RES_CHRATR_BEGIN,       RES_FRMATR_END -1,
                         0L);
-                    SwUnoTableCrsr* pCrsr = *pTblCrsr;
-                    SwXTextCursor::GetCrsrAttr(pCrsr->GetSelRing(), rSet);
-                    aPropSet.setPropertyValue(*pMap, aValue, rSet);
-                    SwXTextCursor::SetCrsrAttr(pCrsr->GetSelRing(), rSet, sal_True);
+                    SwCursor& rSelCrsr = pCrsr->GetSelRing();
+                    SwXTextCursor::GetCrsrAttr(rSelCrsr, rSet);
+                    SwXTextCursor::SetPropertyValue(
+                        rSelCrsr, aPropSet, rPropertyName,
+                        aValue, pMap);
                 }
             }
         }
