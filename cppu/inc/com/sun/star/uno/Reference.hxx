@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:53 $
+ *  last change: $Author: dbo $ $Date: 2001-10-11 14:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,13 @@ template< class interface_type >
 inline Reference< interface_type >::Reference( XInterface * pInterface, __UnoReference_Query ) SAL_THROW( (RuntimeException) )
 {
     _pInterface = __query( pInterface );
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline Reference< interface_type >::Reference( const Any & rAny, __UnoReference_Query ) SAL_THROW( (RuntimeException) )
+{
+    _pInterface = (typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass
+                   ? __query( reinterpret_cast< XInterface * >( rAny.pReserved ) ) : 0);
 }
 
 //__________________________________________________________________________________________________

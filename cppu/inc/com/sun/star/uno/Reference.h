@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
+ *  last change: $Author: dbo $ $Date: 2001-10-11 14:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ namespace uno
 
 class RuntimeException;
 class XInterface;
+class Any;
 
 /** DEPRECATED: use SAL_NO_ACQUIRE
     Enum defining UNO_REF_NO_ACQUIRE for setting reference without acquiring a given interface.
@@ -236,6 +237,12 @@ public:
         @param dummy UNO_QUERY to force obvious distinction to other constructors
     */
     inline Reference( XInterface * pInterface, __UnoReference_Query ) SAL_THROW( (RuntimeException) );
+    /** Constructor: Queries given any for reference interface type (interface_type).
+
+        @param rAny an any
+        @param dummy UNO_QUERY to force obvious distinction to other constructors
+    */
+    inline Reference( const Any & rAny, __UnoReference_Query ) SAL_THROW( (RuntimeException) );
 
     /** Cast operator to Reference< XInterface >: Reference objects are binary compatible and
         any interface must be derived from com.sun.star.uno.XInterface.
