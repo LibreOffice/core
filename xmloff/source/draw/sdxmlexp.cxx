@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-04 08:25:47 $
+ *  last change: $Author: cl $ $Date: 2002-06-17 14:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2193,6 +2193,13 @@ void SdXMLExport::_ExportAutoStyles()
 
     if( getExportFlags() & EXPORT_CONTENT )
     {
+        // prepare animations exporter if impress
+        if(IsImpress())
+        {
+            UniReference< XMLAnimationsExporter > xAnimExport = new XMLAnimationsExporter( GetShapeExport().get() );
+            GetShapeExport()->setAnimationsExporter( xAnimExport );
+        }
+
         // create auto style infos for objects on pages
         for(sal_Int32 nPageInd(0); nPageInd < mnDocDrawPageCount; nPageInd++)
         {
@@ -2250,6 +2257,11 @@ void SdXMLExport::_ExportAutoStyles()
                     }
                 }
             }
+        }
+        if(IsImpress())
+        {
+            UniReference< XMLAnimationsExporter > xAnimExport;
+            GetShapeExport()->setAnimationsExporter( xAnimExport );
         }
     }
 
@@ -2539,6 +2551,24 @@ uno::Reference< uno::XInterface > SAL_CALL DrawingLayerXMLExport_createInstance(
     return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
 }
 
+//////////////////////////////////////////////////////////////////////////////
+
+uno::Sequence< OUString > SAL_CALL ImpressXMLClipboardExport_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLClipboardExporter" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL ImpressXMLClipboardExport_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "ImpressXMLClipboardExport" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL ImpressXMLClipboardExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLExport( sal_False, EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
+}
 //////////////////////////////////////////////////////////////////////////////
 
 uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_Style_getSupportedServiceNames() throw()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-28 09:28:05 $
+ *  last change: $Author: cl $ $Date: 2002-06-17 14:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,6 +414,12 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             }
         }
     }
+
+    // ----------------------------------------
+    // prepare animation informations if needed
+    // ----------------------------------------
+    if( mxAnimationsExporter.is() )
+        mxAnimationsExporter->prepare( xShape );
 
     // -------------------
     // check for connector
