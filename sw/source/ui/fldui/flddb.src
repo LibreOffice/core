@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:28:37 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage TP_FLD_DB
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 14 ) ;
-        Size = MAP_APPFONT ( 76 , 106 ) ;
+        Size = MAP_APPFONT ( 76 , 104 ) ;
         TabStop = TRUE ;
         Sort = TRUE ;
         AutoHScroll = TRUE ;
@@ -138,9 +138,24 @@ TabPage TP_FLD_DB
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 14 ) ;
-        Size = MAP_APPFONT ( 160 , 124 ) ;
+        Size = MAP_APPFONT ( 160 , 104 ) ;
         TabStop = TRUE ;
     };
+    FixedText FT_ADDDB
+    {
+        Pos = MAP_APPFONT ( 88 , 123) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
+        Text [ de ] = "Datenbankdatei hinzufügen" ;
+        Text [ en-US ] = "Add database file" ;
+    };
+    PushButton PB_ADDDB
+    {
+        Pos = MAP_APPFONT ( 198 , 121) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ]  = "~Durchsuchen..." ;
+        Text [ en-US ] = "Browse..." ;
+    };
+
     RadioButton RB_DBOWNFORMAT
     {
         Pos = MAP_APPFONT ( 94 , 153 ) ;
