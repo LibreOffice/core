@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-01 14:01:12 $
+ *  last change: $Author: nn $ $Date: 2001-01-26 19:25:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,6 +464,9 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
                 bSuccess = TRUE;
             }
 
+            uno::Reference<lang::XComponent> xComponent( xRowSet, uno::UNO_QUERY );
+            if (xComponent.is())
+                xComponent->dispose();
         }
     }
     catch ( sdbc::SQLException& rError )
