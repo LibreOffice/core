@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gh $ $Date: 2000-12-06 16:13:43 $
+ *  last change: $Author: rt $ $Date: 2000-12-06 17:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,7 @@ String S_RETURNED_VALUE_ID_MISSMATCH
     Text[ polish ] = "Odebrano wartoœæ return, ale oczekiwane jest inne ID";
     Text[ portuguese_brazilian ] = "Returnwert Empfangen aber andere Id erwartet";
     Text[ japanese ] = "ØÀ°İ’l‚ğó‚¯æ‚è‚Ü‚µ‚½‚ªA•Ê‚ÌId‚ª•K—v‚Å‚·B";
-    Text[ korean ] = "¼ö½ÅÀÇ ¸®ÅÏ°ªÀÌ ´Ù¸¥ Id¸¦ ±â´ëÇÔ";
+    Text[ korean ] = "¹İÈ¯°ª ¼ö½ÅÇÔ,  ÇÏÁö¸¸ ´Ù¸¥ Id¸¦ ±â´ëÇÔ";
     Text[ chinese_simplified ] = "·µ»ØÖµ½ÓÊÕÆÚ´ıµÄÊÇÆäËüµÄ Id(±êÊ¶·û)";
     Text[ chinese_traditional ] = "±µ¦¬¨ìªğ¦^­È¡A¦ı¬O´Á«İ¬O¨ä¥¦ Id";
     Text[ arabic ] = "Return value received but different Id expected";
@@ -595,7 +595,7 @@ String S_RETURNED_VALUE_NO_RECEIVER
     Text[ polish ] = "Odebrano wartoœæ return, ale brak zdefiniowanego odbiorcy";
     Text[ portuguese_brazilian ] = "Returnwert Empfangen aber kein Empfänger definiert";
     Text[ japanese ] = "ØÀ°İ’l‚ğó‚¯æ‚è‚Ü‚µ‚½‚ªAóMÒ‚ªŒˆ’è‚Å‚«‚Ü‚¹‚ñB";
-    Text[ korean ] = "¼ö½ÅÀÇ ¸®ÅÏ°ª¿¡ ¼ö½ÅÀÎÀÌ Á¤ÀÇµÇÁö ¾ÊÀ½";
+    Text[ korean ] = "¹İÈ¯°ª ¼ö½ÅÇÔ, ÇÏÁö¸¸ ¼ö½ÅÀÚ°¡  Á¤ÀÇµÇÁö ¾Ê¾ÒÀ½";
     Text[ chinese_simplified ] = "·µ»ØÖµ½ÓÊÕÃ»ÓĞÖ¸¶¨½ÓÊÕÕß";
     Text[ chinese_traditional ] = "±µ¦¬¨ìªğ¦^­È¡A¦ı¬O¨S¦³«ü©w±µ¦¬¥Ø¼Ğ¡C";
     Text[ arabic ] = "Return value received but receiver not defined";
