@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-25 15:37:50 $
+ *  last change: $Author: jl $ $Date: 2002-10-31 17:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1005,11 +1005,14 @@ static void getJavaPropsFromConfig(JVM * pjvm,
         throw RuntimeException(OUSTR("javavm.cxx: couldn't get ConfigurationRegistry"),
                                Reference<XInterface>());
     Reference<XSimpleRegistry> xConfRegistry_simple(xConfRegistry, UNO_QUERY);
+
     if(!xConfRegistry_simple.is())
         throw RuntimeException(OUSTR("javavm.cxx: couldn't get ConfigurationRegistry"),
                                Reference<XInterface>());
     xConfRegistry_simple->open(OUSTR("org.openoffice.Setup"), sal_True, sal_False);
+
     Reference<XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
+
     Reference<XRegistryKey> key_InstallPath = xRegistryRootKey->openKey(
         OUSTR("Office/ooSetupInstallPath"));
     if(!key_InstallPath.is())
@@ -1017,40 +1020,22 @@ static void getJavaPropsFromConfig(JVM * pjvm,
                                      "Office/InstallPath in org.openoffice.UserProfile"),
                                                      Reference<XInterface>());
     OUString rcPath = key_InstallPath->getStringValue();
-    Reference<XInterface> xIniManager(xSMgr->createInstanceWithContext(
-        OUSTR("com.sun.star.config.INIManager"),xCtx));
-    if(!xIniManager.is())
-        throw RuntimeException(OUSTR("javavm.cxx: couldn't get: com.sun.star.config.INIManager"),
-                               Reference<XInterface>());
-    Reference<XSimpleRegistry> xIniManager_simple(xIniManager, UNO_QUERY);
-    if(!xIniManager_simple.is())
-        throw RuntimeException(OUSTR("javavm.cxx: couldn't get: com.sun.star.config.INIManager"),
-                               Reference<XInterface>());
-    // normalize the path
+    key_InstallPath->closeKey();
+    xRegistryRootKey->closeKey();
+
+
     OUString urlrcPath;
-    if( osl_File_E_None != File::getFileURLFromSystemPath( rcPath, urlrcPath ) )
-    {
-        urlrcPath = rcPath;
-    }
+    if( File::E_None != File::getFileURLFromSystemPath( rcPath, urlrcPath ) )
+        throw RuntimeException(OUSTR("javavm.cxx: could not convert a system path to URL"),
+                               Reference<XInterface>());
+
     urlrcPath += OUSTR("/config/" INI_FILE);
 
-
-    Reference<XRegistryKey> xJavaSection;
-    sal_Bool bNoUserJavarc= sal_False;
-    try
-    {   // open user/config/javarc
-        xIniManager_simple->open(urlrcPath, sal_True, sal_False);
-    }
-    catch( Exception & e)
+    File *pIniFile= new File(urlrcPath);
+    if( pIniFile->open(OpenFlag_Read) != File::E_None)
     {
-        //now we try share/config/javarc
-        bNoUserJavarc= sal_True;
-    }
-
-    // Network installation. A workstation installation does not need to have its own javarc.
-    // Then we use the one from the network insallation ( <install-di>/share/config/javarc)
-    if( bNoUserJavarc)
-    {
+        // Probably network installation. A workstation installation does not need to have its own javarc.
+        // Then we use the one from the network insallation ( <install-di>/share/config/javarc)
         xConfRegistry_simple->open(OUSTR("org.openoffice.Office.Common"), sal_True, sal_False);
         Reference<XRegistryKey> xRegistryCommonRootKey = xConfRegistry_simple->getRootKey();
 
@@ -1067,54 +1052,75 @@ static void getJavaPropsFromConfig(JVM * pjvm,
         }
         urlrcPath += OUSTR("/share/config/" INI_FILE);
 
-        try
-        {
-            // open share/config/javarc
-            xIniManager_simple->open(urlrcPath, sal_True, sal_False);
-        }
-        catch( Exception & e)
+        key_NetInstallPath->closeKey();
+        File *pIni2= new File(urlrcPath);
+        if(pIni2->open(OpenFlag_Read) != File::E_None)
         {
             throw JavaNotConfiguredException (
                 OUSTR("javavm.cxx: can not find " INI_FILE ),
                 Reference<XInterface>());
         }
+        else
+            pIniFile= pIni2;
     }
-    try
-    {
-        xJavaSection = xIniManager_simple->getRootKey()->openKey(OUSTR("Java"));
-    }
-    catch( Exception & e)
-    {
-        throw JavaNotConfiguredException(OUSTR("javavm.cxx: cannot open Java section" \
-                                               "in " INI_FILE), Reference<XInterface>());
-    }
-    if(!xJavaSection.is() || !xJavaSection->isValid())
-        throw JavaNotConfiguredException(OUSTR("javavm.cxx: "  INI_FILE " has invalid" \
-                                             "Java section"), Reference<XInterface>());
 
-    Sequence<OUString> javaProperties = xJavaSection->getKeyNames();
-    OUString * pSectionEntry = javaProperties.getArray();
-    sal_Int32 nCount         = javaProperties.getLength();
-
-    for(sal_Int32 i=0; i < nCount; ++ i)
+    //Find the Java Section
+    OString sJavaSection("[Java]");
+    bool bSectionFound= false;
+    while(1)
     {
-        //Reconstruct the whole lines of the java.ini
-        Reference< XRegistryKey > key= xJavaSection->openKey(pSectionEntry[i]);
-        if (key.is())
+        ByteSequence seq;
+        if(pIniFile->readLine(seq) == File::E_None)
         {
-            // there was a "=" in the line, hence key/value pair.
-            OUString entryValue = key->getStringValue();
-
-            if(entryValue.getLength()) {
-                pSectionEntry[i] += OUSTR("=");
-                pSectionEntry[i] += entryValue;
+            OString line((sal_Char*)seq.getArray(),seq.getLength());
+            if(line.match(sJavaSection, 0))
+            {
+                bSectionFound= true;
+                break;
             }
-        }
 
-        pjvm->pushProp(pSectionEntry[i]);
+        }
+        else
+            break;
     }
 
-    xIniManager_simple->close();
+    //Read each line from the Java section
+    while(1)
+    {
+        ByteSequence seq;
+        if(pIniFile->readLine(seq) == File::E_None)
+        {
+            sal_Bool bEOF;
+            pIniFile->isEndOfFile(&bEOF);
+            if(bEOF)
+                break;
+            //check if another Section starts
+            OString line((sal_Char*)seq.getArray(), seq.getLength());
+            if(line.indexOf('[') == 0)
+                break;
+            //check if there is '=' after the first word
+            bool bOk= false;
+            const sal_Char *pIndex= line.getStr();
+            sal_Int32 len= line.getLength();
+            const sal_Char *pEnd= pIndex + len;
+            while( pIndex != pEnd
+                   && *pIndex != ' '
+                   && *pIndex != '\t'
+                   && *pIndex != '=')
+                pIndex ++;
+            if(pIndex == pEnd || *pIndex != '=')
+                continue;   // no '=' found
+
+            // Ok, store the line
+            line.trim();
+            OUString usProp= OStringToOUString(line, osl_getThreadTextEncoding());
+            pjvm->pushProp(usProp);
+        }
+        else
+            break;
+    }
+    pIniFile->close();
+    delete pIniFile;
 }
 
 static const Bootstrap & getBootstrapHandle()
