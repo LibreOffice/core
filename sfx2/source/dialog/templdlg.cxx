@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:06:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1527,7 +1527,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          // anderer Filter fuer automatisch
          CheckItem( nActFamily, TRUE );
          const SfxStyleFamilyItem *pStyleItem =  GetFamilyItem_Impl();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
          SfxFilterTupel *pT = pStyleItem->GetFilterList().GetObject(nActFilter);
 #endif
          if(0 == pStyleItem->GetFilterList().GetObject(nActFilter)->nFlags
