@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-21 10:14:26 $
+ *  last change: $Author: obr $ $Date: 2001-05-07 11:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,6 +386,7 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
 
             // initialize map with member none
             m_aAtomToString[ 0 ]= OUString::createFromAscii( "None" );
+            m_aAtomToString[ XA_PRIMARY ] = OUString::createFromAscii( "PRIMARY" );
 
             // create a (invisible) message window
             m_aWindow = XCreateSimpleWindow( m_pDisplay, DefaultRootWindow( m_pDisplay ),
@@ -2150,6 +2151,14 @@ void SelectionManager::startDrag(
     {
         if( listener.is() )
             listener->dragDropEnd( aDragFailedEvent );
+
+#ifdef DEBUG
+        fprintf( stderr, "*** ERROR *** second drag and drop started.\n" );
+        if( m_xDragSourceListener.is() )
+            fprintf( stderr, "*** ERROR *** drag source listener already set.\n" );
+        else
+            fprintf( stderr, "*** ERROR *** drag thread already running.\n" );
+#endif
         return;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_clipboard.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-16 14:37:50 $
+ *  last change: $Author: obr $ $Date: 2001-05-07 11:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,14 @@ X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
         m_xSelectionManager( & rManager ),
         m_aSelection( aSelection )
 {
+#ifdef DEBUG
+    fprintf( stderr, "creating instance of X11Clipboard (this=%x)\n", this );
+#endif
+
     if( m_aSelection != None )
+    {
         m_rSelectionManager.registerHandler( m_aSelection, *this );
+    }
     else
     {
         m_rSelectionManager.registerHandler( XA_PRIMARY, *this );
@@ -151,7 +157,7 @@ X11Clipboard::~X11Clipboard()
     MutexGuard aGuard( *Mutex::getGlobalMutex() );
 
 #ifdef DEBUG
-    fprintf( stderr, "shutting down X11Clipboard\n" );
+    fprintf( stderr, "shutting down instance of X11Clipboard (this=%x)\n", this );
 #endif
     if( m_aSelection != None )
         m_rSelectionManager.deregisterHandler( m_aSelection );
@@ -208,9 +214,11 @@ void X11Clipboard::clearContents()
 
     if ( m_aOwner.is() ) {
         m_aOwner->lostOwnership(static_cast < XClipboard * > (this), m_aContents);
-        m_aContents.clear();
         m_aOwner.clear();
     }
+
+    // may be set even if no owner.
+    m_aContents.clear();
 }
 
 // ------------------------------------------------------------------------
@@ -320,9 +328,6 @@ X11ClipboardHolder::X11ClipboardHolder() :
     ::com::sun::star::lang::XInitialization
         >( m_aMutex )
 {
-    // XXX: currently X11ClipboardHolder starts without arguments
-    // this will need to change
-    initialize( Sequence< Any >() );
 }
 
 X11ClipboardHolder::~X11ClipboardHolder()
@@ -332,21 +337,40 @@ X11ClipboardHolder::~X11ClipboardHolder()
 void X11ClipboardHolder::initialize( const Sequence< Any >& arguments )
 {
     OUString aDisplayName;
+    Atom nSelection;
 
+    // extract display name from connection argument. An exception is thrown
+    // by SelectionManager.initialize() if no display connection is given.
     if( arguments.getLength() > 0 )
     {
         Reference< XDisplayConnection > xConn;
         arguments.getConstArray()[0] >>= xConn;
+
         if( xConn.is() )
         {
-            Any aIdentifier;
+            Any aIdentifier = xConn->getIdentifier();
             aIdentifier >>= aDisplayName;
         }
     }
 
     SelectionManager& rManager = SelectionManager::get( aDisplayName );
     rManager.initialize( arguments );
-    m_xRealClipboard = X11Clipboard::get( aDisplayName, None );
+
+    // check if any other selection than clipboard selection is specified
+    if( arguments.getLength() > 1 )
+    {
+        OUString aSelectionName;
+
+        arguments.getConstArray()[1] >>= aSelectionName;
+        nSelection = rManager.getAtom( aSelectionName );
+    }
+    else
+    {
+        // default atom is clipboard selection
+        nSelection = rManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) );
+    }
+
+    m_xRealClipboard = X11Clipboard::get( aDisplayName, nSelection );
 }
 
 // ------------------------------------------------------------------------
