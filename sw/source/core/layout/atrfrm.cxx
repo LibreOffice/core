@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:21 $
+ *  last change: $Author: os $ $Date: 2001-03-01 12:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,10 +447,10 @@ BOOL SwFmtFrmSize::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         }
         break;
         case MID_FRMSIZE_REL_HEIGHT:
-            rVal <<= (sal_Int8)(GetHeightPercent() != 0xFF ? GetHeightPercent() : 0);
+            rVal <<= (sal_Int16)(GetHeightPercent() != 0xFF ? GetHeightPercent() : 0);
         break;
         case MID_FRMSIZE_REL_WIDTH:
-            rVal <<= (sal_Int8)(GetWidthPercent() != 0xFF ? GetWidthPercent() : 0);
+            rVal <<= (sal_Int16)(GetWidthPercent() != 0xFF ? GetWidthPercent() : 0);
         break;
         case MID_FRMSIZE_IS_SYNC_REL_SIZE:
         {
@@ -517,20 +517,20 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_FRMSIZE_REL_HEIGHT:
         {
-            sal_Int8 nSet;
+            sal_Int16 nSet;
             rVal >>= nSet;
             if(nSet >= 0 && nSet <= 100)
-                SetHeightPercent(nSet);
+                SetHeightPercent((BYTE)nSet);
             else
                 bRet = sal_False;
         }
         break;
         case MID_FRMSIZE_REL_WIDTH:
         {
-            sal_Int8 nSet;
+            sal_Int16 nSet;
             rVal >>= nSet;
             if(nSet >= 0 && nSet <= 100)
-                SetWidthPercent(nSet);
+                SetWidthPercent((BYTE)nSet);
             else
                 bRet = sal_False;
         }

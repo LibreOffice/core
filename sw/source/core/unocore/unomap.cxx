@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-20 13:46:04 $
+ *  last change: $Author: os $ $Date: 2001-03-01 12:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,8 +659,8 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
     { SW_PROP_NAME(UNO_NAME_PAGE_TOGGLE),               RES_HORI_ORIENT,        &::getBooleanCppuType(),            PROPERTY_NONE ,MID_HORIORIENT_PAGETOGGLE },               \
     { SW_PROP_NAME(UNO_NAME_POSITION_PROTECTED),    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_POSITION},                      \
     { SW_PROP_NAME(UNO_NAME_PRINT),                     RES_PRINT,              &::getBooleanCppuType(),            PROPERTY_NONE, 0},                                        \
-    { SW_PROP_NAME(UNO_NAME_RELATIVE_HEIGHT),       RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE,   MID_FRMSIZE_REL_HEIGHT },            \
-    { SW_PROP_NAME(UNO_NAME_RELATIVE_WIDTH),            RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE,   MID_FRMSIZE_REL_WIDTH  },         \
+    { SW_PROP_NAME(UNO_NAME_RELATIVE_HEIGHT),       RES_FRM_SIZE,           &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,   MID_FRMSIZE_REL_HEIGHT },            \
+    { SW_PROP_NAME(UNO_NAME_RELATIVE_WIDTH),            RES_FRM_SIZE,           &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,   MID_FRMSIZE_REL_WIDTH  },         \
     { SW_PROP_NAME(UNO_NAME_SHADOW_FORMAT),             RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, CONVERT_TWIPS},             \
     { SW_PROP_NAME(UNO_NAME_SERVER_MAP      ),      RES_URL,                &::getBooleanCppuType(),            PROPERTY_NONE ,MID_URL_SERVERMAP         },                      \
     { SW_PROP_NAME(UNO_NAME_SIZE),                  RES_FRM_SIZE,           &::getCppuType((const awt::Size*)0),            PROPERTY_NONE, MID_FRMSIZE_SIZE|CONVERT_TWIPS},        \
@@ -931,8 +931,8 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PRINT),                     RES_PRINT,              &::getBooleanCppuType(),            PROPERTY_NONE, 0},
                     { SW_PROP_NAME(UNO_NAME_WIDTH),                     RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_WIDTH|CONVERT_TWIPS          },
                     { SW_PROP_NAME(UNO_NAME_HEIGHT),                    RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS         },
-                    { SW_PROP_NAME(UNO_NAME_RELATIVE_HEIGHT),       RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE,   MID_FRMSIZE_REL_HEIGHT },
-                    { SW_PROP_NAME(UNO_NAME_RELATIVE_WIDTH),            RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE,   MID_FRMSIZE_REL_WIDTH  },
+                    { SW_PROP_NAME(UNO_NAME_RELATIVE_HEIGHT),       RES_FRM_SIZE,           &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,   MID_FRMSIZE_REL_HEIGHT },
+                    { SW_PROP_NAME(UNO_NAME_RELATIVE_WIDTH),            RES_FRM_SIZE,           &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,   MID_FRMSIZE_REL_WIDTH  },
                     { SW_PROP_NAME(UNO_NAME_SIZE_TYPE),                 RES_FRM_SIZE,           &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
                     { SW_PROP_NAME(UNO_NAME_SIZE),                  RES_FRM_SIZE,           &::getCppuType((const awt::Size*)0),            PROPERTY_NONE, MID_FRMSIZE_SIZE|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_SIZE_RELATIVE),             RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_REL_SIZE   },
