@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-04 12:35:13 $
+ *  last change: $Author: mtg $ $Date: 2001-10-11 18:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,8 +277,10 @@ SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum ( SfxStyleFamily eFamily )
             return GET_POOLID_PAGEDESC;
         case SFX_STYLE_FAMILY_PSEUDO:
             return GET_POOLID_NUMRULE;
+        default:
+            DBG_ASSERT(sal_False, "someone asking for all styles in unostyle.cxx!" );
+            return GET_POOLID_CHRFMT;
     }
-    DBG_ASSERT(sal_False, "someone asking for all styles in unostyle.cxx!" );
 }
 
 /******************************************************************
@@ -929,8 +931,8 @@ SwXStyle*   SwXStyleFamily::_FindStyle(const String& rStyleName)const
 class SwStyleProperties_Impl
 {
     const SfxItemPropertyMap*   _pMap;
-    Any**                   pAnyArr;
-    sal_uInt16                      nArrLen;
+    Any**                       pAnyArr;
+    sal_uInt16                  nArrLen;
 
 public:
     SwStyleProperties_Impl(const SfxItemPropertyMap* _pMap);
@@ -949,20 +951,16 @@ SwStyleProperties_Impl::SwStyleProperties_Impl(const SfxItemPropertyMap* pMap) :
 {
     const SfxItemPropertyMap* pTmp = _pMap;
     while(pTmp[nArrLen].nWID)
-    {
         nArrLen++;
-    }
-
-    pAnyArr = new Any*[nArrLen];
-    for(sal_uInt16 i = 0; i < nArrLen; i++)
+    pAnyArr = new Any* [nArrLen];
+    for ( sal_uInt16 i =0 ; i < nArrLen; i++ )
         pAnyArr[i] = 0;
-
 }
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
 SwStyleProperties_Impl::~SwStyleProperties_Impl()
 {
-    for(sal_uInt16 i = 0; i < nArrLen; i++)
+    for ( sal_uInt16 i =0 ; i < nArrLen; i++ )
         delete pAnyArr[i];
     delete pAnyArr;
 }
@@ -983,7 +981,7 @@ sal_Bool SwStyleProperties_Impl::SetProperty(const String& rName, Any aVal)
     if(nPos < nArrLen)
     {
         delete pAnyArr[nPos];
-        pAnyArr[nPos] = new Any(aVal);
+        pAnyArr[nPos] = new Any ( aVal );
     }
     return nPos < nArrLen;
 }
@@ -1001,10 +999,8 @@ sal_Bool SwStyleProperties_Impl::GetProperty(const String& rName, Any*& rpAny )
         ++pTemp;
     }
     if(nPos < nArrLen)
-    {
         rpAny = pAnyArr[nPos];
-    }
-    return rpAny && nPos < nArrLen;
+    return nPos < nArrLen;
 }
 
 /******************************************************************
@@ -1815,8 +1811,6 @@ void SwXStyle::setPropertyValues(
     const OUString* pNames = rPropertyNames.getConstArray();
     const Any* pValues = rValues.getConstArray();
     const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
-    if(!m_pDoc)
-        throw RuntimeException();
 
     SwStyleBase_Impl aBaseImpl(*m_pDoc, sStyleName);
     if(pBasePool)
@@ -2013,8 +2007,6 @@ Sequence< Any > SwXStyle::getPropertyValues(
     const Sequence< OUString >& rPropertyNames ) throw(RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!m_pDoc)
-        throw RuntimeException();
     sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
     switch(eFamily)
     {
@@ -2053,11 +2045,11 @@ Sequence< Any > SwXStyle::getPropertyValues(
         }
         else if(bIsDescriptor)
         {
-            Any* pAny = 0;
-            if(!pPropImpl->GetProperty(pNames[nProp], pAny))
+            Any *pAny = 0;
+            if( ! pPropImpl->GetProperty ( pNames[nProp], pAny ) )
                 throw RuntimeException();
-            else if(pAny)
-                pRet[nProp] = *pAny;
+            else if ( pAny )
+                pRet [ nProp ] = *pAny;
         }
         else
             throw RuntimeException();
