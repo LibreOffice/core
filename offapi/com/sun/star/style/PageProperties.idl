@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageProperties.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:12 $
+ *  last change: $Author: os $ $Date: 2001-02-13 07:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,7 +418,42 @@ service PageProperties
 //-----------------------------------------------------------------------------
 /** contains the interface to the text of the footer of a right page.
  */
+//-----------------------------------------------------------------------------
+/** contains .
+ */
 [optional,property] com::sun::star::text::XText FooterTextRight;
+//-----------------------------------------------------------------------------
+/** contains the maximum height of the footnote area. If set to zero then the height
+of the current page is used as limit.
+ */
+[optional,property] long FootnoteHeight;
+//-----------------------------------------------------------------------------
+/** contains the weight of the separator line between the text and the footnote area.
+ */
+[optional,property] short FootnoteLineWeight;
+//-----------------------------------------------------------------------------
+/** contains the color of the separator line between the text and the footnote area..
+ */
+[optional,property] long FootnoteLineColor;
+//-----------------------------------------------------------------------------
+/** contains the relative width of the separator line between the text and the footnote area.
+ */
+[optional,property] byte FootnoteLineRelativeWidth;
+//-----------------------------------------------------------------------------
+/** contains the adjustmen of the separator line between the text and the footnote area.
+     <p><type scope="com::sun::star::text">HorizontalAdjust</type>s.</p>
+ */
+[optional,property] short FootnoteLineAdjust;
+//-----------------------------------------------------------------------------
+/** contains the distance between the text and the separator line between the
+ text and the footnote area.
+ */
+[optional,property] long FootnoteLineTextDistance;
+//-----------------------------------------------------------------------------
+/** contains the distance between the footnote area and the separator line between
+     the text and the footnote area.
+ */
+[optional,property] long FootnoteLineDistance;
 
 };
 //=============================================================================
