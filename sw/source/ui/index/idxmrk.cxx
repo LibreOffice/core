@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-18 15:16:05 $
+ *  last change: $Author: tl $ $Date: 2001-11-08 11:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,8 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
         OKButton aTmp(this, WB_HIDE);
         aOKBT.SetText( aTmp.GetText() );
     }
+
+    aEntryED.GrabFocus();
 }
 
 /*--------------------------------------------------------------------
