@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XBridgeFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:04 $
+ *  last change:$Date: 2003-05-27 12:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@ package ifc.bridge;
 
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XBridgeFactory;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.connection.XAcceptor;
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnector;
@@ -186,13 +187,14 @@ public class _XBridgeFactory extends MultiMethodTest {
 
         // first creating a connection
         try {
-            XInterface x = (XInterface) tParam.getMSF().createInstance
+            XInterface x = (XInterface)
+                ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.connection.Connector") ;
 
             XConnector xCntr = (XConnector) UnoRuntime.queryInterface
                 (XConnector.class, x) ;
 
-            x = (XInterface) tParam.getMSF().createInstance
+            x = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.connection.Acceptor") ;
 
             XAcceptor xAccptr = (XAcceptor)UnoRuntime.queryInterface(

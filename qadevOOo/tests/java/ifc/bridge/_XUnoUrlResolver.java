@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XUnoUrlResolver.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:03 $
+ *  last change:$Date: 2003-05-27 12:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ public class _XUnoUrlResolver extends MultiMethodTest {
         connectStr += curPort;
 
         try {
-            XMultiServiceFactory xMSF = tParam.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
 
             // get the bridge factory
             XBridgeFactory xBrdgFctr = (XBridgeFactory)
