@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-18 14:31:16 $
+#   last change: $Author: vg $ $Date: 2004-01-06 13:11:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,11 +77,9 @@ CDEFS+=-DDLLSUFFIX=$(DLLSUFFIX)
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	$(SLO)$/access.obj		\
-            $(SLO)$/dbggui.obj		\
+SLOFILES=	$(SLO)$/dbggui.obj		\
             $(SLO)$/help.obj		\
             $(SLO)$/idlemgr.obj 	\
-            $(SLO)$/oldsv.obj		\
             $(SLO)$/resmgr.obj		\
             $(SLO)$/settings.obj	\
             $(SLO)$/sound.obj		\
@@ -89,7 +87,6 @@ SLOFILES=	$(SLO)$/access.obj		\
             $(SLO)$/svapp.obj		\
             $(SLO)$/svdata.obj		\
             $(SLO)$/svmain.obj		\
-            $(SLO)$/system.obj		\
             $(SLO)$/timer.obj		\
             $(SLO)$/dndhelp.obj     \
             $(SLO)$/unohelp.obj     \
@@ -98,23 +95,6 @@ SLOFILES=	$(SLO)$/access.obj		\
             $(SLO)$/i18nhelp.obj	\
             $(SLO)$/salvtables.obj
 
-.IF "$(remote)"!=""
-EXCEPTIONSFILES=					\
-            $(SLO)$/svapp.obj		\
-            $(SLO)$/access.obj		\
-            $(SLO)$/oldsv.obj		\
-            $(SLO)$/help.obj		\
-            $(SLO)$/resmgr.obj		\
-            $(SLO)$/sound.obj		\
-            $(SLO)$/svdata.obj		\
-            $(SLO)$/svmain.obj		\
-            $(SLO)$/system.obj		\
-            $(SLO)$/idlemgr.obj 	\
-            $(SLO)$/timer.obj		\
-            $(SLO)$/unohelp.obj     \
-            $(SLO)$/unohelp2.obj    \
-            $(SLO)$/dndhelp.obj
-.ELSE
 EXCEPTIONSFILES=					\
             $(SLO)$/svapp.obj		\
             $(SLO)$/svdata.obj		\
@@ -123,7 +103,6 @@ EXCEPTIONSFILES=					\
             $(SLO)$/unohelp2.obj    \
             $(SLO)$/i18nhelp.obj 	\
             $(SLO)$/svmain.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
