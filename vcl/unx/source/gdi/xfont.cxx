@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:44:52 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,27 @@
 #define VCLASS_FONT_NUM         2 // Other than rotate and rotate_reverse,
                                   // don't have spacial font
 
+// Select the max size of a font, which is token for real
+// This routine is (and should be) called only once, the result should be
+// stored in some static variable
+
+static int GetMaxFontHeight()
+{
+    static int nMaxFontHeight = 0;
+    if( nMaxFontHeight <= 0 )
+    {
+        const char *pFontHeight = getenv ("SAL_MAXFONTHEIGHT");
+        if( pFontHeight )
+            nMaxFontHeight = atoi( pFontHeight );
+        static const int DEFAULT_MAXFONTHEIGHT = 250;
+        if (nMaxFontHeight <= 20)
+            nMaxFontHeight = DEFAULT_MAXFONTHEIGHT;
+    }
+
+    return nMaxFontHeight;
+}
+
+
 ExtendedFontStruct::ExtendedFontStruct( Display* pDisplay, const Size& rPixelSize,
                                         sal_Bool bVertical, ExtendedXlfd* pXlfd ) :
         mpDisplay( pDisplay ),
@@ -156,15 +177,26 @@ ExtendedFontStruct::LoadEncoding( rtl_TextEncoding nEncoding )
     if ( (nIdx < 0) || (mpXFontStruct[ nIdx ] != NULL) )
         return nIdx;
 
+    // limit font height that gets requested from the XServer
+    // see BugId #44528# FontWork (-> #45038#) and as well Bug #47127#
+    int nReqPixelHeight = maPixelSize.Height();
+    if( nReqPixelHeight > GetMaxFontHeight() )
+        nReqPixelHeight = GetMaxFontHeight();
+    else if( nReqPixelHeight < 2 )
+        nReqPixelHeight = 2;
+
+    // get the X11 font from a matching XLFD
     ByteString aFontName;
-    mpXlfd->ToString( aFontName, maPixelSize.Height(), nEncoding );
+    mpXlfd->ToString( aFontName, nReqPixelHeight, nEncoding );
     mpXFontStruct[ nIdx ] = LoadXFont( mpDisplay, aFontName.GetBuffer() );
     if (mpXFontStruct[nIdx] == NULL)
         mpXFontStruct[nIdx] = LoadXFont( mpDisplay, "fixed" );
 
     // calculate correction factors to improve matching
-    // the selected font size to available bitmap font
-    int nRealPixelSize = mpXlfd->GetPixelSize( maPixelSize.Height() );
+    // the selected font size to the used bitmap font
+    int nRealPixelSize = mpXlfd->GetPixelSize();
+    if( !nRealPixelSize )  // check for scalable mpXlfd
+        nRealPixelSize = nReqPixelHeight;
     if( nRealPixelSize && (nRealPixelSize != maPixelSize.Width()) )
         mfXScale = (float)maPixelSize.Width() / nRealPixelSize;
     if( nRealPixelSize && (nRealPixelSize != maPixelSize.Height()) )
