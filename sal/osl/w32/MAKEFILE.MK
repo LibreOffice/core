@@ -2,9 +2,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: tra $ $Date: 2000-12-11 16:59:34 $
+#   last change: $Author: obr $ $Date: 2001-04-11 11:25:20 $
 #
 #   Copyright according the GNU Public License.
 #
@@ -36,6 +36,7 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/semaphor.obj \
             $(SLO)$/socket.obj   \
             $(SLO)$/interlck.obj \
+            $(SLO)$/nlsupport.obj\
             $(SLO)$/mutex.obj    \
             $(SLO)$/thread.obj   \
             $(SLO)$/module.obj   \
@@ -56,6 +57,7 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/semaphor.obj \
             $(OBJ)$/socket.obj   \
             $(OBJ)$/interlck.obj \
+            $(OBJ)$/nlsupport.obj\
             $(OBJ)$/mutex.obj    \
             $(OBJ)$/thread.obj   \
             $(OBJ)$/module.obj   \
