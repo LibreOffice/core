@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-19 14:44:24 $
+ *  last change: $Author: mba $ $Date: 2001-09-19 16:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ static USHORT aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 #define PROPERTYNAME_REDUCEDBITMAPRESOLUTION            OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapResolution"))
 #define PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY  OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapIncludesTransparency"))
 #define PROPERTYNAME_CONVERTTOGREYSCALES                OUString(RTL_CONSTASCII_USTRINGPARAM("ConvertToGreyscales"))
+#define PROPERTYNAME_PRINTINGMODIFIESDOCUMENT           OUString(RTL_CONSTASCII_USTRINGPARAM("PrintingModifiesDocument"))
 
 #define PROPERTYHDL_REDUCETRANSPARENCY                  0
 #define PROPERTYHDL_REDUCEDTRANSPARENCYMODE             1
@@ -121,8 +122,9 @@ static USHORT aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 #define PROPERTYHDL_REDUCEDBITMAPRESOLUTION             7
 #define PROPERTYHDL_REDUCEDBITMAPINCLUDESTRANSPARENCY   8
 #define PROPERTYHDL_CONVERTTOGREYSCALES                 9
+#define PROPERTYHDL_PRINTINGMODIFIESDOCUMENT            10
 
-#define PROPERTYCOUNT                                   10
+#define PROPERTYCOUNT                                   11
 
 // --------------
 // - Namespaces -
@@ -136,6 +138,9 @@ using namespace ::com::sun::star::uno;
 // -----------
 // - statics -
 // -----------
+
+static SvtPrintOptions_Impl*   pPrinterOptionsDataContainer = NULL;
+static SvtPrintOptions_Impl*   pPrintFileOptionsDataContainer = NULL;
 
 SvtPrintOptions_Impl*   SvtPrinterOptions::m_pStaticDataContainer = NULL;
 sal_Int32               SvtPrinterOptions::m_nRefCount = 0;
@@ -257,6 +262,13 @@ SvtPrintOptions_Impl::SvtPrintOptions_Impl( const OUString& rConfigRoot ) :
             }
             break;
 
+            case PROPERTYHDL_PRINTINGMODIFIESDOCUMENT:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "Invalid type" );
+                seqValues[nProperty] >>= m_bModifyDocumentOnPrintingAllowed;
+            }
+            break;
+
             case PROPERTYHDL_REDUCEDTRANSPARENCYMODE:
             {
                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SHORT), "Invalid type" );
@@ -342,6 +354,10 @@ void SvtPrintOptions_Impl::Commit()
     {
         switch( nProperty )
         {
+            case PROPERTYHDL_PRINTINGMODIFIESDOCUMENT:
+                aSeqValues[nProperty] <<= m_bModifyDocumentOnPrintingAllowed;
+            break;
+
             case PROPERTYHDL_REDUCETRANSPARENCY:
                 aSeqValues[nProperty] <<= m_bReduceTransparency;
             break;
@@ -403,7 +419,8 @@ Sequence< OUString > SvtPrintOptions_Impl::impl_GetPropertyNames()
         PROPERTYNAME_REDUCEDBITMAPMODE,
         PROPERTYNAME_REDUCEDBITMAPRESOLUTION,
         PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY,
-        PROPERTYNAME_CONVERTTOGREYSCALES
+        PROPERTYNAME_CONVERTTOGREYSCALES,
+        PROPERTYNAME_PRINTINGMODIFIESDOCUMENT
     };
 
     // Initialize return sequence with these list ...
@@ -543,7 +560,8 @@ sal_Bool SvtBasePrintOptions::IsModifyDocumentOnPrintingAllowed() const
 void SvtBasePrintOptions::SetModifyDocumentOnPrintingAllowed( sal_Bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetModifyDocumentOnPrintingAllowed( bState ) ;
+    pPrinterOptionsDataContainer->SetModifyDocumentOnPrintingAllowed( bState ) ;
+    pPrintFileOptionsDataContainer->SetModifyDocumentOnPrintingAllowed( bState ) ;
 }
 
 // -----------------------------------------------------------------------------
@@ -688,6 +706,7 @@ SvtPrinterOptions::SvtPrinterOptions()
     {
         OUString aRootPath( ROOTNODE_START );
         SetDataContainer( m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/Printer" ) ) ) );
+        pPrinterOptionsDataContainer = m_pStaticDataContainer;
     }
 }
 
@@ -705,6 +724,7 @@ SvtPrinterOptions::~SvtPrinterOptions()
     {
         delete m_pStaticDataContainer;
         m_pStaticDataContainer = NULL;
+        pPrinterOptionsDataContainer = NULL;
     }
 }
 
@@ -723,6 +743,7 @@ SvtPrintFileOptions::SvtPrintFileOptions()
     {
         OUString aRootPath( ROOTNODE_START );
         SetDataContainer( m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/File" ) ) ) );
+        pPrintFileOptionsDataContainer = m_pStaticDataContainer;
     }
 }
 
@@ -740,5 +761,6 @@ SvtPrintFileOptions::~SvtPrintFileOptions()
     {
         delete m_pStaticDataContainer;
         m_pStaticDataContainer = NULL;
+        pPrintFileOptionsDataContainer = NULL;
     }
 }
