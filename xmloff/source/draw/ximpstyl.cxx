@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:27:42 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 19:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,6 +863,11 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
                 msName = sValue;
                 break;
             }
+            case XML_TOK_MASTERPAGE_DISPLAY_NAME:
+            {
+                msDisplayName = sValue;
+                break;
+            }
             case XML_TOK_MASTERPAGE_PAGE_MASTER_NAME:
             {
                 msPageMasterName = sValue;
@@ -881,14 +886,19 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
         }
     }
 
+    if( !msDisplayName.getLength() )
+        msDisplayName = msName;
+    else if( msDisplayName != msName )
+        GetImport().AddStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE, msName, msDisplayName );
+
     GetImport().GetShapeImport()->startPage( GetLocalShapesContext() );
 
     // set page name?
-    if(!bHandoutMaster && msName.getLength() && GetLocalShapesContext().is())
+    if(!bHandoutMaster && msDisplayName.getLength() && GetLocalShapesContext().is())
     {
         uno::Reference < container::XNamed > xNamed(GetLocalShapesContext(), uno::UNO_QUERY);
         if(xNamed.is())
-            xNamed->setName(msName);
+            xNamed->setName(msDisplayName);
     }
 
     // set page-master?
@@ -1253,12 +1263,12 @@ void SdXMLStylesContext::EndElement()
 //
 void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) const
 {
-    UniString sPrefix(rMaster.GetName(), (sal_uInt16)rMaster.GetName().getLength());
+    UniString sPrefix(rMaster.GetDisplayName(), (sal_uInt16)rMaster.GetDisplayName().getLength());
     sPrefix += sal_Unicode('-');
 
-    if(GetSdImport().GetLocalDocStyleFamilies().is() && GetSdImport().GetLocalDocStyleFamilies()->hasByName(rMaster.GetName()))
+    if(GetSdImport().GetLocalDocStyleFamilies().is() && GetSdImport().GetLocalDocStyleFamilies()->hasByName(rMaster.GetDisplayName()))
     {
-        uno::Any aAny(GetSdImport().GetLocalDocStyleFamilies()->getByName(rMaster.GetName()));
+        uno::Any aAny(GetSdImport().GetLocalDocStyleFamilies()->getByName(rMaster.GetDisplayName()));
         uno::Reference< container::XNameAccess > xMasterPageStyles;
         aAny >>= xMasterPageStyles;
 
@@ -1333,15 +1343,11 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
                 const UniString aStyleName(pStyle->GetDisplayName(), (sal_uInt16)pStyle->GetDisplayName().getLength());
                 sal_uInt16 nStylePrefLen = aStyleName.SearchBackward( sal_Unicode('-') ) + 1;
 
-                uno::Reference< style::XStyle > xStyle;
-                const OUString aPureStyleName = nPrefLen ?
-                    pStyle->GetDisplayName().copy((sal_Int32)nPrefLen) : pStyle->GetDisplayName();
-
                 if(!nPrefLen || ((nPrefLen == nStylePrefLen) && aStyleName.Equals(rPrefix, 0, nPrefLen)))
                 {
                     uno::Reference< style::XStyle > xStyle;
-                    const OUString aPureStyleName = nPrefLen ?
-                        pStyle->GetName().copy((sal_Int32)nPrefLen) : pStyle->GetName();
+                    const OUString aPureStyleName = nStylePrefLen ?
+                        pStyle->GetDisplayName().copy((sal_Int32)nStylePrefLen) : pStyle->GetDisplayName();
 
                     if(xPageStyles->hasByName(aPureStyleName))
                     {
@@ -1399,7 +1405,6 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
                                 {
                                     aAny <<= xStyle;
                                     xInsertContainer->insertByName(aPureStyleName, aAny);
-                                    const_cast< SvXMLImport&>( GetImport() ).AddStyleDisplayName( XML_STYLE_FAMILY_SD_GRAPHICS_ID, pStyle->GetName(), aPureStyleName );
                                 }
                             }
                         }
@@ -1436,7 +1441,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
 
         if(pStyle && nFamily == pStyle->GetFamily())
         {
-            const UniString aStyleName(pStyle->GetName(), (sal_uInt16)pStyle->GetName().getLength());
+            const UniString aStyleName(pStyle->GetDisplayName(), (sal_uInt16)pStyle->GetDisplayName().getLength());
             sal_uInt16 nStylePrefLen = aStyleName.SearchBackward( sal_Unicode('-') ) + 1;
 
             if(pStyle->GetName().getLength() && (!nPrefLen || ((nPrefLen == nStylePrefLen) && aStyleName.Equals(rPrefix, 0, nPrefLen))))
@@ -1445,7 +1450,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
                 {
 
                     uno::Reference< style::XStyle > xStyle;
-                    const OUString aPureStyleName = nPrefLen ? pStyle->GetName().copy((sal_Int32)nPrefLen) : pStyle->GetName();
+                    const OUString aPureStyleName = nPrefLen ? pStyle->GetDisplayName().copy((sal_Int32)nPrefLen) : pStyle->GetDisplayName();
                     xPageStyles->getByName(aPureStyleName) >>= xStyle;
 
                     if(xStyle.is())
