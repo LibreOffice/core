@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 09:19:38 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 using namespace ::com::sun::star;
 
 //=========================================================
+
+typedef ::std::list< uno::WeakReference< lang::XComponent > > WeakComponentList;
+
 struct StorInternalData_Impl
 {
     SotMutexHolderRef m_rSharedMutexRef;
@@ -136,7 +139,7 @@ struct StorInternalData_Impl
 
     OChildDispListener_Impl* m_pSubElDispListener;
 
-    uno::Sequence< uno::Reference< lang::XComponent > > m_aOpenSubComponentsList;
+    WeakComponentList m_aOpenSubComponentsList;
 
     // the mutex reference MUST NOT be empty
     StorInternalData_Impl( const SotMutexHolderRef& rMutexRef, sal_Bool bRoot, sal_Bool bReadOnlyWrap )
@@ -150,6 +153,7 @@ struct StorInternalData_Impl
 
     ~StorInternalData_Impl();
 };
+
 //=========================================================
 
 extern uno::Sequence< sal_Int8 > MakeKeyFromPass( ::rtl::OUString aPass, sal_Bool bUseUTF );
@@ -335,12 +339,13 @@ OStorage_Impl::~OStorage_Impl()
         {
             for ( OStorageList_Impl::iterator pStorageIter = m_aReadOnlyWrapList.begin();
                   pStorageIter != m_aReadOnlyWrapList.end(); pStorageIter++ )
-                if ( *pStorageIter )
+            {
+                uno::Reference< embed::XStorage > xTmp = pStorageIter->m_xWeakRef;
+                if ( xTmp.is() )
                     try {
-                        (*pStorageIter)->InternalDispose( sal_False );
-                        (*pStorageIter)->release();
-                        (*pStorageIter) = NULL;
+                        pStorageIter->m_pPointer->InternalDispose( sal_False );
                     } catch( uno::Exception& ) {}
+            }
 
             m_aReadOnlyWrapList.clear();
         }
@@ -393,26 +398,31 @@ OStorage_Impl::~OStorage_Impl()
 //-----------------------------------------------
 void OStorage_Impl::SetReadOnlyWrap( OStorage& aStorage )
 {
-    aStorage.acquire();
-    m_aReadOnlyWrapList.push_back( &aStorage );
+    // Weak reference is used inside the holder so the refcount must not be zero at this point
+    OSL_ENSURE( aStorage.GetRefCount_Impl(), "There must be a reference alive to use this method!\n" );
+    m_aReadOnlyWrapList.push_back( StorageHolder_Impl( &aStorage ) );
 }
 
 //-----------------------------------------------
 void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
 {
     for ( OStorageList_Impl::iterator pStorageIter = m_aReadOnlyWrapList.begin();
-      pStorageIter != m_aReadOnlyWrapList.end(); pStorageIter++ )
-        if ( *pStorageIter == &aStorage )
+      pStorageIter != m_aReadOnlyWrapList.end();)
+    {
+        uno::Reference< embed::XStorage > xTmp = pStorageIter->m_xWeakRef;
+        if ( !xTmp.is() || pStorageIter->m_pPointer == &aStorage )
         {
             try {
-                (*pStorageIter)->InternalDispose( sal_False );
+                pStorageIter->m_pPointer->InternalDispose( sal_False );
             } catch( uno::Exception& ) {}
 
-            (*pStorageIter)->release();
-            (*pStorageIter) = NULL;
+            OStorageList_Impl::iterator pIterToDelete( pStorageIter );
+            pStorageIter++;
+            m_aReadOnlyWrapList.erase( pIterToDelete );
         }
-
-    m_aReadOnlyWrapList.remove( NULL );
+        else
+            pStorageIter++;
+    }
 }
 
 //-----------------------------------------------
@@ -679,7 +689,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
         if ( !pElement->m_pStream->IsEncrypted() )
         {
             uno::Reference< io::XStream > xSubStr =
-                                        xDest->openStreamElement( pElement->m_aName,
+                                        xDest->openStreamElement( aName,
                                         embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
             OSL_ENSURE( xSubStr.is(), "No destination substream!\n" );
 
@@ -688,7 +698,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
         else if ( pElement->m_pStream->HasCachedPassword() && pElement->m_pStream->IsModified() )
         {
             uno::Reference< io::XStream > xSubStr =
-                                        xDest->openEncryptedStreamElement( pElement->m_aName,
+                                        xDest->openEncryptedStreamElement( aName,
                                             embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE,
                                             pElement->m_pStream->GetCachedPassword() );
             OSL_ENSURE( xSubStr.is(), "No destination substream!\n" );
@@ -762,6 +772,9 @@ void OStorage_Impl::Commit()
     OSL_ENSURE( m_nStorageMode & embed::ElementModes::WRITE,
                 "Commit of readonly storage, should be detected before!\n" );
 
+    if ( !m_bIsModified )
+        return;
+
     uno::Reference< container::XNameContainer > xNewPackageFolder;
 
     // here the storage will switch to the temporary package folder
@@ -825,6 +838,13 @@ void OStorage_Impl::Commit()
 
         if ( !(*pElementIter)->m_bIsInserted )
         {
+            // for now stream is opened in direct mode that means that in case
+            // storage is commited all the streams from it are commited in current state.
+            // following two steps are separated to allow easily implement transacted mode
+            // for streams if we need it in future.
+            if ( !(*pElementIter)->m_bIsStorage && (*pElementIter)->m_pStream )
+                (*pElementIter)->m_pStream->Commit();
+
             // if the storage was not open, there is no need to commit it ???
             // the storage should be checked that it is commited
             if ( (*pElementIter)->m_bIsStorage && (*pElementIter)->m_pStorage && (*pElementIter)->m_pStorage->m_bCommited )
@@ -838,15 +858,8 @@ void OStorage_Impl::Commit()
 
                 (*pElementIter)->m_pStorage->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
             }
-            else if ( !(*pElementIter)->m_bIsStorage && (*pElementIter)->m_pStream )
+            else if ( !(*pElementIter)->m_bIsStorage && (*pElementIter)->m_pStream && (*pElementIter)->m_pStream->m_bFlushed )
             {
-                // for now stream is opened in direct mode that means that in case
-                // storage is commited all the streams from it are commited in current state.
-                // following two steps are separated to allow easily implement transacted mode
-                // for streams if we need it in future.
-
-                (*pElementIter)->m_pStream->Commit();
-
                 // the renamed elements are not in new temporary storage
                 if ( m_bCommited || m_bIsRoot )
                     xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
@@ -1339,9 +1352,7 @@ OStorage::OStorage( OStorage_Impl* pImpl, sal_Bool bReadOnlyWrap )
                     m_pData->m_bReadOnlyWrap,
                 "The wrapper can not allow writing in case implementation does not!\n" );
 
-    if ( m_pData->m_bReadOnlyWrap )
-        m_pImpl->SetReadOnlyWrap( *this );
-    else
+    if ( !bReadOnlyWrap )
         m_pImpl->m_pAntiImpl = this;
 }
 
@@ -1384,7 +1395,7 @@ void SAL_CALL OStorage::InternalDispose( sal_Bool bNotifyImpl )
 
     if ( m_pData->m_bReadOnlyWrap )
     {
-        OSL_ENSURE( !m_pData->m_aOpenSubComponentsList.getLength() || m_pData->m_pSubElDispListener,
+        OSL_ENSURE( !m_pData->m_aOpenSubComponentsList.size() || m_pData->m_pSubElDispListener,
                     "If any subelements are open the listener must exist!\n" );
 
         if ( m_pData->m_pSubElDispListener )
@@ -1393,20 +1404,25 @@ void SAL_CALL OStorage::InternalDispose( sal_Bool bNotifyImpl )
 
             // iterate through m_pData->m_aOpenSubComponentsList
             // deregister m_pData->m_pSubElDispListener and dispose all of them
-            for ( sal_Int32 nInd = 0; nInd < m_pData->m_aOpenSubComponentsList.getLength(); nInd++ )
-                if ( m_pData->m_aOpenSubComponentsList[nInd].is() )
+            if ( !m_pData->m_aOpenSubComponentsList.empty() )
+            {
+                for ( WeakComponentList::iterator pCompIter = m_pData->m_aOpenSubComponentsList.begin();
+                      pCompIter != m_pData->m_aOpenSubComponentsList.end(); pCompIter++ )
                 {
-                    m_pData->m_aOpenSubComponentsList[nInd]->removeEventListener( uno::Reference< lang::XEventListener >(
+                    uno::Reference< lang::XComponent > xTmp = (*pCompIter);
+                    if ( xTmp.is() )
+                    {
+                        xTmp->removeEventListener( uno::Reference< lang::XEventListener >(
                                     static_cast< lang::XEventListener* >( m_pData->m_pSubElDispListener ) ) );
 
-                    try {
-                        m_pData->m_aOpenSubComponentsList[nInd]->dispose();
-                    } catch( uno::Exception& )
-                    {}
-                    m_pData->m_aOpenSubComponentsList[nInd] = uno::Reference< XComponent >();
+                        try {
+                            xTmp->dispose();
+                        } catch( uno::Exception& ) {}
+                    }
                 }
 
-            m_pData->m_aOpenSubComponentsList.realloc( 0 );
+                m_pData->m_aOpenSubComponentsList.clear();
+            }
         }
 
         if ( bNotifyImpl )
@@ -1439,17 +1455,22 @@ void OStorage::ChildIsDisposed( const uno::Reference< uno::XInterface >& xChild 
     // this method must not contain any locking
     // the locking is done in the listener
 
-    sal_Int32 nOldLength = m_pData->m_aOpenSubComponentsList.getLength();
-    sal_Int32 nNewLength = 0;
-
-    uno::Sequence< uno::Reference< lang::XComponent > > aNewSeq( nOldLength );
-
-    for ( sal_Int32 nInd = 0; nInd < nOldLength; nInd++ )
-        if ( m_pData->m_aOpenSubComponentsList[nInd] != xChild )
-            aNewSeq[nNewLength++] = m_pData->m_aOpenSubComponentsList[nInd];
-
-    aNewSeq.realloc( nNewLength );
-    m_pData->m_aOpenSubComponentsList = aNewSeq;
+    if ( !m_pData->m_aOpenSubComponentsList.empty() )
+    {
+        for ( WeakComponentList::iterator pCompIter = m_pData->m_aOpenSubComponentsList.begin();
+              pCompIter != m_pData->m_aOpenSubComponentsList.end(); )
+        {
+            uno::Reference< lang::XComponent > xTmp = (*pCompIter);
+            if ( !xTmp.is() || xTmp == xChild )
+            {
+                WeakComponentList::iterator pIterToRemove = pCompIter;
+                pCompIter++;
+                m_pData->m_aOpenSubComponentsList.erase( pIterToRemove );
+            }
+            else
+                pCompIter++;
+        }
+    }
 }
 
 //-----------------------------------------------
@@ -1571,9 +1592,7 @@ void OStorage::MakeLinkToSubComponent_Impl( const uno::Reference< lang::XCompone
     xComponent->addEventListener( uno::Reference< lang::XEventListener >(
         static_cast< ::cppu::OWeakObject* >( m_pData->m_pSubElDispListener ), uno::UNO_QUERY ) );
 
-    sal_Int32 nLength = m_pData->m_aOpenSubComponentsList.getLength();
-    m_pData->m_aOpenSubComponentsList.realloc( nLength + 1 );
-    m_pData->m_aOpenSubComponentsList[nLength] = xComponent;
+    m_pData->m_aOpenSubComponentsList.push_back( xComponent );
 }
 
 //____________________________________________________________________________________________________
@@ -1933,14 +1952,15 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
     if ( !pElement->m_pStorage )
         throw io::IOException(); // TODO: general_error
 
-    uno::Reference< embed::XStorage > xResult(
-                static_cast< OWeakObject* >( new OStorage(
-                            pElement->m_pStorage,
-                            ( nStorageMode & embed::ElementModes::WRITE ) != embed::ElementModes::WRITE ) ),
-                uno::UNO_QUERY );
+    sal_Bool bReadOnlyWrap = ( ( nStorageMode & embed::ElementModes::WRITE ) != embed::ElementModes::WRITE );
+    OStorage* pResultStorage = new OStorage( pElement->m_pStorage, bReadOnlyWrap );
+    uno::Reference< embed::XStorage > xResult( (embed::XStorage*) pResultStorage );
 
-    if ( m_pData->m_bReadOnlyWrap )
+    if ( bReadOnlyWrap )
     {
+        // Before this call is done the object must be refcounted already
+        pElement->m_pStorage->SetReadOnlyWrap( *pResultStorage );
+
         // before the storage disposes the stream it must deregister itself as listener
         uno::Reference< lang::XComponent > xStorageComponent( xResult, uno::UNO_QUERY );
         if ( !xStorageComponent.is() )
