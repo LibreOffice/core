@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-29 00:37:57 $
+ *  last change: $Author: er $ $Date: 2002-10-10 13:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ static const struct {
     { "fr_MC",  lcl_DATA_EURO, NULL },
     { "it_IT",  lcl_DATA_EURO, "it" },
     { "it_CH",  lcl_DATA_EURO, NULL },
+    { "sl_SI",  lcl_DATA_EURO, "sl" },
     { "sv_SE",  lcl_DATA_EURO, "sv" },
     { "sv_FI",  lcl_DATA_EURO, NULL },
     { "ca_ES",  lcl_DATA_EURO, "ca" },
