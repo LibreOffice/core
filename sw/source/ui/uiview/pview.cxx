@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:47:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,9 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SVX_ZOOM_HXX
-#include <svx/zoom.hxx>
-#endif
+//CHINA001 #ifndef _SVX_ZOOM_HXX
+//CHINA001 #include <svx/zoom.hxx>
+//CHINA001 #endif
 #ifndef _SVX_STDDLG_HXX //autogen
 #include <svx/stddlg.hxx>
 #endif
@@ -221,6 +221,9 @@
 #ifndef _PAGEPREVIEWLAYOUT_HXX
 #include <pagepreviewlayout.hxx>
 #endif
+
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 SFX_IMPL_VIEWFACTORY(SwPagePreView, SW_RES(STR_NONAME))
 {
@@ -1412,7 +1415,8 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
         {
             const SfxItemSet *pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
-            SvxZoomDialog* pDlg = 0;
+            //CHINA001 SvxZoomDialog* pDlg = 0;
+            AbstractSvxZoomDialog *pDlg = 0;
             if(!pArgs)
             {
                 SfxItemSet aCoreSet(GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
@@ -1428,7 +1432,14 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
                         SVX_ZOOM_ENABLE_WHOLEPAGE);
                 aCoreSet.Put( aZoom );
 
-                pDlg = new SvxZoomDialog( &GetViewFrame()->GetWindow(), aCoreSet );
+                //CHINA001 pDlg = new SvxZoomDialog( &GetViewFrame()->GetWindow(), aCoreSet );
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                if(pFact)
+                {
+                    pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet, ResId(RID_SVXDLG_ZOOM));
+                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                }
+
                 pDlg->SetLimits( MINZOOM, MAXZOOM );
 
                 if( pDlg->Execute() != RET_CANCEL )
