@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-03 11:45:59 $
+ *  last change: $Author: dg $ $Date: 2000-12-07 14:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,10 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     void OConfigurationProvider::connect(const ConnectionSettings& _rSettings) throw(uno::Exception)
     {
+        ::rtl::OUString sService(RTL_CONSTASCII_USTRINGPARAM("configuration"));
+        ConnectionSettings aSettings(_rSettings);
+        aSettings.setService(sService);
+
         IConfigSession* pNewSession = m_aModule.connect(_rSettings);
         if (!pNewSession)
             throw uno::Exception(::rtl::OUString::createFromAscii("Could not connect to the configuration registry. Please check your settings."), NULL);
