@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-17 14:08:20 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 15:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,211 +67,43 @@
 
 String STR_MENU_ADDONS
 {
-    Text = "Add-Ons" ;
-    Text [ ENGLISH ] = "Add-Ons" ;
-    Text [ english_us ] = "Add-Ons" ;
-    Text[ portuguese ] = "Add-Ons";
-    Text[ russian ] = "Add-Ons";
-    Text[ greek ] = "Add-Ons";
-    Text[ dutch ] = "Add-Ons";
-    Text[ french ] = "Add-ons";
-    Text[ spanish ] = "Complementos (add-ons)";
-    Text[ finnish ] = "Add-Ons";
-    Text[ italian ] = "Add-on";
-    Text[ danish ] = "AddOns";
-    Text[ swedish ] = "Tillägg";
-    Text[ polish ] = "Add-Ons";
-    Text[ portuguese_brazilian ] = "Aditivos";
-    Text[ japanese ] = "ã‚¢ãƒ‰ã‚ªãƒ³";
-    Text[ korean ] = "Add-Ons";
-    Text[ chinese_simplified ] = "Add-Ons";
-    Text[ chinese_traditional ] = "é™„åŠ å…ƒä»¶";
-    Text[ turkish ] = "Eklentiler";
-    Text[ arabic ] = "Add-Ons";
-    Text[ catalan ] = "Add-Ons";
-    Text[ thai ] = "Add-Ons";
-    Text[ czech ] = "PÅ™Ã­davky";
-    Text[ hebrew ] = "Add-Ons";
-    Text[ hindi ] = "Add-Ons";
-    Text[ slovak ] = "Add-Ons";
-    Text[ hungarian ] = "KiegÃ©szÃ­tÅ‘k";
-    Text[ slovenian ] = "Dodatki";
+    Text [ de ] = "Add-Ons" ;
+    Text [ en-US ] = "Add-Ons" ;
 };
 
 String STR_MENU_ADDONHELP
 {
-    Text = "Add-~On-Hilfe" ;
-    Text [ english_us ] = "Add-~On Help" ;
-    Text[ french ] = "Aide de l'add-on";
-    Text[ spanish ] = "~Complemento (add-on) - Ayuda";
-    Text[ italian ] = "Guida Add-on";
-    Text[ swedish ] = "Ti~lläggshjälp";
-    Text[ japanese ] = "ã‚¢ãƒ‰ã‚ªãƒ³ãƒ˜ãƒ«ãƒ—(~O)";
-    Text[ korean ] = "Add-On ë„ì›€ë§";
-    Text[ chinese_simplified ] = "Add-~On å¸®åŠ©";
-    Text[ chinese_traditional ] = "Add-~On èªªæ˜";
-    Text[ slovak ] = "Add-~On PomocnÃ­k";
-    Text[ portuguese_brazilian ] = "Ajuda do Add-~On";
-    Text[ greek ] = "Add-~On Help";
-    Text[ dutch ] = "Add-~On Help";
-    Text[ finnish ] = "Add-~On Help";
-    Text[ czech ] = "NÃ¡povÄ›da pÅ™Ã­davku";
-    Text[ danish ] = "Add~On Hjælp";
-    Text[ arabic ] = "Add-~On Help";
-    Text[ hebrew ] = "Add-~On Help";
-    Text[ catalan ] = "Add-~On Help";
-    Text[ hindi ] = "Add-~On Help";
-    Text[ portuguese ] = "Add-~On Help";
-    Text[ russian ] = "Add-~On Help";
-    Text[ polish ] = "Add-~On Help";
-    Text[ turkish ] = "Add-~On Help";
-    Text[ thai ] = "Add-~On Help";
-    Text[ hungarian ] = "~KiegÃ©szÃ­tÅ‘ sÃºgÃ³ja";
-    Text[ slovenian ] = "PomoÄ za ~Dodatke";
+    Text [ de ] = "Add-~On-Hilfe" ;
+    Text [ en-US ] = "Add-~On Help" ;
 };
 
 String STR_MENU_HEADFOOTALL
 {
-    TEXT = "Alle" ;
-    TEXT [ English ] = "All" ;
-    Text [ english_us ] = "All" ;
-    Text [ italian ] = "Tutti" ;
-    Text [ spanish ] = "Todos" ;
-    Text [ french ] = "Tous" ;
-    Text [ dutch ] = "alle" ;
-    Text [ swedish ] = "Alla" ;
-    Text [ danish ] = "Alle" ;
-    Text [ portuguese ] = "Todos" ;
-    Text [ portuguese_brazilian ] = "Tudo" ;
-    Text[ chinese_simplified ] = "å…¨éƒ¨";
-    Text[ russian ] = "Âñå";
-    Text[ polish ] = "Wszystko";
-    Text[ japanese ] = "ã™ã¹ã¦";
-    Text[ chinese_traditional ] = "å…¨éƒ¨";
-    Text[ arabic ] = "Çáßá";
-    Text[ greek ] = "¼ëá";
-    Text[ korean ] = "ëª¨ë‘";
-    Text[ turkish ] = "Tümü";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tot";
-    Text[ finnish ] = "Kaikki";
-    Text[ thai ] = "à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
-    Text[ czech ] = "VÅ¡e";
-    Text[ hebrew ] = "â€®×”×›×œâ€¬";
-    Text[ hindi ] = "à¤¸à¤¬";
-    Text[ slovak ] = "VÅ¡etko";
-    Text[ hungarian ] = "Minden";
-    Text[ slovenian ] = "Vse";
+    Text [ de ] = "Alle" ;
+    Text [ en-US ] = "All" ;
+    Text [ x-comment ] = " ";
 };
 
 String STR_UPDATEDOC
 {
-    Text = "Aktuali~siere" ;
-    Text [ ENGLISH ] = "Update" ;
-    Text [ english_us ] = "~Update" ;
-    Text [ italian ] = "~Aggiorna" ;
-    Text [ spanish ] = "Actuali~zación" ;
-    Text [ french ] = "Actuali~se" ;
-    Text [ dutch ] = "~Bijwerken" ;
-    Text [ swedish ] = "~Uppdatera" ;
-    Text [ danish ] = "~Opdater" ;
-    Text [ portuguese_brazilian ] = "A~tualizar" ;
-    Text [ portuguese ] = "A ac~tualizar" ;
-    Text[ chinese_simplified ] = "æ›´æ–°(~U)";
-    Text[ russian ] = "Îáíîâèòü";
-    Text[ polish ] = "~Aktualizuj";
-    Text[ japanese ] = "æ›´æ–°(~U)";
-    Text[ chinese_traditional ] = "æ›´æ–°(~U)";
-    Text[ arabic ] = "ÊÍÏíË";
-    Text[ dutch ] = "~Bijwerken";
-    Text[ chinese_simplified ] = "æ›´æ–°(~U)";
-    Text[ greek ] = "Åíçìİñùóç";
-    Text[ korean ] = "ì—…ë°ì´íŠ¸(~U)";
-    Text[ turkish ] = "Gün~celle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Actualitza";
-    Text[ finnish ] = "~Päivitä";
-    Text[ thai ] = "~à¸›à¸£à¸±à¸šà¸›à¸£à¸¸à¸‡";
-    Text[ czech ] = "Aktualizovat";
-    Text[ hebrew ] = "â€®×¢×™×“×›×•×Ÿâ€¬";
-    Text[ hindi ] = "~à¤…à¤ªà¤¡à¥‡à¤Ÿà¥ à¤•à¤°à¥‹";
-    Text[ slovak ] = "Akt~ualizovaÅ¥";
-    Text[ hungarian ] = "~FrissÃ­tÃ©s";
-    Text[ slovenian ] = "~Posodobi";
+    Text [ de ] = "Aktuali~siere" ;
+    Text [ en-US ] = "~Update" ;
+    Text [ x-comment ] = " ";
 };
 
 String STR_CLOSEDOC_ANDRETURN
 {
     /* ### ACHTUNG: Neuer Text in Resource? S~chließen & zurück zu  : S~chlie˜en & zur³ck zu  */
     /* ### ACHTUNG: Neuer Text in Resource? S~chließen & zurück zu  : S~chlie˜en & zur³ck zu  */
-    Text = "S~chließen & zurück zu " ;
-    Text [ ENGLISH ] = "~Close & Return to " ;
-    Text [ english_us ] = "~Close & Return to " ;
-    Text [ italian ] = "Chiudi e ritorna a " ;
-    Text [ spanish ] = "C~errar y regresar a  " ;
-    Text [ french ] = "~Fermer & retourner à " ;
-    Text [ dutch ] = "S~luiten en terug naar" ;
-    Text [ swedish ] = "St~äng och tillbaka till  " ;
-    Text [ danish ] = "~Luk og gå tilbage til " ;
-    Text [ portuguese_brazilian ] = "~Fechar & Retornar a " ;
-    Text [ portuguese ] = "~Fechar & Regressar a " ;
-    Text[ chinese_simplified ] = "å…³é—­å’Œè¿”å›(~C)";
-    Text[ russian ] = "Çàêğûòü è âåğíóòüñÿ ê  ";
-    Text[ polish ] = "~Zamknij i powróæ do ";
-    Text[ japanese ] = "é–‰ã˜ã‚‹ & æˆ»ã‚‹(~C)";
-    Text[ chinese_traditional ] = "é—œé–‰å’Œè¿”å›(~C)";
-    Text[ arabic ] = "ÇáÅÛáÇŞ æÇáÚæÏÉ Åáì ";
-    Text[ dutch ] = "S~luiten en terug naar";
-    Text[ chinese_simplified ] = "å…³é—­å’Œè¿”å›(~C)";
-    Text[ greek ] = "Êëåßóéìï êáé åğéóôñïöŞ óå ";
-    Text[ korean ] = "ë‹«ê¸° & ëŒì•„ê°€ê¸°(~C)";
-    Text[ turkish ] = "Kapat ve geri dön ";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Tanca i retorna a ";
-    Text[ finnish ] = "Sulje ja ~palauta ";
-    Text[ thai ] = "~à¸›à¸´à¸”à¹à¸¥à¸°à¸à¸¥à¸±à¸šà¹„à¸›à¸¢à¸±à¸‡ ";
-    Text[ czech ] = "Konec a nÃ¡vrat do ";
-    Text[ hebrew ] = "â€®×™×¦×™××” ×•×—×–×¨×” ××œ â€¬";
-    Text[ hindi ] = "à¤¬à¤¨à¥à¤¦ à¤•à¤°à¥‹ ~à¤”à¤° à¤•à¥‡à¤²à¤¿à¤ à¤µà¤¾à¤ªà¤¸ ";
-    Text[ slovak ] = "~ZavrieÅ¥ a nÃ¡vrat do ";
-    Text[ hungarian ] = "~BezÃ¡rÃ¡s Ã©s visszatÃ©rÃ©s";
-    Text[ slovenian ] = "~Zapri & se vrni na";
+    Text [ de ] = "S~chließen & zurück zu " ;
+    Text [ en-US ] = "~Close & Return to " ;
+    Text [ x-comment ] = " ";
 };
 
 String STR_SAVECOPYDOC
 {
-    Text = "Kopie Speichern ~unter..." ;
-    Text [ ENGLISH ] = "Save Copy ~as" ;
-    Text [ english_us ] = "Save Copy ~as..." ;
-    Text [ italian ] = "Salva copia con ~nome..." ;
-    Text [ spanish ] = "Guardar copia ~como..." ;
-    Text [ french ] = "Enregistrer la copie ~sous..." ;
-    Text [ dutch ] = "~Kopie opslaan als..." ;
-    Text [ swedish ] = "Spara kopia som..." ;
-    Text [ danish ] = "Gem kopi som..." ;
-    Text [ portuguese_brazilian ] = "Salvar ~cópia como..." ;
-    Text [ portuguese ] = "Guardar ~cópia como..." ;
-    Text[ chinese_simplified ] = "å¤ä»¶å¦å­˜ä¸º(~A)...";
-    Text[ russian ] = "Ñîõğàíèòü êîïèş êàê...";
-    Text[ polish ] = "Zapi~sz kopiê jako...";
-    Text[ japanese ] = "ã‚³ãƒ”ãƒ¼ã«åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜(~A)...";
-    Text[ chinese_traditional ] = "è¤‡è£½ä»¶å¦å­˜æ–°æª”(~A)...";
-    Text[ arabic ] = "ÍİÙ ÇáäÓÎÉ ÈÇÓã...";
-    Text[ dutch ] = "~Kopie opslaan als...";
-    Text[ chinese_simplified ] = "å¤ä»¶å¦å­˜ä¸º(~A)...";
-    Text[ greek ] = "ÁğïèŞêåõóç áíôéãñÜöïõ ùò...";
-    Text[ korean ] = "ë³µì‚¬ë¥¼ ë‹¤ë¥¸ ì´ë¦„ìœ¼ë¡œ ì €ì¥(~A)...";
-    Text[ turkish ] = "Kopyasını farklı  ka~ydet...";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Desa-ho en còpia ~com a...";
-    Text[ finnish ] = "Tallenna ~kopio nimellä...";
-    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¸ªà¸³à¹€à¸™à¸²à¹€~à¸›à¹‡à¸™...";
-    Text[ czech ] = "UloÅ¾it kopii jako...";
-    Text[ hebrew ] = "â€®×©××™×¨×ª ×¢×•×ª×§ ×‘×©×...â€¬";
-    Text[ hindi ] = "~à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹ à¤œà¥ˆà¤¸à¥‡...";
-    Text[ slovak ] = "UloÅ¾iÅ¥ kÃ³piu ~ako...";
-    Text[ hungarian ] = "MÃ¡sol~at mentÃ©se mÃ¡skÃ©nt...";
-    Text[ slovenian ] = "Shrani kopijo ~kot...";
+    Text [de ] = "Kopie Speichern ~unter..." ;
+    Text [ en-US ] = "Save Copy ~as..." ;
 };
 
 // ***********************************************************************
