@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:40 $
+ *  last change: $Author: oj $ $Date: 2001-02-12 10:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2358,7 +2358,7 @@ void OResultSet::setOrderbyColumn(UINT16 nOrderbyColumnNo,
         return;
     }
 
-    String aColumnName;
+    ::rtl::OUString aColumnName;
     if (pColumnRef->count() == 1)
         aColumnName = pColumnRef->getChild(0)->getTokenValue();
     else if (pColumnRef->count() == 3)
@@ -2372,7 +2372,7 @@ void OResultSet::setOrderbyColumn(UINT16 nOrderbyColumnNo,
 //                      0, String() );
             //  return;
         //  }
-        aColumnName = pColumnRef->getChild(2)->getTokenValue();
+        pColumnRef->getChild(2)->parseNodeToStr(aColumnName,m_xDBMetaData,NULL,sal_False,sal_False);
     }
     else
     {
