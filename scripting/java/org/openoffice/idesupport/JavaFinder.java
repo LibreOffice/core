@@ -12,7 +12,7 @@ import java.net.URLClassLoader;
 import java.net.MalformedURLException;
 import org.openoffice.idesupport.zip.ParcelZipper;
 
-import com.sun.star.script.framework.browse.ScriptEntry;
+import com.sun.star.script.framework.container.ScriptEntry;
 
 public class JavaFinder implements MethodFinder {
 
