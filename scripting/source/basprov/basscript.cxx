@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basscript.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:49 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,9 @@
 #ifndef _SB_SBMETH_HXX
 #include <basic/sbmeth.hxx>
 #endif
-
+#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_SCRIPTFRAMEWORKERRORTYPE_HPP_
+#include <drafts/com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
+#endif
 #include <map>
 
 
@@ -100,8 +102,8 @@ namespace basprov
     // BasicScriptImpl
     // =============================================================================
 
-    BasicScriptImpl::BasicScriptImpl( SbMethod* pMethod )
-        :m_pMethod( pMethod )
+    BasicScriptImpl::BasicScriptImpl( const ::rtl::OUString& funcName,  SbMethod* pMethod )
+        :m_pMethod( pMethod ), m_funcName( funcName )
     {
     }
 
@@ -116,7 +118,7 @@ namespace basprov
     // -----------------------------------------------------------------------------
 
     Any BasicScriptImpl::invoke( const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
-        throw (IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
+        throw ( provider::ScriptFrameworkErrorException, reflection::InvocationTargetException, uno::RuntimeException)
     {
         // TODO: throw CannotConvertException
         // TODO: check length of aOutParamIndex, aOutParam
@@ -149,9 +151,15 @@ namespace basprov
                 sal_Int32 nSbxCount = n - 1;
                 if ( nParamsCount < nSbxCount - nSbxOptional )
                 {
-                    throw IllegalArgumentException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicScriptImpl::invoke: wrong number of paramters!" ) ),
-                        Reference< XInterface >(), 1 );
+                    throw provider::ScriptFrameworkErrorException(
+                        ::rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "wrong number of paramters!" ) ),
+                         Reference< XInterface >(),
+                         m_funcName,
+                         ::rtl::OUString(
+                             RTL_CONSTASCII_USTRINGPARAM( "Basic" ) ),
+                        provider::ScriptFrameworkErrorType::UNKNOWN  );
                 }
             }
 
