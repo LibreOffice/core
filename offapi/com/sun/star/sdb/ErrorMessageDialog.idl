@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ErrorMessageDialog.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: rt $ $Date: 2002-06-17 16:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,9 @@ service ErrorMessageDialog
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/10/25 15:00:32  mi
+ *  proofreading and corrections from Richard Holt
+ *
  *  Revision 1.4  2001/07/03 09:00:57  tra
  *  must change com/sun/star/ui -> com/sun/star/ui/dialogs/
  *
@@ -170,5 +173,5 @@ service ErrorMessageDialog
  *
  ************************************************************************/
 
-#endif  // __com_sun_star_sdb_ErrorMessageDialog_idl__
+#endif
 
