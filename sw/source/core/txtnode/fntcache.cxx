@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-10 15:22:50 $
+ *  last change: $Author: fme $ $Date: 2002-09-18 11:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,6 +853,10 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                     pKernArray[ j - 1 ] = nNextFix + nHalfWidth - nScr;
                 }
             }
+
+            // the layout engine requires the total width of the output
+            pKernArray[ rInf.GetLen() - 1 ] = rInf.GetWidth() -
+                                              aPos.X() + rInf.GetPos().X() ;
 
             if ( bSwitchH2V )
                 rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
