@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-11 07:06:12 $
+ *  last change: $Author: tl $ $Date: 2001-06-11 09:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,12 +615,18 @@ public:
     void Reconfigure( const OUString &rDisplayName, BOOL bEnable );
 
     const Sequence<Locale> &    GetAllSupportedLocales() { return aAllServiceLocales; }
+
     const LangImplNameTable &   GetSpellTable() const   { return aCfgSpellTable; }
+    LangImplNameTable &         GetSpellTable()         { return aCfgSpellTable; }
     const LangImplNameTable &   GetHyphTable() const    { return aCfgHyphTable; }
+    LangImplNameTable &         GetHyphTable()          { return aCfgHyphTable; }
     const LangImplNameTable &   GetThesTable() const    { return aCfgThesTable; }
+    LangImplNameTable &         GetThesTable()          { return aCfgThesTable; }
+
     const ServiceInfoArr &      GetDisplayServiceArray() const  { return aDisplayServiceArr; }
     ServiceInfoArr &            GetDisplayServiceArray()        { return aDisplayServiceArr; }
-    const ULONG &   GetDisplayServiceCount() const      { return nDisplayServices; }
+
+    const ULONG &   GetDisplayServiceCount() const          { return nDisplayServices; }
     void            SetDisplayServiceCount( ULONG nVal )    { nDisplayServices = nVal; }
 };
 
@@ -1919,6 +1925,14 @@ SvLBoxEntry* SvxEditModulesDlg::CreateEntry( String& rTxt, USHORT nCol )
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
+
+static void lcl_UpdateLinguData()
+{
+}
+
+/* ---------------------------------------------------------------------------
+
+ ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
 {
     if (&aModulesCLB == pBox)
@@ -1954,42 +1968,6 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
 
     return 0;
 }
-/* -----------------------------30.01.01 10:50--------------------------------
-
- ---------------------------------------------------------------------------*/
-/*
-IMPL_LINK( SvxEditModulesDlg, CheckButtonHdl_Impl, SvTreeListBox *, pBox )
-{
-    if (pBox == &aModulesCLB)
-    {
-        SvLBoxEntry *pCurEntry = pBox->GetCurEntry();
-        if (pCurEntry)
-        {
-            ModuleUserData_Impl* pData = (ModuleUserData_Impl *)
-                                                pCurEntry->GetUserData();
-            if (!pData->IsParent()  &&  pData->GetType() == TYPE_HYPH)
-            {
-                // make hyphenator checkboxes function as radio-buttons
-                // (at most one box may be checked)
-                SvLBoxEntry *pEntry = pBox->First();
-                while (pEntry)
-                {
-                    pData = (ModuleUserData_Impl *) pEntry->GetUserData();
-                    if (!pData->IsParent()  &&
-                         pData->GetType() == TYPE_HYPH  &&
-                         pEntry != pCurEntry)
-                    {
-                        lcl_SetCheckButton( pEntry, FALSE );
-                        pBox->InvalidateEntry( pEntry );
-                    }
-                    pEntry = pBox->Next( pEntry );
-                }
-            }
-        }
-    }
-    return 0;
-}
-*/
 /* -----------------------------28.05.01 11:00--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -2048,8 +2026,14 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     SvxLanguageToLocale(aCurLocale, eCurLanguage);
     SvLBoxTreeList *pModel = aModulesCLB.GetModel();
     Reference<XLinguServiceManager>&   xMgr = rLinguData.GetManager();
-    if(pBox)
+
+    if (pBox)
     {
+        // save old probably changed settings
+        // before switching to new language entries
+
+        ULONG nLang = SvxLocaleToLanguage( aLastLocale );
+
         sal_Int32 nStart = 0, nLocalIndex = 0;
         Sequence<OUString> aChange;
         sal_Bool bChanged = FALSE;
@@ -2061,9 +2045,23 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             {
                 if(bChanged)
                 {
-                    aChange.realloc(nStart);
-                    xMgr->setConfiguredServices(
-                        lcl_GetServiceName(pData->GetType() - 1), aLastLocale, aChange);
+                    LangImplNameTable *pTable = 0;
+                    BYTE nType = pData->GetType();
+                    switch (nType - 1)
+                    {
+                        case  TYPE_SPELL : pTable = &rLinguData.GetSpellTable(); break;
+                        case  TYPE_HYPH  : pTable = &rLinguData.GetHyphTable();  break;
+                        case  TYPE_THES  : pTable = &rLinguData.GetThesTable();  break;
+                    }
+                    if (pTable)
+                    {
+                        aChange.realloc(nStart);
+                        Sequence< OUString > *pImplNames = pTable->Get( nLang );
+                        if (pImplNames)
+                            *pImplNames = aChange;
+                        else
+                            pTable->Insert( nLang, new Sequence< OUString >(aChange) );
+                    }
                 }
                 nLocalIndex = nStart = 0;
                 aChange.realloc(aModulesCLB.GetEntryCount());
@@ -2083,13 +2081,21 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         if(bChanged)
         {
             aChange.realloc(nStart);
-            xMgr->setConfiguredServices(lcl_GetServiceName(TYPE_THES), aLastLocale, aChange);
+            LangImplNameTable &rTable = rLinguData.GetThesTable();
+            Sequence< OUString > *pImplNames = rTable.Get( nLang );
+            if (pImplNames)
+                *pImplNames = aChange;
+            else
+                rTable.Insert( nLang, new Sequence< OUString >(aChange) );
         }
     }
 
     for(ULONG i = 0; i < aModulesCLB.GetEntryCount(); i++)
         delete (ModuleUserData_Impl*)aModulesCLB.GetEntry(i)->GetUserData();
 
+    //
+    // display entries for new selected language
+    //
     aModulesCLB.Clear();
     if(LANGUAGE_DONTKNOW != eCurLanguage)
     {
