@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-09 14:05:09 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,7 @@ String STR_ADABAS_HELP_SYSDEVSPACE
     Text[ greek ] = "Περιέχει τους πίνακες του συστήματος";
     Text[ dutch ] = "Bevat de systeemtabellen";
     Text[ french ] = "Contient les tables systθme";
-    Text[ spanish ] = "Contains the system tables";
+    Text[ spanish ] = "Contiene las tablas de sistema";
     Text[ italian ] = "Contiene le tabelle di sistema";
     Text[ danish ] = "Contains the system tables";
     Text[ swedish ] = "Innehεller systemtabellerna";
@@ -404,7 +404,7 @@ String STR_ADABAS_HELP_TRANSACT
     Text[ greek ] = "Περιέχει πληροφορίες για την συναλλαγή";
     Text[ dutch ] = "Bevat gegevens over de transactie";
     Text[ french ] = "Contient une information sur les transactions";
-    Text[ spanish ] = "Contains information about transactions";
+    Text[ spanish ] = "Contiene informaciσn sobre transacciσn";
     Text[ italian ] = "Contiene informazioni sulla transazione";
     Text[ danish ] = "Contains information about transactions";
     Text[ swedish ] = "Innehεller information om transaktion";
@@ -428,7 +428,7 @@ String STR_ADABAS_HELP_DATADEVSPACES
     Text[ greek ] = "Περιέχει όλα τα αρχεία δεδομένων";
     Text[ dutch ] = "Bevat alle gegevensbestanden";
     Text[ french ] = "Contient tous les fichiers de donnιes";
-    Text[ spanish ] = "Contains all data files";
+    Text[ spanish ] = "Contiene todos los archivos de datos";
     Text[ italian ] = "Contiene tutti i file di dati";
     Text[ danish ] = "Contains all data files";
     Text[ swedish ] = "Innehεller alla datafiler";
@@ -452,7 +452,7 @@ String STR_ADABAS_HELP_SIZE
     Text[ greek ] = "Συνολικό μέγεθος των αρχείων της βάσης δεδομένων";
     Text[ dutch ] = "Totale grootte van de databasebestanden";
     Text[ french ] = "Taille totale des fichiers de la base de donnιes";
-    Text[ spanish ] = "Overall Size of the database files";
+    Text[ spanish ] = "Tamaρo total de los archivos de base de datos";
     Text[ italian ] = "Dimensioni dei file del database";
     Text[ danish ] = "Overall Size of the database files";
     Text[ swedish ] = "Totalstorlek pε databasfilerna";
@@ -470,19 +470,19 @@ String STR_ADABAS_HELP_FREESIZE
 {
     Text = "Noch zur Verfόgung stehender Speicher bevor eine neue Datadev Datei erzeugt wird." ;
     Text [ English ] = "Currently free avaliable space before a new datadev will be created." ;
-    Text[ english_us ] = "Currently available space before a new datadev file will be created.";
+    Text[ english_us ] = "Currently available space before a new datadev file is created.";
     Text[ portuguese ] = "Memσria ainda disponνvel antes de criar um novo ficheiro Datadev.";
     Text[ russian ] = "Δξρςσονξ οΰμÿςθ οεπεδ ρξηδΰνθεμ νξβξγξ τΰιλΰ datadev.";
     Text[ greek ] = "Απομένουσα μνήμη πριν την δημιουργία ενός νέου αρχείου Datadev.";
     Text[ dutch ] = "Noch beschikbare vrije ruimte voordat een nieuwe Datadev-bestand moet worden aangelegd.";
-    Text[ french ] = "Mιmoire encore disponible avant qu'un fichier Datadev ne doive κtre gιnιrι.";
-    Text[ spanish ] = "Currently free avaliable space bevor a new datadev must be created.";
-    Text[ italian ] = "Memoria ancora disponibile prima di dover creare un nuovo file Datadev.";
+    Text[ french ] = "Mιmoire encore disponible avant gιnιration d'un fichier Datadev.";
+    Text[ spanish ] = "Memoria existente actualmente antes de crear un nuevo archivo datadev.";
+    Text[ italian ] = "Memoria ancora disponibile prima di creare un nuovo file Datadev.";
     Text[ danish ] = "Currently free avaliable space bevor a new datadev must be created.";
-    Text[ swedish ] = "Minne som δr tillgδngligt innan en ny datadev-fil mεste skapas.";
-    Text[ polish ] = "Currently free avaliable space bevor a new datadev must be created.";
+    Text[ swedish ] = "Minne som δr tillgδngligt innan en ny datadev-fil skapas.";
+    Text[ polish ] = "Zasσb dostκpnej pamiκci przed utworzeniem pliku datadev.";
     Text[ portuguese_brazilian ] = "Currently free avaliable space bevor a new datadev must be created.";
-    Text[ japanese ] = "datadev Μ§²Ω‚πV‹Kμ¬‚·‚ιΘ‘O‚Ι•K—v‚ΘÒΣΨ‹σ‚«—e—ΚB";
+    Text[ japanese ] = "V‚µ‚Ά datadev Μ§²Ω‚πμ¬‚·‚ι‘O‚Μc‚θÒΣΨ‹σ‚«—e—ΚB";
     Text[ korean ] = "Currently free avaliable space bevor a new datadev must be created.";
     Text[ chinese_simplified ] = "ΤΪΠΒ½¨Ò»Έφ datadev ΞΔΌώΦ®Η°µΔΏΙΣΓΏΥΌδ΅£";
     Text[ chinese_traditional ] = "¦b·sΌW¤@­Σ datadev ΐΙ®Χ¤§«eªΊ¥i¥ΞªΕ¶΅΅C";
@@ -496,11 +496,11 @@ String STR_ADABAS_HELP_MEMORYUSING
     Text [ English ] = "Currently used memory" ;
     Text[ english_us ] = "Currently used memory";
     Text[ portuguese ] = "Memσria utilizada actualmente";
-    Text[ russian ] = "Β νΰρςξÿωθι μξμενς θροξλόησεμξι οΰμÿςθ";
+    Text[ russian ] = "Νΰ ςεκσωθι μξμενς οΰμÿςθ θροξλόηξβΰνξ";
     Text[ greek ] = "Προς το παρόν κατελημμένη μνήμη";
     Text[ dutch ] = "Momenteel gebruikte vrije ruimte";
     Text[ french ] = "Mιmoire actuellement utilisιe";
-    Text[ spanish ] = "Currently used memory";
+    Text[ spanish ] = "Memoria usada actualmente";
     Text[ italian ] = "Memoria attualmente in uso";
     Text[ danish ] = "Currently used memory";
     Text[ swedish ] = "Minne som anvδnds fφr nδrvarande";
