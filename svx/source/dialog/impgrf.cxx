@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-13 17:19:57 $
+ *  last change: $Author: kso $ $Date: 2000-12-01 07:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ sal_Bool IsFolder_Impl( const String& rURL )
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( ContentCreationException& )
+    catch( com::sun::star::ucb::ContentCreationException& )
     {
         DBG_ERRORFILE( "ContentCreationException" );
     }

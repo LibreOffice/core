@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-29 22:25:48 $
+ *  last change: $Author: kso $ $Date: 2000-12-01 07:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     {
         aFile = ::ucb::Content(aFileName,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
     }
-    catch(::ucb::ContentCreationException&e)
+    catch(ContentCreationException&e)
     {
         SQLException aError;
         aError.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to create a content for the URL given."));

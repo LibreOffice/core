@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:20 $
+ *  last change: $Author: kso $ $Date: 2000-12-01 07:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,17 +340,9 @@ sal_Bool SfxMailModel_Impl::Send()
                     ::rtl::OUString( DEFINE_CONST_UNICODE("application/vnd.sun.staroffice.message") ),
                     aNamesList, aValuesList, aMessage );
             }
-            catch( ::ucb::ContentCreationException& e )
+            catch( com::sun::star::ucb::ContentCreationException& )
             {
-                switch ( e.getReason() )
-                {
-                    case ::ucb::ContentCreationException::NO_CONTENT_BROKER :
-                        DBG_ERRORFILE( "no content broker" );
-                        break;
-
-                    default:
-                        DBG_ERRORFILE( "ContentCreationException" );
-                }
+                DBG_ERRORFILE( "ContentCreationException" );
             }
             catch( ::com::sun::star::ucb::CommandAbortedException& e )
             {

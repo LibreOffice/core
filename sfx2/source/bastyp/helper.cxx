@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:59:14 $
+ *  last change: $Author: kso $ $Date: 2000-12-01 07:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ sal_Bool SfxContentHelper::IsDocument( const String& rContent )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( ContentCreationException& )
+    catch( com::sun::star::ucb::ContentCreationException& )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
