@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:23:16 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1829,7 +1829,7 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
                             bHasTransp = bHasTransp ||
                                 lcl_HasTransparent( &aDocument, nTab, aDocument.GetPrintRange( nTab, i ) );
                     }
-                    else if (!bAnyPrintRanges)
+                    else if (!bAnyPrintRanges || aDocument.IsPrintEntireSheet(nTab))
                         bHasTransp = bHasTransp || lcl_HasTransparent( &aDocument, nTab, NULL );
                 }
             }
