@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-19 08:45:58 $
+#   last change: $Author: rt $ $Date: 2004-05-21 12:55:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,9 +77,6 @@ LIBTARGET=NO
 
 .INCLUDE :  $(UPD)minor.mk
 RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
-
-IMGLST_SRS=$(SRS)$/app.srs
-BMP_IN=$(PRJ)$/win/imglst
 
 # --- Files --------------------------------------------------------
 
