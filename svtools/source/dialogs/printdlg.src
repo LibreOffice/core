@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2001-11-01 07:50:15 $
+ *  last change: $Author: kz $ $Date: 2001-11-01 21:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,14 +97,14 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ french ] = "Imprimante" ;
         Text [ dutch ] = "Printer" ;
         Text [ portuguese ] = "Impressora" ;
-        Text[ chinese_simplified ] = "´òÓ¡»ú";
+        Text[ chinese_simplified ] = "æ‰“å°æœº";
         Text[ russian ] = "Ïğèíòåğ";
         Text[ polish ] = "Drukarka";
-        Text[ japanese ] = "ÌßØİÀ";
-        Text[ chinese_traditional ] = "¦Lªí¾÷";
+        Text[ japanese ] = "ï¾Œï¾Ÿï¾˜ï¾ï¾€";
+        Text[ chinese_traditional ] = "å°è¡¨æ©Ÿ";
         Text[ arabic ] = "ÇáØÇÈÚÉ";
         Text[ greek ] = "ÅêôõğùôŞò";
-        Text[ korean ] = "ÇÁ¸°ÅÍ";
+        Text[ korean ] = "í”„ë¦°í„°";
         Text[ turkish ] = "Yazıcı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Impresora";
@@ -125,14 +125,14 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ french ] = "~Nom" ;
         Text [ dutch ] = "~Naam" ;
         Text [ portuguese ] = "~Nome" ;
-        Text[ chinese_simplified ] = "Ãû³Æ(~N)";
+        Text[ chinese_simplified ] = "åç§°(~N)";
         Text[ russian ] = "~Èìÿ";
         Text[ polish ] = "Nazwa";
-        Text[ japanese ] = "–¼‘O(~N)";
-        Text[ chinese_traditional ] = "¦WºÙ(~N)";
+        Text[ japanese ] = "åå‰(~N)";
+        Text[ chinese_traditional ] = "åç¨±(~N)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§(~N)";
+        Text[ korean ] = "ì´ë¦„(~N)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
@@ -161,18 +161,18 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ spanish ] = "~Propiedades..." ;
         Text [ french ] = "~Propriétés..." ;
         Text [ dutch ] = "~Eigenschappen..." ;
-        Text[ chinese_simplified ] = "ÊôĞÔ(~I)...";
+        Text[ chinese_simplified ] = "å±æ€§(~I)...";
         Text[ russian ] = "~Ñâîéñòâà...";
         Text[ polish ] = "W³aœciwoœci...";
-        Text[ japanese ] = "ÌßÛÊßÃ¨(~I)...";
-        Text[ chinese_traditional ] = "Äİ©Ê(~I)...";
+        Text[ japanese ] = "ï¾Œï¾Ÿï¾›ï¾Šï¾Ÿï¾ƒï½¨(~I)...";
+        Text[ chinese_traditional ] = "å±¬æ€§(~I)...";
         Text[ arabic ] = "ÎÕÇÆÕ...";
         Text[ greek ] = "Éäéüôçôåò...";
-        Text[ korean ] = "µî·ÏÁ¤º¸(~I)...";
+        Text[ korean ] = "ë“±ë¡ì •ë³´(~I)...";
         Text[ turkish ] = "~Özellikler...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Propiedades...";
-        Text[ finnish ] = "~Ominaisuudet";
+        Text[ finnish ] = "Ominai~suudet";
     };
     FixedText FT_STATUS
     {
@@ -189,14 +189,14 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ french ] = "État" ;
         Text [ dutch ] = "Status" ;
         Text [ portuguese ] = "Estado" ;
-        Text[ chinese_simplified ] = "×´Ì¬";
+        Text[ chinese_simplified ] = "çŠ¶æ€";
         Text[ russian ] = "Ñîñòîÿíèå";
         Text[ polish ] = "Stan";
-        Text[ japanese ] = "½Ã°À½";
-        Text[ chinese_traditional ] = "ª¬ºA";
+        Text[ japanese ] = "ï½½ï¾ƒï½°ï¾€ï½½";
+        Text[ chinese_traditional ] = "ç‹€æ…‹";
         Text[ arabic ] = "ÇáÍÇáÉ";
         Text[ greek ] = "ÊáôÜóôáóç";
-        Text[ korean ] = "»óÅÂ";
+        Text[ korean ] = "ìƒíƒœ";
         Text[ turkish ] = "Durum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estado";
@@ -222,14 +222,14 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ french ] = "Type" ;
         Text [ dutch ] = "Type" ;
         Text [ portuguese ] = "Tipo" ;
-        Text[ chinese_simplified ] = "ÀàĞÍ";
+        Text[ chinese_simplified ] = "ç±»å‹";
         Text[ russian ] = "Òèï";
         Text[ polish ] = "Typ";
-        Text[ japanese ] = "í—Ş";
-        Text[ chinese_traditional ] = "Ãş«¬";
+        Text[ japanese ] = "ç¨®é¡";
+        Text[ chinese_traditional ] = "é¡å‹";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "À¯Çü";
+        Text[ korean ] = "ìœ í˜•";
         Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo";
@@ -255,14 +255,14 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ french ] = "Emplacement" ;
         Text [ dutch ] = "Plaats" ;
         Text [ portuguese ] = "Lugar" ;
-        Text[ chinese_simplified ] = "Î»ÖÃ";
+        Text[ chinese_simplified ] = "ä½ç½®";
         Text[ russian ] = "Ëîêàëèçàöèÿ";
         Text[ polish ] = "Lokalizacja";
-        Text[ japanese ] = "êŠ";
-        Text[ chinese_traditional ] = "¦ì¸m";
+        Text[ japanese ] = "å ´æ‰€";
+        Text[ chinese_traditional ] = "ä½ç½®";
         Text[ arabic ] = "ÇáãæŞÚ";
         Text[ greek ] = "Èİóç";
-        Text[ korean ] = "À§Ä¡";
+        Text[ korean ] = "ìœ„ì¹˜";
         Text[ turkish ] = "Yer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ubicación";
@@ -288,18 +288,18 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ french ] = "Commentaire" ;
         Text [ dutch ] = "Commentaar" ;
         Text [ portuguese ] = "Comentário" ;
-        Text[ chinese_simplified ] = "×¢½â";
+        Text[ chinese_simplified ] = "æ³¨è§£";
         Text[ russian ] = "Êîììåíòàğèé";
         Text[ polish ] = "Komentarz";
-        Text[ japanese ] = "ºÒİÄ";
-        Text[ chinese_traditional ] = "µù¸Ñ";
+        Text[ japanese ] = "ï½ºï¾’ï¾ï¾„";
+        Text[ chinese_traditional ] = "è¨»è§£";
         Text[ arabic ] = "ÊÚáíŞ";
         Text[ greek ] = "Ó÷üëéï";
-        Text[ korean ] = "ÁÖ¼®";
+        Text[ korean ] = "ì£¼ì„";
         Text[ turkish ] = "Açıklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comentario";
-        Text[ finnish ] = "Kommentti";
+        Text[ finnish ] = "Huomautus";
     };
     FixedText FI_COMMENT
     {
@@ -324,10 +324,10 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ swedish ] = "Faxnummer";
         Text[ polish ] = "Numer faksu";
         Text[ portuguese_brazilian ] = "Fax number";
-        Text[ japanese ] = "Fax ”Ô†";
-        Text[ korean ] = "ÆÑ½º ¹øÈ£";
-        Text[ chinese_simplified ] = "´«ÕæºÅÂë";
-        Text[ chinese_traditional ] = "¶Ç¯u¸¹½X";
+        Text[ japanese ] = "Fax ç•ªå·";
+        Text[ korean ] = "íŒ©ìŠ¤ ë²ˆí˜¸";
+        Text[ chinese_simplified ] = "ä¼ çœŸå·ç ";
+        Text[ chinese_traditional ] = "å‚³çœŸè™Ÿç¢¼";
         Text[ turkish ] = "Fax number";
         Text[ arabic ] = "ÑŞã ÇáİÇßÓ";
         Text[ catalan ] = "Número de fax";
@@ -354,14 +354,14 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ french ] = "Imprimer dans un ~fichier " ;
         Text [ dutch ] = "Afdrukken in ~bestand" ;
         Text [ portuguese ] = "Imprimir em ~ficheiro" ;
-        Text[ chinese_simplified ] = "´òÓ¡³ÉÎÄ¼ş";
+        Text[ chinese_simplified ] = "æ‰“å°æˆæ–‡ä»¶";
         Text[ russian ] = "Ïå÷àòü â ôàéë";
         Text[ polish ] = "Drukuj do pliku";
-        Text[ japanese ] = "Ì§²Ù‚Öo—Í";
-        Text[ chinese_traditional ] = "¦C¦L¦¨ÀÉ®×";
+        Text[ japanese ] = "ï¾Œï½§ï½²ï¾™ã¸å‡ºåŠ›";
+        Text[ chinese_traditional ] = "åˆ—å°æˆæª”æ¡ˆ";
         Text[ arabic ] = "ØÈÇÚÉ Åáì ãáİ";
         Text[ greek ] = "Åêôığùóç óå áñ÷åßï";
-        Text[ korean ] = "ÆÄÀÏ·Î ÀÎ¼â";
+        Text[ korean ] = "íŒŒì¼ë¡œ ì¸ì‡„";
         Text[ turkish ] = "D~osyaya yazdır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imprimir ~en archivo";
@@ -393,14 +393,14 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ french ] = "Zone d'impression" ;
         Text [ dutch ] = "Afdrukbereik" ;
         Text [ portuguese ] = "Área de impressão" ;
-        Text[ chinese_simplified ] = "´òÓ¡ÇøÓò";
+        Text[ chinese_simplified ] = "æ‰“å°åŒºåŸŸ";
         Text[ russian ] = "Îáëàñòü ïå÷àòè";
         Text[ polish ] = "Zakres wydruku";
-        Text[ japanese ] = "ˆóü”ÍˆÍ";
-        Text[ chinese_traditional ] = "¦C¦L½d³ò";
+        Text[ japanese ] = "å°åˆ·ç¯„å›²";
+        Text[ chinese_traditional ] = "åˆ—å°ç¯„åœ";
         Text[ arabic ] = "äØÇŞ ÇáØÈÇÚÉ";
         Text[ greek ] = "Ğåñéï÷Ş åêôığùóçò";
-        Text[ korean ] = "ÀÎ¼â ¹üÀ§";
+        Text[ korean ] = "ì¸ì‡„ ì˜ì—­";
         Text[ turkish ] = "Yazdırma aralığı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Área de impresión";
@@ -421,14 +421,14 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ spanish ] = "~Todo" ;
         Text [ french ] = "~Tout" ;
         Text [ dutch ] = "~Alles" ;
-        Text[ chinese_simplified ] = "È«²¿";
+        Text[ chinese_simplified ] = "å…¨éƒ¨";
         Text[ russian ] = "~Âñå";
         Text[ polish ] = "Wszystko";
-        Text[ japanese ] = "‚·‚×‚Ä";
-        Text[ chinese_traditional ] = "¥ş³¡";
+        Text[ japanese ] = "ã™ã¹ã¦";
+        Text[ chinese_traditional ] = "å…¨éƒ¨";
         Text[ arabic ] = "Çáßá";
         Text[ greek ] = "¼ëá";
-        Text[ korean ] = "¸ğµÎ";
+        Text[ korean ] = "ëª¨ë‘";
         Text[ turkish ] = "~Tümü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Todo";
@@ -449,14 +449,14 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ spanish ] = "~Páginas" ;
         Text [ french ] = "P~ages" ;
         Text [ dutch ] = "~Pagina" ;
-        Text[ chinese_simplified ] = "Ò³";
+        Text[ chinese_simplified ] = "é¡µ";
         Text[ russian ] = "~Ñòğàíèöû";
         Text[ polish ] = "Strony";
-        Text[ japanese ] = "Íß°¼Şw’è";
-        Text[ chinese_traditional ] = "­¶";
+        Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾æŒ‡å®š";
+        Text[ chinese_traditional ] = "é ";
         Text[ arabic ] = "ÕİÍÇÊ";
         Text[ greek ] = "Óåëßäåò";
-        Text[ korean ] = "ÂÊ";
+        Text[ korean ] = "í˜ì´ì§€";
         Text[ turkish ] = "~Sayfa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Páginas";
@@ -477,14 +477,14 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ spanish ] = "~Selección" ;
         Text [ french ] = "~Sélection" ;
         Text [ dutch ] = "~Selectie" ;
-        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ chinese_simplified ] = "é€‰æ‹©";
         Text[ russian ] = "Âûäåëåíèå";
         Text[ polish ] = "Zaznaczony fragment";
-        Text[ japanese ] = "‘I‘ğ‚µ‚½•”•ª";
-        Text[ chinese_traditional ] = "¿ï¾Ü";
+        Text[ japanese ] = "é¸æŠã—ãŸéƒ¨åˆ†";
+        Text[ chinese_traditional ] = "é¸æ“‡";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
         Text[ greek ] = "ÅğéëïãŞ";
-        Text[ korean ] = "¼±ÅÃ";
+        Text[ korean ] = "ì„ íƒ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Selección";
@@ -522,14 +522,14 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ french ] = "Copies" ;
         Text [ dutch ] = "Kopieën" ;
         Text [ portuguese ] = "Cópias" ;
-        Text[ chinese_simplified ] = "·İÊı";
+        Text[ chinese_simplified ] = "ä»½æ•°";
         Text[ russian ] = "Êîïèè";
         Text[ polish ] = "Kopie";
-        Text[ japanese ] = "ˆóü•””";
-        Text[ chinese_traditional ] = "¥ó¼Æ";
+        Text[ japanese ] = "å°åˆ·éƒ¨æ•°";
+        Text[ chinese_traditional ] = "ä»¶æ•¸";
         Text[ arabic ] = "äÓÎ";
         Text[ greek ] = "Áíôßãñáöá";
-        Text[ korean ] = "º¹»ç";
+        Text[ korean ] = "ë³µì‚¬";
         Text[ turkish ] = "Kopya";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Copias";
@@ -550,18 +550,18 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ french ] = "E~xemplaire(s)" ;
         Text [ dutch ] = "E~xemplaren" ;
         Text [ portuguese ] = "E~xemplares" ;
-        Text[ chinese_simplified ] = "´òÓ¡·İÊı";
+        Text[ chinese_simplified ] = "æ‰“å°ä»½æ•°";
         Text[ russian ] = "İêçåìïëÿğà(îâ)";
         Text[ polish ] = "Egzemplarze";
-        Text[ japanese ] = "•””";
-        Text[ chinese_traditional ] = "¦C¦L¥ó¼Æ";
+        Text[ japanese ] = "éƒ¨æ•°";
+        Text[ chinese_traditional ] = "åˆ—å°ä»¶æ•¸";
         Text[ arabic ] = "ÚÏÏ ÇáäÓÎ";
         Text[ greek ] = "Áíôß~ãñáöá";
-        Text[ korean ] = "º¹»çº» ¼ö";
+        Text[ korean ] = "ì‚¬ë³¸ ìˆ˜";
         Text[ turkish ] = "~Kopya sayısı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ejemplares";
-        Text[ finnish ] = "Kopioiden määrä";
+        Text[ finnish ] = "Kopioiden m??r?";
     };
     NumericField NUM_COPIES
     {
@@ -591,18 +591,18 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ french ] = "T~rier" ;
         Text [ dutch ] = "S~orteren" ;
         Text [ portuguese ] = "~Ordenar" ;
-        Text[ chinese_simplified ] = "ÅÅĞò(~L)";
+        Text[ chinese_simplified ] = "æ’åº(~L)";
         Text[ russian ] = "Ñîğòèğîâàòü";
         Text[ polish ] = "Sortuj";
-        Text[ japanese ] = "•”’PˆÊ‚Åˆóü(~L)";
-        Text[ chinese_traditional ] = "±Æ§Ç(~L)";
+        Text[ japanese ] = "éƒ¨å˜ä½ã§å°åˆ·(~L)";
+        Text[ chinese_traditional ] = "æ’åº(~L)";
         Text[ arabic ] = "ÊÑÊíÈ ÇáäÓÎ";
         Text[ greek ] = "Ôáîéíüìçóç";
-        Text[ korean ] = "ºĞ·ù(~L)";
+        Text[ korean ] = "ë¶„ë¥˜(~L)";
         Text[ turkish ] = "S~ırala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ordenar";
-        Text[ finnish ] = "~Yhdistä";
+        Text[ finnish ] = "~Yhdist?";
     };
     FixedImage IMG_COLLATE
     {
@@ -644,14 +644,14 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ spanish ] = "~Opciones..." ;
         Text [ french ] = "~Options..." ;
         Text [ dutch ] = "~Overige..." ;
-        Text[ chinese_simplified ] = "ÆäËû(~O)...";
+        Text[ chinese_simplified ] = "å…¶ä»–(~O)...";
         Text[ russian ] = "Ïàğàìåòğû...";
         Text[ polish ] = "Dodatki...";
-        Text[ japanese ] = "µÌß¼®İ(~O)...";
-        Text[ chinese_traditional ] = "¨ä¥L(~O)...";
+        Text[ japanese ] = "ï½µï¾Œï¾Ÿï½¼ï½®ï¾(~O)...";
+        Text[ chinese_traditional ] = "å…¶ä»–(~O)...";
         Text[ arabic ] = "ÎíÇÑÇÊ...";
         Text[ greek ] = "Ğñüóèåôá...";
-        Text[ korean ] = "¿É¼Ç(~O)...";
+        Text[ korean ] = "ì˜µì…˜(~O)...";
         Text[ turkish ] = "~Seçenekler...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Opciones...";
@@ -690,27 +690,28 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ swedish ] = "<Alla>";
         Text[ polish ] = "<Wszystko>";
         Text[ portuguese_brazilian ] = "<All>";
-        Text[ japanese ] = "<‚·‚×‚Ä>";
-        Text[ korean ] = "<All>";
-        Text[ chinese_simplified ] = "<All>";
-        Text[ chinese_traditional ] = "<All>";
+        Text[ japanese ] = "<ã™ã¹ã¦>";
+        Text[ korean ] = "<ëª¨ë‘>";
+        Text[ chinese_simplified ] = "<å…¨éƒ¨>";
+        Text[ chinese_traditional ] = "<å…¨éƒ¨>";
         Text[ turkish ] = "<All>";
         Text[ arabic ] = "<All>";
         Text[ catalan ] = "<All>";
     };
-    Text[ chinese_simplified ] = "´òÓ¡";
+    Text[ chinese_simplified ] = "æ‰“å°";
     Text[ russian ] = "Ïå÷àòü";
     Text[ polish ] = "Drukuj";
-    Text[ japanese ] = "ˆóü";
-    Text[ chinese_traditional ] = "¦C¦L";
+    Text[ japanese ] = "å°åˆ·";
+    Text[ chinese_traditional ] = "åˆ—å°";
     Text[ arabic ] = "ØÈÇÚÉ";
     Text[ greek ] = "Åêôığùóç";
-    Text[ korean ] = "ÀÎ¼â";
+    Text[ korean ] = "ì¸ì‡„";
     Text[ turkish ] = "Yazdır";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imprimir";
     Text[ finnish ] = "Tulosta";
 };
+
 
 
 
