@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-28 09:00:22 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,9 +147,15 @@ public:
     void                ReleaseDocRef();    // without calling DoClose
 
     static String       GetOptions( SfxMedium& rMedium );
+
+    /** Returns the filter name and options from a file name.
+        @param bWithContent
+            true = Tries to detect the filter by looking at the file contents.
+            false = Detects filter by file name extension only (should be used in filter code only). */
     static void         GetFilterName( const String& rFileName,
                                         String& rFilter, String& rOptions,
-                                        BOOL bWithContent = FALSE );
+                                        BOOL bWithContent );
+
     static void         RemoveAppPrefix( String& rFilterName );
 };
 
