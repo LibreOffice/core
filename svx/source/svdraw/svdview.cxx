@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:02:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,11 +743,11 @@ BOOL SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
             if (rVEvt.bPrevNextMark) {
                 bRet=MarkNextObj(aLogicPos,nHitTolLog,rVEvt.bMarkPrev);
             } else {
-                aMark.ForceSort();
-                ULONG nAnz0=aMark.GetMarkCount();
+                SortMarkedObjects();
+                ULONG nAnz0=GetMarkedObjectCount();
                 bRet=MarkObj(aLogicPos,nHitTolLog,rVEvt.bAddMark);
-                aMark.ForceSort();
-                ULONG nAnz1=aMark.GetMarkCount();
+                SortMarkedObjects();
+                ULONG nAnz1=GetMarkedObjectCount();
                 bUnmark=nAnz1<nAnz0;
             }
             if (!bUnmark) {
@@ -954,8 +954,8 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
                 // Sind 3D-Objekte selektiert?
                 BOOL b3DObjSelected = FALSE;
 #ifndef SVX_LIGHT
-                for (UINT32 a=0; !b3DObjSelected && a<aMark.GetMarkCount(); a++) {
-                    SdrObject* pObj = aMark.GetMark(a)->GetObj();
+                for (UINT32 a=0; !b3DObjSelected && a<GetMarkedObjectCount(); a++) {
+                    SdrObject* pObj = GetMarkedObjectByIndex(a);
                     if(pObj && pObj->ISA(E3dObject))
                         b3DObjSelected = TRUE;
                 }
@@ -1065,7 +1065,7 @@ XubString SdrView::GetStatusText()
             }
         }
     } else if (bMarking) {
-        if (HasMarkedObj()) {
+        if (AreObjectsMarked()) {
             aStr=ImpGetResStr(STR_ViewMarkMoreObjs);
         } else {
             aStr=ImpGetResStr(STR_ViewMarkObjs);
@@ -1116,7 +1116,7 @@ XubString SdrView::GetStatusText()
 
     if(aStr.EqualsAscii("nix"))
     {
-        if (HasMarkedObj()) {
+        if (AreObjectsMarked()) {
             ImpTakeDescriptionStr(STR_ViewMarked,aStr);
             if (IsGluePointEditMode()) {
                 if (HasMarkedGluePoints()) {
@@ -1154,25 +1154,25 @@ SdrViewContext SdrView::GetContext() const
     if( IsGluePointEditMode() )
         return SDRCONTEXT_GLUEPOINTEDIT;
 
-    const ULONG nMarkAnz = aMark.GetMarkCount();
+    const ULONG nMarkAnz = GetMarkedObjectCount();
 
     if( HasMarkablePoints() && !IsFrameHandles() )
     {
         BOOL bPath=TRUE;
         for( ULONG nMarkNum = 0; nMarkNum < nMarkAnz && bPath; nMarkNum++ )
-            if (!aMark.GetMark(nMarkNum)->GetObj()->ISA(SdrPathObj))
+            if (!GetMarkedObjectByIndex(nMarkNum)->ISA(SdrPathObj))
                 bPath=FALSE;
 
         if( bPath )
             return SDRCONTEXT_POINTEDIT;
     }
 
-    if( aMark.GetMarkCount() )
+    if( GetMarkedObjectCount() )
     {
         BOOL bGraf = TRUE;
         for( ULONG nMarkNum = 0; nMarkNum < nMarkAnz && bGraf; nMarkNum++ )
         {
-            const SdrObject* pMarkObj = aMark.GetMark( nMarkNum )->GetObj();
+            const SdrObject* pMarkObj = GetMarkedObjectByIndex( nMarkNum );
 
             if( !pMarkObj->ISA( SdrGrafObj ) )
                 bGraf = FALSE;
@@ -1226,7 +1226,7 @@ BOOL SdrView::IsAllMarked() const
         return nAnz!=0 && nAnz==GetMarkedPointCount();
     }
     ULONG nAnz=GetMarkableObjCount();
-    return nAnz!=0 && nAnz==GetMarkedObjCount();
+    return nAnz!=0 && nAnz == GetMarkedObjectCount();
 }
 
 BOOL SdrView::IsMarkPossible() const
