@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpoutput.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:22:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 class Rectangle;
 class SvStream;
 class ScDocument;
@@ -130,21 +134,21 @@ private:
     long                    nColCount;
     long                    nRowCount;
     long                    nHeaderSize;
-    USHORT                  nTabStartCol;
-    USHORT                  nTabStartRow;
-    USHORT                  nMemberStartCol;
-    USHORT                  nMemberStartRow;
-    USHORT                  nDataStartCol;
-    USHORT                  nDataStartRow;
-    USHORT                  nTabEndCol;
-    USHORT                  nTabEndRow;
+    SCCOL                   nTabStartCol;
+    SCROW                   nTabStartRow;
+    SCCOL                   nMemberStartCol;
+    SCROW                   nMemberStartRow;
+    SCCOL                   nDataStartCol;
+    SCROW                   nDataStartRow;
+    SCCOL                   nTabEndCol;
+    SCROW                   nTabEndRow;
 
-    void            DataCell( USHORT nCol, USHORT nRow, USHORT nTab,
+    void            DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const com::sun::star::sheet::DataResult& rData );
-    void            HeaderCell( USHORT nCol, USHORT nRow, USHORT nTab,
+    void            HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const com::sun::star::sheet::MemberResult& rData,
                                 BOOL bColHeader, long nLevel );
-    void            FieldCell( USHORT nCol, USHORT nRow, USHORT nTab, const String& rCaption,
+    void            FieldCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rCaption,
                                 BOOL bFrame = TRUE );
     void            CalcSizes();
 
