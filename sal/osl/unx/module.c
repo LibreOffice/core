@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-07 00:17:51 $
+ *  last change: $Author: pliao $ $Date: 2001-02-05 00:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,7 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
     CFBundleRef     pLib=0;
     sal_Char        *searchPath=0;
     sal_Char        path[PATH_MAX + 1];
+    sal_Char        *pszModulePath=0;
 
     OSL_ASSERT(pszModuleName);
 
@@ -221,13 +222,13 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
      * DYLD_LIBRARY_PATH environment variable.
      */
     if ( osl_searchPath( pszModuleName, "DYLD_LIBRARY_PATH", '\0', path, sizeof(path) ) == osl_Process_E_None )
-        pszModuleName = path;
+        pszModulePath = path;
 
-    if ( pszModuleName )
+    if ( pszModulePath )
     {
 #ifndef NO_DL_FUNCTIONS
         /* Convert path in strModulePath to CFStringRef */
-        pPath = CFStringCreateWithCString( NULL, pszModuleName,
+        pPath = CFStringCreateWithCString( NULL, pszModulePath,
             kCFStringEncodingUTF8 );
 
         /* Get the framework's CFURLRef using its path */
@@ -237,7 +238,7 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
 #ifdef DEBUG
             fprintf( stderr,
                 "osl_loadModule: cannot load module %s for reason: %s\n",
-                pszModuleName, "path does not exist" );
+                pszModulePath, "path does not exist" );
 #endif
             CFRelease(pPath);
             return NULL;
@@ -249,7 +250,7 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
 #ifdef DEBUG
             fprintf( stderr,
                 "osl_loadModule: cannot load module %s for reason: %s\n",
-                pszModuleName, "path is not a bundle" );
+                pszModulePath, "path is not a bundle" );
 #endif
             CFRelease( pPath );
             CFRelease( pURL );
@@ -259,16 +260,27 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
         /* Load the library in the framework */
         if ( CFBundleLoadExecutable( pLib ) )
         {
+            oslModule pModule=0;
+
             CFRelease( pPath );
             CFRelease( pURL );
-            return (oslModule)pLib;
+            pModule = (oslModule)malloc( sizeof( struct _oslModule ) );
+
+            if ( pModule )
+            {
+                pModule->pModule = pLib;
+                pModule->pModuleName = (sal_Char *)malloc( strlen( pszModuleName ) );
+                strcpy( pModule->pModuleName, pszModuleName );
+            }
+
+            return pModule;
         }
         else
         {
 #ifdef DEBUG
             fprintf( stderr,
                 "osl_loadModule: cannot load module %s for reason: %s\n",
-                pszModuleName, "bundle does not contain a valid library" );
+                pszModulePath, "bundle does not contain a valid library" );
 #endif
             CFRelease( pPath );
             CFRelease( pURL );
@@ -323,8 +335,14 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
 
     if (hModule)
     {
-        CFBundleUnloadExecutable((CFBundleRef)hModule);
-        CFRelease((CFBundleRef)hModule);
+        if ( hModule->pModule )
+        {
+            CFBundleUnloadExecutable((CFBundleRef)(hModule->pModule));
+            CFRelease((CFBundleRef)(hModule->pModule));
+        }
+        if ( hModule->pModuleName )
+            free( hModule->pModuleName );
+        free( hModule );
     }
 
 #else /* MACOSX */
@@ -387,26 +405,48 @@ void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolNam
 {
 #ifdef MACOSX
 
+    CFMutableStringRef pMutSymbolName=0;
     CFStringRef pSymbolName=0;
     void *pSymbol=0;
 
     OSL_ASSERT(hModule);
     OSL_ASSERT(pszSymbolName);
 
-    if (hModule && pszSymbolName)
+    if (hModule && hModule->pModule && pszSymbolName)
     {
 #ifndef NO_DL_FUNCTIONS
-        /* Convert char pointer to CFStringRef */
-        pSymbolName = CFStringCreateWithCString(NULL, pszSymbolName,
-            kCFStringEncodingUTF8);
+        /* The need to concat the library name and function name is caused
+           by a bug in MACOSX's loader */
+        if ( hModule->pModuleName )  /* if module name is not null */
+        {
+            /* Convert char pointer to CFStringRef, make it mutable and
+               append the symbol */
+            pSymbolName = CFStringCreateWithCString(NULL, hModule->pModuleName, kCFStringEncodingUTF8);
+            pMutSymbolName = CFStringCreateMutableCopy(NULL, 0, pSymbolName);
+            CFStringAppendCString(pMutSymbolName, pszSymbolName, kCFStringEncodingUTF8);
+            /* Try to get the symbol */
+            pSymbol = CFBundleGetFunctionPointerForName((CFBundleRef)(hModule->pModule), (CFStringRef)pMutSymbolName);
+            /* Release CFStringRef */
+            if ( pSymbolName )
+                CFRelease(pSymbolName);
+            /* Release CFMutableStringRef */
+            if ( pMutSymbolName )
+                CFRelease(pMutSymbolName);
+        }
 
-        /* Try to get the symbol */
-        pSymbol = CFBundleGetFunctionPointerForName((CFBundleRef)hModule,
-            pSymbolName);
+        /* If a symbol with the module name as a prefix was not found, try to
+           load the symbol without any prefix */
+        if ( !pSymbol )
+        {
+            /* Convert char pointer to CFStringRef */
+            pSymbolName = CFStringCreateWithCString(NULL, pszSymbolName, kCFStringEncodingUTF8);
 
-        /* Release CFStringRef */
-        if ( pSymbolName )
-            CFRelease(pSymbolName);
+            /* Try to get the symbol */
+            pSymbol = CFBundleGetFunctionPointerForName((CFBundleRef)(hModule->pModule), pSymbolName);
+            /* Release CFStringRef */
+            if ( pSymbolName )
+                CFRelease(pSymbolName);
+        }
 
         return pSymbol;
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2000-11-01 11:35:48 $
+ *  last change: $Author: pliao $ $Date: 2001-02-05 00:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,16 @@ extern "C" {
 #define SAL_LOADMODULE_NOW        0x00002
 #define SAL_LOADMODULE_GLOBAL     0x00100
 
-
+#ifdef MACOSX
+struct _oslModule
+{
+    void*       pModule;
+    sal_Char*   pModuleName;
+};
+typedef struct _oslModule* oslModule;
+#else
 typedef void* oslModule;
+#endif
 
 
 /** Load a module.<BR>
