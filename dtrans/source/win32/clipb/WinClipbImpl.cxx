@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-15 10:12:12 $
+ *  last change: $Author: tra $ $Date: 2001-03-16 08:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ CWinClipbImpl::CWinClipbImpl( const OUString& aClipboardName, CWinClipboard* the
 
 CWinClipbImpl::~CWinClipbImpl( )
 {
+    unregisterClipboardViewer( );
 }
 
 //------------------------------------------------------------------------
@@ -261,8 +262,6 @@ void SAL_CALL CWinClipbImpl::unregisterClipboardViewer( )
 
 void SAL_CALL CWinClipbImpl::dispose() throw( RuntimeException )
 {
-    unregisterClipboardViewer( );
-
     OSL_ENSURE( !m_rOldClipbContent.is( ) &&
                 !m_rOldClipbOwner.is( ) &&
                 !m_rCurrentClipbContent.is( ) &&
@@ -276,44 +275,58 @@ void SAL_CALL CWinClipbImpl::dispose() throw( RuntimeException )
 
 void WINAPI CWinClipbImpl::onClipboardContentChanged( void )
 {
-    ClearableMutexGuard aGuard( s_pCWinClipbImpl->m_aMutex );
-
-    Reference< XTransferable >   xClipbContent;
-    Reference< XClipboardOwner > xClipbOwner;
-
-    if ( s_pCWinClipbImpl->m_rOldClipbContent.is( ) )
+    try
     {
-        // release the condition because of expected callbacks
-        // to the clipboard service (remeber: the mutex is already
-        // released)
-        s_pCWinClipbImpl->m_pWinClipboard->m_aCondition.set( );
+        ClearableMutexGuard aGuard( s_pCWinClipbImpl->m_aMutex );
 
-        // notify the old ClipboardOwner
-        if ( s_pCWinClipbImpl->m_rOldClipbOwner.is( ) )
-            s_pCWinClipbImpl->m_rOldClipbOwner->lostOwnership(
-                s_pCWinClipbImpl->m_pWinClipboard, s_pCWinClipbImpl->m_rOldClipbContent );
+        Reference< XTransferable >   xClipbContent;
+        Reference< XClipboardOwner > xClipbOwner;
 
-        s_pCWinClipbImpl->m_rOldClipbOwner   = Reference< XClipboardOwner >( );
-        s_pCWinClipbImpl->m_rOldClipbContent = Reference< XTransferable >( );
+        if ( s_pCWinClipbImpl->m_rOldClipbContent.is( ) )
+        {
+            xClipbContent = s_pCWinClipbImpl->m_rOldClipbContent;
+            xClipbOwner   = s_pCWinClipbImpl->m_rOldClipbOwner;
+
+            s_pCWinClipbImpl->m_rOldClipbOwner   = Reference< XClipboardOwner >( );
+            s_pCWinClipbImpl->m_rOldClipbContent = Reference< XTransferable >( );
+
+            // release the condition because of expected callbacks
+            // to the clipboard service (remeber: the mutex is already
+            // released)
+            s_pCWinClipbImpl->m_pWinClipboard->m_aCondition.set( );
+
+            // notify the old ClipboardOwner
+            if ( xClipbOwner.is( ) )
+                xClipbOwner->lostOwnership(
+                    s_pCWinClipbImpl->m_pWinClipboard, xClipbContent );
+        }
+        else if ( !s_pCWinClipbImpl->m_bSelfTriggered &&
+                  s_pCWinClipbImpl->m_rCurrentClipbContent.is( ) )
+        {
+            // save the state variables locally
+            xClipbContent = s_pCWinClipbImpl->m_rCurrentClipbContent;
+            xClipbOwner   = s_pCWinClipbImpl->m_rCurrentClipbOwner;
+
+            s_pCWinClipbImpl->m_rCurrentClipbOwner   = Reference< XClipboardOwner >( );
+            s_pCWinClipbImpl->m_rCurrentClipbContent = Reference< XTransferable >( );
+
+            // release the condition because of expected callbacks
+            // to the clipboard service (remeber: the mutex is already
+            // released)
+            s_pCWinClipbImpl->m_pWinClipboard->m_aCondition.set( );
+
+            // notify the old ClipboardOwner
+            if ( xClipbOwner.is( ) )
+                xClipbOwner->lostOwnership( s_pCWinClipbImpl->m_pWinClipboard, xClipbContent );
+        }
     }
-    else if ( !s_pCWinClipbImpl->m_bSelfTriggered &&
-              s_pCWinClipbImpl->m_rCurrentClipbContent.is( ) )
+    catch( RuntimeException& )
     {
-        // save the state variables locally
-        xClipbContent = s_pCWinClipbImpl->m_rCurrentClipbContent;
-        xClipbOwner   = s_pCWinClipbImpl->m_rCurrentClipbOwner;
-
-        s_pCWinClipbImpl->m_rCurrentClipbOwner   = Reference< XClipboardOwner >( );
-        s_pCWinClipbImpl->m_rCurrentClipbContent = Reference< XTransferable >( );
-
-        // release the condition because of expected callbacks
-        // to the clipboard service (remeber: the mutex is already
-        // released)
-        s_pCWinClipbImpl->m_pWinClipboard->m_aCondition.set( );
-
-        // notify the old ClipboardOwner
-        if ( xClipbOwner.is( ) )
-            xClipbOwner->lostOwnership( s_pCWinClipbImpl->m_pWinClipboard, xClipbContent );
+        OSL_ENSURE( sal_False, "RuntimeException caught" );
+    }
+    catch(...)
+    {
+        OSL_ENSURE( sal_False, "Unknown exception caught" );
     }
 
     s_pCWinClipbImpl->m_pWinClipboard->m_aCondition.set( );

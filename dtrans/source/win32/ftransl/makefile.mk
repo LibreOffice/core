@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tra $ $Date: 2001-02-27 06:55:00 $
+#   last change: $Author: tra $ $Date: 2001-03-16 09:02:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,8 @@ SHL1STDLIBS= \
         $(SALLIB)	\
         $(CPPULIB) 	\
         $(CPPUHELPERLIB)\
-        ole32.lib
+        ole32.lib\
+        gdi32.lib
 
 SHL1TARGET=$(TARGET)
 SHL1IMPLIB=i$(SHL1TARGET) 

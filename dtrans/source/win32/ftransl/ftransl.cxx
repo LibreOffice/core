@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftransl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-09 08:48:02 $
+ *  last change: $Author: tra $ $Date: 2001-03-16 09:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,8 +214,8 @@ DataFlavor SAL_CALL CDataFormatTranslator::getDataFlavorFromSystemDataType( cons
     {
         sal_Int32 clipformat;
         aSysDataType >>= clipformat;
-
-        findDataFlavorForStandardFormatId( clipformat, aFlavor );
+        if ( CF_INVALID != clipformat )
+            findDataFlavorForStandardFormatId( clipformat, aFlavor );
     }
     else if ( aSysDataType.getValueType( ) == CPPUTYPE_OUSTR )
     {
@@ -225,7 +225,7 @@ DataFlavor SAL_CALL CDataFormatTranslator::getDataFlavorFromSystemDataType( cons
         findDataFlavorForNativeFormatName( nativeFormatName, aFlavor );
     }
     else
-        OSL_ASSERT( false );
+        OSL_ENSURE( sal_False, "Invalid data type received" );
 
     return aFlavor;
 }

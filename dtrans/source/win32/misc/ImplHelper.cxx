@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-15 08:10:38 $
+ *  last change: $Author: tra $ $Date: 2001-03-16 09:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <rtl/memory.h>
 #endif
 
+#include <memory>
 #include <windows.h>
 #include <systools/win32/user9x.h>
 
@@ -107,12 +108,23 @@ using ::rtl::OString;
 
 sal_uInt32 SAL_CALL getWinCPFromMimeCharset( const OUString& charset )
 {
-    OString osCharset( charset.getStr( ), charset.getLength( ), CP_ACP );
+    OString osCharset(
+        charset.getStr( ), charset.getLength( ), RTL_TEXTENCODING_ASCII_US );
 
-    rtl_TextEncoding textEnc =
+    rtl_TextEncoding txtEnc =
         rtl_getTextEncodingFromMimeCharset( osCharset.getStr( ) );
 
-    return rtl_getBestPCCodePageFromTextEncoding( textEnc );
+    sal_uInt32 winChrs = rtl_getBestWindowsCharsetFromTextEncoding( txtEnc );
+
+    CHARSETINFO chrsInf;
+    sal_Bool bRet = TranslateCharsetInfo(
+        (DWORD*)winChrs, &chrsInf, TCI_SRCCHARSET );
+
+    sal_uInt32 winCP = GetACP( );
+    if ( bRet )
+        winCP = chrsInf.ciACP;
+
+    return winCP;
 }
 
 //--------------------------------------------------
@@ -127,10 +139,32 @@ OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
     // we use the GetLocaleInfoA because don't want to provide
     // a unicode wrapper function for Win9x in sal/systools
     char buff[6];
-    GetLocaleInfoA( lcid, lctype, buff, sizeof( buff ) );
-    rtl_TextEncoding tenc = rtl_getTextEncodingFromPCCodePage( CP_ACP );
+    sal_Int32 nResult = GetLocaleInfoA(
+        lcid, lctype | LOCALE_USE_CP_ACP, buff, sizeof( buff ) );
 
-    return OUString( buff, rtl_str_getLength( buff ), tenc );
+    OSL_ASSERT( nResult );
+
+    OUString winCP;
+
+    if ( nResult )
+    {
+        sal_Int32 len = MultiByteToWideChar(
+            CP_ACP, 0, buff, -1, NULL, 0 );
+
+        OSL_ASSERT( len > 0 );
+
+        std::auto_ptr< sal_Unicode > lpwchBuff( new sal_Unicode[len] );
+
+        if ( NULL != lpwchBuff.get( ) )
+        {
+            len = MultiByteToWideChar(
+                CP_ACP, 0, buff, -1, lpwchBuff.get( ), len );
+
+            winCP = OUString( lpwchBuff.get( ), (len - 1) );
+        }
+    }
+
+    return winCP;
 }
 
 //--------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-15 10:13:24 $
+ *  last change: $Author: tra $ $Date: 2001-03-16 09:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,28 +295,25 @@ LCID SAL_CALL CDataFormatTranslator::getCurrentLocaleFromClipboard(
     const Reference< XTransferable >& refXTransferable ) const
 {
     Any        aAny;
-    CFormatEtc fetc = getFormatEtcForClipformat( CF_LOCALE );
+    CFormatEtc fetc    = getFormatEtcForClipformat( CF_LOCALE );
     DataFlavor aFlavor = getDataFlavorFromFormatEtc( refXTransferable, fetc );
 
     OSL_ASSERT( aFlavor.MimeType.getLength( ) );
 
-    LCID lcid;
+    LCID lcid = 0;
 
     try
     {
         aAny = refXTransferable->getTransferData( aFlavor );
-        if ( aAny.hasValue( ) )
-        {
-            OSL_ASSERT( aAny.getValueType( ) == CPPUTYPE_SEQSALINT8 );
-            Sequence< sal_Int8 > byteStream;
-            aAny >>= byteStream;
+        OSL_ASSERT( aAny.hasValue( ) && (aAny.getValueType( ) == CPPUTYPE_SEQSALINT8) );
 
-            lcid = *reinterpret_cast< LCID* >( byteStream.getArray( ) );
-        }
+        Sequence< sal_Int8 > byteStream;
+        aAny >>= byteStream;
+
+        lcid = *reinterpret_cast< LCID* >( byteStream.getArray( ) );
     }
     catch( UnsupportedFlavorException& )
     {
-        lcid = GetThreadLocale( );
     }
     catch( ... )
     {
@@ -324,7 +321,7 @@ LCID SAL_CALL CDataFormatTranslator::getCurrentLocaleFromClipboard(
     }
 
     if ( !IsValidLocale( lcid, LCID_SUPPORTED ) )
-            lcid = GetThreadLocale( );
+        lcid = GetThreadLocale( );
 
     return lcid;
 }

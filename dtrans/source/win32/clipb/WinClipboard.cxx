@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipboard.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-14 14:43:32 $
+ *  last change: $Author: tra $ $Date: 2001-03-16 08:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,12 +140,18 @@ CWinClipboard::CWinClipboard( const Reference< XMultiServiceFactory >& rServiceM
 
 Reference< XTransferable > SAL_CALL CWinClipboard::getContents( ) throw( RuntimeException )
 {
+    OSL_ASSERT( m_pImpl.get( ) );
+
     m_aCondition.wait( );
 
     MutexGuard aGuard( m_aMutex );
 
     OSL_ENSURE( !rBHelper.bDisposed, "Object is already disposed" );
-    return m_pImpl->getContents( );
+
+    if ( NULL != m_pImpl.get( ) )
+        return m_pImpl->getContents( );
+
+    return Reference< XTransferable >( );
 }
 
 //------------------------------------------------------------------------
@@ -156,12 +162,16 @@ void SAL_CALL CWinClipboard::setContents( const Reference< XTransferable >& xTra
                                           const Reference< XClipboardOwner >& xClipboardOwner )
                                           throw( RuntimeException )
 {
+    OSL_ASSERT( m_pImpl.get( ) );
+
     m_aCondition.wait( );
 
     ClearableMutexGuard aGuard( m_aMutex );
 
     OSL_ENSURE( !rBHelper.bDisposed, "Object is already disposed" );
-    m_pImpl->setContents( xTransferable, xClipboardOwner, aGuard );
+
+    if ( NULL != m_pImpl.get( ) )
+        m_pImpl->setContents( xTransferable, xClipboardOwner, aGuard );
 }
 
 //------------------------------------------------------------------------
@@ -170,7 +180,12 @@ void SAL_CALL CWinClipboard::setContents( const Reference< XTransferable >& xTra
 
 OUString SAL_CALL CWinClipboard::getName(  ) throw( RuntimeException )
 {
-    return m_pImpl->getName( );
+    OSL_ASSERT( m_pImpl.get( ) );
+
+    if ( NULL != m_pImpl.get( ) )
+        return m_pImpl->getName( );
+
+    return OUString::createFromAscii( "" );
 }
 
 //========================================================================
@@ -179,12 +194,15 @@ OUString SAL_CALL CWinClipboard::getName(  ) throw( RuntimeException )
 
 void SAL_CALL CWinClipboard::flushClipboard( ) throw( RuntimeException )
 {
+    OSL_ASSERT( m_pImpl.get( ) );
+
     m_aCondition.wait( );
 
     MutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !rBHelper.bDisposed, "Object is already disposed" );
 
-    m_pImpl->flushClipboard( );
+    if ( NULL != m_pImpl.get( ) )
+        m_pImpl->flushClipboard( );
 }
 
 //========================================================================
@@ -193,7 +211,12 @@ void SAL_CALL CWinClipboard::flushClipboard( ) throw( RuntimeException )
 
 sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities(  ) throw( RuntimeException )
 {
-    return m_pImpl->getRenderingCapabilities( );
+    OSL_ASSERT( m_pImpl.get( ) );
+
+    if ( NULL != m_pImpl.get( ) )
+        return m_pImpl->getRenderingCapabilities( );
+
+    return 0;
 }
 
 //========================================================================
@@ -232,6 +255,8 @@ void SAL_CALL CWinClipboard::removeClipboardListener( const Reference< XClipboar
 
 void SAL_CALL CWinClipboard::notifyAllClipboardListener( )
 {
+    OSL_ASSERT( NULL != m_pImpl.get( ) );
+
     OInterfaceContainerHelper* pICHelper = rBHelper.aLC.getContainer(
         getCppuType( ( Reference< XClipboardListener > * ) 0 ) );
 
@@ -277,6 +302,9 @@ void SAL_CALL CWinClipboard::dispose() throw(RuntimeException)
     {
         // do my own stuff
         m_pImpl->dispose( );
+
+        // force destruction of the impl class
+        m_pImpl.reset( NULL );
 
         // call the base class implementation first
         WeakComponentImplHelper4< XClipboardEx,

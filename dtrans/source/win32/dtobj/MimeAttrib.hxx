@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MimeAttrib.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:51:36 $
+ *  last change: $Author: tra $ $Date: 2001-03-16 09:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 
 const rtl::OUString TEXTPLAIN_PARAM_CHARSET = rtl::OUString::createFromAscii( "charset" );
 
-const rtl::OUString PRE_WINDOWS_CODEPAGE = rtl::OUString::createFromAscii( "windows-" );
+const rtl::OUString PRE_WINDOWS_CODEPAGE = rtl::OUString::createFromAscii( "windows" );
 const rtl::OUString PRE_OEM_CODEPAGE     = rtl::OUString::createFromAscii( "cp" );
 const rtl::OUString CHARSET_UTF16        = rtl::OUString::createFromAscii( "utf-16" );
 const rtl::OUString CHARSET_UNICODE      = rtl::OUString::createFromAscii( "unicode" );

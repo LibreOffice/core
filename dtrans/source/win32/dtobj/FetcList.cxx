@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-09 08:47:21 $
+ *  last change: $Author: tra $ $Date: 2001-03-16 09:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,12 @@ CFormatRegistrar::CFormatRegistrar( const Reference< XMultiServiceFactory >& Ser
 CFormatRegistrar::~CFormatRegistrar( )
 {
     if ( CFormatRegistrar::m_hEvtEnumLocaleReady )
-        CloseHandle( CFormatRegistrar::m_hEvtEnumLocaleReady );
+    {
+        sal_Bool bRet = CloseHandle(
+            CFormatRegistrar::m_hEvtEnumLocaleReady );
+
+        OSL_ASSERT( bRet );
+    }
 }
 
 //------------------------------------------------------------------------
