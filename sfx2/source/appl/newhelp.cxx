@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: pb $ $Date: 2002-10-23 08:26:29 $
+ *  last change: $Author: os $ $Date: 2002-10-24 09:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2814,6 +2814,8 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener 
                 xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("ShowGraphics"), aBoolAny );
                 xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("ShowTables"), aBoolAny );
                 xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("HelpURL"), makeAny( DEFINE_CONST_OUSTRING("HID:68245") ) );
+
+                xController->restoreViewData(pHelpInterceptor->GetViewData());
             }
         }
         catch( Exception& )
