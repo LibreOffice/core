@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dynamic.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,14 +67,14 @@
 
 module com {  module sun {  module star {  module loader {
 
-interface XImplementationLoader;
+ published interface XImplementationLoader;
 
 
 /** makes it possible to access services accessible via a <code>UnoUrlResolver</code>
     E.g., instantiation of services in another process. This service is still in an
     experimental state and should not be used in a production environment.
  */
-service Dynamic
+published service Dynamic
 {
     /** is used to write persistent information into the given registry
         for accessing a <code>SingleServiceFactory</code> and for activating this
