@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digest.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mhu $ $Date: 2001-11-29 19:12:42 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _RTL_DIGEST_H_
-#define _RTL_DIGEST_H_ "$Revision: 1.5 $"
+#define _RTL_DIGEST_H_ "$Revision: 1.6 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -304,6 +304,19 @@ rtlDigestError SAL_CALL rtl_digest_updateMD5 (
     @see rtl_digest_get()
  */
 rtlDigestError SAL_CALL rtl_digest_getMD5 (
+    rtlDigest Digest,
+    sal_uInt8 *pBuffer, sal_uInt32 nBufLen
+) SAL_THROW_EXTERN_C();
+
+
+/** Retrieve the raw (not finalized) MD5 digest value.
+    @descr This function is a non-standard replacement for
+    rtl_digest_getMD5() and must be used with caution.
+
+    @postcond Digest initialized to accept another update sequence.
+    @see      rtl_digest_get()
+ */
+rtlDigestError SAL_CALL rtl_digest_rawMD5 (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
