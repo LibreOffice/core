@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: fs $ $Date: 2001-01-30 08:32:49 $
+#   last change: $Author: oj $ $Date: 2001-02-05 09:16:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,9 +74,6 @@ IMGLST_SRS=$(SRS)$/$(TARGET).srs
 # --- Files --------------------------------------------------------
 
 SLOFILES =\
-            $(SLO)$/QueryTextView.obj			\
-            $(SLO)$/querycontroller.obj			\
-            $(SLO)$/queryview.obj				\
             $(SLO)$/AsyncronousLink.obj			\
             $(SLO)$/dataview.obj				\
             $(SLO)$/genericcontroller.obj		\
