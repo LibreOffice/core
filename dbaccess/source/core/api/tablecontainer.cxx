@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 14:15:28 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 08:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,8 @@ OTableContainer::OTableContainer(const OConfigurationNode& _rTablesConfig,
     ,m_aCommitLocation(_rCommitLocation)
     ,m_aTablesConfig(_rTablesConfig)
     ,m_pWarningsContainer(_pWarningsContainer)
+    ,m_bInAppend(sal_False)
+    ,m_bInDrop(sal_False)
 {
     DBG_CTOR(OTableContainer, NULL);
     m_aTablesConfig.setEscape(m_aTablesConfig.isSetNode());
@@ -565,297 +567,317 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
         throw SQLException(sMessage,*this,SQLSTATE_GENERAL,1000,Any());
     }
 
-    Reference<XAppend> xAppend(m_xMasterTables,UNO_QUERY);
-    if(xAppend.is())
+    m_bInAppend = sal_True;
+    try
     {
-        xAppend->appendByDescriptor(descriptor);
-    }
-    else
-    {
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE TABLE ");
-        ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
-
-        if(m_xMetaData->supportsCatalogsInTableDefinitions())
-            descriptor->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-        if(m_xMetaData->supportsSchemasInTableDefinitions())
-            descriptor->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-
-        descriptor->getPropertyValue(PROPERTY_NAME)         >>= sTable;
-
-        ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True);
-        if(!sComposedName.getLength())
-            ::dbtools::throwFunctionSequenceException(*this);
-
-        aSql += sComposedName + ::rtl::OUString::createFromAscii(" (");
-
-        // columns
-        Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
-        Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
-        // check if there are columns
-        if(!xColumns.is() || !xColumns->getCount())
-            ::dbtools::throwFunctionSequenceException(*this);
-
-        Reference< XPropertySet > xColProp;
-
-        ::rtl::OUString sTypeName;
-        sal_Int32       nDataType   = 0;
-        sal_Int32       nPrecision  = 0;
-        sal_Int32       nScale      = 0;
-        for(sal_Int32 i=0;i<xColumns->getCount();++i)
+        Reference<XAppend> xAppend(m_xMasterTables,UNO_QUERY);
+        if(xAppend.is())
         {
-            if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
+            xAppend->appendByDescriptor(descriptor);
+        }
+        else
+        {
+            ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE TABLE ");
+            ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
+
+            if(m_xMetaData->supportsCatalogsInTableDefinitions())
+                descriptor->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
+            if(m_xMetaData->supportsSchemasInTableDefinitions())
+                descriptor->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
+
+            descriptor->getPropertyValue(PROPERTY_NAME)         >>= sTable;
+
+            ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True);
+            if(!sComposedName.getLength())
+                ::dbtools::throwFunctionSequenceException(*this);
+
+            aSql += sComposedName + ::rtl::OUString::createFromAscii(" (");
+
+            // columns
+            Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
+            Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
+            // check if there are columns
+            if(!xColumns.is() || !xColumns->getCount())
+                ::dbtools::throwFunctionSequenceException(*this);
+
+            Reference< XPropertySet > xColProp;
+
+            ::rtl::OUString sTypeName;
+            sal_Int32       nDataType   = 0;
+            sal_Int32       nPrecision  = 0;
+            sal_Int32       nScale      = 0;
+            for(sal_Int32 i=0;i<xColumns->getCount();++i)
             {
-
-                aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)));
-
-                aSql += ::rtl::OUString::createFromAscii(" ");
-
-                nDataType = nPrecision = nScale = 0;
-                xColProp->getPropertyValue(PROPERTY_TYPENAME)   >>= sTypeName;
-                xColProp->getPropertyValue(PROPERTY_TYPE)       >>= nDataType;
-                xColProp->getPropertyValue(PROPERTY_PRECISION)  >>= nPrecision;
-                xColProp->getPropertyValue(PROPERTY_SCALE)      >>= nScale;
-                // look if we have to use precisions
-                sal_Bool bUseLiteral = sal_False;
+                if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
                 {
-                    Reference<XResultSet> xRes = m_xMetaData->getTypeInfo();
-                    if(xRes.is())
+
+                    aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)));
+
+                    aSql += ::rtl::OUString::createFromAscii(" ");
+
+                    nDataType = nPrecision = nScale = 0;
+                    xColProp->getPropertyValue(PROPERTY_TYPENAME)   >>= sTypeName;
+                    xColProp->getPropertyValue(PROPERTY_TYPE)       >>= nDataType;
+                    xColProp->getPropertyValue(PROPERTY_PRECISION)  >>= nPrecision;
+                    xColProp->getPropertyValue(PROPERTY_SCALE)      >>= nScale;
+                    // look if we have to use precisions
+                    sal_Bool bUseLiteral = sal_False;
                     {
-                        Reference<XRow> xRow(xRes,UNO_QUERY);
-                        while(xRes->next())
+                        Reference<XResultSet> xRes = m_xMetaData->getTypeInfo();
+                        if(xRes.is())
                         {
-                            ::rtl::OUString sTypeName2Cmp = xRow->getString(1);
-                            sal_Int32 nType = xRow->getShort(2);
-                            ::rtl::OUString sCreateParams = xRow->getString(6);
-                            if( sTypeName.equalsIgnoreAsciiCase(sTypeName2Cmp) && nType == nDataType && sCreateParams.getLength() && !xRow->wasNull())
+                            Reference<XRow> xRow(xRes,UNO_QUERY);
+                            while(xRes->next())
                             {
-                                bUseLiteral = sal_True;
-                                break;
+                                ::rtl::OUString sTypeName2Cmp = xRow->getString(1);
+                                sal_Int32 nType = xRow->getShort(2);
+                                ::rtl::OUString sCreateParams = xRow->getString(6);
+                                if( sTypeName.equalsIgnoreAsciiCase(sTypeName2Cmp) && nType == nDataType && sCreateParams.getLength() && !xRow->wasNull())
+                                {
+                                    bUseLiteral = sal_True;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    aSql += sTypeName;
+                    if(nPrecision > 0 && bUseLiteral)
+                    {
+                        aSql += ::rtl::OUString::createFromAscii("(");
+                        aSql += ::rtl::OUString::valueOf(nPrecision);
+                        if(nScale > 0)
+                        {
+                            aSql += ::rtl::OUString::createFromAscii(",");
+                            aSql += ::rtl::OUString::valueOf(nScale);
+                        }
+                        aSql += ::rtl::OUString::createFromAscii(")");
+                    }
+
+                    ::rtl::OUString aDefault = ::comphelper::getString(xColProp->getPropertyValue(PROPERTY_DEFAULTVALUE));
+                    if(aDefault.getLength())
+                        aSql += ::rtl::OUString::createFromAscii(" DEFAULT ") + aDefault;
+
+                    if(::comphelper::getINT32(xColProp->getPropertyValue(PROPERTY_ISNULLABLE)) == ColumnValue::NO_NULLS)
+                        aSql += ::rtl::OUString::createFromAscii(" NOT NULL");
+
+                    aSql += ::rtl::OUString::createFromAscii(",");
+                }
+            }
+            //  aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+
+            // keys
+
+            Reference<XKeysSupplier> xKeySup(descriptor,UNO_QUERY);
+
+            Reference<XIndexAccess> xKeys = xKeySup->getKeys();
+            if(xKeys.is())
+            {
+                sal_Bool bPKey = sal_False;
+                for(sal_Int32 i=0;i<xKeys->getCount();++i)
+                {
+                    if(::cppu::extractInterface(xColProp,xKeys->getByIndex(i)) && xColProp.is())
+                    {
+
+                        sal_Int32 nKeyType      = ::comphelper::getINT32(xColProp->getPropertyValue(PROPERTY_TYPE));
+
+                        if(nKeyType == KeyType::PRIMARY)
+                        {
+                            if(bPKey)
+                                ::dbtools::throwFunctionSequenceException(*this);
+
+                            bPKey = sal_True;
+                            xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
+                            xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
+                            if(!xColumns.is() || !xColumns->getCount())
+                                ::dbtools::throwFunctionSequenceException(*this);
+
+                            aSql += ::rtl::OUString::createFromAscii(" PRIMARY KEY (");
+                            for(sal_Int32 i=0;i<xColumns->getCount();++i)
+                            {
+                                if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
+                                    aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)))
+                                            +   ::rtl::OUString::createFromAscii(",");
+                            }
+
+                            aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+                        }
+                        else if(nKeyType == KeyType::UNIQUE)
+                        {
+                            xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
+                            xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
+                            if(!xColumns.is() || !xColumns->getCount())
+                                ::dbtools::throwFunctionSequenceException(*this);
+
+                            aSql += ::rtl::OUString::createFromAscii(" UNIQUE (");
+                            for(sal_Int32 i=0;i<xColumns->getCount();++i)
+                            {
+                                if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
+                                    aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)))
+                                         + ::rtl::OUString::createFromAscii(",");
+                            }
+
+                            aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+                        }
+                        else if(nKeyType == KeyType::FOREIGN)
+                        {
+                            sal_Int32 nDeleteRule   = getINT32(xColProp->getPropertyValue(PROPERTY_DELETERULE));
+
+                            xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
+                            xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
+                            if(!xColumns.is() || !xColumns->getCount())
+                                ::dbtools::throwFunctionSequenceException(*this);
+
+                            aSql += ::rtl::OUString::createFromAscii(" FOREIGN KEY ");
+                            ::rtl::OUString sRefTable = getString(xColProp->getPropertyValue(PROPERTY_REFERENCEDTABLE));
+                            ::dbtools::qualifiedNameComponents(m_xMetaData,
+                                                                sRefTable,
+                                                                sCatalog,
+                                                                sSchema,
+                                                                sTable);
+                            ::dbtools::composeTableName(m_xMetaData,sCatalog, sSchema, sTable,sComposedName,sal_True);
+
+
+                            if(!sComposedName.getLength())
+                                ::dbtools::throwFunctionSequenceException(*this);
+                            aSql += sComposedName + ::rtl::OUString::createFromAscii(" (");
+
+                            for(sal_Int32 i=0;i<xColumns->getCount();++i)
+                            {
+                                if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
+                                    aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)))
+                                                + ::rtl::OUString::createFromAscii(",");
+                            }
+
+                            aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+
+                            switch(nDeleteRule)
+                            {
+                                case KeyRule::CASCADE:
+                                    aSql += ::rtl::OUString::createFromAscii(" ON DELETE CASCADE ");
+                                    break;
+                                case KeyRule::RESTRICT:
+                                    aSql += ::rtl::OUString::createFromAscii(" ON DELETE RESTRICT ");
+                                    break;
+                                case KeyRule::SET_NULL:
+                                    aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET NULL ");
+                                    break;
+                                case KeyRule::SET_DEFAULT:
+                                    aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET DEFAULT ");
+                                    break;
+                                default:
+                                    ;
                             }
                         }
                     }
                 }
-
-                aSql += sTypeName;
-                if(nPrecision > 0 && bUseLiteral)
-                {
-                    aSql += ::rtl::OUString::createFromAscii("(");
-                    aSql += ::rtl::OUString::valueOf(nPrecision);
-                    if(nScale > 0)
-                    {
-                        aSql += ::rtl::OUString::createFromAscii(",");
-                        aSql += ::rtl::OUString::valueOf(nScale);
-                    }
-                    aSql += ::rtl::OUString::createFromAscii(")");
-                }
-
-                ::rtl::OUString aDefault = ::comphelper::getString(xColProp->getPropertyValue(PROPERTY_DEFAULTVALUE));
-                if(aDefault.getLength())
-                    aSql += ::rtl::OUString::createFromAscii(" DEFAULT ") + aDefault;
-
-                if(::comphelper::getINT32(xColProp->getPropertyValue(PROPERTY_ISNULLABLE)) == ColumnValue::NO_NULLS)
-                    aSql += ::rtl::OUString::createFromAscii(" NOT NULL");
-
-                aSql += ::rtl::OUString::createFromAscii(",");
             }
+
+            if(aSql.lastIndexOf(',') == (aSql.getLength()-1))
+                aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+            else
+                aSql += ::rtl::OUString::createFromAscii(")");
+
+            OSL_ENSURE(m_xConnection.is(),"Connection is null!");
+            Reference< XStatement > xStmt = m_xConnection->createStatement(  );
+            if(xStmt.is())
+                xStmt->execute(aSql);
+            ::comphelper::disposeComponent(xStmt);
         }
-        //  aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
-
-        // keys
-
-        Reference<XKeysSupplier> xKeySup(descriptor,UNO_QUERY);
-
-        Reference<XIndexAccess> xKeys = xKeySup->getKeys();
-        if(xKeys.is())
+        // create a new config entry
+        if(m_aTablesConfig.isValid())
         {
-            sal_Bool bPKey = sal_False;
-            for(sal_Int32 i=0;i<xKeys->getCount();++i)
-            {
-                if(::cppu::extractInterface(xColProp,xKeys->getByIndex(i)) && xColProp.is())
-                {
+            ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
+            descriptor->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
+            descriptor->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
+            descriptor->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-                    sal_Int32 nKeyType      = ::comphelper::getINT32(xColProp->getPropertyValue(PROPERTY_TYPE));
+            ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_False);
 
-                    if(nKeyType == KeyType::PRIMARY)
-                    {
-                        if(bPKey)
-                            ::dbtools::throwFunctionSequenceException(*this);
-
-                        bPKey = sal_True;
-                        xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
-                        xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
-                        if(!xColumns.is() || !xColumns->getCount())
-                            ::dbtools::throwFunctionSequenceException(*this);
-
-                        aSql += ::rtl::OUString::createFromAscii(" PRIMARY KEY (");
-                        for(sal_Int32 i=0;i<xColumns->getCount();++i)
-                        {
-                            if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
-                                aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)))
-                                        +   ::rtl::OUString::createFromAscii(",");
-                        }
-
-                        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
-                    }
-                    else if(nKeyType == KeyType::UNIQUE)
-                    {
-                        xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
-                        xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
-                        if(!xColumns.is() || !xColumns->getCount())
-                            ::dbtools::throwFunctionSequenceException(*this);
-
-                        aSql += ::rtl::OUString::createFromAscii(" UNIQUE (");
-                        for(sal_Int32 i=0;i<xColumns->getCount();++i)
-                        {
-                            if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
-                                aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)))
-                                     + ::rtl::OUString::createFromAscii(",");
-                        }
-
-                        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
-                    }
-                    else if(nKeyType == KeyType::FOREIGN)
-                    {
-                        sal_Int32 nDeleteRule   = getINT32(xColProp->getPropertyValue(PROPERTY_DELETERULE));
-
-                        xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
-                        xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
-                        if(!xColumns.is() || !xColumns->getCount())
-                            ::dbtools::throwFunctionSequenceException(*this);
-
-                        aSql += ::rtl::OUString::createFromAscii(" FOREIGN KEY ");
-                        ::rtl::OUString sRefTable = getString(xColProp->getPropertyValue(PROPERTY_REFERENCEDTABLE));
-                        ::dbtools::qualifiedNameComponents(m_xMetaData,
-                                                            sRefTable,
-                                                            sCatalog,
-                                                            sSchema,
-                                                            sTable);
-                        ::dbtools::composeTableName(m_xMetaData,sCatalog, sSchema, sTable,sComposedName,sal_True);
-
-
-                        if(!sComposedName.getLength())
-                            ::dbtools::throwFunctionSequenceException(*this);
-                        aSql += sComposedName + ::rtl::OUString::createFromAscii(" (");
-
-                        for(sal_Int32 i=0;i<xColumns->getCount();++i)
-                        {
-                            if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
-                                aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)))
-                                            + ::rtl::OUString::createFromAscii(",");
-                        }
-
-                        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
-
-                        switch(nDeleteRule)
-                        {
-                            case KeyRule::CASCADE:
-                                aSql += ::rtl::OUString::createFromAscii(" ON DELETE CASCADE ");
-                                break;
-                            case KeyRule::RESTRICT:
-                                aSql += ::rtl::OUString::createFromAscii(" ON DELETE RESTRICT ");
-                                break;
-                            case KeyRule::SET_NULL:
-                                aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET NULL ");
-                                break;
-                            case KeyRule::SET_DEFAULT:
-                                aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET DEFAULT ");
-                                break;
-                            default:
-                                ;
-                        }
-                    }
-                }
-            }
-        }
-
-        if(aSql.lastIndexOf(',') == (aSql.getLength()-1))
-            aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
-        else
-            aSql += ::rtl::OUString::createFromAscii(")");
-
-        OSL_ENSURE(m_xConnection.is(),"Connection is null!");
-        Reference< XStatement > xStmt = m_xConnection->createStatement(  );
-        if(xStmt.is())
-            xStmt->execute(aSql);
-        ::comphelper::disposeComponent(xStmt);
-    }
-    // create a new config entry
-    if(m_aTablesConfig.isValid())
-    {
-        ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
-        descriptor->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-        descriptor->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-        descriptor->getPropertyValue(PROPERTY_NAME)         >>= sTable;
-
-        ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_False);
-
-        OConfigurationNode aTableConfig;
-        if(m_aTablesConfig.hasByName(sComposedName))
-            aTableConfig = m_aTablesConfig.openNode(sComposedName);
-        else
-        {
-            aTableConfig = m_aTablesConfig.createNode(sComposedName);
-            m_aCommitLocation.commit();
-        }
-        Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
-        if(xTunnel.is())
-        {
-            ODBTableDecorator* pDecoTable = (ODBTableDecorator*)xTunnel->getSomething(ODBTableDecorator::getUnoTunnelImplementationId());
-            if(pDecoTable)
-            {
-                pDecoTable->setContext( aTableConfig.cloneAsRoot(), getDataSourceNumberFormats( m_xConnection ) );
-            }
+            OConfigurationNode aTableConfig;
+            if(m_aTablesConfig.hasByName(sComposedName))
+                aTableConfig = m_aTablesConfig.openNode(sComposedName);
             else
             {
-                ODBTable* pTable = (ODBTable*)xTunnel->getSomething(ODBTable::getUnoTunnelImplementationId());
-                if ( pTable )
-                    pTable->setConfigurationNode( aTableConfig.cloneAsRoot() );
+                aTableConfig = m_aTablesConfig.createNode(sComposedName);
+                m_aCommitLocation.commit();
             }
+            Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
+            if(xTunnel.is())
+            {
+                ODBTableDecorator* pDecoTable = (ODBTableDecorator*)xTunnel->getSomething(ODBTableDecorator::getUnoTunnelImplementationId());
+                if(pDecoTable)
+                {
+                    pDecoTable->setContext( aTableConfig.cloneAsRoot(), getDataSourceNumberFormats( m_xConnection ) );
+                }
+                else
+                {
+                    ODBTable* pTable = (ODBTable*)xTunnel->getSomething(ODBTable::getUnoTunnelImplementationId());
+                    if ( pTable )
+                        pTable->setConfigurationNode( aTableConfig.cloneAsRoot() );
+                }
+            }
+            // we must the table here because otherwise the ui information are lost
+            Reference<XFlushable> xFlush(descriptor,UNO_QUERY);
+            if(xFlush.is())
+                xFlush->flush();
         }
-        // we must the table here because otherwise the ui information are lost
-        Reference<XFlushable> xFlush(descriptor,UNO_QUERY);
-        if(xFlush.is())
-            xFlush->flush();
     }
+    catch(Exception&)
+    {
+        m_bInAppend = sal_False;
+        throw;
+    }
+    m_bInAppend = sal_False;
 }
 // -------------------------------------------------------------------------
 // XDrop
 void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    Reference< XDrop > xDrop(m_xMasterTables,UNO_QUERY);
-    if(xDrop.is())
-        xDrop->dropByName(_sElementName);
-    else
+    m_bInDrop = sal_True;
+    try
     {
-        ObjectIter aIter = m_aElements[_nPos];
-        if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
-            aIter->second = createObject(_sElementName);
-        ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
-
-        Reference<XPropertySet> xTable(aIter->second.get(),UNO_QUERY);
-        if(xTable.is())
+        Reference< XDrop > xDrop(m_xMasterTables,UNO_QUERY);
+        if(xDrop.is())
+            xDrop->dropByName(_sElementName);
+        else
         {
-            if(m_xMetaData->supportsCatalogsInTableDefinitions())
-                xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-            if(m_xMetaData->supportsSchemasInTableDefinitions())
-                xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-            xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
+            ObjectIter aIter = m_aElements[_nPos];
+            if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
+                aIter->second = createObject(_sElementName);
+            ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
 
-            ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True);
+            Reference<XPropertySet> xTable(aIter->second.get(),UNO_QUERY);
+            if(xTable.is())
+            {
+                if(m_xMetaData->supportsCatalogsInTableDefinitions())
+                    xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
+                if(m_xMetaData->supportsSchemasInTableDefinitions())
+                    xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
+                xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
+
+                ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True);
+            }
+
+            if(!sComposedName.getLength())
+                ::dbtools::throwFunctionSequenceException(*this);
+
+            ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP TABLE ");
+            aSql += sComposedName;
+            Reference< XStatement > xStmt = m_xConnection->createStatement(  );
+            if(xStmt.is())
+                xStmt->execute(aSql);
+            ::comphelper::disposeComponent(xStmt);
+
         }
-
-        if(!sComposedName.getLength())
-            ::dbtools::throwFunctionSequenceException(*this);
-
-        ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP TABLE ");
-        aSql += sComposedName;
-        Reference< XStatement > xStmt = m_xConnection->createStatement(  );
-        if(xStmt.is())
-            xStmt->execute(aSql);
-        ::comphelper::disposeComponent(xStmt);
-
+        // we don't need to call dropByName when we have xMasterTables
     }
-    // we don't need to call dropByName when we have xMasterTables
+    catch(Exception&)
+    {
+        m_bInDrop = sal_False;
+        throw;
+    }
+    m_bInDrop = sal_False;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OTableContainer::acquire() throw(RuntimeException)
@@ -872,7 +894,7 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     ::rtl::OUString sName;
-    if((Event.Accessor >>= sName) && !hasByName(sName))
+    if(!m_bInAppend && (Event.Accessor >>= sName) && !hasByName(sName))
     {
         if(!m_xMasterTables.is() || m_xMasterTables->hasByName(sName))
             insertElement(sName,createObject(sName));
@@ -881,13 +903,13 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    ::rtl::OUString sName;
-    if((Event.Accessor >>= sName) && hasByName(sName))
-    {
-        if(!m_xMasterTables.is() || !m_xMasterTables->hasByName(sName))
-            ;
-    }
+    //  ::osl::MutexGuard aGuard(m_rMutex);
+    //  ::rtl::OUString sName;
+//  if( !m_bInDrop && m_xMasterTables.is() && (Event.Accessor >>= sName) && hasByName(sName))
+//  {
+//      if( || !m_xMasterTables->hasByName(sName))
+//          ;
+//  }
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 12:01:30 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 08:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,10 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
 
+        sal_Bool m_bInAppend;               // true when we are in append mode
+        sal_Bool m_bInDrop;                 // set when we are in the drop method
         sal_Bool m_bConstructed : 1;        // late ctor called
+
 
         sal_Bool isNameValid(const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
