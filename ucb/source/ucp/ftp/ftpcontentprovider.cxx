@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentprovider.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2002-06-07 15:31:00 $
+ *  last change: $Author: abi $ $Date: 2002-06-20 14:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,9 @@
 #ifndef _FTP_FTPCONTENT_HXX_
 #include "ftpcontent.hxx"
 #endif
-
+#ifndef _FTP_FTPLOADERTHREAD_HXX_
+#include "ftploaderthread.hxx"
+#endif
 
 
 using namespace ftp;
@@ -91,7 +93,7 @@ using namespace com::sun::star::ucb;
 
 FtpContentProvider::FtpContentProvider(const Reference< XMultiServiceFactory >& rSMgr)
     : ::ucb::ContentProviderImplHelper(rSMgr),
-             m_bInitialized( false )
+             m_ftpLoaderThread(NULL)
 {
 }
 
@@ -99,6 +101,7 @@ FtpContentProvider::FtpContentProvider(const Reference< XMultiServiceFactory >& 
 // virtual
 FtpContentProvider::~FtpContentProvider()
 {
+    delete m_ftpLoaderThread;
 }
 
 //=========================================================================
@@ -163,15 +166,25 @@ Reference<XContent> SAL_CALL FtpContentProvider::queryContent(const Reference< X
     {
         // Initialize
         osl::MutexGuard aGuard( m_aMutex );
-        if(!m_bInitialized )
+        if(!m_ftpLoaderThread)
+        {
             init();
+            if(!m_ftpLoaderThread)
+                throw RuntimeException();
+        }
     }
+
     xContent = new FtpContent(m_xSMgr,this,xCanonicId); // may throw IllegalIdentifierException
     return xContent;
 }
 
 
-void FtpContentProvider::init()
-{
-    m_bInitialized = true;
+void FtpContentProvider::init() {
+    m_ftpLoaderThread = new FtpLoaderThread();
+}
+
+
+CURL* FtpContentProvider::handle() {
+    // Cannot be zero if called from here;
+    return m_ftpLoaderThread->handle();
 }

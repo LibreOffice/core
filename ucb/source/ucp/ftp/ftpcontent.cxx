@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2002-06-07 15:31:00 $
+ *  last change: $Author: abi $ $Date: 2002-06-20 14:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,10 @@ using namespace com::sun::star::io;
 //=========================================================================
 
 FtpContent::FtpContent( const Reference< XMultiServiceFactory >& rxSMgr,
-                        ::ucb::ContentProviderImplHelper* pProvider,
+                        FtpContentProvider* pProvider,
                         const Reference< XContentIdentifier >& Identifier)
-    : ContentImplHelper(rxSMgr,pProvider,Identifier)
+    : ContentImplHelper(rxSMgr,pProvider,Identifier),
+      m_pFCP(pProvider)
 {
 }
 
@@ -205,20 +206,36 @@ struct XOutputStreamContainer
 };
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-int writeToXOutputStream(void *buffer, size_t size, size_t nmemb, void *stream)
-{
-    XOutputStreamContainer *p = static_cast<XOutputStreamContainer*>(stream);
-    Sequence<sal_Int8> seq(static_cast<sal_Int8*>(buffer),size*nmemb);
-    try{
-        p->stream->writeBytes(seq);
-        return size*nmemb;
-    }
-    catch(const Exception&)
+    /** Callback for curl_easy_perform();
+     */
+
+    int write2OutputStream(void *buffer,size_t size,size_t nmemb,void *stream)
     {
-        return 0;
+        size_t ret = size*nmemb;
+
+        if(!stream)  // OK, no error if nothing can be written.
+            return ret;
+
+        XOutputStreamContainer *p = static_cast<XOutputStreamContainer*>(stream);
+        Sequence<sal_Int8> seq(static_cast<sal_Int8*>(buffer),size*nmemb);
+        try{
+            if(p && p->stream.is())
+                p->stream->writeBytes(seq);
+            return ret;
+        }
+        catch(const Exception&)
+        {
+            return 0;
+        }
     }
+
+#ifdef __cplusplus
 }
+#endif
 
 
 // virtual
@@ -241,32 +258,41 @@ Any SAL_CALL FtpContent::execute( const Command& aCommand,
             throw IllegalArgumentException();
 
         Reference< XActiveDataStreamer > activeDataStreamer( aOpenCommand.Sink,UNO_QUERY );
-        if( activeDataStreamer.is() )
+        if(activeDataStreamer.is())
             throw UnsupportedDataSinkException();
 
-        CURL *curl = FtpLoaderThread::curlHandle();
+        CURL *curl = m_pFCP->handle();
 
-        Reference< XActiveDataSink > xActiveDataSink( aOpenCommand.Sink,UNO_QUERY );
-        if( xActiveDataSink.is() )
-            ;
+        /** Now setting the URL
+         */
 
-        Reference< XOutputStream > xOutputStream( aOpenCommand.Sink,UNO_QUERY );
-        if( xOutputStream.is() )
+        rtl::OUString aOUStr(m_xIdentifier->getContentIdentifier());
+        rtl::OString aOStr(aOUStr.getStr(),
+                           aOUStr.getLength(),
+                           RTL_TEXTENCODING_UTF8); // Only ASCII in URLs -> UTF8
+        curl_easy_setopt(curl,CURLOPT_URL,aOStr.getStr());
+
+        Reference<XActiveDataSink> activeDataSink(aOpenCommand.Sink,UNO_QUERY);
+        if(activeDataSink.is())
+            throw UnsupportedDataSinkException();;
+
+        Reference< XOutputStream > xOutputStream(aOpenCommand.Sink,UNO_QUERY);
+        if(xOutputStream.is())
         {
-            rtl::OUString aOUStr(m_xIdentifier->getContentIdentifier());
-            rtl::OString aOStr(aOUStr.getStr(),
-                               aOUStr.getLength(),
-                               RTL_TEXTENCODING_UTF8);
-
-            curl_easy_setopt(curl,CURLOPT_URL,
-                             aOStr.getStr());
-            curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,
-                             writeToXOutputStream);
             XOutputStreamContainer container;
             container.stream = xOutputStream;
-            curl_easy_setopt(curl,CURLOPT_FILE,
-                             &container);
+            struct curl_slist *list = curl_slist_append(NULL,"pwd");
+            curl_easy_setopt(curl,CURLOPT_QUOTE,list);
+            CURLcode code;
+
+            code = curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,write2OutputStream);
+            curl_easy_setopt(curl,CURLOPT_WRITEDATA,&container);
+
+            code = curl_easy_setopt(curl,CURLOPT_HEADERFUNCTION,write2OutputStream);
+              curl_easy_setopt(curl,CURLOPT_WRITEHEADER,&container);
+
             curl_easy_perform(curl);
+            curl_slist_free_all(list);
         }
     }
     else

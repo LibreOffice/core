@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentprovider.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2002-06-07 15:31:00 $
+ *  last change: $Author: abi $ $Date: 2002-06-20 14:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _UCBHELPER_PROVIDERHELPER_HXX
 #include <ucbhelper/providerhelper.hxx>
 #endif
+#ifndef __CURL_TYPES_H
+#include <curl/types.h>
+#endif
 //  #ifndef _COM_SUN_STAR_UCB_XCONTENTIDENTIFIERFACTORY_HPP_
 //  #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
 //  #endif
@@ -93,6 +96,9 @@
 
 
 namespace ftp {
+
+
+    class FtpLoaderThread;
 
 
     class FtpContentProvider:
@@ -137,12 +143,15 @@ namespace ftp {
 //              const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Id2 )
 //              throw( com::sun::star::uno::RuntimeException );
 
+        CURL* handle();
+
     private:
 
         osl::Mutex m_aMutex;
-        sal_Bool m_bInitialized;
-
+        FtpLoaderThread *m_ftpLoaderThread;
         void init();
+
+
 
     };  // end class FtpContentProvider
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2002-06-07 15:31:00 $
+ *  last change: $Author: abi $ $Date: 2002-06-20 14:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@ namespace ftp
 
 //=========================================================================
 
+    class FtpContentProvider;
+
+//=========================================================================
+
     class FtpContent
         : public ::ucb::ContentImplHelper
     {
@@ -110,7 +114,7 @@ namespace ftp
 
         FtpContent( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                    ::ucb::ContentProviderImplHelper* pProvider,
+                    FtpContentProvider* pProvider,
                     const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XContentIdentifier >& Identifier);
 
@@ -147,6 +151,8 @@ namespace ftp
 
 
     private:
+
+        FtpContentProvider *m_pFCP;
 
         virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
         getProperties( const com::sun::star::uno::Reference<
