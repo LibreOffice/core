@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:09:17 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ protected:
 
     void                        Print( const ByteString& rStr );
     void                        Print( const sal_Char* pStr );
-    void                        DumpSubStream( SotStorage* pStorage, const String& rStrmName );
+    void                        DumpSubStream( SotStorageRef xStrg, const String& rStrmName );
     void                        DumpPivotCache( const UINT16 nStrId );
     UINT16                      DumpXF( XclImpStream& rIn, const sal_Char* pPre );
     void                        DumpValidPassword( XclImpStream& rIn, const sal_Char* pPre );
