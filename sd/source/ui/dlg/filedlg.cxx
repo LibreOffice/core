@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-22 10:07:45 $
+ *  last change: $Author: thb $ $Date: 2001-06-27 17:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,18 @@ SdFileDialogHelper::SdFileDialogHelper( const short  nDialogType ) :
     mxControlAccess = Reference< XFilePickerControlAccess > ( mxFileDlg, UNO_QUERY );
 
     if( mxControlAccess.is() && nDialogType == SDFILEDIALOG_OPEN_SOUND )
-        mxControlAccess->setLabel( ExtendedFilePickerElementIds::PUSHBUTTON_PLAY, String( SdResId( STR_PLAY ) ) );
+    {
+        try
+        {
+            mxControlAccess->setLabel( ExtendedFilePickerElementIds::PUSHBUTTON_PLAY, String( SdResId( STR_PLAY ) ) );
+        }
+        catch(IllegalArgumentException)
+        {
+#ifdef DBG_UTIL
+            DBG_ERROR( "Cannot set play button label" );
+#endif
+        }
+    }
 }
 
 
@@ -402,12 +413,32 @@ ErrCode SdFileDialogHelper::execute()
         OUString aTitle( aObj.getName( INetURLObject::LAST_SEGMENT, true,
                          INetURLObject::DECODE_WITH_CHARSET ) );
         aObj.removeSegment();
-        mxFileDlg->setDisplayDirectory( aObj.GetMainURL() );
+        try
+        {
+            mxFileDlg->setDisplayDirectory( aObj.GetMainURL() );
+        }
+        catch(IllegalArgumentException)
+        {
+#ifdef DBG_UTIL
+            DBG_ERROR( "Cannot set display directory" );
+#endif
+        }
         mxFileDlg->setDefaultName( aTitle );
     }
 
     if ( maCurFilter.getLength() )
-        mxFilterMgr->setCurrentFilter( maCurFilter );
+    {
+        try
+        {
+            mxFilterMgr->setCurrentFilter( maCurFilter );
+        }
+        catch(IllegalArgumentException)
+        {
+#ifdef DBG_UTIL
+            DBG_ERROR( "Cannot set current filter" );
+#endif
+        }
+    }
 
     // show the dialog
     sal_Int16 nRet = mxFileDlg->execute();
@@ -429,7 +460,18 @@ void SdFileDialogHelper::addFilter( const String& rFilter,
 {
     // set the filter
     if( mxFilterMgr.is() )
-        mxFilterMgr->appendFilter( rFilter, rType );
+    {
+        try
+        {
+            mxFilterMgr->appendFilter( rFilter, rType );
+        }
+        catch(IllegalArgumentException)
+        {
+#ifdef DBG_UTIL
+            DBG_ERROR( "Cannot append filter" );
+#endif
+        }
+    }
 }
 
 BOOL SdFileDialogHelper::checkBoxState() const
@@ -438,7 +480,16 @@ BOOL SdFileDialogHelper::checkBoxState() const
         return FALSE;
 
     BOOL bState = 0;
-    mxControlAccess->getValue(ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0) >>= bState;
+    try
+    {
+        mxControlAccess->getValue(ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0) >>= bState;
+    }
+    catch(IllegalArgumentException)
+    {
+#ifdef DBG_UTIL
+        DBG_ERROR( "Cannot access \"selection\" checkbox" );
+#endif
+    }
 
     return bState;
 }
@@ -603,6 +654,3 @@ String SdOpenSoundFileDialog::ReqDisplayDirectory() const
 {
     return mpImp->getPath();
 }
-
-
-

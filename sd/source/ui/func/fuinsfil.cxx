@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:08:04 $
+ *  last change: $Author: thb $ $Date: 2001-06-27 17:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,56 +213,68 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
             pCont = rMatcher.GetContainer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sdraw" ) ) );
 
         // Get filter for current format
-        pFilter = pCont->GetFilter( 0 );
-        if( pFilter )
+        if( xFilterManager.is() )
         {
-            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-            xFilterManager->setCurrentFilter( String() ); // set default-filter (<All>)
+            try
+            {
+                pFilter = pCont->GetFilter( 0 );
+                if( pFilter )
+                {
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                    xFilterManager->setCurrentFilter( pFilter->GetUIName() ); // set default-filter (<All>)
+                }
+
+                // Get Draw filter for Impress and Impress filter for Draw as secondary
+                if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+                    aExt = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".sxd" ) );
+                else
+                    aExt = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".sxi" ) );
+
+                pFilter = pCont->GetFilter4Extension( aExt );
+                if( pFilter )
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+
+                // Get other filters
+                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50 );
+                if( pFilter )
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50, SFX_FILTER_TEMPLATEPATH );
+                if( pFilter )
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+
+                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50 );
+                if( pFilter )
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50, SFX_FILTER_TEMPLATEPATH  );
+                if( pFilter )
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+
+                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_40 );
+                if( pFilter )
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_40, SFX_FILTER_TEMPLATEPATH  );
+                if( pFilter )
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+
+                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW );
+                if( pFilter )
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW, SFX_FILTER_TEMPLATEPATH  );
+                if( pFilter )
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+
+                xFilterManager->appendFilter( aPlainTextSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.txt" ) ) );
+                xFilterManager->appendFilter( aRTFSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.rtf" ) ));
+                xFilterManager->appendFilter( aHTMLSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.htm;*.html" ) ));
+                xFilterManager->appendFilter( aAllSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
+            }
+            catch(IllegalArgumentException)
+            {
+#ifdef DBG_UTIL
+                DBG_ERROR( "Cannot setup filters" );
+#endif
+            }
         }
-
-        // Get Draw filter for Impress and Impress filter for Draw as secondary
-        if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
-            aExt = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".sxd" ) );
-        else
-            aExt = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".sxi" ) );
-
-        pFilter = pCont->GetFilter4Extension( aExt );
-        if( pFilter )
-            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-
-        // Get other filters
-        pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50 );
-        if( pFilter )
-            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-        pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50, SFX_FILTER_TEMPLATEPATH );
-        if( pFilter )
-            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-
-        pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50 );
-        if( pFilter )
-            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-        pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50, SFX_FILTER_TEMPLATEPATH  );
-        if( pFilter )
-            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-
-        pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_40 );
-        if( pFilter )
-            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-        pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_40, SFX_FILTER_TEMPLATEPATH  );
-        if( pFilter )
-            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-
-        pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW );
-        if( pFilter )
-            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-        pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW, SFX_FILTER_TEMPLATEPATH  );
-        if( pFilter )
-            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-
-        xFilterManager->appendFilter( aPlainTextSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.txt" ) ) );
-        xFilterManager->appendFilter( aRTFSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.rtf" ) ));
-        xFilterManager->appendFilter( aHTMLSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.htm;*.html" ) ));
-        xFilterManager->appendFilter( aAllSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
 
         if( aFileDialog.Execute() != ERRCODE_NONE )
             return;

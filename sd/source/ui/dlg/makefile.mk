@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: thb $ $Date: 2001-06-20 17:16:53 $
+#   last change: $Author: thb $ $Date: 2001-06-27 17:48:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -209,6 +209,7 @@ SLOFILES =  \
         $(SLO)$/TemplateThread.obj
 
 EXCEPTIONSFILES= \
+        $(SLO)$/filedlg.obj   \
         $(SLO)$/TemplateThread.obj
 
 # --- Tagets -------------------------------------------------------
