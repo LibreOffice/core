@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:03 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 09:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,23 +78,26 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLCHECKER1_HPP_
-#include <com/sun/star/linguistic/XSpellChecker1.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XHYPHENATOR_HPP_
-#include <com/sun/star/linguistic/XHyphenator.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XTHESAURUS_HPP_
-#include <com/sun/star/linguistic/XThesaurus.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATOR_HPP_
+#include <com/sun/star/linguistic2/XHyphenator.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYLIST_HPP_
-#include <com/sun/star/linguistic/XDictionaryList.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARYLIST_HPP_
+#include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARY1_HPP_
-#include <com/sun/star/linguistic/XDictionary1.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARY1_HPP_
+#include <com/sun/star/linguistic2/XDictionary1.hpp>
 #endif
 
 class LinguMgrExitLstnr;
@@ -119,40 +122,42 @@ class LinguMgr
     //static ::VOS::ORefCount aRefCount;
 
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XSpellChecker1 >  xSpell;
+        ::com::sun::star::linguistic2::XLinguServiceManager > xLngSvcMgr;
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XHyphenator >     xHyph;
+        ::com::sun::star::linguistic2::XSpellChecker1 > xSpell;
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XThesaurus >      xThes;
+        ::com::sun::star::linguistic2::XHyphenator >    xHyph;
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionaryList > xDicList;
+        ::com::sun::star::linguistic2::XThesaurus >     xThes;
+    static ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XDictionaryList > xDicList;
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >         xProp;
 
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionary1 >    xIgnoreAll;
+        ::com::sun::star::linguistic2::XDictionary1 >   xIgnoreAll;
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionary1 >    xChangeAll;
+        ::com::sun::star::linguistic2::XDictionary1 >   xChangeAll;
 
     static LinguMgrExitLstnr                           *pExitLstnr;
     static sal_Bool                                     bExiting;
 
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XSpellChecker1 >  GetSpell();
+        ::com::sun::star::linguistic2::XSpellChecker1 > GetSpell();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XHyphenator >     GetHyph();
+        ::com::sun::star::linguistic2::XHyphenator >    GetHyph();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XThesaurus >      GetThes();
+        ::com::sun::star::linguistic2::XThesaurus >     GetThes();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionaryList > GetDicList();
+        ::com::sun::star::linguistic2::XDictionaryList > GetDicList();
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >         GetProp();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionary1 >    GetStandard();
+        ::com::sun::star::linguistic2::XDictionary1 >   GetStandard();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionary1 >    GetIgnoreAll();
+        ::com::sun::star::linguistic2::XDictionary1 >   GetIgnoreAll();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionary1 >    GetChangeAll();
+        ::com::sun::star::linguistic2::XDictionary1 >   GetChangeAll();
 
     // disallow access to copy-constructor and assignment-operator
     LinguMgr(const LinguMgr &);
@@ -161,27 +166,25 @@ class LinguMgr
 public:
 
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XSpellChecker1 >  GetSpellChecker();
+        ::com::sun::star::linguistic2::XSpellChecker1 > GetSpellChecker();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XHyphenator >     GetHyphenator();
+        ::com::sun::star::linguistic2::XHyphenator >    GetHyphenator();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XThesaurus >      GetThesaurus();
+        ::com::sun::star::linguistic2::XThesaurus >     GetThesaurus();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionaryList > GetDictionaryList();
+        ::com::sun::star::linguistic2::XDictionaryList > GetDictionaryList();
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >         GetLinguPropertySet();
 
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionary1 >    GetStandardDic();
+        ::com::sun::star::linguistic2::XDictionary1 >   GetStandardDic();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionary1 >    GetIgnoreAllList();
+        ::com::sun::star::linguistic2::XDictionary1 >   GetIgnoreAllList();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionary1 >    GetChangeAllList();
+        ::com::sun::star::linguistic2::XDictionary1 >   GetChangeAllList();
 };
 
 ///////////////////////////////////////////////////////////////////////////
-
-#ifdef TL_NOTYET
 
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XHyphenatedWord;
@@ -210,7 +213,6 @@ SvxAlternativeSpelling SvxGetAltSpelling(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XHyphenatedWord > & rHyphWord );
 
-#endif //TL_NOTYET
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -218,7 +220,7 @@ class SvxDicListChgClamp
 {
 private:
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionaryList >     xDicList;
+        ::com::sun::star::linguistic2::XDictionaryList >    xDicList;
 
     // disallow access to copy-constructor and assignment-operator
     SvxDicListChgClamp(const SvxDicListChgClamp &);
@@ -226,7 +228,7 @@ private:
 
 public:
     SvxDicListChgClamp( ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionaryList >  &rxDicList );
+        ::com::sun::star::linguistic2::XDictionaryList >  &rxDicList );
     ~SvxDicListChgClamp();
 };
 
@@ -234,24 +236,24 @@ public:
 
 //TL:TODO: remove those functions or make them inline
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic::XSpellChecker1 >  SvxGetSpellChecker();
+    ::com::sun::star::linguistic2::XSpellChecker1 > SvxGetSpellChecker();
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic::XHyphenator >     SvxGetHyphenator();
+    ::com::sun::star::linguistic2::XHyphenator >    SvxGetHyphenator();
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic::XThesaurus >      SvxGetThesaurus();
+    ::com::sun::star::linguistic2::XThesaurus >     SvxGetThesaurus();
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic::XDictionaryList > SvxGetDictionaryList();
+    ::com::sun::star::linguistic2::XDictionaryList > SvxGetDictionaryList();
 ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet >         SvxGetLinguPropertySet();
 //TL:TODO: remove argument or provide SvxGetIgnoreAllList with the same one
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic::XDictionary1 >    SvxGetOrCreatePosDic(
+    ::com::sun::star::linguistic2::XDictionary1 >   SvxGetOrCreatePosDic(
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic::XDictionaryList >  xDicList );
+                ::com::sun::star::linguistic2::XDictionaryList >  xDicList );
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic::XDictionary1 >    SvxGetIgnoreAllList();
+    ::com::sun::star::linguistic2::XDictionary1 >   SvxGetIgnoreAllList();
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic::XDictionary1 >    SvxGetChangeAllList();
+    ::com::sun::star::linguistic2::XDictionary1 >   SvxGetChangeAllList();
 
 ///////////////////////////////////////////////////////////////////////////
 // misc functions
@@ -281,7 +283,7 @@ String  SvxGetDictionaryURL(const String &rDicName,
 //TL:TODO: soll mal den rictigen Rückgabetyp bekommen!
 sal_Bool    SvxAddEntryToDic(
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionary >  &rxDic,
+        ::com::sun::star::linguistic2::XDictionary >  &rxDic,
     const ::rtl::OUString &rWord, sal_Bool bIsNeg,
     const ::rtl::OUString &rRplcTxt, sal_Int16 nRplcLang,
     sal_Bool bStripDot = sal_True );
@@ -289,7 +291,7 @@ short   SvxDicError( Window *pParent, sal_Int16 nError );
 
 sal_Bool    SvxSaveDictionaries(
     const ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionaryList >  &xDicList );
+        ::com::sun::star::linguistic2::XDictionaryList >  &xDicList );
 
 #endif
 
