@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
+ *  last change: $Author: aw $ $Date: 2001-09-27 10:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,4 +523,28 @@ Window* SdDrawDocShell::GetWindow() const
     }
 }
 
+/*************************************************************************
+|*
+|* Callback fuer ExecuteSpellPopup()
+|*
+\************************************************************************/
+
+// #91457# ExecuteSpellPopup now handled by SdDrawDocShell. This is necessary
+// to get hands on the outliner and the text object.
+#ifndef SVX_LIGHT
+IMPL_LINK(SdDrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
+{
+    SdrObject* pObj = NULL;
+    SdrOutliner* pOutl = NULL;
+
+    if(GetViewShell())
+    {
+        pOutl = GetViewShell()->GetView()->GetTextEditOutliner();
+        pObj = GetViewShell()->GetView()->GetTextEditObject();
+    }
+
+    pDoc->ImpOnlineSpellCallback(pInfo, pObj, pOutl);
+    return(0);
+}
+#endif // !SVX_LIGHT
 
