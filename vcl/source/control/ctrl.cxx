@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-08 16:05:42 $
+ *  last change: $Author: pl $ $Date: 2002-05-16 11:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,14 +170,35 @@ void Control::SetText( const String& rStr )
 
 // -----------------------------------------------------------------------
 
+Rectangle ControlLayoutData::GetCharacterBounds( long nIndex ) const
+{
+    return (nIndex >= 0 && nIndex < m_aUnicodeBoundRects.size()) ? m_aUnicodeBoundRects[ nIndex ] : Rectangle();
+}
+
+
+// -----------------------------------------------------------------------
+
 Rectangle Control::GetCharacterBounds( long nIndex ) const
 {
-    Rectangle aBoundRect;
     if( ! mpLayoutData )
         FillLayoutData();
-    if( mpLayoutData && nIndex >= 0 && nIndex < mpLayoutData->m_aUnicodeBoundRects.size() )
-        aBoundRect = mpLayoutData->m_aUnicodeBoundRects[ nIndex ];
-    return aBoundRect;
+    return mpLayoutData ? mpLayoutData->GetCharacterBounds( nIndex ) : Rectangle();
+}
+
+// -----------------------------------------------------------------------
+
+long ControlLayoutData::GetIndexForPoint( const Point& rPoint ) const
+{
+    long nIndex = -1;
+    for( long i = m_aUnicodeBoundRects.size()-1; i >= 0; i-- )
+    {
+        if( m_aUnicodeBoundRects[ i ].IsInside( rPoint ) )
+        {
+            nIndex = i;
+            break;
+        }
+    }
+    return nIndex;
 }
 
 // -----------------------------------------------------------------------
@@ -187,63 +208,60 @@ long Control::GetIndexForPoint( const Point& rPoint ) const
     long nIndex = -1;
     if( ! mpLayoutData )
         FillLayoutData();
-    if( mpLayoutData )
-    {
-        for( long i = mpLayoutData->m_aUnicodeBoundRects.size()-1; i >= 0; i-- )
-        {
-            if( mpLayoutData->m_aUnicodeBoundRects[ i ].IsInside( rPoint ) )
-            {
-                nIndex = i;
-                break;
-            }
-        }
-    }
-    return nIndex;
+    return mpLayoutData ? mpLayoutData->GetIndexForPoint( rPoint ) : -1;
+}
+
+// -----------------------------------------------------------------------
+
+long ControlLayoutData::GetLineCount() const
+{
+    long nLines = m_aLineIndices.size();
+    if( nLines == 0 && m_aDisplayText.Len() )
+        nLines = 1;
+    return nLines;
 }
 
 // -----------------------------------------------------------------------
 
 long Control::GetLineCount() const
 {
-    long nLines = 0;
     if( ! mpLayoutData )
         FillLayoutData();
-    if( mpLayoutData )
+    return mpLayoutData ? mpLayoutData->GetLineCount() : 0;
+}
+
+// -----------------------------------------------------------------------
+
+Pair ControlLayoutData::GetLineStartEnd( long nLine ) const
+{
+    Pair aPair( -1, -1 );
+
+    int nDisplayLines = m_aLineIndices.size();
+    if( nLine >= 0 && nLine < nDisplayLines )
     {
-        nLines = mpLayoutData->m_aLineIndices.size();
-        if( nLines == 0 && mpLayoutData->m_aDisplayText.Len() )
-            nLines = 1;
+        aPair.A() = m_aLineIndices[nLine];
+        if( nLine+1 < m_aLineIndices.size() )
+            aPair.B() = m_aLineIndices[nLine+1]-1;
+        else
+            aPair.B() = m_aDisplayText.Len()-1;
     }
-    return nLines;
+    else if( nLine == 0 && nDisplayLines == 0 && m_aDisplayText.Len() )
+    {
+        // special case for single line controls so the implementations
+        // in that case do not have to fill in the line indices
+        aPair.A() = 0;
+        aPair.B() = m_aDisplayText.Len()-1;
+    }
+    return aPair;
 }
 
 // -----------------------------------------------------------------------
 
 Pair Control::GetLineStartEnd( long nLine ) const
 {
-    Pair aPair( -1, -1 );
     if( ! mpLayoutData )
         FillLayoutData();
-    if( mpLayoutData )
-    {
-        int nDisplayLines = mpLayoutData->m_aLineIndices.size();
-        if( nLine >= 0 && nLine < nDisplayLines )
-        {
-            aPair.A() = mpLayoutData->m_aLineIndices[nLine];
-            if( nLine+1 < mpLayoutData->m_aLineIndices.size() )
-                aPair.B() = mpLayoutData->m_aLineIndices[nLine+1]-1;
-            else
-                aPair.B() = mpLayoutData->m_aDisplayText.Len()-1;
-        }
-        else if( nLine == 0 && nDisplayLines == 0 && mpLayoutData->m_aDisplayText.Len() )
-        {
-            // special case for single line controls so the implementations
-            // in that case do not have to fill in the line indices
-            aPair.A() = 0;
-            aPair.B() = mpLayoutData->m_aDisplayText.Len()-1;
-        }
-    }
-    return aPair;
+    return mpLayoutData ? mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
 }
 
 // -----------------------------------------------------------------------

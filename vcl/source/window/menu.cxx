@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-16 11:21:28 $
+ *  last change: $Author: pl $ $Date: 2002-05-16 11:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,10 @@
 #ifndef _SV_WINDOW_H
 #include <window.h>
 #endif
+#ifndef _VCL_CONTROLLAYOUT_HXX
+#include <controllayout.hxx>
+#endif
+
 #pragma hdrstop
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
@@ -147,6 +151,7 @@
 #include <unohelp.hxx>
 
 using namespace ::com::sun::star;
+using namespace vcl;
 
 DBG_NAME( Menu );
 
@@ -343,6 +348,7 @@ uno::Reference< i18n::XCharacterClassification > MenuItemList::GetCharClass() co
 
 class MenuFloatingWindow : public FloatingWindow
 {
+    friend void Menu::ImplFillLayoutData() const;
 private:
     Menu*           pMenu;
     PopupMenu*      pActivePopup;
@@ -584,6 +590,7 @@ Menu::~Menu()
 
     delete pItemList;
     delete pLogo;
+    delete mpLayoutData;
 }
 
 void Menu::ImplInit()
@@ -600,6 +607,7 @@ void Menu::ImplInit()
     bCanceled       = FALSE;
     bInCallback     = FALSE;
     bKilled         = FALSE;
+    mpLayoutData    = NULL;
 }
 
 void Menu::ImplLoadRes( const ResId& rResId )
@@ -785,6 +793,7 @@ void Menu::InsertItem( USHORT nItemId, const XubString& rStr, MenuItemBits nItem
                              nItemBits, rStr, Image(), this, nPos );
 
     Window* pWin = ImplGetWindow();
+    delete mpLayoutData, mpLayoutData = NULL;
     if ( pWin )
     {
         ImplCalcSize( pWin );
@@ -904,6 +913,7 @@ void Menu::InsertItem( const ResId& rResId, USHORT nPos )
         }
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
     }
+    delete mpLayoutData, mpLayoutData = NULL;
 }
 
 void Menu::InsertSeparator( USHORT nPos )
@@ -918,6 +928,7 @@ void Menu::InsertSeparator( USHORT nPos )
 
     // Separator in die Item-Liste einfuegen
     pItemList->InsertSeparator( nPos );
+    delete mpLayoutData, mpLayoutData = NULL;
 }
 
 void Menu::RemoveItem( USHORT nPos )
@@ -932,6 +943,7 @@ void Menu::RemoveItem( USHORT nPos )
         if ( pWin->IsVisible() )
             pWin->Invalidate();
     }
+    delete mpLayoutData, mpLayoutData = NULL;
 }
 
 void ImplCopyItem( Menu* pThis, const Menu& rMenu, USHORT nPos, USHORT nNewPos,
@@ -1675,7 +1687,7 @@ Size Menu::ImplCalcSize( Window* pWin )
     return aSz;
 }
 
-void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* pThisItemOnly, BOOL bHighlighted )
+void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* pThisItemOnly, BOOL bHighlighted, bool bLayout ) const
 {
     // Fuer Symbole: nFontHeight x nFontHeight
     long nFontHeight = pWin->GetTextHeight();
@@ -1722,7 +1734,7 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 }
 
                 // Separator
-                if ( !bIsMenuBar && ( pData->eType == MENUITEM_SEPARATOR ) )
+                if ( !bLayout && !bIsMenuBar && ( pData->eType == MENUITEM_SEPARATOR ) )
                 {
                     aTmpPos.Y() = aPos.Y() + ((pData->aSz.Height()-2)/2);
                     aTmpPos.X() = aPos.X() + 1;
@@ -1735,7 +1747,7 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 }
 
                 // Image:
-                if ( !bIsMenuBar && ( ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ) ) )
+                if ( !bLayout && !bIsMenuBar && ( ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ) ) )
                 {
                     aTmpPos.Y() = aPos.Y();
                     aTmpPos.X() = aPos.X() + nImagePos;
@@ -1752,11 +1764,15 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                     USHORT nStyle = nTextStyle|TEXT_DRAW_MNEMONIC;
                     if ( pData->bIsTemporary )
                         nStyle |= TEXT_DRAW_DISABLE;
-                    pWin->DrawCtrlText( aTmpPos, pData->aText, 0, pData->aText.Len(), nStyle );
+                    MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
+                    String* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
+                    if( bLayout )
+                        mpLayoutData->m_aLineIndices.push_back( mpLayoutData->m_aDisplayText.Len() );
+                    pWin->DrawCtrlText( aTmpPos, pData->aText, 0, pData->aText.Len(), nStyle, pVector, pDisplayText );
                 }
 
                 // Accel
-                if ( !bIsMenuBar && pData->aAccelKey.GetCode() )
+                if ( !bLayout && !bIsMenuBar && pData->aAccelKey.GetCode() )
                 {
                     XubString aAccText = pData->aAccelKey.GetName();
                     aTmpPos.X() = aOutSz.Width() - pWin->GetTextWidth( aAccText );
@@ -1767,7 +1783,7 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 }
 
                 // CheckMark
-                if ( !bIsMenuBar && pData->bChecked )
+                if ( !bLayout && !bIsMenuBar && pData->bChecked )
                 {
                     Rectangle aRect;
                     SymbolType eSymbol;
@@ -1792,7 +1808,7 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 }
 
                 // SubMenu?
-                if ( !bIsMenuBar && pData->pSubMenu )
+                if ( !bLayout && !bIsMenuBar && pData->pSubMenu )
                 {
                     aTmpPos.X() = aOutSz.Width() - nFontHeight + nExtra;
                     aTmpPos.Y() = aPos.Y();
@@ -1836,7 +1852,7 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
         }
     }
 
-    if ( !pThisItemOnly && pLogo )
+    if ( !bLayout && !pThisItemOnly && pLogo )
     {
         Size aLogoSz = pLogo->aBitmap.GetSizePixel();
 
@@ -1931,6 +1947,7 @@ void Menu::RemoveDisabledEntries( BOOL bCheckPopups, BOOL bRemoveEmptyPopups )
         if ( pItem->eType == MENUITEM_SEPARATOR )
             RemoveItem( nLast );
     }
+    delete mpLayoutData, mpLayoutData = NULL;
 }
 
 BOOL Menu::HasValidEntries( BOOL bCheckPopups )
@@ -1974,6 +1991,56 @@ MenuLogo Menu::GetLogo() const
 void Menu::GetAccessObject( AccessObjectRef& rAcc ) const
 {
     rAcc = new AccessObject( (void*) this, bIsMenuBar? ACCESS_TYPE_MENUBAR : ACCESS_TYPE_MENU );
+}
+
+void Menu::ImplKillLayoutData() const
+{
+    delete mpLayoutData, mpLayoutData = NULL;
+}
+
+void Menu::ImplFillLayoutData() const
+{
+    if( pWindow && pWindow->IsReallyVisible() )
+    {
+        mpLayoutData = new ControlLayoutData();
+        if( bIsMenuBar )
+        {
+            ImplPaint( pWindow, 0, 0, 0, FALSE, true );
+        }
+        else
+        {
+            MenuFloatingWindow* pFloat = (MenuFloatingWindow*)pWindow;
+            ImplPaint( pWindow, pFloat->nScrollerHeight, pFloat->ImplGetStartY(), 0, FALSE, true );
+        }
+    }
+}
+
+String Menu::GetDisplayText() const
+{
+    if( ! mpLayoutData )
+        ImplFillLayoutData();
+    return mpLayoutData ? mpLayoutData->m_aDisplayText : String();
+}
+
+long Menu::GetIndexForPoint( const Point& rPoint ) const
+{
+    if( ! mpLayoutData )
+        ImplFillLayoutData();
+    return mpLayoutData ? mpLayoutData->GetIndexForPoint( rPoint ) : -1;
+}
+
+long Menu::GetLineCount() const
+{
+    if( ! mpLayoutData )
+        ImplFillLayoutData();
+    return mpLayoutData ? mpLayoutData->GetLineCount() : 0;
+}
+
+Pair Menu::GetLineStartEnd( long nLine ) const
+{
+    if( ! mpLayoutData )
+        ImplFillLayoutData();
+    return mpLayoutData ? mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
 }
 
 // -----------
@@ -2178,6 +2245,8 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
 
     if ( !pSFrom && ( PopupMenu::IsInExecute() || !GetItemCount() ) )
         return 0;
+
+    delete mpLayoutData, mpLayoutData = NULL;
 
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -2873,6 +2942,8 @@ void MenuFloatingWindow::ImplScroll( BOOL bUp )
     Update();
 
     HighlightItem( nHighlightedItem, FALSE );
+
+    pMenu->ImplKillLayoutData();
 
     if ( bScrollUp && bUp )
     {
@@ -3967,6 +4038,9 @@ void MenuBarWindow::StateChanged( StateChangedType nType )
         ImplInitMenuWindow( this, FALSE, TRUE );
         Invalidate();
     }
+    else if( pMenu )
+        pMenu->ImplKillLayoutData();
+
 }
 
 void MenuBarWindow::DataChanged( const DataChangedEvent& rDCEvt )
@@ -3985,6 +4059,8 @@ void MenuBarWindow::DataChanged( const DataChangedEvent& rDCEvt )
         GetParent()->Resize();
         Invalidate();
         Resize();
+        if( pMenu )
+            pMenu->ImplKillLayoutData();
     }
 }
 
