@@ -316,16 +316,15 @@ Dim i as Integer
 Dim bLogExists as Boolean
 	If ImportDialog.chkLogfile.State = 1 Then
 		i = 2
-Dim oArg() as new com.sun.star.beans.PropertyValue
-Dim oUrl as new com.sun.star.util.URL
-Dim oDisp as Object
-	oUrl.Complete = &quot;private:factory/swriter&quot;
+&apos;Dim oArg() as new com.sun.star.beans.PropertyValue
+&apos;Dim oUrl as new com.sun.star.util.URL
+&apos;Dim oDisp as Object
+&apos;	oUrl.Complete = &quot;private:factory/swriter&quot;
 &apos;	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
-	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
+&apos;	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
 
-	oDisp.dispatch(oUrl, oArg())
-	printdbgInfo oDisp
-&apos;	oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 4, NoArgs())&apos; HiddenProperties()) &apos; HiddenProperties())
+&apos;	oDisp.dispatch(oUrl, oArg())
+	oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 4, NoArgs())&apos; HiddenProperties()) &apos; HiddenProperties())
 		oLogCursor = oLogDocument.Text.CreateTextCursor
 		oLogTable =  oLogDocument.CreateInstance(&quot;com.sun.star.text.TextTable&quot;)
 		oLogCursor.Text.InsertTextContent(oLogCursor, oLogTable, True)
@@ -334,7 +333,7 @@ Dim oDisp as Object
 		oLogCursor = oLogTable.GetCellbyPosition(1,0).createTextCursor
 		oLogCursor.SetString(sTargetDocuments)
 		bInsertRow = False
-&apos; Todo: Strings in Resourcen
+		&apos; Todo: Strings in Resourcen
 		sLogUrl = SOWorkPath &amp; &quot;/Logfile.sxw&quot;
 		Do
 			bLogExists = oUcb.Exists(sLogUrl)
