@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:18:42 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,11 +368,11 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
     if( pRewindMap )
         xContext->SetRewindMap( pRewindMap );
 
-    // Call a startElement at the new context.
-    xContext->StartElement( xAttrList );
-
     // Push context on stack.
     m_pContexts->push_back( xContext );
+
+    // Call a startElement at the new context.
+    xContext->StartElement( xAttrList );
 }
 
 void SAL_CALL XMLTransformerBase::endElement( const OUString& rName )
@@ -380,9 +380,8 @@ void SAL_CALL XMLTransformerBase::endElement( const OUString& rName )
 {
     if( !m_pContexts->empty() )
     {
-        // Get topmost context and remove it from the stack.
+        // Get topmost context
         ::rtl::Reference< XMLTransformerContext > xContext = m_pContexts->back();
-        m_pContexts->pop_back();
 
 #ifndef PRODUCT
         OSL_ENSURE( xContext->GetQName() == rName,
@@ -391,6 +390,9 @@ void SAL_CALL XMLTransformerBase::endElement( const OUString& rName )
 
         // Call a EndElement at the current context.
         xContext->EndElement();
+
+        // and remove it from the stack.
+        m_pContexts->pop_back();
 
         // Get a namespace map to rewind.
         SvXMLNamespaceMap *pRewindMap = xContext->GetRewindMap();
@@ -1273,4 +1275,17 @@ const XMLTransformerContext *XMLTransformerBase::GetCurrentContext() const
 
 
     return m_pContexts->empty() ? 0 : m_pContexts->back().get();
+}
+
+const XMLTransformerContext *XMLTransformerBase::GetAncestorContext(
+                                                        sal_uInt32 n ) const
+{
+    XMLTransformerContextVector::size_type nSize =
+        m_pContexts->size();
+    XMLTransformerContextVector::size_type nPos =
+        static_cast<XMLTransformerContextVector::size_type>( n );
+
+    OSL_ENSURE( nSize >nPos+2 , "invalid context" );
+
+    return nSize > nPos+2 ? (*m_pContexts)[nSize-(nPos+2)].get() : 0;
 }
