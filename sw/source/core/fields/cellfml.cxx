@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellfml.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:04:17 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:47:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1046,7 +1046,8 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
             // dann mal die Tabellenkoepfe raus:
             for( USHORT n = 0; n < rBoxes.Count(); ++n )
             {
-                while( (pLine = rBoxes[n]->GetUpper())->GetUpper() )
+                pLine = rBoxes[n]->GetUpper();
+                while( pLine->GetUpper() )
                     pLine = pLine->GetUpper()->GetUpper();
 
                 if( pLine == pHeadLine )
