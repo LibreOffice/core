@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleRadioButton.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:28 $
+ *  last change:$Date: 2003-03-24 16:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,8 @@ public class AccessibleRadioButton extends TestCase {
             }
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
+        } catch(com.sun.star.lang.DisposedException de) {
+            log.println("Already disposed");
         }
 
         log.println("disposing xTextDoc");
@@ -200,6 +202,8 @@ public class AccessibleRadioButton extends TestCase {
             }
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
+        } catch(com.sun.star.lang.DisposedException de) {
+            log.println("already disposed");
         }
 
         if (xTextDoc != null) {
@@ -316,6 +320,8 @@ public class AccessibleRadioButton extends TestCase {
             });
 
         tEnv.addObjRelation("XAccessibleText.Text", "Internet");
+
+        tEnv.addObjRelation("EditOnly","Can't change or select Text in AccessibleRadioButton");
 
         XAccessibleValue anotherButtonValue = (XAccessibleValue)
             UnoRuntime.queryInterface(XAccessibleValue.class, anotherButton);
