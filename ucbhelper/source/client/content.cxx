@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kso $ $Date: 2002-04-09 11:49:57 $
+ *  last change: $Author: kso $ $Date: 2002-06-21 14:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ public:
     virtual ~Content_Impl();
 
     const rtl::OUString&           getURL() const;
-    Reference< XContent >          getContent() const { return m_xContent; }
+    Reference< XContent >          getContent();
     Reference< XCommandProcessor > getCommandProcessor();
     sal_Int32 getCommandId();
     Reference< XMultiServiceFactory > getServiceManager() { return m_xSMgr; }
@@ -1557,16 +1557,22 @@ void Content_Impl::reinit( const Reference< XContent >& xContent )
 
     m_xCommandProcessor = 0;
     m_nCommandId = 0;
-    m_aURL = rtl::OUString();
 
-    if ( xContent.is() )
+    // #92581# - Don't reset m_aURL!!!
+
+    if ( m_xContent.is() )
     {
         try
         {
             m_xContent->removeContentEventListener( m_xContentEventListener );
         }
-        catch (RuntimeException const &)
-        {}
+        catch ( RuntimeException const & )
+        {
+        }
+    }
+
+    if ( xContent.is() )
+    {
         m_xContent = xContent;
         m_xContent->addContentEventListener( m_xContentEventListener );
 
@@ -1577,12 +1583,6 @@ void Content_Impl::reinit( const Reference< XContent >& xContent )
     }
     else
     {
-        try
-        {
-            m_xContent->removeContentEventListener( m_xContentEventListener );
-        }
-        catch (RuntimeException const &)
-        {}
         m_xContent = 0;
     }
 }
@@ -1592,37 +1592,107 @@ void Content_Impl::reinit( const Reference< XContent >& xContent )
 Content_Impl::~Content_Impl()
 {
     if ( m_xContent.is() )
+    {
         try
         {
             m_xContent->removeContentEventListener( m_xContentEventListener );
         }
-        catch (RuntimeException const &)
-        {}
+        catch ( RuntimeException const & )
+        {
+        }
+    }
 }
 
 //=========================================================================
 const rtl::OUString& Content_Impl::getURL() const
 {
-    osl::MutexGuard aGuard( m_aMutex );
-
     if ( !m_aURL.getLength() && m_xContent.is() )
     {
-        Reference< XContentIdentifier > xId = m_xContent->getIdentifier();
-        if ( xId.is() )
-            m_aURL = xId->getContentIdentifier();
+        osl::MutexGuard aGuard( m_aMutex );
+
+        if ( !m_aURL.getLength() && m_xContent.is() )
+        {
+            Reference< XContentIdentifier > xId = m_xContent->getIdentifier();
+            if ( xId.is() )
+                m_aURL = xId->getContentIdentifier();
+        }
     }
 
     return m_aURL;
 }
 
 //=========================================================================
+Reference< XContent > Content_Impl::getContent()
+{
+    if ( !m_xContent.is() && m_aURL.getLength() )
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+
+        if ( !m_xContent.is() && m_aURL.getLength() )
+        {
+            ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
+
+            OSL_ENSURE( pBroker, "No Content Broker!" );
+
+            if ( pBroker )
+            {
+                OSL_ENSURE( pBroker->getContentProviderManagerInterface()
+                                        ->queryContentProviders().getLength(),
+                            "Content Broker not configured (no providers)!" );
+
+                Reference< XContentIdentifierFactory > xIdFac
+                            = pBroker->getContentIdentifierFactoryInterface();
+
+                OSL_ENSURE( xIdFac.is(), "No Content Identifier factory!" );
+
+                if ( xIdFac.is() )
+                {
+                    Reference< XContentIdentifier > xId
+                                = xIdFac->createContentIdentifier( m_aURL );
+
+                    OSL_ENSURE( xId.is(), "No Content Identifier!" );
+
+                    if ( xId.is() )
+                    {
+                        Reference< XContentProvider > xProvider
+                            = pBroker->getContentProviderInterface();
+
+                        OSL_ENSURE( xProvider.is(), "No Content Provider!" );
+
+                        if ( xProvider.is() )
+                        {
+                            try
+                            {
+                                m_xContent = xProvider->queryContent( xId );
+                            }
+                            catch ( IllegalIdentifierException const & )
+                            {
+                            }
+
+                            if ( m_xContent.is() )
+                                m_xContent->addContentEventListener(
+                                                m_xContentEventListener );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return m_xContent;
+}
+
+//=========================================================================
 Reference< XCommandProcessor > Content_Impl::getCommandProcessor()
 {
-    osl::MutexGuard aGuard( m_aMutex );
-
     if ( !m_xCommandProcessor.is() )
-        m_xCommandProcessor
-            = Reference< XCommandProcessor >( m_xContent, UNO_QUERY );
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+
+        if ( !m_xCommandProcessor.is() )
+            m_xCommandProcessor
+                = Reference< XCommandProcessor >( getContent(), UNO_QUERY );
+    }
 
     return m_xCommandProcessor;
 }
@@ -1630,13 +1700,16 @@ Reference< XCommandProcessor > Content_Impl::getCommandProcessor()
 //=========================================================================
 sal_Int32 Content_Impl::getCommandId()
 {
-    osl::MutexGuard aGuard( m_aMutex );
-
     if ( m_nCommandId == 0 )
     {
-        Reference< XCommandProcessor > xProc = getCommandProcessor();
-        if ( xProc.is() )
-            m_nCommandId = xProc->createCommandIdentifier();
+        osl::MutexGuard aGuard( m_aMutex );
+
+        if ( m_nCommandId == 0 )
+        {
+            Reference< XCommandProcessor > xProc = getCommandProcessor();
+            if ( xProc.is() )
+                m_nCommandId = xProc->createCommandIdentifier();
+        }
     }
 
     return m_nCommandId;
@@ -1732,7 +1805,10 @@ void SAL_CALL ContentEventListener_Impl::disposing( const EventObject& Source )
     throw( RuntimeException )
 {
     if ( Source.Source == m_rContent.m_xContent )
+    {
         m_rContent.reinit( Reference< XContent >() );
+        m_rContent.m_aURL = rtl::OUString();
+    }
 }
 
 } /* namespace ucb */
