@@ -4888,3 +4888,4 @@ _TI2?AVElementExistException@container@star@sun@com@@
 ?getStatusIndicator@SfxBaseController@@UAA?AV?$Reference@VXStatusIndicator@task@star@sun@com@@@uno@star@sun@com@@XZ
 ?queryInterface@SfxBaseController@@WBA@AA?AVAny@uno@star@sun@com@@ABVType@3456@@Z
 ?release@SfxBaseController@@WBA@AAXXZ
+?LoadDocumentSynchron@SfxFrame@@QAEPBVSfxPoolItem@@AAVSfxItemSet@@@Z
