@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:44:53 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,11 +522,22 @@ bool convertListToSequence(StringList const& aStringList, uno::Sequence< T >& rS
 
 static
 inline
-void stringListToSequence(uno::Sequence< OUString >& rSequence, StringList const& aStringList)
+void stringListToSequence(uno::Sequence< OUString > & rSequence, StringList const & aStringList)
 {
     rSequence .realloc( aStringList.size() );
 
     std::copy( aStringList.begin(), aStringList.end(), rSequence.getArray() );
+}
+// -----------------------------------------------------------------------------
+
+static
+inline
+StringList sequenceToStringList(uno::Sequence< OUString > const & aSequence)
+{
+    OUString const * const pBegin = aSequence.getConstArray();
+    OUString const * const pEnd = pBegin + aSequence.getLength();
+
+    return StringList(pBegin,pEnd);
 }
 // -----------------------------------------------------------------------------
 
@@ -538,6 +549,16 @@ uno::Sequence< OUString > ValueConverter::splitStringList(OUString const& aConte
     uno::Sequence< OUString > aResult;
     stringListToSequence(aResult,aList);
 
+    return aResult;
+}
+// -----------------------------------------------------------------------------
+
+uno::Any ValueConverter::convertListToAny(uno::Sequence< OUString > const& aContentList) const
+    CFG_UNO_THROW1( script::CannotConvertException )
+{
+    uno::Any aResult;
+    StringList const aStringList = sequenceToStringList(aContentList);
+    convertListToAny(aStringList,aResult);
     return aResult;
 }
 // -----------------------------------------------------------------------------
