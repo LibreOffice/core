@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-12-21 12:12:32 $
+ *  last change: $Author: os $ $Date: 2001-01-10 15:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@
 
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
-#define C2S(cChar) String::CreateFromAscii(cChar)
+
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
@@ -471,10 +471,6 @@ void SwOneExampleFrame::ExecUndo()
 {
     DisposeControl();
     CreateControl();
-    while(pTimer->IsActive())
-    {
-        wait();
-    }
 }
 /* -----------------------------15.12.99 11:09--------------------------------
 
