@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scripttypedetector.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 16:59:03 $
+ *  last change: $Author: er $ $Date: 2002-06-13 16:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,10 +147,10 @@ ScriptTypeDetector::getCTLScriptType( const ::rtl::OUString& Text, sal_Int32 nPo
     { UnicodeScript_kArabic,    CTLScriptType::CTL_ARABIC },    // 11
     { UnicodeScript_kDevanagari,    CTLScriptType::CTL_INDIC }, // 14
     { UnicodeScript_kThai,      CTLScriptType::CTL_THAI },  // 24
-    { UnicodeScript_kScriptCount,   CTLScriptType::CTL_UNKNOW } // 88
+    { UnicodeScript_kScriptCount,   CTLScriptType::CTL_UNKNOWN }    // 88
     };
 
-    return unicode::getUnicodeScriptType(Text[nPos], typeList, CTLScriptType::CTL_UNKNOW);
+    return unicode::getUnicodeScriptType(Text[nPos], typeList, CTLScriptType::CTL_UNKNOWN);
 }
 
 // Begin of Script Type is inclusive.
