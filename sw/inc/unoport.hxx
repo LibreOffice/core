@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-12-19 15:46:40 $
+ *  last change: $Author: os $ $Date: 2001-02-19 10:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ class SwFmtFld;
 class SwFrmFmt;
 class SwUnoCrsr;
 class SwRedline;
+class SwTxtRuby;
 /* -----------------29.05.98 14:42-------------------
  *
  * --------------------------------------------------*/
@@ -116,7 +117,9 @@ enum SwTextPortionType
     PORTION_BOOKMARK_START,
     PORTION_BOOKMARK_END,
     PORTION_REDLINE_START,
-    PORTION_REDLINE_END
+    PORTION_REDLINE_END,
+    PORTION_RUBY_START,
+    PORTION_RUBY_END
 };
 
 class SwXTextPortion : public cppu::WeakImplHelper6
@@ -216,7 +219,24 @@ public:
     BOOL                IsCollapsed() const { return bIsCollapsed;}
     void                SetCollapsed(BOOL bSet) { bIsCollapsed = bSet;}
 
+    SwTextPortionType   GetTextPortionType() const {return ePortionType;}
     //falls es mal als service erzeugt werden kann
     //void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+};
+/* -----------------------------19.02.01 10:46--------------------------------
+
+ ---------------------------------------------------------------------------*/
+class SwXRubyPortion : public SwXTextPortion
+{
+    ::com::sun::star::uno::Any aRubyText;
+    ::com::sun::star::uno::Any aRubyStyle;
+    ::com::sun::star::uno::Any aRubyAdjust;
+public:
+    SwXRubyPortion(const SwUnoCrsr* pPortionCrsr,
+                    SwTxtRuby& rAttr,
+                    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent,
+                    sal_Bool bEnd   );
+    ~SwXRubyPortion();
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 };
 #endif

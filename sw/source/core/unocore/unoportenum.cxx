@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-24 14:40:19 $
+ *  last change: $Author: os $ $Date: 2001-02-19 10:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,17 @@ void lcl_InsertRefMarkPortion(
     }
 }
 //-----------------------------------------------------------------------------
+void lcl_InsertRubyPortion( XTextRangeArr& rArr, SwUnoCrsr* pUnoCrsr,
+                        Reference<XText> xParent, SwTxtAttr* pAttr, BOOL bEnd)
+{
+    SwXRubyPortion* pPortion;
+    rArr.Insert(
+        new Reference< XTextRange >(pPortion = new SwXRubyPortion(*pUnoCrsr, *(SwTxtRuby*)pAttr, xParent,
+            bEnd)),
+        rArr.Count());
+    pPortion->SetCollapsed(pAttr->GetEnd() ? FALSE : TRUE);
+}
+//-----------------------------------------------------------------------------
 void lcl_InsertTOXMarkPortion(
     XTextRangeArr& rArr, SwUnoCrsr* pUnoCrsr, Reference<XText> xParent, SwTxtAttr* pAttr, BOOL bEnd)
 {
@@ -460,7 +471,8 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
             USHORT nAttrWhich = pAttr->Which();
             if(nNextEnd == nCurrentIndex &&
                 ( RES_TXTATR_TOXMARK == nAttrWhich ||
-                        RES_TXTATR_REFMARK == nAttrWhich))
+                    RES_TXTATR_REFMARK == nAttrWhich ||
+                        RES_TXTATR_CJK_RUBY == nAttrWhich))
             {
                 switch( nAttrWhich )
                 {
@@ -474,7 +486,11 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                             rPortionArr, pUnoCrsr, xParent, pAttr, TRUE);
                         ePortionType = PORTION_TEXT;
                     break;
-
+                    case RES_TXTATR_CJK_RUBY:
+                        lcl_InsertRubyPortion(
+                            rPortionArr, pUnoCrsr, xParent, pAttr, TRUE);
+                        ePortionType = PORTION_TEXT;
+                    break;
                 }
             }
         }
@@ -491,7 +507,8 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
         if(nNextStart == nCurrentIndex &&
             (!pAttr->GetEnd() ||
                 RES_TXTATR_TOXMARK == nAttrWhich ||
-                    RES_TXTATR_REFMARK == nAttrWhich))
+                    RES_TXTATR_REFMARK == nAttrWhich||
+                        RES_TXTATR_CJK_RUBY == nAttrWhich))
         {
             switch( nAttrWhich )
             {
@@ -568,6 +585,14 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                         if(*pUnoCrsr->GetPoint() < *pUnoCrsr->GetMark())
                                 pUnoCrsr->Exchange();
                         pUnoCrsr->DeleteMark();
+                    }
+                break;
+                case RES_TXTATR_CJK_RUBY:
+                    if(pAttr->GetEnd())
+                    {
+                        lcl_InsertRubyPortion(
+                            rPortionArr, pUnoCrsr, xParent, pAttr, FALSE);
+                        ePortionType = PORTION_TEXT;
                     }
                 break;
                 default:

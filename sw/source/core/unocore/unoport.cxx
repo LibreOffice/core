@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:46:22 $
+ *  last change: $Author: os $ $Date: 2001-02-19 10:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,12 @@
 #endif
 #ifndef _UNOCRSR_HXX
 #include <unocrsr.hxx>
+#endif
+#ifndef _UNOMID_H
+#include <unomid.h>
+#endif
+#ifndef _TXTATR_HXX
+#include <txtatr.hxx>
 #endif
 #ifndef _TXTFLD_HXX //autogen
 #include <txtfld.hxx>
@@ -338,6 +344,10 @@ uno::Any SwXTextPortion::getPropertyValue(const OUString& rPropertyName) throw( 
                 case PORTION_BOOKMARK_END :  sRet = C2U(UNO_NAME_BOOKMARK);break;
                 case PORTION_REDLINE_START:
                 case PORTION_REDLINE_END:   sRet = C2U("Redline");break;
+                case PORTION_RUBY_START:
+                case PORTION_RUBY_END:  sRet = C2U("Ruby");break;
+
+
             }
             aAny <<= sRet;
         }
@@ -367,6 +377,8 @@ uno::Any SwXTextPortion::getPropertyValue(const OUString& rPropertyName) throw( 
                 case PORTION_BOOKMARK_END :
                 case PORTION_REDLINE_START :
                 case PORTION_REDLINE_END :
+                case PORTION_RUBY_START:
+                case PORTION_RUBY_END:
                     aAny.setValue(&bIsCollapsed, ::getBooleanCppuType());
                 break;
                 default:
@@ -382,11 +394,15 @@ uno::Any SwXTextPortion::getPropertyValue(const OUString& rPropertyName) throw( 
                 case PORTION_BOOKMARK_START:
                 case PORTION_TOXMARK_START:
                 case PORTION_REDLINE_START:
+                case PORTION_RUBY_START:
                 break;
+
                 case PORTION_REFMARK_END:
                 case PORTION_TOXMARK_END:
                 case PORTION_BOOKMARK_END:
-                case PORTION_REDLINE_END:   bStart = FALSE;
+                case PORTION_REDLINE_END:
+                case PORTION_RUBY_END:
+                    bStart = FALSE;
                 break;
                 default:
                     bPut = FALSE;
@@ -692,5 +708,47 @@ void SwXTextPortion::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     if(!aFrameDepend.GetRegisteredIn())
         pFrameFmt = 0;
 }
+/* -----------------------------19.02.01 10:52--------------------------------
 
+ ---------------------------------------------------------------------------*/
+SwXRubyPortion::SwXRubyPortion(const SwUnoCrsr* pPortionCrsr,
+                    SwTxtRuby& rAttr,
+                    Reference< XText >  xParent,
+                    sal_Bool bEnd   ) :
+        SwXTextPortion(pPortionCrsr, xParent, bEnd ? PORTION_RUBY_END : PORTION_RUBY_START  )
+{
+    if(!bEnd)
+    {
+        const SfxPoolItem& rItem = rAttr.GetAttr();
+        rItem.QueryValue(aRubyText, MID_RUBY_TEXT);
+        rItem.QueryValue(aRubyStyle, MID_RUBY_CHARSTYLE);
+        rItem.QueryValue(aRubyAdjust, MID_RUBY_ADJUST);
+    }
+}
+/* -----------------------------19.02.01 10:52--------------------------------
 
+ ---------------------------------------------------------------------------*/
+SwXRubyPortion::~SwXRubyPortion()
+{
+}
+/* -----------------------------19.02.01 10:52--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Any SwXRubyPortion::getPropertyValue( const OUString& rPropertyName )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    Any aRet;
+    if(GetTextPortionType() == PORTION_RUBY_START &&
+        !rPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("Ruby") ))
+    {
+        if(rPropertyName.equalsAsciiL( UNO_NAME_RUBY_TEXT.pName, UNO_NAME_RUBY_TEXT.nNameLen))
+            aRet = aRubyText;
+        else if(rPropertyName.equalsAsciiL( UNO_NAME_RUBY_ADJUST.pName, UNO_NAME_RUBY_ADJUST.nNameLen))
+            aRet = aRubyAdjust;
+        else if(rPropertyName.equalsAsciiL( UNO_NAME_RUBY_CHAR_STYLE_NAME.pName, UNO_NAME_RUBY_CHAR_STYLE_NAME.nNameLen))
+            aRet = aRubyStyle;
+    }
+    else
+        aRet = SwXTextPortion::getPropertyValue(rPropertyName);
+    return aRet;
+}
