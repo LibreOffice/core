@@ -2,9 +2,9 @@
  *
  *  $RCSfile: richtextengine.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:12:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-12 15:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ namespace frm
 
         pReturn->SetStatusEventHdl( LINK( pReturn, RichTextEngine, EditEngineStatusChanged ) );
 
-        pPool->SetDefaultMetric( static_cast< SfxMapUnit >( aDeviceMapMode.GetMapUnit() ) );
+        pPool->SetDefaultMetric(  (SfxMapUnit)( aDeviceMapMode.GetMapUnit() ) );
 
         // defaults
         Font aFont = Application::GetSettings().GetStyleSettings().GetAppFont();
