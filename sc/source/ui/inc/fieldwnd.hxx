@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-22 14:37:40 $
+ *  last change: $Author: sab $ $Date: 2002-08-06 10:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include <vcl/fixed.hxx>
 #endif
 
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
+#endif
 
 #define MAX_LABELS  256
 #define PAGE_SIZE   16      // count of visible fields for scrollbar
@@ -81,6 +84,7 @@
 #define SSPACE  PivotGlobal::nSelSpace
 
 class ScDPLayoutDlg;
+class ScAccessibleDataPilotControl;
 
 //===================================================================
 
@@ -99,6 +103,7 @@ enum ScDPFieldType
 class ScDPFieldWindow : public Control
 {
 private:
+    String                  aName;          /// name of the control, used in Accessibility
     ScDPLayoutDlg*          pDlg;           /// Parent dialog.
     Rectangle               aWndRect;       /// Area rectangle in pixels.
     FixedText*              pFtCaption;     /// FixedText containing the name of the control.
@@ -112,17 +117,14 @@ private:
     long                    nFieldCount;    /// Count of existing fields.
     long                    nFieldSelected; /// Currently selected field.
 
+    com::sun::star::uno::WeakReference< ::drafts::com::sun::star::accessibility::XAccessible > xAccessible;
+    ScAccessibleDataPilotControl* pAccessible;
+
+    /** Initilize the object. */
+    void                    Init();
+
     /** Reads all needed style settings. */
     void                    GetStyleSettings();
-
-    /** @return  The pixel position of a field (without bound check). */
-    Point                   GetFieldPosition( long nIndex ) const;
-    /** @return  The pixel size of a field. */
-    Size                    GetFieldSize() const;
-    /** Calculates the field index at a specific pixel position.
-        @param rnIndex  The index of the field is returned here.
-        @return  TRUE, if the index value is valid. */
-    BOOL                    GetFieldIndex( const Point& rPos, long& rnIndex ) const;
 
     /** Draws the background. */
     void                    DrawBackground( OutputDevice& rDev );
@@ -154,9 +156,6 @@ private:
     /** Moves the selected field to the given direction. */
     void                    MoveFieldRel( short nDX, short nDY );
 
-    /** Grabs focus and sets new selection. */
-    void                    GrabFocusWithSel( long nIndex );
-
 protected:
     virtual void            Paint( const Rectangle& rRect );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
@@ -166,6 +165,7 @@ protected:
     virtual void            KeyInput( const KeyEvent& rKEvt );
     virtual void            GetFocus();
     virtual void            LoseFocus();
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
 public:
                             ScDPFieldWindow(
@@ -173,10 +173,20 @@ public:
                                 const ResId& rResId,
                                 ScDPFieldType eFieldType,
                                 FixedText* pFtFieldCaption );
+                            ScDPFieldWindow(
+                                ScDPLayoutDlg* pDialog,
+                                const ResId& rResId,
+                                ScDPFieldType eFieldType,
+                                const String& aName );
     virtual                 ~ScDPFieldWindow();
 
     /** Draws the complete control. */
     void                    Redraw();
+
+    /** @return  The pixel position of a field (without bound check). */
+    Point                   GetFieldPosition( long nIndex ) const;
+    /** @return  The pixel size of a field. */
+    Size                    GetFieldSize() const;
 
     /** @return  The index of the selected field. */
     inline BOOL             IsEmpty() const             { return nFieldCount == 0; }
@@ -185,6 +195,8 @@ public:
     /** @return  The pixel position of the last possible field. */
     Point                   GetLastPosition() const;
 
+    /** @return  The count of existing fields. */
+    long                    GetFieldCount() const       { return nFieldCount; }
     /** Inserts a field to the specified index. */
     void                    AddField( const String& rText, long nNewIndex );
     /** Removes a field from the specified index. */
@@ -193,12 +205,18 @@ public:
     void                    ClearFields();
     /** Changes the text on an existing field. */
     void                    SetFieldText( const String& rText, long nIndex );
+    /** Returns the text of an existing field. */
+    const String&           GetFieldText(long nIndex) const;
 
     /** Inserts a field using the specified pixel position.
         @param rPos  The coordinates to insert the field.
         @param rnIndex  The new index of the field is returned here.
         @return  TRUE, if the field has been created. */
     BOOL                    AddField( const String& rText, const Point& rPos, long& rnIndex );
+    /** Calculates the field index at a specific pixel position.
+        @param rnIndex  The index of the field is returned here.
+        @return  TRUE, if the index value is valid. */
+    BOOL                    GetFieldIndex( const Point& rPos, long& rnIndex ) const;
     /** Calculates a field index at a specific pixel position. Returns in every
         case the index of an existing field.
         @param rnIndex  The index of the field is returned here.
@@ -211,6 +229,12 @@ public:
     void                    ModifySelectionOffset( long nOffsetDiff );
     /** Selects the next field. Called i.e. after moving a field from SELECT area. */
     void                    SelectNext();
+
+    /** @return The name of the control without shortcut. */
+    String                  GetName()const              { return aName; }
+
+    /** Grabs focus and sets new selection. */
+    void                    GrabFocusWithSel( long nIndex );
 };
 
 //===================================================================
