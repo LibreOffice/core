@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 10:02:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,8 +904,11 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule, SwHistory* pHist,
         delete pUpd;
 }
 
+// --> OD 2005-02-18 #i42921# - re-use unused 3rd parameter - it replaces local
+// variable <bSetItem>
 void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
-                        sal_Bool bSetAbsLSpace )
+                        sal_Bool bSetItem )
+// <--
 {
     SwUndoInsNum* pUndo;
     if( DoesUndo() )
@@ -918,7 +921,6 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
         pUndo = 0;
 
     ULONG nPamPos = rPam.Start()->nNode.GetIndex();
-    BOOL bSetItem = TRUE;
     SwNumRule* pNew = FindNumRulePtr( rRule.GetName() );
 
     if( !pNew )
@@ -959,7 +961,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
                     pTxtNd->GetNum()->IsStart() )
                     break;
 
-            bSetItem = FALSE;
+            bSetItem = sal_False;
             nPamPos = ULONG_MAX;
             if( !pNew->IsAutoRule() || nFirst || nLast != aUpd.GetList().Count() )
             {
@@ -1349,6 +1351,8 @@ BOOL SwDoc::ReplaceNumRule( const SwPosition& rPos,
 
 void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 {
+    ASSERT( rPaM.GetDoc() == this, "need same doc" );
+
     map<SwNumRule *, SwNumRule *> aNumRuleMap;
 
      ULONG nStt = rPaM.Start()->nNode.GetIndex();
@@ -2521,6 +2525,19 @@ void lcl_UpdateNumRuleRange( SwNumRule & rRule,
     /* counter for continuous numbering */
     int nCount = 0;
 
+    while (nUpdatePos < nLast)
+    {
+        SwTxtNode * pTxtNode = rNumRuleInfo.GetList().GetObject(nUpdatePos);
+
+        if (pTxtNode->MayBeNumbered())
+            break;
+
+        nUpdatePos++;
+    }
+
+    if (nUpdatePos >= nLast)
+        return;
+
     /* If all paragraphs found are to be processed initialize all
        levels with their start values.*/
     if ( bInit )
@@ -3017,12 +3034,11 @@ void SwDoc::UpdateNumRuleOld( SwNumRule & rRule, ULONG nUpdPos )
                                 pRule->Get( GetRealLevel(nLevel) ).GetStart();
                         else
                         {
-                            const SwNumFmt * pTmpNumFmt =
-                                pRule->GetNumFmt(GetRealLevel(nLevel));
+                            const SwNumFmt & rTmpNumFmt =
+                                pRule->Get(GetRealLevel(nLevel));
 
-                            if (pTmpNumFmt &&
-                                SVX_NUM_NUMBER_NONE !=
-                                pTmpNumFmt->GetNumberingType())
+                            if (SVX_NUM_NUMBER_NONE !=
+                                rTmpNumFmt.GetNumberingType())
                                 aNum.GetLevelVal()[ GetRealLevel(nLevel) ]++;
                         }
                     }
