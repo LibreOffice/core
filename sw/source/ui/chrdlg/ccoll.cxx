@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:15:23 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,8 +191,9 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     SfxStyleFamilies aFamilies(SW_RES(DLG_STYLE_DESIGNER));
     const SfxStyleFamilyItem* pFamilyItem;
     USHORT nCount = aFamilies.Count();
+    USHORT i;
 
-    for(USHORT i = 0; i < nCount; ++i)
+    for( i = 0; i < nCount; ++i)
     {
         if(SFX_STYLE_FAMILY_PARA == (USHORT)(pFamilyItem = aFamilies.GetObject(i))->GetFamily())
             break;
