@@ -363,7 +363,7 @@ public abstract class OfficeDocument
                     }
                     // Take off the trailing '/'
                     String name = path.substring(0, path.length() - 1);
-                    embeddedObjects.put(path, new EmbeddedXMLObject(name, type, zip));
+                    embeddedObjects.put(name, new EmbeddedXMLObject(name, type, zip));
                 }
                 else if (type.equals("text/xml")) {
                     // XML entries are either embedded StarOffice doc entries or main
@@ -582,7 +582,7 @@ public abstract class OfficeDocument
      *
      *  @throws  SAXException  If any parsing error occurs.
      */
-    private Document parse(DocumentBuilder builder, byte bytes[])
+    static Document parse(DocumentBuilder builder, byte bytes[])
         throws SAXException, IOException {
 
         Document doc = null;
@@ -918,9 +918,9 @@ public abstract class OfficeDocument
      *
      *  @throws  IOException  If any I/O error occurs.
      */
-    private Reader hack(InputStream is) throws IOException {
+    private static Reader hack(InputStream is) throws IOException {
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
         StringBuffer buffer = new StringBuffer(is.available());
 
         String str = null;
