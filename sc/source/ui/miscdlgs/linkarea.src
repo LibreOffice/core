@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:58:10 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,7 @@ ModalDialog RID_SCDLG_LINKAREA
     Moveable = TRUE ;
     Closeable = TRUE ;
     Size = MAP_APPFONT ( 274 , 190 ) ;
-    Text = "Externe Daten" ;
-    Text [ ENGLISH ] = "External Data" ;
+    Text [ de ] = "Externe Daten" ;
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 218 , 8 ) ;
@@ -90,35 +89,8 @@ ModalDialog RID_SCDLG_LINKAREA
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 204 , 8 ) ;
-        Text = "~URL der externen Datenquelle" ;
-        Text [ ENGLISH ] = "External Data Source Location" ;
-        Text[ english_us ] = "URL of ~external data source";
-        Text[ portuguese ] = "~URL da fonte de dados externa";
-        Text[ russian ] = "URL âíåøíèõ èñòî÷íèêîâ äàííûõ";
-        Text[ greek ] = "~URL ôçò åîùôåñéêŞò ğñïİëåõóçò ôùí äåäïìİíùí";
-        Text[ dutch ] = "~URL van de externe gegevensbron";
-        Text[ french ] = "~URL de la source de données externe";
-        Text[ spanish ] = "~URL de la fuente de datos externa";
-        Text[ italian ] = "URL della sorgente dati esterna";
-        Text[ danish ] = "URL til den ~eksterne datakilde";
-        Text[ swedish ] = "~URL för extern datakälla";
-        Text[ polish ] = "Adr~es URL zewnêtrznego Ÿród³a danych";
-        Text[ portuguese_brazilian ] = "~URL da fonte de dados externa";
-        Text[ japanese ] = "å¤–éƒ¨ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã® URL(~E)";
-        Text[ korean ] = "ì™¸ë¶€ ë°ì´í„° ì›ë³¸ì˜ URL(~E)";
-        Text[ chinese_simplified ] = "å¤–éƒ¨æ•°æ®æºçš„ URL(~E)";
-        Text[ chinese_traditional ] = "å¤–éƒ¨è³‡æ–™æºçš„ URL(~E)";
-        Text[ turkish ] = "-harici veri kaynağı URL' si";
-        Text[ arabic ] = "External Data Source Location";
-        Text[ catalan ] = "URL de la font de dades ~externa";
-        Text[ finnish ] = "~Ulkoisen tietolähteen URL-osoite";
-        Text[ thai ] = "URL à¸‚à¸­à¸‡à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¸­à¸¡à¸¹à¸¥~à¸ à¸²à¸¢à¸™à¸­à¸";
-        Text[ czech ] = "URL externÃ­ho zdroje dat";
-        Text[ hebrew ] = "~URL der externen Datenquelle";
-        Text[ hindi ] = "~à¤¬à¤¾à¤¹à¤°à¥€ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤•à¥€ URL";
-        Text[ slovak ] = "URL ~externÃ©ho zdroja dÃ¡t";
-        Text[ hungarian ] = "~KÃ¼lsÅ‘ adatforrÃ¡s:";
-        Text[ slovenian ] = "URL zunanj~ega vira podatkov";
+        Text [ de ] = "~URL der externen Datenquelle" ;
+        Text [ en-US ] = "URL of ~external data source";
     };
     ComboBox CB_URL
     {
@@ -138,69 +110,15 @@ ModalDialog RID_SCDLG_LINKAREA
         Pos = MAP_APPFONT ( 12 , 31 ) ;
         Size = MAP_APPFONT ( 192 , 26 ) ;
         WordBreak = TRUE ;
-        Text = "(URL des Quelldokuments im lokalen Dateisystem oder im Internet)" ;
-        Text [ ENGLISH ] = "(Insert a local file location or an URL from a web site here)" ;
-        Text[ english_us ] = "(Enter the URL of the source document in the local file system or Internet here.)";
-        Text[ portuguese ] = "(URL do documento-fonte no sistema local de ficheiros ou na Internet)";
-        Text[ russian ] = "(Ââåäèòå URL èñõîäíîãî äîêóìåíòà â ëîêàëüíîé ôàéëîâîé ñèñòåìå èëè â Èíòåğíåòå)";
-        Text[ greek ] = "(ÅéóáãùãŞ ôïõ İããñáöïõ ğñïİëåõóçò áğü ôï ôïğéêü óıóôçìá áñ÷åßùí Ş áğü ôï Internet)";
-        Text[ dutch ] = "(URL van het brondocument in het lokale bestandssysteem of op het internet)";
-        Text[ french ] = "(URL du document source dans le système de fichiers local ou dans l'Internet)";
-        Text[ spanish ] = "(URL del documento fuente en el sistema de archivos local o en Internet)";
-        Text[ italian ] = "(URL del documento sorgente nel sistema di dati locale oppure in Internet)";
-        Text[ danish ] = "(Indtast her kildedokumentets URL til det lokale filsystem eller på Internet.)";
-        Text[ swedish ] = "(Källdokumentets URL i det lokala filsystemet eller på Internet)";
-        Text[ polish ] = "(Adres URL dokumentu Ÿród³owego w lokalnym systemie plików lub w Internecie)";
-        Text[ portuguese_brazilian ] = "(Digite a URL do documento-origem no sistema de arquivos local ou na Internet)";
-        Text[ japanese ] = "(ãƒ­ãƒ¼ã‚«ãƒ«ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚·ã‚¹ãƒ†ãƒ ã€ã‚ã‚‹ã„ã¯ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆã«ã‚ã‚‹ã‚½ãƒ¼ã‚¹ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã® URL)";
-        Text[ korean ] = "(ë¡œì»¬ íŒŒì¼ ì‹œìŠ¤í…œ ë˜ëŠ” ì›¹ì‚¬ì´íŠ¸ ë‚´ ì›ë³¸ ë¬¸ì„œì˜ URL)";
-        Text[ chinese_simplified ] = "(æœ¬æœºæ–‡ä»¶ç³»ç»Ÿæˆ–å›½é™…äº’è”ç½‘ä¹‹ä¸­æºæ–‡æœ¬çš„ URL)";
-        Text[ chinese_traditional ] = "(æœ¬æ©Ÿæª”æ¡ˆç³»çµ±æˆ– internet ä¹‹ä¸­æºæ–‡ä»¶çš„ URL)";
-        Text[ turkish ] = "(Yerel dosya sistemi ya da internet üzerindeki kaynak belgesinin URL' sini buraya girin)";
-        Text[ arabic ] = "(Insert a local file location or an URL from a web site here)";
-        Text[ catalan ] = "(Introduïu aquí l'URL del document font del sistema de fitxers local o d'Internet.)";
-        Text[ finnish ] = "(Kirjoita tähän paikallisessa tiedostojärjestelmässä tai Internetissä olevan lähdetiedoston URL-osoite).";
-        Text[ thai ] = "(à¹ƒà¸ªà¹ˆ URL à¸‚à¸­à¸‡à¹à¸«à¸¥à¹ˆà¸‡à¹€à¸­à¸à¸ªà¸²à¸£à¹ƒà¸™à¸£à¸°à¸šà¸šà¹à¸Ÿà¹‰à¸¡à¸—à¹‰à¸­à¸‡à¸–à¸´à¹ˆà¸™à¸«à¸£à¸·à¸­à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•à¸—à¸µà¹ˆà¸™à¸µà¹ˆ)";
-        Text[ czech ] = "(ZapiÅ¡te URL zdrojovÃ©ho dokumentu v lokÃ¡lnÃ­m souborovÃ©m systÃ©mu nebo v sÃ­ti Internet)";
-        Text[ hebrew ] = "(URL des Quelldokuments im lokalen Dateisystem oder im Internet)";
-        Text[ hindi ] = "(à¤®à¥‚à¤² à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤•à¤¾ URL à¤•à¥‹ à¤¸à¥à¤¥à¤¾à¤¨à¤¿à¤• à¤«à¤¾à¤‡à¤² à¤¸à¤¿à¤¸à¥à¤Ÿà¤® à¤®à¥‡à¤‚ à¤…à¤¥à¤µà¤¾ à¤‡à¤¨à¥à¤Ÿà¤°à¤¨à¥‡à¤Ÿà¥ à¤®à¥‡à¤‚ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿ à¤•à¥€à¤œà¤¿à¤ à¥¤)";
-        Text[ slovak ] = "(Tu zadajte URL zdrojovÃ©ho dokumentu v lokÃ¡lnom systÃ©me alebo na internete.)";
-        Text[ hungarian ] = "(Ãrja be a forrÃ¡sdokumentum fÃ¡jlnevÃ©t vagy URL-jÃ©t.)";
-        Text[ slovenian ] = "(Tu vpiÅ¡ite URL izvornega dokumenta v lokalnem datoteÄnem sistemu ali na Internetu.)";
+        Text [ de ] = "(URL des Quelldokuments im lokalen Dateisystem oder im Internet)" ;
+        Text [ en-US ] = "(Enter the URL of the source document in the local file system or Internet here.)";
     };
     FixedText FT_RANGES
     {
         Pos = MAP_APPFONT ( 6 , 62 ) ;
         Size = MAP_APPFONT ( 198 , 8 ) ;
-        Text = "~Verfügbare Tabellen/Bereiche" ;
-        Text [ ENGLISH ] = "Available Tables/Ranges" ;
-        Text[ english_us ] = "~Available tables/ranges";
-        Text[ portuguese ] = "~Tabelas/Áreas disponíveis";
-        Text[ russian ] = "Äîñòóïíûå òàáëèöû/äèàïàçîíû";
-        Text[ greek ] = "Äéáèİóéìïé ğßíáêåò/ğåñéï÷İò";
-        Text[ dutch ] = "~Beschikbare tabellen/Bereiken";
-        Text[ french ] = "Feuilles/plages dis~ponibles";
-        Text[ spanish ] = "Tablas/Áreas dispo~nibles";
-        Text[ italian ] = "~Sezioni/tabelle disponibili";
-        Text[ danish ] = "~Tilgængelige tabeller/områder";
-        Text[ swedish ] = "T~illgängliga tabeller/områden";
-        Text[ polish ] = "~Dostêpne tabele/zakresy";
-        Text[ portuguese_brazilian ] = "Tabelas/intervalos ~disponíveis";
-        Text[ japanese ] = "ä½¿ç”¨ã§ãã‚‹è¡¨ã¨ç¯„å›²(~A)";
-        Text[ korean ] = "ì‚¬ìš© ê°€ëŠ¥í•œ í‘œ/ë²”ìœ„(~A)";
-        Text[ chinese_simplified ] = "ç°æœ‰çš„è¡¨æ ¼/åŒºåŸŸ(~A)";
-        Text[ chinese_traditional ] = "ç¾æœ‰çš„è¡¨æ ¼æˆ–å€åŸŸ(~A)";
-        Text[ turkish ] = "Erişilebilir Tablolar/Aralıklar";
-        Text[ arabic ] = "Available Tables/Ranges";
-        Text[ catalan ] = "Taules/àrees ~disponibles";
-        Text[ finnish ] = "~Käytettävissä olevat taulukot/alueet";
-        Text[ thai ] = "à¸•à¸²à¸£à¸²à¸‡/à¸Šà¹ˆà¸§à¸‡à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰à¹„à¸”à¹‰";
-        Text[ czech ] = "DostupnÃ© tabulky/oblasti";
-        Text[ hebrew ] = "~VerfÃ¼gbare Tabellen/Bereiche";
-        Text[ hindi ] = "~à¤ªà¥à¤°à¤¾à¤ªà¥à¤¯ à¤¸à¤¾à¤°à¤£à¥€/à¤«à¥ˆà¤²à¤¾à¤µ";
-        Text[ slovak ] = "DostupnÃ© t~abuÄ¾ky/oblasti";
-        Text[ hungarian ] = "~RendelkezÃ©sre Ã¡llÃ³ tÃ¡blÃ¡zatok/tartomÃ¡nyok";
-        Text[ slovenian ] = "~RazpoloÅ¾ljive tabele / obsegi";
+        Text [ de ] = "~Verfügbare Tabellen/Bereiche" ;
+        Text [ en-US ] = "~Available tables/ranges";
     };
     MultiListBox LB_RANGES
     {
@@ -215,35 +133,8 @@ ModalDialog RID_SCDLG_LINKAREA
         Pos = MAP_APPFONT ( 12 , 168 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
-        Text = "~Aktualisierung alle" ;
-        Text [ ENGLISH ] = "Auto reload data every" ;
-        Text[ english_us ] = "~Update every";
-        Text[ portuguese ] = "A~ctualizar cada";
-        Text[ russian ] = "Îáíîâëåíèå êàæäûå";
-        Text[ greek ] = "Å~íçìİñùóç üëùí";
-        Text[ dutch ] = "~Bijwerken alle";
-        Text[ french ] = "~Actualisation toutes les";
-        Text[ spanish ] = "Actuali~zar cada";
-        Text[ italian ] = "Aggiorna ogni";
-        Text[ danish ] = "~Opdater efter";
-        Text[ swedish ] = "Uppd~atering var";
-        Text[ polish ] = "~Aktualizuj co";
-        Text[ portuguese_brazilian ] = "~Atualizar a cada";
-        Text[ japanese ] = "æ¬¡ã®æ™‚é–“é–“éš”ã§æ›´æ–°(~U)";
-        Text[ korean ] = "ì—…ë°ì´íŠ¸ ì‹œê°„ ê°„ê²©(~U)";
-        Text[ chinese_simplified ] = "æ›´æ–°æ—¶é—´é—´éš”ä¸ºæ¯(~U)";
-        Text[ chinese_traditional ] = "æ›´æ–°æ™‚é–“é–“éš”ç‚ºæ¯(~U)";
-        Text[ turkish ] = "-Güncelle her";
-        Text[ arabic ] = "Auto reload data every";
-        Text[ catalan ] = "~Actualitza cada";
-        Text[ finnish ] = "~Päivitysväli";
-        Text[ thai ] = "~à¸›à¸£à¸±à¸šà¸›à¸£à¸¸à¸‡à¸—à¸¸à¸à¹†";
-        Text[ czech ] = "Aktualizovat kaÅ¾dÃ½ch";
-        Text[ hebrew ] = "~Aktualisierung alle";
-        Text[ hindi ] = "à¤¹à¤°à¥‡à¤• à¤•à¥‹ ~à¤…à¤ªà¤¡à¥‡à¤Ÿà¥ à¤•à¤°à¥‹";
-        Text[ slovak ] = "Akt~ualizovaÅ¥ kaÅ¾dÃ½ch";
-        Text[ hungarian ] = "~FrissÃ­tÃ©s";
-        Text[ slovenian ] = "~Posodobi vsakih";
+        Text [ de ] = "~Aktualisierung alle" ;
+        Text [ en-US ] = "~Update every";
     };
     NumericField NF_DELAY
     {
@@ -260,63 +151,10 @@ ModalDialog RID_SCDLG_LINKAREA
     {
         Pos = MAP_APPFONT ( 149 , 168 ) ;
         Size = MAP_APPFONT ( 59 , 8 ) ;
-        Text = "Sekunden" ;
-        Text [ ENGLISH ] = "seconds" ;
-        Text[ english_us ] = "seconds";
-        Text[ portuguese ] = "segundos";
-        Text[ russian ] = "ñåêóíä(û)";
-        Text[ greek ] = "Äåõôåñüëåğôá";
-        Text[ dutch ] = "seconden";
-        Text[ french ] = "secondes";
-        Text[ spanish ] = "segundos";
-        Text[ italian ] = "secondi";
-        Text[ danish ] = "Sekunder";
-        Text[ swedish ] = "sekund";
-        Text[ polish ] = "sek.";
-        Text[ portuguese_brazilian ] = "segundos";
-        Text[ japanese ] = "ç§’æ¯";
-        Text[ korean ] = "ì´ˆ";
-        Text[ chinese_simplified ] = "ç§’";
-        Text[ chinese_traditional ] = "ç§’";
-        Text[ turkish ] = "saniyeler";
-        Text[ arabic ] = "ËæÇäí";
-        Text[ catalan ] = "segons";
-        Text[ finnish ] = "sekuntia";
-        Text[ thai ] = "à¸§à¸´à¸™à¸²à¸—à¸µ";
-        Text[ czech ] = "sekund";
-        Text[ hebrew ] = "â€®×©× ×™×•×ªâ€¬";
-        Text[ hindi ] = "à¤¸à¥‡à¤•à¤¨à¥à¤¡";
-        Text[ slovak ] = "SekÃºnd";
-        Text[ hungarian ] = "mÃ¡sodpercenkÃ©nt";
-        Text[ slovenian ] = "sekund";
+        Text [ de ] = "Sekunden" ;
+        Text [ en-US ] = "seconds";
     };
-    Text[ english_us ] = "External Data";
-    Text[ portuguese ] = "Dados externos";
-    Text[ russian ] = "Âíåøíèå äàííûå";
-    Text[ greek ] = "ÅîùôåñéêÜ äåäïìİíá";
-    Text[ dutch ] = "Externe gegevens";
-    Text[ french ] = "Données externes";
-    Text[ spanish ] = "Datos externos";
-    Text[ italian ] = "Dati esterni";
-    Text[ danish ] = "Eksterne data";
-    Text[ swedish ] = "Externa data";
-    Text[ polish ] = "Zewnêtrzne dane";
-    Text[ portuguese_brazilian ] = "Dados Externos";
-    Text[ japanese ] = "å¤–éƒ¨ãƒ‡ãƒ¼ã‚¿";
-    Text[ korean ] = "ì™¸ë¶€ ë°ì´í„°";
-    Text[ chinese_simplified ] = "å¤–éƒ¨çš„æ•°æ®";
-    Text[ chinese_traditional ] = "å¤–éƒ¨çš„è³‡æ–™";
-    Text[ turkish ] = "Dış veri";
-    Text[ arabic ] = "External Data Source";
-    Text[ catalan ] = "Font de dades externa";
-    Text[ finnish ] = "Ulkoiset tiedot";
-    Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸ à¸²à¸¢à¸™à¸­à¸";
-    Text[ czech ] = "ExternÃ­ data";
-    Text[ hebrew ] = "Externe Daten";
-    Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤¡à¤¼à¥‰à¤Ÿà¤¾";
-    Text[ slovak ] = "ExternÃ© dÃ¡ta";
-    Text[ hungarian ] = "KÃ¼lsÅ‘ adatok";
-    Text[ slovenian ] = "Zunanji podatki";
+    Text [ en-US ] = "External Data";
 };
 
 
