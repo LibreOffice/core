@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:43:35 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #ifndef _ANCHOREDDRAWOBJECT_HXX
 #include <anchoreddrawobject.hxx>
 #endif
-
 #ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
 #endif
@@ -321,6 +320,9 @@ void SwAnchoredDrawObject::MakeObjPos()
         return;
     }
 
+    SwDrawContact* pDrawContact =
+                        static_cast<SwDrawContact*>(::GetUserCall( GetDrawObj() ));
+
     // --> OD 2004-08-09 #i28749# - if anchored drawing object hasn't been yet
     // positioned, convert its positioning attributes, if its positioning
     // attributes are given in horizontal left-to-right layout.
@@ -328,9 +330,14 @@ void SwAnchoredDrawObject::MakeObjPos()
     // the default layout direction for <SwDrawFrmFmt> instances. Thus, it has
     // to be adjusted manually, if no adjustment of the positioning attributes
     // have to be performed here.
+    // --> OD 2004-11-17 #i35635# - additionally move drawing object to the
+    // visible layer.
     if ( mbNotYetPositioned )
     {
         mbNotYetPositioned = false;
+        // --> OD 2004-11-17 #i35635#
+        pDrawContact->MoveObjToVisibleLayer( DrawObj() );
+        // <--
         // --> OD 2004-09-29 #117975# - perform conversion of positioning
         // attributes only for 'master' drawing objects
         if ( !GetDrawObj()->ISA(SwDrawVirtObj) &&
@@ -347,9 +354,6 @@ void SwAnchoredDrawObject::MakeObjPos()
 
     // indicate that positioning is in progress
     SwObjPositioningInProgress aObjPosInProgress( *this );
-
-    SwDrawContact* pDrawContact =
-                        static_cast<SwDrawContact*>(::GetUserCall( GetDrawObj() ));
 
     // determine relative position of drawing object and set it
     switch ( pDrawContact->GetAnchorId() )
@@ -557,7 +561,17 @@ void SwAnchoredDrawObject::_InvalidatePage( SwPageFrm* _pPageFrm )
     {
         if ( _pPageFrm->GetUpper() )
         {
-            _pPageFrm->InvalidateFlyLayout();
+            // --> OD 2004-11-11 #i35007# - correct invalidation for as-character
+            // anchored objects.
+            if ( GetFrmFmt().GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
+            {
+                _pPageFrm->InvalidateFlyInCnt();
+            }
+            else
+            {
+                _pPageFrm->InvalidateFlyLayout();
+            }
+            // <--
 
             SwRootFrm* pRootFrm = static_cast<SwRootFrm*>(_pPageFrm->GetUpper());
             pRootFrm->DisallowTurbo();
@@ -579,6 +593,14 @@ void SwAnchoredDrawObject::InvalidateObjPos()
          InvalidationOfPosAllowed() )
     {
         mbValidPos = false;
+
+        // --> OD 2004-11-22 #118547# - notify anchor frame of as-character
+        // anchored object, because its positioned by the format of its anchor frame.
+        if ( GetFrmFmt().GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
+        {
+            AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, &GetFrmFmt() );
+        }
+        // <--
 
         SwPageFrm* pPageFrm = AnchorFrm()->FindPageFrm();
         _InvalidatePage( pPageFrm );
