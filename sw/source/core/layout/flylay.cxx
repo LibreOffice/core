@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:18:23 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,6 +819,46 @@ void SwPageFrm::AppendDrawObj( SwDrawContact *pNew )
     pNew->ChgPage( this );
 }
 
+// OD 20.05.2003 #108784# - adding 'virtual' drawing object to page frame
+void SwPageFrm::AppendVirtDrawObj( SwDrawContact* _pDrawContact,
+                                   SwDrawVirtObj* _pDrawVirtObj )
+{
+    if ( GetUpper() )
+    {
+        ((SwRootFrm*)GetUpper())->InvalidateBrowseWidth();
+    }
+
+    ASSERT( _pDrawVirtObj->GetAnchorFrm(), "virtual draw contact without anchor" );
+    SwFlyFrm *pFly = _pDrawVirtObj->GetAnchorFrm()->FindFlyFrm();
+    if ( pFly && _pDrawVirtObj->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() )
+    {
+        UINT32 nNewNum = pFly->GetVirtDrawObj()->GetOrdNumDirect() + 1;
+        if ( _pDrawVirtObj->GetPage() )
+            _pDrawVirtObj->GetPage()->SetObjectOrdNum( _pDrawVirtObj->GetOrdNumDirect(), nNewNum);
+        else
+            _pDrawVirtObj->SetOrdNum( nNewNum );
+    }
+
+    if ( FLY_IN_CNTNT == _pDrawContact->GetFmt()->GetAnchor().GetAnchorId() )
+    {
+        return;
+    }
+
+    if ( !pSortedObjs )
+    {
+        pSortedObjs = new SwSortDrawObjs();
+    }
+    if ( !pSortedObjs->Insert( _pDrawVirtObj ) )
+    {
+#ifndef PRODUCT
+        USHORT nIdx;
+        ASSERT( pSortedObjs->Seek_Entry( _pDrawVirtObj, &nIdx ),
+                "Fly nicht in Sorted eingetragen." );
+#endif
+    }
+    _pDrawVirtObj->SetPageFrm( this );
+}
+
 void SwPageFrm::RemoveDrawObj( SwDrawContact *pToRemove )
 {
     //Auch Zeichengebundene muessen hier leider durchlaufen, weil beim
@@ -846,6 +886,30 @@ void SwPageFrm::RemoveDrawObj( SwDrawContact *pToRemove )
         }
     }
     pToRemove->ChgPage( 0 );
+}
+
+// OD 20.05.2003 #108784# - remove 'virtual' drawing object from page frame.
+void SwPageFrm::RemoveVirtDrawObj( SwDrawContact* _pDrawContact,
+                                   SwDrawVirtObj* _pDrawVirtObj )
+{
+    if ( pSortedObjs )
+    {
+        pSortedObjs->Remove( _pDrawVirtObj );
+        if ( !pSortedObjs->Count() )
+        {
+            DELETEZ( pSortedObjs );
+        }
+        if ( GetUpper() )
+        {
+            if ( FLY_IN_CNTNT != _pDrawContact->GetFmt()->GetAnchor().GetAnchorId() )
+            {
+                ((SwRootFrm*)GetUpper())->SetSuperfluous();
+                InvalidatePage();
+            }
+            ((SwRootFrm*)GetUpper())->InvalidateBrowseWidth();
+        }
+    }
+    _pDrawVirtObj->SetPageFrm( 0 );
 }
 
 /*************************************************************************
@@ -901,43 +965,29 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             pClip->Calc();
 
             rRect = pClip->Frm();
-#ifdef VERTICAL_LAYOUT
             SWRECTFN( pClip )
-#endif
 
             //Vertikales clipping: Top und Bottom, ggf. an PrtArea
             const SwFmtVertOrient &rV = pFly->GetFmt()->GetVertOrient();
             if( rV.GetVertOrient() != VERT_NONE &&
                 rV.GetRelationOrient() == PRTAREA )
             {
-#ifdef VERTICAL_LAYOUT
                 (rRect.*fnRect->fnSetTop)( (pClip->*fnRect->fnGetPrtTop)() );
                 (rRect.*fnRect->fnSetBottom)( (pClip->*fnRect->fnGetPrtBottom)() );
-#else
-                rRect.Top( pClip->Frm().Top() + pClip->Prt().Top() );
-                rRect.Bottom( pClip->Frm().Top() + pClip->Prt().Bottom() );
-#endif
             }
             //Horizontales clipping: Left und Right, ggf. an PrtArea
             const SwFmtHoriOrient &rH = pFly->GetFmt()->GetHoriOrient();
             if( rH.GetHoriOrient() != HORI_NONE &&
                 rH.GetRelationOrient() == PRTAREA )
             {
-#ifdef VERTICAL_LAYOUT
                 (rRect.*fnRect->fnSetLeft)( (pClip->*fnRect->fnGetPrtLeft)() );
                 (rRect.*fnRect->fnSetRight)((pClip->*fnRect->fnGetPrtRight)());
-#else
-                rRect.Left( pClip->Frm().Left() + pClip->Prt().Left() );
-                rRect.Right( pClip->Frm().Left() + pClip->Prt().Right() );
-#endif
             }
         }
         else if( pFly->IsFlyAtCntFrm() )
         {
             const SwFrm *pClip = pFly->GetAnchor();
-#ifdef VERTICAL_LAYOUT
             SWRECTFN( pClip )
-#endif
             const SwLayoutFrm *pUp = pClip->GetUpper();
             const SwFrm *pCell = pUp->IsCellFrm() ? pUp : 0;
             USHORT nType = bMove ? FRM_ROOT   | FRM_FLY | FRM_HEADER |
@@ -957,52 +1007,6 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                 {
                     rRect  = pUp->Prt();
                     rRect += pUp->Frm().Pos();
-#ifndef VERTICAL_LAYOUT
-                    const SwPageFrm *pPg = (SwPageFrm*)pUp->Lower();
-                    if( !pPg->Lower() )
-                        pPg = (SwPageFrm*)pPg->GetNext();
-                    const SwFrm *pBody = pPg->FindBodyCont();
-                    if ( pBody->GetPrev() )
-                        pBody->GetPrev()->Calc();
-                    pBody->Calc();
-                    rRect.Top( pBody->Frm().Top() + pBody->Prt().Top() );
-
-                    //Den Bottom setzen wir auf den unteren Rand der letzten Seite.
-                    pPg = ((SwRootFrm*)pUp)->GetLastPage();
-                    if ( !pPg->Lower() )
-                        pPg = (SwPageFrm*)pPg->GetPrev();
-                    if ( pPg )
-                    {
-                        pPg->Calc();
-                        pBody = pPg->FindBodyCont();
-                        if ( pBody->GetPrev() )
-                            pBody->GetPrev()->Calc();
-                        pBody->Calc();
-                        rRect.Bottom( pBody->Frm().Top() + pBody->Prt().Bottom());
-                        if( pFly->GetFmt()->GetDoc()->IsBrowseMode() )
-                        {
-                            // Hier wird folgende Situation abgefangen: Im Browse-
-                            // Modus hat man mehrere Seiten, die aktuelle Seite
-                            // waechst gerade, die letzte Seite hat dies noch nicht
-                            // mitbekommen, dann koennte der von der letzten Seite
-                            // gelieferte nBot zu klein sein, der Fly sich also
-                            // zum Clippen/Moven genoetigt sehen, obgleich genug
-                            // Platz vorhanden ist.
-                            const SwPageFrm* pMyPg = pClip->FindPageFrm();
-                            if( pMyPg != pPg && pMyPg &&
-                                pMyPg->Frm().Bottom() > pPg->Frm().Top() )
-                            {
-                                pBody = pMyPg->FindBodyCont();
-                                if ( pBody->GetPrev() )
-                                    pBody->GetPrev()->Calc();
-                                pBody->Calc();
-                                SwTwips nBot = pBody->Frm().Top() + pBody->Prt().Bottom();
-                                if( rRect.Bottom() < nBot )
-                                    rRect.Bottom( nBot );
-                            }
-                        }
-                    }
-#endif
                     pUp = 0;
                 }
             }
@@ -1017,13 +1021,8 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                     if ( pUp->GetUpper() != (pPg = pFly->FindPageFrm()) )
                         pUp = pPg->FindBodyCont();
                     rRect = pUp->GetUpper()->Frm();
-#ifdef VERTICAL_LAYOUT
                     (rRect.*fnRect->fnSetTop)( (pUp->*fnRect->fnGetPrtTop)() );
                     (rRect.*fnRect->fnSetBottom)((pUp->*fnRect->fnGetPrtBottom)());
-#else
-                    rRect.Pos().Y() = pUp->Frm().Top() + pUp->Prt().Top();
-                    rRect.SSize().Height() = pUp->Prt().Height();
-#endif
                 }
                 else
                 {
@@ -1063,14 +1062,8 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                     else if ( pUp->IsCellFrm() )                //MA_FLY_HEIGHT
                     {
                         const SwFrm *pTab = pUp->FindTabFrm();
-#ifdef VERTICAL_LAYOUT
                         (rRect.*fnRect->fnSetBottom)(
                                     (pTab->GetUpper()->*fnRect->fnGetPrtBottom)() );
-#else
-                        long nBottom = pTab->GetUpper()->Frm().Top() +
-                                       pTab->GetUpper()->Prt().Bottom();
-                        rRect.Bottom( nBottom );
-#endif
                     }
                 }
             }
@@ -1088,9 +1081,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             const SwFrm *pUp = pFly->GetAnchor()->GetUpper();
             if( !pUp->IsFooterFrm() )
                 pUp->Calc();
-#ifdef VERTICAL_LAYOUT
             SWRECTFN( pFly->GetAnchor() )
-#endif
             while( pUp->IsColumnFrm() || pUp->IsSctFrm() || pUp->IsColBodyFrm())
                 pUp = pUp->GetUpper();
             rRect = pUp->Frm();
@@ -1101,27 +1092,16 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                 if ( pUp->IsCellFrm() )
                 {
                     const SwFrm *pTab = pUp->FindTabFrm();
-#ifdef VERTICAL_LAYOUT
                     (rRect.*fnRect->fnSetBottom)(
                                     (pTab->GetUpper()->*fnRect->fnGetPrtBottom)() );
-#else
-                    long nBottom = pTab->GetUpper()->Frm().Top() +
-                                   pTab->GetUpper()->Prt().Bottom();
-                    rRect.Bottom( nBottom );
-#endif
                 }
             }
-#ifdef VERTICAL_LAYOUT
             long nHeight = (9*(rRect.*fnRect->fnGetHeight)())/10;
             long nTop;
-#else
-            rRect.Height( (rRect.Height()*9)/10 );
-#endif
             const SwFmt *pFmt = ((SwContact*)GetUserCall(pSdrObj))->GetFmt();
             const SvxULSpaceItem &rUL = pFmt->GetULSpace();
             if( bMove )
             {
-#ifdef VERTICAL_LAYOUT
                 nTop = bVert ? ((SwFlyInCntFrm*)pFly)->GetRefPoint().X() :
                                ((SwFlyInCntFrm*)pFly)->GetRefPoint().Y();
                 nTop = (*fnRect->fnYInc)( nTop, -nHeight );
@@ -1139,20 +1119,6 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                           - rUL.GetLower() - rUL.GetUpper();
             }
             (rRect.*fnRect->fnSetTopAndHeight)( nTop, nHeight );
-#else
-                rRect.Width( pFly->Frm().Width() );
-                rRect.Pos( ((SwFlyInCntFrm*)pFly)->GetRefPoint().X(),
-                    ((SwFlyInCntFrm*)pFly)->GetRefPoint().Y() -rRect.Height() );
-                rRect.Height( 2*rRect.Height() -rUL.GetLower() -rUL.GetUpper());
-            }
-            else
-            {
-                rRect.Pos().Y() = pFly->Frm().Top() + pFly->Frm().Height()
-                    + rUL.GetLower() - rRect.Height();
-                rRect.Height( 2*rRect.Height() - pFly->Frm().Height()
-                              - rUL.GetLower() - rUL.GetUpper() );
-            }
-#endif
         }
     }
     else
@@ -1173,19 +1139,14 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                 pUp->Calc();
             rRect = pUp->Prt();
             rRect += pUp->Frm().Pos();
-#ifdef VERTICAL_LAYOUT
             SWRECTFN( pFrm )
             long nHeight = (9*(rRect.*fnRect->fnGetHeight)())/10;
             long nTop;
-#else
-            rRect.Height( (rRect.Height()*9)/10 );
-#endif
             const SvxULSpaceItem &rUL = pFmt->GetULSpace();
             SwRect aSnapRect( pSdrObj->GetSnapRect() );
             long nTmpH = 0;
             if( bMove )
             {
-#ifdef VERTICAL_LAYOUT
                 nTop = (*fnRect->fnYInc)( bVert ? pSdrObj->GetAnchorPos().X() :
                                        pSdrObj->GetAnchorPos().Y(), -nHeight );
                 long nWidth = (aSnapRect.*fnRect->fnGetWidth)();
@@ -1202,25 +1163,31 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             }
             nHeight = 2*nHeight - nTmpH - rUL.GetLower() - rUL.GetUpper();
             (rRect.*fnRect->fnSetTopAndHeight)( nTop, nHeight );
-#else
-                rRect.Width( aSnapRect.Width() );
-                rRect.Pos( pSdrObj->GetAnchorPos().X(),
-                           pSdrObj->GetAnchorPos().Y() - rRect.Height() );
+        }
+        else
+        {
+            // OD 23.06.2003 #108784# - restrict clip rectangle for drawing
+            // objects in header/footer to the page frame.
+            const SwFrm* pAnchorFrm = 0L;
+            if ( pSdrObj->ISA(SwDrawVirtObj) )
+            {
+                pAnchorFrm = static_cast<const SwDrawVirtObj*>(pSdrObj)->GetAnchorFrm();
             }
             else
             {
-                nTmpH = pSdrObj->GetBoundRect().GetHeight();
-                rRect.Pos().Y() = aSnapRect.Top() + nTmpH
-                                  + rUL.GetLower() - rRect.Height();
+                pAnchorFrm = pC->GetAnchor();
             }
-            rRect.Height( 2*rRect.Height() - nTmpH
-                          - rUL.GetLower() - rUL.GetUpper() );
-#endif
+            if ( pAnchorFrm && pAnchorFrm->FindFooterOrHeader() )
+            {
+                // clip frame is the page frame the header/footer is on.
+                const SwFrm* pClipFrm = pAnchorFrm->FindPageFrm();
+                rRect = pClipFrm->Frm();
+            }
+            else
+            {
+                bRet = FALSE;
+            }
         }
-        else
-            bRet = FALSE;
     }
     return bRet;
 }
-
-
