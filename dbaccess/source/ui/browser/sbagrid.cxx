@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:32:52 $
+ *  last change: $Author: fs $ $Date: 2002-10-09 08:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,6 +687,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDis
 //---------------------------------------------------------------------------------------
 void SAL_CALL SbaXGridPeer::dispatch(const ::com::sun::star::util::URL& aURL, const Sequence< PropertyValue >& aArgs) throw( RuntimeException )
 {
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
     SbaGridControl* pGrid = (SbaGridControl*)GetWindow();
     if (!pGrid)
         return;
