@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-24 11:35:59 $
+ *  last change: $Author: vg $ $Date: 2002-07-23 11:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ void OFormattedControl::disposing(const EventObject& _rSource) throw(RuntimeExce
 }
 
 //------------------------------------------------------------------------------
-void OFormattedControl::keyPressed(const KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
+void OFormattedControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( e.KeyCode != KEY_RETURN || e.Modifiers != 0 )
         return;
@@ -334,7 +334,7 @@ void OFormattedControl::keyPressed(const KeyEvent& e) throw ( ::com::sun::star::
 }
 
 //------------------------------------------------------------------------------
-void OFormattedControl::keyReleased(const KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
+void OFormattedControl::keyReleased(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
 }
 

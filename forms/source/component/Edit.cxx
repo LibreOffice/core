@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 14:46:12 $
+ *  last change: $Author: vg $ $Date: 2002-07-23 11:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ void OEditControl::focusLost( const FocusEvent& e ) throw ( ::com::sun::star::un
 
 // XKeyListener
 //------------------------------------------------------------------------------
-void OEditControl::keyPressed(const KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
+void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( e.KeyCode != KEY_RETURN || e.Modifiers != 0 )
         return;
@@ -319,7 +319,7 @@ void OEditControl::keyPressed(const KeyEvent& e) throw ( ::com::sun::star::uno::
 }
 
 //------------------------------------------------------------------------------
-void OEditControl::keyReleased(const KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
+void OEditControl::keyReleased(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
 }
 
