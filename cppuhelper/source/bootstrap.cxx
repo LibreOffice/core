@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:34:00 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,6 @@
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
-#if ! defined SAL_DLLPREFIX
-#define SAL_DLLPREFIX
-#endif
-#define CORE_COMPONENT_LIB(x) SAL_DLLPREFIX x SAL_DLLEXTENSION
-
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -107,7 +102,6 @@ namespace cppu
 {
 
 static void MyDummySymbolWithinLibrary(){}
-//--------------------------------------------------------------------------------------------------
 OUString const & get_this_libpath()
 {
     static OUString s_path;
@@ -123,13 +117,13 @@ OUString const & get_this_libpath()
     return s_path;
 }
 
-//--------------------------------------------------------------------------------------------------
 Bootstrap const & get_unorc() SAL_THROW( () )
 {
     static rtlBootstrapHandle s_bstrap = 0;
     if (! s_bstrap)
     {
-        OUString iniName( get_this_libpath() + OUSTR("/" SAL_CONFIGFILE("uno")) );
+        OUString iniName(
+            get_this_libpath() + OUSTR("/" SAL_CONFIGFILE("uno")) );
         rtlBootstrapHandle bstrap = rtl_bootstrap_args_open( iniName.pData );
 
         ClearableMutexGuard guard( Mutex::getGlobalMutex() );
@@ -146,11 +140,7 @@ Bootstrap const & get_unorc() SAL_THROW( () )
     return *(Bootstrap const *)&s_bstrap;
 }
 
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
 
-//==================================================================================================
 void addFactories(
     char const * const * ppNames /* lib, implname, ..., 0 */,
     OUString const & bootstrapPath,
@@ -167,7 +157,8 @@ void addFactories(
         OUString lib( OUString::createFromAscii( *ppNames++ ) );
         OUString implName( OUString::createFromAscii( *ppNames++ ) );
 
-        Any aFac( makeAny( loadSharedLibComponentFactory( lib, bootstrapPath, implName, xSF, xKey ) ) );
+        Any aFac( makeAny( loadSharedLibComponentFactory(
+                               lib, bootstrapPath, implName, xSF, xKey ) ) );
         xSet->insert( aFac );
 #if OSL_DEBUG_LEVEL > 1
         if (xSet->has( aFac ))
@@ -175,8 +166,10 @@ void addFactories(
             Reference< lang::XServiceInfo > xInfo;
             if (aFac >>= xInfo)
             {
-                ::fprintf( stderr, "> implementation %s supports: ", ppNames[ -1 ] );
-                Sequence< OUString > supported( xInfo->getSupportedServiceNames() );
+                ::fprintf(
+                    stderr, "> implementation %s supports: ", ppNames[ -1 ] );
+                Sequence< OUString > supported(
+                    xInfo->getSupportedServiceNames() );
                 for ( sal_Int32 nPos = supported.getLength(); nPos--; )
                 {
                     OString str( OUStringToOString(
@@ -188,7 +181,8 @@ void addFactories(
             {
                 ::fprintf(
                     stderr,
-                    "> implementation %s provides NO lang::XServiceInfo!!!\n", ppNames[ -1 ] );
+                    "> implementation %s provides NO lang::XServiceInfo!!!\n",
+                    ppNames[ -1 ] );
             }
         }
 #endif
@@ -207,11 +201,10 @@ void addFactories(
 }
 
 // private forward decl
-//--------------------------------------------------------------------------------------------------
 Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
     OUString const & rBootstrapPath )
     SAL_THROW( (Exception) );
-//--------------------------------------------------------------------------------------------------
+
 Reference< XComponentContext > bootstrapInitialContext(
     Reference< lang::XMultiComponentFactory > const & xSF,
     Reference< registry::XSimpleRegistry > const & types_xRegistry,
@@ -219,25 +212,23 @@ Reference< XComponentContext > bootstrapInitialContext(
     OUString const & rBootstrapPath, Bootstrap const & bootstrap )
     SAL_THROW( (Exception) );
 
-//--------------------------------------------------------------------------------------------------
 Reference< XComponentContext > SAL_CALL createInitialCfgComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,
     Reference< XComponentContext > const & xDelegate )
     SAL_THROW( () );
-//--------------------------------------------------------------------------------------------------
+
 Reference< registry::XSimpleRegistry > SAL_CALL createRegistryWrapper(
     const Reference< XComponentContext >& xContext );
 
-//--------------------------------------------------------------------------------------------------
 template< class T >
 static inline beans::PropertyValue createPropertyValue(
     OUString const & name, T const & value )
     SAL_THROW( () )
 {
-    return beans::PropertyValue( name, -1, makeAny( value ), beans::PropertyState_DIRECT_VALUE );
+    return beans::PropertyValue(
+        name, -1, makeAny( value ), beans::PropertyState_DIRECT_VALUE );
 }
 
-//--------------------------------------------------------------------------------------------------
 static OUString findBoostrapArgument(
     const Bootstrap & bootstrap,
     const OUString & arg_name,
@@ -260,18 +251,24 @@ static OUString findBoostrapArgument(
 
         // cut the rc extension
         OUStringBuffer result_buf( 64 );
-        result_buf.append( fileName.copy(0, fileName.getLength() - strlen(SAL_CONFIGFILE(""))) );
+        result_buf.append(
+            fileName.copy(
+                0, fileName.getLength() - strlen(SAL_CONFIGFILE(""))) );
         result_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("_") );
         result_buf.append( arg_name.toAsciiLowerCase() );
         result_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".rdb") );
         result = result_buf.makeStringAndClear();
 
 #if OSL_DEBUG_LEVEL > 1
-        OString result_dbg = OUStringToOString(result, RTL_TEXTENCODING_ASCII_US);
-        OString arg_name_dbg = OUStringToOString(arg_name, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("cppuhelper::findBoostrapArgument - setting %s relative to executable: %s\n",
-                  arg_name_dbg.getStr(),
-                  result_dbg.getStr());
+        OString result_dbg =
+            OUStringToOString(result, RTL_TEXTENCODING_ASCII_US);
+        OString arg_name_dbg =
+            OUStringToOString(arg_name, RTL_TEXTENCODING_ASCII_US);
+        OSL_TRACE(
+            "cppuhelper::findBoostrapArgument - "
+            "setting %s relative to executable: %s\n",
+            arg_name_dbg.getStr(),
+            result_dbg.getStr() );
 #endif
     }
     else
@@ -294,7 +291,6 @@ static OUString findBoostrapArgument(
     return result;
 }
 
-//--------------------------------------------------------------------------------------------------
 static Reference< registry::XSimpleRegistry > nestRegistries(
     const OUString baseDir,
     const Reference< lang::XSingleServiceFactory > & xSimRegFac,
@@ -397,8 +393,8 @@ static Reference< registry::XSimpleRegistry > nestRegistries(
     return lastRegistry;
 }
 
-//--------------------------------------------------------------------------------------------------
-static Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext(
+static Reference< XComponentContext >
+SAL_CALL defaultBootstrap_InitialComponentContext(
     Bootstrap const & bootstrap )
     SAL_THROW( (Exception) )
 {
@@ -415,7 +411,7 @@ static Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponent
     Reference<registry::XRegistryKey> xEmptyKey;
     Reference<lang::XSingleServiceFactory> xSimRegFac(
         loadSharedLibComponentFactory(
-            OUSTR(CORE_COMPONENT_LIB("simreg")), bootstrapPath,
+            OUSTR("simplereg.uno" SAL_DLLEXTENSION), bootstrapPath,
             OUSTR("com.sun.star.comp.stoc.SimpleRegistry"),
             smgr_XMultiServiceFactory,
             xEmptyKey),
@@ -423,172 +419,68 @@ static Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponent
 
     Reference<lang::XSingleServiceFactory> xNesRegFac(
         loadSharedLibComponentFactory(
-            OUSTR(CORE_COMPONENT_LIB("defreg")), bootstrapPath,
+            OUSTR("nestedreg.uno" SAL_DLLEXTENSION), bootstrapPath,
             OUSTR("com.sun.star.comp.stoc.NestedRegistry"),
             smgr_XMultiServiceFactory,
             xEmptyKey),
         UNO_QUERY);
 
     sal_Bool bFallenback_types;
-    OUString cls_uno_types = findBoostrapArgument( bootstrap, OUSTR("TYPES"), &bFallenback_types );
+    OUString cls_uno_types =
+        findBoostrapArgument( bootstrap, OUSTR("TYPES"), &bFallenback_types );
 
-    Reference<registry::XSimpleRegistry> types_xRegistry = nestRegistries(
-        iniDir, xSimRegFac, xNesRegFac, cls_uno_types, OUString(), sal_False, bFallenback_types );
+    Reference<registry::XSimpleRegistry> types_xRegistry =
+        nestRegistries(
+            iniDir, xSimRegFac, xNesRegFac, cls_uno_types,
+            OUString(), sal_False, bFallenback_types );
 
-/*
-    // xxx todo: when moving down cfgmgr+interfaces to udk, code from cfg_registry_wrapper
-    // is used.  Now not supported...
-    OUString cfg_url;
-    if (bootstrap.getFrom( OUSTR("UNO_CFG_URL"), cfg_url ))
+    // ==== bootstrap from services registry ====
+
+    sal_Bool bFallenback_services;
+    OUString cls_uno_services = findBoostrapArgument(
+        bootstrap, OUSTR("SERVICES"), &bFallenback_services );
+
+    sal_Bool fallenBackWriteRegistry;
+    OUString write_rdb = findBoostrapArgument(
+        bootstrap, OUSTR("WRITERDB"), &fallenBackWriteRegistry );
+    if (fallenBackWriteRegistry)
     {
-        // ==== bootstrap from configuration ====
-
-        // servertype;sourcepath[;updatepath]
-        sal_Int32 semi = cfg_url.indexOf( ';', 0 );
-        OSL_ENSURE( semi >= 0, "# invalid UNO_CFG_URL!" );
-        if (semi < 0)
-        {
-            throw Exception( OUSTR( "invalid UNO_CFG_URL" ), Reference< XInterface >() );
-        }
-
-        // xxx todo lib names work with src libs: sax, cfgmgr2!!!
-        // add additional factories for config provider
-        static char const * ar[] = {
-            "sax", "com.sun.star.comp.extensions.xml.sax.ParserExpat",
-            "sax", "com.sun.star.extensions.xml.sax.Writer",
-//              "stm", "com.sun.star.comp.io.stm.Pipe",
-//              "stm", "com.sun.star.comp.io.stm.DataInputStream",
-//              "stm", "com.sun.star.comp.io.stm.DataOutputStream",
-//              "stm", "com.sun.star.comp.io.stm.ObjectInputStream",
-//              "stm", "com.sun.star.comp.io.stm.MarkableInputStream",
-//              "stm", "com.sun.star.comp.stoc.Pump",
-            "stm", "com.sun.star.comp.io.stm.MarkableOutputStream",
-            "stm", "com.sun.star.comp.io.stm.ObjectOutputStream",
-            "tcv", "com.sun.star.comp.stoc.TypeConverter",
-            "cfgmgr2", "com.sun.star.comp.configuration.ConfigurationProvider",
-            "cfgmgr2", "com.sun.star.comp.configuration.AdministrationProvider",
-            0
-        };
-        addFactories( ar, bootstrapPath, smgr_XMultiComponentFactory, xEmptyKey );
-
-        ContextEntry_Init entry;
-        ::std::vector< ContextEntry_Init > context_values;
-        context_values.reserve( 2 );
-
-        // singleton entry
-        entry.bLateInitService = true;
-        entry.name = OUSTR("/singletons/com.sun.star.bootstrap.theConfigurationProvider");
-        sal_Int32 semi2 = cfg_url.indexOf( ';', semi +1 );
-        if (semi2 > semi) // use config provider
-        {
-            // xxx todo: service name would suffice here, if registered factory (bootstrap.cxx)
-            // would export lang::XServiceInfo...
-            entry.value <<= loadSharedLibComponentFactory(
-                OUSTR("cfgmgr2"), bootstrapPath,
-                OUSTR("com.sun.star.comp.configuration.ConfigurationProvider"),
-                smgr_XMultiServiceFactory, Reference< registry::XRegistryKey >() );
-            context_values.push_back( entry );
-
-            Sequence< Any > cfg_args( 3 );
-            cfg_args[ 0 ] <<= createPropertyValue(
-                OUSTR("servertype"), cfg_url.copy( 0, semi ) );
-            cfg_args[ 1 ] <<= createPropertyValue(
-                OUSTR("sourcepath"), cfg_url.copy( semi +1, semi2 -semi -1 ) );
-            cfg_args[ 2 ] <<= createPropertyValue(
-                OUSTR("updatepath"), cfg_url.copy( semi2 +1 ) );
-            entry.value <<= cfg_args;
-        }
-        else // use admin provider
-        {
-            // xxx todo: service name would suffice here, if registered factory (bootstrap.cxx)
-            // would export lang::XServiceInfo...
-            entry.value <<= loadSharedLibComponentFactory(
-                OUSTR("cfgmgr2"), bootstrapPath,
-                OUSTR("com.sun.star.comp.configuration.AdministrationProvider"),
-                smgr_XMultiServiceFactory, Reference< registry::XRegistryKey >() );
-            context_values.push_back( entry );
-
-            Sequence< Any > cfg_args( 2 );
-            cfg_args[ 0 ] <<= createPropertyValue(
-                OUSTR("servertype"), cfg_url.copy( 0, semi ) );
-            cfg_args[ 1 ] <<= createPropertyValue(
-                OUSTR("sourcepath"), cfg_url.copy( semi +1 ) );
-            entry.value <<= cfg_args;
-        }
-        entry.bLateInitService = false;
-        entry.name = OUSTR("/singletons/com.sun.star.bootstrap.theConfigurationProvider/initial-arguments");
-        context_values.push_back( entry );
-
-        // layer into two contexts
-        Reference< XComponentContext > xContext( bootstrapInitialContext(
-            smgr_XMultiComponentFactory, types_xRegistry,
-            Reference< registry::XSimpleRegistry >(),
-            bootstrapPath, bootstrap, pEntries, nEntries ) );
-        xContext = createInitialCfgComponentContext(
-            &context_values[ 0 ], context_values.size(), xContext );
-
-        // initialize sf
-        Reference< lang::XInitialization > xInit( smgr_XMultiComponentFactory, UNO_QUERY );
-        OSL_ASSERT( xInit.is() );
-        Sequence< Any > aSFInit( 1 );
-        aSFInit[ 0 ] <<= createRegistryWrapper( xContext );
-        // for now the registry service manager works upon the wrapped config,
-        // we will proceed implementing a config service manager when everything works fine...
-        xInit->initialize( aSFInit );
-
-        return xContext;
+        // no standard write rdb anymore
+        write_rdb = OUString();
     }
-    else
-*/
-    {
-        // ==== bootstrap from services registry ====
 
-        sal_Bool bFallenback_services;
-        OUString cls_uno_services = findBoostrapArgument(
-            bootstrap, OUSTR("SERVICES"), &bFallenback_services );
+    Reference<registry::XSimpleRegistry> services_xRegistry = nestRegistries(
+        iniDir, xSimRegFac, xNesRegFac, cls_uno_services, write_rdb,
+        !fallenBackWriteRegistry, bFallenback_services );
 
-        sal_Bool fallenBackWriteRegistry;
-        OUString write_rdb = findBoostrapArgument(
-            bootstrap, OUSTR("WRITERDB"), &fallenBackWriteRegistry );
-        if (fallenBackWriteRegistry)
-        {
-            // no standard write rdb anymore
-            write_rdb = OUString();
-        }
-
-        Reference<registry::XSimpleRegistry> services_xRegistry = nestRegistries(
-            iniDir, xSimRegFac, xNesRegFac, cls_uno_services, write_rdb,
-            !fallenBackWriteRegistry, bFallenback_services );
-
-        Reference< XComponentContext > xContext( bootstrapInitialContext(
+    Reference< XComponentContext > xContext(
+        bootstrapInitialContext(
             smgr_XMultiComponentFactory, types_xRegistry, services_xRegistry,
             bootstrapPath, bootstrap ) );
 
-        // initialize sf
-        Reference< lang::XInitialization > xInit( smgr_XMultiComponentFactory, UNO_QUERY );
-        OSL_ASSERT( xInit.is() );
-        Sequence< Any > aSFInit( 1 );
-        aSFInit[ 0 ] <<= services_xRegistry;
-        xInit->initialize( aSFInit );
+    // initialize sf
+    Reference< lang::XInitialization > xInit(
+        smgr_XMultiComponentFactory, UNO_QUERY );
+    OSL_ASSERT( xInit.is() );
+    Sequence< Any > aSFInit( 1 );
+    aSFInit[ 0 ] <<= services_xRegistry;
+    xInit->initialize( aSFInit );
 
-        return xContext;
-    }
+    return xContext;
 }
 
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
 
-//==================================================================================================
-Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext(
+Reference< XComponentContext >
+SAL_CALL defaultBootstrap_InitialComponentContext(
     OUString const & iniFile )
     SAL_THROW( (Exception) )
 {
     Bootstrap bootstrap( iniFile );
     return defaultBootstrap_InitialComponentContext( bootstrap );
 }
-//==================================================================================================
-Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext()
+
+Reference< XComponentContext >
+SAL_CALL defaultBootstrap_InitialComponentContext()
     SAL_THROW( (Exception) )
 {
     return defaultBootstrap_InitialComponentContext( get_unorc() );
