@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:33:51 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include "PreviewChildWindow.hxx"
 #include "PreviewWindow.hxx"
 #include "fuslshow.hxx"
+#include "FactoryIds.hxx"
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -427,6 +428,45 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
     mrViewShell.Cancel();
     rRequest.Done ();
 }
+
+
+
+
+sal_uInt16 ViewShell::Implementation::GetViewId (void)
+{
+    switch (mrViewShell.GetShellType())
+    {
+        case ViewShell::ST_IMPRESS:
+        case ViewShell::ST_NOTES:
+        case ViewShell::ST_HANDOUT:
+            return IMPRESS_FACTORY_ID;
+
+        case ViewShell::ST_DRAW:
+            return DRAW_FACTORY_ID;
+
+        case ViewShell::ST_OUTLINE:
+            return OUTLINE_FACTORY_ID;
+
+        case ViewShell::ST_SLIDE:
+        case ViewShell::ST_SLIDE_SORTER:
+            return SLIDE_SORTER_FACTORY_ID;
+
+        case ViewShell::ST_PREVIEW:
+            return PREVIEW_FACTORY_ID;
+
+        case ViewShell::ST_PRESENTATION:
+            return PRESENTATION_FACTORY_ID;
+
+        // Since we have to return a view id for every possible shell type
+        // and there is not (yet) a proper ViewShellBase sub class for the
+        // remaining types we chose the Impress factory as a fall back.
+        case ViewShell::ST_TASK_PANE:
+        case ViewShell::ST_NONE:
+        default:
+            return IMPRESS_FACTORY_ID;
+    }
+}
+
 
 
 } // end of namespace sd
