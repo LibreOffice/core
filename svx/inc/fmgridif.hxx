@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-20 16:15:45 $
+ *  last change: $Author: fs $ $Date: 2001-05-16 14:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _SVX_FMGRIDIF_HXX
 #define _SVX_FMGRIDIF_HXX
 
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -129,14 +132,14 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE10_HXX_
-#include <cppuhelper/implbase10.hxx>
+#ifndef _CPPUHELPER_IMPLBASE11_HXX_
+#include <cppuhelper/implbase11.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE12_HXX_
 #include <cppuhelper/implbase12.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE7_HXX_
-#include <cppuhelper/implbase7.hxx>
+#ifndef _CPPUHELPER_IMPLBASE8_HXX_
+#include <cppuhelper/implbase8.hxx>
 #endif
 
 class DbGridColumn;
@@ -202,6 +205,30 @@ public:
 };
 
 //==================================================================
+// FmXSelectionMultiplexer
+//==================================================================
+class FmXSelectionMultiplexer   :public OWeakSubObject
+                                ,public ::cppu::OInterfaceContainerHelper
+                                ,public ::com::sun::star::view::XSelectionChangeListener
+{
+public:
+    FmXSelectionMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
+    DECLARE_UNO3_DEFAULTS(FmXSelectionMultiplexer, OWeakSubObject);
+
+    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::view::XSelectionChangeListener
+    virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+
+// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators
+    void * SAL_CALL operator new( size_t size ) throw() { return OWeakSubObject::operator new(size); }
+    void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
+};
+
+//==================================================================
 // FmXContainerMultiplexer
 //==================================================================
 class FmXContainerMultiplexer : public OWeakSubObject,
@@ -229,7 +256,7 @@ public:
 //==================================================================
 // FmXGridControl
 //==================================================================
-typedef ::cppu::ImplHelper10<   ::com::sun::star::form::XBoundComponent,
+typedef ::cppu::ImplHelper11<   ::com::sun::star::form::XBoundComponent,
                                 ::com::sun::star::form::XGrid,
                                 ::com::sun::star::util::XModifyBroadcaster,
                                 ::com::sun::star::form::XGridFieldDataSupplier,
@@ -238,7 +265,9 @@ typedef ::cppu::ImplHelper10<   ::com::sun::star::form::XBoundComponent,
                                 ::com::sun::star::util::XModeSelector,
                                 ::com::sun::star::container::XContainer,
                                 ::com::sun::star::frame::XDispatchProvider,
-                                ::com::sun::star::frame::XDispatchProviderInterception > FmXGridControl_BASE;
+                                ::com::sun::star::frame::XDispatchProviderInterception,
+                                ::com::sun::star::view::XSelectionSupplier
+                            >   FmXGridControl_BASE;
 
 class FmXGridPeer;
 class FmXGridControl    :public UnoControl
@@ -247,6 +276,7 @@ class FmXGridControl    :public UnoControl
     FmXModifyMultiplexer    m_aModifyListeners;
     FmXUpdateMultiplexer    m_aUpdateListeners;
     FmXContainerMultiplexer m_aContainerListeners;
+    FmXSelectionMultiplexer m_aSelectionListeners;
 
 protected:
     sal_uInt16  m_nPeerCreationLevel;
@@ -331,6 +361,12 @@ public:
     virtual void SAL_CALL registerDispatchProviderInterceptor(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& xInterceptor) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL releaseDispatchProviderInterceptor(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& xInterceptor) throw(::com::sun::star::uno::RuntimeException);
 
+// ::com::sun::star::view::XSelectionSupplier
+    virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
 protected:
     virtual FmXGridPeer*    imp_CreatePeer(Window* pParent);
         // ImplCreatePeer waere besser ;) geht aber nicht, da dann nicht exportiert
@@ -351,15 +387,18 @@ typedef ::cppu::ImplHelper12<   ::com::sun::star::form::XGridPeer,
                                 ::com::sun::star::form::XLoadListener,
                                 ::com::sun::star::view::XSelectionChangeListener,
                                 ::com::sun::star::form::XGridFieldDataSupplier,
-                                ::com::sun::star::container::XIndexAccess > FmXGridPeer_BASE1;
+                                ::com::sun::star::container::XIndexAccess
+                            >   FmXGridPeer_BASE1;
 
-typedef ::cppu::ImplHelper7<    ::com::sun::star::container::XEnumerationAccess,
+typedef ::cppu::ImplHelper8<    ::com::sun::star::container::XEnumerationAccess,
                                 ::com::sun::star::util::XModeSelector,
                                 ::com::sun::star::container::XContainer,
                                 ::com::sun::star::frame::XStatusListener,
                                 ::com::sun::star::frame::XDispatchProvider,
                                 ::com::sun::star::frame::XDispatchProviderInterception,
-                                ::com::sun::star::form::XResetListener > FmXGridPeer_BASE2;
+                                ::com::sun::star::form::XResetListener,
+                                ::com::sun::star::view::XSelectionSupplier
+                            >   FmXGridPeer_BASE2;
 class FmGridControl;
 class FmXGridPeer   :public VCLXWindow
                     ,public FmXGridPeer_BASE1
@@ -369,7 +408,9 @@ class FmXGridPeer   :public VCLXWindow
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                 m_xCursor;
     ::cppu::OInterfaceContainerHelper       m_aModifyListeners,
                                             m_aUpdateListeners,
-                                            m_aContainerListeners;
+                                            m_aContainerListeners,
+                                            m_aSelectionListeners;
+
     ::rtl::OUString         m_aMode;
     sal_Int32               m_nCursorListening;
 
@@ -383,6 +424,10 @@ class FmXGridPeer   :public VCLXWindow
         // one dispatcher for each supported url
         // (I would like to have a vector here but including the stl in an exported file seems
         // very risky to me ....)
+
+    class SelectionListenerImpl;
+    friend class SelectionListenerImpl;
+    SelectionListenerImpl*                  m_pSelectionListener;
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
@@ -519,6 +564,12 @@ public:
     virtual sal_Bool SAL_CALL approveReset(const ::com::sun::star::lang::EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL resetted(const ::com::sun::star::lang::EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException);
 
+// ::com::sun::star::view::XSelectionSupplier
+    virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
 protected:
     virtual FmGridControl*  imp_CreateControl(Window* pParent, WinBits nStyle);
 
@@ -535,6 +586,8 @@ protected:
     */
     virtual void addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xCol);
     virtual void removeColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xCol);
+
+    void selectionChanged();
 
     DECL_LINK(OnQueryGridSlotState, void*);
     DECL_LINK(OnExecuteGridSlot, void*);

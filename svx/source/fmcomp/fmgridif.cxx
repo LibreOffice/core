@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-14 08:34:06 $
+ *  last change: $Author: fs $ $Date: 2001-05-16 14:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,11 @@
 
 using namespace ::svxform;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //------------------------------------------------------------------
 ::com::sun::star::awt::FontDescriptor ImplCreateFontDescriptor( const Font& rFont )
@@ -180,21 +185,24 @@ Font ImplCreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr )
     Font aFont;
     aFont.SetName( rDescr.Name );
     aFont.SetStyleName( rDescr.StyleName );
-    aFont.SetSize( Size( rDescr.Width, rDescr.Height ) );
+    aFont.SetSize( ::Size( rDescr.Width, rDescr.Height ) );
     aFont.SetFamily( (FontFamily)rDescr.Family );
     aFont.SetCharSet( (CharSet)rDescr.CharSet );
     aFont.SetPitch( (FontPitch)rDescr.Pitch );
     aFont.SetWidthType( VCLUnoHelper::ConvertFontWidth( rDescr.CharacterWidth ) );
     aFont.SetWeight( VCLUnoHelper::ConvertFontWeight( rDescr.Weight ) );
     aFont.SetItalic( (FontItalic)rDescr.Slant );
-    aFont.SetUnderline( (FontUnderline)rDescr.Underline );
-    aFont.SetStrikeout( (FontStrikeout)rDescr.Strikeout );
+    aFont.SetUnderline( (::FontUnderline)rDescr.Underline );
+    aFont.SetStrikeout( (::FontStrikeout)rDescr.Strikeout );
     aFont.SetOrientation( rDescr.Orientation );
     aFont.SetKerning( rDescr.Kerning );
     aFont.SetWordLineMode( rDescr.WordLineMode );
     return aFont;
 }
 
+//==================================================================
+//= FmXModifyMultiplexer
+//==================================================================
 //------------------------------------------------------------------
 FmXModifyMultiplexer::FmXModifyMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex )
                     :OWeakSubObject( rSource )
@@ -230,6 +238,9 @@ void FmXModifyMultiplexer::modified(const ::com::sun::star::lang::EventObject& e
     NOTIFY_LISTENERS((*this), ::com::sun::star::util::XModifyListener, modified, aMulti);
 }
 
+//==================================================================
+//= FmXUpdateMultiplexer
+//==================================================================
 //------------------------------------------------------------------
 FmXUpdateMultiplexer::FmXUpdateMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex )
                     :OWeakSubObject( rSource )
@@ -283,6 +294,47 @@ void FmXUpdateMultiplexer::updated(const ::com::sun::star::lang::EventObject &e)
 }
 
 
+//==================================================================
+//= FmXSelectionMultiplexer
+//==================================================================
+//------------------------------------------------------------------
+FmXSelectionMultiplexer::FmXSelectionMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex )
+    :OWeakSubObject( rSource )
+    ,OInterfaceContainerHelper(rMutex)
+{
+}
+
+//------------------------------------------------------------------
+Any SAL_CALL FmXSelectionMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
+{
+    Any aReturn;
+    aReturn = ::cppu::queryInterface(_rType,
+        static_cast< XSelectionChangeListener*>(this),
+        static_cast< XEventListener*>(this)
+    );
+
+    if (!aReturn.hasValue())
+        aReturn = OWeakSubObject::queryInterface( _rType );
+
+    return aReturn;
+}
+
+//------------------------------------------------------------------
+void FmXSelectionMultiplexer::disposing(const EventObject& ) throw( RuntimeException )
+{
+}
+
+//------------------------------------------------------------------
+void SAL_CALL FmXSelectionMultiplexer::selectionChanged( const EventObject& _rEvent ) throw (RuntimeException)
+{
+    EventObject aMulti(_rEvent);
+    aMulti.Source = &m_rParent;
+    NOTIFY_LISTENERS((*this), XSelectionChangeListener, selectionChanged, aMulti);
+}
+
+//==================================================================
+//= FmXContainerMultiplexer
+//==================================================================
 //------------------------------------------------------------------
 FmXContainerMultiplexer::FmXContainerMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex )
                         :OWeakSubObject( rSource )
@@ -349,6 +401,7 @@ FmXGridControl::FmXGridControl(const ::com::sun::star::uno::Reference< ::com::su
                :m_aModifyListeners(*this, GetMutex())
                ,m_aUpdateListeners(*this, GetMutex())
                ,m_aContainerListeners(*this, GetMutex())
+               ,m_aSelectionListeners(*this, GetMutex())
                ,m_nPeerCreationLevel(0)
                ,m_bInDraw(sal_False)
                ,m_xServiceFactory(_rxFactory)
@@ -616,6 +669,42 @@ void FmXGridControl::addModifyListener(const ::com::sun::star::uno::Reference< :
 }
 
 //------------------------------------------------------------------------------
+sal_Bool SAL_CALL FmXGridControl::select( const Any& _rSelection ) throw (IllegalArgumentException, RuntimeException)
+{
+    Reference< XSelectionSupplier > xPeer(mxPeer, UNO_QUERY);
+    return xPeer->select(_rSelection);
+}
+
+//------------------------------------------------------------------------------
+Any SAL_CALL FmXGridControl::getSelection(  ) throw (RuntimeException)
+{
+    Reference< XSelectionSupplier > xPeer(mxPeer, UNO_QUERY);
+    return xPeer->getSelection();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FmXGridControl::addSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener ) throw (RuntimeException)
+{
+    m_aSelectionListeners.addInterface( _rxListener );
+    if( mxPeer.is() && 1 == m_aSelectionListeners.getLength() )
+    {
+        Reference< XSelectionSupplier > xGrid(mxPeer, UNO_QUERY);
+        xGrid->addSelectionChangeListener( &m_aSelectionListeners);
+    }
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FmXGridControl::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener ) throw (RuntimeException)
+{
+    if( mxPeer.is() && 1 == m_aSelectionListeners.getLength() )
+    {
+        Reference< XSelectionSupplier > xGrid(mxPeer, UNO_QUERY);
+        xGrid->removeSelectionChangeListener( &m_aSelectionListeners);
+    }
+    m_aSelectionListeners.removeInterface( _rxListener );
+}
+
+//------------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< sal_Bool > SAL_CALL FmXGridControl::queryFieldDataType( const ::com::sun::star::uno::Type& xType ) throw(::com::sun::star::uno::RuntimeException)
 {
     if (mxPeer.is())
@@ -871,7 +960,36 @@ sal_Bool SAL_CALL FmXGridControl::supportsMode(const ::rtl::OUString& Mode) thro
     return xPeer.is() ? xPeer->supportsMode(Mode) : sal_False;
 }
 
-/*************************************************************************/
+//==============================================================================
+//= FmXGridPeer
+//==============================================================================
+// helper class which prevents that in the peer's header the FmGridSelectionListener must be known
+class FmXGridPeer::SelectionListenerImpl : public FmGridSelectionListener
+{
+protected:
+    FmXGridPeer*        m_pPeer;
+
+public:
+    SelectionListenerImpl(FmXGridPeer* _pPeer);
+
+protected:
+    virtual void selectionChanged();
+};
+
+//------------------------------------------------------------------
+FmXGridPeer::SelectionListenerImpl::SelectionListenerImpl(FmXGridPeer* _pPeer)
+    :m_pPeer(_pPeer)
+{
+    DBG_ASSERT(m_pPeer, "SelectionListenerImpl::SelectionListenerImpl");
+}
+
+//------------------------------------------------------------------
+void FmXGridPeer::SelectionListenerImpl::selectionChanged()
+{
+    m_pPeer->selectionChanged();
+}
+
+//==============================================================================
 //------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  FmXGridPeer_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
 {
@@ -906,21 +1024,30 @@ sal_Bool SAL_CALL FmXGridControl::supportsMode(const ::rtl::OUString& Mode) thro
     return aReturn;
 }
 
-//------------------------------------------------------------------------------
-rtl::OUString _fModeName = DATA_MODE;
+//------------------------------------------------------------------
+void FmXGridPeer::selectionChanged()
+{
+    EventObject aSource;
+    aSource.Source = static_cast< ::cppu::OWeakObject* >(this);
+    NOTIFY_LISTENERS(m_aSelectionListeners, XSelectionChangeListener, selectionChanged, aSource);
+}
+
+//------------------------------------------------------------------
 FmXGridPeer::FmXGridPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
             :m_aModifyListeners(m_aMutex)
             ,m_aUpdateListeners(m_aMutex)
             ,m_aContainerListeners(m_aMutex)
+            ,m_aSelectionListeners(m_aMutex)
             ,m_nCursorListening(0)
-//          ,m_aMode(rtl::OUString(DATA_MODE))
-            ,m_aMode( _fModeName )
+            ,m_aMode( DATA_MODE )
             ,m_pStateCache(NULL)
             ,m_pDispatchers(NULL)
             ,m_bInterceptingDispatch(sal_False)
             ,m_xServiceFactory(_rxFactory)
+            ,m_pSelectionListener(NULL)
 {
     // nach diesem Constructor muss Create gerufen werden !
+    m_pSelectionListener = new SelectionListenerImpl(this);
 }
 
 //------------------------------------------------------------------------------
@@ -938,6 +1065,9 @@ void FmXGridPeer::Create(Window* pParent, WinBits nStyle)
     pWin->SetStateProvider(LINK(this, FmXGridPeer, OnQueryGridSlotState));
     pWin->SetSlotExecutor(LINK(this, FmXGridPeer, OnExecuteGridSlot));
 
+    // want to hear about row selections
+    pWin->setSelectionListener(m_pSelectionListener);
+
     // Init muß immer aufgerufen werden
     pWin->Init();
     pWin->SetComponentInterface(this);
@@ -950,6 +1080,8 @@ FmXGridPeer::~FmXGridPeer()
 {
     setRowSet(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > ());
     setColumns(::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > ());
+
+    delete m_pSelectionListener;
 }
 
 //------------------------------------------------------------------------------
@@ -1328,7 +1460,7 @@ void FmXGridPeer::propertyChange(const ::com::sun::star::beans::PropertyChangeEv
             if (bWasEditing)
                 pGrid->DeactivateCell();
 
-            Rectangle aColRect = pGrid->GetFieldRect(nId);
+            ::Rectangle aColRect = pGrid->GetFieldRect(nId);
             aColRect.Top() = 0;
             aColRect.Bottom() = pGrid->GetSizePixel().Height();
             pGrid->Invalidate(aColRect);
@@ -2277,6 +2409,44 @@ void FmXGridPeer::statusChanged(const ::com::sun::star::frame::FeatureStateEvent
 sal_Bool FmXGridPeer::approveReset(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException )
 {
     return sal_True;
+}
+
+//------------------------------------------------------------------------------
+sal_Bool SAL_CALL FmXGridPeer::select( const Any& _rSelection ) throw (IllegalArgumentException, RuntimeException)
+{
+    Sequence< Any > aBookmarks;
+    if (!(_rSelection >>= aBookmarks) || (0 == aBookmarks.getLength()))
+        throw IllegalArgumentException();
+
+    FmGridControl* pVclControl = static_cast<FmGridControl*>(GetWindow());
+    return pVclControl->selectBookmarks(aBookmarks);
+
+    // TODO:
+    // speaking strictly, we would have to adjust our model, as our ColumnSelection may have changed.
+    // Our model is a XSelectionSupplier, too, it handles the selection of single columns.
+    // This is somewhat strange, as selection should be a view (not a model) aspect.
+    // So for a clean solution, we should handle column selection ourself, and the model shouldn't
+    // deal with selection at all.
+}
+
+//------------------------------------------------------------------------------
+Any SAL_CALL FmXGridPeer::getSelection(  ) throw (RuntimeException)
+{
+    FmGridControl* pVclControl = static_cast<FmGridControl*>(GetWindow());
+    Sequence< Any > aSelectionBookmarks = pVclControl->getSelectionBookmarks();
+    return makeAny(aSelectionBookmarks);
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FmXGridPeer::addSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener ) throw (RuntimeException)
+{
+    m_aSelectionListeners.addInterface( _rxListener );
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FmXGridPeer::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener ) throw (RuntimeException)
+{
+    m_aSelectionListeners.removeInterface( _rxListener );
 }
 
 //------------------------------------------------------------------------------
