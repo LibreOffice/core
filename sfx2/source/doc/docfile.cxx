@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.161 $
+ *  $Revision: 1.162 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:44:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,6 +410,7 @@ public:
     ::utl::TempFile*           pTempDir;
     ::utl::TempFile*           pTempFile;
 
+    uno::Reference < embed::XStorage > m_xReadStorage;
     Reference < XInputStream > xInputStream;
     Reference < XStream > xStream;
 
@@ -681,7 +682,9 @@ void SfxMedium::CloseInStream_Impl()
     if ( pSet )
         pSet->ClearItem( SID_INPUTSTREAM );
 
+    CloseReadStorage_Impl();
     pImp->xInputStream = uno::Reference< io::XInputStream >();
+
     if ( !pOutStream )
     {
         // output part of the stream is not used so the whole stream can be closed
@@ -1259,6 +1262,56 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
 }
 
 //------------------------------------------------------------------
+uno::Reference< embed::XStorage > SfxMedium::GetLastCommitReadStorage_Impl()
+{
+    if ( !GetError() && !pImp->m_xReadStorage.is() )
+    {
+        GetMedium_Impl();
+
+        try
+        {
+            if ( pImp->xInputStream.is() )
+            {
+                uno::Sequence< uno::Any > aArgs( 2 );
+                aArgs[0] <<= pImp->xInputStream;
+                aArgs[1] <<= embed::ElementModes::READ;
+                pImp->m_xReadStorage = uno::Reference< embed::XStorage >(
+                                    ::comphelper::OStorageHelper::GetStorageFactory()->createInstanceWithArguments( aArgs ),
+                                    uno::UNO_QUERY );
+            }
+            else if ( GetStorage().is() )
+            {
+                uno::Reference< embed::XStorage > xTempStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
+                GetStorage()->copyLastCommitTo( xTempStor );
+                pImp->m_xReadStorage = xTempStor;
+            }
+        }
+        catch( uno::Exception& )
+        {
+            OSL_ENSURE( sal_False, "No possibility to get readonly version of storage from medium!\n" );
+        }
+
+        ResetError();
+    }
+
+    return pImp->m_xReadStorage;
+}
+
+//------------------------------------------------------------------
+void SfxMedium::CloseReadStorage_Impl()
+{
+    if ( pImp->m_xReadStorage.is() )
+    {
+        try {
+            pImp->m_xReadStorage->dispose();
+        } catch( uno::Exception& )
+        {}
+
+        pImp->m_xReadStorage = uno::Reference< embed::XStorage >();
+    }
+}
+
+//------------------------------------------------------------------
 void SfxMedium::CloseStorage()
 {
     if ( pImp->xStorage.is() )
@@ -1347,6 +1400,7 @@ sal_Bool SfxMedium::StorageCommit_Impl()
                 try
                 {
                     xTrans->commit();
+                    CloseReadStorage_Impl();
                     bResult = sal_True;
                 }
                 catch ( embed::UseBackupException& aBackupExc )
@@ -2313,6 +2367,7 @@ void SfxMedium::Close()
         const SvStream *pStream = aStorage->GetSvStream();
         if ( pStream && pStream == pInStream )
         {
+            CloseReadStorage_Impl();
             pInStream = NULL;
             pImp->xInputStream = Reference < XInputStream >();
             pImp->xLockBytes.Clear();
@@ -2343,6 +2398,7 @@ void SfxMedium::CloseAndRelease()
         const SvStream *pStream = aStorage->GetSvStream();
         if ( pStream && pStream == pInStream )
         {
+            CloseReadStorage_Impl();
             pInStream = NULL;
             pImp->xInputStream = Reference < XInputStream >();
             pImp->xLockBytes.Clear();
@@ -2361,6 +2417,7 @@ void SfxMedium::CloseAndRelease()
 
     try
     {
+        CloseReadStorage_Impl();
         if ( pImp->xInputStream.is() )
             pImp->xInputStream->closeInput();
         if ( pImp->xStream.is() && pImp->xStream->getOutputStream().is() )
@@ -3188,30 +3245,79 @@ void SfxMedium::SetCharset( ::rtl::OUString aChs )
     pImp->aCharset = aChs;
 }
 
-void SfxMedium::SignContents_Impl( sal_Bool bScriptingContent )
+sal_Bool SfxMedium::SignContents_Impl( sal_Bool bScriptingContent )
 {
     DBG_ASSERT( GetStorage().is(), "SfxMedium::SignContents_Impl - Storage doesn't exist!" );
+
+    sal_Bool bChanges = FALSE;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xD(
         comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), ::com::sun::star::uno::UNO_QUERY );
 
+    // TODO/LATER: error handling
     if ( xD.is() && GetStorage().is() )
     {
-        if ( bScriptingContent )
+        sal_Int32 nEncrMode = IsReadOnly() ? embed::ElementModes::READ
+                                           : embed::ElementModes::READWRITE;
+
+        try
         {
-            if ( !IsReadOnly() )
-                xD->SignScriptingContent( GetStorage() );
+            uno::Reference< embed::XStorage > xMetaInf = GetStorage()->openStorageElement(
+                                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) ),
+                                                nEncrMode );
+            if ( !xMetaInf.is() )
+                throw uno::RuntimeException();
+
+               if ( bScriptingContent )
+            {
+                if ( !IsReadOnly() )
+                {
+                    uno::Reference< io::XStream > xStream = xMetaInf->openStreamElement(
+                                                                    xD->getScriptingContentSignatureDefaultStreamName(),
+                                                                    nEncrMode );
+                    if ( !xStream.is() )
+                        throw uno::RuntimeException();
+
+                    if ( xD->signScriptingContent( GetLastCommitReadStorage_Impl(), xStream ) )
+                    {
+                        uno::Reference< embed::XTransactedObject > xTrans( xMetaInf, uno::UNO_QUERY );
+                        xTrans->commit();
+                        Commit();
+                        bChanges = TRUE;
+                    }
+                }
+                else
+                    xD->showScriptingContentSignatures( GetLastCommitReadStorage_Impl(), uno::Reference< io::XInputStream >() );
+            }
             else
-                xD->ShowScriptingContentSignatures( GetStorage() );
+            {
+                if ( !IsReadOnly() )
+                {
+                    uno::Reference< io::XStream > xStream = xMetaInf->openStreamElement(
+                                                                    xD->getDocumentContentSignatureDefaultStreamName(),
+                                                                    nEncrMode );
+                    if ( !xStream.is() )
+                        throw uno::RuntimeException();
+
+                    if ( xD->signDocumentContent( GetLastCommitReadStorage_Impl(), xStream ) )
+                    {
+                        uno::Reference< embed::XTransactedObject > xTrans( xMetaInf, uno::UNO_QUERY );
+                        xTrans->commit();
+                        Commit();
+                        bChanges = TRUE;
+                    }
+
+                }
+                else
+                    xD->showDocumentContentSignatures( GetLastCommitReadStorage_Impl(), uno::Reference< io::XInputStream >() );
+            }
         }
-        else
+        catch( uno::Exception& )
         {
-            if ( !IsReadOnly() )
-                xD->SignDocumentContent( GetStorage() );
-            else
-                xD->ShowDocumentContentSignatures( GetStorage() );
+            OSL_ENSURE( sal_False, "Couldn't use signing functionality!\n" );
         }
     }
+    return bChanges;
 }
 
 //----------------------------------------------------------------
