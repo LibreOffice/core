@@ -100,8 +100,8 @@ StringListPtr_t CommandLine::GetArgumentNames() const
 std::string CommandLine::GetArgument(const std::string& ArgumentName) const
 {
     std::string arg_value;
-
-    for (size_t i = 0; i < m_argc; i++)
+    size_t i;
+    for ( i = 0; i < m_argc; i++)
     {
         std::string arg = m_argv[i];
 
