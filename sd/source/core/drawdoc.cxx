@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:19:04 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@
 #endif
 
 using namespace ::rtl;
+using namespace ::sd;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -1309,7 +1310,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
                 if( pPresObj )
                 {
                     pPage->RemoveObject( pPresObj->GetOrdNum() );
-                    pPage->GetPresObjList()->Remove(pPresObj);
+                    pPage->RemovePresObj(pPresObj);
                     delete pPresObj;
                 }
             }
@@ -1334,7 +1335,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     // Draw-Outliner und  Dokument Outliner initialisieren,
     // aber nicht den globalen Outliner, den der ist ja nicht
     // dokumentspezifisch wie StyleSheetPool und StyleRequestHandler
-    Outliner& rDrawOutliner = GetDrawOutliner();
+    ::Outliner& rDrawOutliner = GetDrawOutliner();
     rDrawOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
        rDrawOutliner.SetMinDepth(0);
     ULONG nCntrl = rDrawOutliner.GetControlWord();
@@ -1395,186 +1396,20 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
             if( nFileFormatVersion <= 4 )
                 pPage->CreateTitleAndLayout();
 
-            SdrObjListIter aIter( *pPage );
-            while( aIter.IsMore() )
-            {
-                OutlinerParaObject* pOPO = aIter.Next()->GetOutlinerParaObject();
-                if( pOPO )
-                {
-                    if( pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
-                        pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
-
-                    pOPO->FinishLoad( pSPool );
-                }
-            }
-
-            List* pPresObjList = pPage->GetPresObjList();
-            ULONG nObjCount = pPresObjList->Count();
-            if (nObjCount)
-            {
-                // Listen mit Titel- und Gliederungsvorlagen erstellen
-                String aName = pPage->GetLayoutName();
-                aName.Erase( aName.SearchAscii( SD_LT_SEPARATOR ));
-
-                List* pOutlineList = pSPool->CreateOutlineSheetList(aName);
-                SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)
-                                                pSPool->GetTitleSheet(aName);
-
-                // jetzt nach Titel- und Gliederungstextobjekten suchen und
-                // Objekte zu Listenern machen
-                SdrAttrObj* pObj = (SdrAttrObj*)pPresObjList->First();
-                while (pObj)
-                {
-                    if (pObj->GetObjInventor() == SdrInventor)
-                    {
-                        OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
-                        SdPage* pPage = (SdPage*) pObj->GetPage();
-                        UINT16 nId = pObj->GetObjIdentifier();
-
-                        if (nId == OBJ_TITLETEXT)
-                        {
-                            if( pOPO && pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
-                                pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
-
-                            // TRUE: harte Attribute dabei nicht loeschen
-                            if (pTitleSheet)
-                                pObj->SetStyleSheet(pTitleSheet, TRUE);
-                        }
-                        else if (nId == OBJ_OUTLINETEXT)
-                        {
-                            if( pOPO && pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
-                                pOPO->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
-
-                            for (USHORT nSheet = 0; nSheet < 10; nSheet++)
-                            {
-                                pSheet = (SfxStyleSheet*)pOutlineList->GetObject(nSheet);
-                                if (pSheet)
-                                {
-                                    pObj->StartListening(*pSheet);
-
-                                    if( nSheet == 0)
-                                        // Textrahmen hoert auf StyleSheet der Ebene1
-                                        pObj->NbcSetStyleSheet(pSheet, TRUE);
-                                }
-                            }
-                        }
-
-                        if (pObj->ISA(SdrTextObj) && pObj->IsEmptyPresObj() && pPage)
-                        {
-                            PresObjKind ePresObjKind = pPage->GetPresObjKind(pObj);
-                            String aString = pPage->GetPresObjText(ePresObjKind);
-
-                            if (aString.Len())
-                            {
-                                ::sd::Outliner* pInternalOutl = GetInternalOutliner(TRUE);
-                                pInternalOutl->SetMinDepth(0);
-                                pPage->SetObjText( (SdrTextObj*) pObj, pInternalOutl, ePresObjKind, aString );
-                                pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), TRUE );
-                                pInternalOutl->Clear();
-                            }
-                        }
-                    }
-                    pObj = (SdrAttrObj*)pPresObjList->Next();
-                }
-
-                delete pOutlineList;
-            }
+            NewOrLoadCompleted( pPage, pSPool );
         }
 
         // Masterpages:
         for (nPage = 0; nPage < GetMasterPageCount(); nPage++)
         {
             SdPage* pPage = (SdPage*)GetMasterPage(nPage);
-            SdrObjListIter aIter( *pPage );
-            while( aIter.IsMore() )
-            {
-                OutlinerParaObject* pOPO = aIter.Next()->GetOutlinerParaObject();
-                if( pOPO )
-                {
-                    if( pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
-                        pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
 
-                    pOPO->FinishLoad( pSPool );
-                }
-            }
+            NewOrLoadCompleted( pPage, pSPool );
 
             // BackgroundObjekt vor Selektion schuetzen #62144#
             SdrObject* pBackObj = pPage->GetPresObj(PRESOBJ_BACKGROUND);
             if(pBackObj)
                 pBackObj->SetMarkProtect(TRUE);
-
-            List* pPresObjList = pPage->GetPresObjList();
-            ULONG nObjCount = pPresObjList->Count();
-            if (nObjCount)
-            {
-                // Listen mit Titel- und Gliederungsvorlagen erstellen
-                String aName = pPage->GetLayoutName();
-                aName.Erase(aName.SearchAscii( SD_LT_SEPARATOR ));
-
-                List* pOutlineList = pSPool->CreateOutlineSheetList(aName);
-                SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)
-                                                pSPool->GetTitleSheet(aName);
-
-                // jetzt nach Titel- und Gliederungstextobjekten suchen und
-                // Objekte zu Listenern machen
-                SdrAttrObj* pObj = (SdrAttrObj*)pPresObjList->First();
-                while (pObj)
-                {
-                    if (pObj->GetObjInventor() == SdrInventor)
-                    {
-                        OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
-                        UINT16 nId = pObj->GetObjIdentifier();
-
-                        if (nId == OBJ_TITLETEXT)
-                        {
-                            if( pOPO && pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
-                                pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
-
-                            // TRUE: harte Attribute dabei nicht loeschen
-                            if (pTitleSheet)
-                                pObj->SetStyleSheet(pTitleSheet, TRUE);
-                        }
-                        else if (nId == OBJ_OUTLINETEXT)
-                        {
-                            if( pOPO && pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
-                                pOPO->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
-
-                            for (USHORT nSheet = 0; nSheet < 10; nSheet++)
-                            {
-                                pSheet = (SfxStyleSheet*)pOutlineList->GetObject(nSheet);
-                                if (pSheet)
-                                {
-                                    pObj->StartListening(*pSheet);
-
-                                    if( nSheet == 0)
-                                        // Textrahmen hoert auf StyleSheet der Ebene1
-                                        pObj->NbcSetStyleSheet(pSheet, TRUE);
-                                }
-                            }
-                        }
-
-                        SdPage* pPage = (SdPage*) pObj->GetPage();
-
-                        if (pObj->ISA(SdrTextObj) && pObj->IsEmptyPresObj() && pPage)
-                        {
-                            PresObjKind ePresObjKind = pPage->GetPresObjKind(pObj);
-                            String aString = pPage->GetPresObjText(ePresObjKind);
-
-                            if (aString.Len())
-                            {
-                                ::sd::Outliner* pInternalOutl = GetInternalOutliner(TRUE);
-                                pInternalOutl->SetMinDepth(0);
-                                pPage->SetObjText( (SdrTextObj*) pObj, pInternalOutl, ePresObjKind, aString );
-                                pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), TRUE );
-                                pInternalOutl->Clear();
-                            }
-                        }
-                    }
-                    pObj = (SdrAttrObj*)pPresObjList->Next();
-                }
-
-                delete pOutlineList;
-            }
         }
     }
 
@@ -1615,6 +1450,96 @@ void SdDrawDocument::UpdateAllLinks()
     }
 }
 
+/** this loops over the presentation objectes of a page and repairs some new settings
+    from old binary files and resets all default strings for empty presentation objects.
+*/
+void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool )
+{
+    SdrObjListIter aShapeIter( *pPage );
+    while( aShapeIter.IsMore() )
+    {
+        OutlinerParaObject* pOPO = aShapeIter.Next()->GetOutlinerParaObject();
+        if( pOPO )
+        {
+            if( pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
+                pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+
+            pOPO->FinishLoad( pSPool );
+        }
+    }
+
+    PresentationObjectList::iterator aIter( pPage->GetPresObjList().begin() );
+    const PresentationObjectList::iterator aEnd( pPage->GetPresObjList().end() );
+    if(aIter != aEnd)
+    {
+        // Listen mit Titel- und Gliederungsvorlagen erstellen
+        String aName = pPage->GetLayoutName();
+        aName.Erase( aName.SearchAscii( SD_LT_SEPARATOR ));
+
+        List* pOutlineList = pSPool->CreateOutlineSheetList(aName);
+        SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)
+                                        pSPool->GetTitleSheet(aName);
+
+        // jetzt nach Titel- und Gliederungstextobjekten suchen und
+        // Objekte zu Listenern machen
+        while (aIter != aEnd)
+        {
+            SdrObject* pObj = (*aIter).mpObject;
+
+            if (pObj->GetObjInventor() == SdrInventor)
+            {
+                OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+                UINT16 nId = pObj->GetObjIdentifier();
+
+                if (nId == OBJ_TITLETEXT)
+                {
+                    if( pOPO && pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
+                        pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
+
+                    // TRUE: harte Attribute dabei nicht loeschen
+                    if (pTitleSheet)
+                        pObj->SetStyleSheet(pTitleSheet, TRUE);
+                }
+                else if (nId == OBJ_OUTLINETEXT)
+                {
+                    if( pOPO && pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
+                        pOPO->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
+
+                    for (USHORT nSheet = 0; nSheet < 10; nSheet++)
+                    {
+                        SfxStyleSheet* pSheet = (SfxStyleSheet*)pOutlineList->GetObject(nSheet);
+                        if (pSheet)
+                        {
+                            pObj->StartListening(*pSheet);
+
+                            if( nSheet == 0)
+                                // Textrahmen hoert auf StyleSheet der Ebene1
+                                pObj->NbcSetStyleSheet(pSheet, TRUE);
+                        }
+                    }
+                }
+
+                if (pObj->ISA(SdrTextObj) && pObj->IsEmptyPresObj() && pPage)
+                {
+                    PresObjKind ePresObjKind = (*aIter).meKind;
+                    String aString( pPage->GetPresObjText(ePresObjKind) );
+
+                    if (aString.Len())
+                    {
+                        sd::Outliner* pInternalOutl = GetInternalOutliner(TRUE);
+                        pInternalOutl->SetMinDepth(0);
+                        pPage->SetObjText( (SdrTextObj*) pObj, pInternalOutl, ePresObjKind, aString );
+                        pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), TRUE );
+                        pInternalOutl->Clear();
+                    }
+                }
+            }
+            aIter++;
+        }
+
+        delete pOutlineList;
+    }
+}
 
 /*************************************************************************
 |*
@@ -1761,7 +1686,7 @@ void SdDrawDocument::SetOnlineSpell(BOOL bIn)
         pInternalOutliner->SetControlWord(nCntrl);
     }
 
-    Outliner& rOutliner = GetDrawOutliner();
+    ::Outliner& rOutliner = GetDrawOutliner();
 
     nCntrl = rOutliner.GetControlWord();
 
@@ -1818,7 +1743,7 @@ void SdDrawDocument::SetHideSpell(BOOL bIn)
         pInternalOutliner->SetControlWord(nCntrl);
     }
 
-    Outliner& rOutliner = GetDrawOutliner();
+    ::Outliner& rOutliner = GetDrawOutliner();
 
     nCntrl = rOutliner.GetControlWord();
 
