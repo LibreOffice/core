@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanjadlg.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:14:53 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 // PushButton
 #define PB_FIND         1
 
-// ListBox
-#define LB_SUGGESTIONS  1
+// Control
+#define CTL_SUGGESTIONS 1
 
 // FixedText
 #define FT_FORMAT           1
@@ -119,7 +119,6 @@
 #define LB_DICTS                    1
 
 #define CB_IGNOREPOST               1
-#define CB_AUTOCLOSE                2
 #define CB_SHOWRECENTLYFIRST        3
 #define CB_AUTOREPLACEUNIQUE        4
 
@@ -133,7 +132,7 @@
 // metrics
 
 #define HHO_DLGWIDTH                287
-#define HHx_DLGHIGHT                195
+#define HHx_DLGHIGHT                175
 #define HHO_COL_1                   RSC_SP_DLG_INNERBORDER_LEFT
 #define HHO_COL_1a                  (HHO_COL_1+3)
 #define HHO_COL_6                   (HHO_DLGWIDTH-6)
@@ -151,8 +150,7 @@
 #define HHO_ROW_7                   (HHO_ROW_6+14)
 #define HHO_ROW_8                   (HHO_ROW_7+4)
 #define HHO_ROW_9                   (HHO_ROW_8+8+4)
-#define HHO_ROW_10                  (HHO_ROW_9+8+4)
-#define HHO_ROW_11                  (HHO_ROW_10+8+4)
+#define HHO_ROW_11                  (HHO_ROW_9+8+4)
 #define HHO_ROW_12                  (HHO_ROW_11+8+4)
 
 #define HHO_ROW_a1                  HHO_ROW_1
@@ -186,8 +184,6 @@
 
 #define LB_BOOK                     1
 #define LB_ORIGINAL                 2
-
-#define CB_REPLACEBYCHAR            1
 
 #define PB_HHE_NEW                  1
 #define PB_HHE_DELETE               2
@@ -224,7 +220,7 @@
 #define HHE_ROW_7                   (HHE_ROW_6+2)
 #define HHE_ROW_8                   (HHE_ROW_7+2)
 #define HHE_ROW_9                   (HHE_ROW_6+12)
-#define HHE_ROW_10                  (HHE_ROW_8+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define HHE_ROW_10                  (HHE_ROW_8+RSC_SP_CTRL_GROUP_Y)
 #define HHE_ROW_11                  (HHE_ROW_10+8+2)
 #define HHE_ROW_12                  (HHE_ROW_11+4*12)
 #define HHE_ROW_14                  (HHx_DLGHIGHT-RSC_SP_DLG_INNERBORDER_BOTTOM)
