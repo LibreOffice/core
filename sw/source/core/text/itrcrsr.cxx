@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:47:50 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,6 @@
 #include <pormulti.hxx>     // SwMultiPortion
 #endif
 
-extern BYTE WhichFont( xub_StrLen nIdx, const String* pTxt,
-                       const SwScriptInfo* pSI );
-
 // Nicht reentrant !!!
 // wird in GetCharRect gesetzt und im UnitUp/Down ausgewertet.
 sal_Bool SwTxtCursor::bRightMargin = sal_False;
@@ -169,7 +166,7 @@ void lcl_GetPositionInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
         if ( pString )
         {
             // get script for field portion
-            rInf.GetFont()->SetActual( WhichFont( 0, pString, 0 ) );
+            rInf.GetFont()->SetActual( SwScriptInfo::WhichFont( 0, pString, 0 ) );
 
             xub_StrLen nOldLen = pPor->GetLen();
             ((SwLinePortion*)pPor)->SetLen( nLen - 1 );
