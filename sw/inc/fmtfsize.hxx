@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfsize.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:48:10 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -90,7 +94,7 @@ enum SwFrmSize
                         //ueberschritten werden kann.
 };
 
-class SwFmtFrmSize: public SfxPoolItem
+class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
 {
     Size      aSize;
     SwFrmSize eFrmHeightType;
