@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-25 21:25:46 $
+ *  last change: $Author: cd $ $Date: 2001-11-01 17:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,6 +346,22 @@ ErrorBox MSG_SIGNAL
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "¡Se ha producido un error inesperado de la aplicación!\nUsted puede ahora, a riesgo propio, intentar\nsalvar todos los documentos abiertos!\n\n¿Desea guardar su trabajo antes de cerrar la aplicación?";
     Message[ finnish ] = "On ilmennyt odottamaton ohjelmavirhe.\n\nHaluatko yrittää tallentaa kaikkien avointen asiakirjojen muutokset ennen kuin ohjelma lopetetaan?";
+};
+
+ErrorBox MSG_ERR_WEBBROWSER_NOT_STARTED
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message = "Fehler beim Starten des externen Webbrowsers.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME und die des Webbrowsers." ;
+    Message [ ENGLISH ] = "An error occurred in starting an external webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings." ;
+};
+
+ErrorBox MSG_ERR_EXTERNAL_APP_NOT_FOUND
+{
+    BUTTONS = WB_OK;
+    DEFBUTTON = WB_DEF_OK ;
+    Message = "Es konnte keine zugehörige externe Applikation für den angewählten Dateitypen gefunden werden.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME." ;
+    Message [ ENGLISH ] = "An error occurred in starting the external application for the given file type.\nPlease check the %PRODUCTNAME settings." ;
 };
 
 Resource SID_UNKNOWN
