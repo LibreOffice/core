@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-06 20:19:13 $
+ *  last change: $Author: tl $ $Date: 2001-09-19 15:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2886,7 +2886,7 @@ ModalDialog RID_SYMBOLDIALOG
     FixedText 1
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
         Text = "~Symbolset" ;
         Left = TRUE ;
         Text [ English ] = "~Symbolset" ;
@@ -2936,9 +2936,9 @@ ModalDialog RID_SYMBOLDIALOG
     };
     FixedText 2
     {
-        Left = TRUE ;
-        Pos = MAP_APPFONT ( 35 , 108 ) ;
-        Size = MAP_APPFONT ( 63 , 8 ) ;
+        Center = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 108 ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
         Text = "Unbekannt" ;
         Text [ ENGLISH ] = "Unknown" ;
         Text [ norwegian ] = "Unknown" ;
@@ -2987,10 +2987,10 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ polish ] = "Zastosuj";
         Text[ japanese ] = "ζΏε…¥(~I)";
         Text[ russian ] = "Οπθνÿςό";
-    Text[ polish ] = "Zastosuj";
-    Text[ japanese ] = "ζΏε…¥(~I)";
-    Text[ chinese_simplified ] = "ι‡‡η”¨(~I)";
-    Text[ chinese_traditional ] = "ζ΅η”¨(~I)";
+        Text[ polish ] = "Zastosuj";
+        Text[ japanese ] = "ζΏε…¥(~I)";
+        Text[ chinese_simplified ] = "ι‡‡η”¨(~I)";
+        Text[ chinese_traditional ] = "ζ΅η”¨(~I)";
         Text[ arabic ] = "ΕΟΡΗΜ";
         Text[ greek ] = "Εφαρμογή";
         Text[ korean ] = "μ μ©(~I)";
