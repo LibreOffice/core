@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:43:23 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,9 +299,10 @@ void SessionManagerClient::SaveYourselfProc(
 
 IMPL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void*, pDummy )
 {
-    SMprintf( GetSalData()->pFirstFrame_ ? "shutdown on first frame\n" : "shutdown event but no frame\n" );
-    if( GetSalData()->pFirstFrame_ )
-        GetSalData()->pFirstFrame_->ShutDown();
+    const std::list< SalFrame* >& rFrames = GetSalData()->GetDisplay()->getFrames();
+    SMprintf( rFrames.begin() != rFrames.end() ? "shutdown on first frame\n" : "shutdown event but no frame\n" );
+    if( rFrames.begin() != rFrames.end() )
+        rFrames.front()->CallCallback( SALEVENT_SHUTDOWN, 0 );
     return 0;
 }
 
@@ -378,7 +379,7 @@ void SessionManagerClient::open()
         pClientID = NULL;
         ICEConnectionObserver::unlock();
 
-        SalDisplay* pDisp = GetSalData()->GetDefDisp();
+        SalDisplay* pDisp = GetSalData()->GetDisplay();
         if( pDisp->GetDrawable() && aClientID.Len() )
         {
             XChangeProperty( pDisp->GetDisplay(),
@@ -565,6 +566,6 @@ void ICEConnectionObserver::ICEWatchProc(
     SMprintf( "ICE connection on %d %s\n",
               IceConnectionNumber( connection ),
               opening ? "inserted" : "removed" );
-    SMprintf( "Display connection is %d\n", ConnectionNumber( GetSalData()->GetDefDisp()->GetDisplay() ) );
+    SMprintf( "Display connection is %d\n", ConnectionNumber( GetSalData()->GetDisplay()->GetDisplay() ) );
 #endif
 }
