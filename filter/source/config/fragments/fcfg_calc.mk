@@ -59,10 +59,28 @@ F4_CALC = \
     calc_HTML_WebQuery \
     calc_StarOffice_XML_Calc_Template \
     calc_pdf_Export \
-    dBase\
-    calc8\
+    dBase \
+    calc8 \
     calc8_template
-
+    
+# -----------------------------------------------
+# count = 14
+F4_UI_CALC = \
+    HTML__StarCalc__ui \
+    MS_Excel_4_0_Vorlage_Template_ui \
+    MS_Excel_5_0_95_Vorlage_Template_ui \
+    MS_Excel_95_Vorlage_Template_ui \
+    MS_Excel_97_Vorlage_Template_ui \
+    StarCalc_3_0_Vorlage_Template_ui \
+    StarCalc_4_0_Vorlage_Template_ui \
+    StarCalc_5_0_Vorlage_Template_ui \
+    StarOffice_XML__Calc__ui \
+    Text___txt___csv__StarCalc__ui \
+    calc_HTML_WebQuery_ui \
+    calc_StarOffice_XML_Calc_Template_ui \
+    calc8_ui \
+    calc8_template_ui
+    
 # -----------------------------------------------
 # count = 0
 L4_CALC =
@@ -72,15 +90,22 @@ L4_CALC =
 C4_CALC =
 
 # -----------------------------------------------
-TYPES_4fcfg_calc           = $(foreach,i,$(T4_CALC) types$/$i.xcu          )
-FILTERS_4fcfg_calc         = $(foreach,i,$(F4_CALC) filters$/$i.xcu        )
-FRAMELOADERS_4fcfg_calc    = $(foreach,i,$(L4_CALC) frameloaders$/$i.xcu   )
-CONTENTHANDLERS_4fcfg_calc = $(foreach,i,$(C4_CALC) contenthandlers$/$i.xcu)
+TYPES_4fcfg_calc           = $(foreach,i,$(T4_CALC)    types$/$i.xcu                     )
+FILTERS_4fcfg_calc         = $(foreach,i,$(F4_CALC)    filters$/$i.xcu                   )
+UI_FILTERS_4fcfg_calc      = $(foreach,i,$(F4_UI_CALC) $(DIR_LOCFRAG)$/filters$/$i.xcu   )
+FRAMELOADERS_4fcfg_calc    = $(foreach,i,$(L4_CALC)    frameloaders$/$i.xcu              )
+CONTENTHANDLERS_4fcfg_calc = $(foreach,i,$(C4_CALC)    contenthandlers$/$i.xcu           )
 
 # -----------------------------------------------
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_calc = \
     $(TYPES_4fcfg_calc) \
-    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
+    $(FILTERS_4fcfg_calc) \
+    $(UI_FILTERS_4fcfg_calc) \
     $(FRAMELOADERS_4fcfg_calc) \
     $(CONTENTHANDLERS_4fcfg_calc)
+    
+ALL_UI_FILTERS+=$(UI_FILTERS_4fcfg_calc)
+
+ALL_PACKAGES+=calc
+
