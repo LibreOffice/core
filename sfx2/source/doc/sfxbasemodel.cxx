@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ganaya $ $Date: 2001-02-01 01:17:52 $
+ *  last change: $Author: dv $ $Date: 2001-02-09 12:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 //ASDBG #include <usr/smartconv.hxx>
 //ASDBG #endif
 
+#ifndef _SV_RESARY_HXX
+#include <vcl/resary.hxx>
+#endif
+
 #ifndef _UNO_MAPPING_HXX_
 #include <uno/mapping.hxx>
 #endif
@@ -171,9 +175,20 @@
 #include <basmgr.hxx>
 #endif
 
+#ifndef _SFXEVENT_HXX
+#include <event.hxx>
+#endif
+
+#ifndef _SFX_EVENTSUPPLIER_HXX_
+#include <eventsupplier.hxx>
+#endif
+
 #include <vos/mutex.hxx>
 
 #include "sfxsids.hrc"
+#include "doc.hrc"
+#include "sfxlocal.hrc"
+#include "sfxresid.hxx"
 
 //________________________________________________________________________________________________________
 //  defines
@@ -203,6 +218,9 @@
 //  namespaces
 //________________________________________________________________________________________________________
 
+
+// Don't use using ... here, because there are at least two classes with the same name in use
+
 //using namespace ::osl                             ;
 //using namespace ::rtl                             ;
 //using namespace ::cppu                            ;
@@ -222,6 +240,7 @@
 struct IMPL_SfxBaseModel_DataContainer
 {
     SfxObjectShell*                                 m_pObjectShell          ;
+    ResStringArray                                  m_aEventNames           ;
     OUSTRING                                        m_sURL                  ;
     sal_uInt16                                      m_nControllerLockCount  ;
     OMULTITYPEINTERFACECONTAINERHELPER              m_aInterfaceContainer   ;
@@ -229,12 +248,14 @@ struct IMPL_SfxBaseModel_DataContainer
     REFERENCE< XCONTROLLER >                        m_xCurrent              ;
     REFERENCE< XDOCUMENTINFO >                      m_xDocumentInfo         ;
     REFERENCE< XSTARBASICACCESS >                   m_xStarBasicAccess      ;
+    REFERENCE< XNAMEREPLACE >                       m_xEvents               ;
     SEQUENCE< PROPERTYVALUE>                        m_seqArguments          ;
     SEQUENCE< REFERENCE< XCONTROLLER > >            m_seqControllers        ;
 
     IMPL_SfxBaseModel_DataContainer::IMPL_SfxBaseModel_DataContainer(   MUTEX&          aMutex          ,
                                                                         SfxObjectShell* pObjectShell    )
             :   m_pObjectShell          ( pObjectShell  )
+            ,   m_aEventNames           ( SfxResId( EVENT_NAMES_ARY ) )
             ,   m_sURL                  ( String()      )
             ,   m_nControllerLockCount  ( 0             )
             ,   m_aInterfaceContainer   ( aMutex        )
@@ -379,6 +400,13 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
                                                static_cast< XSTARBASICACCESS*       > ( this )  ,
                                                static_cast< XSTORABLE*              > ( this )  ) ) ;
 
+    if ( aReturn.hasValue() == sal_False )
+    {
+        aReturn = ::cppu::queryInterface(   rType                                           ,
+                                               static_cast< XEVENTBROADCASTER*      > ( this )  ,
+                                               static_cast< XEVENTSSUPPLIER*        > ( this )  ) ;
+    }
+
     // If searched interface supported by this class ...
     if ( aReturn.hasValue() == sal_True )
     {
@@ -446,7 +474,9 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
                                                       ::getCppuType(( const REFERENCE< XMODIFIABLE          >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XPRINTABLE               >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XSTORABLE                >*)NULL ) ,
-                                                      ::getCppuType(( const REFERENCE< XSTARBASICACCESS     >*)NULL ) ) ;
+                                                      ::getCppuType(( const REFERENCE< XSTARBASICACCESS     >*)NULL ) ,
+                                                      ::getCppuType(( const REFERENCE< XEVENTBROADCASTER        >*)NULL ) ,
+                                                      ::getCppuType(( const REFERENCE< XEVENTSSUPPLIER      >*)NULL ) ) ;
 
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;
@@ -647,7 +677,7 @@ void SAL_CALL SfxBaseModel::addEventListener( const REFERENCE< XEVENTLISTENER >&
 {
     // object already disposed?
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        return;
 
     m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const REFERENCE< XEVENTLISTENER >*)0), aListener );
 }
@@ -660,7 +690,7 @@ void SAL_CALL SfxBaseModel::removeEventListener( const REFERENCE< XEVENTLISTENER
 {
     // object already disposed?
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        return;
 
     m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XEVENTLISTENER >*)0), aListener );
 }
@@ -693,10 +723,13 @@ void SAL_CALL SfxBaseModel::disposing( const EVENTOBJECT& aObject )
 {
     REFERENCE< XMODIFYLISTENER >  xMod( aObject.Source, UNO_QUERY );
     REFERENCE< XEVENTLISTENER >  xListener( aObject.Source, UNO_QUERY );
+    REFERENCE< XDOCEVENTLISTENER >  xDocListener( aObject.Source, UNO_QUERY );
     if ( xMod.is() )
         m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XMODIFYLISTENER >*)0), xMod );
     else if ( xListener.is() )
         m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XEVENTLISTENER >*)0), xListener );
+    else if ( xDocListener.is() )
+        m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0), xListener );
 
     ::osl::MutexGuard aGuard( m_aMutex );
     sal_uInt32 nCount = m_pData->m_seqControllers.getLength();
@@ -1347,6 +1380,50 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUSTRING&                   rURL
     }
 }
 
+//--------------------------------------------------------------------------------------------------------
+//  XEventsSupplier
+//--------------------------------------------------------------------------------------------------------
+
+REFERENCE< XNAMEREPLACE > SAL_CALL SfxBaseModel::getEvents() throw( RUNTIMEEXCEPTION )
+{
+    // object already disposed?
+    if ( impl_isDisposed() )
+        return NULL;
+
+    if ( ! m_pData->m_xEvents.is() )
+    {
+        m_pData->m_xEvents = new SfxEvents_Impl( m_pData->m_pObjectShell, this );
+    }
+
+    return m_pData->m_xEvents;
+}
+
+//--------------------------------------------------------------------------------------------------------
+//  XEventBroadcaster
+//--------------------------------------------------------------------------------------------------------
+
+void SAL_CALL SfxBaseModel::addEventListener( const REFERENCE< XDOCEVENTLISTENER >& aListener ) throw( RUNTIMEEXCEPTION )
+{
+    // object already disposed?
+    if ( impl_isDisposed() )
+        return;
+
+    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0), aListener );
+}
+
+//--------------------------------------------------------------------------------------------------------
+//  XEventBroadcaster
+//--------------------------------------------------------------------------------------------------------
+
+void SAL_CALL SfxBaseModel::removeEventListener( const REFERENCE< XDOCEVENTLISTENER >& aListener ) throw( RUNTIMEEXCEPTION )
+{
+    // object already disposed?
+    if ( impl_isDisposed() )
+        return;
+
+    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0), aListener );
+}
+
 //________________________________________________________________________________________________________
 //  SfxListener
 //________________________________________________________________________________________________________
@@ -1356,9 +1433,12 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
 {
     if ( &rBC == m_pData->m_pObjectShell )
     {
-        SfxSimpleHint* pHint = PTR_CAST( SfxSimpleHint, &rHint );
-        if ( pHint && pHint->GetId() == SFX_HINT_DOCCHANGED )
+        SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
+        if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DOCCHANGED )
             changing();
+        SfxEventHint* pNamedHint = PTR_CAST( SfxEventHint, &rHint );
+        if ( pNamedHint )
+            postEvent_Impl( *pNamedHint );
     }
 }
 
@@ -1541,3 +1621,37 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
     if ( !pRet || !pRet->GetValue() )
         throw SfxIOException_Impl( ERRCODE_IO_CANTWRITE );
 }
+
+//********************************************************************************************************
+
+void SfxBaseModel::postEvent_Impl( const SfxEventHint& rHint )
+{
+    // object already disposed?
+    if ( impl_isDisposed() )
+        return;
+
+    OINTERFACECONTAINERHELPER* pIC = m_pData->m_aInterfaceContainer.getContainer(
+                                        ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0) );
+    if( pIC )
+
+    {
+        OUSTRING aName = getEventName_Impl( rHint.GetEventId() );
+        DOCEVENTOBJECT aEvent( (XMODEL *)this, aName );
+        OINTERFACEITERATORHELPER aIt( *pIC );
+        while( aIt.hasMoreElements() )
+            ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------
+String SfxBaseModel::getEventName_Impl( long nID )
+{
+    String aName;
+    USHORT nIndex = m_pData->m_aEventNames.FindIndex( nID );
+
+    if ( nIndex != RESARRAY_INDEX_NOTFOUND )
+        aName= m_pData->m_aEventNames.GetString( nIndex );
+
+    return aName;
+}
+
