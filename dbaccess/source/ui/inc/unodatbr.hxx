@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 07:44:32 $
+ *  last change: $Author: oj $ $Date: 2002-08-26 07:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,8 +406,6 @@ namespace dbaui
         DECL_LINK( OnShowRefreshDropDown, void* );
 
         void implRemoveStatusListeners();
-
-        void openHelpAgent(sal_Int32 _nHelpId);
 
         sal_Bool implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor);
 

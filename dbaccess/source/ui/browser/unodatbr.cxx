@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:32:53 $
+ *  last change: $Author: oj $ $Date: 2002-08-26 07:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,9 +180,7 @@
 #ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #endif
-#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
-#include <svtools/moduleoptions.hxx>
-#endif
+
 #ifndef _SVX_ALGITEM_HXX //autogen
 #include <svx/algitem.hxx>
 #endif
@@ -2283,141 +2281,6 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceNam
         }
     }
     return sal_False;
-}
-
-//------------------------------------------------------------------------------
-namespace
-{
-    ::rtl::OUString lcl_getModuleHelpModuleName( const Reference< XFrame >& _rxFrame )
-    {
-        const sal_Char* pReturn = NULL;
-
-        try
-        {
-            // get the model of the document in the given frame
-            Reference< XController > xController;
-            if ( _rxFrame.is() )
-                xController = _rxFrame->getController();
-            Reference< XModel > xModel;
-            if ( xController.is() )
-                xModel = xController->getModel();
-            Reference< XServiceInfo > xSI( xModel, UNO_QUERY );
-
-            if ( !xSI.is() )
-            {   // try to go up the frame hierarchy
-
-                Reference< XFrame > xParentFrame;
-                if ( _rxFrame.is() )
-                    xParentFrame = xParentFrame.query( _rxFrame->getCreator() );
-                // did we find a parent frame? Which is no top-level frame?
-                if ( xParentFrame.is() && !_rxFrame->isTop() )
-                    // TODO: to prevent framework assertions, re-insert this "isTop" once 98303 is fixed
-                    return lcl_getModuleHelpModuleName( xParentFrame );
-            }
-            else
-            {
-#ifdef _DEBUG
-                Sequence< ::rtl::OUString > sServiceNames = xSI->getSupportedServiceNames();
-                const ::rtl::OUString* pLoop = sServiceNames.getConstArray();
-                for ( sal_Int32 i=0; i<sServiceNames.getLength(); ++i, ++pLoop )
-                {
-                    sal_Int32 nDummy = 0;
-                }
-#endif
-
-                // check which service we know ....
-                static const sal_Char* pTransTable[] = {
-                    "com.sun.star.text.TextDocument",   "swriter",
-                    "com.sun.star.sheet.SpreadsheetDocument", "scalc",
-                    "com.sun.star.presentation.PresentationDocument", "simpress",
-                    "com.sun.star.drawing.DrawingDocument", "sdraw",
-                    "com.sun.star.formula.FormularProperties", "smath",
-                    "com.sun.star.chart.ChartDocument", "schart"
-                };
-                OSL_ENSURE( ( sizeof( pTransTable ) / sizeof( pTransTable[0] ) ) % 2 == 0,
-                    "lcl_getModuleHelpModuleName: odd size of translation table!" );
-
-                // loop through the table
-                sal_Int32 nTableEntries = ( sizeof( pTransTable ) / sizeof( pTransTable[0] ) ) / 2;
-                const sal_Char** pDocumentService = pTransTable;
-                const sal_Char** pHelpModuleName = pTransTable + 1;
-                for ( sal_Int32 j=0; j<nTableEntries; ++j )
-                {
-                    if ( xSI->supportsService( ::rtl::OUString::createFromAscii( *pDocumentService ) ) )
-                    {   // found a table entry which matches the model's services
-                        pReturn = *pHelpModuleName;
-                        break;
-                    }
-
-                    ++pDocumentService; ++pDocumentService;
-                    ++pHelpModuleName; ++pHelpModuleName;
-                }
-            }
-
-            if ( !pReturn )
-            {
-                // could not determine the document type we're living in
-                // ->fallback
-                SvtModuleOptions aModOpt;
-                if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
-                    pReturn = "swriter";
-                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
-                    pReturn = "scalc";
-                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
-                    pReturn = "simpress";
-                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
-                    pReturn = "sdraw";
-                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
-                    pReturn = "smath";
-                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCHART ) )
-                    pReturn = "schart";
-                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SBASIC ) )
-                    pReturn = "sbasic";
-                else
-                {
-                    OSL_ENSURE( sal_False, "lcl_getModuleHelpModuleName: no installed module found" );
-                }
-            }
-        }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "lcl_getModuleHelpModuleName: caught an exception!" );
-        }
-
-        if ( !pReturn )
-            pReturn = "swriter";
-
-        return ::rtl::OUString::createFromAscii( pReturn );
-    }
-}
-
-//------------------------------------------------------------------------------
-void SbaTableQueryBrowser::openHelpAgent(sal_Int32 _nHelpId)
-{
-    try
-    {
-        URL aURL;
-        aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ) );
-        aURL.Complete += lcl_getModuleHelpModuleName( getFrame() );
-        aURL.Complete += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-        aURL.Complete += ::rtl::OUString::valueOf(_nHelpId);
-        if (m_xUrlTransformer.is())
-            m_xUrlTransformer->parseStrict(aURL);
-
-        Reference< XDispatchProvider > xDispProv(m_xCurrentFrame, UNO_QUERY);
-        Reference< XDispatch > xHelpDispatch;
-        if (xDispProv.is())
-            xHelpDispatch = xDispProv->queryDispatch(aURL, ::rtl::OUString::createFromAscii("_helpagent"), FrameSearchFlag::PARENT | FrameSearchFlag::SELF);
-        OSL_ENSURE(xHelpDispatch.is(), "SbaTableQueryBrowser::openHelpAgent: could not get a dispatcher!");
-        if (xHelpDispatch.is())
-        {
-            xHelpDispatch->dispatch(aURL, Sequence< PropertyValue >());
-        }
-    }
-    catch(const Exception&)
-    {
-        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::openHelpAgent: caught an exception while executing the dispatch!");
-    }
 }
 
 //------------------------------------------------------------------------------
