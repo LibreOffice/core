@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-22 10:03:12 $
+ *  last change: $Author: sab $ $Date: 2001-02-27 16:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #include <com/sun/star/frame/XModel.hpp>
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
 #endif
 
 #ifndef _XMLEOHLP_HXX
@@ -378,6 +381,8 @@ sal_Bool ScXMLImportWrapper::Export()
                 OUString sMetaName( RTL_CONSTASCII_USTRINGPARAM( "Meta.xml" ) );
                 xMetaStream = pStorage->OpenStream( sMetaName,
                                           STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+                uno::Any aAny = ::cppu::bool2any(sal_False);
+                xMetaStream->SetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")), aAny);
                 xMetaStream->SetBufferSize( 16*1024 );
                 xMetaOut = new utl::OOutputStreamWrapper( *xMetaStream );
             }
@@ -423,6 +428,9 @@ sal_Bool ScXMLImportWrapper::Export()
                 OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
                 xDocStream = pStorage->OpenStream( sDocName,
                                           STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+                rtl::OUString sType(RTL_CONSTASCII_USTRINGPARAM("text/xml"));
+                uno::Any aAny; aAny <<= sType;
+                xDocStream->SetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny);
                 xDocStream->SetBufferSize( 16*1024 );
                 xDocOut = new utl::OOutputStreamWrapper( *xDocStream );
             }
