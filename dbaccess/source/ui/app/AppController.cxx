@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:55:51 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,7 +667,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     aReturn.bEnabled = eType == E_REPORT || eType == E_FORM;
                 }
                 break;
-            case SID_FORM_NEW_PILOT_PRE_SEL:
+            case SID_FORM_CREATE_REPWIZ_PRE_SEL:
             case SID_REPORT_CREATE_REPWIZ_PRE_SEL:
                 aReturn.bEnabled = !isDataSourceReadOnly()
                                     && SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SWRITER)
@@ -723,8 +723,14 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
             case SID_DB_APP_DSEXPORT:
                 aReturn.bEnabled = sal_True;
                 break;
-            case SID_DB_APP_DSRELDESIGN:
             case SID_DB_APP_DSUSERADMIN:
+                {
+                    static ODsnTypeCollection aTypeCollection;
+                    DATASOURCE_TYPE eType = aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                    aReturn.bEnabled = DST_EMBEDDED != eType;
+                }
+                break;
+            case SID_DB_APP_DSRELDESIGN:
                 aReturn.bEnabled = sal_True;
                 break;
             case SID_DB_APP_TABLEFILTER:
@@ -733,18 +739,28 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
             case SID_DB_APP_REFRESH_TABLES:
                 aReturn.bEnabled = getContainer()->getElementType() == E_TABLE && getActiveConnection().is();
                 break;
-            case SID_DB_APP_DSCONNECTION_TYPE:
-                aReturn.bEnabled = !isDataSourceReadOnly();
-                break;
             case SID_DB_APP_DSPROPS:
-                aReturn.bEnabled = sal_True;
+                if ( m_xDataSource.is() )
+                {
+                    static ODsnTypeCollection aTypeCollection;
+                    DATASOURCE_TYPE eType = aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                    aReturn.bEnabled = DST_EMBEDDED != eType;
+                }
+                break;
+            case SID_DB_APP_DSCONNECTION_TYPE:
+                if ( aReturn.bEnabled = !isDataSourceReadOnly() && m_xDataSource.is() )
+                {
+                    static ODsnTypeCollection aTypeCollection;
+                    DATASOURCE_TYPE eType = aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                    aReturn.bEnabled = DST_EMBEDDED != eType;
+                }
                 break;
             case SID_DB_APP_DSADVANCED_SETTINGS:
                 if ( m_xDataSource.is() )
                 {
                     static ODsnTypeCollection aTypeCollection;
                     DATASOURCE_TYPE eType = aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    aReturn.bEnabled = DST_LDAP != eType && DST_CALC != eType && DST_MOZILLA != eType && DST_EVOLUTION != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
+                    aReturn.bEnabled = DST_EMBEDDED != eType && DST_LDAP != eType && DST_CALC != eType && DST_MOZILLA != eType && DST_EVOLUTION != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
                 }
                 break;
             case SID_DB_APP_CONVERTTOVIEW:
