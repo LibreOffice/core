@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-05 17:40:19 $
+ *  last change: $Author: ka $ $Date: 2001-01-08 15:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
+#include <tools/urlobj.hxx>
 
 #include "unoprnms.hxx"
 #include "unoshape.hxx"
@@ -1278,8 +1279,7 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
         String aGrafURL( aURL );
 
         if( ( aGrafURL.GetTokenCount( ':' ) == 2 ) &&
-            ( aGrafURL.GetToken( 0, ':' ) ==
-              String( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_GRAPHOBJ_URLPREFIX ) ).GetToken( 0, ':' ) ) )
+            ( aGrafURL.GetToken( 0, ':' ) == String( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_GRAPHOBJ_URLPREFIX ) ).GetToken( 0, ':' ) ) )
         {
             // graphic manager url
             aURL = aURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
@@ -1289,7 +1289,8 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
             ((SdrGrafObj*)pObj)->ReleaseGraphicLink();
             ((SdrGrafObj*)pObj)->SetGraphicObject( aGrafObj );
         }
-        else
+        else if( ( aGrafURL.GetTokenCount( ':' ) != 2 ) ||
+                 ( aGrafURL.GetToken( 0, ':' ) != String( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) ).GetToken( 0, ':' ) ) )
         {
             const SfxFilter* pFilter = NULL;
             SfxMedium aSfxMedium(aURL, (STREAM_READ | STREAM_SHARE_DENYNONE), FALSE);
@@ -1302,6 +1303,21 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
             ((SdrGrafObj*)pObj)->SetGraphicLink( aURL, aFilterName );
         }
 
+    }
+    else if( pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL)))
+    {
+        OUString aStreamURL;
+
+        if( !( aValue >>= aStreamURL ) )
+            throw lang::IllegalArgumentException();
+
+        if( ( aStreamURL.getTokenCount( ':' ) != 2 ) ||
+            ( aStreamURL.getToken( 0, ':' ) != OUString::createFromAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ).getToken( 0, ':' ) ) )
+        {
+            aStreamURL = OUString();
+        }
+
+        ((SdrGrafObj*)pObj)->SetGrafStreamURL( aStreamURL );
     }
     else
     {
