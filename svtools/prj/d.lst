@@ -281,3 +281,4 @@ hedabu: ..\inc\options3d.hxx %_DEST%\inc%_EXT%\svtools\options3d.hxx
 hedabu: ..\inc\fontoptions.hxx %_DEST%\inc%_EXT%\svtools\fontoptions.hxx
 hedabu: ..\inc\addxmltostorageoptions.hxx %_DEST%\inc%_EXT%\svtools\addxmltostorageoptions.hxx
 
+hedabu: ..\inc\lngmisc.hxx %_DEST%\inc%_EXT%\svtools\lngmisc.hxx
