@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-07 10:33:55 $
+ *  last change: $Author: pb $ $Date: 2001-05-07 13:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ IMPL_LINK ( SvtTemplateWindow , TimeoutHdl_Impl, Timer *, EMPTYARG )
 {
     aSelectHdl.Call( this );
     String aURL = pFileWin->GetSelectedFile();
-    sal_Bool bIsFolder = ::utl::UCBContentHelper::IsFolder( aURL );
+    sal_Bool bIsFolder = ( aURL.Len() == 0 || ::utl::UCBContentHelper::IsFolder( aURL ) );
     aToolBox.EnableItem( TI_DOCTEMPLATE_PRINT, !bIsFolder );
     if ( !bIsFolder )
         pFrameWin->OpenFile( aURL, sal_True, sal_False );
