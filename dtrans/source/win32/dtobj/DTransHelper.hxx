@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTransHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-09 15:20:11 $
+ *  last change: $Author: tra $ $Date: 2001-04-04 14:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 
 #include <windows.h>
 
+#ifndef _WINCLIP_HXX_
+#include "..\misc\WinClip.hxx"
+#endif
+
 //------------------------------------------------------------------------
 // defines
 //------------------------------------------------------------------------
@@ -124,7 +128,7 @@ public:
         sal_Bool bDelStgOnRelease = sal_False );
 
     // returns the size of the managed memory
-    sal_uInt32 SAL_CALL memSize( ) const;
+    sal_uInt32 SAL_CALL memSize( CLIPFORMAT cf = CF_INVALID ) const;
 
     // free the global memory and necessary
     // release the internal stream pointer

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTransHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-09 15:20:11 $
+ *  last change: $Author: tra $ $Date: 2001-04-04 14:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,16 +239,35 @@ void SAL_CALL CStgTransferHelper::cleanup( )
 // return the size of memory we point to
 //------------------------------------------------------------------------
 
-sal_uInt32 SAL_CALL CStgTransferHelper::memSize( ) const
+sal_uInt32 SAL_CALL CStgTransferHelper::memSize( CLIPFORMAT cf ) const
 {
     DWORD dwSize = 0;
 
     if ( NULL != m_lpStream )
     {
         HGLOBAL hGlob;
-
         GetHGlobalFromStream( m_lpStream, &hGlob );
-        dwSize = GlobalSize( hGlob );
+
+        if ( CF_TEXT == cf )
+        {
+            sal_Char* pText = static_cast< sal_Char* >( GlobalLock( hGlob ) );
+            if ( pText )
+            {
+                dwSize = strlen( pText ) + 1; // strlen + trailing '\0'
+                GlobalUnlock( hGlob );
+            }
+        }
+        else if ( CF_UNICODETEXT == cf )
+        {
+            sal_Unicode* pText = static_cast< sal_Unicode* >( GlobalLock( hGlob ) );
+            if ( pText )
+            {
+                dwSize = wcslen( pText ) * sizeof( sal_Unicode );
+                GlobalUnlock( hGlob );
+            }
+        }
+        else
+            dwSize = GlobalSize( hGlob );
     }
 
     return dwSize;

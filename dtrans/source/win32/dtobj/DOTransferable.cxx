@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-22 14:15:51 $
+ *  last change: $Author: tra $ $Date: 2001-04-04 14:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,7 +389,7 @@ CDOTransferable::ByteSequence_t SAL_CALL CDOTransferable::getClipboardData( CFor
 
     try
     {
-        clipDataToByteStream( stgmedium, byteStream );
+        clipDataToByteStream( aFormatEtc.getClipformat( ), stgmedium, byteStream );
 
         // format conversion if necessary
         if ( CF_DIB == aFormatEtc.getClipformat() )
@@ -458,7 +458,7 @@ OUString SAL_CALL CDOTransferable::synthesizeUnicodeText( )
 //
 //------------------------------------------------------------------------
 
-void CDOTransferable::clipDataToByteStream( STGMEDIUM stgmedium, ByteSequence_t& aByteSequence )
+void CDOTransferable::clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, ByteSequence_t& aByteSequence )
 {
     CStgTransferHelper memTransferHelper;
 
@@ -485,7 +485,7 @@ void CDOTransferable::clipDataToByteStream( STGMEDIUM stgmedium, ByteSequence_t&
         break;
     }
 
-    int nMemSize = memTransferHelper.memSize( );
+    int nMemSize = memTransferHelper.memSize( cf );
     aByteSequence.realloc( nMemSize );
     memTransferHelper.read( aByteSequence.getArray( ), nMemSize );
 }

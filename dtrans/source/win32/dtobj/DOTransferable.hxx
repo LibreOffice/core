@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-22 14:15:51 $
+ *  last change: $Author: tra $ $Date: 2001-04-04 14:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ private:
     ByteSequence_t SAL_CALL getClipboardData( CFormatEtc& aFormatEtc );
     rtl::OUString  SAL_CALL synthesizeUnicodeText( );
 
-    void SAL_CALL clipDataToByteStream( STGMEDIUM stgmedium, ByteSequence_t& aByteSequence );
+    void SAL_CALL clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, ByteSequence_t& aByteSequence );
 
     ::com::sun::star::uno::Any SAL_CALL byteStreamToAny( ByteSequence_t& aByteStream, const com::sun::star::uno::Type& aRequestedDataType );
     rtl::OUString              SAL_CALL byteStreamToOUString( ByteSequence_t& aByteStream );
