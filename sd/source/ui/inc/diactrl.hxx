@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diactrl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:31:04 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 #include <sfx2/tbxctrl.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+
 
 /*************************************************************************
 |*
@@ -107,16 +111,19 @@
 class DiaTimeControl : public TimeField
 {
 private:
-
-    SfxBindings&    rBindings;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 
 protected:
     virtual void    Up();
     virtual void    Down();
 
 public:
-                DiaTimeControl( Window* pParent, SfxBindings& rBindings, WinBits nStyle = 0 );
-                DiaTimeControl( Window* pParent, SfxBindings& rBindings, ResId nRId );
+                DiaTimeControl( Window* pParent,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                WinBits nStyle = 0 );
+                DiaTimeControl( Window* pParent,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                ResId nRId );
                 ~DiaTimeControl();
 
     DECL_LINK( ModifyDiaTimeHdl, void * );
@@ -134,7 +141,9 @@ public:
     FadeEffectLB    aLbEffect;
 
 public:
-                DiaEffectControl( Window* pParent, SfxBindings& rBindings, WinBits nStyle = 0 );
+                DiaEffectControl( Window* pParent,
+                                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                  WinBits nStyle = 0 );
                 ~DiaEffectControl();
 
     DECL_LINK( SelectDiaEffectHdl, void * );
@@ -147,7 +156,7 @@ protected:
     virtual void GetFocus (void);
 
 private:
-    SfxBindings&    rBindings;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
     FixedText       aFtDescr;
 };
 
@@ -160,7 +169,9 @@ public:
     ListBox         aLbSpeed;
 
 public:
-                DiaSpeedControl( Window* pParent, SfxBindings& rBindings, WinBits nStyle = 0 );
+                DiaSpeedControl( Window* pParent,
+                                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                 WinBits nStyle = 0 );
                 ~DiaSpeedControl();
 
     DECL_LINK( SelectDiaSpeedHdl, void * );
@@ -173,7 +184,7 @@ protected:
     virtual void GetFocus (void);
 
 private:
-    SfxBindings&    rBindings;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 };
 
 //========================================================================
@@ -185,7 +196,9 @@ public:
     ListBox         aLbAuto;
 
 public:
-                DiaAutoControl( Window* pParent, SfxBindings& rBindings, WinBits nStyle = 0 );
+                DiaAutoControl( Window* pParent,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                WinBits nStyle = 0 );
                 ~DiaAutoControl();
 
     DECL_LINK( SelectDiaAutoHdl, void * );
@@ -198,7 +211,7 @@ protected:
     virtual void GetFocus (void);
 
 private:
-    SfxBindings&    rBindings;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
     FixedText       aFtDescr;
 };
 
@@ -208,13 +221,14 @@ private:
 class SdPagesField : public SvxMetricField
 {
 private:
-    SfxBindings&    rBindings;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 protected:
     virtual void    Modify();
 
 public:
-                    SdPagesField( Window* pParent, SfxBindings& rBindings,
-                        WinBits nBits = WB_BORDER | WB_SPIN | WB_REPEAT );
+                    SdPagesField( Window* pParent,
+                                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                  WinBits nBits = WB_BORDER | WB_SPIN | WB_REPEAT );
                     ~SdPagesField();
 
     void            Update( const SfxUInt16Item* pItem );
@@ -236,7 +250,7 @@ public:
 
             SFX_DECL_TOOLBOX_CONTROL();
 
-            SdTbxCtlDiaEffect( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+            SdTbxCtlDiaEffect( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
             ~SdTbxCtlDiaEffect() {}
 };
 
@@ -249,7 +263,7 @@ public:
 
             SFX_DECL_TOOLBOX_CONTROL();
 
-            SdTbxCtlDiaSpeed( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+            SdTbxCtlDiaSpeed( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
             ~SdTbxCtlDiaSpeed() {}
 };
 
@@ -262,7 +276,7 @@ public:
 
             SFX_DECL_TOOLBOX_CONTROL();
 
-            SdTbxCtlDiaAuto( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+            SdTbxCtlDiaAuto( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
             ~SdTbxCtlDiaAuto() {}
 };
 
@@ -275,7 +289,7 @@ public:
 
             SFX_DECL_TOOLBOX_CONTROL();
 
-            SdTbxCtlDiaTime( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+            SdTbxCtlDiaTime( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
             ~SdTbxCtlDiaTime() {}
 };
 
@@ -285,9 +299,6 @@ public:
 
 class SdTbxCtlDiaPages : public SfxToolBoxControl
 {
-protected:
-    SfxBindings&        rBindings;
-
 public:
     virtual void        StateChanged( USHORT nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
@@ -295,7 +306,7 @@ public:
 
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SdTbxCtlDiaPages( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+    SdTbxCtlDiaPages( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SdTbxCtlDiaPages();
 };
 
