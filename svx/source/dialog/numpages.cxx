@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:20:57 $
+ *  last change: $Author: hr $ $Date: 2003-06-26 11:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2022,6 +2022,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     aSameLevelCB.Show(bContinuous);
     //wieder Missbrauch: im Draw gibt es die Numerierung nur bis zum Bitmap
     // without SVX_NUM_NUMBER_NONE
+    //remove types that are unsupported by Draw/Impress
     if(!bContinuous)
     {
         USHORT nFmtCount = aFmtLB.GetEntryCount();
@@ -2029,7 +2030,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
         {
             USHORT nEntryData = (USHORT)(ULONG)aFmtLB.GetEntryData(i - 1);
             if(SVX_NUM_NUMBER_NONE == nEntryData ||
-                SVX_NUM_BITMAP < nEntryData)
+                ((SVX_NUM_BITMAP|LINK_TOKEN) ==  nEntryData))
                 aFmtLB.RemoveEntry(i - 1);
         }
     }
