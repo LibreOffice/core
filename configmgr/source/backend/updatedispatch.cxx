@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedispatch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-16 07:57:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ void UpdateDispatcher::handle(ValueChange const& aValueNode)
     case ValueChange::wasDefault:
         if (aValueNode.isReplacedValue())
         {
+
             OSL_ENSURE(m_bInValueSet, "UpdateDispatcher: Cannot add/replace a value in a nonextensible node");
             OSL_ENSURE(!aValueNode.isLocalizedValue(), "UpdateDispatcher: Cannot add a localized value in a layer");
 
@@ -321,8 +322,9 @@ data::SetVisitor::Result UpdateDispatcher::handle(data::ValueNodeAccess const& _
             m_xUpdateHandler->setPropertyValue( _aNode.getValue() );
         }
     }
-    else if (testReplacedAndGetName(_aNode,aName)) // we must be inside a set of values
+    else if (testReplacedAndGetName(_aNode,aName)&& (_aNode.getAttributes().isRemovable()) ) // we must be inside a set of values
     {
+
         OSL_ENSURE(!_aNode.isLocalized(), "UpdateDispatcher: Cannot add a localized value in a layer .");
 
         sal_Int16 nAttr = getUpdateAttributes(_aNode.getAttributes(),true);
@@ -340,9 +342,9 @@ data::SetVisitor::Result UpdateDispatcher::handle(data::ValueNodeAccess const& _
                                                     _aNode.getValueType());
         }
     }
-    else // normal case: updating a single property
+    else // normal case: updating a single property //Inserting set
     {
-        sal_Int16 nAttr     = getUpdateAttributes(_aNode.getAttributes(),false);
+         sal_Int16 nAttr     = getUpdateAttributes(_aNode.getAttributes(),false);
         sal_Int16 nAttrMask = getUpdateAttributeMask(_aNode.getAttributes());
 
         m_xUpdateHandler->modifyProperty( aName, nAttr, nAttrMask );
@@ -440,7 +442,7 @@ data::SetVisitor::Result UpdateDispatcher::handle(data::SetNodeAccess const& _aN
 }
 // -----------------------------------------------------------------------------
 
-bool UpdateDispatcher::testReplacedAndGetName(data::NodeAccess const & _aNode, OUString & _aName)
+bool UpdateDispatcher::testReplacedAndGetName(data::NodeAccessRef const & _aNode, OUString & _aName)
 {
     if (m_aElementName.getLength())
     {
@@ -482,14 +484,14 @@ sal_Int16 UpdateDispatcher::getUpdateAttributes(node::Attributes const & _aAttri
 
     sal_Int16 nResult = 0;
 
-    if (!_aAttributes.bWritable)
+    if (_aAttributes.isReadonly())
         nResult = NodeAttribute::READONLY;
 
-    else if (_aAttributes.bFinalized)
-        nResult = NodeAttribute::FINALIZED;
+    if (_aAttributes.isFinalized())
+        nResult |= NodeAttribute::FINALIZED;
 
-    if (!_aAttributes.bNullable)
-        nResult = NodeAttribute::MANDATORY;
+    if (!_aAttributes.isNullable())
+        nResult |= NodeAttribute::MANDATORY;
 
     return nResult;
 }
