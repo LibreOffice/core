@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 15:06:37 $
+ *  last change: $Author: mav $ $Date: 2002-10-25 09:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,12 @@ Resource RID_UUI_ERRHDL
         Text[ turkish ] = "$(ARG1) does already exist";
         Text[ arabic ] = "$(ARG1) does already exist";
         Text[ catalan ] = "$(ARG1) does already exist";
+    };
+
+    String (ERRCODE_UUI_IO_TARGETALREADYEXISTS & ERRCODE_RES_MASK)
+    {
+        Text = "Ziel existiert bereits";
+        Text[english] = "Target does already exist";
     };
 
     String (ERRCODE_UUI_IO_BADCRC & ERRCODE_RES_MASK)
