@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-13 15:26:09 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,7 @@
 #define HID_FUNC_DDE                (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TABLE*ID_FUNCTION_OFFSET)+17)
 #define HID_FUNC_TABELLE            (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TABLE*ID_FUNCTION_OFFSET)+18)
 #define HID_FUNC_TABELLEN           (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TABLE*ID_FUNCTION_OFFSET)+19)
+#define HID_FUNC_HYPERLINK          (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TABLE*ID_FUNCTION_OFFSET)+20)
 
 #define HID_FUNC_CODE               (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TEXT*ID_FUNCTION_OFFSET)+1)
 #define HID_FUNC_DM                 (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TEXT*ID_FUNCTION_OFFSET)+2)
