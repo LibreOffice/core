@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-12-07 12:03:07 $
+ *  last change: $Author: os $ $Date: 2000-12-20 10:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,7 +477,6 @@ sal_Bool SwXTextDocument::hasControllersLocked(void) throw( RuntimeException )
   -----------------------------------------------------------------------*/
 Reference< frame::XController >  SwXTextDocument::getCurrentController(void) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
     return SfxBaseModel::getCurrentController();
 }
 /*-- 18.12.98 13:12:24---------------------------------------------------
@@ -486,7 +485,6 @@ Reference< frame::XController >  SwXTextDocument::getCurrentController(void) thr
 void SwXTextDocument::setCurrentController(const Reference< frame::XController > & xController)
     throw( container::NoSuchElementException, RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
     SfxBaseModel::setCurrentController(xController);
 }
 /* -----------------27.01.99 11:48-------------------
@@ -520,7 +518,6 @@ Reference< XInterface >  SwXTextDocument::getCurrentSelection() throw( RuntimeEx
 sal_Bool SwXTextDocument::attachResource(const OUString& aURL, const Sequence< beans::PropertyValue >& aArgs)
         throw( RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
     return SfxBaseModel::attachResource(aURL, aArgs);
 }
 /*-- 18.12.98 13:12:24---------------------------------------------------
@@ -528,7 +525,6 @@ sal_Bool SwXTextDocument::attachResource(const OUString& aURL, const Sequence< b
   -----------------------------------------------------------------------*/
 OUString SwXTextDocument::getURL(void) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
     return SfxBaseModel::getURL();
 }
 /*-- 18.12.98 13:12:24---------------------------------------------------
@@ -536,7 +532,6 @@ OUString SwXTextDocument::getURL(void) throw( RuntimeException )
   -----------------------------------------------------------------------*/
 Sequence< beans::PropertyValue > SwXTextDocument::getArgs(void) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
     return SfxBaseModel::getArgs();
 }
 /*-- 18.12.98 13:12:24---------------------------------------------------
@@ -544,7 +539,6 @@ Sequence< beans::PropertyValue > SwXTextDocument::getArgs(void) throw( RuntimeEx
   -----------------------------------------------------------------------*/
 void SwXTextDocument::connectController(const Reference< frame::XController > & xController) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
     SfxBaseModel::connectController(xController);
 }
 /*-- 18.12.98 13:12:25---------------------------------------------------
@@ -552,7 +546,6 @@ void SwXTextDocument::connectController(const Reference< frame::XController > & 
   -----------------------------------------------------------------------*/
 void SwXTextDocument::disconnectController(const Reference< frame::XController > & xController) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
     SfxBaseModel::disconnectController(xController);
 }
 /*-- 18.12.98 13:12:25---------------------------------------------------
@@ -560,7 +553,6 @@ void SwXTextDocument::disconnectController(const Reference< frame::XController >
   -----------------------------------------------------------------------*/
 void SwXTextDocument::dispose(void) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
     SfxBaseModel::dispose();
 }
 /*-- 18.12.98 13:12:25---------------------------------------------------
@@ -568,7 +560,6 @@ void SwXTextDocument::dispose(void) throw( RuntimeException )
   -----------------------------------------------------------------------*/
 void SwXTextDocument::addEventListener(const Reference< XEventListener > & aListener) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
     SfxBaseModel::addEventListener(aListener);
 }
 /*-- 18.12.98 13:12:26---------------------------------------------------
@@ -576,7 +567,6 @@ void SwXTextDocument::addEventListener(const Reference< XEventListener > & aList
   -----------------------------------------------------------------------*/
 void SwXTextDocument::removeEventListener(const Reference< XEventListener > & aListener) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
     SfxBaseModel::removeEventListener(aListener);
 }
 
