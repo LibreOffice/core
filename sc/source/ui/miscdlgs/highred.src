@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:22:41 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:17:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ chinese_traditional ] = "Εγ¥ά¤u§@ªν¤ΊªΊΕά§σ(~S)";
         Text[ arabic ] = "ΕΩεΗΡ ΗαΚΫννΡΗΚ έν ΗαΜΟζα";
         Text[ greek ] = "Εμφάνιση αλλαγών πίνακα";
-        Text[ korean ] = "½ΊΗΑ·Ήµε½ΓΖ®»σΏ΅ Ί―°ζ»ηΗΧ ΊΈΐΜ±β";
+        Text[ korean ] = "½ΊΗΑ·Ήµε½ΓΖ®»σΏ΅ Ί―°ζ»ηΗΧ ΊΈΐΜ±β(~S)";
         Text[ turkish ] = "~Tablodaki deπiώiklikleri gφrόntόle";
         Text[ language_user1 ] = " ";
     };
@@ -127,7 +127,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ chinese_traditional ] = "Εγ¥ά±µ¨όªΊΕά§σ(~A)";
         Text[ arabic ] = "ΕΩεΗΡ ΗαΚΫννΡΗΚ ΗαγήΘζαΙ";
         Text[ greek ] = "Εμφάνιση αποδεχομένων αλλαγών";
-        Text[ korean ] = "ΐϋΏλµΘ Ί―°ζ»ηΗΧ ΊΈΐΜ±β";
+        Text[ korean ] = "ΐϋΏλµΘ Ί―°ζ»ηΗΧ ΊΈΐΜ±β(~A)";
         Text[ turkish ] = "~Kabul edilen deπiώiklikleri gφrόntόle";
         Text[ language_user1 ] = " ";
     };
@@ -154,7 +154,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ chinese_traditional ] = "Εγ¥ά©Ϊµ΄ªΊΕά§σ(~R)";
         Text[ arabic ] = "ΕΩεΗΡ ΗαΚΫννΡΗΚ ΗαγΡέζΦΙ";
         Text[ greek ] = "Εμφάνιση απορριπτέων αλλαγών";
-        Text[ korean ] = "°ΕΊΞµΘ Ί―°ζ»ηΗΧ ΊΈΐΜ±β";
+        Text[ korean ] = "°ΕΊΞµΘ Ί―°ζ»ηΗΧ ΊΈΐΜ±β(~R)";
         Text[ turkish ] = "~Reddedilen deπiώiklikleri gφrόntόle";
         Text[ language_user1 ] = " ";
     };
