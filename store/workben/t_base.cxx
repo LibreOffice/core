@@ -2,9 +2,9 @@
  *
  *  $RCSfile: t_base.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-02-26 14:21:41 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 21:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _T_BASE_CXX "$Revision: 1.2 $"
+#define _T_BASE_CXX "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -75,12 +75,8 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-
-#ifndef _VOS_MACROS_HXX_
-#include <vos/macros.hxx>
-#endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 
 #ifndef _STORE_FILELCKB_HXX_
@@ -91,20 +87,136 @@
 #include "storbase.hxx"
 #endif
 
-#ifdef _USE_NAMESPACE
 using namespace store;
-#endif
 
 #define TEST_PAGESIZE 1024
+
+/*========================================================================
+ *
+ * OTestDaemon.
+ *
+ *======================================================================*/
+
+#if 1  /* EXP */
+
+#include <osl/interlck.h>
+
+class OTestDaemon : public rtl::IReference
+{
+public:
+    static sal_Bool getOrCreate (
+        rtl::Reference<OTestDaemon> &rxDaemon);
+
+    virtual oslInterlockedCount SAL_CALL acquire (void);
+    virtual oslInterlockedCount SAL_CALL release (void);
+
+protected:
+    OTestDaemon (void);
+    virtual ~OTestDaemon (void);
+
+private:
+    static OTestDaemon *m_pThis;
+
+    oslInterlockedCount m_nRefCount;
+};
+
+#include <osl/mutex.hxx>
+
+OTestDaemon* OTestDaemon::m_pThis = 0;
+
+OTestDaemon::OTestDaemon (void)
+{
+}
+
+OTestDaemon::~OTestDaemon (void)
+{
+}
+
+sal_Bool OTestDaemon::getOrCreate (rtl::Reference<OTestDaemon> &rxDaemon)
+{
+    osl::MutexGuard aGuard (osl::Mutex::getGlobalMutex());
+
+    rxDaemon = m_pThis;
+    if (!rxDaemon.is())
+    {
+        m_pThis  = new OTestDaemon();
+        rxDaemon = m_pThis;
+    }
+    return rxDaemon.is();
+}
+
+oslInterlockedCount SAL_CALL OTestDaemon::acquire (void)
+{
+    return osl_incrementInterlockedCount (&m_nRefCount);
+}
+
+oslInterlockedCount SAL_CALL OTestDaemon::release (void)
+{
+    oslInterlockedCount result;
+
+    result = osl_decrementInterlockedCount (&m_nRefCount);
+    if (result == 0)
+    {
+        osl::MutexGuard aGuard (osl::Mutex::getGlobalMutex());
+        if (m_nRefCount == 0)
+        {
+            m_pThis = 0;
+            delete this;
+        }
+    }
+    return (result);
+}
+
+#endif /* EXP */
+
+/*========================================================================
+ *
+ * OTestObject.
+ *
+ *======================================================================*/
+class OTestObject : public store::OStoreObject
+{
+public:
+    OTestObject (void);
+
+    virtual sal_Bool SAL_CALL isKindOf (sal_uInt32 nTypeId);
+
+protected:
+    virtual ~OTestObject (void);
+};
+
+OTestObject::OTestObject (void)
+{
+}
+
+OTestObject::~OTestObject (void)
+{
+}
+
+sal_Bool SAL_CALL OTestObject::isKindOf (sal_uInt32 nTypeId)
+{
+    return (nTypeId == 42);
+}
+
+namespace store
+{
+static OTestObject* SAL_CALL query (IStoreHandle *pHandle, OTestObject*)
+{
+    if (pHandle && pHandle->isKindOf (42))
+        return static_cast<OTestObject*>(pHandle);
+    else
+        return 0;
+}
+}
 
 /*========================================================================
  *
  * OTestBIOS.
  *
  *======================================================================*/
-class OTestBIOS : public NAMESPACE_STORE(OStorePageBIOS)
+class OTestBIOS : public store::OStorePageBIOS
 {
-    typedef NAMESPACE_STORE(OStorePageBIOS) base;
+    typedef store::OStorePageBIOS base;
 
 public:
     OTestBIOS (void);
@@ -112,6 +224,8 @@ public:
     virtual storeError initialize (
         ILockBytes      *pLockBytes,
         storeAccessMode  eAccessMode);
+
+    virtual sal_Bool SAL_CALL isKindOf (sal_uInt32 nTypeId);
 
 protected:
     virtual ~OTestBIOS (void);
@@ -123,6 +237,11 @@ OTestBIOS::OTestBIOS (void)
 
 OTestBIOS::~OTestBIOS (void)
 {
+}
+
+sal_Bool SAL_CALL OTestBIOS::isKindOf (sal_uInt32 nTypeId)
+{
+    return (nTypeId == 4242);
 }
 
 storeError OTestBIOS::initialize (
@@ -141,6 +260,50 @@ storeError OTestBIOS::initialize (
         eErrCode = base::create (TEST_PAGESIZE);
     }
     return eErrCode;
+}
+
+namespace store
+{
+static OTestBIOS* SAL_CALL query (IStoreHandle *pHandle, OTestBIOS*)
+{
+    if (pHandle && pHandle->isKindOf (4242))
+        return static_cast<OTestBIOS*>(pHandle);
+    else
+        return 0;
+}
+}
+
+/*========================================================================
+ *
+ * __store_test_handle.
+ *
+ *======================================================================*/
+static void __store_test_handle (void* Handle)
+{
+    IStoreHandle *pHandle = static_cast<IStoreHandle*>(Handle);
+    if (pHandle)
+    {
+        pHandle->acquire();
+        pHandle->isKindOf (42);
+        pHandle->release();
+    }
+
+    OTestObject *pObj = query (pHandle, static_cast<OTestObject*>(0));
+    if (pObj)
+    {
+        pObj->acquire();
+        pObj->isKindOf (42);
+        pObj->release();
+    }
+
+    store::OStoreHandle<OTestObject> xObj (
+        store::OStoreHandle<OTestObject>::query (Handle));
+    if (xObj.is())
+    {
+        xObj->acquire();
+        xObj->isKindOf (42);
+        xObj->release();
+    }
 }
 
 /*========================================================================
@@ -173,9 +336,9 @@ static void __store_string_newFromUnicode (
 }
 
 static storeError __store_namei (
-    const NAMESPACE_RTL(OString) &rPath,
-    const NAMESPACE_RTL(OString) &rName,
-    OStorePageKey     &rKey)
+    const rtl::OString &rPath,
+    const rtl::OString &rName,
+    OStorePageKey      &rKey)
 {
     return store_E_Unknown;
 }
@@ -185,9 +348,8 @@ static storeError __store_namei (
     const sal_Unicode *pszName,
     OStorePageKey     &rKey)
 {
-    NAMESPACE_RTL(OString) aName (
+    rtl::OString aName (
         pszName, rtl_ustr_getLength (pszName), RTL_TEXTENCODING_UTF8);
-
 
     rtl_String *pszNameA = 0;
     __store_string_newFromUnicode (&pszNameA, pszName);
@@ -305,11 +467,11 @@ int SAL_CALL main (int argc, char **argv)
     __store_testUnicode (argv[1]);
 #endif /* EXP */
 
-    NAMESPACE_VOS(ORef)<OFileLockBytes> xLockBytes (new OFileLockBytes());
-    if (!xLockBytes.isValid())
+    rtl::Reference<OFileLockBytes> xLockBytes (new OFileLockBytes());
+    if (!xLockBytes.is())
         return 0;
 
-    NAMESPACE_RTL(OUString) aFilename (
+    rtl::OUString aFilename (
         argv[1], rtl_str_getLength(argv[1]),
         osl_getThreadTextEncoding());
 
@@ -318,8 +480,15 @@ int SAL_CALL main (int argc, char **argv)
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    NAMESPACE_VOS(ORef)<OTestBIOS> xBIOS (new OTestBIOS());
-    if (!xBIOS.isValid())
+
+    rtl::Reference<OTestObject> xObject (new OTestObject());
+    __store_test_handle (&*xObject);
+
+    rtl::Reference<OTestBIOS> xBIOS (new OTestBIOS());
+    __store_test_handle (&*xBIOS);
+
+
+    if (!xBIOS.is())
         return 0;
 
     eErrCode = xBIOS->initialize (&*xLockBytes, store_AccessReadWrite);
@@ -334,7 +503,7 @@ int SAL_CALL main (int argc, char **argv)
         if (eErrCode != store_E_None)
             return eErrCode;
     }
-    xLockBytes.unbind();
+    xLockBytes.clear();
 
     sal_Char pBuffer[TEST_PAGESIZE];
     rtl_zeroMemory (pBuffer, sizeof (pBuffer));
@@ -355,7 +524,7 @@ int SAL_CALL main (int argc, char **argv)
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    xBIOS.unbind();
+    xBIOS.clear();
     return 0;
 }
 

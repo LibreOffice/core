@@ -2,9 +2,9 @@
  *
  *  $RCSfile: t_file.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-02-26 14:21:41 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 21:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,15 @@
  *
  ************************************************************************/
 
-#define _T_FILE_CXX "$Revision: 1.2 $"
+#define _T_FILE_CXX "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
 
+#ifndef _OSL_FILE_H_
+#include <osl/file.h>
+#endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
@@ -72,21 +75,15 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-
-#ifndef _VOS_MACROS_HXX_
-#include <vos/macros.hxx>
-#endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 
 #ifndef _STORE_FILELCKB_HXX_
 #include <store/filelckb.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
 using namespace store;
-#endif
 
 /*========================================================================
  *
@@ -98,13 +95,23 @@ int SAL_CALL main (int argc, char **argv)
     if (argc < 2)
         return 0;
 
-    NAMESPACE_VOS(ORef)<OFileLockBytes> xLockBytes (new OFileLockBytes());
-    if (!xLockBytes.isValid())
+    rtl::Reference<OFileLockBytes> xLockBytes (new OFileLockBytes());
+    if (!xLockBytes.is())
         return 0;
 
-    NAMESPACE_RTL(OUString) aFilename (
+    rtl::OUString aFilename (
         argv[1], rtl_str_getLength(argv[1]),
         osl_getThreadTextEncoding());
+
+#if 0  /* EXP */
+
+    rtl::OUString aNormPath;
+    osl_searchNormalizedPath (aFilename.pData, 0, &(aNormPath.pData));
+
+    rtl::OUString aSysPath;
+    osl_getSystemPathFromNormalizedPath (aNormPath.pData, &(aSysPath.pData));
+
+#endif /* EXP */
 
     storeError eErrCode = xLockBytes->create (
         aFilename.pData, store_AccessReadWrite);
@@ -144,7 +151,7 @@ int SAL_CALL main (int argc, char **argv)
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    xLockBytes.unbind();
+    xLockBytes.clear();
     return 0;
 }
 

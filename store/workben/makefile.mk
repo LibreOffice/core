@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+#   last change: $Author: mhu $ $Date: 2001-03-13 21:15:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -54,7 +54,7 @@
 #
 #   All Rights Reserved.
 #
-#   Contributor(s): _______________________________________
+#   Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
 #
 #
 #
@@ -105,28 +105,25 @@ OBJFILES=	\
 APP1TARGET=		t_file
 APP1OBJS=		$(OBJ)$/t_file.obj
 APP1STDLIBS=	$(STODBGLIB)
-APP1STDLIBS+=	$(VOSLIB) $(SALLIB)
+APP1STDLIBS+=	$(SALLIB)
 APP1DEPN=	\
     $(STODBGLIB)	\
-    $(L)$/ivos.lib	\
     $(L)$/isal.lib
 
 APP2TARGET=		t_base
 APP2OBJS=		$(OBJ)$/t_base.obj
 APP2STDLIBS=	$(STODBGLIB)
-APP2STDLIBS+=	$(VOSLIB) $(SALLIB)
+APP2STDLIBS+=	$(SALLIB)
 APP2DEPN=	\
     $(STODBGLIB)	\
-    $(L)$/ivos.lib	\
     $(L)$/isal.lib
 
 APP3TARGET=		t_store
 APP3OBJS=		$(OBJ)$/t_store.obj
 APP3STDLIBS=	$(STORELIB)
-APP3STDLIBS+=	$(VOSLIB) $(SALLIB)
+APP3STDLIBS+=	$(SALLIB)
 APP3DEPN=	\
     $(SLB)$/store.lib	\
-    $(L)$/ivos.lib 		\
     $(L)$/isal.lib
 
 # --- Targets ---

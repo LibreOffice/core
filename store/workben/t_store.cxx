@@ -2,9 +2,9 @@
  *
  *  $RCSfile: t_store.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-02-26 14:21:41 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 21:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,20 @@
  *
  ************************************************************************/
 
-#define _T_STORE_CXX "$Revision: 1.2 $"
+#define _T_STORE_CXX "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
 
-#ifndef _OSL_TIME_H_
-#include <osl/time.h>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
+#endif
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
 #endif
 
 #ifndef _RTL_CHAR_H_
@@ -79,16 +82,6 @@
 #include <rtl/ustring.hxx>
 #endif
 
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
-#endif
-#ifndef _VOS_THREAD_HXX_
-#include <vos/thread.hxx>
-#endif
-
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
-#endif
 #ifndef _STORE_STORE_HXX_
 #include <store/store.hxx>
 #endif
@@ -179,15 +172,15 @@ struct OTime : public TimeValue
  * DirectoryTraveller.
  *
  *======================================================================*/
-typedef NAMESPACE_STORE(OStoreDirectory) Directory;
+typedef store::OStoreDirectory Directory;
 
 class DirectoryTraveller : public Directory::traveller
 {
-    typedef NAMESPACE_STORE(OStoreFile) file;
-    typedef Directory::iterator         iter;
+    typedef store::OStoreFile   file;
+    typedef Directory::iterator iter;
 
-    NAMESPACE_STORE(OStoreFile) m_aFile;
-    OUString    m_aPath;
+    store::OStoreFile m_aFile;
+    OUString          m_aPath;
 
     sal_uInt32  m_nOptions;
     sal_uInt32  m_nLevel;
@@ -248,6 +241,10 @@ sal_Bool DirectoryTraveller::visit (const iter& it)
     if (it.m_nAttrib & STORE_ATTRIB_ISDIR)
     {
         OUString  aName (it.m_pszName, it.m_nLength);
+        if (aName.compareToAscii ("XTextViewCursorSupplier") == 0)
+        {
+            m_nCount += 1 - 1;
+        }
         Directory aSubDir;
 
         storeError eErrCode = aSubDir.create (
@@ -278,7 +275,7 @@ int SAL_CALL main (int argc, char **argv)
     OTime aStartTime (OTime::getSystemTime());
 #endif /* PROFILE */
 
-    NAMESPACE_STORE(OStoreFile) aFile;
+    store::OStoreFile aFile;
     storeError eErrCode = store_E_None;
 
     sal_uInt32 nOptions = 0;
@@ -402,7 +399,7 @@ int SAL_CALL main (int argc, char **argv)
                 break;
 #endif /* _REMOVE */
 
-            NAMESPACE_STORE(OStoreStream) aStream;
+            store::OStoreStream aStream;
             eErrCode = aStream.create (aFile, aPath, aName, eMode);
             if (eErrCode != store_E_None)
                 break;
@@ -471,7 +468,7 @@ int SAL_CALL main (int argc, char **argv)
         eErrCode = aFile.symlink (
             aPath,      OUString::createFromAscii("000000/"),
             OUString(), aPath);
-        VOS_POSTCOND(
+        OSL_POSTCOND(
             ((eErrCode == store_E_None         ) ||
              (eErrCode == store_E_AlreadyExists)    ),
             "t_store::main(): store_symlink() failed");
@@ -482,7 +479,7 @@ int SAL_CALL main (int argc, char **argv)
         eErrCode = aFile.symlink (
             aPath, aLinkName,
             aPath, OUString::createFromAscii("demostor-1.dat"));
-        VOS_POSTCOND(
+        OSL_POSTCOND(
             ((eErrCode == store_E_None         ) ||
              (eErrCode == store_E_AlreadyExists)    ),
             "t_store::main(): store_symlink() failed");
@@ -494,7 +491,7 @@ int SAL_CALL main (int argc, char **argv)
             eErrCode = aFile.rename (
                 aPath, aLinkName,
                 aPath, aShortcut);
-            VOS_POSTCOND(
+            OSL_POSTCOND(
                 ((eErrCode == store_E_None         ) ||
                  (eErrCode == store_E_AlreadyExists)    ),
                 "t_store::main(): store_rename() failed");
@@ -502,11 +499,11 @@ int SAL_CALL main (int argc, char **argv)
 
         // Create directory.
         OUString aDirName (RTL_CONSTASCII_USTRINGPARAM("demostor-1.dir"));
-        NAMESPACE_STORE(OStoreDirectory) aDir;
+        store::OStoreDirectory aDir;
 
         eErrCode = aDir.create (
             aFile, aPath, aDirName, store_AccessReadCreate);
-        VOS_POSTCOND(
+        OSL_POSTCOND(
             (eErrCode == store_E_None),
             "t_store::main(): store_createDirectory() failed");
         if (eErrCode == store_E_None)
@@ -516,7 +513,7 @@ int SAL_CALL main (int argc, char **argv)
             eErrCode = aFile.rename (
                 aPath, "demostor-1.dir/",
                 aPath, "Renamed demostor-1.dir");
-            VOS_POSTCOND(
+            OSL_POSTCOND(
                 ((eErrCode == store_E_None         ) ||
                  (eErrCode == store_E_AlreadyExists)    ),
                 "t_store::main(): store_rename() failed");
@@ -524,7 +521,7 @@ int SAL_CALL main (int argc, char **argv)
             eErrCode = aFile.rename (
                 aPath, "Renamed demostor-1.dir/",
                 aPath, "demostor-1.dir");
-            VOS_POSTCOND(
+            OSL_POSTCOND(
                 (eErrCode == store_E_None),
                 "t_store::main(): store_rename() failed");
 #endif  /* NYI */
@@ -540,7 +537,7 @@ int SAL_CALL main (int argc, char **argv)
         OUString aEmpty;
 
         // Root directory.
-        NAMESPACE_STORE(OStoreDirectory) aRootDir;
+        store::OStoreDirectory aRootDir;
         if (nOptions & OPTION_LINK)
         {
             // Open symlink entry.
@@ -590,7 +587,7 @@ int SAL_CALL main (int argc, char **argv)
         TimeValue tv;
         tv.Seconds = 300;
         tv.Nanosec = 0;
-        NAMESPACE_VOS(OThread)::wait (tv);
+        osl_waitThread (&tv);
     }
 
     // Size.
