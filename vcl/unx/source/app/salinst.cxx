@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
+ *  last change: $Author: mhu $ $Date: 2003-02-11 11:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,28 +284,27 @@ BOOL SalInstance::AnyInput(USHORT nType)
 {
     SalData *pSalData = GetSalData();
     Display *pDisplay  = pSalData->GetDefDisp()->GetDisplay();
+    BOOL bRet = FALSE;
 
-    // XtInputMask nMask = XtAppPending( SVData().GetAppContext() );
-    // if( nMask )
-    if (XPending(pDisplay) )
+    if( (nType & INPUT_TIMER) &&
+        pSalData->GetDefDisp()->GetXLib()->CheckTimeout( false ) )
     {
-        // if ( INPUT_TIMER & nType && XtIMTimer & nMask )
-        //  return TRUE;
-        // else
-        {
-            PredicateReturn aInput;
-            XEvent          aEvent;
-
-            aInput.bRet     = FALSE;
-            aInput.nType    = nType;
-
-            XCheckIfEvent(pDisplay, &aEvent, ImplPredicateEvent,
-                          (char *)&aInput );
-
-            return aInput.bRet;
-        }
+        bRet = TRUE;
     }
-    return FALSE ;
+    else if (XPending(pDisplay) )
+    {
+        PredicateReturn aInput;
+        XEvent          aEvent;
+
+        aInput.bRet     = FALSE;
+        aInput.nType    = nType;
+
+        XCheckIfEvent(pDisplay, &aEvent, ImplPredicateEvent,
+                      (char *)&aInput );
+
+        bRet = aInput.bRet;
+    }
+    return bRet;
 }
 
 #ifdef _VOS_NO_NAMESPACE
