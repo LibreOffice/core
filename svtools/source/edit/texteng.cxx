@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:42:47 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 14:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,11 @@ static inline const sal_Unicode* static_getLineEndText( LineEnd aLineEnd )
     case LINEEND_CRLF: pRet = static_aCRLFText;break;
     }
     return pRet;
+}
+
+void  TextEngine::ReplaceText(const TextSelection& rSel, const String& rText)
+{
+    ImpInsertText( rSel, rText );
 }
 
 String TextEngine::GetText( LineEnd aSeparator ) const
@@ -1563,7 +1568,7 @@ void TextEngine::UpdateViews( TextView* pCurView )
 
     if ( pCurView )
     {
-        pCurView->ShowCursor( pCurView->mbAutoScroll );
+        pCurView->ShowCursor( pCurView->IsAutoScroll() );
     }
 
     maInvalidRec = Rectangle();
@@ -2843,7 +2848,7 @@ void TextEngine::ImpParagraphInserted( ULONG nPara )
 //                  rMax.GetPara()++;
                 for ( int n = 0; n <= 1; n++ )
                 {
-                    TextPaM& rPaM = n ? pView->maSelection.GetStart(): pView->maSelection.GetEnd();
+                    TextPaM& rPaM = n ? pView->GetSelection().GetStart(): pView->GetSelection().GetEnd();
                     if ( rPaM.GetPara() >= nPara )
                         rPaM.GetPara()++;
                 }
@@ -2865,7 +2870,7 @@ void TextEngine::ImpParagraphRemoved( ULONG nPara )
                 ULONG nParas = mpDoc->GetNodes().Count();
                 for ( int n = 0; n <= 1; n++ )
                 {
-                    TextPaM& rPaM = n ? pView->maSelection.GetStart(): pView->maSelection.GetEnd();
+                    TextPaM& rPaM = n ? pView->GetSelection().GetStart(): pView->GetSelection().GetEnd();
                     if ( rPaM.GetPara() > nPara )
                         rPaM.GetPara()--;
                     else if ( rPaM.GetPara() == nPara )
@@ -2893,7 +2898,7 @@ void TextEngine::ImpCharsRemoved( ULONG nPara, USHORT nPos, USHORT nChars )
                 USHORT nEnd = nPos+nChars;
                 for ( int n = 0; n <= 1; n++ )
                 {
-                    TextPaM& rPaM = n ? pView->maSelection.GetStart(): pView->maSelection.GetEnd();
+                    TextPaM& rPaM = n ? pView->GetSelection().GetStart(): pView->GetSelection().GetEnd();
                     if ( rPaM.GetPara() == nPara )
                     {
                         if ( rPaM.GetIndex() > nEnd )
@@ -2919,7 +2924,7 @@ void TextEngine::ImpCharsInserted( ULONG nPara, USHORT nPos, USHORT nChars )
             {
                 for ( int n = 0; n <= 1; n++ )
                 {
-                    TextPaM& rPaM = n ? pView->maSelection.GetStart(): pView->maSelection.GetEnd();
+                    TextPaM& rPaM = n ? pView->GetSelection().GetStart(): pView->GetSelection().GetEnd();
                     if ( rPaM.GetPara() == nPara )
                     {
                         if ( rPaM.GetIndex() >= nPos )
