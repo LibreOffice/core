@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsplit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: mh $ $Date: 2000-12-07 08:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,24 +67,13 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "tabsplit.hxx"
 #include "viewdata.hxx"
 #include "dbfunc.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
-SEG_EOFGLOBALS()
-
-
 //==================================================================
-
-#pragma SEG_FUNCDEF(tabsplit_01)
 
 ScTabSplitter::ScTabSplitter( Window* pParent, WinBits nWinStyle, ScViewData* pData ) :
     Splitter( pParent, nWinStyle ),
@@ -93,13 +82,10 @@ ScTabSplitter::ScTabSplitter( Window* pParent, WinBits nWinStyle, ScViewData* pD
     SetFixed(FALSE);
 }
 
-#pragma SEG_FUNCDEF(tabsplit_02)
 
 ScTabSplitter::~ScTabSplitter()
 {
 }
-
-#pragma SEG_FUNCDEF(tabsplit_03)
 
 void __EXPORT ScTabSplitter::MouseMove( const MouseEvent& rMEvt )
 {
@@ -109,8 +95,6 @@ void __EXPORT ScTabSplitter::MouseMove( const MouseEvent& rMEvt )
         Splitter::MouseMove( rMEvt );
 }
 
-#pragma SEG_FUNCDEF(tabsplit_04)
-
 void __EXPORT ScTabSplitter::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if (bFixed)
@@ -119,8 +103,6 @@ void __EXPORT ScTabSplitter::MouseButtonUp( const MouseEvent& rMEvt )
         Splitter::MouseButtonUp( rMEvt );
 }
 
-#pragma SEG_FUNCDEF(tabsplit_05)
-
 void __EXPORT ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (bFixed)
@@ -128,8 +110,6 @@ void __EXPORT ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
     else
         Splitter::MouseButtonDown( rMEvt );
 }
-
-#pragma SEG_FUNCDEF(tabsplit_07)
 
 void __EXPORT ScTabSplitter::Splitting( Point& rSplitPos )
 {
@@ -143,7 +123,6 @@ void __EXPORT ScTabSplitter::Splitting( Point& rSplitPos )
         rSplitPos.Y() = aNew.Y();
 }
 
-#pragma SEG_FUNCDEF(tabsplit_06)
 
 void ScTabSplitter::SetFixed(BOOL bSet)
 {
@@ -156,39 +135,5 @@ void ScTabSplitter::SetFixed(BOOL bSet)
         SetPointer(POINTER_VSPLIT);
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.8  2000/09/17 14:09:34  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.7  2000/08/31 16:38:47  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.6  1997/08/27 10:56:38  TRI
-    VCL Anpassung
-
-
-      Rev 1.5   27 Aug 1997 12:56:38   TRI
-   VCL Anpassung
-
-      Rev 1.4   24 May 1996 10:58:44   NN
-   Position einrasten in Splitting
-
-      Rev 1.3   14 Feb 1996 20:32:34   NN
-   MouseButtonDown, bFixed auswerten
-
-      Rev 1.2   02 Feb 1996 16:28:18   NN
-   #25064# Freeze wieder raus
-
-      Rev 1.1   27 Oct 1995 18:02:58   NN
-   Test: Freeze auf rechter Maustaste
-
-      Rev 1.0   25 Oct 1995 16:35:44   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
 
