@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:38:20 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,8 +556,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         }
                     }
 
-/*
-                    if ( aCmd.Len() )
+                    if ( aCmd.Len() && (( nId < SID_SFX_START ) || ( nId > SHRT_MAX )) )
                     {
                         // try to create control via comand name
                         pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nId, *pSVMenu, *pBindings, this );
@@ -568,7 +567,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                             (pItems+nPos)->Bind( 0, nId, pSVMenu->GetItemText(nId), pSVMenu->GetHelpText(nId), *pBindings);
                         }
                     }
-*/
+
                     if ( !pMnuCtrl )
                     {
                         // try to create control via Id
@@ -911,7 +910,7 @@ void SfxVirtualMenu::BindControllers()
     {
         SfxMenuControl* pCtrl = rCtrlArr[nPos];
         USHORT nId = pCtrl->GetId();
-//        if ( !pSVMenu->GetItemCommand(nId).Len() )
+        if ( !pSVMenu->GetItemCommand(nId).Len() )
             pCtrl->ReBind();
     }
 
