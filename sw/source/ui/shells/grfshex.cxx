@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfshex.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:00:03 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,11 @@
 #include <sfx2/request.hxx>
 #include <svtools/stritem.hxx>
 
+// -> #111827#
+#include <SwRewriter.hxx>
+#include <undobj.hxx>
+#include <comcore.hrc>
+// <- #111827#
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
@@ -302,7 +307,12 @@ BOOL SwTextShell::InsertGraphicDlg( SfxRequest& rReq )
 
         SwWrtShell& rSh = GetShell();
         rSh.StartAction();
-        rSh.StartUndo(UNDO_INSERT);
+
+        /// #111827#
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UNDO_ARG1, String(SW_RES(STR_GRAPHIC_DEFNAME)));
+
+        rSh.StartUndo(UNDO_INSERT, &aRewriter);
 
         USHORT nError = InsertGraphic( aFileName, aFilterName, bAsLink, ::GetGrfFilter() );
 
