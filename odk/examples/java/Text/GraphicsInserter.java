@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicsInserter.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:13:09 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 17:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,201 +38,148 @@
  *
  *************************************************************************/
 
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.text.XText;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.text.XTextCursor;
-import com.sun.star.text.XTextContent;
-import com.sun.star.text.TextContentAnchorType;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
+
 import java.io.PrintWriter;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
 
 public class GraphicsInserter {
-  public static void main(String args[]) {
-    try {
-      String sConnectionString = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
+    public static void main(String args[]) {
+        if ( args.length < 1 )
+        {
+            System.out.println(
+                "usage: java -jar GraphicsInserter.jar \"<Graphic URL|path>\"" );
+            System.out.println( "\ne.g.:" );
+            System.out.println(
+                "java -jar GraphicsInserter.jar \"file:///f:/TestGraphics.gif\"" );
+            System.exit( 1 );
+        }
 
-      if ( args.length < 1 ) {
-        System.out.println(
-        "usage: java -classpath .;<Office path>/program/classes/jurt.jar;" +
-        "<Office path>/program/classes/ridl.jar;" +
-        "<Office path>/program/classes/sandbox.jar;" +
-        "<Office path>/program/classes/unoil.jar;" +
-        "<Office path>/program/classes/juh.jar " +
-        "GraphicsInserter \"<Graphic URL|path>\" [\"<Connection>\"]" );
-        System.out.println( "\ne.g.:" );
-        System.out.println(
-        "java -classpath .;d:/office60/program/classes/jurt.jar;" +
-        "d:/office60/program/classes/ridl.jar;" +
-        "d:/office60/program/classes/sandbox.jar;" +
-        "d:/office60/program/classes/unoil.jar; " +
-        "d:/office60/program/classes/juh.jar " +
-        "GraphicsInserter \"file:///f:/TestGraphics.gif\"" );
-        System.exit( 1 );
-      }
+        com.sun.star.uno.XComponentContext xContext = null;
 
-      // It is possible to use a different connection string, passed as argument
-      if ( args.length == 2 ) {
-            sConnectionString = args[1];
-      }
+        try {
 
-      /* Bootstraps a component context with the jurt base components
-         registered. Component context to be granted to a component for running.
-         Arbitrary values can be retrieved from the context. */
-      XComponentContext xcomponentcontext =
-      com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
+            // bootstrap UNO and get the remote component context. The context can
+            // be used to get the service manager
+            xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            System.out.println("Connected to a running office ...");
 
-      /* Gets the service manager instance to be used (or null). This method has
-         been added for convenience, because the service manager is a often used
-         object. */
-      XMultiComponentFactory xmulticomponentfactory =
-      xcomponentcontext.getServiceManager();
+            // get the remote office service manager
+            com.sun.star.lang.XMultiComponentFactory xMCF =
+                xContext.getServiceManager();
 
-      /* Creates an instance of the component UnoUrlResolver which
-         supports the services specified by the factory. */
-      Object objectUrlResolver =
-      xmulticomponentfactory.createInstanceWithContext(
-      "com.sun.star.bridge.UnoUrlResolver", xcomponentcontext );
+            /* A desktop environment contains tasks with one or more
+               frames in which components can be loaded. Desktop is the
+               environment for components which can instanciate within
+               frames. */
+            com.sun.star.frame.XDesktop xDesktop = (com.sun.star.frame.XDesktop)
+                UnoRuntime.queryInterface(com.sun.star.frame.XDesktop.class,
+                    xMCF.createInstanceWithContext("com.sun.star.frame.Desktop",
+                                                   xContext ) );
 
-      // Create a new url resolver
-      XUnoUrlResolver xurlresolver = ( XUnoUrlResolver )
-      UnoRuntime.queryInterface( XUnoUrlResolver.class,
-      objectUrlResolver );
+            com.sun.star.frame.XComponentLoader xCompLoader =
+                (com.sun.star.frame.XComponentLoader)UnoRuntime.queryInterface(
+                    com.sun.star.frame.XComponentLoader.class, xDesktop);
 
-      // Resolves an object that is specified as follow:
-      // uno:<connection description>;<protocol description>;<initial object name>
-      Object objectInitial = xurlresolver.resolve( sConnectionString );
+            // Load a Writer document, which will be automaticly displayed
+            com.sun.star.lang.XComponent xComp = xCompLoader.loadComponentFromURL(
+                "private:factory/swriter", "_blank", 0,
+                new com.sun.star.beans.PropertyValue[0]);
 
-      // Create a service manager from the initial object
-      xmulticomponentfactory = ( XMultiComponentFactory )
-      UnoRuntime.queryInterface( XMultiComponentFactory.class, objectInitial );
+            // Querying for the interface XTextDocument on the xcomponent
+            com.sun.star.text.XTextDocument xTextDoc =
+                (com.sun.star.text.XTextDocument)UnoRuntime.queryInterface(
+                    com.sun.star.text.XTextDocument.class, xComp);
 
-      // Query for the XPropertySet interface.
-      XPropertySet xpropertysetMultiComponentFactory = ( XPropertySet )
-      UnoRuntime.queryInterface( XPropertySet.class, xmulticomponentfactory );
+            // Querying for the interface XMultiServiceFactory on the xtextdocument
+            com.sun.star.lang.XMultiServiceFactory xMSFDoc =
+                (com.sun.star.lang.XMultiServiceFactory)UnoRuntime.queryInterface(
+                    com.sun.star.lang.XMultiServiceFactory.class, xTextDoc);
 
-      // Get the default context from the office server.
-      Object objectDefaultContext =
-      xpropertysetMultiComponentFactory.getPropertyValue( "DefaultContext" );
+            // Providing a log file for output
+            PrintWriter printwriterLog = new PrintWriter(
+                new BufferedWriter( new FileWriter("log.txt") ) );
 
-      // Query for the interface XComponentContext.
-      xcomponentcontext = ( XComponentContext ) UnoRuntime.queryInterface(
-      XComponentContext.class, objectDefaultContext );
+            Object oGraphic = null;
+            try {
+                // Creating the service GraphicObject
+                oGraphic =
+                    xMSFDoc.createInstance("com.sun.star.text.GraphicObject");
+            }
+            catch ( Exception exception ) {
+                System.out.println( "Could not create instance" );
+                exception.printStackTrace( printwriterLog );
+            }
 
-      /* A desktop environment contains tasks with one or more
-         frames in which components can be loaded. Desktop is the
-         environment for components which can instanciate within
-         frames. */
-      XComponentLoader xcomponentloader = ( XComponentLoader )
-      UnoRuntime.queryInterface( XComponentLoader.class,
-      xmulticomponentfactory.createInstanceWithContext(
-      "com.sun.star.frame.Desktop", xcomponentcontext ) );
+            // Getting the text
+            com.sun.star.text.XText xText = xTextDoc.getText();
 
-      // Load a Writer document, which will be automaticly displayed
-      XComponent xcomponent = xcomponentloader.loadComponentFromURL(
-      "private:factory/swriter", "_blank", 0,
-      new PropertyValue[0] );
+            // Getting the cursor on the document
+            com.sun.star.text.XTextCursor xTextCursor = xText.createTextCursor();
 
-      // Querying for the interface XTextDocument on the xcomponent
-      XTextDocument xtextdocument = ( XTextDocument ) UnoRuntime.queryInterface(
-      XTextDocument.class, xcomponent );
+            // Querying for the interface XTextContent on the GraphicObject
+            com.sun.star.text.XTextContent xTextContent =
+                (com.sun.star.text.XTextContent)UnoRuntime.queryInterface(
+                    com.sun.star.text.XTextContent.class, oGraphic );
 
-      // Querying for the interface XMultiServiceFactory on the xtextdocument
-      XMultiServiceFactory xmultiservicefactoryDocument =
-      ( XMultiServiceFactory ) UnoRuntime.queryInterface(
-      XMultiServiceFactory.class, xtextdocument );
+            // Printing information to the log file
+            printwriterLog.println( "inserting graphic" );
+            try {
+                // Inserting the content
+                xText.insertTextContent(xTextCursor, xTextContent, true);
+            } catch ( Exception exception ) {
+                System.out.println( "Could not insert Content" );
+                exception.printStackTrace(System.err);
+            }
 
-      // Providing a log file for output
-      PrintWriter printwriterLog = new PrintWriter( new BufferedWriter(
-      new FileWriter( "log.txt" ) ) );
+            // Printing information to the log file
+            printwriterLog.println( "adding graphic" );
 
-      Object objectGraphic = null;
-      try {
-        // Creating the service GraphicObject
-        objectGraphic =
-        xmultiservicefactoryDocument.createInstance(
-        "com.sun.star.text.GraphicObject" );
-      }
-      catch ( Exception exception ) {
-        System.out.println( "Could not create instance" );
-        exception.printStackTrace( printwriterLog );
-      }
+            // Querying for the interface XPropertySet on GraphicObject
+            com.sun.star.beans.XPropertySet xPropSet =
+                (com.sun.star.beans.XPropertySet)UnoRuntime.queryInterface(
+                    com.sun.star.beans.XPropertySet.class, oGraphic);
+            try {
+                // Creating a string for the graphic url
+                java.io.File sourceFile = new java.io.File(args[0]);
+                StringBuffer sUrl = new StringBuffer("file:///");
+                sUrl.append(sourceFile.getCanonicalPath().replace('\\', '/'));
+                System.out.println( "insert graphic \"" + sUrl + "\"");
 
-      // Getting the text
-      XText xtext = xtextdocument.getText();
+                // Setting the anchor type
+                xPropSet.setPropertyValue("AnchorType",
+                           com.sun.star.text.TextContentAnchorType.AT_PARAGRAPH );
 
-      // Getting the cursor on the document
-      XTextCursor xtextcursor = xtext.createTextCursor();
+                // Setting the graphic url
+                xPropSet.setPropertyValue( "GraphicURL", sUrl.toString() );
 
-      // Querying for the interface XTextContent on the GraphicObject
-      XTextContent xtextcontent = ( XTextContent )
-      UnoRuntime.queryInterface( XTextContent.class, objectGraphic );
+                // Setting the horizontal position
+                xPropSet.setPropertyValue( "HoriOrientPosition",
+                                           new Integer( 5500 ) );
 
-      // Printing information to the log file
-      printwriterLog.println( "inserting graphic" );
-      try {
-        // Inserting the content
-        xtext.insertTextContent( xtextcursor, xtextcontent, true );
-      } catch ( Exception exception ) {
-        System.out.println( "Could not insert Content" );
-        exception.printStackTrace();
-      }
+                // Setting the vertical position
+                xPropSet.setPropertyValue( "VertOrientPosition",
+                                           new Integer( 4200 ) );
 
-      // Printing information to the log file
-      printwriterLog.println( "adding graphic" );
+                // Setting the width
+                xPropSet.setPropertyValue( "Width", new Integer( 4400 ) );
 
-      // Querying for the interface XPropertySet on GraphicObject
-      XPropertySet xpropertyset = (XPropertySet)
-      UnoRuntime.queryInterface(XPropertySet.class,objectGraphic);
-      try {
-        // Creating a string for the graphic url
-        java.io.File sourceFile = new java.io.File(args[0]);
-        StringBuffer sUrl = new StringBuffer("file:///");
-        sUrl.append(sourceFile.getCanonicalPath().replace('\\', '/'));
-        System.out.println( "insert graphic \"" + sUrl + "\"");
+                // Setting the height
+                xPropSet.setPropertyValue( "Height", new Integer( 4000 ) );
+            } catch ( Exception exception ) {
+                System.out.println( "Couldn't set property 'GraphicURL'" );
+                exception.printStackTrace( printwriterLog );
+            }
 
-        // Setting the anchor type
-        xpropertyset.setPropertyValue( "AnchorType",
-        TextContentAnchorType.AT_PARAGRAPH );
+            xContext = null;
 
-        // Setting the graphic url
-        xpropertyset.setPropertyValue( "GraphicURL", sUrl.toString() );
-
-        // Setting the horizontal position
-        xpropertyset.setPropertyValue( "HoriOrientPosition",
-        new Integer( 5500 ) );
-
-        // Setting the vertical position
-        xpropertyset.setPropertyValue( "VertOrientPosition",
-        new Integer( 4200 ) );
-
-        // Setting the width
-        xpropertyset.setPropertyValue( "Width", new Integer( 4400 ) );
-
-        // Setting the height
-        xpropertyset.setPropertyValue( "Height", new Integer( 4000 ) );
-      } catch ( Exception exception ) {
-        System.out.println( "Couldn't set property 'GraphicURL'" );
-        exception.printStackTrace( printwriterLog );
-      }
-
-      xcomponentcontext = null;
-
-      System.exit(0);
+            System.exit(0);
+        }
+        catch( Exception e ) {
+            e.printStackTrace(System.err);
+            System.exit(1);
+        }
     }
-    catch( Exception exception ) {
-      System.err.println( exception );
-    }
-  }
 }
