@@ -7,8 +7,8 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Open Text Document (%productname% Writer/Web)</value>
-            <value xml:lang="de">Offenes Textdokument (%productname% Writer/Web)</value>
+            <value xml:lang="en-US">Open Office Text (%productname% Writer/Web)</value>
+            <value xml:lang="de">Open Office Text (%productname% Writer/Web)</value>
         </prop>
         <prop oor:name="Flags"><value>EXPORT TEMPLATE</value></prop>
     </node>
