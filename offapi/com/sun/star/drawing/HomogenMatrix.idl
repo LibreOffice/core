@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HomogenMatrix.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 // DocMerge from xml: struct com::sun::star::drawing::HomogenMatrix
 /** specifies a homogenous matrix by three homogenous lines
  */
-struct HomogenMatrix
+published struct HomogenMatrix
 {
     // DocMerge: empty anyway
     com::sun::star::drawing::HomogenMatrixLine Line1;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HatchStyle.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 // DocMerge from xml: enum com::sun::star::drawing::HatchStyle
 /** The <type>HatchStyle</type> defines the style of the lines in a hatch.
  */
-enum HatchStyle
+published enum HatchStyle
 {
     //-------------------------------------------------------------------------
 
