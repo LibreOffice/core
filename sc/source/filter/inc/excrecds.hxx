@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:07:47 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,6 @@
 
 #ifndef _ROOT_HXX
 #include "root.hxx"
-#endif
-#ifndef _FLTTOOLS_HXX
-#include "flttools.hxx"
 #endif
 #ifndef _EXCDEFS_HXX
 #include "excdefs.hxx"
@@ -419,41 +416,6 @@ private:
 };
 
 
-//---------------------------------------------------------- class ExcWindow2 -
-
-class XclExpWindow2 : public XclExpRecord
-{
-public:
-    explicit            XclExpWindow2( const XclExpRoot& rRoot, SCTAB nScTab );
-
-private:
-    virtual void        WriteBody( XclExpStream& rStrm );
-
-private:
-    sal_uInt16          mnFlags;
-};
-
-
-//-------------------------------------------------------- class ExcSelection -
-
-class ExcSelection : public ExcRecord
-{
-private:
-    UINT16                  nCol;
-    UINT16                  nRow;
-    UINT8                   nPane;
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-
-public:
-    inline                  ExcSelection( UINT16 _nCol, UINT16 _nRow, UINT8 _nPane ) :
-                                nCol( _nCol ), nRow( _nRow ), nPane( _nPane ) {}
-
-    virtual UINT16          GetNum( void ) const;
-    virtual ULONG           GetLen( void ) const;
-};
-
-
 // XclExpWsbool ===============================================================
 
 class XclExpWsbool : public XclExpUInt16Record
@@ -531,7 +493,7 @@ public:
 
     inline UINT16           GetCol() const          { return nCol; }
     inline BOOL             HasCondition() const    { return !aCond[ 0 ].IsEmpty(); }
-    inline BOOL             HasTop10() const        { return TRUEBOOL( nFlags & EXC_AFFLAG_TOP10 ); }
+    inline BOOL             HasTop10() const        { return ::get_flag( nFlags, EXC_AFFLAG_TOP10 ); }
 
     BOOL                    AddEntry( const ScQueryEntry& rEntry );
 };
