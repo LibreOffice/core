@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLPageExport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 12:30:05 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:23:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,11 +194,17 @@ sal_Bool XMLPageExport::exportStyle(
     else
     {
         OUString sName( rStyle->getName() );
-        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, sName );
+        sal_Bool bEncoded = sal_False;
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
+                          GetExport().EncodeStyleName( sName, &bEncoded ) );
+
+        if( bEncoded )
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME,
+                                   sName);
 
         OUString sPMName;
         if( findPageMasterName( sName, sPMName ) )
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_PAGE_MASTER_NAME, sPMName );
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_NAME, GetExport().EncodeStyleName( sPMName ) );
 
         aAny = xPropSet->getPropertyValue( sFollowStyle );
         OUString sNextName;
@@ -206,7 +212,7 @@ sal_Bool XMLPageExport::exportStyle(
         if( sName != sNextName && sNextName.getLength() )
         {
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NEXT_STYLE_NAME,
-                          sNextName );
+                  GetExport().EncodeStyleName( sNextName ) );
         }
 //      OUString sPageMaster = GetExport().GetAutoStylePool()->Find(
 //                                          XML_STYLE_FAMILY_PAGE_MASTER,
