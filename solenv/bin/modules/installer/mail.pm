@@ -2,9 +2,9 @@
 #
 #   $RCSfile: mail.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 14:58:26 $
+#   last change: $Author: rt $ $Date: 2004-07-30 16:37:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -138,7 +138,7 @@ sub send_fail_mail
     my $listener = "";
     $listener = installer::ziplist::getinfofromziplist($allsettingsarrayref, "fail");
 
-    if ( $listener )
+    if ( $$listener )
     {
         my $mailinfo = installer::ziplist::getinfofromziplist($allsettingsarrayref, "mailinfo");
 
@@ -155,7 +155,7 @@ sub send_success_mail
     my $listener = "";
     $listener = installer::ziplist::getinfofromziplist($allsettingsarrayref, "success");
 
-    if ( $listener )
+    if ( $$listener )
     {
         my $mailinfo = installer::ziplist::getinfofromziplist($allsettingsarrayref, "mailinfo");
 
