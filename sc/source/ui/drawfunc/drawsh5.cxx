@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:58:02 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
