@@ -1,5 +1,9 @@
 oa	offapi	:	udkapi solenv NULL
 oa	offapi									usr1	-	all	oa_mkout NULL
+oa	offapi\drafts\com\sun\star\script\browse	nmake	-	all	oa_sfbrowse_drafts NULL
+oa	offapi\drafts\com\sun\star\script\provider	nmake	-	all	oa_sfprovider_drafts NULL
+oa	offapi\drafts\com\sun\star\script\framework\security	nmake	-	all	oa_sfsecurity_drafts NULL
+oa	offapi\drafts\com\sun\star\script\framework\storage	nmake	-	all	oa_sfstorage_drafts NULL
 oa	offapi\com\sun\star\auth				nmake	-	all	oa_auth NULL
 oa	offapi\com\sun\star\accessibility       nmake	-	all	oa_accessibility oa_awt NULL
 oa	offapi\com\sun\star\awt					nmake	-	all	oa_awt NULL
@@ -11,9 +15,9 @@ oa	offapi\com\sun\star\configuration\backend\xml	nmake	-	all	oa_configbackend_xm
 oa	offapi\com\sun\star\datatransfer		nmake	-	all	oa_datatransfer NULL
 oa	offapi\com\sun\star\datatransfer\clipboard			nmake	-	all	oa_datatrans_clip NULL
 oa	offapi\com\sun\star\datatransfer\dnd	nmake	-	all	oa_datatrans_dnd oa_awt NULL
-oa	offapi\com\sun\star\document			nmake	-	all	oa_docu NULL
-oa	offapi\com\sun\star\drawing				nmake	-	all	oa_draw NULL
 oa	offapi\com\sun\star\embed				nmake	-	all	oa_embed NULL
+oa	offapi\com\sun\star\document			nmake	-	all	oa_docu oa_embed NULL
+oa	offapi\com\sun\star\drawing				nmake	-	all	oa_draw NULL
 oa	offapi\com\sun\star\form\component		nmake	-	all	oa_fcomp NULL
 oa	offapi\com\sun\star\form\control		nmake	-	all	oa_fcontr NULL
 oa	offapi\com\sun\star\form				nmake	-	all	oa_form NULL
@@ -60,4 +64,4 @@ oa	offapi\com\sun\star  				nmake	-	all	- NULL
 oa	offapi\drafts\com\sun\star\form         nmake	-	all	oa_drafts_form NULL
 oa	offapi\drafts\com\sun\star\form\component nmake	-	all	oa_drafts_formcomp oa_drafts_form NULL
 oa	offapi\drafts\com\sun\star\table         nmake	-	all	oa_drafts_table NULL
-oa  offapi\util                             nmake   -   all oa_util oa_auth oa_awt oa_chart oa_config oa_configbootstrap oa_configbackend oa_configbackend_xml oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_embed oa_fcomp oa_fcontr oa_fieldmaster oa_form oa_formula oa_frame oa_i18n oa_inst oa_ldap oa_ling2 oa_mozilla oa_packages oa_manifest oa_zippackage oa_plug oa_pres oa_putil oa_resrc oa_sax oa_xml_input oa_scan oa_sdb oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync oa_sync2 oa_system oa_table oa_task oa_text oa_textfield oa_docinfo oa_ucb oa_view oa_xml oa_image oa_ui oa_ui_dialogs oa_accessibility oa_drafts_form oa_drafts_formcomp oa_drafts_table NULL
+oa  offapi\util                             nmake   -   all oa_util oa_auth oa_awt oa_chart oa_config oa_configbootstrap oa_configbackend oa_configbackend_xml oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_embed oa_fcomp oa_fcontr oa_fieldmaster oa_form oa_formula oa_frame oa_i18n oa_inst oa_ldap oa_ling2 oa_mozilla oa_packages oa_manifest oa_zippackage oa_plug oa_pres oa_putil oa_resrc oa_sax oa_xml_input oa_scan oa_sdb oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync oa_sync2 oa_system oa_table oa_task oa_text oa_textfield oa_docinfo oa_ucb oa_view oa_xml oa_image oa_ui oa_ui_dialogs oa_accessibility oa_drafts_form oa_drafts_formcomp oa_drafts_table oa_sfprovider_drafts oa_sfbrowse_drafts oa_sfsecurity_drafts oa_sfstorage_drafts NULL
