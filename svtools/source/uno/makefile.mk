@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-06 12:13:43 $
+#   last change: $Author: obo $ $Date: 2004-09-09 17:13:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,9 @@ SLOFILES= \
             $(SLO)$/unoiface.obj	\
             $(SLO)$/imgprod.obj \
             $(SLO)$/toolboxcontroller.obj \
-            $(SLO)$/framestatuslistener.obj
+            $(SLO)$/framestatuslistener.obj \
+            $(SLO)$/statusbarcontroller.obj \
+            $(SLO)$/generictoolboxcontroller.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1OBJFILES=  \
@@ -99,7 +101,9 @@ LIB1OBJFILES=  \
             $(SLO)$/unoiface.obj	\
             $(SLO)$/imgprod.obj     \
             $(SLO)$/toolboxcontroller.obj \
-            $(SLO)$/framestatuslistener.obj
+            $(SLO)$/framestatuslistener.obj \
+            $(SLO)$/statusbarcontroller.obj \
+            $(SLO)$/generictoolboxcontroller.obj
 
 # --- Targets ------------------------------------------------------
 
