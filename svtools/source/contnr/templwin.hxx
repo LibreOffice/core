@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: gt $ $Date: 2001-10-19 13:59:02 $
+ *  last change: $Author: gt $ $Date: 2001-11-07 09:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/splitwin.hxx>
 #include <vcl/resary.hxx>
+//#ifndef _TOOLS_DEBUG_HXX
+//#include <tools/debug.hxx>
+//#endif
 
 #include "ivctrl.hxx"
 #include "fileview.hxx"
@@ -97,7 +100,11 @@ private:
     SvtDummyHeaderBar_Impl  aDummyHeaderBar;    // spaceholder instead of HeaderBar
     SvtIconChoiceCtrl   aIconCtrl;
 
+    String              aNewDocumentRootURL;
     String              aTemplateRootURL;
+    String              aMyDocumentsRootURL;
+    String              aSamplesFolderRootURL;
+
     long                nMaxTextLength;
 
     SvxIconChoiceCtrlEntry* GetEntry( const String& rURL ) const;
@@ -121,14 +128,24 @@ public:
     ULONG               GetCursorPos();
     void                SetFocus();
 
-    static String       GetSamplesFolderURL();
+    inline const String&    GetSamplesFolderURL() const;
+
+    sal_Bool            IsRootURL( const String& rURL ) const;
 };
 
+inline const String& SvtIconWindow_Impl::GetSamplesFolderURL() const
+{
+    return aSamplesFolderRootURL;
+}
+
 // class SvtFileViewWindow_Impl ------------------------------------------
+
+class SvtTemplateWindow;
 
 class SvtFileViewWindow_Impl : public Window
 {
 private:
+    SvtTemplateWindow&  rParent;
     SvtFileView         aFileView;
     Link                aNewFolderLink;
     String              aCurrentRootURL;
@@ -141,7 +158,7 @@ private:
                         GetNewDocContents() const;
 
 public:
-    SvtFileViewWindow_Impl( Window* pParent, const String& rSamplesFolderURL );
+    SvtFileViewWindow_Impl( SvtTemplateWindow* pParent, const String& rSamplesFolderURL );
     ~SvtFileViewWindow_Impl();
 
     virtual void        Resize();
@@ -161,7 +178,6 @@ public:
     String              GetFolderTitle() const;
     String              GetFolderURL() const { return aFolderURL; }
     void                SetFocus();
-//  void                SetSamplesFolder( const String* pSamplesFolder );
 };
 
 // class SvtFrameWindow_Impl ---------------------------------------------
@@ -288,7 +304,10 @@ public:
     void                SetFocus( sal_Bool bIconWin );
     sal_Bool            HasIconWinFocus() const { return pIconWin->HasChildPathFocus(); }
     void                OpenTemplateRoot();
+
+    void                SetPrevLevelButtonState( const String& rURL );  // sets state (enable/disable) for previous level button
 };
+
 
 #endif // _SVTOOLS_TEMPLWIN_HXX
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-29 08:52:46 $
+ *  last change: $Author: gt $ $Date: 2001-11-07 09:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,11 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     aDummyHeaderBar( this ),
     aIconCtrl( this, WB_ICON | WB_NOCOLUMNHEADER |
                      WB_HIGHLIGHTFRAME | WB_NOSELECTION | WB_NODRAGSELECTION | WB_TABSTOP ),
-    nMaxTextLength( 0 )
+    nMaxTextLength( 0 ),
+    aNewDocumentRootURL( RTL_CONSTASCII_USTRINGPARAM( "private:newdoc" ) ),
+    aMyDocumentsRootURL( SvtPathOptions().GetWorkPath() ),
+    aSamplesFolderRootURL( SvtPathOptions().SubstituteVariable(
+                                String( RTL_CONSTASCII_USTRINGPARAM( "$(insturl)/share/samples/$(vlang)" ) ) ) )
 
 {
     aDummyHeaderBar.Show();
@@ -327,20 +331,18 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     String aEntryStr = String( SvtResId( STR_SVT_NEWDOC ) );
     SvxIconChoiceCtrlEntry* pEntry =
         aIconCtrl.InsertEntry( aEntryStr, aImage, ICON_POS_NEWDOC );
-    String* pURL = new String( RTL_CONSTASCII_USTRINGPARAM("private:newdoc") );
-    pEntry->SetUserData( pURL );
+    pEntry->SetUserData( new String( aNewDocumentRootURL ) );
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
     long nTemp = pEntry->GetBoundRect().GetSize().Width();
     if (nTemp > nMaxTextLength)
         nMaxTextLength = nTemp;
 
     // "Templates"
-    if ( aTemplateRootURL.Len() > 0 )
+    if( aTemplateRootURL.Len() > 0 )
     {
         aEntryStr = String( SvtResId( STR_SVT_TEMPLATES ) );
         pEntry = aIconCtrl.InsertEntry( aEntryStr, Image( SvtResId( IMG_SVT_TEMPLATES ) ), ICON_POS_TEMPLATES );
-        pURL = new String( aTemplateRootURL );
-        pEntry->SetUserData( pURL );
+        pEntry->SetUserData( new String( aTemplateRootURL ) );
         DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
         nTemp = pEntry->GetBoundRect().GetSize().Width();
         if (nTemp > nMaxTextLength)
@@ -350,19 +352,16 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     // "My Documents"
     aEntryStr = String( SvtResId( STR_SVT_MYDOCS ) );
     pEntry = aIconCtrl.InsertEntry( aEntryStr, Image( SvtResId( IMG_SVT_MYDOCS ) ), ICON_POS_MYDOCS );
-    pURL = new String( SvtPathOptions().GetWorkPath() );
-    pEntry->SetUserData( pURL );
+    pEntry->SetUserData( new String( aMyDocumentsRootURL ) );
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
     nTemp = pEntry->GetBoundRect().GetSize().Width();
-    if (nTemp > nMaxTextLength)
+    if( nTemp > nMaxTextLength )
         nMaxTextLength = nTemp;
 
     // "Samples"
     aEntryStr = String( SvtResId( STR_SVT_SAMPLES ) );
     pEntry = aIconCtrl.InsertEntry( aEntryStr, Image( SvtResId( IMG_SVT_SAMPLES ) ), ICON_POS_SAMPLES );
-    String aPath( RTL_CONSTASCII_USTRINGPARAM("$(insturl)/share/samples/$(vlang)") );
-    pURL = new String( SvtPathOptions().SubstituteVariable( aPath ) );
-    pEntry->SetUserData( pURL );
+    pEntry->SetUserData( new String( aSamplesFolderRootURL ) );
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
     nTemp = pEntry->GetBoundRect().GetSize().Width();
     if (nTemp > nMaxTextLength)
@@ -470,21 +469,24 @@ void SvtIconWindow_Impl::SetFocus()
     aIconCtrl.GrabFocus();
 }
 
-String SvtIconWindow_Impl::GetSamplesFolderURL()
+sal_Bool SvtIconWindow_Impl::IsRootURL( const String& rURL ) const
 {
-    return SvtPathOptions().SubstituteVariable(
-        String( RTL_CONSTASCII_USTRINGPARAM("$(insturl)/share/samples/$(vlang)") ) );
+    return  rURL == aNewDocumentRootURL ||
+            rURL == aTemplateRootURL ||
+            rURL == aMyDocumentsRootURL ||
+            rURL == aSamplesFolderRootURL;
 }
 
 // class SvtFileViewWindow_Impl -----------------------------------------_
 
-SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( Window* pParent, const String& rSamplesFolderURL ) :
+SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( SvtTemplateWindow* pParent, const String& rSamplesFolderURL ) :
 
     Window( pParent, WB_DIALOGCONTROL | WB_TABSTOP | WB_BORDER | WB_3DLOOK ),
 
     aFileView           ( this, SvtResId( CTRL_FILEVIEW ), FILEVIEW_SHOW_TITLE ),
     bIsTemplateFolder   ( sal_False ),
-    aSamplesFolderURL   ( rSamplesFolderURL )
+    aSamplesFolderURL   ( rSamplesFolderURL ),
+    rParent( *pParent )
 
 {
     aFileView.SetStyle( aFileView.GetStyle() | WB_DIALOGCONTROL | WB_TABSTOP );
@@ -601,6 +603,9 @@ String SvtFileViewWindow_Impl::GetSelectedFile() const
 void SvtFileViewWindow_Impl::OpenFolder( const String& rURL )
 {
     aFolderURL = rURL;
+
+    rParent.SetPrevLevelButtonState( rURL );
+
     INetProtocol eProt = INetURLObject( rURL ).GetProtocol();
     bIsTemplateFolder = ( eProt == INET_PROT_VND_SUN_STAR_HIER );
     if ( eProt == INET_PROT_PRIVATE )
@@ -1089,7 +1094,6 @@ IMPL_LINK ( SvtTemplateWindow , FileDblClickHdl_Impl, SvtFileView *, pView )
 IMPL_LINK ( SvtTemplateWindow , NewFolderHdl_Impl, SvtFileView *, pView )
 {
     String aTemp;
-    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PREV, pFileWin->HasPreviousLevel( aTemp ) );
     pFrameWin->OpenFile( String(), sal_True, sal_False, sal_False );
     AppendHistoryURL( pFileWin->GetFolderURL() );
     aNewFolderHdl.Call( this );
@@ -1292,6 +1296,11 @@ void SvtTemplateWindow::SetFocus( sal_Bool bIconWin )
 void SvtTemplateWindow::OpenTemplateRoot()
 {
     pFileWin->OpenFolder( pIconWin->GetTemplateRootURL() );
+}
+
+void SvtTemplateWindow::SetPrevLevelButtonState( const String& rURL )
+{
+    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PREV, !pIconWin->IsRootURL( rURL ) );
 }
 
 // ------------------------------------------------------------------------
