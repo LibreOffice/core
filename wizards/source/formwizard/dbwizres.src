@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: nf $ $Date: 2002-06-13 14:58:48 $
+ *  last change: $Author: kz $ $Date: 2002-06-17 09:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1566,20 +1566,20 @@ String RID_DB_FORM_WIZARD_START + 13
     Text[ russian ] = "Ïîëÿ â ~ôîğìóëÿğå";
     Text[ dutch ] = "Velden in ~formulier";
     Text[ french ] = "Champs du formulaire";
-    Text[ spanish ] = "~Campos del informe";
+    Text[ spanish ] = "~Campos del formulario";
     Text[ italian ] = "Campi nel ~formulario";
     Text[ danish ] = "Felter i ~formularen";
-    Text[ swedish ] = "~Fält i rapport";
+    Text[ swedish ] = "~Fält i formulär";
     Text[ polish ] = "Pola w formularzu";
-    Text[ portuguese_brazilian ] = "~Felder im Bericht";
-    Text[ japanese ] = "ãƒ¬ãƒãƒ¼ãƒˆã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
+    Text[ portuguese_brazilian ] = "~Felder im Formular";
+    Text[ japanese ] = "ãƒ•ã‚©ãƒ¼ãƒ ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
     Text[ chinese_simplified ] = "è¡¨å•å†…çš„å­—æ®µ";
     Text[ chinese_traditional ] = "è¡¨å–®ä¹‹ä¸­çš„æ¬„ä½";
     Text[ arabic ] = "ÍŞæá ~ÇáÇÓÊãÇÑÉ";
     Text[ dutch ] = "Velden in ~formulier";
     Text[ chinese_simplified ] = "è¡¨å•å†…çš„å­—æ®µ";
     Text[ greek ] = "Ğåäßá óôç ~öüñìá";
-    Text[ korean ] = "ë³´ê³ ì„œ ë‚´ì˜ í•„ë“œ";
+    Text[ korean ] = "ì„œì‹ ìš©ì§€ ë‚´ì˜ í•„ë“œ";
     Text[ turkish ] = "Form içindeki alanlar";
     Text[ catalan ] = "Fields in Form";
     Text[ finnish ] = "Lomakkeen kentät";
@@ -3932,6 +3932,14 @@ String RID_DB_REPORT_WIZARD_START + 9
 {
     Text = "~Felder im Bericht";
     Text [ english_us ] = "~Fields in report";
+    Text[ french ] = "Champs de l'état";
+    Text[ spanish ] = "~Campos del informe";
+    Text[ swedish ] = "~Fält i rapport";
+    Text[ portuguese_brazilian ] = "~Felder im Bericht";
+    Text[ japanese ] = "ãƒ¬ãƒãƒ¼ãƒˆã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
+    Text[ korean ] = "ë³´ê³ ì„œ ë‚´ì˜ í•„ë“œ";
+    Text[ chinese_simplified ] = "è¡¨å•å†…çš„å­—æ®µ";
+    Text[ chinese_traditional ] = "è¡¨å–®ä¹‹ä¸­çš„æ¬„ä½";
 };
 
 
