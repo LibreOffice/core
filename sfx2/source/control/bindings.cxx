@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-15 16:47:49 $
+ *  last change: $Author: mba $ $Date: 2001-08-24 07:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1771,7 +1771,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
 
     if ( !SfxMacroConfig::IsMacroSlot( pRealSlot->GetSlotId() ) )
     {
-        pInterface->GetRealInterfaceForSlot( pRealSlot );
+        pInterface = pInterface->GetRealInterfaceForSlot( pRealSlot );
         DBG_ASSERT (pInterface,"Slot in angegebener Shell nicht gefunden!");
     }
 
