@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:01:20 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< lang::XMulti
 , m_bDisposed( sal_False )
 , m_bClosed( sal_False )
 , m_nObjectState( -1 )
+, m_nTargetState( -1 )
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_xFactory( xFactory )
 , m_nMiscStatus( 0 )
@@ -128,6 +129,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
 , m_bDisposed( sal_False )
 , m_bClosed( sal_False )
 , m_nObjectState( embed::EmbedStates::LOADED )
+, m_nTargetState( -1 )
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_xFactory( xFactory )
 , m_nMiscStatus( 0 )
