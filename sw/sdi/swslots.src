@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 18:44:49 $
+ *  last change: $Author: kz $ $Date: 2001-12-19 18:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3843,7 +3843,7 @@ SfxSlotInfo FN_INSERT_HARDHYPHEN
     SlotName[ portuguese ] = "Inserir hífen não separável";
     SlotName[ russian ] = "Âñòàâèòü æåñòêèå ïåðåíîñû";
     SlotName[ dutch ] = "Vast scheidingsteken invoegen";
-    SlotName[ french ] = "Insérer un trait d'union protégé";
+    SlotName[ french ] = "Insérer un tiret protégé";
     SlotName[ spanish ] = "Insertar guión protegido";
     SlotName[ italian ] = "Inserisci sillabazione non divisibile";
     SlotName[ danish ] = "Indsæt hård bindestreg";
@@ -4234,7 +4234,7 @@ SfxSlotInfo FN_INSERT_SOFT_HYPHEN
     SlotName[ portuguese ] = "Inserir hífen opcional";
     SlotName[ russian ] = "Âñòàâêà ìÿãêèõ ïåðåíîñîâ";
     SlotName[ dutch ] = "Zacht scheidingsteken invoegen";
-    SlotName[ french ] = "Insérer un trait d'union conditionnel";
+    SlotName[ french ] = "Insérer un tiret conditionnel";
     SlotName[ spanish ] = "Insertar guión opcional";
     SlotName[ italian ] = "Inserisci sillabazione manuale";
     SlotName[ danish ] = "Indsæt blød bindestreg";
@@ -9539,6 +9539,7 @@ SfxSlotInfo FN_UPDATE_CHARTS
     SlotName[ arabic ] = "Update Charts";
     SlotName[ catalan ] = "Update Charts";
 };
+
 
 
 
