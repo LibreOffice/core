@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:29:25 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ SfxSlotInfo FN_ABSTRACT_STARIMPRESS
     SlotName[ danish ] = "Prζsentation fra abstract";
     SlotName[ swedish ] = "Presentation frεn utdrag";
     SlotName[ polish ] = "Prezentacja z Abstraktu";
-    SlotName[ portuguese_brazilian ] = "SendAbstractToStarOffice Impress";
+    SlotName[ portuguese_brazilian ] = "SendAbstractTo%PRODUCTNAME Impress";
     SlotName[ japanese ] = "±³ΔΧ²έ‚©‚η‚ΜΜίΪΎήέΓ°Ό®έ";
     SlotName[ chinese_simplified ] = "ΡέΚΎΞΔΈεΐ΄ΧΤΥªÒª";
     SlotName[ chinese_traditional ] = "Β²³ψ±qΊK­n";
@@ -3668,7 +3668,7 @@ SfxSlotInfo FN_INSERT_HRULER
     SlotName[ dutch ] = "Horizontale lijn invoegen";
     SlotName[ chinese_simplified ] = "²εΘλΛ®Ζ½Οί";
     SlotName[ greek ] = "Εισαγωγή οριζόντιας γραμμής";
-    SlotName[ korean ] = "ΌφΖς ΄«±έΐΪ »πΐΤ";
+    SlotName[ korean ] = "ΌφΖς Ό± »πΐΤ";
     SlotName[ turkish ] = "Yatay ayύrma ηizgisi ekle";
     SlotName[ language_user1 ] = " ";
 };
@@ -3745,7 +3745,7 @@ SfxSlotInfo FN_INSERT_LINEBREAK
     SlotName[ dutch ] = "Handmatig regeleinde invoegen";
     SlotName[ chinese_simplified ] = "ΚΦΉ¤²εΘλ»»ΠΠ·ϋ";
     SlotName[ greek ] = "Εισαγωγή χειροκίνητης αλλαγής γραμμής";
-    SlotName[ korean ] = "ΌφµΏ Ηΰ ³ª΄©±β »πΐΤ";
+    SlotName[ korean ] = "ΌφµΏ °³Ηΰ »πΐΤ";
     SlotName[ turkish ] = "Manόel satύr sonu ekle";
     SlotName[ language_user1 ] = " ";
 };
@@ -3933,26 +3933,26 @@ SfxSlotInfo FN_INSERT_REGION
 };
 SfxSlotInfo FN_INSERT_SMA
 {
-    SlotName = "StarOffice Math Objekt einfόgen";
+    SlotName = "%PRODUCTNAME Math Objekt einfόgen";
     SlotName [ english ] =  "Insert StarOffice Math object";
-    SlotName[ english_us ] = "Insert StarOffice Math object";
-    SlotName[ portuguese ] = "Inserir objecto do StarOffice Math";
-    SlotName[ russian ] = "Βρςΰβθςό ξαϊεκς StarOffice Math";
-    SlotName[ dutch ] = "StarOffice Math-object invoegen";
-    SlotName[ french ] = "Insιrer un objet StarOffice Math";
-    SlotName[ spanish ] = "Insertar objeto StarOffice Math";
-    SlotName[ italian ] = "Inserisci oggetto StarOffice Math";
-    SlotName[ danish ] = "Indsζt StarOffice Math-objekt";
-    SlotName[ swedish ] = "Infoga StarOffice Math-objekt";
-    SlotName[ polish ] = "Wstaw obiekt StarOffice Math";
-    SlotName[ portuguese_brazilian ] = "InsertObjectStarOffice Math";
-    SlotName[ japanese ] = "StarOffice Math µΜήΌήªΈΔ‚Μ‘}“ό";
-    SlotName[ chinese_simplified ] = "²εΘλ StarOffice Math ¶ΤΟσ";
-    SlotName[ chinese_traditional ] = "΄΅¤J StarOffice Math ª«¥σ";
-    SlotName[ arabic ] = "ΕΟΡΗΜ ίΗΖδ StarOffice Math ";
-    SlotName[ dutch ] = "StarOffice Math-object invoegen";
-    SlotName[ chinese_simplified ] = "²εΘλ StarOffice Math ¶ΤΟσ";
-    SlotName[ greek ] = "Εισαγωγή αντικειμένου StarOffice Math";
+    SlotName[ english_us ] = "Insert %PRODUCTNAME Math object";
+    SlotName[ portuguese ] = "Inserir objecto do %PRODUCTNAME Math";
+    SlotName[ russian ] = "Βρςΰβθςό ξαϊεκς %PRODUCTNAME Math";
+    SlotName[ dutch ] = "%PRODUCTNAME Math-object invoegen";
+    SlotName[ french ] = "Insιrer un objet %PRODUCTNAME Math";
+    SlotName[ spanish ] = "Insertar objeto %PRODUCTNAME Math";
+    SlotName[ italian ] = "Inserisci oggetto %PRODUCTNAME Math";
+    SlotName[ danish ] = "Indsζt %PRODUCTNAME Math-objekt";
+    SlotName[ swedish ] = "Infoga %PRODUCTNAME Math-objekt";
+    SlotName[ polish ] = "Wstaw obiekt %PRODUCTNAME Math";
+    SlotName[ portuguese_brazilian ] = "InsertObject%PRODUCTNAME Math";
+    SlotName[ japanese ] = "%PRODUCTNAME Math µΜήΌήªΈΔ‚Μ‘}“ό";
+    SlotName[ chinese_simplified ] = "²εΘλ %PRODUCTNAME Math ¶ΤΟσ";
+    SlotName[ chinese_traditional ] = "΄΅¤J %PRODUCTNAME Math ª«¥σ";
+    SlotName[ arabic ] = "ΕΟΡΗΜ ίΗΖδ %PRODUCTNAME Math ";
+    SlotName[ dutch ] = "%PRODUCTNAME Math-object invoegen";
+    SlotName[ chinese_simplified ] = "²εΘλ %PRODUCTNAME Math ¶ΤΟσ";
+    SlotName[ greek ] = "Εισαγωγή αντικειμένου %PRODUCTNAME Math";
     SlotName[ korean ] = "Όφ½Δ »πΐΤ";
     SlotName[ turkish ] = "StarMath nesnesi ekle";
     SlotName[ language_user1 ] = " ";
@@ -4178,7 +4178,7 @@ SfxSlotInfo FN_LINE_NUMBERING_DLG
     SlotName[ swedish ] = "Stδll in radnumrering";
     SlotName[ polish ] = "Ustaw numeracjκ wierszy";
     SlotName[ portuguese_brazilian ] = "LineNumberingDialog";
-    SlotName[ japanese ] = "s‚Μ”Τ†•t‚―‚Μέ’θ";
+    SlotName[ japanese ] = "s”Τ†•t‚―‚Μέ’θ";
     SlotName[ chinese_simplified ] = "Ιθ¶¨ΠΠ±ΰΊΕ";
     SlotName[ chinese_traditional ] = "³]©w¦ζ½sΈΉ";
     SlotName[ arabic ] = "ΚΪννδ ΚΡήνγ ΗαΓΣΨΡ";
@@ -4731,7 +4731,7 @@ SfxSlotInfo FN_NUM_BULLET_NONUM
     SlotName[ dutch ] = "Item zonder nummer invoegen";
     SlotName[ chinese_simplified ] = "²»΄ψ±ΰΊΕ²εΘλΜυΔΏ";
     SlotName[ greek ] = "Εισαγωγή καταχώρισης χωρίς αρίθμηση";
-    SlotName[ korean ] = "ΉψΘ£ Ύψ΄Β ΗΧΈρ »πΐΤ";
+    SlotName[ korean ] = "ΉψΘ£Ύψ΄Β ΗΧΈρ »πΐΤ";
     SlotName[ turkish ] = "Numarasύz giriώ ekle";
     SlotName[ language_user1 ] = " ";
 };
@@ -5069,7 +5069,7 @@ SfxSlotInfo FN_NUMBER_NEWSTART
     SlotName[ dutch ] = "Nieuwe nummering";
     SlotName[ chinese_simplified ] = "ΦΨΠΒΏªΚΌ±ΰΊΕ";
     SlotName[ greek ] = "Επανεκκίνηση αρίθμησης";
-    SlotName[ korean ] = "ΉψΘ£ ΄Ω½Γ ΈΕ±β±β";
+    SlotName[ korean ] = "ΉψΘ£ ΈΕ±β±β ΄Ω½Γ ½ΓΐΫ";
     SlotName[ turkish ] = "Numaralamayύ yeniden baώlat";
     SlotName[ language_user1 ] = " ";
 };
@@ -5218,14 +5218,14 @@ SfxSlotInfo FN_NUMBERING_OUTLINE_DLG
     SlotName[ swedish ] = "Kapitelnumrering";
     SlotName[ polish ] = "Numeracja rozdzia³u";
     SlotName[ portuguese_brazilian ] = "ToolsChapterNumbering";
-    SlotName[ japanese ] = "Ν‚Μ”Τ†•t‚―";
+    SlotName[ japanese ] = "Ν”Τ†•t‚―";
     SlotName[ chinese_simplified ] = "ΥΒ±ΰΊΕ";
     SlotName[ chinese_traditional ] = "³Ή½sΈΉ";
     SlotName[ arabic ] = "ΚΡήνγ ΗαέΥζα";
     SlotName[ dutch ] = "Hoofdstuknummering";
     SlotName[ chinese_simplified ] = "ΥΒ±ΰΊΕ";
     SlotName[ greek ] = "Αρίθμηση κεφαλαίων";
-    SlotName[ korean ] = "ΐε ΉψΘ£ΈΕ±β±β";
+    SlotName[ korean ] = "ΐε ΉψΘ£ ΈΕ±β±β";
     SlotName[ turkish ] = "Bφlόm numaralamasύ";
     SlotName[ language_user1 ] = " ";
 };
@@ -5295,7 +5295,7 @@ SfxSlotInfo FN_OUTLINE_TO_IMPRESS
     SlotName[ danish ] = "Disposition til prζsentation";
     SlotName[ swedish ] = "Disposition till presentation";
     SlotName[ polish ] = "Konspekt do prezentacji";
-    SlotName[ portuguese_brazilian ] = "SendOutlineToStarOffice Impress";
+    SlotName[ portuguese_brazilian ] = "SendOutlineTo%PRODUCTNAME Impress";
     SlotName[ japanese ] = "ΜίΪΎήέΓ°Ό®έ‚Μ±³ΔΧ²έ";
     SlotName[ chinese_simplified ] = "΄σΈΩΛΝµ½ΡέΚΎΞΔΈε";
     SlotName[ chinese_traditional ] = "¤jΊυ°e¨μΒ²³ψ";
@@ -5798,7 +5798,7 @@ SfxSlotInfo FN_PREVIEW_PRINT_OPTIONS
     SlotName[ dutch ] = "Printopties afdrukvoorbeeld";
     SlotName[ chinese_simplified ] = "΄ςΣ΅Ρ΅Οξ Ò³ΓζΚΣΝΌ";
     SlotName[ greek ] = "Επιλογές εκτύπωσης/Προεπισκόπηση σελίδας";
-    SlotName[ korean ] = "ΐΞΌβ ΏΙΌΗ";
+    SlotName[ korean ] = "ΐΞΌβ ΏΙΌΗ, ΖδΐΜΑφ ΊΈ±β";
     SlotName[ turkish ] = "Sayfa gφrόnόmό yazdύrma seηenekleri";
 };
 SfxSlotInfo FN_PREVIEW_ZOOM
@@ -5846,7 +5846,7 @@ SfxSlotInfo FN_PRINT_LAYOUT
     SlotName[ dutch ] = "Afdruklay-out aan/uit";
     SlotName[ chinese_simplified ] = "ΟΤΚΎ/ÒώΘλ ΄ςΣ΅°ζΚ½";
     SlotName[ greek ] = "Διάταξη εκτύπωσης Ναι/Όχι";
-    SlotName[ korean ] = "ΐΞΌβ ΈπΎη ΐΫµΏ/ΗΨΑ¦";
+    SlotName[ korean ] = "ΐΞΌβ ·ΉΐΜΎΖΏτ ΐϋΏλ/ΐϋΏλΗΨΑ¦";
     SlotName[ turkish ] = "Yazdύrma dόzeni aηύk/kapalύ";
     SlotName[ language_user1 ] = " ";
 };
@@ -5872,7 +5872,7 @@ SfxSlotInfo FN_PRINT_PAGEPREVIEW
     SlotName[ dutch ] = "Afdrukvoorbeeld drukken";
     SlotName[ chinese_simplified ] = "΄ςΣ΅Ò³ΓζΚΣΝΌ";
     SlotName[ greek ] = "Εκτύπωση προεπισκόπησης σελίδας";
-    SlotName[ korean ] = "ΐΞΌβ ΖδΐΜΑφ ΊΈ±β";
+    SlotName[ korean ] = "ΖδΐΜΑφ ΊΈ±β, ΐΞΌβ";
     SlotName[ turkish ] = "Sayfa gφrόnόmόnό yazdύr";
     SlotName[ language_user1 ] = " ";
 };
@@ -8485,7 +8485,7 @@ SfxSlotInfo FN_VIEW_META_CHARS
     SlotName[ polish ] = "W³Ήcz/Wy³Ήcz znaki niedrukowalne";
     SlotName[ portuguese_brazilian ] = "ViewControlCodes";
     SlotName[ japanese ] = "•ÒW‹L† µέ/µΜ";
-    SlotName[ korean ] = "ΊρΐΞΌβ Ή®ΐΪ ΏΒ/ΏΐΗΑ";
+    SlotName[ korean ] = "ΊρΐΞΌβ Ή®ΐΪ  ΐϋΏλ/ΐϋΏλΗΨΑ¦";
     SlotName[ chinese_simplified ] = "ΟΤΚΎ/ÒώΘλ ΏΨΦΖ·ϋ";
     SlotName[ chinese_traditional ] = "Εγ¥ά©ΞΑτ¤J±±¨ξ²ΕΈΉ";
     SlotName[ turkish ] = "Denetim karakterleri";
