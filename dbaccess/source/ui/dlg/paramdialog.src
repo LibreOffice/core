@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:32:27 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,14 @@ ModalDialog DLG_PARAMETERS
         Text [ ENGLISH ] = "~Parameters";
         Text[ english_us ] = "~Parameters";
         Text[ portuguese ] = "~Parâmetros";
-        Text[ russian ] = "~Ïàğàìåòğ";
-        Text[ greek ] = "ĞáñÜìåôñïé";
+        Text[ russian ] = "~Ïàğàìåòğû";
+        Text[ greek ] = "~ĞáñÜìåôñïé";
         Text[ dutch ] = "~Parameters";
         Text[ french ] = "~Paramètres";
         Text[ spanish ] = "~Parámetros";
         Text[ italian ] = "~Parametri";
         Text[ danish ] = "Parametre";
-        Text[ swedish ] = "Parametrar";
+        Text[ swedish ] = "~Parametrar";
         Text[ polish ] = "Parametr";
         Text[ portuguese_brazilian ] = "~Parameters";
         Text[ japanese ] = "Êß×Ò°À(~P)";
@@ -156,7 +156,7 @@ ModalDialog DLG_PARAMETERS
         Text[ dutch ] = "~volgende";
         Text[ french ] = "~suivant";
         Text[ spanish ] = "~siguiente";
-        Text[ italian ] = "Successivo";
+        Text[ italian ] = "Successi~vo";
         Text[ danish ] = "næste";
         Text[ swedish ] = "~nästa";
         Text[ polish ] = "~nastêpny";
@@ -187,19 +187,19 @@ ModalDialog DLG_PARAMETERS
         TabStop = TRUE ;
     };
     Text [ ENGLISH ] = "Parameter input" ;
-    Text [ english_us ] = "Parameter input" ;
+    Text [ english_us ] = "Parameter Input" ;
     Text [ portuguese_brazilian ] = "Eingabe des Parameterwertes" ;
-    Text [ swedish ] = "Ange parametervärde" ;
+    Text [ swedish ] = "Parameterinmatning" ;
     Text [ danish ] = "Parameter-input" ;
     Text [ italian ] = "Specifica parametro" ;
     Text [ spanish ] = "Entrada de parámetro" ;
     Text [ french ] = "Saisie de paramètre" ;
     Text [ dutch ] = "Parameter aangeven" ;
-    Text [ portuguese ] = "Entrada de parâmetro" ;
+    Text [ portuguese ] = "Entrada de parâmetros" ;
     Text[ chinese_simplified ] = "ÊäÈë²ÎÊıÖµ";
     Text[ russian ] = "Ââîä ïàğàìåòğà";
     Text[ polish ] = "Wpisanie parametru";
-    Text[ japanese ] = "Êß×Ò°À°‚Ìw’è";
+    Text[ japanese ] = "Êß×Ò°À‚Ì“ü—Í";
     Text[ chinese_traditional ] = "¿é¤J°Ñ¼Æ­È";
     Text[ arabic ] = "ÅÏÎÇá ÇáãÚáãÉ";
     Text[ greek ] = "ÅéóáãùãŞ ğáñáìİôñùí";
@@ -213,19 +213,19 @@ ModalDialog DLG_PARAMETERS
         Text [ english_us ] = "The entry could not be converted to a valid value for the \"$name$\"column";
         Text[ portuguese ] = "Foi impossível converter a entrada indicada num valor válido para a coluna \"$name$\".";
         Text[ russian ] = "Ïğåîáğàçîâàòü ââîä â äîïóñòèìîå çíà÷åíèå äëÿ êîëîíêè \"$name$\" íåâîçìîæíî.";
-        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé ìåôáôñïğŞ ôçò åéóáãùãŞò óå ìéá İãêõñç ôéìŞ ãéá ôçí óôŞëç \"$value$\".";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé ç ìåôáôñïğŞ ôçò åéóáãùãŞò óå ìéá İãêõñç ôéìŞ ãéá ôçí óôŞëç \"$name$\".";
         Text[ dutch ] = "De ingevoerde gegevens konden niet worden geconverteerd in een geldige waarde voor de kolom \"$name$\".";
         Text[ french ] = "Impossible de convertir la saisie en une valeur correcte pour la colonne \"$name$\".";
         Text[ spanish ] = "La entrada no se pudo convertir en un valor válido para la columna \"$name$\".";
-        Text[ italian ] = "Non è stato possibile convertire la voce in un valore valido per la colonna \"$name$\".";
+        Text[ italian ] = "Impossibile convertire la voce in un valore valido per la colonna \"$name$\".";
         Text[ danish ] = "Det var ikke muligt at konvertere inputtet til en gyldig værdi for kolonne \"$name$\".";
         Text[ swedish ] = "Inmatningen kunde inte omvandlas till ett giltigt värde för kolumnen \"$name$\".";
         Text[ polish ] = "Nie mo¿na by³o zamieniæ wpisu na wa¿n¹ wartoœæ kolumny \"$name$\".";
         Text[ portuguese_brazilian ] = "The given input could no be converted into a valid value for column \"$value$\".";
-        Text[ japanese ] = "“ü—Í€–Ú‚Í—ñ<$name$>‚Ì—LŒø‚È’l‚É•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ japanese ] = "“ü—Í’l‚Í <$name$> —ñ‚Å—LŒø‚È’l‚É•ÏŠ·‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
         Text[ korean ] = "ÀÔ·Â »çÇ×ÀÌ ¿­\"$name$\"¿¡ À¯È¿ÇÑ °ªÀ¸·Î º¯È¯µÇÁö ¸øÇß½À´Ï´Ù.";
         Text[ chinese_simplified ] = "ÊäÈëµÄÄÚÈİÎŞ·¨×ª»»³ÉÒ»¸öÓÃÓÚÁĞ\"$value$\"µÄÓĞĞ§ÊıÖµ¡£";
-        Text[ chinese_traditional ] = "¿é¤J­ÈµLªkÂà´«¦¨Äæ\"$name$\" ªº¦³®Ä­È¡C";
+        Text[ chinese_traditional ] = "³o­Ó¿é¤J­ÈµLªkÂà´«¦¨Äæ ¡§$name$¡¨ ªº¦³®Ä­È¡C";
         Text[ arabic ] = "ÊÚĞÑ ÊÍæíá ÇáÅÏÎÇá Åáì ŞíãÉ ÕÇáÍÉ ááÚãæÏ \"$name$\".";
         Text[ turkish ] = "Giriş, \"$name$\" sütunu için geçerli bir değere dönüştürülemedi.";
     };
@@ -234,6 +234,9 @@ ModalDialog DLG_PARAMETERS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/11/09 12:32:27  kz
+ *  Merge SRC612: 09.11.00 - 13:32:04 (NoBranch)
+ *
  *  Revision 1.1  2000/10/26 18:07:04  fs
  *  initial checkin - parameter dialog
  *
