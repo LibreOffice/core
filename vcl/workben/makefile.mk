@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2001-06-26 12:57:04 $
+#   last change: $Author: obo $ $Date: 2001-06-27 08:35:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,6 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(VCLLIB)			\
                 $(TOOLSLIB) 		\
                 $(SALLIB)			\
-                $(SALHELPERLIB)			\
                 $(VOSLIB)			\
                 $(SOTLIB)			\
                 $(SVLIB)
