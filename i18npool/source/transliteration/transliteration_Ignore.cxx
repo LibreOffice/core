@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_Ignore.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:06:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 
 #include <transliteration_Ignore.hxx>
 
-using namespace drafts::com::sun::star::i18n;
 using namespace com::sun::star::uno;
 using namespace rtl;
 
