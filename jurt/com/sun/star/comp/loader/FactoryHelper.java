@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FactoryHelper.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-14 11:54:57 $
+ *  last change: $Author: jl $ $Date: 2002-09-18 09:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,12 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XSingleComponentFactory;
+import com.sun.star.lang.XTypeProvider;
 
 import com.sun.star.registry.XRegistryKey;
 
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.Type;
 
 
 /**
@@ -83,7 +85,7 @@ import com.sun.star.uno.UnoRuntime;
  * This class has default implementations for <code>getServiceFactory</code>
  * and <code>writeRegistryServiceInfo</code>.
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2001-06-14 11:54:57 $
+ * @version     $Revision: 1.6 $ $ $Date: 2002-09-18 09:59:02 $
  * @author      Kay Ramme
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
@@ -94,7 +96,8 @@ import com.sun.star.uno.UnoRuntime;
 public class FactoryHelper {
     // the factory
     static protected class Factory
-        implements XSingleServiceFactory, XSingleComponentFactory, XServiceInfo {
+        implements XSingleServiceFactory, XSingleComponentFactory, XServiceInfo,
+        XTypeProvider {
         protected static Class __objectArray;
 
         static {
@@ -114,6 +117,9 @@ public class FactoryHelper {
         protected Constructor          _constructor;
         protected String               _implName;
         protected String               _serviceName;
+        // keeps the Id for XTypeProvider
+        protected static Object _mutex= new Object();
+        private static byte[] _implementationId;
 
         protected Factory(Class implClass,
                           String serviceName,
@@ -419,6 +425,44 @@ public class FactoryHelper {
                 found = services[i].equals(serviceName);
 
             return found;
+        }
+
+        //XTypeProvider
+        public byte[] getImplementationId()
+        {
+            synchronized (_mutex)
+            {
+                if (_implementationId == null)
+                {
+                    int hash = hashCode();
+                    String sName= getClass().getName();
+                    byte[] arName= sName.getBytes();
+                    int nNameLength= arName.length;
+
+                    _implementationId= new byte[ 4 + nNameLength];
+                    _implementationId[0]= (byte)(hash & 0xff);
+                    _implementationId[1]= (byte)((hash >>> 8) & 0xff);
+                    _implementationId[2]= (byte)((hash >>> 16) & 0xff);
+                    _implementationId[3]= (byte)((hash >>>24) & 0xff);
+
+                    for (int i= 0; i < nNameLength; i++)
+                    {
+                        _implementationId[4 + i]= arName[i];
+                    }
+                }
+            }
+            return _implementationId;
+        }
+        //XTypeProvider
+        public com.sun.star.uno.Type[] getTypes()
+        {
+            Type[] t = new Type[] {
+                new Type(XSingleServiceFactory.class),
+                new Type(XSingleComponentFactory.class),
+                new Type(XServiceInfo.class),
+                new Type(XTypeProvider.class)
+            };
+            return t;
         }
 
     }
