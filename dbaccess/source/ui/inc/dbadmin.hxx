@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:49:58 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 12:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,6 +487,7 @@ protected:
 //= ODbAdminDialog
 //=========================================================================
 class OGeneralPage;
+struct OPageSettings;
 /** tab dialog for administrating the office wide registered data sources
 */
 class ODbAdminDialog : public SfxTabDialog
@@ -515,8 +516,11 @@ private:
     sal_Bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
 
     sal_Int32               m_nCurrentDeletedDataSource;
+    sal_Int16               m_nPostApplyPage;           // the page to be activated after an async apply operation
+    const OPageSettings*    m_pPostApplyPageSettings;   // the page data to pass to this page
+
 private:
-    ODatasourceSelector m_aSelector;
+    ODatasourceSelector     m_aSelector;
 
 public:
     /** ctor. The itemset given should have been created by <method>createItemSet</method> and should be destroyed
@@ -545,17 +549,27 @@ public:
     */
     static void         destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults);
 
-    /// translate the current dialog SfxItems into driver relevant PropertyValues
+    /** translate the current dialog SfxItems into driver relevant PropertyValues
+        @see successfullyConnected
+    */
     sal_Bool    getCurrentSettings(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDriverParams);
+
+    /** to be called if the settings got from getCurrentSettings have been used for successfully connecting
+        @see getCurrentSettings
+    */
+    void        successfullyConnected();
 
     /// clear the password in the current data source's item set
     void        clearPassword();
 
     /// apply the current changes, return sal_True if successfull
-    void        applyChangesAsync(sal_Int32 _nOnErrorPageId);
+    void        applyChangesAsync(const OPageSettings* _pUseTheseSettings = NULL);
 
     /// return <TRUE/> if in the current state, the changes can be saved (i.e. they produce no conflict)
-    sal_Bool    isApplyable();
+    sal_Bool    isApplyable() const;
+
+    /// return <TRUE/> if the currently selected data (if any) source is modified
+    sal_Bool    isCurrentModified() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const { return m_xORB; }
 
@@ -657,6 +671,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/04/26 11:49:58  fs
+ *  file is alive, again - added support for data source associated bookmarks
+ *
  *  Revision 1.14  2001/03/29 07:44:46  fs
  *  #84826# +clearPassword
  *
