@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:56:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@
 #include <unotools/charclass.hxx>
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>        // pSwpHints, Ausgabeoperator
 #endif
@@ -1782,7 +1782,7 @@ void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
                     default: ASSERT( sal_False, ": unknown InterLineSpaceRule" );
                 }
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         KSHORT nDummy = nLineHeight + 1;
 #endif
 
