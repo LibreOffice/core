@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-07 07:50:43 $
+ *  last change: $Author: mba $ $Date: 2000-11-08 18:22:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,15 +91,12 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#ifndef _SV_SYSTEM_HXX
-#include <vcl/system.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
+
+#include <vos/process.hxx>
+#include <unotools/localfilehelper.hxx>
 
 using namespace osl;
 using namespace utl;
@@ -464,6 +461,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
                aReplacement = OUString::valueOf( (sal_uInt16)m_eLanguageType );
         }
         else
+/*
         // -------------------------------------------------------------------------------------------------------------------
         // $(syslangid) - LanguageType of the system as string (for example "1031")
         if ( SUBSTITUTE_SYSLANGID == aSubString )
@@ -472,6 +470,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
             aReplacement = OUString::valueOf( (sal_uInt16)System::GetLanguage() );
         }
         else
+*/
         // -------------------------------------------------------------------------------------------------------------------
         // $(vlang) - language dependent directory with english language name as directory name
         if ( SUBSTITUTE_VLANG == aSubString )
@@ -688,22 +687,20 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
 // -----------------------------------------------------------------------
 
 SvtPathOptions_Impl::SvtPathOptions_Impl() :
-
     ConfigItem( ASCII_STR("Office.Common/Path") )
-
 {
     ConfigManager* pCfgMgr = ConfigManager::GetConfigManager();
     Any aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::OFFICEINSTALL );
     OUString aOfficePath;
     if ( aAny >>= aOfficePath )
     {
-        INetURLObject aOfficePathObj( aOfficePath, INET_PROT_FILE );
-        aOfficePathObj.removeFinalSlash();
-        m_aInstPath = aOfficePathObj.getFSysPath( INetURLObject::FSYS_DETECT );
-        m_aInstURL = aOfficePathObj.GetMainURL();
-        aOfficePathObj.insertName( ASCII_STR( "program" ) );
-        m_aProgPath = aOfficePathObj.getFSysPath( INetURLObject::FSYS_DETECT );
-        m_aProgURL = aOfficePathObj.GetMainURL();
+        OUString aTmp;
+        FileBase::getSystemPathFromNormalizedPath( aOfficePath, aTmp );
+        if ( aTmp.getLength() )
+            m_aInstPath = aTmp;
+        else
+            m_aInstPath = aOfficePath;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aInstPath, m_aInstURL );
     }
     else
     {
@@ -714,14 +711,30 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     OUString aUserPath;
     if ( aAny >>= aUserPath )
     {
-        INetURLObject aUserPathObj( aUserPath, INET_PROT_FILE );
-        aUserPathObj.removeFinalSlash();
-        m_aUserPath = aUserPathObj.getFSysPath( INetURLObject::FSYS_DETECT );
-        m_aUserURL = aUserPathObj.GetMainURL();
+        OUString aTmp;
+        FileBase::getSystemPathFromNormalizedPath( aUserPath, aTmp );
+        if ( aTmp.getLength() )
+            m_aUserPath = aTmp;
+        else
+            m_aUserPath = aOfficePath;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aUserPath, m_aUserURL );
     }
     else
     {
         DBG_ERRORFILE( "wrong any type" );
+    }
+
+    OUString aProgName;
+    ::vos::OStartupInfo aInfo;
+    aInfo.getExecutableFile( aProgName );
+    sal_Int32 lastIndex = aProgName.lastIndexOf('/');
+    if ( lastIndex )
+    {
+        m_aProgPath = aProgName.copy(0, lastIndex + 1);
+        OUString aTmp;
+        FileBase::getSystemPathFromNormalizedPath( m_aProgPath, aTmp );
+        m_aProgPath = aTmp;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aProgPath, m_aProgURL );
     }
 
     m_eLanguageType = LANGUAGE_ENGLISH_US;
