@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-17 13:56:26 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 13:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1108,8 +1108,9 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
     static ::rtl::OUString sEmpty;
     static ::rtl::OUString sSeparator = ::rtl::OUString::createFromAscii(".");
     _rComposedName = sEmpty;
+    ::rtl::OUString sCatalogSep = _rxMetaData->getCatalogSeparator();
 
-    if (_rCatalog.getLength() && _rxMetaData->isCatalogAtStart() && !_rxMetaData->usesLocalFiles())
+    if (_rCatalog.getLength() && _rxMetaData->isCatalogAtStart() && sCatalogSep.getLength())
     {
         QUOTE(_rComposedName,_rCatalog);
         _rComposedName += _rxMetaData->getCatalogSeparator();
@@ -1126,7 +1127,7 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
         QUOTE(_rComposedName,_rName);
     }
 
-    if (_rCatalog.getLength() && !_rxMetaData->isCatalogAtStart() && !_rxMetaData->usesLocalFiles())
+    if (_rCatalog.getLength() && !_rxMetaData->isCatalogAtStart() && sCatalogSep.getLength())
     {
         _rComposedName += _rxMetaData->getCatalogSeparator();
         QUOTE(_rComposedName,_rCatalog);
@@ -1256,6 +1257,9 @@ void showError(const SQLExceptionInfo& _rInfo,
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/04/17 13:56:26  fs
+ *  corrected getConnection
+ *
  *  Revision 1.20  2001/04/12 09:49:49  fs
  *  #84852# calcConnection: use a OAutoConnectionDisposer when setting the rowsets connection
  *
