@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewobjectcontact.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-13 08:55:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,11 +439,23 @@ namespace sdr
                 }
                 else
                 {
-                    // invalidate last paint area
-                    GetObjectContact().InvalidatePartOfView(GetPaintedRectangle());
+                    // #i42815#
+                    if(GetObjectContact().IsAreaVisible(GetPaintedRectangle()))
+                    {
+                        // invalidate last paint area
+                        GetObjectContact().InvalidatePartOfView(GetPaintedRectangle());
 
-                    // change state to invalidated
-                    mbIsInvalidated = sal_True;
+                        // change state to invalidated
+                        mbIsInvalidated = sal_True;
+                    }
+                    else
+                    {
+                        // #i42815#
+                        // to-be-invalidated area is not visible in view, so object is painted
+                        // but out of display region, e.g. scrolled out without redraw. In that
+                        // case, give redraw a chance by checking if its new position gets visible
+                        GetObjectContact().ObjectGettingPotentiallyVisible(*this);
+                    }
                 }
             }
             else
