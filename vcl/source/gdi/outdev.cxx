@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-29 10:59:45 $
+ *  last change: $Author: thb $ $Date: 2002-11-19 18:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,13 +428,16 @@ OutputDevice::OutputDevice() :
     mnTextOffX          = 0;
     mnTextOffY          = 0;
     mnOutOffOrigX       = 0;
+    mnOutOffLogicX      = 0;
     mnOutOffOrigY       = 0;
+    mnOutOffLogicY      = 0;
     mnEmphasisAscent    = 0;
     mnEmphasisDescent   = 0;
     mnDrawMode          = 0;
     mnTextLayoutMode    = 0;
     meOutDevType        = OUTDEV_DONTKNOW;
     mbMap               = FALSE;
+    mbMapIsDefault      = TRUE;
     mbClipRegion        = FALSE;
     mbBackground        = FALSE;
     mbOutput            = TRUE;
