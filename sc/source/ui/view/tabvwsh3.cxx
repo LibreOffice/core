@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:28:51 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@
     (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
 #define GET_STRING(nid) ((const SfxStringItem&)pReqArgs->Get(nid)).GetValue()
 #define GET_UINT16(nid) ((const SfxUInt16Item&)pReqArgs->Get(nid)).GetValue()
+#define GET_BOOL(nid)   ((const SfxBoolItem&)pReqArgs->Get(nid)).GetValue()
 #define RECALC_PAGE(pDocSh) ScPrintFunc( pDocSh, GetPrinter(), nCurTab ).UpdatePages()
 
 //------------------------------------------------------------------
@@ -180,8 +181,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     String aPrintStr = GET_STRING( SID_CHANGE_PRINTAREA );
                     String aRowStr   = GET_STRING( FN_PARAM_2 );
                     String aColStr   = GET_STRING( FN_PARAM_3 );
+                    BOOL   bEntire   = GET_BOOL( FN_PARAM_4 );
 
-                    SetPrintRanges( &aPrintStr, &aColStr, &aRowStr, FALSE );
+                    SetPrintRanges( bEntire, &aPrintStr, &aColStr, &aRowStr, FALSE );
 
                     rReq.Done();
                 }
@@ -195,11 +197,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if ( pReqArgs )
                 {
                     String aPrintStr = GET_STRING( SID_DEFINE_PRINTAREA );
-                    SetPrintRanges( &aPrintStr, NULL, NULL, bAdd );
+                    SetPrintRanges( FALSE, &aPrintStr, NULL, NULL, bAdd );
                 }
                 else
                 {
-                    SetPrintRanges( NULL, NULL, NULL, bAdd );       // aus Selektion
+                    SetPrintRanges( FALSE, NULL, NULL, NULL, bAdd );      // aus Selektion
                     rReq.Done();
                 }
             }
@@ -208,7 +210,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_DELETE_PRINTAREA:
             {
                 String aEmpty;
-                SetPrintRanges( &aEmpty, NULL, NULL, FALSE );       // Druckbereich loeschen
+                SetPrintRanges( FALSE, &aEmpty, NULL, NULL, FALSE );        // Druckbereich loeschen
                 rReq.Done();
             }
             break;
