@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofpageview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:40:05 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,10 +490,6 @@ namespace sdr
                 DoVisualizeEnteredGroup()
                 && !rDisplayInfo.OutputToPrinter());
 
-            // Always save original DrawMode, it's used by the renderers
-            // when they need to paint into a bitmap.
-            rDisplayInfo.SaveOriginalDrawMode();
-
             // Visualize entered groups: Set to ghosted as default
             // start. Do this only for the DrawPage, not for MasterPages
             if(bVisualizeEnteredGroup)
@@ -526,7 +522,7 @@ namespace sdr
             // Visualize entered groups: Reset to original DrawMode
             if(bVisualizeEnteredGroup)
             {
-                rDisplayInfo.RestoreOriginalDrawMode();
+                rDisplayInfo.ClearGhostedDrawMode();
             }
         }
 
@@ -606,6 +602,13 @@ namespace sdr
         {
             SdrView& rView = GetPageViewWindow().GetPageView().GetView();
             return rView.IsSwapAsynchron();
+        }
+
+        // check if buffering of MasterPages is allowed. Default is sal_False.
+        sal_Bool ObjectContactOfPageView::IsMasterPageBufferingAllowed() const
+        {
+            SdrView& rView = GetPageViewWindow().GetPageView().GetView();
+            return rView.IsMasterPagePaintCaching();
         }
     } // end of namespace contact
 } // end of namespace sdr

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontact.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:40:22 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,32 @@ namespace sdr
 {
     namespace contact
     {
+        // Create a Object-Specific ViewObjectContact, set ViewContact and
+        // ObjectContact. Always needs to return something. Default is to create
+        // a standard ViewObjectContact containing the given ObjectContact and *this
+        ViewObjectContact& ViewContact::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
+        {
+            ViewObjectContact* pRetval = new ViewObjectContact(rObjectContact, *this);
+            DBG_ASSERT(pRetval, "ViewContact::CreateObjectSpecificViewObjectContact() failed (!)");
+
+            return *pRetval;
+        }
+
         ViewContact::ViewContact()
         :   mpAnimationInfo(0L),
             mpViewObjectContactRedirector(0L),
             mbPaintRectangleValid(sal_False)
         {
+        }
+
+        // method to create a AnimationInfo. Needs to give a result if
+        // SupportsAnimation() is overloaded and returns sal_True. Default is to
+        // pop up an assert since it's always an error if this gets called
+        sdr::animation::AnimationInfo* ViewContact::CreateAnimationInfo()
+        {
+            // This call can only be an error ATM.
+            DBG_ERROR("ViewContact::CreateAnimationInfo(): If SupportsAnimation() can give sal_True, this needs to be implemented (!)");
+            return 0L;
         }
 
         // Methods to react on start getting viewed or stop getting
@@ -129,12 +150,6 @@ namespace sdr
 
             // Take care for clean shutdown
             DeleteAnimationInfo();
-        }
-
-        // To transport the MasterPage Layer info, ATM use a virtual method at ViewContacts
-        void ViewContact::SetVisibleLayers(const SetOfByte& rSet)
-        {
-            // normal object does not need this
         }
 
         // get a Object-specific ViewObjectContact for a specific
@@ -282,6 +297,28 @@ namespace sdr
             // Default implementation has nothing to paint
         }
 
+        // Access to possible sub-hierarchy and parent. GetObjectCount() default is 0L
+        // and GetViewContact default pops up an assert since it's an error if
+        // GetObjectCount has a result != 0 and it's not overloaded.
+        sal_uInt32 ViewContact::GetObjectCount() const
+        {
+            // no sub-objects
+            return 0L;
+        }
+
+        ViewContact& ViewContact::GetViewContact(sal_uInt32 nIndex) const
+        {
+            // call would be an error
+            DBG_ERROR("ViewContact::GetViewContact: This call needs to be overloaded when GetObjectCount() can return results != 0 (!)");
+            return (ViewContact&)(*this);
+        }
+
+        ViewContact* ViewContact::GetParentContact() const
+        {
+            // default has no parent
+            return 0L;
+        }
+
         // React on removal of the object of this ViewContact,
         // DrawHierarchy needs to be changed
         void ViewContact::ActionRemoved()
@@ -314,19 +351,13 @@ namespace sdr
         // DrawHierarchy has changed
         void ViewContact::ActionInserted()
         {
-            // get the potential parent contacts of this instered object.
-            ViewContactVector aVCVector;
+            ViewContact* pParentContact = GetParentContact();
 
-            if(GetParentContacts(aVCVector))
+            if(pParentContact)
             {
-                for(ViewContactVector::iterator aFindResult = aVCVector.begin(); aFindResult != aVCVector.end(); aFindResult++)
-                {
-                    ViewContact* pParentContact = *aFindResult;
-
-                    // If it has a parent in DrawHierarchy,
-                    // tell parent about the DrawHierarchy change.
-                    pParentContact->ActionChildInserted(*this);
-                }
+                // If it has a parent in DrawHierarchy,
+                // tell parent about the DrawHierarchy change.
+                pParentContact->ActionChildInserted(*this);
             }
         }
 
@@ -383,6 +414,13 @@ namespace sdr
 
             // also invalidate the PaintRectangle, this may have changed now, too.
             InvalidatePaintRectangle();
+        }
+
+        // Does this ViewContact support animation? Default is sal_False
+        sal_Bool ViewContact::SupportsAnimation() const
+        {
+            // No.
+            return sal_False;
         }
 
         // check for animation features. This may start or stop animations. Should
