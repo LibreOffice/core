@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-17 13:52:25 $
+ *  last change: $Author: os $ $Date: 2001-04-19 14:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ class SwDoc;
  *
  ******************************************************************************/
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-    SAL_CALL SwXAutoTextContainer_CreateInstance(
+    SAL_CALL SwXAutoTextContainer_createInstance(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
 
 class SwXAutoTextContainer : public cppu::WeakImplHelper3
