@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_interface.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:11:27 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
     // BASE CLASSES
 #include <ary/idl/i_ce.hxx>
     // COMPONENTS
+#include <ary/idl/i_comrela.hxx>
     // PARAMETERS
 #include <ary/stdconstiter.hxx>
 
@@ -91,21 +92,23 @@ class Interface : public CodeEntity
   public:
     enum E_ClassId { class_id = 2001 };
 
-
     // LIFECYCLE
                         Interface(
                             const String &      i_sName,
-                            Ce_id               i_nOwner,
-                            Type_id             i_nBase );
+                            Ce_id               i_nOwner );
                         ~Interface();
     // INQUIRY
-    Type_id             Base() const;
+    bool                HasBase() const;
 
     // ACCESS
     void                Add_Function(
                             Ce_id               i_nId );
     void                Add_Attribute(
                             Ce_id               i_nId );
+    void                Add_Base(
+                            Type_id             i_nInterface,
+                            DYN info::CodeInformation *
+                                                pass_dpDocu );
 
   private:
     // Interface ary::RepositoryEntity:
@@ -119,16 +122,16 @@ class Interface : public CodeEntity
     virtual E_SightLevel    inq_SightLevel() const;
 
     // Local
-    typedef std::vector<Ce_id>          MemberList;
+    typedef std::vector< CommentedRelation >    RelationList;
+    typedef std::vector<Ce_id>                  MemberList;
     friend struct ifc_interface::attr;
 
     // DATA
     String              sName;
     Ce_id               nOwner;
-    Type_id             nBase;
+    RelationList        aBases;
     MemberList          aFunctions;
     MemberList          aAttributes;
-
     Dyn<Interface_2s>   p2s;
 };
 
@@ -136,17 +139,19 @@ class Interface : public CodeEntity
 
 // IMPLEMENTATION
 
-inline Type_id
-Interface::Base() const
-    { return nBase; }
-
+inline bool
+Interface::HasBase() const
+    { return aBases.size() > 0; }
 inline void
 Interface::Add_Function( Ce_id i_nId )
     { aFunctions.push_back(i_nId); }
 inline void
 Interface::Add_Attribute( Ce_id i_nId )
     { aAttributes.push_back(i_nId); }
-
+inline void
+Interface::Add_Base( Type_id                     i_nInterface,
+                     DYN info::CodeInformation * pass_dpDocu )
+    { aBases.push_back( CommentedRelation(i_nInterface, pass_dpDocu) ); }
 
 }   // namespace idl
 }   // namespace ary

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_function.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:11:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,11 @@ namespace idl
 */
 
 /** @resp
-    Represents an IDL module.
+    Represents an IDL function.
+
+    @descr
+    Special case constructor:
+    Constructors have return type "0".
 */
 class Function : public CodeEntity
 {
@@ -96,13 +100,18 @@ class Function : public CodeEntity
     typedef std::vector< Type_id >      ExceptionList;
 
     // LIFECYCLE
+    /// Normal function
                         Function(
                             const String &      i_sName,
                             Ce_id               i_nOwner,
                             Ce_id               i_nNameRoom,
                             Type_id             i_nReturnType,
-                            bool                i_bConst,
                             bool                i_bOneWay );
+    /// Constructor
+                        Function(
+                            const String &      i_sName,
+                            Ce_id               i_nOwner,
+                            Ce_id               i_nNameRoom );
                         ~Function();
 
     // OPERATIONS
@@ -111,6 +120,8 @@ class Function : public CodeEntity
                             Type_id             i_nType,
                             E_ParameterDirection
                                                 i_eDirection );
+    /// The function's parameter list ends with the ellipse "..." .
+    void                Set_Ellipse();
     void                Add_Exception(
                             Type_id             i_nException );
 
@@ -119,8 +130,8 @@ class Function : public CodeEntity
     const ParamList &   Parameters() const      { return aParameters; }
     const ExceptionList &
                         Exceptions() const      { return aExceptions; }
-    bool                IsConst() const;
     bool                IsOneway() const;
+    bool                HasEllipse() const      { return bEllipse; }
 
   private:
     // Interface ary::RepositoryEntity
@@ -144,8 +155,8 @@ class Function : public CodeEntity
     Type_id             nReturnType;
     ParamList           aParameters;
     ExceptionList       aExceptions;
-    bool                bConst;
     bool                bOneWay;
+    bool                bEllipse;
 };
 
 
@@ -161,6 +172,12 @@ Function::Add_Parameter( const String &         i_sName,
 }
 
 inline void
+Function::Set_Ellipse()
+{
+    bEllipse = true;
+}
+
+inline void
 Function::Add_Exception( Type_id i_nException )
 {
     aExceptions.push_back(i_nException);
@@ -169,10 +186,6 @@ Function::Add_Exception( Type_id i_nException )
 inline Type_id
 Function::ReturnType() const
     { return nReturnType; }
-
-inline bool
-Function::IsConst() const
-    { return bConst; }
 
 inline bool
 Function::IsOneway() const

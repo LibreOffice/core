@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_attribute.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:11:04 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,14 +94,22 @@ class Attribute : public CodeEntity
     // LIFECYCLE
                         Attribute(
                             const String &      i_sName,
-                            Ce_id               i_nService,
+                            Ce_id               i_nInterface,
                             Ce_id               i_nModule,
                             Type_id             i_nType,
-                            bool                i_bReadonly );
+                            bool                i_bReadonly,
+                            bool                i_bBound );
                         ~Attribute();
+    // OPERATIONS
+    void                Add_GetException(
+                            Type_id             i_nException );
+    void                Add_SetException(
+                            Type_id             i_nException );
+
     // INQUIRY
     Type_id             Type() const;
     bool                IsReadonly() const;
+    bool                IsBound() const;
 
   private:
     // Interface ary::RepositoryEntity
@@ -114,6 +122,8 @@ class Attribute : public CodeEntity
     virtual Ce_id           inq_Owner() const;
     virtual E_SightLevel    inq_SightLevel() const;
 
+    // Local
+    typedef std::vector< Type_id >      ExceptionList;
     friend struct ifc_attribute::attr;
 
     // DATA
@@ -122,12 +132,23 @@ class Attribute : public CodeEntity
     Ce_id               nNameRoom;
 
     Type_id             nType;
+    ExceptionList       aGetExceptions;
+    ExceptionList       aSetExceptions;
     bool                bReadonly;
+    bool                bBound;
 };
 
 
 
 // IMPLEMENTATION
+
+inline void
+Attribute::Add_GetException( Type_id i_nException )
+    { aGetExceptions.push_back(i_nException); }
+
+inline void
+Attribute::Add_SetException( Type_id i_nException )
+    { aSetExceptions.push_back(i_nException); }
 
 inline Type_id
 Attribute::Type() const
@@ -136,6 +157,10 @@ Attribute::Type() const
 inline bool
 Attribute::IsReadonly() const
     { return bReadonly; }
+
+inline bool
+Attribute::IsBound() const
+    { return bBound; }
 
 }   // namespace idl
 }   // namespace ary
