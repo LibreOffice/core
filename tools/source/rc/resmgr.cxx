@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-31 12:08:35 $
+ *  last change: $Author: nf $ $Date: 2002-09-20 07:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1190,7 +1190,7 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
             case LANGUAGE_RUSSIAN:
                 return "07";
             case LANGUAGE_SLOVAK:
-                return "04";
+                return "43";
             case LANGUAGE_GREEK:
                 return "30";
             case LANGUAGE_TURKISH:
