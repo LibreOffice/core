@@ -2,9 +2,9 @@
  *
  *  $RCSfile: path_helper.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-12 14:57:04 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,60 @@
 #ifndef _PATH_HELPER_H_
 #define _PATH_HELPER_H_
 
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
 
-/********************************************/
-/* Forward declaration                      */
-/********************************************/
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.h>
+#endif
 
-oslFileError SAL_CALL _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **pustrPath, sal_Bool bAllowRelative );
+#ifndef _OSL_FILE_H_
+#include <osl/file.h>
+#endif
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+/*******************************************************************
+ _osl_getSystemPathFromFileURL
+ ******************************************************************/
+
+oslFileError SAL_CALL _osl_getSystemPathFromFileURL(
+    rtl_uString *strURL,
+    rtl_uString **pustrPath,
+    sal_Bool bAllowRelative );
+
+/*******************************************************************
+ osl_systemPathEnsureSeparator
+ Adds a trailing path separator to the given system path if not
+ already there and if the path is not the root path or a logical
+ drive alone
+ ******************************************************************/
+
+void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath);
+
+/*******************************************************************
+ osl_systemPathRemoveSeparator
+ Removes the last separator from the given system path if any and
+ if the path is not the root path '\'
+ ******************************************************************/
+
+void SAL_CALL osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath);
+
+/*******************************************************************
+ osl_is_logical_drive_pattern
+ Returns whether a given path is only a logical drive pattern or not.
+ A logical drive pattern is something like "a:\", "c:\".
+ No logical drive pattern is something like "c:\test"
+ ******************************************************************/
+
+sal_Int32 osl_systemPathIsLogicalDrivePattern(/*in*/ const rtl_uString* pustrPath);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
