@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:39:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #define SC_PVLAYDLG_HXX
 
 #include <vector>
+#include <memory>
 #include <boost/shared_ptr.hpp>
 
 #ifndef _LSTBOX_HXX //autogen
@@ -78,8 +79,8 @@
 #include <vcl/morebtn.hxx>
 #endif
 
-#ifndef SC_SCGLOB_HXX
-#include "global.hxx"
+#ifndef SC_PIVOT_HXX
+#include "pivot.hxx"
 #endif
 #ifndef SC_ANYREFDG_HXX
 #include "anyrefdg.hxx"
@@ -114,7 +115,7 @@
 class ScViewData;
 class ScDocument;
 class ScRangeData;
-struct FuncData;
+struct ScDPFuncData;
 class ScDPObject;
 
 //============================================================================
@@ -128,7 +129,7 @@ public:
                                 SfxBindings* pB,
                                 SfxChildWindow* pCW,
                                 Window* pParent,
-                                const ScDPObject* pDPObject );
+                                const ScDPObject& rDPObject );
     virtual                 ~ScDPLayoutDlg();
 
     virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc );
@@ -149,8 +150,9 @@ protected:
     virtual void            Deactivate();
 
 private:
-    typedef boost::shared_ptr< FuncData >   FuncDataRef;
-    typedef std::vector< FuncDataRef >      FuncDataVec;
+    typedef boost::shared_ptr< ScDPFuncData >   ScDPFuncDataRef;
+    typedef std::vector< ScDPFuncDataRef >      ScDPFuncDataVec;
+    typedef std::auto_ptr< ScDPObject >         ScDPObjectPtr;
 
     FixedLine               aFlLayout;
     FixedText               aFtPage;
@@ -196,21 +198,18 @@ private:
     Rectangle               aRectData;
     Rectangle               aRectSelect;
 
-    LabelData**             aLabelDataArr; // (nCol, Feldname, Zahl/Text)
-    size_t                  nLabelCount;
+    ScDPLabelDataVec        aLabelDataArr; // (nCol, Feldname, Zahl/Text)
 
     ScDPFieldType           eLastActiveType;        /// Type of last active area.
     size_t                  nOffset;                /// Offset of first field in TYPE_SELECT area.
 
-    FuncDataVec             aSelectArr;
-    FuncDataVec             aPageArr;
-    FuncDataVec             aColArr;
-    FuncDataVec             aRowArr;
-    FuncDataVec             aDataArr;
+    ScDPFuncDataVec         aSelectArr;
+    ScDPFuncDataVec         aPageArr;
+    ScDPFuncDataVec         aColArr;
+    ScDPFuncDataVec         aRowArr;
+    ScDPFuncDataVec         aDataArr;
 
-    BOOL                    bShowAll[MAX_LABELS];
-
-    ScDPObject*             pDlgDPObject;
+    ScDPObjectPtr           xDlgDPObject;
     ScPivotParam            thePivotData;
     ScViewData*             pViewData;
     ScDocument*             pDoc;
@@ -224,12 +223,12 @@ private:
     void                    InitFocus       ();
     void                    CalcWndSizes    ();
     Point                   DlgPos2WndPos   ( const Point& rPt, Window& rWnd );
-    LabelData*              GetLabelData    ( SCsCOL nCol, size_t* pPos = NULL );
+    ScDPLabelData*          GetLabelData    ( SCsCOL nCol, size_t* pPos = NULL );
     String                  GetLabelString  ( SCsCOL nCol );
     String                  GetFuncString   ( USHORT& rFuncMask, BOOL bIsValue = TRUE );
-    BOOL                    Contains        ( FuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
-    void                    Remove          ( FuncDataVec* pArr, size_t nAt );
-    void                    Insert          ( FuncDataVec* pArr, const FuncData& rFData, size_t nAt );
+    BOOL                    Contains        ( ScDPFuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
+    void                    Remove          ( ScDPFuncDataVec* pArr, size_t nAt );
+    void                    Insert          ( ScDPFuncDataVec* pArr, const ScDPFuncData& rFData, size_t nAt );
 
     void                    AddField        ( size_t nFromIndex,
                                               ScDPFieldType eToType, const Point& rAtPos );
