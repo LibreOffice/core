@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-04 12:30:22 $
+ *  last change: $Author: ka $ $Date: 2001-09-06 09:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include "svdoole2.hxx" // fuer kein OLE im SdrClipboardFormat
 #include "svdorect.hxx"
 #include "svdoedge.hxx" // fuer Konnektoren uebers Clipboard
+#include "svdopage.hxx" // fuer Konnektoren uebers Clipboard
 #include "svdpage.hxx"
 #include "svdpagv.hxx"
 #include "svdtrans.hxx" // Fuer GetMapFactor zum umskalieren bei PasteModel
@@ -722,18 +723,33 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
     ULONG nCloneErrCnt=0;
     ULONG nMarkAnz=aMark.GetMarkCount();
     ULONG nm;
-    for (nm=0; nm<nMarkAnz; nm++) {
-        const SdrMark* pM=aMark.GetMark(nm);
-        const SdrObject* pObj=pM->GetObj();
-        SdrObject* pNeuObj=pObj->Clone(pNeuPag,pNeuMod);
-        if (pNeuObj!=NULL) {
+
+    for (nm=0; nm<nMarkAnz; nm++)
+    {
+        const SdrMark*      pM = aMark.GetMark( nm );
+        const SdrObject*    pObj = pM->GetObj();
+        SdrObject*          pNeuObj;
+
+        if( pObj->ISA( SdrPageObj ) )
+        {
+            // convert SdrPageObj's to a graphic representation, because
+            // virtual connection to referenced page gets lost in new model
+            pNeuObj = new SdrGrafObj( GetObjGraphic( pMod, const_cast< SdrObject* >( pObj ) ), pObj->GetLogicRect() );
+            pNeuObj->SetPage( pNeuPag );
+            pNeuObj->SetModel( pNeuMod );
+        }
+        else
+            pNeuObj = pObj->Clone( pNeuPag, pNeuMod );
+
+        if( pNeuObj )
+        {
             Point aP(pM->GetPageView()->GetOffset());
             if (aP.X()!=0 || aP.Y()!=0) pNeuObj->NbcMove(Size(aP.X(),aP.Y()));
             SdrInsertReason aReason(SDRREASON_VIEWCALL);
             pNeuPag->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
-        } else {
-            nCloneErrCnt++;
         }
+        else
+            nCloneErrCnt++;
     }
     // und nun zu den Konnektoren
     // Die Objekte in pNeuPag werden auf die MarkList abgebildet

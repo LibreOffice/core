@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-02 12:10:24 $
+ *  last change: $Author: ka $ $Date: 2001-09-06 09:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,9 +247,6 @@ void SdrPageObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToPathLineToArea=FALSE;
     rInfo.bCanConvToPolyLineToArea=FALSE;
 }
-
-#define NORELMAPMODE
-
 
 FASTBOOL SdrPageObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
