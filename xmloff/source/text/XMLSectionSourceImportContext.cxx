@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionSourceImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:38 $
+ *  last change: $Author: dvo $ $Date: 2001-04-17 09:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ void XMLSectionSourceImportContext::StartElement(
         rSectionPropertySet->setPropertyValue(sFileLink, aAny);
     }
 
-    if (sLinkRegion.getLength() > 0)
+    if (sSectionName.getLength() > 0)
     {
         aAny <<= sSectionName;
         rSectionPropertySet->setPropertyValue(sLinkRegion, aAny);
