@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-13 17:54:54 $
+ *  last change: $Author: dvo $ $Date: 2001-03-01 15:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,6 @@ sal_uInt32 WriteThroughComponent(
     ASSERT(xComponent.is(), "Need component!");
     ASSERT(NULL != pStreamName, "Need stream name!");
     ASSERT(NULL != pComponentName, "Need component name!");
-    ASSERT(rMediaDesc.getLength() > 0, "Need media descriptor");
 
     Reference< io::XOutputStream > xOutputStream;
     SvStorageStreamRef xDocStream;
@@ -369,11 +368,16 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.16 2001-02-13 17:54:54 dvo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.17 2001-03-01 15:47:53 dvo Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.16  2001/02/13 17:54:54  dvo
+      - changed: in wrtxml.cxx substreams now use common code
+      - added: document classes for global, label, etc. documents
+      - added: support for bSaveLinkedSections flag
+
       Revision 1.15  2001/02/06 15:41:55  dvo
       - added: auto text event ex- and import
 
