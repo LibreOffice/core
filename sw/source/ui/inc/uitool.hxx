@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *  last change: $Author: jp $ $Date: 2001-02-14 09:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ class ListBox;
 class SwDocShell;
 class SwFrmFmt;
 class SwTabCols;
-
+class DateTime;
 
 // Umschalten einer Metric
 void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit);
@@ -135,5 +135,6 @@ USHORT InsertStringSorted(const String& rEntry, ListBox& rToFill, BOOL bHasOffse
 SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,
         SwWrtShell* pSh );
 
+String GetAppLangDateTimeString( const DateTime& );
 
 #endif // _UITOOL_HXX

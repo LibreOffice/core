@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-17 12:09:31 $
+ *  last change: $Author: jp $ $Date: 2001-02-14 09:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _EMBOBJ_HXX //autogen
 #include <so3/embobj.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 
 
@@ -450,7 +453,7 @@ void lcl_FormatPostIt( SwDoc* pDoc, SwPaM& aPam, SwPostItField* pField,
     aStr.AppendAscii(sTmp);
     aStr += pField->GetPar1();
     aStr += ' ';
-    aStr += GetpApp()->GetAppInternational().GetDate( pField->GetDate() );
+    aStr += GetAppLocaleData().getDate( pField->GetDate() );
     pDoc->Insert( aPam, aStr );
 
     pDoc->SplitNode( *aPam.GetPoint() );
@@ -1554,6 +1557,9 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/01/17 12:09:31  jp
+      remove compiler warning
+
       Revision 1.2  2000/10/25 12:03:41  jp
       Spellchecker/Hyphenator are not longer member of the shells
 

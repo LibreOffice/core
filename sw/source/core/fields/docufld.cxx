@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-29 15:05:48 $
+ *  last change: $Author: jp $ $Date: 2001-02-14 09:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,15 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _URLOBJ_HXX //autogen
@@ -1000,15 +1009,26 @@ SwFieldType* SwDocInfoFieldType::Copy() const
     return pType;
 }
 
+void lcl_GetLocalDataWrapper( ULONG nLang,
+                              LocaleDataWrapper **ppAppLocalData,
+                              LocaleDataWrapper **ppLocalData )
+{
+    *ppAppLocalData = &GetAppLocaleData();
+    *ppLocalData = *ppAppLocalData;
+    if( nLang != SvxLocaleToLanguage( (*ppLocalData)->getLocale() ) )
+        *ppLocalData = new LocaleDataWrapper(
+                        ::comphelper::getProcessServiceFactory(),
+                        SvxCreateLocale( nLang ) );
+}
+
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-String SwDocInfoFieldType::Expand(sal_uInt16 nSub, sal_uInt32 nFormat, sal_uInt16 nLang) const
+String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
+                                    sal_uInt16 nLang) const
 {
-    String          aStr;
-    International   aInter( (LanguageType)nLang,
-                            GetpApp()->GetAppInternational().GetFormatLanguage() );
-
+    String aStr;
+    LocaleDataWrapper *pAppLocalData = 0, *pLocalData = 0;
     const SfxDocumentInfo*  pInf = GetDoc()->GetInfo();
 
     sal_uInt16 nExtSub = nSub & 0xff00;
@@ -1016,29 +1036,33 @@ String SwDocInfoFieldType::Expand(sal_uInt16 nSub, sal_uInt32 nFormat, sal_uInt1
 
     switch(nSub)
     {
-        case DI_TITEL:  aStr = pInf->GetTitle();    break;
-        case DI_THEMA:  aStr = pInf->GetTheme();    break;
-        case DI_KEYS:   aStr = pInf->GetKeywords(); break;
-        case DI_COMMENT:aStr = pInf->GetComment();  break;
-        case DI_INFO1:
-        case DI_INFO2:
-        case DI_INFO3:
-        case DI_INFO4:  aStr = pInf->GetUserKey(nSub - DI_INFO1).GetWord();break;
-        case DI_DOCNO:  aStr = String::CreateFromInt32(
-                                    pInf->GetDocumentNumber() );
-                        break;
-        case DI_EDIT:
-            if (!nFormat)
-                aStr = aInter.GetTime( pInf->GetTime(), sal_False, sal_False);
-            else
-            {
-                // Numberformatter anwerfen!
-                double fVal = SwDateTimeField::GetDateTime(GetDoc(), 0, pInf->GetTime());
-                aStr = ExpandValue(fVal, nFormat, nLang);
-            }
-            break;
+    case DI_TITEL:  aStr = pInf->GetTitle();    break;
+    case DI_THEMA:  aStr = pInf->GetTheme();    break;
+    case DI_KEYS:   aStr = pInf->GetKeywords(); break;
+    case DI_COMMENT:aStr = pInf->GetComment();  break;
+    case DI_INFO1:
+    case DI_INFO2:
+    case DI_INFO3:
+    case DI_INFO4:  aStr = pInf->GetUserKey(nSub - DI_INFO1).GetWord();break;
+    case DI_DOCNO:  aStr = String::CreateFromInt32(
+                                                pInf->GetDocumentNumber() );
+                    break;
+    case DI_EDIT:
+        if ( !nFormat )
+        {
+            lcl_GetLocalDataWrapper( nLang, &pAppLocalData, &pLocalData );
+            aStr = pLocalData->getTime( pInf->GetTime(), sal_False, sal_False);
+        }
+        else
+        {
+            // Numberformatter anwerfen!
+            double fVal = SwDateTimeField::GetDateTime( GetDoc(), 0,
+                                                        pInf->GetTime());
+            aStr = ExpandValue(fVal, nFormat, nLang);
+        }
+        break;
 
-        default:
+    default:
         {
             SfxStamp aTmp;
             aTmp = pInf->GetCreated();
@@ -1053,41 +1077,59 @@ String SwDocInfoFieldType::Expand(sal_uInt16 nSub, sal_uInt32 nFormat, sal_uInt1
                     pInf->GetPrinted().GetTime() != aTmp.GetTime() )
                 aTmp = pInf->GetPrinted();
             else
-                return aStr;
+                break;
 
             if (aTmp.IsValid())
             {
                 switch (nExtSub & ~DI_SUB_FIXED)
                 {
-                    case DI_SUB_AUTHOR:
-                        aStr = aTmp.GetName();
-                        break;
+                case DI_SUB_AUTHOR:
+                    aStr = aTmp.GetName();
+                    break;
 
-                    case DI_SUB_TIME:
-                        if (!nFormat)
-                            aStr = aInter.GetTime(aTmp.GetTime(), sal_False, sal_False);
-                        else
-                        {
-                            // Numberformatter anwerfen!
-                            double fVal = SwDateTimeField::GetDateTime(GetDoc(), aTmp.GetTime().GetDate(), aTmp.GetTime().GetTime());
-                            aStr = ExpandValue(fVal, nFormat, nLang);
-                        }
-                        break;
+                case DI_SUB_TIME:
+                    if (!nFormat)
+                    {
+                        lcl_GetLocalDataWrapper( nLang, &pAppLocalData,
+                                                        &pLocalData );
+                        aStr = pLocalData->getTime( aTmp.GetTime(),
+                                                    sal_False, sal_False);
+                    }
+                    else
+                    {
+                        // Numberformatter anwerfen!
+                        double fVal = SwDateTimeField::GetDateTime( GetDoc(),
+                                                    aTmp.GetTime().GetDate(),
+                                                    aTmp.GetTime().GetTime());
+                        aStr = ExpandValue(fVal, nFormat, nLang);
+                    }
+                    break;
 
-                    case DI_SUB_DATE:
-                        if (!nFormat)
-                            aStr = aInter.GetDate(aTmp.GetTime());
-                        else
-                        {
-                            // Numberformatter anwerfen!
-                            double fVal = SwDateTimeField::GetDateTime(GetDoc(), aTmp.GetTime().GetDate(), aTmp.GetTime().GetTime());
-                            aStr = ExpandValue(fVal, nFormat, nLang);
-                        }
-                        break;
+                case DI_SUB_DATE:
+                    if (!nFormat)
+                    {
+                        lcl_GetLocalDataWrapper( nLang, &pAppLocalData,
+                                                 &pLocalData );
+                        aStr = pLocalData->getDate( aTmp.GetTime() );
+                    }
+                    else
+                    {
+                        // Numberformatter anwerfen!
+                        double fVal = SwDateTimeField::GetDateTime( GetDoc(),
+                                                    aTmp.GetTime().GetDate(),
+                                                    aTmp.GetTime().GetTime());
+                        aStr = ExpandValue(fVal, nFormat, nLang);
+                    }
+                    break;
                 }
             }
         }
+        break;
     }
+
+    if( pAppLocalData != pLocalData )
+        delete pLocalData;
+
     return aStr;
 }
 

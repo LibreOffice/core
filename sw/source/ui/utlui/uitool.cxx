@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-28 15:25:03 $
+ *  last change: $Author: jp $ $Date: 2001-02-14 09:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _VCL_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 
 #ifndef _FMTORNT_HXX //autogen
@@ -876,8 +879,22 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,
     return nWidth;
 }
 
+/*------------------------------------------------------------------------*/
+
+String GetAppLangDateTimeString( const DateTime& rDT )
+{
+    LocaleDataWrapper& rAppLclData = GetAppLocaleData();
+    String sRet( rAppLclData.getDate( rDT ));
+    ( sRet += ' ' ) += rAppLclData.getTime( rDT, FALSE, FALSE );
+    return sRet;
+}
+
+
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/09/28 15:25:03  os
+    use of configuration service in view options
+
     Revision 1.1.1.1  2000/09/18 17:14:50  hr
     initial import
 

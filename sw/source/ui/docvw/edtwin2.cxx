@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:41:10 $
+ *  last change: $Author: jp $ $Date: 2001-02-14 09:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,9 @@
 #ifndef _TXTTXMRK_HXX //autogen
 #include <txttxmrk.hxx>
 #endif
+#ifndef _UITOOL_HXX //autogen
+#include <uitool.hxx>
+#endif
 
 #ifndef _DOCVW_HRC
 #include <docvw.hrc>
@@ -189,8 +192,6 @@
 #ifndef _UTLUI_HRC
 #include <utlui.hrc>
 #endif
-
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
 
 /*--------------------------------------------------------------------
     Beschreibung:   KeyEvents
@@ -209,12 +210,11 @@ void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL bBalloon )
 
     if( nResId )
     {
-        const DateTime& rDT = rRedl.GetTimeStamp();
-        const International& rIntl = Application::GetAppInternational();
         rTxt = SW_RESSTR( nResId );
-        (rTxt += C2S(": " )) += rRedl.GetAuthorString();
-        (rTxt += C2S(" - " )) += rIntl.GetDate( rDT );
-        (rTxt += ' ') += rIntl.GetTime( rDT, FALSE, FALSE );
+        rTxt.AppendAscii( RTL_CONSTASCII_STRINGPARAM(": " ));
+        rTxt += rRedl.GetAuthorString();
+        rTxt.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " - " ));
+        rTxt += GetAppLangDateTimeString( rRedl.GetTimeStamp() );
         if( bBalloon && rRedl.GetComment().Len() )
             ( rTxt += '\n' ) += rRedl.GetComment();
     }
@@ -262,7 +262,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             switch( aCntntAtPos.eCntntAtPos )
             {
             case SwContentAtPos::SW_TABLEBOXFML:
-                ( sTxt = C2S("= ")) += ((SwTblBoxFormula*)aCntntAtPos.aFnd.pAttr)->GetFormula();
+                sTxt.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "= " ));
+                sTxt += ((SwTblBoxFormula*)aCntntAtPos.aFnd.pAttr)->GetFormula();
                 break;
 #ifndef PRODUCT
             case SwContentAtPos::SW_TABLEBOXVALUE:
@@ -308,7 +309,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                         GetTOXMark().GetTOXType();
                     if( pTType && pTType->GetTypeName().Len() )
                     {
-                        sTxt.Insert( C2S(": "), 0 );
+                        sTxt.InsertAscii( ": ", 0 );
                         sTxt.Insert( pTType->GetTypeName(), 0 );
                     }
                 }
@@ -317,7 +318,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 if(aCntntAtPos.aFnd.pAttr)
                 {
                     sTxt = SW_RES(STR_CONTENT_TYPE_SINGLE_REFERENCE);
-                    sTxt += C2S(": ");
+                    sTxt.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": "));
                     sTxt += ((const SwFmtRefMark*)aCntntAtPos.aFnd.pAttr)->GetRefName();
                 }
             break;

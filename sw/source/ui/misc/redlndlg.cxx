@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 16:15:31 $
+ *  last change: $Author: jp $ $Date: 2001-02-14 09:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
 #endif
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
+#endif
 
 #ifndef _HELPID_H
 #include <helpid.h>
@@ -202,7 +205,6 @@ class SwRedlineAcceptDlg
     SwRedlineDataChildArr   aRedlineChilds;
     SwRedlineDataParentSortArr aUsedSeqNo;
     SvxAcceptChgCtr         aTabPagesCTRL;
-    const International&    rIntl;
     PopupMenu               aPopup;
     Timer                   aDeselectTimer;
     Timer                   aSelectTimer;
@@ -455,7 +457,6 @@ void SwModalRedlineAcceptDlg::AcceptAll( BOOL bAccept )
 
 SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, BOOL bAutoFmt) :
     pParentDlg      (pParent),
-    rIntl           (Application::GetAppInternational()),
     aTabPagesCTRL   (pParent, SW_RES(CTRL_TABPAGES)),
     aPopup          (SW_RES(MN_REDLINE_POPUP)),
     aRootClosed     (SW_RES(BMP_ROOT_CLOSED)),
@@ -651,7 +652,8 @@ void SwRedlineAcceptDlg::InitAuthors()
     Beschreibung:
 ------------------------------------------------------------------------*/
 
-String SwRedlineAcceptDlg::GetRedlineText(const SwRedline& rRedln, DateTime &rDateTime, USHORT nStack)
+String SwRedlineAcceptDlg::GetRedlineText( const SwRedline& rRedln,
+                                        DateTime &rDateTime, USHORT nStack)
 {
     String sEntry(GetActionText(rRedln, nStack));
     sEntry += '\t';
@@ -661,9 +663,7 @@ String SwRedlineAcceptDlg::GetRedlineText(const SwRedline& rRedln, DateTime &rDa
     const DateTime &rDT = rRedln.GetTimeStamp(nStack);
     rDateTime = rDT;
 
-    sEntry += rIntl.GetDate( rDT );
-    sEntry += ' ';
-    sEntry += rIntl.GetTime( rDT, FALSE, FALSE );
+    sEntry += GetAppLangDateTimeString( rDT );
     sEntry += '\t';
 
     sEntry += rRedln.GetComment(nStack);
@@ -1411,17 +1411,13 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
                         const SwRedline &rRedline = pSh->GetRedline(nPos);
                         sComment = rRedline.GetComment();
                         SfxItemSet aSet(pSh->GetAttrPool(), SvxPostItDialog::GetRanges());
-                        const International& rIntl = Application::GetAppInternational();
 
                         aSet.Put(SvxPostItTextItem(sComment.ConvertLineEnd(), SID_ATTR_POSTIT_TEXT));
                         aSet.Put(SvxPostItAuthorItem(rRedline.GetAuthorString(), SID_ATTR_POSTIT_AUTHOR));
 
-                        const DateTime &rDT = rRedline.GetRedlineData().GetTimeStamp();
-
-                        String sDate(rIntl.GetDate( rDT ));
-                        (sDate += ' ' ) += rIntl.GetTime( rDT, FALSE, FALSE );
-
-                        aSet.Put(SvxPostItDateItem(sDate, SID_ATTR_POSTIT_DATE));
+                        aSet.Put(SvxPostItDateItem( GetAppLangDateTimeString(
+                                    rRedline.GetRedlineData().GetTimeStamp() ),
+                                    SID_ATTR_POSTIT_DATE ));
 
                         SvxPostItDialog *pDlg = new SvxPostItDialog(pParentDlg, aSet, FALSE);
                         pDlg->HideAuthor();
@@ -1560,6 +1556,9 @@ void SwRedlineAcceptDlg::FillInfo(String &rExtraData) const
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 16:15:31  jp
+    FillInfo: store TabDistance as string
+
     Revision 1.3  2000/12/07 11:47:55  os
     #81429# String::CreateFromInt32()
 

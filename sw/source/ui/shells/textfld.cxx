@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 11:38:29 $
+ *  last change: $Author: jp $ $Date: 2001-02-14 09:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
 #endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 
 #ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
@@ -174,6 +177,9 @@
 #endif
 #ifndef _FLDEDT_HXX
 #include <fldedt.hxx>
+#endif
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -340,10 +346,10 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 {
                     aSet.Put(SvxPostItTextItem(pPostIt->GetPar2().ConvertLineEnd(), SID_ATTR_POSTIT_TEXT));
                     aSet.Put(SvxPostItAuthorItem(pPostIt->GetPar1(), SID_ATTR_POSTIT_AUTHOR));
-                    aSet.Put(SvxPostItDateItem(
-                        Application::GetAppInternational().
-                        GetDate(pPostIt->GetDate()),
-                        SID_ATTR_POSTIT_DATE));
+
+                    aSet.Put( SvxPostItDateItem(
+                            GetAppLocaleData().getDate( pPostIt->GetDate() ),
+                            SID_ATTR_POSTIT_DATE ));
 
                     // Traveling nur bei mehr als einem Feld
                     rSh.StartAction();
@@ -366,8 +372,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     aSet.Put(SvxPostItAuthorItem( aUserOpt.GetID(),
                                                     SID_ATTR_POSTIT_AUTHOR));
                     aSet.Put(SvxPostItDateItem(
-                            Application::GetAppInternational().
-                            GetDate(Date()), SID_ATTR_POSTIT_DATE));
+                            GetAppLocaleData().getDate( Date() ),
+                            SID_ATTR_POSTIT_DATE));
                 }
 
                 SvxPostItDialog *pDlg = new SvxPostItDialog( pMDI, aSet, bTravel);
@@ -419,17 +425,13 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     BOOL bTravel = FALSE;
 
                     SfxItemSet aSet(GetPool(), SvxPostItDialog::GetRanges());
-                    const International& rIntl = Application::GetAppInternational();
 
                     aSet.Put(SvxPostItTextItem(sComment.ConvertLineEnd(), SID_ATTR_POSTIT_TEXT));
                     aSet.Put(SvxPostItAuthorItem(pRedline->GetAuthorString(), SID_ATTR_POSTIT_AUTHOR));
 
-                    const DateTime &rDT = pRedline->GetRedlineData().GetTimeStamp();
-
-                    String sDate(rIntl.GetDate( rDT ));
-                    (sDate += ' ' ) += rIntl.GetTime( rDT, FALSE, FALSE );
-
-                    aSet.Put(SvxPostItDateItem(sDate, SID_ATTR_POSTIT_DATE));
+                    aSet.Put( SvxPostItDateItem( GetAppLangDateTimeString(
+                                pRedline->GetRedlineData().GetTimeStamp() ),
+                                SID_ATTR_POSTIT_DATE ));
 
                     // Traveling nur bei mehr als einem Feld
                     rSh.StartAction();
@@ -723,7 +725,8 @@ IMPL_LINK( SwTextShell, PostItNextHdl, Button *, pBtn )
     pPostItFldMgr->GoNext();
     SwPostItField* pPostIt = (SwPostItField*)pPostItFldMgr->GetCurFld();
     pDlg->SetNote(pPostIt->GetPar2().ConvertLineEnd());
-    pDlg->ShowLastAuthor(pPostIt->GetPar1(), Application::GetAppInternational().GetDate(pPostIt->GetDate()));
+    pDlg->ShowLastAuthor( pPostIt->GetPar1(),
+                          GetAppLocaleData().getDate(pPostIt->GetDate()));
 
     // Traveling nur bei mehr als einem Feld
     SwWrtShell* pSh = GetShellPtr();
@@ -760,7 +763,8 @@ IMPL_LINK( SwTextShell, PostItPrevHdl, Button *, pBtn )
     pPostItFldMgr->GoPrev();
     SwPostItField* pPostIt = (SwPostItField*)pPostItFldMgr->GetCurFld();
     pDlg->SetNote(pPostIt->GetPar2().ConvertLineEnd());
-    pDlg->ShowLastAuthor(pPostIt->GetPar1(), Application::GetAppInternational().GetDate(pPostIt->GetDate()));
+    pDlg->ShowLastAuthor( pPostIt->GetPar1(),
+                          GetAppLocaleData().getDate(pPostIt->GetDate()));
 
     // Traveling nur bei mehr als einem Feld
     SwWrtShell* pSh = GetShellPtr();
@@ -827,15 +831,10 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, Button *, pBtn )
         pRedline = pSh->GetCurrRedline();
         sComment = pRedline->GetComment();
 
-        const International& rIntl = Application::GetAppInternational();
-
-        const DateTime &rDT = pRedline->GetRedlineData().GetTimeStamp();
-
-        String sDate(rIntl.GetDate( rDT ));
-        (sDate += ' ' ) += rIntl.GetTime( rDT, FALSE, FALSE );
-
-        pDlg->SetNote(sComment.ConvertLineEnd());
-        pDlg->ShowLastAuthor(pRedline->GetAuthorString(), sDate);
+        pDlg->SetNote( sComment.ConvertLineEnd() );
+        pDlg->ShowLastAuthor( pRedline->GetAuthorString(),
+                    GetAppLangDateTimeString(
+                                pRedline->GetRedlineData().GetTimeStamp() ));
 
         String sTitle(SW_RES(STR_REDLINE_COMMENT));
         ::lcl_AppendRedlineStr( sTitle, pRedline->GetType() );
@@ -887,15 +886,10 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, Button *, pBtn )
         pRedline = pSh->GetCurrRedline();
         sComment = pRedline->GetComment();
 
-        const International& rIntl = Application::GetAppInternational();
-
-        const DateTime &rDT = pRedline->GetRedlineData().GetTimeStamp();
-
-        String sDate(rIntl.GetDate( rDT ));
-        (sDate += ' ' ) += rIntl.GetTime( rDT, FALSE, FALSE );
-
         pDlg->SetNote(sComment.ConvertLineEnd());
-        pDlg->ShowLastAuthor(pRedline->GetAuthorString(), sDate);
+        pDlg->ShowLastAuthor(pRedline->GetAuthorString(),
+                GetAppLangDateTimeString(
+                                pRedline->GetRedlineData().GetTimeStamp() ));
 
         String sTitle(SW_RES(STR_REDLINE_COMMENT));
         ::lcl_AppendRedlineStr( sTitle, pRedline->GetType() );
