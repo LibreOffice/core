@@ -38,6 +38,7 @@
  *
  *************************************************************************/
 package com.sun.star.wizards.db;
+
 import java.util.Vector;
 
 import com.sun.star.awt.VclWindowPeerAttribute;
@@ -55,9 +56,11 @@ import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.ColumnValue;
+import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbcx.KeyType;
 import com.sun.star.sdbcx.XAppend;
 import com.sun.star.sdbcx.XColumnsSupplier;
@@ -67,37 +70,53 @@ import com.sun.star.sdbcx.XKeysSupplier;
 import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.XRefreshable;
 import com.sun.star.wizards.common.Desktop;
+import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.Properties;
 
 
 public class TableDescriptor extends CommandMetaData  implements XContainerListener{
     XDataDescriptorFactory xTableDataDescriptorFactory;
     XPropertySet xPropTableDataDescriptor;
-    XNameAccess xNameAccessColumns;
-    XIndexAccess xIndexAccessKeys;
-    XAppend xAppendColumns;
+    private XNameAccess xNameAccessColumns;
+    private XIndexAccess xIndexAccessKeys;
+
     public XDataDescriptorFactory xColumnDataDescriptorFactory;
     XContainer xTableContainer;
     XAppend xTableAppend;
     XDrop   xTableDrop;
-    XDrop xColumnDrop;
-    XDrop xKeyDrop;
-    XRefreshable xRefreshable;
+    private XAppend xKeyAppend;
+    private XDrop xKeyDrop;
     private String[] sTableFilters = null;
-    public Vector tempcolumncontainer;
+    private Vector columncontainer;
+    private Vector keycolumncontainer;
     public XHierarchicalNameAccess xTableHierarchicalNameAccess;
     private CommandName ComposedTableName;
+    private XAppend xKeyColAppend;
+    private XPropertySet xKey;
+    private boolean bIDFieldisInserted = false;
+    private String IDFieldName = "";
 
         /**
          * @param xMSF
          */
         public TableDescriptor(XMultiServiceFactory xMSF) {
             super(xMSF);
-            this.tempcolumncontainer = new Vector();
+            columncontainer = new Vector();
+            keycolumncontainer = new Vector();
         }
 
+
+        private class ColumnDescriptor{
+            String Name;
+            XPropertySet xColPropertySet;
+
+            public ColumnDescriptor(XPropertySet _xColPropertySet, String _Name){
+                Name = _Name;
+                xColPropertySet = _xColPropertySet;
+            }
+
+        }
 
         public boolean getConnection(PropertyValue[] _curPropertyValue){
             if (super.getConnection(_curPropertyValue)){
@@ -109,10 +128,7 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
                 xPropTableDataDescriptor = xTableDataDescriptorFactory.createDataDescriptor();
                 XColumnsSupplier xColumnsSupplier = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, xPropTableDataDescriptor);
                 xNameAccessColumns = xColumnsSupplier.getColumns();
-                xColumnDrop = (XDrop) UnoRuntime.queryInterface(XDrop.class, xNameAccessColumns);
                 xColumnDataDescriptorFactory = (XDataDescriptorFactory) UnoRuntime.queryInterface(XDataDescriptorFactory.class, xNameAccessColumns);
-                xAppendColumns = (XAppend) UnoRuntime.queryInterface(XAppend.class, xNameAccessColumns);
-                xRefreshable = (XRefreshable) UnoRuntime.queryInterface(XRefreshable.class, xNameAccessColumns);
                 try {
                     createTypeInspector();
                     sTableFilters = (String[]) AnyConverter.toArray(xDataSourcePropertySet.getPropertyValue("TableFilter"));
@@ -126,6 +142,52 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
         }
 
 
+       public boolean createPrimaryKeys(String[] _fieldnames, boolean _bAutoincrementation){
+        try {
+           XKeysSupplier xKeySupplier = (XKeysSupplier)UnoRuntime.queryInterface(XKeysSupplier.class, xPropTableDataDescriptor);
+           xIndexAccessKeys = xKeySupplier.getKeys();
+           XDataDescriptorFactory xKeyFac = (XDataDescriptorFactory)UnoRuntime.queryInterface(XDataDescriptorFactory.class,xIndexAccessKeys);
+           xKeyDrop = (XDrop) UnoRuntime.queryInterface(XDrop.class, xIndexAccessKeys);
+           xKeyAppend = (XAppend)UnoRuntime.queryInterface(XAppend.class, xKeyFac);
+           xKey = xKeyFac.createDataDescriptor();
+           xKey.setPropertyValue("Type", new Integer(KeyType.PRIMARY));
+           XColumnsSupplier xKeyColumSup = (XColumnsSupplier)UnoRuntime.queryInterface(XColumnsSupplier.class, xKey);
+           XDataDescriptorFactory xKeyColFac = (XDataDescriptorFactory)UnoRuntime.queryInterface(XDataDescriptorFactory.class,xKeyColumSup.getColumns());
+           xKeyColAppend = (XAppend)UnoRuntime.queryInterface(XAppend.class, xKeyColFac);
+            if (keycolumncontainer.size() > 0){
+                for (int i = (keycolumncontainer.size()-1); i >= 0 ; i--){
+                    keycolumncontainer.remove(i);
+                }
+            }
+           for (int i = 0; i < _fieldnames.length; i++){
+                  XPropertySet xKeyColPropertySet = xKeyColFac.createDataDescriptor();
+                   xKeyColPropertySet.setPropertyValue("Name", _fieldnames[i]);
+                   keycolumncontainer.add(xKeyColPropertySet);
+                XPropertySet xColPropertySet = null;
+                   if (hasByName(_fieldnames[i]))
+                       xColPropertySet = getByName(_fieldnames[i]);
+                   else
+                       xColPropertySet = addPrimaryKeyColumn(_fieldnames[i]);
+                   xColPropertySet.setPropertyValue("IsNullable", new Integer(com.sun.star.sdbc.ColumnValue.NO_NULLS));
+                   if (_bAutoincrementation){
+                       int nDataType  = oTypeInspector.getAutoIncrementIndex(xColPropertySet);
+                       if (nDataType != oTypeInspector.INVALID)
+                           if (xColPropertySet.getPropertySetInfo().hasPropertyByName("IsAutoIncrement")){
+                            xColPropertySet.setPropertyValue("Type", new Integer(nDataType));
+                            xColPropertySet.setPropertyValue("IsAutoIncrement", new Boolean(_bAutoincrementation));
+                           }
+                }
+                   modifyColumn(_fieldnames[i], xColPropertySet);
+           }
+           return true;
+        } catch (Exception e) {
+            showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getMessage());
+            e.printStackTrace(System.out);
+        }
+            return false;
+        }
+
+
         /**
          * creates the table under the passed name
          * @param _tablename is made unique if necessary
@@ -133,18 +195,23 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
          */
         public boolean createTable(String _catalogname, String _schemaname, String _tablename, String[] _fieldnames){
             try {
-                for (int i = 0; i < _fieldnames.length; i++){
-                    if (xNameAccessColumns.hasByName(_fieldnames[i])){
-                        XPropertySet xcurPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccessColumns.getByName(_fieldnames[i]) );
-                        xColumnDrop.dropByName(_fieldnames[i]);
-                        xAppendColumns.appendByDescriptor(xcurPropertySet);
-                    }
+                XAppend xAppendColumns = (XAppend) UnoRuntime.queryInterface(XAppend.class, xNameAccessColumns);
+                for (int i = 0; i < columncontainer.size(); i++){
+                    XPropertySet xColPropertySet = getByIndex(i);
+                    xAppendColumns.appendByDescriptor(xColPropertySet);
                 }
                 assignTableProperty("Name", _tablename);
                 assignTableProperty("CatalogName", _catalogname);
                 assignTableProperty("SchemaName", _schemaname);
                 xTableContainer = (XContainer) UnoRuntime.queryInterface(XContainer.class, xTableNames);
                 xTableContainer.addContainerListener(this);
+                if (keycolumncontainer.size() > 0){
+                    for (int i = 0; i < keycolumncontainer.size(); i++){
+                        XPropertySet xKeyColPropertySet = (XPropertySet) keycolumncontainer.get(i);
+                        xKeyColAppend.appendByDescriptor(xKeyColPropertySet);
+                    }
+                   xKeyAppend.appendByDescriptor(xKey);
+                }
                 xTableAppend.appendByDescriptor(xPropTableDataDescriptor);
                 return true;
             } catch (Exception e) {
@@ -160,9 +227,17 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
                             }
                         }
                     }
+                    XDrop xColumnDrop = (XDrop) UnoRuntime.queryInterface(XDrop.class, xNameAccessColumns);
+                    for (int i = xNameAccessColumns.getElementNames().length - 1; i >= 0; i--)
+                        xColumnDrop.dropByIndex(i);
                     if (xTableDrop != null)
                         if (xTableNames.hasByName(_tablename))
                             xTableDrop.dropByName(_tablename);
+                    if (bIDFieldisInserted){
+                        this.dropColumnbyName(this.IDFieldName);
+                        bIDFieldisInserted = false;
+                    }
+                    return false;
                 } catch (Exception e1) {
                     e1.printStackTrace(System.out);
                 }
@@ -193,73 +268,156 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
 
         public boolean modifyColumnName(String _soldname, String _snewname){
         try {
-            if (xNameAccessColumns.hasByName(_soldname)){
-                XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccessColumns.getByName(_soldname) );
-                if (addColumn(_snewname, xPropertySet)){
-                    xColumnDrop.dropByName(_soldname);
-                    return true;
-                }
-                else
-                    return false;
+            if (hasByName(_soldname)){
+                ColumnDescriptor oColumnDescriptor = this.getColumnDescriptorByName(_soldname);
+                oColumnDescriptor.xColPropertySet.setPropertyValue("Name", _snewname);
+                oColumnDescriptor.Name = _snewname;
             }
             return true;
         } catch (Exception e) {
             e.printStackTrace(System.out);
-            showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getLocalizedMessage());
+            showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getMessage());
             return false;
         }}
 
 
-        public boolean modifyColumn(String _sname, XPropertySet _xColPropertySet){
+        public boolean modifyColumn(String _sname, String _spropname, Object _oValue){
             try {
-                if (xNameAccessColumns.hasByName(_sname)){
-                    xColumnDrop.dropByName(_sname);
-                    addColumn(_sname, _xColPropertySet);
-                    return true;
+                if (this.columncontainer.size() > 0){
+                    for (int i = 0; i < columncontainer.size(); i++){
+                        ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
+                        if (oColumnDescriptor.Name.equals(_sname)){
+                            oColumnDescriptor.xColPropertySet.setPropertyValue(_spropname, _oValue);
+                            if (_spropname.equals("Name"))
+                                oColumnDescriptor.Name = (String) _oValue;
+                            return true;
+                        }
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace(System.out);
-                showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getLocalizedMessage());
+                showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getMessage());
             }
             return false;
+
         }
 
-        public XPropertySet getColumnbyName(String _sname){
+
+        public boolean modifyColumn(String _sname, XPropertySet _xColPropertySet){
         try {
-            if (!_sname.equals("")){
-                if (xNameAccessColumns.hasByName(_sname));
-                    return (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccessColumns.getByName(_sname));
+            if (this.columncontainer.size() > 0){
+                for (int i = 0; i < columncontainer.size(); i++){
+                    ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
+                    if (oColumnDescriptor.Name.equals(_sname)){
+                        oColumnDescriptor.xColPropertySet = _xColPropertySet;
+                        oColumnDescriptor.Name = (String) _xColPropertySet.getPropertyValue("Name");
+                        columncontainer.remove(i);
+                        columncontainer.insertElementAt(oColumnDescriptor, i);
+                        return true;
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace(System.out);
+            showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getMessage());
         }
-        return null;
+        return false;
         }
 
 
         public void dropColumnbyName(String _sname){
         try {
-            String[] snames = xNameAccessColumns.getElementNames();
-            if (snames.length > 0){
-                if (xNameAccessColumns.hasByName(_sname));
-                    xColumnDrop.dropByName(_sname);
+            if (columncontainer.size() > 0){
+                for (int i = 0; i < columncontainer.size(); i++){
+                    ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
+                    if (oColumnDescriptor != null)
+                        if (oColumnDescriptor.Name.equals(_sname))
+                            columncontainer.remove(i);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }}
 
 
-        public String[] getFieldnames(){
-            String[] fieldnames = xNameAccessColumns.getElementNames();
-            return fieldnames;
+        public String[] getColumnNames(){
+            if (columncontainer.size() > 0){
+                try {
+                    String[] fieldnames = new String[columncontainer.size()];
+                    for (int i = 0; i < columncontainer.size(); i++){
+                        ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
+                        fieldnames[i] = oColumnDescriptor.Name;
+                    }
+                    return fieldnames;
+                } catch (RuntimeException e) {
+                    e.printStackTrace(System.out);
+                }
+            }
+            return new String[]{};
+        }
+
+
+        private boolean hasByName(String _fieldname){
+            try {
+                if (columncontainer.size() > 0){
+                    for (int i = 0; i < columncontainer.size(); i++){
+                        ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
+                        if (oColumnDescriptor.Name.equals(_fieldname)){
+                            return true;
+                        }
+                    }
+                }
+            } catch (RuntimeException e) {
+                e.printStackTrace(System.out);
+            }
+            return false;
+        }
+
+
+        private ColumnDescriptor getColumnDescriptorByName(String _fieldname){
+            try {
+                if (this.columncontainer.size() > 0){
+                    for (int i = 0; i < columncontainer.size(); i++){
+                        ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
+                        if (oColumnDescriptor.Name.equals(_fieldname)){
+                            return oColumnDescriptor;
+                        }
+                    }
+                }
+            } catch (RuntimeException e) {
+                e.printStackTrace(System.out);
+            }
+            return null;
+        }
+
+
+        public XPropertySet getByName(String _fieldname){
+            ColumnDescriptor oColumnDescriptor = getColumnDescriptorByName(_fieldname);
+            if (oColumnDescriptor != null)
+                return oColumnDescriptor.xColPropertySet;
+            else
+                return null;
+        }
+
+
+        private XPropertySet getByIndex(int _index){
+            try {
+                if (columncontainer.size() > _index){
+                    ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(_index);
+                    return oColumnDescriptor.xColPropertySet;
+                }
+            } catch (RuntimeException e) {
+                e.printStackTrace(System.out);
+            }
+            return null;
         }
 
 
         public XPropertySet clonePropertySet(String _snewname, XPropertySet _xnewPropertySet){
             XPropertySet xRetPropertySet = xColumnDataDescriptorFactory.createDataDescriptor();
             try {
-                if (xNameAccessColumns.hasByName(_snewname)){
-                    Object oColumn = xNameAccessColumns.getByName(_snewname);
+                if (hasByName(_snewname)){
+                    Object oColumn = getByName(_snewname);
                     XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oColumn);
                     Property[] aColProperties = xPropertySet.getPropertySetInfo().getProperties();
                     for (int i = 0; i < aColProperties.length; i++){
@@ -278,10 +436,11 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
         public boolean addColumn(PropertyValue[] _aNewPropertyValues){
         try {
             String sname = (String) Properties.getPropertyValue(_aNewPropertyValues, "Name");
-            if (!xNameAccessColumns.hasByName(sname)){
+            if (!hasByName(sname)){
                 ColumnPropertySet oPropertySet = new ColumnPropertySet(oTypeInspector, xColumnDataDescriptorFactory.createDataDescriptor());
                 oPropertySet.assignPropertyValues(_aNewPropertyValues, true);
-                xAppendColumns.appendByDescriptor(oPropertySet.xPropertySet);
+                ColumnDescriptor oColumnDescriptor = new ColumnDescriptor(oPropertySet.xPropertySet, sname);
+                this.columncontainer.add(oColumnDescriptor);
                 return true;
             }
         } catch (Exception e) {
@@ -293,91 +452,69 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
 
         public boolean addColumn(String _columnname, XPropertySet _xNewColPropertySet){
         try {
-            if (!xNameAccessColumns.hasByName(_columnname)){
+            if (!hasByName(_columnname)){
                 if (_columnname.equals(""))
                     return false;
                 else{
                     ColumnPropertySet oPropertySet = new ColumnPropertySet(oTypeInspector, xColumnDataDescriptorFactory.createDataDescriptor());
                     oPropertySet.assignNewPropertySet(_columnname, _xNewColPropertySet);
-                    xAppendColumns.appendByDescriptor(oPropertySet.xPropertySet);
+                    ColumnDescriptor oColumnDescriptor = new ColumnDescriptor(oPropertySet.xPropertySet, _columnname);
+                    columncontainer.add(oColumnDescriptor);
                     return true;
                 }
             }
         } catch (Exception e) {
             e.printStackTrace(System.out);
-            showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getLocalizedMessage());
+            showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getMessage());
         }
         return false;
         }
 
 
 
-        public boolean addPrimaryKeyColumn(String _columnname){
+        public XPropertySet addPrimaryKeyColumn(String _columnname){
         try {
-            if (!xNameAccessColumns.hasByName(_columnname)){
-                XPropertySet xColPropertySet = xColumnDataDescriptorFactory.createDataDescriptor();
-                xColPropertySet.setPropertyValue("Name", _columnname);
-                xColPropertySet.setPropertyValue("Type", new Integer(oTypeInspector.convertDataType(com.sun.star.sdbc.DataType.INTEGER)));
-                xAppendColumns.appendByDescriptor(xColPropertySet);
-                return true;
+            if (!hasByName(_columnname)){
+                try {
+                    XPropertySet xColPropertySet = xColumnDataDescriptorFactory.createDataDescriptor();
+                    IDFieldName = Desktop.getUniqueName(getColumnNames(), _columnname, "");
+                    xColPropertySet.setPropertyValue("Name", IDFieldName);
+                    xColPropertySet.setPropertyValue("Type", new Integer(oTypeInspector.convertDataType(com.sun.star.sdbc.DataType.INTEGER)));
+                    ColumnDescriptor oColumnDescriptor = new ColumnDescriptor( xColPropertySet, IDFieldName);
+                    this.columncontainer.add(0, oColumnDescriptor);
+                    this.bIDFieldisInserted = true;
+                    return xColPropertySet;
+                } catch (RuntimeException e1) {
+                    e1.printStackTrace(System.out);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace(System.out);
-            showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getLocalizedMessage());
+            showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getMessage());
         }
-            return false;
+            return null;
         }
 
-
-       public boolean createPrimaryKeys(String[] _columnnames, boolean _bAutoincrementation){
-        try {
-           XKeysSupplier xKeySupplier = (XKeysSupplier)UnoRuntime.queryInterface(XKeysSupplier.class, xPropTableDataDescriptor);
-           xIndexAccessKeys = xKeySupplier.getKeys();
-           XDataDescriptorFactory xKeyFac = (XDataDescriptorFactory)UnoRuntime.queryInterface(XDataDescriptorFactory.class,xIndexAccessKeys);
-           xKeyDrop = (XDrop) UnoRuntime.queryInterface(XDrop.class, xIndexAccessKeys);
-           XAppend xKeyAppend = (XAppend)UnoRuntime.queryInterface(XAppend.class, xKeyFac);
-           XPropertySet xKey = xKeyFac.createDataDescriptor();
-           xKey.setPropertyValue("Type", new Integer(KeyType.PRIMARY));
-           XColumnsSupplier xKeyColumSup = (XColumnsSupplier)UnoRuntime.queryInterface(XColumnsSupplier.class, xKey);
-           XDataDescriptorFactory xKeyColFac = (XDataDescriptorFactory)UnoRuntime.queryInterface(XDataDescriptorFactory.class,xKeyColumSup.getColumns());
-           XAppend xKeyColAppend = (XAppend)UnoRuntime.queryInterface(XAppend.class, xKeyColFac);
-           for (int i = 0; i < _columnnames.length; i++){
-                  XPropertySet xKeyCol = xKeyColFac.createDataDescriptor();
-                       if (!xNameAccessColumns.hasByName(_columnnames[i]))
-                           addPrimaryKeyColumn(_columnnames[i]);
-                   xKeyCol.setPropertyValue("Name", _columnnames[i]);
-                xKeyCol.setPropertyValue("IsNullable", new Integer(com.sun.star.sdbc.ColumnValue.NO_NULLS));
-
-                   if (supportsAutoIncrementation()){
-                   if (xKeyCol.getPropertySetInfo().hasPropertyByName("IsAutoIncrement"))
-                           xKeyCol.setPropertyValue("IsAutoIncrement", new Boolean(_bAutoincrementation));
-                   }
-                xKeyColAppend.appendByDescriptor(xKeyCol);
-           }
-           xKeyAppend.appendByDescriptor(xKey);
-           return true;
-        } catch (Exception e) {
-            showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getLocalizedMessage());
-            e.printStackTrace(System.out);
-        }
-            return false;
-        }
 
 
        public String[] getNonBinaryFieldNames(){
             Vector NonBinaryFieldNameVector = new Vector();
-            String[] scolnames = xNameAccessColumns.getElementNames();
-            for (int i = 0; i < scolnames.length; i++){
-                XPropertySet xColPropertySet = getColumnbyName(scolnames[i]);
-                Property[] aProperties = xColPropertySet.getPropertySetInfo().getProperties();
-                int itype;
-                try {
-                    itype = AnyConverter.toInt(xColPropertySet.getPropertyValue("Type"));
-                    if (!isBinaryDataType(itype))
-                        NonBinaryFieldNameVector.addElement(scolnames[i]);
-                } catch (Exception e) {
-                    e.printStackTrace(System.out);
+            try {
+                for (int i = 0; i < columncontainer.size(); i++){
+                    ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
+                    XPropertySet xColPropertySet = getByName(oColumnDescriptor.Name);
+                    Property[] aProperties = xColPropertySet.getPropertySetInfo().getProperties();
+                    int itype;
+                    try {
+                        itype = AnyConverter.toInt(xColPropertySet.getPropertyValue("Type"));
+                        if (!isBinaryDataType(itype))
+                            NonBinaryFieldNameVector.addElement(oColumnDescriptor.Name);
+                    } catch (Exception e) {
+                        e.printStackTrace(System.out);
+                    }
                 }
+            } catch (RuntimeException e) {
+                e.printStackTrace(System.out);
             }
             String[] sbinaryfieldnames = new String[NonBinaryFieldNameVector.size()];
             NonBinaryFieldNameVector.toArray(sbinaryfieldnames);
