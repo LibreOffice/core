@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:15:42 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 05:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ ModalDialog IDD_FIND_DIALOG {
     TEXT[ polish ] = "Testtool: Find Text";
     TEXT[ portuguese_brazilian ] = "StarBasic: Text suchen";
     TEXT[ japanese ] = "Testtool: •¶š—ñ‚ÌŒŸõ";
-    TEXT[ korean ] = "StarBasic: ÅØ½ºÆ®  Ã£±â";
+    TEXT[ korean ] = "Å×½ºÆ®Åø: ÅØ½ºÆ® Ã£±â";
     TEXT[ chinese_simplified ] = "StarBasic: Find Text";
     TEXT[ chinese_traditional ] = "Testtool: Find Text";
     TEXT[ arabic ] = "Testtool: Find Text";
@@ -516,7 +516,7 @@ ModalDialog IDD_REPLACE_DIALOG {
     TEXT[ polish ] = "Testtool: Replace Text";
     TEXT[ portuguese_brazilian ] = "StarBasic: Text ersetzen";
     TEXT[ japanese ] = "Testtool: •¶š—ñ‚Ì’uŠ·";
-    TEXT[ korean ] = "StarBasic: ÅØ½ºÆ® ¹Ù²Ù±â";
+    TEXT[ korean ] = "Å×½ºÆ®Åø: ÅØ½ºÆ® ¹Ù²Ù±â";
     TEXT[ chinese_simplified ] = "Testtool: Replace Text";
     TEXT[ chinese_traditional ] = "Testtool¡GReplace Text";
     TEXT[ arabic ] = "Testtool: Replace Text";
@@ -581,7 +581,7 @@ ErrorBox IDS_CANTLOAD {
     Title[ polish ] = "Testtool Error!";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "Testtool ´×°!";
-    Title[ korean ] = "StarBasic-¿À·ùr!";
+    Title[ korean ] = "Å×½ºÆ®Åø-¿À·ù!";
     Title[ chinese_simplified ] = "Testtool Error!";
     Title[ chinese_traditional ] = "StarBasic Error!";
     Title[ arabic ] = "Testtool Error!";
@@ -609,7 +609,7 @@ ErrorBox IDS_CANTSAVE {
     MESSAGE[ polish ] = "Library cannot be saved! ";
     MESSAGE[ portuguese_brazilian ] = "Library kann nicht gespeichert werden!";
     MESSAGE[ japanese ] = "×²ÌŞ×Ø‚Í•Û‘¶‚Å‚«‚Ü‚¹‚ñB";
-    MESSAGE[ korean ] = "¶óÀÌºê·¯¸®¸¦ ÀúÀåÇÒ¼ö¡¡¾ø½À´Ï´Ù!";
+    MESSAGE[ korean ] = "¶óÀÌºê·¯¸®¸¦ ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù!";
     MESSAGE[ chinese_simplified ] = "Library cannot be saved!";
     MESSAGE[ chinese_traditional ] = "Library cannot be saved!";
     MESSAGE[ arabic ] = "Library cannot be saved!";
@@ -625,7 +625,7 @@ ErrorBox IDS_CANTSAVE {
     Title[ polish ] = "Testtool Error!";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "Testtool ´×°!";
-    Title[ korean ] = "StarBasic-¿À·ù!";
+    Title[ korean ] = "Å×½ºÆ®Åø-¿À·ù!";
     Title[ chinese_simplified ] = "Testtool Error!";
     Title[ chinese_traditional ] = "Testtool Error!";
     Title[ arabic ] = "Testtool Error!";
@@ -653,7 +653,7 @@ ErrorBox IDS_NOMAINPGM {
     MESSAGE[ polish ] = "This window does not contain a main program! ";
     MESSAGE[ portuguese_brazilian ] = "Dieses Fenster enthält kein Hauptprogramm!";
     MESSAGE[ japanese ] = "‚±‚Ì³¨İÄŞ³‚ÉÒ²İÌßÛ¸Ş×Ñ‚ÍŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñB";
-    MESSAGE[ korean ] = "ÀÌ À©µµ¿ì´Â ¸ŞÀÎÇÁ·Î±×·¥À» Æ÷ÇÔÇÏ°í ÀÖÁö ¾Ê½À´Ï´Ù !";
+    MESSAGE[ korean ] = "ÀÌ À©µµ¿ì´Â ¸ŞÀÎ ÇÁ·Î±×·¥À» Æ÷ÇÔÇÏ°í ÀÖÁö ¾Ê½À´Ï´Ù!";
     MESSAGE[ chinese_simplified ] = "This window does not contain a main program!";
     MESSAGE[ chinese_traditional ] = "This window does not contain a main program!";
     MESSAGE[ arabic ] = "This window does not contain a main program!";
@@ -669,7 +669,7 @@ ErrorBox IDS_NOMAINPGM {
     Title[ polish ] = "Testtool Error!";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "Testtool ´×°!";
-    Title[ korean ] = "StarBasic-¿À·ùr!";
+    Title[ korean ] = "Å×½ºÆ®Åø-¿À·ù!";
     Title[ chinese_simplified ] = "Testtool Error!";
     Title[ chinese_traditional ] = "Testtool Error!";
     Title[ arabic ] = "Testtool Error!";
@@ -697,7 +697,7 @@ ErrorBox IDS_READERROR {
     MESSAGE[ polish ] = "File cannot be read!";
     MESSAGE[ portuguese_brazilian ] = "Datei kann nicht eingelesen werden!";
     MESSAGE[ japanese ] = "Ì§²Ù‚Í“Ç‚İæ‚ê‚Ü‚¹‚ñB";
-    MESSAGE[ korean ] = "ÆÄÀÏÀ» ÀĞÀ»¼ö ¾ø½À´Ï´Ù!";
+    MESSAGE[ korean ] = "ÆÄÀÏÀ» ÀĞÀ» ¼ö ¾ø½À´Ï´Ù!";
     MESSAGE[ chinese_simplified ] = "File cannot be read!";
     MESSAGE[ chinese_traditional ] = "File cannot be read!";
     MESSAGE[ arabic ] = "File cannot be read!";
@@ -713,7 +713,7 @@ ErrorBox IDS_READERROR {
     Title[ polish ] = "Testtool Error!";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "Testtool ´×°!";
-    Title[ korean ] = "StarBasic-¿À·ù!";
+    Title[ korean ] = "Å×½ºÆ®Åø-¿À·ù!";
     Title[ chinese_simplified ] = "Testtool Error!";
     Title[ chinese_traditional ] = "Testtool Error!";
     Title[ arabic ] = "Testtool Error!";
@@ -741,7 +741,7 @@ ErrorBox IDS_WRITEERROR {
     MESSAGE[ polish ] = "File cannot be saved!";
     MESSAGE[ portuguese_brazilian ] = "Datei kann nicht abgespeichert werden!";
     MESSAGE[ japanese ] = "Ì§²Ù‚Í•Û‘¶‚Å‚«‚Ü‚¹‚ñB";
-    MESSAGE[ korean ] = "ÆÄÀÏÀ» ÀúÀåÇÒ¼ö¡¡¾ø½À´Ï´Ù !";
+    MESSAGE[ korean ] = "ÆÄÀÏÀ» ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù !";
     MESSAGE[ chinese_simplified ] = "File cannot be saved!";
     MESSAGE[ chinese_traditional ] = "File cannot be saved!";
     MESSAGE[ arabic ] = "File cannot be saved!";
@@ -757,7 +757,7 @@ ErrorBox IDS_WRITEERROR {
     Title[ polish ] = "Testtool Error!";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "Testtool ´×°!";
-    Title[ korean ] = "StarBasic-¿À·ùr!";
+    Title[ korean ] = "Å×½ºÆ®Åø-¿À·ù!";
     Title[ chinese_simplified ] = "Testtool Error!";
     Title[ chinese_traditional ] = "Testtool Error!";
     Title[ arabic ] = "Testtool Error!";
@@ -801,7 +801,7 @@ ErrorBox IDS_PATTERNNOTFOUND {
     Title[ polish ] = "Testtool Error!";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "Testtool ´×°!";
-    Title[ korean ] = "StarBasic-¿À·ù!";
+    Title[ korean ] = "Å×½ºÆ®Åø-¿À·ù!";
     Title[ chinese_simplified ] = "Testtool Error!";
     Title[ chinese_traditional ] = "Testtool Error!";
     Title[ arabic ] = "Testtool Error!";
@@ -829,7 +829,7 @@ ErrorBox IDS_INVALID_VALUE {
     MESSAGE[ polish ] = "The value is invalid and cannot be set.";
     MESSAGE[ portuguese_brazilian ] = "Der Wert ist ungültig und kann daher nicht gesetzt werden.";
     MESSAGE[ japanese ] = "’l‚ª–³Œø‚ÅAİ’è‚Å‚«‚Ü‚¹‚ñB";
-    MESSAGE[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº °ªÀÌ¹Ç·Î ¼³Á¤µÉ ¼ö ¾ø½À´Ï´Ù .";
+    MESSAGE[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº °ªÀÌ¹Ç·Î ¼³Á¤µÉ ¼ö ¾ø½À´Ï´Ù.";
     MESSAGE[ chinese_simplified ] = "The value is invalid and cannot be set.";
     MESSAGE[ chinese_traditional ] = "The value is invalid and cannot be set.";
     MESSAGE[ arabic ] = "The value is invalid and cannot be set.";
@@ -845,7 +845,7 @@ ErrorBox IDS_INVALID_VALUE {
     Title[ polish ] = "Testtool Error!";
     Title[ portuguese_brazilian ] = "StarBasic Error";
     Title[ japanese ] = "Testtool ´×°!";
-    Title[ korean ] = "StarBasic£­¿À·ù!";
+    Title[ korean ] = "Å×½ºÆ®Åø£­¿À·ù!";
     Title[ chinese_simplified ] = "Testtool Error!";
     Title[ chinese_traditional ] = "Testtool Error!";
     Title[ arabic ] = "Testtool Error!";
@@ -875,7 +875,7 @@ QueryBox IDS_ASKSAVEERROR {
     MESSAGE[ polish ] = "Error saving files! Run anyway? ";
     MESSAGE[ portuguese_brazilian ] = "Fehler beim Speichern der Dateien! Trotzdem ausführen?";
     MESSAGE[ japanese ] = "Ì§²Ù•Û‘¶‚Ì´×°‚Å‚·BÀs‚µ‚Ä‚à‚©‚Ü‚¢‚Ü‚¹‚ñ‚©B";
-    MESSAGE[ korean ] = "ÆÄÀÏ ÀúÀå ½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù! °è¼Ó ½ÇÇàÇÏ½Ã°Ú½À´Ï±î?";
+    MESSAGE[ korean ] = "ÆÄÀÏ ÀúÀå½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù! °è¼Ó ½ÇÇàÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "Error saving files! Run anyway?";
     MESSAGE[ chinese_traditional ] = "Error saving files! Run anyway?";
     MESSAGE[ arabic ] = "Error saving files! Run anyway?";
@@ -891,7 +891,7 @@ QueryBox IDS_ASKSAVEERROR {
     Title[ polish ] = "Testtool!";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
-    Title[ korean ] = "StarBasic";
+    Title[ korean ] = "Å×½ºÆ®Åø!";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "Testtool!";
@@ -936,7 +936,7 @@ QueryBox IDS_ASK_DIRTY_SAVE {
     Title[ polish ] = "Testtool!";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
-    Title[ korean ] = "StarBasic";
+    Title[ korean ] = "Å×½ºÆ®Åø!";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "Testtool!";
@@ -965,7 +965,7 @@ QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     MESSAGE[ polish ] = "File has been changed on data medium\nand in the Editor. Save? ";
     MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datenträger und\nim Editor geändert worden. Abspeichern?";
     MESSAGE[ japanese ] = "Ì§²Ù‚Í”}‘Ìã‚Æ\n´ÃŞ¨À‚Å•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B•Û‘¶‚µ‚Ü‚·‚©B";
-    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼¿Í ÆíÁı±â ³»ÀÇ ÆÄÀÏÀÌ¡¡º¯°æµÇ¾ú½À´Ï´Ù.  \nÀúÀåÇÏ½Ã°Ú½À´Ï±î ?";
+    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼»óÀÇ ÆÄÀÏÀÌ º¯°æµÇ¾ú½À´Ï´Ù. ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium\nand in the Editor. Save?";
     MESSAGE[ chinese_traditional ] = "File has been changed on data medium\nand in the Editor. Save?";
     MESSAGE[ arabic ] = "File has been changed on data medium\nand in the Editor. Save?";
@@ -981,7 +981,7 @@ QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     Title[ polish ] = "Testtool!";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
-    Title[ korean ] = "StarBasic";
+    Title[ korean ] = "Å×½ºÆ®Åø!";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "Testtool!";
@@ -1010,7 +1010,7 @@ QueryBox IDS_ASK_DISKCHANGE_SAVE {
     MESSAGE[ polish ] = "File has been changed on data medium.\nOverwrite?";
     MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datenträger geändert worden.\nÜberschreiben?";
     MESSAGE[ japanese ] = "Ì§²Ù‚Í”}‘Ìã‚Å•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\nã‘‚«‚µ‚Ü‚·‚©B";
-    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼ÀÇ ÆÄÀÏÀÌ¡¡º¯°æµÇ¾ú½À´Ï´Ù. \n µ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
+    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼»óÀÇ ÆÄÀÏÀÌ º¯°æµÇ¾ú½À´Ï´Ù.\nµ¤¾î¾º¿ì½Ã°Ú½À´Ï±î??";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium.\nOverwrite?";
     MESSAGE[ chinese_traditional ] = "File has been changed on data medium.\nOverwrite?";
     MESSAGE[ arabic ] = "File has been changed on data medium.\nOverwrite?";
@@ -1026,7 +1026,7 @@ QueryBox IDS_ASK_DISKCHANGE_SAVE {
     Title[ polish ] = "Testtool!";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
-    Title[ korean ] = "StarBasic";
+    Title[ korean ] = "Å×½ºÆ®Åø!";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "Testtool!";
@@ -1055,7 +1055,7 @@ QueryBox IDS_ASKRELOAD {
     MESSAGE[ polish ] = "File has been changed on data medium. Reload? ";
     MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datenträger geändert worden. Erneut Laden?";
     MESSAGE[ japanese ] = "Ì§²Ù‚Í”}‘Ìã‚Å•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B“Ç‚İ‚İ‚È‚¨‚µ‚Ü‚·‚©B";
-    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼¿Í ÆíÁı±â ³»ÀÇ ÆÄÀÏÀÌ¡¡º¯°æµÇ¾ú½À´Ï´Ù.  ´Ù½Ã ·ÎµåÇÏ½Ã°Ú½À´Ï±î?";
+    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼»óÀÇ ÆÄÀÏÀÌ º¯°æµÇ¾ú½À´Ï´Ù. ´Ù½Ã ·ÎµåÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium. Reload?";
     MESSAGE[ chinese_traditional ] = "File has been changed on data medium. Reload?";
     MESSAGE[ arabic ] = "File has been changed on data medium. Reload?";
@@ -1071,7 +1071,7 @@ QueryBox IDS_ASKRELOAD {
     Title[ polish ] = "Testtool!";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
-    Title[ korean ] = "StarBasic";
+    Title[ korean ] = "Å×½ºÆ®Åø!";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "Testtool!";
@@ -1100,7 +1100,7 @@ QueryBox IDS_ASKDIRTYRELOAD {
     MESSAGE[ polish ] = "File has been changed on data medium\nand in the Editor. Reload? ";
     MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datenträger und\nim Editor geändert worden. Erneut Laden?";
     MESSAGE[ japanese ] = "Ì§²Ù‚Í”}‘Ìã‚Æ\n´ÃŞ¨À‚Å•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B“Ç‚İ‚İ‚È‚¨‚µ‚Ü‚·‚©B";
-    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼¿Í ÆíÁı±â ³»ÀÇ ÆÄÀÏÀÌ¡¡º¯°æµÇ¾ú½À´Ï´Ù. \n ´Ù½Ã ·ÎµåÇÏ½Ã°Ú½À´Ï±î?";
+    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼¿Í ÆíÁı±â»óÀÇ ÆÄÀÏÀÌ¡¡º¯°æµÇ¾ú½À´Ï´Ù. \n ´Ù½Ã ·ÎµåÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium\nand in the Editor. Reload?";
     MESSAGE[ chinese_traditional ] = "File has been changed on data medium\nand in the Editor. Reload?";
     MESSAGE[ arabic ] = "File has been changed on data medium\nand in the Editor. Reload?";
@@ -1116,7 +1116,7 @@ QueryBox IDS_ASKDIRTYRELOAD {
     Title[ polish ] = "Testtool!";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
-    Title[ korean ] = "StarBasic";
+    Title[ korean ] = "Å×½ºÆ®Åø!";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "Testtool!";
@@ -1145,7 +1145,7 @@ QueryBox IDS_RUNNING {
     MESSAGE[ polish ] = "BASIC is still running! Exit anyway?";
     MESSAGE[ portuguese_brazilian ] = "BASIC-Programm ist noch aktiv! Dennoch beenden?";
     MESSAGE[ japanese ] = "BASIC ÌßÛ¸Ş×Ñ‚Í‚Ü‚¾‹N“®’†‚Å‚·B‚»‚Ì‚Ü‚ÜI—¹‚µ‚Ä‚à‚©‚Ü‚¢‚Ü‚¹‚ñ‚©B";
-    MESSAGE[ korean ] = "BASIC ÇÁ·Î±×·¥ÀÌ ¾ÆÁ÷ ÀÛµ¿ÁßÀÔ´Ï´Ù. ±×·¡µµ¡¡Á¾·áÇÏ½Ã°Ú½À´Ï±î??";
+    MESSAGE[ korean ] = "BASIC ÇÁ·Î±×·¥ÀÌ ¾ÆÁ÷ ÀÛµ¿ÁßÀÔ´Ï´Ù! ±×·¡µµ Á¾·áÇÏ½Ã°Ú½À´Ï±î??";
     MESSAGE[ chinese_simplified ] = "BASIC is still running! Exit anyway?";
     MESSAGE[ chinese_traditional ] = "BASIC is still running! Exit anyway?";
     MESSAGE[ arabic ] = "BASIC is still running! Exit anyway?";
@@ -1161,7 +1161,7 @@ QueryBox IDS_RUNNING {
     Title[ polish ] = "Testtool!";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
-    Title[ korean ] = "StarBasic";
+    Title[ korean ] = "Å×½ºÆ®Åø!";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "Testtool!";
@@ -1190,7 +1190,7 @@ QueryBox IDS_LOSS_OF_INFORMATION {
     MESSAGE[ polish ] = "Saving in an external format causes information loss.";
     MESSAGE[ portuguese_brazilian ] = "BASIC is still running! Exit anyway?";
     MESSAGE[ japanese ] = "ŠO•”‘®‚Å•Û‘¶‚·‚é‚ÆAî•ñ‚ğ¸‚¤‰Â”\\«‚ª‚ ‚è‚Ü‚·B";
-    MESSAGE[ korean ] = "¿ÜºÎ Æ÷¸Ë¿¡ ÀúÀåÇÏ´Â°ÍÀº Á¤º¸ ¼Õ½ÇÀ»¡¡ÃÊ·¡ÇÕ´Ï´Ù.";
+    MESSAGE[ korean ] = "¿ÜºÎ Æ÷¸Ë¿¡ ÀúÀåÇÏ´Â °ÍÀº Á¤º¸ ¼Õ½ÇÀ» ÃÊ·¡ÇÕ´Ï´Ù.";
     MESSAGE[ chinese_simplified ] = "Saving in an external format causes information loss.";
     MESSAGE[ chinese_traditional ] = "Saving in an external format causes information loss";
     MESSAGE[ arabic ] = "Saving in an external format causes information loss.";
@@ -1206,7 +1206,7 @@ QueryBox IDS_LOSS_OF_INFORMATION {
     Title[ polish ] = "Testtool!";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
-    Title[ korean ] = "StarBasic";
+    Title[ korean ] = "Å×½ºÆ®Åø!";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "Testtool!";
@@ -1426,7 +1426,7 @@ String IDS_APPNAME {
     TEXT[ polish ] = "Testtool";
     TEXT[ portuguese_brazilian ] = "StarBasic";
     TEXT[ japanese ] = "Testtool";
-    TEXT[ korean ] = "%PRODUCTNAME Basic";
+    TEXT[ korean ] = "Å×½ºÆ®Åø";
     TEXT[ chinese_simplified ] = "Testtool";
     TEXT[ chinese_traditional ] = "Testtool";
     TEXT[ arabic ] = "Testtool";
@@ -1578,7 +1578,7 @@ String IDS_LOADDLG {
     TEXT[ polish ] = "Testtool: Load File";
     TEXT[ portuguese_brazilian ] = "StarBasic: Datei einlesen";
     TEXT[ japanese ] = "Testtool: Ì§²Ù‚Ì“Ç‚İæ‚è";
-    TEXT[ korean ] = "StarBasic: ÆÄÀÏ ÆÇµ¶";
+    TEXT[ korean ] = "Å×½ºÆ®Åø: ÆÄÀÏ ÆÇµ¶";
     TEXT[ chinese_simplified ] = "Testtool: Load File";
     TEXT[ chinese_traditional ] = "Testtool¡GLoad File";
     TEXT[ arabic ] = "Testtool: Load File";
@@ -1601,7 +1601,7 @@ String IDS_SAVEDLG {
     TEXT[ polish ] = "Testtool: Save File";
     TEXT[ portuguese_brazilian ] = "StarBasic: Datei speichern";
     TEXT[ japanese ] = "Testtool: Ì§²Ù‚Ì•Û‘¶";
-    TEXT[ korean ] = "StarBasic: ÆÄÀÏ ÀúÀå";
+    TEXT[ korean ] = "Å×½ºÆ®Åø: ÆÄÀÏ ÀúÀå";
     TEXT[ chinese_simplified ] = "Testtool: Save File";
     TEXT[ chinese_traditional ] = "Testtool: Save File";
     TEXT[ arabic ] = "Testtool: Save File";
@@ -3149,7 +3149,7 @@ ModelessDialog IDD_PRINT_DIALOG {
     TEXT[ polish ] = "Testtool: Print File";
     TEXT[ portuguese_brazilian ] = "StarBasic: Datei drucken";
     TEXT[ japanese ] = "Testtool: Ì§²Ù‚Ìˆóü";
-    TEXT[ korean ] = "StarBasic: ÆÄÀÏ¡¡ÀÎ¼â";
+    TEXT[ korean ] = "Å×½ºÆ®Åø: ÆÄÀÏ ÀÎ¼â";
     TEXT[ chinese_simplified ] = "Testtool: Print File";
     TEXT[ chinese_traditional ] = "Testtool: Print File";
     TEXT[ arabic ] = "Testtool: Print File";
