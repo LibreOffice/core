@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-10-18 10:34:00 $
+ *  last change: $Author: os $ $Date: 2002-11-07 10:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,6 +659,7 @@ struct RulerIndent
 #define RULER_TAB_CENTER        ((USHORT)0x0003)
 #define RULER_TAB_DEFAULT       ((USHORT)0x0004)
 #define RULER_TAB_STYLE         ((USHORT)0x000F)
+#define RULER_TAB_RTL           ((USHORT)0x0010)
 
 struct RulerTab
 {

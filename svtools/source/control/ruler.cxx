@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-10-18 10:34:42 $
+ *  last change: $Author: os $ $Date: 2002-11-07 10:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -991,12 +991,14 @@ void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom
 
 // -----------------------------------------------------------------------
 
-static void ImplCenterTabPos( Point& rPos, USHORT nStyle )
+static void ImplCenterTabPos( Point& rPos, USHORT nTabStyle )
 {
+    BOOL bRTL  = 0 != (nTabStyle & RULER_TAB_RTL);
+    nTabStyle &= RULER_TAB_STYLE;
     rPos.Y() += RULER_TAB_HEIGHT/2;
-    if ( nStyle == RULER_TAB_LEFT )
+    if ( (!bRTL && nTabStyle == RULER_TAB_LEFT) ||( bRTL && nTabStyle == RULER_TAB_RIGHT))
         rPos.X() -= RULER_TAB_WIDTH/2;
-    else if ( nStyle == RULER_TAB_RIGHT )
+    else if ( (!bRTL && nTabStyle == RULER_TAB_RIGHT) ||( bRTL && nTabStyle == RULER_TAB_LEFT))
         rPos.X() += RULER_TAB_WIDTH/2;
 }
 
@@ -1027,7 +1029,7 @@ static void ImplDrawRulerTab( OutputDevice* pDevice,
         return;
 
     USHORT nTabStyle = nStyle & RULER_TAB_STYLE;
-
+    BOOL bRTL = 0 != (nStyle & RULER_TAB_RTL);
     Rectangle aRect1, aRect2, aRect3;
     aRect3.SetEmpty();
     if ( nTabStyle == RULER_TAB_DEFAULT )
@@ -1042,7 +1044,7 @@ static void ImplDrawRulerTab( OutputDevice* pDevice,
         aRect2.Bottom() =   rPos.Y();
 
     }
-    else if ( nTabStyle == RULER_TAB_LEFT )
+    else if ( (!bRTL && nTabStyle == RULER_TAB_LEFT) ||( bRTL && nTabStyle == RULER_TAB_RIGHT))
     {
         aRect1.Left() =     rPos.X();
         aRect1.Top() =      rPos.Y() - RULER_TAB_HEIGHT2 + 1;
@@ -1053,7 +1055,7 @@ static void ImplDrawRulerTab( OutputDevice* pDevice,
         aRect2.Right() =    rPos.X() + RULER_TAB_WIDTH2 - 1;
         aRect2.Bottom() =   rPos.Y();
     }
-    else if ( nTabStyle == RULER_TAB_RIGHT )
+    else if ( (!bRTL && nTabStyle == RULER_TAB_RIGHT) ||( bRTL && nTabStyle == RULER_TAB_LEFT))
     {
         aRect1.Left() =     rPos.X() - RULER_TAB_WIDTH + 1;
         aRect1.Top() =      rPos.Y() - RULER_TAB_HEIGHT2 + 1;
@@ -1110,7 +1112,9 @@ void Ruler::ImplDrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle
     else
         pDevice->SetFillColor( GetSettings().GetStyleSettings().GetWindowTextColor() );
 
-    ImplDrawRulerTab( pDevice, rPos, nStyle, GetStyle() );
+    if(mpData->bTextRTL)
+        nStyle |= RULER_TAB_RTL;
+    ImplDrawRulerTab( pDevice, rPos, nStyle, GetStyle());
 }
 
 // -----------------------------------------------------------------------
@@ -1540,6 +1544,8 @@ void Ruler::ImplDrawExtra( BOOL bPaint )
     else if ( meExtraType == RULER_EXTRA_TAB )
     {
         USHORT nTabStyle = mnExtraStyle & RULER_TAB_STYLE;
+        if(mpData->bTextRTL)
+            nTabStyle |= RULER_TAB_RTL;
         Point aCenter = aRect.Center();
         Point aDraw(aCenter);
         ImplCenterTabPos( aDraw, nTabStyle );
@@ -1673,6 +1679,8 @@ BOOL Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest ) const
                         aRect.Right()   = n1-RULER_TAB_CWIDTH2+RULER_TAB_CWIDTH;
                     }
 
+                    if(mpData->bTextRTL)
+                        nX = mpData->nMargin2 - nX;
                     if ( aRect.IsInside( Point( nX, nY ) ) )
                     {
                         pHitTest->eType     = RULER_TYPE_TAB;
@@ -3103,7 +3111,7 @@ void Ruler::DrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle )
 {
     const StyleSettings&    rStyleSettings = pDevice->GetSettings().GetStyleSettings();
     Point                   aPos( rPos );
-    USHORT                  nTabStyle = nStyle & RULER_TAB_STYLE;
+    USHORT                  nTabStyle = nStyle & (RULER_TAB_STYLE | RULER_TAB_RTL);
 
     pDevice->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
     pDevice->SetLineColor();
@@ -3118,4 +3126,6 @@ void Ruler::DrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle )
 void Ruler::SetTextRTL(BOOL bRTL)
 {
     mpData->bTextRTL = bRTL;
+    if ( IsReallyVisible() && IsUpdateMode() )
+        ImplDrawExtra( FALSE );
 }
