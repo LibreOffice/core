@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:03:38 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 14:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,14 +672,14 @@ String RID_STR_CURSORSOURCE
     Text[ greek ] = "Ğåñéå÷üìåíá";
     Text[ dutch ] = "Inhoud";
     Text[ french ] = "Contenu";
-    Text[ spanish ] = "Fuente de datos";
+    Text[ spanish ] = "Contenido";
     Text[ italian ] = "Contenuto";
     Text[ danish ] = "Datakilde";
     Text[ swedish ] = "Innehåll";
     Text[ polish ] = "Zawartoœæ";
     Text[ portuguese_brazilian ] = "Datenquelle";
     Text[ japanese ] = "“à—e";
-    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º";
+    Text[ korean ] = "³»¿ë";
     Text[ chinese_simplified ] = "ÄÚÈİ";
     Text[ chinese_traditional ] = "¤º®e";
     Text[ turkish ] = "Veri kaynağı";
@@ -695,14 +695,14 @@ String RID_STR_CURSORSOURCETYPE
     Text[ greek ] = "Ôığïò ğåñéå÷ïìİíùí";
     Text[ dutch ] = "Soort inhoud";
     Text[ french ] = "Type de contenu";
-    Text[ spanish ] = "Tipo de fuente de datos";
+    Text[ spanish ] = "Tipo de contenido";
     Text[ italian ] = "Tipo di contenuto";
     Text[ danish ] = "Datakildetype";
     Text[ swedish ] = "Typ av innehåll";
     Text[ polish ] = "Rodzaj zawartoœci";
     Text[ portuguese_brazilian ] = "Typ der Datenquelle";
     Text[ japanese ] = "“à—e‚Ìí—Ş";
-    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½ºÀÇ À¯Çü";
+    Text[ korean ] = "³»¿ë Á¾·ù";
     Text[ chinese_simplified ] = "ÄÚÈİÀàĞÍ";
     Text[ chinese_traditional ] = "¤º®eÃş«¬";
     Text[ turkish ] = "Veri kaynağı türü";
@@ -814,7 +814,7 @@ String RID_STR_DATASOURCE
     Text[ greek ] = "Ğñïİëåõóç äåäïìİíùí";
     Text[ dutch ] = "Gegevensbron";
     Text[ french ] = "Source de données";
-    Text[ spanish ] = "Base de datos";
+    Text[ spanish ] = "Fuente de datos";
     Text[ italian ] = "Sorgente dati";
     Text[ danish ] = "Database";
     Text[ swedish ] = "Datakälla";
@@ -3966,7 +3966,7 @@ String RID_STR_HARDLINEBREAKS
     Text[ japanese ] = "‰üs";
     Text[ chinese_traditional ] = "¤â¤u¤À¦æ²Å";
     Text[ greek ] = "¸íôïíç áëëáãŞ ãñáììŞò";
-    Text[ korean ] = "°íÁ¤ °³Çà";
+    Text[ korean ] = "°³Çà (°íÁ¤)";
     Text[ arabic ] = "İÇÕá ÃÓØÑ íÏæí";
     Text[ turkish ] = "Kullanıcı tanımlı satır sonu";
     Text[ language_user1 ] = " ";
@@ -5799,7 +5799,7 @@ String RID_STR_PROPTITLE_DBGRID
     Text[ japanese ] = "Ã°ÌŞÙºİÄÛ°Ù ";
     Text[ chinese_traditional ] = "ªí®æ±±¨î¶µ ";
     Text[ greek ] = "Ğåäßï åëİã÷ïõ ğßíáêá ";
-    Text[ korean ] = "Å×ÀÌºí ÄÁÆ®·Ñ ÇÊµå ";
+    Text[ korean ] = "Ç¥ ÄÁÆ®·Ñ- ÇÊµå ";
     Text[ arabic ] = "ÚäÕÑ ÊÍßã ÎÇÕ ÈÇáÌÏÇæá";
     Text[ turkish ] = "Tablo komut öğesi ";
     Text[ language_user1 ] = " ";
@@ -5895,7 +5895,7 @@ String RID_STR_NODATACONTROLS
     Text[ japanese ] = "Œ»İ‚ÌŒ`®‚É—LŒø‚È•\\Ì¨°ÙÄŞ‚ÉŠÖ˜A‚·‚éºİÄÛ°Ù‚Í‚ ‚è‚Ü‚¹‚ñ!";
     Text[ chinese_traditional ] = "·í«eªºªí³æ¨S¦³¤@­Ó¦³®Äªº©Mªí³æÄæ¦ì³sµ²ªº±±¨î¶µ¡T";
     Text[ greek ] = "Óôç ôñİ÷ïõóá öüñìá äåí õğÜñ÷ïõí óôïé÷åßá åëİã÷ïõ ôá ïğïßá íá åßíáé äåóìåõìİíá ìå İíá İãêõñï ğåäßï ğéíÜêùí!";
-    Text[ korean ] = "ÇöÀç Æû¿¡´Â À¯È¿ÇÑ Å×ÀÌºí ÇÊµå¿¡ ¿¬°áµÈ ÄÁÆ®·ÑÀÌ ¾ø½À´Ï´Ù!";
+    Text[ korean ] = "ÇöÀçÀÇ  Æû¿¡´Â À¯È¿ÇÑ Ç¥ ÇÊµå¿¡ ¿¬°áµÈ ÄÁÆ®·ÑÀÌ ¾ø½À´Ï´Ù!";
     Text[ arabic ] = "áÇ íæÌÏ ÚäÇÕÑ ÊÍßã ãÑÊÈØÉ ÈÍŞá ÌÏæá ÕÇáÍ İí ÇáÇÓÊãÇÑÉ ÇáÍÇáíÉ!";
     Text[ turkish ] = "Yürürlükteki formda, geçerli bir tablo alanına bağlı komut öğeleri yok!";
     Text[ language_user1 ] = " ";
@@ -6117,7 +6117,7 @@ String RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY
     Text[ polish ] = "W aktualnym formularzu brak wa¿nych formantów, których mo¿na by by³o u¿yæ dla widoku tabeli!";
     Text[ portuguese_brazilian ] = "No valid bound controls usable for the table view exist in the current form";
     Text[ japanese ] = "•\\ËŞ­°‚Ég—p‚Å‚«‚éAŒ‹‡‚Ì—LŒø‚ÈºİÄÛ°Ù‚ÍŒ»İ‚ÌÌ«°Ñ‚Ì’†‚É‚ ‚è‚Ü‚¹‚ñB";
-    Text[ korean ] = "ÇöÀç Æû¿¡´Â Å×ÀÌºí º¸±â¿¡ »ç¿ëµÉ ¼ö ÀÖ´Â À¯È¿ ¹Ù¿îµå ÄÁÆ®·ÑÀÌ ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "ÇöÀçÀÇ  Æû¿¡´Â,  Ç¥ º¸±â¿¡ »ç¿ëµÉ ¼ö ÀÖ´Â  À¯È¿ ¿¬°áµÈ ÄÁÆ®·ÑÀÌ ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "µ±Ç°µÄ±íµ¥ÄÚÃ»ÓĞ¿ÉÓÃÓÚ±í¸ñÊÓÍ¼µÄÓĞĞ§¿Ø¼ş£¡";
     Text[ chinese_traditional ] = "·í«eªºªí³æ¨S¦³¦³®Äªº±Ò°Êªí®æÀËµø¼Ò¦¡ªº±±¨î¥ó¡C";
     Text[ arabic ] = "İí ÇáÇÓÊãÇÑÉ ÇáÍÇáíÉ¡ áÇ ÊæÌÏ ÚäÇÕÑ ÊÍßã ãÑÊÈØÉ ÈÔßá ÕÇáÍ íãßä ÇÓÊÎÏÇãåÇ İí ØÑíŞÉ ÚÑÖ ÇáÌÏæá!";
@@ -6550,7 +6550,7 @@ String RID_STR_CREATECONTROLS_INVALIDSOURCE
     Text[ swedish ] = "Du kan inte skapa några formulärkontrollfält för de här kolumnerna i det här dokumentet:\nDokumentet hör till en fast databas ($docname$) som används som datakälla av alla formulärelement.\nMen kolumnerna som Du använder hör till en tabell eller sökning i en annan databas ($dropname$).";
     Text[ polish ] = "Dla kolumn w tym dokumencie nie mozna utworzyc pól kontrolnych formularza:\nDokument ten jest czescia stalej bazy danych ($docname$), która wykorzystywana jest przez wszystkie elementy formularza jako zródlo danych.\nUzywane przez ciebie kolumny sa skladnikiem tabeli lub kwerendy innej bazy danych ($dropname$).";
     Text[ japanese ] = "‚±‚ÌÄŞ·­ÒİÄ’†‚Å‚±‚ê‚ç‚Ì—ñ‚ÉÌ«°Ñ‚ÌºİÄÛ°ÙÌ¨°ÙÄŞ‚ÍŠi”[‚Å‚«‚Ü‚¹‚ñ:\nÄŞ·­ÒİÄ‚ÍŒÅ’è‚µ‚½ÃŞ°ÀÍŞ°½‚É‚Â‚È‚ª‚Á‚Ä‚¢‚Ä ($docname$) ‚·‚×‚Ä‚ÌÌ«°Ñ—v‘f‚©‚ç‚à‚±‚ê‚ªÃŞ°À¿°½‚Æ‚µ‚Äg‚í‚ê‚é‚½‚ß‚Å‚·B\n‚Æ‚±‚ë‚ªAg‚í‚ê‚½—ñ‚Í•Ê‚ÌÃŞ°ÀÍŞ°½‚ÌÃ°ÌŞÙ‚©¸´Ø°‚É‚Â‚È‚ª‚Á‚Ä‚¢‚Ü‚·($dropname$)B";
-    Text[ korean ] = "For this columns you can't create form controls within this document:\nThe document belongs to a fixed database ($docname$) which has to be used as data source for all form elements.\nBut the columns You dropped are part of a table or query within another database ($dropname$).";
+    Text[ korean ] = "ÀÌ ¹®¼­ÀÇ ÀÌ¿­¿¡ ´ëÇØ¼­´Â Æû-ÄÁÆ®·Ñ ÇÊµå¸¦ »ı¼ºÇÒ ¼ö ¾ø½À´Ï´Ù:\n ¹®¼­´Â °íÁ¤µÈ µ¥ÀÌÅÍ º£ÀÌ½º($docname$)¿¡ ¼ÓÇÏ¸ç, µû¶ó¼­ ¸ğµç Æû ¿ä¼Ò¿¡ ÀÇÇØ µ¥ÀÌÅÍ¼Ò½º·Î¼­ »ç¿ëµË´Ï´Ù.\n ÇÏÁö¸¸ »ç¿ëÀÚ¿¡ ÀÇÇØ ¿­Àº ´Ù¸¥ µ¥ÀÌÅÍº£ÀÌ½º($dropname$)ÀÇ Ç¥ ¶Ç´Â Á¶È¸¿¡ ¼ÓÇÕ´Ï´Ù.";
     Text[ chinese_simplified ] = "ÎŞ·¨ÎªÎÄµµÖĞµÄÕâÒ»ÁĞ½¨Á¢±íµ¥¿ØÖÆ×Ö¶Î£º\nÕâ¸öÎÄµµ¹éÊôÓÚÒ»¸öÓÉËùÓĞ±íµ¥ÔªËØµ±×÷Êı¾İÔ´Ê¹ÓÃµÄÊı¾İ¿â($docname$)¡£\nÄúÊ¹ÓÃµÄÕâÒ»ÁĞÈ´¹éÊôÓÚÁíÒ»¸öÊı¾İ¿â($dropname$)ÖĞµÄÒ»¸ö±í¸ñ»òÕß²éÑ¯¡£";
     Text[ chinese_traditional ] = "µLªk¬°³o­Ó¤å¥óªºÄæ¦ì«Ø¥ß±±¨î¶µ¡G\n³o­Ó¤å¥óÄİ©ó¤@­Ó©T©wªº¸ê®Æ®w¡C¦]¬°©Ò¦³ªí³æª«É²³£¨Ï¥Î³o­Ó¸ê®Æ®w·½¡C\n¨Ï¥ÎªºÄæ¦ìÄİ©ó¥t¤@­Ó¸ê®Æ®w($dropname$)ªºªí®æ©M¬d¸ß¡C";
     Text[ arabic ] = "áÇ íãßäß ÅäÔÇÁ ÍŞæá ÊÍßã ÎÇÕÉ ÈÇÓÊãÇÑÉ İí åĞÇ ÇáãÓÊäÏ áåĞå ÇáÃÚãÏÉ:\níäÊãí åĞÇ ÇáãÓÊäÏ Åáì ŞÇÚÏÉ ÈíÇäÇÊ ËÇÈÊÉ ($docname$) íÊã ÇÓÊÎÏÇãåÇ ãä ŞÈá ßÇİÉ ÚäÇÕÑ ÇáÇÓÊãÇÑÉ ßãÕÏÑ ááÈíÇäÇÊ. \nÃãÇ ÇáÃÚãÏÉ ÇáÊí ÊÓÊÎÏãåÇ İåí ÊäÊãí Åáì ÌÏæá Ãæ ÇÓÊİÓÇÑ İí ŞÇÚÏÉ ÈíÇäÇÊ ÃÎÑì ($dropname$).";
