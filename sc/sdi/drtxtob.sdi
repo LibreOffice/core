@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.sdi,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:52:46 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,12 @@ interface TableDrawText : Selection
     SID_PARA_DLG                [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
      // ---- FontWork:
     SID_FONTWORK    [ ExecMethod = ExecuteExtra; StateMethod = GetState; Export = FALSE; ]
+
+    // pseudo slots from Format menu
+    SID_ALIGN_ANY_LEFT      [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ALIGN_ANY_HCENTER   [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ALIGN_ANY_RIGHT     [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ALIGN_ANY_JUSTIFIED [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
 
     SID_FORMTEXT_STYLE      [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
     SID_FORMTEXT_ADJUST     [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
