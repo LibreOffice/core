@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-29 13:05:57 $
+ *  last change: $Author: cl $ $Date: 2002-11-12 15:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,15 +482,15 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                     pValues->Value >>= aURL.Complete;
                 }
             }
-            else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )
+            else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )  // for compatibility reasons, deprecated
             {
                 pValues->Value >>= nWidth;
             }
-            else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) )
+            else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) ) // for compatibility reasons, deprecated
             {
                 pValues->Value >>= nHeight;
             }
-            else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportOnlyBackground" ) ) )
+            else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportOnlyBackground" ) ) )   // for compatibility reasons, deprecated
             {
                 pValues->Value >>= bExportOnlyBackground;
             }
@@ -499,25 +499,37 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 pValues->Value >>= aFilterData;
 
                 sal_Int32 nArgs = aFilterData.getLength();
-                const PropertyValue* pValues = aFilterData.getConstArray();
+                PropertyValue* pDataValues = aFilterData.getArray();
                 while( nArgs-- )
                 {
-                    if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Translucent" ) ) )
+                    if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Translucent" ) ) )
                     {
-                        pValues->Value >>= bTranslucent;
+                        pDataValues->Value >>= bTranslucent;
                     }
-                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )
+                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PixelWidth" ) ) )
                     {
-                        pValues->Value >>= nWidth;
+                        pDataValues->Value >>= nWidth;
                     }
-                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) )
+                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PixelHeight" ) ) )
                     {
-                        pValues->Value >>= nHeight;
+                        pDataValues->Value >>= nHeight;
                     }
-                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportOnlyBackground" ) ) )
+                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )  // for compatibility reasons, deprecated
                     {
-                        pValues->Value >>= bExportOnlyBackground;
+                        pDataValues->Value >>= nWidth;
+                        pDataValues->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PixelWidth" ) );
                     }
+                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) ) // for compatibility reasons, deprecated
+                    {
+                        pDataValues->Value >>= nHeight;
+                        pDataValues->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PixelHeight" ) );
+                    }
+                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportOnlyBackground" ) ) )
+                    {
+                        pDataValues->Value >>= bExportOnlyBackground;
+                    }
+
+                    pDataValues++;
                 }
             }
 
@@ -765,9 +777,14 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             Size        aBoundSize( aBound.GetWidth() + ( aExtSize.Width() ),
                                     aBound.GetHeight() + ( aExtSize.Height() ) );
 
-            aMtf.SetPrefMapMode( aMap );
+            MapMode aNewMap( aMap );
+            Point aOrigin( aNewMap.GetOrigin() );
+            aOrigin -= aBound.TopLeft();
+            aNewMap.SetOrigin( aOrigin );
+
+            aMtf.SetPrefMapMode( aNewMap );
             aMtf.SetPrefSize( aBoundSize );
-            aMtf.Move( -aBound.TopLeft().X(), -aBound.TopLeft().Y() );
+//          aMtf.Move( -aBound.TopLeft().X(), -aBound.TopLeft().Y() );
 
             if( !bVectorType )
             {
