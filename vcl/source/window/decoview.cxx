@@ -2,9 +2,9 @@
  *
  *  $RCSfile: decoview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:49:48 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 16:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
