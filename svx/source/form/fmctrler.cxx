@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-15 11:26:50 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1581,7 +1581,7 @@ void FmXFormController::setContainer(const Reference< XControlContainer > & xCon
         if (m_bDBConnection && isListeningForChanges())
             stopListening();
 
-        m_aControls = Sequence< Reference< XControl > >();
+        m_aControls.realloc( 0 );
     }
 
     if (m_xTabController.is())
@@ -1631,7 +1631,7 @@ void FmXFormController::setContainer(const Reference< XControlContainer > & xCon
             }
         }
 
-        // nicht fuer jedes Model ein Control
+        // not every model had an associated control
         if (j != i)
             m_aControls.realloc(j);
 
@@ -1686,6 +1686,7 @@ Sequence< Reference< XControl > > FmXFormController::getControls(void) throw( Ru
         Reference< XControl >  xCtrl;
 
         // Umsortieren der Controls entsprechend der TabReihenfolge
+    sal_Int32 j = 0;
         for (sal_Int32 i = 0, j = 0; i < nModels; i++)
         {
             xCtrlModel = pModels[i];
@@ -1695,6 +1696,11 @@ Sequence< Reference< XControl > > FmXFormController::getControls(void) throw( Ru
             if (xCtrl.is())
                 pControls[j++] = xCtrl;
         }
+
+        // not every model had an associated control
+        if ( j != nModels )
+            aNewControls.realloc( j );
+
         m_aControls = aNewControls;
         m_bControlsSorted = sal_True;
     }
