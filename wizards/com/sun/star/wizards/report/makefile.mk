@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tv $ $Date: 2002-05-10 15:49:22 $
+#   last change: $Author: tv $ $Date: 2002-05-13 13:40:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,7 @@ JARTARGET		= $(TARGET).jar
 JAVAFILES=						\
     DBMetaData.java		\
     ReportDocument.java		\
-    XReportWizard.java		\
+    XCallReportWizard.java		\
     ReportWizard.java		\
     CallReportWizard.java	\
     tools.java			\
