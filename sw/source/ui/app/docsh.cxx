@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-14 18:25:04 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 09:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1236,7 +1236,6 @@ void SwDocShell::SetView(SwView* pVw)
 void SwDocShell::PrepareReload()
 {
     ::DelAllGrfCacheEntries( pDoc );
-    pDoc->GetLinkManager().PrepareReload();
 }
 
 
@@ -1460,6 +1459,9 @@ BOOL SwTmpPersist::SaveCompleted( SvStorage * pStor )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/11/14 18:25:04  jp
+    use moduleoptions
+
     Revision 1.4  2000/10/31 20:32:32  jp
     change usage of filestream to medium
 
