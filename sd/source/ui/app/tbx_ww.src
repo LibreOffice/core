@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-05 11:35:37 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -911,9 +911,9 @@ FloatingWindow RID_3D_OBJECTS
     Text[ russian ] = "Îáúåêòû 3-Ì";
     Text[ polish ] = "Obiekty 3-W";
     Text[ japanese ] = "3D ‘ÌµÌŞ¼Şª¸Ä";
-    Text[ chinese_traditional ] = "3 ºûª«¥ó";
+    Text[ chinese_traditional ] = "3D ª«¥ó";
     Text[ greek ] = "Áíôéêåßìåíá 3Ä";
-    Text[ korean ] = "3Â÷¿ø °³Ã¼";
+    Text[ korean ] = "3£Ä£­ °³Ã¼";
     Text[ arabic ] = "ßÇÆäÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B nesneler";
     Text[ language_user1 ] = " ";
@@ -935,7 +935,7 @@ FloatingWindow RID_CONNECTORS
     Text [ spanish ] = "Conector" ;
     Text [ french ] = "Connecteurs" ;
     Text [ portuguese_brazilian ] = "Verbinder" ;
-    Text [ portuguese ] = "Conectores" ;
+    Text [ portuguese ] = "Conector" ;
     ToolBox RID_CONNECTORS_TBX
     {
         SVLook = TRUE ;
