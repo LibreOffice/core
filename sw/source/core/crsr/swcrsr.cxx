@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-26 09:27:42 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 19:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1249,7 +1249,10 @@ FASTBOOL SwCursor::SelectWord( const Point* pPt )
     }
 
     if( !bRet )
+    {
+        DeleteMark();
         RestoreSavePos();
+    }
     return bRet;
 }
 
