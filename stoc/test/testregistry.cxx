@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregistry.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:15:04 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,13 +223,13 @@ void setLinkInDefaultRegistry(const OUString& linkName, const OUString& linkTarg
 void test_SimpleRegistry(
     OUString const & testreg,
     OUString const & testreg2,
-    bool bMergeDifferently = false )
+    bool bMergeDifferently = true )
 {
     Reference<XInterface> xIFace;
     Module module;
 
     OUString dllName(
-        RTL_CONSTASCII_USTRINGPARAM("simplreg.uno" SAL_DLLEXTENSION) );
+        RTL_CONSTASCII_USTRINGPARAM("simplereg.uno" SAL_DLLEXTENSION) );
 
     if (module.load(dllName))
     {
