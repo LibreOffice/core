@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextPortion.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:26 $
+ *  last change:$Date: 2003-02-06 14:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  *
@@ -153,7 +156,7 @@ public class SwXTextPortion extends TestCase {
             }
         }catch(Exception e){
             log.println("Couldn't insert Text");
-            e.printStackTrace();
+            e.printStackTrace(log);
             throw new StatusException( "Couldn't insert Text", e );
         }
 
@@ -165,11 +168,12 @@ public class SwXTextPortion extends TestCase {
         int n = 0;
         while ( (oEnum.hasMoreElements()) ) {
             try {
-                param = (XInterface)oEnum.nextElement();
+                param = (XInterface) AnyConverter.toObject(
+                        new Type(XInterface.class),oEnum.nextElement());
                 log.println("Element Nr.: " + n );
             } catch ( Exception e) {
                 log.println("Couldn't get Paragraph");
-                e.printStackTrace();
+                e.printStackTrace(log);
                 throw new StatusException( "Couldn't get Paragraph", e );
             }
             n++;
@@ -179,10 +183,11 @@ public class SwXTextPortion extends TestCase {
             UnoRuntime.queryInterface( XEnumerationAccess.class, param );
         XEnumeration oEnum2 = oEnumP.createEnumeration();
         try {
-            oObj = (XInterface)oEnum2.nextElement();
+            oObj = (XInterface)AnyConverter.toObject(
+                        new Type(XInterface.class),oEnum2.nextElement());
         } catch ( Exception e) {
             log.println("Couldn't get TextPortion");
-            e.printStackTrace();
+            e.printStackTrace(log);
             throw new StatusException( "Couldn't get TextPortion", e );
         }
 
