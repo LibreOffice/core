@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $ $Date: 2002-04-16 00:05:32 $
+ *  last change: $Author: khong $ $Date: 2002-08-26 21:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ sal_Bool SAL_CALL BreakIteratorImpl::isBeginWord( const OUString& Text, sal_Int3
 {
         if (unicode::isWhiteSpace(Text[nPos])) return false;
 
-    result = getWordBoundary(Text, nPos, rLocale, rWordType, false);
+    result = getWordBoundary(Text, nPos, rLocale, rWordType, true);
 
         return result.startPos == nPos;
 }
