@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:04:10 $
+ *  last change: $Author: sb $ $Date: 2000-11-10 10:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,8 +387,13 @@ UUIInteractionHandler::handle(
         LoginErrorInfo aInfo;
         aInfo.SetTitle(aAuthenticationRequest.ServerName);
         aInfo.SetServer(aAuthenticationRequest.ServerName);
-        if (aAuthenticationRequest.HasRealm
-            || aAuthenticationRequest.HasAccount)
+        DBG_ASSERT(!(aAuthenticationRequest.HasRealm
+                     && aAuthenticationRequest.HasAccount),
+                   "UUIInteractionHandler::handle():"
+                       " AuthenticationRequest with both Realm and Account");
+        if (aAuthenticationRequest.HasRealm)
+            aInfo.SetAccount(aAuthenticationRequest.Realm);
+        else if (aAuthenticationRequest.HasAccount)
             aInfo.SetAccount(aAuthenticationRequest.Account);
         if (aAuthenticationRequest.HasUserName)
             aInfo.SetUserName(aAuthenticationRequest.UserName);
@@ -397,7 +402,8 @@ UUIInteractionHandler::handle(
         aInfo.SetErrorText(aAuthenticationRequest.Diagnostic);
         aInfo.SetPersistentPassword(bRememberPersistent);
         aInfo.SetSavePassword(bRemember);
-        aInfo.SetModifyAccount(aAuthenticationRequest.HasAccount);
+        aInfo.SetModifyAccount(aAuthenticationRequest.HasRealm
+                               || aAuthenticationRequest.HasAccount);
         aInfo.SetModifyUserName(aAuthenticationRequest.HasUserName
                                 && xSupplyAuthentication.is()
                                 && xSupplyAuthentication->canSetUserName());
@@ -416,7 +422,10 @@ UUIInteractionHandler::handle(
                                     ucb::RememberAuthentication_PERSISTENT :
                                     ucb::RememberAuthentication_SESSION :
                                 ucb::RememberAuthentication_NO);
-                    xSupplyAuthentication->setAccount(aInfo.GetAccount());
+                    if (aAuthenticationRequest.HasRealm)
+                        xSupplyAuthentication->setRealm(aInfo.GetAccount());
+                    else
+                        xSupplyAuthentication->setAccount(aInfo.GetAccount());
                     xSupplyAuthentication->select();
                 }
                 break;
@@ -922,4 +931,3 @@ void executeCookieDialog(CntHTTPCookieRequest & rRequest)
 }
 
 }
-
