@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeimpars.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:04:31 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,10 +627,16 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             Rectangle aRect ( aInsertPos, aLogicSize );
             SdrGrafObj* pObj = new SdrGrafObj( *pI->pGraphic, aRect );
-            pObj->SetGraphicLink( pI->aURL, pI->aFilterName );
+            // #118522# calling SetGraphicLink here doesn't work
             pObj->SetName( pI->aURL );
 
             pPage->InsertObject( pObj );
+
+            // #118522# SetGraphicLink has to be used after inserting the object,
+            // otherwise an empty graphic is swapped in and the contact stuff crashes.
+            // See #i37444#.
+            pObj->SetGraphicLink( pI->aURL, pI->aFilterName );
+
             pObj->SetLogicRect( aRect );        // erst nach InsertObject !!!
         }
         nDir = pI->nDir;
