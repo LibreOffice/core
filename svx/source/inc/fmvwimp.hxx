@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 15:21:21 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_CONTAINEREVENT_HPP_
 #include <com/sun/star/container/ContainerEvent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 
 #ifndef _LINK_HXX //autogen
 #include <tools/link.hxx>
@@ -117,17 +120,16 @@ class FmXPageViewWinRec : public ::cppu::WeakImplHelper1< ::com::sun::star::cont
     friend class FmXFormView;
 
     ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > >    m_aControllerList;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >                m_xORB;
     FmXFormView*                m_pViewImpl;
     Window*                     m_pWindow;
 
 public:
-    FmXPageViewWinRec(const SdrPageViewWinRec*, FmXFormView* pView);
+    FmXPageViewWinRec(  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
+                        const SdrPageViewWinRec*, FmXFormView* pView);
     ~FmXPageViewWinRec();
 
 // UNO Anbindung
-    //  DECLARE_UNO3_AGG_DEFAULTS(FmXPageViewWinRec, WeakImplHelper1< ::com::sun::star::container::XIndexAccess> );
-    //  virtual sal_Bool queryInterface( ::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rOut );
-    //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > >  getIdlClasses();
 
 // ::com::sun::star::container::XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException);
@@ -174,9 +176,10 @@ class FmXFormView : public ::cppu::WeakImplHelper2<
     SdrPageView*    m_pPageViewForActivation;
     sal_uInt32      m_nEvent;
     sal_uInt32      m_nErrorMessageEvent;
-    sal_uInt32      m_nAutoFocusEvent;
 
     String          m_sErrorMessage;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
 
     void AttachControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rControl, sal_Bool bDetach );
     void AttachControls( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >&, sal_Bool bDetach );
@@ -184,22 +187,18 @@ class FmXFormView : public ::cppu::WeakImplHelper2<
     FmFormShell* GetFormShell() const;
 
 protected:
-    FmXFormView(FmFormView* _pView)
+    FmXFormView(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
+                FmFormView* _pView)
         :m_pView(_pView)
         ,m_pPageViewForActivation(NULL)
         ,m_nEvent(0)
         ,m_nErrorMessageEvent(0)
-        ,m_nAutoFocusEvent(0)
+        ,m_xORB(_xORB)
     { }
     ~FmXFormView();
 
 public:
     // UNO Anbindung
-    //  DECLARE_UNO3_AGG_DEFAULTS(FmXFormView, WeakImplHelper2<
-                            //  ::com::sun::star::form::XFormControllerListener,
-                            //  ::com::sun::star::container::XContainerListener>);
-    //  virtual sal_Bool queryInterface( ::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rOut );
-    //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > >  getIdlClasses();
 
 // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);
@@ -224,11 +223,7 @@ protected:
     void Activate(SdrPageView* pPageView, sal_Bool bSync = sal_False);
     void Deactivate(SdrPageView* pPageView, BOOL bDeactivateController = TRUE);
 
-    /// the the auto focus to the first (in terms of the tab order) control
-    void AutoFocus();
-
     DECL_LINK(OnActivate, void* );
-    DECL_LINK(OnAutoFocus, void* );
     DECL_LINK(OnDelayedErrorMessage, void*);
 };
 

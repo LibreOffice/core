@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 11:47:53 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -951,7 +951,8 @@ sal_Bool SAL_CALL FmXGridControl::supportsMode(const ::rtl::OUString& Mode) thro
         static_cast< ::com::sun::star::util::XModeSelector*>(this),
         static_cast< ::com::sun::star::frame::XDispatchProvider*>(this),
         static_cast< ::com::sun::star::frame::XDispatchProviderInterception*>(this),
-        static_cast< ::com::sun::star::form::XResetListener*>(this)
+        static_cast< ::com::sun::star::form::XResetListener*>(this),
+        static_cast< ::com::sun::star::form::XGridPeer*>(this)
     );
 
     if (!aReturn.hasValue())

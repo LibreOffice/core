@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-27 09:45:49 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifndef _SVT_SDBPARSE_HXX //autogen wg. SdbSqlParser
-#include <svtools/sdbparse.hxx>
-#endif
 
 #ifndef _SVX_GRIDCELL_HXX
 #include "gridcell.hxx"
@@ -165,12 +161,17 @@
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
-
-#define IFACECAST(c)        ((const com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&)c)
-    // SUN C52 has some ambiguities without this cast ....
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
+#ifndef _CONNECTIVITY_SQLNODE_HXX
+#include <connectivity/sqlnode.hxx>
+#endif
 
 #include <math.h>
 
+
+using namespace connectivity;
 // An irgendeiner Stelle dieser include-Orgie hier gehen die defines fuer WB_LEFT und WB_RIGHT verloren, und ich habe einfach
 // nicht herausgefunden, wo. Also eben ein Hack.
 #define WB_LEFT                 ((WinBits)0x00004000)
@@ -223,7 +224,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const ::com::sun::star::u
     DbCellControl* pCellControl = NULL;
     if (m_rParent.IsFilterMode())
     {
-        pCellControl = new DbFilterField(*this);
+        pCellControl = new DbFilterField(m_rParent.getServiceManager(),*this);
     }
     else
     {
@@ -248,7 +249,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const ::com::sun::star::u
     }
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  xCur;
     if (m_rParent.getDataSource())
-        xCur = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > (IFACECAST(*m_rParent.getDataSource()), ::com::sun::star::uno::UNO_QUERY);
+        xCur = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > (*m_rParent.getDataSource(), ::com::sun::star::uno::UNO_QUERY);
         // TODO : the cursor wrapper should use an ::com::sun::star::sdbc::XRowSet interface, too
 
     pCellControl->Init(&m_rParent.GetDataWindow(), xCur );
@@ -1911,12 +1912,13 @@ sal_Bool DbListBox::Commit()
 
 DBG_NAME(DbFilterField);
 /*************************************************************************/
-DbFilterField::DbFilterField(DbGridColumn& _rColumn)
+DbFilterField::DbFilterField(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,DbGridColumn& _rColumn)
               :DbCellControl(_rColumn)
               ,m_bFilterList(sal_False)
               ,m_nControlClass(::com::sun::star::form::FormComponentType::TEXTFIELD)
               ,m_bFilterListFilled(sal_False)
               ,m_bBound(sal_False)
+              ,m_aParser(_rxORB)
 {
     DBG_CTOR(DbFilterField,NULL);
 
@@ -2125,23 +2127,27 @@ sal_Bool DbFilterField::Commit()
         aNewText.EraseTrailingChars();
         if (aNewText.Len() != 0)
         {
-            XubString aErrorMsg;
+            ::rtl::OUString aErrorMsg;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >  xNumberFormatter(m_rColumn.GetParent().getNumberFormatter());
-            SdbSqlParseNode* pParseNode =
-                    getSQLParser().PredicateTree(aErrorMsg, aNewText,
-                    xNumberFormatter, Application::GetAppInternational(), m_rColumn.GetField());
+
+            OSQLParseNode* pParseNode = m_aParser.predicateTree(aErrorMsg, aNewText,xNumberFormatter, m_rColumn.GetField());
             if (pParseNode)
             {
-                XubString aPreparedText;
+                ::rtl::OUString aPreparedText;
+
+                XubString sLanguage, sCountry;
+                ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
+                ::com::sun::star::lang::Locale aAppLocale(sLanguage, sCountry, ::rtl::OUString());
+
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > xDataSourceRowSet(
-                    IFACECAST(*m_rColumn.GetParent().getDataSource()), ::com::sun::star::uno::UNO_QUERY);
+                    *m_rColumn.GetParent().getDataSource(), ::com::sun::star::uno::UNO_QUERY);
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >  xConnection(
                     ::dbtools::getConnection(xDataSourceRowSet));
-                pParseNode->ParseNodeToPredicateStr(aPreparedText,
+
+                pParseNode->parseNodeToPredicateStr(aPreparedText,
                                                     xConnection->getMetaData(),
                                                     xNumberFormatter,
-                                                    Application::GetAppInternational(),
-                                                    m_rColumn.GetField());
+                                                    m_rColumn.GetField(),aAppLocale,'.');
                 delete pParseNode;
                 m_aText = aPreparedText;
             }

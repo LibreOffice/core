@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 09:34:15 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,10 +188,6 @@ String OBJECTTEXT   = String::CreateFromAscii("<OBJECT>");
 #endif
 
 using namespace dbtools;
-
-#define IFACECAST(c)        ((const com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&)c)
-    // SUN C52 has some ambiguities without this cast ....
-
 
 #define ROWSTATUS(row)  !row.Is() ? "NULL" : row->GetStatus() == GRS_CLEAN ? "CLEAN" : row->GetStatus() == GRS_MODIFIED ? "MODIFIED" : row->GetStatus() == GRS_DELETED ? "DELETED" : "INVALID"
 
@@ -881,7 +877,7 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, sal_Bool bPaintCursor)
                 m_eStatus = (pCur->isAfterLast() || pCur->isBeforeFirst()) ? GRS_INVALID : GRS_CLEAN;
             else
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(IFACECAST(*pCur),::com::sun::star::uno::UNO_QUERY);
+                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(*pCur,::com::sun::star::uno::UNO_QUERY);
                 if (xSet.is())
                 {
                     m_bIsNew = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
@@ -928,7 +924,7 @@ void DbGridRow::SetState(CursorWrapper* pCur, sal_Bool bPaintCursor)
             m_eStatus = GRS_CLEAN;
             if (!bPaintCursor)
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(IFACECAST(*pCur), ::com::sun::star::uno::UNO_QUERY);
+                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(*pCur, ::com::sun::star::uno::UNO_QUERY);
                 DBG_ASSERT(xSet.is(), "DbGridRow::SetState : invalid cursor !");
 
                 if (::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISMODIFIED)))
@@ -1301,7 +1297,7 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
     m_nOptionMask = nOpt;
 
     // normalize the new options
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xDataSourceSet(IFACECAST(*m_pDataCursor), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xDataSourceSet(*m_pDataCursor, ::com::sun::star::uno::UNO_QUERY);
     if (xDataSourceSet.is())
     {
         // feststellen welche Updatemöglichkeiten bestehen
@@ -1477,7 +1473,7 @@ void DbGridControl::setDataSource(const ::com::sun::star::uno::Reference< ::com:
             {
                 xSupplier->getNumberFormatSettings()->getPropertyValue(rtl::OUString::createFromAscii("NullDate")) >>= m_aNullDate;
             }
-            catch(com::sun::star::uno::Exception&)
+            catch(::com::sun::star::uno::Exception&)
             {
             }
         }
@@ -1506,7 +1502,7 @@ void DbGridControl::setDataSource(const ::com::sun::star::uno::Reference< ::com:
     if (m_pDataCursor)
     {
         m_pDataSourcePropListener = new FmXGridSourcePropListener(this);
-        m_pDataSourcePropMultiplexer = new ::comphelper::OPropertyChangeMultiplexer(m_pDataSourcePropListener, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (IFACECAST(*m_pDataCursor), ::com::sun::star::uno::UNO_QUERY));
+        m_pDataSourcePropMultiplexer = new ::comphelper::OPropertyChangeMultiplexer(m_pDataSourcePropListener, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (*m_pDataCursor, ::com::sun::star::uno::UNO_QUERY));
         m_pDataSourcePropMultiplexer->acquire();
         m_pDataSourcePropMultiplexer->addProperty(FM_PROP_ISMODIFIED);
         m_pDataSourcePropMultiplexer->addProperty(FM_PROP_ISNEW);
@@ -1569,7 +1565,7 @@ void DbGridControl::setDataSource(const ::com::sun::star::uno::Reference< ::com:
 
         if (m_pSeekCursor)
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(IFACECAST(*m_pDataCursor), ::com::sun::star::uno::UNO_QUERY);
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(*m_pDataCursor, ::com::sun::star::uno::UNO_QUERY);
             xSet->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
             m_bRecordCountFinal = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ROWCOUNTFINAL));
 
@@ -1622,7 +1618,7 @@ void DbGridControl::setDataSource(const ::com::sun::star::uno::Reference< ::com:
 
     // start listening on the seek cursor
     if (m_pSeekCursor)
-        m_pCursorDisposeListener = new DisposeListenerGridBridge(*this, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > (IFACECAST(*m_pSeekCursor), ::com::sun::star::uno::UNO_QUERY), 0);
+        m_pCursorDisposeListener = new DisposeListenerGridBridge(*this, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > (*m_pSeekCursor, ::com::sun::star::uno::UNO_QUERY), 0);
 }
 
 //------------------------------------------------------------------------------
@@ -1831,7 +1827,7 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_B
         EnablePaint(sal_False);
 
     // Cache an den sichtbaren Bereich anpassen
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(IFACECAST(*m_pSeekCursor), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(*m_pSeekCursor, ::com::sun::star::uno::UNO_QUERY);
     sal_Int32 nCacheSize;
     xSet->getPropertyValue(FM_PROP_FETCHSIZE) >>= nCacheSize;
     sal_Bool bCacheAligned   = sal_False;
@@ -1919,7 +1915,7 @@ void DbGridControl::AdjustRows()
     if (!m_pSeekCursor)
         return;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(IFACECAST(*m_pDataCursor), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(*m_pDataCursor, ::com::sun::star::uno::UNO_QUERY);
 
     // Aktualisieren des RecordCounts
     sal_Int32 nRecordCount;
@@ -2055,10 +2051,10 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow, sal_Bool bForceInsertIfNewRow)
                     // to we need to move the cursor to the insert row?
                     // we need to insert the if the current row isn't the insert row or if the
                     // cursor triggered the move by itselt and we need a reinitialization of the row
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xCursorProps(IFACECAST(*m_pDataCursor), ::com::sun::star::uno::UNO_QUERY);
+                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xCursorProps(*m_pDataCursor, ::com::sun::star::uno::UNO_QUERY);
                     if (bForceInsertIfNewRow || !::comphelper::getBOOL(xCursorProps->getPropertyValue(FM_PROP_ISNEW)))
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(IFACECAST(*m_pDataCursor), ::com::sun::star::uno::UNO_QUERY);
+                        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(*m_pDataCursor, ::com::sun::star::uno::UNO_QUERY);
                         xUpdateCursor->moveToInsertRow();
                     }
                     bNewRowInserted = sal_True;
@@ -2205,7 +2201,7 @@ void DbGridControl::AdjustDataSource(sal_Bool bFull)
     // may not be correct
     else if (m_xCurrentRow.Is() && !m_xCurrentRow->IsNew() &&
         CompareBookmark(m_xCurrentRow->GetBookmark(), m_pDataCursor->getBookmark()) &&
-        !::comphelper::getBOOL(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (IFACECAST(*m_pDataCursor), ::com::sun::star::uno::UNO_QUERY)->getPropertyValue(FM_PROP_ISNEW)))
+        !::comphelper::getBOOL(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (*m_pDataCursor, ::com::sun::star::uno::UNO_QUERY)->getPropertyValue(FM_PROP_ISNEW)))
     {
         // Position ist ein und dieselbe
         // Status uebernehmen, neuzeichnen fertig
@@ -2261,7 +2257,7 @@ sal_Int32 DbGridControl::AlignSeekCursor()
     if (!m_pSeekCursor)
         return -1;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(IFACECAST(*m_pDataCursor), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(*m_pDataCursor, ::com::sun::star::uno::UNO_QUERY);
 
     // jetzt den seekcursor an den DatenCursor angleichen
     if (::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW)))
@@ -3002,7 +2998,7 @@ void DbGridControl::Undo()
         try
         {
             // Editieren abbrechen
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(IFACECAST(*m_pDataCursor), ::com::sun::star::uno::UNO_QUERY);
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(*m_pDataCursor, ::com::sun::star::uno::UNO_QUERY);
             // no effects if we're not updating currently
             if (bAppending)
                 // just refresh the row
@@ -3048,7 +3044,7 @@ void DbGridControl::resetCurrentRow()
         // would never delete the obsolet "second insert row". Thus in this special case this method here
         // is the only possibility to determine the redundance of the row (resetCurrentRow is called when the
         // "first insert row" is about to be cleaned, so of course the "second insert row" is redundant now)
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xDataSource(IFACECAST(*getDataSource()), ::com::sun::star::uno::UNO_QUERY);
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xDataSource(*getDataSource(), ::com::sun::star::uno::UNO_QUERY);
         if (xDataSource.is() && !::comphelper::getBOOL(xDataSource->getPropertyValue(FM_PROP_ISMODIFIED)))
         {
             // are we on a new row currently ?
@@ -3157,7 +3153,7 @@ sal_Bool DbGridControl::SaveRow()
     sal_Bool bSuccess = sal_False;
     try
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(IFACECAST(*m_pDataCursor), ::com::sun::star::uno::UNO_QUERY);
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(*m_pDataCursor, ::com::sun::star::uno::UNO_QUERY);
         if (bAppending)
             xUpdateCursor->insertRow();
         else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:12:06 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 
 #ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
 #include <comphelper/propmultiplex.hxx>
+#endif
+#ifndef _CONNECTIVITY_SQLPARSE_HXX
+#include <connectivity/sqlparse.hxx>
 #endif
 
 class DbCellControl;
@@ -464,6 +467,7 @@ public:
 class DbFilterField : public DbCellControl
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aValueList;
+    connectivity::OSQLParser    m_aParser;
     XubString   m_aText;
     Link    m_aCommitLink;
     sal_Int16   m_nControlClass;
@@ -472,7 +476,7 @@ class DbFilterField : public DbCellControl
     sal_Bool    m_bBound : 1;
 
 public:
-    DbFilterField(DbGridColumn& _rColumn);
+    DbFilterField(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,DbGridColumn& _rColumn);
     virtual ~DbFilterField();
 
     virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 11:57:54 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,11 +242,6 @@
 #endif
 
 
-class SdbSqlParser;
-
-// one SQLParser for the form layer
-SdbSqlParser& getSQLParser();
-
 //==================================================================
 // allgemeine Typen
 //==================================================================
@@ -318,7 +313,6 @@ double ToNullDate(const Date& rNullDate, double rVal);
 class CursorWrapper
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                m_xGeneric;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>               m_xMoveOperations;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate>              m_xBookmarkOperations;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>        m_xColumnsSupplier;
@@ -340,7 +334,8 @@ public:
     sal_Bool Is() const { return m_xMoveOperations.is(); }
 
     CursorWrapper* operator ->() { return this; }
-    operator const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& () const{ return m_xGeneric; }
+    operator ::com::sun::star::uno::XInterface* () const { return (::com::sun::star::uno::XInterface *)m_xMoveOperations.get(); }
+    operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> () const{ return (::com::sun::star::uno::XInterface *)m_xMoveOperations.get(); }
 
     // 'Konvertierungen'
     const CursorWrapper& operator=(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xCursor);

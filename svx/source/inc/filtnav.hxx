@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #ifndef _SVX_FMTOOLS_HXX
 #include <fmtools.hxx>
 #endif // _SVX_FMTOOLS_HXX
+#ifndef _CONNECTIVITY_SQLPARSE_HXX
+#include <connectivity/sqlparse.hxx>
+#endif
 
 class FmFormShell;
 class FmFilterItem;
@@ -139,13 +142,17 @@ class FmFilterAdapter;
 //========================================================================
 class FmFilterData
 {
-    FmParentData* m_pParent;
-    ::rtl::OUString       m_aText;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
+    FmParentData*           m_pParent;
+    ::rtl::OUString         m_aText;
 
 public:
     TYPEINFO();
-    FmFilterData(FmParentData* pParent = NULL, const ::rtl::OUString& rText = ::rtl::OUString())
-        :m_pParent(pParent), m_aText(rText){}
+    FmFilterData(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* pParent = NULL, const ::rtl::OUString& rText = ::rtl::OUString())
+        :m_pParent(pParent)
+        ,m_aText(rText)
+        ,m_xORB()
+    {}
     virtual ~FmFilterData(){}
 
     void    SetText( const ::rtl::OUString& rText ){ m_aText = rText; }
@@ -160,9 +167,12 @@ class FmParentData : public FmFilterData
 protected:
     vector<FmFilterData*> m_aChilds;
 
+
 public:
     TYPEINFO();
-    FmParentData(FmParentData* pParent, const ::rtl::OUString& rText):FmFilterData(pParent, rText){}
+    FmParentData(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* pParent, const ::rtl::OUString& rText)
+        : FmFilterData(_rxFactory,pParent, rText)
+    {}
     virtual ~FmParentData();
 
     vector<FmFilterData*>& GetChilds() {return m_aChilds;}
@@ -177,10 +187,10 @@ class FmFormItem : public FmParentData
 
 public:
     TYPEINFO();
-    FmFormItem():FmParentData(NULL, ::rtl::OUString()){}
-    FmFormItem(FmParentData* _pParent,
+    FmFormItem(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory):FmParentData(_rxFactory,NULL, ::rtl::OUString()){}
+    FmFormItem(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* _pParent,
                  const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & _xController,
-                 const ::rtl::OUString& _rText):FmParentData(_pParent, _rText)
+                 const ::rtl::OUString& _rText):FmParentData(_rxFactory,_pParent, _rText)
                                      ,m_xController(_xController)
                                      ,m_nCurrent(0){}
 
@@ -195,8 +205,8 @@ class FmFilterItems : public FmParentData
 {
 public:
     TYPEINFO();
-    FmFilterItems():FmParentData(NULL, ::rtl::OUString()){}
-    FmFilterItems(FmFormItem* pParent, const ::rtl::OUString& rText ):FmParentData(pParent, rText){}
+    FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory):FmParentData(_rxFactory,NULL, ::rtl::OUString()){}
+    FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmFormItem* pParent, const ::rtl::OUString& rText ):FmParentData(_rxFactory,pParent, rText){}
 
     FmFilterItem* Find(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent > & xText) const;
     virtual Image GetImage() const;
@@ -210,7 +220,8 @@ class FmFilterItem : public FmFilterData
 
 public:
     TYPEINFO();
-    FmFilterItem(FmFilterItems* pParent,
+    FmFilterItem(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
+                FmFilterItems* pParent,
               const ::rtl::OUString& aFieldName,
               const ::rtl::OUString& aCondition,
               const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent > & xText);
@@ -227,14 +238,16 @@ class FmFilterModel : public FmParentData
 {
     friend class FmFilterAdapter;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >           m_xControllers;
+    connectivity::OSQLParser    m_aParser;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >       m_xControllers;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >         m_xController;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
     FmFilterAdapter*        m_pAdapter;
     FmFilterItems*          m_pCurrentItems;
 
 public:
     TYPEINFO();
-    FmFilterModel();
+    FmFilterModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
     virtual ~FmFilterModel();
 
     void Update(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & xCurrent);
@@ -246,6 +259,7 @@ public:
     FmFormItem* GetCurrentForm() const {return m_pCurrentItems ? (FmFormItem*)m_pCurrentItems->GetParent() : NULL;}
     FmFilterItems* GetCurrentItems() const {return m_pCurrentItems;}
     void SetCurrentItems(FmFilterItems* pCurrent);
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const { return m_xORB; }
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & GetControllers() const {return m_xControllers;}
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & GetCurrentController() const {return m_xController;}

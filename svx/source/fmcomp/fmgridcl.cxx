@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-27 09:45:49 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,9 +248,6 @@
 #include "trace.hxx"
 #endif
 
-#define IFACECAST(c)        ((const com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&)c)
-    // SUN C52 has some ambiguities without this cast ....
-
 static sal_uInt32 nFormat = 0;
 
 //==============================================================================
@@ -421,16 +418,15 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
         if (!xDatabaseAccess.is())
         {   // aDatabaseName isn't a database path. maybe a favorite name ?
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService >  xDatabaseAccesses(
-                static_cast<FmGridControl*>(GetParent())->getServiceManager()->createInstance(SRV_SDB_DATABASE_ACCESS_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
+                static_cast<FmGridControl*>(GetParent())->getServiceManager()->createInstance(SRV_SDB_DATABASE_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
             if (xDatabaseAccesses.is())
             {
                 try
                 {
                     xDatabaseAccess = ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseAccess > (xDatabaseAccesses->getRegisteredObject(sDatabaseName), ::com::sun::star::uno::UNO_QUERY);
                 }
-                catch(::com::sun::star::container::NoSuchElementException& e)
+                catch(::com::sun::star::container::NoSuchElementException&)
                 {   // allowed, means aDatabaseName isn't a valid favorite name ....
-                    e; // make the compiler happy
                 }
             }
         }
@@ -1176,7 +1172,7 @@ void FmGridControl::DeleteSelectedRows()
         if (xConfirm.is())
         {
             ::com::sun::star::sdb::RowChangeEvent aEvent;
-            aEvent.Source = IFACECAST(*getDataSource());
+            aEvent.Source = (::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > )(::com::sun::star::uno::XInterface*)(*getDataSource());
             aEvent.Rows = nSelectedRows;
             aEvent.Action = ::com::sun::star::sdb::RowChangeAction::DELETE;
             if (!xConfirm->confirmDelete(aEvent))
@@ -1184,7 +1180,7 @@ void FmGridControl::DeleteSelectedRows()
         }
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XDeleteRows >  xDeleteThem(IFACECAST(*getDataSource()), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XDeleteRows >  xDeleteThem(*getDataSource(), ::com::sun::star::uno::UNO_QUERY);
 
     // colect the bookmarks of the selected rows
     ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any> aBookmarks = getSelectionBookmarks();
@@ -1265,19 +1261,19 @@ void FmGridControl::DeleteSelectedRows()
                     // no valid bookmark so move to the insert row
                     else
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(IFACECAST(*getDataSource()), ::com::sun::star::uno::UNO_QUERY);
+                        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(*getDataSource(), ::com::sun::star::uno::UNO_QUERY);
                         xUpdateCursor->moveToInsertRow();
                     }
                 }
                 else
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(IFACECAST(*m_pDataCursor), ::com::sun::star::uno::UNO_QUERY);
+                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(*m_pDataCursor, ::com::sun::star::uno::UNO_QUERY);
                     sal_Int32 nRecordCount;
                     xSet->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
                     // there are no rows left and we have an insert row
                     if (!nRecordCount && GetEmptyRow().Is())
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(IFACECAST(*getDataSource()), ::com::sun::star::uno::UNO_QUERY);
+                        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(*getDataSource(), ::com::sun::star::uno::UNO_QUERY);
                         xUpdateCursor->moveToInsertRow();
                     }
                     else if (nRecordCount)

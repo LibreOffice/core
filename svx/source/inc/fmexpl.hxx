@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,6 +458,7 @@ class FmExplorer : public SvTreeListBox, public SfxListener
     // die Images, die ich brauche (und an FormDatas und EntryDatas weiterreiche)
     ImageList           m_ilNavigatorImages;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
     FmExplorerModel*    m_pExplModel;
     SvLBoxEntry*        m_pRootEntry;
     SvLBoxEntry*        m_pEditEntry;
@@ -536,7 +537,7 @@ protected:
     virtual void Command( const CommandEvent& rEvt );
 
 public:
-    FmExplorer( Window* pParent );
+    FmExplorer(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&  _xORB, Window* pParent );
     virtual ~FmExplorer();
 
     void Clear();

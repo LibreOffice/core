@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:12:06 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -221,8 +224,14 @@
 #include "fmtools.hxx"
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE12_HXX_
+#include <cppuhelper/implbase12.hxx>
+#endif
+#ifndef _CPPUHELPER_COMPBASE12_HXX_
+#include <cppuhelper/compbase12.hxx>
 #endif
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
@@ -235,6 +244,12 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _CONNECTIVITY_SQLPARSE_HXX
+#include <connectivity/sqlparse.hxx>
+#endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
 #endif
 
 struct FmXTextComponentLess : public binary_function< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent> , sal_Bool>
@@ -255,73 +270,77 @@ class FmXFormController;
 class FmFormView;
 class Window;
 
+typedef ::cppu::WeakAggComponentImplHelper12<   ::com::sun::star::form::XFormController
+                                            ,::com::sun::star::container::XChild
+                                            ,::com::sun::star::container::XIndexAccess      //  access of child contoller
+                                            ,::com::sun::star::container::XEnumerationAccess
+                                            ,::com::sun::star::awt::XFocusListener
+                                            ,::com::sun::star::form::XLoadListener
+                                            ,::com::sun::star::beans::XPropertyChangeListener
+                                            ,::com::sun::star::awt::XTextListener
+                                            ,::com::sun::star::awt::XItemListener
+                                            ,::com::sun::star::container::XContainerListener
+                                            ,::com::sun::star::util::XModifyListener
+                                            ,::com::sun::star::util::XModifyBroadcaster> FmXFormController_BASE1;
+
+typedef ::cppu::ImplHelper12<               ::com::sun::star::util::XModeSelector
+                                            ,::com::sun::star::form::XConfirmDeleteListener
+                                            ,::com::sun::star::form::XConfirmDeleteBroadcaster
+                                            ,::com::sun::star::sdb::XSQLErrorListener
+                                            ,::com::sun::star::sdb::XSQLErrorBroadcaster
+                                            ,::com::sun::star::sdbc::XRowSetListener
+                                            ,::com::sun::star::sdb::XRowSetApproveListener
+                                            ,::com::sun::star::sdb::XRowSetApproveBroadcaster
+                                            ,::com::sun::star::form::XDatabaseParameterListener
+                                            ,::com::sun::star::form::XDatabaseParameterBroadcaster
+                                            ,::com::sun::star::lang::XServiceInfo
+                                            ,::com::sun::star::form::XResetListener> FmXFormController_BASE2;
+typedef ::cppu::ImplHelper1<                ::com::sun::star::lang::XUnoTunnel> FmXFormController_BASE3;
+
 //==================================================================
 // FmXFormController
 //==================================================================
-class FmXFormController     :public ::cppu::OComponentHelper
+class FmXFormController     : public ::comphelper::OBaseMutex
+                            ,public FmXFormController_BASE1
+                            ,public FmXFormController_BASE2
+                            ,public FmXFormController_BASE3
                             ,public ::cppu::OPropertySetHelper
-                            ,public ::com::sun::star::form::XFormController
-                            ,public ::com::sun::star::container::XChild
-                            ,public ::com::sun::star::container::XIndexAccess               // zugriff auf child contoller
-                            ,public ::com::sun::star::container::XEnumerationAccess
-                            ,public ::com::sun::star::awt::XFocusListener
-                            ,public ::com::sun::star::form::XLoadListener
-                            ,public ::com::sun::star::beans::XPropertyChangeListener
-                            ,public ::com::sun::star::awt::XTextListener
-                            ,public ::com::sun::star::awt::XItemListener
-                            ,public ::com::sun::star::container::XContainerListener
-                            ,public ::com::sun::star::util::XModifyListener
-                            ,public ::com::sun::star::util::XModifyBroadcaster
-                            ,public ::com::sun::star::util::XModeSelector
-                            ,public ::com::sun::star::form::XConfirmDeleteListener
-                            ,public ::com::sun::star::form::XConfirmDeleteBroadcaster
-                            ,public ::com::sun::star::sdb::XSQLErrorListener
-                            ,public ::com::sun::star::sdb::XSQLErrorBroadcaster
-                            ,public ::com::sun::star::sdbc::XRowSetListener
-                            ,public ::com::sun::star::sdb::XRowSetApproveListener
-                            ,public ::com::sun::star::sdb::XRowSetApproveBroadcaster
-                            ,public ::com::sun::star::form::XDatabaseParameterListener
-                            ,public ::com::sun::star::form::XDatabaseParameterBroadcaster
-                            ,public ::com::sun::star::lang::XServiceInfo
-                            ,public ::com::sun::star::form::XResetListener
-                            ,public ::com::sun::star::lang::XUnoTunnel
                             ,public FmDispatchInterceptor
                             ,public ::comphelper::OAggregationArrayUsageHelper< FmXFormController>
 {
     friend class FmXPageViewWinRec;
 
-    //  friend Reflection* FmXFormController_getReflection();
-
-    ::osl::Mutex    m_aMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>          m_xAggregate;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController>        m_xTabController, m_xNavigationController;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>              m_xActiveControl, m_xCurrentControl;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>            m_xModelAsIndex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager> m_xModelAsManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>            m_xParent;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>              m_xAggregate;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController>            m_xTabController, m_xNavigationController;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>                  m_xActiveControl, m_xCurrentControl;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>        m_xModelAsIndex;
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager>  m_xModelAsManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                m_xParent;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
     // Composer used for checking filter conditions
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> m_xComposer;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> >   m_aControls;
     ::cppu::OInterfaceContainerHelper
-                            m_aActivateListeners,
-                            m_aModifyListeners,
-                            m_aErrorListeners,
-                            m_aDeleteListeners,
-                            m_aRowSetApproveListeners,
-                            m_aParameterListeners;
+                                m_aActivateListeners,
+                                m_aModifyListeners,
+                                m_aErrorListeners,
+                                m_aDeleteListeners,
+                                m_aRowSetApproveListeners,
+                                m_aParameterListeners;
 
-    FmFormControllers       m_aChilds;
-    FmFilterControls        m_aFilterControls;
-    FmFilterRows            m_aFilters;
+    FmFormControllers           m_aChilds;
+    FmFilterControls            m_aFilterControls;
+    FmFilterRows                m_aFilters;
     ::form::OImplementationIdsRef   m_aHoldImplIdHelper;
 
-    Timer                   m_aInsertTimer;
+    Timer                       m_aInsertTimer;
+    connectivity::OSQLParser    m_aParser;
 
-    FmFormView*             m_pView;
-    Window*                 m_pWindow;
+    FmFormView*                 m_pView;
+    Window*                     m_pWindow;
 
-    ::rtl::OUString                 m_aMode;
+    ::rtl::OUString             m_aMode;
 
     sal_uInt32                  m_nLoadEvent;
     sal_uInt32                  m_nUpdateDispatcherEvent;
@@ -350,15 +369,16 @@ class FmXFormController     :public ::cppu::OComponentHelper
     Interceptors    m_aControlDispatchInterceptors;
 
 public:
-    FmXFormController(FmFormView* _pView = NULL, Window* _pWindow = NULL, const UniString& _sDispatchPrefix = UniString());
+    FmXFormController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & _rxORB,
+                      FmFormView* _pView = NULL, Window* _pWindow = NULL, const UniString& _sDispatchPrefix = UniString());
     ~FmXFormController();
 
     // UNO Anbindung
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException )
-            { return OComponentHelper::queryInterface( type ); }
+            { return FmXFormController_BASE1::queryInterface( type ); }
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() { OComponentHelper::acquire(); }
-    virtual void SAL_CALL release() { OComponentHelper::release(); }
+    virtual void SAL_CALL acquire();
+    virtual void SAL_CALL release();
 
 // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException)
