@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:07:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,6 +629,13 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
         SetCols(rFmt, rSection, rSection.GetTextAreaWidth());
 }
 
+USHORT lcl_MakeSafeNegativeSpacing(USHORT nIn)
+{
+    if (nIn > SHRT_MAX)
+        nIn = 0;
+    return nIn;
+}
+
 void SwWW8ImplReader::SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) const
 {
     if (!IsBorder(rSection.brc))
@@ -641,6 +648,7 @@ void SwWW8ImplReader::SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) c
     SvxULSpaceItem aUL(ItemGet<SvxULSpaceItem>(aSet, RES_UL_SPACE));
 
     SvxBoxItem aBox(ItemGet<SvxBoxItem>(aSet, RES_BOX));
+    short aOriginalBottomMargin = aBox.GetDistance(BOX_LINE_BOTTOM);
 
     if (rSection.maSep.pgbOffsetFrom == 1)
     {
@@ -648,8 +656,7 @@ void SwWW8ImplReader::SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) c
         if (aBox.GetLeft())
         {
             nDist = aBox.GetDistance(BOX_LINE_LEFT);
-            aBox.SetDistance(writer_cast<USHORT>(aLR.GetLeft() - nDist),
-                BOX_LINE_LEFT);
+            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<USHORT>(aLR.GetLeft() - nDist)), BOX_LINE_LEFT);
             aSizeArray[WW8_LEFT] =
                 aSizeArray[WW8_LEFT] - nDist + aBox.GetDistance(BOX_LINE_LEFT);
         }
@@ -657,8 +664,7 @@ void SwWW8ImplReader::SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) c
         if (aBox.GetRight())
         {
             nDist = aBox.GetDistance(BOX_LINE_RIGHT);
-            aBox.SetDistance(writer_cast<USHORT>(aLR.GetRight() - nDist),
-                BOX_LINE_RIGHT);
+            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<USHORT>(aLR.GetRight() - nDist)), BOX_LINE_RIGHT);
             aSizeArray[WW8_RIGHT] =
                 aSizeArray[WW8_RIGHT] - nDist + aBox.GetDistance(BOX_LINE_RIGHT);
         }
@@ -666,8 +672,7 @@ void SwWW8ImplReader::SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) c
         if (aBox.GetTop())
         {
             nDist = aBox.GetDistance(BOX_LINE_TOP);
-            aBox.SetDistance(writer_cast<USHORT>(aUL.GetUpper() - nDist),
-                BOX_LINE_TOP);
+            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<USHORT>(aUL.GetUpper() - nDist)), BOX_LINE_TOP);
             aSizeArray[WW8_TOP] =
                 aSizeArray[WW8_TOP] - nDist + aBox.GetDistance(BOX_LINE_TOP);
         }
@@ -675,8 +680,7 @@ void SwWW8ImplReader::SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) c
         if (aBox.GetBottom())
         {
             nDist = aBox.GetDistance(BOX_LINE_BOTTOM);
-            aBox.SetDistance(writer_cast<USHORT>(aUL.GetLower() - nDist),
-                BOX_LINE_BOTTOM);
+            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<USHORT>(aUL.GetLower() - nDist)), BOX_LINE_BOTTOM);
             aSizeArray[WW8_BOT] =
                 aSizeArray[WW8_BOT] - nDist + aBox.GetDistance(BOX_LINE_BOTTOM);
         }
@@ -685,13 +689,21 @@ void SwWW8ImplReader::SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) c
     }
 
     if (aBox.GetLeft())
-        aLR.SetLeft(aLR.GetLeft() - aSizeArray[WW8_LEFT]);
+        aLR.SetLeft(lcl_MakeSafeNegativeSpacing(static_cast<USHORT>(aLR.GetLeft() - aSizeArray[WW8_LEFT])));
     if (aBox.GetRight())
-        aLR.SetRight(aLR.GetRight() - aSizeArray[WW8_RIGHT]);
+        aLR.SetRight(lcl_MakeSafeNegativeSpacing(static_cast<USHORT>(aLR.GetRight() - aSizeArray[WW8_RIGHT])));
     if (aBox.GetTop())
-        aUL.SetUpper(aUL.GetUpper() - aSizeArray[WW8_TOP]);
+        aUL.SetUpper(lcl_MakeSafeNegativeSpacing(static_cast<USHORT>(aUL.GetUpper() - aSizeArray[WW8_TOP])));
     if (aBox.GetBottom())
-        aUL.SetLower(aUL.GetLower() - aSizeArray[WW8_BOT]);
+    {
+        //#i30088# and #i30074# - do a final sanity check on
+        //bottom value. Do not allow a resulting zero if bottom
+        //Border margin value was not originally zero.
+        if(aUL.GetLower() != 0)
+            aUL.SetLower(lcl_MakeSafeNegativeSpacing(static_cast<USHORT>(aUL.GetLower() - aSizeArray[WW8_BOT])));
+        else
+            aUL.SetLower(lcl_MakeSafeNegativeSpacing(static_cast<USHORT>(aOriginalBottomMargin - aSizeArray[WW8_BOT])));
+    }
 
     aSet.Put(aLR);
     aSet.Put(aUL);
@@ -1126,7 +1138,11 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
     aNewSection.maSep.dxaRight = ReadUSprm( pSep, pIds[4], nRig[nLIdx]);
 
     //#110175# 2pages in 1sheet hackery ?
-    if (aNewSection.maSep.dmOrientPage == 2)
+    //#i31806# but only swap if 2page in 1sheet is enabled.
+    // its not clear if dmOrientPage is the correct member to
+    // decide on this but I am not about to 2nd guess cmc.
+    if(mrReader.pWDop->doptypography.f2on1 &&
+            aNewSection.maSep.dmOrientPage == 2)
         std::swap(aNewSection.maSep.dxaLeft, aNewSection.maSep.dxaRight);
 
     aNewSection.maSep.dzaGutter = ReadUSprm( pSep, pIds[5], 0);
@@ -4763,7 +4779,12 @@ void SwWW8ImplReader::Read_UsePgsuSettings(USHORT,const BYTE* pData,short nLen)
     if( nLen <= 0 )
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_PARATR_SNAPTOGRID);
     else
-        NewAttr( SvxParaGridItem(*pData) );
+    {
+        if(nInTable)
+            NewAttr( SvxParaGridItem(false) );
+        else
+            NewAttr( SvxParaGridItem(*pData) );
+    }
 }
 
 void SwWW8ImplReader::Read_AlignFont( USHORT, const BYTE* pData, short nLen )
