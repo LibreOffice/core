@@ -2,9 +2,9 @@
 *
 *  $RCSfile: CommandFieldSelection.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 13:04:06 $
+*  last change: $Author: pjunck $ $Date: 2004-10-27 13:40:41 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -123,8 +123,8 @@ public class CommandFieldSelection extends FieldSelection {
             toggleListboxControls(Boolean.FALSE);
             sTableLabelName = "lblTables_" + super.sIncSuffix;
             sTableListBoxName = "lstTables_" + super.sIncSuffix;
-            sTablePrefix = CurUnoDialog.oResource.getResText(UIConsts.RID_QUERY + 21);
-            sQueryPrefix = CurUnoDialog.oResource.getResText(UIConsts.RID_QUERY + 22);
+            sTablePrefix = getTablePrefix();
+            sQueryPrefix = getQueryPrefix();
             Integer LabelWidth = new Integer(getListboxWidth().intValue() + 6);
             xlblTable = CurUnoDialog.insertLabel(sTableLabelName, new String[] { "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
                         new Object[] { Boolean.FALSE, new Integer(8), _reslblTables, new Integer(95), new Integer(27), IStep, new Short((short) 3), LabelWidth });
@@ -138,41 +138,68 @@ public class CommandFieldSelection extends FieldSelection {
         }
     }
 
+    /**
+     * @return Returns the sQueryPrefix.
+     */
+    public String getQueryPrefix() {
+        if (sQueryPrefix == null)
+            sQueryPrefix = CurUnoDialog.oResource.getResText(UIConsts.RID_QUERY + 22);
+        return sQueryPrefix;
+    }
+    /**
+     * @return Returns the sTablePrefix.
+     */
+    public String getTablePrefix() {
+        if (sTablePrefix == null)
+            sTablePrefix = CurUnoDialog.oResource.getResText(UIConsts.RID_QUERY + 21);
+        return sTablePrefix;
+    }
 
-
+    private short getselectedItemPos(){
+        short[] iSelPoses = ((short[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems"));
+        if (iSelPoses.length > 0)
+            return iSelPoses[0];
+        else
+        return (short) -1;
+    }
 
     public void fillUpFieldsListbox() {
     try {
         String curCommandName = "";
         //As the peer of the control might not yet exist we have to query the model for the SelectedItems
         String[] sLocList = (String[]) CurUnoDialog.getControlProperty(sTableListBoxName, "StringItemList");
+        short iSelPos = getselectedItemPos();
         if (!bgetQueries){
             curCommandName = sLocList[iSelPos];
             CurDBMetaData.setTableByName(curCommandName);
-            CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.TABLE);
+            CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.TABLE, AppendMode);
         }
         else {
             if (sLocList[iSelPos].startsWith(sTablePrefix)){
-                CurDBMetaData.CommandType = CommandType.TABLE;
+                CurDBMetaData.setCommandType(CommandType.TABLE);
                 curCommandName = JavaTools.replaceSubString(sLocList[iSelPos], "", sTablePrefix);
                 CurDBMetaData.setTableByName(curCommandName);
-                CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.TABLE);
+                CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.TABLE, AppendMode);
             }
             else {
-                CurDBMetaData.CommandType = CommandType.QUERY;
+                CurDBMetaData.setCommandType(CommandType.QUERY);
                 curCommandName = JavaTools.replaceSubString(sLocList[iSelPos], "", sQueryPrefix);
                 CurDBMetaData.setQueryByName(curCommandName);
-                CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.QUERY);
+                CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.QUERY, AppendMode);
             }
         }
-        if (CurDBMetaData.AllFieldNames.length > 0) {
-            initialize(CurDBMetaData.AllFieldNames, AppendMode, CurDBMetaData.getMaxColumnsInSelect());
-            return;
+        CurDBMetaData.setCommand(curCommandName);
+        if (CurDBMetaData.AllFieldNames != null){
+            if (CurDBMetaData.AllFieldNames.length > 0) {
+                initialize(CurDBMetaData.AllFieldNames, AppendMode, CurDBMetaData.getMaxColumnsInSelect());
+                return;
+            }
         }
         emptyFieldsListBoxes();
     } catch (Exception exception) {
         exception.printStackTrace(System.out);
     }}
+
 
     // returns the selected entry index in the commandListbox
     private short fillupCommandListBox(boolean bpreselectCommand) throws com.sun.star.wizards.common.TerminateWizardException {
@@ -180,6 +207,7 @@ public class CommandFieldSelection extends FieldSelection {
         boolean bgetFields = false;
         String[] ContentList = new String[0];
         CurDBMetaData.setCommandNames();
+        short iSelPos = getselectedItemPos();
         if (bgetQueries) {
             ContentList = new String[CurDBMetaData.TableNames.length + CurDBMetaData.QueryNames.length];
             System.arraycopy(CurDBMetaData.QueryNames, 0, ContentList, CurDBMetaData.TableNames.length, CurDBMetaData.QueryNames.length);
@@ -224,6 +252,38 @@ public class CommandFieldSelection extends FieldSelection {
     public void toggleCommandListBox(boolean _bdoenable) {
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "Enabled", new Boolean(_bdoenable));
         Helper.setUnoPropertyValue(UnoDialog.getModel(xlblTable), "Enabled", new Boolean(_bdoenable));
+    }
+
+    public String getSelectedCommandName(){
+        String sCommandname = xTableListBox.getSelectedItem();
+        if (sCommandname.startsWith(this.sTablePrefix))
+            return sCommandname.substring(sTablePrefix.length());
+        else if ((sCommandname.startsWith(this.sQueryPrefix)))
+            return sCommandname.substring(sQueryPrefix.length());
+        else
+            return sCommandname;
+    }
+
+
+    public int getSelectedCommandType(){
+        String sCommandname = xTableListBox.getSelectedItem();
+        if (sCommandname.startsWith(this.sTablePrefix))
+            return CommandType.TABLE;
+        else
+            return CommandType.QUERY;
+    }
+
+
+    public void preselectCommand(String _selitem, boolean _bReadOnly){
+        if (_selitem.length() > 0){
+            String[] sitems = (String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), "StringItemList");
+            short iselpos = (short) JavaTools.FieldInList(sitems, getTablePrefix() + _selitem);
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]{iselpos});
+            this.fillUpFieldsListbox();
+        }
+        else
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]{});
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "ReadOnly", new Boolean(_selitem.length() > 0));
     }
 
 }
