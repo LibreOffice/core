@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpgroupdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:36:10 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SC_DLLIMPLEMENTATION
+#undef SC_DLLIMPLEMENTATION
+#endif
 
 #ifdef PCH
 #include "ui_pch.hxx"
