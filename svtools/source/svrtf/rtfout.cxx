@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfout.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 16:00:34 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
+#ifndef _RTL_STRING_HXX_
+#include <rtl/string.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 #ifndef _RTFKEYWD_HXX
 #include <rtfkeywd.hxx>
@@ -76,6 +82,7 @@
 #include <rtfout.hxx>
 #endif
 
+using namespace rtl;
 
 #if defined(MAC)
 const sal_Char RTFOutFuncs::sNewLine = '\015';
@@ -86,108 +93,146 @@ const sal_Char __FAR_DATA RTFOutFuncs::sNewLine[] = "\015\012";
 #endif
 
 
-// ER 01.04.99 diese Methode wurde aus sw/source/filter/rtf/rtfatr.cxx
-// Writer& OutRTF_SwChar( Writer& rWrt, BYTE c ) kopiert und angepasst
-SvStream& RTFOutFuncs::Out_Char( SvStream& rStream, sal_Unicode c,
-                            rtl_TextEncoding eDestEnc, BOOL bWriteHelpFile )
+SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
+    int *pUCMode, rtl_TextEncoding eDestEnc, BOOL bWriteHelpFile)
 {
     const sal_Char* pStr = 0;
-    switch( c )
+    switch (c)
     {
-    case 0x1:   // this are control character of our textattributes and
-    case 0x2:   // will never be written
-                break;
-
-    case 0xA0:          rStream << "\\~";   break;
-    case 0xAD:          rStream << "\\-";   break;
-    case 0x2011:        rStream << "\\_";   break;
-    case '\n':          pStr = sRTF_LINE; break;
-    case '\t':          pStr = sRTF_TAB; break;
-
+    case 0x1:
+    case 0x2:
+        // this are control character of our textattributes and will never be
+        // written
+        break;
+    case 0xA0:
+        rStream << "\\~";
+        break;
+    case 0xAD:
+        rStream << "\\-";
+        break;
+    case 0x2011:
+        rStream << "\\_";
+        break;
+    case '\n':
+        pStr = sRTF_LINE;
+        break;
+    case '\t':
+        pStr = sRTF_TAB;
+        break;
     default:
+        if(!bWriteHelpFile)
         {
-            sal_Unicode cCh = c;
-            c = (BYTE)ByteString::ConvertFromUnicode( c, eDestEnc, FALSE );
-            if( !c )
+            switch(c)
             {
-                // then write as unicode - character
-                if( 0xFF < cCh )
-                {
-                    ByteString sNo( ByteString::CreateFromInt32( cCh ));
-                     rStream << "\\u" << sNo.GetBuffer() << " ?";
-                }
-                else
-                {
-                    rStream << "\\'";
-                     Out_Hex( rStream, cCh, 2 );
-                }
-                break;
+                case 149:
+                    pStr = sRTF_BULLET;
+                    break;
+                case 150:
+                    pStr = sRTF_ENDASH;
+                    break;
+                case 151:
+                    pStr = sRTF_EMDASH;
+                    break;
+                case 145:
+                    pStr = sRTF_LQUOTE;
+                    break;
+                case 146:
+                    pStr = sRTF_RQUOTE;
+                    break;
+                case 147:
+                    pStr = sRTF_LDBLQUOTE;
+                    break;
+                case 148:
+                    pStr = sRTF_RDBLQUOTE;
+                    break;
             }
 
-            if( !bWriteHelpFile )
-                switch( c )
-                {
-#ifdef MAC
-                case 0xa5:          pStr = sRTF_BULLET; break;
-                case 0xd0:          pStr = sRTF_ENDASH; break;
-                case 0xd1:          pStr = sRTF_EMDASH; break;
-                case 0xd4:          pStr = sRTF_LQUOTE; break;
-                case 0xd5:          pStr = sRTF_RQUOTE; break;
-                case 0xd2:          pStr = sRTF_LDBLQUOTE; break;
-                case 0xd3:          pStr = sRTF_RDBLQUOTE; break;
-#else
-                case 149:           pStr = sRTF_BULLET; break;
-                case 150:           pStr = sRTF_ENDASH; break;
-                case 151:           pStr = sRTF_EMDASH; break;
-                case 145:           pStr = sRTF_LQUOTE; break;
-                case 146:           pStr = sRTF_RQUOTE; break;
-                case 147:           pStr = sRTF_LDBLQUOTE; break;
-                case 148:           pStr = sRTF_RDBLQUOTE; break;
-#endif
-            // MAC
-                }
-            if( !pStr )
-                switch ( c )
-                {
-                case '\\':
-                case '}':
-                case '{':           rStream << '\\' << (sal_Char)c; break;
+            if (pStr)
+                break;
+        }
 
-                default:
-                    if( c >= ' ' && c <= '~' )
-                        rStream << (sal_Char)c;
-                    else if( 0xFF < c )
+        switch (c)
+        {
+            case '\\':
+            case '}':
+            case '{':
+                rStream << '\\' << (sal_Char)c;
+                break;
+            default:
+                if (c >= ' ' && c <= '~')
+                    rStream << (sal_Char)c;
+                else
+                {
+                    //If we can't convert to the dest encoding, or if
+                    //its an uncommon multibyte sequence which most
+                    //readers won't be able to handle correctly, then
+                    //export as unicode
+                    OUString sBuf(&c, 1);
+                    OString sConverted;
+                    sal_uInt32 nFlags =
+                        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+                        RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
+                    bool bWriteAsUnicode = !(sBuf.convertToString(&sConverted,
+                        eDestEnc, nFlags));
+                    if (bWriteAsUnicode)
                     {
-                        // write as unicode-char
-                        ByteString aNumStr( ByteString::CreateFromInt32( c ));
-                        rStream << "\\u" << aNumStr.GetBuffer() << " ?";
+                        sBuf.convertToString(&sConverted,
+                            eDestEnc, OUSTRING_TO_OSTRING_CVTFLAGS);
                     }
-                    else
+                    const sal_Int32 nLen = sConverted.getLength();
+                    if (sConverted.getLength() > 1)
+                        bWriteAsUnicode = true;
+
+                    if (bWriteAsUnicode && pUCMode)
+                    {
+                        // then write as unicode - character
+                        if (*pUCMode != nLen)
+                        {
+                             rStream << "\\uc" << ByteString::CreateFromInt32(nLen).GetBuffer();
+                            *pUCMode = nLen;
+                        }
+                        ByteString sNo(ByteString::CreateFromInt32(c));
+                         rStream << "\\u" << sNo.GetBuffer();
+                    }
+
+                    for (sal_Int32 nI = 0; nI < nLen; ++nI)
                     {
                         rStream << "\\'";
-                        Out_Hex( rStream, c, 2 );
+                        Out_Hex(rStream, sConverted.getStr()[nI], 2);
                     }
-                    break;
                 }
+                break;
         }
         break;
     }
 
-    if( pStr )
+    if (pStr)
         rStream << pStr << ' ';
 
     return rStream;
 }
 
-
 SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const String& rStr,
-                            rtl_TextEncoding eDestEnc, BOOL bWriteHelpFile )
+    rtl_TextEncoding eDestEnc, BOOL bWriteHelpFile)
 {
-    for( xub_StrLen n = 0; n < rStr.Len(); n++ )
-        Out_Char( rStream, rStr.GetChar( n ), eDestEnc, bWriteHelpFile );
+    int nUCMode = 1;
+    for (xub_StrLen n = 0; n < rStr.Len(); ++n)
+        Out_Char(rStream, rStr.GetChar(n), &nUCMode, eDestEnc, bWriteHelpFile);
+    if (nUCMode != 1)
+        rStream << "\\uc1";
     return rStream;
 }
 
+SvStream& RTFOutFuncs::Out_Fontname(SvStream& rStream, const String& rStr,
+    rtl_TextEncoding eDestEnc, BOOL bWriteHelpFile)
+{
+    //Fontnames in word have a quirk in that \uc and usage of ansi replacement
+    //chars after a \u don't work and in wordpad \u doesn't work, so we are
+    //left with forcing ansi characters only for fontnames
+    for (xub_StrLen n = 0; n < rStr.Len(); ++n)
+        Out_Char(rStream, rStr.GetChar(n), 0, eDestEnc, bWriteHelpFile);
+    return rStream;
+}
 
 SvStream& RTFOutFuncs::Out_Hex( SvStream& rStream, ULONG nHex, BYTE nLen )
 {
