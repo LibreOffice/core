@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:04:55 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3160,15 +3160,13 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryVisibleC
                 aMarkData.SetMultiMarkArea( ScRange( nCol,0,nTab, nCol,MAXROW,nTab ), FALSE );
 
         //! nur bis zur letzten selektierten Zeile testen?
-        for (SCROW nRow=0; nRow<=MAXROW; nRow++)
-            if (pDoc->GetRowFlags(nRow,nTab) & CR_HIDDEN)
-            {
-                SCROW nHiddenCount = pDoc->GetHiddenRowCount( nRow, nTab );
-                DBG_ASSERT((nHiddenCount > 0), "huch?");
-                SCROW nLast = nRow + nHiddenCount - 1;
-                aMarkData.SetMultiMarkArea( ScRange( 0,nRow,nTab, MAXCOL,nLast,nTab ), FALSE );
-                nRow = nLast;   // +1 wird hinterher addiert
-            }
+        ScCompressedArrayIterator< SCROW, BYTE> aIter( pDoc->GetRowFlagsArray( nTab), 0, MAXROW);
+        do
+        {
+            if (*aIter & CR_HIDDEN)
+                aMarkData.SetMultiMarkArea( ScRange( 0, aIter.GetRangeStart(),
+                            nTab, MAXCOL, aIter.GetRangeEnd(), nTab ), FALSE );
+        } while (aIter.NextRange());
 
         ScRangeList aNewRanges;
         aMarkData.FillRangeListWithMarks( &aNewRanges, FALSE );
@@ -6698,26 +6696,30 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getRowPageBre
             aPrintFunc.UpdatePages();
         }
 
-        SCROW nCount = 0;
-        SCROW nRow;
-        for (nRow=0; nRow<=MAXROW; nRow++)
-            if (pDoc->GetRowFlags( nRow, nTab ) & ( CR_PAGEBREAK | CR_MANUALBREAK ))
-                ++nCount;
+        SCROW nCount = pDoc->GetRowFlagsArray( nTab).CountForAnyBitCondition(
+                0, MAXROW, (CR_PAGEBREAK | CR_MANUALBREAK));
 
-        sheet::TablePageBreakData aData;
         uno::Sequence<sheet::TablePageBreakData> aSeq(nCount);
-        sheet::TablePageBreakData* pAry = aSeq.getArray();
-        USHORT nPos = 0;
-        for (nRow=0; nRow<=MAXROW; nRow++)
+        if (nCount)
         {
-            BYTE nFlags = pDoc->GetRowFlags( nRow, nTab );
-            if (nFlags & ( CR_PAGEBREAK | CR_MANUALBREAK ))
+            sheet::TablePageBreakData aData;
+            sheet::TablePageBreakData* pAry = aSeq.getArray();
+            size_t nPos = 0;
+            ScCompressedArrayIterator< SCROW, BYTE> aIter( pDoc->GetRowFlagsArray( nTab), 0, MAXROW);
+            do
             {
-                aData.Position    = nRow;
-                aData.ManualBreak = ( nFlags & CR_MANUALBREAK ) != 0;
-                pAry[nPos] = aData;
-                ++nPos;
-            }
+                BYTE nFlags = *aIter;
+                if (nFlags & ( CR_PAGEBREAK | CR_MANUALBREAK ))
+                {
+                    for (SCROW nRow = aIter.GetRangeStart(); nRow <= aIter.GetRangeEnd(); ++nRow)
+                    {
+                        aData.Position    = nRow;
+                        aData.ManualBreak = ( nFlags & CR_MANUALBREAK ) != 0;
+                        pAry[nPos] = aData;
+                        ++nPos;
+                    }
+                }
+            } while (aIter.NextRange());
         }
         return aSeq;
     }
