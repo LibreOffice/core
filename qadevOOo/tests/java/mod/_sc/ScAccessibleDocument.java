@@ -2,7 +2,7 @@
  *
  *  $RCSfile: ScAccessibleDocument.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
  *  last change: $Author: vg $
  *
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.awt.XWindow;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawPagesSupplier;
@@ -133,7 +134,7 @@ public class ScAccessibleDocument extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT, "");
@@ -179,7 +180,7 @@ public class ScAccessibleDocument extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println("creating a spreadsheetdocument");
