@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-04 16:55:50 $
+ *  last change: $Author: cl $ $Date: 2001-04-19 12:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,18 +476,6 @@ void SdXMLShapeContext::SetStyle()
             // if this is an auto style, set its properties
             if(bAutoStyle && pDocStyle)
             {
-                // check if this is a control shape
-                // if so we must split the style for the shape and its control model
-                uno::Reference< drawing::XControlShape > xControl( mxShape, uno::UNO_QUERY );
-                if( xControl.is() )
-                {
-                    uno::Reference< beans::XPropertySet > xControlModel( xControl->getControl(), uno::UNO_QUERY );
-                    if( !xControlModel.is() )
-                        break;
-
-                    xPropSet = PropertySetMerger_CreateInstance( xPropSet, xControlModel );
-                }
-
                 // set PropertySet on object
                 pDocStyle->FillPropertySet(xPropSet);
             }
@@ -1251,12 +1239,6 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     AddShape("com.sun.star.drawing.ControlShape");
     if( mxShape.is() )
     {
-        SetStyle();
-        SetLayer();
-
-        // set pos, size, shear and rotate
-        SetTransformation();
-
         DBG_ASSERT( maFormId.getLength(), "draw:control without a form:id attribute!" );
         if( maFormId.getLength() )
         {
@@ -1269,6 +1251,13 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
             }
         }
+
+        SetStyle();
+        SetLayer();
+
+        // set pos, size, shear and rotate
+        SetTransformation();
+
         SdXMLShapeContext::StartElement(xAttrList);
     }
 }

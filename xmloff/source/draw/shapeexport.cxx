@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-16 10:59:46 $
+ *  last change: $Author: cl $ $Date: 2001-04-19 12:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,24 +233,6 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             }
 
             aParentName += xStyle->getName();
-        }
-
-        // if this shape is a control shape we merge the styles
-        // from this shape with the styles from the controls model
-        if( aShapeInfo.meShapeType == XmlShapeTypeDrawControlShape )
-        {
-            do
-            {
-                uno::Reference< drawing::XControlShape > xControl( xShape, uno::UNO_QUERY );
-                if( !xControl.is() )
-                    break;
-
-                uno::Reference< beans::XPropertySet > xControlModel( xControl->getControl(), uno::UNO_QUERY );
-                if( !xControlModel.is() )
-                    break;
-
-                xPropSet = PropertySetMerger_CreateInstance( xPropSet, xControlModel );
-            } while(0);
         }
 
         // filter propset

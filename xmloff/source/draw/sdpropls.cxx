@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-18 08:55:58 $
+ *  last change: $Author: cl $ $Date: 2001-04-19 12:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,10 @@
 
 #ifndef _COM_SUN_STAR_DRAWING_MEASURETEXTVERTPOS_HPP_
 #include <com/sun/star/drawing/MeasureTextVertPos.hpp>
+#endif
+
+#ifndef _XMLOFF_CONTROLBORDERHDL_HXX_
+#include "ControlBorderHandler.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
@@ -342,6 +346,9 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
 
     // 3D shadow attributes
     { "D3DShadow3D",                    XML_NAMESPACE_DR3D, sXML_shadow,                XML_SD_TYPE_SHADOW, 0 },
+
+    // control attributes
+    { "ControlBorder",                  XML_NAMESPACE_FO,   sXML_border,                XML_SD_TYPE_CONTROL_BORDER, 0 },
 
     { 0L }
 };
@@ -862,6 +869,10 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
             case XML_TYPE_TEXT_CLIP:
                 pHdl = new XMLClipPropertyHandler;
+                break;
+
+            case XML_SD_TYPE_CONTROL_BORDER:
+                pHdl = new xmloff::OControlBorderHandler();
                 break;
         }
 
