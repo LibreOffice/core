@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:41 $
+ *  last change: $Author: fs $ $Date: 2000-11-24 14:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,8 @@ struct UStringDescription
             m_encoding = _encoding;
             m_aString = ::rtl::OUString(_pName, _nLen, _encoding);
         }
-    operator ::rtl::OUString() const {
-        return m_aString;
-    }
+    operator ::rtl::OUString() const { return m_aString; }
+    operator const sal_Char*() const { return m_pZeroTerminatedName; }
 
 private:
     rtl::OUString m_aString;
