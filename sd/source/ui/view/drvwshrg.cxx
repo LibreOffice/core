@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drvwshrg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:33:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,6 @@
 #ifndef SD_NAVIGATOR_CHILD_WINDOW_HXX
 #include "NavigatorChildWindow.hxx"
 #endif
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
-#endif
 #ifndef SD_LAYER_DIALOG_CHILD_WINDOW_HXX
 #include "LayerDialogChildWindow.hxx"
 #endif
@@ -157,7 +154,6 @@ SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION( SvxFontWorkChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxColorChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( AnimationChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( PreviewChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( Svx3DChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxBmpMaskChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( GalleryChildWindow::GetChildWindowId() );
@@ -195,7 +191,6 @@ SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL)) //SOH
     SFX_CHILDWINDOW_REGISTRATION( SvxFontWorkChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxColorChildWindow::GetChildWindowId() );
     //SFX_CHILDWINDOW_REGISTRATION( SdAnimationChildWindow::GetChildWindowId() );
-    /* ? */SFX_CHILDWINDOW_REGISTRATION( PreviewChildWindow::GetChildWindowId() );
     //SFX_CHILDWINDOW_REGISTRATION( Sd3DChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( Svx3DChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxBmpMaskChildWindow::GetChildWindowId() );
