@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:56:30 $
+ *  last change: $Author: rt $ $Date: 2004-09-22 14:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,10 +245,6 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-namespace beans     = ::com::sun::star::beans;
-namespace container = ::com::sun::star::container;
-namespace util      = ::com::sun::star::util;
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
@@ -405,15 +401,15 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
     aProxyModeLB.SetSelectHdl(LINK( this, SvxProxyTabPage, ProxyHdl_Impl ));
 
-    Reference< lang::XMultiServiceFactory > xServiceManager(
+    Reference< com::sun::star::lang::XMultiServiceFactory > xServiceManager(
         ::comphelper::getProcessServiceFactory());
 
     if( xServiceManager.is() )
     {
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
-                Reference< lang::XMultiServiceFactory > ( xServiceManager->createInstance( rtl::OUString(
+            Reference< com::sun::star::lang::XMultiServiceFactory > xConfigurationProvider =
+                Reference< com::sun::star::lang::XMultiServiceFactory > ( xServiceManager->createInstance( rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) ) ),
                 UNO_QUERY_THROW);
 
@@ -431,7 +427,7 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
                     aArgumentList );
         }
 
-        catch (uno::RuntimeException e) {
+        catch (RuntimeException e) {
         }
     }
 
@@ -514,11 +510,11 @@ void SvxProxyTabPage::ReadConfigData_Impl()
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: NoSuchElementException caught" );
     }
 
-    catch(lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException e) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: WrappedTargetException caught" );
     }
 
-    catch(uno::RuntimeException e) {
+    catch(RuntimeException e) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: RuntimeException caught" );
     }
 
@@ -567,11 +563,11 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
     }
 
-    catch(lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException e) {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
     }
 
-    catch(uno::RuntimeException e)
+    catch(RuntimeException e)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
     }
@@ -603,11 +599,11 @@ void SvxProxyTabPage::RestoreConfigDefaults_Impl()
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
     }
 
-    catch(lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException e) {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
     }
 
-    catch(uno::RuntimeException e)
+    catch(RuntimeException e)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
     }
@@ -695,7 +691,7 @@ BOOL SvxProxyTabPage::FillItemSet(SfxItemSet& rSet)
         xChangesBatch->commitChanges();
     }
 
-    catch(lang::IllegalArgumentException e) {
+    catch(com::sun::star::lang::IllegalArgumentException e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: IllegalArgumentException caught" );
     }
 
@@ -707,11 +703,11 @@ BOOL SvxProxyTabPage::FillItemSet(SfxItemSet& rSet)
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: PropertyVetoException caught" );
     }
 
-    catch(lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: WrappedTargetException caught" );
     }
 
-    catch(uno::RuntimeException e) {
+    catch(RuntimeException e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: RuntimeException caught" );
     }
 
@@ -1355,7 +1351,7 @@ IMPL_LINK( SvxSecurityTabPage, AdvancedPBHdl, void*, EMPTYARG )
 IMPL_LINK( SvxSecurityTabPage, MacroSecPBHdl, void*, EMPTYARG )
 {
     Reference< security::XDocumentDigitalSignatures > xD(
-        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
+        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), UNO_QUERY );
     if ( xD.is() )
         xD->manageTrustedSources();
 
