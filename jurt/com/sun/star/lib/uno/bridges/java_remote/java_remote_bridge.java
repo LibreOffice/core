@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-22 17:12:21 $
+ *  last change: $Author: kr $ $Date: 2001-02-26 18:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.15 $ $ $Date: 2001-02-22 17:12:21 $
+ * @version     $Revision: 1.16 $ $ $Date: 2001-02-26 18:22:14 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -371,40 +371,45 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
     }
 
 
-    void addRefHolder(Type type, String oid) {
+    final void addRefHolder(Type type, String oid) {
         acquire();
 
-        RefHolder refHolder = (RefHolder)_refHolders.get(oid + type);
+        synchronized(_refHolders) {
+            RefHolder refHolder = (RefHolder)_refHolders.get(oid + type);
 
-        if(refHolder == null) {
-            refHolder = new RefHolder();
-            refHolder._type = type;
-            refHolder._oid = oid;
+            if(refHolder == null) {
+                refHolder = new RefHolder();
+                refHolder._type = type;
+                refHolder._oid = oid;
 
-            _refHolders.put(oid + type, refHolder);
+                _refHolders.put(oid + type, refHolder);
+            }
+
+            ++ refHolder._mapCount;
         }
-
-        ++ refHolder._mapCount;
     }
 
-    void remRefHolder(Type type, String oid) {
-        RefHolder refHolder = (RefHolder)_refHolders.get(oid + type);
+    final void remRefHolder(Type type, String oid) {
+        synchronized(_refHolders) {
+            RefHolder refHolder = (RefHolder)_refHolders.get(oid + type);
 
-        if(refHolder != null) {
-            -- refHolder._mapCount;
-            if(refHolder._mapCount <= 0)
-                _refHolders.remove(oid + type);
+            if(refHolder != null) {
+                -- refHolder._mapCount;
+                if(refHolder._mapCount <= 0)
+                    _refHolders.remove(oid + type);
 
-            release();
+                release();
+            }
+            else
+                System.err.println(getClass().getName() + ".remRefHolder - warning - unknown oid:" + oid + " " + type);
         }
-        else
-            System.err.println(getClass().getName() + ".remRefHolder - warning - unknown oid:" + oid + " " + type);
     }
 
 
-    void freeHolders() {
+    final void freeHolders() {
         if(DEBUG) System.err.println("#### " + getClass().getName() + ".freeHolders:" + _refHolders.size());
 
+        synchronized(_refHolders) {
         Enumeration elements = _refHolders.elements();
         while(elements.hasMoreElements()) {
             RefHolder refHolder = (RefHolder)elements.nextElement();
@@ -415,6 +420,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                 _java_environment.revokeInterface(refHolder._oid, refHolder._type);
                 release();
             }
+        }
         }
     }
 
@@ -680,7 +686,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
      * <p>
      * @see com.sun.star.uno.IBridge#acquire
      */
-    public void acquire() {
+    public synchronized void acquire() {
         ++ _life_count;
     }
 
@@ -690,7 +696,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
      * <p>
      * @see com.sun.star.uno.IBridge#release
      */
-    public void release() {
+    public synchronized void release() {
         -- _life_count;
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".release:" + _life_count);
