@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-29 02:44:27 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,14 +151,14 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ PORTUGUESE_BRAZILIAN ] = "Fremdgrafiken andeuten" ;
         Text [ SWEDISH ] = "Antyd extern gra~fik" ;
         Text [ PORTUGUESE ] = "Delinear imagens e~xternas" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾ÆäËü¸ñÊ½Í¼ĞÎµÄ±ß¿ò(~P)";
+        Text[ chinese_simplified ] = "ÏÔÊ¾ÆäËü¸ñÊ½Í¼ĞÎµÄ±ß¿ò(~I)";
         Text[ russian ] = "Îáîçíà÷èòü âíåøíèå ğèñóíêè";
         Text[ polish ] = "Symbol zastêpczy grafik";
-        Text[ japanese ] = "²Ò°¼Ş˜g‚Ì•\\¦(~P)";
-        Text[ chinese_traditional ] = "Åã¥Ü¨ä¥L®æ¦¡¹Ï§ÎªºÃä®Ø(~P)";
+        Text[ japanese ] = "²Ò°¼Ş˜g‚Ì•\\¦(~I)";
+        Text[ chinese_traditional ] = "Åã¥Ü¨ä¥L®æ¦¡¹Ï§ÎªºÃä®Ø(~I)";
         Text[ arabic ] = "ÊáãíÍ áÕæÑ ÎÇÑÌíÉ";
         Text[ greek ] = "ÕğïäŞëùóç åîùôåñéêşí ãñá~öéêşí";
-        Text[ korean ] = "¿ÜºÎ±×·¡ÇÈ Ç¥½Ã(~P)";
+        Text[ korean ] = "¿ÜºÎ±×·¡ÇÈ Ç¥½Ã(~I)";
         Text[ turkish ] = "Harici grafik için yer tutucu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Indicar imágenes externas";
@@ -179,14 +179,14 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ danish ] = "Konturmodus" ;
         Text [ portuguese ] = "Modo de ~contorno" ;
         Text [ portuguese_brazilian ] = "Umri?modus" ;
-        Text[ chinese_simplified ] = "ÂÖÀªÄ£Ê½(~C)";
+        Text[ chinese_simplified ] = "ÂÖÀªÄ£Ê½(~O)";
         Text[ russian ] = "~Ğåæèì êîíòóğà";
         Text[ polish ] = "Tryb konturu";
-        Text[ japanese ] = "—ÖŠsÓ°ÄŞ(~C)";
-        Text[ chinese_traditional ] = "½ü¹ø¼Ò¦¡(~C)";
+        Text[ japanese ] = "—ÖŠsÓ°ÄŞ(~O)";
+        Text[ chinese_traditional ] = "½ü¹ø¼Ò¦¡(~O)";
         Text[ arabic ] = "Ôßá ÇáÎØ ÇáßİÇİí";
         Text[ greek ] = "ÊáôÜóôáóç ğåñéãñÜììáôïò";
-        Text[ korean ] = "À±°û ¸ğµå(~C)";
+        Text[ korean ] = "À±°û ¸ğµå(~O)";
         Text[ turkish ] = "Kontur kipi";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Ääriviivatila";
@@ -246,7 +246,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ chinese_traditional ] = "¥uÅã¥Ü½ü¹ø½u(~L)";
         Text[ arabic ] = "ÅÙåÇÑ ÍÏæÏ ÇáÎØ İŞØ";
         Text[ greek ] = "ÅìöÜ~íéóç ìüíï ğïëı ëåğôşí ãñáììşí";
-        Text[ korean ] = "°¡´Â¼±¸¸¡¡º¸ÀÌ±â(~L)";
+        Text[ korean ] = "°¡´Â ¼±¸¸ Ç¥½Ã(~L)";
         Text[ turkish ] = "Kontur çizgilerini göster";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar solo líneas finas";
@@ -297,14 +297,14 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ PORTUGUESE_BRAZILIAN ] = "Lineale" ;
         Text [ SWEDISH ] = "~Linjaler synliga" ;
         Text [ PORTUGUESE ] = "Réguas visíveis" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾±ê³ß";
+        Text[ chinese_simplified ] = "ÏÔÊ¾±ê³ß(~R)";
         Text[ russian ] = "~Ïîêàçàòü ëèíåéêè";
         Text[ polish ] = "Widoczne linijki";
-        Text[ japanese ] = "Ù°×‚Ì•\\¦(~V)";
-        Text[ chinese_traditional ] = "Åã¥Ü¼Ğ¤Ø";
+        Text[ japanese ] = "Ù°×‚Ì•\\¦(~R)";
+        Text[ chinese_traditional ] = "Åã¥Ü¼Ğ¤Ø(~R)";
         Text[ arabic ] = "ÇáãÓÇØÑ ãÑÆíÉ";
         Text[ greek ] = "×Üñáêåò ïñáôÜ";
-        Text[ korean ] = "´«±İÀÚ Ç¥½Ã";
+        Text[ korean ] = "´«±İÀÚ Ç¥½Ã(~R)";
         Text[ turkish ] = "Cetvelleri göster";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reglas ~visibles";
@@ -325,11 +325,11 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ danish ] = "Hjælpelinjer ved flytning" ;
         Text [ portuguese ] = "Guias ao ~mover" ;
         Text [ portuguese_brazilian ] = "Hilfslinien beim ~Verschieben" ;
-        Text[ chinese_simplified ] = "ÔÚÒÆ¶¯¶ÔÏóÊ±ÏÔÊ¾¸¨ÖúÏß";
+        Text[ chinese_simplified ] = "ÔÚÒÆ¶¯¶ÔÏóÊ±ÏÔÊ¾¸¨ÖúÏß(~G)";
         Text[ russian ] = "Íàïğàâ. ëèíèè ïğè ïåğåìåùåíèè îáúåêòà";
         Text[ polish ] = "Linie pomocnicze przy przesuwaniu obiektu";
         Text[ japanese ] = "ˆÚ“®‚Ì•â•ü‚ğ•\\¦(~G)";
-        Text[ chinese_traditional ] = "¦b²¾°Ê®ÉÅã¥Ü»²§U½u";
+        Text[ chinese_traditional ] = "¦b²¾°Ê®ÉÅã¥Ü»²§U½u(~G)";
         Text[ arabic ] = "ÇáÎØæØ ÇáãÓÇÚÏÉ ÃËäÇÁ ÇáÅÒÇÍÉ";
         Text[ greek ] = "Âïçèçôéêİò ãñáììİò êáôÜ ôç ìåôáêßíçóç";
         Text[ korean ] = "°³Ã¼ ÀÌµ¿½Ã ¾È³»¼±(~G)";
@@ -354,14 +354,14 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ danish ] = "Alle kontrolpunkter i bezier-redigeringen" ;
         Text [ portuguese_brazilian ] = "~Alle Handles im Bezier-Editor" ;
         Text [ portuguese ] = "~Todos os pontos de controlo do editor Bézier" ;
-        Text[ chinese_simplified ] = "ÇúÏß±à¼­Æ÷Ö®ÄÚµÄÈ«²¿¿Øµã";
+        Text[ chinese_simplified ] = "ÇúÏß±à¼­Æ÷Ö®ÄÚµÄÈ«²¿¿Øµã(~A)";
         Text[ russian ] = "~Âñå òî÷êè â ğåäàêòîğå Áåçüå";
         Text[ polish ] = "~Wszystkie punkty sterownicze w edytorze Beziera";
         Text[ japanese ] = "ÍŞ¼Şª‹Èü•ÒW‚Å§Œä“_‚ğ‚·‚×‚Ä•\\¦(~A)";
-        Text[ chinese_traditional ] = "¦±½u½s¿èµ{¦¡¤ºªº¥ş³¡±±ÂI";
+        Text[ chinese_traditional ] = "¦±½u½s¿èµ{¦¡¤ºªº¥ş³¡±±ÂI(~A)";
         Text[ arabic ] = "ßá äŞÇØ ÇáÊÍßã İí ãÍÑÑ Bézier";
         Text[ greek ] = "¼ëåò ôá óçìå~ßá åëİã÷ïõ óå åğåîåñãáóßá Bézier";
-        Text[ korean ] = "º£Áö¿¡ ÆíÁı±âÀÇ ¸ğµç ÇÚµé";
+        Text[ korean ] = "º£Áö¿¡ ÆíÁı±âÀÇ ¸ğµç ÇÚµé(~A)";
         Text[ turkish ] = "Bézier düzenleyicisindeki tüm denetim nokt.";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Kaikki Bézier-editorin ohjauspisteet";
@@ -383,14 +383,14 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ danish ] = "Hvert enkelt objekts kontur" ;
         Text [ portuguese ] = "~Contorno de cada objecto" ;
         Text [ portuguese_brazilian ] = "~Umri? jedes einzelnen Objektes" ;
-        Text[ chinese_simplified ] = "Ã¿¸öµ¥Ò»¶ÔÏóµÄÂÖÀª";
+        Text[ chinese_simplified ] = "Ã¿¸öµ¥Ò»¶ÔÏóµÄÂÖÀª(~C)";
         Text[ russian ] = "Êîíòóğ êàæäîãî îáúåêòà îòäåëüíî";
         Text[ polish ] = "Obrys pojedynczych obiektów";
         Text[ japanese ] = "ŠeµÌŞ¼Şª¸Ä‚É“K‚µ‚½—ÖŠs‚Ì•\\¦(~C)";
-        Text[ chinese_traditional ] = "¨C­Óª«¥óªº½ü¹ø";
+        Text[ chinese_traditional ] = "¨C­Óª«¥óªº½ü¹ø(~C)";
         Text[ arabic ] = "ÇáÎØ ÇáßİÇİí áßá ßÇÆä İÑÏí";
         Text[ greek ] = "Ğåñßãñáììá êÜèå ~ìåìïíùìİíïõ áíôéêåéìİíïõ";
-        Text[ korean ] = "°¢ °³º° °³Ã¼ÀÇ À±°û(~C)";
+        Text[ korean ] = "¸ğµç °³º° °³Ã¼ÀÇ À±°û(~C)";
         Text[ turkish ] = "Her bir nesnenin konturu";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Kunkin yksittäisen objektin ääriviiva";
@@ -503,7 +503,7 @@ TabPage TP_OPTIONS_MISC
         Text[ russian ] = "~Âûäåëåíèå òîëüêî îáëàñòè òåêñòà";
         Text[ polish ] = "Selekcja mo¿liwa tylko w obszarze tekstu";
         Text[ japanese ] = "Ã·½Ä—Ìˆæ‚¾‚¯‘I‘ğ‰Â”\\";
-        Text[ chinese_traditional ] = "¥u¯à°÷¿ï¾Ü¤å¦r­S³ò";
+        Text[ chinese_traditional ] = "¥u¯à°÷¿ï¾Ü¤å¦r½d³ò";
         Text[ arabic ] = "äØÇŞ ÇáäÕ İŞØ ŞÇÈá ááÊÍÏíÏ";
         Text[ greek ] = "ÅğéëïãŞ ìü~íï ğåñéï÷Şò êåéìİíïõ";
         Text[ korean ] = "ÅØ½ºÆ® ¿µ¿ª¸¸ ¼±ÅÃ °¡´É";
@@ -729,17 +729,17 @@ TabPage TP_OPTIONS_MISC
         Text [ danish ] = "Måleenhed" ;
         Text [ french ] = "Unité de ~mesure" ;
         Text [ swedish ] = "~Måttenhet" ;
-        Text [ dutch ] = "Maateenheid" ;
+        Text [ dutch ] = "~Maateenheid" ;
         Text [ spanish ] = "Unidad de medida" ;
         Text [ english_us ] = "~Meas. unit" ;
-        Text[ chinese_simplified ] = "³ß´çµ¥Î»";
+        Text[ chinese_simplified ] = "³ß´çµ¥Î»(~M)";
         Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
         Text[ polish ] = "Jednostka miary";
-        Text[ japanese ] = "g‚¤’PˆÊ";
-        Text[ chinese_traditional ] = "¤Ø¤o³æ¦ì";
+        Text[ japanese ] = "g‚¤’PˆÊ(~M)";
+        Text[ chinese_traditional ] = "¤Ø¤o³æ¦ì(~M)";
         Text[ arabic ] = "æÍÏÉ ÇáŞíÇÓ";
         Text[ greek ] = "~ÌïíÜäá ìİôñçóçò";
-        Text[ korean ] = "´ÜÀ§";
+        Text[ korean ] = "Ä¡¼ö ´ÜÀ§(~M)";
         Text[ turkish ] = "Ölçü birimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Unidad de medida";
@@ -764,17 +764,17 @@ TabPage TP_OPTIONS_MISC
         Text [ italian ] = "Posizione tabulazioni" ;
         Text [ spanish ] = "Distancia entre tabuladores" ;
         Text [ french ] = "Espace entre les ~tabulations" ;
-        Text [ dutch ] = "Tabstops" ;
+        Text [ dutch ] = "~Tabstops" ;
         Text [ portuguese ] = "I~ntervalo entre tabulações" ;
         Text [ portuguese_brazilian ] = "Tabulatorabstand" ;
-        Text[ chinese_simplified ] = "ÖÆ±í·ûµÄ¼ä¸ô";
+        Text[ chinese_simplified ] = "ÖÆ±í·ûµÄ¼ä¸ô(~B)";
         Text[ russian ] = "Ïîçèöèÿ òàáóëÿòîğà";
         Text[ polish ] = "Tabulatory";
-        Text[ japanese ] = "ÀÌŞŠÔŠu";
-        Text[ chinese_traditional ] = "»sªí²Åªº¶¡¹j";
+        Text[ japanese ] = "ÀÌŞŠÔŠu(~B)";
+        Text[ chinese_traditional ] = "»sªí²Åªº¶¡¹j(~B)";
         Text[ arabic ] = "ÚáÇãÇÊ ÇáÌÏæáÉ";
         Text[ greek ] = "Áğüó~ôáóç óôçëïèåôşí";
-        Text[ korean ] = "ÅÇ °£°İ";
+        Text[ korean ] = "ÅÇ °£°İ(~B)";
         Text[ turkish ] = "Sekme durakları";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Sarkainkeskeytykset";
@@ -899,10 +899,10 @@ TabPage TP_OPTIONS_MISC
         Text[ swedish ] = "A~ddera alla styckeavstånd i det aktuella dokumentet";
         Text[ polish ] = "Dodaj w bie¿¹cym dokumencie wszystkie odstêpy miêdzy akapitami";
         Text[ portuguese_brazilian ] = "Add ~distances between paragraphs";
-        Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚Å‚·‚×‚Ä‚Ì’i—‚ÌŠÔŠu‚ğ‰ÁZ‚·‚é";
-        Text[ korean ] = "ÇöÀç ¹®¼­ÀÇ ¸ğµç ´Ü¶ô °£°İ ÇÕ»ê";
-        Text[ chinese_simplified ] = "µ±Ç°ÎÄµµÖ®ÖĞËùÓĞ¶ÎÂä¼ä¸ñÏà¼Ó";
-        Text[ chinese_traditional ] = "·í«eªº¤å¥ó¤§¤¤©Ò¦³ªº¬q¸¨¶¡¹j¬Û¥[";
+        Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚Å‚·‚×‚Ä‚Ì’i—‚ÌŠÔŠu‚ğ‰ÁZ‚·‚é(~S)";
+        Text[ korean ] = "ÇöÀç ¹®¼­¿¡¼­ ¸ğµç ´Ü¶ô °£°İÀ» ÇÕ»êÇÕ´Ï´Ù(~S)";
+        Text[ chinese_simplified ] = "µ±Ç°ÎÄµµÖ®ÖĞËùÓĞ¶ÎÂä¼ä¸ñÏà¼Ó(~S)";
+        Text[ chinese_traditional ] = "·í«eªº¤å¥ó¤§¤¤©Ò¦³ªº¬q¸¨¶¡¹j¬Û¥[(~S)";
         Text[ turkish ] = "Add ~distances between paragraphs";
         Text[ arabic ] = "Add ~distances between paragraphs";
         Text[ finnish ] = "Im aktuellen Dokument alle ~Absatzabstände addieren";
@@ -982,7 +982,7 @@ TabPage TP_OPTIONS_MISC
         Text[ portuguese ] = "Es~cala de desenho";
         Text[ russian ] = "Ìàñøòàá ğèñóíêà";
         Text[ greek ] = "Êëßìáêá ó÷åäéáó~ìïı";
-        Text[ dutch ] = "Drawing scale";
+        Text[ dutch ] = "Teken~maatstaf";
         Text[ french ] = "Échelle de ~dessin";
         Text[ spanish ] = "Escala de dibujo";
         Text[ italian ] = "Scala di disegno";
@@ -990,10 +990,10 @@ TabPage TP_OPTIONS_MISC
         Text[ swedish ] = "Te~ckningsskala";
         Text[ polish ] = "Skala rysunku";
         Text[ portuguese_brazilian ] = "Drawing scale";
-        Text[ japanese ] = "}Œ`•`‰æ‚Ì”{—¦";
-        Text[ korean ] = "Drawing scale";
-        Text[ chinese_simplified ] = "»æÍ¼µÄÏÔÊ¾¿Ì¶È";
-        Text[ chinese_traditional ] = "Ã¸¹ÏªºÅã¥Ü¨è«×";
+        Text[ japanese ] = "}Œ`•`‰æ‚Ì”{—¦(~D)";
+        Text[ korean ] = "±×¸®±â ±âÁØ(~D)";
+        Text[ chinese_simplified ] = "»æÍ¼µÄÏÔÊ¾¿Ì¶È(~D)";
+        Text[ chinese_traditional ] = "Ã¸¹ÏªºÅã¥Ü¨è«×(~D)";
         Text[ turkish ] = "Drawing scale";
         Text[ arabic ] = "Drawing scale";
         Text[ catalan ] = "Drawing scale";
@@ -1018,19 +1018,19 @@ TabPage TP_OPTIONS_MISC
         Text [ italian ] = "Larghezza pagina" ;
         Text [ spanish ] = "Ancho de página" ;
         Text [ french ] = "~Largeur de page" ;
-        Text [ dutch ] = "Paginabreedte" ;
+        Text [ dutch ] = "~Paginabreedte" ;
         Text [ swedish ] = "Sid~bredd" ;
         Text [ danish ] = "Sidebredde" ;
         Text [ portuguese ] = "~Largura de página" ;
         Text [ portuguese_brazilian ] = "Seitenbreite" ;
-        Text[ chinese_simplified ] = "Ò³Ãæ¿í¶È";
+        Text[ chinese_simplified ] = "Ò³Ãæ¿í¶È(~W)";
         Text[ russian ] = "Øèğèíà ñòğàíèöû";
         Text[ polish ] = "Szerokoœæ strony";
-        Text[ japanese ] = "Íß°¼Ş•";
-        Text[ chinese_traditional ] = "­¶­±¼e«×";
+        Text[ japanese ] = "Íß°¼Ş•(~W)";
+        Text[ chinese_traditional ] = "­¶­±¼e«×(~W)";
         Text[ arabic ] = "ÚÑÖ ÇáÕİÍÉ";
         Text[ greek ] = "~ĞëÜôïò óåëßäáò";
-        Text[ korean ] = "ÂÊ ³Êºñ";
+        Text[ korean ] = "ÆäÀÌÁö ³Êºñ(~W)";
         Text[ turkish ] = "Sayfa genişliği";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Sivun leveys";
@@ -1067,7 +1067,7 @@ TabPage TP_OPTIONS_MISC
         Size = MAP_APPFONT ( 49 , 8 ) ;
         Text = "Se~itenhöhe" ;
         Text [ ENGLISH ] = "Page height" ;
-        Text [ dutch ] = "Paginahoogte" ;
+        Text [ dutch ] = "Pagina~hoogte" ;
         Text [ english_us ] = "Page ~height" ;
         Text [ italian ] = "Altezza pagina" ;
         Text [ spanish ] = "Altura de página" ;
@@ -1076,14 +1076,14 @@ TabPage TP_OPTIONS_MISC
         Text [ danish ] = "Sidehøjde" ;
         Text [ portuguese ] = "~Altura da página" ;
         Text [ portuguese_brazilian ] = "Seitenh?e" ;
-        Text[ chinese_simplified ] = "Ò³Ãæ¸ß¶È";
+        Text[ chinese_simplified ] = "Ò³Ãæ¸ß¶È(~H)";
         Text[ russian ] = "Âûñîòà ñòğàíèöû";
         Text[ polish ] = "Wysokoœæ strony";
-        Text[ japanese ] = "Íß°¼Ş‚Ì‚‚³";
-        Text[ chinese_traditional ] = "­¶­±°ª«×";
+        Text[ japanese ] = "Íß°¼Ş‚Ì‚‚³(~H)";
+        Text[ chinese_traditional ] = "­¶­±°ª«×(~H)";
         Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİÍÉ";
         Text[ greek ] = "¾ø~ïò óåëßäáò";
-        Text[ korean ] = "ÂÊ ³ôÀÌ";
+        Text[ korean ] = "ÆäÀÌÁö ³ôÀÌ(~H)";
         Text[ turkish ] = "Sayfa yüksekliği";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Sivun korkeus";
@@ -1127,6 +1127,7 @@ TabPage TP_OPTIONS_MISC
     Text[ finnish ] = "Muu";
     Text[ catalan ] = "Otros";
 };
+
 
 
 
