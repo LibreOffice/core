@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleContext.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:25 $
+ *  last change:$Date: 2003-01-30 14:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,12 +202,19 @@ public class _XAccessibleContext extends MultiMethodTest {
 
         XAccessibleContext parentAC = parent.getAccessibleContext() ;
         try {
-            bOK &= AccessibilityTools.equals(
-                parentAC.getAccessibleChild(idx).getAccessibleContext(),oObj);
+            if (parentAC.getAccessibleChild(idx) == null) {
+                log.println("Parent has no child with this index");
+                bOK &= false;
+            } else {
+                bOK &= AccessibilityTools.equals(
+                    parentAC.getAccessibleChild(idx).getAccessibleContext(),oObj);
+            }
             if (!bOK) {
                 log.println("Expected: "+util.utils.getImplName(oObj));
-                log.println("Getting: "+util.utils.getImplName(
-                    parentAC.getAccessibleChild(idx).getAccessibleContext()));
+                if (parentAC.getAccessibleChild(idx) != null) {
+                    log.println("Getting: "+util.utils.getImplName(
+                        parentAC.getAccessibleChild(idx).getAccessibleContext()));
+                }
             }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
