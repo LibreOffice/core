@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2001-09-26 09:06:49 $
+ *  last change: $Author: kz $ $Date: 2001-09-27 21:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,7 +542,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ japanese ] = "位置";
         Text[ korean ] = "~Position";
         Text[ chinese_simplified ] = "位置";
-        Text[ chinese_traditional ] = "~Position";
+        Text[ chinese_traditional ] = "位置(~P)";
         Text[ turkish ] = "~Position";
         Text[ arabic ] = "~Position";
         Text[ catalan ] = "~Position";
@@ -1932,6 +1932,7 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ catalan ] = "Posici�n y tama�o";
 };
  // ********************************************************************** EOF
+
 
 
 
