@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicObjectShape.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 19:06:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include <com/sun/star/awt/XBitmap.idl>
 #endif
 
+#ifndef com_sun_star_graphic_XGraphic_idl
+#include <com/sun/star/graphic/XGraphic.idl>
+#endif
+
 #ifndef __com_sun_star_drawing_ColorMode_idl__
 #include <com/sun/star/drawing/ColorMode.idl>
 #endif
@@ -118,7 +122,8 @@ published service GraphicObjectShape
     [property] string GraphicStreamURL;
 
     //-------------------------------------------------------------------------
-    /** This is the bitmap that represents this graphic shape.
+    /** Deprecated. Use graphic property instead!
+        This is the bitmap that represents this graphic shape.
     */
     [optional, property] com::sun::star::awt::XBitmap GraphicObjectFillBitmap;
 
@@ -176,6 +181,10 @@ published service GraphicObjectShape
     */
     [optional, property] com::sun::star::container::XIndexContainer ImageMap;
 
+    //-------------------------------------------------------------------------
+    /** This is the graphic that represents this graphic shape
+    */
+    [optional, property] com::sun::star::graphic::XGraphic Graphic;
 };
 
 //=============================================================================
@@ -183,4 +192,3 @@ published service GraphicObjectShape
 }; }; }; };
 
 #endif
-
