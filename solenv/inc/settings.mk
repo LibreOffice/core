@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-28 13:15:37 $
+#   last change: $Author: hjs $ $Date: 2001-08-28 13:29:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1313,10 +1313,6 @@ CFLAGSCXX+=$(CFLAGS_NO_EXCEPTIONS)
 .ELSE
 CDEFS+=-DEXCEPTIONS_ON
 .ENDIF
-.ENDIF
-
-.IF "$(dbcs)"!=""
-CDEFS+=-DENABLEUNICODE
 .ENDIF
 
 .IF "$(PRJPCH)"!=""
