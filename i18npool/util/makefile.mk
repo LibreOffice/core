@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.7 $
+#*  $Revision: 1.8 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2002-03-16 19:40:20 $
+#*  last change: $Author: bustamam $ $Date: 2002-03-26 13:40:06 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -82,22 +82,45 @@ LIB1FILES=	$(SLB)$/defaultnumberingprovider.lib	\
         $(SLB)$/registerservices.lib		\
         $(SLB)$/numberformatcode.lib		\
         $(SLB)$/locale.lib			\
-        $(SLB)$/indexentry.lib
+        $(SLB)$/indexentry.lib			\
+        $(SLB)$/calendar.lib		\
+        $(SLB)$/breakiterator.lib \
+        $(SLB)$/transliterationImpl.lib \
+        $(SLB)$/characterclassification.lib \
+        $(SLB)$/collator.lib \
+        $(SLB)$/inputchecker.lib
+LIB1DEPN=	$(MISC)$/$(LIB1TARGET).flt
 
 SHL1TARGET= $(TARGET)$(VERSION)$(DLLPOSTFIX)
 SHL1IMPLIB= i$(TARGET)
+.IF "$(OS)"=="WNT"
+ICUI18NLIB= icuin.lib icuuc.lib
+.ELSE
+ICUI18NLIB= -licui18n -licuuc -licudata
+.IF "$(OS)"=="SOLARIS"
+ICUI18NLIB+= -lCstd
+.ENDIF
+.ENDIF
 
 SHL1STDLIBS=\
         $(TOOLSLIB)				\
         $(CPPULIB)				\
         $(COMPHELPERLIB)			\
         $(CPPUHELPERLIB)			\
-        $(SALLIB)
+        $(SALLIB)				\
+        $(ICUI18NLIB)
 
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 DEF1EXPORTFILE=	$(TARGET).dxp
+
+I18NINC=	$(PRJ)$/inc$/transliterationImpl.hxx \
+        $(PRJ)$/inc$/transliteration_body.hxx \
+        $(PRJ)$/inc$/transliteration_caseignore.hxx \
+        $(PRJ)$/inc$/transliteration_commonclass.hxx \
+        $(PRJ)$/inc$/x_rtl_ustring.h \
+        $(PRJ)$/inc$/unicode.hxx
 
 # --- Targets ------------------------------------------------------------
 
@@ -107,3 +130,6 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @echo Provider>> $@
+
+$(MISC)$/$(LIB1TARGET).flt: $(I18NINC)
+    +$(COPY) $< $(INCCOM)
