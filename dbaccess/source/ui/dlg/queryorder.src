@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:17:48 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,19 +71,8 @@ ModalDialog DLG_ORDERCRIT
     SVLook = TRUE ;
     HelpId = HID_DLG_ORDERCRIT ;
     Size = MAP_APPFONT ( 252 , 76 ) ;
-    Text = "Sortierung" ;
-    Text [ ENGLISH ] = "Sort Order" ;
-    Text [ norwegian ] = "Sort Order" ;
-    Text [ italian ] = "Ordine" ;
-    Text [ portuguese_brazilian ] = "Ordem de classificaÁ„o" ;
-    Text [ portuguese ] = "Ordenar" ;
-    Text [ finnish ] = "Lajitteluj‰rjestys" ;
-    Text [ danish ] = "SorteringsrÊkkef¯lge" ;
-    Text [ french ] = "Tri" ;
-    Text [ swedish ] = "Sortering" ;
-    Text [ dutch ] = "Sortering" ;
-    Text [ spanish ] = "Orden" ;
-    Text [ english_us ] = "Sort Order" ;
+    Text [ de ] = "Sortierung" ;
+    Text [ en-US ] = "Sort Order" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     ListBox LB_ORDERFIELD1
@@ -103,160 +92,20 @@ ModalDialog DLG_ORDERCRIT
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-        StringList =
+        StringList [ de ] =
         {
             < "aufsteigend" ; Default ; > ;
             < "absteigend" ; Default ; > ;
         };
-        StringList [ ENGLISH ] =
-        {
-            < "aufsteigend" ; Default ; > ;
-            < "absteigend" ; Default ; > ;
-        };
-        StringList [ norwegian ] =
-        {
-            < "aufsteigend" ; Default ; > ;
-            < "absteigend" ; Default ; > ;
-        };
-        StringList [ italian ] =
-        {
-            < "crescente" ; Default ; > ;
-            < "decrescente" ; Default ; > ;
-        };
-        StringList [ portuguese_brazilian ] =
-        {
-            < "crescente" ; Default ; > ;
-            < "decrescente" ; Default ; > ;
-        };
-        StringList [ portuguese ] =
-        {
-            < "ascendente" ; Default ; > ;
-            < "descendente" ; Default ; > ;
-        };
-        StringList [ finnish ] =
-        {
-            < "nouseva" ; Default ; > ;
-            < "laskeva" ; Default ; > ;
-        };
-        StringList [ danish ] =
-        {
-            < "stigende" ; Default ; > ;
-            < "faldende" ; Default ; > ;
-        };
-        StringList [ french ] =
-        {
-            < "croissant" ; Default ; > ;
-            < "dÈcroissant" ; Default ; > ;
-        };
-        StringList [ swedish ] =
-        {
-            < "stigande" ; Default ; > ;
-            < "fallande" ; Default ; > ;
-        };
-        StringList [ dutch ] =
-        {
-            < "oplopend" ; Default ; > ;
-            < "aflopend" ; Default ; > ;
-        };
-        StringList [ spanish ] =
-        {
-            < "ascendente" ; Default ; > ;
-            < "descendente" ; Default ; > ;
-        };
-        StringList [ english_us ] =
+        StringList [ en-US ] =
         {
             < "ascending" ; Default ; > ;
             < "descending" ; Default ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
-            < "Âêë‰∏ä" ; Default ; > ;
-        < "Âêë‰∏ã" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "ÔÓ ‚ÓÁ‡ÒÚ‡ÌË˛" ; Default ; > ;
-        < "ÔÓ Û·˚‚‡ÌË˛" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "rosnπco" ; Default ; > ;
-        < "malejπco" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "ÊòáÈ†Ü" ; Default ; > ;
-        < "ÈôçÈ†Ü" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "Âêë‰∏ä" ; Default ; > ;
-        < "Âêë‰∏ã" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < " ’«⁄œÌ" ; Default ; > ;
-        < " ‰«“·Ì" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "·˝ÓÔıÛ·" ; Default ; > ;
-        < "ˆËﬂÌÔıÛ·" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "Ïò§Î¶ÑÏ∞®Ïàú" ; Default ; > ;
-        < "ÎÇ¥Î¶ºÏ∞®Ïàú" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "artan" ; Default ; > ;
-        < "azalan" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "ascendent" ; Default ; > ;
-        < "descendent" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "‡∏à‡∏≤‡∏Å‡∏ô‡πâ‡∏≠‡∏¢‡πÑ‡∏õ‡∏°‡∏≤‡∏Å" ; Default ; > ;
-        < "‡∏à‡∏≤‡∏Å‡∏°‡∏≤‡∏Å‡πÑ‡∏õ‡∏ô‡πâ‡∏≠‡∏¢" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "vzestupnƒõ" ; Default ; > ;
-        < "sestupnƒõ" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "aufsteigend" ; Default ; > ;
-        < "absteigend" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "‡§Ü‡§∞‡•ã‡§π‡§£ ‡§ï‡•ç‡§∞‡§Æ" ; Default ; > ;
-        < "‡§Ö‡§µ‡§∞‡•ã‡§π‡§£ ‡§ï‡•ç‡§∞‡§Æ" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "vzostupne" ; Default ; > ;
-        < "zostupne" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "n√∂vekv≈ë" ; Default ; > ;
-        < "cs√∂kken≈ë" ; Default ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "nara≈°ƒçajoƒçe" ; Default ; > ;
-        < "padajoƒçe" ; Default ; > ;
     };
     };
     ListBox LB_ORDERFIELD2
@@ -276,160 +125,20 @@ ModalDialog DLG_ORDERCRIT
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-        StringList =
+        StringList [ de ] =
         {
             < "aufsteigend" ; Default ; > ;
             < "absteigend" ; Default ; > ;
         };
-        StringList [ ENGLISH ] =
-        {
-            < "aufsteigend" ; Default ; > ;
-            < "absteigend" ; Default ; > ;
-        };
-        StringList [ norwegian ] =
-        {
-            < "aufsteigend" ; Default ; > ;
-            < "absteigend" ; Default ; > ;
-        };
-        StringList [ italian ] =
-        {
-            < "crescente" ; Default ; > ;
-            < "decrescente" ; Default ; > ;
-        };
-        StringList [ portuguese_brazilian ] =
-        {
-            < "crescente" ; Default ; > ;
-            < "decrescente" ; Default ; > ;
-        };
-        StringList [ portuguese ] =
-        {
-            < "ascendente" ; Default ; > ;
-            < "descendente" ; Default ; > ;
-        };
-        StringList [ finnish ] =
-        {
-            < "nouseva" ; Default ; > ;
-            < "laskeva" ; Default ; > ;
-        };
-        StringList [ danish ] =
-        {
-            < "stigende" ; Default ; > ;
-            < "faldende" ; Default ; > ;
-        };
-        StringList [ french ] =
-        {
-            < "croissant" ; Default ; > ;
-            < "dÈcroissant" ; Default ; > ;
-        };
-        StringList [ swedish ] =
-        {
-            < "stigande" ; Default ; > ;
-            < "fallande" ; Default ; > ;
-        };
-        StringList [ dutch ] =
-        {
-            < "oplopend" ; Default ; > ;
-            < "aflopend" ; Default ; > ;
-        };
-        StringList [ spanish ] =
-        {
-            < "ascendente" ; Default ; > ;
-            < "descendente" ; Default ; > ;
-        };
-        StringList [ english_us ] =
+        StringList [ en-US ] =
         {
             < "ascending" ; Default ; > ;
             < "descending" ; Default ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
-            < "Âêë‰∏ä" ; Default ; > ;
-        < "Âêë‰∏ã" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "ÔÓ ‚ÓÁ‡ÒÚ‡ÌË˛" ; Default ; > ;
-        < "ÔÓ Û·˚‚‡ÌË˛" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "rosnπco" ; Default ; > ;
-        < "malejπco" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "ÊòáÈ†Ü" ; Default ; > ;
-        < "ÈôçÈ†Ü" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "Âêë‰∏ä" ; Default ; > ;
-        < "Âêë‰∏ã" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < " ’«⁄œÌ" ; Default ; > ;
-        < " ‰«“·Ì" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "·˝ÓÔıÛ·" ; Default ; > ;
-        < "ˆËﬂÌÔıÛ·" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "Ïò§Î¶ÑÏ∞®Ïàú" ; Default ; > ;
-        < "ÎÇ¥Î¶ºÏ∞®Ïàú" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "artan" ; Default ; > ;
-        < "azalan" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "ascendent" ; Default ; > ;
-        < "descendent" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "‡∏à‡∏≤‡∏Å‡∏ô‡πâ‡∏≠‡∏¢‡πÑ‡∏õ‡∏°‡∏≤‡∏Å" ; Default ; > ;
-        < "‡∏à‡∏≤‡∏Å‡∏°‡∏≤‡∏Å‡πÑ‡∏õ‡∏ô‡πâ‡∏≠‡∏¢" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "vzestupnƒõ" ; Default ; > ;
-        < "sestupnƒõ" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "aufsteigend" ; Default ; > ;
-        < "absteigend" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "‡§Ü‡§∞‡•ã‡§π‡§£ ‡§ï‡•ç‡§∞‡§Æ" ; Default ; > ;
-        < "‡§Ö‡§µ‡§∞‡•ã‡§π‡§£ ‡§ï‡•ç‡§∞‡§Æ" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "vzostupne" ; Default ; > ;
-        < "zostupne" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "n√∂vekv≈ë" ; Default ; > ;
-        < "cs√∂kken≈ë" ; Default ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "nara≈°ƒçajoƒçe" ; Default ; > ;
-        < "padajoƒçe" ; Default ; > ;
     };
     };
     ListBox LB_ORDERFIELD3
@@ -449,345 +158,65 @@ ModalDialog DLG_ORDERCRIT
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-        StringList =
+        StringList [ de ] =
         {
             < "aufsteigend" ; Default ; > ;
             < "absteigend" ; Default ; > ;
         };
-        StringList [ ENGLISH ] =
-        {
-            < "aufsteigend" ; Default ; > ;
-            < "absteigend" ; Default ; > ;
-        };
-        StringList [ norwegian ] =
-        {
-            < "aufsteigend" ; Default ; > ;
-            < "absteigend" ; Default ; > ;
-        };
-        StringList [ italian ] =
-        {
-            < "crescente" ; Default ; > ;
-            < "decrescente" ; Default ; > ;
-        };
-        StringList [ portuguese_brazilian ] =
-        {
-            < "crescente" ; Default ; > ;
-            < "decrescente" ; Default ; > ;
-        };
-        StringList [ portuguese ] =
-        {
-            < "ascendente" ; Default ; > ;
-            < "descendente" ; Default ; > ;
-        };
-        StringList [ finnish ] =
-        {
-            < "nouseva" ; Default ; > ;
-            < "laskeva" ; Default ; > ;
-        };
-        StringList [ danish ] =
-        {
-            < "stigende" ; Default ; > ;
-            < "faldende" ; Default ; > ;
-        };
-        StringList [ french ] =
-        {
-            < "croissant" ; Default ; > ;
-            < "dÈcroissant" ; Default ; > ;
-        };
-        StringList [ swedish ] =
-        {
-            < "stigande" ; Default ; > ;
-            < "fallande" ; Default ; > ;
-        };
-        StringList [ dutch ] =
-        {
-            < "oplopend" ; Default ; > ;
-            < "aflopend" ; Default ; > ;
-        };
-        StringList [ spanish ] =
-        {
-            < "ascendente" ; Default ; > ;
-            < "descendente" ; Default ; > ;
-        };
-        StringList [ english_us ] =
+        StringList [ en-US ] =
         {
             < "ascending" ; Default ; > ;
             < "descending" ; Default ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
-            < "Âêë‰∏ä" ; Default ; > ;
-        < "Âêë‰∏ã" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "ÔÓ ‚ÓÁ‡ÒÚ‡ÌË˛" ; Default ; > ;
-        < "ÔÓ Û·˚‚‡ÌË˛" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "rosnπco" ; Default ; > ;
-        < "malejπco" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "ÊòáÈ†Ü" ; Default ; > ;
-        < "ÈôçÈ†Ü" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "Âêë‰∏ä" ; Default ; > ;
-        < "Âêë‰∏ã" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < " ’«⁄œÌ" ; Default ; > ;
-        < " ‰«“·Ì" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "·˝ÓÔıÛ·" ; Default ; > ;
-        < "ˆËﬂÌÔıÛ·" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "Ïò§Î¶ÑÏ∞®Ïàú" ; Default ; > ;
-        < "ÎÇ¥Î¶ºÏ∞®Ïàú" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "artan" ; Default ; > ;
-        < "azalan" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "ascendent" ; Default ; > ;
-        < "descendent" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "‡∏à‡∏≤‡∏Å‡∏ô‡πâ‡∏≠‡∏¢‡πÑ‡∏õ‡∏°‡∏≤‡∏Å" ; Default ; > ;
-        < "‡∏à‡∏≤‡∏Å‡∏°‡∏≤‡∏Å‡πÑ‡∏õ‡∏ô‡πâ‡∏≠‡∏¢" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "vzestupnƒõ" ; Default ; > ;
-        < "sestupnƒõ" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "aufsteigend" ; Default ; > ;
-        < "absteigend" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "‡§Ü‡§∞‡•ã‡§π‡§£ ‡§ï‡•ç‡§∞‡§Æ" ; Default ; > ;
-        < "‡§Ö‡§µ‡§∞‡•ã‡§π‡§£ ‡§ï‡•ç‡§∞‡§Æ" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "vzostupne" ; Default ; > ;
-        < "zostupne" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "n√∂vekv≈ë" ; Default ; > ;
-        < "cs√∂kken≈ë" ; Default ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "nara≈°ƒçajoƒçe" ; Default ; > ;
-        < "padajoƒçe" ; Default ; > ;
     };
     };
     FixedText FT_ORDERFIELD
     {
         Pos = MAP_APPFONT ( 58 , 14 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "Feldname" ;
-        Text [ ENGLISH ] = "Fieldname" ;
-        Text [ norwegian ] = "Fieldname" ;
-        Text [ italian ] = "Nome di campo" ;
-        Text [ portuguese_brazilian ] = "Nome do campo" ;
-        Text [ portuguese ] = "Nome de campo" ;
-        Text [ finnish ] = "Kent‰n nimi" ;
-        Text [ danish ] = "Feltnavn" ;
-        Text [ french ] = "Nom de champ" ;
-        Text [ swedish ] = "F‰ltnamn" ;
-        Text [ dutch ] = "Veldnaam" ;
-        Text [ spanish ] = "Nombre del campo" ;
-        Text [ ENGLISH_US ] = "Field name" ;
+        Text [ de ] = "Feldname" ;
+        Text [ en-US ] = "Field name" ;
         Center = TRUE ;
-        Text[ chinese_simplified ] = "Â≠óÊÆµÂêçÁß∞";
-        Text[ russian ] = "»Ïˇ ÔÓÎˇ";
-        Text[ polish ] = "Nazwa pola";
-        Text[ japanese ] = "„Éï„Ç£„Éº„É´„ÉâÂêç";
-        Text[ chinese_traditional ] = "Ê¨Ñ‰ΩçÂêçÁ®±";
-        Text[ arabic ] = "«”„ «·Õﬁ·";
-        Text[ greek ] = "ºÌÔÏ· Â‰ﬂÔı";
-        Text[ korean ] = "ÌïÑÎìú Ïù¥Î¶Ñ";
-        Text[ turkish ] = "Alan ad˝";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nom del camp";
-        Text[ thai ] = "‡∏ä‡∏∑‡πà‡∏≠‡πÄ‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
-        Text[ czech ] = "N√°zev pole";
-        Text[ hebrew ] = "Feldname";
-        Text[ hindi ] = "‡§ï‡•ç‡§∑‡•á‡§§‡•ç‡§∞ ‡§®‡§æ‡§Æ";
-        Text[ slovak ] = "N√°zov poƒæa";
-        Text[ hungarian ] = "Mez≈ën√©v";
-        Text[ slovenian ] = "Ime polja";
+        Text [ x-comment ] = " ";
     };
 
     FixedText FT_ORDERAFTER1
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "danach" ;
-        Text [ ENGLISH ] = "and then" ;
-        Text [ norwegian ] = "and then" ;
-        Text [ italian ] = "poi per" ;
-        Text [ portuguese_brazilian ] = "e ent„o" ;
-        Text [ portuguese ] = "depois" ;
-        Text [ finnish ] = "ja sitten" ;
-        Text [ danish ] = "derefter" ;
-        Text [ french ] = "puis" ;
-        Text [ swedish ] = "d‰refter" ;
-        Text [ dutch ] = "vervolgens" ;
-        Text [ spanish ] = "despuÈs" ;
-        Text [ ENGLISH_US ] = "and then" ;
-        Text[ chinese_simplified ] = "‰πãÂêé";
-        Text[ russian ] = "Á‡ÚÂÏ";
-        Text[ polish ] = "a nastÍpnie";
-        Text[ japanese ] = "„Åù„Çå„Åã„Çâ";
-        Text[ chinese_traditional ] = "‰πãÂæå";
-        Text[ arabic ] = "»⁄œ –·ﬂ";
-        Text[ greek ] = "›ÂÈÙ·";
-        Text[ korean ] = "Í∑∏ Îã§Ïùå";
-        Text[ turkish ] = "ve sonra";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "i desprÈs";
-        Text[ thai ] = "‡πÅ‡∏•‡∏∞  ‡∏à‡∏≤‡∏Å‡∏ô‡∏±‡πâ‡∏ô";
-        Text[ czech ] = "a pak";
-        Text[ hebrew ] = "danach";
-        Text[ hindi ] = "‡§â‡§∏‡§ï‡•á ‡§¨‡§æ‡§¶";
-        Text[ slovak ] = "a potom";
-        Text[ hungarian ] = "azut√°n";
-        Text[ slovenian ] = "in potem";
+        Text [ de ] = "danach" ;
+        Text [ en-US ] = "and then" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_ORDERAFTER2
     {
         Pos = MAP_APPFONT ( 12 , 59 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "danach" ;
-        Text [ ENGLISH ] = "and then" ;
-        Text [ norwegian ] = "and then" ;
-        Text [ italian ] = "poi per" ;
-        Text [ portuguese_brazilian ] = "e ent„o" ;
-        Text [ portuguese ] = "depois" ;
-        Text [ finnish ] = "ja sitten" ;
-        Text [ danish ] = "derefter" ;
-        Text [ french ] = "puis" ;
-        Text [ swedish ] = "d‰refter" ;
-        Text [ dutch ] = "vervolgens" ;
-        Text [ spanish ] = "despuÈs" ;
-        Text [ ENGLISH_US ] = "and then" ;
-        Text[ chinese_simplified ] = "‰πãÂêé";
-        Text[ russian ] = "Á‡ÚÂÏ";
-        Text[ polish ] = "a nastÍpnie";
-        Text[ japanese ] = "„Åù„Çå„Åã„Çâ";
-        Text[ chinese_traditional ] = "‰πãÂæå";
-        Text[ arabic ] = "»⁄œ –·ﬂ";
-        Text[ greek ] = "›ÂÈÙ·";
-        Text[ korean ] = "Í∑∏ Îã§Ïùå";
-        Text[ turkish ] = "ve sonra";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "i desprÈs";
-        Text[ thai ] = "‡πÅ‡∏•‡∏∞  ‡∏à‡∏≤‡∏Å‡∏ô‡∏±‡πâ‡∏ô";
-        Text[ czech ] = "a pak";
-        Text[ hebrew ] = "danach";
-        Text[ hindi ] = "‡§â‡§∏‡§ï‡•á ‡§¨‡§æ‡§¶";
-        Text[ slovak ] = "a potom";
-        Text[ hungarian ] = "azut√°n";
-        Text[ slovenian ] = "in potem";
+        Text [ de ] = "danach" ;
+        Text [ en-US ] = "and then" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_ORDEROPER
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 46 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Verkn¸pfung : Verkn≥pfung */
-        Text = "Verkn¸pfung" ;
-        Text [ ENGLISH ] = "Operator" ;
-        Text [ norwegian ] = "Operator" ;
-        Text [ italian ] = "Operatore" ;
-        Text [ portuguese_brazilian ] = "Operador" ;
-        Text [ portuguese ] = "LigaÁ„o" ;
-        Text [ finnish ] = "Operaattori" ;
-        Text [ danish ] = "Operator" ;
-        Text [ french ] = "Lien" ;
-        Text [ swedish ] = "Operator" ;
-        Text [ dutch ] = "Koppeling" ;
-        Text [ spanish ] = "VÌnculo" ;
-        Text [ ENGLISH_US ] = "Operator" ;
-        Text[ chinese_simplified ] = "ÈìæÊé•";
-        Text[ russian ] = "ŒÔÂ‡ÚÓ";
-        Text[ polish ] = "Operator";
-        Text[ japanese ] = "ÊºîÁÆóÂ≠ê";
-        Text[ chinese_traditional ] = "Êç∑Âæë";
-        Text[ arabic ] = "«— »«ÿ";
-        Text[ greek ] = "‘ÂÎÂÛÙﬁÚ";
-        Text[ korean ] = "Ïó∞ÏÇ∞Ïûê";
-        Text[ turkish ] = "›˛lemci";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Operador";
-        Text[ thai ] = "‡∏ï‡∏±‡∏ß‡∏õ‡∏è‡∏¥‡∏ö‡∏±‡∏ï‡∏¥‡∏Å‡∏≤‡∏£";
-        Text[ czech ] = "Oper√°tor";
-        Text[ hebrew ] = "Verkn√ºpfung";
-        Text[ hindi ] = "‡§™‡•ç‡§∞‡§µ‡§∞‡•ç‡§§‡§ï";
-        Text[ slovak ] = "Oper√°tor";
-        Text[ hungarian ] = "Oper√°tor";
-        Text[ slovenian ] = "Operator";
+        Text [ de ] = "Verkn¸pfung" ;
+        Text [ en-US ] = "Operator" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_ORDERDIR
     {
         Pos = MAP_APPFONT ( 122 , 14 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "Reihenfolge" ;
-        Text [ ENGLISH ] = "Direction" ;
-        Text [ norwegian ] = "Retning" ;
-        Text [ italian ] = "Sequenza" ;
-        Text [ portuguese_brazilian ] = "Ordem" ;
-        Text [ portuguese ] = "Ordem" ;
-        Text [ finnish ] = "J‰rjestys" ;
-        Text [ danish ] = "RÊkkef¯lge" ;
-        Text [ french ] = "Ordre" ;
-        Text [ swedish ] = "Ordning" ;
-        Text [ dutch ] = "Volgorde" ;
-        Text [ spanish ] = "Orden" ;
-        Text [ ENGLISH_US ] = "Order" ;
+        Text [ de ] = "Reihenfolge" ;
+        Text [ en-US ] = "Order" ;
         Center = TRUE ;
-        Text[ chinese_simplified ] = "È°∫Â∫è";
-        Text[ russian ] = "œÓˇ‰ÓÍ";
-        Text[ polish ] = "Porzπdek";
-        Text[ japanese ] = "‰∏¶„ÅπÊõø„ÅàÈ†ÜÂ∫è";
-        Text[ chinese_traditional ] = "È†ÜÂ∫è";
-        Text[ arabic ] = "«· — Ì»";
-        Text[ greek ] = "”ÂÈÒ‹";
-        Text[ korean ] = "ÏàúÏÑú";
-        Text[ turkish ] = "S˝ra";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ordre";
-        Text[ thai ] = "‡∏•‡∏≥‡∏î‡∏±‡∏ö";
-        Text[ czech ] = "Po≈ôad√≠";
-        Text[ hebrew ] = "Reihenfolge";
-        Text[ hindi ] = "‡§ï‡•ç‡§∞‡§Æ";
-        Text[ slovak ] = "Poradie";
-        Text[ hungarian ] = "Sorrend";
-        Text[ slovenian ] = "Razvrsti";
+        Text [ x-comment ] = " ";
     };
     OKButton BT_OK
     {
@@ -812,90 +241,17 @@ ModalDialog DLG_ORDERCRIT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 184 , 8 ) ;
-        Text = "Sortierung" ;
-        Text [ ENGLISH ] = "Sort order" ;
-        Text [ norwegian ] = "Sort order" ;
-        Text [ italian ] = "Ordine" ;
-        Text [ portuguese_brazilian ] = "Ordem de classificaÁ„o" ;
-        Text [ portuguese ] = "Ordenar" ;
-        Text [ finnish ] = "Lajitteluj‰rjestys" ;
-        Text [ danish ] = "SorteringsrÊkkef¯lge" ;
-        Text [ french ] = "Tri" ;
-        Text [ swedish ] = "Sortering" ;
-        Text [ dutch ] = "Sortering" ;
-        Text [ spanish ] = "Orden" ;
-        Text [ ENGLISH_US ] = "Sort order" ;
-        Text[ chinese_simplified ] = "ÊéíÂ∫è";
-        Text[ russian ] = "—ÓÚËÓ‚Í‡";
-        Text[ polish ] = "Porzπdek sortowania";
-        Text[ japanese ] = "‰∏¶„ÅπÊõø„Åà";
-        Text[ chinese_traditional ] = "ÊéíÂ∫è";
-        Text[ arabic ] = "«·›—“";
-        Text[ greek ] = "”ÂÈÒ‹ Ù·ÓÈÌ¸ÏÁÛÁÚ";
-        Text[ korean ] = "Ï†ïÎ†¨ ÏàúÏÑú";
-        Text[ turkish ] = "S˝ralama kural˝";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ordre";
-        Text[ thai ] = "‡πÄ‡∏£‡∏µ‡∏¢‡∏á‡∏•‡∏≥‡∏î‡∏±‡∏ö";
-        Text[ czech ] = "Po≈ôad√≠ ≈ôazen√≠";
-        Text[ hebrew ] = "Sortierung";
-        Text[ hindi ] = "‡§∏‡•ã‡§∞‡•ç‡§ü ‡§ï‡•ç‡§∞‡§Æ";
-        Text[ slovak ] = "Poradie radenia";
-        Text[ hungarian ] = "Rendez√©s ir√°nya";
-        Text[ slovenian ] = "Vrstni red razvr≈°ƒçanja";
+        Text [ de ] = "Sortierung" ;
+        Text [ en-US ] = "Sort order" ;
+        Text [ x-comment ] = " ";
     };
     String STR_NOENTRY
     {
-        Text = "<keines>" ;
-        Text [ ENGLISH ] = "<none>" ;
-        Text [ norwegian ] = "<none>" ;
-        Text [ italian ] = "<nessuno>" ;
-        Text [ portuguese_brazilian ] = "<nenhum>" ;
-        Text [ portuguese ] = "<nenhum>" ;
-        Text [ finnish ] = "<ei mit‰‰n>" ;
-        Text [ danish ] = "<intet>" ;
-        Text [ french ] = "<aucun(e)>" ;
-        Text [ swedish ] = "<inget>" ;
-        Text [ dutch ] = "<geen>" ;
-        Text [ spanish ] = "<ninguno>" ;
-        Text [ ENGLISH_US ] = "<none>" ;
-        Text[ chinese_simplified ] = "<Êó†>";
-        Text[ russian ] = "<ÌÂÚ>";
-        Text[ polish ] = "<brak>";
-        Text[ japanese ] = "<„Å™„Åó>";
-        Text[ chinese_traditional ] = "<ÁÑ°>";
-        Text[ arabic ] = "<»œÊ‰>";
-        Text[ greek ] = "<Í·Ì›Ì·>";
-        Text[ korean ] = "<ÏóÜÏùå>";
-        Text[ turkish ] = "<hiÁbiri>";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "<cap>";
-        Text[ thai ] = "<‡πÑ‡∏°‡πà‡∏°‡∏µ>";
-        Text[ czech ] = "<nic>";
-        Text[ hebrew ] = "<keines>";
-        Text[ hindi ] = "<‡§ï‡•ã‡§à ‡§®‡§π‡•Ä‡§Ç>";
-        Text[ slovak ] = "<niƒç>";
-        Text[ hungarian ] = "<semmi>";
-        Text[ slovenian ] = "<brez>";
+        Text [ de ] = "<keines>" ;
+        Text [ en-US ] = "<none>" ;
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "ÊéíÂ∫è";
-    Text[ russian ] = "—ÓÚËÓ‚Í‡";
-    Text[ polish ] = "Porzπdek sortowania";
-    Text[ japanese ] = "‰∏¶„ÅπÊõø„Åà";
-    Text[ chinese_traditional ] = "ÊéíÂ∫è";
-    Text[ arabic ] = " — Ì» «·›—“";
-    Text[ greek ] = "‘·ÓÈÌ¸ÏÁÛÁ";
-    Text[ korean ] = "Ï†ïÎ†¨ ÏàúÏÑú";
-    Text[ turkish ] = "S˝ralama kural˝";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "OrdenaciÛ";
-    Text[ thai ] = "‡πÄ‡∏£‡∏µ‡∏¢‡∏á‡∏•‡∏≥‡∏î‡∏±‡∏ö";
-    Text[ czech ] = "Po≈ôad√≠ ≈ôazen√≠";
-    Text[ hebrew ] = "Sortierung";
-    Text[ hindi ] = "‡§∏‡•ã‡§∞‡•ç‡§ü ‡§ï‡•ç‡§∞‡§Æ";
-    Text[ slovak ] = "Poradie triedenia";
-    Text[ hungarian ] = "Rendez√©s ir√°nya";
-    Text[ slovenian ] = "Vrstni red razvr≈°ƒçanja";
+    Text [ x-comment ] = " ";
 };
 
 
