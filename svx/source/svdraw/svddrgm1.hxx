@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svddrgm1.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:11:39 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ public:
     virtual void Mov(const Point& rPnt);
     virtual FASTBOOL End(FASTBOOL bCopy);
     virtual Pointer GetPointer() const;
-    virtual void DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const;
+    virtual void DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const;
 
     //SJ: added following method, otherwise the object won't be
     //able to notice that dragging has been cancelled.
@@ -340,7 +340,7 @@ public:
     virtual void Mov(const Point& rPnt);
     virtual FASTBOOL End(FASTBOOL bCopy);
     virtual Pointer GetPointer() const;
-    virtual void DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const;
+    virtual void DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const;
 };
 
 //************************************************************
@@ -368,7 +368,7 @@ public:
     virtual void Mov(const Point& rPnt);
     virtual FASTBOOL End(FASTBOOL bCopy);
     virtual Pointer GetPointer() const;
-    virtual void DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const;
+    virtual void DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
