@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:16:38 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,8 @@
     Text[ thai ] = "ป้ายชื่อ";  \
     Text[ czech ] = "Štítky"; \
     Text[ hebrew ] = "‮מדבקות‬";  \
-    Text[ hindi ] = "लेबिलें";
+    Text[ hindi ] = "लेबिलें";    \
+    Text[ slovak ] = "Štítky";
 
 #define BUSINESS_CARD_STRING \
     Text = "Visitenkarten" ;                            \
@@ -120,7 +121,8 @@
     Text[ thai ] = "นามบัตร"; \
     Text[ czech ] = "Vizitky";  \
     Text[ hebrew ] = "‮כרטיסי ביקור‬";   \
-    Text[ hindi ] = "व्यवहार कार्डस";
+    Text[ hindi ] = "व्यवहार कार्डस"; \
+    Text[ slovak ] = "Vizitky";
 
  // DLG_LAB ------------------------------------------------------------------
 TabDialog DLG_LAB
@@ -171,6 +173,7 @@ TabDialog DLG_LAB
                 Text[ czech ] = "Soukromé";
                 Text[ hebrew ] = "‮אישי‬";
                 Text[ hindi ] = "वैयक्तिक";
+                Text[ slovak ] = "Súkromné";
             };
             PageItem
             {
@@ -203,6 +206,7 @@ TabDialog DLG_LAB
                 Text[ czech ] = "Pracovní";
                 Text[ hebrew ] = "‮עיסקי‬";
                 Text[ hindi ] = "व्यवहार";
+                Text[ slovak ] = "Pracovné";
             };
             PageItem
             {
@@ -235,6 +239,7 @@ TabDialog DLG_LAB
                 Text[ czech ] = "Formát";
                 Text[ hebrew ] = "‮עיצוב‬";
                 Text[ hindi ] = "रचना";
+                Text[ slovak ] = "Formát";
             };
             PageItem
             {
@@ -267,6 +272,7 @@ TabDialog DLG_LAB
                 Text[ czech ] = "Volby";
                 Text[ hebrew ] = "‮אפשרויות‬";
                 Text[ hindi ] = "विकल्प";
+                Text[ slovak ] = "Nastavenia";
             };
         };
     };
@@ -307,6 +313,7 @@ TabDialog DLG_LAB
         Text[ czech ] = "Střední";
         Text[ hebrew ] = "‮מדיה‬";
         Text[ hindi ] = "मीडियम";
+        Text[ slovak ] = "Médium";
     };
 };
  // TP_LAB_LAB ---------------------------------------------------------------
@@ -349,6 +356,7 @@ TabPage TP_LAB_LAB
         Text[ czech ] = "Text štítku";
         Text[ hebrew ] = "‮תוכן‬";
         Text[ hindi ] = "लेबिल टेक्स्ट्";
+        Text[ slovak ] = "Text štítku";
     };
     CheckBox BOX_ADDR
     {
@@ -383,6 +391,7 @@ TabPage TP_LAB_LAB
         Text[ czech ] = "Adresa";
         Text[ hebrew ] = "‮כתובת‬";
         Text[ hindi ] = "पता";
+        Text[ slovak ] = "Adresa";
     };
     MultiLineEdit EDT_WRITING
     {
@@ -427,6 +436,7 @@ TabPage TP_LAB_LAB
         Text[ czech ] = "Databáze";
         Text[ hebrew ] = "‮מסד נתונים‬";
         Text[ hindi ] = "लेखासंचय";
+        Text[ slovak ] = "Databáza";
     };
     ListBox LB_DATABASE
     {
@@ -467,6 +477,7 @@ TabPage TP_LAB_LAB
         Text[ czech ] = "Tabulka";
         Text[ hebrew ] = "‮טבלה‬";
         Text[ hindi ] = "सारणी";
+        Text[ slovak ] = "Tabuľka";
     };
     ListBox LB_TABLE
     {
@@ -515,6 +526,7 @@ TabPage TP_LAB_LAB
         Text[ czech ] = "Pole databáze";
         Text[ hebrew ] = "‮שדה מסד נתונים‬";
         Text[ hindi ] = "लेखासंचय क्षेत्र";
+        Text[ slovak ] = "Pole databázy";
     };
     ListBox LB_DBFIELD
     {
@@ -557,6 +569,7 @@ TabPage TP_LAB_LAB
         Text[ czech ] = "Přípis";
         Text[ hebrew ] = "‮כיתוב‬";
         Text[ hindi ] = "नक्श";
+        Text[ slovak ] = "Text na štítku";
     };
     RadioButton BTN_CONT
     {
@@ -592,6 +605,7 @@ TabPage TP_LAB_LAB
         Text[ czech ] = "Spojitý";
         Text[ hebrew ] = "‮רציף‬";
         Text[ hindi ] = "~निरन्तर";
+        Text[ slovak ] = "~Spojitý";
     };
     RadioButton BTN_SHEET
     {
@@ -625,6 +639,7 @@ TabPage TP_LAB_LAB
         Text[ czech ] = "Tabulka";
         Text[ hebrew ] = "‮דפים‬";
         Text[ hindi ] = "~शीट्";
+        Text[ slovak ] = "Ta~buľka";
     };
     FixedText TXT_MAKE
     {
@@ -659,6 +674,7 @@ TabPage TP_LAB_LAB
         Text[ czech ] = "Značka";
         Text[ hebrew ] = "‮יצרן‬";
         Text[ hindi ] = "व्यापारिक चिन्ह";
+        Text[ slovak ] = "Značka";
     };
     ListBox BOX_MAKE
     {
@@ -701,6 +717,7 @@ TabPage TP_LAB_LAB
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "~Typ";
     };
     ListBox BOX_TYPE
     {
@@ -749,6 +766,7 @@ TabPage TP_LAB_LAB
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
+        Text[ slovak ] = "Formát";
     };
 };
 #define WIDTH  100
@@ -795,6 +813,7 @@ FloatingWindow DLG_SYNC_BTN
         Text[ czech ] = "Synchronizovat popisky";
         Text[ hebrew ] = "Etiketten synchronisieren";
         Text[ hindi ] = "लेबिलों का समीकरण";
+        Text[ slovak ] = "Synchronizovať značky";
     };
 };
  // String *******************************************************************
@@ -828,6 +847,7 @@ String STR_DOC_TITLE
     Text[ czech ] = "Popisky";
     Text[ hebrew ] = "‮מדבקות‬";
     Text[ hindi ] = "लेबिलें";
+    Text[ slovak ] = "Štítky";
 };
 String STR_CUSTOM
 {
@@ -857,6 +877,7 @@ String STR_CUSTOM
     Text[ czech ] = "[Uživatelský]";
     Text[ hebrew ] = "[Benutzer]";
     Text[ hindi ] = "[उपभोक्ता]";
+    Text[ slovak ] = "[Užívateľský]";
 };
 /********************************************************************/
 TabPage TP_VISITING_CARDS
@@ -903,6 +924,7 @@ TabPage TP_VISITING_CARDS
         Text[ czech ] = "Automatický text - sekce";
         Text[ hebrew ] = "‮סוג טקסט מקובץ‬";
         Text[ hindi ] = "स्वचालित ढंग से टेक्स्ट् - विभाग";
+        Text[ slovak ] = "Automatický text - sekcia";
     };
     ListBox LB_AUTO_TEXT_GROUP
     {
@@ -943,6 +965,7 @@ TabPage TP_VISITING_CARDS
         Text[ czech ] = "Obsah";
         Text[ hebrew ] = "‮תוכן‬";
         Text[ hindi ] = "विषय";
+        Text[ slovak ] = "Obsah";
     };
     Window WIN_EXAMPLE
     {
@@ -990,6 +1013,7 @@ TabPage TP_PRIVATE_DATA
         Text[ czech ] = "Soukromá data";
         Text[ hebrew ] = "‮פרטים אישיים‬";
         Text[ hindi ] = "वैयक्तिक ड़ॉटा";
+        Text[ slovak ] = "Súkromné údaje";
     };
     FixedText FT_NAME
     {
@@ -1022,6 +1046,7 @@ TabPage TP_PRIVATE_DATA
         Text[ czech ] = "Jméno/Příjmení/Iniciály";
         Text[ hebrew ] = "‮שם פרטי/משפחה/ראשי תיבות‬";
         Text[ hindi ] = "पहिला/अंतिम ~नाम/इनिश्यल";
+        Text[ slovak ] = "Me~no/Priezvisko/Iniciály";
     };
     Edit ED_FIRSTNAME
     {
@@ -1071,6 +1096,7 @@ TabPage TP_PRIVATE_DATA
         Text[ czech ] = "Jméno / Příjmení / Iniciály 2";
         Text[ hebrew ] = "‮שם פרטי/משפחה/ראשי תיבות 2‬";
         Text[ hindi ] = "पहिला/अंतिम ~नाम/इनिश्यल 2";
+        Text[ slovak ] = "Meno / ~Priezvisko  / Iniciály 2";
     };
     Edit ED_FIRSTNAME_2
     {
@@ -1121,6 +1147,7 @@ TabPage TP_PRIVATE_DATA
         Text[ czech ] = "Ulice";
         Text[ hebrew ] = "‮רחוב‬";
         Text[ hindi ] = "स~ड़क";
+        Text[ slovak ] = "U~lica";
     };
     Edit ED_STREET
     {
@@ -1159,6 +1186,7 @@ TabPage TP_PRIVATE_DATA
         Text[ czech ] = "PSČ/Obec";
         Text[ hebrew ] = "PLZ/Or~t";
         Text[ hindi ] = "Zip/नग~र";
+        Text[ slovak ] = "PSČ/O~bec";
     };
     Edit ED_ZIP
     {
@@ -1203,6 +1231,7 @@ TabPage TP_PRIVATE_DATA
         Text[ czech ] = "Země/Stát";
         Text[ hebrew ] = "‮מחוז/מדינה‬";
         Text[ hindi ] = "दे~श/राज्य";
+        Text[ slovak ] = "Kra~jina/Štát";
     };
     Edit ED_COUNTRY
     {
@@ -1247,6 +1276,7 @@ TabPage TP_PRIVATE_DATA
         Text[ czech ] = "Titul/Profese";
         Text[ hebrew ] = "‮תואר/מקצוע‬";
         Text[ hindi ] = "शीर्षक/~पदवी";
+        Text[ slovak ] = "Titul/~Profesia";
     };
     Edit ED_TITLE
     {
@@ -1290,6 +1320,7 @@ TabPage TP_PRIVATE_DATA
         Text[ czech ] = "Tel./Mobilní tel.";
         Text[ hebrew ] = "‮טלפון/טלפון נייד‬";
         Text[ hindi ] = "फोन/मोबैल";
+        Text[ slovak ] = "Tel./Mobilný tel.";
     };
     Edit ED_PHONE
     {
@@ -1334,6 +1365,7 @@ TabPage TP_PRIVATE_DATA
         Text[ czech ] = "Fax";
         Text[ hebrew ] = "‮פקס‬";
         Text[ hindi ] = "फॉ~क्स";
+        Text[ slovak ] = "Fa~x";
     };
     Edit ED_FAX
     {
@@ -1372,6 +1404,7 @@ TabPage TP_PRIVATE_DATA
         Text[ czech ] = "Domovská stránka/e-mail";
         Text[ hebrew ] = "‮דף בית/דואר אלקטרוני‬";
         Text[ hindi ] = "मुख्य पृष्ठ / इ-मेइल";
+        Text[ slovak ] = "Domovská stránka/email";
     };
     Edit ED_WWW
     {
@@ -1422,6 +1455,7 @@ TabPage TP_BUSINESS_DATA
         Text[ czech ] = "Obchodní informace";
         Text[ hebrew ] = "‮פרטים עיסקיים‬";
         Text[ hindi ] = "व्यवहार ड़ॉटा";
+        Text[ slovak ] = "Obchodné informácie";
     };
     FixedText FT_COMP
     {
@@ -1454,6 +1488,7 @@ TabPage TP_BUSINESS_DATA
         Text[ czech ] = "Společnost";
         Text[ hebrew ] = "‮חברה‬";
         Text[ hindi ] = "संस्था";
+        Text[ slovak ] = "Spoločnosť";
     };
     Edit ED_COMP
     {
@@ -1492,6 +1527,7 @@ TabPage TP_BUSINESS_DATA
         Text[ czech ] = "Společnost (druhý řádek)";
         Text[ hebrew ] = "‮חברה, שורה שניה‬";
         Text[ hindi ] = "संस्था 2nd रेखा";
+        Text[ slovak ] = "Spoločnosť (druhý riadok)";
     };
     Edit ED_COMP_EXT
     {
@@ -1530,6 +1566,7 @@ TabPage TP_BUSINESS_DATA
         Text[ czech ] = "Motto";
         Text[ hebrew ] = "‮משפט מפתח‬";
         Text[ hindi ] = "स्लोगन";
+        Text[ slovak ] = "Motto";
     };
     Edit ED_SLOGAN
     {
@@ -1568,6 +1605,7 @@ TabPage TP_BUSINESS_DATA
         Text[ czech ] = "Ulice";
         Text[ hebrew ] = "‮רחוב‬";
         Text[ hindi ] = "सड़क";
+        Text[ slovak ] = "Ulica";
     };
     Edit ED_STREET
     {
@@ -1606,6 +1644,7 @@ TabPage TP_BUSINESS_DATA
         Text[ czech ] = "PSČ/Obec";
         Text[ hebrew ] = "‮מיקוד/עיר‬";
         Text[ hindi ] = "ZIP/नगर";
+        Text[ slovak ] = "PSČ/Obec";
     };
     Edit ED_ZIP
     {
@@ -1650,6 +1689,7 @@ TabPage TP_BUSINESS_DATA
         Text[ czech ] = "Země/Stát";
         Text[ hebrew ] = "‮מחוז/מדינה‬";
         Text[ hindi ] = "देश/राज्य";
+        Text[ slovak ] = "Krajina/Štát";
     };
     Edit ED_COUNTRY
     {
@@ -1694,6 +1734,7 @@ TabPage TP_BUSINESS_DATA
         Text[ czech ] = "Pozice";
         Text[ hebrew ] = "‮תפקיד‬";
         Text[ hindi ] = "स्थान";
+        Text[ slovak ] = "Umiestnenie";
     };
     Edit ED_POSITION
     {
@@ -1731,6 +1772,7 @@ TabPage TP_BUSINESS_DATA
         Text[ czech ] = "Tel./Mobilní tel.";
         Text[ hebrew ] = "‮טלפון/טלפון נייד‬";
         Text[ hindi ] = "दूरभाष/मोबैल";
+        Text[ slovak ] = "Tel./Mobilný tel.";
     };
     Edit ED_PHONE
     {
@@ -1774,6 +1816,7 @@ TabPage TP_BUSINESS_DATA
         Text[ czech ] = "Fax";
         Text[ hebrew ] = "‮פקס‬";
         Text[ hindi ] = "फॉक्स";
+        Text[ slovak ] = "Fax";
     };
     Edit ED_FAX
     {
@@ -1812,6 +1855,7 @@ TabPage TP_BUSINESS_DATA
         Text[ czech ] = "Domovská stránka/e-mail";
         Text[ hebrew ] = "‮דף בית/דואר אלקטרוני‬";
         Text[ hindi ] = "~मुख्य पृष्ठ / इ-मेइल";
+        Text[ slovak ] = "Do~movská stránka/e-mail";
     };
     Edit ED_WWW
     {
@@ -1826,6 +1870,8 @@ TabPage TP_BUSINESS_DATA
         Border = TRUE ;
     };
 };
+
+
 
 
 
