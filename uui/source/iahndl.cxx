@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:01:16 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 08:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2348,23 +2348,29 @@ UUIInteractionHandler::handleErrorRequest(
 
     rtl::OUString aMessage;
     {
-        enum Source { SOURCE_DEFAULT, SOURCE_CNT, SOURCE_UUI };
-        static char const * const aManager[3]
+        enum Source { SOURCE_DEFAULT, SOURCE_CNT, SOURCE_SVX, SOURCE_UUI };
+        static char const * const aManager[4]
             = { 0,
                 CREATEVERSIONRESMGR_NAME(cnt),
+                CREATEVERSIONRESMGR_NAME(svx),
                 CREATEVERSIONRESMGR_NAME(uui) };
-        static USHORT const aId[3]
+        static USHORT const aId[4]
             = { RID_ERRHDL,
                 RID_CHAOS_START + 12,
                     // cf. chaos/source/inc/cntrids.hrc, where
                     // #define RID_CHAOS_ERRHDL (RID_CHAOS_START + 12)
+                RID_SVX_START + 350, // RID_SVXERRCODE
                 RID_UUI_ERRHDL };
-        Source eSource = nErrorCode >= ERRCODE_AREA_TOOLS
-                         && nErrorCode < ERRCODE_AREA_LIB1 ?
+        ErrCode nErrorId = nErrorCode & ~ERRCODE_WARNING_MASK;
+        Source eSource = nErrorId >= ERRCODE_AREA_TOOLS
+                         && nErrorId < ERRCODE_AREA_LIB1 ?
                              SOURCE_DEFAULT :
-                         nErrorCode >= ERRCODE_AREA_CHAOS
-                         && nErrorCode < ERRCODE_AREA_CHAOS_END ?
+                         nErrorId >= ERRCODE_AREA_CHAOS
+                         && nErrorId < ERRCODE_AREA_CHAOS_END ?
                              SOURCE_CNT :
+                         nErrorId >= ERRCODE_AREA_SVX
+                         && nErrorId <= ERRCODE_AREA_SVX_END ?
+                             SOURCE_SVX :
                              SOURCE_UUI;
 
         vos::OGuard aGuard(Application::GetSolarMutex());
