@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: dr $ $Date: 2001-05-28 14:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #ifndef _STDCTRL_HXX //autogen
 #include <svtools/stdctrl.hxx>
 #endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _FIXED_HXX //autogen
+#include <vcl/fixed.hxx>
 #endif
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
@@ -101,11 +101,11 @@ public:
     BOOL    GetShowAll() const;
 
 private:
+    FixedLine           aFlFunc;
     RadioButton         aBtnNone;
     RadioButton         aBtnAuto;
     RadioButton         aBtnUser;
     MultiListBox        aLbFunc;
-    GroupBox            aGbFunc;
     CheckBox            aCbShowAll;
     OKButton            aBtnOk;
     CancelButton        aBtnCancel;

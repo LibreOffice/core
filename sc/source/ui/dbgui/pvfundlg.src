@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:58:57 $
+ *  last change: $Author: dr $ $Date: 2001-05-28 14:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     OutputSize = TRUE ;
     HelpId = HID_SC_PIVOTSUBT ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 220 , 188 ) ;
+    Size = MAP_APPFONT ( 220 , 190 ) ;
     Text = "Datenfeld" ;
     Text [ ENGLISH ] = "Data Field" ;
     Text [ norwegian ] = "Data Field" ;
@@ -79,7 +79,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     RadioButton BTN_NONE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 143 , 10 ) ;
         Text = "~Keine" ;
         Text [ ENGLISH ] = "~None" ;
         Text [ norwegian ] = "~Ingen " ;
@@ -108,8 +108,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     };
     RadioButton BTN_AUTO
     {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 143 , 10 ) ;
         Text = "~Automatisch" ;
         Text [ ENGLISH ] = "~Auto" ;
         Text [ norwegian ] = "~Auto" ;
@@ -138,8 +138,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     };
     RadioButton BTN_USER
     {
-        Pos = MAP_APPFONT ( 12 , 40 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Size = MAP_APPFONT ( 143 , 10 ) ;
         Text = "~Benutzerdefiniert" ;
         Text [ ENGLISH ] = "~Userdefined" ;
         Text [ norwegian ] = "~Brukerdefinert " ;
@@ -171,7 +171,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 56 ) ;
-        Size = MAP_APPFONT ( 140 , 90 ) ;
+        Size = MAP_APPFONT ( 143 , 100 ) ;
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
         StringList =
@@ -514,15 +514,15 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         < "Varianzas (Población)" ; Default ; > ;
     };
     };
-    GroupBox GB_FUNC
+    FixedLine FL_FUNC
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 152 , 150 ) ;
+        Size = MAP_APPFONT ( 152 , 8 ) ;
     };
     CheckBox CB_SHOWALL
     {
-        Pos = MAP_APPFONT ( 6 , 159 ) ;
-        Size = MAP_APPFONT ( 152 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 160 ) ;
+        Size = MAP_APPFONT ( 143 , 10 ) ;
         Text = "~Elemente ohne Daten anzeigen" ;
         Text [ ENGLISH ] = "Show elements without data" ;
         TabStop = TRUE ;
@@ -550,8 +550,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     };
     FixedText FT_NAMELABEL
     {
-        Pos = MAP_APPFONT ( 6 , 174 ) ;
-        Size = MAP_APPFONT ( 25 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 176 ) ;
+        Size = MAP_APPFONT ( 25 , 8 ) ;
         Text = "Name:" ;
         Text [ ENGLISH ] = "Name:" ;
         Text [ norwegian ] = "Navn:" ;
@@ -579,8 +579,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     };
     FixedText FT_NAME
     {
-        Pos = MAP_APPFONT ( 32 , 174 ) ;
-        Size = MAP_APPFONT ( 125 , 10 ) ;
+        Pos = MAP_APPFONT ( 32 , 176 ) ;
+        Size = MAP_APPFONT ( 126 , 8 ) ;
     };
     OKButton BTN_OK
     {

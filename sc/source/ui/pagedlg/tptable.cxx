@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tptable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-25 15:23:16 $
+ *  last change: $Author: dr $ $Date: 2001-05-28 14:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,8 @@ BOOL lcl_PutScaleItem( USHORT               nWhich,
                        SfxItemSet&          rCoreSet,
                        const SfxItemSet&    rOldSet,
                        const RadioButton&   rBtn,
-                       const NumericField&  rEd );
+                       const SpinField&     rEd,
+                       UINT16               nValue );
 
 BOOL lcl_PutBoolItem( USHORT            nWhich,
                       SfxItemSet&       rCoreSet,
@@ -133,7 +134,6 @@ ScTablePage::ScTablePage( Window*               pParent,
         aBtnFormulas        ( this, ScResId( BTN_FORMULAS ) ),
         aBtnNullVals        ( this, ScResId( BTN_NULLVALS ) ),
         aFlPrint            ( this, ScResId( FL_PRINT ) ),
-        aFlSep              ( this, ScResId( FL_SEP ) ),
         aBtnTopDown         ( this, ScResId( BTN_TOPDOWN ) ),
         aBtnLeftRight       ( this, ScResId( BTN_LEFTRIGHT ) ),
         aBmpPageDir         ( this, ScResId( BMP_PAGEDIR ) ),
@@ -154,7 +154,10 @@ ScTablePage::ScTablePage( Window*               pParent,
     aBtnLeftRight       .SetClickHdl( PAGEDIR_HDL );
     aBtnScaleAll        .SetClickHdl( SCALE_HDL );
     aBtnScalePageNum    .SetClickHdl( SCALE_HDL );
-    aFlSep.SetStyle( aFlSep.GetStyle() | WB_VERT );
+
+    Size aBmpSize = Bitmap( IMG_LEFTRIGHT ).GetSizePixel();
+    aBmpPageDir.SetOutputSizePixel( aBmpSize );
+
     FreeResource();
 }
 
@@ -341,11 +344,13 @@ BOOL __EXPORT ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
 
     bDataChanged |= lcl_PutScaleItem( GetWhich(SID_SCATTR_PAGE_SCALE),
                                       rCoreSet, rOldSet,
-                                      aBtnScaleAll, aEdScaleAll );
+                                      aBtnScaleAll, aEdScaleAll,
+                                      (UINT16)aEdScaleAll.GetValue() );
 
     bDataChanged |= lcl_PutScaleItem( GetWhich(SID_SCATTR_PAGE_SCALETOPAGES),
                                       rCoreSet, rOldSet,
-                                      aBtnScalePageNum, aEdScalePageNum );
+                                      aBtnScalePageNum, aEdScalePageNum,
+                                      (UINT16)aEdScalePageNum.GetValue() );
 
     return bDataChanged;
 }
@@ -460,9 +465,10 @@ BOOL lcl_PutScaleItem( USHORT               nWhich,
                       SfxItemSet&           rCoreSet,
                       const SfxItemSet&     rOldSet,
                       const RadioButton&    rBtn,
-                      const NumericField&   rEd )
+                      const SpinField&      rEd,
+                      UINT16                nValue )
 {
-    UINT16  nValue          = (UINT16)rEd.GetValue();
+//    UINT16  nValue          = (UINT16)rEd.GetValue();
     BOOL    bIsChecked      = rBtn.IsChecked();
     BOOL    bSaveValue      = rBtn.GetSavedValue();
     BOOL    bDataChanged    = FALSE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: dr $ $Date: 2001-05-28 14:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ ScPivotFunctionDlg::ScPivotFunctionDlg( Window*         pParent,
         aBtnNone    ( this, ScResId( BTN_NONE ) ),
         aBtnAuto    ( this, ScResId( BTN_AUTO ) ),
         aBtnUser    ( this, ScResId( BTN_USER ) ),
-        aGbFunc     ( this, ScResId( GB_FUNC ) ),
+        aFlFunc     ( this, ScResId( FL_FUNC ) ),
         aCbShowAll  ( this, ScResId( CB_SHOWALL ) ),
         aFtNameLabel( this, ScResId( FT_NAMELABEL ) ),
         aFtName     ( this, ScResId( FT_NAME ) ),
@@ -182,7 +182,7 @@ void ScPivotFunctionDlg::SetUI( BOOL bSubTotals )
 
     if ( bSubTotals )
     {
-        aGbFunc.SetText( ScResId( STR_SUBTOTALS ) );
+        aFlFunc.SetText( ScResId( STR_SUBTOTALS ) );
 
         aBtnNone.SetClickHdl    ( LINK( this, ScPivotFunctionDlg, RadioClickHdl ) );
         aBtnAuto.SetClickHdl    ( LINK( this, ScPivotFunctionDlg, RadioClickHdl ) );
@@ -206,9 +206,9 @@ void ScPivotFunctionDlg::SetUI( BOOL bSubTotals )
     }
     else
     {
-        aGbFunc.SetText( ScResId( STR_DATAFUNC ) );
+        aFlFunc.SetText( ScResId( STR_DATAFUNC ) );
 
-        Size    aSize( aGbFunc.GetSizePixel() );
+        Size    aSize( aFlFunc.GetSizePixel() );
         Point   aPos1( aFtNameLabel.GetPosPixel() );
         Point   aPos2( aFtName.GetPosPixel() );
         long    nYDiff =  aBtnUser.GetPosPixel().Y()
@@ -216,11 +216,9 @@ void ScPivotFunctionDlg::SetUI( BOOL bSubTotals )
                         + aBtnNone.GetSizePixel().Height()
                         + LogicToPixel( Point(5,0), MAP_APPFONT ).X();
 
-        aSize.Height()  -= nYDiff;
         aPos1.Y()       -= nYDiff;
         aPos2.Y()       -= nYDiff;
 
-        aGbFunc     .SetSizePixel( aSize );
         aLbFunc     .SetPosPixel( aBtnNone.GetPosPixel() );
         aFtNameLabel.SetPosPixel( aPos1 );
         aFtName     .SetPosPixel( aPos2 );
@@ -301,6 +299,9 @@ IMPL_LINK( ScPivotFunctionDlg, ClickHdl, PushButton *, pBtn )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:44:54  hr
+    initial import
+
     Revision 1.15  2000/09/17 14:08:57  willem.vandorp
     OpenOffice header added.
 

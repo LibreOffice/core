@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: dr $ $Date: 2001-05-28 14:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #define BTN_AUTO        2
 #define BTN_USER        3
 #define LB_FUNC         1
-#define GB_FUNC         1
+#define FL_FUNC         1
 
 #define FT_FUNC         1
 #define FT_NAMELABEL    2
