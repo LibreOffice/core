@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: khong $ $Date: 2002-06-18 22:36:32 $
+ *  last change: $Author: khong $ $Date: 2002-06-20 02:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ eak *  See the License for the specific provisions governing your rights and
 
 #include <localedata.hxx>
 #include <numberformatcode.hxx>
+#include <nativenumbersupplier.hxx>
 #include <defaultnumberingprovider.hxx>
 #include <servicename.hxx>
 
@@ -169,6 +170,7 @@ typedef ::com::sun::star::uno::Reference<
 using namespace ::com::sun::star::i18n;
 
 IMPL_CREATEINSTANCE_MSF( NumberFormatCodeMapper )
+IMPL_CREATEINSTANCE( NativeNumberSupplier )
 IMPL_CREATEINSTANCE( LocaleData )
 IMPL_CREATEINSTANCE_MSF( DefaultNumberingProvider )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier )
@@ -344,6 +346,9 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.NumberFormatMapper",
         "com.sun.star.i18n.NumberFormatCodeMapper",
         & NumberFormatCodeMapper_CreateInstance },
+    {   "com.sun.star.i18n.NativeNumberSupplier",
+        "com.sun.star.i18n.NativeNumberSupplier",
+        & NativeNumberSupplier_CreateInstance },
     {   "com.sun.star.text.DefaultNumberingProvider",
         "com.sun.star.text.DefaultNumberingProvider",
         &DefaultNumberingProvider_CreateInstance },

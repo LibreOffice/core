@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.10 $
+#*  $Revision: 1.1 $
 #*
-#*  last change: $Author: khong $ $Date: 2002-06-20 02:38:54 $
+#*  last change: $Author: khong $ $Date: 2002-06-20 02:28:47 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -57,72 +57,29 @@
 #*  Contributor(s): _______________________________________
 #*
 #*
-#************************************************************************
+#************************************************************************/
 
-PRJ=..
+PRJ=..$/..
 
 PRJNAME=i18npool
-TARGET=i18npool
-VERSION=$(UPD)
-USE_LDUMP2=TRUE
+TARGET=nativenumber
 
-# Make symbol renaming match library name for Mac OS X
-.IF "$(OS)"=="MACOSX"
-SYMBOLPREFIX=i18n$(UPD)$(DLLPOSTFIX)
-.ENDIF
+ENABLE_EXCEPTIONS=TRUE
 
-# --- Settings -----------------------------------------------------------
+# --- Settings -----------------------------------------------------
 
+.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
+.INCLUDE :	sv.mk
 
-# --- Allgemein ----------------------------------------------------------
+# --- Files --------------------------------------------------------
 
-LIB1TARGET= $(SLB)$/$(TARGET).lib
-LIB1FILES=	$(SLB)$/defaultnumberingprovider.lib	\
-        $(SLB)$/nativenumber.lib		\
-        $(SLB)$/registerservices.lib		\
-        $(SLB)$/numberformatcode.lib		\
-        $(SLB)$/locale.lib			\
-        $(SLB)$/indexentry.lib			\
-        $(SLB)$/calendar.lib		\
-        $(SLB)$/breakiterator.lib \
-        $(SLB)$/transliterationImpl.lib \
-        $(SLB)$/characterclassification.lib \
-        $(SLB)$/collator.lib \
-        $(SLB)$/inputchecker.lib
-LIB1DEPN=	$(MISC)$/$(LIB1TARGET).flt
+SLOFILES=	\
+            $(SLO)$/nativenumbersupplier.obj \
 
-SHL1TARGET= $(TARGET)$(VERSION)$(DLLPOSTFIX)
-SHL1IMPLIB= i$(TARGET)
-
-SHL1STDLIBS=\
-        $(TOOLSLIB)				\
-        $(CPPULIB)				\
-        $(COMPHELPERLIB)			\
-        $(CPPUHELPERLIB)			\
-        $(SALLIB)				\
-        $(ICUI18NLIB)
-
-SHL1LIBS=	$(LIB1TARGET)
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=	$(SHL1TARGET)
-DEF1EXPORTFILE=	$(TARGET).dxp
-
-I18NINC=	$(PRJ)$/inc$/transliterationImpl.hxx \
-        $(PRJ)$/inc$/transliteration_body.hxx \
-        $(PRJ)$/inc$/transliteration_caseignore.hxx \
-        $(PRJ)$/inc$/transliteration_commonclass.hxx \
-        $(PRJ)$/inc$/x_rtl_ustring.h \
-        $(PRJ)$/inc$/unicode.hxx
-
-# --- Targets ------------------------------------------------------------
+# --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
 
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo Provider>> $@
 
-$(MISC)$/$(LIB1TARGET).flt: $(I18NINC)
-    +$(COPY) $< $(INCCOM)
+

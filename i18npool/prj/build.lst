@@ -11,8 +11,9 @@ inp  i18npool\source\localedata\data             nmake   -   all inp_locdata_dat
 inp  i18npool\source\calendar		 	 nmake	 -   all inp_cal inp_utypes NULL
 inp  i18npool\source\numberformatcode            nmake   -   all inp_numformat inp_utypes NULL
 inp  i18npool\source\defaultnumberingprovider    nmake   -   all inp_dnum inp_utypes NULL
+inp  i18npool\source\nativenumber    		 nmake   -   all inp_natnum inp_utypes NULL
 inp  i18npool\source\indexentry    		 nmake   -   all inp_index inp_utypes NULL
 inp  i18npool\source\collator    		 nmake   -   all inp_collator inp_utypes NULL
 inp  i18npool\source\inputchecker    		 nmake   -   all inp_inputchecker inp_utypes NULL
-inp  i18npool\util                               nmake   -   all inp_util inp_brkit inp_dict inp_chclass inp_translit inp_cal inp_dnum inp_localedata inp_locdata_data inp_numformat inp_rserv inp_index inp_collator inp_inputchecker NULL
+inp  i18npool\util                               nmake   -   all inp_util inp_brkit inp_dict inp_chclass inp_translit inp_cal inp_dnum inp_natnum inp_localedata inp_locdata_data inp_numformat inp_rserv inp_index inp_collator inp_inputchecker NULL
 
