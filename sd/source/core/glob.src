@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:26 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ String STR_LAYER_BCKGRND
     Text [ ENGLISH ] = "Background" ;
     Text [ norwegian ] = "Background" ;
     Text [ italian ] = "Sfondo" ;
-    Text [ portuguese_brazilian ] = "Fundo" ;
+    Text [ portuguese_brazilian ] = "Plano de Fundo" ;
     Text [ portuguese ] = "Plano de fundo" ;
     Text [ finnish ] = "Tausta" ;
     Text [ danish ] = "Baggrund" ;
@@ -95,6 +95,9 @@ String STR_LAYER_BCKGRND
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fons";
     Text[ thai ] = "à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
+    Text[ czech ] = "PozadÃ­";
+    Text[ hebrew ] = "â€®×¨×§×¢â€¬";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤—";
 };
 String STR_LAYER_BCKGRNDOBJ
 {
@@ -102,7 +105,7 @@ String STR_LAYER_BCKGRNDOBJ
     Text [ ENGLISH ] = "Background objects" ;
     Text [ norwegian ] = "Background objects" ;
     Text [ italian ] = "Oggetti di sfondo" ;
-    Text [ portuguese_brazilian ] = "Objetos de fundo" ;
+    Text [ portuguese_brazilian ] = "Objetos do plano de fundo" ;
     Text [ portuguese ] = "Objectos do plano de fundo" ;
     Text [ finnish ] = "Taustaobjektit" ;
     Text [ danish ] = "Baggrundsobjekter" ;
@@ -125,6 +128,9 @@ String STR_LAYER_BCKGRNDOBJ
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objectes de fons";
     Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸à¸‚à¸­à¸‡à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
+    Text[ czech ] = "Objekty pozadÃ­";
+    Text[ hebrew ] = "Hintergrundobjekte";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤— à¤µà¤¸à¥à¤¤à¥";
 };
 String STR_LAYER_LAYOUT
 {
@@ -155,6 +161,9 @@ String STR_LAYER_LAYOUT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Format";
     Text[ thai ] = "à¹€à¸„à¹‰à¸²à¹‚à¸„à¸£à¸‡";
+    Text[ czech ] = "RozvrÅ¾enÃ­";
+    Text[ hebrew ] = "â€®×¤×¨×™×¡×”â€¬";
+    Text[ hindi ] = "à¤…à¤­à¤¿à¤¨à¥à¤¯à¤¾à¤¸";
 };
 String STR_LAYER_CONTROLS
 {
@@ -173,7 +182,7 @@ String STR_LAYER_CONTROLS
     Text [ english_us ] = "Controls" ;
     Text[ chinese_simplified ] = "æ§ä»¶";
     Text[ russian ] = "İëåìåíòû óïğàâëåíèÿ";
-    Text[ polish ] = "Pola kontrolne";
+    Text[ polish ] = "Formanty";
     Text[ japanese ] = "ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«";
     Text[ chinese_traditional ] = "æ§åˆ¶é …";
     Text[ arabic ] = "ÚäÇÕÑ ÊÍßã";
@@ -185,6 +194,9 @@ String STR_LAYER_CONTROLS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Controls";
     Text[ thai ] = "à¸•à¸±à¸§à¸„à¸§à¸šà¸„à¸¸à¸¡";
+    Text[ czech ] = "OvlÃ¡dacÃ­ prvky";
+    Text[ hebrew ] = "â€®×›×¤×ª×•×¨×™ ×©×œ×™×ª×”â€¬";
+    Text[ hindi ] = "à¤¨à¤¿à¤¯à¤‚à¤¤à¥à¤°à¤£";
 };
 String STR_LAYER_MEASURELINES
 {
@@ -198,11 +210,11 @@ String STR_LAYER_MEASURELINES
     Text [ italian ] = "Linee di quotatura" ;
     Text [ spanish ] = "Líneas de dimensiones" ;
     Text [ french ] = "Lignes de cote" ;
-    Text [ portuguese_brazilian ] = "Ma?linien" ;
+    Text [ portuguese_brazilian ] = "Linhas de Cota" ;
     Text [ portuguese ] = "Linhas de dimensão" ;
     Text[ chinese_simplified ] = "å®šé‡çº¿";
     Text[ russian ] = "Ğàçìåğíûå ëèíèè";
-    Text[ polish ] = "Linie wymiaru";
+    Text[ polish ] = "Linie wymiarowe";
     Text[ japanese ] = "å¯¸æ³•ç·š";
     Text[ chinese_traditional ] = "å®šé‡ç·š";
     Text[ arabic ] = "ÎØæØ ŞíÇÓ";
@@ -215,6 +227,9 @@ String STR_LAYER_MEASURELINES
     Text[ finnish ] = "Mittajanat";
     Text[ catalan ] = "Línies de dimensions";
     Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸¡à¸µà¸¡à¸´à¸•à¸´";
+    Text[ czech ] = "KÃ³tovacÃ­ ÄÃ¡ry";
+    Text[ hebrew ] = "MaÃŸlinien";
+    Text[ hindi ] = "à¤ªà¤°à¤¿à¤®à¤¾à¤£ à¤°à¥‡à¤–à¤¾";
 };
 String STR_PAGE
 {
@@ -222,14 +237,14 @@ String STR_PAGE
     Text [ ENGLISH ] = "Page" ;
     Text [ norwegian ] = "Page" ;
     Text [ italian ] = "Pagina" ;
-    Text [ portuguese_brazilian ] = "P?gina" ;
+    Text [ portuguese_brazilian ] = "Slide" ;
     Text [ portuguese ] = "Página" ;
     Text [ finnish ] = "Dia" ;
     Text [ danish ] = "Side" ;
     Text [ french ] = "Page" ;
     Text [ swedish ] = "Sida" ;
     Text [ dutch ] = "Pagina" ;
-    Text [ spanish ] = "Página" ;
+    Text [ spanish ] = "Diapositiva" ;
     Text [ english_us ] = "Slide" ;
     Text[ chinese_simplified ] = "é¡µ";
     Text[ russian ] = "Ñëàéä";
@@ -241,10 +256,13 @@ String STR_PAGE
     Text[ chinese_simplified ] = "é¡µ";
     Text[ greek ] = "Óåëßäá";
     Text[ korean ] = "ìŠ¬ë¼ì´ë“œ";
-    Text[ turkish ] = "Sayfa";
+    Text[ turkish ] = "Slayt";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Diapositiva";
     Text[ thai ] = "à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡";
+    Text[ czech ] = "SnÃ­mek";
+    Text[ hebrew ] = "Seite";
+    Text[ hindi ] = "à¤¸à¥à¤²à¤‡à¤¡";
 };
 String STR_MASTERPAGE
 {
@@ -252,7 +270,7 @@ String STR_MASTERPAGE
     Text [ ENGLISH ] = "Background" ;
     Text [ norwegian ] = "Background" ;
     Text [ italian ] = "Sfondo" ;
-    Text [ portuguese_brazilian ] = "Fundo" ;
+    Text [ portuguese_brazilian ] = "Plano de Fundo" ;
     Text [ portuguese ] = "Plano de fundo" ;
     Text [ finnish ] = "Tausta" ;
     Text [ danish ] = "Baggrund" ;
@@ -275,6 +293,9 @@ String STR_MASTERPAGE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fons";
     Text[ thai ] = "à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
+    Text[ czech ] = "PozadÃ­";
+    Text[ hebrew ] = "â€®×¨×§×¢â€¬";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤—";
 };
 String STR_NOTES
 {
@@ -282,7 +303,7 @@ String STR_NOTES
     Text [ ENGLISH ] = "(Notes)" ;
     Text [ norwegian ] = "(Notes)" ;
     Text [ italian ] = "(Note)" ;
-    Text [ portuguese_brazilian ] = "(Notes)" ;
+    Text [ portuguese_brazilian ] = "(Anotações)" ;
     Text [ portuguese ] = "(Anotações)" ;
     Text [ finnish ] = "(Huomautukset)" ;
     Text [ danish ] = "(Noter)" ;
@@ -305,6 +326,9 @@ String STR_NOTES
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "(Notes)";
     Text[ thai ] = "(à¸šà¸±à¸™à¸—à¸¶à¸)";
+    Text[ czech ] = "(KomentÃ¡Å™e)";
+    Text[ hebrew ] = "â€®(×”×¢×¨×•×ª)â€¬";
+    Text[ hindi ] = "(à¤Ÿà¤¿à¤ªà¥à¤ªà¤£à¥€)";
 };
 String STR_HANDOUT
 {
@@ -323,7 +347,7 @@ String STR_HANDOUT
     Text [ english_us ] = "Handouts" ;
     Text[ chinese_simplified ] = "è®²ä¹‰";
     Text[ russian ] = "Òåçèñû";
-    Text[ polish ] = "Materia³y";
+    Text[ polish ] = "Materia³y informacyjne";
     Text[ japanese ] = "ãƒãƒ³ãƒ‰ã‚¢ã‚¦ãƒˆ";
     Text[ chinese_traditional ] = "è¬›ç¾©";
     Text[ arabic ] = "äÔÑÇÊ";
@@ -335,12 +359,15 @@ String STR_HANDOUT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Prospectes";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸›à¸£à¸°à¸à¸­à¸šà¸„à¸³à¸šà¸£à¸£à¸¢à¸²à¸¢";
+    Text[ czech ] = "Teze";
+    Text[ hebrew ] = "Handzettel";
+    Text[ hindi ] = "à¤¹à¤¾à¤¨à¥à¤¡à¥Œà¤Ÿà¥à¤¸";
 };
 String STR_PRESOBJ_MPTITLE
 {
     Text = "Klicken Sie, um das Format des Titeltextes zu bearbeiten" ;
     Text [ ENGLISH ] = "Click to edit the titles format" ;
-    Text [ portuguese_brazilian ] = "Doppelklicken Sie, um das Format des Titeltextes zu bearbeiten" ;
+    Text [ portuguese_brazilian ] = "Clique para editar o formato do texto do título" ;
     Text [ english_us ] = "Click to edit the title text format" ;
     Text [ portuguese ] = "Clique para editar o formato do texto-título" ;
     Text [ swedish ] = "Klicka för att redigera rubriktextens format" ;
@@ -351,7 +378,7 @@ String STR_PRESOBJ_MPTITLE
     Text [ dutch ] = "Klik om de opmaak van de titeltekst te bewerken" ;
     Text[ chinese_simplified ] = "è¯·æ‚¨æŒ‰å‡»é¼ æ ‡ï¼Œç¼–è¾‘æ ‡é¢˜æ–‡çš„æ ¼å¼ã€‚";
     Text[ russian ] = "Äëÿ ïğàâêè òåêñòà çàãîëîâêà ùåëêíèòå ìûøüş";
-    Text[ polish ] = "Kliknij, aby edytowaæ format tekstu tytu³owego.";
+    Text[ polish ] = "Kliknij, aby edytowaæ format tekstu tytu³u";
     Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«ãƒ†ã‚­ã‚¹ãƒˆã®æ›¸å¼ã‚’ç·¨é›†ã™ã‚‹ã«ã¯ã‚¯ãƒªãƒƒã‚¯ã—ã¾ã™ã€‚";
     Text[ chinese_traditional ] = "è«‹æŒ‰ä¸€ä¸‹é¼ æ¨™ï¼Œç·¨è¼¯æ¨™é¡Œæ–‡çš„æ ¼å¼ã€‚";
     Text[ arabic ] = "ÇäŞÑ áÊÍÑíÑ ÊäÓíŞ äÕ ÇáÚäæÇä";
@@ -364,12 +391,15 @@ String STR_PRESOBJ_MPTITLE
     Text[ finnish ] = "Muokkaa otsikon tekstimuotoa napsauttamalla";
     Text[ catalan ] = "Feu clic per editar el format del text del títol";
     Text[ thai ] = "à¸„à¸¥à¸´à¸à¹€à¸à¸·à¹ˆà¸­à¹à¸à¹‰à¹„à¸‚à¸£à¸¹à¸›à¹à¸šà¸šà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸«à¸±à¸§à¹€à¸£à¸·à¹ˆà¸­à¸‡";
+    Text[ czech ] = "KliknÄ›te pro Ãºpravu formÃ¡tu titulnÃ­ho textu";
+    Text[ hebrew ] = "Klicken Sie, um das Format des Titeltextes zu bearbeiten";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤• à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤°à¤šà¤¨à¤¾ à¤•à¥‡ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨ à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤•à¥à¤²à¤¿à¤• à¤•à¤°à¥‹";
 };
 String STR_PRESOBJ_MPOUTLINE
 {
     Text = "Klicken Sie, um die Formate des Gliederungstextes zu bearbeiten" ;
     Text [ ENGLISH ] = "Click to edit the outlines format" ;
-    Text [ portuguese_brazilian ] = "Doppelklicken Sie, um die Formate des Gliederungstextes zu bearbeiten" ;
+    Text [ portuguese_brazilian ] = "Clique para editar o formato de texto do tópico" ;
     Text [ english_us ] = "Click to edit the outline text format" ;
     Text [ portuguese ] = "Clique duplo para editar os formatos do esquema do texto" ;
     Text [ swedish ] = "Klicka för att redigera dispositionstextens format" ;
@@ -380,7 +410,7 @@ String STR_PRESOBJ_MPOUTLINE
     Text [ dutch ] = "Klik om het formaat van de overzichtstekst te bewerken" ;
     Text[ chinese_simplified ] = "è¯·æ‚¨æŒ‰å‡»é¼ æ ‡ï¼Œç¼–è¾‘å¤§çº²æ­£æ–‡æ ¼å¼ã€‚";
     Text[ russian ] = "Äëÿ ïğàâêè ñòğóêòóğû ùåëêíèòå ìûøüş";
-    Text[ polish ] = "Kliknij, aby edytowaæ formaty tekstu konspektu.";
+    Text[ polish ] = "Kliknij, aby edytowaæ format tekstu konspektu";
     Text[ japanese ] = "ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã®æ›¸å¼ã‚’ç·¨é›†ã™ã‚‹ã«ã¯ã‚¯ãƒªãƒƒã‚¯ã—ã¾ã™ã€‚";
     Text[ chinese_traditional ] = "è«‹æŒ‰é¼ æ¨™ï¼Œç·¨è¼¯å¤§ç¶±æ–‡å­—æ ¼å¼ã€‚";
     Text[ arabic ] = "ÇäŞÑ åäÇ áÊŞæã ÈÊÍÑíÑ ÊäÓíŞ äÕ ÇáÊŞÓíã";
@@ -393,6 +423,9 @@ String STR_PRESOBJ_MPOUTLINE
     Text[ finnish ] = "Muokkaa jäsennyksen tekstimuotoa napsauttamalla";
     Text[ catalan ] = "Feu clic per editar el format del text del contorn";
     Text[ thai ] = "à¸„à¸¥à¸´à¸à¹€à¸à¸·à¹ˆà¸­à¹à¸à¹‰à¹„à¸‚à¸£à¸¹à¸›à¹à¸šà¸šà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡";
+    Text[ czech ] = "KliknÄ›te pro Ãºpravu formÃ¡tu textu osnovy";
+    Text[ hebrew ] = "Klicken Sie, um die Formate des Gliederungstextes zu bearbeiten";
+    Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤°à¤šà¤¨à¤¾ à¤•à¥‡ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨ à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤•à¥à¤²à¤¿à¤• à¤•à¤°à¥‹";
 };
 String STR_PRESOBJ_MPOUTLLAYER2
 {
@@ -400,7 +433,7 @@ String STR_PRESOBJ_MPOUTLLAYER2
     Text [ ENGLISH ] = "Second Outlinelevel " ;
     Text [ norwegian ] = "Second Outlinelevel " ;
     Text [ italian ] = "Secondo livello struttura" ;
-    Text [ portuguese_brazilian ] = "Segundo N?vel de Esbo?o" ;
+    Text [ portuguese_brazilian ] = "Tópicos de Nível 2" ;
     Text [ portuguese ] = "Segundo nível do esquema" ;
     Text [ finnish ] = "Toinen jäsennystaso" ;
     Text [ danish ] = "Andet dispositionsniveau" ;
@@ -423,6 +456,9 @@ String STR_PRESOBJ_MPOUTLLAYER2
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Segon nivell de contorn";
     Text[ thai ] = "à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸£à¸°à¸”à¸±à¸šà¸—à¸µà¹ˆà¸ªà¸­à¸‡";
+    Text[ czech ] = "DruhÃ¡ ÃºroveÅˆ osnovy";
+    Text[ hebrew ] = "Zweite Gliederungsebene";
+    Text[ hindi ] = "à¤¦à¥‚à¤¸à¤°à¤¾ à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¸à¤¤à¤¹";
 };
 String STR_PRESOBJ_MPOUTLLAYER3
 {
@@ -430,7 +466,7 @@ String STR_PRESOBJ_MPOUTLLAYER3
     Text [ ENGLISH ] = "Third Outlinelevel " ;
     Text [ norwegian ] = "Third Outlinelevel " ;
     Text [ italian ] = "Terzo livello struttura" ;
-    Text [ portuguese_brazilian ] = "Terceiro N?vel de Esbo?o" ;
+    Text [ portuguese_brazilian ] = "Tópicos de Nível 3" ;
     Text [ portuguese ] = "Terceiro nível do esquema" ;
     Text [ finnish ] = "Kolmas jäsennystaso" ;
     Text [ danish ] = "Tredje dispositionsniveau" ;
@@ -453,6 +489,9 @@ String STR_PRESOBJ_MPOUTLLAYER3
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tercer nivell de contorn";
     Text[ thai ] = "à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸£à¸°à¸”à¸±à¸šà¸—à¸µà¹ˆà¸ªà¸²à¸¡";
+    Text[ czech ] = "TÅ™etÃ­ ÃºroveÅˆ osnovy";
+    Text[ hebrew ] = "Dritte Gliederungsebene";
+    Text[ hindi ] = "à¤¤à¥€à¤¸à¤°à¤¾ à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¸à¤¤à¤¹";
 };
 String STR_PRESOBJ_MPOUTLLAYER4
 {
@@ -460,7 +499,7 @@ String STR_PRESOBJ_MPOUTLLAYER4
     Text [ ENGLISH ] = "Fourth Outlinelevel " ;
     Text [ norwegian ] = "Fourth Outlinelevel " ;
     Text [ italian ] = "Quarto livello struttura" ;
-    Text [ portuguese_brazilian ] = "Quarto N?vel de Esbo?o" ;
+    Text [ portuguese_brazilian ] = "Tópicos de Nível 4" ;
     Text [ portuguese ] = "Quarto nível do esquema" ;
     Text [ finnish ] = "Neljäs jäsennystaso" ;
     Text [ danish ] = "Fjerde dispositionsniveau" ;
@@ -483,6 +522,9 @@ String STR_PRESOBJ_MPOUTLLAYER4
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Quart nivell de contorn";
     Text[ thai ] = "à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸£à¸°à¸”à¸±à¸šà¸—à¸µà¹ˆà¸ªà¸µà¹ˆ";
+    Text[ czech ] = "ÄŒtvrtÃ¡ ÃºroveÅˆ osnovy";
+    Text[ hebrew ] = "Vierte Gliederungsebene";
+    Text[ hindi ] = "à¤šà¥Œà¤¥à¤¾ à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¸à¤¤à¤¹";
 };
 String STR_PRESOBJ_MPOUTLLAYER5
 {
@@ -491,7 +533,7 @@ String STR_PRESOBJ_MPOUTLLAYER5
     Text [ ENGLISH ] = "Fifth Outlinelevel " ;
     Text [ norwegian ] = "Fifth Outlinelevel " ;
     Text [ italian ] = "Quinto livello struttura" ;
-    Text [ portuguese_brazilian ] = "Quinto N?vel de Esbo?o" ;
+    Text [ portuguese_brazilian ] = "Tópicos de Nível 5" ;
     Text [ portuguese ] = "Quinto nível do esquema" ;
     Text [ finnish ] = "Viides jäsennystaso" ;
     Text [ danish ] = "Femte dispositionsniveau" ;
@@ -514,6 +556,9 @@ String STR_PRESOBJ_MPOUTLLAYER5
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cinquè nivell de contorn";
     Text[ thai ] = "à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸£à¸°à¸”à¸±à¸šà¸—à¸µà¹ˆà¸«à¹‰à¸²";
+    Text[ czech ] = "PÃ¡tÃ¡ ÃºroveÅˆ osnovy";
+    Text[ hebrew ] = "FÃ¼nfte Gliederungsebene";
+    Text[ hindi ] = "à¤ªà¤¾à¤à¤šà¤µà¤¾à¤ à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¸à¤¤à¤¹";
 };
 String STR_PRESOBJ_MPOUTLLAYER6
 {
@@ -521,7 +566,7 @@ String STR_PRESOBJ_MPOUTLLAYER6
     Text [ ENGLISH ] = "Sixth Outlinelevel " ;
     Text [ norwegian ] = "Sixth Outlinelevel " ;
     Text [ italian ] = "Sesto livello struttura" ;
-    Text [ portuguese_brazilian ] = "Sexto N?vel de Esbo?o" ;
+    Text [ portuguese_brazilian ] = "Tópicos de Nível 6" ;
     Text [ portuguese ] = "Sexto nível do esquema" ;
     Text [ finnish ] = "Kuudes jäsennystaso" ;
     Text [ danish ] = "Sjette dispositionsniveau" ;
@@ -544,6 +589,9 @@ String STR_PRESOBJ_MPOUTLLAYER6
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sisè nivell de contorn";
     Text[ thai ] = "à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸£à¸°à¸”à¸±à¸šà¸—à¸µà¹ˆà¸«à¸";
+    Text[ czech ] = "Å estÃ¡ ÃºroveÅˆ osnovy";
+    Text[ hebrew ] = "Sechste Gliederungsebene";
+    Text[ hindi ] = "à¤›à¤ à¤µà¤¾à¤ à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¸à¤¤à¤¹";
 };
 String STR_PRESOBJ_MPOUTLLAYER7
 {
@@ -551,7 +599,7 @@ String STR_PRESOBJ_MPOUTLLAYER7
     Text [ ENGLISH ] = "Seventh Outlinelevel " ;
     Text [ norwegian ] = "Seventh Outlinelevel " ;
     Text [ italian ] = "Settimo livello struttura" ;
-    Text [ portuguese_brazilian ] = "S?timo N?vel l de Esbo?o" ;
+    Text [ portuguese_brazilian ] = "Tópicos de Nível 7" ;
     Text [ portuguese ] = "Sétimo nível do esquema" ;
     Text [ finnish ] = "Seitsemäs jäsennystaso" ;
     Text [ danish ] = "Syvende dispositionsniveau" ;
@@ -574,6 +622,9 @@ String STR_PRESOBJ_MPOUTLLAYER7
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Setè nivell de contorn";
     Text[ thai ] = "à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸£à¸°à¸”à¸±à¸šà¸—à¸µà¹ˆà¹€à¸ˆà¹‡à¸”";
+    Text[ czech ] = "SedmÃ¡ ÃºroveÅˆ osnovy";
+    Text[ hebrew ] = "Siebente Gliederungsebene";
+    Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¸à¤¤à¤¹";
 };
 String STR_PRESOBJ_MPOUTLLAYER8
 {
@@ -581,7 +632,7 @@ String STR_PRESOBJ_MPOUTLLAYER8
     Text [ ENGLISH ] = "Eigth Outlinelevel " ;
     Text [ norwegian ] = "Eigth Outlinelevel " ;
     Text [ italian ] = "Ottavo livello struttura" ;
-    Text [ portuguese_brazilian ] = "Oitavo N?vel de Esbo?o" ;
+    Text [ portuguese_brazilian ] = "Tópicos de Nível 8" ;
     Text [ portuguese ] = "Oitavo nível do esquema" ;
     Text [ finnish ] = "Kahdeksas jäsennystaso" ;
     Text [ danish ] = "Ottende dispositionsniveau" ;
@@ -604,6 +655,9 @@ String STR_PRESOBJ_MPOUTLLAYER8
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vuitè nivell de contorn";
     Text[ thai ] = "à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸£à¸°à¸”à¸±à¸šà¸—à¸µà¹ˆà¹à¸›à¸”";
+    Text[ czech ] = "OsmÃ¡ ÃºroveÅˆ osnovy";
+    Text[ hebrew ] = "Achte Gliederungsebene";
+    Text[ hindi ] = "à¤†à¤ à¤µà¤¾à¤ à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¸à¤¤à¤¹";
 };
 String STR_PRESOBJ_MPOUTLLAYER9
 {
@@ -611,7 +665,7 @@ String STR_PRESOBJ_MPOUTLLAYER9
     Text [ ENGLISH ] = "Ninth Outlinelevel " ;
     Text [ norwegian ] = "Ninth Outlinelevel " ;
     Text [ italian ] = "Nono livello struttura" ;
-    Text [ portuguese_brazilian ] = "Nono N?vel de Esbo?o" ;
+    Text [ portuguese_brazilian ] = "Tópicos de Nível 9" ;
     Text [ portuguese ] = "Nono nível do esquema" ;
     Text [ finnish ] = "Yhdeksäs jäsennystaso" ;
     Text [ danish ] = "Niende dispositionsniveau" ;
@@ -634,6 +688,9 @@ String STR_PRESOBJ_MPOUTLLAYER9
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Novè nivell de contorn";
     Text[ thai ] = "à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸£à¸°à¸”à¸±à¸šà¸—à¸µà¹ˆà¹€à¸à¹‰à¸²";
+    Text[ czech ] = "DevÃ¡tÃ¡ ÃºroveÅˆ osnovy";
+    Text[ hebrew ] = "Neunte Gliederungsebene";
+    Text[ hindi ] = "à¤¨à¤µà¤¾à¤ à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¸à¤¤à¤¹";
 };
 String STR_PRESOBJ_MPNOTESTITLE
 {
@@ -642,15 +699,15 @@ String STR_PRESOBJ_MPNOTESTITLE
     Text [ dutch ] = "Klik om de pagina te verplaatsen" ;
     Text [ english_us ] = "Click to move the slide" ;
     Text [ italian ] = "Cliccate per spostare la pagina" ;
-    Text [ spanish ] = "Pulse para desplazar la página" ;
+    Text [ spanish ] = "Pulse para desplazar la diapositiva" ;
     Text [ french ] = "Cliquez pour déplacer la page" ;
     Text [ swedish ] = "Klicka för att flytta sidan" ;
     Text [ danish ] = "Klik for at flytte siden" ;
-    Text [ portuguese_brazilian ] = "Klicken Sie, um die Seite zu verschieben" ;
+    Text [ portuguese_brazilian ] = "Clique para mover o slide" ;
     Text [ portuguese ] = "Clique para mover a página" ;
     Text[ chinese_simplified ] = "è¯·æ‚¨æŒ‰å‡»é¼ æ ‡ï¼Œç§»åŠ¨é¡µé¢ã€‚";
     Text[ russian ] = "Äëÿ ïåğåìåùåíèÿ ñòğàíèöû ùåëêíèòå ìûøüş";
-    Text[ polish ] = "Kliknij, aby przesun¹æ slajd.";
+    Text[ polish ] = "Kliknij, aby przesun¹æ slajd";
     Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã‚’ç§»å‹•ã™ã‚‹ã«ã¯ã‚¯ãƒªãƒƒã‚¯ã—ã¾ã™ã€‚";
     Text[ chinese_traditional ] = "è«‹æŒ‰ä¸€ä¸‹æ»‘é¼ ï¼Œç§»å‹•é é¢ã€‚";
     Text[ arabic ] = "ÇäŞÑ áÅÒÇÍÉ ÇáÕİÍÉ";
@@ -658,17 +715,20 @@ String STR_PRESOBJ_MPNOTESTITLE
     Text[ chinese_simplified ] = "è¯·æ‚¨æŒ‰å‡»é¼ æ ‡ï¼Œç§»åŠ¨é¡µé¢ã€‚";
     Text[ greek ] = "ÊÜíôå êëéê åäş ãéá ôçí ìåôáêßíçóç ôçò óåëßäáò";
     Text[ korean ] = "ìŠ¬ë¼ì´ë“œë¥¼ ì´ë™í•˜ê¸° ìœ„í•´ í´ë¦­í•˜ì‹­ì‹œì˜¤.";
-    Text[ turkish ] = "Sayfayı taşımak için tıklayın";
+    Text[ turkish ] = "Slaytı taşımak için tıklayın";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Siirrä diaa napsauttamalla";
     Text[ catalan ] = "Feu clic per moure la diapositiva";
     Text[ thai ] = "à¸„à¸¥à¸´à¸à¹€à¸à¸·à¹ˆà¸­à¸¢à¹‰à¸²à¸¢à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡";
+    Text[ czech ] = "KliknÄ›te pro pÅ™esun snÃ­mku";
+    Text[ hebrew ] = "Klicken Sie, um die Seite zu verschieben";
+    Text[ hindi ] = "à¤¸à¥à¤²à¤‡à¤¡ à¤•à¤¾ à¤¸à¥à¤¥à¤¾à¤¨ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨ à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤•à¥à¤²à¤¿à¤• à¤•à¤°à¥‹";
 };
 String STR_PRESOBJ_MPNOTESTEXT
 {
     Text = "Klicken Sie, um das Format der Notizen zu bearbeiten" ;
     Text [ ENGLISH ] = "Click to edit the notes" ;
-    Text [ portuguese_brazilian ] = "Doppelklicken Sie, um das Format der Notizen zu bearbeiten" ;
+    Text [ portuguese_brazilian ] = "Clique para editar o formato das anotações" ;
     Text [ english_us ] = "Click to edit the notes format" ;
     Text [ portuguese ] = "Clique para editar o formato das anotações" ;
     Text [ swedish ] = "Klicka för att redigera anteckningarnas format" ;
@@ -692,13 +752,16 @@ String STR_PRESOBJ_MPNOTESTEXT
     Text[ finnish ] = "Napsauta ja muokkaa huomautusmuotoa";
     Text[ catalan ] = "Feu clic per editar el format de les notes";
     Text[ thai ] = "à¸„à¸¥à¸´à¸à¹€à¸à¸·à¹ˆà¸­à¹à¸à¹‰à¹„à¸‚à¸£à¸¹à¸›à¹à¸šà¸šà¸šà¸±à¸™à¸—à¸¶à¸";
+    Text[ czech ] = "KliknÄ›te pro Ãºpravu formÃ¡tu komentÃ¡Å™Å¯";
+    Text[ hebrew ] = "Klicken Sie, um das Format der Notizen zu bearbeiten";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¤¨à¤¾ à¤°à¤šà¤¨à¤¾ à¤•à¥‡ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨ à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤•à¥à¤²à¤¿à¤• à¤•à¤°à¥‹";
 };
 String STR_PRESOBJ_TITLE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Titel durch Klicken hinzufügen : Titel durch Klicken hinzuf³gen */
     Text = "Titel durch Klicken hinzufügen" ;
     Text [ ENGLISH ] = "Click to add a title" ;
-    Text [ portuguese_brazilian ] = "Titel durch Doppelklicken hinzuf?en" ;
+    Text [ portuguese_brazilian ] = "Clique para adicionar um título" ;
     Text [ english_us ] = "Click to add title" ;
     Text [ portuguese ] = "Inserir texto com clique duplo" ;
     Text [ swedish ] = "Lägg till rubrik genom att klicka" ;
@@ -709,7 +772,7 @@ String STR_PRESOBJ_TITLE
     Text [ dutch ] = "Klik om titel toe te voegen" ;
     Text[ chinese_simplified ] = "å•å‡»æ’å…¥æ ‡é¢˜";
     Text[ russian ] = "Äëÿ äîáàâëåíèÿ çàãîëîâêà ùåëêíèòå ìûøüş";
-    Text[ polish ] = "Dodaj tytu³ przez klikniêcie";
+    Text[ polish ] = "Kliknij, aby dodaæ tytu³";
     Text[ japanese ] = "ã‚¯ãƒªãƒƒã‚¯ã—ã¦ã‚¿ã‚¤ãƒˆãƒ«ã®æŒ¿å…¥";
     Text[ chinese_traditional ] = "æŒ‰ä¸€ä¸‹æ»‘é¼ å·¦éµæ–°å¢æ¨™é¡Œ";
     Text[ arabic ] = "ÇäŞÑ áÅÏÑÇÌ ÚäæÇä";
@@ -722,13 +785,16 @@ String STR_PRESOBJ_TITLE
     Text[ finnish ] = "Lisää otsikko napsauttamalla";
     Text[ catalan ] = "Feu clic per afegir un títol";
     Text[ thai ] = "à¸„à¸¥à¸´à¸à¹€à¸à¸·à¹ˆà¸­à¹€à¸à¸´à¹ˆà¸¡à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡";
+    Text[ czech ] = "KliknutÃ­m vloÅ¾Ã­te titulek";
+    Text[ hebrew ] = "Titel durch Klicken hinzufÃ¼gen";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤• à¤œà¥‹à¤¡à¤¼à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤•à¥à¤²à¤¿à¤• à¤•à¤°à¥‹";
 };
 String STR_PRESOBJ_OUTLINE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Gliederung durch Klicken hinzufügen : Gliederung durch Klicken hinzuf³gen */
     Text = "Gliederung durch Klicken hinzufügen" ;
     Text [ ENGLISH ] = "Click to add an outline" ;
-    Text [ portuguese_brazilian ] = "Gliederung durch Doppelklicken hinzuf?en" ;
+    Text [ portuguese_brazilian ] = "Clique para adicionar um tópico" ;
     Text [ english_us ] = "Click to add an outline" ;
     Text [ portuguese ] = "Clique para inserir esquema" ;
     Text [ swedish ] = "Lägg till disposition genom att klicka" ;
@@ -739,7 +805,7 @@ String STR_PRESOBJ_OUTLINE
     Text [ dutch ] = "Klik om overzicht toe te voegen" ;
     Text[ chinese_simplified ] = "å•å‡»é¼ æ ‡é”®æ–°å¢å¤§çº²";
     Text[ russian ] = "Äëÿ äîáàâëåíèÿ ñòğóêòóğû ùåëêíèòå ìûøüş";
-    Text[ polish ] = "Dodaj konspekt przez klikniêcie";
+    Text[ polish ] = "Kliknij, aby dodaæ konspekt";
     Text[ japanese ] = "ã‚¯ãƒªãƒƒã‚¯ã—ã¦ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ã®æŒ¿å…¥";
     Text[ chinese_traditional ] = "æŒ‰æ»‘é¼ å·¦éµä¾†æ–°å¢å¤§ç¶±";
     Text[ arabic ] = "ÇäŞÑ åäÇ áÅÏÑÇÌ ÊŞÓíã";
@@ -747,18 +813,21 @@ String STR_PRESOBJ_OUTLINE
     Text[ chinese_simplified ] = "å•å‡»é¼ æ ‡é”®æ–°å¢å¤§çº²";
     Text[ greek ] = "ÊÜíôå êëéê åäş ãéá ôçí åéóáãùãŞ äéÜñèñùóçò";
     Text[ korean ] = "í´ë¦­ìœ¼ë¡œ ì•„ì›ƒíŠ¸ë¼ì¸ ì¶”ê°€";
-    Text[ turkish ] = "Anahat eklemek için çift tıklayın";
+    Text[ turkish ] = "Anahat eklemek için  tıklayın";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lisää jäsennys napsauttamalla";
     Text[ catalan ] = "Feu clic per afegir un contorn";
     Text[ thai ] = "à¸„à¸¥à¸´à¸à¹€à¸à¸·à¹ˆà¸­à¹€à¸à¸´à¹ˆà¸¡à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡";
+    Text[ czech ] = "KliknutÃ­m vloÅ¾Ã­te osnovu";
+    Text[ hebrew ] = "Gliederung durch Klicken hinzufÃ¼gen";
+    Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤œà¥‹à¤¡à¤¼à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤•à¥à¤²à¤¿à¤• à¤•à¤°à¥‹";
 };
 String STR_PRESOBJ_TEXT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Text durch Klicken hinzufügen : Text durch Klicken hinzuf³gen */
     Text = "Text durch Klicken hinzufügen" ;
     Text [ ENGLISH ] = "Click to add text" ;
-    Text [ portuguese_brazilian ] = "Text durch Doppelklicken hinzuf?en" ;
+    Text [ portuguese_brazilian ] = "Clique para adicionar um texto" ;
     Text [ english_us ] = "Click to add text" ;
     Text [ portuguese ] = "Inserir texto com clique duplo" ;
     Text [ swedish ] = "Klicka för att lägga till text" ;
@@ -769,7 +838,7 @@ String STR_PRESOBJ_TEXT
     Text [ dutch ] = "Klik om tekst toe te voegen" ;
     Text[ chinese_simplified ] = "å•å‡»é¼ æ ‡é”®æ·»åŠ æ–‡å­—";
     Text[ russian ] = "Äëÿ äîáàâëåíèÿ òåêñòà ùåëêíèòå ìûøüş";
-    Text[ polish ] = "Dodaj tekst przez klikniêcie";
+    Text[ polish ] = "Kliknij, aby dodaæ tekst";
     Text[ japanese ] = "ã‚¯ãƒªãƒƒã‚¯ã—ã¦ãƒ†ã‚­ã‚¹ãƒˆã®æŒ¿å…¥";
     Text[ chinese_traditional ] = "æŒ‰æ»‘é¼ å·¦éµï¼Œè¼¸å…¥æ–‡å­—";
     Text[ arabic ] = "ÇäŞÑ áÅÏÑÇÌ äÕ";
@@ -782,13 +851,16 @@ String STR_PRESOBJ_TEXT
     Text[ finnish ] = "Lisää teksti napsauttamalla";
     Text[ catalan ] = "Feu clic per afegir el text";
     Text[ thai ] = "à¸„à¸¥à¸´à¸à¹€à¸à¸·à¹ˆà¸­à¹€à¸à¸´à¹ˆà¸¡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+    Text[ czech ] = "KliknutÃ­m vloÅ¾Ã­te text";
+    Text[ hebrew ] = "Text durch Klicken hinzufÃ¼gen";
+    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤œà¥‹à¤¡à¤¼à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤•à¥à¤²à¤¿à¤• à¤•à¤°à¥‹";
 };
 String STR_PRESOBJ_NOTESTEXT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Notizen durch Klicken hinzufügen : Notizen durch Klicken hinzuf³gen */
     Text = "Notizen durch Klicken hinzufügen" ;
     Text [ ENGLISH ] = "Click to add notes" ;
-    Text [ portuguese_brazilian ] = "Notizen durch Doppelklicken hinzuf?en" ;
+    Text [ portuguese_brazilian ] = "Clique para adicionar anotações" ;
     Text [ english_us ] = "Click to add notes" ;
     Text [ portuguese ] = "Clique para inserir anotações" ;
     Text [ swedish ] = "Lägg till anteckningar genom att klicka" ;
@@ -799,7 +871,7 @@ String STR_PRESOBJ_NOTESTEXT
     Text [ dutch ] = "Klik om aantekeningen toe te voegen" ;
     Text[ chinese_simplified ] = "å•å‡»é¼ æ ‡é”®æ·»åŠ å¤‡æ³¨";
     Text[ russian ] = "Äëÿ äîáàâëåíèÿ ïğèìå÷àíèÿ ùåëêíèòå ìûøüş";
-    Text[ polish ] = "Dodaj notatkê przez klikniêcie";
+    Text[ polish ] = "Kliknij, aby dodaæ notatki";
     Text[ japanese ] = "ã‚¯ãƒªãƒƒã‚¯ã—ã¦ãƒãƒ¼ãƒˆã®æŒ¿å…¥";
     Text[ chinese_traditional ] = "æŒ‰ä¸€ä¸‹æ»‘é¼ å·¦éµæ–°å¢å‚™è¨»";
     Text[ arabic ] = "ÇäŞÑ áÅÏÑÇÌ ãáÇÍÙÇÊ";
@@ -812,6 +884,9 @@ String STR_PRESOBJ_NOTESTEXT
     Text[ finnish ] = "Lisää huomautus napsauttamalla";
     Text[ catalan ] = "Feu clic per afegir les notes";
     Text[ thai ] = "à¸„à¸¥à¸´à¸à¹€à¸à¸·à¹ˆà¸­à¹€à¸à¸´à¹ˆà¸¡à¸šà¸±à¸™à¸—à¸¶à¸";
+    Text[ czech ] = "KliknutÃ­m vloÅ¾Ã­te komentÃ¡Å™e";
+    Text[ hebrew ] = "Notizen durch Klicken hinzufÃ¼gen";
+    Text[ hindi ] = "à¤Ÿà¤¿à¤ªà¥à¤ªà¤£à¥€ à¤œà¥‹à¤¡à¤¼à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤•à¥à¤²à¤¿à¤• à¤•à¤°à¥‹";
 };
 String STR_PRESOBJ_GRAPHIC
 {
@@ -825,7 +900,7 @@ String STR_PRESOBJ_GRAPHIC
     Text [ french ] = "Double-clic pour insérer une image" ;
     Text [ swedish ] = "Lägg till grafik genom att dubbelklicka" ;
     Text [ danish ] = "Tilføj grafik ved at dobbeltklikke" ;
-    Text [ portuguese_brazilian ] = "Graphik durch Doppelklicken hinzuf?en" ;
+    Text [ portuguese_brazilian ] = "Duplo clique para adicionar uma figura" ;
     Text [ portuguese ] = "Inserir gráfico com duplo clique" ;
     Text[ chinese_simplified ] = "åŒå‡»é¼ æ ‡æ’å…¥å›¾å½¢";
     Text[ russian ] = "Äîáàâüòå ãğàôè÷åñêèé îáúåêò äâîéíûì ùåë÷êîì ìûøè";
@@ -842,6 +917,9 @@ String STR_PRESOBJ_GRAPHIC
     Text[ finnish ] = "Lisää grafiikkaa kaksoisnapsauttamalla";
     Text[ catalan ] = "Feu doble clic per afegir una imatge";
     Text[ thai ] = "à¸„à¸¥à¸´à¸à¸ªà¸­à¸‡à¸„à¸£à¸±à¹‰à¸‡à¹€à¸à¸·à¹ˆà¸­à¹€à¸à¸´à¹ˆà¸¡à¸à¸£à¸²à¸Ÿà¸´à¸„";
+    Text[ czech ] = "DvojitÃ½m kliknutÃ­m vloÅ¾Ã­te obrÃ¡zek";
+    Text[ hebrew ] = "Grafik durch Doppelklicken hinzufÃ¼gen";
+    Text[ hindi ] = "à¤à¤• à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤¡à¤¬à¤²-à¤•à¥à¤²à¤¿à¤•à¥ à¤•à¤°à¥‹";
 };
 String STR_PRESOBJ_OBJECT
 {
@@ -855,7 +933,7 @@ String STR_PRESOBJ_OBJECT
     Text [ dutch ] = "Dubbelklik om object toe te voegen" ;
     Text [ swedish ] = "Lägg till objekt genom att dubbelklicka" ;
     Text [ danish ] = "Tilføj objekt ved at dobbeltklikke" ;
-    Text [ portuguese_brazilian ] = "Objekt durch Doppelklicken hinzuf?en" ;
+    Text [ portuguese_brazilian ] = "Duplo clique para adicionar um objeto" ;
     Text [ portuguese ] = "Inserir objecto com clique duplo" ;
     Text[ chinese_simplified ] = "åŒå‡»é¼ æ ‡åŠ å…¥å¯¹è±¡";
     Text[ russian ] = "Äîáàâüòå îáúåêò äâîéíûì ùåë÷êîì ìûøè";
@@ -872,6 +950,9 @@ String STR_PRESOBJ_OBJECT
     Text[ finnish ] = "Lisää objekti kaksoisnapsauttamalla";
     Text[ catalan ] = "Feu doble clic per afegir un objecte";
     Text[ thai ] = "à¸„à¸¥à¸´à¸à¸ªà¸­à¸‡à¸„à¸£à¸±à¹‰à¸‡à¹€à¸à¸·à¹ˆà¸­à¹€à¸à¸´à¹ˆà¸¡à¸§à¸±à¸•à¸–à¸¸";
+    Text[ czech ] = "DvojitÃ½m kliknutÃ­m vloÅ¾Ã­te objekt";
+    Text[ hebrew ] = "Objekt durch Doppelklicken hinzufÃ¼gen";
+    Text[ hindi ] = "à¤à¤• à¤µà¤¸à¥à¤¤à¥ à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤¡à¤¬à¤²-à¤•à¥à¤²à¤¿à¤•à¥ à¤•à¤°à¥‹";
 };
 String STR_PRESOBJ_CHART
 {
@@ -885,7 +966,7 @@ String STR_PRESOBJ_CHART
     Text [ french ] = "Double-clic pour insérer un diagramme" ;
     Text [ swedish ] = "Lägg till diagram genom att dubbelklicka" ;
     Text [ danish ] = "Tilføj diagram ved at dobbeltklikke" ;
-    Text [ portuguese_brazilian ] = "Diagramm durch Doppelklicken hinzuf?en" ;
+    Text [ portuguese_brazilian ] = "Duplo clique para adicionar um gráfico" ;
     Text [ portuguese ] = "Inserir gráfico com clique duplo" ;
     Text[ chinese_simplified ] = "åŒå‡»é¼ æ ‡æ’å…¥å›¾è¡¨";
     Text[ russian ] = "Äîáàâüòå äèàãğàììó äâîéíûì ùåë÷êîì";
@@ -902,6 +983,9 @@ String STR_PRESOBJ_CHART
     Text[ finnish ] = "Lisää kaavio kaksoisnapsauttamalla";
     Text[ catalan ] = "Feu doble clic per afegir un diagrama";
     Text[ thai ] = "à¸„à¸¥à¸´à¸à¸ªà¸­à¸‡à¸„à¸£à¸±à¹‰à¸‡à¹€à¸à¸·à¹ˆà¸­à¹€à¸à¸´à¹ˆà¸¡à¹à¸œà¸™à¸ à¸¹à¸¡à¸´";
+    Text[ czech ] = "DvojitÃ½m kliknutÃ­m vloÅ¾Ã­te graf";
+    Text[ hebrew ] = "Diagramm durch Doppelklicken hinzufÃ¼gen";
+    Text[ hindi ] = "à¤à¤• à¤šà¤¾à¤°à¥à¤Ÿ à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤¡à¤¬à¤²-à¤•à¥à¤²à¤¿à¤•à¥ à¤•à¤°à¥‹";
 };
 String STR_PRESOBJ_ORGCHART
 {
@@ -915,11 +999,11 @@ String STR_PRESOBJ_ORGCHART
     Text [ dutch ] = "Dubbelklik om organisatiediagram toe te voegen" ;
     Text [ swedish ] = "Lägg till organisationsdiagram genom att dubbelklicka" ;
     Text [ danish ] = "Tilføj organisationsdiagram ved at dobbeltklikke" ;
-    Text [ portuguese_brazilian ] = "Organisationsdiagramm durch Doppelklicken hinzuf?en" ;
+    Text [ portuguese_brazilian ] = "Duplo clique para adicionar um organograma" ;
     Text [ portuguese ] = "Inserir gráfico de organização com clique duplo" ;
     Text[ chinese_simplified ] = "åŒå‡»é¼ æ ‡æ–°å¢ç»„ç»‡å›¾è¡¨";
     Text[ russian ] = "Äîáàâüòå îğãàíèçàöèîííóş äèàãğàììó äâîéíûì ùåë÷êîì ìûøè";
-    Text[ polish ] = "Dodaj wykres organizacyjny przez dwukrotne klikniêcie";
+    Text[ polish ] = "Dodaj schemat organizacyjny przez dwukrotne klikniêcie";
     Text[ japanese ] = "ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯ã—ã¦çµ„ç¹”å›³ã®æŒ¿å…¥";
     Text[ chinese_traditional ] = "é›™æ“Šé¼ æ¨™ï¼Œæ–°å¢ä¸€å€‹çµ„ç¹”åœ–è¡¨";
     Text[ arabic ] = "ÇäŞÑ äŞÑÇğ ãÒÏæÌÇğ áÅÖÇİÉ ÑÓã ÈíÇäí åíßáí";
@@ -932,6 +1016,9 @@ String STR_PRESOBJ_ORGCHART
     Text[ finnish ] = "Lisää organisaatiokaavio kaksoisnapsauttamalla";
     Text[ catalan ] = "Feu doble clic per afegir un organigrama";
     Text[ thai ] = "à¸„à¸¥à¸´à¸à¸ªà¸­à¸‡à¸„à¸£à¸±à¹‰à¸‡à¹€à¸à¸·à¹ˆà¸­à¹€à¸à¸´à¹ˆà¸¡à¹à¸œà¸™à¸ à¸¹à¸¡à¸´à¸­à¸‡à¸„à¹Œà¸à¸£";
+    Text[ czech ] = "DvojitÃ½m kliknutÃ­m vloÅ¾Ã­te organizaÄnÃ­ diagram";
+    Text[ hebrew ] = "Organisationsdiagramm durch Doppelklicken hinzufÃ¼gen";
+    Text[ hindi ] = "à¤à¤• à¤šà¤¿à¤¤à¥à¤° à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤¡à¤¬à¤²-à¤•à¥à¤²à¤¿à¤•à¥ à¤•à¤°à¥‹";
 };
 String STR_PRESOBJ_TABLE
 {
@@ -945,7 +1032,7 @@ String STR_PRESOBJ_TABLE
     Text [ dutch ] = "Dubbelklik om werkblad toe te voegen" ;
     Text [ swedish ] = "Dubbelklicka för att lägga till tabell" ;
     Text [ danish ] = "Tilføj regneark ved at dobbeltklikke" ;
-    Text [ portuguese_brazilian ] = "Tabelle durch Doppelklicken hinzuf?en" ;
+    Text [ portuguese_brazilian ] = "Duplo clique para adicionar uma planilha" ;
     Text [ portuguese ] = "Inserir folha de cálculo com clique duplo" ;
     Text[ chinese_simplified ] = "è¯·æ‚¨åŒå‡»é¼ æ ‡æ–°å¢å·¥ä½œè¡¨";
     Text[ russian ] = "Äîáàâüòå ıëåêòğîííóş òàáëèöó äâîéíûì ùåë÷êîì ìûøè";
@@ -962,6 +1049,9 @@ String STR_PRESOBJ_TABLE
     Text[ finnish ] = "Lisää laskentataulukko kaksoisnapsauttamalla";
     Text[ catalan ] = "Feu doble clic per afegir un full càlcul";
     Text[ thai ] = "à¸„à¸¥à¸´à¸à¸ªà¸­à¸‡à¸„à¸£à¸±à¹‰à¸‡à¹€à¸à¸·à¹ˆà¸­à¹€à¸à¸´à¹ˆà¸¡à¸à¸£à¸°à¸”à¸²à¸©à¸„à¸³à¸™à¸§à¸“";
+    Text[ czech ] = "DvojitÃ½m kliknutÃ­m vloÅ¾Ã­te seÅ¡it";
+    Text[ hebrew ] = "Tabelle durch Doppelklicken hinzufÃ¼gen";
+    Text[ hindi ] = "à¤à¤• à¤¸à¥à¤ªà¥à¤°à¥‡à¤¡à¤¶à¥€à¤Ÿà¥ à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤¡à¤¬à¤²-à¤•à¥à¤²à¤¿à¤•à¥ à¤•à¤°à¥‹";
 };
 String STR_SLIDEVIEWSHELL
 {
@@ -969,7 +1059,7 @@ String STR_SLIDEVIEWSHELL
     Text [ ENGLISH ] = "Slide Show mode" ;
     Text [ norwegian ] = "Slide Show mode" ;
     Text [ italian ] = "Modo diapositiva" ;
-    Text [ portuguese_brazilian ] = "Modo Show de Slides" ;
+    Text [ portuguese_brazilian ] = "Modo de Slide" ;
     Text [ portuguese ] = "Modo Diapositivos" ;
     Text [ finnish ] = "Diatila" ;
     Text [ danish ] = "Diasmodus" ;
@@ -992,6 +1082,9 @@ String STR_SLIDEVIEWSHELL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mode Diapositiva";
     Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡";
+    Text[ czech ] = "SnÃ­mkovÃ½ reÅ¾im";
+    Text[ hebrew ] = "Diamodus";
+    Text[ hindi ] = "à¤¸à¥à¤²à¤‡à¤¡ à¤ªà¥à¤°à¤•à¤¾à¤°";
 };
 String STR_OUTLINEVIEWSHELL
 {
@@ -999,7 +1092,7 @@ String STR_OUTLINEVIEWSHELL
     Text [ ENGLISH ] = "Outline mode" ;
     Text [ norwegian ] = "Outline mode" ;
     Text [ italian ] = "Modo struttura" ;
-    Text [ portuguese_brazilian ] = "Modo Esbo?o" ;
+    Text [ portuguese_brazilian ] = "Modo de Estrutura de Tópicos" ;
     Text [ portuguese ] = "Modo Esquema" ;
     Text [ finnish ] = "Jäsennysnäkymä" ;
     Text [ danish ] = "Dispositionsmodus" ;
@@ -1010,7 +1103,7 @@ String STR_OUTLINEVIEWSHELL
     Text [ english_us ] = "Outline View" ;
     Text[ chinese_simplified ] = "å¤§çº²æ¨¡å¼";
     Text[ russian ] = "Ğåæèì ñòğóêòóğû";
-    Text[ polish ] = "Tryb konspektu";
+    Text[ polish ] = "Widok konspektu";
     Text[ japanese ] = "ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰";
     Text[ chinese_traditional ] = "å¤§ç¶±æ¨¡å¼";
     Text[ arabic ] = "æÖÚ ÇáÊŞÓíã";
@@ -1018,10 +1111,13 @@ String STR_OUTLINEVIEWSHELL
     Text[ chinese_simplified ] = "å¤§çº²æ¨¡å¼";
     Text[ greek ] = "ÊáôÜóôáóç äéÜñèñùóçò";
     Text[ korean ] = "ì•„ì›ƒíŠ¸ë¼ì¸ ëª¨ë“œ";
-    Text[ turkish ] = "Anahat kipi";
+    Text[ turkish ] = "Genel bakış";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vista Contorn";
     Text[ thai ] = "à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¹à¸šà¸šà¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡";
+    Text[ czech ] = "Zobrazit osnovu";
+    Text[ hebrew ] = "Gliederungsmodus";
+    Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¦à¥ƒà¤¶à¥à¤¯";
 };
 String STR_DRAWVIEWSHELL
 {
@@ -1029,7 +1125,7 @@ String STR_DRAWVIEWSHELL
     Text [ ENGLISH ] = "Drawing mode" ;
     Text [ norwegian ] = "Drawing mode" ;
     Text [ italian ] = "Modo disegno" ;
-    Text [ portuguese_brazilian ] = "Modo Desenhar" ;
+    Text [ portuguese_brazilian ] = "Modo de Desenho" ;
     Text [ portuguese ] = "Modo Desenho" ;
     Text [ finnish ] = "Piirrosnäkymä" ;
     Text [ danish ] = "Tegnemodus" ;
@@ -1040,7 +1136,7 @@ String STR_DRAWVIEWSHELL
     Text [ english_us ] = "Drawing View" ;
     Text[ chinese_simplified ] = "ç»˜å›¾æ¨¡å¼";
     Text[ russian ] = "Ğåæèì ğèñîâàíèÿ";
-    Text[ polish ] = "Tryb rysunkowy";
+    Text[ polish ] = "Widok rysunku";
     Text[ japanese ] = "å›³å½¢æç”»ãƒ¢ãƒ¼ãƒ‰";
     Text[ chinese_traditional ] = "ç¹ªåœ–æ¨¡å¼";
     Text[ arabic ] = "æÖÚ ÇáÑÓã";
@@ -1048,10 +1144,13 @@ String STR_DRAWVIEWSHELL
     Text[ chinese_simplified ] = "ç»˜å›¾æ¨¡å¼";
     Text[ greek ] = "ÊáôÜóôáóç ó÷åäßáóçò";
     Text[ korean ] = "ë¬¸ì ëª¨ë“œ";
-    Text[ turkish ] = "Çizim kipi";
+    Text[ turkish ] = "Çizim bakışı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vista Dibuix";
     Text[ thai ] = "à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¸§à¸²à¸”à¸£à¸¹à¸›";
+    Text[ czech ] = "Pohled na kreslenÃ­";
+    Text[ hebrew ] = "Zeichenmodus";
+    Text[ hindi ] = "à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤° à¤¦à¥ƒà¤¶à¥à¤¯";
 };
 String STR_PRESVIEWSHELL
 {
@@ -1069,15 +1168,18 @@ String STR_PRESVIEWSHELL
     Text[ danish ] = "Præsentationsmodus";
     Text[ swedish ] = "Presentationsläge";
     Text[ polish ] = "Tryb prezentacji";
-    Text[ portuguese_brazilian ] = "Presentation mode";
+    Text[ portuguese_brazilian ] = "Modo de apresentação";
     Text[ japanese ] = "ã‚¹ãƒ©ã‚¤ãƒ‰ã‚·ãƒ§ãƒ¼ãƒ¢ãƒ¼ãƒ‰";
     Text[ korean ] = "í”„ë ˆì  í…Œì´ì…˜ ëª¨ë“œ";
     Text[ chinese_simplified ] = "æ¼”ç¤ºæ–‡ç¨¿æ¨¡å¼";
     Text[ chinese_traditional ] = "ç°¡å ±æ¨¡å¼";
-    Text[ turkish ] = "Presentation mode";
+    Text[ turkish ] = "Sunu kipi";
     Text[ arabic ] = "Presentation mode";
     Text[ catalan ] = "Mode Presentació";
     Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­";
+    Text[ czech ] = "ReÅ¾im prezentace";
+    Text[ hebrew ] = "PrÃ¤sentationsmodus";
+    Text[ hindi ] = "à¤ªà¥à¤°à¤¸à¥à¤¤à¥à¤¤à¤¿ à¤ªà¥à¤°à¤•à¤¾à¤°";
 };
 String STR_PREVIEWVIEWSHELL
 {
@@ -1086,7 +1188,7 @@ String STR_PREVIEWVIEWSHELL
     Text[ english_us ] = "Preview Window";
     Text[ portuguese ] = "Janela Previsualizar";
     Text[ russian ] = "Îêíî ïğåäâàğèòåëüíîãî ïğîñìîòğà";
-    Text[ greek ] = "Preview window";
+    Text[ greek ] = "Preview Window";
     Text[ dutch ] = "Voorbeeldvenster";
     Text[ french ] = "Fenêtre d'aperçu";
     Text[ spanish ] = "Ventana de previsualización";
@@ -1095,15 +1197,18 @@ String STR_PREVIEWVIEWSHELL
     Text[ danish ] = "Eksempelvindue";
     Text[ swedish ] = "Förhandsvisningsfönster";
     Text[ polish ] = "Okno podgl¹du";
-    Text[ portuguese_brazilian ] = "Preview window";
+    Text[ portuguese_brazilian ] = "Janela de visualização";
     Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦";
-    Text[ korean ] = "ë¯¸ë¦¬ë³´ê¸° ì°½";
+    Text[ korean ] = "ë¯¸ë¦¬ ë³´ê¸° ì°½";
     Text[ chinese_simplified ] = "é¢„è§ˆè§†çª—";
     Text[ chinese_traditional ] = "é è¦½è¦–çª—";
-    Text[ turkish ] = "Preview window";
-    Text[ arabic ] = "Preview window";
+    Text[ turkish ] = "Önizleme penceresi";
+    Text[ arabic ] = "Preview Window";
     Text[ catalan ] = "Finestra de previsualització";
     Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡à¸«à¸™à¹‰à¸²à¸•à¹ˆà¸²à¸‡";
+    Text[ czech ] = "Okno nÃ¡hledu";
+    Text[ hebrew ] = "Vorschaufenster";
+    Text[ hindi ] = "à¤ªà¥‚à¤°à¥à¤µà¤¦à¥ƒà¤¶à¥à¤¯ à¤µà¤¿à¤¨à¥à¤¡à¥‹";
 };
 String STR_TEXTOBJECTBARSHELL
 {
@@ -1111,7 +1216,7 @@ String STR_TEXTOBJECTBARSHELL
     Text [ ENGLISH ] = "Text mode" ;
     Text [ norwegian ] = "Text mode" ;
     Text [ italian ] = "Modo testo" ;
-    Text [ portuguese_brazilian ] = "Modo Texto" ;
+    Text [ portuguese_brazilian ] = "Modo de Texto" ;
     Text [ portuguese ] = "Modo Texto" ;
     Text [ finnish ] = "Tekstitila" ;
     Text [ danish ] = "Tekstmodus" ;
@@ -1122,7 +1227,7 @@ String STR_TEXTOBJECTBARSHELL
     Text [ english_us ] = "Text Mode" ;
     Text[ chinese_simplified ] = "æ–‡å­—æ¨¡å¼";
     Text[ russian ] = "Ğåæèì òåêñòà";
-    Text[ polish ] = "Tryb tekstu";
+    Text[ polish ] = "Tryb tekstowy";
     Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒ¢ãƒ¼ãƒ‰";
     Text[ chinese_traditional ] = "æ–‡å­—æ¨¡å¼";
     Text[ arabic ] = "æÖÚ ÇáäÕ";
@@ -1134,6 +1239,9 @@ String STR_TEXTOBJECTBARSHELL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mode Text";
     Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+    Text[ czech ] = "TextovÃ½ reÅ¾im";
+    Text[ hebrew ] = "Textmodus";
+    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤ªà¥à¤°à¤•à¤¾à¤°";
 };
 String STR_STDOBJECTBARSHELL
 {
@@ -1141,7 +1249,7 @@ String STR_STDOBJECTBARSHELL
     Text [ ENGLISH ] = "Document mode" ;
     Text [ norwegian ] = "Document mode" ;
     Text [ italian ] = "Modo documento" ;
-    Text [ portuguese_brazilian ] = "Modo documento" ;
+    Text [ portuguese_brazilian ] = "Modo Documento" ;
     Text [ portuguese ] = "Modo Documento" ;
     Text [ finnish ] = "Asiakirjatila" ;
     Text [ danish ] = "Dokumentmodus" ;
@@ -1164,6 +1272,9 @@ String STR_STDOBJECTBARSHELL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mode Document";
     Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¹€à¸­à¸à¸ªà¸²à¸£";
+    Text[ czech ] = "ReÅ¾im dokumentu";
+    Text[ hebrew ] = "Dokumentmodus";
+    Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤ªà¥à¤°à¤•à¤¾à¤°";
 };
 String STR_BEZIEROBJECTBARSHELL
 {
@@ -1172,7 +1283,7 @@ String STR_BEZIEROBJECTBARSHELL
     Text [ ENGLISH ] = "Bézier mode" ;
     Text [ norwegian ] = "B,zier mode" ;
     Text [ italian ] = "Modo Bézier" ;
-    Text [ portuguese_brazilian ] = "Modo B?zier" ;
+    Text [ portuguese_brazilian ] = "Modo Bézier" ;
     Text [ portuguese ] = "Modo Bézier" ;
     Text [ finnish ] = "Bézier-tila" ;
     Text [ danish ] = "Beziermodus" ;
@@ -1195,6 +1306,9 @@ String STR_BEZIEROBJECTBARSHELL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mode Bézier";
     Text[ thai ] = "à¹‚à¸«à¸¡à¸” Bà¹‰zier ";
+    Text[ czech ] = "BÃ©zierÅ¯v reÅ¾im";
+    Text[ hebrew ] = "BÃ©ziermodus";
+    Text[ hindi ] = "BÃƒÂ©zier mode";
 };
 String STR_APPLICATIONOBJECTBAR
 {
@@ -1205,7 +1319,7 @@ String STR_APPLICATIONOBJECTBAR
     Text [ ENGLISH ] = "StarImpress 4.0" ;
     Text [ norwegian ] = "StarImpress 4.0" ;
     Text [ italian ] = "StarImpress 4.0" ;
-    Text [ portuguese_brazilian ] = "%PRODUCTNAME Draw 4.0" ;
+    Text [ portuguese_brazilian ] = "StarImpress 4.0" ;
     Text [ portuguese ] = "StarImpress 4.0" ;
     Text [ finnish ] = "StarImpress 4.0" ;
     Text [ danish ] = "StarImpress 4.0" ;
@@ -1228,6 +1342,9 @@ String STR_APPLICATIONOBJECTBAR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "StarImpress 4.0";
     Text[ thai ] = "à¸ªà¸•à¸²à¸£à¹Œà¸­à¸´à¸¡à¹€à¸à¸£à¸ª 4.0";
+    Text[ czech ] = "StarImpress 4.0";
+    Text[ hebrew ] = "StarImpress 4.0";
+    Text[ hindi ] = "StarImpress 4.0";
 };
 String STR_GLUEPOINTSOBJECTBARSHELL
 {
@@ -1240,11 +1357,11 @@ String STR_GLUEPOINTSOBJECTBARSHELL
     Text [ dutch ] = "Modus Plakpunten" ;
     Text [ swedish ] = "Fästpunktsläge" ;
     Text [ danish ] = "Klæbepunktmodus" ;
-    Text [ portuguese_brazilian ] = "Klebepunktemodus" ;
+    Text [ portuguese_brazilian ] = "Modo de Pontos de Adesão" ;
     Text [ portuguese ] = "Modo Pontos de Colagem" ;
     Text[ chinese_simplified ] = "ç²˜ç»“ç‚¹æ¨¡å¼";
     Text[ russian ] = "Ğåæèì òî÷åê ñîåäèíåíèÿ";
-    Text[ polish ] = "Tryb punktów sklejania";
+    Text[ polish ] = "Tryb punktów sklejenia";
     Text[ japanese ] = "æ¥ç€ç‚¹ãƒ¢ãƒ¼ãƒ‰";
     Text[ chinese_traditional ] = "æ¥é»æ¨¡å¼";
     Text[ arabic ] = "æÖÚ äŞÇØ ÇááÕŞ";
@@ -1257,6 +1374,9 @@ String STR_GLUEPOINTSOBJECTBARSHELL
     Text[ finnish ] = "Liimapistetila";
     Text[ catalan ] = "Mode de punts de cola";
     Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¸ˆà¸¸à¸”à¹€à¸Šà¸·à¹ˆà¸­à¸¡";
+    Text[ czech ] = "ReÅ¾im zÃ¡chytnÃ½ch bodÅ¯";
+    Text[ hebrew ] = "Klebepunktemodus";
+    Text[ hindi ] = "à¤—à¥à¤²à¥‚ à¤¬à¤¿à¤¨à¥à¤¦à¥ à¤ªà¥à¤°à¤•à¤¾à¤°";
 };
 /* nicht uebersetzen */
 String STR_LAYOUT_TITLE
@@ -1289,7 +1409,7 @@ String STR_LAYOUT_DEFAULT_NAME
     Text [ ENGLISH ] = "standard" ;
     Text [ norwegian ] = "standard" ;
     Text [ italian ] = "Standard" ;
-    Text [ portuguese_brazilian ] = "Padr?o" ;
+    Text [ portuguese_brazilian ] = "Padrão" ;
     Text [ portuguese ] = "Padrão" ;
     Text [ finnish ] = "Oletus" ;
     Text [ danish ] = "Standard" ;
@@ -1308,10 +1428,13 @@ String STR_LAYOUT_DEFAULT_NAME
     Text[ chinese_simplified ] = "æ ‡å‡†";
     Text[ greek ] = "ĞñïåğéëïãŞ";
     Text[ korean ] = "ê¸°ë³¸ê°’";
-    Text[ turkish ] = "Standart";
+    Text[ turkish ] = "Öntanımlı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Per defecte";
     Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
+    Text[ czech ] = "VÃ½chozÃ­";
+    Text[ hebrew ] = "â€®×‘×¨×™×¨×ª ××—×“×œâ€¬";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿";
 };
 String STR_LAYOUT_DEFAULT_TITLE_NAME
 {
@@ -1324,7 +1447,7 @@ String STR_LAYOUT_DEFAULT_TITLE_NAME
     Text [ dutch ] = "Titel" ;
     Text [ swedish ] = "Titel" ;
     Text [ danish ] = "Titel" ;
-    Text [ portuguese_brazilian ] = "Titel" ;
+    Text [ portuguese_brazilian ] = "Título" ;
     Text [ portuguese ] = "Título" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜";
     Text[ russian ] = "Çàãîëîâîê";
@@ -1341,6 +1464,9 @@ String STR_LAYOUT_DEFAULT_TITLE_NAME
     Text[ finnish ] = "Tehtävä";
     Text[ catalan ] = "Títol";
     Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡";
+    Text[ czech ] = "Titul";
+    Text[ hebrew ] = "â€®×›×•×ª×¨×ªâ€¬";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_STANDARD_STYLESHEET_NAME
 {
@@ -1348,7 +1474,7 @@ String STR_STANDARD_STYLESHEET_NAME
     Text [ ENGLISH ] = "standard" ;
     Text [ norwegian ] = "standard" ;
     Text [ italian ] = "Standard" ;
-    Text [ portuguese_brazilian ] = "padr?o" ;
+    Text [ portuguese_brazilian ] = "Padrão" ;
     Text [ portuguese ] = "Padrão" ;
     Text [ finnish ] = "Oletus" ;
     Text [ danish ] = "Standard" ;
@@ -1367,10 +1493,13 @@ String STR_STANDARD_STYLESHEET_NAME
     Text[ chinese_simplified ] = "æ ‡å‡†";
     Text[ greek ] = "ĞñïåğéëïãŞ";
     Text[ korean ] = "ê¸°ë³¸ê°’";
-    Text[ turkish ] = "Standart";
+    Text[ turkish ] = "Öntanımlı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Per defecte";
     Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
+    Text[ czech ] = "VÃ½chozÃ­";
+    Text[ hebrew ] = "â€®×‘×¨×™×¨×ª ××—×“×œâ€¬";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿";
 };
 String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
 {
@@ -1379,7 +1508,7 @@ String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
     Text [ ENGLISH ] = "The password is wrong or the file is corrupted." ;
     Text [ norwegian ] = "The password is wrong or the file is corrupted." ;
     Text [ italian ] = "La password è errata o il file è danneggiato." ;
-    Text [ portuguese_brazilian ] = "The password is wrong or the file is corrupted." ;
+    Text [ portuguese_brazilian ] = "A senha está incorreta ou o arquivo está danificado." ;
     Text [ portuguese ] = "Ou a senha está incorrecta ou o ficheiro danificado." ;
     Text [ french ] = "Le mot de passe est incorrect ou le fichier est défectueux." ;
     Text [ dutch ] = "Het wachtwoord is niet correct of het bestand is beschadigd" ;
@@ -1390,7 +1519,7 @@ String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
     Text [ english_us ] = "The password is incorrect or the file is damaged." ;
     Text[ chinese_simplified ] = "å¯†ç æ— æ•ˆæˆ–è€…æ–‡ä»¶å·²ç»æŸåã€‚";
     Text[ russian ] = "Íåïğàâèëüíûé ïàğîëü èëè ïîâğåæäåí ôàéë.";
-    Text[ polish ] = "Has³o jest nieprawid³owe lub plik jest uszkodzony.";
+    Text[ polish ] = "Nieprawid³owe has³o lub uszkodzony plik.";
     Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒé–“é•ã£ã¦ã„ã‚‹ã‹ã€ã¾ãŸã¯ãƒ•ã‚¡ã‚¤ãƒ«ã«å•é¡ŒãŒã‚ã‚Šã¾ã™ã€‚";
     Text[ chinese_traditional ] = "å¯†ç¢¼ç„¡æ•ˆæˆ–è€…æª”æ¡ˆå·²ç¶“æå£ã€‚";
     Text[ arabic ] = "ßáãÉ ÇáÓÑ ÛíÑ ÕÍíÍÉ Ãæ Çáãáİ ãÚØæÈ.";
@@ -1398,10 +1527,13 @@ String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
     Text[ chinese_simplified ] = "å¯†ç æ— æ•ˆæˆ–è€…æ–‡ä»¶å·²ç»æŸåã€‚";
     Text[ greek ] = "Ï êùäéêüò ğñüóâáóçò åßíáé åóöáëìİíïò Ş ôï áñ÷åßï åëáôôùìáôéêü.";
     Text[ korean ] = "ì•”í˜¸ê°€ í‹€ë¦¬ê±°ë‚˜ íŒŒì¼ì´ ì†ìƒë˜ì—ˆìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Şifre yanlış ya da dosya hasar görmüş.";
+    Text[ turkish ] = "Şifre yanlış veya dosya zarar görmüş.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La contrasenya no és vàlida o el fitxer està corrupte.";
     Text[ thai ] = "à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡à¸«à¸£à¸·à¸­à¹à¸Ÿà¹‰à¸¡à¹€à¸ªà¸µà¸¢à¸«à¸²à¸¢";
+    Text[ czech ] = "Heslo je nesprÃ¡vnÃ© nebo je soubor poÅ¡kozen.";
+    Text[ hebrew ] = "Das Kennwort ist falsch oder die Datei beschÃ¤digt.";
+    Text[ hindi ] = "à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦ à¤—à¤²à¤¤ à¤¹à¥ˆ à¤…à¤¥à¤µà¤¾ à¤«à¤¾à¤‡à¤² à¤•à¥‹ à¤¹à¤¾à¤¨à¥€ à¤ªà¤¹à¥à¤à¤šà¤¾ à¤¹à¥ˆ à¥¤";
 };
 String STR_UNDO_MOVEPAGES
 {
@@ -1409,7 +1541,7 @@ String STR_UNDO_MOVEPAGES
     Text [ ENGLISH ] = "Move pages" ;
     Text [ norwegian ] = "Move pages" ;
     Text [ italian ] = "Sposta pagine" ;
-    Text [ portuguese_brazilian ] = "Move os p?ginas" ;
+    Text [ portuguese_brazilian ] = "Mover slides" ;
     Text [ portuguese ] = "Mover páginas" ;
     Text [ finnish ] = "Siirrä dioja" ;
     Text [ danish ] = "Flyt sider" ;
@@ -1420,7 +1552,7 @@ String STR_UNDO_MOVEPAGES
     Text [ english_us ] = "Move slides" ;
     Text[ chinese_simplified ] = "ç§»åŠ¨é¡µé¢";
     Text[ russian ] = "Ïåğåìåñòèòü ñëàéäû";
-    Text[ polish ] = "Przesuñ strony";
+    Text[ polish ] = "Przenieœ slajdy";
     Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã®ç§»å‹•";
     Text[ chinese_traditional ] = "ç§»å‹•é é¢";
     Text[ arabic ] = "ÅÒÇÍÉ ÇáÕİÍÇÊ";
@@ -1428,10 +1560,13 @@ String STR_UNDO_MOVEPAGES
     Text[ chinese_simplified ] = "ç§»åŠ¨é¡µé¢";
     Text[ greek ] = "Ìåôáêßíçóç äéáöáíåéşí";
     Text[ korean ] = "ìŠ¬ë¼ì´ë“œ ì´ë™";
-    Text[ turkish ] = "Sayfaları taşı";
+    Text[ turkish ] = "Slaytları taşı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mou les diapositives";
     Text[ thai ] = "à¸¢à¹‰à¸²à¸¢à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡";
+    Text[ czech ] = "PÅ™esunout snÃ­mky";
+    Text[ hebrew ] = "Seiten verschieben";
+    Text[ hindi ] = "à¤¸à¥à¤²à¤‡à¤¡à¥‹à¤‚ à¤•à¤¾ à¤¸à¥à¤¥à¤¾à¤¨ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨ à¤•à¤°à¥‹";
 };
 String STR_NOT_ENOUGH_MEMORY
 {
@@ -1444,11 +1579,11 @@ String STR_NOT_ENOUGH_MEMORY
     Text [ french ] = "Mémoire insuffisante !\nL'opération va être interrompue." ;
     Text [ swedish ] = "Inte tillräckligt med minne!\nÅtgärden avbryts." ;
     Text [ danish ] = "Ikke tilstrækkelig hukommelse!\nHandlingen bliver afbrudt." ;
-    Text [ portuguese_brazilian ] = "Nicht genug Speicher!\nDie Aktion wird abgebrochen." ;
+    Text [ portuguese_brazilian ] = "Não há memória suficiente!\nA ação será cancelada." ;
     Text [ portuguese ] = "Memória insuficiente!\nA acção será cancelada." ;
     Text[ chinese_simplified ] = "å†…å­˜ä¸è¶³ï¼\nä¸­æ–­æ‰§è¡Œæ“ä½œã€‚";
     Text[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè!\nÄåéñòâèå áóäåò ïğåğâàíî.";
-    Text[ polish ] = "Za ma³o pamiêci!\nAkcja zostanie anulowana.";
+    Text[ polish ] = "Za ma³o pamiêci!\nAkcja zostanie przerwana.";
     Text[ japanese ] = "ãƒ‡ã‚£ã‚¹ã‚¯ç©ºãå®¹é‡ãŒè¶³ã‚Šã¾ã›ã‚“ã€‚\nã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’ä¸­æ­¢ã—ã¾ã™ã€‚";
     Text[ chinese_traditional ] = "è¨˜æ†¶é«”ä¸è¶³ï¼\nä¸­æ–·åŸ·è¡ŒæŒ‡ä»¤ã€‚";
     Text[ arabic ] = "áÇ ÊæÌÏ ĞÇßÑÉ ßÇİíÉ!\nÓæİ íÊã ŞØÚ ÇáÅÌÑÇÁ.";
@@ -1456,11 +1591,14 @@ String STR_NOT_ENOUGH_MEMORY
     Text[ chinese_simplified ] = "å†…å­˜ä¸è¶³ï¼\nä¸­æ–­æ‰§è¡Œæ“ä½œã€‚";
     Text[ greek ] = "Äåí õğÜñ÷åé áñêåôŞ ìíŞìç!\nÇ åíİñãåéá èá äéáêïğåß.";
     Text[ korean ] = "ì €ì¥ ê³µê°„ì´ ì¶©ë¶„í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤\nì‘ì—…ì„ ì¤‘ë‹¨í•©ë‹ˆë‹¤.";
-    Text[ turkish ] = "Disk alanı yeterli değil!\nİşlem iptal edilecek.";
+    Text[ turkish ] = "Yetersiz bellek!\nİşlem iptal edilecek.";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muisti ei riitä.\nToiminto keskeytetään.";
     Text[ catalan ] = "No hi ha prou memòria!\nL'acció no es pot executar.";
     Text[ thai ] = "à¸«à¸™à¹ˆà¸§à¸¢à¸„à¸§à¸²à¸¡à¸ˆà¸³à¹„à¸¡à¹ˆà¸à¸­!\nà¸à¸²à¸£à¸à¸£à¸°à¸—à¸³à¸ˆà¸°à¸–à¸¹à¸à¸¢à¸à¹€à¸¥à¸´à¸";
+    Text[ czech ] = "Nedostatek pamÄ›ti!\nAkce bude zruÅ¡ena.";
+    Text[ hebrew ] = "Nicht genug Speicher!\nDie Aktion wird abgebrochen.";
+    Text[ hindi ] = "à¤®à¥‡à¤®à¤°à¥€ à¤ªà¤°à¥à¤¯à¤¾à¤ªà¥à¤¤ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ !\nà¤•à¤¾à¤°à¥à¤¯ à¤•à¥‹ à¤…à¤¦à¥‚à¤°à¤¾ à¤°à¤–à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾ à¥¤";
 };
 /* nicht uebersetzen */
 String STR_LAYOUT_SUBTITLE
@@ -1484,11 +1622,11 @@ String STR_POOLSHEET_MEASURE
     Text [ italian ] = "Linea di quotatura" ;
     Text [ spanish ] = "Línea de dimensiones" ;
     Text [ french ] = "Ligne de cote" ;
-    Text [ portuguese_brazilian ] = "Ma?linie" ;
+    Text [ portuguese_brazilian ] = "Linha de Cota" ;
     Text [ portuguese ] = "Linha de dimensão" ;
     Text[ chinese_simplified ] = "å®šé‡çº¿";
     Text[ russian ] = "Ğàçìåğíàÿ ëèíèÿ";
-    Text[ polish ] = "Linia wymiaru";
+    Text[ polish ] = "Linia wymiarowa";
     Text[ japanese ] = "å¯¸æ³•ç·š";
     Text[ chinese_traditional ] = "å®šé‡ç·š";
     Text[ arabic ] = "ÎØ ŞíÇÓ";
@@ -1501,6 +1639,9 @@ String STR_POOLSHEET_MEASURE
     Text[ finnish ] = "Mittajana";
     Text[ catalan ] = "Línia de dimensions";
     Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸¡à¸µà¸¡à¸´à¸•à¸´";
+    Text[ czech ] = "KÃ³tovacÃ­ ÄÃ¡ra";
+    Text[ hebrew ] = "MaÃŸlinie";
+    Text[ hindi ] = "à¤ªà¤°à¤¿à¤®à¤¾à¤£ à¤°à¥‡à¤–à¤¾";
 };
 String STR_POOLSHEET_OBJWITHARROW
 {
@@ -1513,11 +1654,11 @@ String STR_POOLSHEET_OBJWITHARROW
     Text [ dutch ] = "Object met pijl" ;
     Text [ swedish ] = "Objekt med pilspets" ;
     Text [ danish ] = "Objekt med pilespids" ;
-    Text [ portuguese_brazilian ] = "Objekt mit Pfeilspitze" ;
+    Text [ portuguese_brazilian ] = "Objeto com seta" ;
     Text [ portuguese ] = "Objecto com seta na ponta" ;
     Text[ chinese_simplified ] = "å¸¦ç®­å¤´çš„å¯¹è±¡";
     Text[ russian ] = "Îáúåêò ñî ñòğåëêîé";
-    Text[ polish ] = "Obiekt z grotem strza³ki";
+    Text[ polish ] = "Obiekt ze strza³k¹";
     Text[ japanese ] = "çŸ¢å°å…ˆç«¯ä»˜ãã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     Text[ chinese_traditional ] = "å¸¶ç®­é ­çš„ç‰©ä»¶";
     Text[ arabic ] = "ßÇÆä ÈÓåã";
@@ -1530,6 +1671,9 @@ String STR_POOLSHEET_OBJWITHARROW
     Text[ finnish ] = "Objekti ja nuoli";
     Text[ catalan ] = "Objecte amb fletxa";
     Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸à¸¥à¸¹à¸à¸¨à¸£";
+    Text[ czech ] = "Objekt se Å¡ipkou";
+    Text[ hebrew ] = "Objekt mit Pfeilspitze";
+    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤¤à¥€à¤° à¤°à¥‡à¤–à¤¾";
 };
 String STR_POOLSHEET_OBJWITHSHADOW
 {
@@ -1542,7 +1686,7 @@ String STR_POOLSHEET_OBJWITHSHADOW
     Text [ dutch ] = "Object met schaduw" ;
     Text [ swedish ] = "Objekt med skugga" ;
     Text [ danish ] = "Objekt med skygge" ;
-    Text [ portuguese_brazilian ] = "Objekt mit Schatten" ;
+    Text [ portuguese_brazilian ] = "Objeto com sombreado" ;
     Text [ portuguese ] = "Objecto com sombra" ;
     Text[ chinese_simplified ] = "å¸¦é˜´å½±çš„å¯¹è±¡";
     Text[ russian ] = "Îáúåêò ñ òåíüş";
@@ -1559,6 +1703,9 @@ String STR_POOLSHEET_OBJWITHSHADOW
     Text[ finnish ] = "Objekti ja varjostus";
     Text[ catalan ] = "Objecte amb ombra";
     Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸à¹€à¸‡à¸²";
+    Text[ czech ] = "Objekt se stÃ­novÃ¡nÃ­m";
+    Text[ hebrew ] = "Objekt mit Schatten";
+    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤›à¤¾à¤¯à¤¾ à¤¸à¤¹à¤¿à¤¤";
 };
 String STR_POOLSHEET_OBJWITHOUTFILL_NT
 {
@@ -1576,7 +1723,7 @@ String STR_POOLSHEET_OBJWITHOUTFILL
     Text [ french ] = "Objet sans remplissage" ;
     Text [ swedish ] = "Objekt utan fyllning" ;
     Text [ danish ] = "Objekt uden fyld" ;
-    Text [ portuguese_brazilian ] = "Objekt ohne F?lung" ;
+    Text [ portuguese_brazilian ] = "Objeto não preenchido" ;
     Text [ portuguese ] = "Objecto não preenchido" ;
     Text[ chinese_simplified ] = "ä¸å¡«è‰²çš„å¯¹è±¡";
     Text[ russian ] = "Îáúåêò áåç çàëèâêè";
@@ -1593,6 +1740,9 @@ String STR_POOLSHEET_OBJWITHOUTFILL
     Text[ finnish ] = "Objekti ilman täyttöä";
     Text[ catalan ] = "Objecte sense emplenament";
     Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸à¹„à¸¡à¹ˆà¸¡à¸µà¸à¸²à¸£à¹€à¸•à¸´à¸¡";
+    Text[ czech ] = "Objekt bez vÃ½plnÄ›";
+    Text[ hebrew ] = "Objekt ohne FÃ¼llung";
+    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤¬à¤¿à¤¨à¤¾ à¤­à¤°à¤¾";
 };
 String STR_POOLSHEET_TEXT
 {
@@ -1605,7 +1755,7 @@ String STR_POOLSHEET_TEXT
     Text [ dutch ] = "Tekst" ;
     Text [ swedish ] = "Text" ;
     Text [ danish ] = "Tekst" ;
-    Text [ portuguese_brazilian ] = "Text" ;
+    Text [ portuguese_brazilian ] = "Texto" ;
     Text [ portuguese ] = "Texto" ;
     Text[ chinese_simplified ] = "æ–‡å­—";
     Text[ russian ] = "Òåêñò";
@@ -1622,6 +1772,9 @@ String STR_POOLSHEET_TEXT
     Text[ finnish ] = "Teksti";
     Text[ catalan ] = "Text";
     Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+    Text[ czech ] = "Text";
+    Text[ hebrew ] = "â€®×˜×§×¡×˜â€¬";
+    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
 };
 String STR_POOLSHEET_TEXTBODY_NT
 {
@@ -1639,11 +1792,11 @@ String STR_POOLSHEET_TEXTBODY
     Text [ dutch ] = "Tekstblok" ;
     Text [ swedish ] = "Brödtext" ;
     Text [ danish ] = "Brødtekst" ;
-    Text [ portuguese_brazilian ] = "Textk?per" ;
+    Text [ portuguese_brazilian ] = "Corpo do texto" ;
     Text [ portuguese ] = "Corpo do texto" ;
     Text[ chinese_simplified ] = "æ­£æ–‡";
     Text[ russian ] = "Îñíîâíîé òåêñò";
-    Text[ polish ] = "Obszar tekstowy";
+    Text[ polish ] = "Treœæ tekstu";
     Text[ japanese ] = "æœ¬æ–‡";
     Text[ chinese_traditional ] = "å…§æ–‡";
     Text[ arabic ] = "ÌÓã ÇáäÕ";
@@ -1656,6 +1809,9 @@ String STR_POOLSHEET_TEXTBODY
     Text[ finnish ] = "Leipäteksti";
     Text[ catalan ] = "Cos del text";
     Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸„à¸§à¸²à¸¡";
+    Text[ czech ] = "TÄ›lo textu";
+    Text[ hebrew ] = "TextkÃ¶rper";
+    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤•à¤¾ à¤®à¥à¤–à¥à¤¯ à¤­à¤¾à¤—";
 };
 String STR_POOLSHEET_TEXTBODY_JUSTIFY_NT
 {
@@ -1673,7 +1829,7 @@ String STR_POOLSHEET_TEXTBODY_JUSTIFY
     Text [ dutch ] = "Tekstblok uitgevuld" ;
     Text [ swedish ] = "Marginaljustera brödtext" ;
     Text [ danish ] = "Lige margener i brødtekst" ;
-    Text [ portuguese_brazilian ] = "Textk?per Blocksatz" ;
+    Text [ portuguese_brazilian ] = "Corpo do texto justificado" ;
     Text [ portuguese ] = "Corpo do texto justificado" ;
     Text[ chinese_simplified ] = "æ­£æ–‡å·¦å³å¯¹é½";
     Text[ russian ] = "Âûğàâíèâàíèå òåêñòà ïî øèğèíå";
@@ -1690,6 +1846,9 @@ String STR_POOLSHEET_TEXTBODY_JUSTIFY
     Text[ finnish ] = "Leipätekstin tasaus";
     Text[ catalan ] = "Cos justificat del text";
     Text[ thai ] = "à¸ˆà¸±à¸”à¹€à¸™à¸·à¹‰à¸­à¸„à¸§à¸²à¸¡à¸Šà¸´à¸”à¸‚à¸­à¸š";
+    Text[ czech ] = "ZarovnanÃ© tÄ›lo textu";
+    Text[ hebrew ] = "TextkÃ¶rper Blocksatz";
+    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤•à¤¾ à¤®à¥à¤–à¥à¤¯ à¤­à¤¾à¤— à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¿à¤¤";
 };
 String STR_POOLSHEET_TEXTBODY_INDENT_NT
 {
@@ -1707,7 +1866,7 @@ String STR_POOLSHEET_TEXTBODY_INDENT
     Text [ french ] = "Alinéa" ;
     Text [ swedish ] = "Brödtext indrag" ;
     Text [ danish ] = "Brødtekst indrykning" ;
-    Text [ portuguese_brazilian ] = "Textk?per Einzug" ;
+    Text [ portuguese_brazilian ] = "Recuo da primeira linha" ;
     Text [ portuguese ] = "Abrir parágrafo" ;
     Text[ chinese_simplified ] = "æ­£æ–‡ç¼©è¿›";
     Text[ russian ] = "Ïåğâàÿ ñòğîêà ñ îòñòóïîì";
@@ -1724,6 +1883,9 @@ String STR_POOLSHEET_TEXTBODY_INDENT
     Text[ finnish ] = "Ensimmäisen rivin sisennys";
     Text[ catalan ] = "Sangría de la primera línea";
     Text[ thai ] = "à¸£à¸°à¸¢à¸°à¹€à¸¢à¸·à¹‰à¸­à¸‡à¸šà¸£à¸£à¸—à¸±à¸”à¹à¸£à¸";
+    Text[ czech ] = "OdsazenÃ­ prvnÃ­ho Å™Ã¡dku";
+    Text[ hebrew ] = "TextkÃ¶rper Einzug";
+    Text[ hindi ] = "à¤ªà¤¹à¤¿à¤²à¤¾ à¤°à¥‡à¤–à¤¾ à¤‡à¤¨à¥à¤¡à¥‡à¤¨à¥à¤Ÿ";
 };
 String STR_POOLSHEET_TITLE
 {
@@ -1736,7 +1898,7 @@ String STR_POOLSHEET_TITLE
     Text [ dutch ] = "Titel" ;
     Text [ swedish ] = "Titel" ;
     Text [ danish ] = "Titel" ;
-    Text [ portuguese_brazilian ] = "Titel" ;
+    Text [ portuguese_brazilian ] = "Título" ;
     Text [ portuguese ] = "Título3" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜";
     Text[ russian ] = "Çàãîëîâîê";
@@ -1753,6 +1915,9 @@ String STR_POOLSHEET_TITLE
     Text[ finnish ] = "Otsikko";
     Text[ catalan ] = "Títol";
     Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡";
+    Text[ czech ] = "Titul";
+    Text[ hebrew ] = "â€®×›×•×ª×¨×ªâ€¬";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_POOLSHEET_TITLE1
 {
@@ -1765,7 +1930,7 @@ String STR_POOLSHEET_TITLE1
     Text [ dutch ] = "Titel1" ;
     Text [ swedish ] = "Titel1" ;
     Text [ danish ] = "Titel1" ;
-    Text [ portuguese_brazilian ] = "Titel1" ;
+    Text [ portuguese_brazilian ] = "Título1" ;
     Text [ portuguese ] = "Título4" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜ 1";
     Text[ russian ] = "Çàãîëîâîê 3";
@@ -1782,6 +1947,9 @@ String STR_POOLSHEET_TITLE1
     Text[ finnish ] = "Otsikko1";
     Text[ catalan ] = "Títol1";
     Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡1";
+    Text[ czech ] = "Titul1";
+    Text[ hebrew ] = "Titel1";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•1";
 };
 String STR_POOLSHEET_TITLE2
 {
@@ -1794,7 +1962,7 @@ String STR_POOLSHEET_TITLE2
     Text [ dutch ] = "Titel2" ;
     Text [ swedish ] = "Titel2" ;
     Text [ danish ] = "Titel2" ;
-    Text [ portuguese_brazilian ] = "Titel2" ;
+    Text [ portuguese_brazilian ] = "Título2" ;
     Text [ portuguese ] = "Título5" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜ 2";
     Text[ russian ] = "Çàãîëîâîê 4";
@@ -1811,6 +1979,9 @@ String STR_POOLSHEET_TITLE2
     Text[ finnish ] = "Otsikko2";
     Text[ catalan ] = "Títol2";
     Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡2";
+    Text[ czech ] = "Titul2";
+    Text[ hebrew ] = "Titel2";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•2";
 };
 String STR_POOLSHEET_HEADLINE_NT
 {
@@ -1828,13 +1999,13 @@ String STR_POOLSHEET_HEADLINE
     Text [ french ] = "Titre" ;
     Text [ swedish ] = "Överskrift" ;
     Text [ danish ] = "Overskrift" ;
-    Text [ portuguese_brazilian ] = "?berschrift" ;
+    Text [ portuguese_brazilian ] = "Título" ;
     Text [ portuguese ] = "Título" ;
     Text[ chinese_simplified ] = "å¤§æ ‡é¢˜";
     Text[ russian ] = "Çàãîëîâîê 2";
-    Text[ polish ] = "Tytu³";
+    Text[ polish ] = "Nag³ówek";
     Text[ japanese ] = "è¦‹å‡ºã—";
-    Text[ chinese_traditional ] = "å¤§æ¨™é¡Œ";
+    Text[ chinese_traditional ] = "æ¨™é ­";
     Text[ arabic ] = "ÇáÚäæÇä";
     Text[ dutch ] = "Kop";
     Text[ chinese_simplified ] = "å¤§æ ‡é¢˜";
@@ -1845,6 +2016,9 @@ String STR_POOLSHEET_HEADLINE
     Text[ finnish ] = "Otsikko";
     Text[ catalan ] = "Encapçalament";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§";
+    Text[ czech ] = "Nadpis";
+    Text[ hebrew ] = "Ãœberschrift";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_POOLSHEET_HEADLINE1_NT
 {
@@ -1862,13 +2036,13 @@ String STR_POOLSHEET_HEADLINE1
     Text [ dutch ] = "Kop1" ;
     Text [ swedish ] = "Överskrift1" ;
     Text [ danish ] = "Overskrift1" ;
-    Text [ portuguese_brazilian ] = "?berschrift1" ;
+    Text [ portuguese_brazilian ] = "Título 1" ;
     Text [ portuguese ] = "Título1" ;
     Text[ chinese_simplified ] = "å¤§æ ‡é¢˜ 1";
     Text[ russian ] = "Çàãîëîâîê 5";
-    Text[ polish ] = "Tytu³1";
+    Text[ polish ] = "Nag³ówek1";
     Text[ japanese ] = "è¦‹å‡ºã— 1";
-    Text[ chinese_traditional ] = "å¤§æ¨™é¡Œ 1";
+    Text[ chinese_traditional ] = "æ¨™é ­ 1";
     Text[ arabic ] = "ÇáÚäæÇä1";
     Text[ dutch ] = "Kop1";
     Text[ chinese_simplified ] = "å¤§æ ‡é¢˜ 1";
@@ -1879,6 +2053,9 @@ String STR_POOLSHEET_HEADLINE1
     Text[ finnish ] = "Otsikko1";
     Text[ catalan ] = "Encapçalament1";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§1";
+    Text[ czech ] = "Nadpis1";
+    Text[ hebrew ] = "Ãœberschrift1";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•1";
 };
 String STR_POOLSHEET_HEADLINE2_NT
 {
@@ -1896,13 +2073,13 @@ String STR_POOLSHEET_HEADLINE2
     Text [ dutch ] = "Kop2" ;
     Text [ swedish ] = "Överskrift2" ;
     Text [ danish ] = "Overskrift2" ;
-    Text [ portuguese_brazilian ] = "?berschrift2" ;
+    Text [ portuguese_brazilian ] = "Título 2" ;
     Text [ portuguese ] = "Título2" ;
     Text[ chinese_simplified ] = "å¤§æ ‡é¢˜ 2";
     Text[ russian ] = "Çàãîëîâîê 6";
-    Text[ polish ] = "Tytu³2";
+    Text[ polish ] = "Nag³ówek2";
     Text[ japanese ] = "è¦‹å‡ºã— 2";
-    Text[ chinese_traditional ] = "å¤§æ¨™é¡Œ 2";
+    Text[ chinese_traditional ] = "æ¨™é ­ 2";
     Text[ arabic ] = "ÇáÚäæÇä2";
     Text[ dutch ] = "Kop2";
     Text[ chinese_simplified ] = "å¤§æ ‡é¢˜ 2";
@@ -1913,6 +2090,9 @@ String STR_POOLSHEET_HEADLINE2
     Text[ finnish ] = "Otsikko2";
     Text[ catalan ] = "Encapçalament2";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§2";
+    Text[ czech ] = "Nadpis2";
+    Text[ hebrew ] = "Ãœberschrift2";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•2";
 };
 String STR_EMPTY_STYLESHEET_NAME
 {
@@ -1925,7 +2105,7 @@ String STR_EMPTY_STYLESHEET_NAME
     Text [ french ] = "Modèle vierge" ;
     Text [ swedish ] = "Blank mall" ;
     Text [ danish ] = "Tom skabelon" ;
-    Text [ portuguese_brazilian ] = "Leere Vorlage" ;
+    Text [ portuguese_brazilian ] = "Modelo em branco" ;
     Text [ portuguese ] = "Modelo vazio" ;
     Text[ chinese_simplified ] = "ç©ºç™½æ ·å¼";
     Text[ russian ] = "Ïóñòîé øàáëîí";
@@ -1942,6 +2122,9 @@ String STR_EMPTY_STYLESHEET_NAME
     Text[ finnish ] = "Tyhjä malli";
     Text[ catalan ] = "Plantilla en blanc";
     Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¹€à¸›à¸¥à¹ˆà¸²";
+    Text[ czech ] = "PrÃ¡zdnÃ¡ Å¡ablona";
+    Text[ hebrew ] = "Leere Vorlage";
+    Text[ hindi ] = "à¤–à¤¾à¤²à¥€ à¤¨à¤®à¥‚à¤¨à¤¾";
 };
 String STR_PSEUDOSHEET_TITLE
 {
@@ -1954,7 +2137,7 @@ String STR_PSEUDOSHEET_TITLE
     Text [ dutch ] = "Titel" ;
     Text [ swedish ] = "Rubrik" ;
     Text [ danish ] = "Titel" ;
-    Text [ portuguese_brazilian ] = "Titel" ;
+    Text [ portuguese_brazilian ] = "Título" ;
     Text [ portuguese ] = "Capitulo" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜";
     Text[ russian ] = "Çàãîëîâîê";
@@ -1971,13 +2154,16 @@ String STR_PSEUDOSHEET_TITLE
     Text[ finnish ] = "Otsikko";
     Text[ catalan ] = "Títol";
     Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡";
+    Text[ czech ] = "Titul";
+    Text[ hebrew ] = "â€®×›×•×ª×¨×ªâ€¬";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_PSEUDOSHEET_SUBTITLE
 {
     Text = "Untertitel" ;
     Text [ ENGLISH ] = "Subtitle" ;
     Text[ italian ] = "Sottotitolo";
-    Text[ portuguese_brazilian ] = "Subtitle";
+    Text[ portuguese_brazilian ] = "Subtítulo";
     Text[ portuguese ] = "Subtítulo";
     Text[ danish ] = "Undertitel";
     Text[ french ] = "Sous-titre";
@@ -2000,6 +2186,9 @@ String STR_PSEUDOSHEET_SUBTITLE
     Text[ finnish ] = "Alaotsikko";
     Text[ catalan ] = "Subtítol";
     Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡à¸¢à¹ˆà¸­à¸¢";
+    Text[ czech ] = "Podtitul";
+    Text[ hebrew ] = "Untertitel";
+    Text[ hindi ] = "à¤…à¤§à¥€à¤¨ à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_PSEUDOSHEET_OUTLINE
 {
@@ -2012,7 +2201,7 @@ String STR_PSEUDOSHEET_OUTLINE
     Text [ french ] = "Plan" ;
     Text [ swedish ] = "Disposition" ;
     Text [ danish ] = "Disposition" ;
-    Text [ portuguese_brazilian ] = "Gliederung" ;
+    Text [ portuguese_brazilian ] = "Estrutura de Tópicos" ;
     Text [ portuguese ] = "Esquema" ;
     Text[ chinese_simplified ] = "å¤§çº²";
     Text[ russian ] = "Ñòğóêòóğà";
@@ -2029,6 +2218,9 @@ String STR_PSEUDOSHEET_OUTLINE
     Text[ finnish ] = "Jäsennystaso";
     Text[ catalan ] = "Contorn";
     Text[ thai ] = "à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡";
+    Text[ czech ] = "Osnova";
+    Text[ hebrew ] = "â€®××¡×’×¨×ªâ€¬";
+    Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾";
 };
 String STR_PSEUDOSHEET_BACKGROUNDOBJECTS
 {
@@ -2041,11 +2233,11 @@ String STR_PSEUDOSHEET_BACKGROUNDOBJECTS
     Text [ french ] = "Objets d'arrière-plan" ;
     Text [ swedish ] = "Bakgrundsobjekt" ;
     Text [ danish ] = "Baggrundsobjekter" ;
-    Text [ portuguese_brazilian ] = "Hintergrundobjekte" ;
+    Text [ portuguese_brazilian ] = "Objetos do plano de fundo" ;
     Text [ portuguese ] = "Objectos do plano de fundo" ;
     Text[ chinese_simplified ] = "èƒŒæ™¯å¯¹è±¡";
     Text[ russian ] = "Îáúåêòû ôîíà";
-    Text[ polish ] = "Obiekty w tle";
+    Text[ polish ] = "Obiekty t³a";
     Text[ japanese ] = "èƒŒæ™¯ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     Text[ chinese_traditional ] = "èƒŒæ™¯ç‰©ä»¶";
     Text[ arabic ] = "ßÇÆäÇÊ ÇáÎáİíÉ";
@@ -2058,6 +2250,9 @@ String STR_PSEUDOSHEET_BACKGROUNDOBJECTS
     Text[ finnish ] = "Taustaobjektit";
     Text[ catalan ] = "Objectes de fons";
     Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸à¸‚à¸­à¸‡à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
+    Text[ czech ] = "Objekty pozadÃ­";
+    Text[ hebrew ] = "Hintergrundobjekte";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤— à¤µà¤¸à¥à¤¤à¥";
 };
 String STR_PSEUDOSHEET_BACKGROUND
 {
@@ -2070,7 +2265,7 @@ String STR_PSEUDOSHEET_BACKGROUND
     Text [ french ] = "Arrière-plan" ;
     Text [ swedish ] = "Bakgrund" ;
     Text [ danish ] = "Baggrund" ;
-    Text [ portuguese_brazilian ] = "Hintergrund" ;
+    Text [ portuguese_brazilian ] = "Plano de fundo" ;
     Text [ portuguese ] = "Plano de fundo" ;
     Text[ chinese_simplified ] = "èƒŒæ™¯";
     Text[ russian ] = "Ôîí";
@@ -2087,6 +2282,9 @@ String STR_PSEUDOSHEET_BACKGROUND
     Text[ finnish ] = "Tausta";
     Text[ catalan ] = "Fons";
     Text[ thai ] = "à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
+    Text[ czech ] = "PozadÃ­";
+    Text[ hebrew ] = "â€®×¨×§×¢â€¬";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤—";
 };
 String STR_PSEUDOSHEET_NOTES
 {
@@ -2099,7 +2297,7 @@ String STR_PSEUDOSHEET_NOTES
     Text [ dutch ] = "Aantekeningen" ;
     Text [ swedish ] = "Anteckningar" ;
     Text [ danish ] = "Noter" ;
-    Text [ portuguese_brazilian ] = "Notizen" ;
+    Text [ portuguese_brazilian ] = "Anotações" ;
     Text [ portuguese ] = "Anotações" ;
     Text[ chinese_simplified ] = "å¤‡æ³¨";
     Text[ russian ] = "Ïğèìå÷àíèÿ";
@@ -2116,6 +2314,9 @@ String STR_PSEUDOSHEET_NOTES
     Text[ finnish ] = "Muistiinpanot";
     Text[ catalan ] = "Notes";
     Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸";
+    Text[ czech ] = "KomentÃ¡Å™e";
+    Text[ hebrew ] = "â€®×”×¢×¨×•×ªâ€¬";
+    Text[ hindi ] = "à¤Ÿà¤¿à¤ªà¥à¤ªà¤£à¥€";
 };
 String STR_GRAFOBJECTBARSHELL
 {
@@ -2131,8 +2332,8 @@ String STR_GRAFOBJECTBARSHELL
     Text[ russian ] = "Ğåæèì ãğàôè÷åñêèõ îáúåêòîâ";
     Text[ italian ] = "Modo immagine";
     Text[ danish ] = "Grafikmodus";
-    Text[ polish ] = "Tryb grafiki";
-    Text[ portuguese_brazilian ] = "Graphics mode";
+    Text[ polish ] = "Tryb graficzny";
+    Text[ portuguese_brazilian ] = "Modo de figuras";
     Text[ japanese ] = "å›³ãƒ¢ãƒ¼ãƒ‰";
     Text[ korean ] = "ê·¸ë¦¼ ëª¨ë“œ";
     Text[ chinese_simplified ] = "å›¾å½¢æ¨¡å¼";
@@ -2142,6 +2343,9 @@ String STR_GRAFOBJECTBARSHELL
     Text[ finnish ] = "Grafiikkatila";
     Text[ catalan ] = "Mode gràfic";
     Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¸à¸£à¸²à¸Ÿà¸´à¸„";
+    Text[ czech ] = "ReÅ¾im grafiky";
+    Text[ hebrew ] = "Grafikmodus";
+    Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤ªà¥à¤°à¤•à¤¾à¤°";
 };
 
 String STR_POWERPOINT_IMPORT
@@ -2158,8 +2362,8 @@ String STR_POWERPOINT_IMPORT
     Text[ italian ] = "Importazione PowerPoint";
     Text[ danish ] = "PowerPoint-import";
     Text[ swedish ] = "PowerPoint-import";
-    Text[ polish ] = "Import PowerPoint";
-    Text[ portuguese_brazilian ] = "PowerPoint import";
+    Text[ polish ] = "Import formatu PowerPoint";
+    Text[ portuguese_brazilian ] = "Importar PowerPoint";
     Text[ japanese ] = "PowerPoint ã‚¤ãƒ³ãƒãƒ¼ãƒˆ";
     Text[ korean ] = "PowerPoint ê°€ì ¸ì˜¤ê¸°";
     Text[ chinese_simplified ] = "PowerPoint è¾“å…¥";
@@ -2169,6 +2373,9 @@ String STR_POWERPOINT_IMPORT
     Text[ finnish ] = "PowerPoint-tuonti";
     Text[ catalan ] = "Importació de PowerPoint";
     Text[ thai ] = "à¸™à¸³à¹€à¸‚à¹‰à¸² PowerPoint";
+    Text[ czech ] = "Import z PowerPointu";
+    Text[ hebrew ] = "PowerPoint Import";
+    Text[ hindi ] = "à¤ªà¤µà¤°à¤ªà¥‹à¤‡à¤¨à¥à¤Ÿ à¤†à¤¯à¤¾à¤¤";
 };
 
 #ifdef STARIMAGE_AVAILABLE
@@ -2184,7 +2391,7 @@ String STR_PRESOBJ_IMAGE
     Text [ french ] = "Double-clic pour insérer une image" ;
     Text [ swedish ] = "Lägg till bild genom att dubbelklicka" ;
     Text [ danish ] = "Tilføj billede via dobbeltklik" ;
-    Text [ portuguese_brazilian ] = "Bild durch Doppelklicken hinzuf?en" ;
+    Text [ portuguese_brazilian ] = "Duplo clique para adicionar uma imagem" ;
     Text [ portuguese ] = "Inserir imagem com clique duplo" ;
     Text[ chinese_simplified ] = "é€šè¿‡åŒå‡»æ’å…¥å›¾åƒ";
     Text[ russian ] = "Äîáàâèòü êàğòèíêó äâîéíûì ùåë÷êîì";
@@ -2196,11 +2403,14 @@ String STR_PRESOBJ_IMAGE
     Text[ chinese_simplified ] = "é€šè¿‡åŒå‡»æ’å…¥å›¾åƒ";
     Text[ greek ] = "ÊÜíôå äéğëü êëéê ãéá ôç ğñïóèŞêç ôçò åéêüíáò";
     Text[ korean ] = "ë”ë¸”í´ë¦­í•˜ì—¬ ì´ë¯¸ì§€ ì¶”ê°€";
-    Text[ turkish ] = "Resim eklemek için çift tıklayın";
+    Text[ turkish ] = "Görüntü eklemek için çift-tıklayın";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lisää kuva kaksoisnapsauttamalla";
     Text[ catalan ] = "Feu doble clic per afegir una imatge";
     Text[ thai ] = "à¸„à¸¥à¸´à¹Šà¸à¸ªà¸­à¸‡à¸„à¸£à¸±à¹‰à¸‡à¹€à¸à¸·à¹ˆà¸­à¹€à¸à¸´à¹ˆà¸¡à¸£à¸¹à¸›à¸ à¸²à¸";
+    Text[ czech ] = "DvojitÃ½m kliknutÃ­m pÅ™idÃ¡te obrÃ¡zek";
+    Text[ hebrew ] = "Bild durch Doppelklicken hinzufÃ¼gen";
+    Text[ hindi ] = "à¤à¤• à¤šà¤¿à¤¤à¥à¤° à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤¡à¤¬à¤²-à¤•à¥à¤²à¤¿à¤•à¥ à¤•à¤°à¥‹";
 };
 #endif
 
@@ -2210,7 +2420,7 @@ String STR_POOLSHEET_ARROW
     Text [ ENGLISH ] = "Arrow" ;
     Text [ norwegian ] = "Arrow" ;
     Text [ italian ] = "Freccia" ;
-    Text [ portuguese_brazilian ] = "Arrow" ;
+    Text [ portuguese_brazilian ] = "Seta" ;
     Text [ portuguese ] = "Seta" ;
     Text [ french ] = "Flèche" ;
     Text [ dutch ] = "Pijl" ;
@@ -2231,6 +2441,9 @@ String STR_POOLSHEET_ARROW
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fletxa";
     Text[ thai ] = "à¸¥à¸¹à¸à¸¨à¸£";
+    Text[ czech ] = "Å ipka";
+    Text[ hebrew ] = "Pfeil";
+    Text[ hindi ] = "à¤¤à¥€à¤°";
 };
 
 
@@ -2240,7 +2453,7 @@ String STR_LOAD_DOC
     Text [ ENGLISH ] = "Load document" ;
     Text [ norwegian ] = "Load document" ;
     Text [ italian ] = "Carica documento" ;
-    Text [ portuguese_brazilian ] = "Carregar documento" ;
+    Text [ portuguese_brazilian ] = "Carregar Documento" ;
     Text [ portuguese ] = "Carregar documento" ;
     Text [ finnish ] = "Lataa asiakirja" ;
     Text [ danish ] = "Indlæs dokument" ;
@@ -2257,10 +2470,13 @@ String STR_LOAD_DOC
     Text[ arabic ] = "ÊÍãíá ãáİ";
     Text[ greek ] = "Öüñôùóç åããñÜöïõ";
     Text[ korean ] = "ë¬¸ì„œ ë¡œë“œ";
-    Text[ turkish ] = "Belgeyi yükle";
+    Text[ turkish ] = "Döküman Yükle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Carrega document";
     Text[ thai ] = "à¹‚à¸«à¸¥à¸”à¹€à¸­à¸à¸ªà¸²à¸£";
+    Text[ czech ] = "NaÄÃ­st dokument";
+    Text[ hebrew ] = "â€®×˜×¢×™× ×ª ××¡××šâ€¬";
+    Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤²à¥‹à¤¡ à¤•à¤°à¥‹";
 };
 String STR_SAVE_DOC
 {
@@ -2268,7 +2484,7 @@ String STR_SAVE_DOC
     Text [ ENGLISH ] = "Save document" ;
     Text [ norwegian ] = "Save document" ;
     Text [ italian ] = "Salva documento" ;
-    Text [ portuguese_brazilian ] = "Gravar documento" ;
+    Text [ portuguese_brazilian ] = "Salvar Documento" ;
     Text [ portuguese ] = "Guardar documento" ;
     Text [ finnish ] = "Tallenna asiakirja" ;
     Text [ danish ] = "Gem dokument" ;
@@ -2285,10 +2501,13 @@ String STR_SAVE_DOC
     Text[ arabic ] = "ÍİÙ ÇáãÓÊäÏ";
     Text[ greek ] = "ÁğïèŞêåõóç åããñÜöïõ";
     Text[ korean ] = "ë¬¸ì„œ ì €ì¥";
-    Text[ turkish ] = "Belgeyi kaydet";
+    Text[ turkish ] = "Belgeyi Sakla";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desa document";
     Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸­à¸à¸ªà¸²à¸£";
+    Text[ czech ] = "UloÅ¾it dokument";
+    Text[ hebrew ] = "Dokument speichern";
+    Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
 };
 
 #define ERR_CODE( class, err )  (class | (err - ERROR_SD_BASE))
@@ -2308,20 +2527,23 @@ Resource RID_SD_ERRHDL
         Text [ swedish ] = "Formatfel vid position $(ARG1)(rad,kolumn) upptäckt i filen" ;
         Text [ danish ] = "Der er konstateret formatfejl i filen på position $(ARG1)(linje,kolonne)" ;
         Text [ portuguese ] = "Descoberto erro de formato na posição $(ARG1)(linha, coluna) no ficheiro" ;
-        Text [ portuguese_brazilian ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt" ;
+        Text [ portuguese_brazilian ] = "Ocorreu um erro de formato de arquivo em $(ARG1)(linha,coluna)" ;
         Text[ chinese_simplified ] = "åœ¨æ–‡ä»¶çš„ $(ARG1)(è¡Œï¼Œåˆ—)å¤„å‘ç°æ ¼å¼é”™è¯¯";
         Text[ russian ] = "Îøèáêà ôîğìàòà â ôàéëå â ïîçèöèè $(ARG1) (ñòğîêà, ñòîëáåö).";
-        Text[ polish ] = "Wykryto b³¹d w formacie pliku na pozycji $(ARG1)(wiersz, kolumna)";
+        Text[ polish ] = "Znaleziono b³¹d w formacie pliku na pozycji $(ARG1) (wiersz, kolumna)";
         Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã® $(ARG1)(è¡Œã€åˆ—)ã«æ›¸å¼ã‚¨ãƒ©ãƒ¼ãŒè¦‹ã¤ã‹ã‚Šã¾ã—ãŸã€‚";
         Text[ chinese_traditional ] = "æª”æ¡ˆçš„æ ¼å¼éŒ¯èª¤ï¼Œä½ç½®åœ¨ $(ARG1)(è¡Œï¼Œåˆ—)";
         Text[ arabic ] = "Êã ÇßÊÔÇİ ÎØÃ İí ÇáãæÖÚ $(ARG1)(ÓØÑ¡ÚãæÏ) İí Çáãáİ";
         Text[ greek ] = "Âñİèçêå óöÜëìá ìïñöïğïßçóçò óôç èİóç $(ARG1)(ãñáììŞ,óôŞëç) ôïõ áñ÷åßï";
         Text[ korean ] = "íŒŒì¼ í˜•ì‹ ì˜¤ë¥˜ê°€ $(ARG1)(í–‰,ì—´)ì—ì„œ ë°œê²¬ë˜ì—ˆìŠµë‹ˆë‹¤.";
-        Text[ turkish ] = "Dosya format hatası $(ARG1)(satır, sütun) bulundu";
+        Text[ turkish ] = "$(ARG1)(satır,sütun)  adresinde dosya biçim hatası bulundu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Se ha descubierto un error de formato en el archivo en la posición $(ARG1)(fila,columna)";
         Text[ finnish ] = "Tiedostomuotovirhe ilmeni kohteessa $(ARG1)(rivi,sarake).";
         Text[ thai ] = "à¸à¸šà¸£à¸¹à¸›à¹à¸šà¸šà¹à¸Ÿà¹‰à¸¡à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸—à¸µà¹ˆ $(ARG1)(à¹à¸–à¸§,à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ)";
+        Text[ czech ] = "Chyba formÃ¡tu souboru na $(ARG1)(Å™Ã¡dek,sloupec)";
+        Text[ hebrew ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt";
+        Text[ hindi ] = "$(ARG2)(à¤ªà¤‚à¤•à¥à¤¤à¤¿,à¤¸à¥à¤¤à¤‚à¤­) à¤®à¥‡à¤‚ à¤«à¤¾à¤‡à¤² à¤°à¤šà¤¨à¤¾ à¤•à¤¾ à¤—à¤²à¤¤à¥€ à¤¹à¥à¤† à¥¤";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL )
     {
@@ -2337,17 +2559,20 @@ Resource RID_SD_ERRHDL
         Text[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
         Text[ danish ] = "Der er konstateret formatfejl i underdokumentet $(ARG1) på position $(ARG2)(linje,kolonne) i filen";
         Text[ swedish ] = "Det har upptäckts ett formatfel i filen:  deldokument $(ARG1), position $(ARG2)(rad,kolumn)";
-        Text[ polish ] = "Wykryto b³¹d w formacie dokumentu podrzêdnego $(ARG1) na pozycji $(ARG2)(wiersz, kolumna)";
-        Text[ portuguese_brazilian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ polish ] = "Wykryto b³¹d formatowania w pliku dokumentu podrzêdnego $(ARG1) na pozycji $(ARG2) (wiersz, kolumna)";
+        Text[ portuguese_brazilian ] = "Foi descoberto um erro de formato no arquivo do sub-documento $(ARG1), na posição $(ARG2)(linha,coluna) ";
         Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã® $(ARG2)(è¡Œã€åˆ—)ã«ã‚ã‚‹éƒ¨åˆ†ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ $(ARG1) ã«æ›¸å¼ã‚¨ãƒ©ãƒ¼ãŒè¦‹ã¤ã‹ã‚Šã¾ã—ãŸã€‚";
         Text[ korean ] = "íŒŒì¼ì˜ $(ARG2)(í–‰, ì—´) ìœ„ì¹˜ì— ìˆëŠ” ë¶€ë¶„ ë¬¸ì„œ $(ARG1)ì˜ ì„œì‹ ì˜¤ë¥˜ê°€ ë°œê²¬ë˜ì—ˆìŠµë‹ˆë‹¤.";
         Text[ chinese_simplified ] = "åœ¨æ–‡ä»¶çš„å­æ–‡æ¡£$(ARG1)å†…çš„ $(ARG2)(è¡Œ,åˆ—)å¤„å‘ç°æ ¼å¼é”™è¯¯";
         Text[ chinese_traditional ] = "ç™¼ç¾æª”æ¡ˆçš„å­æ–‡ä»¶ $(ARG1) å…§å«éŒ¯èª¤ï¼Œä½ç½®åœ¨ $(ARG2)(è¡Œ,æ¬„)";
-        Text[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ turkish ] = "Alt döküman  $(ARG1) da $(ARG2)(row,col) pozisyonunda dosya format hatası bulundu.";
         Text[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         Text[ catalan ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         Text[ finnish ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe.";
         Text[ thai ] = "à¸„à¹‰à¸™à¸à¸šà¸£à¸¹à¸›à¹à¸šà¸šà¸œà¸´à¸”à¸à¸¥à¸²à¸”à¹ƒà¸™à¹à¸Ÿà¹‰à¸¡à¹ƒà¸™à¹€à¸­à¸à¸ªà¸²à¸£à¸¢à¹ˆà¸­à¸¢ $(ARG1) à¸—à¸µà¹ˆ $(ARG2)(à¹à¸–à¸§,à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ)";
+        Text[ czech ] = "V souboru byla objevena chyba formÃ¡tu v podÅ™Ã­zenÃ©m dokumentu $(ARG1) na pozici $(ARG2)(Å™Ã¡dek,sloupec)";
+        Text[ hebrew ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
+        Text[ hindi ] = "à¤…à¤§à¥€à¤¨-à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° $(ARG1) à¤®à¥‡à¤‚ $(ARG2)(à¤ªà¤‚à¤•à¥à¤¤à¤¿,à¤¸à¥à¤¤à¤‚à¤­) à¤¸à¥à¤¥à¤¾à¤¨ à¤ªà¤° à¤«à¤¾à¤‡à¤² à¤®à¥‡à¤‚ à¤°à¤šà¤¨à¤¾ à¤•à¤¾ à¤—à¤²à¤¤à¥€ à¤ªà¥à¤°à¤•à¤Ÿ à¤¹à¥à¤† à¥¤";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , WARN_FORMAT_FILE_ROWCOL )
     {
@@ -2363,19 +2588,39 @@ Resource RID_SD_ERRHDL
         Text[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
         Text[ danish ] = "Der er konstateret formatfejl i underdokumentet $(ARG1) på position $(ARG2)(linje,kolonne) i filen";
         Text[ swedish ] = "Det har upptäckts ett formatfel i filen: deldokument $(ARG1), position $(ARG2)(rad,kolumn)";
-        Text[ polish ] = "Wykryto b³¹d w formacie dokumentu podrzêdnego $(ARG1) na pozycji $(ARG2)(wiersz, kolumna)";
-        Text[ portuguese_brazilian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ polish ] = "Wykryto b³¹d formatowania w pliku dokumentu podrzêdnego $(ARG1) na pozycji $(ARG2) (wiersz, kolumna)";
+        Text[ portuguese_brazilian ] = "Foi descoberto um erro de formato no arquivo do sub-documento $(ARG1), na posição $(ARG2)(linha,coluna) ";
         Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã® $(ARG2)(è¡Œã€åˆ—)ã«ã‚ã‚‹éƒ¨åˆ†ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ $(ARG1) ã«æ›¸å¼ã‚¨ãƒ©ãƒ¼ãŒè¦‹ã¤ã‹ã‚Šã¾ã—ãŸã€‚";
         Text[ korean ] = "íŒŒì¼ì˜ $(ARG2)(í–‰, ì—´) ìœ„ì¹˜ì— ìˆëŠ” ë¶€ë¶„ ë¬¸ì„œ $(ARG1)ì˜ ì„œì‹ ì˜¤ë¥˜ê°€ ë°œê²¬ë˜ì—ˆìŠµë‹ˆë‹¤.";
         Text[ chinese_simplified ] = "åœ¨æ–‡ä»¶çš„å­æ–‡æ¡£$(ARG1)å†…çš„ $(ARG2)(è¡Œ,åˆ—)å¤„å‘ç°æ ¼å¼é”™è¯¯";
         Text[ chinese_traditional ] = "ç™¼ç¾æª”æ¡ˆçš„å­æ–‡ä»¶ $(ARG1) å…§å«éŒ¯èª¤ï¼Œä½ç½®åœ¨ $(ARG2)(è¡Œ,æ¬„)";
-        Text[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ turkish ] = "Alt döküman  $(ARG1) da  $(ARG2)(row,col) pozisyonunda dosya format hatası bulundu.";
         Text[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         Text[ catalan ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         Text[ finnish ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe.";
         Text[ thai ] = "à¸„à¹‰à¸™à¸à¸šà¸£à¸¹à¸›à¹à¸šà¸šà¸œà¸´à¸”à¸à¸¥à¸²à¸”à¹ƒà¸™à¹à¸Ÿà¹‰à¸¡à¹ƒà¸™à¹€à¸­à¸à¸ªà¸²à¸£à¸¢à¹ˆà¸­à¸¢ $(ARG1) à¸—à¸µà¹ˆ $(ARG2)(à¹à¸–à¸§,à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ)";
+        Text[ czech ] = "V souboru byla objevena chyba formÃ¡tu v podÅ™Ã­zenÃ©m dokumentu $(ARG1) na pozici $(ARG2)(Å™Ã¡dek,sloupec)";
+        Text[ hebrew ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
+        Text[ hindi ] = "à¤…à¤§à¥€à¤¨-à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° $(ARG1) à¤®à¥‡à¤‚ $(ARG2)(à¤ªà¤‚à¤•à¥à¤¤à¤¿,à¤¸à¥à¤¤à¤‚à¤­) à¤¸à¥à¤¥à¤¾à¤¨ à¤ªà¤° à¤«à¤¾à¤‡à¤² à¤®à¥‡à¤‚ à¤°à¤šà¤¨à¤¾ à¤•à¤¾ à¤—à¤²à¤¤à¥€ à¤ªà¥à¤°à¤•à¤Ÿ à¤¹à¥à¤† à¥¤";
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
