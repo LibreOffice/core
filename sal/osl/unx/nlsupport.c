@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-04-11 11:32:33 $
+ *  last change: $Author: obr $ $Date: 2001-05-14 09:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ typedef struct {
 static int
 _pair_compare (const char *key, const _pair *pair)
 {
-    int result = rtl_str_compareIgnoreCase( key, pair->key );
+    int result = rtl_str_compareIgnoreAsciiCase( key, pair->key );
     return result;
 }
 
