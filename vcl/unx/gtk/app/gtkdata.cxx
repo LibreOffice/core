@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:53:25 $
+ *  last change: $Author: hr $ $Date: 2004-03-11 10:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,7 @@ void GtkXLib::Init()
     // init gtk/gdk
     gtk_init_check( &nParams, &pCmdLineAry );
 
-    for (i = 0; i < nParams; i++ )
+    for (int i = 0; i < nParams; i++ )
         g_free( pCmdLineAry[i] );
     delete pCmdLineAry;
 
