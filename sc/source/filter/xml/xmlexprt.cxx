@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.171 $
+ *  $Revision: 1.172 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:53:19 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,9 @@
 #endif
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
+#include <toolkit/helper/convert.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -583,11 +586,11 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                 nTableCount = xIndex->getCount();
                 if (!pSharedData)
                     CreateSharedData(nTableCount);
-                pCellStyles->AddNewTable(nTableCount - 1);
+                pCellStyles->AddNewTable(static_cast<sal_Int16>(nTableCount - 1));
                 if (HasDrawPages(xSpreadDoc))
                 {
                     rtl::OUString sCaptionPoint( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ));
-                    for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
+                    for (sal_uInt16 nTable = 0; nTable < nTableCount; nTable++)
                     {
                         nCurrentTable = nTable;
                         uno::Any aTable = xIndex->getByIndex(nTable);
@@ -1665,7 +1668,7 @@ void ScXMLExport::_ExportAutoStyles()
                     rtl::OUString SC_SCELLPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX));
                     rtl::OUString SC_NUMBERFORMAT(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT));
                     sal_Int32 nTableCount = xIndex->getCount();
-                    pCellStyles->AddNewTable(nTableCount - 1);
+                    pCellStyles->AddNewTable(static_cast<sal_Int16>(nTableCount - 1));
                     CollectShapesAutoStyles(nTableCount);
                     for (sal_uInt16 nTable = 0; nTable < nTableCount; nTable++)
                     {
@@ -2487,14 +2490,19 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
         awt::Point aPoint;
         Rectangle aRec = pDoc->GetMMRect(static_cast<USHORT>(rMyCell.aCellAddress.Column), static_cast<USHORT>(rMyCell.aCellAddress.Row),
             static_cast<USHORT>(rMyCell.aCellAddress.Column), static_cast<USHORT>(rMyCell.aCellAddress.Row), rMyCell.aCellAddress.Sheet);
-        aPoint.X = aRec.Left();
+        BOOL bNegativePage(pDoc->IsNegativePage(rMyCell.aCellAddress.Sheet));
+        if (bNegativePage)
+            aPoint.X = aRec.Right();
+        else
+            aPoint.X = aRec.Left();
         aPoint.Y = aRec.Top();
-        awt::Point* pPoint = &aPoint;
         ScMyShapeList::const_iterator aItr = rMyCell.aShapeList.begin();
         while (aItr != rMyCell.aShapeList.end())
         {
             if (aItr->xShape.is())
             {
+                if (bNegativePage)
+                    aPoint.X = 2 * aItr->xShape->getPosition().X + aItr->xShape->getSize().Width - aPoint.X;
                 if ( !aItr->xShape->getShapeType().equals(sCaptionShape) )
                 {
                     awt::Point aEndPoint;
@@ -2503,11 +2511,18 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                     rtl::OUString sEndAddress;
                     ScXMLConverter::GetStringFromAddress(sEndAddress, aItr->aEndAddress, pDoc);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_END_CELL_ADDRESS, sEndAddress);
-                    aEndPoint.X = aEndRec.Left();
+                    if (bNegativePage)
+                        aEndPoint.X = -aEndRec.Right();
+                    else
+                        aEndPoint.X = aEndRec.Left();
                     aEndPoint.Y = aEndRec.Top();
                     awt::Point aStartPoint = aItr->xShape->getPosition();
                     awt::Size aSize = aItr->xShape->getSize();
-                    sal_Int32 nEndX = aStartPoint.X + aSize.Width - aEndPoint.X;
+                    sal_Int32 nEndX;
+                    if (bNegativePage)
+                        nEndX = -aStartPoint.X - aEndPoint.X;
+                    else
+                        nEndX = aStartPoint.X + aSize.Width - aEndPoint.X;
                     sal_Int32 nEndY = aStartPoint.Y + aSize.Height - aEndPoint.Y;
                     rtl::OUStringBuffer sBuffer;
                     GetMM100UnitConverter().convertMeasure(sBuffer, nEndX);
@@ -2515,7 +2530,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                     GetMM100UnitConverter().convertMeasure(sBuffer, nEndY);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_END_Y, sBuffer.makeStringAndClear());
                 }
-                ExportShape(aItr->xShape, pPoint);
+                ExportShape(aItr->xShape, &aPoint);
             }
             aItr++;
         }
@@ -2534,7 +2549,16 @@ void ScXMLExport::WriteTableShapes()
         {
             if (aItr->is())
             {
-                ExportShape(*aItr, NULL);
+                if (pDoc->IsNegativePage(nCurrentTable))
+                {
+                    awt::Point aPoint((*aItr)->getPosition());
+                    awt::Size aSize((*aItr)->getSize());
+                    aPoint.X += aPoint.X + aSize.Width;
+                    aPoint.Y = 0;
+                    ExportShape(*aItr, &aPoint);
+                }
+                else
+                    ExportShape(*aItr, NULL);
             }
             aItr = (*pTableShapes)[nCurrentTable].erase(aItr);
         }
