@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmhelp.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-08 04:33:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,12 +314,17 @@
 #define UID_SQLERROR_BUTTONMORE                 (HID_FORM_DLG_START +  36)
 
 #define UID_FORMPROPBROWSER_FRAME               (HID_FORM_DLG_START +  37)
+#define UID_ABSOLUTE_RECORD_WINDOW              (HID_FORM_DLG_START +  38)
+
+// if you add a new define here, please adjust the overflow check
+// at the end of the file!!
+
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
 // -----------------------------------------------------------------------
 
-#define ACT_SVX_HID_END     HID_GRID_NUMBEROFRECORDS
+#define ACT_SVX_HID_END     UID_ABSOLUTE_RECORD_WINDOW
 
 #if ACT_SVX_HID_END > HID_FORMS_END
 #error Resource-Ueberlauf in #line, #file
