@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:55:36 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1403,7 +1403,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ danish ] = "Nedad" ;
         Text [ italian ] = "Verso il ~basso" ;
         Text [ spanish ] = "Hacia a~bajo" ;
-        Text [ french ] = "Vers le ~bas" ;
+        Text [ french ] = "Vers le bas" ;
         Text [ dutch ] = "Naar ~beneden" ;
         Text [ portuguese ] = "Para ~baixo" ;
         Text[ chinese_simplified ] = "Âêë‰∏ã(~W)";
@@ -2537,7 +2537,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ portuguese ] = "~MÍs" ;
         Text [ finnish ] = "~Kuukausi" ;
         Text [ danish ] = "MÂned" ;
-        Text [ french ] = "~Mois" ;
+        Text [ french ] = "Mois" ;
         Text [ swedish ] = "~MÂnad" ;
         Text [ dutch ] = "~Maand" ;
         Text [ spanish ] = "~Mes" ;
@@ -2570,7 +2570,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ french ] = "AnnÈe" ;
         Text [ swedish ] = "~≈r" ;
         Text [ dutch ] = "~Jaar" ;
-        Text [ spanish ] = "~AÒo" ;
+        Text [ spanish ] = "AÒo" ;
         Text [ english_us ] = "Y~ear" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "Âπ¥(~E)";
@@ -2935,7 +2935,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ swedish ] = "~Startv‰rde" ;
         Text [ danish ] = "StartvÊrdi" ;
         Text [ italian ] = "~Valore iniziale" ;
-        Text [ spanish ] = "Valor ~inicial" ;
+        Text [ spanish ] = "Valor inicial" ;
         Text [ dutch ] = "~Startwaarde" ;
         Text [ portuguese ] = "~Valor inicial" ;
         Text[ chinese_simplified ] = "Ëµ∑ÂßãÂÄº(~S)";
@@ -3694,7 +3694,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text [ dutch ] = "Ee~rste kolom als kop" ;
         Text [ italian ] = "Prima colonna come dicitura" ;
         Text [ spanish ] = "Primera c~olumna como etiqueta" ;
-        Text [ french ] = "PremiËre ~colonne comme Ètiquette" ;
+        Text [ french ] = "PremiËre colonne comme Ètiquette" ;
         Text [ swedish ] = "Fˆrsta kolumn ~som etikett" ;
         Text [ danish ] = "F¯rste kolonne som etiket" ;
         Text [ portuguese_brazilian ] = "Erste ~Spalte als Beschriftung" ;
@@ -3721,7 +3721,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text [ ENGLISH_US ] = "First ~row as label" ;
         Text [ italian ] = "Prima riga come dicitura" ;
         Text [ spanish ] = "Primera ~fila como etiqueta" ;
-        Text [ french ] = "PremiËre ~ligne comme Ètiquette" ;
+        Text [ french ] = "PremiËre ligne comme Ètiquette" ;
         Text [ dutch ] = "Eerste rij als ~kop" ;
         Text [ swedish ] = "Fˆrsta ~rad som etikett" ;
         Text [ danish ] = "F¯rste rÊkke som etiket" ;
