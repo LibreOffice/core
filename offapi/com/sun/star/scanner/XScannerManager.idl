@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XScannerManager.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 16:39:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ module com { module sun { module star { module scanner {
 //=============================================================================
 /**
 */
-interface XScannerManager: com::sun::star::uno::XInterface
+published interface XScannerManager: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XScannerManager::getAvailableScanners
