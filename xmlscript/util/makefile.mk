@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2003-09-04 09:21:37 $
+#   last change: $Author: hr $ $Date: 2004-11-09 12:36:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,9 @@ LIB1FILES= \
         $(SLB)$/xml_helper.lib		\
         $(SLB)$/xmldlg_imexp.lib	\
         $(SLB)$/xmllib_imexp.lib	\
-        $(SLB)$/xmlmod_imexp.lib
+        $(SLB)$/xmlmod_imexp.lib	\
+        $(SLB)$/xmlflat_imexp.lib	\
+        $(SLB)$/misc.lib
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
