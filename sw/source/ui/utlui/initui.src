@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:55:31 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1030,7 +1030,7 @@ Resource RID_SW_SHELLRES
         Text[ english_us ] = "Convert $(ARG1)";
         Text[ portuguese ] = "Convert $(ARG1)";
         Text[ russian ] = "Преобразование $(ARG1)";
-        Text[ greek ] = "МефбфспрЮ фпх $(ARG1)";
+        Text[ greek ] = "МефбфспрЮ $(ARG1)";
         Text[ dutch ] = "Convert $(ARG1)";
         Text[ french ] = "Convert $(ARG1)";
         Text[ spanish ] = "Convertir $(ARG1)";
@@ -1045,6 +1045,7 @@ Resource RID_SW_SHELLRES
         Text[ chinese_traditional ] = "Ваґ« $(ARG1)";
         Text[ turkish ] = "Convert $(ARG1)";
         Text[ arabic ] = "КНжнб $(ARG1)";
+        Text[ language_user1 ] = "DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet.";
     };
     String STR_PAGEDESC_FIRSTNAME
     {
@@ -1068,12 +1069,13 @@ Resource RID_SW_SHELLRES
         Text[ chinese_traditional ] = "ІД¤@­УВаґ« $(ARG1)";
         Text[ turkish ] = "First convert $(ARG1)";
         Text[ arabic ] = "First convert $(ARG1)";
+        Text[ language_user1 ] = "DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet. Mit $(ARG1) ist die Seitenzahl oder eine Folge von Seiten (z.B. 1-12) gemeint.";
     };
     String STR_PAGEDESC_FOLLOWNAME
     {
         Text = "Konvert Folge $(ARG1)" ;
         Text [ ENGLISH ] = "Convert follow $(ARG1)" ;
-        Text[ english_us ] = "Convert follow $(ARG1)";
+        Text[ english_us ] = "Next convert $(ARG1)";
         Text[ portuguese ] = "Convert follow $(ARG1)";
         Text[ russian ] = "Последовательность преобразования $(ARG1)";
         Text[ greek ] = "МефбфспрЮ ухнЭчейб $(ARG1)";
@@ -1091,6 +1093,7 @@ Resource RID_SW_SHELLRES
         Text[ chinese_traditional ] = "Ваґ«ІХ $(ARG1)";
         Text[ turkish ] = "Convert follow $(ARG1)";
         Text[ arabic ] = "Convert follow $(ARG1)";
+        Text[ language_user1 ] = "DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet. Mit $(ARG1) ist die Seitenzahl oder eine Folge von Seiten (z.B. 1-12) gemeint.";
     };
 };
 
