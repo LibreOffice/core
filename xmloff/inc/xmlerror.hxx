@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlerror.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:52 $
+ *  last change: $Author: dvo $ $Date: 2001-09-24 14:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ public:
     ~XMLErrors();
 
     /// add a new entry to the list of error messages
-    AddRecord(
+    void AddRecord(
         sal_Int32 nId, /// error ID == error flags + error class + error number
         const ::com::sun::star::uno::Sequence<
                   ::rtl::OUString> & rParams,  /// parameters for error message
@@ -157,7 +157,7 @@ public:
         const ::rtl::OUString& rPublicId,   /// XLocator: file public ID
         const ::rtl::OUString& rSystemId ); /// XLocator: file system ID
 
-    AddRecord(
+    void AddRecord(
         sal_Int32 nId, /// error ID == error flags + error class + error number
         const ::com::sun::star::uno::Sequence<
                   ::rtl::OUString> & rParams,  /// parameters for error message
@@ -165,13 +165,13 @@ public:
         const ::com::sun::star::uno::Reference<
                  ::com::sun::star::xml::sax::XLocator> & rLocator); /// location
 
-    AddRecord(
+    void AddRecord(
         sal_Int32 nId, /// error ID == error flags + error class + error number
         const ::com::sun::star::uno::Sequence<
                   ::rtl::OUString> & rParams,  /// parameters for error message
         const ::rtl::OUString& rExceptionMessage); /// original exception string
 
-    AddRecord(
+    void AddRecord(
         sal_Int32 nId, /// error ID == error flags + error class + error number
         const ::com::sun::star::uno::Sequence<
                   ::rtl::OUString> & rParams); /// parameters for error message

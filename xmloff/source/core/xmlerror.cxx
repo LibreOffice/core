@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlerror.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-18 16:28:34 $
+ *  last change: $Author: dvo $ $Date: 2001-09-24 14:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ XMLErrors::~XMLErrors()
 {
 }
 
-XMLErrors::AddRecord(
+void XMLErrors::AddRecord(
     sal_Int32 nId,
     const Sequence<OUString> & rParams,
     const OUString& rExceptionMessage,
@@ -166,7 +166,7 @@ XMLErrors::AddRecord(
                                     nRow, nColumn, rPublicId, rSystemId ) );
 }
 
-XMLErrors::AddRecord(
+void XMLErrors::AddRecord(
     sal_Int32 nId,
     const Sequence<OUString> & rParams,
     const OUString& rExceptionMessage,
@@ -186,7 +186,7 @@ XMLErrors::AddRecord(
     }
 }
 
-XMLErrors::AddRecord(
+void XMLErrors::AddRecord(
     sal_Int32 nId,
     const Sequence<OUString> & rParams,
     const OUString& rExceptionMessage)
@@ -195,7 +195,7 @@ XMLErrors::AddRecord(
     AddRecord( nId, rParams, rExceptionMessage, -1, -1, sEmpty, sEmpty );
 }
 
-XMLErrors::AddRecord(
+void XMLErrors::AddRecord(
     sal_Int32 nId,
     const Sequence<OUString> & rParams)
 {
