@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: mh $ $Date: 2001-08-27 07:42:31 $
+#   last change: $Author: oj $ $Date: 2002-02-06 07:11:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ SRCFILES =	\
 # ... exception files .........................
 
 EXCEPTIONSFILES=\
+        $(SLO)$/RelationControl.obj		\
         $(SLO)$/tabletree.obj			\
         $(SLO)$/TableGrantCtrl.obj		\
         $(SLO)$/sqledit.obj			\
