@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:27:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -954,6 +954,14 @@ void writeClassFile(
     rtl::OString filename(
         createFileNameFromType(
             path, type, rtl::OString(RTL_CONSTASCII_STRINGPARAM(".class"))));
+    if (filename.getLength() == 0) {
+        rtl::OStringBuffer msg;
+        msg.append(RTL_CONSTASCII_STRINGPARAM("Cannot dump type '"));
+        msg.append(type);
+        msg.append(RTL_CONSTASCII_STRINGPARAM("', can't create output file"));
+        throw CannotDumpException(msg.makeStringAndClear());
+    }
+
     bool check = false;
     if (fileExists(filename)) {
         if (options.isValid(rtl::OString(RTL_CONSTASCII_STRINGPARAM("-G")))) {
@@ -3579,19 +3587,93 @@ void handleSingleton(
 }
 
 bool produceType(
-    rtl::OString const & type, TypeManager & manager,
+    rtl::OString const & type, TypeManager const & manager,
     codemaker::GeneratedTypeSet & generated, JavaOptions * options)
 {
     OSL_ASSERT(options != 0);
-    if (type == rtl::OString(RTL_CONSTASCII_STRINGPARAM("/"))
+    if (type.equals("/")
+        || type.equals(manager.getBase())
         || generated.contains(type))
     {
         return true;
     }
-    sal_Bool extra;
+    sal_Bool extra = sal_False;
     typereg::Reader reader(manager.getTypeReader(type, &extra));
     if (extra) {
         generated.add(type);
+        return true;
+    }
+    if (!reader.isValid()) {
+        return false;
+    }
+
+    handleUnoTypeRegistryEntityFunction handler;
+    switch (reader.getTypeClass()) {
+    case RT_TYPE_ENUM:
+        handler = handleEnumType;
+        break;
+
+    case RT_TYPE_STRUCT:
+    case RT_TYPE_EXCEPTION:
+        handler = handleAggregatingType;
+        break;
+
+    case RT_TYPE_INTERFACE:
+        handler = handleInterfaceType;
+        break;
+
+    case RT_TYPE_TYPEDEF:
+        handler = handleTypedef;
+        break;
+
+    case RT_TYPE_CONSTANTS:
+        handler = handleConstantGroup;
+        break;
+
+    case RT_TYPE_MODULE:
+        handler = handleModule;
+        break;
+
+    case RT_TYPE_SERVICE:
+        handler = handleService;
+        break;
+
+    case RT_TYPE_SINGLETON:
+        handler = handleSingleton;
+        break;
+
+    default:
+        return false;
+    }
+    Dependencies deps;
+    handler(manager, *options, reader, &deps);
+    generated.add(type);
+    if (!options->isValid(rtl::OString(RTL_CONSTASCII_STRINGPARAM("-nD")))) {
+        for (Dependencies::iterator i(deps.begin()); i != deps.end(); ++i) {
+            if (!produceType(*i, manager, generated, options)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool produceType(
+    RegistryKey & rTypeKey, bool bIsExtraType, TypeManager const & manager,
+    codemaker::GeneratedTypeSet & generated, JavaOptions * options)
+{
+    ::rtl::OString typeName = manager.getTypeName(rTypeKey);
+
+    OSL_ASSERT(options != 0);
+    if (typeName.equals("/")
+        || typeName.equals(manager.getBase())
+        || generated.contains(typeName))
+    {
+        return true;
+    }
+    typereg::Reader reader(manager.getTypeReader(rTypeKey));
+    if (bIsExtraType) {
+        generated.add(typeName);
         return true;
     }
     if (!reader.isValid()) {
@@ -3637,7 +3719,7 @@ bool produceType(
     }
     Dependencies deps;
     handler(manager, *options, reader, &deps);
-    generated.add(type);
+    generated.add(typeName);
     if (!options->isValid(rtl::OString(RTL_CONSTASCII_STRINGPARAM("-nD")))) {
         for (Dependencies::iterator i(deps.begin()); i != deps.end(); ++i) {
             if (!produceType(*i, manager, generated, options)) {
