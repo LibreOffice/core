@@ -34,7 +34,38 @@ Public Tablename as String
 &apos; Todo: Mit FS abschnacken, dass als CommandType Nur Queries und Tables zugelassen sind. Dabei müsste noch abgklärt werden
 &apos; wann ein Content ein &apos;Command&apos; ist.
 
-Sub MainWithDefault(Optional DatasourceName as String, Optional CommandType as Integer, Optional sContent as String, Optional oConnection as Object)
+
+&apos; The macro can be called in 4 possible scenarios:
+&apos; Scenario 1. No parameters at given
+&apos; Scenario 2: Only Datasourcename is given, but no connection and no Content
+&apos; Scenario 3: a data source and a connection are given
+&apos; Scenario 4: all parameters (data source name, connection, object type and object) are given
+
+Sub Main()
+Dim oLocDBContext as Object
+Dim oLocConnection as Object
+
+&apos; Scenario 1. No parameters at given
+	MainWithDefault()
+
+&apos; Scenario 2: Only Datasourcename is given, but no connection and no Content
+&apos;	MainWithDefault(&quot;Bibliography&quot;)
+
+&apos; Scenario 3: a data source and a connection are given
+&apos;	oLocDBContext = CreateUnoService(&quot;com.sun.star.sdb.DatabaseContext&quot;)
+&apos;	oLocConnection = oLocDBContext.GetByName(&quot;Bibliography&quot;).GetConnection(&quot;&quot;,&quot;&quot;)
+&apos;	MainWithDefault(&quot;Bibliography&quot;, oLocConnection)
+
+&apos; Scenario 4: all parameters (data source name, connection, object type and object) are given
+&apos;	oLocDBContext = CreateUnoService(&quot;com.sun.star.sdb.DatabaseContext&quot;)
+&apos;	oLocConnection = oLocDBContext.GetByName(&quot;Bibliography&quot;).GetConnection(&quot;&quot;,&quot;&quot;)
+&apos;	MainWithDefault(&quot;Bibliography&quot;, oLocConnection, com.sun.star.sdb.CommandType.TABLE, &quot;biblio&quot;)
+End Sub
+
+
+Sub MainWithDefault(Optional DatasourceName as String, Optional oConnection as Object, Optional CommandType as Integer, Optional sContent as String)
+Dim i as Integer
+Dim SelCount as Integer
 &apos;On Local Error Goto GlobalError
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;WebWizard&quot;)
@@ -57,21 +88,7 @@ Sub MainWithDefault(Optional DatasourceName as String, Optional CommandType as I
 	InitializeWidthList()
 	LoadLanguage
 	bNeedFieldRefresh = True
-	If Not IsMissing(DataSourceName) Then
-		CreateForm(DatasourceName, CommandType, sContent, oConnection)
-	Else
-		CreateForm()
-	End If
-GlobalError:
-	If Err &lt;&gt; 0 Then
-		ToggleWindow(True)
-		MsgBox(sMsgErrMsg , 16, sMsgWizardName)
-	End If
-End Sub
 
-
-Sub CreateForm(Optional DatasourceName as String, Optional CommandType as Integer, Optional sContent as String, Optional oConnection as Object) as String
-Dim i as Integer
 	With oDialogModel
 		.optIgnoreBinaries.State = True
 		.cmdBack.Enabled = False
@@ -81,31 +98,43 @@ Dim i as Integer
 		.Step = 1
 		.lstDatabases.StringItemList()= sDatabaseList()&apos; = AddItem(sDatabaseList(i)
 	End With
-
 	If Not IsMissing(DataSourceName) Then
 		DlgFormDB.GetControl(&quot;lstDatabases&quot;).SelectItem(DataSourceName, True)
-		Set oDBConnection = oConnection
-		If GetDBMetaData() Then
-			oDialogModel.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
-			iCommandTypes() = CreateCommandTypeList()
-			SelCount = CountItemsInArray()
-			If SelCount = 1 Then
-				DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItem(sContent, True)
-			Else 		&apos; Note here is no Error Handling in case that no valid content is transferred
-				If CommandType = com.sun.star.sdb.CommandType.QUERY Then
-					SelIndex = IndexInArray(sContent, QueryNames()
-					DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(SelIndex, True)
-				ElseIf CommandType = com.sun.star.sdb.CommandType.TABLE Then
-					SelIndex = IndexInArray(sContent, TableNames()
-					DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(Ubound(QueryNames()+1 + SelIndex, True)				
+		If Not IsMissing(oConnection) Then
+			&apos; Scenario 3: a data source and a connection are given
+			Set oDBConnection = oConnection
+			oDialogModel.lstTables.Enabled = True
+			oDialogModel.lblTables.Enabled = True
+			If GetDBMetaData() Then
+				oDialogModel.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
+				If Not IsMissing(sContent) Then
+					&apos; Scenario 4: all parameters (data source name, connection, object type and object) are given
+					iCommandTypes() = CreateCommandTypeList()
+					SelCount = CountItemsInArray(oDialogModel.lstTables.StringItemList(), sContent)
+					If SelCount = 1 Then
+						DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItem(sContent, True)
+					Else 		&apos; Note: Here is no Error Handling in case that no valid content is transferred
+						If CommandType = com.sun.star.sdb.CommandType.QUERY Then
+							SelIndex = IndexInArray(sContent, QueryNames()
+							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(SelIndex, True)
+						ElseIf CommandType = com.sun.star.sdb.CommandType.TABLE Then
+							SelIndex = IndexInArray(sContent, TableNames()
+							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(Ubound(QueryNames()+1 + SelIndex, True)				
+						End If
+					End If
+					CurCommandType = CommandType
+					FillUpFieldsListbox(False)
 				End If
 			End If
-			CurCommandType = CommandType
-			FillUpFieldsListbox(False)
+		Else
+			&apos; Scenario 2: Only Datasourcename is given, but no connection and no Content
+			GetSelectedDBMetaData()
 		End If
 	Else
+		&apos; Scenario 1: No parameters are given 
 		ToggleListboxControls(oDialogModel, False)
 	End If
+
 	DlgFormDB.Title = WizardTitle(1)
 	NumberofStyles = FillupWebListbox(oUcb, &quot;/stl&quot;, DlgFormDB, &quot;lstStyles&quot;, Styles())
 	ImportStyles()
@@ -113,7 +142,6 @@ Dim i as Integer
 	oDialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
 	DlgFormDB.Execute()
 	Exit Sub
-
 GlobalError:
 	MsgBox(sMsgErrMsg , 16, sMsgWizardName)
 	ToggleWindow(True)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" dlg:id="DlgFormDB" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="2" dlg:help-url="HID:34400">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" dlg:id="DlgFormDB" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="1" dlg:help-url="HID:34400">
  <dlg:bulletinboard>
   <dlg:text dlg:id="lblSelFields" dlg:tab-index="0" dlg:left="154" dlg:top="70" dlg:width="110" dlg:height="8" dlg:page="1" dlg:value="lblSelFields"/>
   <dlg:menulist dlg:id="lstDatabases" dlg:tab-index="1" dlg:left="6" dlg:top="51" dlg:width="110" dlg:height="12" dlg:page="1" dlg:help-url="HID:34410" dlg:spin="true">
@@ -13,7 +13,9 @@
   <dlg:button dlg:id="cmdCancel" dlg:tab-index="4" dlg:left="6" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34401" dlg:value="cmdCancel">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.FormWizard.CancelFormWizard"/>
   </dlg:button>
-  <dlg:button dlg:id="cmdHelp" dlg:tab-index="5" dlg:left="63" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HiD:34400" dlg:value="cmdHelp"/>
+  <dlg:button dlg:id="cmdHelp" dlg:tab-index="5" dlg:left="63" dlg:top="190" dlg:width="53" dlg:height="14" dlg:tag="34400" dlg:help-url="HiD:34400" dlg:value="cmdHelp">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="Tools.Recursive.ShowHelperDialog"/>
+  </dlg:button>
   <dlg:button dlg:id="cmdBack" dlg:tab-index="6" dlg:left="155" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34401" dlg:value="cmdBack">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.FormWizard.PreviousStep"/>
   </dlg:button>

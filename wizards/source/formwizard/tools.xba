@@ -204,7 +204,8 @@ Dim i as Integer
 Dim MaxIndex as Integer
 Dim ResCount as Integer
 	ResCount = 0
-	For i = o To MaxIndex
+	MaxIndex = Ubound(BigArray())
+	For i = 0 To MaxIndex
 		If SearchItem = BigArray(i) Then
 			ResCount = ResCount + 1
 		End If
