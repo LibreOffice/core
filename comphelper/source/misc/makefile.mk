@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: fs $ $Date: 2002-12-06 12:57:10 $
+#   last change: $Author: tbe $ $Date: 2002-12-10 17:21:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ SLOFILES=	\
             $(SLO)$/evtlistenerhlp.obj \
             $(SLO)$/accessiblecomponenthelper.obj \
             $(SLO)$/accessiblecontexthelper.obj \
+            $(SLO)$/accessiblekeybindinghelper.obj \
             $(SLO)$/accessibleselectionhelper.obj \
             $(SLO)$/accessibletexthelper.obj \
             $(SLO)$/accimplaccess.obj \
