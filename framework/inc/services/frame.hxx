@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-12 16:24:32 $
+ *  last change: $Author: as $ $Date: 2001-10-26 09:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,6 +480,7 @@ class Frame :   // interfaces
         void                                                    implts_resizeComponentWindow    (                                                                        );
         void                                                    implts_setTitleOnWindow         ( const ::rtl::OUString&                                sTitle           );
         const ::rtl::OUString                                   implts_getTitleFromWindow       (                                                                        ) const;
+        void                                                    implts_setIconOnWindow          (                                                                        );
         void                                                    implts_startWindowListening     (                                                                        );
         void                                                    implts_stopWindowListening      (                                                                        );
 

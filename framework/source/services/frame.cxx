@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-12 16:33:42 $
+ *  last change: $Author: as $ $Date: 2001-10-26 09:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,16 +87,24 @@
 #include <classes/targetfinder.hxx>
 #endif
 
+#ifndef __FRAMEWORK_CLASSES_ARGUMENTANALYZER_HXX_
+#include <classes/argumentanalyzer.hxx>
+#endif
+
+#ifndef __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
+#include <classes/filtercache.hxx>
+#endif
+
+#ifndef __FRAMEWORK_CLASSES_DROPTARGETLISTENER_HXX_
+#include <classes/droptargetlistener.hxx>
+#endif
+
 #ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
 #include <threadhelp/transactionguard.hxx>
 #endif
 
 #ifndef __FRAMEWORK_SERVICES_H_
 #include <services.h>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_DROPTARGETLISTENER_HXX_
-#include <classes/droptargetlistener.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -147,6 +155,18 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_AWT_XDATATRANSFERPROVIDERACCESS_HPP_
 #include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
 #endif
@@ -187,6 +207,10 @@
 #include <vcl/window.hxx>
 #endif
 
+#ifndef _SV_WRKWIN_HXX
+#include <vcl/wrkwin.hxx>
+#endif
+
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
@@ -201,6 +225,10 @@
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 
 #ifdef ENABLE_ASSERTIONS
@@ -2460,6 +2488,117 @@ const ::rtl::OUString Frame::implts_getTitleFromWindow() const
 }
 
 /*-****************************************************************************************************//**
+    @short      helper to set icon on our container window (if it is a system window!)
+    @descr      We use our internal set controller (if it exist) to specify which factory he represanted.
+                These information can be used to find right icon. But our controller can say it us directly
+                too ... we should ask his optional property set first ...
+
+    @seealso    method Window::SetIcon()
+
+    @param      -
+    @return     -
+
+    @onerror    We do nothing.
+*//*-*****************************************************************************************************/
+void Frame::implts_setIconOnWindow()
+{
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    // Look for rejected calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    // Make snapshot of neccessary members and release lock.
+    ReadGuard aReadLock( m_aLock );
+    css::uno::Reference< css::awt::XWindow >       xContainerWindow( m_xContainerWindow, css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XController > xController     ( m_xController     , css::uno::UNO_QUERY );
+    aReadLock.unlock();
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+
+    if(
+        ( xContainerWindow.is() == sal_True )   &&
+        ( xController.is()      == sal_True )
+      )
+    {
+        //-------------------------------------------------------------------------------------------------------------
+        // a) set default value to an invalid one. So we can start further searches for right icon id, if
+        //    first steps failed!
+        //    We must reset it to any fallback value - if no search step returns a valid result.
+        sal_Int32 nIcon = -1;
+
+        //-------------------------------------------------------------------------------------------------------------
+        // b) try to find information on controller propertyset directly
+        //    Don't forget to catch possible exceptions - because these property is an optional one!
+        css::uno::Reference< css::beans::XPropertySet > xSet( xController, css::uno::UNO_QUERY );
+        if( xSet.is() == sal_True )
+        {
+            try
+            {
+                css::uno::Any aID = xSet->getPropertyValue( DECLARE_ASCII("IconId") );
+                if( aID.hasValue() == sal_True )
+                {
+                    aID >>= nIcon;
+                }
+            }
+            catch( css::beans::UnknownPropertyException& )
+            {
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------
+        // c) if b) failed ... analyze argument list of currently loaded document insde the frame to find the filter.
+        //    He can be used to detect right factory - and these can be used to match factory to icon ...
+        if( nIcon == -1 )
+        {
+            css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
+            if( xModel.is() == sal_True )
+            {
+                css::uno::Sequence< css::beans::PropertyValue > lLoadArguments = xModel->getArgs();
+                ::rtl::OUString                                 sFilter                           ;
+                ArgumentAnalyzer                                aAnalyzer( lLoadArguments )       ; // Don't set temp. copy of list into analyzer! He works on reference only ...
+
+                aAnalyzer.getArgument( E_FILTERNAME, sFilter );
+                if( sFilter.getLength() > 0 )
+                {
+                    FilterCache aCacheRef; // Cache use refcount and static impl_data_container! So we can use it so!
+                    Filter      aFilter  = aCacheRef.getFilter( sFilter );
+
+                    SvtModuleOptions::EFactory eFactory;
+                    if( SvtModuleOptions::ClassifyFactoryByName( aFilter.sDocumentService, eFactory ) == sal_True )
+                    {
+                        nIcon = SvtModuleOptions().GetFactoryIcon( eFactory );
+                    }
+                }
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------
+        // d) if all steps failed - use fallback!
+        if( nIcon == -1 )
+        {
+            nIcon = 0;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------
+        // e) set icon on container window now
+        //    Don't forget SolarMutex! We use vcl directly :-(
+        //    Check window pointer for right WorkWindow class too!!!
+        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+        ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+        Window* pWindow = (VCLUnoHelper::GetWindow( xContainerWindow ));
+        if(
+            ( pWindow            != NULL              ) &&
+            ( pWindow->GetType() == WINDOW_WORKWINDOW )
+        )
+        {
+            WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
+            pWorkWindow->SetIcon( (sal_uInt16)nIcon );
+        }
+        aSolarGuard.clear();
+        /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    }
+}
+
+/*-****************************************************************************************************//**
     @short      helper to change current component with window
     @descr      This method is used by two different interface methods - dispose() and setComponent().
                 It's a threadsafe one and handle calling by dispose by using E_SOFTEXCEPTIONS too!
@@ -2608,6 +2747,9 @@ sal_Bool Frame::implts_setComponent(  const   css::uno::Reference< css::awt::XWi
             }
             aSolarGuard.clear();
         }
+
+        // New component should change our current icon ...
+        implts_setIconOnWindow();
 
         /* SAFE AREA ------------------------------------------------------------------------------------------- */
         aWriteLock.lock();
