@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:22:17 $
+ *  last change: $Author: aw $ $Date: 2002-02-15 16:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,4 +232,19 @@ void FuConstUnoControl::Deactivate()
     pWindow->SetPointer( aOldPointer );
 }
 
+// #97016#
+SdrObject* FuConstUnoControl::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+{
+    // case SID_FM_CREATE_CONTROL:
 
+    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
+        0L, pDoc);
+
+    if(pObj)
+    {
+        pObj->SetLogicRect(rRectangle);
+    }
+
+    return pObj;
+}

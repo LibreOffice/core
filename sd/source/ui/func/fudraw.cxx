@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-24 13:41:22 $
+ *  last change: $Author: aw $ $Date: 2002-02-15 16:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,8 +580,10 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                 // changeover to the next object
                 if(!pView->MarkNextObj( !aCode.IsShift() ))
                 {
-                    // if that does not function try the other direction
-                    while(pView->MarkNextObj( aCode.IsShift() )) ;
+                    // #97016# No next object: go over open end and
+                    // get first from the other side
+                    pView->UnmarkAllObj();
+                    pView->MarkNextObj(!aCode.IsShift());
                 }
                 bReturn = TRUE;
             }
@@ -594,8 +596,10 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
 
             if ( aCode.IsMod1() )
             {
-                // turn over to the next object
-                while(pView->MarkNextObj(FALSE)) ;
+                // #97016# mark last object
+                pView->UnmarkAllObj();
+                pView->MarkNextObj(FALSE);
+
                 bReturn = TRUE;
             }
         }
@@ -607,8 +611,10 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
 
             if ( aCode.IsMod1() )
             {
-                // turn over to the next object
-                while(pView->MarkNextObj(TRUE)) ;
+                // #97016# mark first object
+                pView->UnmarkAllObj();
+                pView->MarkNextObj(TRUE);
+
                 bReturn = TRUE;
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-01-09 12:43:18 $
+ *  last change: $Author: aw $ $Date: 2002-02-15 16:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,9 +500,20 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 if (pView->HasMarkedObj() && !rKEvt.GetKeyCode().IsMod1() &&
                     !pDocSh->IsReadOnly())
                 {
-                    // Objekte verschieben
-                    nX *= 100;
-                    nY *= 100;
+                    if(rKEvt.GetKeyCode().IsMod2())
+                    {
+                        // #97016# move in 1 pixel distance
+                        Size aLogicSizeOnePixel = (pWindow) ? pWindow->PixelToLogic(Size(1,1)) : Size(100, 100);
+                        nX *= aLogicSizeOnePixel.Width();
+                        nY *= aLogicSizeOnePixel.Height();
+                    }
+                    else
+                    {
+                        // old, fixed move distance
+                        nX *= 100;
+                        nY *= 100;
+                    }
+
                     pView->MoveAllMarked(Size(nX, nY));
                 }
                 else
@@ -704,4 +715,15 @@ void FuPoor::ReceiveRequest(SfxRequest& rReq)
     }
 }
 
+/*************************************************************************
+|*
+|* #97016#
+|*
+\************************************************************************/
+
+SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+{
+    // empty base implementation
+    return 0L;
+}
 

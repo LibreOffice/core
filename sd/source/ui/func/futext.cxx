@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-04 13:57:25 $
+ *  last change: $Author: aw $ $Date: 2002-02-15 16:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,6 +555,113 @@ BOOL FuText::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
+// #97016#
+void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
+{
+    if(pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS)
+    {
+        if( nSlotId == SID_ATTR_CHAR )
+        {
+            // Impress-Textobjekt wird erzeugt (faellt auf Zeilenhoehe zusammen)
+            // Damit das Objekt beim anschliessenden Erzeugen gleich die richtige
+            // Hoehe bekommt (sonst wird zuviel gepainted)
+            SfxItemSet aSet(pViewShell->GetPool());
+            aSet.Put(SdrTextMinFrameHeightItem(0));
+            aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
+            aSet.Put(SdrTextAutoGrowHeightItem(TRUE));
+            pTxtObj->SetItemSet(aSet);
+            pTxtObj->AdjustTextFrameWidthAndHeight();
+            aSet.Put(SdrTextMaxFrameHeightItem(pTxtObj->GetLogicRect().GetSize().Height()));
+            pTxtObj->SetItemSet(aSet);
+        }
+        else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
+        {
+            SfxItemSet aSet(pViewShell->GetPool());
+            aSet.Put(SdrTextMinFrameWidthItem(0));
+            aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
+            aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+            pTxtObj->SetItemSet(aSet);
+            pTxtObj->AdjustTextFrameWidthAndHeight();
+            aSet.Put(SdrTextMaxFrameWidthItem(pTxtObj->GetLogicRect().GetSize().Width()));
+            pTxtObj->SetItemSet(aSet);
+        }
+    }
+    else
+    {
+        if( nSlotId == SID_ATTR_CHAR_VERTICAL )
+        {
+            // draw text object, needs to be initialized when vertical text is used
+            SfxItemSet aSet(pViewShell->GetPool());
+
+            // #91510#
+            aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
+            aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+
+            // #91508#
+            aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
+            aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+
+            pTxtObj->SetItemSet(aSet);
+        }
+    }
+}
+
+// #97016#
+void FuText::ImpSetAttributesFitToSize(SdrTextObj* pTxtObj)
+{
+    // FitToSize (An Rahmen anpassen)
+    SfxItemSet aSet(pViewShell->GetPool(), SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWWIDTH);
+    SdrFitToSizeType eFTS = SDRTEXTFIT_PROPORTIONAL;
+    aSet.Put(SdrTextFitToSizeTypeItem(eFTS));
+    aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+    aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
+    pTxtObj->SetItemSet(aSet);
+    pTxtObj->AdjustTextFrameWidthAndHeight();
+}
+
+// #97016#
+void FuText::ImpSetAttributesFitToSizeVertical(SdrTextObj* pTxtObj)
+{
+    SfxItemSet aSet(pViewShell->GetPool(),
+        SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWWIDTH);
+    SdrFitToSizeType eFTS = SDRTEXTFIT_PROPORTIONAL;
+    aSet.Put(SdrTextFitToSizeTypeItem(eFTS));
+    aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+    aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
+    pTxtObj->SetItemSet(aSet);
+    pTxtObj->AdjustTextFrameWidthAndHeight();
+}
+
+// #97016#
+void FuText::ImpSetAttributesFitCommon(SdrTextObj* pTxtObj)
+{
+    // Normales Textobjekt
+    if (pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS)
+    {
+        if( nSlotId == SID_ATTR_CHAR )
+        {
+            // Impress-Textobjekt (faellt auf Zeilenhoehe zusammen)
+            SfxItemSet aSet(pViewShell->GetPool());
+            aSet.Put(SdrTextMinFrameHeightItem(0));
+            aSet.Put(SdrTextMaxFrameHeightItem(0));
+            aSet.Put(SdrTextAutoGrowHeightItem(TRUE));
+            aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
+            pTxtObj->SetItemSet(aSet);
+        }
+        else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
+        {
+            SfxItemSet aSet(pViewShell->GetPool());
+            aSet.Put(SdrTextMinFrameWidthItem(0));
+            aSet.Put(SdrTextMaxFrameWidthItem(0));
+            aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
+            aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+            pTxtObj->SetItemSet(aSet);
+        }
+
+        pTxtObj->AdjustTextFrameWidthAndHeight();
+    }
+}
+
 BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FALSE;
@@ -631,52 +738,8 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
         // #91508# and #91510#
         if(pTextObj)
         {
-            if(pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS)
-            {
-                if( nSlotId == SID_ATTR_CHAR )
-                {
-                    // Impress-Textobjekt wird erzeugt (faellt auf Zeilenhoehe zusammen)
-                    // Damit das Objekt beim anschliessenden Erzeugen gleich die richtige
-                    // Hoehe bekommt (sonst wird zuviel gepainted)
-                    SfxItemSet aSet(pViewShell->GetPool());
-                    aSet.Put(SdrTextMinFrameHeightItem(0));
-                    aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
-                    aSet.Put(SdrTextAutoGrowHeightItem(TRUE));
-                    pTextObj->SetItemSet(aSet);
-                    pTextObj->AdjustTextFrameWidthAndHeight();
-                    aSet.Put(SdrTextMaxFrameHeightItem(pTextObj->GetLogicRect().GetSize().Height()));
-                    pTextObj->SetItemSet(aSet);
-                }
-                else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
-                {
-                    SfxItemSet aSet(pViewShell->GetPool());
-                    aSet.Put(SdrTextMinFrameWidthItem(0));
-                    aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
-                    aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
-                    pTextObj->SetItemSet(aSet);
-                    pTextObj->AdjustTextFrameWidthAndHeight();
-                    aSet.Put(SdrTextMaxFrameWidthItem(pTextObj->GetLogicRect().GetSize().Width()));
-                    pTextObj->SetItemSet(aSet);
-                }
-            }
-            else
-            {
-                if( nSlotId == SID_ATTR_CHAR_VERTICAL )
-                {
-                    // draw text object, needs to be initialized when vertical text is used
-                    SfxItemSet aSet(pViewShell->GetPool());
-
-                    // #91510#
-                    aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
-                    aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
-
-                    // #91508#
-                    aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
-                    aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
-
-                    pTextObj->SetItemSet(aSet);
-                }
-            }
+            // #97016#
+            ImpSetAttributesForNewTextObject(pTextObj);
         }
 
         if (!pView->EndCreateObj(SDRCREATE_FORCEEND))
@@ -686,56 +749,22 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
         }
         else if (nSlotId == SID_TEXT_FITTOSIZE)
         {
-            // FitToSize (An Rahmen anpassen)
-            SfxItemSet aSet(pViewShell->GetPool(),
-                SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWWIDTH);
-            SdrFitToSizeType eFTS = SDRTEXTFIT_PROPORTIONAL;
-            aSet.Put(SdrTextFitToSizeTypeItem(eFTS));
-            aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
-            aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
-            pTextObj->SetItemSet(aSet);
-            pTextObj->AdjustTextFrameWidthAndHeight();
+            // #97016#
+            ImpSetAttributesFitToSize(pTextObj);
+
             SetInEditMode(rMEvt, FALSE);
         }
         else if ( nSlotId == SID_TEXT_FITTOSIZE_VERTICAL )
         {
-            SfxItemSet aSet(pViewShell->GetPool(),
-                SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWWIDTH);
-            SdrFitToSizeType eFTS = SDRTEXTFIT_PROPORTIONAL;
-            aSet.Put(SdrTextFitToSizeTypeItem(eFTS));
-            aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
-            aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
-            pTextObj->SetItemSet(aSet);
-            pTextObj->AdjustTextFrameWidthAndHeight();
+            // #97016#
+            ImpSetAttributesFitToSizeVertical(pTextObj);
+
             SetInEditMode(rMEvt, FALSE);
         }
         else
         {
-            // Normales Textobjekt
-            if (pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS)
-            {
-                if( nSlotId == SID_ATTR_CHAR )
-                {
-                    // Impress-Textobjekt (faellt auf Zeilenhoehe zusammen)
-                    SfxItemSet aSet(pViewShell->GetPool());
-                    aSet.Put(SdrTextMinFrameHeightItem(0));
-                    aSet.Put(SdrTextMaxFrameHeightItem(0));
-                    aSet.Put(SdrTextAutoGrowHeightItem(TRUE));
-                    aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
-                    pTextObj->SetItemSet(aSet);
-                }
-                else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
-                {
-                    SfxItemSet aSet(pViewShell->GetPool());
-                    aSet.Put(SdrTextMinFrameWidthItem(0));
-                    aSet.Put(SdrTextMaxFrameWidthItem(0));
-                    aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
-                    aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
-                    pTextObj->SetItemSet(aSet);
-                }
-
-                pTextObj->AdjustTextFrameWidthAndHeight();
-            }
+            // #97016#
+            ImpSetAttributesFitCommon(pTextObj);
 
             // Damit die Handles und der graue Rahmen stimmen
             pView->AdjustMarkHdl();
@@ -1424,5 +1453,57 @@ void FuText::DoubleClick(const MouseEvent& rMEvt)
     // Nichts zu tun
 }
 
+// #97016#
+SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+{
+    // case SID_TEXTEDIT:   // BASIC ???
+    // case SID_ATTR_CHAR:
+    // case SID_ATTR_CHAR_VERTICAL:
+    // case SID_TEXT_FITTOSIZE:
+    // case SID_TEXT_FITTOSIZE_VERTICAL:
 
+    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
+        0L, pDoc);
+
+    if(pObj)
+    {
+        if(pObj->ISA(SdrTextObj))
+        {
+            SdrTextObj* pText = (SdrTextObj*)pObj;
+            pText->SetLogicRect(rRectangle);
+
+            sal_Bool bVertical = (SID_ATTR_CHAR_VERTICAL == nID || SID_TEXT_FITTOSIZE_VERTICAL == nID);
+            pText->SetVerticalWriting(bVertical);
+
+            String aText(SdResId(STR_POOLSHEET_TEXT));
+            pText->SetText(aText);
+
+            // #97016#
+            ImpSetAttributesForNewTextObject(pText);
+
+            if (nSlotId == SID_TEXT_FITTOSIZE)
+            {
+                // #97016#
+                ImpSetAttributesFitToSize(pText);
+            }
+            else if ( nSlotId == SID_TEXT_FITTOSIZE_VERTICAL )
+            {
+                // #97016#
+                ImpSetAttributesFitToSizeVertical(pText);
+            }
+            else
+            {
+                // #97016#
+                ImpSetAttributesFitCommon(pText);
+            }
+        }
+        else
+        {
+            DBG_ERROR("Object is NO text object");
+        }
+    }
+
+    return pObj;
+}
 

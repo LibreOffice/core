@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconarc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:17:40 $
+ *  last change: $Author: aw $ $Date: 2002-02-15 16:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,4 +311,55 @@ void FuConstArc::Deactivate()
 //  FuDraw::Deactivate();
 }
 
+// #97016#
+#ifndef _SXCIAITM_HXX
+#include <svx/sxciaitm.hxx>
+#endif
+
+// #97016#
+SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+{
+    // case SID_DRAW_ARC:
+    // case SID_DRAW_CIRCLEARC:
+    // case SID_DRAW_PIE:
+    // case SID_DRAW_PIE_NOFILL:
+    // case SID_DRAW_CIRCLEPIE:
+    // case SID_DRAW_CIRCLEPIE_NOFILL:
+    // case SID_DRAW_ELLIPSECUT:
+    // case SID_DRAW_ELLIPSECUT_NOFILL:
+    // case SID_DRAW_CIRCLECUT:
+    // case SID_DRAW_CIRCLECUT_NOFILL:
+
+    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
+        0L, pDoc);
+
+    if(pObj)
+    {
+        if(pObj->ISA(SdrCircObj))
+        {
+            pObj->SetLogicRect(rRectangle);
+
+            SfxItemSet aAttr(pDoc->GetPool());
+            aAttr.Put(SdrCircStartAngleItem(9000));
+            aAttr.Put(SdrCircEndAngleItem(0));
+
+            if(SID_DRAW_PIE_NOFILL == nID ||
+                SID_DRAW_CIRCLEPIE_NOFILL == nID ||
+                SID_DRAW_ELLIPSECUT_NOFILL == nID ||
+                SID_DRAW_CIRCLECUT_NOFILL == nID)
+            {
+                aAttr.Put(XFillStyleItem(XFILL_NONE));
+            }
+
+            pObj->SetItemSet(aAttr);
+        }
+        else
+        {
+            DBG_ERROR("Object is NO circle object");
+        }
+    }
+
+    return pObj;
+}
 

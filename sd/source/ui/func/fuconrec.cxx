@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-18 16:13:10 $
+ *  last change: $Author: aw $ $Date: 2002-02-15 16:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,11 @@
 // #88751#
 #ifndef _SVDCAPT_HXX
 #include <svx/svdocapt.hxx>
+#endif
+
+// #97016#
+#ifndef _SVDOMEAS_HXX
+#include <svx/svdomeas.hxx>
 #endif
 
 #include "viewshel.hxx"
@@ -841,5 +846,212 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
     }
 }
 
+// #97016#
+SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+{
+    // case SID_DRAW_LINE:
+    // case SID_DRAW_XLINE:
+    // case SID_DRAW_MEASURELINE:
+    // case SID_LINE_ARROW_START:
+    // case SID_LINE_ARROW_END:
+    // case SID_LINE_ARROWS:
+    // case SID_LINE_ARROW_CIRCLE:
+    // case SID_LINE_CIRCLE_ARROW:
+    // case SID_LINE_ARROW_SQUARE:
+    // case SID_LINE_SQUARE_ARROW:
+    // case SID_DRAW_RECT:
+    // case SID_DRAW_RECT_NOFILL:
+    // case SID_DRAW_RECT_ROUND:
+    // case SID_DRAW_RECT_ROUND_NOFILL:
+    // case SID_DRAW_SQUARE:
+    // case SID_DRAW_SQUARE_NOFILL:
+    // case SID_DRAW_SQUARE_ROUND:
+    // case SID_DRAW_SQUARE_ROUND_NOFILL:
+    // case SID_DRAW_ELLIPSE:
+    // case SID_DRAW_ELLIPSE_NOFILL:
+    // case SID_DRAW_CIRCLE:
+    // case SID_DRAW_CIRCLE_NOFILL:
+    // case SID_DRAW_CAPTION:
+    // case SID_DRAW_CAPTION_VERTICAL:
+    // case SID_TOOL_CONNECTOR:
+    // case SID_CONNECTOR_ARROW_START:
+    // case SID_CONNECTOR_ARROW_END:
+    // case SID_CONNECTOR_ARROWS:
+    // case SID_CONNECTOR_CIRCLE_START:
+    // case SID_CONNECTOR_CIRCLE_END:
+    // case SID_CONNECTOR_CIRCLES:
+    // case SID_CONNECTOR_LINE:
+    // case SID_CONNECTOR_LINE_ARROW_START:
+    // case SID_CONNECTOR_LINE_ARROW_END:
+    // case SID_CONNECTOR_LINE_ARROWS:
+    // case SID_CONNECTOR_LINE_CIRCLE_START:
+    // case SID_CONNECTOR_LINE_CIRCLE_END:
+    // case SID_CONNECTOR_LINE_CIRCLES:
+    // case SID_CONNECTOR_CURVE:
+    // case SID_CONNECTOR_CURVE_ARROW_START:
+    // case SID_CONNECTOR_CURVE_ARROW_END:
+    // case SID_CONNECTOR_CURVE_ARROWS:
+    // case SID_CONNECTOR_CURVE_CIRCLE_START:
+    // case SID_CONNECTOR_CURVE_CIRCLE_END:
+    // case SID_CONNECTOR_CURVE_CIRCLES:
+    // case SID_CONNECTOR_LINES:
+    // case SID_CONNECTOR_LINES_ARROW_START:
+    // case SID_CONNECTOR_LINES_ARROW_END:
+    // case SID_CONNECTOR_LINES_ARROWS:
+    // case SID_CONNECTOR_LINES_CIRCLE_START:
+    // case SID_CONNECTOR_LINES_CIRCLE_END:
+    // case SID_CONNECTOR_LINES_CIRCLES:
+
+    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
+        0L, pDoc);
+    Point aStart = rRectangle.TopLeft();
+    Point aEnd = rRectangle.BottomRight();
+
+    if(pObj)
+    {
+        switch(nID)
+        {
+            case SID_DRAW_LINE:
+            case SID_DRAW_XLINE:
+            case SID_LINE_ARROW_START:
+            case SID_LINE_ARROW_END:
+            case SID_LINE_ARROWS:
+            case SID_LINE_ARROW_CIRCLE:
+            case SID_LINE_CIRCLE_ARROW:
+            case SID_LINE_ARROW_SQUARE:
+            case SID_LINE_SQUARE_ARROW:
+            {
+                if(pObj->ISA(SdrPathObj))
+                {
+                    XPolyPolygon aPoly;
+                    aPoly.Insert(XPolygon(2));
+
+                    if(SID_DRAW_LINE == nID || SID_DRAW_XLINE == nID)
+                    {
+                        aPoly[0][0] = aStart;
+                        aPoly[0][1] = aEnd;
+                    }
+                    else
+                    {
+                        sal_Int32 nYMiddle((rRectangle.Top() + rRectangle.Bottom()) / 2);
+                        aPoly[0][0] = Point(aStart.X(), nYMiddle);
+                        aPoly[0][1] = Point(aEnd.X(), nYMiddle);
+                    }
+
+                    ((SdrPathObj*)pObj)->SetPathPoly(aPoly);
+                }
+                else
+                {
+                    DBG_ERROR("Object is NO line object");
+                }
+
+                break;
+            }
+
+            case SID_DRAW_MEASURELINE:
+            {
+                if(pObj->ISA(SdrMeasureObj))
+                {
+                    sal_Int32 nYMiddle((rRectangle.Top() + rRectangle.Bottom()) / 2);
+                    ((SdrMeasureObj*)pObj)->SetPoint(Point(aStart.X(), nYMiddle), 0);
+                    ((SdrMeasureObj*)pObj)->SetPoint(Point(aEnd.X(), nYMiddle), 1);
+                }
+                else
+                {
+                    DBG_ERROR("Object is NO measure object");
+                }
+
+                break;
+            }
+
+            case SID_TOOL_CONNECTOR:
+            case SID_CONNECTOR_ARROW_START:
+            case SID_CONNECTOR_ARROW_END:
+            case SID_CONNECTOR_ARROWS:
+            case SID_CONNECTOR_CIRCLE_START:
+            case SID_CONNECTOR_CIRCLE_END:
+            case SID_CONNECTOR_CIRCLES:
+            case SID_CONNECTOR_LINE:
+            case SID_CONNECTOR_LINE_ARROW_START:
+            case SID_CONNECTOR_LINE_ARROW_END:
+            case SID_CONNECTOR_LINE_ARROWS:
+            case SID_CONNECTOR_LINE_CIRCLE_START:
+            case SID_CONNECTOR_LINE_CIRCLE_END:
+            case SID_CONNECTOR_LINE_CIRCLES:
+            case SID_CONNECTOR_CURVE:
+            case SID_CONNECTOR_CURVE_ARROW_START:
+            case SID_CONNECTOR_CURVE_ARROW_END:
+            case SID_CONNECTOR_CURVE_ARROWS:
+            case SID_CONNECTOR_CURVE_CIRCLE_START:
+            case SID_CONNECTOR_CURVE_CIRCLE_END:
+            case SID_CONNECTOR_CURVE_CIRCLES:
+            case SID_CONNECTOR_LINES:
+            case SID_CONNECTOR_LINES_ARROW_START:
+            case SID_CONNECTOR_LINES_ARROW_END:
+            case SID_CONNECTOR_LINES_ARROWS:
+            case SID_CONNECTOR_LINES_CIRCLE_START:
+            case SID_CONNECTOR_LINES_CIRCLE_END:
+            case SID_CONNECTOR_LINES_CIRCLES:
+            {
+                if(pObj->ISA(SdrEdgeObj))
+                {
+                    ((SdrEdgeObj*)pObj)->SetTailPoint(FALSE, aStart);
+                    ((SdrEdgeObj*)pObj)->SetTailPoint(TRUE, aEnd);
+                }
+                else
+                {
+                    DBG_ERROR("Object is NO connector object");
+                }
+
+                break;
+            }
+            case SID_DRAW_CAPTION:
+            case SID_DRAW_CAPTION_VERTICAL:
+            {
+                if(pObj->ISA(SdrCaptionObj))
+                {
+                    sal_Bool bIsVertical(SID_DRAW_CAPTION_VERTICAL == nID);
+
+                    ((SdrTextObj*)pObj)->SetVerticalWriting(bIsVertical);
+
+                    if(bIsVertical)
+                    {
+                        SfxItemSet aSet(pObj->GetItemSet());
+                        aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
+                        aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+                        pObj->SetItemSet(aSet);
+                    }
+
+                    String aText(SdResId(STR_POOLSHEET_TEXT));
+                    ((SdrCaptionObj*)pObj)->SetText(aText);
+                    ((SdrCaptionObj*)pObj)->SetLogicRect(rRectangle);
+                    ((SdrCaptionObj*)pObj)->SetTailPos(
+                        rRectangle.TopLeft() - Point(rRectangle.GetWidth() / 2, rRectangle.GetHeight() / 2));
+                }
+                else
+                {
+                    DBG_ERROR("Object is NO caption object");
+                }
+
+                break;
+            }
+            default:
+            {
+                pObj->SetLogicRect(rRectangle);
+
+                break;
+            }
+        }
+
+        SfxItemSet aAttr(pDoc->GetPool());
+        SetStyleSheet(aAttr, pObj);
+        SetAttributes(aAttr, pObj);
+        SetLineEnds(aAttr, pObj);
+        pObj->SetItemSet(aAttr);
+    }
+
+    return pObj;
+}
 
 
