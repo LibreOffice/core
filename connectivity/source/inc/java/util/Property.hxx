@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Property.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:27 $
+ *  last change: $Author: oj $ $Date: 2001-05-09 12:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,17 +58,30 @@
  *
  *
  ************************************************************************/
+#ifndef CONNECTIVITY_java_util_Properties
+#define CONNECTIVITY_java_util_Properties
 
+#ifndef _CONNECTIVITY_JAVA_LANG_OBJECT_HXX_
+#include "java/lang/Object.hxx"
+#endif
 
-class java_util_Property : public java_lang_Object
+namespace connectivity
 {
-protected:
-// statische Daten fuer die Klasse
-    static jclass theClass;
-    // der Destruktor um den Object-Counter zu aktualisieren
-    static void saveClassRef( jclass pClass );
-public:
-    static jclass getMyClass();
-    virtual ~java_util_Property();
-    // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-};  java_util_Property( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
+    class java_util_Properties : public java_lang_Object
+    {
+    protected:
+    // statische Daten fuer die Klasse
+        static jclass theClass;
+        // der Destruktor um den Object-Counter zu aktualisieren
+        static void saveClassRef( jclass pClass );
+    public:
+        static jclass getMyClass();
+        virtual ~java_util_Properties();
+        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        java_util_Properties( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
+        java_util_Properties( );
+        void setProperty(const ::rtl::OUString key, const ::rtl::OUString& value);
+    };
+}
+
+#endif // CONNECTIVITY_java_util_Properties

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 09:58:43 $
+ *  last change: $Author: oj $ $Date: 2001-05-09 12:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #ifndef _CONNECTIVITY_JAVA_SQL_CONNECTION_HXX_
 #include "java/sql/Connection.hxx"
 #endif
+#include "java/util/Property.hxx"
 #ifndef _CONNECTIVITY_JAVA_TOOLS_HXX_
 #include "java/tools.hxx"
 #endif
@@ -215,23 +216,27 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
 
     if( t.pEnv )
     {
-        jvalue args[2];
-        // Parameter konvertieren
-        args[0].l = convertwchar_tToJavaString(t.pEnv,url);
-        args[1].l = createStringPropertyArray(t.pEnv,info);
         // temporaere Variable initialisieren
-        char * cSignature = "(Ljava/lang/String;Ljava/util/Properties)Ljava/sql/Connection;";
+        char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;";
         char * cMethodName = "connect";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        ThrowSQLException(t.pEnv,*this);
         if( mID )
         {
-            out = t.pEnv->CallObjectMethodA( getMyClass(), mID, args );
+            jvalue args[2];
+            // Parameter konvertieren
+            args[0].l = convertwchar_tToJavaString(t.pEnv,url);
+            java_util_Properties* pProps = createStringPropertyArray(t.pEnv,info);
+            args[1].l = pProps->getJavaObject();
+
+            out = t.pEnv->CallObjectMethod( object, mID, args[0].l,args[1].l );
+            ThrowSQLException(t.pEnv,*this);
+            // und aufraeumen
+            t.pEnv->DeleteLocalRef((jstring)args[0].l);
+            ThrowSQLException(t.pEnv,*this);
+            delete pProps;
         } //mID
-        // und aufraeumen
-        t.pEnv->DeleteLocalRef((jstring)args[0].l);
-        t.pEnv->DeleteLocalRef((jstring)args[1].l);
-        ThrowSQLException(t.pEnv,*this);
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     Reference< XConnection > xOut;
@@ -264,22 +269,24 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
 
     if( t.pEnv )
     {
-        jvalue args[2];
-        // Parameter konvertieren
-        args[0].l = convertwchar_tToJavaString(t.pEnv,url);
-        args[1].l = createStringPropertyArray(t.pEnv,info);
         // temporaere Variable initialisieren
-        char * cSignature = "(Ljava/lang/String;Ljava/util/Properties)[Ljava/sql/DriverPropertyInfo;";
+        char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)[Ljava/sql/DriverPropertyInfo;";
         char * cMethodName = "getPropertyInfo";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
         if( mID )
         {
-            out = (jobjectArray)t.pEnv->CallObjectMethodA( getMyClass(), mID, args );
+            jvalue args[2];
+            // Parameter konvertieren
+            args[0].l = convertwchar_tToJavaString(t.pEnv,url);
+            java_util_Properties* pProps = createStringPropertyArray(t.pEnv,info);
+            args[1].l = pProps->getJavaObject();
+
+            out = (jobjectArray)t.pEnv->CallObjectMethodA( object, mID, args );
             ThrowSQLException(t.pEnv,*this);
             // und aufraeumen
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
-            t.pEnv->DeleteLocalRef((jstring)args[1].l);
+            delete pProps;
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 17:03:17 $
+ *  last change: $Author: oj $ $Date: 2001-05-09 12:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,12 +384,24 @@ void java_lang_Object::ThrowSQLException(JNIEnv * pEnv,const Reference< XInterfa
     {
         if(pEnv->IsInstanceOf(jThrow,java_sql_SQLException_BASE::getMyClass()))
         {
-            throw java_sql_SQLException(java_sql_SQLException_BASE(pEnv,jThrow),_rContext);
+            java_sql_SQLException_BASE* pException = new java_sql_SQLException_BASE(pEnv,jThrow);
+            SQLException e( pException->getMessage(),
+                                _rContext,
+                                pException->getSQLState(),
+                                pException->getErrorCode(),
+                                makeAny(pException->getNextException())
+                            );
+            delete pException;
+            throw  e;
         }
         else if(pEnv->IsInstanceOf(jThrow,java_lang_Throwable::getMyClass()))
         {
             java_lang_Throwable *pThrow = new java_lang_Throwable(pEnv,jThrow);
             ::rtl::OUString aMsg = pThrow->getMessage();
+            if(!aMsg.getLength())
+                aMsg = pThrow->getLocalizedMessage();
+            if(!aMsg.getLength())
+                aMsg = pThrow->toString();
             delete pThrow;
             throw SQLException(aMsg,_rContext,::rtl::OUString(),-1,Any());
         }

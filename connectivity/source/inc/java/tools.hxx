@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:42:28 $
+ *  last change: $Author: oj $ $Date: 2001-05-09 12:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,11 @@ namespace connectivity
 
     jstring convertwchar_tToJavaString(JNIEnv *pEnv,const ::rtl::OUString& _Temp);
     ::rtl::OUString JavaString2String(JNIEnv *pEnv,jstring _Str);
+    class java_util_Properties;
 
-        jobjectArray createStringPropertyArray(JNIEnv *pEnv,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    java_util_Properties* createStringPropertyArray(JNIEnv *pEnv,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-        template<class T,class JT> ::com::sun::star::uno::Sequence< T > copyArrayAndDelete(JNIEnv *pEnv,jobjectArray _Array,const  T& _rD1,const  JT& _rD2)
+    template<class T,class JT> ::com::sun::star::uno::Sequence< T > copyArrayAndDelete(JNIEnv *pEnv,jobjectArray _Array,const  T& _rD1,const  JT& _rD2)
     {
                 ::com::sun::star::uno::Sequence< T > xOut;
         if(_Array)
@@ -117,8 +118,8 @@ namespace connectivity
         return xOut;
     }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > Map2XNameAccess(JNIEnv *pEnv,jobject _pMap);
-        jobject XNameAccess2Map(JNIEnv *pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & _rMap);
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > Map2XNameAccess(JNIEnv *pEnv,jobject _pMap);
+    jobject XNameAccess2Map(JNIEnv *pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & _rMap);
 }
 
 #endif // _CONNECTIVITY_JAVA_TOOLS_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-07 08:19:46 $
+ *  last change: $Author: oj $ $Date: 2001-05-09 12:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _CONNECTIVITY_JAVA_LANG_CLASS_HXX_
 #include "java/lang/Class.hxx"
 #endif
+#ifndef CONNECTIVITY_java_util_Properties
+#include "java/util/Property.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_SDBC_DRIVERPROPERTYINFO_HPP_
 #include <com/sun/star/sdbc/DriverPropertyInfo.hpp>
@@ -85,38 +88,99 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
+void java_util_Properties::setProperty(const ::rtl::OUString key, const ::rtl::OUString& value)
+{
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    jobject out(0);
+    if( t.pEnv )
+    {
+        jvalue args[2];
+        // Parameter konvertieren
+        args[0].l = convertwchar_tToJavaString(t.pEnv,key);
+        args[1].l = convertwchar_tToJavaString(t.pEnv,value);
+        // temporaere Variable initialisieren
+        char * cSignature = "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;";
+        char * cMethodName = "setProperty";
+        // Java-Call absetzen
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        if( mID )
+            out = t.pEnv->CallObjectMethod(object, mID, args[0].l,args[1].l);
+        t.pEnv->DeleteLocalRef((jstring)args[1].l);
+        t.pEnv->DeleteLocalRef((jstring)args[0].l);
+        ThrowSQLException(t.pEnv,0);
+        if(out)
+            t.pEnv->DeleteLocalRef(out);
+    } //t.pEnv
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+}
+jclass java_util_Properties::theClass = 0;
+
+java_util_Properties::~java_util_Properties()
+{}
+
+jclass java_util_Properties::getMyClass()
+{
+    // die Klasse muss nur einmal geholt werden, daher statisch
+    if( !theClass ){
+        SDBThreadAttach t;
+        if( !t.pEnv ) return (jclass)NULL;
+        jclass tempClass = t.pEnv->FindClass( "java/util/Properties" );
+        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
+        t.pEnv->DeleteLocalRef( tempClass );
+        saveClassRef( globClass );
+    }
+    return theClass;
+}
+
+void java_util_Properties::saveClassRef( jclass pClass )
+{
+    if( SDBThreadAttach::IsJavaErrorOccured() || pClass==NULL  )
+        return;
+    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
+    theClass = pClass;
+}
+//--------------------------------------------------------------------------
+java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)NULL )
+{
+    SDBThreadAttach t;
+    if( !t.pEnv )
+        return;
+    // Java-Call fuer den Konstruktor absetzen
+    // temporaere Variable initialisieren
+    char * cSignature = "()V";
+    jobject tempObj;
+    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );
+    tempObj = t.pEnv->NewObject( getMyClass(), mID);
+    saveRef( t.pEnv, tempObj );
+    t.pEnv->DeleteLocalRef( tempObj );
+}
+
 // --------------------------------------------------------------------------------
-jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const ::rtl::OUString& Temp)
+jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const ::rtl::OUString& _rTemp)
 {
     if (pEnv)
-    {
-        ::rtl::OString aT = ::rtl::OUStringToOString(Temp,RTL_TEXTENCODING_UTF8);
-        return pEnv->NewString((const unsigned short *)aT.getStr(), aT.getLength());
-    }
+        return pEnv->NewString(_rTemp.getStr(), _rTemp.getLength());
     return NULL;
 }
 
 // --------------------------------------------------------------------------------
-jobjectArray connectivity::createStringPropertyArray(JNIEnv *pEnv,const Sequence< PropertyValue >& info )  throw(SQLException, RuntimeException)
+java_util_Properties* connectivity::createStringPropertyArray(JNIEnv *pEnv,const Sequence< PropertyValue >& info )  throw(SQLException, RuntimeException)
 {
-    jobjectArray aArray = pEnv->NewObjectArray(info.getLength(),java_lang_String::getMyClass(),pEnv->NewStringUTF(""));
-
+    java_util_Properties* pProps = new java_util_Properties();
     const PropertyValue* pBegin = info.getConstArray();
     const PropertyValue* pEnd   = pBegin + info.getLength();
 
-    sal_Bool bFound = sal_False;
-    for(jsize i=0;pBegin != pEnd;++pBegin)
+    for(;pBegin != pEnd;++pBegin)
     {
         // this is a special property to find the jdbc driver
-        if(!pBegin->Name.compareToAscii("JavaDriverClass"))
+        if(pBegin->Name.compareToAscii("JavaDriverClass"))
         {
             ::rtl::OUString aStr;
             pBegin->Value >>= aStr;
-            jstring a = convertwchar_tToJavaString(pEnv,aStr.getStr());
-            pEnv->SetObjectArrayElement(aArray,i++,a);
+            pProps->setProperty(pBegin->Name,aStr);
         }
     }
-    return aArray;
+    return pProps;
 }
 // --------------------------------------------------------------------------------
 ::rtl::OUString connectivity::JavaString2String(JNIEnv *pEnv,jstring _Str)
@@ -127,7 +191,7 @@ jobjectArray connectivity::createStringPropertyArray(JNIEnv *pEnv,const Sequence
         jboolean bCopy(sal_True);
         const jchar* pChar = pEnv->GetStringChars(_Str,&bCopy);
         jsize len = pEnv->GetStringLength(_Str);
-        aStr = ::rtl::OUString(pChar,RTL_TEXTENCODING_UTF8);
+        aStr = ::rtl::OUString(pChar,len);
 
         if(bCopy)
             pEnv->ReleaseStringChars(_Str,pChar);
