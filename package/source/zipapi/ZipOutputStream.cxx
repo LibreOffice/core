@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 12:07:21 $
+ *  last change: $Author: mtg $ $Date: 2000-11-22 16:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,11 @@ void SAL_CALL ZipOutputStream::write( const uno::Sequence< sal_Int8 >& rBuffer, 
             }
             break;
         case STORED:
-            aChucker.writeBytes(rBuffer);
+            sal_Int32 nOldLength = rBuffer.getLength();
+            uno::Sequence < sal_Int8 > *pBuffer = const_cast < uno::Sequence < sal_Int8 > *> (&rBuffer);
+            pBuffer->realloc(nNewLength);
+            aChucker.writeBytes(*pBuffer);
+            pBuffer->realloc(nOldLength);
             break;
     }
     aCRC.updateSegment(rBuffer, nNewOffset, nNewLength);
@@ -240,9 +244,12 @@ void SAL_CALL ZipOutputStream::finish(  )
 void ZipOutputStream::doDeflate()
 {
     sal_Int32 nLength = aDeflater.doDeflateSegment(aBuffer, 0, aBuffer.getLength());
+    sal_Int32 nOldLength = aBuffer.getLength();
     if (nLength > 0 )
     {
+        aBuffer.realloc(nLength);
         aChucker.writeBytes(aBuffer);
+        aBuffer.realloc(nOldLength);
     }
 }
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
