@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-20 12:49:58 $
+ *  last change: $Author: os $ $Date: 2002-11-06 10:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,6 +600,10 @@ BOOL SwFldFuncPage::FillItemSet(SfxItemSet& rSet)
     {
         case TYP_INPUTFLD:
             nSubType = INP_TXT;
+            // to prevent removal of CR/LF restore old content
+            if(!aNameED.IsModified() && IsFldEdit())
+                aName = GetCurField()->GetPar1();
+
             break;
 
         case TYP_MACROFLD:
@@ -717,6 +721,9 @@ IMPL_LINK( SwFldFuncPage, ModifyHdl, Edit *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/09/20 12:49:58  jp
+    Bug #89582#: handle field dialog activation correct
+
     Revision 1.5  2001/07/17 08:48:51  tbe
     #87307# remove external basctl dependencies
 
