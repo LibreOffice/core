@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_quickstart.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 16:30:16 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 10:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,5 +65,5 @@ Module gid_Module_Optional_Quickstart
     MOD_NAME_DESC ( MODULE_OPTIONAL_QUICKSTART );
     Default = NO;
     ParentID = gid_Module_Optional;
-    Files = ();
+    Files = (gid_File_Tmp_Userinstall_Quickstart_Inf);
 End
