@@ -10349,6 +10349,33 @@ SfxBoolItem ToolSelect SID_OBJECT_SELECT
 ]
 
 //--------------------------------------------------------------------------
+SfxBoolItem SelectMode SID_INSERT_SELECT
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_CONTROLS;
+]
+
+//--------------------------------------------------------------------------
 SvxULSpaceItem TopBottomMargin SID_ATTR_ULSPACE
 
 [
