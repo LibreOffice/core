@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-21 11:36:34 $
+ *  last change: $Author: ka $ $Date: 2002-06-21 14:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@
 #include "SdUnoDrawView.hxx"
 
 #define TABCONTROL_INITIAL_SIZE     350
+#define PAPER_SHADOW_EXT_PIXEL        2
 
 /*************************************************************************
 |*
@@ -562,14 +563,14 @@ void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
             Color               aFillColor;
             const BOOL          bOldMap = pWin->IsMapModeEnabled();
             const Rectangle     aOutputRect( Point(), pWin->GetOutputSizePixel() );
-            Rectangle           aPageRect;
+            Rectangle           aOutputPaperRect, aPaperRect;
 
             if( pPageView )
-                aPageRect = pPageView->GetPageRect();
+                aPaperRect = pPageView->GetPageRect();
             else
-                aPageRect = Rectangle( Point(), pActualPage->GetSize() );
+                aPaperRect = Rectangle( Point(), pActualPage->GetSize() );
 
-            aPageRect = pWin->LogicToPixel( aPageRect ).Intersection( aOutputRect );
+            ( aOutputPaperRect = aPaperRect = pWin->LogicToPixel( aPaperRect ) ).Intersection( aOutputRect );
 
             if( DOCUMENT_TYPE_IMPRESS == pDoc->GetDocumentType() )
                 aFillColor = Color( aColorConfig.GetColorValue( svx::APPBACKGROUND ).nColor );
@@ -581,32 +582,33 @@ void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
             pWin->SetLineColor();
             pWin->SetFillColor( aFillColor );
 
-            if( aPageRect.IsEmpty() )
+            if( aOutputPaperRect.IsEmpty() )
                 pWin->DrawRect( aOutputRect );
             else
             {
-                if( aPageRect.Top() > 0 )
-                    pWin->DrawRect( Rectangle( Point(), Size( aOutputRect.GetWidth(), aPageRect.Top() ) ) );
+                const Color aShadowColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
+                PolyPolygon aPolyPoly( 2 );
+                Rectangle   aOutputRectExt( aOutputRect );
 
-                if( aPageRect.Left() > 0 )
-                    pWin->DrawRect( Rectangle( Point( 0, aPageRect.Top() ), Size( aPageRect.Left(), aPageRect.GetHeight() ) ) );
+                aOutputRectExt.Left()--;
+                aOutputRectExt.Top()--;
+                aOutputRectExt.Right()++;
+                aOutputRectExt.Bottom()++;
 
-                if( aPageRect.Right() < ( aOutputRect.GetWidth() - 1 ) )
-                    pWin->DrawRect( Rectangle( Point( aPageRect.Right() + 1, aPageRect.Top() ), Size( aOutputRect.GetWidth() - aPageRect.Right(), aPageRect.GetHeight() ) ) );
+                aPolyPoly.Insert( aOutputRectExt );
+                aPolyPoly.Insert( aOutputPaperRect );
 
-                if( aPageRect.Bottom() < ( aOutputRect.GetHeight() - 1 ) )
-                    pWin->DrawRect( Rectangle( Point( 0, aPageRect.Bottom() + 1 ), Size( aOutputRect.GetWidth(), aOutputRect.GetHeight() - aPageRect.Bottom() ) ) );
+                // draw paper
+                pWin->DrawPolyPolygon( aPolyPoly );
+
+                 // draw shadow
+                pWin->SetFillColor( aShadowColor );
+                pWin->DrawRect( Rectangle( Point( aPaperRect.Right() + 1, aPaperRect.Top() + PAPER_SHADOW_EXT_PIXEL ),
+                                           Size( PAPER_SHADOW_EXT_PIXEL, aPaperRect.GetHeight() ) ) );
+                pWin->DrawRect( Rectangle( Point( aPaperRect.Left() + PAPER_SHADOW_EXT_PIXEL, aPaperRect.Bottom() + 1 ),
+                                           Size( aPaperRect.GetWidth(), PAPER_SHADOW_EXT_PIXEL ) ) );
             }
 
-/*          svx::ColorConfig aColorConfig;
-            svx::ColorConfigValue aDocColor( aColorConfig.GetColorValue( svx::DOCCOLOR ) );
-            Color aBorderColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
-
-            rOut.SetFillColor( aDocColor.nColor );
-            rOut.SetLineColor( aBorderColor );
-
-            rOut.DrawRect(aRect);
-*/
             pWin->SetFillColor( aOldFillColor );
             pWin->SetLineColor( aOldLineColor );
             pWin->SetDrawMode( nOldDrawMode );
