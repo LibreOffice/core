@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tl $ $Date: 2000-11-19 09:56:39 $
+#   last change: $Author: hr $ $Date: 2000-11-21 15:34:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,8 +63,9 @@
 PRJ = ..
 
 PRJNAME	= linguistic
-TARGET	= lng
+TARGET	= oolng
 ENABLE_EXCEPTIONS=TRUE
+USE_DEFFILE=TRUE
 
 #----- Settings ---------------------------------------------------------
 
@@ -119,14 +120,13 @@ EXCEPTIONSFILES=\
         $(SLO)$/spelldsp.obj\
         $(SLO)$/thesdsp.obj
 
-SLOFILES=	\
+LNGOBJS = \
         $(SLO)$/dicimp.obj\
         $(SLO)$/dlistimp.obj\
         $(SLO)$/hyphdsp.obj\
         $(SLO)$/hyphdta.obj\
         $(SLO)$/iprcache.obj\
         $(SLO)$/lngopt.obj\
-        $(SLO)$/lngreg.obj\
         $(SLO)$/lngsvcmgr.obj\
         $(SLO)$/misc.obj\
         $(SLO)$/spelldsp.obj\
@@ -134,7 +134,25 @@ SLOFILES=	\
         $(SLO)$/thesdsp.obj
 #		$(SLO)$/thesdta.obj
 
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
+REGOBJS = \
+        $(SLO)$/lngreg.obj
+
+SLOFILES = \
+        $(LNGOBJS) $(REGOBJ)
+
+TARGET1 = lng
+TARGET2 = lngreg
+
+
+LIB1TARGET		= $(SLB)$/$(TARGET1).lib
+LIB1ARCHIV		= $(LB)$/lib$(TARGET1).a
+LIB1OBJFILES	= $(LNGOBJS)
+
+LIB2TARGET		= $(SLB)$/$(TARGET2).lib
+LIB2OBJFILES    = $(REGOBJS)
+
+
+SHL1TARGET= $(TARGET1)$(UPD)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
         $(CPPULIB) 	 \
@@ -150,12 +168,21 @@ SHL1STDLIBS= \
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)
 
+        
+.IF "$(GUI)" == "UNX"
+SHL1STDLIBS += $(LNGLIB)
+.ENDIF
+#
 
 # build DLL
-SHL1LIBS=		$(SLB)$/$(TARGET).lib
-SHL1IMPLIB=		i$(TARGET)
-SHL1DEPN=		$(SHL1LIBS)
+.IF "$(GUI)" == "WNT"
+SHL1LIBS=		$(SLB)$/$(TARGET1).lib $(SLB)$/$(TARGET2).lib 
+.ELSE
+SHL1LIBS=		$(SLB)$/$(TARGET2).lib
+.ENDIF
+SHL1DEPN=		$(SLB)$/$(TARGET1).lib $(SLB)$/$(TARGET2).lib  
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
+SHL1VERSIONMAP= $(TARGET1).map
 
 # build DEF file
 DEF1NAME	=$(SHL1TARGET)
