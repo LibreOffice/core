@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collatorwrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-03-08 17:12:18 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ CollatorWrapper::~CollatorWrapper()
 sal_Int32
 CollatorWrapper::compareSubstring (
         const ::rtl::OUString& s1, sal_Int32 off1, sal_Int32 len1,
-        const ::rtl::OUString& s2, sal_Int32 off2, sal_Int32 len2)
+        const ::rtl::OUString& s2, sal_Int32 off2, sal_Int32 len2) const
 {
     try
     {
@@ -148,7 +148,7 @@ CollatorWrapper::compareSubstring (
 }
 
 sal_Int32
-CollatorWrapper::compareString (const ::rtl::OUString& s1, const ::rtl::OUString& s2)
+CollatorWrapper::compareString (const ::rtl::OUString& s1, const ::rtl::OUString& s2) const
 {
     try
     {
@@ -164,7 +164,7 @@ CollatorWrapper::compareString (const ::rtl::OUString& s1, const ::rtl::OUString
 }
 
 uno::Sequence< ::rtl::OUString >
-CollatorWrapper::listCollatorAlgorithms (const lang::Locale& rLocale)
+CollatorWrapper::listCollatorAlgorithms (const lang::Locale& rLocale) const
 {
     try
     {
@@ -180,7 +180,7 @@ CollatorWrapper::listCollatorAlgorithms (const lang::Locale& rLocale)
 }
 
 uno::Sequence< sal_Int32 >
-CollatorWrapper::listCollatorOptions (const ::rtl::OUString& rAlgorithm)
+CollatorWrapper::listCollatorOptions (const ::rtl::OUString& rAlgorithm) const
 {
     try
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collatorwrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-02 17:28:58 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,19 +93,19 @@ class CollatorWrapper
         sal_Int32
         compareSubstring (
                 const ::rtl::OUString& s1, sal_Int32 off1, sal_Int32 len1,
-                const ::rtl::OUString& s2, sal_Int32 off2, sal_Int32 len2);
+                const ::rtl::OUString& s2, sal_Int32 off2, sal_Int32 len2) const;
 
            sal_Int32
         compareString (
-                const ::rtl::OUString& s1, const ::rtl::OUString& s2);
+                const ::rtl::OUString& s1, const ::rtl::OUString& s2) const;
 
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
         listCollatorAlgorithms (
-                const ::com::sun::star::lang::Locale& rLocale);
+                const ::com::sun::star::lang::Locale& rLocale) const;
 
         ::com::sun::star::uno::Sequence< sal_Int32 >
         listCollatorOptions (
-                const ::rtl::OUString& rAlgorithm);
+                const ::rtl::OUString& rAlgorithm) const;
 
         sal_Int32
         loadDefaultCollator (
