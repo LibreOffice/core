@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:54:48 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 12:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,9 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
         m_pToolBar->SetFloatStyle( m_pToolBar->GetFloatStyle() & ~WB_CLOSEABLE );
     }
     m_pToolBar->SetSmartHelpId( SmartId( aHelpIdAsString ) );
+
+    m_aAsyncUpdateControllersTimer.SetTimeout( 50 );
+    m_aAsyncUpdateControllersTimer.SetTimeoutHdl( LINK( this, ToolBarManager, AsyncUpdateControllersHdl ) );
 }
 
 ToolBarManager::~ToolBarManager()
@@ -485,6 +488,8 @@ void ToolBarManager::UpdateImageOrientation()
 
 void ToolBarManager::UpdateControllers()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::UpdateControllers" );
+
     if ( !m_bUpdateControllers )
     {
         m_bUpdateControllers = sal_True;
@@ -509,7 +514,7 @@ throw ( RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
     if ( Action.Action == FrameAction_CONTEXT_CHANGED )
-        UpdateControllers();
+        m_aAsyncUpdateControllersTimer.Start();
 }
 
 void SAL_CALL ToolBarManager::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
@@ -937,6 +942,8 @@ OUString ToolBarManager::RetrieveLabelFromCommand( const OUString& aCmdURL )
 
 void ToolBarManager::CreateControllers( const ControllerParamsVector& rControllerParamsVector )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::CreateControllers" );
+
     Reference< XMultiComponentFactory > xToolbarControllerFactory( m_xToolbarControllerRegistration, UNO_QUERY );
     Reference< XComponentContext > xComponentContext;
     Reference< XPropertySet > xProps( m_xServiceManager, UNO_QUERY );
@@ -1113,7 +1120,10 @@ void ToolBarManager::AddImageOrientationListener()
 
 void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContainer )
 {
+    OString aTbxName = rtl::OUStringToOString( m_aResourceName, RTL_TEXTENCODING_ASCII_US );
+
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::FillToolbar" );
+    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) ::ToolBarManager::FillToolbar %s", aTbxName.getStr() );
 
     ResetableGuard aGuard( m_aLock );
 
@@ -1121,7 +1131,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         return;
 
     USHORT    nId( 1 );
-    sal_Int16 nSymbolSet( ToolBarManager::GetCurrentSymbolSize() );
     OUString  aHelpIdPrefix( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX ));
 
     Reference< XModuleManager > xModuleManager( Reference< XModuleManager >(
@@ -1280,6 +1289,44 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         }
     }
 
+    // Request images for all toolbar items. Must be done before CreateControllers as
+    // some controllers need access to the image.
+    RequestImages();
+
+    // Create controllers after we set the images. There are controllers which needs
+    // an image at the toolbar at creation time!
+    CreateControllers( aCtrlParamsVector );
+
+    // Notify controllers that they are now correctly initialized and can start listening
+    if ( m_pToolBar->IsReallyVisible() )
+        m_aAsyncUpdateControllersTimer.Start();
+//    UpdateControllers();
+
+    // Try to retrieve UIName from the container property set and set it as the title
+    // if it is not empty.
+    Reference< XPropertySet > xPropSet( rItemContainer, UNO_QUERY );
+    if ( xPropSet.is() )
+    {
+        Any a;
+        try
+        {
+            rtl::OUString aUIName;
+            xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))) >>= aUIName;
+            if ( aUIName.getLength() > 0 )
+                m_pToolBar->SetText( aUIName );
+        }
+        catch ( Exception& )
+        {
+        }
+    }
+}
+
+void ToolBarManager::RequestImages()
+{
+    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::RequestImages" );
+
+    sal_Int16 nSymbolSet( ToolBarManager::GetCurrentSymbolSize() );
+
     // Request images from image manager
     Sequence< rtl::OUString > aCmdURLSeq( m_aCommandMap.size() );
     Sequence< Reference< XGraphic > > aDocGraphicSeq;
@@ -1330,31 +1377,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         }
         ++pIter;
         ++i;
-    }
-
-    // Create controllers after we set the images. There are controllers which needs
-    // an image at the toolbar at creation time!
-    CreateControllers( aCtrlParamsVector );
-
-    // Notify controllers that they are now correctly initialized and can start listening
-    UpdateControllers();
-
-    // Try to retrieve UIName from the container property set and set it as the title
-    // if it is not empty.
-    Reference< XPropertySet > xPropSet( rItemContainer, UNO_QUERY );
-    if ( xPropSet.is() )
-    {
-        Any a;
-        try
-        {
-            rtl::OUString aUIName;
-            xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))) >>= aUIName;
-            if ( aUIName.getLength() > 0 )
-                m_pToolBar->SetText( aUIName );
-        }
-        catch ( Exception& )
-        {
-        }
     }
 }
 
@@ -1826,10 +1848,22 @@ IMPL_LINK( ToolBarManager, Deactivate, ToolBox*, pToolBar )
 
 IMPL_LINK( ToolBarManager, StateChanged, StateChangedType*, pStateChangedType )
 {
+    if ( m_bDisposed )
+        return 1;
+
     if ( *pStateChangedType == STATE_CHANGE_CONTROLBACKGROUND )
     {
         // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
+    }
+    else if ( *pStateChangedType == STATE_CHANGE_VISIBLE )
+    {
+        if ( m_pToolBar->IsReallyVisible() )
+            m_aAsyncUpdateControllersTimer.Start();
+    }
+    else if ( *pStateChangedType == STATE_CHANGE_INITSHOW )
+    {
+        m_aAsyncUpdateControllersTimer.Start();
     }
     return 1;
 }
@@ -1865,6 +1899,22 @@ IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
     }
 
     return 1;
+}
+
+IMPL_LINK( ToolBarManager, AsyncUpdateControllersHdl, Timer *, pTimer )
+{
+    // The guard must be in its own context as the we can get destroyed when our
+    // own xInterface reference get destroyed!
+    ResetableGuard aGuard( m_aLock );
+
+    if ( m_bDisposed )
+        return 1;
+
+    // Request to update our controllers
+    m_aAsyncUpdateControllersTimer.Stop();
+    UpdateControllers();
+
+    return 0;
 }
 
 }
