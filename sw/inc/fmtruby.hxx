@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtruby.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,6 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVer) const;
-    virtual SvStream&       Store(SvStream &, USHORT nIVer) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -105,7 +103,6 @@ public:
     virtual BOOL            PutValue( const com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 );
 
-    virtual USHORT          GetVersion( USHORT nFFVer ) const;
 
     const SwTxtRuby* GetTxtRuby() const         { return pTxtAttr; }
     SwTxtRuby* GetTxtRuby()                     { return pTxtAttr; }
