@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clipboardctl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-20 13:06:57 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ class SvxClipboardFmtItem;
 
 class SvxClipBoardControl : public SfxToolBoxControl
 {
-    SfxStatusForwarder      aForwarder;
+//    SfxStatusForwarder      aForwarder;
     SfxPoolItem*            pClipboardFmtItem;
     PopupMenu*              pPopup;
     USHORT                  nItemId;
@@ -89,7 +89,7 @@ class SvxClipBoardControl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxClipBoardControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+    SvxClipBoardControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxClipBoardControl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
