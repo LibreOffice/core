@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:44:46 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,7 +636,10 @@ void SvxShape::ObtainSettingsFromPropertySet(SvxItemPropertySet& rPropSet) throw
         SfxItemSet aSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END, 0);
         Reference< beans::XPropertySet > xShape( (OWeakObject*)this, UNO_QUERY );
         aPropSet.ObtainSettingsFromPropertySet(rPropSet, aSet, xShape);
-        pObj->SetItemSetAndBroadcast(aSet);
+
+        //pObj->SetItemSetAndBroadcast(aSet);
+        pObj->SetMergedItemSetAndBroadcast(aSet);
+
         pObj->ApplyNotPersistAttr( aSet );
     }
 }
@@ -662,7 +665,7 @@ uno::Any SvxShape::GetBitmap( sal_Bool bMetaFile /* = sal_False */ ) const throw
     SdrObject *pTempObj = pObj;
     pView->MarkObj(pTempObj,pPageView);
 
-    Rectangle aRect(pTempObj->GetBoundRect());
+    Rectangle aRect(pTempObj->GetCurrentBoundRect());
     aRect.Justify();
     Size aSize(aRect.GetSize());
 
@@ -1002,7 +1005,7 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
     if (!pSdrHint || ( /* (pSdrHint->GetKind() != HINT_OBJREMOVED)  && */
         (pSdrHint->GetKind() != HINT_MODELCLEARED) &&
-        (pSdrHint->GetKind() != HINT_OBJLISTCLEAR) &&
+        // #110094#-9 (pSdrHint->GetKind() != HINT_OBJLISTCLEAR) &&
         (pSdrHint->GetKind() != HINT_OBJCHG)))
         return;
 
@@ -1036,21 +1039,21 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
             pModel = NULL;
             break;
         }
-        case HINT_OBJLISTCLEAR:
-        {
-            SdrObjList* pObjList = pObj ? pObj->GetObjList() : NULL;
-            while( pObjList )
-            {
-                if( pSdrHint->GetObjList() == pObjList )
-                {
-                    bClearMe = sal_True;
-                    break;
-                }
-
-                pObjList = pObjList->GetUpList();
-            }
-            break;
-        }
+        // #110094#-9
+        //case HINT_OBJLISTCLEAR:
+        //{
+        //  SdrObjList* pObjList = pObj ? pObj->GetObjList() : NULL;
+        //  while( pObjList )
+        //  {
+        //      if( pSdrHint->GetObjList() == pObjList )
+        //      {
+        //          bClearMe = sal_True;
+        //          break;
+        //      }
+        //      pObjList = pObjList->GetUpList();
+        //  }
+        //  break;
+        //}
     };
 
     if( bClearMe )
@@ -1364,7 +1367,9 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
 
     if( SetFillAttribute( nWID, rName, aSet, pModel ) )
     {
-        pObj->SetItemSetAndBroadcast(aSet);
+        //pObj->SetItemSetAndBroadcast(aSet);
+        pObj->SetMergedItemSetAndBroadcast(aSet);
+
         return sal_True;
     }
     else
@@ -1841,8 +1846,8 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                     aPoint += pObj->GetAnchorPos();
 
                 pMeasureObj->NbcSetPoint( aPoint, pMap->nWID == OWN_ATTR_MEASURE_START_POS ? 0 : 1 );
-                pMeasureObj->SendRepaintBroadcast();
                 pMeasureObj->SetChanged();
+                pMeasureObj->BroadcastObjectChange();
                 return;
             }
             break;
@@ -1859,8 +1864,8 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
                     eMode = (drawing::BitmapMode)nMode;
                 }
-                pObj->SetItem( XFillBmpStretchItem( eMode == drawing::BitmapMode_STRETCH ) );
-                pObj->SetItem( XFillBmpTileItem( eMode == drawing::BitmapMode_REPEAT ) );
+                pObj->SetMergedItem( XFillBmpStretchItem( eMode == drawing::BitmapMode_STRETCH ) );
+                pObj->SetMergedItem( XFillBmpTileItem( eMode == drawing::BitmapMode_REPEAT ) );
                 return;
             }
             while(0);
@@ -1982,7 +1987,12 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
                 SdrPageObj* pPageObj = PTR_CAST(SdrPageObj,pObj);
                 if( pPageObj )
-                    pPageObj->SetPageNum( (sal_uInt16)nPageNum );
+                {
+                    SdrModel* pModel = pPageObj->GetModel();
+                    SdrPage* pNewPage = ((pModel) ? pModel->GetPage((sal_uInt16)nPageNum) : 0L);
+                    pPageObj->SetReferencedPage(pNewPage);
+                }
+
                 return;
             }
             break;
@@ -2061,7 +2071,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             {
                 if( mpImpl->mpItemSet == NULL )
                 {
-                    pSet = mpImpl->mpItemSet = pObj->GetItemSet().Clone();
+                    pSet = mpImpl->mpItemSet = pObj->GetMergedItemSet().Clone();
                 }
                 else
                 {
@@ -2074,7 +2084,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             }
 
             if( pSet->GetItemState( pMap->nWID ) != SFX_ITEM_SET )
-                pSet->Put(pObj->GetItem(pMap->nWID));
+                pSet->Put(pObj->GetMergedItem(pMap->nWID));
 
             if( !SvxUnoTextRangeBase::SetPropertyValueHelper( *pSet, pMap, rVal, *pSet ))
             {
@@ -2113,7 +2123,9 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                 // will be set in setPropertyValues later
                 if( !mbIsMultiPropertyCall )
                 {
-                    pObj->SetItemSetAndBroadcast( *pSet );
+                    //pObj->SetItemSetAndBroadcast( *pSet );
+                    pObj->SetMergedItemSetAndBroadcast( *pSet );
+
                     delete pSet;
                 }
             }
@@ -2298,7 +2310,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
             }
             case OWN_ATTR_BOUNDRECT:
             {
-                Rectangle aRect( pObj->GetBoundRect() );
+                Rectangle aRect( pObj->GetCurrentBoundRect() );
                 Point aTopLeft( aRect.TopLeft() );
                 Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
                 ForceMetricTo100th_mm(aTopLeft);
@@ -2486,8 +2498,10 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
             }
             case OWN_ATTR_FILLBMP_MODE:
             {
-                XFillBmpStretchItem* pStretchItem = (XFillBmpStretchItem*)&pObj->GetItem(XATTR_FILLBMP_STRETCH);
-                XFillBmpTileItem* pTileItem = (XFillBmpTileItem*)&pObj->GetItem(XATTR_FILLBMP_TILE);
+                const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
+
+                XFillBmpStretchItem* pStretchItem = (XFillBmpStretchItem*)&rObjItemSet.Get(XATTR_FILLBMP_STRETCH);
+                XFillBmpTileItem* pTileItem = (XFillBmpTileItem*)&rObjItemSet.Get(XATTR_FILLBMP_TILE);
 
                 if( pTileItem && pTileItem->GetValue() )
                 {
@@ -2542,7 +2556,8 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 SdrPageObj* pPageObj = PTR_CAST(SdrPageObj,pObj);
                 if(pPageObj)
                 {
-                    sal_Int32 nPageNumber = pPageObj->GetPageNum();
+                    SdrPage* pPage = pPageObj->GetReferencedPage();
+                    sal_Int32 nPageNumber = (pPage) ? pPage->GetPageNum() : 0L;
                     nPageNumber++;
                     nPageNumber >>= 1;
                     aAny <<= nPageNumber;
@@ -2555,7 +2570,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
 
                 SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
-                aSet.Put(pObj->GetItem(pMap->nWID));
+                aSet.Put(pObj->GetMergedItem(pMap->nWID));
 
                 if(SvxUnoTextRangeBase::GetPropertyValueHelper(  aSet, pMap, aAny ))
                     return aAny;
@@ -2627,7 +2642,9 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
 
         if( mpImpl->mpItemSet )
         {
-            pObj->SetItemSetAndBroadcast( *mpImpl->mpItemSet );
+            //pObj->SetItemSetAndBroadcast( *mpImpl->mpItemSet );
+            pObj->SetMergedItemSetAndBroadcast( *mpImpl->mpItemSet );
+
             delete mpImpl->mpItemSet;
             mpImpl->mpItemSet = NULL;
         }
@@ -2814,7 +2831,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
 
     if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
     {
-        const SfxItemSet& rSet = pObj->GetItemSet();
+        const SfxItemSet& rSet = pObj->GetMergedItemSet();
 
         if( rSet.GetItemState( XATTR_FILLBMP_STRETCH, false ) == SFX_ITEM_SET ||
             rSet.GetItemState( XATTR_FILLBMP_TILE, false ) == SFX_ITEM_SET )
@@ -2833,7 +2850,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
     }
     else
     {
-        const SfxItemSet& rSet = pObj->GetItemSet();
+        const SfxItemSet& rSet = pObj->GetMergedItemSet();
 
         beans::PropertyState eState;
 
@@ -2930,8 +2947,8 @@ void SAL_CALL SvxShape::_setPropertyToDefault( const OUString& PropertyName )
 
     if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
     {
-        pObj->ClearItem( XATTR_FILLBMP_STRETCH );
-        pObj->ClearItem( XATTR_FILLBMP_TILE );
+        pObj->ClearMergedItem( XATTR_FILLBMP_STRETCH );
+        pObj->ClearMergedItem( XATTR_FILLBMP_TILE );
     }
     else if((pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END ) ||
        ( pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST ))
@@ -2940,7 +2957,7 @@ void SAL_CALL SvxShape::_setPropertyToDefault( const OUString& PropertyName )
     }
     else
     {
-        pObj->ClearItem( pMap->nWID );
+        pObj->ClearMergedItem( pMap->nWID );
     }
 
     pModel->SetChanged();
