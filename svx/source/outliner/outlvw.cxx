@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-24 13:52:13 $
+ *  last change: $Author: mt $ $Date: 2001-10-31 15:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ BOOL OutlinerView::PostKeyEvent( const KeyEvent& rKEvt )
     USHORT nCode = aKeyCode.GetCode();
     BOOL bReadOnly = IsReadOnly();
 
-    if( bSelection && EditEngine::DoesKeyChangeText( rKEvt ) )
+    if( bSelection && ( nCode != KEY_TAB ) && EditEngine::DoesKeyChangeText( rKEvt ) )
     {
         if ( ImpCalcSelectedPages( FALSE ) && !pOwner->ImpCanDeleteSelectedPages( this ) )
             return TRUE;
@@ -778,6 +778,11 @@ void OutlinerView::Indent( short nDiff )
             pOwner->nDepthChangedHdlPrevDepth = (USHORT)nOldDepth;
             pOwner->pHdlParagraph = pPara;
             pOwner->DepthChangedHdl();
+        }
+        else
+        {
+            // Needs at least a repaint...
+            pOwner->pEditEngine->QuickMarkInvalid( ESelection( nPara, 0, nPara, 0 ) );
         }
     }
 
