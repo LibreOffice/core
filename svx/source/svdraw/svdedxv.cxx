@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: dl $ $Date: 2001-02-07 09:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1331,7 +1331,7 @@ BOOL SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) c
         rTargetSet.Put( pTextEditObj->GetItemSet() );
 
         if( pTextEditObj->GetOutlinerParaObject() )
-            rTargetSet.Put( SvxScriptTypeItem( /* pTextEditObj->GetOutlinerParaObject()->GetScriptType() */ SCRIPTTYPE_LATIN ) );
+            rTargetSet.Put( SvxScriptTypeItem( pTextEditObj->GetOutlinerParaObject()->GetScriptType() ) );
 
         if(pTextEditOutlinerView)
         {
