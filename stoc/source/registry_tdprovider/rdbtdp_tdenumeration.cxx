@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbtdp_tdenumeration.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:15:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#include "com/sun/star/reflection/XPublished.hpp"
+#include "cppuhelper/implbase1.hxx"
 #include "registry/reader.hxx"
 #include "registry/version.h"
 
@@ -84,6 +86,32 @@
 #endif
 
 using namespace com::sun::star;
+
+namespace {
+
+class IndividualConstantTypeDescriptionImpl:
+    public cppu::ImplInheritanceHelper1<
+        stoc_rdbtdp::ConstantTypeDescriptionImpl,
+        com::sun::star::reflection::XPublished >
+{
+public:
+    IndividualConstantTypeDescriptionImpl(
+        rtl::OUString const & name, com::sun::star::uno::Any const & value,
+        bool published):
+        cppu::ImplInheritanceHelper1<
+            stoc_rdbtdp::ConstantTypeDescriptionImpl,
+            com::sun::star::reflection::XPublished >(name, value),
+        m_published(published) {}
+
+    virtual sal_Bool SAL_CALL isPublished()
+        throw (::com::sun::star::uno::RuntimeException)
+    { return m_published; }
+
+private:
+    bool m_published;
+};
+
+}
 
 namespace stoc_rdbtdp
 {
@@ -533,8 +561,11 @@ bool TypeDescriptionEnumerationImpl::queryMore()
                                     aReader.getFieldValue( nFields ) ) );
 
                             m_aTypeDescs.push_back(
-                                new ConstantTypeDescriptionImpl(
-                                        aName.makeStringAndClear(), aValue ) );
+                                new IndividualConstantTypeDescriptionImpl(
+                                    aName.makeStringAndClear(), aValue,
+                                    ( ( aReader.getFieldFlags( nFields )
+                                        & RT_ACCESS_PUBLISHED )
+                                      != 0 ) ) );
                         }
                     }
                 }
