@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:53:41 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,28 +58,16 @@
  *
  *
  ************************************************************************/
-#ifndef     _OSL_PROCESS_H_
-#include    <osl/process.h>
-#endif
-#ifndef     _RTL_OSTRINGBUFFER_HXX_
-#include    <rtl/strbuf.hxx>
-#endif
-#ifndef     _RTL_USTRING_HXX_
-#include    <rtl/ustring.hxx>
-#endif
-
-#ifndef     _OSL_THREAD_H_
-#include    <osl/thread.h>
-#endif
-#ifndef     _OSL_FILE_HXX_
-#include    <osl/file.hxx>
-#endif
+#include "osl/process.h"
+#include "rtl/strbuf.hxx"
+#include "rtl/ustring.hxx"
+#include "osl/thread.h"
+#include "osl/file.hxx"
 
 #include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #if defined(SAL_W32) || defined(SAL_OS2)
 #include <io.h>
+
 #include <direct.h>
 #include <errno.h>
 #endif
@@ -90,9 +78,7 @@
 #include <unistd.h>
 #endif
 
-#ifndef _CODEMAKER_GLOBAL_HXX_
-#include    <codemaker/global.hxx>
-#endif
+#include "codemaker/global.hxx"
 
 #ifdef SAL_UNX
 #define SEPARATOR '/'
@@ -103,75 +89,18 @@
 using namespace ::rtl;
 using namespace ::osl;
 
-OString makeTempName(sal_Char* prefix)
+
+OString getTempDir(const OString& sFileName)
 {
-    static OUString uTMP( RTL_CONSTASCII_USTRINGPARAM("TMP") );
-    static OUString uTEMP( RTL_CONSTASCII_USTRINGPARAM("TEMP") );
-    OUString        uPrefix( RTL_CONSTASCII_USTRINGPARAM("cmk_") );
-    OUString        uPattern;
-
-    sal_Char*   pPrefix = "cmk_";
-    sal_Char    tmpPattern[512] = "";
-    sal_Char    *pTmpName = NULL;
-
-    if (prefix)
-        pPrefix = prefix;
-
-    if ( osl_getEnvironment(uTMP.pData, &uPattern.pData) != osl_Process_E_None )
-    {
-        if ( osl_getEnvironment(uTEMP.pData, &uPattern.pData) != osl_Process_E_None )
-        {
-#if defined(SAL_W32) || defined(SAL_OS2)
-            OSL_ASSERT( sizeof(tmpPattern) > RTL_CONSTASCII_LENGTH( "." ) );
-            strncpy(tmpPattern, ".", sizeof(tmpPattern)-1);
-#else
-            OSL_ASSERT( sizeof(tmpPattern) > RTL_CONSTASCII_LENGTH( "/tmp" ) );
-            strncpy(tmpPattern, "/tmp", sizeof(tmpPattern)-1);
-#endif
-        }
-    }
-
-    if (uPattern.getLength())
-    {
-        OString aOStr( OUStringToOString(uPattern, RTL_TEXTENCODING_UTF8) );
-        OSL_ASSERT( sizeof(tmpPattern) > aOStr.getLength() );
-        strncpy(tmpPattern, aOStr.getStr(), sizeof(tmpPattern)-1);
-    }
-
-#ifdef SAL_W32
-    OSL_ASSERT( sizeof(tmpPattern) > ( strlen(tmpPattern)
-                                       + RTL_CONSTASCII_LENGTH("\\")
-                                       + strlen(pPrefix)
-                                       + RTL_CONSTASCII_LENGTH("XXXXXX") ) );
-    strncat(tmpPattern, "\\", sizeof(tmpPattern)-1-strlen(tmpPattern));
-    strncat(tmpPattern, pPrefix, sizeof(tmpPattern)-1-strlen(tmpPattern));
-    strncat(tmpPattern, "XXXXXX", sizeof(tmpPattern)-1-strlen(tmpPattern));
-    pTmpName = mktemp(tmpPattern);
-#endif
-
-#ifdef SAL_OS2
-    char* tmpname = tempnam(NULL, prefix);
-    OSL_ASSERT( sizeof(tmpPattern) > strlen(tmpname) );
-    strncpy(tmpPattern, tmpname, sizeof(tmpPattern)-1);
-    pTmpName = tmpPattern;
-#endif
-
+    sal_Int32 index = 0;
 #ifdef SAL_UNX
-    OSL_ASSERT( sizeof(tmpPattern) > ( strlen(tmpPattern)
-                                       + RTL_CONSTASCII_LENGTH("/")
-                                       + strlen(pPrefix)
-                                       + RTL_CONSTASCII_LENGTH("XXXXXX") ) );
-    strncat(tmpPattern, "/", sizeof(tmpPattern)-1-strlen(tmpPattern));
-    strncat(tmpPattern, pPrefix, sizeof(tmpPattern)-1-strlen(tmpPattern));
-    strncat(tmpPattern, "XXXXXX", sizeof(tmpPattern)-1-strlen(tmpPattern));
-#if defined(FREEBSD) || defined(MACOSX)
-    pTmpName = mkstemp(tmpPattern);
+    if ((index=sFileName.indexOf('/')) > 0)
+        return sFileName.copy(0, index);
 #else
-    pTmpName = mktemp(tmpPattern);
+    if ((index=sFileName.indexOf('\\')) > 0)
+        return sFileName.copy(0, index);
 #endif
-#endif
-
-    return OString(pTmpName);
+    return ".";
 }
 
 OString createFileNameFromType( const OString& destination,
@@ -256,14 +185,10 @@ OString createFileNameFromType( const OString& destination,
 #ifdef SAL_UNX
         if (mkdir((char*)nameBuffer.getStr(), 0777) == -1)
 #else
-           if (mkdir((char*)nameBuffer.getStr()) == -1)
+        if (mkdir((char*)nameBuffer.getStr()) == -1)
 #endif
         {
-// #if __SUNPRO_CC >= 0x500
-//          if( * ::___errno() == ENOENT )
-// #else
             if ( errno == ENOENT )
-// #endif
                 return OString();
         }
 
@@ -290,11 +215,10 @@ sal_Bool checkFileContent(const OString& targetFileName, const OString& tmpFileN
 {
     FILE  *target = fopen(targetFileName.getStr(), "r");
     FILE  *tmp = fopen(tmpFileName.getStr(), "r");
-    sal_Bool ret = sal_False;
+    sal_Bool    bFindChanges = sal_False;
 
     if (target != NULL && tmp != NULL)
     {
-        sal_Bool    bFindChanges = sal_False;
         sal_Char    buffer1[1024+1];
         sal_Char    buffer2[1024+1];
         sal_Int32   n1 = 0;
@@ -306,33 +230,49 @@ sal_Bool checkFileContent(const OString& targetFileName, const OString& tmpFileN
             n2 = fread(buffer2, sizeof(sal_Char), 1024, tmp);
 
             if ( n1 != n2 )
-            {
                 bFindChanges = sal_True;
-            }
             else
-            {
                 if ( rtl_compareMemory(buffer1, buffer2, n2) != 0 )
                     bFindChanges =  sal_True;
-            }
         }
 
         fclose(target);
         fclose(tmp);
-
-        if ( bFindChanges )
-        {
-            if ( !unlink(targetFileName.getStr()) )
-                if ( !rename(tmpFileName.getStr(), targetFileName.getStr()) )
-                    ret = sal_True;
-        }
-        else
-        {
-            if ( !unlink(tmpFileName.getStr()) )
-                ret = sal_True;
-        }
     }
 
-    return ret;
+    return bFindChanges;
+}
+
+sal_Bool makeValidTypeFile(const OString& targetFileName, const OString& tmpFileName,
+                           sal_Bool bFileCheck)
+{
+    if (bFileCheck) {
+        if (checkFileContent(targetFileName, tmpFileName)) {
+            if ( !unlink(targetFileName.getStr()) )
+                if ( !rename(tmpFileName.getStr(), targetFileName.getStr()) )
+                    return sal_True;
+        } else
+            return removeTypeFile(tmpFileName);
+    } else {
+        if (fileExists(targetFileName))
+            if (!removeTypeFile(targetFileName))
+                return sal_False;
+
+        if ( rename(tmpFileName.getStr(), targetFileName.getStr()) ) {
+            if (errno == EEXIST)
+                return sal_True;
+        } else
+            return sal_True;
+    }
+    return sal_False;
+}
+
+sal_Bool removeTypeFile(const OString& fileName)
+{
+    if ( !unlink(fileName.getStr()) )
+        return sal_True;
+
+    return sal_False;
 }
 
 const OString inGlobalSet(const OUString & rValue)
@@ -379,42 +319,66 @@ OUString convertToFileUrl(const OString& fileName)
 // FileStream
 //*************************************************************************
 FileStream::FileStream()
+    : m_file(NULL)
 {
 }
 
 FileStream::FileStream(const OString& name, FileAccessMode mode)
-    : m_pFile(NULL)
+    : m_file(NULL)
 {
     if ( name.getLength() > 0 )
     {
-        m_name = name;
-        m_pFile = fopen(m_name, checkAccessMode(mode));
+        oslFileError ret =  osl_File_E_None;
+        if ((ret = osl_openFile(convertToFileUrl(name).pData, &m_file, checkAccessMode(mode))) == osl_File_E_None)
+            m_name = name;
+        else
+            m_file = NULL;
     }
 }
 
 FileStream::~FileStream()
 {
     if ( isValid() )
-    {
-        fflush(m_pFile);
-        fclose(m_pFile);
-    }
+        osl_closeFile(m_file);
 }
 
 sal_Bool FileStream::isValid()
 {
-    if ( m_pFile )
+    if ( m_file )
         return sal_True;
 
     return sal_False;
+}
+
+void FileStream::createTempFile(const OString& sPath)
+{
+    OString sTmp(".");
+    OUString sTmpPath;
+    OUString sTmpName;
+
+    if (sPath.getLength() > 0)
+        sTmp = sPath;
+
+    sTmpPath = convertToFileUrl(sTmp);
+
+    oslFileError ret =  osl_File_E_None;
+    if ((ret = osl_createTempFile(sTmpPath.pData, &m_file, &sTmpName.pData)) == osl_File_E_None) {
+        OUString sSysTmpName;
+        FileBase::getSystemPathFromFileURL(sTmpName, sSysTmpName);
+        m_name = OUStringToOString(sSysTmpName, osl_getThreadTextEncoding());
+    } else
+        m_file = NULL;
 }
 
 void FileStream::open(const OString& name, FileAccessMode mode)
 {
     if ( name.getLength() > 0 )
     {
-        m_name = name;
-        m_pFile = fopen(m_name, checkAccessMode(mode));
+        oslFileError ret =  osl_File_E_None;
+        if ((ret = osl_openFile(convertToFileUrl(name).pData, &m_file, checkAccessMode(mode))) == osl_File_E_None)
+            m_name = name;
+        else
+            m_file = NULL;
     }
 }
 
@@ -422,45 +386,57 @@ void FileStream::close()
 {
     if ( isValid() )
     {
-        fflush(m_pFile);
-        fclose(m_pFile);
-        m_pFile = NULL;
+        osl_closeFile(m_file);
+        m_file = NULL;
         m_name = OString();
     }
 }
 
-sal_Int32 FileStream::getSize()
-{
-    sal_Int32 pos = 0;
-    sal_Int32 size = 0;
-    if ( isValid() )
-    {
-        fflush(m_pFile);
-        pos = ftell(m_pFile);
-        if (!fseek(m_pFile, 0, SEEK_END))
-            size = ftell(m_pFile);
-        fseek(m_pFile, pos, SEEK_SET);
-    }
-    return size;
-}
-
-const sal_Char* FileStream::checkAccessMode(FileAccessMode mode)
+sal_uInt32 FileStream::checkAccessMode(FileAccessMode mode)
 {
     switch( mode )
     {
     case FAM_READ:
-        return "r";
+        return osl_File_OpenFlag_Read;
     case FAM_WRITE:
-        return "w";
-    case FAM_APPEND:
-        return "a";
+        return osl_File_OpenFlag_Write;
     case FAM_READWRITE_EXIST:
-        return "r+";
+        return osl_File_OpenFlag_Read | osl_File_OpenFlag_Write;
     case FAM_READWRITE:
-        return "w+";
-    case FAM_READAPPEND:
-        return "a+";
+        return osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create;
     }
-    return "w+";
+    return osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create;
 }
 
+FileStream &operator<<(FileStream& o, sal_uInt32 i) {
+    sal_uInt64 writtenBytes;
+    OString s = OString::valueOf((sal_Int32)i);
+    osl_writeFile(o.m_file, s.getStr(), s.getLength() * sizeof(sal_Char), &writtenBytes);
+    return o;
+}
+FileStream &operator<<(FileStream& o, sal_Char* s) {
+    sal_uInt64 writtenBytes;
+    oslFileError ret = osl_writeFile(o.m_file, s, strlen(s) * sizeof(sal_Char), &writtenBytes);
+    return o;
+}
+FileStream &operator<<(FileStream& o, ::rtl::OString* s) {
+    sal_uInt64 writtenBytes;
+    oslFileError ret = osl_writeFile(o.m_file, s->getStr(), s->getLength() * sizeof(sal_Char), &writtenBytes);
+    return o;
+}
+FileStream &operator<<(FileStream& o, const ::rtl::OString& s) {
+    sal_uInt64 writtenBytes;
+    oslFileError ret = osl_writeFile(o.m_file, s.getStr(), s.getLength() * sizeof(sal_Char), &writtenBytes);
+    return o;
+
+}
+FileStream &operator<<(FileStream& o, ::rtl::OStringBuffer* s) {
+    sal_uInt64 writtenBytes;
+    oslFileError ret = osl_writeFile(o.m_file, s->getStr(), s->getLength() * sizeof(sal_Char), &writtenBytes);
+    return o;
+}
+FileStream &operator<<(FileStream& o, const ::rtl::OStringBuffer& s) {
+    sal_uInt64 writtenBytes;
+    oslFileError ret = osl_writeFile(o.m_file, s.getStr(), ((::rtl::OStringBuffer)s).getLength() * sizeof(sal_Char), &writtenBytes);
+    return o;
+}
