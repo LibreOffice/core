@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:13:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,14 +135,14 @@ public:
 
 struct ScPrintState                         //  Variablen aus ScPrintFunc retten
 {
-    USHORT  nPrintTab;
-    USHORT  nStartCol;
-    USHORT  nStartRow;
-    USHORT  nEndCol;
-    USHORT  nEndRow;
+    SCTAB   nPrintTab;
+    SCCOL   nStartCol;
+    SCROW   nStartRow;
+    SCCOL   nEndCol;
+    SCROW   nEndRow;
     USHORT  nZoom;
-    USHORT  nPagesX;
-    USHORT  nPagesY;
+    size_t  nPagesX;
+    size_t  nPagesY;
     long    nTabPages;
     long    nTotalPages;
     long    nPageStart;
@@ -152,30 +152,30 @@ struct ScPrintState                         //  Variablen aus ScPrintFunc retten
 class ScPageRowEntry
 {
 private:
-    USHORT  nStartRow;
-    USHORT  nEndRow;
-    USHORT  nPagesX;
+    SCROW   nStartRow;
+    SCROW   nEndRow;
+    size_t  nPagesX;
     BOOL*   pHidden;
     //!     Anzahl wirklich sichtbarer cachen???
 
 public:
-            ScPageRowEntry()    { nStartRow = nEndRow = nPagesX = 0; pHidden = NULL; }
+            ScPageRowEntry()    { nStartRow = nEndRow = 0; nPagesX = 0; pHidden = NULL; }
             ~ScPageRowEntry()   { delete[] pHidden; }
 
             ScPageRowEntry(const ScPageRowEntry& r);
     const ScPageRowEntry& operator=(const ScPageRowEntry& r);
 
-    USHORT  GetStartRow() const     { return nStartRow; }
-    USHORT  GetEndRow() const       { return nEndRow; }
-    USHORT  GetPagesX() const       { return nPagesX; }
-    void    SetStartRow(USHORT n)   { nStartRow = n; }
-    void    SetEndRow(USHORT n)     { nEndRow = n; }
+    SCROW   GetStartRow() const     { return nStartRow; }
+    SCROW   GetEndRow() const       { return nEndRow; }
+    size_t  GetPagesX() const       { return nPagesX; }
+    void    SetStartRow(SCROW n)    { nStartRow = n; }
+    void    SetEndRow(SCROW n)      { nEndRow = n; }
 
-    void    SetPagesX(USHORT nNew);
-    void    SetHidden(USHORT nX);
-    BOOL    IsHidden(USHORT nX) const;
+    void    SetPagesX(size_t nNew);
+    void    SetHidden(size_t nX);
+    BOOL    IsHidden(size_t nX) const;
 
-    USHORT  CountVisible() const;
+    size_t  CountVisible() const;
 };
 
 class ScPrintFunc
@@ -196,7 +196,7 @@ private:
     BOOL                bUseStyleColor;
     BOOL                bIsRender;
 
-    USHORT              nPrintTab;
+    SCTAB               nPrintTab;
     long                nPageStart;         //  Offset fuer erste Seite
     long                nDocPages;          //  Seiten im Dokument
 
@@ -247,22 +247,22 @@ private:
     double              nScaleX;
     double              nScaleY;
 
-    USHORT              nRepeatStartCol;
-    USHORT              nRepeatEndCol;
-    USHORT              nRepeatStartRow;
-    USHORT              nRepeatEndRow;
+    SCCOL               nRepeatStartCol;
+    SCCOL               nRepeatEndCol;
+    SCROW               nRepeatStartRow;
+    SCROW               nRepeatEndRow;
 
-    USHORT              nStartCol;
-    USHORT              nStartRow;
-    USHORT              nEndCol;
-    USHORT              nEndRow;
+    SCCOL               nStartCol;
+    SCROW               nStartRow;
+    SCCOL               nEndCol;
+    SCROW               nEndRow;
 
-    USHORT*             pPageEndX;          // Seitenaufteilung
-    USHORT*             pPageEndY;
+    SCCOL*              pPageEndX;          // Seitenaufteilung
+    SCROW*              pPageEndY;
     ScPageRowEntry*     pPageRows;
-    USHORT              nPagesX;
-    USHORT              nPagesY;
-    USHORT              nTotalY;
+    size_t              nPagesX;
+    size_t              nPagesY;
+    size_t              nTotalY;
 
     ScHeaderEditEngine* pEditEngine;
     SfxItemSet*         pEditDefaults;
@@ -274,7 +274,7 @@ private:
     ScPageBreakData*    pPageData;          // zum Eintragen der Umbrueche etc.
 
 public:
-                    ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, USHORT nTab,
+                    ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTab,
                                  long nPage = 0, long nDocP = 0,
                                  const ScRange* pArea = NULL,
                                  const ScPrintOptions* pOptions = NULL,
@@ -282,7 +282,7 @@ public:
 
                     // ctors for device other than printer - for preview and pdf:
 
-                    ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, USHORT nTab,
+                    ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
                                  long nPage = 0, long nDocP = 0,
                                  const ScRange* pArea = NULL,
                                  const ScPrintOptions* pOptions = NULL );
@@ -327,7 +327,7 @@ public:
     long            GetTotalPages() const { return nTotalPages; }
     USHORT          GetZoom() const { return nZoom; }
 
-    void            ResetBreaks( USHORT nTab );
+    void            ResetBreaks( SCTAB nTab );
 
     void            GetPrintState( ScPrintState& rState );
     BOOL            GetLastSourceRange( ScRange& rRange ) const;
@@ -356,19 +356,19 @@ private:
     void            MakeTableString();                  // setzt aTableStr
 
     void            PrintPage( long nPageNo,
-                                    USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
+                                    SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     BOOL bDoPrint, ScPreviewLocationData* pLocationData );
-    void            PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
+    void            PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     long nScrX, long nScrY,
                                     BOOL bShLeft, BOOL bShTop, BOOL bShRight, BOOL bShBottom );
-    void            LocateArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
+    void            LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     long nScrX, long nScrY, BOOL bRepCol, BOOL bRepRow,
                                     ScPreviewLocationData& rLocationData );
-    void            PrintColHdr( USHORT nX1, USHORT nX2, long nScrX, long nScrY );
-    void            PrintRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY );
-    void            LocateColHdr( USHORT nX1, USHORT nX2, long nScrX, long nScrY,
+    void            PrintColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY );
+    void            PrintRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY );
+    void            LocateColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY,
                                 BOOL bRepCol, ScPreviewLocationData& rLocationData );
-    void            LocateRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY,
+    void            LocateRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY,
                                 BOOL bRepRow, ScPreviewLocationData& rLocationData );
     void            PrintHF( long nPageNo, BOOL bHeader, long nStartY,
                                     BOOL bDoPrint, ScPreviewLocationData* pLocationData );
