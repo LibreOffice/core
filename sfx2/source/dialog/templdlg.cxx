@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gt $ $Date: 2001-11-09 16:28:00 $
+ *  last change: $Author: gt $ $Date: 2001-11-13 11:25:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,9 +423,17 @@ SfxTemplateDialogWrapper::SfxTemplateDialogWrapper(Window *pParent,
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
     Point aEmptyPoint;
 
-    Rectangle aRect( pWindow->GetDesktopRectPixel() );
-    Size aSize = aRect.GetSize();
-    Point aPoint = aRect.TopLeft();
+    // find topmost parent
+    Window* pTopParent = pParent;
+    Window* pNewParent = pParent->GetParent();
+    while( pNewParent )
+    {
+        pTopParent = pNewParent;
+        pNewParent = pTopParent->GetParent();
+    }
+
+    Size aSize = pTopParent->GetSizePixel();
+    Point aPoint = pTopParent->GetPosPixel();
     Size aWinSize = pWin->GetSizePixel();
     aPoint.X() += aSize.Width() - aWinSize.Width() - 20;
     aPoint.Y() += aSize.Height() / 2 - aWinSize.Height() / 2;
