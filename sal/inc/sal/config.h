@@ -2,9 +2,8 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.9 $
- *
- *  last change: $Author: mh $ $Date: 2001-08-15 03:35:15 $
+ *  $Revision: 1.10 $
+ *  last change: $Author: mh $ $Date: 2001-12-19 14:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +128,11 @@ extern "C" {
 #define SAL_UNX
 #define SAL_DLLEXTENSION ".dylib.framework"
 #define SAL_DLLPREFIX "lib"
+#define SAL_PRGEXTENSION ".bin"
+#define SAL_PATHSEPARATOR ':'
+#define SAL_PATHDELIMITER '/'
+#define SAL_CONFIGFILE( name ) name "rc"
+#define SAL_SYSCONFIGFILE( name ) "." name "rc"
 #endif
 
 #ifdef HPUX
