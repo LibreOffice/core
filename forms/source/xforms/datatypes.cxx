@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datatypes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:35:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-24 15:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,6 @@ namespace xforms
     //====================================================================
     //= OXSDDataType
     //====================================================================
-    DBG_NAME( OXSDDataType )
     //--------------------------------------------------------------------
     OXSDDataType::OXSDDataType( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass )
         :OXSDDataType_PBase( m_aBHelper )
@@ -144,13 +143,11 @@ namespace xforms
         ,m_bIsBasic( sal_True )
         ,m_bPatternMatcherDirty( true )
     {
-        DBG_CTOR( OXSDDataType, NULL );
     }
 
     //--------------------------------------------------------------------
     OXSDDataType::~OXSDDataType()
     {
-        DBG_DTOR( OXSDDataType, NULL );
     }
 
     //--------------------------------------------------------------------
