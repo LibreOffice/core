@@ -405,9 +405,9 @@ Sub	SetupMSConfiguration()
 	MSFilterName(1,3) = sMSDocumentCheckBox(1)
 	MSFilterName(1,4) = &quot;Excel&quot;
 
-	MSFilterName(2,0) = &quot;ppt&quot;
-	MSFilterName(2,1) = &quot;impress8&quot;
-	MSFilterName(2,2) = &quot;odp&quot;
+	MSFilterName(2,0) = &quot;ppt|pps&quot;
+	MSFilterName(2,1) = &quot;impress8|impress8&quot;
+	MSFilterName(2,2) = &quot;odp|odp&quot;
 	MSFilterName(2,3) = sMSDocumentCheckBox(2)
 	MSFilterName(2,4) = &quot;PowerPoint&quot;
 
@@ -469,7 +469,7 @@ Sub SetupXMLConfiguration()
 	Wizardmode = SBXMLMODE
 	ApplCount = 4
 	MaxApplCount = 4
-	XMLTemplateList = Array(&quot;vor&quot;, &quot;sti&quot;, &quot;stw&quot; , &quot;stc&quot;)
+	XMLTemplateList = Array(&quot;vor&quot;, &quot;sti&quot;, &quot;stw&quot; , &quot;stc&quot; , &quot;std&quot;)
 	&apos; chkTemplatePath-Captions
 	GetApplResourceArray(1009 + iApplSection, ApplCount, sTemplateCheckBox())
 	&apos; DocumentCheckbox- Captions
@@ -487,7 +487,7 @@ Sub SetupXMLConfiguration()
 
 	XMLFilterName(2,0) = &quot;sdd|sda|sxi|sxd&quot;
 	XMLFilterName(2,1) = &quot;impress8|draw8|impress8|draw8&quot;
-	XMLFilterName(2,2) = &quot;odp|odd|odp|odd&quot;
+	XMLFilterName(2,2) = &quot;odp|odg|odp|odg&quot;
 	XMLFilterName(2,3) = sDocumentCheckBox(2)
 	
 	XMLFilterName(3,0) = &quot;smf|sxm&quot;
@@ -508,9 +508,9 @@ Sub SetupXMLConfiguration()
 
 	&apos; due to bug #108942# impress templates of the version 4.0 have to be handled in a special way because their mimetype 
 	&apos; falsely points to the draw application.
-	XMLFilterName(6,0) = &quot;application/x-openoffice-starimpress|application/x-openoffice-stardraw-40|application/x-openoffice-stardraw|application/vnd.sun.xml.impress&quot;
-	XMLFilterName(6,1) = &quot;impress8_template|impress8_template|draw8_template|impress8_template&quot;
-	XMLFilterName(6,2) = &quot;otp|otp|otd|otp&quot;
+	XMLFilterName(6,0) = &quot;application/x-openoffice-starimpress|application/x-openoffice-stardraw-40|application/x-openoffice-stardraw|application/vnd.sun.xml.impress|application/vnd.sun.xml.draw&quot;
+	XMLFilterName(6,1) = &quot;impress8_template|impress8_template|draw8_template|impress8_template|draw8_template&quot;
+	XMLFilterName(6,2) = &quot;otp|otp|otg|otp|otg&quot;
 	XMLFilterName(6,3) = sTemplateCheckBox(2)
 	
 	XMLFilterName(7,0) = &quot;sgl|sxg&quot;
