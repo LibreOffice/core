@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:58 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,6 @@
 #include <vcl/edit.hxx>
 #endif
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
@@ -88,14 +84,14 @@
 class SvxPasswordDialog : public SfxModalDialog
 {
 private:
+    FixedLine       aOldFL;
     FixedText       aOldPasswdFT;
     Edit            aOldPasswdED;
-    GroupBox        aOldGB;
+    FixedLine       aNewFL;
     FixedText       aNewPasswdFT;
     Edit            aNewPasswdED;
     FixedText       aRepeatPasswdFT;
     Edit            aRepeatPasswdED;
-    GroupBox        aNewGB;
     OKButton        aOKBtn;
     CancelButton    aEscBtn;
     HelpButton      aHelpBtn;
