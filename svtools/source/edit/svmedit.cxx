@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-26 12:46:01 $
+ *  last change: $Author: mt $ $Date: 2002-05-17 11:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,6 +692,7 @@ TextWindow::TextWindow( Window* pParent ) : Window( pParent )
 
     mpExtTextEngine = new ExtTextEngine;
     mpExtTextEngine->SetMaxTextLen( STRING_MAXLEN );
+    mpExtTextEngine->SetLocale( GetSettings().GetLocale() );
     mpExtTextView = new ExtTextView( mpExtTextEngine, this );
     mpExtTextEngine->InsertView( mpExtTextView );
     mpExtTextEngine->EnableUndo( TRUE );

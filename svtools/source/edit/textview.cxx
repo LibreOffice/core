@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-29 15:04:45 $
+ *  last change: $Author: mt $ $Date: 2002-05-17 11:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,7 +682,8 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
             {
-                if ( !rKeyEvent.GetKeyCode().IsMod2() && !( rKeyEvent.GetKeyCode().IsMod1() && ( nCode == KEY_PAGEUP || nCode == KEY_PAGEDOWN ) ) )
+                if ( ( !rKeyEvent.GetKeyCode().IsMod2() || ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) )
+                      && !( rKeyEvent.GetKeyCode().IsMod1() && ( nCode == KEY_PAGEUP || nCode == KEY_PAGEDOWN ) ) )
                 {
                     aCurSel = ImpMoveCursor( rKeyEvent );
                     if ( aCurSel.HasRange() ) {
@@ -1205,9 +1206,9 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
                             break;
         case KEY_PAGEDOWN:  aPaM = bCtrl ? CursorEndOfDoc() : PageDown( aPaM );
                             break;
-        case KEY_LEFT:      aPaM = CursorLeft( aPaM, bCtrl );
+        case KEY_LEFT:      aPaM = bCtrl ? CursorWordLeft( aPaM ) : CursorLeft( aPaM, rKeyEvent.GetKeyCode().IsMod2() ? (USHORT)i18n::CharacterIteratorMode::SKIPCHARACTER : (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
                             break;
-        case KEY_RIGHT:     aPaM = CursorRight( aPaM, bCtrl );
+        case KEY_RIGHT:     aPaM = bCtrl ? CursorWordRight( aPaM ) : CursorRight( aPaM, rKeyEvent.GetKeyCode().IsMod2() ? (USHORT)i18n::CharacterIteratorMode::SKIPCHARACTER : (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
                             break;
     }
 
@@ -1257,7 +1258,23 @@ void TextView::InsertText( const XubString& rStr, BOOL bSelect )
     mpTextEngine->FormatAndUpdate( this );
 }
 
+// OLD
 TextPaM TextView::CursorLeft( const TextPaM& rPaM, BOOL bWordMode )
+{
+    return bWordMode ? CursorWordLeft( rPaM ) : CursorLeft( rPaM, (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
+
+    // Remove (USHORT) typecasts in this file when removing this method!
+}
+
+// OLD
+TextPaM TextView::CursorRight( const TextPaM& rPaM, BOOL bWordMode )
+{
+    return bWordMode ? CursorWordRight( rPaM ) : CursorRight( rPaM, (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
+
+    // Remove (USHORT) typecasts in this file when removing this method!
+}
+
+TextPaM TextView::CursorLeft( const TextPaM& rPaM, USHORT nCharacterIteratorMode )
 {
     TextPaM aPaM( rPaM );
 
@@ -1265,18 +1282,8 @@ TextPaM TextView::CursorLeft( const TextPaM& rPaM, BOOL bWordMode )
     {
         TextNode* pNode = mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
         uno::Reference < i18n::XBreakIterator > xBI = mpTextEngine->GetBreakIterator();
-        if ( bWordMode )
-        {
-            i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
-            if ( aBoundary.startPos == rPaM.GetIndex() )
-                aBoundary = xBI->previousWord( pNode->GetText(), rPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-            aPaM.GetIndex() = ( aBoundary.startPos != -1 ) ? aBoundary.startPos : 0;
-        }
-        else
-        {
-            sal_Int32 nCount = 1;
-            aPaM.GetIndex() = (USHORT)xBI->previousCharacters( pNode->GetText(), aPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
-        }
+        sal_Int32 nCount = 1;
+        aPaM.GetIndex() = (USHORT)xBI->previousCharacters( pNode->GetText(), aPaM.GetIndex(), mpTextEngine->GetLocale(), nCharacterIteratorMode, nCount, nCount );
     }
     else if ( aPaM.GetPara() )
     {
@@ -1287,7 +1294,7 @@ TextPaM TextView::CursorLeft( const TextPaM& rPaM, BOOL bWordMode )
     return aPaM;
 }
 
-TextPaM TextView::CursorRight( const TextPaM& rPaM, BOOL bWordMode )
+TextPaM TextView::CursorRight( const TextPaM& rPaM, USHORT nCharacterIteratorMode )
 {
     TextPaM aPaM( rPaM );
 
@@ -1295,16 +1302,52 @@ TextPaM TextView::CursorRight( const TextPaM& rPaM, BOOL bWordMode )
     if ( aPaM.GetIndex() < pNode->GetText().Len() )
     {
         uno::Reference < i18n::XBreakIterator > xBI = mpTextEngine->GetBreakIterator();
-        if ( bWordMode )
-        {
-            i18n::Boundary aBoundary = xBI->nextWord(  pNode->GetText(), aPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-            aPaM.GetIndex() = (USHORT)aBoundary.startPos;
-        }
-        else
-        {
-            sal_Int32 nCount = 1;
-            aPaM.GetIndex() = (USHORT)xBI->nextCharacters( pNode->GetText(), aPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
-        }
+        sal_Int32 nCount = 1;
+        aPaM.GetIndex() = (USHORT)xBI->nextCharacters( pNode->GetText(), aPaM.GetIndex(), mpTextEngine->GetLocale(), nCharacterIteratorMode, nCount, nCount );
+    }
+    else if ( aPaM.GetPara() < ( mpTextEngine->mpDoc->GetNodes().Count()-1) )
+    {
+        aPaM.GetPara()++;
+        aPaM.GetIndex() = 0;
+    }
+
+    return aPaM;
+}
+
+
+TextPaM TextView::CursorWordLeft( const TextPaM& rPaM )
+{
+    TextPaM aPaM( rPaM );
+
+    if ( aPaM.GetIndex() )
+    {
+        TextNode* pNode = mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
+        uno::Reference < i18n::XBreakIterator > xBI = mpTextEngine->GetBreakIterator();
+        i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+        if ( aBoundary.startPos == rPaM.GetIndex() )
+            aBoundary = xBI->previousWord( pNode->GetText(), rPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+        aPaM.GetIndex() = ( aBoundary.startPos != -1 ) ? aBoundary.startPos : 0;
+    }
+    else if ( aPaM.GetPara() )
+    {
+        aPaM.GetPara()--;
+        TextNode* pNode = mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
+        aPaM.GetIndex() = pNode->GetText().Len();
+    }
+    return aPaM;
+}
+
+
+TextPaM TextView::CursorWordRight( const TextPaM& rPaM )
+{
+    TextPaM aPaM( rPaM );
+
+    TextNode* pNode = mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
+    if ( aPaM.GetIndex() < pNode->GetText().Len() )
+    {
+        uno::Reference < i18n::XBreakIterator > xBI = mpTextEngine->GetBreakIterator();
+        i18n::Boundary aBoundary = xBI->nextWord(  pNode->GetText(), aPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+        aPaM.GetIndex() = (USHORT)aBoundary.startPos;
     }
     else if ( aPaM.GetPara() < ( mpTextEngine->mpDoc->GetNodes().Count()-1) )
     {
@@ -1326,7 +1369,7 @@ TextPaM TextView::ImpDelete( BYTE nMode, BYTE nDelMode )
     {
         if ( nDelMode == DELMODE_SIMPLE )
         {
-            aEndPaM = CursorLeft( aEndPaM );
+            aEndPaM = CursorLeft( aEndPaM, (USHORT)i18n::CharacterIteratorMode::SKIPCHARACTER );
         }
         else if ( nDelMode == DELMODE_RESTOFWORD )
         {
@@ -1353,7 +1396,7 @@ TextPaM TextView::ImpDelete( BYTE nMode, BYTE nDelMode )
     {
         if ( nDelMode == DELMODE_SIMPLE )
         {
-            aEndPaM = CursorRight( aEndPaM );
+            aEndPaM = CursorRight( aEndPaM, (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
         }
         else if ( nDelMode == DELMODE_RESTOFWORD )
         {
@@ -1651,9 +1694,6 @@ void TextView::ImpShowCursor( BOOL bGotoCursor, BOOL bForceVisCursor, BOOL bSpec
 
 BOOL TextView::SetCursorAtPoint( const Point& rPosPixel )
 {
-//  if ( !Rectangle( Point(), mpWindow->GetOutputSizePixel() ).IsInside( rPosPixel ) && !mbInSelection )
-//      return FALSE;
-
     mpTextEngine->CheckIdleFormatter();
 
     Point aDocPos = GetDocPos( rPosPixel );

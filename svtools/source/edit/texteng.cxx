@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-26 12:46:01 $
+ *  last change: $Author: mt $ $Date: 2002-05-17 11:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1038,7 +1038,9 @@ USHORT TextEngine::ImpFindIndex( ULONG nPortion, const Point& rPosInPara, BOOL b
     if ( nCurIndex && ( nCurIndex == pLine->GetEnd() ) &&
          ( pLine != pPortion->GetLines().GetObject( pPortion->GetLines().Count()-1) ) )
     {
-        nCurIndex--;
+        uno::Reference < i18n::XBreakIterator > xBI = GetBreakIterator();
+        sal_Int32 nCount = 1;
+        nCurIndex = (USHORT)xBI->previousCharacters( pPortion->GetNode()->GetText(), nCurIndex, GetLocale(), i18n::CharacterIteratorMode::SKIPCELL, nCount, nCount );
     }
     return nCurIndex;
 }
@@ -1070,6 +1072,7 @@ USHORT TextEngine::GetCharPos( ULONG nPortion, USHORT nLine, long nXPos, BOOL bS
                 SeekCursor( nPortion, nCurIndex+1, aFont );
                 mpRefDev->SetFont( aFont );
                 nCurIndex = mpRefDev->GetTextBreak( pPortion->GetNode()->GetText(), nXPos-nTmpX, nCurIndex );
+                // MT: GetTextBreak should assure that we are not withing a CTL cell...
             }
             return nCurIndex;
         }
@@ -2734,17 +2737,18 @@ USHORT TextEngine::GetLeftMargin() const
 
 uno::Reference< i18n::XBreakIterator > TextEngine::GetBreakIterator()
 {
-    static uno::Reference < i18n::XBreakIterator > mxBreakIterator;
     if ( !mxBreakIterator.is() )
         mxBreakIterator = vcl::unohelper::CreateBreakIterator();
     return mxBreakIterator;
 }
 
+void TextEngine::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
+{
+    maLocale = rLocale;
+}
+
 ::com::sun::star::lang::Locale TextEngine::GetLocale()
 {
-#if SUPD <= 594
-    static ::com::sun::star::lang::Locale maLocale;
-#endif
     if ( !maLocale.Language.getLength() )
     {
         String aLanguage, aCountry;
