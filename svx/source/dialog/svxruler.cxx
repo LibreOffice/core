@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:50:55 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 12:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1264,9 +1264,6 @@ void SvxRuler::UpdateTabs()
             pTabs[nTabCount+TAB_GAP].nPos =
                 ConvertHPosPixel(
                     lParaIndent + pTab->GetTabPos() + lAppNullOffset);
-            // nicht ueber den rechten Absatzrand
-            if(pTabs[nTabCount+TAB_GAP].nPos > lRightIndent)
-                break;
             if(bRTL)
             {
                 pTabs[nTabCount+TAB_GAP].nPos = lParaIndentPix + lRightPixMargin - pTabs[nTabCount+TAB_GAP].nPos;
@@ -1890,7 +1887,7 @@ void SvxRuler::DragTabs()
 {
 
     BOOL bRTL = pRuler_Imp->pTextRTLItem && pRuler_Imp->pTextRTLItem->GetValue();
-    long lDragPos = GetCorrectedDragPos();
+    long lDragPos = GetCorrectedDragPos(TRUE, FALSE);
 
     USHORT nIdx = GetDragAryPos()+TAB_GAP;
     DrawLine_Impl(lTabPos, 7, bHorz);
