@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-19 16:54:15 $
+ *  last change: $Author: jbu $ $Date: 2002-01-07 09:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,16 @@ namespace osl
     inline void SAL_CALL Pipe::close()
     {
         osl_closePipe( m_handle );
+    }
+
+    //______________________________________________________________________________
+    inline void SAL_CALL Pipe::clear()
+    {
+        if( m_handle )
+        {
+            osl_releasePipe( m_handle );
+            m_handle = 0;
+        }
     }
 
     //______________________________________________________________________________
