@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_asian.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2002-03-28 00:31:18 $
+ *  last change: $Author: khong $ $Date: 2002-05-31 04:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,16 @@ rtl::OUString SAL_CALL IndexEntrySupplier_CJK::getIndexString( const rtl::OUStri
         // using alphanumeric index for non-define stirng
         rtl::OUString(&idxStr[(ch & 0xFF00) ? 0 : ch], 1) :
         rtl::OUString(&CJK_idxStr[idx2[ first + (ch & 0xff) ]]);
+}
+
+rtl::OUString SAL_CALL IndexEntrySupplier_CJK::getIndexString( const rtl::OUString & rIndexEntry,
+    const sal_uInt16 idx1[], const sal_Unicode idx2[])
+    throw (com::sun::star::uno::RuntimeException) {
+    sal_uInt16 ch = *(rIndexEntry.getStr()), first = idx1[ ch >> 8 ];
+    return first == 0xFFFF ?
+        // using alphanumeric index for non-define stirng
+        rtl::OUString(&idxStr[(ch & 0xFF00) ? 0 : ch], 1) :
+        rtl::OUString(&idx2[ first + (ch & 0xff) ], 1);
 }
 
 } } } }

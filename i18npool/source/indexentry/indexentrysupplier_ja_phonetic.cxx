@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_ja_phonetic.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: khong $Date: $
+ *  last change: $Author: khong $Date: 2002/05/24 22:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 rtl::OUString SAL_CALL IndexEntrySupplier_ja_phonetic::getIndexCharacter( const rtl::OUString& rIndexEntry,
     const lang::Locale& rLocale, const rtl::OUString& rSortAlgorithm ) throw (com::sun::star::uno::RuntimeException) {
-    return getIndexString(rIndexEntry, idxStr, idx1, idx2);
+    return getIndexString(rIndexEntry, idx1, idx2);
 }
 
 } } } }

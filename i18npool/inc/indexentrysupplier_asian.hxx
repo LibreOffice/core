@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_asian.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-24 22:26:13 $
+ *  last change: $Author: khong $ $Date: 2002-05-31 04:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@ public:
 
     virtual rtl::OUString SAL_CALL getIndexString( const rtl::OUString & IndexEntry, const sal_Unicode idxStr[],
         const sal_uInt16 idx1[], const sal_uInt16 idx2[]) throw (com::sun::star::uno::RuntimeException);
+    virtual rtl::OUString SAL_CALL getIndexString( const rtl::OUString & IndexEntry,
+        const sal_uInt16 idx1[], const sal_Unicode idx2[]) throw (com::sun::star::uno::RuntimeException);
 };
 
 #define INDEXENTRYSUPPLIER_CJK( algorithm ) \
