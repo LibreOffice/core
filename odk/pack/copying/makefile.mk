@@ -52,6 +52,8 @@ DIRLIST = \
     $(DESTDIRBASICEXAMPLES)$/text	 			\
     $(DESTDIRBASICEXAMPLES)$/text$/creating_an_index 	\
     $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically 	\
+    $(DESTDIRBASICEXAMPLES)$/register_component	 			\
+    $(DESTDIRBASICEXAMPLES)$/register_component$/regcomp	\
     $(DESTDIROLEEXAMPLES)		 	\
     $(DESTDIROLEEXAMPLES)$/vbscript		 	\
     $(DESTDIROLEEXAMPLES)$/delphi		 	\
@@ -80,6 +82,7 @@ CPP_GENERICXMLFILTER= \
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/GenericXMLFilter.hxx	\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/genericxmlfilter.xml	\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/README           		\
+    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/TypeDetection.xml 		\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/Makefile         		\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/exports.dxp
 
@@ -256,7 +259,12 @@ BASIC_EXAMPLES= \
     $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/changing_appearance.sxw 		\
     $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/inserting_bookmarks.sxw 		\
     $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/replacing_text.sxw 		\
-    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/using_regular_expressions.sxw
+    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/using_regular_expressions.sxw \
+    $(DESTDIRBASICEXAMPLES)$/register_component$/readme.txt \
+    $(DESTDIRBASICEXAMPLES)$/register_component$/regcomp$/dialog.xlb \
+    $(DESTDIRBASICEXAMPLES)$/register_component$/regcomp$/script.xlb \
+    $(DESTDIRBASICEXAMPLES)$/register_component$/regcomp$/regcomp.xba \
+    $(DESTDIRBASICEXAMPLES)$/register_component$/regcomp$/regcompdlg.xdl
 
 OLE_EXAMPLES= \
     $(DESTDIROLEEXAMPLES)$/vbscript$/readme.txt \
