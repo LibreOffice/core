@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-16 15:41:26 $
+ *  last change: $Author: jp $ $Date: 2001-11-29 15:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,10 @@ struct SvxRTFPictureType
         WIN_METAFILE,       // in den Pict.Daten steht ein Window-Metafile
         MAC_QUICKDRAW,      // in den Pict.Daten steht ein Mac-QuickDraw
         OS2_METAFILE,       // in den Pict.Daten steht ein OS2-Metafile
-        RTF_DI_BMP          // Device Independent Bitmap,
+        RTF_DI_BMP,         // Device Independent Bitmap
+        ENHANCED_MF,        // in den Pict.Daten steht ein Enhanced-Metafile
+        RTF_PNG,            // in den Pict.Daten steht ein PNG file
+        RTF_JPG             // in den Pict.Daten steht ein JPG file
     } eStyle;
 
     enum RTF_BMPMODE
@@ -480,11 +483,14 @@ inline SfxItemSet& SvxRTFParser::GetAttrSet()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/inc/svxrtf.hxx,v 1.7 2001-08-16 15:41:26 thb Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/inc/svxrtf.hxx,v 1.8 2001-11-29 15:47:29 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/08/16 15:41:26  thb
+      #90760# Removed VCL define
+
       Revision 1.6  2001/05/03 11:48:03  jp
       handle RTF default attributes correct
 
