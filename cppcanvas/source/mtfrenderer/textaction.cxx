@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textaction.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:57:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,15 @@
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
+#ifndef _BGFX_RANGE_B2DRECTANGLE_HXX
+#include <basegfx/range/b2drectangle.hxx>
+#endif
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
 
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
@@ -100,6 +109,7 @@ namespace cppcanvas
     {
         void TextAction::init( const ::Point&                                                   rStartPoint,
                                const OutDevState&                                               rState,
+                               const CanvasSharedPtr&                                           rCanvas,
                                const ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >&    rTextTransform       )
         {
             // ensure that mxFont is valid. It is possible that text actions
@@ -121,6 +131,44 @@ namespace cppcanvas
 
             tools::initRenderState(maState,rState);
 
+            // #i36950# Offset clip back to origin (as it's also moved
+            // by rStartPoint!)
+            ::Point aEmptyPoint;
+            if( rStartPoint != aEmptyPoint )
+            {
+                if( rState.clip.count() )
+                {
+                    ::basegfx::B2DPolyPolygon aLocalClip( rState.clip );
+                    ::basegfx::B2DHomMatrix   aTranslate;
+
+                    aTranslate.translate( -rStartPoint.X(),
+                                          -rStartPoint.Y() );
+                    aLocalClip.transform( aTranslate );
+
+                    maState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                        rCanvas->getUNOCanvas()->getDevice(),
+                        aLocalClip );
+                }
+                else if( !rState.clipRect.IsEmpty() )
+                {
+                    ::Rectangle aLocalClipRect( rState.clipRect );
+
+                    aLocalClipRect.Move( -rStartPoint.X(),
+                                         -rStartPoint.Y() );
+
+                    maState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                        rCanvas->getUNOCanvas()->getDevice(),
+                        ::basegfx::B2DPolyPolygon(
+                            ::basegfx::tools::createPolygonFromRect(
+                                ::basegfx::B2DRectangle( aLocalClipRect.Left(),
+                                                         aLocalClipRect.Top(),
+                                                         aLocalClipRect.Right(),
+                                                         aLocalClipRect.Bottom() ) ) ) );
+                }
+            }
+
+            // TODO(F3): Also inversely-transform clip with
+            // rTextTransform!
             if( rTextTransform.isValid() )
             {
                 // prepend extra font transform to render state
@@ -164,7 +212,7 @@ namespace cppcanvas
             maState(),
             maTextDirection( rState.textDirection )
         {
-            init( rStartPoint, rState, rTextTransform );
+            init( rStartPoint, rState, rCanvas, rTextTransform );
         }
 
         TextAction::TextAction( const ::Point&                                                  rStartPoint,
@@ -182,7 +230,7 @@ namespace cppcanvas
             maState(),
             maTextDirection( rState.textDirection )
         {
-            init( rStartPoint, rState, rTextTransform );
+            init( rStartPoint, rState, rCanvas, rTextTransform );
         }
 
         TextAction::~TextAction()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdevstate.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:55:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _VCL_VCLENUM_HXX
 #include <vcl/vclenum.hxx>
 #endif
+#ifndef _SV_OUTDEV_HXX
+#include <vcl/outdev.hxx>
+#endif
 
 
 namespace cppcanvas
@@ -108,6 +111,7 @@ namespace cppcanvas
         {
             OutDevState() :
                 clip(),
+                clipRect(),
                 xClipPoly(),
 
                 lineColor(),
@@ -121,6 +125,7 @@ namespace cppcanvas
                 fontTransform(),
 
                 textEmphasisMarkStyle(EMPHASISMARK_NONE),
+                pushFlags(PUSH_ALL),
                 textDirection(::drafts::com::sun::star::rendering::TextDirection::WEAK_LEFT_TO_RIGHT),
                 textAlignment(0), // TODO(Q2): Synchronize with implrenderer
                                   // and possibly new rendering::TextAlignment
@@ -142,6 +147,7 @@ namespace cppcanvas
             }
 
             ::basegfx::B2DPolyPolygon                                                               clip;
+            ::Rectangle                                                                             clipRect;
             ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D > xClipPoly;
 
             ::com::sun::star::uno::Sequence< double >                                               lineColor;
@@ -160,6 +166,7 @@ namespace cppcanvas
             ::basegfx::B2DHomMatrix                                                                 fontTransform;
 
             sal_uInt16                                                                              textEmphasisMarkStyle;
+            sal_uInt16                                                                              pushFlags;
             sal_Int8                                                                                textDirection;
             sal_Int8                                                                                textAlignment;
             sal_Int8                                                                                textReliefStyle;
