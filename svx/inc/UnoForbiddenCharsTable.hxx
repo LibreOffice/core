@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoForbiddenCharsTable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-05 16:46:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,13 @@
 
 #include <cppuhelper/implbase2.hxx>
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class SvxForbiddenCharactersTable;
 
-class SvxUnoForbiddenCharsTable : public cppu::WeakImplHelper2<
+class SVX_DLLPUBLIC SvxUnoForbiddenCharsTable : public cppu::WeakImplHelper2<
                                         com::sun::star::i18n::XForbiddenCharacters,
                                         com::sun::star::linguistic2::XSupportedLocales>
 {
