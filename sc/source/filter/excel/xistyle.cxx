@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:34:00 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
 #endif
@@ -149,16 +150,15 @@
 #include "globstr.hrc"
 #endif
 
-#ifndef SC_XLCONTENT_HXX
-#include "xlcontent.hxx"
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
 #endif
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
 #endif
-#ifndef SC_XLTRACER_HXX
-#include "xltracer.hxx"
+#ifndef SC_XICONTENT_HXX
+#include "xicontent.hxx"
 #endif
-
 
 #include "root.hxx"
 
@@ -1551,26 +1551,19 @@ void XclImpXFRangeColumn::TryConcatPrev( ULONG nIndex )
 
 // ----------------------------------------------------------------------------
 
-/** Number of columns. */
-const SCCOL EXC_XFBUFF_COLUMNS = MAXCOL + 1;
-
-
 XclImpXFRangeBuffer::XclImpXFRangeBuffer( const XclImpRoot& rRoot ) :
-    XclImpRoot( rRoot ),
-    mppColumns( new XclImpXFRangeColumnPtr[ EXC_XFBUFF_COLUMNS ] )
+    XclImpRoot( rRoot )
 {
 }
 
 XclImpXFRangeBuffer::~XclImpXFRangeBuffer()
 {
-    delete[] mppColumns;
 }
 
 void XclImpXFRangeBuffer::Initialize()
 {
-    for( SCCOL nScCol = 0; nScCol < EXC_XFBUFF_COLUMNS; ++nScCol )
-        mppColumns[ nScCol ].reset();
-
+    maColumns.clear();
+    maHyperlinks.clear();
     maMergeList.RemoveAll();
 }
 
@@ -1579,10 +1572,13 @@ void XclImpXFRangeBuffer::SetXF( SCCOL nScCol, SCROW nScRow, sal_uInt16 nXFIndex
     DBG_ASSERT( (nScCol <= MAXCOL) && (nScRow <= MAXROW), "XclImpXFRangeBuffer::SetXF - out of range" );
 
     // set cell XF's
-    if( !mppColumns[ nScCol ].get() )
-        mppColumns[ nScCol ].reset( new XclImpXFRangeColumn );
+    size_t nIndex = static_cast< size_t >( nScCol );
+    if( maColumns.size() <= nIndex )
+        maColumns.resize( nIndex + 1 );
+    if( !maColumns[ nIndex ] )
+        maColumns[ nIndex ].reset( new XclImpXFRangeColumn );
     // #108770# remember all Boolean cells, they will get 'Standard' number format
-    mppColumns[ nScCol ]->SetXF( nScRow, XclImpXFIndex( nXFIndex, eMode == xlXFModeBoolCell ) );
+    maColumns[ nIndex ]->SetXF( nScRow, XclImpXFIndex( nXFIndex, eMode == xlXFModeBoolCell ) );
 
     // set "center across selection" and "fill" attribute for all following empty cells
     // #97130# ignore it on row default XFs
@@ -1626,9 +1622,12 @@ void XclImpXFRangeBuffer::SetRowDefXF( SCROW nScRow, sal_uInt16 nXFIndex )
 void XclImpXFRangeBuffer::SetColumnDefXF( SCCOL nScCol, sal_uInt16 nXFIndex )
 {
     // our array should not have values when creating the default column format.
-    DBG_ASSERT( !mppColumns[ nScCol ].get(), "XclImpXFRangeBuffer::SetColumnDefXF - default column of XFs already has values" );
-    mppColumns[ nScCol ].reset( new XclImpXFRangeColumn );
-    mppColumns[ nScCol ]->SetDefaultXF( XclImpXFIndex( nXFIndex ) );
+    size_t nIndex = static_cast< size_t >( nScCol );
+    if( maColumns.size() <= nIndex )
+        maColumns.resize( nIndex + 1 );
+    DBG_ASSERT( !maColumns[ nIndex ], "XclImpXFRangeBuffer::SetColumnDefXF - default column of XFs already has values" );
+    maColumns[ nIndex ].reset( new XclImpXFRangeColumn );
+    maColumns[ nIndex ]->SetDefaultXF( XclImpXFIndex( nXFIndex ) );
 }
 
 void XclImpXFRangeBuffer::SetBorderLine( const ScRange& rRange, SCTAB nScTab, USHORT nLine )
@@ -1645,6 +1644,11 @@ void XclImpXFRangeBuffer::SetBorderLine( const ScRange& rRange, SCTAB nScTab, US
     SvxBoxItem aNewItem( *pToItem );
     aNewItem.SetLine( pFromItem->GetLine( nLine ), nLine );
     rDoc.ApplyAttr( rRange.aStart.Col(), rRange.aStart.Row(), nScTab, aNewItem );
+}
+
+void XclImpXFRangeBuffer::SetHyperlink( const XclRange& rXclRange, const String& rUrl )
+{
+    maHyperlinks.push_back( XclImpHyperlinkRange( rXclRange, rUrl ) );
 }
 
 void XclImpXFRangeBuffer::SetMerge( SCCOL nScCol, SCROW nScRow )
@@ -1664,16 +1668,21 @@ void XclImpXFRangeBuffer::Finalize()
 
     // apply patterns
     XclImpXFBuffer& rXFBuffer = GetXFBuffer();
-    for( SCCOL nScCol = 0; nScCol < EXC_XFBUFF_COLUMNS; ++nScCol )
+    for( XclImpXFRangeColumnVec::const_iterator aVBeg = maColumns.begin(), aVEnd = maColumns.end(), aVIt = aVBeg; aVIt != aVEnd; ++aVIt )
     {
         // apply all cell styles of an existing column
-        if( mppColumns[ nScCol ].get() )
+        if( aVIt->is() )
         {
-            XclImpXFRangeColumn& rColumn = *mppColumns[ nScCol ];
+            XclImpXFRangeColumn& rColumn = **aVIt;
+            SCCOL nScCol = static_cast< SCCOL >( aVIt - aVBeg );
             for( XclImpXFRange* pStyle = rColumn.First(); pStyle; pStyle = rColumn.Next() )
                 rXFBuffer.ApplyPattern( nScCol, pStyle->mnScRow1, nScCol, pStyle->mnScRow2, nScTab, pStyle->maXFIndex );
         }
     }
+
+    // insert hyperlink cells
+    for( XclImpHyperlinkList::const_iterator aLIt = maHyperlinks.begin(), aLEnd = maHyperlinks.end(); aLIt != aLEnd; ++aLIt )
+        XclImpHyperlink::InsertUrl( GetRoot(), aLIt->first, aLIt->second );
 
     // apply cell merging
     for( const ScRange* pRange = maMergeList.First(); pRange; pRange = maMergeList.Next() )
