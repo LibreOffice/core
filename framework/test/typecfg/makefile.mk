@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: as $ $Date: 2001-04-24 07:51:56 $
+#   last change: $Author: as $ $Date: 2001-05-23 13:34:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,20 +78,24 @@ NO_BSYMBOLIC=		TRUE
 LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 .ENDIF
 
-# --- applikation: "typecfg" --------------------------------------------------
+# --- applikation: "xml2xcd" --------------------------------------------------
 
-APP3TARGET=     $(TARGET)
+APP1TARGET=     xml2xcd
 
-APP3OBJS=		$(SLO)$/typecfg.obj					\
+APP1OBJS=		$(SLO)$/xml2xcd.obj					\
                 $(SLO)$/servicemanager.obj			\
+                $(SLO)$/filtercachedata.obj			\
                 $(SLO)$/filtercache.obj				\
                 $(SLO)$/wildcard.obj				\
                 $(SLO)$/fairrwlock.obj				\
                 $(SLO)$/writeguard.obj				\
                 $(SLO)$/readguard.obj				\
+                $(SLO)$/transactionmanager.obj		\
+                $(SLO)$/transactionguard.obj		\
+                $(SLO)$/gate.obj					\
                 $(SLO)$/resetableguard.obj
 
-APP3STDLIBS=	$(CPPULIB)							\
+APP1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
                 $(OSLLIB)							\
                 $(SALLIB)							\
@@ -103,16 +107,20 @@ APP3STDLIBS=	$(CPPULIB)							\
                 $(UNOTOOLSLIB)						\
                 $(SVLIB)
 
-APP3DEPN=		$(SLO)$/servicemanager.obj			\
+APP1DEPN=		$(SLO)$/servicemanager.obj			\
+                $(SLO)$/filtercachedata.obj			\
                 $(SLO)$/filtercache.obj				\
                 $(SLO)$/wildcard.obj				\
                 $(SLO)$/fairrwlock.obj				\
                 $(SLO)$/writeguard.obj				\
                 $(SLO)$/readguard.obj				\
+                $(SLO)$/transactionmanager.obj		\
+                $(SLO)$/transactionguard.obj		\
+                $(SLO)$/gate.obj					\
                 $(SLO)$/resetableguard.obj
 
 .IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-APP3DEF=        $(MISC)$/$(TARGET).def
+APP1DEF=        $(MISC)$/xml2xcd.def
 .ENDIF
 
 # --- Targets ------------------------------------------------------
