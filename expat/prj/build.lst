@@ -1,2 +1,2 @@
-ep	expat	: solenv	NULL
+ep	expat	: NULL
 ep	expat			nmake	-	all	ft_mkout NULL
