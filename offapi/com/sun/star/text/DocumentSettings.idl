@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettings.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 00:02:03 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,24 @@ published service DocumentSettings
 
     */
     [optional, property] boolean UseFormerObjectPositioning;
+
+    // ------------------------------------------------------------
+    /** specifies if the text wrap of floating screen objects are
+        considered in a specified way in the positioning algorithm.
+
+        @since #i28701#
+
+        <p>This property controls how floating screen objects (Writer
+        fly frames and drawing objects) are positioned.
+        If <TRUE\>, the object positioning algorithm will consider
+        the text wrap style, set at the floating screen object.
+        The attribute <member>BaseFrameProperties::WrapInfluenceOnPosition</member>
+        specifies how the text wrap is considered.
+        If <FALSE\> (default value), the former object positioning
+        algorithm (known from OpenOffice.org 1.1) is applied.</p>
+
+    */
+    [optional, property] boolean ConsiderTextWrapOnObjPos;
 
 };
 
