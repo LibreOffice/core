@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:50:11 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,8 @@ ModalDialog RID_SCDLG_ASCII
         Text[ hebrew ] = "‮שדות‬";
         Text[ hindi ] = "क्षेत्रें";
         Text[ slovak ] = "Polia";
+        Text[ hungarian ] = "Mezők";
+        Text[ slovenian ] = "Polja";
     };
     FixedText FT_TYPE
     {
@@ -144,6 +146,8 @@ ModalDialog RID_SCDLG_ASCII
         Text[ hebrew ] = "Spaltent~yp";
         Text[ hindi ] = "स्तंभ व~र्ग";
         Text[ slovak ] = "T~yp stĺpca";
+        Text[ hungarian ] = "Oszlop~típus";
+        Text[ slovenian ] = "V~rsta stolpca";
     };
     ListBox LB_TYPE1
     {
@@ -186,6 +190,8 @@ ModalDialog RID_SCDLG_ASCII
         Text[ hebrew ] = "Trennoptionen";
         Text[ hindi ] = "अलगानेवाला विकल्प";
         Text[ slovak ] = "Voľby oddeľovača";
+        Text[ hungarian ] = "Elválasztók beállításai";
+        Text[ slovenian ] = "Možnosti ločila";
     };
     RadioButton RB_FIXED
     {
@@ -193,7 +199,7 @@ ModalDialog RID_SCDLG_ASCII
         Size = MAP_APPFONT ( 243 , 10 ) ;
         Text = "~Feste Breite" ;
         Text [ ENGLISH ] = "Fixed width" ;
-        Text [ DANISH ] = "Fast bredde" ;
+        Text [ DANISH ] = "~Fast bredde" ;
         Text [ ENGLISH_US ] = "~Fixed width" ;
         Text [ SPANISH ] = "Ancho ~fijo" ;
         Text [ FRENCH ] = "Largeur fixe" ;
@@ -222,6 +228,8 @@ ModalDialog RID_SCDLG_ASCII
         Text[ hebrew ] = "~Feste Breite";
         Text[ hindi ] = "~स्थिर चौड़ाई";
         Text[ slovak ] = "~Písmo s nemennou šírkou";
+        Text[ hungarian ] = "~Rögzített szélesség";
+        Text[ slovenian ] = "~Fiksna širina";
     };
     RadioButton RB_SEPARATED
     {
@@ -229,7 +237,7 @@ ModalDialog RID_SCDLG_ASCII
         Size = MAP_APPFONT ( 243 , 10 ) ;
         Text = "~Getrennt" ;
         Text [ ENGLISH ] = "Separated" ;
-        Text [ DANISH ] = "Delt" ;
+        Text [ DANISH ] = "~Delt med" ;
         Text [ ENGLISH_US ] = "~Separated by" ;
         Text [ SPANISH ] = "~Separado" ;
         Text [ FRENCH ] = "S�par�" ;
@@ -259,6 +267,8 @@ ModalDialog RID_SCDLG_ASCII
         Text[ hebrew ] = "~Getrennt";
         Text[ hindi ] = "से ~अलगाया हुआ";
         Text[ slovak ] = "Oddelené ~pomocou";
+        Text[ hungarian ] = "~Elválasztójel";
+        Text[ slovenian ] = "~Ločeno z";
     };
     FixedText FT_CHARSET
     {
@@ -266,7 +276,7 @@ ModalDialog RID_SCDLG_ASCII
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Z~eichensatz" ;
         Text [ ENGLISH ] = "Charset" ;
-        Text [ DANISH ] = "Tegns�t" ;
+        Text [ DANISH ] = "T~egns�t" ;
         Text [ ENGLISH_US ] = "Ch~aracter set" ;
         Text [ SPANISH ] = "Juego de caracteres" ;
         Text [ FRENCH ] = "Jeu de caract�res" ;
@@ -294,6 +304,8 @@ ModalDialog RID_SCDLG_ASCII
         Text[ hebrew ] = "Z~eichensatz";
         Text[ hindi ] = "अ~क्षर समूह";
         Text[ slovak ] = "Zn~aková sada";
+        Text[ hungarian ] = "K~arakterkészlet";
+        Text[ slovenian ] = "N~abor znakov";
     };
     ListBox LB_CHARSET
     {
@@ -337,6 +349,8 @@ ModalDialog RID_SCDLG_ASCII
         Text[ hebrew ] = "Import";
         Text[ hindi ] = "आयात";
         Text[ slovak ] = "Importovať";
+        Text[ hungarian ] = "Importálás";
+        Text[ slovenian ] = "Uvoz";
     };
     FixedText FT_TEXTSEP
     {
@@ -344,7 +358,7 @@ ModalDialog RID_SCDLG_ASCII
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Te~xttrenner" ;
         Text [ ENGLISH ] = "Text Separator" ;
-        Text [ DANISH ] = "Tekstseparator" ;
+        Text [ DANISH ] = "~Tekstseparator" ;
         Text [ ENGLISH_US ] = "Te~xt delimiter" ;
         Text [ SPANISH ] = "Separador de te~xto" ;
         Text [ FRENCH ] = "S�parateur de texte" ;
@@ -372,6 +386,8 @@ ModalDialog RID_SCDLG_ASCII
         Text[ hebrew ] = "Te~xttrenner";
         Text[ hindi ] = "टे~क्स्ट् परिसीमित करनेवाला";
         Text[ slovak ] = "Oddeľovač te~xtu";
+        Text[ hungarian ] = "S~zöveghatároló";
+        Text[ slovenian ] = "Ločilo be~sedila";
     };
     ComboBox CB_TEXTSEP
     {
@@ -409,7 +425,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ english_us ] = "~Tab" ;
         Text [ portuguese_brazilian ] = "~Tabula��o" ;
         Text [ swedish ] = "Tabu~lator" ;
-        Text [ danish ] = "Tabulator" ;
+        Text [ danish ] = "~Tabulator" ;
         Text [ italian ] = "~Tabulazione" ;
         Text [ spanish ] = "~Tabulador" ;
         Text [ french ] = "Tabulation" ;
@@ -434,6 +450,8 @@ ModalDialog RID_SCDLG_ASCII
         Text[ hebrew ] = "~Tabulator";
         Text[ hindi ] = "~टॉब";
         Text[ slovak ] = "~Tabulátor";
+        Text[ hungarian ] = "~Tabulátor";
+        Text[ slovenian ] = "~Tabulator";
     };
     CheckBox CKB_SEMICOLON
     {
@@ -445,7 +463,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ english_us ] = "S~emicolon" ;
         Text [ portuguese_brazilian ] = "~Ponto-e-v�rgula" ;
         Text [ swedish ] = "~Semikolon" ;
-        Text [ danish ] = "Semikolon" ;
+        Text [ danish ] = "S~emikolon" ;
         Text [ italian ] = "Punto e virgola" ;
         Text [ spanish ] = "~Punto y coma" ;
         Text [ french ] = "Point-virgule" ;
@@ -470,6 +488,8 @@ ModalDialog RID_SCDLG_ASCII
         Text[ hebrew ] = "~Semikolon";
         Text[ hindi ] = "अर्ध ~विराम चिह्न";
         Text[ slovak ] = "B~odkočiarka";
+        Text[ hungarian ] = "~Pontosvessző";
+        Text[ slovenian ] = "Podpičj~e";
     };
     CheckBox CKB_COMMA
     {
@@ -481,7 +501,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ english_us ] = "~Comma" ;
         Text [ portuguese_brazilian ] = "~V�rgula" ;
         Text [ swedish ] = "~Komma" ;
-        Text [ danish ] = "Komma" ;
+        Text [ danish ] = "~Komma" ;
         Text [ italian ] = "~Virgola" ;
         Text [ spanish ] = "Co~ma" ;
         Text [ french ] = "~Virgule" ;
@@ -506,6 +526,8 @@ ModalDialog RID_SCDLG_ASCII
         Text[ hebrew ] = "~Komma";
         Text[ hindi ] = "~छोटा विराम चिह्न";
         Text[ slovak ] = "Či~arka";
+        Text[ hungarian ] = "~Vessző";
+        Text[ slovenian ] = "Veji~ca";
     };
     CheckBox CKB_SPACE
     {
@@ -517,7 +539,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ english_us ] = "S~pace" ;
         Text [ portuguese_brazilian ] = "~Espa�o" ;
         Text [ swedish ] = "~Blanksteg" ;
-        Text [ danish ] = "Mellemrum" ;
+        Text [ danish ] = "~Mellemrum" ;
         Text [ italian ] = "~Spazio" ;
         Text [ spanish ] = "Espacio" ;
         Text [ french ] = "~Espace" ;
@@ -542,6 +564,8 @@ ModalDialog RID_SCDLG_ASCII
         Text[ hebrew ] = "~Leerzeichen";
         Text[ hindi ] = "अं~तर";
         Text[ slovak ] = "Med~zera";
+        Text[ hungarian ] = "Szókö~z";
+        Text[ slovenian ] = "~Presledek";
     };
     CheckBox CKB_OTHER
     {
@@ -578,6 +602,8 @@ ModalDialog RID_SCDLG_ASCII
         Text[ hebrew ] = "~Andere";
         Text[ hindi ] = "~अन्य";
         Text[ slovak ] = "~Iný";
+        Text[ hungarian ] = "~Egyéb";
+        Text[ slovenian ] = "Drug~o";
     };
     Edit ED_OTHER
     {
@@ -596,7 +622,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ english_us ] = "From ro~w" ;
         Text [ portuguese_brazilian ] = "A partir da ~linha" ;
         Text [ swedish ] = "Fr�n ~rad" ;
-        Text [ danish ] = "Fra r�kke" ;
+        Text [ danish ] = "Fra ~r�kke" ;
         Text [ italian ] = "Dalla ~riga" ;
         Text [ spanish ] = "A partir de ~l�nea" ;
         Text [ french ] = "� partir de la ~ligne" ;
@@ -621,6 +647,8 @@ ModalDialog RID_SCDLG_ASCII
         Text[ hebrew ] = "Ab ~Zeile";
         Text[ hindi ] = "पं~क्ति से";
         Text[ slovak ] = "Od riad~ka";
+        Text[ hungarian ] = "~Sorból";
+        Text[ slovenian ] = "Iz v~rstice";
     };
     NumericField NF_AT_ROW
     {
@@ -652,7 +680,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ english_us ] = "Merge ~delimiters" ;
         Text [ portuguese_brazilian ] = "Mesclar ~delimitadores" ;
         Text [ swedish ] = "Sammanfatta f~�ltavgr�nsare" ;
-        Text [ danish ] = "Kombiner feltseparatorer" ;
+        Text [ danish ] = "Flet ~separatorer" ;
         Text [ italian ] = "Raggruppa i separatori di campo" ;
         Text [ spanish ] = "Reagrupar los ~separadores de campo" ;
         Text [ french ] = "~Regrouper s�parateurs de champ" ;
@@ -677,6 +705,8 @@ ModalDialog RID_SCDLG_ASCII
         Text[ hebrew ] = "Fel~dtrenner zusammenfassen";
         Text[ hindi ] = "~परिसीमित करनेवाले को मिलाओ";
         Text[ slovak ] = "Zlúčiť o~ddeľovače";
+        Text[ hungarian ] = "Határolók ~egyesítése";
+        Text[ slovenian ] = "Spo~ji ločila";
     };
     Text[ chinese_simplified ] = "输入文字";
     Text[ russian ] = "������ ������";
@@ -697,7 +727,11 @@ ModalDialog RID_SCDLG_ASCII
     Text[ hebrew ] = "Textimport";
     Text[ hindi ] = "टेक्स्ट् आयात";
     Text[ slovak ] = "Import textu";
+    Text[ hungarian ] = "Szöveg importálása";
+    Text[ slovenian ] = "Uvoz besedila";
 };
+
+
 
 
 
