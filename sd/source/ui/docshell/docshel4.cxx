@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:38:03 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,15 +393,26 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
     BOOL    bRet = FALSE;
     BOOL    bXML = ( nStoreVer >= SOFFICE_FILEFORMAT_60 );
     BOOL    bBinary = ( nStoreVer < SOFFICE_FILEFORMAT_60 );
+    bool    bStartPresentation = false;
 
     if( bBinary || bXML )
     {
         SfxItemSet* pSet = GetMedium()->GetItemSet();
 
-        if( pSet && ( SFX_ITEM_SET == pSet->GetItemState(SID_PREVIEW ) ) &&
-            ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
+
+        if( pSet )
         {
-            pDoc->SetStarDrawPreviewMode( TRUE );
+            if( (  SFX_ITEM_SET == pSet->GetItemState(SID_PREVIEW ) ) && ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
+            {
+                pDoc->SetStarDrawPreviewMode( TRUE );
+            }
+
+            if( SFX_ITEM_SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
+                ( (SfxBoolItem&) ( pSet->Get( SID_DOC_STARTPRESENTATION ) ) ).GetValue() )
+            {
+                bStartPresentation = true;
+                pDoc->SetStartWithPresentation( true );
+            }
         }
 
         bRet = SfxInPlaceObject::Load( pStore );
@@ -461,12 +472,12 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
     }
 
     // tell SFX to change viewshell when in preview mode
-    if( IsPreview() )
+    if( IsPreview() || bStartPresentation )
     {
         SfxItemSet *pSet = GetMedium()->GetItemSet();
 
         if( pSet )
-            pSet->Put( SfxUInt16Item( SID_VIEW_ID, 5 ) );
+            pSet->Put( SfxUInt16Item( SID_VIEW_ID, bStartPresentation ? 1 : 5 ) );
     }
 
     return bRet;
