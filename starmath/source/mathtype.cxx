@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-18 13:54:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef MATHTYPE_HXX
 #include <mathtype.hxx>
@@ -919,10 +921,10 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 APPEND(rRet,"\\(");
                             break;
                         case 0x2:
-                            if (nVariation==0)
-                                APPEND(rRet," lbrace ");
-                            else if (nVariation==1)
-                                APPEND(rRet," \\lbrace ");
+                            if ((nVariation==0) || (nVariation==1))
+                                APPEND(rRet," left lbrace ");
+                            else
+                                APPEND(rRet," left none ");
                             break;
                         case 0x3:
                             if (nVariation==0)
@@ -1006,16 +1008,16 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             break;
                         case 0x10:
                             if (nVariation == 0)
-                                APPEND(rRet," underline ");
+                                APPEND(rRet," {underline ");
                             else if (nVariation == 1)
-                                APPEND(rRet," underline underline ");
+                                APPEND(rRet," {underline underline ");
                             APPEND(rRet," {");
                             break;
                         case 0x11:
                             if (nVariation == 0)
-                                APPEND(rRet," overline ");
+                                APPEND(rRet," {overline ");
                             else if (nVariation == 1)
-                                APPEND(rRet," overline overline ");
+                                APPEND(rRet," {overline overline ");
                             APPEND(rRet," {");
                             break;
                         case 0x12:
@@ -1484,10 +1486,10 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 APPEND(rRet,"\\)");
                             break;
                         case 0x2:
-                            if (nVariation==0)
-                                APPEND(rRet," rbrace ");
-                            else if (nVariation==2)
-                                APPEND(rRet," \\rbrace ");
+                            if ((nVariation==0) || (nVariation==2))
+                                APPEND(rRet," right rbrace ");
+                            else
+                                APPEND(rRet," right none ");
                             break;
                         case 0x3:
                             if (nVariation==0)
@@ -1596,11 +1598,13 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             APPEND(rRet,"} ");
                             nPart++;
                             break;
-                        case 0x10:
-                        case 0x11:
                         case 0x2e:
                         case 0x2f:
                             APPEND(rRet,"} ");
+                            break;
+                        case 0x10:
+                        case 0x11:
+                            APPEND(rRet,"}} ");
                             break;
                         case 0x12:
                         case 0x13:
@@ -3265,6 +3269,11 @@ void MathType::HandleMath(SmNode *pNode,int nLevel)
         {
             *pS << sal_uInt8(CHAR|0x20);
         }
+        else if ((nPendingAttributes) &&
+                (i == ((pTemp->GetText().Len()+1)/2)-1))
+            {
+                *pS << sal_uInt8(0x22);
+            }
         else
             *pS << sal_uInt8(CHAR); //char without formula recognition
         //The typeface seems to be MTEXTRA for unicode characters,
@@ -3341,8 +3350,26 @@ void MathType::HandleMath(SmNode *pNode,int nLevel)
             *pS << sal_uInt8(END); //end embel
         }
         else
+        {
             *pS << nArse;
+            if ((nPendingAttributes) &&
+                (i == ((pTemp->GetText().Len()+1)/2)-1))
+            {
+                *pS << sal_uInt8(EMBEL);
+                while (nPendingAttributes)
+                {
+                        *pS << sal_uInt8(2);
+                        //wedge the attributes in here and clear
+                        //the pending stack
+                        nPendingAttributes--;
+                }
+                nInsertion=pS->Tell();
+                *pS << sal_uInt8(END); //end embel
+                *pS << sal_uInt8(END); //end embel
+            }
+        }
     }
+    nPendingAttributes = 0;
 }
 
 void MathType::HandleAttributes(SmNode *pNode,int nLevel)
@@ -3533,3 +3560,5 @@ void MathType::HandleText(SmNode *pNode,int nLevel)
         }
     }
 }
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
