@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:02:55 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,24 @@ inline Any::Any() SAL_THROW( () )
 {
     ::uno_any_construct( this, 0, 0, (uno_AcquireFunc)cpp_acquire );
 }
+
+//______________________________________________________________________________
+template <typename T>
+inline Any::Any( T const & value )
+{
+    ::uno_type_any_construct(
+        this, const_cast<T *>(&value), getCppuType(&value).getTypeLibType(),
+        (uno_AcquireFunc) cpp_acquire );
+}
+//______________________________________________________________________________
+inline Any::Any( bool value )
+{
+    sal_Bool b = value;
+    ::uno_type_any_construct(
+        this, &b, ::getCppuBooleanType().getTypeLibType(),
+        (uno_AcquireFunc) cpp_acquire );
+}
+
 //__________________________________________________________________________________________________
 inline Any::Any( const Any & rAny ) SAL_THROW( () )
 {
@@ -172,6 +190,23 @@ inline sal_Bool Any::isExtractableTo( const Type & rType ) const SAL_THROW( () )
         rType.getTypeLibType(), pData, pType,
         (uno_QueryInterfaceFunc)cpp_queryInterface, (uno_ReleaseFunc)cpp_release );
 }
+
+//______________________________________________________________________________
+template <typename T>
+inline bool Any::has() const
+{
+    Type const & rType = getCppuType( static_cast<T const *>(0) );
+    return ::uno_type_isAssignableFromData(
+        rType.getTypeLibType(), pData, pType,
+        (uno_QueryInterfaceFunc) cpp_queryInterface,
+        (uno_ReleaseFunc) cpp_release );
+}
+#if ! defined(__SUNPRO_CC)
+// not impl: forbid use with ambiguous type (sal_Unicode, sal_uInt16)
+template <>
+bool Any::has<sal_uInt16>() const;
+#endif // ! defined(__SUNPRO_CC)
+
 //__________________________________________________________________________________________________
 inline sal_Bool Any::operator == ( const Any & rAny ) const SAL_THROW( () )
 {
@@ -199,7 +234,7 @@ inline Any SAL_CALL makeAny( const C & value ) SAL_THROW( () )
 template<>
 inline Any SAL_CALL makeAny( bool const & value ) SAL_THROW( () )
 {
-    sal_Bool b = value;
+    const sal_Bool b = value;
     return Any( &b, ::getCppuBooleanType() );
 }
 
@@ -212,6 +247,18 @@ inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW( () 
         &rAny, const_cast< C * >( &value ), rType.getTypeLibType(),
         (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
 }
+
+// additionally for C++ bool:
+//______________________________________________________________________________
+inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
+    SAL_THROW( () )
+{
+    sal_Bool b = value;
+    ::uno_type_any_assign(
+        &rAny, &b, ::getCppuBooleanType().getTypeLibType(),
+        (uno_AcquireFunc) cpp_acquire, (uno_ReleaseFunc) cpp_release );
+}
+
 //__________________________________________________________________________________________________
 template< class C >
 inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, C & value ) SAL_THROW( () )
@@ -550,6 +597,30 @@ inline sal_Bool SAL_CALL operator != ( const Any & rAny, const C & value ) SAL_T
 {
     return (! operator == ( rAny, value ));
 }
+
+#if ! defined(EXCEPTIONS_OFF)
+extern "C" rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
+    uno_Any const * pAny, typelib_TypeDescriptionReference * pType )
+    SAL_THROW_EXTERN_C();
+
+//______________________________________________________________________________
+template <typename T>
+T Any::get() const
+{
+    T value;
+    if (! (*this >>= value)) {
+        throw RuntimeException(
+            ::rtl::OUString( cppu_Any_extraction_failure_msg(
+                                 this, getCppuType(&value).getTypeLibType() ),
+                             SAL_NO_ACQUIRE ),
+            Reference<XInterface>() );
+    }
+    return value;
+}
+// not impl: forbid use with ambiguous type (sal_Unicode, sal_uInt16)
+template <>
+sal_uInt16 Any::get<sal_uInt16>() const;
+#endif // ! defined(EXCEPTIONS_OFF)
 
 }
 }
