@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:31:26 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
-#pragma hdrstop
+
 
 using namespace ::com::sun::star;
 
