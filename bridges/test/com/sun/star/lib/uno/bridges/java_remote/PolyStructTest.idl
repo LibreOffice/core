@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PolyStructTest.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:04:36 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,14 +72,8 @@ interface TestTransport {
     TestPolyStruct<boolean> transportBoolean([in] TestPolyStruct<boolean> arg);
     TestPolyStruct<byte> transportByte([in] TestPolyStruct<byte> arg);
     TestPolyStruct<short> transportShort([in] TestPolyStruct<short> arg);
-    TestPolyStruct<unsigned short> transportUnsignedShort(
-        [in] TestPolyStruct<unsigned short> arg);
     TestPolyStruct<long> transportLong([in] TestPolyStruct<long> arg);
-    TestPolyStruct<unsigned long> transportUnsignedLong(
-        [in] TestPolyStruct<unsigned long> arg);
     TestPolyStruct<hyper> transportHyper([in] TestPolyStruct<hyper> arg);
-    TestPolyStruct<unsigned hyper> transportUnsignedHyper(
-        [in] TestPolyStruct<unsigned hyper> arg);
     TestPolyStruct<float> transportFloat([in] TestPolyStruct<float> arg);
     TestPolyStruct<double> transportDouble([in] TestPolyStruct<double> arg);
     TestPolyStruct<char> transportChar([in] TestPolyStruct<char> arg);
