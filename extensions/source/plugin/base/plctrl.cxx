@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+ *  last change: $Author: dbo $ $Date: 2001-12-07 10:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,6 @@ void PluginControl_Impl::createPeer( const Reference< ::com::sun::star::awt::XTo
     if (pImpl)
     {
         _pSysChild = new SystemChildWindow( pImpl, WB_CLIPCHILDREN );
-//      _pSysChild->Show();
         if (pImpl->HasFocus())
             _pSysChild->GrabFocus();
 

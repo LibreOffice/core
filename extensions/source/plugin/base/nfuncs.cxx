@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nfuncs.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-23 17:31:19 $
+ *  last change: $Author: dbo $ $Date: 2001-12-07 10:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,15 +65,32 @@
 
 #include <list>
 
-#ifdef USE_NAMESPACE
-using namespace std;
-#endif
-
-
 #include <plugin/impl.hxx>
 
-//  #define TRACE(x) DBG_ERROR( (x) )
+#ifdef DEBUG
+#include <osl/thread.h>
+#include <stdio.h>
+static FILE * s_file = 0;
+void TRACE( char const * s )
+{
+    if (! s_file)
+        s_file = fopen( "f:\\pluginlog.txt", "w" );
+    oslThreadIdentifier t = osl_getThreadIdentifier(0);
+    fprintf( s_file, "log [t_id=%d]: %s\n", t, s );
+    fflush( s_file );
+}
+void TRACE( char const * s, long n )
+{
+    if (! s_file)
+        s_file = fopen( "f:\\pluginlog.txt", "w" );
+    oslThreadIdentifier t = osl_getThreadIdentifier(0);
+    fprintf( s_file, "log [t_id=%d]: %s%d\n", t, s, n );
+    fflush( s_file );
+}
+#else
 #define TRACE(x)
+#define TRACE(x,n)
+#endif
 
 
 NPNetscapeFuncs aNPNFuncs =

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-23 17:31:19 $
+ *  last change: $Author: dbo $ $Date: 2001-12-07 10:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,13 +688,14 @@ void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, 
              nX_, nY_, nWidth_, nHeight_, nFlags );
 #endif
 
+    PluginControl_Impl::setPosSize(nX_, nY_, nWidth_, nHeight_, nFlags);
+
     m_aNPWindow.x       = nX_;
     m_aNPWindow.y       = nY_;
     m_aNPWindow.width   = nWidth_;
     m_aNPWindow.height  = nHeight_;
     if(getPluginComm())
         getPluginComm()->NPP_SetWindow( getNPPInstance(), &m_aNPWindow );
-    PluginControl_Impl::setPosSize(nX_, nY_, nWidth_, nHeight_, nFlags);
 }
 
 PluginStream::PluginStream( XPlugin_Impl* pPlugin,
@@ -839,13 +840,13 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw()
     m_aFileStream.Seek( STREAM_SEEK_TO_END );
     m_aFileStream.Write( Buffer.getConstArray(), Buffer.getLength() );
 
-    int nPos = m_aFileStream.Tell();
-    int nBytes = 0;
-    while( m_nMode != NP_SEEK && m_nMode != NP_ASFILEONLY &&
-           ( nBytes = m_pPlugin->getPluginComm()->
-             NPP_WriteReady( m_pPlugin->getNPPInstance(),
-                             &m_aNPStream ) ) > 0 &&
-        m_nWritePos < nPos )
+    UINT32 nPos = m_aFileStream.Tell();
+    UINT32 nBytes = 0;
+    while( m_nMode != NP_SEEK &&
+           m_nMode != NP_ASFILEONLY &&
+           m_nWritePos < nPos &&
+           (nBytes = m_pPlugin->getPluginComm()-> NPP_WriteReady(
+               m_pPlugin->getNPPInstance(), &m_aNPStream )) > 0 )
     {
         nBytes = nBytes > nPos - m_nWritePos ? nPos - m_nWritePos : nBytes;
 
@@ -853,20 +854,16 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw()
         m_aFileStream.Seek( m_nWritePos );
         nBytes = m_aFileStream.Read( pBuffer, nBytes );
 
-        int nBytesRead = 0;
+        UINT32 nBytesRead = 0;
         try
         {
-            nBytesRead = m_pPlugin->getPluginComm()->
-                NPP_Write( m_pPlugin->getNPPInstance(),
-                           &m_aNPStream,
-                           m_nWritePos,
-                           nBytes,
-                           pBuffer );
-            delete pBuffer;
+            nBytesRead = m_pPlugin->getPluginComm()->NPP_Write(
+                m_pPlugin->getNPPInstance(), &m_aNPStream, m_nWritePos, nBytes, pBuffer );
+            delete [] pBuffer;
         }
         catch( ... )
         {
-            delete pBuffer;
+            delete [] pBuffer;
             return;
         }
 
@@ -879,9 +876,8 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw()
         m_nWritePos += nBytesRead;
     }
 
-    m_pPlugin->getPluginComm()->
-        NPP_SetWindow( m_pPlugin->getNPPInstance(),
-                       m_pPlugin->getNPWindow());
+    m_pPlugin->getPluginComm()->NPP_SetWindow(
+        m_pPlugin->getNPPInstance(), m_pPlugin->getNPWindow() );
 }
 
 void PluginInputStream::closeOutput() throw()
@@ -900,9 +896,7 @@ sal_uInt32 PluginInputStream::read( sal_uInt32 offset, sal_Int8* buffer, sal_uIn
         return 0;
 
     m_aFileStream.Seek( offset );
-    int nBytes = m_aFileStream.Read( buffer, size );
-
-    return nBytes;
+    return m_aFileStream.Read( buffer, size );
 }
 
 void PluginInputStream::flush(void) throw()
