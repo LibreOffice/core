@@ -1,3 +1,5 @@
 InstallExecSequenceEntry
 DeinstallExecSequenceEntry
+InstallStartmenuFolderIcon
+DeinstallStartmenuFolderIcon
     

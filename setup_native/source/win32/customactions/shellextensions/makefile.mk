@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-03 08:04:15 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:40:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,9 @@ CFLAGS+=-D_STLP_USE_STATIC_LIB
 
 UWINAPILIB=
 
-SLOFILES =	$(SLO)$/shellextensions.obj
+SLOFILES = \
+    $(SLO)$/shellextensions.obj \
+    $(SLO)$/startmenuicon.obj
 
 SHL1STDLIBS=	kernel32.lib\
                 user32.lib\
