@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:14:37 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 07:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ ModelessDialog DLG_REDLINE_ACCEPT
     Text[ turkish ] = "Deðiþiklikleri onayla ya da reddet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aceptar o rechazar modificaciones";
+    Text[ finnish ] = "Hyväksy tai hylkää muutokset";
 };
 
 ModalDialog DLG_MOD_REDLINE_ACCEPT
@@ -138,6 +139,7 @@ ModalDialog DLG_MOD_REDLINE_ACCEPT
     Text[ turkish ] = "Otomatik formatlama: Deðiþiklikleri onayla ya da reddet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoFormato: Aceptar o rechazar cambios";
+    Text[ finnish ] = "Hyväksy tai hylkää automaattisen muotoilun muutokset";
 };
 
 Menu MN_REDLINE_POPUP
@@ -170,6 +172,7 @@ Menu MN_REDLINE_POPUP
             Text[ korean ] = "ÁÖ¼®  ÆíÁý...";
             Text[ turkish ] = "Açýklamalarý düzenle...";
             Text[ catalan ] = "Modificar comentario...";
+            Text[ finnish ] = "Muokkaa huomautusta";
         };
         MenuItem
         {
@@ -208,6 +211,7 @@ Menu MN_REDLINE_POPUP
                         Text[ korean ] = "µ¿ÀÛ";
                         Text[ turkish ] = "Ýþlem";
                         Text[ catalan ] = "Acción";
+                        Text[ finnish ] = "Toiminto";
                     };
                     MenuItem
                     {
@@ -236,6 +240,7 @@ Menu MN_REDLINE_POPUP
                         Text[ turkish ] = "Yazan";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Autor";
+                        Text[ finnish ] = "Laatija";
                     };
                     MenuItem
                     {
@@ -264,6 +269,7 @@ Menu MN_REDLINE_POPUP
                         Text[ turkish ] = "Tarih";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Fecha";
+                        Text[ finnish ] = "Päivämäärä";
                     };
                     MenuItem
                     {
@@ -292,6 +298,7 @@ Menu MN_REDLINE_POPUP
                         Text[ turkish ] = "Açýklama";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Descripción";
+                        Text[ finnish ] = "Kommentti";
                     };
                     MenuItem
                     {
@@ -320,6 +327,7 @@ Menu MN_REDLINE_POPUP
                         Text[ turkish ] = "Belge konumu";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Posición del documento";
+                        Text[ finnish ] = "Asiakirjan sijainti";
                     };
                 };
             };
@@ -343,6 +351,7 @@ Menu MN_REDLINE_POPUP
             Text[ turkish ] = "Sýrala";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ordenar";
+            Text[ finnish ] = "Lajitellaan";
         };
     };
 };
