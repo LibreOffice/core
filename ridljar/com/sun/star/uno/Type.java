@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-18 14:04:55 $
+ *  last change: $Author: dbo $ $Date: 2002-10-29 11:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ import java.util.Hashtable;
  * to the java runtime system, e.g. for delaying the need of a class,
  * so that it is possible to generate it on the fly.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2002-01-18 14:04:55 $
+ * @version     $Revision: 1.7 $ $ $Date: 2002-10-29 11:01:46 $
  * @since       UDK1.0
  */
 public class Type {
@@ -191,7 +191,7 @@ public class Type {
                 _typeName  = zClass.getName();
             }
             else {
-                _typeClass = TypeClass.UNKNOWN;
+                _typeClass = TypeClass.STRUCT;
                 _typeName  = zClass.getName();
             }
         }
@@ -227,6 +227,12 @@ public class Type {
             _typeClass = TypeClass.UNKNOWN;
 
         _typeName = typeName;
+    }
+
+    public Type( String type_name, TypeClass type_class )
+    {
+        _typeClass = type_class;
+        _typeName = type_name;
     }
 
 
