@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: as $ $Date: 2000-09-26 13:01:15 $
+#   last change: $Author: as $ $Date: 2000-10-12 10:48:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,9 @@ SLOFILES=			$(SLO)$/otasksaccess.obj	 					\
                     $(SLO)$/opluginframedispatcher.obj				\
                     $(SLO)$/oinstanceprovider.obj					\
                     $(SLO)$/opluginframefactory.obj					\
-                    $(SLO)$/opipeconnection.obj
+                    $(SLO)$/opipeconnection.obj						\
+                    $(SLO)$/ostatusindicatorfactory.obj				\
+                    $(SLO)$/ostatusindicator.obj
 
 # --- Targets ------------------------------------------------------
 
