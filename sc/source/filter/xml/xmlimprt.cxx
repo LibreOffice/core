@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:34:52 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
 
 static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
 {
-    { XML_NAMESPACE_OFFICE, XML_FONT_DECLS,         XML_TOK_DOC_FONTDECLS           },
+    { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS           },
     { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES              },
     { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES          },
     { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES        },
