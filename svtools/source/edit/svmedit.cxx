@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-17 16:22:06 $
+ *  last change: $Author: dv $ $Date: 2001-10-31 11:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1429,3 +1429,19 @@ BOOL MultiLineEdit::IsFocusSelectionHideEnabled() const
 {
     return pImpSvMEdit->GetTextWindow()->IsAutoFocusHide();
 }
+
+
+void MultiLineEdit::SetLeftMargin( USHORT n )
+{
+    if ( GetTextEngine() )
+        GetTextEngine()->SetLeftMargin( n );
+}
+
+USHORT MultiLineEdit::GetLeftMargin() const
+{
+    if ( GetTextEngine() )
+        return GetTextEngine()->GetLeftMargin();
+    else
+        return 0;
+}
+
