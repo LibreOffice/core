@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presethandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2004-12-07 13:37:37 $
+ *  last change: $Author: as $ $Date: 2004-12-07 14:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,15 +411,8 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     //    existing ones only!
     // b) inside user layer we can (SOFT mode!) but sometimes we shouldnt (HARD mode!)
     //    create new empty structures. We should preferr using of any existing structure.
-    sal_Int32 eShareMode    = (css::embed::ElementModes::READ      | css::embed::ElementModes::NOCREATE);
-    sal_Int32 eUserModeHard = (css::embed::ElementModes::READWRITE | css::embed::ElementModes::NOCREATE);
-    sal_Int32 eUserModeSoft = (css::embed::ElementModes::READWRITE                                     );
-
-    // Prefer HARD mode for user layer (especialy for global or module based configurations, where
-    // our setup is responsible to create all needed structures.
-    // But switch to SOFT mode in case document based configuration is used.
-    // Then we may be must create our own structures!
-    sal_Int32 eUserMode = eUserModeHard;
+    sal_Int32 eShareMode = (css::embed::ElementModes::READ      | css::embed::ElementModes::NOCREATE);
+    sal_Int32 eUserMode  = (css::embed::ElementModes::READWRITE                                     );
 
     ::rtl::OUStringBuffer sRelPathBuf(1024);
     ::rtl::OUString       sRelPath;
@@ -453,7 +446,6 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
         case E_DOCUMENT :
         {
-            eUserMode = eUserModeSoft;
             sRelPathBuf.append(sResource);
             sRelPath = sRelPathBuf.makeStringAndClear();
 
@@ -830,13 +822,23 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     ::std::vector< ::rtl::OUString >                 lSubFolders   = impl_getSubFolderNames(xPath);
     ::std::vector< ::rtl::OUString >::const_iterator pLocaleFolder = ::comphelper::Locale::getFallback(lSubFolders, aLocale.toISO());
 
-    if (pLocaleFolder == lSubFolders.end())
+    // no fallback ... creation not allowed => no storage
+    if (
+        (pLocaleFolder == lSubFolders.end()                                                ) &&
+        ((eMode & css::embed::ElementModes::NOCREATE) == css::embed::ElementModes::NOCREATE)
+       )
         return css::uno::Reference< css::embed::XStorage >();
 
+    // it doesnt matter, if there is a locale fallback or not
+    // If creation of storages is allowed, we do it anyway.
+    // Otherwhise we have no acc config at all, which can make other trouble.
     ::rtl::OUString sLocalizedPath;
     sLocalizedPath  = sPath;
     sLocalizedPath += PATH_SEPERATOR;
-    sLocalizedPath += *pLocaleFolder;
+    if (pLocaleFolder != lSubFolders.end())
+        sLocalizedPath += *pLocaleFolder;
+    else
+        sLocalizedPath += aLocale.toISO();
 
     css::uno::Reference< css::embed::XStorage > xLocalePath = impl_openPathIgnoringErrors(sLocalizedPath, eMode, bShare);
 
