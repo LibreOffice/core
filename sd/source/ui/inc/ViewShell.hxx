@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:55:08 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,24 @@
 #ifndef _SD_GLOB_HXX
 #include "glob.hxx"
 #endif
+#ifndef _PRESENTATION_HXX
 #include "pres.hxx"
+#endif
+#ifndef _SD_CFGID_HXX
 #include "cfgids.hxx"
+#endif
+#ifndef _SD_VIEW_HXX
 #include "View.hxx"
+#endif
+
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
+
+#ifndef INCLUDED_MEMORY
 #include <memory>
+#define INCLUDED_MEMORY
+#endif
 
 class SdPage;
 class SvxRuler;
@@ -207,10 +221,11 @@ public:
 
     inline ::sd::View* GetView (void) const;
     inline SdrView* GetDrawView (void) const;
-    DrawDocShell* GetDocSh (void) const;
+    SD_DLLPUBLIC DrawDocShell* GetDocSh (void) const;
+
     SdDrawDocument*  GetDoc (void) const;
 
-    SfxViewFrame* GetViewFrame (void) const;
+    SD_DLLPUBLIC SfxViewFrame* GetViewFrame (void) const;
 
     /** The active window is usually the mpContentWindow.  When there is a
         show running then the active window is a ShowWindow.
