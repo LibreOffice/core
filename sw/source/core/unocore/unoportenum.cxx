@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 11:39:11 $
+ *  last change: $Author: dvo $ $Date: 2001-01-10 21:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,7 +613,12 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
             pUnoCrsr->Right(nMovePos - nCurrentIndex);
         else
         {
-            DBG_ERROR("else obsoleted by 'if (nMovePos <= nCurrentIndex)' above");
+            // ensure proper exit: move to paragraph end
+            // (this should not be necessary any more; we assert it only
+            //  happens when the above would move to the end of the
+            //  paragraph anyway)
+            DBG_ASSERT(nMovePos == pUnoCrsr->GetCntntNode()->Len(),
+                       "may only happen at paragraph end");
             pUnoCrsr->MovePara(fnParaCurr, fnParaEnd);
         }
     }
