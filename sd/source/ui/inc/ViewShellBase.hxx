@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:05:31 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ class DrawDocShell;
 class FormShellManager;
 class PaneManager;
 class PrintManager;
+class UpdateLockManager;
 class ViewShell;
 class ViewShellManager;
 
@@ -290,6 +291,8 @@ public:
     /* returns the complete area of the current view relative to the frame window */
     inline const Rectangle& getClientRectangle() const;
 
+    UpdateLockManager& GetUpdateLockManager (void) const;
+
 protected:
     osl::Mutex maMutex;
     /** The view tab bar is the control for switching between different
@@ -316,6 +319,8 @@ private:
 
     // contains the complete area of the current view relative to the frame window
     Rectangle maClientArea;
+
+    ::std::auto_ptr<UpdateLockManager> mpUpdateLockManager;
 
     /** Common code of OuterResizePixel() and InnerResizePixel().
     */
