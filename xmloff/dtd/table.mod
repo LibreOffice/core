@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.11 2000-10-26 13:15:29 dr Exp $
+	$Id: table.mod,v 1.12 2000-11-01 11:55:17 dr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -363,4 +363,11 @@
 	table:display %boolean; #IMPLIED
 	table:display-details %boolean; #IMPLIED
 >
-
+<!ELEMENT table:consolidation EMPTY>
+<!ATTLIST table:consolidation
+	table:function CDATA #REQUIRED
+	table:source-cell-range-addresses %cell-range-address-list; #REQUIRED
+	table:target-cell-address %cell-address; #REQUIRED
+	table:use-label (none | column | row | both) "none"
+	table:link-to-source-data %boolean; "false"
+>

@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.5 2000-10-24 08:36:39 dr Exp $
+	$Id: office.mod,v 1.6 2000-11-01 11:55:17 dr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -128,5 +128,6 @@
 		text:unordered-list|table:table|chart:chart|draw:page|
 		draw:a|draw:text-box|draw:image|text:section)*,
 		table:named-expressions?,
-		table:database-ranges?,table:data-pilot-tables?)">
+		table:database-ranges?,table:data-pilot-tables?,
+		table:consolidation?)">
 <!ELEMENT office:body %body;>
