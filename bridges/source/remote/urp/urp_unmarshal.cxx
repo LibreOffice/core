@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_unmarshal.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2002-10-18 09:27:18 $
+ *  last change: $Author: kso $ $Date: 2002-10-23 13:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,12 +519,12 @@ sal_Bool Unmarshal::unpack( void *pDestination ,
                     }
                     else
                     {
-                        for( sal_Int32 i = 0 ; i < nLen ; i ++ )
+                        for ( sal_Int32 i = nLen; i; --i )
                         {
                             m_aItemsToUnpack.push(
                                 UnpackItem(
                                     ((char*)pSequence->elements)
-                                        + i * nElementSize,
+                                        + (i - 1) * nElementSize,
                                     pET ) );
                         }
                     }
