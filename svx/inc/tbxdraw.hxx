@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:07:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _SFXTBXMGR_HXX //autogen
-#include <sfx2/tbxmgr.hxx>
-#endif
 #ifndef _SFXTBXCTRL_HXX //autogen
 #include <sfx2/tbxctrl.hxx>
 #endif
