@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autorecovery.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:50:22 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:54:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,7 +657,8 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         //---------------------------------------
         /** TODO document me */
-        void implts_hideAllDocs();
+        void implts_changeAllDocVisibility(sal_Bool bVisible);
+        void implts_prepareSessionShutdown();
 
         //---------------------------------------
         /** @short  save all current opened documents to a specific
@@ -874,6 +875,9 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         /// TODO
         void implts_lockDocCache();
         void implts_unlockDocCache();
+
+        /// TODO
+        void implts_verifyCacheAgainstDesktopDocumentList();
 };
 
 } // namespace framework
