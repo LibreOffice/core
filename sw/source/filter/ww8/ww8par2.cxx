@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-23 11:16:23 $
+ *  last change: $Author: cmc $ $Date: 2001-04-26 12:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1350,6 +1350,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         aRes.nStartPos = nStartCp;
         pPap->SeekPos(aRes.nStartPos);
         pPap->GetSprms(&aRes);
+        nStartCp = aRes.nEndPos;
 
         if(    ( pPap->Where() == LONG_MAX )
             || (    ( !bVer67 || bComplex )
@@ -3065,11 +3066,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.9 2001-04-23 11:16:23 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.10 2001-04-26 12:01:42 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/04/23 11:16:23  cmc
+      Enable automatic text foreground color {im|ex}port
+
       Revision 1.8  2001/04/20 14:54:47  cmc
       base table handling on logical character positions and by using new property finding algorithm
 
