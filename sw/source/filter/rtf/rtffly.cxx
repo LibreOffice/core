@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 12:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
+
 #ifdef PRECOMPILED
 #include "filt_pch.hxx"
 #endif
@@ -176,10 +179,15 @@
 #ifndef _FLTINI_HXX
 #include <fltini.hxx>
 #endif
-#ifndef __SGI_STL_VECTOR
-#include <vector>
+#ifndef __SGI_STL_DEQUE
+#include <deque>
 #endif
-
+#ifndef __SGI_STL_MAP
+#include <map>
+#endif
+#ifndef __SGI_STL_UTILITY
+#include <utility>
+#endif
 
 #define ANCHOR(p)   ((SwFmtAnchor*)p)
 
@@ -336,7 +344,11 @@ void SwRTFParser::SetFlysInDoc()
 {
     // !! von Oben abarbeiten, CntntPos ist kein Index !
     SwNodes & rNds = pDoc->GetNodes();
-    ::std::vector <SwFlyFrmFmt*> aPrevFmts;
+    typedef std::pair<SwFlyFrmFmt*, SwFmtAnchor> frameEntry;
+    typedef std::deque<frameEntry> rtfframesAtIndex;
+    typedef std::map<const SwNode*, rtfframesAtIndex> rtfFmtMap;
+    rtfFmtMap aPrevFmts;
+
     SwFrmFmt* pParent = pDoc->GetFrmFmtFromPool( RES_POOLFRM_FRAME );
     for( USHORT n = 0; n < aFlyArr.Count(); ++n )
     {
@@ -556,40 +568,51 @@ void SwRTFParser::SetFlysInDoc()
                 ::lcl_CpyBreakAttrs( pSrcNd, pDstNd, &pFlySave->nSttNd );
             }
 
+            const SwNodeIndex aSttNd(*pSttNd);
+            SwNodeIndex aEndNd(*pSttNd->EndOfSectionNode());
+            aEndNd--;
 
             SwPosition aPos( pFlySave->nSttNd );
-            SwFmtAnchor aAnchor( rAnchor );
-            aAnchor.SetAnchor( &aPos );
-            pFmt->SetAttr( aAnchor );
+            SwFmtAnchor aAnchor(rAnchor);
+            aAnchor.SetAnchor(&aPos);
 
-            // check if the new Frame contains any anchors to previous
-            // flys. This is in RTF not allowed, so move all anchors to
-            // the prev position
+            const SwNode *pCurrentAnchor = &(pFlySave->nSttNd.GetNode());
+            aPrevFmts[pCurrentAnchor].push_back(frameEntry(pFmt, aAnchor));
+
+            while (aEndNd > aSttNd)
             {
-                ULONG nSttNd = pSttNd->GetIndex(),
-                nEndNd = pSttNd->EndOfSectionIndex();
-                for( USHORT nPrevFmts = aPrevFmts.size(); nPrevFmts; )
+                typedef rtfframesAtIndex::iterator myIter;
+                rtfframesAtIndex &rDeque = aPrevFmts[&(aEndNd.GetNode())];
+                myIter aEnd = rDeque.end();
+                for (myIter aIter = rDeque.begin(); aIter != aEnd; ++aIter)
                 {
-                    SwFmt* pTmpFmt = (SwFmt*)aPrevFmts[ --nPrevFmts ];
-                    const SwFmtAnchor& rAn = pTmpFmt->GetAnchor();
-                    ULONG nNd = rAn.GetCntntAnchor()->nNode.GetIndex();
-                    if( nSttNd < nNd && nNd < nEndNd )
-                    {
-                        SwFmtAnchor aAnchor( rAn );
-                        aAnchor.SetAnchor( &aPos );
-                        pTmpFmt->SetAttr( aAnchor );
-                    }
-                    else
-                    // then forget it
-                        aPrevFmts.erase( aPrevFmts.begin()+nPrevFmts, aPrevFmts.begin()+nPrevFmts+1);
+                    aIter->second.SetAnchor(&aPos);
+                    aPrevFmts[pCurrentAnchor].push_back(*aIter);
                 }
-                void* p = (void*)pFmt;
-                aPrevFmts.push_back(pFmt);
-            }
+                rDeque.clear();
+                aEndNd--;
+           }
         }
         delete pFlySave;
     }
-    aFlyArr.Remove( 0, aFlyArr.Count() );
+
+    typedef rtfFmtMap::reverse_iterator myriter;
+    myriter aEnd = aPrevFmts.rend();
+    for(myriter aIter = aPrevFmts.rbegin(); aIter != aEnd; ++aIter)
+    {
+        rtfframesAtIndex &rDeque = aIter->second;
+        typedef rtfframesAtIndex::iterator myIter;
+        myIter aQEnd = rDeque.end();
+        for (myIter aQIter = rDeque.begin(); aQIter != aQEnd; ++aQIter)
+        {
+            frameEntry &rEntry = *aQIter;
+            SwFlyFrmFmt *pFrm = rEntry.first;
+            SwFmtAnchor &rAnchor = rEntry.second;
+            pFrm->SetAttr(rAnchor);
+        }
+    }
+
+    aFlyArr.Remove(0, aFlyArr.Count());
 }
 
 void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
@@ -1650,4 +1673,4 @@ void SwRTFParser::ReadOLEData()
 }
 #endif
 
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
