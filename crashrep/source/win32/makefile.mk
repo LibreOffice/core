@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 19:29:46 $
+#   last change: $Author: kz $ $Date: 2004-06-11 15:16:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,8 @@ APP1NOSVRES=$(RES)$/$(TARGET).res
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+$(OBJ)$/soreport.obj: $(INCCOM)$/_version.h
 
 # Generate the native Windows resource file
 # using lngconvex.exe 
