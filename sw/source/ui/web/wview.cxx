@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:25:40 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,10 +361,8 @@ void SwWebView::SelectShell()
         //aktiviert war
         //Vorher muss ein Flush() sein, betrifft aber lt. MBA nicht das UI und ist
         //kein Performance-Problem
+        // TODO/LATER: maybe now the Flush() command is superfluous?!
         rDispatcher.Flush();
-        USHORT nId = pBarCfg->GetTopToolbar( nSelectionType );
-        if ( USHRT_MAX != nId )
-            rDispatcher.ShowObjectBar( nId );
 
         Point aPnt = GetEditWin().GetPointerPosPixel();
         aPnt = GetEditWin().PixelToLogic(aPnt);
