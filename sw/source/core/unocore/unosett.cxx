@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 17:29:11 $
+ *  last change: $Author: os $ $Date: 2000-10-18 09:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1312,6 +1312,7 @@ SwXNumberingRules::SwXNumberingRules() :
     pNumRule(0),
     pDoc(0),
     pDocShell(0),
+    bOwnNumRuleCreated(FALSE),
     _pMap(GetNumberingRulesMap())
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -1326,6 +1327,7 @@ SwXNumberingRules::SwXNumberingRules() :
   -----------------------------------------------------------------------*/
 SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule) :
     pNumRule(new SwNumRule(rRule)),
+    bOwnNumRuleCreated(TRUE),
     pDoc(0),
     pDocShell(0),
     _pMap(GetNumberingRulesMap())
@@ -1357,6 +1359,7 @@ SwXNumberingRules::SwXNumberingRules(SwDocShell& rDocSh) :
     pDoc(0),
     pNumRule(0),
     pDocShell(&rDocSh),
+    bOwnNumRuleCreated(FALSE),
     _pMap(GetNumberingRulesMap())
 {
     pDocShell->GetDoc()->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
@@ -1368,30 +1371,20 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
     pDoc(&rDoc),
     pNumRule(0),
     pDocShell(0),
+    bOwnNumRuleCreated(FALSE),
     _pMap(GetNumberingRulesMap())
 {
     rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
     sCreatedNumRuleName = rDoc.GetUniqueNumRuleName();
     sal_uInt16 nIndex = rDoc.MakeNumRule( sCreatedNumRuleName, 0 );
 }
-
-/* -----------------28.10.99 09:40-------------------
-
- --------------------------------------------------*/
-SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc, const String& rName) :
-    pNumRule(new SwNumRule(rName)),
-    pDoc(&rDoc),
-    pDocShell(0),
-    _pMap(GetNumberingRulesMap())
-{
-    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
-}
 /*-- 14.12.98 14:57:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SwXNumberingRules::~SwXNumberingRules()
 {
-    delete pNumRule;
+    if(sCreatedNumRuleName.Len())
+        pDoc->DelNumRule( sCreatedNumRuleName );
 }
 /*-- 14.12.98 14:57:58---------------------------------------------------
 
@@ -1405,6 +1398,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
         throw lang::IllegalArgumentException();
     const uno::Sequence<beans::PropertyValue>& rProperties =
                     *(const uno::Sequence<beans::PropertyValue>*)rElement.getValue();
+    SwNumRule* pRule = 0;
     if(pNumRule)
         SwXNumberingRules::setNumberingRuleByIndex( *pNumRule,
                             rProperties, nIndex);
@@ -1451,6 +1445,14 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
         }
         pDocShell->GetDoc()->SetOutlineNumRule( aNumRule );
     }
+    else if(!pNumRule && pDoc && sCreatedNumRuleName.Len() &&
+        0 != (pRule = pDoc->FindNumRulePtr( sCreatedNumRuleName )))
+    {
+        SwXNumberingRules::setNumberingRuleByIndex( *pNumRule,
+                            rProperties, nIndex);
+        sal_uInt16 nPos = pDoc->FindNumRule( sCreatedNumRuleName );
+        pDoc->UpdateNumRule( sCreatedNumRuleName, nPos );
+    }
     else
         throw uno::RuntimeException();
 
@@ -1473,10 +1475,13 @@ uno::Any SwXNumberingRules::getByIndex(sal_Int32 nIndex)
     uno::Any aVal;
     if(MAXLEVEL <= nIndex)
         throw lang::IndexOutOfBoundsException();
-    if(pNumRule)
+    const SwNumRule* pRule = pNumRule;
+    if(!pRule && pDoc && sCreatedNumRuleName.Len())
+        pRule = pDoc->FindNumRulePtr( sCreatedNumRuleName );
+    if(pRule)
     {
         uno::Sequence<beans::PropertyValue> aRet = getNumberingRuleByIndex(
-                                        *pNumRule, nIndex);
+                                        *pRule, nIndex);
         aVal.setValue(&aRet, ::getCppuType((uno::Sequence<beans::PropertyValue>*)0));
 
     }
@@ -2097,23 +2102,34 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
 {
     Any aRet;
     SwNumRule* pDocRule = 0;
-    if(!pNumRule && pDocShell)
+    SwNumRule* pCreatedRule = 0;
+    if(!pNumRule)
     {
-        pDocRule = new SwNumRule(*pDocShell->GetDoc()->GetOutlineNumRule());
+        if(!pNumRule && pDocShell)
+        {
+            pDocRule = new SwNumRule(*pDocShell->GetDoc()->GetOutlineNumRule());
+        }
+        else if(pDoc && sCreatedNumRuleName.Len())
+        {
+            pCreatedRule = pDoc->FindNumRulePtr( sCreatedNumRuleName);
+        }
+
     }
-    if(!pNumRule && !pDocRule)
+    if(!pNumRule && !pDocRule && !pCreatedRule)
         throw RuntimeException();
 
 
     if(0 == rPropertyName.compareToAscii(UNO_NAME_IS_AUTOMATIC))
     {
         BOOL bVal = *(sal_Bool*)rValue.getValue();
-        pDocRule ? pDocRule->SetAutoRule(bVal) :pNumRule->SetAutoRule(bVal);
+        if(!pCreatedRule)
+            pDocRule ? pDocRule->SetAutoRule(bVal) : pNumRule->SetAutoRule(bVal);
     }
     else if(0 == rPropertyName.compareToAscii(UNO_NAME_IS_CONTINUOUS_NUMBERING))
     {
         BOOL bVal = *(sal_Bool*)rValue.getValue();
-        pDocRule ? pDocRule->SetContinusNum(bVal) : pNumRule->SetContinusNum(bVal);
+        pDocRule ? pDocRule->SetContinusNum(bVal) :
+            pCreatedRule ? pCreatedRule->SetContinusNum(bVal) : pNumRule->SetContinusNum(bVal);
     }
     else if(0 == rPropertyName.compareToAscii(UNO_NAME_NAME))
     {
@@ -2123,7 +2139,8 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     else if(0 == rPropertyName.compareToAscii(UNO_NAME_IS_ABSOLUTE_MARGINS))
     {
         BOOL bVal = *(sal_Bool*)rValue.getValue();
-        pDocRule ? pDocRule->SetAbsSpaces(bVal) : pNumRule->SetAbsSpaces(bVal);
+        pDocRule ? pDocRule->SetAbsSpaces(bVal) :
+            pCreatedRule ? pCreatedRule->SetAbsSpaces(bVal) : pNumRule->SetAbsSpaces(bVal);
     }
     else
         throw UnknownPropertyException();
@@ -2131,6 +2148,11 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     {
         pDocShell->GetDoc()->SetOutlineNumRule(*pDocRule);
         delete pDocRule;
+    }
+    else if(pCreatedRule)
+    {
+        sal_uInt16 nPos = pDoc->FindNumRule( sCreatedNumRuleName );
+        pDoc->UpdateNumRule( sCreatedNumRuleName, nPos );
     }
 }
 /*-- 19.07.00 07:49:18---------------------------------------------------
@@ -2141,8 +2163,11 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
 {
     Any aRet;
     const SwNumRule* pRule = pNumRule;
+    SwNumRule* pCreatedRule = 0;
     if(!pRule && pDocShell)
         pRule = pDocShell->GetDoc()->GetOutlineNumRule();
+    else if(pDoc && sCreatedNumRuleName.Len())
+        pRule = pDoc->FindNumRulePtr( sCreatedNumRuleName );
     if(!pRule)
         throw RuntimeException();
 
@@ -2199,6 +2224,25 @@ void SwXNumberingRules::removeVetoableChangeListener(
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
+/* -----------------------------17.10.00 14:23--------------------------------
+
+ ---------------------------------------------------------------------------*/
+OUString SwXNumberingRules::getName() throw( RuntimeException )
+{
+    if(pNumRule)
+        return pNumRule->GetName();
+    else
+        return sCreatedNumRuleName;
+}
+/* -----------------------------17.10.00 14:23--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXNumberingRules::setName(const OUString& Name_) throw( RuntimeException )
+{
+    RuntimeException aExcept;
+    aExcept.Message = C2U("readonly");
+    throw aExcept;
+}
 /*-- 14.12.98 14:58:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -2207,7 +2251,8 @@ void SwXNumberingRules::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
     {
-        delete pNumRule;
+        if(bOwnNumRuleCreated)
+            delete pNumRule;
         pNumRule = 0;
         pDoc = 0;
     }
@@ -2377,6 +2422,9 @@ void SwXTextColumns::setColumns(const uno::Sequence< text::TextColumn >& rColumn
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/10/12 17:29:11  mib
+    Don't create styles then querying footnote info properties
+
     Revision 1.3  2000/10/12 07:06:04  os
     #79412# service name corrected
 

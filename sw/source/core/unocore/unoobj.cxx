@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-10-17 15:34:13 $
+ *  last change: $Author: os $ $Date: 2000-10-18 09:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,6 +583,9 @@ void lcl_InsertFile(SwUnoCrsr* pUnoCrsr,
     else
     {
         pMed = new SfxMedium(rFileName, STREAM_READ, sal_True,
+#if SUPD<609
+            sal_True,
+#endif
                     pFilter, 0);
         if(rFilterOption.Len())
         {
@@ -811,71 +814,83 @@ void lcl_setNumberingProperty(const uno::Any& rValue, SwPaM& rPam)
                 xNumTunnel->getSomething( SwXNumberingRules::getUnoTunnelId() );
         }
 
-        if(pSwNum && pSwNum->GetNumRule())
+        if(pSwNum)
         {
-            SwDoc* pDoc = rPam.GetDoc();
-            SwNumRule aRule(*pSwNum->GetNumRule());
-            const String* pNewCharStyles =  pSwNum->GetNewCharStyleNames();
-            const String* pBulletFontNames = pSwNum->GetBulletFontNames();
-            for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
+            if(pSwNum->GetNumRule())
             {
-                SwNumFmt aFmt(aRule.Get( i ));
-                if( pNewCharStyles[i].Len() &&
-                    pNewCharStyles[i] != SwXNumberingRules::GetInvalidStyle() &&
-                    (!aFmt.GetCharFmt() || pNewCharStyles[i] != aFmt.GetCharFmt()->GetName()))
+                SwDoc* pDoc = rPam.GetDoc();
+                SwNumRule aRule(*pSwNum->GetNumRule());
+                const String* pNewCharStyles =  pSwNum->GetNewCharStyleNames();
+                const String* pBulletFontNames = pSwNum->GetBulletFontNames();
+                for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
                 {
-                    if(!pNewCharStyles[i].Len())
-                        aFmt.SetCharFmt(0);
-                    else
+                    SwNumFmt aFmt(aRule.Get( i ));
+                    if( pNewCharStyles[i].Len() &&
+                        pNewCharStyles[i] != SwXNumberingRules::GetInvalidStyle() &&
+                        (!aFmt.GetCharFmt() || pNewCharStyles[i] != aFmt.GetCharFmt()->GetName()))
                     {
-
-                        // CharStyle besorgen und an der chaos::Rule setzen
-                        sal_uInt16 nChCount = pDoc->GetCharFmts()->Count();
-                        SwCharFmt* pCharFmt = 0;
-                        for(sal_uInt16 i = 0; i< nChCount; i++)
+                        if(!pNewCharStyles[i].Len())
+                            aFmt.SetCharFmt(0);
+                        else
                         {
-                            SwCharFmt& rChFmt = *((*(pDoc->GetCharFmts()))[i]);;
-                            if(rChFmt.GetName() == pNewCharStyles[i])
+
+                            // CharStyle besorgen und an der chaos::Rule setzen
+                            sal_uInt16 nChCount = pDoc->GetCharFmts()->Count();
+                            SwCharFmt* pCharFmt = 0;
+                            for(sal_uInt16 i = 0; i< nChCount; i++)
                             {
-                                pCharFmt = &rChFmt;
-                                break;
+                                SwCharFmt& rChFmt = *((*(pDoc->GetCharFmts()))[i]);;
+                                if(rChFmt.GetName() == pNewCharStyles[i])
+                                {
+                                    pCharFmt = &rChFmt;
+                                    break;
+                                }
                             }
-                        }
 
-                        if(!pCharFmt)
-                        {
-                            SfxStyleSheetBasePool* pPool = pDoc->GetDocShell()->GetStyleSheetPool();
-                            SfxStyleSheetBase* pBase;
-                            pBase = pPool->Find(pNewCharStyles[i], SFX_STYLE_FAMILY_CHAR);
-                        // soll das wirklich erzeugt werden?
-                            if(!pBase)
-                                pBase = &pPool->Make(pNewCharStyles[i], SFX_STYLE_FAMILY_PAGE);
-                            pCharFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
+                            if(!pCharFmt)
+                            {
+                                SfxStyleSheetBasePool* pPool = pDoc->GetDocShell()->GetStyleSheetPool();
+                                SfxStyleSheetBase* pBase;
+                                pBase = pPool->Find(pNewCharStyles[i], SFX_STYLE_FAMILY_CHAR);
+                            // soll das wirklich erzeugt werden?
+                                if(!pBase)
+                                    pBase = &pPool->Make(pNewCharStyles[i], SFX_STYLE_FAMILY_PAGE);
+                                pCharFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
+                            }
+                            if(pCharFmt)
+                                aFmt.SetCharFmt(pCharFmt);
                         }
-                        if(pCharFmt)
-                            aFmt.SetCharFmt(pCharFmt);
                     }
-                }
-                //jetzt nochmal fuer Fonts
-                if(pBulletFontNames[i] != SwXNumberingRules::GetInvalidStyle() &&
-                    ((pBulletFontNames[i].Len() && !aFmt.GetBulletFont()) ||
-                    pBulletFontNames[i].Len() &&
-                            aFmt.GetBulletFont()->GetName() != pBulletFontNames[i] ))
-                {
-                    const SvxFontListItem* pFontListItem =
-                            (const SvxFontListItem* )pDoc->GetDocShell()
-                                                ->GetItem( SID_ATTR_CHAR_FONTLIST );
-                    const FontList*  pList = pFontListItem->GetFontList();
+                    //jetzt nochmal fuer Fonts
+                    if(pBulletFontNames[i] != SwXNumberingRules::GetInvalidStyle() &&
+                        ((pBulletFontNames[i].Len() && !aFmt.GetBulletFont()) ||
+                        pBulletFontNames[i].Len() &&
+                                aFmt.GetBulletFont()->GetName() != pBulletFontNames[i] ))
+                    {
+                        const SvxFontListItem* pFontListItem =
+                                (const SvxFontListItem* )pDoc->GetDocShell()
+                                                    ->GetItem( SID_ATTR_CHAR_FONTLIST );
+                        const FontList*  pList = pFontListItem->GetFontList();
 
-                    FontInfo aInfo = pList->Get(
-                        pBulletFontNames[i],WEIGHT_NORMAL, ITALIC_NONE);
-                    Font aFont(aInfo);
-                    aFmt.SetBulletFont(&aFont);
+                        FontInfo aInfo = pList->Get(
+                            pBulletFontNames[i],WEIGHT_NORMAL, ITALIC_NONE);
+                        Font aFont(aInfo);
+                        aFmt.SetBulletFont(&aFont);
+                    }
+                    aRule.Set( i, aFmt );
                 }
-                aRule.Set( i, aFmt );
+                UnoActionContext aAction(rPam.GetDoc());
+                rPam.GetDoc()->SetNumRule( rPam, aRule );
             }
-            UnoActionContext aAction(rPam.GetDoc());
-            rPam.GetDoc()->SetNumRule( rPam, aRule );
+            else if(pSwNum->GetCreatedNumRuleName().Len())
+            {
+                SwDoc* pDoc = rPam.GetDoc();
+                UnoActionContext aAction(pDoc);
+                SwNumRule* pRule = pDoc->FindNumRulePtr( pSwNum->GetCreatedNumRuleName() );
+                if(!pRule)
+                    throw RuntimeException();
+                pDoc->SetNumRule( rPam, *pRule );
+            }
         }
     }
 }
