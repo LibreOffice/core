@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-27 12:49:42 $
+ *  last change: $Author: mba $ $Date: 2001-08-28 15:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,8 @@ sal_Bool SfxFrame::DoClose()
         SfxViewShell *pViewSh;
         if ( pImp->pCurrentViewFrame && 0 != ( pViewSh = pImp->pCurrentViewFrame->GetViewShell() ) )
         {
-            pViewSh->DisconnectClients_Impl( NULL );
+            // disconnect saves all objects, let viewframe discard the clients ( #89692# )
+//            pViewSh->DisconnectClients_Impl( NULL );
             pWin = pViewSh->GetWindow();
             if ( pWin )
             {
