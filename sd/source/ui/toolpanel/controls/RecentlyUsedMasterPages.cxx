@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RecentlyUsedMasterPages.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:47:37 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,12 @@
 #endif
 #include <tools/urlobj.hxx>
 #include <unotools/confignode.hxx>
+#ifndef INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
+#include <osl/doublecheckedlocking.h>
+#endif
+#ifndef INCLUDED_OSL_GETGLOBALMUTEX_HXX
+#include <osl/getglobalmutex.hxx>
+#endif
 
 using namespace ::std;
 using namespace ::rtl;
@@ -133,20 +139,26 @@ namespace sd { namespace toolpanel { namespace controls {
 
 
 RecentlyUsedMasterPages* RecentlyUsedMasterPages::mpInstance = NULL;
-::osl::Mutex RecentlyUsedMasterPages::maMutex;
 
 
 RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance (void)
 {
     if (mpInstance == NULL)
     {
-        ::osl::MutexGuard aGuard (maMutex);
+        ::osl::GetGlobalMutex aMutexFunctor;
+        ::osl::MutexGuard aGuard (aMutexFunctor());
         if (mpInstance == NULL)
         {
-            mpInstance = new RecentlyUsedMasterPages ();
-            mpInstance->LateInit();
+            RecentlyUsedMasterPages* pInstance = new RecentlyUsedMasterPages();
+            pInstance->LateInit();
+            SdGlobalResourceContainer::Instance().AddResource (
+                ::std::auto_ptr<SdGlobalResource>(pInstance));
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            mpInstance = pInstance;
         }
     }
+    else
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
 
     return *mpInstance;
 }
