@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:43:37 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -906,7 +906,7 @@ void Star::InsertToken ( char *yytext )
                     }
                     else
                     {
-                        aProjectName = aDirName.GetToken ( 0, 0x5c);
+                        aProjectName = aDirName.GetToken ( 0, '\\');
                         if ( HasProject( aProjectName ))
                         {
                             pPrj = GetPrj( aProjectName );
@@ -934,7 +934,7 @@ void Star::InsertToken ( char *yytext )
        der Solar-Projekte einfuegen */
     if ( i == -1 )
     {
-        aProjectName = aDirName.GetToken ( 0, 0x5c);
+        aProjectName = aDirName.GetToken ( 0, '\\');
         if ( HasProject( aProjectName ))
         {
             pPrj = GetPrj( aProjectName );
@@ -1517,7 +1517,7 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
                         }
                         else
                         {
-                            aProjectName = aDirName.GetToken ( 0, 0x5c);
+                            aProjectName = aDirName.GetToken ( 0, '\\');
                             if ( HasProject( aProjectName ))
                             {
                                 pPrj = GetPrj( aProjectName );
@@ -1546,7 +1546,7 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
            der Solar-Projekte einfuegen */
         if ( i == -1 )
         {
-            aProjectName = aDirName.GetToken ( 0, 0x5c);
+            aProjectName = aDirName.GetToken ( 0, '\\');
             if ( HasProject( aProjectName ))
             {
                 pPrj = GetPrj( aProjectName );
