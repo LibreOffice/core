@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-06 11:59:04 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 13:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ Lcleanup:
 }
 
 //==================================================================================================
-inline static void cpp_call(
+static void cpp_call(
     cppu_unoInterfaceProxy * pThis,
     sal_Int32 nVtableCall,
     typelib_TypeDescriptionReference * pReturnTypeRef,
@@ -286,89 +286,85 @@ inline static void cpp_call(
         pCppStack += sizeof(sal_Int32); // standard parameter length
     }
 
-    // only try-finally/ try-except statements possible...
     __try
     {
-        __try
-        {
-            // pCppI is msci this pointer
-            callVirtualMethod(
-                pThis->pCppI, nVtableCall,
-                pCppReturn, pReturnTypeDescr->eTypeClass,
-                (sal_Int32 *)pCppStackStart, (pCppStack - pCppStackStart) / sizeof(sal_Int32) );
-
-            // NO exception occured...
-            *ppUnoExc = 0;
-
-            // reconvert temporary params
-            while (nTempIndizes--)
-            {
-                sal_Int32 nIndex = pTempIndizes[nTempIndizes];
-                typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndizes];
-
-                if (pParams[nIndex].bIn)
-                {
-                    if (pParams[nIndex].bOut) // inout
-                    {
-                        ::uno_destructData(
-                            pUnoArgs[nIndex], pParamTypeDescr, 0 ); // destroy uno value
-                        ::uno_copyAndConvertData(
-                            pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
-                            &pThis->pBridge->aCpp2Uno );
-                    }
-                }
-                else // pure out
-                {
-                    ::uno_copyAndConvertData(
-                        pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
-                        &pThis->pBridge->aCpp2Uno );
-                }
-                // destroy temp cpp param => cpp: every param was constructed
-                ::uno_destructData(
-                    pCppArgs[nIndex], pParamTypeDescr, cpp_release );
-
-                TYPELIB_DANGER_RELEASE( pParamTypeDescr );
-            }
-            // return value
-            if (pCppReturn && pUnoReturn != pCppReturn)
-            {
-                ::uno_copyAndConvertData(
-                    pUnoReturn, pCppReturn, pReturnTypeDescr,
-                    &pThis->pBridge->aCpp2Uno );
-                ::uno_destructData(
-                    pCppReturn, pReturnTypeDescr, cpp_release );
-            }
-        }
-        __except (msci_filterCppException( GetExceptionInformation(),
-                                           *ppUnoExc, &pThis->pBridge->aCpp2Uno ))
-        {
-            // *ppUnoExc is untouched and any was constructed by filter function
-            // __finally block will be called
-            return;
-        }
+        // pCppI is msci this pointer
+        callVirtualMethod(
+            pThis->pCppI, nVtableCall,
+            pCppReturn, pReturnTypeDescr->eTypeClass,
+            (sal_Int32 *)pCppStackStart,
+            (pCppStack - pCppStackStart) / sizeof(sal_Int32) );
     }
-    __finally
-    {
-        // cleanup of params was already done in reconversion loop iff no exception occured;
-        // this is quicker than getting all param descriptions twice!
-        // so cleanup only iff an exception occured:
-        if (*ppUnoExc)
+    __except (msci_filterCppException(
+                  GetExceptionInformation(),
+                  *ppUnoExc, &pThis->pBridge->aCpp2Uno ))
+   {
+        // *ppUnoExc was constructed by filter function
+        // temporary params
+        while (nTempIndizes--)
         {
-            // temporary params
-            while (nTempIndizes--)
-            {
-                sal_Int32 nIndex = pTempIndizes[nTempIndizes];
-                // destroy temp cpp param => cpp: every param was constructed
-                ::uno_destructData(
-                    pCppArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], cpp_release );
-                TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
-            }
+            sal_Int32 nIndex = pTempIndizes[nTempIndizes];
+            // destroy temp cpp param => cpp: every param was constructed
+            ::uno_destructData(
+                pCppArgs[nIndex], ppTempParamTypeDescr[nTempIndizes],
+                cpp_release );
+            TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
         }
         // return type
         if (pReturnTypeDescr)
         {
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
         }
+        // end here
+        return;
+    }
+
+    // NO exception occured
+    *ppUnoExc = 0;
+
+    // reconvert temporary params
+    while (nTempIndizes--)
+    {
+        sal_Int32 nIndex = pTempIndizes[nTempIndizes];
+        typelib_TypeDescription * pParamTypeDescr =
+            ppTempParamTypeDescr[nTempIndizes];
+
+        if (pParams[nIndex].bIn)
+        {
+            if (pParams[nIndex].bOut) // inout
+            {
+                ::uno_destructData(
+                    pUnoArgs[nIndex], pParamTypeDescr, 0 ); // destroy uno value
+                ::uno_copyAndConvertData(
+                    pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
+                    &pThis->pBridge->aCpp2Uno );
+            }
+        }
+        else // pure out
+        {
+            ::uno_copyAndConvertData(
+                pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
+                &pThis->pBridge->aCpp2Uno );
+        }
+        // destroy temp cpp param => cpp: every param was constructed
+        ::uno_destructData(
+            pCppArgs[nIndex], pParamTypeDescr, cpp_release );
+
+        TYPELIB_DANGER_RELEASE( pParamTypeDescr );
+    }
+    // return value
+    if (pCppReturn && pUnoReturn != pCppReturn)
+    {
+        ::uno_copyAndConvertData(
+            pUnoReturn, pCppReturn, pReturnTypeDescr,
+            &pThis->pBridge->aCpp2Uno );
+        ::uno_destructData(
+            pCppReturn, pReturnTypeDescr, cpp_release );
+    }
+    // return type
+    if (pReturnTypeDescr)
+    {
+        TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
     }
 }
 
