@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-09-26 11:42:52 $
+ *  last change: $Author: john.marmion $ $Date: 2000-09-26 14:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,10 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_XTEXTCOMPONENT_HPP_

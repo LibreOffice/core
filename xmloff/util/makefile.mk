@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2000-09-21 09:38:42 $
+#   last change: $Author: john.marmion $ $Date: 2000-09-26 14:10:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,7 +106,6 @@ SHL1STDLIBS= \
         $(SVLLIB)		\
         $(SALLIB)		\
         $(UNOTOOLSLIB)	\
-#		$(GOODIESLIB) \
         $(ONELIB)
 
 

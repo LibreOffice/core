@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mib $ $Date: 2000-09-26 08:10:55 $
+#   last change: $Author: john.marmion $ $Date: 2000-09-26 14:12:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,6 @@ CXXFILES = \
         txtstyle.cxx \
         txtstyli.cxx \
         txtvfldi.cxx \
-        txtflde.cxx \
         txtftne.cxx \
         XMLTextNumRuleInfo.cxx \
         XMLTextColumnsExport.cxx \
@@ -99,12 +98,10 @@ CXXFILES = \
         XMLTextFrameHyperlinkContext.cxx \
         XMLTextListAutoStylePool.cxx \
         XMLTextListBlockContext.cxx \
-        XMLTextPropertySetContext.cxx \
         XMLFootnoteImportContext.cxx \
         XMLFootnoteConfigurationImportContext.cxx \
         XMLTextMarkImportContext.cxx \
         XMLTextColumnsContext.cxx \
-        XMLTextColumnsExport.cxx \
         XMLTextListItemContext.cxx \
         XMLTextPropertySetContext.cxx
 
@@ -123,7 +120,6 @@ SLOFILES =	\
         $(SLO)$/txtstyle.obj \
         $(SLO)$/txtstyli.obj \
         $(SLO)$/txtvfldi.obj \
-        $(SLO)$/txtflde.obj \
         $(SLO)$/txtftne.obj \
         $(SLO)$/XMLTextColumnsContext.obj \
         $(SLO)$/XMLTextColumnsExport.obj \
@@ -134,8 +130,6 @@ SLOFILES =	\
         $(SLO)$/XMLFootnoteImportContext.obj \
         $(SLO)$/XMLFootnoteConfigurationImportContext.obj \
         $(SLO)$/XMLTextMarkImportContext.obj \
-        $(SLO)$/XMLTextPropertySetContext.obj \
-        $(SLO)$/XMLTextColumnsExport.obj \
         $(SLO)$/XMLTextListItemContext.obj \
         $(SLO)$/XMLTextNumRuleInfo.obj \
         $(SLO)$/XMLTextPropertySetContext.obj
