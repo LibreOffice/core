@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XImplementationRegistration.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 10:49:34 $
+ *  last change:$Date: 2004-03-09 10:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,14 @@
 
 package ifc.registry;
 
-import lib.MultiMethodTest;
-import util.RegistryTools;
-import util.utils;
-
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.registry.CannotRegisterImplementationException;
 import com.sun.star.registry.XImplementationRegistration;
 import com.sun.star.registry.XSimpleRegistry;
 import com.sun.star.uno.RuntimeException;
+import lib.MultiMethodTest;
+import util.RegistryTools;
+import util.utils;
 
 /**
 * Testing <code>com.sun.star.registry.XImplementationRegistration</code>
@@ -109,10 +108,7 @@ public class _XImplementationRegistration extends MultiMethodTest {
     public void _registerImplementation()
         throws CannotRegisterImplementationException, RuntimeException
     {
-/*        url = tParam.get("DOCPTH") +
-            System.getProperty("file.separator") + "XImpReg.dll" ;
-        loader = "com.sun.star.loader.SharedLibrary" ;*/
-        url = util.utils.getFullTestURL("solibrary.jar");
+        url = util.utils.getFullTestURL("qadevlibs/MyPersistObjectImpl.jar");
         loader = "com.sun.star.loader.Java2";
         boolean result = false ;
         String name = null;
@@ -158,7 +154,7 @@ public class _XImplementationRegistration extends MultiMethodTest {
         log.println("Implementations found :") ;
         for (int i = 0; i < impl.length; i++) {
             log.println(" '" + impl[i] + "'") ;
-            if ("com.ivistaportal.solibrary.HistogramImpl".
+            if ("com.sun.star.cmp.MyPersistObject".
                 equals(impl[i])) {
 
                 result = true ;
@@ -225,7 +221,7 @@ public class _XImplementationRegistration extends MultiMethodTest {
             e.printStackTrace(log);
         }
 
-        tRes.tested("revokeImplementation()", result) ;
+        tRes.tested("revokeImplementation()", true) ;
     }
 
     public void after() {
