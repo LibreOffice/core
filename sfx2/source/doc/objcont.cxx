@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-21 15:43:22 $
+ *  last change: $Author: ab $ $Date: 2001-06-25 11:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,7 @@ BOOL SfxObjectShell::SaveInfoAndConfig_Impl( SvStorageRef pNewStg )
                     aURL = URIHelper::SmartRelToAbs( aURL );
                 }
 #ifndef TFPLUGCOMM
-                SfxBasicManager::CopyBasicData( GetStorage(), aURL, pNewStg );
+                BasicManager::CopyBasicData( GetStorage(), aURL, pNewStg );
 #endif
             }
 
@@ -657,7 +657,7 @@ BOOL SfxObjectShell::SaveInfoAndConfig_Impl( SvStorageRef pNewStg )
                 aURL = URIHelper::SmartRelToAbs( aURL );
             }
 #ifndef TFPLUGCOMM
-            SfxBasicManager::CopyBasicData( GetStorage(), aURL, pNewStg );
+            BasicManager::CopyBasicData( GetStorage(), aURL, pNewStg );
 #endif
         }
 #endif

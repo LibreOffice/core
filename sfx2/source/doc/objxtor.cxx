@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-12 15:58:06 $
+ *  last change: $Author: ab $ $Date: 2001-06-25 11:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,7 +638,7 @@ void SfxObjectShell::InitBasicManager_Impl
     DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicMgr, "Lokaler BasicManager bereits vorhanden");
 
     pImp->bBasicInitialized = TRUE;
-    SfxBasicManager* pSfxBasicManager;
+    BasicManager* pBasicManager;
     if ( pStor )
     {
         String aOldURL = INetURLObject::GetBaseURL();
@@ -661,7 +661,7 @@ void SfxObjectShell::InitBasicManager_Impl
 #else
         String aAppBasicDir = SvtPathOptions().GetBasicPath();
 #endif
-        pImp->pBasicMgr = pSfxBasicManager = new SfxBasicManager( *pStor, pAppBasic, &aAppBasicDir );
+        pImp->pBasicMgr = pBasicManager = new BasicManager( *pStor, pAppBasic, &aAppBasicDir );
         if ( pImp->pBasicMgr->HasErrors() )
         {
             // handle errors
@@ -690,7 +690,7 @@ void SfxObjectShell::InitBasicManager_Impl
         // create new BASIC-manager
         StarBASIC *pBas = new StarBASIC(pAppBasic);
         pBas->SetFlag( SBX_EXTSEARCH );
-        pImp->pBasicMgr = pSfxBasicManager = new SfxBasicManager( pBas );
+        pImp->pBasicMgr = pBasicManager = new BasicManager( pBas );
     }
 
     // Standard lib name
@@ -698,7 +698,7 @@ void SfxObjectShell::InitBasicManager_Impl
 
     // Basic container
     SfxScriptLibraryContainer* pBasicCont = new SfxScriptLibraryContainer
-        ( DEFINE_CONST_UNICODE( "StarBasic" ), pSfxBasicManager, pStor );
+        ( DEFINE_CONST_UNICODE( "StarBasic" ), pBasicManager, pStor );
     pBasicCont->acquire();  // Hold via UNO
     Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
     if ( xBasicCont.is() && !xBasicCont->hasByName( aStdLibName ) )
@@ -714,10 +714,9 @@ void SfxObjectShell::InitBasicManager_Impl
     pImp->pDialogLibContainer = pDialogCont;
 
     BasicManagerImpl* pBasMgrImpl = new BasicManagerImpl();
-    pBasMgrImpl->pScriptCont = pBasicCont;
-    pBasMgrImpl->pDialogCont = pDialogCont;
-    pBasMgrImpl->pDocShell = this;
-    pSfxBasicManager->SetImpl( pBasMgrImpl );
+    pBasMgrImpl->xScriptCont = xBasicCont;
+    pBasMgrImpl->xDialogCont = xDialogCont;
+    pBasicManager->SetImpl( pBasMgrImpl );
 
 
     // damit auch Dialoge etc. 'qualifiziert' angesprochen werden k"onnen
