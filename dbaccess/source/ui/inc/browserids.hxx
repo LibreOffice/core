@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:42:06 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@
 #define ID_INDEX_RESET                      40
 #define ID_DOCUMENT_CREATE_REPWIZ           41
 #define ID_BROWSER_SQL                      42
+#define ID_NEW_QUERY_WIZARD                 43
 
 
 #define ID_BROWSER_QUERY_EXECUTE            SID_FM_EXECUTE
