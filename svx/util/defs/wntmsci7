@@ -20957,3 +20957,12 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?RegisterDrawShapeTypes@accessibility@@YAXXZ
 ?aSvxShapeTypeList@accessibility@@3PAUShapeTypeDescriptor@1@A
 ?createSvxAccessibleShape@accessibility@@YA?AV?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@ABV23456@ABV?$Reference@VXShape@drawing@star@sun@com@@@3456@H@Z
+?GetFocus@FmFilterNavigatorWin@svxform@@UAEXXZ
+??0AbsolutePos@NavigationBar@DbGridControl@@QAE@PAVWindow@@_J@Z
+??0DbGridControl@@QAE@V?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@PAVWindow@@_J@Z
+??0NavigationBar@DbGridControl@@QAE@PAVWindow@@_J@Z
+??0FmGridControl@@QAE@V?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@PAVWindow@@PAVFmXGridPeer@@_J@Z
+??0FmGridHeader@@QAE@PAVBrowseBox@@_J@Z
+?Create@FmXGridPeer@@QAEXPAVWindow@@_J@Z
+?imp_CreateControl@FmXGridPeer@@MAEPAVFmGridControl@@PAVWindow@@_J@Z
+?GetBroadcaster@SvxEditEngineSource@@UBEAAVSfxBroadcaster@@XZ
