@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2000-10-31 15:21:44 $
+ *  last change: $Author: mfe $ $Date: 2001-01-19 16:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 
 /*#define DEBUG_OSL_PIPE*/
 /*#define TRACE_OSL_PIPE*/
+
 
 /*****************************************************************************/
 /* enum oslPipeImpl */
@@ -244,7 +245,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         return NULL;
     }
 
-//    OSL_TRACE("osl_createPipe : new Pipe on fd %i\n",pPipeImpl->m_Socket);
+    OSL_TRACE("osl_createPipe : new Pipe on fd %i\n",pPipeImpl->m_Socket);
 
     /* set close-on-exec flag */
     if ((Flags = fcntl(pPipeImpl->m_Socket, F_GETFD, 0)) != -1)
@@ -372,6 +373,12 @@ void SAL_CALL osl_destroyPipe(oslPipe Pipe)
 {
     oslPipeImpl* pPipeImpl;
     int nRet;
+#if defined(LINUX)
+    size_t     len;
+    struct sockaddr_un addr;
+    int fd;
+    int ConnFD;
+#endif
 
     /* socket already invalid */
     if( Pipe == NULL )
@@ -381,7 +388,27 @@ void SAL_CALL osl_destroyPipe(oslPipe Pipe)
 
     pPipeImpl = (oslPipeImpl*) Pipe;
 
-    nRet = close(pPipeImpl->m_Socket);
+#if defined(LINUX)
+    ConnFD = pPipeImpl->m_Socket;
+    pPipeImpl->m_Socket = -1;
+    fd = socket(AF_UNIX, SOCK_STREAM, 0);
+    memset(&addr, 0, sizeof(addr));
+
+    OSL_TRACE("osl_destroyPipe : Pipe Name '%s'",pPipeImpl->m_Name);
+
+    addr.sun_family = AF_UNIX;
+    strcpy(addr.sun_path, pPipeImpl->m_Name);
+    len = sizeof(addr.sun_family) + strlen(addr.sun_path);
+
+    nRet = connect( fd, (struct sockaddr *)&addr, len);
+    if ( nRet < 0 )
+    {
+        perror("connect");
+    }
+    close(fd);
+#endif
+
+    nRet = close(ConnFD);
     if ( nRet < 0 )
     {
         OSL_TRACE("close in destroyPipe failed : '%s'\n",strerror(errno));
@@ -395,6 +422,8 @@ void SAL_CALL osl_destroyPipe(oslPipe Pipe)
 
     /* free memory */
     __osl_destroyPipeImpl(pPipeImpl);
+
+    OSL_TRACE("Out osl_destroyPipe");
 }
 
 /*****************************************************************************/
