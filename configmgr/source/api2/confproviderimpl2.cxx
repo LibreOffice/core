@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-13 13:14:44 $
+ *  last change: $Author: dg $ $Date: 2000-11-13 16:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@ namespace configmgr
     //= OConfigurationProviderImpl
     //=============================================================================
     //-----------------------------------------------------------------------------------
-    OConfigurationProviderImpl::OConfigurationProviderImpl(OConfigurationProvider* _pProvider, IConfigSession* _pSession, const uno::Reference< script::XTypeConverter >& _rxTypeConverter)
-                               :OProviderImpl(_pProvider, _pSession, _rxTypeConverter)
+    OConfigurationProviderImpl::OConfigurationProviderImpl(OConfigurationProvider* _pProvider, IConfigSession* _pSession, Module& _rModule)
+                               :OProviderImpl(_pProvider, _pSession, _rModule)
     {
     }
     //--------------------------------------------------------------------------
@@ -117,7 +117,7 @@ namespace configmgr
         OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels);
         ::rtl::OUString sNodeAccessor = IConfigSession::composeNodeAccessor(sPath, sUser);
 
-        m_pConfiguration->setOptions(getOptions());
+        // m_pConfiguration->setOptions(getOptions());
         getOptions()->add("Locale", sLocale);
 
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sNodeAccessor));
@@ -155,7 +155,7 @@ namespace configmgr
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sNodeAccessor));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
 
-        m_pConfiguration->setOptions(getOptions());
+        // m_pConfiguration->setOptions(getOptions());
         getOptions()->add("Locale", sLocale);
 
         // create the access object

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-13 13:14:44 $
+ *  last change: $Author: dg $ $Date: 2000-11-13 16:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ namespace configmgr
         IConfigSession* pNewSession = m_aModule.connect(m_aModule.getConnectionData(), m_aSecurityOverride);
         if (!pNewSession)
             throw uno::Exception(::rtl::OUString::createFromAscii("Could not connect to the configuration registry. Please check your settings."), NULL);
-        m_pImpl = new OConfigurationProviderImpl(this, pNewSession, m_aModule.getConverter());
+        m_pImpl = new OConfigurationProviderImpl(this, pNewSession, m_aModule);
         m_aModule.setProvider(this);
     }
 

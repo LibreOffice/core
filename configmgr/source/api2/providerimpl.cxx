@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 14:37:07 $
+ *  last change: $Author: dg $ $Date: 2000-11-13 16:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,14 +132,16 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     OProviderImpl::OProviderImpl(OProvider* _pProvider,
                                  IConfigSession* _pSession,
-                                 const uno::Reference< script::XTypeConverter >& _rxTypeConverter)
-                  :m_pConfiguration(new TreeManager(_pSession, _rxTypeConverter))
+                                 Module& _rModule)
+                  :m_pConfiguration(new TreeManager(_pSession, _rModule.getConverter()))
                   ,m_aNotifier(m_pConfiguration)
                   ,m_pProvider(_pProvider)
-                  ,m_xConverter(_rxTypeConverter)
+                  ,m_xConverter(_rModule.getConverter())
                   ,m_pNewProviders(new configapi::ApiProviderInstances(*this))
+                  ,m_aOptions(_rModule.getOptions())
     {
         m_pConfiguration->acquire();
+        m_pConfiguration->setOptions(m_aOptions);
     }
 
     //-----------------------------------------------------------------------------
