@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-29 17:46:18 $
+ *  last change: $Author: hdu $ $Date: 2002-05-03 16:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1569,7 +1569,6 @@ ImplFontCache::~ImplFontCache()
 // -----------------------------------------------------------------------
 
 ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
-
                                    const Font& rFont, const Size& rSize )
 {
     const XubString& rName      = rFont.GetName();
@@ -1804,7 +1803,6 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
                     String      aTempName;
                     xub_StrLen  nIndex = 0;
                     do
-
                     {
                         aTempName = GetFontToken( pData->maMapNames, 0, nIndex );
                         // Test, if the Font name match with one of the mapping names
@@ -1824,7 +1822,6 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         // If we haven't found a font over the name, we try to find the best match over the attributes
         if ( !pFoundData && aSearchName.Len() )
         {
-
             ImplCalcType( nSearchType, eSearchWeight, eSearchWidth,
                           eFamily, pFontAttr );
             if ( (eItalic != ITALIC_NONE) && (eItalic != ITALIC_DONTKNOW) )
@@ -1952,7 +1949,6 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
                         nTestMatch += 1000000*3;
 
                     if ( nSearchType & IMPL_FONT_ATTR_ALLSCRIPT )
-
                     {
                         if ( nMatchType & IMPL_FONT_ATTR_ALLSCRIPT )
                         {
@@ -2105,7 +2101,6 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
                                 nTestMatch += 1000000;
                         }
                         else
-
                         {
                             if ( pData->mnTypeFaces & IMPL_DEVFONT_BOLD )
                                 nTestMatch += 1000000;
@@ -2238,8 +2233,8 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         }
     }
 
-    // We have found a useable Font, than we look with Font mapps at best
-    // with the wished attributes
+    // we found a useable Font, than we look which font maps best
+    // with the requested attributes
     if ( pFoundData )
     {
         ULONG           nBestMatch = 0;         // Der groessere Wert ist der bessere
@@ -2277,8 +2272,8 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
             if ( (eFamily != FAMILY_DONTKNOW) && (eFamily == pCurFontData->meFamily) )
                 nMatch += 30000;
 
-            // Normale Schriftbreiten bevorzugen, da wir noch keine Daten
-            // von den Applikationen bekommen
+            // prefer NORMAL font width
+            // TODO: change when the upper layers can tell their preference
             if ( pCurFontData->meWidthType == WIDTH_NORMAL )
                 nMatch += 15000;
 
@@ -2372,9 +2367,8 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
             }
             else if ( nMatch == nBestMatch )
             {
-                // Wenn 2 gleichwertig sind, kommt die Size-Bewertung
-                // Hier gewinnt der jenige, der die niedrigere Abweichung
-                // in der Groesse hat (also den kleinsten Match)
+                // when two fonts are still competing prefer the
+                // one with the closest height
                 if ( nHeightMatch < nBestHeightMatch )
                 {
                     pFontData           = pCurFontData;
@@ -2394,12 +2388,12 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
             pCurFontData = pCurFontData->mpNext;
         }
 
-        // If we haven't the font, try to find a Font-TextConversion table
+        // we have not found the font => try to use a font-conversion table
         if ( aSearchName != pFoundData->maSearchName )
             pConvertFontTab = ImplGetRecodeData( aSearchName, pFoundData->maSearchName );
     }
 
-    // Daten initialisieren und in die Liste aufnehmen
+    // add a new entry into the cache
     pEntry                          = new ImplFontEntry;
     pEntry->mpNext                  = mpFirstEntry;
     pEntry->mpConversion            = pConvertFontTab;
@@ -2414,7 +2408,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     pEntry->mnRefCount              = 1;
     mpFirstEntry                    = pEntry;
 
-    // Font-Selection-Daten setzen
+    // initialize font selection data
     ImplFontSelectData* pFontSelData = &(pEntry->maFontSelData);
     pFontSelData->mpFontData        = pFontData;
     pFontSelData->mpSysSelData      = NULL;
@@ -2426,7 +2420,6 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     pFontSelData->meCharSet         = eCharSet;
     pFontSelData->meLanguage        = eLanguage;
     pFontSelData->meWidthType       = WIDTH_DONTKNOW;
-
     pFontSelData->meWeight          = eWeight;
     pFontSelData->meItalic          = eItalic;
     pFontSelData->mePitch           = ePitch;
@@ -2440,54 +2433,47 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
 
 void ImplFontCache::Release( ImplFontEntry* pEntry )
 {
-    pEntry->mnRefCount--;
+    if( --pEntry->mnRefCount > 0 )
+        return;
 
-    if ( !pEntry->mnRefCount )
+    if( ++mnRef0Count < MAXFONT_CACHE )
+        return;
+
+    // delete least-recently-used unreferenced entry
+    ImplFontEntry* pPrevDelEntry = mpFirstEntry;
+    int nCurRef0Count = !(pPrevDelEntry->mnRefCount);
+    while( ImplFontEntry* pDelEntry = pPrevDelEntry->mpNext )
     {
-        if ( mnRef0Count >= MAXFONT_CACHE )
+        if( !pDelEntry->mnRefCount && (++nCurRef0Count >= MAXFONT_CACHE) )
         {
-            // Letzten Entry mit RefCount 0 loeschen
-            ImplFontEntry* pPrevDelEntry = mpFirstEntry;
-            ImplFontEntry* pDelEntry = pPrevDelEntry->mpNext;
-            USHORT nCurRef0Count = !(pPrevDelEntry->mnRefCount);
-            while ( pDelEntry )
-            {
-                if ( !pDelEntry->mnRefCount )
-                    nCurRef0Count++;
-
-                if ( nCurRef0Count >= MAXFONT_CACHE )
-                {
-                    pPrevDelEntry->mpNext = pDelEntry->mpNext;
-                    delete pDelEntry;
-                    break;
-                }
-
-                pPrevDelEntry = pDelEntry;
-                pDelEntry = pDelEntry->mpNext;
-            }
+            --mnRef0Count;
+            pPrevDelEntry->mpNext = pDelEntry->mpNext;
+            delete pDelEntry;
+            return;
         }
-        else
-            mnRef0Count++;
+
+        pPrevDelEntry = pDelEntry;
     }
+
+    DBG_ASSERT( false, "ImplFontCache::Release() - no font released" );
+    return; // we should never get here
 }
 
 // -----------------------------------------------------------------------
 
 void ImplFontCache::Clear()
 {
-    // Alle Eintraege loeschen
-    ImplFontEntry* pTemp;
-    ImplFontEntry* pEntry = mpFirstEntry;
-    while ( pEntry )
+    // delete all entries
+    for( ImplFontEntry* pNext = mpFirstEntry; pNext; )
     {
+        ImplFontEntry* pEntry = pNext;
+        pNext = pEntry->mpNext;
         DBG_ASSERT( !pEntry->mnRefCount, "ImplFontCache::Clear() - Font in use" );
-        pTemp = pEntry->mpNext;
         delete pEntry;
-        pEntry = pTemp;
     }
 
-    mpFirstEntry    = NULL;
-    mnRef0Count     = 0;
+    mpFirstEntry = NULL;
+    mnRef0Count  = 0;
 }
 
 // =======================================================================
@@ -2690,49 +2676,48 @@ int OutputDevice::ImplNewFont()
 
 #ifndef REMOTE_APPSERVER
     // we need a graphics
-    if ( !mpGraphics )
-    {
-        if ( !ImplGetGraphics() )
-            return FALSE;
-    }
+    if ( !mpGraphics && !ImplGetGraphics() )
+        return FALSE;
     SalGraphics* pGraphics = mpGraphics;
 #else
-    // Da wegen Clipping hier NULL zurueckkommen kann, koennen wir nicht
-    // den Rueckgabewert nehmen
+    // due to clipping we may get NULL, so don't use return value
     ImplGetServerGraphics();
     ImplServerGraphics* pGraphics = mpGraphics;
 #endif
 
-    // Groesse umrechnen
+    // convert to pixel height
     Size aSize = ImplLogicToDevicePixel( maFont.GetSize() );
     if ( !aSize.Height() )
     {
-        // Nur dann Defaultgroesse setzen, wenn Fonthoehe auch in logischen
-        // Koordinaaten 0 ist
+        // use default pixel height only when logical height is zero
         if ( maFont.GetSize().Height() )
             aSize.Height() = 1;
         else
             aSize.Height() = (12*mnDPIY)/72;
     }
 
-    // Neuen Font besorgen
+    // use default width only when logical width is zero
+    if( (0 == aSize.Width()) && (0 != maFont.GetSize().Width()) )
+        aSize.Width() = 1;
+
+    // get font entry
     ImplFontEntry* pOldEntry = mpFontEntry;
     mpFontEntry = mpFontCache->Get( mpFontList, maFont, aSize );
     ImplFontEntry* pFontEntry = mpFontEntry;
 
-    // Feststellen, ob Font neu selektiert werden muss
+    // do lower layers need notification
     if ( pFontEntry != pOldEntry )
         mbInitFont = TRUE;
 
     // these two may be filled in remote version
     ImplKernPairData* pKernPairs = NULL;
     long nKernPairs = 0;
-    // Wenn Font nicht initialisiert ist, dann sofort selektieren
+    // select font when it has not been initialized yet
     if ( !pFontEntry->mbInit )
     {
         ImplInitFont();
 
-        // und die Font-Daten besorgen
+        // get font data
         if ( pGraphics )
         {
             pFontEntry->mbInit = TRUE;
@@ -2747,7 +2732,6 @@ int OutputDevice::ImplNewFont()
             pFontEntry->maMetric.meFamily       = pFontEntry->maFontSelData.meFamily;
             pFontEntry->maMetric.meCharSet      = pFontEntry->maFontSelData.meCharSet;
             pFontEntry->maMetric.meWeight       = pFontEntry->maFontSelData.meWeight;
-
             pFontEntry->maMetric.meItalic       = pFontEntry->maFontSelData.meItalic;
             pFontEntry->maMetric.mePitch        = pFontEntry->maFontSelData.mePitch;
             pFontEntry->maMetric.mnOrientation  = pFontEntry->maFontSelData.mnOrientation;
@@ -2774,7 +2758,6 @@ int OutputDevice::ImplNewFont()
             pFontEntry->maMetric.mnDUnderlineOffset2        = 0;
             pFontEntry->maMetric.mnWUnderlineSize           = 0;
             pFontEntry->maMetric.mnWUnderlineOffset         = 0;
-
             pFontEntry->maMetric.mnAboveUnderlineSize       = 0;
             pFontEntry->maMetric.mnAboveUnderlineOffset     = 0;
             pFontEntry->maMetric.mnAboveBUnderlineSize      = 0;
@@ -2793,7 +2776,7 @@ int OutputDevice::ImplNewFont()
             pFontEntry->maMetric.mnDStrikeoutOffset2        = 0;
 #ifndef REMOTE_APPSERVER
             pGraphics->GetFontMetric( &(pFontEntry->maMetric) );
-            // Query the first latin area, because we need a
+            // query the first latin area, because we need a
             // WidthFactor for some methods (e.g. GetTextBreak)
             pFontEntry->mnWidthFactor = pGraphics->GetCharWidth( IMPL_CACHE_A1_FIRST, IMPL_CACHE_A1_LAST,
                                                                  pFontEntry->maWidthAry+IMPL_CACHE_A1_INDEX );
@@ -2833,7 +2816,7 @@ int OutputDevice::ImplNewFont()
         }
     }
 
-    // Wenn Kerning gewuenscht ist, die Kerning-Werte ermitteln
+    // get kerning array if requested
     if ( maFont.GetKerning() & KERNING_FONTSPECIFIC )
     {
         ImplInitKerningPairs( pKernPairs, nKernPairs );
@@ -2844,7 +2827,7 @@ int OutputDevice::ImplNewFont()
     if ( maFont.GetKerning() & KERNING_ASIAN )
         mbKerning = TRUE;
 
-    // Calculate the EmphasisArea
+    // calculate EmphasisArea
     mnEmphasisAscent = 0;
     mnEmphasisDescent = 0;
     if ( maFont.GetEmphasisMark() & EMPHASISMARK_STYLE )
@@ -2859,7 +2842,7 @@ int OutputDevice::ImplNewFont()
             mnEmphasisAscent = nEmphasisHeight;
     }
 
-    // Je nach TextAlign den TextOffset berechnen
+    // calculate text offset depending on TextAlignment
     TextAlign eAlign = maFont.GetAlign();
     if ( eAlign == ALIGN_BASELINE )
     {
@@ -2896,12 +2879,15 @@ int OutputDevice::ImplNewFont()
         float fStretch = (float)maMapRes.mnMapScNumX * maMapRes.mnMapScDenomY;
         fStretch /= (float)maMapRes.mnMapScNumY * maMapRes.mnMapScDenomX;
         int nNewWidth = (int)(nOrigWidth * fStretch + 0.5);
-        if( nNewWidth != nOrigWidth )
+        if( (nNewWidth != nOrigWidth) && (nNewWidth != 0) )
         {
-            aSize.Width() = nNewWidth;
-            maFont.SetSize( PixelToLogic( aSize ) );
+            Size aOrigSize = maFont.GetSize();
+            maFont.SetSize( Size( nNewWidth, aSize.Height() ) );
+            mbMap = FALSE;
             mbNewFont = TRUE;
             ImplNewFont();  // recurse once using stretched width
+            mbMap = TRUE;
+            maFont.SetSize( aOrigSize );
         }
     }
 
@@ -2954,11 +2940,8 @@ static void ImplSortKernPairs( ImplKernPairData* pKernPairs, long l, long r )
 
 void OutputDevice::ImplInitKerningPairs( ImplKernPairData* pKernPairs, long nKernPairs )
 {
-    if ( mbNewFont )
-    {
-        if ( !ImplNewFont() )
-            return;
-    }
+    if( mbNewFont && !ImplNewFont() )
+        return;
 
     ImplFontEntry* pFontEntry = mpFontEntry;
     if ( !pFontEntry->mbInitKernPairs )
@@ -3128,7 +3111,7 @@ long OutputDevice::ImplCalcKerning( const sal_Unicode* pStr, xub_StrLen nLen,
 
 // -----------------------------------------------------------------------
 
-long OutputDevice::ImplGetTextWidth( const SalLayout& rSalLayout )
+long OutputDevice::ImplGetTextWidth( const SalLayout& rSalLayout ) const
 {
     long nWidth = rSalLayout.GetTextWidth();
     nWidth /= rSalLayout.GetUnitsPerPixel();
@@ -5284,26 +5267,30 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
     if ( !IsDeviceOutputNecessary() )
         return;
 
-/*### already called in upper layer
 #ifndef REMOTE_APPSERVER
     // we need a graphics
-    if( !mpGraphics )
-        if( !ImplGetGraphics() )
-            return;
-    if ( mbInitClipRegion )
+    if( !mpGraphics && !ImplGetGraphics() )
+        return;
+    if( mbInitClipRegion )
         ImplInitClipRegion();
-    if ( mbOutputClipped )
+    if( mbOutputClipped )
         return;
 #else
-    if ( !ImplGetServerGraphics() )
+    if( !ImplGetServerGraphics() )
         return;
 #endif
-###*/
+
+    // initialize font if needed to get text offsets
+    // TODO: only needed for mnTextOff!=(0,0)
+    if( mbNewFont )
+        if( !(const_cast<OutputDevice&>(*this).ImplNewFont()) )
+            return;
+    if( mbInitFont )
+        const_cast<OutputDevice&>(*this).ImplInitFont();
 
     Point aPos = ImplLogicToDevicePixel( rPos );
     nWidth = ImplLogicWidthToDevicePixel( nWidth );
-    aPos.X() += mnTextOffX;
-    aPos.Y() += mnTextOffY;
+    aPos += Point( mnTextOffX, mnTextOffY );
     ImplDrawTextLine( aPos.X(), aPos.X(), aPos.Y(), nWidth, eStrikeout, eUnderline, bUnderlineAbove );
 }
 
@@ -5633,7 +5620,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         aLayoutArgs.SetLayoutWidth( nPixelWidth );
     }
 
-    int nLength = nEndIndex - nFirstIndex; //### -1
+    int nLength = nEndIndex - nFirstIndex;
     if( pDXArray && (mbMap || (nWidthFactor != 1)) )
     {
         // convert from logical units to font units using a temporary array
@@ -6647,7 +6634,7 @@ FontMetric OutputDevice::GetFontMetric() const
 
     FontMetric aMetric;
 
-    if( mbNewFont && !(const_cast<OutputDevice*>(this)->ImplNewFont()) )
+    if( mbNewFont && !(const_cast<OutputDevice&>(*this).ImplNewFont()) )
         return aMetric;
 
     ImplFontEntry*      pEntry = mpFontEntry;
@@ -6752,7 +6739,6 @@ ULONG OutputDevice::GetKerningPairCount() const
     DBG_TRACE( "OutputDevice::GetKerningPairCount()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-
     const_cast<OutputDevice*>(this)->ImplInitKerningPairs();
     return mpFontEntry->mnKernPairs;
 }
@@ -6782,7 +6768,7 @@ BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL 
     BOOL bRet = FALSE;
 if(1) {//###
     String aStr( &cChar, 1 );
-    bRet = GetGlyphBoundRect( aStr, 0, 0, rRect );
+    bRet = GetTextBoundRect( rRect, aStr, 0, 0, 1 );
  }//###
 
 /*
@@ -7029,7 +7015,7 @@ BOOL OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& rStr,
     for( int i = 0; i < nLen && bRet; i++ )
     {
         Rectangle aRect;
-        bRet = GetGlyphBoundRect( rStr, nIndex+i, nBase, aRect );
+        bRet = GetTextBoundRect( aRect, rStr, nIndex+i, nBase );
         if( bRet )
         {
             aRect.Move( rOrigin.X(), rOrigin.Y() );
@@ -7041,158 +7027,167 @@ BOOL OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& rStr,
 
 // -----------------------------------------------------------------------
 
-BOOL OutputDevice::GetGlyphBoundRect( const String& rStr, int nIndex, int nBase,
-    Rectangle& rRect, BOOL bOptimize )
+BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
+    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
+    xub_StrLen nLen ) const
 {
     DBG_TRACE( "OutputDevice::GetGlyphBoundRect_CTL()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     BOOL bRet = FALSE;
+    rRect.SetEmpty();
 
-    // we want to get the Rectangle in logical units, so to
-    // avoid rounding errors we just size the font in logical units
-    Font aOrgFont = GetFont();
-    Font aTmpFont = aOrgFont;
-    Size aTmpSize = PixelToLogic( aOrgFont.GetSize() );
-    aTmpFont.SetSize( aTmpSize );
-    SetFont( aTmpFont );
+    SalLayout* pSalLayout = NULL;
 
-    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, 1, Point(0,0) );
+    // calculate offset when nBase!=nIndex
+    long nXOffset = 0;
+    if( nBase != nIndex )
+    {
+        xub_StrLen nStart = std::min( nBase, nIndex );
+        xub_StrLen nLength = std::max( nBase, nIndex ) - nStart;
+        pSalLayout = ImplLayout( rStr, nStart, nLength, Point(0,0) );
+        if( pSalLayout )
+        {
+            nXOffset = pSalLayout->FillDXArray( NULL );
+            pSalLayout->Release();
+            if( nBase > nIndex)
+                nXOffset = -nXOffset;
+        }
+    }
+
+    pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0) );
     if( pSalLayout )
     {
+        int nWidthFactor = pSalLayout->GetUnitsPerPixel();
+        Point aPos = pSalLayout->GetDrawPosition();
+
+        // TODO: avoid use of outline for bounding rect calculation
+        // TODO: consider rotation
         PolyPolygon aPolyPoly;
         bRet = mpGraphics->GetLayoutOutline( *pSalLayout, aPolyPoly );
-        //### TODO: apply nBase
         pSalLayout->Release();
 
-        if( mpFontEntry && pSalLayout->GetUnitsPerPixel()>1 )
+        if( bRet )
         {
-            double fFactor = 1.0 / pSalLayout->GetUnitsPerPixel();
-            aPolyPoly.Scale( fFactor, fFactor );
-        }
-
-        rRect = aPolyPoly.GetBoundRect();
-    }
-    // restore original font
-    SetFont( aOrgFont );
-
-    if ( !bRet && (OUTDEV_PRINTER != meOutDevType) )
-    {
-        if ( bOptimize )
-        {
-            if ( mbNewFont )
-                ImplNewFont();
-            if ( mbInitFont )
-                ImplInitFont();
-        }
-
-        VirtualDevice*  pVDev = new VirtualDevice( 1 );
-        pSalLayout = pVDev->ImplLayout( rStr, nIndex, 1, Point(0,0) );
-
-        long            nWidth = ImplGetTextWidth( *pSalLayout );
-        long            nHeight = mpFontEntry->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
-        Point           aOffset( nWidth >> 1, 8 );
-        Size            aSize( nWidth + ( aOffset.X() << 1 ), nHeight + ( aOffset.Y() << 1 ) );
-
-        if( pSalLayout && pVDev->SetOutputSizePixel( aSize ) )
-        {
-            Font    aFont( GetFont() );
-            Bitmap  aBmp;
-
-            aFont.SetShadow( FALSE );
-            aFont.SetOutline( FALSE );
-            aFont.SetRelief( RELIEF_NONE );
-            aFont.SetOrientation( 0 );
-            aFont.SetSize( Size( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight ) );
-
-            pVDev->SetFont( aFont );
-            pVDev->SetTextAlign( ALIGN_TOP );
-            pVDev->SetTextColor( Color( COL_BLACK ) );
-            pVDev->SetTextFillColor();
-            pVDev->ImplNewFont();
-            pVDev->ImplInitFont();
-            pVDev->ImplInitTextColor();
-
-            pSalLayout->SetDrawPosition( aOffset );
-            pVDev->ImplDrawText( *pSalLayout );
-            pSalLayout->Release();
-
-            aBmp = pVDev->GetBitmap( Point(), aSize );
-
-            BitmapReadAccess* pAcc = aBmp.AcquireReadAccess();
-
-            if ( pAcc )
+            if( nWidthFactor > 1 )
             {
-                const long          nW = pAcc->Width();
-                const long          nW1 = nW - 1L;
-                const long          nH = pAcc->Height();
-                long                nLeft, nTop, nRight, nBottom;
-                const BitmapColor   aBlack( pAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
-                BOOL                bLineDone;
+                double fFactor = 1.0 / nWidthFactor;
+                aPolyPoly.Scale( fFactor, fFactor );
+                nXOffset /= nWidthFactor;
+            }
 
-                nLeft = nW;
-                nTop = nH;
-                nRight = nBottom = -1L;
+            Rectangle aPixelRect = aPolyPoly.GetBoundRect();
+            aPixelRect += Point( mnTextOffX - nXOffset, mnTextOffY );
+            aPixelRect += aPos;
+            rRect = ImplDevicePixelToLogic( aPixelRect );
+        }
+    }
 
-                for( long nY = 0L; nY < nH; nY++ )
+    if( bRet || (OUTDEV_PRINTER == meOutDevType) )
+        return bRet;
+
+    // bitmap method to get the bounding rectangle
+    VirtualDevice aVDev( 1 );
+    pSalLayout = aVDev.ImplLayout( rStr, nIndex, nLen, Point(0,0) );
+    if( !pSalLayout )
+        return false;
+
+    long nWidth = ImplGetTextWidth( *pSalLayout );
+    long nHeight = mpFontEntry->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
+    Point aOffset( nWidth >> 1, 8 );
+    Size aSize( nWidth + ( aOffset.X() << 1 ), nHeight + ( aOffset.Y() << 1 ) );
+
+    if( !aVDev.SetOutputSizePixel( aSize ) )
+        return false;
+
+    Font aFont( GetFont() );
+    aFont.SetShadow( FALSE );
+    aFont.SetOutline( FALSE );
+    aFont.SetRelief( RELIEF_NONE );
+    aFont.SetOrientation( 0 );
+    aFont.SetSize( Size( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight ) );
+
+    aVDev.SetFont( aFont );
+    aVDev.SetTextAlign( ALIGN_TOP );
+    aVDev.SetTextColor( Color( COL_BLACK ) );
+    aVDev.SetTextFillColor();
+    aVDev.ImplNewFont();
+    aVDev.ImplInitFont();
+    aVDev.ImplInitTextColor();
+
+    pSalLayout->SetDrawPosition( aOffset - Point( mnTextOffX, mnTextOffY ) );
+    aVDev.ImplDrawText( *pSalLayout );
+    pSalLayout->Release();
+
+    Bitmap aBmp = aVDev.GetBitmap( Point(), aSize );
+    BitmapReadAccess* pAcc = aBmp.AcquireReadAccess();
+    if( pAcc )
+    {
+        const long          nW = pAcc->Width();
+        const long          nW1 = nW - 1L;
+        const long          nH = pAcc->Height();
+        long                nLeft, nTop, nRight, nBottom;
+        const BitmapColor   aBlack( pAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
+        BOOL                bLineDone;
+
+        nLeft = nW;
+        nTop = nH;
+        nRight = nBottom = -1L;
+
+        for( long nY = 0L; nY < nH; nY++ )
+        {
+            bLineDone = FALSE;
+
+            for( long nX = 0L; ( nX < nW ) && !bLineDone; nX++ )
+            {
+                if( pAcc->GetPixel( nY, nX ) == aBlack )
                 {
-                    bLineDone = FALSE;
+                    // find y minimum
+                    if( nY < nTop )
+                        nTop = nY;
 
-                    for( long nX = 0L; ( nX < nW ) && !bLineDone; nX++ )
+                    // find y maximum
+                    if( nY > nBottom )
+                        nBottom = nY;
+
+                    // find x minimum
+                    if( nX < nLeft )
+                        nLeft = nX;
+
+                    // find x maximum (last pixel in line)
+                    for( long nX2 = nW1; nX2 >= nX; nX2-- )
+
                     {
-                        if( pAcc->GetPixel( nY, nX ) == aBlack )
+                        if( pAcc->GetPixel( nY, nX2 ) == aBlack )
                         {
-                            // find y minimum
-                            if( nY < nTop )
-                                nTop = nY;
+                            if( nX2 > nRight )
+                                nRight = nX2;
 
-                            // find y maximum
-                            if( nY > nBottom )
-                                nBottom = nY;
-
-                            // find x minimum
-                            if( nX < nLeft )
-                                nLeft = nX;
-
-                            // find x maximum (last pixel in line)
-                            for( long nX2 = nW1; nX2 >= nX; nX2-- )
-
-                            {
-                                if( pAcc->GetPixel( nY, nX2 ) == aBlack )
-                                {
-                                    if( nX2 > nRight )
-                                        nRight = nX2;
-
-                                    bLineDone = TRUE;
-                                    break;
-                                }
-                            }
+                            bLineDone = TRUE;
+                            break;
                         }
                     }
                 }
-
-                if( nLeft < nW && nTop < nH && nRight > -1L && nBottom > -1L )
-                {
-                    nLeft -= aOffset.X(), nTop -= aOffset.Y();
-                    nRight -= aOffset.X(), nBottom -= aOffset.Y();
-
-                    nWidth = ImplDevicePixelToLogicWidth( nRight - nLeft + 1L );
-                    nHeight = ImplDevicePixelToLogicHeight( nBottom - nTop + 1L );
-                    nLeft = ImplDevicePixelToLogicWidth( nLeft );
-                    nTop = ImplDevicePixelToLogicHeight( nTop );
-                    rRect = Rectangle( Point( nLeft, nTop ), Size( nWidth, nHeight ) );
-                    bRet = TRUE;
-                }
-
-                aBmp.ReleaseAccess( pAcc );
             }
         }
 
-        delete pVDev;
+        if( nLeft < nW && nTop < nH && nRight > -1L && nBottom > -1L )
+        {
+            nLeft -= aOffset.X(), nTop -= aOffset.Y();
+            nRight -= aOffset.X(), nBottom -= aOffset.Y();
+
+            nWidth = ImplDevicePixelToLogicWidth( nRight - nLeft + 1L );
+            nHeight = ImplDevicePixelToLogicHeight( nBottom - nTop + 1L );
+            nLeft = ImplDevicePixelToLogicWidth( nLeft );
+            nTop = ImplDevicePixelToLogicHeight( nTop );
+            rRect = Rectangle( Point( nLeft, nTop ), Size( nWidth, nHeight ) );
+            bRet = TRUE;
+        }
+
+        aBmp.ReleaseAccess( pAcc );
     }
 
-    if ( !bRet )
-        rRect.SetEmpty();
+    rRect += Point( mnTextOffX, mnTextOffY );
     return bRet;
 }
 
@@ -7205,121 +7200,146 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     String aStr( &cChar, 1 );
-    BOOL bRet = GetGlyphOutline( aStr, 0, 0, rPolyPoly, bOptimize );
-
+    BOOL bRet = GetTextOutline( rPolyPoly, aStr, 0, 0, 1, bOptimize );
     return bRet;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL OutputDevice::GetGlyphOutline( const String& rStr, int nIndex, int nBase,
-    PolyPolygon& rPolyPoly, BOOL bOptimize )
+BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
+    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
+    BOOL bOptimize ) const
 {
     BOOL bRet = FALSE;
     rPolyPoly.Clear();
 
-    // we want to get the PolyPolygon in logical units, so to
+    // we want to get the Rectangle in logical units, so to
     // avoid rounding errors we just size the font in logical units
-    Font aOrgFont = GetFont();
-    Font aTmpFont = aOrgFont;
-    Size aTmpSize = PixelToLogic( aOrgFont.GetSize() );
-    aTmpFont.SetSize( aTmpSize );
-    SetFont( aTmpFont );
+    BOOL bOldMap = mbMap;
+    if( bOldMap )
+    {
+        const_cast<OutputDevice&>(*this).mbMap = FALSE;
+        const_cast<OutputDevice&>(*this).mbNewFont = TRUE;
+    }
 
-    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, 1, Point(0,0) );
+    SalLayout* pSalLayout = NULL;
+
+    // calculate offset when nBase!=nIndex
+    long nXOffset = 0;
+    if( nBase != nIndex )
+    {
+        xub_StrLen nStart = std::min( nBase, nIndex );
+        xub_StrLen nLength = std::max( nBase, nIndex ) - nStart;
+        pSalLayout = ImplLayout( rStr, nStart, nLength, Point(0,0) );
+        if( pSalLayout )
+        {
+            nXOffset = pSalLayout->FillDXArray( NULL );
+            pSalLayout->Release();
+            if( nBase > nIndex)
+                nXOffset = -nXOffset;
+        }
+    }
+
+    pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0) );
     if( pSalLayout )
     {
+        int nWidthFactor = pSalLayout->GetUnitsPerPixel();
+        // Point aPos = pSalLayout->GetDrawPosition();
         bRet = mpGraphics->GetLayoutOutline( *pSalLayout, rPolyPoly );
-        //### TODO: apply nBase
-
-        if( mpFontEntry && pSalLayout->GetUnitsPerPixel()>1 )
-        {
-            double fFactor = 1.0 / pSalLayout->GetUnitsPerPixel();
-            rPolyPoly.Scale( fFactor, fFactor );
-        }
-    }
-    // restore original font
-    SetFont( aOrgFont );
-
-    if ( !bRet && (OUTDEV_PRINTER != meOutDevType) )
-    {
-        if ( bOptimize )
-        {
-            if ( mbNewFont )
-                ImplNewFont();
-            if ( mbInitFont )
-                ImplInitFont();
-        }
-
-        Font            aFont( GetFont() );
-        VirtualDevice*  pVDev = new VirtualDevice( 1 );
-        const Size      aFontSize( pVDev->LogicToPixel( Size( 0, GLYPH_FONT_HEIGHT ), MAP_POINT ) );
-
-        SalLayout* pSalLayout = ImplLayout( rStr, 0, 1, Point(0,0) );
-        if( !pSalLayout )
-            return FALSE;
-
-        const long nOrgWidth = ImplGetTextWidth( *pSalLayout );
-        const long nOrgHeight = mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent;
-
-        aFont.SetShadow( FALSE );
-        aFont.SetOutline( FALSE );
-        aFont.SetRelief( RELIEF_NONE );
-        aFont.SetOrientation( 0 );
-        aFont.SetSize( aFontSize );
-        pVDev->SetFont( aFont );
-        pVDev->SetTextAlign( ALIGN_TOP );
-        pVDev->SetTextColor( Color( COL_BLACK ) );
-        pVDev->SetTextFillColor();
-
-        pSalLayout = pVDev->ImplLayout( rStr, 0, 1, Point(0,0) );
-        if( !pSalLayout )
-            return FALSE;
-
-        const long      nWidth = pVDev->ImplGetTextWidth( *pSalLayout );
-        const long      nHeight = pVDev->mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent;
-        const Point     aOffset( nWidth >> 1, 8 );
-        const Size      aSize( nWidth + ( aOffset.X() << 1 ), nHeight + ( aOffset.Y() << 1 ) );
-        const double    fScaleX = ( nOrgWidth && nWidth )  ? ( (double) nOrgWidth / nWidth ) : 0.0;
-        const double    fScaleY = ( nOrgHeight && nHeight ) ?  ( (double) nOrgHeight / nHeight ) : 0.0;
-
-        if ( pVDev->SetOutputSizePixel( aSize ) )
-        {
-            Bitmap  aBmp;
-
-            pSalLayout->SetDrawPosition( aOffset );
-            pVDev->ImplDrawText( *pSalLayout );
-            aBmp = pVDev->GetBitmap( Point(0,0), aSize );
-
-            if( aBmp.Vectorize( rPolyPoly, BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES ) )
-            {
-                const long nOffX = aOffset.X(), nOffY = aOffset.Y();
-
-                for( USHORT i = 0UL, nCount = rPolyPoly.Count(); i < nCount; i++ )
-                {
-                    Polygon& rPoly = rPolyPoly[ i ];
-
-                    for( USHORT n = 0, nSize = rPoly.GetSize(); n < nSize; n++ )
-                    {
-                        Point& rPt = rPoly[ n ];
-                        rPt.X() = FRound( ImplDevicePixelToLogicWidth( rPt.X() - nOffX  ) * fScaleX );
-                        rPt.Y() = FRound( ImplDevicePixelToLogicHeight( rPt.Y() - nOffY ) * fScaleY );
-                    }
-                }
-
-                bRet = TRUE;
-            }
-        }
-
-        delete pVDev;
-
-        // #83068#
-        if( GetFont().GetOrientation() )
-            rPolyPoly.Rotate( Point(), GetFont().GetOrientation() );
-    }
-
-    if( pSalLayout )
         pSalLayout->Release();
+
+        if( bRet )
+        {
+            if( nWidthFactor > 1 )
+            {
+                double fFactor = 1.0 / nWidthFactor;
+                rPolyPoly.Scale( fFactor, fFactor );
+                nXOffset /= nWidthFactor;
+            }
+
+            Size aOffset = PixelToLogic( Size( mnTextOffX, mnTextOffY ) );
+            rPolyPoly.Move( aOffset.Width() + nXOffset, aOffset.Height() );
+        }
+    }
+
+    if( bOldMap )
+    {
+        // restore original font size and map mode
+        const_cast<OutputDevice&>(*this).mbMap = bOldMap;
+        const_cast<OutputDevice&>(*this).mbNewFont = TRUE;
+    }
+
+    if( bRet || (OUTDEV_PRINTER == meOutDevType) )
+        return bRet;
+
+    // fall back to bitmap measurement method
+    Font            aFont( GetFont() );
+    VirtualDevice*  pVDev = new VirtualDevice( 1 );
+    const Size      aFontSize( pVDev->LogicToPixel( Size( 0, GLYPH_FONT_HEIGHT ), MAP_POINT ) );
+
+    pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0) );
+    if( !pSalLayout )
+        return FALSE;
+
+    const long nOrgWidth = ImplGetTextWidth( *pSalLayout );
+    const long nOrgHeight = mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent;
+    pSalLayout->Release();
+
+    aFont.SetShadow( FALSE );
+    aFont.SetOutline( FALSE );
+    aFont.SetRelief( RELIEF_NONE );
+    aFont.SetOrientation( 0 );
+    aFont.SetSize( aFontSize );
+    pVDev->SetFont( aFont );
+    pVDev->SetTextAlign( ALIGN_TOP );
+    pVDev->SetTextColor( Color( COL_BLACK ) );
+    pVDev->SetTextFillColor();
+
+    pSalLayout = pVDev->ImplLayout( rStr, nIndex, nLen, Point(0,0) );
+    if( !pSalLayout )
+        return FALSE;
+
+    const long      nWidth = pVDev->ImplGetTextWidth( *pSalLayout );
+    const long      nHeight = pVDev->mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent;
+    pSalLayout->Release();
+
+    const Point     aOffset( nWidth >> 1, 8 );
+    const Size      aSize( nWidth + ( aOffset.X() << 1 ), nHeight + ( aOffset.Y() << 1 ) );
+    const double    fScaleX = ( nOrgWidth && nWidth )  ? ( (double) nOrgWidth / nWidth ) : 0.0;
+    const double    fScaleY = ( nOrgHeight && nHeight ) ?  ( (double) nOrgHeight / nHeight ) : 0.0;
+
+    if ( pVDev->SetOutputSizePixel( aSize ) )
+    {
+        pSalLayout->SetDrawPosition( aOffset - Point( mnTextOffX, mnTextOffY ) );
+        pVDev->ImplDrawText( *pSalLayout );
+
+        Bitmap aBmp = pVDev->GetBitmap( Point(0,0), aSize );
+
+        if( aBmp.Vectorize( rPolyPoly, BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES ) )
+        {
+            const long nOffX = aOffset.X(), nOffY = aOffset.Y();
+
+            for( USHORT i = 0UL, nCount = rPolyPoly.Count(); i < nCount; i++ )
+            {
+                Polygon& rPoly = rPolyPoly[ i ];
+
+                for( USHORT n = 0, nSize = rPoly.GetSize(); n < nSize; n++ )
+                {
+                    Point& rPt = rPoly[ n ];
+                    rPt.X() = FRound( ImplDevicePixelToLogicWidth( rPt.X() - nOffX  ) * fScaleX );
+                    rPt.Y() = FRound( ImplDevicePixelToLogicHeight( rPt.Y() - nOffY ) * fScaleY );
+                }
+            }
+
+            bRet = TRUE;
+        }
+    }
+
+    delete pVDev;
+
+    // #83068#
+    if( GetFont().GetOrientation() )
+        rPolyPoly.Rotate( Point(), GetFont().GetOrientation() );
 
     return bRet;
 }
@@ -7335,14 +7355,12 @@ BOOL OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     if( !mpGraphics && !(const_cast<OutputDevice*>(this)->ImplGetGraphics()) )
         return FALSE;
 #else
-    // Da wegen Clipping hier NULL zurueckkommen kann, koennen wir nicht
-    // den Rueckgabewert nehmen
     const_cast<OutputDevice&>(*this).ImplGetServerGraphics();
 #endif
 
-    if ( mbNewFont )
+    if( mbNewFont )
         const_cast<OutputDevice&>(*this).ImplNewFont();
-    if ( mbInitFont )
+    if( mbInitFont )
         const_cast<OutputDevice&>(*this).ImplInitFont();
     if( !mpFontEntry )
         return FALSE;
