@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:11:27 $
+ *  last change: $Author: os $ $Date: 2001-01-17 16:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,8 @@
 #define WID_DOC_CHANGES_RECORD                  1005
 #define WID_DOC_AUTO_MARK_URL                   1006
 #define WID_DOC_HIDE_TIPS                       1007
+#define WID_DOC_REDLINE_DISPLAY                 1008
+#define WID_DOC_FORBIDDEN_CHARS                 1009
 
 //AutoText
 #define WID_GROUP_PATH                          0

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-15 11:26:06 $
+ *  last change: $Author: os $ $Date: 2001-01-17 16:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,4 +645,7 @@ const SwPropNameLen __FAR_DATA UNO_NAME_END_REDLINE                         (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_START                       (MAP_CHAR_LEN("RedlineStart"));
 const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_END                         (MAP_CHAR_LEN("RedlineEnd"));
 const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_TEXT                        (MAP_CHAR_LEN("RedlineText"));
+
+const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_DISPLAY_TYPE                (MAP_CHAR_LEN("RedlineDisplayType"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FORBIDDEN_CHARACTERS                (MAP_CHAR_LEN("ForbiddenCharacters"));
 

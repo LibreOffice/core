@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-17 10:50:53 $
+ *  last change: $Author: os $ $Date: 2001-01-17 16:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #endif
+#ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
+#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
 #include <com/sun/star/drawing/ColorMode.hpp>
 #endif
@@ -358,6 +361,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::i18n;
 using namespace ::rtl;
 
 SwUnoPropertyMapProvider aSwMapProvider;
@@ -512,7 +516,8 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
     {SW_PROP_NAME(UNO_NAME_REDLINE_COMMENT),    0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
     {SW_PROP_NAME(UNO_NAME_REDLINE_TYPE),       0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
     {SW_PROP_NAME(UNO_NAME_REDLINE_SUCCESSOR_DATA),  0, &::getCppuType((Sequence<PropertyValue>*)0),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
-    {SW_PROP_NAME(UNO_NAME_REDLINE_IDENTIFIER), 0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},
+    {SW_PROP_NAME(UNO_NAME_REDLINE_IDENTIFIER), 0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},\
+    {SW_PROP_NAME(UNO_NAME_REDLINE_TEXT  ), 0, &::getCppuType((Reference<XText>*)0),                    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
 
 /* -----------------24.06.98 18:12-------------------
  *
@@ -1789,6 +1794,8 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_WORD_COUNT),                    WID_DOC_WORD_COUNT,         &::getCppuType((const sal_Int32*)0),    PropertyAttribute::READONLY,   0},
                     { SW_PROP_NAME(UNO_NAME_WORD_SEPARATOR),                WID_DOC_WORD_SEPARATOR,     &::getCppuType((const OUString*)0), PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_HIDE_FIELD_TIPS),               WID_DOC_HIDE_TIPS,          &::getBooleanCppuType(),    PROPERTY_NONE,   0},
+                    { SW_PROP_NAME(UNO_NAME_REDLINE_DISPLAY_TYPE),          WID_DOC_REDLINE_DISPLAY,    &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,   0},
+                    { SW_PROP_NAME(UNO_NAME_FORBIDDEN_CHARACTERS),          WID_DOC_FORBIDDEN_CHARS,    &::getCppuType((Reference<XForbiddenCharacters>*)0),    PropertyAttribute::READONLY,   0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aDocMap_Impl;
@@ -1925,7 +1932,6 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     _REDLINE_PROPERTIES
                     {SW_PROP_NAME(UNO_NAME_REDLINE_START), 0, &::getCppuType((Reference<XInterface>*)0),    PropertyAttribute::READONLY,    0},
                     {SW_PROP_NAME(UNO_NAME_REDLINE_END  ), 0, &::getCppuType((Reference<XInterface>*)0),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
-                    {SW_PROP_NAME(UNO_NAME_REDLINE_TEXT  ), 0, &::getCppuType((Reference<XText>*)0),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aRedlineMap_Impl;
