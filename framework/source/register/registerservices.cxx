@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:09:56 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,18 @@
 #include <uifactory/menubarfactory.hxx>
 #endif
 
+#ifndef __FRAMEWORK_ACCELERATORS_GLOBALACCELERATORCONFIGURATION_HXX_
+#include <accelerators/globalacceleratorconfiguration.hxx>
+#endif
+
+#ifndef __FRAMEWORK_ACCELERATORS_MODULEACCELERATORCONFIGURATION_HXX_
+#include <accelerators/moduleacceleratorconfiguration.hxx>
+#endif
+
+#ifndef __FRAMEWORK_ACCELERATORS_DOCUMENTACCELERATORCONFIGURATION_HXX_
+#include <accelerators/documentacceleratorconfiguration.hxx>
+#endif
+
 #ifndef __FRAMEWORK_UIFACTORY_TOOLBOXFACTORY_HXX_
 #include <uifactory/toolboxfactory.hxx>
 #endif
@@ -275,6 +287,9 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::ModuleUIConfigurationManagerSupplier    )
                         COMPONENTINFO( ::framework::ModuleUIConfigurationManager            )
                         COMPONENTINFO( ::framework::MenuBarFactory                          )
+                        COMPONENTINFO( ::framework::GlobalAcceleratorConfiguration          )
+                        COMPONENTINFO( ::framework::ModuleAcceleratorConfiguration          )
+                        COMPONENTINFO( ::framework::DocumentAcceleratorConfiguration        )
                         COMPONENTINFO( ::framework::ToolBoxFactory                          )
                         COMPONENTINFO( ::framework::AddonsToolBoxFactory                    )
                         COMPONENTINFO( ::framework::WindowStateConfiguration                )
@@ -315,6 +330,9 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::ModuleUIConfigurationManagerSupplier    )   else
                         IFFACTORY( ::framework::ModuleUIConfigurationManager            )   else
                         IFFACTORY( ::framework::MenuBarFactory                          )   else
+                        IFFACTORY( ::framework::GlobalAcceleratorConfiguration          )   else
+                        IFFACTORY( ::framework::ModuleAcceleratorConfiguration          )   else
+                        IFFACTORY( ::framework::DocumentAcceleratorConfiguration        )   else
                         IFFACTORY( ::framework::ToolBoxFactory                          )   else
                         IFFACTORY( ::framework::AddonsToolBoxFactory                    )   else
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
