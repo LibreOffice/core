@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: thb $ $Date: 2004-03-18 10:44:39 $
+#   last change: $Author: rt $ $Date: 2004-11-26 19:24:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,18 +79,33 @@ CDEFS+= -DVERBOSE
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=\
-    $(SLB)$/engine.lib	\
+    $(SLB)$/transitions.lib	\
+    $(SLB)$/engine.lib		\
     $(SLB)$/api.lib
 
 SHL1TARGET=$(TARGET).uno
 
-SHL1STDLIBS= $(TOOLSLIB) $(CPPULIB) $(SALLIB) $(VCLLIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(BASEGFXLIB) $(CANVASTOOLSLIB) $(CPPCANVASLIB)
-
-#SHL1VERSIONMAP=$(TARGET).map
+SHL1STDLIBS= $(TOOLSLIB) \
+             $(CPPULIB) \
+             $(SALLIB) \
+             $(VCLLIB) \
+             $(COMPHELPERLIB) \
+             $(CPPUHELPERLIB) \
+             $(BASEGFXLIB) \
+             $(CANVASTOOLSLIB) \
+             $(CPPCANVASLIB) \
+             $(UNOTOOLSLIB) \
+             $(GOODIESLIB) \
+             $(TKLIB)
 
 SHL1IMPLIB=i$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+
+.IF "$(OS)"=="MACOSX"
+.ELSE
+SHL1VERSIONMAP=exports.map
+.ENDIF 
 
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
