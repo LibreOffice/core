@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-17 15:51:30 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,8 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         }
     }
 
+    SetStyle( maStyleName );
+
     // set MasterPage?
     if(maMasterPageName.getLength())
     {
@@ -232,71 +234,6 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                         {
                             xDrawPage->setMasterPage(xMasterPage);
                             bDone = TRUE;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // set PageProperties?
-    if(maStyleName.getLength())
-    {
-        const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetAutoStylesContext();
-
-        if( pContext && pContext->ISA( SvXMLStyleContext ) )
-        {
-            const SdXMLStylesContext* pStyles = (SdXMLStylesContext*)pContext;
-            if(pStyles)
-            {
-                const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, maStyleName);
-
-                if(pStyle && pStyle->ISA(XMLPropStyleContext))
-                {
-                    XMLPropStyleContext* pPropStyle = (XMLPropStyleContext*)pStyle;
-
-
-                    uno::Reference <beans::XPropertySet> xPropSet1(rShapes, uno::UNO_QUERY);
-                    if(xPropSet1.is())
-                    {
-                        // since the background items are in a different propertyset
-                        // which itself is a property of the pages property set
-                        // we now merge these two propertysets if possible to simulate
-                        // a single propertyset with all draw page properties
-                        const OUString aBackground(RTL_CONSTASCII_USTRINGPARAM("Background"));
-                        uno::Reference< beans::XPropertySet > xPropSet2;
-                        uno::Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
-                        if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )
-                        {
-                            uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetSdImport().GetModel(), uno::UNO_QUERY);
-                            if(xServiceFact.is())
-                            {
-                                uno::Reference< beans::XPropertySet > xTempSet(
-                                    xServiceFact->createInstance(
-                                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Background"))),
-                                    uno::UNO_QUERY);
-
-                                xPropSet2 = xTempSet;
-                            }
-                        }
-
-                        uno::Reference< beans::XPropertySet > xPropSet;
-                        if( xPropSet2.is() )
-                            xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xPropSet2 );
-                        else
-                            xPropSet = xPropSet1;
-
-                        if(xPropSet.is())
-                        {
-                            pPropStyle->FillPropertySet(xPropSet);
-                        }
-
-                        if( xPropSet2.is() )
-                        {
-                            uno::Any aAny;
-                            aAny <<= xPropSet2;
-                            xPropSet1->setPropertyValue( aBackground, aAny );
                         }
                     }
                 }
