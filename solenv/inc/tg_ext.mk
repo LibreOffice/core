@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hjs $ $Date: 2001-12-19 12:33:32 $
+#   last change: $Author: hjs $ $Date: 2002-01-29 16:47:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,7 +120,7 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar
 $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack
     @+-$(MKDIR) $(PACKAGE_DIR:d)
     @+-$(MKDIR) $(PACKAGE_DIR)
-    +cd $(PACKAGE_DIR) && $(shell +$(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack) && $(TOUCH) $(UNTAR_FLAG_FILE)
+    +cd $(PACKAGE_DIR) && ( $(shell +$(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @+echo make writeable...
 .IF "$(GUI)"=="WNT"
     @+cd $(PACKAGE_DIR) && attrib /s -r  >& $(NULLDEV) && $(TOUCH) $(UNTAR_FLAG_FILE)
@@ -144,7 +144,7 @@ $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
     +$(TOUCH) $@
 .ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 .IF "$(GUI)"=="WNT"
-    +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | tr -d "\015" | patch -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+    +cd $(PACKAGE_DIR) && ( $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | tr -d "\015" | patch -b -p2 ) && $(TOUCH) $(PATCH_FLAG_FILE)
 .ELSE           # "$(GUI)"=="WNT"
 .IF "$(BSCLIENT)"=="TRUE"
     +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | $(GNUPATCH) -f -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
