@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 17:28:35 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 23:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
 
 #ifndef _SVX_UNOFILL_HXX_
 #include <svx/unofill.hxx>
+#endif
+
+#ifndef _SVX_UNOPOOL_HXX_
+#include <svx/unopool.hxx>
 #endif
 
 #ifndef _VOS_MUTEX_HXX_ //autogen
@@ -629,6 +633,13 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     {
         uno::Reference< style::XStyle > xStyle( new SdUnoGraphicStyle() );
         return xStyle;
+    }
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Defaults") ) )
+    {
+        if( !mxDrawingPool.is() )
+            mxDrawingPool = (uno::XAggregation*)new SvxUnoDrawPool( pDoc );
+
+        return mxDrawingPool;
     }
 
     uno::Reference< uno::XInterface > xRet;

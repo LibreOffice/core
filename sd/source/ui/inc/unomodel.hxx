@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 17:27:01 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 23:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxBitmapTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxTransGradientTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxMarkerTable;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDrawingPool;
 
     SvxItemPropertySet  aPropSet;
 
