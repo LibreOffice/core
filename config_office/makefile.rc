@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: svesik $ $Date: 2000-10-22 20:10:59 $
+#   last change: $Author: svesik $ $Date: 2000-10-23 08:34:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -245,6 +245,7 @@ sj2 : jtools sandbox svtools
 so3 : inet sj2
 sot : tools
 starmath : svx
+std2: external
 stoc : bridges rdbmaker xml2cmp
 store : vos
 svtools : toolkit ucbhelper unotools
