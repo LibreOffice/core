@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:42:36 $
+ *  last change: $Author: vg $ $Date: 2001-05-17 08:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,14 +89,14 @@ ModelessDialog DLG_INSERT_CHART
         Text [ dutch ] = "Als de gemarkeerde cellen niet de gewenste gegevens bevatten markeert u nu het bereik.\n\nMarkeer eveneens de cellen met de kolom- resp. rijlabels als u deze in uw afbeelding wilt weergeven." ;
         Text [ swedish ] = "Om de markerade cellerna inte innehåller de önskade data, markera då området nu.\n\nTa med de celler som innehåller kolumn- och radöverskrifter om dessa skall visas i grafiken." ;
         Text [ danish ] = "Hvis de markerede celler ikke indeholder de ønskede data, marker det ønskede område nu.\n\nInkluder cellerne med kolonne- hhv.rækkeetiketter, hvis de skal vises i din grafik." ;
-        Text [ portuguese_brazilian ] = "Falls die markierten Zellen nicht die gewünschten Daten enthalten, markieren Sie jetzt den Bereich.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbezeichnern mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben möchten" ;
+        Text [ portuguese_brazilian ] = "Falls die markierten Zellen nicht die gew?schten Daten enthalten, markieren Sie jetzt den Bereich.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbezeichnern mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben m?hten" ;
         Text [ portuguese ] = "Se as células marcadas não incluírem os dados desejados, marque-os agora.\n\nInclua as células contendo os títulos das colunas e linhas se desejar vê-las representadas no seu gráfico." ;
         Text[ chinese_simplified ] = "Èç¹ûÑ¡ÖĞµÄµ¥Ôª¸ñÃ»ÓĞÊı¾İ£¬ÄÇÃ´ÇëÄúÑ¡ÔñÇøÓò¡£\n\nÄú¿ÉÒÔÒ²Ñ¡ÖĞÁĞ±êÌâºÍĞĞ±êÌâ£¬Èç´ËÕâĞ©×ÊÁÏÒ²»á±»ÏÔÊ¾ÔÚÍ¼±íÄÚ¡£";
-        Text[ russian ] = "Åñëè îòìå÷åííûå ÿ÷åéêè íå ñîäåğæàò æåëàåìûõ äàííûõ, âûäåëèòå ñåé÷àñ ıòó îáëàñòü.\n\nÂêëş÷èòå òàêæå ÿ÷åéêè ñ ïîìåòêàìè ñòîëáöîâ èëè ñòğîê, åñëè Âû õîòèòå èõ ïğåäñòàâèòü íà Âàøåì ğèñóíêå.";
-        Text[ polish ] = "Jeœli zaznaczone komórki nie zawieraj¹ potrzebnych danych, zaznacz teraz ten obszar ponownie.\n\nZaznacz równie¿ komórki z etykietami wierszy lub kolumn , jeœli maj¹ one zostaæ przedstawione w twojej grafice.";
+        Text[ russian ] = "Åñëè îòìå÷åííûå ÿ÷åéêè íå ñîäåğæàò æåëàåìûõ äàííûõ, âûäåëèòå ñåé÷àñ ıòó îáëàñòü.\n\nÂêëş÷èòå òàêæå ÿ÷åéêè ñ ïîìåòêàìè ñòîëáöîâ èëè ñòğîê, åñ";
+        Text[ polish ] = "Je?li zaznaczone komórki nie zawieraj¹ potrzebnych danych, zaznacz teraz ten obszar ponownie.\n\nZaznacz równie¿ komórki z etykietami wierszy lub kolumn , je?li maj¹ one zostaæ przedstawione w twojej grafice.";
         Text[ japanese ] = "•K—v‚ÈÃŞ°À‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é¾Ù‚ª‚Ü‚¾‘I‘ğ‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍA¡‚»‚Ì”ÍˆÍ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B\n\n¸Ş×Ì‚É€–Ú–¼‚ğ•\\¦‚·‚é‚½‚ß‚É‚ÍAs‚Æ—ñ‚Ì€–Ú—“‚ğŠÜ‚ß‚½¾Ù”ÍˆÍ‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
         Text[ chinese_traditional ] = "¦pªG¿ï¨úªºÀx¦s®æ¨S¦³¸ê®Æ¡M´N½Ğ±z¿ï¾Ü°Ï°ì¡C\n\n±z¥i¥H¿ï¤¤¦C¼ĞÃD©M¦æ¼ĞÃD¡A³o¼Ë¡A¹Ïªí¤]·|Åã¥Ü¥X³o¨Ç¸ê®Æ¡C";
-        Text[ arabic ] = "ÅĞÇ ßÇäÊ ÇáÎáÇíÇ ÇáãÍÏÏÉ áÇ ÊÍÊæí Úáì ÇáÈíÇäÇÊ ÇáãØáæÈÉ¡ Şã ÈÊÍÏíÏ ÇáäØÇŞ\n\nÈãÇ İí Ğáß ÇáÎáÇíÇ¡ ÇáÊí ÊÍÊæí Úáì ÚäÇæíä Õİæİ Ãæ ÃÚãÏÉ¡ æĞáß ÅĞÇ ßäÊ ÊÑíÏ ÙåæÑåÇ İí ÑÓãÊß.";
+        Text[ arabic ] = "ÅĞÇ ßÇäÊ ÇáÎáÇíÇ ÇáãÍÏÏÉ áÇ ÊÍÊæí Úáì ÇáÈíÇäÇÊ ÇáãØáæÈÉ¡ Şã ÈÊÍÏíÏ ÇáäØÇŞ\n\nÈãÇ İí Ğáß ÇáÎáÇíÇ¡ ÇáÊí ÊÍÊæí Úáì ÚäÇæíä Õİæİ Ãæ ÃÚãÏÉ¡ æĞáß ÅĞ";
         Text[ dutch ] = "Als de gemarkeerde cellen niet de gewenste gegevens bevatten markeert u nu het bereik.\n\nMarkeer eveneens de cellen met de kolom- resp. rijlabels als u deze in uw afbeelding wilt weergeven.";
         Text[ chinese_simplified ] = "Èç¹ûÑ¡ÖĞµÄµ¥Ôª¸ñÃ»ÓĞÊı¾İ£¬ÄÇÃ´ÇëÄúÑ¡ÔñÇøÓò¡£\n\nÄú¿ÉÒÔÒ²Ñ¡ÖĞÁĞ±êÌâºÍĞĞ±êÌâ£¬Èç´ËÕâĞ©×ÊÁÏÒ²»á±»ÏÔÊ¾ÔÚÍ¼±íÄÚ¡£";
         Text[ greek ] = "Óôçí ğåñßğôùóç ğïõ ôá åğéëåãìİíá êåëéÜ äåí ğåñéİ÷ïõí ôá äåäïìİíá ğïõ åğéèõìåßôå, åğéëİîôå åóåßò ôçí óùóôŞ ğåñéï÷Ş.\n\n Áí èİëåôå íá åìöáíéóôïıí óôï ãñáöéêü óáò êáé ïé åğéãñáöİò ôùí óôçëşí êáé ôùí ãñáììşí, ôüôå èá ğñİğåé íá óõìğåñéëçöèïıí êáé áõôÜ ôá äåäïìİíá óôçí ğåñéï÷Ş ôçò åğéëïãŞò óáò.";
@@ -267,7 +267,7 @@ ModelessDialog DLG_INSERT_CHART
         Text [ swedish ] = "<< ~Tillbaka" ;
         Text [ danish ] = "<< Tilbage" ;
         Text [ portuguese ] = "<< ~Anterior" ;
-        Text [ portuguese_brazilian ] = "<< ~Zurück" ;
+        Text [ portuguese_brazilian ] = "<< ~Zur?k" ;
         Text[ chinese_simplified ] = "<< ·µ»Ø(~B)";
         Text[ russian ] = "<< Íàçàä";
         Text[ polish ] = "<< Wstecz";
