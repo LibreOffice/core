@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-08 10:59:20 $
+ *  last change: $Author: kz $ $Date: 2001-08-10 20:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1456,6 +1456,25 @@ String Newsletter
     Text[English] = "General Layout";
     Text[ english_us ] = "General Layout";
     Text[ language_user1 ] = "�berschrift f�r Optionsgruppe im Initialdialog f�r die Zeitungsvorlage";
+    Text[ portuguese ] = "General Layout";
+    Text[ russian ] = "General Layout";
+    Text[ greek ] = "General Layout";
+    Text[ dutch ] = "General Layout";
+    Text[ french ] = "General Layout";
+    Text[ spanish ] = "General Layout";
+    Text[ finnish ] = "General Layout";
+    Text[ italian ] = "General Layout";
+    Text[ danish ] = "General Layout";
+    Text[ swedish ] = "General Layout";
+    Text[ polish ] = "General Layout";
+    Text[ portuguese_brazilian ] = "General Layout";
+    Text[ japanese ] = "全般ﾚｲｱｳﾄ";
+    Text[ korean ] = "General Layout";
+    Text[ chinese_simplified ] = "General Layout";
+    Text[ chinese_traditional ] = "General Layout";
+    Text[ turkish ] = "General Layout";
+    Text[ arabic ] = "General Layout";
+    Text[ catalan ] = "General Layout";
 };
 
 
@@ -1465,6 +1484,25 @@ String Newsletter + 1
     Text[English] = "Standard Layout";
     Text[ english_us ] = "Standard Layout";
     Text[ language_user1 ] = "Layout Option im Initialdialog f�r die Zeitungsvorlage";
+    Text[ portuguese ] = "Standard Layout";
+    Text[ russian ] = "Standard Layout";
+    Text[ greek ] = "Standard Layout";
+    Text[ dutch ] = "Standard Layout";
+    Text[ french ] = "Standard Layout";
+    Text[ spanish ] = "Standard Layout";
+    Text[ finnish ] = "Standard Layout";
+    Text[ italian ] = "Standard Layout";
+    Text[ danish ] = "Standard Layout";
+    Text[ swedish ] = "Standard Layout";
+    Text[ polish ] = "Standard Layout";
+    Text[ portuguese_brazilian ] = "Standard Layout";
+    Text[ japanese ] = "標準ﾚｲｱｳﾄ";
+    Text[ korean ] = "Standard Layout";
+    Text[ chinese_simplified ] = "Standard Layout";
+    Text[ chinese_traditional ] = "Standard Layout";
+    Text[ turkish ] = "Standard Layout";
+    Text[ arabic ] = "Standard Layout";
+    Text[ catalan ] = "Standard Layout";
 };
 
 String Newsletter + 2
@@ -1473,6 +1511,25 @@ String Newsletter + 2
     Text[English] = "Party Layout";
     Text[ english_us ] = "Party Layout";
     Text[ language_user1 ] = "Layout Option im Initialdialog f�r die Zeitungsvorlage";
+    Text[ portuguese ] = "Party Layout";
+    Text[ russian ] = "Party Layout";
+    Text[ greek ] = "Party Layout";
+    Text[ dutch ] = "Party Layout";
+    Text[ french ] = "Party Layout";
+    Text[ spanish ] = "Party Layout";
+    Text[ finnish ] = "Party Layout";
+    Text[ italian ] = "Party Layout";
+    Text[ danish ] = "Party Layout";
+    Text[ swedish ] = "Party Layout";
+    Text[ polish ] = "Party Layout";
+    Text[ portuguese_brazilian ] = "Party Layout";
+    Text[ japanese ] = "記念刊行物ﾚｲｱｳﾄ";
+    Text[ korean ] = "Party Layout";
+    Text[ chinese_simplified ] = "Party Layout";
+    Text[ chinese_traditional ] = "Party Layout";
+    Text[ turkish ] = "Party Layout";
+    Text[ arabic ] = "Party Layout";
+    Text[ catalan ] = "Party Layout";
 };
 
 String Newsletter + 3
@@ -1481,14 +1538,52 @@ String Newsletter + 3
     Text[English] = "Brochure Layout";
     Text[ english_us ] = "Brochure Layout";
     Text[ language_user1 ] = "Layout Option im Initialdialog f�r die Zeitungsvorlage";
+    Text[ portuguese ] = "Brochure Layout";
+    Text[ russian ] = "Brochure Layout";
+    Text[ greek ] = "Brochure Layout";
+    Text[ dutch ] = "Brochure Layout";
+    Text[ french ] = "Brochure Layout";
+    Text[ spanish ] = "Brochure Layout";
+    Text[ finnish ] = "Brochure Layout";
+    Text[ italian ] = "Brochure Layout";
+    Text[ danish ] = "Brochure Layout";
+    Text[ swedish ] = "Brochure Layout";
+    Text[ polish ] = "Brochure Layout";
+    Text[ portuguese_brazilian ] = "Brochure Layout";
+    Text[ japanese ] = "ﾊﾟﾝﾌﾚｯﾄ用ﾚｲｱｳﾄ";
+    Text[ korean ] = "Brochure Layout";
+    Text[ chinese_simplified ] = "Brochure Layout";
+    Text[ chinese_traditional ] = "Brochure Layout";
+    Text[ turkish ] = "Brochure Layout";
+    Text[ arabic ] = "Brochure Layout";
+    Text[ catalan ] = "Brochure Layout";
 };
 
 String Newsletter + 10
 {
     Text = "Format";
     Text[English] = "Format";
-    Text[ english_us ] = "Format";
+    Text[ english_us ] = "Numbers";
     Text[ language_user1 ] = "�berschrift f�r Optionsgruppe im Initialdialog f�r die Zeitungsvorlage";
+    Text[ portuguese ] = "Formato";
+    Text[ russian ] = "������";
+    Text[ greek ] = "�����";
+    Text[ dutch ] = "Formaat";
+    Text[ french ] = "Format";
+    Text[ spanish ] = "Formato";
+    Text[ finnish ] = "Muotoile";
+    Text[ italian ] = "Formato";
+    Text[ danish ] = "Format";
+    Text[ swedish ] = "Format";
+    Text[ polish ] = "Format";
+    Text[ portuguese_brazilian ] = "Format";
+    Text[ japanese ] = "書式";
+    Text[ korean ] = "서식";
+    Text[ chinese_simplified ] = "格式";
+    Text[ chinese_traditional ] = "格式";
+    Text[ turkish ] = "Format";
+    Text[ arabic ] = "�����";
+    Text[ catalan ] = "Format";
 };
 
 String Newsletter + 11
@@ -1497,6 +1592,25 @@ String Newsletter + 11
     Text[English] = "Single sided";
     Text[ english_us ] = "Single sided";
     Text[ language_user1 ] = "'Format' Option im Initialdialog f�r die Zeitungsvorlage";
+    Text[ portuguese ] = "Single sided";
+    Text[ russian ] = "Single sided";
+    Text[ greek ] = "Single sided";
+    Text[ dutch ] = "Single sided";
+    Text[ french ] = "Single sided";
+    Text[ spanish ] = "Single sided";
+    Text[ finnish ] = "Single sided";
+    Text[ italian ] = "Single sided";
+    Text[ danish ] = "Single sided";
+    Text[ swedish ] = "Single sided";
+    Text[ polish ] = "Single sided";
+    Text[ portuguese_brazilian ] = "Single sided";
+    Text[ japanese ] = "1ﾍﾟｰｼﾞ";
+    Text[ korean ] = "Single sided";
+    Text[ chinese_simplified ] = "Single sided";
+    Text[ chinese_traditional ] = "Single sided";
+    Text[ turkish ] = "Single sided";
+    Text[ arabic ] = "Single sided";
+    Text[ catalan ] = "Single sided";
 };
 
 String Newsletter + 12
@@ -1505,6 +1619,26 @@ String Newsletter + 12
     Text[English] = "double sided";
     Text[ english_us ] = "double sided";
     Text[ language_user1 ] = "'Format' Option im Initialdialog f�r die Zeitungsvorlage";
+    Text[ portuguese ] = "double sided";
+    Text[ russian ] = "double sided";
+    Text[ greek ] = "double sided";
+    Text[ dutch ] = "double sided";
+    Text[ french ] = "double sided";
+    Text[ spanish ] = "double sided";
+    Text[ finnish ] = "double sided";
+    Text[ italian ] = "double sided";
+    Text[ danish ] = "double sided";
+    Text[ swedish ] = "double sided";
+    Text[ polish ] = "double sided";
+    Text[ portuguese_brazilian ] = "double sided";
+    Text[ japanese ] = "2ﾍﾟｰｼﾞ";
+    Text[ korean ] = "double sided";
+    Text[ chinese_simplified ] = "double sided";
+    Text[ chinese_traditional ] = "double sided";
+    Text[ turkish ] = "double sided";
+    Text[ arabic ] = "double sided";
+    Text[ catalan ] = "double sided";
 };
+
 
 
