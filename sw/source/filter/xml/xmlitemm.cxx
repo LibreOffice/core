@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitemm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:36:43 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ SvXMLItemMapEntry aXMLTableCellItemMap[] =
     // RES_SURROUND
     // not required
     // RES_VERT_ORIENT
-    M_E( FO,    VERTICAL_ALIGN,                 RES_VERT_ORIENT, 0 ),
+    M_E( STYLE, VERTICAL_ALIGN,                 RES_VERT_ORIENT, 0 ),
     // RES_HORI_ORIENT
     // not required
     // RES_ANCHOR
