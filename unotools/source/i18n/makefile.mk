@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: er $ $Date: 2000-11-18 19:23:59 $
+#   last change: $Author: jp $ $Date: 2000-12-21 09:26:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,6 +100,7 @@ SLOFILES=	\
     $(SLO)$/calendarwrapper.obj	\
     $(SLO)$/localedatawrapper.obj	\
     $(SLO)$/numberformatcodewrapper.obj \
+    $(SLO)$/transliterationwrapper.obj \
     $(SLO)$/textsearch.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.
