@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-10 10:21:22 $
+ *  last change: $Author: mt $ $Date: 2000-10-18 13:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4012,20 +4012,20 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
             if ( nLineWidth > nMaxLineWidth )
                 nMaxLineWidth = nLineWidth;
 
-            if ( ( rStr.GetChar( nBreakPos ) == _CR ) || ( rStr.GetChar( nBreakPos ) == _LF ) )
-            {
-                nBreakPos++;
-                // CR/LF?
-                if ( ( nPos < nLen ) && ( rStr.GetChar( nBreakPos ) == _LF ) && ( rStr.GetChar( nBreakPos-1 ) == _CR ) )
-                    nBreakPos++;
-            }
-
             if ( nBreakPos == nPos )
                 nBreakPos++;
 
             rLineInfo.AddLine( new ImplTextLineInfo( nLineWidth, nPos, nBreakPos-nPos ) );
 
             nPos = nBreakPos;
+
+            if ( ( rStr.GetChar( nPos ) == _CR ) || ( rStr.GetChar( nPos ) == _LF ) )
+            {
+                nPos++;
+                // CR/LF?
+                if ( ( nPos < nLen ) && ( rStr.GetChar( nPos ) == _LF ) && ( rStr.GetChar( nPos-1 ) == _CR ) )
+                    nPos++;
+            }
         }
     }
 
