@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:38:27 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,14 +620,14 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "Voorbeeld";
         TEXT[ spanish ] = "Previsualización";
         TEXT[ english_us ] = "Preview";
-    TEXT[ chinese_simplified ] = "Ô¤ÊÓ";
+    TEXT[ chinese_simplified ] = "Ô¤ÀÀ";
         TEXT[ russian ] = "Ïðîñìîòð";
         TEXT[ polish ] = "Podgl¹d";
         TEXT[ japanese ] = "ÌßÚËÞ­°";
         TEXT[ chinese_traditional ] = "¹wÄý";
         TEXT[ arabic ] = "ãÚÇíäÉ";
         TEXT[ dutch ] = "Voorbeeld";
-        TEXT[ chinese_simplified ] = "Ô¤ÊÓ";
+        TEXT[ chinese_simplified ] = "Ô¤ÀÀ";
         TEXT[ greek ] = "Ðñïåðéóêüðçóç";
         TEXT[ korean ] = "¹Ì¸®º¸±â";
         TEXT[ turkish ] = "Önizleme";
