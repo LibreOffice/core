@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dbo $ $Date: 2003-08-20 12:53:25 $
+#   last change: $Author: vg $ $Date: 2003-10-06 13:06:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,9 +85,10 @@ CLIMAKERFLAGS += --verbose
 $(OUT)$/bin$/cli_types.dll : $(OUT)$/bin$/climaker.exe $(SOLARBINDIR)$/types.rdb
     +$(OUT)$/bin$/climaker.exe $(CLIMAKERFLAGS) \
         --out $@ \
-        --version "1.0.0.0" \
-        --product "Software Development Kit (SDK)" \
-        --description "This assembly contains API metadata of the Software Development Kit (SDK)." \
+        --assembly-version "1.0.0.0" \
+        --assembly-description "This assembly contains metadata for the StarOffice/OpenOffice.org API." \
+        --assembly-company "Sun Microsystems, Inc." \
+        --assembly-copyright "2003" \
         $(SOLARBINDIR)$/types_doc.rdb
 
 .ENDIF
