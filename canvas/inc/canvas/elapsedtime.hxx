@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elapsedtime.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:38:25 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace canvas
 
                 @return the elapsed time in seconds.
              */
-            double getElapsedTime();
+            double getElapsedTime() const;
 
         private:
             sal_uInt64  mnStartTime;    // implementation-dependent start time representation
