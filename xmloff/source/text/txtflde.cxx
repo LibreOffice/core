@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:16:30 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2587,7 +2587,7 @@ void XMLTextFieldExport::ProcessString(
     if (bOmitEmpty && (eValue == XML_TOKEN_INVALID))
         return;
 
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, eName, eValue);
+    GetExport().AddAttribute(nPrefix, eName, eValue);
 }
 
 /// export a string attribute
