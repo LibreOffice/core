@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-19 15:58:55 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 16:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,12 +514,16 @@ void ScInputHandler::UpdateSpellSettings( BOOL bFromStartTab )
         //  language is set separately, so the speller is needed only if online
         //  spelling is active
 
-        if ( bOnlineSpell )
-            pEngine->SetSpeller( LinguMgr::GetSpellChecker() );
+        if ( bOnlineSpell ) {
+            com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1> xXSpellChecker1( LinguMgr::GetSpellChecker() );
+            pEngine->SetSpeller( xXSpellChecker1 );
+        }
 
         BOOL bHyphen = pLastPattern && ((const SfxBoolItem&)pLastPattern->GetItem(ATTR_HYPHENATE)).GetValue();
-        if ( bHyphen )
-            pEngine->SetHyphenator( LinguMgr::GetHyphenator() );
+        if ( bHyphen ) {
+            com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
+            pEngine->SetHyphenator( xXHyphenator );
+        }
     }
 }
 
