@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-21 13:49:53 $
+ *  last change: $Author: thb $ $Date: 2002-12-10 15:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1026,12 +1026,6 @@ namespace accessibility
     {
         // set cursor to this paragraph
         setSelection(0,0);
-    }
-
-    uno::Any SAL_CALL AccessibleEditableTextPara::getAccessibleKeyBinding(  ) throw (uno::RuntimeException)
-    {
-        // AFAIK, none.
-        return uno::Any();
     }
 
     sal_Int32 SAL_CALL AccessibleEditableTextPara::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)

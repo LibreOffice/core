@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-23 14:11:01 $
+ *  last change: $Author: thb $ $Date: 2002-12-10 15:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,12 +374,6 @@ namespace accessibility
         throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Not focusable")),
                                     uno::Reference< uno::XInterface >
                                     ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
-    }
-
-    uno::Any SAL_CALL AccessibleImageBullet::getAccessibleKeyBinding(  ) throw (uno::RuntimeException)
-    {
-        // AFAIK, none.
-        return uno::Any();
     }
 
     sal_Int32 SAL_CALL AccessibleImageBullet::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
