@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FlatXml.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aidan $ $Date: 2002-07-17 15:04:21 $
+ *  last change: $Author: aidan $ $Date: 2002-10-23 15:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,6 @@
 #ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
 #include <com/sun/star/frame/XConfigManager.hpp>
 #endif
-
 #include <rtl/textenc.h>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #ifndef _COM_SUN_STAR_XML_SAX_INPUTSOURCE_HPP_
@@ -138,11 +137,15 @@ class XFlatXml : public WeakImplHelper3< com::sun::star::xml::XImportFilter,com:
 {
 private:
   Reference< XMultiServiceFactory > xMSF;
+  int indentation;
+  bool followsEndNode;
+  bool followsStartNode;
+
 
 public:
 
-  XFlatXml( const Reference< XMultiServiceFactory > &r ) :      xMSF( r )
-        {}
+  XFlatXml( const Reference< XMultiServiceFactory > &r ) : xMSF( r )
+    {}
 
     virtual sal_Bool SAL_CALL importer(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aSourceData, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>& xHandler, const com::sun::star::uno::Sequence<rtl::OUString>& msUserData) throw(RuntimeException);
 
@@ -160,7 +163,41 @@ public:
 
 };
 
+ OUString replace(OUString origString, OUString origChar, OUString replaceChar){
+           OUString tmp=rtl::OUString::createFromAscii("");
+           int index=origString.indexOf(origChar);
+           if(index !=-1){
+           while (index !=-1){
+               OUString first =origString.copy(0,index);
+               first=first.concat(replaceChar);
+               tmp=tmp.concat(first);
+               origString=origString.copy(index+1,origString.getLength());
+               index=origString.indexOf(origChar);
+               if(index==-1) {
+               tmp=tmp.concat(origString);
+               }
 
+           }
+
+           }
+
+           return tmp;
+    }
+
+OUString needsMask(OUString origString){
+
+        if (origString.indexOf(rtl::OUString::createFromAscii("&"))!=-1){
+        origString=replace(origString,rtl::OUString::createFromAscii("&"),rtl::OUString::createFromAscii("&amp;"));
+        }
+        if (origString.indexOf(rtl::OUString::createFromAscii("<"))!=-1){
+        origString=replace(origString,rtl::OUString::createFromAscii("<"),rtl::OUString::createFromAscii("&lt;"));
+        }
+        if (origString.indexOf(rtl::OUString::createFromAscii(">"))!=-1){
+        origString=replace(origString,rtl::OUString::createFromAscii(">"),rtl::OUString::createFromAscii("&gt;"));
+        }
+        return origString;
+
+    }
 
 
 sal_Bool XFlatXml::importer(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aSourceData, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>& xHandler, const com::sun::star::uno::Sequence<rtl::OUString>& msUserData) throw (RuntimeException)
@@ -266,7 +303,6 @@ sal_Bool XFlatXml::exporter(const com::sun::star::uno::Sequence<com::sun::star::
   fprintf(stderr,"\nUserData :  %s",OUStringToOString( msUserData[3], RTL_TEXTENCODING_ASCII_US ).getStr());
   */
 
-
   sal_Int32 nLength = aSourceData.getLength();
   Sequence<com::sun::star::beans::PropertyValue> pValue = aSourceData;
   OUString sFileName=OUString::createFromAscii("");
@@ -289,6 +325,7 @@ sal_Bool XFlatXml::exporter(const com::sun::star::uno::Sequence<com::sun::star::
     }
 
 
+
   return sal_True;
 }
 
@@ -298,15 +335,29 @@ sal_Bool XFlatXml::exporter(const com::sun::star::uno::Sequence<com::sun::star::
 
     void XFlatXml::startDocument() throw (com::sun::star::xml::sax::SAXException,RuntimeException){
       //fprintf(stderr,"\nStartDocument ");
+      indentation=0;
+      followsEndNode=false;
+      followsStartNode=false;
+      // xExportHandler->startDocument();
+
     }
 
    void XFlatXml::endDocument() throw (com::sun::star::xml::sax::SAXException,RuntimeException){
+     //fprintf(stderr,"\nEndDocument ");
+     //xExportHandler->endDocument();
    }
 
    void XFlatXml::startElement(const rtl::OUString& str, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& attriblist) throw (com::sun::star::xml::sax::SAXException,RuntimeException)
    {
-
-     OUString lt =OUString::createFromAscii("<");
+    OUString indent=OUString::createFromAscii("");
+     if (followsStartNode){
+       indent+=OUString::createFromAscii("\n");
+       for (int i=0 ;i<indentation;i++){
+     indent+=OUString::createFromAscii(" ");
+       }
+     }
+     OUString lt =indent;
+     lt+=OUString::createFromAscii("<");
      lt+= (str);
 
      if (attriblist !=NULL)
@@ -317,27 +368,36 @@ sal_Bool XFlatXml::exporter(const com::sun::star::uno::Sequence<com::sun::star::
        {
          lt +=attriblist->getNameByIndex(i);
          lt +=OUString::createFromAscii("=\"");
-         lt +=attriblist->getValueByIndex(i);
+         lt +=needsMask(attriblist->getValueByIndex(i));
          lt +=OUString::createFromAscii("\" ");
        }
        }
      lt+=OUString::createFromAscii(">");
-
      OString sStr= OUStringToOString(lt, RTL_TEXTENCODING_UTF8);
      Sequence <sal_Int8> b((const sal_Int8 *)sStr.getStr(),sStr.getLength());
      //Sequence <sal_Int8>b((const sal_Int8 *)OUStringToOString( lt, RTL_TEXTENCODING_UTF8 ).getStr(),(OUStringToOString( lt, RTL_TEXTENCODING_UTF8 ).getStr()).getLength());
      try{
-     XFlatXml::xOutputStream->writeBytes(b);
+
+       XFlatXml::xOutputStream->writeBytes(b);
      }
      catch ( Exception &exc){
         fprintf(stderr,"Exception");
      }
-
-
+      indentation++;
    }
 
    void XFlatXml::endElement(const rtl::OUString& str) throw (com::sun::star::xml::sax::SAXException,RuntimeException) {
-      OUString lt =OUString::createFromAscii("</");
+     OUString indent=OUString::createFromAscii("");
+        indentation--;
+     if (followsEndNode){
+       indent+=OUString::createFromAscii("\n");
+       for (int i=0 ;i<indentation;i++){
+     indent+=OUString::createFromAscii(" ");
+       }
+     }
+     OUString lt =indent;
+     lt+=OUString::createFromAscii("</");
+        //OUString lt =OUString::createFromAscii("</");
      lt+= (str);
 
      lt+=OUString::createFromAscii(">");
@@ -352,13 +412,14 @@ sal_Bool XFlatXml::exporter(const com::sun::star::uno::Sequence<com::sun::star::
      catch ( Exception &exc){
 
      }
+     followsEndNode=true;
+     followsStartNode=true;
 }
 
    void XFlatXml::characters(const rtl::OUString& str) throw (com::sun::star::xml::sax::SAXException,RuntimeException) {
-
-     //System.out.println(str);
-     //fprintf(stderr,"%s",OUStringToOString( str, RTL_TEXTENCODING_ASCII_US ).getStr());
-     OString sStr= OUStringToOString(str, RTL_TEXTENCODING_UTF8);
+     //fprintf(stderr,"\n %s ",OUStringToOString(str, RTL_TEXTENCODING_ASCII_US).getStr());
+     OUString newStr = needsMask(str);
+     OString sStr= OUStringToOString(newStr, RTL_TEXTENCODING_UTF8);
      Sequence <sal_Int8> b((const sal_Int8 *)sStr.getStr(),sStr.getLength());
      try{
 
@@ -367,10 +428,16 @@ sal_Bool XFlatXml::exporter(const com::sun::star::uno::Sequence<com::sun::star::
      catch ( Exception &exc){
 
      }
+     followsEndNode=false;
+     followsStartNode=false;
    }
 
+
    void XFlatXml::ignorableWhitespace(const rtl::OUString& str) throw (com::sun::star::xml::sax::SAXException,RuntimeException){
-      fprintf(stderr,"%s",OUStringToOString( str, RTL_TEXTENCODING_ASCII_US ).getStr());
+     //xExportHandler->ignorableWhitespace( str);
+
+     //fprintf(stderr,"%s",OUStringToOString( str, RTL_TEXTENCODING_ASCII_US ).getStr());
+     /*
      OString sStr= OUStringToOString(str, RTL_TEXTENCODING_UTF8);
      Sequence <sal_Int8> b((const sal_Int8 *)sStr.getStr(),sStr.getLength());
      try{
@@ -380,11 +447,17 @@ sal_Bool XFlatXml::exporter(const com::sun::star::uno::Sequence<com::sun::star::
      catch ( Exception &exc){
 
      }
+     */
+
 }
 
-   void  XFlatXml::processingInstruction(const rtl::OUString& str, const rtl::OUString& str2) throw (com::sun::star::xml::sax::SAXException,RuntimeException) {}
+   void  XFlatXml::processingInstruction(const rtl::OUString& str, const rtl::OUString& str2) throw (com::sun::star::xml::sax::SAXException,RuntimeException) {
+     //xExportHandler->processingInstruction( str, str2);
+}
 
-   void XFlatXml::setDocumentLocator(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XLocator>& doclocator) throw (com::sun::star::xml::sax::SAXException,RuntimeException) {}
+   void XFlatXml::setDocumentLocator(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XLocator>& doclocator) throw (com::sun::star::xml::sax::SAXException,RuntimeException) {
+     //xExportHandler->setDocumentLocator( doclocator);
+   }
 
 
 
