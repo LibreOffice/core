@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syslocaleoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-09-23 10:44:00 $
+ *  last change: $Author: er $ $Date: 2002-09-23 13:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,48 +181,50 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     , m_nBlockedHint( 0 )
     , m_nBroadcastBlocked( 0 )
 {
-    const Sequence< OUString > aNames = GetPropertyNames();
-    Sequence< Any > aValues = GetProperties( aNames );
-    const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
-    if ( aValues.getLength() == aNames.getLength() )
+    if ( !IsValidConfigMgr() )
+        ChangeLocaleSettings();     // assume SYSTEM defaults during Setup
+    else
     {
-        for ( sal_Int32 nProp = 0; nProp < aNames.getLength(); nProp++ )
+        const Sequence< OUString > aNames = GetPropertyNames();
+        Sequence< Any > aValues = GetProperties( aNames );
+        const Any* pValues = aValues.getConstArray();
+        DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
+        if ( aValues.getLength() == aNames.getLength() )
         {
-#ifdef DBG_UTIL
-            if(!pValues[nProp].hasValue())
-                DBG_WARNING(  "property value missing" );
-#endif
-            if ( pValues[nProp].hasValue() )
+            for ( sal_Int32 nProp = 0; nProp < aNames.getLength(); nProp++ )
             {
-                switch ( nProp )
+                DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
+                if ( pValues[nProp].hasValue() )
                 {
-                    case PROPERTYHANDLE_LOCALE :
+                    switch ( nProp )
                     {
-                        OUString aStr;
-                        if ( pValues[nProp] >>= aStr )
-                            m_aLocaleString = aStr;
-                        else
+                        case PROPERTYHANDLE_LOCALE :
+                            {
+                                OUString aStr;
+                                if ( pValues[nProp] >>= aStr )
+                                    m_aLocaleString = aStr;
+                                else
+                                    DBG_ERRORFILE( "Wrong property type!" );
+                            }
+                            break;
+                        case PROPERTYHANDLE_CURRENCY :
+                            {
+                                OUString aStr;
+                                if ( pValues[nProp] >>= aStr )
+                                    m_aCurrencyString = aStr;
+                                else
+                                    DBG_ERRORFILE( "Wrong property type!" );
+                            }
+                            break;
+                        default:
                             DBG_ERRORFILE( "Wrong property type!" );
                     }
-                    break;
-                    case PROPERTYHANDLE_CURRENCY :
-                    {
-                        OUString aStr;
-                        if ( pValues[nProp] >>= aStr )
-                            m_aCurrencyString = aStr;
-                        else
-                            DBG_ERRORFILE( "Wrong property type!" );
-                    }
-                    break;
-                    default:
-                        DBG_ERRORFILE( "Wrong property type!" );
                 }
             }
         }
+        ChangeLocaleSettings();
+        EnableNotification( aNames );
     }
-    ChangeLocaleSettings();
-    EnableNotification( aNames );
 }
 
 
