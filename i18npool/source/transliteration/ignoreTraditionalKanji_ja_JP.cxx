@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreTraditionalKanji_ja_JP.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:52:58 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,15 +174,17 @@ OneToOneMappingTable_t traditionalKanji2updateKanji[] = {
     MAKE_PAIR( 0x5AFB, 0x5AFA ),
     MAKE_PAIR( 0x5B43, 0x5B22 ),
     MAKE_PAIR( 0x5B78, 0x5B66 ),
-    MAKE_PAIR( 0x5B9D, 0x73CD ),
+    //    MAKE_PAIR( 0x5B9D, 0x73CD ),
     MAKE_PAIR( 0x5BC3, 0x51A4 ),
     MAKE_PAIR( 0x5BC7, 0x51A6 ),
     MAKE_PAIR( 0x5BC9, 0x9DB4 ),
     MAKE_PAIR( 0x5BE2, 0x5BDD ),
     MAKE_PAIR( 0x5BE6, 0x5B9F ),
     MAKE_PAIR( 0x5BEB, 0x5199 ),
-    MAKE_PAIR( 0x5BF3, 0x73CD ),
-    MAKE_PAIR( 0x5BF6, 0x73CD ),
+    //MAKE_PAIR( 0x5BF3, 0x73CD ),
+    MAKE_PAIR( 0x5BF3, 0x5B9D ),
+    //MAKE_PAIR( 0x5BF6, 0x73CD ),
+    MAKE_PAIR( 0x5BF6, 0x5B9D ),
     MAKE_PAIR( 0x5C05, 0x524B ),
     MAKE_PAIR( 0x5C07, 0x5C06 ),
     MAKE_PAIR( 0x5C08, 0x5C02 ),
