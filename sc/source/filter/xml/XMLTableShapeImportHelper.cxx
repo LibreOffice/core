@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-28 06:55:01 $
+ *  last change: $Author: sab $ $Date: 2002-05-29 11:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ void XMLTableShapeImportHelper::finishShape(
                         nLayerID = SC_LAYER_BACK;
             }
         }
-        SetLayer(rShape, -1, rShape->getShapeType());
+        SetLayer(rShape, nLayerID, rShape->getShapeType());
     }
     static_cast<ScXMLImport&>(mrImporter).UnlockSolarMutex();
 }
