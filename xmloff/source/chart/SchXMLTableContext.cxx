@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2001-04-10 10:24:40 $
+ *  last change: $Author: bm $ $Date: 2001-04-10 12:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,10 +109,12 @@ using namespace com::sun::star;
 SchXMLTableContext::SchXMLTableContext( SchXMLImportHelper& rImpHelper,
                                         SvXMLImport& rImport,
                                         const rtl::OUString& rLName,
-                                        SchXMLTable& aTable ) :
+                                        SchXMLTable& aTable,
+                                        ::rtl::OUString& rTableName ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLName ),
         mrImportHelper( rImpHelper ),
-        mrTable( aTable )
+        mrTable( aTable ),
+        mrTableName( rTableName )
 {
     mrTable.nColumnIndex = -1;
     mrTable.nMaxColumnIndex = -1;
@@ -122,6 +124,26 @@ SchXMLTableContext::SchXMLTableContext( SchXMLImportHelper& rImpHelper,
 
 SchXMLTableContext::~SchXMLTableContext()
 {
+}
+
+void SchXMLTableContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    // get number-columns-repeated attribute
+    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
+
+    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        rtl::OUString aLocalName;
+        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+
+        if( nPrefix == XML_NAMESPACE_TABLE &&
+            aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_name )))
+        {
+            mrTableName = xAttrList->getValueByIndex( i );
+            break;   // we only need this attribute
+        }
+    }
 }
 
 SvXMLImportContext *SchXMLTableContext::CreateChildContext(
@@ -489,7 +511,7 @@ void SchXMLTableHelper::applyTableSimple(
             }
             xData->setColumnDescriptions( aLabels );
 
-            for( ++iRow; iRow != rTable.aData.end(); iRow++, nRow++ )
+            for( ++iRow, nRow = 0; iRow != rTable.aData.end(); iRow++, nRow++ )
             {
                 aCategories[ nRow ] = (*iRow)[ 0 ].aString;
                 for( nCol = 1; nCol < nColumnCount; nCol++ )
