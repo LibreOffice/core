@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-06 09:30:50 $
+ *  last change: $Author: dv $ $Date: 2001-07-25 10:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,6 +752,11 @@ sal_Bool SvtInetOptions::ShouldUseFtpProxy(const rtl::OUString &rUrl) const
     // Check URL.
     INetURLObject aURL(rUrl);
     if ( !(aURL.GetProtocol() == INET_PROT_FTP))
+        return sal_False;
+
+    ProxyType eType = (ProxyType) GetProxyType();
+
+    if ( eType == NONE )
         return sal_False;
 
     rtl::OUString aFtpProxy = GetProxyFtpName();
