@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleRegistry.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:39 $
+ *  last change: $Author: dbo $ $Date: 2001-09-11 09:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,9 @@ interface XSimpleRegistry: com::sun::star::uno::XInterface
             raises( com::sun::star::registry::InvalidRegistryException );
 
     //-------------------------------------------------------------------------
-    /** merges a registry under the specified key.
+    /** DEPRECATED: this method lacks a registry key (better than a URL).
+
+        merges a registry under the specified key.
 
         <p>If the key does not exist it will be created. Existing
         keys will be overridden from keys of registry specified by
