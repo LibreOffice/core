@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:38:05 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 15:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ portuguese ] = "~Proteger" ;
         Text [ finnish ] = "~Suojattu" ;
         Text [ danish ] = "Lεst" ;
-        Text [ french ] = "~Vιrrouiller" ;
+        Text [ french ] = "~Verrouiller" ;
         Text [ swedish ] = "Skydda~d" ;
         Text [ dutch ] = "~Beveiligd" ;
         Text [ spanish ] = "~Protegido" ;
@@ -399,7 +399,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ chinese_simplified ] = "Φ»ΣΠΤΪΔϊΌ¤»ξ±£»¤Ή¤Χχ±νΊσ£¬µ¥ΤªΈρ²Ε»αΚάµ½±£»¤΅£\n\nΗλΔϊ°΄»χ²Λµ¥ΓόΑξ΅°Ή¤Ύί΅±£¬΅°±£»¤ΞΔµµ΅±£¬΅°Ή¤Χχ±ν΅±΅£";
         Text[ russian ] = "Ηΰωθςΰ ÿχεικθ δειρςβσες ςξλόκξ οξρλε ηΰωθςϋ ςεκσωεγξ λθρςΰ.\n\nΔλÿ ηΰωθςϋ λθρςΰ βϋαεπθςε β μενώ 'Ρεπβθρ' κξμΰνδσ 'Ηΰωθςΰ δξκσμενςΰ', ΰ ηΰςεμ κξμΰνδσ 'Òΰαλθφΰ'.";
         Text[ polish ] = "Ochrona komσrek jest wtedy uaktywniona, jeli bieΏΉcy arkusz jest chroniony.\n\nWybierz dla tego celu z menu 'Narzκdzia' polecenie 'Chroρ dokument', a nastκpnie polecenie 'Arkusz'.";
-        Text[ japanese ] = "ΎΩ‚Μ•Ϋμ‚Ν»έ‚Μ•\\‚ª•Ϋμ‚³‚κ‚Δ‚Ά‚ι‚Μ‚έ—Lψ‚Ε‚·B\n\n•\\‚π•Ϋμ‚·‚ι‚Ι‚ΝÒΖ­°‚ΜΒ°Ω‚ΕΔή·­ÒέΔ‚Μ•Ϋμ‚Μ•\\‚ΕΊΟέΔή‚πΐs‚µ‚ά‚·B";
+        Text[ japanese ] = "ΎΩ‚Μ•Ϋμ‚Ν»έ‚Μ•\\‚ª•Ϋμ‚³‚κ‚Δ‚Ά‚ι‚Μ‚έ—Lψ‚Ε‚·B\n\n•\\‚π•Ϋμ‚·‚ι‚Ι‚ΝÒΖ­°‚ΕΒ°Ω ¨ Δή·­ÒέΔ‚Μ•Ϋμ ¨ •\\‚π‘I‘π‚µ‚ά‚·B";
         Text[ chinese_traditional ] = "¥u¦³¦b±zΏE¬΅«OΕ@¤u§@ªν«α΅Aΐx¦s®ζ¤~·|¨ό¨μ«OΕ@΅C\n\n½Π±z«φ¤@¤U³o­Σ¥\\―ΰªνªΊ©R¥O΅G\"«OΕ@¤ε¥σ\"΅A\"¤u§@ªν\"΅C";
         Text[ arabic ] = "αΗ ΚΥΘΝ ΝγΗνΙ ΗαΞαΗνΗ έΪψΗαΙ΅ ΕαΗ ΪδΟγΗ νίζδ ΗαΜΟζα ΗαΝΗαν γΝγν.\n\nαΚδένΠ Παί ΗαΡΜΗΑ ΗΞΚνΗΡ ΗαΓγΡ 'ΝγΗνΙ ΗαγΣΚδΟ' γδ ΗαήΗΖγΙ 'ΓΟζΗΚ'΅ Λγ ΗαΓγΡ 'ΜΟζα'.";
         Text[ greek ] = "Η προστασία κελιών ισχύει μόνο εφόσον τεθεί ο τρέχων πίνακας υπό προστασία.\n\nΓια να επιτευχθεί αυτό επιλέξτε στο μενού 'Εργαλεία' την εντολή 'Προστασία εγγράφου' και στη συνέχεια 'Πίνακας'.";
