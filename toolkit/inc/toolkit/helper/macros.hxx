@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 09:44:09 $
+ *  last change: $Author: fs $ $Date: 2001-12-07 16:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,8 @@ ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference<
         ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ); \
         if( !pCollection ) \
         { \
-            static ::cppu::OTypeCollection collection(
+            static ::cppu::OTypeCollection collection( \
+            getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider>* ) NULL ),
 
 // -------------------------------------------------------------------------------------
 
