@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 08:30:41 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 13:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,6 +550,10 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void OGeneralPage::Reset(const SfxItemSet& _rCoreAttrs)
     {
+        // reset all locale data
+        m_sControlPassword = m_sControlUser = m_sUserPassword = m_sUser = String();
+        m_nCacheSize = 0;
+
         implSetCurrentType( DST_UNKNOWN );
             // this ensures that our type selection link will be called, even if the new is is the same as the
             // current one
@@ -1263,6 +1267,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/08/01 08:30:41  fs
+ *  #88530# changeConnectionURL / getConnectionURL / minor corrections in the handling of m_eCurrentType
+ *
  *  Revision 1.17  2001/07/31 16:01:33  fs
  *  #88530# changes to operate the dialog in a mode where no type change is possible
  *
