@@ -2670,3 +2670,4 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?DbgName_file_OPreparedStatement@@YAPAUDbgDataType@@XZ
 ?DbgName_file_OStatement_Base@file@connectivity@@YAPAUDbgDataType@@XZ
 ?isCaseSensitiveParentFolder@?%O:\SRC641\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx1005715063@@YAEABVString@@0@Z
+?isCaseSensitiveParentFolder@?%O:\SRC641\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx271208398@@YAEABVString@@0@Z
