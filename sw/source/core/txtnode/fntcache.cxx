@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-04 13:15:15 $
+ *  last change: $Author: ama $ $Date: 2001-05-10 09:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -915,8 +915,20 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
             // Bei Pairkerning waechst der Printereinfluss auf die Positionierung
             USHORT nMul = 3;
-            if ( pPrtFont->IsKerning() )
+            long *pScrArray = NULL;
+
+            if ( pPrtFont->GetKerning() )
+            {
                 nMul = 1;
+                if( KERNING_ASIAN == pPrtFont->GetKerning() )
+                {
+                    pScrArray = new long[ rInf.GetLen() ];
+                    rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray,
+                                        rInf.GetIdx(), rInf.GetLen() );
+                    nScrPos = pScrArray[0];
+                }
+            }
+
             const USHORT nDiv = nMul+1;
             // In nSpaceSum wird der durch Blocksatz auf die Spaces verteilte
             // Zwischenraum aufsummiert.
@@ -936,7 +948,10 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             {
                 nCh = rInf.GetText().GetChar( rInf.GetIdx() + i );
                 long nScr;
-                rInf.GetOut().GetCharWidth( nCh, nCh, &nScr );
+                if( pScrArray )
+                    nScr = pScrArray[ i ] - pScrArray[ i - 1 ];
+                else
+                    rInf.GetOut().GetCharWidth( nCh, nCh, &nScr );
                 if( bCompress && ( SwScriptInfo::NONE != ( nType =
                     rInf.GetScriptInfo()->CompType( rInf.GetIdx() + i ) ) ) )
                 {
@@ -1151,6 +1166,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray + nOffs,
                                     nTmpIdx + nOffs , nLen - nOffs );
             }
+            delete[] pScrArray;
         }
         delete[] pKernArray;
     }
@@ -1221,7 +1237,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 
             // Bei Pairkerning waechst der Printereinfluss auf die Positionierung
             USHORT nMul = 3;
-            if ( pPrtFont->IsKerning() )
+            if ( pPrtFont->GetKerning() )
                 nMul = 1;
             const USHORT nDiv = nMul+1;
             for( xub_StrLen i=1; i<nCnt; i++ )
