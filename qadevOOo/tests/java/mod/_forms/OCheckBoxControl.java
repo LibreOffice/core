@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OCheckBoxControl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:40:08 $
+ *  last change:$Date: 2003-09-08 11:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,17 @@
 
 package mod._forms;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.FormTools;
+import util.SOfficeFactory;
+import util.WriterTools;
+
 import com.sun.star.awt.XCheckBox;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
@@ -72,18 +81,12 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShape;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
 import com.sun.star.view.XControlAccess;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.FormTools;
-import util.SOfficeFactory;
-import util.WriterTools;
 
 
 /**
@@ -133,7 +136,7 @@ public class OCheckBoxControl extends TestCase {
      * Creates a new text document.
      */
     protected void initialize ( TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( ((XMultiServiceFactory)Param.getMSF()) );
 
         try {
             log.println( "creating a textdocument" );
@@ -148,9 +151,18 @@ public class OCheckBoxControl extends TestCase {
     /**
      * Disposes the text document created before
      */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
+
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xTextDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
     }
 
     /**
@@ -185,9 +197,7 @@ public class OCheckBoxControl extends TestCase {
      *      registered here and passed as relation. </li>
      * </ul>
      */
-    public TestEnvironment createTestEnvironment( TestParameters Param,
-                                                  PrintWriter log )
-                                                    throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         XWindowPeer the_win = null;
         XToolkit the_kit = null;
