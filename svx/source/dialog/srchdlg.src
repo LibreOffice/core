@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 03:35:51 $
+ *  last change: $Author: gt $ $Date: 2001-09-04 11:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,12 +234,20 @@ ModelessDialog RID_SVXDLG_SEARCH
         WordBreak = TRUE ;
         Hide = TRUE ;
     };
+#if SUPD < 641 || defined( GT_DEBUG )
     MultiLineEdit ED_SEARCH_FORMATS
     {
         Pos = MAP_APPFONT ( 10 , 24 ) ;
         Size = MAP_APPFONT ( 171 , 16 ) ;
         ReadOnly = TRUE ;
         IgnoreTab = TRUE ;
+        Hide = TRUE ;
+    };
+#endif
+    FixedText FT_SEARCH_FORMATS
+    {
+        Pos = MAP_APPFONT ( 10 , 24 ) ;
+        Size = MAP_APPFONT ( 171 , 16 ) ;
         Hide = TRUE ;
     };
     FixedText FT_REPLACE
@@ -295,12 +303,20 @@ ModelessDialog RID_SVXDLG_SEARCH
         WordBreak = TRUE ;
         Hide = TRUE ;
     };
+#if SUPD < 641  || defined( GT_DEBUG )
     MultiLineEdit ED_REPLACE_FORMATS
     {
         Pos = MAP_APPFONT ( 10 , 68 ) ;
         Size = MAP_APPFONT ( 171 , 16 ) ;
         ReadOnly = TRUE ;
         IgnoreTab = TRUE ;
+        Hide = TRUE ;
+    };
+#endif
+    FixedText FT_REPLACE_FORMATS
+    {
+        Pos = MAP_APPFONT ( 10 , 68 ) ;
+        Size = MAP_APPFONT ( 171 , 16 ) ;
         Hide = TRUE ;
     };
     CheckBox BTN_CELLS

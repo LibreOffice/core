@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-16 15:41:29 $
+ *  last change: $Author: gt $ $Date: 2001-09-04 11:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,14 +171,23 @@ SV_IMPL_VARARR(SrchAttrItemList, SearchAttrItem);
 
 struct SearchDlg_Impl
 {
+    FixedText   aSearchFormats;
+    FixedText   aReplaceFormats;
+
     BOOL        bMultiLineEdit  : 1,
                 bSaveToModule   : 1,
                 bFocusOnSearch  : 1;
     USHORT*     pRanges;
     Timer       aSelectionTimer;
 
-    SearchDlg_Impl() :
-        bMultiLineEdit( FALSE ), bSaveToModule( TRUE ), bFocusOnSearch( TRUE ), pRanges( NULL ) {}
+    SearchDlg_Impl( Window* pParent ) :
+        aSearchFormats( pParent, ResId( FT_SEARCH_FORMATS ) ),
+        aReplaceFormats( pParent, ResId( FT_REPLACE_FORMATS ) ),
+        bMultiLineEdit( FALSE ),
+        bSaveToModule( TRUE ),
+        bFocusOnSearch( TRUE ),
+        pRanges( NULL )
+        {}
     ~SearchDlg_Impl() { delete pRanges; }
 };
 
@@ -364,13 +373,17 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     aSearchLB       ( this, ResId( ED_SEARCH ) ),
     aSearchTmplLB   ( this, ResId( LB_SEARCH ) ),
     aSearchAttrText ( this, ResId( FT_SEARCH_ATTR ) ),
+#if SUPD < 641 || defined( GT_DEBUG )
     aSearchFormatsED( this, ResId( ED_SEARCH_FORMATS ) ),
+#endif
 
     aReplaceText    ( this, ResId( FT_REPLACE ) ),
     aReplaceLB      ( this, ResId( ED_REPLACE ) ),
     aReplaceTmplLB  ( this, ResId( LB_REPLACE ) ),
     aReplaceAttrText( this, ResId( FT_REPLACE_ATTR ) ),
+#if SUPD < 641 || defined( GT_DEBUG )
     aReplaceFormatsED( this, ResId( ED_REPLACE_FORMATS ) ),
+#endif
 
     aSearchAllBtn   ( this, ResId( BTN_SEARCH_ALL ) ),
     aSearchBtn      ( this, ResId( BTN_SEARCH ) ),
@@ -435,6 +448,11 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     nTransliterationFlags   ( 0x00000000 )
 
 {
+    // temporary to avoid incompatibility
+#if SUPD < 641 || defined( GT_DEBUG )
+    aSearchFormatsED.Hide();
+    aReplaceFormatsED.Hide();
+
     Wallpaper aBackground = GetBackground();
     aSearchFormatsED.SetBackground( aBackground );
     aReplaceFormatsED.SetBackground( aBackground );
@@ -442,7 +460,8 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     aSearchFormatsED.SetFont( pInfo->GetFont() );
     aReplaceFormatsED.SetFont( pInfo->GetFont() );
     delete pInfo;
-    pImpl = new SearchDlg_Impl;
+#endif
+    pImpl = new SearchDlg_Impl( this );
     pImpl->aSelectionTimer.SetTimeout( 500 );
     pImpl->aSelectionTimer.SetTimeoutHdl(
         LINK( this, SvxSearchDialog, TimeoutHdl_Impl ) );
@@ -450,9 +469,13 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     EnableControls_Impl( 0 );
 
 #ifdef OS2
+#if SUPD < 641 || defined( GT_DEBUG )
     aSearchFormatsED.Hide();
+#endif
     aSearchAttrText.Show();
+#if SUPD < 641 || defined( GT_DEBUG )
     aReplaceFormatsED.Hide();
+#endif
     aReplaceAttrText.Show();
 #endif
     // alten Text des aWordBtn's merken
@@ -623,9 +646,10 @@ void SvxSearchDialog::InitControls_Impl()
 
     Link aLink = LINK( this, SvxSearchDialog, FocusHdl_Impl );
     aSearchLB.SetGetFocusHdl( aLink );
-    aSearchFormatsED.SetGetFocusHdl( aLink );
+    pImpl->aSearchFormats.SetGetFocusHdl( aLink );
+
     aReplaceLB.SetGetFocusHdl( aLink );
-    aReplaceFormatsED.SetGetFocusHdl( aLink );
+    pImpl->aReplaceFormats.SetGetFocusHdl( aLink );
 
     aLink = LINK( this, SvxSearchDialog, LoseFocusHdl_Impl );
     aSearchLB.SetLoseFocusHdl( aLink );
@@ -673,9 +697,9 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
 
     if ( !pImpl->bMultiLineEdit )
     {
-        aSearchFormatsED.Hide();
+        pImpl->aSearchFormats.Hide();
         aSearchAttrText.Show();
-        aReplaceFormatsED.Hide();
+        pImpl->aReplaceFormats.Hide();
         aReplaceAttrText.Show();
     }
     else
@@ -684,14 +708,14 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         aSearchAttrText.Hide();
 
         if ( aText.Len() )
-            aSearchFormatsED.SetText( aText );
-        aSearchFormatsED.Show();
+            pImpl->aSearchFormats.SetText( aText );
+        pImpl->aSearchFormats.Show();
         aText = aReplaceAttrText.GetText();
         aReplaceAttrText.Hide();
 
         if ( aText.Len() )
-            aReplaceFormatsED.SetText( aText );
-        aReplaceFormatsED.Show();
+            pImpl->aReplaceFormats.SetText( aText );
+        pImpl->aReplaceFormats.Show();
     }
 #endif
 
@@ -930,7 +954,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         String aSrchAttrTxt;
 
         if ( pImpl->bMultiLineEdit )
-            aSrchAttrTxt = aSearchFormatsED.GetText();
+            aSrchAttrTxt = pImpl->aSearchFormats.GetText();
         else
             aSrchAttrTxt = aSearchAttrText.GetText();
 
@@ -954,7 +978,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
     }
 
     if ( ( !pImpl->bMultiLineEdit && aSearchAttrText.GetText().Len() ) ||
-         ( pImpl->bMultiLineEdit && aSearchFormatsED.GetText().Len() ) )
+            ( pImpl->bMultiLineEdit && pImpl->aSearchFormats.GetText().Len() ) )
         EnableControl_Impl( &aNoFormatBtn );
     else
         aNoFormatBtn.Disable();
@@ -1012,7 +1036,7 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
             if ( !pImpl->bMultiLineEdit )
                 aSearchAttrText.SetText( BuildAttrText_Impl( aDesc, TRUE ) );
             else
-                aSearchFormatsED.SetText( BuildAttrText_Impl( aDesc, TRUE ) );
+                pImpl->aSearchFormats.SetText( BuildAttrText_Impl( aDesc, TRUE ) );
 
             if ( aDesc.Len() )
                 bFormat |= TRUE;
@@ -1031,7 +1055,7 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
             if ( !pImpl->bMultiLineEdit )
                 aReplaceAttrText.SetText( BuildAttrText_Impl( aDesc, FALSE ) );
             else
-                aReplaceFormatsED.SetText( BuildAttrText_Impl( aDesc, FALSE ) );
+                pImpl->aReplaceFormats.SetText( BuildAttrText_Impl( aDesc, FALSE ) );
 
             if ( aDesc.Len() )
                 bFormat |= TRUE;
@@ -1301,7 +1325,7 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
         if ( !pImpl->bMultiLineEdit )
            nTxtLen = aSearchAttrText.GetText().Len();
         else
-           nTxtLen = aSearchFormatsED.GetText().Len();
+            nTxtLen = pImpl->aSearchFormats.GetText().Len();
 
         if ( nLBTxtLen || nTxtLen )
         {
@@ -1379,8 +1403,8 @@ IMPL_LINK( SvxSearchDialog, TemplateHdl_Impl, Button *, EMPTYARG )
             }
             else
             {
-                aSearchFormatsED.SetText( sDesc );
-                aReplaceFormatsED.SetText( sDesc );
+                pImpl->aSearchFormats.SetText( sDesc );
+                pImpl->aReplaceFormats.SetText( sDesc );
             }
         }
         aFormatBtn.Disable();
@@ -1408,8 +1432,8 @@ IMPL_LINK( SvxSearchDialog, TemplateHdl_Impl, Button *, EMPTYARG )
         }
         else
         {
-            aSearchFormatsED.SetText( BuildAttrText_Impl( sDesc, TRUE ) );
-            aReplaceFormatsED.SetText( BuildAttrText_Impl( sDesc, FALSE ) );
+            pImpl->aSearchFormats.SetText( BuildAttrText_Impl( sDesc, TRUE ) );
+            pImpl->aReplaceFormats.SetText( BuildAttrText_Impl( sDesc, FALSE ) );
         }
 
         EnableControl_Impl( &aFormatBtn );
@@ -1729,9 +1753,9 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
     if ( !pImpl->bMultiLineEdit )
         nTxtLen = aSearchAttrText.GetText().Len();
     else
-        nTxtLen = aSearchFormatsED.GetText().Len();
+        nTxtLen = pImpl->aSearchFormats.GetText().Len();
 
-    if ( pCtrl == &aSearchLB || pCtrl == &aSearchFormatsED )
+    if ( pCtrl == &aSearchLB || pCtrl == &pImpl->aSearchFormats )
     {
         if ( pCtrl->HasChildPathFocus() )
             pImpl->bFocusOnSearch = TRUE;
@@ -1751,7 +1775,7 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
         bSearch = FALSE;
 
         if ( ( !pImpl->bMultiLineEdit && aReplaceAttrText.GetText().Len() ) ||
-             ( pImpl->bMultiLineEdit && aReplaceFormatsED.GetText().Len() ) )
+                ( pImpl->bMultiLineEdit && pImpl->aReplaceFormats.GetText().Len() ) )
             EnableControl_Impl( &aNoFormatBtn );
         else
             aNoFormatBtn.Disable();
@@ -1875,7 +1899,7 @@ IMPL_LINK( SvxSearchDialog, NoFormatHdl_Impl, Button *, EMPTYARG )
         if ( !pImpl->bMultiLineEdit )
             aSearchAttrText.SetText( String() );
         else
-            aSearchFormatsED.SetText( String() );
+            pImpl->aSearchFormats.SetText( String() );
         pSearchList->Clear();
     }
     else
@@ -1883,7 +1907,7 @@ IMPL_LINK( SvxSearchDialog, NoFormatHdl_Impl, Button *, EMPTYARG )
         if ( !pImpl->bMultiLineEdit )
             aReplaceAttrText.SetText( String() );
         else
-            aReplaceFormatsED.SetText( String() );
+            pImpl->aReplaceFormats.SetText( String() );
         pReplaceList->Clear();
     }
     pImpl->bSaveToModule = FALSE;
@@ -1937,7 +1961,7 @@ void SvxSearchDialog::GetSearchItems( SfxItemSet& rSet )
     if ( !pImpl->bMultiLineEdit )
         nLen = aSearchAttrText.GetText().Len();
     else
-        nLen = aSearchFormatsED.GetText().Len();
+        nLen = pImpl->aSearchFormats.GetText().Len();
 
     if ( nLen && pSearchList )
         pSearchList->Get( rSet );
@@ -1952,7 +1976,7 @@ void SvxSearchDialog::GetReplaceItems( SfxItemSet& rSet )
     if ( !pImpl->bMultiLineEdit )
         nLen = aReplaceAttrText.GetText().Len();
     else
-        nLen = aReplaceFormatsED.GetText().Len();
+        nLen = pImpl->aReplaceFormats.GetText().Len();
 
     if ( nLen && pReplaceList )
         pReplaceList->Get( rSet );
@@ -2039,7 +2063,7 @@ void SvxSearchDialog::PaintAttrText_Impl()
         if ( !pImpl->bMultiLineEdit )
             aSearchAttrText.SetText( aDesc );
         else
-            aSearchFormatsED.SetText( aDesc );
+            pImpl->aSearchFormats.SetText( aDesc );
         FocusHdl_Impl( &aSearchLB );
     }
     else
@@ -2047,7 +2071,7 @@ void SvxSearchDialog::PaintAttrText_Impl()
         if ( !pImpl->bMultiLineEdit )
             aReplaceAttrText.SetText( aDesc );
         else
-            aReplaceFormatsED.SetText( aDesc );
+            pImpl->aReplaceFormats.SetText( aDesc );
         FocusHdl_Impl( &aReplaceLB );
     }
 }

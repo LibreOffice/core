@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
+ *  last change: $Author: gt $ $Date: 2001-09-04 11:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,8 @@
 
 #define ED_SEARCH_FORMATS   60
 #define ED_REPLACE_FORMATS  61
+#define FT_SEARCH_FORMATS   62
+#define FT_REPLACE_FORMATS  63
 
 
 #endif
