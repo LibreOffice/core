@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:46 $
+ *  last change: $Author: ka $ $Date: 2001-04-09 10:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,3 +145,5 @@ hidspecial HID_SD_CHGFOIL_OBJECTS       { HelpId = HID_SD_CHGFOIL_OBJECTS; };
 hidspecial HID_SD_CHGFOIL_NAME          { HelpId = HID_SD_CHGFOIL_NAME; };
 
 hidspecial HID_FM_CTL_SELECTION         { HelpId = HID_FM_CTL_SELECTION; };
+
+hidspecial HID_SD_WIN_PRESENTATION      { HelpId = HID_SD_WIN_PRESENTATION; };
