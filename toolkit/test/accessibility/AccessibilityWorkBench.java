@@ -52,7 +52,7 @@ public class AccessibilityWorkBench
     implements ActionListener, XTerminateListener, TreeSelectionListener
 
 {
-    public static final String msVersion = "v1.7.1";
+    public static final String msVersion = "v1.7.2";
     public String msOptionsFileName = ".AWBrc";
 
     public static void main (String args[])
