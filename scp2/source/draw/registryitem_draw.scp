@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registryitem_draw.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:22:58 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 12:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,13 +675,13 @@ RegistryItem gid_Regitem_Odg_Contenttype
     ModuleID = gid_Module_Prg_Draw_Bin;
     Subkey = ".odg";
     Name = "Content Type";
-    Value = "application/vnd.oasis.opendocumentdrawing";
+    Value = "application/vnd.oasis.opendocument.graphics";
 End
 
 RegistryItem gid_Regitem_Odg_Mime_Database
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "MIME\Database\Content Type\application/vnd.oasis.opendocumentdrawing";
+    Subkey = "MIME\Database\Content Type\application/vnd.oasis.opendocument.graphics";
     Name = "Extension";
     Value = ".odg";
 End
@@ -847,7 +847,7 @@ RegistryItem gid_Regitem_Otg_Contenttype
     ModuleID = gid_Module_Prg_Draw_Bin;
     Subkey = ".otg";
     Name = "Content Type";
-    Value = "application/vnd.oasis.opendocumentdrawing";
+    Value = "application/vnd.oasis.opendocument.graphics-template";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawtemplate_1
