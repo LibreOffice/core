@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 18:37:26 $
+#   last change: $Author: rt $ $Date: 2004-09-08 17:06:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,8 +84,12 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE: settings.mk
 .INCLUDE: sv.mk
 
+.IF "$(SYSTEM_NEON)" == "YES"
+CFLAGS+= $(NEON_CFLAGS)
+.ELSE
 NEONINCDIR=external$/neon
 CFLAGS+= -I$(SOLARINCDIR)$/$(NEONINCDIR)
+.ENDIF
 
 # --- General -----------------------------------------------------
 
