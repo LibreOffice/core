@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PersAttrListTContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:55:42 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ class XMLPersAttrListTContext : public XMLTransformerContext
     ::rtl::OUString m_aElemQName;
     sal_uInt16 m_nActionMap;
 
+
 public:
     TYPEINFO();
 
@@ -138,6 +139,14 @@ public:
     virtual void ExportContent();
 
     const ::rtl::OUString& GetExportQName() const { return m_aElemQName; }
+
+    void AddAttribute( sal_uInt16 nAPrefix,
+        ::xmloff::token::XMLTokenEnum eAToken,
+           ::xmloff::token::XMLTokenEnum eVToken );
+
+    void AddAttribute( sal_uInt16 nAPrefix,
+        ::xmloff::token::XMLTokenEnum eAToken,
+        const ::rtl::OUString & rValue );
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList >
