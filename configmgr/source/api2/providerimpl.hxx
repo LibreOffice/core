@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-18 15:46:51 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,6 @@ namespace configmgr
         configapi::ApiProviderInstances*    m_pNewProviders;
         mutable osl::Mutex                  m_aTreeManagerMutex;
         TreeManager*                        m_pTreeManager;     /// the tree cache. Will hold a reference to us as long as it life
-        sal_Bool                            m_bEnableAsync;
 
         rtl::Reference< TreeManager > maybeGetTreeManager() const CFG_NOTHROW();
         rtl::Reference< TreeManager > getTreeManager() const CFG_UNO_THROW_RTE();
