@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2004-12-16 12:25:41 $
+#   last change: $Author: kz $ $Date: 2004-12-16 12:49:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,7 +154,7 @@ $(DESTDIR)$/cli_cs_testobj.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +$(WRAPCMD) $(CSC) $(CSCFLAGS) -target:library -out:$@ \
+    +$(CSC) $(CSCFLAGS) -target:library -out:$@ \
         -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_URE) \
         -reference:$(CLI_BASETYPES) \
@@ -166,7 +166,7 @@ $(DESTDIR)$/cli_cs_bridgetest.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +$(WRAPCMD) $(CSC) $(CSCFLAGS) -target:library -out:$@ \
+    +$(CSC) $(CSCFLAGS) -target:library -out:$@ \
         -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_TYPES) \
         -reference:$(CLI_BASETYPES) \
@@ -180,7 +180,7 @@ $(DESTDIR)$/cli_vb_bridgetest.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +$(WRAPCMD) $(VBC) $(VBC_FLAGS) \
+    +$(VBC) $(VBC_FLAGS) \
         -target:library \
         -out:$@ \
         -reference:$(CLI_TYPES) \
@@ -197,7 +197,7 @@ $(DESTDIR)$/cli_vb_testobj.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +$(WRAPCMD) $(VBC) $(VBC_FLAGS) \
+    +$(VBC) $(VBC_FLAGS) \
         -target:library \
         -out:$@ \
         -reference:$(CLI_BASETYPES) \
@@ -221,7 +221,7 @@ $(DESTDIR)$/cli_bridgetest_inprocess.exe : \
         $(CLI_TYPES) \
         $(CLI_URE) \
         $(CLI_CPPUHELPER)
-    +$(WRAPCMD) $(CSC) $(CSCFLAGS) -target:exe -out:$@ \
+    +$(CSC) $(CSCFLAGS) -target:exe -out:$@ \
         -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_BASETYPES) \
         -reference:$(CLI_TYPES) \
