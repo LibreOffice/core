@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PathSettings.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:32 $
+ *  last change:$Date: 2003-05-27 12:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._fwl;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -109,7 +110,7 @@ public class PathSettings extends TestCase {
 
         //now get the OButtonControl
         try {
-            oInterface = Param.getMSF().createInstance
+            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.comp.framework.PathSettings") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get service");
