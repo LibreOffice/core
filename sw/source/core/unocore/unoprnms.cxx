@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
+ *  last change: $Author: mib $ $Date: 2001-01-15 11:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,8 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_INDEX_MARK_BACKGROUND             
 const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_FOOTNOTE_BACKGROUND               (MAP_CHAR_LEN("ShowFootnoteBackground"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_TEXT_FIELD_BACKGROUND             (MAP_CHAR_LEN("ShowTextFieldBackground"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SIZE_RELATIVE                          (MAP_CHAR_LEN("SizeRelative"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT                (MAP_CHAR_LEN("IsSyncWidthToHeight"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH                (MAP_CHAR_LEN("IsSyncHeightToWidth"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SIZE_PROTECTED                         (MAP_CHAR_LEN("SizeProtected"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SMOOTH_SCROLLING                       (MAP_CHAR_LEN("SmoothScrolling"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SOLID_MARK_HANDLES                     (MAP_CHAR_LEN("SolidMarkHandles"));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-08 13:28:27 $
+ *  last change: $Author: mib $ $Date: 2001-01-15 11:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,14 +447,27 @@ BOOL SwFmtFrmSize::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         }
         break;
         case MID_FRMSIZE_REL_HEIGHT:
-            rVal <<= (sal_Int8)GetHeightPercent();
+            rVal <<= (sal_Int8)(GetHeightPercent() != 0xFF ? GetHeightPercent() : 0);
         break;
         case MID_FRMSIZE_REL_WIDTH:
-            rVal <<= (sal_Int8)GetWidthPercent();
+            rVal <<= (sal_Int8)(GetWidthPercent() != 0xFF ? GetWidthPercent() : 0);
         break;
         case MID_FRMSIZE_IS_SYNC_REL_SIZE:
         {
+            BOOL bTmp = (0xFF == GetHeightPercent()) ||
+                        (0xFF == GetWidthPercent());
+            rVal.setValue(&bTmp, ::getBooleanCppuType());
+        }
+        break;
+        case MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH:
+        {
             BOOL bTmp = 0xFF == GetHeightPercent();
+            rVal.setValue(&bTmp, ::getBooleanCppuType());
+        }
+        break;
+        case MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT:
+        {
+            BOOL bTmp = 0xFF == GetWidthPercent();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
@@ -504,9 +517,9 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_FRMSIZE_REL_HEIGHT:
         {
-            sal_Int32 nSet;
+            sal_Int8 nSet;
             rVal >>= nSet;
-            if(nSet > 0 && nSet <= 100)
+            if(nSet >= 0 && nSet <= 100)
                 SetHeightPercent(nSet);
             else
                 bRet = sal_False;
@@ -514,22 +527,31 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_FRMSIZE_REL_WIDTH:
         {
-            sal_Int32 nSet;
+            sal_Int8 nSet;
             rVal >>= nSet;
-            if(nSet > 0 && nSet <= 100)
+            if(nSet >= 0 && nSet <= 100)
                 SetWidthPercent(nSet);
             else
                 bRet = sal_False;
         }
         break;
         case MID_FRMSIZE_IS_SYNC_REL_SIZE:
+        case MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH:
         {
             sal_Bool bSet = *(sal_Bool*)rVal.getValue();
             if(bSet)
                 SetHeightPercent(0xff);
-            else
-                    // 0xff kann so nicht abgeschaltet werden
-                    bRet = sal_False;
+            else if( 0xff == GetHeightPercent() )
+                SetHeightPercent( 0 );
+        }
+        break;
+        case MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT:
+        {
+            sal_Bool bSet = *(sal_Bool*)rVal.getValue();
+            if(bSet)
+                SetWidthPercent(0xff);
+            else if( 0xff == GetWidthPercent() )
+                SetWidthPercent(0);
         }
         break;
         case MID_FRMSIZE_WIDTH :

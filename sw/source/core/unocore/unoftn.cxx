@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
+ *  last change: $Author: mib $ $Date: 2001-01-15 11:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ sal_Int64 SAL_CALL SwXFootnote::getSomething( const uno::Sequence< sal_Int8 >& r
     {
             return (sal_Int64)this;
     }
-    return 0;
+    return SwXText::getSomething( rId );
 }
 /* -----------------------------06.04.00 16:36--------------------------------
 
@@ -619,6 +619,9 @@ void SwXFootnote::removeVetoableChangeListener( const OUString& PropertyName,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/01/12 16:12:45  os
+    new: Redline container
+
     Revision 1.4  2000/10/23 08:45:59  os
     syntax: ')'
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
+ *  last change: $Author: mib $ $Date: 2001-01-15 11:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,8 @@ const SfxItemPropertyMap* GetFrameDescMap()
         { SW_PROP_NAME(UNO_NAME_SIZE),                  RES_FRM_SIZE,           &::getCppuType((const awt::Size*)0),            PROPERTY_NONE, MID_FRMSIZE_SIZE|CONVERT_TWIPS},
         { SW_PROP_NAME(UNO_NAME_SIZE_PROTECTED)    ,    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_SIZE    },
         { SW_PROP_NAME(UNO_NAME_SIZE_RELATIVE),             RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_REL_SIZE   },
+        { SW_PROP_NAME(UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT    },
+        { SW_PROP_NAME(UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH },
         { SW_PROP_NAME(UNO_NAME_SURROUND  )               , RES_SURROUND,           &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },
         { SW_PROP_NAME(UNO_NAME_SURROUND_ANCHORONLY),   RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_ANCHORONLY      },
         { SW_PROP_NAME(UNO_NAME_TEXT_COLUMNS),          RES_COL,                &::getCppuType((const uno::Reference<XTextColumns>*)0),    PROPERTY_NONE, MID_COLUMNS},
@@ -311,7 +313,7 @@ const SfxItemPropertyMap* GetFrameDescMap()
         { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER_DISTANCE),    RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
         {0,0,0,0}
     };
-    #define FRM_PROP_COUNT 54
+    #define FRM_PROP_COUNT 56
     return aFrameDescPropertyMap_Impl;
 }
 // unterscheidet sich von der Rahmenbeschreibung durch eine XTextPosition
@@ -352,6 +354,8 @@ const SfxItemPropertyMap* GetGraphicDescMap()
         { SW_PROP_NAME(UNO_NAME_SHADOW_FORMAT),             RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, 0},
         { SW_PROP_NAME(UNO_NAME_SIZE),                  RES_FRM_SIZE,           &::getCppuType((const awt::Size*)0),            PROPERTY_NONE, MID_FRMSIZE_SIZE|CONVERT_TWIPS},
         { SW_PROP_NAME(UNO_NAME_SIZE_RELATIVE),             RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_REL_SIZE   },
+        { SW_PROP_NAME(UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT    },
+        { SW_PROP_NAME(UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH },
         { SW_PROP_NAME(UNO_NAME_SIZE_PROTECTED)    ,    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_SIZE    },
         { SW_PROP_NAME(UNO_NAME_SURROUND    )             , RES_SURROUND,           &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },
         { SW_PROP_NAME(UNO_NAME_SURROUND_ANCHORONLY),   RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_ANCHORONLY      },
@@ -390,7 +394,7 @@ const SfxItemPropertyMap* GetGraphicDescMap()
         { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
         {0,0,0,0}
     };
-    #define GRPH_PROP_COUNT 69
+    #define GRPH_PROP_COUNT 71
     return aGraphicDescPropertyMap_Impl;
 }
 
@@ -657,6 +661,10 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet)
         GetProperty(C2S(UNO_NAME_RELATIVE_WIDTH), pRelW);
         uno::Any* pSzRel = 0;
         GetProperty(C2S(UNO_NAME_SIZE_RELATIVE), pSzRel);
+        uno::Any* pSyncWidth = 0;
+        GetProperty(C2S(UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT), pSyncWidth);
+        uno::Any* pSyncHeight = 0;
+        GetProperty(C2S(UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH), pSyncHeight);
         uno::Any* pWidth = 0;
         GetProperty(C2S(UNO_NAME_WIDTH), pWidth);
         uno::Any* pHeight = 0;
@@ -665,7 +673,8 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet)
         GetProperty(C2S(UNO_NAME_SIZE), pSize);
         uno::Any* pSizeType = 0;
         GetProperty(C2S(UNO_NAME_SIZE_TYPE), pSizeType);
-        if(pWidth || pHeight ||pRelH || pRelW || pSzRel || pSize ||pSizeType)
+        if( pWidth || pHeight ||pRelH || pRelW || pSzRel || pSize ||pSizeType ||
+            pSyncWidth || pSyncHeight )
         {
             SwFmtFrmSize aFrmSz;
             if(pWidth)
@@ -678,6 +687,10 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet)
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pRelW, MID_FRMSIZE_REL_WIDTH);
             if(pSzRel)
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pSzRel, MID_FRMSIZE_IS_SYNC_REL_SIZE);
+            if(pSyncWidth)
+                bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pSyncWidth, MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT);
+            if(pSyncHeight)
+                bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pSyncHeight, MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH);
             if(pSize)
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pSize, MID_FRMSIZE_SIZE|CONVERT_TWIPS);
             if(pSizeType)
@@ -2336,7 +2349,18 @@ uno::Reference<container::XNameReplace > SAL_CALL SwXTextFrame::getEvents()
 {
     return new SwFrameEventDescriptor( *this );
 }
+/* -----------------------------10.01.01 13:27--------------------------------
 
+ ---------------------------------------------------------------------------*/
+sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& rId )
+    throw(RuntimeException)
+{
+    sal_Int64 nRet = SwXFrame::getSomething( rId );
+    if( !nRet )
+        nRet = SwXText::getSomething( rId );
+
+    return nRet;
+}
 /******************************************************************
  *  SwXTextGraphicObject
  ******************************************************************/
