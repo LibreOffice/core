@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:22:31 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ chinese_traditional ] = "Εγ¥ά¤u§@ªν¤ΊªΊΕά§σ(~S)";
         Text[ arabic ] = "ΕΩεΗΡ ΗαΚΫννΡΗΚ έν ΗαΜΟζα";
         Text[ greek ] = "Εμφάνιση αλλαγών πίνακα";
-        Text[ korean ] = "½ΊΗΑ·Ήµε ½ΓΖ®»σΏ΅ Ί―°ζ ΊΈΐΜ±β(~S)";
+        Text[ korean ] = "½ΊΗΑ·Ήµε½ΓΖ®»σΏ΅ Ί―°ζ»ηΗΧ ΊΈΐΜ±β";
         Text[ turkish ] = "~Tablodaki deπiώiklikleri gφrόntόle";
         Text[ language_user1 ] = " ";
     };
@@ -127,7 +127,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ chinese_traditional ] = "Εγ¥ά±µ¨όªΊΕά§σ(~A)";
         Text[ arabic ] = "ΕΩεΗΡ ΗαΚΫννΡΗΚ ΗαγήΘζαΙ";
         Text[ greek ] = "Εμφάνιση αποδεχομένων αλλαγών";
-        Text[ korean ] = "ΐϋΏλµΘ Ί―°ζ ΊΈΐΜ±β(~A)";
+        Text[ korean ] = "ΐϋΏλµΘ Ί―°ζ»ηΗΧ ΊΈΐΜ±β";
         Text[ turkish ] = "~Kabul edilen deπiώiklikleri gφrόntόle";
         Text[ language_user1 ] = " ";
     };
@@ -154,7 +154,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ chinese_traditional ] = "Εγ¥ά©Ϊµ΄ªΊΕά§σ(~R)";
         Text[ arabic ] = "ΕΩεΗΡ ΗαΚΫννΡΗΚ ΗαγΡέζΦΙ";
         Text[ greek ] = "Εμφάνιση απορριπτέων αλλαγών";
-        Text[ korean ] = "ΓλΌÒµΘ Ί―°ζ ΊΈΐΜ±β(~R)";
+        Text[ korean ] = "°ΕΊΞµΘ Ί―°ζ»ηΗΧ ΊΈΐΜ±β";
         Text[ turkish ] = "~Reddedilen deπiώiklikleri gφrόntόle";
         Text[ language_user1 ] = " ";
     };
@@ -243,7 +243,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         QuickHelpText[ chinese_traditional ] = "ΑY¤p/©ρ¤j";
         QuickHelpText[ arabic ] = "ΚΥΫνΡ/ΚίΘνΡ";
         QuickHelpText[ greek ] = "Σμίκρυνση/Μεγέθυνση";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "ΓΰΌÒ£―Θ®΄λ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern/Vergrφίern";
@@ -264,7 +264,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     Text[ chinese_traditional ] = "Εγ¥άΕά§σ";
     Text[ arabic ] = "ΕΩεΗΡ ΗαΚΫννΡΗΚ";
     Text[ greek ] = "Εμφάνιση αλλαγών";
-    Text[ korean ] = "Ί―°ζΊΈΐΜ±β";
+    Text[ korean ] = "Ί―°ζ»ηΗΧ΅΅ΊΈΐΜ±β";
     Text[ turkish ] = "Deπiώiklikleri gφrόntόle";
     Text[ language_user1 ] = " ";
 };
