@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: np $ $Date: 2002-03-08 14:32:38 $
+#   last change: $Author: hr $ $Date: 2004-03-09 12:16:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,11 @@ APP1TARGET=	$(TARGET)
 APP1STACK=	1000000
 APP1OBJS=   $(OBJ)$/test.obj
 
+.IF "$(COMEX)"=="10"
+APP1STDLIBS= $(STATIC_LIBS) cosv.lib
+.ELSE
 APP1STDLIBS= $(STATIC_LIBS) msvcirt.lib cosv.lib
+.ENDIF
 
 
 APP1LIBS=	$(LB)$/$(TARGET).lib
