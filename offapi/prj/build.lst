@@ -1,0 +1,44 @@
+oa	offapi	:	udkapi NULL
+oa	offapi									usr1	-	all	oa_mkout NULL
+oa	offapi\com\sun\star\awt					nmake	-	all	oa_awt NULL
+oa	offapi\com\sun\star\chart				nmake	-	all	oa_chart NULL
+oa	offapi\com\sun\star\configuration		nmake	-	all	oa_config NULL
+oa	offapi\com\sun\star\datatransfer		nmake	-	all	oa_datatransfer NULL
+oa	offapi\com\sun\star\datatransfer\clipboard			nmake	-	all	oa_datatrans_clip NULL
+oa	offapi\com\sun\star\datatransfer\dnd	nmake	-	all	oa_datatrans_dnd oa_awt NULL
+oa	offapi\com\sun\star\document			nmake	-	all	oa_docu NULL
+oa	offapi\com\sun\star\drawing				nmake	-	all	oa_draw NULL
+oa	offapi\com\sun\star\form\component		nmake	-	all	oa_fcomp NULL
+oa	offapi\com\sun\star\form				nmake	-	all	oa_form NULL
+oa	offapi\com\sun\star\formula				nmake	-	all	oa_formula NULL
+oa	offapi\com\sun\star\frame				nmake	-	all	oa_frame NULL
+oa	offapi\com\sun\star\i18n				nmake	-	all	oa_i18n NULL
+oa	offapi\com\sun\star\installation		nmake	-	all	oa_inst NULL
+oa	offapi\com\sun\star\linguistic2			nmake	-	all	oa_ling2 NULL
+oa	offapi\com\sun\star\mozilla				nmake	-	all	oa_mozilla NULL
+oa	offapi\com\sun\star\package				nmake	-	all	oa_package NULL
+oa	offapi\com\sun\star\pgp					nmake	-	all	oa_pgp NULL
+oa	offapi\com\sun\star\plugin				nmake	-	all	oa_plug NULL
+oa	offapi\com\sun\star\presentation		nmake	-	all	oa_pres NULL
+oa	offapi\com\sun\star\resource			nmake	-	all	oa_resrc NULL
+oa	offapi\com\sun\star\xml\sax				nmake	-	all	oa_sax NULL
+oa	offapi\com\sun\star\xml					nmake	-	all	oa_xml NULL
+oa	offapi\com\sun\star\scanner				nmake	-	all	oa_scan NULL
+oa	offapi\com\sun\star\setup				nmake	-	all	oa_setup NULL
+oa	offapi\com\sun\star\sheet				nmake	-	all	oa_sheet NULL
+oa	offapi\com\sun\star\style				nmake	-	all	oa_style NULL
+oa	offapi\com\sun\star\svg					nmake	-	all	oa_svg NULL
+oa	offapi\com\sun\star\sync				nmake	-	all	oa_sync NULL
+oa	offapi\com\sun\star\table				nmake	-	all	oa_table NULL
+oa	offapi\com\sun\star\task				nmake	-	all	oa_task NULL
+oa	offapi\com\sun\star\text				nmake	-	all	oa_text NULL
+oa	offapi\com\sun\star\text\textfield		nmake	-	all	oa_textfield NULL
+oa	offapi\com\sun\star\text\fieldmaster	nmake	-	all	oa_fieldmaster NULL
+oa	offapi\com\sun\star\ucb					nmake	-	all	oa_ucb NULL
+oa	offapi\com\sun\star\ui					nmake	-	all	oa_ui NULL
+oa	offapi\com\sun\star\util				nmake	-	all	oa_putil NULL
+oa	offapi\com\sun\star\view				nmake	-	all	oa_view NULL
+oa	offapi\com\sun\star\sdbcx				nmake	-	all	oa_sdbcx NULL
+oa	offapi\com\sun\star\sdbc				nmake	-	all	oa_sdbc NULL
+oa	offapi\com\sun\star\sdb					nmake	-	all	oa_sdb NULL
+oa	offapi\util								nmake	-	all	oa_util oa_awt oa_chart oa_config oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_fcomp oa_fieldmaster oa_form oa_formula oa_frame oa_i18n oa_inst oa_ling2 oa_mozilla oa_package oa_pgp oa_plug oa_pres oa_putil oa_resrc oa_sax oa_scan oa_sdb oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync oa_table oa_task oa_text oa_textfield oa_ucb oa_ui oa_view oa_xml NULL

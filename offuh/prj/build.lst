@@ -1,0 +1,4 @@
+ou	offuh	:	codemaker drafts NULL
+ou	offuh									usr1	-	all	ou_mkout NULL
+ou	offuh\prj								get		-	all	ou_prj NULL
+ou	offuh\source							nmake	-	all	ou_source NULL
