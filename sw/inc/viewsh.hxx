@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:41:58 $
+ *  last change: $Author: os $ $Date: 2001-05-10 12:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,8 +314,8 @@ public:
     void SetParaSpaceMax( sal_Bool bNew, sal_Bool bAtPages );
 
     // compatible behaviour of tabs
-    sal_Bool IsTabCompat() const {return FALSE;}
-    void SetTabCompat( sal_Bool bNew ){};
+    sal_Bool IsTabCompat() const;
+    void SetTabCompat( sal_Bool bNew );
 
     //Ruft den Idle-Formatierer des Layouts
     void LayoutIdle();
