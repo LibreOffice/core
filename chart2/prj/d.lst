@@ -11,6 +11,8 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 
 mkdir: %_DEST%\inc%_EXT%\chart2
 
+hedabu: ..\inc\DevChartConfig.hxx %_DEST%\inc%_EXT%\chart2\DevChartConfig.hxx
+
 mkdir: %_DEST%\inc%_EXT%\drafts
 mkdir: %_DEST%\inc%_EXT%\drafts\com
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun
