@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Scaling.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:13:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
 #endif
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 namespace
 {
