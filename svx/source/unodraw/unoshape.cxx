@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-31 10:20:50 $
+ *  last change: $Author: sab $ $Date: 2001-08-01 12:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1662,6 +1662,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
 
 //----------------------------------------------------------------------
 
+#ifndef SVX_LIGHT
 const SvGlobalName SvxShape::GetClassName_Impl(rtl::OUString& rHexCLSID)
 {
     SvGlobalName aClassName;
@@ -1693,6 +1694,7 @@ const SvGlobalName SvxShape::GetClassName_Impl(rtl::OUString& rHexCLSID)
     }
     return aClassName;
 }
+#endif
 
 uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
