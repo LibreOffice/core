@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-19 18:48:55 $
+ *  last change: $Author: mba $ $Date: 2002-06-03 11:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,25 +397,7 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const Reference< XNameC
                 Reference< XInterface > xPipe;
 
                 aMedium.GetInStream()->Seek( 0 );
-                xSource = aMedium.GetDataSource();
-
-                if( !xSource.is() )
-                {
-                    DBG_ERROR( "got no data source from medium" );
-                    break;
-                }
-
-                xPipe = xServiceFactory->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe") ) );
-                if( !xPipe.is() )
-                {
-                    DBG_ERROR( "XMLReader::Read: com.sun.star.io.Pipe service missing" );
-                    break;
-                }
-
-                // connect pipe's output stream to the data source
-                xSource->setOutputStream( Reference< io::XOutputStream >::query( xPipe ) );
-
-                aParserInput.aInputStream = uno::Reference< io::XInputStream >::query( xPipe );
+                aParserInput.aInputStream = aMedium.GetInputStream();
             }
 
             if( xSource.is() )
