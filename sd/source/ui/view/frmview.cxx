@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:41:58 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,8 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetOrtho( pFrameView->IsOrtho() );
         SetEliminatePolyPointLimitAngle( pFrameView->GetEliminatePolyPointLimitAngle() );
         SetEliminatePolyPoints( pFrameView->IsEliminatePolyPoints() );
-        SetMasterPagePaintCaching( pFrameView->IsMasterPagePaintCaching() );
+// #110094#-7
+//      SetMasterPagePaintCaching( pFrameView->IsMasterPagePaintCaching() );
         SetDesignMode( pFrameView->IsDesignMode() );
 
         SetLineDraft( pFrameView->IsLineDraft() );
@@ -604,7 +605,8 @@ void FrameView::Update(SdOptions* pOptions)
         SetBigOrtho( pOptions->IsBigOrtho() );
         SetOrtho( pOptions->IsOrtho() );
         SetEliminatePolyPointLimitAngle( pOptions->GetEliminatePolyPointLimitAngle() );
-        SetMasterPagePaintCaching( pOptions->IsMasterPagePaintCaching() );
+// #110094#-7
+//      SetMasterPagePaintCaching( pOptions->IsMasterPagePaintCaching() );
         GetModel()->SetPickThroughTransparentTextFrames( pOptions->IsPickThrough() );
 
         SetLineDraft( pOptions->IsHairlineMode() );
