@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtsecte.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-08 19:17:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ Reference<XText> lcl_findXText(const Reference<XTextSection>& rSect)
     Reference<XTextContent> xTextContent(rSect, UNO_QUERY);
     if (xTextContent.is())
     {
-        xText = xTextContent->getAnchor()->getText();
+        xText.set(xTextContent->getAnchor()->getText());
     }
 
     return xText;
@@ -204,8 +204,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
     {
         if (xPropSet->getPropertySetInfo()->hasPropertyByName(sTextSection))
         {
-            Any aAny = xPropSet->getPropertyValue(sTextSection);
-            aAny >>= xNextSection;
+            xPropSet->getPropertyValue(sTextSection) >>= xNextSection;
         }
         // else: no current section
     }
@@ -233,9 +232,8 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             rPropSetHelper.hasProperties( xPropSet->getPropertySetInfo() );
         if( rPropSetHelper.hasProperty( nTextSectionId ))
         {
-            Any aAny = rPropSetHelper.getValue( nTextSectionId , xPropSet,
-                                                    sal_True );
-            aAny >>= xNextSection;
+            xNextSection.set(rPropSetHelper.getValue( nTextSectionId , xPropSet,
+                sal_True ), uno::UNO_QUERY);
         }
         // else: no current section
     }
@@ -264,7 +262,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
         // Build stacks of old and new sections
         // Sections on top of mute sections should not be on the stack
         vector<Reference<XTextSection> > aOldStack;
-        Reference<XTextSection> aCurrent = rPrevSection;
+        Reference<XTextSection> aCurrent(rPrevSection);
         while(aCurrent.is())
         {
             // if we have a mute section, ignore all its children
@@ -273,11 +271,11 @@ void XMLTextParagraphExport::exportListAndSectionChange(
                 aOldStack.clear();
 
             aOldStack.push_back(aCurrent);
-            aCurrent = aCurrent->getParentSection();
+            aCurrent.set(aCurrent->getParentSection());
         }
 
         vector<Reference<XTextSection> > aNewStack;
-        aCurrent = rNextSection;
+        aCurrent.set(rNextSection);
         sal_Bool bMute = sal_False;
         while(aCurrent.is())
         {
@@ -290,7 +288,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             }
 
             aNewStack.push_back(aCurrent);
-            aCurrent = aCurrent->getParentSection();
+            aCurrent.set(aCurrent->getParentSection());
         }
 
         // compare the two stacks
@@ -303,16 +301,16 @@ void XMLTextParagraphExport::exportListAndSectionChange(
                 (aNew != aNewStack.rend()) &&
                 (*aOld) == (*aNew) )
         {
-            aOld++;
-            aNew++;
+            ++aOld;
+            ++aNew;
         }
 
         // close all elements of aOld ...
         // (order: newest to oldest)
         if (aOld != aOldStack.rend())
         {
-            vector<Reference<XTextSection> > ::iterator aOldForward =
-                aOldStack.begin();
+            vector<Reference<XTextSection> > ::iterator aOldForward(
+                aOldStack.begin());
             while ((aOldForward != aOldStack.end()) &&
                    (*aOldForward != *aOld))
             {
@@ -320,7 +318,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
                     pRedlineExport->ExportStartOrEndRedline(*aOldForward,
                                                                 sal_False);
                 pSectionExport->ExportSectionEnd(*aOldForward, bAutoStyles);
-                aOldForward++;
+                ++aOldForward;
             }
             if (aOldForward != aOldStack.end())
             {
@@ -338,7 +336,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             if ( !bAutoStyles && (NULL != pRedlineExport) )
                 pRedlineExport->ExportStartOrEndRedline(*aNew, sal_True);
             pSectionExport->ExportSectionStart(*aNew, bAutoStyles);
-            aNew++;
+            ++aNew;
         }
 
         // start new list
@@ -353,6 +351,6 @@ void XMLTextParagraphExport::exportListAndSectionChange(
     }
 
     // save old section (old numRule gets saved in calling method)
-    rPrevSection = rNextSection;
+    rPrevSection.set(rNextSection);
 }
 
