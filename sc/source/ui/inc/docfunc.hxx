@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:37:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@ private:
 
     BOOL            AdjustRowHeight( const ScRange& rRange, BOOL bPaint = TRUE );
     void            CreateOneName( ScRangeName& rList,
-                                    USHORT nPosX, USHORT nPosY, USHORT nTab,
-                                    USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
+                                    SCCOL nPosX, SCROW nPosY, SCTAB nTab,
+                                    SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     BOOL& rCancel, BOOL bApi );
     void            NotifyInputHandler( const ScAddress& rPos );
 
@@ -107,8 +107,8 @@ public:
     BOOL            DetectiveAddSucc(const ScAddress& rPos);
     BOOL            DetectiveDelSucc(const ScAddress& rPos);
     BOOL            DetectiveAddError(const ScAddress& rPos);
-    BOOL            DetectiveMarkInvalid(USHORT nTab);
-    BOOL            DetectiveDelAll(USHORT nTab);
+    BOOL            DetectiveMarkInvalid(SCTAB nTab);
+    BOOL            DetectiveDelAll(SCTAB nTab);
     BOOL            DetectiveRefresh(BOOL bAutomatic = FALSE);
 
     BOOL            DeleteContents( const ScMarkData& rMark, USHORT nFlags,
@@ -141,16 +141,16 @@ public:
     BOOL            MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                                 BOOL bCut, BOOL bRecord, BOOL bPaint, BOOL bApi );
 
-    BOOL            InsertTable( USHORT nTab, const String& rName, BOOL bRecord, BOOL bApi );
-    BOOL            RenameTable( USHORT nTab, const String& rName, BOOL bRecord, BOOL bApi );
-    BOOL            DeleteTable( USHORT nTab, BOOL bRecord, BOOL bApi );
+    BOOL            InsertTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL bApi );
+    BOOL            RenameTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL bApi );
+    BOOL            DeleteTable( SCTAB nTab, BOOL bRecord, BOOL bApi );
 
-    BOOL            SetTableVisible( USHORT nTab, BOOL bVisible, BOOL bApi );
+    BOOL            SetTableVisible( SCTAB nTab, BOOL bVisible, BOOL bApi );
 
-    BOOL            SetLayoutRTL( USHORT nTab, BOOL bRTL, BOOL bApi );
+    BOOL            SetLayoutRTL( SCTAB nTab, BOOL bRTL, BOOL bApi );
 
-    BOOL            SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRanges,
-                                    USHORT nTab, ScSizeMode eMode, USHORT nSizeTwips,
+    BOOL            SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
+                                    SCTAB nTab, ScSizeMode eMode, USHORT nSizeTwips,
                                     BOOL bRecord, BOOL bApi );
 
     BOOL            InsertPageBreak( BOOL bColumn, const ScAddress& rPos,
@@ -158,8 +158,8 @@ public:
     BOOL            RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
                                     BOOL bRecord, BOOL bSetModified, BOOL bApi );
 
-    BOOL            Protect( USHORT nTab, const String& rPassword, BOOL bApi );
-    BOOL            Unprotect( USHORT nTab, const String& rPassword, BOOL bApi );
+    BOOL            Protect( SCTAB nTab, const String& rPassword, BOOL bApi );
+    BOOL            Unprotect( SCTAB nTab, const String& rPassword, BOOL bApi );
 
     BOOL            ClearItems( const ScMarkData& rMark, const USHORT* pWhich, BOOL bApi );
     BOOL            ChangeIndent( const ScMarkData& rMark, BOOL bIncrement, BOOL bApi );
@@ -180,7 +180,7 @@ public:
                                 BOOL bRecord, BOOL bApi );
                     // FillAuto: rRange wird von Source-Range auf Dest-Range angepasst
     BOOL            FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
-                                FillDir eDir, USHORT nCount, BOOL bRecord, BOOL bApi );
+                                FillDir eDir, ULONG nCount, BOOL bRecord, BOOL bApi );
 
     BOOL            ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd, BOOL bApi );
 
