@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:32:29 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,10 +435,23 @@ SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( USHORT nPref
     {
         if (IsXMLToken(rLocalName, XML_CONFIG_ITEM_SET))
         {
-            if (IsXMLToken(sName, XML_VIEW_SETTINGS))
-                pContext = new XMLConfigItemSetContext(GetImport(), nPrefix, rLocalName, xAttrList, aViewProps, NULL);
-            else if (IsXMLToken(sName, XML_CONFIGURATION_SETTINGS))
-                pContext = new XMLConfigItemSetContext(GetImport(), nPrefix, rLocalName, xAttrList, aConfigProps, NULL);
+            ::rtl::OUString aLocalConfigName;
+            sal_uInt16 nConfigPrefix =
+                GetImport().GetNamespaceMap().GetKeyByAttrName(
+                                            sName, &aLocalConfigName );
+
+            if( XML_NAMESPACE_OOO == nConfigPrefix )
+            {
+                if (IsXMLToken(aLocalConfigName, XML_VIEW_SETTINGS))
+                    pContext = new XMLConfigItemSetContext(GetImport(),
+                                        nPrefix, rLocalName, xAttrList,
+                                        aViewProps, NULL);
+                else if (IsXMLToken(aLocalConfigName,
+                                                XML_CONFIGURATION_SETTINGS))
+                    pContext = new XMLConfigItemSetContext(GetImport(),
+                                        nPrefix, rLocalName, xAttrList,
+                                        aConfigProps, NULL);
+            }
         }
     }
 
