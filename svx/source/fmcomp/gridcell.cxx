@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 15:51:58 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 16:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,12 @@ void DbGridColumn::Clear()
 {
     m_xController = NULL;
     m_xField = NULL;
+
+    m_nFormatKey = 0;
+    m_nFieldPos = -1;
+    m_bReadOnly = sal_True;
+    m_bAutoValue = sal_False;
+    m_nFieldType = DataType::OTHER;
 
     if (m_pCell)
     {
