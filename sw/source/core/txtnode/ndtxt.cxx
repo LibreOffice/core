@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:05:55 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2253,6 +2253,7 @@ void SwTxtNode::GCAttr()
     }
 }
 
+
 const SwNodeNum* SwTxtNode::UpdateNum( const SwNodeNum& rNum )
 {
     // #111955#
@@ -2501,10 +2502,6 @@ SwTxtAttr *SwTxtNode::GetTxtAttr( const xub_StrLen nIdx,
     return 0;
 }
 
-/*************************************************************************
- *                      SwTxtNode::GetExpandTxt
- *************************************************************************/
-// Felder werden expandiert:
 // -> #i29560#
 BOOL SwTxtNode::HasNumber() const
 {
@@ -2706,6 +2703,11 @@ void SwTxtNode::Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
         }
     }
 }
+
+/*************************************************************************
+ *                      SwTxtNode::GetExpandTxt
+ * Expand fields
+ *************************************************************************/
 
 XubString SwTxtNode::GetExpandTxt( const xub_StrLen nIdx, const xub_StrLen nLen,
                                 const BOOL bWithNum  ) const
@@ -3150,3 +3152,29 @@ void SwTxtNode::SetOutlineLevel(BYTE nLevel)
     }
 }
 
+/**
+   Returns if the paragraph has a visible numbering or bullet.
+   This includes all kinds of numbering/bullet/outlines.
+   Note: This function returns false, if the numbering format is
+   SVX_NUM_NUMBER_NONE or if the numbering/bullet has been deleted.
+ */
+
+bool SwTxtNode::HasVisibleNumberingOrBullet() const
+{
+    bool bRet = false;
+
+    if ( pNdNum && pNdNum->IsShowNum() )
+    {
+        const SwNumRule * pRule = GetNumRule();
+        if ( pRule )
+        {
+            const SwNumFmt& rFmt = pRule->Get( pNdNum->GetRealLevel() );
+            if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
+            {
+                bRet = true;
+            }
+        }
+    }
+
+    return bRet;
+}
