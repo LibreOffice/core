@@ -4,8 +4,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.7 $
- *  last change: $Author: hdu $ $Date: 2002-05-29 17:49:56 $
+ *  $Revision: 1.8 $
+ *  last change: $Author: hdu $ $Date: 2002-06-06 14:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,14 +403,11 @@ float IcuFontFromServerFont::getYPixelsPerEm() const
 
 float IcuFontFromServerFont::xUnitsToPoints( float xUnits ) const
 {
-    // assumption: pixels==points
+    // TODO: avoid assumption: pixels==points
     float fPoints = xUnits;
     const ImplFontSelectData& r = mpServerFont->GetFontSelData();
     fPoints *= r.mnWidth ? r.mnWidth : r.mnHeight;
     fPoints /= mpServerFont->GetEmUnits();
-#ifdef DEBUG
-    fprintf(stderr,"xu2p( %f ) => %f\n", xUnits, fPoints );
-#endif
     return fPoints;
 }
 
@@ -418,13 +415,10 @@ float IcuFontFromServerFont::xUnitsToPoints( float xUnits ) const
 
 float IcuFontFromServerFont::yUnitsToPoints( float yUnits ) const
 {
-    // TODO: remove assumption pixels==points
+    // TODO: avoid assumption pixels==points
     float fPoints = yUnits;
     fPoints *= mpServerFont->GetFontSelData().mnHeight;
     fPoints /= mpServerFont->GetEmUnits();
-#ifdef DEBUG
-    fprintf(stderr,"yu2p( %f ) => %f\n", yUnits, fPoints );
-#endif
     return fPoints;
 }
 
@@ -432,11 +426,11 @@ float IcuFontFromServerFont::yUnitsToPoints( float yUnits ) const
 
 void IcuFontFromServerFont::unitsToPoints( LEPoint &units, LEPoint &points ) const
 {
-#ifdef DEBUG
-    fprintf(stderr,"pu2p\n");
-#endif
     points.fX = xUnitsToPoints( units.fX );
     points.fY = yUnitsToPoints( units.fY );
+#ifdef DEBUG
+    fprintf(stderr,"pu2p( %f, %f ) => ( %f, %f )\n", units.fX, units.fY, points.fX, points.fY );
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -449,7 +443,6 @@ float IcuFontFromServerFont::xPixelsToUnits( float xPixels ) const
     fPixels /= r.mnWidth ? r.mnWidth : r.mnHeight;
 #ifdef DEBUG
     fprintf(stderr,"xp2u( %f ) => %f\n", xPixels, fPixels );
-    fprintf(stderr,"\t* em=%d / mnW=%d\n", mpServerFont->GetEmUnits(), mpServerFont->GetFontSelData().mnWidth );
 #endif
     return fPixels;
 }
@@ -471,22 +464,20 @@ float IcuFontFromServerFont::yPixelsToUnits( float yPixels ) const
 
 void IcuFontFromServerFont::pixelsToUnits( LEPoint &pixels, LEPoint &units ) const
 {
+#ifdef DEBUG
+    fprintf(stderr,"pp2u( %f, %f )\n", pixels.fX, pixels.fY );
+#endif
     units.fX = xPixelsToUnits( pixels.fX );
     units.fY = yPixelsToUnits( pixels.fY );
-#ifdef DEBUG
-    fprintf(stderr,"pp2u( %f, %f ) => ( %f, %f )\n", pixels.fX, pixels.fY, units.fX, units.fY );
-#endif
 }
 
 // -----------------------------------------------------------------------
 
 void IcuFontFromServerFont::transformFunits( float xFunits, float yFunits, LEPoint &pixels ) const
 {
-    //TODO: replace dummy implementation
-    Point aOrig( (int)(xFunits + 0.5), (int)(yFunits + 0.5) );
-    Point aDest = mpServerFont->TransformPoint( aOrig );
-    pixels.fX = aDest.X();
-    pixels.fY = aDest.Y();
+    // TODO: avoid assumption pixels==points
+    LEPoint units = { xFunits, yFunits };
+    unitsToPoints( units, pixels );
 #ifdef DEBUG
     fprintf(stderr,"tfu( %f, %f ) => ( %f, %f )\n", xFunits, yFunits, pixels.fX, pixels.fY );
 #endif
