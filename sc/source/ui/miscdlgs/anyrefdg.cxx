@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:19:36 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 15:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,12 +852,21 @@ void ScAnyRefDlg::RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton )
         // Edit-Feld verschieben und anpassen
         Size aNewDlgSize(aOldDialogSize.Width(), aOldEditSize.Height());
         Size aNewEditSize(aNewDlgSize);
+        long nOffset = 0;
         if (pRefBtn)
         {
             aNewEditSize.Width() -= pRefBtn->GetSizePixel().Width();
             aNewEditSize.Width() -= aOldButtonPos.X() - (aOldEditPos.X()+aOldEditSize.Width());
+
+            long nHeight = pRefBtn->GetSizePixel().Height();
+            if ( nHeight > aOldEditSize.Height() )
+            {
+                aNewDlgSize.Height() = nHeight;
+                nOffset = (nHeight-aOldEditSize.Height()) / 2;
+            }
+            aNewEditSize.Width() -= nOffset;
         }
-        pRefEdit->SetPosSizePixel(Point(0, 0), aNewEditSize);
+        pRefEdit->SetPosSizePixel(Point(nOffset, nOffset), aNewEditSize);
 
         // set button position and image
         if( pRefBtn )
