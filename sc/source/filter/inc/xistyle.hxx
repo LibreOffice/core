@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:20:06 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XISTYLE_HXX
 #define SC_XISTYLE_HXX
 
@@ -119,11 +118,12 @@ private:
 // FONT record - font information =============================================
 
 /** Enumeration to choose the Which-IDs for font items. */
-enum XclFontWhichIDMode
+enum XclImpFontMode
 {
-    xlFontScIDs,                /// Calc Which-IDs (ATTR_*).
-    xlFontEEIDs,                /// Edit engine Which-IDs (EE_CHAR_*).
-    xlFontHFIDs                 /// Header/footer edit engine Which-IDs (EE_CHAR_*).
+    EXC_FONTMODE_CELL,          /// Use Calc Which-IDs (ATTR_*).
+    EXC_FONTMODE_EDITENG,       /// Use edit engine Which-IDs (EE_CHAR_*).
+    EXC_FONTMODE_HF,            /// Use header/footer edit engine Which-IDs (EE_CHAR_*).
+    EXC_FONTMODE_NOTE           /// Use note edit engine Which-IDs (EE_CHAR_*), special font handling.
 };
 
 // ----------------------------------------------------------------------------
@@ -165,9 +165,7 @@ public:
         @param rItemSet  The destination item set.
         @param eMode  The type of Which-IDs.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
-    void                FillToItemSet(
-                            SfxItemSet& rItemSet,
-                            XclFontWhichIDMode eMode,
+    void                FillToItemSet( SfxItemSet& rItemSet, XclImpFontMode eMode,
                             bool bSkipPoolDefs = false ) const;
 
 private:
@@ -226,11 +224,8 @@ public:
         @param eMode  The type of Which-IDs.
         @param nFontIndex  The Excel index of the font.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
-    void                FillToItemSet(
-                            SfxItemSet& rItemSet,
-                            XclFontWhichIDMode eMode,
-                            sal_uInt16 nFontIndex,
-                            bool bSkipPoolDefs = false ) const;
+    void                FillToItemSet( SfxItemSet& rItemSet, XclImpFontMode eMode,
+                            sal_uInt16 nFontIndex, bool bSkipPoolDefs = false ) const;
 
 private:
     ScfDelList< XclImpFont > maFontList;    /// List of all FONT records in the Excel file.
