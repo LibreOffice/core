@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-08 13:10:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@
 #define ID_BROWSER_ROWHEIGHT                23  // Zeilenhoehe
 #define ID_BROWSER_COLUMNINFO               24  // copies the column description to insert it into the table design
 #define ID_BROWSER_COUNTALL                 SID_FM_COUNTALL // count all
-#define ID_BROWSER_SQL                      SID_SOURCEVIEW
 #define ID_BROWSER_ADDTABLE                 SID_FM_ADDTABLE
 #define ID_BROWSER_DESIGN                   SID_SBA_QRY_DESIGN
 #define ID_BROWSER_EXPLORER                 SID_DSBROWSER_EXPLORER
@@ -142,7 +141,7 @@
 #define ID_INDEX_SAVE                       39
 #define ID_INDEX_RESET                      40
 #define ID_DOCUMENT_CREATE_REPWIZ           41
-
+#define ID_BROWSER_SQL                      42
 
 
 #define ID_BROWSER_QUERY_EXECUTE            SID_FM_EXECUTE
