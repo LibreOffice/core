@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:40:59 $
+ *  last change: $Author: nn $ $Date: 2001-02-08 15:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <vcl/svapp.hxx>
+#include <offmgr/app.hxx>
 
 
 
@@ -418,9 +419,9 @@ void ScDocShell::InitItems()
     }
     else
     {
-        //  ColorTable wegen Farben fuer Tabelle
+        //  always use global color table instead of local copy
 
-        PutItem( SvxColorTableItem( aDocument.GetColorTable() ) );
+        PutItem( SvxColorTableItem( OFF_APP()->GetStdColorTable() ) );
     }
 }
 
