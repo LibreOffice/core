@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-26 13:44:24 $
+ *  last change: $Author: cmc $ $Date: 2001-02-27 16:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,6 +819,7 @@ static FNReadField aWW8FieldTab[93] = {
 0,
 &SwWW8ImplReader::Read_F_Equation,          // 49
 0,
+0,
 &SwWW8ImplReader::Read_F_Macro,             // 51
 &SwWW8ImplReader::Read_F_ANumber,           // 52
 &SwWW8ImplReader::Read_F_ANumber,           // 53
@@ -1310,7 +1311,7 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
         }
     }
     if(    !aSequenceName.Len()
-        || !aBook.Len() )
+        && !aBook.Len() )
         return F_TAGIGN;
 
     SwSetExpFieldType* pFT = (SwSetExpFieldType*)rDoc.InsertFldType(
@@ -2978,30 +2979,6 @@ void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
             break;
         }
 
-
-/*
-    WW8FldParaGuess aG( pStr, ( bIdx ) ? 0 : "fl" );
-    const char* pFld = (const char*)aG.GetStdPara();
-    if( !aG.Ok() || !pFld )
-        return;
-
-    char* pKey1 = (char*)strchr( pFld, ':' );
-    if( pKey1 )
-    {
-        *pKey1++ = '\0';
-    }
-
-    USHORT nLevel = 1;
-
-    if( !bIdx ){                            // Inhalts- oder Abbildungsverzeichnis
-        const unsigned char* pFlg = aG.GetSwitch( 0 );// Switch 'f'
-        if( pFlg && toupper(*pFlg) != 'C' )
-            eTox = TOX_USER;                // z.B. F = Abbildungsverzeichnis
-        pFlg = aG.GetSwitch( 1 );           // Switch 'l'
-        if( pFlg && *pFlg > '0' && *pFlg <= '9' )
-            nLevel = *pFlg - '0';
-    }
-*/
     ASSERT( rDoc.GetTOXTypeCount( eTox ), "Doc.GetTOXTypeCount() == 0  :-(" );
 
     const SwTOXType* pT = rDoc.GetTOXType( eTox, 0 );
@@ -3011,10 +2988,8 @@ void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
 
     if( sKey1.Len() )
     {
-        aM.SetAlternativeText( sKey1 );     // WW/SW: unterschiedliche Reihenfolge
-                                            // Text mit Key1 tauschen
-        aM.SetPrimaryKey( aStr );
-
+        aM.SetAlternativeText( sKey1 ); // WW/SW: unterschiedliche Reihenfolge
+                                        // Text mit Key1 tauschen
     }
     else
         aM.SetAlternativeText( aStr );
@@ -3065,7 +3040,6 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, BYTE*, short nLen )
     {
         if( 0x15 == sFieldName.GetChar( nC ))       // Field End Mark found
             bIgnoreText = FALSE;
-//      delete( pFieldName );
         return;                 // kein Feld zu finden
     }
 
@@ -3077,9 +3051,9 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, BYTE*, short nLen )
     {
         const sal_Char* pName = aFldNames[i];
         USHORT nNameLen = *pName++;
-        if( sFieldName.EqualsIgnoreCaseAscii( pName, 0, nNameLen ) )
+        if( sFieldName.EqualsIgnoreCaseAscii( pName, nC, nNameLen ) )
         {
-            ImportTox( aFldId[i], sFieldName.Copy( nNameLen ) );
+            ImportTox( aFldId[i], sFieldName.Copy( nC + nNameLen ) );
             break;                  // keine Mehrfachnennungen moeglich
         }
     }
@@ -3118,12 +3092,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.11 2001-02-26 13:44:24 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.12 2001-02-27 16:25:05 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2001/02/26 13:44:24  cmc
+      Ruby Text Import
+
       Revision 1.10  2001/02/21 13:49:03  cmc
       Combined Characters Field Import
 
