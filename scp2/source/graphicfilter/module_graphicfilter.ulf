@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_graphicfilter.ulf,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:19:33 $
+ *  last change: $Author: rt $ $Date: 2004-08-12 08:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@ de = "Grafikfilter"
 en-US = "Graphics Filters"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT]
-de = "Einige optionale Grafik-Filter, die notwendig sind, um Fremdgrafiken in Ihre Dokumente einzubinden."
-en-US = "Several optional graphics filters required to embed external graphics in your documents."
+de = "Zusätzliche Filter, um fremde Grafikformate einzulesen."
+en-US = "Additional filters required to read alien graphic formats."
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_ADOBE]
 de = "Adobe Photoshop Importfilter"
