@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-18 13:44:33 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_GDIMTF_CXX
 
 #ifndef _VOS_MACROS_HXX_
 #include <vos/macros.hxx>
@@ -1174,8 +1172,6 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( META_GRADIENTEX_ACTION ):
                 {
                     MetaGradientExAction* pAct = (MetaGradientExAction*) pAction;
-                    Gradient              aGradient(  );
-
                     aMtf.AddAction( new MetaGradientExAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
                                                               pAct->GetGradient() ) );
                 }
@@ -2178,7 +2174,6 @@ SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
         char    aId[ 7 ];
         ULONG   nStmPos = rIStm.Tell();
         USHORT  nOldFormat = rIStm.GetNumberFormatInt();
-        BOOL    bError = FALSE;
 
         rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
