@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:21:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,8 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     pApp->Get_Impl()->pAppDispatch->ReleaseAll();
     pApp->Get_Impl()->pAppDispatch->release();
     pApp->NotifyEvent(SfxEventHint( SFX_EVENT_CLOSEAPP) );
-    pApp->Deinitialize();
+    //pApp->Deinitialize();
+    delete pApp;
     Application::Quit();
 }
 
