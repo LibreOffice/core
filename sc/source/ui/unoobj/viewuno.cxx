@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 07:37:29 $
+ *  last change: $Author: sab $ $Date: 2002-04-11 09:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,14 +451,16 @@ void SAL_CALL ScViewPaneObj::release() throw()
 ScTabViewObj::ScTabViewObj() :
     SfxBaseController( NULL ),
     ScViewPaneBase( NULL, SC_VIEWPANE_ACTIVE ),
-    aPropSet( lcl_GetViewOptPropertyMap() )
+    aPropSet( lcl_GetViewOptPropertyMap() ),
+    bDrawSelModeSet(sal_False)
 {
 }
 
 ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
     SfxBaseController( pViewSh ),
     ScViewPaneBase( pViewSh, SC_VIEWPANE_ACTIVE ),
-    aPropSet( lcl_GetViewOptPropertyMap() )
+    aPropSet( lcl_GetViewOptPropertyMap() ),
+    bDrawSelModeSet(sal_False)
 {
     //! Listening oder so
 }
@@ -604,17 +606,36 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
 
     //! Type of aSelection can be some specific interface instead of XInterface
 
+    BOOL bRet = FALSE;
     uno::Reference<uno::XInterface> xInterface;
     aSelection >>= xInterface;
-    if ( !xInterface.is() )
-        return FALSE;
+    if ( !xInterface.is() )  //clear all selections
+    {
+        ScDrawView* pDrawView = pViewSh->GetScDrawView();
+        if (pDrawView)
+        {
+            pDrawView->ScEndTextEdit();
+            pDrawView->UnmarkAll();
+            bRet = TRUE;
+        }
+    }
+
+    if (bDrawSelModeSet) // remove DrawSelMode if set by API; if necessary it will be set again later
+    {
+        pViewSh->SetDrawSelMode(sal_False);
+        pViewSh->UpdateLayerLocks();
+        bDrawSelModeSet = sal_False;
+    }
+
+    if (bRet)
+        return bRet;
+
 
     ScCellRangesBase* pRangesImp = ScCellRangesBase::getImplementation( xInterface );
     uno::Reference<drawing::XShapes> xShapeColl( xInterface, uno::UNO_QUERY );
     uno::Reference<drawing::XShape> xShapeSel( xInterface, uno::UNO_QUERY );
     SvxShape* pShapeImp = SvxShape::getImplementation( xShapeSel );
 
-    BOOL bRet = FALSE;
     if (pRangesImp)                                     // Zell-Ranges
     {
         ScViewData* pViewData = pViewSh->GetViewData();
@@ -702,33 +723,44 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
 
                 SdrPageView* pPV = NULL;
                 long nCount = xShapeColl->getCount();
-                for ( long i = 0; i < nCount; i++ )
+                if (nCount)
                 {
-                    uno::Reference<drawing::XShape> xShapeInt;
-                    uno::Any aAny = xShapeColl->getByIndex(i);
-                    aAny >>= xShapeInt;
-                    if (xShapeInt.is())
+                    for ( long i = 0; i < nCount; i++ )
                     {
-                        SvxShape* pShape = SvxShape::getImplementation( xShapeInt );
-                        if (pShape)
+                        uno::Reference<drawing::XShape> xShapeInt;
+                        uno::Any aAny = xShapeColl->getByIndex(i);
+                        aAny >>= xShapeInt;
+                        if (xShapeInt.is())
                         {
-                            SdrObject *pObj = pShape->GetSdrObject();
-                            if (pObj)
+                            SvxShape* pShape = SvxShape::getImplementation( xShapeInt );
+                            if (pShape)
                             {
-                                if (!pPV)               // erstes Objekt
+                                SdrObject *pObj = pShape->GetSdrObject();
+                                if (pObj)
                                 {
-                                    lcl_ShowObject( *pViewSh, *pDrawView, pObj );
-                                    pPV = pDrawView->GetPageViewPvNum(0);
-                                }
-                                if ( pPV && pObj->GetPage() == pPV->GetPage() )
-                                {
-                                    pDrawView->MarkObj( pObj, pPV );
-                                    bRet = TRUE;
+                                    if (!bDrawSelModeSet && (pObj->GetLayer() == SC_LAYER_BACK))
+                                    {
+                                        pViewSh->SetDrawSelMode(sal_True);
+                                        pViewSh->UpdateLayerLocks();
+                                        bDrawSelModeSet = sal_True;
+                                    }
+                                    if (!pPV)               // erstes Objekt
+                                    {
+                                        lcl_ShowObject( *pViewSh, *pDrawView, pObj );
+                                        pPV = pDrawView->GetPageViewPvNum(0);
+                                    }
+                                    if ( pPV && pObj->GetPage() == pPV->GetPage() )
+                                    {
+                                        pDrawView->MarkObj( pObj, pPV );
+                                        bRet = TRUE;
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                else
+                    bRet = TRUE; // empty XShapes (all shapes are deselected)
             }
 
             if (bRet)
