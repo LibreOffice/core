@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-26 08:40:38 $
+#   last change: $Author: vg $ $Date: 2003-10-09 10:13:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,15 +72,13 @@ TARGET  = com_sun_star_lib_util
 # --- Files --------------------------------------------------------
 
 JAVACLASSFILES= 									\
+    $(CLASSDIR)$/$(PACKAGE)$/DisposeListener.class \
+    $(CLASSDIR)$/$(PACKAGE)$/DisposeNotifier.class \
     $(CLASSDIR)$/$(PACKAGE)$/IInvokeHook.class		\
     $(CLASSDIR)$/$(PACKAGE)$/IInvokable.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/IStableListener.class	\
-    $(CLASSDIR)$/$(PACKAGE)$/IStableObject.class	\
     $(CLASSDIR)$/$(PACKAGE)$/NativeLibraryLoader.class \
-    $(CLASSDIR)$/$(PACKAGE)$/RefObject.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/RefererObject.class	\
     $(CLASSDIR)$/$(PACKAGE)$/StringHelper.class \
-    $(CLASSDIR)$/$(PACKAGE)$/WeakTable.class
+    $(CLASSDIR)$/$(PACKAGE)$/WeakMap.class
 
 # --- Targets ------------------------------------------------------
 
