@@ -1,41 +1,67 @@
 Various unresolved issues with configure:
 ----------------------------------------
 
-* Providing the location of perl5 with --with-perl-home does not work.
-Please make sure that perl5 is on your path.
-
 * --with-gcc-home may cause a warning message to be displayed even if the
-correct version of gcc is found. This should be harmless.
+  correct version of gcc is found. This should be harmless.
 
 * It is at present time not possible to use --with-local-solenv to point
-to a solvenv residing at a non-standard location.
+  to a solenv residing at a non-standard location.
 
-* The configure script also creates a bootstrap script in the top-level 
-directory to support the creation of the build executable tools needed to 
-bootstrap the build process. These tools normally reside in the 
-solenv/$OUTPATH/bin directory for the supported platforms. It is hoped that 
-these tools will be removed from the solenv tree at some stage. This 
-bootstrap script does not yet work on Windows.
+* The configure script also creates a bootstrap script in the top-level
+  directory to support the creation of the build executable tools needed to
+  bootstrap the build process. These tools normally reside in the
+  solenv/$OUTPATH/bin directory for the supported platforms. It is hoped that
+  these tools will be removed from the solenv tree at some stage.
 
 Running configure on Windows NT:
 -------------------------------
 
 * configure must be run from the Cygnus bash shell. On the bash command line
-type "bash configure <options>" to run the script. The generated winenv.bat
-file must then be executed from the 4NT shell in which you will be building
-OpenOffice.org
+  type "bash configure <options>" to run the script. The generated winenv.bat
+  file must then be executed from the 4NT shell in which you will be building
+  OpenOffice.org
 
-* The path to the Microsoft C/C++ compiler home directory must be given as
-an MS-DOS format path on the command line with the configure option --with-cl-home 
-or entered interactively when prompted. MS-DOS format names are <8 characters
-in length and don't contain spaces. To get the MS-DOS format of a Windows
-pathname select the directory in a window and right-click and choose properties.   
+* The path to the Microsoft C/C++ compiler home directory must be given as an
+  MS-DOS format path on the command line with the configure option
+  --with-cl-home. MS-DOS format names are <8 characters in length and don't
+  contain spaces. To get the MS-DOS format of a Windows pathname select the
+  directory in a window and right-click and choose properties.   
 
-* configure automatically copies the top level makefile.rc from the config_office
-directory to the top level directory when run. If you are not running configure and
-are using a pre-generated winenv.bat to set up the build environment, then you must 
-manually copy the makefile.rc file in config_office to the top level directory.
+* configure automatically copies the top level makefile.rc from the
+  config_office directory to the top level directory when run. If you are not
+  running configure and are using a pre-generated winenv.bat to set up the
+  build environment, then you must manually copy the makefile.rc file in
+  config_office to the top level directory.
 
 * It is recommended that you close the Cygnus bash shell before you start the
-build as it might cause problems later on.
+  build as it might cause problems later on.
 
+
+Some quasi standards for configure
+----------------------------------
+
+* configure will use four type of parameters:
+
+   --with-xyz-home  to locate an executable tool and related libraries, eg jdk.
+   
+   --with-xyz to locate a library of that type
+
+   --without-xyz to disable a library,  not always available.
+
+   --enable-xyz to set a compile feature such as debugging.
+
+* Try and make tests as generic as possible, specific is good for early testing
+  of a feature but don't keep the pattern,  make it generic quickly.
+
+* configure should terminate with an error if it does not locate something that
+  is needed for a build to succeed, note that this conflicts with previous
+  standards which had a manual entry override.  This is less than successful
+  configure either works or it fails, no data entry allowed.
+
+Premises for configure
+----------------------
+
+* This is not a true autoconf project.  The code base is huge and the ability
+  to test for everything is impossible.  We are currently supporting only a
+  subset of compilers therefore do not need a lot of testing on compiler
+  capabilities.
