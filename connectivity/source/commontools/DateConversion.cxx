@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateConversion.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-04 11:22:41 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:23:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,6 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
         return ::rtl::OUString();
 
     sal_Int32 nKey;
-    sal_Int16 nKeyType;
     try
     {
         _xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY)) >>= nKey;
@@ -381,8 +380,9 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
                                            Reference< XNumberFormatTypes > (xFormats, UNO_QUERY),
                                            _rLocale);
 
-        nKeyType = getNumberFormatType(_xFormatter, nKey) & ~NumberFormat::DEFINED;
     }
+
+    sal_Int16 nKeyType = getNumberFormatType(_xFormatter, nKey) & ~NumberFormat::DEFINED;
 
     return DBTypeConversion::getValue(Reference< XColumn > (_xColumn, UNO_QUERY), _xFormatter, _rNullDate, nKey, nKeyType);
 }
