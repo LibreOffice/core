@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:31:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,11 @@
 #include <swlinguconfig.hxx>
 #endif
 
+// #i18732#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
+#endif
+
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
@@ -471,6 +476,13 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
     if( !bHTMLTemplSet &&
         FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) )
         pDoc->SetDefault( SvxAdjustItem(SVX_ADJUST_RIGHT) );
+
+    // OD 09.10.2003 #i18732# - set dynamic pool default for
+    // item RES_FOLLOW_TEXT_FLOW to FALSE for *new document*.
+    // Thus, redo this change in method <SwDoc::RemoveAllFmtLanguageDependencies()>,
+    // which is called from <SwDocShell::ConvertFrom(..)> in order to restore
+    // the static pool default.
+    pDoc->SetDefault( SwFmtFollowTextFlow( FALSE ) );
 
     return bRet;
 }
