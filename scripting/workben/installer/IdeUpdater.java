@@ -52,7 +52,7 @@ public class IdeUpdater extends Thread {
         isNetbeansPath = true;
         installPath = installPath +"modules" + File.separator;
     }
-    else if( jeditLauncher.isDirectory() ){
+    else if( jeditLauncher.isFile() ){
         isNetbeansPath =  false;
         installPath = installPath + "jars" + File.separator;
     }
