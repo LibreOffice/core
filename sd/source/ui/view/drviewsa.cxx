@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:25:28 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@
 #include "ObjectBarManager.hxx"
 #endif
 #include "SdUnoDrawView.hxx"
+#include "FormShellManager.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -263,7 +264,8 @@ DrawViewShell::DrawViewShell (
       bInEffectAssignment(FALSE),
       pSlotArray( NULL ),
       pClipEvtLstnr(NULL),
-      bPastePossible(FALSE)
+      bPastePossible(FALSE),
+      mpFormShellManager(NULL)
 {
     if (pFrameViewArgument != NULL)
         pFrameView = pFrameViewArgument;
@@ -304,7 +306,8 @@ DrawViewShell::DrawViewShell (
       bInEffectAssignment(FALSE),
       pSlotArray( NULL ),
       pClipEvtLstnr(NULL),
-      bPastePossible(FALSE)
+      bPastePossible(FALSE),
+      mpFormShellManager(NULL)
 {
     pFrameView = new FrameView(GetDoc());
     Construct (GetDocSh(), PK_STANDARD);
@@ -320,6 +323,8 @@ DrawViewShell::~DrawViewShell()
 {
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
+
+    mpFormShellManager.reset();
 
     if( mxScannerListener.is() )
         static_cast< ScannerEventListener* >( mxScannerListener.get() )->ParentDestroyed();
@@ -500,9 +505,8 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         ::std::auto_ptr<SfxShell>(new TextObjectBar(
             this, GetDoc()->GetPool(), pDrView)));
 
-    rObjectBarManager.RegisterObjectBar (
-        RID_FORMLAYER_TOOLBOX,
-        ::std::auto_ptr<SfxShell>(new FmFormShell(pViewShell, pDrView)));
+    ::std::auto_ptr<SfxShell> pFormShell(new FmFormShell(pViewShell, pDrView));
+    rObjectBarManager.RegisterObjectBar (RID_FORMLAYER_TOOLBOX, pFormShell);
 
     rObjectBarManager.RegisterObjectBar (
         RID_DRAW_GRAF_TOOLBOX,
@@ -689,6 +693,8 @@ void DrawViewShell::Init (void)
 {
     ViewShell::Init ();
     StartListening (*GetDocSh());
+    mpFormShellManager = ::std::auto_ptr<FormShellManager>(
+        new FormShellManager (GetViewShellBase()));
 }
 
 
