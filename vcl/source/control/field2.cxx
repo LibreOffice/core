@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-19 11:20:03 $
+ *  last change: $Author: mt $ $Date: 2002-09-02 12:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2439,7 +2439,7 @@ USHORT DateBox::GetDatePos( const Date& rDate ) const
 
 static BOOL ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
                                      BOOL bStrictFormat, BOOL bDuration,
-                                     TimeFieldFormat eFormat,
+                                     TimeFieldFormat eFormat, TimeFormat eTimeFormat,
                                      const LocaleDataWrapper& rLocaleDataWrapper  )
 {
     xub_Unicode cChar = rKEvt.GetCharCode();
@@ -2453,6 +2453,10 @@ static BOOL ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
              (nGroup == KEYGROUP_MISC)   ||
              ((cChar >= '0') && (cChar <= '9')) ||
              (cChar == rLocaleDataWrapper.getTimeSep()) ||
+             ( /*(eTimeFormat == HOUR_12) && */ ( rLocaleDataWrapper.getTimeAM().Search( cChar ) != STRING_NOTFOUND ) ) ||
+             ( /*(eTimeFormat == HOUR_12) && */ ( rLocaleDataWrapper.getTimePM().Search( cChar ) != STRING_NOTFOUND ) ) ||
+             // Accept AM/PM:
+             (cChar == 'a') || (cChar == 'A') || (cChar == 'm') || (cChar == 'M') || (cChar == 'p') || (cChar == 'P') ||
              ((eFormat == TIMEF_100TH_SEC) && (cChar == rLocaleDataWrapper.getTime100SecSep())) ||
              ((eFormat == TIMEF_SEC_CS) && (cChar == rLocaleDataWrapper.getTime100SecSep())) ||
              (bDuration && (cChar == '-')) )
@@ -2465,7 +2469,7 @@ static BOOL ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
 // -----------------------------------------------------------------------
 
 static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
-                              TimeFieldFormat eTimeFormat, BOOL bDuration,
+                              TimeFieldFormat eFormat, TimeFormat eTimeFormat, BOOL bDuration,
                               const LocaleDataWrapper& rLocaleDataWrapper )
 {
     XubString   aStr    = rStr;
@@ -2502,7 +2506,7 @@ static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
     xub_StrLen nSepPos = aStr.Search( rLocaleDataWrapper.getTimeSep() );
     if ( aStr.GetChar( 0 ) == '-' )
         bNegative = TRUE;
-    if ( eTimeFormat != TIMEF_SEC_CS )
+    if ( eFormat != TIMEF_SEC_CS )
     {
         if ( nSepPos == STRING_NOTFOUND )
             return FALSE;
@@ -2612,9 +2616,9 @@ static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
     if ( (nMinute > 59) || (nSecond > 59) || (n100Sec > 100) )
         return FALSE;
 
-    if ( eTimeFormat == TIMEF_NONE )
+    if ( eFormat == TIMEF_NONE )
         nSecond = n100Sec = 0;
-    else if ( eTimeFormat == TIMEF_SEC )
+    else if ( eFormat == TIMEF_SEC )
         n100Sec = 0;
 
     if ( !bDuration )
@@ -2628,10 +2632,13 @@ static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
         XubString aPM( rLocaleDataWrapper.getTimePM() );
         aAM.ToUpperAscii();
         aPM.ToUpperAscii();
+        XubString aAM2( RTL_CONSTASCII_USTRINGPARAM( "AM" ) );  // aAM is localized
+        XubString aPM2( RTL_CONSTASCII_USTRINGPARAM( "PM" ) );  // aPM is localized
 
-        if ( (aStr.Search( aPM ) != STRING_NOTFOUND) && (nHour < 12) )
+        if ( (nHour < 12) && ( ( aStr.Search( aPM ) != STRING_NOTFOUND ) || ( aStr.Search( aPM2 ) != STRING_NOTFOUND ) ) )
             nHour += 12;
-        if ( (aStr.Search( aAM ) != STRING_NOTFOUND) && (nHour == 12) )
+
+        if ( (nHour == 12) && ( ( aStr.Search( aAM ) != STRING_NOTFOUND ) || ( aStr.Search( aAM2 ) != STRING_NOTFOUND ) ) )
             nHour = 0;
 
         aTime = Time( (USHORT)nHour, (USHORT)nMinute, (USHORT)nSecond,
@@ -2665,7 +2672,7 @@ static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
 BOOL TimeFormatter::ImplTimeReformat( const XubString& rStr, XubString& rOutStr )
 {
     Time aTime( 0, 0, 0 );
-    if ( !ImplTimeGetValue( rStr, aTime, meFormat, mbDuration, ImplGetLocaleDataWrapper() ) )
+    if ( !ImplTimeGetValue( rStr, aTime, GetFormat(), GetTimeFormat(), IsDuration(), ImplGetLocaleDataWrapper() ) )
         return TRUE;
 
     Time aTempTime = aTime;
@@ -2707,7 +2714,23 @@ BOOL TimeFormatter::ImplTimeReformat( const XubString& rStr, XubString& rOutStr 
     else if ( mbDuration )
         rOutStr = ImplGetLocaleDataWrapper().getDuration( aTempTime, bSecond, b100Sec );
     else
+    {
         rOutStr = ImplGetLocaleDataWrapper().getTime( aTempTime, bSecond, b100Sec );
+        if ( GetTimeFormat() == HOUR_12 )
+        {
+            if ( aTempTime.GetHour() > 12 )
+            {
+                Time aT( aTempTime );
+                aT.SetHour( aT.GetHour() % 12 );
+                rOutStr = ImplGetLocaleDataWrapper().getTime( aT, bSecond, b100Sec );
+            }
+            // Don't use LocaleDataWrapper, we want AM/PM
+            if ( aTempTime.GetHour() < 12 )
+                rOutStr += String( RTL_CONSTASCII_USTRINGPARAM( "AM" ) ); // ImplGetLocaleDataWrapper().getTimeAM();
+            else
+                rOutStr += String( RTL_CONSTASCII_USTRINGPARAM( "PM" ) ); // ImplGetLocaleDataWrapper().getTimePM();
+        }
+    }
 
     return TRUE;
 }
@@ -2788,7 +2811,7 @@ void TimeFormatter::ImplInit()
 {
     meFormat        = TIMEF_NONE;
     mbDuration      = FALSE;
-    mnTimeFormat    = 0xFFFF;
+    mnTimeFormat    = HOUR_24;  // Should become a ExtTimeFieldFormat in next implementation, merge with mbDuration and meFormat
 }
 
 // -----------------------------------------------------------------------
@@ -2892,7 +2915,7 @@ void TimeFormatter::SetTimeFormat( TimeFormat eNewFormat )
 
 TimeFormat TimeFormatter::GetTimeFormat() const
 {
-    return ( mnTimeFormat != 0xFFFF ) ? (TimeFormat)mnTimeFormat : HOUR_24;
+    return (TimeFormat)mnTimeFormat;
 }
 
 // -----------------------------------------------------------------------
@@ -2982,9 +3005,27 @@ void TimeFormatter::ImplSetUserTime( const Time& rNewTime, Selection* pNewSelect
             aStr += String::CreateFromInt32( aNewTime.Get100Sec() );
         }
         else if ( mbDuration )
+        {
             aStr = ImplGetLocaleDataWrapper().getDuration( aNewTime, bSec, b100Sec );
+        }
         else
+        {
             aStr = ImplGetLocaleDataWrapper().getTime( aNewTime, bSec, b100Sec );
+            if ( GetTimeFormat() == HOUR_12 )
+            {
+                if ( aNewTime.GetHour() > 12 )
+                {
+                    Time aT( aNewTime );
+                    aT.SetHour( aT.GetHour() % 12 );
+                    aStr = ImplGetLocaleDataWrapper().getTime( aT, bSec, b100Sec );
+                }
+                // Don't use LocaleDataWrapper, we want AM/PM
+                if ( aNewTime.GetHour() < 12 )
+                    aStr += String( RTL_CONSTASCII_USTRINGPARAM( "AM" ) ); // ImplGetLocaleDataWrapper().getTimeAM();
+                else
+                    aStr += String( RTL_CONSTASCII_USTRINGPARAM( "PM" ) ); // ImplGetLocaleDataWrapper().getTimePM();
+            }
+        }
 
         ImplSetText( aStr, pNewSelection );
     }
@@ -3005,7 +3046,7 @@ Time TimeFormatter::GetTime() const
 
     if ( GetField() )
     {
-        if ( ImplTimeGetValue( GetField()->GetText(), aTime, meFormat, mbDuration, ImplGetLocaleDataWrapper() ) )
+        if ( ImplTimeGetValue( GetField()->GetText(), aTime, GetFormat(), GetTimeFormat(), IsDuration(), ImplGetLocaleDataWrapper() ) )
         {
             if ( aTime > GetMax() )
                 aTime = GetMax();
@@ -3027,7 +3068,7 @@ Time TimeFormatter::GetRealTime() const
 
     if ( GetField() )
     {
-        ImplTimeGetValue( GetField()->GetText(), aTime, meFormat, mbDuration, ImplGetLocaleDataWrapper() );
+        ImplTimeGetValue( GetField()->GetText(), aTime, GetFormat(), GetTimeFormat(), IsDuration(), ImplGetLocaleDataWrapper() );
     }
 
     return aTime;
@@ -3063,7 +3104,7 @@ void TimeFormatter::Reformat()
     if ( aStr.Len() )
     {
         ImplSetText( aStr );
-        ImplTimeGetValue( aStr, maLastTime, meFormat, mbDuration, ImplGetLocaleDataWrapper() );
+        ImplTimeGetValue( aStr, maLastTime, GetFormat(), GetTimeFormat(), IsDuration(), ImplGetLocaleDataWrapper() );
     }
     else
         SetTime( maLastTime );
@@ -3135,7 +3176,7 @@ long TimeField::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), ImplGetLocaleDataWrapper() ) )
+        if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), GetTimeFormat(), ImplGetLocaleDataWrapper() ) )
             return 1;
     }
 
@@ -3306,7 +3347,7 @@ long TimeBox::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), ImplGetLocaleDataWrapper() ) )
+        if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), GetTimeFormat(), ImplGetLocaleDataWrapper() ) )
             return 1;
     }
 
@@ -3404,7 +3445,7 @@ void TimeBox::RemoveTime( const Time& rTime )
 Time TimeBox::GetTime( USHORT nPos ) const
 {
     Time aTime( 0, 0, 0 );
-    ImplTimeGetValue( ComboBox::GetEntry( nPos ), aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper() );
+    ImplTimeGetValue( ComboBox::GetEntry( nPos ), aTime, GetFormat(), GetTimeFormat(), IsDuration(), ImplGetLocaleDataWrapper() );
     return aTime;
 }
 
