@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:21:32 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,64 +118,94 @@ namespace sw
             switch (eProblem)
             {
                 case ePrinterMetrics:
-                    mpTrace->Trace(sID,
-                        C2O("Word<->Writer \'Don't Use PrinterMetrics\' not"
-                            " exactly equivalent"));
+                    mpTrace->Trace(sID, C2O("PrinterMetrics"));
                     break;
                 case eExtraLeading:
-                    mpTrace->Trace(sID,
-                        C2O("\'Use Extra Leading\' not supported"));
+                    mpTrace->Trace(sID, C2O("Extra Leading"));
                     break;
                 case eTabStopDistance:
-                    mpTrace->Trace(sID,
-                        C2O("Minimum tab distance larger in Writer"));
+                    mpTrace->Trace(sID, C2O("Minimum Tab Distance"));
                     break;
                 case eDontUseHTMLAutoSpacing:
-                    mpTrace->Trace(sID,
-                        C2O("\'Don't Use HTML AutoSpacing\' affects more than"
-                            " what is currently implemented or understood"));
+                    mpTrace->Trace(sID, C2O("HTML AutoSpacing"));
                     break;
                 case eAutoWidthFrame:
-                    mpTrace->Trace(sID,
-                        C2O("No core support for autowidth frames"));
+                    mpTrace->Trace(sID, C2O("AutoWidth"));
+                    break;
+                case eRowCanSplit:
+                    mpTrace->Trace(sID, C2O("Splitable Row"));
+                    break;
+                case eTabInNumbering:
+                    mpTrace->Trace(sID, C2O("Tab In Numbering"));
+                    break;
+                case eNegativeVertPlacement:
+                    mpTrace->Trace(sID, C2O("Negative Vertical Placement"));
                     break;
                 default:
-                    mpTrace->Trace(sID, C2O("Unknown trace property"));
+                    mpTrace->Trace(sID, C2O("UNKNOWN"));
                     break;
             }
         }
 
-        Context::Context(const Tracer &rTracer, Environment eContext)
-            : mpTrace(rTracer.GetTrace())
+        rtl::OUString Tracer::GetContext(Environment eContext) const
         {
+            rtl::OUString sContext;
             switch (eContext)
             {
                 case eDocumentProperties:
-                    msContext = C2O("Global");
-                    msDetails = C2O("Document Properties");
+                    sContext = C2O("Global");
                     break;
                 case eMainText:
-                    msContext = C2O("Text");
-                    msDetails = C2O("MainDocument");
+                    sContext = C2O("Text");
                     break;
                 case eSubDoc:
-                    msContext = C2O("Text");
-                    msDetails = C2O("Unknown Subdocument");
+                    sContext = C2O("Text");
+                    break;
+                case eTable:
+                    sContext = C2O("Table");
                     break;
                 default:
-                    msContext = C2O("UNKNOWN");
-                    msDetails = C2O("UNKNOWN");
+                    sContext = C2O("UNKNOWN");
                     break;
             }
-
-            if (mpTrace)
-                mpTrace->AddAttribute(msContext, msDetails);
+            return sContext;
         }
 
-        Context::~Context()
+        rtl::OUString Tracer::GetDetails(Environment eContext) const
         {
-            if (mpTrace)
-                mpTrace->RemoveAttribute(msContext);
+            rtl::OUString sDetails;
+            switch (eContext)
+            {
+                case eDocumentProperties:
+                    sDetails = C2O("Document Properties");
+                    break;
+                case eMainText:
+                    sDetails = C2O("MainDocument");
+                    break;
+                case eSubDoc:
+                    sDetails = C2O("Unknown Subdocument");
+                    break;
+                default:
+                    sDetails = C2O("UNKNOWN");
+                    break;
+            }
+            return sDetails;
+        }
+
+        void Tracer::EnterEnvironment(Environment eContext)
+        {
+            mpTrace->AddAttribute(GetContext(eContext), GetDetails(eContext));
+        }
+
+        void Tracer::EnterEnvironment(Environment eContext,
+            const rtl::OUString &rDetails)
+        {
+            mpTrace->AddAttribute(GetContext(eContext), rDetails);
+        }
+
+        void Tracer::LeaveEnvironment(Environment eContext)
+        {
+            mpTrace->RemoveAttribute(GetContext(eContext));
         }
     }
 }
