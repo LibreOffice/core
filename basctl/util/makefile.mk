@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:18:53 $
+#   last change: $Author: rt $ $Date: 2004-05-21 07:50:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -126,6 +126,7 @@ SRSFILELIST=\
 SRSFILELIST+=   $(SOLARVERSION)$/$(INPATH)$/res$(UPDMINOREXT)$/sfx.srs
 
 RESLIB1NAME=basctl
+RESLIB1IMAGES =$(PRJ)$/res
 RESLIB1SRSFILES= $(SRSFILELIST)
 
 # --- Targets -------------------------------------------------------
