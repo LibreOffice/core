@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodlg.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-10 08:07:53 $
+ *  last change: $Author: fs $ $Date: 2002-05-23 14:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,6 @@
 
 #define IMG_FILEDLG_BTN_UP                  10
 #define IMG_FILEDLG_BTN_STD                 11
-#define IMG_FILEDLG_DOCUMENT                12
-#define IMG_FILEDLG_FOLDER                  13
 #define IMG_FILEDLG_BTN_LOCAL               14
 #define IMG_FILEDLG_CREATEFOLDER            15
 
