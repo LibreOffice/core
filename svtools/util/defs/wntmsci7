@@ -9523,3 +9523,7 @@ _real@8@3ffeccccccccccccd000
 ??0DropTargetDragEvent@dnd@datatransfer@star@sun@com@@QAE@XZ
 ??0SvtResId@@QAE@G@Z
 ?DisableHelp@PrintDialog@@QAEXXZ
+?Copy@TextView@@QAEXAAV?$Reference@VXClipboard@clipboard@datatransfer@star@sun@com@@@uno@star@sun@com@@@Z
+?Paste@TextView@@QAEXAAV?$Reference@VXClipboard@clipboard@datatransfer@star@sun@com@@@uno@star@sun@com@@@Z
+?GetFilterCallback@GraphicFilter@@QBE?BVLink@@XZ
+?ImportJPEG@@YAEAAVSvStream@@AAVGraphic@@PAXJ@Z
