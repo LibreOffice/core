@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 14:04:44 $
+#   last change: $Author: rt $ $Date: 2005-03-30 11:42:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,11 +64,6 @@ PRJ=..$/..$/..
 PRJNAME=plugin
 TARGET=plunx
 TARGETTYPE=CUI
-
-.IF "$(WITH_MOZILLA)" == "NO"
-dummy:
-        @echo "mozilla disabled"
-.ENDIF
 
 .INCLUDE :  ..$/util$/makefile.pmk
 
