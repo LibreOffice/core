@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-15 12:01:01 $
+ *  last change: $Author: ssa $ $Date: 2002-08-22 07:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,7 +526,10 @@ int OutputDevice::ImplGetGraphics()
     DBG_TESTSOLARMUTEX();
 
     if ( mpGraphics )
+    {
+        mpGraphics->SetCurrentOutputDevice( (OutputDevice*)this );
         return TRUE;
+    }
 
     mbInitLineColor     = TRUE;
     mbInitFillColor     = TRUE;
@@ -655,6 +658,7 @@ int OutputDevice::ImplGetGraphics()
     if ( mpGraphics )
     {
         mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp) );
+        mpGraphics->SetCurrentOutputDevice( (OutputDevice*)this );
         return TRUE;
     }
 
