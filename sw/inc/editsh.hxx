@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 20:33:09 $
+ *  last change: $Author: jp $ $Date: 2000-12-13 14:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,9 @@ public:
 
     // returns the scripttpye of the selection
     USHORT GetScriptType() const;
+
+    // returns the language at current cursor position
+    USHORT GetCurLang() const;
 
     // FrameFormate
     SwFrmFmt* FindFrmFmtByName( const String& rName ) const;

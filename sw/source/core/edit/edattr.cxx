@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-23 20:04:33 $
+ *  last change: $Author: jp $ $Date: 2000-12-13 14:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,4 +539,10 @@ USHORT SwEditShell::GetScriptType() const
 }
 
 
-
+USHORT SwEditShell::GetCurLang() const
+{
+    const SwPaM* pCrsr = GetCrsr();
+    const SwTxtNode* pTNd = pCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
+    return pTNd ? pTNd->GetLang( pCrsr->GetPoint()->nContent.GetIndex(), 1 )
+                : LANGUAGE_DONTKNOW;
+}
