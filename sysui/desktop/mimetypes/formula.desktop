@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=formula
+Type=MimeType
+Patterns=*.sxm
+MimeType=application/vnd.sun.xml.math
+Comment=%PRODUCTNAME Formula
