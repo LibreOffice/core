@@ -184,8 +184,6 @@ SRS1 SRS2 SRS3 SRS4 SRS5 SRS6 SRS7 SRS8 SRS9:
     @+dmake "$(SRS$(TNR)TARGET)" MULTI_SRS_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
 .ENDIF	# "$(GUI)" != "MAC"
 .ELSE
-.IF "$(VCL)" == ""
-.ELSE
 $(SRS$(TNR)TARGET): $(SRS$(TNR)FILES) $(SRS$(TNR)DEPN)
     @echo ------------------------------
     @echo Making: $@
@@ -204,6 +202,5 @@ $(SRS$(TNR)TARGET): $(SRS$(TNR)FILES) $(SRS$(TNR)DEPN)
 .ELSE		# "$(GUI)" != "MAC"
     +$(RSC) -r $(RSC_RES_CHARSET) -fs$(SRS$(TNR)TARGET)  -fo$(RES)$/$(RES$(TNR)TARGET).res -I$(SOLARENV)$/res -I$(INPATH)$/res -I$(RSCEXTINC) -I"$(INCLUDE:s/inc/inc:/)" -I$(SOLARINCDIR)$/ $(RSCDEFS) $(RSCUPDVERMAC)  $(RSC$(TNR)HEADER) $(SRS$(TNR)FILES)
 .ENDIF		# "$(GUI)" != "MAC"
-.ENDIF		# "$(VCL)" == ""
 .ENDIF		# "$(MULTI_SRS_FLAG)" == ""
 

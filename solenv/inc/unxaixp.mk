@@ -9,7 +9,7 @@ CC=				xlC_r
 cc=				xlc_r
 CFLAGS=			-c -qlanglvl=extended -qchars=signed 
 CFLAGS+=		$(INCLUDE)
-CDEFS+=			-DVCL -D_PTHREADS
+CDEFS+=			-D_PTHREADS
 CDEFS+=			-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
 CFLAGSCC=
 CFLAGSCXX=

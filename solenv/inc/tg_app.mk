@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-23 15:07:29 $
+#   last change: $Author: hjs $ $Date: 2001-11-02 13:19:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,11 +107,9 @@ APP$(TNR)STACKN=$(LINKFLAGSTACK)$(APP$(TNR)STACK)
 .ELSE
 APP$(TNR)STACKN=
 .ENDIF
-.IF "$(VCL)" != ""
 .IF "$(APP$(TNR)NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP$(TNR)OBJS+= $(STDOBJVCL)
-.ENDIF
 .ENDIF
 .ENDIF
 

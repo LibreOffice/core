@@ -2,9 +2,9 @@
 #
 #   $RCSfile: os2.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mh $ $Date: 2000-10-30 06:00:04 $
+#   last change: $Author: hjs $ $Date: 2001-11-02 13:18:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -184,15 +184,7 @@ CFLAGSOPT=/O+ /Oi+ /Oc+
 CFLAGSNOOPT=/O-
 CFLAGSOUTOBJ=/Fo
 
-.IF "$(vcl)"!=""
-CDEFS+=-DVCL -D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
-.ENDIF
-.IF "$(so3)"!=""
-CDEFS+=-DSO3
-.ENDIF
-.IF "$(old_chaos)"!=""
-CDEFS+=-DOLD_CHAOS
-.ENDIF
+CDEFS+=-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
 
 LINK=ilink
 #LINKFLAGS=/PACKCODE:8192 /ALIGN:16 /NOD /NOE /NOI /MAP /NOFREE

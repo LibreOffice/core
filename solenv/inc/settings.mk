@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.81 $
+#   $Revision: 1.82 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-02 12:00:24 $
+#   last change: $Author: hjs $ $Date: 2001-11-02 13:18:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -389,11 +389,6 @@ solarlang*=$(SOLARLANG)
 
 .IF "$(solarlang)" != ""
 SOLARLANG:=$(solarlang)
-.ENDIF
-
-.IF "$(VCL)" != ""
-vcl=$(VCL)
-DONT_USE_OLE2=TRUE
 .ENDIF
 
 .IF "$(wall)"!=""
@@ -1125,9 +1120,6 @@ RSCEXTINC=.
 .IF "$(DEBUG)" != ""
 RSCDEFS+= -DDEBUG
 .ENDIF
-.IF "$(VCL)"!=""
-RSCDEFS+= -DVCL
-.ENDIF
 .IF "$(OLD_CHAOS)"!=""
 RSCDEFS+= -DOLD_CHAOS
 .ENDIF
@@ -1193,9 +1185,6 @@ COMID=$(COM)
 # --- Neues Environment erweitern ----------------------------------
 CDEFS+= -DSUPD=$(UPD) -DBUILD=$(BUILD)
 
-.IF "$(VCL)" != ""
-CDEFS+= -DVCL
-.ENDIF
 .IF "$(OLD_CHAOS)"!=""
 CDEFS+= -DOLD_CHAOS
 .ENDIF

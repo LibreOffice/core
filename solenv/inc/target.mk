@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.81 $
+#   $Revision: 1.82 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-02 12:00:24 $
+#   last change: $Author: hjs $ $Date: 2001-11-02 13:19:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -190,8 +190,7 @@ something_wrong_with_objects :
 # - ALL -
 # -------
 
-# Bei VCL werden keine Resouren an die Apps geklemmt
-.IF "$(VCL)" != ""
+# with VCL no resources are appended to the application
 APP1RES=
 APP2RES=
 APP3RES=
@@ -201,8 +200,8 @@ APP6RES=
 APP7RES=
 APP8RES=
 APP9RES=
-# Leider gibt es auch Applikationen die nicht VCLApp's sind, und Resourcen nicht von
-# VCL beziehen
+# unfortunatly there are some applications which don't VCL resources but have
+# resources of their own
 .IF "$(APP1NOSVRES)" != ""
 APP1RES=$(APP1NOSVRES)
 .ENDIF
@@ -211,7 +210,6 @@ APP2RES=$(APP2NOSVRES)
 .ENDIF
 .IF "$(APP3NOSVRES)" != ""
 APP3RES=$(APP3NOSVRES)
-.ENDIF
 .ENDIF
 
 .IF "$(NO_APP)"!=""
@@ -467,11 +465,7 @@ SRC1TARGET=$(SRS)$/$(SRS1NAME).srs
 .ENDIF
 
 .IF "$(SRS1FILES)"!=""
-.IF "$(VCL)" != ""
 SRS1TARGET=$(BIN)$/$(RES1TARGET).res
-.ELSE
-SRS1TARGET=$(RES)$/$(RES1TARGET).res
-.ENDIF
 .ENDIF
 
 .IF "$(SRC2FILES)"!=""
@@ -479,11 +473,7 @@ SRC2TARGET=$(SRS)$/$(SRS2NAME).srs
 .ENDIF
 
 .IF "$(SRS2FILES)"!=""
-.IF "$(VCL)" != ""
 SRS2TARGET=$(BIN)$/$(RES2TARGET).res
-.ELSE
-SRS2TARGET=$(RES)$/$(RES2TARGET).res
-.ENDIF
 .ENDIF
 
 .IF "$(SRC3FILES)"!=""
@@ -491,11 +481,7 @@ SRC3TARGET=$(SRS)$/$(SRS3NAME).srs
 .ENDIF
 
 .IF "$(SRS3FILES)"!=""
-.IF "$(VCL)" != ""
 SRS3TARGET=$(BIN)$/$(RES3TARGET).res
-.ELSE
-SRS3TARGET=$(RES)$/$(RES3TARGET).res
-.ENDIF
 .ENDIF
 
 .IF "$(SRC4FILES)"!=""
@@ -503,11 +489,7 @@ SRC4TARGET=$(SRS)$/$(SRS4NAME).srs
 .ENDIF
 
 .IF "$(SRS1FILES)"!=""
-.IF "$(VCL)" != ""
 SRS4TARGET=$(BIN)$/$(RES4TARGET).res
-.ELSE
-SRS4TARGET=$(RES)$/$(RES4TARGET).res
-.ENDIF
 .ENDIF
 
 .IF "$(SRC5FILES)"!=""
@@ -515,11 +497,7 @@ SRC5TARGET=$(SRS)$/$(SRS5NAME).srs
 .ENDIF
 
 .IF "$(SRS5FILES)"!=""
-.IF "$(VCL)" != ""
 SRS5TARGET=$(BIN)$/$(RES5TARGET).res
-.ELSE
-SRS5TARGET=$(RES)$/$(RES5TARGET).res
-.ENDIF
 .ENDIF
 
 .IF "$(SRC6FILES)"!=""
@@ -527,11 +505,7 @@ SRC6TARGET=$(SRS)$/$(SRS6NAME).srs
 .ENDIF
 
 .IF "$(SRS6FILES)"!=""
-.IF "$(VCL)" != ""
 SRS6TARGET=$(BIN)$/$(RES6TARGET).res
-.ELSE
-SRS6TARGET=$(RES)$/$(RES6TARGET).res
-.ENDIF
 .ENDIF
 
 .IF "$(SRC7FILES)"!=""
@@ -539,11 +513,7 @@ SRC7TARGET=$(SRS)$/$(SRS7NAME).srs
 .ENDIF
 
 .IF "$(SRS7FILES)"!=""
-.IF "$(VCL)" != ""
 SRS7TARGET=$(BIN)$/$(RES7TARGET).res
-.ELSE
-SRS7TARGET=$(RES)$/$(RES7TARGET).res
-.ENDIF
 .ENDIF
 
 .IF "$(SRC8FILES)"!=""
@@ -551,11 +521,7 @@ SRC8TARGET=$(SRS)$/$(SRS8NAME).srs
 .ENDIF
 
 .IF "$(SRS8FILES)"!=""
-.IF "$(VCL)" != ""
 SRS8TARGET=$(BIN)$/$(RES8TARGET).res
-.ELSE
-SRS8TARGET=$(RES)$/$(RES8TARGET).res
-.ENDIF
 .ENDIF
 
 .IF "$(SRC9FILES)"!=""
@@ -563,11 +529,7 @@ SRC9TARGET=$(SRS)$/$(SRS9NAME).srs
 .ENDIF
 
 .IF "$(SRS9FILES)"!=""
-.IF "$(VCL)" != ""
 SRS9TARGET=$(BIN)$/$(RES9TARGET).res
-.ELSE
-SRS9TARGET=$(RES)$/$(RES9TARGET).res
-.ENDIF
 .ENDIF
 
 .IF "$(SOLAR_JAVA)"!=""
@@ -1542,7 +1504,6 @@ LIB9ARCHIV=
 
 .IF "$(RESLIB1NAME)" != ""
 RESLIB1 ?= TNR!:=1
-.IF "$(VCL)" != ""
 .IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB1TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB1NAME)$(UPD)LANGEXT.res
@@ -1553,14 +1514,10 @@ RESLIB1TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB1TARGETN:s/LANGEXT/$i/))
 .ELSE			# "$(NO_REC_RES)"!=""
 RESLIB1TARGETN=$(BIN)$/$(RESLIB1NAME)$(UPD)$(LANGEXT).res
 .ENDIF			# "$(NO_REC_RES)"!=""
-.ELSE
-RESLIB1TARGETN=$(BIN)$/$(RESLIB1NAME)$(UPD)$(LANGEXT).dll
-.ENDIF
 .ENDIF
 
 .IF "$(RESLIB2NAME)" != ""
 RESLIB2 ?= TNR!:=2
-.IF "$(VCL)" != ""
 .IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB2TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB2NAME)$(UPD)LANGEXT.res
@@ -1571,14 +1528,10 @@ RESLIB2TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB2TARGETN:s/LANGEXT/$i/))
 .ELSE			# "$(NO_REC_RES)"!=""
 RESLIB2TARGETN=$(BIN)$/$(RESLIB2NAME)$(UPD)$(LANGEXT).res
 .ENDIF			# "$(NO_REC_RES)"!=""
-.ELSE
-RESLIB2TARGETN=$(BIN)$/$(RESLIB2NAME)$(UPD)$(LANGEXT).dll
-.ENDIF
 .ENDIF
 
 .IF "$(RESLIB3NAME)" != ""
 RESLIB3 ?= TNR!:=3
-.IF "$(VCL)" != ""
 .IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB3TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB3NAME)$(UPD)LANGEXT.res
@@ -1589,14 +1542,10 @@ RESLIB3TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB3TARGETN:s/LANGEXT/$i/))
 .ELSE			# "$(NO_REC_RES)"!=""
 RESLIB3TARGETN=$(BIN)$/$(RESLIB3NAME)$(UPD)$(LANGEXT).res
 .ENDIF			# "$(NO_REC_RES)"!=""
-.ELSE
-RESLIB3TARGETN=$(BIN)$/$(RESLIB3NAME)$(UPD)$(LANGEXT).dll
-.ENDIF
 .ENDIF
 
 .IF "$(RESLIB4NAME)" != ""
 RESLIB4 ?= TNR!:=4
-.IF "$(VCL)" != ""
 .IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB4TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB4NAME)$(UPD)LANGEXT.res
@@ -1607,14 +1556,10 @@ RESLIB4TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB4TARGETN:s/LANGEXT/$i/))
 .ELSE			# "$(NO_REC_RES)"!=""
 RESLIB4TARGETN=$(BIN)$/$(RESLIB4NAME)$(UPD)$(LANGEXT).res
 .ENDIF			# "$(NO_REC_RES)"!=""
-.ELSE
-RESLIB4TARGETN=$(BIN)$/$(RESLIB4NAME)$(UPD)$(LANGEXT).dll
-.ENDIF
 .ENDIF
 
 .IF "$(RESLIB5NAME)" != ""
 RESLIB5 ?= TNR!:=5
-.IF "$(VCL)" != ""
 .IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB5TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB5NAME)$(UPD)LANGEXT.res
@@ -1625,14 +1570,10 @@ RESLIB5TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB5TARGETN:s/LANGEXT/$i/))
 .ELSE			# "$(NO_REC_RES)"!=""
 RESLIB5TARGETN=$(BIN)$/$(RESLIB5NAME)$(UPD)$(LANGEXT).res
 .ENDIF			# "$(NO_REC_RES)"!=""
-.ELSE
-RESLIB5TARGETN=$(BIN)$/$(RESLIB5NAME)$(UPD)$(LANGEXT).dll
-.ENDIF
 .ENDIF
 
 .IF "$(RESLIB6NAME)" != ""
 RESLIB6 ?= TNR!:=6
-.IF "$(VCL)" != ""
 .IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB6TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB6NAME)$(UPD)LANGEXT.res
@@ -1643,14 +1584,10 @@ RESLIB6TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB6TARGETN:s/LANGEXT/$i/))
 .ELSE			# "$(NO_REC_RES)"!=""
 RESLIB6TARGETN=$(BIN)$/$(RESLIB6NAME)$(UPD)$(LANGEXT).res
 .ENDIF			# "$(NO_REC_RES)"!=""
-.ELSE
-RESLIB6TARGETN=$(BIN)$/$(RESLIB6NAME)$(UPD)$(LANGEXT).dll
-.ENDIF
 .ENDIF
 
 .IF "$(RESLIB7NAME)" != ""
 RESLIB7 ?= TNR!:=7
-.IF "$(VCL)" != ""
 .IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB7TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB7NAME)$(UPD)LANGEXT.res
@@ -1661,14 +1598,10 @@ RESLIB7TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB7TARGETN:s/LANGEXT/$i/))
 .ELSE			# "$(NO_REC_RES)"!=""
 RESLIB7TARGETN=$(BIN)$/$(RESLIB7NAME)$(UPD)$(LANGEXT).res
 .ENDIF			# "$(NO_REC_RES)"!=""
-.ELSE
-RESLIB7TARGETN=$(BIN)$/$(RESLIB7NAME)$(UPD)$(LANGEXT).dll
-.ENDIF
 .ENDIF
 
 .IF "$(RESLIB8NAME)" != ""
 RESLIB8 ?= TNR!:=8
-.IF "$(VCL)" != ""
 .IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB8TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB8NAME)$(UPD)LANGEXT.res
@@ -1679,14 +1612,10 @@ RESLIB8TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB8TARGETN:s/LANGEXT/$i/))
 .ELSE			# "$(NO_REC_RES)"!=""
 RESLIB8TARGETN=$(BIN)$/$(RESLIB8NAME)$(UPD)$(LANGEXT).res
 .ENDIF			# "$(NO_REC_RES)"!=""
-.ELSE
-RESLIB8TARGETN=$(BIN)$/$(RESLIB8NAME)$(UPD)$(LANGEXT).dll
-.ENDIF
 .ENDIF
 
 .IF "$(RESLIB9NAME)" != ""
 RESLIB9 ?= TNR!:=9
-.IF "$(VCL)" != ""
 .IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB9TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB9NAME)$(UPD)LANGEXT.res
@@ -1697,9 +1626,6 @@ RESLIB9TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB9TARGETN:s/LANGEXT/$i/))
 .ELSE			# "$(NO_REC_RES)"!=""
 RESLIB9TARGETN=$(BIN)$/$(RESLIB9NAME)$(UPD)$(LANGEXT).res
 .ENDIF			# "$(NO_REC_RES)"!=""
-.ELSE
-RESLIB9TARGETN=$(BIN)$/$(RESLIB9NAME)$(UPD)$(LANGEXT).dll
-.ENDIF
 .ENDIF
 
 .IF "$(INDPRESLIB1NAME)"!=""
