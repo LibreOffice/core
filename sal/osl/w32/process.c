@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 16:26:32 $
+ *  last change: $Author: mhu $ $Date: 2004-11-02 17:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char ** argv)
         int i;
         for (i = 0; i < argc; i++)
         {
-            /* Convert from LPSTR */
+            /* Convert to unicode */
             rtl_string2UString (
                 &(ppArgs[i]),
                 argv[i], rtl_str_getLength (argv[i]), encoding,
@@ -270,7 +270,22 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char ** argv)
         }
         if (ppArgs[0] != 0)
         {
-            /* see @ osl_getExecutableFile() */
+            /* Ensure absolute path */
+            DWORD dwResult;
+            TCHAR szBuffer[MAX_PATH];
+
+            dwResult = GetFullPathName (
+                ppArgs[0]->buffer, MAX_PATH, szBuffer, 0);
+            if ((0 < dwResult) && (dwResult < MAX_PATH))
+            {
+                /* Replace argv[0] with it's absolute path */
+                rtl_uString_newFromStr_WithLength(
+                    &(ppArgs[0]), szBuffer, dwResult);
+            }
+        }
+        if (ppArgs[0] != 0)
+        {
+            /* Convert to FileURL, see @ osl_getExecutableFile() */
             rtl_uString * pResult = 0;
             osl_getFileURLFromSystemPath (ppArgs[0], &pResult);
             if (pResult != 0)
