@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svcontnr.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:37:18 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ String STR_SVT_ACC_DESC_TABLISTBOX
     Text[ czech ] = "Řádek: %1, Sloupec: %2";
     Text[ hebrew ] = "‮שורה: %1, עמוד: %2‬";
     Text[ hindi ] = "Row: %1, Column: %2";
+    Text[ slovak ] = "Riadok: %1, Stĺpec: %2";
 };
 String STR_SVT_ACC_DESC_FILEVIEW
 {
@@ -142,6 +143,7 @@ String STR_SVT_ACC_DESC_FILEVIEW
     Text[ czech ] = ", Typ: %1, URL: %2";
     Text[ hebrew ] = "סוג: %1, URL: %2";
     Text[ hindi ] = ", Type: %1, URL: %2";
+    Text[ slovak ] = ", Typ: %1, URL: %2";
 };
 String STR_SVT_ACC_DESC_FOLDER
 {
@@ -170,6 +172,7 @@ String STR_SVT_ACC_DESC_FOLDER
     Text[ czech ] = "Adresář";
     Text[ hebrew ] = "‮תיקיה‬";
     Text[ hindi ] = "कोष्ठ";
+    Text[ slovak ] = "Priečinok";
 };
 String STR_SVT_ACC_DESC_FILE
 {
@@ -198,6 +201,7 @@ String STR_SVT_ACC_DESC_FILE
     Text[ czech ] = "Soubor";
     Text[ hebrew ] = "‮קובץ‬";
     Text[ hindi ] = "फाइल";
+    Text[ slovak ] = "Súbor";
 };
 String STR_SVT_ACC_EMPTY_FIELD
 {
@@ -226,7 +230,10 @@ String STR_SVT_ACC_EMPTY_FIELD
     Text[ hebrew ] = "Empty Field";
     Text[ portuguese_brazilian ] = "Empty Field";
     Text[ hindi ] = "Empty Field";
+    Text[ slovak ] = "Prázdne pole";
 };
+
+
 
 
 
