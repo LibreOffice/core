@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 15:13:39 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text [ english_us ] = "Hyperlink type" ;
         Text[ portuguese ] = "Tipo de hiperligação";
         Text[ russian ] = "Òèï ãèïåğññûëêè";
-        Text[ greek ] = "Ôığïò ôçò õğåñ-óıíäåóçò";
+        Text[ greek ] = "Ôığïò õğåñ-óıíäåóçò";
         Text[ dutch ] = "Soort hyperlink";
         Text[ french ] = "Type d'hyperlien";
         Text[ spanish ] = "Tipo de hiperenlace";
@@ -279,7 +279,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ danish ] = "Loginnavn";
         Text[ swedish ] = "~Loginnamn";
         Text[ polish ] = "~Nazwa logowania";
-        Text[ portuguese_brazilian ] = "Nome de ~login";
+        Text[ portuguese_brazilian ] = "Login";
         Text[ japanese ] = "ãƒ­ã‚°ã‚¤ãƒ³å(~L)";
         Text[ korean ] = "ë¡œê·¸ì¸ ì´ë¦„(~L)";
         Text[ chinese_simplified ] = "ç™»å½•å(~L)";
@@ -309,7 +309,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text [ english_us ] = "~Password" ;
         Text[ portuguese ] = "~Senha";
         Text[ russian ] = "Ïàğîëü";
-        Text[ greek ] = "Êùäéêüò ğñü~óâáóçò";
+        Text[ greek ] = "~Êùäéêüò ğñüóâáóçò";
         Text[ dutch ] = "~Wachtwoord";
         Text[ french ] = "Mot de passe";
         Text[ spanish ] = "~Contraseña";
@@ -427,6 +427,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ thai ] = "WWW Browser";
         QuickHelpText[ hindi ] = "WWW à¤¬à¥à¤°à¤‰à¤œà¤¼à¤°";
         QuickHelpText[ slovak ] = "PrehliadaÄ WWW";
+        Text[ portuguese_brazilian ] = "Navegador Web";
     };
     Image IMG_BROWSE_HC
     {
@@ -459,7 +460,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ danish ] = "Mål i dokumentet";
         QuickHelpText[ swedish ] = "Mål i dokumentet";
         QuickHelpText[ polish ] = "Cel w dokumencie";
-        QuickHelpText[ portuguese_brazilian ] = "Target";
+        QuickHelpText[ portuguese_brazilian ] = "Destino no documento";
         QuickHelpText[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«ã‚ã‚‹ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ";
         QuickHelpText[ korean ] = "ë¬¸ì„œ ë‚´ ëŒ€ìƒ";
         QuickHelpText[ chinese_simplified ] = "æ–‡ä»¶ä¸­çš„ç›®æ ‡";
@@ -486,6 +487,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ thai ] = "Target in Document";
         QuickHelpText[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤®à¥‡à¤‚ à¤²à¤•à¥à¤·à¥à¤¯";
         QuickHelpText[ slovak ] = "CieÄ¾ v dokumente";
+        Text[ portuguese_brazilian ] = "Destino no documento";
     };
     Image IMG_TARGET_HC
     {
@@ -936,7 +938,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text [ english_us ] = "Mail & news" ;
         Text[ portuguese ] = "Mail & News";
         Text[ russian ] = "Ïî÷òà è íîâîñòè";
-        Text[ greek ] = "Áëëçëïãñáößá êáé ÓõæçôŞóåéò";
+        Text[ greek ] = "Áëëçëïãñáößá êáé óõæçôŞóåéò";
         Text[ dutch ] = "Mail & Nieuws";
         Text[ french ] = "Mail & News";
         Text[ spanish ] = "Correo y noticias";
@@ -978,7 +980,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ polish ] = "~e-mail";
         Text[ portuguese_brazilian ] = "~E-mail";
         Text[ japanese ] = "~E-mail";
-        Text[ korean ] = "~ì „ìë©”ì¼";
+        Text[ korean ] = "ì „ì ë©”ì¼(~E)";
         Text[ chinese_simplified ] = "ç”µå­é‚®ä»¶(~E)";
         Text[ chinese_traditional ] = "é›»å­éƒµä»¶(~E)";
         Text[ arabic ] = "ÈÑíÏ ÅáßÊÑæäí";
@@ -1149,6 +1151,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ thai ] = "Data Sources...";
         QuickHelpText[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤²...";
         QuickHelpText[ slovak ] = "Zdroje dÃ¡t...";
+        Text[ portuguese_brazilian ] = "Fontes de dados...";
     };
     Image IMG_ADRESSBOOK_HC
     {
@@ -1877,7 +1880,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ danish ] = "Mål i dokumentet";
         QuickHelpText[ swedish ] = "Mål i dokumentet";
         QuickHelpText[ polish ] = "Cel w dokumencie";
-        QuickHelpText[ portuguese_brazilian ] = "Target in document";
+        QuickHelpText[ portuguese_brazilian ] = "Destino no documento";
         QuickHelpText[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«ã‚ã‚‹ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ";
         QuickHelpText[ korean ] = "ë¬¸ì„œ ë‚´ ëŒ€ìƒ";
         QuickHelpText[ chinese_simplified ] = "æ–‡æ¡£å†…çš„ç›®æ ‡";
@@ -1904,6 +1907,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ thai ] = "Target in Document";
         QuickHelpText[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤®à¥‡à¤‚ à¤²à¤•à¥à¤·à¥à¤¯";
         QuickHelpText[ slovak ] = "CieÄ¾ v dokumente";
+        Text[ portuguese_brazilian ] = "Destino no documento";
     };
     Image IMG_BROWSE_HC
     {
@@ -3157,7 +3161,7 @@ String RID_SVXSTR_HYPDLG_MACROACT3
     Text [ english_us ] = "Mouse leaves object" ;
     Text[ portuguese ] = "Rato fora do objecto";
     Text[ russian ] = "Ìûøü ïîêèäàåò îáúåêò";
-    Text[ greek ] = "Ğïíôßêé åîİñ÷åôáé áğü áíôéêåßìåíï";
+    Text[ greek ] = "Ğïíôßêé áğïìáêñıíåôáé áğü áíôéêåßìåíï";
     Text[ dutch ] = "Muis verlaat object";
     Text[ french ] = "Souris quitte l'objet";
     Text[ spanish ] = "Ratón fuera del objeto";
@@ -3267,7 +3271,7 @@ String RID_SVXSTR_HYPERDLG_HLINETTP_HELP
     Text[ czech ] = "Zde mÅ¯Å¾ete vytvoÅ™it hyperlink na webovou strÃ¡nku, FTP server nebo spojenÃ­ Telnet.";
     Text[ hebrew ] = "Erstellen Sie einen Hyperlink zu einer Webseite, einem FTP Server oder einer Telnet-Verbindung.";
     Text[ catalan ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection.";
-    Text[ portuguese_brazilian ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection.";
+    Text[ portuguese_brazilian ] = "Criação de hiperlink para páginas Web, servidores FTP ou conexão Telnet.";
     Text[ thai ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection.";
     Text[ hindi ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection.";
     Text[ slovak ] = "Tu mÃ´Å¾ete vytvoriÅ¥ odkaz na WebovÃº strÃ¡nku, FTP server alebo Telnet spojenie.";
@@ -3288,7 +3292,7 @@ String RID_SVXSTR_HYPERDLG_HLMAILTP
     Text[ danish ] = "E-mail og nyheder";
     Text[ swedish ] = "E-post & nyheter";
     Text[ polish ] = "Poczta i wiadomoœci";
-    Text[ portuguese_brazilian ] = "Correio & Grupos de Notícias";
+    Text[ portuguese_brazilian ] = "Correio &\nGrupos de notícias";
     Text[ japanese ] = "E-mailï¼†ãƒ‹ãƒ¥ãƒ¼ã‚¹";
     Text[ korean ] = "ë©”ì¼ & ë‰´ìŠ¤";
     Text[ chinese_simplified ] = "ç”µå­é‚®ä»¶å’Œæ–°é—»ç»„";
@@ -3327,7 +3331,7 @@ String RID_SVXSTR_HYPERDLG_HLMAILTP_HELP
     Text[ czech ] = "Zde mÅ¯Å¾ete vytvoÅ™it hyperlink na emailovou adresu nebo diskuznÃ­ skupinu.";
     Text[ hebrew ] = "Erstellen Sie einen Hyperlink auf eine Mail-Adresse oder zu einem News-Forum.";
     Text[ catalan ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
-    Text[ portuguese_brazilian ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
+    Text[ portuguese_brazilian ] = "Criação de hiperlink para endereço de e-mail ou grupo de notícias.";
     Text[ thai ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
     Text[ hindi ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
     Text[ slovak ] = "Tu mÃ´Å¾ete vytvoriÅ¥ odkaz na e-mailovÃº adresu alebo skupinu sprÃ¡v.";
@@ -3387,7 +3391,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCTP_HELP
     Text[ czech ] = "Zde mÅ¯Å¾ete vytvoÅ™it hyperlink na existujÃ­cÃ­ dokument nebo cÃ­l v dokumentu.";
     Text[ hebrew ] = "Erstellen Sie einen Hyperlink zu einem bestehenden Dokument oder ein Ziel innerhalb eines Dokumentes.";
     Text[ catalan ] = "This is where you create a hyperlink to an exisitng document or a target within a document.";
-    Text[ portuguese_brazilian ] = "This is where you create a hyperlink to an exisitng document or a target within a document.";
+    Text[ portuguese_brazilian ] = "Criação de hiperlink para um documento existente ou um alvo dentro de um documento.";
     Text[ thai ] = "This is where you create a hyperlink to an exisitng document or a target within a document.";
     Text[ hindi ] = "This is where you create a hyperlink to an exisitng document or a target within a document.";
     Text[ slovak ] = "Tu mÃ´Å¾ete vytvoriÅ¥ odkaz na existujÃºci dokument alebo cieÄ¾ vo vnÃºtri dokumentu.";
@@ -3408,7 +3412,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCNTP
     Text[ danish ] = "Nyt dokument";
     Text[ swedish ] = "Nytt dokument";
     Text[ polish ] = "Nowy dokument";
-    Text[ portuguese_brazilian ] = "Novo documento";
+    Text[ portuguese_brazilian ] = "Novo\ndocumento";
     Text[ japanese ] = "æ–°ã—ã„ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
     Text[ korean ] = "ìƒˆ ë¬¸ì„œ";
     Text[ chinese_simplified ] = "æ–°å»ºæ–‡æ¡£";
@@ -3447,7 +3451,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP
     Text[ czech ] = "Zde vytvoÅ™Ã­te dokument, na kterÃ½ odkaz ukazuje.";
     Text[ hebrew ] = "Erstellen Sie ein neues Dokument, auf das dann der neue Hyperlink verweist.";
     Text[ catalan ] = "This is where you create a new document to which the new link points.";
-    Text[ portuguese_brazilian ] = "This is where you create a new document to which the new link points.";
+    Text[ portuguese_brazilian ] = "Criação de um novo documento para o qual seu hiperlink irá apontar.";
     Text[ thai ] = "This is where you create a new document to which the new link points.";
     Text[ hindi ] = "This is where you create a new document to which the new link points.";
     Text[ slovak ] = "Tu mÃ´Å¾ete vytvoriÅ¥ novÃ½ dokument na ktorÃ½ ukazuje novÃ½ odkaz.";
@@ -3528,7 +3532,7 @@ String RID_SVXSTR_HYPERDLG_QUERYOVERWRITE
     Text [ dutch ] = "Het bestand bestaat reeds. Overschrijven?" ;
     Text [ swedish ] = "Filen finns redan. Skall den skrivas över?" ;
     Text [ danish ] = "Filen eksisterer allerede. Skal den erstattes?" ;
-    Text [ portuguese_brazilian ] = "Die Datei existiert bereits. Soll sie ?erschrieben werden?" ;
+    Text [ portuguese_brazilian ] = "O arquivo já existe. Sobrescrevê-lo?" ;
     Text [ portuguese ] = "O ficheiro já existe. Deseja substituí-lo?" ;
     Text [ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶å·²ç»å­˜åœ¨ã€‚è¦æ”¹å†™å®ƒ?";
     Text [ russian ] = "İòîò ôàéë óæå ñóùåñòâóåò. Ïåğåïèñàòü åãî?";
@@ -3597,6 +3601,7 @@ Image RID_SVXBMP_HLDOCNTP_H
     ImageBitmap = Bitmap { File = "hldocntp_h.bmp" ; };
     MASKCOLOR
 };
+
 
 
 
