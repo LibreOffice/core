@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerhelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 13:45:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
 #endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 //=========================================================================
 
@@ -121,7 +124,7 @@ typedef std::list< ContentImplHelperRef > ContentRefList;
   *   ( These set contains the properties added to a content using its
   *   XPropertyContainer interface )
   */
-class ContentProviderImplHelper : public cppu::OWeakObject,
+class UCBHELPER_DLLPUBLIC ContentProviderImplHelper : public cppu::OWeakObject,
                                     public com::sun::star::lang::XTypeProvider,
                                     public com::sun::star::lang::XServiceInfo,
                                     public com::sun::star::ucb::XContentProvider
@@ -136,11 +139,11 @@ protected:
             ::com::sun::star::lang::XMultiServiceFactory >  m_xSMgr;
 
 private:
-    void addContent   ( ContentImplHelper* pContent );
-    void removeContent( ContentImplHelper* pContent );
-    void removeContent( const ::rtl::OUString& rURL );
+    UCBHELPER_DLLPRIVATE void addContent      ( ContentImplHelper* pContent );
+    UCBHELPER_DLLPRIVATE void removeContent( ContentImplHelper* pContent );
+    UCBHELPER_DLLPRIVATE void removeContent( const ::rtl::OUString& rURL );
 
-    ::com::sun::star::uno::Reference<
+    UCBHELPER_DLLPRIVATE ::com::sun::star::uno::Reference<
         ::com::sun::star::ucb::XPropertySetRegistry >
     getAdditionalPropertySetRegistry();
 
