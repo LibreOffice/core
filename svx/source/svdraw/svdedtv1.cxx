@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:54:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,15 @@
 
 #ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_OBJECTCONTACT_HXX
+#include <svx/sdr/contact/objectcontact.hxx>
+#endif
+
+// #i38495#
+#ifndef _SDR_CONTACT_VIEWCONTACT_HXX
+#include <svx/sdr/contact/viewcontact.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -816,6 +825,9 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
         SfxItemSet aAttr(*rAttr.GetPool(), rAttr.GetRanges());
         aAttr.Put(rAttr, TRUE);
 
+        // #i38135#
+        bool bResetAnimationTimer(false);
+
         for (ULONG nm=0; nm<nMarkAnz; nm++)
         {
             SdrMark* pM=GetSdrMarkByIndex(nm);
@@ -842,23 +854,40 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
             //pObj->SetItemSetAndBroadcast(aAttr, bReplaceAll);
             pObj->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
 
-            if( (0 != aCharWhichIds.size() ) && pObj->ISA(SdrTextObj) )
+            if(pObj->ISA(SdrTextObj))
             {
                 SdrTextObj* pTextObj = ((SdrTextObj*)pObj);
-                Rectangle aOldBoundRect = pTextObj->GetLastBoundRect();
 
-                // #110094#-14 pTextObj->SendRepaintBroadcast(pTextObj->GetBoundRect());
-                pTextObj->RemoveOutlinerCharacterAttribs( aCharWhichIds );
+                if(0 != aCharWhichIds.size())
+                {
+                    Rectangle aOldBoundRect = pTextObj->GetLastBoundRect();
 
-                // object has changed, should be called form
-                // RemoveOutlinerCharacterAttribs. This will change when the text
-                // object implementation changes.
-                pTextObj->SetChanged();
+                    // #110094#-14 pTextObj->SendRepaintBroadcast(pTextObj->GetBoundRect());
+                    pTextObj->RemoveOutlinerCharacterAttribs( aCharWhichIds );
 
-                pTextObj->BroadcastObjectChange();
-                pTextObj->SendUserCall(SDRUSERCALL_CHGATTR, aOldBoundRect);
+                    // object has changed, should be called form
+                    // RemoveOutlinerCharacterAttribs. This will change when the text
+                    // object implementation changes.
+                    pTextObj->SetChanged();
+
+                    pTextObj->BroadcastObjectChange();
+                    pTextObj->SendUserCall(SDRUSERCALL_CHGATTR, aOldBoundRect);
+                }
+            }
+
+            // #i38495#
+            if(!bResetAnimationTimer && pObj->GetViewContact().SupportsAnimation())
+            {
+                bResetAnimationTimer = true;
             }
         }
+
+        // #i38135#
+        if(bResetAnimationTimer)
+        {
+            SetAnimationTimer(0L);
+        }
+
         // besser vorher checken, was gemacht werden soll:
         // pObj->SetAttr() oder SetNotPersistAttr()
         // !!! fehlende Implementation !!!
