@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-25 15:01:04 $
+ *  last change: $Author: aw $ $Date: 2001-04-25 16:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,21 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     // 3D shadow attributes
     { "D3DShadow3D",                    XML_NAMESPACE_DR3D, sXML_shadow,                XML_SD_TYPE_SHADOW, 0 },
 
+    // #FontWork# attributes
+    { "FontWorkStyle",                  XML_NAMESPACE_DRAW, sXML_fontwork_style,                XML_SD_TYPE_FONTWORK_STYLE, CTF_FONTWORK_STYLE  },
+    { "FontWorkAdjust",                 XML_NAMESPACE_DRAW, sXML_fontwork_adjust,               XML_SD_TYPE_FONTWORK_ADJUST,CTF_FONTWORK_ADJUST },
+    { "FontWorkDistance",               XML_NAMESPACE_DRAW, sXML_fontwork_distance,             XML_TYPE_MEASURE,           CTF_FONTWORK_DISTANCE   },
+    { "FontWorkStart",                  XML_NAMESPACE_DRAW, sXML_fontwork_start,                XML_TYPE_MEASURE,           CTF_FONTWORK_START  },
+    { "FontWorkMirror",                 XML_NAMESPACE_DRAW, sXML_fontwork_mirror,               XML_TYPE_BOOL,              CTF_FONTWORK_MIRROR },
+    { "FontWorkOutline",                XML_NAMESPACE_DRAW, sXML_fontwork_outline,              XML_TYPE_BOOL,              CTF_FONTWORK_OUTLINE    },
+    { "FontWorkShadow",                 XML_NAMESPACE_DRAW, sXML_fontwork_shadow,               XML_SD_TYPE_FONTWORK_SHADOW,CTF_FONTWORK_SHADOW },
+    { "FontWorkShadowColor",            XML_NAMESPACE_DRAW, sXML_fontwork_shadow_color,         XML_TYPE_COLOR,             CTF_FONTWORK_SHADOWCOLOR    },
+    { "FontWorkShadowOffsetX",          XML_NAMESPACE_DRAW, sXML_fontwork_shadow_offset_x,      XML_TYPE_MEASURE,           CTF_FONTWORK_SHADOWOFFSETX  },
+    { "FontWorkShadowOffsetY",          XML_NAMESPACE_DRAW, sXML_fontwork_shadow_offset_y,      XML_TYPE_MEASURE,           CTF_FONTWORK_SHADOWOFFSETY  },
+    { "FontWorkForm",                   XML_NAMESPACE_DRAW, sXML_fontwork_form,                 XML_SD_TYPE_FONTWORK_FORM,  CTF_FONTWORK_FORM   },
+    { "FontWorkHideForm",               XML_NAMESPACE_DRAW, sXML_fontwork_hide_form,            XML_TYPE_BOOL,              CTF_FONTWORK_HIDEFORM   },
+    { "FontWorkShadowTransparence",     XML_NAMESPACE_DRAW, sXML_fontwork_shadow_transparence,  XML_TYPE_PERCENT,           CTF_FONTWORK_SHADOWTRANSPARENCE },
+
     // control attributes (border exists one mor time for the text additions
     // of shapes)
     { "ControlBorder",                  XML_NAMESPACE_FO,   sXML_border,                XML_SD_TYPE_CONTROL_BORDER|MID_FLAG_MULTI_PROPERTY, 0 },
@@ -660,6 +675,52 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_Measure_VAlign_Enum[] =
     { 0,0 }
 };
 
+// #FontWork#
+SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Style_Enum[] =
+{
+    { sXML_rotate,      0 }, //XFT_ROTATE,
+    { sXML_upright,     1 }, //XFT_UPRIGHT,
+    { sXML_slant_x,     2 }, //XFT_SLANTX,
+    { sXML_slant_y,     3 }, //XFT_SLANTY,
+    { sXML_none,        4 }, //XFT_NONE
+    { 0,0 }
+};
+
+SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Adjust_Enum[] =
+{
+    { sXML_left,        0 }, //XFT_LEFT,
+    { sXML_right,       1 }, //XFT_RIGHT,
+    { sXML_autosize,    2 }, //XFT_AUTOSIZE,
+    { sXML_center,      3 }, //XFT_CENTER
+    { 0,0 }
+};
+
+SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Shadow_Enum[] =
+{
+    { sXML_normal,      0 }, //XFTSHADOW_NORMAL,
+    { sXML_slant,       1 }, //XFTSHADOW_SLANT,
+    { sXML_none,        2 }, //XFTSHADOW_NONE
+    { 0,0 }
+};
+
+SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Form_Enum[] =
+{
+    { sXML_none,            0 }, //XFTFORM_NONE,
+    { sXML_topcircle,       1 }, //XFTFORM_TOPCIRC,
+    { sXML_bottomcircle,    2 }, //XFTFORM_BOTCIRC,
+    { sXML_leftcircle,      3 }, //XFTFORM_LFTCIRC,
+    { sXML_rightcircle,     4 }, //XFTFORM_RGTCIRC,
+    { sXML_toparc,          5 }, //XFTFORM_TOPARC,
+    { sXML_bottomarc,       6 }, //XFTFORM_BOTARC,
+    { sXML_leftarc,         7 }, //XFTFORM_LFTARC,
+    { sXML_rightarc,        8 }, //XFTFORM_RGTARC,
+    { sXML_button1,         9 }, //XFTFORM_BUTTON1,
+    { sXML_button2,         10 }, //XFTFORM_BUTTON2,
+    { sXML_button3,         11 }, //XFTFORM_BUTTON3,
+    { sXML_button4,         12 }, //XFTFORM_BUTTON4
+    { 0,0 }
+};
+
 //////////////////////////////////////////////////////////////////////////////
 
 XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel )
@@ -872,6 +933,20 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLClipPropertyHandler;
                 break;
 
+            // #FontWork#
+            case XML_SD_TYPE_FONTWORK_STYLE     :
+                pHdl = new XMLEnumPropertyHdl( pXML_Fontwork_Style_Enum , ::getCppuType((const sal_Int32*)0));
+                break;
+            case XML_SD_TYPE_FONTWORK_ADJUST        :
+                pHdl = new XMLEnumPropertyHdl( pXML_Fontwork_Adjust_Enum , ::getCppuType((const sal_Int32*)0));
+                break;
+            case XML_SD_TYPE_FONTWORK_SHADOW        :
+                pHdl = new XMLEnumPropertyHdl( pXML_Fontwork_Shadow_Enum , ::getCppuType((const sal_Int32*)0));
+                break;
+            case XML_SD_TYPE_FONTWORK_FORM      :
+                pHdl = new XMLEnumPropertyHdl( pXML_Fontwork_Form_Enum , ::getCppuType((const sal_Int32*)0));
+                break;
+
             case XML_SD_TYPE_CONTROL_BORDER:
                 pHdl = new xmloff::OControlBorderHandler();
                 break;
@@ -921,6 +996,21 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     XMLPropertyState* pRepeatOffsetY = NULL;
     XMLPropertyState* pTextAnimationBlinking = NULL;
     XMLPropertyState* pTextAnimationKind = NULL;
+
+    // #FontWork#
+    XMLPropertyState* pFontWorkStyle = NULL;
+    XMLPropertyState* pFontWorkAdjust = NULL;
+    XMLPropertyState* pFontWorkDistance = NULL;
+    XMLPropertyState* pFontWorkStart = NULL;
+    XMLPropertyState* pFontWorkMirror = NULL;
+    XMLPropertyState* pFontWorkOutline = NULL;
+    XMLPropertyState* pFontWorkShadow = NULL;
+    XMLPropertyState* pFontWorkShadowColor = NULL;
+    XMLPropertyState* pFontWorkShadowOffsetx = NULL;
+    XMLPropertyState* pFontWorkShadowOffsety = NULL;
+    XMLPropertyState* pFontWorkForm = NULL;
+    XMLPropertyState* pFontWorkHideform = NULL;
+    XMLPropertyState* pFontWorkShadowTransparence = NULL;
 
     // filter properties
     for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
@@ -997,6 +1087,21 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_TEXTANIMATION_KIND:
                 pTextAnimationKind = property;
                 break;
+
+            // #FontWork#
+            case CTF_FONTWORK_STYLE:                pFontWorkStyle = property;              break;
+            case CTF_FONTWORK_ADJUST:               pFontWorkAdjust = property;             break;
+            case CTF_FONTWORK_DISTANCE:             pFontWorkDistance = property;           break;
+            case CTF_FONTWORK_START:                pFontWorkStart = property;              break;
+            case CTF_FONTWORK_MIRROR:               pFontWorkMirror = property;             break;
+            case CTF_FONTWORK_OUTLINE:              pFontWorkOutline = property;            break;
+            case CTF_FONTWORK_SHADOW:               pFontWorkShadow = property;             break;
+            case CTF_FONTWORK_SHADOWCOLOR:          pFontWorkShadowColor = property;        break;
+            case CTF_FONTWORK_SHADOWOFFSETX:        pFontWorkShadowOffsetx = property;      break;
+            case CTF_FONTWORK_SHADOWOFFSETY:        pFontWorkShadowOffsety = property;      break;
+            case CTF_FONTWORK_FORM:                 pFontWorkForm = property;               break;
+            case CTF_FONTWORK_HIDEFORM:             pFontWorkHideform = property;           break;
+            case CTF_FONTWORK_SHADOWTRANSPARENCE:   pFontWorkShadowTransparence = property; break;
         }
     }
 
@@ -1020,6 +1125,44 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             pRepeatOffsetX->mnIndex = -1;
         else
             pRepeatOffsetY->mnIndex = -1;
+    }
+
+    if(pFontWorkStyle)
+    {
+        // #FontWork#
+        sal_Int32 nStyle;
+
+        if(pFontWorkStyle->maValue >>= nStyle)
+        {
+            if(/*XFT_NONE*/4 == nStyle)
+            {
+                pFontWorkStyle->mnIndex = -1;
+                if(pFontWorkAdjust)
+                    pFontWorkAdjust->mnIndex = -1;
+                if(pFontWorkDistance)
+                    pFontWorkDistance->mnIndex = -1;
+                if(pFontWorkStart)
+                    pFontWorkStart->mnIndex = -1;
+                if(pFontWorkMirror)
+                    pFontWorkMirror->mnIndex = -1;
+                if(pFontWorkOutline)
+                    pFontWorkOutline->mnIndex = -1;
+                if(pFontWorkShadow)
+                    pFontWorkShadow->mnIndex = -1;
+                if(pFontWorkShadowColor)
+                    pFontWorkShadowColor->mnIndex = -1;
+                if(pFontWorkShadowOffsetx)
+                    pFontWorkShadowOffsetx->mnIndex = -1;
+                if(pFontWorkShadowOffsety)
+                    pFontWorkShadowOffsety->mnIndex = -1;
+                if(pFontWorkForm)
+                    pFontWorkForm->mnIndex = -1;
+                if(pFontWorkHideform)
+                    pFontWorkHideform->mnIndex = -1;
+                if(pFontWorkShadowTransparence)
+                    pFontWorkShadowTransparence->mnIndex = -1;
+            }
+        }
     }
 
     SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);

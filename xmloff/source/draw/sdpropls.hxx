@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-19 12:00:46 $
+ *  last change: $Author: aw $ $Date: 2001-04-25 16:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,29 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define CTF_FILLTRANSNAME           1018
 #define CTF_TEXTANIMATION_BLINKING  1019
 #define CTF_TEXTANIMATION_KIND      1020
+
+//////////////////////////////////////////////////////////////////////////////
+// #FontWork#
+#define CTF_FONTWORK_STYLE              1021
+#define CTF_FONTWORK_ADJUST             1022
+#define CTF_FONTWORK_DISTANCE           1023
+#define CTF_FONTWORK_START              1024
+#define CTF_FONTWORK_MIRROR             1025
+#define CTF_FONTWORK_OUTLINE            1026
+#define CTF_FONTWORK_SHADOW             1027
+#define CTF_FONTWORK_SHADOWCOLOR        1028
+#define CTF_FONTWORK_SHADOWOFFSETX      1029
+#define CTF_FONTWORK_SHADOWOFFSETY      1030
+#define CTF_FONTWORK_FORM               1031
+#define CTF_FONTWORK_HIDEFORM           1032
+#define CTF_FONTWORK_SHADOWTRANSPARENCE 1033
+
+//////////////////////////////////////////////////////////////////////////////
+// #FontWork# types
+#define XML_SD_TYPE_FONTWORK_STYLE                  (XML_SD_TYPES_START + 47 )
+#define XML_SD_TYPE_FONTWORK_ADJUST                 (XML_SD_TYPES_START + 48 )
+#define XML_SD_TYPE_FONTWORK_SHADOW                 (XML_SD_TYPES_START + 49 )
+#define XML_SD_TYPE_FONTWORK_FORM                   (XML_SD_TYPES_START + 50 )
 
 //////////////////////////////////////////////////////////////////////////////
 // enum maps for attributes
