@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-20 07:43:30 $
+ *  last change: $Author: ab $ $Date: 2001-08-01 11:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,6 +575,10 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     xDlg->createPeer( xToolkit, NULL );
     StarBASIC* pStartedBasic = pINST->GetBasic();
     attachDialogEvents( pStartedBasic, xDlg );
+
+    // Add dialog to dispose vector
+    Reference< XComponent > xDlgComponent( xDlg, UNO_QUERY );
+    pINST->getComponentVector().push_back( xDlgComponent );
 
     // Return dialog
     Any aRetVal;

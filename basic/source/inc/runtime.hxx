@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-15 13:10:59 $
+ *  last change: $Author: ab $ $Date: 2001-08-01 10:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,14 @@
 #include <osl/file.hxx>
 #endif
 
+#include <vector>
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
+
 using namespace rtl;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
 
 
 // Define activates old file implementation
@@ -171,6 +177,13 @@ public:
 // laufende BASICs werden ueber verkettete Instanzen verwaltet. Hier liegen
 // alle Daten, die nur leben, wenn BASIC auch lebt, wie z.B. das I/O-System.
 
+typedef ::std::vector
+<
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+>
+ComponentVector_t;
+
+
 class SbiInstance
 {
     friend class SbiRuntime;
@@ -188,6 +201,8 @@ class SbiInstance
     String          aErrorMsg;      // letzte Error-Message fuer $ARG
     USHORT          nErl;           // aktuelle Fehlerzeile
     BOOL            bReschedule;    // Flag: TRUE = Reschedule in Hauptschleife
+
+    ComponentVector_t ComponentVector;
 
 public:
     SbiRuntime*  pRun;              // Call-Stack
@@ -213,6 +228,8 @@ public:
     xub_StrLen GetErl()             { return nErl; }
     void    EnableReschedule( BOOL bEnable ) { bReschedule = bEnable; }
     BOOL    IsReschedule( void ) { return bReschedule; }
+
+    ComponentVector_t& getComponentVector( void )  { return ComponentVector; }
 
     SbMethod* GetCaller( USHORT );
     SbModule* GetActiveModule();

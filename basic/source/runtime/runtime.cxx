@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-23 17:11:50 $
+ *  last change: $Author: ab $ $Date: 2001-08-01 11:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,17 @@ SbiInstance::~SbiInstance()
     delete pDdeCtrl;
     delete pDllMgr;
     delete pNumberFormatter;
+
+    // Dispose components, especially dialogs created in CreateUnoDialog
+    ComponentVector_t::const_iterator iPos( ComponentVector.begin() );
+    while( iPos != ComponentVector.end() )
+    {
+        Reference< XComponent > xDlgComponent = *iPos ;
+        if( xDlgComponent.is() )
+            xDlgComponent->dispose();
+        ++iPos;
+    }
+    ComponentVector.clear();
 }
 
 SbiDllMgr* SbiInstance::GetDllMgr()
