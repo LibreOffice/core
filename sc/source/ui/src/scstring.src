@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:58:05 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 16:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4372,6 +4372,7 @@ String STR_ACC_DATAPILOT_SEL_DESCR
     Text[ hindi ] = "Lists the fields that you can drag to one of the other three areas.";
     Text[ slovak ] = "Zobrazí polia, ktoré môžete presunúť do jednej z troch ďalších oblastí.";
 };
+
 
 
 
