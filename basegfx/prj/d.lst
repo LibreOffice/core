@@ -16,6 +16,7 @@ hedabu: ..\inc\b2dvector.hxx %_DEST%\inc%_EXT%\basegfx\b2dvector.hxx
 hedabu: ..\inc\b2dpoint.hxx %_DEST%\inc%_EXT%\basegfx\b2dpoint.hxx
 hedabu: ..\inc\b2dhompoint.hxx %_DEST%\inc%_EXT%\basegfx\b2dhompoint.hxx
 hedabu: ..\inc\b2dhommatrix.hxx %_DEST%\inc%_EXT%\basegfx\b2dhommatrix.hxx
+hedabu: ..\inc\b2dpolygon.hxx %_DEST%\inc%_EXT%\basegfx\b2dpolygon.hxx
 
 hedabu: ..\inc\b3drange.hxx %_DEST%\inc%_EXT%\basegfx\b3drange.hxx
 hedabu: ..\inc\b3dtuple.hxx %_DEST%\inc%_EXT%\basegfx\b3dtuple.hxx
