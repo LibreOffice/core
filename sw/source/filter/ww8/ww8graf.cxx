@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:35:51 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2791,8 +2791,11 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     if (pRecord->bHidden)
         return 0;
 
-    //If we are to be "below text" then we are not to be opaque
-    if (pF->bBelowText || pRecord->bDrawHell)
+    // If we are to be "below text" then we are not to be opaque
+    // #i14045# MM If we are in a header or footer then make the object transparent
+    // Not exactly like word but close enough for now
+    if ( (pF->bBelowText || pRecord->bDrawHell) ||
+         ( ( bIsHeader || bIsFooter ) && pF->nwr == 3 ) )
         aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
 
     SwFrmFmt* pRetFrmFmt = 0;
