@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-25 10:32:47 $
+ *  last change: $Author: ab $ $Date: 2001-06-28 15:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,7 +799,14 @@ void BasicManager::SetImpl( BasicManagerImpl* pImpl )
         else
         {
             // No libs? Maybe an 5.2 document already loaded
-            copyToLibraryContainer( pStdLib, mpImpl );
+            USHORT nLibs = GetLibCount();
+            for( USHORT nL = 0; nL < nLibs; nL++ )
+            {
+                BasicLibInfo* pInfo = pLibs->GetObject( nL );
+                StarBASIC* pLib = pInfo->GetLib();
+                if( pLib )
+                    copyToLibraryContainer( pLib, mpImpl );
+            }
         }
     }
 }
