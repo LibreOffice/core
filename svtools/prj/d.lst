@@ -286,6 +286,8 @@ hedabu: ..\inc\options3d.hxx %_DEST%\inc%_EXT%\svtools\options3d.hxx
 hedabu: ..\inc\fontoptions.hxx %_DEST%\inc%_EXT%\svtools\fontoptions.hxx
 hedabu: ..\inc\addxmltostorageoptions.hxx %_DEST%\inc%_EXT%\svtools\addxmltostorageoptions.hxx
 hedabu: ..\inc\defaultoptions.hxx %_DEST%\inc%_EXT%\svtools\defaultoptions.hxx
+hedabu: ..\inc\printwarningoptions.hxx %_DEST%\inc%_EXT%\svtools\printwarningoptions.hxx
+hedabu: ..\inc\printoptions.hxx %_DEST%\inc%_EXT%\svtools\printoptions.hxx
 hedabu: ..\inc\dynamicmenuoptions.hxx %_DEST%\inc%_EXT%\svtools\dynamicmenuoptions.hxx
 hedabu: ..\inc\localresaccess.hxx %_DEST%\inc%_EXT%\svtools\localresaccess.hxx
 hedabu: ..\inc\wizardmachine.hxx %_DEST%\inc%_EXT%\svtools\wizardmachine.hxx

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: as $ $Date: 2001-04-26 13:51:15 $
+#   last change: $Author: ka $ $Date: 2001-05-03 08:01:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ TARGET=config
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
-    $(SLO)$/cjkoptions.obj             \
+    $(SLO)$/cjkoptions.obj				\
     $(SLO)$/pathoptions.obj             \
     $(SLO)$/saveopt.obj					\
     $(SLO)$/undoopt.obj             	\
@@ -96,7 +96,9 @@ SLOFILES = \
     $(SLO)$/miscopt.obj					\
     $(SLO)$/defaultoptions.obj			\
     $(SLO)$/searchopt.obj				\
-    $(SLO)$/cacheoptions.obj
+    $(SLO)$/cacheoptions.obj			\
+    $(SLO)$/printwarningoptions.obj		\
+    $(SLO)$/printoptions.obj			
 
 # --- Targets ------------------------------------------------------
 
