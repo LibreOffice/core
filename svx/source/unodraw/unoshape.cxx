@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 22:14:03 $
+ *  last change: $Author: cl $ $Date: 2001-01-22 13:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1028,10 +1028,11 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
         }
         case OWN_ATTR_WRITINGMODE:
         {
-            if( pObj && pObj->ISA(SdrTextObj) )
+            drawing::WritingMode eMode;
+            if( pObj && pObj->ISA(SdrTextObj) && rVal >>= eMode )
             {
                 SdrTextObj* pText = (SdrTextObj*)pObj;
-                pText->SetVerticalWriting( ::cppu::any2bool(rVal) );
+                pText->SetVerticalWriting( eMode == drawing::WritingMode_TB_RL );
                 return;
             }
         }
@@ -1208,8 +1209,8 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
             sal_Int32 nMode;
             if( rVal >>= nMode )
             {
-                pObj->SetItem( XFillBmpStretchItem( nMode == 1 ) );
-                pObj->SetItem( XFillBmpTileItem( nMode == 0 ) );
+                pObj->SetItem( XFillBmpStretchItem( nMode == drawing::BitmapMode_STRETCH ) );
+                pObj->SetItem( XFillBmpTileItem( nMode == drawing::BitmapMode_REPEAT ) );
             }
             break;
         }
@@ -1484,7 +1485,8 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                 if( pObj && pObj->ISA(SdrTextObj) )
                 {
                     SdrTextObj* pText = (SdrTextObj*)pObj;
-                    aAny = ::cppu::bool2any( pText->IsVerticalWriting() );
+                    drawing::WritingMode eMode = pText->IsVerticalWriting() ? drawing::WritingMode_TB_RL : drawing::WritingMode_LR_TB;
+                    aAny <<= eMode;
                     break;
                 }
             }
@@ -1684,11 +1686,11 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                 if( pStretchItem && pTileItem )
                 {
                     if( pTileItem->GetValue() )
-                        aAny <<= (sal_Int32)0;
+                        aAny <<= (sal_Int32)drawing::BitmapMode_REPEAT;
                     else if( pStretchItem->GetValue() )
-                        aAny <<= (sal_Int32)1;
+                        aAny <<= (sal_Int32)drawing::BitmapMode_STRETCH;
                     else
-                        aAny <<= (sal_Int32)2;
+                        aAny <<= (sal_Int32)drawing::BitmapMode_NO_REPEAT;
                 }
                 break;
             }
