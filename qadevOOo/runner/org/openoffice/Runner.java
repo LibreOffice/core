@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Runner.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:03:50 $
+ *  last change:$Date: 2004-03-19 14:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,11 @@
 package org.openoffice;
 
 import lib.TestParameters;
-import lib.DynamicClassLoader;
+import util.DynamicClassLoader;
 import base.TestBase;
 import helper.ClParser;
 import helper.CfgParser;
+
 
 /**
  * The main class, will call ClParser and CfgParser to <br>
@@ -75,6 +76,7 @@ import helper.CfgParser;
 public class Runner {
 
     public static void main(String[] args) {
+
         DynamicClassLoader dcl = new DynamicClassLoader();
 
         // get a class for test parameters
@@ -94,7 +96,19 @@ public class Runner {
         //parse the commandline arguments
         cli.getCommandLineParameter(param,args);
 
-        System.out.println("TestJob: "+param.get("TestJob"));
+        Object tj = param.get("TestJob");
+
+        if (tj==null) {
+            System.out.println("==========================================================================");
+            System.out.println("No TestJob given, please make sure that you ");
+            System.out.println("a.) called the OOoRunner with the paramter -o <job> or -sce <scenarioFile>");
+            System.out.println("or");
+            System.out.println("b.) have an entry called TestJob in your used properties file");
+            System.out.println("==========================================================================");
+            System.exit(-1);
+        }
+
+        System.out.println("TestJob: "+tj);
 
         TestBase toExecute = (TestBase) dcl.getInstance("base."+
                                             (String)param.get("TestBase"));
@@ -105,7 +119,7 @@ public class Runner {
             System.out.println("Job "+param.get("TestJob")+" failed");
             System.exit(-1);
         } else {
-            System.out.println("Job "+param.get("TestJob")+" successful executed");
+            System.out.println("Job "+param.get("TestJob")+" done");
             System.exit(0);
         }
     }
