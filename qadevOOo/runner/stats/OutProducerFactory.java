@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutProducerFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-10-06 12:41:14 $
+ *  last change:$Date: 2003-11-18 16:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,15 @@ public class OutProducerFactory {
         }
         if (dbOut == null) {
             DynamicClassLoader dcl = new DynamicClassLoader();
-            try {
-                dbOut = (LogWriter)dcl.getInstance((String)param.get("OutProducer"));
+            String outProducerName = (String)param.get("OutProducer");
+            if (outProducerName != null) {
+                try {
+                    dbOut = (LogWriter)dcl.getInstance(outProducerName);
+                }
+                catch(IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
             }
-            catch(IllegalArgumentException e) {}
         }
         if (dbOut == null) {
             dbOut = createSimpleOutProducer();
@@ -104,10 +109,13 @@ public class OutProducerFactory {
      * @return The database out producer, or null if it couldn't be created.
      */
     public static LogWriter createDataBaseOutProducer(Hashtable param) {
-        String testBaseName = (String)param.get("TestBase");
-        String dataProducerName = testBaseName.substring(testBaseName.indexOf("_")+1);
-        dataProducerName = "stats." + makeFirstCharUpperCase(dataProducerName)
+        String dataProducerName = (String)param.get("DataBaseOutProducer");
+        if (dataProducerName == null) {
+            String testBaseName = (String)param.get("TestBase");
+            dataProducerName = testBaseName.substring(testBaseName.indexOf("_")+1);
+            dataProducerName = "stats." + makeFirstCharUpperCase(dataProducerName)
                             + "DataBaseOutProducer";
+        }
         DynamicClassLoader dcl = new DynamicClassLoader();
         LogWriter dbOut = null;
         try {
