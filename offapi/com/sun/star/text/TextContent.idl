@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextContent.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ module com { module sun { module star { module text {
     @see TextGraphicObject
     @see TextEmbeddedObject
 */
-service TextContent
+published service TextContent
 {
 
     /** This interface is used for the attachment of this text content
