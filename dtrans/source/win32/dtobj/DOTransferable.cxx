@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-05 06:34:57 $
+ *  last change: $Author: tra $ $Date: 2001-03-05 13:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,8 +298,7 @@ CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( CFormatEtc& a
         OSL_ASSERT( (hr != E_INVALIDARG) &&
                     (hr != DV_E_DVASPECT) &&
                     (hr != DV_E_LINDEX) &&
-                    (hr != DV_E_TYMED) &&
-                    (hr != DV_E_FORMATETC) );
+                    (hr != DV_E_TYMED) );
 
         if ( DV_E_FORMATETC == hr )
             throw UnsupportedFlavorException( );
