@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:23:02 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 //_________________________________________________________________________________________________________________
 //  includes
@@ -259,8 +260,8 @@ class SvtMiscOptions_Impl : public ConfigItem
 SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     // Init baseclasses first
     : ConfigItem( ROOTNODE_MISC )
-    , m_nToolboxStyle( 1 )
     , m_nSymbolSet( 0 )
+    , m_nToolboxStyle( 1 )
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = GetPropertyNames  (           );
