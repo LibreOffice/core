@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-31 20:09:04 $
+ *  last change: $Author: kz $ $Date: 2001-08-08 09:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,12 @@ String STR_SVT_STYLE_LIGHT
     Text [ portuguese ] = "Claro" ;
     Text[ russian ] = "Òîíêèé";
     Text[ polish ] = "Light";
-    Text[ japanese ] = "×š";
-    Text[ chinese_simplified ] = "Ï¸";
-    Text[ chinese_traditional ] = "²Ó";
+    Text[ japanese ] = "ç´°å­—";
+    Text[ chinese_simplified ] = "ç»†";
+    Text[ chinese_traditional ] = "ç´°";
     Text[ arabic ] = "İÇÊÍ";
     Text[ greek ] = "Áğáëü";
-    Text[ korean ] = "¾ã°Ô";
+    Text[ korean ] = "ì–‡ê²Œ";
     Text[ turkish ] = "İnce";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Light";
@@ -102,12 +102,12 @@ String STR_SVT_STYLE_LIGHT_ITALIC
     Text [ portuguese ] = "Itálico claro" ;
     Text[ russian ] = "Òîíêèé êóğñèâ";
     Text[ polish ] = "Kursywa light";
-    Text[ japanese ] = "×š Î‘Ì";
-    Text[ chinese_simplified ] = "Ï¸Ğ±Ìå";
-    Text[ chinese_traditional ] = "²Ó±×Åé";
+    Text[ japanese ] = "ç´°å­— æ–œä½“";
+    Text[ chinese_simplified ] = "ç»†æ–œä½“";
+    Text[ chinese_traditional ] = "ç´°æ–œé«”";
     Text[ arabic ] = "İÇÊÍ ãÇÆá";
     Text[ greek ] = "ĞëÜãéá ÁğáëÜ";
-    Text[ korean ] = "°¡´Â ÀÌÅÅ¸¯Ã¼";
+    Text[ korean ] = "ê°€ëŠ” ì´íƒ¤ë¦­ì²´";
     Text[ turkish ] = "İnce italik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cursiva light";
@@ -129,12 +129,12 @@ String STR_SVT_STYLE_NORMAL
     Text [ portuguese ] = "Padrão" ;
     Text[ russian ] = "Ñòàíäàğò";
     Text[ polish ] = "Domyœlnie";
-    Text[ japanese ] = "•W€";
-    Text[ chinese_simplified ] = "±ê×¼";
-    Text[ chinese_traditional ] = "¼Ğ·Ç";
+    Text[ japanese ] = "æ¨™æº–";
+    Text[ chinese_simplified ] = "æ ‡å‡†";
+    Text[ chinese_traditional ] = "æ¨™æº–";
     Text[ arabic ] = "ŞíÇÓí";
     Text[ greek ] = "ĞñïåğéëïãŞ";
-    Text[ korean ] = "º¸Åë";
+    Text[ korean ] = "ë³´í†µ";
     Text[ turkish ] = "Normal";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Predeterminado";
@@ -156,12 +156,12 @@ String STR_SVT_STYLE_NORMAL_ITALIC
     Text [ portuguese ] = "Itálico" ;
     Text[ russian ] = "Êóğñèâ";
     Text[ polish ] = "Kursywa";
-    Text[ japanese ] = "Î‘Ì";
-    Text[ chinese_simplified ] = "Ğ±Ìå";
-    Text[ chinese_traditional ] = "±×Åé";
+    Text[ japanese ] = "æ–œä½“";
+    Text[ chinese_simplified ] = "æ–œä½“";
+    Text[ chinese_traditional ] = "æ–œé«”";
     Text[ arabic ] = "ãÇÆá";
     Text[ greek ] = "ĞëÜãéá";
-    Text[ korean ] = "ÀÌÅÅ¸¯Ã¼";
+    Text[ korean ] = "ì´íƒ¤ë¦­ì²´";
     Text[ turkish ] = "İtalik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cursiva";
@@ -183,12 +183,12 @@ String STR_SVT_STYLE_BOLD
     Text [ portuguese ] = "Negrito" ;
     Text[ russian ] = "Æèğíûé";
     Text[ polish ] = "Pogrubienie";
-    Text[ japanese ] = "‘¾š";
-    Text[ chinese_simplified ] = "´ÖÌå";
-    Text[ chinese_traditional ] = "²ÊÅé";
+    Text[ japanese ] = "å¤ªå­—";
+    Text[ chinese_simplified ] = "ç²—ä½“";
+    Text[ chinese_traditional ] = "ç²—é«”";
     Text[ arabic ] = "ÚÑíÖ";
     Text[ greek ] = "¸íôïíï";
-    Text[ korean ] = "±½°Ô";
+    Text[ korean ] = "êµµê²Œ";
     Text[ turkish ] = "Kalın";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Negrita";
@@ -201,7 +201,7 @@ String STR_SVT_STYLE_BOLD_ITALIC
     Text [ ENGLISH ] = "Bold Italic" ;
     Text [ english_us ] = "Bold Italic" ;
     Text [ italian ] = "Corsivo Grassetto" ;
-    Text [ spanish ] = "Cursiva negrita" ;
+    Text [ spanish ] = "Negrita cursiva" ;
     Text [ french ] = "Italique gras" ;
     Text [ dutch ] = "Vet Cursief" ;
     Text [ swedish ] = "Fet kursiv" ;
@@ -210,12 +210,12 @@ String STR_SVT_STYLE_BOLD_ITALIC
     Text [ portuguese ] = "Itálico negrito" ;
     Text[ russian ] = "Æèğíûé êóğñèâ";
     Text[ polish ] = "Pogrubiona kursywa";
-    Text[ japanese ] = "‘¾šÎ‘Ì";
-    Text[ chinese_simplified ] = "´ÖĞ±Ìå";
-    Text[ chinese_traditional ] = "²Ê±×Åé";
+    Text[ japanese ] = "å¤ªå­—æ–œä½“";
+    Text[ chinese_simplified ] = "ç²—æ–œä½“";
+    Text[ chinese_traditional ] = "ç²—æ–œé«”";
     Text[ arabic ] = "ÚÑíÖ ãÇÆá";
     Text[ greek ] = "ĞëÜãéá ¸íôïíá";
-    Text[ korean ] = "±½Àº ÀÌÅÅ¸¯Ã¼";
+    Text[ korean ] = "êµµì€ ì´íƒ¤ë¦­ì²´";
     Text[ turkish ] = "Kalın italik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cursiva negrita";
@@ -237,13 +237,13 @@ String STR_SVT_STYLE_BLACK
     Text [ portuguese ] = "Preto" ;
     Text[ russian ] = "×åğíûé";
     Text[ polish ] = "Czarny";
-    Text[ japanese ] = "•";
-    Text[ chinese_simplified ] = "ºÚÌå";
+    Text[ japanese ] = "é»’";
+    Text[ chinese_simplified ] = "é»‘ä½“";
     Text[ language_user1 ] = " ";
-    Text[ chinese_traditional ] = "¶ÂÅé";
+    Text[ chinese_traditional ] = "é»‘é«”";
     Text[ arabic ] = "ÃÓæÏ";
     Text[ greek ] = "Ìáıñï";
-    Text[ korean ] = "°Ë°Ô";
+    Text[ korean ] = "ê²€ê²Œ";
     Text[ turkish ] = "Siyah";
     Text[ catalan ] = "Black";
     Text[ finnish ] = "Musta";
@@ -264,13 +264,13 @@ String STR_SVT_STYLE_BLACK_ITALIC
     Text [ portuguese ] = "Preto itálico" ;
     Text[ russian ] = "×åğíûé êóğñèâ";
     Text[ polish ] = "Czarna kursywa";
-    Text[ japanese ] = "•‚ÌÎ‘Ì";
-    Text[ chinese_simplified ] = "ºÚĞ±Ìå";
+    Text[ japanese ] = "é»’ã®æ–œä½“";
+    Text[ chinese_simplified ] = "é»‘æ–œä½“";
     Text[ language_user1 ] = " ";
-    Text[ chinese_traditional ] = "¶Â±×Åé";
+    Text[ chinese_traditional ] = "é»‘æ–œé«”";
     Text[ arabic ] = "ÃÓæÏ ãÇÆá";
     Text[ greek ] = "ĞëÜãéá Ìáıñï";
-    Text[ korean ] = "°Ë°Ô, ÀÌÅÅ¸¯Ã¼";
+    Text[ korean ] = "ê²€ê²Œ, ì´íƒ¤ë¦­ì²´";
     Text[ turkish ] = "Siyah italik";
     Text[ catalan ] = "Cursiva black";
     Text[ finnish ] = "Musta kursivointi";
@@ -303,14 +303,14 @@ String STR_SVT_FONTMAP_BOTH
     TEXT [ dutch ] = "Dit lettertype wordt voor zowel de printer als het scherm gebruikt." ;
     TEXT [ spanish ] = "Se usará la misma fuente en la impresora y en pantalla" ;
     TEXT [ english_us ] = "The same font will be used on both your printer and your screen." ;
-    TEXT[ chinese_simplified ] = "ÆÁÄ»ÏÔÊ¾ºÍ´òÓ¡Ê¹ÓÃÍ¬Ò»ÖÖ×ÖÌå¡£";
+    TEXT[ chinese_simplified ] = "å±å¹•æ˜¾ç¤ºå’Œæ‰“å°ä½¿ç”¨åŒä¸€ç§å­—ä½“ã€‚";
     TEXT[ russian ] = "Äëÿ ïå÷àòè è âûâîäà íà ıêğàí èñïîëüçóåòñÿ îäèí è òîò æå øğèôò";
     TEXT[ polish ] = "U¿yj tej samej czcionki dla wydruku i ekranu";
-    TEXT[ japanese ] = "ˆóü‚Æ‰æ–Ê•\\¦‚É‚Í“¯‚¶Ì«İÄ‚ªg—p‚³‚ê‚Ü‚·B";
-    TEXT[ chinese_traditional ] = "¿Ã¹õÅã¥Ü©M¦C¦L¨Ï¥Î²Î¤@ªº¦r«¬";
+    TEXT[ japanese ] = "å°åˆ·ã¨ç”»é¢è¡¨ç¤ºã«ã¯åŒã˜ï¾Œï½«ï¾ï¾„ãŒä½¿ç”¨ã•ã‚Œã¾ã™ã€‚";
+    TEXT[ chinese_traditional ] = "è¢å¹•é¡¯ç¤ºå’Œåˆ—å°ä½¿ç”¨çµ±ä¸€çš„å­—å‹";
     TEXT[ arabic ] = "Óæİ íÊã ÇÓÊÎÏÇã äİÓ ÇáÎØ ááØÇÈÚÉ æÇáÔÇÔÉ.";
     TEXT[ greek ] = "Ç ãñáììáôïóåéñÜ áõôŞ èá ÷ñçóéìïğïéçèåß ãéá ôçí ïèüíç êáé ãéá ôïí åêôõğùôŞ.";
-    TEXT[ korean ] = "ÇÁ¸°ÅÍ¿Í È­¸é¿¡´Â °°Àº ±Û²ÃÀÌ »ç¿ëµÉ °Í ÀÔ´Ï´Ù.";
+    TEXT[ korean ] = "í”„ë¦°í„°ì™€ í™”ë©´ì—ëŠ” ê°™ì€ ê¸€ê¼´ì´ ì‚¬ìš©ë  ê²ƒ ì…ë‹ˆë‹¤.";
     TEXT[ turkish ] = "Yazdırma ve ekranda görüntüleme için aynı yazıtipi kullanılacak.";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Se usará la misma fuente en la impresora y en pantalla";
@@ -331,14 +331,14 @@ String STR_SVT_FONTMAP_PRINTERONLY
     TEXT [ dutch ] = "Dit is een printerlettertype. De weergave op het scherm kan iets afwijken." ;
     TEXT [ spanish ] = "Fuente de impresora. La imagen en pantalla podría ser diferente." ;
     TEXT [ english_us ] = "This is a printer font. The screen image may differ." ;
-    TEXT[ chinese_simplified ] = "ÕâÊÇ´òÓ¡×ÖÌå¡£ÆÁÄ»ÏÔÊ¾µÄ×ÖÌåÓëÆä¿ÉÄÜ»áÓĞĞ©Æ«²î¡£";
+    TEXT[ chinese_simplified ] = "è¿™æ˜¯æ‰“å°å­—ä½“ã€‚å±å¹•æ˜¾ç¤ºçš„å­—ä½“ä¸å…¶å¯èƒ½ä¼šæœ‰äº›åå·®ã€‚";
     TEXT[ russian ] = "Øğèôò ïå÷àòè. Íà ıêğàíå ìîæåò íåìíîãî îòëè÷àòüñÿ.";
     TEXT[ polish ] = "Czcionka drukarkowa. Obraz czcionek na ekranie mo¿e siê trochê ró¿niæ.";
-    TEXT[ japanese ] = "ÌßØİÀ—p‚ÌÌ«İÄ‚Å‚·B‰æ–Ê•\\¦‚Æ‚Í­‚µˆÙ‚È‚è‚Ü‚·B";
-    TEXT[ chinese_traditional ] = "¦C¦L¦r«¬¡C¿Ã¹õÅã¥Ü¦r«¬¥i¯à²¤·L¦³¨Ç°¾®t¡C";
+    TEXT[ japanese ] = "ï¾Œï¾Ÿï¾˜ï¾ï¾€ç”¨ã®ï¾Œï½«ï¾ï¾„ã§ã™ã€‚ç”»é¢è¡¨ç¤ºã¨ã¯å°‘ã—ç•°ãªã‚Šã¾ã™ã€‚";
+    TEXT[ chinese_traditional ] = "åˆ—å°å­—å‹ã€‚è¢å¹•é¡¯ç¤ºå­—å‹å¯èƒ½ç•¥å¾®æœ‰äº›åå·®ã€‚";
     TEXT[ arabic ] = "åĞÇ ÎØ ÇáØÇÈÚÉ. ŞÏ íÎÊáİ ÇáãÙåÑ Úáì ÇáÔÇÔÉ ÈÚÖ ÇáÔÆ.";
     TEXT[ greek ] = "ÃñáììáôïóåéñÜ åêôõğùôŞ. Ç åìöÜíéóç ôçò óôçí ïèüíç åßíáé äõíáôüí íá äéáöİñåé.";
-    TEXT[ korean ] = "ÀÌ°ÍÀº ÇÁ¸°ÅÍ ±Û²ÃÀÔ´Ï´Ù. È­¸é ÀÌ¹ÌÁö´Â ÀÏºÎ ´Ù¸¦ ¼ö ÀÖ½À´Ï´Ù.";
+    TEXT[ korean ] = "ì´ê²ƒì€ í”„ë¦°í„° ê¸€ê¼´ì…ë‹ˆë‹¤. í™”ë©´ ì´ë¯¸ì§€ëŠ” ì¼ë¶€ ë‹¤ë¥¼ ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
     TEXT[ turkish ] = "Yazıcı yazıtipi. Ekrandaki görüntü biraz farklı olabilir.";
     TEXT[ catalan ] = "Fuente de impresora. La imagen en pantalla podría ser diferente.";
 };
@@ -358,14 +358,14 @@ String STR_SVT_FONTMAP_SCREENONLY
     TEXT [ dutch ] = "Dit is een schermlettertype. De afdruk kan iets afwijken." ;
     TEXT [ spanish ] = "Fuente de pantalla. La imagen en la impresora podría ser diferente." ;
     TEXT [ english_us ] = "This is a screen font. The printer image may differ." ;
-    TEXT[ chinese_simplified ] = "ÕâÊÇÆÁÄ»×ÖÌå¡£´òÓ¡³öÀ´µÄ×ÖÌåÓëÆä¿ÉÄÜ»áÓĞÒ»Ğ©Æ«²î¡£";
+    TEXT[ chinese_simplified ] = "è¿™æ˜¯å±å¹•å­—ä½“ã€‚æ‰“å°å‡ºæ¥çš„å­—ä½“ä¸å…¶å¯èƒ½ä¼šæœ‰ä¸€äº›åå·®ã€‚";
     TEXT[ russian ] = "Øğèôò ıêğàíà. Â ïå÷àòè ìîãóò áûòü îòêëîíåíèÿ.";
     TEXT[ polish ] = "To jest czcionka ekranowa. Wydruk bêdzie siê trochê ró¿ni³.";
-    TEXT[ japanese ] = "‰æ–Ê—p‚ÌÌ«İÄ‚Å‚·Bˆóü²Ò°¼Ş‚Æ‚Í­‚µˆÙ‚È‚è‚Ü‚·B";
-    TEXT[ chinese_traditional ] = "¿Ã¹õ¦r«¬¡C¦C¦L¥X¥i¯à·|¦³¤@¨Ç°¾®t¡C";
+    TEXT[ japanese ] = "ç”»é¢ç”¨ã®ï¾Œï½«ï¾ï¾„ã§ã™ã€‚å°åˆ·ï½²ï¾’ï½°ï½¼ï¾ã¨ã¯å°‘ã—ç•°ãªã‚Šã¾ã™ã€‚";
+    TEXT[ chinese_traditional ] = "è¢å¹•å­—å‹ã€‚åˆ—å°å‡ºå¯èƒ½æœƒæœ‰ä¸€äº›åå·®ã€‚";
     TEXT[ arabic ] = "åĞÇ ÎØ ÔÇÔÉ. ŞÏ íÎÊáİ ÇáãÙåÑ Úáì ÇáæÑŞ ÇáãØÈæÚ ÈÚÖ ÇáÔÆ.";
     TEXT[ greek ] = "ÃñáììáôïóåéñÜ ïèüíçò. Ç åìöÜíéóç ôçò óôçí åêôığùóç åßíáé äõíáôüí íá äéáöİñåé.";
-    TEXT[ korean ] = "ÀÌ°ÍÀº È­¸é ±Û²Ã ÀÔ´Ï´Ù. ÇÁ¸°ÅÍ ÀÌ¹ÌÁö´Â ÀÏºÎ ´Ù¸¦ ¼ö ÀÖ½À´Ï´Ù.";
+    TEXT[ korean ] = "ì´ê²ƒì€ í™”ë©´ ê¸€ê¼´ ì…ë‹ˆë‹¤. í”„ë¦°í„° ì´ë¯¸ì§€ëŠ” ì¼ë¶€ ë‹¤ë¥¼ ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
     TEXT[ turkish ] = "Ekran yazıtipi. Yazdırma biraz farklı olabilir.";
     TEXT[ catalan ] = "Fuente de pantalla. La imagen en la impresora podría ser diferente.";
 };
@@ -386,10 +386,10 @@ String STR_SVT_FONTMAP_SIZENOTAVAILABLE
     TEXT[ swedish ] = "Den här teckenstorleken är inte installerad. Den tillgängliga storlek som passar bäst används.";
     TEXT[ polish ] = "Dany rozmiar czcionki nie jest zaistalowany. U¿yty zostanie najbardziej pasuj¹cy, ju¿ istniej¹ca rozmiar.";
     TEXT[ portuguese_brazilian ] = "This font size is not installed. The closest available size will be used.";
-    TEXT[ japanese ] = "‚±‚ÌÌ«İÄ»²½Ş‚Í²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBÅ‚à“KØ‚È»²½Ş‚ª‘I‚Î‚ê‚Ü‚·B";
-    TEXT[ korean ] = "ÀÌ ±Û²ÃÀÇ Å©±â´Â ¼³Ä¡µÇÁö ¾Ê¾Ò½À´Ï´Ù. ±âÁ¸ÀÇ °¡Àå ÀûÇÕÇÑ Å©±â°¡ »ç¿ëµË´Ï´Ù.";
-    TEXT[ chinese_simplified ] = "Ã»ÓĞ°²×°ÕâÖÖ×ÖÌå´óĞ¡¡£Ê¹ÓÃµÄÊÇÏÖÓĞµÄ×î½Ó½üµÄ×ÖÌå´óĞ¡¡£";
-    TEXT[ chinese_traditional ] = "¨S¦³¦w¸Ë³o­Ó¦r«¬¡C±Ä¥Î³Ìªñ¦üªº¦r«¬¡C";
+    TEXT[ japanese ] = "ã“ã®ï¾Œï½«ï¾ï¾„ï½»ï½²ï½½ï¾ã¯ï½²ï¾ï½½ï¾„ï½°ï¾™ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚æœ€ã‚‚é©åˆ‡ãªï½»ï½²ï½½ï¾ãŒé¸ã°ã‚Œã¾ã™ã€‚";
+    TEXT[ korean ] = "ì´ ê¸€ê¼´ì˜ í¬ê¸°ëŠ” ì„¤ì¹˜ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤. ê¸°ì¡´ì˜ ê°€ì¥ ì í•©í•œ í¬ê¸°ê°€ ì‚¬ìš©ë©ë‹ˆë‹¤.";
+    TEXT[ chinese_simplified ] = "æ²¡æœ‰å®‰è£…è¿™ç§å­—ä½“å¤§å°ã€‚ä½¿ç”¨çš„æ˜¯ç°æœ‰çš„æœ€æ¥è¿‘çš„å­—ä½“å¤§å°ã€‚";
+    TEXT[ chinese_traditional ] = "æ²’æœ‰å®‰è£é€™å€‹å­—å‹ã€‚æ¡ç”¨æœ€è¿‘ä¼¼çš„å­—å‹ã€‚";
     TEXT[ arabic ] = "ÍÌã ÇáÎØ åĞÇ ÛíÑ ãËÈÊ. Óæİ íÊã ÇÓÊÎÏÇã ÃßËÑ ÇáÃÍÌÇã ÇáãæÌæÏÉ ŞÑÈÇğ áå.";
     TEXT[ turkish ] = "Bu yazıtipi boyu yüklenmedi. Mevcut boylardan en uygun olanı kullanılacak.";
     TEXT[ catalan ] = "Este tamaño de fuente no está instalado. Se usará el tamaño disponible más adecuado.";
@@ -412,10 +412,10 @@ String STR_SVT_FONTMAP_STYLENOTAVAILABLE
     TEXT[ swedish ] = "Det här teckensnittet efterbildas eller närmast motsvarande teckensnitt används.";
     TEXT[ polish ] = "Dany styl czcionki zostanie skopiowany lub zostanie u¿yty najlepiej pasuj¹cy styl.";
     TEXT[ portuguese_brazilian ] = "This font style will be generated or the closest matching style will be used.";
-    TEXT[ japanese ] = "‚±‚ÌÌ«İÄ½À²Ù‚ÍC³‚³‚ê‚é‚©A‚Ü‚½‚ÍÅ‚à“KØ‚È½À²Ù‚ªg—p‚³‚ê‚Ü‚·B";
-    TEXT[ korean ] = "ÀÌ ±Û²ÃÃ¼¿¡ °¡Àå ÀûÇÕÇÑ ±Û²ÃÃ¼°¡ »ç¿ëµË´Ï´Ù.";
-    TEXT[ chinese_simplified ] = "Éú³ÉÕâÖÖ×ÖÌå»òÊ¹ÓÃ×î½Ó½üµÄ×ÖÌå¡£";
-    TEXT[ chinese_traditional ] = "¼Ò¥é³o­Ó¦r«¬©Î±Ä¥Î³Ìªñ¦üªº¦r«¬¡C";
+    TEXT[ japanese ] = "ã“ã®ï¾Œï½«ï¾ï¾„ï½½ï¾€ï½²ï¾™ã¯ä¿®æ­£ã•ã‚Œã‚‹ã‹ã€ã¾ãŸã¯æœ€ã‚‚é©åˆ‡ãªï½½ï¾€ï½²ï¾™ãŒä½¿ç”¨ã•ã‚Œã¾ã™ã€‚";
+    TEXT[ korean ] = "ì´ ê¸€ê¼´ì²´ì— ê°€ì¥ ì í•©í•œ ê¸€ê¼´ì²´ê°€ ì‚¬ìš©ë©ë‹ˆë‹¤.";
+    TEXT[ chinese_simplified ] = "ç”Ÿæˆè¿™ç§å­—ä½“æˆ–ä½¿ç”¨æœ€æ¥è¿‘çš„å­—ä½“ã€‚";
+    TEXT[ chinese_traditional ] = "æ¨¡ä»¿é€™å€‹å­—å‹æˆ–æ¡ç”¨æœ€è¿‘ä¼¼çš„å­—å‹ã€‚";
     TEXT[ arabic ] = "Óæİ íÊã ÊŞáíÏ äãØ ÇáÎØ åĞÇ¡ Ãæ Óæİ íÊã ÇÓÊÎÏÇã ÃŞÑÈ äãØğ áå.";
     TEXT[ turkish ] = "Bu yazıtipi taklit edilecek ya da en uygun olan biçim kullanılacak.";
     TEXT[ language_user1 ] = " ";
@@ -439,15 +439,16 @@ String STR_SVT_FONTMAP_NOTAVAILABLE
     TEXT[ swedish ] = "Det här teckensnittet är inte installerat. Det tillgängliga teckensnitt som passar bäst används.";
     TEXT[ polish ] = "Dana czcionka nie jest zainstalowana.U¿yta zostanie najbardziej pasuj¹ca, ju¿ istniej¹ca czcionka.";
     TEXT[ portuguese_brazilian ] = "This font is not installed. The closest available font will be used.";
-    TEXT[ japanese ] = "‚±‚ÌÌ«İÄ‚Í²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBÅ‚à“KØ‚ÈÌ«İÄ‚ª‘I‚Î‚ê‚Ü‚·B";
-    TEXT[ korean ] = "ÀÌ ±Û²ÃÀº ¼³Ä¡µÇÁö ¾Ê¾Ò½À´Ï´Ù. ±âÁ¸ÀÇ °¡Àå ÀûÇÕÇÑ ±Û²ÃÀÌ »ç¿ëµË´Ï´Ù.";
-    TEXT[ chinese_simplified ] = "Ã»ÓĞ°²×°ÕâÖÖ×ÖÌå¡£Ê¹ÓÃµÄÊÇÏÖÓĞµÄ×î½Ó½üµÄ×ÖÌå¡£";
-    TEXT[ chinese_traditional ] = "¨S¦³¦w¸Ë³o­Ó¦r«¬¡C±Ä¥Î³Ìªñ¦üªº¦r«¬¡C";
+    TEXT[ japanese ] = "ã“ã®ï¾Œï½«ï¾ï¾„ã¯ï½²ï¾ï½½ï¾„ï½°ï¾™ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚æœ€ã‚‚é©åˆ‡ãªï¾Œï½«ï¾ï¾„ãŒé¸ã°ã‚Œã¾ã™ã€‚";
+    TEXT[ korean ] = "ì´ ê¸€ê¼´ì€ ì„¤ì¹˜ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤. ê¸°ì¡´ì˜ ê°€ì¥ ì í•©í•œ ê¸€ê¼´ì´ ì‚¬ìš©ë©ë‹ˆë‹¤.";
+    TEXT[ chinese_simplified ] = "æ²¡æœ‰å®‰è£…è¿™ç§å­—ä½“ã€‚ä½¿ç”¨çš„æ˜¯ç°æœ‰çš„æœ€æ¥è¿‘çš„å­—ä½“ã€‚";
+    TEXT[ chinese_traditional ] = "æ²’æœ‰å®‰è£é€™å€‹å­—å‹ã€‚æ¡ç”¨æœ€è¿‘ä¼¼çš„å­—å‹ã€‚";
     TEXT[ arabic ] = "åĞÇ ÇáÎØ ÛíÑ ãËÈÊ. Óæİ íÊã ÇÓÊÎÏÇã ÃßËÑ ÇáÎØæØ ÇáãæÌæÏÉ ŞÑÈÇğ áå.";
     TEXT[ turkish ] = "Bu yazıtipi yüklenmedi. Mevcut yazıtiplerinden en uygun olanı kullanılacak.";
     TEXT[ catalan ] = "Esta fuente no está instalada. Se usará la fuente existente más adecuada.";
     TEXT[ finnish ] = "Tätä fonttia ei ole asennettu. Lähintä käytettävissä olevaa fonttia käytetään.";
 };
+
 
 
 
