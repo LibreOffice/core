@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAppletImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:47:28 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,23 @@
 #ifndef _SW_APPLET_IMPL_HXX
 #include <SwAppletImpl.hxx>
 #endif
+
+#ifndef _COM_SUN_STAR_EMBED_XCOMPONENTSUPPLIER_HPP_
+#include <com/sun/star/embed/XComponentSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
+
+#include <comphelper/embeddedobjectcontainer.hxx>
+#include <sot/clsids.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <svtools/embedhlp.hxx>
+
+using namespace com::sun::star;
 
 /* Some MIB magic...*/
 
@@ -153,17 +170,10 @@ SwApplet_Impl::SwApplet_Impl( SfxItemPool& rPool, USHORT nWhich1, USHORT nWhich2
 
 void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
                                       BOOL bMayScript, const String& rCodeBase)
-                                      //const String& rAlt )
 {
-    SvStorageRef pStor = new SvStorage( String(), STREAM_STD_READWRITE );
-    xApplet = new SvAppletObject();
-    xApplet->DoInitNew( pStor );
-
-    xApplet->EnableSetModified( FALSE );
-    xApplet->SetClass( rCode );
-    xApplet->SetName( rName );
-    xApplet->SetMayScript( bMayScript );
-    xApplet->SetDocBase( INetURLObject::GetBaseURL() );
+    comphelper::EmbeddedObjectContainer aCnt;
+    ::rtl::OUString aName;
+    xApplet = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_APPLET_CLASSID ).GetByteSequence(), aName );
 
     String sCodeBase;
     if( rCodeBase.Len() )
@@ -189,9 +199,17 @@ void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
         sCodeBase = aTmpURL.GetPartBeforeLastName();
     }
 
-    xApplet->SetCodeBase( sCodeBase );
-
-    //sAlt = rAlt;
+    svt::EmbeddedObjectRef::TryRunningState( xApplet );
+    uno::Reference < beans::XPropertySet > xSet( xApplet->getComponent(), uno::UNO_QUERY );
+    if ( xSet.is() )
+    {
+        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCode"), uno::makeAny( ::rtl::OUString( rCode ) ) );
+        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase"), uno::makeAny( ::rtl::OUString( sCodeBase ) ) );
+        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletName"), uno::makeAny( ::rtl::OUString( rName ) ) );
+        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletIsScript"), uno::makeAny( sal_Bool(bMayScript) ) );
+        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletDocBase"), uno::makeAny( ::rtl::OUString(
+                INetURLObject::GetBaseURL() ) ) );
+    }
 }
 
 #ifdef SOLAR_JAVA
@@ -225,12 +243,18 @@ sal_Bool SwApplet_Impl::CreateApplet()
 
 SwApplet_Impl::~SwApplet_Impl()
 {
-    xApplet.Clear();
 }
 void SwApplet_Impl::FinishApplet()
 {
-    xApplet->SetCommandList( aCommandList );
-    xApplet->EnableSetModified( TRUE );
+    //xApplet->EnableSetModified( TRUE );
+    svt::EmbeddedObjectRef::TryRunningState( xApplet );
+    uno::Reference < beans::XPropertySet > xSet( xApplet->getComponent(), uno::UNO_QUERY );
+    if ( xSet.is() )
+    {
+        uno::Sequence < beans::PropertyValue > aProps;
+        aCommandList.FillSequence( aProps );
+        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands"), uno::makeAny( aProps ) );
+    }
 }
 
 #ifdef SOLAR_JAVA
