@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-22 15:45:18 $
+ *  last change: $Author: ka $ $Date: 2001-07-02 10:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,7 +854,7 @@ const GDIMetaFile* SdrOle2Obj::GetGDIMetaFile() const
             GDIMetaFile* pNewMtf = new GDIMetaFile;
 
             if( aData.GetGDIMetaFile( FORMAT_GDIMETAFILE, *pNewMtf ) )
-                ((SdrOle2Obj*)this)->pMetaFile = pNewMtf;
+                ((SdrOle2Obj*)this)->mpImpl->pMetaFile = pNewMtf;
             else
                 delete pNewMtf;
         }
