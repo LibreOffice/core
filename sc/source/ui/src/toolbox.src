@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:38:25 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #include "sc.hrc" // -> #include <sfx.hrc>
 #include <offmgr/offmenu.hrc>
 #include "tbinsert.hrc" // Sub-IDs
@@ -130,7 +131,7 @@ String SCSTR_QHELP_POSWND
     Text [ portuguese_brazilian ] = "�rea da Planilha" ;
     Text [ portuguese ] = "�rea da folha" ;
     Text [ finnish ] = "Taulukkoalue" ;
-    Text [ danish ] = "Regnearksomr�de" ;
+    Text [ danish ] = "Arkomr�de" ;
     Text [ french ] = "Plage de la feuille" ;
     Text [ swedish ] = "Tabellomr�de" ;
     Text [ dutch ] = "Werkbladbereik" ;
@@ -146,45 +147,14 @@ String SCSTR_QHELP_POSWND
     Text[ korean ] = "시트 영역";
     Text[ turkish ] = "Tablo b�l�m�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "�rea del full";
-    Text[ thai ] = "พื้นที่แผ่นงาน";
-    Text[ czech ] = "Oblast listu";
-    Text[ hebrew ] = "Tabellenbereich";
-    Text[ hindi ] = "शीट् विस्तीर्ण";
-    Text[ slovak ] = "Oblasť listu";
-};
-
-String SCSTR_QHELP_INPUTWND
-{
-    Text = "Eingabezeile" ;
-    Text [ english ] = "Inputline" ;
-    Text [ norwegian ] = "Inputline" ;
-    Text [ italian ] = "Riga di digitazione" ;
-    Text [ portuguese_brazilian ] = "Linha de entrada" ;
-    Text [ portuguese ] = "Linha de entrada" ;
-    Text [ finnish ] = "Sy�tt�rivi" ;
-    Text [ danish ] = "Inputlinje" ;
-    Text [ french ] = "Ligne de saisie" ;
-    Text [ swedish ] = "Inmatningsrad" ;
-    Text [ dutch ] = "Invoerregel" ;
-    Text [ spanish ] = "L�nea de entrada" ;
-    Text [ english_us ] = "Input line" ;
-    Text[ chinese_simplified ] = "输入行";
-    Text[ russian ] = "������ �����";
-    Text[ polish ] = "Wiersz wprowadzania";
-    Text[ japanese ] = "数式入力ボックス";
-    Text[ chinese_traditional ] = "輸入欄";
-    Text[ arabic ] = "��� �������";
-    Text[ greek ] = "������ ���������";
-    Text[ korean ] = "입력줄";
-    Text[ turkish ] = "Giri� sat�r�";
-    Text[ language_user1 ] = " ";
     Text[ catalan ] = "L�nia d'entrada";
     Text[ thai ] = "ป้อนบรรทัด";
     Text[ czech ] = "Vstupní řádka";
     Text[ hebrew ] = "Eingabezeile";
     Text[ hindi ] = "इनपुट् रेखा";
     Text[ slovak ] = "Vstupný riadok";
+    Text[ hungarian ] = "Beviteli sor";
+    Text[ slovenian ] = "Vhodna vrstica";
 };
 
 String SCSTR_QHELP_BTNCALC
@@ -196,7 +166,7 @@ String SCSTR_QHELP_BTNCALC
     Text [ portuguese_brazilian ] = "Assistente: Fun��es" ;
     Text [ portuguese ] = "Fun��o AutoPiloto" ;
     Text [ finnish ] = "Ohjattu toiminto: Funktiot" ;
-    Text [ danish ] = "FunktionsAutoPilot" ;
+    Text [ danish ] = "AutoPilot: Funktioner" ;
     Text [ french ] = "AutoPilote de fonctions" ;
     Text [ swedish ] = "Funktionsautopilot" ;
     Text [ dutch ] = "Functie-AutoPiloot" ;
@@ -218,6 +188,8 @@ String SCSTR_QHELP_BTNCALC
     Text[ hebrew ] = "Funktionsautopilot";
     Text[ hindi ] = "ओटोपैलट्: फ़ंक्शन्स";
     Text[ slovak ] = "Sprievodca: Funkcie";
+    Text[ hungarian ] = "Függvénytündér";
+    Text[ slovenian ] = "Avtopilot: funkcije";
 };
 
 String SCSTR_QHELP_BTNOK
@@ -252,6 +224,8 @@ String SCSTR_QHELP_BTNOK
     Text[ hebrew ] = "‮קבלת שינוים‬";
     Text[ hindi ] = "स्वीकार";
     Text[ slovak ] = "Prijať";
+    Text[ hungarian ] = "Elfogadás";
+    Text[ slovenian ] = "Sprejmi";
 };
 
 String SCSTR_QHELP_BTNCANCEL
@@ -263,7 +237,7 @@ String SCSTR_QHELP_BTNCANCEL
     Text [ portuguese_brazilian ] = "Cancelar" ;
     Text [ portuguese ] = "Cancelar" ;
     Text [ finnish ] = "Peruuta" ;
-    Text [ danish ] = "Forkast" ;
+    Text [ danish ] = "Annuller" ;
     Text [ french ] = "Annuler" ;
     Text [ swedish ] = "Ignorera" ;
     Text [ dutch ] = "Verwerpen" ;
@@ -285,6 +259,8 @@ String SCSTR_QHELP_BTNCANCEL
     Text[ hebrew ] = "‮ביטול‬";
     Text[ hindi ] = "रद्द करो";
     Text[ slovak ] = "Zrušiť";
+    Text[ hungarian ] = "Mégsem";
+    Text[ slovenian ] = "Prekliči";
 };
 
 String SCSTR_QHELP_BTNSUM
@@ -318,6 +294,8 @@ String SCSTR_QHELP_BTNSUM
     Text[ hebrew ] = "‮סכום‬";
     Text[ hindi ] = "कुलजोड़";
     Text[ slovak ] = "Celkom";
+    Text[ hungarian ] = "Összegzés";
+    Text[ slovenian ] = "Vsota";
 };
 
 String SCSTR_QHELP_BTNEQUAL
@@ -351,6 +329,8 @@ String SCSTR_QHELP_BTNEQUAL
     Text[ hebrew ] = "‮פעולה‬";
     Text[ hindi ] = "फ़ंक्शन्";
     Text[ slovak ] = "Funkcia";
+    Text[ hungarian ] = "Függvény";
+    Text[ slovenian ] = "Funkcija";
 };
 
 String RID_OBJECTBAR_FORMAT
@@ -384,6 +364,8 @@ String RID_OBJECTBAR_FORMAT
     Text[ hebrew ] = "Tabellenobjektleiste";
     Text[ hindi ] = "स्प्रेडशीट् वस्तु पट्टी";
     Text[ slovak ] = "Panel nástrojov zošita";
+    Text[ hungarian ] = "Munkafüzet-objektum eszköztár";
+    Text[ slovenian ] = "Predmetna vrstica za preglednico";
 };
 
 ToolBox RID_OBJECTBAR_FORMAT
@@ -1157,7 +1139,7 @@ String RID_OBJECTBAR_PREVIEW
     Text [ portuguese_brazilian ] = "Barra de Objetos de Visualiza��o de P�gina" ;
     Text [ portuguese ] = "Previsualiza��o" ;
     Text [ finnish ] = "Sivun�kym�n muotoilurivi" ;
-    Text [ danish ] = "Sidevisningobjektlinje" ;
+    Text [ danish ] = "Sidevisningsobjektlinje" ;
     Text [ french ] = "Barre d'objets d'aper�u" ;
     Text [ swedish ] = "F�rhandsgranskningobjektlist" ;
     Text [ dutch ] = "Afdrukvoorbeeld" ;
@@ -1179,6 +1161,8 @@ String RID_OBJECTBAR_PREVIEW
     Text[ hebrew ] = "Seitenansichtobjektleiste";
     Text[ hindi ] = "पृष्ठ दृश्य वस्तु पट्टी";
     Text[ slovak ] = "Panel objektového zobrazenia stránky";
+    Text[ hungarian ] = "Oldalnézet eszköztár";
+    Text[ slovenian ] = "Vrstica za pogled strani";
 };
 
 ToolBox RID_OBJECTBAR_PREVIEW
@@ -1280,7 +1264,7 @@ String RID_OBJECTBAR_TOOLS
     Text [ spanish ] = "Barra de herramientas" ;
     Text [ french ] = "Barre d'instruments" ;
     Text [ swedish ] = "Verktygslist" ;
-    Text [ danish ] = "V�rkt�jslinje" ;
+    Text [ danish ] = "Hovedv�rkt�jslinje" ;
     Text [ portuguese ] = "Barra de ferramentas" ;
     Text [ portuguese_brazilian ] = "Barra de Ferramentas Principal" ;
     Text[ chinese_simplified ] = "主工具栏";
@@ -1300,6 +1284,8 @@ String RID_OBJECTBAR_TOOLS
     Text[ hebrew ] = "‮סרגל ראשי‬";
     Text[ hindi ] = "मुख्य औज़ार पट्टी";
     Text[ slovak ] = "Hlavný panel nástrojov";
+    Text[ hungarian ] = "Fő eszköztár";
+    Text[ slovenian ] = "Glavna orodna vrstica";
 };
 
 ToolBox RID_OBJECTBAR_TOOLS
@@ -1508,6 +1494,8 @@ FloatingWindow RID_TBXCTL_INSERT
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ो";
     Text[ slovak ] = "Vložiť";
+    Text[ hungarian ] = "Beszúrás";
+    Text[ slovenian ] = "Vstavi";
 };
 
 FloatingWindow RID_TBXCTL_INSCELLS
@@ -1576,6 +1564,8 @@ FloatingWindow RID_TBXCTL_INSCELLS
     Text[ hebrew ] = "Zellen einfügen";
     Text[ hindi ] = "कोष्ठों को जोड़ो";
     Text[ slovak ] = "Vložiť bunky";
+    Text[ hungarian ] = "Cellák beszúrása";
+    Text[ slovenian ] = "Vstavi celice";
 };
 
 FloatingWindow RID_TBXCTL_INSOBJ
@@ -1657,6 +1647,8 @@ FloatingWindow RID_TBXCTL_INSOBJ
     Text[ hebrew ] = "‮הוספת אוביקט‬";
     Text[ hindi ] = "वस्तु जोड़ो";
     Text[ slovak ] = "Vložiť objekt";
+    Text[ hungarian ] = "Objektum beszúrása";
+    Text[ slovenian ] = "Vstavi predmet";
 };
 
  // Image-Liste fuer ToolBoxen -----------------------------------------------
@@ -1934,6 +1926,10 @@ ImageList RID_DEFAULTIMAGELIST_SC
         File [ arabic ] = "sc_out96.bmp" ;
         File [ czech ] = "sc_out42.bmp" ;
         File [ slovak ] = "sc_out43.bmp" ;
+        File [ hungarian ] = "sc_out36.bmp" ;
+        File [ slovenian ] = "sc_out50.bmp" ;
+        File [ catalan ] = "sc_out37.bmp" ;
+
     };
     MaskColor = STD_MASKCOLOR ;
     DEFAULT_IDLIST
@@ -1966,6 +1962,10 @@ ImageList RID_DEFAULTIMAGELIST_LC
         File [ arabic ] = "lc_out96.bmp" ;
         File [ czech ] = "lc_out42.bmp" ;
         File [ slovak ] = "lc_out43.bmp" ;
+        File [ hungarian ] = "lc_out36.bmp" ;
+        File [ slovenian ] = "lc_out50.bmp" ;
+        File [ catalan ] = "lc_out37.bmp" ;
+
     };
     MaskColor = STD_MASKCOLOR ;
     DEFAULT_IDLIST
@@ -1998,6 +1998,10 @@ ImageList RID_DEFAULTIMAGELIST_SCH
         File [ arabic ] = "sch_out96.bmp" ;
         File [ czech ] = "sch_out42.bmp" ;
         File [ slovak ] = "sch_out43.bmp" ;
+        File [ hungarian ] = "sch_out36.bmp" ;
+        File [ slovenian ] = "sch_out50.bmp" ;
+        File [ catalan ] = "sch_out37.bmp" ;
+
     };
     MaskColor = SC_HC_MASKCOLOR ;
     DEFAULT_IDLIST
@@ -2030,6 +2034,10 @@ ImageList RID_DEFAULTIMAGELIST_LCH
         File [ arabic ] = "lch_out96.bmp" ;
         File [ czech ] = "lch_out42.bmp" ;
         File [ slovak ] = "lch_out43.bmp" ;
+        File [ hungarian ] = "lch_out36.bmp" ;
+        File [ slovenian ] = "lch_out50.bmp" ;
+        File [ catalan ] = "lch_out37.bmp" ;
+
     };
     MaskColor = SC_HC_MASKCOLOR ;
     DEFAULT_IDLIST
@@ -2072,7 +2080,7 @@ String RID_OBJECTBAR_APP
     Text [ spanish ] = "Barra de funciones (modo vista)" ;
     Text [ french ] = "Barre de fonctions (mode visualisation)" ;
     Text [ swedish ] = "Funktionslist (visningsl�ge)" ;
-    Text [ danish ] = "Funktionslinje" ;
+    Text [ danish ] = "Funktionslinje (visningstilstand)" ;
     Text [ portuguese_brazilian ] = "Barra de Fun��es" ;
     Text [ portuguese ] = "Barra de fun��es" ;
     Text[ chinese_simplified ] = "功能栏(视图模式)";
@@ -2094,6 +2102,8 @@ String RID_OBJECTBAR_APP
     Text[ hebrew ] = "‮סרגל פעולות נפוצות‬";
     Text[ hindi ] = "फ़ंक्शन् पट्टी";
     Text[ slovak ] = "Panel funkcií (mód náhľadu)";
+    Text[ hungarian ] = "Függvény eszköztár (nézeti mód)";
+    Text[ slovenian ] = "Funkcijska vrstica (ogledovalni način)";
 };
 
 ToolBox RID_OBJECTBAR_APP
@@ -2135,6 +2145,7 @@ ToolBox RID_OBJECTBAR_APP
         ToolBoxItem
         {
             Identifier = SID_DIRECTEXPORTDOCASPDF ;
+
         };
         ToolBoxItem
         {
@@ -2171,4 +2182,3 @@ ToolBox RID_OBJECTBAR_APP
     };
     Scroll = TRUE ;
 };
-
