@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdlFactory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-20 06:14:52 $
+ *  last change: $Author: dr $ $Date: 2000-10-27 06:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _XMLOFF_PAGEMASTERPROPHDLFACTORY_HXX
 
 #ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
-#include <xmloff/prhdlfac.hxx>
+#include "prhdlfac.hxx"
 #endif
 
 

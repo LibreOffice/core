@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageHeaderFooterContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
+ *  last change: $Author: dr $ $Date: 2000-10-27 06:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define _XMLOFF_PAGEHEADERFOOTERCONTEXT_HXX
 
 #ifndef _XMLOFF_XMLIMP_HXX
-#include <xmloff/xmlimp.hxx>
+#include "xmlimp.hxx"
 #endif
 
 class PageHeaderFooterContext : public SvXMLImportContext
