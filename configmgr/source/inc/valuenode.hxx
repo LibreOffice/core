@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: lla $ $Date: 2001-03-23 09:37:42 $
+ *  last change: $Author: jb $ $Date: 2001-04-05 14:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@ namespace configmgr
     class ISubtree;
     class ValueNode;
 
+    // helper (tag) class
+    namespace argument { struct NoChildCopy {}; }
     //==========================================================================
     //= Visitors
     //==========================================================================
@@ -270,6 +272,10 @@ namespace configmgr
         void init();
         void check_init();
     };
+    //==========================================================================
+
+    extern bool isLocalizedValueSet(ISubtree const& _aSubtree);
+
     //==========================================================================
     //= inlines
     //==========================================================================

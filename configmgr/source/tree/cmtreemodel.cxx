@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:26:09 $
+ *  last change: $Author: jb $ $Date: 2001-04-05 14:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <osl/diagnose.h>
 #endif
 #include "configexcept.hxx"
+#include "strdecl.hxx"
 
 #include <algorithm>
 
@@ -74,6 +75,26 @@
 namespace configmgr
 {
 //==========================================================================
+
+bool isLocalizedValueSet(ISubtree const& _aSubtree)
+{
+    if ( !_aSubtree.isSetNode())    return false;
+    if ( !_aSubtree.isLocalized())  return false;
+    if ( !_aSubtree.getElementTemplateModule().equals(TEMPLATE_MODULE_LOCALIZED_VALUE) )    return false;
+    return true;
+}
+// -----------------------------------------------------------------------------
+
+bool isLocalizedValueSet(SubtreeChange const& _aSubtree)
+{
+    if ( !_aSubtree.isSetNodeChange())  return false;
+    if ( !_aSubtree.isLocalized())  return false;
+    if ( !_aSubtree.getElementTemplateModule().equals(TEMPLATE_MODULE_LOCALIZED_VALUE) )    return false;
+    return true;
+}
+
+//==========================================================================
+// -----------------------------------------------------------------------------
 //= TreeChangeList
 //==========================================================================
 OUString TreeChangeList::getModuleName() const

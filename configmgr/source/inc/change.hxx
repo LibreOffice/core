@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-20 08:01:46 $
+ *  last change: $Author: jb $ $Date: 2001-04-05 14:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,8 +314,6 @@ namespace configmgr
         RTTI(RemoveNode, Change);
     };
 
-    namespace argument { struct NoChildCopy {}; }
-
     //==========================================================================
     //= SubtreeChange
     //==========================================================================
@@ -501,6 +499,8 @@ namespace configmgr
     };
 
 ////////////////////////////////////////////////////////////////////////////////
+    //==========================================================================
+    extern bool isLocalizedValueSet(SubtreeChange const& _aSubtree);
 
     //==========================================================================
     //= inlines
