@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:17:37 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,26 +162,18 @@
 
 using namespace com::sun::star;
 
-extern const sal_Char* pVBAStorageName;
-extern const sal_Char* pVBASubStorageName;
-
-
 
 #define INVALID_POS     0xFFFFFFFF
 
 
 
 
-ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, XclBiff eBiff, ScDocument* pDoc, const String& rDocUrl, SvStorage* pPivotCache ) :
-    ImportExcel( rStream, eBiff, pDoc, rDocUrl )
+ImportExcel8::ImportExcel8( SfxMedium& rMedium, SvStream& rStream, XclBiff eBiff, ScDocument* pDoc ) :
+    ImportExcel( rMedium, rStream, eBiff, pDoc )
 {
     delete pFormConv;
 
     pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc8( pExcRoot, aIn );
-
-    pExcRoot->pPivotCacheStorage = pPivotCache;
-
-    pExcRoot->pRootStorage = pStorage;
 
     bHasBasic = FALSE;
 }
@@ -562,14 +554,13 @@ void ImportExcel8::PostDocLoad( void )
         {
             if( pFiltOpt->IsLoadExcelBasicCode() || pFiltOpt->IsLoadExcelBasicStorage() )
             {
-                DBG_ASSERT( pExcRoot->pRootStorage, "-ImportExcel8::PostDocLoad(): no storage, no cookies!" );
+                DBG_ASSERT( GetRootStorage(), "-ImportExcel8::PostDocLoad(): no storage, no cookies!" );
 
-                SvxImportMSVBasic   aBasicImport( *pShell, *pExcRoot->pRootStorage,
+                SvxImportMSVBasic   aBasicImport( *pShell, *GetRootStorage(),
                                                     pFiltOpt->IsLoadExcelBasicCode(),
                                                     pFiltOpt->IsLoadExcelBasicStorage() );
 
-                aBasicImport.Import( String::CreateFromAscii( pVBAStorageName ),
-                                     String::CreateFromAscii( pVBASubStorageName ) );
+                aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA );
             }
         }
     }
@@ -581,7 +572,7 @@ void ImportExcel8::PostDocLoad( void )
         SfxDocumentInfo     aNewDocInfo;
         SfxDocumentInfo&    rOldDocInfo = pShell->GetDocInfo();
 
-        aNewDocInfo.LoadPropertySet( pExcRoot->pRootStorage );
+        aNewDocInfo.LoadPropertySet( GetRootStorage() );
 
         rOldDocInfo = aNewDocInfo;
         pShell->Broadcast( SfxDocumentInfoHint( &rOldDocInfo ) );
