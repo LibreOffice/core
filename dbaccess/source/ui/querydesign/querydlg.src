@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:09:09 $
+ *  last change: $Author: rt $ $Date: 2001-06-13 22:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ chinese_traditional ] = "§t¦³'%1'¤¤ªΊ©Ò¦³Έκ®Ζ¶µ¥Ψ©M'%2'¤¤¨β­Σªν®ζªΊ³sµ²Δζ¦μ¬Ϋ¦PªΊΈκ®Ζ¶µ¥Ψ΅C";
     Text[ dutch ] = "Bevat ALLE records uit '%1' en alleen de records uit '%2' waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
     Text[ chinese_simplified ] = "Ί¬ΣΠ'%1'ΦΠµΔΛωΣΠΚύΎέΜυΔΏΊΝ'%2'ΦΠΑ½Έφ±νΈρÒύΣΓΧΦ¶ΞΟΰΝ¬µΔΚύΎέΜυΔΏ΅£";
-    Text[ greek ] = "Περιέχει ΟΛΕΣ τις εγγραφές του πίνακα '%1' και τις εγγραφές του πίνακα '%2' στις οποίες ταυτίζονται τα περιεχόμενα των συνδεδεμένων πεδίων των";
+    Text[ greek ] = "Περιέχει ΟΛΕΣ τις εγγραφές του πίνακα '%1' και τις εγγραφές του πίνακα '%2' στις οποίες ταυτίζονται τα περιεχόμενα των συνδεδεμένων πεδίων των ";
     Text[ korean ] = "ΕΧΐΜΊν'%1'Ώ΅΄Β Έπµη ·ΉΔΪµε, ΕΧΐΜΊν '%2'Ώ΅΄Β µΞ ΕΧΐΜΊνΐΗ ΈµΕ©µΘ ΗΚµε ³»ΏλΐΜ °°ΐΊ ·ΉΔΪµεΈΈΐΜ ΖχΗΤµΛ΄Ο΄Ω .";
     Text[ arabic ] = "νΝΚζν Ϊαμ ία ΣΜαΗΚ '%1'΅ ζΣΜαΗΚ '%2' ΗαΚν ΚΚΨΗΘή ένεΗ γΝΚζνΗΚ ΗαΝήζα ΗαγΡΚΘΨΙ έν ίαΗ ΗαΜΟζανδ έήΨ.";
     Text[ turkish ] = "'%1' tablosundaki kayύtlarύn TAMAMINI ve '%2' tablosundaki kayύtlardan yalnύzca her iki tablodaki iliώkili alan iηerikleri aynύ olan kayύtlarύ iηerir.";
@@ -374,5 +374,6 @@ String STR_QUERY_FULL_JOIN
     Text[ catalan ] = "Contiene TODOS los registros de datos de '%1' y de '%2'";
     Text[ finnish ] = "Beinhaltet ALLE Datensδtze aus '%1' und aus '%2'.";
 };
+
 
 
