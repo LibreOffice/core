@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-27 14:18:19 $
+#   last change: $Author: hr $ $Date: 2003-08-07 15:09:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,11 +88,11 @@ SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
 .ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
+# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
-DEF1EXPORTFILE= export.exp
-
+# DEF1EXPORTFILE= export.exp
+SHL1VERSIONMAP = export.map
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
