@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2002-10-25 10:07:01 $
+ *  last change: $Author: os $ $Date: 2002-12-10 14:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2977,13 +2977,20 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
 
     // textflow
     SfxItemState eState;
-    if( DLG_FRM_GRF != nDlgType && DLG_FRM_OLE != nDlgType &&
+    if( (!bHtmlMode || (0 != (nHtmlMode&HTMLMODE_SOME_STYLES)))
+            && DLG_FRM_GRF != nDlgType && DLG_FRM_OLE != nDlgType &&
         SFX_ITEM_UNKNOWN != ( eState = rSet.GetItemState(
                                         RES_FRAMEDIR, TRUE )) )
     {
         aTextFlowFT.Show();
         aTextFlowLB.Show();
 
+        //vertical text flow is not possible in HTML
+        if(bHtmlMode)
+        {
+            ULONG nData = FRMDIR_VERT_TOP_RIGHT;
+            aTextFlowLB.RemoveEntry(aTextFlowLB.GetEntryPos((void*)nData));
+        }
         sal_uInt16 nPos, nVal = ((SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR)).GetValue();
         for( nPos = aTextFlowLB.GetEntryCount(); nPos; )
             if( (sal_uInt16)(long)aTextFlowLB.GetEntryData( --nPos ) == nVal )
