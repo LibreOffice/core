@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DefaultProvider.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:47:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,14 +112,14 @@ published service DefaultProvider
 
     /** Enable setting/getting locale for Provider
 
-        @since OOo 2.0
+        @since OOo 2.0.0
      */
 
     [optional] interface com::sun::star::lang::XLocalizable;
 
     /** Property to enable/disable asynchronous write-back from in-memory cache to backend(s)
 
-        @since OOo 2.0
+        @since OOo 2.0.0
      */
 
     [optional,property] boolean EnableAsync;
