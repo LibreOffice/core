@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:58:20 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Size = MAP_APPFONT ( GB_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Systemeinstellungen in Kontrastdarstellung verwenden" ;
         Text [ English ] = "Use system settings in high contrast appearance" ;
-        Text[ english_us ] = "Use settings for high contrast appearance";
+        Text[ english_us ] = "Use system settings in high contrast appearance";
         Text[ portuguese ] = "Settings for high contrast appearance";
         Text[ russian ] = "Settings for high contrast appearance";
         Text[ greek ] = "Settings for high contrast appearance";
@@ -89,9 +89,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ swedish ] = "Anv�nd inst�llningar f�r h�gkontrastvisning";
         Text[ polish ] = "Settings for high contrast appearance";
         Text[ japanese ] = "ハイコントラスト設定の使用";
-        Text[ korean ] = "고대비 디스플레이 설정 사용";
+        Text[ korean ] = "운영 체제 고대비 디스플레이로 설정하여 사용";
         Text[ chinese_simplified ] = "使用高对比度的设定";
-        Text[ chinese_traditional ] = "使用高對比度的設定";
+        Text[ chinese_traditional ] = "使用操作系統的高對比度的設定";
         Text[ turkish ] = "Settings for high contrast appearance";
         Text[ arabic ] = "Settings for high contrast appearance";
     };
