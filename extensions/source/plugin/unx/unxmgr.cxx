@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unxmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-27 19:44:14 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ Sequence<PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
                         && strncmp( ((struct dirent*)aBuffer)->d_name, "libflashplayer.so", 17 )
                         )
                     {
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "Trying plugin %s ... ", aFileName.GetBuffer() );
 #endif
                         int nStructs;
@@ -185,13 +185,13 @@ Sequence<PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
                             CheckPlugin( aFileName, nStructs );
                         if( pStructs )
                         {
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
                             fprintf( stderr, "success: %d\n", nStructs );
 #endif
                             for( int i = 0; i < nStructs; i++ )
                             {
                                 aPlugins.push_back( pStructs[i] );
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
                                 fprintf( stderr, "Mimetype: %s\nExtension: %s\n"
                                          "Description: %s\n",
                                          ::rtl::OUStringToOString( pStructs[i]->Mimetype, aEncoding ).getStr(),
@@ -202,7 +202,7 @@ Sequence<PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
                             }
                             delete pStructs;
                         }
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
                         else
                             fprintf(stderr, "failed\n" );
 #endif
@@ -213,7 +213,7 @@ Sequence<PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
             }
         }
         aDescriptions = Sequence<PluginDescription>( aPlugins.size() );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "found %d plugins\n", aPlugins.size() );
 #endif
         list<PluginDescription*>::iterator iter;
