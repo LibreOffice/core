@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propres.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:00:55 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 15:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,13 +76,13 @@ String RID_STR_STANDARD
     Text [ spanish ] = "Predeterminado" ;
     Text [ french ] = "Par défaut" ;
     Text [ dutch ] = "Standaard" ;
-    Text[ chinese_simplified ] = "±ê×¼";
+    Text[ chinese_simplified ] = "æ ‡å‡†";
     Text[ russian ] = "Ñòàíäàğò";
     Text[ polish ] = "Domyœlnie";
-    Text[ japanese ] = "•W€";
-    Text[ chinese_traditional ] = "¼Ğ·Ç";
+    Text[ japanese ] = "æ¨™æº–";
+    Text[ chinese_traditional ] = "æ¨™æº–";
     Text[ greek ] = "ĞñïåğéëïãŞ";
-    Text[ korean ] = "Ç¥ÁØ";
+    Text[ korean ] = "í‘œì¤€";
     Text[ arabic ] = "ŞíÇÓí";
     Text[ turkish ] = "Standart";
     Text[ language_user1 ] = " ";
@@ -102,13 +102,13 @@ String RID_STR_PROPPAGE_DEFAULT
     Text [ spanish ] = "General" ;
     Text [ french ] = "Général" ;
     Text [ dutch ] = "Algemeen" ;
-    Text[ chinese_simplified ] = "³£¹æ";
+    Text[ chinese_simplified ] = "å¸¸è§„";
     Text[ russian ] = "Îáùèå";
     Text[ polish ] = "Ogólne";
-    Text[ japanese ] = "‘S”Ê";
-    Text[ chinese_traditional ] = "¤@¯ë";
+    Text[ japanese ] = "å…¨èˆ¬";
+    Text[ chinese_traditional ] = "ä¸€èˆ¬";
     Text[ greek ] = "ÃåíéêÜ";
-    Text[ korean ] = "ÀÏ¹İ";
+    Text[ korean ] = "ì¼ë°˜";
     Text[ arabic ] = "ÚÇã";
     Text[ turkish ] = "Genel";
     Text[ language_user1 ] = " ";
@@ -128,13 +128,13 @@ String RID_STR_PROPPAGE_DATA
     Text [ spanish ] = "Datos" ;
     Text [ french ] = "Données" ;
     Text [ dutch ] = "Gegevens" ;
-    Text[ chinese_simplified ] = "Êı¾İ";
+    Text[ chinese_simplified ] = "æ•°æ®";
     Text[ russian ] = "Äàííûå";
     Text[ polish ] = "Dane";
-    Text[ japanese ] = "”z—ñ";
-    Text[ chinese_traditional ] = "¸ê®Æ";
+    Text[ japanese ] = "é…åˆ—";
+    Text[ chinese_traditional ] = "è³‡æ–™";
     Text[ greek ] = "Äåäïìİíá";
-    Text[ korean ] = "µ¥ÀÌÅÍ";
+    Text[ korean ] = "ë°ì´í„°";
     Text[ arabic ] = "ÈíÇäÇÊ";
     Text[ turkish ] = "Veriler";
     Text[ language_user1 ] = " ";
@@ -154,13 +154,13 @@ String RID_STR_BOOL
     Text [ spanish ] = "No;Sí" ;
     Text [ french ] = "Non;Oui" ;
     Text [ dutch ] = "Nee;Ja" ;
-    Text[ chinese_simplified ] = "·ñ;ÊÇ";
+    Text[ chinese_simplified ] = "å¦;æ˜¯";
     Text[ russian ] = "Íåò;Äà";
     Text[ polish ] = "Nie;Tak";
-    Text[ japanese ] = "‚¢‚¢‚¦;‚Í‚¢";
-    Text[ chinese_traditional ] = "§_;¬O";
+    Text[ japanese ] = "ã„ã„ãˆ;ã¯ã„";
+    Text[ chinese_traditional ] = "å¦;æ˜¯";
     Text[ greek ] = "¼÷é-Íáé";
-    Text[ korean ] = "¾Æ´Ï¿À;¿¹";
+    Text[ korean ] = "ì•„ë‹ˆì˜¤;ì˜ˆ";
     Text[ arabic ] = "áÇ;äÚã";
     Text[ turkish ] = "Hayır;Evet";
     Text[ language_user1 ] = " ";
@@ -171,6 +171,9 @@ String RID_STR_BOOL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/07/13 21:00:55  kz
+ *  Merge SRC638: 13.07.01 - 22:59:52
+ *
  *  Revision 1.10  2001/07/03 22:26:20  kz
  *  Merge SRC633: 04.07.01 - 00:25:00
  *
@@ -204,6 +207,7 @@ String RID_STR_BOOL
  *
  *  Revision 1.0 08.01.01 13:04:05  fs
  ************************************************************************/
+
 
 
 
