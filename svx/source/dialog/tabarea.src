@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:37:57 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ czech ] = "Průhledný režim";
         Text[ hebrew ] = "Transparenzmodus";
         Text[ hindi ] = "पारदर्शकता प्रकार";
+        Text[ slovak ] = "Priehľadný režim";
     };
     RadioButton RBT_TRANS_OFF
     {
@@ -140,6 +141,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ czech ] = "Žádná průhlednost";
         Text[ hebrew ] = "~Keine Transparenz";
         Text[ hindi ] = "कोई पारदर्शकता ~नहीं";
+        Text[ slovak ] = "Žiad~na priehľadnosť";
     };
     RadioButton RBT_TRANS_LINEAR
     {
@@ -171,6 +173,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ czech ] = "Průhlednost";
         Text[ hebrew ] = "~Transparenz";
         Text[ hindi ] = "~पारदर्शकता";
+        Text[ slovak ] = "~Priehľadnosť";
     };
     MetricField MTR_TRANSPARENT
     {
@@ -217,6 +220,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ czech ] = "Přechod";
         Text[ hebrew ] = "~Verlauf";
         Text[ hindi ] = "ग्रेडिऐन्ट्";
+        Text[ slovak ] = "Prechod";
     };
     FixedText FT_TRGR_TYPE
     {
@@ -249,6 +253,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "Ty~p";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "Ty~p";
     };
     ListBox LB_TRGR_GRADIENT_TYPES
     {
@@ -500,6 +505,15 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         < "चतुर्वर्गीय" ; Default ; > ;
         < "समचतुर्भुज" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Lineárny" ; Default ; > ;
+        < "Osový" ; Default ; > ;
+        < "Radiálny" ; Default ; > ;
+        < "Oválny" ; Default ; > ;
+        < "Kvadratický" ; Default ; > ;
+        < "Štvorec" ; Default ; > ;
+    };
     };
     FixedText FT_TRGR_CENTER_X
     {
@@ -532,6 +546,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ czech ] = "Střed X";
         Text[ hebrew ] = "Zentrum ~X";
         Text[ hindi ] = "केन्द्र ~X";
+        Text[ slovak ] = "Stred ~X";
     };
     MetricField MTR_TRGR_CENTER_X
     {
@@ -579,6 +594,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ czech ] = "Střed Y";
         Text[ hebrew ] = "Zentrum ~Y";
         Text[ hindi ] = "केन्द्र ~Y";
+        Text[ slovak ] = "Stred ~Y";
     };
     MetricField MTR_TRGR_CENTER_Y
     {
@@ -626,6 +642,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ czech ] = "Úhel";
         Text[ hebrew ] = "~Winkel";
         Text[ hindi ] = "~कोण";
+        Text[ slovak ] = "~Uhol";
     };
     MetricField MTR_TRGR_ANGLE
     {
@@ -665,6 +682,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         CustomUnitText[ czech ] = " stupňů";
         CustomUnitText[ hebrew ] = " ‮מעלות‬";
         CustomUnitText[ hindi ] = " डिग्रियाँ";
+        CustomUnitText[ slovak ] = " stupňov";
     };
     FixedText FT_TRGR_BORDER
     {
@@ -696,6 +714,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ czech ] = "Okraj";
         Text[ hebrew ] = "~Rand";
         Text[ hindi ] = "कि~नारा";
+        Text[ slovak ] = "~Okraj";
     };
     MetricField MTR_TRGR_BORDER
     {
@@ -742,6 +761,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ czech ] = "Počáteční hodnota";
         Text[ hebrew ] = "~Startwert";
         Text[ hindi ] = "प्रा~रंभ मूल्य";
+        Text[ slovak ] = "~Počiatočná hodnota";
     };
     MetricField MTR_TRGR_START_VALUE
     {
@@ -788,6 +808,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ czech ] = "Konečná hodnota";
         Text[ hebrew ] = "~Endwert";
         Text[ hindi ] = "~अंतिम मूल्य";
+        Text[ slovak ] = "~Konečná hodnota";
     };
     MetricField MTR_TRGR_END_VALUE
     {
@@ -840,6 +861,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     Text[ czech ] = "Průhlednost";
     Text[ hebrew ] = "Transparenz";
     Text[ hindi ] = "पारदर्शकता";
+    Text[ slovak ] = "Priehľadnosť";
 };
 
  // RID_SVXPAGE_AREA ------------------------------------------------------
@@ -903,6 +925,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Vyplnění";
         Text[ hebrew ] = "Füllung";
         Text[ hindi ] = "भरो";
+        Text[ slovak ] = "Vyplnenie";
     };
     RadioButton RBT_FILL_OFF
     {
@@ -934,6 +957,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Žádné";
         Text[ hebrew ] = "‮ללא‬";
         Text[ hindi ] = "कोई नहीं";
+        Text[ slovak ] = "Žiadne";
     };
     RadioButton RBT_COLOR
     {
@@ -966,6 +990,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Barva";
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "रंग";
+        Text[ slovak ] = "Farba";
     };
     RadioButton RBT_GRADIENT
     {
@@ -998,6 +1023,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Přechod";
         Text[ hebrew ] = "Farb~verlauf";
         Text[ hindi ] = "ग्रेडिऐन्ट्";
+        Text[ slovak ] = "Prechod";
     };
     RadioButton RBT_HATCH
     {
@@ -1029,6 +1055,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Šrafování";
         Text[ hebrew ] = "Schraff~ur";
         Text[ hindi ] = "हाचिंग";
+        Text[ slovak ] = "Šrafovanie";
     };
     RadioButton RBT_BITMAP
     {
@@ -1042,7 +1069,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ greek ] = "~Bitmap";
         Text[ dutch ] = "~Bitmap";
         Text[ french ] = "Bitmap";
-        Text[ spanish ] = "Bitmap";
+        Text[ spanish ] = "Mapa de bits";
         Text[ finnish ] = "Bittikartta";
         Text[ italian ] = "Bitmap";
         Text[ danish ] = "Bit~map";
@@ -1061,6 +1088,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Bitová mapa";
         Text[ hebrew ] = "~Bitmap";
         Text[ hindi ] = "बिटमॉप्";
+        Text[ slovak ] = "Bitová mapa";
     };
     ListBox LB_COLOR
     {
@@ -1140,6 +1168,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Přírůstky";
         Text[ hebrew ] = "Schrittweite";
         Text[ hindi ] = "बढ़ती";
+        Text[ slovak ] = "Prírastky";
     };
     TriStateBox TSB_STEPCOUNT
     {
@@ -1173,6 +1202,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Automaticky";
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "स्वचालि~त";
+        Text[ slovak ] = "A~utomaticky";
     };
     NumericField NUM_FLD_STEPCOUNT
     {
@@ -1203,7 +1233,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ russian ] = "���� ����";
         Text[ greek ] = "������� ������";
         Text[ dutch ] = "A~chtergrondkleur";
-        Text[ french ] = "Arri�re plan";
+        Text[ french ] = "Arri�re-plan";
         Text[ spanish ] = "Color de ~fondo";
         Text[ italian ] = "Colore di s~fondo";
         Text[ danish ] = "Baggr~undsfarve";
@@ -1223,6 +1253,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Barva pozadí";
         Text[ hebrew ] = "‮צבע רקע‬";
         Text[ hindi ] = "पृष्ठ~भाग रंग";
+        Text[ slovak ] = "Farba ~pozadia";
     };
     ListBox LB_HATCHBCKGRDCOLOR
     {
@@ -1267,6 +1298,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Velikost";
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "परिमाण";
+        Text[ slovak ] = "Veľkosť";
     };
     TriStateBox TSB_ORIGINAL
     {
@@ -1300,6 +1332,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Původní";
         Text[ hebrew ] = "~Original";
         Text[ hindi ] = "~यथार्थ";
+        Text[ slovak ] = "~Pôvodné";
     };
     TriStateBox TSB_SCALE
     {
@@ -1333,6 +1366,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Relativní";
         Text[ hebrew ] = "Re~lativ";
         Text[ hindi ] = "सं~बन्धित";
+        Text[ slovak ] = "Re~latívne";
     };
     FixedText FT_X_SIZE
     {
@@ -1365,6 +1399,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौ~ड़ाई";
+        Text[ slovak ] = "Ší~rka";
     };
     MetricField MTR_FLD_X_SIZE
     {
@@ -1415,6 +1450,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँ~चाई";
+        Text[ slovak ] = "~Výška";
     };
     MetricField MTR_FLD_Y_SIZE
     {
@@ -1466,6 +1502,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
+        Text[ slovak ] = "Umiestnenie";
     };
 
     Control CTL_POSITION
@@ -1506,6 +1543,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Odchylka X";
         Text[ hebrew ] = "~X-Offset";
         Text[ hindi ] = "~X ऑफसेट्ट";
+        Text[ slovak ] = "Odchýlka ~X";
     };
     FixedText FT_Y_OFFSET
     {
@@ -1538,6 +1576,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Odchylka Y";
         Text[ hebrew ] = "~Y-Offset";
         Text[ hindi ] = "~Y ऑफसेट्ट";
+        Text[ slovak ] = "Odchýlka ~Y";
     };
     MetricField MTR_FLD_X_OFFSET
     {
@@ -1601,6 +1640,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Dlaždice";
         Text[ hebrew ] = "Ka~cheln";
         Text[ hindi ] = "~टइल";
+        Text[ slovak ] = "~Dlaždica";
     };
     TriStateBox TSB_STRETCH
     {
@@ -1634,6 +1674,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Automatická úprava";
         Text[ hebrew ] = "A~npassen";
         Text[ hindi ] = "स्वचालित ~योग्य";
+        Text[ slovak ] = "A~utomatická úprava";
     };
     FixedLine FL_OFFSET
     {
@@ -1666,6 +1707,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Odchylka";
         Text[ hebrew ] = "Verschiebung";
         Text[ hindi ] = "ऑफसेट्ट";
+        Text[ slovak ] = "Odchýlka";
     };
     RadioButton RBT_ROW
     {
@@ -1698,6 +1740,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Řádek";
         Text[ hebrew ] = "~Zeile";
         Text[ hindi ] = "पं~क्ति";
+        Text[ slovak ] = "~Riadok";
     };
     RadioButton RBT_COLUMN
     {
@@ -1730,6 +1773,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ czech ] = "Sloupec";
         Text[ hebrew ] = "S~palte";
         Text[ hindi ] = "स्तं~भ";
+        Text[ slovak ] = "~Stĺpec";
     };
     MetricField MTR_FLD_OFFSET
     {
@@ -1750,6 +1794,7 @@ TabPage RID_SVXPAGE_AREA
     Text[ czech ] = "Oblast";
     Text[ hebrew ] = "Fläche";
     Text[ hindi ] = "विस्तीर्ण";
+    Text[ slovak ] = "Oblasť";
 };
  // RID_SVXPAGE_SHADOW ------------------------------------------------------
 TabPage RID_SVXPAGE_SHADOW
@@ -1810,6 +1855,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ czech ] = "Vlastnosti";
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "विशेषतायें";
+        Text[ slovak ] = "Vlastnosti";
     };
     TriStateBox TSB_SHOW_SHADOW
     {
@@ -1843,6 +1889,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ czech ] = "Použít stín";
         Text[ hebrew ] = "~Schatten anwenden";
         Text[ hindi ] = "~छाया का उपयोग करो";
+        Text[ slovak ] = "~Použiť tieň";
     };
     FixedText FT_POSITION
     {
@@ -1875,6 +1922,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "~स्थान";
+        Text[ slovak ] = "~Umiestnenie";
     };
     Control CTL_POSITION
     {
@@ -1915,6 +1963,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ czech ] = "Vzdálenost";
         Text[ hebrew ] = "~Distanz";
         Text[ hindi ] = "~दूरी";
+        Text[ slovak ] = "~Vzdialenosť";
     };
     MetricField MTR_FLD_DISTANCE
     {
@@ -1974,6 +2023,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ czech ] = "Barva";
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "~रंग";
+        Text[ slovak ] = "~Farba";
     };
     FixedText FT_TRANSPARENT
     {
@@ -2006,6 +2056,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ czech ] = "Průhlednost";
         Text[ hebrew ] = "~Transparenz";
         Text[ hindi ] = "~पारदर्शकता";
+        Text[ slovak ] = "~Priehľadnosť";
     };
     MetricField MTR_SHADOW_TRANSPARENT
     {
@@ -2033,6 +2084,7 @@ TabPage RID_SVXPAGE_SHADOW
     Text[ czech ] = "Stín";
     Text[ hebrew ] = "‮הצללה‬";
     Text[ hindi ] = "छाया";
+    Text[ slovak ] = "Tieň";
 };
  // RID_SVXPAGE_HATCH --------------------------------------------------------
 TabPage RID_SVXPAGE_HATCH
@@ -2083,6 +2135,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ czech ] = "Vlastnosti";
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "विशेषतायें";
+        Text[ slovak ] = "Vlastnosti";
     };
     FixedText FT_LINE_DISTANCE
     {
@@ -2116,6 +2169,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ czech ] = "Vzdálenost";
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "~अंतर देना";
+        Text[ slovak ] = "Rozo~stupy";
     };
     MetricField MTR_FLD_DISTANCE
     {
@@ -2165,6 +2219,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ czech ] = "Úhel";
         Text[ hebrew ] = "~Winkel";
         Text[ hindi ] = "को~ण";
+        Text[ slovak ] = "~Uhol";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -2206,6 +2261,7 @@ TabPage RID_SVXPAGE_HATCH
         CustomUnitText[ czech ] = " stupňů";
         CustomUnitText[ hebrew ] = " ‮מעלות‬";
         CustomUnitText[ hindi ] = " डिग्रियाँ";
+        CustomUnitText[ slovak ] = " stupňov";
     };
     Control CTL_ANGLE
     {
@@ -2247,6 +2303,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ czech ] = "Typ čáry";
         Text[ hebrew ] = "Li~nientyp";
         Text[ hindi ] = "~रेखा वर्ग";
+        Text[ slovak ] = "~Typ čiary";
     };
     ListBox LB_LINE_TYPE
     {
@@ -2423,6 +2480,12 @@ TabPage RID_SVXPAGE_HATCH
         < "कटा हुआ" ; Default ; > ;
         < "तिगुना" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Jednoduché" ; Default ; > ;
+        < "Preškrtnuté" ; Default ; > ;
+        < "Trojité" ; Default ; > ;
+    };
     };
     FixedText FT_LINE_COLOR
     {
@@ -2456,6 +2519,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ czech ] = "Barva čáry";
         Text[ hebrew ] = "Linien~farbe";
         Text[ hindi ] = "रेखा का ~रंग";
+        Text[ slovak ] = "~Farba čiary";
     };
     ListBox LB_LINE_COLOR
     {
@@ -2512,6 +2576,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ czech ] = "Přidat...";
         Text[ hebrew ] = "‮הוספת...‬";
         Text[ hindi ] = "~जोड़ो...";
+        Text[ slovak ] = "Prid~ať...";
     };
     PushButton BTN_MODIFY
     {
@@ -2546,6 +2611,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ czech ] = "Změnit...";
         Text[ hebrew ] = "‮שינוי...‬";
         Text[ hindi ] = "~सुधारो...";
+        Text[ slovak ] = "Z~meniť...";
     };
     PushButton BTN_DELETE
     {
@@ -2580,6 +2646,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ czech ] = "Smazat...";
         Text[ hebrew ] = "‮מחיקה...‬";
         Text[ hindi ] = "~मिटाओ...";
+        Text[ slovak ] = "~Zmazať...";
     };
     ImageButton BTN_LOAD
     {
@@ -2625,6 +2692,7 @@ TabPage RID_SVXPAGE_HATCH
         QuickHelpText[ czech ] = "Načíst seznam šrafování";
         QuickHelpText[ hebrew ] = "Schraffurentabelle laden";
         QuickHelpText[ hindi ] = "हाचेस सूची को लोड़ करो";
+        QuickHelpText[ slovak ] = "Načítať zoznam šrafovania";
     };
     ImageButton BTN_SAVE
     {
@@ -2639,7 +2707,7 @@ TabPage RID_SVXPAGE_HATCH
         QuickHelpText [ portuguese ] = "Guarda a lista de campos sombreados" ;
         QuickHelpText [ finnish ] = "Tallenna viivoitusluettelo" ;
         QuickHelpText [ danish ] = "Gem skraveringstabel" ;
-        QuickHelpText [ french ] = "Sauvegarder la palette de hachures" ;
+        QuickHelpText [ french ] = "Enregistrer la palette de hachures" ;
         QuickHelpText [ swedish ] = "Spara skrafferingstabell" ;
         QuickHelpText [ dutch ] = "Tabel arceringen opslaan" ;
         QuickHelpText [ spanish ] = "Guardar tabla de tramas" ;
@@ -2670,6 +2738,7 @@ TabPage RID_SVXPAGE_HATCH
         QuickHelpText[ czech ] = "Uložit seznam šrafování";
         QuickHelpText[ hebrew ] = "Schraffurentabelle sichern";
         QuickHelpText[ hindi ] = "हाचेस सूची को संचित करो";
+        QuickHelpText[ slovak ] = "Uložiť zoznam šrafovania";
     };
     Text[ chinese_simplified ] = "阴影线";
     Text[ russian ] = "���������";
@@ -2686,6 +2755,7 @@ TabPage RID_SVXPAGE_HATCH
     Text[ czech ] = "Šrafování";
     Text[ hebrew ] = "Schraffuren";
     Text[ hindi ] = "हाचिंग";
+    Text[ slovak ] = "Šrafovanie";
 };
  // RID_SVXPAGE_BITMAP -------------------------------------------------------
 TabPage RID_SVXPAGE_BITMAP
@@ -2703,7 +2773,7 @@ TabPage RID_SVXPAGE_BITMAP
     Text [ french ] = "Motifs bitmap" ;
     Text [ swedish ] = "Bitmapsm�nster" ;
     Text [ dutch ] = "Bitmappatronen" ;
-    Text [ spanish ] = "Modelos de bitmap" ;
+    Text [ spanish ] = "Modelos de mapas de bits" ;
     Text [ english_us ] = "Bitmap Patterns" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedLine FL_PROP
@@ -2736,6 +2806,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ czech ] = "Vlastnosti";
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "विशेषतायें";
+        Text[ slovak ] = "Vlastnosti";
     };
     FixedText FT_PIXEL_EDIT
     {
@@ -2753,11 +2824,11 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ finnish ] = "Kuvioeditori";
         Text[ italian ] = "Editor modello";
         Text[ danish ] = "M�nsterredigering";
-        Text[ swedish ] = "M�nstereditor";
+        Text[ swedish ] = "M�nsterredigerare";
         Text[ polish ] = "Edytor deseni";
         Text[ portuguese_brazilian ] = "Editor de Padr�es";
         Text[ japanese ] = "パターンエディタ";
-        Text[ korean ] = "패턴 편집";
+        Text[ korean ] = "패턴 편집기";
         Text[ chinese_simplified ] = "编辑图案";
         Text[ chinese_traditional ] = "編輯圖案";
         Text[ turkish ] = "Desen D�zenleyici";
@@ -2767,6 +2838,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ czech ] = "Editor vzorků";
         Text[ hebrew ] = "Muster Editor";
         Text[ hindi ] = "नमूना संपादक";
+        Text[ slovak ] = "Editor vzoriek";
     };
     Control CTL_PIXEL
     {
@@ -2806,6 +2878,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ czech ] = "Barva popředí";
         Text[ hebrew ] = "~Vordergrundfarbe";
         Text[ hindi ] = "~सामने का रंग ";
+        Text[ slovak ] = "~Farba popredia";
     };
     ListBox LB_COLOR
     {
@@ -2847,6 +2920,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ czech ] = "Barva pozadí";
         Text[ hebrew ] = "‮צבע רקע‬";
         Text[ hindi ] = "~पृष्ठभाग रंग";
+        Text[ slovak ] = "Far~ba pozadia";
     };
     ListBox LB_BACKGROUND_COLOR
     {
@@ -2864,7 +2938,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text [ ENGLISH ] = "Bitmap" ;
         Text[ portuguese ] = "~Bitmap";
         Text[ russian ] = "�����";
-        Text[ spanish ] = "Bitmap";
+        Text[ spanish ] = "Mapa de bits";
         Text[ italian ] = "Bitmap";
         Text[ swedish ] = "Bitmap";
         Text[ polish ] = "Mapa bitowa";
@@ -2886,6 +2960,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ czech ] = "Rastr";
         Text[ hebrew ] = "~Bitmap";
         Text[ hindi ] = "बिटमॉप्";
+        Text[ slovak ] = "Bitová mapa";
     };
     ListBox LB_BITMAPS
     {
@@ -2933,6 +3008,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ czech ] = "Přidat...";
         Text[ hebrew ] = "‮הוספת...‬";
         Text[ hindi ] = "~जोड़ो...";
+        Text[ slovak ] = "Prid~ať...";
     };
     PushButton BTN_MODIFY
     {
@@ -2967,6 +3043,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ czech ] = "Změnit...";
         Text[ hebrew ] = "‮שינוי...‬";
         Text[ hindi ] = "~सुधारो...";
+        Text[ slovak ] = "Z~meniť...";
     };
     PushButton BTN_IMPORT
     {
@@ -3001,6 +3078,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ czech ] = "Importovat...";
         Text[ hebrew ] = "I~mport...";
         Text[ hindi ] = "~आयात...";
+        Text[ slovak ] = "~Importovať...";
     };
     PushButton BTN_DELETE
     {
@@ -3035,6 +3113,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ czech ] = "Smazat...";
         Text[ hebrew ] = "‮מחיקה...‬";
         Text[ hindi ] = "~मिटाओ...";
+        Text[ slovak ] = "~Zmazať...";
     };
     ImageButton BTN_LOAD
     {
@@ -3052,7 +3131,7 @@ TabPage RID_SVXPAGE_BITMAP
         QuickHelpText [ french ] = "Charger la palette de bitmaps" ;
         QuickHelpText [ swedish ] = "Ladda bitmaptabell" ;
         QuickHelpText [ dutch ] = "Bitmap-lijst laden" ;
-        QuickHelpText [ spanish ] = "Cargar tabla de bitmaps" ;
+        QuickHelpText [ spanish ] = "Cargar tabla de mapa de bits" ;
         QuickHelpText [ english_us ] = "Load Bitmap List" ;
         ButtonImage = Image
         {
@@ -3077,6 +3156,7 @@ TabPage RID_SVXPAGE_BITMAP
         QuickHelpText[ czech ] = "Načíst seznam bitmap";
         QuickHelpText[ hebrew ] = "Bitmaptabelle laden";
         QuickHelpText[ hindi ] = "बिटमॉप् सूची लोड़ करो";
+        QuickHelpText[ slovak ] = "Načítať zoznam bitmáp";
     };
     ImageButton BTN_SAVE
     {
@@ -3091,10 +3171,10 @@ TabPage RID_SVXPAGE_BITMAP
         QuickHelpText [ portuguese ] = "Guarda a lista de bitmaps" ;
         QuickHelpText [ finnish ] = "Tallenna bittikarttaluettelo" ;
         QuickHelpText [ danish ] = "Gem bitmaptabel" ;
-        QuickHelpText [ french ] = "Sauvegarder la palette de bitmaps" ;
+        QuickHelpText [ french ] = "Enregistrer la palette de bitmaps" ;
         QuickHelpText [ swedish ] = "Spara bitmaptabell" ;
         QuickHelpText [ dutch ] = "Bitmap-lijst opslaan" ;
-        QuickHelpText [ spanish ] = "Guardar tabla de bitmaps" ;
+        QuickHelpText [ spanish ] = "Guardar tabla de mapa de bits" ;
         QuickHelpText [ english_us ] = "Save Bitmap List" ;
         ButtonImage = Image
         {
@@ -3119,6 +3199,7 @@ TabPage RID_SVXPAGE_BITMAP
         QuickHelpText[ czech ] = "Uložit seznam bitmap";
         QuickHelpText[ hebrew ] = "Bitmaptabelle sichern";
         QuickHelpText[ hindi ] = "बिटमॉप् सूची संचित करो";
+        QuickHelpText[ slovak ] = "Uložiť zoznam bitmáp";
     };
     Text[ chinese_simplified ] = "位图图案";
     Text[ russian ] = "������� ������";
@@ -3135,6 +3216,7 @@ TabPage RID_SVXPAGE_BITMAP
     Text[ czech ] = "Bitmapové vzory";
     Text[ hebrew ] = "Bitmapmuster";
     Text[ hindi ] = "बिटमॉप् नमूनें";
+    Text[ slovak ] = "Vzory bitových máp";
 };
  // RID_SVXPAGE_GRADIENT -----------------------------------------------------
 TabPage RID_SVXPAGE_GRADIENT
@@ -3185,6 +3267,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ czech ] = "Vlastnosti";
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "विशेषतायें";
+        Text[ slovak ] = "Vlastnosti";
     };
     FixedText FT_TYPE
     {
@@ -3218,6 +3301,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "~Typ";
         Text[ hindi ] = "व~र्ग";
+        Text[ slovak ] = "Ty~p";
     };
     ListBox LB_GRADIENT_TYPES
     {
@@ -3478,6 +3562,15 @@ TabPage RID_SVXPAGE_GRADIENT
         < "समचतुर्भुज" ; Default ; > ;
         < "आयताकार" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Lineárny" ; Default ; > ;
+        < "Osový" ; Default ; > ;
+        < "Radiálny" ; Default ; > ;
+        < "Oválny" ; Default ; > ;
+        < "Štvorec" ; Default ; > ;
+        < "Pravouhlé" ; Default ; > ;
+    };
     };
     FixedText FT_CENTER_X
     {
@@ -3511,6 +3604,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ czech ] = "Střed X";
         Text[ hebrew ] = "Zentrum ~X";
         Text[ hindi ] = "केन्द्र ~X";
+        Text[ slovak ] = "Stred ~X";
     };
     MetricField MTR_CENTER_X
     {
@@ -3559,6 +3653,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ czech ] = "Střed Y";
         Text[ hebrew ] = "Zentrum ~Y";
         Text[ hindi ] = "केन्द्र ~Y";
+        Text[ slovak ] = "Stred ~Y";
     };
     MetricField MTR_CENTER_Y
     {
@@ -3607,6 +3702,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ czech ] = "Úhel";
         Text[ hebrew ] = "~Winkel";
         Text[ hindi ] = "को~ण";
+        Text[ slovak ] = "~Uhol";
     };
     MetricField MTR_ANGLE
     {
@@ -3648,6 +3744,7 @@ TabPage RID_SVXPAGE_GRADIENT
         CustomUnitText[ czech ] = " stupňů";
         CustomUnitText[ hebrew ] = " ‮מעלות‬";
         CustomUnitText[ hindi ] = " डिग्रियाँ";
+        CustomUnitText[ slovak ] = " stupňov";
     };
     FixedText FT_BORDER
     {
@@ -3681,6 +3778,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ czech ] = "Okraj";
         Text[ hebrew ] = "~Rand";
         Text[ hindi ] = "~किनारा";
+        Text[ slovak ] = "~Okraj";
     };
     MetricField MTR_BORDER
     {
@@ -3729,6 +3827,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ czech ] = "Od";
         Text[ hebrew ] = "~Von";
         Text[ hindi ] = "~से";
+        Text[ slovak ] = "~Od";
     };
     ListBox LB_COLOR_FROM
     {
@@ -3786,6 +3885,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ czech ] = "Do";
         Text[ hebrew ] = "~Bis";
         Text[ hindi ] = "~को";
+        Text[ slovak ] = "~Do";
     };
     ListBox LB_COLOR_TO
     {
@@ -3857,6 +3957,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ czech ] = "Přidat...";
         Text[ hebrew ] = "‮הוספה...‬";
         Text[ hindi ] = "~जोड़ो...";
+        Text[ slovak ] = "Prid~ať...";
     };
     PushButton BTN_MODIFY
     {
@@ -3891,6 +3992,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ czech ] = "Změnit...";
         Text[ hebrew ] = "‮שינוי...‬";
         Text[ hindi ] = "सु~धारो...";
+        Text[ slovak ] = "Z~meniť...";
     };
     PushButton BTN_DELETE
     {
@@ -3925,6 +4027,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ czech ] = "Smazat...";
         Text[ hebrew ] = "‮מחיקה...‬";
         Text[ hindi ] = "मि~टाओ...";
+        Text[ slovak ] = "~Zmazať...";
     };
     ImageButton BTN_LOAD
     {
@@ -3967,6 +4070,7 @@ TabPage RID_SVXPAGE_GRADIENT
         QuickHelpText[ czech ] = "Načíst seznam přechodů";
         QuickHelpText[ hebrew ] = "Farbverlauftabelle laden";
         QuickHelpText[ hindi ] = "ग्रेडिऐन्ट्स सूची लोड करो";
+        QuickHelpText[ slovak ] = "Načítať zoznam prechodov";
     };
     ImageButton BTN_SAVE
     {
@@ -3981,7 +4085,7 @@ TabPage RID_SVXPAGE_GRADIENT
         QuickHelpText [ portuguese ] = "Guarda as grada��es de cores" ;
         QuickHelpText [ finnish ] = "Tallenna gradienttiluettelo" ;
         QuickHelpText [ danish ] = "Gem farvegraduerings tabel" ;
-        QuickHelpText [ french ] = "sauvegarder la palette de d�grad�s" ;
+        QuickHelpText [ french ] = "Enregistrer la palette de d�grad�s" ;
         QuickHelpText [ swedish ] = "Spara f�rggradienttabell" ;
         QuickHelpText [ dutch ] = "Tabel kleurverlopen opslaan" ;
         QuickHelpText [ spanish ] = "Guardar tabla de gradientes" ;
@@ -4009,6 +4113,7 @@ TabPage RID_SVXPAGE_GRADIENT
         QuickHelpText[ czech ] = "Uložit seznam přechodů";
         QuickHelpText[ hebrew ] = "Farbverlauftabelle sichern";
         QuickHelpText[ hindi ] = "ग्रेडिऐन्ट्स सूची संचित करो";
+        QuickHelpText[ slovak ] = "Uložiť zoznam prechodov";
     };
     Text[ chinese_simplified ] = "彩色图案";
     Text[ russian ] = "���������";
@@ -4025,6 +4130,7 @@ TabPage RID_SVXPAGE_GRADIENT
     Text[ czech ] = "Přechody";
     Text[ hebrew ] = "Farbverläufe";
     Text[ hindi ] = "ग्रेडिऐन्ट्स";
+    Text[ slovak ] = "Prechody";
 };
  // RID_SVXPAGE_COLOR --------------------------------------------------------
 TabPage RID_SVXPAGE_COLOR
@@ -4076,6 +4182,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ czech ] = "Vlastnosti";
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "विशेषतायें";
+        Text[ slovak ] = "Vlastnosti";
     };
     FixedText FT_NAME
     {
@@ -4109,6 +4216,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ czech ] = "Název";
         Text[ hebrew ] = "~Name";
         Text[ hindi ] = "~नाम";
+        Text[ slovak ] = "~Názov";
     };
     Edit EDT_NAME
     {
@@ -4149,6 +4257,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ czech ] = "Barva";
         Text[ hebrew ] = "~Farbe";
         Text[ hindi ] = "रं~ग";
+        Text[ slovak ] = "~Farba";
     };
     ListBox LB_COLOR
     {
@@ -4192,6 +4301,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ czech ] = "Tabulka barev";
         Text[ hebrew ] = "Farbtabelle";
         Text[ hindi ] = "रंग का सारणी";
+        Text[ slovak ] = "Tabuľka farieb";
     };
     Control CTL_COLORTABLE
     {
@@ -4351,6 +4461,11 @@ TabPage RID_SVXPAGE_COLOR
          < "RGB" ; Default ; > ;
         < "CMYK" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "RGB" ; Default ; > ;
+        < "CMYK" ; Default ; > ;
+    };
     };
     FixedText FT_1
     {
@@ -4461,6 +4576,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "Prid~ať";
     };
     PushButton BTN_WORK_ON
     {
@@ -4495,6 +4611,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ czech ] = "Upravit...";
         Text[ hebrew ] = "‮עריכה...‬";
         Text[ hindi ] = "~संपादन...";
+        Text[ slovak ] = "~Upraviť...";
     };
     PushButton BTN_DELETE
     {
@@ -4529,6 +4646,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ czech ] = "Smazat...";
         Text[ hebrew ] = "‮מחיקה...‬";
         Text[ hindi ] = "मि~टाओ...";
+        Text[ slovak ] = "~Zmazať...";
     };
     PushButton BTN_MODIFY
     {
@@ -4563,6 +4681,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ czech ] = "Změnit";
         Text[ hebrew ] = "‮שינוי‬";
         Text[ hindi ] = "सु~धारो";
+        Text[ slovak ] = "Z~meniť";
     };
     ImageButton BTN_LOAD
     {
@@ -4605,6 +4724,7 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText[ czech ] = "Načíst seznam barev";
         QuickHelpText[ hebrew ] = "Farbtabelle laden";
         QuickHelpText[ hindi ] = "रंग का सूची लोड़ करो";
+        QuickHelpText[ slovak ] = "Načítať zoznam farieb";
     };
     ImageButton BTN_SAVE
     {
@@ -4619,7 +4739,7 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText [ portuguese ] = "Guarda a paleta de cores" ;
         QuickHelpText [ finnish ] = "Tallenna v�riluettelo" ;
         QuickHelpText [ danish ] = "Gem farvetabel" ;
-        QuickHelpText [ french ] = "Sauvegarder la palette de couleurs" ;
+        QuickHelpText [ french ] = "Enregistrer la palette de couleurs" ;
         QuickHelpText [ swedish ] = "Spara f�rgtabell" ;
         QuickHelpText [ dutch ] = "Kleurenlijst opslaan" ;
         QuickHelpText [ spanish ] = "Guardar tabla de colores" ;
@@ -4647,6 +4767,7 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText[ czech ] = "Uložit seznam barev";
         QuickHelpText[ hebrew ] = "Farbtabelle sichern";
         QuickHelpText[ hindi ] = "रंग का सूची संचित करो";
+        QuickHelpText[ slovak ] = "Uložiť zoznam farieb";
     };
     Text[ chinese_simplified ] = "颜色";
     Text[ russian ] = "�����";
@@ -4663,6 +4784,7 @@ TabPage RID_SVXPAGE_COLOR
     Text[ czech ] = "Barvy";
     Text[ hebrew ] = "Farben";
     Text[ hindi ] = "रंग";
+    Text[ slovak ] = "Farby";
 };
  // RID_SVXDLG_AREA ----------------------------------------------------------
 TabDialog RID_SVXDLG_AREA
@@ -4722,6 +4844,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ czech ] = "Oblast";
                 Text[ hebrew ] = "Fläche";
                 Text[ hindi ] = "विस्तीर्ण";
+                Text[ slovak ] = "Oblasť";
             };
             PageItem
             {
@@ -4754,6 +4877,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ czech ] = "Stín";
                 Text[ hebrew ] = "‮הצללה‬";
                 Text[ hindi ] = "छाया";
+                Text[ slovak ] = "Tieň";
             };
             PageItem
             {
@@ -4784,6 +4908,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ czech ] = "Průhlednost";
                 Text[ hebrew ] = "Transparenz";
                 Text[ hindi ] = "पारदर्शकता";
+                Text[ slovak ] = "Priehľadnosť";
             };
             PageItem
             {
@@ -4817,6 +4942,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ czech ] = "Barvy";
                 Text[ hebrew ] = "Farben";
                 Text[ hindi ] = "रंग";
+                Text[ slovak ] = "Farby";
             };
             PageItem
             {
@@ -4850,6 +4976,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ czech ] = "Přechody";
                 Text[ hebrew ] = "Farbverläufe";
                 Text[ hindi ] = "ग्रेडिऐन्ट्स";
+                Text[ slovak ] = "Prechody";
             };
             PageItem
             {
@@ -4883,6 +5010,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ czech ] = "Šrafování";
                 Text[ hebrew ] = "Schraffuren";
                 Text[ hindi ] = "हाचिंग";
+                Text[ slovak ] = "Šrafovanie";
             };
             PageItem
             {
@@ -4898,7 +5026,7 @@ TabDialog RID_SVXDLG_AREA
                 Text [ french ] = "Motifs bitmap" ;
                 Text [ swedish ] = "Bitmapm�nster" ;
                 Text [ dutch ] = "Bitmappatronen" ;
-                Text [ spanish ] = "Modelos de bitmap" ;
+                Text [ spanish ] = "Modelos de mapas de bits" ;
                 Text [ english_us ] = "Bitmaps" ;
                 PageResID = RID_SVXPAGE_BITMAP ;
                 Text[ chinese_simplified ] = "位图图案";
@@ -4908,7 +5036,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ chinese_traditional ] = "點陣圖圖案";
                 Text[ arabic ] = "����� ����� �������";
                 Text[ greek ] = "������ Bitmap";
-                Text[ korean ] = "비트맵 패턴";
+                Text[ korean ] = "비트맵";
                 Text[ turkish ] = "Bit e�lem";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Mapes de bits";
@@ -4916,6 +5044,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ czech ] = "Bitové mapy";
                 Text[ hebrew ] = "Bitmapmuster";
                 Text[ hindi ] = "बिटमॉप्";
+                Text[ slovak ] = "Bitové mapy";
             };
         };
     };
@@ -4934,6 +5063,7 @@ TabDialog RID_SVXDLG_AREA
     Text[ czech ] = "Oblast";
     Text[ hebrew ] = "Fläche";
     Text[ hindi ] = "विस्तीर्ण";
+    Text[ slovak ] = "Oblasť";
 };
 
 Image RID_SVXIMG_LOAD_H
@@ -4955,6 +5085,10 @@ Image RID_SVXIMG_SAVE_H
 };
 
  // ********************************************************************** EOF
+
+
+
+
 
 
 
