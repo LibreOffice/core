@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdf.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:07:44 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,12 @@ String PDF_PROGRESS_BAR
     Text[ portuguese ] = "Export as PDF";
     Text[ russian ] = "Export as PDF";
     Text[ polish ] = "Export as PDF";
-    Text[ portuguese_brazilian ] = "Export as PDF";
+    Text[ portuguese_brazilian ] = "Exportar como PDF";
     Text[ thai ] = "Export as PDF";
     Text[ hindi ] = "Export as PDF";
     Text[ slovak ] = "Export do PDF";
 };
+
 
 
 
