@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-06 08:36:56 $
+ *  last change: $Author: mt $ $Date: 2001-06-29 12:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,6 @@
 #endif
 
 #include <vcl/svapp.hxx>
-#include <tools/intn.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
