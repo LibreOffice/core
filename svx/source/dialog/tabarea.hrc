@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
+ *  last change: $Author: dr $ $Date: 2001-06-15 16:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@
 #define FL_SIZE 3
 #define FL_POSITION 4
 #define FL_OFFSET 5
-#define FT_STEPCOUNT 7
+#define FL_STEPCOUNT 7
 
 // Farben definieren TabPage
 // nur temporaer !!!

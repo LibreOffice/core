@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
+ *  last change: $Author: dr $ $Date: 2001-06-15 16:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1812,16 +1812,9 @@ SvxXRectPreview::SvxXRectPreview( Window* pParent, const ResId& rResId, XOutputD
     pXOutDev( pXOut )
 
 {
+    SetBorderStyle( WINDOW_BORDER_MONO );
     SetMapMode( MAP_100TH_MM );
-    Size aSize = GetOutputSize();
-
-    Size aTmp(1, 1);
-    aTmp = PixelToLogic(aTmp);
-    aSize.Width() -= aTmp.Width() /2;
-    aSize.Height() -= aTmp.Height() /2;
-
-    aRect = Rectangle( Point(), aSize );
-
+    aRect = Rectangle( Point(), GetOutputSize() );
     InitSettings( TRUE, TRUE );
 }
 
@@ -1854,6 +1847,7 @@ void SvxXRectPreview::InitSettings( BOOL bForeground, BOOL bBackground )
 
 void SvxXRectPreview::Paint( const Rectangle& rRect )
 {
+    pXOutDev->SetLineColor( Color( COL_TRANSPARENT ) );
     pXOutDev->DrawRect( aRect );
 }
 

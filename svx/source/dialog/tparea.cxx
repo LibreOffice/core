@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
+ *  last change: $Author: dr $ $Date: 2001-06-15 16:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,7 +664,7 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 
     aTsbStepCount       ( this, ResId( TSB_STEPCOUNT ) ),
     aNumFldStepCount    ( this, ResId( NUM_FLD_STEPCOUNT ) ),
-    aFtStepCount        ( this, ResId( FT_STEPCOUNT ) ),
+    aFlStepCount        ( this, ResId( FL_STEPCOUNT ) ),
 
     aTsbTile            ( this, ResId( TSB_TILE ) ),
     aTsbStretch         ( this, ResId( TSB_STRETCH ) ),
@@ -697,7 +697,7 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     aLbBitmap.Hide();
     aCtlBitmapPreview.Hide();
 
-    aFtStepCount.Hide();
+    aFlStepCount.Hide();
     aTsbStepCount.Hide();
     aNumFldStepCount.Hide();
 
@@ -1788,7 +1788,7 @@ IMPL_LINK( SvxAreaTabPage, ClickInvisibleHdl_Impl, void *, EMPTYARG )
     aCtlXRectPreview.Hide();
     aCtlBitmapPreview.Hide();
 
-    aFtStepCount.Hide();
+    aFlStepCount.Hide();
     aTsbStepCount.Hide();
     aNumFldStepCount.Hide();
 
@@ -1839,7 +1839,7 @@ IMPL_LINK( SvxAreaTabPage, ClickColorHdl_Impl, void *, EMPTYARG )
     aCtlXRectPreview.Show();
     aCtlBitmapPreview.Hide();
 
-    aFtStepCount.Hide();
+    aFlStepCount.Hide();
     aTsbStepCount.Hide();
     aNumFldStepCount.Hide();
 
@@ -1927,8 +1927,8 @@ IMPL_LINK( SvxAreaTabPage, ClickGradientHdl_Impl, void *, EMPTYARG )
     aCtlXRectPreview.Show();
     aCtlBitmapPreview.Hide();
 
-    aFtStepCount.Enable();
-    aFtStepCount.Show();
+    aFlStepCount.Enable();
+    aFlStepCount.Show();
     aTsbStepCount.Enable();
     aTsbStepCount.Show();
     aNumFldStepCount.Show();
@@ -2002,7 +2002,7 @@ IMPL_LINK( SvxAreaTabPage, ClickHatchingHdl_Impl, void *, EMPTYARG )
 
 //  aGrpTransparent.Hide();
 //  aLbTransparent.Hide();
-    aFtStepCount.Hide();
+    aFlStepCount.Hide();
     aTsbStepCount.Hide();
     aNumFldStepCount.Hide();
 
@@ -2152,7 +2152,7 @@ IMPL_LINK( SvxAreaTabPage, ClickBitmapHdl_Impl, void *, EMPTYARG )
 //      aGrpPreview.Hide();
 //  aGrpTransparent.Hide();
 //  aLbTransparent.Hide();
-    aFtStepCount.Hide();
+    aFlStepCount.Hide();
     aTsbStepCount.Hide();
     aNumFldStepCount.Hide();
 

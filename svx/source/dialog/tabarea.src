@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-14 17:58:13 $
+ *  last change: $Author: dr $ $Date: 2001-06-15 16:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,8 +161,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     MetricField MTR_TRANSPARENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 27 ) ;
-        Size = MAP_APPFONT ( 30, 12 ) ;
+        Pos = MAP_APPFONT ( 72 , 26 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -177,8 +177,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
-        Text = "Verlauf" ;
-        Text [ ENGLISH ] = "Gradient" ;
+        Text = "~Verlauf" ;
+        Text [ ENGLISH ] = "~Gradient" ;
         Text[ english_us ] = "Transparency ~gradient";
         Text[ portuguese ] = "~Gradação da transparência";
         Text[ russian ] = "Ãðàäèåíòíàÿ";
@@ -253,195 +253,195 @@ TabPage RID_SVXPAGE_TRANSPARENCE
             < "Quadratisch" ; Default ; > ;
             < "Rechteckig" ; Default ; > ;
         };
-    StringList [ language_user1 ] =
-    {
+        StringList [ language_user1 ] =
+        {
             < "Linear" ; Default ; > ;
-        < "Axial" ; Default ; > ;
-        < "Radial" ; Default ; > ;
-        < "Ellipsoid" ; Default ; > ;
-        < "Quadratisch" ; Default ; > ;
-        < "Rechteckig" ; Default ; > ;
-    };
-    StringList [ english_us ] =
-    {
+            < "Axial" ; Default ; > ;
+            < "Radial" ; Default ; > ;
+            < "Ellipsoid" ; Default ; > ;
+            < "Quadratisch" ; Default ; > ;
+            < "Rechteckig" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
             < "Linear" ; Default ; > ;
-        < "Axial" ; Default ; > ;
-        < "Radial" ; Default ; > ;
-        < "Ellipsoid" ; Default ; > ;
-        < "Quadratic" ; Default ; > ;
-        < "Square" ; Default ; > ;
-    };
-    StringList [ portuguese ] =
-    {
+            < "Axial" ; Default ; > ;
+            < "Radial" ; Default ; > ;
+            < "Ellipsoid" ; Default ; > ;
+            < "Quadratic" ; Default ; > ;
+            < "Square" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
             < "Linear" ; Default ; > ;
-        < "Axial" ; Default ; > ;
-        < "Radial" ; Default ; > ;
-        < "Elipsóide" ; Default ; > ;
-        < "Quadrado" ; Default ; > ;
-        < "Rectangular" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "Axial" ; Default ; > ;
+            < "Radial" ; Default ; > ;
+            < "Elipsóide" ; Default ; > ;
+            < "Quadrado" ; Default ; > ;
+            < "Rectangular" ; Default ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "Ëèíåéíàÿ" ; Default ; > ;
-        < "Îñåâàÿ" ; Default ; > ;
-        < "Êðóãîâàÿ" ; Default ; > ;
-        < "Ýëëèïñîâèäíàÿ" ; Default ; > ;
-        < "Êâàäðàòíàÿ" ; Default ; > ;
-        < "Ïðÿìîóãîëüíàÿ" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "Îñåâàÿ" ; Default ; > ;
+            < "Êðóãîâàÿ" ; Default ; > ;
+            < "Ýëëèïñîâèäíàÿ" ; Default ; > ;
+            < "Êâàäðàòíàÿ" ; Default ; > ;
+            < "Ïðÿìîóãîëüíàÿ" ; Default ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "ÃñáììéêÜ" ; Default ; > ;
-        < "ÁîïíéêÜ" ; Default ; > ;
-        < "ÁêôéíéêÜ" ; Default ; > ;
-        < "ÅëëåéøïåéäÝò" ; Default ; > ;
-        < "ÔåôñÜãùíá" ; Default ; > ;
-        < "Ïñèïãþíéá" ; Default ; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < "ÁîïíéêÜ" ; Default ; > ;
+            < "ÁêôéíéêÜ" ; Default ; > ;
+            < "ÅëëåéøïåéäÝò" ; Default ; > ;
+            < "ÔåôñÜãùíá" ; Default ; > ;
+            < "Ïñèïãþíéá" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "Lineair" ; Default ; > ;
-        < "Axiaal" ; Default ; > ;
-        < "Radiaal" ; Default ; > ;
-        < "Ovaal" ; Default ; > ;
-        < "Vierkant" ; Default ; > ;
-        < "Rechthoekig" ; Default ; > ;
-    };
-    StringList [ french ] =
-    {
+            < "Axiaal" ; Default ; > ;
+            < "Radiaal" ; Default ; > ;
+            < "Ovaal" ; Default ; > ;
+            < "Vierkant" ; Default ; > ;
+            < "Rechthoekig" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
             < "Linéaire" ; Default ; > ;
-        < "Axial" ; Default ; > ;
-        < "Radial" ; Default ; > ;
-        < "Ellipsoïde" ; Default ; > ;
-        < "Carré" ; Default ; > ;
-        < "Rectangulaire" ; Default ; > ;
-    };
-    StringList [ spanish ] =
-    {
+            < "Axial" ; Default ; > ;
+            < "Radial" ; Default ; > ;
+            < "Ellipsoïde" ; Default ; > ;
+            < "Carré" ; Default ; > ;
+            < "Rectangulaire" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
             < "Lineal" ; Default ; > ;
-        < "Axial" ; Default ; > ;
-        < "Radial" ; Default ; > ;
-        < "Elipsoide" ; Default ; > ;
-        < "Cuadrado" ; Default ; > ;
-        < "Rectangular" ; Default ; > ;
-    };
-    StringList [ italian ] =
-    {
+            < "Axial" ; Default ; > ;
+            < "Radial" ; Default ; > ;
+            < "Elipsoide" ; Default ; > ;
+            < "Cuadrado" ; Default ; > ;
+            < "Rectangular" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
             < "Lineare" ; Default ; > ;
-        < "Assiale" ; Default ; > ;
-        < "Radiale" ; Default ; > ;
-        < "Ellissoidale" ; Default ; > ;
-        < "Quadrato" ; Default ; > ;
-        < "Rettangolare" ; Default ; > ;
-    };
-    StringList [ danish ] =
-    {
+            < "Assiale" ; Default ; > ;
+            < "Radiale" ; Default ; > ;
+            < "Ellissoidale" ; Default ; > ;
+            < "Quadrato" ; Default ; > ;
+            < "Rettangolare" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
             < "Lineær" ; Default ; > ;
-        < "Aksial" ; Default ; > ;
-        < "Radial" ; Default ; > ;
-        < "Ellipsoide" ; Default ; > ;
-        < "Kvadratisk" ; Default ; > ;
-        < "Rektangulær" ; Default ; > ;
-    };
-    StringList [ swedish ] =
-    {
+            < "Aksial" ; Default ; > ;
+            < "Radial" ; Default ; > ;
+            < "Ellipsoide" ; Default ; > ;
+            < "Kvadratisk" ; Default ; > ;
+            < "Rektangulær" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
             < "Lineär" ; Default ; > ;
-        < "Axial" ; Default ; > ;
-        < "Radiell" ; Default ; > ;
-        < "Ellipsoid" ; Default ; > ;
-        < "Kvadratisk" ; Default ; > ;
-        < "Rektangulär" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "Axial" ; Default ; > ;
+            < "Radiell" ; Default ; > ;
+            < "Ellipsoid" ; Default ; > ;
+            < "Kvadratisk" ; Default ; > ;
+            < "Rektangulär" ; Default ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "Linearny" ; Default ; > ;
-        < "Osiowy" ; Default ; > ;
-        < "Radialny" ; Default ; > ;
-        < "Elipsoida" ; Default ; > ;
-        < "Kwadratowy" ; Default ; > ;
-        < "Prostok¹tny" ; Default ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
+            < "Osiowy" ; Default ; > ;
+            < "Radialny" ; Default ; > ;
+            < "Elipsoida" ; Default ; > ;
+            < "Kwadratowy" ; Default ; > ;
+            < "Prostok¹tny" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
             < "Linear" ; Default ; > ;
-        < "Axial" ; Default ; > ;
-        < "Radial" ; Default ; > ;
-        < "Ellipsoid" ; Default ; > ;
-        < "Quadratisch" ; Default ; > ;
-        < "Rechteckig" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "Axial" ; Default ; > ;
+            < "Radial" ; Default ; > ;
+            < "Ellipsoid" ; Default ; > ;
+            < "Quadratisch" ; Default ; > ;
+            < "Rechteckig" ; Default ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "üó" ; Default ; > ;
-        < "Ž²" ; Default ; > ;
-        < "•úŽËüó" ; Default ; > ;
-        < "‘È‰~‘Ì" ; Default ; > ;
-        < "³•ûŒ`" ; Default ; > ;
-        < "ŽlŠpŒ`" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "Ž²" ; Default ; > ;
+            < "•úŽËüó" ; Default ; > ;
+            < "‘È‰~‘Ì" ; Default ; > ;
+            < "³•ûŒ`" ; Default ; > ;
+            < "ŽlŠpŒ`" ; Default ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "¼±Çü" ; Default ; > ;
-        < "ÃàÇü" ; Default ; > ;
-        < "¹æ»ç¼±Çü" ; Default ; > ;
-        < "Å¸¿øÇü" ; Default ; > ;
-        < "Á¤»ç°¢Çü" ; Default ; > ;
-        < "Á÷»ç°¢Çü" ; Default ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < "ÃàÇü" ; Default ; > ;
+            < "¹æ»ç¼±Çü" ; Default ; > ;
+            < "Å¸¿øÇü" ; Default ; > ;
+            < "Á¤»ç°¢Çü" ; Default ; > ;
+            < "Á÷»ç°¢Çü" ; Default ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < "ÏßÐÎµÄ" ; Default ; > ;
-        < "ÖáÏò" ; Default ; > ;
-        < "¾¶Ïò" ; Default ; > ;
-        < "ÍÖÔ²Ìå" ; Default ; > ;
-        < "Õý·½ÐÎ" ; Default ; > ;
-        < "¾ØÐÎ" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "ÖáÏò" ; Default ; > ;
+            < "¾¶Ïò" ; Default ; > ;
+            < "ÍÖÔ²Ìå" ; Default ; > ;
+            < "Õý·½ÐÎ" ; Default ; > ;
+            < "¾ØÐÎ" ; Default ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "½u§Îªº" ; Default ; > ;
-        < "¶b¦¡" ; Default ; > ;
-        < "®|¦V" ; Default ; > ;
-        < "¾ò¶ê²y" ; Default ; > ;
-        < "¥ß¤èÅé" ; Default ; > ;
-        < "¯x§Î" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "¶b¦¡" ; Default ; > ;
+            < "®|¦V" ; Default ; > ;
+            < "¾ò¶ê²y" ; Default ; > ;
+            < "¥ß¤èÅé" ; Default ; > ;
+            < "¯x§Î" ; Default ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "ÎØí" ; Default ; > ;
-        < "ãÍæÑí" ; Default ; > ;
-        < "ÔÚÇÚí" ; Default ; > ;
-        < "ÈíÖí" ; Default ; > ;
-        < "ãÑÈÚ" ; Default ; > ;
-        < "ãÓÊØíá" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "ãÍæÑí" ; Default ; > ;
+            < "ÔÚÇÚí" ; Default ; > ;
+            < "ÈíÖí" ; Default ; > ;
+            < "ãÑÈÚ" ; Default ; > ;
+            < "ãÓÊØíá" ; Default ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "Doðrusal" ; Default ; > ;
-        < "Eksenel" ; Default ; > ;
-        < "Radyal" ; Default ; > ;
-        < "Elipsoid" ; Default ; > ;
-        < "Karesel" ; Default ; > ;
-        < "Dikdörtgen" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "Eksenel" ; Default ; > ;
+            < "Radyal" ; Default ; > ;
+            < "Elipsoid" ; Default ; > ;
+            < "Karesel" ; Default ; > ;
+            < "Dikdörtgen" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "Lineaarinen" ; Default ; > ;
-        < "Aksiaalinen" ; Default ; > ;
-        < "Säteittäinen" ; Default ; > ;
-        < "Ellipsoidi" ; Default ; > ;
-        < "Kuutiomainen" ; Default ; > ;
-        < "Neliö" ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < "Aksiaalinen" ; Default ; > ;
+            < "Säteittäinen" ; Default ; > ;
+            < "Ellipsoidi" ; Default ; > ;
+            < "Kuutiomainen" ; Default ; > ;
+            < "Neliö" ; Default ; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "Lineal" ; Default ; > ;
-        < "Axial" ; Default ; > ;
-        < "Radial" ; Default ; > ;
-        < "Elipsoide" ; Default ; > ;
-        < "Cuadrado" ; Default ; > ;
-        < "Rectangular" ; Default ; > ;
-    };
+            < "Axial" ; Default ; > ;
+            < "Radial" ; Default ; > ;
+            < "Elipsoide" ; Default ; > ;
+            < "Cuadrado" ; Default ; > ;
+            < "Rectangular" ; Default ; > ;
+        };
     };
     FixedText FT_TRGR_CENTER_X
     {
@@ -475,7 +475,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 72 , 70 ) ;
-        Size = MAP_APPFONT ( 30, 12 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -518,7 +518,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 72 , 86 ) ;
-        Size = MAP_APPFONT ( 30, 12 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -561,14 +561,14 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 72 , 102 ) ;
-        Size = MAP_APPFONT ( 42 , 12 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
         Maximum = 359 ;
         Unit = FUNIT_CUSTOM ;
         CustomUnitText = " Grad" ;
-        CustomUnitText [ ENGLISH ] = " degree" ;
+        CustomUnitText [ ENGLISH ] = " degrees" ;
         Last = 359 ;
         SpinSize = 15 ;
         CustomUnitText[ english_us ] = " degrees";
@@ -623,7 +623,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 + TRANS_GRAD_OFFSET_X, 54 + TRANS_GRAD_OFFSET_Y) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -665,7 +665,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 72 , 134 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -707,7 +707,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 72 , 150 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -720,17 +720,15 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     Control CTL_BITMAP_PREVIEW
     {
-        Border = FALSE ;
-        Pos = MAP_APPFONT ( 140 , 14  ) ;
-        Size = MAP_APPFONT ( 108 , 42 ) ;
-        TabStop = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 138 , 14  ) ;
+        Size = MAP_APPFONT ( 110 , 42 ) ;
     };
     Control CTL_TRANS_PREVIEW
     {
-        Border = FALSE ;
-        Pos = MAP_APPFONT ( 140 , 14  ) ;
-        Size = MAP_APPFONT ( 108 , 42 ) ;
-        TabStop = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 138 , 14  ) ;
+        Size = MAP_APPFONT ( 110 , 42 ) ;
     };
     Text[ english_us ] = "Transparency";
     Text[ portuguese ] = "Transparência";
@@ -804,10 +802,10 @@ TabPage RID_SVXPAGE_AREA
     RadioButton RBT_FILL_OFF
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
-        Text = "Keine" ;
-        Text [ ENGLISH ] = "No Fill" ;
-        Text[ english_us ] = "No Fill";
+        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Text = "~Keine" ;
+        Text [ ENGLISH ] = "~No Fill" ;
+        Text[ english_us ] = "~No Fill";
         Text[ portuguese ] = "No Fill";
         Text[ russian ] = "Áåç";
         Text[ greek ] = "No Fill";
@@ -831,10 +829,10 @@ TabPage RID_SVXPAGE_AREA
     RadioButton RBT_COLOR
     {
         Pos = MAP_APPFONT ( 12 , 28  ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
-        Text = "Farbe" ;
-        Text [ ENGLISH ] = "Color" ;
-        Text[ english_us ] = "Color";
+        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Text = "~Farbe" ;
+        Text [ ENGLISH ] = "~Color" ;
+        Text[ english_us ] = "~Color";
         Text[ portuguese ] = "C~or";
         Text[ russian ] = "Öâåò";
         Text[ greek ] = "×ñþìá";
@@ -858,10 +856,10 @@ TabPage RID_SVXPAGE_AREA
     RadioButton RBT_GRADIENT
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
-        Text = "Farbverlauf" ;
-        Text [ ENGLISH ] = "Gradient" ;
-        Text[ english_us ] = "Gradient";
+        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Text = "Farb~verlauf" ;
+        Text [ ENGLISH ] = "~Gradient" ;
+        Text[ english_us ] = "~Gradient";
         Text[ portuguese ] = "~Gradação";
         Text[ russian ] = "Ãðàäèåíòíàÿ";
         Text[ greek ] = "Äéá~âÜèì. ÷ñþìá";
@@ -884,11 +882,11 @@ TabPage RID_SVXPAGE_AREA
     };
     RadioButton RBT_HATCH
     {
-        Pos = MAP_APPFONT ( 66 , 14  ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
-        Text = "Schraffur" ;
-        Text [ ENGLISH ] = "Hatching" ;
-        Text[ english_us ] = "Hatching";
+        Pos = MAP_APPFONT ( 72 , 14  ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Text = "Schraff~ur" ;
+        Text [ ENGLISH ] = "Ha~tching" ;
+        Text[ english_us ] = "Ha~tching";
         Text[ portuguese ] = "Hatching";
         Text[ russian ] = "Øòðèõîâêà";
         Text[ greek ] = "Hatching";
@@ -911,11 +909,11 @@ TabPage RID_SVXPAGE_AREA
     };
     RadioButton RBT_BITMAP
     {
-        Pos = MAP_APPFONT ( 66 , 28  ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
-        Text = "Bitmap" ;
-        Text [ ENGLISH ] = "Bitmap" ;
-        Text[ english_us ] = "Bitmap";
+        Pos = MAP_APPFONT ( 72 , 28  ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Text = "~Bitmap" ;
+        Text [ ENGLISH ] = "~Bitmap" ;
+        Text[ english_us ] = "~Bitmap";
         Text[ portuguese ] = "~Bitmap";
         Text[ russian ] = "Bitmap";
         Text[ greek ] = "~Bitmap";
@@ -939,29 +937,29 @@ TabPage RID_SVXPAGE_AREA
     ListBox LB_COLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 58 ) ;
-        Size = MAP_APPFONT ( 108 , 95 ) ;
+        Pos = MAP_APPFONT ( 12 , 61 ) ;
+        Size = MAP_APPFONT ( 108 , 118 ) ;
         TabStop = TRUE ;
     };
     ListBox LB_GRADIENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 58 ) ;
-        Size = MAP_APPFONT ( 108 , 95 ) ;
+        Pos = MAP_APPFONT ( 12 , 61 ) ;
+        Size = MAP_APPFONT ( 108 , 118 ) ;
         TabStop = TRUE ;
     };
     ListBox LB_HATCHING
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 58 ) ;
-        Size = MAP_APPFONT ( 108 , 95 ) ;
+        Pos = MAP_APPFONT ( 12 , 61 ) ;
+        Size = MAP_APPFONT ( 108 , 118 ) ;
         TabStop = TRUE ;
     };
     ListBox LB_BITMAP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 58 ) ;
-        Size = MAP_APPFONT ( 109 , 95 ) ;
+        Pos = MAP_APPFONT ( 12 , 61 ) ;
+        Size = MAP_APPFONT ( 108 , 118 ) ;
         TabStop = TRUE ;
     };
 
@@ -969,26 +967,24 @@ TabPage RID_SVXPAGE_AREA
 
     Control CTL_COLOR_PREVIEW
     {
-        Border = FALSE;
-        Pos = MAP_APPFONT ( 140 , 14  ) ;
-        Size = MAP_APPFONT ( 108 , 42 ) ;
-        TabStop = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 138 , 14  ) ;
+        Size = MAP_APPFONT ( 110 , 42 ) ;
     };
     Control CTL_BITMAP_PREVIEW
     {
-        Border = FALSE;
-        Pos = MAP_APPFONT ( 140 , 14  ) ;
-        Size = MAP_APPFONT ( 108 , 42 ) ;
-        TabStop = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 138 , 14  ) ;
+        Size = MAP_APPFONT ( 110 , 42 ) ;
         Hide = TRUE ;
     };
 
     // ---------- for gradients ----------
 
-    FixedText FT_STEPCOUNT
+    FixedLine FL_STEPCOUNT
     {
-        Pos = MAP_APPFONT ( 12 , 158 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Pos = MAP_APPFONT ( 132 , 61 ) ;
+        Size = MAP_APPFONT ( 122 , 8 ) ;
         Text = "Schrittweite" ;
         Text [ ENGLISH ] = "Step count" ;
         Text [ dutch ] = "Stapgrootte" ;
@@ -1015,10 +1011,10 @@ TabPage RID_SVXPAGE_AREA
     };
     TriStateBox TSB_STEPCOUNT
     {
-        Pos = MAP_APPFONT ( 12 , 171 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "~automatisch" ;
-        Text [ ENGLISH ] = "~automatic" ;
+        Pos = MAP_APPFONT ( 138 , 75 ) ;
+        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Text = "~Automatisch" ;
+        Text [ ENGLISH ] = "~Automatic" ;
         TabStop = TRUE ;
         Text [ english_us ] = "A~utomatic" ;
         Text [ italian ] = "~automatico" ;
@@ -1045,8 +1041,8 @@ TabPage RID_SVXPAGE_AREA
     NumericField NUM_FLD_STEPCOUNT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 169 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Pos = MAP_APPFONT ( 208 , 73 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -1061,11 +1057,11 @@ TabPage RID_SVXPAGE_AREA
 
     CheckBox CB_HATCHBCKGRD
     {
-        Pos = MAP_APPFONT ( 12 , 160 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Pos = MAP_APPFONT ( 132 , 61 ) ;
+        Size = MAP_APPFONT ( 122 , 10 ) ;
         TabStop = TRUE ;
-        Text = "Hintergrund~farbe" ;
-        Text [ ENGLISH ] = "~Backgroundcolor" ;
+        Text = "H~intergrundfarbe" ;
+        Text [ ENGLISH ] = "B~ackground color" ;
         Text [ english_us ] = "~Background color" ;
         Text[ portuguese ] = "~Cor de fundo";
         Text[ russian ] = "Öâåò ôîíà";
@@ -1091,8 +1087,8 @@ TabPage RID_SVXPAGE_AREA
     ListBox LB_HATCHBCKGRDCOLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 158 ) ;
-        Size = MAP_APPFONT ( 49 , 32 ) ;
+        Pos = MAP_APPFONT ( 141 , 74 ) ;
+        Size = MAP_APPFONT ( 70 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
@@ -1133,7 +1129,7 @@ TabPage RID_SVXPAGE_AREA
         Pos = MAP_APPFONT ( 138 , 73 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "~Original" ;
-        Text [ ENGLISH ] = "Or~iginal" ;
+        Text [ ENGLISH ] = "~Original" ;
         TabStop = TRUE ;
         Text [ dutch ] = "~Origineel" ;
         Text [ english_us ] = "~Original" ;
@@ -1159,10 +1155,10 @@ TabPage RID_SVXPAGE_AREA
     };
     TriStateBox TSB_SCALE
     {
-        Pos = MAP_APPFONT ( 138 , 89 ) ;
+        Pos = MAP_APPFONT ( 138 , 88 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "Rel~ativ" ;
-        Text [ ENGLISH ] = "Rel~ative" ;
+        Text = "Re~lativ" ;
+        Text [ ENGLISH ] = "Re~lative" ;
         TabStop = TRUE ;
         Text [ dutch ] = "Rel~atief" ;
         Text [ english_us ] = "Re~lative" ;
@@ -1188,7 +1184,7 @@ TabPage RID_SVXPAGE_AREA
     };
     FixedText FT_X_SIZE
     {
-        Pos = MAP_APPFONT ( 184 , 74  ) ;
+        Pos = MAP_APPFONT ( 183 , 73 ) ;
         Size = MAP_APPFONT ( 24 , 8 ) ;
         Text = "B~reite" ;
         Text [ ENGLISH ] = "~Width" ;
@@ -1217,7 +1213,7 @@ TabPage RID_SVXPAGE_AREA
     MetricField MTR_FLD_X_SIZE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 209 , 72  ) ;
+        Pos = MAP_APPFONT ( 208 , 71 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1225,7 +1221,7 @@ TabPage RID_SVXPAGE_AREA
         StrictFormat = TRUE ;
         DecimalDigits = 2 ;
         Unit = FUNIT_MM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
         Minimum = 5 ;
         Maximum = 100 ;
         First = 5 ;
@@ -1234,10 +1230,8 @@ TabPage RID_SVXPAGE_AREA
     };
     FixedText FT_Y_SIZE
     {
-        Pos = MAP_APPFONT ( 184 , 90  ) ;
+        Pos = MAP_APPFONT ( 183 , 88  ) ;
         Size = MAP_APPFONT ( 24 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? H~öhe : H~÷he */
-        /* ### ACHTUNG: Neuer Text in Resource? H~öhe : H~÷he */
         Text = "H~öhe" ;
         Text [ ENGLISH ] = "H~eight" ;
         Text [ english_us ] = "H~eight" ;
@@ -1265,7 +1259,7 @@ TabPage RID_SVXPAGE_AREA
     MetricField MTR_FLD_Y_SIZE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 209 , 88  ) ;
+        Pos = MAP_APPFONT ( 208 , 86  ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1273,7 +1267,7 @@ TabPage RID_SVXPAGE_AREA
         StrictFormat = TRUE ;
         DecimalDigits = 2 ;
         Unit = FUNIT_MM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
         Minimum = 5 ;
         Maximum = 100 ;
         First = 5 ;
@@ -1283,7 +1277,7 @@ TabPage RID_SVXPAGE_AREA
     };
     FixedLine FL_POSITION
     {
-        Pos = MAP_APPFONT ( 132 , 101 ) ;
+        Pos = MAP_APPFONT ( 132 , 104 ) ;
         Size = MAP_APPFONT ( 122 , 8 ) ;
         Text = "Position" ;
         Text [ English ] = "Position" ;
@@ -1313,13 +1307,13 @@ TabPage RID_SVXPAGE_AREA
     Control CTL_POSITION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 138 , 112 ) ;
+        Pos = MAP_APPFONT ( 138 , 114 ) ;
         Size = MAP_APPFONT ( 37 , 27 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_X_OFFSET
     {
-        Pos = MAP_APPFONT ( 179 , 114  ) ;
+        Pos = MAP_APPFONT ( 179 , 116  ) ;
         Size = MAP_APPFONT ( 29 , 8 ) ;
         Text = "~X-Offset" ;
         Text [ ENGLISH ] = "~X offset" ;
@@ -1347,7 +1341,7 @@ TabPage RID_SVXPAGE_AREA
     };
     FixedText FT_Y_OFFSET
     {
-        Pos = MAP_APPFONT ( 179 , 130 ) ;
+        Pos = MAP_APPFONT ( 179 , 131 ) ;
         Size = MAP_APPFONT ( 29 , 8 ) ;
         Text = "~Y-Offset" ;
         Text [ ENGLISH ] = "~Y offset" ;
@@ -1376,14 +1370,14 @@ TabPage RID_SVXPAGE_AREA
     MetricField MTR_FLD_X_OFFSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 209 , 112 ) ;
+        Pos = MAP_APPFONT ( 208 , 114 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
         Maximum = 100 ;
         Last = 100 ;
         SpinSize = 5 ;
@@ -1391,7 +1385,7 @@ TabPage RID_SVXPAGE_AREA
     MetricField MTR_FLD_Y_OFFSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 209 , 128 ) ;
+        Pos = MAP_APPFONT ( 208 , 129 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1399,7 +1393,7 @@ TabPage RID_SVXPAGE_AREA
         Maximum = 100 ;
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
         Last = 100 ;
         SpinSize = 5 ;
     };
@@ -1407,10 +1401,10 @@ TabPage RID_SVXPAGE_AREA
     {
         Pos = MAP_APPFONT ( 138 , 144  ) ;
         Size = MAP_APPFONT ( 54 , 10 ) ;
-        Text = "~Kacheln" ;
-        Text [ ENGLISH ] = "~Tile" ;
+        Text = "Ka~cheln" ;
+        Text [ ENGLISH ] = "T~ile" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Tile" ;
+        Text [ english_us ] = "T~ile" ;
         Text [ italian ] = "Affianca" ;
         Text [ spanish ] = "A~zulejar" ;
         Text [ french ] = "Ca~rrelage" ;
@@ -1434,10 +1428,10 @@ TabPage RID_SVXPAGE_AREA
     };
     TriStateBox TSB_STRETCH
     {
-        Pos = MAP_APPFONT ( 196 , 144  ) ;
+        Pos = MAP_APPFONT ( 194 , 144  ) ;
         Size = MAP_APPFONT ( 54 , 10 ) ;
         Text = "A~npassen" ;
-        Text [ ENGLISH ] = "~Stretch" ;
+        Text [ ENGLISH ] = "Auto~Fit" ;
         TabStop = TRUE ;
         Text [ dutch ] = "Aan~passen" ;
         Text [ english_us ] = "Auto~Fit" ;
@@ -1463,7 +1457,7 @@ TabPage RID_SVXPAGE_AREA
     };
     FixedLine FL_OFFSET
     {
-        Pos = MAP_APPFONT ( 132 , 157  ) ;
+        Pos = MAP_APPFONT ( 132 , 158  ) ;
         Size = MAP_APPFONT ( 122 , 8 ) ;
         Text = "Verschiebung" ;
         Text [ English ] = "Offset" ;
@@ -1491,11 +1485,11 @@ TabPage RID_SVXPAGE_AREA
     };
     RadioButton RBT_ROW
     {
-        Pos = MAP_APPFONT ( 138 , 168  ) ;
+        Pos = MAP_APPFONT ( 138 , 170  ) ;
         Size = MAP_APPFONT ( 32 , 10 ) ;
-        Text = "Z~eile" ;
-        Text [ English ] = "R~ow" ;
-        Text [ english_us ] = "Ro~w" ;
+        Text = "~Zeile" ;
+        Text [ English ] = "~Row" ;
+        Text [ english_us ] = "~Row" ;
         Text [ italian ] = "Riga" ;
         Text [ spanish ] = "~Fila" ;
         Text [ french ] = "~Ligne" ;
@@ -1519,10 +1513,10 @@ TabPage RID_SVXPAGE_AREA
     };
     RadioButton RBT_COLUMN
     {
-        Pos = MAP_APPFONT ( 171 , 168 ) ;
+        Pos = MAP_APPFONT ( 171 , 170 ) ;
         Size = MAP_APPFONT ( 37 , 10 ) ;
         Text = "S~palte" ;
-        Text [ English ] = "~Column" ;
+        Text [ English ] = "Colu~mn" ;
         Text [ english_us ] = "Colu~mn" ;
         Text [ italian ] = "Colonna" ;
         Text [ spanish ] = "~Columna" ;
@@ -1548,7 +1542,7 @@ TabPage RID_SVXPAGE_AREA
     MetricField MTR_FLD_OFFSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 209 , 167 ) ;
+        Pos = MAP_APPFONT ( 208 , 168 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1556,7 +1550,7 @@ TabPage RID_SVXPAGE_AREA
         Maximum = 100 ;
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
         Last = 100 ;
         SpinSize = 5 ;
     };
@@ -1818,8 +1812,8 @@ TabPage RID_SVXPAGE_SHADOW
     Control CTL_COLOR_PREVIEW
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 140 , 14  ) ;
-        Size = MAP_APPFONT ( 108 , 42 ) ;
+        Pos = MAP_APPFONT ( 138 , 14  ) ;
+        Size = MAP_APPFONT ( 110 , 42 ) ;
         TabStop = FALSE ;
     };
 };
@@ -2202,7 +2196,7 @@ TabPage RID_SVXPAGE_HATCH
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 161 ) ;
-        Size = MAP_APPFONT ( 62 , 62 ) ;
+        Size = MAP_APPFONT ( 62 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
@@ -2216,17 +2210,14 @@ TabPage RID_SVXPAGE_HATCH
     };
     Control CTL_PREVIEW
     {
-        Border = FALSE;
+        Border = TRUE ;
         Pos = MAP_APPFONT ( 103 , 131  ) ;
         Size = MAP_APPFONT ( 88 , 42 ) ;
-        TabStop = TRUE ;
     };
     PushButton BTN_ADD
     {
         Pos = MAP_APPFONT ( 197 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? H~inzufügen... : H~inzuf³gen... */
-        /* ### ACHTUNG: Neuer Text in Resource? H~inzufügen... : H~inzuf³gen... */
         Text = "H~inzufügen..." ;
         Text [ ENGLISH ] = "~Add..." ;
         Text [ norwegian ] = "~Add..." ;
@@ -2257,8 +2248,6 @@ TabPage RID_SVXPAGE_HATCH
     {
         Pos = MAP_APPFONT ( 197 , 32  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern... : ~Žndern... */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern... : ~Žndern... */
         Text = "~Ändern..." ;
         Text [ ENGLISH ] = "~Modify..." ;
         Text [ norwegian ] = "~Endre..." ;
@@ -2289,8 +2278,6 @@ TabPage RID_SVXPAGE_HATCH
     {
         Pos = MAP_APPFONT ( 197 , 68  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
         Text = "~Löschen..." ;
         Text [ ENGLISH ] = "~Delete..." ;
         Text [ norwegian ] = "~Delete..." ;
@@ -2532,7 +2519,7 @@ TabPage RID_SVXPAGE_BITMAP
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 115  ) ;
-        Size = MAP_APPFONT ( 62 , 62 ) ;
+        Size = MAP_APPFONT ( 62 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
@@ -2568,7 +2555,7 @@ TabPage RID_SVXPAGE_BITMAP
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 142  ) ;
-        Size = MAP_APPFONT ( 62 , 62 ) ;
+        Size = MAP_APPFONT ( 62 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
@@ -2582,17 +2569,14 @@ TabPage RID_SVXPAGE_BITMAP
     };
     Control CTL_PREVIEW
     {
-        Border = FALSE;
+        Border = TRUE ;
         Pos = MAP_APPFONT ( 103 , 131  ) ;
         Size = MAP_APPFONT ( 88 , 42 ) ;
-        TabStop = TRUE ;
     };
     PushButton BTN_ADD
     {
         Pos = MAP_APPFONT ( 197 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? H~inzufügen... : H~inzuf³gen... */
-        /* ### ACHTUNG: Neuer Text in Resource? H~inzufügen... : H~inzuf³gen... */
         Text = "H~inzufügen..." ;
         Text [ ENGLISH ] = "~Add..." ;
         Text [ norwegian ] = "~Add..." ;
@@ -2623,8 +2607,6 @@ TabPage RID_SVXPAGE_BITMAP
     {
         Pos = MAP_APPFONT ( 197 , 32  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern... : ~Žndern... */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern... : ~Žndern... */
         Text = "~Ändern..." ;
         Text [ ENGLISH ] = "~Modify..." ;
         Text [ norwegian ] = "~Endre..." ;
@@ -2685,8 +2667,6 @@ TabPage RID_SVXPAGE_BITMAP
     {
         Pos = MAP_APPFONT ( 197 , 68 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
         Text = "~Löschen..." ;
         Text [ ENGLISH ] = "~Delete..." ;
         Text [ norwegian ] = "~Delete..." ;
@@ -2822,8 +2802,6 @@ TabPage RID_SVXPAGE_GRADIENT
 {
     HelpID = HID_AREA_GRADIENT ;
     Hide = TRUE ;
-    /* ### ACHTUNG: Neuer Text in Resource? Farbverläufe : Farbverlõufe */
-    /* ### ACHTUNG: Neuer Text in Resource? Farbverläufe : Farbverlõufe */
     Text = "Farbverläufe" ;
     Text [ English ] = "Gradients" ;
     Text [ norwegian ] = "+++Gradients" ;
@@ -3151,7 +3129,7 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 30  ) ;
-        Size = MAP_APPFONT ( 42 , 12 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -3195,7 +3173,7 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 46  ) ;
-        Size = MAP_APPFONT ( 42, 12 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -3239,7 +3217,7 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 62 ) ;
-        Size = MAP_APPFONT ( 42, 12 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -3305,7 +3283,7 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 78  ) ;
-        Size = MAP_APPFONT ( 42, 12 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -3349,7 +3327,7 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 97 ) ;
-        Size = MAP_APPFONT ( 48, 63 ) ;
+        Size = MAP_APPFONT ( 48, 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
@@ -3358,7 +3336,7 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 113  ) ;
-        Size = MAP_APPFONT ( 29, 12 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -3402,7 +3380,7 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 131 ) ;
-        Size = MAP_APPFONT ( 48, 62 ) ;
+        Size = MAP_APPFONT ( 48, 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
@@ -3411,7 +3389,7 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 147 ) ;
-        Size = MAP_APPFONT ( 29, 12 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -3431,17 +3409,14 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     Control CTL_PREVIEW
     {
-        Border = FALSE;
+        Border = TRUE;
         Pos = MAP_APPFONT ( 103 , 131  ) ;
         Size = MAP_APPFONT ( 88 , 42 ) ;
-        TabStop = TRUE ;
     };
     PushButton BTN_ADD
     {
         Pos = MAP_APPFONT ( 197 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? H~inzufügen... : H~inzuf³gen... */
-        /* ### ACHTUNG: Neuer Text in Resource? H~inzufügen... : H~inzuf³gen... */
         Text = "H~inzufügen..." ;
         Text [ ENGLISH ] = "~Add..." ;
         Text [ norwegian ] = "~Add..." ;
@@ -3472,8 +3447,6 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Pos = MAP_APPFONT ( 197 , 32  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern... : ~Žndern... */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern... : ~Žndern... */
         Text = "~Ändern..." ;
         Text [ ENGLISH ] = "~Modify..." ;
         Text [ norwegian ] = "~Endre..." ;
@@ -3504,8 +3477,6 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Pos = MAP_APPFONT ( 197 , 68 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
         Text = "~Löschen..." ;
         Text [ ENGLISH ] = "~Delete..." ;
         Text [ norwegian ] = "~Delete..." ;
@@ -3752,7 +3723,7 @@ TabPage RID_SVXPAGE_COLOR
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 42 , 30  ) ;
-        Size = MAP_APPFONT ( 76 , 65 ) ;
+        Size = MAP_APPFONT ( 76 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
@@ -3798,17 +3769,15 @@ TabPage RID_SVXPAGE_COLOR
 
     Control CTL_PREVIEW_OLD
     {
-        Border = FALSE;
+        Border = TRUE;
         Pos = MAP_APPFONT ( 157 , 14  ) ;
         Size = MAP_APPFONT ( 34 , 25 ) ;
-        TabStop = TRUE ;
     };
     Control CTL_PREVIEW_NEW
     {
-        Border = FALSE;
+        Border = TRUE;
         Pos = MAP_APPFONT ( 157, 39  ) ;
         Size = MAP_APPFONT ( 34 , 25 ) ;
-        TabStop = TRUE ;
     };
     ListBox LB_COLORMODEL
     {
@@ -3944,7 +3913,7 @@ TabPage RID_SVXPAGE_COLOR
         Spin = TRUE ;
         Maximum = 100 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
         Last = 100 ;
     };
     FixedText FT_2
@@ -3963,7 +3932,7 @@ TabPage RID_SVXPAGE_COLOR
         Spin = TRUE ;
         Maximum = 100 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
         Last = 100 ;
     };
     FixedText FT_3
@@ -3982,7 +3951,7 @@ TabPage RID_SVXPAGE_COLOR
         Spin = TRUE ;
         Maximum = 100 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
         Last = 100 ;
     };
     FixedText FT_4
@@ -4001,7 +3970,7 @@ TabPage RID_SVXPAGE_COLOR
         Spin = TRUE ;
         Maximum = 100 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
         Last = 100 ;
     };
     PushButton BTN_ADD
