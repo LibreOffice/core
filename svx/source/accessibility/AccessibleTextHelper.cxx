@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:23:36 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,16 @@ namespace accessibility
 //------------------------------------------------------------------------
 
     DBG_NAME( AccessibleTextHelper_Impl )
+
+    template < typename first_type, typename second_type >
+        ::std::pair< first_type, second_type > makeSortedPair( first_type   first,
+                                                                                 second_type    second  )
+    {
+        if( first > second )
+            return ::std::make_pair( second, first );
+        else
+            return ::std::make_pair( first, second );
+    }
 
     class AccessibleTextHelper_Impl : public SfxListener
     {
@@ -728,8 +738,13 @@ namespace accessibility
                              aSelection.nStartPara == aSelection.nEndPara) )
                         {
                             // selection was on, now is empty
-                            maParaManager.FireEvent( ::std::min( maLastSelection.nStartPara, nMaxValidParaIndex ),
-                                                     ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex )+1,
+
+                            // #108947# Sort range befor calling FireEvent
+                            ::std::pair< xub_StrLen, xub_StrLen > sortedSel(
+                                makeSortedPair( static_cast< xub_StrLen >( ::std::min( maLastSelection.nStartPara, nMaxValidParaIndex ) ),
+                                               static_cast< xub_StrLen >( ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex )+1) ) );
+
+                            maParaManager.FireEvent( sortedSel.first, sortedSel.second,
                                                      AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
                         }
                         else if( (maLastSelection.nStartPos == maLastSelection.nEndPos &&
@@ -745,10 +760,15 @@ namespace accessibility
                         else
                         {
                             // selection was on, now is different
-                            maParaManager.FireEvent( ::std::min(aSelection.nStartPara,
-                                                                ::std::min( maLastSelection.nStartPara, nMaxValidParaIndex )),
-                                                     ::std::max( aSelection.nEndPara,
-                                                                 static_cast< USHORT >( ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex )+1 ) ),
+
+                            // #108947# Sort range befor calling FireEvent
+                            ::std::pair< xub_StrLen, xub_StrLen > sortedSel(
+                                makeSortedPair( static_cast< xub_StrLen >( ::std::min(aSelection.nStartPara,
+                                                           ::std::min( maLastSelection.nStartPara, nMaxValidParaIndex ))),
+                                                static_cast< xub_StrLen >( ::std::max( (xub_StrLen)aSelection.nEndPara,
+                                                            static_cast< USHORT >( ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex ) ) ) + 1 ) ) );
+
+                            maParaManager.FireEvent( sortedSel.first, sortedSel.second,
                                                      AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
                         }
                     }
