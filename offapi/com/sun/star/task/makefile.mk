@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: jsc $ $Date: 2002-11-29 15:14:45 $
+#   last change: $Author: mi $ $Date: 2003-01-21 13:42:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,23 +73,25 @@ PACKAGE=com$/sun$/star$/task
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    PasswordContainer.idl \
     ClassifiedInteractionRequest.idl\
-    DocumentPasswordRequest.idl\
     InteractionClassification.idl\
     InteractionHandler.idl\
     JobExecutor.idl\
-    MasterPasswordRequest.idl\
     NoMasterException.idl\
     PasswordContainer.idl\
     PasswordRequest.idl\
     PasswordRequestMode.idl\
-    UnsupportedOverwriteRequest.idl\
     UrlRecord.idl\
     UserRecord.idl\
     XAsyncJob.idl\
+    XInteractionAbort.idl\
     XInteractionApprove.idl\
+    XInteractionContinuation.idl\
     XInteractionDisapprove.idl\
-    XInteractionPassword.idl\
+    XInteractionHandler.idl\
+    XInteractionRequest.idl\
+    XInteractionRetry.idl\
     XJob.idl\
     XJobExecutor.idl\
     XJobListener.idl\
@@ -97,7 +99,6 @@ IDLFILES=\
     XStatusIndicator.idl\
     XStatusIndicatorFactory.idl\
     XStatusIndicatorSupplier.idl
-
 
 # ------------------------------------------------------------------
 

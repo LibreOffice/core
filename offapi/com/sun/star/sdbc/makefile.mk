@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jsc $ $Date: 2002-11-29 15:08:57 $
+#   last change: $Author: mi $ $Date: 2003-01-21 13:42:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,12 @@ PACKAGE=com$/sun$/star$/sdbc
 
 # ------------------------------------------------------------------------
 IDLFILES=\
+    ConnectionProperties.idl \
+    DBASEConnectionProperties.idl \
+    FILEConnectionProperties.idl \
+    FLATConnectionProperties.idl \
+    JDBCConnectionProperties.idl \
+    ODBCConnectionProperties.idl \
     BatchUpdateException.idl \
     BestRowScope.idl \
     BestRowType.idl \
@@ -83,21 +89,15 @@ IDLFILES=\
     ColumnValue.idl \
     Connection.idl \
     ConnectionPool.idl \
-    ConnectionProperties.idl \
     DataTruncation.idl \
     DataType.idl \
-    DBASEConnectionProperties.idl \
     Deferrability.idl \
     Driver.idl \
     DriverManager.idl \
     DriverPropertyInfo.idl \
     FetchDirection.idl \
-    FILEConnectionProperties.idl \
-    FLATConnectionProperties.idl \
     IndexType.idl \
-    JDBCConnectionProperties.idl \
     KeyRule.idl \
-    ODBCConnectionProperties.idl \
     PreparedStatement.idl \
     ProcedureColumn.idl \
     ProcedureResult.idl \
@@ -112,21 +112,20 @@ IDLFILES=\
     XArray.idl \
     XBatchExecution.idl \
     XBlob.idl \
+    XColumnLocate.idl \
     XClob.idl \
     XCloseable.idl \
-    XColumnLocate.idl \
     XConnection.idl \
+    XPooledConnection.idl \
     XDatabaseMetaData.idl \
     XDataSource.idl \
     XDriver.idl \
     XDriverAccess.idl \
     XDriverManager.idl \
-    XGeneratedResultSet.idl \
     XIsolatedConnection.idl \
     XMultipleResults.idl \
     XOutParameters.idl \
     XParameters.idl \
-    XPooledConnection.idl \
     XPreparedBatchExecution.idl \
     XPreparedStatement.idl \
     XRef.idl \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextCursor.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-10 11:42:50 $
+ *  last change: $Author: mi $ $Date: 2003-01-21 13:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@
 #include <com/sun/star/document/XDocumentInsertable.idl>
 #endif
 
-#ifndef __com_sun_star_text_TextSortable_idl__
-#include <com/sun/star/text/TextSortable.idl>
+#ifndef __com_sun_star_util_XSortable_idl__
+#include <com/sun/star/util/XSortable.idl>
 #endif
 
 
@@ -116,11 +116,6 @@ service TextCursor
 {
     // DocMerge: empty anyway
     service com::sun::star::text::TextRange;
-
-        /** This optional service makes it possible to sort the contents at
-            the cursor position.
-         */
-        [optional] service com::sun::star::text::TextSortable;
 
     interface com::sun::star::text::XTextCursor;
 
@@ -154,6 +149,13 @@ service TextCursor
                 from an external source at the cursor position.
      */
     [optional] interface com::sun::star::document::XDocumentInsertable;
+
+
+    // DocMerge from xml: service com::sun::star::text::TextCursor: interface com::sun::star::util::XSortable
+    /** This optional interface makes it possible to sort the contents at
+                the cursor position.
+     */
+    [optional] interface com::sun::star::util::XSortable;
 
 };
 

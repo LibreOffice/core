@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: fs $ $Date: 2002-11-13 09:05:36 $
+#   last change: $Author: mi $ $Date: 2003-01-21 13:43:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,12 +91,9 @@ IDLFILES=\
     NumberFormatProperties.idl\
     NumberFormats.idl\
     NumberFormatSettings.idl\
-    NumberFormatsSupplier.idl\
     NumberFormatter.idl\
-    ModeChangeEvent.idl\
     ReplaceDescriptor.idl\
     SearchDescriptor.idl\
-        Sortable.idl\
     SortDescriptor.idl\
     SortField.idl\
     SortFieldType.idl\
@@ -123,9 +120,6 @@ IDLFILES=\
     XLinkUpdate.idl\
     XLocalizedAliases.idl\
     XMergeable.idl\
-    XModeChangeBroadcaster.idl\
-    XModeChangeListener.idl\
-    XModeChangeApproveListener.idl\
     XModeSelector.idl\
     XModifiable.idl\
     XModifyBroadcaster.idl\
@@ -153,7 +147,6 @@ IDLFILES=\
     XUpdatable.idl\
     XURLTransformer.idl\
     XUniqueIDFactory.idl\
-    VetoException.idl\
     DataEditorEventType.idl\
     DataEditorEvent.idl\
     XDataEditorListener.idl\
@@ -162,10 +155,7 @@ IDLFILES=\
     NotNumericException.idl\
     XAtomServer.idl\
     AtomClassRequest.idl\
-    AtomDescription.idl\
-    XStringSubstitution.idl\
-    PathSettings.idl\
-    PathSubstitution.idl
+    AtomDescription.idl
 
 # ------------------------------------------------------------------
 

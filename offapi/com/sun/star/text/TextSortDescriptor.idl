@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextSortDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-14 10:10:37 $
+ *  last change: $Author: mi $ $Date: 2003-01-21 13:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,14 +97,14 @@ service TextSortDescriptor
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::SortRowOrColumnNo0
-        /** contains the row or column index used in the first key.
+    /** contains the row or column index used in the first search key.
      */
     [property] long SortRowOrColumnNo0;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortNumeric0
-        /** determines if the sorting in the first key is done
+    /** determines if the sorting in the first search key is done
         numeric or alphanumeric order.
      */
     [property] boolean IsSortNumeric0;
@@ -112,32 +112,22 @@ service TextSortDescriptor
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortAscending0
-        /** determines if the sorting in the first key is done
+    /** determines if the sorting in the first search key is done
         in ascending or descending order.
      */
     [property] boolean IsSortAscending0;
 
-        //-------------------------------------------------------------------------
-
-        /** specifies the algorithm for the compare operator (collator)
-            in the first key.
-
-            Set only if 'IsSortNumeric0' is <FALSE/> otherwise
-            it is the empty string.
-         */
-        [property] string CollatorAlgorithm0;
-
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::SortRowOrColumnNo1
-        /** contains the row or column index used in the second key.
+    /** contains the row or column index used in the second search key.
      */
     [property] long SortRowOrColumnNo1;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortNumeric1
-        /** determines if the sorting in the second key is done
+    /** determines if the sorting in the second search key is done
         in numeric or alphanumeric order.
      */
     [property] boolean IsSortNumeric1;
@@ -145,32 +135,22 @@ service TextSortDescriptor
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortAscending1
-        /** determines if the sorting in the second key is done
+    /** determines if the sorting in the second search key is done
         in ascending or descending order.
      */
     [property] boolean IsSortAscending1;
 
-        //-------------------------------------------------------------------------
-
-        /** specifies the algorithm for the compare operator (collator)
-            in the second key.
-
-            Set only if 'IsSortNumeric1' is <FALSE/> otherwise
-            it is the empty string.
-         */
-        [property] string CollatorAlgorithm1;
-
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::SortRowOrColumnNo2
-        /** contains the row or column index used in the third key.
+    /** contains the row or column index used in the third search key.
      */
     [property] long SortRowOrColumnNo2;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortNumeric2
-        /** determines if the sorting in the third key is done
+    /** determines if the sorting in the third search key is done
         in numeric or alphanumeric order.
      */
     [property] boolean IsSortNumeric2;
@@ -178,20 +158,10 @@ service TextSortDescriptor
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortAscending2
-        /** determines if the sorting in the third key is done
+    /** determines if the sorting in the third search key is done
         in ascending or descending order.
      */
     [property] boolean IsSortAscending2;
-
-        //-------------------------------------------------------------------------
-
-        /** specifies the algorithm for the compare operator (collator)
-            in the third key.
-
-            Set only if 'IsSortNumeric1' is <FALSE/> otherwise
-            it is the empty string.
-         */
-        [property] string CollatorAlgorithm2;
 
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseRange.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2002-12-03 17:11:45 $
+ *  last change: $Author: mi $ $Date: 2003-01-21 13:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_DatabaseRange_idl__
 #define __com_sun_star_sheet_DatabaseRange_idl__
 
@@ -77,14 +78,9 @@
 #include <com/sun/star/container/XNamed.idl>
 #endif
 
-#ifndef __com_sun_star_table_CellRangeAddress_idl__
-#include <com/sun/star/table/CellRangeAddress.idl>
-#endif
-
-
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
@@ -97,60 +93,51 @@
  */
 service DatabaseRange
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the settings of the database range.
+     */
     interface com::sun::star::sheet::XDatabaseRange;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::sheet::XCellRangeReferrer;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::beans::XPropertySet;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XNamed;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DatabaseRange::MoveCells
-    /** if this property is set, columns or rows are inserted or deleted
-        when the size of the range is changed by an update operation.
+    /** provides access to the cell range object referred by this named range.
+     */
+    interface com::sun::star::sheet::XCellRangeReferrer;
+
+    //-------------------------------------------------------------------------
+
+//! service PropertySet
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the name of the database range.
+      */
+    interface com::sun::star::container::XNamed;
+
+    //=========================================================================
+
+    /** specifies whether columns or rows are inserted or deleted when the
+        size of the range is changed by an update operation.
      */
     [property] boolean MoveCells;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DatabaseRange::KeepFormats
-    /** if this property is set, cell formats are extended
-        when the size of the range is changed by an update operation.
+    /** specifies whether cell formats are extended when the size of the
+        range is changed by an update operation.
      */
     [property] boolean KeepFormats;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DatabaseRange::StripData
-    /** if this property is set, the cell contents within the database
-        range are left out when the document is saved.
+    /** specifies whether cell contents within the database range are left
+        out when the document is saved.
      */
     [property] boolean StripData;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies whether the AutoFilter is enabled or not.
-     */
-    [optional, property] boolean AutoFilter;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies whether the filter criteria should be taken from a CellRange
-     */
-    [optional, property] boolean UseFilterCriteriaSource;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies the range where the filter can find the filter criterias.
-        <p>This is only used if <member>SheetFilterDescriptor::UseFilterCriteriaSource</member> is <TRUE/>.</p>
-     */
-    [optional, property] com::sun::star::table::CellRangeAddress FilterCriteriaSource;
 
 };
 
@@ -158,24 +145,5 @@ service DatabaseRange
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2002/10/11 07:50:35  sab
-    #100469#; add AutoFilter and FilterCriteriaSource support
-
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:47  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

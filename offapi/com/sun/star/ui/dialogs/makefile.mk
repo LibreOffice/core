@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: tra $ $Date: 2002-07-12 13:11:57 $
+#   last change: $Author: mi $ $Date: 2003-01-21 13:43:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,6 @@ PACKAGE=com$/sun$/star$/ui$/dialogs
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    FilterOptionsDialog.idl\
     ControlActions.idl\
     ExecutableDialogException.idl\
     ExecutableDialogResults.idl\
@@ -93,9 +92,7 @@ IDLFILES=\
     XFilePreview.idl\
     XFilterGroupManager.idl\
     XFilterManager.idl\
-    XFolderPicker.idl\
-    XControlAccess.idl\
-    XControlInformation.idl
+    XFolderPicker.idl
 
 # ------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateTime.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 14:00:56 $
+ *  last change: $Author: mi $ $Date: 2003-01-21 13:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,6 @@ service DateTime
     /** contains an offset to the date or time value in minutes.
     */
     [optional, property] long Adjust;
-    /** determines whether changes in language attributes at the position the text field
-        is located also change the number format as appropriate for this language.
-     */
-    [optional, property] boolean IsFixedLanguage;
 };
 
 //=============================================================================

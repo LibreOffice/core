@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jsc $ $Date: 2002-11-29 15:23:52 $
+#   last change: $Author: mi $ $Date: 2003-01-21 13:43:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,31 +73,28 @@ PACKAGE=com$/sun$/star$/view
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    ViewSettings.idl\
     DocumentZoomType.idl\
     OfficeDocumentView.idl\
     PaperFormat.idl\
     PaperOrientation.idl\
-    PrintableState.idl\
-    PrintableStateEvent.idl\
     PrinterDescriptor.idl\
     PrintOptions.idl\
     PrintSettings.idl\
-    RenderDescriptor.idl\
-    RenderOptions.idl\
-    ViewSettings.idl\
     XControlAccess.idl\
     XLineCursor.idl\
     XPrintable.idl\
-    XPrintableBroadcaster.idl\
-    XPrintableListener.idl\
     XPrintPreview.idl\
     XPrintSettingsSupplier.idl\
-    XRenderable.idl\
     XScreenCursor.idl\
     XSelectionChangeListener.idl\
     XSelectionSupplier.idl\
     XViewCursor.idl\
     XViewSettingsSupplier.idl\
+    XPrintableBroadcaster.idl\
+    XPrintableListener.idl\
+    PrintableState.idl\
+    PrintableStateEvent.idl
 
 # ------------------------------------------------------------------
 

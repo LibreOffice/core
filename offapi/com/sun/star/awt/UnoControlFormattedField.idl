@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFormattedField.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-09 16:05:11 $
+ *  last change: $Author: mi $ $Date: 2003-01-21 13:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,4 +85,14 @@ service UnoControlFormattedField
 
 }; }; }; };
 
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.2  2001/06/11 15:20:04  mt
+    #87832# UnoControlFormattedField doesn't support XSpinField
+
+    Revision 1.1  2001/04/19 08:42:34  fs
+    initial checkin
+
+=============================================================================*/
 #endif

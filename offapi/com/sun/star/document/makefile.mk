@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: bm $ $Date: 2002-12-06 14:14:51 $
+#   last change: $Author: mi $ $Date: 2003-01-21 13:41:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,54 +73,48 @@ PACKAGE=com$/sun$/star$/document
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    AmbigousFilterRequest.idl\
-    DocumentInfo.idl\
-    EventDescriptor.idl\
-    EventObject.idl\
-    Events.idl\
-    ExportFilter.idl\
-    ExtendedTypeDetection.idl\
-    FilterAdapter.idl\
-    FilterFactory.idl\
-    FilterOptionsRequest.idl\
-    HeaderFooterSettings.idl\
-    ImportFilter.idl\
-    LinkTarget.idl\
-    LinkTargets.idl\
-    MacroExecMode.idl\
-    MediaDescriptor.idl\
-    NoSuchFilterRequest.idl\
-    OfficeDocument.idl\
-    RedlineDisplayType.idl \
-    Settings.idl\
-    StandaloneDocumentInfo.idl\
-    TypeDetection.idl\
-    UpdateDocMode.idl\
-    XActionLockable.idl\
-    XBinaryStreamResolver.idl\
-    XDocumentInfo.idl\
-    XDocumentInfoSupplier.idl\
-    XDocumentInsertable.idl\
+    XMimeTypeInfo.idl\
+    XViewDataSupplier.idl\
     XEmbeddedObjectResolver.idl\
-    XEmbeddedObjectSupplier.idl\
+    XGraphicObjectResolver.idl\
+    XBinaryStreamResolver.idl\
     XEventBroadcaster.idl\
     XEventListener.idl\
     XEventsSupplier.idl\
+    EventDescriptor.idl\
+    Events.idl\
+    EventObject.idl\
+    ExtendedTypeDetection.idl \
+    DocumentInfo.idl\
+    ExportFilter.idl\
+    FilterFactory.idl\
+    ImportFilter.idl\
+    LinkTarget.idl\
+    LinkTargets.idl\
+    MediaDescriptor.idl\
+    OfficeDocument.idl\
+    RedlineDisplayType.idl \
+    StandaloneDocumentInfo.idl\
+    TypeDetection.idl\
+    XActionLockable.idl\
+    XDocumentInfo.idl\
+    XDocumentInfoSupplier.idl\
+    XDocumentInsertable.idl\
+    XEmbeddedObjectSupplier.idl\
     XExporter.idl\
     XExtendedFilterDetection.idl\
     XFilter.idl\
-    XFilterAdapter.idl\
-    XGraphicObjectResolver.idl\
     XImporter.idl\
-    XInteractionFilterOptions.idl\
-    XInteractionFilterSelect.idl\
     XLinkTargetSupplier.idl\
-    XMimeTypeInfo.idl\
     XRedlinesSupplier.idl \
     XStandaloneDocumentInfo.idl\
     XTypeDetection.idl\
-    XViewDataSupplier.idl\
-    LinkUpdateModes.idl
+    XInteractionFilterSelect.idl\
+    NoSuchFilterRequest.idl\
+    AmbigousFilterRequest.idl\
+    LinkUpdateModes.idl\
+    HeaderFooterSettings.idl\
+    Settings.idl
 
 # ------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreparedStatement.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mi $ $Date: 2002-12-10 16:13:53 $
+ *  last change: $Author: mi $ $Date: 2003-01-21 13:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@ interface XWarningsSupplier;
 interface XMultipleResults;
 interface XResultSetMetaDataSupplier;
 interface XCloseable;
-interface XGeneratedResultSet;
 
 
 // DocMerge from idl: service com::sun::star::sdbc::PreparedStatement
@@ -157,13 +156,6 @@ service PreparedStatement
              The implementation is optional.
      */
     [optional] interface com::sun::star::util::XCancellable;
-
-    /** could be used to retrieve a result set which gives access to automatically generated values after an insert statement.
-             The implementation is optional.
-
-        @since #95146#
-     */
-    [optional] interface com::sun::star::sdbc::XGeneratedResultSet;
 
     // DocMerge from xml: service com::sun::star::sdbc::PreparedStatement: interface com::sun::star::sdbc::XPreparedStatement
     /** is the interface for executing SQL prepared commands.

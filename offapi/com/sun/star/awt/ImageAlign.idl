@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageAlign.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-09 13:49:14 $
+ *  last change: $Author: mi $ $Date: 2003-01-21 13:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,4 +101,15 @@ constants ImageAlign
 
 }; }; }; };
 
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.2  2001/06/01 11:57:33  mt
+    #86837# short values!
+
+    Revision 1.1  2001/06/01 11:34:30  mt
+    #86837# ImageAlign
+
+
+=============================================================================*/
 #endif

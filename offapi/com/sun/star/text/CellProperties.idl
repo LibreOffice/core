@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellProperties.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2002-10-18 08:05:16 $
+ *  last change: $Author: mi $ $Date: 2003-01-21 13:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,10 +152,6 @@ service CellProperties
     [property] long BottomBorderDistance;
     //-------------------------------------------------------------------------
     /** contains user defined attributes.
-
-        This <type scope="com::sun::star::container">XNameContainer</type>
-        supports the service
-        <type scope="com::sun::star::xml>AttributeContainer</type>.
      */
     [property] com::sun::star::container::XNameContainer UserDefinedAttributes;
     //-------------------------------------------------------------------------

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jsc $ $Date: 2002-11-29 15:08:23 $
+#   last change: $Author: mi $ $Date: 2003-01-21 13:42:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ IDLFILES=\
     DatabaseAccess.idl \
     DatabaseAccessConnection.idl \
     DatabaseAccessContext.idl \
+    DatabaseAccessDataSource.idl \
     DatabaseContext.idl \
     DatabaseDocument.idl \
     DatabaseEnvironment.idl \
@@ -98,7 +99,6 @@ IDLFILES=\
     Query.idl \
     QueryDefinition.idl \
     QueryDescriptor.idl \
-    QueryDesign.idl \
     ResultColumn.idl \
     ResultSet.idl \
     RowChangeAction.idl \
@@ -109,9 +109,6 @@ IDLFILES=\
     SQLErrorEvent.idl \
     SQLQueryComposer.idl \
     Table.idl \
-    TableDesign.idl \
-    QueryDesign.idl \
-    RelationDesign.idl \
     TableDescriptor.idl \
     XAlterQuery.idl \
     XBookmarksSupplier.idl \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FolderPicker.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:42 $
+ *  last change: $Author: mi $ $Date: 2003-01-21 13:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,6 @@ module com { module sun { module star { module ui { module dialogs {
 //=============================================================================
 
 interface XFolderPicker;
-interface XControlInformation;
-interface XControlAccess;
 
 //=============================================================================
 /** A FolderPicker service.
@@ -115,24 +113,6 @@ service FolderPicker
         <p>This may be usefull for automatic test tools for instance.</p>
     */
     [optional] interface com::sun::star::util::XCancellable;
-
-    //-------------------------------------------------------------------------
-    /** Use this interface to query for the controls and control
-            properties supported.
-    */
-    [optional] interface com::sun::star::ui::dialogs::XControlInformation;
-
-    //-------------------------------------------------------------------------
-    /** Use this interface to query for or modify the properties of the
-            supported controls.
-
-        <p>For a list of commonly used control names and control properties, please
-        have a look at the <type>FilePicker</type> documentation.</p>
-
-        @see FilePicker
-
-        */
-    [optional] interface com::sun::star::ui::dialogs::XControlAccess;
 };
 
 //=============================================================================

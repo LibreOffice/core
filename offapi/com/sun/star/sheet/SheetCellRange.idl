@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetCellRange.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-23 12:36:51 $
+ *  last change: $Author: mi $ $Date: 2003-01-21 13:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,10 +114,6 @@
 
 #ifndef __com_sun_star_sheet_XCellRangeData_idl__
 #include <com/sun/star/sheet/XCellRangeData.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XCellRangeFormula_idl__
-#include <com/sun/star/sheet/XCellRangeFormula.idl>
 #endif
 
 #ifndef __com_sun_star_sheet_XCellRangeAddressable_idl__
@@ -281,12 +277,6 @@ service SheetCellRange
     /** provides simultaneous access to the contents of all cells.
      */
     interface com::sun::star::sheet::XCellRangeData;
-
-    //-------------------------------------------------------------------------
-
-    /** provides simultaneous access to the formula contents of all cells.
-     */
-    [optional] interface com::sun::star::sheet::XCellRangeFormula;
 
     //-------------------------------------------------------------------------
 
