@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdidlclass.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 13:20:20 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ Reference< XIdlReflection > const & OStdIdlClass::get_corefl()
                     Reference < XIdlReflection > x;
                     xContext->getValueByName(
                         OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection") ) ) >>= x;
-                    OSL_ENSURE( x.is(), "### CoreReflection singleton not accessable!?" );
+                    OSL_ENSURE( x.is(), "### CoreReflection singleton not accessible!?" );
 
                     if (x.is())
                     {
@@ -186,7 +186,7 @@ Reference< XIdlReflection > const & OStdIdlClass::get_corefl()
         if (! m_xCorefl.is())
         {
             throw DeploymentException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessable") ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessible") ),
                 Reference< XInterface >() );
         }
     }
@@ -199,9 +199,9 @@ OStdIdlClass::OStdIdlClass(
                     const Reference < XIdlClass > & rSuperClass,
                     const Sequence < OUString > &seq
                           ) SAL_THROW( () ) :
-                m_rSMgr( rSMgr ) ,
                 m_sImplementationName( sImplementationName ) ,
-                m_seqSupportedInterface( seq )
+                m_seqSupportedInterface( seq ),
+                m_rSMgr( rSMgr )
 {
     if( rSuperClass.is() )
         m_seqSuperClasses = Sequence< Reference < XIdlClass > >( &rSuperClass, 1 );
