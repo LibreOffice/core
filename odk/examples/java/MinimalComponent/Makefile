@@ -1,4 +1,4 @@
-# Builds the java minimal component.
+# Builds the java minimal component. 
 
 PRJ=..$(PS)..$(PS)..
 SETTINGS=../../../settings
