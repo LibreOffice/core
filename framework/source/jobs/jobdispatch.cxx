@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobdispatch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:17:01 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,27 +397,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const ::rtl::OUString&             
         // Otherwhise the listener may will ignore it.
         if (xListener.is())
             pJob->setDispatchResultFake(xListener, xThis);
-        try
-        {
-            pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
-        }
-#ifdef ENABLE_WARNINGS
-        catch(const css::uno::Exception& exAny)
-        {
-            LOG_EXCEPTION("JobDispatch::impl_dispatchEvent()", "catched on execute job", exAny.Message)
-#else
-        catch(const css::uno::Exception&)
-        {
-#endif // ENABLE_WARNINGS
-            if (xListener.is())
-            {
-                css::frame::DispatchResultEvent aEvent;
-                aEvent.Source = xThis;
-                aEvent.State  = css::frame::DispatchResultState::FAILURE;
-                xListener->dispatchFinished(aEvent);
-                return;
-            }
-        }
+        pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
     }
 }
 
@@ -470,28 +450,7 @@ void JobDispatch::impl_dispatchService( /*IN*/ const ::rtl::OUString&           
     // Otherwhise the listener may will ignore it.
     if (xListener.is())
         pJob->setDispatchResultFake(xListener, xThis);
-
-    try
-    {
-        pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
-    }
-#ifdef ENABLE_WARNINGS
-    catch(const css::uno::Exception& exAny)
-    {
-        LOG_EXCEPTION("JobDispatch::impl_dispatchService()", "catched on execute job", exAny.Message)
-#else
-    catch(const css::uno::Exception&)
-    {
-#endif // ENABLE_WARNINGS
-        if (xListener.is())
-        {
-            css::frame::DispatchResultEvent aEvent;
-            aEvent.Source = xThis;
-            aEvent.State  = css::frame::DispatchResultState::FAILURE;
-            xListener->dispatchFinished(aEvent);
-            return;
-        }
-    }
+    pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
 }
 
 //________________________________
@@ -542,28 +501,7 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const ::rtl::OUString&             
     // Otherwhise the listener may will ignore it.
     if (xListener.is())
         pJob->setDispatchResultFake(xListener, xThis);
-
-    try
-    {
-        pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
-    }
-#ifdef ENABLE_WARNINGS
-    catch(const css::uno::Exception& exAny)
-    {
-        LOG_EXCEPTION("JobDispatch::impl_dispatchAlias()", "catched on execute job", exAny.Message)
-#else
-    catch(const css::uno::Exception&)
-    {
-#endif // ENABLE_WARNINGS
-        if (xListener.is())
-        {
-            css::frame::DispatchResultEvent aEvent;
-            aEvent.Source = xThis;
-            aEvent.State  = css::frame::DispatchResultState::FAILURE;
-            xListener->dispatchFinished(aEvent);
-            return;
-        }
-    }
+    pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
 }
 
 //________________________________
