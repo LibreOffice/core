@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-19 18:02:03 $
+ *  last change: $Author: mba $ $Date: 2001-12-21 16:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,19 +603,13 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
             {
                 // remove "ThisComponent" reference from AppBasic
                 SFX_APP()->Get_Impl()->pThisDocument = NULL;
-                SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
-                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInterface;
-                ::com::sun::star::uno::Any aComponent;
+                SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_OBJECT );
                 if ( pCompVar )
                 {
+                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInterface;
+                    ::com::sun::star::uno::Any aComponent;
                     aComponent <<= xInterface;
                     pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent ) );
-                }
-                else
-                {
-                    SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent );
-                    xUnoObj->SetFlag( SBX_DONTSTORE );
-                    pBas->Insert( xUnoObj );
                 }
             }
 
