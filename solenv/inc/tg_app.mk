@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_app.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-03-02 04:49:00 $
-#*    $Revision: 1.17 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-03-02 06:16:03 $
+#*    $Revision: 1.18 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_app.mkv  $
 #*
@@ -80,7 +80,6 @@ USE_APP$(TNR)DEF=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 APP$(TNR)STDLIBS+=$(STATICLIB)
-LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(APP$(TNR)TARGETN)"!=""

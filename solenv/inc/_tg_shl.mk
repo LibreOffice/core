@@ -7,7 +7,6 @@ SHL1STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 SHL1STDLIBS+=$(STATICLIB)
-LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -382,7 +381,6 @@ SHL2STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 SHL2STDLIBS+=$(STATICLIB)
-LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -757,7 +755,6 @@ SHL3STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 SHL3STDLIBS+=$(STATICLIB)
-LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -1132,7 +1129,6 @@ SHL4STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 SHL4STDLIBS+=$(STATICLIB)
-LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -1507,7 +1503,6 @@ SHL5STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 SHL5STDLIBS+=$(STATICLIB)
-LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -1882,7 +1877,6 @@ SHL6STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 SHL6STDLIBS+=$(STATICLIB)
-LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -2257,7 +2251,6 @@ SHL7STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 SHL7STDLIBS+=$(STATICLIB)
-LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -2632,7 +2625,6 @@ SHL8STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 SHL8STDLIBS+=$(STATICLIB)
-LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -3007,7 +2999,6 @@ SHL9STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 SHL9STDLIBS+=$(STATICLIB)
-LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -3382,7 +3373,6 @@ SHL10STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 SHL10STDLIBS+=$(STATICLIB)
-LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""

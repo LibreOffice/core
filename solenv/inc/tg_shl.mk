@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 04:49:00 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 06:16:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,6 @@ SHL$(TNR)STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 SHL$(TNR)STDLIBS+=$(STATICLIB)
-LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""

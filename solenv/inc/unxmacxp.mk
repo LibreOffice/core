@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-28 23:40:27 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 06:16:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,14 +124,15 @@ CFLAGSNOOPT=
 .ENDIF
 CFLAGSOUTOBJ=-o
 
-SOLARVERSHLLIBS=$(shell -/bin/sh -c "ls $(SOLARLIBDIR)$/*$(DLLPOST) $(LB)$/*$(DLLPOST) 2>/dev/null")
+SOLARVERSHLLIBS=$(shell -/bin/sh -c "ls $(SOLARLIBDIR)$/*$(DLLPOST) $(LB)$/*$(DLLPOST) $(MISC)$/*$(DLLPOST) 2>/dev/null")
 .IF "$(STLPORT4)"!=""
 SOLARVERSHLLIBS+=$(shell -/bin/sh -c "ls $(STLPORT4)$/lib$/*$(DLLPOST) 2>/dev/null")
 .ENDIF
 
 LINK=cc
 LINKFLAGS=-dynamic -framework System -framework Cocoa -lcc_dynamic -lstdc++ \
-  $(foreach,i,$(SOLARVERSHLLIBS) -dylib_file @executable_path$/$(i:f):$i)
+  $(foreach,i,$(SOLARVERSHLLIBS) -dylib_file @executable_path$/$(i:f):$i) \
+  -L$(MISC)
 LINKFLAGSAPPGUI=-Wl,-u,__objcInit
 LINKFLAGSSHLGUI=-dynamiclib -install_name '@executable_path$/$(@:f)' \
   -Wl,-U,___progname -Wl,-U,_environ
