@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: mt $ $Date: 2001-06-01 10:44:53 $
+#   last change: $Author: mt $ $Date: 2001-06-01 11:35:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ IDLFILES=\
     FontWidth.idl\
     Gradient.idl\
     GradientStyle.idl\
+    ImageAlign.idl\
     ImageStatus.idl\
     InputEvent.idl\
     InvalidateStyle.idl\
