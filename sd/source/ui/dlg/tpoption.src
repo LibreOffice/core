@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:44 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,9 +884,9 @@ TabPage TP_OPTIONS_MISC
     {
         Pos = MAP_APPFONT ( 6 , 160 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Kompatibilit‰t" ;
-        Text [ English ] = "Compatibility" ;
-        Text[ english_us ] = "Compatibility";
+        Text = "Kompatibilit‰t (dokumentspezifische Einstellungen)" ;
+        Text [ English ] = "Compatibility (document-specific settings)" ;
+        Text[ english_us ] = "Compatibility (document-specific settings)" ;
         Text[ portuguese ] = "Compatibilidade";
         Text[ russian ] = "—Ó‚ÏÂÒÚËÏÓÒÚ¸";
         Text[ greek ] = "”ıÏ‚·Ù¸ÙÁÙ·";
@@ -907,6 +907,16 @@ TabPage TP_OPTIONS_MISC
         Text[ finnish ] = "Yhteensopivuus";
         Text[ catalan ] = "Compatibilitat";
         Text[ thai ] = "‡πÄ‡∏Ç‡πâ‡∏≤‡∏Å‡∏±‡∏ô‡πÑ‡∏î‡πâ";
+    };
+    CheckBox CB_USE_PRINTER_METRICS
+    {
+        // This checkbox and the following one will change places when this
+        // one is wired in into the dialog.  At the moment exists only for
+        // translation to work on.
+        Pos = MAP_APPFONT ( 12 , 184 ) ;
+        Size = MAP_APPFONT ( 242, 10 ) ;
+        Text = "Druckermaﬂe f¸r Dokumentformatierung verwenden";
+        Text[english_us] = "Us~e printer metrics for document formatting";
     };
     CheckBox CB_MERGE_PARA_DIST
     {
