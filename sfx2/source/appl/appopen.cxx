@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-02 11:58:52 $
+ *  last change: $Author: dv $ $Date: 2001-07-09 09:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,7 @@ ULONG CheckPasswd_Impl
                 SfxPasswordDialog *pDlg = new SfxPasswordDialog(pWin);
                 String aTitle( pDlg->GetText() );
                 aTitle += String::CreateFromAscii(" [");
-                aTitle += INetURLObject( pFile->GetOrigURL() ).GetName();
+                aTitle += INetURLObject( pFile->GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET );
                 aTitle += String::CreateFromAscii("]");
                 pDlg->SetText( aTitle );
                 if(RET_OK == pDlg->Execute())
