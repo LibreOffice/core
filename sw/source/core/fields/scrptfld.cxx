@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrptfld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:07:07 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #ifndef _UNOFLDMID_H
 #include <unofldmid.h>
 #endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
+#endif
+#ifndef _TOOLS_RESID_HXX
+#include <tools/resid.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -94,6 +100,11 @@ SwScriptField::SwScriptField( SwScriptFieldType* pType,
                                 BOOL bURL )
     : SwField( pType ), sType( rType ), sCode( rCode ), bCodeURL( bURL )
 {
+}
+
+String SwScriptField::GetDescription() const
+{
+    return SW_RES(STR_SCRIPT);
 }
 
 String SwScriptField::Expand() const
