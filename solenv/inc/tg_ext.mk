@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-14 12:42:47 $
+#   last change: $Author: armin $ $Date: 2002-03-19 11:32:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -163,9 +163,17 @@ $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
     +cd $(PACKAGE_DIR) && ( $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | tr -d "\015" | patch -b -p2 ) && $(TOUCH) $(PATCH_FLAG_FILE)
 .ELSE           # "$(GUI)"=="WNT"
 .IF "$(BSCLIENT)"=="TRUE"
+.IF "$(OS)"=="NETBSD"
+    +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | $(GNUPATCH) -f -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+.ELSE
     +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | $(GNUPATCH) -f -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+.ENDIF		# "$(OS)"=="NETBSD"
 .ELSE           # "$(BSCLIENT)"!=""
+.IF "$(OS)"=="NETBSD"
+    +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | patch -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+.ELSE
     +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | patch -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+.ENDIF          # "$(OS)"=="NETBSD"
 .ENDIF          # "$(BSCLIENT)"!=""
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
