@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-16 14:31:04 $
+ *  last change: $Author: kz $ $Date: 2002-06-13 12:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1277,7 +1277,7 @@ String STR_DESCRIPTION_LOCALE_VOLUME
     Text[ portuguese_brazilian ] = "Local drive";
     Text[ japanese ] = "ローカルのドライブ";
     Text[ korean ] = "로컬 드라이브";
-    Text[ chinese_simplified ] = "局部驱动器";
+    Text[ chinese_simplified ] = "本地磁盘";
     Text[ chinese_traditional ] = "本機磁碟";
     Text[ turkish ] = "Local drive";
     Text[ arabic ] = "Local drive";
