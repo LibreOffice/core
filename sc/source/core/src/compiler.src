@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:24:09 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SCEGLI" ;
         Text [ portuguese_brazilian ] = "ESCOLHER" ;
         Text [ portuguese ] = "SELECCIONAR" ;
-        Text [ finnish ] = "CHOSE" ;
+        Text [ finnish ] = "CHOOSE" ;
         Text [ danish ] = "VÆLG" ;
         Text [ french ] = "CHOISIR" ;
         Text [ swedish ] = "VÄLJ" ;
@@ -1084,7 +1084,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MINUTO" ;
         Text [ portuguese_brazilian ] = "MINUTO" ;
         Text [ portuguese ] = "MINUTO" ;
-        Text [ finnish ] = "MINUTE" ;
+        Text [ finnish ] = "minuutti" ;
         Text [ danish ] = "MINUT" ;
         Text [ french ] = "MINUTE" ;
         Text [ swedish ] = "MINUT" ;
@@ -1391,6 +1391,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "CELL";
         Text[ arabic ] = "CELL";
         Text[ catalan ] = "CELDA";
+        Text[ finnish ] = "ZELLE";
     };
     String SC_OPCODE_IS_REF
     {
@@ -2206,6 +2207,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "FORMULA";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "FORMULA";
+        Text[ finnish ] = "FORMULA";
     };
     String SC_OPCODE_ARABIC
     {
@@ -2230,6 +2232,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "ARABIC";
         Text[ arabic ] = "ARABIC";
         Text[ catalan ] = "ÁRABE";
+        Text[ finnish ] = "ARABISCH";
     };
     String SC_OPCODE_ARC_TAN_2
     {
@@ -2502,7 +2505,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MCM" ;
         Text [ portuguese_brazilian ] = "LCD" ;
         Text [ portuguese ] = "MIN.MÚLT.COMUM" ;
-        Text [ finnish ] = "LCD" ;
+        Text [ finnish ] = "LCM" ;
         Text [ danish ] = "MINDSTE.FÆLLES.MULTIPLUM" ;
         Text [ french ] = "PPCM" ;
         Text [ swedish ] = "MGT" ;
@@ -2647,7 +2650,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SOMMA.SOMMA.Q" ;
         Text [ portuguese_brazilian ] = "SOMARX2DY2" ;
         Text [ portuguese ] = "SOMA.X2PY2" ;
-        Text [ finnish ] = "SUMX2DY2" ;
+        Text [ finnish ] = "SUMX2PY2" ;
         Text [ danish ] = "SUMX2PY2" ;
         Text [ french ] = "SOMME.X2PY2" ;
         Text [ swedish ] = "SUMMAX2PY2" ;
@@ -2821,7 +2824,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MIN" ;
         Text [ portuguese_brazilian ] = "MIN" ;
         Text [ portuguese ] = "MÍNIMO" ;
-        Text [ finnish ] = "MIN" ;
+        Text [ finnish ] = "Väh" ;
         Text [ danish ] = "MIN" ;
         Text [ french ] = "MIN" ;
         Text [ swedish ] = "MIN" ;
@@ -2879,7 +2882,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MAX" ;
         Text [ portuguese_brazilian ] = "MAX" ;
         Text [ portuguese ] = "MÁXIMO" ;
-        Text [ finnish ] = "MAX" ;
+        Text [ finnish ] = "Enint" ;
         Text [ danish ] = "MAKS" ;
         Text [ french ] = "MAX" ;
         Text [ swedish ] = "MAX" ;
@@ -3184,6 +3187,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "MIRR";
         Text[ arabic ] = "MIRR";
         Text[ catalan ] = "MIRR";
+        Text[ finnish ] = "QIKV";
     };
     String SC_OPCODE_ISPMT
     {
@@ -3208,6 +3212,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "ISPMT";
         Text[ arabic ] = "ISPMT";
         Text[ catalan ] = "ISPMT";
+        Text[ finnish ] = "ISPMT";
     };
     String SC_OPCODE_VAR
     {
@@ -3653,7 +3658,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "PERMUTATIONA" ;
         Text [ portuguese_brazilian ] = "PERMUTA" ;
         Text [ portuguese ] = "COMBIN" ;
-        Text [ finnish ] = "PERMUTA" ;
+        Text [ finnish ] = "PERMUTATIONA" ;
         Text [ danish ] = "PERMUT2" ;
         Text [ french ] = "PERMUTATIONA" ;
         Text [ swedish ] = "PERMUT2" ;
@@ -3990,6 +3995,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "SHEETS";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "HOJAS";
+        Text[ finnish ] = "SHEETS";
     };
     String SC_OPCODE_COLUMN
     {
@@ -4075,6 +4081,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "SHEET";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "HOJA";
+        Text[ finnish ] = "SHEET";
     };
     String SC_OPCODE_ZGZ
     {
@@ -4102,6 +4109,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "ZGZ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "INT.RENDIMIENTO";
+        Text[ finnish ] = "RRI";
     };
     String SC_OPCODE_ZW
     {
@@ -4198,7 +4206,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "P.RATA" ;
         Text [ portuguese_brazilian ] = "PPGTO" ;
         Text [ portuguese ] = "PPGTO" ;
-        Text [ finnish ] = "PPMT" ;
+        Text [ finnish ] = "IPMT" ;
         Text [ danish ] = "R.YDELSE" ;
         Text [ french ] = "INTPER" ;
         Text [ swedish ] = "RBETALNING" ;
@@ -4227,7 +4235,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INTERESSI" ;
         Text [ portuguese_brazilian ] = "IPGTO" ;
         Text [ portuguese ] = "IPGTO" ;
-        Text [ finnish ] = "IPMT" ;
+        Text [ finnish ] = "PPMT" ;
         Text [ danish ] = "H.YDELSE" ;
         Text [ french ] = "PRINCPER" ;
         Text [ swedish ] = "AMORT" ;
@@ -4256,7 +4264,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INT.CUMUL" ;
         Text [ portuguese_brazilian ] = "CUMPPMT" ;
         Text [ portuguese ] = "PGTO.JUR.ACUM" ;
-        Text [ finnish ] = "CUMPPMT" ;
+        Text [ finnish ] = "CUMIPMT" ;
         Text [ danish ] = "AKKUM.RENTE" ;
         Text [ french ] = "CUMUL.INTER" ;
         Text [ swedish ] = "KUMRÄNTA" ;
@@ -4285,7 +4293,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CAP.CUM" ;
         Text [ portuguese_brazilian ] = "CUMIPMT" ;
         Text [ portuguese ] = "PGTO.CAP.ACUM" ;
-        Text [ finnish ] = "CUMIPMT" ;
+        Text [ finnish ] = "CUMPRINC" ;
         Text [ danish ] = "AKKUM.HOVEDSTOL" ;
         Text [ french ] = "CUMUL.PRINCPER" ;
         Text [ swedish ] = "KUMKAPITAL" ;
@@ -4778,7 +4786,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INDIRIZZO" ;
         Text [ portuguese_brazilian ] = "ENDEREÇO" ;
         Text [ portuguese ] = "ENDEREÇO" ;
-        Text [ finnish ] = "ADRESS" ;
+        Text [ finnish ] = "ADDRESS" ;
         Text [ danish ] = "ADRESSE" ;
         Text [ french ] = "ADRESSE" ;
         Text [ swedish ] = "ADRESS" ;
@@ -5070,7 +5078,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ portuguese_brazilian ] = "NDICE" ;
          // ?? erstes Zeichen = I ??
         Text [ portuguese ] = "ÍNDICE" ;
-        Text [ finnish ] = "INDEX" ;
+        Text [ finnish ] = "Hakemisto" ;
         Text [ danish ] = "INDEKS" ;
         Text [ french ] = "INDEX" ;
         Text [ swedish ] = "INDEX" ;
@@ -5389,7 +5397,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "TESTO" ;
         Text [ portuguese_brazilian ] = "TEXTO" ;
         Text [ portuguese ] = "TEXTO" ;
-        Text [ finnish ] = "TEXT" ;
+        Text [ finnish ] = "Teksti" ;
         Text [ danish ] = "TEKST" ;
         Text [ french ] = "TEXTE" ;
         Text [ swedish ] = "TEXT" ;
@@ -5621,7 +5629,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MATR.TRASPOSTA" ;
         Text [ portuguese_brazilian ] = "MTRANS" ;
         Text [ portuguese ] = "TRANSPOR" ;
-        Text [ finnish ] = "MTRANS" ;
+        Text [ finnish ] = "TRANSPOSE" ;
         Text [ danish ] = "TRANSPONER" ;
         Text [ french ] = "TRANSPOSE" ;
         Text [ swedish ] = "MTRANS" ;
@@ -7161,7 +7169,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "OPERAZIONE.MULTIPLA" ;
         Text [ portuguese_brazilian ] = "TABLEOPERATION" ;
         Text [ portuguese ] = "OPERAÇÃO.MÚLTIPLA" ;
-        Text [ finnish ] = "TABLEOPERATION" ;
+        Text [ finnish ] = "MULTIPLE.OPERATIONS" ;
         Text [ danish ] = "MULTIOPERATION" ;
         Text [ french ] = "OPERATION.MULTIPLE" ;
         Text [ swedish ] = "MULTIPEL.OPERATION" ;
@@ -7248,7 +7256,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "NUM.SETTIMANA" ;
         Text [ portuguese_brazilian ] = "WEEKOFYEAR" ;
         Text [ portuguese ] = "SEMANACALENDÁRIO" ;
-        Text [ finnish ] = "WEEKOFYEAR" ;
+        Text [ finnish ] = "WEEKNUM" ;
         Text [ danish ] = "KALENDERUGE" ;
         Text [ french ] = "NO.SEMAINE" ;
         Text [ swedish ] = "KALENDERVECKA" ;
@@ -7277,7 +7285,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ portuguese ] = "DOMINGOPÁSCOA";
         Text[ russian ] = "ÏÀÑÕÀËÜÍÎÅÂÎÑÊÐÅÑÅÍÜÅ";
         Text[ dutch ] = "EERSTEPAASDAG";
-        Text[ french ] = "DIMANCHEDEPÂQUES";
+        Text[ french ] = "DIMANCHEDEPAQUES";
         Text[ spanish ] = "DOMINGOPASCUA";
         Text[ italian ] = "DOMENICADIPASQUA";
         Text[ danish ] = "PÅSKESØNDAG";
@@ -7295,6 +7303,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "EASTERSUNDAY";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "DOMINGOPASCUA";
+        Text[ finnish ] = "EASTERSUNDAY";
     };
     String SC_OPCODE_GET_DAY_OF_WEEK
     {
@@ -7333,7 +7342,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "#NOME!" ;
         Text [ portuguese_brazilian ] = "#NOME!" ;
         Text [ portuguese ] = "#NOME!" ;
-        Text [ finnish ] = "#NAME!" ;
+        Text [ finnish ] = "NAME!" ;
         Text [ danish ] = "#NAVN!" ;
         Text [ french ] = "#NOM!" ;
         Text [ swedish ] = "#NAMN!" ;
@@ -7410,6 +7419,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "BASE";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "BASE";
+        Text[ finnish ] = "BASE";
     };
     String SC_OPCODE_DECIMAL
     {
@@ -7437,6 +7447,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "DECIMAL";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "DECIMAL";
+        Text[ finnish ] = "DECIMAL";
     };
     String SC_OPCODE_CONVERT
     {
@@ -7464,6 +7475,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "CONVERT";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "CONVERTIR";
+        Text[ finnish ] = "CONVERT";
     };
     String SC_OPCODE_ROMAN
     {
@@ -7488,6 +7500,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "ROMAN";
         Text[ arabic ] = "ROMAN";
         Text[ catalan ] = "ROMANO";
+        Text[ finnish ] = "RÖMISCH";
     };
 };
 Resource RID_SC_FUNCTION_NAMES_ENGLISH
