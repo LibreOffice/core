@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: cd $ $Date: 2001-07-30 15:31:59 $
+#   last change: $Author: hjs $ $Date: 2001-09-18 14:46:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,17 +64,14 @@ PRJ=..
 
 PRJNAME=desktop
 TARGET=soffice
+TARGETTYPE=GUI
 GEN_HID=TRUE
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 VERINFONAME=verinfo
-
-#IENV=$(IENV);..\res
 
 # --- Resourcen ----------------------------------------------------
 
@@ -113,37 +110,13 @@ APP1STDLIBS=			\
     $(COMPHELPERLIB)	\
     $(SALHELPERLIB)
 
-#	$(SETUPLIB)			\
-#	$(AUTOMATIONLIB)	\
-#	$(TKLIB)			\
-#	$(SJLIB)			\
-#	$(SOTLIB)			\
-#   $(OFALIB)			\
-#	$(SFX2LIB)			\
-#	$(SO2LIB)			\
-#	$(BASICLIB)			\
-
-.IF "$(OS)" == "SOLARIS"
-# for Java applets
-APP1STDLIBS+= -lXm
-.ENDIF
-
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" == "LINUX"
 
-APP1STDLIBS+= -lXt -lXmu -lXext -lX11 -lSM -lICE
+APP1STDLIBS+= -lXmu -lXext -lSM -lICE
 
 .ENDIF
 .ENDIF
-
-
-.IF "$(GUI)" == "MAC"
-APP1STDLIBS+=$(SOLARLIBDIR)$/SALMAIN.OBJ \
-            $(SOLARLIBDIR)$/NOSHAREDMAIN.LIB \
-            $(SOLARLIBDIR)$/aofa.lib
-MACRES += writer.r
-.ENDIF
-
 
 APP1DEPN= \
         $(APP1RES) \
@@ -161,11 +134,6 @@ APP1OBJS= \
             $(OBJ)$/opluginframefactory.obj	\
             $(OBJ)$/appsys.obj				\
             $(OBJ)$/desktopresid.obj
-
-#			$(OBJ)$/shutdownicon.obj \
-#			$(OBJ)$/shutdowniconw32.obj \
-
-#APP1STACK=64000
 
 APP1DEF=    $(MISCX)$/$(TARGET).def
 
@@ -248,20 +216,9 @@ APP4LINKRES=$(MISC)$/$(APP4TARGET).res
 
 .INCLUDE :  target.mk
 
-# -------------------------------------------------------------------------
-# MAC
-# -------------------------------------------------------------------------
-
-.IF "$(GUI)" == "MAC"
-
-$(MISCX)$/$(APP1TARGET).def : makefile
-    echo "kein Def-File bei Applikationen"
-
-.ENDIF
-
 .IF "$(GUI)" == "WNT"
 
-$(MISCX)$/$(APP1TARGET).def : makefile
+$(MISCX)$/$(APP1TARGET).def : makefile.mk
     echo  NAME			soffice								>$@
     echo  DESCRIPTION   'StarDesktop Version 5'           >>$@
     echo  DATA			READ WRITE NONSHARED		   >>$@
