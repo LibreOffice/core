@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 19:12:15 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 23:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,7 @@ String RID_CNT_STR_WAITING
     Text[ portuguese ] = "Os componentes do %PRODUCTNAME acabados de instalar estγo agora a ser inicializados.";
     Text[ russian ] = "Οεπεδ οεπβϋμ θροξλόηξβΰνθεμ βϋοξλνÿεςρÿ θνθφθΰλθηΰφθÿ ψΰαλξνξβ.";
     Text[ greek ] = "Αρχικοποίηση των στοιχείων του %PRODUCTNAME για πρώτη φορά μετά την εγκατάσταση.";
-    Text[ dutch ] = "De %PRODUCTNAME-componenten worden na de installatie eerst geοnitialiseerd";
+    Text[ dutch ] = "De sjablonen worden nu geοnitialiseerd voor het eerste gebruik.";
     Text[ french ] = "Initialisation des modθles pour une premiθre utilisation ...";
     Text[ spanish ] = "Los componentes de %PRODUCTNAME van a ser inicializados ahora tras la instalaciσn.";
     Text[ italian ] = "Adesso le componenti di %PRODUCTNAME vengono inizializzate.";
