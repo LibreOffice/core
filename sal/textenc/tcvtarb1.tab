@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtarb1.tab,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-04 13:37:03 $
+ *  last change: $Author: sb $ $Date: 2002-12-12 12:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,10 +433,10 @@ static sal_uInt16 const aImplMS1255ToUniTab[MS1255UNI_END - MS1255UNI_START + 1]
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
-    0x20AC, 0x0081, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021, /* 0x80 */
-    0x02C6, 0x2030, 0x008A, 0x2039, 0x008C, 0x008D, 0x008E, 0x008F, /* 0x80 */
-    0x0090, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014, /* 0x90 */
-    0x02DC, 0x2122, 0x009A, 0x203A, 0x009C, 0x009D, 0x009E, 0x009F, /* 0x90 */
+    0x20AC,      0, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021, /* 0x80 */
+    0x02C6, 0x2030,      0, 0x2039,      0,      0,      0,      0, /* 0x80 */
+         0, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014, /* 0x90 */
+    0x02DC, 0x2122,      0, 0x203A,      0,      0,      0,      0, /* 0x90 */
     0x00A0, 0x00A1, 0x00A2, 0x00A3, 0x20AA, 0x00A5, 0x00A6, 0x00A7, /* 0xA0 */
     0x00A8, 0x00A9, 0x00D7, 0x00AB, 0x00AC, 0x00AD, 0x00AE, 0x00AF, /* 0xA0 */
     0x00B0, 0x00B1, 0x00B2, 0x00B3, 0x00B4, 0x00B5, 0x00B6, 0x00B7, /* 0xB0 */
@@ -540,10 +540,10 @@ static ImplByteConvertData const aImplMS1255ByteCvtData =
     MS1255UNI_START, MS1255UNI_END,
     NOTABUNI_START, NOTABUNI_END,
     aImplMS1255ToCharTab,
-    aImpl8090SameToCharTab,
+    NULL,
     aImplMS1255ToCharTabEx,
     MS1255CHAR_START, MS1255CHAR_END,
-    SAME8090CHAR_START, SAME8090CHAR_END,
+    NOTABCHAR_START, NOTABCHAR_END,
     MS1255TOCHARTABEX_COUNT
 };
 
@@ -718,10 +718,10 @@ static ImplByteConvertData const aImplMS1256ByteCvtData =
     MS1256UNI_START, MS1256UNI_END,
     NOTABUNI_START, NOTABUNI_END,
     aImplMS1256ToCharTab,
-    aImpl8090SameToCharTab,
+    NULL,
     aImplMS1256ToCharTabEx,
     MS1256CHAR_START, MS1256CHAR_END,
-    SAME8090CHAR_START, SAME8090CHAR_END,
+    NOTABCHAR_START, NOTABCHAR_END,
     MS1256TOCHARTABEX_COUNT
 };
 

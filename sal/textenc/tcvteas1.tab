@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvteas1.tab,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-04 13:37:04 $
+ *  last change: $Author: sb $ $Date: 2002-12-12 12:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,10 @@ static sal_uInt16 const aImplMS874ToUniTab[MS874UNI_END - MS874UNI_START + 1] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
-    0x20AC, 0x0081, 0x0082, 0x0083, 0x0084, 0x2026, 0x0086, 0x0087, /* 0x80 */
-    0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F, /* 0x80 */
-    0x0090, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014, /* 0x90 */
-    0x0098, 0x0099, 0x009A, 0x009B, 0x009C, 0x009D, 0x009E, 0x009F, /* 0x90 */
+    0x20AC,      0,      0,      0,      0, 0x2026,      0,      0, /* 0x80 */
+         0,      0,      0,      0,      0,      0,      0,      0, /* 0x80 */
+         0, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014, /* 0x90 */
+         0,      0,      0,      0,      0,      0,      0,      0, /* 0x90 */
     0x00A0, 0x0E01, 0x0E02, 0x0E03, 0x0E04, 0x0E05, 0x0E06, 0x0E07, /* 0xA0 */
     0x0E08, 0x0E09, 0x0E0A, 0x0E0B, 0x0E0C, 0x0E0D, 0x0E0E, 0x0E0F, /* 0xA0 */
     0x0E10, 0x0E11, 0x0E12, 0x0E13, 0x0E14, 0x0E15, 0x0E16, 0x0E17, /* 0xB0 */
@@ -146,10 +146,10 @@ static ImplByteConvertData const aImplMS874ByteCvtData =
     MS874UNI_START, MS874UNI_END,
     NOTABUNI_START, NOTABUNI_END,
     aImplMS874ToCharTab,
-    aImpl8090SameToCharTab,
+    NULL,
     aImplMS874ToCharTabEx,
     MS874CHAR_START, MS874CHAR_END,
-    SAME8090CHAR_START, SAME8090CHAR_END,
+    NOTABCHAR_START, NOTABCHAR_END,
     MS874TOCHARTABEX_COUNT
 };
 
@@ -241,10 +241,10 @@ static sal_uInt16 const aImplMS1258ToUniTab[MS1258UNI_END - MS1258UNI_START + 1]
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
-    0x20AC, 0x0081, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021, /* 0x80 */
-    0x02C6, 0x2030, 0x008A, 0x2039, 0x0152, 0x008D, 0x008E, 0x008F, /* 0x80 */
-    0x0090, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014, /* 0x90 */
-    0x02DC, 0x2122, 0x009A, 0x203A, 0x0153, 0x009D, 0x009E, 0x0178, /* 0x90 */
+    0x20AC,      0, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021, /* 0x80 */
+    0x02C6, 0x2030,      0, 0x2039, 0x0152,      0,      0,      0, /* 0x80 */
+         0, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014, /* 0x90 */
+    0x02DC, 0x2122,      0, 0x203A, 0x0153,      0,      0, 0x0178, /* 0x90 */
     0x00A0, 0x00A1, 0x00A2, 0x00A3, 0x00A4, 0x00A5, 0x00A6, 0x00A7, /* 0xA0 */
     0x00A8, 0x00A9, 0x00AA, 0x00AB, 0x00AC, 0x00AD, 0x00AE, 0x00AF, /* 0xA0 */
     0x00B0, 0x00B1, 0x00B2, 0x00B3, 0x00B4, 0x00B5, 0x00B6, 0x00B7, /* 0xB0 */
@@ -334,10 +334,10 @@ static ImplByteConvertData const aImplMS1258ByteCvtData =
     MS1258UNI_START, MS1258UNI_END,
     NOTABUNI_START, NOTABUNI_END,
     aImplMS1258ToCharTab,
-    aImpl8090SameToCharTab,
+    NULL,
     aImplMS1258ToCharTabEx,
     MS1258CHAR_START, MS1258CHAR_END,
-    SAME8090CHAR_START, SAME8090CHAR_END,
+    NOTABCHAR_START, NOTABCHAR_END,
     MS1258TOCHARTABEX_COUNT
 };
 
