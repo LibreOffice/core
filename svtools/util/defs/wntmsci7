@@ -12419,3 +12419,7 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?lcl_autoUpdateFileExtension@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx139088695@@YAXPAVSvtFileDialog@@@Z
 ?lcl_getHomeDirectory@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx139088695@@YAEABVString@@AAV2@@Z
 ?lcl_DecoratedFilter@?%O:\SRX642\src\svtools\source\filepicker\iodlgimp.cxx299268950@@YA?AVString@@ABV2@@Z
+?GetHelpStyleSheet@SvtHelpOptions@@QBEABVString@@XZ
+?SetHelpStyleSheet@SvtHelpOptions@@QAEXABVString@@@Z
+?GetIsForBorders@SvtAccessibilityOptions@@QBEEXZ
+?SetIsForBorders@SvtAccessibilityOptions@@QAEXE@Z
