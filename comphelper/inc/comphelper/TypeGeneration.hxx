@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeGeneration.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-06 14:17:51 $
+ *  last change: $Author: tl $ $Date: 2002-05-23 08:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,8 @@ namespace comphelper
         CPPUTYPE_REFTXTFIELD,       //getCppuType( (Reference<text::XTextField>*)0)
         CPPUTYPE_REFTXTRANGE,       //getCppuType( (Reference<text::XTextRange>*)0)
         CPPUTYPE_REFTXTTABLE,       //getCppuType( (Reference<text::XTextTable>*)0)
+
+        CPPUTYPE_AWTPOINT,          //getCppuType( (awt::Point*)0 )
 
         CPPUTYPE_END
     };

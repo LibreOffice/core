@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeGeneration.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-06 14:16:51 $
+ *  last change: $Author: tl $ $Date: 2002-05-23 08:14:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,6 +408,8 @@ namespace comphelper
             case CPPUTYPE_REFTXTFIELD:  pType = &::getCppuType( (Reference<text::XTextField>*)0 ); break;
             case CPPUTYPE_REFTXTRANGE:  pType = &::getCppuType( (Reference<text::XTextRange>*)0 ); break;
             case CPPUTYPE_REFTXTTABLE:  pType = &::getCppuType( (Reference<text::XTextTable>*)0 ); break;
+
+            case CPPUTYPE_AWTPOINT:     pType = &::getCppuType( (awt::Point*)0 );    break;
 
             default:
                 OSL_ASSERT( "Unknown CPPU type" );
