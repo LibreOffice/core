@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: packimages.pl,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-19 11:41:35 $
+#   last change: $Author: kz $ $Date: 2005-01-18 14:34:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ my $out_file;                # path to output archive
 my $tmp_out_file;            # path to temporary output file
 my $global_path;             # path to global images directory
 my $module_path;             # path to module images directory
-my $custom_path;             # path to custom images directory
+my @custom_path;             # path to custom images directory
 my @imagelist_path;          # pathes to directories containing the image lists
 my $verbose;                 # be verbose
 my $extra_verbose;           # be extra verbose
@@ -94,7 +94,7 @@ my @custom_list;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.8 $ ';
+my $id_str = ' $Revision: 1.9 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -135,14 +135,14 @@ sub parse_options
                              '-o=s' => \$out_file,
                              '-g=s' => \$global_path,
                              '-m=s' => \$module_path,
-                             '-c=s' => \$custom_path,
+                             '-c=s' => \@custom_path,
                              '-l=s' => \@imagelist_path,
                              '-v'   => \$verbose,
                              '-vv'  => \$extra_verbose
                             );
 
     if ( $opt_help || !$success || !$out_file || !$global_path
-        || !$module_path || !$custom_path || !@imagelist_path )
+        || !$module_path || !@custom_path || !@imagelist_path )
     {
         usage();
         exit(1);
@@ -159,7 +159,7 @@ sub parse_options
     print_error("directory is not writable: '$out_dir'", 2) if ! -w $out_dir;
 
     # Check paths.
-    foreach ($global_path, $module_path, $custom_path, @imagelist_path) {
+    foreach ($global_path, $module_path, @custom_path, @imagelist_path) {
         print_error("no such directory: '$_'", 2) if ! -d $_;
         print_error("can't search directory: '$_'", 2) if ! -x $_;
     }
@@ -235,12 +235,16 @@ sub find_custom
 {
     my $custom_hash_ref = shift;
     my $keep_back;
-    find({ wanted => \&wanted, no_chdir => 0 }, "$custom_path");
+    for my $path (@custom_path) {
+    find({ wanted => \&wanted, no_chdir => 0 }, $path);
     foreach ( @custom_list ) {
-        if ( /^\Q$custom_path\E\/(.*)$/o ) {
-            $keep_back=$1;
-            $custom_hash_ref->{$keep_back}++;
+        if ( /^\Q$path\E\/(.*)$/o ) {
+        $keep_back=$1;
+        if (!defined $custom_hash_ref->{$keep_back}) {
+            $custom_hash_ref->{$keep_back} = $path;
         }
+        }
+    }
     }
 }
 
@@ -270,7 +274,7 @@ sub create_zip_list
             next;
         }
         if ( exists $custom_hash_ref->{$_} ) {
-            $zip_hash{$_} = $custom_path;
+            $zip_hash{$_} = $custom_hash_ref->{$_};
             next;
         }
         # it's neither in 'module' nor 'custom', record it in zip hash
@@ -278,15 +282,12 @@ sub create_zip_list
     }
     foreach ( keys %{$module_hash_ref} ) {
         if ( exists $custom_hash_ref->{$_} ) {
-            $zip_hash{$_} = $custom_path;
+            $zip_hash{$_} = $custom_hash_ref->{$_};
             next;
         }
         # it's not in 'custom', record it in zip hash
         $zip_hash{$_} = $module_path;
     }
-#    foreach ( keys %{$custom_hash_ref} ) {
-#        $zip_hash{$_} = $custom_path;
-#    }
 
     if ( @warn_list ) {
         foreach ( @warn_list ) {
