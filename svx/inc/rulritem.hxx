@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rulritem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:20:50 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ public:
     TYPEINFO();
     SvxLongLRSpaceItem(long lLeft, long lRight, USHORT nId);
     SvxLongLRSpaceItem(const SvxLongLRSpaceItem &);
+    SvxLongLRSpaceItem();
 
     long    GetLeft() const { return lLeft; }
     long    GetRight() const { return lRight; }
@@ -134,6 +135,7 @@ public:
     TYPEINFO();
     SvxLongULSpaceItem(long lUpper, long lLower, USHORT nId);
     SvxLongULSpaceItem(const SvxLongULSpaceItem &);
+    SvxLongULSpaceItem();
 
     long    GetUpper() const { return lLeft; }
     long    GetLower() const { return lRight; }
@@ -167,6 +169,7 @@ public:
     TYPEINFO();
     SvxPagePosSizeItem(const Point &rPos, long lWidth, long lHeight);
     SvxPagePosSizeItem(const SvxPagePosSizeItem &);
+    SvxPagePosSizeItem();
 
     const Point &GetPos() const { return aPos; }
     long    GetWidth() const { return lWidth; }
