@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:01:26 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ Resource RID_BASIC_START
         Text[ arabic ] = "αΗ νζΜΟ ΠΗίΡΙ ίΗένΙ";
         Text[ dutch ] = "Onvoldoende geheugen";
         Text[ chinese_simplified ] = "ε†…ε­δΈθ¶³";
-        Text[ greek ] = "Δεν υπάρχει αρκετός χώρος αποθήκευσης";
+        Text[ greek ] = "Δεν υπάρχει αρκετή μνήμη";
         Text[ korean ] = "λ©”λª¨λ¦¬κ°€ λ¶€μ΅±ν•©λ‹λ‹¤.";
         Text[ turkish ] = "Bellek yeterli deπil";
         Text[ language_user1 ] = " ";
@@ -297,7 +297,7 @@ Resource RID_BASIC_START
         Text[ arabic ] = "ΓΘΪΗΟ ΗαΥένέ γΪνδΙ γΣΘήΗπ";
         Text[ dutch ] = "Het aantal dimensies van de matrix is al bepaald";
         Text[ chinese_simplified ] = "ζ•°η»„ε·²η»θΆ«ε®ε°ΊεΊ¦";
-        Text[ greek ] = "Έχουν ήδη οριστεί οι διαστάσεις της μήτρας";
+        Text[ greek ] = "Έχουν ήδη οριστεί οι διαστάσεις του πίνακα";
         Text[ korean ] = "λ°°μ—΄μ μ°¨μ›ν™” μ§€μ •λ¨";
         Text[ turkish ] = "Dizi boyutlandύrύlmύώ durumda";
         Text[ language_user1 ] = " ";
@@ -1723,7 +1723,7 @@ Resource RID_BASIC_START
         Text [ ENGLISH ] = "Timeout while waiting for DDE response" ;
         Text [ norwegian ] = "Timeout while waiting for DDE response" ;
         Text [ italian ] = "Tempo d'attesa per la rispota DDE oltrepassato" ;
-        Text [ portuguese_brazilian ] = "Timeout enquanto esperava por uma resposta DDE" ;
+        Text [ portuguese_brazilian ] = "Tempo esgotado enquanto esperava por uma resposta DDE" ;
         Text [ portuguese ] = "Ultrapassado tempo de espera pela resposta DDE" ;
         Text [ french ] = "Timeout pendant l'attente de la rιponse DDE" ;
         Text [ dutch ] = "Tijdoverschrijding tijdens wachten op DDE-antwoord" ;
@@ -2085,7 +2085,7 @@ Resource RID_BASIC_START
         Text[ arabic ] = "γΣΘήΗπ Paste link Κγ ΓΟΗΑ ";
         Text[ dutch ] = "Koppeling plakken reeds uitgevoerd";
         Text[ chinese_simplified ] = "η²θ΄΄ι“Ύζ¥ε·²η»ε®ζ";
-        Text[ greek ] = "Το 'Paste link' εκτελέστηκε ήδη";
+        Text[ greek ] = "Το Η επικόλληση υπερσυνδέσμου εκτελέστηκε ήδη";
         Text[ korean ] = "λ§ν¬ λ¶™μ—¬λ„£κΈ°λ¥Ό μ΄λ―Έ μν–‰ν–μµλ‹λ‹¤.";
         Text[ turkish ] = "Paste Link iώlemi yόrόtόldό";
         Text[ catalan ] = "L'enllaη ja s'ha enganxat";
@@ -2119,7 +2119,7 @@ Resource RID_BASIC_START
         Text[ arabic ] = "ΫνΡ ΥΗαΝΙ Link-Topics αΓδ LinkMode αΗ νγίδ ΚΪννδ";
         Text[ dutch ] = "Ongeldig koppelingonderwerp; koppelingmodus kan niet worden ingesteld";
         Text[ chinese_simplified ] = "η”±δΊζ— ζ•η„ι“Ύζ¥ζ ‡ιΆθ€ζ— ζ³•θ®Ύε®ι“Ύζ¥ζ ‡ιΆ";
-        Text[ greek ] = "Δεν είναι δυνατόν να οριστεί το LinkMode εξαιτίας μη έγκυρων Link-Topics.";
+        Text[ greek ] = "Δεν είναι δυνατόν να οριστεί η κατάσταση σύνδεσης εξαιτίας μη έγκυρων θεμάτων σύνδεσης.";
         Text[ korean ] = "μλª»λ λ§ν¬ ν•­λª©μΌλ΅ μΈν•΄ μ—°κ²° λª¨λ“λ¥Ό μ„¤μ •ν•  μ μ—†μµλ‹λ‹¤.";
         Text[ turkish ] = "LinkMode, geηersiz Link-Topics nedeniyle belirlenemez";
         Text[ language_user1 ] = " ";
@@ -2399,7 +2399,7 @@ Resource RID_BASIC_START
         Text[ arabic ] = "γΡΜΪ ΗαίΗΖδ ΫνΡ ΥΗαΝ";
         Text[ dutch ] = "Ongeldige objectverwijzing";
         Text[ chinese_simplified ] = "ζ— ζ•η„ε―Ήθ±΅εΌ•η”¨";
-        Text[ greek ] = "Μη έγκυρη αναφορά αντικειμένου";
+        Text[ greek ] = "Μη έγκυρη παραπομπή αντικειμένου";
         Text[ korean ] = "μλª»λ κ°μ²΄ μ°Έμ΅°";
         Text[ turkish ] = "Geηersiz nesne referansύ";
         Text[ language_user1 ] = " ";
@@ -3310,7 +3310,7 @@ Resource RID_BASIC_START
         Text [ ENGLISH ] = "Variable expected" ;
         Text [ norwegian ] = "Variable expected" ;
         Text [ italian ] = "Variabile attesa" ;
-        Text [ portuguese_brazilian ] = "Ι esperada uma variαvel" ;
+        Text [ portuguese_brazilian ] = "Variαvel esperada" ;
         Text [ portuguese ] = "Necessαrio variαvel" ;
         Text [ french ] = "Variable requise" ;
         Text [ dutch ] = "Variabele verwacht" ;
@@ -3361,7 +3361,7 @@ Resource RID_BASIC_START
         Text[ arabic ] = "γΚζήΪ ΘΨΗήΙ ΪδζδΙ";
         Text[ dutch ] = "Naam verwacht";
         Text[ chinese_simplified ] = "η­‰εΎ…ζ ‡ε·";
-        Text[ greek ] = "Απαιτείται επιγραφή";
+        Text[ greek ] = "Απαιτείται επισήμανση";
         Text[ korean ] = "λ μ΄λΈ”μ΄ ν•„μ”";
         Text[ turkish ] = "Etiket bekleniyor";
         Text[ language_user1 ] = " ";
@@ -3463,7 +3463,7 @@ Resource RID_BASIC_START
         Text[ arabic ] = "γΪΡψέ γΣΘήΗπ $(ARG1) ΕΜΡΗΑ ΗαΟΗαΙ Γζ ΗαΕΜΡΗΑ ΗαέΡΪν";
         Text[ dutch ] = "Sub- of functieprocedure $(ARG1) reeds gedefinieerd";
         Text[ chinese_simplified ] = "ε·²η»ε®δΉ‰δΊ†ε†θΏ‡η¨‹ζ–ε‡½ζ•°θΏ‡η¨‹ $(ARG1)";
-        Text[ greek ] = "Η διαδικασία υπό (Sub) ή λειτουργίας (Function) $(ARG1) ορίστηκε ήδη";
+        Text[ greek ] = "Η δευτερεύσουσα διαδικασία ή λειτουργία $(ARG1) έχει ήδη οριστεί";
         Text[ korean ] = "μ„λΈ ν”„λ΅μ‹μ € λλ” κΈ°λ¥ ν”„λ΅μ‹μ € $(ARG1)μ΄(κ°€οΌ‰ μ΄λ―Έ μ •μλμ–΄ μμµλ‹λ‹¤.";
         Text[ turkish ] = "Alt yordam ya da iώlev yordamύ $(ARG1) tanύmlanmύώ durumda";
         Text[ language_user1 ] = " ";
@@ -3497,7 +3497,7 @@ Resource RID_BASIC_START
         Text[ arabic ] = "γΪΡψέΙ γΣΘήΗπ $(ARG1) ΗαΪδζδΙ";
         Text[ dutch ] = "Naam $(ARG1) reeds gedefinieerd";
         Text[ chinese_simplified ] = "ε·²η»ε®δΉ‰δΊ†ζ ‡θ®° $(ARG1)";
-        Text[ greek ] = "Η επιγραφή $(ARG1) ορίστηκε ήδη";
+        Text[ greek ] = "Η επισήμανση $(ARG1) ορίστηκε ήδη";
         Text[ korean ] = "λ μ΄λΈ” $(ARG1)μ΄(κ°€) μ΄λ―Έ μ§€μ •λμ–΄ μμµλ‹λ‹¤.";
         Text[ turkish ] = "Etiket $(ARG1) tanύmlanmύώ durumda";
         Text[ language_user1 ] = " ";
@@ -3565,7 +3565,7 @@ Resource RID_BASIC_START
         Text[ arabic ] = "$(ARG1) αγ νΚγ ΗαΪΛζΡ Ϊαμ ΗαΥένέ Γζ ΗαΕΜΡΗΑ";
         Text[ dutch ] = "Matrix of procedure $(ARG1) niet gevonden";
         Text[ chinese_simplified ] = "ζ²΅ζ‰ζ‰Ύε°ζ•°η»„ζ–θΏ‡η¨‹ $(ARG1)";
-        Text[ greek ] = "Δεν βρέθηκε η μήτρα ή η διαδικασία $(ARG1)";
+        Text[ greek ] = "Δεν βρέθηκε ο πίνακας ή η διαδικασία $(ARG1)";
         Text[ korean ] = "λ°°μ—΄ λλ” ν”„λ΅μ‹μ € $(ARG1)μ„(λ¥Ό) μ°Ύμ§€ λª»ν–μµλ‹λ‹¤.";
         Text[ turkish ] = "Dizi ya da yordam $(ARG1) bulunamadύ";
         Text[ language_user1 ] = " ";
@@ -3633,7 +3633,7 @@ Resource RID_BASIC_START
         Text[ arabic ] = "ΫνΡ γΪΡέΙ $(ARG1) ΗαΪδζδΙ";
         Text[ dutch ] = "Naam $(ARG1) niet gedefinieerd";
         Text[ chinese_simplified ] = "ε°ζªε®δΉ‰ζ ‡θ®° $(ARG1)";
-        Text[ greek ] = "Δεν ορίστηκε η επιγραφή $(ARG1)";
+        Text[ greek ] = "Δεν ορίστηκε η επισήμανση $(ARG1)";
         Text[ korean ] = "λ μ΄λΈ” $(ARG1)μ΄(κ°€οΌ‰ μ •μλμ§€ μ•μ•μµλ‹λ‹¤.";
         Text[ turkish ] = "Etiket $(ARG1) tanύmlanmadύ";
         Text[ language_user1 ] = " ";
@@ -3769,7 +3769,7 @@ Resource RID_BASIC_START
         Text[ arabic ] = "ΞΨΓ έν ΗαΓήζΗΣ";
         Text[ dutch ] = "Fout bij plaatsen van haakjes";
         Text[ chinese_simplified ] = "ζ‹¬ε·η»„ι”™θ――";
-        Text[ greek ] = "Σφάλμα παρενθέσεων";
+        Text[ greek ] = "Εσφαλμένη αντιστοίχιση παρενθέσεων";
         Text[ korean ] = "λ§μ§€ μ•λ” κ΄„νΈ";
         Text[ turkish ] = "Ayraηlar uyumsuz";
         Text[ language_user1 ] = " ";
@@ -3872,7 +3872,7 @@ Resource RID_BASIC_START
         Text[ arabic ] = "ΝΡέ ΫνΡ ΥΗαΝ έν ΗαΡήγ";
         Text[ dutch ] = "Ongeldig teken in getal";
         Text[ chinese_simplified ] = "ζ•°ε­—ε†…ε«ζ‰ζ— ζ•η„ε­—η¬¦";
-        Text[ greek ] = "Μη έγκυρος χαρακτήρας στον αρθιμό";
+        Text[ greek ] = "Μη έγκυρος χαρακτήρας στον αριθμό";
         Text[ korean ] = "μ«μμ— μλª»λ λ¬Έμκ°€ μμµλ‹λ‹¤.";
         Text[ turkish ] = "Numara geηersiz bir karakter iηeriyor";
         Text[ language_user1 ] = " ";
@@ -3907,7 +3907,7 @@ Resource RID_BASIC_START
         Text[ arabic ] = "νΜΘ ΚΪννδ ΓΘΪΗΟ ΗαΥένέ";
         Text[ dutch ] = "Het aantal dimensies van de matrix moet nog worden bepaald";
         Text[ chinese_simplified ] = "εΏ…ι΅»δΈΊζ•°η»„ε®ε°ΊεΊ¦";
-        Text[ greek ] = "Πρέπει να οριστούν οι διαστάσεις της μήτρας";
+        Text[ greek ] = "Πρέπει να οριστούν οι διαστάσεις του πίνακα";
         Text[ korean ] = "λ°°μ—΄ μ°¨μ›ν™”κ°€ ν•„μ”ν•©λ‹λ‹¤.";
         Text[ turkish ] = "Dizinin boyutlandύrύlmasύ gerekir";
         Text[ language_user1 ] = " ";
@@ -4183,7 +4183,7 @@ Resource RID_BASIC_START
         Text[ arabic ] = "ΫνΡ γΣγζΝ ΘεΠε ΗαΣαΗΣα Γζ ΗαΥέΗΖέ";
         Text[ dutch ] = "Tekenreeksen en matrices niet toegestaan";
         Text[ chinese_simplified ] = "δΈε…θ®Έε­—δΈ²ζ–ζ•°η»„";
-        Text[ greek ] = "Δεν επιτρέπονται ακολουθίες χαρακτήρων ή μήτρες";
+        Text[ greek ] = "Δεν επιτρέπονται ακολουθίες χαρακτήρων ή πίνακες";
         Text[ korean ] = "λ¬Έμμ—΄ λλ” λ°°μ—΄μ΄ ν—μ©λμ§€ μ•μµλ‹λ‹¤.";
         Text[ turkish ] = "Dizilimler ya da diziler geηerli deπil";
         Text[ language_user1 ] = " ";
@@ -4285,7 +4285,7 @@ String IDS_SBERR_STOREREF
     Text[ arabic ] = ":αδ νΚγ ΝέΩ ΗαγΡΜΪ";
     Text[ dutch ] = "Verwijzing wordt niet opgeslagen:";
     Text[ chinese_simplified ] = "δΈε­η›εΌ•η”¨: ";
-    Text[ greek ] = "Η αναφορά δεν θα αποθηκευτεί: ";
+    Text[ greek ] = "Η παραπομπή δεν θα αποθηκευτεί: ";
     Text[ korean ] = "μ°Έμ΅°κ°€ μ €μ¥λμ§€ μ•μ•μµλ‹λ‹¤. ";
     Text[ turkish ] = "Referans kaydedilmeyecek: ";
     Text [ ENGLISH ] = "reference will not be saved: " ;
@@ -4509,6 +4509,7 @@ String ERRCODE_BASMGR_UNLOADLIB & ERRCODE_RES_MASK
     Text[ hindi ] = "ΰ¤²ΰ¥ΰ¤¬ΰ¥ΰ¤°ΰ¤°ΰ¥€ ΰ¤•ΰ¥‹ ΰ¤®ΰ¥‡ΰ¤®ΰ¤°ΰ¥€ ΰ¤Έΰ¥‡ ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤Ήΰ¤ΰ¤Ύ ΰ¤Έΰ¤•ΰ¤¤ΰ¥‡ ΰ¤Ήΰ¥ ΰ¥¤";
     Text[ slovak ] = "KniΕΎnica nemohla byΕ¥ odstrΓ΅nenΓ΅ z pamΓ¤ti.";
 };
+
 
 
 
