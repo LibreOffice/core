@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 16:56:12 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 18:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-#include <vector>
+#ifndef __SGI_STL_VECTOR
+#include <stl/vector>
+#endif
 #include <list>
 
 class ScXMLImport;
