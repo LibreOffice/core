@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-15 18:47:06 $
+ *  last change: $Author: mib $ $Date: 2001-02-01 14:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1358,7 +1358,15 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
         pAppName->AssignAscii( "StarWriter 4.0" );
         *pLongUserName  = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE_40);
     }
-    else if (nVersion == SOFFICE_FILEFORMAT_NOW)
+    else if (nVersion == SOFFICE_FILEFORMAT_XML)
+    {
+        *pClassName     = SvGlobalName( SO3_SW_CLASSID_60 );
+
+        *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_60;
+        *pLongUserName  = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
+    }
+    else if (nVersion == SOFFICE_FILEFORMAT_NOW ||
+             nVersion == SOFFICE_FILEFORMAT_50)
     {
         *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
     }
@@ -1692,6 +1700,9 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.10  2001/01/15 18:47:06  jp
+    use TempFile::GetURL instead of ::GetFileName
+
     Revision 1.9  2000/11/06 09:21:17  jp
     must changes: tempfile
 

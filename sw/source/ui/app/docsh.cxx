@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-19 09:40:12 $
+ *  last change: $Author: mib $ $Date: 2001-02-01 14:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,6 +516,8 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
 BOOL SwDocShell::Save()
 {
+    sal_Bool bXML = pIo->GetStorage()->GetVersion() >= SOFFICE_FILEFORMAT_XML;
+
     SwWait aWait( *this, TRUE );
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     if( SfxInPlaceObject::Save() )
@@ -527,7 +529,8 @@ BOOL SwDocShell::Save()
             break;
 
         case SFX_CREATE_MODE_ORGANIZER:
-            nErr = pIo->SaveStyles();
+            if( !bXML )
+                nErr = pIo->SaveStyles();
             break;
 
         case SFX_CREATE_MODE_EMBEDDED:
@@ -549,7 +552,8 @@ BOOL SwDocShell::Save()
                     pDoc->SetContainsMSVBasic( FALSE );
                 }
 
-                if( !ISA( SwGlobalDocShell ) && !ISA( SwWebDocShell ) &&
+                if( !bXML &&
+                    !ISA( SwGlobalDocShell ) && !ISA( SwWebDocShell ) &&
                     SFX_CREATE_MODE_EMBEDDED != GetCreateMode() )
                     AddXMLAsZipToTheStorage( *pIo->GetStorage() );
 
@@ -558,8 +562,15 @@ BOOL SwDocShell::Save()
                     pWrtShell->EndAllTblBoxEdit();
 
                 WriterRef xWrt;
-                ::GetSw3Writer( aEmptyStr, xWrt );
-                ((Sw3Writer*)&xWrt)->SetSw3Io( pIo, FALSE );
+                if( bXML )
+                {
+                    ::GetXMLWriter( aEmptyStr, xWrt );
+                }
+                else
+                {
+                    ::GetSw3Writer( aEmptyStr, xWrt );
+                    ((Sw3Writer*)&xWrt)->SetSw3Io( pIo, FALSE );
+                }
 
                 SwWriter aWrt( *pIo->GetStorage(), *pDoc );
                 nErr = aWrt.Write( xWrt );
@@ -585,6 +596,8 @@ BOOL SwDocShell::Save()
 
 BOOL SwDocShell::SaveAs( SvStorage * pStor )
 {
+    sal_Bool bXML = pStor->GetVersion() >= SOFFICE_FILEFORMAT_XML;
+
     SwWait aWait( *this, TRUE );
 
     if( pDoc->IsGlobalDoc() && !pDoc->IsGlblDocSaveLinks() )
@@ -625,7 +638,7 @@ BOOL SwDocShell::SaveAs( SvStorage * pStor )
             pDoc->SetContainsMSVBasic( FALSE );
         }
 
-        if( !ISA( SwGlobalDocShell ) && !ISA( SwWebDocShell ) &&
+        if( !bXML && !ISA( SwGlobalDocShell ) && !ISA( SwWebDocShell ) &&
             SFX_CREATE_MODE_EMBEDDED != GetCreateMode() )
             AddXMLAsZipToTheStorage( *pStor );
 
@@ -644,8 +657,15 @@ BOOL SwDocShell::SaveAs( SvStorage * pStor )
                             SFX_CREATE_MODE_EMBEDDED == GetCreateMode() );
 
         WriterRef xWrt;
-        ::GetSw3Writer( aEmptyStr, xWrt );
-        ((Sw3Writer*)&xWrt)->SetSw3Io( pIo, TRUE );
+        if( bXML )
+        {
+            ::GetXMLWriter( aEmptyStr, xWrt );
+        }
+        else
+        {
+            ::GetSw3Writer( aEmptyStr, xWrt );
+            ((Sw3Writer*)&xWrt)->SetSw3Io( pIo, TRUE );
+        }
 
         SwWriter aWrt( *pStor, *pDoc );
         nErr = aWrt.Write( xWrt );
@@ -1459,6 +1479,9 @@ BOOL SwTmpPersist::SaveCompleted( SvStorage * pStor )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/01/19 09:40:12  jp
+    Method SvLinkManager::PrepareReload removed
+
     Revision 1.5  2000/11/14 18:25:04  jp
     use moduleoptions
 

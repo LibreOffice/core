@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:12:09 $
+ *  last change: $Author: mib $ $Date: 2001-02-01 14:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,8 @@ void SwDocShell::RemoveLink()
 sal_Bool  SwDocShell::Load(SvStorage* pStor)
 {
     sal_Bool bRet = sal_False;
-    if(SfxInPlaceObject::Load( pStor ))
+    sal_Bool bXML = pStor->GetVersion() >= SOFFICE_FILEFORMAT_XML;
+    if( SfxInPlaceObject::Load( pStor ))
     {
         if( pDoc )              // fuer Letzte Version !!
             RemoveLink();       // das existierende Loslassen
@@ -527,6 +528,13 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
         sal_Bool bWeb = 0 != PTR_CAST(SwWebDocShell, this);
         bNotLoadLayout |= SW_MOD()->GetUsrPref(bWeb)->IsTest1();
 #endif
+        if( bXML )
+        {
+            ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
+            pBasePool = new SwDocStyleSheetPool( *pDoc,
+                            SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
+        }
+
         SwWait aWait( *this, sal_True );
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
         switch( GetCreateMode() )
@@ -536,7 +544,8 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
 //          break;
 
         case SFX_CREATE_MODE_ORGANIZER:
-            nErr = pIo->LoadStyles( pStor );
+            if( !bXML )
+                nErr = pIo->LoadStyles( pStor );
             break;
 
         case SFX_CREATE_MODE_INTERNAL:
@@ -544,27 +553,37 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
             // kein break;
 
         case SFX_CREATE_MODE_EMBEDDED:
+            if ( bXML )
+            {
+                // fuer MWERKS (Mac-Compiler): kann nicht selbststaendig casten
+                SvEmbeddedObject* pObj = this;
+                SwDataExchange::InitOle( pObj, pDoc );
+            }
             // SfxProgress unterdruecken, wenn man Embedded ist
             SW_MOD()->SetEmbeddedLoadSave( sal_True );
             // kein break;
 
         case SFX_CREATE_MODE_STANDARD:
         case SFX_CREATE_MODE_PREVIEW:
-            if( ReadSw3 )
             {
-                // die DocInfo vom Doc am DocShell-Medium setzen
+                Reader *pReader = bXML ? ReadXML : ReadSw3;
+                if( pReader )
                 {
-                    SfxDocumentInfo aInfo;
-                    aInfo.Load( pStor );
-                    pDoc->DocInfoChgd( aInfo );
+                    // die DocInfo vom Doc am DocShell-Medium setzen
+                    if( !bXML )
+                    {
+                        SfxDocumentInfo aInfo;
+                        aInfo.Load( pStor );
+                        pDoc->DocInfoChgd( aInfo );
+                    }
+                    SwReader aRdr( *pStor, aEmptyStr, pDoc );
+                    nErr = aRdr.Read( *pReader );
                 }
-                SwReader aRdr( *pStor, aEmptyStr, pDoc );
-                nErr = aRdr.Read( *ReadSw3 );
-            }
 #ifndef PRODUCT
-            else
-                ASSERT( !this, "ohne Sw3Reader geht nichts" );
+                else
+                    ASSERT( !this, "ohne Sw3Reader geht nichts" );
 #endif
+            }
             break;
 
 #ifndef PRODUCT
@@ -575,9 +594,12 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
         }
         bNotLoadLayout = bSave;
 
-        ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
-        pBasePool = new SwDocStyleSheetPool( *pDoc,
-                        SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
+        if( !bXML )
+        {
+            ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
+            pBasePool = new SwDocStyleSheetPool( *pDoc,
+                            SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
+        }
         UpdateFontList();
         InitDraw();
 
@@ -778,6 +800,9 @@ void SwDocShell::SubInitNew()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.8  2000/11/20 09:12:09  jp
+    should change: use LocaleDataWrapper
+
     Revision 1.7  2000/11/19 11:36:18  tl
     lngprops.hxx include changed
 
