@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_app.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-03-12 06:50:17 $
-#*    $Revision: 1.24 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-03-12 07:34:45 $
+#*    $Revision: 1.25 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_app.mkv  $
 #*
@@ -111,8 +111,8 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @+echo __objcInit > $(MISC)$/$(@:b).strip
-    @strip -R $(MISC)$/$(@:b).strip -X $@
+    @+-nm $@ | grep -v ' U ' | awk '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
+    @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"

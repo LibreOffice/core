@@ -65,8 +65,8 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @+echo __objcInit > $(MISC)$/$(@:b).strip
-    @strip -R $(MISC)$/$(@:b).strip -X $@
+    @+-nm $@ | grep -v ' U ' | awk '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
+    @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -252,8 +252,8 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @+echo __objcInit > $(MISC)$/$(@:b).strip
-    @strip -R $(MISC)$/$(@:b).strip -X $@
+    @+-nm $@ | grep -v ' U ' | awk '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
+    @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -439,8 +439,8 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @+echo __objcInit > $(MISC)$/$(@:b).strip
-    @strip -R $(MISC)$/$(@:b).strip -X $@
+    @+-nm $@ | grep -v ' U ' | awk '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
+    @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -626,8 +626,8 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @+echo __objcInit > $(MISC)$/$(@:b).strip
-    @strip -R $(MISC)$/$(@:b).strip -X $@
+    @+-nm $@ | grep -v ' U ' | awk '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
+    @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -813,8 +813,8 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @+echo __objcInit > $(MISC)$/$(@:b).strip
-    @strip -R $(MISC)$/$(@:b).strip -X $@
+    @+-nm $@ | grep -v ' U ' | awk '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
+    @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -1000,8 +1000,8 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @+echo __objcInit > $(MISC)$/$(@:b).strip
-    @strip -R $(MISC)$/$(@:b).strip -X $@
+    @+-nm $@ | grep -v ' U ' | awk '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
+    @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -1187,8 +1187,8 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @+echo __objcInit > $(MISC)$/$(@:b).strip
-    @strip -R $(MISC)$/$(@:b).strip -X $@
+    @+-nm $@ | grep -v ' U ' | awk '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
+    @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -1374,8 +1374,8 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @+echo __objcInit > $(MISC)$/$(@:b).strip
-    @strip -R $(MISC)$/$(@:b).strip -X $@
+    @+-nm $@ | grep -v ' U ' | awk '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
+    @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -1561,8 +1561,8 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @+echo __objcInit > $(MISC)$/$(@:b).strip
-    @strip -R $(MISC)$/$(@:b).strip -X $@
+    @+-nm $@ | grep -v ' U ' | awk '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
+    @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -1748,8 +1748,8 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @+echo __objcInit > $(MISC)$/$(@:b).strip
-    @strip -R $(MISC)$/$(@:b).strip -X $@
+    @+-nm $@ | grep -v ' U ' | awk '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
+    @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
