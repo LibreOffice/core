@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 13:46:58 $
+ *  last change: $Author: fs $ $Date: 2001-08-07 15:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #endif
 #ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
@@ -244,9 +247,115 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
+    void OGeneralPage::implSetURL( const String& _rURL, sal_Bool _bPrefix )
+    {
+        String sURL( _rURL );
+        DBG_ASSERT( m_pCollection, "OGeneralPage::setURL: have no interpreter for the URLs!" );
+
+        if ( m_pCollection && sURL.Len() )
+        {
+            // determine the type
+            DATASOURCE_TYPE eType = m_pCollection->getType( _bPrefix ? sURL : m_aConnection.GetText() );
+
+            if ( m_pCollection->isFileSystemBased( eType ) )
+            {
+                // get the tow parts: prefix and file URL
+                String sTypePrefix, sFileURLEncoded;
+                if ( _bPrefix )
+                {
+                    sTypePrefix = m_pCollection->getDatasourcePrefix( eType );
+                    sFileURLEncoded = m_pCollection->cutPrefix( sURL );
+                }
+                else
+                {
+                    sFileURLEncoded = sURL;
+                }
+
+                // substitute any variables
+                sFileURLEncoded = SvtPathOptions().SubstituteVariable( sFileURLEncoded );
+
+                // decode the URL
+                INetURLObject aFileURL( sFileURLEncoded, INetURLObject::WAS_ENCODED, RTL_TEXTENCODING_UTF8 );
+                String sFileURLDecoded = aFileURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+
+                // set this decoded URL as text
+                sURL = sTypePrefix;
+                sURL += sFileURLDecoded;
+            }
+        }
+
+        if ( _bPrefix )
+            m_aConnection.SetText( sURL );
+        else
+            m_aConnection.SetTextNoPrefix( sURL );
+    }
+
+    //-------------------------------------------------------------------------
+    String OGeneralPage::implGetURL( sal_Bool _bPrefix ) const
+    {
+        // get the pure text
+        String sURL = _bPrefix ? m_aConnection.GetText() : m_aConnection.GetTextNoPrefix();
+
+        DBG_ASSERT( m_pCollection, "OGeneralPage::implGetURL: have no interpreter for the URLs!" );
+
+        if ( m_pCollection && sURL.Len() )
+        {
+            // determine the type
+            DATASOURCE_TYPE eType = m_pCollection->getType( _bPrefix ? sURL : m_aConnection.GetText() );
+            if ( m_pCollection->isFileSystemBased( eType ) )
+            {
+                // get the tow parts: prefix and file URL
+                String sTypePrefix, sFileURLDecoded;
+                if ( _bPrefix )
+                {
+                    sTypePrefix = m_pCollection->getDatasourcePrefix( eType );
+                    sFileURLDecoded = m_pCollection->cutPrefix( sURL );
+                }
+                else
+                {
+                    sFileURLDecoded = sURL;
+                }
+
+                // encode the URL
+                INetURLObject aFileURL( sFileURLDecoded, INetURLObject::ENCODE_ALL, RTL_TEXTENCODING_UTF8 );
+                String sFileURLEncoded = aFileURL.GetMainURL( INetURLObject::NO_DECODE );
+
+                // return this encoded URL
+                sURL = sTypePrefix;
+                sURL += sFileURLEncoded;
+            }
+        }
+        return sURL;
+    }
+
+    //-------------------------------------------------------------------------
+    String OGeneralPage::getURL( ) const
+    {
+        return implGetURL( sal_True );
+    }
+
+    //-------------------------------------------------------------------------
+    void OGeneralPage::setURL( const String& _rURL )
+    {
+        implSetURL( _rURL, sal_True );
+    }
+
+    //-------------------------------------------------------------------------
+    String OGeneralPage::getURLNoPrefix( ) const
+    {
+        return implGetURL( sal_False );
+    }
+
+    //-------------------------------------------------------------------------
+    void OGeneralPage::setURLNoPrefix( const String& _rURL )
+    {
+        implSetURL( _rURL, sal_False );
+    }
+
+    //-------------------------------------------------------------------------
     String OGeneralPage::getConnectionURL( ) const
     {
-        return m_aConnection.GetText();
+        return getURL( );
     }
 
     //-------------------------------------------------------------------------
@@ -254,7 +363,7 @@ namespace dbaui
     {
         DBG_ASSERT( m_pCollection && ( m_eCurrentSelection == m_pCollection->getType( _rNewDSN ) ),
             "OGeneralPage::changeConnectionURL: invalid new DSN!" );
-        m_aConnection.SetText( _rNewDSN );
+        setURL( _rNewDSN );
     }
 
     //-------------------------------------------------------------------------
@@ -501,7 +610,7 @@ namespace dbaui
         if (_bSaveValue)
             m_aDatasourceType.SaveValue();
 
-        m_aConnection.SetText(sConnectURL);
+        setURL(sConnectURL);
 
         // notify our listener that our type selection has changed (if so)
         if (eOldSelection != m_eCurrentSelection)
@@ -542,9 +651,9 @@ namespace dbaui
         if ( _eType == m_eCurrentSelection )
             return;
 
-        m_aSelectionHistory[ m_eCurrentSelection ] = m_aConnection.GetText();
+        m_aSelectionHistory[ m_eCurrentSelection ] = getURL();
         m_eCurrentSelection = _eType;
-        m_aConnection.SetText( m_aSelectionHistory[ m_eCurrentSelection ] );
+        setURL( m_aSelectionHistory[ m_eCurrentSelection ] );
     }
 
     //-------------------------------------------------------------------------
@@ -584,9 +693,9 @@ namespace dbaui
             bChangedSomething = sal_True;
         }
 
-        if ((m_aConnection.GetText() != m_aConnection.GetSavedValue()) || (m_aDatasourceType.GetSavedValue() != m_aDatasourceType.GetSelectEntryPos()))
+        if ((getURL() != m_aConnection.GetSavedValue()) || (m_aDatasourceType.GetSavedValue() != m_aDatasourceType.GetSelectEntryPos()))
         {
-            _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, m_aConnection.GetText()));
+            _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, getURL()));
             bChangedSomething = sal_True;
         }
         if(m_sControlUser.Len())
@@ -674,7 +783,7 @@ namespace dbaui
                                     {
                                         String sDatabaseName;
                                         sDatabaseName = String(::comphelper::getString(xProp->getPropertyValue(PROPERTY_DATABASENAME)));
-                                        m_aConnection.SetTextNoPrefix(sDatabaseName);
+                                        setURLNoPrefix(sDatabaseName);
                                         callModifiedHdl();
                                     }
                                     if(xPropInfo->hasPropertyByName(PROPERTY_CONTROLUSER))
@@ -846,7 +955,7 @@ namespace dbaui
         if ((DST_DBASE == m_eCurrentSelection) || (DST_TEXT == m_eCurrentSelection) || (DST_CALC == m_eCurrentSelection))
         {
             String sOldPath = m_aConnection.GetSavedValueNoPrefix();
-            String sURL = m_aConnection.GetTextNoPrefix();
+            String sURL = getURLNoPrefix();
             if ((sURL != sOldPath) && (0 != sURL.Len()))
             {   // the text changed since entering the control
 
@@ -861,12 +970,12 @@ namespace dbaui
                         String sFile = String(ModuleRes(STR_CALCDOC_DOESNOTEXIST));
                         sFile.SearchAndReplaceAscii("$file$", aTransformer.get(OFileNotation::N_SYSTEM));
                         OSQLMessageBox(this,String(ModuleRes(STR_STAT_WARNING)),sFile).Execute();
-                        m_aConnection.SetTextNoPrefix(sOldPath);
+                        setURLNoPrefix(sOldPath);
                         return sal_False;
                     }
                     else
                     {
-                        m_aConnection.SetTextNoPrefix(sURL);
+                        setURLNoPrefix(sURL);
                         m_aConnection.SaveValueNoPrefix();
                     }
                 }
@@ -881,12 +990,12 @@ namespace dbaui
                             return sal_False;
 
                         case RET_CANCEL:
-                            m_aConnection.SetTextNoPrefix(sOldPath);
+                            setURLNoPrefix(sOldPath);
                             return sal_False;
 
                         default:
                             // accept the input
-                            m_aConnection.SetTextNoPrefix(sURL);
+                            setURLNoPrefix(sURL);
                             m_aConnection.SaveValueNoPrefix();
                             break;
                     }
@@ -941,7 +1050,7 @@ namespace dbaui
                     }
 
                     sal_Bool bDoBrowse = sal_False;
-                    String sOldPath = m_aConnection.GetTextNoPrefix();
+                    String sOldPath = getURLNoPrefix();
                     do
                     {
                         if (sOldPath.Len())
@@ -964,7 +1073,13 @@ namespace dbaui
                     }
                     while (bDoBrowse);
 
-                    m_aConnection.SetTextNoPrefix(xFolderPicker->getDirectory());
+                    String sSelectedDirectory = xFolderPicker->getDirectory();
+                    INetURLObject aSelectedDirectory( sSelectedDirectory, INetURLObject::WAS_ENCODED, RTL_TEXTENCODING_UTF8 );
+
+                    // for UI purpose, we don't want to have the path encoded
+                    sSelectedDirectory = aSelectedDirectory.GetMainURL( INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8  );
+
+                    setURLNoPrefix( sSelectedDirectory );
                     callModifiedHdl();
                 }
                 catch(const Exception&)
@@ -977,12 +1092,12 @@ namespace dbaui
             {
                 ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK | WB_STDMODAL | WB_OPEN);
 
-                String sOldPath = m_aConnection.GetTextNoPrefix();
+                String sOldPath = getURLNoPrefix();
                 if (sOldPath.Len())
                     aFileDlg.SetDisplayDirectory(sOldPath);
                 if (0 == aFileDlg.Execute())
                 {
-                    m_aConnection.SetTextNoPrefix(aFileDlg.GetPath());
+                    setURLNoPrefix(aFileDlg.GetPath());
                     callModifiedHdl();
                 }
             }
@@ -1056,7 +1171,7 @@ namespace dbaui
                         String aSelected;
                         aSelected.AssignAscii(":");
                         aSelected += aSelector.GetSelected();
-                        m_aConnection.SetTextNoPrefix(aSelected);
+                        setURLNoPrefix(aSelected);
                         callModifiedHdl();
                     }
                 }
@@ -1091,7 +1206,7 @@ namespace dbaui
                     ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources, GetSelectedType());
                     if (RET_OK == aSelector.Execute())
                     {
-                        m_aConnection.SetTextNoPrefix(aSelector.GetSelected());
+                        setURLNoPrefix(aSelector.GetSelected());
                         callModifiedHdl();
                     }
                 }
@@ -1125,7 +1240,7 @@ namespace dbaui
                 ODatasourceSelectDialog aSelector(GetParent(), aAddressBooks, GetSelectedType());
 
                 // initial selection
-                String sType = m_aConnection.GetText();
+                String sType = getURL();
                 sal_Int32 nOldPos = 0;
                 for (; nOldPos < s_nTypes && sType != String(sAddressBookTypes[nOldPos]); ++nOldPos)
                     ;
@@ -1140,7 +1255,7 @@ namespace dbaui
                         ;
                     if(nOldPos != nNewPos)
                     {
-                        m_aConnection.SetText(sAddressBookTypes[nNewPos]);
+                        setURL(sAddressBookTypes[nNewPos]);
                         // as the (sub-)type changed, call the handler
                         if (m_aTypeSelectHandler.IsSet())
                             m_aTypeSelectHandler.Call(this);
@@ -1267,6 +1382,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/08/02 13:46:58  oj
+ *  #90386# set user/pwd and other to zero
+ *
  *  Revision 1.18  2001/08/01 08:30:41  fs
  *  #88530# changeConnectionURL / getConnectionURL / minor corrections in the handling of m_eCurrentType
  *

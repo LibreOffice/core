@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 08:30:41 $
+ *  last change: $Author: fs $ $Date: 2001-08-07 15:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,10 +187,21 @@ namespace dbaui
         StringBag getInstalledAdabasDBDirs(const String &_rPath,const ::ucb::ResultSetInclude& _reResultSetInclude);
         StringBag getInstalledAdabasDBs(const String &_rConfigDir,const String &_rWorkDir);
 
+        // setting/retrieving the current connection URL
+        // necessary because for some types, the URL must be decoded for display purposes
+        String      getURL( ) const;
+        void        setURL( const String& _rURL );
+        String      getURLNoPrefix( ) const;
+        void        setURLNoPrefix( const String& _rURL );
+
         DECL_LINK(OnDatasourceTypeSelected, ListBox*);
         DECL_LINK(OnBrowseConnections, PushButton*);
         DECL_LINK(OnCreateDatabase, PushButton*);
         DECL_LINK(OnNameModified, Edit*);
+
+    private:
+        String      implGetURL( sal_Bool _bPrefix ) const;
+        void        implSetURL( const String& _rURL, sal_Bool _bPrefix );
     };
 
 //.........................................................................
@@ -201,6 +212,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/08/01 08:30:41  fs
+ *  #88530# changeConnectionURL / getConnectionURL / minor corrections in the handling of m_eCurrentType
+ *
  *  Revision 1.4  2001/07/31 16:01:33  fs
  *  #88530# changes to operate the dialog in a mode where no type change is possible
  *
