@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:59 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ String STR_NOGLOS1
     TEXT [ English ] = "AutoText for Short Name '" ;
     TEXT [ norwegian ] = "AutoText for Short Name '" ;
     TEXT [ italian ] = "Testo automatico per la sigla '" ;
-    TEXT [ portuguese_brazilian ] = "Texto Autom?tico para Abrevia??o" ;
+    TEXT [ portuguese_brazilian ] = "AutoTexto para Atalho " ;
     TEXT [ portuguese ] = "AutoTexto para abreviatura '" ;
     TEXT [ finnish ] = "Automaattista tekstiä pikavalinnalle" ;
     TEXT [ danish ] = "AutoTekst til genvej '" ;
@@ -84,7 +84,7 @@ String STR_NOGLOS1
     TEXT [ english_us ] = "AutoText for Shortcut '" ;
     TEXT[ chinese_simplified ] = "è‡ªåŠ¨å›¾æ–‡é›†çš„ç¼©å†™ '";
     TEXT[ russian ] = "Àâòîòåêñò ê ñîêğàùåíèş '";
-    TEXT[ polish ] = "Autotekst do skrótu '";
+    TEXT[ polish ] = "Autotekst skrótu '";
     TEXT[ japanese ] = "å…¥åŠ›æ”¯æ´ã®ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã€Œ";
     TEXT[ chinese_traditional ] = "è‡ªå‹•åœ–æ–‡é›†çš„ç¸®å¯«<";
     TEXT[ arabic ] = "äÕ ÊáŞÇÆí ááÇÎÊÕÇÑ '";
@@ -96,6 +96,9 @@ String STR_NOGLOS1
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "AutoText per al nom curt '";
     TEXT[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¸ªà¸³à¸«à¸£à¸±à¸šà¹€à¸›à¹‡à¸™à¸—à¸²à¸‡à¸¥à¸±à¸” '";
+    TEXT[ czech ] = "AutomatickÃ½ text pro zkratku '";
+    TEXT[ hebrew ] = "AutoText zum KÃ¼rzel '";
+    TEXT[ hindi ] = "à¤¸à¤°à¤²à¤µà¤¿à¤§à¤¿ à¤•à¥‡à¤²à¤¿à¤ à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥  '";
 };
 String STR_NOGLOS2
 {
@@ -107,7 +110,7 @@ String STR_NOGLOS2
     TEXT [ English ] = "' not found." ;
     TEXT [ norwegian ] = "' not found." ;
     TEXT [ italian ] = "' non trovato." ;
-    TEXT [ portuguese_brazilian ] = "' n?o encontrado." ;
+    TEXT [ portuguese_brazilian ] = " não encontrado." ;
     TEXT [ portuguese ] = "' não localizado." ;
     TEXT [ finnish ] = "ei löydy." ;
     TEXT [ danish ] = "' blev ikke fundet." ;
@@ -130,6 +133,9 @@ String STR_NOGLOS2
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "' no s'ha trobat.";
     TEXT[ thai ] = "' à¹„à¸¡à¹ˆà¸à¸š";
+    TEXT[ czech ] = "' nebyl nalezen.";
+    TEXT[ hebrew ] = "' nicht gefunden.";
+    TEXT[ hindi ] = "' à¤¨à¤¹à¥€à¤‚ à¤®à¤¿à¤²à¤¾ à¥¤";
 };
 
 String STR_NO_TABLE
@@ -138,7 +144,7 @@ String STR_NO_TABLE
     Text [ english_us ] = "A table cannot be inserted into another table. However, you can paste the data into the document when the cursor is not in a table.";
     Text [ norwegian ] = "Inserting a table is impossible now." ;
     Text [ italian ] = "Impossibile inserire una tabella in un'altra tabella. Tuttavia potete inserire i dati nel documento quando il cursore non è posizionato in una tabella." ;
-    Text [ portuguese_brazilian ] = "Inserir a tabela ? agora imposs?vel." ;
+    Text [ portuguese_brazilian ] = "Não é possível inserir uma tabela no momento" ;
     Text [ portuguese ] = "De momento não é possível inserir a tabela." ;
     Text [ finnish ] = "Tällä hetkellä taulukkoa ei voi lisätä" ;
     Text [ danish ] = "Det er for tiden ikke muligt at indsætte en tabel" ;
@@ -148,7 +154,7 @@ String STR_NO_TABLE
     Text [ spanish ] = "No se puede insertar una tabla dentro de otra. Sin embargo, puede pegar los datos en el documento cuando el cursor no esté en la tabla." ;
     Text[ chinese_simplified ] = "åœ¨ä¸€ä¸ªè¡¨æ ¼ä¹‹å†…æ— æ³•æ’å…¥è¡¨æ ¼ã€‚å¦‚æœé¼ æ ‡ä¸æ˜¯ä½äºä¸€ä¸ªè¡¨æ ¼ä¹‹å†…ï¼Œæ‚¨ä¹Ÿè¿˜æ˜¯èƒ½å¤Ÿæ’å…¥æ•°æ®ã€‚";
     Text[ russian ] = "Ñåé÷àñ íåâîçìîæíî âñòàâèòü òàáëèöó";
-    Text[ polish ] = "W tym momencie nie mo¿e byæ wstawiona tabela.";
+    Text[ polish ] = "Obecnie wstawienie tabeli jest niemo¿liwe.";
     Text[ japanese ] = "è¡¨ã‚’åˆ¥ã®è¡¨ã«æŒ¿å…¥ã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚ãŸã ã—ã€è¡¨ä»¥å¤–ã®å ´æ‰€ã«ã‚«ãƒ¼ã‚½ãƒ«ã‚’ç½®ã‘ã°ã€ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«è¡¨ã®ãƒ‡ãƒ¼ã‚¿ã‚’è²¼ã‚Šä»˜ã‘ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚";
     Text[ chinese_traditional ] = "è¡¨æ ¼ç„¡æ³•æ’å…¥å…¶ä»–è¡¨æ ¼ä¸­ã€‚ä½†æ˜¯ç•¶æ¸¸æ¨™ä¸åœ¨è¡¨æ ¼ä¸­æ™‚ï¼Œæ‚¨å¯ä»¥å°‡è³‡æ–™è²¼åˆ°æ–‡ä»¶ä¸­ã€‚";
     Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá ÛíÑ ããßä ÍÇáíÇğ.";
@@ -156,10 +162,13 @@ String STR_NO_TABLE
     Text[ chinese_simplified ] = "åœ¨ä¸€ä¸ªè¡¨æ ¼ä¹‹å†…æ— æ³•æ’å…¥è¡¨æ ¼ã€‚å¦‚æœé¼ æ ‡ä¸æ˜¯ä½äºä¸€ä¸ªè¡¨æ ¼ä¹‹å†…ï¼Œæ‚¨ä¹Ÿè¿˜æ˜¯èƒ½å¤Ÿæ’å…¥æ•°æ®ã€‚";
     Text[ greek ] = "Ğñïò ôï ğáñüí åßíáé áäıíáôïí íá åéóá÷èåß ğßíáêáò.";
     Text[ korean ] = "í‘œ ì•ˆì— ë˜ ë‹¤ë¥¸ í‘œë¥¼ ì‚½ì…í•  ìˆ˜ëŠ” ì—†ìœ¼ë‚˜ ì»¤ì„œê°€ í‘œ ì•ˆì— ë†“ì—¬ìˆì§€ ì•Šì€ í•œ ë°ì´í„°ëŠ” í‘œë¬¸ì„œ ì•ˆìœ¼ë¡œ ì‚½ì…í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Şu an tablo eklenemiyor.";
+    Text[ turkish ] = "Bir tablo başka bir tablo içine eklenemez. Ancak, fare imleçi tablo içinde olmadığı zaman verileri belgeye yapiştırabilirsiniz.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ara no es pot inserir cap taula.";
     Text[ thai ] = "à¸¡à¸±à¸™à¹€à¸›à¹‡à¸™à¹„à¸›à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸—à¸µà¹ˆà¸ˆà¸°à¹à¸—à¸£à¸à¸•à¸²à¸£à¸²à¸‡à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™";
+    Text[ czech ] = "NenÃ­ moÅ¾no vloÅ¾it tabulku";
+    Text[ hebrew ] = "Eine Tabelle kann nicht in eine andere Tabelle eingefÃ¼gt werden. Sie kÃ¶nnen die Daten jedoch einfÃ¼gen, wenn sich der Cursor nicht in einer Tabelle befindet.";
+    Text[ hindi ] = "à¤µà¤°à¥à¤¤à¤®à¤¾à¤¨ à¤®à¥‡à¤‚ à¤¸à¤¾à¤°à¤£à¥€ à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¤¨à¤¾ à¤¸à¤‚à¤­à¤µ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ ";
 };
 
 
@@ -169,7 +178,7 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE [ English ] = "Could not insert AutoText." ;
     MESSAGE [ norwegian ] = "Could not insert AutoText." ;
     MESSAGE [ italian ] = "Impossibile creare voce di glossario." ;
-    MESSAGE [ portuguese_brazilian ] = "N?o pude inserir Texto Autom?tico." ;
+    MESSAGE [ portuguese_brazilian ] = "Não foi possível criar o AutoTexto" ;
     MESSAGE [ portuguese ] = "Impossível inserir o AutoTexto." ;
     MESSAGE [ finnish ] = "Automaattista tekstiä ei voitu luoda." ;
     MESSAGE [ danish ] = "Det var ikke muligt at oprette AutoTeksten." ;
@@ -180,7 +189,7 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE [ english_us ] = "AutoText could not be created." ;
     MESSAGE[ chinese_simplified ] = "æ— æ³•å»ºç«‹è‡ªåŠ¨å›¾æ–‡é›†ã€‚";
     MESSAGE[ russian ] = "Íåâîçìîæíî ñîçäàòü àâòîòåêñò.";
-    MESSAGE[ polish ] = "Autotekst nie móg³ zostaæ utworzony.";
+    MESSAGE[ polish ] = "Nie mo¿na utworzyæ Autotekstu.";
     MESSAGE[ japanese ] = "å…¥åŠ›æ”¯æ´ã§ãã¾ã›ã‚“";
     MESSAGE[ chinese_traditional ] = "ç„¡æ³•å»ºç«‹è‡ªå‹•åœ–æ–‡é›†ã€‚";
     MESSAGE[ arabic ] = "ÊÚĞÑ Úãá äÕ ÊáŞÇÆí.";
@@ -192,6 +201,9 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "No s'ha pogut crear l'autotext.";
     MESSAGE[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+    MESSAGE[ czech ] = "AutomatickÃ½ text nelze vytvoÅ™it.";
+    MESSAGE[ hebrew ] = "AutoText konnte nicht angelegt werden.";
+    MESSAGE[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤¨à¤¹à¥€à¤‚ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
 };
 
 InfoBox MSG_CLPBRD_FORMAT_ERROR
@@ -200,7 +212,7 @@ InfoBox MSG_CLPBRD_FORMAT_ERROR
     MESSAGE [ English ] = "Requested clipboard format is not available." ;
     MESSAGE [ norwegian ] = "Requested clipboard format is not available." ;
     MESSAGE [ italian ] = "Il formato Appunti richiesto non è disponibile." ;
-    MESSAGE [ portuguese_brazilian ] = "Formato solicitado de clipboard n?o est? dispon?vel." ;
+    MESSAGE [ portuguese_brazilian ] = "O formato de área de transferência solicitado não está disponível." ;
     MESSAGE [ portuguese ] = "Formato da área de transferência solicitado não se encontra disponível." ;
     MESSAGE [ finnish ] = "Pyydetty leikepöydän muoto ei ole käytettävissä." ;
     MESSAGE [ danish ] = "Det anmodede udskriftsholderformat er ikke tilgængeligt." ;
@@ -211,7 +223,7 @@ InfoBox MSG_CLPBRD_FORMAT_ERROR
     MESSAGE [ english_us ] = "Requested clipboard format is not available." ;
     MESSAGE[ chinese_simplified ] = "æ‰€éœ€è¦çš„è£å‰ªæ¿æ ¼å¼ä¸å­˜åœ¨ã€‚";
     MESSAGE[ russian ] = "Íåäîñòóïåí æåëàåìûé ôîğìàò áóôåğà îáìåíà.";
-    MESSAGE[ polish ] = "Szukany format schowka jest niedostêpny.";
+    MESSAGE[ polish ] = "¯¹dany format zawartoœci schowka jest niedostêpny.";
     MESSAGE[ japanese ] = "æŒ‡å®šã®ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰æ›¸å¼ã¯ä½¿ç”¨ã§ãã¾ã›ã‚“ã€‚";
     MESSAGE[ chinese_traditional ] = "è«‹æ±‚çš„å‰ªè²¼ç°¿æ ¼å¼ä¸å­˜åœ¨ã€‚";
     MESSAGE[ arabic ] = "ÊäÓíŞ ÇáÍÇİÙÉ ÇáãØáæÈ ÛíÑ ãÊæİÑ.";
@@ -219,10 +231,13 @@ InfoBox MSG_CLPBRD_FORMAT_ERROR
     MESSAGE[ chinese_simplified ] = "æ‰€éœ€è¦çš„è£å‰ªæ¿æ ¼å¼ä¸å­˜åœ¨ã€‚";
     MESSAGE[ greek ] = "Ç æçôïıìåíç ìïñöŞ ôïõ ğñü÷åéñïõ äåí åßíáé äéáèİóéìç.";
     MESSAGE[ korean ] = "ìš”ì²­í•œ í´ë¦½ë³´ë“œ ì„œì‹ì„ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    MESSAGE[ turkish ] = "İstenen pano formatı mevcut değil.";
+    MESSAGE[ turkish ] = "İstenen artalan biçemi kullanılamaz";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "El format desitjat del porta-retalls no està disponible.";
     MESSAGE[ thai ] = "à¸£à¹‰à¸­à¸‡à¸‚à¸­à¸£à¸¹à¸›à¹à¸šà¸šà¸„à¸¥à¸´à¸›à¸šà¸­à¸£à¹Œà¸”à¹„à¸¡à¹ˆà¹„à¸”à¹‰";
+    MESSAGE[ czech ] = "PoÅ¾adovanÃ½ formÃ¡t schrÃ¡nky nenÃ­ dostupnÃ½.";
+    MESSAGE[ hebrew ] = "GewÃ¼nschtes Zwischenablagen-Format steht nicht zur VerfÃ¼gung.";
+    MESSAGE[ hindi ] = "à¤¨à¤¿à¤µà¥‡à¤¦à¤¨ à¤•à¥€ à¤¹à¥à¤¯à¥€ à¤•à¥à¤²à¤¿à¤ªà¤¬à¥‹à¤°à¥à¤¡ à¤°à¤šà¤¨à¤¾ à¤ªà¥à¤°à¤¾à¤ªà¥à¤¯ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ à¥¤";
 };
 
 QueryBox MSG_UPDATE_NEW_GLOS_FMT
@@ -233,7 +248,7 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     MESSAGE [ English ] = "The file format of the region is out-of-date.\nIt must be converted in order to save modifications.\nDo you want to convert it?" ;
     MESSAGE [ norwegian ] = "The file format of the region is out-of-date.\nIt must be converted in order to save modifications.\nDo you want to convert it?" ;
     MESSAGE [ italian ] = "Il formato dell'area è vecchio.\nÈ necessario convertirlo per poter\nsalvare le modifiche apportate\nVolete convertirlo?" ;
-    MESSAGE [ portuguese_brazilian ] = "O formato de arquivo da regiao est? desatualizado.\nDeve ser convertido para que se possa gravar modifica??s.\nDeseja convert?-lo?" ;
+    MESSAGE [ portuguese_brazilian ] = "O formato da seção está desatualizado.\nEle deve ser convertido para que se possa gravar modificações.\nDeseja convertê-lo agora?" ;
     MESSAGE [ portuguese ] = "O formato do ficheiro está desactualizado.\nDeve ser convertido para que se possam\n guardar as respectivas alterações.\nDeseja convertê-lo?" ;
     MESSAGE [ finnish ] = "Osan muoto on vanhentunut.\nOsa on muunnettava, jotta\nmuutokset voisi tallentaa.\nMuunnetaanko osa nyt?" ;
     MESSAGE [ danish ] = "Områdets filformat er forældet.\nDet skal konverteres, for at ændringerne kan gemmes.\nVil du konvertere det?" ;
@@ -246,7 +261,7 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     Message = "Der Bereich liegt in einem alten Format vor.\nEr muss konvertiert werden, um Änderungen\nspeichern zu können.\nSoll er konvertiert werden?" ;
     Message[ chinese_simplified ] = "è¿™ä¸ªåŒºåŸŸå…·æœ‰çš„æ ¼å¼æ˜¯æ—§çš„ã€‚\nè¦å­˜ç›˜æ›´æ”¹å°±å¿…é¡»è¿›è¡Œæ ¼å¼è½¬æ¢ã€‚\nè¦è½¬æ¢æ ¼å¼å—ï¼Ÿ";
     Message[ russian ] = "Ğàçäåë ïğåäñòàâëåí â ñòàğîì ôîğìàòå.\nÅãî íåîáõîäèìî ïğåîáğàçîâàòü, ÷òîáû \nñîõğàíèòü èçìåíåíèÿ\n.Ïğåîáğàçîâàòü?";
-    Message[ polish ] = "Format obszaru nie jest aktualny.\nObszar musi byæ skonwertowany, by mo¿na by³o zapisaæ zmiany\n. Skonwertowaæ go?";
+    Message[ polish ] = "Format sekcji jest przestarza³y.\nAby mo¿na by³o zapisaæ zmiany,\nnale¿y dokonaæ konwersji\n.Czy zrobiæ to teraz?";
     Message[ japanese ] = "ã“ã®ç¯„å›²ã¯æ—§æ›¸å¼ã«ã‚ã‚Šã¾ã™ã€‚\nå¤‰æ›´ã‚’ä¿å­˜ã™ã‚‹ã«ã¯\næ›¸å¼ã‚’å¤‰æ›ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚\næ›¸å¼å¤‰æ›ã—ã¾ã™ã‹?";
     Message[ chinese_traditional ] = "é€™å€‹å€åŸŸçš„æ ¼å¼æ˜¯èˆŠçš„ã€‚\nè¦å„²å­˜è®Šæ›´å°±å¿…é ˆè½‰æ›å®ƒæ ¼å¼ã€‚\næ‚¨è¦è½‰æ›å®ƒçš„æ ¼å¼ï¼Ÿ";
     Message[ arabic ] = "ÊäÓíŞ ÇáäØÇŞ ŞÏíã.\níÌÈ ÊÍæíáå¡ ÍÊì íãßä \nÍİÙ ÇáÊÛííÑÇÊ.\nåá ÊÑíÏ ÊÍæíáå¿";
@@ -258,6 +273,9 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "El format de l'àrea no és actual.\nS'ha de convertir\nper poder desar les modificacions.\nVoleu convertir-lo?";
     Message[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¸ªà¹ˆà¸§à¸™à¸¥à¹‰à¸²à¸ªà¸¡à¸±à¸¢\nà¸¡à¸±à¸™à¸ˆà¸³à¹€à¸›à¹‡à¸™à¸•à¹‰à¸­à¸‡à¸–à¸¹à¸à¹à¸›à¸¥à¸‡à¹€à¸à¸·à¹ˆà¸­\nà¸ªà¸²à¸¡à¸²à¸£à¸–à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡\nà¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹à¸›à¸¥à¸‡à¸‚à¸“à¸°à¸™à¸µà¹‰à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
+    Message[ czech ] = "FormÃ¡t oddÃ­lu je neplatnÃ½.\nMusÃ­ se zkonvertovat, aby\nbylo moÅ¾no uloÅ¾it zmÄ›ny.\nZkonvertovat nynÃ­?";
+    Message[ hebrew ] = "Der Bereich liegt in einem alten Format vor.\nEr muss konvertiert werden, um Ã„nderungen\nspeichern zu kÃ¶nnen.\nSoll er konvertiert werden?";
+    Message[ hindi ] = "à¤µà¤¿à¤­à¤¾à¤— à¤°à¤šà¤¨à¤¾ à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤¹à¥ˆ à¥¤\nà¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨à¥‹à¤‚ à¤•à¥‹ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤‰à¤¨à¤•à¥‹\nà¤¬à¤¦à¤²à¤¨à¤¾ à¤¹à¥‹à¤—à¤¾ à¥¤\nà¤…à¤­à¥€ à¤‰à¤¸à¥‡ à¤¬à¤¦à¤²à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
 };
 
 String STR_PRIVATETEXT
@@ -286,6 +304,9 @@ String STR_PRIVATETEXT
     Text[ catalan ] = "%PRODUCTNAME Writer";
     Text[ finnish ] = "%PRODUCTNAME Writer";
     Text[ thai ] = "%PRODUCTNAME Writer";
+    Text[ czech ] = "%PRODUCTNAME Writer";
+    Text[ hebrew ] = "%PRODUCTNAME Writer";
+    Text[ hindi ] = "%PRODUCTNAME à¤²à¥‡à¤–à¤•";
 };
 String STR_PRIVATEGRAPHIC
 {
@@ -293,7 +314,7 @@ String STR_PRIVATEGRAPHIC
     Text [ ENGLISH ] = "Graphic [%PRODUCTNAME Writer]" ;
     Text [ norwegian ] = "Graphic [%PRODUCTNAME Writer]" ;
     Text [ italian ] = "Immagine [%PRODUCTNAME Writer]" ;
-    Text [ portuguese_brazilian ] = "Gr?fico [%PRODUCTNAME Writer]" ;
+    Text [ portuguese_brazilian ] = "Figura [%PRODUCTNAME Writer]" ;
     Text [ portuguese ] = "Imagem [%PRODUCTNAME Writer]" ;
     Text [ finnish ] = "Grafiikka [%PRODUCTNAME Writer]" ;
     Text [ danish ] = "Grafik [%PRODUCTNAME Writer]" ;
@@ -304,7 +325,7 @@ String STR_PRIVATEGRAPHIC
     Text [ english_us ] = "Graphics [%PRODUCTNAME Writer]" ;
     Text[ chinese_simplified ] = "å›¾å½¢ [%PRODUCTNAME Writer]";
     Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò [%PRODUCTNAME Writer]";
-    Text[ polish ] = "Grafika [%PRODUCTNAME Writer]";
+    Text[ polish ] = "[%PRODUCTNAME Writer] - Grafika";
     Text[ japanese ] = "å›³ [%PRODUCTNAME Writer]";
     Text[ greek ] = "Ãñáöéêü [%PRODUCTNAME Writer]";
     Text[ korean ] = "ê·¸ë¦¼ [%PRODUCTNAME Writer]";
@@ -313,6 +334,9 @@ String STR_PRIVATEGRAPHIC
     Text[ turkish ] = "Grafik [%PRODUCTNAME Writer]";
     Text[ catalan ] = "Imatge [%PRODUCTNAME Writer]";
     Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„ [%PRODUCTNAME Writer]";
+    Text[ czech ] = "ObrÃ¡zek [%PRODUCTNAME Writer]";
+    Text[ hebrew ] = "Grafik [%PRODUCTNAME Writer]";
+    Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤° [%PRODUCTNAME à¤²à¥‡à¤–à¤•]";
 };
 String STR_PRIVATEOLE
 {
@@ -326,7 +350,7 @@ String STR_PRIVATEOLE
     Text [ swedish ] = "Objekt [%PRODUCTNAME Writer]" ;
     Text [ danish ] = "Objekt [%PRODUCTNAME Writer]" ;
     Text [ portuguese ] = "Objecto [%PRODUCTNAME Writer]" ;
-    Text [ portuguese_brazilian ] = "Objekt [%PRODUCTNAME Writer]" ;
+    Text [ portuguese_brazilian ] = "Objeto [%PRODUCTNAME Writer]" ;
     Text[ chinese_simplified ] = "å¯¹è±¡ [%PRODUCTNAME Writer]";
     Text[ russian ] = "Îáúåêò [%PRODUCTNAME Writer]";
     Text[ polish ] = "Obiekt [%PRODUCTNAME Writer]";
@@ -339,6 +363,9 @@ String STR_PRIVATEOLE
     Text[ catalan ] = "Objecte [%PRODUCTNAME Writer]";
     Text[ finnish ] = "Objekti [%PRODUCTNAME Writer]";
     Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸ [%PRODUCTNAME Writer]";
+    Text[ czech ] = "Objekt [%PRODUCTNAME Writer]";
+    Text[ hebrew ] = "Objekt [%PRODUCTNAME Writer]";
+    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ [%PRODUCTNAME à¤²à¥‡à¤–à¤•]";
 };
 String STR_DDEFORMAT
 {
@@ -347,7 +374,7 @@ String STR_DDEFORMAT
     Text [ ENGLISH ] = "DDE link" ;
     Text [ norwegian ] = "DDE link" ;
     Text [ italian ] = "Collegamento DDE" ;
-    Text [ portuguese_brazilian ] = "Liga??o do DDE" ;
+    Text [ portuguese_brazilian ] = "Vínculo DDE" ;
     Text [ portuguese ] = "Ligação DDE" ;
     Text [ finnish ] = "DDE-linkki" ;
     Text [ danish ] = "DDE-kæde" ;
@@ -370,6 +397,9 @@ String STR_DDEFORMAT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Enllaç DDE";
     Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡ DDE ";
+    Text[ czech ] = "Odkaz DDE";
+    Text[ hebrew ] = "DDE VerknÃ¼pfung";
+    Text[ hindi ] = "DDE à¤²à¤¿à¤‚à¤•";
 };
 Bitmap BMP_SW_TEAM_MUGSHOT
 {
@@ -380,6 +410,15 @@ String STR_SW_TEAM_NAMES
 {
     TEXT = "Back row: Juergen Pingel, Caolan McNamara, Andreas Martens, Daniel Vogelheim, Thomas Lange, Michael Brauer, Frank Meies, Oliver Specht, Ulf Stroehler (QA). \nFront row: Stefan Baltzer (QA), Eric Savary (QA), Hasan Ilter (QA), Martin Gallwey, Michael Ruess (QA)";
 };
+
+
+
+
+
+
+
+
+
 
 
 
