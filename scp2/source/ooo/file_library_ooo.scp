@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.70 $
+*  $Revision: 1.71 $
 *
-*  last change: $Author: kz $ $Date: 2004-11-26 18:37:20 $
+*  last change: $Author: hr $ $Date: 2004-11-26 21:52:02 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1584,8 +1584,6 @@ File gid_File_Lib_Sec
   #endif
 End
 
-STD_SETUPZIP_LIB_FILE( gid_File_Lib_Set, set )
-
 STD_UNO_LIB_FILE( gid_File_Lib_Sf_Prothdlr, protocolhandler )
 
 STD_UNO_LIB_FILE( gid_File_Lib_Sfx , sfx)
@@ -1811,8 +1809,6 @@ STD_SETUPZIP_LIB_FILE( gid_File_Lib_Tools, tl )
 
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_Toutstrm,textoutstream.uno)
 
-STD_SETUPZIP_LIB_FILE( gid_File_Lib_Tplx, tplx )
-
 File gid_File_Lib_Tvhlp1
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
@@ -1922,8 +1918,6 @@ File gid_File_Lib_Urp_Uno
     Name = "urp_uno.dll";
   #endif
 End
-
-STD_SETUPZIP_LIB_FILE( gid_File_Lib_Usp, usp )
 
 UNO_SETUPZIP_LIB_FILE( gid_File_Lib_Utl , utl)
 
