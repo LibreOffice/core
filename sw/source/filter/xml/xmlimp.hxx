@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:22:31 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,15 @@ class SwXMLImport: public SvXMLImport
     void                    _FinitItemImport();
     void                    UpdateTxtCollConditions( SwDoc *pDoc );
 
+    void         setTextInsertMode(
+                     const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::text::XTextRange > & rInsertPos );
+    void         setStyleInsertMode( sal_uInt16 nFamilies,
+                                     sal_Bool bOverwrite );
+    void         setBlockMode();
+    void         setOrganizerMode();
+
+
 protected:
 
     // This method is called after the namespace map has been updated, but
@@ -160,14 +169,6 @@ public:
 #endif
 
     ~SwXMLImport() throw();
-
-    void         setTextInsertMode(
-                     const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::text::XTextRange > & rInsertPos );
-    void         setStyleInsertMode( sal_uInt16 nFamilies,
-                                     sal_Bool bOverwrite );
-    void         setBlockMode();
-    void         setOrganizerMode();
 
     // ::com::sun::star::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument(void)
