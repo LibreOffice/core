@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anytostring.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:49:03 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,17 @@
 #if ! defined INCLUDED_ANYTOSTRING_HXX
 #define INCLUDED_ANYTOSTRING_HXX
 
+#ifndef _RTL_USTRING_HXX_
 #include "rtl/ustring.hxx"
-#include "com/sun/star/uno/Any.hxx"
+#endif
 
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include "com/sun/star/uno/Any.hxx"
+#endif
+
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 namespace comphelper
 {
@@ -76,7 +84,7 @@ namespace comphelper
     @return
            STRING representation of given ANY value
 */
-::rtl::OUString anyToString( ::com::sun::star::uno::Any const & value );
+COMPHELPER_DLLPUBLIC ::rtl::OUString anyToString( ::com::sun::star::uno::Any const & value );
 
 }
 
