@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:08:34 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1955,7 +1955,8 @@ BOOL SwFEShell::ImpEndCreate()
             } while( pTmp->IsFollow() );
             pAnch = pTmp;
         }
-        Point aNewAnchor = pAnch->GetAnchorPos();
+
+        Point aNewAnchor = pAnch->GetFrmAnchorPos( ::HasWrap( &rSdrObj ) );
         Point aRelPos( aRelNullPt - aNewAnchor );
         rSdrObj.NbcSetRelativePos( aRelPos );
         rSdrObj.NbcSetAnchorPos( aNewAnchor );
@@ -2674,7 +2675,7 @@ void SwFEShell::CheckUnboundObjects()
             SwDrawContact *pContact = new SwDrawContact(
                                             (SwDrawFrmFmt*)pFmt, pObj );
 
-            Point aNewAnchor = pAnch->GetAnchorPos();
+            Point aNewAnchor = pAnch->GetFrmAnchorPos( ::HasWrap( pObj ) );
             pObj->NbcSetRelativePos( aRelNullPt - aNewAnchor );
             pObj->NbcSetAnchorPos  ( aNewAnchor );
 
