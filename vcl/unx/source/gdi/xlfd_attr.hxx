@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ class AttributeStorage {
         void            AddClassification( AttributeClassifierT Classify );
         void            TagFeature( unsigned short nFeature );
         void            AddAnnotation( AttributeAnnotatorT Annotate );
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         void            Dump();
         #endif
 };
@@ -210,7 +210,7 @@ class AttributeProvider {
         void                AddClassification();
         void                AddAnnotation();
         void                TagFeature();
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         void                Dump();
         #endif
 
