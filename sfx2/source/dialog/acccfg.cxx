@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:22:01 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 09:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,10 @@ void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr, BOOL bIsDe
         // Macro-Eintraege referenzieren, da sie sonst beim Clear eventuell
         // entfernt werden koennten !
         if ( SfxMacroConfig::IsMacroSlot( nId ) )
+        {
             aListOfIds.Insert( nId, aListOfIds.Count() );
+             SFX_APP()->GetMacroConfig()->RegisterSlotId(nId);
+        }
     }
 
     pAccMgr->Reset(nCount);
