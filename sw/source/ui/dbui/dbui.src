@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:02:11 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,10 @@ String STR_DB_EMAIL
     Text[ hindi ] = "E-mail";
     Text[ slovak ] = "E-mail";
 };
+
+
+
+
 
 
 
