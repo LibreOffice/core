@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:48:41 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,15 @@
 #define ODBC_UI_LIBRARY "ODBCCP32.DLL"
 #endif
 #ifdef UNX
+#ifdef MACOSX
+#define ODBC_LIBRARY        "libiodbc.dylib"
+#define ODBC_UI_LIBRARY     "libiodbcinst.dylib"
+#else
 #define ODBC_LIBRARY_1      "libodbc.so.1"
 #define ODBC_UI_LIBRARY_1   "libodbcinst.so.1"
 #define ODBC_LIBRARY        "libodbc.so"
 #define ODBC_UI_LIBRARY     "libodbcinst.so"
+#endif
 #endif
 
 // just to go with calling convention of windows
