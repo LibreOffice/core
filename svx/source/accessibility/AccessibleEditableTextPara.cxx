@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-02 12:20:32 $
+ *  last change: $Author: thb $ $Date: 2002-10-02 17:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,10 +913,8 @@ namespace accessibility
 
         if( HaveChildren() )
         {
-            // make given position relative
+            // #103862# No longer need to make given position relative
             Point aPoint( _aPoint.X, _aPoint.Y );
-            awt::Point aRefPoint = getLocationOnScreen();
-            aPoint -= Point( aRefPoint.X, aRefPoint.Y );
 
             // respect EditEngine offset to surrounding shape/cell
             aPoint -= GetEEOffset();
