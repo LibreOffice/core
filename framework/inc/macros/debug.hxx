@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-07-09 12:55:30 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@
     #undef  ENABLE_MUTEXDEBUG
 //    #undef  ENABLE_TIMEMEASURE
     #undef  ENABLE_MEMORYMEASURE
+    #undef  ENABLE_FILTERDBG
 
 #endif
 
@@ -190,6 +191,14 @@
 #include <macros/debug/timemeasure.hxx>
 #endif
 */
+
+//*****************************************************************************************************************
+//  special macros to debug our filter cache!
+//*****************************************************************************************************************
+
+#ifndef __FRAMEWORK_MACROS_DEBUG_FILTERDBG_HXX_
+#include <macros/debug/filterdbg.hxx>
+#endif
 
 //*****************************************************************************************************************
 //  end of file
