@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:24:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,6 @@ void PrinterInfoManager::initialize()
     rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
     m_aPrinters.clear();
     m_aWatchFiles.clear();
-    OUString aPrinterPath( getPrinterPath() );
     OUString aDefaultPrinter;
 
     // first initialize the global defaults
@@ -164,10 +163,12 @@ void PrinterInfoManager::initialize()
         return;
     }
 
-    sal_Int32 nIndex = 0;
-    while( nIndex != -1 )
+    std::list< OUString > aDirList;
+    psp::getPrinterPathList( aDirList, NULL );
+    std::list< OUString >::const_iterator print_dir_it;
+    for( print_dir_it = aDirList.begin(); print_dir_it != aDirList.end(); ++print_dir_it )
     {
-        INetURLObject aFile( aPrinterPath.getToken( 0, ':', nIndex ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+        INetURLObject aFile( *print_dir_it, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
         aFile.Append( String( RTL_CONSTASCII_USTRINGPARAM( PRINT_FILENAME ) ) );
         Config aConfig( aFile.PathToFileName() );
         if( aConfig.HasGroup( GLOBAL_DEFAULTS_GROUP ) )
@@ -239,10 +240,9 @@ void PrinterInfoManager::initialize()
     fillFontSubstitutions( m_aGlobalDefaults );
 
     // now collect all available printers
-    nIndex = 0;
-    while( nIndex != -1 )
+    for( print_dir_it = aDirList.begin(); print_dir_it != aDirList.end(); ++print_dir_it )
     {
-        INetURLObject aDir( aPrinterPath.getToken( 0, ':', nIndex ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+        INetURLObject aDir( *print_dir_it, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
         INetURLObject aFile( aDir );
         aFile.Append( String( RTL_CONSTASCII_USTRINGPARAM( PRINT_FILENAME ) ) );
 
