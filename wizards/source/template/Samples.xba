@@ -170,7 +170,7 @@ Sub CloseStyleDialog
 	StylesDialog.Endexecute
 End Sub
 
-&apos; Todo:Diese Prozedur an das Dialog-Schließen Ereignis ranhängen
+
 Sub KillTempFile()
 	If oUcbObject.Exists(aTempUrl) Then
 		oUcbObject.Kill(aTempUrl)

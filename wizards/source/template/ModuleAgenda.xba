@@ -6,7 +6,6 @@ Option Explicit
 &apos; Used for &quot;disabling&quot; the cancel button of the dialog
 Public DialogExited As Boolean
 Dim DlgAgenda_gMyName as String
-&apos;Dim DlgAgenda_gMsgNoCancel$
 Public TemplateDialog as Object
 Public DialogModel as Object
 Public sTrueContent as String
@@ -49,7 +48,6 @@ Dim i as Integer
 	oBookMarks = oDocument.Bookmarks
 
 	On Local Error Goto NOBOOKMARK
-&apos; Todo: auch beim Schließen des Dialogs muss was passieren
 	TemplateDialog.EndExecute
 	DialogExited = TRUE
 	oBookmarkCursor = CreateBookmarkCursor(oDocument, BookmarkName)
@@ -64,7 +62,6 @@ Dim i as Integer
 	oBookMarkCursor = CreateBookmarkCursor(oDocument, &quot;NextTopic&quot;)
 	If Not IsNull(oBookMarkCursor) Then
 		oTextField = oBookMarkCursor.TextField
-&apos; Todo: Was ist mit der Property &apos;TrueContent&apos; geschehen?
 &apos;		oTextField.TrueContent = 	sTrueContent
 		oTextField.Content = sTrueContent
 	End If
@@ -76,16 +73,13 @@ Dim i as Integer
 End Sub
 
 
-&apos; Attention This Sub is also called from the correspondence stuff
-
-
 Sub NewTopic
 &apos; Add a new topic to the agenda
 Dim oDocument, oBookmarks, oBookmark, oBookmarkCursor, oTextField as Object
 Dim oBaustein, oAutoText, oAutoGroup as Object
 Dim i as Integer
 
-  oDocument = ThisComponent
+  	oDocument = ThisComponent
 	oBookMarkCursor = CreateBookMarkCursor(oDocument, &quot;NextTopic&quot;)
 	oTextField = oBookMarkCursor.TextField
 	oAutoText = CreateUnoService(&quot;com.sun.star.text.AutoTextContainer&quot;)
