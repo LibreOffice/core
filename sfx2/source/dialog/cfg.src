@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:13:50 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ TabPage TP_CONFIG_MENU
         Text[ english_us ] = "Menu entries";
         Text[ portuguese ] = "Entradas de menu";
         Text[ russian ] = "έλεμενςϋ μενώ";
-        Text[ greek ] = "Menu entries";
+        Text[ greek ] = "Καταχωρίσεις μενού";
         Text[ dutch ] = "Menuopties";
         Text[ french ] = "Entrιes de menu";
         Text[ spanish ] = "Entradas de menϊ";
@@ -504,7 +504,7 @@ TabPage TP_CONFIG_MENU
         Text[ japanese ] = "ζ©θƒ½";
         Text[ chinese_traditional ] = "εθƒ½";
         Text[ arabic ] = "γεΗγ";
-        Text[ greek ] = "Λειτουργίες";
+        Text[ greek ] = "Συναρτήσεις";
         Text[ korean ] = "κΈ°λ¥ λª¨μ";
         Text[ turkish ] = "Fonksiyonlar";
         Text[ language_user1 ] = " ";
@@ -618,7 +618,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ english_us ] = "Shortcut keys";
         Text[ portuguese ] = "Teclas de atalho";
         Text[ russian ] = "Κξμαθνΰφθθ κλΰβθψ";
-        Text[ greek ] = "Keyboard shortcuts";
+        Text[ greek ] = "Πλήκτρα συντόμευσης";
         Text[ dutch ] = "Toetsencombinaties";
         Text[ french ] = "Raccourcis clavier";
         Text[ spanish ] = "Combinaciσn de teclas";
@@ -936,7 +936,7 @@ TabDialog DLG_CONFIG
                 Text [ English ] = "Statusbar" ;
                 Text [ norwegian ] = "Statuslinje" ;
                 Text [ italian ] = "Barra di stato" ;
-                Text [ portuguese_brazilian ] = "Barra de Status" ;
+                Text [ portuguese_brazilian ] = "Barra de status " ;
                 Text [ portuguese ] = "Barra de estado" ;
                 Text [ finnish ] = "Tilarivi" ;
                 Text [ danish ] = "Statuslinje" ;
@@ -986,7 +986,7 @@ TabDialog DLG_CONFIG
                 Text[ japanese ] = "γƒ„γƒΌγƒ«γƒγƒΌ";
                 Text[ chinese_traditional ] = "ε–η¤Ίε—";
                 Text[ arabic ] = "ΓΤΡΨΙ ΗαΡγζÒ";
-                Text[ greek ] = "Γραμμές συμβόλων";
+                Text[ greek ] = "Γραμμές εργαλείων";
                 Text[ korean ] = "λ„κµ¬ λª¨μ";
                 Text[ turkish ] = "Araη ηubuklarύ";
                 Text[ language_user1 ] = " ";
@@ -1020,7 +1020,7 @@ TabDialog DLG_CONFIG
                 Text[ japanese ] = "γ‚¤γƒ™γƒ³γƒ";
                 Text[ chinese_traditional ] = "δΊ‹δ»¶";
                 Text[ arabic ] = "ΗαΓΝΟΗΛ";
-                Text[ greek ] = "Γεγονότα";
+                Text[ greek ] = "Συμβάντα";
                 Text[ korean ] = "μ΄λ²¤νΈ";
                 Text[ turkish ] = "έώlemler";
                 Text[ language_user1 ] = " ";
@@ -1039,7 +1039,7 @@ TabDialog DLG_CONFIG
     Text[ japanese ] = "θ¨­ε®";
     Text[ chinese_traditional ] = "θªΏζ•΄";
     Text[ arabic ] = "ΚΞΥνΥ";
-    Text[ greek ] = "Προσαρμογή";
+    Text[ greek ] = "Διαμόρφωση";
     Text[ korean ] = "μ„¤μ •";
     Text[ turkish ] = "Φzelleώtir";
     Text[ language_user1 ] = " ";
@@ -1251,7 +1251,7 @@ String STR_CUT
     Text [ ENGLISH ] = "Cut" ;
     Text [ norwegian ] = "Cut" ;
     Text [ italian ] = "Taglia" ;
-    Text [ portuguese_brazilian ] = "Recortar" ;
+    Text [ portuguese_brazilian ] = "Cortar" ;
     Text [ portuguese ] = "Cortar" ;
     Text [ finnish ] = "Leikkaa" ;
     Text [ danish ] = "Klip" ;
@@ -1518,7 +1518,7 @@ QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
     Message [ ENGLISH ] = "There are still undefined functions (???).\n\nContinue anyway?" ;
     Message [ norwegian ] = "Det er fremdeles udefinerte funksjoner are still undefined functions (???).\n\nFortsett likevel?" ;
     Message [ italian ] = "Vi sono ancora funzioni non definite (???).\n\nContinuare lo stesso?" ;
-    Message [ portuguese_brazilian ] = "Ainda existem funηυes indefinidas (???).\n\nVocκ deseja continuar mesmo assim?" ;
+    Message [ portuguese_brazilian ] = "Algumas funηυes nγo foram definidas (???).\n\nDeseja continuar mesmo assim?" ;
     Message [ portuguese ] = "Ainda existem funηυes indefinidas (???).\n\nDeseja continuar?" ;
     Message [ finnish ] = "Osa toiminnoista on vielδ mδδrittδmδttδ (???).\n\nHyvδksytδδnkφ kokoonpano?" ;
     Message [ danish ] = "Der eksisterer stadig udefinerede funktioner (???).\n\nVil du overtage denne konfiguration alligevel?" ;
@@ -1554,7 +1554,7 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message [ ENGLISH ] = "There are still entries with functions that can only be assigned to popups.\n\nContinue anyway?" ;
     Message [ norwegian ] = "Det er fremdeles oppfψringer med funksjoner som bare kan tilordnes tilleggsmenyenps.\n\nFortsett likevel?" ;
     Message [ italian ] = "Vi sono ancora voci con funzioni che possono essere assegnate solo a menu di scelta rapida.\n\nContinuare lo stesso?" ;
-    Message [ portuguese_brazilian ] = "Ainda existem entradas com funηυes que sσ podem ser atribuidas a janelas pop-up.\n\nDeseja continuar mesmo assim?" ;
+    Message [ portuguese_brazilian ] = "Ainda existem entradas com funηυes que sσ podem ser atribuνdas a janelas pop-up.\n\nDeseja continuar mesmo assim?" ;
     Message [ portuguese ] = "Existem ainda entradas com funηυes que sσ podem ser atribuνdas a janelas instantβneas.\n\nContinuar?" ;
     Message [ finnish ] = "Osa merkintφjen toiminnoista voidaan yhδ liittδδ vain ponnahdusobjekteihin.\n\nJatketaanko?" ;
     Message [ danish ] = "Der findes stadig elementer med funktioner, som kun kan tildeles popups.\n\nVil du overtage denne konfiguration alligevel?" ;
@@ -1569,7 +1569,7 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message[ japanese ] = "γΎγ γƒγƒƒγƒ—γ‚Άγƒƒγƒ—γ®γΏγ«ε‰²γ‚ε½“γ¦γ‚‰γ‚γ‚‹ζ©θƒ½γ®ι …η›®γγ‚γ‚γΎγ™γ€‚\n\nγ“γ®θ¨­ε®γ‚’ι©η”¨γ—γ¦γ‚‚γ„γ„γ§γ™γ‹?";
     Message[ chinese_traditional ] = "ι‚„ε­ε¨δΈ€δΊ›εªθƒ½θ®“ηµ¦εΏ«ι΅―εθƒ½θ΅¨ε·θ΅η„ι …η›®γ€‚\nζ‚¨ι‚„ζ―θ¦ζ¥ε—ι€™ε€‹ι…η½®οΌ";
     Message[ arabic ] = "γΗÒΗαΚ εδΗαί ΕΟΞΗαΗΚ ΘεΗ γεΗγ αΗ νγίδ ΚΪννδεΗ ΕαΗ αήζΗΖγ ΗδΘΛΗήνΙ έήΨ.\n\nεα ΚΡνΟ ήΘζα ΗαΚίζνδ Ϊαμ ΗαΡΫγ γδ ΠαίΏ";
-    Message[ greek ] = "Υπάρχουν ακόμη εγγραφές με λειτουργίες των οποίων μπορεί να γίνει μόνο αντιστοίχιση με αναδυόμενα παράθυρα.\n\nΘέλετε να αποδεχτείτε τη δια ";
+    Message[ greek ] = "Υπάρχουν ακόμα καταχωρίσεις με συναρτήσεις που μπορούν να ανατεθούν μόνο σε αναδυόμενα μενού.\n\nΕίστε βέβαιοι ότι θέλετε να συνεχίσετε;";
     Message[ korean ] = "νμ—…μ—λ§ μ§€μ •ν•  μ μλ” κΈ°λ¥μ„ κ°€μ§„ ν•­λª©μ΄ μ•„μ§ μμµλ‹λ‹¤.\n\nκ·Έλλ„ μ΄ κµ¬μ„±μ„ μ μ©ν•μ‹κ² μµλ‹κΉ?";
     Message[ turkish ] = "Yalnύzca aηύlan mφnόlere atanabilen iώlevleri olan giriώler mevcut.\n\nBu konfigόrasyon ile devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
@@ -1625,7 +1625,7 @@ String STR_LOADMENUCONFIG
     Text [ dutch ] = "Menuconfiguratie laden" ;
     Text [ swedish ] = "Ladda menykonfiguration" ;
     Text [ danish ] = "Indlζs menukonfiguration" ;
-    Text [ portuguese_brazilian ] = "Carregar Configuraηγo do menu" ;
+    Text [ portuguese_brazilian ] = "Carregar a configuraηγo do menu" ;
     Text [ portuguese ] = "Carregar configuraηγo do menu" ;
     Text[ chinese_simplified ] = "θ£…ε…¥θε•ι…η½®";
     Text[ russian ] = "Ηΰγπσηθςό κξντθγσπΰφθώ μενώ";
@@ -1686,7 +1686,7 @@ String STR_LOADACCELCONFIG
     Text [ french ] = "Charger configuration du clavier" ;
     Text [ swedish ] = "Ladda tangentbordskonfiguration" ;
     Text [ danish ] = "Indlζs tastaturkonfiguration" ;
-    Text [ portuguese_brazilian ] = "Carregar Configuraηγo do Teclado" ;
+    Text [ portuguese_brazilian ] = "Carregar a configuraηγo do teclado" ;
     Text [ portuguese ] = "Carregar configuraηγo do teclado" ;
     Text[ chinese_simplified ] = "θ£…ε…¥ι”®η›ι…η½®";
     Text[ russian ] = "Ηΰγπσηθςό κξντθγσπΰφθώ κλΰβθΰςσπϋ";
@@ -1844,7 +1844,7 @@ String STR_TOOLBAR_SEPARATOR
     Text[ danish ] = "Skilletegn";
     Text[ swedish ] = "Avgrδnsare";
     Text[ polish ] = "Separator";
-    Text[ portuguese_brazilian ] = "Separator";
+    Text[ portuguese_brazilian ] = "Separador";
     Text[ japanese ] = "εΊε‡γ‚θ¨ε·";
     Text[ korean ] = "κµ¬λ¶„ κΈ°νΈ";
     Text[ chinese_simplified ] = "ε†ι”η¬¦";
@@ -1875,7 +1875,7 @@ String STR_TOOLBAR_SPACE
     Text[ danish ] = "Invisible separator";
     Text[ swedish ] = "Osynlig avgrδnsare";
     Text[ polish ] = "Invisible separator";
-    Text[ portuguese_brazilian ] = "Invisible separator";
+    Text[ portuguese_brazilian ] = "Separador invisνvel";
     Text[ japanese ] = "ι γ—εΊε‡γ‚θ¨ε·";
     Text[ korean ] = "μ¨κ²¨μ§„ κµ¬λ¶„ κΈ°νΈ";
     Text[ chinese_simplified ] = "ιθ—η„ε†ι”η¬¦";
@@ -1906,7 +1906,7 @@ String STR_FUNCTION_ALREADY_IN_TOOLBOX
     Text[ danish ] = "The selected function is already in the current toolbox.";
     Text[ swedish ] = "Den φnskade funktionen finns redan pε den aktuella symbollisten.";
     Text[ polish ] = "The selected function is already in the current toolbox.";
-    Text[ portuguese_brazilian ] = "The selected function is already on the current toolbar.";
+    Text[ portuguese_brazilian ] = "A funηγo selecionada jα estα na caixa de ferramentas atual.";
     Text[ japanese ] = "ιΈζγ—γζ©θƒ½γ―γ™γ§γ«ηΎε¨γ®γƒ„γƒΌγƒ«γƒγƒΌγ«γ‚γ‚γΎγ™γ€‚";
     Text[ korean ] = "μ„ νƒν•μ‹  κΈ°λ¥μ€ μ΄λ―Έ ν„μ¬ λ³΄μ‹λ” λ„κµ¬ μƒμ μ•μ— μμµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "δ½ ι€θ¦η„εθƒ½ε·²η»ε¨ε½“ε‰η„ε›Ύθ΅¨ζ δΉ‹δΈ­γ€‚";
@@ -1921,6 +1921,7 @@ String STR_FUNCTION_ALREADY_IN_TOOLBOX
     Text[ slovak ] = "VybranΓ΅ funkcia sa uΕΎ nachΓ΅dza na paneli nΓ΅strojov.";
 };
  // ********************************************************************** EOF
+
 
 
 
