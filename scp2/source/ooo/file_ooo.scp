@@ -264,14 +264,12 @@ End
 
 #ifdef UNX
 
-#ifndef WITHOUT_MOZILLA
 File gid_File_Bin_Pluginapp
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "pluginapp.bin";
     Styles = (PACKED);
 End
-#endif
 
 #endif
 
@@ -906,7 +904,7 @@ File gid_File_Mod_Text
     Name = "text.mod";
 End
 
-#ifndef WITHOUT_MOZILLA
+#ifndef SYSTEM_MOZILLA
 
 #ifndef MACOSX
 
