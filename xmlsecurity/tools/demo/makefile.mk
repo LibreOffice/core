@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 15:00:03 $
+#   last change: $Author: vg $ $Date: 2005-03-10 18:15:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,12 +93,12 @@ SHARE_LIBS =	\
         
 .IF "$(GUI)"=="WNT"
 .IF "$(CRYPTO_ENGINE)" == "mscrypto"
-SHARE_LIBS+= "libxml2.lib" "nss3.lib" "nspr4.lib" "xmlsec.lib" "xmlsec-mscrypto.lib" "helper.lib" "xsec_xmlsec.lib"
+SHARE_LIBS+= "libxml2.lib" "nss3.lib" "nspr4.lib" "libxmlsec.lib" "libxmlsec-mscrypto.lib" "helper.lib" "xsec_xmlsec.lib"
 .ELSE
-SHARE_LIBS+= "libxml2.lib" "nss3.lib" "nspr4.lib" "xmlsec.lib" "xmlsec-nss.lib" "helper.lib" "xsec_xmlsec.lib"
+SHARE_LIBS+= "libxml2.lib" "nss3.lib" "nspr4.lib" "libxmlsec.lib" "libxmlsec-nss.lib" "helper.lib" "xsec_xmlsec.lib"
 .ENDIF
 .ELSE
-SHARE_LIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec" "-lxmlsec-nss" "helper.lib" "-lxsec_xmlsec"
+SHARE_LIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec1" "-lxmlsec1-nss" "helper.lib" "-lxsec_xmlsec"
 .ENDIF
 
 SHARE_OBJS =	\
@@ -148,6 +148,20 @@ APP3STDLIBS+= -lstdc++
 .ENDIF
 
 APP3STDLIBS+=	\
+        $(SHARE_LIBS)
+
+#
+# The 4rd application
+#
+#APP4TARGET=	moz_profile
+APP4OBJS=	\
+        $(SLO)$/moz_profile.obj
+        
+.IF "$(OS)" == "LINUX"
+APP4STDLIBS+= -lstdc++
+.ENDIF
+
+APP4STDLIBS+=	\
         $(SHARE_LIBS)
 
 # --- Targets ------------------------------------------------------
