@@ -12,41 +12,37 @@
  /* force an assertion on false state */
 #define TST_BOOM(c, m)  OSL_ENSURE(c, m)
 
- /* forward declarations */
-struct _rtl_CmpState;
-struct _rtl_FuncState;
-typedef struct _rtl_CmpState rtl_CmpState;
-typedef struct _rtl_FuncState rtl_FuncState;
 
 typedef struct _rtl_CmpState
 {
-    rtl_CmpState*       m_next;
-    rtl_CmpState*       m_prev;
+    struct _rtl_CmpState*   m_next;
+    struct _rtl_CmpState*   m_prev;
 
-    sal_Bool            m_stat;
-    sal_Char*           m_msg;
+    sal_Bool                m_stat;
+    sal_Char*               m_msg;
 
 } rtl_CmpState;
 
 typedef struct _rtl_FuncState
 {
-    rtl_FuncState*  m_next;
-    rtl_FuncState*  m_prev;
-
-    sal_Char*       m_name;
-    sal_uInt32      m_flags;
-    sal_uInt32      m_start;
-    sal_uInt32      m_stop;
-    rtl_CmpState*   m_cmp;
+    struct _rtl_FuncState*  m_next;
+    struct _rtl_FuncState*  m_prev;
+    sal_Char*               m_name;
+    sal_uInt32              m_flags;
+    sal_uInt32              m_start;
+    sal_uInt32              m_stop;
+    struct _rtl_CmpState*   m_cmp;
 
 } rtl_FuncState;
+
+
 
 typedef struct _rtl_TestResult_Data
 {
     rtl_TestResult_vtable*  m_funcs;
     void*                   m_externaldata;
 
-    rtl_FuncState*          m_state;
+    rtl_FuncState*   m_state;
 
 } rtl_TestResult_Data;
 
@@ -109,7 +105,7 @@ static sal_Bool SAL_CALL rtl_tres_ispassed( rtl_TestResult* pThis_ );
 static sal_Bool SAL_CALL rtl_tres_isok( rtl_TestResult* pThis_ );
 
 static sal_Bool SAL_CALL rtl_tres_isbit( rtl_TestResult* pThis_,
-                                                            sal_uInt32 flag );
+                                                        sal_uInt32 flag );
 
 static rtl_funcstate SAL_CALL rtl_tres_getnextfuncstate( rtl_funcstate );
 static rtl_funcstate SAL_CALL rtl_tres_getprevfuncstate( rtl_funcstate );
@@ -190,7 +186,7 @@ rtl_FuncState* SAL_CALL rtl_tres_create_funcstate( const sal_Char* meth )
     rtl_FuncState* pStat = 0;                   /* status structure */
 
     /* allocate memory for status structure */
-    pStat = (rtl_FuncState*) malloc( sizeof( rtl_FuncState ) );
+    pStat = (rtl_FuncState*) malloc( sizeof( struct _rtl_FuncState ) );
 
     if ( pStat )
     {
