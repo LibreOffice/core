@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-16 17:06:23 $
+ *  last change: $Author: cmc $ $Date: 2002-08-20 10:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,8 +388,13 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                         if( '\\' == nNextCh &&
                             '\'' == ( nNextCh = GetNextChar()) )
                             aDblChr[1] = (sal_Char)GetHexValue();
-                        else
+                        else if ((nNextCh != '{') && (nNextCh != '}'))
                             aDblChr[1] = (sal_Char)nNextCh;
+                        else
+                        {
+                            aDblChr[1] = ' ';
+                            bWeiter = FALSE;
+                        }
 
                         SetSrcEncoding( eSvSet );
 
