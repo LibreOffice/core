@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlImageControlModel.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:56:37 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <com/sun/star/awt/UnoControlModel.idl>
 #endif
 
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
+#endif
+
 
 //=============================================================================
 
@@ -82,7 +86,7 @@ service UnoControlImageControlModel
 
     /** specifies the background color (RGB) of the control.
      */
-    [property] long BackgroundColor;
+    [property] com::sun::star::util::Color BackgroundColor;
 
     //-------------------------------------------------------------------------
 
