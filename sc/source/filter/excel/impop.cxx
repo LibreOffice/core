@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:44:32 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,8 +195,8 @@ ScExtDocOptions &ImportTyp::GetExtOpt( void )
 
 
 
-ImportExcel::ImportExcel( SvStream& rSvStrm, ScDocument* pDoc, const String& rDocUrl ):
-    XclImpRootData( xlBiffUnknown, *pDoc, rDocUrl, RTL_TEXTENCODING_MS_1252 ),
+ImportExcel::ImportExcel( SvStream& rSvStrm, XclBiff eBiff, ScDocument* pDoc, const String& rDocUrl ):
+    XclImpRootData( eBiff, *pDoc, rDocUrl, RTL_TEXTENCODING_MS_1252 ),
     ImportTyp( pDoc, RTL_TEXTENCODING_MS_1252 ),
     XclImpRoot( static_cast< XclImpRootData& >( *this ) ),
     maStrm( rSvStrm, *this ),
@@ -512,7 +512,6 @@ void ImportExcel::Bof2( void )
 #endif
     maStrm.Ignore( 2 );
     maStrm >> nSubType;
-    SetBiff( xlBiff2 );
 #if SC_XCL_USEDECR
     maStrm.UseDecryption( true );
 #endif
@@ -1301,7 +1300,6 @@ void ImportExcel::Bof3( void )
 #endif
     maStrm.Ignore( 2 );
     maStrm >> nSubType;
-    SetBiff( xlBiff3 );
 #if SC_XCL_USEDECR
     maStrm.UseDecryption( true );
 #endif
@@ -1510,7 +1508,6 @@ void ImportExcel::Bof4( void )
 #endif
     maStrm.Ignore( 2 );
     maStrm >> nSubType;
-    SetBiff( xlBiff4 );
 #if SC_XCL_USEDECR
     maStrm.UseDecryption( true );
 #endif
@@ -1543,8 +1540,6 @@ void ImportExcel::Bof5( void )
     maStrm.UseDecryption( false );
 #endif
     maStrm >> nVers >> nSubType;
-    if( nSubType == 0x0005 )    // nVers may be wrong in Worksheet BOFs
-        SetBiff( (nVers == 0x0600) ? xlBiff8 : xlBiff5 );
 #if SC_XCL_USEDECR
     maStrm.UseDecryption( true );
 #endif
