@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:21:43 $
+ *  last change: $Author: vg $ $Date: 2002-05-28 15:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@
 #ifndef _EDITOBJ_HXX
 #include <svx/editobj.hxx>
 #endif
+
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
