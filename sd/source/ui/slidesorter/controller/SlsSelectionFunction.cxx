@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:56:48 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include "view/SlideSorterView.hxx"
 #include "view/SlsViewOverlay.hxx"
 #include "view/SlsLayouter.hxx"
+#include "view/SlsPageObjectViewObjectContact.hxx"
 #include "TextLogger.hxx"
 #include "showview.hxx"
 #include "fader.hxx"
@@ -130,12 +131,11 @@ SelectionFunction::SelectionFunction (
         rRequest),
       mrController (rController),
       mbPageHit(false),
-      mbDragSelection(false)
+      mbDragSelection(false),
+      maInsertionMarkerBox(),
+      mpSound(new Sound),
+      mpShowingEffectInfo(new ShowingEffectInfo (false))
 {
-    mpSound = new Sound;
-
-    mpShowingEffectInfo = new ShowingEffectInfo (false);
-
     //af    aDelayToScrollTimer.SetTimeout(50);
     aDragTimer.SetTimeoutHdl( LINK( this, SelectionFunction, DragSlideHdl ) );
 }
@@ -337,6 +337,16 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
     BOOL bResult = FALSE;
     view::ViewOverlay& rOverlay (mrController.GetView().GetOverlay());
 
+    // Determine page under mouse and show the mouse over effect.
+    model::PageDescriptor* pHitDescriptor
+        = mrController.GetPageAt (aMousePosition);
+    rOverlay.GetMouseOverIndicatorOverlay().SetSlideUnderMouse (
+        pHitDescriptor==NULL ? NULL : pHitDescriptor);
+    if (pHitDescriptor != NULL)
+        rOverlay.GetMouseOverIndicatorOverlay().Show();
+    else
+        rOverlay.GetMouseOverIndicatorOverlay().Hide();
+
     // Allow one mouse move before the drag timer is disabled.
     if (aDragTimer.IsActive())
     {
@@ -430,6 +440,7 @@ BOOL SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
         rOverlay.GetSubstitutionOverlay().Hide();
         rOverlay.GetSubstitutionOverlay().Clear();
         rOverlay.GetInsertionIndicatorOverlay().Hide();
+        rOverlay.GetMouseOverIndicatorOverlay().SetSlideUnderMouse (NULL);;
 
         // Tell the model to move the selected pages behind the one with the
         // index mnInsertionIndex which first has to transformed into an
