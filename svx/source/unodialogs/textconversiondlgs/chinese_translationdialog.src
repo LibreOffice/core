@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chinese_translationdialog.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:48:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 17:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 #define FULL_WIDTH (220)
 #define FULL_HEIGHT (120)
-#define EDITBUTTON_WIDTH (60)
+#define EDITBUTTON_WIDTH (70)
 
 #define COL_1 (RSC_SP_DLG_INNERBORDER_LEFT)
 #define COL_2 (COL_1+RSC_SP_FLGR_SPACE_X)
