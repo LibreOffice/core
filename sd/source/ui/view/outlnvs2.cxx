@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:51:26 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,14 +94,14 @@
 #ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
 #endif
-#ifndef _SVX_ADRITEM_HXX
-#include <svx/adritem.hxx>
-#endif
 #ifndef _EDITSTAT_HXX
 #include <svx/editstat.hxx>
 #endif
 #ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
+#endif
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
 #endif
 
 #ifndef SD_OUTLINER_HXX
@@ -545,8 +545,10 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
                 case SID_INSERT_FLD_AUTHOR:
                 {
-                    SvxAddressItem aAdrItem;
-                    pFieldItem = new SvxFieldItem( SvxAuthorField( aAdrItem ) );
+                    SvtUserOptions aUserOptions;
+                    pFieldItem = new SvxFieldItem(
+                            SvxAuthorField(
+                                aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() ) );
                 }
                 break;
 
