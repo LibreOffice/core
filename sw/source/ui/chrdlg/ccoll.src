@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:03:21 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,7 @@ TabPage TP_CONDCOLL
             < "Tabelle" ; > ;
             < "Rahmen" ; > ;
             < "Bereich" ; > ;
-            < "Fußnote" ; > ;
+            < "Fu?note" ; > ;
             < "Kopfzeile" ; > ;
             < "Fusszeile" ; > ;
             < "1. Ebene Gliederung" ; > ;
