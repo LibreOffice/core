@@ -10,12 +10,15 @@
  <toolbar:toolbaritem xlink:href=".uno:CheckBox" toolbar:helpid="helpid:10596" toolbar:text="" toolbar:style="radio auto" />
  <toolbar:toolbaritem xlink:href=".uno:Edit" toolbar:helpid="helpid:10599" toolbar:text="" toolbar:style="radio auto" />
  <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:FormattedField" toolbar:helpid="helpid:10728" toolbar:text="" toolbar:style="radio auto" />
  <toolbar:toolbaritem xlink:href=".uno:Pushbutton" toolbar:helpid="helpid:10594" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:RadioButton" toolbar:helpid="helpid:10595" toolbar:text="" toolbar:style="radio auto" />
- <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:ListBox" toolbar:helpid="helpid:10600" toolbar:text="" toolbar:style="radio auto" />
- <toolbar:toolbaritem xlink:href=".uno:FileControl" toolbar:helpid="helpid:10605" toolbar:text="" toolbar:style="radio auto" />
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:Imagebutton" toolbar:helpid="helpid:10604" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:ComboBox" toolbar:helpid="helpid:10601" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:Label" toolbar:helpid="helpid:10597" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:FormDesignTools" toolbar:helpid="helpid:11046" toolbar:text="" />
-</toolbar:toolbar>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:UseWizards" toolbar:helpid="helpid:10727" toolbar:text="" />
