@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-11 09:17:43 $
+ *  last change: $Author: oj $ $Date: 2001-01-15 09:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1255,6 +1255,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
             aDlg.BuildOrderPart();
         }
     }
+    catch(SQLException& e) { showError(SQLExceptionInfo(e)); return; }
     catch(Exception&)
     {
         return;
@@ -2100,8 +2101,10 @@ sal_Bool SbaXDataBrowserController::isValidCursor() const
     Reference< ::com::sun::star::container::XIndexAccess >  xCols(xSupplyCols->getColumns(), UNO_QUERY);
     if (!xCols.is() || (xCols->getCount() == 0))
         return sal_False;
+
     Reference<XPropertySet> xProp(m_xRowSet,UNO_QUERY);
-    return ::cppu::any2bool(xProp->getPropertyValue(PROPERTY_ISNEW)) || !(m_xRowSet->isBeforeFirst() || m_xRowSet->isAfterLast()) ;
+    return ::cppu::any2bool(xProp->getPropertyValue(PROPERTY_ISNEW)) || !(m_xRowSet->isBeforeFirst() || m_xRowSet->isAfterLast()) ||
+            (m_xParser.is() && (m_xParser->getFilter().len() || m_xParser->getOrder().len()));
 }
 
 // -------------------------------------------------------------------------
