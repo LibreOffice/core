@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-21 18:03:36 $
+ *  last change: $Author: rt $ $Date: 2001-06-22 10:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1117,7 +1117,8 @@ Any SAL_CALL SbaTableQueryBrowser::getSelection(  ) throw (RuntimeException)
         Reference< XLoadable > xLoadable(getRowSet(), UNO_QUERY);
         if (xLoadable.is() && xLoadable->isLoaded())
         {
-            ODataAccessDescriptor aDescriptor(Reference< XPropertySet >(getRowSet(), UNO_QUERY));
+            Reference< XPropertySet > aFormProps(getRowSet(), UNO_QUERY);
+            ODataAccessDescriptor aDescriptor(aFormProps);
             // remove properties which are not part of our "selection"
             aDescriptor.erase(daConnection);
             aDescriptor.erase(daCursor);
