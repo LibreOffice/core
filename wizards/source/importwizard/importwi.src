@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-27 21:07:25 $
+ *  last change: $Author: kz $ $Date: 2001-10-11 21:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,10 +251,10 @@ String sNextButton
     Text[ danish ] = "~Næste >>";
     Text[ polish ] = "Dalej >>";
     Text[ portuguese_brazilian ] = "C~ontinue >>";
-    Text[ japanese ] = "æ¬¡ã¸ (~O) >>";
+    Text[ japanese ] = "æ¬¡ã¸  (~O) >>";
     Text[ korean ] = "ë‹¤ìŒ >>(~O)";
-    Text[ chinese_simplified ] = "ç»§ç»­ (~O) >>";
-    Text[ chinese_traditional ] = "ç¹¼çºŒ (~O) >>";
+    Text[ chinese_simplified ] = "ç»§ç»­  (~O) >>";
+    Text[ chinese_traditional ] = "ç¹¼çºŒ  (~O) >>";
     Text[ arabic ] = "~ÇáÊÇáí >>";
     Text[ turkish ] = "Ýl~eri >>";
     Text[ catalan ] = "C~ontinue >>";
@@ -2165,6 +2165,7 @@ String sSumMSDrawTemplates
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
     Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
 };
+
 
 
 
