@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewnode.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:55:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,9 +150,9 @@ namespace configmgr
         }
 */
 //-----------------------------------------------------------------------------
-        data::NodeAccess Node::getAccess() const
+        data::NodeAccessRef Node::getAccessRef() const
         {
-            return get_impl()->getOriginalNodeAccess(accessor());
+            return get_impl()->getOriginalNodeAccessRef(&accessor());
         }
 
 //-----------------------------------------------------------------------------
