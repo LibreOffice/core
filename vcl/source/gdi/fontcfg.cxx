@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:36:29 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ void DefaultFontConfigItem::getValues()
     {
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "found localized default font data for \"%s\"\n",
-                 OUStringToOString( aNames.getConstArray()[j], RTL_TEXTENCODING_ASCII_US ).getStr()
+                 OUStringToOString( aNames.getConstArray()[j], osl_getThreadTextEncoding() ).getStr()
                  );
 #endif
         String aKeyName( aNames.getConstArray()[j] );
