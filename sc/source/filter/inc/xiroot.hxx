@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:06:11 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,12 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XIROOT_HXX
 #define SC_XIROOT_HXX
 
 #ifndef SC_XLROOT_HXX
 #include "xlroot.hxx"
 #endif
-
 
 // Global data ================================================================
 
@@ -76,7 +73,7 @@ class XclImpPalette;
 class XclImpFontBuffer;
 class XclImpNumFmtBuffer;
 class XclImpXFBuffer;
-class XclImpXFIndexBuffer;
+class XclImpXFRangeBuffer;
 class XclImpPageSettings;
 class _ScRangeListTabs;
 class XclImpTabInfo;
@@ -93,44 +90,44 @@ struct XclImpRootData : public XclRootData
 {
     typedef ::std::auto_ptr< XclImpSst >                XclImpSstPtr;
     typedef ::std::auto_ptr< XclImpPalette >            XclImpPalettePtr;
-    typedef ::std::auto_ptr< XclImpFontBuffer >         XclImpFontBufferPtr;
-    typedef ::std::auto_ptr< XclImpNumFmtBuffer >       XclImpNumFmtBufferPtr;
-    typedef ::std::auto_ptr< XclImpXFBuffer >           XclImpXFBufferPtr;
-    typedef ::std::auto_ptr< XclImpXFIndexBuffer >      XclImpXFIndexBufferPtr;
-    typedef ::std::auto_ptr< XclImpPageSettings >       XclImpPageSettingsPtr;
+    typedef ::std::auto_ptr< XclImpFontBuffer >         XclImpFontBfrPtr;
+    typedef ::std::auto_ptr< XclImpNumFmtBuffer >       XclImpNumFmtBfrPtr;
+    typedef ::std::auto_ptr< XclImpXFBuffer >           XclImpXFBfrPtr;
+    typedef ::std::auto_ptr< XclImpXFRangeBuffer >      XclImpXFRangeBfrPtr;
+    typedef ::std::auto_ptr< XclImpPageSettings >       XclImpPageSettPtr;
     typedef ::std::auto_ptr< XclImpTabInfo >            XclImpTabInfoPtr;
-    typedef ::std::auto_ptr< XclImpNameBuffer >         XclImpNameBufferPtr;
-    typedef ::std::auto_ptr< XclImpLinkManager >        XclImpLinkManagerPtr;
-    typedef ::std::auto_ptr< XclImpObjectManager >      XclImpObjectManagerPtr;
-    typedef ::std::auto_ptr< XclImpCondFormatManager >  XclImpCondFormatManagerPtr;
-    typedef ::std::auto_ptr< XclImpWebQueryBuffer >     XclImpWebQueryBufferPtr;
-    typedef ::std::auto_ptr< XclImpPivotTableManager >  XclImpPivotTableManagerPtr;
+    typedef ::std::auto_ptr< XclImpNameBuffer >         XclImpNameBfrPtr;
+    typedef ::std::auto_ptr< XclImpLinkManager >        XclImpLinkMgrPtr;
+    typedef ::std::auto_ptr< XclImpObjectManager >      XclImpObjectMgrPtr;
+    typedef ::std::auto_ptr< XclImpCondFormatManager >  XclImpCondFmtMgrPtr;
+    typedef ::std::auto_ptr< XclImpWebQueryBuffer >     XclImpWebQueryBfrPtr;
+    typedef ::std::auto_ptr< XclImpPivotTableManager >  XclImpPTableMgrPtr;
 
-    XclImpSstPtr                mpSst;              /// The shared string table.
+    XclImpSstPtr        mxSst;              /// The shared string table.
 
-    XclImpPalettePtr            mpPalette;          /// The color buffer.
-    XclImpFontBufferPtr         mpFontBuffer;       /// All fonts in the file.
-    XclImpNumFmtBufferPtr       mpNumFmtBuffer;     /// All number formats in the file.
-    XclImpXFBufferPtr           mpXFBuffer;         /// All XF record data in the file.
-    XclImpXFIndexBufferPtr      mpXFIndexBuffer;    /// Buffer of XF indexes in a sheet.
+    XclImpPalettePtr    mxPalette;          /// The color buffer.
+    XclImpFontBfrPtr    mxFontBfr;          /// All fonts in the file.
+    XclImpNumFmtBfrPtr  mxNumFmtBfr;        /// All number formats in the file.
+    XclImpXFBfrPtr      mpXFBfr;            /// All XF record data in the file.
+    XclImpXFRangeBfrPtr mxXFRangeBfr;       /// Buffer of XF index ranges in a sheet.
 
-    XclImpPageSettingsPtr       mpPageSettings;     /// Page settings for current sheet.
+    XclImpPageSettPtr   mxPageSettings;     /// Page settings for current sheet.
 
-    XclImpTabInfoPtr            mpTabInfo;          /// Sheet creation order list.
-    XclImpNameBufferPtr         mpNameBuffer;       /// Internal defined names.
-    XclImpLinkManagerPtr        mpLinkManager;      /// Manager for internal/external links.
+    XclImpTabInfoPtr    mxTabInfo;          /// Sheet creation order list.
+    XclImpNameBfrPtr    mxNameBfr;          /// Internal defined names.
+    XclImpLinkMgrPtr    mxLinkMgr;          /// Manager for internal/external links.
 
-    XclImpObjectManagerPtr      mpObjManager;       /// All drawing objects.
-    XclImpCondFormatManagerPtr  mpCondFmtManager;   /// Conditional formattings.
-    XclImpWebQueryBufferPtr     mpWebQBuffer;       /// All web queries.
-    XclImpPivotTableManagerPtr  mpPTManager;        /// All pivot tables and pivot caches.
+    XclImpObjectMgrPtr  mxObjMgr;           /// All drawing objects.
+    XclImpCondFmtMgrPtr mxCondFmtMgr;       /// Conditional formattings.
+    XclImpWebQueryBfrPtr mxWebQueryBfr;     /// All web queries.
+    XclImpPTableMgrPtr  mxPTableMgr;        /// All pivot tables and pivot caches.
 
-    explicit                    XclImpRootData(
-                                    XclBiff eBiff,
-                                    SfxMedium& rMedium,
-                                    ScDocument& rDocument,
-                                    CharSet eCharSet );
-    virtual                     ~XclImpRootData();
+    explicit            XclImpRootData(
+                            XclBiff eBiff,
+                            SfxMedium& rMedium,
+                            ScDocument& rDocument,
+                            CharSet eCharSet );
+    virtual             ~XclImpRootData();
 };
 
 
@@ -141,70 +138,70 @@ class ExcelToSc;
 /** Access to global data from other classes. */
 class XclImpRoot : public XclRoot
 {
-private:
-    mutable XclImpRootData&     mrImpData;      /// Reference to the global import data struct.
-
 public:
     /** Returns this root instance - for code readability in derived classes. */
-    inline const XclImpRoot&    GetRoot() const { return *this; }
+    inline const XclImpRoot& GetRoot() const { return *this; }
 
     /** Returns the shared string table. */
-    XclImpSst&                  GetSst() const;
+    XclImpSst&          GetSst() const;
 
     /** Returns the color buffer. */
-    XclImpPalette&              GetPalette() const;
+    XclImpPalette&      GetPalette() const;
     /** Returns the font buffer. */
-    XclImpFontBuffer&           GetFontBuffer() const;
+    XclImpFontBuffer&   GetFontBuffer() const;
     /** Returns the number format buffer. */
-    XclImpNumFmtBuffer&         GetNumFmtBuffer() const;
+    XclImpNumFmtBuffer& GetNumFmtBuffer() const;
     /** Returns the cell formatting attributes buffer. */
-    XclImpXFBuffer&             GetXFBuffer() const;
-    /** Returns the buffer of XF indexes for a sheet. */
-    XclImpXFIndexBuffer&        GetXFIndexBuffer() const;
+    XclImpXFBuffer&     GetXFBuffer() const;
+    /** Returns the buffer of XF index ranges for a sheet. */
+    XclImpXFRangeBuffer& GetXFRangeBuffer() const;
 
     /** Returns the page settings of the current sheet. */
-    XclImpPageSettings&         GetPageSettings() const;
+    XclImpPageSettings& GetPageSettings() const;
     /** Returns the buffer that contains all print areas in the document. */
-    _ScRangeListTabs&           GetPrintAreaBuffer() const;
+    _ScRangeListTabs&   GetPrintAreaBuffer() const;
     /** Returns the buffer that contains all print areas in the document. */
-    _ScRangeListTabs&           GetTitleAreaBuffer() const;
+    _ScRangeListTabs&   GetTitleAreaBuffer() const;
 
     /** Returns the buffer that contains the sheet creation order. */
-    XclImpTabInfo&              GetTabInfo() const;
+    XclImpTabInfo&      GetTabInfo() const;
     /** Returns the buffer that contains internal defined names. */
-    XclImpNameBuffer&           GetNameBuffer() const;
+    XclImpNameBuffer&   GetNameBuffer() const;
     /** Returns the link manager. */
-    XclImpLinkManager&          GetLinkManager() const;
+    XclImpLinkManager&  GetLinkManager() const;
 
     /** Returns the drawing object manager. */
-    XclImpObjectManager&        GetObjectManager() const;
+    XclImpObjectManager& GetObjectManager() const;
     /** Returns the conditional formattings manager. */
-    XclImpCondFormatManager&    GetCondFormatManager() const;
+    XclImpCondFormatManager& GetCondFormatManager() const;
     /** Returns the filter manager. */
-    XclImpAutoFilterBuffer&     GetFilterManager() const;
+    XclImpAutoFilterBuffer& GetFilterManager() const;
     /** Returns the web query buffer. */
-    XclImpWebQueryBuffer&       GetWebQueryBuffer() const;
+    XclImpWebQueryBuffer& GetWebQueryBuffer() const;
     /** Returns the pivot table manager. */
-    XclImpPivotTableManager&    GetPivotTableManager() const;
+    XclImpPivotTableManager& GetPivotTableManager() const;
 
     /** Returns the formula converter. */
-    ExcelToSc&                  GetFmlaConverter() const;
+    ExcelToSc&          GetFmlaConverter() const;
 
     /** Returns the Calc add-in function name for an Excel function name. */
-    String                      GetScAddInName( const String& rXclName ) const;
+    String              GetScAddInName( const String& rXclName ) const;
 
     /** Checks if the passed cell address is a valid Calc cell position.
         @descr  See XclRoot::CheckCellAddress for details. */
-    bool                        CheckCellAddress( const ScAddress& rPos ) const;
+    bool                CheckCellAddress( const ScAddress& rPos ) const;
     /** Checks and eventually crops the cell range to valid Calc dimensions.
         @descr  See XclRoot::CheckCellRange for details. */
-    bool                        CheckCellRange( ScRange& rRange ) const;
+    bool                CheckCellRange( ScRange& rRange ) const;
     /** Checks and eventually crops the cell ranges to valid Calc dimensions.
         @descr  See XclRoot::CheckCellRangeList for details. */
-    void                        CheckCellRangeList( ScRangeList& rRanges ) const;
+    void                CheckCellRangeList( ScRangeList& rRanges ) const;
 
 protected:
-    explicit                    XclImpRoot( XclImpRootData& rImpRootData );
+    explicit            XclImpRoot( XclImpRootData& rImpRootData );
+
+private:
+    mutable XclImpRootData& mrImpData;      /// Reference to the global import data struct.
 };
 
 
