@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-24 11:00:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Setup" oor:package="org.openoffice" xml:lang="en-US">
 	<info>
-		<author>DG</author>
+		<author>JB/IS</author>
 		<desc >Contains Setup preferences, such as the installed UI locales or the available modules.</desc>
 	</info>
 	<templates>
@@ -230,7 +230,6 @@
 		<group oor:name="Office">
 			<!--The default must be written by the setup.-->
 			<info>
-				<author>DG</author>
 				<desc>Specifies the installation location, locales and the available factories for creating documents.</desc>
 			</info>
 			<prop oor:name="ooSetupInstallPath" oor:type="xs:string">
@@ -373,9 +372,9 @@
 			</info>
 			<prop oor:name="TransferUserSettingsOnce" oor:type="xs:boolean" oor:nillable="false">
 				<info>
+                    <deprecated>This feature is not supported any more since OOo 2.0</deprecated>
 					<author>JB</author>
-					<desc>Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
-					<label>Transfer User Settings Once on First Start</label>
+                    <desc>Deprecated</desc>
 				</info>
 			</prop>
 		</group>
