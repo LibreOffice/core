@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HStorageMap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:41:05 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 11:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,10 +375,3 @@ namespace connectivity
 }
 // namespace connectivity
 //........................................................................
-#if OSL_DEBUG_LEVEL > 1
-TDebugStreamMap& getStreams()
-{
-    static TDebugStreamMap streams;
-    return streams;
-}
-#endif
