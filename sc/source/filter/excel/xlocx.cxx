@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:58:28 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ XclImpOcxConverter::XclImpOcxConverter( const XclImpRoot& rRoot ) :
     XclOcxConverter( rRoot ),
     XclImpRoot( rRoot )
 {
-    mxStrm = ScfTools::OpenStorageStreamRead( GetRootStorage(), EXC_STREAMNAME_CTLS );
+    mxStrm = OpenStream( EXC_STREAMNAME_CTLS );
 }
 
 bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOcxCtrl )
@@ -457,7 +457,7 @@ XclExpObjOcxCtrl* XclExpOcxConverter::CreateCtrlObj( const Reference< XShape >& 
         {
             // output stream
             if( !mxStrm.Is() )
-                mxStrm = ScfTools::OpenStorageStreamWrite( GetRootStorage(), EXC_STREAMNAME_CTLS );
+                mxStrm = OpenStream( EXC_STREAMNAME_CTLS );
             if( mxStrm.Is() )
             {
                 String aClassName;
