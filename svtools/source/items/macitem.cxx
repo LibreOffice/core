@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:51:28 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,9 @@
 #include <tools/stream.hxx>
 #endif
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 #define ITEMID_MACRO 0
 
 #include "macitem.hxx"
