@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jp $ $Date: 2001-12-12 12:33:17 $
+ *  last change: $Author: fme $ $Date: 2001-12-17 12:39:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -977,6 +977,19 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
             }
             if( bSameFrame )
             {
+#ifdef VERTICAL_LAYOUT
+                SWRECTFN( pStartFrm )
+                if( (aTmp.*fnRect->fnGetTop)() == (aRect.*fnRect->fnGetTop)() )
+                    (aRect.*fnRect->fnSetLeft)( (aTmp.*fnRect->fnGetLeft)() );
+                else
+                {
+                    SwRect aStFrm( pStartFrm->PaintArea() );
+                    (aRect.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
+                    (aRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
+                    (aRect.*fnRect->fnSetTop)( (aTmp.*fnRect->fnGetTop)() );
+                }
+#else
+
                 if( aTmp.Top() == aRect.Top() )
                     aRect.Left( aTmp.Left() );
                 else
@@ -986,6 +999,8 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
                     aRect.Right( aStFrm.Right() );
                     aRect.Top( aTmp.Top() );
                 }
+#endif
+
                 if( aTmp.Height() > aRect.Height() )
                     aRect.Height( aTmp.Height() );
             }
