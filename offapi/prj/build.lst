@@ -3,6 +3,7 @@ oa	offapi									usr1	-	all	oa_mkout NULL
 oa	offapi\drafts\com\sun\star\sync			nmake	-	all	oa_sync_drafts NULL
 oa	offapi\drafts\com\sun\star\frame		nmake	-	all	oa_frame_drafts NULL
 oa	offapi\drafts\com\sun\star\accessibility nmake	-	all	oa_accessibility_drafts NULL
+oa	offapi\drafts\com\sun\star\accessibility\bridge nmake	-	all	oa_accessbridge_drafts oa_accessibility_drafts NULL
 oa	offapi\com\sun\star\awt					nmake	-	all	oa_awt NULL
 oa	offapi\com\sun\star\chart				nmake	-	all	oa_chart NULL
 oa	offapi\com\sun\star\configuration		nmake	-	all	oa_config NULL
