@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-15 11:09:54 $
+ *  last change: $Author: jbu $ $Date: 2001-04-11 15:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,8 @@ namespace stoc_connector
         else if( 0 == container.getToken(0).compareToAscii("socket") )
         {
             OUString sHost;
-            sal_uInt16 nPort;
+            sal_uInt16 nPort = 0;
+            sal_Bool bTcpNoDelay = sal_False;
 
             int i;
             for( i = 1 ; i < container.getTokenCount() ; i ++ )
@@ -252,15 +253,18 @@ namespace stoc_connector
                         {
                             nPort = ( sal_uInt16 )  oValue.toInt32();
                         }
+                        else if( aName.compareToAscii("tcpnodelay") == 0 )
+                        {
+                            bTcpNoDelay = oValue.toInt32() ? sal_True : sal_False;
+                        }
                     }
                 }
             }
 
-            SocketConnection *pConn = new SocketConnection( sHost ,
-                                                            nPort ,
+            SocketConnection *pConn = new SocketConnection( sHost,
+                                                            nPort,
                                                             sConnectionDescription);
 
-            pConn->m_socket.setOption( osl_Socket_OptionTcpNoDelay , sal_True );
             SocketAddr AddrTarget( sHost.pData, nPort );
             if(pConn->m_socket.connect(AddrTarget) != osl_Socket_Ok)
             {
@@ -270,6 +274,12 @@ namespace stoc_connector
                 sMessage += OUString::createFromAscii( ")" );
                 delete pConn;
                 throw NoConnectException( sMessage, Reference < XInterface > () );
+            }
+            if( bTcpNoDelay )
+            {
+                sal_Int32 nTcpNoDelay = sal_True;
+                pConn->m_socket.setOption( osl_Socket_OptionTcpNoDelay , &nTcpNoDelay,
+                                           sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
             }
             pConn->completeConnectionString();
             r = Reference< XConnection > ( (XConnection * ) pConn );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-15 11:10:54 $
+ *  last change: $Author: jbu $ $Date: 2001-04-11 15:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ namespace io_acceptor {
     public:
         SocketAcceptor( const ::rtl::OUString & sSocketName ,
                         sal_uInt16 nPort,
+                        sal_Bool bTcpNoDelay,
                         const ::rtl::OUString &sConnectionDescription );
 
         void init();
@@ -104,6 +105,7 @@ namespace io_acceptor {
         ::rtl::OUString m_sSocketName;
         ::rtl::OUString m_sConnectionDescription;
         sal_uInt16 m_nPort;
+        sal_Bool m_bTcpNoDelay;
         sal_Bool m_bClosed;
     };
 

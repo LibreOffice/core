@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acc_socket.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-15 11:10:54 $
+ *  last change: $Author: jbu $ $Date: 2001-04-11 15:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,13 +349,15 @@ namespace io_acceptor {
         _listeners.erase(aListener);
     }
 
-    SocketAcceptor::SocketAcceptor( const OUString &sSocketName ,
-                                    sal_uInt16 nPort ,
+    SocketAcceptor::SocketAcceptor( const OUString &sSocketName,
+                                    sal_uInt16 nPort,
+                                    sal_Bool bTcpNoDelay,
                                     const OUString &sConnectionDescription) :
         m_bClosed( sal_False ),
         m_sSocketName( sSocketName ),
         m_nPort( nPort ),
-        m_sConnectionDescription( sConnectionDescription )
+        m_sConnectionDescription( sConnectionDescription ),
+        m_bTcpNoDelay( bTcpNoDelay )
     {
     }
 
@@ -398,7 +400,12 @@ namespace io_acceptor {
         }
 
         pConn->completeConnectionString();
-        pConn->m_socket.setOption( osl_Socket_OptionTcpNoDelay,  1 );
+        if( m_bTcpNoDelay )
+        {
+            sal_Int32 nTcpNoDelay = sal_True;
+            pConn->m_socket.setOption( osl_Socket_OptionTcpNoDelay , &nTcpNoDelay,
+                                       sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
+        }
 
         return Reference < XConnection > ( (XConnection * ) pConn );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:50:58 $
+ *  last change: $Author: jbu $ $Date: 2001-04-11 15:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,8 @@ namespace io_acceptor
             else if ( 0 == container.getToken(0).compareToAscii("socket") )
             {
                 OUString sHost = OUString( RTL_CONSTASCII_USTRINGPARAM("localhost"));
-                sal_uInt16 nPort;
+                sal_uInt16 nPort = 0;
+                sal_Bool bTcpNoDelay = sal_False;
                 sal_Int32 i;
 
                 for( i = 1 ;i < container.getTokenCount() ; i ++ )
@@ -313,11 +314,16 @@ namespace io_acceptor
                             {
                                 nPort = (sal_uInt16) oValue.toInt32();
                             }
+                            else if( aName.compareToAscii("tcpnodelay") == 0 )
+                            {
+                                bTcpNoDelay = oValue.toInt32() ? sal_True : sal_False;
+                            }
                         }
                     }
                 }
 
-                m_pSocket = new SocketAcceptor( sHost , nPort, sConnectionDescription );
+                m_pSocket = new SocketAcceptor(
+                    sHost , nPort, bTcpNoDelay, sConnectionDescription );
 
                 try
                 {
