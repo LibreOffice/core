@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:48:51 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,36 @@
 
 // =======================================================================
 
+class FloatingWindow::ImplData
+{
+public:
+    ImplData();
+    ~ImplData();
+
+    ToolBox*        mpBox;
+    Rectangle       maItemEdgeClipRect; // used to clip the common edge between a toolbar item and the border of this window
+};
+
+FloatingWindow::ImplData::ImplData()
+{
+    mpBox = NULL;
+}
+
+FloatingWindow::ImplData::~ImplData()
+{
+}
+
+Rectangle& FloatingWindow::ImplGetItemEdgeClipRect()
+{
+    return mpImplData->maItemEdgeClipRect;
+}
+
+// =======================================================================
+
 void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
 {
+    mpImplData = new ImplData;
+
     mbFloatWin = TRUE;
     mbInCleanUp = FALSE;
     mbGrabFocus = FALSE;
@@ -124,7 +152,8 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
         if ( !(nStyle & WB_NODIALOGCONTROL) )
             nStyle |= WB_DIALOGCONTROL;
 
-        if( nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE) )
+        if( nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE)
+            && !(nStyle & WB_OWNERDRAWDECORATION) )
         {
             WinBits nFloatWinStyle = nStyle;
             // #99154# floaters are not closeable by default anymore, eg fullscreen floater
@@ -136,7 +165,11 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
         else
         {
             ImplBorderWindow*   pBorderWin;
-            USHORT              nBorderStyle = BORDERWINDOW_STYLE_OVERLAP | BORDERWINDOW_STYLE_BORDER | BORDERWINDOW_STYLE_FLOAT;
+            USHORT              nBorderStyle = BORDERWINDOW_STYLE_BORDER | BORDERWINDOW_STYLE_FLOAT;
+
+            if( nStyle & WB_OWNERDRAWDECORATION ) nBorderStyle |= BORDERWINDOW_STYLE_FRAME;
+            else                                  nBorderStyle |= BORDERWINDOW_STYLE_OVERLAP;
+
             if ( (nStyle & WB_SYSTEMWINDOW) && !(nStyle & (WB_MOVEABLE | WB_SIZEABLE)) )
             {
                 nBorderStyle |= BORDERWINDOW_STYLE_FRAME;
@@ -155,7 +188,6 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
 
     mpNextFloat             = NULL;
     mpFirstPopupModeWin     = NULL;
-    mpBox                   = NULL;
     mnPostId                = 0;
     mnTitle                 = (nStyle & WB_MOVEABLE) ? FLOATWIN_TITLE_NORMAL : FLOATWIN_TITLE_NONE;
     mnOldTitle              = mnTitle;
@@ -253,6 +285,8 @@ FloatingWindow::~FloatingWindow()
 
     if ( mnPostId )
         Application::RemoveUserEvent( mnPostId );
+
+    delete mpImplData;
 }
 
 // -----------------------------------------------------------------------
@@ -265,6 +299,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     Point       aPos;
     Size        aSize = pWindow->GetSizePixel();
     Rectangle   aScreenRect = pWindow->ImplGetFrameWindow()->GetDesktopRectPixel();
+    FloatingWindow *pFloatingWindow = dynamic_cast<FloatingWindow*>( pWindow );
 
     // convert....
     Window* pW = pWindow;
@@ -290,6 +325,8 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     BOOL        bLeft;
     BOOL        bTop;
     BOOL        bBreak;
+    Point       e1,e2;  // the common edge between the item rect and the floating window
+
     if ( nFlags & FLOATWIN_POPUPMODE_LEFT )
     {
         nArrangeAry[0]  = FLOATWIN_POPUPMODE_LEFT;
@@ -336,7 +373,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
         {
 
             case FLOATWIN_POPUPMODE_LEFT:
-                aPos.X() = devRect.Left()-aSize.Width();
+                aPos.X() = devRect.Left()-aSize.Width()+1;
                 aPos.Y() = devRect.Top();
                 aPos.Y() -= pWindow->mnTopBorder;
                 if( bRTL ) // --- RTL --- we're comparing screen coordinates here
@@ -348,6 +385,16 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 {
                     if ( aPos.X() < aScreenRect.Left() )
                         bBreak = FALSE;
+                }
+                if( bBreak )
+                {
+                    e1 = devRect.TopLeft();
+                    e2 = devRect.BottomLeft();
+                    // set non-zero width
+                    e2.X()++;
+                    // don't clip corners
+                    e1.Y()++;
+                    e2.Y()--;
                 }
                 break;
             case FLOATWIN_POPUPMODE_RIGHT:
@@ -363,34 +410,49 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                     if ( aPos.X()+aSize.Width() > aScreenRect.Right() )
                         bBreak = FALSE;
                 }
+                if( bBreak )
+                {
+                    e1 = devRect.TopRight();
+                    e2 = devRect.BottomRight();
+                    // set non-zero width
+                    e2.X()++;
+                    // don't clip corners
+                    e1.Y()++;
+                    e2.Y()--;
+                }
                 break;
             case FLOATWIN_POPUPMODE_UP:
                 aPos.X() = devRect.Left();
-                aPos.Y() = devRect.Top()-aSize.Height();
+                aPos.Y() = devRect.Top()-aSize.Height()+1;
                 if ( aPos.Y() < aScreenRect.Top() )
                     bBreak = FALSE;
+                if( bBreak )
+                {
+                    e1 = devRect.TopLeft();
+                    e2 = devRect.TopRight();
+                    // set non-zero height
+                    e2.Y()++;
+                    // don't clip corners
+                    e1.X()++;
+                    e2.X()--;
+                }
                 break;
             case FLOATWIN_POPUPMODE_DOWN:
                 aPos = devRect.BottomLeft();
                 if ( aPos.Y()+aSize.Height() > aScreenRect.Bottom() )
                     bBreak = FALSE;
+                if( bBreak )
+                {
+                    e1 = devRect.BottomLeft();
+                    e2 = devRect.BottomRight();
+                    // set non-zero height
+                    e2.Y()++;
+                    // don't clip corners
+                    e1.X()++;
+                    e2.X()--;
+                }
                 break;
         }
-
-#if 0   // TODO: this should only happen if the mouse pointer is over the menu
-        // as it only affects a single window manager, a better solution should be found
-        // currently it makes exact positioning impossible
-        /*
-         *  #95901# avoid mouse pointer for popup menus because
-         *  of sawfish window manager. This cannot be done in
-         *  the Unix dependant part since that cannot decide between
-         *  popup menus and other menus/floatwins.
-         */
-        if( ( (nArrangeAry[nArrangeIndex] == FLOATWIN_POPUPMODE_DOWN)  ||
-              (nArrangeAry[nArrangeIndex] == FLOATWIN_POPUPMODE_RIGHT) )
-            && ( nFlags & FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE ) )
-            aPos.X() += 2;
-#endif
 
         // Evt. noch anpassen
         if ( bBreak && !(nFlags & FLOATWIN_POPUPMODE_NOAUTOARRANGE) )
@@ -401,7 +463,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 if ( aPos.Y()+aSize.Height() > aScreenRect.Bottom() )
                 {
                     bTop = TRUE;
-                    aPos.Y() = devRect.Bottom()-aSize.Height();
+                    aPos.Y() = devRect.Bottom()-aSize.Height()+1;
                     if ( aPos.Y() < aScreenRect.Top() )
                         aPos.Y() = aScreenRect.Top();
                 }
@@ -411,7 +473,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 if ( !bRTL && aPos.X()+aSize.Width() > aScreenRect.Right() )
                 {
                     bLeft = TRUE;
-                    aPos.X() = devRect.Right()-aSize.Width();
+                    aPos.X() = devRect.Right()-aSize.Width()+1;
                     if ( aPos.X() < aScreenRect.Left() )
                         aPos.X() = aScreenRect.Left();
                 }
@@ -424,23 +486,16 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     if ( nArrangeIndex > 4 )
         nArrangeIndex = 4;
 
-    // Ansonsten soweit wie moeglich in den Bildschirm einpassen
-    /*
-    // should not be required anymore: moving windows
-    // into the screen is done in the sal layer anyway
-    if ( aPos.X()+aSize.Width() > aScreenRect.Right() )
-        aPos.X() = aScreenRect.Right()-aSize.Width();
-    if ( aPos.X() < aScreenRect.Left() )
-        aPos.X() = aScreenRect.Left();
-    if ( aPos.Y()+aSize.Height() > aScreenRect.Bottom() )
-        aPos.Y() = aScreenRect.Bottom()-aSize.Height();
-    if ( aPos.Y() < aScreenRect.Top() )
-        aPos.Y() = aScreenRect.Top();
-*/
     rArrangeIndex = nArrangeIndex;
 
     aPos = pW->AbsoluteScreenToOutputPixel( aPos );
 
+    // store a cliprect that can be used to clip the common edge of the itemrect and the floating window
+    if( pFloatingWindow )
+    {
+        pFloatingWindow->mpImplData->maItemEdgeClipRect =
+            Rectangle( e1, e2 );
+    }
 
     // caller expects cordinates relative to top-level win
     return pW->OutputToScreenPixel( aPos );
@@ -715,7 +770,7 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, ULONG nFlags )
     if ( !nItemId )
         return;
 
-    mpBox = pBox;
+    mpImplData->mpBox = pBox;
     pBox->ImplFloatControl( TRUE, this );
 
     // retrieve some data from the ToolBox
@@ -745,17 +800,23 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, ULONG nFlags )
          WindowAlign eAlign = pBox->GetAlign();
          if ( pBox->IsHorizontal() )
          {
+             nFlags |= FLOATWIN_POPUPMODE_DOWN;
+             /*
              if ( pBox->IsFloatingMode() || (eAlign == WINDOWALIGN_TOP) )
                  nFlags |= FLOATWIN_POPUPMODE_DOWN;
              else
                  nFlags |= FLOATWIN_POPUPMODE_UP;
+             */
          }
          else
          {
+             nFlags |= FLOATWIN_POPUPMODE_RIGHT;
+             /*
              if ( eAlign == WINDOWALIGN_LEFT )
                  nFlags |= FLOATWIN_POPUPMODE_RIGHT;
              else
                  nFlags |= FLOATWIN_POPUPMODE_LEFT;
+             */
          }
     }
 
@@ -813,10 +874,10 @@ void FloatingWindow::ImplEndPopupMode( USHORT nFlags, ULONG nFocusId )
     SetTitleType( mnOldTitle );
 
     // ToolBox wieder auf normal schalten
-    if ( mpBox )
+    if ( mpImplData->mpBox )
     {
-        mpBox->ImplFloatControl( FALSE, this );
-        mpBox = NULL;
+        mpImplData->mpBox->ImplFloatControl( FALSE, this );
+        mpImplData->mpBox = NULL;
     }
 
     // Je nach Parameter den PopupModeEnd-Handler rufen
