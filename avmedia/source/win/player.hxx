@@ -2,9 +2,9 @@
  *
  *  $RCSfile: player.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2004-08-23 09:04:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ class Player : public ::cppu::WeakImplHelper2< ::com::sun::star::media::XPlayer,
 {
 public:
 
-                        Player();
+                        Player( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
                         ~Player();
 
     bool                create( const ::rtl::OUString& rURL );
@@ -122,6 +122,7 @@ public:
     virtual sal_Int16 SAL_CALL getVolumeDB(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Size SAL_CALL getPreferredPlayerWindowSize(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow > SAL_CALL createPlayerWindow( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::media::XFrameGrabber > SAL_CALL createFrameGrabber(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -130,6 +131,9 @@ public:
 
 private:
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
+
+    ::rtl::OUString         maURL;
     IGraphBuilder*          mpGB;
     IBaseFilter*            mpOMF;
     IMediaControl*          mpMC;
