@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-07 14:32:04 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 11:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1317,7 +1317,11 @@ String StarSymbolToMSMultiFontImpl::ConvertChar(sal_Unicode &rChar)
 String StarSymbolToMSMultiFontImpl::ConvertString(String &rString,
     xub_StrLen& rIndex)
 {
+#if 1
+    typedef ::std::multimap<sal_Unicode, SymbolEntry>::iterator MI;
+#else
     typedef ::std::multimap<sal_Unicode, SymbolEntry>::const_iterator MI;
+#endif
     typedef ::std::pair<MI, MI> Result;
 
     String sRet;
