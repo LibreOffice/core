@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-05-15 12:18:01 $
+ *  last change: $Author: gt $ $Date: 2002-07-18 09:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,8 +606,7 @@ void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
  ---------------------------------------------------------------------------*/
 void BibToolBar::ApplyImageList()
 {
-    ImageList& rList = GetSettings().GetStyleSettings().GetHighContrastMode() ?
-                        aImgLstHC : aImgLst;
+    ImageList& rList = GetDisplayBackground().GetColor().IsDark()? aImgLstHC : aImgLst;
     SetItemImage(TBC_BT_AUTOFILTER  , rList.GetImage(SID_FM_AUTOFILTER));
     SetItemImage(TBC_BT_FILTERCRIT  , rList.GetImage(SID_FM_FILTERCRIT));
     SetItemImage(TBC_BT_REMOVEFILTER, rList.GetImage(SID_FM_REMOVE_FILTER_SORT ));
