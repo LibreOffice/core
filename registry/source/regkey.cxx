@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regkey.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-01-10 10:15:54 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,12 +208,14 @@ RegError REGISTRY_CALLTYPE openSubKeys(RegKeyHandle hKey,
 
         if (pKey->isDeleted())
         {
-            pphSubKeys = NULL;
+            *pphSubKeys = NULL;
+            *pnSubKeys = 0;
             return REG_INVALID_KEY;
         }
     } else
     {
-        pphSubKeys = NULL;
+        *pphSubKeys = NULL;
+        *pnSubKeys = 0;
         return REG_INVALID_KEY;
     }
 
@@ -228,7 +230,7 @@ RegError REGISTRY_CALLTYPE closeSubKeys(RegKeyHandle* phSubKeys,
 {
     RegError _ret = REG_NO_ERROR;
 
-    if (phSubKeys)
+    if (phSubKeys != 0 && nSubKeys != 0)
     {
         ORegistry* pReg = NULL;
 
