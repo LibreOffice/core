@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:42:30 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
 #endif
+#ifndef SW_WRITERWORDGLUE
+#include "writerwordglue.hxx"
+#endif
 
 #ifndef _WRTWW8_HXX
 #include "wrtww8.hxx"
@@ -120,6 +123,7 @@
 #endif
 
 using namespace ::com::sun::star::i18n;
+using namespace sw::types;
 using namespace sw::util;
 
 USHORT SwWW8Writer::DupNumRuleWithLvlStart(const SwNumRule *pRule,BYTE nLvl,
@@ -265,6 +269,8 @@ void SwWW8Writer::OutListTab()
             }
             *pTableStrm << nAlign;
 
+            nFlags = 2;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+
             // Build the NumString for this Level
             String sNumStr;
             String sFontName;
@@ -288,6 +294,8 @@ void SwWW8Writer::OutListTab()
 
                 if (wwFont::IsStarSymbol(sFontName))
                     SubstituteBullet(sNumStr,eChrSet,sFontName);
+
+                nFlags = 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
             }
             else
             {
@@ -309,6 +317,7 @@ void SwWW8Writer::OutListTab()
                             sNumStr.SetChar( nFnd, (char)i );
                         }
                     }
+                    nFlags = 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
                 }
 
                 if( rFmt.GetPrefix().Len() )
@@ -319,7 +328,6 @@ void SwWW8Writer::OutListTab()
             // write the rgbxchNums[9]
             pTableStrm->Write(aNumLvlPos, WW8ListManager::nMaxLevel);
 
-            nFlags = 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
             *pTableStrm << nFlags;
             // dxaSoace/dxaIndent (Word 6 compatibility)
             SwWW8Writer::WriteLong( *pTableStrm, 0 );
@@ -730,50 +738,49 @@ bool SwWW8Writer::Out_SwNum(const SwTxtNode* pNd)
 {
     BYTE nSwLevel = pNd->GetNum()->GetLevel();
     const SwNumRule* pRul = pNd->GetNumRule();
-    if( !pRul || nSwLevel == WW8ListManager::nMaxLevel )
+    if (!pRul || nSwLevel == WW8ListManager::nMaxLevel)
         return false;
 
     bool bNoNum = false;
-    if( nSwLevel == NO_NUM )
-        nSwLevel = NO_NUMLEVEL | 0 ;    // alte Codierung...
-    if( ( nSwLevel & NO_NUMLEVEL ) != 0 )
+    if (nSwLevel == NO_NUM)
+        nSwLevel = NO_NUMLEVEL;         // alte Codierung...
+    if (nSwLevel & NO_NUMLEVEL)
     {
         nSwLevel &= ~NO_NUMLEVEL;       // 0..WW8ListManager::nMaxLevel
         bNoNum = true;
     }
 
     bool bRet = true;
-    const SwNumFmt* pFmt = &pRul->Get( nSwLevel );// interessierendes Format
-
-#ifdef NUM_RELSPACE
-    SwNumFmt aFmt( *pFmt );
+    SwNumFmt aFmt(pRul->Get(nSwLevel));
     const SvxLRSpaceItem& rLR = ItemGet<SvxLRSpaceItem>(*pNd, RES_LR_SPACE);
-    aFmt.SetAbsLSpace(aFmt.GetAbsLSpace() + rLR.GetLeft());
-    pFmt = &aFmt;
-#endif
+    aFmt.SetAbsLSpace(writer_cast<short>(aFmt.GetAbsLSpace() + rLR.GetLeft()));
 
-    if( pFmt->GetNumberingType() == SVX_NUM_NUMBER_NONE
-        || pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL
-        || pFmt->GetNumberingType() == SVX_NUM_BITMAP )
+    if (
+         aFmt.GetNumberingType() == SVX_NUM_NUMBER_NONE ||
+         aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL ||
+         aFmt.GetNumberingType() == SVX_NUM_BITMAP
+       )
     {
-                            // Aufzaehlung
-        Out_WwNumLvl( (bNoNum) ? 12 : 11 );
-        Out_NumRuleAnld( *pRul, *pFmt, 11 );
+        // Aufzaehlung
+        Out_WwNumLvl(bNoNum ? 12 : 11);
+        Out_NumRuleAnld(*pRul, aFmt, 11);
         bRet = false;
     }
-    else if( pRul->IsContinusNum()
-              || ( pRul->Get(1).GetIncludeUpperLevels() <= 1 ) )
+    else if (
+              pRul->IsContinusNum() ||
+              (pRul->Get(1).GetIncludeUpperLevels() <= 1)
+            )
     {
-                            // Nummerierung
-        Out_WwNumLvl( (bNoNum) ? 12 : 10 );
-        Out_NumRuleAnld( *pRul, *pFmt, 10 );
+        // Nummerierung
+        Out_WwNumLvl(bNoNum ? 12 : 10);
+        Out_NumRuleAnld(*pRul, aFmt, 10);
         bRet = false;
     }
     else
     {
-                            // Gliederung
-        Out_SwNumLvl( (bNoNum) ? 12 :nSwLevel );
-        Out_NumRuleAnld( *pRul, *pFmt, nSwLevel );
+        // Gliederung
+        Out_SwNumLvl(bNoNum ? 12 : nSwLevel);
+        Out_NumRuleAnld(*pRul, aFmt, nSwLevel);
     }
     return bRet;
 }
