@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:55:50 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,177 +63,37 @@
 CheckBox CB_USE_PASSWD
 {
     /* ### ACHTUNG: Neuer Text in Resource? ~Paßwort : ~Pa˜wort */
-    Text = "~Passwort" ;
-    Text [ ENGLISH ] = "~Password" ;
-    Text [ norwegian ] = "~Passord" ;
-    Text [ italian ] = "~Password" ;
-    Text [ portuguese_brazilian ] = "~Senha" ;
-    Text [ portuguese ] = "~Senha" ;
-    Text [ finnish ] = "~Salasana" ;
-    Text [ danish ] = "~Adgangskode" ;
-    Text [ french ] = "~Mot de passe" ;
-    Text [ swedish ] = "~Lösenord" ;
-    Text [ dutch ] = "~Wachtwoord" ;
-    Text [ spanish ] = "~Contraseña" ;
-    Text [ english_us ] = "~Password" ;
-    Text[ chinese_simplified ] = "å¯†ç (~P)";
-    Text[ russian ] = "Ïàğîëü";
-    Text[ polish ] = "~Has³o";
-    Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰(~P)";
-    Text[ chinese_traditional ] = "å¯†ç¢¼(~P)";
-    Text[ arabic ] = "ßáãÉ ÇáÓÑ";
-    Text[ greek ] = "Êùäéêüò ğñüóâáóçò";
-    Text[ korean ] = "ì•”í˜¸(~P)";
-    Text[ turkish ] = "Şifre";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Contrasenya";
-    Text[ thai ] = "~à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™";
-    Text[ czech ] = "Heslo";
-    Text[ hebrew ] = "â€®×¡×™×¡××”â€¬";
-    Text[ hindi ] = "~à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦";
-    Text[ slovak ] = "~Heslo";
-    Text[ hungarian ] = "~JelszÃ³";
-    Text[ slovenian ] = "~Geslo";
+    Text [ de ] = "~Passwort" ;
+    Text [ en-US ] = "~Password" ;
+    Text [ x-comment ] = " ";
 };
 CheckBox CB_READ_ONLY
 {
-    Text = "Nu~r lesen" ;
-    Text [ ENGLISH ] = "~Read only" ;
-    Text [ norwegian ] = "~Skrivebeskyttet" ;
-    Text [ italian ] = "~Sola lettura" ;
-    Text [ portuguese_brazilian ] = "~Somente leitura" ;
-    Text [ portuguese ] = "~Só leitura" ;
-    Text [ finnish ] = "Vain ~luku" ;
-    Text [ danish ] = "Skrive~beskyttet" ;
-    Text [ french ] = "En ~lecture seule" ;
-    Text [ swedish ] = "Sk~rivskyddad" ;
-    Text [ dutch ] = "~Alleen-lezen" ;
-    Text [ spanish ] = "~Sólo lectura" ;
-    Text [ english_us ] = "~Read-only" ;
-    Text[ chinese_simplified ] = "åªè¯»(~R)";
-    Text[ russian ] = "Òîëüêî äëÿ ÷òåíèÿ";
-    Text[ polish ] = "Tylko ~do odczytu";
-    Text[ japanese ] = "èª­ã¿å–ã‚Šå°‚ç”¨(~R)";
-    Text[ chinese_traditional ] = "å”¯è®€(~R)";
-    Text[ arabic ] = "ááŞÑÇÁÉ İŞØ";
-    Text[ greek ] = "Ìüíï ãéá áíÜãíùóç";
-    Text[ korean ] = "ì½ê¸° ì „ìš©(~R)";
-    Text[ turkish ] = "~Salt okunur";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Només lectura";
-    Text[ thai ] = "~à¸­à¹ˆà¸²à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";
-    Text[ czech ] = "Pouze pro ÄtenÃ­";
-    Text[ hebrew ] = "â€®×§×¨×™××” ×‘×œ×‘×“â€¬";
-    Text[ hindi ] = "~à¤•à¥‡à¤µà¤² à¤ªà¤¢à¤¼à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤";
-    Text[ slovak ] = "~Len na ÄÃ­tanie";
-    Text[ hungarian ] = "Csak ~olvashatÃ³";
-    Text[ slovenian ] = "Samo za ~branje";
+    Text [ de ] = "Nu~r lesen" ;
+    Text [ en-US ] = "~Read-only" ;
+    Text [ x-comment ] = " ";
 };
 String STR_LINKEDIT_TEXT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Verknüpfungen bearbeiten : Verkn³pfungen bearbeiten */
-    Text = "Verknüpfungen bearbeiten" ;
-    Text [ ENGLISH ] = "Edit links" ;
-    Text [ norwegian ] = "Edit links" ;
-    Text [ italian ] = "Modifica collegamenti" ;
-    Text [ portuguese_brazilian ] = "Editar vínculos" ;
-    Text [ portuguese ] = "Editar ligações" ;
-    Text [ finnish ] = "Muokkaa linkkejä" ;
-    Text [ danish ] = "Rediger kæder" ;
-    Text [ french ] = "Édition de liens" ;
-    Text [ swedish ] = "Redigera länkar" ;
-    Text [ dutch ] = "Koppelingen bewerken" ;
-    Text [ spanish ] = "Modificar vínculos" ;
-    Text [ english_us ] = "Edit links" ;
-    Text[ chinese_simplified ] = "ç¼–è¾‘é“¾æ¥";
-    Text[ russian ] = "Ïğàâêà ññûëîê";
-    Text[ polish ] = "Edytuj ³¹cza";
-    Text[ japanese ] = "ãƒªãƒ³ã‚¯ã®ç·¨é›†";
-    Text[ chinese_traditional ] = "ç·¨è¼¯æ·å¾‘";
-    Text[ arabic ] = "ÊÍÑíÑ ÇáÇÑÊÈÇØÇÊ";
-    Text[ greek ] = "Åğåîåñãáóßá óõíäİóåùí";
-    Text[ korean ] = "ë§í¬ í¸ì§‘";
-    Text[ turkish ] = "Bağlantıları düzenle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modifica els enllaços";
-    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
-    Text[ czech ] = "Upravit odkazy";
-    Text[ hebrew ] = "VerknÃ¼pfungen bearbeiten";
-    Text[ hindi ] = "à¤²à¤¿à¤‚à¤•à¥à¤¸ à¤•à¤¾ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
-    Text[ slovak ] = "UpraviÅ¥ odkazy";
-    Text[ hungarian ] = "HivatkozÃ¡sok szerkesztÃ©se";
-    Text[ slovenian ] = "Uredi povezave";
+    Text [ de ] = "Verknüpfungen bearbeiten" ;
+    Text [ en-US ] = "Edit links" ;
+    Text [ x-comment ] = " ";
 };
 String STR_PATH_NOT_FOUND1
 {
     /* ### ACHTUNG: Neuer Text in Resource? Das Verzeichnis ' : Das Verzeichnis '' */
-    Text = "Das Verzeichnis '" ;
-    Text [ English ] = "The directory '" ;
-    Text [ norwegian ] = "The directory '" ;
-    Text [ italian ] = "La cartella" ;
-    Text [ portuguese_brazilian ] = "O diretório " ;
-    Text [ portuguese ] = "O directório '" ;
-    Text [ finnish ] = "Hakemistoa" ;
-    Text [ danish ] = "Kataloget '" ;
-    Text [ french ] = "Le répertoire'" ;
-    Text [ swedish ] = "Katalogen '" ;
-    Text [ dutch ] = "Map '" ;
-    Text [ spanish ] = "El directorio '" ;
-    Text [ english_us ] = "The directory '" ;
-    Text[ chinese_simplified ] = "è¿™ä¸ªç›®å½• '";
-    Text[ russian ] = "Êàòàëîã '";
-    Text[ polish ] = "Katalog '";
-    Text[ japanese ] = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã€Œ";
-    Text[ language_user1 ] = " ";
-    Text[ chinese_traditional ] = "é€™å€‹ç›®éŒ„<";
-    Text[ arabic ] = "ÇáÏáíá '";
-    Text[ greek ] = "Ï êáôÜëïãïò '";
-    Text[ korean ] = "ë””ë ‰í† ë¦¬'";
-    Text[ turkish ] = "Dizin '";
-    Text[ catalan ] = "El directori '";
-    Text[ thai ] = "à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆ '";
-    Text[ czech ] = "AdresÃ¡Å™ ";
-    Text[ hebrew ] = "Das Verzeichnis '";
-    Text[ hindi ] = "à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ '";
-    Text[ slovak ] = "AdresÃ¡r '";
-    Text[ hungarian ] = "A '";
-    Text[ slovenian ] = "Mapa '";
+    Text [ de ] = "Das Verzeichnis '" ;
+    Text [ en-US ] = "The directory '" ;
+    Text [ x-comment ] = " ";
 };
 String STR_PATH_NOT_FOUND2
 {
     /* ### ACHTUNG: Neuer Text in Resource? ' existiert nicht. : '' existiert nicht. */
     /* ### ACHTUNG: Neuer Text in Resource? ' existiert nicht. : '' existiert nicht. */
-    Text = "' existiert nicht." ;
-    Text [ English ] = "' does not exist." ;
-    Text [ norwegian ] = "' does not exist." ;
-    Text [ italian ] = "' non esiste." ;
-    Text [ portuguese_brazilian ] = " não existe." ;
-    Text [ portuguese ] = "' não existe." ;
-    Text [ finnish ] = "ei ole olemassa." ;
-    Text [ danish ] = "' findes ikke." ;
-    Text [ french ] = "' n'existe pas." ;
-    Text [ swedish ] = "' finns inte." ;
-    Text [ dutch ] = "' bestaat niet." ;
-    Text [ spanish ] = "' no existe." ;
-    Text [ english_us ] = "' does not exist." ;
-    Text[ chinese_simplified ] = "' ä¸å­˜åœ¨ã€‚";
-    Text[ russian ] = "' íå ñóùåñòâóåò.";
-    Text[ polish ] = "' nie istnieje.";
-    Text[ japanese ] = "ã€ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
-    Text[ chinese_traditional ] = ">ä¸å­˜åœ¨ã€‚";
-    Text[ arabic ] = "' ÛíÑ ãæÌæÏ.";
-    Text[ greek ] = "' äåí õğÜñ÷åé.";
-    Text[ korean ] = "' ì´(ê°€) ì—†ìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "' mevcut değil.";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "' no existeix.";
-    Text[ thai ] = "' à¹„à¸¡à¹ˆà¸¡à¸µà¸­à¸¢à¸¹à¹ˆ";
-    Text[ czech ] = " neexistuje.";
-    Text[ hebrew ] = "' existiert nicht.";
-    Text[ hindi ] = "' à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = " neexistuje.";
-    Text[ hungarian ] = "' kÃ¶nyvtÃ¡r nem lÃ©tezik.";
-    Text[ slovenian ] = "' ne obstaja.";
+    Text [ de ] = "' existiert nicht." ;
+    Text [ en-US ] = "' does not exist." ;
+    Text [ x-comment ] = " ";
 };
 String STR_FLT_SGV
 {
