@@ -2,9 +2,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 10:51:11 $
+#   last change: $Author: vg $ $Date: 2005-03-23 15:59:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ BEGIN
                  "Shortcut", "Custom", "Procedure", "Module", "Profile", "ProfileItem",
                  "Folder", "FolderItem", "RegistryItem", "StarRegistryItem");
 
+    $logging     = 0;
     $logfilename = "logfile.log";   # the default logfile name for global errors
     @logfileinfo = ();
 
