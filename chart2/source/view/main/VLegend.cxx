@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-30 16:08:59 $
+ *  last change: $Author: iha $ $Date: 2003-10-31 12:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,16 +122,19 @@ namespace
 
 struct LegendEntry
 {
-    uno::Reference< drawing::XShape >      xShape;
+    uno::Reference< drawing::XShapes >      xGroupShapes;
+    uno::Reference< drawing::XShape >      xTextShape;
     uno::Reference< beans::XPropertySet >  xSymbolProperties;
     uno::Reference< chart2::XChartType >   xChartType;
 
-    LegendEntry( uno::Reference< drawing::XShape > _shape,
-                 uno::Reference< beans::XPropertySet > _prop,
-                 uno::Reference< chart2::XChartType > _chart_type ) :
-            xShape( _shape ),
-            xSymbolProperties( _prop ),
-            xChartType( _chart_type )
+    LegendEntry( uno::Reference< drawing::XShapes > _GroupShapeForSingleEntry,
+                 uno::Reference< drawing::XShape > _xTextShape,
+                 uno::Reference< beans::XPropertySet > _xSymbolProperties,
+                 uno::Reference< chart2::XChartType > _xChartType ) :
+            xGroupShapes( _GroupShapeForSingleEntry ),
+            xTextShape( _xTextShape ),
+            xSymbolProperties( _xSymbolProperties ),
+            xChartType( _xChartType )
     {}
 };
 typedef ::std::vector< LegendEntry > tEntryGroup;
@@ -290,7 +293,8 @@ void lcl_getLegendEntries(
     const uno::Reference< chart2::XChartType > & xChartType,
     const tPropertyValues & rProperties,
     awt::Size & rOutMinExtentSoFar,
-    awt::Size & rOutMaxExtentSoFar )
+    awt::Size & rOutMaxExtentSoFar,
+    const rtl::OUString& rLegendIdentifier )
 {
     uno::Sequence< uno::Reference< chart2::XDataSeriesTreeNode > > aChildren(
         xParent->getChildren());
@@ -302,20 +306,26 @@ void lcl_getLegendEntries(
         {
             // recurse !
             lcl_getLegendEntries( xNewParent, rOutEntryContainer, xTarget, xShapeFactory,
-                                  xChartType, rProperties, rOutMinExtentSoFar, rOutMaxExtentSoFar );
+                                  xChartType, rProperties, rOutMinExtentSoFar, rOutMaxExtentSoFar, rLegendIdentifier );
         }
         else
         {
             try
             {
                 // create label shape
+                uno::Reference< drawing::XShape > xGroupShapeForSingleEntry(
+                    xShapeFactory->createInstance(
+                        C2U( "com.sun.star.drawing.GroupShape" )), uno::UNO_QUERY );
                 uno::Reference< drawing::XShape > xEntry(
                     xShapeFactory->createInstance(
                         C2U( "com.sun.star.drawing.TextShape" )), uno::UNO_QUERY );
                 if( !xEntry.is())
                     continue;
 
-                xTarget->add( xEntry );
+                xTarget->add( xGroupShapeForSingleEntry );
+
+                uno::Reference< drawing::XShapes > xGroupShapes( xGroupShapeForSingleEntry, uno::UNO_QUERY );
+                xGroupShapes->add( xEntry );
                 // get label text via data source
                 ::rtl::OUString aName;
                 uno::Reference< chart2::XDataSource > xSeriesSource(
@@ -352,7 +362,25 @@ void lcl_getLegendEntries(
                 // add entry to list
                 uno::Reference< beans::XPropertySet > xSeriesProp( xSeriesSource, uno::UNO_QUERY );
                 rOutEntryContainer.push_back(
-                    tEntryGroup::value_type( xEntry, xSeriesProp, xChartType ));
+                    tEntryGroup::value_type( xGroupShapes, xEntry, xSeriesProp, xChartType ));
+
+                //set identifier for selection handling
+                try
+                {
+                    rtl::OUString aSeriesIdentifier;
+                    uno::Any aAIdentifier = xSeriesProp->getPropertyValue( C2U( "Identifier" ) );
+                    aAIdentifier >>= aSeriesIdentifier;
+
+                    rtl::OUString aCID = chart::ObjectIdentifier::createClassifiedIdentifier(
+                          chart::OBJECTTYPE_LEGEND_ENTRY, aSeriesIdentifier
+                          , chart::ObjectIdentifier::createParticle( chart::OBJECTTYPE_LEGEND, rLegendIdentifier ) );
+                    uno::Reference< beans::XPropertySet > xEntryProps( xGroupShapeForSingleEntry,uno::UNO_QUERY );
+                    xEntryProps->setPropertyValue( C2U("Name"), uno::makeAny( aCID ));
+                }
+                catch( uno::Exception & ex )
+                {
+                    ASSERT_EXCEPTION( ex );
+                }
             }
             catch( uno::Exception & ex )
             {
@@ -437,7 +465,7 @@ void lcl_createLegend(
                 : (nRow + nColumn * nNumberOfRows);
             if( nEntry < nNumberOfEntries )
                 nMaxHeight = ::std::max(
-                    nMaxHeight, nYOffset + rEntries[ nEntry ].xShape->getSize().Height );
+                    nMaxHeight, nYOffset + rEntries[ nEntry ].xTextShape->getSize().Height );
         }
         nMaxHeights[ nRow ] = nMaxHeight;
     }
@@ -466,7 +494,7 @@ void lcl_createLegend(
                 lcl_getSymbol( rEntry.xChartType,
                                rEntry.xSymbolProperties,
                                xShapeFactory,
-                               xTarget ));
+                               rEntry.xGroupShapes ));
 
             if( xSymbol.is())
             {
@@ -481,13 +509,16 @@ void lcl_createLegend(
                     awt::Point(
                         nCurrentXPos + ((aMaxSymbolExtent.Width - aSymbolSize.Width) / 2),
                         nCurrentYPos + ((aMaxSymbolExtent.Height - aSymbolSize.Height) / 2)));
+
+                //because of this name the symbol shape will be used for marking the legend
+                chart::ShapeFactory(xShapeFactory).setShapeName( xSymbol, C2U("MarkHandles") );
             }
 
             // position text shape
-            awt::Size aTextSize( rEntry.xShape->getSize());
+            awt::Size aTextSize( rEntry.xTextShape->getSize());
             nMaxWidth = ::std::max(
                 nMaxWidth, 2 * nXOffset + aMaxSymbolExtent.Width + aTextSize.Width );
-            rEntry.xShape->setPosition(
+            rEntry.xTextShape->setPosition(
                 awt::Point( nCurrentXPos + aMaxSymbolExtent.Width, nCurrentYPos ));
 
             nCurrentYPos += nMaxHeights[ nRow ];
@@ -563,14 +594,16 @@ void VLegend::createShapes(
         m_xTarget->add( m_xShape );
 
         // set Name
+        rtl::OUString aLegendIdentifier;
         {
             uno::Reference< beans::XPropertySet > xShapeProp( m_xShape, uno::UNO_QUERY );
             uno::Reference< chart2::XIdentifiable > xLegendIdent( m_xLegend, uno::UNO_QUERY );
             if( xShapeProp.is() &&
                 xLegendIdent.is())
             {
+                aLegendIdentifier = xLegendIdent->getIdentifier();
                 rtl::OUString aCID = ObjectIdentifier::createClassifiedIdentifier(
-                    OBJECTTYPE_LEGEND, xLegendIdent->getIdentifier() );
+                    OBJECTTYPE_LEGEND, aLegendIdentifier );
                 xShapeProp->setPropertyValue( C2U("Name"), uno::makeAny( aCID ));
             }
         }
@@ -633,7 +666,7 @@ void VLegend::createShapes(
                     lcl_getLegendEntries( xGroup, aEntryGroup, xLegendContainer,
                                           m_xShapeFactory, xChartType,
                                           aTextProperties,
-                                          aMinEntryExtent, aMaxEntryExtent );
+                                          aMinEntryExtent, aMaxEntryExtent, aLegendIdentifier );
                 }
             }
 
