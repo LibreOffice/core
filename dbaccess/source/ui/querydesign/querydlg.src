@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:47:37 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ ModalDialog DLG_QRY_JOIN
     Moveable = TRUE ;
     Closeable = TRUE ;
 
-    Window LB_CONTROL
+    Window WND_CONTROL
     {
         Pos = MAP_APPFONT( 0, 0 );
         Size = MAP_APPFONT( 203, 113 );
