@@ -1,0 +1,10 @@
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
+..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
+..\%__SRC%\inc\*.bin %_DEST%\bin%_EXT%\*.bin
+
+mkdir: %_DEST%\inc%_EXT%\comphelper
+..\inc\comphelper\*.hxx %_DEST%\inc%_EXT%\comphelper\*.hxx
