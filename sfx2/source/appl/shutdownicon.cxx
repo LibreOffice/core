@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:57:42 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,7 +540,7 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
             {
                 sal_Bool bQuickstart = sal_False;
                 bQuickstart = ::cppu::any2bool( aArguments[0] );
-                if( Application::IsRemoteServer() || ( !bQuickstart && !GetAutostart() ) )
+                if( !bQuickstart && !GetAutostart() )
                     return;
 
                 m_pResMgr = SFX_APP()->GetSfxResManager();
