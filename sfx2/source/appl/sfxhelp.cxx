@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-13 10:05:38 $
+ *  last change: $Author: mba $ $Date: 2000-12-13 10:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
             // must be created on dispatch
             nFlag |= FrameSearchFlag::CREATE;
         String aURL;
-        aURL = DEFINE_CONST_UNICODE("vnd.sun.star.cmd://help?");
+        aURL = DEFINE_CONST_UNICODE("vnd.sun.star.cmd:help?");
         aURL += DEFINE_CONST_UNICODE("HELP_Request_Mode=contextIndex,HELP_Session_Mode=context,HELP_Url=");
         aURL += aHelpURL;
         aURL += '&';
