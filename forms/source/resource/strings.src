@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:46:38 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text[ italian ] = "Durante il caricamento del control si è verificato un errore. Pertanto è stato sostituito con una variabile.";
     Text[ danish ] = "Der opstod en fejl under indlæsningen af dette kontrolelement. Det blev derfor erstattet med en pladsholder.";
     Text[ swedish ] = "När denna control laddades uppstod ett fel. Därför ersattes den av en platshållare.";
-    Text[ polish ] = "Wyst¹pi³ b³¹d podczas ³adowania pola kontrolnego (control). Zamieniono je dlatego na symbol wieloznaczny.";
+    Text[ polish ] = "Wyst¹pi³ b³¹d podczas ³adowania pola kontrolnego (control). Z tego powodu zamieniono je na symbol wieloznaczny.";
     Text[ portuguese_brazilian ] = "While loading this control an error occured. Thus it was replaced with a placeholder.";
     Text[ japanese ] = "‚±‚ÌºİÄÛ°Ù‚Ì“Ç‚İ‚İ’†‚É´×°‚ª”­¶‚µ‚Ü‚µ‚½B‚»‚ê‚ªŒ´ˆö‚ÅÜ²ÙÄŞ¶°ÄŞ‚É’uŠ·‚³‚ê‚Ü‚µ‚½B";
     Text[ korean ] = "ÀÌ ÄÁÆ®·Ñ ·Îµå½Ã¿¡ ¿À·ù°¡ ¹ß»ıÇÏ¿´½À´Ï´Ù. ±×·¯¹Ç·Î ÇÃ·¹ÀÌ½ºÈ¦´õ·Î ´ëÃ¼µÇ¾ú½À´Ï´Ù.";
