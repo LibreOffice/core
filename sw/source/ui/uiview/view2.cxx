@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:47:54 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,9 +118,9 @@
 #ifndef _TXTCMP_HXX //autogen
 #include <svtools/txtcmp.hxx>
 #endif
-#ifndef _SVX_ZOOM_HXX //autogen
-#include <svx/zoom.hxx>
-#endif
+//CHINA001 #ifndef _SVX_ZOOM_HXX //autogen
+//CHINA001 #include <svx/zoom.hxx>
+//CHINA001 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -313,6 +313,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 //Damit die Seitenanzeige in der Statusleiste nicht unnoetig erfolgt.
 static String sLstPg;
@@ -1120,7 +1123,8 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
             {
                 const SfxItemSet *pSet = 0;
-                SvxZoomDialog *pDlg = 0;
+                //CHINA001 SvxZoomDialog *pDlg = 0;
+                AbstractSvxZoomDialog *pDlg = 0;
                 if ( pArgs )
                     pSet = pArgs;
                 else if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
@@ -1140,7 +1144,14 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     }
                     aCoreSet.Put( aZoom );
 
-                    pDlg = new SvxZoomDialog( &GetViewFrame()->GetWindow(), aCoreSet );
+                    //CHINA001 pDlg = new SvxZoomDialog( &GetViewFrame()->GetWindow(), aCoreSet );
+                    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                    if(pFact)
+                    {
+                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet, ResId(RID_SVXDLG_ZOOM));
+                        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                    }
+
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
 
                     if( pDlg->Execute() != RET_CANCEL )
