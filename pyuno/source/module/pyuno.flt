@@ -8,3 +8,6 @@
 ?AVRuntimeException@uno@star@sun@com@@
 ?AVUnknownPropertyException@beans@star@sun@com@@
 ?AVInvocationTargetException@reflection@star@sun@com@@
+__CT??_R0?AVbad_alloc@std@@@8??0bad_alloc@std@@QAE@ABV01@@Z12
+__CT??_R0?AVexception@@@8??0exception@@QAE@ABV0@@Z12
+__CTA2?AVbad_alloc@std@@
