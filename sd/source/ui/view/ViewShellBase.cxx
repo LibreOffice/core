@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:41:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 
 #include "ViewShellBase.hxx"
 
-#include "../toolpanel/controls/MasterPageContainer.hxx"
 #include "ShellFactory.hxx"
 #ifndef SD_RESID_HXX
 #include "sdresid.hxx"
@@ -440,9 +439,6 @@ void ViewShellBase::SFX_NOTIFY(SfxBroadcaster& rBC,
 
     if (rHint.IsA(TYPE(SfxEventHint)))
     {
-        OSL_TRACE ("ViewShellBase::SFX_NOTIFY: %p %d",
-            this,
-            static_cast<const SfxEventHint&>(rHint).GetEventId());
         switch (static_cast<const SfxEventHint&>(rHint).GetEventId())
         {
             case SFX_EVENT_OPENDOC:
