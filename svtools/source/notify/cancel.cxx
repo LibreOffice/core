@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cancel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:25:58 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,11 @@
 #endif
 
 #include <vos/mutex.hxx>
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
-static ::vos::OMutex aMutex;
+namespace { struct lclMutex : public rtl::Static< ::vos::OMutex, lclMutex >{}; }
 
 //=========================================================================
 
@@ -103,7 +106,7 @@ BOOL SfxCancelManager::CanCancel() const
 */
 
 {
-    ::vos::OGuard aGuard( aMutex );
+    ::vos::OGuard aGuard( lclMutex::get() );
     return _aJobs.Count() > 0 || ( _pParent && _pParent->CanCancel() );
 }
 
@@ -118,7 +121,7 @@ void SfxCancelManager::Cancel( BOOL bDeep )
 */
 
 {
-    ::vos::OGuard aGuard( aMutex );
+    ::vos::OGuard aGuard( lclMutex::get() );
     SfxCancelManagerWeak xWeak( this );
     for ( USHORT n = _aJobs.Count(); n-- && xWeak.Is(); )
         if ( n < _aJobs.Count() )
@@ -147,7 +150,7 @@ void SfxCancelManager::SFX_INSERT_CANCELLABLE( SfxCancellable *pJob )
     }
 #endif
 
-    ::vos::OClearableGuard aGuard( aMutex );
+    ::vos::OClearableGuard aGuard( lclMutex::get() );
     _aJobs.C40_INSERT( SfxCancellable, pJob, _aJobs.Count() );
 
     aGuard.clear();
@@ -168,7 +171,7 @@ void SfxCancelManager::SFX_REMOVE_CANCELLABLE( SfxCancellable *pJob )
 */
 
 {
-    ::vos::OClearableGuard aGuard( aMutex );
+    ::vos::OClearableGuard aGuard( lclMutex::get() );
     const SfxCancellable *pTmp = pJob;
     USHORT nPos = _aJobs.GetPos( pTmp );
     if ( nPos != 0xFFFF )
