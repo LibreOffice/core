@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dif.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:51:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
+#endif
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 
@@ -213,19 +217,19 @@ private:
     {
         UINT32          nNumFormat;
 
-        UINT16          nStart;
-        UINT16          nEnd;
+        SCROW           nStart;
+        SCROW           nEnd;
     };
 
     ENTRY*              pAkt;
 
     inline              DifColumn( void );
                         ~DifColumn();
-    void                SetLogical( UINT16 nRow );
-    void                SetNumFormat( UINT16 nRow, const UINT32 nNumFormat );
-    void                NewEntry( const UINT16 nPos, const UINT32 nNumFormat );
-    void                Apply( ScDocument&, const UINT16 nCol, const UINT16 nTab, const ScPatternAttr& );
-    void                Apply( ScDocument &rDoc, const UINT16 nCol, const UINT16 nTab );
+    void                SetLogical( SCROW nRow );
+    void                SetNumFormat( SCROW nRow, const UINT32 nNumFormat );
+    void                NewEntry( const SCROW nPos, const UINT32 nNumFormat );
+    void                Apply( ScDocument&, const SCCOL nCol, const SCTAB nTab, const ScPatternAttr& );
+    void                Apply( ScDocument &rDoc, const SCCOL nCol, const SCTAB nTab );
 public:     // geht niemanden etwas an...
 };
 
@@ -246,15 +250,15 @@ private:
 public:
                         DifAttrCache( const BOOL bPlain );
                         ~DifAttrCache();
-    inline void         SetLogical( const UINT16 nCol, const UINT16 nRow );
-    void                SetNumFormat( const UINT16 nCol, const UINT16 nRow, const UINT32 nNumFormat );
-    void                Apply( ScDocument&, UINT16 nTab );
+    inline void         SetLogical( const SCCOL nCol, const SCROW nRow );
+    void                SetNumFormat( const SCCOL nCol, const SCROW nRow, const UINT32 nNumFormat );
+    void                Apply( ScDocument&, SCTAB nTab );
 };
 
 
-inline void DifAttrCache::SetLogical( const UINT16 nCol, const UINT16 nRow )
+inline void DifAttrCache::SetLogical( const SCCOL nCol, const SCROW nRow )
 {
-    DBG_ASSERT( nCol <= MAXCOL, "-DifAttrCache::SetLogical(): Col zu gross!" );
+    DBG_ASSERT( ValidCol(nCol), "-DifAttrCache::SetLogical(): Col zu gross!" );
     DBG_ASSERT( bPlain, "*DifAttrCache::SetLogical(): muss Plain sein!" );
 
     if( !ppCols[ nCol ] )
