@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:55:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
 #include <svtools/transfer.hxx>
 #include <svtools/urlbmk.hxx>
 #include <vcl/msgbox.hxx>
+#include <avmedia/mediawindow.hxx>
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -543,6 +544,15 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
     INetURLObject aURL;
     aURL.SetSmartURL( rFile );
     String aStrURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
+
+    // is it a media URL?
+    if( ::avmedia::MediaWindow::isMediaURL( aStrURL ) )
+    {
+        const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aStrURL );
+        return BOOL( 0 != GetViewData()->GetDispatcher().Execute(
+                                SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON,
+                                &aMediaURLItem, 0L ) );
+    }
 
     if (!bLink)     // bei bLink nur Grafik oder URL
     {
