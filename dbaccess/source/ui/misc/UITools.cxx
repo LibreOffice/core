@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:35:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1478,6 +1478,12 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
 ::rtl::OUString getDriverDsnPrefixNodeName()
 {
     static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DriverDsnPrefix"));
+    return s_sNodeName;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString getDriverExtensionNodeName()
+{
+    static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("Extension"));
     return s_sNodeName;
 }
 // -----------------------------------------------------------------------------
