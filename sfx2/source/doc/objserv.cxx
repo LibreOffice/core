@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:04:19 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,14 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SECURITY_DOCUMENTSIGNATURESINFORMATION_HPP_
+#include <com/sun/star/security/DocumentSignaturesInformation.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_SECURITY_XDOCUMENTDIGITALSIGNATURES_HPP_
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#endif
+
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
@@ -170,10 +178,23 @@
 #include "filedlghelper.hxx"
 #include "sfxhelp.hxx"
 
+// xmlsec05, check with SFX team
+// MT: HACK
+#include "../appl/app.hrc"
+#if 0
+#include <unotools/tempfile.hxx>
+#include <osl/file.hxx>
+#endif
+#include <storagehelper.hxx>
+#include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+
+
 #ifndef _SFX_HELPID_HRC
 #include "helpid.hrc"
 #endif
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
@@ -333,6 +354,9 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                             ( pRequest->GetSlot() == SID_DIRECTEXPORTDOCASPDF ));
     sal_Bool bIsExport = ( pRequest->GetSlot() == SID_EXPORTDOC ) || bIsPDFExport;
     sal_Bool bSuppressFilterOptionsDialog = sal_False;
+
+    if ( QueryHiddenInformation( bIsPDFExport ? WhenCreatingPDF : WhenSaving, NULL ) != RET_YES )
+        return sal_True;
 
     // Parameter to return if user cancelled a optional configuration dialog and
     // there for cancelled the whole save procedure.
@@ -858,6 +882,20 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
     pImp->bSetStandardName=FALSE;
     USHORT nId = rReq.GetSlot();
+
+    if( nId == SID_SIGNATURE )
+    {
+//      Reference< com::sun::star::embed::XStorage > xStore;
+//      Reference< com::sun::star::security::XDocumentDigitalSignatures > xD(
+//          comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), UNO_QUERY );
+//      if( xD.is() )
+//          xD->ShowPackageSignatures( xStore );
+
+        if ( QueryHiddenInformation( WhenSigning, NULL ) == RET_YES )
+            SignDocumentContent();
+        return;
+    }
+
     if ( !GetMedium() && nId != SID_CLOSEDOC )
     {
         rReq.Ignore();
@@ -952,7 +990,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         }
         else
         {
-            // fremdes Format mit m"oglichem Verlust (aber nicht per API) wenn noch nicht gewarnt und anschlie�end im
+            // fremdes Format mit m"oglichem Verlust (aber nicht per API) wenn noch nicht gewarnt und anschlie?end im
             // alien format gespeichert wurde
             if ( !( pCurFilter->IsOwnFormat() && pCurFilter->GetVersion() == SOFFICE_FILEFORMAT_CURRENT || ( pCurFilter->GetFilterFlags() & SFX_FILTER_SILENTEXPORT ) )
                  && ( !pImp->bDidWarnFormat || !pImp->bDidDangerousSave ) )
@@ -1084,7 +1122,21 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             SfxErrorContext aEc(ERRCTX_SFX_SAVEDOC,GetTitle());
             SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEDOC,this));
 
+            // xmlsec05, check with SFX team
+            if ( ( GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_OK ) || ( GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_INVALID )
+                || ( GetScriptingSignatureState() == SIGNATURESTATE_SIGNATURES_OK ) || ( GetScriptingSignatureState() == SIGNATURESTATE_SIGNATURES_INVALID ) )
+            {
+                if( QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_LOSINGSIGNATURE ) ).Execute() != RET_YES )
+                    return;
+            }
+
             BOOL bOk = Save_Impl( rReq.GetArgs() );
+
+            if ( bOk )
+            {
+                pImp->nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES;
+                pImp->nScriptingSignatureState = SIGNATURESTATE_NOSIGNATURES;
+            }
 
             ULONG lErr=GetErrorCode();
             if( !lErr && !bOk )
@@ -1178,7 +1230,20 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     SetError( ERRCODE_IO_INVALIDPARAMETER );
             }
 
+            // xmlsec05, check with SFX team
+            if ( ( GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_OK ) || ( GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_INVALID ) )
+            {
+                if( QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_LOSINGSIGNATURE ) ).Execute() != RET_YES )
+                    return;
+            }
+
             BOOL bOk = GUISaveAs_Impl(nId == SID_SAVEASURL, &rReq);
+
+            if ( bOk )
+            {
+                pImp->nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES;
+                pImp->nScriptingSignatureState = SIGNATURESTATE_NOSIGNATURES;
+            }
             ULONG lErr=GetErrorCode();
             if ( !lErr && !bOk )
                 lErr=ERRCODE_IO_GENERAL;
@@ -1692,6 +1757,11 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         SID_FILE_NAME, GetMedium()->GetName() ) );
                 break;
             }
+            case SID_SIGNATURE:
+            {
+                rSet.Put( SfxUInt16Item( SID_SIGNATURE, GetDocumentSignatureState() ) );
+                break;
+            }
         }
     }
 }
@@ -1897,3 +1967,130 @@ void SfxObjectShell::StateView_Impl(SfxItemSet &rSet)
 {
 }
 
+
+// xmlsec05, check with SFX team
+
+sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
+{
+    sal_Int16* pState = bScriptingContent ? &pImp->nScriptingSignatureState : &pImp->nDocumentSignatureState;
+
+    if ( *pState == SIGNATURESTATE_UNKNOWN )
+    {
+        *pState = SIGNATURESTATE_NOSIGNATURES;
+
+        if ( GetMedium() && GetMedium()->GetName().Len() )
+        {
+            uno::Reference< security::XDocumentDigitalSignatures > xD(
+                comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
+
+            if ( xD.is() )
+            {
+                // HACK: No Storage API befoer CWS MAV09
+                rtl::OUString aDocFileNameURL = GetMedium()->GetName();
+                uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
+                        aDocFileNameURL, embed::ElementModes::READ, comphelper::getProcessServiceFactory() );
+                if ( xStore.is() )
+                {
+                    ::com::sun::star::uno::Sequence< security::DocumentSignaturesInformation > aInfos;
+                    if ( bScriptingContent )
+                        aInfos = xD->VerifyScriptingContentSignatures( xStore );
+                    else
+                        aInfos = xD->VerifyDocumentContentSignatures( xStore );
+                    int nInfos = aInfos.getLength();
+                    if( nInfos )
+                    {
+                        *pState = SIGNATURESTATE_SIGNATURES_OK;
+                        for ( int n = 0; n < nInfos; n++ )
+                        {
+                            if ( !aInfos[n].SignatureIsValid )
+                            {
+                                *pState = SIGNATURESTATE_SIGNATURES_BROKEN;
+                                break; // we know enough
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if ( *pState == SIGNATURESTATE_SIGNATURES_OK )
+    {
+        if ( IsModified() )
+            *pState = SIGNATURESTATE_SIGNATURES_INVALID;
+    }
+
+    return (sal_uInt16)*pState;
+}
+
+void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
+{
+    if ( IsModified() || !GetMedium() || !GetMedium()->GetName().Len() )
+    {
+        // Document must be stored....
+        // xmlsec05, check with SFX team
+        if( QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_SAVEBEFORESIGN ) ).Execute() == RET_YES )
+        {
+            int nId = SID_SAVEDOC;
+            if ( !GetMedium() || !GetMedium()->GetName().Len() )
+                nId = SID_SAVEASDOC;
+            SfxRequest aSaveRequest( nId, 0, GetPool() );
+            ExecFile_Impl( aSaveRequest );
+        }
+        if ( IsModified() || !GetMedium() || !GetMedium()->GetName().Len() )
+            return;
+
+    }
+
+    // Check if it is stored in a OOo format...
+    if ( GetMedium() && GetMedium()->GetFilter() && !GetMedium()->GetFilter()->IsOwnFormat() )
+    {
+        InfoBox( NULL, SfxResId( RID_XMLSEC_INFO_WRONGDOCFORMAT ) ).Execute();
+        return;
+    }
+
+
+
+    if ( !IsHandsOff() )
+           DoHandsOff();
+
+    GetMedium()->SignContents_Impl( bScriptingContent );
+
+    if ( IsHandsOff() )
+    {
+        if ( !DoSaveCompleted( pMedium ) )
+            DBG_ERROR("Case not handled - no way to get a storage!");
+    }
+    else
+        DoSaveCompleted( (SvStorage*)0 );
+
+    if ( bScriptingContent )
+        pImp->nScriptingSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
+    else
+        pImp->nDocumentSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
+
+    Invalidate( SID_SIGNATURE );
+    Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
+}
+
+
+
+sal_uInt16 SfxObjectShell::GetDocumentSignatureState()
+{
+    return ImplGetSignatureState( FALSE );
+}
+
+void SfxObjectShell::SignDocumentContent()
+{
+    ImplSign( FALSE );
+}
+
+sal_uInt16 SfxObjectShell::GetScriptingSignatureState()
+{
+    return ImplGetSignatureState( TRUE );
+}
+
+void SfxObjectShell::SignScriptingContent()
+{
+    ImplSign( TRUE );
+}
