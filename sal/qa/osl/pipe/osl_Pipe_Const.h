@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Pipe_Const.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-08 13:22:20 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ OSLTEST_DECLARE_USTRING( TestPipe,  "testpipe2" );
 OSLTEST_DECLARE_USTRING( TestPipe1,  "testpipe1" );
 OSLTEST_DECLARE_USTRING( TestString, "Sun Microsystems" );
 
-const char pTestString[17] = "Sun Microsystems";
-
+const char pTestString1[17] = "Sun Microsystems";
+const char pTestString2[18] = "test pipe PASS/OK";
 
 #endif /* _OSL_PIPE_CONST_H_ */
