@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.8 $
+*  $Revision: 1.9 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-10-23 14:22:03 $
+*  last change: $Author: dfoster $ $Date: 2002-10-24 08:44:09 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -313,7 +313,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
 {
     OSL_TRACE( "ScriptStorageManager::disposing started" );
     Reference< beans::XPropertySet > xScriptingContext(Source.Source, UNO_QUERY );
-    validateXRef( xScriptingContext, "ScriptStorageManager::disposing can't get script context from EventObject" );
+    validateXRef( xScriptingContext, "ScriptStorageManager::dispjarStreamMap.osing can't get script context from EventObject" );
     scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
         scripting_constants::ScriptingConstantsPool::instance();
 
