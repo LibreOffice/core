@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hdu $ $Date: 2001-12-10 15:05:54 $
+ *  last change: $Author: cp $ $Date: 2002-01-24 11:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1057,7 +1057,7 @@ static char const aImplSubsComic[] = "comicsansms;kidprint;";
 static char const aImplSubsPalaceScript[] = "palacescript;palacescriptmt;arioso;shelley";
 static char const aImplSubsSheffield[] = "sheffield;conga;centurygothic;copperlategothic;felixtitling";
 
-static char const aImplSubsJPGothic[] = "msgothic;mspgothic;hggothic;hggothicb;hggothice;gothic;andalesansui";
+static char const aImplSubsJPGothic[] = "msgothic;mspgothic;hggothic;hggothicb;hggothice;andalesansui;gothic";
 static char const aImplSubsJPMincho[] = "hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou";
 static char const aImplSubsSCSun[] = "msunglightsc;simsun;nsimsun;zycjksun";
 static char const aImplSubsSCHei[] = "simhei;fzhei;zycjkhei;mhei;hei;andalesansui";
@@ -2128,7 +2128,7 @@ String GetSubsFontName( const String& rName, ULONG nFlags )
     if( nFlags == (SUBSFONT_MS|SUBSFONT_ONLYONE)
     &&  ( aOrgName.EqualsAscii( "starsymbol" )
       ||  aOrgName.EqualsAscii( "opensymbol" ) ) )
-    return aName;
+        return aName;
 
     // Search Font in FontList
     const ImplFontNameAttr* pFontAttr = ImplGetFontNameAttr( aOrgName );
@@ -2805,8 +2805,18 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
 
         // Search, if ShortName is available
         if ( aSearchShortName != aSearchName )
+        {
+            /* #96738# don't use mincho as an replacement for "MS Mincho" on X11: Mincho is
+               a korean bitmap font that is not suitable here. Use the font replacement table,
+               that automatically leads to the desired "HG Mincho Light J". Same story for
+               MS Gothic, there are thai and korean "Gothic" fonts, so we even prefer Andale */
+            #ifdef UNX
+            static String aMS_Mincho = String(RTL_CONSTASCII_USTRINGPARAM("msmincho"));
+            static String aMS_Gothic = String(RTL_CONSTASCII_USTRINGPARAM("msgothic"));
+            if ((aSearchName != aMS_Mincho) && (aSearchName != aMS_Gothic))
+            #endif
             pFoundData = pFontList->ImplFind( aSearchShortName );
-
+        }
         if ( !pFoundData && aSearchName.Len() )
         {
             pFontAttr = ImplGetFontNameAttr( aSearchName );
