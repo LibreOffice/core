@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-31 13:15:19 $
+ *  last change: $Author: tbe $ $Date: 2002-11-01 10:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1376,7 +1376,7 @@ void Menu::CheckItem( USHORT nItemId, BOOL bCheck )
     USHORT nPos;
     MenuItemData* pData = pItemList->GetData( nItemId, nPos );
 
-    if ( !pData )
+    if ( !pData || pData->bChecked == bCheck )
         return;
 
     // Wenn RadioCheck, dann vorherigen unchecken
@@ -1428,6 +1428,8 @@ void Menu::CheckItem( USHORT nItemId, BOOL bCheck )
     }
 
     pData->bChecked = bCheck;
+
+    ImplCallEventListeners( bCheck ? VCLEVENT_MENU_ITEMCHECKED : VCLEVENT_MENU_ITEMUNCHECKED, nPos );
 }
 
 BOOL Menu::IsItemChecked( USHORT nItemId ) const
