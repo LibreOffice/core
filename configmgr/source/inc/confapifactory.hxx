@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:40:25 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,9 +158,19 @@ namespace configmgr
     {
         uno::Reference< uno::XInterface > SAL_CALL instantiateUpdateMerger
         ( CreationContext const& rServiceManager );
+        uno::Reference<uno::XInterface> SAL_CALL
+            instantiateSingleBackendAdapter(
+                    const CreationContext& aServiceManager) ;
 
         const ServiceInfo* getUpdateMergerServiceInfo();
+        const ServiceInfo *getSingleBackendAdapterServiceInfo(void) ;
     }
+    namespace localbe {
+        uno::Reference<uno::XInterface> SAL_CALL instantiateLocalBackend(
+                const CreationContext& aServiceManager) ;
+
+        const ServiceInfo *getLocalBackendServiceInfo(void) ;
+    } // localbe
 } //  namespace configmgr
 
 #endif // CONFIGMGR_API_FACTORY_HXX_
