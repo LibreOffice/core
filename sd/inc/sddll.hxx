@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-16 16:01:03 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _SDDLL_HXX
 #define _SDDLL_HXX
+
+#ifndef _SDMOD_HXX
+#include "sdmod.hxx"
+#endif
 
 #ifndef _SFXMODULE_HXX //autogen
 #include <sfx2/module.hxx>
@@ -120,38 +124,8 @@ public:
 |*
 \************************************************************************/
 
-class SdModuleDummy : public SfxModule
-{
-public:
-    TYPEINFO();
-
-                // SvFactory name convention:
-                // 'p' + SfxObjectShell-subclass + 'Factory'
-    SotFactory* pSdDrawDocShellFactory;
-    SotFactory* pSdGraphicDocShellFactory;
-
-               SdModuleDummy(ResMgr* pResMgr, BOOL bDummy,
-                             SotFactory* pDrawObjFact, SotFactory* pGraphicObjFact)
-               : SfxModule(pResMgr, bDummy,
-                            // Der erste Factory-Pointer muss gueltig sein!
-                           (SfxObjectFactory*) (pDrawObjFact ? pDrawObjFact    : pGraphicObjFact),
-                           (SfxObjectFactory*) (pDrawObjFact ? pGraphicObjFact : pDrawObjFact),
-                           0L),
-                 pSdDrawDocShellFactory( pDrawObjFact ),
-                 pSdGraphicDocShellFactory( pGraphicObjFact )
-               {}
-
-    virtual SfxModule*  Load();
-
-    static SvGlobalName GetID(USHORT nFileFormat);
-    static USHORT       HasID(const SvGlobalName& rName);
-};
-
-
-
-
 #ifndef _SD_DLL                      // Das define muss im Draw gesetzt werden
-#define SD_MOD() ( *(SdModuleDummy**) GetAppData(SHL_DRAW) )
+#define SD_MOD() ( *(SdModule**) GetAppData(SHL_DRAW) )
 #endif
 
 #endif                               // _SDDLL_HXX
