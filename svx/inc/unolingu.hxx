@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-12 09:29:15 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,8 +292,8 @@ LanguageType                        SvxLocaleToLanguage(
 String  SvxGetDictionaryURL(const String &rDicName,
                             sal_Bool bIsUserDic = sal_True);
 
-//TL:TODO: soll mal den rictigen Rückgabetyp bekommen!
-sal_Bool    SvxAddEntryToDic(
+
+sal_uInt8    SvxAddEntryToDic(
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >  &rxDic,
     const ::rtl::OUString &rWord, sal_Bool bIsNeg,
