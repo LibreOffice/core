@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-10 08:23:31 $
+ *  last change: $Author: oj $ $Date: 2002-05-22 10:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,58 +457,123 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
     if(bRemove && (sal_Int32)m_aTableMap.size() < (nCount-1)) // if some connections could be removed
         childCountChanged(m_aTableMap.size() + 1);
 }
+namespace
+{
+    // -----------------------------------------------------------------------------
+    BOOL isScrollAllowed( OJoinTableView* _pView,long nDelta, BOOL bHoriz)
+    {
+        BOOL bRet = TRUE;
+        //////////////////////////////////////////////////////////////////////
+        // adjust ScrollBar-Positions
+        ScrollBar* pBar = _pView->GetVScrollBar();
+        if( bHoriz )
+            pBar = _pView->GetHScrollBar();
 
+        long nOldThumbPos = pBar->GetThumbPos();
+        long nNewThumbPos = nOldThumbPos + nDelta;
+        if( nNewThumbPos < 0 )
+            nNewThumbPos = 0;// bRet = FALSE;
+        else if( nNewThumbPos > pBar->GetRangeMax() )
+            nNewThumbPos = pBar->GetRangeMax();// bRet = FALSE;
+
+        if ( bHoriz )
+        {
+            if( nNewThumbPos == _pView->GetScrollOffset().X() )
+                return FALSE;
+        }
+        else if ( nNewThumbPos == _pView->GetScrollOffset().Y() )
+            return FALSE;
+
+        return bRet;
+    }
+    // -----------------------------------------------------------------------------
+    BOOL getMovementImpl(OJoinTableView* _pView,const Point& _rPoint,const Size& _rSize,long& _nScrollX,long& _nScrollY)
+    {
+        _nScrollY = _nScrollX = 0;
+        // data about the tab win
+        Point aUpperLeft = _rPoint;
+        // normalize with respect to visibility
+        aUpperLeft.X() -= _pView->GetScrollOffset().X();
+        aUpperLeft.Y() -= _pView->GetScrollOffset().Y();
+        Point aLowerRight(aUpperLeft.X() + _rSize.Width(), aUpperLeft.Y() + _rSize.Height());
+        //  aLowerRight.Y() -= GetScrollOffset().Y();
+
+        // data about ourself
+        Size aSize = _pView->getRealOutputSize(); //GetOutputSizePixel();
+
+        BOOL bVisbile = TRUE;
+        BOOL bFitsHor = (aUpperLeft.X() >= 0) && (aLowerRight.X() <= aSize.Width());
+        BOOL bFitsVert = (aUpperLeft.Y() >= 0) && (aLowerRight.Y() <= aSize.Height());
+        if (!bFitsHor || !bFitsVert)
+        {
+            if (!bFitsHor)
+            {
+                // ensure the visibility of the right border
+                if (aLowerRight.X() > aSize.Width())
+                    _nScrollX = (aLowerRight.X() - aSize.Width() + TABWIN_SPACING_X);
+
+                // ensure the cisibility of the left border (higher priority)
+                if (aUpperLeft.X() - _nScrollX < 0)
+                    _nScrollX = aUpperLeft.X() - TABWIN_SPACING_X;
+            }
+
+            if (!bFitsVert)
+            {
+                // lower border
+                if (aLowerRight.Y() > aSize.Height())
+                    _nScrollY = (aLowerRight.Y() - aSize.Height() + TABWIN_SPACING_Y);
+
+                // upper border
+                if (aUpperLeft.Y() - _nScrollY < 0)
+                    _nScrollY = aUpperLeft.Y() - TABWIN_SPACING_Y;
+            }
+
+            if (_nScrollX)
+                bVisbile = isScrollAllowed(_pView,_nScrollX, TRUE);
+
+            if (_nScrollY)
+                bVisbile = bVisbile && isScrollAllowed(_pView,_nScrollY, FALSE);
+
+            if( (_rPoint.X() + _rSize.Width() +_nScrollX + 1) >= _pView->GetHScrollBar()->GetRangeMax() )
+                bVisbile = FALSE;
+            else if( (_rPoint.Y() + _rSize.Height() + _nScrollY + 1) >= _pView->GetVScrollBar()->GetRangeMax() )
+                bVisbile = FALSE;
+
+        }
+
+
+        return bVisbile;
+    }
+} // end of ano namespace
+// -----------------------------------------------------------------------------
+BOOL OJoinTableView::isMovementAllowed(const Point& _rPoint,const Size& _rSize)
+{
+    long nX,nY;
+    return getMovementImpl(this,_rPoint,_rSize,nX,nY);
+}
 //------------------------------------------------------------------------------
 void OJoinTableView::EnsureVisible(const OTableWindow* _pWin)
 {
     // data about the tab win
     OTableWindowData* pData = _pWin->GetData();
-    Point aUpperLeft = pData->GetPosition();
-    // normalize with respect to visibility
-    aUpperLeft.X() -= GetScrollOffset().X();
-    aUpperLeft.Y() -= GetScrollOffset().Y();
-    Point aLowerRight(aUpperLeft.X() + pData->GetSize().Width(), aUpperLeft.Y() + pData->GetSize().Height());
-    //  aLowerRight.Y() -= GetScrollOffset().Y();
+    //  Point aUpperLeft = pData->GetPosition();
+    EnsureVisible( pData->GetPosition() , pData->GetSize());
+    Invalidate(INVALIDATE_NOCHILDREN);
+}
+//------------------------------------------------------------------------------
+void OJoinTableView::EnsureVisible(const Point& _rPoint,const Size& _rSize)
+{
+    long nScrollX,nScrollY;
 
-    // data about ourself
-    Size aSize = GetOutputSizePixel();
-
-    BOOL bFitsHor = (aUpperLeft.X() >= 0) && (aLowerRight.X() <= aSize.Width());
-    BOOL bFitsVert = (aUpperLeft.Y() >= 0) && (aLowerRight.Y() <= aSize.Height());
-    if (!bFitsHor || !bFitsVert)
+    if ( getMovementImpl(this,_rPoint,_rSize,nScrollX,nScrollY) )
     {
-        long nScrollX(0);
-        if (!bFitsHor)
-        {
-            // ensure the visibility of the right border
-            if (aLowerRight.X() > aSize.Width())
-                nScrollX = (aLowerRight.X() - aSize.Width() + TABWIN_SPACING_X);
-
-            // ensure the cisibility of the left border (higher priority)
-            if (aUpperLeft.X() - nScrollX < 0)
-                nScrollX = aUpperLeft.X() - TABWIN_SPACING_X;
-        }
-
-        long nScrollY(0);
-        if (!bFitsVert)
-        {
-            // lower border
-            if (aLowerRight.Y() > aSize.Height())
-                nScrollY = (aLowerRight.Y() - aSize.Height() + TABWIN_SPACING_Y);
-
-            // upper border
-            if (aUpperLeft.Y() - nScrollY < 0)
-                nScrollY = aUpperLeft.Y() - TABWIN_SPACING_Y;
-        }
-
+        BOOL bVisbile = TRUE;
         if (nScrollX)
-            Scroll(nScrollX, TRUE, TRUE);
+            bVisbile = Scroll(nScrollX, TRUE, TRUE);
 
         if (nScrollY)
-            Scroll(nScrollY, FALSE, TRUE);
+            bVisbile = bVisbile && Scroll(nScrollY, FALSE, TRUE);
     }
-
-    Invalidate(INVALIDATE_NOCHILDREN);
 }
 
 //------------------------------------------------------------------------------
@@ -765,9 +830,9 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
             if( aDragWinPos.Y() < 0 )
                 aDragWinPos.Y() = 0;
             if( (aDragWinPos.X() + aDragWinSize.Width()) > m_aOutputSize.Width() )
-                aDragWinPos.X() = m_aOutputSize.Width() - aDragWinSize.Width();
+                aDragWinPos.X() = m_aOutputSize.Width() - aDragWinSize.Width() - 1;
             if( (aDragWinPos.Y() + aDragWinSize.Height()) > m_aOutputSize.Height() )
-                aDragWinPos.Y() = m_aOutputSize.Height() - aDragWinSize.Height();
+                aDragWinPos.Y() = m_aOutputSize.Height() - aDragWinSize.Height() - 1;
             if( aDragWinPos.X() < 0 )
                 aDragWinPos.X() = 0;
             if( aDragWinPos.Y() < 0 )
