@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:53:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #include <svx/frmdiritem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/editeng.hxx>
+#include <svx/svditer.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdocapt.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/poolcach.hxx>
@@ -473,6 +476,73 @@ BOOL ScDocument::IsVisible( USHORT nTab ) const
 
     return FALSE;
 }
+
+
+void ScDocument::SetLayoutRTL( USHORT nTab, BOOL bRTL )
+{
+    if ( nTab <= MAXTAB && pTab[nTab] )
+    {
+        pTab[nTab]->SetLayoutRTL( bRTL );       // only sets the flag
+        pTab[nTab]->SetDrawPageSize();
+
+        //  mirror existing objects:
+
+        if (pDrawLayer)
+        {
+            SdrPage* pPage = pDrawLayer->GetPage(nTab);
+            DBG_ASSERT(pPage,"Page ?");
+            if (pPage)
+            {
+                SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+                SdrObject* pObject = aIter.Next();
+                while (pObject)
+                {
+                    //  objects with ScDrawObjData are re-positioned in SetPageSize,
+                    //  don't mirror again
+                    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
+                    if ( !pData )
+                        pDrawLayer->MirrorRTL( pObject );
+                    else if ( pObject->ISA( SdrCaptionObj ) )
+                    {
+                        //  Re-positioning only moves the whole object so the tail
+                        //  points to the cell. The position of the text area relative
+                        //  to the tail must be mirrored here.
+
+                        SdrCaptionObj* pCaption = (SdrCaptionObj*) pObject;
+                        Rectangle aOldRect = pCaption->GetLogicRect();
+                        long nTail = pCaption->GetTailPos().X();
+                        Rectangle aNewRect = aOldRect;
+
+                        aNewRect.Left() = 2 * nTail - aOldRect.Right();
+                        aNewRect.Right() = 2 * nTail - aOldRect.Left();
+
+                        pCaption->SetLogicRect( aNewRect );
+                    }
+
+                    pObject = aIter.Next();
+                }
+            }
+        }
+    }
+}
+
+
+BOOL ScDocument::IsLayoutRTL( USHORT nTab ) const
+{
+    if ( nTab <= MAXTAB && pTab[nTab] )
+        return pTab[nTab]->IsLayoutRTL();
+
+    return FALSE;
+}
+
+
+BOOL ScDocument::IsNegativePage( USHORT nTab ) const
+{
+    //  Negative page area is always used for RTL layout.
+    //  The separate method is used to find all RTL handling of drawing objects.
+    return IsLayoutRTL( nTab );
+}
+
 
 /* ----------------------------------------------------------------------------
     benutzten Bereich suchen:
@@ -3155,8 +3225,18 @@ BOOL ScDocument::HasAttrib( USHORT nCol1, USHORT nRow1, USHORT nTab1,
                 if ( GetEditTextDirection(i) == EE_HTEXTDIR_R2L )       // sheet default
                     bFound = TRUE;
             }
+            if ( nMask & HASATTR_RIGHTORCENTER )
+            {
+                //  On a RTL sheet, don't start to look for the default left value
+                //  (which is then logically right), instead always assume TRUE.
+                //  That way, ScAttrArray::HasAttrib doesn't have to handle RTL sheets.
 
-            bFound |= pTab[i]->HasAttrib( nCol1, nRow1, nCol2, nRow2, nMask );
+                if ( IsLayoutRTL(i) )
+                    bFound = TRUE;
+            }
+
+            if ( !bFound )
+                bFound = pTab[i]->HasAttrib( nCol1, nRow1, nCol2, nRow2, nMask );
         }
 
     return bFound;
