@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:14:59 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,10 +459,8 @@ FmXGridPeer* SbaXGridControl::imp_CreatePeer(Window* pParent)
 //------------------------------------------------------------------------------
 Any SAL_CALL SbaXGridControl::queryInterface(const Type& _rType) throw (RuntimeException)
 {
-    Any aRet = ::cppu::queryInterface(_rType,(::com::sun::star::frame::XDispatch*)this);
-    if(aRet.hasValue())
-        return aRet;
-    return FmXGridControl::queryInterface(_rType);
+    Any aRet = FmXGridControl::queryInterface(_rType);
+    return aRet.hasValue() ? aRet : ::cppu::queryInterface(_rType,(::com::sun::star::frame::XDispatch*)this);
 }
 
 //------------------------------------------------------------------------------
@@ -480,8 +478,17 @@ Sequence< Type > SAL_CALL SbaXGridControl::getTypes(  ) throw (RuntimeException)
 //------------------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL SbaXGridControl::getImplementationId(  ) throw (RuntimeException)
 {
-    static ::cppu::OImplementationId aId;
-    return aId.getImplementationId();
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
 }
 
 //---------------------------------------------------------------------------------------
@@ -568,6 +575,7 @@ void SAL_CALL SbaXGridControl::dispose(void) throw( RuntimeException )
             (*aIter).second = NULL;
         }
     }
+    StatusMultiplexerArray().swap(m_aStatusMultiplexer);
 
     FmXGridControl::dispose();
 }
@@ -575,7 +583,7 @@ void SAL_CALL SbaXGridControl::dispose(void) throw( RuntimeException )
 //=======================================================================================
 // SbaXGridPeer
 //=======================================================================================
-DBG_NAME(SbaXGridPeer );
+DBG_NAME(SbaXGridPeer )
 //---------------------------------------------------------------------------------------
 SbaXGridPeer::SbaXGridPeer(const Reference< XMultiServiceFactory >& _rM)
 : FmXGridPeer(_rM)

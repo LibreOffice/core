@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:31:34 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,8 +430,17 @@ Sequence< Type > SAL_CALL SbaTableQueryBrowser::getTypes(  ) throw (RuntimeExcep
 //------------------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL SbaTableQueryBrowser::getImplementationId(  ) throw (RuntimeException)
 {
-    static ::cppu::OImplementationId aId;
-    return aId.getImplementationId();
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
 }
 
 //------------------------------------------------------------------------------
@@ -2377,7 +2386,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
     // check if need to rebuild the rowset
     sal_Bool bRebuild = xOldConnection != xConnection || nOldType != nCommandType || aName != aOldName;
 
-    Reference< ::com::sun::star::form::XLoadable >  xLoadable(getRowSet(),UNO_QUERY);
+    Reference< ::com::sun::star::form::XLoadable >  xLoadable = getLoadable();
     bRebuild |= !xLoadable->isLoaded();
     if(bRebuild)
     {
@@ -2902,7 +2911,7 @@ void SbaTableQueryBrowser::unloadAndCleanup(sal_Bool _bDisposeConnection, sal_Bo
 #endif
 
         // unload the form
-        Reference< XLoadable > xLoadable(getRowSet(), UNO_QUERY);
+        Reference< XLoadable > xLoadable = getLoadable();
         if (xLoadable->isLoaded())
             xLoadable->unload();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineData.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:06:09 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,11 @@ namespace dbaui
             else
                 m_aDestFieldName = strFieldName;
         }
-        void SetSourceFieldName( const ::rtl::OUString& rSourceFieldName ){ SetFieldName(JTCS_FROM, rSourceFieldName); }
+        void SetSourceFieldName( const ::rtl::OUString& rSourceFieldName){ SetFieldName(JTCS_FROM, rSourceFieldName); }
         void SetDestFieldName( const ::rtl::OUString& rDestFieldName ){ SetFieldName(JTCS_TO, rDestFieldName); }
+
+        inline bool clearSourceFieldName() { SetSourceFieldName(::rtl::OUString()); return true;}
+        inline bool clearDestFieldName() { SetDestFieldName(::rtl::OUString());     return true;}
 
         // Memberzugriff (lesen)
         ::rtl::OUString GetFieldName(EConnectionSide nWhich) const { return (nWhich == JTCS_FROM) ? m_aSourceFieldName : m_aDestFieldName; }

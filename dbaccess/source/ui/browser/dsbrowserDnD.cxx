@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:31:34 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,6 +627,36 @@ namespace dbaui
         }
         return NULL;
     }
+    /// unary_function Functor object for class ZZ returntype is void
+    struct DataFlavorExVectorSlotPrec : ::std::unary_function<DataFlavorExVector::value_type,bool>
+    {
+        SbaTableQueryBrowser::EntryType eEntryType;
+        sal_Bool    bQueryDrop;
+        DataFlavorExVectorSlotPrec(const SbaTableQueryBrowser::EntryType &_eEntryType,sal_Bool _bQueryDrop)
+            : eEntryType(_eEntryType)
+            , bQueryDrop(_bQueryDrop)
+        {
+        }
+
+        inline bool operator()(const DataFlavorExVector::value_type& _aType)
+        {
+            switch (_aType.mnSotId)
+            {
+                case SOT_FORMAT_RTF:                    // RTF data descriptions
+                case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
+                case SOT_FORMATSTR_ID_HTML_SIMPLE:      // HTML data descriptions
+                case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
+                    return (SbaTableQueryBrowser::etTableContainer == eEntryType);
+                    break;
+                case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
+                case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command
+                    return ((SbaTableQueryBrowser::etQueryContainer == eEntryType) || ( !bQueryDrop && SbaTableQueryBrowser::etTableContainer == eEntryType));
+                    break;
+            }
+            return false;
+        }
+    };
+
 
     // -----------------------------------------------------------------------------
     sal_Int8 SbaTableQueryBrowser::queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors )
@@ -645,28 +675,9 @@ namespace dbaui
         // TODO: check if the data source is readonly
 
         // check for the concrete type
-        for (   DataFlavorExVector::const_iterator aSearch = _rFlavors.begin();
-                aSearch != _rFlavors.end();
-                ++aSearch
-            )
-        {
-            switch (aSearch->mnSotId)
-            {
-                case SOT_FORMAT_RTF:                    // RTF data descriptions
-                case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
-                case SOT_FORMATSTR_ID_HTML_SIMPLE:      // HTML data descriptions
-                case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
-                    if (etTableContainer == eEntryType)
-                        return DND_ACTION_COPY;
-                    break;
+        if(::std::find_if(_rFlavors.begin(),_rFlavors.end(),DataFlavorExVectorSlotPrec(eEntryType,sal_True)) != _rFlavors.end())
+            return DND_ACTION_COPY;
 
-                case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
-                case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command
-                    if (etQueryContainer == eEntryType)
-                        return DND_ACTION_COPY;
-                    break;
-            }
-        }
         return DND_ACTION_NONE;
     }
 
@@ -710,34 +721,8 @@ namespace dbaui
         m_aAsyncDrop.pDroppedAt     = NULL;
         m_aAsyncDrop.bTable         = sal_False;
 
-
-        sal_Bool bDoDrop = sal_False;
-
         // loop through the available formats and see what we can do ...
-        DataFlavorExVector::const_iterator aFormats = aDroppedData.GetDataFlavorExVector().begin();
-        DataFlavorExVector::const_iterator aFormatsEnd = aDroppedData.GetDataFlavorExVector().end();
-        for (;aFormats != aFormatsEnd; ++aFormats)
-        {
-            switch (aFormats->mnSotId)
-            {
-                case SOT_FORMAT_RTF:                    // RTF data descriptions
-                case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
-                case SOT_FORMATSTR_ID_HTML_SIMPLE:      // HTML data descriptions
-                case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
-                    bDoDrop = (etTableContainer == eEntryType);
-                    break;
-
-                case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command
-                case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
-                    bDoDrop =   (etQueryContainer == eEntryType)
-                            ||  (etTableContainer == eEntryType);
-                    break;
-            }
-            if (bDoDrop)
-                break;
-        }
-
-        if (bDoDrop)
+        if(::std::find_if(aDroppedData.GetDataFlavorExVector().begin(),aDroppedData.GetDataFlavorExVector().end(),DataFlavorExVectorSlotPrec(eEntryType,sal_False)) != aDroppedData.GetDataFlavorExVector().end())
         {
             m_aAsyncDrop.aDroppedData   = aDroppedData;
             m_aAsyncDrop.pDroppedAt     = pHitEntry;
@@ -1091,6 +1076,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2001/08/24 06:31:34  oj
+ *  #90015# code corrcetions for some speedup's
+ *
  *  Revision 1.25  2001/07/30 06:20:24  oj
  *  #90291# check if table should be appended
  *

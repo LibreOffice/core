@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:38:23 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,9 +245,11 @@ void OJoinController::setModified(sal_Bool _bModified)
 void OJoinController::Save(const Reference< XObjectOutputStream>& _rxOut)
 {
     OStreamSection aSection(_rxOut.get());
-
     // save all tablewindow data
     _rxOut << (sal_Int32)m_vTableData.size();
+
+    //  ::std::for_each(m_vTableData.begin(),m_vTableData.end(),::std::bind2nd(::std::mem_fun(&OTableWindowData::Save),_rxOut));
+
     ::std::vector< OTableWindowData*>::const_iterator aIter = m_vTableData.begin();
     for(;aIter != m_vTableData.end();++aIter)
         (*aIter)->Save(_rxOut);
@@ -267,6 +269,7 @@ void OJoinController::Load(const Reference< XObjectInputStream>& _rxIn)
 
         sal_Int32 nCount = 0;
         _rxIn >> nCount;
+        m_vTableData.reserve(nCount);
         for(sal_Int32 i=0;i<nCount;++i)
         {
             OTableWindowData* pData = createTableWindowData();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:41:10 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,22 +711,18 @@ void OGenericUnoController::removeStatusListener(const Reference< ::com::sun::st
 
     // now remove the listener from the deque
     ::osl::MutexGuard aGuard( m_aFeatureMutex);
-    ::std::deque< FeaturePair >::iterator aFeatIter = m_aFeaturesToInvalidate.begin();
-    for(;aFeatIter != m_aFeaturesToInvalidate.end();)
-    {
-        //  FeaturePair aPair = *aIter;
-        if(aFeatIter->xListener == aListener)
-            aFeatIter = m_aFeaturesToInvalidate.erase(aFeatIter);
-        else
-            ++aFeatIter;
-    }
+    m_aFeaturesToInvalidate.erase(
+        ::std::remove_if(   m_aFeaturesToInvalidate.begin(),
+                            m_aFeaturesToInvalidate.end(),
+                            ::std::bind2nd(FeaturePairFunctor(),aListener))
+        ,m_aFeaturesToInvalidate.end());
 }
 
 // -----------------------------------------------------------------------
 void OGenericUnoController::disposing()
 {
     // our status listeners, too
-    while (m_arrStatusListener.size() > 0)
+    while (!m_arrStatusListener.empty())
     {
         DispatchIterator iterCurrent = m_arrStatusListener.begin();
 
@@ -872,22 +868,18 @@ sal_uInt16 OGenericUnoController::SaveData(sal_Bool bUI, sal_Bool bForBrowsing)
     return (sal_uInt16)SaveModified();
 }
 // -------------------------------------------------------------------------
-URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
+URL OGenericUnoController::getURLForId(sal_Int32 _nId)
 {
     URL aReturn;
-    for (   ConstSupportedFeaturesIterator aLoop = m_aSupportedFeatures.begin();
-            aLoop != m_aSupportedFeatures.end();
-            ++aLoop
-        )
-        if (aLoop->second == _nId)
+    if (m_xUrlTransformer.is())
+    {
+        SupportedFeatures::iterator aIter = ::std::find_if(m_aSupportedFeatures.begin(),m_aSupportedFeatures.end(),::std::bind2nd(SupportedFeaturesFunc(),_nId));
+        if(m_aSupportedFeatures.end() != aIter && aIter->first.getLength())
         {
-            aReturn.Complete = aLoop->first;
-            break;
+            aReturn.Complete = aIter->first;
+            m_xUrlTransformer->parseStrict(aReturn);
         }
-
-    if (m_xUrlTransformer.is() && aReturn.Complete.getLength())
-        m_xUrlTransformer->parseStrict(aReturn);
-
+    }
     return aReturn;
 }
 

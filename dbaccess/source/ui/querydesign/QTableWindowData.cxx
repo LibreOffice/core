@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindowData.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:20:19 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ using namespace ::com::sun::star::uno;
 
 TYPEINIT1(OQueryTableWindowData, OTableWindowData);
 
-DBG_NAME(OQueryTableWindowData);
+DBG_NAME(OQueryTableWindowData)
 //==================================================================
 // class OQueryTableWindowData
 //==================================================================
@@ -98,17 +98,8 @@ OQueryTableWindowData::~OQueryTableWindowData()
 {
     DBG_DTOR(OQueryTableWindowData,NULL);
 }
-//------------------------------------------------------------------------------
-void OQueryTableWindowData::Load(const Reference<XObjectInputStream>& _rxIn)
-{
-    OTableWindowData::Load(_rxIn);
-}
-//------------------------------------------------------------------------------
-void OQueryTableWindowData::Save(const Reference<XObjectOutputStream>& _rxOut)
-{
-    OTableWindowData::Save(_rxOut);
-}
 // -----------------------------------------------------------------------------
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 09:59:51 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ namespace dbaui
         OTableWindow* GetSourceWin() const;
         OTableWindow* GetDestWin() const;
 
-        void RecalcLines();
+        bool RecalcLines();
 
         Rectangle   GetBoundingRect();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:51:12 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,6 +492,8 @@ void fillTypeInfo(  const ::com::sun::star::uno::Reference< ::com::sun::star::sd
             _rTypeInfoMap.insert(OTypeInfoMap::value_type(pInfo->nType,pInfo));
         }
         // for a faster index access
+        _rTypeInfoIters.reserve(_rTypeInfoMap.size());
+
         OTypeInfoMap::iterator aIter = _rTypeInfoMap.begin();
         for(;aIter != _rTypeInfoMap.end();++aIter)
             _rTypeInfoIters.push_back(aIter);

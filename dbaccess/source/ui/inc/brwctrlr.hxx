@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: avy $ $Date: 2001-08-22 08:58:42 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
 #include <com/sun/star/awt/XFocusListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
@@ -161,6 +164,8 @@ namespace dbaui
         friend class FormControllerImpl;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >             m_xRowSet;      // our rowset
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >   m_xColumnsSupplier; // queried from the rowset member
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >           m_xLoadable;        // queried from the rowset member as well
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >      m_xGridModel;   // the model of our grid
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >         m_xFormControllerImpl;
@@ -203,6 +208,9 @@ namespace dbaui
     // attribute access
     public:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >             getRowSet()         const   { return m_xRowSet; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >   getColumnsSupplier()const   { return m_xColumnsSupplier; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >           getLoadable()       const   { return m_xLoadable; }
+
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >      getFormComponent()  const   { return m_xGridModel; }
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >        getControlModel()   const   { return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > (m_xGridModel, ::com::sun::star::uno::UNO_QUERY); }
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getNumberFormatter()const   { return m_xFormatter; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 13:21:58 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,12 +290,12 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
             }
             else
             {
-                OCopyTableWizard::TNameMapping::const_iterator aIter =  m_pParent->m_mNameMapping.begin();
-                for(;aIter != m_pParent->m_mNameMapping.end();++aIter)
-                {
-                    if(aIter->second == ::rtl::OUString(aColumnName))
-                        break;
-                }
+                OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
+                                                                        ::std::compose1(
+                                                                            ::std::bind2nd(::std::equal_to< ::rtl::OUString>(), ::rtl::OUString(aColumnName)),
+                                                                            ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
+                                                                            );
+
                 DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must to be defined");
                 const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
                 ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
@@ -342,12 +342,11 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
             }
             else
             {
-                OCopyTableWizard::TNameMapping::const_iterator aIter =  m_pParent->m_mNameMapping.begin();
-                for(;aIter != m_pParent->m_mNameMapping.end();++aIter)
-                {
-                    if(aIter->second == ::rtl::OUString(aColumnName))
-                        break;
-                }
+                OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
+                                                                        ::std::compose1(
+                                                                            ::std::bind2nd(::std::equal_to< ::rtl::OUString>(), ::rtl::OUString(aColumnName)),
+                                                                            ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
+                                                                            );
                 DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must to be defined");
                 const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
                 ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
@@ -425,12 +424,11 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
         }
         else
         {
-            OCopyTableWizard::TNameMapping::const_iterator aIter =  m_pParent->m_mNameMapping.begin();
-            for(;aIter != m_pParent->m_mNameMapping.end();++aIter)
-            {
-                if(aIter->second == ::rtl::OUString(aColumnName))
-                    break;
-            }
+            OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
+                                                                        ::std::compose1(
+                                                                            ::std::bind2nd(::std::equal_to< ::rtl::OUString>(), ::rtl::OUString(aColumnName)),
+                                                                            ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
+                                                                            );
             DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must to be defined");
             const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
             ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);

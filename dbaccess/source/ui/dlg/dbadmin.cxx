@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:48:13 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1487,13 +1487,10 @@ void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::
 
         // for this, we need a string-controlled quick access to m_aIndirectPropTranslator
         StringSet aIndirectProps;
-        for (   ConstMapInt2StringIterator aIPLoop = m_aIndirectPropTranslator.begin();
-                aIPLoop != m_aIndirectPropTranslator.end();
-                ++aIPLoop
-            )
-        {
-            aIndirectProps.insert(aIPLoop->second);
-        }
+        ::std::transform(m_aIndirectPropTranslator.begin(),
+                         m_aIndirectPropTranslator.end(),
+                         ::std::insert_iterator<StringSet>(aIndirectProps,aIndirectProps.begin()),
+                         ::std::select2nd<MapInt2String::value_type>());
 
         // now check the to-be-preserved props
         ::std::vector< sal_Int32 > aRemoveIndexes;
@@ -2028,6 +2025,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.71  2001/08/23 14:48:13  fs
+ *  #88637# corrected error message
+ *
  *  Revision 1.70  2001/08/14 14:11:33  fs
  *  #86945# +getCurrentDataSource
  *

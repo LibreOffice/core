@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowTitle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:22:47 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,8 +228,7 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
             OQueryTableView* pView = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
             OSL_ENSURE(pView,"No OQueryTableView!");
             ::std::vector<OTableConnection*>* pConns = pView->GetTabConnList();
-            for(::std::vector<OTableConnection*>::iterator aIter = pConns->begin();aIter != pConns->end();++aIter)
-                (*aIter)->RecalcLines();
+            ::std::for_each(pConns->begin(),pConns->end(),::std::mem_fun(&OTableConnection::RecalcLines));
 
             pView->InvalidateConnections();
             pView->getDesignView()->getController()->setModified(sal_True);

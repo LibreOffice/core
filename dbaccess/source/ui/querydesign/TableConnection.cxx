@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 09:59:51 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,9 +180,10 @@ OTableConnection& OTableConnection::operator=( const OTableConnection& rConn )
 
 
 //------------------------------------------------------------------------
-void OTableConnection::RecalcLines()
+bool OTableConnection::RecalcLines()
 {
     ::std::for_each(m_vConnLine.begin(),m_vConnLine.end(),::std::mem_fun(&OConnectionLine::RecalcLine));
+    return true;
 }
 //------------------------------------------------------------------------
 OTableWindow* OTableConnection::GetSourceWin() const

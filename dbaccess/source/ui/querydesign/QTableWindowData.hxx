@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindowData.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:24:24 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@ namespace dbaui
         OQueryTableWindowData();
         OQueryTableWindowData(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rTableName, const ::rtl::OUString& rTableAlias);
         virtual ~OQueryTableWindowData();
-
-        virtual void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxIn);
-        virtual void Save(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOut);
 
         ::rtl::OUString GetAliasName() { return GetWinName(); }
         void SetAliasName(const ::rtl::OUString& rNewAlias) { SetWinName(rNewAlias); }

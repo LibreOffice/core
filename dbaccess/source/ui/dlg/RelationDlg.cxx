@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-29 08:38:00 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,15 +424,11 @@ void ORelationControl::SetDef(const Reference< XPropertySet>& xDest,sal_Int32 _n
 
     // beide (!) Spalten loeschen
     ::std::vector<OConnectionLineData*>* pLines = m_pConnData->GetConnLineDataList();
-    ::std::vector<OConnectionLineData*>::iterator aIter = pLines->begin();
+    if(_nPos == 1)
+        ::std::for_each(pLines->begin(),pLines->end(),::std::mem_fun(&OConnectionLineData::clearSourceFieldName));
+    else
+        ::std::for_each(pLines->begin(),pLines->end(),::std::mem_fun(&OConnectionLineData::clearDestFieldName));
 
-    for(;aIter != pLines->end();++aIter)
-    {
-        if(_nPos == 1)
-            (*aIter)->SetSourceFieldName(String());
-        else
-            (*aIter)->SetDestFieldName(String());
-    }
     // neu zeichnen
     Invalidate();
 

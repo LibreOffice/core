@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formadapter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 08:46:56 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1630,16 +1630,15 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_uInt16 nIndex, const :
 }
 
 // -------------------------------------------------------------------------
-sal_Int32 SbaXFormAdapter::implGetPos(const ::rtl::OUString& rName) const
+sal_Int32 SbaXFormAdapter::implGetPos(const ::rtl::OUString& rName)
 {
-    for (   vector< ::rtl::OUString>::const_iterator aIter = m_aChildNames.begin();
-            aIter != m_aChildNames.end();
-            ++aIter
-        )
-    {
-        if ((*aIter).equals(rName))
-            return aIter - m_aChildNames.begin();
-    }
+    vector< ::rtl::OUString>::iterator aIter = ::std::find_if(  m_aChildNames.begin(),
+                                                                m_aChildNames.end(),
+                                                                ::std::bind2nd(::std::equal_to< rtl::OUString>(),rName));
+
+    if(aIter != m_aChildNames.end())
+        return aIter - m_aChildNames.begin();
+
     return -1;
 }
 
@@ -1687,16 +1686,7 @@ Any SAL_CALL SbaXFormAdapter::getByName(const ::rtl::OUString& aName) throw( ::c
 // -------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL SbaXFormAdapter::getElementNames() throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString > aReturn(m_aChildNames.size());
-    ::rtl::OUString* pReturn = aReturn.getArray();
-    for (   vector< ::rtl::OUString>::const_iterator aIter = m_aChildNames.begin();
-            aIter != m_aChildNames.end();
-            ++aIter, ++pReturn
-        )
-    {
-        *pReturn = *aIter;
-    }
-    return aReturn;
+    return Sequence< ::rtl::OUString >(m_aChildNames.begin(),m_aChildNames.size());
 }
 
 // -------------------------------------------------------------------------
@@ -1871,18 +1861,15 @@ void SAL_CALL SbaXFormAdapter::propertyChange(const ::com::sun::star::beans::Pro
 {
     if (evt.PropertyName.equals(PROPERTY_NAME))
     {
-        for (   vector< Reference< ::com::sun::star::form::XFormComponent > >::const_iterator aIter = m_aChildren.begin();
-                aIter != m_aChildren.end();
-                ++aIter
-            )
+        ::std::vector<  ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = ::std::find_if(  m_aChildren.begin(),
+                                                                m_aChildren.end(),
+                                                                ::std::bind2nd(::std::equal_to< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >(),evt.Source));
+
+        if(aIter != m_aChildren.end())
         {
-            if (*aIter == evt.Source)
-            {
-                sal_Int32 nPos = aIter - m_aChildren.begin();
-                DBG_ASSERT(*(m_aChildNames.begin() + nPos) == ::comphelper::getString(evt.OldValue), "SAL_CALL SbaXFormAdapter::propertyChange : object has a wrong name !");
-                *(m_aChildNames.begin() + nPos) = ::comphelper::getString(evt.NewValue);
-                break;
-            }
+            sal_Int32 nPos = aIter - m_aChildren.begin();
+            DBG_ASSERT(*(m_aChildNames.begin() + nPos) == ::comphelper::getString(evt.OldValue), "SAL_CALL SbaXFormAdapter::propertyChange : object has a wrong name !");
+            *(m_aChildNames.begin() + nPos) = ::comphelper::getString(evt.NewValue);
         }
     }
 }
@@ -1895,14 +1882,12 @@ void SAL_CALL SbaXFormAdapter::disposing(const ::com::sun::star::lang::EventObje
     if (Source.Source == m_xMainForm)
         dispose();
 
-    //  was it one of our childs ?
-    for (   vector< Reference< ::com::sun::star::form::XFormComponent > >::const_iterator aIter = m_aChildren.begin();
-            aIter != m_aChildren.end();
-            ++aIter
-        )
-    {
-        if (*aIter == Source.Source)
+    ::std::vector<  ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = ::std::find_if(  m_aChildren.begin(),
+                                                                m_aChildren.end(),
+                                                                ::std::bind2nd(::std::equal_to< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >(),Source.Source));
+    if(aIter != m_aChildren.end())
             removeByIndex(aIter - m_aChildren.begin());
-    }
 }
+// -----------------------------------------------------------------------------
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formadapter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 13:30:49 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,7 +535,7 @@ namespace dbaui
 
         // container handling
         void implInsert(const ::com::sun::star::uno::Any& aElement, sal_uInt16 nIndex, const ::rtl::OUString* pNewElName = NULL) throw(::com::sun::star::lang::IllegalArgumentException);
-        sal_Int32 implGetPos(const ::rtl::OUString& rName) const;
+        sal_Int32 implGetPos(const ::rtl::OUString& rName);
 
         void StopListening();
         void StartListening();

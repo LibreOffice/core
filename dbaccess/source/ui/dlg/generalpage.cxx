@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-20 11:31:33 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1295,11 +1295,7 @@ namespace dbaui
             ConstStringBagIterator aInner = aWrkDBs.begin();
             for (;aInner != aWrkDBs.end(); ++aInner)
             {
-#if SUPD<632
-                if (aInner->equalsIgnoreCase(*aOuter))
-#else
                 if (aInner->equalsIgnoreAsciiCase(*aOuter))
-#endif
                 {
                     aInstalledDBs.insert(*aInner);
                     break;
@@ -1383,6 +1379,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2001/08/20 11:31:33  fs
+ *  #91278# implInitiControls: more sensitive disabling of the browse button ...
+ *
  *  Revision 1.22  2001/08/15 07:28:33  fs
  *  #90803# properly set the cache size
  *

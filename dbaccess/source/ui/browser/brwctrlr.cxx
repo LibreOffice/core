@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:31:34 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 06:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,6 @@
 #endif
 #ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
 #include <com/sun/star/form/XFormController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -239,6 +236,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -494,8 +492,17 @@ Sequence< Type > SAL_CALL SbaXDataBrowserController::getTypes(  ) throw (Runtime
 //------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL SbaXDataBrowserController::getImplementationId(  ) throw (RuntimeException)
 {
-    static ::cppu::OImplementationId aId;
-    return aId.getImplementationId();
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
 }
 
 //------------------------------------------------------------------
@@ -649,6 +656,9 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     if (!m_xRowSet.is())
         return sal_False;
 
+    m_xColumnsSupplier  = Reference< XColumnsSupplier >(m_xRowSet, UNO_QUERY);
+    m_xLoadable         = Reference< XLoadable >(m_xRowSet, UNO_QUERY);
+
     if (!InitializeForm(m_xRowSet))
         return sal_False;
 
@@ -733,9 +743,8 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     if (xFormError.is())
         xFormError->addSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
 
-    Reference< ::com::sun::star::form::XLoadable >  xLoadable(getRowSet(), UNO_QUERY);
-    if (xLoadable.is())
-        xLoadable->addLoadListener(this);
+    if (m_xLoadable.is())
+        m_xLoadable->addLoadListener(this);
 
     Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xFormParameter(getRowSet(), UNO_QUERY);
     if (xFormParameter.is())
@@ -752,8 +761,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 //------------------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::LoadForm()
 {
-    Reference< XLoadable > xLoadable(getRowSet(),UNO_QUERY);
-    reloadForm( xLoadable );
+    reloadForm( m_xLoadable );
     return sal_True;
 }
 //------------------------------------------------------------------------------
@@ -787,7 +795,8 @@ void SbaXDataBrowserController::addModelListeners(const Reference< ::com::sun::s
     {
         for (sal_uInt16 i=0; i<xColumns->getCount(); ++i)
         {
-            Reference< XPropertySet >  xCol = *(Reference< XPropertySet > *)xColumns->getByIndex(i).getValue();
+            Reference< XPropertySet >  xCol;
+            xColumns->getByIndex(i) >>= xCol;
             AddColumnListener(xCol);
         }
     }
@@ -811,7 +820,8 @@ void SbaXDataBrowserController::removeModelListeners(const Reference< ::com::sun
     {
         for (sal_uInt16 i=0; i<xColumns->getCount(); ++i)
         {
-            Reference< XPropertySet >  xCol = *(Reference< XPropertySet > *)xColumns->getByIndex(i).getValue();
+            Reference< XPropertySet >  xCol;
+            xColumns->getByIndex(i) >>= xCol;
             RemoveColumnListener(xCol);
         }
     }
@@ -935,9 +945,8 @@ void SbaXDataBrowserController::disposingFormModel(const ::com::sun::star::lang:
     if (xFormError.is())
         xFormError->removeSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
 
-    Reference< ::com::sun::star::form::XLoadable >  xLoadable(getRowSet(), UNO_QUERY);
-    if (xLoadable.is())
-        xLoadable->removeLoadListener(this);
+    if (m_xLoadable.is())
+        m_xLoadable->removeLoadListener(this);
 
     Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xFormParameter(Source.Source, UNO_QUERY);
     if (xFormParameter.is())
@@ -1081,7 +1090,8 @@ void SbaXDataBrowserController::elementInserted(const ::com::sun::star::containe
 {
     DBG_ASSERT(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
         "SbaXDataBrowserController::elementInserted: where did this come from (not from the grid model)?!");
-    Reference< XPropertySet >  xNewColumn(*(Reference< XPropertySet > *)evt.Element.getValue());
+    Reference< XPropertySet >  xNewColumn;
+    evt.Element >>= xNewColumn;
     AddColumnListener(xNewColumn);
 }
 
@@ -1090,7 +1100,8 @@ void SbaXDataBrowserController::elementRemoved(const ::com::sun::star::container
 {
     DBG_ASSERT(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
         "SbaXDataBrowserController::elementRemoved: where did this come from (not from the grid model)?!");
-    Reference< XPropertySet >  xOldColumn(*(Reference< XPropertySet > *)evt.Element.getValue());
+    Reference< XPropertySet >  xOldColumn;
+    evt.Element >>= xOldColumn;
     RemoveColumnListener(xOldColumn);
 }
 
@@ -1099,10 +1110,12 @@ void SbaXDataBrowserController::elementReplaced(const ::com::sun::star::containe
 {
     DBG_ASSERT(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
         "SbaXDataBrowserController::elementReplaced: where did this come from (not from the grid model)?!");
-    Reference< XPropertySet >  xOldColumn(*(Reference< XPropertySet > *)evt.ReplacedElement.getValue());
+    Reference< XPropertySet >  xOldColumn;
+    evt.ReplacedElement >>= xOldColumn;
     RemoveColumnListener(xOldColumn);
 
-    Reference< XPropertySet >  xNewColumn(*(Reference< XPropertySet > *)evt.Element.getValue());
+    Reference< XPropertySet >  xNewColumn;
+    evt.Element >>= xNewColumn;
     AddColumnListener(xNewColumn);
 }
 
@@ -1211,9 +1224,8 @@ void SbaXDataBrowserController::disposing()
         if (xFormError.is())
             xFormError->removeSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
 
-        Reference< ::com::sun::star::form::XLoadable >  xLoadable(getRowSet(), UNO_QUERY);
-        if (xLoadable.is())
-            xLoadable->removeLoadListener(this);
+        if (m_xLoadable.is())
+            m_xLoadable->removeLoadListener(this);
 
         Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xFormParameter(getRowSet(), UNO_QUERY);
         if (xFormParameter.is())
@@ -1240,9 +1252,10 @@ void SbaXDataBrowserController::disposing()
         try
         {
             ::comphelper::disposeComponent(m_xRowSet);
-//      Reference< ::com::sun::star::lang::XComponent >  xDataSourceComponent(m_xRowSet, UNO_QUERY);
-//      if (xDataSourceComponent.is())
-//          xDataSourceComponent->dispose();
+
+            m_xRowSet           = NULL;
+            m_xColumnsSupplier  = NULL;
+            m_xLoadable         = NULL;
         }
         catch(Exception&)
         {
@@ -1594,9 +1607,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
 void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrder)
 {
     Reference< XPropertySet > xFormSet(getRowSet(), UNO_QUERY);
-    Reference< XLoadable > xLoadable(getRowSet(), UNO_QUERY);
-
-    if (!xLoadable.is())
+    if (!m_xLoadable.is())
     {
         OSL_ENSURE(sal_False, "SbaXDataBrowserController::applyParserOrder: invalid row set!");
         return;
@@ -1606,7 +1617,7 @@ void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrd
     try
     {
         xFormSet->setPropertyValue(PROPERTY_ORDER, makeAny(m_xParser->getOrder()));
-        bSuccess = reloadForm(xLoadable);
+        bSuccess = reloadForm(m_xLoadable);
     }
     catch(Exception&)
     {
@@ -1619,7 +1630,7 @@ void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrd
 
         try
         {
-            if (m_bLoadCanceled || !reloadForm(xLoadable))
+            if (m_bLoadCanceled || !reloadForm(m_xLoadable))
                 criticalFail();
         }
         catch(Exception&)
@@ -1635,9 +1646,7 @@ void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrd
 void SbaXDataBrowserController::applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied)
 {
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
-    Reference< XLoadable >  xLoadable(getRowSet(), UNO_QUERY);
-
-    if (!xLoadable.is())
+    if (!m_xLoadable.is())
     {
         OSL_ENSURE(sal_False, "SbaXDataBrowserController::applyParserFilter: invalid row set!");
         return;
@@ -1650,7 +1659,7 @@ void SbaXDataBrowserController::applyParserFilter(const ::rtl::OUString& _rOldFi
         xFormSet->setPropertyValue(PROPERTY_FILTER, makeAny(m_xParser->getFilter()));
         xFormSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(sal_Bool(sal_True)));
 
-        bSuccess = reloadForm(xLoadable);
+        bSuccess = reloadForm(m_xLoadable);
     }
     catch(Exception&)
     {
@@ -1664,7 +1673,7 @@ void SbaXDataBrowserController::applyParserFilter(const ::rtl::OUString& _rOldFi
 
         try
         {
-            if (m_bLoadCanceled || !reloadForm(xLoadable))
+            if (m_bLoadCanceled || !reloadForm(m_xLoadable))
                 criticalFail();
         }
         catch(Exception&)
@@ -1700,7 +1709,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
     ::rtl::OUString sOldVal = bFilter ? m_xParser->getFilter() : m_xParser->getOrder();
     try
     {
-        Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xSup(xFormSet,UNO_QUERY);
+        Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xSup = getColumnsSupplier();
         Reference< XConnection> xCon;
         xFormSet->getPropertyValue(PROPERTY_ACTIVECONNECTION) >>= xCon;
         if(bFilter)
@@ -1765,13 +1774,15 @@ void SbaXDataBrowserController::ExecuteSearch()
     sal_Int16 nViewCol = xGrid->getCurrentColumnPosition();
     sal_Int16 nModelCol = getBrowserView()->View2ModelPos(nViewCol);
 
-    Reference< XPropertySet >  xCurrentCol = *(Reference< XPropertySet > *)xColumns->getByIndex(nModelCol).getValue();
+    Reference< XPropertySet >  xCurrentCol;
+    xColumns->getByIndex(nModelCol) >>= xCurrentCol;
     String sActiveField = ::comphelper::getString(xCurrentCol->getPropertyValue(PROPERTY_CONTROLSOURCE));
 
     // the text within the current cell
     String sInitialText;
     Reference< ::com::sun::star::container::XIndexAccess >  xColControls(xGridPeer, UNO_QUERY);
-    Reference< XInterface >  xCurControl(*(Reference< XInterface > *)xColControls->getByIndex(nViewCol).getValue(), UNO_QUERY);
+    Reference< XInterface >  xCurControl;
+    xColControls->getByIndex(nViewCol) >>= xCurControl;
     ::rtl::OUString aInitialText;
     if (IsSearchableControl(xCurControl, &aInitialText))
         sInitialText = (const sal_Unicode*)aInitialText;
@@ -2167,15 +2178,13 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 n
 
     // get the according column from the model
     Reference< ::com::sun::star::container::XIndexContainer >  xCols(getControlModel(), UNO_QUERY);
-    Reference< XPropertySet >  xCurrentCol(*(Reference< XInterface > *)xCols->getByIndex(nCurrentCol).getValue(), UNO_QUERY);
+    Reference< XPropertySet >  xCurrentCol;
+    xCols->getByIndex(nCurrentCol) >>= xCurrentCol;
     if (!xCurrentCol.is())
         return xEmptyReturn;
 
-    Any aBoundField = xCurrentCol->getPropertyValue(PROPERTY_BOUNDFIELD);
-    if (!aBoundField.hasValue())
-        return xEmptyReturn;
-
-    return Reference< XPropertySet > (*(Reference< XInterface > *)aBoundField.getValue(), UNO_QUERY);
+    xCurrentCol->getPropertyValue(PROPERTY_BOUNDFIELD) >>= xEmptyReturn;
+    return xEmptyReturn;
 }
 
 //------------------------------------------------------------------------------
@@ -2192,7 +2201,8 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
     String sFieldList;
     for (sal_Int32 nViewPos=0; nViewPos<xPeerContainer->getCount(); ++nViewPos)
     {
-        Reference< XInterface >  xCurrentColumn(*(Reference< XInterface > *)xPeerContainer->getByIndex(nViewPos).getValue(), UNO_QUERY);
+        Reference< XInterface >  xCurrentColumn;
+        xPeerContainer->getByIndex(nViewPos) >>= xCurrentColumn;
         if (!xCurrentColumn.is())
             continue;
 
@@ -2201,7 +2211,8 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
             continue;
 
         sal_uInt16 nModelPos = getBrowserView()->View2ModelPos((sal_uInt16)nViewPos);
-        Reference< XPropertySet >  xCurrentColModel = *(Reference< XPropertySet > *)xModelColumns->getByIndex(nModelPos).getValue();
+        Reference< XPropertySet >  xCurrentColModel;
+        xModelColumns->getByIndex(nModelPos) >>= xCurrentColModel;
         ::rtl::OUString aName = ::comphelper::getString(xCurrentColModel->getPropertyValue(PROPERTY_CONTROLSOURCE));
 
         sFieldList += (const sal_Unicode*)aName;
@@ -2246,7 +2257,8 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
     Reference< ::com::sun::star::container::XIndexAccess >  aColumnControls(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
     for (sal_uInt16 nViewPos=0; nViewPos<aColumnControls->getCount(); ++nViewPos)
     {
-        Reference< XInterface >  xCurrent(*(Reference< XInterface > *)aColumnControls->getByIndex(nViewPos).getValue(), UNO_QUERY);
+        Reference< XInterface >  xCurrent;
+        aColumnControls->getByIndex(nViewPos) >>= xCurrent;
         if (IsSearchableControl(xCurrent))
             if (pInfo->nFieldPos)
                 --pInfo->nFieldPos;
@@ -2453,17 +2465,15 @@ void SbaXDataBrowserController::leaveFormAction()
 // -------------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::isLoaded() const
 {
-    Reference< XLoadable > xLoad(m_xRowSet, UNO_QUERY);
-    return xLoad.is() && xLoad->isLoaded();
+    return m_xLoadable.is() && m_xLoadable->isLoaded();
 }
 
 // -------------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::isValidCursor() const
 {
-    Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(m_xRowSet, UNO_QUERY);
-    if (!xSupplyCols.is())
+    if (!m_xColumnsSupplier.is())
         return sal_False;
-    Reference< ::com::sun::star::container::XNameAccess >  xCols = xSupplyCols->getColumns();
+    Reference< ::com::sun::star::container::XNameAccess >  xCols = m_xColumnsSupplier->getColumns();
     if (!xCols.is() || !xCols->hasElements())
         return sal_False;
 
@@ -2666,16 +2676,16 @@ void LoadFormThread::run()
 
     // start it
     bool bErrorOccured = false;
+    Reference< XLoadable > xLoadable(m_xRowSet, UNO_QUERY);
     try
     {
-        Reference< ::com::sun::star::form::XLoadable >  xLoad(m_xRowSet, UNO_QUERY);
         Reference< XRowSet >  xMove(m_xRowSet, UNO_QUERY);
-        DBG_ASSERT(xLoad.is() && xMove.is(), "LoadFormThread::run : invalid cursor !");
-        xLoad->load();
+        DBG_ASSERT(xLoadable.is() && xMove.is(), "LoadFormThread::run : invalid cursor !");
+        xLoadable->load();
         // go to the first record if the load was successfull.
-        Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(m_xRowSet, UNO_QUERY);
-        Reference< ::com::sun::star::container::XNameAccess >  xCols = xSupplyCols.is() ? xSupplyCols->getColumns() : Reference< ::com::sun::star::container::XNameAccess > ();
-        if (xCols.is() && xCols->getElementNames().getLength())
+        Reference< XColumnsSupplier > xColumnsSupplier(m_xRowSet, UNO_QUERY);
+        Reference< ::com::sun::star::container::XNameAccess >  xCols = xColumnsSupplier.is() ? xColumnsSupplier->getColumns() : Reference< ::com::sun::star::container::XNameAccess > ();
+        if (xCols.is() && xCols->hasElements())
             xMove->first();
         else
             bErrorOccured = true;
@@ -2684,7 +2694,6 @@ void LoadFormThread::run()
     {
         bErrorOccured = true;
     }
-    ;
 
     // check if we were canceled
     ::osl::ClearableMutexGuard aTestGuard(m_aAccessSafety);
@@ -2703,7 +2712,6 @@ void LoadFormThread::run()
     pHelper->release();
 
     // yes, we were, but eventually the cancel request didn't reach the data source in time
-    Reference< ::com::sun::star::form::XLoadable >  xLoadable(m_xRowSet, UNO_QUERY);
     if (bReallyCanceled && xLoadable.is() && xLoadable->isLoaded())
         xLoadable->unload();
 
@@ -2728,9 +2736,16 @@ void LoadFormThread::onTerminated()
     else
     {
         // we are fully responsible for the data source and for ourself, so dispose the former ...
-        Reference< ::com::sun::star::lang::XComponent >  xDataSourceComponent(m_xRowSet, UNO_QUERY);
-        if (xDataSourceComponent.is())
-            xDataSourceComponent->dispose();
+        try
+        {
+            ::comphelper::disposeComponent(m_xRowSet);
+
+            m_xRowSet           = NULL;
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(0,"Exception thrown by dispose");
+        }
         // ... and delete the latter
         aGuard.clear();     // like above - releasing the mutex is a member access ...
         delete this;
@@ -2744,14 +2759,14 @@ void LoadFormThread::StopIt()
     m_bCanceled = sal_True;
     aResetGuard.clear();
 
-    Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(m_xRowSet, UNO_QUERY);
-    if (!xSupplyCols.is())
+    Reference< XColumnsSupplier > xColumnsSupplier(m_xRowSet, UNO_QUERY);
+    if (!xColumnsSupplier.is())
     {
         DBG_ERROR("LoadFormThread::StopIt : invalid data source !");
         return;
     }
-    Reference< ::com::sun::star::container::XIndexAccess >  xCols(xSupplyCols->getColumns(), UNO_QUERY);
-    if (!xCols.is() || (xCols->getCount() == 0))
+    Reference< ::com::sun::star::container::XNameAccess >  xCols(xColumnsSupplier->getColumns(), UNO_QUERY);
+    if (!xCols.is() || !xCols->hasElements())
         // the cursor isn't alive, don't need to cancel
         return;
 
