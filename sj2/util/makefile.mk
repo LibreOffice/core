@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: patrick.luby $ $Date: 2000-09-25 01:01:09 $
+#   last change: $Author: kz $ $Date: 2001-05-16 11:12:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ USE_LDUMP2=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 
-LDUMP2=LDUMP3
+LDUMP2=LDUMP4
 
 # ------------------------------------------------------------------
 
