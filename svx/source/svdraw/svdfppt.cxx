@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-20 10:50:29 $
+ *  last change: $Author: sj $ $Date: 2001-06-20 13:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1178,10 +1178,10 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
             sal_uInt32 nTextFlags = aTextObj.GetTextFlags();
             sal_Bool  bVerticalText = aTextObj.GetVertical();
-            sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 92076 );
-            sal_Int32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 92076 );
-            sal_Int32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 46038 );
-            sal_Int32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 46038 );
+            sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 25 * 3600 );   // 0.25 cm (emu)
+            sal_Int32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 25 * 3600 ); // 0.25 cm (emu)
+            sal_Int32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 13 * 3600 );     // 0.13 cm (emu)
+            sal_Int32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 13 * 3600 );
             ScaleEmu( nTextLeft );
             ScaleEmu( nTextRight );
             ScaleEmu( nTextTop );
