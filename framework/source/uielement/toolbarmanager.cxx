@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:12:15 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,10 @@
 #include <drafts/com/sun/star/ui/UIElementType.hpp>
 #endif
 
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -224,6 +228,7 @@ static const char   ITEM_DESCRIPTOR_CONTAINER[]   = "ItemDescriptorContainer";
 static const char   ITEM_DESCRIPTOR_LABEL[]       = "Label";
 static const char   ITEM_DESCRIPTOR_TYPE[]        = "Type";
 static const char   ITEM_DESCRIPTOR_VISIBLE[]     = "IsVisible";
+static const char   ITEM_DESCRIPTOR_WIDTH[]       = "Width";
 static const char   HELPID_PREFIX[]               = "helpid:";
 static const char   HELPID_PREFIX_TESTTOOL[]      = ".HelpId:";
 static sal_Int32    HELPID_PREFIX_LENGTH          = 7;
@@ -399,7 +404,8 @@ void ToolBarManager::CheckAndUpdateImages()
         bRefreshImages = sal_True;
         m_bIsHiContrast = sal_False;
     }
-    else if ( m_bSmallSymbols != ( GetCurrentSymbolSize() == SFX_SYMBOLS_SMALL ))
+
+    if ( m_bSmallSymbols != ( GetCurrentSymbolSize() == SFX_SYMBOLS_SMALL ))
     {
         bRefreshImages = sal_True;
         m_bSmallSymbols = ( GetCurrentSymbolSize() == SFX_SYMBOLS_SMALL );
@@ -714,7 +720,8 @@ void SAL_CALL ToolBarManager::elementInserted( const ::drafts::com::sun::star::u
             // Check if we have commands which have an image. We stored for every command
             // from which image manager it got its image. Use only images from this
             // notification if stored nImageInfo >= current nImageInfo!
-            CommandToInfoMap::iterator pIter = m_aCommandMap.find( aSeq[i] );
+            rtl::OUString aCommandURL = aSeq[i];
+            CommandToInfoMap::iterator pIter = m_aCommandMap.find( aCommandURL );
             if ( pIter != m_aCommandMap.end() && ( pIter->second.nImageInfo >= nImageInfo ))
             {
                 Reference< XGraphic > xGraphic;
@@ -846,6 +853,7 @@ void ToolBarManager::RemoveControllers()
     if ( m_bDisposed )
         return;
 
+    m_aSubToolBarControllerMap.clear();
     for ( sal_uInt32 n = 0; n < m_aControllerVector.size(); n++ )
     {
         try
@@ -923,7 +931,7 @@ OUString ToolBarManager::RetrieveLabelFromCommand( const OUString& aCmdURL )
     return aLabel;
 }
 
-void ToolBarManager::CreateControllers()
+void ToolBarManager::CreateControllers( const ControllerParamsVector& rControllerParamsVector )
 {
     Reference< XMultiComponentFactory > xToolbarControllerFactory( m_xToolbarControllerRegistration, UNO_QUERY );
     Reference< XComponentContext > xComponentContext;
@@ -950,24 +958,33 @@ void ToolBarManager::CreateControllers()
         {
             if ( xToolbarControllerFactory.is() )
             {
-                Sequence< Any > aSeq( 4 );
                 PropertyValue aPropValue;
+                std::vector< Any > aPropertyVector;
 
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
                 aPropValue.Value    = makeAny( m_aModuleIdentifier );
-                aSeq[0] = makeAny( aPropValue );
+                aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
                 aPropValue.Value    = makeAny( m_xFrame );
-                aSeq[1] = makeAny( aPropValue );
+                aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
                 aPropValue.Value    = makeAny( m_xServiceManager );
-                aSeq[2] = makeAny( aPropValue );
+                aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
                 aPropValue.Value    = makeAny( xToolbarWindow );
-                aSeq[3] = makeAny( aPropValue );
+                aPropertyVector.push_back( makeAny( aPropValue ));
 
+                sal_Int16 nWidth( rControllerParamsVector[nId-1].nWidth );
+                if ( nWidth > 0 )
+                {
+                    aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ));
+                    aPropValue.Value    = makeAny( nWidth );
+                    aPropertyVector.push_back( makeAny( aPropValue ));
+                }
+
+                Sequence< Any > aArgs( comphelper::containerToSequence< std::vector< Any >, Any >( aPropertyVector ));
                 xController = Reference< XStatusListener >( xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
-                                                                aCommandURL, aSeq, xComponentContext ),
+                                                                aCommandURL, aArgs, xComponentContext ),
                                                             UNO_QUERY );
                 bInit = sal_False; // Initialization is done through the factory service
             }
@@ -984,26 +1001,58 @@ void ToolBarManager::CreateControllers()
         }
 
         m_aControllerVector.push_back( xController );
-        Reference< XInitialization > xInit( xController, UNO_QUERY );
 
+        // Fill sub-toolbars into our hash-map
+        Reference< XSubToolbarController > xSubToolBar( xController, UNO_QUERY );
+        if ( xSubToolBar.is() && xSubToolBar->opensSubToolbar() )
+        {
+            rtl::OUString aSubToolBarName = xSubToolBar->getSubToolbarName();
+            if ( aSubToolBarName.getLength() != 0 )
+            {
+                SubToolBarToSubToolBarControllerMap::iterator pIter =
+                    m_aSubToolBarControllerMap.find( aSubToolBarName );
+                if ( pIter == m_aSubToolBarControllerMap.end() )
+                {
+                    SubToolBarControllerVector aSubToolBarVector;
+                    aSubToolBarVector.push_back( xSubToolBar );
+                    m_aSubToolBarControllerMap.insert(
+                        SubToolBarToSubToolBarControllerMap::value_type(
+                            aSubToolBarName, aSubToolBarVector ));
+                }
+                else
+                    pIter->second.push_back( xSubToolBar );
+            }
+        }
+
+        Reference< XInitialization > xInit( xController, UNO_QUERY );
         if ( xInit.is() )
         {
             if ( bInit )
             {
                 PropertyValue aPropValue;
-                Sequence< Any > aArgs( 4 );
+                std::vector< Any > aPropertyVector;
+
                 aPropValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
                 aPropValue.Value = makeAny( m_xFrame );
-                aArgs[0] = makeAny( aPropValue );
+                aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
                 aPropValue.Value = makeAny( aCommandURL );
-                aArgs[1] = makeAny( aPropValue );
+                aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
                 aPropValue.Value = makeAny( m_xServiceManager );
-                aArgs[2] = makeAny( aPropValue );
+                aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
                 aPropValue.Value = makeAny( xToolbarWindow );
-                aArgs[3] = makeAny( aPropValue );
+                aPropertyVector.push_back( makeAny( aPropValue ));
+                sal_Int16 nWidth( rControllerParamsVector[nId-1].nWidth );
+                if ( nWidth > 0 )
+                {
+                    aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ));
+                    aPropValue.Value    = makeAny( nWidth );
+                    aPropertyVector.push_back( makeAny( aPropValue ));
+                }
+
+                Sequence< Any > aArgs( comphelper::containerToSequence< std::vector< Any >, Any >( aPropertyVector ));
                 xInit->initialize( aArgs );
             }
 
@@ -1122,7 +1171,9 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     m_aControllerVector.clear();
     m_aCommandMap.clear();
 
-    CommandInfo           aCmdInfo;
+    CommandInfo             aCmdInfo;
+    ControllerParams        aCtrlParams;
+    ControllerParamsVector  aCtrlParamsVector;
     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
         Sequence< PropertyValue >   aProp;
@@ -1130,6 +1181,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         rtl::OUString               aLabel;
         rtl::OUString               aHelpURL;
         sal_uInt16                  nType( drafts::com::sun::star::ui::ItemType::DEFAULT );
+        sal_uInt16                  nWidth( 0 );
         sal_Bool                    bIsVisible( sal_True );
 
         try
@@ -1139,25 +1191,17 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                 for ( int i = 0; i < aProp.getLength(); i++ )
                 {
                     if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
-                    {
                         aProp[i].Value >>= aCommandURL;
-                    }
                     else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
-                    {
                         aProp[i].Value >>= aHelpURL;
-                    }
                     else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ))
-                    {
                         aProp[i].Value >>= aLabel;
-                    }
                     else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_TYPE ))
-                    {
                         aProp[i].Value >>= nType;
-                    }
                     else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_VISIBLE ))
-                    {
                         aProp[i].Value >>= bIsVisible;
-                    }
+                    else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_WIDTH ))
+                        aProp[i].Value >>= nWidth;
                 }
 
                 if (( nType == drafts::com::sun::star::ui::ItemType::DEFAULT ) && ( aCommandURL.getLength() > 0 ))
@@ -1178,8 +1222,13 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     // image manager we got our image. So we can decide if we have to use an
                     // image from a notification message.
                     aCmdInfo.nId = nId;
-                    m_aCommandMap.insert( CommandToInfoMap::value_type(
-                        rtl::OUString( m_pToolBar->GetItemCommand( nId )), aCmdInfo ));
+                    m_aCommandMap.insert( CommandToInfoMap::value_type( aCommandURL, aCmdInfo ));
+
+                    // Add additional information for the controller to our
+                    // params vector. It is given to the CreateControllers method
+                    // which will provide them to the controller instances.
+                    aCtrlParams.nWidth = nWidth;
+                    aCtrlParamsVector.push_back( aCtrlParams );
 
                     if ( aHelpURL.indexOf( aHelpIdPrefix ) == 0 )
                     {
@@ -1244,12 +1293,12 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         if ( !aImage )
         {
             m_pToolBar->SetItemImage( pIter->second.nId, Image( aModGraphicSeq[i] ));
-            pIter->second.nImageInfo = 0; // mark image as document based
+            pIter->second.nImageInfo = 1; // mark image as module based
         }
         else
         {
-            m_pToolBar->SetItemImage( pIter->second.nId, Image( aDocGraphicSeq[i] ));
-            pIter->second.nImageInfo = 1; // mark image as module based
+            m_pToolBar->SetItemImage( pIter->second.nId, aImage );
+            pIter->second.nImageInfo = 0; // mark image as document based
         }
         ++pIter;
         ++i;
@@ -1257,7 +1306,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
     // Create controllers after we set the images. There are controllers which needs
     // an image at the toolbar at creation time!
-    CreateControllers();
+    CreateControllers( aCtrlParamsVector );
 
     // Notify controllers that they are now correctly initialized and can start listening
     UpdateControllers();
@@ -1277,6 +1326,43 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         }
         catch ( Exception& )
         {
+        }
+    }
+}
+
+void ToolBarManager::notifyRegisteredControllers( const rtl::OUString& aUIElementName, const rtl::OUString& aCommand )
+{
+    ResetableGuard aGuard( m_aLock );
+    if ( m_aSubToolBarControllerMap.size() > 0 )
+    {
+        SubToolBarToSubToolBarControllerMap::const_iterator pIter =
+            m_aSubToolBarControllerMap.find( aUIElementName );
+
+        if ( pIter != m_aSubToolBarControllerMap.end() )
+        {
+            const SubToolBarControllerVector& rSubToolBarVector = pIter->second;
+            if ( rSubToolBarVector.size() > 0 )
+            {
+                SubToolBarControllerVector aNotifyVector = rSubToolBarVector;
+                aGuard.unlock();
+
+                for ( sal_uInt32 i = 0; i < aNotifyVector.size(); i++ )
+                {
+                    try
+                    {
+                        Reference< XSubToolbarController > xController = aNotifyVector[i];
+                        if ( xController.is() )
+                            xController->functionSelected( aCommand );
+                    }
+                    catch ( RuntimeException& e )
+                    {
+                        throw e;
+                    }
+                    catch ( Exception& )
+                    {
+                    }
+                }
+            }
         }
     }
 }
@@ -1391,12 +1477,15 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
 
     PopupMenu *pMenu = pToolBar->GetMenu();
 
+    // remove all entries before inserting new ones
+    ImplClearPopupMenu( pToolBar );
+
     // No config menu entries if command ".uno:ConfigureDialog" is not enabled
     Reference< XDispatch > xDisp;
     com::sun::star::util::URL aURL;
     if ( m_xFrame.is() )
     {
-        Reference< XDispatchProvider > xProv( m_xFrame->getController(), UNO_QUERY );
+        Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
         Reference< XURLTransformer > xTrans( m_xServiceManager->createInstance(
                                                 OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                 "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
@@ -1506,7 +1595,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                 com::sun::star::util::URL aURL;
                 if ( m_xFrame.is() )
                 {
-                    Reference< XDispatchProvider > xProv( m_xFrame->getController(), UNO_QUERY );
+                    Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
                     Reference< XURLTransformer > xTrans( m_xServiceManager->createInstance(
                                                             OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                             "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
