@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:05:57 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1748,12 +1748,12 @@ String sLogfileSummary
     Text[ finnish ] = "<COUNT> Documents converted";
     Text[ italian ] = "<COUNT> Documents converted";
     Text[ danish ] = "<COUNT> Documents converted";
-    Text[ swedish ] = "<COUNT> Documents converted";
+    Text[ swedish ] = "<COUNT> dokument konverterade";
     Text[ polish ] = "<COUNT> Documents converted";
     Text[ japanese ] = "<COUNT> Documents converted";
     Text[ korean ] = "<COUNT> Documents converted";
-    Text[ chinese_simplified ] = "<COUNT> Documents converted";
-    Text[ chinese_traditional ] = "<COUNT> Documents converted";
+    Text[ chinese_simplified ] = "<COUNT> 文件已经转换";
+    Text[ chinese_traditional ] = "<COUNT> 文件已轉換";
     Text[ turkish ] = "<COUNT> Documents converted";
     Text[ arabic ] = "<COUNT> Documents converted";
 };
