@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:38:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,10 @@
 #include "editable.hxx"
 
 using namespace com::sun::star;
+
+const BYTE SC_NESTEDBUTTON_NONE = 0;
+const BYTE SC_NESTEDBUTTON_DOWN = 1;
+const BYTE SC_NESTEDBUTTON_UP   = 2;
 
 #define SC_AUTOFILTER_ALL       0
 #define SC_AUTOFILTER_CUSTOM    1
@@ -468,6 +472,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             bEEMouse( FALSE ),
             nButtonDown( 0 ),
             nMouseStatus( SC_GM_NONE ),
+            nNestedButtonState( SC_NESTEDBUTTON_NONE ),
             bPivotMouse( FALSE ),
             bDPMouse( FALSE ),
             bRFMouse( FALSE ),
@@ -1523,6 +1528,27 @@ BOOL ScGridWindow::TestMouse( const MouseEvent& rMEvt, BOOL bAction )
 
 void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    nNestedButtonState = SC_NESTEDBUTTON_DOWN;
+
+    HandleMouseButtonDown( rMEvt );
+
+    if ( nNestedButtonState == SC_NESTEDBUTTON_UP )
+    {
+        // #i41690# If an object is deactivated from MouseButtonDown, it might reschedule,
+        // so MouseButtonUp comes before the MouseButtonDown call is finished. In this case,
+        // simulate another MouseButtonUp call, so the selection state is consistent.
+
+        nButtonDown = rMEvt.GetButtons();
+        FakeButtonUp();
+
+        if ( IsTracking() )
+            EndTracking();      // normally done in VCL as part of MouseButtonUp handling
+    }
+    nNestedButtonState = SC_NESTEDBUTTON_NONE;
+}
+
+void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
+{
     aCurMousePos = rMEvt.GetPosPixel();
 
     //  Filter-Popup beendet sich mit eigenem Mausklick, nicht erst beim Klick
@@ -1867,6 +1893,12 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     aCurMousePos = rMEvt.GetPosPixel();
     ScDocument* pDoc = pViewData->GetDocument();
     ScMarkData& rMark = pViewData->GetMarkData();
+
+    // #i41690# detect a MouseButtonUp call from within MouseButtonDown
+    // (possible through Reschedule from storing an OLE object that is deselected)
+
+    if ( nNestedButtonState == SC_NESTEDBUTTON_DOWN )
+        nNestedButtonState = SC_NESTEDBUTTON_UP;
 
     if (nButtonDown != rMEvt.GetButtons())
         nMouseStatus = SC_GM_IGNORE;            // reset und return
