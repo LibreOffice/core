@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:50 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,8 +341,7 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 SdrObject* pObj = pPage->GetBackgroundObj();
                 if( pObj )
                 {
-    //-/                pObj->TakeAttributes( aMergedAttr, TRUE, TRUE );
-                    aMergedAttr.Put(pObj->GetItemSet());
+                    aMergedAttr.Put(pObj->GetMergedItemSet());
                 }
                 else
                 {
@@ -412,6 +411,10 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                         {
                             pBackgroundObjUndoAction = new SdBackgroundObjUndoAction( *pDoc, *pPage, pPage->GetBackgroundObj() );
                             pPage->SetBackgroundObj( NULL );
+
+                            // #110094#-15
+                            // tell the page that it's visualization has changed
+                            pPage->ActionChanged();
                         }
 
                     }
@@ -445,8 +448,7 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                     {
                         // BackgroundObj: no hard attributes allowed
                         SfxItemSet aSet( pDoc->GetPool() );
-    //-/                    pObj->NbcSetAttributes( aSet, TRUE );
-                        pObj->SetItemSet(aSet);
+                        pObj->SetMergedItemSet(aSet);
                     }
                 }
 
@@ -600,7 +602,11 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
             aSize.Height() -= nUpper + nLower - 1;
             Rectangle aRect( aPos, aSize );
             pObj->SetLogicRect( aRect );
-            pObj->SetItemSet(*pArgs);
+            pObj->SetMergedItemSet(*pArgs);
+
+            // #110094#-15
+            // tell the page that it's visualization has changed
+            pPage->ActionChanged();
         }
     }
 
