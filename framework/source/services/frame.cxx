@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-12 13:16:39 $
+ *  last change: $Author: cd $ $Date: 2002-04-22 07:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1642,13 +1642,27 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Frame::queryDispatch( cons
                                                                             const ::rtl::OUString&  sTargetFrameName,
                                                                                   sal_Int32         nSearchFlags    ) throw( css::uno::RuntimeException )
 {
+    const char UNO_PROTOCOL[] = ".uno:";
+
     // Don't check incoming parameter here! Our helper do it for us and it isn't a good idea to do it more then ones!
     // But look for rejected calls!
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // We use a helper to support these interface and an interceptor mechanism.
-    // Our helper is threadsafe by himself!
-    return m_xDispatchHelper->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+    // Remove uno and cmd protocol part as we want to support both of them. We store only the command part
+    // in our hash map. All other protocols are stored with the protocol part.
+    String aCommand( aURL.Main );
+    if ( aURL.Protocol.equalsIgnoreAsciiCaseAsciiL( UNO_PROTOCOL, sizeof( UNO_PROTOCOL )-1 ))
+        aCommand = aURL.Path;
+
+    // Make hash_map lookup if the current URL is in the disabled list
+    if ( m_aCommandOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aCommand ) )
+        return css::uno::Reference< css::frame::XDispatch >();
+    else
+    {
+        // We use a helper to support these interface and an interceptor mechanism.
+        // Our helper is threadsafe by himself!
+        return m_xDispatchHelper->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+    }
 }
 
 /*-****************************************************************************************************//**
