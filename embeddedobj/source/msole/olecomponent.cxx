@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:53:27 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,23 +128,23 @@ struct OleComponentNative_Impl {
     OleComponentNative_Impl()
     {
         // TODO: Extend format list
-        m_aSupportedGraphFormats.realloc( 4 );
-        m_aGraphShortFormats.realloc( 4 );
+        m_aSupportedGraphFormats.realloc( 5 );
+        m_aGraphShortFormats.realloc( 5 );
 
         m_aSupportedGraphFormats[0] = datatransfer::DataFlavor(
-            ::rtl::OUString::createFromAscii( "application/x-openoffice;windows_formatname=\"Image EMF\"" ),
+            ::rtl::OUString::createFromAscii( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ),
             ::rtl::OUString::createFromAscii( "Windows Enhanced Metafile" ),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
         m_aGraphShortFormats[0] = ::rtl::OUString::createFromAscii( "EMF" );
 
         m_aSupportedGraphFormats[1] = datatransfer::DataFlavor(
-            ::rtl::OUString::createFromAscii( "application/x-openoffice;windows_formatname=\"Image WMF\"" ),
+            ::rtl::OUString::createFromAscii( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
             ::rtl::OUString::createFromAscii( "Windows Metafile" ),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
         m_aGraphShortFormats[1] = ::rtl::OUString::createFromAscii( "WMF" );
 
         m_aSupportedGraphFormats[2] = datatransfer::DataFlavor(
-            ::rtl::OUString::createFromAscii( "application/x-openoffice;windows_formatname=\"Bitmap\"" ),
+            ::rtl::OUString::createFromAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ),
             ::rtl::OUString::createFromAscii( "Bitmap" ),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
         m_aGraphShortFormats[2] = ::rtl::OUString::createFromAscii( "BMP" );
@@ -154,6 +154,12 @@ struct OleComponentNative_Impl {
             ::rtl::OUString::createFromAscii( "PNG" ),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
         m_aGraphShortFormats[3] = ::rtl::OUString::createFromAscii( "PNG" );
+
+        m_aSupportedGraphFormats[0] = datatransfer::DataFlavor(
+            ::rtl::OUString::createFromAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
+            ::rtl::OUString::createFromAscii( "GDIMetafile" ),
+            getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
+        m_aGraphShortFormats[0] = ::rtl::OUString::createFromAscii( "SVM" );
     }
 
     void AddSupportedFormat( const FORMATETC& aFormatEtc );
@@ -259,7 +265,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
 
                 if ( nBufSize && nBufSize == GetMetaFileBitsEx( pMF->hMF, nBufSize, pBuf+22 ) )
                 {
-                      if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice;windows_formatname=\"Image WMF\"", 57 ) )
+                    if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"", 57 ) )
                     {
                         aResult <<= uno::Sequence< sal_Int8 >( ( sal_Int8* )pBuf, nBufSize + 22 );
                         bAnyIsReady = sal_True;
@@ -276,7 +282,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
             pBuf = new unsigned char[nBufSize];
             if ( nBufSize && nBufSize == GetEnhMetaFileBits( aMedium.hEnhMetaFile, nBufSize, pBuf ) )
             {
-                  if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice;windows_formatname=\"Image EMF\"", 57 ) )
+                if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"", 57 ) )
                 {
                     aResult <<= uno::Sequence< sal_Int8 >( ( sal_Int8* )pBuf, nBufSize );
                     bAnyIsReady = sal_True;
@@ -289,7 +295,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
             pBuf = new unsigned char[nBufSize];
             if ( nBufSize && nBufSize == GetBitmapBits( aMedium.hBitmap, nBufSize, pBuf ) )
             {
-                  if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice;windows_formatname=\"Bitmap\"", 54 ) )
+                if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", 54 ) )
                 {
                     aResult <<= uno::Sequence< sal_Int8 >( ( sal_Int8* )pBuf, nBufSize );
                     bAnyIsReady = sal_True;
@@ -690,38 +696,45 @@ void OleComponent::RetrieveObjectDataFlavors_Impl()
     {
         CComPtr< IDataObject > pDataObject;
         HRESULT hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IDataObject, (void**)&pDataObject );
-        if ( FAILED( hr ) || !pDataObject )
-            throw io::IOException(); // TODO: transport error code
-
-        CComPtr< IEnumFORMATETC > pFormatEnum;
-        hr = pDataObject->EnumFormatEtc( DATADIR_GET, &pFormatEnum );
-        if ( FAILED( hr ) || !pFormatEnum )
-            throw io::IOException(); // TODO: transport error code
-
-        FORMATETC pElem[ MAX_ENUM_ELE ];
-        ULONG nNum = 0;
-
-        // if it is possible to retrieve at least one supported graphical format for an aspect
-        // this format can be converted to other supported formats
-        sal_uInt32 nSupportedAspects = 0;
-        do
+        if ( SUCCEEDED( hr ) && pDataObject )
         {
-            HRESULT hr = pFormatEnum->Next( MAX_ENUM_ELE, pElem, &nNum );
-            if( hr == S_OK || hr == S_FALSE )
+            CComPtr< IEnumFORMATETC > pFormatEnum;
+            hr = pDataObject->EnumFormatEtc( DATADIR_GET, &pFormatEnum );
+            if ( SUCCEEDED( hr ) && pFormatEnum )
             {
-                for( sal_uInt32 nInd = 0; nInd < FORMATS_NUM; nInd++ )
-                {
-                    if ( pElem[nInd].cfFormat == pFormatTemplates[nInd].cfFormat
-                      && pElem[nInd].tymed == pFormatTemplates[nInd].tymed )
-                        nSupportedAspects |= pElem[nInd].dwAspect;
-                }
-            }
-            else
-                break;
-        }
-        while( nNum == MAX_ENUM_ELE );
+                FORMATETC pElem[ MAX_ENUM_ELE ];
+                ULONG nNum = 0;
 
-        m_aDataFlavors = m_pNativeImpl->GetFlavorsForAspects( nSupportedAspects );
+                // if it is possible to retrieve at least one supported graphical format for an aspect
+                // this format can be converted to other supported formats
+                sal_uInt32 nSupportedAspects = 0;
+                do
+                {
+                    HRESULT hr = pFormatEnum->Next( MAX_ENUM_ELE, pElem, &nNum );
+                    if( hr == S_OK || hr == S_FALSE )
+                    {
+                        for( sal_uInt32 nInd = 0; nInd < FORMATS_NUM; nInd++ )
+                            {
+                            if ( pElem[nInd].cfFormat == pFormatTemplates[nInd].cfFormat
+                              && pElem[nInd].tymed == pFormatTemplates[nInd].tymed )
+                                nSupportedAspects |= pElem[nInd].dwAspect;
+                        }
+                    }
+                    else
+                        break;
+                }
+                while( nNum == MAX_ENUM_ELE );
+
+                m_aDataFlavors = m_pNativeImpl->GetFlavorsForAspects( nSupportedAspects );
+            }
+        }
+
+        if ( !m_aDataFlavors.getLength() )
+        {
+            // TODO:
+            // for any reason the object could not provide this information
+            // try to get access to the cached representation
+        }
     }
 }
 
@@ -1013,6 +1026,7 @@ void OleComponent::InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent )
 //----------------------------------------------
 void OleComponent::RunObject()
 {
+    OSL_ENSURE( m_pNativeImpl->m_pOleObject, "The pointer can not be set to NULL here!\n" );
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
@@ -1020,17 +1034,19 @@ void OleComponent::RunObject()
     {
         HRESULT hr = OleRun( m_pNativeImpl->m_pObj );
         if ( FAILED( hr ) )
-            throw io::IOException();
+        {
+            if ( hr == REGDB_E_CLASSNOTREG )
+                throw embed::WrongStateException(); // the object server is not installed
+            else
+                throw io::IOException();
+        }
     }
 }
 
 //----------------------------------------------
 void OleComponent::CloseObject()
 {
-    if ( !m_pNativeImpl->m_pOleObject )
-        throw embed::WrongStateException(); // TODO: the object is in wrong state
-
-    if ( OleIsRunning( m_pNativeImpl->m_pOleObject ) )
+    if ( m_pNativeImpl->m_pOleObject && OleIsRunning( m_pNativeImpl->m_pOleObject ) )
         m_pNativeImpl->m_pOleObject->Close( OLECLOSE_NOSAVE ); // must be saved before
 }
 
@@ -1089,6 +1105,9 @@ void OleComponent::ExecuteVerb( sal_Int32 nVerbID )
 
     if ( FAILED( hr ) )
         throw io::IOException(); // TODO
+
+    // TODO/LATER: the real names should be used here
+    m_pNativeImpl->m_pOleObject->SetHostNames( L"app name", L"untitled" );
 }
 
 //----------------------------------------------
@@ -1113,7 +1132,14 @@ void OleComponent::SetExtent( const awt::Size& aVisAreaSize, sal_Int64 nAspect )
     HRESULT hr = m_pNativeImpl->m_pOleObject->SetExtent( nMSAspect, &aSize );
 
     if ( FAILED( hr ) )
-        throw io::IOException(); // TODO
+    {
+        // TODO/LATER: is it correct? In future user code probably should be ready for the exception.
+        // if the object is running but not activated, RPC_E_SERVER_DIED error code is returned by OLE package
+        // in this case just do nothing
+        // Also Visio returns E_FAIL on resize if it is in running state
+        // if ( hr != RPC_E_SERVER_DIED )
+        //  throw io::IOException(); // TODO
+    }
 }
 
 //----------------------------------------------
@@ -1124,10 +1150,18 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
 
     DWORD nMSAspect = ( DWORD )nAspect; // first 32 bits are for MS aspects
     SIZEL aSize;
-    HRESULT hr = m_pNativeImpl->m_pOleObject->GetExtent( nMSAspect, &aSize );
+    HRESULT hr = m_pNativeImpl->m_pViewObject2->GetExtent( nMSAspect, -1, NULL, &aSize );
 
     if ( FAILED( hr ) )
-        throw io::IOException(); // TODO
+    {
+        // TODO/LATER: is it correct?
+        // if there is no appropriate cache, OLE_E_BLANK error code is returned
+        // in this case just return empty size
+        if ( hr == OLE_E_BLANK )
+            return awt::Size( 0, 0 );
+        else
+            throw io::IOException(); // TODO
+    }
 
     return awt::Size( aSize.cx, aSize.cy );
 }
@@ -1162,7 +1196,7 @@ uno::Sequence< sal_Int8 > OleComponent::GetCLSID()
 }
 
 //----------------------------------------------
-void OleComponent::StoreObjectToStream( uno::Reference< io::XOutputStream > xOutStream, sal_Bool bStoreVisReplace )
+void OleComponent::StoreObjectToStream( uno::Reference< io::XOutputStream > xOutStream )
 {
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
@@ -1180,18 +1214,18 @@ void OleComponent::StoreObjectToStream( uno::Reference< io::XOutputStream > xOut
     if ( FAILED( hr ) )
         throw io::IOException(); // TODO
 
-    if ( !bStoreVisReplace )
-    {
-        // remove all the cache streams from the storage
-        for ( sal_uInt8 nInd = 0; nInd < 10; nInd++ )
-        {
-            ::rtl::OUString aStreamName = ::rtl::OUString::createFromAscii( "\002OlePres00" );
-            aStreamName += ::rtl::OUString::valueOf( (sal_Int32)nInd );
-            hr = m_pNativeImpl->m_pIStorage->DestroyElement( aStreamName.getStr() );
-            if ( FAILED( hr ) )
-                break;
-        }
-    }
+//REMOVE        if ( !bStoreVisReplace )
+//REMOVE        {
+//REMOVE            // remove all the cache streams from the storage
+//REMOVE            for ( sal_uInt8 nInd = 0; nInd < 10; nInd++ )
+//REMOVE            {
+//REMOVE                ::rtl::OUString aStreamName = ::rtl::OUString::createFromAscii( "\002OlePres00" );
+//REMOVE                aStreamName += ::rtl::OUString::valueOf( (sal_Int32)nInd );
+//REMOVE                hr = m_pNativeImpl->m_pIStorage->DestroyElement( aStreamName.getStr() );
+//REMOVE                if ( FAILED( hr ) )
+//REMOVE                    break;
+//REMOVE            }
+//REMOVE        }
 
     hr = m_pNativeImpl->m_pIStorage->Commit( STGC_DEFAULT );
     if ( FAILED( hr ) )
@@ -1493,7 +1527,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
         uno::Reference< io::XInputStream > xTempInStream = xTempFileStream->getInputStream();
         if ( xTempOutStream.is() && xTempInStream.is() )
         {
-            StoreObjectToStream( xTempOutStream, sal_False );
+            StoreObjectToStream( xTempOutStream );
             xTempOutStream->closeOutput();
             xTempOutStream = uno::Reference< io::XOutputStream >();
         }
