@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:12 $
+ *  last change: $Author: rt $ $Date: 2003-05-27 16:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2138,6 +2138,8 @@ namespace xmloff { namespace token {
         // #107245# New 3D properties which are possible for lathe and extrude 3d objects
         TOKEN( "close-front" ),                 // XML_CLOSE_FRONT
         TOKEN( "close-back" ),                  // XML_CLOSE_BACK
+
+        TOKEN( "join-border" ),                // XML_JOIN_BORDER
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
