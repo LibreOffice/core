@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.21 $
+*  $Revision: 1.22 $
 *
-*  last change: $Author: vg $ $Date: 2004-12-23 11:49:54 $
+*  last change: $Author: rt $ $Date: 2005-01-27 15:31:10 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -111,7 +111,6 @@ void SAL_CALL ScriptProtocolHandler::initialize(
 {
     if ( m_bInitialised )
     {
-        OSL_TRACE( "ScriptProtocolHandler Already initialised" );
         return ;
     }
 
@@ -126,7 +125,6 @@ void SAL_CALL ScriptProtocolHandler::initialize(
 
     validateXRef( m_xFactory,
         "ScriptProtocolHandler::initialize: No Service Manager available" );
-    OSL_TRACE( "ScriptProtocolHandler::initialize\n " );
     m_bInitialised = true;
 }
 
@@ -135,8 +133,6 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     throw( ::com::sun::star::uno::RuntimeException )
 {
     Reference< XDispatch > xDispatcher;
-    OSL_TRACE( "ScriptProtocolHandler::queryDispatch - 1, for URL.complete %s \n",
-        ::rtl::OUStringToOString( aURL.Complete, RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
     // get scheme of url
 
     Reference< uri::XUriReferenceFactory > xFac (
@@ -152,23 +148,8 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
             {
                 xDispatcher = this;
             }
-            else
-            {
-                OSL_TRACE("ScriptProtocolHandler::queryDispatch - 2 scheme doesn't match" );
-            }
-        }
-        else
-        {
-            OSL_TRACE( "ScriptProtocolHandler::queryDispatch - 2 failed to getUrlReference from factory for scheme\n" );
         }
     }
-
-
-    else
-    {
-        OSL_TRACE( "ScriptProtocolHandler::queryDispatch - 2 failed to match scheme\n" );
-    }
-    OSL_TRACE( "ScriptProtocolHandler::queryDispatch - 2\n" );
 
     return xDispatcher;
 }
@@ -186,8 +167,6 @@ throw( RuntimeException )
                                                 seqDescriptor[ i ].FrameName,
                                                 seqDescriptor[ i ].SearchFlags );
     }
-    OSL_TRACE( "ScriptProtocolHandler::queryDispatches \n" );
-
     return lDispatcher;
 }
 
@@ -202,8 +181,6 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     bool bCaughtException = FALSE;
     Any aException;
 
-    OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotification - start \nInput URL %s and %d args\n",
-    ::rtl::OUStringToOString( aURL.Complete, RTL_TEXTENCODING_ASCII_US ).pData->buffer, lArgs.getLength() );
     if ( m_bInitialised )
     {
         try
@@ -231,14 +208,11 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             if ( pDocShell && aURL.Complete.indexOf( ::rtl::OUString::createFromAscii("document") )!=-1 )
             {
                 pDocShell->AdjustMacroMode( String() );
-                OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotification: MacroMode = %d", pDocShell->GetMacroMode() );
 
                 if ( pDocShell->GetMacroMode() ==
                      ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
                 {
-                    // check forbids execution
-                    ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::dispatchWithNotification: execution permission denied. " );
-                    throw RuntimeException( temp, Reference< XInterface >() );
+                    return;
                 }
             }
 
@@ -261,13 +235,6 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                int argCount = 0;
                for ( int index = 0; index < lArgs.getLength(); index++ )
                {
-                   OSL_TRACE(" processing arg %d, name %s of type %s", index,
-                       ::rtl::OUStringToOString(
-                           lArgs[ index ].Name,
-                           RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-                       ::rtl::OUStringToOString(
-                           lArgs[ index ].Value.getValueTypeName(),
-                           RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                    // Sometimes we get a propertyval with name = "Referer"
                    // this is not an argument to be passed to script, so
                    // ignore.
@@ -275,7 +242,6 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                         lArgs[ index ].Name.getLength() == 0 )
                    {
                        inArgs.realloc( ++argCount );
-                       OSL_TRACE("Adding arg to inArgs");
                        inArgs[ index ] = lArgs[ index ].Value;
                    }
                }
@@ -293,9 +259,6 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
             reason = reason.concat( ite.Message );
 
-            OSL_TRACE( ::rtl::OUStringToOString(
-                reason, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
             invokeResult <<= reason;
 
             aException = makeAny( ite );
@@ -304,12 +267,9 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
            catch ( provider::ScriptFrameworkErrorException& se )
            {
             ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
-        "ScriptProtocolHandler::dispatch: caught CannotConvertException: " );
+    "ScriptProtocolHandler::dispatch: caught ScriptFrameworkErrorException: " );
 
             reason = reason.concat( se.Message );
-
-            OSL_TRACE( ::rtl::OUStringToOString(
-                reason, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
             invokeResult <<= reason;
 
@@ -323,9 +283,6 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
             reason = reason.concat( rte.Message );
 
-            OSL_TRACE( ::rtl::OUStringToOString(
-                reason, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
             invokeResult <<= reason;
 
             aException = makeAny( rte );
@@ -338,9 +295,6 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
             reason = reason.concat( e.Message );
 
-            OSL_TRACE( ::rtl::OUStringToOString(
-                reason, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
             invokeResult <<= reason;
 
             aException = makeAny( e );
@@ -352,9 +306,6 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
                 "ScriptProtocolHandler::dispatch: caught unknown exception" );
 
-            OSL_TRACE( ::rtl::OUStringToOString(
-                reason, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
             invokeResult <<= reason;
         }
 #endif
@@ -362,7 +313,6 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     }
     else
     {
-        OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotification: failed, ScriptProtocolHandler not initialised" );
         ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
         "ScriptProtocolHandler::dispatchWithNotification failed, ScriptProtocolHandler not initialised"
         );
@@ -416,15 +366,12 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
     }
-    OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotification - end" );
-
 }
 
 void SAL_CALL ScriptProtocolHandler::dispatch(
 const URL& aURL, const Sequence< PropertyValue >& lArgs )
 throw ( RuntimeException )
 {
-    OSL_TRACE("ScriptProtocolHandler::dispatch");
     dispatchWithNotification( aURL, lArgs, Reference< XDispatchResultListener >() );
 }
 
@@ -446,13 +393,10 @@ throw ( RuntimeException )
 {
     if ( m_xScriptProvider.is() )
     {
-        OSL_TRACE("ScriptProtocolHandler::createScriptProvider(), function provider already created");
         return;
     }
     try
     {
-        OSL_TRACE("ScriptProtocolHandler::createScriptProvider() need one");
-
         css::uno::Sequence < css::uno::Any > args( 1 );
         Reference< XModel > xModel;
         if ( m_xFrame.is() )
@@ -465,8 +409,11 @@ throw ( RuntimeException )
 
                 Reference< provider::XScriptProviderSupplier > xSPS =
                     Reference< provider::XScriptProviderSupplier >
-                        ( xModel, UNO_QUERY_THROW );
-                m_xScriptProvider = xSPS->getScriptProvider();
+                        ( xModel, UNO_QUERY );
+                if ( xSPS.is() )
+                {
+                    m_xScriptProvider = xSPS->getScriptProvider();
+                }
             }
         }
 
@@ -498,15 +445,12 @@ throw ( RuntimeException )
     }
     catch ( Exception & e )
     {
-        OSL_TRACE( "ScriptProtocolHandler::createScriptProvider: Caught Exception %s",
-        ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::createScriptProvider: " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
 #ifdef _DEBUG
     catch ( ... )
     {
-        OSL_TRACE( "ScriptProtocolHandler::createScriptProvier: Unknown exception caught" );
         throw RuntimeException(
         OUSTR( "ScriptProtocolHandler::createScriptProvider: UnknownException: " ),
             Reference< XInterface > () );
@@ -519,12 +463,10 @@ ScriptProtocolHandler::ScriptProtocolHandler(
 Reference< css::lang::XMultiServiceFactory > const& rFact ) :
 m_bInitialised( false ), m_xFactory( rFact )
 {
-    OSL_TRACE( "ScriptProtocolHandler::ScriptProtocolHandler - ctor" );
 }
 
 ScriptProtocolHandler::~ScriptProtocolHandler()
 {
-    OSL_TRACE( "ScriptProtocolHandler::ScriptProtocolHandler - dtor" );
 }
 
 /* XServiceInfo */
