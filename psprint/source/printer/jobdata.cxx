@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobdata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:46:03 $
+ *  last change: $Author: pl $ $Date: 2002-06-19 10:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,12 @@
 #include <psprint/jobdata.hxx>
 #include <psprint/printerinfomanager.hxx>
 #include <tools/stream.hxx>
+
+#ifdef SOLARIS
+#include <alloca.h>
+#else
+#include <stdlib.h>
+#endif
 
 using namespace psp;
 using namespace rtl;
@@ -127,7 +133,7 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
         aStream.Write( pContextBuffer, nBytes );
 
     // success
-    pData = new char[ bytes = aStream.GetSize() ];
+    pData = rtl_allocateMemory( bytes = aStream.GetSize() );
     memcpy( pData, aStream.GetData(), bytes );
     return true;
 }
@@ -206,10 +212,9 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
                 {
                     rJobData.m_aContext.setParser( rJobData.m_pParser );
                     int nBytes = bytes - aStream.Tell();
-                    void* pRemain = new char[ bytes - aStream.Tell() ];
+                    void* pRemain = alloca( bytes - aStream.Tell() );
                     aStream.Read( pRemain, nBytes );
                     rJobData.m_aContext.rebuildFromStreamBuffer( pRemain, nBytes );
-                    delete pRemain;
                     bContext = true;
                 }
             }
