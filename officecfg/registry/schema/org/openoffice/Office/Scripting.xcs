@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Scripting.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:54:23 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 23:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,13 +93,13 @@
 				<info>
 					<desc xml:lang="en-US">Show Basic scripts in assignment dialogs</desc>
 				</info>
-				<value>true</value>
+				<value>false</value>
 			</prop>
 			<prop oor:name="ShowSF" oor:type="xs:boolean">
 				<info>
 					<desc xml:lang="en-US">Show Scripting Framework scripts in assignment dialogs</desc>
 				</info>
-				<value>false</value>
+				<value>true</value>
 			</prop>
 		</group>
 	</component>
