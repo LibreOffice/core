@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-19 16:19:23 $
+#   last change: $Author: hr $ $Date: 2004-02-02 20:21:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,10 +96,6 @@ OBJFILES=	\
         $(OBJ)$/filehelper.obj	\
         $(OBJ)$/trivialbufferedfile.obj \
 
-
-.IF "$(OS)"=="MACOSX"
-SYMBOLPREFIX=$(CFGMGR_TARGET)$(CFGMGR_MAJOR)
-.ENDIF
 
 # --- Targets ----------------------------------
 
