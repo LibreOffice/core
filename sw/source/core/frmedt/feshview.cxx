@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:29:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1901,6 +1901,9 @@ BOOL SwFEShell::ImpEndCreate()
         // --> OD 2004-10-25 #i36010# - set layout direction of the position
         pFmt->SetPositionLayoutDir(
             com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
+        // <--
+        // --> OD 2005-03-11 #i44344#, #i44681# - positioning attributes already set
+        pFmt->PosAttrSet();
         // <--
 
         SwDrawContact *pContact = new SwDrawContact( pFmt, &rSdrObj );
