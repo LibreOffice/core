@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-29 12:24:20 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,12 @@ OAdoTable::OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCa
     m_aTable.putref_ParentCatalog(_pCatalog->getCatalog());
 
 }
+// -----------------------------------------------------------------------------
+void SAL_CALL OAdoTable::disposing(void)
+{
+    OTable_TYPEDEF::disposing();
+    m_aTable.clear();
+}
 // -------------------------------------------------------------------------
 void OAdoTable::refreshColumns()
 {
@@ -231,6 +237,11 @@ void SAL_CALL OAdoTable::rename( const ::rtl::OUString& newName ) throw(SQLExcep
     ADOS::ThrowException(*(m_pCatalog->getConnection()->getConnection()),*this);
 
     OTable_TYPEDEF::rename(newName);
+}
+// -----------------------------------------------------------------------------
+Reference< XDatabaseMetaData> OAdoTable::getMetaData() const
+{
+    return m_pCatalog->getConnection()->getMetaData();
 }
 // -------------------------------------------------------------------------
 // XAlterTable
