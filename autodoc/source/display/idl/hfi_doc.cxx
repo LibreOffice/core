@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_doc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:25 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,15 @@ HF_IdlDocu::Produce_byData( const client &  i_ce,
     if ( i_pDocu->IsDeprecated() )
     {
         rOut.Produce_Term("[ DEPRECATED ]");
+
+        if (NOT i_pDocu->DeprecatedText().IsEmpty())
+        {
+            HF_IdlDocuTextDisplay
+                aDescription( Env(), 0, i_ce);
+            aDescription.Out().Enter( rOut.Produce_Definition() );
+            i_pDocu->DeprecatedText().DisplayAt( aDescription );
+            aDescription.Out().Leave();
+        }
     }
     if ( i_pDocu->IsOptional() )
     {
