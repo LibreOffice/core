@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:14:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,9 +645,19 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrint
 
         Size aOne = pDev->PixelToLogic( Size(1,1) );
         if (bMetaFile)
-            aOne = Size(1,1);   // kompatibel zu DrawGrid
-        pDev->DrawLine( Point(nScrX,nScrY), Point(nScrX,nScrY+aOutputData.GetScrH()-aOne.Width() ) );
-        pDev->DrawLine( Point(nScrX,nScrY), Point(nScrX+aOutputData.GetScrW()-aOne.Height(),nScrY ) );
+            aOne = Size(1,1);   // compatible with DrawGrid
+        long nRight = nScrX + aOutputData.GetScrW() - aOne.Width();
+        long nBottom = nScrY + aOutputData.GetScrH() - aOne.Height();
+
+        BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+
+        // extra line at the left edge for left-to-right, right for right-to-left
+        if ( bLayoutRTL )
+            pDev->DrawLine( Point(nRight,nScrY), Point(nRight,nBottom) );
+        else
+            pDev->DrawLine( Point(nScrX,nScrY), Point(nScrX,nBottom) );
+        // extra line at the top in both cases
+        pDev->DrawLine( Point(nScrX,nScrY), Point(nRight,nScrY) );
     }
 
     // #109985#
@@ -1417,24 +1427,35 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
 
 void ScPrintFunc::PrintColHdr( USHORT nX1, USHORT nX2, long nScrX, long nScrY )
 {
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nPrintTab );
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+
     Size aOnePixel = pDev->PixelToLogic(Size(1,1));
     long nOneX = aOnePixel.Width();
     long nOneY = aOnePixel.Height();
+    USHORT nCol;
 
     long nHeight = (long) (PRINT_HEADER_HEIGHT * nScaleY);
     long nEndY = nScrY + nHeight - nOneY;
 
-    long nPosX = nScrX - nOneX;
+    long nPosX = nScrX;
+    if ( bLayoutRTL )
+    {
+        for (nCol=nX1; nCol<=nX2; nCol++)
+            nPosX += (long)( pDoc->GetColWidth( nCol, nPrintTab ) * nScaleX );
+    }
+    else
+        nPosX -= nOneX;
     long nPosY = nScrY - nOneY;
     String aText;
 
-    for (USHORT nCol=nX1; nCol<=nX2; nCol++)
+    for (nCol=nX1; nCol<=nX2; nCol++)
     {
         USHORT nDocW = pDoc->GetColWidth( nCol, nPrintTab );
         if (nDocW)
         {
             long nWidth = (long) (nDocW * nScaleX);
-            long nEndX = nPosX + nWidth;
+            long nEndX = nPosX + nWidth * nLayoutSign;
 
             pDev->DrawRect( Rectangle( nPosX,nPosY,nEndX,nEndY ) );
 
@@ -1449,7 +1470,10 @@ void ScPrintFunc::PrintColHdr( USHORT nX1, USHORT nX2, long nScrX, long nScrY )
             long nTextHeight = pDev->GetTextHeight();
             long nAddX = ( nWidth  - nTextWidth  ) / 2;
             long nAddY = ( nHeight - nTextHeight ) / 2;
-            pDev->DrawText( Point( nPosX+nAddX,nPosY+nAddY ), aText );
+            long nTextPosX = nPosX+nAddX;
+            if ( bLayoutRTL )
+                nTextPosX -= nWidth;
+            pDev->DrawText( Point( nTextPosX,nPosY+nAddY ), aText );
 
             nPosX = nEndX;
         }
@@ -1462,10 +1486,16 @@ void ScPrintFunc::PrintRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY )
     long nOneX = aOnePixel.Width();
     long nOneY = aOnePixel.Height();
 
-    long nWidth = (long) (PRINT_HEADER_WIDTH * nScaleX);
-    long nEndX = nScrX + nWidth - nOneX;
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nPrintTab );
 
-    long nPosX = nScrX - nOneX;
+    long nWidth = (long) (PRINT_HEADER_WIDTH * nScaleX);
+    long nEndX = nScrX + nWidth;
+    long nPosX = nScrX;
+    if ( !bLayoutRTL )
+    {
+        nEndX -= nOneX;
+        nPosX -= nOneX;
+    }
     long nPosY = nScrY - nOneY;
     String aText;
 
@@ -1519,8 +1549,12 @@ void ScPrintFunc::LocateRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY,
     long nOneX = aOnePixel.Width();
     long nOneY = aOnePixel.Height();
 
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nPrintTab );
+
     long nWidth = (long) (PRINT_HEADER_WIDTH * nScaleX);
-    long nEndX = nScrX + nWidth - nOneX;
+    long nEndX = nScrX + nWidth;
+    if ( !bLayoutRTL )
+        nEndX -= nOneX;
 
     long nPosY = nScrY - nOneY;
     for (USHORT nRow=nY1; nRow<=nY2; nRow++)
@@ -2085,7 +2119,10 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
 void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                                 BOOL bDoPrint, ScPreviewLocationData* pLocationData )
 {
-    //  nPageNo - Seitennummer innerhalb einer "Startseite"-Einstellung
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nPrintTab );
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+
+    //  nPageNo is the page number within all sheets of one "start page" setting
 
     if ( bClearWin && bDoPrint )
     {
@@ -2177,7 +2214,7 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
 
     long nLeftSpace = aPageRect.Left();     // Document-Twips
     long nTopSpace  = aPageRect.Top();
-    if ( bCenterHor )
+    if ( bCenterHor || bLayoutRTL )
     {
         long nDataWidth = 0;
         for (i=nX1; i<=nX2; i++)
@@ -2193,9 +2230,14 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
         if (pShadowItem && pShadowItem->GetLocation() != SVX_SHADOW_NONE)
             nDataWidth += pShadowItem->CalcShadowSpace(SHADOW_LEFT) +
                            pShadowItem->CalcShadowSpace(SHADOW_RIGHT);
-        nLeftSpace += ( aPageRect.GetWidth() - nDataWidth ) / 2;
-        if (pBorderItem)
-            nLeftSpace -= lcl_LineTotal(pBorderItem->GetLeft());
+        if ( bCenterHor )
+        {
+            nLeftSpace += ( aPageRect.GetWidth() - nDataWidth ) / 2;        // LTR or RTL
+            if (pBorderItem)
+                nLeftSpace -= lcl_LineTotal(pBorderItem->GetLeft());
+        }
+        else if ( bLayoutRTL )
+            nLeftSpace += aPageRect.GetWidth() - nDataWidth;                // align to the right edge of the page
     }
     if ( bCenterVer )
     {
@@ -2218,7 +2260,32 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
             nTopSpace -= lcl_LineTotal(pBorderItem->GetTop());
     }
 
-    //  Seite aufteilen
+    //  calculate sizes of the elements for partitioning
+    //  (header, repeat, data)
+
+    long nHeaderWidth   = 0;
+    long nHeaderHeight  = 0;
+    long nRepeatWidth   = 0;
+    long nRepeatHeight  = 0;
+    long nContentWidth  = 0;        // scaled - not the same as nDataWidth above
+    long nContentHeight = 0;
+    if (aTableParam.bHeaders)
+    {
+        nHeaderWidth  = (long) (PRINT_HEADER_WIDTH * nScaleX);
+        nHeaderHeight = (long) (PRINT_HEADER_HEIGHT * nScaleY);
+    }
+    if (bDoRepCol)
+        for (i=nRepeatStartCol; i<=nRepeatEndCol; i++)
+            nRepeatWidth += (long) (pDoc->GetColWidth(i,nPrintTab) * nScaleX);
+    if (bDoRepRow)
+        for (i=nRepeatStartRow; i<=nRepeatEndRow; i++)
+            nRepeatHeight += (long) (pDoc->FastGetRowHeight(i,nPrintTab) * nScaleY);
+    for (i=nX1; i<=nX2; i++)
+        nContentWidth += (long) (pDoc->GetColWidth(i,nPrintTab) * nScaleX);
+    for (i=nY1; i<=nY2; i++)
+        nContentHeight += (long) (pDoc->FastGetRowHeight(i,nPrintTab) * nScaleY);
+
+    //  partition the page
 
     long nStartX = ((long) ( nLeftSpace * nScaleX ));
     long nStartY = ((long) ( nTopSpace  * nScaleY ));
@@ -2239,27 +2306,41 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
         nInnerStartX += (long) ( pShadowItem->CalcShadowSpace(SHADOW_LEFT) * nScaleX );
         nInnerStartY += (long) ( pShadowItem->CalcShadowSpace(SHADOW_TOP) * nScaleY );
     }
-    long nRepStartX = nInnerStartX;
-    long nRepStartY = nInnerStartY;
-    if (aTableParam.bHeaders)
+
+    if ( bLayoutRTL )
     {
-        nRepStartX += (long) (PRINT_HEADER_WIDTH * nScaleX);
-        nRepStartY += (long) (PRINT_HEADER_HEIGHT * nScaleY);
+        //  arrange elements starting from the right edge
+        nInnerStartX += nHeaderWidth + nRepeatWidth + nContentWidth;
+
+        //  make rounding easier so the elements are really next to each other in preview
+        Size aOffsetOnePixel = pDev->PixelToLogic( Size(1,1), aOffsetMode );
+        long nOffsetOneX = aOffsetOnePixel.Width();
+        nInnerStartX += nOffsetOneX / 2;
     }
-    long nDataX = nRepStartX;
-    long nDataY = nRepStartY;
-    if (bDoRepCol)
-        for (i=nRepeatStartCol; i<=nRepeatEndCol; i++)
-            nDataX += (long) (pDoc->GetColWidth(i,nPrintTab) * nScaleX);
-    if (bDoRepRow)
-        for (i=nRepeatStartRow; i<=nRepeatEndRow; i++)
-            nDataY += (long) (pDoc->FastGetRowHeight(i,nPrintTab) * nScaleY);
-    long nEndX = nDataX;
-    long nEndY = nDataY;
-    for (i=nX1; i<=nX2; i++)
-        nEndX += (long) (pDoc->GetColWidth(i,nPrintTab) * nScaleX);
-    for (i=nY1; i<=nY2; i++)
-        nEndY += (long) (pDoc->FastGetRowHeight(i,nPrintTab) * nScaleY);
+
+    long nFrameStartX = nInnerStartX;
+    long nFrameStartY = nInnerStartY;
+
+    long nRepStartX = nInnerStartX + nHeaderWidth * nLayoutSign;    // widths/heights are 0 if not used
+    long nRepStartY = nInnerStartY + nHeaderHeight;
+    long nDataX = nRepStartX + nRepeatWidth * nLayoutSign;
+    long nDataY = nRepStartY + nRepeatHeight;
+    long nEndX = nDataX + nContentWidth * nLayoutSign;
+    long nEndY = nDataY + nContentHeight;
+    long nFrameEndX = nEndX;
+    long nFrameEndY = nEndY;
+
+    if ( bLayoutRTL )
+    {
+        //  each element's start position is its left edge
+        //! subtract one pixel less?
+        nInnerStartX -= nHeaderWidth;       // used for header
+        nRepStartX   -= nRepeatWidth;
+        nDataX       -= nContentWidth;
+
+        //  continue right of the main elements again
+        nEndX += nHeaderWidth + nRepeatWidth + nContentWidth;
+    }
 
     //  Seiten-Rahmen / Hintergrund
 
@@ -2381,12 +2462,19 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
         long nOneX = aOnePixel.Width();
         long nOneY = aOnePixel.Height();
 
-        long nLeftX = nInnerStartX-nOneX;
-        long nTopY  = nInnerStartY-nOneY;
+        long nLeftX   = nFrameStartX;
+        long nTopY    = nFrameStartY - nOneY;
+        long nRightX  = nFrameEndX;
+        long nBottomY = nFrameEndY - nOneY;
+        if ( !bLayoutRTL )
+        {
+            nLeftX   -= nOneX;
+            nRightX  -= nOneX;
+        }
         pDev->SetMapMode(aOffsetMode);
         pDev->SetLineColor( aGridColor );
         pDev->SetFillColor();
-        pDev->DrawRect( Rectangle( nLeftX, nTopY, nEndX-nOneX, nEndY-nOneY ) );
+        pDev->DrawRect( Rectangle( nLeftX, nTopY, nRightX, nBottomY ) );
         //  nEndX/Y ohne Rahmen-Anpassung
     }
 
