@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,12 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
         pSectNd->SetNewSection( pNew );
 
         if( bExpand )
-            pNew->Update();
+        {
+            // OD 19.03.2003 #106329# - add value for 2nd parameter = true to
+            // indicate, that a creation of a new table of content has to be performed.
+            // Value of 1st parameter = default value.
+            pNew->Update( 0, true );
+        }
         else if( 1 == rTOX.GetTitle().Len() && IsInReading() )
         // insert title of TOX
         {
@@ -957,7 +962,8 @@ BOOL SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, BOOL bAtStart ) const
      Beschreibung: Verzeichnisinhalt zusammensammeln
  --------------------------------------------------------------------*/
 
-void SwTOXBaseSection::Update(const SfxItemSet* pAttr)
+void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
+                              const bool        _bNewTOX )
 {
     const SwSectionNode* pSectNd;
     if( !SwTOXBase::GetRegisteredIn()->GetDepends() ||
@@ -970,6 +976,58 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr)
         GetFmt()->SetAttr(*pAttr);
 
     SwDoc* pDoc = (SwDoc*)pSectNd->GetDoc();
+    // OD 18.03.2003 #106329# - determine default page description, which
+    // will be used by the content nodes, if no approriate one is found.
+    const SwPageDesc* pDefaultPageDesc;
+    {
+        pDefaultPageDesc =
+            pSectNd->GetSection().GetFmt()->GetPageDesc().GetPageDesc();
+        if ( !_bNewTOX && !pDefaultPageDesc )
+        {
+            // determine page description of table-of-content
+            sal_uInt32 nPgDescNdIdx = pSectNd->GetIndex() + 1;
+            sal_uInt32* pPgDescNdIdx = &nPgDescNdIdx;
+            pDefaultPageDesc = pSectNd->FindPageDesc( FALSE, pPgDescNdIdx );
+            if ( nPgDescNdIdx < pSectNd->GetIndex() )
+            {
+                pDefaultPageDesc = 0;
+            }
+        }
+        if ( !pDefaultPageDesc &&
+             ( pSectNd->EndOfSectionNode()->GetIndex() <
+                    pSectNd->GetNodes().GetEndOfContent().GetIndex() )
+           )
+        {
+            // determine page description of content after table-of-content
+            SwNodeIndex aIdx( *(pSectNd->EndOfSectionNode()) );
+            const SwCntntNode* pNdAfterTOX = pSectNd->GetNodes().GoNext( &aIdx );
+            const SwAttrSet& aNdAttrSet = pNdAfterTOX->GetSwAttrSet();
+            const SvxBreak eBreak = aNdAttrSet.GetBreak().GetBreak();
+            if ( !( eBreak == SVX_BREAK_PAGE_BEFORE ||
+                    eBreak == SVX_BREAK_PAGE_BOTH )
+               )
+            {
+                pDefaultPageDesc = pNdAfterTOX->FindPageDesc( FALSE );
+            }
+        }
+        if ( !pDefaultPageDesc &&
+             ( pSectNd->GetIndex() >
+                    pSectNd->GetNodes().GetEndOfExtras().GetIndex() + 1 )
+           )
+        {
+            // determine page description of content before table-of-content
+            SwNodeIndex aIdx( *pSectNd );
+            pDefaultPageDesc =
+                pSectNd->GetNodes().GoPrevious( &aIdx )->FindPageDesc( FALSE );
+
+        }
+        if ( !pDefaultPageDesc )
+        {
+            // determine default page description
+            pDefaultPageDesc = &pDoc->GetPageDesc( 0 );
+        }
+    }
+
     pDoc->SetModified();
 
     // get current Language
@@ -1141,7 +1199,9 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
                     pNextMark->GetSecondaryKey() == sSecKey)
                 nRange++;
         }
-        GenerateText( nCnt, nRange, aStrArr );
+        // OD 18.03.2003 #106329# - pass node index of table-of-content section
+        // and default page description to method <GenerateText(..)>.
+        GenerateText( nCnt, nRange, aStrArr, pSectNd->GetIndex(), pDefaultPageDesc );
         nCnt += nRange - 1;
     }
 
@@ -1759,8 +1819,13 @@ String lcl_GetNumString( const SwTOXSortTabBase& rBase )
     return sRet;
 }
 
-void SwTOXBaseSection::GenerateText( USHORT nArrayIdx, USHORT nCount,
-                                    SvStringsDtor& rTabForms )
+// OD 18.03.2003 #106329# - add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc>
+// in order to control, which page description is used, no appropriate one is found.
+void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
+                                     USHORT nCount,
+                                     SvStringsDtor& rTabForms,
+                                     const sal_uInt32   _nTOXSectNdIdx,
+                                     const SwPageDesc*  _pDefaultPageDesc )
 {
     LinkStructArr   aLinkArr;
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
@@ -1854,9 +1919,18 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx, USHORT nCount,
                     {
                         // dann hilft alles nichts, wir muessen ueber die Seiten-
                         // vorlage gehen.
-                        if( !pPageDesc &&
-                            0 == (pPageDesc = pTOXNd->FindPageDesc( FALSE ) ) )
-                            pPageDesc = &pDoc->GetPageDesc( 0 );
+                        // OD 18.03.2003 #106329# - call
+                        sal_uInt32 nPgDescNdIdx = pTOXNd->GetIndex() + 1;
+                        sal_uInt32* pPgDescNdIdx = &nPgDescNdIdx;
+                        pPageDesc = pTOXNd->FindPageDesc( FALSE, pPgDescNdIdx );
+                        if ( !pPageDesc ||
+                             *pPgDescNdIdx < _nTOXSectNdIdx )
+                        {
+                            // use default page description, if none is found
+                            // or the found one is given by a node before the
+                            // table-of-content section.
+                            pPageDesc = _pDefaultPageDesc;
+                        }
 
                         const SwFrmFmt& rPgDscFmt = pPageDesc->GetMaster();
                         nRightMargin = rPgDscFmt.GetFrmSize().GetWidth() -
