@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:10:07 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1216,15 +1216,6 @@ SfxChildAlignment eRetAlign;
         }
     return eRetAlign;
 
-}
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-BOOL SwNavigationPI::IsInDrag() const
-{
-    return aContentTree.IsInternalDrag() || aContentTree.IsInDrag();
 }
 
 /*--------------------------------------------------------------------
