@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2004-03-11 14:41:40 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,8 +460,6 @@ class SwDoc
     sal_Bool    bUpdateTOX      : 1;    // TRUE: nach Dokument laden die TOX Updaten
     sal_Bool    bInLoadAsynchron: 1;    // TRUE: Dokument wird gerade asynchron geladen
     sal_Bool    bHTMLMode       : 1;    // TRUE: Dokument ist im HTMLMode
-    sal_Bool    bHeadInBrowse   : 1;    // TRUE: Header sind im BrowseMode aktiviert
-    sal_Bool    bFootInBrowse   : 1;    // TRUE: Footer sind im BrowseMode aktiviert
     sal_Bool    bFrmBeepEnabled : 1;    // TRUE: Frames beepen wenn der Inhalt zu gross wird
     sal_Bool    bInCallModified : 1;    // TRUE: im Set/Reset-Modified Link
     sal_Bool    bIsGlobalDoc    : 1;    // TRUE: es ist ein GlobalDokument
@@ -641,10 +639,6 @@ public:
     sal_Bool IsBrowseMode() const                       { return bBrowseMode; }
     void SetHTMLMode( sal_Bool bFlag = sal_True )       { bHTMLMode = bFlag; }
     sal_Bool IsHTMLMode() const                         { return bHTMLMode; }
-    void SetHeadInBrowse( sal_Bool bFlag = sal_True )   { bHeadInBrowse = bFlag; }
-    sal_Bool IsHeadInBrowse() const                     { return bHeadInBrowse; }
-    void SetFootInBrowse( sal_Bool bFlag = sal_True )   { bFootInBrowse = bFlag; }
-    sal_Bool IsFootInBrowse() const                     { return bFootInBrowse; }
     void SetFrmBeepEnabled( sal_Bool bFlag = sal_True ) { bFrmBeepEnabled = bFlag; }
     sal_Bool IsFrmBeepEnabled() const                   { return bFrmBeepEnabled; }
 
