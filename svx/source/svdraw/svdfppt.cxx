@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-29 15:37:29 $
+ *  last change: $Author: sj $ $Date: 2001-04-03 15:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1248,7 +1248,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     }
                     break;
                 }
-                sal_Int32   nMinFrameWidth = rTextRect.GetWidth() - ( nTextLeft + nTextRight );
+                nMinFrameWidth = rTextRect.GetWidth() - ( nTextLeft + nTextRight );
             }
             else
             {
@@ -1336,7 +1336,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     }
                     break;
                 }
-                sal_Int32   nMinFrameHeight = rTextRect.GetHeight() - ( nTextTop + nTextBottom );
+                nMinFrameHeight = rTextRect.GetHeight() - ( nTextTop + nTextBottom );
             }
 
 
