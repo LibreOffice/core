@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 07:30:16 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ String STR_CANT_UNDO
     TEXT [ English ] = "not possible" ;
     TEXT [ norwegian ] = "ikke mulig" ;
     TEXT [ italian ] = "Impossibile" ;
-    TEXT [ portuguese_brazilian ] = "não possível" ;
+    TEXT [ portuguese_brazilian ] = "n?o poss?vel" ;
     TEXT [ portuguese ] = "Impossível" ;
     TEXT [ finnish ] = "ei mahdollinen" ;
     TEXT [ danish ] = "ikke mulig" ;
@@ -183,7 +183,7 @@ String STR_SPLITNODE_UNDO
     TEXT [ English ] = "new Paragraph" ;
     TEXT [ norwegian ] = "nytt Avsnitt" ;
     TEXT [ italian ] = "Nuovo paragrafo" ;
-    TEXT [ portuguese_brazilian ] = "novo Parágrafo" ;
+    TEXT [ portuguese_brazilian ] = "novo Par?grafo" ;
     TEXT [ portuguese ] = "Novo parágrafo" ;
     TEXT [ finnish ] = "Uusi kappale" ;
     TEXT [ danish ] = "nyt afsnit" ;
@@ -386,7 +386,7 @@ String STR_INSERT_GLOSSARY
     TEXT [ English ] = "Insert AutoText" ;
     TEXT [ norwegian ] = "Insert AutoText" ;
     TEXT [ italian ] = "Inserisci testo automatico" ;
-    TEXT [ portuguese_brazilian ] = "Inserir Texto Automático" ;
+    TEXT [ portuguese_brazilian ] = "Inserir Texto Autom?tico" ;
     TEXT [ portuguese ] = "Inserir AutoTexto" ;
     TEXT [ finnish ] = "Lisää automaattinen teksti" ;
     TEXT [ danish ] = "Indsæt AutoTekst" ;
@@ -676,7 +676,7 @@ String STR_INSERT_PAGE_BREAK_UNDO
     TEXT [ English ] = "Hard page break" ;
     TEXT [ norwegian ] = "Fast sideskift" ;
     TEXT [ italian ] = "Interruzione di pagina fissa" ;
-    TEXT [ portuguese_brazilian ] = "Quebra forçada de página" ;
+    TEXT [ portuguese_brazilian ] = "Quebra for?ada de p?gina" ;
     TEXT [ portuguese ] = "Quebra de página fixa" ;
     TEXT [ finnish ] = "Suora sivunvaihto" ;
     TEXT [ danish ] = "Hårdt sideskift" ;
@@ -705,7 +705,7 @@ String STR_INSERT_COLUMN_BREAK_UNDO
     TEXT [ English ] = "Hard column break" ;
     TEXT [ norwegian ] = "Fast kolonneskift" ;
     TEXT [ italian ] = "Interruzione di colonna fissa" ;
-    TEXT [ portuguese_brazilian ] = "Quebra forçada de coluna" ;
+    TEXT [ portuguese_brazilian ] = "Quebra for?ada de coluna" ;
     TEXT [ portuguese ] = "Quebra de coluna fixa" ;
     TEXT [ finnish ] = "Suora sarakevaihto" ;
     TEXT [ danish ] = "Hårdt spalteskift" ;
@@ -848,7 +848,7 @@ String STR_INSERT_RULER
     Text [ English ] = "Insert Ruler" ;
     Text [ portuguese ] = "Inserir régua" ;
     Text [ english_us ] = "Insert ruler" ;
-    Text [ portuguese_brazilian ] = "Ruler einfügen" ;
+    Text [ portuguese_brazilian ] = "Ruler einf?en" ;
     Text [ swedish ] = "Infoga linjal" ;
     Text [ danish ] = "Indsæt lineal" ;
     Text [ italian ] = "Inserisci ruler" ;
@@ -876,7 +876,7 @@ String STR_INSERT_CHART
     Text [ English ] = "Insert %PRODUCTNAME Chart" ;
     Text [ portuguese ] = "Inserir %PRODUCTNAME Chart" ;
     Text [ english_us ] = "Insert %PRODUCTNAME Chart" ;
-    Text [ portuguese_brazilian ] = "%PRODUCTNAME Chart einfügen" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Chart einf?en" ;
     Text [ swedish ] = "Infoga %PRODUCTNAME Chart" ;
     Text [ danish ] = "Indsæt %PRODUCTNAME Chart" ;
     Text [ italian ] = "Inserisci %PRODUCTNAME Chart" ;
@@ -962,7 +962,7 @@ String STR_AUTOFORMAT
     TEXT [ English ] = "AutoFormat" ;
     TEXT [ norwegian ] = "AutoFormat" ;
     TEXT [ italian ] = "Formattazione automatica" ;
-    TEXT [ portuguese_brazilian ] = "Auto Formatação" ;
+    TEXT [ portuguese_brazilian ] = "Auto Formata??o" ;
     TEXT [ portuguese ] = "AutoFormato" ;
     TEXT [ finnish ] = "Automaattinen muotoilu" ;
     TEXT [ danish ] = "AutoFormat" ;
@@ -991,7 +991,7 @@ String STR_TABLEHEADLINE
     TEXT [ English ] = "Table headline" ;
     TEXT [ norwegian ] = "Tabelloverskrift" ;
     TEXT [ italian ] = "Intestazione tabella" ;
-    TEXT [ portuguese_brazilian ] = "Cabeçalho da tabela" ;
+    TEXT [ portuguese_brazilian ] = "Cabe?alho da tabela" ;
     TEXT [ portuguese ] = "Título da tabela" ;
     TEXT [ finnish ] = "Taulukon otsikko" ;
     TEXT [ danish ] = "Tabeloverskrift" ;
@@ -1049,7 +1049,7 @@ String STR_INSERTSECTION
     TEXT [ English ] = "Section insert" ;
     TEXT [ norwegian ] = "Sett inn område" ;
     TEXT [ italian ] = "Inserisci area" ;
-    TEXT [ portuguese_brazilian ] = "Inserir seção" ;
+    TEXT [ portuguese_brazilian ] = "Inserir se??o" ;
     TEXT [ portuguese ] = "Inserir secção" ;
     TEXT [ finnish ] = "Lisää osio" ;
     TEXT [ danish ] = "Indsæt område" ;
@@ -1078,7 +1078,7 @@ String STR_DELETESECTION
     TEXT [ English ] = "Section delete" ;
     TEXT [ norwegian ] = "Slett område" ;
     TEXT [ italian ] = "Elimina area" ;
-    TEXT [ portuguese_brazilian ] = "Apagar seção" ;
+    TEXT [ portuguese_brazilian ] = "Apagar se??o" ;
     TEXT [ portuguese ] = "Eliminar categoria" ;
     TEXT [ finnish ] = "Poista osio" ;
     TEXT [ danish ] = "Slet område" ;
@@ -1107,7 +1107,7 @@ String STR_CHANGESECTION
     TEXT [ English ] = "Section change" ;
     TEXT [ norwegian ] = "Endre område" ;
     TEXT [ italian ] = "Cambia area" ;
-    TEXT [ portuguese_brazilian ] = "Mudar seção" ;
+    TEXT [ portuguese_brazilian ] = "Mudar se??o" ;
     TEXT [ portuguese ] = "Alterar secção" ;
     TEXT [ finnish ] = "Muokkaa osiota" ;
     TEXT [ danish ] = "Modificer område" ;
@@ -1142,7 +1142,7 @@ String STR_CHANGESECTPASSWD
     Text [ swedish ] = "Ändra lösenordsskydd" ;
     Text [ danish ] = "Modificer adgangskodebeskyttelse" ;
     Text [ portuguese ] = "Alterar protecção da senha" ;
-    Text [ portuguese_brazilian ] = "Paßwortschutz ändern" ;
+    Text [ portuguese_brazilian ] = "Pa?wortschutz ?ndern" ;
     Text[ chinese_simplified ] = "¸ü¸Ä±£»¤ÃÜÂë";
     Text[ russian ] = "Èçìåíèòü çàùèòó ïàğîëåì";
     Text[ polish ] = "Zmieñ ochronê has³a";
@@ -1164,7 +1164,7 @@ String STR_CHANGEDEFATTR
     TEXT [ English ] = "Defaults change" ;
     TEXT [ norwegian ] = "Endre standard" ;
     TEXT [ italian ] = "Cambia valori predefiniti" ;
-    TEXT [ portuguese_brazilian ] = "Mudar padrões" ;
+    TEXT [ portuguese_brazilian ] = "Mudar padr?s" ;
     TEXT [ portuguese ] = "Alterar valores padrão" ;
     TEXT [ finnish ] = "Muokkaa oletusarvoja" ;
     TEXT [ danish ] = "Modificer standardværdier" ;
@@ -1175,7 +1175,7 @@ String STR_CHANGEDEFATTR
     TEXT [ english_us ] = "Modify default values" ;
     TEXT[ chinese_simplified ] = "¸ü¸Ä±ê×¼Öµ";
     TEXT[ russian ] = "Èçìåíèòü ñòàíäàğòíûå çíà÷åíèÿ";
-    TEXT[ polish ] = "Zmieñ wartoœci domyœlne";
+    TEXT[ polish ] = "Zmieñ warto?ci domy?lne";
     TEXT[ japanese ] = "•W€’l‚Ì•ÏX";
     TEXT[ chinese_traditional ] = "ÅÜ§ó¼Ğ·Ç­È";
     TEXT[ arabic ] = "ÊÚÏíá ÇáŞíã ÇáÇİÊÑÇÖíÉ";
@@ -1251,7 +1251,7 @@ String STR_INSNUM
     TEXT [ English ] = "Numbering insert" ;
     TEXT [ norwegian ] = "Sett inn nummerering" ;
     TEXT [ italian ] = "Inserisci numerazione" ;
-    TEXT [ portuguese_brazilian ] = "Inserir Numeração" ;
+    TEXT [ portuguese_brazilian ] = "Inserir Numera??o" ;
     TEXT [ portuguese ] = "Inserir numeração" ;
     TEXT [ finnish ] = "Lisää numerointi" ;
     TEXT [ danish ] = "Indsæt nummerering" ;
@@ -1280,7 +1280,7 @@ String STR_NUMUPDOWN
     TEXT [ English ] = "Numbering promote" ;
     TEXT [ norwegian ] = "Framhev Nummerering" ;
     TEXT [ italian ] = "Sposta numerazione" ;
-    TEXT [ portuguese_brazilian ] = "Mover Numeração" ;
+    TEXT [ portuguese_brazilian ] = "Mover Numera??o" ;
     TEXT [ portuguese ] = "Escalonar numeração" ;
     TEXT [ finnish ] = "Siirrä numerointi" ;
     TEXT [ danish ] = "Inddel nummerering" ;
@@ -1309,7 +1309,7 @@ String STR_MOVENUM
     TEXT [ English ] = "Paragraph move" ;
     Text [ portuguese ] = "Mover parágrafos" ;
     Text [ english_us ] = "Move paragraphs" ;
-    Text [ portuguese_brazilian ] = "Promover Numeração" ;
+    Text [ portuguese_brazilian ] = "Promover Numera??o" ;
     Text [ swedish ] = "Flytta stycken" ;
     Text [ danish ] = "Flyt afsnit" ;
     Text [ italian ] = "Sposta paragrafi" ;
@@ -1343,7 +1343,7 @@ String STR_INSERTDRAW
     Text [ swedish ] = "Infoga ritobjekt" ;
     Text [ danish ] = "Indsæt tegneobjekt" ;
     Text [ portuguese ] = "Inserir objecto de desenho" ;
-    Text [ portuguese_brazilian ] = "Zeichenobjekt einfügen" ;
+    Text [ portuguese_brazilian ] = "Zeichenobjekt einf?en" ;
     Text[ chinese_simplified ] = "²åÈë»æÍ¼¶ÔÏó";
     Text[ russian ] = "Âñòàâèòü ãğàôè÷åñêèé îáúåêò";
     Text[ polish ] = "Wstaw obiekty graficzne";
@@ -1399,7 +1399,7 @@ String STR_INC_LEFTMARGIN
     Text [ spanish ] = "Aumentar sangría" ;
     Text [ french ] = "Augmenter le retrait" ;
     Text [ portuguese ] = "Aumentar avanço" ;
-    Text [ portuguese_brazilian ] = "Einzug vergrößern" ;
+    Text [ portuguese_brazilian ] = "Einzug vergr?ern" ;
     Text[ chinese_simplified ] = "Ôö´óËõ½ø";
     Text[ russian ] = "Óâåëè÷èòü îòñòóï";
     Text[ polish ] = "Zwiêksz wciêcie";
@@ -1448,7 +1448,7 @@ String STR_INSERTLABEL
     Text = "Beschriftung einfügen" ;
     Text [ English ] = "Insert caption" ;
     Text [ english_us ] = "Insert caption" ;
-    Text [ portuguese_brazilian ] = "Beschriftung einfügen" ;
+    Text [ portuguese_brazilian ] = "Beschriftung einf?en" ;
     Text [ swedish ] = "Infoga bildtext" ;
     Text [ danish ] = "Indsæt billedtekst" ;
     Text [ italian ] = "Inserisci dicitura" ;
@@ -1505,7 +1505,7 @@ String STR_CHANGEFTN
     Text [ English ] = "Change footnote" ;
     Text [ portuguese ] = "Modificar nota de rodapé" ;
     Text [ english_us ] = "Modify footnote" ;
-    Text [ portuguese_brazilian ] = "Fußnote ändern" ;
+    Text [ portuguese_brazilian ] = "Fu?note ?ndern" ;
     Text [ swedish ] = "Ändra fotnot" ;
     Text [ danish ] = "Modificer fodnote" ;
     Text [ italian ] = "Modifica nota a piè pagina" ;
@@ -1537,7 +1537,7 @@ String STR_ACCEPT_REDLINE
     Text = "Änderung akzeptieren" ;
     Text [ English ] = "Accept redline" ;
     Text [ english_us ] = "Accept changes" ;
-    Text [ portuguese_brazilian ] = "Änderung akzeptieren" ;
+    Text [ portuguese_brazilian ] = "?nderung akzeptieren" ;
     Text [ swedish ] = "Acceptera ändring" ;
     Text [ danish ] = "Accepter ændring" ;
     Text [ italian ] = "Accetta le modifiche" ;
@@ -1566,7 +1566,7 @@ String STR_REJECT_REDLINE
     Text [ English ] = "Reject redline" ;
     Text [ portuguese ] = "Rejeitar alteração" ;
     Text [ english_us ] = "Reject change" ;
-    Text [ portuguese_brazilian ] = "Änderung ablehnen" ;
+    Text [ portuguese_brazilian ] = "?nderung ablehnen" ;
     Text [ swedish ] = "Ignorera ändring" ;
     Text [ danish ] = "Forkast ændring" ;
     Text [ italian ] = "Rifiuta modifica" ;
@@ -1733,7 +1733,7 @@ String STR_DELNUM
     TEXT [ English ] = "Numbering delete" ;
     TEXT [ norwegian ] = "Slett nummerering" ;
     TEXT [ italian ] = "Elimina numerazione" ;
-    TEXT [ portuguese_brazilian ] = "Apagar Numeração" ;
+    TEXT [ portuguese_brazilian ] = "Apagar Numera??o" ;
     TEXT [ portuguese ] = "Eliminar numeração" ;
     TEXT [ finnish ] = "Poista numerointi" ;
     TEXT [ danish ] = "Slet nummerering" ;
@@ -1824,7 +1824,7 @@ String STR_DRAWUNGROUP
     Text [ swedish ] = "Upplös gruppobjekt" ;
     Text [ danish ] = "Ophæv gruppeobjekter" ;
     Text [ portuguese ] = "Desagrupar objectos" ;
-    Text [ portuguese_brazilian ] = "Gruppenobjekt auflösen" ;
+    Text [ portuguese_brazilian ] = "Gruppenobjekt aufl?en" ;
     Text[ chinese_simplified ] = "È¡Ïû·Ö×é¶ÔÏó";
     Text[ russian ] = "Ğàçãğóïïèğîâàòü ãğàôè÷åñêèé îáúåêò";
     Text[ polish ] = "Rozgrupuj obiekty rysunkowe";
@@ -1852,7 +1852,7 @@ String STR_DRAWDELETE
     Text [ swedish ] = "Radera ritobjekt" ;
     Text [ danish ] = "Slet tegneobjekter" ;
     Text [ portuguese ] = "Eliminar objectos de desenho" ;
-    Text [ portuguese_brazilian ] = "Zeichenobjekte löschen" ;
+    Text [ portuguese_brazilian ] = "Zeichenobjekte l?chen" ;
     Text[ chinese_simplified ] = "É¾³ı»æÍ¼¶ÔÏó";
     Text[ russian ] = "Óäàëèòü ãğàôè÷åñêèå îáúåêòû";
     Text[ polish ] = "Usuñ obiekty graficzne";
@@ -1908,7 +1908,7 @@ String STR_DELGRF
     Text [ swedish ] = "Radera grafik" ;
     Text [ danish ] = "Slet grafik" ;
     Text [ portuguese ] = "Eliminar imagem" ;
-    Text [ portuguese_brazilian ] = "Grafik löschen" ;
+    Text [ portuguese_brazilian ] = "Grafik l?chen" ;
     Text[ chinese_simplified ] = "É¾³ıÍ¼ĞÎ";
     Text[ russian ] = "Óäàëèòü";
     Text[ polish ] = "Usuñ grafikê";
@@ -1936,7 +1936,7 @@ String STR_DELOLE
     Text [ swedish ] = "Radera objekt" ;
     Text [ danish ] = "Slet objekt" ;
     Text [ portuguese ] = "Eliminar objecto" ;
-    Text [ portuguese_brazilian ] = "Objekt löschen" ;
+    Text [ portuguese_brazilian ] = "Objekt l?chen" ;
     Text[ chinese_simplified ] = "É¾³ı¶ÔÏó";
     Text[ russian ] = "Óäàëèòü îáúåêò";
     Text[ polish ] = "Usuñ obiekt";
@@ -2101,7 +2101,7 @@ String STR_TABLE_SPLIT
     Text [ ENGLISH ] = "Split cells" ;
     Text [ norwegian ] = "Del celler" ;
     Text [ italian ] = "Dividi celle" ;
-    Text [ portuguese_brazilian ] = "Partir células" ;
+    Text [ portuguese_brazilian ] = "Partir c?lulas" ;
     Text [ portuguese ] = "Dividir células" ;
     Text [ finnish ] = "Jaa solut" ;
     Text [ danish ] = "Opdel celler" ;
@@ -2186,7 +2186,7 @@ String STR_INSERT_TOX
     Text [ ENGLISH ] = "Insert index" ;
     Text [ portuguese ] = "Inserir índice" ;
     Text [ english_us ] = "Insert index" ;
-    Text [ portuguese_brazilian ] = "Einfügen Verzeichnis" ;
+    Text [ portuguese_brazilian ] = "Einf?en Verzeichnis" ;
     Text [ swedish ] = "Infoga förteckning" ;
     Text [ danish ] = "Indsæt indeks" ;
     Text [ italian ] = "Inserisci indice" ;
@@ -2382,7 +2382,7 @@ String STR_UNDO_FTNINFO
     Text [ ENGLISH ] = "change footnote properties" ;
     Text [ portuguese ] = "Modificar configuração de notas finais" ;
     Text [ english_us ] = "Modify footnote options" ;
-    Text [ portuguese_brazilian ] = "Fußnoteneinstellungen ändern" ;
+    Text [ portuguese_brazilian ] = "Fu?noteneinstellungen ?ndern" ;
     Text [ swedish ] = "Ändra fotnotsinställningar" ;
     Text [ danish ] = "Modificer fodnoteindstillinger" ;
     Text [ italian ] = "Modifica impostazioni note a piè pagina" ;
@@ -2410,7 +2410,7 @@ String STR_UNDO_ENDNOTEINFO
     Text [ ENGLISH ] = "change endnote properties" ;
     Text [ portuguese ] = "Modificar configuração de notas finais" ;
     Text [ english_us ] = "Modify endnote settings" ;
-    Text [ portuguese_brazilian ] = "Endnoteneinstellungen ändern" ;
+    Text [ portuguese_brazilian ] = "Endnoteneinstellungen ?ndern" ;
     Text [ swedish ] = "Ändra slutnotsinställningar" ;
     Text [ danish ] = "Modificer slutnoteindstillinger" ;
     Text [ italian ] = "Modifica impostazione note di chiusura" ;
@@ -2502,7 +2502,7 @@ String STR_UNDO_SETRUBYATTR
     Text[ italian ] = "Applica testo ruby";
     Text[ danish ] = "Set phonetic Symbols";
     Text[ swedish ] = "Sätt fonetiska symboler";
-    Text[ polish ] = "OsadŸ znaki diakrytyczne";
+    Text[ polish ] = "Osad? znaki diakrytyczne";
     Text[ portuguese_brazilian ] = "Set phonetic Symbols";
     Text[ japanese ] = "ÙËŞİ’è";
     Text[ korean ] = "·çºñ";
@@ -2518,7 +2518,7 @@ String STR_INSERT_FOOTNOTE
     Text = "Fußnote einfügen" ;
     Text [ ENGLISH ] = "insert footnote" ;
     Text [ english_us ] = "Insert footnote" ;
-    Text [ portuguese_brazilian ] = "Fußnote einfügen" ;
+    Text [ portuguese_brazilian ] = "Fu?note einf?en" ;
     Text [ swedish ] = "Infoga fotnot" ;
     Text [ danish ] = "Indsæt fodnote" ;
     Text [ italian ] = "Inserisci nota a piè pagina" ;
@@ -2611,7 +2611,7 @@ String STR_DELETE_INVISIBLECNTNT
     Text[ russian ] = "óäàëèòü íåâèäèìîå ñîäåğæèìîå";
     Text[ italian ] = "Rimuovi contenuto nascosto";
     Text[ danish ] = "fjern usynlige indhold";
-    Text[ polish ] = "usuñ niewidoczn¹ zawartoœæ";
+    Text[ polish ] = "usuñ niewidoczn¹ zawarto?æ";
     Text[ portuguese_brazilian ] = "remove invisible content";
     Text[ japanese ] = "•\\¦‚Å‚«‚È‚¢“à—e‚ğíœ‚·‚é";
     Text[ korean ] = "º¸ÀÌÁö ¾Ê´Â ³»¿ë Á¦°Å";
@@ -2656,7 +2656,7 @@ String STR_DDEERROR_APP2
     TEXT [ ENGLISH ] = "] does not respond" ;
     TEXT [ norwegian ] = "] korresponderer ikke" ;
     TEXT [ italian ] = "] non risponde" ;
-    TEXT [ portuguese_brazilian ] = "] não responde" ;
+    TEXT [ portuguese_brazilian ] = "] n?o responde" ;
     TEXT [ portuguese ] = "] não responde." ;
     TEXT [ finnish ] = "] ei vastaa." ;
     TEXT [ danish ] = "] svarer ikke" ;
@@ -2711,7 +2711,7 @@ String STR_DDEERROR_DATA2
     TEXT [ ENGLISH ] = "] cannot be obtained" ;
     TEXT [ norwegian ] = "] kan ikke oppnåes" ;
     TEXT [ italian ] = "]" ;
-    TEXT [ portuguese_brazilian ] = "] não podem ser obtidos" ;
+    TEXT [ portuguese_brazilian ] = "] n?o podem ser obtidos" ;
     TEXT [ portuguese ] = "] não podem ser determinados." ;
     TEXT [ finnish ] = "] ei ole saatavilla" ;
     TEXT [ danish ] = "] kan ikke bestemmes" ;
@@ -2740,7 +2740,7 @@ String STR_DDEERROR_LINK1
     TEXT [ ENGLISH ] = "Link to [" ;
     TEXT [ norwegian ] = "Koble til [" ;
     TEXT [ italian ] = "Collegamento con [" ;
-    TEXT [ portuguese_brazilian ] = "Ligação para [" ;
+    TEXT [ portuguese_brazilian ] = "Liga??o para [" ;
     TEXT [ portuguese ] = "A ligação a [" ;
     TEXT [ finnish ] = "Linkki [" ;
     TEXT [ danish ] = "Kæden til [" ;
@@ -2766,7 +2766,7 @@ String STR_DDEERROR_LINK2
     TEXT [ ENGLISH ] = "] cannot be established" ;
     TEXT [ norwegian ] = "] kan ikke etableres" ;
     TEXT [ italian ] = "]" ;
-    TEXT [ portuguese_brazilian ] = "] não pode ser estabelecido" ;
+    TEXT [ portuguese_brazilian ] = "] n?o pode ser estabelecido" ;
     TEXT [ portuguese ] = "] não pode ser estabelecido." ;
     TEXT [ finnish ] = "] ei ole muodostettavissa" ;
     TEXT [ danish ] = "] kan ikke oprettes" ;
