@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-04 14:08:00 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:15:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,8 +81,8 @@ PARFILES= \
         custom_activex.par
 .ENDIF
 
-LNGFILES= \
-        module_activex.lng
+ULFFILES= \
+        module_activex.ulf
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
