@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Axis.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:22 $
+ *  last change: $Author: bm $ $Date: 2003-12-09 09:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #include "OPropertySet.hxx"
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -90,15 +90,19 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
 #include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
+#include <drafts/com/sun/star/chart2/XTitled.hpp>
+#endif
 
 namespace chart
 {
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper3<
+typedef ::cppu::WeakImplHelper4<
     ::drafts::com::sun::star::chart2::XAxis,
     ::drafts::com::sun::star::chart2::XIdentifiable,
+    ::drafts::com::sun::star::chart2::XTitled,
     ::com::sun::star::lang::XServiceInfo >
     Axis_Base;
 }
@@ -173,6 +177,15 @@ protected:
     virtual ::rtl::OUString SAL_CALL getIdentifier()
         throw (::com::sun::star::uno::RuntimeException);
 
+    // ____ XTitled ____
+    virtual ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::chart2::XTitle > SAL_CALL getTitle()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTitle(
+        const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XTitle >& Title )
+        throw (::com::sun::star::uno::RuntimeException);
+
 private:
     ::rtl::OUString m_aIdentifier;
 
@@ -183,6 +196,10 @@ private:
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::chart2::XIncrement >
                        m_xIncrement;
+
+    ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::chart2::XTitle >
+                       m_xTitle;
 };
 
 } //  namespace chart

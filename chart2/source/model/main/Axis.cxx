@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Axis.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-19 16:00:14 $
+ *  last change: $Author: bm $ $Date: 2003-12-09 09:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,25 @@ uno::Reference< chart2::XIncrement > SAL_CALL Axis::getIncrement()
     // /--
     MutexGuard aGuard( GetMutex());
     return m_aIdentifier;
+    // \--
+}
+
+// ____ XTitled ____
+uno::Reference< chart2::XTitle > SAL_CALL Axis::getTitle()
+    throw (uno::RuntimeException)
+{
+    // /--
+    MutexGuard aGuard( GetMutex() );
+    return m_xTitle;
+    // \--
+}
+
+void SAL_CALL Axis::setTitle( const uno::Reference< chart2::XTitle >& Title )
+    throw (uno::RuntimeException)
+{
+    // /--
+    MutexGuard aGuard( GetMutex() );
+    m_xTitle = Title;
     // \--
 }
 
