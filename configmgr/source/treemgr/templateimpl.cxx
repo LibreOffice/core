@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: lla $ $Date: 2001-03-23 09:37:49 $
+ *  last change: $Author: jb $ $Date: 2001-04-03 16:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,37 +127,6 @@ UnoType TemplateName::resolveToSimpleType() const
         OSL_ENSURE(false, "TemplateName::resolveToSimpleType must be called only for simple type name pairs");
     return aType;
 }
-//-----------------------------------------------------------------------------
-#if 0
-TemplateName TemplateName::parseTemplatePath(OUString const& sName)
-{
-    Path::Components aPath = Path::parse(sName);
-    if (aPath.empty())
-        return TemplateName();
-
-    TemplateName aNames( aPath.back() );
-
-    switch(aPath.size())
-    {
-    case 1: break;
-    case 2: aNames.aModule = aPath.front(); break;
-
-    case 3: if (aPath[0].isEmpty())
-            {
-                aNames.aModule = aPath[1];
-                break;
-            }
-            // fall through
-    default:
-            OSL_ENSURE(false, "Invalid template path - too many components");
-            // hack - cram it all into the module part
-            aPath.pop_back();
-            aNames.aModule = Name( PathRep(aPath).toString(), Name::NoValidate() );
-            break;
-    }
-    return aNames;
-}
-#endif
 //-----------------------------------------------------------------------------
 
 TemplateName TemplateName::parseTemplateNames(OUString const& sName,OUString const& sModule)

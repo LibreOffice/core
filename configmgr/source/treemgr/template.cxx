@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-16 17:35:23 $
+ *  last change: $Author: jb $ $Date: 2001-04-03 16:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,14 +137,6 @@ RelativePath Template::getPath() const
 }
 //-----------------------------------------------------------------------------
 
-#if 0
-TemplateHolder Template::fromPath(OUString const& sPath, TemplateProvider const& aProvider)
-{
-    TemplateName aNames( TemplateName::parseTemplatePath(sPath) );
-    return TemplateImplHelper::findTemplate(aNames, aProvider );
-}
-#endif
-//-----------------------------------------------------------------------------
 TemplateHolder Template::fromNames(OUString const& sName, OUString const& sModule, TemplateProvider const& aProvider)
 {
     TemplateName aNames( TemplateName::parseTemplateNames(sName,sModule) );
@@ -163,14 +155,6 @@ TemplateHolder makeSimpleTemplate(UnoType const& aType, Attributes const& aAttrs
     TemplateName aNames(aType,false);
     return TemplateImplHelper::makeTemplate( aNames, aProvider, aType, aAttrs);
 }
-//-----------------------------------------------------------------------------
-#if 0
-TemplateHolder makeTreeTemplate(OUString const& sPath, OUString const& sModule, TemplateProvider const& aProvider)
-{
-    TemplateName aNames( TemplateName::parseTemplatePath(sName) );
-    return TemplateImplHelper::makeTemplate( aNames,aProvider, TemplateImplHelper::getUnoInterfaceType(), Attributes());
-}
-#endif
 //-----------------------------------------------------------------------------
 
 TemplateHolder makeTreeTemplate(OUString const& sName, OUString const& sModule, TemplateProvider const& aProvider)
