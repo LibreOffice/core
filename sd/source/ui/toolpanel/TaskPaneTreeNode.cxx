@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneTreeNode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:37:25 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ TreeNode* TreeNode::GetParentNode (void)
 
 
 
-const ::Window* TreeNode::GetWindow (void) const
+const ::Window* TreeNode::GetConstWindow (void) const
 {
     return const_cast<TreeNode*>(this)->GetWindow();
 }
@@ -200,8 +200,8 @@ void TreeNode::Expand (bool bExpansionState)
 
 bool TreeNode::IsExpanded (void) const
 {
-    if (GetWindow()!=NULL)
-        return GetWindow()->IsVisible();
+    if (GetConstWindow()!=NULL)
+        return GetConstWindow()->IsVisible();
     else
         return false;
 }
@@ -211,7 +211,7 @@ bool TreeNode::IsExpanded (void) const
 
 bool TreeNode::IsExpandable (void) const
 {
-    return GetWindow()!=NULL;
+    return GetConstWindow()!=NULL;
 }
 
 
