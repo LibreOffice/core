@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:22:29 $
+ *  last change: $Author: dr $ $Date: 2002-12-12 13:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 
 #include "global.hxx"
 #include "document.hxx"
+#include "drwlayer.hxx"
 #include "xcl97esc.hxx"
 #include "xcl97rec.hxx"
 
@@ -367,6 +368,18 @@ XclEscher::~XclEscher()
     delete pEx;
     delete pStrm;
     delete pTempFile;
+}
+
+
+void XclEscher::AddSdrPage( RootData& rRootData )
+{
+    if( ScDrawLayer* pDrawLayer = rRootData.pDoc->GetDrawLayer() )
+        if( SdrPage* pPage = pDrawLayer->GetPage( rRootData.pER->GetScTab() ) )
+            pEx->AddSdrPage( *pPage );
+    // #106213# the first dummy object may still be open
+    DBG_ASSERT( pEx->GetGroupLevel() <= 1, "XclEscher::AddSdrPage - still groups open?" );
+    while( pEx->GetGroupLevel() )
+        pEx->LeaveGroup();
 }
 
 

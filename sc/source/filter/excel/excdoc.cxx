@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-10 14:07:24 $
+ *  last change: $Author: dr $ $Date: 2002-12-12 13:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,6 @@
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustring>
-
-#include "drwlayer.hxx"
 
 #include "cell.hxx"
 #include "dociter.hxx"
@@ -992,13 +990,7 @@ void ExcTable::FillAsTable( void )
     }
     else
     {
-        ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-        if( pDrawLayer )
-        {
-            SdrPage* pPage = pDrawLayer->GetPage( nScTab );
-            if( pPage )
-                rR.pEscher->GetEx()->AddSdrPage( *pPage );
-        }
+        rR.pEscher->AddSdrPage( rR );
         //! close Escher group shape and ESCHER_DgContainer
         //! opened by XclObjList ctor MSODRAWING
         rR.pObjRecs->EndSheet();
@@ -1126,13 +1118,7 @@ void ExcTable::NullTab( const String* pCodename )
             // create at least the MSODRAWING per-sheet data
             rR.pObjRecs = new XclObjList( rR );
             // all drawing obects
-            ScDrawLayer*    pDrawLayer = pExcRoot->pDoc->GetDrawLayer();
-            if ( pDrawLayer )
-            {
-                SdrPage*    pPage = pDrawLayer->GetPage( nScTab );
-                if ( pPage )
-                    rR.pEscher->GetEx()->AddSdrPage( *pPage );
-            }
+            rR.pEscher->AddSdrPage( rR );
             //! close Escher group shape and ESCHER_DgContainer
             //! opened by XclObjList ctor MSODRAWING
             rR.pObjRecs->EndSheet();
