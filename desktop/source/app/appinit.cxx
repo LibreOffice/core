@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 13:51:11 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,8 +321,7 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
     CommandLineArgs* pCmdLine = GetCommandLineArgs();
 
     // read accept string from configuration
-    if ( !Application::IsRemoteServer() )
-        conDcp = SvtStartOptions().GetConnectionURL();
+    conDcp = SvtStartOptions().GetConnectionURL();
 
     if ( pCmdLine->GetAcceptString( aTmpString ))
         conDcp = aTmpString;
@@ -330,11 +329,6 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
 
     // Headless mode for FAT Office
     bHeadlessMode   = pCmdLine->IsHeadless();
-    if ( Application::IsRemoteServer() )
-    {
-        pCmdLine->GetClientDisplay( aClientDisplay );
-    }
-
     if ( bHeadlessMode )
         Application::EnableHeadlessMode();
 
@@ -347,15 +341,7 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
 
     // improves parallel processing on Sun ONE Webtop
     // servicemanager up -> copy user installation
-    if ( Application::IsRemoteServer() )
-    {
-        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) createInstance com.sun.star.portal.InstallUser" );
-        Any aAny;
-        Reference <XInterface> xRef =  xSMgr->createInstanceWithArguments(
-            OUString::createFromAscii( "com.sun.star.portal.InstallUser" ),
-            Sequence<Any>( &aAny, 1 ) );
-    }
-    else if ( pCmdLine->IsServer() )
+    if ( pCmdLine->IsServer() )
     {
         // Check some mandatory environment states if "-server" is possible. Otherwise ignore
         // this parameter.
