@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:18:24 $
+ *  last change: $Author: jp $ $Date: 2001-03-13 19:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1391,27 +1391,40 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
 
     // !!!! DDE nur updaten wenn Shell vorhanden ist??
     ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
-    if( pESh && pRead && rValue.hasValue() && ( rValue >>= aSeq ) )
+    if( pRead && rValue.hasValue() && ( rValue >>= aSeq ) )
     {
-        pESh->Push();
-        *pESh->GetCrsr()->GetPoint() = *pPam->GetPoint();
-        delete pPam, pPam = 0;
+        if( pESh )
+        {
+            pESh->Push();
+            SwPaM* pCrsr = pESh->GetCrsr();
+            *pCrsr->GetPoint() = *pPam->GetPoint();
+            delete pPam;
+            pPam = pCrsr;
+        }
 
         SvMemoryStream aStrm( (void*)aSeq.getConstArray(), aSeq.getLength(),
                                 STREAM_READ );
         aStrm.Seek( 0 );
 
-        SwReader aTmpReader( aStrm, aEmptyStr, *pESh->GetCrsr() );
-
-        if( IsError( aTmpReader.Read( *pRead ) ))
+#ifdef DEBUG
         {
-//          InfoBox( 0, ResId(ERR_CLPBRD_READ) ).Execute();
-//          bOk = FALSE;
+            SvFileStream aDeb( String::CreateFromAscii(
+                    "file:///d|/temp/update.txt" ), STREAM_WRITE );
+            aDeb << aStrm;
         }
-        else
+        aStrm.Seek( 0 );
+#endif
+
+        SwReader aTmpReader( aStrm, aEmptyStr, *pPam );
+
+        if( !IsError( aTmpReader.Read( *pRead ) ))
             rSection.SetConnectFlag( TRUE );
 
-        pESh->Pop( FALSE );
+        if( pESh )
+        {
+            pESh->Pop( FALSE );
+            pPam = 0;                   // pam is deleted before
+        }
     }
 
 
