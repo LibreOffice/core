@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:05:53 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,6 @@
 #endif
 
 #define NAVSTATE_NONE           0x00000000
-
-#define NAVBTN_LIVE_ENABLED     0x00000001
-#define NAVBTN_LIVE_DISABLED    0x00000002
-#define NAVBTN_LIVE_CHECKED     0x00000004
-#define NAVBTN_LIVE_UNCHECKED   0x00000008
 
 #define NAVBTN_PEN_ENABLED      0x00000010
 #define NAVBTN_PEN_DISABLED     0x00000020
