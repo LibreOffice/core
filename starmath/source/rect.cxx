@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-06 12:39:17 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 10:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
     // workaround for printer fonts with very small (possible 0 or even
     // negative(!)) leading
-    if (aFM.GetLeading() < 5  &&  rDev.GetOutDevType() == OUTDEV_PRINTER)
+    if (aFM.GetIntLeading() < 5  &&  rDev.GetOutDevType() == OUTDEV_PRINTER)
     {
         OutputDevice    *pWindow = Application::GetDefaultDevice();
 
@@ -221,7 +221,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
         pWindow->SetMapMode(rDev.GetMapMode());
         pWindow->SetFont(rDev.GetFontMetric());
 
-        long  nDelta = pWindow->GetFontMetric().GetLeading();
+        long  nDelta = pWindow->GetFontMetric().GetIntLeading();
         if (nDelta == 0)
         {   // dieser Wert entspricht etwa einem Leading von 80 bei einer
             // Fonthöhe von 422 (12pt)
