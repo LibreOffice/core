@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-03 11:29:16 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 22:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,12 +306,14 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
         // JP 26.08.96: Bug 30344 - entweder der Text aus dem Doc oder
         //                          ein Alternativ-Text, beides gibts nicht!
         BOOL bReplace = pCurTOXMark->IsAlternativeText();
-        pCurTOXMark->SetAlternativeText( *rDesc.GetAltStr() );
-        if( !bReplace )
+        if( bReplace )
+            pCurTOXMark->SetAlternativeText( *rDesc.GetAltStr() );
+        else
         {
             SwTOXMark aCpy( *pCurTOXMark );
             aCurMarks.Remove(0, aCurMarks.Count());
             pSh->DeleteTOXMark(pCurTOXMark);
+            aCpy.SetAlternativeText( *rDesc.GetAltStr() );
             pSh->SwEditShell::Insert( aCpy );
             pCurTOXMark = 0;
         }
@@ -762,6 +764,9 @@ void SwTOXDescription::ApplyTo(SwTOXBase& rTOXBase)
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/11/03 11:29:16  os
+    allow editing of indexes independent from the cursor position
+
     Revision 1.1.1.1  2000/09/18 17:14:44  hr
     initial import
 
