@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ORootElementGroupUpdateAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:38:01 $
+ *  last change:$Date: 2003-12-11 11:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 package mod._cfgmgr2;
 
+import com.sun.star.beans.Property;
 import java.io.PrintWriter;
 
 import lib.TestCase;
@@ -71,9 +72,13 @@ import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameReplace;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.XChangesBatch;
+import java.util.Enumeration;
+import java.util.Properties;
 
 
 public class ORootElementGroupUpdateAccess extends TestCase {
@@ -100,7 +105,8 @@ public class ORootElementGroupUpdateAccess extends TestCase {
         PropertyValue[] nodeArgs = new PropertyValue[1];
         PropertyValue nodepath = new PropertyValue();
         nodepath.Name = "nodepath";
-        nodepath.Value = "org.openoffice.Office.Common";
+        nodepath.Value = "org.openoffice.Office.Common/Internal";
+
         nodepath.Handle = -1;
         nodepath.State = PropertyState.DEFAULT_VALUE;
         nodeArgs[0] = nodepath;
@@ -115,6 +121,17 @@ public class ORootElementGroupUpdateAccess extends TestCase {
                                                            pMSF.createInstanceWithArguments(
                                                                    "com.sun.star.configuration.ConfigurationUpdateAccess",
                                                                    nodeArgs));
+
+/*            helper.ConfigurationRead read = new helper.ConfigurationRead(pMSF, "org.openoffice.Office.Common");
+            String[] subs = read.getRootNodeNames();
+            for (int i=0; i<subs.length; i++)
+                System.out.println("Rootnodes " + subs[i]);
+            subs = read.getSubNodeNames("Internal");
+            for (int i=0; i<subs.length; i++)
+                System.out.println("Rootnodes " + subs[i]);
+            Object subNode = read.getByHierarchicalName("Internal/RecoveryList");
+            util.dbg.getSuppServices(subNode); */
+
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace();
         }
@@ -128,41 +145,70 @@ public class ORootElementGroupUpdateAccess extends TestCase {
 
         Object instance = null;
 
-        try {
-            instance = prop.getPropertyValue("AsianLayout");
-        } catch (Exception e) {
-            log.println("Couldn't create instance for XNameReplace");
-        }
-
         String[] pNames = new String[] {
-            "Accessibility", "AddXMLToStorage", "AsianLayout", "AutoCorrect",
-            "Cache", "DateFormat", "ExternalApps", "ExternalMailer", "Filter",
-            "Font", "Gallery", "Help", "History", "I18N", "Image", "Internal",
-            "InternalMSExport", "Java", "Load", "Menus", "Misc",
-            "OfficeObjects", "Passwords", "Path", "Print", "Save",
-            "SearchOptions", "Security", "Setup", "Startup", "Undo",
-            "Vectorize", "View", "WorkingSet", "_3D_Engine"
+            "CurrentTempURL",
+            "DevelopmentChart",
+            "SendCrashMail",
+            "Slot",
+            "UseMailUI"//, "RecoveryList"
         };
 
-        String[] pTypes = new String[36];
-
-        for (int k = 0; k < pTypes.length; k++) {
-            pTypes[k] = "XInterface";
-        }
+        String[] pTypes = new String[]{
+            "String",
+            "Boolean",
+            "Boolean",
+            "Boolean",
+            "Boolean"
+        };
 
         tEnv.addObjRelation("PropertyNames", pNames);
         tEnv.addObjRelation("PropertyTypes", pTypes);
 
-        tEnv.addObjRelation("ElementName", "Accessibility");
+        // for XHierarchicalNameAccess
+        tEnv.addObjRelation("ElementName", "Slot");
 
-        tEnv.addObjRelation("allReadOnly",
-                            "Field is final and can't be changed");
+        tEnv.addObjRelation("XLocalizable.ReadOnly", "Localization is final and can't be changed");
 
-        tEnv.addObjRelation("expectedName", "OfficeObjects");
+        tEnv.addObjRelation("XChangesNotifier.ChangesBatch", (XChangesBatch)UnoRuntime.queryInterface(XChangesBatch.class, oObj));
+
+        // set a new temp directory: use java.io.tmpdir as substitute
+        String newTempURL = util.utils.getFullURL(System.getProperty("java.io.tmpdir"));
+        String curTempURL = "";
+        try {
+            curTempURL = (String)prop.getPropertyValue("CurrentTempURL");
+        }
+        catch(Exception e) {
+            log.println("Cannot get property for XChangesBatch test: this test is bound to fail.");
+            e.printStackTrace((PrintWriter)log);
+        }
+        // fallback 1: get user home
+        if (newTempURL.equalsIgnoreCase(curTempURL)) {
+            newTempURL = util.utils.getFullURL(System.getProperty("user.home"));
+            // fallback 2: get user dir
+            if (newTempURL.equalsIgnoreCase(curTempURL)) {
+                newTempURL = util.utils.getFullURL(System.getProperty("user.dir"));
+            }
+        }
+
+        tEnv.addObjRelation("XChangesBatch.ChangeElement", newTempURL);
+        tEnv.addObjRelation("XChangesBatch.OriginalElement", curTempURL);
+        tEnv.addObjRelation("XChangesBatch.PropertyName", "CurrentTempURL");
+        tEnv.addObjRelation("XChangesBatch.PropertySet", prop);
+        tEnv.addObjRelation("XChangesNotifier.ChangeElement", newTempURL);
+        tEnv.addObjRelation("XChangesNotifier.OriginalElement", curTempURL);
+        tEnv.addObjRelation("XChangesNotifier.PropertyName", "CurrentTempURL");
+        tEnv.addObjRelation("XChangesNotifier.PropertySet", prop);
+
+        tEnv.addObjRelation("expectedName", "RecoveryList");
         tEnv.addObjRelation("HierachicalName", "/org.openoffice");
 
-        tEnv.addObjRelation("INSTANCE1", instance);
-        tEnv.addObjRelation("NAMEREPLACE", pNames[1]);
+        String overwriteString = new String("ThisIsSenselessForSure");
+        tEnv.addObjRelation("INSTANCE1", overwriteString);
+        tEnv.addObjRelation("NAMEREPLACE", pNames[0]);
+
+        tEnv.addObjRelation("XContainer.NewValue", overwriteString);
+        tEnv.addObjRelation("XContainer.ElementName", pNames[0]);
+        tEnv.addObjRelation("XContainer.Container", (XNameReplace)UnoRuntime.queryInterface(XNameReplace.class, oObj));
 
         tEnv.addObjRelation("NoSetName", "ORootElementGroupInfoAccess");
 

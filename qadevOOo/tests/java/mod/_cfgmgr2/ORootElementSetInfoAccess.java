@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ORootElementSetInfoAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:38:15 $
+ *  last change:$Date: 2003-12-11 11:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 package mod._cfgmgr2;
 
+import com.sun.star.beans.Property;
 import java.io.PrintWriter;
 
 import lib.TestCase;
@@ -69,10 +70,14 @@ import util.utils;
 
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameReplace;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.XChangesBatch;
 
 
 public class ORootElementSetInfoAccess extends TestCase {
@@ -104,6 +109,8 @@ public class ORootElementSetInfoAccess extends TestCase {
         nodepath.State = PropertyState.DEFAULT_VALUE;
         nodeArgs[0] = nodepath;
 
+        XInterface changeView = null;
+        Object instance = null;
         try {
             XInterface Provider = (XInterface) ((XMultiServiceFactory)tParam.getMSF())
                                                      .createInstance("com.sun.star.comp.configuration.ConfigurationProvider");
@@ -114,14 +121,35 @@ public class ORootElementSetInfoAccess extends TestCase {
                                                            pMSF.createInstanceWithArguments(
                                                                    "com.sun.star.configuration.ConfigurationAccess",
                                                                    nodeArgs));
+            changeView =  (XNameReplace) UnoRuntime.queryInterface(XNameReplace.class,
+                                                           pMSF.createInstanceWithArguments(
+                                                                   "com.sun.star.configuration.ConfigurationUpdateAccess",
+                                                                   nodeArgs));
+            XSingleServiceFactory jobsFac = (XSingleServiceFactory) UnoRuntime.queryInterface(
+                                        XSingleServiceFactory.class,
+                                        changeView);
+            instance = jobsFac.createInstance();
+
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace();
         }
 
         log.println("ImplementationName: " + utils.getImplName(oObj));
+        log.println("ChangeView: " + utils.getImplName(changeView));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
+        XNameReplace container = (XNameReplace)UnoRuntime.queryInterface(XNameReplace.class, changeView);
+        tEnv.addObjRelation("XContainer.NewValue", instance);
+        tEnv.addObjRelation("XContainer.ElementName", "RegistrationRequest");
+        tEnv.addObjRelation("XContainer.Container", container);
+
+        tEnv.addObjRelation("XChangesNotifier.ChangesBatch", (XChangesBatch)UnoRuntime.queryInterface(XChangesBatch.class, changeView));
+        tEnv.addObjRelation("XChangesNotifier.ChangeElement", instance);
+        tEnv.addObjRelation("XChangesNotifier.PropertyName", "RegistrationRequest");
+        tEnv.addObjRelation("XChangesNotifier.NameReplace", container);
+
+        tEnv.addObjRelation("XLocalizable.ReadOnly", "Locale of ORootElementSetInfoAccess is read Only");
         tEnv.addObjRelation("allReadOnly",
                             "all Properties of ORootElementSetInfoAccess are read Only");
         tEnv.addObjRelation("NoSetName", "ORootElementSetInfoAccess");

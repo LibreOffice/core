@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ORootElementTreeSetUpdateAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:38:25 $
+ *  last change:$Date: 2003-12-11 11:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,12 @@ import util.utils;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameReplace;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.XChangesBatch;
 
 
 public class ORootElementTreeSetUpdateAccess extends TestCase {
@@ -97,7 +99,6 @@ public class ORootElementTreeSetUpdateAccess extends TestCase {
         XInterface oObj = null;
         Object instance = null;
         Object instance1 = null;
-        Object instance2 = null;
         log.println("creating the Environment");
 
         PropertyValue[] nodeArgs = new PropertyValue[1];
@@ -124,7 +125,6 @@ public class ORootElementTreeSetUpdateAccess extends TestCase {
                                                     oObj);
             instance = jobsFac.createInstance();
             instance1 = jobsFac.createInstance();
-            instance2 = jobsFac.createInstance();
 
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace();
@@ -139,6 +139,16 @@ public class ORootElementTreeSetUpdateAccess extends TestCase {
         tEnv.addObjRelation("INSTANCE1", instance1);
         tEnv.addObjRelation("INSTANCE2", instance1);
 
+        tEnv.addObjRelation("XChangesBatch.ChangeElement", instance);
+        tEnv.addObjRelation("XChangesBatch.PropertyName", "RegistrationRequest");
+        tEnv.addObjRelation("XChangesBatch.NameReplace", (XNameReplace)UnoRuntime.queryInterface(XNameReplace.class, oObj));
+
+        tEnv.addObjRelation("XChangesNotifier.ChangeElement", instance);
+        tEnv.addObjRelation("XChangesNotifier.PropertyName", "RegistrationRequest");
+        tEnv.addObjRelation("XChangesNotifier.NameReplace", (XNameReplace)UnoRuntime.queryInterface(XNameReplace.class, oObj));
+        tEnv.addObjRelation("XChangesNotifier.ChangesBatch", (XChangesBatch)UnoRuntime.queryInterface(XChangesBatch.class, oObj));
+
+        tEnv.addObjRelation("XLocalizable.ReadOnly", "Locale of ORootElementTreeSetUpdateAccess is read Only");
         tEnv.addObjRelation("NoSetName", "ORootElementTreeSetUpdateAccess");
 
         tEnv.addObjRelation("HierachicalName", "/org.openoffice.Office");
