@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-11 16:38:32 $
+ *  last change: $Author: dr $ $Date: 2001-07-13 12:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2053,7 +2053,7 @@ void ScViewData::WriteExtOptions(ScExtDocOptions& rOpt)
 
             pTabOpt->nLeftCol = pViewTab->nPosX[ SC_SPLIT_LEFT ];
             pTabOpt->nLeftSplitCol = pViewTab->nPosX[ SC_SPLIT_RIGHT ];
-            pTabOpt->nTopRow = pViewTab->nPosY[ SC_SPLIT_TOP ];
+            pTabOpt->nTopRow = pViewTab->nPosY[ bVertSplit ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM ];
             pTabOpt->nTopSplitRow = pViewTab->nPosY[ SC_SPLIT_BOTTOM ];
 
             switch( pViewTab->eWhichActive )
