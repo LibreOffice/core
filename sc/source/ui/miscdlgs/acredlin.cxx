@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-25 15:23:00 $
+ *  last change: $Author: nn $ $Date: 2002-10-28 15:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,12 +144,6 @@ ScRedlinData::~ScRedlinData()
     bIsAcceptable=FALSE;
 }
 
-static BOOL bSomebodyKilledMe= FALSE;
-static BOOL bFilterPageVisible=FALSE;
-static BOOL bSimpleRefDlgStarted=FALSE;
-static BOOL bScAcceptChgDlgIsDead=TRUE;
-
-static ScChangeViewSettings aPrivChangeViewSet;
 
 //============================================================================
 //  class ScAcceptChgDlg
@@ -184,7 +178,7 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
         aLocalRangeName ( *(pDoc->GetRangeName()) )
 {
     FreeResource();
-    bScAcceptChgDlgIsDead=FALSE;
+//  bScAcceptChgDlgIsDead=FALSE;
     bNoSelection=FALSE;
     bNeedsUpdate=FALSE;
     bIgnoreMsg=FALSE;
@@ -197,14 +191,8 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     aReOpenTimer.SetTimeout(50);
     aReOpenTimer.SetTimeoutHdl(LINK( this, ScAcceptChgDlg, ReOpenTimerHdl ));
 
-    if(bSomebodyKilledMe)
-    {
-        if(bFilterPageVisible)
-            aAcceptChgCtr.ShowFilterPage();
-
-        if(bSimpleRefDlgStarted)
-            aReOpenTimer.Start();
-    }
+    //  dialog is now only hidden, not deleted, on switching views,
+    //  so there's no need to restore settings when reopening
 
     MinSize=aAcceptChgCtr.GetMinSizePixel();
     MinSize.Height()+=2;
@@ -247,15 +235,10 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     {
         pTheView->Select(pEntry);
     }
-    bSomebodyKilledMe=TRUE;
 }
 ScAcceptChgDlg::~ScAcceptChgDlg()
 {
-    bScAcceptChgDlgIsDead=TRUE;
-    if(bSomebodyKilledMe)
-    {
-        SetMyStaticData();
-    }
+//  bScAcceptChgDlgIsDead=TRUE;
     ClearView();
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
@@ -286,9 +269,17 @@ void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)
     bAcceptEnableFlag=TRUE;
     bRejectEnableFlag=TRUE;
 
-    Init();
+    //  #91781# don't call Init here (switching between views), just set link below
+    //  (dialog is just hidden, not deleted anymore, when switching views)
     ClearView();
     UpdateView();
+
+    if ( pDoc )
+    {
+        ScChangeTrack* pChanges = pDoc->GetChangeTrack();
+        if ( pChanges )
+            pChanges->SetModifiedLink( LINK( this, ScAcceptChgDlg, ChgTrackModHdl ) );
+    }
 }
 
 void __EXPORT ScAcceptChgDlg::Init()
@@ -310,16 +301,9 @@ void __EXPORT ScAcceptChgDlg::Init()
             pTPFilter->InsertAuthor(aUserColl[i]->GetString());
     }
 
-
     ScChangeViewSettings* pViewSettings=pDoc->GetChangeViewSettings();
-
-    if(pViewSettings!=NULL &&!bSomebodyKilledMe)
-    {
-        aChangeViewSet=*pViewSettings;
-        aPrivChangeViewSet=aChangeViewSet;
-    }
-    else
-        aChangeViewSet=aPrivChangeViewSet;
+    if ( pViewSettings!=NULL )
+        aChangeViewSet = *pViewSettings;
 
     pTPFilter->CheckDate(aChangeViewSet.HasDate());
     pTPFilter->SetFirstDate(aChangeViewSet.GetTheFirstDateTime());
@@ -999,7 +983,6 @@ void ScAcceptChgDlg::UpdateView()
 //----------------------------------------------------------------------------
 BOOL ScAcceptChgDlg::Close()
 {
-    bSomebodyKilledMe=FALSE;
     return SfxModelessDialog::Close();
 }
 
@@ -1046,7 +1029,7 @@ IMPL_LINK( ScAcceptChgDlg, RefHandle, SvxTPFilter*, pRef )
 
     if(pWnd!=NULL)
     {
-        bSimpleRefDlgStarted=TRUE;
+//      bSimpleRefDlgStarted=TRUE;
         USHORT nAcceptId=ScAcceptChgDlgWrapper::GetChildWindowId();
         pViewFrm->ShowChildWindow(nAcceptId,FALSE);
         pWnd->SetCloseHdl(LINK( this, ScAcceptChgDlg,RefInfoHandle));
@@ -1065,7 +1048,7 @@ IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, String*, pResult)
 {
     USHORT nId;
 
-    bSimpleRefDlgStarted=FALSE;
+//  bSimpleRefDlgStarted=FALSE;
     ScSimpleRefDlgWrapper::SetAutoReOpen(TRUE);
 
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
@@ -1827,7 +1810,7 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, ULONG nStartAction,U
 
 IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack*, pChgTrack)
 {
-    if(bScAcceptChgDlgIsDead) return 0;
+//  if(bScAcceptChgDlgIsDead) return 0;
 
     ScChangeTrackMsgQueue& aMsgQueue= pChgTrack->GetMsgQueue();
 
@@ -2099,67 +2082,10 @@ void ScAcceptChgDlg::InitFilter()
 
 void ScAcceptChgDlg::SetMyStaticData()
 {
-    bFilterPageVisible=aAcceptChgCtr.IsFilterPageVisible();
-    aPrivChangeViewSet.SetHasDate(pTPFilter->IsDate());
-    ScChgsDateMode eMode = (ScChgsDateMode) pTPFilter->GetDateMode();
-    aPrivChangeViewSet.SetTheDateMode( eMode );
-    Date aFirstDate( pTPFilter->GetFirstDate() );
-    Time aFirstTime( pTPFilter->GetFirstTime() );
-    Date aLastDate( pTPFilter->GetLastDate() );
-    Time aLastTime( pTPFilter->GetLastTime() );
-    switch ( eMode )
-    {   // korrespondiert mit ScViewUtil::IsActionShown
-        case SCDM_DATE_EQUAL :
-        case SCDM_DATE_NOTEQUAL :
-            aFirstTime.SetTime( 0 );
-            aLastDate = aFirstDate;
-            aLastTime.SetTime( 23595999 );
-        break;
-    }
-    aPrivChangeViewSet.SetTheFirstDateTime( DateTime( aFirstDate, aFirstTime ) );
-    aPrivChangeViewSet.SetTheLastDateTime( DateTime( aLastDate, aLastTime ) );
-    aPrivChangeViewSet.SetHasAuthor(pTPFilter->IsAuthor());
-    aPrivChangeViewSet.SetTheAuthorToShow(pTPFilter->GetSelectedAuthor());
-    aPrivChangeViewSet.SetHasRange(pTPFilter->IsRange());
-    aPrivChangeViewSet.SetHasComment(pTPFilter->IsComment());
-    aPrivChangeViewSet.SetTheComment(pTPFilter->GetComment());
-
-    ScRangeList aRangeList;
-
-    String aRange;
-
-    if(!bSimpleRefDlgStarted)
-    {
-        aRange=pTPFilter->GetRange();
-    }
-    else
-    {
-        USHORT nId = ScSimpleRefDlgWrapper::GetChildWindowId();
-        SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
-
-        ScSimpleRefDlgWrapper* pWnd =(ScSimpleRefDlgWrapper*)pViewFrm->GetChildWindow( nId );
-
-        if(pWnd!=NULL && pWnd->GetWindow()!=NULL)
-        {
-            aRange=pWnd->GetRefString();
-        }
-        else
-        {
-            aRange=ScSimpleRefDlg::GetLastRefString();
-        }
-    }
-
-    aRangeList.Parse(aRange, pDoc);
-    aPrivChangeViewSet.SetTheRangeList(aRangeList);
 }
 
 IMPL_LINK( ScAcceptChgDlg, FilterModified, SvxTPFilter*, pRef )
 {
-    if(pRef!=NULL)
-    {
-        SetMyStaticData();
-    }
-
     return 0;
 }
 
