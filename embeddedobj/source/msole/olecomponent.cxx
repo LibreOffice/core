@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-24 09:42:58 $
+ *  last change: $Author: mav $ $Date: 2003-11-24 16:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,12 @@ using namespace ::com::sun::star;
 #define     MAX_ENUM_ELE     20
 const sal_Int32 n_ConstBufferSize = 32000;
 
+
+uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
+                                                sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
+                                                sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
+
+//----------------------------------------------
 STDAPI StarObject_SwitchDisplayAspect(IUnknown *pObj, LPDWORD pdwCurAspect
     , DWORD dwNewAspect, HGLOBAL hMetaPict, BOOL fDeleteOld
     , BOOL fViewAdvise, IAdviseSink *pSink, BOOL *pfMustUpdate)
@@ -111,7 +117,7 @@ STDAPI StarObject_SwitchDisplayAspect(IUnknown *pObj, LPDWORD pdwCurAspect
     return S_OK;
 }
 
-
+//----------------------------------------------
 sal_Bool ConvertDataForFlavor( const STGMEDIUM& aMedium, const datatransfer::DataFlavor& aFlavor, uno::Any& aResult )
 {
     // TODO: try to convert data from Medium format to specified Flavor format
@@ -650,15 +656,66 @@ void OleComponent::CreateObjectFromData( const uno::Reference< datatransfer::XTr
 }
 
 //----------------------------------------------
-void OleComponent::CreateObjectFromFile( const ::rtl::OUString& aFileName, sal_Int64 nAspect, sal_uInt32 nIconHandle )
+void OleComponent::CreateObjectFromFile( const ::rtl::OUString& aFileURL, sal_Int64 nAspect, sal_uInt32 nIconHandle )
 {
-    // TODO:
+    if ( m_pIStorage || m_aTempURL.getLength() )
+        throw frame::DoubleInitializationException(); // the object is already initialized
+
+    m_nMSAspect = (DWORD)nAspect; // first 32 bits are for MS aspects
+
+    m_pIStorage = CreateNewIStorage_Impl();
+    if ( !m_pIStorage )
+        throw uno::RuntimeException(); // TODO:
+
+    ::rtl::OUString aFilePath;
+    if ( ::osl::FileBase::getSystemPathFromFileURL( aFileURL, aFilePath ) != ::osl::FileBase::E_None )
+        throw uno::RuntimeException(); // TODO: something dangerous happend
+
+    HRESULT hr = OleCreateFromFile( CLSID_NULL,
+                                    aFilePath.getStr(),
+                                    IID_IUnknown,
+                                    OLERENDER_DRAW, // OLERENDER_FORMAT
+                                    NULL,
+                                    NULL,
+                                    m_pIStorage,
+                                    (void**)&m_pObj );
+
+    if ( FAILED( hr ) || !m_pObj)
+        throw uno::RuntimeException(); // TODO
+
+    if ( !InitializeObject_Impl( nIconHandle ) )
+        throw uno::RuntimeException(); // TODO
 }
 
 //----------------------------------------------
-void OleComponent::CreateLinkFromFile( const ::rtl::OUString& aFileName, sal_Int64 nAspect, sal_uInt32 nIconHandle )
+void OleComponent::CreateLinkFromFile( const ::rtl::OUString& aFileURL, sal_Int64 nAspect, sal_uInt32 nIconHandle )
 {
-    // TODO:
+    if ( m_pIStorage || m_aTempURL.getLength() )
+        throw frame::DoubleInitializationException(); // the object is already initialized
+
+    m_nMSAspect = (DWORD)nAspect; // first 32 bits are for MS aspects
+
+    m_pIStorage = CreateNewIStorage_Impl();
+    if ( !m_pIStorage )
+        throw uno::RuntimeException(); // TODO:
+
+    ::rtl::OUString aFilePath;
+    if ( ::osl::FileBase::getSystemPathFromFileURL( aFileURL, aFilePath ) != ::osl::FileBase::E_None )
+        throw uno::RuntimeException(); // TODO: something dangerous happend
+
+    HRESULT hr = OleCreateLinkToFile( aFilePath.getStr(),
+                                        IID_IUnknown,
+                                        OLERENDER_DRAW, // OLERENDER_FORMAT
+                                        NULL,
+                                        NULL,
+                                        m_pIStorage,
+                                        (void**)&m_pObj );
+
+    if ( FAILED( hr ) || !m_pObj)
+        throw uno::RuntimeException(); // TODO
+
+    if ( !InitializeObject_Impl( nIconHandle ) )
+        throw uno::RuntimeException(); // TODO
 }
 
 //----------------------------------------------
@@ -790,6 +847,24 @@ sal_Int64 OleComponent::GetMiscStatus()
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
     return (sal_Int64)m_nOLEMiscFlags; // first 32 bits are for MS flags
+}
+
+//----------------------------------------------
+uno::Sequence< sal_Int8 > OleComponent::GetCLSID()
+{
+    if ( !m_pOleObject )
+        throw embed::WrongStateException(); // TODO: the object is in wrong state
+
+    GUID aCLSID;
+    HRESULT hr = m_pOleObject->GetUserClassID( &aCLSID );
+    if ( FAILED( hr ) )
+        throw io::IOException(); // TODO:
+
+    return  GetSequenceClassID( aCLSID.Data1, aCLSID.Data2, aCLSID.Data3,
+                                aCLSID.Data4[0], aCLSID.Data4[1],
+                                aCLSID.Data4[2], aCLSID.Data4[3],
+                                aCLSID.Data4[4], aCLSID.Data4[5],
+                                aCLSID.Data4[6], aCLSID.Data4[7] );
 }
 
 //----------------------------------------------

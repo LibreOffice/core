@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-24 09:42:10 $
+ *  last change: $Author: mav $ $Date: 2003-11-24 16:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,8 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
             // after the loading the object can appear as a link
             // will be detected later by olecomponent
             m_pOleComponent->LoadEmbeddedObject( xInStream, embed::Aspects::MSASPECT_CONTENT );
+            m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
+
             m_nObjectState = embed::EmbedStates::EMBED_LOADED;
         }
         else
@@ -326,6 +328,8 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                 m_pOleComponent->CreateLinkFromFile( aURL, embed::Aspects::MSASPECT_CONTENT, NULL );
 
             m_pOleComponent->RunObject();
+            m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
+
             m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
         }
         //else if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_TRANSFERABLE_INIT )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-20 17:02:23 $
+ *  last change: $Author: mav $ $Date: 2003-11-24 16:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 //------------------------------------------------------
 // In case of loading from persistent entry the classID of the object
 // will be retrieved from the entry, during construction it is unknown
-OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory, sal_Bool bLink )
 : m_pOleComponent( NULL )
 , m_pInterfaceContainer( NULL )
 , m_bReadOnly( sal_False )
@@ -112,7 +112,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bStoreVisRepl( sal_True )
 , m_xFactory( xFactory )
 , m_bWaitSaveCompleted( sal_False )
-, m_bIsLink( sal_False )
+, m_bIsLink( bLink )
 {
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-17 16:19:24 $
+ *  last change: $Author: mav $ $Date: 2003-11-24 16:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,8 @@ public:
     sal_Int64 GetViewAspect();
 
     sal_Int64 GetMiscStatus();
+
+    ::com::sun::star::uno::Sequence< sal_Int8 > GetCLSID();
 
     void StoreObjectToStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutStream,
                               sal_Bool bStoreVisReplace );

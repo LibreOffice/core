@@ -19,6 +19,8 @@ import com.sun.star.uno.Any;
 import com.sun.star.lang.XComponent;
 
 import com.sun.star.util.XCloseable;
+import com.sun.star.util.XURLTransformer;
+import com.sun.star.util.URL;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.NamedValue;
@@ -70,6 +72,8 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
     private Object m_oInHandlerLock;
     private boolean m_bInHandler = false;
 
+    private XURLTransformer m_xTransformer;
+
 // Constants
     private final byte DESTROY                  =  1;
     private final byte MOUSE_CLICKED            =  2;
@@ -95,6 +99,11 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
         setBackground( Color.gray );
 
         m_aToolkit = Toolkit.getDefaultToolkit();
+
+        try {
+            Object oTransformer = m_xServiceFactory.createInstance( "com.sun.star.util.URLTransformer" );
+            m_xTransformer = (XURLTransformer)UnoRuntime.queryInterface( XURLTransformer.class, oTransformer );
+        } catch( Exception e ) { System.exit( 0 ); }
 
         m_pActionsList = new byte[200];
         m_nActionsNumber = 0;
@@ -246,14 +255,14 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                             if ( aFile != null )
                             {
                                 // create object from specified file
-                                String aFileURI = aFile.toURI().toASCIIString();
+                                String aFileURI = getValidURL( aFile.toURI().toASCIIString() );
                                 try {
-                                    saveObject();
-
+                                /*
                                     if ( m_bLinkObj )
-                                        storeLinkToStorage();
-
-                                    saveStorageAsFileURI( aFileURI );
+                                        storeLinkAsFileURI( aFileURI );
+                                    else
+                                */
+                                        saveObjectAsFileURI( aFileURI );
                                 }
                                 catch( Exception ex )
                                 {
@@ -283,7 +292,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                         if ( aFile != null )
                         {
                             // create object from specified file
-                            String aFileURI = aFile.toURI().toASCIIString();
+                            String aFileURI = getValidURL( aFile.toURI().toASCIIString() );
 
                             // load from specified file
                             loadFileURI( aFileURI );
@@ -360,14 +369,14 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                 if ( aFile != null )
                                 {
                                     // create object from specified file
-                                    String aFileURI = aFile.toURI().toASCIIString();
+                                    String aFileURI = getValidURL( aFile.toURI().toASCIIString() );
                                     try {
-                                        saveObject();
-
+                                    /*
                                         if ( m_bLinkObj )
-                                            storeLinkToStorage();
-
-                                        saveStorageAsFileURI( aFileURI );
+                                            storeLinkAsFileURI( aFileURI );
+                                        else
+                                    */
+                                            saveObjectAsFileURI( aFileURI );
                                     }
                                     catch( Exception ex )
                                     {
@@ -447,7 +456,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                         if ( aFile != null )
                         {
                             // create object from specified file
-                            String aFileURI = aFile.toURI().toASCIIString();
+                            String aFileURI = getValidURL( aFile.toURI().toASCIIString() );
                             m_xStorage = createTempStorage();
 
                             if ( m_xStorage != null )
@@ -489,7 +498,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                         if ( aFile != null )
                         {
                             // create object from specified file
-                            String aFileURI = aFile.toURI().toASCIIString();
+                            String aFileURI = getValidURL( aFile.toURI().toASCIIString() );
 
                             m_xEmbedObj = createLinkObject( aFileURI );
 
@@ -954,7 +963,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                                                                     oEmbedFactory );
             if ( xEmbedFactory != null )
             {
-                Object oEmbObj = xEmbedFactory.createInstanceLink( aLinkURL );
+                Object oEmbObj = xEmbedFactory.createInstanceLink( m_xStorage, "EmbedSub", aLinkURL, true );
                 xEmbObj = (XEmbeddedObject)UnoRuntime.queryInterface( XEmbeddedObject.class, oEmbObj );
             }
             else
@@ -990,7 +999,8 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                 aMedDescr[1].Value = (Object) new Boolean( false );
                 Object oEmbObj = xEmbedFactory.createInstanceInitFromMediaDescriptor( m_xStorage,
                                                                                     "EmbedSub",
-                                                                                    aMedDescr );
+                                                                                    aMedDescr,
+                                                                                    true );
                 xEmbObj = (XEmbeddedObject)UnoRuntime.queryInterface( XEmbeddedObject.class, oEmbObj );
             }
             else
@@ -1022,9 +1032,9 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
         if ( m_xEmbedObj != null )
         {
             try {
-                XComponent xComponent = (XComponent)UnoRuntime.queryInterface( XComponent.class, m_xEmbedObj );
-                if ( xComponent != null )
-                    xComponent.dispose();
+                XCloseable xClose = (XCloseable)UnoRuntime.queryInterface( XCloseable.class, m_xEmbedObj );
+                if ( xClose != null )
+                    xClose.close( true );
             }
             catch ( Exception ex )
             {}
@@ -1072,7 +1082,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
         return xTempStorage;
     }
 
-    public void saveStorageAsFileURI( String aFileURI )
+    public void saveObjectAsFileURI( String aFileURI )
     {
         try {
             Object oStorageFactory = m_xServiceFactory.createInstance( "com.sun.star.embed.StorageFactory" );
@@ -1081,19 +1091,33 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                                                                         oStorageFactory );
             if ( xStorageFactory != null )
             {
-                Object aArgs[] = new Object[2];
-                aArgs[0] = aFileURI;
-                aArgs[1] = new Integer( ElementModes.ELEMENT_READWRITE );
+                XEmbedPersist xPersist = (XEmbedPersist)UnoRuntime.queryInterface( XEmbedPersist.class, m_xEmbedObj );
+                if ( xPersist != null )
+                {
+                    Object aArgs[] = new Object[2];
+                    aArgs[0] = aFileURI;
+                    aArgs[1] = new Integer( ElementModes.ELEMENT_READWRITE );
 
-                Object oStorage = xStorageFactory.createInstanceWithArguments( aArgs );
-                XStorage xTargetStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oStorage );
-                m_xStorage.copyToStorage( xTargetStorage );
+                    Object oStorage = xStorageFactory.createInstanceWithArguments( aArgs );
+                    XStorage xTargetStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oStorage );
 
-                XComponent xComponent = (XComponent)UnoRuntime.queryInterface( XComponent.class, m_xStorage );
-                xComponent.dispose();
+                    xPersist.storeAsEntry( xTargetStorage, "EmbedSub", new PropertyValue[0] );
+                    xPersist.saveCompleted( true );
 
-                m_xStorage = xTargetStorage;
-                m_bOwnFile = true;
+                    // the object must be already based on new storage
+                    XComponent xComponent = (XComponent)UnoRuntime.queryInterface( XComponent.class, m_xStorage );
+                    xComponent.dispose();
+
+                    m_xStorage = xTargetStorage;
+                    m_bOwnFile = true;
+
+                    XTransactedObject xTransact = (XTransactedObject)UnoRuntime.queryInterface( XTransactedObject.class,
+                                                                                            m_xStorage );
+                    if ( xTransact != null )
+                        xTransact.commit();
+                }
+                else
+                    JOptionPane.showMessageDialog( m_aFrame, "No XEmbedPersist!", "Error:", JOptionPane.ERROR_MESSAGE );
             }
             else
                 JOptionPane.showMessageDialog( m_aFrame,
@@ -1139,6 +1163,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
             Object oEmbObj = null;
             if ( xNameAccess.hasByName( "LinkName" ) && xTargetStorage.isStreamElement( "LinkName" ) )
             {
+            /*
                 XStream xLinkStream = xTargetStorage.openStreamElement( "LinkName", ElementModes.ELEMENT_READ );
                 if ( xLinkStream != null )
                 {
@@ -1153,6 +1178,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                         m_bLinkObj = true;
                     }
                 }
+            */
             }
             else
                 oEmbObj = xEmbedFactory.createInstanceInitFromEntry( xTargetStorage,
@@ -1229,6 +1255,65 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
             }
         }
+    }
+
+    public void storeLinkAsFileURI( String aFileURI )
+    {
+        try {
+            Object oStorageFactory = m_xServiceFactory.createInstance( "com.sun.star.embed.StorageFactory" );
+            XSingleServiceFactory xStorageFactory = (XSingleServiceFactory)UnoRuntime.queryInterface(
+                                                                                        XSingleServiceFactory.class,
+                                                                                        oStorageFactory );
+            if ( xStorageFactory != null )
+            {
+                Object aArgs[] = new Object[2];
+                aArgs[0] = aFileURI;
+                aArgs[1] = new Integer( ElementModes.ELEMENT_READWRITE );
+
+                Object oStorage = xStorageFactory.createInstanceWithArguments( aArgs );
+                XStorage xTargetStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oStorage );
+
+                XComponent xComponent = (XComponent)UnoRuntime.queryInterface( XComponent.class, m_xStorage );
+                xComponent.dispose();
+
+                m_xStorage = xTargetStorage;
+                m_bOwnFile = true;
+
+                storeLinkToStorage();
+
+                XTransactedObject xTransact = (XTransactedObject)UnoRuntime.queryInterface( XTransactedObject.class,
+                                                                                            m_xStorage );
+                if ( xTransact != null )
+                    xTransact.commit();
+            }
+            else
+                JOptionPane.showMessageDialog( m_aFrame,
+                                                "Can't create StorageFactory!",
+                                                "Error:",
+                                                JOptionPane.ERROR_MESSAGE );
+        }
+        catch( Exception e )
+        {
+            JOptionPane.showMessageDialog( m_aFrame, e, "Exception in saveStorageToFileURI():", JOptionPane.ERROR_MESSAGE );
+        }
+    }
+
+    public String getValidURL( String sFileURL )
+    {
+        // m_xTransformer must be set!
+        URL[] aURLs = { new URL() };
+        aURLs[0].Complete = sFileURL;
+
+        try {
+            if ( !m_xTransformer.parseSmart( aURLs, "" ) )
+                throw new Exception();
+        }
+        catch( Exception e )
+        {
+            JOptionPane.showMessageDialog( m_aFrame, e, "Exception in getValidURL():", JOptionPane.ERROR_MESSAGE );
+        }
+
+        return aURLs[0].Complete;
     }
 }
 
