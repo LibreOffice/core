@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:09:50 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,18 +596,20 @@ void XMLTextFrameContext_Impl::Create( sal_Bool bHRefOrBase64 )
                 OUString sURL( GetImport().ResolveEmbeddedObjectURL( sHRef,
                                                                 OUString() ) );
 
-                if( sURL.getLength() )
+                if( GetImport().IsPackageURL( sHRef ) )
+                {
                     xPropSet = GetImport().GetTextImport()
                             ->createAndInsertOLEObject( GetImport(), sURL,
                                                         sStyleName,
                                                         sTblName,
                                                         nWidth, nHeight );
+                }
                 else
                 {
                     // it should be an own OOo link that has no storage persistance
                     xPropSet = GetImport().GetTextImport()
                             ->createAndInsertOOoLink( GetImport(),
-                                                        sHRef,
+                                                        sURL,
                                                         sStyleName,
                                                         sTblName,
                                                         nWidth, nHeight );
