@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:04:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
 
     ScViewData* pViewData = GetViewData();
     ScDocument* pDoc = pViewData->GetDocument();
-    USHORT nTab = pViewData->GetTabNo();
+    SCTAB nTab = pViewData->GetTabNo();
     if ( pDoc->IsTabProtected(nTab) )
     {
         ErrorMessage(STR_PROTECTIONERR);
