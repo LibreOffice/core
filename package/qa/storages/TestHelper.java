@@ -111,7 +111,7 @@ public class TestHelper  {
         XStream xSubStream = null;
         try
         {
-            Object oSubStream = xStorage.openStreamElement( sStreamName, ElementModes.ELEMENT_WRITE );
+            Object oSubStream = xStorage.openStreamElement( sStreamName, ElementModes.WRITE );
             xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
             if ( xSubStream == null )
             {
@@ -133,13 +133,13 @@ public class TestHelper  {
                                               String sMediaType,
                                               boolean bCompressed,
                                               byte[] pBytes,
-                                              byte[] pPass )
+                                              String sPass )
     {
         // open substream element
         XStream xSubStream = null;
         try
         {
-            Object oSubStream = xStorage.openEncryptedStreamElement( sStreamName, ElementModes.ELEMENT_WRITE, pPass );
+            Object oSubStream = xStorage.openEncryptedStreamElement( sStreamName, ElementModes.WRITE, sPass );
             xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
             if ( xSubStream == null )
             {
@@ -167,7 +167,7 @@ public class TestHelper  {
         XStream xSubStream = null;
         try
         {
-            Object oSubStream = xStorage.openStreamElement( sStreamName, ElementModes.ELEMENT_WRITE );
+            Object oSubStream = xStorage.openStreamElement( sStreamName, ElementModes.WRITE );
             xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
             if ( xSubStream == null )
             {
@@ -192,11 +192,11 @@ public class TestHelper  {
         // set properties to the stream
         try
         {
-            xPropSet.setPropertyValue( "Encrypted", new Boolean( bEncrypted ) );
+            xPropSet.setPropertyValue( "UseCommonStoragePasswordEncryption", new Boolean( bEncrypted ) );
         }
         catch( Exception e )
         {
-            Error( "Can't set 'Encrypted' property to substream '" + sStreamName + "', exception: " + e );
+            Error( "Can't set 'UseCommonStoragePasswordEncryption' property to substream '" + sStreamName + "', exception: " + e );
             return false;
         }
 
@@ -205,14 +205,14 @@ public class TestHelper  {
 
     public int ChangeStreamPass( XStorage xStorage,
                                  String sStreamName,
-                                 byte[] pOldPass,
-                                 byte[] pNewPass )
+                                 String sOldPass,
+                                 String sNewPass )
     {
         // open substream element
         XStream xSubStream = null;
         try
         {
-            Object oSubStream = xStorage.openEncryptedStreamElement( sStreamName, ElementModes.ELEMENT_WRITE, pOldPass );
+            Object oSubStream = xStorage.openEncryptedStreamElement( sStreamName, ElementModes.WRITE, sOldPass );
             xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
             if ( xSubStream == null )
             {
@@ -238,7 +238,7 @@ public class TestHelper  {
         }
 
         try {
-            xStreamEncryption.setEncryptionKey( pNewPass );
+            xStreamEncryption.setEncryptionPassword( sNewPass );
         }
         catch( Exception e )
         {
@@ -278,7 +278,7 @@ public class TestHelper  {
                 }
 
                 if ( ( bIsRoot
-                  && ( nPropMode | ElementModes.ELEMENT_READ ) != ( nMode | ElementModes.ELEMENT_READ ) )
+                  && ( nPropMode | ElementModes.READ ) != ( nMode | ElementModes.READ ) )
                   || ( !bIsRoot && ( nPropMode & nMode ) != nMode ) )
                 {
                     Error( "'OpenMode' property contains wrong value, expected " + nMode + ", in reality " + nPropMode + "!" );
@@ -328,7 +328,7 @@ public class TestHelper  {
                 }
 
                 if ( ( bIsRoot
-                  && ( nPropMode | ElementModes.ELEMENT_READ ) != ( nMode | ElementModes.ELEMENT_READ ) )
+                  && ( nPropMode | ElementModes.READ ) != ( nMode | ElementModes.READ ) )
                   || ( !bIsRoot && ( nPropMode & nMode ) != nMode ) )
                 {
                     Error( "'OpenMode' property contains wrong value, expected " + nMode + ", in reality " + nPropMode + "!" );
@@ -446,7 +446,7 @@ public class TestHelper  {
         XStream xSubStream = null;
         try
         {
-            Object oSubStream = xParentStorage.openStreamElement( sName, ElementModes.ELEMENT_READ );
+            Object oSubStream = xParentStorage.openStreamElement( sName, ElementModes.READ );
             xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
             if ( xSubStream == null )
             {
@@ -473,20 +473,14 @@ public class TestHelper  {
                                     String sName,
                                     String sMediaType,
                                     byte[] pBytes,
-                                    byte[] pPass )
+                                    String sPass )
     {
         // Important: a common password for any of parent storage should not be set or
-        //            should be different from pPass
-
-        if ( pPass.length == 0 )
-        {
-            Error( "Wrong password is used in the test!" );
-            return false;
-        }
+        //            should be different from sPass
 
         try
         {
-            Object oSubStream = xParentStorage.openStreamElement( sName, ElementModes.ELEMENT_READ );
+            Object oSubStream = xParentStorage.openStreamElement( sName, ElementModes.READ );
             Error( "Encrypted stream '" + sName + "' was opened without password!" );
             return false;
         }
@@ -498,11 +492,11 @@ public class TestHelper  {
             return false;
         }
 
-        byte pWrongPass[] = { 1, 1 };
-        pWrongPass[0] += pPass[0];
+        String sWrongPass = "11";
+        sWrongPass += sPass;
         try
         {
-            Object oSubStream = xParentStorage.openEncryptedStreamElement( sName, ElementModes.ELEMENT_READ, pWrongPass );
+            Object oSubStream = xParentStorage.openEncryptedStreamElement( sName, ElementModes.READ, sWrongPass );
             Error( "Encrypted stream '" + sName + "' was opened with wrong password!" );
             return false;
         }
@@ -517,7 +511,7 @@ public class TestHelper  {
         XStream xSubStream = null;
         try
         {
-            Object oSubStream = xParentStorage.openEncryptedStreamElement( sName, ElementModes.ELEMENT_READ, pPass );
+            Object oSubStream = xParentStorage.openEncryptedStreamElement( sName, ElementModes.READ, sPass );
             xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
             if ( xSubStream == null )
             {
@@ -853,7 +847,7 @@ public class TestHelper  {
         // try to open an opened substorage, open call must fail
         try
         {
-            Object oDummyStorage = xStorage.openStorageElement( sName, ElementModes.ELEMENT_READ );
+            Object oDummyStorage = xStorage.openStorageElement( sName, ElementModes.READ );
             Error( "The trying to reopen opened substorage '" + sName + "' must fail!" );
         }
         catch( Exception e )
@@ -880,20 +874,42 @@ public class TestHelper  {
         return false;
     }
 
-    public XStorage cloneSubStorage( XStorage xStorage, String sName )
+    public XStorage cloneStorage( XSingleServiceFactory xFactory, XStorage xStorage )
     {
-        // clone existing substorage
+        // create a copy of a last commited version of specified storage
+        XStorage xResult = null;
         try
         {
-            XStorage xSubStorage = xStorage.cloneStorageElement( sName );
-            return xSubStorage;
+            Object oTempStorage = xFactory.createInstance();
+            xResult = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );
+            if ( xResult != null )
+                xStorage.copyLastCommitTo( xResult );
+        }
+        catch( Exception e )
+        {
+            Error( "Can't clone storage, exception: " + e );
+        }
+
+        return xResult;
+    }
+
+    public XStorage cloneSubStorage( XSingleServiceFactory xFactory, XStorage xStorage, String sName )
+    {
+        // create a copy of a last commited version of specified substorage
+        XStorage xResult = null;
+        try
+        {
+            Object oTempStorage = xFactory.createInstance();
+            xResult = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );
+            if ( xResult != null )
+                xStorage.copyStorageElementLastCommitTo( sName, xResult );
         }
         catch( Exception e )
         {
             Error( "Can't clone substorage '" + sName + "', exception: " + e );
         }
 
-        return null;
+        return xResult;
     }
 
     public XStream cloneSubStream( XStorage xStorage, String sName )
@@ -912,12 +928,12 @@ public class TestHelper  {
         return null;
     }
 
-    public XStream cloneEncrSubStream( XStorage xStorage, String sName, byte[] pPass )
+    public XStream cloneEncrSubStream( XStorage xStorage, String sName, String sPass )
     {
         // clone existing substream
         try
         {
-            XStream xStream = xStorage.cloneEncryptedStreamElement( sName, pPass );
+            XStream xStream = xStorage.cloneEncryptedStreamElement( sName, sPass );
             return xStream;
         }
         catch( Exception e )
