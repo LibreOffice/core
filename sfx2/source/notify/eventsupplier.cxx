@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 13:25:26 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,7 +509,7 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
                 {
                     OUSTRING aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
                     if ( aBasMgrName.compareToAscii(".") == 0 )
-                        aLibrary = pDoc->GetTitle( SFX_TITLE_APINAME );
+                        aLibrary = pDoc->GetTitle();
 /*
                     else if ( aBasMgrName.getLength() )
                         aLibrary = aBasMgrName;
@@ -542,7 +542,7 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
 
         if ( aLibrary.compareToAscii("document") != 0 )
         {
-            if ( !aLibrary.getLength() || pDoc && String(aLibrary) == pDoc->GetTitle( SFX_TITLE_APINAME ) )
+            if ( !aLibrary.getLength() || pDoc && ( String(aLibrary) == pDoc->GetTitle() || String(aLibrary) == pDoc->GetTitle(SFX_TITLE_APINAME) ) )
                 aLibrary = String::CreateFromAscii("document");
             else
                 aLibrary = String::CreateFromAscii("application");
