@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-08 09:09:18 $
+ *  last change: $Author: ka $ $Date: 2001-05-11 12:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,7 @@ void GraphicObject::ImplConstruct()
     mpSwapStreamHdl = NULL;
     mpSwapOutTimer = NULL;
     mpSimpleCache = NULL;
+    mnAnimationLoopCount = 0;
     mbAutoSwapped = FALSE;
     mbIsInSwapIn = FALSE;
     mbIsInSwapOut = FALSE;
@@ -212,6 +213,7 @@ void GraphicObject::ImplAssignGraphicData()
     meType = maGraphic.GetType();
     mbTransparent = maGraphic.IsTransparent();
     mbAnimated = maGraphic.IsAnimated();
+    mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
 
     if( maGraphic.GetType() == GRAPHIC_GDIMETAFILE )
     {
@@ -841,6 +843,7 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const
                 {
                     Animation aAnimation( maGraphic.GetAnimation() );
                     GraphicManager::ImplAdjust( aAnimation, aActAttr, ADJUSTMENT_ALL );
+                    aAnimation.SetLoopCount( mnAnimationLoopCount );
                     aGraphic = aAnimation;
                 }
                 else
@@ -858,7 +861,16 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const
             }
         }
         else
-            aGraphic = maGraphic;
+        {
+            if( ( GetType() == GRAPHIC_BITMAP ) && IsAnimated() )
+            {
+                Animation aAnimation( maGraphic.GetAnimation() );
+                aAnimation.SetLoopCount( mnAnimationLoopCount );
+                aGraphic = aAnimation;
+            }
+            else
+                aGraphic = maGraphic;
+        }
     }
 
     return aGraphic;
