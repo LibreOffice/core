@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:27:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #endif
 #ifndef _COM_SUN_STAR_I18N_CALENDARDISPLAYCODE_HPP_
-#include <drafts/com/sun/star/i18n/CalendarDisplayCode.hpp>
+#include <com/sun/star/i18n/CalendarDisplayCode.hpp>
 #endif
 #ifndef _COM_SUN_STAR_I18N_AMPMVALUE_HPP_
 #include <com/sun/star/i18n/AmPmValue.hpp>
@@ -2748,7 +2748,6 @@ void SvNumberformat::ImpAppendEraG( String& OutString,
         const CalendarWrapper& rCal, sal_Int16 nNatNum )
 {
     using namespace ::com::sun::star::i18n;
-    using namespace ::drafts::com::sun::star::i18n;
     if ( rCal.getUniqueID().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "gengou" ) ) )
     {
         sal_Unicode cEra;
@@ -2774,7 +2773,6 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                                    String& OutString)
 {
     using namespace ::com::sun::star::i18n;
-    using namespace ::drafts::com::sun::star::i18n;
     BOOL bRes = FALSE;
     CalendarWrapper& rCal = GetCal();
     double fDiff = DateTime(*(rScan.GetNullDate())) - rCal.getEpochStart();
@@ -2955,7 +2953,6 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                                        String& OutString)
 {
     using namespace ::com::sun::star::i18n;
-    using namespace ::drafts::com::sun::star::i18n;
     BOOL bRes = FALSE;
 
     CalendarWrapper& rCal = GetCal();
@@ -4139,7 +4136,7 @@ void SvNumberformat::ImpTransliterateImpl( String& rStr,
 
 
 void SvNumberformat::GetNatNumXml(
-        drafts::com::sun::star::i18n::NativeNumberXmlAttributes& rAttr,
+        com::sun::star::i18n::NativeNumberXmlAttributes& rAttr,
         USHORT nNumFor ) const
 {
     if ( nNumFor <= 3 )
@@ -4153,10 +4150,10 @@ void SvNumberformat::GetNatNumXml(
                     aLocale, rNum.GetNatNum() );
         }
         else
-            rAttr = drafts::com::sun::star::i18n::NativeNumberXmlAttributes();
+            rAttr = com::sun::star::i18n::NativeNumberXmlAttributes();
     }
     else
-        rAttr = drafts::com::sun::star::i18n::NativeNumberXmlAttributes();
+        rAttr = com::sun::star::i18n::NativeNumberXmlAttributes();
 }
 
 // static
