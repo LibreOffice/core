@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: af $ $Date: 2002-04-18 17:54:21 $
+#   last change: $Author: ka $ $Date: 2002-04-25 13:18:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ SLOFILES =      									\
     $(SLO)$/AccessibleViewForwarder.obj				\
     $(SLO)$/AccessibleOutlineEditSource.obj			\
     $(SLO)$/AccessiblePageShape.obj					\
+    $(SLO)$/AccessibleSlideView.obj					\
     $(SLO)$/SdShapeTypes.obj
 
 
