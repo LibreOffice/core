@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:21:37 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ String RID_STR_MULTILINE
     Text[ polish ] = "Wielowierszowy";
     Text[ japanese ] = "θ¤‡ζ•°θ΅";
     Text[ chinese_traditional ] = "ε¤θ΅";
-    Text[ greek ] = "Περισσότερες γραμμές";
+    Text[ greek ] = "Εισαγωγή σε πολλές γραμμές";
     Text[ korean ] = "μ—¬λ¬ μ¤„ μ…λ ¥";
     Text[ arabic ] = "γΚΪΟΟ ΗαΓΣΨΡ";
     Text[ turkish ] = "Ηok satύrlύ giriώ";
@@ -607,7 +607,7 @@ String RID_STR_DROPDOWN
     Text[ polish ] = "Rozwijane";
     Text[ japanese ] = "γƒ‰γƒ­γƒƒγƒ—γƒ€γ‚¦γƒ³";
     Text[ chinese_traditional ] = "ε―ζ“΄ε±•";
-    Text[ greek ] = "Δυνατότητα ανοίγματος";
+    Text[ greek ] = "Αναπτυσσόμενο";
     Text[ korean ] = "λ“λ΅­λ‹¤μ΄";
     Text[ arabic ] = "γδΣΟα";
     Text[ turkish ] = "Aηύlabilir";
@@ -720,7 +720,7 @@ String RID_STR_CURSORSOURCE
     Text[ english_us ] = "Content";
     Text[ portuguese ] = "Conteϊdo";
     Text[ russian ] = "Ρξδεπζθμξε";
-    Text[ greek ] = "Περιεχόμενα";
+    Text[ greek ] = "Περιεχόμενο";
     Text[ dutch ] = "Inhoud";
     Text[ french ] = "Contenu";
     Text[ spanish ] = "Contenido";
@@ -751,7 +751,7 @@ String RID_STR_CURSORSOURCETYPE
     Text[ english_us ] = "Content Type";
     Text[ portuguese ] = "Tipo de conteϊdo";
     Text[ russian ] = "Òθο ρξδεπζθμξγξ";
-    Text[ greek ] = "Τύπος περιεχομένων";
+    Text[ greek ] = "Τύπος περιεχομένου";
     Text[ dutch ] = "Soort inhoud";
     Text[ french ] = "Type de contenu";
     Text[ spanish ] = "Tipo de contenido";
@@ -855,7 +855,7 @@ String RID_STR_ALLOW_EDITS
     Text[ polish ] = "Zezwalaj na modyfikacje";
     Text[ japanese ] = "γƒ‡γƒΌγ‚Ώγ®ε¤‰ζ›΄";
     Text[ chinese_traditional ] = "θ®ζ›΄θ³‡ζ–™";
-    Text[ greek ] = "Τροποποίηση δεδομένων";
+    Text[ greek ] = "Αποδοχή τροποποιήσεων δεδομένων";
     Text[ korean ] = "λ°μ΄ν„° λ³€κ²½";
     Text[ arabic ] = "ΚΫννΡ ΘνΗδΗΚ";
     Text[ turkish ] = "Verileri deπiώtir";
@@ -1135,7 +1135,7 @@ String RID_STR_FMEXPLORER
     Text[ polish ] = "Nawigator formularza";
     Text[ japanese ] = "γƒ•γ‚©γƒΌγƒ  γƒγƒ“γ‚²γƒΌγ‚Ώ";
     Text[ chinese_traditional ] = "θ΅¨ε–®ε©ζ‰‹";
-    Text[ greek ] = "Navigator φόρμας";
+    Text[ greek ] = "Περιήγηση φόρμας";
     Text[ korean ] = "μ–‘μ‹ λ„¤λΉ„κ²μ΄ν„°";
     Text[ arabic ] = "δΗένΜνΚζΡ ΗαΗΣΚγΗΡΙ";
     Text[ turkish ] = "Form navigatφrό";
@@ -1642,7 +1642,7 @@ String RID_ERR_NO_ELEMENT
     Text [ ENGLISH ] = "Choose an entry of the list." ;
     Text [ english_us ] = "Choose an entry from the list or enter a text corresponding to one of the list items." ;
     Text[ italian ] = "Selezionate un elemento dell'elenco oppure inserite un testo corrispondente a uno degli elementi elencati.";
-    Text[ portuguese_brazilian ] = "Selecione um dos elementos da lista ou digite um texto correspondente a um dos itens da lista.";
+    Text[ portuguese_brazilian ] = "Selecione um dos elementos da lista ou digite um texto correspondente a um dos νtens da lista.";
     Text[ portuguese ] = "Seleccione um dos elementos da lista ou indique um texto correspondente a um dos elementos da referida lista.";
     Text[ danish ] = "Vζlg et element fra listen eller indtast tekst, som svarer til et af elementerne fra listen.";
     Text[ french ] = "Sιlectionnez une entrιe de liste ou saisissez le texte concordant avec l'un des ιlιments listιs.";
@@ -2027,7 +2027,7 @@ String RID_STR_CLASSID
     Text[ polish ] = "Identyfikator klasy";
     Text[ japanese ] = "γ‚―γƒ©γ‚Ήγ‚¤γƒ³γƒ‡γƒƒγ‚―γ‚Ή";
     Text[ chinese_traditional ] = "η¨‹εΌι΅η΄ΆεΌ•";
-    Text[ greek ] = "Ευρετήριο κλάσης";
+    Text[ greek ] = "Αναγνωριστικό κλάσης";
     Text[ korean ] = "ν΄λμ¤ ID";
     Text[ arabic ] = "έεΡΣ ΗαΨΘήΗΚ";
     Text[ turkish ] = "Sύnύf dizini";
@@ -3166,7 +3166,7 @@ String RID_STR_VALUESTEP
     Text [ italian ] = "Intervallo" ;
     Text [ spanish ] = "Intervalo" ;
     Text [ dutch ] = "Interval" ;
-    Text[ portuguese_brazilian ] = "Valor do Increm./Decremento";
+    Text[ portuguese_brazilian ] = "Valor do incremento/decremento";
     Text[ danish ] = "Interval";
     Text[ french ] = "Intervalle";
     Text[ chinese_simplified ] = "εΊι—΄";
@@ -3225,7 +3225,7 @@ String RID_STR_CURRSYM_POSITION
     Text[ english_us ] = "Prefix symbol";
     Text[ portuguese ] = "Colocar sνmbolo antes";
     Text[ russian ] = "Ρθμβξλ οπθρςΰβκθ";
-    Text[ greek ] = "Τοποθέτηση συμβόλου μπροστά";
+    Text[ greek ] = "Σύμβολο προθέματος";
     Text[ dutch ] = "Valutateken vooraan";
     Text[ french ] = "Placer le symbole avant le nombre";
     Text[ spanish ] = "Situar sνmbolo delante";
@@ -3329,7 +3329,7 @@ String RID_STR_ENABLED
     Text[ polish ] = "W³Ήczony";
     Text[ japanese ] = "γ‚Άγ‚―γƒ†γ‚£γƒ–γ«γ™γ‚‹";
     Text[ chinese_traditional ] = "ε•ε‹•η„";
-    Text[ greek ] = "Ενεργοποιημένο";
+    Text[ greek ] = "Ενεργοποιημένη";
     Text[ korean ] = "ν™μ„±ν™”";
     Text[ arabic ] = "δΤΨ";
     Text[ turkish ] = "Etkinleώtirildi";
@@ -3732,7 +3732,7 @@ String RID_STR_EMPTY_IS_NULL
     Text[ polish ] = "Pusty ciΉg znakσw jest ZEREM";
     Text[ japanese ] = "η©Ίη™½γ®ζ–‡ε­—ε—γ―γ‚Όγƒ­γ¨γΏγªγ™";
     Text[ chinese_traditional ] = "η©Ίζ Όε­—ε…ƒζ― NULL";
-    Text[ greek ] = "Κενή ακολουθία χαρακτήρων είναι NULL (ΜΗΔΕΝ)";
+    Text[ greek ] = "Κενή ακολουθία χαρακτήρων είναι NULL (μηδενικός χαρακτήρας)";
     Text[ korean ] = "λΉ„μ–΄ μλ” λ¬Έμμ—΄μ€ NULLμ…λ‹λ‹¤.";
     Text[ arabic ] = "ΣαΣαΙ ΗαΓΝΡέ ΗαέΗΡΫΙ ΚΪΚΘΡ NULL";
     Text[ turkish ] = "Boώ karakter dizilimi SIFIR";
@@ -3919,7 +3919,7 @@ String RID_STR_PROPTITLE_FIXEDTEXT
     Text[ polish ] = "Pole etykiety";
     Text[ japanese ] = "γƒ©γƒ™γƒ«γƒ•γ‚£γƒΌγƒ«γƒ‰";
     Text[ chinese_traditional ] = "ζ¨™η±¤ζ¬„δ½";
-    Text[ greek ] = "Πεδίο επιγραφής";
+    Text[ greek ] = "Πεδίο επισήμανσης";
     Text[ korean ] = "λ μ΄λΈ” ν•„λ“";
     Text[ arabic ] = "Νήα ΪδζδΙ";
     Text[ turkish ] = "Etiket alanύ";
@@ -4403,7 +4403,7 @@ String RID_STR_PROPTITLE_MULTISELECT
     Text [ ENGLISH ] = "Multiselection" ;
     Text [ portuguese ] = "Multi-selecηγo" ;
     Text [ english_us ] = "Multiselection" ;
-    Text [ portuguese_brazilian ] = "Multi seleηγo" ;
+    Text [ portuguese_brazilian ] = "Multi-seleηγo" ;
     Text [ swedish ] = "Multimarkering" ;
     Text [ danish ] = "Multimarkering" ;
     Text [ italian ] = "Selezione multipla" ;
@@ -4658,7 +4658,7 @@ String RID_STR_FILTER_NAVIGATOR
     Text [ english_us ] = "Filter navigator";
     Text[ portuguese ] = "Navegador de filtros";
     Text[ russian ] = "Νΰβθγΰςξπ τθλόςπξβ";
-    Text[ greek ] = "Νavigator φίλτρου";
+    Text[ greek ] = "Πλοηγός φίλτρου";
     Text[ dutch ] = "Filter-navigator";
     Text[ french ] = "Navigateur de filtres";
     Text[ spanish ] = "Navegador de filtros";
@@ -4785,7 +4785,7 @@ String RID_STR_LABELCONTROL
     Text[ english_us ] = "Label field";
     Text[ portuguese ] = "Campo de rσtulo";
     Text[ russian ] = "Οξλε οξδοθρθ";
-    Text[ greek ] = "Πεδίο επιγραφής";
+    Text[ greek ] = "Πεδίο επισήμανσης";
     Text[ dutch ] = "Titelveld";
     Text[ french ] = "Champ d'ιtiquette";
     Text[ spanish ] = "Campo de etiqueta";
@@ -4816,7 +4816,7 @@ String RID_STR_AUTOFIELD
     Text[ english_us ] = "<AutoField>";
     Text[ portuguese ] = "<AutoCampo>";
     Text[ russian ] = "<ΐβςξοξλε>";
-    Text[ greek ] = "<ΑυτοΠεδίο>";
+    Text[ greek ] = "<Αυτόματο Πεδίο>";
     Text[ dutch ] = "<AutoVeld>";
     Text[ french ] = "<AutoChamp>";
     Text[ spanish ] = "<Campo automαtico>";
@@ -4824,7 +4824,7 @@ String RID_STR_AUTOFIELD
     Text[ danish ] = "<AutoFelt>";
     Text[ swedish ] = "<AutoFδlt>";
     Text[ polish ] = "<AutoPole>";
-    Text[ portuguese_brazilian ] = "<Campoautomαtico>";
+    Text[ portuguese_brazilian ] = "<Campo Automαtico>";
     Text[ japanese ] = "<γ‚ªγƒΌγƒγƒ•γ‚£γƒΌγƒ«γƒ‰>";
     Text[ korean ] = "<μλ™ ν•„λ“>";
     Text[ chinese_simplified ] = "<θ‡ªε¨ε­—ζ®µ>";
@@ -4999,7 +4999,7 @@ String RID_STR_SVT_SQL_INTERNATIONAL
     Text [ ENGLISH ] = "LIKE;NOT;NULL;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum" ;
     Text [ english_us ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum" ;
     Text [ portuguese ] = "COMO;NΓO;VAZIO;VERDADEIRO;FALSO;Ι;ENTRE;OU;E;mιdia;quantidade;mαximo;mνnimo;soma" ;
-    Text [ portuguese_brazilian ] = "WIE;NICHT;LEER;WAHR;FALSCH;IST;ZWISCHEN;ODER;UND" ;
+    Text [ portuguese_brazilian ] = "COMO;NΓO;VAZIO;VERDADEIRO;FALSO;Ι;ENTRE;OU;E;mιdia;quantidade;mαximo;mνnimo;soma" ;
     Text [ swedish ] = "SOM;INTE;TOM;SANN;FALSK;ΔR;MELLAN;ELLER;OCH;genomsnitt;antal;maximum;minimum;summa" ;
     Text [ danish ] = "SOM;IKKE;TOM;SAND;FALSK;ER;MELLEM;ELLER;OG;Gennemsnit;Antal;Maksimum;Minimum;Sum" ;
     Text [ italian ] = "COME;NON;VUOTO;VERO;FALSO;Θ;TRA;O;E;media;quantitΰ;massimo;minimo;totale" ;
@@ -5033,7 +5033,7 @@ String RID_STR_SVT_SQL_SYNTAX_ERROR
     Text [ ENGLISH ] = "Syntax error in SQL-expression" ;
     Text [ english_us ] = "Syntax error in SQL statement" ;
     Text [ portuguese ] = "Erro de sintaxe na expressγo SQL" ;
-    Text [ portuguese_brazilian ] = "Fehlerhafte Syntax" ;
+    Text [ portuguese_brazilian ] = "Erro de sintaxe na expressγo SQL" ;
     Text [ swedish ] = "Syntaxfel i SQL-uttryck" ;
     Text [ danish ] = "Syntaksfejl i SQL-sζtning" ;
     Text [ italian ] = "Errore di sintassi nell'espressione SQL" ;
@@ -5108,7 +5108,7 @@ String RID_STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE
     Text[ italian ] = "Il valore #1 non puς essere usato con COME!";
     Text[ danish ] = "Vζrdien #1 kan ikke anvendes sammen med SOM!";
     Text[ polish ] = "Wartoci #1 nie moΏna zastosowaζ z JAK!";
-    Text[ portuguese_brazilian ] = "The value #1 can not be used with LIKE!";
+    Text[ portuguese_brazilian ] = "O valor #1 nγo pode ser usado com COMO!";
     Text[ japanese ] = "#1 γ®ε€¤γ― LIKE γ¨δΈ€η·’γ«δ½Ώη”¨γ§γγΎγ›γ‚“γ€‚";
     Text[ korean ] = "#1κ°’μ€ LIKE μ—°μ‚°μμ²λΌ μ‚¬μ©ν•  μ μ—†μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "ζ•°ε€Ό #1 δΈθƒ½δΈ LIKE εζ—¶δ½Ώη”¨οΌ";
@@ -5139,7 +5139,7 @@ String RID_STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE
     Text[ italian ] = "COME non puς essere utilizzato in questo campo!";
     Text[ danish ] = "SOM kan ikke bruges ved dette felt!";
     Text[ polish ] = "JAK nie moΏna uΏyζ przy tym polu!";
-    Text[ portuguese_brazilian ] = "LIKE can not be used with this field!";
+    Text[ portuguese_brazilian ] = "COMO nγo pode ser usado neste campo!";
     Text[ japanese ] = "LIKE γ―γ“γ®γƒ•γ‚£γƒΌγƒ«γƒ‰γ§δ½Ώη”¨γ§γγΎγ›γ‚“γ€‚";
     Text[ korean ] = "LIKEλ” μ΄ ν•„λ“μ—μ„ μ‚¬μ©ν•  μ μ—†μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "ε¨θΏ™δΈªε­—ζ®µδΈ­δΈθƒ½δ½Ώη”¨ LIKE οΌ";
@@ -5170,7 +5170,7 @@ String RID_STR_SVT_SQL_SYNTAX_NO_NUM
     Text[ italian ] = "Il campo non puς essere paragonato a una stringa!";
     Text[ danish ] = "Feltet kan ikke sammenlignes med en streng!";
     Text[ polish ] = "Pola nie moΏna porσwnaζ z ciΉgiem znakσw!";
-    Text[ portuguese_brazilian ] = "The field can not be compared with a string!";
+    Text[ portuguese_brazilian ] = "O campo nγo pode ser comparado com um string!";
     Text[ japanese ] = "γ“γ®γƒ•γ‚£γƒΌγƒ«γƒ‰γ―ζ–‡ε­—ε—γ§ζ―”θΌƒγ§γγΎγ›γ‚“γ€‚";
     Text[ korean ] = "ν•„λ“λ¥Ό λ¬Έμμ—΄κ³Ό λΉ„κµν•  μ μ—†μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "θΏ™δΈªε­—ζ®µδΈθƒ½δΈε­—η¬¦δΈ²η›Έζ―”θΎƒοΌ";
@@ -5201,7 +5201,7 @@ String RID_STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID
     Text[ italian ] = "Il campo non puς essere paragonato a un dato.";
     Text[ danish ] = "Feltet kan ikke sammenlignes med en dato!";
     Text[ polish ] = "Pola nie moΏna porσwnaζ z datΉ!";
-    Text[ portuguese_brazilian ] = "The field can not be compared with a ACCESS date!";
+    Text[ portuguese_brazilian ] = "Este campo nγo pode ser comparado com uma data!";
     Text[ japanese ] = "γ“γ®γƒ•γ‚£γƒΌγƒ«γƒ‰γ―ζ—¥δ»γ§ζ―”θΌƒγ§γγΎγ›γ‚“γ€‚";
     Text[ korean ] = "ν•„λ“λ¥Ό λ‚ μ§μ™€ λΉ„κµν•  μ μ—†μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "θΏ™δΈªε­—ζ®µδΈθƒ½δΈζ—¥ζη›Έζ―”θΎƒοΌ";
@@ -5232,7 +5232,7 @@ String RID_STR_SVT_SQL_SYNTAX_INT_NO_VALID
     Text[ italian ] = "Il campo non puς essere paragonato a un integrale.";
     Text[ danish ] = "Feltet kan ikke sammenlignes med et heltal!";
     Text[ polish ] = "Porσwnanie pola z liczbΉ ca³kowitΉ nie jest moΏliwe!";
-    Text[ portuguese_brazilian ] = "The field can not be compared with a integer!";
+    Text[ portuguese_brazilian ] = "Este campo nγo pode ser comparado com um nϊmero inteiro!";
     Text[ japanese ] = "γ“γ®γƒ•γ‚£γƒΌγƒ«γƒ‰γ―ζ•΄ζ•°γ§ζ―”θΌƒγ§γγΎγ›γ‚“γ€‚";
     Text[ korean ] = "ν•„λ“λ¥Ό μ •μμ™€ λΉ„κµν•  μ μ—†μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "θΏ™δΈªε­—ζ®µδΈθƒ½δΈδΈ€δΈªζ•΄ζ•°η›Έζ―”θΎƒοΌ";
@@ -5262,7 +5262,7 @@ String RID_STR_SVT_SQL_SYNTAX_TABLE
     Text[ danish ] = "Tabellen \"#\" er ukendt i databasen!";
     Text[ swedish ] = "Tabellen \"#\" δr okδnd i databasen!";
     Text[ polish ] = "Tabela \"#\" jest nieznana w bazie danych!";
-    Text[ portuguese_brazilian ] = "The table \"#\" is unknown in the database!";
+    Text[ portuguese_brazilian ] = "A tabela \"#\" ι desconhecida no banco de dados!";
     Text[ japanese ] = "γƒ†γƒΌγƒ–γƒ« \"#\" γ―γ€γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ήγ§γ―δΈζγ§γ™γ€‚";
     Text[ korean ] = "\"#\" ν…μ΄λΈ”μ€ λ°μ΄ν„°λ² μ΄μ¤μ—μ„ μ• μ μ—†μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "θΏ™δΈªθ΅¨ζ Ό \"#\" ε―Ήζ•°ζ®εΊ“θ€θ¨€ζ―δΈζη„οΌ";
@@ -5322,7 +5322,7 @@ String RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID
     Text[ italian ] = "Il campo non puς essere paragonato a un numero in virgola mobile.";
     Text[ danish ] = "Feltet kan ikke sammenlignes med et flydende tal!";
     Text[ polish ] = "Porσwnanie pola z liczbΉ rzeczywistΉ nie jest moΏliwe!";
-    Text[ portuguese_brazilian ] = "The field can not be compared with a real!";
+    Text[ portuguese_brazilian ] = "Este campo nγo pode ser comparado com um nϊmero de vνrgula flutuante!";
     Text[ japanese ] = "γ“γ®γƒ•γ‚£γƒΌγƒ«γƒ‰γ―ζµ®ε‹•ε°ζ•°γ§ζ―”θΌƒγ§γγΎγ›γ‚“γ€‚";
     Text[ korean ] = "ν•„λ“λ¥Ό λ¶€λ™ μ†μμ μ μμ™€ λΉ„κµν•  μ μ—†μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "θΏ™δΈªε­—ζ®µδΈθƒ½δΈδΈ€δΈªεΈ¦ε―εε°ζ•°η‚Ήδ½ζ•°η›Έζ―”θΎƒοΌ";
@@ -5353,7 +5353,7 @@ String RID_STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
     Text[ danish ] = "Det angivne kriterium kan ikke sammenlignes med dette felt!!";
     Text[ swedish ] = "Det angivna kriteriet kan inte jδmfφras med det hδr fδltet!!";
     Text[ polish ] = "Podanego kryterium nie moΏna porσwnaζ z danym polem!!";
-    Text[ portuguese_brazilian ] = "The entered critisim can not be compared with this field!!";
+    Text[ portuguese_brazilian ] = "Nγo ι possνvel comparar o critιrio indicado com este campo!";
     Text[ japanese ] = "ε…¥ε›γ—γζ¤η΄Άζ΅δ»¶γ―γ“γ®γƒ•γ‚£γƒΌγƒ«γƒ‰γ§ζ―”θΌƒγ§γγΎγ›γ‚“γ€‚";
     Text[ korean ] = "μ§€μ •ν• κΈ°μ¤€μ„ μ΄ ν•„λ“μ™€ λΉ„κµν•  μ μ—†μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "θ®Ύε®η„ζ΅δ»¶ζ— ζ³•δΈθΏ™δΈªε­—ζ®µζ―”θΎƒοΌ";
@@ -5368,6 +5368,7 @@ String RID_STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
     Text[ hindi ] = "The entered criterion cannot be compared with this field.";
     Text[ slovak ] = "ZadanΓ© kritΓ©rium,nemΓ΄ΕΎe byΕ¥ porovnΓ΅vanΓ© s tΓ½mto poΔΎom.";
 };
+
 
 
 
