@@ -2,9 +2,9 @@
 #
 #   $RCSfile: logger.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:27:51 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:55:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,10 @@ sub include_header_into_logfile
 
     my $infoline;
 
-    $infoline = "\n######################################################\n";
+    $infoline = "\n" . get_time_string();
+    push( @installer::globals::logfileinfo, $infoline);
+
+    $infoline = "######################################################\n";
     push( @installer::globals::logfileinfo, $infoline);
 
     $infoline = "$message\n";
@@ -96,7 +99,10 @@ sub globallog
 
     my $infoline;
 
-    $infoline = "\n################################################################\n";
+    $infoline = "\n" . get_time_string();
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+    $infoline = "################################################################\n";
     push( @installer::globals::globallogfileinfo, $infoline);
 
     $infoline = "$message\n";
@@ -143,6 +149,79 @@ sub savedebug
 
     installer::files::save_file($outputdir . $installer::globals::debugfilename, \@installer::globals::functioncalls);
     print "... writing debug file " . $outputdir . $installer::globals::debugfilename . "\n";
+}
+
+###############################################################
+# Starting the time
+###############################################################
+
+sub starttime
+{
+    $installer::globals::starttime = time();
+}
+
+###############################################################
+# Convert time string
+###############################################################
+
+sub convert_timestring
+{
+    my ($secondstring) = @_;
+
+    my $timestring = "";
+
+    if ( $secondstring < 60 )    # less than a minute
+    {
+        if ( $secondstring < 10 ) { $secondstring = "0" . $secondstring; }
+        $timestring = "00\:$secondstring min\.";
+    }
+    elsif ( $secondstring < 3600 )
+    {
+        my $minutes = $secondstring / 60;
+        my $seconds = $secondstring % 60;
+        if ( $minutes =~ /(\d*)\.\d*/ ) { $minutes = $1; }
+        if ( $minutes < 10 ) { $minutes = "0" . $minutes; }
+        if ( $seconds < 10 ) { $seconds = "0" . $seconds; }
+        $timestring = "$minutes\:$seconds min\.";
+    }
+    else    # more than one hour
+    {
+        my $hours = $secondstring / 3600;
+        my $secondstring = $secondstring % 3600;
+        my $minutes = $secondstring / 60;
+        my $seconds = $secondstring % 60;
+        if ( $hours =~ /(\d*)\.\d*/ ) { $hours = $1; }
+        if ( $minutes =~ /(\d*)\.\d*/ ) { $minutes = $1; }
+        if ( $hours < 10 ) { $hours = "0" . $hours; }
+        if ( $minutes < 10 ) { $minutes = "0" . $minutes; }
+        if ( $seconds < 10 ) { $seconds = "0" . $seconds; }
+        $timestring = "$hours\:$minutes\:$seconds hours";
+    }
+
+    return $timestring;
+}
+
+###############################################################
+# Returning time string for logging
+###############################################################
+
+sub get_time_string
+{
+    my $currenttime = time();
+    $currenttime = $currenttime - $installer::globals::starttime;
+    $currenttime = convert_timestring($currenttime);
+    $currenttime = localtime() . " \(" . $currenttime . "\)\n";
+    return $currenttime;
+}
+
+###############################################################
+# Stopping the time
+###############################################################
+
+sub stoptime
+{
+    my $infoline = get_time_string();
+    print "$infoline";
 }
 
 1;
