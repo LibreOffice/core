@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-15 07:56:18 $
+ *  last change: $Author: hro $ $Date: 2001-07-20 16:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@
 LPWSTR *lpArgvW = NULL;
 int nArgnW = 0;
 
+extern oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle( HANDLE hFile );
+
 /***************************************************************************/
 
 oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
@@ -105,15 +107,48 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
 
 /***************************************************************************/
 
-oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
-                                            rtl_uString *ustrArguments[],
-                                            sal_uInt32   nArguments,
-                                            oslProcessOption Options,
-                                            oslSecurity Security,
-                                            rtl_uString *ustrWorkDir,
-                                            rtl_uString *ustrEnvironmentVars[],
-                                            sal_uInt32   nEnvironmentVars,
-                                            oslProcess *pProcess)
+oslProcessError SAL_CALL osl_executeProcess(
+    rtl_uString *ustrImageName,
+    rtl_uString *ustrArguments[],
+    sal_uInt32   nArguments,
+    oslProcessOption Options,
+    oslSecurity Security,
+    rtl_uString *ustrWorkDir,
+    rtl_uString *ustrEnvironmentVars[],
+    sal_uInt32   nEnvironmentVars,
+    oslProcess *pProcess
+)
+{
+    return osl_executeProcess_WithRedirectedIO(
+        ustrImageName,
+        ustrArguments,
+        nArguments,
+        Options,
+        Security,
+        ustrWorkDir,
+        ustrEnvironmentVars,
+        nEnvironmentVars,
+        pProcess,
+        NULL, NULL, NULL );
+}
+
+
+/***************************************************************************/
+
+oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
+    rtl_uString *ustrImageName,
+    rtl_uString *ustrArguments[],
+    sal_uInt32   nArguments,
+    oslProcessOption Options,
+    oslSecurity Security,
+    rtl_uString *ustrWorkDir,
+    rtl_uString *ustrEnvironmentVars[],
+    sal_uInt32   nEnvironmentVars,
+    oslProcess *pProcess,
+    oslFileHandle *pProcessInputWrite,
+    oslFileHandle *pProcessOutputRead,
+    oslFileHandle *pProcessErrorRead
+)
 {
     sal_Int32 nIndex;
     sal_Int32 nCapacity = 0;
@@ -130,6 +165,9 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
     STARTUPINFOW        startupInfo;
     PROCESS_INFORMATION processInfo;
     BOOL                bRet;
+
+    HANDLE              hInputRead = NULL, hInputWrite = NULL, hOutputRead = NULL, hOutputWrite = NULL, hErrorRead = NULL, hErrorWrite = NULL;
+    BOOL                fInheritHandles = FALSE;
 
     /* if no image name given, use first argument */
     if( ( NULL == ustrImageName ) && nArguments )
@@ -249,6 +287,48 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
     startupInfo.dwFlags   = STARTF_USESHOWWINDOW;
     startupInfo.lpDesktop = lpDesktopName;
 
+    /* Create pipes for redirected IO */
+
+    if ( pProcessInputWrite )
+    {
+        HANDLE  hTemp = NULL;
+
+        CreatePipe( &hInputRead, &hTemp, NULL, 0 );
+
+        DuplicateHandle( GetCurrentProcess(), hTemp, GetCurrentProcess(), &hInputWrite, 0, FALSE, DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS );
+
+        startupInfo.hStdInput = hInputRead;
+        startupInfo.dwFlags   |= STARTF_USESTDHANDLES;
+        fInheritHandles = TRUE;
+    }
+
+    if ( pProcessOutputRead )
+    {
+        HANDLE  hTemp = NULL;
+
+        CreatePipe( &hTemp, &hOutputWrite, NULL, 0 );
+
+        DuplicateHandle( GetCurrentProcess(), hTemp, GetCurrentProcess(), &hOutputRead, 0, FALSE, DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS );
+
+        startupInfo.hStdOutput = hOutputWrite;
+        startupInfo.dwFlags   |= STARTF_USESTDHANDLES;
+        fInheritHandles = TRUE;
+    }
+
+    if ( pProcessErrorRead )
+    {
+        HANDLE  hTemp = NULL;
+
+        CreatePipe( &hTemp, &hErrorWrite, NULL, 0 );
+
+        DuplicateHandle( GetCurrentProcess(), hTemp, GetCurrentProcess(), &hErrorRead, 0, FALSE, DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS );
+
+        startupInfo.hStdError = hErrorWrite;
+        startupInfo.dwFlags   |= STARTF_USESTDHANDLES;
+        fInheritHandles = TRUE;
+    }
+
+
     switch( Options & (osl_Process_NORMAL | osl_Process_HIDDEN | osl_Process_MINIMIZED | osl_Process_MAXIMIZED | osl_Process_FULLSCREEN) )
     {
         case osl_Process_HIDDEN:
@@ -302,16 +382,27 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
         bRet = CreateProcessAsUserW(
             ((oslSecurityImpl*)Security)->m_hToken,
             NULL, ustrCommandLine->buffer, NULL,  NULL,
-            FALSE, dwFlags, lpEnvironment, lpCurrentWorkDir,
+            fInheritHandles, dwFlags, lpEnvironment, lpCurrentWorkDir,
             &startupInfo, &processInfo);
     }
     else
     {
         bRet = CreateProcessW(
             NULL, ustrCommandLine->buffer, NULL,  NULL,
-            FALSE, dwFlags, lpEnvironment, lpCurrentWorkDir,
+            fInheritHandles, dwFlags, lpEnvironment, lpCurrentWorkDir,
             &startupInfo, &processInfo);
     }
+
+    /* Now we can close the pipe ends that are used by the child process */
+
+    if ( hInputRead )
+        CloseHandle( hInputRead );
+
+    if ( hOutputWrite )
+        CloseHandle( hOutputWrite );
+
+    if ( hErrorWrite )
+        CloseHandle( hErrorWrite );
 
     /* release string members */
     rtl_uString_release( ustrCommandLine );
@@ -339,8 +430,30 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
         if (Options & osl_Process_WAIT)
             WaitForSingleObject(pProcImpl->m_hProcess, INFINITE);
 
+        /* Provide redirected IO handles to caller */
+
+        if ( pProcessInputWrite )
+            *pProcessInputWrite = osl_createFileHandleFromOSHandle( hInputWrite );
+
+        if ( pProcessOutputRead )
+            *pProcessOutputRead = osl_createFileHandleFromOSHandle( hOutputRead );
+
+        if ( pProcessErrorRead )
+            *pProcessErrorRead = osl_createFileHandleFromOSHandle( hErrorRead );
+
         return osl_Process_E_None;
     }
+
+    /* if an error occured we have to close the server side pipe ends too */
+
+    if ( hInputWrite )
+        CloseHandle( hInputWrite );
+
+    if ( hOutputRead )
+        CloseHandle( hOutputRead );
+
+    if ( hErrorRead )
+        CloseHandle( hErrorRead );
 
     return osl_Process_E_Unknown;
 }
