@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-18 16:26:11 $
+#   last change: $Author: kz $ $Date: 2005-01-14 11:33:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.77 $ ';
+$id_str = ' $Revision: 1.78 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -496,8 +496,12 @@ sub init_globals
         $common_build = 1;
         if ((defined $common_outdir) && ($common_outdir ne "")) {
             $common_outdir = $common_outdir . ".pro" if $inpath =~ /\.pro$/;
-            $common_dest = "$solarversion/$common_outdir" if ( !$dest );
-            $dest = "$solarversion/$inpath" if ( !$dest );
+            if ( $dest ) {
+                $common_dest = $dest;
+            } else {
+                $common_dest = "$solarversion/$common_outdir";
+                $dest = "$solarversion/$inpath";
+            }
         } else {
             print_error("common_build defined without common_outdir", 0);
             exit(6);
