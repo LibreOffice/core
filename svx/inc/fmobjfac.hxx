@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobjfac.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,15 @@
 #include <tools/link.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class SdrObjFactory;
 
 
 
-class FmFormObjFactory
+class SVX_DLLPUBLIC FmFormObjFactory
 {
 public:
     FmFormObjFactory();
