@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-10 13:43:35 $
+ *  last change: $Author: sab $ $Date: 2001-10-16 12:23:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,35 +364,11 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         return SCERR_IMPORT_UNKNOWN;
     }
 
+    // free the component
+    xParser->setDocumentHandler( NULL );
+
     // success!
     return 0;
-/*  catch( xml::sax::SAXParseException e )
-    {
-        bRet = sal_False;
-        bFormatError = sal_True;
-    }
-    catch( xml::sax::SAXException e )
-    {
-        bRet = sal_False;
-        bFormatError = sal_True;
-    }
-    catch( io::IOException e )
-    {
-        bRet = sal_False;
-    }
-
-    if ( bFormatError && bEncrypted )
-    {
-        //  any format or parse error in an encrypted document
-        //  is treated as a wrong password.
-
-        if ( pStorage )
-            pStorage->SetError( ERRCODE_SFX_WRONGPASSWORD );
-        else if ( pMedium )
-            pMedium->SetError( ERRCODE_SFX_WRONGPASSWORD );
-    }
-
-    return bRet;*/
 }
 
 sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
