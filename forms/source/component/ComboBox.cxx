@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:35:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,7 +534,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
     if (nVersion > 0x0003)  // nVersion == 4
         _rxInStream >> m_aDefaultText;
 
-    // Stringliste muﬂ geleert werden, wenn eine Listenquelle gesetzt ist
+    // Stringliste muss geleert werden, wenn eine Listenquelle gesetzt ist
     // dieses kann der Fall sein wenn im alive modus gespeichert wird
     if  (   m_aListSource.getLength()
         &&  !hasExternalListSource()
