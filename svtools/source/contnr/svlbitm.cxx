@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbitm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:56:13 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,10 +266,17 @@ USHORT SvLBoxString::IsA()
 }
 
 void SvLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
-    SvLBoxEntry* )
+    SvLBoxEntry* _pEntry)
 {
     DBG_CHKTHIS(SvLBoxString,0);
-    rDev.DrawText( rPos, aStr );
+    if ( _pEntry )
+    {
+        USHORT nStyle = rDev.IsEnabled() ? 0 : TEXT_DRAW_DISABLE;
+        rDev.DrawText( Rectangle(rPos,GetSize(&rDev,_pEntry)),aStr,nStyle);
+    }
+    else
+        rDev.DrawText( rPos, aStr);
+
 }
 
 SvLBoxItem* SvLBoxString::Create() const
@@ -347,7 +354,8 @@ void SvLBoxBmp::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
                         SvLBoxEntry* )
 {
     DBG_CHKTHIS(SvLBoxBmp,0);
-    rDev.DrawImage( rPos, aBmp );
+    USHORT nStyle = rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
+    rDev.DrawImage( rPos, aBmp ,nStyle);
 }
 
 SvLBoxItem* SvLBoxBmp::Create() const
@@ -425,7 +433,8 @@ void SvLBoxButton::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
 {
     DBG_CHKTHIS(SvLBoxButton,0);
     USHORT nIndex = pData->GetIndex( nItemFlags );
-    rDev.DrawImage( rPos, pData->aBmps[nIndex + nBaseOffs] );
+    USHORT nStyle = rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
+    rDev.DrawImage( rPos, pData->aBmps[nIndex + nBaseOffs] ,nStyle);
 }
 
 SvLBoxItem* SvLBoxButton::Create() const
@@ -577,7 +586,10 @@ void SvLBoxContextBmp::Paint( const Point& _rPos, SvLBox& _rDev,
 
     sal_Bool _bSemiTransparent = _pEntry && ( 0 != ( SV_ENTRYFLAG_SEMITRANSPARENT  & _pEntry->GetFlags( ) ) );
     // draw
-    _rDev.DrawImage( _rPos, rImage, _bSemiTransparent ? IMAGE_DRAW_SEMITRANSPARENT : 0 );
+    USHORT nStyle = _rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
+    if ( _bSemiTransparent )
+        nStyle |= IMAGE_DRAW_SEMITRANSPARENT;
+    _rDev.DrawImage( _rPos, rImage, nStyle);
 }
 
 SvLBoxItem* SvLBoxContextBmp::Create() const
