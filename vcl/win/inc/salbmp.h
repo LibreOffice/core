@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:48:14 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ public:
 
     virtual BitmapBuffer*       AcquireBuffer( bool bReadOnly );
     virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
+    virtual bool                GetSystemData( BitmapSystemData& rData );
 };
 
 #endif // _SV_SALBMP_HXX
