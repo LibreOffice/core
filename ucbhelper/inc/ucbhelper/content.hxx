@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-10 07:46:11 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 10:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _COM_SUN_STAR_UCB_CONTENTCREATIONEXCEPTION_HPP_
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
@@ -91,7 +94,6 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 } } } }
 
 namespace com { namespace sun { namespace star { namespace ucb {
-    class CommandAbortedException;
     class XCommandEnvironment;
     class XCommandInfo;
     class XContent;
