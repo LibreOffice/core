@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:12:05 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,6 +687,10 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
         };
     };
 };
+
+
+
+
 
 
 
