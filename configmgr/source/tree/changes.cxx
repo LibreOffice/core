@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
+ *  last change: $Author: jb $ $Date: 2002-02-15 14:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,8 @@
 #include <osl/diagnose.h>
 #endif
 
-using namespace configmgr;
+namespace configmgr
+{
 
 //==========================================================================
 //= ValueChange
@@ -381,4 +382,6 @@ void RemoveNode::takeRemovedTree(data::TreeSegment const & _aRemovedTree)
     m_aOwnOldNode   = _aRemovedTree;
 }
 
+//--------------------------------------------------------------------------
+}  // namespace configmgr
 

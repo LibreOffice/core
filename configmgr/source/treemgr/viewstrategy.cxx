@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstrategy.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:55:53 $
+ *  last change: $Author: jb $ $Date: 2002-02-15 14:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,14 +538,16 @@ namespace configmgr
 
                 OSL_ASSERT( DONE == GroupMemberVisitor::DONE );
                 OSL_ASSERT( CONTINUE == GroupMemberVisitor::CONTINUE );
-                return static_cast<Result>(_aResult);
+        register int nResultValue = _aResult;
+                return static_cast<Result>(nResultValue);
             }
 
             static GroupMemberVisitor::Result unmapResult(Result _aResult)
             {
                 OSL_ASSERT( DONE == GroupMemberVisitor::DONE );
                 OSL_ASSERT( CONTINUE == GroupMemberVisitor::CONTINUE );
-                return static_cast<GroupMemberVisitor::Result>(_aResult);
+        register int nResultValue = _aResult;
+                return static_cast<GroupMemberVisitor::Result>(nResultValue);
             }
 
             virtual Result handle(data::ValueNodeAccess const& _aValue);

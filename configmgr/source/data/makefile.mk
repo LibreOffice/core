@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jb $ $Date: 2002-02-11 14:55:52 $
+#   last change: $Author: jb $ $Date: 2002-02-15 14:34:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,6 @@ SLOFILES=	\
         $(SLO)$/simpleheap.obj	\
         $(SLO)$/heap.obj	\
         $(SLO)$/segmentheap.obj	\
-        $(SLO)$/sequence.obj	\
         $(SLO)$/anydata.obj	\
         $(SLO)$/sequence.obj	\
         $(SLO)$/types.obj	\

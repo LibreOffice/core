@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodevisitor.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:29:07 $
+ *  last change: $Author: jb $ $Date: 2002-02-15 14:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ namespace configmgr
             enum Result { DONE, CONTINUE };
 
             /// destructor. is pure to make this class abstract
-            virtual ~NodeVisitor() = 0;
+            virtual ~NodeVisitor() ; // = 0; - does not work well with SunCC 5.2
 
             /// dispatch this to the children of <var>aNode</var>, until one returns DONE
             Result visitChildren(GroupNodeAccess const& _aNode);
@@ -126,7 +126,7 @@ namespace configmgr
         {
         public:
             /// destructor. is pure to make this class abstract
-            virtual ~SetVisitor() = 0;
+            virtual ~SetVisitor() ; //= 0; - does not work well with SunCC 5.2
 
             /// dispatch to <var>_aElementTree</var>
             Result visitTree(TreeAccessor const& _aElementTree);

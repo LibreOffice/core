@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: jb $ $Date: 2002-02-15 14:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-    namespace memory { class Accessor; };
-    namespace data { class NodeAccess; };
+    namespace memory { class Accessor; }
+    namespace data { class NodeAccess; }
     namespace view { class ViewStrategy; }
 //-----------------------------------------------------------------------------
     namespace configuration

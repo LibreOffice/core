@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: jb $ $Date: 2002-02-15 14:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,6 +419,7 @@ namespace configmgr
             /// set no-parent context for this tree
             void clearContext();
 
+            inline // is protected and should be used only in the implementation
             Name    implGetOriginalName(NodeOffset nNode) const;
 
         private:

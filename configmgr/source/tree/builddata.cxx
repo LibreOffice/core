@@ -2,9 +2,9 @@
  *
  *  $RCSfile: builddata.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:55:53 $
+ *  last change: $Author: jb $ $Date: 2002-02-15 14:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,8 @@
 
 namespace configmgr
 {
+//-----------------------------------------------------------------------------
+    typedef ValueNode OValueNode; // to avoid ambiguity with sharable::ValueNode
 //-----------------------------------------------------------------------------
     namespace data
     {
@@ -268,7 +270,7 @@ namespace configmgr
         class ElementListBuilder;
 
         virtual void handle(ISubtree  const & _aNode);
-        virtual void handle(ValueNode const & _aNode);
+        virtual void handle(OValueNode const & _aNode);
 
         Address makeTemplateData(rtl::OUString const & _aTemplateName, rtl::OUString const & _aTemplateModule);
 
@@ -296,7 +298,7 @@ namespace configmgr
     private:
         void handleNode(INode const & _aSourceNode);
 
-        void handle(ValueNode const & _aSourceNode);
+        void handle(OValueNode const & _aSourceNode);
         void handle(ISubtree  const & _aSourceNode);
     };
 //-----------------------------------------------------------------------------
@@ -353,7 +355,7 @@ namespace configmgr
 
         std::auto_ptr<ISubtree>     buildNodeTree(GroupNodeAccess const& _aGroupNode) const;
         std::auto_ptr<ISubtree>     buildNodeTree(SetNodeAccess const& _aSetNode) const;
-        std::auto_ptr<ValueNode>    buildNode(ValueNodeAccess const& _aValueNode) const
+        std::auto_ptr<OValueNode>   buildNodeTree(ValueNodeAccess const& _aValueNode) const
         { return this->convertNode(_aValueNode); }
 
         static node::Attributes convertAttributes(NodeAccess const& _aNode)
@@ -361,7 +363,7 @@ namespace configmgr
     private:
         std::auto_ptr<ISubtree>     convertNode(GroupNodeAccess const& _aGroupNode) const;
         std::auto_ptr<ISubtree>     convertNode(SetNodeAccess const& _aSetNode) const;
-        std::auto_ptr<ValueNode>    convertNode(ValueNodeAccess const& _aValueNode) const;
+        std::auto_ptr<OValueNode>   convertNode(ValueNodeAccess const& _aValueNode) const;
 
         Result handle(ValueNodeAccess const & _aNode);
         Result handle(GroupNodeAccess const & _aNode);
@@ -398,7 +400,7 @@ namespace configmgr
 
         void mergeDefaults(TreeAddress _aBaseAddress, INode const& _aDefaultNode);
     private:
-        void handle(ValueNode const & _aNode);
+        void handle(OValueNode const & _aNode);
         void handle(ISubtree  const & _aNode);
     protected:
         UpdateAccessor &    updater()   const { return m_updater; }
@@ -916,7 +918,7 @@ void ConvertingDataTreeBuilder::handle(ISubtree const & _aNode)
 }
 //-----------------------------------------------------------------------------
 
-void ConvertingDataTreeBuilder::handle(ValueNode const & _aNode)
+void ConvertingDataTreeBuilder::handle(OValueNode const & _aNode)
 {
     sharable::Name aNodeName = allocName( _aNode );
     Flags::Field aFlags = makeFlags(_aNode.getAttributes());
@@ -1035,7 +1037,7 @@ void ConvertingDataTreeBuilder::ElementListBuilder::handleNode(INode const & _aS
 }
 //-----------------------------------------------------------------------------
 
-void ConvertingDataTreeBuilder::ElementListBuilder::handle(ValueNode const & _aSourceNode)
+void ConvertingDataTreeBuilder::ElementListBuilder::handle(OValueNode const & _aSourceNode)
 {
     handleNode(_aSourceNode);
 }
@@ -1051,7 +1053,7 @@ void ConvertingDataTreeBuilder::ElementListBuilder::handle(ISubtree  const & _aS
 std::auto_ptr<INode> ConvertingNodeBuilder::buildNode(TreeAccessor const & _aSourceTree, bool _bUseTreeName)
 {
     std::auto_ptr<INode> pResult = this->buildNode(_aSourceTree.getRootNode());
-    if (pResult.get != NULL)
+    if (pResult.get() != NULL)
     {
         // use the element name !
         if (_bUseTreeName) pResult->setName( _aSourceTree.getName().toString() );
@@ -1114,7 +1116,7 @@ std::auto_ptr<ISubtree> ConvertingNodeBuilder::convertNode(SetNodeAccess const& 
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<ValueNode> ConvertingNodeBuilder::convertNode(ValueNodeAccess const& _aValueNode) const
+std::auto_ptr<OValueNode> ConvertingNodeBuilder::convertNode(ValueNodeAccess const& _aValueNode) const
 {
     uno::Any aUserValue = _aValueNode.getUserValue();
     uno::Any aDefValue  = _aValueNode.getDefaultValue();
@@ -1136,7 +1138,7 @@ std::auto_ptr<ValueNode> ConvertingNodeBuilder::convertNode(ValueNodeAccess cons
 
 NodeVisitor::Result ConvertingNodeBuilder::handle(ValueNodeAccess const & _aNode)
 {
-    m_pNode = base_ptr(buildNode(_aNode));
+    m_pNode = base_ptr(buildNodeTree(_aNode));
     return DONE;
 }
 //-----------------------------------------------------------------------------
@@ -1183,7 +1185,7 @@ void DataTreeDefaultMerger::handle(ISubtree const & _aNode)
 }
 //-----------------------------------------------------------------------------
 
-void DataTreeDefaultMerger::handle(ValueNode const & _aNode)
+void DataTreeDefaultMerger::handle(OValueNode const & _aNode)
 {
 }
 //-----------------------------------------------------------------------------
