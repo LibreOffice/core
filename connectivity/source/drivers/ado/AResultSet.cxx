@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSet.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 09:41:10 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceN
 // -------------------------------------------------------------------------
 OResultSet::OResultSet(ADORecordset* _pRecordSet,OStatement_Base* pStmt) :  OResultSet_BASE(m_aMutex)
                         ,OPropertySetHelper(OResultSet_BASE::rBHelper)
-                        ,m_aStatement((::cppu::OWeakObject*)pStmt)
+                        ,m_xStatement(*pStmt)
                         ,m_pStmt(pStmt)
                         ,m_nRowPos(0)
                         ,m_xMetaData(NULL)
@@ -166,7 +166,7 @@ OResultSet::OResultSet(ADORecordset* _pRecordSet,OStatement_Base* pStmt) :  ORes
 // -------------------------------------------------------------------------
 OResultSet::OResultSet(ADORecordset* _pRecordSet) : OResultSet_BASE(m_aMutex)
                         ,OPropertySetHelper(OResultSet_BASE::rBHelper)
-                        ,m_aStatement(NULL)
+                        ,m_xStatement(NULL)
                         ,m_xMetaData(NULL)
                         ,m_pRecordSet(_pRecordSet)
                         ,m_bEOF(sal_False)
@@ -204,7 +204,7 @@ void OResultSet::disposing(void)
     ::osl::MutexGuard aGuard(m_aMutex);
     if(m_pRecordSet)
         m_pRecordSet->Close();
-    m_aStatement    = NULL;
+    m_xStatement    = NULL;
     m_xMetaData     = NULL;
 }
 // -------------------------------------------------------------------------
@@ -588,7 +588,9 @@ sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException, RuntimeException)
 {
-    return m_aStatement.get();
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    return m_xStatement;
 }
 // -------------------------------------------------------------------------
 
