@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-22 14:36:44 $
+#   last change: $Author: hjs $ $Date: 2002-04-29 10:40:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.26 $ ';
+$id_str = ' $Revision: 1.27 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -124,6 +124,9 @@ $opt_force          = 0;            # option force copy
 $opt_minor          = 0;            # option deliver in minor
 $opt_check          = 0;            # do actually execute any action
 $opt_zip            = 0;            # create an additional zip file
+
+# zip is default for RE
+$opt_zip = 1 if ( "$ENV{UPDATER}" eq "YES" );
 
 $has_symlinks       = 0;            # system supports symlinks
 
