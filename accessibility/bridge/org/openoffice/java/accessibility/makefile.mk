@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obr $ $Date: 2002-08-16 13:13:09 $
+#   last change: $Author: obr $ $Date: 2002-08-19 09:36:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ JAVADIR = $(OUT)$/misc$/java
 JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar
 JAVAFILES = \
     AccessibleButton.java \
+    AccessibleComboBox.java \
     AccessibleContainer.java \
     AccessibleDescendantManager.java \
     AccessibleEditLine.java \
@@ -99,7 +100,6 @@ JAVAFILES = \
     AccessibleStateTypeMap.java \
     AccessibleTextTable.java \
     AccessibleTreeList.java \
-    AccessibleTreeListItem.java \
     AccessibleWindow.java \
     GenericAccessibleEditableText.java \
     GenericAccessibleExtendedTable.java \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleObjectFactory.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-16 13:13:08 $
+ *  last change: $Author: obr $ $Date: 2002-08-19 09:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,8 @@ public class AccessibleObjectFactory {
                         );
                     break;
                 case AccessibleRole.COMBOBOX:
+                    o = new AccessibleComboBox(xAccessibleContext);
+                    break;
                 case AccessibleRole.LIST:
                 case AccessibleRole.MENUBAR:
                 case AccessibleRole.POPUPMENU:
@@ -179,8 +181,8 @@ public class AccessibleObjectFactory {
                     break;
                 case AccessibleRole.LABEL:
                 case AccessibleRole.TABLE_CELL:
-                    if((info.States & AccessibleState.TRANSIENT) == 0) {
-                        o = new AccessibleFixedText(info.IndexInParent);
+                    if((info.States & AccessibleState.TRANSIENT) != 0) {
+                        o = new AccessibleFixedText(info.IndexInParent, xAccessibleContext);
                     } else {
                         o = new AccessibleLabel(xAccessibleContext);
                     }
@@ -241,11 +243,7 @@ public class AccessibleObjectFactory {
                     o = new AccessibleEditLine(xAccessibleContext);
                     break;
                 case AccessibleRole.TREE:
-                    if((info.States & AccessibleState.CHILDREN_TRANSIENT) == 0) {
-                        o = new AccessibleTreeList(xAccessibleContext);
-                    } else {
-                        o = new AccessibleTreeListItem(xAccessibleContext, info.IndexInParent);
-                    }
+                    o = new AccessibleTreeList(xAccessibleContext);
                     break;
                 case AccessibleRole.CANVAS:
                 case AccessibleRole.DOCUMENT:
