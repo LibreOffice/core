@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-12 14:27:58 $
+ *  last change: $Author: sab $ $Date: 2001-06-13 17:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,15 +956,19 @@ ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
 void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
 {
     if (!xNumberStyles.is())
-    {
-        uno::Reference< container::XNameContainer > xTempNumberStyles( comphelper::NameContainer_createInstance( ::getCppuType((const sal_Int32*)0)) );
-        xNumberStyles = xTempNumberStyles;
-    }
+        xNumberStyles = uno::Reference< container::XNameContainer >( comphelper::NameContainer_createInstance( ::getCppuType((const sal_Int32*)0)) );
     if (xNumberStyles.is())
     {
         uno::Any aAny;
         aAny <<= nKey;
-        xNumberStyles->insertByName(rName, aAny);
+        try
+        {
+            xNumberStyles->insertByName(rName, aAny);
+        }
+        catch ( uno::Exception& )
+        {
+            DBG_ERROR("Numberformat could not be inserted");
+        }
     }
     else
         DBG_ERROR("not possible to create NameContainer");
