@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 15:13:35 $
+ *  last change: $Author: fs $ $Date: 2000-12-11 16:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     Window WND_DATASOURCESELECTOR
     {
         Pos = MAP_APPFONT ( 0, 0 ) ;
-        Size = MAP_APPFONT ( 60, 200 ) ;
+        Size = MAP_APPFONT ( 80, 200 ) ;
         ClipChildren = TRUE;
         HelpId = HID_DSADMIN_DATASOURCE_SELECTOR;
 
@@ -1636,27 +1636,9 @@ TabPage PAGE_TABLESUBSCRIPTION
         Group   = TRUE ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_SUPPRESS_VERSIONCL;
-        Text = "Versionsspalten unterdrücken";
-        Text [ english ] = "Suppress version columns";
-        Text [ english ] = "Suppress version columns";
-        Text[ english_us ] = "Suppress version columns";
-        Text[ portuguese ] = "Suprimir colunas de versão";
-        Text[ russian ] = "Ïîäàâëÿòü êîëîíêè âåðñèè";
-        Text[ greek ] = "Áðüêñõøç óôçëþí Ýêäïóçò";
-        Text[ dutch ] = "Versiekolommen onderdrukken";
-        Text[ french ] = "Interdire les colonnes de version";
-        Text[ spanish ] = "Suprimir columnas de versión";
-        Text[ italian ] = "Sopprimi colonne di versione";
-        Text[ danish ] = "Suppress version columns";
-        Text[ swedish ] = "Undertryck versionskolumner";
-        Text[ polish ] = "St³um kolumny wersji";
-        Text[ portuguese_brazilian ] = "Suppress version columns";
-        Text[ japanese ] = "ÊÞ°¼Þ®Ý—“‚ð‰B‚·";
-        Text[ korean ] = "¹öÀü ¿­ ¾ïÁ¦";
-        Text[ chinese_simplified ] = "ÒþÈë°æ±¾À¸Î»";
-        Text[ chinese_traditional ] = "Áô¤Jª©¥»Äæ¦ì";
-        Text[ turkish ] = "Suppress version columns";
-        Text[ arabic ] = "ãäÚ ÃÚãÏÉ ÇáÅÕÏÇÑ";
+        Text = "Versionsspalten anzeigen (wenn verfuegbar)";
+        Text [ english ] = "Display version columns (if appliable)";
+        Text [ english_us ] = "Display version columns (if appliable)";
     };
 };
 
@@ -1863,6 +1845,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2000/12/06 15:13:35  rt
+ *  Merge SRC614: 06.12.00 - 16:13:06
+ *
  *  Revision 1.19  2000/12/05 15:58:43  fs
  *  #79820# HID_DSADMIN_DIALOG
  *
