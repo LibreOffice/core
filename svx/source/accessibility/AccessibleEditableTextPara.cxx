@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-16 11:58:06 $
+ *  last change: $Author: thb $ $Date: 2002-08-22 09:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,7 +684,13 @@ namespace accessibility
 
     sal_Bool AccessibleEditableTextPara::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, sal_Int32 nIndex )
     {
-        return GetTextForwarder().GetAttributeRun( nStartIndex, nEndIndex, GetParagraphIndex(), nIndex );
+        DBG_ASSERT(nIndex >= 0 && nIndex <= USHRT_MAX,
+                   "AccessibleEditableTextPara::GetAttributeRun: index value overflow");
+
+        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                   "AccessibleEditableTextPara::getLocale: paragraph index value overflow");
+
+        return GetTextForwarder().GetAttributeRun( nStartIndex, nEndIndex, static_cast< USHORT >(GetParagraphIndex()), static_cast< USHORT >(nIndex) );
     }
 
     uno::Any SAL_CALL AccessibleEditableTextPara::queryInterface (const uno::Type & rType) throw (uno::RuntimeException)
