@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-16 08:41:53 $
+ *  last change: $Author: oj $ $Date: 2002-10-24 14:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,9 +189,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
 // -------------------------------------------------------------------------
 namespace
 {
-    sal_Bool isCaseSensitiveParentFolder( const String& _rFolderOrDoc, const String& _rDocName )
+    sal_Int16 isCaseSensitiveParentFolder( const String& _rFolderOrDoc, const String& _rDocName )
     {
-        sal_Bool bIsCS = sal_True;
+        sal_Int16 nIsCS = 1;
         try
         {
             // first get the real content for the URL
@@ -219,7 +219,10 @@ namespace
 
             // the complete URL for the second extension
             INetURLObject aURL2( aContentURL );
-            aURL2.SetExtension( sExtension2 );
+            if ( sExtension2.Len() )
+                aURL2.SetExtension( sExtension2 );
+            if ( aURL2.GetMainURL(INetURLObject::NO_DECODE) == aContentURL.GetMainURL(INetURLObject::NO_DECODE) )
+                return -1;
 
             // the second context
             sal_Bool bCanAccess = sal_False;
@@ -257,7 +260,7 @@ namespace
                         {
                             if ( 0 == xProvider->compareContentIds( xID1, xID2 ) )
                                 // finally, we know that the folder is not case-sensitive ....
-                                bIsCS = sal_False;
+                                nIsCS = 0;
                         }
                     }
                 }
@@ -268,7 +271,7 @@ namespace
             OSL_ENSURE( sal_False, "isCaseSensitiveParentFolder: caught an unexpected exception!" );
         }
 
-        return bIsCS;
+        return nIsCS;
     }
 }
 
@@ -350,10 +353,24 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         if ( !bKnowCaseSensivity )
         {
             bKnowCaseSensivity = sal_True;
-            bCaseSensitiveDir = isCaseSensitiveParentFolder( m_pConnection->getURL(), aURL.getName() );
-            m_pConnection->setCaseSensitiveExtension( bCaseSensitiveDir, OConnection::GrantAccess() );
-            if ( !bCaseSensitiveDir )
-                aFilenameExtension.ToLowerAscii();
+            sal_Int16 nCase = isCaseSensitiveParentFolder( m_pConnection->getURL(), aURL.getName() );
+            switch( nCase )
+            {
+                case 1:
+                    bCaseSensitiveDir = sal_True;
+                    break;
+                case -1:
+                    bKnowCaseSensivity = sal_False;
+                    /** run through */
+                case 0:
+                    bCaseSensitiveDir = sal_False;
+            }
+            if ( bKnowCaseSensivity )
+            {
+                m_pConnection->setCaseSensitiveExtension( bCaseSensitiveDir, OConnection::GrantAccess() );
+                if ( !bCaseSensitiveDir )
+                    aFilenameExtension.ToLowerAscii();
+            }
         }
 
         if (aFilenameExtension.Len())
