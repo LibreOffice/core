@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:28:16 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2079,6 +2079,7 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT3
         VirtualDevice aVirDev( 1 );
         aVirDev.SetMapMode( rVDev.GetMapMode() );
         aVirDev.SetFont( aNotRotatedFont );
+        aVirDev.SetTextAlign( eTextAlign );
 
         sal_Int16 nRotation = maFont.GetOrientation();
         Polygon aPolyDummy( 1 );
