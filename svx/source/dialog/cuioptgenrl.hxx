@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cuioptgenrl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-06 11:35:50 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
 
 // forward ---------------------------------------------------------------
 
-class SvxAddressItem;
 struct GeneralTabPage_Impl;
 
 #define SfxGeneralTabPage SvxGeneralTabPage
@@ -129,8 +128,8 @@ private:
 #ifdef _SVX_OPTGENRL_CXX
     DECL_LINK( ModifyHdl_Impl, Edit * );
 
-    String              GetAddress_Impl();
-    void                SetAddress_Impl( const SvxAddressItem& rAddress );
+    sal_Bool            GetAddress_Impl();
+    void                SetAddress_Impl();
 #endif
 
 protected:
