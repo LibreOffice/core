@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:10:32 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#ifndef INCLUDED_SVTOOLS_ACCELERATOREXECUTE_HXX
+#include <svtools/acceleratorexecute.hxx>
+#endif
 
 // forward ---------------------------------------------------------------
 
@@ -118,10 +121,12 @@ struct SfxViewShell_Impl
     SfxAcceleratorManager*      pAccel;
     USHORT                      nFamily;
     SfxBaseController*          pController;
+    ::svt::AcceleratorExecute*  pAccExec;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aPrintOpts;
 
                                 SfxViewShell_Impl()
                                   : aInterceptorContainer( aMutex )
+                                  , pAccExec(0)
                                 {}
 };
 
