@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:14 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ namespace xmloff
 
     const SvXMLEnumMapEntry*    OEnumMapper::s_pEnumMap[OEnumMapper::KNOWN_ENUM_PROPERTIES] =
     {
+        NULL,
         NULL,
         NULL,
         NULL,
@@ -310,6 +311,18 @@ namespace xmloff
                     rReturn = aFontReliefMap;
                 }
                 break;
+
+                case epListLinkageType:
+                {
+                    static SvXMLEnumMapEntry aListLinkageMap[] =
+                    {
+                        { XML_SELECTION,            0 },
+                        { XML_SELECTION_INDEXES,    1 },
+                        { XML_TOKEN_INVALID, 0 }
+                    };
+                    rReturn = aListLinkageMap;
+                }
+                break;
             }
         }
 
@@ -323,6 +336,18 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8.188.1  2003/10/01 09:55:21  fs
+ *  #i18994# merging the changes from the CWS fs002
+ *
+ *  Revision 1.8.184.1  2003/09/25 14:28:39  fs
+ *  #18994# merging the changes from cws_srx645_fs002 branch
+ *
+ *  Revision 1.8.180.1  2003/09/18 14:00:38  fs
+ *  #18995# changes for binding list boxes to cells, while exchanging selection indexes instead of strings
+ *
+ *  Revision 1.8  2001/06/29 21:07:14  dvo
+ *  #86004# changes sXML_* strings to XML_* tokens
+ *
  *  Revision 1.7  2001/06/15 10:37:07  dvo
  *  #86004# #88312#
  *  - changed convertEnum and appropriate maps to use token constants (rahter than sal_Char*)
