@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:50:20 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 16:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ String SCSTR_DRAWSHELL
     Text [ finnish ] = "Graafiset objektit" ;
     Text [ danish ] = "Grafiske objekter" ;
     Text [ french ] = "Objets graphiques" ;
-    Text [ swedish ] = "Grafiska objekt" ;
+    Text [ swedish ] = "Grafikobjekt" ;
     Text [ dutch ] = "Grafische objecten" ;
     Text [ spanish ] = "Objetos gráficos" ;
     Text [ english_us ] = "Graphics objects" ;
@@ -1095,7 +1095,7 @@ String SCSTR_NONAME
     Text [ portuguese ] = "sem nome" ;
     Text [ finnish ] = "tuntematon" ;
     Text [ danish ] = "ikke-navngivet" ;
-    Text [ french ] = "sans nom" ;
+    Text [ french ] = "Sans nom" ;
     Text [ swedish ] = "namnlös" ;
     Text [ dutch ] = "naamloos" ;
     Text [ spanish ] = "Sin nombre" ;
@@ -1369,7 +1369,7 @@ String SCSTR_SELECTDB
     Text[ chinese_simplified ] = "Ñ¡ÔñÊı¾İ¿âÇøÓò";
     Text[ russian ] = "Âûáğàòü îáëàñòü áàçû äàííûõ";
     Text[ polish ] = "Zaznacz obszar bazy danych";
-    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚Ì”ÍˆÍ‚ğ‘I‘ğ";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½”ÍˆÍ‚Ì‘I‘ğ";
     Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ®w°Ï°ì";
     Text[ arabic ] = "ÇÎÊíÇÑ äØÇŞ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
     Text[ greek ] = "ÅğéëïãŞ ğåñéï÷Şò âÜóçò äåäïìİíùí";
@@ -2308,7 +2308,7 @@ String SCSTR_CLPBRD_CLEAR
     Text [ english_us ] = "You have a large amount of data saved in the clipboard.\nDo you want the clipboard contents to be available in other applications?" ;
     Text [ finnish ] = "Pitääkö leikepöydän sisällön olla muiden sovellusten käytettävissä?" ;
     Text [ danish ] = "Du har placeret en stor mængde data i udklipsholderen.\nSkal udklipholderens indhold være tilgængeligt for andre applikationer?" ;
-    Text [ french ] = "Vous avez déposé un grand nombre de données dans le presse-papiers. \nSouhaitez-vous en conserver le contenu pour une utilisation ultérieure sous une autre application ?" ;
+    Text [ french ] = "Vous avez déposé un grand nombre de données dans le presse-papiers. \nSouhaitez-vous en conserver le contenu pour une utilisation sous une autre application ?" ;
     Text [ swedish ] = "Du har stora datamängder i urklippet. \nSkall innehållet i urklippet vara tillgängligt för andra tillämpningar?" ;
     Text [ dutch ] = "U hebt een groot aantal gegevens op het Klembord geplaatst.\nWilt u dat de inhoud van het Klembord beschikbaar blijft voor andere toepassingen?" ;
     Text [ spanish ] = "Ha copiado una gran cantidad de datos en el portapapeles.\n¿Desea que el contenido del portapapeles esté disponible para otras aplicaciones?" ;
