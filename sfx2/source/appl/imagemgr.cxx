@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 12:44:13 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 12:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,12 +126,7 @@ static ModuleIdToImagegMgr                                    m_aModuleIdToImage
 
 Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast )
 {
-<<<<<<< imagemgr.cxx
     // TODO/LATeR: shouldn't this become a method at SfxViewFrame?! That would save the UnoTunnel
-=======
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (cd100003) ::GetImage" );
-
->>>>>>> 1.8.232.1
     if ( !rFrame.is() )
         return Image();
 
@@ -297,93 +292,3 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
 
     return Image();
 }
-<<<<<<< imagemgr.cxx
-/*
-    Reference< XController > xController = rFrame->getController();
-    if ( xController.is() )
-    {
-        Reference< XModel > xModel = xController->getModel();
-        if ( xModel )
-        {
-        }
-    }
-*/
-/*
-    m_aModuleIdToImageMgrMap
-
-
-
-    Reference< XImageManager >
-
-    INetURLObject aObj( aURL );
-    INetProtocol nProtocol = aObj.GetProtocol();
-    switch ( nProtocol )
-    {
-        case INET_PROT_UNO :
-        case INET_PROT_SLOT :
-        {
-            URL aTargetURL;
-            aTargetURL.Complete = aURL;
-            Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-            xTrans->parseStrict( aTargetURL );
-
-            SfxViewFrame* pViewFrame = NULL;
-            Reference < XController > xController;
-            if ( rFrame.is() )
-                xController = rFrame->getController();
-
-            Reference < XDispatchProvider > xProvider( xController, UNO_QUERY );
-            if ( xProvider.is() )
-            {
-                Reference < XDispatch > xDisp = xProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-                if ( xDisp.is() )
-                {
-                    Reference< XUnoTunnel > xTunnel( xDisp, UNO_QUERY );
-                    SfxOfficeDispatch* pDisp = NULL;
-                    if ( xTunnel.is() )
-                    {
-                        sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
-                        pDisp = (SfxOfficeDispatch*)(nImplementation);
-                    }
-
-                    if ( pDisp )
-                        pViewFrame = pDisp->GetDispatcher_Impl()->GetFrame();
-                }
-            }
-
-            USHORT nId = 0;
-            if ( nProtocol == INET_PROT_UNO )
-            {
-                SfxSlotPool& rPool = SFX_APP()->GetSlotPool( pViewFrame );
-                const SfxSlot* pSlot = rPool.GetUnoSlot( aTargetURL.Path );
-                if ( pSlot )
-                    nId = pSlot->GetSlotId();
-            }
-            else
-                nId = ( USHORT ) aTargetURL.Path.toInt32();
-
-            SfxModule* pModule = pViewFrame ? pViewFrame->GetObjectShell()->GetModule() : NULL;
-            if ( nId )
-            {
-                if ( pViewFrame )
-                    return pViewFrame->GetImageManager()->GetImage( nId, pModule, bBig, bHiContrast );
-                else
-                {
-                    return SFX_APP()->GetImageManager_Impl()->GetImage( nId, NULL, bBig, bHiContrast );
-                }
-            }
-            break;
-        }
-
-        case INET_PROT_NOT_VALID :
-        {
-            return Image();
-            break;
-        }
-    }
-
-    return SvFileInformationManager::GetImageNoDefault( aObj, bBig, bHiContrast );
-}
-*/
-=======
->>>>>>> 1.8.232.1
