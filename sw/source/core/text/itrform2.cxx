@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-20 10:27:05 $
+ *  last change: $Author: ama $ $Date: 2001-02-28 08:46:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,7 +504,8 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
         while( pPor && pPor != pUnderFlow )
         {
             DBG_LOOP;
-            if( pPor->Width() || pPor->IsSoftHyphPortion() )
+            if( !pPor->IsKernPortion() &&
+                ( pPor->Width() || pPor->IsSoftHyphPortion() ) )
             {
                 while( pPrev != pPor )
                 {
