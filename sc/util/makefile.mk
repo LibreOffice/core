@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:45:16 $
+#   last change: $Author: john.marmion $ $Date: 2000-09-28 14:39:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,7 @@ RESLIB1LIST=\
     $(SRS)$/formdlgs.srs \
     $(SRS)$/pagedlg.srs	\
     $(SRS)$/navipi.srs	\
-    $(SOLARVER)$/$(INPATH)$/res$(EXT_UPDMINOR)$/sfx.srs
+    $(SOLARVERERSION)$/$(INPATH)$/res$(EXT_UPDMINOR)$/sfx.srs
 
 RESLIB1NAME=sc
 RESLIB1SRSFILES=\
