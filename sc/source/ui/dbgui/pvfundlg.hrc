@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-28 14:05:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,26 +58,58 @@
  *
  *
  ************************************************************************/
+
 #include "sc.hrc"
 
-//#define RID_SCDLG_PIVOTSUBT       256
+// RID_SCDLG_DPDATAFIELD - DataPilot Data Field Function
+// RID_SCDLG_PIVOTSUBT - DataPilot Page/Row/Column Field Subtotals
+
 #define BTN_OK          1
-#define BTN_CANCEL      1
-#define BTN_HELP        1
+#define BTN_CANCEL      2
+#define BTN_HELP        3
+#define BTN_MORE        4
+#define BTN_OPTIONS     5
 
-#define BTN_NONE        1
-#define BTN_AUTO        2
-#define BTN_USER        3
-#define LB_FUNC         1
+#define RB_NONE         1
+#define RB_AUTO         2
+#define RB_USER         3
+#define RB_SORT_ASC     4
+#define RB_SORT_DESC    5
+#define RB_SORT_MAN     6
+
 #define FL_FUNC         1
+#define FL_DISPLAY      2
+#define FL_SORT_BY      3
+#define FL_LAYOUT       4
+#define FL_AUTOSHOW     5
+#define FL_HIDE         6
 
-#define FT_FUNC         1
-#define FT_NAMELABEL    2
-#define FT_NAME         3
+#define LB_FUNC         1
+#define LB_TYPE         2
+#define LB_BASEFIELD    3
+#define LB_BASEITEM     4
+#define LB_SORT_BY      5
+#define LB_LAYOUT       6
+#define LB_SHOW_FROM    7
+#define LB_SHOW_USING   8
+#define LB_HIERARCHY    9
+
+#define FT_NAMELABEL    1
+#define FT_NAME         2
+#define FT_TYPE         3
+#define FT_BASEFIELD    4
+#define FT_BASEITEM     5
+#define FT_LAYOUT       6
+#define FT_SHOW         7
+#define FT_SHOW_FROM    8
+#define FT_SHOW_USING   9
+#define FT_HIERARCHY    10
 
 #define CB_SHOWALL      1
+#define CB_LAYOUT_EMPTY 2
+#define CB_SHOW         3
 
-#define STR_SUBTOTALS   1
-#define STR_DATAFUNC    2
+#define NF_SHOW         1
 
+#define CT_HIDE         1
 
