@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:41:06 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 11:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,8 +718,8 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
 
             // stream is encrypted and should be decrypted (without setting the key we'll get the raw data)
             sal_uInt8 aBuffer[RTL_DIGEST_LENGTH_SHA1];
-            rtlDigestError nError = rtl_digest_SHA1( pKey->GetBuffer(), pKey->Len(), aBuffer, RTL_DIGEST_LENGTH_SHA1 );
-            if ( nError == rtl_Digest_E_None )
+            rtlDigestError nErr = rtl_digest_SHA1( pKey->GetBuffer(), pKey->Len(), aBuffer, RTL_DIGEST_LENGTH_SHA1 );
+            if ( nErr == rtl_Digest_E_None )
             {
                 sal_uInt8* pBuffer = aBuffer;
                 ::com::sun::star::uno::Sequence < sal_Int8 > aSequ( (sal_Int8*) pBuffer, RTL_DIGEST_LENGTH_SHA1 );
@@ -1168,18 +1168,20 @@ void  UCBStorageStream_Impl::FlushData()
     m_bCommited = TRUE;
 }
 
-void UCBStorageStream_Impl::SetError( long nError )
+void UCBStorageStream_Impl::SetError( long nErr )
 {
     if ( !m_nError )
     {
-        m_nError = nError;
-        if ( m_pAntiImpl ) m_pAntiImpl->SetError( nError );
+        m_nError = nErr;
+        SvStream::SetError( nErr );
+        if ( m_pAntiImpl ) m_pAntiImpl->SetError( nErr );
     }
 }
 
 void  UCBStorageStream_Impl::ResetError()
 {
     m_nError = 0;
+    SvStream::ResetError();
     if ( m_pAntiImpl )
         m_pAntiImpl->ResetError();
 }
@@ -1202,9 +1204,15 @@ BaseStorage* UCBStorageStream_Impl::CreateStorage()
 {
     // create an OLEStorage on a SvStream ( = this )
     // it gets the root attribute because otherwise it would probably not write before my root is commited
-    Storage *pStorage = new Storage( *this, m_bDirect );
-    m_bIsOLEStorage = !pStorage->GetError();
-    return pStorage;
+    UCBStorageStream* pNewStorageStream = new UCBStorageStream( this );
+    Storage *pStorage = new Storage( *pNewStorageStream, m_bDirect );
+
+    // GetError() call cleares error code for OLE storages, must be changed in future
+    long nTmpErr = pStorage->GetError();
+    pStorage->SetError( nTmpErr );
+
+    m_bIsOLEStorage = !nTmpErr;
+    return static_cast< BaseStorage* > ( pStorage );
 }
 
 sal_Int16 UCBStorageStream_Impl::Commit()
@@ -1509,6 +1517,11 @@ const SvStream* UCBStorageStream::GetSvStream() const
 
     pImp->CopySourceToTemporary();
     return pImp->m_pStream; // should not live longer then pImp!!!
+}
+
+SvStream* UCBStorageStream::GetModifySvStream()
+{
+    return (SvStream*)pImp;
 }
 
 Reference< XInputStream > UCBStorageStream::GetXInputStream() const
