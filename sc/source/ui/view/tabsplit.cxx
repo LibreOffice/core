@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsplit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2000-12-07 08:54:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ ScTabSplitter::ScTabSplitter( Window* pParent, WinBits nWinStyle, ScViewData* pD
     pViewData(pData)
 {
     SetFixed(FALSE);
+    EnableRTL( FALSE );
 }
 
 
@@ -114,9 +115,9 @@ void __EXPORT ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
 void __EXPORT ScTabSplitter::Splitting( Point& rSplitPos )
 {
     Window* pParent = GetParent();
-    Point aScreenPos = pParent->OutputToScreenPixel( rSplitPos );
+    Point aScreenPos = pParent->OutputToNormalizedScreenPixel( rSplitPos );
     pViewData->GetView()->SnapSplitPos( aScreenPos );
-    Point aNew = pParent->ScreenToOutputPixel( aScreenPos );
+    Point aNew = pParent->NormalizedScreenToOutputPixel( aScreenPos );
     if ( IsHorizontal() )
         rSplitPos.X() = aNew.X();
     else
