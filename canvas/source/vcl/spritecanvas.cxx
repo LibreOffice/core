@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spritecanvas.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:26:10 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,29 +59,7 @@
  *
  ************************************************************************/
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
-
-#ifndef _SV_OUTDEV_HXX
-#include <vcl/outdev.hxx>
-#endif
-#ifndef _SV_WINDOW_HXX
-#include <vcl/window.hxx>
-#endif
-#ifndef _SV_BITMAPEX_HXX
-#include <vcl/bitmapex.hxx>
-#endif
+#include <canvas/debug.hxx>
 
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -105,9 +83,6 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
-#endif
 #ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
 #endif
@@ -115,43 +90,38 @@
 #include <cppuhelper/implementationentry.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XSPRITECANVAS_HPP_
-#include <drafts/com/sun/star/rendering/XSpriteCanvas.hpp>
-#endif
-
-#ifndef BOOST_SCOPED_ARRAY_HPP_INCLUDED
-#include <boost/scoped_array.hpp>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_POINT_B2DPOINT_HXX
-#include <basegfx/point/b2dpoint.hxx>
-#endif
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
+#endif
+
+#ifndef _VCL_CANVASTOOLS_HXX
+#include <vcl/canvastools.hxx>
+#endif
+#ifndef _SV_OUTDEV_HXX
+#include <vcl/outdev.hxx>
+#endif
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
+#endif
+#ifndef _SV_BITMAPEX_HXX
+#include <vcl/bitmapex.hxx>
 #endif
 
 #include <algorithm>
 
 #include <canvas/verbosetrace.hxx>
-
 #include <canvas/canvastools.hxx>
 
-#include "impltools.hxx"
-#include "canvasfont.hxx"
 #include "spritecanvas.hxx"
-#include "graphicdevice.hxx"
-#include "outdevprovider.hxx"
 #include "canvascustomsprite.hxx"
-#include "bitmapcanvas.hxx"
+#include "windowgraphicdevice.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
 
+
 #define IMPLEMENTATION_NAME "VCLCanvas::SpriteCanvas"
-#define SERVICE_NAME "drafts.com.sun.star.rendering.Canvas"
+#define SERVICE_NAME "drafts.com.sun.star.rendering.VCLCanvas"
 
 namespace
 {
@@ -173,7 +143,10 @@ namespace
 namespace vclcanvas
 {
     SpriteCanvas::SpriteCanvas( const uno::Reference< uno::XComponentContext >& rxContext ) :
-        SpriteCanvas_Base( m_aMutex )
+        mxComponentContext( rxContext ),
+        mxDevice(),
+        mpBackBuffer(),
+        mpRedrawManager()
     {
     }
 
@@ -181,153 +154,17 @@ namespace vclcanvas
     {
     }
 
-    OutDevProvider::ImplRef SpriteCanvas::getImplRef()
+    void SAL_CALL SpriteCanvas::disposing()
     {
-        return OutDevProvider::ImplRef::createFromQuery( this );
-    }
-
-    void SAL_CALL SpriteCanvas::drawPoint( const geometry::RealPoint2D&         aPoint,
-                                           const rendering::ViewState&      viewState,
-                                           const rendering::RenderState&    renderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        checkOurState();
-
-        mpRedrawManager->backgroundDirty();
-        maCanvasHelper.drawPoint( aPoint, viewState, renderState, getImplRef() );
-    }
-
-    void SAL_CALL SpriteCanvas::drawLine( const geometry::RealPoint2D& aStartPoint, const geometry::RealPoint2D& aEndPoint, const rendering::ViewState& viewState, const rendering::RenderState& renderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        checkOurState();
-
-        mpRedrawManager->backgroundDirty();
-        maCanvasHelper.drawLine(aStartPoint, aEndPoint, viewState, renderState, getImplRef());
-    }
-
-    void SAL_CALL SpriteCanvas::drawBezier( const geometry::RealBezierSegment2D&    aBezierSegment,
-                                            const geometry::RealPoint2D&            aEndPoint,
-                                            const rendering::ViewState&             viewState,
-                                            const rendering::RenderState&           renderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        checkOurState();
-
-        mpRedrawManager->backgroundDirty();
-        maCanvasHelper.drawBezier(aBezierSegment, aEndPoint, viewState, renderState, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL SpriteCanvas::drawPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        checkOurState();
-
-        // TODO: Remember to handle backgroundDirty also for XCachedPrimitive redraw!
-        mpRedrawManager->backgroundDirty();
-        return maCanvasHelper.drawPolyPolygon(xPolyPolygon, viewState, renderState, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL SpriteCanvas::strokePolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState, const rendering::StrokeAttributes& strokeAttributes ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        checkOurState();
-
-        mpRedrawManager->backgroundDirty();
-        return maCanvasHelper.strokePolyPolygon(xPolyPolygon, viewState, renderState, strokeAttributes, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL SpriteCanvas::strokeTexturedPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState, const uno::Sequence< rendering::Texture >& textures, const rendering::StrokeAttributes& strokeAttributes ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        checkOurState();
-
-        mpRedrawManager->backgroundDirty();
-        return maCanvasHelper.strokeTexturedPolyPolygon(xPolyPolygon, viewState, renderState, textures, strokeAttributes, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL SpriteCanvas::strokeTextureMappedPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState, const uno::Sequence< rendering::Texture >& textures, const uno::Reference< geometry::XMapping2D >& xMapping, const rendering::StrokeAttributes& strokeAttributes ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        checkOurState();
-
-        mpRedrawManager->backgroundDirty();
-        return maCanvasHelper.strokeTextureMappedPolyPolygon(xPolyPolygon, viewState, renderState, textures, xMapping, strokeAttributes, getImplRef());
-    }
-
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL SpriteCanvas::queryStrokeShapes( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState, const rendering::StrokeAttributes& strokeAttributes ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        return maCanvasHelper.queryStrokeShapes(xPolyPolygon, viewState, renderState, strokeAttributes, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL SpriteCanvas::fillPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        checkOurState();
-
-        mpRedrawManager->backgroundDirty();
-        return maCanvasHelper.fillPolyPolygon(xPolyPolygon, viewState, renderState, getImplRef() );
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL SpriteCanvas::fillTexturedPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState, const uno::Sequence< rendering::Texture >& textures ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        checkOurState();
-
-        mpRedrawManager->backgroundDirty();
-        return maCanvasHelper.fillTexturedPolyPolygon(xPolyPolygon, viewState, renderState, textures, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL SpriteCanvas::fillTextureMappedPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState, const uno::Sequence< rendering::Texture >& textures, const uno::Reference< geometry::XMapping2D >& xMapping ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        checkOurState();
-
-        mpRedrawManager->backgroundDirty();
-        return maCanvasHelper.fillTextureMappedPolyPolygon(xPolyPolygon, viewState, renderState, textures, xMapping, getImplRef());
-    }
-
-    uno::Reference< rendering::XCanvasFont > SAL_CALL SpriteCanvas::queryFont( const rendering::FontRequest& fontRequest ) throw (uno::RuntimeException)
-    {
-        return maCanvasHelper.queryFont( fontRequest, getImplRef() );
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL SpriteCanvas::drawText( const rendering::StringContext&                  text,
-                                                                                   const uno::Reference< rendering::XCanvasFont >&  xFont,
-                                                                                   const rendering::ViewState&                      viewState,
-                                                                                   const rendering::RenderState&                    renderState,
-                                                                                   sal_Int8                                         textDirection ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        checkOurState();
-
-        mpRedrawManager->backgroundDirty();
-        return maCanvasHelper.drawText(text, xFont, viewState, renderState, textDirection, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL SpriteCanvas::drawOffsettedText( const rendering::StringContext& text, const uno::Reference< rendering::XCanvasFont >& xFont, const uno::Sequence< double >& offsets, const rendering::ViewState& viewState, const rendering::RenderState& renderState, sal_Int8 textDirection ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        checkOurState();
-
-        mpRedrawManager->backgroundDirty();
-        return maCanvasHelper.drawOffsettedText(text, xFont, offsets, viewState, renderState, textDirection, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL SpriteCanvas::drawBitmap( const uno::Reference< rendering::XBitmap >& xBitmap, const rendering::ViewState& viewState, const rendering::RenderState& renderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        checkOurState();
-
-        mpRedrawManager->backgroundDirty();
-        return maCanvasHelper.drawBitmap(xBitmap, viewState, renderState, getImplRef());
-    }
-
-    uno::Reference< rendering::XGraphicDevice > SAL_CALL SpriteCanvas::getDevice() throw (uno::RuntimeException)
-    {
-        return maCanvasHelper.getDevice( getImplRef() );
-    }
-
-    void SAL_CALL SpriteCanvas::copyRect( const uno::Reference< rendering::XBitmapCanvas >& sourceCanvas,
-                                          const geometry::RealRectangle2D&                  sourceRect,
-                                          const rendering::ViewState&                       sourceViewState,
-                                          const rendering::RenderState&                     sourceRenderState,
-                                          const geometry::RealRectangle2D&                  destRect,
-                                          const rendering::ViewState&                       destViewState,
-                                          const rendering::RenderState&                     destRenderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        checkOurState();
-
         tools::LocalGuard aGuard;
 
-        mpRedrawManager->backgroundDirty();
+        mxComponentContext.clear();
+        mxDevice.reset();
+        mpBackBuffer.reset(),
+        mpRedrawManager.reset();
+
+        // forward to parent
+        SpriteCanvas_Base::disposing();
     }
 
     uno::Reference< rendering::XAnimatedSprite > SAL_CALL SpriteCanvas::createSpriteFromAnimation( const uno::Reference< rendering::XAnimation >& animation ) throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -337,8 +174,8 @@ namespace vclcanvas
         return uno::Reference< rendering::XAnimatedSprite >(NULL);
     }
 
-    uno::Reference< rendering::XAnimatedSprite > SAL_CALL SpriteCanvas::createSpriteFromBitmaps( const uno::Sequence< uno::Reference< rendering::XBitmap > >&   animationBitmaps,
-                                                                                                 sal_Int16                                                      interpolationMode ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+    uno::Reference< rendering::XAnimatedSprite > SAL_CALL SpriteCanvas::createSpriteFromBitmaps( const uno::Sequence< uno::Reference< rendering::XBitmap > >& animationBitmaps,
+                                                                                                 sal_Int8                                                     interpolationMode ) throw (lang::IllegalArgumentException, rendering::VolatileContentDestroyedException, uno::RuntimeException)
     {
         tools::LocalGuard aGuard;
 
@@ -349,8 +186,12 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
+        if( !mxDevice.is() )
+            return uno::Reference< rendering::XCustomSprite >(); // we're disposed
+
         return uno::Reference< rendering::XCustomSprite >(
             new CanvasCustomSprite( spriteSize,
+                                    mxDevice,
                                     ImplRef(this)) );
     }
 
@@ -361,16 +202,32 @@ namespace vclcanvas
         return uno::Reference< rendering::XSprite >(NULL);
     }
 
-    sal_Bool SAL_CALL SpriteCanvas::updateScreen() throw (uno::RuntimeException)
+    sal_Bool SAL_CALL SpriteCanvas::updateScreen( sal_Bool bUpdateAll ) throw (uno::RuntimeException)
     {
-        checkOurState();
-
         tools::LocalGuard aGuard;
 
-        mpRedrawManager->updateScreen();
+        if( !mpRedrawManager.get() )
+            return sal_False; // disposed
+
+        // pass background dirty state to redrawmanager
+        if( mbSurfaceDirty )
+        {
+            mpRedrawManager->backgroundDirty();
+            mbSurfaceDirty = false;
+        }
+
+        mpRedrawManager->updateScreen( bUpdateAll );
 
         // commit to screen
         maCanvasHelper.flush();
+
+#if defined(VERBOSE) && defined(DBG_UTIL)
+        static ::canvas::tools::ElapsedTime aElapsedTime;
+
+        // log time immediately after surface flip
+        OSL_TRACE( "SpriteCanvas::updateScreen(): flip done at %f",
+                   aElapsedTime.getElapsedTime() );
+#endif
 
         return sal_True;
     }
@@ -380,26 +237,38 @@ namespace vclcanvas
     {
         VERBOSE_TRACE( "SpriteCanvas::initialize called" );
 
-        OSL_ENSURE( aArguments.getLength() >= 1,
-                    "SpriteCanvas::initialize: wrong number of arguments" );
+        CHECK_AND_THROW( aArguments.getLength() >= 1,
+                         "SpriteCanvas::initialize: wrong number of arguments" );
 
         // We expect a single Any here, containing a pointer to a valid
         // VCL window, on which to output
         if( aArguments.getLength() >= 1 &&
             aArguments[0].getValueTypeClass() == uno::TypeClass_HYPER )
         {
-            mpOutputWindow = *(Window**)(aArguments[0].getValue());
-            OSL_ENSURE( mpOutputWindow != NULL,
-                        "SpriteCanvas::initialize: invalid Window pointer" );
+            // TODO(Q2): This now works for Solaris, but still warns for gcc
+            Window* pOutputWindow = (Window*) *reinterpret_cast<const sal_Int64*>(aArguments[0].getValue());
+
+            CHECK_AND_THROW( pOutputWindow != NULL,
+                             "SpriteCanvas::initialize: invalid Window pointer" );
+
+            // setup graphic device
+            mxDevice = WindowGraphicDevice::ImplRef( new WindowGraphicDevice( *pOutputWindow ) );
+
+            // setup helper
+            maCanvasHelper.setGraphicDevice( mxDevice );
 
             // setup back buffer
-            maVDev->SetOutputSizePixel( mpOutputWindow->GetOutputSizePixel() );
+            mpBackBuffer.reset( new BackBuffer( *pOutputWindow ) );
+            mpBackBuffer->getVirDev().SetOutputSizePixel(
+                pOutputWindow->GetOutputSizePixel() );
 
-            // always render into back buffer
-            maCanvasHelper.setOutDev( *maVDev );
+            // always render into back buffer, don't preserve state
+            // (it's our private VDev, after all)
+            maCanvasHelper.setOutDev( mpBackBuffer, false );
 
-            mpRedrawManager = ::std::auto_ptr< RedrawManager >( new RedrawManager( *mpOutputWindow,
-                                                                                   *maVDev ) );
+            // setup RedrawManager
+            mpRedrawManager.reset( new RedrawManager( *pOutputWindow,
+                                                      mpBackBuffer ) );
         }
     }
 
@@ -431,21 +300,21 @@ namespace vclcanvas
     // SpriteSurface
     void SpriteCanvas::showSprite( const Sprite::ImplRef& sprite )
     {
-        checkOurState();
-
         tools::LocalGuard aGuard;
+
+        if( !mpRedrawManager.get() )
+            return; // we're disposed
+
         mpRedrawManager->showSprite( sprite );
     }
 
     void SpriteCanvas::hideSprite( const Sprite::ImplRef& sprite )
     {
-        checkOurState();
-
-        // strictly speaking, the solar mutex here is overkill, and a
-        // object mutex would suffice. But on the other hand, nearly
-        // every other method needs the solar mutex anyway, so it's no
-        // big loss (and much simpler) here.
         tools::LocalGuard aGuard;
+
+        if( !mpRedrawManager.get() )
+            return; // we're disposed
+
         mpRedrawManager->hideSprite( sprite );
     }
 
@@ -453,9 +322,11 @@ namespace vclcanvas
                                    const Point&             rOldPos,
                                    const Point&             rNewPos )
     {
-        checkOurState();
-
         tools::LocalGuard aGuard;
+
+        if( !mpRedrawManager.get() )
+            return; // we're disposed
+
         mpRedrawManager->moveSprite( sprite, rOldPos, rNewPos );
     }
 
@@ -463,28 +334,12 @@ namespace vclcanvas
                                      const Point&           rPos,
                                      const Rectangle&       rUpdateArea )
     {
-        checkOurState();
-
         tools::LocalGuard aGuard;
+
+        if( !mpRedrawManager.get() )
+            return; // we're disposed
+
         mpRedrawManager->updateSprite( sprite, rPos, rUpdateArea );
-    }
-
-    // OutDevProvider
-    ::OutputDevice& SpriteCanvas::getOutDev()
-    {
-        return maCanvasHelper.getOutDev();
-    }
-
-    const ::OutputDevice& SpriteCanvas::getOutDev() const
-    {
-        return maCanvasHelper.getOutDev();
-    }
-
-    void SpriteCanvas::checkOurState()
-    {
-        if( mpOutputWindow == NULL ||
-            mpRedrawManager.get() == NULL )
-            throw uno::RuntimeException();
     }
 
 }
