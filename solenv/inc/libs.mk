@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.82 $
+#   $Revision: 1.83 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-11 11:23:39 $
+#   last change: $Author: kz $ $Date: 2005-01-14 11:34:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.82 $$"
+LIBSMKREV!:="$$Revision: 1.83 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -89,8 +89,8 @@ DVOSUTILLIBST=-ldvosutil
 DUNOUTILLIBST=-ldunoutil
 DVCLUTILLIBST=-ldvclutil
 BPICONVLIB=-lbpiconv
-OSLLIB=-losl$(OFFICEUPD)$(DLLPOSTFIX)
 TOOLSLIB=-ltl$(OFFICEUPD)$(DLLPOSTFIX)
+# make sure some ancient libs are empty
 OSLLIB=
 RTLLIB=
 TECLIB=
@@ -321,6 +321,7 @@ DUNOUTILLIBST=$(LIBPRE) dunoutil.lib
 DVCLUTILLIBST=$(LIBPRE) dvclutil.lib
 BPICONVLIB=$(LIBPRE) bpiconv.lib
 SALLIB=$(LIBPRE) isal.lib
+# make sure some ancient libs are empty
 OSLLIB=
 RTLLIB=
 TECLIB=
