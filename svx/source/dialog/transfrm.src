@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ TabPage RID_SVXPAGE_POSITION
         QuickHelpText [ swedish ] = "Baspunkt" ;
         QuickHelpText [ danish ] = "Basispunkt" ;
         QuickHelpText [ italian ] = "Punto di base" ;
-        QuickHelpText [ spanish ] = "Basispunkt" ;
+        QuickHelpText [ spanish ] = "Punto base" ;
         QuickHelpText [ french ] = "Point de base" ;
         QuickHelpText [ dutch ] = "Basispunt" ;
         QuickHelpText[ russian ] = "Òî÷êà îñíîâû";
@@ -909,7 +909,7 @@ TabPage RID_SVXPAGE_SIZE
         QuickHelpText [ swedish ] = "Baspunkt" ;
         QuickHelpText [ danish ] = "Basispunkt" ;
         QuickHelpText [ italian ] = "Punto di base" ;
-        QuickHelpText [ spanish ] = "Basispunkt" ;
+        QuickHelpText [ spanish ] = "Punto base" ;
         QuickHelpText [ french ] = "Point de base" ;
         QuickHelpText [ dutch ] = "Basispunt" ;
         QuickHelpText [ portuguese ] = "Ponto de base" ;
@@ -1311,7 +1311,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText [ swedish ] = "Rotationspunkt" ;
         QuickHelpText [ danish ] = "Rotationspunkt" ;
         QuickHelpText [ italian ] = "Punto di rotazione" ;
-        QuickHelpText [ spanish ] = "Rotationspunkt" ;
+        QuickHelpText [ spanish ] = "Punto de rotación" ;
         QuickHelpText [ french ] = "Point de rotation" ;
         QuickHelpText [ dutch ] = "Rotatiepunt" ;
         QuickHelpText [ portuguese ] = "Ponto de rotação" ;
