@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscconst.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ RscEnum::RscEnum( HASHID nId, USHORT nTypeId, BOOL bUSHORT_ )
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-ERRTYPE RscEnum::SetConst( const RSCINST & rInst, HASHID nConst, long nVal )
+ERRTYPE RscEnum::SetConst( const RSCINST & rInst, HASHID nConst, INT32 nVal )
 {
     USHORT i;
 
@@ -318,7 +318,7 @@ ERRTYPE RscEnum::SetNumber( const RSCINST & rInst, INT32 lValue ){
     USHORT i;
 
     for( i = 0; i < nEntries; i++ ){
-        if( (long)pVarArray[ i ].lValue == lValue )
+        if( (INT32)pVarArray[ i ].lValue == lValue )
             return( SetConst( rInst, pVarArray[ i ].nId, lValue ) );
     };
 
@@ -348,7 +348,7 @@ ERRTYPE RscEnum::GetConst( const RSCINST & rInst, HASHID * pH ){
 |*    Letzte Aenderung  MM 16.09.91
 |*
 *************************************************************************/
-ERRTYPE RscEnum::GetNumber( const RSCINST & rInst, long * pNumber ){
+ERRTYPE RscEnum::GetNumber( const RSCINST & rInst, INT32 * pNumber ){
     *pNumber = pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].lValue;
     return( ERR_OK );
 }
