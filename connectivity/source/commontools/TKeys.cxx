@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TKeys.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:50:04 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,8 +291,7 @@ void OKeysHelper::appendObject( const Reference< XPropertySet >& descriptor )
                 while( xResult->next() )
                 {
                     ::rtl::OUString sName = xRow->getString(nColumn);
-                    ObjectMap::iterator aIter = m_aNameMap.find(sName);
-                    if( aIter == m_aNameMap.end()) // this name wasn't inserted yet so it must be te new one
+                    if ( !m_pElements->exists(sName) ) // this name wasn't inserted yet so it must be te new one
                     {
                         descriptor->setPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME),makeAny(sName));
                         break;
@@ -315,11 +314,7 @@ void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName
 
         aSql += composeTableName(m_pTable->getConnection()->getMetaData(),m_pTable,sal_True,::dbtools::eInTableDefinitions);
 
-        ObjectIter aIter = m_aElements[_nPos];
-        if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
-            aIter->second = createObject(_sElementName);
-
-        Reference<XPropertySet> xKey(aIter->second,UNO_QUERY);
+        Reference<XPropertySet> xKey(getObject(_nPos),UNO_QUERY);
 
         sal_Int32 nKeyType = KeyType::PRIMARY;
         if ( xKey.is() )
