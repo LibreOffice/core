@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-10 11:53:02 $
+ *  last change: $Author: pl $ $Date: 2001-09-10 17:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,11 @@ public:
      *  must be called before showing the frame
      */
     virtual void setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, SalFrame* pTransientFrame = NULL ) const;
+
+    /*
+     *  enables always on top or equivalent if possible
+     */
+    virtual void enableAlwaysOnTop( SalFrame* pFrame, bool bEnable ) const;
 
     /*
      *  gets a WM atom

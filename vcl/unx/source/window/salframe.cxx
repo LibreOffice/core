@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-06 13:27:02 $
+ *  last change: $Author: pl $ $Date: 2001-09-10 17:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,11 +1043,8 @@ void SalFrame::SetClientPosSize( const Rectangle& rRect )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::SetAlwaysOnTop( BOOL bOnTop )
 {
-    // #74406# do not raise fullscreenwindow since it may override the
-    // screenlocker
-    // maFrameData.bAlwaysOnTop_ = bOnTop;
-    if( bOnTop )
-        XRaiseWindow( _GetXDisplay(), maFrameData.GetShellWindow() );
+    maFrameData.bAlwaysOnTop_ = bOnTop;
+    maFrameData.pDisplay_->getWMAdaptor()->enableAlwaysOnTop( this, bOnTop );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -2950,19 +2947,6 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 break;
         }
     }
-
-    // #74406# do not raise fullscreenwindow as it may override the
-    // screenlocker
-#if 0
-    if( bAlwaysOnTop_
-        && nVisibility_ != VisibilityUnobscured
-        && pEvent->type != ConfigureNotify
-        && pEvent->type != MotionNotify )
-    {
-        XRaiseWindow( GetXDisplay(), XtWindow( hShell_ ) );
-    }
-#endif
-
 
     return nRet;
 }

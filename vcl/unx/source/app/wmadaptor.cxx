@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-10 11:53:02 $
+ *  last change: $Author: pl $ $Date: 2001-09-10 17:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ public:
     virtual void maximizeFrame( SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const;
     virtual void setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, SalFrame* pTransientFrame = NULL ) const;
     virtual bool supportsICCCMPos() const;
+    virtual void enableAlwaysOnTop( SalFrame* pFrame, bool bEnable ) const;
 };
 
 class GnomeWMAdaptor : public WMAdaptor
@@ -119,6 +120,7 @@ public:
     virtual ~GnomeWMAdaptor();
 
     virtual void maximizeFrame( SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const;
+    virtual void enableAlwaysOnTop( SalFrame* pFrame, bool bEnable ) const;
 };
 
 }
@@ -880,7 +882,7 @@ void NetWMAdaptor::setNetWMState( SalFrame* pFrame ) const
 {
     if( m_aWMAtoms[ NET_WM_STATE ] )
     {
-        Atom aStateAtoms[ 4 ];
+        Atom aStateAtoms[ 5 ];
         int nStateAtoms = 0;
 
         // set NET_WM_STATE_MODAL
@@ -901,6 +903,8 @@ void NetWMAdaptor::setNetWMState( SalFrame* pFrame ) const
         if( pFrame->maFrameData.mbMaximizedHorz
             && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ] )
             aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ];
+        if( pFrame->maFrameData.bAlwaysOnTop_ && m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ] )
+            aStateAtoms[nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ];
         if( nStateAtoms )
         {
             XChangeProperty( m_pDisplay,
@@ -1446,4 +1450,91 @@ bool WMAdaptor::supportsICCCMPos() const
 bool NetWMAdaptor::supportsICCCMPos() const
 {
     return true;
+}
+
+
+/*
+ *  WMAdaptor::enableAlwaysOnTop
+ */
+void WMAdaptor::enableAlwaysOnTop( SalFrame* pFrame, bool bEnable ) const
+{
+}
+
+/*
+ *  NetWMAdaptor::enableAlwaysOnTop
+ */
+void NetWMAdaptor::enableAlwaysOnTop( SalFrame* pFrame, bool bEnable ) const
+{
+    pFrame->maFrameData.bAlwaysOnTop_ = bEnable;
+    if( m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ] )
+    {
+        if( pFrame->maFrameData.bMapped_ )
+        {
+            // window already mapped, send WM a message
+            XEvent aEvent;
+            aEvent.type                 = ClientMessage;
+            aEvent.xclient.display      = m_pDisplay;
+            aEvent.xclient.window       = pFrame->maFrameData.GetShellWindow();
+            aEvent.xclient.message_type = m_aWMAtoms[ NET_WM_STATE ];
+            aEvent.xclient.format       = 32;
+            aEvent.xclient.data.l[0]    = bEnable ? 1 : 0;
+            aEvent.xclient.data.l[1]    = m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ];
+            aEvent.xclient.data.l[2]    = 0;
+            aEvent.xclient.data.l[3]    = 0;
+            aEvent.xclient.data.l[4]    = 0;
+            XSendEvent( m_pDisplay,
+                        m_pSalDisplay->GetRootWindow(),
+                        False,
+                        SubstructureNotifyMask | SubstructureRedirectMask,
+                        &aEvent
+                        );
+        }
+        else
+            setNetWMState( pFrame );
+    }
+}
+
+/*
+ *  GnomeWMAdaptor::enableAlwaysOnTop
+ */
+void GnomeWMAdaptor::enableAlwaysOnTop( SalFrame* pFrame, bool bEnable ) const
+{
+    pFrame->maFrameData.bAlwaysOnTop_ = bEnable;
+    if( m_aWMAtoms[ WIN_LAYER ] )
+    {
+        if( pFrame->maFrameData.bMapped_ )
+        {
+            // window already mapped, send WM a message
+            XEvent aEvent;
+            aEvent.type                 = ClientMessage;
+            aEvent.xclient.display      = m_pDisplay;
+            aEvent.xclient.window       = pFrame->maFrameData.GetShellWindow();
+            aEvent.xclient.message_type = m_aWMAtoms[ WIN_LAYER ];
+            aEvent.xclient.format       = 32;
+            aEvent.xclient.data.l[0]    = bEnable ? 6 : 4;
+            aEvent.xclient.data.l[1]    = 0;
+            aEvent.xclient.data.l[2]    = 0;
+            aEvent.xclient.data.l[3]    = 0;
+            aEvent.xclient.data.l[4]    = 0;
+            XSendEvent( m_pDisplay,
+                        m_pSalDisplay->GetRootWindow(),
+                        False,
+                        SubstructureNotifyMask | SubstructureRedirectMask,
+                        &aEvent
+                        );
+        }
+        else
+        {
+            sal_uInt32 nNewLayer = bEnable ? 6 : 4;
+            XChangeProperty( m_pDisplay,
+                             pFrame->maFrameData.GetShellWindow(),
+                             m_aWMAtoms[ WIN_LAYER ],
+                             XA_CARDINAL,
+                             32,
+                             PropModeReplace,
+                             (unsigned char*)&nNewLayer,
+                             1
+                             );
+        }
+    }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-30 09:53:33 $
+ *  last change: $Author: pl $ $Date: 2001-09-10 17:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent ) :
     else
         fprintf( stderr, "Warning: could not reposition status window since no frame\n" );
 #endif
+    EnableAlwaysOnTop( TRUE );
 }
 
 IIIMPStatusWindow::~IIIMPStatusWindow()
