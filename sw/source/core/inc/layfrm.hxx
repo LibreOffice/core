@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layfrm.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:28:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,10 @@ public:
                         SwFtnBossFrm *pNewBoss, const BOOL bFtnNums );
 
     // --> OD 2004-07-01 #i28701# - change purpose of method and its name
-    void NotifyLowerObjs();
+    // --> OD 2005-03-11 #i44016# - add parameter <_bUnlockPosOfObjs> to
+    // force an unlockposition call for the lower objects.
+    void NotifyLowerObjs( const bool _bUnlockPosOfObjs = false );
+    // <--
 
     //Invalidiert diejenigen innenliegenden Frames, deren Breite und/oder
     //Hoehe Prozentual berechnet werden. Auch Rahmen, die an this oder an
