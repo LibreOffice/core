@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:46:20 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,6 +570,7 @@ void OutlineViewShell::Activate( BOOL bIsMDIActivate )
 {
     ViewShell::Activate( bIsMDIActivate );
     pOlView->SetLinks();
+    pOlView->ConnectToApplication();
 
     if( bIsMDIActivate )
     {
@@ -590,6 +591,8 @@ void OutlineViewShell::Activate( BOOL bIsMDIActivate )
 \************************************************************************/
 void OutlineViewShell::Deactivate( BOOL bIsMDIActivate )
 {
+    pOlView->DisconnectFromApplication();
+
     // #96416# Links must be kept also on deactivated viewshell, to allow drag'n'drop
     // to function properly
     // pOlView->ResetLinks();
