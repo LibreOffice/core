@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-16 13:16:03 $
+#   last change: $Author: hjs $ $Date: 2001-10-16 15:53:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -151,6 +151,7 @@ DEPFILESx+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(OBJFILES:s/.obj/.dpcc/))
 DEPFILESx+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SLOFILES:s/.obj/.dpcc/))
 .ENDIF			# "$(L10N_framework)"==""
 DEPFILESx+=$(subst,$(PAR),$(MISC) $(ALLPARFILES:s/.par/.dpsc/))
+.IF "$(L10N_framework)"==""
 .IF "$(RCFILES)"!=""
 .IF "$(RESNAME)"!=""
 #RCTARGET!:=$(foreach,i,$(alllangext) $(RES)$/$i$/$(RESNAME).res)
@@ -159,6 +160,7 @@ DEPFILESx+=$(MISC)$/$(RESNAME).dpcc
 DEPFILESx+=$(foreach,i,$(alllangext) $(MISC)$/$i$/$(TARGET).dprc)
 .ENDIF			# "$(RESNAME)"!=""
 .ENDIF			# "$(RCFILES)"!=""
+.ENDIF          # "$(L10N_framework)"==""
 DEPFILES=$(uniq $(DEPFILESx))
 .ENDIF			# "$(nodep)"==""
 
@@ -593,24 +595,26 @@ JAVAFILES:=
 javauno:=
 .ENDIF			# "$(SOLAR_JAVA)"!=""
 
+.IF "$(L10N_framework)"==""
 .IF "$(RCFILES)"!=""
 RESNAME*=$(TARGET)
 .IF "$(solarlang)" == "deut"
 RCTARGET=$(RES)$/$(RESNAME).res
 .IF "$(NO_REC_RES)"!=""
 RCTARGET!:=$(foreach,i,$(alllangext) $(RES)$/$i$/$(RESNAME).res)
-.ENDIF
-.ELSE
+.ENDIF          # "$(NO_REC_RES)"!=""
+.ELSE           # "$(solarlang)" == "deut"
 .IF "$(RCFILES)" != "verinfo.rc"
 RCTARGET=$(RES)$/$(RESNAME).res
 .IF "$(NO_REC_RES)"!=""
 RCTARGET!:=$(foreach,i,$(alllangext) $(RES)$/$i$/$(RESNAME).res)
-.ENDIF
-.ELSE
+.ENDIF          # "$(NO_REC_RES)"!=""
+.ELSE           # "$(RCFILES)" != "verinfo.rc"
 RCFILES=
-.ENDIF
-.ENDIF
-.ENDIF
+.ENDIF          # "$(RCFILES)" != "verinfo.rc"
+.ENDIF          # "$(solarlang)" == "deut"
+.ENDIF          # "$(RCFILES)"!=""
+.ENDIF          # "$(L10N_framework)"==""
 
 .IF "$(SCP1TARGET)"!=""
 SCP1TARGETN:=$(foreach,i,$(SCP1LINK_PRODUCT_TYPE) $(BIN)$/$i$/$(SCP1TARGET)$(SCPPOST))
