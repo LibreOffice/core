@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:56:38 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 13:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,10 +801,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     return aTxt.Copy( nStart, nEnd - nStart );
 }
 
-OUString SAL_CALL SmGraphicAccessible::getTextAtIndex(
-        sal_Int32 nIndex,
-        sal_Int16 aTextType )
-    throw (IndexOutOfBoundsException, RuntimeException)
+::com::sun::star::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     String aTxt( GetAccessibleText_Impl() );
@@ -812,15 +809,20 @@ OUString SAL_CALL SmGraphicAccessible::getTextAtIndex(
     //!! nIndex is allowed to be the string length
     if (!(0 <= nIdx  &&  nIdx <= aTxt.Len()))
         throw IndexOutOfBoundsException();
-    if (AccessibleTextType::CHARACTER != aTextType  ||  nIdx == aTxt.Len())
-        return OUString();
-    return aTxt.Copy(nIdx, 1);
+
+    ::com::sun::star::accessibility::TextSegment aResult;
+    aResult.SegmentStart = -1;
+    aResult.SegmentEnd = -1;
+    if ( (AccessibleTextType::CHARACTER == aTextType)  &&  (nIdx < aTxt.Len()) )
+    {
+        aResult.SegmentText = aTxt.Copy(nIdx, 1);
+        aResult.SegmentStart = nIdx;
+        aResult.SegmentEnd = nIdx+1;
+    }
+    return aResult;
 }
 
-OUString SAL_CALL SmGraphicAccessible::getTextBeforeIndex(
-        sal_Int32 nIndex,
-        sal_Int16 aTextType )
-    throw (IndexOutOfBoundsException, RuntimeException)
+::com::sun::star::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     String aTxt( GetAccessibleText_Impl() );
@@ -828,15 +830,21 @@ OUString SAL_CALL SmGraphicAccessible::getTextBeforeIndex(
     //!! nIndex is allowed to be the string length
     if (!(0 <= nIdx  &&  nIdx <= aTxt.Len()))
         throw IndexOutOfBoundsException();
-    if (AccessibleTextType::CHARACTER != aTextType)
-        return OUString();
-    return aTxt.Copy(0, nIdx);
+
+    ::com::sun::star::accessibility::TextSegment aResult;
+    aResult.SegmentStart = -1;
+    aResult.SegmentEnd = -1;
+
+    if ( (AccessibleTextType::CHARACTER == aTextType)  && nIdx )
+    {
+        aResult.SegmentText = aTxt.Copy(nIdx-1, 1);
+        aResult.SegmentStart = nIdx-1;
+        aResult.SegmentEnd = nIdx;
+    }
+    return aResult;
 }
 
-OUString SAL_CALL SmGraphicAccessible::getTextBehindIndex(
-        sal_Int32 nIndex,
-        sal_Int16 aTextType )
-    throw (IndexOutOfBoundsException, RuntimeException)
+::com::sun::star::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     String aTxt( GetAccessibleText_Impl() );
@@ -844,9 +852,19 @@ OUString SAL_CALL SmGraphicAccessible::getTextBehindIndex(
     //!! nIndex is allowed to be the string length
     if (!(0 <= nIdx  &&  nIdx <= aTxt.Len()))
         throw IndexOutOfBoundsException();
-    if (AccessibleTextType::CHARACTER != aTextType  ||  nIdx == aTxt.Len())
-        return OUString();
-    return aTxt.Copy(nIdx, aTxt.Len() - nIdx);
+
+    ::com::sun::star::accessibility::TextSegment aResult;
+    aResult.SegmentStart = -1;
+    aResult.SegmentEnd = -1;
+
+    nIdx++; // text *behind*
+    if ( (AccessibleTextType::CHARACTER == aTextType)  &&  (nIdx < aTxt.Len()) )
+    {
+        aResult.SegmentText = aTxt.Copy(nIdx, 1);
+        aResult.SegmentStart = nIdx;
+        aResult.SegmentEnd = nIdx+1;
+    }
+    return aResult;
 }
 
 sal_Bool SAL_CALL SmGraphicAccessible::copyText(
