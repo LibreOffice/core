@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-17 14:18:06 $
+ *  last change: $Author: fs $ $Date: 2001-08-27 16:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@
 namespace frm
 {
 //.........................................................................
+
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -126,6 +127,18 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::form;
+
+    //---------------------------------------------------------------------
+    static void lcl_throwIllegalArgumentException()
+    {
+        throw IllegalArgumentException();
+    }
+
+    static void lcl_throwIllegalArgumentException( const ::rtl::OUString& _rMessage, const Reference< XInterface >& _rxObject, sal_Int32 _nArgPos )
+    {
+        throw IllegalArgumentException();
+    }
+
 //------------------------------------------------------------------
 OInterfaceContainer::OInterfaceContainer(
                 const Reference<XMultiServiceFactory>& _rxFactory,
@@ -169,59 +182,153 @@ void OInterfaceContainer::disposing()
 //------------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::writeEvents(const Reference<XObjectOutputStream>& _rxOutStream)
 {
-    Reference<XMarkableStream>  xMark(_rxOutStream, UNO_QUERY);
-    sal_Int32 nMark = xMark->createMark();
+    // We're writing a document in SO 5.2 format (or even from earlier versions)
+    // -> convert the events from the new runtime format to the format of the 5.2 files
+    transformEvents( efVersionSO5x );
 
-    sal_Int32 nObjLen = 0;
-    _rxOutStream->writeLong(nObjLen);
+    try
+    {
+        Reference<XMarkableStream>  xMark(_rxOutStream, UNO_QUERY);
+        sal_Int32 nMark = xMark->createMark();
 
-    Reference<XPersistObject>  xScripts(m_xEventAttacher, UNO_QUERY);
-    if (xScripts.is())
-        xScripts->write(_rxOutStream);
+        sal_Int32 nObjLen = 0;
+        _rxOutStream->writeLong(nObjLen);
 
-    // feststellen der Laenge
-    nObjLen = xMark->offsetToMark(nMark) - 4;
-    xMark->jumpToMark(nMark);
-    _rxOutStream->writeLong(nObjLen);
-    xMark->jumpToFurthest();
-    xMark->deleteMark(nMark);
+        Reference<XPersistObject>  xScripts(m_xEventAttacher, UNO_QUERY);
+        if (xScripts.is())
+            xScripts->write(_rxOutStream);
+
+        // feststellen der Laenge
+        nObjLen = xMark->offsetToMark(nMark) - 4;
+        xMark->jumpToMark(nMark);
+        _rxOutStream->writeLong(nObjLen);
+        xMark->jumpToFurthest();
+        xMark->deleteMark(nMark);
+    }
+    catch( const Exception& )
+    {
+        // transform the events back
+        transformEvents( efVersionSO6x );
+        throw;
+    }
+
+    // transform the events back
+    transformEvents( efVersionSO6x );
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::readEvents(const Reference<XObjectInputStream>& _rxInStream, sal_Int32 nCount)
+struct TransformEventTo52Format : public ::std::unary_function< ScriptEventDescriptor, void >
+{
+    void operator()( ScriptEventDescriptor& _rDescriptor )
+    {
+        if ( 0 == _rDescriptor.ScriptType.compareToAscii( "StarBasic" ) )
+        {   // it's a starbasic macro
+            sal_Int32 nPrefixLength = _rDescriptor.ScriptCode.indexOf( ':' );
+            if ( 0 <= nPrefixLength )
+            {   // the macro name does not already contain a :
+#ifdef DBG_UTIL
+                const ::rtl::OUString sPrefix = _rDescriptor.ScriptCode.copy( 0, nPrefixLength );
+                DBG_ASSERT( 0 == sPrefix.compareToAscii( "document" )
+                        ||  0 == sPrefix.compareToAscii( "application" ),
+                        "TransformEventTo52Format: invalid (unknown) prefix!" );
+#endif
+                // cut the prefix
+                _rDescriptor.ScriptCode = _rDescriptor.ScriptCode.copy( nPrefixLength + 1 );
+            }
+        }
+    }
+};
+
+//------------------------------------------------------------------------------
+struct TransformEventTo60Format : public ::std::unary_function< ScriptEventDescriptor, void >
+{
+    void operator()( ScriptEventDescriptor& _rDescriptor )
+    {
+        if ( 0 == _rDescriptor.ScriptType.compareToAscii( "StarBasic" ) )
+        {   // it's a starbasic macro
+            if ( _rDescriptor.ScriptCode.indexOf( ':' ) < 0 )
+            {   // the macro name does not already contain a :
+                // -> default the type to "document"
+                ::rtl::OUString sNewScriptCode( RTL_CONSTASCII_USTRINGPARAM( "document:" ) );
+                sNewScriptCode += _rDescriptor.ScriptCode;
+                _rDescriptor.ScriptCode = sNewScriptCode;
+            }
+        }
+    }
+};
+
+//------------------------------------------------------------------------------
+void OInterfaceContainer::transformEvents( const EventFormat _eTargetFormat )
+{
+    try
+    {
+        // loop through all our children
+        sal_Int32 nItems = m_aItems.size();
+        Sequence< ScriptEventDescriptor > aChildEvents;
+
+        for (sal_Int32 i=0; i<nItems; ++i)
+        {
+            // get the script events for this object
+            aChildEvents = m_xEventAttacher->getScriptEvents( i );
+
+            if ( aChildEvents.getLength() )
+            {
+                // the "iterators" for the events for this child
+                ScriptEventDescriptor* pChildEvents     =                       aChildEvents.getArray();
+                ScriptEventDescriptor* pChildEventsEnd  =   pChildEvents    +   aChildEvents.getLength();
+
+                // do the transformation
+                if ( efVersionSO6x == _eTargetFormat )
+                    ::std::for_each( pChildEvents, pChildEventsEnd, TransformEventTo60Format() );
+                else
+                    ::std::for_each( pChildEvents, pChildEventsEnd, TransformEventTo52Format() );
+
+                // revoke the script events
+                m_xEventAttacher->revokeScriptEvents( i );
+                // and re-register them
+                m_xEventAttacher->registerScriptEvents( i, aChildEvents );
+            }
+        }
+    }
+    catch( const Exception& e )
+    {
+        e;  // make compiler happy
+        DBG_ERROR( "OInterfaceContainer::transformEvents: caught an exception!" );
+    }
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OInterfaceContainer::readEvents(const Reference<XObjectInputStream>& _rxInStream)
 {
     ::osl::MutexGuard aGuard( m_rMutex );
-    if (nCount)
-    {
-        // Scripting Info lesen
-        Reference<XMarkableStream>  xMark(_rxInStream, UNO_QUERY);
-        sal_Int32 nObjLen = _rxInStream->readLong();
-        if (nObjLen)
-        {
-            sal_Int32 nMark = xMark->createMark();
-            Reference<XPersistObject>  xObj(m_xEventAttacher, UNO_QUERY);
-            if (xObj.is())
-                xObj->read(_rxInStream);
-            xMark->jumpToMark(nMark);
-            _rxInStream->skipBytes(nObjLen);
-            xMark->deleteMark(nMark);
-        }
 
-        // Attachement lesen
-        for (sal_Int32 i = 0; i < nCount; i++)
-        {
-            InterfaceRef  xIfc(m_aItems[i], UNO_QUERY);
-            Reference<XPropertySet>  xSet(xIfc, UNO_QUERY);
-            Any aHelper;
-            aHelper <<= xSet;
-            m_xEventAttacher->attach( i, xIfc, aHelper );
-        }
-    }
-    else
+    // Scripting Info lesen
+    Reference<XMarkableStream>  xMark(_rxInStream, UNO_QUERY);
+    sal_Int32 nObjLen = _rxInStream->readLong();
+    if (nObjLen)
     {
-        // neuen EventManager
-        m_xEventAttacher = ::comphelper::createEventAttacherManager(m_xServiceFactory);
+        sal_Int32 nMark = xMark->createMark();
+        Reference<XPersistObject>  xObj(m_xEventAttacher, UNO_QUERY);
+        if (xObj.is())
+            xObj->read(_rxInStream);
+        xMark->jumpToMark(nMark);
+        _rxInStream->skipBytes(nObjLen);
+        xMark->deleteMark(nMark);
     }
+
+    // Attachement lesen
+    OInterfaceArray::const_iterator aAttach = m_aItems.begin();
+    OInterfaceArray::const_iterator aAttachEnd = m_aItems.end();
+    for ( sal_Int32 i=0; aAttach != aAttachEnd; ++aAttach, ++i )
+    {
+        Reference< XInterface > xAsIFace( *aAttach, UNO_QUERY );    // important to normalize this ....
+        Reference< XPropertySet > xAsSet( xAsIFace, UNO_QUERY );
+        m_xEventAttacher->attach( i, xAsIFace, makeAny( xAsSet ) );
+    }
+
+    // We're reading a document in SO 5.2 format (or even from earlier versions)
+    // -> convert the events to the new runtime format
+    transformEvents( efVersionSO6x );
 }
 
 //------------------------------------------------------------------------------
@@ -328,9 +435,11 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                     ; // form konnte nicht gelesen werden; nyi
             }
         }
-    }
 
-    readEvents(_rxInStream, nLen);
+        readEvents(_rxInStream);
+    }
+    else
+        m_xEventAttacher = ::comphelper::createEventAttacherManager( m_xServiceFactory );
 }
 
 // XContainer
@@ -462,7 +571,7 @@ void OInterfaceContainer::insert(sal_Int32 _nIndex, const InterfaceRef& xElement
     // das richtige Interface besorgen
     Any aCorrectType = xElement->queryInterface(m_aElementType);
     if (!aCorrectType.hasValue())
-        throw IllegalArgumentException();
+        lcl_throwIllegalArgumentException();
     InterfaceRef xCorrectType = *static_cast<const InterfaceRef*>(aCorrectType.getValue());
 
     ::rtl::OUString sName;
@@ -470,16 +579,16 @@ void OInterfaceContainer::insert(sal_Int32 _nIndex, const InterfaceRef& xElement
     if (xSet.is())
     {
         if (!hasProperty(PROPERTY_NAME, xSet))
-            throw IllegalArgumentException();
+            lcl_throwIllegalArgumentException();
 
         Any aValue = xSet->getPropertyValue(PROPERTY_NAME);
         aValue >>= sName;
         xSet->addPropertyChangeListener(PROPERTY_NAME, this);
     }
     else
-        throw IllegalArgumentException();
+        lcl_throwIllegalArgumentException();
 
-    if (_nIndex > m_aItems.size()) // ermitteln des tatsaechlichen Indexs
+    if (_nIndex > (sal_Int32)m_aItems.size()) // ermitteln des tatsaechlichen Indexs
     {
         _nIndex = m_aItems.size();
         m_aItems.push_back(xCorrectType);
@@ -496,10 +605,8 @@ void OInterfaceContainer::insert(sal_Int32 _nIndex, const InterfaceRef& xElement
     if (bEvents)
     {
         m_xEventAttacher->insertEntry(_nIndex);
-        InterfaceRef  xIfc(xElement, UNO_QUERY);// wichtig
-        Any aHelper;
-        aHelper <<= xSet;
-        m_xEventAttacher->attach(_nIndex, xIfc, aHelper);
+        Reference< XInterface > xAsIFace(xElement, UNO_QUERY);  // important to normalize this ....
+        m_xEventAttacher->attach( _nIndex, xAsIFace, makeAny( xSet ) );
     }
 
     // notify derived classes
@@ -539,7 +646,7 @@ void OInterfaceContainer::removeElementsNoEvents(sal_Int32 nIndex)
 void SAL_CALL OInterfaceContainer::insertByIndex(sal_Int32 _nIndex, const Any& Element) throw(IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
     if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
-        throw IllegalArgumentException();
+        lcl_throwIllegalArgumentException();
 
     ::osl::MutexGuard aGuard( m_rMutex );
     Reference< XInterface > xElement;
@@ -551,10 +658,10 @@ void SAL_CALL OInterfaceContainer::insertByIndex(sal_Int32 _nIndex, const Any& E
 void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& Element) throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
-        throw IllegalArgumentException();
+        lcl_throwIllegalArgumentException();
 
     ::osl::MutexGuard aGuard( m_rMutex );
-    if (_nIndex < 0 || _nIndex >= m_aItems.size())
+    if (_nIndex < 0 || _nIndex >= (sal_Int32)m_aItems.size())
         throw IndexOutOfBoundsException();
 
 
@@ -583,14 +690,14 @@ void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& 
     if (xSet.is())
     {
         if (!hasProperty(PROPERTY_NAME, xSet))
-            throw IllegalArgumentException();
+            lcl_throwIllegalArgumentException();
 
         Any aValue = xSet->getPropertyValue(PROPERTY_NAME);
         aValue >>= sName;
         xSet->addPropertyChangeListener(PROPERTY_NAME, this);
     }
     else
-        throw IllegalArgumentException();
+        lcl_throwIllegalArgumentException();
 
     // remove the old one
     m_aMap.erase(j);
@@ -604,10 +711,8 @@ void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& 
         xChild->setParent(static_cast<XContainer*>(this));
 
     m_xEventAttacher->insertEntry(_nIndex);
-    xIfc = InterfaceRef (xNewElement, UNO_QUERY);// wichtig
-    Any aHelper;
-    aHelper <<= xSet;
-    m_xEventAttacher->attach(_nIndex, xIfc, aHelper);
+    xIfc = InterfaceRef ( xNewElement, UNO_QUERY );// wichtig
+    m_xEventAttacher->attach( _nIndex, xIfc, makeAny( xSet ) );
 
     implReplaced(xOldElement, xNewElement);
 
@@ -624,7 +729,7 @@ void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& 
 void SAL_CALL OInterfaceContainer::removeByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
-    if (_nIndex < 0 || _nIndex >= m_aItems.size())
+    if (_nIndex < 0 || _nIndex >= (sal_Int32)m_aItems.size())
         throw IndexOutOfBoundsException();
 
     OInterfaceArray::iterator i = m_aItems.begin() + _nIndex;
@@ -665,7 +770,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& Name, con
 {
     ::osl::MutexGuard aGuard( m_rMutex );
     if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
-        throw IllegalArgumentException();
+        lcl_throwIllegalArgumentException();
 
     Reference< XInterface > xElement;
     Element >>= xElement;
@@ -674,7 +779,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& Name, con
     if (xSet.is())
     {
         if (!hasProperty(PROPERTY_NAME, xSet))
-            throw IllegalArgumentException();
+            lcl_throwIllegalArgumentException();
 
         xSet->setPropertyValue(PROPERTY_NAME, makeAny(Name));
     }
@@ -692,13 +797,13 @@ void SAL_CALL OInterfaceContainer::replaceByName(const ::rtl::OUString& Name, co
         throw NoSuchElementException();
 
     if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
-        throw IllegalArgumentException();
+        lcl_throwIllegalArgumentException();
 
     Reference<XPropertySet>  xSet(*(InterfaceRef *)Element.getValue(), UNO_QUERY);
     if (xSet.is())
     {
         if (!hasProperty(PROPERTY_NAME, xSet))
-            throw IllegalArgumentException();
+            lcl_throwIllegalArgumentException();
 
         xSet->setPropertyValue(PROPERTY_NAME, makeAny(Name));
     }
