@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:15:47 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ dutch ] = "~Decimaal" ;
         Text [ spanish ] = "Deci~mal" ;
         Text [ english_us ] = "Deci~mal" ;
-        Text[ chinese_simplified ] = "Ê®½øÖÆµÄ(~M)";
+        Text[ chinese_simplified ] = "Ê®½øÖÆ(~M)";
         Text[ russian ] = "Äåñÿòè÷íûé";
         Text[ polish ] = "Dziesiê~tny";
         Text[ japanese ] = "¬”“_‘µ‚¦(~M)";
@@ -415,11 +415,11 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ dutch ] = "Opvulteken" ;
         Text [ spanish ] = "Carácter de relleno" ;
         Text [ english_us ] = "Fill character" ;
-        Text[ chinese_simplified ] = "Ç°µ¼×Ö·û£º";
+        Text[ chinese_simplified ] = "³äÌî×Ö·û";
         Text[ russian ] = "Çàïîëíèòåëü";
         Text[ polish ] = "Znaki wiod¹ce";
         Text[ japanese ] = "Ø°ÀŞ°";
-        Text[ chinese_traditional ] = "¤Ş¾É½u";
+        Text[ chinese_traditional ] = "¥R¶ñ¦r¤¸";
         Text[ arabic ] = "ÍÑİ ÓÇÈŞ";
         Text[ greek ] = "×áñáêôŞñáò ãåìßóìáôïò";
         Text[ korean ] = "Ã¤¿ò±âÈ£";
