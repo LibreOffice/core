@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:49:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2103,6 +2103,17 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             }
         }
         break;
+        // --> FME 2005-02-25 #i42634# New property to set the bInReading
+        // flag at the document, used during binary import
+        case WID_DOC_LOCK_UPDATES :
+        {
+            SwDoc* pDoc = pDocShell->GetDoc();
+            bool bBool;
+            if( aValue >>= bBool )
+              pDoc->SetInReading( bBool );
+        }
+        break;
+        // <--
         default:
         {
             const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pMap->nWID);
@@ -2238,6 +2249,10 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_RUNTIME_UID:
             aAny <<= getRuntimeUID();
         break;
+        case WID_DOC_LOCK_UPDATES :
+            aAny <<= static_cast<bool>( pDocShell->GetDoc()->IsInReading() );
+        break;
+
         default:
         {
             const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pMap->nWID);
