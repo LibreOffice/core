@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.187 $
+ *  $Revision: 1.188 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:38:53 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,7 +717,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     mbShaded                    = false;
     mbFullScreen                = false;
 
-    mnIconID                    = 0; // ICON_DEFAULT
+    mnIconID                    = 1; // ICON_DEFAULT
 
     if( mpParent )
         mpParent->maChildren.push_back( this );
@@ -925,7 +925,11 @@ void X11SalFrame::SetIcon( USHORT nIcon )
 {
     if ( !( nStyle_ & (SAL_FRAME_STYLE_CHILD|SAL_FRAME_STYLE_FLOAT) ) )
     {
-        mnIconID = (nIcon > 0) ? nIcon : 1;
+        // 0 == default icon -> #1
+        if ( nIcon == 0 )
+            nIcon = 1;
+
+        mnIconID = nIcon;
 
         XIconSize *pIconSize = NULL;
         int nSizes = 0;
@@ -2920,6 +2924,11 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
                     if ((nKeyCode != 0) && ((nKeyCode | nModCode) != aKeyEvt.mnCode))
                     {
                         aKeyEvt.mnCode = nKeyCode | nModCode;
+                        if( nKeySym )
+                        {
+                            String aKeyName = pDisplay_->GetKeyNameFromKeySym( nKeySym );
+                            aKeyEvt.mnCharCode = aKeyName.GetChar(0);
+                        }
                         CallCallback(SALEVENT_KEYINPUT, &aKeyEvt);
                     }
                 }
