@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:57:27 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1266,12 +1266,7 @@ XclExpNote::XclExpNote(
     }
 
     // append additional text
-    if( rAddText.Len() )
-    {
-        if( aNoteText.Len() )
-            aNoteText.Append( EXC_NEWLINE ).Append( EXC_NEWLINE );
-        aNoteText.Append( rAddText );
-    }
+    ScGlobal::AddToken( aNoteText, rAddText, '\n', 2 );
 
     // create the Escher object
     mnObjId = rRoot.mpRD->pObjRecs->Add( new XclObjComment( rRoot, maPos, aNoteText, mbVisible ) );
