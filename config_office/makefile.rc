@@ -2,12 +2,12 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: waratah $ $Date: 2002-10-13 05:19:45 $
+#   last change: $Author: mh $ $Date: 2003-01-20 15:00:18 $
 #
 #   Bugs:  'update' tag will not change you from one release to another.
-#          See webpages to checkout OpenOffice from you office directory.
+#          See webpages to checkout OpenOffice.org from you office directory.
 #
 #
 #   The Contents of this file are made available subject to the terms of
@@ -202,11 +202,17 @@ bootstrap .PHONY :
 	@bootstrap
 
 
+distclean .PHONY: clean
+	-rm config_office/config.cache
+	-rm config_office/config.log
+	-$(GNUMAKE) -C dmake distclean
+
+
 clean .PHONY:
 	-rm -rf */$(INPATH)
 	-rm -rf solver/*/$(INPATH)
 	-echo cleaning up dmake...
-	-echo $(shell +cd dmake && make clean)
+	-$(GNUMAKE) -C dmake clean
 
 # 
 # configure target

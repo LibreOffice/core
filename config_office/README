@@ -23,7 +23,7 @@ Running configure on Windows NT:
 * configure must be run from the Cygnus bash shell. On the bash command line
 type "bash configure <options>" to run the script. The generated winenv.bat
 file must then be executed from the 4NT shell in which you will be building
-OpenOffice.
+OpenOffice.org
 
 * The path to the Microsoft C/C++ compiler home directory must be given as
 an MS-DOS format path on the command line with the configure option --with-cl-home 

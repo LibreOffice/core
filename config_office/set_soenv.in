@@ -1,6 +1,6 @@
 #!@PERL@ -w
 #
-# Program:     set_soenv.1
+# Program:     set_soenv.in
 # Version:     0.1
 # Date:        07-06-2000
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
@@ -10,7 +10,7 @@
 #---------------------------------------------------------------------------
 # Description:
 # set_soenv generates a file that contains all necessary 
-# environment variables for the build proces of OpenOffice
+# environment variables for the build proces of OpenOffice.org
 # on Linux, NetBSD, Solaris, Windows NT and Macosx.
 # This script prompts the installer to enter:
 #   1. (if necessary) The directory where the jdk is located (JAVA_HOME).
@@ -65,7 +65,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $NO_SRS_PATCH, $PRODUCT, $PROFULLSWITCH, $BIG_
 my ( $BIG_SVX, $COM, $CPU, $CPUNAME, $CVER, $DLLSUFFIX, $GLIBC, $GUI, $GUIBASE, $GUIENV,
       $GVER, $GVERDIR, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR, $PROSWITCH, $XPVERSION, $BOTH,
       $DEMO_ENV, $DYNAMIC_CRT, $SET_EXCEPTIONS, $emergency, $use_shl_versions, $CDPATHx, $JRELIBDIR,
-      $JRETOOLKITDIR, $JRETHREADDIR, $PTHREAD_CFLAGS, $PTHREAD_LIBS, $EXCEPTIONS);
+      $JRETOOLKITDIR, $JRETHREADDIR, $PTHREAD_CFLAGS, $PTHREAD_LIBS, $EXCEPTIONS, $WRAPCMD );
 #
 #-------------------------------------------
 # IIc. Declaring the environment variables.
@@ -74,12 +74,12 @@ my ( $BIG_SVX, $COM, $CPU, $CPUNAME, $CVER, $DLLSUFFIX, $GLIBC, $GUI, $GUIBASE, 
 # Help variables.
 my ( $USR, $ETC, $BIN, $LIB, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, 
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
-     $SOLARENVINC, $USR_DT, $USR_OPENWIN, $TCSH_PATH, $XLIB, $XINC, @GCC_INCLUDES,
-     @GXX_INCLUDES, $CYGWIN, $language, $ASM_PATH, $UNZIP_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
+     $SOLARENVINC, $USR_DT, $USR_OPENWIN, $TCSH_PATH, $XLIB, $XINC,
+     $CYGWIN, $language, $ASM_PATH, $UNZIP_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
      $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH );
 
 # Environment variables.
-my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $ANT_HOME, $SHELL, $GCC_HOME, $GCC_INCLUDE, $GXX_INCLUDE, 
+my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $ANT_HOME, $SHELL, $GCC_HOME,
      $UPD, $SOLARUPD, $WORK_STAMP, $TF_ONE51, $TF_UCB, 
      $URD_ONLY, $SOLARROOT, $SOLARSRC, $RSCRES, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
@@ -131,8 +131,6 @@ $no_tcsh        = "NO_TCSH";        # possible argument
 $no_cl          = "NO_CL";
 $no_gcc         = "NO_GCC";
 $no_gcc_home    = "NO_GCC_HOME";
-$no_gcc_include = "NO_GCC_INCLUDE";
-$no_gxx_include = "NO_GXX_INCLUDE";
 $warnfile       = "warn";           # logfile configure warnings.
 $Warning        = "";               # container for warning messages
 $STLPORT4	= '@STLPORT4@';     # Location of STLport4
@@ -143,6 +141,7 @@ $CC			= '@CC@';           # C compiler
 $CXX		= '@CXX@';          # C++ compiler
 $EXCEPTIONS	= '@EXCEPTIONS@';   # Exception handling type
 $ENABLE_DEBUG	= '@ENABLE_DEBUG@';  # Enable a debug build
+$WRAPCMD	= "";				# Wrapper (only for winnt)
 
 #
 #---------------------------------------------------------------
@@ -162,7 +161,7 @@ $GNUcomp  = $ds."usr".$ds."local".$ds."bin";  # path to the Sun workshop compile
 # , $Warning.
 AddWarning( "configure", "" );
 #
-print ("Setting up the environment for building OpenOffice. $newline");
+print ("Setting up the environment for building OpenOffice.org $newline");
 #
 #--------------------------------------------------
 # V. Setting the environment variables/values.
@@ -362,7 +361,7 @@ elsif ( $platform eq "$Linux" )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
    }
-   elsif ($machine_type eq "ppc") 
+   elsif (($machine_type eq "ppc") or ($machine_type eq "ppc64"))
    {  print "Setting Linux PPC specific values... ";
       $outfile        = "LinuxPPCEnv.Set"; 
       $CPU            = "P";
@@ -372,6 +371,17 @@ elsif ( $platform eq "$Linux" )
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
+   }
+   elsif ($machine_type eq "s390")
+   {  print "Setting Linux S/390 specific values... ";
+      $outfile        = "LinuxS390Env.Set";
+      $CPU            = "3";
+      $CPUNAME        = "S390";
+      $DLLSUFFIX      = "l3";
+      $OUTPATH        = "unxlngs390";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."s390";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."s390".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."s390".$ds."native_threads";
    }
    elsif ($machine_type eq "alpha") 
    {  print "Setting Linux Alpha specific values... ";
@@ -458,12 +468,15 @@ elsif ( $platform eq "$Irix" || $platform eq "$Irix64" )
 {     print "Setting Irix specific values... ";
       $outfile        = "IrixMipsEnv.Set";
       $BIG_SVX        = "TRUE";
-      if ($USE_GCC3 eq  "TRUE") {
-	  	$COM          = "GCC";
-        $CVER           = "C295";
-        $OUTPATH        = "unxirgm";
-      }
-      else {
+      if ($CC =~ "gcc" ) {
+            $COM          = "GCC";
+            $OUTPATH        = "unxirgm";
+            if ($USE_GCC3 eq  "TRUE") {
+              $CVER           = "C300";
+            } else {
+              $CVER           = "C295";
+            }
+     } else {
 	  	$COM            = "C730";
         $CVER           = "C730";
         $OUTPATH        = "unxirxm3";
@@ -520,6 +533,9 @@ elsif ( $platform eq "$Winnt" )
   {   print "Setting Windows NT cygwin without 4NT specific values... ";
       $outfile        = "winenv.set"; 
       $COM            = "MSC";
+	  $WRAPCMD        = "guw.pl";
+	  $CC             = $WRAPCMD." ".$CC;
+	  $CXX            = $WRAPCMD." ".$CXX;
       # Change path to lower case.
       # not realy usefull for *sh
 #      $COMPATH        = lc $COMPATH;
@@ -588,7 +604,7 @@ print "done\n";
 # D. Gathering directory information from the user.
 #
 # If the directory does not exist ask the user to create it.
-# 1. OpenOffice build home directory.
+# 1. OpenOffice.org build home directory.
 $SRC_ROOT  = `pwd`; 
 $SRC_ROOT =~ s/\/config_office//;
 chomp($SRC_ROOT);
@@ -690,34 +706,7 @@ if (($platform eq $Linux) or ($platform eq $NetBSD) or ($platform eq $FreeBSD) o
          }
          else 
          {  $COMPATH = $GCC_HOME."/bin";
-            @GCC_INCLUDES = `find $GCC_HOME -name "2.95.2" -print 2> /dev/null`;
-            if ($#GCC_INCLUDES == -1) 
-            {  AddWarning( "set_soenv", "No gcc 2.95.2/include directory found, please rerun configure with correct parameters" );
             }
-            else 
-            {  if ($#GCC_INCLUDES == 0) 
-               {  $GCC_INCLUDE = $GCC_INCLUDES[0];
-                  chomp( $GCC_INCLUDE );
-                  $GCC_INCLUDE = $GCC_INCLUDE."/include";
-               }
-               else 
-               {  AddWarning( "set_soenv", "Multiple gcc 2.95.2/include directories found, please rename so you have only one distinct." );
-               }
-            }
-            @GXX_INCLUDES = `find $GCC_HOME -name "g++-3" -print 2> /dev/null`;
-            if ($#GCC_INCLUDES == -1) 
-            {  AddWarning( "set_soenv", "No g++-3 directory found, please rerun configure with correct parameters." );
-            }
-            else 
-            {  if ($#GXX_INCLUDES == 0) 
-               {  $GXX_INCLUDE = $GXX_INCLUDES[0];
-                  chomp( $GXX_INCLUDE );
-               }
-               else 
-               {  AddWarning( "set_soenv", "Multiple g++-3 directories found, please rename so you have only one distinct." );
-               }
-            }
-         }     
       }
       else 
       {  AddWarning( "set_soenv", "gcc 2.95.2 does not exist on your system." );
@@ -726,36 +715,6 @@ if (($platform eq $Linux) or ($platform eq $NetBSD) or ($platform eq $FreeBSD) o
    else 
    {  # GCC_HOME is not needed.
       $GCC_HOME = $no_gcc_home;
-
-      # 5. Gcc include directory.
-      # Check whether autoconf found the gcc 2.95.2 include directory.
-      if ( '@GCC_INCLUDE_PATH@' eq $no_gcc_include ) 
-      {  AddWarning( "set_soenv", "No 2.95.2/include directory found." );
-         $GCC_INCLUDE = GetValue( "Please enter the gcc include path (e.g. /usr/lib/gcc-lib/2.95.2/include): " );
-         $result = CheckPathExist( $GCC_INCLUDE );
-         if ($result eq "false") 
-         {  AddWarning( "set_soenv", "The path $GCC_INCLUDE does not exist on your system." );
-         }   
-      }
-      else 
-      {  # GCC_INCLUDE as argument from autoconf.
-         $GCC_INCLUDE = PosixFormat('@GCC_INCLUDE_PATH@');
-      }
-      # 6. G++ include directory.
-      # Check whether autoconf found the g++ 2.95.2 include directory.
-      if ( '@GXX_INCLUDE_PATH@' eq $no_gxx_include ) 
-      {
-         AddWarning( "set_soenv", "No g++-3 directory found." );
-         $GXX_INCLUDE = GetValue( "Please enter the g++ include path (e.g. /usr/include/g++-3): " );
-         $result = CheckPathExist( $GXX_INCLUDE );
-         if ($result eq "false") 
-         {  AddWarning( "set_soenv", "The path $GXX_INCLUDE does not exist on your system." );
-         }   
-      }
-      else 
-      {  # GXX_INCLUDE as argument from autoconf.
-         $GXX_INCLUDE = PosixFormat('@GXX_INCLUDE_PATH@');
-      }
    }
 }
 
@@ -903,7 +862,7 @@ $STAR_STANDLST        = '$SOLARENV'.$CONFIG.$ds."stand.lst";
 $STAR_SSCOMMON        = '$SOLARENV'.$CONFIG.$ds."ssolar.cmn";
 # Location of 
 $STAR_SSOLARINI       = '$SOLARENV'.$CONFIG.$ds."ssolar.ini";
-# Path to the OpenOffice recourses.
+# Path to the OpenOffice.org recourses.
 $STAR_RESOURCEPATH    = '$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN;
 # Location of the registry file.
 $STAR_REGISTRY        = '$STAR_RESOURCEPATH'.$ds."applicat.rdb";
@@ -1033,7 +992,7 @@ elsif ($platform eq "$Winnt")
                         $I.$SOLARENV.$ds.$INPATH.$INC.
                         $I.$SOLARENV.$INC.
                         $I.'$COMPATH'.$ds."include".
-                        $I.'$PSDK_HOME'.$INCLUDE; # This must be the last
+                        $I."'".$PSDK_HOME.$INCLUDE."'"; # This must be the last
 }
 elsif ($platform eq "$Macosx")
 {  $SOLARINCLUDES     = $I.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$INC.
@@ -1101,6 +1060,14 @@ elsif (($platform eq "$Linux") or ($platform eq "$NetBSD")
                         $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
+
+   if ( $JAVA_HOME ne "" )
+   {
+      $PATH .=          $ps.'$JAVA_HOME'.$BIN;
+   }
+
+   $PATH             .= GetCorrectPath($COMPATH.$BIN, $PERL_PATH, $TCSH_PATH, $compiler);
+
 
    $PATH             .= $ps.$oldPATH;
 }
@@ -1185,11 +1152,9 @@ elsif ($platform eq $Macosx)
                         $ps.$USR_LOCAL.$BIN.
                         $ps.$USR.$ds."X11R6".$BIN.
                         $ps.$USR_LOCAL.$ds."sbin";
-}
                         
 # PATHEXTRA variable for Macosx.
-if ($platform eq $Macosx)
-{  $PATHEXTRA         = $USR_BIN.
+  $PATHEXTRA         = $USR_BIN.
                         $ps.$BIN.
                         $ps.$USR.$ds."sbin".
                         $ps.$ds."sbin".
@@ -1267,10 +1232,6 @@ $SOLARINC             = $I.$cur_dir.
 
 if (($platform eq "$Solaris") or ($platform eq "$Linux") or ($platform eq "$Tru64") or ($platform eq "$FreeBSD") or ($platform eq "$NetBSD") or ($platform eq "$Irix") or ($platform eq "$Irix64"))
 {
-if ( ($platform ne "$Irix") and ($platform ne "$Irix64") )
-{
-	$SOLARINC            .= $I.$USR.$INCLUDE;
-}
 $SOLARINC	     .= $STLPORT_stlport;
 if ($platform eq "$Linux" || $platform eq "$FreeBSD")
 {
@@ -1331,9 +1292,7 @@ elsif ($platform eq "$Tru64")
                         $I.$USR.$INCLUDE;
 }
 elsif (($platform eq "$Irix") or ($platform eq "$Irix64"))
-{  $SOLARINC         .= $I.$GCC_INCLUDE.
-                       $I.$GXX_INCLUDE.
-                       $I.$XINC;
+{  $SOLARINC         .= $I.$XINC;
 }
 }
 elsif ($platform eq "$Winnt")
@@ -1341,14 +1300,15 @@ elsif ($platform eq "$Winnt")
                         $I.'$JAVA_HOME'.$ds."include".$ds."win32".
                         $I.'$JAVA_HOME'.$ds."include".
                         $I.'$COMPATH'.$ds."include".
-                        $I.'$PSDK_HOME'.$INCLUDE; # This must be the last.
+                        $I."'".$PSDK_HOME.$INCLUDE."'"; # This must be the last.
 }
 elsif ($platform eq "$Macosx")
 {  $SOLARINC         .= $STLPORT_stlport.
                         $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
 # [ed] 6/15/02 Add in X11 headers as appropriate for the build
    if ($GUIBASE eq "unx") {
-      $SOLARINC      .= $I.$XINC;
+      $SOLARINC      .= $I.$XINC.
+                        $I.$XINC.$ds."freetype2";
    }
 }
                         
@@ -1479,7 +1439,7 @@ ToFile( "PSPRINT",           "TRUE",             "e" );
 
 if ($platform eq "$Macosx")
 {
-    my $macosxCdefs="\"";
+    my $macosxCdefs="";
     
     if( ! -e "/usr/bin/osascript" ) {
         # no command line applescript.  Chances are we're on a Darwin system
@@ -1624,9 +1584,17 @@ EOF
         $macosxCdefs.=" -DQUARTZ";
     }
     
-    $macosxCdefs .= "\"";
     ToFile( "ENVCDEFS", $macosxCdefs, "e");
 }
+
+# [ed] 5/14/02 If we're building Aqua graphics, insert a C macro to indicate this.
+# There may be a better way to do this, like splitting unxmacxp into two, but
+# hopefully this hack will work for now...
+
+if ( $GUIBASE eq "aqua" ) {
+ToFile( "ENVCDEFS",			"-DQUARTZ",			"e" );
+}
+
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
 #
 # Writing the platform dependent constant values to file.
@@ -1664,6 +1632,7 @@ ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
 ToFile( "SET_EXCEPTIONS",    $SET_EXCEPTIONS,    "e" );
 ToFile( "emergency",         $emergency,         "e" );
 ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
+ToFile( "WRAPCMD",           $WRAPCMD,           "e" );
 #
 # Writing the variables to file.
 # (c = comment, e = environment variable, a = alias, n = newline )
@@ -1693,7 +1662,6 @@ ToFile( "STAR_INIROOT",      $STAR_INIROOT,      "e" );
 ToFile( "STAR_INIROOTOLD",   $STAR_INIROOTOLD,   "e" );
 ToFile( "STAR_STANDLST",     $STAR_STANDLST,     "e" );
 ToFile( "STAR_SSCOMMON",     $STAR_SSCOMMON,     "e" );
-ToFile( "STAR_SSCOMMON",     $STAR_SSCOMMON,     "e" );
 ToFile( "STAR_SSOLARINI",    $STAR_SSOLARINI,    "e" );
 ToFile( "STAR_RESOURCEPATH", $STAR_RESOURCEPATH, "e" );
 ToFile( "STAR_REGISTRY",     $STAR_REGISTRY,     "e" );
@@ -1703,8 +1671,13 @@ ToFile( "XCLASSPATH",        $XCLASSPATH,        "e" );
 if ( $platform eq "$Macosx" )
 {  ToFile( "DYLD_LIBRARY_PATH", $LD_LIBRARY_PATH,   "e" );
 }
-else
-{  ToFile( "LD_LIBRARY_PATH",   $LD_LIBRARY_PATH,   "e" );
+else {
+  if ( $platform eq "$Irix" || $platform eq "$Irix64" ) { 
+    ToFile( "LD_LIBRARYN32_PATH",   $LD_LIBRARY_PATH,   "e" );
+  }
+  else {
+    ToFile( "LD_LIBRARY_PATH",   $LD_LIBRARY_PATH,   "e" );
+  }
 }
 ToFile( "SOLARDEF",          $SOLARDEF,          "e" );
 ToFile( "SOLAREXTRAINC",     $SOLAREXTRAINC,     "e" );
@@ -1719,11 +1692,12 @@ ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 ToFile( "CC",                $CC,                "e" );
 ToFile( "CXX",               $CXX,               "e" );
 if ( $COM ne "MSC" ) {
-  ToFile( "LINK",			 $CXX,				 "e" );
+  ToFile( "LINK",			 $CC,				 "e" );
 }
+ToFile( "GXX_INCLUDE_PATH",  "@GXX_INCLUDE_PATH@","e" );
 ToFile( "BISON_HAIRY",       $BISON_HAIRY,       "e" );
 ToFile( "BISON_SIMPLE",      $BISON_SIMPLE,      "e" );
-ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,"e" );
+ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS, "e" );
 if ($platform ne "$Winnt")
 {  ToFile( "TEMP",              $TEMP,              "e" );
    ToFile( "TMP",               $TEMP,              "e" );
@@ -1836,9 +1810,9 @@ if ( !$buildenv )
    }
    else 
    {  print "You need to create the build environment before you ";
-      print "start building OpenOffice $UPD.\n";
+      print "start building OpenOffice.org $UPD.\n";
       AddWarning( "set_soenv", 
-                  "No build environment set-up. Create before building OpenOffice." );
+                  "No build environment set-up. Create before building OpenOffice.org" );
    }
 }
 else 
@@ -1868,12 +1842,12 @@ if(defined($outfile_sh))
 #
 print "*********************************************************".
       "******************* $newline"."*"."$newline";
-print "* OpenOffice $UPD configuration. $newline";
+print "* OpenOffice.org $UPD configuration. $newline";
 for ( $tmp = 0; $tmp < 2; $tmp++ ) 
 {  print "* $newline";
 }
-print "* Configuration part of OpenOffice $UPD build is finished. $newline* $newline";
-print "* NB! Be aware that you might not be able to build OpenOffice if you $newline".
+print "* Configuration part of OpenOffice.org $UPD build is finished. $newline* $newline";
+print "* NB! Be aware that you might not be able to build OpenOffice.org if you $newline".
       "* ignore any warning message that were generated during this configuration $newline".
       "* process. $newline* $newline" .
       "* Any interactive values you have given have not been version checked. $newline* $newline"; 
@@ -1884,10 +1858,10 @@ if ( $Warning ne "" )
 }
 
 print "$newline* USAGE: $newline";
-print "* Source $outfile (in tcsh) ";
-print "or $outfile.sh (in sh) " if defined($outfile_sh);
-print "in order to set up $newline".
-      "* the build-environment variables. $newline";
+print "* Source $outfile (in tcsh)";
+print " or $outfile.sh (in sh)" if defined($outfile_sh);
+print "$newline";
+print "* in order to set up the build-environment variables.$newline";
 for ( $tmp = 0; $tmp < 2; $tmp++ ) 
 {  print "* $newline";
 }
@@ -2007,7 +1981,7 @@ sub CreateFileHeader
    my $filehandle = $_[0];
    print { $filehandle } "$comment #################################################################"; 
    print { $filehandle } $newline;
-   print { $filehandle } "$comment OpenOffice $_[ 1 ] build environment file for: $_[ 2 ]. $newline"; 
+   print { $filehandle } "$comment OpenOffice.org $_[ 1 ] build environment file for: $_[ 2 ]. $newline"; 
    print { $filehandle } "$comment Generated on: $timestamp $newline"; 
    print { $filehandle } "$comment Source this file to set up the build environment. $newline"; 
    print { $filehandle } "$comment 1. exec $_[3] $newline"; 
@@ -2155,7 +2129,7 @@ sub PosixFormat
 # Return value:  Reformatted String
 #----------------------------------------------------------
 sub WinFormat         
-{  my ( $variable, $d1, $d1_prefix, @split_var );  
+{  my ( $variable, $d1, $d1_prefix, $d1_fname, @split_var );  
    $variable = $_[ 0 ];
    $variable =~ s/^\s+//g ; #remove leading spaces
    $variable =~ s/\s+$//g ; #remove trailing spaces
@@ -2189,19 +2163,20 @@ sub WinFormat
            foreach $d1 ( @split_var )
            {
 			   $d1 = "-".$d1;
-               if ( $d1 =~ /^(-\w)(?:(?:\/[\w\.~ ]+)+)/ )
+               if ( $d1 =~ /^(-\w)[\'\"]?((?:\/[\w\.~ ]+)+)[\'\"]?/ )
+			   # This regex: option -> $1, filename without quotes -> $2
                {
                    $d1_prefix = $1;
-                   $d1 =~ s/^-\w//;
-				   if ( $d1 =~ / / )
+				   $d1_fname = $2;
+				   if ( $d1_fname =~ / / )
 				   {
-					   chomp( $d1 = qx{cygpath -d "$d1"} ); # Use DOS 8.3 style to avoid quoting
+					   chomp( $d1_fname = qx{cygpath -d "$d1_fname"} ); # Use DOS 8.3 style to avoid quoting
 				   }                                        # ! This fails when $d1 doesn't exist!
 				   else
 				   {
-					   chomp( $d1 = qx{cygpath -w "$d1"} ); # Use "normal" filenames
+					   chomp( $d1_fname = qx{cygpath -w "$d1_fname"} ); # Use "normal" filenames
 				   }
-                   $d1 = $d1_prefix.$d1;
+                   $d1 = $d1_prefix.$d1_fname;
                }
 			   else
 			   {   # relative paths here

@@ -4,10 +4,18 @@ if ( ! -f $SRC_ROOT/dmake/dmake ) then
 cd $SRC_ROOT/dmake
 if "$?" != "0" exit $?
 
+# Special case! The w32/tcsh build needs CC pointing to the MSVC++ compiler
+# but we need a cygwin/gcc build dmake to understand the posix paths
+if ( $GUI == "WNT" && $USE_SHELL == "tcsh" ) then
+  setenv CC ""
+  setenv CXX ""
+endif
+
 ./configure
 if "$?" != "0" exit $?
 
-make
+## invoke the gnu make command set by configure.
+$GNUMAKE
 if "$?" != "0" exit $?
 
 echo ""
