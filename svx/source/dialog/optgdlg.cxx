@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:44:51 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef SVX_DLLIMPLEMENTATION
 #undef SVX_DLLIMPLEMENTATION
 #endif
@@ -89,6 +88,9 @@
 #endif
 #ifndef _SFXIMGMGR_HXX
 #include <sfx2/imgmgr.hxx>
+#endif
+#ifndef VCL_INC_CONFIGSETTINGS_HXX
+#include <vcl/configsettings.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -190,6 +192,10 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
 
 #include "dialmgr.hxx"
 #ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
@@ -532,6 +538,132 @@ IMPL_LINK( OfaMiscTabPage, HelpAgentResetHdl_Impl, PushButton*, EMPTYARG )
     return 0;
 }
 
+// -----------------------------------------------------------------------
+namespace
+{
+    // ...................................................................
+    static const sal_Char* getDirectXRendererAsciiName()
+    {
+        return "com.sun.star.rendering.DXCanvas";
+//        return "drafts.com.sun.star.rendering.DXCanvas";
+    }
+    // ...................................................................
+    static const sal_Char* getVCLRendererAsciiName()
+    {
+        return "com.sun.star.rendering.VCLCanvas";
+//        return "drafts.com.sun.star.rendering.VCLCanvas";
+    }
+
+    // ...................................................................
+    static  bool    isHardwareAccelerationAvailable()
+    {
+        static bool bWasHere = false;
+        static bool bIsAvailable = false;
+        if ( !bWasHere )
+        {
+            Reference< XInterface > xDirectXRenderer;
+            try
+            {
+                Reference< XMultiServiceFactory > xORB( ::comphelper::getProcessServiceFactory() );
+                if ( xORB.is() )
+                    xDirectXRenderer = xORB->createInstance(
+                        ::rtl::OUString::createFromAscii( getDirectXRendererAsciiName() )
+                    );
+            }
+            catch( const Exception& )
+            {
+            }
+            bIsAvailable = xDirectXRenderer.is();
+            bWasHere = true;
+        }
+        return bIsAvailable;
+    }
+
+    // -------------------------------------------------------------------
+    class VCLSettings
+    {
+    public:
+        VCLSettings();
+
+    public:
+        BOOL    IsHardwareAccelerationEnabled() const;
+        void    EnabledHardwareAcceleration( BOOL _bEnabled ) const;
+
+    private:
+        void            implSetRendererPreference( const ::rtl::OUString& _rPreferredServices ) const;
+        ::rtl::OUString implGetRendererPreference() const;
+    };
+
+    // -------------------------------------------------------------------
+    VCLSettings::VCLSettings()
+    {
+    }
+
+    // -------------------------------------------------------------------
+    void VCLSettings::implSetRendererPreference( const ::rtl::OUString& _rPreferredServices ) const
+    {
+        return ::vcl::SettingsConfigItem::get()->setValue(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Canvas" ) ),
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PreferredServices" ) ),
+            _rPreferredServices
+        );
+    }
+
+    // -------------------------------------------------------------------
+    ::rtl::OUString VCLSettings::implGetRendererPreference() const
+    {
+        return ::vcl::SettingsConfigItem::get()->getValue(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Canvas" ) ),
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PreferredServices" ) )
+        );
+    }
+
+    // -------------------------------------------------------------------
+    BOOL VCLSettings::IsHardwareAccelerationEnabled() const
+    {
+        ::rtl::OUString sPreferredServices( implGetRendererPreference() );
+        sal_Int32 nTokenPos = 0;
+        do
+        {
+            ::rtl::OUString sServiceName = sPreferredServices.getToken( 0, ';', nTokenPos );
+            if ( sServiceName.equalsAscii( getDirectXRendererAsciiName() ) )
+                // the DirectX renderer is to be preferred (over the VCL renderer)
+                return TRUE;
+            if ( sServiceName.equalsAscii( getVCLRendererAsciiName() ) )
+                // the VCL renderer is to be preferred (over the DirectX renderer)
+                return FALSE;
+        }
+        while ( nTokenPos > 0 );
+        return TRUE;
+    }
+
+    // -------------------------------------------------------------------
+    void VCLSettings::EnabledHardwareAcceleration( BOOL _bEnabled ) const
+    {
+        const sal_Char* pPreferredRenderer = _bEnabled ? getDirectXRendererAsciiName() : getVCLRendererAsciiName();
+
+        ::rtl::OUStringBuffer aPreferredServices;
+        aPreferredServices.appendAscii( pPreferredRenderer );
+
+        // append all other services
+        ::rtl::OUString sPreviouslyPreferred( implGetRendererPreference() );
+        sal_Int32 nTokenPos = 0;
+        do
+        {
+            ::rtl::OUString sServiceName = sPreviouslyPreferred.getToken( 0, ';', nTokenPos );
+            if ( sServiceName.equalsAscii( pPreferredRenderer ) )
+                // no duplicate ...
+                continue;
+
+            aPreferredServices.append( (sal_Unicode)';' );
+            aPreferredServices.append( sServiceName );
+        }
+        while ( nTokenPos > 0 );
+
+        implSetRendererPreference( aPreferredServices.makeStringAndClear() );
+    }
+}
+
 // class OfaViewTabPage --------------------------------------------------
 // -----------------------------------------------------------------------
 IMPL_LINK_INLINE_START( OfaViewTabPage, OpenGLHdl, CheckBox*, EMPTYARG )
@@ -551,7 +683,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aIconSizeFT              ( this, ResId( FT_ICONSIZE ) ),
     aIconSizeLB              ( this, ResId( LB_ICONSIZE ) ),
     m_aSystemFont               (this, ResId( CB_SYSTEM_FONT ) ),
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     aFontAntiAliasing   ( this, ResId( CB_FONTANTIALIASING )),
     aAAPointLimitLabel  ( this, ResId( FT_POINTLIMIT_LABEL )),
     aAAPointLimit       ( this, ResId( NF_AA_POINTLIMIT )),
@@ -563,6 +695,8 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aFontListsFL        ( this, ResId( FL_FONTLISTS) ),
     aFontShowCB         ( this, ResId( CB_FONT_SHOW ) ),
     aFontHistoryCB      ( this, ResId( CB_FONT_HISTORY ) ),
+    aRenderingFL        ( this, ResId( FL_RENDERING ) ),
+    aUseHardwareAccell  ( this, ResId( CB_USE_HARDACCELL ) ),
 
     aMouseFL            ( this, ResId( FL_MOUSE ) ),
     aMousePosFT         ( this, ResId( FT_MOUSEPOS ) ),
@@ -581,7 +715,13 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
 {
     a3DOpenGLCB.SetClickHdl( LINK( this, OfaViewTabPage, OpenGLHdl ) );
 
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+    if ( !isHardwareAccelerationAvailable() )
+    {
+        aRenderingFL.Hide();
+        aUseHardwareAccell.Hide();
+    }
+
+#if defined( UNX )
     aFontAntiAliasing.SetToggleHdl( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
 
     // depending on the size of the text in aAAPointLimitLabel, we slightly re-arrange aAAPointLimit and aAAPointLimitUnits
@@ -619,7 +759,8 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     Control* pMiscOptions[] =
     {
         &aMenuFL, &aFontShowCB, &aShowInactiveItemsCB,
-        &aFontListsFL, &aFontHistoryCB, &aMenuIconsCB
+        &aFontListsFL, &aFontHistoryCB, &aMenuIconsCB,
+        &aRenderingFL, &aUseHardwareAccell
     };
 
     // temporaryly create the checkbox for the anti aliasing (we need to to determine it's pos)
@@ -649,7 +790,7 @@ OfaViewTabPage::~OfaViewTabPage()
     delete pAppearanceCfg;
 }
 
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
 //--- 20.08.01 10:16:12 ---------------------------------------------------
 IMPL_LINK( OfaViewTabPage, OnAntialiasingToggled, void*, NOTINTERESTEDIN )
 {
@@ -739,7 +880,7 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
         bAppearanceChanged = TRUE;
     }
 
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     if ( aFontAntiAliasing.IsChecked() != aFontAntiAliasing.GetSavedValue() )
     {
         pAppearanceCfg->SetFontAntiAliasing( aFontAntiAliasing.IsChecked() );
@@ -752,6 +893,12 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
         bAppearanceChanged = TRUE;
     }
 #endif
+
+    if ( bAppearanceChanged )
+    {
+        pAppearanceCfg->Commit();
+        pAppearanceCfg->SetApplicationDefaults ( GetpApp() );
+    }
 
     if ( aFontShowCB.IsChecked() != aFontShowCB.GetSavedValue() )
     {
@@ -777,11 +924,14 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
         aFontOpt.EnableFontHistory( aFontHistoryCB.IsChecked() );
         bModified = TRUE;
     }
-    if ( bAppearanceChanged )
-    {
-        pAppearanceCfg->Commit();
-        pAppearanceCfg->SetApplicationDefaults ( GetpApp() );
-    }
+
+    if ( isHardwareAccelerationAvailable() )
+        if ( aUseHardwareAccell.IsChecked() != aUseHardwareAccell.GetSavedValue() )
+        {
+            VCLSettings().EnabledHardwareAcceleration( aUseHardwareAccell.IsChecked() );
+            bModified = TRUE;
+        }
+
     // Workingset
     SvtSaveOptions aSaveOptions;
     if ( aDocViewBtn.IsChecked() != aDocViewBtn.GetSavedValue() )
@@ -900,7 +1050,7 @@ void OfaViewTabPage::Reset( const SfxItemSet& rSet )
     aMouseMiddleLB.SelectEntryPos(pAppearanceCfg->GetMiddleMouseButton());
     aMouseMiddleLB.SaveValue();
 
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     aFontAntiAliasing.Check( pAppearanceCfg->IsFontAntiAliasing() );
     aAAPointLimit.SetValue( pAppearanceCfg->GetFontAntialiasingMinPixelHeight() );
 #endif
@@ -921,18 +1071,22 @@ void OfaViewTabPage::Reset( const SfxItemSet& rSet )
     aMenuIconsCB.SaveValue();
 
     aFontHistoryCB.Check( aFontOpt.IsFontHistoryEnabled() );
+    if ( isHardwareAccelerationAvailable() )
+        aUseHardwareAccell.Check( VCLSettings().IsHardwareAccelerationEnabled() );
 
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     aFontAntiAliasing.SaveValue();
     aAAPointLimit.SaveValue();
 #endif
     aFontShowCB.SaveValue();
     aShowInactiveItemsCB.SaveValue();
     aFontHistoryCB.SaveValue();
+    if ( isHardwareAccelerationAvailable() )
+        aUseHardwareAccell.SaveValue();
     aDocViewBtn.SaveValue();
     aOpenWinBtn.SaveValue();
 
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     LINK( this, OfaViewTabPage, OnAntialiasingToggled ).Call( NULL );
 #endif
 }
