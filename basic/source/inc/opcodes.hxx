@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opcodes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-18 08:58:04 $
+ *  last change: $Author: ab $ $Date: 2001-09-04 07:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,11 +178,14 @@ enum SbiOpcode {
     // Objekte
     _LOCAL,             // Lokale Variable definieren (+StringID+Typ)
     _PUBLIC,            // Modulglobale Variable (+StringID+Typ)
-    _GLOBAL,            // Globale Variable definieren (+StringID+Typ)
+    _GLOBAL,            // Globale Variable definieren, public-Anweisung (+StringID+Typ)
     _CREATE,            // Objekt kreieren (+StringId+StringID)
     _STATIC,            // Statische Variabl (+StringID+Typ) JSM
     _TCREATE,           // User Defined Objekt kreieren
     _DCREATE,           // Objekt-Array kreieren (+StringId+StringID)
+    _GLOBAL_P,          // Globale Variable definieren, die beim Neustart von Basic
+                        // nicht ueberschrieben wird, P=PERSIST (+StringID+Typ)
+    _FIND_G,            // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
     SbOP2_END
 
 };
