@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-08-07 15:12:08 $
+#   last change: $Author: kz $ $Date: 2003-11-18 16:41:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,4 +102,5 @@ SLOFILES=$(SHL1OBJS)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+.INCLUDE : _cppunit.mk
 
