@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: nn $ $Date: 2002-11-20 14:33:08 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:20:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -137,8 +137,8 @@ EXCEPTIONSFILES= \
         $(SLO)$/docsh8.obj \
         $(SLO)$/dbdocimp.obj
 
-
-SRCFILES =  tpstat.src
+SRS1NAME=$(TARGET)
+SRC1FILES =  tpstat.src
 
 # --- Tagets -------------------------------------------------------
 
