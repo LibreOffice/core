@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: urp_dispatch.hxx,v $
+ *  $RCSfile: urp_property.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
  *
@@ -58,45 +58,46 @@
  *
  *
  ************************************************************************/
+#ifndef _URP_PROPERTY_HXX_
+#define _URP_PROPERTY_HXX_
+#include <bridges/remote/remote.h>
 
 #include <rtl/ustring.hxx>
+#include <rtl/byteseq.hxx>
 
-#include <typelib/typedescription.h>
+namespace bridges_urp
+{
+    struct Properties
+    {
+        ::rtl::ByteSequence seqBridgeID;
+        sal_Int32           nTypeCacheSize;
+        sal_Int32           nOidCacheSize;
+        sal_Int32           nTidCacheSize;
+        ::rtl::OUString     sSupportedVersions;
+        ::rtl::OUString     sVersion;
+        sal_Int32           nFlushBlockSize;
+        sal_Int32           nOnewayTimeoutMUSEC;
+        sal_Bool            bSupportsMustReply;
+        sal_Bool            bSupportsSynchronous;
+        sal_Bool            bSupportsMultipleSynchronous;
+        sal_Bool            bClearCache;
 
-#include <uno/any2.h>
-
-
-typedef struct _uno_Environment uno_Environment;
-struct remote_Interface;
-
-
-
-namespace bridges_urp {
-
-    const sal_uInt8 HDRFLAG_LONGHEADER       = 0x80;
-    const sal_uInt8 HDRFLAG_REQUEST          = 0x40;
-    const sal_uInt8 HDRFLAG_NEWTYPE          = 0x20;
-    const sal_uInt8 HDRFLAG_NEWOID           = 0x10;
-    const sal_uInt8 HDRFLAG_NEWTID           = 0x08;
-    const sal_uInt8 HDRFLAG_LONGMETHODID     = 0x04;
-    const sal_uInt8 HDRFLAG_IGNORECACHE      = 0x02;
-    const sal_uInt8 HDRFLAG_MOREFLAGS        = 0x01;
-    const sal_uInt8 HDRFLAG_MUSTREPLY        = 0x80;
-    const sal_uInt8 HDRFLAG_SYNCHRONOUS      = 0x40;
-
-    const sal_uInt8 HDRFLAG_EXCEPTION        = 0x20;
-
-    void SAL_CALL urp_sendCloseConnection( uno_Environment *pEnvRemote );
-
-    void SAL_CALL urp_sendRequest(
-        uno_Environment *pEnvRemote,
-        typelib_TypeDescription * pMemberType,
-        rtl_uString *pOid,
-        typelib_InterfaceTypeDescription *pInterfaceType,
-        void *pReturn,
-        void *ppArgs[],
-        uno_Any **ppException
-        );
-
-}
-
+        inline Properties & SAL_CALL operator = ( const Properties &props )
+        {
+            seqBridgeID                  = props.seqBridgeID;
+            nTypeCacheSize               = props.nTypeCacheSize;
+            nOidCacheSize                = props.nOidCacheSize;
+            nTidCacheSize                = props.nTidCacheSize;
+            sSupportedVersions           = props.sSupportedVersions;
+            sVersion                     = props.sVersion;
+            nFlushBlockSize              = props.nFlushBlockSize;
+            nOnewayTimeoutMUSEC          = props.nOnewayTimeoutMUSEC;
+            bSupportsMustReply           = props.bSupportsMustReply;
+            bSupportsSynchronous         = props.bSupportsSynchronous;
+            bSupportsMultipleSynchronous = props.bSupportsMultipleSynchronous;
+            bClearCache                  = props.bClearCache;
+            return *this;
+        }
+    };
+} // end namespace bridges_urp
+#endif

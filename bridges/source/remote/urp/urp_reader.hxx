@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_reader.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@ namespace bridges_urp
 {
 
 class OWriterThread;
+struct MessageFlags;
 
 class OReaderThread :
     public ::vos::OThread
@@ -86,10 +87,10 @@ public:
     // run() -> disposeEnvironment() -> dispose() -> destroyYourself()
     void destroyYourself();
 
+    inline sal_Bool readBlock( sal_Int32 *pnMessageCount );
+    inline sal_Bool readFlags( struct MessageFlags *pFlags );
 private:
-
     void disposeEnvironment();
-    void throwUnmarshalException( const ::rtl::OUString &sMessage );
 
     remote_Connection *m_pConnection;
     uno_Environment *m_pEnvRemote;

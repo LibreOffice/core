@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+#   last change: $Author: jbu $ $Date: 2000-09-29 08:42:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,8 @@ INCPRE+=$(UNOUCROUT)
 
 UNOTYPES= \
           com.sun.star.uno.XInterface \
-      com.sun.star.uno.TypeClass
+      com.sun.star.uno.TypeClass \
+      com.sun.star.bridge.XProtocolProperties
 
 
 SLOFILES= 	\
@@ -100,7 +101,8 @@ SLOFILES= 	\
         $(SLO)$/urp_reader.obj \
         $(SLO)$/urp_writer.obj \
         $(SLO)$/urp_log.obj \
-        $(SLO)$/urp_bridgeimpl.obj
+        $(SLO)$/urp_bridgeimpl.obj \
+        $(SLO)$/urp_propertyobject.obj
 
 SHL1TARGET= $(TARGET)
 

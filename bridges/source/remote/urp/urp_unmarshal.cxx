@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_unmarshal.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,48 +101,8 @@ Unmarshal::~Unmarshal()
     rtl_freeMemory( m_base );
 }
 
-sal_Bool Unmarshal::setSize( sal_Int32 nSize )
-{
-    if( nSize > m_nBufferSize )
-    {
-        m_nBufferSize = nSize;
-        m_base = (sal_Int8 * ) rtl_reallocateMemory( (sal_uInt8*) m_base , m_nBufferSize );
-        m_pos = m_base;
-    }
-    m_nLength = nSize;
-    return ( 0 != m_base );
-}
-
-
-//  sal_Bool Unmarshal::unpack( void *pDest, const ::com::sun::star::uno::Type &rType)
-//  {
-//      typelib_TypeDescription * pDataTD = 0;
-//      TYPELIB_DANGER_GET( &pDataTD, rType.getTypeLibType() );
-//      sal_Bool b = unpack( pDest, pDataTD );
-//      TYPELIB_DANGER_RELEASE( pDataTD );
-//      return b;
-//  }
-
-sal_Bool Unmarshal::unpackAndDestruct( void *pDest, const ::com::sun::star::uno::Type &rType)
-{
-    typelib_TypeDescription * pDataTD = 0;
-    TYPELIB_DANGER_GET( &pDataTD, rType.getTypeLibType() );
-    uno_destructData( pDest , pDataTD , 0 );
-    sal_Bool b = unpack( pDest, pDataTD );
-    TYPELIB_DANGER_RELEASE( pDataTD );
-    return b;
-}
-
-sal_Bool Unmarshal::unpackAndDestruct( void *pDest, typelib_TypeDescription *pType)
-{
-    uno_destructData( pDest , pType  , 0 );
-    return unpack( pDest, pType );
-}
-
-
-
 // special unpacks
-sal_Bool Unmarshal::unpackTid( ::rtl::ByteSequence *pId )
+sal_Bool Unmarshal::unpackTid( sal_Sequence **ppThreadId )
 {
     sal_Int32 nSize;
     sal_Bool bReturn = unpackCompressedSize( &nSize );
@@ -150,18 +110,18 @@ sal_Bool Unmarshal::unpackTid( ::rtl::ByteSequence *pId )
     {
         if( nSize )
         {
-            *pId = ByteSequence( m_pos , nSize );
+            rtl_byte_sequence_constructFromArray( ppThreadId , m_pos , nSize );
             m_pos += nSize;
             sal_uInt16 nIndex;
             bReturn = unpackInt16( &nIndex );
-            if( nIndex < m_pBridgeImpl->m_nCacheSize )
+            if( nIndex < m_pBridgeImpl->m_properties.nTidCacheSize )
             {
-                 m_pBridgeImpl->m_pTidIn[nIndex] = *pId;
+                m_pBridgeImpl->m_pTidIn[nIndex] = *(ByteSequence * )ppThreadId;
             }
             else if( 0xffff != nIndex )
             {
                 bReturn = sal_False;
-                *pId = ByteSequence();
+                rtl_byte_sequence_construct( ppThreadId , 0 );
                 OSL_ENSURE( 0 , "unknown thread id" );
             }
         }
@@ -169,14 +129,15 @@ sal_Bool Unmarshal::unpackTid( ::rtl::ByteSequence *pId )
         {
             sal_uInt16 nIndex;
             bReturn = unpackInt16( &nIndex );
-            if( nIndex < m_pBridgeImpl->m_nCacheSize )
+            if( nIndex < m_pBridgeImpl->m_properties.nTidCacheSize )
             {
-                *pId = m_pBridgeImpl->m_pTidIn[nIndex];
+                *ppThreadId = m_pBridgeImpl->m_pTidIn[nIndex].getHandle();
+                rtl_byte_sequence_acquire( *ppThreadId );
             }
             else
             {
                 bReturn = sal_False;
-                *pId = ByteSequence();
+                rtl_byte_sequence_construct( ppThreadId , 0 );
                 OSL_ENSURE( 0 , "unknown thread id" );
             }
         }
@@ -201,7 +162,7 @@ sal_Bool Unmarshal::unpackOid( rtl_uString **ppOid )
             if( 0xffff != nCacheIndex )
             {
                 // oid should be cached ?
-                if( nCacheIndex < m_pBridgeImpl->m_nCacheSize )
+                if( nCacheIndex < m_pBridgeImpl->m_properties.nOidCacheSize )
                 {
                     m_pBridgeImpl->m_pOidIn[nCacheIndex] = *ppOid;
                 }
@@ -214,7 +175,7 @@ sal_Bool Unmarshal::unpackOid( rtl_uString **ppOid )
         else
         {
             // reference in cache !
-            if( nCacheIndex < m_pBridgeImpl->m_nCacheSize )
+            if( nCacheIndex < m_pBridgeImpl->m_properties.nOidCacheSize )
             {
                 rtl_uString_assign( ppOid , m_pBridgeImpl->m_pOidIn[nCacheIndex].pData );
             }
@@ -228,21 +189,6 @@ sal_Bool Unmarshal::unpackOid( rtl_uString **ppOid )
     return bReturn;
 }
 
-template < class t >
-inline sal_Int32 convertFromPackedInt( t* pTarget , const sal_uInt8 *pSource , sal_Int32 nMaxToGo )
-{
-      *pTarget = 0;
-      sal_Int32 i = 0;
-      do
-      {
-          *pTarget |= ( ( sal_Int64) (pSource[i] & 0x7f) ) << ( i * 7 );
-          i ++;
-      } while ( i < nMaxToGo && (pSource[i-1] & 0x80) );
-
-      return i;
-}
-
-
 sal_Bool Unmarshal::unpackType( void *pDest )
 {
     *(typelib_TypeDescriptionReference **) pDest = 0;
@@ -250,89 +196,13 @@ sal_Bool Unmarshal::unpackType( void *pDest )
     sal_uInt8 nTypeClass;
     sal_Bool bReturn = unpackInt8( &nTypeClass );
 
-    Type type;
+    typelib_TypeDescriptionReference *pTypeRef = 0;
     if( bReturn )
     {
         if( nTypeClass <= 14 /* any */ )
         {
-            switch( nTypeClass )
-            {
-            case typelib_TypeClass_VOID:
-            {
-                type = getVoidCppuType( );
-                break;
-            }
-            case typelib_TypeClass_CHAR:
-            {
-                type = getCharCppuType( );
-                break;
-            }
-            case typelib_TypeClass_BOOLEAN:
-            {
-                type = getBooleanCppuType();
-                break;
-            }
-            case typelib_TypeClass_BYTE:
-            {
-                type = getCppuType( (sal_Int8 *) 0);
-                break;
-            }
-            case typelib_TypeClass_SHORT:
-            {
-                type = getCppuType( ( sal_Int16 *)0 );
-                break;
-            }
-            case typelib_TypeClass_UNSIGNED_SHORT:
-            {
-                type = getCppuType( (sal_uInt16 *)0 );
-                break;
-            }
-            case typelib_TypeClass_LONG:
-            {
-                type = getCppuType( ( sal_Int32 *) 0 );
-                break;
-            }
-            case typelib_TypeClass_UNSIGNED_LONG:
-            {
-                type = getCppuType( ( sal_uInt32 *) 0 );
-                break;
-            }
-            case typelib_TypeClass_HYPER:
-            {
-                type = getCppuType( ( sal_Int64 *) 0 );
-                break;
-            }
-            case typelib_TypeClass_UNSIGNED_HYPER:
-            {
-                type = getCppuType( ( sal_uInt64 *) 0 );
-                break;
-            }
-            case typelib_TypeClass_FLOAT:
-            {
-                type = getCppuType( ( float *) 0 );
-                break;
-            }
-            case typelib_TypeClass_DOUBLE:
-            {
-                type = getCppuType( (double*)  0 );
-                break;
-            }
-            case typelib_TypeClass_STRING:
-            {
-                type = getCppuType( (OUString *) 0 );
-                break;
-            }
-            case typelib_TypeClass_TYPE:
-            {
-                type = getCppuType( (Type *) 0 );
-                break;
-            }
-            case typelib_TypeClass_ANY:
-            {
-                type = getCppuType( (Any *) 0 );
-                break;
-            }
-            }
+            pTypeRef = * typelib_static_type_getByTypeClass((enum typelib_TypeClass )nTypeClass);
+            typelib_typedescriptionreference_acquire( pTypeRef );
         }
         else
         {
@@ -345,15 +215,16 @@ sal_Bool Unmarshal::unpackType( void *pDest )
                 {
                     // new type
                     rtl_uString *pString = 0;
-                    bReturn = bReturn && unpackString( &pString  );
+                    bReturn = bReturn && unpackString( &pString );
                     if( bReturn )
                     {
-                        type = Type( (enum TypeClass )(nTypeClass & 0x7f) , pString );
+                        ::typelib_typedescriptionreference_new(
+                            &pTypeRef, (enum typelib_TypeClass )(nTypeClass & 0x7f), pString );
                         if( nCacheIndex != 0xffff )
                         {
-                            if( nCacheIndex < m_pBridgeImpl->m_nCacheSize )
+                            if( nCacheIndex < m_pBridgeImpl->m_properties.nTypeCacheSize )
                             {
-                                m_pBridgeImpl->m_pTypeIn[nCacheIndex] = type;
+                                m_pBridgeImpl->m_pTypeIn[nCacheIndex] = *( Type * )&pTypeRef;
                             }
                             else
                             {
@@ -368,9 +239,10 @@ sal_Bool Unmarshal::unpackType( void *pDest )
                 }
                 else
                 {
-                    if( nCacheIndex < m_pBridgeImpl->m_nCacheSize )
+                    if( nCacheIndex < m_pBridgeImpl->m_properties.nTypeCacheSize )
                     {
-                            type = m_pBridgeImpl->m_pTypeIn[nCacheIndex];
+                        pTypeRef = m_pBridgeImpl->m_pTypeIn[nCacheIndex].getTypeLibType();
+                        typelib_typedescriptionreference_acquire( pTypeRef );
                     }
                     else
                     {
@@ -379,9 +251,14 @@ sal_Bool Unmarshal::unpackType( void *pDest )
                 }
             }
         }
-        }
-    *(typelib_TypeDescriptionReference**)pDest = type.getTypeLibType();
-    typelib_typedescriptionreference_acquire( *(typelib_TypeDescriptionReference**)pDest );
+    }
+    if( ! pTypeRef )
+    {
+        pTypeRef = * typelib_static_type_getByTypeClass(typelib_TypeClass_VOID);
+        typelib_typedescriptionreference_acquire( pTypeRef );
+    }
+    // pTypeRef is already acquired
+    *(typelib_TypeDescriptionReference**)pDest = pTypeRef;
     return bReturn;
 }
 

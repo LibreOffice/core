@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,21 +58,24 @@
  *
  *
  ************************************************************************/
+#ifndef _URP_JOB_HXX_
+#define _URP_JOB_HXX_
 #include <list>
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
 #include <uno/environment.h>
+#include <uno/threadpool.h>
 
 #include "urp_threadid.hxx"
 #include "urp_unmarshal.hxx"
 #include <bridges/remote/bridgeimpl.hxx>
 
-const sal_Int32 MAX_ENTRIES_IN_MULTIJOB = 60;
-const sal_Int32 g_nInitialMemorySize = 6192;
-
 
 namespace bridges_urp
 {
+const sal_Int32 MULTIJOB_STANDARD_MEMORY_SIZE = 1024;
+const sal_Int32 MULTIJOB_PER_CALL_MEMORY_SIZE = 96;
+
 class Unmarshal;
 struct urp_BridgeImpl;
 
@@ -98,22 +101,12 @@ public:
         , m_pTid( 0 )
         {}
 
-    virtual ~Job();
+    ~Job();
 
-    // doit method is used only for ServerJobs, calls execute and pack
-    static void  SAL_CALL doit( void *pThreadSpecificData );
-
-    // is called from the dispatcher thread
-    virtual sal_Bool extract( ) = 0;
-    virtual void initiate() = 0;
-    virtual void execute() = 0;
-
-    inline void setThreadId( sal_Sequence *pId )
-        { rtl_byte_sequence_assign( &m_pTid , pId ); }
        inline void setUnmarshal( Unmarshal *p )
            { m_pUnmarshal = p; }
 
-protected:
+public:
       Unmarshal *m_pUnmarshal;
     struct urp_BridgeImpl *m_pBridgeImpl;
     sal_Sequence          *m_pTid;
@@ -123,37 +116,56 @@ protected:
 class ClientJob : public Job
 {
 public:
-    ClientJob( uno_Environment *pEnvRemote, struct urp_BridgeImpl *pBridgeImpl )
-        : Job( pEnvRemote , pBridgeImpl, ::bridges_remote::RTC_HOLDENVWEAK )
-        , m_ppException( 0 )
-        , m_ppArgs( 0 )
-        , m_pReturn( 0 )
-        , m_pMethodType( 0 )
-        , m_pAttributeType( 0 )
-        {}
+    inline ClientJob( uno_Environment *pEnvRemote, // weak !
+                      struct urp_BridgeImpl *pBridgeImpl,
+                      rtl_uString *pOid,  // weak
+                      typelib_TypeDescription * pMemberType, // weak
+                      typelib_InterfaceTypeDescription *pInterfaceType, // weak
+                      void *pReturn,
+                      void *ppArgs[],
+                      uno_Any **ppException  );
 
     // ~ClientJob
     // no release for method type and attribute type necessary, because
     // it was acquired by the caller of urp_sendRequest. The lifetime
     // of the ClientJob object is always shorter than the urp_sendRequest call.
-    ~ClientJob()
-        {}
+    inline ~ClientJob()
+        {
+            if( m_bReleaseForTypeDescriptionNecessary )
+                typelib_typedescription_release( (typelib_TypeDescription*) m_pInterfaceType );
+            uno_releaseIdFromCurrentThread();
+        }
 
-    virtual sal_Bool extract( );
-    virtual void initiate();
-    virtual void execute()
-        {}
+    void pack();
+    void wait();
+    sal_Bool extract( );
+    void initiate();
 
+    inline void setBridgePropertyCall()
+        { m_bBridgePropertyCall = sal_True; }
+    inline sal_Bool isBridgePropertyCall()
+        { return m_bBridgePropertyCall; }
+    inline sal_Bool isOneway()
+        { return m_bOneway; }
 public:
-    void     **m_ppArgs;
-    void     *m_pReturn;
     typelib_InterfaceMethodTypeDescription    *m_pMethodType;
     typelib_InterfaceAttributeTypeDescription *m_pAttributeType;
-
-    uno_Any  **m_ppException;
     sal_Bool m_bExceptionOccured;
-};
 
+private:
+    void     **m_ppArgs;
+    void     *m_pReturn;
+    typelib_InterfaceTypeDescription          *m_pInterfaceType;
+    sal_Bool m_bReleaseForTypeDescriptionNecessary;
+
+    uno_threadpool_Handle *m_pThreadpoolHandle;
+    uno_Any  **m_ppException;
+    sal_Bool m_bOneway;
+    sal_Bool m_bBridgePropertyCall;
+    sal_uInt16 m_nMethodIndex;
+    uno_Environment *m_pEnvRemote;
+    rtl_uString *m_pOid;
+};
 
 struct MemberTypeInfo
 {
@@ -178,7 +190,7 @@ struct ServerJobEntry
     void                  *m_pReturn;
     uno_Any               m_exception;
      uno_Any               *m_pException;
-
+    sal_Bool              m_bIgnoreCache;
 };
 
 class ServerMultiJob : public Job
@@ -187,12 +199,16 @@ public:
     ServerMultiJob( uno_Environment *pEnvRemote,
                     sal_Sequence *pTid,
                     struct urp_BridgeImpl *pBridgeImpl,
-                    Unmarshal *pUnmarshal);
+                    Unmarshal *pUnmarshal,
+                    sal_Int32 nMaxMessages );
     ~ServerMultiJob();
 public:
-    virtual sal_Bool extract( );
-    virtual void initiate();
-    virtual void execute();
+    // doit method is used only for ServerJobs, calls execute and pack
+    static void  SAL_CALL doit( void *pThreadSpecificData );
+
+    sal_Bool extract( );
+    void initiate();
+    void execute();
 
 public:
     // setMethodType or setAttributeType MUST be called before extract
@@ -212,18 +228,18 @@ public:
             m_aTypeInfo[m_nCalls].m_bIsReleaseCall = sal_False;
         }
 
-    inline void setType( const ::com::sun::star::uno::Type &type )
+    inline void setType( typelib_TypeDescriptionReference *pTypeRef )
         {
-            m_aEntries[m_nCalls].m_pInterfaceTypeRef = type.getTypeLibType();
+            m_aEntries[m_nCalls].m_pInterfaceTypeRef = pTypeRef;
             typelib_typedescriptionreference_acquire( m_aEntries[m_nCalls].m_pInterfaceTypeRef );
             TYPELIB_DANGER_GET(
                 (typelib_TypeDescription ** )&(m_aTypeInfo[m_nCalls].m_pInterfaceType) ,
-                type.getTypeLibType() );
+                pTypeRef );
         }
     // setOid or setInterface MUST be called before extract
-      inline void setOid(   const ::rtl::OUString & sOid )
+      inline void setOid(   rtl_uString *pOid )
         {
-            m_aEntries[m_nCalls].m_pOid = sOid.pData;
+            m_aEntries[m_nCalls].m_pOid = pOid;
             rtl_uString_acquire( m_aEntries[m_nCalls].m_pOid );
             m_aEntries[m_nCalls].m_pRemoteI = 0;
         }
@@ -236,16 +252,22 @@ public:
             m_aEntries[m_nCalls].m_pOid = 0;
         }
 
+    inline void setIgnoreCache( sal_Bool bIgnoreCache )
+        {
+            m_aEntries[m_nCalls].m_bIgnoreCache = bIgnoreCache;
+        }
+
     inline sal_Bool isFull()
-        { return m_nCalls >= MAX_ENTRIES_IN_MULTIJOB; }
+        { return m_nCalls >= m_nMaxMessages; }
 
     inline sal_Int8 *getHeap( sal_Int32 nSizeToAlloc )
         {
-            if( nSizeToAlloc + m_nCurrentMemPosition > g_nInitialMemorySize )
+            if( nSizeToAlloc + m_nCurrentMemPosition > m_nCurrentMemSize )
             {
                 m_lstMem.push_back( m_pCurrentMem );
-                m_pCurrentMem = (sal_Int8*)
-                    rtl_allocateMemory( mymax( nSizeToAlloc , g_nInitialMemorySize ) );
+                m_nCurrentMemSize = mymax( nSizeToAlloc , MULTIJOB_STANDARD_MEMORY_SIZE ) +
+                    (m_nMaxMessages -m_nCalls)*MULTIJOB_PER_CALL_MEMORY_SIZE;
+                m_pCurrentMem = (sal_Int8*) rtl_allocateMemory( m_nCurrentMemSize );
                 m_nCurrentMemPosition = 0;
             }
             sal_Int8 *pHeap = m_pCurrentMem + m_nCurrentMemPosition;
@@ -263,14 +285,78 @@ public:
 private:
     uno_Environment *m_pEnvRemote;
     sal_Int32 m_nCalls;
-    ServerJobEntry m_aEntries[MAX_ENTRIES_IN_MULTIJOB];
-    MemberTypeInfo m_aTypeInfo[MAX_ENTRIES_IN_MULTIJOB];
+    sal_Int32 m_nMaxMessages;
+
+    ServerJobEntry *m_aEntries;
+    MemberTypeInfo *m_aTypeInfo;
 
     sal_Int8 *m_pCurrentMem;
+    sal_Int32 m_nCurrentMemSize;
     sal_Int32 m_nCurrentMemPosition;
 
     // list of memory pointers, that must be freed
     ::std::list< sal_Int8 * > m_lstMem;
 };
 
+
+
+//---------------------------------------------------------------------------------------------
+inline ClientJob::ClientJob(
+    uno_Environment *pEnvRemote,
+    struct urp_BridgeImpl *pBridgeImpl,
+    rtl_uString *pOid,
+    typelib_TypeDescription * pMemberType,
+    typelib_InterfaceTypeDescription *pInterfaceType,
+    void *pReturn,
+    void *ppArgs[],
+    uno_Any **ppException )
+    : Job( pEnvRemote , pBridgeImpl, ::bridges_remote::RTC_HOLDENVWEAK )
+    , m_pOid( pOid ) // weak
+    , m_pEnvRemote( pEnvRemote ) // weak
+    , m_ppArgs( ppArgs )
+    , m_pReturn( pReturn )
+    , m_ppException( ppException )
+    , m_pInterfaceType( pInterfaceType ) // weak
+    , m_bReleaseForTypeDescriptionNecessary( sal_False )
+    , m_bBridgePropertyCall( sal_False )
+{
+    uno_getIdOfCurrentThread( &m_pTid );
+
+    if( typelib_TypeClass_INTERFACE_METHOD == pMemberType->eTypeClass )
+    {
+        m_pMethodType = ( typelib_InterfaceMethodTypeDescription * ) pMemberType;
+        m_pAttributeType = 0;
+    }
+    else if( typelib_TypeClass_INTERFACE_ATTRIBUTE == pMemberType->eTypeClass )
+    {
+        m_pAttributeType = ( typelib_InterfaceAttributeTypeDescription * ) pMemberType;
+        m_pMethodType = 0;
+    }
+    else
+    {
+        OSL_ASSERT( ! "wrong member type" );
+    }
+
+    // calculate method index
+    if( ! m_pInterfaceType->aBase.bComplete )
+    {
+        // must be acquired because typedescription may be exchanged
+        typelib_typedescription_acquire((typelib_TypeDescription*) m_pInterfaceType );
+        m_bReleaseForTypeDescriptionNecessary = sal_True;
+        typelib_typedescription_complete( (typelib_TypeDescription ** ) &m_pInterfaceType );
+    }
+    m_nMethodIndex = m_pInterfaceType->pMapMemberIndexToFunctionIndex[
+        ((typelib_InterfaceMemberTypeDescription*)pMemberType)->nPosition ];
+
+    if( m_pAttributeType && m_ppArgs )
+    {
+        // setter
+        m_nMethodIndex ++;
+    }
+    m_bOneway = typelib_TypeClass_INTERFACE_METHOD == pMemberType->eTypeClass ?
+                (( typelib_InterfaceMethodTypeDescription * ) pMemberType)->bOneWay :
+                sal_False;
 }
+
+}
+#endif

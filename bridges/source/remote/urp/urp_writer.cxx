@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_writer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:51 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ OWriterThread::~OWriterThread()
 // touch is called with locked m_marshalingMutex
 void OWriterThread::touch( sal_Bool bImmediately )
 {
-      if( bImmediately || m_pBridgeImpl->m_blockMarshaler.getPos() > m_pBridgeImpl->m_nFlushBlockSize )
+      if( bImmediately || m_pBridgeImpl->m_blockMarshaler.getPos() > m_pBridgeImpl->m_properties.nFlushBlockSize )
       {
         write();
       }
@@ -132,7 +132,8 @@ void OWriterThread::write()
 {
      if( ! m_pBridgeImpl->m_blockMarshaler.empty() )
      {
-        m_pBridgeImpl->m_blockMarshaler.finish();
+        m_pBridgeImpl->m_blockMarshaler.finish( m_pBridgeImpl->m_nMarshaledMessages);
+        m_pBridgeImpl->m_nMarshaledMessages = 0;
 
         sal_Int32 nLength = m_pBridgeImpl->m_blockMarshaler.getSize();
         sal_Int8 *pBuf = m_pBridgeImpl->m_blockMarshaler.getBuffer();
@@ -150,10 +151,10 @@ void OWriterThread::write()
 void OWriterThread::sendEmptyMessage()
 {
     // must be called with locked marshaling mutex
-    sal_Int8 n = 0;
+    sal_Int32 a[2] = {0,0};
     if( m_pConnection )
     {
-        m_pConnection->write( m_pConnection , &n , 1 );
+        m_pConnection->write( m_pConnection , (sal_Int8*) a , sizeof( sal_Int32) *2 );
     }
 }
 
@@ -162,20 +163,9 @@ void OWriterThread::run()
     while( sal_True )
     {
         // Wait for some work to do
-//          osl_waitCondition( m_oslCondition , 0 );
-//          if( m_bAbort )
-//          {
-//              break;
-//          }
-
-//          if( m_bWaitForTimeout )
-//          {
-            // wait for timeout
-//              printf( "Waiting for timeout ....\n" );
-            TimeValue value = { 0 , 1000 * m_pBridgeImpl->m_nTimeoutMUSEC };
-            osl_resetCondition( m_oslCondition );
-            osl_waitCondition( m_oslCondition , &value );
-//          }
+        TimeValue value = { 0 , 1000 * m_pBridgeImpl->m_properties.nOnewayTimeoutMUSEC };
+        osl_resetCondition( m_oslCondition );
+        osl_waitCondition( m_oslCondition , &value );
 
         {
             // write to the socket
@@ -183,7 +173,6 @@ void OWriterThread::run()
             m_bWaitForTimeout = sal_False;
             if( ! m_pBridgeImpl->m_blockMarshaler.empty() )
             {
-//                  printf( "Sending with timeout\n" );
                 write();
             }
             osl_resetCondition( m_oslCondition );

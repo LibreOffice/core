@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,15 +91,83 @@
 #include "urp_reader.hxx"
 #include "urp_dispatch.hxx"
 #include "urp_log.hxx"
+#include "urp_propertyobject.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
-
-#define UNO_LB_URP "urp"
-
 namespace bridges_urp
 {
+
+//  static void dumpProperties( struct Properties *p )
+//  {
+//      fprintf( stderr , "FlushBlockSize     : %d\n" , p->nFlushBlockSize );
+//      fprintf( stderr , "OnewayTimeoutMUSEC : %d\n" , p->nOnewayTimeoutMUSEC );
+//      fprintf( stderr , "OidCacheSize       : %d\n" , p->nOidCacheSize );
+//      fprintf( stderr , "TypeCacheSize      : %d\n" , p->nTypeCacheSize );
+//      fprintf( stderr , "TidCacheSize       : %d\n" , p->nTidCacheSize );
+//      OString o = OUStringToOString( p->sSupportedVersions , RTL_TEXTENCODING_ASCII_US );
+//      fprintf( stderr , "SupportedVersions  : %s\n" , o.pData->buffer );
+//      o = OUStringToOString( p->sVersion , RTL_TEXTENCODING_ASCII_US );
+//      fprintf( stderr , "Version : %s\n" , o.pData->buffer );
+//      fprintf( stderr , "SupportsMultipleSynchronous : %d\n" , p->bSupportsMultipleSynchronous );
+//      fprintf( stderr , "SupportsMustReply   : %d\n" , p->bSupportsMustReply );
+//      fprintf( stderr , "SupportsSynchronous : %d\n" , p->bSupportsSynchronous );
+//  }
+
+// PropertySetterThread
+//------------------------------------
+class PropertySetterThread : public ::vos::OThread
+{
+    urp_BridgeImpl *m_pImpl;
+    ::rtl::OUString m_sProps;
+    uno_Environment *m_pEnvRemote;
+public:
+    PropertySetterThread( uno_Environment *pEnvRemote,
+                          urp_BridgeImpl *pImpl,
+                          const ::rtl::OUString  & props )
+        : m_pImpl( pImpl )
+        , m_sProps( props )
+        , m_pEnvRemote( pEnvRemote )
+        {
+            // hold the environment in case all references are released before this
+            // thread terminates
+            m_pEnvRemote->acquire( pEnvRemote );
+        }
+    ~PropertySetterThread()
+        {
+            m_pEnvRemote->release( m_pEnvRemote );
+        }
+
+    virtual void SAL_CALL run()
+        {
+            struct Properties props;
+            if( m_sProps.getLength() )
+            {
+                sal_Int32 nResult = m_pImpl->m_pPropertyObject->localRequestChange( );
+                if( 1  == nResult )
+                {
+                    sal_Bool bExceptionThrown;
+                    m_pImpl->m_pPropertyObject->localCommitChange( m_sProps , &bExceptionThrown );
+                    OSL_ENSURE( !bExceptionThrown, "properties were not set\n" );
+                }
+                else if( 0 == nResult )
+                {
+                    OSL_TRACE( "urp-bridge : remote-counterpart won the changing-the-protocol-race\n" );
+                }
+                else
+                {
+                    OSL_ASSERT( !"urp-bridge : property setting failed because identical random numbers " );
+                }
+            }
+        }
+    virtual void SAL_CALL onTerminated()
+        {
+            delete this;
+        }
+};
+//------------------------------------
+
 
 void test_cache()
 {
@@ -296,6 +364,8 @@ void RemoteEnvironment::thisDisposing( uno_Environment *pEnvRemote )
             thisDispose( pEnvRemote );
         }
     }
+    pImpl->m_pPropertyObject->thisRelease();
+    pImpl->m_pPropertyObject = 0;
 
      uno_threadpool_stopDisposeThreads( (sal_Int64) pEnvRemote );
 
@@ -309,8 +379,7 @@ void RemoteEnvironment::thisComputeObjectIdentifier( uno_ExtEnvironment *pEnvRem
                                                      rtl_uString **ppOid ,
                                                      void *pInterface)
 {
-    assert( 0  );
-    // should never be called
+    OSL_ENSURE( 0, "RemoteEnvironment::thisComputeObjectIdentifier should never be called" );
 }
 
 void RemoteEnvironment::thisAcquireInterface( uno_ExtEnvironment *pEnvRemote, void *pInterface )
@@ -325,6 +394,7 @@ void RemoteEnvironment::thisReleaseInterface( uno_ExtEnvironment *pEnvRemote, vo
 
 } // end namespace bridges_urp
 using namespace bridges_urp;
+
 
 //##################################################################################################
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pEnvRemote )
@@ -341,22 +411,35 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pE
       pContext->getRemoteInstance = ::bridges_remote::remote_sendQueryInterface;
 
     // Initialize impl struct     urp_BridgeImpl
-    sal_Int32 nCacheSize = 256;
-    sal_Int32 nTimeoutMUSEC = 10000;
-    sal_Int32 nFlushBlockSize = 4*1024;
-
-    urp_BridgeImpl *pImpl = new ::bridges_urp::urp_BridgeImpl( nCacheSize, 8192 );
+    urp_BridgeImpl *pImpl = new ::bridges_urp::urp_BridgeImpl( 256, 8192 );
     pContext->m_pBridgeImpl = pImpl;
 
-    pImpl->m_cndWaitForThreads;
+    // take the bridgepointer as id
+    pImpl->m_properties.seqBridgeID = ByteSequence( (sal_Int8*)&pEnvRemote , sizeof( pEnvRemote ) );
+    pImpl->m_properties.nFlushBlockSize = 4*1024;
+    pImpl->m_properties.nTypeCacheSize = 256;
+    pImpl->m_properties.nOnewayTimeoutMUSEC = 10000;
+    pImpl->m_properties.nOidCacheSize = 256;
+    pImpl->m_properties.nTidCacheSize = 256;
+    pImpl->m_properties.sVersion = OUString( RTL_CONSTASCII_USTRINGPARAM( "1.0" ) );
+    pImpl->m_properties.sSupportedVersions = OUString( RTL_CONSTASCII_USTRINGPARAM( "1.0" ) );
+    pImpl->m_properties.bSupportsMultipleSynchronous = sal_False;
+    pImpl->m_properties.bSupportsMustReply = sal_False;
+    pImpl->m_properties.bSupportsSynchronous = sal_False;
+    pImpl->m_properties.bClearCache = sal_False;
+
+
+    pImpl->m_cndWaitForThreads.reset();
     pImpl->m_allThreadsAreGone = allThreadsAreGone;
     pImpl->m_sendRequest = urp_sendRequest;
-    pImpl->m_nFlushBlockSize = nFlushBlockSize;
-    pImpl->m_nTimeoutMUSEC = nTimeoutMUSEC;
     pImpl->m_nRemoteThreads = 0;
     pImpl->m_bDisposed = sal_False;
     pImpl->m_bReleaseStubsCalled = sal_False;
 
+    pImpl->m_pPropertyObject = new PropertyObject( &(pImpl->m_properties ),  pEnvRemote, pImpl );
+    pImpl->m_pPropertyObject->thisAcquire();
+
+    // start reader and writer threads
     pImpl->m_pWriter = new ::bridges_urp::OWriterThread( pContext->m_pConnection , pImpl );
     pImpl->m_pWriter->create();
 
@@ -365,6 +448,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pE
                                                          pImpl->m_pWriter );
     pImpl->m_pReader->create();
 
+    // create the properties object
 #ifdef BRIDGES_URP_PROT
       pImpl->m_pLogFile = 0;
       char *p = getenv( "PROT_REMOTE" );
@@ -377,7 +461,19 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pE
         counter++;
       }
 #endif
-    // start reader and writer threads
+
+    // start the property-set-thread, if necessary
+    OUString sProtocolProperties;
+    if( pContext->m_pProtocol->length > 3 )
+    {
+        sProtocolProperties = OUString( pContext->m_pProtocol ).copy( 4, pContext->m_pProtocol->length-4);
+    }
+    if( sProtocolProperties.getLength() )
+    {
+        PropertySetterThread *pPropsSetterThread =
+            new PropertySetterThread( pEnvRemote, pImpl , sProtocolProperties );
+        pPropsSetterThread->create();
+    }
 #ifdef DEBUG
     thisCounter.acquire();
 #endif
@@ -400,7 +496,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_ext_getMapping(
         ::rtl::OUString sFromName = pFrom->pTypeName;
         ::rtl::OUString sToName = pTo->pTypeName;
         ::rtl::OUString sUno = OUString::createFromAscii( UNO_LB_UNO );
-        ::rtl::OUString sRemote = OUString::createFromAscii( UNO_LB_URP );
+        ::rtl::OUString sRemote = OUString::createFromAscii( "urp" );
         if ( sFromName.equalsIgnoreCase( sRemote ) &&
              sToName.equalsIgnoreCase( sUno ) )
         {

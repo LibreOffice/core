@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_cache.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@ namespace bridges_urp
     template < class t , class tequals >
     inline sal_uInt16 Cache< t , tequals >::put( const t & value )
     {
+        if( ! m_nMaxEntries )
+        {
+            return 0xffff;
+        }
         sal_uInt16 nEntry = 0xffff;
         if( m_nEntries < m_nMaxEntries )
         {
@@ -128,5 +132,64 @@ namespace bridges_urp
             }
         }
         return 0xffff;
+    }
+
+    // helper predicate for element removal
+    template < class t >
+    struct PredicateOverMax
+    {
+        t m_;
+        inline PredicateOverMax( const t &value ) : m_(value)
+            {}
+        sal_Int32 operator () ( const t &value  )  const
+            { return value >= m_; }
+    };
+
+    template < class t, class tequals >
+    inline void Cache < t , tequals >::resize( sal_Int32 nNewMaxEntries )
+    {
+        if( 0 == nNewMaxEntries )
+        {
+            m_lstLeastRecentlyUsed.clear();
+            delete [] m_pCache;
+            m_pCache = 0;
+            m_nMaxEntries = 0;
+        }
+        else
+        {
+            // allocate
+            t *pNew = new t[nNewMaxEntries];
+            sal_Int32 nMin = nNewMaxEntries < m_nMaxEntries ? nNewMaxEntries : m_nMaxEntries;
+
+            // copy
+            for( sal_Int32 i = 0; i < nMin ; i ++ )
+            {
+                pNew[i] = m_pCache[i];
+            }
+            // delete
+            delete [] m_pCache;
+
+            // assign
+            m_pCache = pNew;
+
+            // remove overlapping lru cache entries
+            ::std::remove_if(m_lstLeastRecentlyUsed.begin(),
+                             m_lstLeastRecentlyUsed.end(),
+                             PredicateOverMax< sal_Int32 > ( nMin ) );
+        }
+        m_nMaxEntries = nNewMaxEntries;
+        m_nEntries = m_nEntries < m_nMaxEntries ?
+                     m_nEntries : m_nMaxEntries;
+    }
+
+    template < class t, class tequals >
+    inline void Cache < t, tequals >:: clear()
+    {
+        for( sal_Int32 i = 0; i < m_nMaxEntries ; i ++ )
+        {
+            m_pCache[i] = t();
+        }
+        m_lstLeastRecentlyUsed.clear();
+        m_nEntries = 0;
     }
 }

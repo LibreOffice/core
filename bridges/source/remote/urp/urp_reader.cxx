@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_reader.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 /**************************************************************************
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1.1.1  2000/09/18 15:28:50  hr
+ *  initial import
+ *
  *  Revision 1.7  2000/09/15 13:05:58  jbu
  *  extensive performance optimizations
  *
@@ -98,6 +101,7 @@
 #include "urp_job.hxx"
 #include "urp_bridgeimpl.hxx"
 #include "urp_log.hxx"
+#include "urp_propertyobject.hxx"
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -109,6 +113,33 @@ static MyCounter thisCounter( "DEBUG : ReaderThread" );
 
 namespace bridges_urp
 {
+    struct MessageFlags
+    {
+        sal_uInt16 nMethodId;
+        sal_Bool bRequest;
+        sal_Bool bType;
+        sal_Bool bOid;
+        sal_Bool bTid;
+        sal_Bool bException;
+        sal_Bool bMustReply;
+        sal_Bool bSynchronous;
+        sal_Bool bMoreFlags;
+        sal_Bool bIgnoreCache;
+        sal_Bool bBridgePropertyCall;
+        ///--------------------------
+        inline MessageFlags()
+            {
+                bTid = sal_False;
+                bOid = sal_False;
+                bType = sal_False;
+                bException = sal_False;
+                bMoreFlags = sal_False;
+                bIgnoreCache = sal_False;
+                bBridgePropertyCall = sal_False;
+            }
+        //---------------------------
+    }; // end struct MessageFlags
+
 
     inline sal_Bool getMemberTypeDescription(
         typelib_InterfaceAttributeTypeDescription **ppAttributeType,
@@ -239,62 +270,149 @@ void OReaderThread::disposeEnvironment()
     }
 }
 
-void OReaderThread::run()
+inline sal_Bool OReaderThread::readBlock( sal_Int32 *pnMessageCount )
 {
-    sal_Bool bContinue = sal_True;
-    while( bContinue )
+    m_unmarshal.setSize( 8 );
+    if( 8 != m_pConnection->read( m_pConnection , m_unmarshal.getBuffer(), 8 ) )
     {
-        sal_Int32 nSize;
-        sal_uInt8 n8Size;
-        if( 1 != m_pConnection->read( m_pConnection , (sal_Int8*) &n8Size, 1) )
-        {
-            disposeEnvironment();
-            break;
-        }
-        if( 255 == n8Size )
-        {
-            sal_uInt8 buf[4];
-            m_pConnection->read( m_pConnection ,(sal_Int8*)buf, 4);
+        return sal_False;
+    }
 
-            nSize = buf[0] << 24 | buf[1] << 16 | buf[2] << 8 | buf[3];
+    sal_Int32 nSize;
+    m_unmarshal.unpackInt32( &nSize );
+    m_unmarshal.unpackInt32( pnMessageCount );
+
+    if( nSize < 0 )
+    {
+        // buffer too big
+        // no exception can be thrown, because there is no thread id, which could be
+        // used. -> terminate !
+        OSL_ENSURE( 0 , "urp bridge: invalid message size, terminating connection." );
+        disposeEnvironment();
+        return sal_False;
+    }
+
+    if( 0 == nSize )
+    {
+        return sal_False;
+    }
+
+    // allocate the necessary memory
+    if( ! m_unmarshal.setSize( nSize ) )
+    {
+        OSL_ENSURE( 0 , "urp bridge: messages size too large, terminating connection" );
+        return sal_False;
+    }
+
+    sal_Int32 nRead = m_pConnection->read( m_pConnection , m_unmarshal.getBuffer() , nSize );
+
+    if( nSize != nRead )
+    {
+        // couldn't get the asked amount of bytes, quit
+        // should only occur, when the environment has already been disposed
+        OSL_ENSURE( m_pBridgeImpl->m_bDisposed , "urp bridge: couldn't read complete message, terminating connection." );
+        return sal_False;
+    }
+    return sal_True;
+}
+
+inline sal_Bool OReaderThread::readFlags( struct MessageFlags *pFlags )
+{
+    sal_uInt8 nBitField;
+    if( ! m_unmarshal.unpackInt8( &nBitField ) )
+    {
+        return sal_False;
+    }
+
+    if( HDRFLAG_LONGHEADER & nBitField )
+    {
+        // this is a long header, interpret the byte as bitfield
+        pFlags->bTid     = (HDRFLAG_NEWTID & nBitField );
+        pFlags->bRequest = (HDRFLAG_REQUEST & nBitField);
+
+        if( pFlags->bRequest )
+        {
+            // request
+            pFlags->bType = ( HDRFLAG_NEWTYPE & nBitField );
+            pFlags->bOid  = ( HDRFLAG_NEWOID & nBitField );
+            pFlags->bIgnoreCache = ( HDRFLAG_IGNORECACHE & nBitField );
+            pFlags->bMoreFlags = ( HDRFLAG_MOREFLAGS & nBitField );
+
+            if( pFlags->bMoreFlags )
+            {
+                // another byte with flags
+                sal_Int8 moreFlags;
+                if( ! m_unmarshal.unpackInt8( &moreFlags ) )
+                {
+                    return sal_False;
+                }
+                pFlags->bSynchronous = ( HDRFLAG_SYNCHRONOUS & moreFlags );
+                pFlags->bMustReply = ( HDRFLAG_MUSTREPLY & moreFlags );
+                OSL_ENSURE( pFlags->bSynchronous && pFlags->bMustReply ||
+                            ! pFlags->bSynchronous && !pFlags->bMustReply,
+                            "urp-bridge : customized calls currently not supported !");
+            }
+
+            if( HDRFLAG_LONGMETHODID & nBitField )
+            {
+                // methodid as unsigned short
+                if( ! m_unmarshal.unpackInt16( &(pFlags->nMethodId )) )
+                {
+                    return sal_False;
+                }
+            }
+            else
+            {
+                sal_uInt8 id;
+                if( ! m_unmarshal.unpackInt8( &id ) )
+                {
+                    return sal_False;
+                }
+                pFlags->nMethodId = (sal_uInt16) id;
+            }
         }
         else
         {
-            nSize = ( sal_Int32 ) n8Size;
+            // reply
+            pFlags->bRequest = sal_False;
+            pFlags->bException = ( HDRFLAG_EXCEPTION & nBitField );
         }
-
-        if( nSize < 0 )
+    }
+    else
+    {
+        // short request
+        pFlags->bRequest = sal_True;
+        if( 0x40 & nBitField )
         {
-            // buffer too big
-            // no exception can be thrown, because there is no thread id, which could be
-            // used. -> terminate !
-            OSL_ENSURE( 0 , "urp bridge: invalid message size, terminating connection." );
-            disposeEnvironment();
-            break;
+            sal_uInt8 lower;
+            if( ! m_unmarshal.unpackInt8( &lower  ) )
+            {
+                return sal_False;
+            }
+            pFlags->nMethodId = ( nBitField & 0x3f ) << 8 | lower;
         }
-
-        if( 0 == nSize )
+        else
         {
-            disposeEnvironment();
-            break;
+            pFlags->nMethodId = ( nBitField & 0x3f );
         }
+    }
+    return sal_True;
+}
 
-        // allocate the necessary memory
-        if( ! m_unmarshal.setSize( nSize ) )
+void OReaderThread::run()
+{
+    sal_Bool bContinue = sal_True;
+
+    // This vars are needed to hold oid,tid and type information, which should not be cached.
+    Type lastTypeNoCache;
+    OUString lastOidNoCache;
+    ByteSequence lastTidNoCache;
+
+    while( bContinue )
+    {
+        sal_Int32 nMessageCount;
+        if( ! readBlock( &nMessageCount ) )
         {
-            OSL_ENSURE( 0 , "urp bridge: messages size too large, terminating connection" );
-            disposeEnvironment();
-            break;
-        }
-
-        sal_Int32 nRead = m_pConnection->read( m_pConnection , m_unmarshal.getBuffer() , nSize );
-
-        if( nSize != nRead )
-        {
-            // couldn't get the asked amount of bytes, quit
-            // should only occur, when the environment has already been disposed
-            OSL_ENSURE( m_pBridgeImpl->m_bDisposed , "urp bridge: couldn't read complete message, terminating connection." );
-
             disposeEnvironment();
             break;
         }
@@ -308,73 +426,43 @@ void OReaderThread::run()
             sal_Bool bIsOneWay = sal_False;
             OUString sMemberName;
 #endif
-            sal_uInt8 nBitField;
-            sal_Bool bSuccess = m_unmarshal.unpackInt8( &nBitField );
+            MessageFlags flags;
 
-            sal_Bool bRequest = sal_True;
-            sal_uInt16 nMethodId = 0;
-            sal_Bool bType = sal_False, bOid = sal_False, bTid = sal_False;
-            sal_Bool bExceptionOccured = sal_False;
-
-            if( HDRFLAG_LONG & nBitField )
-            {
-                // this is a long header, interpret the byte as bitfield
-                // this is a bitfield
-                bTid  = ( HDRFLAG_NEWTID & nBitField );
-
-                if( HDRFLAG_REQUEST & nBitField )
-                {
-                    bType = ( HDRFLAG_NEWTYPE & nBitField );
-                    bOid  = ( HDRFLAG_NEWOID & nBitField );
-
-                    // request
-                    if( HDRFLAG_LONGMETHODID & nBitField )
-                    {
-                        // methodid as unsigned short
-                        bSuccess = bSuccess && m_unmarshal.unpackInt16( &nMethodId );
-                    }
-                    else
-                    {
-                        sal_uInt8 id;
-                        bSuccess = bSuccess && m_unmarshal.unpackInt8( &id );
-                        nMethodId = (sal_uInt16) id;
-                    }
-                }
-                else
-                {
-                    // reply
-                    bRequest = sal_False;
-                    bExceptionOccured = ( HDRFLAG_EXCEPTIONOCCURED & nBitField );
-                }
-            }
-            else
-            {
-                // method request + synchronous-asynchronous default
-                if( 0x40 & nBitField )
-                {
-                    sal_uInt8 lower;
-                    bSuccess = bSuccess && m_unmarshal.unpackInt8( &lower  );
-                    nMethodId = ( nBitField & 0x3f ) << 8 | lower;
-                }
-                else
-                {
-                    nMethodId = ( nBitField & 0x3f );
-                }
-            }
-
-            if( ! bSuccess )
+            if( ! readFlags( &flags ) )
             {
                 OSL_ENSURE ( 0 , "urp-bridge : incomplete message, skipping block" );
                 break;
             }
 
-            // get new type,oid,tid
-            if( bType )
+            // use these ** to access the ids fast ( avoid acquire/release calls )
+            sal_Sequence **ppLastTid = flags.bIgnoreCache ?
+                (sal_Sequence **) &lastTidNoCache :
+                (sal_Sequence **) &(m_pBridgeImpl->m_lastInTid);
+            rtl_uString **ppLastOid = flags.bIgnoreCache ?
+                (rtl_uString ** ) &lastOidNoCache :
+                (rtl_uString ** ) &(m_pBridgeImpl->m_lastInOid);
+            typelib_TypeDescriptionReference **ppLastType =
+                flags.bIgnoreCache ?
+                (typelib_TypeDescriptionReference ** ) &lastTidNoCache :
+                (typelib_TypeDescriptionReference ** ) &(m_pBridgeImpl->m_lastInType);
+
+            // get new type
+            if( flags.bType )
             {
-                if( ! m_unmarshal.unpackAndDestruct(
-                    &m_pBridgeImpl->m_lastInType , getCppuType( &m_pBridgeImpl->m_lastInType ) ) )
+                typelib_TypeDescriptionReference *pTypeRef = 0;
+                if( m_unmarshal.unpackType( &pTypeRef ) )
                 {
-                    OSL_ENSURE( 0 , "urp-bridge : error during unpacking cached data, terminating connection" );
+                    // release the old type
+                    typelib_typedescriptionreference_release( *ppLastType );
+                    // set the new type
+                    *ppLastType = pTypeRef;
+
+                    // no release on pTypeRef necessary (will be released by type dtor)
+                }
+                else
+                {
+                    typelib_typedescriptionreference_release( pTypeRef );
+                    OSL_ENSURE( 0 , "urp-bridge : error during unpacking interface type, terminating connection" );
                     disposeEnvironment();
                     return;
                 }
@@ -385,44 +473,57 @@ void OReaderThread::run()
                     return;
                 }
             }
-            if( bOid )
+            if( flags.bOid )
             {
                 rtl_uString *pOid = 0;
                 if( m_unmarshal.unpackOid( &pOid ) )
                 {
-                    m_pBridgeImpl->m_lastInOid = pOid;
+                    rtl_uString_release( *ppLastOid );
+                    *ppLastOid = pOid;
                 }
                 else
                 {
+                    rtl_uString_release( pOid );
                     OSL_ENSURE( 0 , "urp-bridge : error during unpacking cached data, terminating connection" );
                     disposeEnvironment();
                     return;
                 }
             }
-            if( bTid )
+
+            if( flags.bTid )
             {
-                if( ! m_unmarshal.unpackTid( &(m_pBridgeImpl->m_lastInTid) ) )
+                sal_Sequence *pSeq = 0;
+                if( m_unmarshal.unpackTid( &pSeq ) )
                 {
+                    rtl_byte_sequence_release( *ppLastTid );
+                    *ppLastTid = pSeq;
+                }
+                else
+                {
+                    rtl_byte_sequence_release( pSeq );
+
                     OSL_ENSURE( 0 , "urp-bridge : error during unpacking cached data, terminating connection" );
                     disposeEnvironment();
                     return;
                 }
             }
 
-            Job *pJob;
             // do the job
-            if( bRequest )
+            if( flags.bRequest )
             {
+                //--------------------------
+                // handle request
+                //--------------------------
                 // get the membertypedescription
-
                 typelib_InterfaceMethodTypeDescription *pMethodType = 0;
                 typelib_InterfaceAttributeTypeDescription *pAttributeType = 0;
                 sal_Bool bIsSetter = sal_False;
 
-                if( getMemberTypeDescription( &pAttributeType, &pMethodType, &bIsSetter,
-                                              nMethodId, m_pBridgeImpl->m_lastInType ) )
+                if( getMemberTypeDescription(
+                    &pAttributeType, &pMethodType, &bIsSetter,
+                    flags.nMethodId, *ppLastType ) )
                 {
-                    if( ! pLastRemoteI || bOid || bType )
+                    if( ! pLastRemoteI || flags.bOid || flags.bType )
                     {
                         // a new interface must be retrieved
 
@@ -432,7 +533,7 @@ void OReaderThread::run()
 
                         TYPELIB_DANGER_GET(
                             (typelib_TypeDescription ** ) &pInterfaceType ,
-                            m_pBridgeImpl->m_lastInType.getTypeLibType() );
+                            *ppLastType );
                         if( !pInterfaceType )
                         {
                             delete pMultiJob;
@@ -442,14 +543,24 @@ void OReaderThread::run()
                         }
                         m_pEnvRemote->pExtEnv->getRegisteredInterface(
                             m_pEnvRemote->pExtEnv, ( void **  ) &pLastRemoteI,
-                            m_pBridgeImpl->m_lastInOid.pData, pInterfaceType );
+                            *ppLastOid, pInterfaceType );
                         TYPELIB_DANGER_RELEASE( (typelib_TypeDescription * )pInterfaceType );
+
+                        if( !pLastRemoteI &&
+                            REMOTE_RELEASE_METHOD_INDEX != flags.nMethodId &&
+                            OUString::createFromAscii( g_NameOfUrpProtocolPropertiesObject ).equals( *ppLastOid ) )
+                        {
+                            // check for bridge internal propertyobject
+                            pLastRemoteI = m_pBridgeImpl->m_pPropertyObject;
+                            pLastRemoteI->acquire( pLastRemoteI );
+                            flags.bBridgePropertyCall = sal_True;
+                        }
 
                         // NOTE : Instance provider is called in the executing thread
                         //        Otherwise, instance provider may block the bridge
                     }
 
-                    if( pMultiJob && ! bTid && pMethodType && pMethodType->bOneWay && ! pMultiJob->isFull())
+                    if( pMultiJob && ! flags.bTid && pMethodType && pMethodType->bOneWay && ! pMultiJob->isFull())
                     {
                         // add to the existing multijob, nothing to do here
                     }
@@ -458,32 +569,26 @@ void OReaderThread::run()
                         // create a new multijob
                         if( pMultiJob )
                         {
-                            // start a previously existing multijob
+                            // there exists an old one, start it first.
                             pMultiJob->initiate();
                         }
 
                         pMultiJob = new ServerMultiJob(
-                            m_pEnvRemote, m_pBridgeImpl->m_lastInTid.getHandle(),
-                            m_pBridgeImpl, &m_unmarshal );
+                            m_pEnvRemote, *ppLastTid,
+                            m_pBridgeImpl, &m_unmarshal , nMessageCount );
                     }
 
-                    pMultiJob->setType( m_pBridgeImpl->m_lastInType );
+                    pMultiJob->setIgnoreCache( flags.bIgnoreCache );
+                    pMultiJob->setType( *ppLastType );
                     if( pMethodType )
-                        pMultiJob->setMethodType( pMethodType , REMOTE_RELEASE_METHOD_INDEX == nMethodId);
+                        pMultiJob->setMethodType( pMethodType , REMOTE_RELEASE_METHOD_INDEX == flags.nMethodId);
                     else if( pAttributeType )
                         pMultiJob->setAttributeType( pAttributeType, bIsSetter  );
 
                     if( pLastRemoteI )
                         pMultiJob->setInterface( pLastRemoteI );
                     else
-                        pMultiJob->setOid( m_pBridgeImpl->m_lastInOid );
-
-#ifdef BRIDGES_URP_PROT
-                    bIsOneWay = pMethodType && pMethodType->bOneWay;
-                    sMemberName = pMethodType ?
-                        pMethodType->aBase.pMemberName :
-                        pAttributeType->aBase.pMemberName;
-#endif
+                        pMultiJob->setOid( *ppLastOid );
                 }
                 else
                 {
@@ -492,10 +597,60 @@ void OReaderThread::run()
                     bContinue = sal_False;
                     break;
                 }
-                pJob = pMultiJob;
+#ifdef BRIDGES_URP_PROT
+                bIsOneWay = pMethodType && pMethodType->bOneWay;
+                sMemberName = pMethodType ?
+                    pMethodType->aBase.pMemberName :
+                    pAttributeType->aBase.pMemberName;
+                sal_uInt32 nLogHeader = m_unmarshal.getPos();
+#endif
+                if( ! pMultiJob->extract(  ) )
+                {
+                    // severe error during extracting, dispose
+                    delete pMultiJob;
+                    disposeEnvironment();
+                    bContinue = sal_False;
+                    break;
+                }
+
+#ifdef BRIDGES_URP_PROT
+                urp_logServingRequest(
+                    m_pBridgeImpl, m_unmarshal.getPos() - nLogStart,
+                    m_unmarshal.getPos() - nLogHeader,
+                    !bIsOneWay,
+                    sMemberName );
+#endif
+                if ( flags.bBridgePropertyCall )
+                {
+                    // call to the bridge internal object.
+                    // these calls MUST be executed within the dispatcher thread in order
+                    // to synchronize properly with protocol changes
+                    // NOTE : Threadid is not preserved for this call.
+
+                    // lock the marshaling  NOW !
+                    {
+                        MutexGuard guard( m_pBridgeImpl->m_marshalingMutex );
+
+                        pMultiJob->execute();
+
+                        if( m_pBridgeImpl->m_pPropertyObject->changesHaveBeenCommited() )
+                        {
+                            Properties props;
+                            props = m_pBridgeImpl->m_pPropertyObject->getCommitedChanges();
+
+                            // This call modified the protocol, apply the changes NOW !
+                            m_pBridgeImpl->applyProtocolChanges( props );
+                        }
+                    }
+                    delete pMultiJob;
+                    pMultiJob = 0;
+                }
             }
             else
             {
+                //--------------------------
+                // handle reply
+                //--------------------------
                 if( pMultiJob )
                 {
                     pMultiJob->initiate();
@@ -507,54 +662,44 @@ void OReaderThread::run()
                     pLastRemoteI = 0;
                 }
                 ClientJob *pClientJob =
-                    m_pBridgeImpl->m_clientJobContainer.remove( m_pBridgeImpl->m_lastInTid );
+                    m_pBridgeImpl->m_clientJobContainer.remove( *( ByteSequence * )ppLastTid );
                 OSL_ASSERT( pClientJob );
-                pClientJob->m_bExceptionOccured = bExceptionOccured;
+                pClientJob->m_bExceptionOccured = flags.bException;
 
-                pJob = pClientJob;
-                pJob->setThreadId( m_pBridgeImpl->m_lastInTid.getHandle() );
-                pJob->setUnmarshal( &m_unmarshal );
+                pClientJob->setUnmarshal( &m_unmarshal );
 #ifdef BRIDGES_URP_PROT
                 sMemberName = pClientJob->m_pMethodType ?
                     pClientJob->m_pMethodType->aBase.pMemberName :
                     pClientJob->m_pAttributeType->aBase.pMemberName;
+                sal_uInt32 nLogHeader = m_unmarshal.getPos();
 #endif
-            }
-
+                if( ! pClientJob->extract(  ) )
+                {
+                    // severe error during extracting, dispose
+                    disposeEnvironment();
+                    bContinue = sal_False;
+                    break;
+                }
 #ifdef BRIDGES_URP_PROT
-            sal_uInt32 nLogHeader = m_unmarshal.getPos();
+                urp_logGettingReply(
+                    m_pBridgeImpl, m_unmarshal.getPos() - nLogStart,
+                    m_unmarshal.getPos() - nLogHeader, sMemberName );
 #endif
+                sal_Bool bBridgePropertyCallAndWaitingForReply =
+                    m_pBridgeImpl->m_pPropertyObject->waitingForCommitChangeReply() &&
+                    pClientJob->isBridgePropertyCall();
 
-            if( ! pJob->extract(  ) )
-            {
-                // severe error during extracting, dispose
-                delete pJob;
-                disposeEnvironment();
-                bContinue = sal_False;
-                break;
-            }
+                pClientJob->initiate();
 
-#ifdef BRIDGES_URP_PROT
-              {
-                  if( bRequest )
-                  {
-                      urp_logServingRequest(
-                          m_pBridgeImpl, m_unmarshal.getPos() - nLogStart,
-                          m_unmarshal.getPos() - nLogHeader,
-                          !bIsOneWay,
-                          sMemberName );
-                  }
-                  else
-                  {
-                      urp_logGettingReply(
-                          m_pBridgeImpl, m_unmarshal.getPos() - nLogStart,
-                          m_unmarshal.getPos() - nLogHeader, sMemberName );
-                  }
-              }
-#endif
-            if( ! pMultiJob )
-            {
-                pJob->initiate();
+                if( bBridgePropertyCallAndWaitingForReply )
+                {
+                    // NOTE : This must be the reply for commit change. The new properties
+                    //        are now applied by the clientJob thread, but the reader thread
+                    //        must wait for it, because the next message on the wire already
+                    //        uses the new protocol settings.
+                    // waiting for the commit change reply
+                    m_pBridgeImpl->m_pPropertyObject->waitUntilChangesAreCommitted();
+                }
             }
         }  // end while( !m_unmarshal.finished() )
 
@@ -565,8 +710,6 @@ void OReaderThread::run()
         {
             pMultiJob->initiate();
         }
-
-        m_unmarshal.restart();
     }
 
     if( m_pConnection )
@@ -575,4 +718,7 @@ void OReaderThread::run()
         m_pConnection = 0;
     }
 }
+
+
+
 }

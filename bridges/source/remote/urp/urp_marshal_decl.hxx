@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_marshal_decl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
  *
  *  Copyright according the GNU Public License.
  *
@@ -14,8 +14,8 @@
 
 /**************************************************************************
 #*
-#*    last change   $Author: hr $ $Date: 2000-09-18 15:28:50 $
-#*    $Revision: 1.1.1.1 $
+#*    last change   $Author: jbu $ $Date: 2000-09-29 08:42:06 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile: $
 #*
@@ -31,9 +31,8 @@ namespace bridges_urp
 {
     struct urp_BridgeImpl;
 
-      typedef void ( SAL_CALL * urp_extractOidCallback ) (
-          remote_Interface *pRemoteI,
-          rtl_uString **ppOid );
+      typedef void
+        ( SAL_CALL * urp_extractOidCallback )( remote_Interface *pRemoteI, rtl_uString **ppOid );
 
     extern char g_bMarshalSystemIsLittleEndian;
     class Marshal
@@ -49,7 +48,7 @@ namespace bridges_urp
 
         void packRecursive( void *pSource, typelib_TypeDescription *pType );
 
-        void packTid( const ::rtl::ByteSequence &id );
+        void packTid( const ::rtl::ByteSequence &id, sal_Bool bIgnoreCache = sal_False );
         void packOid( const ::rtl::OUString &oid );
         void packType( void *pSource );
 
@@ -68,7 +67,7 @@ namespace bridges_urp
 
         // stops marshaling, inserts size in front of the buffer
         // getStart and getSize can now be called
-        inline void finish();
+        inline void finish( sal_Int32 nMessageCount );
 
         // must be called after finish. After calling restart,
         // a new marshalling session is started invalidating
@@ -93,9 +92,7 @@ namespace bridges_urp
         inline void ensureAdditionalMem( sal_Int32 nMemToAdd );
         sal_Int32 m_nBufferSize;
         sal_Int8 *m_base;
-
         sal_Int8 *m_pos;
-        sal_Int32 m_nSizeOffset;
         struct urp_BridgeImpl *m_pBridgeImpl;
         urp_extractOidCallback m_callback;
     };

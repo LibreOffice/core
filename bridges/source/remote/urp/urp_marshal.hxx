@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_marshal.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,6 @@
 #ifndef _URP_MARSHAL_HXX_
 #define _URP_MARSHAL_HXX_
 
-/**************************************************************************
-#*
-#*    last change   $Author: hr $ $Date: 2000-09-18 15:28:50 $
-#*    $Revision: 1.1.1.1 $
-#*
-#*    $Logfile: $
-#*
-#*    Copyright (c) 2000, Sun Microsystems
-#*
-#************************************************************************/
 #include <rtl/ustring.hxx>
 #include <rtl/byteseq.hxx>
 
@@ -81,48 +71,41 @@
 
 struct remote_Interface;
 
-
 namespace bridges_urp
 {
     // methods for accessing marshaling buffer
-    inline void Marshal::finish()
+    inline void Marshal::finish( sal_Int32 nMessageCount )
     {
-        sal_Int32 nSize = ( ((sal_uInt32 )(m_pos - m_base)) -5 );
-        OSL_ASSERT( nSize );
+        sal_Int32 nSize = getSize() - 2*sizeof( sal_Int32 );
+
+        // save the state
         sal_Int8 *pos = m_pos;
         m_pos = m_base;
-        packCompressedSize( nSize );
-        if( m_pos == m_base +1 )
-        {
-            ((sal_uInt8*)m_base)[4] = (sal_uInt8) ((sal_uInt8*)m_base)[0];
-            m_nSizeOffset = 4;
-        }
-        else
-        {
-            m_nSizeOffset = 0;
-        }
+        packInt32( &nSize );
+        packInt32( &nMessageCount );
+
+        // reset the state
         m_pos = pos;
     }
 
     inline void Marshal::restart()
     {
-        m_pos = m_base +5;
-        m_nSizeOffset = 0;
+        m_pos = m_base + 2*sizeof( sal_Int32 );
     }
 
     inline sal_Int8 *Marshal::getBuffer()
     {
-        return m_base + m_nSizeOffset;
+        return m_base;
     }
 
     inline sal_Bool Marshal::empty() const
     {
-        return ( m_pos -m_base ) == 5;
+        return ( m_pos - m_base ) == 2*sizeof( sal_Int32 );
     }
 
     inline sal_Int32 Marshal::getSize()
     {
-        return (sal_Int32)(m_pos - m_base) - m_nSizeOffset;
+        return ((sal_Int32) (m_pos - m_base));
     }
 
     inline void Marshal::ensureAdditionalMem( sal_Int32 nMemToAdd )
@@ -138,7 +121,6 @@ namespace bridges_urp
             m_pos = m_base + nDiff;
         }
     }
-
 
     // marshaling methods
     inline void Marshal::packInt8( void *pSource )
@@ -222,7 +204,6 @@ namespace bridges_urp
         m_pos +=4;
     }
 
-
     inline void Marshal::packCompressedSize( sal_Int32 nSize )
     {
         ensureAdditionalMem( 5 );
@@ -239,7 +220,6 @@ namespace bridges_urp
             packInt32( &nSize );
         }
     }
-
 
     inline void Marshal::pack( void *pSource , typelib_TypeDescription *pType )
     {
@@ -265,6 +245,7 @@ namespace bridges_urp
             packInt16( pSource );
             break;
         }
+        case typelib_TypeClass_ENUM:
         case typelib_TypeClass_LONG:
         case typelib_TypeClass_UNSIGNED_LONG:
         case typelib_TypeClass_FLOAT:
@@ -316,12 +297,6 @@ namespace bridges_urp
         case typelib_TypeClass_ANY:
         {
             packAny( pSource );
-            break;
-        }
-        case typelib_TypeClass_ENUM:
-        {
-            sal_uInt32 nValue = *(sal_Int32*)pSource;
-            packCompressedSize( nValue );
             break;
         }
         case typelib_TypeClass_TYPEDEF:

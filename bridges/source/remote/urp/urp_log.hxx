@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_log.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 namespace bridges_urp
 {
 #ifndef PRODUCT
-#define BRIDGES_URP_PROT
+//#define BRIDGES_URP_PROT
 #endif
 
 #ifdef BRIDGES_URP_PROT

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_marshal.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,7 @@ Marshal::Marshal( urp_BridgeImpl *pBridgeImpl,
     m_callback( callback ),
     m_nBufferSize( nBufferSize ),
     m_base( (sal_Int8*)rtl_allocateMemory( nBufferSize ) ),
-    m_pos( m_base + 5 ),
-    m_nSizeOffset( 0 ),
+    m_pos( m_base + 2*sizeof( sal_Int32 ) ),
     m_pBridgeImpl( pBridgeImpl )
 {}
 
@@ -120,12 +119,21 @@ void Marshal::packOid( const ::rtl::OUString & oid )
     packInt16( &nIndex );
 }
 
-void Marshal::packTid( const ByteSequence & threadId )
+void Marshal::packTid( const ByteSequence & threadId, sal_Bool bIgnoreCache )
 {
-    sal_uInt16 nIndex = m_pBridgeImpl->m_tidCacheOut.seek( threadId );
+
+    sal_uInt16 nIndex = 0xffff;
+    if( ! bIgnoreCache )
+    {
+        nIndex = m_pBridgeImpl->m_tidCacheOut.seek( threadId );
+    }
+
     if( 0xffff == nIndex )
     {
-        nIndex = m_pBridgeImpl->m_tidCacheOut.put( threadId );
+        if( ! bIgnoreCache )
+        {
+            nIndex = m_pBridgeImpl->m_tidCacheOut.put( threadId );
+        }
         packByteSequence( (sal_Int8*) threadId.getConstArray() ,threadId.getLength());
     }
     else
@@ -142,9 +150,8 @@ void Marshal::packType( void *pSource )
         *(typelib_TypeDescriptionReference ** ) pSource;
 
     OSL_ASSERT( pRef );
-    Type type( pRef );
 
-    sal_uInt8 nTypeClass = type.getTypeClass();
+    sal_uInt8 nTypeClass = ( sal_uInt8 ) pRef->eTypeClass;
 
     if( nTypeClass <= /* any*/ 14 )
     {
@@ -155,12 +162,12 @@ void Marshal::packType( void *pSource )
         OUString sTypeName;
         sal_uInt16 nIndex = 0xffff;
 
-        nIndex = m_pBridgeImpl->m_typeCacheOut.seek( type );
+        nIndex = m_pBridgeImpl->m_typeCacheOut.seek( *(Type*)&pRef );
         if( 0xffff == nIndex )
         {
             // put it into the cache
-            nIndex = m_pBridgeImpl->m_typeCacheOut.put( type );
-            sTypeName = type.getTypeName();
+            nIndex = m_pBridgeImpl->m_typeCacheOut.put( *(Type*)&pRef );
+            sTypeName = pRef->pTypeName;
             nTypeClass = nTypeClass | 0x80;
         }
         packInt8( &nTypeClass  );

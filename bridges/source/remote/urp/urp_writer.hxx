@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_writer.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:51 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,13 +85,10 @@ namespace bridges_urp
     private:
         void write();
         oslCondition m_oslCondition;
-
         sal_Bool m_bAbort;
         sal_Bool m_bWaitForTimeout;
         remote_Connection *m_pConnection;
         urp_BridgeImpl *m_pBridgeImpl;
     };
-
-
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_unmarshal.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:51 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,10 @@ struct remote_Interface;
 namespace bridges_urp
 {
 
-    extern char g_bSystemIsLittleEndian;
+extern char g_bSystemIsLittleEndian;
 class ThreadId;
 struct urp_BridgeImpl;
+
 class Unmarshal
 {
 public:
@@ -85,15 +86,13 @@ public:
         remote_createStubFunc callback );
     ~Unmarshal();
 
-    sal_Bool unpackAndDestruct( void *pDest , const ::com::sun::star::uno::Type &rType );
-    sal_Bool unpackAndDestruct( void *pDest , typelib_TypeDescription *pType );
     sal_Bool unpackRecursive( void *pDest , typelib_TypeDescription *pType );
-    sal_Bool finished()
+    inline sal_Bool finished()
         { return m_base + m_nLength == m_pos; }
-    sal_uInt32 getPos()
+    inline sal_uInt32 getPos()
         { return (sal_uInt32 ) (m_pos - m_base); }
 
-    sal_Bool setSize( sal_Int32 nSize );
+    inline sal_Bool setSize( sal_Int32 nSize );
 
     inline sal_Bool unpackCompressedSize( sal_Int32 *pData );
     inline sal_Bool unpack( void *pDest, typelib_TypeDescription *pType );
@@ -105,10 +104,7 @@ public:
 
     sal_Bool unpackAny( void *pDest );
     sal_Bool unpackOid( rtl_uString **ppOid );
-    sal_Bool unpackTid( ::rtl::ByteSequence *pId );
-
-    void restart()
-        { m_pos = m_base; }
+    sal_Bool unpackTid( sal_Sequence **ppThreadId );
 
     sal_Int8 *getBuffer()
         { return m_base; }
@@ -121,13 +117,24 @@ private:
     sal_Int32 m_nBufferSize;
     sal_Int8 *m_base;
     sal_Int8 *m_pos;
-
     sal_Int32 m_nLength;
 
     remote_createStubFunc m_callback;
     uno_Environment *m_pEnvRemote;
     urp_BridgeImpl *m_pBridgeImpl;
 };
+
+inline sal_Bool Unmarshal::setSize( sal_Int32 nSize )
+{
+    if( nSize > m_nBufferSize )
+    {
+        m_nBufferSize = nSize;
+        m_base = (sal_Int8 * ) rtl_reallocateMemory( (sal_uInt8*) m_base , m_nBufferSize );
+    }
+    m_pos = m_base;
+    m_nLength = nSize;
+    return ( 0 != m_base );
+}
 
 inline sal_Bool Unmarshal::checkOverflow( sal_Int32 nNextMem )
 {
@@ -229,7 +236,7 @@ inline sal_Bool Unmarshal::unpackString( void *pDest )
 }
 
 
-sal_Bool Unmarshal::unpackCompressedSize( sal_Int32 *pData )
+inline sal_Bool Unmarshal::unpackCompressedSize( sal_Int32 *pData )
 {
     sal_uInt8 n8Size;
     sal_Bool bReturn = unpackInt8( &n8Size  );
@@ -282,6 +289,7 @@ inline sal_Bool Unmarshal::unpack( void *pDest , typelib_TypeDescription *pType 
         unpackInt16( pDest );
         break;
     }
+    case typelib_TypeClass_ENUM:
     case typelib_TypeClass_FLOAT:
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
@@ -334,11 +342,6 @@ inline sal_Bool Unmarshal::unpack( void *pDest , typelib_TypeDescription *pType 
         bReturn = unpackAny( pDest );
         break;
     }
-    case typelib_TypeClass_ENUM:
-    {
-          bReturn = unpackCompressedSize( (sal_Int32 *) pDest );
-        break;
-    }
     case typelib_TypeClass_INTERFACE:
     {
         *(remote_Interface**)pDest = 0;
@@ -383,10 +386,8 @@ inline sal_Bool Unmarshal::unpack( void *pDest , typelib_TypeDescription *pType 
         OSL_ASSERT( 0 );
     }
 
-
     return bReturn;
 }
 
 }
-
 #endif

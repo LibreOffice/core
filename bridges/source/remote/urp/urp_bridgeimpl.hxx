@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_bridgeimpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,13 @@
 #include "urp_cache.hxx"
 #include "urp_marshal_decl.hxx"
 #include "urp_replycontainer.hxx"
+#include "urp_property.hxx"
 
 
 namespace bridges_urp
 {
+
+class PropertyObject;
 
 struct equalOUString
 {
@@ -104,9 +107,15 @@ struct urp_BridgeImpl :
     urp_BridgeImpl( sal_Int32 nCacheSize , sal_uInt32 nInitialMarshalerSize );
     ~urp_BridgeImpl();
 
+    void applyProtocolChanges( const Properties & );
+
+    void startBlockBridge();
+    void stopBlockBridge();
+
     ::osl::Mutex m_marshalingMutex;
     ::osl::Mutex m_disposingMutex;
     Marshal m_blockMarshaler;
+    sal_Int32 m_nMarshaledMessages;
 
       // Caches for vars, that go from local process to the remote process
       Cache < ::rtl::OUString , equalOUString >             m_oidCacheOut;
@@ -118,7 +127,6 @@ struct urp_BridgeImpl :
     ::rtl::OUString m_lastOutOid;
 
       // Caches for vars, that come from the remote process to the local process
-    sal_Int32 m_nCacheSize;
     ::rtl::OUString             *m_pOidIn;
     ::rtl::ByteSequence         *m_pTidIn;
     ::com::sun::star::uno::Type *m_pTypeIn;
@@ -127,15 +135,15 @@ struct urp_BridgeImpl :
     ::rtl::ByteSequence m_lastInTid;
     ::rtl::OUString m_lastInOid;
 
-    sal_Int32 m_nTimeoutMUSEC;
-    sal_Int32 m_nFlushBlockSize;
-
     urp_ClientJobContainer m_clientJobContainer;
 
     OWriterThread *m_pWriter;
     OReaderThread *m_pReader;
     FILE *m_pLogFile;
     ::osl::Condition m_cndWaitForThreads;
+
+    struct Properties m_properties;
+    class PropertyObject *m_pPropertyObject;
 };
 
 }

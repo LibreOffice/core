@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_bridgeimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,12 @@ using namespace ::com::sun::star::uno;
 namespace bridges_urp
 {
 
+template < class t >
+inline t mymin( const t & val1, const t & val2 )
+{
+    return val1 < val2 ? val1 : val2;
+}
+
 /***********
  * urp_BridgeImpl
  ***********/
@@ -74,8 +80,8 @@ urp_BridgeImpl::urp_BridgeImpl( sal_Int32 nCacheSize , sal_uInt32 nInitialMarsha
     m_oidCacheOut( nCacheSize ),
     m_tidCacheOut( nCacheSize ),
     m_typeCacheOut( nCacheSize ),
-    m_nCacheSize( nCacheSize ),
-    m_blockMarshaler( this , nInitialMarshalerSize , ::bridges_remote::remote_retrieveOidFromProxy)
+    m_blockMarshaler( this , nInitialMarshalerSize , ::bridges_remote::remote_retrieveOidFromProxy),
+    m_nMarshaledMessages( 0 )
 {
     m_pOidIn = new OUString[ nCacheSize ];
     m_pTidIn = new ByteSequence[ nCacheSize ];
@@ -89,4 +95,123 @@ urp_BridgeImpl::~urp_BridgeImpl()
     delete [] m_pTidIn;
     delete [] m_pTypeIn;
 }
+
+
+void urp_BridgeImpl::applyProtocolChanges( const Properties &props )
+{
+    if( m_properties.nTypeCacheSize != props.nTypeCacheSize )
+    {
+        if( props.nTypeCacheSize == 0 )
+        {
+            delete [] m_pTypeIn;
+            m_pTypeIn = 0;
+        }
+        else
+        {
+            Type *pNew = new Type[props.nTypeCacheSize];
+            sal_Int32 i;
+            sal_Int32 iMin = mymin( m_properties.nTypeCacheSize , props.nTypeCacheSize );
+            for( i = 0; i < iMin ; i ++ )
+            {
+                pNew[i] = m_pTypeIn[i];
+            }
+            delete [] m_pTypeIn;
+            m_pTypeIn = pNew;
+        }
+        m_properties.nTypeCacheSize = props.nTypeCacheSize;
+        m_typeCacheOut.resize( props.nTypeCacheSize );
+    }
+
+     if( m_properties.nOidCacheSize != props.nOidCacheSize )
+     {
+         if( 0 == props.nOidCacheSize )
+         {
+             delete [] m_pOidIn;
+             m_pOidIn = 0;
+         }
+         else
+         {
+             OUString *pNew = new OUString[props.nOidCacheSize];
+             sal_Int32 i;
+             sal_Int32 iMin = mymin( m_properties.nOidCacheSize , props.nOidCacheSize );
+             for( i = 0; i < iMin ; i ++ )
+             {
+                 pNew[i] = m_pOidIn[i];
+             }
+             delete [] m_pOidIn;
+             m_pOidIn = pNew;
+         }
+         m_oidCacheOut.resize( props.nOidCacheSize );
+         m_properties.nOidCacheSize = props.nOidCacheSize;
+     }
+
+     if( m_properties.nTidCacheSize != props.nTidCacheSize )
+     {
+         if( 0 == props.nTidCacheSize )
+         {
+             delete [] m_pTidIn;
+             m_pOidIn = 0;
+         }
+         else
+         {
+             ByteSequence *pNew = new ByteSequence[props.nTidCacheSize];
+             sal_Int32 i;
+             sal_Int32 iMin = mymin( m_properties.nTidCacheSize , props.nTidCacheSize );
+             for( i = 0; i < iMin ; i ++ )
+             {
+                 pNew[i] = m_pTidIn[i];
+             }
+             delete [] m_pTidIn;
+             m_pTidIn = pNew;
+         }
+         m_tidCacheOut.resize( props.nTidCacheSize );
+         m_properties.nTidCacheSize = props.nTidCacheSize;
+     }
+
+     if( m_properties.sVersion != props.sVersion )
+     {
+        m_properties.sVersion = props.sVersion;
+     }
+
+    if( m_properties.nFlushBlockSize != props.nFlushBlockSize )
+    {
+        m_properties.nFlushBlockSize = props.nFlushBlockSize;
+    }
+
+    if( m_properties.nOnewayTimeoutMUSEC != props.nOnewayTimeoutMUSEC )
+    {
+        m_properties.nOnewayTimeoutMUSEC = props.nOnewayTimeoutMUSEC;
+    }
+
+    if( props.bClearCache )
+    {
+        if( m_properties.nTypeCacheSize )
+        {
+            delete [] m_pTypeIn;
+            m_pTypeIn = new Type[m_properties.nTypeCacheSize];
+            m_typeCacheOut.clear();
+        }
+        m_lastInType = Type();
+        m_lastOutType = Type();
+
+        if( m_properties.nOidCacheSize )
+        {
+            delete [] m_pOidIn;
+            m_pOidIn = new OUString[ m_properties.nOidCacheSize];
+            m_oidCacheOut.clear();
+        }
+        m_lastOutOid = OUString();
+        m_lastInOid = OUString();
+
+        if( m_properties.nTidCacheSize )
+        {
+            delete [] m_pTidIn;
+            m_pTidIn = new ByteSequence[m_properties.nTidCacheSize];
+            m_tidCacheOut.clear();
+        }
+        m_lastInTid = ByteSequence();
+        m_lastOutTid = ByteSequence();
+    }
+}
+
 }
