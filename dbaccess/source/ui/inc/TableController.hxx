@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-08 14:03:32 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 12:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,9 +210,6 @@ namespace dbaui
         virtual void Save(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOut);
 
     protected:
-        void startConnectionListening();
-        void stopConnectionListening();
-
         void startTableListening();
         void stopTableListening();
     };
