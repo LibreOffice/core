@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:16:54 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 10:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3182,9 +3182,13 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                                         aTopLeft.Y() -= pLine->GetMaxAscent();
 //                                                      if ( nOrientation )
 //                                                          aTopLeft = lcl_ImplCalcRotatedPos( aTopLeft, aOrigin, nSin, nCos );
+
                                                         Rectangle aRect( aTopLeft, pTextPortion->GetSize() );
-                                                        sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink( aRect );
-                                                        pPDFExtOutDevData->SetLinkURL( nLinkId, ((SvxURLField*)pFieldData)->GetURL() );
+                                                        vcl::PDFExtOutDevBookmarkEntry aBookmark;
+                                                        aBookmark.nLinkId = pPDFExtOutDevData->CreateLink( aRect );
+                                                        aBookmark.aBookmark = ((SvxURLField*)pFieldData)->GetURL();
+                                                        std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
+                                                        rBookmarks.push_back( aBookmark );
                                                     }
                                                 }
                                             }
