@@ -1,5 +1,5 @@
 <!--
-	$Id: defs.mod,v 1.1 2002-02-28 14:42:15 dvo Exp $
+	$Id: defs.mod,v 1.2 2002-11-01 10:22:59 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -62,6 +62,11 @@
 <!-- text marks for tracking changes; usually used inside of paragraphs -->
 <!ENTITY % change-marks "text:change | text:change-start | text:change-end">
 
+<!-- (optional) text declarations; used before the first paragraph -->
+<!ENTITY % text-decls "text:variable-decls?, text:sequence-decls?,
+					   text:user-field-decls?, text:dde-connection-decls?, 
+					   text:alphabetical-index-auto-mark-file?" >
+
 <!-- define the types of text which may occur inside of sections -->
 <!ENTITY % sectionText "(text:h|text:p|text:ordered-list|
 						text:unordered-list|table:table|text:section|
@@ -70,8 +75,10 @@
 						text:alphabetical-index|text:bibliography|
 						text:index-title|%change-marks;)*">
 
-<!-- (optional) text declarations; used before the first paragraph -->
-<!ENTITY % text-decls "text:variable-decls?, text:sequence-decls?,
-					   text:user-field-decls?, text:dde-connection-decls?, 
-					   text:alphabetical-index-auto-mark-file?" >
+<!ENTITY % headerText "(%text-decls;, (text:h|text:p|text:ordered-list|
+						text:unordered-list|table:table|text:section|
+						text:table-of-content|text:illustration-index|
+						text:table-index|text:object-index|text:user-index|
+						text:alphabetical-index|text:bibliography|
+						text:index-title|%change-marks;)* )">
 

@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.56 2002-09-04 14:02:51 cl Exp $
+	$Id: style.mod,v 1.57 2002-11-01 10:22:59 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -430,14 +430,6 @@
 <!ELEMENT style:handout-master (%shapes;)*>
 <!ATTLIST style:handout-master presentation:presentation-page-layout-name %styleName; #IMPLIED>
 <!ATTLIST style:handout-master style:page-master-name %styleName; #IMPLIED>
-
-
-<!ENTITY % headerText "(text:h|text:p|text:ordered-list|
-						text:unordered-list|table:table|text:section|
-						text:table-of-content|text:illustration-index|
-						text:table-index|text:object-index|text:user-index|
-						text:alphabetical-index|text:bibliography|
-						text:index-title|%change-marks;)*">
 
 
 <!ENTITY % hd-ft-content "( %headerText; | (style:region-left?, style:region-center?, style:region-right?) )">
