@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 13:43:12 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 16:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,15 +120,6 @@
 #ifndef _UNDO_HXX //autogen
 #include <svtools/undo.hxx>
 #endif
-
-#if 0  /* OBSOLETE */
-#ifndef _INET_WRAPPER_HXX
-#include <inet/wrapper.hxx>
-#endif
-#ifndef _INET_CONFIG_HXX
-#include <inet/inetcfg.hxx>
-#endif
-#endif /* OBSOLETE */
 
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
@@ -1132,43 +1123,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
         DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nsoffice.ini key \"MetafilPrint\" not supported any longer!\n");
 #endif
-    }
-
-    if ( bResetSession )
-    {
-#if 0   /* OBSOLETE */
-        NAMESPACE_INET(INetWrapper) aWrapper;
-        ::vos::ORef< ::inet::INetConfig > xINetConfig;
-        if ( aWrapper.getINetConfig( xINetConfig ) )
-        {
-            //xINetConfig->setDomainNameServer( aInetOptions.GetDnsIpAddress() );
-
-            if ( bProxiesModified )
-            {
-                ::inet::INetProxyConfig aProxyCfg (xINetConfig->getProxyConfig());
-                SvtInetOptions::ProxyType eProxy = (SvtInetOptions::ProxyType)aInetOptions.GetProxyType();
-
-                if (eProxy == SvtInetOptions::NONE)
-                    aProxyCfg.setNoProxyList(aInetOptions.GetProxyNoProxy());
-                else
-                    aProxyCfg.setNoProxyList(DEFINE_CONST_UNICODE("*:*"));
-
-                aProxyCfg.setHttpProxy (
-                    aInetOptions.GetProxyHttpName(),
-                    (sal_uInt16)aInetOptions.GetProxyHttpPort());
-
-                aProxyCfg.setFtpProxy (
-                    aInetOptions.GetProxyFtpName(),
-                    (sal_uInt16)aInetOptions.GetProxyFtpPort());
-
-/*              aProxyCfg.setSocksProxy (
-                    aInetOptions.GetProxySocksName(),
-                    (sal_uInt16)aInetOptions.GetProxySocksPort());*/
-
-                xINetConfig->setProxyConfig (aProxyCfg);
-            }
-        }
-#endif  /* OBSOLETE */
     }
 
     // AutoSave starten oder anhalten
