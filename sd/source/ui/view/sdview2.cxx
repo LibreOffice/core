@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-24 13:38:09 $
+ *  last change: $Author: thb $ $Date: 2001-10-18 14:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,8 +820,10 @@ IMPL_LINK( SdView, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDrop
         // die einzufuegenden geprueft und gegebenenfalls in einer Ersatzliste
         // aufgenommen (bNameOK == FALSE -> Benutzer hat abgebrochen)
         List*   pExchangeList = NULL;
-        BOOL    bNameOK = GetExchangeList( pExchangeList, &aBookmarkList, 2 );
+
+        // #93240# swapped order: GetExchangeList() ends drop, which in turn resets GetCurrentNavigatorDragType.
         BOOL    bLink = ( SD_MOD()->GetCurrentNavigatorDragType() == NAVIGATOR_DRAGTYPE_LINK ? TRUE : FALSE );
+        BOOL    bNameOK = GetExchangeList( pExchangeList, &aBookmarkList, 2 );
         BOOL    bReplace = FALSE;
 
         // Da man hier nicht weiss, ob es sich um eine Seite oder ein Objekt handelt,
