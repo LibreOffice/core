@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-27 09:05:20 $
+ *  last change: $Author: pb $ $Date: 2000-11-27 14:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2622,6 +2622,52 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT( 60, 48 );
         TabStop = TRUE;
         DropDown = TRUE;
+    };
+    String STR_CHARNAME_NOSTYLE
+    {
+        Text[language_user1] = "PB: %s wird ersetzt durch fett oder kursiv";
+        Text = "Nicht %s";
+        Text[ english_us ] = "No %s";
+        Text[ portuguese ] = "Sem %s";
+        Text[ russian ] = "Íåò %s";
+        Text[ dutch ] = "Niet %s";
+        Text[ french ] = "Pas de %s";
+        Text[ spanish ] = "No %s";
+        Text[ italian ] = "Senza %s";
+        Text[ danish ] = "Ikke %s";
+        Text[ swedish ] = "Inte %s";
+        Text[ polish ] = "Nie %s";
+        Text[ portuguese_brazilian ] = "No %s";
+        Text[ japanese ] = "%s‚È‚µ";
+        Text[ chinese_simplified ] = "²»ÊÇ %s";
+        Text[ chinese_traditional ] = "¤£¬O %s";
+        Text[ arabic ] = "ÈÏæä %s";
+        Text[ greek ] = "×ùñßò %s";
+        Text[ korean ] = "%s ¾Æ´Ô";
+        Text[ turkish ] = "%s değil";
+    };
+    String STR_CHARNAME_TRANSPARENT
+    {
+        Text[ language_user1 ] = " ";
+        Text = "Transparent";
+        Text[ english_us ] = "Transparent";
+        Text[ italian ] = "Transparente";
+        Text[ portuguese_brazilian ] = "Transparent";
+        Text[ portuguese ] = "Transparente";
+        Text[ danish ] = "Transparent";
+        Text[ french ] = "Transparent";
+        Text[ swedish ] = "Transparent";
+        Text[ dutch ] = "Transparant";
+        Text[ spanish ] = "Transparente";
+        Text[ chinese_simplified ] = "Í¸Ã÷";
+        Text[ russian ] = "Ïğîçğà÷íûé";
+        Text[ polish ] = "PrzeŸroczysty";
+        Text[ japanese ] = "“§‰ß«";
+        Text[ chinese_traditional ] = "³z©ú";
+        Text[ arabic ] = "ÔİÇİ";
+        Text[ greek ] = "Äéáöáíİò";
+        Text[ korean ] = "Åõ¸í";
+        Text[ turkish ] = "Saydam";
     };
 };
 
