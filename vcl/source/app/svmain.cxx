@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:32:23 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ using namespace ::com::sun::star::lang;
 
 #include <fontcfg.hxx>
 
-#pragma hdrstop
+
 
 // =======================================================================
 
@@ -222,11 +222,7 @@ public:
             }
             bIn = FALSE;
 
-#ifndef REMOTE_APPSERVER
             return vos::OSignalHandler::TAction_CallNextHandler;
-#else
-            return vos::OSignalHandler::TAction_KillApplication;
-#endif
         }
     }
 
@@ -282,9 +278,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     {
         pOwnSvApp = new Application_Impl();
     }
-#ifndef REMOTE_APPSERVER
     InitSalMain();
-#endif
 
     /*AllSettings aAS;
     Application::SetSettings( aAS );// ???
@@ -303,43 +297,19 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     vos::OStartupInfo   aStartInfo;
     rtl::OUString       aExeFileName;
 
-#ifdef REMOTE_APPSERVER
-    // create condition now to avoid race
-    pSVData->mpStartUpCond = new vos::OCondition;
-#endif
 
     // Sal initialisieren
-#ifndef REMOTE_APPSERVER
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ ::CreateSalInstance" );
     pSVData->mpDefInst = CreateSalInstance();
     if ( !pSVData->mpDefInst )
         return FALSE;
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} ::CreateSalInstance" );
-#endif
 
     // Initialize application instance (should be done after initialization of VCL SAL part)
     if( pSVData->mpApp )
         // call init to initialize application class
         // soffice/sfx implementation creates the global service manager
         pSVData->mpApp->Init();
-
-#ifdef REMOTE_APPSERVER
-    {
-    Reference< XMultiServiceFactory > rSMgr = ::comphelper::getProcessServiceFactory();
-
-    pSVData->mpRmEventQueue = new RmEventQueue;
-    pSVData->mpWindowObjectMutex = new vos::OMutex;
-    pSVData->maAppData.mpSolarMutex = new ImplRemoteYieldMutex;
-
-    pSVData->maGDIData.mpScreenFontList   = new ImplDevFontList;
-    pSVData->maGDIData.mpScreenFontCache  = new ImplFontCache( FALSE );
-
-    pSVData->maAppData.mpSolarMutex->acquire(); // mutex should be aquired for startup
-
-//    ImplInitRemotePrinterList();
-    }
-
-#endif
 
     // Den AppFileName gleich holen und absolut machen, bevor das
     // WorkingDirectory sich aendert...
@@ -449,79 +419,11 @@ void DeInitVCL()
         pSVData->mpResMgr = NULL;
     }
 
-#ifdef REMOTE_APPSERVER
-    if( pSVData->mxClientFactory.is() )
-    {
-        try
-        {
-            pSVData->mxClientFactory = Reference < XMultiServiceFactory >();
-        }
-        catch(::com::sun::star::uno::Exception&)
-        {
-        }
-    }
-
-    if( pSVData->mxMultiFactory.is() )
-    {
-        try
-        {
-            pSVData->mxMultiFactory.clear();
-        }
-        catch(::com::sun::star::uno::Exception&)
-        {
-        }
-
-    }
-    CORmStarOffice::eraseRemoteCaches();
-    if( pSVData->mxStatus.is() )
-    {
-        try
-        {
-            // #93174 DO NOT SYNC HERE -
-            // the client's sync object might already be destructed by the ORmRemoteClientFactory destructor
-            // CHECK_FOR_RVPSYNC_NORMAL()
-
-            delete pSVData->mpRVPNormalSync;
-            delete pSVData->mpRVPSoundSync;
-            delete pSVData->mpAtoms;
-
-            pSVData->mxStatus->Quit();
-            pSVData->mxStatus = Reference < ::com::sun::star::portal::client::XRmStatus >();
-        }
-        catch(::com::sun::star::uno::Exception&)
-        {
-        }
-    }
-
     if( pSVData->mpApp )
         // call deinit to deinitialize application class
         // soffice/sfx implementation disposes the global service manager
         // Warning: After this call you can't call uno services
         pSVData->mpApp->DeInit();
-
-    pSVData->maAppData.mpSolarMutex->release();
-    delete pSVData->maAppData.mpSolarMutex;
-    pSVData->maAppData.mpSolarMutex = NULL;
-    pSVData->mpOTimer->release();
-    pSVData->mpOTimer = NULL;
-    delete pSVData->mpRmEventQueue;
-    pSVData->mpRmEventQueue = NULL;
-    delete pSVData->mpWindowObjectMutex;
-    pSVData->mpWindowObjectMutex = NULL;
-
-    if ( pSVData->mpKeyNames )
-    {
-        for( String* pObj = pSVData->mpKeyNames->First(); pObj; pObj = pSVData->mpKeyNames->Next() )
-            delete pObj;
-        delete pSVData->mpKeyNames;
-    }
-#else
-    if( pSVData->mpApp )
-        // call deinit to deinitialize application class
-        // soffice/sfx implementation disposes the global service manager
-        // Warning: After this call you can't call uno services
-        pSVData->mpApp->DeInit();
-#endif
 
     if ( pSVData->maAppData.mpSettings )
     {
@@ -584,15 +486,11 @@ void DeInitVCL()
     ResMgr::DestroyAllResMgr();
 
     // Sal deinitialisieren
-#ifndef REMOTE_APPSERVER
     DestroySalInstance( pSVData->mpDefInst );
-#endif
 
     DeInitTools();
 
-#ifndef REMOTE_APPSERVER
     DeInitSalMain();
-#endif
     if( pOwnSvApp )
     {
         delete pOwnSvApp;
