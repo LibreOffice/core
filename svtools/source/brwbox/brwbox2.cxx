@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-27 11:47:13 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 13:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,57 @@ void BrowseBox::StartDrag( sal_Int8 /* _nAction */, const Point& /* _rPosPixel *
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     // not interested in this event
+}
+#endif
+
+#if SUPD>627 || FS_PRIV_DEBUG
+//===================================================================
+
+sal_Int8 BrowseBox::AcceptDrop( const AcceptDropEvent& _rEvt )
+{
+    BrowserDataWin* pDataWindow = static_cast<BrowserDataWin*>(pDataWin);
+    AcceptDropEvent aTransformed( _rEvt );
+    aTransformed.maPosPixel = pDataWindow->ScreenToOutputPixel( OutputToScreenPixel( _rEvt.maPosPixel ) );
+    return pDataWindow->AcceptDrop( aTransformed );
+}
+
+//===================================================================
+
+sal_Int8 BrowseBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
+{
+    BrowserDataWin* pDataWindow = static_cast<BrowserDataWin*>(pDataWin);
+    ExecuteDropEvent aTransformed( _rEvt );
+    aTransformed.maPosPixel = pDataWindow->ScreenToOutputPixel( OutputToScreenPixel( _rEvt.maPosPixel ) );
+    return pDataWindow->ExecuteDrop( aTransformed );
+}
+
+//===================================================================
+
+sal_Int8 BrowseBox::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
+{
+    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
+    // not interested in this event
+    return DND_ACTION_NONE;
+}
+
+//===================================================================
+
+sal_Int8 BrowseBox::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
+{
+    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
+    // not interested in this event
+    return DND_ACTION_NONE;
+}
+#endif
+
+//===================================================================
+
+#if SUPD>627 || FS_PRIV_DEBUG
+void* BrowseBox::implGetDataFlavors() const
+{
+    if (static_cast<BrowserDataWin*>(pDataWin)->bCallingDropCallback)
+        return &static_cast<BrowserDataWin*>(pDataWin)->GetDataFlavorExVector();
+    return &GetDataFlavorExVector();
 }
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-27 11:47:48 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 13:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@ public:
 class BrowserDataWin
             :public Control
             ,public DragSourceHelper
+            ,public DropTargetHelper
 {
 friend class BrowseBox;
     BrowserHeader*  pHeaderBar;     // only for BROWSER_HEADERBAR_NEW
@@ -188,9 +189,11 @@ friend class BrowseBox;
     FASTBOOL        bUpdateOnUnlock;    // Update() while locked
     FASTBOOL        bInUpdateScrollbars;    // Rekursionsschutz
     FASTBOOL        bHadRecursion;          // Rekursion war aufgetreten
-    FASTBOOL        bOwnDataChangedHdl; // dont change colors in DataChanged
+    FASTBOOL        bOwnDataChangedHdl;     // dont change colors in DataChanged
+    FASTBOOL        bCallingDropCallback;   // we're in a callback to AcceptDrop or ExecuteDrop curently
     USHORT          nUpdateLock;    // lock count, dont call Control::Update()!
     short           nCursorHidden;  // new conuter for DoHide/ShowCursor
+
 
 public:
                     BrowserDataWin( BrowseBox* pParent );
@@ -209,6 +212,10 @@ public:
 
     virtual BOOL    QueryDrop( DropEvent& rEvt );
     virtual BOOL    Drop( const DropEvent& rEvt );
+
+    // DropTargetHelper overridables
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     // DragSourceHelper overridables
     virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );

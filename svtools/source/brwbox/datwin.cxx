@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-27 11:47:48 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 13:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,7 @@ void BrowserColumn::ZoomChanged(const Fraction& rNewZoom)
 BrowserDataWin::BrowserDataWin( BrowseBox* pParent ) :
     Control( pParent, WinBits(WB_CLIPCHILDREN) ),
     DragSourceHelper( this ),
+    DropTargetHelper( this ),
     pHeaderBar( 0 ),
     pEventWin( pParent ),
     pCornerWin( 0 ),
@@ -269,7 +270,8 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent ) :
     bOwnDataChangedHdl( FALSE ),
     nUpdateLock( 0 ),
     nCursorHidden( 0 ),
-    pDtorNotify( 0 )
+    pDtorNotify( 0 ),
+    bCallingDropCallback( FALSE )
 {
     aMouseTimer.SetTimeoutHdl( LINK( this, BrowserDataWin, RepeatedMouseMove ) );
     aMouseTimer.SetTimeout( 100 );
@@ -414,6 +416,30 @@ BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
 
     // assemble and return the BrowseEvent
     return BrowseEvent( this, nRow, nCol, nColId, aFieldRect );
+}
+
+//-------------------------------------------------------------------
+sal_Int8 BrowserDataWin::AcceptDrop( const AcceptDropEvent& _rEvt )
+{
+    bCallingDropCallback = sal_True;
+    sal_Int8 nReturn = DND_ACTION_NONE;
+#if SUPD>627 || FS_PRIV_DEBUG
+    nReturn = GetParent()->AcceptDrop( BrowserAcceptDropEvent( this, _rEvt ) );
+#endif
+    bCallingDropCallback = sal_False;
+    return nReturn;
+}
+
+//-------------------------------------------------------------------
+sal_Int8 BrowserDataWin::ExecuteDrop( const ExecuteDropEvent& _rEvt )
+{
+    bCallingDropCallback = sal_True;
+    sal_Int8 nReturn = DND_ACTION_NONE;
+#if SUPD>627 || FS_PRIV_DEBUG
+    return GetParent()->ExecuteDrop( BrowserExecuteDropEvent( this, _rEvt ) );
+#endif
+    bCallingDropCallback = sal_False;
+    return nReturn;
 }
 
 //-------------------------------------------------------------------
@@ -615,11 +641,29 @@ BrowserMouseEvent::BrowserMouseEvent( Window *pWin, const MouseEvent& rEvt,
 
 //===================================================================
 
-BrowserDropEvent::BrowserDropEvent( BrowserDataWin *pWin, const DropEvent& rEvt ):
-    DropEvent(rEvt),
-    BrowseEvent( pWin->CreateBrowseEvent( rEvt.GetPosPixel() ) )
+BrowserDropEvent::BrowserDropEvent( BrowserDataWin *pWin, const DropEvent& rEvt )
+    :DropEvent(rEvt)
+    ,BrowseEvent( pWin->CreateBrowseEvent( rEvt.GetPosPixel() ) )
 {
 }
+
+//===================================================================
+
+BrowserAcceptDropEvent::BrowserAcceptDropEvent( BrowserDataWin *pWin, const AcceptDropEvent& rEvt )
+    :AcceptDropEvent(rEvt)
+    ,BrowseEvent( pWin->CreateBrowseEvent( rEvt.maPosPixel ) )
+{
+}
+
+//===================================================================
+
+BrowserExecuteDropEvent::BrowserExecuteDropEvent( BrowserDataWin *pWin, const ExecuteDropEvent& rEvt )
+    :ExecuteDropEvent(rEvt)
+    ,BrowseEvent( pWin->CreateBrowseEvent( rEvt.maPosPixel ) )
+{
+}
+
+//===================================================================
 
 //-------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-27 11:46:46 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 13:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,12 @@ void BrowseBox::Construct( BrowserMode nMode )
 
 BrowseBox::BrowseBox( Window* pParent, WinBits nBits, BrowserMode nMode )
     :Control( pParent, nBits | WB_3DLOOK )
+#if SUPD>626 || FS_PRIV_DEBUG
     ,DragSourceHelper( this )
+#endif
+#if SUPD>627 || FS_PRIV_DEBUG
+    ,DropTargetHelper( this )
+#endif
     ,aHScroll( this, WinBits( WB_HSCROLL ) )
 {
     DBG_CTOR( BrowseBox, NULL );
@@ -178,7 +183,12 @@ BrowseBox::BrowseBox( Window* pParent, WinBits nBits, BrowserMode nMode )
 
 BrowseBox::BrowseBox( Window* pParent, const ResId& rId, BrowserMode nMode )
     :Control( pParent, rId )
+#if SUPD>626 || FS_PRIV_DEBUG
     ,DragSourceHelper( this )
+#endif
+#if SUPD>627 || FS_PRIV_DEBUG
+    ,DropTargetHelper( this )
+#endif
     ,aHScroll( this, WinBits(WB_HSCROLL) )
 {
     DBG_CTOR( BrowseBox, NULL );
