@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:22:31 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,7 +504,7 @@ Menu RID_SVXMNU_COLS
             Text[ dutch ] = "~Vervangen door";
             Text[ chinese_simplified ] = "Ìæ»»Îª(~R)";
             Text[ greek ] = "ÁíôéêáôÜóôáóç ì~å";
-            Text[ korean ] = "´Ù¸¥ °ÍÀ¸·Î ¹Ù²Ù±â(~R)";
+            Text[ korean ] = "¹Ù²Ù±â";
             Text[ arabic ] = "ÇÓÊÈÏÇá ÈÜ";
             Text[ turkish ] = "Şununla değiştir...";
         };
