@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registryitem_draw.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:06:20 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 21:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
     Subkey = "soffice.StarDrawDocument.5\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,5";
+    Value = "<progpath>\program\soffice.exe,31";
 End
 
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Shell
@@ -276,7 +276,7 @@ RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
     Subkey = "soffice.StarDrawDocument.6\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,5";
+    Value = "<progpath>\program\soffice.exe,31";
 End
 
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_Shell
@@ -373,7 +373,7 @@ RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "soffice.StarDrawTemplate.6\DefaultIcon";
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Value = "<progpath>\program\soffice.exe,6";
+    Value = "<progpath>\program\soffice.exe,32";
 End
 
 RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_Shell
@@ -505,14 +505,6 @@ RegistryItem gid_Regitem_Sxd_Mime_Database
     Value = ".sxd";
 End
 
-RegistryItem gid_Regitem_Sxd_Soffice_Stardrawdocument_6_Shellnew
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".sxd\soffice.StarDrawDocument.6\ShellNew";
-    Name = "FileName";
-    Value = "soffice.sxd";
-End
-
 RegistryItem gid_Regitem__Sda
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
@@ -527,268 +519,268 @@ RegistryItem gid_Regitem__Sxd
     Value = "soffice.StarDrawDocument.6";
 End
 
-// new ood file extension 
+// new odg file extension 
 
-RegistryItem gid_Regitem_Ood_PersistentHandler
+RegistryItem gid_Regitem_Odg_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".ood\PersistentHandler";
+    Subkey = ".odg\PersistentHandler";
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Ood_Shellex_00021500_0000_0000_C000_000000000046
+RegistryItem gid_Regitem_Odg_Shellex_00021500_0000_0000_C000_000000000046
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".ood\shellex\{00021500-0000-0000-C000-000000000046}";
+    Subkey = ".odg\shellex\{00021500-0000-0000-C000-000000000046}";
     Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
 End
 
-RegistryItem gid_Regitem_Ood_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+RegistryItem gid_Regitem_Odg_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".ood\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Subkey = ".odg\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
     Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
 End
 
 RegistryItem gid_Regitem_DrawDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Subkey = "opendocument.DrawDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
-RegistryItem gid_Regitem_Ood_Contenttype
+RegistryItem gid_Regitem_Odg_Contenttype
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".ood";
+    Subkey = ".odg";
     Name = "Content Type";
-    Value = "application/x-vnd.oasis.openoffice.drawing";
+    Value = "application/vnd.oasis.opendocumentdrawing";
 End
 
-RegistryItem gid_Regitem_Ood_Mime_Database
+RegistryItem gid_Regitem_Odg_Mime_Database
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "MIME\Database\Content Type\application/x-vnd.oasis.openoffice.drawing";
+    Subkey = "MIME\Database\Content Type\application/vnd.oasis.opendocumentdrawing";
     Name = "Extension";
-    Value = ".ood";
+    Value = ".odg";
 End
 
-RegistryItem gid_Regitem__Ood
+RegistryItem gid_Regitem__Odg
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".ood";
-    Value = "openoffice.DrawDocument.1";
+    Subkey = ".odg";
+    Value = "opendocument.DrawDocument.1";
 End
 
-RegistryItem gid_Regitem_Ood_Openoffice_Drawdocument_1_Shellnew
+RegistryItem gid_Regitem_Odg_Openoffice_Drawdocument_1_Shellnew
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".ood\openoffice.DrawDocument.1\ShellNew";
+    Subkey = ".odg\opendocument.DrawDocument.1\ShellNew";
     Name = "FileName";
-    Value = "soffice.ood";
+    Value = "soffice.odg";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_Curver
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DrawDocument\CurVer";
+    Subkey = "opendocument.DrawDocument\CurVer";
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Value = "openoffice.DrawDocument.1";
+    Value = "opendocument.DrawDocument.1";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawDocument.1";
+    Subkey = "opendocument.DrawDocument.1";
     REG_VALUE_LNG(OO_DRAW)
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawDocument.1\CLSID";
+    Subkey = "opendocument.DrawDocument.1\CLSID";
     Value = "{41662FC2-0D57-4aff-AB27-AD2E12E7C273}";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawDocument.1\DefaultIcon";
+    Subkey = "opendocument.DrawDocument.1\DefaultIcon";
     Value = "<progpath>\program\soffice.exe,5";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawDocument.1\shell";
+    Subkey = "opendocument.DrawDocument.1\shell";
     Value = "open";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawDocument.1\shell\new";
+    Subkey = "opendocument.DrawDocument.1\shell\new";
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawDocument.1\shell\new\command";
+    Subkey = "opendocument.DrawDocument.1\shell\new\command";
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawDocument.1\shell\open\command";
+    Subkey = "opendocument.DrawDocument.1\shell\open\command";
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawDocument.1\shell\print\command";
+    Subkey = "opendocument.DrawDocument.1\shell\print\command";
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawDocument.1\shell\printto\command";
+    Subkey = "opendocument.DrawDocument.1\shell\printto\command";
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawingdocument_1_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawDocument.1\Insertable";
+    Subkey = "opendocument.DrawDocument.1\Insertable";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawingdocument_1_Protocol_Stdfileediting_Server
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawDocument.1\protocol\StdFileEditing\server";
+    Subkey = "opendocument.DrawDocument.1\protocol\StdFileEditing\server";
     Value = "<progpath>\program\soffice.exe";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawingdocument_1_Protocol_Stdfileediting_Verb_0
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawDocument.1\protocol\StdFileEditing\verb\0";
+    Subkey = "opendocument.DrawDocument.1\protocol\StdFileEditing\verb\0";
     Value = "&Edit";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawingdocument_1_Protocol_Stdfileediting_Verb__1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawDocument.1\protocol\StdFileEditing\verb\-1";
+    Subkey = "opendocument.DrawDocument.1\protocol\StdFileEditing\verb\-1";
     Value = "&Show";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawingdocument_1_Protocol_Stdfileediting_Verb__2
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawDocument.1\protocol\StdFileEditing\verb\-2";
+    Subkey = "opendocument.DrawDocument.1\protocol\StdFileEditing\verb\-2";
     Value = "&Open";
 End
 
-// new otd file extension 
+// new otg file extension 
 
-RegistryItem gid_Regitem_Otd_PersistentHandler
+RegistryItem gid_Regitem_Otg_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".otd\PersistentHandler";
+    Subkey = ".otg\PersistentHandler";
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Otd_Shellex_00021500_0000_0000_C000_000000000046
+RegistryItem gid_Regitem_Otg_Shellex_00021500_0000_0000_C000_000000000046
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".otd\shellex\{00021500-0000-0000-C000-000000000046}";
+    Subkey = ".otg\shellex\{00021500-0000-0000-C000-000000000046}";
     Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
 End
 
-RegistryItem gid_Regitem_Otd_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+RegistryItem gid_Regitem_Otg_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".otd\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Subkey = ".otg\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
     Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
 End
 
 RegistryItem gid_Regitem_DrawTemplate_1_Shellex_PropertySheetHandlers_MyPropSheet1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "openoffice.DrawTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Subkey = "opendocument.DrawTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
-RegistryItem gid_Regitem_Otd
+RegistryItem gid_Regitem_Otg
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".otd";
+    Subkey = ".otg";
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Value = "openoffice.DrawTemplate.1";
+    Value = "opendocument.DrawTemplate.1";
 End
 
-RegistryItem gid_Regitem_Otd_Contenttype
+RegistryItem gid_Regitem_Otg_Contenttype
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".otd";
+    Subkey = ".otg";
     Name = "Content Type";
-    Value = "application/x-vnd.oasis.openoffice.drawing";
+    Value = "application/vnd.oasis.opendocumentdrawing";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawtemplate_1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DrawTemplate.1";
+    Subkey = "opendocument.DrawTemplate.1";
     ModuleID = gid_Module_Prg_Draw_Bin;
     REG_VALUE_LNG(OO_DRAW_TEMPLATE)
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DrawTemplate.1\DefaultIcon";
+    Subkey = "opendocument.DrawTemplate.1\DefaultIcon";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Value = "<progpath>\program\soffice.exe,6";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DrawTemplate.1\shell";
+    Subkey = "opendocument.DrawTemplate.1\shell";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Value = "new";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DrawTemplate.1\shell\new";
+    Subkey = "opendocument.DrawTemplate.1\shell\new";
     ModuleID = gid_Module_Prg_Draw_Bin;
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DrawTemplate.1\shell\new\command";
+    Subkey = "opendocument.DrawTemplate.1\shell\new\command";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DrawTemplate.1\shell\open\command";
+    Subkey = "opendocument.DrawTemplate.1\shell\open\command";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DrawTemplate.1\shell\print\command";
+    Subkey = "opendocument.DrawTemplate.1\shell\print\command";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DrawTemplate.1\shell\printto\command";
+    Subkey = "opendocument.DrawTemplate.1\shell\printto\command";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
