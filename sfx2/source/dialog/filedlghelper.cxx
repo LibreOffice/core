@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-25 11:20:56 $
+ *  last change: $Author: fs $ $Date: 2001-10-26 09:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_FILEPREVIEWIMAGEFORMATS_HPP_
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
 #endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_LISTBOXCONTROLACTIONS_HPP_
-#include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_CONTROLACTIONS_HPP_
+#include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -117,6 +117,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -313,6 +316,11 @@ private:
 
     void                    pushBackPicker();
     void                    popPicker();
+
+    void                    correctVirtualDialogType();
+
+    void                    setControlHelpIds( const sal_Int16* _pControlId, const sal_Int32* _pHelpId );
+    void                    setDialogHelpId( const sal_Int32 _nHelpId );
 
     DECL_LINK( TimeOutHdl_Impl, Timer* );
     DECL_LINK( HandleEvent, FileDialogHelper* );
@@ -682,7 +690,7 @@ void FileDialogHelper_Impl::updateVersions()
     try
     {
         xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
-                        ListboxControlActions::DELETE_ITEMS, aValue );
+                        ControlActions::DELETE_ITEMS, aValue );
     }
     catch( IllegalArgumentException ){}
 
@@ -694,12 +702,12 @@ void FileDialogHelper_Impl::updateVersions()
         {
             aValue <<= aEntries;
             xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
-                            ListboxControlActions::ADD_ITEMS, aValue );
+                            ControlActions::ADD_ITEMS, aValue );
 
             Any aPos;
             aPos <<= (sal_Int32) 0;
             xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
-                            ListboxControlActions::SET_SELECT_ITEM, aPos );
+                            ControlActions::SET_SELECT_ITEM, aPos );
         }
         catch( IllegalArgumentException ){}
     }
@@ -917,7 +925,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
 
     Sequence < Any > aServiceType(1);
 
-    switch ( m_nDialogType ) {
+    switch ( m_nDialogType )
+    {
     case FILEOPEN_SIMPLE:
         aServiceType[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
         break;
@@ -1058,10 +1067,68 @@ void SAL_CALL PickerThread_Impl::run()
 }
 
 // ------------------------------------------------------------------------
+void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, const sal_Int32* _pHelpId )
+{
+    DBG_ASSERT( _pControlId && _pHelpId, "FileDialogHelper_Impl::setControlHelpIds: invalid array pointers!" );
+    if ( !_pControlId || !_pHelpId )
+        return;
+
+    // forward these ids to the file picker
+    try
+    {
+        const ::rtl::OUString sHelpIdPrefix( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
+        // the ids for the single controls
+        Reference< XFilePickerControlAccess > xControlAccess( mxFileDlg, UNO_QUERY );
+        if ( xControlAccess.is() )
+        {
+            while ( *_pControlId )
+            {
+                // calc the help id of the element
+                ::rtl::OUString sId( sHelpIdPrefix );
+                sId += ::rtl::OUString::valueOf( *_pHelpId );
+                // set the help id
+                xControlAccess->setValue( *_pControlId, ControlActions::SET_HELP_URL, makeAny( sId ) );
+
+                ++_pControlId; ++_pHelpId;
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_ERROR( "FileDialogHelper_Impl::setControlHelpIds: caught an exception while setting the help ids!" );
+    }
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper_Impl::setDialogHelpId( const sal_Int32 _nHelpId )
+{
+    try
+    {
+        // does the dialog haver a help URL property?
+        Reference< XPropertySet > xDialogProps( mxFileDlg, UNO_QUERY );
+        Reference< XPropertySetInfo > xInfo;
+        if ( xDialogProps.is() )
+            xInfo = xDialogProps->getPropertySetInfo( );
+        const ::rtl::OUString sHelpURLPropertyName( RTL_CONSTASCII_USTRINGPARAM( "HelpURL" ) );
+
+        if ( xInfo.is() && xInfo->hasPropertyByName( sHelpURLPropertyName ) )
+        {   // yep
+            ::rtl::OUString sId( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
+            sId += ::rtl::OUString::valueOf( _nHelpId );
+            xDialogProps->setPropertyValue( sHelpURLPropertyName, makeAny( sId ) );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_ERROR( "FileDialogHelper_Impl::setDialogHelpId: caught an exception while setting the help id!" );
+    }
+}
+
+// ------------------------------------------------------------------------
 Reference< XFilePicker > FileDialogHelper_Impl::getTopMostFilePicker( )
 {
     Reference< XFilePicker > xReturn;
-    DBG_ASSERT( !maDialogQueue.empty(), "FileDialogHelper_Impl::popPicker: no active picker!" );
+    DBG_ASSERT( !maDialogQueue.empty(), "FileDialogHelper_Impl::getTopMostFilePicker: no active picker!" );
     if ( !maDialogQueue.empty() )
         xReturn = *maDialogQueue.begin();
     return xReturn;
@@ -1205,7 +1272,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
             try
             {
                 Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
-                                                    ListboxControlActions::GET_SELECTED_ITEM );
+                                                    ControlActions::GET_SELECTED_ITEM );
                 sal_Int16 nVersion = 0;
                 if ( aValue >>= nVersion )
                     rpSet->Put( SfxInt16Item( SID_VERSION, nVersion ) );
@@ -1834,6 +1901,18 @@ FileDialogHelper::~FileDialogHelper()
 {
     mpImp->dispose();
     mxImp.clear();
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper::SetControlHelpIds( const sal_Int16* _pControlId, const sal_Int32* _pHelpId )
+{
+    mpImp->setControlHelpIds( _pControlId, _pHelpId );
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper::SetDialogHelpId( const sal_Int32 _nHelpId )
+{
+    mpImp->setDialogHelpId( _nHelpId );
 }
 
 // ------------------------------------------------------------------------
