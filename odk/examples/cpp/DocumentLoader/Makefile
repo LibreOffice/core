@@ -76,10 +76,10 @@ $(COMPOENNT_ENV_FLAG) :
 	@echo --------------------------------------------------------------------------------
 	@echo        Register necessary runtime components in the DocumentLoader.rdb 
 	@echo --------------------------------------------------------------------------------
-	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c $(SHAREDLIB_PRE)connectr.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c $(SHAREDLIB_PRE)remotebridge.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c $(SHAREDLIB_PRE)brdgfctr.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c $(SHAREDLIB_PRE)uuresolver.$(SHAREDLIB_EXT)
+	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c connector.uno.$(SHAREDLIB_EXT)
+	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c remotebridge.uno.$(SHAREDLIB_EXT)
+	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c bridgefac.uno.$(SHAREDLIB_EXT)
+	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c uuresolver.uno.$(SHAREDLIB_EXT)
 	@echo bla > $@
 
 CppDocumentLoaderExample : $(OUT_BIN)/DocumentLoader$(EXE_EXT) $(COMPOENNT_ENV_FLAG)
