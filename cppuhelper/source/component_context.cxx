@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-09 14:00:29 $
+ *  last change: $Author: dbo $ $Date: 2001-05-18 14:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,8 +339,8 @@ ComponentContext::ComponentContext(
                     try
                     {
                         Reference< registry::XRegistryKey > const & xKey = pKeys[ nPos ];
-                        m_map[ xKey->getKeyName().copy( 11 ) ] =
-                            new ContextEntry( true, makeAny( xKey->getAsciiValue() ) );
+                        m_map[ xKey->getKeyName().copy( sizeof("/SINGLETONS") /* -\0 +'/' */ ) ] =
+                            new ContextEntry( true, makeAny( xKey->getStringValue() ) );
                     }
                     catch (Exception & rExc)
                     {
