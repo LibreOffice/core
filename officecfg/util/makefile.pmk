@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: dg $ $Date: 2000-11-30 11:50:44 $
+#   last change: $Author: dg $ $Date: 2001-03-30 13:35:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,20 +60,8 @@
 #
 #*************************************************************************
 
-
-$(MISC)$/%.ins : %.xcd
-    java -classpath $(COMMON_BUILD_TOOLS)$/jaxp.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar org.openoffice.helper.Validator $< 
-    java -classpath $(COMMON_BUILD_TOOLS)$/xt19991105.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/instance.xsl $@ path=$(PRJ)$/data	useNamespaces=true newValueStyle=true
-
-$(MISC)$/%.tpl : %.xcd
-    java -classpath $(COMMON_BUILD_TOOLS)$/xt19991105.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/instance.xsl $@ templates=true path=$(PRJ)$/data useNamespaces=true newValueStyle=true
-
-$(MISC)$/%.xsd : %.xcd
-    java -classpath $(COMMON_BUILD_TOOLS)$/xt19991105.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema.xsl $@	
-
-$(MISC)$/%.xml : $(MISC)$/%.ins	
-    java -classpath $(COMMON_BUILD_TOOLS)$/jaxp.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar org.openoffice.helper.PrettyPrinter $< $@ 
-
+$(MISC)$/instance$/%.xml : %.xcd	
+    java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/jaxp.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar org.openoffice.configuration.SchemaImport $< $(PRJ)$/util$/instance.xsl $(MISC)
 
 
 
