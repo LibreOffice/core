@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:21:50 $
+ *  last change: $Author: dl $ $Date: 2001-04-18 12:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 #endif
 #ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
+#endif
+#ifndef _SFXITEMITER_HXX
+#include <svtools/itemiter.hxx>
 #endif
 
 
@@ -548,7 +551,7 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                 SfxItemPool& rPool = pView->GetDoc()->GetPool();
                 SvxScriptSetItem aSvxScriptSetItem( nSlot, rPool );
                 aSvxScriptSetItem.PutItemForScriptType( nScriptType, pArgs->Get( rPool.GetWhich( nSlot ) ) );
-                aNewAttr.Put( *aSvxScriptSetItem.GetItemOfScript( nScriptType ) );
+                aNewAttr.Put( aSvxScriptSetItem.GetItemSet() );
                 rReq.Done( aNewAttr );
                 pArgs = rReq.GetArgs();
             }
