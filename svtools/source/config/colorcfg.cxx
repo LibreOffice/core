@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colorcfg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:23:24 $
+ *  last change: $Author: rt $ $Date: 2003-05-02 14:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,6 +455,8 @@ sal_Bool ColorConfig_Impl::RemoveScheme(const rtl::OUString& rScheme)
 void ColorConfig_Impl::SettingsChanged()
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    ImplUpdateApplicationSettings();
 
     Broadcast( SfxSimpleHint( SFX_HINT_COLORS_CHANGED ) );
 }
