@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:37:37 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ ModalDialog RID_FONTDIALOG
         Text[ chinese_simplified ] = "×ÖÌå(~F)£º";
         Text[ russian ] = "~Òèï øğèôòà:";
         Text[ polish ] = "Czcionka:";
-        Text[ japanese ] = "Ì«İÄ‚Ìí—Ş(~F):";
+        Text[ japanese ] = "Ì«İÄ(~F):";
         Text[ chinese_traditional ] = "¦r«¬(~F)";
         Text[ arabic ] = ":äæÚ ÇáÎØ";
         Text[ greek ] = "ÃñáììáôïóåéñÜ:";
@@ -399,7 +399,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ chinese_simplified ] = "±êÖ¾(~I)";
         Text[ russian ] = "Èíäåêñû:";
         Text[ polish ] = "Indeksy:";
-        Text[ japanese ] = "²İÃŞ¯¸½(~I):";
+        Text[ japanese ] = "w”‚Æ“Y‚¦š(~I):";
         Text[ chinese_traditional ] = "¼Ğ»x(~I)";
         Text[ arabic ] = ":İåÇÑÓ";
         Text[ greek ] = "Äåßêôåò:";
@@ -528,7 +528,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ chinese_simplified ] = "½çÏŞ(~L)";
         Text[ russian ] = "~Ãğàíèöû:";
         Text[ polish ] = "Granice:";
-        Text[ japanese ] = "§ŒÀ(~L):";
+        Text[ japanese ] = "”ÍˆÍ(~L):";
         Text[ chinese_traditional ] = "¬É­­(~L)";
         Text[ arabic ] = ":ÍÏæÏ";
         Text[ greek ] = "¼ñéá:";
@@ -622,7 +622,7 @@ ModalDialog RID_FONTSIZEDIALOG
     Text[ chinese_simplified ] = "×ÖÌå";
     Text[ russian ] = "Ğàçìåğû øğèôòà";
     Text[ polish ] = "Rozmiar czcionek";
-    Text[ japanese ] = "Ì«İÄ »²½Ş";
+    Text[ japanese ] = "Ì«İÄ»²½Ş";
     Text[ chinese_traditional ] = "¦r«¬";
     Text[ arabic ] = "ÃÍÌÇã ÇáÎØ";
     Text[ greek ] = "Ìİãåèïò ãñáììáôïóåéñÜò";
@@ -734,7 +734,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ chinese_simplified ] = "±äÁ¿(~V)";
         Text[ russian ] = "Ïåğåìåííûå:";
         Text[ polish ] = "Zmienne:";
-        Text[ japanese ] = "•ÏX‰Â”\\(~V):";
+        Text[ japanese ] = "•Ï”(~V):";
         Text[ chinese_traditional ] = "ÅÜ¶q(~V)";
         Text[ arabic ] = "ÇáãÊÛíÑÇÊ:";
         Text[ greek ] = "Ìåôáâëçôİò:";
@@ -808,7 +808,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ chinese_simplified ] = "Êı×Ö(~N)";
         Text[ russian ] = "×èñëà:";
         Text[ polish ] = "Liczby:";
-        Text[ japanese ] = "”(~N):";
+        Text[ japanese ] = "”’l(~N):";
         Text[ chinese_traditional ] = "¼Æ¦r(~N)";
         Text[ arabic ] = ":ÃÑŞÇã";
         Text[ greek ] = "Áñéèìïß:";
@@ -1407,7 +1407,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_simplified ] = "±êÖ¾";
             Text[ russian ] = "Èíäåêñû";
             Text[ polish ] = "Indeksy";
-            Text[ japanese ] = "²İÃŞ¯¸½";
+            Text[ japanese ] = "w”‚Æ“Y‚¦š";
             Text[ chinese_traditional ] = "¼Ğ»x";
             Text[ arabic ] = "ÅÓÇÓ (ÃÏáÉ)";
             Text[ greek ] = "Äåßêôåò";
@@ -1433,7 +1433,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_simplified ] = "ÉÏ±ê(~S)";
             Text[ russian ] = "~Âåğõíèé èíäåêñ:";
             Text[ polish ] = "Indeks górny:";
-            Text[ japanese ] = "ã•t‚«(~S):";
+            Text[ japanese ] = "w”(~S):";
             Text[ chinese_traditional ] = "¤W¼Ğ(~S)";
             Text[ arabic ] = ":ãÑÊİÚ";
             Text[ greek ] = "Åêèİôçò:";
@@ -1463,7 +1463,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_simplified ] = "ÏÂ±ê(~U)";
             Text[ russian ] = "~Íèæíèé èíäåêñ:";
             Text[ polish ] = "Indeks dolny:";
-            Text[ japanese ] = "‰º•t‚«(~U):";
+            Text[ japanese ] = "“Y‚¦š(~U):";
             Text[ chinese_traditional ] = "¤U¼Ğ(~U)";
             Text[ arabic ] = ":ãäÎİÖ";
             Text[ greek ] = "Äåßêôçò:";
@@ -1614,7 +1614,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_simplified ] = "³¬³¤¶È(~E)";
             Text[ russian ] = "~Âûñòóï:";
             Text[ polish ] = "Wysuniêcie:";
-            Text[ japanese ] = "’´’·»²½Ş(~E):";
+            Text[ japanese ] = "—]è•”•ª(~E):";
             Text[ chinese_traditional ] = "¶Wªø«×(~E)";
             Text[ arabic ] = ":Øæá ÒÇÆÏ";
             Text[ greek ] = "ÌŞêïò õğİñâáóçò:";
@@ -1678,7 +1678,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_simplified ] = "½çÏŞ";
             Text[ russian ] = "Ïğåäåëû";
             Text[ polish ] = "Granice";
-            Text[ japanese ] = "ØĞ¯Ä";
+            Text[ japanese ] = "”ÍˆÍ";
             Text[ chinese_traditional ] = "¬É­­";
             Text[ arabic ] = "ÇáÍÏæÏ";
             Text[ greek ] = "¼ñéá";
@@ -1783,13 +1783,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ russian ] = "~Âûñòóï (ñëåâà/ñïğàâà):";
             Text[ dutch ] = "~links/rechts te groot:";
             Text[ french ] = "~Dépassement latéral :";
-            Text[ spanish ] = "~Sobredimensión izquierda/derecha:";
-            Text[ italian ] = "Sovradimensionato (sinistra/destra):";
+            Text[ spanish ] = "~Sobredimensión izq./der.:";
+            Text[ italian ] = "Sovradim. (sin./des.):";
             Text[ danish ] = "Venstre/højre overstørrelse:";
             Text[ swedish ] = "~Vänster/höger överstorlek:";
             Text[ polish ] = "Wysuniêcie (z lewej/z prawej):";
             Text[ portuguese_brazilian ] = "~Tamanho excedente:";
-            Text[ japanese ] = "’´‘å»²½Ş¶/‰E(~E):";
+            Text[ japanese ] = "—]è•”•ª ¶/‰E(~E):";
             Text[ chinese_simplified ] = "×óÓÒ³¬´ó(~E)";
             Text[ chinese_traditional ] = "¥ª¥k¶W¤j(~E)";
             Text[ arabic ] = ":ÍÌã ÒÇÆÏ íãíä/íÓÇÑ";
@@ -1847,7 +1847,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ swedish ] = "~Överstorlek:";
             Text[ polish ] = "Wysuniêcie:";
             Text[ portuguese_brazilian ] = "~Excess size:";
-            Text[ japanese ] = "’´‘å»²½Ş(~E)";
+            Text[ japanese ] = "—]è•”•ª(~E)";
             Text[ chinese_simplified ] = "ÌØÊâ´óĞ¡(~E)";
             Text[ chinese_traditional ] = "¯S®í¤j¤p(~E)";
             Text[ arabic ] = ":ÍÌã ÒÇÆÏ";
@@ -1881,7 +1881,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_simplified ] = "¾ØÕó";
             Text[ russian ] = "Ìàòğèöû";
             Text[ polish ] = "Macierze";
-            Text[ japanese ] = "ÏÄØ¸½";
+            Text[ japanese ] = "s—ñ";
             Text[ chinese_traditional ] = "¯x°}";
             Text[ arabic ] = "ãÕİæİÇÊ";
             Text[ greek ] = "ÌŞôñá";
@@ -1907,7 +1907,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_simplified ] = "ĞĞ¾à(~L)";
             Text[ russian ] = "Ìåæäó ñòğîêàìè:";
             Text[ polish ] = "Odstêp wierszy:";
-            Text[ japanese ] = "sŠÔ(~L):";
+            Text[ japanese ] = "s‚ÌŠÔŠu(~L):";
             Text[ chinese_traditional ] = "¦æ¶Z(~L)";
             Text[ arabic ] = ":ÊÈÇÚÏ ÇáÃÓØÑ";
             Text[ greek ] = "ÄéÜóôé÷ï:";
@@ -2087,7 +2087,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_simplified ] = "³¬¸ß(~E)";
             Text[ russian ] = "Âûñòóï:";
             Text[ polish ] = "Wysuniêcie:";
-            Text[ japanese ] = "’´‘å»²½Ş(~E):";
+            Text[ japanese ] = "—]è•”•ª(~E):";
             Text[ chinese_traditional ] = "¶W°ª(~E)";
             Text[ arabic ] = ":ÍÌã ÒÇÆÏ";
             Text[ greek ] = "Õğ~åñâÜëëïí ìİãåèïò:";
@@ -2407,7 +2407,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ chinese_simplified ] = "Ë®Æ½·½Ïò";
         Text[ russian ] = "Ãîğèçîíòàëüíî";
         Text[ polish ] = "Poziomo";
-        Text[ japanese ] = "¶‰E‚É”z—ñ";
+        Text[ japanese ] = "¶‰EˆÊ’u";
         Text[ chinese_traditional ] = "¤ô¥­¤è¦V";
         Text[ arabic ] = "ÃİŞí";
         Text[ greek ] = "Ïñéæüíôéá";
@@ -2533,13 +2533,13 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ french ] = "~Ligne du titre" ;
         Text [ portuguese ] = "Linha do ~título" ;
         Text [ portuguese_brazilian ] = "~Titelzeile" ;
-        Text[ chinese_simplified ] = "±êÌâĞĞ(~T)";
+        Text[ chinese_simplified ] = "±êÌâĞĞ";
         Text[ russian ] = "~Çàãëàâíàÿ ñòğîêà";
         Text[ polish ] = "~Wiersz tytu³owy";
         Text[ japanese ] = "À²ÄÙs(~T)";
         Text[ chinese_traditional ] = "¼ĞÃD¦æ(~T)";
         Text[ arabic ] = "ÓØÑ ÇáÚäæÇä";
-        Text[ greek ] = "ÃñáììŞ ôßôëïõ";
+        Text[ greek ] = "ÃñáììŞ ~ôßôëïõ";
         Text[ korean ] = "Á¦¸ñ Çà(~T)";
         Text[ turkish ] = "Başlık satırı";
         Text[ language_user1 ] = " ";
@@ -2560,13 +2560,13 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ french ] = "~Texte de la formule" ;
         Text [ portuguese ] = "Te~xto da fórmula" ;
         Text [ portuguese_brazilian ] = "~Formeltext" ;
-        Text[ chinese_simplified ] = "¹«Ê½ËµÃ÷ÎÄ(~F)";
+        Text[ chinese_simplified ] = "¹«Ê½ËµÃ÷ÎÄ";
         Text[ russian ] = "Òåêñò ôîğìóëû";
         Text[ polish ] = "~Tekst formu³y";
-        Text[ japanese ] = "”®‚Ì•¶š—ñ(~F)";
+        Text[ japanese ] = "”®•¶š—ñ(~F)";
         Text[ chinese_traditional ] = "¤½¦¡´£¥Ü¤å(~F)";
         Text[ arabic ] = "äÕ ÇáÕíÛÉ";
-        Text[ greek ] = "Êåßìåíï ôığïõ";
+        Text[ greek ] = "Êåßìåíï ~ôığïõ";
         Text[ korean ] = "¼ö½Ä ÅØ½ºÆ®(~F)";
         Text[ turkish ] = "Formül metni";
         Text[ language_user1 ] = " ";
@@ -2583,11 +2583,11 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ swedish ] = "~Ram" ;
         Text [ danish ] = "Ramme" ;
         Text [ italian ] = "~Cornice" ;
-        Text [ spanish ] = "~Borde" ;
+        Text [ spanish ] = "~Marco" ;
         Text [ french ] = "~Cadre" ;
         Text [ portuguese ] = "~Quadro" ;
         Text [ portuguese_brazilian ] = "~Rahmen" ;
-        Text[ chinese_simplified ] = "±ß¿ò(~B)";
+        Text[ chinese_simplified ] = "±ß¿ò";
         Text[ russian ] = "Ğàìêà";
         Text[ polish ] = "~Ramka";
         Text[ japanese ] = "˜g(~B)";
@@ -2645,10 +2645,10 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ dutch ] = "~Originele grootte" ;
         Text [ spanish ] = "T~amaño original" ;
         Text [ english_us ] = "O~riginal size" ;
-        Text[ chinese_simplified ] = "Ô­ÓĞ´óĞ¡(~O)";
+        Text[ chinese_simplified ] = "Ô­ÓĞ´óĞ¡";
         Text[ russian ] = "Èñõîäíûé ğàçìåğ";
         Text[ polish ] = "~Rozmiar oryginalny";
-        Text[ japanese ] = "µØ¼ŞÅÙ »²½Ş(~O)";
+        Text[ japanese ] = "µØ¼ŞÅÙ»²½Ş";
         Text[ chinese_traditional ] = "­ì¦³¤j¤p(~O)";
         Text[ arabic ] = "ÇáÍÌã ÇáÃÕáí";
         Text[ greek ] = "Áñ÷éêü ìİãåè~ïò";
@@ -2672,15 +2672,15 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ french ] = "~Adapter à la page" ;
         Text [ swedish ] = "Anpassa ~sida" ;
         Text [ dutch ] = "~Pagina aanpassen" ;
-        Text [ spanish ] = "Ajustar a la ~página" ;
+        Text [ spanish ] = "Ajustar ~página" ;
         Text [ english_us ] = "Fit to ~page" ;
-        Text[ chinese_simplified ] = "¶ÔÓ¦Ò³Ãæ(~P)";
+        Text[ chinese_simplified ] = "¶ÔÓ¦Ò³Ãæ";
         Text[ russian ] = "Ñîãëàñîâàòü ñòğàíèöó";
         Text[ polish ] = "~Dopasuj stronê";
-        Text[ japanese ] = "Íß°¼Ş‚É“K‡(~P)";
+        Text[ japanese ] = "Íß°¼Ş‚É‡‚í‚¹‚é(~P)";
         Text[ chinese_traditional ] = "¹ïÀ³­¶­±";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÕİÍÉ";
-        Text[ greek ] = "ĞñïóáñìïãŞ óåëßäáò";
+        Text[ greek ] = "Ğñï~óáñìïãŞ óåëßäáò";
         Text[ korean ] = "ÆäÀÌÁö Á¶Á¤(~P)";
         Text[ turkish ] = "Sayfaya sığdır";
         Text[ language_user1 ] = " ";
@@ -2703,13 +2703,13 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ spanish ] = "~Escala" ;
         Text [ english_us ] = "~Scaling" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "¿Ì¶È(~S)";
+        Text[ chinese_simplified ] = "¿Ì¶È";
         Text[ russian ] = "Ìàñøòàáèğîâàíèå";
         Text[ polish ] = "~Skalowanie";
-        Text[ japanese ] = "½¹°Ù(~S)";
+        Text[ japanese ] = "”{—¦(~S)";
         Text[ chinese_traditional ] = "Åã¥Ü¤ñ¨Ò";
         Text[ arabic ] = "ÊÏÑíÌ";
-        Text[ greek ] = "Êëßìáêá";
+        Text[ greek ] = "~Êëßìáêá";
         Text[ korean ] = "¹èÀ²(~S)";
         Text[ turkish ] = "Ölçeklendirme";
         Text[ language_user1 ] = " ";
@@ -2745,7 +2745,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ swedish ] = "Övriga alternativ";
         Text[ polish ] = "Inne opcje";
         Text[ portuguese_brazilian ] = "Misc Options";
-        Text[ japanese ] = "‚»‚Ì‘¼";
+        Text[ japanese ] = "Ú×µÌß¼®İ";
         Text[ chinese_simplified ] = "ÆäËûÑ¡Ïî";
         Text[ chinese_traditional ] = "¨ä¥L¿ï¶µ";
         Text[ arabic ] = "ÚãáíÇÊ ÃÎÑì";
@@ -2770,13 +2770,13 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ italian ] = "Ignora ~~ e ` a fine riga";
         Text[ danish ] = "Ignorer ~~ og ` ved linjeslut";
         Text[ swedish ] = "~Ignorera ~~ och ` vid radslutet";
-        Text[ polish ] = "~Ignoruj ~~i na 'koñcu wiersza";
+        Text[ polish ] = "~Ignoruj ~~i na ' koñcu wiersza";
         Text[ portuguese_brazilian ] = "~Ignore ~~ and ` at ~lineend";
         Text[ japanese ] = "~~ ‚Æ ` ‚Ís––‚Å‚Í–³‹‚·‚é(~N)";
         Text[ chinese_simplified ] = "ºöÂÔĞĞÄ©µÄ·ûºÏ ~~ ºÍ `";
         Text[ chinese_traditional ] = "©¿²¤¦æ¥½ªº²Å¸¹ ~~ ©M `";
         Text[ arabic ] = "ÊÌÇåá ~~ æ ` ÚäÏ äåÇíÉ ÇáÓØÑ";
-        Text[ greek ] = "ĞáñÜâëåøç ~~ êáé ` óôï ôİëïò ôçò ãñáììŞò";
+        Text[ greek ] = "ĞáñÜâëåøç ôùí ~~ êáé ` óôï ôİëïò ôçò óåéñÜò";
         Text[ korean ] = "ÁÙÀÇ ¸¶Áö¸·¿¡¼­~~ ¿Í ` ¹«½Ã";
         Text[ turkish ] = "Satır sonundaki ~~ ve ` işaretlerini dikkate alma";
         Text[ language_user1 ] = " ";
@@ -3193,7 +3193,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ chinese_traditional ] = "¦r«¬(~F)";
         Text[ russian ] = "Òèï øğèôòà:";
         Text[ polish ] = "Czcionka:";
-        Text[ japanese ] = "Ì«İÄ‚Ìí—Ş(~F):";
+        Text[ japanese ] = "Ì«İÄ(~F):";
         Text[ arabic ] = ":äæÚ ÇáÎØ";
         Text [ norwegian ] = "~Font:" ;
         Text [ italian ] = "~Tipo di carattere:" ;
@@ -3240,7 +3240,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ chinese_traditional ] = "¦r«¬¡G";
         Text[ russian ] = "~Íà÷åğòàíèå øğèôòà:";
         Text[ polish ] = "Krój czcionki:";
-        Text[ japanese ] = "Ì«İÄ‚Ìí—Ş:";
+        Text[ japanese ] = "Ì«İÄ‚Ì½À²Ù(~T):";
         Text[ arabic ] = "äãØ ÇáÎØ:";
         Text[ greek ] = "~Ôığïò ãñáöŞò:";
         Text[ korean ] = "À¯Çü:";
@@ -3825,7 +3825,7 @@ Menu RID_DISTANCEMENU
             Text[ chinese_simplified ] = "±êÖ¾";
             Text[ russian ] = "Èíäåêñû";
             Text[ polish ] = "Indeksy";
-            Text[ japanese ] = "²İÃŞ¯¸½";
+            Text[ japanese ] = "w”‚Æ“Y‚¦š";
             Text[ chinese_traditional ] = "¼Ğ»x";
             Text[ arabic ] = "İåÇÑÓ";
             Text[ greek ] = "Äåßêôåò";
@@ -3904,7 +3904,7 @@ Menu RID_DISTANCEMENU
             Text[ chinese_simplified ] = "½çÏŞ";
             Text[ russian ] = "Ãğàíèöû";
             Text[ polish ] = "Granice";
-            Text[ japanese ] = "ØĞ¯Ä";
+            Text[ japanese ] = "”ÍˆÍ";
             Text[ chinese_traditional ] = "¬É­­";
             Text[ arabic ] = "ÍÏæÏ";
             Text[ greek ] = "¼ñéá";
@@ -3957,7 +3957,7 @@ Menu RID_DISTANCEMENU
             Text[ chinese_simplified ] = "¾ØÕó";
             Text[ russian ] = "Ìàòğèöû";
             Text[ polish ] = "Macierze";
-            Text[ japanese ] = "ÏÄØ¸½";
+            Text[ japanese ] = "s—ñ";
             Text[ chinese_traditional ] = "¯x°}";
             Text[ arabic ] = "ãÕİæİÇÊ";
             Text[ greek ] = "ÌŞôñåò";
@@ -4358,7 +4358,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "·ûºÅ +";
                 Text[ russian ] = "Çíàê âïåğåäè +";
                 Text[ polish ] = "Znak +";
-                Text[ japanese ] = "•„†+";
+                Text[ japanese ] = "•„† Ìß×½";
                 Text[ chinese_traditional ] = "²Å¸¹ +";
                 Text[ arabic ] = "+ ÚáÇãÉ";
                 Text[ greek ] = "Ğñüóçìï +";
@@ -4384,7 +4384,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "¸º·ûºÅ";
                 Text[ russian ] = "Çíàê -";
                 Text[ polish ] = "Znak -";
-                Text[ japanese ] = "•„†-";
+                Text[ japanese ] = "•„† Ï²Å½";
                 Text[ chinese_traditional ] = "­t²Å¸¹";
                 Text[ arabic ] = "- ÚáÇãÉ";
                 Text[ greek ] = "Ğñüóçìï -";
@@ -4410,7 +4410,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Õı¸º·ûºÅ";
                 Text[ russian ] = "Çíàê +-";
                 Text[ polish ] = "Znak +-";
-                Text[ japanese ] = "•„†+-";
+                Text[ japanese ] = "•„† Ìß×½Ï²Å½";
                 Text[ chinese_traditional ] = "¥¿­t²Å¸¹";
                 Text[ arabic ] = "+- ÚáÇãÉ";
                 Text[ greek ] = "Ğñüóçìï +-";
@@ -4436,7 +4436,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "¸ºÕı·ûºÅ";
                 Text[ russian ] = "Çíàê -+";
                 Text[ polish ] = "Znak -+";
-                Text[ japanese ] = "•„†-+";
+                Text[ japanese ] = "•„† Ï²Å½Ìß×½";
                 Text[ chinese_traditional ] = "­t¥¿²Å¸¹";
                 Text[ arabic ] = "-+ ÚáÇãÉ";
                 Text[ greek ] = "Ğñüóçìï -+";
@@ -4462,7 +4462,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Âß¼­µÄ NOT";
                 Text[ russian ] = "Ëîãè÷åñêîå ÍÅ";
                 Text[ polish ] = "Funkcja logiczna NIE";
-                Text[ japanese ] = "˜_—‰‰Zq NOT";
+                Text[ japanese ] = "˜_— NOT";
                 Text[ chinese_traditional ] = "ÅŞ¿èªº NOT";
                 Text[ arabic ] = "áÇ ãäØŞíÉ";
                 Text[ greek ] = "ÔåëåóôŞò NOT ôïõ Boole";
@@ -4492,7 +4492,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "¼Ó·¨ +";
                 Text[ russian ] = "Ñëîæåíèå +";
                 Text[ polish ] = "Dodawanie +";
-                Text[ japanese ] = "‘«Z+";
+                Text[ japanese ] = "‰ÁZ+";
                 Text[ chinese_traditional ] = "¥[ªk +";
                 Text[ arabic ] = "+ ÌãÚ";
                 Text[ greek ] = "¢èñïéóìá +";
@@ -4518,7 +4518,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "³Ë·¨(µã)";
                 Text[ russian ] = "Óìíîæåíèå (òî÷êà)";
                 Text[ polish ] = "Mno¿enie (Kropka)";
-                Text[ japanese ] = "Š|Z(“_)";
+                Text[ japanese ] = "æZ(“_)";
                 Text[ chinese_traditional ] = "­¼ªk(ÂI)";
                 Text[ arabic ] = "(.) ÖÑÈ";
                 Text[ greek ] = "Ğïëëáğëáóéáóìüò (Êïõêêßäá)";
@@ -4544,7 +4544,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "³Ë·¨(½»²æ·û)";
                 Text[ russian ] = "Óìíîæåíèå (êğåñòèê)";
                 Text[ polish ] = "Mno¿enie (x)";
-                Text[ japanese ] = "Š|Z(Íß¹)";
+                Text[ japanese ] = "æZ(Íß¹)";
                 Text[ chinese_traditional ] = "­¼ªk(¥æ¤e²Å)";
                 Text[ arabic ] = "(x) ÖÑÈ";
                 Text[ greek ] = "Ğïëëáğëáóéáóìüò (x)";
@@ -4563,14 +4563,14 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ swedish ] = "Multiplikation (*)" ;
                 Text [ danish ] = "multiplikation (stjerne)" ;
                 Text [ italian ] = "Moltiplicazione (asterisco)" ;
-                Text [ spanish ] = "Multiplicación (estrella)" ;
+                Text [ spanish ] = "Multiplicación (asterisco)" ;
                 Text [ french ] = "Multiplication (étoile)" ;
                 Text [ dutch ] = "Vermenigvuldigen (sterretje)" ;
                 Text [ portuguese ] = "Multiplicação (asterisco)" ;
                 Text[ chinese_simplified ] = "³Ë·¨(ĞÇºÅ)";
                 Text[ russian ] = "Óìíîæåíèå (çâåçäî÷êà)";
                 Text[ polish ] = "Mno¿enie (gwiazdka)";
-                Text[ japanese ] = "Š|Z(•Äˆó)";
+                Text[ japanese ] = "æZ(±½ÀØ½¸)";
                 Text[ chinese_traditional ] = "­¼ªk(¬P¸¹)";
                 Text[ arabic ] = "(*) ÖÑÈ";
                 Text[ greek ] = "Ğïëëáğëáóéáóìüò (*)";
@@ -4596,7 +4596,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Âß¼­µÄ AND";
                 Text[ russian ] = "Ëîãè÷åñêîå È";
                 Text[ polish ] = "Funkcja logiczna ORAZ";
-                Text[ japanese ] = "˜_—Ï AND";
+                Text[ japanese ] = "‚©‚Â";
                 Text[ chinese_traditional ] = "ÅŞ¿èªº AND";
                 Text[ arabic ] = "æ ãäØŞíÉ";
                 Text[ greek ] = "ÔåëåóôŞò ANDôïõ Boole";
@@ -4626,7 +4626,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "¼õ·¨ -";
                 Text[ russian ] = "Âû÷èòàíèå -";
                 Text[ polish ] = "Odejmowanie -";
-                Text[ japanese ] = "ˆøZ-";
+                Text[ japanese ] = "Œ¸Z-";
                 Text[ chinese_traditional ] = "´îªk -";
                 Text[ arabic ] = "ØÑÍ Ü";
                 Text[ greek ] = "Áöáßñåóç -";
@@ -4652,7 +4652,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "³ı·¨(·ÖÊı)";
                 Text[ russian ] = "Äåëåíèå (äğîáü)";
                 Text[ polish ] = "Dzielenie (U³amek)";
-                Text[ japanese ] = "Š„Z(•ª”)";
+                Text[ japanese ] = "œZ(•ª”)";
                 Text[ chinese_traditional ] = "°£ªk(¤À¼Æ)";
                 Text[ arabic ] = "ŞÓãÉ (ßÓÑ)";
                 Text[ greek ] = "Äéáßñåóç (ÊëÜóìá)";
@@ -4678,7 +4678,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "³ı·¨(Ò»ĞĞË«µã)";
                 Text[ russian ] = "Äåëåíèå (äâîåòî÷èå ñ ÷åğòîé)";
                 Text[ polish ] = "Dzielenie (dwukropek-kreska)";
-                Text[ japanese ] = "Š„Z(ü‚É“_‚Ó‚½‚Â)";
+                Text[ japanese ] = "œZ(Š„‚èZ‹L†)";
                 Text[ chinese_traditional ] = "°£ªk(¤@¦æÂùÂI)";
                 Text[ arabic ] = "(÷) ŞÓãÉ";
                 Text[ greek ] = "Division (¸)";
@@ -4704,7 +4704,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "³ı·¨(Ğ±Ïß)";
                 Text[ russian ] = "Äåëåíèå (êîñàÿ ÷åğòà)";
                 Text[ polish ] = "Dzielenie (kreska ukoœna)";
-                Text[ japanese ] = "Š„Z(Îü)";
+                Text[ japanese ] = "œZ(Îü)";
                 Text[ chinese_traditional ] = "°£ªk(±×½u)";
                 Text[ arabic ] = "(/) ŞÓãÉ";
                 Text[ greek ] = "Äéáßñåóç (ÊÜèåôïò)";
@@ -4730,7 +4730,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Âß¼­µÄ OR";
                 Text[ russian ] = "Ëîãè÷åñêîå ÈËÈ";
                 Text[ polish ] = "Funkcja logiczna LUB";
-                Text[ japanese ] = "˜_—˜a(OR)";
+                Text[ japanese ] = "‚Ü‚½‚Í";
                 Text[ chinese_traditional ] = "ÅŞ¿èªº OR";
                 Text[ arabic ] = "Ãæ ãäØŞíÉ";
                 Text[ greek ] = "ÔåëåóôŞò ORôïõ Boole";
@@ -4835,7 +4835,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "ÏàµÈ";
                 Text[ russian ] = "ğàâíî";
                 Text[ polish ] = "jest równy";
-                Text[ japanese ] = "“™‚µ‚¢";
+                Text[ japanese ] = "²º°Ù";
                 Text[ chinese_traditional ] = "¬Ûµ¥";
                 Text[ arabic ] = "íÓÇæí";
                 Text[ greek ] = "åßíáé ßóï";
@@ -4861,7 +4861,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "²»µÈÓÚ";
                 Text[ russian ] = "íå ğàâíî";
                 Text[ polish ] = "nie jest równy";
-                Text[ japanese ] = "“™‚µ‚­‚È‚¢";
+                Text[ japanese ] = "É¯Ä²º°Ù";
                 Text[ chinese_traditional ] = "¤£µ¥©ó";
                 Text[ arabic ] = "áÇ íÓÇæí";
                 Text[ greek ] = "åßíáé äéÜöïñï";
@@ -4887,7 +4887,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "½üËÆµÈÓÚ";
                 Text[ russian ] = "ïğèáëèçèòåëüíî ğàâíî";
                 Text[ polish ] = "jest w przybli¿eniu równy";
-                Text[ japanese ] = "‚Ù‚Ú“™‚µ‚¢";
+                Text[ japanese ] = "‹ß—";
                 Text[ chinese_traditional ] = "ªñ¦üµ¥©ó";
                 Text[ arabic ] = "íÓÇæí ÊŞÑíÈÇğ";
                 Text[ greek ] = "åßíáé êáôÜ ğñïóİããéóç ßóï";
@@ -4913,7 +4913,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     TEXT[ chinese_simplified ] = "¿É±»³ıÓÚ";
                 TEXT[ russian ] = "äåëèòñÿ";
                 TEXT[ polish ] = "dzieli";
-                TEXT[ japanese ] = "Š„‚é";
+                TEXT[ japanese ] = "•ª‚¯‚é";
                 TEXT[ chinese_traditional ] = "¥i³Q°£©ó";
                 TEXT[ arabic ] = "íŞÈá ÇáŞÓãÉ";
                 TEXT[ greek ] = "äéáéñåß";
@@ -4939,7 +4939,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     TEXT[ chinese_simplified ] = "²»ÄÜ±»³ıÓÚ";
                 TEXT[ russian ] = "íå äåëèòñÿ";
                 TEXT[ polish ] = "nie dzieli";
-                TEXT[ japanese ] = "Š„‚ç‚È‚¢";
+                TEXT[ japanese ] = "•ª‚¯‚È‚¢";
                 TEXT[ chinese_traditional ] = "¤£¯à³Q°£©ó";
                 TEXT[ arabic ] = "áÇ íŞÈá ÇáŞÓãÉ";
                 TEXT[ greek ] = "äåí äéáéñåß";
@@ -4969,7 +4969,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Ğ¡ÓÚ";
                 Text[ russian ] = "ìåíüøå ÷åì";
                 Text[ polish ] = "jest mniejszy ni¿";
-                Text[ japanese ] = "‚æ‚è¬‚³‚¢";
+                Text[ japanese ] = "¬‚È‚è";
                 Text[ chinese_traditional ] = "¤p©ó";
                 Text[ arabic ] = "ÃŞá ãä";
                 Text[ greek ] = "åßíáé ìéêñüôåñï áğü";
@@ -4995,7 +4995,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "´óÓÚ";
                 Text[ russian ] = "áîëüøå ÷åì";
                 Text[ polish ] = "jest wiêkszy ni¿";
-                Text[ japanese ] = "‚æ‚è‘å‚«‚¢";
+                Text[ japanese ] = "‘å‚È‚è";
                 Text[ chinese_traditional ] = "¤j©ó";
                 Text[ arabic ] = "ÃßÈÑ ãä";
                 Text[ greek ] = "åßíáé ìåãáëıôåñï áğü";
@@ -5022,7 +5022,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "ÏàËÆÓÚ»òµÈÓÚ";
                 Text[ russian ] = "ïîäîáíî èëè ğàâíî";
                 Text[ polish ] = "jest podobny lub równy";
-                Text[ japanese ] = "‚Ù‚Ú“™‚µ‚¢¤‚ ‚é‚¢‚Í“™‚µ‚¢";
+                Text[ japanese ] = "Æ±Ø°²º°Ù";
                 Text[ chinese_traditional ] = "¬Û¦ü¤_©Îµ¥©ó";
                 Text[ arabic ] = "ãÔÇÈå Ãæ ãÓÇæí";
                 Text[ greek ] = "åßíáé üìïéï Ş ßóï ìå";
@@ -5048,7 +5048,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Æ½ĞĞÓÚ";
                 Text[ russian ] = "ïàğàëëåëüíî";
                 Text[ polish ] = "jest równoleg³y do";
-                Text[ japanese ] = "•½s‚·‚é‘ÎÛ";
+                Text[ japanese ] = "•½s";
                 Text[ chinese_traditional ] = "¥­¦æ¤_";
                 Text[ arabic ] = "ãÊæÇÒí ãÚ";
                 Text[ greek ] = "åßíáé ğáñÜëëçëï ğñïò";
@@ -5074,7 +5074,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Ö±½ÇÓÚ";
                 Text[ russian ] = "îğòîãîíàëüíî";
                 Text[ polish ] = "jest prostopad³y do";
-                Text[ japanese ] = "’¼Œğ‚·‚é‘ÎÛ";
+                Text[ japanese ] = "‚’¼";
                 Text[ chinese_traditional ] = "ª½¨¤¤_";
                 Text[ arabic ] = "ãÊÚÇãÏ Úáì";
                 Text[ greek ] = "ó÷çìáôßæåé ïñèŞ ãùíßá ìå";
@@ -5105,7 +5105,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Ğ¡ÓÚ»òµÈÓÚ";
                 Text[ russian ] = "ìåíüøå èëè ğàâíî (ïîä íàêëîíîì)";
                 Text[ polish ] = "jest mniejszy lub równy (ukoœny)";
-                Text[ japanese ] = "¬‚È‚è²º°Ù";
+                Text[ japanese ] = "¬‚È‚è²º°Ù(Î‚ß)";
                 Text[ chinese_traditional ] = "¤p©ó©Îµ¥©ó";
                 Text[ arabic ] = "ÃÕÛÑ ãä Ãæ íÓÇæí";
                 Text[ greek ] = "åßíáé ìéêñüôåñï Ş ßóï ìå (ëïîÜ)";
@@ -5131,7 +5131,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "´óÓÚ»ò´óÓÚ";
                 Text[ russian ] = "áîëüøå èëè ğàâíî (ïîä íàêëîíîì)";
                 Text[ polish ] = "jest wiêkszy lub równy (ukoœny)";
-                Text[ japanese ] = "‘å‚È‚è²º°Ù";
+                Text[ japanese ] = "‘å‚È‚è²º°Ù(Î‚ß)";
                 Text[ chinese_traditional ] = "¤j©ó©Î¤j©ó";
                 Text[ arabic ] = "ÃßÈÑ ãä Ãæ íÓÇæí (ãÇÆá)";
                 Text[ greek ] = "åßíáé ìåãáëıôåñï Ş ßóï ìå (ëïîÜ)";
@@ -5295,7 +5295,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "½Ó½ü";
                 Text[ russian ] = "ñòğåìèòñÿ ê";
                 Text[ polish ] = "d¹¿y do";
-                Text[ japanese ] = "ŒX‚­";
+                Text[ japanese ] = "‰E–îˆó";
                 Text[ chinese_traditional ] = "±µªñ";
                 Text[ arabic ] = "ÈÇÊÌÇå";
                 Text[ greek ] = "ôåßíåé ğñïò";
@@ -5329,7 +5329,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_simplified ] = "×óÏòË«¼ıÍ·";
                 TEXT[ russian ] = "Äâîéíàÿ ñòğåëêà âëåâî";
                 TEXT[ polish ] = "podwójna strza³ka w lewo";
-                TEXT[ japanese ] = "¶Œü‚«“ñd–îˆó";
+                TEXT[ japanese ] = "b‚È‚ç‚Îa";
                 TEXT[ chinese_traditional ] = "¥ª¦VÂù½bÀY";
                 TEXT[ arabic ] = "Óåã ãÒÏæÌ Åáì ÇáíÓÇÑ";
                 TEXT[ greek ] = "Äéğëü âİëïò ğñïò ôá áñéóôåñÜ";
@@ -5355,7 +5355,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_simplified ] = "×óÓÒÏòË«¼ıÍ·";
                 TEXT[ russian ] = "Äâîéíàÿ ñòğåëêà âëåâî è âïğàâî";
                 TEXT[ polish ] = "podwójna strza³ka w lewo i w prawo";
-                TEXT[ japanese ] = "¶‰EŒü‚«‚Ì“ñd–îˆó";
+                TEXT[ japanese ] = "a‚È‚ç‚Îb ‚©‚Â b‚È‚ç‚Îa";
                 TEXT[ chinese_traditional ] = "¥ª¥k¦VÂù½bÀY";
                 TEXT[ arabic ] = "Óåã ãÒÏæÌ Åáì ÇáíÓÇÑ æÇáíãíä";
                 TEXT[ greek ] = "Äéğëü âİëïò ğñïò ôá áñéóôåñÜ êáé äåîéÜ";
@@ -5381,7 +5381,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_simplified ] = "ÓÒÏòË«¼ıÍ·";
                 TEXT[ russian ] = "Äâîéíàÿ ñòğåëêà âïğàâî";
                 TEXT[ polish ] = "podwójna strza³ka w prawo";
-                TEXT[ japanese ] = "‰EŒü‚«“ñd–îˆó";
+                TEXT[ japanese ] = "a‚È‚ç‚Îb";
                 TEXT[ chinese_traditional ] = "¥k¦VÂù½bÀY";
                 TEXT[ arabic ] = "Óåã ãÒÏæÌ Åáì Çáíãíä";
                 TEXT[ greek ] = "Äéğëü âİëïò ğñïò ôá äåîéÜ";
@@ -5509,7 +5509,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "º¬ÓĞ";
                 Text[ russian ] = "ñîäåğæèò";
                 Text[ polish ] = "zawiera";
-                Text[ japanese ] = "ŠÜ‚Ş";
+                Text[ japanese ] = "—v‘f";
                 Text[ chinese_traditional ] = "§t¦³";
                 Text[ arabic ] = "íÍÊæí Úáì";
                 Text[ greek ] = "ğåñéëáìâÜíåé";
@@ -6110,7 +6110,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Ö¸Êıº¯Êı";
                 Text[ russian ] = "İêñïîíåíöèàëüíàÿ ôóíêöèÿ";
                 Text[ polish ] = "Funkcja wyk³adnicza";
-                Text[ japanese ] = "w”ŠÖ”";
+                Text[ japanese ] = "©‘Rw”";
                 Text[ chinese_traditional ] = "«ü¼Æ¨ç¼Æ";
                 Text[ arabic ] = "ÏÇáÉ ÃÓíÉ";
                 Text[ greek ] = "ÅêèåôéêŞ óõíÜñôçóç";
@@ -6162,7 +6162,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Ö¸Êıº¯Êı";
                 Text[ russian ] = "İêñïîíåíöèàëüíàÿ ôóíêöèÿ";
                 Text[ polish ] = "Funkcja wyk³adnicza";
-                Text[ japanese ] = "w”ŠÖ”";
+                Text[ japanese ] = "´¸½ÎßÈİ¼¬Ù";
                 Text[ chinese_traditional ] = "«ü¼Æ¨ç¼Æ";
                 Text[ arabic ] = "ÏÇáÉ ÃÓíÉ";
                 Text[ greek ] = "ÅêèåôéêŞ óõíÜñôçóç";
@@ -6188,7 +6188,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "¶ÔÊı";
                 Text[ russian ] = "Ëîãàğèôì";
                 Text[ polish ] = "Logarytm";
-                Text[ japanese ] = "‘Î”";
+                Text[ japanese ] = "Û¸Ş";
                 Text[ chinese_traditional ] = "¹ï¼Æ";
                 Text[ arabic ] = "áæÛÇÑíÊã";
                 Text[ greek ] = "ËïãÜñéèìïò";
@@ -6423,7 +6423,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ swedish ] = "Arcustangens" ;
                 Text [ danish ] = "arcus tangens" ;
                 Text [ italian ] = "Arcotangente" ;
-                Text [ spanish ] = "Tangente de arco" ;
+                Text [ spanish ] = "Arcotangente" ;
                 Text [ french ] = "Arc tangente" ;
                 Text [ dutch ] = "Boogtangens" ;
                 Text [ portuguese ] = "Arcotangente" ;
@@ -6449,7 +6449,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ swedish ] = "Arcuscotangens" ;
                 Text [ danish ] = "arcus cotangens" ;
                 Text [ italian ] = "Arcocotangente" ;
-                Text [ spanish ] = "Cotangente de arco" ;
+                Text [ spanish ] = "Arcocotangente" ;
                 Text [ french ] = "Arc cotangente" ;
                 Text [ dutch ] = "Boogcotangens" ;
                 Text [ portuguese ] = "Cotangente de arco" ;
@@ -6817,7 +6817,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "¼«ÏŞ";
                 Text[ russian ] = "Ïğåäåë";
                 Text[ polish ] = "Limes";
-                Text[ japanese ] = "‹ÉŒÀ’l";
+                Text[ japanese ] = "ØĞ¯Ä";
                 Text[ chinese_traditional ] = "·¥­­";
                 Text[ arabic ] = "ÇáÍÏ ÇáÃŞÕì";
                 Text[ greek ] = "¼ñéá";
@@ -6843,7 +6843,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "×Ü¼Æ";
                 Text[ russian ] = "Ñóììà";
                 Text[ polish ] = "Suma";
-                Text[ japanese ] = "‘˜a";
+                Text[ japanese ] = "¼¸ŞÏ";
                 Text[ chinese_traditional ] = "Á`­p";
                 Text[ arabic ] = "ÇáãÌãæÚ";
                 Text[ greek ] = "¢èñïéóìá";
@@ -6869,7 +6869,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "³Ë»ı";
                 Text[ russian ] = "Ïğîèçâåäåíèå";
                 Text[ polish ] = "Iloczyn";
-                Text[ japanese ] = "Ï";
+                Text[ japanese ] = "Êß²";
                 Text[ chinese_traditional ] = "­¼¿n";
                 Text[ arabic ] = "ÖÑÈ";
                 Text[ greek ] = "Ãéíüìåíï";
@@ -6921,7 +6921,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "ÉÏÏÂ½çÏŞ";
                 Text[ russian ] = "Âåğõíèé è íèæíèé ïğåäåë";
                 Text[ polish ] = "dolna i górna granica";
-                Text[ japanese ] = "ã‰º‹ÉŒÀ’l";
+                Text[ japanese ] = "ãŒÀ‚Æ‰ºŒÀ";
                 Text[ chinese_traditional ] = "¤W¤U¬É­­";
                 Text[ arabic ] = "ÇáÍÏ ÇáÃÏäì æÇáÃŞÕì";
                 Text[ greek ] = "¢íù êáé êÜôù üñéï";
@@ -6951,7 +6951,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "»ı·Ö";
                 Text[ russian ] = "Èíòåãğàë";
                 Text[ polish ] = "Ca³ka";
-                Text[ japanese ] = "Ï•ª";
+                Text[ japanese ] = "²İÃ¸Ş×Ù";
                 Text[ chinese_traditional ] = "¿n¤À";
                 Text[ arabic ] = "ÊßÇãá";
                 Text[ greek ] = "ÏëïêëŞñùìá";
@@ -6977,7 +6977,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Ë«ÖØ»ı·Ö";
                 Text[ russian ] = "Äâîéíîé èíòåãğàë";
                 Text[ polish ] = "Ca³ka podwójna";
-                Text[ japanese ] = "“ñdÏ•ª";
+                Text[ japanese ] = "ÀŞÌŞÙ²İÃ¸Ş×Ù";
                 Text[ chinese_traditional ] = "Âù­«¿n¤À";
                 Text[ arabic ] = "ÊßÇãá ãÒÏæÌ";
                 Text[ greek ] = "Äéğëü ïëïêëŞñùìá";
@@ -7003,7 +7003,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "ÈıÖØ»ı·Ö";
                 Text[ russian ] = "Òğîéíîé èíòåãğàë";
                 Text[ polish ] = "Potrójna ca³ka";
-                Text[ japanese ] = "OdÏ•ª";
+                Text[ japanese ] = "ÄØÌßÙ²İÃ¸Ş×Ù";
                 Text[ chinese_traditional ] = "¤T­«¿n¤À";
                 Text[ arabic ] = "ÊßÇãá ËáÇËí";
                 Text[ greek ] = "Ôñéğëü ïëïêëŞñùìá";
@@ -7033,7 +7033,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "ÏÂÏŞ";
                 Text[ russian ] = "Íèæíèé ïğåäåë";
                 Text[ polish ] = "Dolna granica";
-                Text[ japanese ] = "‰º‹ÉŒÀ’l";
+                Text[ japanese ] = "‰ºŒÀ";
                 Text[ chinese_traditional ] = "¤U­­";
                 Text[ arabic ] = "ÇáÍÏ ÇáÃÏäì";
                 Text[ greek ] = "ÊÜôù üñéï";
@@ -7063,7 +7063,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "ÇúÏß»ı·Ö";
                 Text[ russian ] = "Êğèâîëèíåéíûé èíòåãğàë";
                 Text[ polish ] = "Ca³ka krzywoliniowa";
-                Text[ japanese ] = "üÏ•ª";
+                Text[ japanese ] = "¶°ÌŞ²İÃ¸Ş×Ù";
                 Text[ chinese_traditional ] = "¦±½u¿n¤À";
                 Text[ arabic ] = "ÊßÇãá ãäÍäì";
                 Text[ greek ] = "Åğéêáìğıëéï ïëïêëŞñùìá";
@@ -7089,7 +7089,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Ë«ÖØÇúÏß»ı·Ö";
                 Text[ russian ] = "Äâîéíîé êğèâîëèíåéíûé èíòåãğàë";
                 Text[ polish ] = "Podwójna ca³ka krzywoliniowa";
-                Text[ japanese ] = "–ÊÏ•ª";
+                Text[ japanese ] = "ÀŞÌŞÙ¶°ÌŞ²İÃ¸Ş×Ù";
                 Text[ chinese_traditional ] = "Âù­«¦±½u¿n¤À";
                 Text[ arabic ] = "ÊßÇãá ãäÍäì ãÒÏæÌ";
                 Text[ greek ] = "Äéğëü åğéêáìğıëéï ïëïêëŞñùìá";
@@ -7115,7 +7115,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "ÈıÖØÇúÏß»ı·Ö";
                 Text[ russian ] = "Òğîéíîé êğèâîëèíåéíûé èíòåãğàë";
                 Text[ polish ] = "Potrójna ca³ka krzywoliniowa";
-                Text[ japanese ] = "‘ÌÏ•ª";
+                Text[ japanese ] = "ÄØÌßÙ¶°ÌŞ²İÃ¸Ş×Ù";
                 Text[ chinese_traditional ] = "¤T­«¦±½u¿n¤À";
                 Text[ arabic ] = "ÊßÇãá ãäÍäì ËáÇËí";
                 Text[ greek ] = "Ôñéğëü åğéêáìğıëéï ïëïêëŞñùìá";
@@ -7145,7 +7145,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "ÉÏÏŞ";
                 Text[ russian ] = "Âåğõíèé ïğåäåë";
                 Text[ polish ] = "Górna granica";
-                Text[ japanese ] = "ã‹ÉŒÀ’l";
+                Text[ japanese ] = "ãŒÀ";
                 Text[ chinese_traditional ] = "¤W­­";
                 Text[ arabic ] = "ÇáÍÏ ÇáÃŞÕì";
                 Text[ greek ] = "¢íù üñéï";
@@ -7714,7 +7714,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Í¸Ã÷";
                 Text[ russian ] = "Ïğîçğà÷íî";
                 Text[ polish ] = "przezroczysty";
-                Text[ japanese ] = "“§‰ß«";
+                Text[ japanese ] = "•\\¦‚µ‚È‚¢";
                 Text[ chinese_traditional ] = "³z©ú";
                 Text[ arabic ] = "ÔİÇİ";
                 Text[ greek ] = "äéáöáíİò";
@@ -8183,7 +8183,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ greek ] = "áãêıëåò (êëéìáêşìåíåò)";
                 Text[ dutch ] = "Dubbele hoekige haakjes (uitbreidbaar)";
                 Text[ french ] = "Crochets (modifiables graduellement)";
-                Text[ spanish ] = "corchetes (ajustables)";
+                Text[ spanish ] = "corchetes (graduables)";
                 Text[ italian ] = "Parentesi quadre (in scala)";
                 Text[ danish ] = "kantede parenteser (skalerbare)";
                 Text[ swedish ] = "Hakparenteser (skalbara)";
@@ -8316,7 +8316,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ russian ] = "Ñêîáêè îïåğàòîğà (èçìåíÿåìûå)";
                 Text[ dutch ] = "Operator-haken";
                 Text[ french ] = "Parenthèses d'opérateur (modifiables graduellement)";
-                Text[ spanish ] = "Paréntesis de operador (ajustable)";
+                Text[ spanish ] = "Paréntesis de operador (graduables)";
                 Text[ italian ] = "Parentesi operatore (in scala)";
                 Text[ danish ] = "operatorparenteser (skalerbare)";
                 Text[ swedish ] = "Operatorparenteser (skalbara)";
@@ -8347,7 +8347,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ greek ] = "¢ãêéóôñï Üíù (êëéìáêşìåíá)";
                 Text[ dutch ] = "accolade boven (uitbreidbaar)";
                 Text[ french ] = "Accolades en haut (modifiables graduellement)";
-                Text[ spanish ] = "llaves arriba (ajustables)";
+                Text[ spanish ] = "llaves arriba (graduables)";
                 Text[ italian ] = "Parentesi tonda in alto (in scala)";
                 Text[ danish ] = "klammeparenteser foroven (skalerbare)";
                 Text[ swedish ] = "Klammerparenteser uppe (skalbara)";
@@ -8373,7 +8373,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ greek ] = "¢ãêéóôñï êÜôù (êëéìáêşìåíá)";
                 Text[ dutch ] = "accolade beneden (uitbreidbaar)";
                 Text[ french ] = "Accolades en bas (modifiables graduellement)";
-                Text[ spanish ] = "llaves abajo (ajustables)";
+                Text[ spanish ] = "llaves abajo (graduables)";
                 Text[ italian ] = "Parentesi tonda in basso (in scala)";
                 Text[ danish ] = "klammeparenteser forneden (skalerbare)";
                 Text[ swedish ] = "Klammerparenteser nere (skalbara)";
@@ -8552,7 +8552,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "ĞÂĞĞ¿ªÊ¼";
                 Text[ russian ] = "Ñ íîâîé ñòğîêè";
                 Text[ polish ] = "Rozpocznij now¹ liniê";
-                Text[ japanese ] = "V‚µ‚¢sŠJn";
+                Text[ japanese ] = "‰üs";
                 Text[ chinese_traditional ] = "·s¦æ¶}©l";
                 Text[ arabic ] = "ÓØÑ ÌÏíÏ";
                 Text[ greek ] = "áñ÷Ş íİáò ãñáììŞò";
@@ -8946,7 +8946,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_simplified ] = "Nabla";
                 TEXT[ russian ] = "Íàáëà";
                 TEXT[ polish ] = "Nabla";
-                TEXT[ japanese ] = "Œù”z";
+                TEXT[ japanese ] = "ÅÌŞ×";
                 TEXT[ chinese_traditional ] = "Nabla";
                 TEXT[ arabic ] = "Nabla";
                 TEXT[ greek ] = "Nabla";
@@ -8972,7 +8972,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_simplified ] = "´æÔÚ";
                 TEXT[ russian ] = "Ñóùåñòâóåò";
                 TEXT[ polish ] = "Istnieje";
-                TEXT[ japanese ] = "‘¶İì—p‘f";
+                TEXT[ japanese ] = "‘¶İ‚·‚é";
                 TEXT[ chinese_traditional ] = "¦s¦b";
                 TEXT[ arabic ] = "ãæÌæÏ";
                 TEXT[ greek ] = "ÕğÜñ÷åé";
@@ -8998,7 +8998,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_simplified ] = "ÓÃÓÚÈ«²¿";
                 TEXT[ russian ] = "Äëÿ âñåõ";
                 TEXT[ polish ] = "Dla wszystkich";
-                TEXT[ japanese ] = "‘SÌì—p‘f";
+                TEXT[ japanese ] = "”CˆÓ‚Ì";
                 TEXT[ chinese_traditional ] = "¾A¥Î¥ş³¡";
                 TEXT[ arabic ] = "ááßá";
                 TEXT[ greek ] = "Ãéá üëá";
@@ -9439,7 +9439,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Ò»Ôª/¶şÔªÔËËã·û";
                 Text[ russian ] = "Óíàğíûå/Áèíàğíûå îïåğàòîğû";
                 Text[ polish ] = "Unarne/Binarne Operatory";
-                Text[ japanese ] = "¼Ş­°ÅØ/ÊŞ²ÅØ‰‰Zq";
+                Text[ japanese ] = "’P€¥“ñ€‰‰Zq";
                 Text[ chinese_traditional ] = "¤@¤¸/¤G¤¸¹Bºâ²Å";
                 Text[ arabic ] = "ÚæÇãá ÊÔÛíá ËäÇÆíÉ/ÃÍÇÏíÉ";
                 Text[ greek ] = "Åíáäéêïß/Äõáäéêïß ôåëåóôİò";
@@ -9465,7 +9465,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "¹ØÏµ";
                 Text[ russian ] = "Îòíîøåíèÿ";
                 Text[ polish ] = "Relacje";
-                Text[ japanese ] = "ŠÖŒW‰‰Z‹L†";
+                Text[ japanese ] = "”äŠr‰‰Z";
                 Text[ chinese_traditional ] = "Ãö«Y";
                 Text[ arabic ] = "ÇáÚáÇŞÇÊ";
                 Text[ greek ] = "Ó÷İóåéò";
@@ -9835,18 +9835,18 @@ String STR_MATH_DOCUMENT_FULLTYPE_60
     Text[ english_us ] = "StarOffice 6.0 Formula";
     Text[ portuguese ] = "StarOffice 6.0 Formula";
     Text[ russian ] = "Ôîğìóëà â %PRODUCTNAME 6.0";
-    Text[ greek ] = "StarOffice 6.0 Formula";
+    Text[ greek ] = "%PRODUCTNAME 6.0 Ôığïò";
     Text[ dutch ] = "StarOffice 6.0 Formula";
-    Text[ french ] = "StarOffice 6.0 Formula";
-    Text[ spanish ] = "StarOffice 6.0 Formula";
+    Text[ french ] = "%PRODUCTNAME 6.0 Formule";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 Fórmula";
     Text[ italian ] = "StarOffice 6.0 Formula";
     Text[ danish ] = "StarOffice 6.0 Formula";
     Text[ swedish ] = "%PRODUCTNAME 6.0 formel";
     Text[ polish ] = "StarOffice 6.0 - Formu³a";
     Text[ portuguese_brazilian ] = "StarOffice 6.0 Formula";
-    Text[ japanese ] = "StarOffice 6.0 Formula";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 ”®";
     Text[ korean ] = "StarOffice 6.0 Formula";
-    Text[ chinese_simplified ] = "StarOffice 6.0 Formula";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 ¹«Ê½";
     Text[ chinese_traditional ] = "StarOffice 6.0 ¤½¦¡";
     Text[ turkish ] = "StarOffice 6.0 Formula";
     Text[ arabic ] = "%PRODUCTNAME 6.0 ÕíÛÉ";
@@ -10115,7 +10115,7 @@ String RID_ERR_RGROUPEXPECTED
     Text [ portuguese ] = "'}' necessária" ;
     Text[ russian ] = "'}' îæèäàåòñÿ";
     Text[ polish ] = "'}' oczekiwany";
-    Text[ japanese ] = "'}'‚ğ–]‚Ş";
+    Text[ japanese ] = "'}'‚ª•K—v‚Å‚·";
     Text[ chinese_simplified ] = "ÆÚ´ı '}'";
     Text[ chinese_traditional ] = "´Á«İ '}'";
     Text[ arabic ] = "ãÊæŞÚ '}'";
@@ -10217,7 +10217,7 @@ String RID_ERR_UNOPEREXPECTED
     Text[ chinese_simplified ] = "ÆÚ´ıÔËËã·û¡£";
     Text[ russian ] = "Îæèäàåòñÿ óíàğíûé îïåğàòîğ";
     Text[ polish ] = "W tym miejscu powinien wyst¹piæ unarny operator";
-    Text[ japanese ] = "¼Ş­°ÅØ‰‰Zq‚ª•K—v‚Å‚·";
+    Text[ japanese ] = "’P€‰‰Zq‚ª•K—v‚Å‚·";
     Text[ chinese_traditional ] = "´Á«İ¹Bºâ²Å¡C";
     Text[ arabic ] = "ãÊæŞÚ ÚÇãá ÊÔÛíá ÃÍÇÏí";
     Text[ greek ] = "Áíáìİíåôáé åíáäéêüò ôåëåóôŞò";
@@ -10243,7 +10243,7 @@ String RID_ERR_BINOPEREXPECTED
     Text[ chinese_simplified ] = "ÆÚ´ı¶şÔªÔËËã·û";
     Text[ russian ] = "Îæèäåòñÿ áèíàğíûé îïåğàòîğ";
     Text[ polish ] = "Oczekiwany binarny operator";
-    Text[ japanese ] = "ÊŞ²ÅØ‰‰Zq‚ª•K—v‚Å‚·";
+    Text[ japanese ] = "“ñ€‰‰Zq‚ª•K—v‚Å‚·";
     Text[ chinese_traditional ] = "´Á«İ¤G¤¸¹Bºâ²Å";
     Text[ arabic ] = "ãÊæŞÚ ÚÇãá ÊÔÛíá ËäÇÆí";
     Text[ greek ] = "Áíáìİíåôáé äõáäéêüò ôåëåóôŞò";
@@ -10368,7 +10368,7 @@ String RID_ERR_LPARENTEXPECTED
     Text[ chinese_simplified ] = "ÆÚ´ı×ó·Ö½ç";
     Text[ russian ] = "Îæèäàåòñÿ ëåâîå îãğàíè÷åíèå";
     Text[ polish ] = "Oczekiwana lewa krawêdŸ";
-    Text[ japanese ] = "¶‘¤‚Ì‹«ŠEü‚ª•K—v‚Å‚·";
+    Text[ japanese ] = "¶‘¤‚Ì‹«ŠE‚ª•K—v‚Å‚·";
     Text[ chinese_traditional ] = "´Á«İ¥ª¤À¬É";
     Text[ arabic ] = "ãØáæÈ ÍÏ ÃíÓÑ";
     Text[ greek ] = "Áíáìİíåôáé áñéóôåñü üñéï";
@@ -10393,7 +10393,7 @@ String RID_ERR_RPARENTEXPECTED
     Text[ chinese_simplified ] = "ÆÚ´ıÓÒ·Ö½ç";
     Text[ russian ] = "Îæèäàåòñÿ ïğàâîå îãğàíè÷åíèå";
     Text[ polish ] = "Oczekiwana prawa krawêdŸ";
-    Text[ japanese ] = "‰E‘¤‚É‹«ŠEü‚ª•K—v‚Å‚·";
+    Text[ japanese ] = "‰E‘¤‚Ì‹«ŠE‚ª•K—v‚Å‚·";
     Text[ chinese_traditional ] = "´Á«İ¥k¤À¬É";
     Text[ arabic ] = "ãØáæÈ ÍÏ Ãíãä";
     Text[ greek ] = "Áíáìİíåôáé äåîéü üñéï";
@@ -10443,7 +10443,7 @@ String RID_PLUGINTOOLBOX
     Text[ chinese_simplified ] = "Plug-In À¸";
     Text[ russian ] = "Ïàíåëü Plug-In";
     Text[ polish ] = "Pasek wtyczek Plug-In";
-    Text[ japanese ] = "Ìß×¸Ş²İ ÊŞ°";
+    Text[ japanese ] = "Ìß×¸Ş²İÊŞ°";
     Text[ chinese_traditional ] = "Plug-In ¦C";
     Text[ arabic ] = "ÔÑíØ Plug-In";
     Text[ greek ] = "ÃñáììŞ óõíäåüìåíçò õğïìïíÜäáò";
