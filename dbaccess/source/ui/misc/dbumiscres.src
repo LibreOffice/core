@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:51:10 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 10:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ Resource RSC_DATASOURCE_TYPES
     {
         Text = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument;Adressbuch" ;
         Text [ english ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
-        Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
+        Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Address book" ;
         Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;FolhaCálculo;LivroEndereços";
         Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;Òåêñò;Äîêóìåíò ıëåêòğîííîé òàáëèöû;Àäğåñíàÿ êíèãà";
         Text[ greek ] = "Adabas;JDBC;ODBC;dBase;ADO;Êåßìåíï;¸ããñáöï ğßíáêá;Áôæİíôá äéåõèıíóåùí";
@@ -596,13 +596,13 @@ String STR_UNDO_COLON
     Text[ spanish ] = "Deshacer:";
     Text[ italian ] = "Annulla:";
     Text[ danish ] = "Fortryd:";
-    Text[ swedish ] = "Ångra";
+    Text[ swedish ] = "Ångra:";
     Text[ polish ] = "Cofnij";
     Text[ portuguese_brazilian ] = "Undo:";
-    Text[ japanese ] = "å…ƒã«æˆ»ã™";
-    Text[ korean ] = "ì‹¤í–‰ì·¨ì†Œ";
-    Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤";
-    Text[ chinese_traditional ] = "å¾©åŸ";
+    Text[ japanese ] = "å…ƒã«æˆ»ã™:";
+    Text[ korean ] = "ì‹¤í–‰ ì·¨ì†Œ:";
+    Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤ï¼š";
+    Text[ chinese_traditional ] = "å¾©åŸï¼š";
     Text[ turkish ] = "Undo";
     Text[ arabic ] = "ÊÑÇÌÚ";
     Text[ catalan ] = "Desfés:";
@@ -623,13 +623,13 @@ String STR_REDO_COLON
     Text[ spanish ] = "Restaurar:";
     Text[ italian ] = "Ripristina:";
     Text[ danish ] = "Gendan:";
-    Text[ swedish ] = "Återställ";
+    Text[ swedish ] = "Återställ:";
     Text[ polish ] = "Przywróæ";
     Text[ portuguese_brazilian ] = "Redo:";
-    Text[ japanese ] = "ã‚„ã‚Šç›´ã—";
-    Text[ korean ] = "ë³µêµ¬";
-    Text[ chinese_simplified ] = "æ¢å¤æ’¤æ¶ˆå‘½ä»¤";
-    Text[ chinese_traditional ] = "æ¢å¾©æ’¤æ¶ˆæŒ‡ä»¤";
+    Text[ japanese ] = "ã‚„ã‚Šç›´ã—:";
+    Text[ korean ] = "ë‹¤ì‹œ ì‹¤í–‰:";
+    Text[ chinese_simplified ] = "æ¢å¤æ’¤æ¶ˆå‘½ä»¤ï¼š";
+    Text[ chinese_traditional ] = "æ¢å¾©æ’¤æ¶ˆæŒ‡ä»¤:";
     Text[ turkish ] = "Redo";
     Text[ arabic ] = "ÅÚÇÏÉ";
     Text[ catalan ] = "Refés";
@@ -640,6 +640,9 @@ String STR_REDO_COLON
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.47  2002/08/19 07:51:10  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.46  2002/08/01 20:27:29  kz
  *  Merge SRX643: 01.08.02 - 22:24:17
  *
