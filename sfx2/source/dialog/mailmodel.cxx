@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:59:40 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 16:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName
             String aName;
             if ( aFileObj.hasExtension() )
             {
-                pExt = new String( String::CreateFromAscii( "." ) + aFileObj.getExtension() );
+                pExt = new String( String::CreateFromAscii( "." ) + (OUString) aFileObj.getExtension() );
                 aFileObj.removeExtension();
                 aLeadingStr = aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
                 aLeadingStr += String::CreateFromAscii( "_" );
