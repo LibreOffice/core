@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: vg $ $Date: 2001-06-15 15:35:10 $
+#   last change: $Author: vg $ $Date: 2001-06-20 16:23:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.20 $ ';
+$id_str = ' $Revision: 1.21 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -505,6 +505,9 @@ sub FindIndepPrj {
         foreach $Prj (@Prjs) {
             if (IsHashNative($Prj)) {
                 next PrjLoop;
+            };
+            if (!(defined $$Dependencies{$Prj})) {
+                return $Prj;
             };
             @PrjDeps = @{$$Dependencies{$Prj}};
             if ($#PrjDeps == -1) {
