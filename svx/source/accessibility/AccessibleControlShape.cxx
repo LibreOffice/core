@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:28:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 09:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,9 @@
 #ifndef _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
 #include "SvxShapeTypes.hxx"
 #endif
-#ifndef SVX_ACCESSIBLE_WRAPPER_HXX
-#include "accessiblewrapper.hxx"
+
+#ifndef COMPHELPER_ACCESSIBLE_WRAPPER_HXX
+#include <comphelper/accessiblewrapper.hxx>
 #endif
 #include "svdstr.hrc"
 #include <algorithm>
@@ -188,7 +189,6 @@ AccessibleControlShape::AccessibleControlShape (
     ,   m_bListeningForDesc( sal_False )
     ,   m_bDisposeNativeContext( sal_False )
     ,   m_bMultiplexingStates( sal_False )
-    ,   m_pChildManager( new OWrappedAccessibleChildrenManager( getProcessServiceFactory() ) )
 {
     m_pChildManager = new OWrappedAccessibleChildrenManager( getProcessServiceFactory() );
     m_pChildManager->acquire();
