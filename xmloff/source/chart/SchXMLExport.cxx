@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-25 12:01:07 $
+ *  last change: $Author: bm $ $Date: 2001-05-25 16:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,7 +797,42 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
             mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aASName );
 
         if( msChartAddress.getLength())
+        {
             mrExport.AddAttribute( XML_NAMESPACE_TABLE, sXML_cell_range_address, msChartAddress );
+
+            uno::Reference< chart::XChartDocument > xDoc( mrExport.GetModel(), uno::UNO_QUERY );
+            if( xDoc.is() )
+            {
+                uno::Reference< beans::XPropertySet > xDocProp( xDoc, uno::UNO_QUERY );
+                if( xDocProp.is())
+                {
+                    uno::Any aAny;
+                    sal_Bool bFirstCol, bFirstRow;
+
+                    try
+                    {
+                        aAny = xDocProp->getPropertyValue(
+                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataSourceLabelsInFirstColumn" )));
+                        aAny >>= bFirstCol;
+                        aAny = xDocProp->getPropertyValue(
+                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataSourceLabelsInFirstRow" )));
+                        aAny >>= bFirstRow;
+
+                        mrExport.AddAttribute( XML_NAMESPACE_CHART,
+                                               ::xmloff::token::GetXMLToken( ::xmloff::token::XML_DATA_SOURCE_HAS_LABELS ),
+                                               ( bFirstCol
+                                                 ? ( bFirstRow
+                                                     ?  ::xmloff::token::GetXMLToken( ::xmloff::token::XML_BOTH )
+                                                     :  ::xmloff::token::GetXMLToken( ::xmloff::token::XML_COLUMN ))
+                                                 :  ::xmloff::token::GetXMLToken( ::xmloff::token::XML_ROW )));
+                    }
+                    catch( beans::UnknownPropertyException )
+                    {
+                        DBG_ERRORFILE( "Properties missing" );
+                    }
+                }
+            }
+        }
 
         if( msTableNumberList.getLength())
         {
@@ -888,8 +923,6 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
             getCellAddress( 0, nDataPointOffset );
             msStringBuffer.append( (sal_Unicode) ':' );
             getCellAddress( 0, mnSeriesLength + nDataPointOffset - 1 );
-
-            msString = msStringBuffer.makeStringAndClear();
         }
         else
         {
@@ -897,11 +930,12 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
 //              msString = msCategoriesAddress;
         }
 
-        if( msString.getLength())
+        if( msStringBuffer.getLength())
         {
+            msString = msStringBuffer.makeStringAndClear();
             mrExport.AddAttribute( XML_NAMESPACE_TABLE, sXML_cell_range_address, msString );
-            SvXMLElementExport aCategories( mrExport, XML_NAMESPACE_CHART, sXML_categories, sal_True, sal_True );
         }
+        SvXMLElementExport aCategories( mrExport, XML_NAMESPACE_CHART, sXML_categories, sal_True, sal_True );
     }
 
     // series elements
