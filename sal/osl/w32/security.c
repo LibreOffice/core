@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:30:34 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 14:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/file.h>
+#include <systools/win32/uwinapi.h>
 #include "secimpl.h"
 
 /*****************************************************************************/
@@ -752,7 +753,7 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                                    &hRegKey) == ERROR_SUCCESS)
                     {
                         LONG lRet;
-                        DWORD lSize = sizeof(PathW);
+                        DWORD lSize = elementsof(PathA);
                         DWORD Type = REG_SZ;
 
                         switch (nFolder)
