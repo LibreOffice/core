@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metric.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hdu $ $Date: 2002-06-03 14:21:42 $
+ *  last change: $Author: hdu $ $Date: 2002-11-07 08:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,9 +292,10 @@ sal_UCS4 FontCharMap::GetPrevChar( sal_UCS4 cChar ) const
         return GetLastChar();
 
     int nRange = ImplFindRange( cChar );
-    // inbetween ranges or first in range?
-    if( (nRange & 1) || (cChar == mpRangeCodes[ nRange ]) )
-        return (mpRangeCodes[ nRange ] - 1);   // last in prev range
+    if( nRange & 1 )                            // inbetween ranges?
+        return (mpRangeCodes[ nRange ] - 1);
+    else if( cChar == mpRangeCodes[ nRange ] )  // first in prev range?
+        return (mpRangeCodes[ nRange-1 ] - 1);
     return (cChar - 1);
 }
 
