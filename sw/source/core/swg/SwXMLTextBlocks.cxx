@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2004-10-08 09:37:25 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
     SwDocShell* pDocSh = new SwDocShell ( SFX_CREATE_MODE_INTERNAL );
     if( !pDocSh->DoInitNew( 0 ) )
         return;
-    bReadOnly = FALSE;
+    bReadOnly = TRUE;
     pDoc = pDocSh->GetDoc();
     xDocShellRef = pDocSh;
     pDoc->SetOle2Link( Link() );
@@ -164,7 +164,8 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
         Touch();        // falls neu angelegt -> neuen ZeitStempel besorgen
     try
     {
-            refStg  = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READWRITE );
+        refStg  = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READWRITE );
+        bReadOnly = FALSE;
     }
     catch( const uno::Exception& rEx)
     {
@@ -259,7 +260,8 @@ ULONG SwXMLTextBlocks::Delete( USHORT n )
 {
     String aName (aNames[ n ]->aPackageName);
     uno::Reference < container::XNameAccess > xAccess( xBlkRoot, uno::UNO_QUERY );
-    if ( xAccess->hasByName( aName ) && xBlkRoot->isStreamElement( aName ) )
+    if ( xAccess.is() &&
+            xAccess->hasByName( aName ) && xBlkRoot->isStreamElement( aName ) )
     {
         try
         {
@@ -279,6 +281,9 @@ ULONG SwXMLTextBlocks::Delete( USHORT n )
 
 ULONG SwXMLTextBlocks::Rename( USHORT nIdx, const String& rNewShort, const String& rNewLong )
 {
+    DBG_ASSERT( xBlkRoot.is(), "No storage set" )
+    if(!xBlkRoot.is())
+        return 0;
     String aOldName (aNames[ nIdx ]->aPackageName);
     aShort = rNewShort;
     GeneratePackageName( aShort, aPackageName );
@@ -316,6 +321,10 @@ ULONG SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
     USHORT nIndex = GetIndex ( rShort );
     String sDestShortName( GetPackageName (nIndex) );
     USHORT nIdx = 0;
+
+    DBG_ASSERT( xBlkRoot.is(), "No storage set" )
+    if(!xBlkRoot.is())
+        return ERR_SWG_WRITE_ERROR;
 
     uno::Reference < container::XNameAccess > xAccess( ((SwXMLTextBlocks&)rDestImp).xBlkRoot, uno::UNO_QUERY );
     while ( xAccess->hasByName( sDestShortName ) )
@@ -377,6 +386,9 @@ ULONG SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
 
 ULONG SwXMLTextBlocks::StartPutBlock( const String& rShort, const String& rPackageName )
 {
+    DBG_ASSERT( xBlkRoot.is(), "No storage set" )
+    if(!xBlkRoot.is())
+        return 0;
     USHORT nIndex = GetIndex ( rShort );
     /*
     if( xBlkRoot->IsContained( rPackageName ) )
@@ -562,7 +574,7 @@ ULONG SwXMLTextBlocks::OpenFile( BOOL bReadOnly )
 {
     if( bAutocorrBlock )
         return 0;
-
+    ULONG nRet = 0;
     try
     {
         uno::Reference < embed::XStorage > refStg  = comphelper::OStorageHelper::GetStorageFromURL( aFile,
@@ -572,10 +584,10 @@ ULONG SwXMLTextBlocks::OpenFile( BOOL bReadOnly )
     catch ( uno::Exception& )
     {
         //TODO/LATER: error handling
+        nRet = 1;
     }
 
-    return 0;
-    //return xBlkRoot->GetError();
+    return nRet;
 }
 
 void SwXMLTextBlocks::CloseFile()
