@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 10:33:09 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #include <image.hxx>
 
 using namespace vcl;
+
+PDFWriter::AnyWidget::~AnyWidget()
+{
+}
 
 PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext )
         :
