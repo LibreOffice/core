@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 12:32:11 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1911,21 +1911,29 @@ void UCBStorage_Impl::Init()
 
                     // create input stream
                     SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
-                    ::utl::OInputStreamWrapper* pHelper = new ::utl::OInputStreamWrapper( *pStream );
-                    com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xInputStream( pHelper );
+                    // no stream means no manifest.xml
+                    if ( pStream )
+                    {
+                        if ( !pStream->GetError() )
+                        {
+                              ::utl::OInputStreamWrapper* pHelper = new ::utl::OInputStreamWrapper( *pStream );
+                            com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xInputStream( pHelper );
 
-                    // create a manifest reader object that will read in the manifest from the stream
-                    Reference < ::com::sun::star::packages::manifest::XManifestReader > xReader =
-                        Reference< ::com::sun::star::packages::manifest::XManifestReader >
-                            ( ::comphelper::getProcessServiceFactory()->createInstance(
-                                ::rtl::OUString::createFromAscii( "com.sun.star.packages.manifest.ManifestReader" )), UNO_QUERY) ;
-                    Sequence < Sequence < PropertyValue > > aProps = xReader->readManifestSequence( xInputStream );
+                            // create a manifest reader object that will read in the manifest from the stream
+                            Reference < ::com::sun::star::packages::manifest::XManifestReader > xReader =
+                                Reference< ::com::sun::star::packages::manifest::XManifestReader >
+                                    ( ::comphelper::getProcessServiceFactory()->createInstance(
+                                        ::rtl::OUString::createFromAscii( "com.sun.star.packages.manifest.ManifestReader" )), UNO_QUERY) ;
+                            Sequence < Sequence < PropertyValue > > aProps = xReader->readManifestSequence( xInputStream );
 
-                    // cleanup
-                    xReader = NULL;
-                    xInputStream = NULL;
-                    delete pStream;
-                    SetProps( aProps, String() );
+                            // cleanup
+                            xReader = NULL;
+                            xInputStream = NULL;
+                            SetProps( aProps, String() );
+                        }
+
+                        delete pStream;
+                    }
                 }
             }
             else
