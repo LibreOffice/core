@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-25 20:30:04 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 22:22:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text [ polish ] = "Tabele";
         Text [ portuguese_brazilian ] = "Tabellen";
         Text [ japanese ] = "ﾃｰﾌﾞﾙ";
-        Text [ korean ] = "표";
+        Text [ korean ] = "시트";
         Text [ chinese_simplified ] = "表格";
         Text [ chinese_traditional ] = "表格";
         Text [ turkish ] = "Tablolar";
@@ -554,7 +554,7 @@ TabPage PAGE_GENERAL
         Text [ polish ] = "~Nazwa";
         Text [ portuguese_brazilian ] = "~Name:";
         Text [ japanese ] = "名前(~N)";
-        Text [ korean ] = "명칭(~N):";
+        Text [ korean ] = "이름(~N):";
         Text [ chinese_simplified ] = "名称(~N)";
         Text [ chinese_traditional ] = "名稱(~N)";
         Text [ turkish ] = "Ad:";
@@ -720,7 +720,7 @@ TabPage PAGE_GENERAL
         Text [ polish ] = "Chwilowa przerwa:";
         Text [ portuguese_brazilian ] = "Timeout:";
         Text [ japanese ] = "ﾀｲﾑｱｳﾄ:";
-        Text [ korean ] = "타임아웃:";
+        Text [ korean ] = "시간 초과:";
         Text [ chinese_simplified ] = "超过时限：";
         Text [ chinese_traditional ] = "超過時限：";
         Text [ turkish ] = "Timeout:";
@@ -773,7 +773,7 @@ TabPage PAGE_GENERAL
         Text [ polish ] = "Nowa baza danych...";
         Text [ portuguese_brazilian ] = "~new database";
         Text [ japanese ] = "新しいﾃﾞｰﾀﾍﾞｰｽ(~N)...";
-        Text [ korean ] = "새로운 데이터베이스(~N)";
+        Text [ korean ] = "새 데이터베이스(~N)";
         Text [ chinese_simplified ] = "新增数据库(~N)...";
         Text [ chinese_traditional ] = "新增資料庫(~N)...";
         Text [ turkish ] = "~new database";
@@ -800,7 +800,7 @@ TabPage PAGE_GENERAL
         Text [ polish ] = "Istnieje inne �r�d�o danych o tej samej nazwie. Poniewa� nazwy �rode� danych musz� by� globalnie jednoznaczne, nale�y wybra� inn� nazw�.";
         Text [ portuguese_brazilian ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
         Text [ japanese ] = "この名前の付いた別のﾃﾞｰﾀｿｰｽがすでにあります。ﾃﾞｰﾀｿｰｽ名をはっきりと区別するためには、ほかの名前を選択する必要があります。";
-        Text [ korean ] = "이미 이 이름을 가진 다른 데이터 소스가 있습니다. 데이터소스 이름은 전역에서 유일해야 하므로, 다른 이름을 선택해야 합니다.";
+        Text [ korean ] = "이미 이 이름의 다른 데이터 소스가 존재합니다. 데이터 소스 이름은 전체에서 유일해야 하므로 다른 이름을 선택하십시오.";
         Text [ chinese_simplified ] = "已经存在一个同名的数据源。因为数据源名称必须是一个通用的有效名称，建议您采用另一个名称。";
         Text [ chinese_traditional ] = "已經存在一個同名的資料源。因為一個資料源的名稱必須通用明確，請您採用另外一個有效的名稱。";
         Text [ turkish ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
@@ -825,7 +825,7 @@ TabPage PAGE_GENERAL
         Text [ polish ] = "To �r�d�o danych zosta�o usuni�te.";
         Text [ portuguese_brazilian ] = "This data source is scheduled to be deleted.";
         Text [ japanese ] = "このﾃﾞｰﾀｿｰｽはﾕｰｻﾞｰによって削除されています。";
-        Text [ korean ] = "이 데이터소스를 삭제하셨습니다.";
+        Text [ korean ] = "이 데이터 소스를 삭제했습니다.";
         Text [ chinese_simplified ] = "您已经删除了这个数据源。";
         Text [ chinese_traditional ] = "您已經刪除了這個資料源。";
         Text [ turkish ] = "This data source is scheduled to be deleted.";
@@ -850,7 +850,7 @@ TabPage PAGE_GENERAL
         Text [ polish ] = "Za�adowanie biblioteki programu #lib# nie by�o mo�liwe. Jest ona by� mo�e uszkodzona. Wyb�r �r�d�a danych ODBC nie jest mo�liwy.";
         Text [ portuguese_brazilian ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source selection is not available.";
         Text [ japanese ] = "#lib# ﾌﾟﾛｸﾞﾗﾑﾗｲﾌﾞﾗﾘを読み込めなかったか、またはそれ自体にﾄﾗﾌﾞﾙがあります。 ODBC ﾃﾞｰﾀｿｰｽは選択できません。";
-        Text [ korean ] = "프로그램 라이브러리 #lib#을(를) 로드할 수 없었거나 또는 고장입니다. ODBC 데이터 소스 선택이 불가능합니다.";
+        Text [ korean ] = "프로그램 라이브러리 #lib#을(를) 로드하지 못했거나 라이브러리에 오류가 있습니다. ODBC 데이터 소스를 선택할 수 없습니다.";
         Text [ chinese_simplified ] = "无法装入程序库 #lib# 或已经损坏。无法选择 ODBC 数据源。";
         Text [ chinese_traditional ] = "無法載入程式庫 #lib# 或已經已經損坏。無法選擇 ODBC 資料源。";
         Text [ turkish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source selection is not available.";
@@ -994,7 +994,7 @@ TabPage PAGE_DBASE
         Text [ chinese_traditional ] = "顯示隱入的資料條目(~N)";
         Text [ arabic ] = "����� ������� ����� ����";
         Text [ greek ] = "����~���� �� ������� ��������";
-        Text [ korean ] = "비활성 레코드 디스플레이(~N)";
+        Text [ korean ] = "비활성 레코드 표시(~N)";
         Text [ turkish ] = "Etkin olmayan kay�tlar� g�r�nt�le";
         Text [ language_user1 ] = " ";
         Text[ catalan ] = "Visualitza els registres i~nactius";
@@ -1742,7 +1742,7 @@ TabPage PAGE_LDAP
         Text[ polish ] = "~Rekordy (maks.)";
         Text[ portuguese_brazilian ] = "~Rows (max.)";
         Text[ japanese ] = "最大ﾚｺｰﾄﾞ数(~R)";
-        Text[ korean ] = "~데이터 레코드(최대)(고칠 말이없음.데이터세트??)";
+        Text[ korean ] = "데이터 레코드(최대)(~R)";
         Text[ chinese_simplified ] = "数据条目(最多)(~R)";
         Text[ chinese_traditional ] = "資料條目(最多)(~R)";
         Text[ turkish ] = "~Rows (max.)";
@@ -1850,7 +1850,7 @@ TabPage PAGE_TEXT
         Text [ chinese_traditional ] = "欄位分隔符";
         Text [ arabic ] = "���� �����";
         Text [ greek ] = "����������� ������";
-        Text [ korean ] = "필드 구분자";
+        Text [ korean ] = "필드 구분 기호";
         Text [ turkish ] = "Alan ay�r�c�s�";
         Text [ language_user1 ] = " ";
         Text[ catalan ] = "Separador de camps";
@@ -1888,7 +1888,7 @@ TabPage PAGE_TEXT
         Text [ chinese_traditional ] = "文字分隔符";
         Text [ arabic ] = "���� ����";
         Text [ greek ] = "������������ �~�������";
-        Text [ korean ] = "텍스트 구분자";
+        Text [ korean ] = "텍스트 구분 기호";
         Text [ turkish ] = "Metin ay�r�c�s�";
         Text [ language_user1 ] = " ";
         Text[ catalan ] = "Separador de text";
@@ -1913,7 +1913,7 @@ TabPage PAGE_TEXT
         Text [ english_US ] = "Decimal separator" ;
         Text [ SPANISH ] = "Separa~dor decimal" ;
         Text [ FINNISH ] = "Desimaalierotin" ;
-        Text [ FRENCH ] = "S�parateur de ~d�cimale" ;
+        Text [ FRENCH ] = "S�parateur de ~d�cimales" ;
         Text [ ITALIAN ] = "Car. di separaz. decimali" ;
         Text [ DUTCH ] = "~Decimaalteken" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Ponto decimal" ;
@@ -1927,7 +1927,7 @@ TabPage PAGE_TEXT
         Text [ chinese_traditional ] = "小數點符號";
         Text [ arabic ] = "���� ����";
         Text [ greek ] = "~������������ ���������";
-        Text [ korean ] = "소수점 구분자";
+        Text [ korean ] = "소수점 구분 기호";
         Text [ turkish ] = "Ondal�k ay�r�c�s�";
         Text[ catalan ] = "Separador decimal";
     };
@@ -1973,7 +1973,7 @@ TabPage PAGE_TEXT
         Text [ chinese_traditional ] = "千位分隔符";
         Text [ arabic ] = "���� ������";
         Text [ greek ] = "��~���������� ������";
-        Text [ korean ] = "천단위 구분자";
+        Text [ korean ] = "천단위 구분 기호";
         Text [ turkish ] = "Binlik ay�r�c�s�";
         Text[ catalan ] = "Separador de milers";
     };
@@ -2011,7 +2011,7 @@ TabPage PAGE_TEXT
         Text [ polish ] = "Format pliku";
         Text [ portuguese_brazilian ] = "File format";
         Text [ japanese ] = "ﾌｧｲﾙの書式";
-        Text [ korean ] = "파일 서식";
+        Text [ korean ] = "파일 형식";
         Text [ chinese_simplified ] = "文件格式";
         Text [ chinese_traditional ] = "檔案格式";
         Text [ turkish ] = "File format";
@@ -2206,7 +2206,7 @@ TabPage PAGE_TEXT
         Text [ chinese_traditional ] = "#1 不能夠含有通配符<*,?>。";
         Text [ arabic ] = "�� ����� ����� ����� ��� *,?� �� #1.";
         Text [ greek ] = "��� ������������ �� ������� �������� ����� ���� (?,*) ��� #1.";
-        Text [ korean ] = "#1 에서 ? 및 *와 같은 와일드 카드는 불가능합니다.";
+        Text [ korean ] = "#1 에서 ? 및 *와 같은 와일드카드 문자 사용할 수 없습니다.";
         Text [ turkish ] = "*,? gibi de�i�kenler #1 i�in kullan�lamaz.";
         Text [ language_user1 ] = " ";
         Text[ finnish ] = "Yleismerkkej� (esimerkiksi ? ja *) ei sallita kohteessa 1.";
@@ -2242,7 +2242,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ polish ] = "Tabele i filtry tabel";
         Text[ portuguese_brazilian ] = "Tables and Table filter";
         Text[ japanese ] = "ﾃｰﾌﾞﾙとﾃｰﾌﾞﾙﾌｨﾙﾀ";
-        Text[ korean ] = "테이블과 테이블 필터";
+        Text[ korean ] = "시트와 시트 필터";
         Text[ chinese_simplified ] = "表格和表格筛选";
         Text[ chinese_traditional ] = "表格及表格篩選";
         Text[ turkish ] = "Tables and Table filter";
@@ -2307,7 +2307,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ polish ] = "Na powy�szej li�cie nale�y zaznaczy� krzy�ykiem tabele, kt�re maj� by� widoczne w aplikacjach.";
         Text[ portuguese_brazilian ] = "In the list above, please check the tables which should be visible for the applications.";
         Text[ japanese ] = "上記のﾘｽﾄの中から、ｱﾌﾟﾘｹｰｼｮﾝで表示させるﾃｰﾌﾞﾙを選択してください。";
-        Text[ korean ] = "위의 목록에서 응용프로그램용으로 보여야 하는 테이블을 선택하십시오.";
+        Text[ korean ] = "위의 목록에서 응용 프로그램용으로 표시되어야 하는 시트를 선택하십시오.";
         Text[ chinese_simplified ] = "请在以上的列单之中挑选要显示给应用程序的表格。";
         Text[ chinese_traditional ] = "請在以上的清單之中挑選要顯示給應用程式的表格。";
         Text[ turkish ] = "In the list above, please check the tables which should be visible for the applications.";
@@ -2363,7 +2363,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text [ polish ] = "Poka� wersje kolumn (je�li s� dost�pne)";
         Text [ portuguese_brazilian ] = "Suppress version columns";
         Text [ japanese ] = "ﾊﾞｰｼﾞｮﾝ欄の表示(ある場合)";
-        Text [ korean ] = "버전 열 나타내기 (가능할 경우)";
+        Text [ korean ] = "버전 열 표시 (가능할 경우)";
         Text [ chinese_simplified ] = "显示隐入版本栏位(如果存在)";
         Text [ chinese_traditional ] = "隱入版本欄位(如果存在)";
         Text [ turkish ] = "Suppress version columns";
@@ -2602,7 +2602,7 @@ ErrorBox ERR_COULDNOTRESTOREDS
     Message[ polish ] = "Nazwa usuni�tego �r�d�a danych przypisana zosta�a innemu plikowi! Nale�y zmieni� jego nazw�, aby m�c odtworzy� aktualne �r�d�o danych.";
     Message[ portuguese_brazilian ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
     Message[ japanese ] = "すでに削除したﾃﾞｰﾀの名前が別のﾃﾞｰﾀｿｰｽに入力されました。現在のものを復元するには、まず旧ﾃﾞｰﾀの名前を変更する必要があります。";
-    Message[ korean ] = "사용자는 삭제된 데이터소스의 이름을 이미 다른 데이터소스에 부여하였습니다. 현재의 데이터 소스를 복구하기 위해서는 전자의 이름을 변경해야 합니다.";
+    Message[ korean ] = "사용자가 삭제된 데이터 소스의 이름을 이미 다른 데이터 소스에 부여하였습니다. 이 데이터 소스 이름을 변경해야만 삭제된 데이터 소스를 복구할 수 있습니다.";
     Message[ chinese_simplified ] = "您已经用一个被删除的数据源名称命名了一个其他的数据源！您必须重命名那一个数据源，然后才能恢复当前的数据源。";
     Message[ chinese_traditional ] = "您已經為另一個資料源設定了這個名稱！您必須先執行重新命名，然后才能夠還原現在的資料源。";
     Message[ turkish ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
@@ -2628,7 +2628,7 @@ String STR_ENTER_CONNECTION_PASSWORD
     Text [ polish ] = "Po��czenie ze �r�d�em danych \"$name$\" wymaga wprowadzenia has�a.";
     Text [ portuguese_brazilian ] = "Connecting to data source \"$name$\" requires you to enter a password.";
     Text [ japanese ] = "\"$name$\" ﾃﾞｰﾀｿｰｽへの接続にはﾊﾟｽﾜｰﾄﾞの入力が必要です。";
-    Text [ korean ] = "데이터 소스 \"$name$\" 에 연결하기 위해서는 패스워드를 입력해야 합니다.";
+    Text [ korean ] = "데이터 소스 \"$name$\" 에 연결하려면 패스워드를 입력해야 합니다.";
     Text [ chinese_simplified ] = "读取数据源 \"$name$\" 要求您输入密码。";
     Text [ chinese_traditional ] = "連線到資料源<$name$>必須輸入一個密碼。";
     Text [ turkish ] = "Connecting to data source \"$name$\" requires you to enter a password.";
@@ -2678,7 +2678,7 @@ String STR_ERR_EMPTY_DSN_NAME
     Text [ polish ] = "Nazwa �r�d�a danych nie mo�e by� pusta!";
     Text [ portuguese_brazilian ] = "The data source name must not be empty!";
     Text [ japanese ] = "ﾃﾞｰﾀｿｰｽ名が空白ではいけません。";
-    Text [ korean ] = "데이터 소스 이름이 비어 있어서는 안됩니다!";
+    Text [ korean ] = "데이터 소스 이름을 지정해야 합니다.!";
     Text [ chinese_simplified ] = "数据源名称不可以空缺！";
     Text [ chinese_traditional ] = "資料源名稱不可以空缺！";
     Text [ turkish ] = "The data source name must not be empty!";
@@ -2710,7 +2710,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text [ polish ] = "nowe �r�d�o danych";
             Text [ portuguese_brazilian ] = "new data source";
             Text [ japanese ] = "新しいﾃﾞｰﾀｿｰｽ";
-            Text [ korean ] = "새로운 데이터 소스";
+            Text [ korean ] = "새 데이터 소스";
             Text [ chinese_simplified ] = "新的数据源";
             Text [ chinese_traditional ] = "新資料源";
             Text [ turkish ] = "new data source";
@@ -2824,7 +2824,7 @@ Menu RID_NEW_FORM
             Text[ polish ] = "~Arkusz kalkulacyjny";
             Text[ portuguese_brazilian ] = "~Spreadsheet";
             Text[ japanese ] = "表計算ﾄﾞｷｭﾒﾝﾄ(~S)";
-            Text[ korean ] = "테이블 문서(~S)";
+            Text[ korean ] = "스프레드시트 문서(~S)";
             Text[ chinese_simplified ] = "工作表文档(~S)";
             Text[ chinese_traditional ] = "工作表文件(~S)";
             Text[ turkish ] = "~Spreadsheet";
@@ -2850,7 +2850,7 @@ Menu RID_NEW_FORM
             Text[ polish ] = "~Prezentacja";
             Text[ portuguese_brazilian ] = "~Presentation";
             Text[ japanese ] = "ﾌﾟﾚｾﾞﾝﾃｰｼｮﾝ(~P)";
-            Text[ korean ] = "슬라이드 쇼(~P)";
+            Text[ korean ] = "프리젠테이션(~P)";
             Text[ chinese_simplified ] = "演示文稿(~P)";
             Text[ chinese_traditional ] = "簡報(~P)";
             Text[ turkish ] = "~Presentation";
@@ -2880,7 +2880,7 @@ Menu RID_NEW_FORM
             Text[ polish ] = "A~utoPilot...";
             Text[ portuguese_brazilian ] = "A~utoPilot";
             Text[ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄ(~U)";
-            Text[ korean ] = "오토 파일럿(~U)";
+            Text[ korean ] = "자동 파일럿(~U)";
             Text[ chinese_simplified ] = "自动文件助理(~U)...";
             Text[ chinese_traditional ] = "自動檔案助理(~U)...";
             Text[ turkish ] = "A~utoPilot";
@@ -2910,7 +2910,7 @@ Menu RID_NEW_FORM
             Text[ polish ] = "Na podstawie ~szablonu...";
             Text[ portuguese_brazilian ] = "From Templ~ate";
             Text[ japanese ] = "ﾃﾝﾌﾟﾚｰﾄから(~A)";
-            Text[ korean ] = "서식 파일에서(~A)";
+            Text[ korean ] = "템플릿에서(~A)";
             Text[ chinese_simplified ] = "采用样式(~A)...";
             Text[ chinese_traditional ] = "採用樣式(~A)...";
             Text[ turkish ] = "From Templ~ate";
@@ -2951,7 +2951,7 @@ WarningBox WARN_SAVEFORQUERIES
     Message[ turkish ] = "To administrate the queries of a data source, it must be saved.\nShould all changes made in this dialog now be saved?";
     Message[ arabic ] = "������ ��������� ���� �����ʡ ��� ��� ��� ������.\n�� ���� ��� ���� ��������� ���� ��� ��� ���� �� ���� ������ ��ǿ";
     Message[ catalan ] = "Para poder administrar las consultas de una fuente de datos, debe guardarse esta.\n�Desea guardar todas las modificaciones realizadas hasta ahora en este di�logo?";
-    Message[ korean ] = "데이터소스의 $개체$를 관리하기 위해서는 이를 반드시 저장해야 합니다.\n지금까지 이 대화상자에서 실시한 모든 변경사항을 지금 저장하시겠습니까?";
+    Message[ korean ] = "데이터 소스의 $개체$를 관리하려면 반드시 저장해야 합니다.\n지금까지 이 대화상자에서 실시한 모든 변경 사항을 지금 저장하겠습니까?";
 };
 
 ErrorBox ERR_CANTADMINQUERIES
@@ -2977,7 +2977,7 @@ ErrorBox ERR_CANTADMINQUERIES
     Message[ polish ] = "Administracja $objects$ okre�lonego �r�d�a danych wymaga jego uprzedniego zapisania.\nAktualne wpisy nie pozwalaj� jednak zapisa� �r�d�a danych (wyst�pi� konflikt nazw).\n\nAdministracja $objects$ mo�liwa b�dzie dopiero po rozwi�zaniu konfliktu i zapisaniu zmian.";
     Message[ portuguese_brazilian ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
     Message[ japanese ] = "ﾃﾞｰﾀｿｰｽの $objects$ を管理するために、これを保存する必要があります。\nところが、名前の共有違反が起こったため、現在の入力では変更の保存はできません。\n\nこの共有違反が削除されて変更が保存されないうちは、$objects$ の管理はできません。";
-    Message[ korean ] = "데이터소스의 $개체$를 관리하기 위해서는 이를 반드시 저장해야 합니다\n물론 현재의 세팅은 변경사항 저장을 허용하지 않습니다(이름 충돌).\n\n이 충돌을 제거하고, 변경사항을 저장하지 않는한 사용자는 $개체$를 관리할 수 없습니다.";
+    Message[ korean ] = "데이터 소스의 $개체$를 관리하려면 반드시 저장해야 합니다\n그러나 현재 설정에서는 이름 충돌로 인해 변경 사항을 저장할 수 없습니다.\n\n이 충돌을 제거하고 변경 사항을 저장하지 않는 한 사용자는 $개체$를 관리할 수 없습니다.";
     Message[ chinese_simplified ] = "要管理一个资料源的 $objects$ ，必须先储存它。\n但是现在您不可以存盘更改的内容，因为存在一个名称冲突的错误。\n\n在排除错误之前您无法存盘更改 $objects$ 。";
     Message[ chinese_traditional ] = "要管理一個資料源的 $objects$ ，必須先儲存它。\n但是現在您不可以儲存變更內容，因為存在名稱沖突錯誤。\n\n在排除錯誤之前您無法存儲變更 $objects$ 。";
     Message[ turkish ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
@@ -3008,7 +3008,7 @@ ErrorBox ERR_CANTDOTABLEACTION
     Message[ polish ] = "Operacja ta wymaga zapisania zmian dokonanych w �r�dle danych.\nNiestety, bie��ce dane uniemo�liwiaj� zapisania zmian, poniewa� mi�dzy r�nymi �r�d�ami danych powsta�y konflikty nazw.\n\nWykonanie operacji mo�liwe b�dzie dopiero po rozwi�zaniu wymienionych konflikt�w.";
     Message[ portuguese_brazilian ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
     Message[ japanese ] = "このｱｸｼｮﾝにはﾃﾞｰﾀｿｰｽの変更を保存しておく必要があります。\nところが、異なったﾃﾞｰﾀｿｰｽ間で名前のｺﾝﾌﾘｸﾄが起こっているため、現在の入力のままでは無理です。\n\nこのｺﾝﾌﾘｸﾄが削除されないまでは、ｱｸｼｮﾝの実行は不可能です。";
-    Message[ korean ] = "이 작업을 위해 데이터 소스에 대한 수정 사항이 저장해야 합니다.\n그러나 현재 설정에서는 서로 다른 데이터 소스 이름들이 충돌하기 때문에 데이터 소스가 저장될 수 없습니다.\n\n충돌이 해결되지 않으면 이 작업을 실행할 수 없습니다";
+    Message[ korean ] = "이 작업을 위해 데이터 소스에 대한 변경 사항을 저장해야 합니다.\n그러나 현재 설정에서는 서로 다른 데이터 소스 이름들이 충돌하기 때문에 데이터 소스를 저장할 수 없습니다.\n\n충돌이 해결되지 않으면 이 작업을 실행할 수 없습니다.";
     Message[ chinese_simplified ] = "要执行这个命令必须先存盘数据源的更改内容。\n但是，当前的输入资料不允许执行这个命令，因为在各个数据源之间存在一个名称冲突的错误。\n\n在排除这个错误之前是无法执行这个命令的。";
     Message[ chinese_traditional ] = "要執行這個動作必須先儲存資料源的變更內容。\n但是，當前的輸入資料不允許執行這個動作，因為在各個資料源之間存在一個名稱沖突的錯誤。\n\n在排除這個錯誤之前是無法執行這個動作的。";
     Message[ turkish ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
@@ -3118,7 +3118,7 @@ String STR_QUERY_DROP_DOCUMENT_LINK
     Text[ polish ] = "Usun�� ��cze do dokumentu \"$name$\"?\n\nUwaga: Usuni�te zostanie tylko ��cze, a nie dokument.";
     Text[ portuguese_brazilian ] = "Do you want to delete the document link \"$name$\"?\n\nNote: Only the assigment of the document to the data source will be dropped, not the document itself.";
     Text[ japanese ] = "ﾄﾞｷｭﾒﾝﾄのﾘﾝｸ \"$name$\" を削除しますか。\n\n指示: このﾄﾞｷｭﾒﾝﾄのﾃﾞｰﾀｿｰｽへの割り当てが削除されるだけで、ﾄﾞｷｭﾒﾝﾄそのものは削除されません。";
-    Text[ korean ] = "문서 링크 \"$name$\"을(를) 삭제하시겠습니까?\n\n참고: 문서 자체가 아닌 데이터 소스에 대한 문서 맞춤만 삭제됩니다";
+    Text[ korean ] = "문서 링크 \"$name$\"을(를) 삭제하겠습니까?\n\n참고: 문서 자체가 아닌 데이터 소스에 대한 문서 맞춤만 삭제됩니다";
     Text[ chinese_simplified ] = "要删除文档链接 \"$name$\"?\n\n注意：这仅仅会移除文档的链接，而不是文档本身。";
     Text[ chinese_traditional ] = "要刪除文件捷徑<$name$>？\n\n注意：這個動作僅僅會移除文件的捷徑，而不是文件本身。";
     Text[ turkish ] = "Do you want to delete the document link \"$name$\"?\n\nNote: Only the assigment of the document to the data source will be dropped, not the document itself.";
@@ -3199,7 +3199,7 @@ QueryBox QUERY_NEED_TO_SAVE_FILTER
     Message[ polish ] = "W celu wykonania operacji nale�y zapisa� zmiany dokonane w danym oknie dialogowym.\nKontynuowa�?";
     Message[ portuguese_brazilian ] = "For this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
     Message[ japanese ] = "このｱｸｼｮﾝを実行するには、このﾀﾞｲｱﾛｸﾞで行った変更を保存する必要があります。\n次へ進みますか。";
-    Message[ korean ] = "이 작업을 실행하려면, 이 대화 상자 안에서 지금까지 변경된 내용을 저장해야 합니다. 작업을 계속 진행하시겠습니까?";
+    Message[ korean ] = "이 작업을 실행하려면 이 대화 상자 안에서 지금까지 변경된 내용을 저장해야 합니다. 작업을 계속 진행하겠습니까?";
     Message[ chinese_simplified ] = "在执行这个操作之前必须存盘已经设定的更改内容。\n要继续？";
     Message[ chinese_traditional ] = "在執行這個動作之前必須儲存已經設定的變更。\n您要繼續？";
     Message[ turkish ] = "For this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
@@ -3350,7 +3350,7 @@ String STR_HINT_READONLY_CONNECTION
     Text[ polish ] = "(po��czenie jest tylko do odczytu)";
     Text[ portuguese_brazilian ] = "(connection is read-only)";
     Text[ japanese ] = "(接続は読み取り専用)";
-    Text[ korean ] = "(connection is read-only)";
+    Text[ korean ] = "(읽기 전용 연결임)";
     Text[ chinese_simplified ] = "(连接方式是只读的)";
     Text[ chinese_traditional ] = "(連線方式是唯讀的)";
     Text[ turkish ] = "(connection is read-only)";
@@ -3376,7 +3376,7 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
     Text[ polish ] = "(nie jest obs�ugiwane przez dane po��czenie)";
     Text[ portuguese_brazilian ] = "(not supported by this connection)";
     Text[ japanese ] = "(この接続で支援されません)";
-    Text[ korean ] = "(not supported by this connection)";
+    Text[ korean ] = "(이 연결에서 지원되지 않음)";
     Text[ chinese_simplified ] = "(不受此连接支持)";
     Text[ chinese_traditional ] = "(不受這個連線的支援)";
     Text[ turkish ] = "(not supported by this connection)";
@@ -3387,6 +3387,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.77  2001/10/25 20:30:04  vg
+ *  Merge SRC641: 25.10.01 - 22:30:11
+ *
  *  Revision 1.76  2001/10/19 22:07:41  kz
  *  Merge SRC641: 20.10.01 - 00:06:18
  *
@@ -3413,6 +3416,7 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
+
 
 
 
