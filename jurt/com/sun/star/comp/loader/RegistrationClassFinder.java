@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistrationClassFinder.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-03-13 09:29:37 $
+ *  last change: $Author: jl $ $Date: 2001-11-22 13:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,9 @@ public class RegistrationClassFinder {
         m_locationUrl = locationUrl;
 
         if(locationUrl.endsWith(".jar")) {
-            m_context = ClassContextProxy.create(new java.net.URL(m_locationUrl), null, null);
+            // The class loader is to be regarded as secure. Therefore the security manager
+            // should not restrict the execution of Java components.
+            m_context = ClassContextProxy.create(new java.net.URL(m_locationUrl), null, null, true);
             m_manifest = locationUrl + "/META-INF/MANIFEST.MF";
         }
     }
