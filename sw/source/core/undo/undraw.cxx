@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undraw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:48:35 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,10 @@ void SwUndoDrawGroup::Undo( SwUndoIter& )
 
         SwDrawContact *pContact = new SwDrawContact( rSave.pFmt, pObj );
         pContact->ConnectToLayout();
+        // --> OD 2005-03-22 #i45718# - follow-up of #i35635#
+        // move object to visible layer
+        pContact->MoveObjToVisibleLayer( pObj );
+        // <--
     }
 }
 
@@ -375,6 +379,10 @@ void SwUndoDrawGroup::Redo( SwUndoIter& )
     SwDrawContact *pContact = new SwDrawContact( pObjArr->pFmt, pObjArr->pObj );
     // OD 2004-04-15 #i26791# - correction: connect object to layout
     pContact->ConnectToLayout();
+    // --> OD 2005-03-22 #i45718# - follow-up of #i35635#
+    // move object to visible layer
+    pContact->MoveObjToVisibleLayer( pObjArr->pObj );
+    // <--
 }
 
 void SwUndoDrawGroup::AddObj( USHORT nPos, SwDrawFrmFmt* pFmt, SdrObject* pObj )
@@ -476,6 +484,10 @@ void SwUndoDrawUnGroup::Undo( SwUndoIter& rIter )
 
     SwDrawContact *pContact = new SwDrawContact( pObjArr->pFmt, pObjArr->pObj );
     pContact->ConnectToLayout();
+    // --> OD 2005-03-22 #i45718# - follow-up of #i35635#
+    // move object to visible layer
+    pContact->MoveObjToVisibleLayer( pObjArr->pObj );
+    // <--
 }
 
 void SwUndoDrawUnGroup::Redo( SwUndoIter& )
@@ -512,6 +524,10 @@ void SwUndoDrawUnGroup::Redo( SwUndoIter& )
 
         SwDrawContact *pContact = new SwDrawContact( rSave.pFmt, rSave.pObj );
         pContact->ConnectToLayout();
+        // --> OD 2005-03-22 #i45718# - follow-up of #i35635#
+        // move object to visible layer
+        pContact->MoveObjToVisibleLayer( rSave.pObj );
+        // <--
     }
 }
 
@@ -555,6 +571,10 @@ void SwUndoDrawDelete::Undo( SwUndoIter &rIter )
         SdrObject *pObj = rSave.pObj;
         SwDrawContact *pContact = new SwDrawContact( rSave.pFmt, pObj );
         pContact->_Changed( *pObj, SDRUSERCALL_INSERTED, NULL );
+        // --> OD 2005-03-22 #i45718# - follow-up of #i35635#
+        // move object to visible layer
+        pContact->MoveObjToVisibleLayer( pObj );
+        // <--
     }
     rIter.pMarkList = pMarkLst;
 }
