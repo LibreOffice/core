@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:38:37 $
+ *  last change: $Author: rt $ $Date: 2001-07-20 21:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,11 +574,11 @@ String STR_POOLCHR_HTML_SAMPLE
     Text [ french ] = "Exemple" ;
     Text [ portuguese ] = "Exemplo" ;
     Text [ portuguese_brazilian ] = "Beispiel" ;
-    Text[ chinese_simplified ] = "Àı×Ó";
+    Text[ chinese_simplified ] = "Ê¾Àı";
     Text[ russian ] = "Ïğèìåğ";
     Text[ polish ] = "Przyk³ad";
     Text[ japanese ] = "—á";
-    Text[ chinese_traditional ] = "¨Ò¤l";
+    Text[ chinese_traditional ] = "¥Ü¨Ò";
     Text[ arabic ] = "ãËÇá";
     Text[ greek ] = "ĞáñÜäåéãìá";
     Text[ korean ] = "¿¹";
@@ -600,7 +600,7 @@ String STR_POOLCHR_HTML_KEYBOARD
     Text [ french ] = "Saisie de l'utilisateur" ;
     Text [ portuguese ] = "Entrada do utilizador" ;
     Text [ portuguese_brazilian ] = "Benutzereingabe" ;
-    Text[ chinese_simplified ] = "ÓÃ»§ÊäÈë";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÊäÈë";
     Text[ russian ] = "Ââîä ïîëüçîâàòåëÿ";
     Text[ polish ] = "Wpis u¿ytkownika";
     Text[ japanese ] = "Õ°»Ş°“ü—Í";
@@ -2002,11 +2002,11 @@ String STR_POOLCOLL_BUL_LEVEL1S
     Text [ danish ] = "Punktopstilling 1 start" ;
     Text [ portuguese ] = "Marca 1 Início" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 1 Anfang" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 1 ¿ª¶Ë";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 1 ¿ªÊ¼";
     Text[ russian ] = "Íà÷àëî ñïèñêà 1";
     Text[ polish ] = "Pocz¹tek listy 1";
     Text[ japanese ] = "‰Óğ‘‚« 1 n‚ß";
-    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 1 °_©l";
+    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 1 ?©l";
     Text[ arabic ] = "ÊÚÏÇÏ 1 ÈÏÇíÉ";
     Text[ greek ] = "ÊáôÜëïãïò 1 Áñ÷Ş";
     Text[ korean ] = "±Û¸Ó¸®±âÈ£ 1 ½ÃÀÛ";
@@ -2056,11 +2056,11 @@ String STR_POOLCOLL_BUL_LEVEL1E
     Text [ danish ] = "Punktopstilling 1 slut" ;
     Text [ portuguese ] = "Marca 1 Fim" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 1 Ende" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 1 ½áÎ²";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 1 ½áÊø";
     Text[ russian ] = "Êîíåö ñïèñêà 1";
     Text[ polish ] = "Koniec listy 1";
     Text[ japanese ] = "‰Óğ‘‚« 1 I‚è";
-    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 1 µ²§À";
+    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 1 µ²§ô";
     Text[ arabic ] = "ÊÚÏÇÏ 1 äåÇíÉ";
     Text[ greek ] = "ÊáôÜëïãïò 1 Ôİëïò";
     Text[ korean ] = "±Û¸Ó¸®±âÈ£ 1³¡";
@@ -2110,11 +2110,11 @@ String STR_POOLCOLL_BUL_LEVEL2S
     Text [ danish ] = "Punktopstilling 2 start" ;
     Text [ portuguese ] = "Marca 2 Início" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 2 Anfang" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 2 ¿ª¶Ë";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 2 ¿ªÊ¼";
     Text[ russian ] = "Íà÷àëî ñïèñêà 2";
     Text[ polish ] = "Pocz¹tek listy 2 ";
     Text[ japanese ] = "‰Óğ‘‚« 2 n‚ß";
-    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 2 °_©l";
+    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 2 ¶}©l";
     Text[ arabic ] = "ÊÚÏÇÏ 2 ÈÏÇíÉ";
     Text[ greek ] = "ÊáôÜëïãïò 2 Áñ÷Ş";
     Text[ korean ] = "±Û¸Ó¸®±âÈ£ ½ÃÀÛ";
@@ -2164,12 +2164,12 @@ String STR_POOLCOLL_BUL_LEVEL2E
     Text [ danish ] = "Punktopstilling 2 slut" ;
     Text [ portuguese ] = "Marca 2 Fim" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 2 Ende" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 2 ½áÎ²";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 2 ½áÊø";
     Text[ russian ] = "êîíåö ñïèñêà 2";
     Text[ polish ] = "Koniec listy 2 ";
     Text[ japanese ] = "‰Óğ‘‚« 2 I‚è";
     Text[ language_user1 ] = " ";
-    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 2 µ²§À";
+    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 2 µ²§ô";
     Text[ arabic ] = "ÊÚÏÇÏ 2 äåÇíÉ";
     Text[ greek ] = "ÊáôÜëïãïò 2 Ôİëïò";
     Text[ korean ] = "±Û¸Ó¸®±âÈ£ 2 ³¡";
@@ -2218,11 +2218,11 @@ String STR_POOLCOLL_BUL_LEVEL3S
     Text [ danish ] = "Punktopstilling 3 start" ;
     Text [ portuguese ] = "Marca 3 Início" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 3 Anfang" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 3 ¿ª¶Ë";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 3 ¿ªÊ¼";
     Text[ russian ] = "Íà÷àëî ñïèñêà 3";
     Text[ polish ] = "Pocz¹tek listy 3";
     Text[ japanese ] = "‰Óğ‘‚« 3 n‚ß";
-    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 3 °_©l";
+    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 3 ¶}©l";
     Text[ arabic ] = "ÊÚÏÇÏ 3 ÈÏÇíÉ";
     Text[ greek ] = "ÊáôÜëïãïò 3 Áñ÷Ş";
     Text[ korean ] = "±Û¸Ó¸®±âÈ£ 3 ½ÃÀÛ";
@@ -2272,11 +2272,11 @@ String STR_POOLCOLL_BUL_LEVEL3E
     Text [ danish ] = "Punktopstilling 3 slut" ;
     Text [ portuguese ] = "Marca 3 Fim" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 3 Ende" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 3 ½áÎ²";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 3 ½áÊø";
     Text[ russian ] = "Êîíåö ñïèñêà 3";
     Text[ polish ] = "Koniec listy 3";
     Text[ japanese ] = "‰Óğ‘‚« 3 I‚è";
-    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 3 µ²§À";
+    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 3 µ²§ô";
     Text[ arabic ] = "ÊÚÏÇÏ 3 äåÇíÉ";
     Text[ greek ] = "ÊáôÜëïãïò 3 Ôİëïò";
     Text[ korean ] = "±Û¸Ó¸®±âÈ£ 3 ³¡";
@@ -2299,7 +2299,7 @@ String STR_POOLCOLL_BUL_NONUM3
     Text [ danish ] = "Punktopstilling 3 fortsættelse" ;
     Text [ portuguese ] = "Marca 3 Continuação" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 3 Fortsetzung" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿±àºÅ 3 ¼ÌĞø";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 3 ¼ÌĞø";
     Text[ russian ] = "Ïğîäîëæåíèå ñïèñêà 3";
     Text[ polish ] = "Kontynuacja listy 3";
     Text[ japanese ] = "‰Óğ‘‚« 3 ‘±‚«";
@@ -2326,11 +2326,11 @@ String STR_POOLCOLL_BUL_LEVEL4S
     Text [ danish ] = "Punktopstilling 4 start" ;
     Text [ portuguese ] = "Marca 4 Início" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 4 Anfang" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 4 ¿ª¶Ë";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 4 ¿ªÊ¼";
     Text[ russian ] = "Íà÷àëî ñïèñêà 4";
     Text[ polish ] = "Pocz¹tek listy 4";
     Text[ japanese ] = "‰Óğ‘‚« 4 n‚ß";
-    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 4 °_©l";
+    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 4 ¶}©l";
     Text[ arabic ] = "ÊÚÏÇÏ 4 ÈÏÇíÉ";
     Text[ greek ] = "ÊáôÜëïãïò 4 Áñ÷Ş";
     Text[ korean ] = "±Û¸Ó¸®±âÈ£ 4 ½ÃÀÛ";
@@ -2380,11 +2380,11 @@ String STR_POOLCOLL_BUL_LEVEL4E
     Text [ danish ] = "Punktopstilling 4 slut" ;
     Text [ portuguese ] = "Marca 4 Fim" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 4 Ende" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 4 ½áÎ²";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 4 ½áÊø";
     Text[ russian ] = "Êîíåö ñïèñêà 4";
     Text[ polish ] = "Koniec listy 4";
     Text[ japanese ] = "‰Óğ‘‚« 4 I‚è";
-    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 4 µ²§À";
+    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 4 µ²§ô";
     Text[ arabic ] = "ÊÚÏÇÏ 4 äåÇíÉ";
     Text[ greek ] = "ÊáôÜëïãïò 4 Ôİëïò";
     Text[ korean ] = "±Û¸Ó¸®±âÈ£ 4 ³¡";
@@ -2407,7 +2407,7 @@ String STR_POOLCOLL_BUL_NONUM4
     Text [ danish ] = "Punktopstilling 4 fortsættelse" ;
     Text [ portuguese ] = "Marca 4 Continuação" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 4 Fortsetzung" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿±àºÅ 4 ¼ÌĞø";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 4 ¼ÌĞø";
     Text[ russian ] = "Ïğîäîëæåíèå ñïèñêà 4";
     Text[ polish ] = "Kontynuacja listy 4";
     Text[ japanese ] = "‰Óğ‘‚« 4 ‘±‚«";
@@ -2434,11 +2434,11 @@ String STR_POOLCOLL_BUL_LEVEL5S
     Text [ danish ] = "Punktopstilling 5 start" ;
     Text [ portuguese ] = "Marca 5 Início" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 5 Anfang" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 5 ¿ª¶Ë";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 5 ¿ªÊ¼";
     Text[ russian ] = "Íà÷àëî ñïèñêà 5";
     Text[ polish ] = "Pocz¹tek listy 5";
     Text[ japanese ] = "‰Óğ‘‚« 5 n‚ß";
-    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 5 °_©l";
+    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 5 ¶}©l";
     Text[ arabic ] = "ÊÚÏÇÏ 5 ÈÏÇíÉ";
     Text[ greek ] = "ÊáôÜëïãïò 5 Áñ÷Ş";
     Text[ korean ] = "±Û¸Ó¸®±âÈ£ 5 ½ÃÀÛ";
@@ -2488,11 +2488,11 @@ String STR_POOLCOLL_BUL_LEVEL5E
     Text [ danish ] = "Punktopstilling 5 slut" ;
     Text [ portuguese ] = "Marca 5 Fim" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 5 Ende" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 5 ½áÎ²";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 5 ½áÊø";
     Text[ russian ] = "Êîíåö ñïèñêà 5";
     Text[ polish ] = "Koniec listy 5";
     Text[ japanese ] = "‰Óğ‘‚« 5 I‚è";
-    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 5 µ²§À";
+    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 5 µ²§ô";
     Text[ arabic ] = "ÊÚÏÇÏ 5 äåÇíÉ";
     Text[ greek ] = "ÊáôÜëïãïò 5 Ôİëïò";
     Text[ korean ] = "±Û¸Ó¸®±âÈ£ £µ³¡";
@@ -2515,7 +2515,7 @@ String STR_POOLCOLL_BUL_NONUM5
     Text [ danish ] = "Punktopstilling 5 fortsættelse" ;
     Text [ portuguese ] = "Marca 5 Continuação" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 5 Fortsetzung" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿±àºÅ 5 ¼ÌĞø";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 5 ¼ÌĞø";
     Text[ russian ] = "Ïğîäîëæåíèå ñïèñêà 5";
     Text[ polish ] = "Kontynuacja listy 5";
     Text[ japanese ] = "‰Óğ‘‚« 5 ‘±‚«";
@@ -3434,7 +3434,7 @@ String STR_POOLCOLL_TOX_USERH
     Text [ danish ] = "Brugerindeks overskrift" ;
     Text [ portuguese ] = "Título do índice do utilizador" ;
     Text [ portuguese_brazilian ] = "Benutzerverzeichnis ?berschrift" ;
-    Text[ chinese_simplified ] = "ÓÃ»§Ë÷Òı±êÌâ";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÄ¿Â¼ ±êÌâ";
     Text[ russian ] = "Çàãîëîâîê ïîëüçîâàòåëüñêîãî óêàçàòåëÿ";
     Text[ polish ] = "Tytu³ indeksu u¿ytkownika";
     Text[ japanese ] = "Õ°»Ş°’è‹`‚Ìõˆø Œ©o‚µ";
@@ -3460,7 +3460,7 @@ String STR_POOLCOLL_TOX_USER1
     Text [ danish ] = "Brugerindeks 1" ;
     Text [ portuguese ] = "Índice do utilizador 1" ;
     Text [ portuguese_brazilian ] = "Benutzerverzeichnis 1" ;
-    Text[ chinese_simplified ] = "ÓÃ»§Ë÷Òı 1";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÄ¿Â¼ 1";
     Text[ russian ] = "Ïîëüçîâàòåëüñêèé óêàçàòåëü 1";
     Text[ polish ] = "Indeks u¿ytkownika 1";
     Text[ japanese ] = "Õ°»Ş°’è‹`‚Ìõˆø 1";
@@ -3486,7 +3486,7 @@ String STR_POOLCOLL_TOX_USER2
     Text [ danish ] = "Brugerindeks 2" ;
     Text [ portuguese ] = "Índice do utilizador 2" ;
     Text [ portuguese_brazilian ] = "Benutzerverzeichnis 2" ;
-    Text[ chinese_simplified ] = "ÓÃ»§Ë÷Òı 2";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÄ¿Â¼ 2";
     Text[ russian ] = "Ïîëüçîâàòåëüñêèé óêàçàòåëü 2";
     Text[ polish ] = "Indeks u¿ytkownika 2";
     Text[ japanese ] = "Õ°»Ş°’è‹`‚Ìõˆø 2";
@@ -3512,7 +3512,7 @@ String STR_POOLCOLL_TOX_USER3
     Text [ danish ] = "Brugerindeks 3" ;
     Text [ portuguese ] = "Índice do utilizador 3" ;
     Text [ portuguese_brazilian ] = "Benutzerverzeichnis 3" ;
-    Text[ chinese_simplified ] = "ÓÃ»§Ë÷Òı 3";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÄ¿Â¼ 3";
     Text[ russian ] = "Ïîëüçîâàòåëüñêèé óêàçàòåëü 3";
     Text[ polish ] = "Indeks u¿ytkownika 3";
     Text[ japanese ] = "Õ°»Ş°’è‹`‚Ìõˆø 3";
@@ -3538,7 +3538,7 @@ String STR_POOLCOLL_TOX_USER4
     Text [ danish ] = "Brugerindeks 4" ;
     Text [ portuguese ] = "Índice do utilizador 4" ;
     Text [ portuguese_brazilian ] = "Benutzerverzeichnis 4" ;
-    Text[ chinese_simplified ] = "ÓÃ»§Ë÷Òı 4";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÄ¿Â¼ 4";
     Text[ russian ] = "Ïîëüçîâàòåëüñêèé óêàçàòåëü 4";
     Text[ polish ] = "Indeks u¿ytkownika 4";
     Text[ japanese ] = "Õ°»Ş°’è‹`‚Ìõˆø 4";
@@ -3564,7 +3564,7 @@ String STR_POOLCOLL_TOX_USER5
     Text [ danish ] = "Brugerindeks 5" ;
     Text [ portuguese ] = "Índice do utilizador 5" ;
     Text [ portuguese_brazilian ] = "Benutzerverzeichnis 5" ;
-    Text[ chinese_simplified ] = "ÓÃ»§Ë÷Òı 5";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÄ¿Â¼ 5";
     Text[ russian ] = "Ïîëüçîâàòåëüñêèé óêàçàòåëü 5";
     Text[ polish ] = "Indeks u¿ytkownika 5";
     Text[ japanese ] = "Õ°»Ş°’è‹`‚Ìõˆø 5";
@@ -3596,7 +3596,7 @@ String STR_POOLCOLL_TOX_USER6
     Text[ arabic ] = "İåÑÓ ÇáãÓÊÎÏã 6";
     Text[ greek ] = "ÅõñåôŞñéï ÷ñçóôşí 6";
     Text[ korean ] = "»ç¿ëÀÚ »öÀÎ 6";
-    Text[ chinese_simplified ] = "ÓÃ»§Ä¿Â¼ 6";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÄ¿Â¼ 6";
     Text[ chinese_traditional ] = "¦Û­q¥Ø¿ı 6";
     Text[ turkish ] = "Kullanıcı dizini 6";
     Text[ language_user1 ] = " ";
@@ -3622,7 +3622,7 @@ String STR_POOLCOLL_TOX_USER7
     Text[ arabic ] = "İåÑÓ ÇáãÓÊÎÏã 7";
     Text[ greek ] = "ÅõñåôŞñéï ÷ñçóôşí 7";
     Text[ korean ] = "»ç¿ëÀÚ »öÀÎ 7";
-    Text[ chinese_simplified ] = "ÓÃ»§Ä¿Â¼ 7";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÄ¿Â¼ 7";
     Text[ chinese_traditional ] = "¦Û­q¥Ø¿ı 7";
     Text[ turkish ] = "Kullanıcı dizini 7";
     Text[ language_user1 ] = " ";
@@ -3648,7 +3648,7 @@ String STR_POOLCOLL_TOX_USER8
     Text[ arabic ] = "İåÑÓ ÇáãÓÊÎÏã 8";
     Text[ greek ] = "ÅõñåôŞñéï ÷ñçóôşí 8";
     Text[ korean ] = "»ç¿ëÀÚ »öÀÎ 8";
-    Text[ chinese_simplified ] = "ÓÃ»§Ä¿Â¼ 8";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÄ¿Â¼ 8";
     Text[ chinese_traditional ] = "¦Û­q¥Ø¿ı 8";
     Text[ turkish ] = "Kullanıcı dizini 8";
     Text[ language_user1 ] = " ";
@@ -3674,7 +3674,7 @@ String STR_POOLCOLL_TOX_USER9
     Text[ arabic ] = "İåÑÓ ÇáãÓÊÎÏã 9";
     Text[ greek ] = "ÅõñåôŞñéï ÷ñçóôşí 9";
     Text[ korean ] = "»ç¿ëÀÚ »öÀÎ 9";
-    Text[ chinese_simplified ] = "ÓÃ»§Ä¿Â¼ 9";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÄ¿Â¼ 9";
     Text[ chinese_traditional ] = "¦Û­q¥Ø¿ı 9";
     Text[ turkish ] = "Kullanıcı dizini 9";
     Text[ language_user1 ] = " ";
@@ -3700,7 +3700,7 @@ String STR_POOLCOLL_TOX_USER10
     Text[ arabic ] = "İåÑÓ ÇáãÓÊÎÏã 10";
     Text[ greek ] = "ÅõñåôŞñéï ÷ñçóôşí 10";
     Text[ korean ] = "»ç¿ëÀÚ »öÀÎ 10";
-    Text[ chinese_simplified ] = "ÓÃ»§Ä¿Â¼ 10";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÄ¿Â¼ 10";
     Text[ chinese_traditional ] = "¦Û­q¥Ø¿ı 10";
     Text[ turkish ] = "Kullanıcı dizini 10";
     Text[ language_user1 ] = " ";
@@ -4480,7 +4480,7 @@ String STR_POOLNUMRULE_BUL1
     Text [ danish ] = "Punktopstilling 1" ;
     Text [ portuguese ] = "Lista 1" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 1" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿±àºÅ 1";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 1";
     Text[ russian ] = "Ñïèñîê 1";
     Text[ polish ] = "Lista 1";
     Text[ japanese ] = "‰Óğ‘‚« 1";
@@ -4507,7 +4507,7 @@ String STR_POOLNUMRULE_BUL2
     Text [ danish ] = "Punktopstilling 2" ;
     Text [ portuguese ] = "Lista 2" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 2" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿±àºÅ 2";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 2";
     Text[ russian ] = "Ñïèñîê 2";
     Text[ polish ] = "Lista 2";
     Text[ japanese ] = "‰Óğ‘‚« 2";
@@ -4534,7 +4534,7 @@ String STR_POOLNUMRULE_BUL3
     Text [ danish ] = "Punktopstilling 3" ;
     Text [ portuguese ] = "Lista 3" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 3" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿±àºÅ 3";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 3";
     Text[ russian ] = "Ñïèñîê 3";
     Text[ polish ] = "Lista 3";
     Text[ japanese ] = "‰Óğ‘‚« 3";
@@ -4561,7 +4561,7 @@ String STR_POOLNUMRULE_BUL4
     Text [ danish ] = "Punktopstilling 4" ;
     Text [ portuguese ] = "Lista 4" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 4" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿±àºÅ 4";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 4";
     Text[ russian ] = "Ñïèñîê 4";
     Text[ polish ] = "Lista 4";
     Text[ japanese ] = "‰Óğ‘‚« 4";
@@ -4588,7 +4588,7 @@ String STR_POOLNUMRULE_BUL5
     Text [ danish ] = "Punktopstilling 5" ;
     Text [ portuguese ] = "Lista 5" ;
     Text [ portuguese_brazilian ] = "Aufz?hlung 51" ;
-    Text[ chinese_simplified ] = "ÏîÄ¿±àºÅ 5";
+    Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ 5";
     Text[ russian ] = "Ñïèñîê 5";
     Text[ polish ] = "Lista 5";
     Text[ japanese ] = "‰Óğ‘‚« 5";
@@ -4606,8 +4606,8 @@ String STR_POOLCHR_RUBYTEXT
 {
     Text = "Rubys" ;
     Text [ English ] = "Rubies" ;
-    Text[ english_us ] = "Rubys";
-    Text[ portuguese ] = "Símbolos fonéticos";
+    Text[ english_us ] = "Rubies";
+    Text[ portuguese ] = "Rubys";
     Text[ russian ] = "Ôîíåòè÷åñêèå çíàêè";
     Text[ greek ] = "ÖùíçôéêÜ óıìâïëá";
     Text[ dutch ] = "Fonetische tekens";
@@ -4622,8 +4622,9 @@ String STR_POOLCHR_RUBYTEXT
     Text[ japanese ] = "‚Ó‚è‚ª‚È";
     Text[ korean ] = "·çºñ";
     Text[ chinese_simplified ] = "Æ´ÒôºÍ×¢Òô·ûºÅ";
-    Text[ chinese_traditional ] = "µù­µ²Å¸¹";
+    Text[ chinese_traditional ] = "ª`­µ²Å¸¹";
     Text[ turkish ] = "Phonetic Symbols";
     Text[ arabic ] = "ÑãæÒ ÕæÊíÉ";
     Text[ catalan ] = "Símbolos fonéticos";
 };
+
