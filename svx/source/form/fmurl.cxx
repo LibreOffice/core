@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmurl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 08:02:45 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 10:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,14 +67,27 @@
 namespace svxform
 {
 
-    IMPLEMENT_CONSTASCII_USTRING(FMURL_FORMSLOTS_PREFIX,".uno:FormSlots/");
+    IMPLEMENT_CONSTASCII_USTRING(FMURL_FORMSLOTS_PREFIX,   ".uno:FormController/");
 
-    IMPLEMENT_CONSTASCII_USTRING(FMURL_RECORD_MOVEFIRST,".uno:FormSlots/moveToFirst");
-    IMPLEMENT_CONSTASCII_USTRING(FMURL_RECORD_MOVEPREV,".uno:FormSlots/moveToPrev");
-    IMPLEMENT_CONSTASCII_USTRING(FMURL_RECORD_MOVENEXT,".uno:FormSlots/moveToNext");
-    IMPLEMENT_CONSTASCII_USTRING(FMURL_RECORD_MOVELAST,".uno:FormSlots/moveToLast");
-    IMPLEMENT_CONSTASCII_USTRING(FMURL_RECORD_MOVETONEW,".uno:FormSlots/moveToNew");
-    IMPLEMENT_CONSTASCII_USTRING(FMURL_RECORD_UNDO,".uno:FormSlots/undoRecord");
+    IMPLEMENT_CONSTASCII_USTRING(FMURL_FORM_POSITION,      ".uno:FormController/positionForm"  );
+    IMPLEMENT_CONSTASCII_USTRING(FMURL_FORM_RECORDCOUNT,   ".uno:FormController/RecordCount"  );
+    IMPLEMENT_CONSTASCII_USTRING(FMURL_RECORD_MOVEFIRST,   ".uno:FormController/moveToFirst"  );
+    IMPLEMENT_CONSTASCII_USTRING(FMURL_RECORD_MOVEPREV,    ".uno:FormController/moveToPrev"   );
+    IMPLEMENT_CONSTASCII_USTRING(FMURL_RECORD_MOVENEXT,    ".uno:FormController/moveToNext"   );
+    IMPLEMENT_CONSTASCII_USTRING(FMURL_RECORD_MOVELAST,    ".uno:FormController/moveToLast"   );
+    IMPLEMENT_CONSTASCII_USTRING(FMURL_RECORD_MOVETONEW,   ".uno:FormController/moveToNew"    );
+    IMPLEMENT_CONSTASCII_USTRING(FMURL_RECORD_UNDO,        ".uno:FormController/undoRecord"   );
+    IMPLEMENT_CONSTASCII_USTRING(FMURL_RECORD_SAVE,        ".uno:FormController/saveRecord"   );
+    IMPLEMENT_CONSTASCII_USTRING(FMURL_RECORD_DELETE,      ".uno:FormController/deleteRecord" );
+    IMPLEMENT_CONSTASCII_USTRING(FMURL_FORM_REFRESH,       ".uno:FormController/refreshForm"  );
+
+    IMPLEMENT_CONSTASCII_USTRING( FMURL_FORM_SORT_UP,      ".uno:FormController/sortUp"       );
+    IMPLEMENT_CONSTASCII_USTRING( FMURL_FORM_SORT_DOWN,    ".uno:FormController/sortDown"     );
+    IMPLEMENT_CONSTASCII_USTRING( FMURL_FORM_SORT,         ".uno:FormController/sort"         );
+    IMPLEMENT_CONSTASCII_USTRING( FMURL_FORM_AUTO_FILTER,  ".uno:FormController/autoFilter"   );
+    IMPLEMENT_CONSTASCII_USTRING( FMURL_FORM_FILTER,       ".uno:FormController/filter"       );
+    IMPLEMENT_CONSTASCII_USTRING( FMURL_FORM_APPLY_FILTER, ".uno:FormController/applyFilter"  );
+    IMPLEMENT_CONSTASCII_USTRING( FMURL_FORM_REMOVE_FILTER,".uno:FormController/removeFilterOrder" );
 
     IMPLEMENT_CONSTASCII_USTRING(FMURL_CONFIRM_DELETION,".uno:FormSlots/ConfirmDeletion");
 
