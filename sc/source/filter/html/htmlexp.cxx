@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:17:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,6 @@
 
 #include "htmlexp.hxx"
 #include "filter.hxx"
-#include "flttools.hxx"
 #include "global.hxx"
 #include "document.hxx"
 #include "scitems.hxx"
@@ -131,6 +130,7 @@
 #include "cellform.hxx"
 #include "docoptio.hxx"
 #include "editutil.hxx"
+#include "ftools.hxx"
 
 #define ITEMID_FIELD EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
@@ -280,20 +280,20 @@ void lcl_WriteTeamInfo( SvStream& rStrm, rtl_TextEncoding eDestEnc )
 {
     if ( !bOderSo ) return;
     lcl_OUT_LF();
-    lcl_OUT_COMMENT( _STRINGCONST( "Sascha Ballach                     " ) );
-    lcl_OUT_COMMENT( _STRINGCONST( "Michael Daeumling (aka Bitsau)     " ) );
-    lcl_OUT_COMMENT( _STRINGCONST( "Michael Hagen                      " ) );
-    lcl_OUT_COMMENT( _STRINGCONST( "Roland Jakobs                      " ) );
-    lcl_OUT_COMMENT( _STRINGCONST( "Andreas Krebs                      " ) );
-    lcl_OUT_COMMENT( _STRINGCONST( "John Marmion                       " ) );
-    lcl_OUT_COMMENT( _STRINGCONST( "Niklas Nebel                       " ) );
-    lcl_OUT_COMMENT( _STRINGCONST( "Jacques Nietsch                    " ) );
-    lcl_OUT_COMMENT( _STRINGCONST( "Marcus Olk                         " ) );
-    lcl_OUT_COMMENT( _STRINGCONST( "Eike Rathke                        " ) );
-    lcl_OUT_COMMENT( _STRINGCONST( "Daniel Rentz                       " ) );
-    lcl_OUT_COMMENT( _STRINGCONST( "Stephan Templin                    " ) );
-    lcl_OUT_COMMENT( _STRINGCONST( "Gunnar Timm                        " ) );
-    lcl_OUT_COMMENT( _STRINGCONST( "*** Man kann nicht ALLES haben! ***" ) );
+    lcl_OUT_COMMENT( CREATE_STRING( "Sascha Ballach                     " ) );
+    lcl_OUT_COMMENT( CREATE_STRING( "Michael Daeumling (aka Bitsau)     " ) );
+    lcl_OUT_COMMENT( CREATE_STRING( "Michael Hagen                      " ) );
+    lcl_OUT_COMMENT( CREATE_STRING( "Roland Jakobs                      " ) );
+    lcl_OUT_COMMENT( CREATE_STRING( "Andreas Krebs                      " ) );
+    lcl_OUT_COMMENT( CREATE_STRING( "John Marmion                       " ) );
+    lcl_OUT_COMMENT( CREATE_STRING( "Niklas Nebel                       " ) );
+    lcl_OUT_COMMENT( CREATE_STRING( "Jacques Nietsch                    " ) );
+    lcl_OUT_COMMENT( CREATE_STRING( "Marcus Olk                         " ) );
+    lcl_OUT_COMMENT( CREATE_STRING( "Eike Rathke                        " ) );
+    lcl_OUT_COMMENT( CREATE_STRING( "Daniel Rentz                       " ) );
+    lcl_OUT_COMMENT( CREATE_STRING( "Stephan Templin                    " ) );
+    lcl_OUT_COMMENT( CREATE_STRING( "Gunnar Timm                        " ) );
+    lcl_OUT_COMMENT( CREATE_STRING( "*** Man kann nicht ALLES haben! ***" ) );
     lcl_OUT_LF();
 }
 
@@ -693,7 +693,7 @@ void ScHTMLExport::WriteBody()
                 // Grafik als (JPG-)File speichern
                 aGrfNm = aStreamPath;
                 USHORT nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm,
-                    _STRINGCONST( "JPG" ), XOUTBMP_USE_NATIVE_IF_POSSIBLE );
+                    CREATE_STRING( "JPG" ), XOUTBMP_USE_NATIVE_IF_POSSIBLE );
                 if( !nErr )     // fehlerhaft, da ist nichts auszugeben
                 {
                     aGrfNm = URIHelper::SmartRel2Abs(
@@ -1028,7 +1028,7 @@ void ScHTMLExport::WriteTables()
         }
 
         if ( bAll )
-            OUT_COMMENT( _STRINGCONST( "**************************************************************************" ) );
+            OUT_COMMENT( CREATE_STRING( "**************************************************************************" ) );
     }
 }
 
