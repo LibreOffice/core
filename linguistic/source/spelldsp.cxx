@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-02 09:24:57 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,7 +697,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
         // list of proposals found (to be checked against entries of
         // neagtive dictionaries)
         Sequence< OUString > aProposals;
-        INT16 eFailureType = SpellFailure::IS_NEGATIVE_WORD;
+        INT16 eFailureType = -1;    // no failure
         if (xRes.is())
         {
             aProposals = xRes->getAlternatives();
@@ -721,6 +721,8 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                         aChkWord, nLanguage, FALSE, TRUE ) );
                 if (xNegEntry.is())
                 {
+                    eFailureType = SpellFailure::IS_NEGATIVE_WORD;
+
                     // replacement text to be added to suggestions, if not empty
                     OUString aAddRplcTxt( xNegEntry->getReplacementText() );
 
@@ -740,12 +742,15 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             }
         }
 
-        // remove entries listed in negative dictionaries
-        if (bCheckDics  &&  xDicList.is())
-            SeqRemoveNegEntries( aProposals, xDicList, nLanguage );
+        if (eFailureType != -1)     // word found in negative dictionary
+        {
+            // remove entries listed in negative dictionaries
+            if (bCheckDics  &&  xDicList.is())
+                SeqRemoveNegEntries( aProposals, xDicList, nLanguage );
 
-        xRes = new SpellAlternatives( aChkWord, nLanguage,
-                        eFailureType, aProposals );
+            xRes = new SpellAlternatives( aChkWord, nLanguage,
+                            eFailureType, aProposals );
+        }
     }
 
     return xRes;
