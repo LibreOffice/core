@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-09 13:57:54 $
+ *  last change: $Author: er $ $Date: 2002-09-26 16:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,7 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom,
                                       const ScAddress* pAdrTo,
                                       BOOL bBroadcast )
 {
-    bBroadcast = (bBroadcast && GetDocOptions().IsCalcAsShown());
+    bBroadcast = (bBroadcast && GetDocOptions().IsCalcAsShown() && !IsImportingXML());
     if ( pAdrFrom && !pAdrTo )
     {
         const USHORT nTab = pAdrFrom->Tab();
