@@ -2,9 +2,9 @@
  *
  *  $RCSfile: systemshell.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-07-05 07:20:17 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 14:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,13 @@ namespace SystemShell
 
           @param aFileUrl
                     The file url of the document.
+
+          @param aMimeType
+          The mime content type of the document specified by aFileUrl.
+          If an empty string will be provided "application/octet-stream"
+          will be used.
     */
-    void AddToRecentDocumentList(const rtl::OUString& aFileUrl);
+    void AddToRecentDocumentList(const rtl::OUString& aFileUrl, const rtl::OUString& aMimeType);
 };
 
 #endif
