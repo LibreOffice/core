@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:34:37 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,10 @@ SfxItemPropertyMap* ImplGetSvxGraphicObjectPropertyMap()
     static SfxItemPropertyMap aGraphicObjectPropertyMap_Impl[] =
     {
         SPECIAL_GRAPHOBJ_PROPERTIES
+
+        // #i25616#
+        FILL_PROPERTIES
+
         LINE_PROPERTIES
         LINE_PROPERTIES_START_END
         SHAPE_DESCRIPTOR_PROPERTIES
