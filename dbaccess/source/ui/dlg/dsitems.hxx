@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsitems.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:47:45 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,14 +114,16 @@
 #define DSID_SCHEMA                 47
 #define DSID_INDEXAPPENDIX          48
 #define DSID_CONN_LDAP_USESSL       49
-#define DSID_DOSLINEENDS            50
+#define DSID_DOCUMENT_URL           50
+#define DSID_DOSLINEENDS            51
+#define DSID_DATABASENAME           52
 
 
 //========================================================================
 //= item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
-#define DSID_LAST_ITEM_ID   DSID_DOSLINEENDS
+#define DSID_LAST_ITEM_ID   DSID_DATABASENAME
 
 #endif // _DBAUI_DATASOURCEITEMS_HXX_
 
