@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPersistObject.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 10:44:04 $
+ *  last change:$Date: 2004-05-07 16:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,7 @@ public class _XPersistObject extends MultiMethodTest {
                                             || (str.equals("FormatsSupplier"))
                                             || (str.equals("Text"))
                                             || (str.equals("Value"))
+                                            || (str.indexOf("UserDefined")>0)
                                             );
                     }
                     if (!locRes) {
