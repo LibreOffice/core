@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-21 03:28:33 $
+ *  last change: $Author: rt $ $Date: 2001-05-21 08:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,6 @@
 using namespace ::svxform;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;
-using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
@@ -1033,13 +1032,24 @@ void FmXGridPeer::selectionChanged()
 }
 
 //------------------------------------------------------------------
+namespace fmgridif
+{
+    const ::rtl::OUString getDataModeIdentifier()
+    {
+        static ::rtl::OUString s_sDataModeIdentifier = DATA_MODE;
+        return s_sDataModeIdentifier;
+    }
+}
+using namespace fmgridif;
+
+//------------------------------------------------------------------
 FmXGridPeer::FmXGridPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
             :m_aModifyListeners(m_aMutex)
             ,m_aUpdateListeners(m_aMutex)
             ,m_aContainerListeners(m_aMutex)
             ,m_aSelectionListeners(m_aMutex)
             ,m_nCursorListening(0)
-            ,m_aMode( (::rtl::OUString)DATA_MODE )
+            ,m_aMode( getDataModeIdentifier() )
             ,m_pStateCache(NULL)
             ,m_pDispatchers(NULL)
             ,m_bInterceptingDispatch(sal_False)
