@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxwriter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-26 07:54:30 $
+ *  last change: $Author: sab $ $Date: 2001-12-12 09:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1008,7 +1008,7 @@ sal_Int32 SAXWriter::getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurence )
         if( m_bForceLineBreak ||
             m_bAllowLineBreak &&
             ((nFirstLineBreakOccurence + mp_SaxWriterHelper->GetLastColumnCount()) > MAXCOLUMNCOUNT) )
-            nLength = m_nLevel +1;
+            nLength = m_nLevel;
     }
     m_bForceLineBreak = sal_False;
     m_bAllowLineBreak = sal_False;
