@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcu,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:36:21 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@
                         <value xml:lang="pl">Arkusze kalkulacyjne</value>
                         <value xml:lang="pt-BR">Planilhas</value>
                         <value xml:lang="ja">表計算ドキュメント</value>
-                        <value xml:lang="ko">스트레드시트</value>
+                        <value xml:lang="ko">스프레드시트</value>
                         <value xml:lang="zh-CN">工作表文档</value>
                         <value xml:lang="zh-TW">工作表文件</value>
                         <value xml:lang="tr">Hesapçizelgesi</value>
