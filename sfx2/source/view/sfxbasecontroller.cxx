@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-24 12:47:59 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 13:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,7 +678,8 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
         if ( m_pData->m_pViewShell->PrepareClose() )
         {
-            getFrame()->removeFrameActionListener( m_pData->m_xListener ) ;
+            if ( getFrame().is() )
+                getFrame()->removeFrameActionListener( m_pData->m_xListener ) ;
             SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame() ;
 
             // weitere View auf dasselbe Doc?
@@ -700,7 +701,8 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::
     }
     else
     {
-        getFrame()->addFrameActionListener( m_pData->m_xListener ) ;
+        if ( getFrame().is() )
+            getFrame()->addFrameActionListener( m_pData->m_xListener ) ;
         return sal_True ;
     }
 }
@@ -868,7 +870,7 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
     aObject.Source = (XCONTROLLER*)this ;
     m_pData->m_aListenerContainer.disposeAndClear( aObject ) ;
 
-    if ( m_pData->m_pController )
+    if ( m_pData->m_pController && m_pData->m_pController->getFrame().is() )
         m_pData->m_pController->getFrame()->removeFrameActionListener( m_pData->m_xListener ) ;
 
     if ( m_pData->m_pViewShell )
@@ -944,6 +946,9 @@ void SfxBaseController::ReleaseShell_Impl()
         if ( xModel.is() )
             xModel->disconnectController( this );
         m_pData->m_pViewShell = 0;
+
+        REFERENCE < XFRAME > aXFrame;
+        attachFrame( aXFrame );
     }
 }
 
