@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 21:05:55 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage TP_FLD_VAR
         Text [ italian ] = "~Tipo di campo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "Tipo de ~campo" ;
-        Text [ finnish ] = "Laji" ;
+        Text [ finnish ] = "~Tyyppi" ;
         Text [ danish ] = "Felttype" ;
         Text [ french ] = "~Type de champ" ;
         Text [ swedish ] = "~Fälttyp" ;
@@ -137,6 +137,7 @@ TabPage TP_FLD_VAR
         Text[ turkish ] = "~Seçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Selección";
+        Text[ finnish ] = "~Valinta";
     };
     ListBox LB_VARSELECTION
     {
@@ -173,6 +174,7 @@ TabPage TP_FLD_VAR
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~ormato";
+        Text[ finnish ] = "Muotoile";
     };
     ListBox LB_VARFORMAT
     {
@@ -200,7 +202,7 @@ TabPage TP_FLD_VAR
         TEXT [ italian ] = "Nascosto" ;
         TEXT [ portuguese_brazilian ] = "Invisível" ;
         TEXT [ portuguese ] = "~Invisível" ;
-        TEXT [ finnish ] = "Näkymätön" ;
+        TEXT [ finnish ] = "~Näkymätön" ;
         TEXT [ danish ] = "Usynlig" ;
         TEXT [ french ] = "Invisible" ;
         TEXT [ swedish ] = "Os~ynlig" ;
@@ -247,6 +249,7 @@ TabPage TP_FLD_VAR
         Text[ turkish ] = "Bölüme göre numaralama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Numeración de capítulos";
+        Text[ finnish ] = "Numerointi luvuittain";
     };
     FixedText FT_VARCHAPTERLEVEL
     {
@@ -275,6 +278,7 @@ TabPage TP_FLD_VAR
         Text[ turkish ] = "D~üzey";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nivel";
+        Text[ finnish ] = "~Taso";
     };
     ListBox LB_VARCHAPTERLEVEL
     {
@@ -372,6 +376,10 @@ TabPage TP_FLD_VAR
     {
              < "Ninguno" ; > ;
     };
+    StringList [ finnish ] =
+    {
+             < "Ei mitään" ; > ;
+    };
     };
     FixedText FT_VARSEPARATOR
     {
@@ -400,6 +408,7 @@ TabPage TP_FLD_VAR
         Text[ turkish ] = "A~yýrma iþareti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Separador";
+        Text[ finnish ] = "~Erotin";
     };
     Edit ED_VARSEPARATOR
     {
@@ -437,6 +446,7 @@ TabPage TP_FLD_VAR
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
+        Text[ finnish ] = "~Nimi";
     };
     Edit ED_VARNAME
     {
@@ -456,7 +466,7 @@ TabPage TP_FLD_VAR
         Text [ italian ] = "~Valore" ;
         Text [ portuguese_brazilian ] = "Valor" ;
         Text [ portuguese ] = "~Valor" ;
-        Text [ finnish ] = "Arvo" ;
+        Text [ finnish ] = "~Arvo" ;
         Text [ danish ] = "Værdi" ;
         Text [ french ] = "~Valeur" ;
         Text [ swedish ] = "~Värde" ;
@@ -573,4 +583,5 @@ TabPage TP_FLD_VAR
     Text[ turkish ] = "Deðiþkenler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Variables";
+    Text[ finnish ] = "Muuttujat";
 };
