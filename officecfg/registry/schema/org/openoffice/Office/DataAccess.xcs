@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 12:25:52 $
+ *  last change: $Author: jb $ $Date: 2002-07-12 15:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@
       <info>
         <desc xml:lang="en-US">Contains information for displaying, sorting and ordering of data.</desc>
       </info>
-      <node-ref oor:name="Font" oor:node-type="Font" oor:component="org.openoffice.Office.Common">
+      <node-ref oor:name="Font" oor:node-type="Font"> <!-- oor:component="org.openoffice.Office.Common" -->
         <info>
           <desc xml:lang="en-US">Specifies the font attributes for data displaying.</desc>
         </info>
@@ -418,6 +418,413 @@
 	  <info>
         <desc xml:lang="en-US">Specifies the connection pooling of used database drivers.</desc>
       </info>
+    </group>
+    <group oor:name="Font">
+        <!-- Responsible: JB (Temporary 'hack' to avoid cross-component references) -->
+        <!-- Copied from org.openoffice.Office.Common -->
+        <prop oor:name="Name" oor:type="xs:string">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US">specifies the exact name of the font ("Arial","Courier", "Frutiger").</desc>
+            </info>
+        </prop>
+        <prop oor:name="Height" oor:type="xs:short">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US">specifies the height of the font in the measure of the destination.</desc>
+            </info>
+        </prop>
+        <prop oor:name="Width" oor:type="xs:short">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US">specifies the width of the font in the measure of the destination.</desc>
+            </info>
+        </prop>
+        <prop oor:name="StyleName" oor:type="xs:string">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US">specifies the style name of the font ("Bold", "Italic", "Italic Bold").</desc>
+            </info>
+        </prop>
+        <prop oor:name="Family" oor:type="xs:short">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US">specifies the general style of the font.</desc>
+            </info>
+            <constraints>
+                <enumeration oor:value="0">
+                    <info>
+                        <desc xml:lang="en-US">DONTKNOW</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="1">
+                    <info>
+                        <desc xml:lang="en-US">DECORATIVE</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="2">
+                    <info>
+                        <desc xml:lang="en-US">MODERN</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="3">
+                    <info>
+                        <desc xml:lang="en-US">ROMAN</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="4">
+                    <info>
+                        <desc xml:lang="en-US">SCRIPT</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="5">
+                    <info>
+                        <desc xml:lang="en-US">SWISS</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="6">
+                    <info>
+                        <desc xml:lang="en-US">SYSTEM</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="7">
+                    <info>
+                        <desc xml:lang="en-US">DONTKNOW</desc>
+                    </info>
+                </enumeration>
+            </constraints>
+        </prop>
+        <prop oor:name="CharSet" oor:type="xs:short">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US">specifies the character set which is supported by the font.</desc>
+            </info>
+            <constraints>
+                <enumeration oor:value="0">
+                    <info>
+                        <desc xml:lang="en-US">DONTKNOW</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="1">
+                    <info>
+                        <desc xml:lang="en-US">ANSI</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="2">
+                    <info>
+                        <desc xml:lang="en-US">MAC</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="3">
+                    <info>
+                        <desc xml:lang="en-US">IBMPC_437</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="4">
+                    <info>
+                        <desc xml:lang="en-US">IBMPC_850</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="5">
+                    <info>
+                        <desc xml:lang="en-US">IBMPC_860</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="6">
+                    <info>
+                        <desc xml:lang="en-US">IBMPC_861</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="7">
+                    <info>
+                        <desc xml:lang="en-US">IBMPC_863</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="8">
+                    <info>
+                        <desc xml:lang="en-US">IBMPC_865</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="9">
+                    <info>
+                        <desc xml:lang="en-US">SYSTEM</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="10">
+                    <info>
+                        <desc xml:lang="en-US">SYMBOL</desc>
+                    </info>
+                </enumeration>
+            </constraints>
+        </prop>
+        <prop oor:name="Pitch" oor:type="xs:short">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US">specifies the pitch of the font.</desc>
+            </info>
+            <constraints>
+                <enumeration oor:value="0">
+                    <info>
+                        <desc xml:lang="en-US">DONTKNOW</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="1">
+                    <info>
+                        <desc xml:lang="en-US">FIXED</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="2">
+                    <info>
+                        <desc xml:lang="en-US">VARIABLE</desc>
+                    </info>
+                </enumeration>
+            </constraints>
+        </prop>
+        <prop oor:name="CharacterWidth" oor:type="xs:double">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US">specifies the character width. Depending on the specified width, a font that supports this width may be selected.  [UNIT=%]</desc>
+            </info>
+        </prop>
+        <prop oor:name="Weight" oor:type="xs:double">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US">specifies the thickness of the line.</desc>
+            </info>
+        </prop>
+        <prop oor:name="Slant" oor:type="xs:short">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US">specifies if there is a character slant (italic).</desc>
+            </info>
+            <constraints>
+                <enumeration oor:value="0">
+                    <info>
+                        <desc xml:lang="en-US">NONE</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="1">
+                    <info>
+                        <desc xml:lang="en-US">OBLIQUE</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="2">
+                    <info>
+                        <desc xml:lang="en-US"> ITALIC</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="3">
+                    <info>
+                        <desc xml:lang="en-US">DONTKNOW</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="4">
+                    <info>
+                        <desc xml:lang="en-US">REVERSE_OBLIQUE</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="5">
+                    <info>
+                        <desc xml:lang="en-US">REVERSE_ITALIC</desc>
+                    </info>
+                </enumeration>
+            </constraints>
+        </prop>
+        <prop oor:name="UnderLine" oor:type="xs:short">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US"/>
+            </info>
+            <constraints>
+                <enumeration oor:value="0">
+                    <info>
+                        <desc xml:lang="en-US">NONE</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="1">
+                    <info>
+                        <desc xml:lang="en-US">SINGLE</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="2">
+                    <info>
+                        <desc xml:lang="en-US">DOUBLE</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="3">
+                    <info>
+                        <desc xml:lang="en-US">DOTTED</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="4">
+                    <info>
+                        <desc xml:lang="en-US">DONTKNOW</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="5">
+                    <info>
+                        <desc xml:lang="en-US">DASH</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="6">
+                    <info>
+                        <desc xml:lang="en-US">LONGDASH</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="7">
+                    <info>
+                        <desc xml:lang="en-US">DASHDOT</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="8">
+                    <info>
+                        <desc xml:lang="en-US">DASHDOTDOT</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="9">
+                    <info>
+                        <desc xml:lang="en-US">SMALLWAVE</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="10">
+                    <info>
+                        <desc xml:lang="en-US">WAVE</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="11">
+                    <info>
+                        <desc xml:lang="en-US">DOUBLEWAVE</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="12">
+                    <info>
+                        <desc xml:lang="en-US">BOLD</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="13">
+                    <info>
+                        <desc xml:lang="en-US">BOLDDOTTED</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="14">
+                    <info>
+                        <desc xml:lang="en-US">BOLDDASH</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="15">
+                    <info>
+                        <desc xml:lang="en-US">BOLDLONGDASH</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="16">
+                    <info>
+                        <desc xml:lang="en-US">BOLDDASHDOT</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="17">
+                    <info>
+                        <desc xml:lang="en-US">BOLDDASHDOTDOT</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="18">
+                    <info>
+                        <desc xml:lang="en-US">BOLDWAVE</desc>
+                    </info>
+                </enumeration>
+            </constraints>
+        </prop>
+        <prop oor:name="Strikeout" oor:type="xs:short">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US"/>
+            </info>
+            <constraints>
+                <enumeration oor:value="0">
+                    <info>
+                        <desc xml:lang="en-US">NONE</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="1">
+                    <info>
+                        <desc xml:lang="en-US">SINGLE</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="2">
+                    <info>
+                        <desc xml:lang="en-US">DOUBLE</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="3">
+                    <info>
+                        <desc xml:lang="en-US">DONTKNOW</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="4">
+                    <info>
+                        <desc xml:lang="en-US">BOLD</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="5">
+                    <info>
+                        <desc xml:lang="en-US">SLASH</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="6">
+                    <info>
+                        <desc xml:lang="en-US">X</desc>
+                    </info>
+                </enumeration>
+            </constraints>
+        </prop>
+        <prop oor:name="Orientation" oor:type="xs:double">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US">specifies the rotation of the font.  [UNIT=degree]</desc>
+            </info>
+        </prop>
+        <prop oor:name="Kerning" oor:type="xs:boolean">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US">for requesting, it specifies if there is a kerning table available. For selecting, it specifies if the kerning table is to be used.</desc>
+            </info>
+        </prop>
+        <prop oor:name="WordLineMode" oor:type="xs:boolean">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US">specifies if only words get underlined.</desc>
+            </info>
+        </prop>
+        <prop oor:name="Type" oor:type="xs:short">
+            <value xsi:nil="true"/>
+            <info>
+                <desc xml:lang="en-US">specifies the technology of the font representation.</desc>
+            </info>
+            <constraints>
+                <enumeration oor:value="0">
+                    <info>
+                        <desc xml:lang="en-US">DONTKNOW</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="1">
+                    <info>
+                        <desc xml:lang="en-US">RASTER</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="2">
+                    <info>
+                        <desc xml:lang="en-US">DEVICE</desc>
+                    </info>
+                </enumeration>
+                <enumeration oor:value="3">
+                    <info>
+                        <desc xml:lang="en-US">SCALABLE</desc>
+                    </info>
+                </enumeration>
+            </constraints>
+        </prop>
+        <info>
+            <desc xml:lang="en-US">describes the characteristics of a font.</desc>
+        </info>
     </group>
   </templates>
   <component>
