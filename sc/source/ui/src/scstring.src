@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 12:55:23 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 18:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1938,7 +1938,7 @@ String SCSTR_VER_JUSTIFY_TOP
     Text [ french ] = "Alignement au bord supÈrieur" ;
     Text [ swedish ] = "Justera uppÂt" ;
     Text [ dutch ] = "Op bovenkant uitlijnen" ;
-    Text [ spanish ] = "AlineaciÛn hacia arriba" ;
+    Text [ spanish ] = "Alinear arriba" ;
     Text [ english_us ] = "Align to top" ;
     Text[ chinese_simplified ] = "Âêë‰∏äÂØπÈΩê";
     Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ ÔÓ ‚ÂıÌÂÏÛ Í‡˛";
@@ -1994,7 +1994,7 @@ String SCSTR_VER_JUSTIFY_BOTTOM
     Text [ french ] = "Alignement en bas" ;
     Text [ swedish ] = "Justera nedÂt" ;
     Text [ dutch ] = "Op onderkant uitlijnen" ;
-    Text [ spanish ] = "AlineaciÛn hacia abajo" ;
+    Text [ spanish ] = "Alinear abajo" ;
     Text [ english_us ] = "Align to bottom" ;
     Text[ chinese_simplified ] = "Âêë‰∏ãÂØπÈΩê";
     Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ ÔÓ ÌËÊÌÂÏÛ Í‡˛";
@@ -3272,6 +3272,27 @@ String STR_ACC_CSVRULER_DESCR
 {
     Text = "Dieses Lineal verwaltet Objekte an festen Positionen.";
     Text[ english ] = "Ruler which manages objects at fixed positions.";
+    Text[ english_us ] = "This ruler manages objects at fixed positions.";
+    Text[ portuguese ] = "Ruler which manages objects at fixed positions.";
+    Text[ russian ] = "Ruler which manages objects at fixed positions.";
+    Text[ greek ] = "Ruler which manages objects at fixed positions.";
+    Text[ dutch ] = "Ruler which manages objects at fixed positions.";
+    Text[ french ] = "Ruler which manages objects at fixed positions.";
+    Text[ spanish ] = "Ruler which manages objects at fixed positions.";
+    Text[ finnish ] = "Ruler which manages objects at fixed positions.";
+    Text[ italian ] = "Ruler which manages objects at fixed positions.";
+    Text[ danish ] = "Ruler which manages objects at fixed positions.";
+    Text[ swedish ] = "Ruler which manages objects at fixed positions.";
+    Text[ polish ] = "Ruler which manages objects at fixed positions.";
+    Text[ portuguese_brazilian ] = "Ruler which manages objects at fixed positions.";
+    Text[ japanese ] = "Ruler which manages objects at fixed positions.";
+    Text[ korean ] = "Ruler which manages objects at fixed positions.";
+    Text[ chinese_simplified ] = "Ruler which manages objects at fixed positions.";
+    Text[ chinese_traditional ] = "Ruler which manages objects at fixed positions.";
+    Text[ turkish ] = "Ruler which manages objects at fixed positions.";
+    Text[ arabic ] = "Ruler which manages objects at fixed positions.";
+    Text[ catalan ] = "Ruler which manages objects at fixed positions.";
+    Text[ thai ] = "Ruler which manages objects at fixed positions.";
 };
 
 String STR_ACC_CSVGRID_NAME
@@ -3305,6 +3326,27 @@ String STR_ACC_CSVGRID_DESCR
 {
     Text = "Diese Tabelle zeigt die Anordnung der Daten, wie sie im Dokument erscheinen.";
     Text[ english ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ english_us ] = "This sheet shows how the data will be arranged in the document.";
+    Text[ portuguese ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ russian ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ greek ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ dutch ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ french ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ spanish ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ finnish ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ italian ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ danish ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ swedish ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ polish ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ portuguese_brazilian ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ japanese ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ korean ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ chinese_simplified ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ chinese_traditional ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ turkish ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ arabic ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ catalan ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ thai ] = "This sheet shows, how the data will be arranged in the document.";
 };
 
 String STR_ACC_DOC_NAME
@@ -3546,26 +3588,26 @@ String STR_ACC_HEADER_NAME
     Text = "Kopfzeile Seite %1";
     Text[ english ] = "Header Page %1";
     Text[ english_us ] = "Header of page %1";
-    Text[ portuguese ] = "Header Page %1";
-    Text[ russian ] = "Header Page %1";
-    Text[ greek ] = "Header Page %1";
-    Text[ dutch ] = "Header Page %1";
-    Text[ french ] = "En-tÍte de la page %1";
-    Text[ spanish ] = "Encabezamiento de la p·gina %1";
-    Text[ finnish ] = "Header Page %1";
-    Text[ italian ] = "Riga d'intestazione della pagina %1";
-    Text[ danish ] = "Header Page %1";
-    Text[ swedish ] = "Sidhuvud sida %1";
-    Text[ polish ] = "Header Page %1";
-    Text[ portuguese_brazilian ] = "Header Page %1";
-    Text[ japanese ] = "„Éö„Éº„Ç∏ %1 „ÅÆ„Éò„ÉÉ„ÉÄ";
-    Text[ korean ] = "Î®∏Î¶¨Í∏Ä ÌéòÏù¥ÏßÄ %1";
-    Text[ chinese_simplified ] = "È°µÁúâ È°µ %1";
-    Text[ chinese_traditional ] = "È†ÅÈ¶ñ È†Å %1";
-    Text[ turkish ] = "Header Page %1";
-    Text[ arabic ] = "Header Page %1";
-    Text[ catalan ] = "Header Page %1";
-    Text[ thai ] = "Header Page %1";
+    Text[ portuguese ] = "Header";
+    Text[ russian ] = "Header";
+    Text[ greek ] = "Header";
+    Text[ dutch ] = "Header";
+    Text[ french ] = "En-tÍte";
+    Text[ spanish ] = "Encabezamiento";
+    Text[ finnish ] = "Header";
+    Text[ italian ] = "Riga d'intestazione";
+    Text[ danish ] = "Header";
+    Text[ swedish ] = "Sidhuvud";
+    Text[ polish ] = "Header";
+    Text[ portuguese_brazilian ] = "Header";
+    Text[ japanese ] = "„Éò„ÉÉ„ÉÄ";
+    Text[ korean ] = "Î®∏Î¶¨Í∏Ä";
+    Text[ chinese_simplified ] = "È°µÁúâ";
+    Text[ chinese_traditional ] = "È†ÅÈ¶ñ";
+    Text[ turkish ] = "Header";
+    Text[ arabic ] = "Header";
+    Text[ catalan ] = "Header";
+    Text[ thai ] = "Header";
 };
 
 String STR_ACC_HEADER_DESCR
@@ -3578,26 +3620,26 @@ String STR_ACC_FOOTER_NAME
     Text = "Fuﬂzeile Seite %1";
     Text[ english ] = "Footer Page %1";
     Text[ english_us ] = "Footer of page %1";
-    Text[ portuguese ] = "Footer Page %1";
-    Text[ russian ] = "Footer Page %1";
-    Text[ greek ] = "Footer Page %1";
-    Text[ dutch ] = "Footer Page %1";
-    Text[ french ] = "Pied de page de la page %1";
-    Text[ spanish ] = "Pie de p·gina de la p·gina %1";
-    Text[ finnish ] = "Footer Page %1";
-    Text[ italian ] = "PiË di pagina della pagina %1";
-    Text[ danish ] = "Footer Page %1";
-    Text[ swedish ] = "Sidfot sida %1";
-    Text[ polish ] = "Footer Page %1";
-    Text[ portuguese_brazilian ] = "Footer Page %1";
-    Text[ japanese ] = "„Éö„Éº„Ç∏ %1 „ÅÆ„Éï„ÉÉ„Çø";
-    Text[ korean ] = "Î∞îÎã•Í∏Ä ÌéòÏù¥ÏßÄ %1";
-    Text[ chinese_simplified ] = "È°µËÑö È°µ %1";
-    Text[ chinese_traditional ] = "È†ÅÂ∞æ È†Å %1";
-    Text[ turkish ] = "Footer Page %1";
-    Text[ arabic ] = "Footer Page %1";
-    Text[ catalan ] = "Footer Page %1";
-    Text[ thai ] = "Footer Page %1";
+    Text[ portuguese ] = "Footer";
+    Text[ russian ] = "Footer";
+    Text[ greek ] = "Footer";
+    Text[ dutch ] = "Footer";
+    Text[ french ] = "Pied de page";
+    Text[ spanish ] = "Pie de p·gina";
+    Text[ finnish ] = "Footer";
+    Text[ italian ] = "PiË di pagina";
+    Text[ danish ] = "Footer";
+    Text[ swedish ] = "Sidfot";
+    Text[ polish ] = "Footer";
+    Text[ portuguese_brazilian ] = "Footer";
+    Text[ japanese ] = "„Éï„ÉÉ„Çø";
+    Text[ korean ] = "Î∞îÎã•Í∏Ä";
+    Text[ chinese_simplified ] = "È°µËÑö";
+    Text[ chinese_traditional ] = "È†ÅÂ∞æ";
+    Text[ turkish ] = "Footer";
+    Text[ arabic ] = "Footer";
+    Text[ catalan ] = "Footer";
+    Text[ thai ] = "Footer";
 };
 
 String STR_ACC_FOOTER_DESCR
@@ -3636,6 +3678,27 @@ String STR_ACC_EDITLINE_DESCR
 {
     Text = "Hier kˆnnen Sie Text, Zahlen und Formeln eingeben und bearbeiten.";
     Text[ english ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ english_us ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ portuguese ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ russian ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ greek ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ dutch ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ french ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ spanish ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ finnish ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ italian ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ danish ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ swedish ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ polish ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ portuguese_brazilian ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ japanese ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ korean ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ chinese_simplified ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ chinese_traditional ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ turkish ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ arabic ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ catalan ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ thai ] = "This is where you enter or edit text, numbers and formulas.";
 };
 
 String STR_ACC_EDITCELL_NAME
@@ -3674,23 +3737,108 @@ String STR_ACC_DATAPILOT_ROW_DESCR
 {
     Text = "Felder, die Sie hier anordnen, werden in der fertigen Datenpilot-Tabelle als Zeile angezeigt.";
     Text[ english ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ english_us ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ portuguese ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ russian ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ greek ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ dutch ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ french ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ spanish ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ finnish ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ italian ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ danish ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ swedish ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ polish ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ portuguese_brazilian ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ japanese ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ korean ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ chinese_simplified ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ chinese_traditional ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ turkish ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ arabic ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ catalan ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ thai ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
 };
 
 String STR_ACC_DATAPILOT_COL_DESCR
 {
     Text = "Felder, die Sie hier anordnen, werden in der fertigen Datenpilot-Tabelle als Spalte angezeigt.";
     Text[ english ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ english_us ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ portuguese ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ russian ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ greek ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ dutch ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ french ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ spanish ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ finnish ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ italian ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ danish ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ swedish ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ polish ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ portuguese_brazilian ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ japanese ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ korean ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ chinese_simplified ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ chinese_traditional ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ turkish ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ arabic ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ catalan ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ thai ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
 };
 
 String STR_ACC_DATAPILOT_DATA_DESCR
 {
     Text = "Felder, die Sie hier anordnen, werden in der fertigen Datenpilot-Tabelle f¸r Berechnungen genutzt.";
     Text[ english ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ english_us ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ portuguese ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ russian ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ greek ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ dutch ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ french ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ spanish ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ finnish ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ italian ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ danish ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ swedish ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ polish ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ portuguese_brazilian ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ japanese ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ korean ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ chinese_simplified ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ chinese_traditional ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ turkish ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ arabic ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ catalan ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ thai ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
 };
 
 String STR_ACC_DATAPILOT_SEL_DESCR
 {
     Text = "Hier sind die Felder aufgelistet, die Sie in einen der drei anderen Bereiche bewegen kˆnnen.";
     Text[ english ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ language_user1 ] = "EM Oct 2002: (not \"range\") In the datapilot dialog, description of controls";
+    Text[ english_us ] = "Lists the fields that you can drag to one of the other three areas.";
+    Text[ portuguese ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ russian ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ greek ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ dutch ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ french ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ spanish ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ finnish ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ italian ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ danish ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ swedish ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ polish ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ portuguese_brazilian ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ japanese ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ korean ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ chinese_simplified ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ chinese_traditional ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ turkish ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ arabic ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ catalan ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ thai ] = "List the fields that you can drag to one of the other three areas.";
 };
 
