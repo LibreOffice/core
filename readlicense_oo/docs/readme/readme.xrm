@@ -6,10 +6,10 @@
 			<Text id="a" xml:lang="en-US">Welcome</Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">Last updated 2003 February 14</Text>
+			<Text id="a" xml:lang="en-US">Last updated 2003 April 14</Text>
 		</Paragraph>
 		<Paragraph id="A3" style="H1">
-			<Text id="a" xml:lang="en-US">OpenOffice.org 1.1 Beta 1 ReadMe</Text>
+			<Text id="a" xml:lang="en-US">OpenOffice.org 1.1 Beta2 ReadMe</Text>
 		</Paragraph>
 		<Paragraph id="A4">
 			<Text id="a" xml:lang="en-US" url="ahead">For latest updates to this readme file, see </Text>
