@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.160 $
+ *  $Revision: 1.161 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-05 09:09:53 $
+ *  last change: $Author: tbe $ $Date: 2002-12-05 11:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4269,7 +4269,7 @@ Window::~Window()
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
 
     // do not send child events for frames that were registered as native frames
-    if( !ImplIsAccessibleNativeFrame() )
+    if( !ImplIsAccessibleNativeFrame() && mbReallyVisible )
         if ( ImplIsAccessibleCandidate() && GetAccessibleParentWindow() )
             GetAccessibleParentWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_CHILDDESTROYED, this );
 
@@ -6099,8 +6099,20 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
     // a NULL handle is also passed if:
     // the window is hidden
     // the window is not really visible (ie, all parents must be visible)
-    ImplCallEventListeners( mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE,
-        ( bNativeFrameRegistered || !ImplIsAccessibleCandidate() || !bVisible || !mbReallyVisible ) ? NULL : this );
+    void *pData = this;
+    if( mbVisible )
+    {
+        // show
+        if( bNativeFrameRegistered || !ImplIsAccessibleCandidate() || !mbReallyVisible )
+            pData = NULL;
+    }
+    else
+    {
+        // hide
+        if( !ImplIsAccessibleCandidate() )
+            pData = NULL;
+    }
+    ImplCallEventListeners( mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE, pData );
 }
 
 // -----------------------------------------------------------------------
