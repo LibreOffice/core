@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2002-04-18 04:39:13 $
+ *  last change: $Author: pb $ $Date: 2002-05-07 08:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
     {
         if ( rColor == Color( COL_TRANSPARENT ) )
         {
-            SetFillColor( GetBackground().GetColor() );
+            SetFillColor( GetSettings().GetStyleSettings().GetFieldColor() );
             Paint( aDrawRect );
         }
         SetFillColor( rColor );
@@ -336,9 +336,7 @@ void BackgroundPreviewImpl::Paint( const Rectangle& rRect )
 
 */
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    SetFillColor( rStyleSettings.GetFieldColor() );
-    SetLineColor( rStyleSettings.GetFieldTextColor() );
+    SetLineColor( GetSettings().GetStyleSettings().GetFieldTextColor() );
     DrawRect( aDrawRect );
     if ( bIsBmp )
     {
