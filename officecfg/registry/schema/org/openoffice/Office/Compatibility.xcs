@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Compatibility.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 10:50:07 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
                 <value>false</value>
             </prop>
             <prop oor:name="UseObjectPositioning" oor:type="xs:boolean"><info><desc xml:lang="en-US">Use OpenOffice.org 1.1 object positioning</desc></info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="UseOurTextWrapping" oor:type="xs:boolean"><info><desc xml:lang="en-US">Use OpenOffice.org 1.1 text wrapping</desc></info>
                 <value>false</value>
             </prop>
         </group>
