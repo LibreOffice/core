@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:23:53 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-#include <svx/fontwork.hxx>
 
 #include "app.hrc"
 #ifndef _AEITEM_HXX //autogen
@@ -150,9 +149,6 @@
 #include <svx/writingmodeitem.hxx>
 #endif
 
-#ifndef _SVX_FONTWORK_BAR_HXX
-#include <svx/fontworkbar.hxx>
-#endif
 #include "sdresid.hxx"
 #ifndef SD_VIEW_HXX
 #include "View.hxx"
@@ -294,44 +290,36 @@ BOOL FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
-        if( (nSlotId == SID_DRAW_FONTWORK) || (nSlotId == SID_DRAW_FONTWORK_VERTICAL) )
+        Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+
+        pWindow->CaptureMouse();
+        USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+
+        if (pView->GetCurrentObjIdentifier() == OBJ_CAPTION)
         {
-            svx::FontworkBar::execute( pView, nSlotId );
+            Size aCaptionSize(846, 846);    // (4x2)cm
+            bReturn = pView->BegCreateCaptionObj(aPnt, aCaptionSize,
+                                                (OutputDevice*) NULL, nDrgLog);
         }
         else
         {
-            Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+            pView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
+        }
 
-            pWindow->CaptureMouse();
-            USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        SdrObject* pObj = pView->GetCreateObj();
 
-            if (pView->GetCurrentObjIdentifier() == OBJ_CAPTION)
-            {
-                Size aCaptionSize(846, 846);    // (4x2)cm
-                bReturn = pView->BegCreateCaptionObj(aPnt, aCaptionSize,
-                                                    (OutputDevice*) NULL, nDrgLog);
-            }
-            else
-            {
-                pView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
-            }
+        if (pObj)
+        {
+            SfxItemSet aAttr(pDoc->GetPool());
+            SetStyleSheet(aAttr, pObj);
+            SetAttributes(aAttr, pObj);
+            SetLineEnds(aAttr, pObj);
+            pObj->SetMergedItemSet(aAttr);
 
-            SdrObject* pObj = pView->GetCreateObj();
-
-            if (pObj)
-            {
-                SfxItemSet aAttr(pDoc->GetPool());
-                SetStyleSheet(aAttr, pObj);
-                SetAttributes(aAttr, pObj);
-                SetLineEnds(aAttr, pObj);
-                pObj->SetMergedItemSet(aAttr);
-
-                if( nSlotId == SID_DRAW_CAPTION_VERTICAL )
-                    ( (SdrTextObj*) pObj)->SetVerticalWriting( TRUE );
-            }
+            if( nSlotId == SID_DRAW_CAPTION_VERTICAL )
+                ( (SdrTextObj*) pObj)->SetVerticalWriting( TRUE );
         }
     }
-
     return bReturn;
 }
 
