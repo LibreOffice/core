@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strmadpt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:53 $
+ *  last change: $Author: hr $ $Date: 2001-09-28 13:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,11 +132,9 @@ public:
     queryInterface(const com::sun::star::uno::Type & rType)
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL acquire()
-        throw(com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire() throw();
 
-    virtual void SAL_CALL release()
-        throw(com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL release() throw();
 
     virtual sal_Int32 SAL_CALL
     readBytes(com::sun::star::uno::Sequence< sal_Int8 > & rData,
