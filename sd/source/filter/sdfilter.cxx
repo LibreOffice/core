@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdfilter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-10 16:15:14 $
+ *  last change: $Author: cl $ $Date: 2001-07-24 12:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,21 +161,27 @@ SdFilter::~SdFilter()
 
 void SdFilter::CreateStatusIndicator()
 {
-    if (mxModel.is())
+    try
     {
-        Reference< XController > xController( mxModel->getCurrentController());
-        if( xController.is())
+        if (mxModel.is())
         {
-            Reference< XFrame > xFrame( xController->getFrame());
-            if( xFrame.is())
+            Reference< XController > xController( mxModel->getCurrentController());
+            if( xController.is())
             {
-                Reference< XStatusIndicatorFactory > xFactory( xFrame, UNO_QUERY );
-                if( xFactory.is())
+                Reference< XFrame > xFrame( xController->getFrame());
+                if( xFrame.is())
                 {
-                    mxStatusIndicator = xFactory->createStatusIndicator();
+                    Reference< XStatusIndicatorFactory > xFactory( xFrame, UNO_QUERY );
+                    if( xFactory.is())
+                    {
+                        mxStatusIndicator = xFactory->createStatusIndicator();
+                    }
                 }
             }
         }
+    }
+    catch( Exception& e )
+    {
     }
 }
 
