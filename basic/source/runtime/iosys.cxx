@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2000-09-26 09:01:36 $
+ *  last change: $Author: ab $ $Date: 2000-10-11 09:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -930,8 +930,6 @@ ULONG   UCBStream::PutData( const void* pData, ULONG nSize )
 
 ULONG   UCBStream::SeekPos( ULONG nPos )
 {
-    if( !nPos )
-        return 0;
     try
     {
         if( xSeek.is() )
