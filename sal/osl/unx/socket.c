@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 14:53:53 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,12 @@
 #include <poll.h>
 #define HAVE_POLL_H
 #endif /* SOLARIS */
+
+#if defined(MACOSX)
+/* Include our own poll.h because OS X doesn't implement one */
+#include "poll.h"
+#define HAVE_POLL_H
+#endif
 
 #ifndef HAVE_POLL_H
 #define POLLIN  0x0001
