@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-07 18:51:35 $
+ *  last change: $Author: obo $ $Date: 2001-03-08 15:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,10 @@
  ************************************************************************/
 
 #include <stdio.h>
+#ifdef LINUX
+#define __USE_XOPEN
 #include <poll.h>
+#endif
 
 #include <prex.h>
 #include <X11/Xlocale.h>
@@ -353,8 +356,11 @@ InputMethod_HasPendingEvent(int nFileDescriptor, void *pData)
         return 0;
 
     struct pollfd aFileDescriptor;
+    #ifdef SOLARIS
     nfds_t        nNumDescriptor = 1;
-
+    #else
+    unsigned int      nNumDescriptor = 1;
+    #endif
     aFileDescriptor.fd      = nFileDescriptor;
     aFileDescriptor.events  = POLLRDNORM;
     aFileDescriptor.revents = 0;
