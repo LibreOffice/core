@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 09:56:29 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ protected:
 
 public:
     inline          ScBaseCell( CellType eNewType );
-    inline          ScBaseCell( const ScBaseCell& rBaseCell );
+    inline          ScBaseCell( const ScBaseCell& rBaseCell, ScDocument* pDoc );
 
     ScBaseCell*     Clone(ScDocument* pDoc) const;
     void            Delete();                       // simulierter virtueller Destructor
@@ -177,9 +177,9 @@ public:
 
                     ScValueCell();
                     ScValueCell( const double& rValue );
-                    ScValueCell( const ScValueCell& rScValueCell );
+                    ScValueCell( const ScValueCell& rScValueCell, ScDocument* pDoc );
                     ScValueCell( SvStream& rStream, USHORT nVer );
-    ScBaseCell*     Clone() const;
+    ScBaseCell*     Clone(ScDocument* pDoc) const;
 
     void            SetValue( const double& rValue );
     double          GetValue() const;
@@ -204,9 +204,9 @@ public:
 
                     ScStringCell();
                     ScStringCell( const String& rString );
-                    ScStringCell( const ScStringCell& rScStringCell );
+                    ScStringCell( const ScStringCell& rScStringCell, ScDocument* pDoc );
                     ScStringCell( SvStream& rStream, USHORT nVer );
-    ScBaseCell*     Clone() const;
+    ScBaseCell*     Clone(ScDocument* pDoc) const;
 
     void            SetString( const String& rString );
     void            GetString( String& rString ) const;
@@ -455,9 +455,9 @@ public:
 
                     ScNoteCell();
                     ScNoteCell( const ScPostIt& rNote );
-                    ScNoteCell( const ScNoteCell& rScNoteCell );
+                    ScNoteCell( const ScNoteCell& rScNoteCell, ScDocument* pDoc );
                     ScNoteCell( SvStream& rStream, USHORT nVer );
-    ScBaseCell*     Clone() const;
+    ScBaseCell*     Clone(ScDocument* pDoc) const;
 
     void            Save( SvStream& rStream ) const;
 };
@@ -472,12 +472,12 @@ inline ScBaseCell::ScBaseCell( CellType eNewType ) :
 {
 }
 
-inline ScBaseCell::ScBaseCell( const ScBaseCell& rBaseCell ) :
+inline ScBaseCell::ScBaseCell( const ScBaseCell& rBaseCell, ScDocument* pDoc ) :
     eCellType( rBaseCell.eCellType ),
     pBroadcaster( NULL ), nTextWidth( rBaseCell.nTextWidth ), nScriptType( SC_SCRIPTTYPE_UNKNOWN )
 {
     if (rBaseCell.pNote)
-        pNote = new ScPostIt( *rBaseCell.pNote );
+        pNote = new ScPostIt( *rBaseCell.pNote, pDoc );
     else
         pNote = NULL;
 }
@@ -530,15 +530,15 @@ inline ScValueCell::ScValueCell( const double& rValue ) :
     aValue = rValue;
 }
 
-inline ScValueCell::ScValueCell(const ScValueCell& rScValueCell) :
-    ScBaseCell( rScValueCell ),
+inline ScValueCell::ScValueCell(const ScValueCell& rScValueCell, ScDocument* pDoc) :
+    ScBaseCell( rScValueCell, pDoc ),
     aValue( rScValueCell.aValue )
 {
 }
 
-inline ScBaseCell* ScValueCell::Clone() const
+inline ScBaseCell* ScValueCell::Clone(ScDocument* pDoc) const
 {
-    return new ScValueCell(*this);
+    return new ScValueCell(*this, pDoc);
 }
 
 inline void ScValueCell::SetValue( const double& rValue )
@@ -560,8 +560,8 @@ inline ScStringCell::ScStringCell() :
 {
 }
 
-inline ScStringCell::ScStringCell( const ScStringCell& rScStringCell ) :
-    ScBaseCell( rScStringCell ),
+inline ScStringCell::ScStringCell( const ScStringCell& rScStringCell, ScDocument* pDoc ) :
+    ScBaseCell( rScStringCell, pDoc ),
     aString( rScStringCell.aString )
 {
 }
@@ -572,9 +572,9 @@ inline ScStringCell::ScStringCell( const String& rString ) :
 {
 }
 
-inline ScBaseCell* ScStringCell::Clone() const
+inline ScBaseCell* ScStringCell::Clone(ScDocument* pDoc) const
 {
-    return new ScStringCell(*this);
+    return new ScStringCell(*this, pDoc);
 }
 
 inline void ScStringCell::GetString( String& rString ) const
@@ -607,8 +607,8 @@ inline ScNoteCell::ScNoteCell() :
 {
 }
 
-inline ScNoteCell::ScNoteCell( const ScNoteCell& rScNoteCell ) :
-    ScBaseCell( rScNoteCell )
+inline ScNoteCell::ScNoteCell( const ScNoteCell& rScNoteCell, ScDocument* pDoc ) :
+    ScBaseCell( rScNoteCell, pDoc )
 {
 }
 
@@ -618,9 +618,9 @@ inline ScNoteCell::ScNoteCell( const ScPostIt& rNote ) :
     ScBaseCell::SetNote(rNote);
 }
 
-inline ScBaseCell* ScNoteCell::Clone() const
+inline ScBaseCell* ScNoteCell::Clone(ScDocument* pDoc) const
 {
-    return new ScNoteCell(*this);
+    return new ScNoteCell(*this, pDoc);
 }
 
 
