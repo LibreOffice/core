@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:10 $
+ *  last change: $Author: cmc $ $Date: 2002-08-12 09:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,20 @@ public:
     void Delete(const SwPaM &rPam);
 };
 
+class wwRedlineStack
+{
+private:
+    std::vector<SwFltStackEntry *> maStack;
+    typedef std::vector<SwFltStackEntry *>::reverse_iterator myriter;
+    SwDoc &mrDoc;
+public:
+    explicit wwRedlineStack(SwDoc &rDoc) : mrDoc(rDoc) {}
+    void open(const SwPosition& rPos, const SfxPoolItem& rAttr);
+    void close(const SwPosition& rPos, SwRedlineType eType);
+    void closeall(const SwPosition& rPos);
+    ~wwRedlineStack();
+};
+
 //The only thing this is for is RES_FLTR_ANCHOR, anything else is an error.
 //For graphics whose anchoring position would otherwise be automatically moved
 //along by the insertion of text.
@@ -404,6 +418,7 @@ class WW8ReaderSave
     SwPosition aTmpPos;
     SwWW8FltControlStack* pOldStck;
     SwWW8FltAnchorStack* pOldAnchorStck;
+    wwRedlineStack *mpOldRedlines;
     WW8PLCFxSaveAll aPLCFxSave;
     WW8PLCFMan* pOldPlcxMan;
 
@@ -606,6 +621,12 @@ friend class WW8FormulaControl;
     SwPaM* pPaM;
 
     SwWW8FltControlStack* pCtrlStck;    // Stack fuer die Attribute
+
+    /*
+    This stack is for redlines, because their sequence of discovery can
+    be out of order of their order of insertion into the document.
+    */
+    wwRedlineStack *mpRedlineStack;
 
     /*
     This stack is for fields whose true conversion cannot be determined until

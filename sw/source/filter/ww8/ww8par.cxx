@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-08 15:03:47 $
+ *  last change: $Author: cmc $ $Date: 2002-08-12 09:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,6 +360,8 @@ void SwWW8FltControlStack::NewAttr(const SwPosition& rPos,
 {
     ASSERT(RES_TXTATR_FIELD != rAttr.Which(), "probably don't want to put"
         "fields into the control stack");
+    ASSERT(RES_FLTR_REDLINE != rAttr.Which(), "probably don't want to put"
+        "redlines into the control stack");
     SwFltControlStack::NewAttr(rPos, rAttr);
 }
 
@@ -906,6 +908,9 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     pRdr->pCtrlStck = new SwWW8FltControlStack(&pRdr->rDoc, pRdr->nFieldFlags,
         *pRdr);
 
+    mpOldRedlines = pRdr->mpRedlineStack;
+    pRdr->mpRedlineStack = new wwRedlineStack(pRdr->rDoc);
+
     pOldAnchorStck = pRdr->pAnchorStck;
     pRdr->pAnchorStck = new SwWW8FltAnchorStack(&pRdr->rDoc, pRdr->nFieldFlags);
 
@@ -949,6 +954,10 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     // entstehen koennen, die aus dem Fly rausragen
     pRdr->DeleteCtrlStk();
     pRdr->pCtrlStck = pOldStck;
+
+    pRdr->mpRedlineStack->closeall(*pRdr->pPaM->GetPoint());
+    delete pRdr->mpRedlineStack;
+    pRdr->mpRedlineStack = mpOldRedlines;
 
     pRdr->DeleteAnchorStk();
     pRdr->pAnchorStck = pOldAnchorStck;
@@ -2234,6 +2243,7 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
     pCtrlStck   = 0;
+    mpRedlineStack = 0;
     pRefStck = 0;
     pAnchorStck = 0;
     pFonts          = 0;
@@ -2323,6 +2333,8 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     pPaM = new SwPaM( *rPaM.GetPoint() );
 
     pCtrlStck = new SwWW8FltControlStack( &rDoc, nFieldFlags, *this );
+
+    mpRedlineStack = new wwRedlineStack(rDoc);
 
     /*
         RefFldStck: Keeps track of bookmarks which may be inserted as
@@ -2734,6 +2746,8 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     if (!pGloss)
         DELETEZ( pWwFib );
     DeleteCtrlStk();
+    mpRedlineStack->closeall(*pPaM->GetPoint());
+    delete mpRedlineStack;
     DeleteAnchorStk();
     DeleteRefStk();
 
@@ -2780,7 +2794,8 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     return nErrRet;
 }
 
-class outlinecmp
+class outlinecmp :
+    public std::binary_function<const SwTxtFmtColl*, const SwTxtFmtColl*, bool>
 {
 public:
     bool operator()(const SwTxtFmtColl *pOne, const SwTxtFmtColl *pTwo) const
@@ -2789,7 +2804,7 @@ public:
     }
 };
 
-class outlineeq
+class outlineeq : public std::unary_function<const SwTxtFmtColl*, bool>
 {
 private:
     BYTE mnNum;

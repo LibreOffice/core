@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-26 08:48:40 $
+ *  last change: $Author: cmc $ $Date: 2002-08-12 09:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2586,6 +2586,26 @@ const BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( USHORT nId )
     return aIter.FindSprm(nId);
 }
 
+bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(USHORT nId,
+    std::vector<const BYTE *> &rResult)
+{
+    if (nIdx >= nIMax)
+       return false;
+
+    long nLen;
+    BYTE* pSprms = GetLenAndIStdAndSprms( nLen );
+
+    WW8SprmIter aIter(pSprms, nLen, maSprmParser);
+
+    while(aIter.GetSprms())
+    {
+        if (aIter.GetAktId() == nId)
+            rResult.push_back(aIter.GetAktParams());
+        aIter++;
+    };
+    return !rResult.empty();
+}
+
 ULONG WW8PLCFx_Fc_FKP::WW8Fkp::GetParaHeight() const
 {
     if( ePLCF != PAP )
@@ -2871,6 +2891,37 @@ const BYTE* WW8PLCFx_Fc_FKP::HasSprm( USHORT nId )
     }
 
     return pRes;
+}
+
+bool WW8PLCFx_Fc_FKP::HasSprm(USHORT nId, std::vector<const BYTE *> &rResult)
+{
+    // const waere schoener, aber dafuer muesste NewFkp() ersetzt werden oder
+    // wegfallen
+    if (!pFkp)
+    {
+       DBG_WARNING( "+Motz: HasSprm: NewFkp noetig ( kein const moeglich )" );
+       // Passiert bei BugDoc 31722
+       if( !NewFkp() )
+           return 0;
+    }
+
+    pFkp->HasSprm(nId, rResult);
+
+    WW8PLCFxDesc aDesc;
+    GetPCDSprms( aDesc );
+
+    if (aDesc.pMemPos)
+    {
+        WW8SprmIter aIter(aDesc.pMemPos, aDesc.nSprmsLen,
+            pFkp->GetSprmParser());
+        while(aIter.GetSprms())
+        {
+            if (aIter.GetAktId() == nId)
+                rResult.push_back(aIter.GetAktParams());
+            aIter++;
+        };
+    }
+    return !rResult.empty();
 }
 
 ULONG WW8PLCFx_Fc_FKP::GetParaHeight() const
@@ -4731,6 +4782,12 @@ const BYTE* WW8PLCFMan::HasParaSprm( USHORT nId ) const
 const BYTE* WW8PLCFMan::HasCharSprm( USHORT nId ) const
 {
     return ((WW8PLCFx_Cp_FKP*)pChp->pPLCFx)->HasSprm( nId );
+}
+
+bool WW8PLCFMan::HasCharSprm(USHORT nId,
+    std::vector<const BYTE *> &rResult) const
+{
+    return ((WW8PLCFx_Cp_FKP*)pChp->pPLCFx)->HasSprm(nId, rResult);
 }
 
 #endif // !DUMP

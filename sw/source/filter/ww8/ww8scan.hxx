@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 17:06:08 $
+ *  last change: $Author: cmc $ $Date: 2002-08-12 09:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,6 +535,7 @@ private:
             ruft GetLenAndIStdAndSprms() auf...
         */
         const BYTE* HasSprm( USHORT nId );
+        bool HasSprm(USHORT nId, std::vector<const BYTE *> &rResult);
 
         ULONG GetParaHeight() const;    // fuer Header/Footer bei Papx-Fkps
 
@@ -567,6 +568,7 @@ public:
     virtual USHORT GetIstd() const;
     void GetPCDSprms( WW8PLCFxDesc& rDesc );
     const BYTE* HasSprm( USHORT nId );
+    bool HasSprm(USHORT nId, std::vector<const BYTE *> &rResult);
     ULONG GetParaHeight() const;
     BOOL HasFkp() const { return (0 != pFkp); }
 };
@@ -867,6 +869,7 @@ public:
 
     /* fragt, ob *aktueller Textrun* einen Sprm diesen Typs hat */
     const BYTE* HasCharSprm( USHORT nId ) const;
+    bool HasCharSprm(USHORT nId, std::vector<const BYTE *> &rResult) const;
 
     WW8PLCFx_Cp_FKP* GetChpPLCF() const
         { return (WW8PLCFx_Cp_FKP*)pChp->pPLCFx; }

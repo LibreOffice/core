@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-29 16:21:48 $
+ *  last change: $Author: cmc $ $Date: 2002-08-12 09:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3091,9 +3091,14 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr )
     if( !bNoAttrImport ) // zum Ignorieren von Styles beim Doc-Einfuegen
     {
         if (pAktColl)
+        {
+            ASSERT(rAttr.Which() != RES_FLTR_REDLINE, "redline in style!");
             pAktColl->SetAttr(rAttr);
+        }
         else if (pAktItemSet)
             pAktItemSet->Put(rAttr);
+        else if (rAttr.Which() == RES_FLTR_REDLINE)
+            mpRedlineStack->open(*pPaM->GetPoint(), rAttr);
         else
             pCtrlStck->NewAttr(*pPaM->GetPoint(), rAttr);
     }

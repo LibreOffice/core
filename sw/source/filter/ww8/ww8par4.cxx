@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:15 $
+ *  last change: $Author: cmc $ $Date: 2002-08-12 09:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,13 @@
 #endif
 
 #pragma hdrstop
+
+#ifndef __SGI_STL_ALGORITHM
+#include <algorithm>
+#endif
+#ifndef __SGI_STL_FUNCTIONAL
+#include <functional>
+#endif
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
@@ -518,6 +525,123 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     return pRet;
 }
 
+void wwRedlineStack::open(const SwPosition& rPos, const SfxPoolItem& rAttr)
+{
+    ASSERT(rAttr.Which() == RES_FLTR_REDLINE, "not a redline");
+    maStack.push_back(new SwFltStackEntry(rPos,rAttr.Clone()));
+}
+
+class SameOpenRedlineType :
+    public std::unary_function<const SwFltStackEntry*, bool>
+{
+private:
+    SwRedlineType meType;
+public:
+    SameOpenRedlineType(SwRedlineType eType) : meType(eType) {}
+    bool operator()(const SwFltStackEntry *pEntry) const
+    {
+        const SwFltRedline *pTest = static_cast<const SwFltRedline *>
+            (pEntry->pAttr);
+        return (pEntry->bLocked && (pTest->eType == meType));
+    }
+};
+
+void wwRedlineStack::close(const SwPosition& rPos, SwRedlineType eType)
+{
+    //Search from end for same type
+    myriter aResult = std::find_if(maStack.rbegin(), maStack.rend(),
+        SameOpenRedlineType(eType));
+    ASSERT(aResult != maStack.rend(), "close without open!");
+    if (aResult != maStack.rend())
+        (*aResult)->SetEndPos(rPos);
+}
+
+class CloseIfOpen
+{
+private:
+    const SwPosition &mrPos;
+public:
+    explicit CloseIfOpen(const SwPosition &rPos) : mrPos(rPos) {}
+        void operator()(SwFltStackEntry *pEntry) const
+    {
+        if (pEntry->bLocked)
+            pEntry->SetEndPos(mrPos);
+    }
+};
+
+void wwRedlineStack::closeall(const SwPosition& rPos)
+{
+    std::for_each(maStack.begin(), maStack.end(), CloseIfOpen(rPos));
+}
+
+class SetInDocAndDelete
+{
+private:
+    SwDoc &mrDoc;
+public:
+    explicit SetInDocAndDelete(SwDoc &rDoc) : mrDoc(rDoc) {}
+    void operator()(SwFltStackEntry *pEntry);
+};
+
+void SetInDocAndDelete::operator()(SwFltStackEntry *pEntry)
+{
+    SwPaM aRegion(pEntry->nMkNode);
+    if (pEntry->MakeRegion(&mrDoc, aRegion, TRUE))
+    {
+        mrDoc.SetRedlineMode(REDLINE_ON | REDLINE_SHOW_INSERT |
+            REDLINE_SHOW_DELETE);
+        const SwFltRedline *pFltRedline = static_cast<const SwFltRedline*>
+            (pEntry->pAttr);
+
+        if (USHRT_MAX != pFltRedline->nAutorNoPrev)
+        {
+            SwRedlineData aData(pFltRedline->eTypePrev,
+                pFltRedline->nAutorNoPrev, pFltRedline->aStampPrev, aEmptyStr,
+                0);
+
+            mrDoc.AppendRedline(new SwRedline(aData, aRegion));
+        }
+
+        SwRedlineData aData(pFltRedline->eType, pFltRedline->nAutorNo,
+                pFltRedline->aStamp, aEmptyStr, 0);
+
+        mrDoc.AppendRedline(new SwRedline(aData, aRegion));
+        mrDoc.SetRedlineMode(REDLINE_NONE | REDLINE_SHOW_INSERT |
+            REDLINE_SHOW_DELETE );
+    }
+    delete pEntry;
+}
+
+class CompareRedlines:
+    public std::binary_function<const SwFltStackEntry*, const SwFltStackEntry*,
+       bool>
+{
+public:
+    bool operator()(const SwFltStackEntry *pOneE, const SwFltStackEntry *pTwoE)
+        const;
+};
+
+bool CompareRedlines::operator()(const SwFltStackEntry *pOneE,
+    const SwFltStackEntry *pTwoE) const
+{
+    const SwFltRedline *pOne= static_cast<const SwFltRedline*>
+        (pOneE->pAttr);
+    const SwFltRedline *pTwo= static_cast<const SwFltRedline*>
+        (pTwoE->pAttr);
+
+    //Return the earlier time, if two have the same time, prioritize
+    //inserts over deletes
+    if (pOne->aStamp == pTwo->aStamp)
+        return (pOne->eType == REDLINE_INSERT && pTwo->eType != REDLINE_INSERT);
+    else
+        return (pOne->aStamp < pTwo->aStamp) ? true : false;
+}
+
+wwRedlineStack::~wwRedlineStack()
+{
+    std::sort(maStack.begin(), maStack.end(), CompareRedlines());
+    std::for_each(maStack.begin(), maStack.end(), SetInDocAndDelete(mrDoc));
+}
 
 void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
     INT32 nTblPos, INT32 nTblSiz, SwDoc& rDocOut )
@@ -560,16 +684,27 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
     }
     else
     {
-        BOOL bIns = (REDLINE_INSERT == eType);
+        /*
+         #101578#
+         It is possible to have a number of date stamps for the created time
+         of the change, (possibly a word bug) so we must use the "get a full
+         list" varient of HasCharSprm and take the last one as the true one.
+        */
+        std::vector<const BYTE *> aResult;
+        bool bIns = (REDLINE_INSERT == eType);
         if( bVer67 )
         {
-            pSprmCIbstRMark = pPlcxMan->HasCharSprm( 69 );
-            pSprmCDttmRMark = pPlcxMan->HasCharSprm( 70 );
+            pPlcxMan->HasCharSprm(69, aResult);
+            pSprmCIbstRMark = aResult.empty() ? 0 : aResult.back();
+            pPlcxMan->HasCharSprm(70, aResult);
+            pSprmCDttmRMark = aResult.empty() ? 0 : aResult.back();
         }
         else
         {
-            pSprmCIbstRMark = pPlcxMan->HasCharSprm( bIns ? 0x4804 : 0x4863 );
-            pSprmCDttmRMark = pPlcxMan->HasCharSprm( bIns ? 0x6805 : 0x6864 );
+            pPlcxMan->HasCharSprm( bIns ? 0x4804 : 0x4863, aResult);
+            pSprmCIbstRMark = aResult.empty() ? 0 : aResult.back();
+            pPlcxMan->HasCharSprm( bIns ? 0x6805 : 0x6864, aResult);
+            pSprmCDttmRMark = aResult.empty() ? 0 : aResult.back();
         }
     }
 
@@ -580,97 +715,42 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
         return;
 
     if (nLen < 0)
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_REDLINE );
+        mpRedlineStack->close(*pPaM->GetPoint(), eType);
     else
     {
         // start of new revision mark
         USHORT nWWAutNo = SVBT16ToShort( pSprmCIbstRMark );
-        UINT32 nWWDate  = SVBT32ToLong(  pSprmCDttmRMark );
-        WW8AuthorInfo aEntry( nWWAutNo );
+        WW8AuthorInfo aEntry(nWWAutNo);
         USHORT nPos;
-        if( pAuthorInfos && pAuthorInfos->Seek_Entry( &aEntry, &nPos ) )
+        if (pAuthorInfos && pAuthorInfos->Seek_Entry(&aEntry, &nPos))
         {
-            const WW8AuthorInfo* pAuthor = pAuthorInfos->GetObject( nPos );
-            if( pAuthor )
+            if (const WW8AuthorInfo* pAuthor = pAuthorInfos->GetObject(nPos))
             {
-                USHORT        nAutorNo = pAuthor->nOurId;
-                DateTime      aStamp(WW8ScannerBase::WW8DTTM2DateTime(nWWDate));
+                UINT32 nWWDate = SVBT32ToLong(pSprmCDttmRMark);
+                ASSERT(nWWDate, "Date is 0, this will cause trouble!");
 
+                DateTime aStamp(WW8ScannerBase::WW8DTTM2DateTime(nWWDate));
+                USHORT nAutorNo = pAuthor->nOurId;
                 SwFltRedline  aNewAttr(eType, nAutorNo, aStamp);
 
-                const SwFltRedline* pOldAttr =
-                    (const SwFltRedline*)pCtrlStck->GetOpenStackAttr(
-                                                        *pPaM->GetPoint(),
-                                                        RES_FLTR_REDLINE );
-                // 1st look if there is already another redline Attribute
-                // set on this text-region
-                // If so, we take it's data and store it as 'previous'
-                //                              or the other way around
-                if( pOldAttr )
-                {
-#if 0
-                    // Insert on top of Delete ?  This is not allowed !
-                    BOOL bDateWrongWayAround
-                            =    (REDLINE_INSERT == eType)
-                              && (REDLINE_DELETE == pOldAttr->eType);
-                    if(    bDateWrongWayAround
-
-                        || (      (aStamp < pOldAttr->aStamp)
-                             && ! (    (REDLINE_INSERT == pOldAttr->eType)
-                                    && (REDLINE_DELETE == eType)
-                                  )
-                           )
-                      )
-#else
-                    /*
-                    ##928##
-                    Only use hack to ignore inserts on deletes, do not
-                    disallow deletes on property changes
-                    */
-                    // Insert on top of Delete ?  This is not allowed !
-                    BOOL bDateWrongWayAround =
-                    (
-                        (REDLINE_INSERT == eType)
-                        && (REDLINE_DELETE == pOldAttr->eType)
-                        && (aStamp < pOldAttr->aStamp)
-                    );
-                    if (bDateWrongWayAround)
-#endif
-                    {
-                        if(     bDateWrongWayAround
-                            && !(nAutorNo == pOldAttr->nAutorNo) )
-                        {
-                            aNewAttr.eTypePrev    = eType;
-                            aNewAttr.nAutorNoPrev = nAutorNo;
-                            aNewAttr.aStampPrev   = aStamp;
-                            aNewAttr.eType        = pOldAttr->eType;
-                            aNewAttr.nAutorNo     = pOldAttr->nAutorNo;
-                            aNewAttr.aStamp       = pOldAttr->aStamp;
-                        }
-                        // else do nothing: so only the INSERT will be stored!
-                    }
-                    else
-                    {
-                        aNewAttr.eTypePrev    = pOldAttr->eType;
-                        aNewAttr.nAutorNoPrev = pOldAttr->nAutorNo;
-                        aNewAttr.aStampPrev   = pOldAttr->aStamp;
-                    }
-                }
-                NewAttr( aNewAttr );
+                NewAttr(aNewAttr);
             }
         }
     }
 }
+
 // insert new content
 void SwWW8ImplReader::Read_CFRMark(USHORT , const BYTE* pData, short nLen)
 {
     Read_CRevisionMark( REDLINE_INSERT, pData, nLen );
 }
+
 // delete old content
 void SwWW8ImplReader::Read_CFRMarkDel(USHORT , const BYTE* pData, short nLen)
 {
     Read_CRevisionMark( REDLINE_DELETE, pData, nLen );
 }
+
 // change properties of content ( == char formating)
 void SwWW8ImplReader::Read_CPropRMark(USHORT , const BYTE* pData, short nLen)
 {
