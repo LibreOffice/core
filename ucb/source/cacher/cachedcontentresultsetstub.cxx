@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultsetstub.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2001-03-22 16:47:12 $
+ *  last change: $Author: iha $ $Date: 2001-03-23 11:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,11 @@ void SAL_CALL CachedContentResultSetStub
         {
             Any aValue;
             aValue <<= nFetchSize;
-            setPropertyValue( m_aPropertyNameForFetchSize, aValue );
+            try
+            {
+                setPropertyValue( m_aPropertyNameForFetchSize, aValue );
+            }
+            catch( com::sun::star::uno::Exception& ) {}
         }
         if( bSetDirection )
         {
@@ -458,7 +462,11 @@ void SAL_CALL CachedContentResultSetStub
                 nFetchDirection = FetchDirection::REVERSE;
             Any aValue;
             aValue <<= nFetchDirection;
-            setPropertyValue( m_aPropertyNameForFetchDirection, aValue );
+            try
+            {
+                setPropertyValue( m_aPropertyNameForFetchDirection, aValue );
+            }
+            catch( com::sun::star::uno::Exception& ) {}
         }
 
     }
