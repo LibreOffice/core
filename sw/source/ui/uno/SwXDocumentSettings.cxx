@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-13 11:46:25 $
+ *  last change: $Author: dvo $ $Date: 2001-09-28 16:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,10 @@
 #ifndef _UNOMOD_HXX
 #include <unomod.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 
 using namespace rtl;
 using namespace comphelper;
@@ -208,7 +212,8 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
 }
 
 SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
-: MasterPropertySet ( lcl_createSettingsInfo () )
+: MasterPropertySet ( lcl_createSettingsInfo (),
+                      &Application::GetSolarMutex () )
 , mxModel ( pModel )
 , mpModel ( pModel )
 , mpDocSh ( NULL )
