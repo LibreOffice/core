@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCommandProcessor.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-09-07 09:16:19 $
+ *  last change: $Author: kso $ $Date: 2002-06-21 12:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,10 @@ interface XCommandProcessor : com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** ends the command associated with the given id.
+
+        <p>Not every command can be aborted. It's up to the implementation
+        to decide whether this method will actually end the processing of
+        the command or simply do nothing.
 
         @param CommandId
         is a unique id for the command to abort. This must be the identifier
