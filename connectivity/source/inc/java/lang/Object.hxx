@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:49:07 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 // jni.h needs cstdarg for std::va_list
 #include <cstdarg>
 #endif
-#include <jni.h>
 
 #ifdef OS2
 #include <typedefs.h>
