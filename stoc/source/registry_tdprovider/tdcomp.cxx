@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdcomp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:15:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,25 @@ Reference< XTypeDescription > CompoundTypeDescriptionImpl::getBaseType()
     return _xBaseTD;
 }
 //__________________________________________________________________________________________________
+
+namespace {
+
+class TypeParameter: public WeakImplHelper1< XTypeDescription > {
+public:
+    explicit TypeParameter(OUString const & name): m_name(name) {}
+
+    virtual TypeClass SAL_CALL getTypeClass() throw (RuntimeException)
+    { return TypeClass_UNKNOWN; }
+
+    virtual OUString SAL_CALL getName() throw (RuntimeException)
+    { return m_name; }
+
+private:
+    OUString m_name;
+};
+
+}
+
 Sequence< Reference< XTypeDescription > > CompoundTypeDescriptionImpl::getMemberTypes()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -134,16 +153,20 @@ Sequence< Reference< XTypeDescription > > CompoundTypeDescriptionImpl::getMember
 
         while (nFields--)
         {
-            try
+            if ((aReader.getFieldFlags(nFields) & RT_ACCESS_PARAMETERIZED_TYPE)
+                != 0)
             {
-                _xTDMgr->getByHierarchicalName(
-                    aReader.getFieldTypeName( nFields ).replace( '/', '.' ) )
-                        >>= pMembers[nFields];
+                pMembers[nFields] = new TypeParameter(
+                    aReader.getFieldTypeName(nFields));
+            } else {
+                try {
+                    _xTDMgr->getByHierarchicalName(
+                        aReader.getFieldTypeName(nFields).replace('/', '.'))
+                            >>= pMembers[nFields];
+                } catch (NoSuchElementException &) {}
+                OSL_ENSURE(
+                    pMembers[nFields].is(), "### compound member unknown!");
             }
-            catch (NoSuchElementException &)
-            {
-            }
-            OSL_ENSURE( pMembers[nFields].is(), "### compound member unknown!" );
         }
 
         ClearableMutexGuard aGuard( getMutex() );
