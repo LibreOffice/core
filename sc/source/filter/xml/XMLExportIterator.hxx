@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-14 12:28:32 $
+ *  last change: $Author: dr $ $Date: 2000-11-15 08:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,8 +195,6 @@ struct ScMyAreaLink
     inline sal_Int32            GetRowCount() const { return aDestRange.EndRow - aDestRange.StartRow + 1; }
 
     sal_Bool                    Compare( const ScMyAreaLink& rAreaLink ) const;
-
-    static sal_Bool             operator<( const ScMyAreaLink& rAreaLink1, const ScMyAreaLink& rAreaLink2 );
 };
 
 typedef ::std::vector< ScMyAreaLink > ScMyAreaLinkVec;
@@ -312,10 +310,6 @@ struct ScMyDetectiveObj
     ::com::sun::star::table::CellRangeAddress   aSourceRange;
     ScDetectiveObjType                          eObjType;
     sal_Bool                                    bHasError;
-
-    static sal_Bool             operator<(
-                                    const ScMyDetectiveObj& rDetObj1,
-                                    const ScMyDetectiveObj& rDetObj2 );
 };
 
 typedef ::std::vector< ScMyDetectiveObj > ScMyDetectiveObjVec;
@@ -348,10 +342,6 @@ struct ScMyDetectiveOp
     ::com::sun::star::table::CellAddress    aPosition;
     ScDetOpType                             eOpType;
     sal_Int32                               nIndex;
-
-    static sal_Bool             operator<(
-                                    const ScMyDetectiveOp& rDetOp1,
-                                    const ScMyDetectiveOp& rDetOp2 );
 };
 
 typedef ::std::vector< ScMyDetectiveOp > ScMyDetectiveOpVec;

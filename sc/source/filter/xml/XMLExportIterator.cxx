@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 09:57:28 $
+ *  last change: $Author: dr $ $Date: 2000-11-15 08:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,16 +305,6 @@ sal_Bool ScMyAreaLink::Compare( const ScMyAreaLink& rAreaLink ) const
             (sSourceStr == rAreaLink.sSourceStr);
 }
 
-sal_Bool ScMyAreaLink::operator<( const ScMyAreaLink& rAreaLink1, const ScMyAreaLink& rAreaLink2 )
-{
-    if( rAreaLink1.aDestRange.Sheet != rAreaLink2.aDestRange.Sheet )
-        return (rAreaLink1.aDestRange.Sheet < rAreaLink2.aDestRange.Sheet);
-    else if( rAreaLink1.aDestRange.StartRow != rAreaLink2.aDestRange.StartRow )
-        return (rAreaLink1.aDestRange.StartRow < rAreaLink2.aDestRange.StartRow);
-    else
-        return (rAreaLink1.aDestRange.StartColumn < rAreaLink2.aDestRange.StartColumn);
-}
-
 ScMyAreaLinksContainer::ScMyAreaLinksContainer() :
     aAreaLinkVec()
 {
@@ -352,9 +342,19 @@ void ScMyAreaLinksContainer::SetCellData( ScMyCell& rMyCell )
     }
 }
 
+sal_Bool LessMyAreaLink( const ScMyAreaLink& rAreaLink1, const ScMyAreaLink& rAreaLink2 )
+{
+    if( rAreaLink1.aDestRange.Sheet != rAreaLink2.aDestRange.Sheet )
+        return (rAreaLink1.aDestRange.Sheet < rAreaLink2.aDestRange.Sheet);
+    else if( rAreaLink1.aDestRange.StartRow != rAreaLink2.aDestRange.StartRow )
+        return (rAreaLink1.aDestRange.StartRow < rAreaLink2.aDestRange.StartRow);
+    else
+        return (rAreaLink1.aDestRange.StartColumn < rAreaLink2.aDestRange.StartColumn);
+}
+
 void ScMyAreaLinksContainer::Sort()
 {
-    ::std::sort( aAreaLinkVec.begin(), aAreaLinkVec.end(), ScMyAreaLink::operator< );
+    ::std::sort( aAreaLinkVec.begin(), aAreaLinkVec.end(), LessMyAreaLink );
 }
 
 //==============================================================================
@@ -863,18 +863,6 @@ void ScMyValidationsContainer::Sort()
 
 //==============================================================================
 
-sal_Bool ScMyDetectiveObj::operator<(
-        const ScMyDetectiveObj& rDetObj1,
-        const ScMyDetectiveObj& rDetObj2 )
-{
-    if( rDetObj1.aPosition.Sheet != rDetObj2.aPosition.Sheet )
-        return (rDetObj1.aPosition.Sheet < rDetObj2.aPosition.Sheet);
-    else if( rDetObj1.aPosition.Row != rDetObj2.aPosition.Row )
-        return (rDetObj1.aPosition.Row < rDetObj2.aPosition.Row);
-    else
-        return (rDetObj1.aPosition.Column != rDetObj2.aPosition.Column);
-}
-
 ScMyDetectiveObjContainer::ScMyDetectiveObjContainer() :
     aDetectiveObjVec()
 {
@@ -926,24 +914,22 @@ void ScMyDetectiveObjContainer::SetCellData( ScMyCell& rMyCell )
     rMyCell.bHasDetectiveObj = (rMyCell.aDetectiveObjVec.size() != 0);
 }
 
+sal_Bool LessMyDetectiveObj( const ScMyDetectiveObj& rDetObj1, const ScMyDetectiveObj& rDetObj2 )
+{
+    if( rDetObj1.aPosition.Sheet != rDetObj2.aPosition.Sheet )
+        return (rDetObj1.aPosition.Sheet < rDetObj2.aPosition.Sheet);
+    else if( rDetObj1.aPosition.Row != rDetObj2.aPosition.Row )
+        return (rDetObj1.aPosition.Row < rDetObj2.aPosition.Row);
+    else
+        return (rDetObj1.aPosition.Column != rDetObj2.aPosition.Column);
+}
+
 void ScMyDetectiveObjContainer::Sort()
 {
-    ::std::sort( aDetectiveObjVec.begin(), aDetectiveObjVec.end(), ScMyDetectiveObj::operator< );
+    ::std::sort( aDetectiveObjVec.begin(), aDetectiveObjVec.end(), LessMyDetectiveObj );
 }
 
 //==============================================================================
-
-sal_Bool ScMyDetectiveOp::operator<(
-        const ScMyDetectiveOp& rDetOp1,
-        const ScMyDetectiveOp& rDetOp2 )
-{
-    if( rDetOp1.aPosition.Sheet != rDetOp2.aPosition.Sheet )
-        return (rDetOp1.aPosition.Sheet < rDetOp2.aPosition.Sheet);
-    else if( rDetOp1.aPosition.Row != rDetOp2.aPosition.Row )
-        return (rDetOp1.aPosition.Row < rDetOp2.aPosition.Row);
-    else
-        return (rDetOp1.aPosition.Column != rDetOp2.aPosition.Column);
-}
 
 ScMyDetectiveOpContainer::ScMyDetectiveOpContainer() :
     aDetectiveOpVec()
@@ -986,9 +972,19 @@ void ScMyDetectiveOpContainer::SetCellData( ScMyCell& rMyCell )
     rMyCell.bHasDetectiveOp = (rMyCell.aDetectiveOpVec.size() != 0);
 }
 
+sal_Bool LessMyDetectiveOp( const ScMyDetectiveOp& rDetOp1, const ScMyDetectiveOp& rDetOp2 )
+{
+    if( rDetOp1.aPosition.Sheet != rDetOp2.aPosition.Sheet )
+        return (rDetOp1.aPosition.Sheet < rDetOp2.aPosition.Sheet);
+    else if( rDetOp1.aPosition.Row != rDetOp2.aPosition.Row )
+        return (rDetOp1.aPosition.Row < rDetOp2.aPosition.Row);
+    else
+        return (rDetOp1.aPosition.Column != rDetOp2.aPosition.Column);
+}
+
 void ScMyDetectiveOpContainer::Sort()
 {
-    ::std::sort( aDetectiveOpVec.begin(), aDetectiveOpVec.end(), ScMyDetectiveOp::operator< );
+    ::std::sort( aDetectiveOpVec.begin(), aDetectiveOpVec.end(), LessMyDetectiveOp );
 }
 
 //==============================================================================
