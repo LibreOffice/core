@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:49:19 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,6 +423,8 @@ sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, const GDIMetaFile& rMtf,
 
 sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, const GDIMetaFile& rMtf, VirtualDevice& rDummyVDev, sal_Int32 nCompressMode )
 {
+    bool bAssertionFired( false );
+
     for( ULONG i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
     {
         const MetaAction*   pAction = rMtf.GetAction( i );
@@ -913,8 +915,21 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, const GDIMetaFile& rMt
             }
             break;
 
+            case META_TEXTLANGUAGE_ACTION:
+            {
+                // TODO: Implement me for tagged PDF
+            }
+            break;
+
             default:
-                DBG_ERROR( "SVGActionWriter::ImplWriteActions: unsupported MetaAction #" );
+                // #i24604# Made assertion fire only once per
+                // metafile. The asserted actions here are all
+                // deprecated
+                if( !bAssertionFired )
+                {
+                    bAssertionFired = true;
+                    DBG_ERROR( "PDFExport::ImplWriteActions: deprecated and unsupported MetaAction encountered" );
+                }
             break;
         }
     }
