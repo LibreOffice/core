@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarwrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-03-08 17:12:18 $
+ *  last change: $Author: er $ $Date: 2001-07-10 12:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,25 @@ void CalendarWrapper::setValue( sal_Int16 nFieldIndex, sal_Int16 nValue )
         DBG_ERRORFILE( aMsg.GetBuffer() );
 #endif
     }
+}
+
+
+sal_Bool CalendarWrapper::isValid() const
+{
+    try
+    {
+        if ( xC.is() )
+            return xC->isValid();
+    }
+    catch ( Exception& e )
+    {
+#ifndef PRODUCT
+        ByteString aMsg( "isValid: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    }
+    return sal_False;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarwrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-11-18 20:02:42 $
+ *  last change: $Author: er $ $Date: 2001-07-10 12:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ public:
     void setDateTime( double nTimeInDays );
     double getDateTime() const;
     void setValue( sal_Int16 nFieldIndex, sal_Int16 nValue );
+    sal_Bool isValid() const;
     sal_Int16 getValue( sal_Int16 nFieldIndex ) const;
     void addValue( sal_Int16 nFieldIndex, sal_Int32 nAmount );
     sal_Int16 getFirstDayOfWeek() const;
