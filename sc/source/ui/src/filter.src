@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:05:23 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 15:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,8 +361,8 @@ ModelessDialog RID_SCDLG_FILTER
     };
     ImageButton RB_COPY_AREA
     {
-        Pos = MAP_APPFONT ( 221 , 126 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 221 , 125 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ de ] = "Verkleinern" ;
         QuickHelpText [ en-US ] = "Shrink" ;
@@ -456,8 +456,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     };
     ImageButton RB_CRITERIA_AREA
     {
-        Pos = MAP_APPFONT ( 201 , 14 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 201 , 13 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ de ] = "Verkleinern" ;
         QuickHelpText [ en-US ] = "Shrink" ;
@@ -535,8 +535,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     };
     ImageButton RB_COPY_AREA
     {
-        Pos = MAP_APPFONT ( 201 , 83 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 201 , 82 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ de ] = "Verkleinern" ;
         QuickHelpText [ en-US ] = "Shrink" ;
