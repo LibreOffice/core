@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-31 13:31:16 $
+ *  last change: $Author: mt $ $Date: 2001-07-31 13:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1142,11 +1142,18 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                 {
                     if ( pFmt->GetBrush()->GetGraphicObject() )
                     {
-                        Point aBulletPos( aBulletArea.TopLeft() );
+                        Point aBulletPos;
                         if ( !bVertical )
-                            aBulletPos.Move( rStartPos.X(), rStartPos.Y() );
+                        {
+                            aBulletPos.X() = rStartPos.X() + aBulletArea.Left();
+                            aBulletPos.Y() = rStartPos.Y() + aBulletArea.Top();
+                        }
                         else
-                            aBulletPos.Move( rStartPos.X(), rStartPos.Y() );
+                        {
+                            aBulletPos.X() = rStartPos.X() - aBulletArea.Bottom();
+                            aBulletPos.Y() = rStartPos.Y() + aBulletArea.Left();
+                        }
+
 
                         // MT: Remove CAST when KA made the Draw-Method const
                         ((GraphicObject*)pFmt->GetBrush()->GetGraphicObject())->Draw( pOutDev, aBulletPos, pPara->aBulSize );
@@ -1159,14 +1166,27 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
         if( pParaList->HasChilds(pPara) && !pParaList->HasVisibleChilds(pPara) &&
                 !bStrippingPortions && !nOrientation )
         {
-            Point aStartPoint( aBulletArea.BottomLeft() );
-            aStartPoint.X() += aBulletArea.GetWidth();
-            Point aEndPoint( aStartPoint );
-            aEndPoint.X() += pOutDev->PixelToLogic( Size( 10, 0 ) ).Width();
+            long nWidth = pOutDev->PixelToLogic( Size( 10, 0 ) ).Width();
+
+            Point aStartPos, aEndPos;
+            if ( !bVertical )
+            {
+                aStartPos.X() = rStartPos.X() + aBulletArea.Right();
+                aStartPos.Y() = rStartPos.Y() + aBulletArea.Bottom();
+                aEndPos = aStartPos;
+                aEndPos.X() += nWidth;
+            }
+            else
+            {
+                aStartPos.X() = rStartPos.X() - aBulletArea.Bottom();
+                aStartPos.Y() = rStartPos.Y() + aBulletArea.Right();
+                aEndPos = aStartPos;
+                aEndPos.Y() += nWidth;
+            }
 
             const Color& rOldLineColor = pOutDev->GetLineColor();
             pOutDev->SetLineColor( Color( COL_BLACK ) );
-            pOutDev->DrawLine( aStartPoint, aEndPoint );
+            pOutDev->DrawLine( aStartPos, aEndPos );
             pOutDev->SetLineColor( rOldLineColor );
         }
     }
