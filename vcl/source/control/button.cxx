@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:35 $
+ *  last change: $Author: ssa $ $Date: 2001-03-23 14:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,8 +492,15 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
     Rectangle               aInRect = rRect;
     Color                   aColor = rStyleSettings.GetButtonTextColor();
     XubString               aText = PushButton::GetText(); // PushButton:: wegen MoreButton
-    USHORT                  nTextStyle;
+    USHORT                  nTextStyle = TEXT_DRAW_CLIP;
     USHORT                  nStyle;
+    BOOL                    bInvalidTextRect = FALSE;
+
+    if( aInRect.nRight < aInRect.nLeft || aInRect.nBottom < aInRect.nTop )
+        aInRect.SetEmpty();
+
+    Push( PUSH_CLIPREGION );
+    IntersectClipRegion( aInRect );
 
     if ( nDrawFlags & WINDOW_DRAW_MONO )
         aColor = Color( COL_BLACK );
@@ -508,14 +515,14 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
     {
         if ( aText.Len() )
         {
-            // Symbol- und Textrect ermitteln
+            // calc Symbol- and Textrect
             long nSymbolSize    = pDev->GetTextHeight();
             aInRect.Right()    -= 5;
             rTextRect.Left()   += 2;
             rTextRect.Right()   = aInRect.Right()-nSymbolSize;
             aInRect.Left()      = rTextRect.Right();
 
-            nTextStyle = ImplGetTextStyle();
+            nTextStyle |= ImplGetTextStyle();
             if ( nDrawFlags & WINDOW_DRAW_NOMNEMONIC )
             {
                 if ( nTextStyle & TEXT_DRAW_MNEMONIC )
@@ -550,50 +557,12 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
     }
     else
     {
-        if ( aText.Len() )
-        {
-            nTextStyle = ImplGetTextStyle();
-            if ( nDrawFlags & WINDOW_DRAW_NOMNEMONIC )
-            {
-                if ( nTextStyle & TEXT_DRAW_MNEMONIC )
-                {
-                    aText = GetNonMnemonicString( aText );
-                    nTextStyle &= ~TEXT_DRAW_MNEMONIC;
-                }
-            }
-            if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
-            {
-                if ( !IsEnabled() )
-                    nTextStyle |= TEXT_DRAW_DISABLE;
-            }
-            rTextRect = pDev->GetTextRect( aInRect, aText, nTextStyle );
-        }
+        Rectangle aInRectText  = aInRect;
+        Point aImagePos;
 
-        if ( IsSymbol() )
-        {
-            ImplCalcSymbolRect( aInRect );
-
-            nStyle = 0;
-            if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
-            {
-                if ( !IsEnabled() )
-                    nStyle |= SYMBOL_DRAW_DISABLE;
-            }
-
-            DecorationView aDecoView( pDev );
-            aDecoView.DrawSymbol( aInRect, meSymbol, aColor, nStyle );
-        }
-
-        if ( aText.Len() )
-        {
-            pDev->SetTextColor( aColor );
-            pDev->DrawText( rTextRect, aText, nTextStyle );
-        }
-
-        // Den Fall Text+Image erstmal ignoriert, TH ignoriert auch Text+Symbol
         if ( IsImage() )
         {
-            // Image zentrieren...
+            // center image...
             Size aImageSize( maImage.GetSizePixel() );
             aImageSize.Width()  = CalcZoom( aImageSize.Width() );
             aImageSize.Height() = CalcZoom( aImageSize.Height() );
@@ -605,8 +574,36 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
                 aImageSize = pDev->LogicToPixel( aImageSize, MAP_100TH_MM );
             }
 
-            Point aImagePos( rRect.Left()+((aInRect.GetWidth()-aImageSize.Width())/2),
-                             rRect.Top()+((aInRect.GetHeight()-aImageSize.Height())/2) );
+            aImagePos.X() = rRect.Left()+((aInRect.GetWidth() -aImageSize.Width()) /2);
+            aImagePos.Y() = rRect.Top() +((aInRect.GetHeight()-aImageSize.Height())/2);
+
+            if( aText.Len() || IsSymbol() )
+            {
+                switch( meImageAlign )
+                {
+                    case IMAGEALIGN_LEFT:
+                        aImagePos.X() = rRect.Left();
+                        aInRectText.nLeft = rRect.Left()+aImageSize.Width() + 1;
+                        break;
+                    case IMAGEALIGN_RIGHT:
+                        aImagePos.X() = rRect.Left()+aInRect.GetWidth()-aImageSize.Width();
+                        aInRectText.nRight = aImagePos.X() - 2;
+                        break;
+                    case IMAGEALIGN_TOP:
+                        aImagePos.Y() = rRect.Top();
+                        aInRectText.nTop = rRect.Top()+aImageSize.Height() + 1;
+                        break;
+                    case IMAGEALIGN_BOTTOM:
+                        aImagePos.Y() = rRect.Top()+aInRect.GetHeight()-aImageSize.Height();
+                        aInRectText.nBottom = aImagePos.Y() - 2;
+                        break;
+                }
+
+                if( aInRectText.nRight < aInRectText.nLeft ||
+                    aInRectText.nBottom < aInRectText.nTop )
+                    aInRectText.SetEmpty();
+            }
+
             nStyle = 0;
             if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
             {
@@ -627,6 +624,109 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
                 else
                     pDev->DrawImage( aImagePos, maImage, nStyle );
             }
+        }
+
+        long nHeight = pDev->GetTextHeight();
+        long nSymbolSpace = 2 * nHeight;
+
+        if ( aText.Len() )
+        {
+            nTextStyle |= ImplGetTextStyle();
+            if ( nDrawFlags & WINDOW_DRAW_NOMNEMONIC )
+            {
+                if ( nTextStyle & TEXT_DRAW_MNEMONIC )
+                {
+                    aText = GetNonMnemonicString( aText );
+                    nTextStyle &= ~TEXT_DRAW_MNEMONIC;
+                }
+            }
+            if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
+            {
+                if ( !IsEnabled() )
+                    nTextStyle |= TEXT_DRAW_DISABLE;
+            }
+
+            if ( IsSymbol() && !aInRectText.IsEmpty() )
+            {
+                // add some space for the symbol before the text
+                aInRectText.nLeft += nSymbolSpace;
+                if(aInRectText.nRight < aInRectText.nLeft)
+                {
+                    aInRectText.nRight = aInRectText.nLeft;
+                    bInvalidTextRect = TRUE;
+                }
+            }
+
+            rTextRect = pDev->GetTextRect( aInRectText, aText, nTextStyle );
+            rTextRect.Intersection( aInRectText );
+        }
+
+        if ( IsSymbol() && !aInRectText.IsEmpty() )
+        {
+            Rectangle aInRectSymbol( aInRectText );
+
+            if ( aText.Len() )
+            {
+                // put symbol before text
+                aInRectSymbol = rTextRect;
+                aInRectSymbol.setWidth( nHeight );
+                aInRectSymbol.setHeight( nHeight );
+                aInRectSymbol.Move( -nSymbolSpace, 0 );
+            }
+            ImplCalcSymbolRect( aInRectSymbol );
+
+            nStyle = 0;
+            if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
+            {
+                if ( !IsEnabled() )
+                    nStyle |= SYMBOL_DRAW_DISABLE;
+            }
+
+            // possibly clip symbol against image
+            Rectangle aSymbolClipRect( aInRectSymbol );
+            BOOL bClipSymbol = FALSE;
+
+            if( IsImage() )
+            {
+                switch( meImageAlign )
+                {
+                    case IMAGEALIGN_RIGHT:
+                        if( aInRectSymbol.nRight > aImagePos.X() )
+                        {
+                            bClipSymbol = TRUE;
+                            aSymbolClipRect.nRight = aImagePos.X();
+                        }
+                        break;
+                    case IMAGEALIGN_BOTTOM:
+                        if( aInRectSymbol.nBottom > aImagePos.Y() )
+                        {
+                            bClipSymbol = TRUE;
+                            aSymbolClipRect.nBottom = aImagePos.Y();
+                        }
+                        break;
+                }
+            }
+
+            if( bClipSymbol )
+            {
+                Push( PUSH_CLIPREGION );
+                IntersectClipRegion( aSymbolClipRect );
+            }
+
+            DecorationView aDecoView( pDev );
+            aDecoView.DrawSymbol( aInRectSymbol, meSymbol, aColor, nStyle );
+
+            if( bClipSymbol )
+                Pop();
+        }
+
+        if( bInvalidTextRect )
+            rTextRect.SetEmpty();
+
+        if ( aText.Len() )
+        {
+            pDev->SetTextColor( aColor );
+            pDev->DrawText( rTextRect, aText, nTextStyle );
         }
 
         if ( mnDDStyle == PUSHBUTTON_DROPDOWN_TOOLBOX )
@@ -651,6 +751,8 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
 
     UserDrawEvent aUDEvt( this, aInRect, 0 );
     UserDraw( aUDEvt );
+
+    Pop();  // restore clipregion
 }
 
 // -----------------------------------------------------------------------
@@ -673,23 +775,28 @@ void PushButton::ImplDrawPushButton()
     Rectangle               aInRect = aRect;
     Rectangle               aTextRect;
 
-    // Wenn Button gedrueckt gezeichnet werden soll, dann Pressed dazuordern
+    // adjust style if button should be rendered 'pressed'
     if ( mbPressed )
         nButtonStyle |= BUTTON_DRAW_PRESSED;
 
-    // PushButtonFrame ausgeben
+    // draw PushButtonFrame, aInRect has content size afterwards
     ImplDrawPushButtonFrame( this, aInRect, nButtonStyle );
 
-    // PushButton-Inhalt ausgeben
+    // draw content
     ImplDrawPushButtonContent( this, 0, aInRect, aTextRect );
 
     maFocusRect = aTextRect;
-    maFocusRect.Left()--;
-    maFocusRect.Top()--;
-    maFocusRect.Right()++;
-    maFocusRect.Bottom()++;
-    if ( HasFocus() )
-        ShowFocus( maFocusRect );
+    if( !maFocusRect.IsEmpty() )
+    {
+        maFocusRect.Left()--;
+        maFocusRect.Top()--;
+        maFocusRect.Right()++;
+        maFocusRect.Bottom()++;
+        if ( HasFocus() )
+        {
+            ShowFocus( maFocusRect );
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1019,7 +1126,6 @@ void PushButton::SetImage( const Image& rImage )
     if ( rImage != maImage )
     {
         maImage = rImage;
-        meSymbol = SYMBOL_IMAGE;
         StateChanged( STATE_CHANGE_DATA );
     }
 }
