@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_punct.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 11:28:39 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ TokPunctuation::EV_TokenId  Greater(TokPunctuation::Greater,">");
 
 namespace lux
 {
-EnumValueMap &
+template<> EnumValueMap &
 TokPunctuation::EV_TokenId::Values_()       { return G_aTokPunctuation_EV_TokenId_Values; }
 }
 
