@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:30:35 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Zarovnání textu";
         Text[ hebrew ] = "‮יישור טקסט‬";
         Text[ hindi ] = "टेक्स्ट् पंक्तिकरण";
+        Text[ slovak ] = "Zarovnanie textu";
     };
     FixedText FT_HORALIGN
     {
@@ -150,6 +151,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Vodorovné";
         Text[ hebrew ] = "‮אופקי‬";
         Text[ hindi ] = "सम~तल";
+        Text[ slovak ] = "~Vodorovné";
     };
     ListBox LB_HORALIGN
     {
@@ -374,6 +376,14 @@ TabPage RID_SVXPAGE_ALIGNMENT
         < "दाहिना" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
         < "व्यवस्थित" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Východzie" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "Vľavo" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Na stred" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "Vpravo" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Do bloku" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
+    };
     };
     FixedText FT_INDENT
     {
@@ -408,6 +418,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Odsazení";
         Text[ hebrew ] = "‮כניסה‬";
         Text[ hindi ] = "इ~न्डेन्ट्";
+        Text[ slovak ] = "~Odsadenie";
     };
     MetricField ED_INDENT
     {
@@ -451,6 +462,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Svislé";
         Text[ hebrew ] = "‮אנכי‬";
         Text[ hindi ] = "~लंबरूप";
+        Text[ slovak ] = "~Zvislé";
     };
     ListBox LB_VERALIGN
     {
@@ -648,6 +660,13 @@ TabPage RID_SVXPAGE_ALIGNMENT
         < "मध्यभाग" ; ALIGNDLG_VERALIGN_MID ; > ;
         < "तल" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Východzie" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Navrchu" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Uprostred" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Dole" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
+    };
     };
     FixedLine FL_ORIENTATION
     {
@@ -683,6 +702,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Směr textu";
         Text[ hebrew ] = "‮כיוון טקסט‬";
         Text[ hindi ] = "टेक्स्ट् दिशा";
+        Text[ slovak ] = "Smer textu";
     };
     ImageButton BTN_TXTSTACKED
     {
@@ -733,6 +753,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Stupňů";
         Text[ hebrew ] = "‮מעלות‬";
         Text[ hindi ] = "डि~ग्रीस";
+        Text[ slovak ] = "~Stupňov";
     };
     NumericField NF_DEGREES
     {
@@ -777,6 +798,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Základna";
         Text[ hebrew ] = "‮קצה יחוס‬";
         Text[ hindi ] = "रे~फरेन्स किनारा";
+        Text[ slovak ] = "~Základňa";
     };
     Control CTR_BORDER_LOCK
     {
@@ -817,6 +839,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Použít asijský svislý režim rozložení";
         Text[ hebrew ] = "‮פריסה אנכית לשפות מזרח הרחוק‬";
         Text[ hindi ] = "Use ~Asian vertical layout mode";
+        Text[ slovak ] = "Použiť vertikálny mód ázijského rozloženi~a";
     };
     FixedLine FL_SPACE
     {
@@ -852,6 +875,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Vzdálenosti rastrovacích čar";
         Text[ hebrew ] = "‮מרווח לקוי הרשת‬";
         Text[ hindi ] = "जाल रेखाओं केलिए अंतर देना";
+        Text[ slovak ] = "Vzdialenosť k mriežkam";
     };
     FixedText FT_LEFTSPACE
     {
@@ -887,6 +911,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Vlevo";
         Text[ hebrew ] = "‮שמאל‬";
         Text[ hindi ] = "बा~याँ";
+        Text[ slovak ] = "Vľ~avo";
     };
     MetricField ED_LEFTSPACE
     {
@@ -936,6 +961,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Vpravo";
         Text[ hebrew ] = "‮ימין‬";
         Text[ hindi ] = "दाहिना";
+        Text[ slovak ] = "Vpravo";
     };
     MetricField ED_RIGHTSPACE
     {
@@ -985,6 +1011,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Nahoře";
         Text[ hebrew ] = "‮עליון‬";
         Text[ hindi ] = "ऊ~पर";
+        Text[ slovak ] = "~Navrchu";
     };
     MetricField ED_TOPSPACE
     {
@@ -1034,6 +1061,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Dole";
         Text[ hebrew ] = "‮תחתון‬";
         Text[ hindi ] = "त~ल";
+        Text[ slovak ] = "Na~spodku";
     };
     MetricField ED_BOTTOMSPACE
     {
@@ -1084,6 +1112,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Tok textu";
         Text[ hebrew ] = "‮מאפיינים‬";
         Text[ hindi ] = "टेक्स्ट् धारा";
+        Text[ slovak ] = "Tok textu";
     };
     TriStateBox BTN_WRAP
     {
@@ -1097,7 +1126,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ portuguese ] = "Quebra de ~linha" ;
         Text [ finnish ] = "Rivinvaihto" ;
         Text [ danish ] = "Linjeskift" ;
-        Text [ french ] = "Renvoi � la ligne automatique" ;
+        Text [ french ] = "Retour � la ligne automatique" ;
         Text [ swedish ] = "Automatisk rad~brytning" ;
         Text [ dutch ] = "Re~gelafbreking" ;
         Text [ spanish ] = "Salto de ~l�nea autom�tico" ;
@@ -1119,6 +1148,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Zalomení řádku";
         Text[ hebrew ] = "‮מעברי שורות אוטומטיים‬";
         Text[ hindi ] = "रेखा खण्डन";
+        Text[ slovak ] = "Zalomenie riadku";
     };
     TriStateBox BTN_HYPH
     {
@@ -1150,6 +1180,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Dělení slov aktivní";
         Text[ hebrew ] = "‮הפעלת מיקוף‬";
         Text[ hindi ] = "क्रियाशील हाइफ़नेशन्";
+        Text[ slovak ] = "Delenie slov aktívne";
     };
     FixedText FT_TEXTFLOW
     {
@@ -1181,6 +1212,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Tok textu";
         Text[ hebrew ] = "‮זרימת טקסט‬";
         Text[ hindi ] = "Te~xt flow";
+        Text[ slovak ] = "Tok te~xtu";
     };
     ListBox LB_FRAMEDIR
     {
@@ -1244,6 +1276,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Rozsah textu od dolního okraje buňky";
         Text[ hebrew ] = "‮המשך טקסט מגבול התחתון של התא‬";
         Text[ hindi ] = "नीचे का कोष्ठ किनारे से टेक्स्ट् विस्तार";
+        Text[ slovak ] = "Rozsah textu od dolného okraja bunky";
     };
     String STR_TOPLOCK
     {
@@ -1276,6 +1309,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Rozsah textu od horního okraje buňky";
         Text[ hebrew ] = "‮המשך טקסט מגבול העליון של התא‬";
         Text[ hindi ] = "ऊपरी कोष्ठ किनारे से टेक्स्ट् विस्तार";
+        Text[ slovak ] = "Rozsah textu od horného okraja bunky";
     };
     String STR_CELLLOCK
     {
@@ -1308,6 +1342,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ czech ] = "Rozsah textu uvnitř buňky";
         Text[ hebrew ] = "‮המשך הטקסט בתוך התא בלבד‬";
         Text[ hindi ] = "कोष्ठ के भीतर टेक्स्ट् विस्तार";
+        Text[ slovak ] = "Rozsah textu vo vnútri bunky";
     };
     Text[ chinese_simplified ] = "对齐";
     Text[ russian ] = "������������";
@@ -1326,8 +1361,11 @@ TabPage RID_SVXPAGE_ALIGNMENT
     Text[ czech ] = "Zarovnání";
     Text[ hebrew ] = "‮יישור‬";
     Text[ hindi ] = "पंक्तिकरण";
+    Text[ slovak ] = "Zarovnanie";
 };
  // ********************************************************************** EOF
+
+
 
 
 
