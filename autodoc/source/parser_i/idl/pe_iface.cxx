@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_iface.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:38 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,8 @@ PE_Interface::aDispatcher[PE_Interface::e_STATES_MAX][PE_Interface::tt_MAX] =
             { DF, DF, DF, DF, DF },  // in_function
             { DF, DF, DF, DF, DF },  // in_attribute
             { DF, DF, &PE_Interface::On_need_finish_Punctuation,
-                          DF, DF }   // need_finish
+                          DF, DF },  // need_finish
+            { DF, DF, DF, DF, DF }   // in_base_interface
         };
 
 
@@ -135,17 +136,17 @@ PE_Interface::PE_Interface()
     :   eState(e_none),
         sData_Name(),
         bIsPreDeclaration(false),
+        pCurInterface(0),
         nCurInterface(0),
         pPE_Function(0),
+        pPE_Attribute(0),
         pPE_Type(0),
         nCurParsed_Base(0),
-        pPE_Attribute(0)
+        bOptional(false)
 {
-    static ary::idl::Ce_id
-        nDummy;
-    pPE_Function    = new PE_Function(nDummy, nCurInterface);
+    pPE_Function    = new PE_Function(nCurInterface);
     pPE_Type        = new PE_Type(nCurParsed_Base);
-    pPE_Attribute   = new PE_Attribute(nCurInterface, PE_Attribute::parse_attribute);
+    pPE_Attribute   = new PE_Attribute(nCurInterface);
 }
 
 void
@@ -215,9 +216,6 @@ PE_Interface::Process_Stereotype( const TokStereotype & i_rToken )
 void
 PE_Interface::Process_Default()
 {
-    // KORR ?
-    if (DEBUG_ShowTokens())
-        Cerr() << "PE_Interface: Strange token parsed." << Endl();
     SetResult(done, stay);
 }
 
@@ -336,6 +334,8 @@ PE_Interface::On_std_Metatype(const char * i_sText)
 {
     if (strcmp(i_sText,"attribute") ==  0)
         On_std_GotoAttribute(i_sText);
+    else if (strcmp(i_sText,"interface") ==  0)
+        On_std_GotoBaseInterface(i_sText);
     else
         On_std_GotoFunction(i_sText);
 }
@@ -346,8 +346,11 @@ PE_Interface::On_std_Punctuation(const char * i_sText)
     switch (i_sText[0])
     {
         case '}':
-            SetResult(done,stay);
+            SetResult(done, stay);
             eState = need_finish;
+            break;
+        case ';':   // Appears after base interface declarations.
+            SetResult(done, stay);
             break;
         default:
             SetResult(not_done, pop_failure);
@@ -360,8 +363,11 @@ PE_Interface::On_std_Stereotype(const char * i_sText)
 {
     if (strcmp(i_sText,"oneway") ==  0)
         On_std_GotoFunction(i_sText);
-    else
+    else if (    strcmp(i_sText,"readonly") ==  0
+              OR strcmp(i_sText,"bound") ==  0 )
         On_std_GotoAttribute(i_sText);
+    else
+        SetResult(not_done, pop_failure);
 }
 
 void
@@ -376,6 +382,16 @@ PE_Interface::On_std_GotoAttribute(const char * )
 {
         SetResult(not_done, push_sure, pPE_Attribute.Ptr());
         eState = in_attribute;
+}
+
+void
+PE_Interface::On_std_GotoBaseInterface(const char * )
+{
+    // KORR_DEBUG
+    Cerr() << "\nOn_std_GotoBaseInterface" << Endl();
+
+       SetResult(done, push_sure, pPE_Type.Ptr());
+    eState = in_base_interface;
 }
 
 void
@@ -406,8 +422,10 @@ PE_Interface::InitData()
 
     sData_Name.clear();
     bIsPreDeclaration = false;
+    pCurInterface = 0;
     nCurInterface = 0;
     nCurParsed_Base = 0;
+    bOptional = false;
 }
 
 void
@@ -421,6 +439,7 @@ PE_Interface::TransferData()
     else
     {
          sData_Name.clear();
+         pCurInterface = 0;
         nCurInterface = 0;
     }
 
@@ -441,6 +460,18 @@ PE_Interface::ReceiveData()
         case in_attribute:
                 eState = e_std;
                 break;
+        case in_base_interface:
+                if (bOptional)
+                {
+                    pPE_Type->SetOptional();
+                    bOptional = false;
+                }
+                pCurInterface->Add_Base(
+                                    nCurParsed_Base,
+                                    pPE_Type->ReleaseDocu());
+                nCurParsed_Base = 0;
+                eState = e_std;
+                break;
         default:
             csv_assert(false);
     }
@@ -455,16 +486,14 @@ PE_Interface::MyPE()
 void
 PE_Interface::store_Interface()
 {
-    ary::idl::Interface &
-        rCe = Gate().Ces().Store_Interface(
-                                CurNamespace().CeId(),
-                                sData_Name,
-                                nCurParsed_Base );
-    nCurInterface = rCe.CeId();
-    PassDocuAt(rCe);
+    pCurInterface = & Gate().Ces().Store_Interface(
+                                        CurNamespace().CeId(),
+                                        sData_Name,
+                                        nCurParsed_Base );
+    nCurInterface = pCurInterface->CeId();
+    PassDocuAt(*pCurInterface);
 }
 
 
 }   // namespace uidl
 }   // namespace csi
-
