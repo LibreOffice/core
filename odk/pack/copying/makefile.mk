@@ -9,7 +9,10 @@ TARGET=copying
 
 CONVERTTAGFLAG = $(MISC)$/converttags_html_files.flag
 
-IDLDIRLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type d -print))}
+IDLLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT)$/com -type f -print))}
+DESTIDLLIST={$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLLIST))}
+
+IDLDIRLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT)$/com -type d -print))}
 
 DIRLIST = \
     $(DESTDIRDOCU) \
@@ -311,7 +314,6 @@ EXAMPLESLIST= \
     $(OLE_EXAMPLES_DELPHI)                \
     $(OLE_EXAMPLES_DELPHI_INSERTTABLES)                \
     $(DESTDIRJAVAEXAMPLES)$/debugging_java.html
-#	$(DESTDIREXAMPLES)$/examples.html   \
 
 DOCUHTMLFILES= \
     $(DESTDIR)$/index.html \
@@ -333,9 +335,10 @@ INSTALLSCRIPT= \
     $(DESTDIR)$/setsdkenv_unix \
     $(DESTDIR)$/setsdkenv_windows.bat
 
-IDLLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f -print))}
-DESTIDLLIST={$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLLIST))}
 
+#--------------------------------------------------
+# TARGETS
+#--------------------------------------------------
 all : 	\
     remove_dk \
     $(DIRLIST) \
@@ -343,22 +346,10 @@ all : 	\
     $(DOCUFILES) \
     $(INSTALLSCRIPT) \
     $(DESTIDLLIST)  \
-    $(DESTDIRBIN)$/applicat.rdb  \
     $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)  \
     $(DESTDIR)$/settings$/dk.mk \
     $(DESTDIRCLASSES)$/officebean.jar \
     $(CONVERTTAGFLAG)
-#	$(DESTDIRCLASSES)$/unoil.jar \
-#	$(DESTDIR)$/odk_overview.html \
-
-
-#.IF "$(BUILD_SOSL)"!=""
-#convert_links : 
-#    +$(PERL) $(CONVERTSCRIPT) $(DESTDIREXAMPLES) odk_ examples
-#.ELSE
-#convert_links : 
-#    +echo no conversion necessary!!
-#.ENDIF
 
 $(DIRLIST) :
      -$(MKDIRHIER) 	$@
@@ -426,8 +417,12 @@ $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX) : $(MY_DLLOUT)$/$(MY_DL
 $(DESTDIR)$/settings$/dk.mk : $(PRJ)$/util$/dk.mk
     +-rm -f $@ >& $(NULLDEV)
     echo #$(ODKNAME) dependent settings > $@
+.IF "$(BUILD_SOSL)"==""
     echo DKNAME=${ODKNAME} >> $@
-    echo DKREGISTRYNAME=applicat.rdb >> $@
+.ELSE
+    echo DKNAME=${PRODUCT_NAME} >> $@    
+.ENDIF    
+    echo DKREGISTRYNAME=$(DOLLARSIGN)(OFFICE_PROGRAMM_PATH)$(DOLLARSIGN)(PS)applicat.rdb >> $@
 
 .IF "$(BUILD_SOSL)"==""
 $(DESTDIR)$/odk_overview.html : $(PRJ)$/util$/odk_overview.html
