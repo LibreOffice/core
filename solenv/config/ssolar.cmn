@@ -13,6 +13,8 @@ common
 	}
 	reset
 	{
+		*mkout
+		*deliver
 		__mgrdir
 		BIG_GOODIES
 		BIG_SVX
@@ -25,15 +27,18 @@ common
 		BSCLIENT
 		BUILD_TOOLS
 		CLASSPATH
+		CALL_CDECL
 		COMEX
 		common_build
 		COMMON_OUTDIR
 		COPYALL
 		CPPRTST
+		CVSROOT
 		DB2IMP
 		DB2INC
 		DB2LIB
 		DB2PATH
+		DELIVER
 		DMAKE_INC
 		DYNAMIC_CRT
 		ENABLEUNICODE
@@ -55,12 +60,15 @@ common
 		JDKLIBS
 		JDKPATH
 		LOCAL_SOLENV
+		LOCALINI
 		MK_UNROLL
 		MKDIR
+		MKOUT
 		MKSPATH
 		MULTITHREAD_OBJ
 		NEW_JAR_PACK
 		NO_BSYMBOLIC
+		NO_DEFAULT_STL
 		no_hids
 		NO_REC_RES
 		no_srs_patch
@@ -96,6 +104,7 @@ common
 		ROOTDIR
 		RSCRES
 		SET_EXCEPTIONS
+		SHARED_SOLARVERSION
 		SOLAR_JAVA
 		SOLAR_PLUGIN
 		SOLARINC
@@ -111,6 +120,7 @@ common
 		TF_SDBAPI
 		TF_SERVER
 		TF_UCB
+		TF_SVDATA
 		TFDEF
 		TFDIR
 		truetime
@@ -137,7 +147,6 @@ common
 		common
 		{
 			NO_SRS_PATCH true
-			CVSROOT :pserver:%VCSID%@cvsserver:/cvs/Archiv
 		}
 		bsclient
 		{
@@ -164,7 +173,21 @@ wntmsci3
 	{
 		common
 		{
+			*build set mk_tmp=#@unique[#tmp#] ^ set mk_tmp=#@path[#mk_tmp#]#@name[#mk_tmp#].bat ^ #SOLARENV#\wnti\build -file #mk_tmp# #1& ^ call #mk_tmp# ^ del #@path[#mk_tmp#]#@name[#mk_tmp#].* >& NUL ^ unset mk_tmp
 			SOLARSRC o:\%UPD%
+		}
+	}
+}
+
+wntmsci7
+{
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC o:\%UPD%
+			*build set mk_tmp=#@unique[#tmp#] ^ set mk_tmp=#@path[#mk_tmp#]#@name[#mk_tmp#].bat ^ #SOLARENV#\wnti\build -file #mk_tmp# #1& ^ call #mk_tmp# ^ del #@path[#mk_tmp#]#@name[#mk_tmp#].* >& NUL ^ unset mk_tmp
 		}
 	}
 }
@@ -530,6 +553,22 @@ unxsoli2
 }
 
 unxsols4
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxmacxp
 {
 	standlst
 	{
