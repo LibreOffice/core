@@ -2242,3 +2242,7 @@ __CTA2?AVIllegalArgumentException@lang@star@sun@com@@
 ??_C@_0DF@HFCE@o?3?2TFD636?2wntmsci7?2inc?2com?1sun?1s@
 ??_C@_0DB@LCLB@o?3?2TFD636?2wntmsci7?2inc?2comphelpe@
 ??_C@_0DG@NKMJ@o?3?2TFD636?2wntmsci7?2inc?2comphelpe@
+__CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@@QAE@ABV01234@@Z28
+?acquire@OStatement@file@connectivity@@WBFA@AAXXZ
+?queryInterface@OStatement@file@connectivity@@WBFA@AA?AVAny@uno@star@sun@com@@ABVType@5678@@Z
+?release@OStatement@file@connectivity@@WBFA@AAXXZ
