@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 15:38:05 $
+ *  last change: $Author: mba $ $Date: 2001-06-19 07:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@ private:
     String          GetHelpModuleName( ULONG nHelpId );
 
 public:
+
+    static SfxHelp* GetHelp();
                     SfxHelp();
                     ~SfxHelp();
     void            SetTicket( const String& rTicket )

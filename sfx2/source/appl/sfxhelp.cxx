@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 15:38:48 $
+ *  last change: $Author: mba $ $Date: 2001-06-19 07:20:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,4 +604,9 @@ void SfxHelp::OpenHelpAgent( SfxFrame *pFrame, ULONG nHelpId )
     {
         DBG_ASSERT( sal_False, "OpenHelpAgent: caught an exception while executing the dispatch!" );
     }
+}
+
+SfxHelp* SfxHelp::GetHelp()
+{
+    return (SfxHelp*) Application::GetHelp();
 }
