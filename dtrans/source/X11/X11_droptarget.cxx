@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_droptarget.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 11:23:56 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ void DropTarget::initialize( const Sequence< Any >& arguments ) throw( ::com::su
         sal_Int32 aWindow = None;
         arguments.getConstArray()[1] >>= aWindow;
         m_pSelectionManager->registerDropTarget( aWindow, this );
+        m_aTargetWindow = aWindow;
         m_bActive = true;
     }
 }
