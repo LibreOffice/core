@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:44:47 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,6 +404,30 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 }
             }
 
+            bWeiter = FALSE;
+        }
+        if( bWeiter )
+        {
+            BYTE nTabCols = rSh.WhichMouseTabCol(aPos);
+            USHORT nTabRes = 0;
+            switch(nTabCols)
+            {
+                case SW_TABCOL_HORI:
+                case SW_TABCOL_VERT:
+                    nTabRes = STR_TABLE_COL_ADJUST;
+                break;
+                case SW_TABROW_HORI:
+                case SW_TABROW_VERT:
+                    nTabRes = STR_TABLE_ROW_ADJUST;
+                break;
+            }
+            if(nTabRes)
+            {
+                sTxt = SW_RESSTR(nTabRes);
+                Size aTxtSize( GetTextWidth(sTxt), GetTextHeight());
+                Rectangle aRect(rEvt.GetMousePosPixel(), aTxtSize);
+                Help::ShowQuickHelp(this, aRect, sTxt);
+            }
             bWeiter = FALSE;
         }
     }
