@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:36:30 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,12 +239,12 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
                                     // Flags fuer Spalten / Zeilen
                                     // FILTERED immer zusammen mit HIDDEN
                                     // FILTERED und MANUALSIZE nur fuer Zeilen moeglich
-#define CR_HIDDEN           1
-//#define CR_MARKED         2
-#define CR_PAGEBREAK        4
-#define CR_MANUALBREAK      8
-#define CR_FILTERED         16
-#define CR_MANUALSIZE       32
+const BYTE   CR_HIDDEN      = 1;
+//const BYTE CR_MARKED      = 2;
+const BYTE   CR_PAGEBREAK   = 4;
+const BYTE   CR_MANUALBREAK = 8;
+const BYTE   CR_FILTERED    = 16;
+const BYTE   CR_MANUALSIZE  = 32;
 
 //  was davon kommt in die Datei:
 #define CR_SAVEMASK     ( ~CR_PAGEBREAK )
