@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_idataobj.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-05 15:50:09 $
+ *  last change: $Author: mav $ $Date: 2003-03-10 16:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,15 +169,13 @@ STDMETHODIMP EmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIUM * pM
           if ( !( pFormatetc->tymed & TYMED_MFPICT ) )
             return DV_E_TYMED;
 
-        HMETAFILEPICT hMeta = reinterpret_cast<HMETAFILEPICT>( getMetaFileHandle_Impl( sal_False ) );
+        HGLOBAL hMeta = reinterpret_cast<HGLOBAL>( getMetaFileHandle_Impl( sal_False ) );
 
         if ( hMeta )
         {
             pMedium->tymed = TYMED_MFPICT;
             pMedium->hMetaFilePict = hMeta;
             pMedium->pUnkForRelease = NULL;
-
-            return S_OK;
         }
 
         return STG_E_MEDIUMFULL;
@@ -329,16 +327,28 @@ STDMETHODIMP EmbedDocument_Impl::EnumFormatEtc( DWORD dwDirection, IEnumFORMATET
 
 STDMETHODIMP EmbedDocument_Impl::DAdvise( FORMATETC * pFormatetc, DWORD advf, IAdviseSink * pAdvSink, DWORD * pdwConnection )
 {
-    return E_NOTIMPL;
+    if ( !m_pDAdviseHolder )
+        if ( !SUCCEEDED( CreateDataAdviseHolder( &m_pDAdviseHolder ) ) || !m_pDAdviseHolder )
+            return E_OUTOFMEMORY;
+
+    return m_pDAdviseHolder->Advise( (IDataObject*)this, pFormatetc, advf, pAdvSink, pdwConnection );
 }
 
 STDMETHODIMP EmbedDocument_Impl::DUnadvise( DWORD dwConnection )
 {
-    return E_NOTIMPL;
+    if ( !m_pDAdviseHolder )
+        if ( !SUCCEEDED( CreateDataAdviseHolder( &m_pDAdviseHolder ) ) || !m_pDAdviseHolder )
+            return E_OUTOFMEMORY;
+
+    return m_pDAdviseHolder->Unadvise( dwConnection );
 }
 
 STDMETHODIMP EmbedDocument_Impl::EnumDAdvise( IEnumSTATDATA ** ppenumAdvise )
 {
-    return OLE_E_ADVISENOTSUPPORTED;
+    if ( !m_pDAdviseHolder )
+        if ( !SUCCEEDED( CreateDataAdviseHolder( &m_pDAdviseHolder ) ) || !m_pDAdviseHolder )
+            return E_OUTOFMEMORY;
+
+    return m_pDAdviseHolder->EnumAdvise( ppenumAdvise );
 }
 
