@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hjs $ $Date: 2002-03-06 13:18:41 $
+ *  last change: $Author: fs $ $Date: 2002-04-08 16:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,10 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
                                    sal_Bool _bQuote) const
 {
 
-    parseNodeToStr(rString, xMeta, Reference< XNumberFormatter >(),
-        Reference< XPropertySet >(), OParseContext::getDefaultLocale(), pContext, _bIntl, _bQuote, '.', sal_False);
+    parseNodeToStr(
+        rString, xMeta, Reference< XNumberFormatter >(),  Reference< XPropertySet >(),
+        pContext ? pContext->getPreferredLocale() : OParseContext::getDefaultLocale(),
+        pContext, _bIntl, _bQuote, '.', sal_False);
 }
 
 //-----------------------------------------------------------------------------
@@ -939,7 +941,11 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 
     // reset the parser
     if (!m_pLocale)
-        m_pLocale = new Locale(m_pContext->getDefaultLocale());
+    {
+        Locale aPreferredLocale( m_pContext->getPreferredLocale( ) );
+            // this temporary is due to a MSVC compiler bug
+        m_pLocale = new Locale( aPreferredLocale );
+    }
 
     m_xField        = xField;
     m_xFormatter    = xFormatter;
@@ -985,7 +991,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
                 aValue >>= *m_pLocale;
         }
         else
-            *m_pLocale = m_pContext->getDefaultLocale();
+            *m_pLocale = m_pContext->getPreferredLocale();
 
         switch (nType)
         {
@@ -1059,7 +1065,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
         return m_pParseTree;
     }
 }
-// -----------------------------------------------------------------------------
+//=============================================================================
 //-----------------------------------------------------------------------------
 OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,const OParseContext* _pContext)
            :m_pContext(_pContext)
@@ -1098,6 +1104,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
         // take the default context
         m_pContext = &s_aDefaultContext;
 }
+
 // -----------------------------------------------------------------------------
 Any getNumberFormatProperty(const Reference< ::com::sun::star::util::XNumberFormatsSupplier > &xSupplier,
                                                    sal_Int32 nKey,
@@ -1139,6 +1146,7 @@ void OSQLParseNode::substituteParameterNames(OSQLParseNode* _pNode)
 
     }
 }
+
 // -----------------------------------------------------------------------------
 
 
