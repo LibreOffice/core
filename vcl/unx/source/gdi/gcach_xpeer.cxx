@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:44:48 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,8 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
 
         case XRENDER_KIND:
             {
-#if 0   // TODO: reenable when it works without problems
+/*
+                // TODO: reenable when it works without problems
                 Glyph nGlyphId = (Glyph)rGlyphData.GetExtPointer();
                 // XRenderFreeGlyphs not implemented yet for version<=0.2
                 // #108209# disabled because of crash potential,
@@ -305,7 +306,7 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
                 // be cleaned up when the glyphset is released
                 if( nRenderVersion >= 0x05 )
                     (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
-#endif
+*/
                 mnBytesUsed -= nHeight * ((nWidth + 3) & ~3);
             }
             break;
@@ -382,7 +383,7 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
         {
             // #94666# circumvent bug in some X11 systems, e.g. XF410.LynxEM.v163
             ULONG nPixmapWidth = 8 * maRawBitmap.mnScanlineSize - 1;
-            nPixmapWidth = std::max( nPixmapWidth, maRawBitmap.mnWidth );
+            nPixmapWidth = Max( nPixmapWidth, maRawBitmap.mnWidth );
 
             rGlyphData.SetSize( Size( nPixmapWidth, maRawBitmap.mnHeight ) );
             rGlyphData.SetOffset( +maRawBitmap.mnXOffset, +maRawBitmap.mnYOffset );
