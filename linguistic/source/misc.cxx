@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-03 12:27:36 $
+ *  last change: $Author: tl $ $Date: 2001-07-04 13:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ static BOOL GetAltSpelling( INT16 &rnChgPos, INT16 &rnChgLen, OUString &rRplc,
 }
 
 
-static INT16 GetOrigWordPos( const OUString &rOrigWord, INT16 nHyphenPos )
+static INT16 GetOrigWordPos( const OUString &rOrigWord, INT16 nPos )
 {
     INT32 nLen = rOrigWord.getLength();
     INT32 nNotSkippedChars = 0;
@@ -380,7 +380,7 @@ static INT16 GetOrigWordPos( const OUString &rOrigWord, INT16 nHyphenPos )
         BOOL bSkip = IsHyphen( cChar ) || IsControlChar( cChar );
         if (!bSkip)
             ++nNotSkippedChars;
-        if (nNotSkippedChars > nHyphenPos)
+        if (nNotSkippedChars > nPos  ||  (bSkip  &&  nNotSkippedChars == nPos))
             break;
     }
     return i < nLen ? i : -1;
@@ -435,8 +435,8 @@ Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
             OUString aLeft, aRight;
             INT16 nPos = GetOrigWordPos( rOrigWord, nChgPos );
             aLeft = rOrigWord.copy( 0, nPos );
-            nPos = GetOrigWordPos( rOrigWord, nChgPos + nChgLen );
-            aRight = rOrigWord.copy( nPos );
+//            nPos = GetOrigWordPos( rOrigWord, nChgPos + nChgLen );
+            aRight = rOrigWord.copy( nPos + nChgLen );
 
             aOrigHyphenatedWord =  aLeft;
             aOrigHyphenatedWord += aRplc;
@@ -454,7 +454,7 @@ Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
         {
             INT16 nLang = LocaleToLanguage( rxHyphWord->getLocale() );
             xRes = new HyphenatedWord(
-                        rxHyphWord->getWord(), nLang, rxHyphWord->getHyphenationPos(),
+                        rOrigWord, nLang, rxHyphWord->getHyphenationPos(),
                         aOrigHyphenatedWord, nOrigHyphenPos );
         }
 
