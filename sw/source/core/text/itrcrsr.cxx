@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-18 09:59:53 $
+ *  last change: $Author: ama $ $Date: 2000-12-21 14:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,11 +513,25 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             Next();
                         sal_Bool bSpaceChg = ((SwMultiPortion*)pPor)->
                                                 ChgSpaceAdd( pCurr, nSpaceAdd );
+                        Point aOldPos = pOrig->Pos();
                         bRet = GetCharRect( pOrig, nOfst, pCMS, nMax );
-                        pOrig->Pos().X() += nX;
-                        if( ((SwMultiPortion*)pPor)->HasBrackets() )
-                            pOrig->Pos().X() +=
-                                ((SwDoubleLinePortion*)pPor)->PreWidth();
+                        if( ((SwMultiPortion*)pPor)->GetRotation() )
+                        {
+                            long nTmp = pOrig->Width();
+                            pOrig->Width( pOrig->Height() );
+                            pOrig->Height( nTmp );
+                            nTmp = pOrig->Left() - aOldPos.X();
+                            pOrig->Pos().X() = nX + aOldPos.X();
+                            pOrig->Pos().Y() = aOldPos.Y() + nTmpAscent
+                                + pPor->Height() - pPor->GetAscent() - nTmp;
+                        }
+                        else
+                        {
+                            pOrig->Pos().X() += nX;
+                            if( ((SwMultiPortion*)pPor)->HasBrackets() )
+                                pOrig->Pos().X() +=
+                                    ((SwDoubleLinePortion*)pPor)->PreWidth();
+                        }
                         if( bSpaceChg )
                             SwDoubleLinePortion::ResetSpaceAdd( pCurr );
                         pCurr = pOldCurr;
