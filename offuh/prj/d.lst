@@ -83,6 +83,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\portal\daemons\sadmind
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\portal\daemons\sofficed
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\portal\system
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\mozilla
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\ldap
 
 mkdir: %_DEST%\inc%_EXT%\drafts\com
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun
@@ -258,6 +259,8 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
 ..\%__SRC%\inc\com\sun\star\portal\system\*.hdl %_DEST%\inc%_EXT%\com\sun\star\portal\system\*.hdl
 ..\%__SRC%\inc\com\sun\star\mozilla\*.hpp %_DEST%\inc%_EXT%\com\sun\star\mozilla\*.hpp
 ..\%__SRC%\inc\com\sun\star\mozilla\*.hdl %_DEST%\inc%_EXT%\com\sun\star\mozilla\*.hdl
+..\%__SRC%\inc\com\sun\star\ldap\*.hpp %_DEST%\inc%_EXT%\com\sun\star\ldap\*.hpp
+..\%__SRC%\inc\com\sun\star\ldap\*.hdl %_DEST%\inc%_EXT%\com\sun\star\ldap\*.hdl
 
 ..\%__SRC%\inc\drafts\com\sun\star\frame\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\frame\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\*.hdl
