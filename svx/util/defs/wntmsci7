@@ -17871,3 +17871,7 @@ _real@8@4005fe00000000000000
 ?__query@?$Reference@VXProgressBar@awt@star@sun@com@@@uno@star@sun@com@@CAPAVXProgressBar@awt@345@PAVXInterface@2345@@Z
 ?__query@?$Reference@VXProgressMonitor@awt@star@sun@com@@@uno@star@sun@com@@CAPAVXProgressMonitor@awt@345@PAVXInterface@2345@@Z
 ?set@?$Reference@VXProgressBar@awt@star@sun@com@@@uno@star@sun@com@@QAAEPAVXProgressBar@awt@345@@Z
+?clear@?$Reference@VXWindow@awt@star@sun@com@@@uno@star@sun@com@@QAAXXZ
+?clear@?$Reference@VXForm@form@star@sun@com@@@uno@star@sun@com@@QAAXXZ
+?__copy@_STL@@YAPAV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@PAV23456@00U_Ra__ItT@1@PAH@Z
+?__query@?$Reference@VXDrawPageSupplier@drawing@star@sun@com@@@uno@star@sun@com@@CAPAVXDrawPageSupplier@drawing@345@PAVXInterface@2345@@Z
