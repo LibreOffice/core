@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-06 08:24:13 $
+ *  last change: $Author: mt $ $Date: 2001-07-26 12:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,10 +395,13 @@ public:
 //  class VCLXCheckBox
 //  ----------------------------------------------------
 class VCLXCheckBox :    public ::com::sun::star::awt::XCheckBox,
+                        public ::com::sun::star::awt::XButton,
                         public VCLXWindow
 {
 private:
-    ItemListenerMultiplexer maItemListeners;
+    ItemListenerMultiplexer     maItemListeners;
+    ActionListenerMultiplexer   maActionListeners;
+    ::rtl::OUString             maActionCommand;
 
 protected:
     DECL_LINK(      ClickHdl, CheckBox* );
@@ -430,6 +433,11 @@ public:
     void SAL_CALL setLabel( const ::rtl::OUString& Label ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL enableTriState( sal_Bool b ) throw(::com::sun::star::uno::RuntimeException);
 
+    // ::com::sun::star::awt::XButton:
+    void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setActionCommand( const ::rtl::OUString& Command ) throw(::com::sun::star::uno::RuntimeException);
+
     // ::com::sun::star::awt::XLayoutConstrains
     ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -448,8 +456,7 @@ class VCLXRadioButton : public ::com::sun::star::awt::XRadioButton,
                         public VCLXWindow
 {
 private:
-    ItemListenerMultiplexer maItemListeners;
-
+    ItemListenerMultiplexer     maItemListeners;
     ActionListenerMultiplexer   maActionListeners;
     ::rtl::OUString             maActionCommand;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-29 12:02:46 $
+ *  last change: $Author: mt $ $Date: 2001-07-26 12:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,7 +481,7 @@ void VCLXImageControl::complete( sal_Int32 Status, const ::com::sun::star::uno::
 //  ----------------------------------------------------
 //  class VCLXCheckBox
 //  ----------------------------------------------------
-VCLXCheckBox::VCLXCheckBox() : maItemListeners( *this )
+VCLXCheckBox::VCLXCheckBox() : maItemListeners( *this ), maActionListeners( *this )
 {
 }
 
@@ -509,13 +509,15 @@ void VCLXCheckBox::SetWindow( Window* pWindow )
 ::com::sun::star::uno::Any VCLXCheckBox::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XButton*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XCheckBox*, this ) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXCheckBox )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox>* ) NULL ),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -539,6 +541,24 @@ void VCLXCheckBox::removeItemListener( const ::com::sun::star::uno::Reference< :
 {
     ::vos::OGuard aGuard( GetMutex() );
     maItemListeners.removeInterface( l );
+}
+
+void VCLXCheckBox::addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l  )throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    maActionListeners.addInterface( l );
+}
+
+void VCLXCheckBox::removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    maActionListeners.removeInterface( l );
+}
+
+void VCLXCheckBox::setActionCommand( const ::rtl::OUString& rCommand ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    maActionCommand = rCommand;
 }
 
 void VCLXCheckBox::setLabel( const ::rtl::OUString& rLabel ) throw(::com::sun::star::uno::RuntimeException)
@@ -674,13 +694,23 @@ void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
 IMPL_LINK( VCLXCheckBox, ClickHdl, CheckBox*, EMPTYARG )
 {
     CheckBox* pCheckBox = (CheckBox*)GetWindow();
-    if ( pCheckBox && maItemListeners.getLength() )
+    if ( pCheckBox )
     {
-        ::com::sun::star::awt::ItemEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-        aEvent.Highlighted = sal_False;
-        aEvent.Selected = pCheckBox->GetState();
-        maItemListeners.itemStateChanged( aEvent );
+        if ( maItemListeners.getLength() )
+        {
+            ::com::sun::star::awt::ItemEvent aEvent;
+            aEvent.Source = (::cppu::OWeakObject*)this;
+            aEvent.Highlighted = sal_False;
+            aEvent.Selected = pCheckBox->GetState();
+            maItemListeners.itemStateChanged( aEvent );
+        }
+        if ( maActionListeners.getLength() )
+        {
+            ::com::sun::star::awt::ActionEvent aEvent;
+            aEvent.Source = (::cppu::OWeakObject*)this;
+            aEvent.ActionCommand = maActionCommand;
+            maActionListeners.actionPerformed( aEvent );
+        }
     }
     return 1;
 }

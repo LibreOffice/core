@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-22 11:18:38 $
+ *  last change: $Author: mt $ $Date: 2001-07-26 12:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1353,7 +1353,8 @@ void UnoButtonControl::createPeer( const uno::Reference< awt::XToolkit > & rxToo
 {
     UnoControl::createPeer( rxToolkit, rParentPeer );
 
-    uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XButton > xButton( mxPeer, uno::UNO_QUERY );
+    xButton->setActionCommand( maActionCommand );
     if ( maActionListeners.getLength() )
         xButton->addActionListener( &maActionListeners );
 }
@@ -1847,7 +1848,8 @@ void UnoRadioButtonControl::createPeer( const uno::Reference< awt::XToolkit > & 
     uno::Reference < awt::XRadioButton >  xRadioButton( mxPeer, uno::UNO_QUERY );
     xRadioButton->addItemListener( this );
 
-    uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XButton > xButton( mxPeer, uno::UNO_QUERY );
+    xButton->setActionCommand( maActionCommand );
     if ( maActionListeners.getLength() )
         xButton->addActionListener( &maActionListeners );
 }
@@ -1998,7 +2000,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlCheckBoxModel::getPropertySe
 //  class UnoCheckBoxControl
 //  ----------------------------------------------------
 UnoCheckBoxControl::UnoCheckBoxControl()
-    : maItemListeners( *this )
+    : maItemListeners( *this ), maActionListeners( *this )
 {
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
@@ -2013,6 +2015,7 @@ UnoCheckBoxControl::UnoCheckBoxControl()
 uno::Any UnoCheckBoxControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( awt::XButton*, this ),
                                         SAL_STATIC_CAST( awt::XCheckBox*, this ),
                                         SAL_STATIC_CAST( awt::XItemListener*, this ),
                                         SAL_STATIC_CAST( lang::XEventListener*, SAL_STATIC_CAST( awt::XItemListener*, this ) ),
@@ -2022,6 +2025,7 @@ uno::Any UnoCheckBoxControl::queryAggregation( const uno::Type & rType ) throw(u
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoCheckBoxControl )
+    getCppuType( ( uno::Reference< awt::XButton>* ) NULL ),
     getCppuType( ( uno::Reference< awt::XCheckBox>* ) NULL ),
     getCppuType( ( uno::Reference< awt::XItemListener>* ) NULL ),
     getCppuType( ( uno::Reference< awt::XLayoutConstrains>* ) NULL ),
@@ -2047,6 +2051,11 @@ void UnoCheckBoxControl::createPeer( const uno::Reference< awt::XToolkit > & rxT
 
     uno::Reference < awt::XCheckBox >  xCheckBox( mxPeer, uno::UNO_QUERY );
     xCheckBox->addItemListener( this );
+
+    uno::Reference < awt::XButton > xButton( mxPeer, uno::UNO_QUERY );
+    xButton->setActionCommand( maActionCommand );
+    if ( maActionListeners.getLength() )
+        xButton->addActionListener( &maActionListeners );
 }
 
 void UnoCheckBoxControl::addItemListener(const uno::Reference < awt::XItemListener > & l) throw(uno::RuntimeException)
@@ -2058,6 +2067,37 @@ void UnoCheckBoxControl::removeItemListener(const uno::Reference < awt::XItemLis
 {
     maItemListeners.removeInterface( l );
 }
+
+void UnoCheckBoxControl::addActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
+{
+    maActionListeners.addInterface( l );
+    if( mxPeer.is() && maActionListeners.getLength() == 1 )
+    {
+        uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+        xButton->addActionListener( &maActionListeners );
+    }
+}
+
+void UnoCheckBoxControl::removeActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
+{
+    if( mxPeer.is() && maActionListeners.getLength() == 1 )
+    {
+        uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+        xButton->removeActionListener( &maActionListeners );
+    }
+    maActionListeners.removeInterface( l );
+}
+
+void UnoCheckBoxControl::setActionCommand( const ::rtl::OUString& rCommand ) throw(uno::RuntimeException)
+{
+    maActionCommand = rCommand;
+    if ( mxPeer.is() )
+    {
+        uno::Reference < awt::XButton > xButton( mxPeer, uno::UNO_QUERY );
+        xButton->setActionCommand( rCommand );
+    }
+}
+
 
 void UnoCheckBoxControl::setLabel( const ::rtl::OUString&  rLabel ) throw(uno::RuntimeException)
 {
