@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:08:26 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,17 +371,16 @@ using namespace ::rtl;
 
 #define C2S(cChar) String::CreateFromAscii(cChar)
 
-TYPEINIT1( SwModuleDummy, SfxModule );
-TYPEINIT1( SwModule, SwModuleDummy );
+TYPEINIT1( SwModule, SfxModule );
 
 
 //************************************************************************
 
-SwModule::SwModule( SvFactory* pFact,
-                    SvFactory* pWebFact,
-                    SvFactory* pGlobalFact )
-    : SwModuleDummy( SFX_APP()->CreateResManager( "sw" ), sal_False, pFact,
-                     pWebFact, pGlobalFact ),
+SwModule::SwModule( SfxObjectFactory* pFact,
+                    SfxObjectFactory* pWebFact,
+                    SfxObjectFactory* pGlobalFact )
+    : SfxModule( SFX_APP()->CreateResManager( "sw" ), sal_False, pFact,
+                     pWebFact, pGlobalFact, NULL ),
     pModuleConfig(0),
     pView(0),
     pChapterNumRules(0),
@@ -632,43 +631,6 @@ void SwDLL::RegisterControls()
 |*
 \************************************************************************/
 
-
-SfxModule* SwModuleDummy::Load()
-{
-    return (NULL);
-}
-
-SwModuleDummy::~SwModuleDummy()
-{
-}
-
-
-/*************************************************************************
-|*
-|* Modul laden
-|*
-\************************************************************************/
-
-SfxModule* SwModule::Load()
-{
-    return (this);
-}
-
-/*-----------------15.03.98 11:50-------------------
-
---------------------------------------------------*/
-/*Reflection*   SwModule::GetReflection( UsrUik aUIK )
-{
-    DBG_ERROR("GetReflection - new method not yet available")
-    return 0;
-
-    if(aUIK == ::getCppuType((const uno::Reference< text::XModule >*)0))
-        return ::getCppuType((const SwXModule*)0)();
-    else if(aUIK == ::getCppuType((const uno::Reference< text::XAutoTextContainer >*)0)())
-        return ::getCppuType((const SwXAutoTextContainer*)0)();
-    else
-        return SfxModule::GetReflection(aUIK);
-}*/
 /* -----------------20.04.99 10:46-------------------
  *
  * --------------------------------------------------*/
