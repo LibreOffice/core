@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.94 $
- *  last change: $Author: hdu $ $Date: 2003-07-02 10:16:21 $
+ *  $Revision: 1.95 $
+ *  last change: $Author: hdu $ $Date: 2003-07-02 11:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,9 @@
 
 // TODO: move file mapping stuff to OSL
 #if defined(UNX)
-    #include <dlfcn.h>
+    #ifdef LINUX
+        #include <dlfcn.h>
+    #endif
     #include <unistd.h>
     #include <fcntl.h>
     #include <sys/stat.h>
@@ -335,9 +337,9 @@ FreetypeManager::FreetypeManager()
 {
     FT_Error rcFT = FT_Init_FreeType( &aLibFT );
 
-#if defined(UNX) && !defined(MACOSX) && !defined(HPUX)
+    #ifdef LINUX
     // XXX hack to enable usage of system freetype library.
-    // freetype <= 2.0.9 does not have FT_Library_Version() API call
+    // freetype prior to 2.0.9 does not have FT_Library_Version
     void (*pft_library_version)(FT_Library library,
         FT_Int *amajor, FT_Int *aminor, FT_Int *apatch);
     pft_library_version = (void (*)(FT_Library library,
@@ -353,7 +355,7 @@ FreetypeManager::FreetypeManager()
         if( nFTVERSION == 2103 )
             nPrioEmbedded = 0;
     }
-#endif
+    #endif
 
     // TODO: remove when the priorities are selected by UI
     char* pEnv;
