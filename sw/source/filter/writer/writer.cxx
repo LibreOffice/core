@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-22 12:29:52 $
+ *  last change: $Author: os $ $Date: 2001-02-27 14:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,8 +482,8 @@ void Writer::PutNumFmtFontsInAttrPool()
     for( USHORT nGet = rListTbl.Count(); nGet; )
         if( pDoc->IsUsed( *(pRule = rListTbl[ --nGet ] )))
             for( BYTE nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
-                if( SVX_NUM_CHAR_SPECIAL == (pFmt = &pRule->Get( nLvl ))->eType ||
-                    SVX_NUM_BITMAP == pFmt->eType )
+                if( SVX_NUM_CHAR_SPECIAL == (pFmt = &pRule->Get( nLvl ))->GetNumberingType() ||
+                    SVX_NUM_BITMAP == pFmt->GetNumberingType() )
                 {
                     if( 0 == ( pFont = pFmt->GetBulletFont() ) )
                         pFont = pDefFont;
@@ -658,11 +658,14 @@ ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.7 2001-01-22 12:29:52 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.8 2001-02-27 14:59:28 os Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/01/22 12:29:52  mib
+      Block mode for Writers added
+
       Revision 1.6  2000/11/27 19:09:58  jp
       Bug #80732#: AddPutEditEngFontsInAttrPool: use the correct Itempool
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-20 15:24:20 $
+ *  last change: $Author: os $ $Date: 2001-02-27 15:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2349,7 +2349,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 
                 aInfo.ePos = FTNPOS_PAGE;
                 aInfo.eNum = eNumA[pWDop->rncFtn];
-                aInfo.aFmt.eType = eNumTA[pWDop->nfcFtnRef];
+                aInfo.aFmt.SetNumberingType(eNumTA[pWDop->nfcFtnRef]);
                 if( pWDop->nFtn )
                     aInfo.nFtnOffset = pWDop->nFtn - 1;
                 rDoc.SetFtnInfo( aInfo );
@@ -2360,7 +2360,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 
                 // Ich kann nicht setzen, wann neu nummerieren...
                 //  aInfo.eNum = eNumA[pWDop->pDop->rncEdn];
-                aInfo.aFmt.eType = eNumTA[pWDop->nfcEdnRef];
+                aInfo.aFmt.SetNumberingType(eNumTA[pWDop->nfcEdnRef]);
                 if( pWDop->nEdn )
                     aInfo.nFtnOffset = pWDop->nEdn - 1;
                 rDoc.SetEndNoteInfo( aInfo );
@@ -3048,11 +3048,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.12 2001-02-20 15:24:20 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.13 2001-02-27 15:03:08 os Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/02/20 15:24:20  cmc
+      #84095# Footnotes in field results that are being ignored shouldn't therefore be inserted
+
       Revision 1.11  2001/02/16 10:08:12  cmc
       Normalize japanese doptypography variable names
 
