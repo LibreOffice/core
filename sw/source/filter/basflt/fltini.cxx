@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:36:45 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,9 +297,9 @@ SwRead SwIoSystem::GetReader( const String& rFltName )
 
         // suche ueber den Filtertext den Filtereintrag
 const SfxFilter* SwIoSystem::GetFilterOfFilterTxt( const String& rFilterNm,
-                                const SfxFactoryFilterContainer* pCnt )
+                                const SfxFilterContainer* pCnt )
 {
-    const SfxFactoryFilterContainer* pFltCnt = pCnt ? pCnt :
+    const SfxFilterContainer* pFltCnt = pCnt ? pCnt :
         ( IsDocShellRegistered()
             ? SwDocShell::Factory().GetFilterContainer()
             : SwWebDocShell::Factory().GetFilterContainer() );
