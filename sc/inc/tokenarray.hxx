@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokenarray.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $  $Date: 2004-06-28 16:50:59 $
+ *  last change: $Author: kz $  $Date: 2004-09-07 10:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,6 @@ class ScTokenArray
     USHORT          nError;                 // Error code
     short           nRefs;                  // Count of cell references
     ScRecalcMode    nMode;                  // Flags to indicate when to recalc this code
-    BOOL            bReplacedSharedFormula; // If code was created by replacing
-                            // a shared formula, a temporary flag during
-                            // UpdateReference() until StartListeningTo()
     BOOL            bHyperLink; // If HYPERLINK() occurs in the formula.
 
     void                    Assign( const ScTokenArray& );
@@ -183,8 +180,6 @@ public:
     USHORT    GetError() const { return nError; }
     void      SetError( USHORT n ) { nError = n; }
     short     GetRefs()  const { return nRefs;  }
-    void      SetReplacedSharedFormula( BOOL bVal ) { bReplacedSharedFormula = bVal; }
-    BOOL      IsReplacedSharedFormula() const       { return bReplacedSharedFormula; }
     void      SetHyperLink( BOOL bVal ) { bHyperLink = bVal; }
     BOOL      IsHyperLink() const       { return bHyperLink; }
 
