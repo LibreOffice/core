@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentInfo.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
+ *  last change: $Author: kso $ $Date: 2001-01-23 11:23:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@ struct ContentInfo
     //-------------------------------------------------------------------------
     /** Attributes. This may be any flags providing additional information
         to the implemantation of the XContentCreator interface.
+
+        The value can be one of the <type>ContentInfoAttribute</type> constants.
     */
     long Attributes;
 
@@ -95,15 +97,16 @@ struct ContentInfo
         committed ( via executing the command "insert" at the new content ).
         If one of the properties is missing, the insert command will fail.
 
-        In example, a new file system folder content will need a title. The
+        <p>In example, a new file system folder content will need a title. The
         Properties member of the ContentInfo provided for this kind of
         content must include the property "Title".
 
-        <b>Important:</b> The required properties must have one of the
+        <p><b>Important:</b> The required properties must have one of the
         following basic data types ( in order to make it possible to implement
         client applications with a small set of generic input methods for the
         values ):
 
+        <p>
         <ul>
         <li>boolean
         <li>char

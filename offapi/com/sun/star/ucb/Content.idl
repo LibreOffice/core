@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Content.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-23 10:08:45 $
+ *  last change: $Author: kso $ $Date: 2001-01-23 11:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,9 +154,9 @@ service Content
         Commands:
         =======================================================================
 
-        [return_type]
-            [command_name]
-                [param_type_and_name]
+        [return type]
+            [command name]
+                [parameter type and name]
 
         -----------------------------------------------------------------------
         Requiered commands:
@@ -164,13 +164,13 @@ service Content
 
         // This command obtains an interface which allows to query
         // information on commands supported by a content.
-        com::sun::star::ucb::XCommandInfo
+        <type>XCommandInfo</type>
             getCommandInfo
                 void
 
         // This command obtains an interface which allows to query
         // information on properties supported by a content.
-        com::sun::star::beans::XPropertySetInfo
+        <type scope="com::sun::star::beans">XPropertySetInfo</type>
             getPropertySetInfo
                 void
 
@@ -179,16 +179,16 @@ service Content
         //       requested, that are unknown to the content! The returned
         //       row object must contain a NULL value in the corresponding
         //       column instead.
-        com::sun::star::sdbc::XRow
+        <type scope="com::sun::star::sdbc">XRow</type>
             getPropertyValues
-                sequence< com::sun::star::beans::Property >
+                sequence< <type scope="com::sun::star::beans">Property</type> >
 
         // This command sets property values of the content.
         // Note: The execution will not be aborted, if there are properties
         //       contained, that are unknown to the content!
         void
             setPropertyValues
-                sequence< com::sun::star::beans::PropertyValue >
+                sequence< <type scope="com::sun::star::beans">PropertyValue</type> >
 
         -----------------------------------------------------------------------
         Optional commands:
@@ -215,9 +215,9 @@ service Content
         // ( by throwing a CommandAbortedException ), if an unsupported open
         // mode is requested.
         //
-        com::sun::star::ucb::XDynamicResultSet
+        <type>XDynamicResultSet</type>
             <B>open</B>
-                com::sun::star::ucb::OpenCommandArgument2 aOpenCommandArg
+                <type>OpenCommandArgument2</type> aOpenCommandArg
 
         // For non-folder objects, the OpenCommandArgument2 struct will be
         // prefilled with a data sink object, which will be filled
@@ -240,7 +240,7 @@ service Content
         //
         void
             <B>open</B>
-                com::sun::star::ucb::OpenCommandArgument2 aOpenCommandArg
+                <type>OpenCommandArgument2</type> aOpenCommandArg
 
         // This command triggers an update operation on a content. For example,
         // when "updating" a POP3-Inbox, the content for that box will get
@@ -249,7 +249,7 @@ service Content
         // <member>com::sun::star::ucb::XContent::contentEvent</member>.
         void
             <B>update</B>
-                com::sun::star::ucb::OpenCommandArgument2 aOpenCommandArg
+                <type>OpenCommandArgument2</type> aOpenCommandArg
 
         // This command triggers a synchronization operation between locally
         // cached data and remote server's data. For example, when
@@ -260,7 +260,7 @@ service Content
         // <member>com::sun::star::ucb::XContent::contentEvent</member>.
         void
             <B>synchronize</B>
-                com::sun::star::ucb::OpenCommandArgument2 aOpenCommandArg
+                <type>OpenCommandArgument2</type> aOpenCommandArg
 
         // This command closes an object.
         void
@@ -307,14 +307,14 @@ service Content
         // the data of an existing content.
         void
             <B>insert</B>
-                com::sun::star::ucb::InsertCommandArgument
+                <type>InsertCommandArgument</type>
 
         // This command searches for subcontents of a content matching the
         // given search criteria. The command will return an implemenation
         // of service com::sun::star::ucb::DynamicContentResultSet.
         com::sun::star::ucb::XDynamicResultSet
             <B>search</B>
-                com::sun::star::ucb::SearchCommandArgument aSearchCommandArg
+                <type>SearchCommandArgument</type> aSearchCommandArg
 
         // This command transfers (copies/moves) an object from one location
         // to another. It must be executed at the folder content representing
@@ -355,7 +355,7 @@ service Content
         // createNew-transferProps-insert sequence described above.
         void
             <B>transfer</B>
-                com::sun::star::ucb::TransferInfo aTransferInfo
+                <type>TransferInfo</type> aTransferInfo
 
         =======================================================================
         Properties:
@@ -404,10 +404,10 @@ service Content
         short ConnectionMode
 
         // contains the date and time the object was created.
-        com::sun::star::util::DateTime DateCreated
+        <type scope"com::sun::star::util">DateTime</type> DateCreated
 
         // contains the date and time the object was last modified.
-        com::sun::star::util::DateTime DateModified
+        <type scope"com::sun::star::util">DateTime</type> DateModified
 
         // contains the count of documents of a folder.
         long DocumentCount;
@@ -419,11 +419,11 @@ service Content
         // fields of a MIME-message, or the document info of an
         // office document ). For some standard header fields there
         // are predefined separate properties, like &quot;MessageTo&quot;.
-        sequence< com::sun::star::ucb::DocumentHeaderField > DocumentHeader
+        sequence< <type>DocumentHeaderField</type> > DocumentHeader
 
         // contains information about the way a folder stores the
         // contents of (remote) documents.
-        com::sun::star::ucb::DocumentStoreMode DocumentStoreMode
+        <type>DocumentStoreMode</type> DocumentStoreMode
 
         // contains the count of subfolders of a folder.
         long FolderCount
@@ -500,13 +500,13 @@ service Content
         string Password
 
         // contains a priority (i.e. of a message).
-        com::sun::star::ucb::Priority Priority
+        <type>Priority</type> Priority
 
         // contains the &quot;References&quot; field of a news article.
         string References
 
         // contains the rules set for a content.
-        com::sun::star::ucb::RuleSet Rules
+        <type>RuleSet</type> Rules
 
         // contains the count of seen/read subcontents of a folder content.
         long SeenCount
@@ -535,7 +535,7 @@ service Content
         long SubscribedCount
 
         // contains the policy to use when synchronizing two objects.
-        com::sun::star::ucb::SynchronizePolicy SynchronizePolicy
+        <type>SynchronizePolicy</type> SynchronizePolicy
 
         // contains information about the target frame to use when displaying
         // an object.
@@ -576,7 +576,7 @@ service Content
         string UserName
 
         // describes a verification policy.
-        com::sun::star::ucb::VerificationMode VerificationMode
+        <type>VerificationMode</type> VerificationMode
         </pre>
      */
     interface com::sun::star::ucb::XCommandProcessor;
