@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:41:09 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ CNames *TestToolObj::pRCommands = NULL;
 DBG_NAME( ControlItem )
 DBG_NAME( ControlDef )
 
-ControlItem::ControlItem( const sal_Char *Name, TTUniqueId aUIdP )
+ControlItem::ControlItem( const sal_Char *Name, SmartId aUIdP )
 {
 DBG_CTOR(ControlItem,0);
     InitData();
@@ -191,7 +191,7 @@ DBG_CTOR(ControlItem,0);
     pData->aUId = aUIdP;
 }
 
-ControlItem::ControlItem( const String &Name, TTUniqueId aUIdP )
+ControlItem::ControlItem( const String &Name, SmartId aUIdP )
 {
 DBG_CTOR(ControlItem,0);
     InitData();
@@ -242,7 +242,7 @@ ControlSon::~ControlSon()
     }
 }
 
-ControlItemSon::ControlItemSon(const String &Name, TTUniqueId aUIdP )
+ControlItemSon::ControlItemSon(const String &Name, SmartId aUIdP )
 : ControlItem( Name, aUIdP )
 {}
 
@@ -276,17 +276,17 @@ void ControlDef::Write( SvStream &aStream )
         aStream.WriteByteString( String('*').Append( pData->Kurzname ), RTL_TEXTENCODING_UTF8 );
     else
         aStream.WriteByteString( pData->Kurzname, RTL_TEXTENCODING_UTF8 );
-    aStream << ((USHORT)pData->aUId.GetUIdType());
-    if ( pData->aUId.IsStrId() )
-        aStream.WriteByteString( pData->aUId.GetString(), RTL_TEXTENCODING_UTF8 );
+    aStream << ((USHORT)pData->aUId.IsNumeric());
+    if ( !pData->aUId.IsNumeric() )
+        aStream.WriteByteString( pData->aUId.GetStr(), RTL_TEXTENCODING_UTF8 );
     else
-        aStream << pData->aUId.GetULONG();
+        aStream << pData->aUId.GetNum();
     if ( pSons )
         for ( int i = 0 ; pSons->Count() > i ; i++ )
             ((ControlDef*)(*pSons)[i])->Write(aStream);
 }
 
-ControlDef::ControlDef(const String &Name, TTUniqueId aUIdP )
+ControlDef::ControlDef(const String &Name, SmartId aUIdP )
 : ControlItemSon( Name, aUIdP)
 {
     DBG_CTOR(ControlDef,0);
@@ -338,7 +338,7 @@ BOOL ControlItemUId::operator == (const ControlItem &rPar)
 
 SV_IMPL_OP_PTRARR_SORT( CNames, ControlItem* )
 
-void CRevNames::Insert( String aName, TTUniqueId aUId, ULONG nSeq )
+void CRevNames::Insert( String aName, SmartId aUId, ULONG nSeq )
 {
     ControlItem *pRN = new ReverseName(aName,aUId,nSeq);
     USHORT nPos;
@@ -353,7 +353,7 @@ void CRevNames::Insert( String aName, TTUniqueId aUId, ULONG nSeq )
 
 }
 
-String CRevNames::GetName( TTUniqueId aUId )
+String CRevNames::GetName( SmartId aUId )
 {
     ReverseName *pRN = new ReverseName(UniString(),aUId,0);
     USHORT nPos;
@@ -364,10 +364,10 @@ String CRevNames::GetName( TTUniqueId aUId )
         return GetObject(nPos)->pData->Kurzname;
     else
     {
-        if ( !aUId.IsStrId() && aUId.GetULONG() == UID_ACTIVE )
+        if ( aUId.Equals( UID_ACTIVE ) )
             return CUniString("Active");
         else
-            return GEN_RES_STR1( S_NAME_NOT_THERE, aUId.GetString() );
+            return GEN_RES_STR1( S_NAME_NOT_THERE, aUId.GetStr() );
     }
 }
 
@@ -554,7 +554,7 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
         SbxTransportMethod *pMeth = new SbxTransportMethod( SbxVARIANT );       \
         pMeth->SetName( aName );                                                                                        \
         pMeth->SetUserData( ID_RemoteCommand );                                                         \
-        pMeth->nValue = aId.GetULONG();                                                                                            \
+        pMeth->nValue = aId.GetNum();                                                                                            \
         Insert( pMeth );                                                                                                        \
         StartListening( pMeth->GetBroadcaster(), TRUE );                                        \
     }
@@ -859,7 +859,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
 
     SvFileStream Stream;
     String       aLine,aName,aLongname;
-    TTUniqueId   aUId;
+    SmartId      aUId;
     xub_StrLen   nLineNr;
     USHORT       nElement;
     ControlDef   *pNewDef, *pNewDef2;
@@ -877,7 +877,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
         ReadFlat( aName ,pUIds, TRUE );
         if ( !pUIds )
             return;
-        pNewDef = new ControlDef("Active",0);
+        pNewDef = new ControlDef("Active",SmartId(0));
         if (! pUIds->C40_PTR_INSERT(ControlItem, (ControlItem*&)pNewDef))
         {
             ADD_WARNING_LOG2( GEN_RES_STR1c( S_DOUBLE_NAME, "Active" ), Filename, nLineNr );
@@ -961,14 +961,15 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
             continue;
         }
 
-        BOOL bUnoName = ( bIsFlat && ( aLongname.Copy( 0, 4 ).CompareIgnoreCaseToAscii( ".uno" ) == COMPARE_EQUAL
-            || aLongname.Copy( 0, 4 ).CompareIgnoreCaseToAscii( "http" ) == COMPARE_EQUAL ) );
-        BOOL bMozillaName = ( !bIsFlat && aLongname.Copy( 0, 4 ).CompareIgnoreCaseToAscii( ".moz" ) == COMPARE_EQUAL );
+        BOOL bUnoName = ( aLongname.Copy( 0, 5 ).EqualsIgnoreCaseAscii( ".uno:" )
+            || aLongname.Copy( 0, 4 ).EqualsIgnoreCaseAscii( "http" )
+            || aLongname.Copy( 0, 8 ).EqualsIgnoreCaseAscii( ".HelpId:" ) );
+        BOOL bMozillaName = ( !bIsFlat && aLongname.Copy( 0, 4 ).EqualsIgnoreCaseAscii( ".moz" ) );
 
         if ( aName.GetChar(0) == '+' )          // Kompletten Eintrag kopieren
         {
             aName.Erase(0,1);
-            ControlDef WhatName(aLongname,0);
+            ControlDef WhatName(aLongname,SmartId());
             ControlDef *OldTree;
             if (pNames->Seek_Entry(&WhatName,&nElement))
             {
@@ -997,10 +998,10 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
         {
 
             if (aName.CompareIgnoreCaseToAscii("*Active") == COMPARE_EQUAL)
-                aUId = TTUniqueId( UID_ACTIVE );
-            else if ( !( ( bIsFlat && bUnoName ) || ( !bIsFlat && bMozillaName ) ) )
+                aUId = SmartId( UID_ACTIVE );
+            else if ( !bUnoName && !bMozillaName )
             {   // Bestimmen der ID aus der Hid.Lst
-                ControlDef WhatName(aLongname,0);
+                ControlDef WhatName(aLongname,SmartId());
                 if (pUIds->Seek_Entry(&WhatName,&nElement))
                     aUId = pUIds->GetObject(nElement)->pData->aUId;
                 else
@@ -1011,10 +1012,10 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
             }
             else
             {
-                if ( bUnoName )     // Ist immer auch flat
-                    aUId = TTUniqueId( aLongname, UID_UNO );
+                if ( bUnoName )
+                    aUId = SmartId( aLongname );
                 else if ( bMozillaName )
-                    aUId = TTUniqueId( aLongname, UID_MOZILLA );
+                    aUId = SmartId( aLongname );
                 else
                 {
                     DBG_ERROR("Unknown URL schema")
@@ -1028,23 +1029,13 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
                 if (!bIsFlat)
                     aName.Erase(0,1);
 
-/*              if ( bUnoName )     // Ist immer auch flat
-                    pNewDef = new ControlDef(aName,aLongname,UNO);
-                else if ( bMozillaName )
-                    pNewDef = new ControlDef(aName,aLongname,MOZILLA);
-                else*/
-                    pNewDef = new ControlDef(aName,aUId);
+                   pNewDef = new ControlDef(aName,aUId);
 
                 if (!bIsFlat)
                 {
                     pNewDef->Sons( new CNames() );
 
-/*                  if ( bUnoName )     // Ist immer auch flat
-                        pNewDef2 = new ControlDef(aName,aLongname,UNO);
-                    else if ( bMozillaName )
-                        pNewDef2 = new ControlDef(aName,aLongname,MOZILLA);
-                    else*/
-                        pNewDef2 = new ControlDef(aName,aUId);
+                       pNewDef2 = new ControlDef(aName,aUId);
                     if (!pNewDef->SonInsert( pNewDef2 ))         // Dialog in eigenen Namespace eintragen
                     {
                         delete pNewDef2;
@@ -1071,12 +1062,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
                 }
                 else
                 {
-/*                  if ( bUnoName )     // Ist immer auch flat
-                        pNewDef = new ControlDef(aName,aLongname,UNO);
-                    else if ( bMozillaName )
-                        pNewDef = new ControlDef(aName,aLongname,MOZILLA);
-                    else*/
-                        pNewDef = new ControlDef(aName,aUId);
+                    pNewDef = new ControlDef(aName,aUId);
                     if (! pFatherDef->SonInsert(pNewDef))
                     {
                         ADD_WARNING_LOG2( GEN_RES_STR1( S_DOUBLE_NAME, aLine ), Filename, nLineNr );
@@ -1116,7 +1102,7 @@ void TestToolObj::ReadFlat( String Filename, CNames *&pNames, BOOL bSortByName )
 {
     SvFileStream Stream;
     String       aLine,aName;
-    TTUniqueId   aUId;
+    SmartId      aUId;
     xub_StrLen   nLineNr;
     ControlItem  *pNewItem;
     USHORT       nDoubleCount = 0;
@@ -1157,7 +1143,7 @@ void TestToolObj::ReadFlat( String Filename, CNames *&pNames, BOOL bSortByName )
         }
 
         aName = aLine.GetToken(0,cMyDelim);
-        aUId = TTUniqueId( (ULONG)aLine.GetToken(1,cMyDelim).ToInt64() );
+        aUId = SmartId( (ULONG)aLine.GetToken(1,cMyDelim).ToInt64() );
 
         if ( bSortByName )
             pNewItem = new ControlDef( aName, aUId );
@@ -1206,7 +1192,7 @@ void ReadFlatArray( const ControlDefLoad arWas [], CNames *&pNames )
 
     while ( String::CreateFromAscii(arWas[nIndex].Kurzname).Len() > 0 )
     {
-        TTUniqueId aUId (arWas[nIndex].nUId);
+        SmartId aUId (arWas[nIndex].nUId);
         const ControlItem *pX = new ControlDef( arWas[nIndex].Kurzname, aUId);
         pNames->C40_PTR_INSERT(ControlItem, pX);
         nIndex++;
@@ -1456,8 +1442,7 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
 {
     SvFileStream aStream;
     String       aName,aURL;
-    UIdType      aUIdType;
-    TTUniqueId   aUId;
+    SmartId      aUId;
     ControlDef   *pNewDef, *pNewDef2;
     ControlDef   *pFatherDef = NULL;
 
@@ -1491,18 +1476,17 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
 
         USHORT nType;
          aStream >> nType;
-        aUIdType = UIdType( nType );
-        if ( TTUniqueId::IsStrId( aUIdType ) )
+        if ( !nType /* IsNumeric() */)
         {
             String aStrId;
             aStream.ReadByteString( aStrId, RTL_TEXTENCODING_UTF8 );
-            aUId = TTUniqueId( aStrId, aUIdType );
+            aUId = SmartId( aStrId );
         }
         else
         {
             ULONG nUId;
             aStream >> nUId;
-            aUId = TTUniqueId( nUId );
+            aUId = SmartId( nUId );
         }
 
         if (aName.GetChar(0) == '*' || bIsFlat )     // Globaler Kurzname (Dialogname oder SId)
@@ -1649,7 +1633,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         USHORT nElement;
                         SbxVariableRef pArg = rPar->Get( 1 );
                         String aKontext = pArg->GetString();
-                        ControlDef WhatName(aKontext,0);
+                        ControlDef WhatName(aKontext,SmartId());
                         if (pControls->Seek_Entry(&WhatName,&nElement))
                         {
                             pNameKontext = ((ControlDef*)pControls->GetObject(nElement))->GetSons();
@@ -2141,7 +2125,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         ((Controls*)pVar)->PutULong( ((Controls*)pVar)->pMethodVar->GetULong() );
                         ((Controls*)pVar)->pMethodVar->SetUserData(ID_Control);
 
-                        pShortNames->Insert( CUniString("xxx"), ((Controls*)pVar)->pMethodVar->nValue, nSequence );
+                        pShortNames->Insert( CUniString("xxx"), SmartId( ((Controls*)pVar)->pMethodVar->nValue ), nSequence );
 
                         nOldValue = ((Controls*)pVar)->GetULong();
 
@@ -2180,7 +2164,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         if ( !IsError() && ((SbxTransportMethod*)pVar)->nValue & M_WITH_RETURN )
                         {
                             pImpl->pNextReturn = ((SbxTransportMethod*)pVar);
-                            aNextReturnId = TTUniqueId( ((SbxTransportMethod*)pVar)->nValue );
+                            aNextReturnId = SmartId( ((SbxTransportMethod*)pVar)->nValue );
                         }
                         if ( SingleCommandBlock )
                             EndBlock();
@@ -2241,13 +2225,13 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         {
                             In->GenCmdControl (pVar->GetParent()->GetULong(),
                                 (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
-                            aNextReturnId = TTUniqueId( pVar->GetParent()->GetULong() );
+                            aNextReturnId = SmartId( pVar->GetParent()->GetULong() );
                         }
                         else
                         {
                             In->GenCmdControl (pVar->GetParent()->GetString(),
                                 (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
-                            aNextReturnId = TTUniqueId( pVar->GetParent()->GetString(), UID_UNKNOWN_STRING );
+                            aNextReturnId = SmartId( pVar->GetParent()->GetString() );
                         }
 
 
@@ -2258,7 +2242,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         else
                         {
                             pImpl->pNextReturn = NULL;
-                            aNextReturnId = TTUniqueId();
+                            aNextReturnId = SmartId();
                         }
 
                     }
@@ -2737,7 +2721,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
     else
     {
         USHORT nElement;
-        ControlDef *pWhatName = new ControlDef(Str,0);
+        ControlDef *pWhatName = new ControlDef(Str,SmartId());
 
         /// nach Controls suchen
         if (pNameKontext && pNameKontext->Seek_Entry(pWhatName,&nElement))
@@ -2747,10 +2731,10 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
             pImpl->pControlsObj = pImpl->pControlsObjs[nControlsObj++];
             pImpl->pControlsObj->SetName(pWhatName->pData->Kurzname);
 
-            if ( pWhatName->pData->aUId.IsStrId() )
-                pImpl->pControlsObj->PutString(pWhatName->pData->aUId.GetString());
+            if ( pWhatName->pData->aUId.IsNumeric() )
+                pImpl->pControlsObj->PutULong(pWhatName->pData->aUId.GetNum());
             else
-                pImpl->pControlsObj->PutULong(pWhatName->pData->aUId.GetULONG());
+                pImpl->pControlsObj->PutString(pWhatName->pData->aUId.GetStr());
 
             pShortNames->Insert(pWhatName->pData->Kurzname,pWhatName->pData->aUId,nSequence);
 
@@ -2760,10 +2744,10 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
                 pMember = new SbxProperty(CUniString("ID"),SbxULONG);
                 pImpl->pControlsObj->Insert(pMember);
             }
-            if ( pWhatName->pData->aUId.IsStrId() )
-                pMember->PutString(pWhatName->pData->aUId.GetString());
+            if ( pWhatName->pData->aUId.IsNumeric() )
+                pMember->PutULong(pWhatName->pData->aUId.GetNum());
             else
-                pMember->PutULong(pWhatName->pData->aUId.GetULONG());
+                pMember->PutString(pWhatName->pData->aUId.GetStr());
 
             if ( ! (pMember = pImpl->pControlsObj->Find(CUniString("name"),SbxCLASS_DONTCARE)) )
             {
@@ -2786,16 +2770,16 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
             pWhatName = ( (ControlDef*)pSIds->GetObject( nElement ) );
             pMyVar->SetName( pWhatName->pData->Kurzname );
 
-            if ( pWhatName->pData->aUId.IsStrId() )
+            if ( pWhatName->pData->aUId.IsNumeric() )
             {
-                pMyVar->SetUserData( ID_UNODispatch );
-                pMyVar->aUnoSlot = pWhatName->pData->aUId.GetString();
+                pMyVar->SetUserData( ID_Dispatch );
+                pMyVar->nValue = pWhatName->pData->aUId.GetNum();
+                pShortNames->Insert( Str, pWhatName->pData->aUId, nSequence );
             }
             else
             {
-                pMyVar->SetUserData( ID_Dispatch );
-                pMyVar->nValue = pWhatName->pData->aUId.GetULONG();
-                pShortNames->Insert( Str, pWhatName->pData->aUId, nSequence );
+                pMyVar->SetUserData( ID_UNODispatch );
+                pMyVar->aUnoSlot = pWhatName->pData->aUId.GetStr();
             }
             return pMyVar;
         }
@@ -2804,7 +2788,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
         if ( Str.Copy( Str.Len()-3, 3 ).CompareIgnoreCaseToAscii("_ID") == COMPARE_EQUAL && pSIds )
         {
             delete pWhatName;
-            pWhatName = new ControlDef( Str.Copy( 0, Str.Len()-3 ), 0 );
+            pWhatName = new ControlDef( Str.Copy( 0, Str.Len()-3 ), SmartId() );
             if ( pSIds->Seek_Entry( pWhatName, &nElement ) )
             {   // Nach slots suchen
                 SbxVariable *pReturn = new SbxVariable;
@@ -2812,10 +2796,10 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
                 pWhatName = ( (ControlDef*)pSIds->GetObject( nElement ) );
                 pReturn->SetName( pWhatName->pData->Kurzname );
 
-                if ( pWhatName->pData->aUId.IsStrId() )
-                    pReturn->PutString(pWhatName->pData->aUId.GetString());
+                if ( pWhatName->pData->aUId.IsNumeric() )
+                    pReturn->PutULong(pWhatName->pData->aUId.GetNum());
                 else
-                    pReturn->PutULong(pWhatName->pData->aUId.GetULONG());
+                    pReturn->PutString(pWhatName->pData->aUId.GetStr());
                 return pReturn;
             }
         }
@@ -2835,7 +2819,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.10 $
+    // search $Revision: 1.11 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
@@ -3217,7 +3201,7 @@ void TestToolObj::SortControlsByNumber( BOOL bIncludeActive )
         }
         if ( !bIncludeActive )
         {
-            ControlItem *pZeroItem = new ControlItemUId( UniString(), 0 );
+            ControlItem *pZeroItem = new ControlItemUId( UniString(), SmartId(0) );
             USHORT nNr;
             if ( pReverseControls->Seek_Entry( pZeroItem, &nNr ) )
             {
@@ -3253,19 +3237,19 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
         case SIReturn:
         {
             USHORT nRet,nParams;
-            TTUniqueId aUId;
+            SmartId aUId;
             pRetStream->Read(nRet);
             if ( pRetStream->GetNextType() == BinString )
             {
                 String aUStrId;     // UniqueStringID Used for Mozilla Integration
                 pRetStream->Read( aUStrId );
-                aUId = TTUniqueId( aUStrId, UID_UNKNOWN_STRING );
+                aUId = SmartId( aUStrId );
             }
             else
             {
                 ULONG nUId;
                 pRetStream->Read( nUId );         // bei Sequence einfach die Sequence
-                aUId = TTUniqueId( nUId );
+                aUId = SmartId( nUId );
             }
             pRetStream->Read(nParams);
 
@@ -3294,7 +3278,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
             {
                 case RET_Sequence:
                     {
-                        ULONG nUId = aUId.GetULONG();
+                        ULONG nUId = aUId.GetNum();
                         if ( nSequence != nUId )
                         {
                             bSequenceOK = FALSE;
@@ -3312,7 +3296,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
 //                                              ULONG nUserData = pImpl->pNextReturn->GetParent()->GetUserData();
 //                                              pImpl->pNextReturn->GetParent()->SetUserData(0);
 //                                              if ( nUId == pImpl->pNextReturn->GetParent()->GetULong() )
-                        if ( aUId == aNextReturnId )
+                        if ( aNextReturnId.Equals( aUId ) )
                         {
                             if( nParams & PARAM_ULONG_1 )       pImpl->pNextReturn->PutULong( nLNr1 );
                             if( nParams & PARAM_USHORT_1 )      pImpl->pNextReturn->PutUShort( nNr1 );
@@ -3359,7 +3343,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         }
 
                         WinInfoRec *pWinInfo = new WinInfoRec;
-                        pWinInfo->aUId = aUId;
+                        pWinInfo->aUId = aUId.GetText();
                         pWinInfo->nRType = (USHORT)nLNr1;   // just ULONG for Transport, data is always USHORT
                         pWinInfo->aRName = aString1;
                         pWinInfo->bIsReset = bBool1;
@@ -3394,7 +3378,10 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                             USHORT nNr;
                             ControlItem *pNewItem = new ControlItemUId( String(), aUId );
                             if ( pReverseControlsKontext->Seek_Entry(pNewItem,&nNr) )
+                            {
+//                                SmartId aID = pReverseControlsKontext->GetObject(nNr)->pData->aUId;
                                 pWinInfo->aKurzname += pReverseControlsKontext->GetObject(nNr)->pData->Kurzname;
+                            }
                             delete pNewItem;
                         }
 
@@ -3409,13 +3396,20 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         }
 
                         // Langname feststellen
-                        if ( pReverseUIds )
+                        if ( aUId.IsNumeric() )
                         {
-                            USHORT nNr;
-                            ControlItem *pNewItem = new ControlItemUId( String(), aUId );
-                            if ( pReverseUIds->Seek_Entry(pNewItem,&nNr) )
-                                pWinInfo->aLangname = pReverseUIds->GetObject(nNr)->pData->Kurzname;
-                            delete pNewItem;
+                            if ( pReverseUIds )
+                            {
+                                USHORT nNr;
+                                ControlItem *pNewItem = new ControlItemUId( String(), aUId );
+                                if ( pReverseUIds->Seek_Entry(pNewItem,&nNr) )
+                                    pWinInfo->aLangname = pReverseUIds->GetObject(nNr)->pData->Kurzname;
+                                delete pNewItem;
+                            }
+                        }
+                        else
+                        {   // use the String ID since there is no LongName in hid.lst
+                            pWinInfo->aLangname = aUId.GetStr();
                         }
 
                         aWinInfoHdl.Call( pWinInfo );
@@ -3425,7 +3419,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                     break;
                 case RET_ProfileInfo:
                     {
-                        ULONG nUId = aUId.GetULONG();
+                        ULONG nUId = aUId.GetNum();
                         if ( nParams & PARAM_STR_1 )
                         {
                             DirEntry FilePath = pImpl->aLogFileBase + DirEntry(DirEntry(aLogFileName).GetBase().AppendAscii(".prf"));
@@ -3557,7 +3551,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                     break;
                 case RET_DirectLoging:
                     {
-                        ULONG nUId = aUId.GetULONG();
+                        ULONG nUId = aUId.GetNum();
                         switch ( nUId )
                         {
                         case S_AssertError:
@@ -3605,7 +3599,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                             if ( pReverseControls )
                             {
                                 USHORT nNr;
-                                ControlItem *pNewItem = new ControlItemUId( String(), nLNr1 );
+                                ControlItem *pNewItem = new ControlItemUId( String(), SmartId( nLNr1 ) );
                                 if ( pReverseControls->Seek_Entry(pNewItem,&nNr) )
                                     aULongNames = pReverseControls->GetObject(nNr)->pData->Kurzname;
                                 delete pNewItem;
@@ -3841,16 +3835,25 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
         case SIReturnError:
         {
             String aString;
-            ULONG nNr;
-            pRetStream->Read( nNr );
+            SmartId aUId;
+            if ( pRetStream->GetNextType() == BinString )
+            {
+                String aUStrId;     // UniqueStringID Used for Mozilla Integration
+                pRetStream->Read( aUStrId );
+                aUId = SmartId( aUStrId );
+            }
+            else
+            {
+                ULONG nUId;
+                pRetStream->Read( nUId );         // bei Sequence einfach die Sequence
+                aUId = SmartId( nUId );
+            }
             pRetStream->Read( aString );
             ReplaceNumbers (aString);
 
             String aShortName;
-            aShortName = pShortNames->GetName(nNr);
+            aShortName = pShortNames->GetName(aUId);
             aShortName.AppendAscii( " : " );
-            if ( nNr == 0 )
-                nNr = 1;
 
             String aTmpStr(aShortName);
             aTmpStr += aString;
@@ -3890,7 +3893,7 @@ String TestToolObj::GetMethodName( ULONG nMethodId )
     if ( Controls::pClasses )
     {
         for ( nElement = 0 ; nElement < Controls::pClasses->Count() ; nElement++ )
-            if ( Controls::pClasses->GetObject(nElement)->pData->aUId.GetULONG() == nMethodId )
+            if ( Controls::pClasses->GetObject(nElement)->pData->aUId.Equals( nMethodId ) )
                 return Controls::pClasses->GetObject(nElement)->pData->Kurzname;
     }
     return String();
@@ -3904,7 +3907,7 @@ String TestToolObj::GetKeyName( USHORT nKeyCode )
     if ( CmdStream::pKeyCodes )
     {
         for ( nElement = 0 ; nElement < CmdStream::pKeyCodes->Count() ; nElement++ )
-            if ( CmdStream::pKeyCodes->GetObject(nElement)->pData->aUId.GetULONG() == nKeyCode )
+            if ( CmdStream::pKeyCodes->GetObject(nElement)->pData->aUId.Equals( nKeyCode ) )
                 return CmdStream::pKeyCodes->GetObject(nElement)->pData->Kurzname;
     }
     return CUniString( "UnknownKeyCode" );
@@ -3934,7 +3937,7 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
         bFound = FALSE;
         if ( aType.CompareTo(UIdKenn) == COMPARE_EQUAL )
         {
-            aResult = pShortNames->GetName(nNumber);
+            aResult = pShortNames->GetName(SmartId(nNumber));
             bFound = TRUE;
         }
         if ( aType.CompareTo(MethodKenn ) == COMPARE_EQUAL )
@@ -3952,7 +3955,7 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
             if ( pRCommands )
             {
                 for ( nElement = 0 ; nElement < pRCommands->Count() ; nElement++ )
-                    if ( pRCommands->GetObject(nElement)->pData->aUId.GetULONG() == nNumber )
+                    if ( pRCommands->GetObject(nElement)->pData->aUId.Equals( nNumber ) )
                     {
                         aResult = pRCommands->GetObject(nElement)->pData->Kurzname;
                         nElement = pRCommands->Count();
@@ -3969,7 +3972,7 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
             if ( pRTypes )
             {
                 for ( nElement = 0 ; nElement < pRTypes->Count() ; nElement++ )
-                    if ( pRTypes->GetObject(nElement)->pData->aUId.GetULONG() == nNumber )
+                    if ( pRTypes->GetObject(nElement)->pData->aUId.Equals( nNumber ) )
                     {
                         aResult = pRTypes->GetObject(nElement)->pData->Kurzname;
                         nElement = pRTypes->Count();
@@ -3978,7 +3981,7 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
         }
         if ( aType.CompareTo(SlotKenn ) == COMPARE_EQUAL )
         {
-            aResult = pShortNames->GetName(nNumber);
+            aResult = pShortNames->GetName(SmartId(nNumber));
             bFound = TRUE;
         }
         if ( aType.CompareTo(TabKenn ) == COMPARE_EQUAL )
@@ -4015,7 +4018,7 @@ SbTextType TestToolObj::GetSymbolType( const String &rSymbol, BOOL bWasControl )
     }
 
 
-    ControlDef WhatName( rSymbol, 0 );
+    ControlDef WhatName( rSymbol, SmartId() );
 
     if ( bWasControl )
     {
@@ -4104,11 +4107,11 @@ SbxVariable* Controls::Find( const String& Str, SbxClassType Type)
 
 
     USHORT nElement;
-    ControlDef WhatName(Str,0);
+    ControlDef WhatName(Str,SmartId());
     if (pClasses && pClasses->Seek_Entry(&WhatName,&nElement))
     {
         pMethodVar->SetName(Str);
-        ULONG nUId = pClasses->GetObject(nElement)->pData->aUId.GetULONG();
+        ULONG nUId = pClasses->GetObject(nElement)->pData->aUId.GetNum();
         pMethodVar->nValue = nUId;
 
         if ( SbxValue::GetType() == SbxSTRING )
