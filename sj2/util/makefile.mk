@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:54:04 $
+#   last change: $Author: patrick.luby $ $Date: 2000-09-25 01:01:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,7 @@ LIB1FILES=  \
     $(SLB)$/java.lib            \
     $(SLB)$/jscpp.lib
 
-SHL1DEPN=   $(L)$/itools.lib $(SVLIBDEPEND) $(L)$/svtool.lib $(LIB1TARGET)
+SHL1DEPN=   $(L)$/itools.lib $(SVLIBDEPEND) $(LIB1TARGET)
 
 SHL1TARGET= j$(UPD)$(DLLPOSTFIX)_g
 SHL1IMPLIB= $(TARGET)
