@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-10 21:11:16 $
+ *  last change: $Author: kz $ $Date: 2002-01-14 21:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,13 +504,14 @@ String STR_ASK_START_SETUP_MANUALLY
     Text[ polish ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
     Text[ portuguese_brazilian ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
     Text[ japanese ] = "インストールの修復を行なうには、CD のセットアップアプリケーションから、あるいはインストールセットが格納されているディレクトリから開始します。";
-    Text[ korean ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ korean ] = "설치 패키지가 들어 있는 폴더 또는 CD의 설치 프로그램을 복구하려면 설치 프로그램을 시작하십시오. ";
     Text[ chinese_simplified ] = "要修复您的程序，请您从光盘启动安装程序或从存有安装数据的目录直接启动安装程序。";
     Text[ chinese_traditional ] = "要修復您的程式，請您從光碟啟動安裝程式或從存有安裝檔案的目錄直接啟動安裝程式。 ";
     Text[ turkish ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
     Text[ arabic ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
     Text[ catalan ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
 };
+
 
 
 
