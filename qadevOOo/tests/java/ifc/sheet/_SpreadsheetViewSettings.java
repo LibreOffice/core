@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _SpreadsheetViewSettings.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:57:35 $
+ *  last change:$Date: 2003-12-11 11:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,12 @@
  *
  *
  ************************************************************************/
-
 package ifc.sheet;
+
+import com.sun.star.view.DocumentZoomType;
 
 import lib.MultiPropertyTest;
 
-import com.sun.star.view.DocumentZoomType;
 
 /**
 * Testing <code>com.sun.star.sheet.SpreadsheetViewSettings</code>
@@ -95,14 +95,15 @@ import com.sun.star.view.DocumentZoomType;
 * @see com.sun.star.sheet.SpreadsheetViewSettings
 */
 public class _SpreadsheetViewSettings extends MultiPropertyTest {
-
     public void _ZoomType() {
-        testProperty("ZoomType",
-            new Short(DocumentZoomType.PAGE_WIDTH),
-            new Short(DocumentZoomType.BY_VALUE));
+        testProperty("ZoomType", new Short(DocumentZoomType.PAGE_WIDTH),
+                     new Short(DocumentZoomType.BY_VALUE));
     }
 
-}  // finish class _SpreadsheetViewSettings
-
-
-
+    /**
+    * Forces environment recreation.
+    */
+    protected void after() {
+        disposeEnvironment();
+    }
+} // finish class _SpreadsheetViewSettings
