@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:42:19 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,7 +724,7 @@ SbError SbiStream::Open
                 {
 
                 // #??? For write access delete file if it already exists (not for appending)
-                if( (nStrmMode & STREAM_WRITE) != 0 && !IsAppend() &&
+                if( (nStrmMode & STREAM_WRITE) != 0 && !IsAppend() && !IsBinary() &&
                     xSFI->exists( aNameStr ) && !xSFI->isFolder( aNameStr ) )
                 {
                     xSFI->kill( aNameStr );
