@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtouch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:43:29 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,14 +238,14 @@ void CheckPolyHit(const Polygon& rPoly, ImpPolyHitCalc& rH)
     }
 }
 
-FASTBOOL IsRectTouchesPoly(const Polygon& rPoly, const Rectangle& rHit)
+sal_Bool IsRectTouchesPoly(const Polygon& rPoly, const Rectangle& rHit)
 {
     ImpPolyHitCalc aHit(rHit);
     CheckPolyHit(rPoly,aHit);
     return aHit.IsHit();
 }
 
-FASTBOOL IsRectTouchesPoly(const PolyPolygon& rPoly, const Rectangle& rHit)
+sal_Bool IsRectTouchesPoly(const PolyPolygon& rPoly, const Rectangle& rHit)
 {
     ImpPolyHitCalc aHit(rHit);
     USHORT nAnz=rPoly.Count();
@@ -255,22 +255,26 @@ FASTBOOL IsRectTouchesPoly(const PolyPolygon& rPoly, const Rectangle& rHit)
     return aHit.IsHit();
 }
 
-FASTBOOL IsRectTouchesPoly(const XPolygon& rPoly, const Rectangle& rHit, OutputDevice* pOut)
+//BFS09FASTBOOL IsRectTouchesPoly(const XPolygon& rPoly, const Rectangle& rHit, OutputDevice* pOut)
+sal_Bool IsRectTouchesPoly(const XPolygon& rPoly, const Rectangle& rHit)
 {
-    return IsRectTouchesPoly(XOutCreatePolygon(rPoly,pOut),rHit);
+    return IsRectTouchesPoly(XOutCreatePolygon(rPoly),rHit);
+//BFS09 return IsRectTouchesPoly(XOutCreatePolygon(rPoly,pOut),rHit);
 }
 
-FASTBOOL IsRectTouchesPoly(const XPolyPolygon& rPoly, const Rectangle& rHit, OutputDevice* pOut)
+//BFS09FASTBOOL IsRectTouchesPoly(const XPolyPolygon& rPoly, const Rectangle& rHit, OutputDevice* pOut)
+sal_Bool IsRectTouchesPoly(const XPolyPolygon& rPoly, const Rectangle& rHit)
 {
     ImpPolyHitCalc aHit(rHit);
     USHORT nAnz=rPoly.Count();
     for (USHORT i=0; i<nAnz && !aHit.IsDecided(); i++) {
-        CheckPolyHit(XOutCreatePolygon(rPoly[i],pOut),aHit);
+//BFS09     CheckPolyHit(XOutCreatePolygon(rPoly[i],pOut),aHit);
+        CheckPolyHit(XOutCreatePolygon(rPoly[i]),aHit);
     }
     return aHit.IsHit();
 }
 
-FASTBOOL IsRectTouchesLine(const Point& rPt1, const Point& rPt2, const Rectangle& rHit)
+sal_Bool IsRectTouchesLine(const Point& rPt1, const Point& rPt2, const Rectangle& rHit)
 {
     Polygon aPol(2);
     aPol[0]=rPt1;
@@ -280,14 +284,14 @@ FASTBOOL IsRectTouchesLine(const Point& rPt1, const Point& rPt2, const Rectangle
     return aHit.IsHit();
 }
 
-FASTBOOL IsRectTouchesLine(const Polygon& rLine, const Rectangle& rHit)
+sal_Bool IsRectTouchesLine(const Polygon& rLine, const Rectangle& rHit)
 {
     ImpPolyHitCalc aHit(rHit,TRUE);
     CheckPolyHit(rLine,aHit);
     return aHit.IsHit();
 }
 
-FASTBOOL IsRectTouchesLine(const PolyPolygon& rLine, const Rectangle& rHit)
+sal_Bool IsRectTouchesLine(const PolyPolygon& rLine, const Rectangle& rHit)
 {
     ImpPolyHitCalc aHit(rHit,TRUE);
     USHORT nAnz=rLine.Count();
@@ -297,17 +301,21 @@ FASTBOOL IsRectTouchesLine(const PolyPolygon& rLine, const Rectangle& rHit)
     return aHit.IsHit();
 }
 
-FASTBOOL IsRectTouchesLine(const XPolygon& rLine, const Rectangle& rHit, OutputDevice* pOut)
+//BFS09FASTBOOL IsRectTouchesLine(const XPolygon& rLine, const Rectangle& rHit, OutputDevice* pOut)
+sal_Bool IsRectTouchesLine(const XPolygon& rLine, const Rectangle& rHit)
 {
-    return IsRectTouchesLine(XOutCreatePolygon(rLine,pOut),rHit);
+//BFS09 return IsRectTouchesLine(XOutCreatePolygon(rLine,pOut),rHit);
+    return IsRectTouchesLine(XOutCreatePolygon(rLine),rHit);
 }
 
-FASTBOOL IsRectTouchesLine(const XPolyPolygon& rLine, const Rectangle& rHit, OutputDevice* pOut)
+//BFS09FASTBOOL IsRectTouchesLine(const XPolyPolygon& rLine, const Rectangle& rHit, OutputDevice* pOut)
+sal_Bool IsRectTouchesLine(const XPolyPolygon& rLine, const Rectangle& rHit)
 {
     ImpPolyHitCalc aHit(rHit,TRUE);
     USHORT nAnz=rLine.Count();
     for (USHORT nNum=0; nNum<nAnz && !aHit.IsHit(); nNum++) {
-        CheckPolyHit(XOutCreatePolygon(rLine[nNum],pOut),aHit);
+//BFS09     CheckPolyHit(XOutCreatePolygon(rLine[nNum],pOut),aHit);
+        CheckPolyHit(XOutCreatePolygon(rLine[nNum]),aHit);
     }
     return aHit.IsHit();
 }
@@ -354,12 +362,12 @@ BYTE CheckPointTouchesPoly(const Polygon& rPoly, const Point& rHit) // 0=Ausserh
     return (nCnt & 1)==1;
 }
 
-FASTBOOL IsPointInsidePoly(const Polygon& rPoly, const Point& rHit)
+sal_Bool IsPointInsidePoly(const Polygon& rPoly, const Point& rHit)
 {
     return CheckPointTouchesPoly(rPoly,rHit)!=0;
 }
 
-FASTBOOL IsPointInsidePoly(const PolyPolygon& rPoly, const Point& rHit)
+sal_Bool IsPointInsidePoly(const PolyPolygon& rPoly, const Point& rHit)
 {
     FASTBOOL bInside=FALSE;
     FASTBOOL bEdge=FALSE;
@@ -372,18 +380,22 @@ FASTBOOL IsPointInsidePoly(const PolyPolygon& rPoly, const Point& rHit)
     return bInside || bEdge;
 }
 
-FASTBOOL IsPointInsidePoly(const XPolygon& rPoly, const Point& rHit, OutputDevice* pOut)
+//BFS09FASTBOOL IsPointInsidePoly(const XPolygon& rPoly, const Point& rHit, OutputDevice* pOut)
+sal_Bool IsPointInsidePoly(const XPolygon& rPoly, const Point& rHit)
 {
-    return IsPointInsidePoly(XOutCreatePolygon(rPoly,pOut),rHit);
+//BFS09 return IsPointInsidePoly(XOutCreatePolygon(rPoly,pOut),rHit);
+    return IsPointInsidePoly(XOutCreatePolygon(rPoly),rHit);
 }
 
-FASTBOOL IsPointInsidePoly(const XPolyPolygon& rPoly, const Point& rHit, OutputDevice* pOut)
+//BFS09FASTBOOL IsPointInsidePoly(const XPolyPolygon& rPoly, const Point& rHit, OutputDevice* pOut)
+sal_Bool IsPointInsidePoly(const XPolyPolygon& rPoly, const Point& rHit)
 {
     FASTBOOL bInside=FALSE;
     FASTBOOL bEdge=FALSE;
     USHORT nAnz=rPoly.Count();
     for (USHORT i=0; i<nAnz && !bEdge; i++) {
-        BYTE n=CheckPointTouchesPoly(XOutCreatePolygon(rPoly[i],pOut),rHit);
+//BFS09     BYTE n=CheckPointTouchesPoly(XOutCreatePolygon(rPoly[i],pOut),rHit);
+        BYTE n=CheckPointTouchesPoly(XOutCreatePolygon(rPoly[i]),rHit);
         bEdge=n==2;
         if (n==1) bInside=!bInside;
     }
