@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
+ *  last change: $Author: fs $ $Date: 2001-10-23 11:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -965,14 +964,14 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
 /* --------------------------------------------------
 
  --------------------------------------------------*/
-Reference< XControlModel >  BibDataManager::updateGridModel()
+Reference< awt::XControlModel > BibDataManager::updateGridModel()
 {
     return updateGridModel( m_xForm );
 }
 /* --------------------------------------------------
 
  --------------------------------------------------*/
-Reference< XControlModel >  BibDataManager::updateGridModel(const Reference< XForm > & xDbForm)
+Reference< awt::XControlModel > BibDataManager::updateGridModel(const Reference< XForm > & xDbForm)
 {
     try
     {
@@ -1442,16 +1441,16 @@ void SAL_CALL BibDataManager::removeLoadListener( const Reference< XLoadListener
 }
 
 //------------------------------------------------------------------------
-Reference< XControlModel >  BibDataManager::createGridModel(const rtl::OUString& rName)
+Reference< awt::XControlModel > BibDataManager::createGridModel(const rtl::OUString& rName)
 {
-    Reference< XControlModel >  xModel;
+    Reference< awt::XControlModel > xModel;
 
     try
     {
         // create the control model
         Reference< XMultiServiceFactory >  xMgr = ::comphelper::getProcessServiceFactory();
         Reference< XInterface >  xObject = xMgr->createInstance(C2U("com.sun.star.form.component.GridControl"));
-        xModel=Reference< XControlModel > ( xObject, UNO_QUERY );
+        xModel=Reference< awt::XControlModel > ( xObject, UNO_QUERY );
 
         // set the
         Reference< XPropertySet > xPropSet( xModel, UNO_QUERY );
@@ -1520,10 +1519,10 @@ rtl::OUString BibDataManager::getControlName(sal_Int32 nFormatKey )
     return aResStr;
 }
 //------------------------------------------------------------------------
-Reference< XControlModel >  BibDataManager::loadControlModel(
+Reference< awt::XControlModel > BibDataManager::loadControlModel(
                     const rtl::OUString& rName, sal_Bool bForceListBox)
 {
-    Reference< XControlModel >  xModel;
+    Reference< awt::XControlModel > xModel;
     rtl::OUString aName(C2U("View_"));
     aName += rName;
 
@@ -1558,7 +1557,7 @@ Reference< XControlModel >  BibDataManager::loadControlModel(
 
             Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
             Reference< XInterface >  xObject = xMgr->createInstance(aInstanceName);
-            xModel=Reference< XControlModel > ( xObject, UNO_QUERY );
+            xModel=Reference< awt::XControlModel > ( xObject, UNO_QUERY );
             Reference< XPropertySet >  xPropSet( xModel, UNO_QUERY );
             Any aFieldName; aFieldName <<= aName;
             xPropSet->setPropertyValue( FM_PROP_NAME,aFieldName);
@@ -1579,7 +1578,7 @@ Reference< XControlModel >  BibDataManager::loadControlModel(
     return xModel;
 }
 //------------------------------------------------------------------------
-void BibDataManager::saveCtrModel(const rtl::OUString& rName,const Reference< XControlModel > & rCtrModel)
+void BibDataManager::saveCtrModel(const rtl::OUString& rName,const Reference< awt::XControlModel > & rCtrModel)
 {
     if(m_xSourceProps.is())
     {
