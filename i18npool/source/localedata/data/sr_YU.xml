@@ -231,6 +231,12 @@
 <TransliterationModules>IGNORE_CASE</TransliterationModules>
 </SearchOptions>
 </LC_SEARCH>
+<LC_INDEX>
+<IndexKey unoid="alphanumeric" default="true" phonetic="false">А Б В Г Д Ђ Е Ж З И Ј К Л Љ М Н Њ О П Р С Т Ћ У Ф Х Ц Ч Џ Ш</IndexKey>
+<UnicodeScript>8</UnicodeScript>
+<FollowPageWord>p.</FollowPageWord>
+<FollowPageWord>pp.</FollowPageWord>
+</LC_INDEX>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek>
@@ -378,12 +384,6 @@
 <quarter4Abbreviation>К4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
-<LC_INDEX>
-<IndexKey unoid="alphanumeric" default="true" phonetic="false">А Б В Г Д Ђ Е Ж З И Ј К Л Љ М Н Њ О П Р С Т Ћ У Ф Х Ц Ч Џ Ш</IndexKey>
-<UnicodeScript>8</UnicodeScript>
-<FollowPageWord>p.</FollowPageWord>
-<FollowPageWord>pp.</FollowPageWord>
-</LC_INDEX>
 <LC_NumberingLevel>
 <NumberingLevel Prefix=" " NumType="4" Suffix=")" />
 <NumberingLevel Prefix=" " NumType="4" Suffix="." />
