@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-16 10:05:26 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 09:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ struct XMLNumberFormat
     rtl::OUString   sCurrency;
     sal_Int32       nNumberFormat;
     sal_Int16       nType;
+    sal_Bool        bIsStandard : 1;
     XMLNumberFormat() : nNumberFormat(0), nType(0) {}
     XMLNumberFormat(const rtl::OUString& sTempCurrency, sal_Int32 nTempFormat,
         sal_Int16 nTempType) : sCurrency(sTempCurrency), nNumberFormat(nTempFormat),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-17 14:20:22 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 09:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,16 +121,18 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
     XMLNumberFormat aFormat(sEmpty, nNumberFormat, 0);
     XMLNumberFormatSet::iterator aItr = aNumberFormats.find(aFormat);
     if (aItr != aNumberFormats.end())
+    {
+        bIsStandard = aItr->bIsStandard;
         return aItr->nType;
+    }
     else
     {
         aFormat.nType = GetCellType(nNumberFormat, bIsStandard, xNumberFormatsSupplier);
+        aFormat.bIsStandard = bIsStandard;
         if (aFormat.nType == util::NumberFormat::CURRENCY)
             if (GetCurrencySymbol(nNumberFormat, aFormat.sCurrency, xNumberFormatsSupplier))
-            {
-                aNumberFormats.insert(aFormat);
                 sCurrency = aFormat.sCurrency;
-            }
+        aNumberFormats.insert(aFormat);
         return aFormat.nType;
     }
     return 0;
