@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:05:51 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ String STR_ASK_DEL_GRADIENT
     Text[ chinese_simplified ] = "ΥζµΔÒªΙΎ³ύΥβΈφ²ΚΙ«ΝΌ°ΈΒπ£Ώ";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςσ γπΰδθενςνσώ?";
     Text[ polish ] = "Chcesz na pewno usunΉζ gradient?";
-    Text[ japanese ] = "ΈήΧΓή°Ό®έ‚π–{“–‚Ιν‚µ‚ά‚·‚©?";
+    Text[ japanese ] = "ΈήΧΓή°Ό®έ‚πν‚µ‚Δ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B";
     Text[ chinese_traditional ] = "±z―u­n§R°£³o­Σ±m¦βΉΟ®Χ΅H";
     Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ ΚΟΡΜ ΗααζδΏ";
     Text[ greek ] = "Θέλετε πραγματικά να γίνει διαγραφή της διαβάθμισης χρώματος;";
@@ -213,7 +213,7 @@ String STR_ASK_CHANGE_GRADIENT
     Text[ chinese_simplified ] = "²ΚΙ«ΝΌ°ΈÒΡΎ­±»ΈόΈΔ£¬µ«ΚΗΙΠΞ΄±»±£΄ζ΅£ \nΔϊΔάΉ»ΈόΈΔΡ΅ΦΠµΔ²ΚΙ«ΝΌ°Έ\n»ςΥίΠΒΤφÒ»Έφ²ΚΙ«ΝΌ°Έ΅£";
     Text[ russian ] = "Γπΰδθενςνΰÿ αϋλΰ θημενενΰ, νξ νε ρξυπνενΰ. \nΒϋ μξζεςε θημενθςό βϋαπΰννσώ γπΰδθενςνσώ \nθλθ δξαΰβθςό νξβσώ γπΰδθενςνσώ.";
     Text[ polish ] = "Gradient zosta³ zmieniony i nie zapisany. \nMoΏesz zmieniζ zaznaczony gradient \nlub dodaζ nowy gradient.";
-    Text[ japanese ] = "ΈήΧΓή°Ό®έ‚ª•ΟX‚³‚κ•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB\n‘I‘π‚µ‚½ΈήΧΓή°Ό®έ‚π•ΟX‚Ε‚«‚ά‚· \n‚ά‚½‚ΝV‚µ‚ΆΈήΧΓή°Ό®έ‚π’Η‰Α‚Ε‚«‚ά‚·B";
+    Text[ japanese ] = "ΈήΧΓή°Ό®έ‚ª•ΟX‚³‚κ•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB\n‘I‘π‚µ‚½ΈήΧΓή°Ό®έ‚π•ΟX‚·‚ι‚©A \nV‚µ‚ΆΈήΧΓή°Ό®έ‚π’Η‰Α‚·‚ι‚±‚Ζ‚ª‚Ε‚«‚ά‚·B";
     Text[ chinese_traditional ] = "±m¦βΉΟ®Χ¤wΈgΕά§σ΅A¦ύ¬O©|¥Ό³Qΐx¦s΅C \n±z―ΰ°χΕά§σΏο¨ϊªΊ±m¦βΉΟ®Χ\n©ΞªΜ·sΌW¤@­Σ±m¦βΉΟ®Χ΅C";
     Text[ arabic ] = "αγ νΚγ ΝέΩ ΚΟΡΜ Ηααζδ ΘΪΟ ΚΫννΡε. \nνγίδί ΚΫννΡ ΚΟΡΜ Ηααζδ ΗαγΝΟΟ΅ \nΓζ ΕΦΗέΙ ΚΟΡΜ αζδ ΜΟνΟ.";
     Text[ greek ] = "Η διαβάθμιση χρώματος τροποποιήθηκε χωρίς να αποθηκευτεί. \nΜπορείτε να αλλάξετε την επιλεγμένη διαβάθμιση \\ή να προσθέσετε μια νέα.";
@@ -347,7 +347,7 @@ String STR_ASK_DEL_BITMAP
     Text[ chinese_simplified ] = "ΥζÒªΙΎ³ύΥβΈφΞ»ΝΌΒπ£Ώ";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό βϋαπΰννϋι bitmap?";
     Text[ polish ] = "Chcesz na pewno usunΉζ mapκ bitowΉ?";
-    Text[ japanese ] = "Λή―ΔΟ―Μί‚π–{“–‚Ιν‚µ‚Δ‚ζ‚λ‚µ‚Ά‚Ε‚·‚©?";
+    Text[ japanese ] = "Λή―ΔΟ―Μί‚πν‚µ‚Δ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B";
     Text[ chinese_traditional ] = "±z―u­n§R°£³o­ΣΒI°}ΉΟ΅H";
     Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ ΗαΥζΡΙ ΗαδήΨνΙΏ";
     Text[ greek ] = "Θέλετε πραγματικά να διαγραφεί το bitmap;";
@@ -374,7 +374,7 @@ String STR_ASK_CHANGE_BITMAP
     Text[ chinese_simplified ] = "Ξ»ΝΌÒΡΎ­ΈόΈΔ£¬µ«²ΆΓ»ΣΠ±»±£΄ζ΅£\nΔϊΔάΉ»ΈόΈΔΡ΅ΦΠµΔΞ»ΝΌ\n»ςΥίΠΒΤφÒ»ΈφΠΒΞ»ΝΌ΅£";
     Text[ russian ] = "Bitmap αϋλ θημενεν, νξ νε ρξυπΰνεν. \nΒϋ μξζεςε θημενθςό βϋαπΰννϋι bitmap \nθλθ δξαΰβθςό νξβϋι bitmap.";
     Text[ polish ] = "Mapa bitowa zosta³a zmieniona i nie zapisana. \nMoΏesz zmieniζ zaznaczonΉ mapκ bitowΉ \nlub dodaζ nowΉ mapκ bitowΉ.";
-    Text[ japanese ] = "Λή―ΔΟ―Μί‚ª•ΟX‚³‚κ‚Δ•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB\n‘I‘π‚³‚κ‚½Λή―ΔΟ―Μί‚π•ΟX‚Ε‚«‚ά‚·\n‚ά‚½‚ΝV‚µ‚ΆΛή―ΔΟ―Μί‚π’Η‰Α‚Ε‚«‚ά‚·B";
+    Text[ japanese ] = "Λή―ΔΟ―Μί‚ª•ΟX‚³‚κ‚Δ•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB\n‘I‘π‚µ‚½Λή―ΔΟ―Μί‚π•ΟX‚·‚ι‚©A\nV‚µ‚ΆΛή―ΔΟ―Μί‚π’Η‰Α‚·‚ι‚±‚Ζ‚ª‚Ε‚«‚ά‚·B";
     Text[ chinese_traditional ] = "ΒI°}ΉΟ¤wΈgΕά§σ΅A¦ύ¨Γ¨S¦³³Q«O¦s΅C\n±z―ΰ°χ§σ§οΏο¤¤ªΊΒI°}ΉΟ\n©ΞªΜ·sΌW¤@­Σ·sΒI°}ΉΟ΅C";
     Text[ arabic ] = "αγ νΚγ ΝέΩ ΗαΥζΡΙ ΗαδήΨνΙ ΘΪΟ ΚΫννΡεΗ.\nνγίδί ΚΫννΡ ΗαΥζΡΙ ΗαδήΨνΙ ΗαγΝΟΟΙ΅ \nΓζ ΕΦΗέΙ ΥζΡΙ δήΨνΙ ΜΟνΟΙ.";
     Text[ greek ] = "Το bitmap τροποποιήθηκε χωρίς να αποθηκευτεί. \nΜπορείτε να αλλάξετε το επιλεγμένο bitmap \\ή να προσθέσετε ένα νέο.";
@@ -481,7 +481,7 @@ String STR_ASK_DEL_LINESTYLE
     Text[ chinese_simplified ] = "ΔϊΥζµΔÒªΙΎ³ύΥβΈφΟίΜυΚ½ΡωΒπ£Ώ";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςξς ρςθλό λθνθθ?";
     Text[ polish ] = "Chcesz na pewno usunΉζ styl linii?";
-    Text[ japanese ] = "ό‚Μν—ή‚π–{“–‚Ιν‚µ‚ά‚·‚©H";
+    Text[ japanese ] = "ό½ΐ²Ω‚πν‚µ‚Δ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B";
     Text[ chinese_traditional ] = "±z―u­n§R°£³o­Σ½u±ψΌΛ¦΅΅H";
     Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ δγΨ ΗαΞΨΏ";
     Text[ greek ] = "Θέλετε σίγουρα να διαγραφεί το στυλ γραμμής;";
@@ -508,7 +508,7 @@ String STR_ASK_CHANGE_LINESTYLE
     Text[ chinese_simplified ] = "ΟίΜυΚ½ΡωÒΡΎ­ΈόΈΔ£¬µ«ΚΗΙΠΞ΄±£΄ζ΅£ \nΔϊΔάΉ»ΈόΈΔΡ΅ΦΠµΔΟίΜυΚ½Ρω\n»ςΥίΠΒΤφÒ»ΈφΟίΜυΚ½Ρω΅£";
     Text[ russian ] = "Ρςθλό λθνθθ αϋλ θημενεν, νξ νε ρξυπΰνεν. \nΒϋ μξζεςε θημενθςό βϋαπΰννϋι ρςθλό λθνθθ \nθλθ δξαΰβθςό νξβϋι ρςθλό λθνθθ.";
     Text[ polish ] = "Styl linii zosta³ zmieniony i nie zapisany. \nMoΏesz zmieniζ zaznaczony styl linii \nlub dodaζ nowy styl linii.";
-    Text[ japanese ] = "ό‚Μ½ΐ²Ω‚ª•ΟX‚³‚κ•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB\n‘I‘π‚µ‚½ό‚Μ½ΐ²Ω‚π•ΟX‚Ε‚«‚ά‚·\n‚ά‚½‚ΝV‚µ‚Άό‚Μ½ΐ²Ω‚π’Η‰Α‚Ε‚«‚ά‚·B";
+    Text[ japanese ] = "ό½ΐ²Ω‚ª•ΟX‚³‚κ•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB\n‘I‘π‚µ‚½ό½ΐ²Ω‚π•ΟX‚·‚ι‚©A\nV‚µ‚Άό½ΐ²Ω‚π’Η‰Α‚·‚ι‚±‚Ζ‚ª‚Ε‚«‚ά‚·B";
     Text[ chinese_traditional ] = "½u±ψΌΛ¦΅¤wΈgΕά§σ΅A¦ύ¬O©|¥Όΐx¦s΅C \n±z―ΰ°χΕά§σΏο¨ϊªΊ½u±ψΌΛ¦΅\n©ΞªΜ·sΌW¤@­Σ½u±ψΌΛ¦΅΅C";
     Text[ arabic ] = "αγ νΚγ ΝέΩ δγΨ ΗαΞΨ ΘΪΟ ΚΫννΡε. \nνγίδί ΚΫννΡ δγΨ ΗαΞΨ ΗαγΝΟΟ΅ \nΓζ ΕΦΗέΙ δγΨ ΞΨ ΜΟνΟ.";
     Text[ greek ] = "Το στυλ γραμμής τροποποιήθηκε χωρίς να αποθηκευτεί. \nΜπορείτε να αλλάξετε το επιλεγμένο στυλ \\ή να προσθέσετε ένα νέο.";
