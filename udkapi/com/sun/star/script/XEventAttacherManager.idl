@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEventAttacherManager.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:25:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,14 +89,13 @@
 //=============================================================================
 /** registers listeners for specified events.
  */
-interface XEventAttacherManager: com::sun::star::uno::XInterface
+published interface XEventAttacherManager: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** registers one event for an object identified by its index.
 
         <p>If any object is attached under this index, then this
         event is attached automatically.</p>
-
         <p>Exceptions of type
         <type scope="com::sun::star::beans">IntrospectionException</type> and
         <type scope="com::sun::star::script">CannotCreateAdapterException</type>
