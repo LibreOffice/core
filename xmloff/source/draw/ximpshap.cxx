@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:23:23 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2581,19 +2581,21 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
             {
                 OUString aPersistName = GetImport().ResolveEmbeddedObjectURL( maHref, maCLSID );
 
-                if ( aPersistName.getLength() )
+                if ( GetImport().IsPackageURL( maHref ) )
                 {
                     const OUString  sURL(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ));
-                    uno::Any        aAny;
 
-                    aAny <<= ( aPersistName = aPersistName.copy( sURL.getLength() ) );
-                    xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ), aAny );
+                    if ( aPersistName.compareTo( sURL, sURL.getLength() ) == 0 )
+                        aPersistName = aPersistName.copy( sURL.getLength() );
+
+                    xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ),
+                                              uno::makeAny( aPersistName ) );
                 }
                 else
                 {
                     // this is OOo link object
                     xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LinkURL" ) ),
-                                              uno::makeAny( maHref ) );
+                                              uno::makeAny( aPersistName ) );
                 }
             }
         }
