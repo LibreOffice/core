@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-15 18:18:37 $
+#   last change: $Author: hr $ $Date: 2004-02-02 20:43:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,10 +78,6 @@ SLOFILES= \
         $(SLO)$/generic_clipboard.obj \
         $(SLO)$/clipboardmanager.obj \
         $(SLO)$/dtrans.obj
-
-.IF "$(OS)"=="MACOSX"
-SYMBOLPREFIX=dtrans
-.ENDIF
 
 SHL1TARGET= dtrans
 .IF "$(OS)"!="MACOSX"
