@@ -437,15 +437,15 @@ if test "$_os" = "SunOS"; then
          AC_MSG_WARN([patch 106327-06 not found, please install compiler patch 106327-06 or greater]) >> warn
       fi
       dnl ***************
-      dnl patch 106590-11
+      dnl patch 106950-11
       dnl ***************
-      AC_MSG_CHECKING([for patch 106590-11 or greater])
-      _patch=`echo $_temp | $AWK '/106590-11/ { print "found" }'`
+      AC_MSG_CHECKING([for patch 106950-11 or greater])
+      _patch=`echo $_temp | $AWK '/106950-11/ { print "found" }'`
       _patch="false"
       for i in $_temp
       do
          _patch_major=`echo $i | $AWK -F"-" '{ print $1 }'`
-         if test "$_patch_major" = "106590"; then
+         if test "$_patch_major" = "106950"; then
             _patch_rev=`echo $i | $AWK -F"-" '{ print $2 }'`
             if test "$_patch_rev" -ge "11"; then
                _patch="found"
@@ -455,8 +455,8 @@ if test "$_os" = "SunOS"; then
       if test "$_patch" = "found"; then
          AC_MSG_RESULT([found])
       else
-         AC_MSG_WARN([patch 106590-11 not found, please install linker patch 106590-11 or greater])
-         AC_MSG_WARN([patch 106590-11 not found, please install linker patch 106590-11 or greater]) >> warn
+         AC_MSG_WARN([patch 106950-11 not found, please install linker patch 106950-11 or greater])
+         AC_MSG_WARN([patch 106950-11 not found, please install linker patch 106950-11 or greater]) >> warn
       fi
    else
       if test "$_os_release" = "6"; then
