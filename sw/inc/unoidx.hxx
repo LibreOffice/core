@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: os $ $Date: 2000-10-16 10:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,7 @@ class SwXDocumentIndexMark : public cppu::WeakImplHelper4
         public SwClient
 {
     SwEventListenerContainer    aLstnrCntnr;
+    SwDepend                    aTypeDepend;
     SwDoc*                      m_pDoc;
     const SwTOXMark*            m_pTOXMark;
     const SfxItemPropertyMap*   _pMap;
@@ -247,11 +248,12 @@ public:
 
     void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
-    SwTOXType*          GetTOXType() const {return (SwTOXType*)GetRegisteredIn();}
+    SwTOXType*          GetTOXType() const {return (SwTOXType*)aTypeDepend.GetRegisteredIn();}
     const SwTOXMark*    GetTOXMark() const {return m_pTOXMark;}
 
     static SwXDocumentIndexMark*    GetObject(SwTOXType* pType, const SwTOXMark* pMark,
                                                 SwDoc* pDoc);
+    void                Invalidate();
 };
 /* -----------------05.05.99 12:27-------------------
  *

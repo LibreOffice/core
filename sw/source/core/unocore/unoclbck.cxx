@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoclbck.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: os $ $Date: 2000-10-16 10:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,12 @@
 
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
+#endif
+#ifndef _UNOIDX_HXX
+#include <unoidx.hxx>
+#endif
+#ifndef _TOX_HXX
+#include <tox.hxx>
 #endif
 #ifndef _UNOCLBCK_HXX
 #include <unoclbck.hxx>
@@ -168,6 +174,35 @@ void SwUnoCallBack::Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue )
 
         }
         break;
+        case  RES_TOXMARK_DELETED:
+        {
+            SwClientIter aIter( *this );
+            SwXDocumentIndexMark* pxIdxMark = (SwXDocumentIndexMark*)aIter.First( TYPE( SwXDocumentIndexMark ));
+            while(pxIdxMark)
+            {
+                SwTOXType* pToxType = pxIdxMark->GetTOXType();
+                if(pToxType)
+                {
+                    const SwTOXMark* pTOXMark = pxIdxMark->GetTOXMark();
+                    if(!pTOXMark)
+                        pxIdxMark->Invalidate();
+                    else
+                    {
+                        const SwTxtTOXMark* pTxtTOXMark = pTOXMark ? pTOXMark->GetTxtTOXMark() : 0;
+                        if(pTxtTOXMark && (void*)pTxtTOXMark == ((SwPtrMsgPoolItem *)pOldValue)->pObject)
+                        {
+                            pxIdxMark->Invalidate();
+                            break;
+                        }
+                    }
+                }
+                else
+                    pxIdxMark->Invalidate();
+                pxIdxMark = (SwXDocumentIndexMark*)aIter.Next( );
+            }
+
+        }
+        break;
     }
 }
 /* -----------------------------01.09.00 12:03--------------------------------
@@ -213,6 +248,9 @@ SwXFootnote*    SwUnoCallBack::GetFootnote(const SwFmtFtn& rMark)
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/19 00:08:28  hr
+    initial import
+
     Revision 1.4  2000/09/18 16:04:31  willem.vandorp
     OpenOffice header added.
 

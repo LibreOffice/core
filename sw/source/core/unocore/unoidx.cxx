@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:10:09 $
+ *  last change: $Author: os $ $Date: 2000-10-16 10:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1284,6 +1284,7 @@ Sequence< OUString > SwXDocumentIndexMark::getSupportedServiceNames(void) throw(
 
   -----------------------------------------------------------------------*/
 SwXDocumentIndexMark::SwXDocumentIndexMark(TOXTypes eToxType) :
+    aTypeDepend(this, 0),
     m_pDoc(0),
     aLstnrCntnr( (text::XTextContent*)this),
     m_pTOXMark(0),
@@ -1299,7 +1300,7 @@ SwXDocumentIndexMark::SwXDocumentIndexMark(TOXTypes eToxType) :
 SwXDocumentIndexMark::SwXDocumentIndexMark(const SwTOXType* pType,
                                     const SwTOXMark* pMark,
                                     SwDoc* pDc) :
-    SwClient((SwTOXType*)pType),
+    aTypeDepend(this, (SwTOXType*)pType),
     aLstnrCntnr( (text::XTextContent*)this),
     m_pDoc(pDc),
     m_pTOXMark(pMark),
@@ -1307,6 +1308,7 @@ SwXDocumentIndexMark::SwXDocumentIndexMark(const SwTOXType* pType,
     eType(pType->GetType()),
     bIsDescriptor(sal_False)
 {
+    m_pDoc->GetUnoCallBack()->Add(this);
     InitMap(eType);
 }
 /*-- 14.12.98 10:25:44---------------------------------------------------
@@ -1467,7 +1469,8 @@ void SwXDocumentIndexMark::attachToRange(const Reference< text::XTextRange > & x
         }
         if(!pTOXType)
             throw IllegalArgumentException();
-        ((SwTOXType*)pTOXType)->Add(this);
+        pDoc->GetUnoCallBack()->Add(this);
+        ((SwTOXType*)pTOXType)->Add(&aTypeDepend);
 
         SwUnoInternalPaM aPam(*pDoc);
         //das muss jetzt sal_True liefern
@@ -1831,6 +1834,21 @@ void SwXDocumentIndexMark::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
         aLstnrCntnr.Disposing();
+}
+/* -----------------------------16.10.00 11:24--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void    SwXDocumentIndexMark::Invalidate()
+{
+    if(GetRegisteredIn())
+    {
+        ((SwModify*)GetRegisteredIn())->Remove(this);
+        if(aTypeDepend.GetRegisteredIn())
+            ((SwModify*)aTypeDepend.GetRegisteredIn())->Remove(&aTypeDepend);
+        aLstnrCntnr.Disposing();
+        m_pTOXMark = 0;
+        m_pDoc = 0;
+    }
 }
 /* -----------------------------06.04.00 15:08--------------------------------
 
@@ -2529,6 +2547,9 @@ sal_Bool SwXIndexTokenAccess_Impl::hasElements(void) throw( RuntimeException )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/05 12:10:09  jp
+    should change: remove image
+
     Revision 1.1.1.1  2000/09/19 00:08:28  hr
     initial import
 

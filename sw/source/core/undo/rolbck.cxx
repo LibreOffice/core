@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: os $ $Date: 2000-10-16 10:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1069,8 +1069,14 @@ void SwHistory::Add( const SwTxtAttr* pHint, ULONG nNodeIdx, BOOL bNewAttr )
             pHt = new SwSetTxtFldHint( (SwTxtFld*)pHint, nNodeIdx );
             break;
         case RES_TXTATR_TOXMARK:
+        {
             pHt = new SwSetTOXMarkHint( (SwTxtTOXMark*)pHint, nNodeIdx );
-            break;
+            const SwDoc* pDoc = ((SwTxtTOXMark*)pHint)->GetTxtNode().GetDoc();
+            SwModify* pCallBack = pDoc->GetUnoCallBack();
+            SwPtrMsgPoolItem aMsgHint( RES_TOXMARK_DELETED, (void*)pHint );
+            pCallBack->Modify(&aMsgHint, &aMsgHint );
+        }
+        break;
         case RES_TXTATR_REFMARK:
         {
             pHt = new SwSetRefMarkHint( (SwTxtRefMark*)pHint, nNodeIdx );
