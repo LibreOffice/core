@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cd $ $Date: 2002-09-11 15:05:42 $
+ *  last change: $Author: gt $ $Date: 2002-10-30 10:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,10 @@
 #define HID_FILEDLG_EXPORTASPDF                     (HID_SFX_START + 307)
 #define HID_USERDEFBMP_TOOLBOX                      (HID_SFX_START + 308)
 
-#define ACT_SFX_HID_END HID_USERDEFBMP_TOOLBOX
+#define HID_CONFIG_LOAD                             (HID_SFX_START + 309)
+#define HID_CONFIG_SAVE                             (HID_SFX_START + 310)
+
+#define ACT_SFX_HID_END HID_CONFIG_SAVE
 
 // "Uberlaufpr"ufung --------------------------------------------------------
 
