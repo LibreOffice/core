@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
+ *  last change: $Author: dvo $ $Date: 2000-10-25 08:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     // page style
     aAny = rFootnoteConfig->getPropertyValue(sPageStyleName);
     aAny >>= sTmp;
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_page_master_name,
+    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_master_page_name,
                              sTmp);
 
     // numbering style

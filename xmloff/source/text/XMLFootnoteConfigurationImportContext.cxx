@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:44 $
+ *  last change: $Author: dvo $ $Date: 2000-10-25 08:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 //        XML_TOK_FTNCONFIG_ANCHOR_STYLENAME },
     { XML_NAMESPACE_TEXT, sXML_default_style_name,
           XML_TOK_FTNCONFIG_DEFAULT_STYLENAME },
-    { XML_NAMESPACE_TEXT, sXML_page_master_name,
+    { XML_NAMESPACE_TEXT, sXML_master_page_name,
           XML_TOK_FTNCONFIG_PAGE_STYLENAME },
     { XML_NAMESPACE_TEXT, sXML_offset, XML_TOK_FTNCONFIG_OFFSET },
     { XML_NAMESPACE_TEXT, sXML_num_prefix, XML_TOK_FTNCONFIG_NUM_PREFIX },
