@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anytostring.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:46:04 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,9 +147,8 @@ static void appendValue(
     {
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
         typelib_TypeDescription * typeDescr = 0;
-        TYPELIB_DANGER_GET( &typeDescr, typeRef );
-        if (typeDescr == 0)
-        {
+        typelib_typedescriptionreference_getDescription( &typeDescr, typeRef );
+        if (typeDescr == 0 || !typelib_typedescription_complete( &typeDescr )) {
             appendTypeError( buf, typeRef );
         }
         else
@@ -192,13 +191,13 @@ static void appendValue(
                                  memberType->pWeakRef, true );
                     TYPELIB_DANGER_RELEASE( memberType );
                 }
-                if (nPos < (nDescr -1))
+                if (nPos < (nDescr - 1))
                     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
             }
-
-            TYPELIB_DANGER_RELEASE( typeDescr );
         }
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
+        if (typeDescr != 0)
+            typelib_typedescription_release( typeDescr );
         break;
     }
     case typelib_TypeClass_SEQUENCE:
@@ -236,7 +235,7 @@ static void appendValue(
                         appendValue(
                             buf, pElements + (nElementSize * nPos),
                             elementTypeDescr->pWeakRef, false );
-                        if (nPos < (nElements -1))
+                        if (nPos < (nElements - 1))
                             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
                     }
                     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
@@ -286,9 +285,8 @@ static void appendValue(
     case typelib_TypeClass_ENUM:
     {
         typelib_TypeDescription * typeDescr = 0;
-        TYPELIB_DANGER_GET( &typeDescr, typeRef );
-        if (typeDescr == 0)
-        {
+        typelib_typedescriptionreference_getDescription( &typeDescr, typeRef );
+        if (typeDescr == 0 || !typelib_typedescription_complete( &typeDescr )) {
             appendTypeError( buf, typeRef );
         }
         else
@@ -313,8 +311,9 @@ static void appendValue(
                 buf.appendAscii(
                     RTL_CONSTASCII_STRINGPARAM("?unknown enum value?") );
             }
-            TYPELIB_DANGER_RELEASE( typeDescr );
         }
+        if (typeDescr != 0)
+            typelib_typedescription_release( typeDescr );
         break;
     }
     case typelib_TypeClass_BOOLEAN:
