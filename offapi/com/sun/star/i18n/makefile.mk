@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: bustamam $ $Date: 2000-11-19 00:36:32 $
+#   last change: $Author: er $ $Date: 2000-12-05 14:57:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,11 +78,15 @@ IDLFILES=\
     CalendarDisplayIndex.idl \
     CalendarFieldIndex.idl \
     CalendarItem.idl \
+    CharacterClassification.idl \
     Currency.idl \
     LanguageCountryInfo.idl \
+    LocaleData.idl \
     LocaleItem.idl \
     Months.idl \
     NumberFormatIndex.idl \
+    NumberFormatMapper.idl \
+    Transliteration.idl \
     Weekdays.idl \
     XBreakIterator.idl \
     XCalendar.idl \
