@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:48:43 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _SV_SALINST_HXX
 #include <salinst.hxx>
+#endif
+#ifndef _SV_WINDOW_H
+#include <window.h>
 #endif
 
 
@@ -567,7 +570,7 @@ void OpenGL::Viewport( GLint nX, GLint nY, GLsizei nWidth, GLsizei nHeight )
         long nOutHeight;
 
         if( mpOutDev->GetOutDevType() == OUTDEV_WINDOW )
-            nOutHeight = ( (Window*) mpOutDev )->mpFrameWindow->mnOutHeight;
+            nOutHeight = ( (Window*) mpOutDev )->mpWindowImpl->mpFrameWindow->mnOutHeight;
         else
             nOutHeight = mpOutDev->mnOutHeight;
 
@@ -1287,7 +1290,7 @@ void OpenGL::Scissor( GLint nX, GLint nY, GLsizei nWidth, GLsizei nHeight )
         long nOutHeight;
 
         if( mpOutDev->GetOutDevType() == OUTDEV_WINDOW )
-            nOutHeight = ( (Window*) mpOutDev )->mpFrameWindow->mnOutHeight;
+            nOutHeight = ( (Window*) mpOutDev )->mpWindowImpl->mpFrameWindow->mnOutHeight;
         else
             nOutHeight = mpOutDev->mnOutHeight;
 
