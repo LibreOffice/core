@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:10:02 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 06:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "·½Έκ®Ζ°Ο°μ(~S)";
         Text[ arabic ] = "δΨΗή ΘνΗδΗΚ ΗαγΥΟΡ";
         Text[ greek ] = "Περιοχή προέλευσης δεδομένων";
-        Text[ korean ] = "ΌÒ½Ί µ¥ΐΜΕΝ ΏµΏª(~S)";
+        Text[ korean ] = "ΌÒ½Ίµ¥ΐΜΕΝ ΏµΏª(~S)";
         Text[ turkish ] = "Kaynak veri a~ralύklarύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Αrea de datos fuente";
@@ -756,7 +756,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "©M·½Έκ®Ζ³sµ²(~L)";
         Text[ arabic ] = "ΡΘΨ ΘΘνΗδΗΚ ΗαγΥΟΡ";
         Text[ greek ] = "Σύνδεση με δεδομένα προέλευσης";
-        Text[ korean ] = "ΌÒ½Ί µ¥ΐΜΕΝΏ΅ Ώ¬°α(~L)";
+        Text[ korean ] = "ΌÒ½Ίµ¥ΐΜΕΝΏ΅ Ώ¬°α(~L)";
         Text[ turkish ] = "Kaynak verilerine ~baπla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Vincular con datos fuente";
