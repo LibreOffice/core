@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2000-11-23 20:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1013,6 +1013,7 @@ void ScFormulaCell::Compile( const String& rFormula, BOOL bNoListening )
     {
         bChanged = TRUE;
         SetTextWidth( TEXTWIDTH_DIRTY );
+        SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
     }
     if ( bWasInFormulaTree )
         pDocument->PutInFormulaTree( this );
@@ -1095,6 +1096,7 @@ void ScFormulaCell::CompileXML()
     {
         bChanged = TRUE;
         SetTextWidth( TEXTWIDTH_DIRTY );
+        SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
     }
 }
 
@@ -1221,6 +1223,7 @@ void ScFormulaCell::Interpret()
             pLastIterInterpreted = NULL;
             bChanged = TRUE;
             SetTextWidth( TEXTWIDTH_DIRTY );
+            SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
             return;
         }
         nRecCount++;
@@ -1377,7 +1380,10 @@ void ScFormulaCell::Interpret()
             }
         }
         if( bChanged )
+        {
             SetTextWidth( TEXTWIDTH_DIRTY );
+            SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
+        }
         delete p;
         nRecCount--;
         pDocument->DecInterpretLevel();

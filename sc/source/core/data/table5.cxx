@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table5.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:16 $
+ *  last change: $Author: nn $ $Date: 2000-11-23 20:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,6 +588,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom,
         if ( pCell )
         {
             pCell->SetTextWidth( TEXTWIDTH_DIRTY );
+            pCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
             if ( bBroadcast )
             {   // nur bei CalcAsShown
                 switch ( pCell->GetCellType() )
@@ -620,6 +621,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom,
             while ( aIter.Next( nRow, pCell ) )
             {
                 pCell->SetTextWidth( TEXTWIDTH_DIRTY );
+                pCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
                 if ( bBroadcast )
                 {   // nur bei CalcAsShown
                     switch ( pCell->GetCellType() )
