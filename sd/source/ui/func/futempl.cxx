@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:53 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,7 +591,11 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                                     {
                                         SdrObject* pObj = aIter.Next();
                                         if( pObj->ISA(SdrPageObj) )
-                                            pObj->SendRepaintBroadcast();
+                                        {
+                                            // repaint only
+                                            pObj->ActionChanged();
+                                            // pObj->SendRepaintBroadcast();
+                                        }
                                     }
                                 }
                             }
