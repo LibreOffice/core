@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:41:57 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,12 +211,6 @@ String STR_TITLE_CONFIRM_DELETION
 {
     Text [ de ] = "Löschen bestätigen" ;
     Text [ en-US ] = "Confirm Deletion" ;
-};
-
-String STR_QUERY_DELETE_QUERY
-{
-    Text [ de ] = "Soll die Abfrage '%1' gelöscht werden?" ;
-    Text [ en-US ] = "Do you want to delete the query '%1'?" ;
 };
 
 String STR_QUERY_DELETE_TABLE
