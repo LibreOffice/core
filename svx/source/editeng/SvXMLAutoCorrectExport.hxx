@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectExport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-02 16:16:10 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 15:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #include <xmloff/xmlnmspe.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _MySVXACORR_HXX
@@ -97,7 +97,7 @@ public:
     SvXMLAutoCorrectExport( const SvxAutocorrWordList * pNewAutocorr_List, const rtl::OUString &rFileName,
           com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
     virtual ~SvXMLAutoCorrectExport ( void ) {}
-    sal_uInt32 exportDoc(const sal_Char *pClass);
+    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass);
     void _ExportAutoStyles() {}
     void _ExportMasterStyles () {}
     void _ExportContent() {}
@@ -113,7 +113,7 @@ public:
     SvXMLExceptionListExport( const SvStringsISortDtor &rNewList, const rtl::OUString &rFileName,
           com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
     virtual ~SvXMLExceptionListExport ( void ) {}
-    sal_uInt32 exportDoc(const sal_Char *pClass);
+    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass);
     void _ExportAutoStyles() {}
     void _ExportMasterStyles () {}
     void _ExportContent() {}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-17 17:21:59 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 15:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2160,7 +2160,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                     uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
                     SvXMLExceptionListExport aExp(rLst, sStrmName, xHandler);
-                aExp.exportDoc( sXML_block_list );
+                aExp.exportDoc( xmloff::token::XML_BLOCK_LIST );
 
                 xStrm->Commit();
                 if( xStrm->GetError() == SVSTREAM_OK )
@@ -2785,7 +2785,7 @@ BOOL SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
                 uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
                 SvXMLAutoCorrectExport aExp(pAutocorr_List, sStrmName, xHandler);
-            aExp.exportDoc( sXML_block_list );
+            aExp.exportDoc( xmloff::token::XML_BLOCK_LIST );
 
             refList->Commit();
             bRet = SVSTREAM_OK == refList->GetError();

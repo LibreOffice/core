@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectExport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-09 17:56:59 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 15:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _SV_XMLAUTOCORRECTEXPORT_HXX
 #include <SvXMLAutoCorrectExport.hxx>
 #endif
+#ifndef _XMLOFF_XMLKYWD_HXX
+#include <xmloff/xmlkywd.hxx>
+#endif
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -68,6 +71,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::rtl;
+using namespace ::xmloff::token;
 sal_Char __READONLY_DATA sXML_np__block_list[] = "_block-list";
 
 SvXMLAutoCorrectExport::SvXMLAutoCorrectExport( const SvxAutocorrWordList *  pNewAutocorr_List, const rtl::OUString &rFileName,
@@ -79,7 +83,7 @@ SvXMLAutoCorrectExport::SvXMLAutoCorrectExport( const SvxAutocorrWordList *  pNe
                                   sXML_n_block_list, XML_NAMESPACE_BLOCKLIST );
 }
 
-sal_uInt32 SvXMLAutoCorrectExport::exportDoc(const sal_Char *pClass)
+sal_uInt32 SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum eClass)
 {
     GetDocHandler()->startDocument();
 
@@ -116,7 +120,7 @@ SvXMLExceptionListExport::SvXMLExceptionListExport( const SvStringsISortDtor &rN
                                   sXML_n_block_list, XML_NAMESPACE_BLOCKLIST );
 }
 
-sal_uInt32 SvXMLExceptionListExport::exportDoc(const sal_Char *pClass)
+sal_uInt32 SvXMLExceptionListExport::exportDoc(enum XMLTokenEnum eClass)
 {
     GetDocHandler()->startDocument();
 
