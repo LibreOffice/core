@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-14 15:14:56 $
+ *  last change: $Author: dl $ $Date: 2001-01-26 14:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,10 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_ATTR_CHAR:
         case SID_TEXT_FITTOSIZE:
         {
+            USHORT n1 = SID_TEXTEDIT;
+            USHORT n2 = SID_ATTR_CHAR;
+            USHORT n3 = SID_TEXT_FITTOSIZE;
+
             pFuActual = new FuText(this, pWindow, pDrView, pDoc, rReq);
             ( (FuText*) pFuActual)->DoExecute();
             // Das Setzen des Permanent-Status erfolgt weiter oben!
@@ -282,7 +286,8 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
                 nSlotId == SID_OBJECT_CROOK_SLANT ||
                 nSlotId == SID_OBJECT_CROOK_STRETCH)
             {
-                if ( !pDrView->IsCrookAllowed( pDrView->IsCrookNoContortion() ) )
+                if ( pDrView->GetMarkList().GetMarkCount() > 0 &&
+                    !pDrView->IsCrookAllowed( pDrView->IsCrookNoContortion() ) )
                 {
                     if ( pDrView->IsPresObjSelected() )
                     {
