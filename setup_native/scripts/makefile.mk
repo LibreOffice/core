@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-10-18 14:07:46 $
+#   last change: $Author: obo $ $Date: 2004-11-18 08:20:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,10 +95,10 @@ $(BIN)$/uninstall: uninstall_linux.sh
 ALLTAR: $(BIN)$/install $(BIN)$/uninstall $(BIN)$/admin
 
 $(BIN)$/install: install_solaris.sh
-    chmod 775 install_create.pl ; .$/install_create.pl install_$(OS).sh $(LB)$/libgetuid.so $(BIN)$/install ; chmod 775 $(BIN)$/install
+    $(PERL) install_create.pl install_$(OS).sh $(LB)$/getuid.so $(BIN)$/install ; chmod 775 $(BIN)$/install
 
 $(BIN)$/uninstall: uninstall_solaris.sh
-    chmod 775 install_create.pl ; .$/install_create.pl uninstall_$(OS).sh $(LB)$/libgetuid.so $(BIN)$/uninstall ; chmod 775 $(BIN)$/install
+    $(PERL) install_create.pl uninstall_$(OS).sh $(LB)$/getuid.so $(BIN)$/uninstall ; chmod 775 $(BIN)$/install
 
 $(BIN)$/admin: admin
     $(COPY) $< $@
