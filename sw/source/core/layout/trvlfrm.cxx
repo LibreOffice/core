@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:28:02 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,8 +1039,14 @@ SwCntntFrm *GetLastSub( const SwLayoutFrm *pLayout )
 
 SwLayoutFrm *GetNextFrm( const SwLayoutFrm *pFrm )
 {
-    return (pFrm->GetNext() && pFrm->GetNext()->IsLayoutFrm()) ?
+    SwLayoutFrm *pNext =
+        (pFrm->GetNext() && pFrm->GetNext()->IsLayoutFrm()) ?
                                             (SwLayoutFrm*)pFrm->GetNext() : 0;
+    // #i39402# in case of an empty page
+    if(pNext && !pNext->ContainsCntnt())
+        pNext = (pNext->GetNext() && pNext->GetNext()->IsLayoutFrm()) ?
+                                            (SwLayoutFrm*)pNext->GetNext() : 0;
+    return pNext;
 }
 
 SwLayoutFrm *GetThisFrm( const SwLayoutFrm *pFrm )
@@ -1050,8 +1056,14 @@ SwLayoutFrm *GetThisFrm( const SwLayoutFrm *pFrm )
 
 SwLayoutFrm *GetPrevFrm( const SwLayoutFrm *pFrm )
 {
-    return (pFrm->GetPrev() && pFrm->GetPrev()->IsLayoutFrm()) ?
+    SwLayoutFrm *pPrev =
+        (pFrm->GetPrev() && pFrm->GetPrev()->IsLayoutFrm()) ?
                                             (SwLayoutFrm*)pFrm->GetPrev() : 0;
+    // #i39402# in case of an empty page
+    if(pPrev && !pPrev->ContainsCntnt())
+        pPrev = (pPrev->GetPrev() && pPrev->GetPrev()->IsLayoutFrm()) ?
+                                            (SwLayoutFrm*)pPrev->GetPrev() : 0;
+    return pPrev;
 }
 
 //Jetzt koennen auch die Funktionspointer initalisiert werden;
