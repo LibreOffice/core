@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-22 12:45:57 $
+ *  last change: $Author: oj $ $Date: 2002-11-22 13:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2191,7 +2191,7 @@ void DbGridControl::CursorMoved()
     m_aBar.InvalidateAll(m_nCurrentPos);
 
     // select the new column when they moved
-    if ( IsDesignMode() && ColCount() )
+    if ( IsDesignMode() && ColCount() && GetCurColumnId() )
     {
         SelectColumnId( GetCurColumnId() );
     }
