@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-09 18:09:26 $
+ *  last change: $Author: tl $ $Date: 2001-03-28 10:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1571,7 +1571,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     Reference< XHyphenator > xHyph;
     if ( bCanHyphenate )
         xHyph = GetHyphenator();
-    i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
+    i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, Sequence< PropertyValue >(), 1 );
     i18n::LineBreakUserOptions aUserOptions;
 
     const i18n::ForbiddenCharacters* pForbidden = GetForbiddenCharsTable()->GetForbiddenCharacters( SvxLocaleToLanguage( aLocale ), TRUE );
