@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:44:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ public:
 
     inline const String&        GetXclName() const { return maXclName; }
     inline const String&        GetScName() const { return maScName; }
-    inline USHORT               GetScTab() const { return mnScTab; }
+    inline SCTAB                GetScTab() const { return mnScTab; }
     inline const ScRangeData*   GetScRangeData() const { return mpScData; }
     inline bool                 IsGlobal() const { return mnScTab == SCNOTAB; }
 
@@ -131,7 +131,7 @@ private:
     String                      maScName;       /// Name inserted into the Calc document.
     const ScRangeData*          mpScData;       /// Pointer to Calc defined name (no ownership).
     sal_Unicode                 mcBuiltIn;      /// Excel built-in name index.
-    USHORT                      mnScTab;        /// Calc sheet index of local names.
+    SCTAB                       mnScTab;        /// Calc sheet index of local names.
 };
 
 
@@ -154,7 +154,7 @@ public:
         @param nScTab  The sheet index for local names or SCNOTAB for global names.
         If no local name is found, tries to find a matching global name.
         @return  Pointer to the defined name or 0 on error. */
-    const XclImpName*           FindName( const String& rXclName, USHORT nScTab = SCNOTAB ) const;
+    const XclImpName*           FindName( const String& rXclName, SCTAB  nScTab = SCNOTAB ) const;
 
 private:
     typedef ScfDelList< XclImpName > XclImpNameList;
@@ -244,7 +244,7 @@ public:
     /** Returns the Calc sheet index range of the specified XTI entry.
         @return  true = XTI data found, returned sheet index range is valid. */
     bool                        GetScTabRange(
-                                    USHORT& rnScTabFirst, USHORT& rnScTabLast,
+                                    SCTAB & rnScTabFirst, SCTAB & rnScTabLast,
                                     sal_uInt16 nXtiIndex ) const;
     /** Returns the specified external name or 0 on error. */
     const XclImpExtName*        GetExternName( sal_uInt16 nXtiIndex, sal_uInt16 nExtName ) const;
@@ -256,7 +256,7 @@ public:
 
     /** Returns the Calc sheet index of a table in an external document.
         @return  Calc sheet index or EXC_TAB_INVALID on error. */
-    USHORT                      GetScTab( const String& rUrl, const String& rTabName ) const;
+    SCTAB                       GetScTab( const String& rUrl, const String& rTabName ) const;
 
 private:
     typedef ::std::auto_ptr< XclImpLinkManager_Impl > XclImpLinkManager_ImplPtr;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 12:45:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ public:
     /** Returns the end position in the Escher stream of this object (last position + 1). */
     inline sal_uInt32           GetStrmEnd() const      { return mnStrmEnd; }
     /** Returns the Calc sheet index of this object. */
-    inline USHORT               GetScTab() const        { return mnScTab; }
+    inline SCTAB                GetScTab() const        { return mnScTab; }
     /** Returns the Excel object identifier. */
     inline sal_uInt16           GetObjId() const        { return mnObjId; }
     /** Returns true, if this Escher object contains an SdrObj and a valid anchor position. */
@@ -183,7 +183,7 @@ protected:
     SdrObjectPtr                mpSdrObj;       /// SdrObj representing this Escher object.
     sal_uInt32                  mnStrmBegin;    /// Start position in Escher stream.
     sal_uInt32                  mnStrmEnd;      /// End position in Escher stream (last + 1).
-    USHORT                      mnScTab;        /// Calc sheet index of the object.
+    SCTAB                       mnScTab;        /// Calc sheet index of the object.
     sal_uInt16                  mnObjId;        /// The Excel object identifier (from OBJ record).
     bool                        mbSkip;         /// true = Skip creation (ignore this object).
     bool                        mbPrintable;    /// true = Print this object.
@@ -423,7 +423,7 @@ private:
 /** Represents the position (anchor) of an Escher object in the Calc document. */
 struct XclImpEscherAnchor
 {
-    USHORT                      mnScTab;    /// Calc sheet index of the object.
+    SCTAB                       mnScTab;    /// Calc sheet index of the object.
 
     sal_uInt16                  mnLCol;     /// Left column index.
     sal_uInt16                  mnLX;       /// X offset in left column (1/1024 of column width).
@@ -434,7 +434,7 @@ struct XclImpEscherAnchor
     sal_uInt16                  mnBRow;     /// Bottom row index.
     sal_uInt16                  mnBY;       /// Y offset in bottom row (1/256 of row height).
 
-    explicit                    XclImpEscherAnchor( USHORT nScTab );
+    explicit                    XclImpEscherAnchor( SCTAB  nScTab );
 };
 
 SvStream& operator>>( SvStream& rStrm, XclImpEscherAnchor& rAnchor );
@@ -487,7 +487,7 @@ public:
     void                        ReplaceLastObj( XclImpEscherObj* pEscherObj );
 
     /** Returns the object in the specified sheet by Excel object identifier. */
-    XclImpEscherObj*            GetObj( USHORT nScTab, sal_uInt16 nObjId ) const;
+    XclImpEscherObj*            GetObj( SCTAB  nScTab, sal_uInt16 nObjId ) const;
     /** Returns the object at the specified Escher stream position. */
     XclImpEscherObj*            GetObj( sal_uInt32 nStrmPos ) const;
     /** Returns the last inserted Escher object in the list. */
@@ -595,9 +595,9 @@ public:
     inline sal_uInt32           GetEscherObjCount() const { return maEscherObjList.GetObjCount(); }
 
     /** Returns the object in the specified sheet by Excel object identifier. */
-    const XclImpEscherObj*      GetEscherObj( USHORT nScTab, sal_uInt16 nObjId ) const;
+    const XclImpEscherObj*      GetEscherObj( SCTAB  nScTab, sal_uInt16 nObjId ) const;
     /** Returns access to the object in the specified sheet by Excel object identifier. */
-    XclImpEscherObj*            GetEscherObjAcc( USHORT nScTab, sal_uInt16 nObjId );
+    XclImpEscherObj*            GetEscherObjAcc( SCTAB  nScTab, sal_uInt16 nObjId );
 
     /** Returns the object at the specified Escher stream position. */
     const XclImpEscherObj*      GetEscherObj( sal_uInt32 nStrmPos ) const;
@@ -622,7 +622,7 @@ public:
     XclImpEscherTxo*            GetEscherTxoAcc( sal_uInt32 nStrmPos );
 
     /** Returns the note object in the specified sheet by Excel object identifier. */
-    const XclImpEscherNote*     GetEscherNote( USHORT nScTab, sal_uInt16 nObjId ) const;
+    const XclImpEscherNote*     GetEscherNote( SCTAB  nScTab, sal_uInt16 nObjId ) const;
 
 // *** Chart *** --------------------------------------------------------------
 
@@ -676,7 +676,7 @@ public:
     void                        UpdateConnectorRules( const DffObjData& rObjData, SdrObject* pSdrObj );
 
     /** Sets the object with the passed identification to be ignored on import. */
-    void                        SetSkipObj( USHORT nScTab, sal_uInt16 nObjId );
+    void                        SetSkipObj( SCTAB  nScTab, sal_uInt16 nObjId );
 
     /** Inserts all objects into the Calc document. */
     void                        Apply();
@@ -706,9 +706,9 @@ private:
     /** Identifies an Escher object to skip on import (will not be inserted into the Calc document). */
     struct XclSkipObj
     {
-        USHORT                      mnScTab;        /// Calc sheet index.
+        SCTAB                       mnScTab;        /// Calc sheet index.
         sal_uInt16                  mnObjId;        /// Excel object identifier.
-        inline explicit             XclSkipObj( USHORT nScTab, sal_uInt16 nObjId ) :
+        inline explicit             XclSkipObj( SCTAB  nScTab, sal_uInt16 nObjId ) :
                                         mnScTab( nScTab ), mnObjId( nObjId ) {}
     };
 
