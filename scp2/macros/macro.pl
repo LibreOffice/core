@@ -2,9 +2,9 @@
 #
 #   $RCSfile: macro.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-13 19:19:33 $
+#   last change: $Author: vg $ $Date: 2005-02-21 12:13:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,6 +61,7 @@
 #*************************************************************************
 
 my $completelangiso_var = $ENV{completelangiso_var};
+my $lastcompletelangiso_var;;
 my $outfile = "";
 
 if ( !defined $completelangiso_var) {
@@ -254,7 +255,7 @@ sub startup_check
     usage() if $i<2;
     usage() if "$outfile" eq "";
     if ( -f "$outfile" ) {
-        open OLDFILE, "$outfile" or die "$0 - ERROR: $outfiles exists but isn't readable.\n";
+        open OLDFILE, "$outfile" or die "$0 - ERROR: $outfile exists but isn't readable.\n";
         while ( $line = <OLDFILE> ) {
             if ( $line =~ /^\/\/.*completelangiso:/ ) {
                 $lastcompletelangiso_var = $line;
