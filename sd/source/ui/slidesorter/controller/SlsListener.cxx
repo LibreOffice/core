@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsListener.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:14:22 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "SlsListener.hxx"
 
 #include "SlideSorterViewShell.hxx"
+#include "ViewShellHint.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "model/SlideSorterModel.hxx"
@@ -242,6 +243,10 @@ void Listener::ConnectToController (void)
             xComponent->addEventListener (
                 Reference<lang::XEventListener>(
                     static_cast<XWeak*>(this), UNO_QUERY));
+
+        // Listen for hints at the view shell in the center pane as well.
+        StartListening (
+            *mrController.GetViewShell().GetViewShellBase().GetMainViewShell());
     }
 }
 
@@ -280,6 +285,10 @@ void Listener::DisconnectFromController (void)
                     RTL_TEXTENCODING_UTF8).getStr());
         }
 
+        // Stop listening for hints at the view shell in the center pane.
+        EndListening (
+            *mrController.GetViewShell().GetViewShellBase().GetMainViewShell());
+
         mbListeningToController = false;
     }
 }
@@ -297,8 +306,33 @@ void Listener::Notify (
         switch (rSdrHint.GetKind())
         {
             case HINT_PAGEORDERCHG:
-                OSL_TRACE ("received HINT_PAGEORDERCHG\n");
                 mrController.HandleModelChange();
+                break;
+        }
+    }
+    else if (rHint.ISA(ViewShellHint))
+    {
+        ViewShellHint& rViewShellHint (*PTR_CAST(ViewShellHint,&rHint));
+        switch (rViewShellHint.GetHintId())
+        {
+            case ViewShellHint::HINT_PAGE_RESIZE_START:
+                // Initiate a model change but do nothing (well, not much)
+                // until we are told that all slides have been resized.
+                mrController.LockModelChange();
+                mrController.HandleModelChange();
+                break;
+
+            case ViewShellHint::HINT_PAGE_RESIZE_END:
+                // All slides have been resized.  The model has to be updated.
+                mrController.UnlockModelChange();
+                break;
+
+            case ViewShellHint::HINT_CHANGE_EDIT_MODE_START:
+                mrController.PrepareEditModeChange();
+                break;
+
+            case ViewShellHint::HINT_CHANGE_EDIT_MODE_END:
+                mrController.FinishEditModeChange();
                 break;
         }
     }
@@ -358,7 +392,7 @@ void SAL_CALL Listener::propertyChange (
     static const ::rtl::OUString sEditModePropertyName (
         RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"));
 
-    OSL_TRACE ("property changed: %s",
+    OSL_TRACE ("slidesorter::Listener: property changed: %s",
         ::rtl::OUStringToOString(rEvent.PropertyName,
             RTL_TEXTENCODING_UTF8).getStr());
 
@@ -390,22 +424,13 @@ void SAL_CALL Listener::propertyChange (
             }
         }
     }
-    /* Do not react to a change of the master page mode in the center pane.
-        The slide sorter has its own master page mode.
     else if (rEvent.PropertyName.equals (sEditModePropertyName))
     {
         sal_Bool bIsMasterPageMode;
         rEvent.NewValue >>= bIsMasterPageMode;
-        EditMode eMode = bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE;
-        if (mrController.GetModel().SetEditMode (eMode))
-            if (eMode == EM_PAGE)
-                mrController.GetViewShell().SwitchTabBar (
-                    SlideSorterViewShell::TBE_SLIDES);
-            else
-                mrController.GetViewShell().SwitchTabBar (
-                    SlideSorterViewShell::TBE_MASTER_PAGES);
+        mrController.ChangeEditMode (
+            bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
     }
-    */
 }
 
 
