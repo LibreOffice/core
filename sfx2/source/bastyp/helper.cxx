@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-14 09:20:38 $
+ *  last change: $Author: pb $ $Date: 2001-06-19 07:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ sal_Bool SfxContentHelper::IsDocument( const String& rContent )
 
     try
     {
-        Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         bRet = aCnt.isDocument();
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -233,7 +233,7 @@ sal_Bool SfxContentHelper::IsFolder( const String& rContent )
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         bRet = aCnt.isFolder();
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -265,7 +265,7 @@ sal_Bool SfxContentHelper::GetTitle( const String& rContent, String& rTitle )
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         OUString aTemp;
         aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTemp;
         rTitle = String( aTemp );
@@ -292,7 +292,7 @@ sal_Bool SfxContentHelper::Kill( const String& rContent )
 
     try
     {
-        Content aCnt( aDeleteObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         aCnt.executeCommand( OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -318,7 +318,7 @@ Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder
     DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aFolderObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps(2);
         OUString* pProps = aProps.getArray();
@@ -423,15 +423,11 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
     DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-#if SUPD>521
         Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
         Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
                     xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
 
-        Content aCnt( aFolderObj.GetMainURL(), new ::ucb::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ) );
-#else
-    Content aCnt( aFolderObj.GetMainURL(), Reference < XCommandEnvironment >() );
-#endif
+        Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), new ::ucb::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ) );
         Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps(5);
         OUString* pProps = aProps.getArray();
@@ -683,7 +679,7 @@ sal_Bool SfxContentHelper::MakeFolder( const String& rFolder )
     {
         // double name?
     }
-    catch( ::com::sun::star::ucb::IllegalIdentifierException& e )
+    catch( ::com::sun::star::ucb::IllegalIdentifierException& )
     {
         DBG_ERRORFILE( "Illegal identifier" );
     }
@@ -705,7 +701,7 @@ ErrCode SfxContentHelper::QueryDiskSpace( const String& rPath, sal_Int64& rFreeB
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         aCnt.getPropertyValue( OUString::createFromAscii( "FreeSpace" ) ) >>= rFreeBytes;
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -731,7 +727,7 @@ ULONG SfxContentHelper::GetSize( const String& rContent )
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         aCnt.getPropertyValue( OUString::createFromAscii( "Size" ) ) >>= nTemp;
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -758,11 +754,11 @@ sal_Bool SfxContentHelper::IsYounger( const String& rIsYoung, const String& rIsO
     try
     {
         Reference< ::com::sun::star::ucb::XCommandEnvironment > aCmdEnv;
-        Content aYoung( aYoungObj.GetMainURL(), aCmdEnv );
+        Content aYoung( aYoungObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
         ::com::sun::star::util::DateTime aTempYoungDate;
         aYoung.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aTempYoungDate;
         CONVERT_DATETIME( aTempYoungDate, aYoungDate );
-        Content aOlder( aOlderObj.GetMainURL(), aCmdEnv );
+        Content aOlder( aOlderObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
         ::com::sun::star::util::DateTime aTempOlderDate;
         aOlder.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aTempOlderDate;
         CONVERT_DATETIME( aTempOlderDate, aOlderDate );
@@ -789,7 +785,7 @@ sal_Bool SfxContentHelper::Exists( const String& rContent )
 
     try
     {
-        Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         // just try to get the property; if no exception is thrown, the content exists!
         aCnt.isDocument();
         bRet = sal_True;
