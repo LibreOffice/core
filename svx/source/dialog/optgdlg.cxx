@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:20:19 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,7 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
@@ -1213,18 +1214,19 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
         Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory > (
             theMSF->createInstance( sConfigSrvc ),UNO_QUERY_THROW);
-        Sequence< Any > theArgs(1);
+        Sequence< Any > theArgs(2);
         Reference< XNameAccess > theNameAccess;
 
         // find out which locales are currently installed and add them to the listbox
-        theArgs[0] = makeAny(sInstalledLocalesPath);
-        theNameAccess = Reference< XNameAccess > (
+        theArgs[0] = makeAny(NamedValue(OUString::createFromAscii("NodePath"), makeAny(sInstalledLocalesPath)));
+        theArgs[1] = makeAny(NamedValue(OUString::createFromAscii("reload"), makeAny(sal_True)));
+    theNameAccess = Reference< XNameAccess > (
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs ), UNO_QUERY_THROW );
         seqInstalledLanguages = theNameAccess->getElementNames();
         LanguageType aLang = LANGUAGE_DONTKNOW;
         for (sal_Int32 i=0; i<seqInstalledLanguages.getLength(); i++)
         {
-            aLang = ConvertIsoStringToLanguage(seqInstalledLanguages[i]);
+        aLang = ConvertIsoStringToLanguage(seqInstalledLanguages[i]);
             if (aLang != LANGUAGE_DONTKNOW)
             {
                 //USHORT p = aUserInterfaceLB.InsertLanguage(aLang);
@@ -1418,6 +1420,19 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             // display info
             InfoBox aBox(this, ResId(RID_SVX_MSGBOX_LANGUAGE_RESTART, DIALOG_MGR()));
             aBox.Execute();
+
+            // tell quickstarter to stop being a veto listener
+
+            Reference< XInitialization > xInit(theMSF->createInstance(
+                OUString::createFromAscii("com.sun.star.office.Quickstart")), UNO_QUERY);
+            if (xInit.is())
+            {
+                Sequence< Any > args(3);
+                args[0] = makeAny(sal_False); // will be ignored
+                args[1] = makeAny(sal_False); // will be ignored
+                args[2] = makeAny(sal_False); // disable veto
+                xInit->initialize(args);
+            }
         }
     }
     catch (Exception& e)
