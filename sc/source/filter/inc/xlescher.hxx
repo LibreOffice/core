@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:01:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 
 
 // Constants and Enumerations =================================================
+
+// misc -----------------------------------------------------------------------
+
+const long EXC_ESCHER_AUTOMARGIN            = 20000;    /// Automatic text margin.
 
 // (0x005D) OBJ ---------------------------------------------------------------
 
