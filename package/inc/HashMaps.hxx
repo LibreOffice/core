@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HashMaps.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:13 $
+ *  last change: $Author: mtg $ $Date: 2001-09-14 14:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEl_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+#ifndef _ZIP_ENTRY_HXX_
+#include <ZipEntry.hxx>
+#endif
 #include <hash_map>
 
 struct eqFunc
@@ -78,13 +81,22 @@ struct eqFunc
     }
 };
 
-typedef std::hash_map < rtl::OUString,
-                        com::sun::star::uno::Reference < com::sun::star::lang::XUnoTunnel >,
-                        ::rtl::OUStringHash,
-                        eqFunc > TunnelHash;
+class ZipPackageFolder;
+struct ContentInfo;
 
 typedef std::hash_map < rtl::OUString,
-                        com::sun::star::uno::Reference < com::sun::star::container::XNameContainer >,
+                        ZipPackageFolder *,
                         ::rtl::OUStringHash,
-                        eqFunc > NameHash;
+                        eqFunc > FolderHash;
+
+typedef std::hash_map < rtl::OUString,
+                        ContentInfo *,
+                        ::rtl::OUStringHash,
+                        eqFunc > ContentHash;
+
+typedef std::hash_map < rtl::OUString,
+                        ZipEntry,
+                        rtl::OUStringHash,
+                        eqFunc > EntryHash;
+
 #endif
