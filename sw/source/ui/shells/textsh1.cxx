@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2002-11-27 08:58:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,13 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #ifdef PRECOMPILED
 #include "ui_pch.hxx"
@@ -1149,6 +1156,24 @@ void SwTextShell::Execute(SfxRequest &rReq)
             const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, TRUE);
             rWrtSh.ClickToINetAttr((const SwFmtINetFmt&)rItem, URLLOAD_NOFILTER);
         }
+    }
+
+    break;
+
+    case SID_OPEN_XML_FILTERSETTINGS:
+    {
+        try
+        {
+            com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), com::sun::star::uno::UNO_QUERY);
+            if( xDialog.is() )
+            {
+                xDialog->execute();
+            }
+        }
+        catch( ::com::sun::star::uno::Exception& )
+        {
+        }
+        rReq.Ignore ();
     }
     break;
     default:
