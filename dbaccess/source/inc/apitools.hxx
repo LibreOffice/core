@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:52:13 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,11 +250,13 @@ protected:
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED2(classname, serviceasciiname1, serviceasciiname2)
 
+//----------------------------------------------------------------------------------
 #define IMPLEMENT_SERVICE_INFO2_STATIC(classname, implasciiname, serviceasciiname1, serviceasciiname2)  \
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(classname, implasciiname)    \
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
-    IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(classname, serviceasciiname1, serviceasciiname2)    \
-    IMPLEMENT_SERVICE_INFO_CREATE_STATIC(classname)
+    IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(classname, serviceasciiname1,serviceasciiname2) \
+    IMPLEMENT_SERVICE_INFO_CREATE_STATIC(classname) \
+
 //----------------------------------------------------------------------------------
 #define IMPLEMENT_SERVICE_INFO3(classname, implasciiname, serviceasciiname1, serviceasciiname2, serviceasciiname3)  \
     IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
@@ -276,7 +278,8 @@ protected:
 
 //--------------------------------------------------------------------------
 #define DECLARE_IMPLEMENTATION_ID( )    \
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException)  \
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);  \
+    static ::com::sun::star::uno::Sequence< sal_Int8 >  getUnoTunnelImplementationId() \
 
 //--------------------------------------------------------------------------
 #define DECLARE_GETTYPES( ) \
@@ -289,7 +292,7 @@ protected:
 
 //--------------------------------------------------------------------------
 #define IMPLEMENT_IMPLEMENTATION_ID( classname )    \
-::com::sun::star::uno::Sequence< sal_Int8 > classname::getImplementationId() throw (::com::sun::star::uno::RuntimeException)    \
+::com::sun::star::uno::Sequence< sal_Int8 > classname::getUnoTunnelImplementationId() \
 {   \
     static ::cppu::OImplementationId* pId = 0;  \
     if ( !pId ) \
@@ -302,6 +305,10 @@ protected:
         }   \
     }   \
     return pId->getImplementationId();  \
+} \
+::com::sun::star::uno::Sequence< sal_Int8 > classname::getImplementationId() throw (::com::sun::star::uno::RuntimeException)    \
+{   \
+    return classname::getUnoTunnelImplementationId(); \
 }
 
 //--------------------------------------------------------------------------
@@ -328,12 +335,12 @@ protected:
 //--------------------------------------------------------------------------
 #define IMPLEMENT_TYPEPROVIDER2( classname, baseclass1, baseclass2 )    \
     IMPLEMENT_IMPLEMENTATION_ID( classname) \
-    IMPLEMENT_GETTYPES2( classname, baseclass1, baseclass2)
+    IMPLEMENT_GETTYPES2( classname, baseclass1, baseclass2 )
 
 //--------------------------------------------------------------------------
 #define IMPLEMENT_TYPEPROVIDER3( classname, baseclass1, baseclass2, baseclass3 )    \
-    IMPLEMENT_IMPLEMENTATION_ID(classname ) \
-    IMPLEMENT_GETTYPES3(classname, baseclass1, baseclass2, baseclass3)
+    IMPLEMENT_IMPLEMENTATION_ID( classname) \
+    IMPLEMENT_GETTYPES3(classname, baseclass1, baseclass2, baseclass3 )
 
 //==================================================================================
 //= helper for declaring/implementing classes based on the OPropertyContainer and an OPropertyArrayUsageHelper
@@ -344,7 +351,7 @@ protected:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const
 
 //----------------------------------------------------------------------------------
-#define IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( classname )   \
+#define IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2( classname , baseclass1)  \
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  SAL_CALL classname::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)  \
     {   \
         Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );    \
@@ -352,7 +359,7 @@ protected:
     }   \
     ::cppu::IPropertyArrayHelper& classname::getInfoHelper()    \
     {   \
-        return *const_cast<classname*>(this)->getArrayHelper(); \
+    return *baseclass1::getArrayHelper();   \
     }   \
     ::cppu::IPropertyArrayHelper* classname::createArrayHelper( ) const \
     {   \
@@ -360,7 +367,9 @@ protected:
         describeProperties(aProps); \
         return new ::cppu::OPropertyArrayHelper(aProps);    \
     }
-
+//----------------------------------------------------------------------------------
+#define IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( classname )   \
+    IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2( classname, classname )
 
 //==================================================================================
 //= helper for implementing the createArrayHelper
@@ -424,6 +433,30 @@ protected:
 #define END_PROPERTY_HELPER()                               \
     END_PROPERTY_SEQUENCE() \
     return new ::cppu::OPropertyArrayHelper(aDescriptor);
+
+
+#define NOTIFY_LISTERNERS(_rListeners,T,method)                                   \
+    Sequence< Reference< XInterface > > aListenerSeq = _rListeners.getElements(); \
+                                                                                  \
+    const Reference< XInterface >* pxIntBegin = aListenerSeq.getConstArray();     \
+    const Reference< XInterface >* pxInt = pxIntBegin + aListenerSeq.getLength(); \
+                                                                                  \
+    _rGuard.clear();                                                              \
+    while( pxInt > pxIntBegin )                                                   \
+    {                                                                             \
+        try                                                                       \
+        {                                                                         \
+            while( pxInt > pxIntBegin )                                           \
+            {                                                                     \
+                --pxInt;                                                          \
+                static_cast< T* >( pxInt->get() )->method(aEvt);                  \
+            }                                                                     \
+        }                                                                         \
+        catch( RuntimeException& )                                                \
+        {                                                                         \
+        }                                                                         \
+    }                                                                             \
+    _rGuard.reset();
 
 
 //==================================================================================
