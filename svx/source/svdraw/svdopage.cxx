@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-01 13:27:31 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 16:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,8 +166,16 @@ void __EXPORT SdrPageObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId&, const S
 
                             if(pMaster == pChangedPage)
                             {
-                                SendRepaintBroadcast();
-                                bDone = TRUE;
+                                if(eHint == HINT_OBJCHG || eHint == HINT_OBJLISTCLEARED)
+                                {
+                                    // see comment above...
+                                }
+                                else
+                                {
+                                    // send normal
+                                    SendRepaintBroadcast();
+                                    bDone = TRUE;
+                                }
                             }
                         }
                     }
