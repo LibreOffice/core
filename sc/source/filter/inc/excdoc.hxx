@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:07:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,6 @@ private:
 
     NameBuffer*                 pTabNames;
 
-    void                        NullTab( const String* pCodename = NULL );
     // pRec mit new anlegen und vergessen, delete macht ExcTable selber!
     void                        Add( XclExpRecordBase* pRec );
 
@@ -120,7 +119,8 @@ public:
                                 ~ExcTable();
 
     void                        FillAsHeader( ExcBoundsheetList& rBoundsheetList );
-    void                        FillAsTable( void );
+    void                        FillAsTable( size_t nCodeNameIdx );
+    void                        FillAsEmptyTable( size_t nCodeNameIdx );
 
     void                        Write( XclExpStream& );
 };
