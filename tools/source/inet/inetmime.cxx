@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetmime.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:45:52 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,11 +390,10 @@ bool parseParameters(ParameterList const & rInput,
                 {
                     if (pNext->m_bExtended)
                         for (xub_StrLen i = 0; i < pNext->m_aValue.Len(); ++i)
-                            aValue
-                                += sal_Unicode(sal_uChar
-                                                   (pNext->
-                                                        m_aValue.GetChar(i)))
-                                       | 0xF800;
+                            aValue += sal_Unicode(
+                                sal_Unicode(
+                                    sal_uChar(pNext->m_aValue.GetChar(i)))
+                                | 0xF800);
                     else
                         for (xub_StrLen i = 0; i < pNext->m_aValue.Len(); ++i)
                             aValue
