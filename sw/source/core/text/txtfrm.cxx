@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-22 15:22:59 $
+ *  last change: $Author: fme $ $Date: 2001-11-28 12:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,21 +639,26 @@ void SwTxtFrm::CalcLineSpace()
     }
 }
 
-/*************************************************************************
- *                      SwTxtFrm::Modify()
- *************************************************************************/
-
-#define SET_WRONG( nPos, nCnt, fnFunc )\
-{\
-    if( GetTxtNode()->GetWrong() && !IsFollow() )\
-        GetTxtNode()->GetWrong()->fnFunc( nPos, nCnt );\
-    GetNode()->SetWrongDirty( sal_True );\
-    GetNode()->SetAutoCompleteWordDirty(  sal_True );\
-    SwPageFrm *pPage = FindPageFrm();\
-    if( pPage ) {  \
+#define SET_WRONG( nPos, nCnt, fnFunc ) \
+{ \
+    if ( !IsFollow() ) \
+    { \
+        if( GetTxtNode()->GetWrong() ) \
+            GetTxtNode()->GetWrong()->fnFunc( nPos, nCnt ); \
+        else \
+        { \
+            GetTxtNode()->SetWrong( new SwWrongList() ); \
+            GetTxtNode()->GetWrong()->SetInvalid( nPos, nPos + ( nCnt > 0 ? nCnt : 1 ) ); \
+        } \
+        GetNode()->SetWrongDirty( sal_True ); \
+        GetNode()->SetAutoCompleteWordDirty( sal_True ); \
+    } \
+    SwPageFrm *pPage = FindPageFrm(); \
+    if( pPage ) \
+    { \
         pPage->InvalidateSpelling(); \
         pPage->InvalidateAutoCompleteWords(); \
-    }\
+    } \
 }
 
 #define SET_SCRIPT_INVAL( nPos )\
@@ -672,6 +677,10 @@ void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, xub_StrLen nLen )
         pFrm = pFrm->GetFollow();
     }
 }
+
+/*************************************************************************
+ *                      SwTxtFrm::Modify()
+ *************************************************************************/
 
 void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {

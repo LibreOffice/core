@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-20 08:25:14 $
+ *  last change: $Author: fme $ $Date: 2001-11-28 12:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,7 +786,6 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
 
     BOOL bAddAutoCmpl = pNode->IsAutoCompleteWordDirty() &&
                         GetShell()->GetViewOptions()->IsAutoCompleteWords();
-    BOOL bIncInsertPos = FALSE;
 
     if( pNode->GetWrong() )
     {
@@ -799,11 +798,24 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
         }
         else
             nEnd = nInsertPos;
+
+        // get word around nBegin, we start at nBegin - 1
+        if ( nBegin )
+            --nBegin;
+
+        LanguageType eActLang = pNode->GetLang( nBegin );
+        Boundary aBound = pBreakIt->xBreak->getWordBoundary( pNode->aText, nBegin,
+                          pBreakIt->GetLocale( eActLang ), WordType::DICTIONARY_WORD, TRUE );
+        nBegin = aBound.startPos;
+
+        // get the position in the wrong list
         nInsertPos = pNode->GetWrong()->GetPos( nBegin );
+
+        // sometimes we have to skip one entry
         if( nInsertPos < pNode->GetWrong()->Count() &&
             nBegin == pNode->GetWrong()->Pos( nInsertPos ) +
                       pNode->GetWrong()->Len( nInsertPos ) )
-            bIncInsertPos = TRUE;
+                nInsertPos++;
     }
     else
     {
@@ -824,12 +836,6 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
         SwScanner aScanner( pNode, NULL, nBegin, nEnd, FALSE, TRUE );
         while( aScanner.NextWord( eActLang ) )
         {
-            if( bIncInsertPos )
-            {
-                bIncInsertPos = FALSE;
-                if( aScanner.GetBegin() >= nBegin )
-                    ++nInsertPos;
-            }
             const XubString& rWord = aScanner.GetWord();
             nBegin = aScanner.GetBegin();
             nLen = aScanner.GetLen();
@@ -983,7 +989,7 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
         }
         pNode->GetWrong()->SetInvalid( nInvStart, nInvEnd );
         pNode->SetWrongDirty( STRING_LEN != pNode->GetWrong()->GetBeginInv() );
-        if( !pNode->GetWrong()->Count() )
+        if( !pNode->GetWrong()->Count() && ! pNode->IsWrongDirty() )
             pNode->SetWrong( NULL );
     }
     else
