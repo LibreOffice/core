@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.86 2004-04-02 13:51:06 rt Exp $
+	$Id: drawing.mod,v 1.87 2004-06-17 14:59:51 rt Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -201,20 +201,20 @@
 <!ATTLIST draw:connector %text-anchor;>
 <!ATTLIST draw:connector draw:layer %layerName; #IMPLIED>
 
-<!ELEMENT draw:custom-shape (draw:thumbnail?, draw:enhanced-geometry?, ( office:events?, %draw-text;)?)>
+<!ELEMENT draw:custom-shape ( draw:thumbnail?, office:events?, (%draw-text;), draw:enhanced-geometry?)>
 <!ATTLIST draw:custom-shape %draw-position;>
 <!ATTLIST draw:custom-shape %draw-size;>
 <!ATTLIST draw:custom-shape %draw-end-position;>
-<!ATTLIST draw:custom-shape %draw-table-background;>
+<!ATTLIST draw:custom-shape %table-background;>
 <!ATTLIST draw:custom-shape %draw-style-name;>
 <!ATTLIST draw:custom-shape %draw-transform;>
-<!ATTLIST draw:custom-shape %draw-zindex;>
+<!ATTLIST draw:custom-shape %zindex;>
 <!ATTLIST draw:custom-shape draw:id %draw-shape-id;>
 <!ATTLIST draw:custom-shape %text-anchor;>
-<!ATTLIST draw:custom-shape draw:layer %layerName;>
-<!ATTLIST draw:custom-shape draw:engine %CDATA #IMPLIED>
-<!ATTLIST draw:custom-shape draw:data %CDATA #IMPLIED>
-<!ELEMENT draw:enhanced-geometry draw:equation*,draw:handle*>
+<!ATTLIST draw:custom-shape draw:layer %layerName; #IMPLIED>
+<!ATTLIST draw:custom-shape draw:engine CDATA #IMPLIED>
+<!ATTLIST draw:custom-shape draw:data CDATA #IMPLIED>
+<!ELEMENT draw:enhanced-geometry ( draw:equation*,draw:handle* )>
 <!ENTITY % custom-shape-type "(NonPrimitive|Rectangle|RoundRectangle|Ellipse|Diamond|IsocelesTriangle|RightTriangle|Parallelogram|Trapezoid|Hexagon|Octagon|Plus|Star|Arrow|ThickArrow|HomePlate|Cube|Balloon|Seal|Arc|Line|Plaque|Can|Donut|TextSimple|TextOctagon|TextHexagon|TextCurve|TextWave|TextRing|TextOnCurve|TextOnRing|StraightConnector1|BentConnector2|BentConnector3|BentConnector4|BentConnector5|CurvedConnector2|CurvedConnector3|CurvedConnector4|CurvedConnector5|Callout1|Callout2|Callout3|AccentCallout1|AccentCallout2|AccentCallout3|BorderCallout1|BorderCallout2|BorderCallout3|AccentBorderCallout1|AccentBorderCallout2|AccentBorderCallout3|Ribbon|Ribbon2|Chevron|Pentagon|NoSmoking|Seal8|Seal16|Seal32|WedgeRectCallout|WedgeRRectCallout|WedgeEllipseCallout|Wave|FoldedCorner|LeftArrow|DownArrow|UpArrow|LeftRightArrow|UpDownArrow|IrregularSeal1|IrregularSeal2|LightningBolt|Heart|PictureFrame|QuadArrow|LeftArrowCallout|RightArrowCallout|UpArrowCallout|DownArrowCallout|LeftRightArrowCallout|UpDownArrowCallout|QuadArrowCallout|Bevel|LeftBracket|RightBracket|LeftBrace|RightBrace|LeftUpArrow|BentUpArrow|BentArrow|Seal24|StripedRightArrow|NotchedRightArrow|BlockArc|SmileyFace|VerticalScroll|HorizontalScroll|CircularArrow|NotchedCircularArrow|UturnArrow|CurvedRightArrow|CurvedLeftArrow|CurvedUpArrow|CurvedDownArrow|CloudCallout|EllipseRibbon|EllipseRibbon2|FlowChartProcess|FlowChartDecision|FlowChartInputOutput|FlowChartPredefinedProcess|FlowChartInternalStorage|FlowChartDocument|FlowChartMultidocument|FlowChartTerminator|FlowChartPreparation|FlowChartManualInput|FlowChartManualOperation|FlowChartConnector|FlowChartPunchedCard|FlowChartPunchedTape|FlowChartSummingJunction|FlowChartOr|FlowChartCollate|FlowChartSort|FlowChartExtract|FlowChartMerge|FlowChartOfflineStorage|FlowChartOnlineStorage|FlowChartMagneticTape|FlowChartMagneticDisk|FlowChartMagneticDrum|FlowChartDisplay|FlowChartDelay|TextPlainText|TextStop|TextTriangle|TextTriangleInverted|TextChevron|TextChevronInverted|TextRingInside|TextRingOutside|TextArchUpCurve|TextArchDownCurve|TextCircleCurve|TextButtonCurve|TextArchUpPour|TextArchDownPour|TextCirclePour|TextButtonPour|TextCurveUp|TextCurveDown|TextCascadeUp|TextCascadeDown|TextWave1|TextWave2|TextWave3|TextWave4|TextInflate|TextDeflate|TextInflateBottom|TextDeflateBottom|TextInflateTop|TextDeflateTop|TextDeflateInflate|TextDeflateInflateDeflate|TextFadeRight|TextFadeLeft|TextFadeUp|TextFadeDown|TextSlantUp|TextSlantDown|TextCanUp|TextCanDown|FlowChartAlternateProcess|FlowChartOffpageConnector|Callout90|AccentCallout90|BorderCallout90|AccentBorderCallout90|LeftRightUpArrow|Sun|Moon|BracketPair|BracePair|Seal4|DoubleWave|ActionButtonBlank|ActionButtonHome|ActionButtonHelp|ActionButtonInformation|ActionButtonForwardNext|ActionButtonBackPrevious|ActionButtonEnd|ActionButtonBeginning|ActionButtonReturn|ActionButtonDocument|ActionButtonSound|ActionButtonMovie|HostControl|TextBox)" >
 <!ATTLIST draw:enhanced-geometry draw:predefined-type %custom-shape-type; #REQUIRED>
 <!ATTLIST draw:enhanced-geometry draw:coordinate-origin-x %coordinate; "0">
@@ -283,14 +283,14 @@
 <!ATTLIST draw:handle draw:handle-mirror-vertical %boolean; "false">
 <!ATTLIST draw:handle draw:handle-mirror-horizontal %boolean; "false">
 <!ATTLIST draw:handle draw:handle-switched %boolean; "false">
-<!ATTLIST draw:handle draw:handle-position CDATA; #REQUIRED>
-<!ATTLIST draw:handle draw:handle-range-x-minimum CDATA; #IMPLIED>
-<!ATTLIST draw:handle draw:handle-range-x-maximum CDATA; #IMPLIED>
-<!ATTLIST draw:handle draw:handle-range-y-minimum CDATA; #IMPLIED>
-<!ATTLIST draw:handle draw:handle-range-y-maximum CDATA; #IMPLIED>
-<!ATTLIST draw:handle draw:handle-polar CDATA; #IMPLIED>
-<!ATTLIST draw:handle draw:handle-radius-range-minimum CDATA; #IMPLIED>
-<!ATTLIST draw:handle draw:handle-radius-range-maximum CDATA; #IMPLIED>
+<!ATTLIST draw:handle draw:handle-position CDATA #REQUIRED>
+<!ATTLIST draw:handle draw:handle-range-x-minimum CDATA #IMPLIED>
+<!ATTLIST draw:handle draw:handle-range-x-maximum CDATA #IMPLIED>
+<!ATTLIST draw:handle draw:handle-range-y-minimum CDATA #IMPLIED>
+<!ATTLIST draw:handle draw:handle-range-y-maximum CDATA #IMPLIED>
+<!ATTLIST draw:handle draw:handle-polar CDATA #IMPLIED>
+<!ATTLIST draw:handle draw:handle-radius-range-minimum CDATA #IMPLIED>
+<!ATTLIST draw:handle draw:handle-radius-range-maximum CDATA #IMPLIED>
 <!ATTLIST draw:enhanced-geometry draw:callout (on|off) "off">
 <!ATTLIST draw:enhanced-geometry draw:callout-accent-bar %boolean; "false">
 <!ATTLIST draw:enhanced-geometry draw:callout-angle %float; #IMPLIED>
