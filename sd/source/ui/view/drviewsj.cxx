@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,12 +201,12 @@ void SdDrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 rSet.DisableItem(SID_UNGROUP);
             }
-
+/*
             if (!pObj->ISA(SdrObjGroup) && !pObj->ISA(SdrGrafObj) && !pObj->ISA(SdrOle2Obj))
             {
                 rSet.DisableItem( SID_NAME_GROUP );
             }
-
+*/
             if (!pObj->ISA(SdrGrafObj) ||
                 ((SdrGrafObj*) pObj)->GetGraphicType() != GRAPHIC_BITMAP ||
                 ((SdrGrafObj*) pObj)->IsLinkedGraphic())
