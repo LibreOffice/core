@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleListItem.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Date: 2004-01-05 20:35:24 $
+ *  last change: $Date: 2004-02-04 11:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ public class AccessibleListItem extends TestCase {
             throw new StatusException("Can't switch to required tab", e);
         }
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.LIST_ITEM);
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.LIST_ITEM,"Spr");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
