@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-14 21:13:17 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ greek ] = "Please choose the type of your external address book:";
         Text[ dutch ] = "Kies het type van uw externe adrasboek:";
         Text[ french ] = "Sélectionnez le type du carnet d'adresses externe :";
-        Text[ spanish ] = "Seleccione el tipo de su libreta de direcciones externa:";
+        Text[ spanish ] = "Seleccione el tipo de libreta de direcciones externa:";
         Text[ finnish ] = "Please choose the type of your external address book:";
         Text[ italian ] = "Selezionate il tipo di Rubrica esterna:";
         Text[ danish ] = "Please choose the type of your external address book:";
@@ -662,7 +662,7 @@ TabPage RID_PAGE_FINAL
         Text[ greek ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
         Text[ dutch ] = "Dat waren alle benodigde gegevens voor de integratie van uw asdresgegevens in %PRODUCTNAME.\n\nVermeld nu nog de naam waaronder de gegevensbron in %PRODUCTNAME moet worden geregistreerd.";
         Text[ french ] = "Toutes les informations requises pour l'intégration des données des adresses dans %PRODUCTNAME sont à présent réunies.\n\nSaisissez maintenant le nom sous lequel enregistrer la source de données dans %PRODUCTNAME.";
-        Text[ spanish ] = "Ya se dispone de la información necesaria para la integración de sus datos de direcciones en %PRODUCTNAME.\n\nIndique ahora el nombre con el que se deba registrar la fuente de datos en %PRODUCTNAME.";
+        Text[ spanish ] = "Ya se dispone de la información necesaria para integrar los datos de las direcciones en %PRODUCTNAME.\n\nIndique ahora el nombre con el que desee registrar la fuente de datos en %PRODUCTNAME.";
         Text[ finnish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
         Text[ italian ] = "Queste informazioni erano necessarie per integrare i dati della Rubrica in %PRODUCTNAME.\n\nIndicate ancora il nome con cui volete registrare la sorgente dati in %PRODUCTNAME.";
         Text[ danish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
@@ -1029,6 +1029,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.27  2002/01/14 21:13:17  kz
+ *  Merge SRC641: 14.01.02 - 22:07:42
+ *
  *  Revision 1.26  2002/01/09 10:43:34  fs
  *  #96349# WordBreak for the second fixed text on the field assignment page
  *
