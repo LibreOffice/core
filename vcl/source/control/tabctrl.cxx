@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:22:18 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1283,14 +1283,6 @@ void TabControl::GetFocus()
     ImplShowFocus();
     SetInputContext( InputContext( GetFont() ) );
     Control::GetFocus();
-    if ( mnCurPageId != 0 )
-    {
-        // #104929# avoid reading the tabcontrol's description which defaults to the help text
-        // deselecting and selecting again the current page forces the page's name to
-        // be read
-        ImplCallEventListeners( VCLEVENT_TABPAGE_DEACTIVATE, (void*) mnCurPageId );
-        ImplCallEventListeners( VCLEVENT_TABPAGE_ACTIVATE, (void*) mnCurPageId );
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -1795,7 +1787,6 @@ void TabControl::SetTabPage( USHORT nPageId, TabPage* pTabPage )
             pItem->mpTabPage = pTabPage;
             if ( pItem->mnId == mnCurPageId )
                 ImplChangeTabPage( pItem->mnId, 0 );
-            ImplCallEventListeners( VCLEVENT_TABPAGE_SET, (void*) nPageId );
         }
         else
             pItem->mpTabPage = NULL;
