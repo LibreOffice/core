@@ -427,30 +427,6 @@ UDK_2_0_0 {
 
         osl_acquireDirectoryItem;
 
-        osl_socket_createSocketLayer;
-        osl_socket_pushSocketLayer;
-        osl_socket_popSocketLayer;
-        osl_socket_deleteSocketLayer;
-
-        osl_socket_create;
-        osl_socket_delete;
-        osl_socket_getLastError;
-        osl_socket_getOption;
-        osl_socket_setOption;
-        osl_socket_accept;
-        osl_socket_accept_handshake;
-        osl_socket_bind;
-        osl_socket_connect;
-        osl_socket_connect_handshake;
-        osl_socket_close;
-        osl_socket_listen;
-        osl_socket_recv;
-        osl_socket_send;
-        osl_socket_shutdown;
-
-        osl_socket_getDefaultSocketMethods;
-        osl_socket_getSocketMethods;
-
         osl_getDateTimeFromTimeValue;
         osl_getTimeValueFromDateTime;
         osl_getLocalTimeFromSystemTime;
