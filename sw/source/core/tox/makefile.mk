@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+#   last change: $Author: jp $ $Date: 2001-05-14 13:36:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,13 +89,18 @@ LIBFLAGS=/NOI /NOE /PAGE:128
 
 CXXFILES = \
         tox.cxx \
+        toxhlp.cxx \
         txmsrt.cxx
 
 
 
 SLOFILES =  \
         $(SLO)$/tox.obj \
+        $(SLO)$/toxhlp.obj \
         $(SLO)$/txmsrt.obj
+
+EXCEPTIONSFILES= \
+        $(SLO)$/toxhlp.obj
 
 # --- Tagets -------------------------------------------------------
 
