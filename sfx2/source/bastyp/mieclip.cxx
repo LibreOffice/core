@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mieclip.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-09 13:38:10 $
+ *  last change: $Author: jp $ $Date: 2001-11-05 14:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
                                         ? nEnd - nStt + 32
                                         : 0 ));
         *pStrm << rStream;
-        pStrm->SetStreamSize( nEnd - nStt );
+        pStrm->SetStreamSize( nEnd - nStt + 1L );
         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
     }
 
