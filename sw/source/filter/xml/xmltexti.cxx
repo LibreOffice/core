@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-30 17:38:02 $
+ *  last change: $Author: mib $ $Date: 2002-10-10 08:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,9 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
     SERVICE_MAP_ENTRY( MATH, SM ),
     { 0, 0, 0, 0 }
 };
-static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet, sal_Int32 nHeight, sal_Int32 nWidth)
+static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
+        sal_Int32 nHeight, sal_Int32 nWidth,
+        sal_Int32 *pTwipHeight=0, sal_Int32 *pTwipWidth=0 )
 {
     if( nWidth > 0 && nHeight > 0 )
     {
@@ -206,6 +208,11 @@ static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet, sal_Int32 nHeight, sal
 
     SwFmtAnchor aAnchor( FLY_AUTO_CNTNT );
     rItemSet.Put( aAnchor );
+
+    if( pTwipWidth )
+        *pTwipWidth = nWidth;
+    if( pTwipHeight )
+        *pTwipHeight = nHeight;
 }
 
 SwXMLTextImportHelper::SwXMLTextImportHelper(
@@ -232,7 +239,7 @@ SwXMLTextImportHelper::~SwXMLTextImportHelper()
     {
         delete pRedlineHelper;
     }
-    catch ( const RuntimeException& e )
+    catch ( const RuntimeException& )
     {
         // ignore
     }
@@ -259,6 +266,19 @@ sal_Bool SwXMLTextImportHelper::IsInHeaderFooter() const
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
     return pDoc->IsInHeaderFooter( pTxtCrsr->GetPaM()->GetPoint()->nNode );
+}
+
+SwOLENode *lcl_GetOLENode( const SwFrmFmt *pFrmFmt )
+{
+    SwOLENode *pOLENd = 0;
+    if( pFrmFmt )
+    {
+        const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
+        const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
+        pOLENd = pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetOLENode();
+    }
+    ASSERT( pOLENd, "Where is the OLE node" );
+    return pOLENd;
 }
 
 Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
@@ -292,7 +312,10 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
                          RES_FRMATR_END );
-    lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
+    Size aTwipSize( 0, 0 );
+    Rectangle aVisArea( 0, 0, nWidth, nHeight );
+    lcl_putHeightAndWidth( aItemSet, nHeight, nWidth,
+                           &aTwipSize.Height(), &aTwipSize.Width() );
 
     SwFrmFmt *pFrmFmt = 0;
     if( rHRef.copy( 0, nPos ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.ServiceName") ) )
@@ -323,7 +346,18 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
             SvInPlaceObjectRef xIPObj =
                 &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
                         aClassName, aStor );
+            if( xIPObj.Is() )
+            {
+                aVisArea.SetSize( aTwipSize );
+                aVisArea = OutputDevice::LogicToLogic(
+                            aVisArea, MAP_TWIP, xIPObj->GetMapUnit() );
+                xIPObj->SetVisArea( aVisArea );
+            }
             pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(), xIPObj, &aItemSet );
+
+            SwOLENode *pOLENd = lcl_GetOLENode( pFrmFmt );
+            if( pOLENd )
+                aObjName = pOLENd->GetOLEObj().GetName();
         }
     }
     else
@@ -413,7 +447,6 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         }
     }
 
-    Rectangle aVisArea( 0, 0, nWidth, nHeight );
     sal_Int32 nDrawAspect = 0;
     const XMLPropStyleContext *pStyle = 0;
     if( rStyleName.getLength() )
