@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2001-11-29 11:54:38 $
+#   last change: $Author: rt $ $Date: 2001-11-29 12:22:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,8 +130,6 @@ SVXLIGHTOBJFILES =	\
         $(OBJ)$/XMLBase64ImportContext.obj
 
 CPPUMAKERFLAGS=
-UNOUCRDEP=  $(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=  $(SOLARBINDIR)$/applicat.rdb
 
 UNOTYPES=\
     com.sun.star.formula.SymbolDescriptor
