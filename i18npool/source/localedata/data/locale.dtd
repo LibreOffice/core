@@ -15,11 +15,11 @@ PURPOSE:
 <!-- Entities for characters and symbols ........................... -->
 
 <!ENTITY % UNOModule
-        'unoid                     CDATA              #REQUIRED'>
+        'unoid                     CDATA              #IMPLIED'>
 <!ENTITY % MessageID
         'msgid                     CDATA              #REQUIRED'>
 <!ENTITY % RefLocale
-        'ref                     CDATA              #REQUIRED'>
+        'ref                     CDATA              #IMPLIED'>
 <!-- The locale referred to for the sub categories -->
 
 <!ELEMENT DefaultName  (#PCDATA)>
@@ -45,11 +45,11 @@ PURPOSE:
 
 <!ELEMENT Varient (#PCDATA) >
 
-<!ELEMENT LC_FORMAT (FormatElement+) >
+<!ELEMENT LC_FORMAT (FormatElement*) >
 <!ATTLIST LC_FORMAT %RefLocale;>
-<!ATTLIST LC_FORMAT ReplaceFrom CDATA #REQUIRED>
+<!ATTLIST LC_FORMAT replaceFrom CDATA #IMPLIED>
 <!-- Define placeholder for currency code -->
-<!ATTLIST LC_FORMAT ReplaceTo CDATA #REQUIRED>
+<!ATTLIST LC_FORMAT replaceTo CDATA #IMPLIED>
 <!-- Currency code to be used to replace the placeholder -->
 
 <!ELEMENT FormatElement   ( FormatCode, DefaultName?)>
@@ -112,24 +112,27 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 <!ELEMENT PercentFormats (FormatElement+)>
 -->
 
-<!ELEMENT LC_CALENDAR (Calendar+ ) >
+<!ELEMENT LC_CALENDAR (Calendar* ) >
 <!ATTLIST LC_CALENDAR %RefLocale;>
 <!ELEMENT Calendar (DaysOfWeek, MonthsOfYear, Eras, StartDayOfWeek, MinimalDaysInFirstWeek) >
 <!ATTLIST Calendar %UNOModule;>
 <!-- the unoid of a gregorian calendar MUST be lower case "gregorian" -->
 <!ATTLIST Calendar default CDATA #REQUIRED >
-<!ELEMENT DaysOfWeek (Day+)>
+<!ELEMENT DaysOfWeek (Day*)>
+<!ATTLIST DaysOfWeek %RefLocale;>
 <!-- Sequence of days is important, MUST start with Sunday -->
 <!ELEMENT Day (DayID, DefaultAbbrvName, DefaultFullName)>
 <!ELEMENT DayID (#PCDATA)>
 <!-- preferably the lower case abbreviated English name like sun for Sunday -->
 <!ELEMENT DefaultAbbrvName (#PCDATA)>
 <!ELEMENT DefaultFullName (#PCDATA)>
-<!ELEMENT MonthsOfYear (Month+)>
+<!ELEMENT MonthsOfYear (Month*)>
+<!ATTLIST MonthsOfYear %RefLocale;>
 <!ELEMENT Month (MonthID, DefaultAbbrvName, DefaultFullName)>
 <!ELEMENT MonthID (#PCDATA)>
 <!-- preferably the lower case abbreviated English name like jan for January -->
-<!ELEMENT Eras (Era+)>
+<!ELEMENT Eras (Era*)>
+<!ATTLIST Eras %RefLocale;>
 <!ELEMENT Era (EraID, DefaultAbbrvName, DefaultFullName)>
 <!ELEMENT EraID (#PCDATA)>
 <!-- if a calendar has special eras (like zh_TW ROC or ja_JP Gengou calendar)
@@ -142,7 +145,7 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 <!-- MUST exactly match (case significant!) one of the DayID of DaysOfWeek -->
 <!ELEMENT MinimalDaysInFirstWeek (#PCDATA)>
 
-<!ELEMENT LC_CURRENCY (Currency+ ) >
+<!ELEMENT LC_CURRENCY (Currency* ) >
 <!ATTLIST LC_CURRENCY %RefLocale;>
 <!ELEMENT Currency (CurrencyID, CurrencySymbol, BankSymbol, CurrencyName, DecimalPlaces)>
 <!ATTLIST Currency  default CDATA #REQUIRED >
@@ -161,7 +164,7 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 <!ELEMENT CurrencyName (#PCDATA)>
 <!ELEMENT DecimalPlaces (#PCDATA)>
 
-<!ELEMENT LC_CTYPE (Separators, Markers, TimeAM, TimePM,  MeasurementSystem)>
+<!ELEMENT LC_CTYPE (Separators?, Markers?, TimeAM?, TimePM?,  MeasurementSystem?)>
 <!ATTLIST LC_CTYPE  %RefLocale;>
 <!ATTLIST LC_CTYPE  %UNOModule;>
 <!ELEMENT Separators (DateSeparator, ThousandSeparator, DecimalSeparator, TimeSeparator, Time100SecSeparator, ListSeparator, LongDateDayOfWeekSeparator, LongDateDaySeparator, LongDateMonthSeparator, LongDateYearSeparator)>
@@ -196,18 +199,18 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 <!ATTLIST LC_SEARCH %RefLocale;>
 <!ELEMENT SearchOptions (TransliterationModules+)>
 
-<!ELEMENT LC_TRANSLITERATION (Transliteration+)>
+<!ELEMENT LC_TRANSLITERATION (Transliteration*)>
 <!ATTLIST LC_TRANSLITERATION %RefLocale;>
 <!ELEMENT Transliteration EMPTY>
 <!ATTLIST Transliteration  %UNOModule;>
 
-<!ELEMENT LC_MISC (ForbiddenCharacters?, ReservedWords)>
+<!ELEMENT LC_MISC (ForbiddenCharacters?, ReservedWords?)>
 <!ATTLIST LC_MISC %RefLocale;>
 <!ELEMENT ForbiddenCharacters (ForbiddenLineBeginCharacters, ForbiddenLineEndCharacters)>
 <!ELEMENT ForbiddenLineBeginCharacters (#PCDATA)>
 <!ELEMENT ForbiddenLineEndCharacters (#PCDATA)>
 
-<!ELEMENT ReservedWords  (trueWord, falseWord, quarter1Word, quarter2Word, quarter3Word, quarter4Word, aboveWord, belowWord, quarter1Abbreviatio, quarter2Abbreviatio, quarter3Abbreviationnn, quarter4Abbreviation)>
+<!ELEMENT ReservedWords  (trueWord, falseWord, quarter1Word, quarter2Word, quarter3Word, quarter4Word, aboveWord, belowWord, quarter1Abbreviation, quarter2Abbreviation, quarter3Abbreviation, quarter4Abbreviation)>
 <!-- order is significant! -->
 <!ELEMENT trueWord (#PCDATA)>
 <!ELEMENT falseWord (#PCDATA)>
@@ -258,18 +261,17 @@ the parameter NumType can have one of the following values:
 30 = Bullet for Korean Hangul Circled Syllable
 -->
 
-<!ELEMENT LC_NumberingLevel (NumberingLevel+ )>
+<!ELEMENT LC_NumberingLevel (NumberingLevel* )>
 <!ATTLIST LC_NumberingLevel %RefLocale;>
 <!ELEMENT NumberingLevel EMPTY>
 <!ATTLIST NumberingLevel Prefix CDATA #REQUIRED>
 <!ATTLIST NumberingLevel NumType CDATA #REQUIRED>
 <!ATTLIST NumberingLevel Suffix CDATA  #REQUIRED>
-<!ATTLIST NumberingLevel Transliteration CDATA #REQUIRED>
-<!ATTLIST NumberingLevel NatNum CDATA #REQUIRED>
+<!ATTLIST NumberingLevel Transliteration CDATA #IMPLIED>
 
 
-<!ELEMENT LC_OutLineNumberingLevel (OutlineStyle+ )>
-<!ATTLIST LC_OuterneNumberingLevel %RefLocale;>
+<!ELEMENT LC_OutLineNumberingLevel (OutlineStyle* )>
+<!ATTLIST LC_OutLineNumberingLevel %RefLocale;>
 <!ELEMENT OutlineStyle (OutLineNumberingLevel+)>
 <!ELEMENT OutLineNumberingLevel EMPTY>
 <!ATTLIST OutLineNumberingLevel Prefix CDATA  #REQUIRED >
@@ -281,7 +283,5 @@ the parameter NumType can have one of the following values:
 <!ATTLIST OutLineNumberingLevel LeftMargin CDATA   #REQUIRED>
 <!ATTLIST OutLineNumberingLevel SymbolTextDistance CDATA  #REQUIRED >
 <!ATTLIST OutLineNumberingLevel FirstLineOffset CDATA  #REQUIRED >
-<!ATTLIST OutLineNumberingLevel Transliteration CDATA #REQUIRED >
-<!ATTLIST OutLineNumberingLevel NatNum CDATA #REQUIRED >
-
+<!ATTLIST OutLineNumberingLevel Transliteration CDATA #IMPLIED >
 
