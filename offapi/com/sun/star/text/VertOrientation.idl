@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VertOrientation.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 // DocMerge from idl: constants com::sun::star::text::VertOrientation
 /** These enumeration values are used to specify the vertical orientation.
  */
-constants VertOrientation
+published constants VertOrientation
 {
     //-------------------------------------------------------------------------
 
