@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-14 06:16:55 $
+ *  last change: $Author: pb $ $Date: 2001-08-20 14:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,13 +541,39 @@ BOOL SfxHelp::Start( ULONG nHelpId, const Window* pWindow )
 XubString SfxHelp::GetHelpText( ULONG nHelpId, const Window* pWindow )
 {
     String aModuleName = GetHelpModuleName_Impl( nHelpId );
-    XubString aHelpText = pImp->GetHelpText( nHelpId, aModuleName );;
+    String aHelpText = pImp->GetHelpText( nHelpId, aModuleName );
+    ULONG nNewHelpId = 0;
+
+    if ( aHelpText.Len() == 0 && pWindow )
+    {
+        // no help text found -> try with parent help id.
+        Window* pParent = pWindow->GetParent();
+        while ( pParent )
+        {
+            nNewHelpId = pParent->GetHelpId();
+            aHelpText = pImp->GetHelpText( nNewHelpId, aModuleName );
+
+            if ( aHelpText.Len() > 0 )
+                pParent = NULL;
+            else
+                pParent = pParent->GetParent();
+        }
+
+        if ( bIsDebug && aHelpText.Len() == 0 )
+            nNewHelpId = 0;
+    }
+
     if ( bIsDebug )
     {
         aHelpText += DEFINE_CONST_UNICODE("\n\n");
         aHelpText += aModuleName;
         aHelpText += DEFINE_CONST_UNICODE(" - ");
         aHelpText += String::CreateFromInt64( nHelpId );
+        if ( nNewHelpId )
+        {
+            aHelpText += DEFINE_CONST_UNICODE(" - ");
+            aHelpText += String::CreateFromInt64( nNewHelpId );
+        }
     }
 
     return aHelpText;
