@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:28:39 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,12 @@ namespace configmgr
             @return the TimeValue of the last modification, if the file exists, otherwise a TimeValue(0,0).
         */
         TimeValue getModifyTime(rtl::OUString const& _aNormalizedFilename);
+
+        /** determines the status of a directory entry specified by a URL.
+            @return the Size of the file in bytes and the TimeValue of the last modification, if the file exists,
+                    otherwise 0 and a TimeValue(0,0).
+        */
+        sal_uInt64 getModifyStatus(rtl::OUString const& _aNormalizedFilename, TimeValue & rModifyTime);
     }
 } // namespace configmgr
 
