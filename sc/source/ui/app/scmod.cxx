@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:29:41 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     SfxModule( SfxApplication::CreateResManager( "sc" ), FALSE, pFact, NULL ),
     bIsWaterCan( FALSE ),
     bIsInEditCommand( FALSE ),
+    bIsInExecuteDrop( FALSE ),
     pSelTransfer( NULL ),
     pRefInputHandler( NULL ),
     pViewCfg( NULL ),
