@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:22:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,10 @@ void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
         if ( pDrawContact )
         {
             pDrawContact->InsertMasterIntoDrawPage();
+            // --> OD 2005-01-31 #i40845# - follow-up of #i35635#
+            // move object to visible layer
+            pDrawContact->MoveObjToVisibleLayer( pDrawContact->GetMaster() );
+            // <--
         }
     }
 
