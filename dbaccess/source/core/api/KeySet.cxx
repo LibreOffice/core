@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 11:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,8 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     }
 
     ::rtl::OUString aColumnName;
-    ::rtl::OUString aCondition,sSetValues;
+    ::rtl::OUString aCondition,sKeyCondition,sIndexCondition,sSetValues;
+    ::std::vector<sal_Int32> aIndexColumnPositions;
 
     // here we build the condition part for the update statement
     OColumnNamePos::const_iterator aIter = m_aColumnNames.begin();
@@ -388,25 +389,29 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     {
         if(xKeyColumns.is() && xKeyColumns->hasByName(aIter->first))
         {
-            aCondition += ::dbtools::quoteName( aQuote,aIter->first);
+            sKeyCondition += ::dbtools::quoteName( aQuote,aIter->first);
             if((*_rOrginalRow)[aIter->second].isNull())
-                aCondition += ::rtl::OUString::createFromAscii(" IS NULL");
+                sKeyCondition += ::rtl::OUString::createFromAscii(" IS NULL");
             else
-                aCondition += ::rtl::OUString::createFromAscii(" = ?");
-            aCondition += aAnd;
+                sKeyCondition += ::rtl::OUString::createFromAscii(" = ?");
+            sKeyCondition += aAnd;
         }
-        for( ::std::vector< Reference<XNameAccess> >::const_iterator aIndexIter = aAllIndexColumns.begin();
-                aIndexIter != aAllIndexColumns.end();++aIndexIter)
+        else
         {
-            if((*aIndexIter)->hasByName(aIter->first))
+            for( ::std::vector< Reference<XNameAccess> >::const_iterator aIndexIter = aAllIndexColumns.begin();
+                    aIndexIter != aAllIndexColumns.end();++aIndexIter)
             {
-                aCondition += ::dbtools::quoteName( aQuote,aIter->first);
-                if((*_rOrginalRow)[aIter->second].isNull())
-                    aCondition += ::rtl::OUString::createFromAscii(" IS NULL");
-                else
-                    aCondition += ::rtl::OUString::createFromAscii(" = ?");
-                aCondition += aAnd;
-                break;
+                if((*aIndexIter)->hasByName(aIter->first))
+                {
+                    sIndexCondition += ::dbtools::quoteName( aQuote,aIter->first);
+                    if((*_rOrginalRow)[aIter->second].isNull())
+                        sIndexCondition += ::rtl::OUString::createFromAscii(" IS NULL");
+                    else
+                        sIndexCondition += ::rtl::OUString::createFromAscii(" = ?");
+                    sIndexCondition += aAnd;
+                    aIndexColumnPositions.push_back(aIter->second);
+                    break;
+                }
             }
         }
         if((*_rInsertRow)[aIter->second].isModified())
@@ -424,8 +429,22 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     else
         throw SQLException(::rtl::OUString::createFromAscii("No modified Values!"),m_xConnection,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
 
-    if(aCondition.getLength())
+    if(sKeyCondition.getLength() || sIndexCondition.getLength())
     {
+        if(sKeyCondition.getLength() && sIndexCondition.getLength())
+        {
+            aCondition =  sKeyCondition;
+            aCondition += sIndexCondition;
+        }
+        else if(sKeyCondition.getLength())
+        {
+            aCondition = sKeyCondition;
+        }
+        else if(sIndexCondition.getLength())
+        {
+            aCondition = sIndexCondition;
+        }
+
         aCondition = aCondition.replaceAt(aCondition.getLength()-5,5,::rtl::OUString::createFromAscii(" "));
 
         aSql += ::rtl::OUString::createFromAscii(" WHERE ");
@@ -452,6 +471,13 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     for(;aIter != m_aKeyColumnNames.end();++aIter,++i)
     {
         setParameter(i,xParameter,(*_rOrginalRow)[aIter->second]);
+    }
+
+    // now we have to set the index values
+    ::std::vector<sal_Int32>::iterator aIdxColIter = aIndexColumnPositions.begin();
+    for(;aIdxColIter != aIndexColumnPositions.end();++aIdxColIter,++i)
+    {
+        setParameter(i,xParameter,(*_rOrginalRow)[*aIdxColIter]);
     }
 
      m_bUpdated = xPrep->executeUpdate() > 0;
@@ -1227,6 +1253,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.23  2001/07/24 13:25:25  oj
+    #89430# move ORowSetValue into dbtools
+
     Revision 1.22  2001/07/19 09:29:22  oj
     #86186# check parsetree for joins
 
