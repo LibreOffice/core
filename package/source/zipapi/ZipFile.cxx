@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 22:07:58 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #ifndef _ZIP_ENUMERATION_HXX
 #include <ZipEnumeration.hxx>
 #endif
-#ifndef _VOS_DIAGNOSE_H_
-#include <vos/diagnose.hxx>
-#endif
 #ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPCONSTANTS_HPP_
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #endif
@@ -85,17 +82,8 @@
 #ifndef _PACKAGE_CONSTANTS_HXX_
 #include <PackageConstants.hxx>
 #endif
-#ifndef _UCBHELPER_CONTENTBROKER_HXX
-#include <ucbhelper/contentbroker.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
-#endif
-#ifndef UCBHELPER_FILEIDENTIFIERCONVERTER_HXX_
-#include <ucbhelper/fileidentifierconverter.hxx>
-#endif
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
+#ifndef _ENCRYPTED_DATA_HEADER_HXX_
+#include <EncryptedDataHeader.hxx>
 #endif
 #ifndef _ENCRYPTION_DATA_HXX_
 #include <EncryptionData.hxx>
@@ -103,17 +91,17 @@
 #ifndef _MEMORY_BYTE_GRABBER_HXX_
 #include <MemoryByteGrabber.hxx>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 #include <string.h> // for memcpy
 #include <vector>
 
 using namespace vos;
-using namespace ucb;
-using namespace osl;
 using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::packages;
 using namespace com::sun::star::packages::zip;
@@ -151,43 +139,202 @@ void ZipFile::setInputStream ( Reference < XInputStream > xNewStream )
 
 void ZipFile::StaticGetCipher ( const ORef < EncryptionData > & xEncryptionData, rtlCipher &rCipher )
 {
-    if ( xEncryptionData.isEmpty() )
-        return;
-    Sequence < sal_uInt8 > aDerivedKey (16);
-    rtlCipherError aResult;
-    Sequence < sal_Int8 > aDecryptBuffer;
+    if ( ! xEncryptionData.isEmpty() )
+    {
+        Sequence < sal_uInt8 > aDerivedKey (16);
+        rtlCipherError aResult;
+        Sequence < sal_Int8 > aDecryptBuffer;
 
-    // Get the key
-    rtl_digest_PBKDF2 ( aDerivedKey.getArray(), 16,
-                        reinterpret_cast < const sal_uInt8 * > (xEncryptionData->aKey.getConstArray()),
-                        xEncryptionData->aKey.getLength(),
-                        xEncryptionData->aSalt.getConstArray(),
-                        xEncryptionData->aSalt.getLength(),
-                        xEncryptionData->nIterationCount );
+        // Get the key
+        rtl_digest_PBKDF2 ( aDerivedKey.getArray(), 16,
+                            reinterpret_cast < const sal_uInt8 * > (xEncryptionData->aKey.getConstArray() ),
+                            xEncryptionData->aKey.getLength(),
+                            reinterpret_cast < const sal_uInt8 * > ( xEncryptionData->aSalt.getConstArray() ),
+                            xEncryptionData->aSalt.getLength(),
+                            xEncryptionData->nIterationCount );
 
-    rCipher = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream);
-    aResult = rtl_cipher_init( rCipher, rtl_Cipher_DirectionDecode,
-                               aDerivedKey.getConstArray(),
-                               aDerivedKey.getLength(),
-                               xEncryptionData->aInitVector.getConstArray(),
-                               xEncryptionData->aInitVector.getLength());
-    OSL_ASSERT (aResult == rtl_Cipher_E_None);
+        rCipher = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream);
+        aResult = rtl_cipher_init( rCipher, rtl_Cipher_DirectionDecode,
+                                   aDerivedKey.getConstArray(),
+                                   aDerivedKey.getLength(),
+                                   reinterpret_cast < const sal_uInt8 * > ( xEncryptionData->aInitVector.getConstArray() ),
+                                   xEncryptionData->aInitVector.getLength());
+        OSL_ASSERT (aResult == rtl_Cipher_E_None);
+    }
 }
 
+void ZipFile::StaticFillHeader ( const ORef < EncryptionData > & rData, sal_Int32 nSize, sal_Int8 * & pHeader )
+{
+    // I think it's safe to restrict vector and salt length to 2 bytes !
+    sal_Int16 nIVLength = static_cast < sal_Int16 > ( rData->aInitVector.getLength() );
+    sal_Int16 nSaltLength = static_cast < sal_Int16 > ( rData->aSalt.getLength() );
+    sal_Int16 nDigestLength = static_cast < sal_Int16 > ( rData->aDigest.getLength() );
+
+    // First the header
+    *(pHeader++) = ( n_ConstHeader >> 0 ) & 0xFF;
+    *(pHeader++) = ( n_ConstHeader >> 8 ) & 0xFF;
+    *(pHeader++) = ( n_ConstHeader >> 16 ) & 0xFF;
+    *(pHeader++) = ( n_ConstHeader >> 24 ) & 0xFF;
+
+    // Then the version
+    *(pHeader++) = ( n_ConstCurrentVersion >> 0 ) & 0xFF;
+    *(pHeader++) = ( n_ConstCurrentVersion >> 8 ) & 0xFF;
+
+    // Then the iteration Count
+    sal_Int32 nIterationCount = rData->nIterationCount;
+    *(pHeader++) = ( nIterationCount >> 0 ) & 0xFF;
+    *(pHeader++) = ( nIterationCount >> 8 ) & 0xFF;
+    *(pHeader++) = ( nIterationCount >> 16 ) & 0xFF;
+    *(pHeader++) = ( nIterationCount >> 24 ) & 0xFF;
+
+    // Then the size
+    *(pHeader++) = ( nSize >> 0 ) & 0xFF;
+    *(pHeader++) = ( nSize >> 8 ) & 0xFF;
+    *(pHeader++) = ( nSize >> 16 ) & 0xFF;
+    *(pHeader++) = ( nSize >> 24 ) & 0xFF;
+
+    // Then the salt length
+    *(pHeader++) = ( nSaltLength >> 0 ) & 0xFF;
+    *(pHeader++) = ( nSaltLength >> 8 ) & 0xFF;
+
+    // Then the IV length
+    *(pHeader++) = ( nIVLength >> 0 ) & 0xFF;
+    *(pHeader++) = ( nIVLength >> 8 ) & 0xFF;
+
+    // Then the digest length
+    *(pHeader++) = ( nDigestLength >> 0 ) & 0xFF;
+    *(pHeader++) = ( nDigestLength >> 8 ) & 0xFF;
+
+    // Then the salt content
+    memcpy ( pHeader, rData->aSalt.getConstArray(), nSaltLength );
+    pHeader += nSaltLength;
+
+    // Then the IV content
+    memcpy ( pHeader, rData->aInitVector.getConstArray(), nIVLength );
+    pHeader += nIVLength;
+
+    // Then the digest content
+    memcpy ( pHeader, rData->aDigest.getConstArray(), nDigestLength );
+    pHeader += nDigestLength;
+}
+sal_Bool ZipFile::StaticFillData ( ORef < EncryptionData > & rData, sal_Int32 &rSize, Reference < XInputStream > &rStream )
+{
+    sal_Bool bOk = sal_False;
+    const sal_Int32 nHeaderSize = n_ConstHeaderSize - 4;
+    Sequence < sal_Int8 > aBuffer ( nHeaderSize );
+    if ( nHeaderSize == rStream->readBytes ( aBuffer, nHeaderSize ) )
+    {
+        sal_Int16 nPos = 0;
+        sal_Int8 *pBuffer = aBuffer.getArray();
+        sal_Int16 nVersion = pBuffer[nPos++] & 0xFF;
+        nVersion |= ( pBuffer[nPos++] & 0xFF ) << 8;
+        if ( nVersion == n_ConstCurrentVersion )
+        {
+            sal_Int32 nCount = pBuffer[nPos++] & 0xFF;
+            nCount |= ( pBuffer[nPos++] & 0xFF ) << 8;
+            nCount |= ( pBuffer[nPos++] & 0xFF ) << 16;
+            nCount |= ( pBuffer[nPos++] & 0xFF ) << 24;
+            rData->nIterationCount = nCount;
+
+            rSize  =   pBuffer[nPos++] & 0xFF;
+            rSize |= ( pBuffer[nPos++] & 0xFF ) << 8;
+            rSize |= ( pBuffer[nPos++] & 0xFF ) << 16;
+            rSize |= ( pBuffer[nPos++] & 0xFF ) << 24;
+
+            sal_Int16 nSaltLength =   pBuffer[nPos++] & 0xFF;
+            nSaltLength          |= ( pBuffer[nPos++] & 0xFF ) << 8;
+            sal_Int16 nIVLength   = ( pBuffer[nPos++] & 0xFF );
+            nIVLength            |= ( pBuffer[nPos++] & 0xFF ) << 8;
+            sal_Int16 nDigestLength = pBuffer[nPos++] & 0xFF;
+            nDigestLength        |= ( pBuffer[nPos++] & 0xFF ) << 8;
+
+            if ( nSaltLength == rStream->readBytes ( aBuffer, nSaltLength ) )
+            {
+                rData->aSalt.realloc ( nSaltLength );
+                memcpy ( rData->aSalt.getArray(), aBuffer.getConstArray(), nSaltLength );
+                if ( nIVLength == rStream->readBytes ( aBuffer, nIVLength ) )
+                {
+                    rData->aInitVector.realloc ( nIVLength );
+                    memcpy ( rData->aInitVector.getArray(), aBuffer.getConstArray(), nIVLength );
+                    if ( nDigestLength == rStream->readBytes ( aBuffer, nDigestLength ) )
+                    {
+                        rData->aDigest.realloc ( nDigestLength );
+                        memcpy ( rData->aDigest.getArray(), aBuffer.getConstArray(), nDigestLength );
+                        bOk = sal_True;
+                    }
+                }
+            }
+        }
+    }
+    return bOk;
+}
 Reference < XInputStream > ZipFile::createFileStream(
             ZipEntry & rEntry,
             const ORef < EncryptionData > &rData,
-            sal_Bool bRawStream )
+            sal_Bool bRawStream,
+            sal_Bool bIsEncrypted )
 {
     static OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
     Reference < XInputStream > xTempStream = Reference < XInputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
-    return new XFileStream ( rEntry, xStream, xTempStream, rData, bRawStream );
+    return new XFileStream ( rEntry, xStream, xTempStream, rData, bRawStream, bIsEncrypted );
 }
 
+sal_Bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ORef < EncryptionData > &rData )
+{
+    sal_Bool bRet = sal_False;
+    if ( rData->aKey.getLength() )
+    {
+        // make a temporary cipher
+        rtlCipher aCipher;
+        StaticGetCipher ( rData, aCipher );
+
+        xSeek->seek( rEntry.nOffset );
+        sal_Int32 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
+
+        // Only want to read enough to verify the digest
+        nSize = nSize > n_ConstDigestLength ? n_ConstDigestLength : nSize;
+        Sequence < sal_Int8 > aReadBuffer ( nSize ), aDecryptBuffer ( nSize );
+
+        xStream->readBytes( aReadBuffer, nSize );
+
+        rtlDigest aDigest = rtl_digest_createSHA1();
+        rtlDigestError aDigestResult;
+        Sequence < sal_uInt8 > aDigestSeq ( RTL_DIGEST_LENGTH_SHA1 );
+        rtlCipherError aResult = rtl_cipher_decode ( aCipher,
+                                      aReadBuffer.getConstArray(),
+                                      nSize,
+                                      reinterpret_cast < sal_uInt8 * > (aDecryptBuffer.getArray()),
+                                      nSize);
+        OSL_ASSERT (aResult == rtl_Cipher_E_None);
+
+        aDigestResult = rtl_digest_updateSHA1 ( aDigest, static_cast < const void * > ( aDecryptBuffer.getConstArray() ), nSize );
+        OSL_ASSERT ( aDigestResult == rtl_Digest_E_None );
+
+        aDigestResult = rtl_digest_getSHA1 ( aDigest, aDigestSeq.getArray(), RTL_DIGEST_LENGTH_SHA1 );
+        OSL_ASSERT ( aDigestResult == rtl_Digest_E_None );
+
+        // If we don't have a digest, then we have to assume that the password is correct
+        if (  rData->aDigest.getLength() != 0  &&
+              ( aDigestSeq.getLength() != rData->aDigest.getLength() ||
+                0 != rtl_compareMemory ( aDigestSeq.getConstArray(),
+                                         rData->aDigest.getConstArray(),
+                                        aDigestSeq.getLength() ) ) )
+        {
+            // We should probably tell the user that the password they entered was wrong,
+            // but for now we'll just give the upper levels the raw unencrypted data
+        }
+        else
+            bRet = sal_True;
+
+        rtl_digest_destroySHA1 ( aDigest );
+    }
+    return bRet;
+}
 Reference < XInputStream > ZipFile::createMemoryStream(
             ZipEntry & rEntry,
             const ORef < EncryptionData > &rData,
-            sal_Bool bRawStream )
+            sal_Bool bRawStream,
+            sal_Bool bIsEncrypted )
 {
     sal_Int32 nUncompressedSize, nEnd;
     if (bRawStream)
@@ -200,11 +347,16 @@ Reference < XInputStream > ZipFile::createMemoryStream(
         nUncompressedSize = rEntry.nSize;
         nEnd = rEntry.nMethod == DEFLATED ? rEntry.nOffset + rEntry.nCompressedSize : rEntry.nOffset + rEntry.nSize;
     }
-    xSeek->seek(rEntry.nOffset);
     sal_Int32 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
     Sequence < sal_Int8 > aReadBuffer ( nSize ), aDecryptBuffer, aWriteBuffer;
     rtlCipher aCipher;
-    sal_Bool bMustDecrypt = (!rData.isEmpty() && rData->aSalt.getLength()) ? sal_True : sal_False;
+
+    // If the encryption key is zero, we need to return the raw stream. First check if
+    // we have the salt. If we have the salt, then check if we have the encryption key
+    // if not, return rawStream instead.
+
+    sal_Bool bHaveEncryptData = ( !rData.isEmpty() && rData->aSalt.getLength() && rData->aInitVector.getLength() && rData->nIterationCount != 0 ) ? sal_True : sal_False;
+    sal_Bool bMustDecrypt = ( !bRawStream && bHaveEncryptData && bIsEncrypted ) ? sal_True : sal_False;
 
     if ( bMustDecrypt )
     {
@@ -212,42 +364,50 @@ Reference < XInputStream > ZipFile::createMemoryStream(
         aDecryptBuffer.realloc ( nSize );
     }
 
-    if (nSize <0)
+    if ( nSize <0 )
         throw IOException ( );
 
+    xSeek->seek( rEntry.nOffset );
     xStream->readBytes( aReadBuffer, nSize ); // Now it holds the raw stuff from disk
 
     if ( bMustDecrypt )
     {
-        rtlDigest aDigest = rtl_digest_createSHA1();
-        rtlDigestError aDigestResult;
-        Sequence < sal_uInt8 > aDigestSeq ( RTL_DIGEST_LENGTH_SHA1 );
         rtlCipherError aResult = rtl_cipher_decode ( aCipher,
                                       aReadBuffer.getConstArray(),
                                       nSize,
                                       reinterpret_cast < sal_uInt8 * > (aDecryptBuffer.getArray()),
                                       nSize);
         OSL_ASSERT (aResult == rtl_Cipher_E_None);
-        sal_Int32 nEat = n_ConstDigestLength > nSize ? nSize : n_ConstDigestLength;
-        aDigestResult = rtl_digest_updateSHA1 ( aDigest, static_cast < const void * > ( aDecryptBuffer.getConstArray() ), nEat );
-        OSL_ASSERT ( aDigestResult == rtl_Digest_E_None );
-        aDigestResult = rtl_digest_getSHA1 ( aDigest, aDigestSeq.getArray(), RTL_DIGEST_LENGTH_SHA1 );
-        OSL_ASSERT ( aDigestResult == rtl_Digest_E_None );
-        if ( aDigestSeq.getLength() != rData->aDigest.getLength() ||
-             0 != rtl_compareMemory ( aDigestSeq.getConstArray(), rData->aDigest.getConstArray(), aDigestSeq.getLength() ) )
-        {
-        }
         aReadBuffer = aDecryptBuffer; // Now it holds the decrypted data
-        rtl_digest_destroySHA1 ( aDigest );
     }
     if (bRawStream || rEntry.nMethod == STORED)
         aWriteBuffer = aReadBuffer; // bRawStream means the caller doesn't want it decompressed
     else
     {
-        aInflater.setInputSegment(aReadBuffer, 0, nSize );
+        aInflater.setInputSegment( aReadBuffer, 0, nSize );
         aWriteBuffer.realloc( nUncompressedSize );
         aInflater.doInflate( aWriteBuffer );
         aInflater.reset();
+    }
+
+    if ( bHaveEncryptData && !bMustDecrypt && bIsEncrypted )
+    {
+        // if we have the data needed to decrypt it, but didn't want it decrypted (or
+        // we couldn't decrypt it due to wrong password), then we prepend this
+        // data to the stream
+
+        // Make a buffer big enough to hold both the header and the data itself
+        Sequence < sal_Int8 > aEncryptedDataHeader ( n_ConstHeaderSize +
+                                                     rData->aInitVector.getLength() +
+                                                     rData->aSalt.getLength() +
+                                                     rData->aDigest.getLength() +
+                                                     aWriteBuffer.getLength() );
+        sal_Int8 * pHeader = aEncryptedDataHeader.getArray();
+        StaticFillHeader ( rData, rEntry.nSize, pHeader );
+        memcpy ( pHeader, aWriteBuffer.getConstArray(), aWriteBuffer.getLength() );
+
+        // dump old buffer and point aWriteBuffer to the new one with the header
+        aWriteBuffer = aEncryptedDataHeader;
     }
     return Reference < XInputStream > ( new XMemoryStream ( aWriteBuffer ) );
 }
@@ -270,29 +430,41 @@ sal_Int32 SAL_CALL ZipFile::getSize(  )
 }
 
 Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,
-        const vos::ORef < EncryptionData > &rData)
+        const vos::ORef < EncryptionData > &rData,
+        sal_Bool bIsEncrypted )
     throw(IOException, ZipException, RuntimeException)
 {
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
+    // We want to return a rawStream if we either don't have a key or if the
+    // key is wrong
+
+    sal_Bool bNeedRawStream = rEntry.nMethod == STORED;
+
+    // if we have a digest, then this file is an encrypted one and we should
+    // check if we can decrypt it or not
+    if ( bIsEncrypted && !rData.isEmpty() && rData->aDigest.getLength() )
+        bNeedRawStream = !hasValidPassword ( rEntry, rData );
+
     return rEntry.nSize > n_ConstMaxMemoryStreamSize ?
-               createFileStream ( rEntry, rData, rEntry.nMethod == STORED ) :
-               createMemoryStream ( rEntry, rData, rEntry.nMethod == STORED );
+               createFileStream ( rEntry, rData, bNeedRawStream, bIsEncrypted ) :
+               createMemoryStream ( rEntry, rData, bNeedRawStream, bIsEncrypted);
     //return createMemoryStream( rEntry, rData, sal_False );
 
 }
 
 Reference< XInputStream > SAL_CALL ZipFile::getRawStream( ZipEntry& rEntry,
-        const vos::ORef < EncryptionData > &rData)
+        const vos::ORef < EncryptionData > &rData,
+        sal_Bool bIsEncrypted )
     throw(IOException, ZipException, RuntimeException)
 {
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
     return ( rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize > n_ConstMaxMemoryStreamSize ) ?
-               createFileStream ( rEntry, rData, sal_True ) :
-               createMemoryStream ( rEntry, rData, sal_True );
+               createFileStream ( rEntry, rData, sal_True, bIsEncrypted ) :
+               createMemoryStream ( rEntry, rData, sal_True, bIsEncrypted );
     //return createMemoryStream( rEntry, rData, sal_True );
 }
 
