@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:45:00 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@
 #include "sfxtypes.hxx"
 #include "arrdecl.hxx"
 #include "sfx.hrc"
-#include "ipfrm.hxx"
-#include "ipenv.hxx"
+//#include "ipfrm.hxx"
+//#include "ipenv.hxx"
 #include "appdata.hxx"
 #include "viewsh.hxx"
 #include "imgmgr.hxx"
@@ -112,6 +112,8 @@
 #include "sfxresid.hxx"
 #include "menu.hrc"
 #include "imagemgr.hxx"
+#include "viewfrm.hxx"
+#include "objsh.hxx"
 
 #ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
 #include <framework/addonsoptions.hxx>
