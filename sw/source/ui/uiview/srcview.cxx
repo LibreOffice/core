@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:10:53 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,8 @@
 
 #include <svx/htmlcfg.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
