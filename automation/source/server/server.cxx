@@ -2,9 +2,9 @@
  *
  *  $RCSfile: server.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:52:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 15:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,8 @@
 #ifdef DBG_UTIL
 void TestToolDebugPrint( const sal_Char *pString )
 {
-    StatementList::DirectLog( S_AssertError, UniString( pString, RTL_TEXTENCODING_UTF8 ) );
+    if ( !DbgFilterMessage( pString ) )
+        StatementList::DirectLog( S_AssertError, UniString( pString, RTL_TEXTENCODING_UTF8 ) );
 }
 void SAL_CALL osl_TestToolDebugPrint( const sal_Char *pString )
 {
