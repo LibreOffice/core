@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:19:52 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,6 +413,10 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Text[ hindi ] = "लेबिल फैलाव को परिभाषा दो";
     Text[ slovak ] = "Definovať oblasť popiskov";
 };
+
+
+
+
 
 
 
