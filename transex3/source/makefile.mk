@@ -2,8 +2,8 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
-#   last change: $Author: obo $ $Date: 2005-03-16 10:28:22 $
+#   $Revision: 1.37 $
+#   last change: $Author: rt $ $Date: 2005-03-29 11:43:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -126,7 +126,7 @@ APP1STDLIBS+= \
 
 .IF "$(OS)"=="MACOSX"
 # static libs at end for OS X
-APP1STDLIBS+= $(BTSTRPLIB)
+APP1STDLIBS+= $(BTSTRPLIB) $(BOOTSTRP2)
 .ENDIF
 
 APP1LIBS+=	$(LB)$/$(PRJNAME).lib
@@ -235,7 +235,7 @@ APP9STDLIBS+= \
 
 .IF "$(OS)"=="MACOSX"
 # static libs at end for OS X
-APP9STDLIBS+= $(BTSTRPLIB)
+APP9STDLIBS+= $(BTSTRPLIB) $(BOOTSTRP2)
 .ENDIF
 
 DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
