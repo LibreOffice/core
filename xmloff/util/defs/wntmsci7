@@ -6923,3 +6923,8 @@ _real@8@3fe7f88d2526f901a800
 ??1XMLTextAnimationStepPropertyHdl@@UAE@XZ
 ?exportXML@XMLTextAnimationStepPropertyHdl@@UBEEAAVOUString@rtl@@ABVAny@uno@star@sun@com@@ABVSvXMLUnitConverter@@@Z
 ?importXML@XMLTextAnimationStepPropertyHdl@@UBEEABVOUString@rtl@@AAVAny@uno@star@sun@com@@ABVSvXMLUnitConverter@@@Z
+??1XMLDurationMS16PropHdl_Impl@@UAE@XZ
+??_7XMLDurationMS16PropHdl_Impl@@6B@
+??_GXMLDurationMS16PropHdl_Impl@@UAEPAXI@Z
+?exportXML@XMLDurationMS16PropHdl_Impl@@UBEEAAVOUString@rtl@@ABVAny@uno@star@sun@com@@ABVSvXMLUnitConverter@@@Z
+?importXML@XMLDurationMS16PropHdl_Impl@@UBEEABVOUString@rtl@@AAVAny@uno@star@sun@com@@ABVSvXMLUnitConverter@@@Z
