@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txencbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-08-14 11:45:56 $
+ *  last change: $Author: er $ $Date: 2002-07-29 15:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,38 +108,49 @@ USHORT SvxTextEncodingBox::EncodingToPos_Impl( rtl_TextEncoding nEnc ) const
 //------------------------------------------------------------------------
 
 void SvxTextEncodingBox::FillFromTextEncodingTable(
-            sal_uInt32 nExcludeInfoFlags, sal_uInt32 nButIncludeInfoFlags )
+        sal_Bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
+        sal_uInt32 nButIncludeInfoFlags )
 {
+    rtl_TextEncodingInfo aInfo;
+    aInfo.StructSize = sizeof(rtl_TextEncodingInfo);
     USHORT nCount = m_pEncTable->Count();
-    if ( nExcludeInfoFlags )
+    for ( USHORT j=0; j<nCount; j++ )
     {
-        rtl_TextEncodingInfo aInfo;
-        aInfo.StructSize = sizeof(rtl_TextEncodingInfo);
-        for ( USHORT j=0; j<nCount; j++ )
+        BOOL bInsert = TRUE;
+        rtl_TextEncoding nEnc = rtl_TextEncoding( m_pEncTable->GetValue( j ) );
+        if ( nExcludeInfoFlags )
         {
-            rtl_TextEncoding nEnc = rtl_TextEncoding( m_pEncTable->GetValue( j ) );
-            if ( rtl_getTextEncodingInfo( nEnc, &aInfo ) )
+            if ( !rtl_getTextEncodingInfo( nEnc, &aInfo ) )
+                bInsert = FALSE;
+            else
             {
                 if ( (aInfo.Flags & nExcludeInfoFlags) == 0 )
                 {
                     if ( (nExcludeInfoFlags & RTL_TEXTENCODING_INFO_UNICODE) &&
                             ((nEnc == RTL_TEXTENCODING_UCS2) ||
                             nEnc == RTL_TEXTENCODING_UCS4) )
-                        ;   // InfoFlags don't work for Unicode :-(
-                    else
-                        InsertTextEncoding( nEnc, m_pEncTable->GetString( j ) );
+                        bInsert = FALSE;    // InfoFlags don't work for Unicode :-(
                 }
-                else if ( (aInfo.Flags & nButIncludeInfoFlags) != 0 )
-                    InsertTextEncoding( nEnc, m_pEncTable->GetString( j ) );
+                else if ( (aInfo.Flags & nButIncludeInfoFlags) == 0 )
+                    bInsert = FALSE;
             }
         }
-    }
-    else
-    {
-        for ( USHORT j=0; j<nCount; j++ )
+        if ( bInsert )
         {
-            InsertTextEncoding( rtl_TextEncoding( m_pEncTable->GetValue( j ) ),
-                m_pEncTable->GetString( j ) );
+            if ( bExcludeImportSubsets )
+            {
+                switch ( nEnc )
+                {
+                    // subsets of RTL_TEXTENCODING_GB_18030
+                    case RTL_TEXTENCODING_GB_2312 :
+                    case RTL_TEXTENCODING_GBK :
+                    case RTL_TEXTENCODING_MS_936 :
+                        bInsert = FALSE;
+                    break;
+                }
+            }
+            if ( bInsert )
+                InsertTextEncoding( nEnc, m_pEncTable->GetString( j ) );
         }
     }
 }
@@ -147,44 +158,54 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
 //------------------------------------------------------------------------
 
 void SvxTextEncodingBox::FillFromDbTextEncodingMap(
-        sal_uInt32 nExcludeInfoFlags, sal_uInt32 nButIncludeInfoFlags )
+        sal_Bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
+        sal_uInt32 nButIncludeInfoFlags )
 {
+    rtl_TextEncodingInfo aInfo;
+    aInfo.StructSize = sizeof(rtl_TextEncodingInfo);
     svxform::ODataAccessCharsetHelper aCSH;
     ::std::vector< rtl_TextEncoding > aEncs;
     sal_Int32 nCount = aCSH.getSupportedTextEncodings( aEncs );
-    if ( nExcludeInfoFlags )
+    for ( USHORT j=0; j<nCount; j++ )
     {
-        rtl_TextEncodingInfo aInfo;
-        aInfo.StructSize = sizeof(rtl_TextEncodingInfo);
-        for ( sal_Int32 j=0; j<nCount; j++ )
+        BOOL bInsert = TRUE;
+        rtl_TextEncoding nEnc = rtl_TextEncoding( aEncs[j] );
+        if ( nExcludeInfoFlags )
         {
-            rtl_TextEncoding nEnc = rtl_TextEncoding( aEncs[j] );
-            if ( rtl_getTextEncodingInfo( nEnc, &aInfo ) )
+            if ( !rtl_getTextEncodingInfo( nEnc, &aInfo ) )
+                bInsert = FALSE;
+            else
             {
                 if ( (aInfo.Flags & nExcludeInfoFlags) == 0 )
                 {
                     if ( (nExcludeInfoFlags & RTL_TEXTENCODING_INFO_UNICODE) &&
                             ((nEnc == RTL_TEXTENCODING_UCS2) ||
                             nEnc == RTL_TEXTENCODING_UCS4) )
-                        ;   // InfoFlags don't work for Unicode :-(
-                    else
-                        InsertTextEncoding( nEnc );
+                        bInsert = FALSE;    // InfoFlags don't work for Unicode :-(
                 }
-                else if ( (aInfo.Flags & nButIncludeInfoFlags) != 0 )
-                    InsertTextEncoding( nEnc );
+                else if ( (aInfo.Flags & nButIncludeInfoFlags) == 0 )
+                    bInsert = FALSE;
             }
         }
-    }
-    else
-    {
-        for ( sal_Int32 j=0; j<nCount; j++ )
+        if ( bInsert )
         {
-            rtl_TextEncoding nEnc = rtl_TextEncoding( aEncs[j] );
+            if ( bExcludeImportSubsets )
+            {
+                switch ( nEnc )
+                {
+                    // subsets of RTL_TEXTENCODING_GB_18030
+                    case RTL_TEXTENCODING_GB_2312 :
+                    case RTL_TEXTENCODING_GBK :
+                    case RTL_TEXTENCODING_MS_936 :
+                        bInsert = FALSE;
+                    break;
+                }
+            }
             // CharsetMap offers a RTL_TEXTENCODING_DONTKNOW for internal use,
             // makes no sense here and would result in an empty string as list
             // entry.
-            if ( nEnc != RTL_TEXTENCODING_DONTKNOW )
-                InsertTextEncoding( nEnc );
+            if ( bInsert && nEnc != RTL_TEXTENCODING_DONTKNOW )
+                InsertTextEncoding( nEnc, m_pEncTable->GetString( j ) );
         }
     }
 }
@@ -193,7 +214,7 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
 
 void SvxTextEncodingBox::FillWithMimeAndSelectBest()
 {
-    FillFromTextEncodingTable( 0xffffffff, RTL_TEXTENCODING_INFO_MIME );
+    FillFromTextEncodingTable( sal_False, 0xffffffff, RTL_TEXTENCODING_INFO_MIME );
     const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( gsl_getSystemTextEncoding() );
     rtl_TextEncoding nEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
     SelectTextEncoding( nEnc );
