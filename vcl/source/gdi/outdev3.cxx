@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-12 13:45:41 $
+ *  last change: $Author: hdu $ $Date: 2001-11-19 17:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8488,26 +8488,103 @@ BOOL OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     // we need a graphics
     if ( !mpGraphics )
     {
-        if ( !((OutputDevice*)this)->ImplGetGraphics() )
+        if ( !(const_cast<OutputDevice&>(*this).ImplGetGraphics()) )
             return FALSE;
     }
 #else
     // Da wegen Clipping hier NULL zurueckkommen kann, koennen wir nicht
     // den Rueckgabewert nehmen
-    ((OutputDevice*)this)->ImplGetServerGraphics();
+    const_cast<OutputDevice&>(*this).ImplGetServerGraphics();
 #endif
 
     if ( mbNewFont )
-        ((OutputDevice*)this)->ImplNewFont();
+        const_cast<OutputDevice&>(*this).ImplNewFont();
     if ( mbInitFont )
-        ((OutputDevice*)this)->ImplInitFont();
+        const_cast<OutputDevice&>(*this).ImplInitFont();
 
-    ULONG nPairs = mpGraphics->GetFontCodeRanges( NULL );
-    if( !nPairs )
+    if( !mpFontEntry )
         return FALSE;
 
-    sal_UCS4* pCodes = new sal_UCS4[ 2 * nPairs ];
-    mpGraphics->GetFontCodeRanges( pCodes );
-    rFontCharMap.ImplSetRanges( nPairs, pCodes );
+    const ImplFontData* pFontData = mpFontEntry->maFontSelData.mpFontData;
+
+    // a little font charmap cache helps considerably
+    static const int NMAXITEMS = 16;
+    static int nUsedItems = 0, nCurItem = 0;
+
+    struct CharMapCacheItem { const ImplFontData* mpFontData; FontCharMap maCharMap; };
+    static CharMapCacheItem aCache[ NMAXITEMS ];
+
+    ULONG nPairs = 0;
+    sal_UCS4* pPairs = NULL;
+
+    int i;
+    for( i = nUsedItems; --i >= 0; )
+        if( pFontData == aCache[i].mpFontData )
+            break;
+    if( i >= 0 )    // found in cache
+    {
+        rFontCharMap = aCache[i].maCharMap;
+    }
+    else            // need to cache
+    {
+        // get the data
+        nPairs = mpGraphics->GetFontCodeRanges( NULL );
+
+        if( nPairs > 0 )
+        {
+            pPairs = new sal_UCS4[ 2 * nPairs ];
+            mpGraphics->GetFontCodeRanges( pPairs );
+            rFontCharMap.ImplSetRanges( nPairs, pPairs );
+        }
+
+        // manage cache round-robin and insert data
+        CharMapCacheItem& rItem = aCache[ nCurItem ];
+        rItem.mpFontData = pFontData;
+        rItem.maCharMap = rFontCharMap;
+
+        if( ++nCurItem >= NMAXITEMS )
+            nCurItem = 0;
+
+        if( ++nUsedItems >= NMAXITEMS )
+            nUsedItems = NMAXITEMS;
+    }
+
+    if( rFontCharMap.IsDefaultMap() )
+        return FALSE;
     return TRUE;
 }
+
+// -----------------------------------------------------------------------
+
+xub_StrLen OutputDevice::HasGlyphs( const Font& rTempFont, const String& rStr,
+    xub_StrLen nIndex, xub_StrLen nLen ) const
+{
+    if( nIndex >= rStr.Len() )
+        return nIndex;
+    xub_StrLen nEnd = nIndex + nLen;
+    if( (ULONG)nEnd+nLen >= rStr.Len() )
+        nEnd = rStr.Len();
+
+    DBG_ASSERT( nIndex < nEnd, "StartPos >= EndPos?" );
+    DBG_ASSERT( nEnd <= rStr.Len(), "String too short" );
+
+    // to get the map temporarily set font
+    const Font aOrigFont = GetFont();
+    const_cast<OutputDevice&>(*this).SetFont( rTempFont );
+    FontCharMap aFontCharMap;
+    BOOL bRet = GetFontCharMap( aFontCharMap );
+    const_cast<OutputDevice&>(*this).SetFont( aOrigFont );
+
+    // if fontmap is unknown assume it doesn't have the glyphs
+    if( bRet == FALSE )
+        return nIndex;
+
+    const sal_Unicode* pStr = rStr.GetBuffer();
+    for(; nIndex < nEnd; ++pStr, ++nIndex )
+        if( ! aFontCharMap.HasChar( *pStr ) )
+            break;
+
+    return nIndex;
+}
+
+// -----------------------------------------------------------------------
