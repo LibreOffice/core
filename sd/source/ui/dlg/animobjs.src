@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:08:38 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1795,6 +1795,18 @@ DockingWindow FLT_WIN_ANIMATION
     Text[ hindi ] = "हूलास";
     Text[ slovak ] = "Animácia";
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
