@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:01:08 $
+ *  last change: $Author: aw $ $Date: 2001-02-02 12:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1566,30 +1566,43 @@ void E3dScene::PostItemChange(const sal_uInt16 nWhich)
     switch(nWhich)
     {
         case SDRATTR_3DSCENE_PERSPECTIVE            :
-        {
-            Camera3D aSceneCam(GetCamera());
-            aSceneCam.SetProjection(GetPerspective());
-            SetCamera( aSceneCam );
-            break;
-        }
         case SDRATTR_3DSCENE_DISTANCE               :
-        {
-            Camera3D aSceneCam(GetCamera());
-            Vector3D aActualPosition = aSceneCam.GetPosition();
-            double fNew = GetDistance();
-            if(fabs(fNew - aActualPosition.Z()) > 1.0)
-            {
-                aSceneCam.SetPosition( Vector3D( aActualPosition.X(), aActualPosition.Y(), fNew) );
-                SetCamera( aSceneCam );
-            }
-            break;
-        }
         case SDRATTR_3DSCENE_FOCAL_LENGTH           :
         {
+            // #83387#, #83391#
+            // one common function for the camera attributes
+            // since SetCamera() sets all three back to the ItemSet
             Camera3D aSceneCam(GetCamera());
-            double fNew = GetFocalLength() / 100.0;
-            aSceneCam.SetFocalLength(fNew);
-            SetCamera( aSceneCam );
+            BOOL bChange(FALSE);
+
+            // for SDRATTR_3DSCENE_PERSPECTIVE:
+            if(aSceneCam.GetProjection() != GetPerspective())
+            {
+                aSceneCam.SetProjection(GetPerspective());
+                bChange = TRUE;
+            }
+
+            // for SDRATTR_3DSCENE_DISTANCE:
+            Vector3D aActualPosition = aSceneCam.GetPosition();
+            double fNew = GetDistance();
+            if(fNew != aActualPosition.Z())
+            {
+                aSceneCam.SetPosition( Vector3D( aActualPosition.X(), aActualPosition.Y(), fNew) );
+                bChange = TRUE;
+            }
+
+            // for SDRATTR_3DSCENE_FOCAL_LENGTH:
+            fNew = GetFocalLength() / 100.0;
+            if(aSceneCam.GetFocalLength() != fNew)
+            {
+                aSceneCam.SetFocalLength(fNew);
+                bChange = TRUE;
+            }
+
+            // for all
+            if(bChange)
+                SetCamera(aSceneCam);
+
             break;
         }
         case SDRATTR_3DSCENE_TWO_SIDED_LIGHTING     :
