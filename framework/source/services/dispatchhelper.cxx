@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:50 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
         (sURL.getLength()<1     )
        )
     {
-        throw css::uno::RuntimeException(DECLARE_ASCII("called with invalid parameters"), xTHIS);
+        return css::uno::Any();
     }
 
     // parse given URL
@@ -198,9 +198,6 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     aReadLock.unlock();
     /* } SAFE */
 
-    if (!xParser.is())
-        throw css::uno::RuntimeException(DECLARE_ASCII("couldn't create neccessary URL parser"), xTHIS);
-
     css::util::URL aURL;
     aURL.Complete = sURL;
     xParser->parseStrict(aURL);
@@ -208,9 +205,6 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     // search dispatcher
     css::uno::Reference< css::frame::XDispatch >          xDispatch       = xDispatchProvider->queryDispatch(aURL, sTargetFrameName, nSearchFlags);
     css::uno::Reference< css::frame::XNotifyingDispatch > xNotifyDispatch (xDispatch, css::uno::UNO_QUERY);
-
-    if (!xDispatch.is())
-        throw css::uno::RuntimeException(DECLARE_ASCII("no dispatch available"), xTHIS);
 
     css::uno::Any aResult;
     if (xNotifyDispatch.is())
@@ -257,10 +251,11 @@ void SAL_CALL DispatchHelper::dispatchFinished( const css::frame::DispatchResult
 {
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
-    m_aResult      = aResult.Result;
-    m_xBroadcaster = css::uno::Reference< css::uno::XInterface >();
+
+    m_aResult <<= aResult;
     m_aBlock.set();
-    aWriteLock.unlock();
+    m_xBroadcaster.clear();
+
     /* } SAFE */
 }
 
@@ -276,9 +271,11 @@ void SAL_CALL DispatchHelper::disposing( const css::lang::EventObject& aEvent )
 {
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
-    if (aEvent.Source == m_xBroadcaster)
-        m_xBroadcaster = css::uno::Reference< css::uno::XInterface >();
-    aWriteLock.unlock();
+
+    m_aResult.clear();
+    m_aBlock.set();
+    m_xBroadcaster.clear();
+
     /* } SAFE */
 }
 
