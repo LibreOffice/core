@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-19 08:41:38 $
+ *  last change: $Author: oj $ $Date: 2002-07-23 10:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,9 @@ void  SwDropCapsPict::Paint(const Rectangle &rRect)
     SetLineColor();
 
     // Weisser Hintergrund
-    SetFillColor(Color(COL_WHITE));
+    // #101510# OJ SetFillColor(Color(COL_WHITE));
+    SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() );
+
     DrawRect(Rectangle(Point(0, 0), GetOutputSizePixel()));
     SetClipRegion(Region(Rectangle(
         Point(BORDER, BORDER),
@@ -233,6 +235,8 @@ void  SwDropCapsPict::Paint(const Rectangle &rRect)
     long nTextH = nLines * nTotLineH;
     aFont.SetSize(Size(0, nTextH));
     aFont.SetTransparent(TRUE);
+    aFont.SetColor(GetSettings().GetStyleSettings().GetWindowTextColor());
+    aFont.SetFillColor(GetSettings().GetStyleSettings().GetWindowColor());
     SetFont(aFont);
     USHORT nLeading = (USHORT) GetFontMetric().GetLeading();
     aFont.SetSize(Size(0, aFont.GetSize().Height() + nLeading));
@@ -242,7 +246,7 @@ void  SwDropCapsPict::Paint(const Rectangle &rRect)
 
     ULONG lDistance = nDistance;
     USHORT nDistW = (USHORT) (ULONG) (((lDistance * 100) / 240) * nTotLineH) / 100;
-    SetFillColor(Color(COL_WHITE));
+    SetFillColor(GetSettings().GetStyleSettings().GetWindowColor());
     if(((SwDropCapsPage*)GetParent())->aDropCapsBox.IsChecked())
     {
         DrawRect(Rectangle(
@@ -608,6 +612,9 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 
 /*--------------------------------------------------
   $Log: not supported by cvs2svn $
+  Revision 1.3  2001/10/19 08:41:38  fme
+  Fix #92507#: Script and attribute changes inside drop caps
+
   Revision 1.2  2001/05/30 16:28:21  fme
   Fix #86988#: Redesign of dialogs
 
