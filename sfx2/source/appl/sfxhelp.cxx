@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 15:25:25 $
+ *  last change: $Author: pb $ $Date: 2001-10-24 11:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,7 @@ public:
     SfxHelpOptions_Impl*    GetOptions();
     String                  GetHelpText( ULONG nHelpId, const String& rModule );    // get "Active Help"
     sal_Bool                HasModule( const ::rtl::OUString& rModule ) const;      // module installed
+    sal_Bool                IsHelpInstalled() const;                                // module list not empty
 };
 
 SfxHelp_Impl::SfxHelp_Impl( sal_Bool bDebug ) :
@@ -368,6 +369,11 @@ sal_Bool SfxHelp_Impl::HasModule( const ::rtl::OUString& rModule ) const
     return ( ::std::find( m_aModulesList.begin(), m_aModulesList.end(), rModule ) != m_aModulesList.end() );
 }
 
+sal_Bool SfxHelp_Impl::IsHelpInstalled() const
+{
+    return ( m_aModulesList.begin() != m_aModulesList.end() );
+}
+
 // class SfxHelp ---------------------------------------------------------
 
 SfxHelp::SfxHelp() :
@@ -382,7 +388,7 @@ SfxHelp::SfxHelp() :
         ::rtl::OUString sHelpDebug;
         ::rtl::OUString sEnvVarName( RTL_CONSTASCII_USTRINGPARAM( "HELP_DEBUG" ) );
         osl_getEnvironment( sEnvVarName.pData, &sHelpDebug.pData );
-        bIsDebug = (0 == sEnvVarName.getLength() );
+        bIsDebug = ( 0 != sHelpDebug.getLength() );
     }
 
     pImp = new SfxHelp_Impl( bIsDebug );
@@ -450,8 +456,8 @@ String SfxHelp::GetHelpModuleName_Impl( ULONG nHelpId )
         if ( pViewFrame->GetObjectShell() )
         {
             aModuleName = GetFactoryName_Impl( pViewFrame );
-            // help fo module installed?
-            sal_Bool bHasModule = pImp->HasModule( aModuleName );
+            // help for module installed? If help isn't installed, module search will be disabled.
+            sal_Bool bHasModule = pImp->IsHelpInstalled() ? pImp->HasModule( aModuleName ) : sal_True;
             // if not, search through the shell hierachy for an installed module
             while ( !bHasModule && pParentViewFrame && pParentViewFrame->GetObjectShell() )
             {
@@ -504,7 +510,8 @@ String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
 
         if ( !nHelpId )
         {
-            aHelpURL += DEFINE_CONST_UNICODE("&startId=go");
+            // no help id -> start page
+            aHelpURL += DEFINE_CONST_UNICODE("&HELP_ContextID=start");
         }
         else
         {
