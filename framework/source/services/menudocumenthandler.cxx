@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudocumenthandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-03 08:55:26 $
+ *  last change: $Author: mba $ $Date: 2001-05-04 15:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,11 +726,18 @@ throw ( SAXException, RuntimeException )
                 AttributeListImpl* pListMenu = new AttributeListImpl;
                 Reference< XAttributeList > xListMenu( (XAttributeList *)pListMenu , UNO_QUERY );
 
+                String aCommand( pMenu->GetItemCommand( nItemId ) );
+                if ( !aCommand.Len() )
+                {
+                    aCommand = String::CreateFromAscii("slot:");
+                    aCommand += String::CreateFromInt32( nItemId );
+                }
+
                 pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ID )),
                                          m_aAttributeType,
-                                         pMenu->GetItemCommand( nItemId ) );
+                                         aCommand );
 
-                if ( pMenu->GetUserValue( nItemId ) & MENU_SAVE_LABEL )
+//                if ( pMenu->GetUserValue( nItemId ) & MENU_SAVE_LABEL )
                     pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_LABEL )),
                                              m_aAttributeType,
                                              pMenu->GetItemText( nItemId ) );
@@ -769,9 +776,16 @@ void OWriteMenuDocumentHandler::WriteMenuItem( Menu* pMenu, USHORT nItemId )
     AttributeListImpl* pList = new AttributeListImpl;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
+    String aCommand( pMenu->GetItemCommand( nItemId ) );
+    if ( !aCommand.Len() )
+    {
+        aCommand = String::CreateFromAscii("slot:");
+        aCommand += String::CreateFromInt32( nItemId );
+    }
+
     pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ID )),
-                         m_aAttributeType,
-                         pMenu->GetItemCommand( nItemId ) );
+                                m_aAttributeType,
+                                aCommand );
 
     ULONG nHelpId = pMenu->GetHelpId( nItemId );
     if ( nHelpId > 0 )
@@ -781,7 +795,7 @@ void OWriteMenuDocumentHandler::WriteMenuItem( Menu* pMenu, USHORT nItemId )
                              OUString::valueOf( sal_Int64( nHelpId )) );
     }
 
-    if ( pMenu->GetUserValue( nItemId ) & MENU_SAVE_LABEL )
+//    if ( pMenu->GetUserValue( nItemId ) & MENU_SAVE_LABEL )
          pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_LABEL )),
                              m_aAttributeType,
                              pMenu->GetItemText( nItemId ));
