@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-05-31 11:55:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:24:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #ifndef _LABFMT_HXX
 #define _LABFMT_HXX
 
-#include "labimp.hxx"
+#include "swuilabimp.hxx" //CHINA001
 #include "labimg.hxx"
 
 #ifndef _SV_MSGBOX_HXX
