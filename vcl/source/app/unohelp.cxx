@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-27 08:16:51 $
+ *  last change: $Author: er $ $Date: 2001-11-15 11:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ struct VCLRegServiceInfo
 static VCLRegServiceInfo aVCLComponentsArray[] =
 {
     {"i18n", sal_True},
+    {"i18npool", sal_True},
 #ifdef UNX
 #ifdef MACOSX
     {"dtransaqua", sal_True},
