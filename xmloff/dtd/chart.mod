@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.1 2000-09-29 16:16:03 mh Exp $
+	$Id: chart.mod,v 1.2 2000-10-19 13:49:05 bm Exp $
  
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -62,7 +62,7 @@
 					    chart:plot-area,
 						table:table )>
 <!ATTLIST chart:chart
-		  office:class %chart-class; #REQUIRED
+		  chart:class %chart-class; #REQUIRED
 		  svg:width %length; #IMPLIED
 		  svg:height %length; #IMPLIED
 		  chart:style-name %styleName; #IMPLIED >
@@ -136,8 +136,8 @@
 
 <!ELEMENT chart:axis (chart:title?, chart:grid*)>
 <!ATTLIST chart:axis
-		  office:class (category|value|series|domain) #REQUIRED
-		  office:name %string; #IMPLIED
+		  chart:class (category|value|series|domain) #REQUIRED
+		  chart:name %string; #IMPLIED
 		  chart:style-name %styleName; #IMPLIED >
 
 <!ATTLIST style:properties
@@ -159,7 +159,7 @@
 
 <!ELEMENT chart:grid EMPTY>
 <!ATTLIST chart:grid
-		  office:class (major|minor) "major"
+		  chart:class (major|minor) "major"
 		  chart:style-name %styleName; #IMPLIED >
 
 
@@ -178,7 +178,7 @@
 <!ATTLIST chart:series
 		  chart:values-cell-range-address %cell-range-address; #REQUIRED
 		  chart:label-cell-address %cell-address; #IMPLIED
-		  office:class %chart-class; #IMPLIED
+		  chart:class %chart-class; #IMPLIED
 		  chart:attached-axis %string; #IMPLIED
 		  chart:style-name %styleName; #IMPLIED >
 
