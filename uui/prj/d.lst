@@ -1,5 +1,6 @@
-touch: ..\%__SRC%\misc\uui.hid %_DEST%\bin%_EXT%\uui.hid
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
 
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\uui*.dll %_DEST%\bin%_EXT%\uui*.dll
 ..\%__SRC%\bin\uui*.res %_DEST%\bin%_EXT%\uui*.res
 ..\%__SRC%\lib\libuui*.* %_DEST%\lib%_EXT%\libuui*.*
