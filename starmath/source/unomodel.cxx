@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-03 18:48:14 $
+ *  last change: $Author: mtg $ $Date: 2001-05-04 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ SfxItemPropertyMap aMathModelMap_Impl[] =
     { MAP_CHAR_LEN(UNO_NAME_IS_TEXT_MODE                       ), FID_IS_TEXT_MODE                       ,      &::getBooleanCppuType(),    PROPERTY_NONE, 0},
     { MAP_CHAR_LEN(UNO_NAME_LEFT_MARGIN                       ), FID_LEFT_MARGIN                           ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_LEFTSPACE                 },
     { MAP_CHAR_LEN(UNO_NAME_PRINTER_NAME                       ), FID_PRINTER_NAME                       ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0                  },
-    { MAP_CHAR_LEN(UNO_NAME_PRINTER_SETUP                      ), FID_PRINTER_SETUP                      ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0                  },
+    { MAP_CHAR_LEN(UNO_NAME_PRINTER_SETUP                      ), FID_PRINTER_SETUP                      ,      &::getCppuType((const Sequence < sal_Int8 >*)0),    PROPERTY_NONE, 0                  },
     { MAP_CHAR_LEN(UNO_NAME_RELATIVE_BRACKET_DISTANCE          ), FID_RELATIVE_BRACKET_DISTANCE          ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_BRACKETSPACE },
     { MAP_CHAR_LEN(UNO_NAME_RELATIVE_BRACKET_EXCESS_SIZE       ), FID_RELATIVE_BRACKET_EXCESS_SIZE       ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_BRACKETSIZE  },
     { MAP_CHAR_LEN(UNO_NAME_RELATIVE_FONT_HEIGHT_FUNCTIONS     ), FID_RELATIVE_FONT_HEIGHT_FUNCTIONS     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_FUNCTION},
@@ -603,11 +603,9 @@ void SmModel::_setPropertyValue(const uno::Any& aValue,
         break;
         case FID_PRINTER_SETUP:
         {
-            OUString aString;
-            if ( aValue >>= aString )
+            Sequence < sal_Int8 > aSequence;
+            if ( aValue >>= aSequence )
             {
-                Sequence < sal_Int8 > aSequence;
-                SvXMLUnitConverter::decodeBase64 ( aSequence, aString );
                 SmDocShell * pDoc = static_cast < SmDocShell * > (pObjShell);
                 sal_uInt32 nSize = aSequence.getLength();
                 SvMemoryStream aStream;
@@ -778,10 +776,7 @@ void SmModel::_getPropertyValue(Any & rValue,  SfxObjectShell *pObjShell,
                 sal_uInt32 nSize = aStream.GetSize();
                 Sequence < sal_Int8 > aSequence ( nSize );
                 memcpy ( aSequence.getArray(), aStream.GetData(), nSize );
-                OUStringBuffer aBuffer;
-                SvXMLUnitConverter::encodeBase64 ( aBuffer, aSequence );
-                OUString aString = aBuffer.makeStringAndClear();
-                rValue <<= aString;
+                rValue <<= aSequence;
             }
         }
         break;
