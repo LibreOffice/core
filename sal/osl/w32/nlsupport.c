@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obr $ $Date: 2001-09-17 12:36:46 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 11:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,6 @@
 #define UNICODE
 #include <windows.h>
 #include <wchar.h>
-
-#include <systools/win32/kernel9x.h>
 
 #include <osl/mutex.h>
 #include <osl/nlsupport.h>
@@ -162,49 +160,49 @@ rtl_TextEncoding GetTextEncodingFromCodePage( UINT codepage )
 
     switch( codepage )
     {
-    case 1200:
+    case 1200: /* Unicode (BMP of ISO 10646) */
         encoding = RTL_TEXTENCODING_UNICODE;
         break;
-    case 1252:
+    case 1252: /* Windows 3.1 Latin 1 (U.S., Western Europe) */
         encoding = RTL_TEXTENCODING_MS_1252;
         break;
-    case 1250:
+    case 1250: /* Windows 3.1 Eastern European  */
         encoding = RTL_TEXTENCODING_MS_1250;
         break;
-    case 1251:
+    case 1251: /* Windows 3.1 Cyrillic */
         encoding = RTL_TEXTENCODING_MS_1251;
         break;
-    case 1253:
+    case 1253: /* Windows 3.1 Greek */
         encoding = RTL_TEXTENCODING_MS_1253;
         break;
-    case 1254:
+    case 1254: /* Windows 3.1 Turkish */
         encoding = RTL_TEXTENCODING_MS_1254;
         break;
-    case 1255:
+    case 1255: /* Hebrew */
         encoding = RTL_TEXTENCODING_MS_1255;
         break;
-    case 1256:
+    case 1256: /* Arabic */
         encoding = RTL_TEXTENCODING_MS_1256;
         break;
-    case 1257:
+    case 1257: /* Baltic */
         encoding = RTL_TEXTENCODING_MS_1257;
         break;
-    case 1258:
+    case 1258: /* Vietnamese */
         encoding = RTL_TEXTENCODING_MS_1258;
         break;
-    case 874:
+    case 874: /* Thai */
         encoding = RTL_TEXTENCODING_MS_874;
         break;
-    case 932:
+    case 932: /* Japan */
         encoding = RTL_TEXTENCODING_MS_932;
         break;
-    case 936:
+    case 936: /* Chinese simplified (PRC, Singapore) */
         encoding = RTL_TEXTENCODING_MS_936;
         break;
-    case 949:
+    case 949: /* Korean */
         encoding = RTL_TEXTENCODING_MS_949;
         break;
-    case 950:
+    case 950: /* Chinese tradintional (Taiwan; Hong Kong SAR, PRC)  */
         encoding = RTL_TEXTENCODING_MS_950;
         break;
     default:
