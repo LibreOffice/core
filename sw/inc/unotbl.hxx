@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-11-15 15:48:28 $
+ *  last change: $Author: tl $ $Date: 2002-04-30 06:58:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,15 +79,18 @@
 #ifndef _COM_SUN_STAR_TABLE_XCELLRANGE_HPP_
 #include <com/sun/star/table/XCellRange.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEDATA_HPP_
+#include <com/sun/star/sheet/XCellRangeData.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TABLE_XAUTOFORMATTABLE_HPP_
 #include <com/sun/star/table/XAutoFormattable.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE9_HXX_
-#include <cppuhelper/implbase9.hxx> // helper for implementations
+#ifndef _CPPUHELPER_IMPLBASE10_HXX_
+#include <cppuhelper/implbase10.hxx> // helper for implementations
 #endif
-#ifndef _CPPUHELPER_IMPLBASE8_HXX_
-#include <cppuhelper/implbase8.hxx> // helper for implementations
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx> // helper for implementations
 #endif
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx> // helper for implementations
@@ -125,6 +128,11 @@ class SwXCell : public SwXCellBaseClass,
     public SwXText,
     public SwClient
 {
+    friend static void   lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt );
+    friend static double lcl_getValue( SwXCell &rCell );
+    friend static void   lcl_setValue( SwXCell &rCell, double nVal );
+
+
     SfxItemPropertySet      aPropSet;
     const String            sCellName;  //kann auch leer sein!
     SwTableBox*             pBox;       // only set in non-XML import
@@ -306,7 +314,7 @@ struct SwRangeDescriptor
 };
 
 class SwTableProperties_Impl;
-class SwXTextTable : public cppu::WeakImplHelper9
+class SwXTextTable : public cppu::WeakImplHelper10
 <
     ::com::sun::star::text::XTextTable,
     ::com::sun::star::lang::XServiceInfo,
@@ -316,7 +324,8 @@ class SwXTextTable : public cppu::WeakImplHelper9
     ::com::sun::star::container::XNamed,
     ::com::sun::star::table::XAutoFormattable,
     ::com::sun::star::util::XSortable,
-    ::com::sun::star::lang::XUnoTunnel
+    ::com::sun::star::lang::XUnoTunnel,
+    ::com::sun::star::sheet::XCellRangeData
 >,
     public SwClient
 {
@@ -365,7 +374,6 @@ public:
     virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
 
-
     //XCellRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > SAL_CALL getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > SAL_CALL getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw(com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
@@ -405,6 +413,10 @@ public:
     virtual rtl::OUString SAL_CALL getName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setName(const rtl::OUString& Name_) throw( ::com::sun::star::uno::RuntimeException );
 
+    //XCellRangeData
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > > SAL_CALL getDataArray(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDataArray( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& aArray ) throw (::com::sun::star::uno::RuntimeException);
+
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
@@ -429,14 +441,15 @@ public:
 /* -----------------27.04.98 16:41-------------------
  *
  * --------------------------------------------------*/
-class SwXCellRange : public cppu::WeakImplHelper6
+class SwXCellRange : public cppu::WeakImplHelper7
 <
     ::com::sun::star::table::XCellRange,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XUnoTunnel,
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::chart::XChartDataArray,
-    ::com::sun::star::util::XSortable
+    ::com::sun::star::util::XSortable,
+    ::com::sun::star::sheet::XCellRangeData
 >,
     public SwClient
 {
@@ -496,6 +509,10 @@ public:
     //XSortable
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL createSortDescriptor(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL sort(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xDescriptor) throw( ::com::sun::star::uno::RuntimeException );
+
+    //XCellRangeData
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > > SAL_CALL getDataArray(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDataArray( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& aArray ) throw (::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );

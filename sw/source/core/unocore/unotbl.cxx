@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: os $ $Date: 2002-03-20 08:46:22 $
+ *  last change: $Author: tl $ $Date: 2002-04-30 06:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,6 +677,71 @@ void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableBox* pBo
         }
     }
 }
+/* -----------------30.04.02 08:00-------------------
+ *
+ * --------------------------------------------------*/
+static inline rtl::OUString lcl_getString( SwXCell &rCell )
+{
+    // getString is a member function of the base class...
+    return rCell.getString();
+}
+/* -----------------30.04.02 08:00-------------------
+ * non UNO function call to set string in SwXCell
+ * --------------------------------------------------*/
+static void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt )
+{
+    if(rCell.IsValid())
+    {
+        SwFrmFmt* pBoxFmt = rCell.pBox->GetFrmFmt();
+        pBoxFmt->LockModify();
+        pBoxFmt->ResetAttr( RES_BOXATR_FORMULA );
+        pBoxFmt->ResetAttr( RES_BOXATR_VALUE );
+        pBoxFmt->UnlockModify();
+    }
+    rCell.SwXText::setString(rTxt);
+}
+/* -----------------30.04.02 08:00-------------------
+ * non UNO function call to get value from SwXCell
+ * --------------------------------------------------*/
+static double lcl_getValue( SwXCell &rCell )
+{
+    double fRet = 0.0;
+    if(rCell.IsValid())
+    {
+        fRet = rCell.pBox->GetFrmFmt()->GetTblBoxValue().GetValue();
+    }
+    return fRet;
+}
+/* -----------------30.04.02 08:00-------------------
+ * non UNO function call to set value in SwXCell
+ * --------------------------------------------------*/
+static void lcl_setValue( SwXCell &rCell, double nVal )
+{
+    if(rCell.IsValid())
+    {
+        // Der Text muß zunaechst (vielleicht) geloescht werden
+        sal_uInt32 nNdPos = rCell.pBox->IsValidNumTxtNd( sal_True );
+        if(USHRT_MAX == nNdPos)
+            lcl_setString( rCell, OUString() );
+        SwDoc* pDoc = rCell.GetDoc();
+        UnoActionContext aAction(pDoc);
+        SwFrmFmt* pBoxFmt = rCell.pBox->GetFrmFmt();
+        SfxItemSet aSet(pDoc->GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE);
+        const SfxPoolItem* pItem;
+        if(SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem)
+            ||  pDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue()))
+        {
+            aSet.Put(SwTblBoxNumFormat(0));
+        }
+
+        SwTblBoxValue aVal(nVal);
+        aSet.Put(aVal);
+        pDoc->SetTblBoxFormulaAttrs( *rCell.pBox, aSet );
+        //Tabelle aktualisieren
+        SwTableFmlUpdate aTblUpdate( SwTable::FindTable( rCell.GetFrmFmt() ));
+        pDoc->UpdateTblFlds( &aTblUpdate );
+    }
+}
 
 /******************************************************************************
  *
@@ -937,12 +1002,7 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException 
 double SwXCell::getValue(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    double fRet = 0.;
-    if(IsValid())
-    {
-        fRet = pBox->GetFrmFmt()->GetTblBoxValue().GetValue();
-    }
-    return fRet;
+    return lcl_getValue( *this );
 }
 /*-- 11.12.98 10:56:26---------------------------------------------------
 
@@ -950,30 +1010,7 @@ double SwXCell::getValue(void) throw( uno::RuntimeException )
 void SwXCell::setValue(double rValue) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(IsValid())
-    {
-        // Der Text muß zunaechst (vielleicht) geloescht werden
-        sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( sal_True );
-        if(USHRT_MAX == nNdPos)
-            setString(OUString());
-        SwDoc* pDoc = GetDoc();
-        UnoActionContext aAction(pDoc);
-        SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
-        SfxItemSet aSet(pDoc->GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE);
-        const SfxPoolItem* pItem;
-        if(SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem)
-            ||  pDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue()))
-        {
-            aSet.Put(SwTblBoxNumFormat(0));
-        }
-
-        SwTblBoxValue aVal(rValue);
-        aSet.Put(aVal);
-        pDoc->SetTblBoxFormulaAttrs( *pBox, aSet );
-        //Tabelle aktualisieren
-        SwTableFmlUpdate aTblUpdate( SwTable::FindTable( GetFrmFmt() ));
-        pDoc->UpdateTblFlds( &aTblUpdate );
-    }
+    lcl_setValue( *this, rValue );
 }
 /*-- 11.12.98 10:56:26---------------------------------------------------
 
@@ -990,15 +1027,7 @@ table::CellContentType SwXCell::getType(void) throw( uno::RuntimeException )
 void SwXCell::setString(const OUString& aString) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(IsValid())
-    {
-        SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
-        pBoxFmt->LockModify();
-        pBoxFmt->ResetAttr( RES_BOXATR_FORMULA );
-        pBoxFmt->ResetAttr( RES_BOXATR_VALUE );
-        pBoxFmt->UnlockModify();
-    }
-    SwXText::setString(aString);
+    lcl_setString( *this, aString );
 }
 
 /*-- 11.12.98 10:56:27---------------------------------------------------
@@ -2671,6 +2700,125 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByName(const OUSt
         throw uno::RuntimeException();
     return aRef;
 }
+/*-- 29.04.02 11:42:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
+    throw (uno::RuntimeException)
+{
+    // see SwXTextTable::getData(...) also
+
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    sal_Int16 nRowCount = getRowCount();
+    sal_Int16 nColCount = getColumnCount();
+    if(!nRowCount || !nColCount)
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U("Table too complex");
+        throw aRuntime;
+    }
+    SwFrmFmt* pFmt = GetFrmFmt();
+    uno::Sequence< uno::Sequence< uno::Any > > aRowSeq(nRowCount);
+    if(pFmt)
+    {
+        uno::Sequence< uno::Any > * pRowArray = aRowSeq.getArray();
+        for(sal_uInt16 nRow = 0; nRow < nRowCount; nRow++)
+        {
+            uno::Sequence< uno::Any >  aColSeq(nColCount);
+            uno::Any * pColArray = aColSeq.getArray();
+            Reference< XCell > xCellRef;
+            for(sal_uInt16 nCol = 0; nCol < nColCount; nCol++)
+            {
+                SwXCell* pXCell = lcl_CreateXCell(pFmt, nCol, nRow);
+                //! keep (additional) reference to object to prevent implicit destruction
+                //! in following UNO calls (when object will get referenced)
+                xCellRef = pXCell;
+                SwTableBox * pBox = pXCell ? pXCell->GetTblBox() : 0;
+                if(!pBox)
+                {
+                    throw uno::RuntimeException();
+                }
+                else
+                {
+                    sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( sal_True );
+                    if(USHRT_MAX == nNdPos)
+                        pColArray[nCol] <<= lcl_getString(*pXCell);
+                    else
+                        pColArray[nCol] <<= lcl_getValue(*pXCell);
+                }
+            }
+            pRowArray[nRow] = aColSeq;
+        }
+    }
+    else
+        throw uno::RuntimeException();
+    return aRowSeq;
+}
+/*-- 29.04.02 11:42:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SAL_CALL SwXTextTable::setDataArray(
+        const uno::Sequence< uno::Sequence< uno::Any > >& rArray )
+    throw (uno::RuntimeException)
+{
+    // see SwXTextTable::setData(...) also
+
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    sal_Int16 nRowCount = nRows;
+    sal_Int16 nColCount = nColumns;
+
+    SwFrmFmt* pFmt = GetFrmFmt();
+    if(pFmt)
+    {
+        SwTable* pTable = SwTable::FindTable( pFmt );
+        if(pTable->IsTblComplex())
+        {
+            RuntimeException aRuntime;
+            aRuntime.Message = C2U("Table too complex");
+            throw aRuntime;
+        }
+
+        if(rArray.getLength() != nRowCount)
+        {
+            throw uno::RuntimeException();
+        }
+        const uno::Sequence< Any >* pRowArray = rArray.getConstArray();
+        for(sal_uInt16 nRow = 0; nRow < nRowCount; nRow++)
+        {
+            const uno::Sequence< Any >& rColSeq = pRowArray[nRow];
+            if(rColSeq.getLength() != nColCount)
+            {
+                throw uno::RuntimeException();
+            }
+            const Any * pColArray = rColSeq.getConstArray();
+            Reference< XCell > xCellRef;
+            for(sal_uInt16 nCol = 0; nCol < nColCount; nCol++)
+            {
+                SwXCell* pXCell = lcl_CreateXCell(pFmt, nCol, nRow);
+                //! keep (additional) reference to object to prevent implicit destruction
+                //! in following UNO calls (when object will get referenced)
+                xCellRef = pXCell;
+                SwTableBox * pBox = pXCell ? pXCell->GetTblBox() : 0;
+                if(!pBox)
+                {
+                    throw uno::RuntimeException();
+                }
+                else
+                {
+                    const uno::Any &rAny = pColArray[nCol];
+                    if (TypeClass_DOUBLE == rAny.getValueTypeClass())
+                        lcl_setValue( *pXCell, *(double *) rAny.getValue() );
+                    else if (TypeClass_STRING == rAny.getValueTypeClass())
+                        lcl_setString( *pXCell, *(rtl::OUString *) rAny.getValue() );
+                    else
+                    {
+                        throw uno::RuntimeException();
+                    }
+                }
+            }
+        }
+    }
+}
 /*-- 11.12.98 12:42:47---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -3951,6 +4099,126 @@ void SwXCellRange::addVetoableChangeListener(const OUString& PropertyName, const
 void SwXCellRange::removeVetoableChangeListener(const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
+}
+/*-- 29.04.02 11:42:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
+    throw (uno::RuntimeException)
+{
+    // see SwXCellRange::getData also
+
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    sal_Int16 nRowCount = getRowCount();
+    sal_Int16 nColCount = getColumnCount();
+    //
+    if(!nRowCount || !nColCount)
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U("Table too complex");
+        throw aRuntime;
+    }
+    uno::Sequence< uno::Sequence< uno::Any > > aRowSeq(nRowCount);
+    SwFrmFmt* pFmt = GetFrmFmt();
+    if(pFmt)
+    {
+        uno::Sequence< uno::Any >* pRowArray = aRowSeq.getArray();
+        Reference< XCell > xCellRef;
+        for(sal_uInt16 nRow = 0; nRow < nRowCount; nRow++)
+        {
+            uno::Sequence< uno::Any > aColSeq(nColCount);
+            uno::Any * pColArray = aColSeq.getArray();
+            for(sal_uInt16 nCol = 0; nCol < nColCount; nCol++)
+            {
+                SwXCell * pXCell = lcl_CreateXCell(pFmt,
+                                    sal_Int16(aRgDesc.nLeft + nCol),
+                                    sal_Int16(aRgDesc.nTop + nRow));
+                //! keep (additional) reference to object to prevent implicit destruction
+                //! in following UNO calls (when object will get referenced)
+                xCellRef = pXCell;
+                SwTableBox * pBox = pXCell ? pXCell->GetTblBox() : 0;
+                if(!pBox)
+                {
+                    throw uno::RuntimeException();
+                }
+                else
+                {
+                    sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( sal_True );
+                    if(USHRT_MAX == nNdPos)
+                        pColArray[nCol] <<= lcl_getString(*pXCell);
+                    else
+                        pColArray[nCol] <<= lcl_getValue(*pXCell);
+                }
+            }
+            pRowArray[nRow] = aColSeq;
+        }
+    }
+    return aRowSeq;
+}
+/*-- 29.04.02 11:42:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SAL_CALL SwXCellRange::setDataArray(
+        const uno::Sequence< uno::Sequence< uno::Any > >& rArray )
+    throw (uno::RuntimeException)
+{
+    // see SwXCellRange::setData also
+
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    sal_Int16 nRowCount = getRowCount();
+    sal_Int16 nColCount = getColumnCount();
+    if(!nRowCount || !nColCount)
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U("Table too complex");
+        throw aRuntime;
+    }
+    SwFrmFmt* pFmt = GetFrmFmt();
+    if(pFmt )
+    {
+        if(rArray.getLength() != nRowCount)
+        {
+            throw uno::RuntimeException();
+            return;
+        }
+        const uno::Sequence< uno::Any >* pRowArray = rArray.getConstArray();
+        for(sal_uInt16 nRow = 0; nRow < nRowCount; nRow++)
+        {
+            const uno::Sequence< uno::Any >& rColSeq = pRowArray[nRow];
+            if(rColSeq.getLength() != nColCount)
+            {
+                throw uno::RuntimeException();
+            }
+            const uno::Any * pColArray = rColSeq.getConstArray();
+            Reference< XCell > xCellRef;
+            for(sal_uInt16 nCol = 0; nCol < nColCount; nCol++)
+            {
+                SwXCell * pXCell = lcl_CreateXCell(pFmt,
+                                    sal_Int16(aRgDesc.nLeft + nCol),
+                                    sal_Int16(aRgDesc.nTop + nRow));
+                //! keep (additional) reference to object to prevent implicit destruction
+                //! in following UNO calls (when object will get referenced)
+                xCellRef = pXCell;
+                SwTableBox * pBox = pXCell ? pXCell->GetTblBox() : 0;
+                if(!pBox)
+                {
+                    throw uno::RuntimeException();
+                }
+                else
+                {
+                    const uno::Any &rAny = pColArray[nCol];
+                    if (TypeClass_DOUBLE == rAny.getValueTypeClass())
+                        lcl_setValue( *pXCell, *(double *) rAny.getValue() );
+                    else if (TypeClass_STRING == rAny.getValueTypeClass())
+                        lcl_setString( *pXCell, *(rtl::OUString *) rAny.getValue() );
+                    else
+                    {
+                        throw uno::RuntimeException();
+                    }
+                }
+            }
+        }
+    }
 }
 /*-- 11.12.98 14:27:36---------------------------------------------------
 
