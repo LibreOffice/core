@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:14:28 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,18 @@ void TaskPaneList::RemoveWindow( Window *pWindow )
     p = ::std::find( mTaskPanes.begin(), mTaskPanes.end(), pWindow );
     if( p != mTaskPanes.end() )
         mTaskPanes.erase( p );
+}
+
+// --------------------------------------------------
+
+BOOL TaskPaneList::IsInList( Window *pWindow )
+{
+    ::std::vector< Window* >::iterator p;
+    p = ::std::find( mTaskPanes.begin(), mTaskPanes.end(), pWindow );
+    if( p != mTaskPanes.end() )
+        return TRUE;
+    else
+        return FALSE;
 }
 
 // --------------------------------------------------
