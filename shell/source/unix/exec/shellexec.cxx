@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellexec.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:16:07 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <osl/thread.h>
 #endif
 
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
@@ -79,6 +83,10 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
+#ifndef _RTL_URI_H_
+#include <rtl/uri.hxx>
+#endif
+
 #ifndef _SHELLEXEC_HXX_
 #include "shellexec.hxx"
 #endif
@@ -87,14 +95,9 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
+#include "uno/current_context.hxx"
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-
+#include <string.h>
 #include <errno.h>
 #include <unistd.h>
 
@@ -104,17 +107,12 @@
 
 using com::sun::star::system::XSystemShellExecute;
 using com::sun::star::system::SystemShellExecuteException;
-using com::sun::star::beans::PropertyValue;
-using com::sun::star::container::NoSuchElementException;
-using com::sun::star::container::XNameAccess;
 
 using rtl::OString;
 using rtl::OUString;
 using rtl::OStringBuffer;
 using rtl::OUStringBuffer;
 using osl::FileBase;
-using osl::MutexGuard;
-using osl::Mutex;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -125,7 +123,7 @@ using namespace cppu;
 // defines
 //------------------------------------------------------------------------
 
-#define SHELLEXEC_IMPL_NAME  "com.sun.star.comp.system.SystemShellExecute"
+#define SHELLEXEC_IMPL_NAME  "com.sun.star.comp.system.SystemShellExecute2"
 
 //------------------------------------------------------------------------
 // helper functions
@@ -139,27 +137,57 @@ namespace // private
         aRet[0] = OUString::createFromAscii("com.sun.star.sys.shell.SystemShellExecute");
         return aRet;
     }
+
+    //-------------------------------------
+
+    /* a slightly modified version of Pchar in rtl/source/uri.c */
+    const sal_Bool uriCharClass[128] =
+    {
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* Pchar but without encoding slashes */
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* !"#$%&'()*+,-./  */
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, /* 0123456789:;<=>? */
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* @ABCDEFGHIJKLMNO */
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, /* PQRSTUVWXYZ[\]^_ */
+      0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* `abcdefghijklmno */
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0  /* pqrstuvwxyz{|}~  */
+    };
+
+    //-------------------------------------
+
+    rtl::OUString reencode_file_url(const rtl::OUString& file_url,
+        rtl_TextEncoding from_textenc, rtl_TextEncoding to_textenc)
+    {
+        rtl::OUString tmp = rtl::Uri::decode(
+            file_url, rtl_UriDecodeWithCharset, from_textenc);
+
+        return rtl::Uri::encode(
+            tmp, uriCharClass, rtl_UriEncodeIgnoreEscapes, to_textenc);
+    }
 }
 
 //-----------------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------------
 
-ShellExec::ShellExec( const Reference< XMultiServiceFactory >& xServiceManager ) :
-    WeakComponentImplHelper3< XSystemShellExecute, XEventListener, XServiceInfo >( m_aMutex ),
-    m_xServiceManager( xServiceManager )
+ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
+    WeakImplHelper2< XSystemShellExecute, XServiceInfo >()
 {
     try {
-        Reference< XComponent > xComponent = Reference< XComponent >( xServiceManager, UNO_QUERY );
+        Reference< XCurrentContext > xCurrentContext(getCurrentContext());
 
-        if( xComponent.is() )
-            xComponent->addEventListener( static_cast < XEventListener * > (this) );
-    }
+        if (xCurrentContext.is())
+        {
+            Any aValue = xCurrentContext->getValueByName(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "system.desktop-environment" ) ) );
 
-    catch( ... )
-    {
-        m_xServiceManager.clear();
-        OSL_TRACE( "ShellExec: corrupted service manager given." );
+            OUString aDesktopEnvironment;
+            if (aValue >>= aDesktopEnvironment)
+            {
+                m_aDesktopEnvironment = OUStringToOString(aDesktopEnvironment, RTL_TEXTENCODING_ASCII_US);
+            }
+        }
+    } catch (RuntimeException e) {
     }
 }
 
@@ -168,221 +196,94 @@ ShellExec::ShellExec( const Reference< XMultiServiceFactory >& xServiceManager )
 //-------------------------------------------------
 
 void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
-        throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)
+    throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)
 {
-    OString aCommandLine = OUStringToOString( aCommand, osl_getThreadTextEncoding() );
+    OStringBuffer aBuffer;
 
-    // check if file exists and is executable -
-    //  if not, it is either an url or a document
-//    if( 0 != access( aCommandLine.getStr(), X_OK ) )
+    // Check wether aCommand contains a document url or not
+    sal_Int32 nIndex = aCommand.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM(":/") ) );
 
-    // for now, only execute urls
-    if( 1 )
+    if( nIndex > 0 || 0 == aCommand.compareToAscii("mailto:", 7) )
     {
-        OUString aURL( aCommand );
-        OUString aProtocol, aHandler;
+        // It seems to be a url ..
+        OUString aURL(aCommand);
 
-        // save this value here
-//        int nerr = errno;
-        // default error value here
-        int nerr = ENOEXEC;
+        // We need to re-encode file urls because osl_getFileURLFromSystemPath converts
+        // to UTF-8 before encoding non ascii characters, which is not what other apps
+        // expect.
+        if ( 0 == aURL.compareToAscii("file://", 7) )
+            aURL = reencode_file_url(aURL, RTL_TEXTENCODING_UTF8, osl_getThreadTextEncoding());
 
-        // find protocol specifier
-        sal_Int32 nIndex = aCommand.indexOf( (sal_Unicode) ':' );
-
-        if( nIndex > 0 )
+#ifdef MACOSX
+        aBuffer.append("open");
+#else
+        OUString aProgramURL;
+        if ( osl_Process_E_None != osl_getExecutableFile(&aProgramURL.pData) )
         {
-            // FIXME: check for valid protocols here - proposed API for rtl
-
-            // protocol keys are stored in lower case
-            aProtocol = aCommand.copy( 0, nIndex ).toAsciiLowerCase();
-        }
-
-        if( ( 0 == aProtocol.getLength() ) &&
-            ( osl_File_E_None == FileBase::getFileURLFromSystemPath( aCommand, aURL ) ) )
-        {
-            // seems to be a document
-            aProtocol = OUString::createFromAscii( "file" );
-        }
-
-        // if aCommand contains a url with a known protocol,
-        //  retrieve the registered handler from configuration
-        if( aProtocol.getLength() )
-        {
-            MutexGuard aGuard( m_aMutex );
-
-            // create config manager if not already done so
-            if( m_xServiceManager.is() && !m_xConfigurationProvider.is() )
-            {
-                try
-                {
-                    m_xConfigurationProvider = Reference< XMultiServiceFactory > (
-                        m_xServiceManager->createInstance(
-                            OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ) ),
-                        UNO_QUERY );
-
-                    Reference< XComponent > xComponent =
-                        Reference< XComponent >( m_xConfigurationProvider, UNO_QUERY );
-
-                    if( xComponent.is() )
-                        xComponent->addEventListener( static_cast < XEventListener * > (this) );
-                }
-
-                // release service manager instance on runtime exceptions
-                catch ( RuntimeException e )
-                {
-                    m_xServiceManager.clear();
-                    OSL_TRACE( "ShellExec: can not instanciate configuration provider." );
-                    throw e;
-                }
-            }
-
-            if( m_xConfigurationProvider.is() )
-            {
-                try
-                {
-                    Sequence< Any > aArgumentList( 1 );
-
-                    PropertyValue aProperty;
-                    aProperty.Name = OUString::createFromAscii( "nodepath" );
-                    aProperty.Value = makeAny( OUString::createFromAscii( "org.openoffice.Office.Common/ExternalApps" ) );
-
-                    aArgumentList[0] = makeAny( aProperty );
-
-                    // query the configured handle for this protocol
-                    Reference< XNameAccess > xNameAccess =
-                        Reference< XNameAccess > (
-                            m_xConfigurationProvider->createInstanceWithArguments(
-                                OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" ),
-                                aArgumentList ),
-                            UNO_QUERY );
-
-                    if( xNameAccess.is() )
-                    {
-                        // save the registered handler
-                        xNameAccess->getByName( aProtocol ) >>= aHandler;
-                    }
-                }
-
-                catch( NoSuchElementException e )
-                {
-                    OSL_TRACE( "ShellExec: unknown protocol.\n" );
-                    OSL_TRACE( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-                }
-
-                catch( WrappedTargetException e )
-                {
-                    OSL_TRACE( "ShellExec: unexspected exception.\n" );
-                    OSL_TRACE( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-                }
-
-                catch( RuntimeException e )
-                {
-                    m_xConfigurationProvider.clear();
-                    OSL_TRACE( "ShellExec: configuration provider." );
-                    OSL_TRACE( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-                    throw e;
-                }
-
-                catch( Exception e )
-                {
-                    OSL_TRACE( "ShellExec: unexspected exception.\n" );
-                    OSL_TRACE( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-                }
-            }
-        }
-
-        if( aHandler.getLength() )
-        {
-            // search handler in system path if no absolute path given
-            FileBase::searchFileURL( aHandler, OUString(), aHandler );
-
-            // handler may be stored as file URL
-            FileBase::getSystemPathFromFileURL( aHandler, aHandler );
-
-            // due to a possible convertion to file url,
-            // rebuild command line from scratch
-            OUStringBuffer aBuffer( aHandler.getLength() + aURL.getLength() + 5 );
-
-            aBuffer.append( (sal_Unicode) '\"' );
-            aBuffer.append( aHandler );
-            aBuffer.append( (sal_Unicode) '\"' );
-            aBuffer.append( (sal_Unicode) ' ' );
-            aBuffer.append( (sal_Unicode) '\'' );
-            aBuffer.append( aURL );
-            aBuffer.append( (sal_Unicode) '\'' );
-
-            aCommandLine = OUStringToOString( aBuffer.makeStringAndClear(), osl_getThreadTextEncoding() );
-        }
-        else
-        {
-            // no handler installed
             throw SystemShellExecuteException(
-                OUString::createFromAscii( strerror( nerr ) ),
-                static_cast < XSystemShellExecute * > (this),
-                nerr );
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Cound not determine executable path")),
+                static_cast < XSystemShellExecute * > (this), ENOENT );
         }
+
+        OUString aProgram;
+        if ( FileBase::E_None != FileBase::getSystemPathFromFileURL(aProgramURL, aProgram))
+        {
+            throw SystemShellExecuteException(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Cound not convert executable path")),
+                static_cast < XSystemShellExecute * > (this), ENOENT );
+        }
+
+        // The url launchers are expected to be in the same directory as the main executable,
+        // so prefixing the launchers with the path of the executable including the last slash
+        OString aTmp = OUStringToOString(aProgram, osl_getThreadTextEncoding());
+        nIndex = aTmp.lastIndexOf('/');
+        if (nIndex > 0)
+            aBuffer.append(aTmp.copy(0, nIndex+1));
+
+        // Respect the desktop environment - if there is an executable named
+        // <desktop-environement-is>-open-url, pass the url to this one instead
+        // of the default "open-url" script.
+        if ( m_aDesktopEnvironment.getLength() > 0 )
+        {
+            OString aDesktopEnvironment(m_aDesktopEnvironment.toAsciiLowerCase());
+            OStringBuffer aCopy(aBuffer);
+
+            aCopy.append(aDesktopEnvironment);
+            aCopy.append("-open-url");
+
+            if ( 0 == access( aCopy.getStr(), X_OK) )
+            {
+                aBuffer.append(aDesktopEnvironment);
+                aBuffer.append("-");
+
+                /* CDE requires file urls to be decoded */
+                if ( m_aDesktopEnvironment.equals("CDE") && 0 == aURL.compareToAscii("file://", 7) )
+                {
+                    aURL = rtl::Uri::decode(aURL, rtl_UriDecodeWithCharset, osl_getThreadTextEncoding());
+                }
+            }
+        }
+
+        aBuffer.append("open-url");
+#endif
+        aBuffer.append(" ");
+        aBuffer.append(OUStringToOString(aURL, osl_getThreadTextEncoding()));
+
+    } else {
+        aBuffer.append(OUStringToOString(aCommand, osl_getThreadTextEncoding()));
+        aBuffer.append(" ");
+        aBuffer.append(OUStringToOString(aParameter, osl_getThreadTextEncoding()));
     }
 
-    // append parameter if any
-    if( aParameter.getLength() )
-    {
-        OString aTmp = OUStringToOString( aParameter, osl_getThreadTextEncoding() );
-
-        OStringBuffer aBuffer( aCommandLine.getLength() + aTmp.getLength() + 1 );
-
-        aBuffer.append( aCommandLine );
-        aBuffer.append( ' ' );
-        aBuffer.append( aTmp );
-
-        aCommandLine = aBuffer.makeStringAndClear();
-    }
-
-    // check if the handler really exists and is executable
-    OString aHandler = aCommandLine.copy( 1, aCommandLine.indexOf( '\"', 1 ) - 1 );
-    if( 0 != access( aHandler.getStr(), X_OK ) )
+    OString cmd = aBuffer.makeStringAndClear();
+    if ( 0 != pclose(popen(cmd.getStr(), "w")) )
     {
         int nerr = errno;
-
-        throw SystemShellExecuteException(
-            OUString::createFromAscii( strerror( nerr ) ),
-            static_cast < XSystemShellExecute * > (this),
-            nerr );
-    }
-
-    // do not wait for completion
-    aCommandLine += " &";
-
-    if( 0 != system( aCommandLine.getStr() ) )
-    {
-        int nerr = errno;
-
-        throw SystemShellExecuteException(
-            OUString::createFromAscii( strerror( nerr ) ),
-            static_cast < XSystemShellExecute * > (this),
-            nerr );
+        throw SystemShellExecuteException(OUString::createFromAscii( strerror( nerr ) ),
+            static_cast < XSystemShellExecute * > (this), nerr );
     }
 }
 
-//------------------------------------------------
-// XEventListener
-//------------------------------------------------
-
-void SAL_CALL ShellExec::disposing( const ::com::sun::star::lang::EventObject& aEvent )
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    MutexGuard aGuard( m_aMutex );
-
-    if( m_xServiceManager == aEvent.Source )
-    {
-        m_xServiceManager.clear();
-    }
-
-    else if( m_xConfigurationProvider == aEvent.Source )
-    {
-        m_xConfigurationProvider.clear();
-    }
-}
 
 // -------------------------------------------------
 // XServiceInfo
