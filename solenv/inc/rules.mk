@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: hjs $ $Date: 2004-07-05 13:12:08 $
+#   last change: $Author: rt $ $Date: 2004-07-13 16:54:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,7 @@ $(OBJ)$/%.obj : %.cxx
     $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+-$(RM) $@ >& nul
+    @+-$(RM) $@ >& $(NULLDEV)
     @+$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
     @+$(ECHONL)
 .IF "$(COM)"=="GCC"
@@ -88,7 +88,7 @@ $(OBJ)$/%.obj : %.cpp
     $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(CFLAGSINCXX)$(PWD)$/$*.cpp
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+-$(RM) $@ >& nul
+    @+-$(RM) $@ >& $(NULLDEV)
     @+$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp )
     @+$(ECHONL)
 .IF "$(COM)"=="GCC"
@@ -111,7 +111,7 @@ $(SLO)$/%.obj : %.cxx
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ENDIF
 .ELSE			# "$(GUI)"=="UNX"
-    @+-$(RM) $@ >& nul
+    @+-$(RM) $@ >& $(NULLDEV)
     @+$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
     @+$(ECHONL)
     $(CXX) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
@@ -129,7 +129,7 @@ $(SLO)$/%.obj : %.cpp
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ENDIF
 .ELSE
-    @+-$(RM) $@ >& nul
+    @+-$(RM) $@ >& $(NULLDEV)
     @+$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp )
     @+$(ECHONL)
     $(CXX) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp )
@@ -199,7 +199,7 @@ $(OBJ)$/%.obj : $(MISC)$/%.c
     $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(MISC)$/$*.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+-$(RM) $@ >& nul
+    @+-$(RM) $@ >& $(NULLDEV)
     @+$(TYPE) $(mktmp $(CXX) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $(MISC)$/$*.c )
     @+$(ECHONL)
     $(CXX) @$(mktmp $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $(MISC)$/$*.c )
@@ -213,7 +213,7 @@ $(SLO)$/%.obj : $(MISC)$/%.c
     $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(MISC)$/$*.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+-$(RM) $@ >& nul
+    @+-$(RM) $@ >& $(NULLDEV)
     @+$(TYPE) $(mktmp $(CXX) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISC)$/$*.c )
     @+$(ECHONL)
 .IF "$(COM)"=="GCC"
@@ -231,7 +231,7 @@ $(SLO)$/%.obj : %.c
     $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $*.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+-$(RM) $@ >& nul
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(COM)"=="GCC"
        $(CXX) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $*.c 
 .ELSE
@@ -592,7 +592,7 @@ $(SLO)$/%.obj : %.asm
        $(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)\$*.obj $*.asm
        +-if exist $*.err @del $*.err
 .ELSE			# "$(ASM)"=="ml"
-        @+-$(RM) $@ >& nul
+        @+-$(RM) $@ >& $(NULLDEV)
         $(ASM) $(AFLAGS) $*.asm,$(SLO)\$*.obj;
 .ENDIF			# "$(ASM)"=="ml"
 .ENDIF			 "$(COM)"=="MSC"
@@ -606,7 +606,7 @@ $(OBJ)$/%.obj : %.asm
        $(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)\$*.obj $*.asm
        +-if exist $*.err @del $*.err
 .ELSE			# "$(ASM)"=="ml"
-        @+if exist $@ $(RM) $@ >& nul
+        @+if exist $@ $(RM) $@ >& $(NULLDEV)
         $(ASM) $(AFLAGS) $*.asm,$(OBJ)\$*.obj;
 .ENDIF			# "$(ASM)"=="ml"
 .ENDIF			 "$(COM)"=="MSC"
