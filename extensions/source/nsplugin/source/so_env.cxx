@@ -2,9 +2,9 @@
  *
  *  $RCSfile: so_env.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 10:08:00 $
+ *  last change: $Author: kz $ $Date: 2004-11-26 16:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #endif
 // For vsnprintf()
 #define NSP_vsnprintf vsnprintf
+#include "nsp_func.hxx"
 #endif // End UNIX
 
 #ifdef WNT
@@ -87,6 +88,8 @@
 #include <errno.h>
 #include "so_env.hxx"
 #include "ns_debug.hxx"
+
+#define PLUGIN_NAME         "OpenOffice.org"
 
 // Tranform all strings like %20 in pPath to one char like space
 /*int retoreUTF8(char* pPath)
@@ -312,6 +315,77 @@ int UnixToDosPath(char* sPath)
     return 0;
 
 }
+
+#ifdef UNIX
+char productName[128] = {0};
+char* NSP_getProductName()
+{
+    if(productName[0])
+        return productName;
+    char fullBootstrapIniPath[1024] = {0};
+    const char* pFullFilePath = findProgramDir();
+    if(0 == *pFullFilePath)
+    {
+        strcpy(productName, PLUGIN_NAME);
+        return productName;
+    }
+    sprintf(fullBootstrapIniPath, "%s/%s", pFullFilePath,
+        "bootstraprc");
+
+    FILE* fp = fopen(fullBootstrapIniPath, "r");
+
+    if (NULL == fp)
+    {
+        strcpy(productName, PLUGIN_NAME);
+        return productName;
+    }
+    char line[4096] = {0};
+    char *pStart = 0;
+    char *pEnd = 0;
+    while(!feof(fp))
+    {
+        fgets( line, sizeof(line), fp );
+        if (NULL == (pStart = strstr( line, "ProductKey=" )))
+            continue;
+        pStart += strlen("ProductKey=");
+        if (NULL == (pEnd = strchr( pStart, ' ' )) &&
+           (NULL == (pEnd = strchr( pStart, '\r' ))))
+            continue;
+        *pEnd = 0;
+        strcpy(productName, pStart);
+    }
+    fclose(fp);
+    if ((*productName == 0) ||
+        (0 != STRNICMP(productName, "StarOffice", sizeof("StarOffice"))))
+    {
+        strcpy(productName, PLUGIN_NAME);
+        return productName;
+    }
+    memset(productName, 0, sizeof(productName));
+    strcat(productName, "StarOffice/StarSuite");
+    return productName;
+}
+
+char PluginName[1024] = {0};
+char* NSP_getPluginName()
+{
+    if(*PluginName)
+        return PluginName;
+    sprintf(PluginName, "%s Plug-in", NSP_getProductName());
+    return PluginName;
+}
+
+char PluginDesc[1024] = {0};
+char* NSP_getPluginDesc()
+{
+    if(*PluginDesc)
+        return PluginDesc;
+
+    sprintf(PluginDesc, "%s Plug-in handles all its documents",
+        productName);
+    return PluginDesc;
+}
+#endif //end of UNIX
 
 void NSP_WriteLog(int level,  const char* pFormat, ...)
 {
