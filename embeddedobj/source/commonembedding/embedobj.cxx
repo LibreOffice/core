@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:49:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,29 +134,6 @@ awt::Rectangle GetRectangleInterception( const awt::Rectangle& aRect1, const awt
     return aResult;
 }
 
-#define NOTIFY_LISTERNERS(_rListeners,T,T1,T2,method)                                     \
-    uno::Sequence< uno::Reference< uno::XInterface > > aListenerSeq = _rListeners.getElements(); \
-                                                                                  \
-    const uno::Reference< uno::XInterface >* pxIntBegin = aListenerSeq.getConstArray();   \
-    const uno::Reference< uno::XInterface >* pxInt = pxIntBegin + aListenerSeq.getLength(); \
-                                                                                  \
-    _rGuard.clear();                                                              \
-    while( pxInt > pxIntBegin )                                                   \
-    {                                                                             \
-        try                                                                       \
-        {                                                                         \
-            while( pxInt > pxIntBegin )                                           \
-            {                                                                     \
-                --pxInt;                                                          \
-                static_cast< T* >( pxInt->get() )->method(aEvt,T1,T2);                \
-            }                                                                     \
-        }                                                                         \
-        catch( uno::RuntimeException& )                                               \
-        {                                                                         \
-        }                                                                         \
-    }
-
-
 //----------------------------------------------
 sal_Int32 OCommonEmbeddedObject::ConvertVerbToState_Impl( sal_Int32 nVerb )
 {
@@ -201,7 +178,7 @@ void OCommonEmbeddedObject::Deactivate()
 }
 
 //----------------------------------------------
-void OCommonEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState ,::osl::ResettableMutexGuard& _rGuard)
+void OCommonEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState ,::osl::ResettableMutexGuard& rGuard )
 {
     if ( m_pInterfaceContainer )
     {
@@ -209,42 +186,28 @@ void OCommonEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange
                             ::getCppuType( ( const uno::Reference< embed::XStateChangeListener >*) NULL ) );
         if ( pContainer != NULL )
         {
-            lang::EventObject aEvt( static_cast< ::cppu::OWeakObject* >( this ) );
-            if ( bBeforeChange )
-            {
-                NOTIFY_LISTERNERS((*pContainer),embed::XStateChangeListener, nOldState, nNewState,changingState);
-            }
-            else
-            {
-                NOTIFY_LISTERNERS((*pContainer),embed::XStateChangeListener, nOldState, nNewState,stateChanged);
-            }
-//          ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+            lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
+            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
 
-            //  while (pIterator.hasMoreElements())
-//          {
-//              if ( bBeforeChange )
-//              {
-//                  try
-//                  {
-//                      ((embed::XStateChangeListener*)pIterator.next())->changingState( aSource, nOldState, nNewState );
-//                  }
-//                  catch( uno::Exception& )
-//                  {
-//                      // even if the listener complains ignore it for now
-//                  }
-//              }
-//              else
-//              {
-//                  try
-//                  {
-//                      ((embed::XStateChangeListener*)pIterator.next())->stateChanged( aSource, nOldState, nNewState );
-//                  }
-//                  catch( uno::Exception& )
-//                  {
-//                      // if anything happened it is problem of listener, ignore it
-//                  }
-//              }
-//          }
+            // should be locked after the method is finished successfully
+            rGuard.clear();
+
+            while (pIterator.hasMoreElements())
+            {
+                try
+                {
+                    if ( bBeforeChange )
+                        ((embed::XStateChangeListener*)pIterator.next())->changingState( aSource, nOldState, nNewState );
+                    else
+                        ((embed::XStateChangeListener*)pIterator.next())->stateChanged( aSource, nOldState, nNewState );
+                }
+                catch( uno::Exception& )
+                {
+                    // even if the listener complains ignore it for now
+                   }
+            }
+
+            rGuard.reset();
         }
     }
 }
@@ -513,7 +476,6 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
 
         // notify listeners that the object is going to change the state
         StateChangeNotification_Impl( sal_True, nOldState, nNewState,aGuard );
-        aGuard.reset();
 
         try {
             for ( sal_Int32 nInd = 0; nInd < aIntermediateStates.getLength(); nInd++ )
