@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:54:35 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3026,13 +3026,52 @@ const SwNodeNum * SwTxtNode::GetNum() const
     return pNdNum;
 }
 
-const SwNodeNum * SwTxtNode::GetOutlineNum() const
+SwNodeNum * SwTxtNode::_GetOutlineNum() const
 {
-    const SwNodeNum * pResult = NULL;
+    SwNodeNum * pResult = NULL;
     const SwNumRule * pRule = GetNumRule();
 
     if (pRule && pRule->IsOutlineRule())
-        pResult = GetNum();
+        pResult = pNdNum;
 
     return pResult;
+}
+
+const SwNodeNum * SwTxtNode::GetOutlineNum() const
+{
+    return _GetOutlineNum();
+}
+
+BYTE SwTxtNode::GetOutlineLevel() const
+{
+    BYTE aResult = NO_NUMBERING;
+
+    const SwNodeNum * pNum = GetOutlineNum();
+
+    if (pNum)
+        aResult = pNum->GetRealLevel();
+    else
+    {
+        SwFmtColl * pFmtColl = GetFmtColl();
+
+        if (pFmtColl)
+            aResult = ((SwTxtFmtColl *) pFmtColl)->GetOutlineLevel();
+    }
+
+    return aResult;
+}
+
+void SwTxtNode::SetOutlineLevel(BYTE nLevel)
+{
+    SwNodeNum * pNum = _GetOutlineNum();
+
+    if (pNum)
+        pNum->SetLevel(nLevel);
+    else
+    {
+        SwFmtColl * pFmtColl = GetFmtColl();
+
+        if (pFmtColl)
+            ((SwTxtFmtColl *) pFmtColl)->SetOutlineLevel(nLevel);
+    }
 }
