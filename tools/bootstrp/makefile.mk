@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:03:01 $
+#   last change: $Author: vg $ $Date: 2003-04-01 13:36:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,10 +69,7 @@ NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-.INCLUDE :      static.mk
 
 CDEFS+=-D_TOOLS_STRINGLIST
 
@@ -110,21 +107,20 @@ LIB2FILES=  $(SLB)$/bootstrp.lib
 APP1TARGET=     i_server
 APP1STACK=      16000
 APP1OBJS=   $(OBJ)$/iserver.obj
-APP1STDLIBS=$(STATIC_LIBS)
 APP1LIBS=       $(LB)$/bootstrp.lib
-APP1DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
+APP1STDLIBS= $(SALLIB) $(TOOLSLIB)
+
 
 APP6TARGET= sspretty
 APP6OBJS=	$(OBJ)$/sspretty.obj
 APP6LIBS=	$(LB)$/bootstrp.lib
 APP6STDLIBS=$(STATIC_LIBS) 
-APP6DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib $(OBJ)$/sspretty.obj
+APP6STDLIBS= $(SALLIB) $(TOOLSLIB)
 
 APP7TARGET= rscdep
 APP7OBJS=	$(OBJ)$/rscdep.obj
 APP7LIBS=	$(LB)$/bootstrp.lib
-APP7STDLIBS=$(STATIC_LIBS) 
-APP7DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib $(OBJ)$/rscdep.obj
+APP7STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB)
 
 DEPOBJFILES		=	$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) 
 
