@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:14 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,36 +675,6 @@
 					<desc xml:lang="th">Specifies the default frame loader.</desc>
 					<desc xml:lang="hi-IN">Specifies the default frame loader.</desc>
 					<desc xml:lang="x-comment">Specifies the default frame loader.</desc>
-				</info>
-				<value>com.sun.star.comp.office.FrameLoader</value>
-			</prop>
-			<prop oor:name="DetectService" oor:type="xs:string">
-				<info>
-					<desc xml:lang="en-US">Specifies the generic detection service.</desc>
-					<desc xml:lang="el">Specifies the generic detection service.</desc>
-					<desc xml:lang="nl">Specifies the generic detection service.</desc>
-					<desc xml:lang="fr">Specifies the generic detection service.</desc>
-					<desc xml:lang="fi">Specifies the generic detection service.</desc>
-					<desc xml:lang="cs">Specifies the generic detection service.</desc>
-					<desc xml:lang="da">Specifies the generic detection service.</desc>
-					<desc xml:lang="zh-CN">指定一般识别服务。</desc>
-					<desc xml:lang="zh-TW">Specifies the generic detection service.</desc>
-					<desc xml:lang="ar">Specifies the generic detection service.</desc>
-					<desc xml:lang="he">Specifies the generic detection service.</desc>
-					<desc xml:lang="ca">Specifies the generic detection service.</desc>
-					<desc xml:lang="pt">Specifies the generic detection service.</desc>
-					<desc xml:lang="ru">Specifies the generic detection service.</desc>
-					<desc xml:lang="es">Specifies the generic detection service.</desc>
-					<desc xml:lang="it">Specifies the generic detection service.</desc>
-					<desc xml:lang="sv">Specifies the generic detection service.</desc>
-					<desc xml:lang="pl">Specifies the generic detection service.</desc>
-					<desc xml:lang="pt-BR">Specifies the generic detection service.</desc>
-					<desc xml:lang="ja">一般的な検出サービスを指定します。</desc>
-					<desc xml:lang="ko">Specifies the generic detection service.</desc>
-					<desc xml:lang="tr">Specifies the generic detection service.</desc>
-					<desc xml:lang="th">Specifies the generic detection service.</desc>
-					<desc xml:lang="hi-IN">Specifies the generic detection service.</desc>
-					<desc xml:lang="x-comment">Specifies the generic detection service.</desc>
 				</info>
 				<value>com.sun.star.comp.office.FrameLoader</value>
 			</prop>
