@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: er $ $Date: 2002-09-15 23:53:49 $
+#   last change: $Author: rt $ $Date: 2002-10-07 13:32:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.55 $$"
+LIBSMKREV!:="$$Revision: 1.56 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -90,7 +90,7 @@ OSLLIB=
 RTLLIB=
 TECLIB=
 CPPULIB=-lcppu
-CPPUHELPERLIB=-lcppuhelper$(UDK_MAJOR)$(COMID)
+CPPUHELPERLIB=-lcppuhelper$(COMID)
 JENVLIB=-ljenv
 .INCLUDE .IGNORE : ucbhelper$/version.mk
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COMID)
