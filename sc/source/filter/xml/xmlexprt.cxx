@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-18 17:03:19 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 18:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,6 +471,11 @@ void ScXMLExport::_ExportMeta()
         AddAttribute(XML_NAMESPACE_META, sXML_object_count, sBuffer.makeStringAndClear());
     }
     SvXMLElementExport aElemStat(*this, XML_NAMESPACE_META, sXML_document_statistic, sal_True, sal_True);
+}
+
+void ScXMLExport::_ExportChangeTracking()
+{
+    aChangeTrackingExportHelper.CollectAndWriteChanges(GetDocument());
 }
 
 table::CellRangeAddress ScXMLExport::GetEndAddress(uno::Reference<sheet::XSpreadsheet>& xTable,const sal_Int16 nTable)
@@ -1331,6 +1336,11 @@ void ScXMLExport::_ExportAutoStyles()
                                                     rtl::OUString* pTemp = new rtl::OUString(sStyleName);
                                                     sal_Int32 nIndex = aCellStyles.AddStyleName(pTemp, sal_False);
                                                     aCellStyles.AddRangeStyleName(aRangeAddress, nIndex, sal_False, nValidationIndex);
+                                                    if (sStyleName.compareToAscii("Default") != 0)
+                                                    {
+                                                        SetLastColumn(nTable, aRangeAddress.EndColumn);
+                                                        SetLastRow(nTable, aRangeAddress.EndRow);
+                                                    }
                                                 }
                                             }
                                             if (nProgressValue < nOldProgressValue + nProgressObjects)
@@ -1363,7 +1373,7 @@ void ScXMLExport::_ExportAutoStyles()
                                 else
                                     aColumnStyles.AddNewTable(nTable, nColumns);
                                 sal_Int32 nColumn = 0;
-                                while (nColumn <= nColumns && nColumn != MAXCOL)
+                                while (/*nColumn <= nColumns && */nColumn <= MAXCOL)
                                 {
                                     sal_Int32 nIndex;
                                     uno::Any aColumn = xTableColumns->getByIndex(nColumn);
@@ -1420,7 +1430,7 @@ void ScXMLExport::_ExportAutoStyles()
                                 else
                                     aRowStyles.AddNewTable(nTable, nRows);
                                 sal_Int32 nRow = 0;
-                                while ( nRow <= nRows && nRow != MAXROW)
+                                while ( /*nRow <= nRows && */nRow <= MAXROW)
                                 {
                                     sal_Int32 nIndex;
                                     uno::Any aRow = xTableRows->getByIndex(nRow);

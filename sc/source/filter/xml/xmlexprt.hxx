@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-18 17:03:19 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 18:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _SC_XMLSTYLESEXPORTHELPER_HXX
 #include "XMLStylesExportHelper.hxx"
 #endif
+#ifndef _SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
+#include "XMLChangeTrackingExportHelper.hxx"
+#endif
 
 class ScOutlineArray;
 class SvXMLExportPropertyMapper;
@@ -134,12 +137,14 @@ class ScXMLExport : public SvXMLExport
     ScMyValidationsContainer    aValidationsContainer;
     ScMyDetectiveObjContainer   aDetectiveObjContainer;
     ScMyNotEmptyCellsIterator*  pCellsItr;
+    ScChangeTrackingExportHelper    aChangeTrackingExportHelper;
 
     virtual void _ExportStyles( sal_Bool bUsed );
     virtual void _ExportAutoStyles();
     virtual void _ExportMasterStyles();
     virtual void _ExportContent();
     virtual void _ExportMeta();
+    virtual void _ExportChangeTracking();
 
     void CollectInternalShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
