@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-11 15:19:18 $
+ *  last change: $Author: ka $ $Date: 2000-10-20 15:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2013,6 +2013,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                             pStream->Seek( nGrafStreamPos );
                             *pStream >> aGraphic;
                             pGraphic->SetGraphic( aGraphic );
+                            pStream->ResetError();
 
                             if( bDeleteStream )
                                 delete pStream;
