@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,14 +91,14 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxInsertStatusBarControl, SfxBoolItem);
 
 // class SvxInsertStatusBarControl ---------------------------------------
 
-SvxInsertStatusBarControl::SvxInsertStatusBarControl( USHORT nId,
-                                                      StatusBar& rStb,
-                                                      SfxBindings& rBind ) :
+SvxInsertStatusBarControl::SvxInsertStatusBarControl( USHORT nSlotId,
+                                                      USHORT nId,
+                                                      StatusBar& rStb ) :
 
-    SfxStatusBarControl( nId, rStb, rBind ),
-
+    SfxStatusBarControl( nSlotId, nId, rStb ),
     bInsert( TRUE )
 {
+    rStb.SetHelpId( nId, nSlotId );
 }
 
 // -----------------------------------------------------------------------
@@ -130,8 +130,15 @@ void SvxInsertStatusBarControl::Click()
     if ( !GetStatusBar().GetItemText( GetId() ).Len() )
         return;
     bInsert = !bInsert;
-    SfxBoolItem aIns( GetId(), bInsert );
-    GetBindings().GetDispatcher()->Execute( GetId(), SFX_CALLMODE_RECORD, &aIns, 0L );
+    SfxBoolItem aIns( GetSlotId(), bInsert );
+
+    ::com::sun::star::uno::Any a;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
+    aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InsertMode" ));
+    aIns.QueryValue( a );
+    aArgs[0].Value = a;
+
+    execute( aArgs );
 }
 
 // -----------------------------------------------------------------------
