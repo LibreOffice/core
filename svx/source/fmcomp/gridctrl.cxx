@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-27 09:45:49 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 09:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1477,7 +1477,7 @@ void DbGridControl::setDataSource(const ::com::sun::star::uno::Reference< ::com:
             {
                 xSupplier->getNumberFormatSettings()->getPropertyValue(rtl::OUString::createFromAscii("NullDate")) >>= m_aNullDate;
             }
-            catch(staruno::Exception&)
+            catch(com::sun::star::uno::Exception&)
             {
             }
         }
