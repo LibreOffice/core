@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UCBDeadPropertyValue.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-22 11:37:32 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 12:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,19 +62,11 @@
 #ifndef _UCBDEADPROPERTYVALUE_HXX_
 #define _UCBDEADPROPERTYVALUE_HXX_
 
-#ifndef NE_XML_H
-#include <neon/ne_xml.h>
-#endif
-
 #ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
-#endif
-
-#ifndef _DAVTYPES_HXX_
-#include "DAVTypes.hxx"
 #endif
 
 namespace webdav_ucp
@@ -83,8 +75,6 @@ namespace webdav_ucp
 class UCBDeadPropertyValue
 {
 private:
-    static const ne_xml_elm elements[];
-
     static const rtl::OUString aTypeString;
     static const rtl::OUString aTypeLong;
     static const rtl::OUString aTypeShort;
