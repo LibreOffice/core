@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:04:40 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
@@ -335,6 +338,7 @@ void SmModule::_CreateVirtualDev() const
 {
     SmModule* pThis = (SmModule*)this;
     pThis->pVirtualDev = new VirtualDevice;
+    pThis->pVirtualDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
 }
 
 void SmModule::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
