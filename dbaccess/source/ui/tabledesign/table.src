@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:19:29 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,25 +619,25 @@ String STR_NO_TYPE_INFO_AVAILABLE
 
 String STR_CHANGE_COLUMN_NAME
 {
-    Text [ de ] = "Spaltennamen ändern";
-    Text [ en-US ] = "change column name";
+    Text [ de ] = "Feldnamen ändern";
+    Text [ en-US ] = "change field name";
 };
 
 String STR_CHANGE_COLUMN_TYPE
 {
-    Text [ de ] = "Spaltentyp ändern";
-    Text [ en-US ] = "change column type";
+    Text [ de ] = "Feldtyp ändern";
+    Text [ en-US ] = "change field type";
 };
 
 String STR_CHANGE_COLUMN_DESCRIPTION
 {
-    Text [ de ] = "Spaltenbeschreibung ändern";
-    Text [ en-US ] = "change column description";
+    Text [ de ] = "Feldbeschreibung ändern";
+    Text [ en-US ] = "change field description";
 };
 
 String STR_CHANGE_COLUMN_ATTRIBUTE
 {
-    Text [ de ] = "Spaltenattribut ändern";
-    Text [ en-US ] = "change column attribute";
+    Text [ de ] = "Feldattribut ändern";
+    Text [ en-US ] = "change field attribute";
 };
 
