@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-10 13:10:39 $
+ *  last change: $Author: sj $ $Date: 2001-05-29 11:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1141,7 +1141,9 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 case TSS_TYPE_HALFBODY :
                 case TSS_TYPE_QUARTERBODY : eTextKind = OBJ_OUTLINETEXT; break;
             }
-            pTObj = new SdrRectObj( eTextKind, rTextRect );
+            pTObj = new SdrRectObj( eTextKind );
+            pTObj->SetModel( pSdrModel );
+            pTObj->SetSnapRect( rTextRect );
             if ( nTextRotationAngle )
             {
                 double a = nTextRotationAngle * nPi180;
@@ -1302,7 +1304,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
             aSet.Put( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, bVerticalText != sal_False ) );
 
-            aSet.Put( SdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
+             aSet.Put( SdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
             aSet.Put( SdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
 
             aSet.Put( SdrTextVertAdjustItem( eTVA ) );
@@ -1322,7 +1324,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             aSet.Put( SdrTextUpperDistItem( nTextTop ) );
             aSet.Put( SdrTextLowerDistItem( nTextBottom ) );
 
-            pTObj->SetModel( pSdrModel );
             pTObj->SetItemSet(aSet);
             pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
             if ( pTObj )
