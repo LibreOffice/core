@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:33:49 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ namespace dbaui
                     Any aTableFilter = xProp->getPropertyValue(PROPERTY_TABLEFILTER);
                     Any aTableTypeFilter = xProp->getPropertyValue(PROPERTY_TABLETYPEFILTER);
 
-                    Reference<XModifiable> xModi(xProp,UNO_QUERY);
+                    Reference<XModifiable> xModi(getDataSourceOrModel(xProp),UNO_QUERY);
                     sal_Bool bModified = ( xModi.is() && xModi->isModified() );
 
                     Sequence< ::rtl::OUString> aNewTableFilter(1),aEmpty(3);
