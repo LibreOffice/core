@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:01:36 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,12 +476,6 @@ void Outliner::QuickRemoveCharAttribs( USHORT nPara, USHORT nWhich )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->QuickRemoveCharAttribs( nPara, nWhich );
-}
-
-EESpellState Outliner::HasSpellErrors( LanguageType eLang )
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->HasSpellErrors( eLang );
 }
 
 EESpellState Outliner::HasSpellErrors()
