@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CfgParser.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:02:07 $
+ *  last change:$Date: 2003-06-11 16:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ import java.io.FileInputStream;
  * inside TestParameters
  */
 public class CfgParser {
-
+    protected boolean debug = false;
     protected String iniFile="";
 
     public CfgParser(String ini) {
@@ -81,6 +81,7 @@ public class CfgParser {
     }
 
     public void getIniParameters(TestParameters param) {
+        debug = param.DebugIsActive;
         Properties cfg = null;
         if (iniFile.equals("")) {
             //no iniFile given, search one in the users home directory
@@ -110,10 +111,14 @@ public class CfgParser {
 
     protected Properties getProperties(String name) {
         Properties prop = new Properties();
+        if ( debug ) {
+            System.out.println("Looking for "+name);
+        }
         FileInputStream propFile = null;
         try {
             propFile = new FileInputStream(name);
             prop.load(propFile);
+            System.out.println("Parsing properties from "+name);
             propFile.close();
         } catch (Exception e) {
             //Exception while reading prop-file, returning null
@@ -136,7 +141,6 @@ public class CfgParser {
             return path+fileSeparator+".runner.props";
         } else {
             //suppose I'm on Windows
-            System.out.println("Parsing "+path+fileSeparator+"runner.props");
             return path+fileSeparator+"runner.props";
         }
     }
