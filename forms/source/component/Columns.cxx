@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:44:07 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,6 +427,7 @@ void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, sal_B
     aForbiddenProperties.insert( PROPERTY_VSCROLL );
     aForbiddenProperties.insert( PROPERTY_CONTROLLABEL );
     aForbiddenProperties.insert( PROPERTY_RICH_TEXT );
+    aForbiddenProperties.insert( PROPERTY_VERTICALALIGN );
     if ( !bAllowDropDown )
         aForbiddenProperties.insert( PROPERTY_DROPDOWN );
 
