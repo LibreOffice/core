@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 20:21:05 $
+#   last change: $Author: hr $ $Date: 2004-03-09 11:20:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,8 +84,15 @@ SHL1TARGET= sd$(UPD)$(DLLPOSTFIX)
 SHL1VERSIONMAP= sd.map
 SHL1IMPLIB= sdi
 
+
+# on MacOSX static libs must be at end of libraries to link with
+.IF "$(OS)" != "MACOSX"
 # static libraries
 SHL1STDLIBS= $(SCHLIB)
+.ELSE
+SHL1STDLIBS=
+.ENDIF # MACOSX
+
 
 # dynamic libraries
 SHL1STDLIBS+= \
@@ -107,6 +114,15 @@ SHL1STDLIBS+= \
     $(CPPULIB) \
     $(VOSLIB) \
     $(SALLIB)
+
+
+# on MacOSX static libs must be at end of libraries to link with
+.IF "$(OS)" == "MACOSX"
+# add back in static libraries
+SHL1STDLIBS+= $(SCHLIB)
+.ENDIF # MACOSX
+
+
 
 SHL1DEPN=   $(L)$/itools.lib
 SHL1LIBS=   $(LIB3TARGET)
