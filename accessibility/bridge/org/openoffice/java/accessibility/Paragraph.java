@@ -67,13 +67,8 @@ import com.sun.star.accessibility.*;
  */
 public class Paragraph extends Container implements javax.accessibility.Accessible {
 
-    boolean multiLine = false;
-    boolean editable = false;
-
-    protected Paragraph(XAccessible xAccessible, XAccessibleContext xAccessibleContext, XAccessibleStateSet xAccessibleStateSet) {
+    protected Paragraph(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
         super(javax.accessibility.AccessibleRole.TEXT, xAccessible, xAccessibleContext);
-        editable = xAccessibleStateSet.contains(AccessibleStateType.EDITABLE);
-        multiLine = xAccessibleStateSet.contains(AccessibleStateType.MULTI_LINE);
     }
 
     protected class AccessibleParagraphListener extends AccessibleContainerListener {
@@ -85,11 +80,9 @@ public class Paragraph extends Container implements javax.accessibility.Accessib
         protected void setComponentState(short state, boolean enable) {
             switch (state) {
                 case AccessibleStateType.EDITABLE:
-                    editable = enable;
                     fireStatePropertyChange(javax.accessibility.AccessibleState.EDITABLE, enable);
                     break;
                 case AccessibleStateType.MULTI_LINE:
-                    multiLine = enable;
                     fireStatePropertyChange(javax.accessibility.AccessibleState.MULTI_LINE, enable);
                     break;
                 case AccessibleStateType.SINGLE_LINE:
@@ -156,22 +149,6 @@ public class Paragraph extends Container implements javax.accessibility.Accessib
              * here and remember the result.
              */
             accessibleText = AccessibleHypertextImpl.get(unoAccessibleContext);
-        }
-
-        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
-        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
-            javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
-
-            if (editable) {
-                states.add(javax.accessibility.AccessibleState.EDITABLE);
-            }
-            if (multiLine) {
-                states.add(javax.accessibility.AccessibleState.MULTI_LINE);
-            } else {
-                states.add(javax.accessibility.AccessibleState.SINGLE_LINE);
-            }
-
-            return states;
         }
 
         /*

@@ -108,21 +108,6 @@ public class Label extends Component implements javax.accessibility.Accessible {
             }
         }
 
-        /**
-        * Get the state set of this object.
-        *
-        * @return an instance of AccessibleState containing the current state
-        * of the object
-        * @see AccessibleState
-        */
-
-        /*
-                        public AccessibleStateSet getAccessibleStateSet() {
-                                AccessibleStateSet states = super.getAccessibleStateSet();
-                                return states;
-                        }
-        */
-
         /** Returns the relation set of this object */
         public javax.accessibility.AccessibleRelationSet getAccessibleRelationSet() {
             try {

@@ -102,19 +102,5 @@ public class Icon extends Component implements javax.accessibility.Accessible {
             return null;
         }
 
-        /**
-        * Get the state set of this object.
-        *
-        * @return an instance of AccessibleState containing the current state
-        * of the object
-        * @see AccessibleState
-        */
-
-        /*
-                        public AccessibleStateSet getAccessibleStateSet() {
-                                AccessibleStateSet states = super.getAccessibleStateSet();
-                                return states;
-                        }
-        */
     }
 }
