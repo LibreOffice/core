@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2001-09-06 08:43:14 $
+ *  last change: $Author: abi $ $Date: 2001-10-02 07:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,13 +96,13 @@ void SAL_CALL
 TaskManager::startTask(
     sal_Int32 CommandId,
     const uno::Reference< XCommandEnvironment >& xCommandEnv )
-    throw( CommandFailedException )
+    throw( DuplicateCommandIdentifierException )
 {
     vos::OGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it != m_aTaskMap.end() )
     {
-        throw CommandFailedException();
+        throw DuplicateCommandIdentifierException();
     }
     m_aTaskMap[ CommandId ] = TaskHandling( xCommandEnv );
 }
