@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 08:17:13 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 11:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,9 +832,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     m_aFilter += aSql;
 
     // add the filter and the sort order
-    aSql2 += getComposedFilter();
-    aSql2 += getGroupBy();
-    aSql2 += getComposedSort();
+    aSql2 += createNewStatement();
 
     resetIterator(aSql2);
 }
@@ -893,9 +891,7 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
         m_aOrder += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DESC "));
 
     // add the filter and the sort order
-    aSql += getComposedFilter();
-    aSql += getGroupBy();
-    aSql += getComposedSort();
+    aSql += createNewStatement();
 
     resetIterator(aSql);
 }
@@ -909,9 +905,7 @@ void SAL_CALL OQueryComposer::setFilter( const ::rtl::OUString& filter ) throw(S
     ::rtl::OUString aSql(m_aWorkSql);
 
     // add the filter and the sort order
-    aSql += getComposedFilter();
-    aSql += getGroupBy();
-    aSql += getComposedSort();
+    aSql += createNewStatement();
 
     resetIterator(aSql);
 
@@ -928,9 +922,7 @@ void SAL_CALL OQueryComposer::setOrder( const ::rtl::OUString& order ) throw(SQL
     ::rtl::OUString aSql(m_aWorkSql);
 
     // add the filter and the sort order
-    aSql += getComposedFilter();
-    aSql += getGroupBy();
-    aSql += getComposedSort();
+    aSql += createNewStatement();
 
     resetIterator(aSql);
 }
@@ -1280,11 +1272,17 @@ void OQueryComposer::resetIterator(const ::rtl::OUString& aSql)
 {
     ::rtl::OUString aResult;
     const OSQLParseNode* pGroupBy = m_aSqlIterator.getGroupByTree();
-    if(pGroupBy)
+    if ( pGroupBy )
         pGroupBy->parseNodeToStr(aResult,m_xMetaData);
 
+    return aResult;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OQueryComposer::getHaving() const
+{
+    ::rtl::OUString aResult;
     const OSQLParseNode* pHaving = m_aSqlIterator.getHavingTree();
-    if(pHaving)
+    if ( pHaving )
         pHaving->parseNodeToStr(aResult,m_xMetaData);
     return aResult;
 }
@@ -1409,6 +1407,17 @@ void OQueryComposer::clearCurrentCollections()
         m_aTablesCollection.push_back(m_pTables);
         m_pTables = NULL;
     }
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OQueryComposer::createNewStatement() const
+{
+    ::rtl::OUString sSql;
+    sSql += getComposedFilter();
+    sSql += getGroupBy();
+    sSql += getHaving();
+    sSql += getComposedSort();
+
+    return sSql;
 }
 // -----------------------------------------------------------------------------
 

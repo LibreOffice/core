@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-08 09:13:57 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 11:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,8 @@ namespace dbaccess
         ::rtl::OUString getComposedSort() const;
         ::rtl::OUString getComposedFilter() const;
         ::rtl::OUString getGroupBy() const;
+        ::rtl::OUString getHaving() const;
+        ::rtl::OUString createNewStatement() const;
         ::rtl::OUString getTableAlias(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column ) const;
         // clears all Columns,Parameters and tables and insert it to their vectors
         void clearCurrentCollections();
