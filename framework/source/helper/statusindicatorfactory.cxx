@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-19 12:00:12 $
+ *  last change: $Author: cd $ $Date: 2002-01-09 15:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,6 +481,7 @@ void StatusIndicatorFactory::start( const css::uno::Reference< css::task::XStatu
         }
 
         m_xParentWindow->setVisible   ( sal_True      );
+        implts_recalcLayout();
         m_pStatusBar->Show();
         m_pStatusBar->StartProgressMode( sText );
         m_nStartTime = Get10ThSec();
