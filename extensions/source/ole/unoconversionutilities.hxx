@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:41 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1861,11 +1861,15 @@ sal_Bool UnoConversionUtilities<T>::isJScriptArray(const VARIANT* rvar)
     HRESULT hr;
     OLECHAR* sindex= L"0";
     DISPID id;
-    hr= rvar->pdispVal->GetIDsOfNames( IID_NULL, &sindex, 1,
-        LOCALE_USER_DEFAULT, &id);
+    if ( rvar->vt == VT_DISPATCH && rvar->pdispVal )
+    {
+        hr= rvar->pdispVal->GetIDsOfNames( IID_NULL, &sindex, 1,
+            LOCALE_USER_DEFAULT, &id);
 
-    if( SUCCEEDED ( hr) )
-        return sal_True;
+        if( SUCCEEDED ( hr) )
+            return sal_True;
+    }
+
     return sal_False;
 }
 
