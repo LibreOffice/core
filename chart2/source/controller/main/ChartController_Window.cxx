@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: iha $ $Date: 2003-10-28 16:04:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,12 @@
  ************************************************************************/
 #include "ChartController.hxx"
 #include "SelectionHelper.hxx"
+#include "chartview/ObjectIdentifier.hxx"
 #include "ChartWindow.hxx"
 #include "chartview/ChartView.hxx"
 #include "Chart.hrc"
 #include "ResId.hxx"
+
 // header for class PopupMenu
 #ifndef _SV_MENU_HXX
 #include <vcl/menu.hxx>
@@ -314,9 +316,10 @@ bool isDoubleClick( const MouseEvent& rMEvt )
 
 void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
 {
+    const short HITPIX=2; //hit-tolerance in pixel
+
     Window* pWindow = m_pChartWindow;
     DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
-
     Point   aMPos   = pWindow->PixelToLogic(rMEvt.GetPosPixel());
 
     if ( MOUSE_LEFT == rMEvt.GetButtons() )
@@ -325,12 +328,19 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
         pWindow->CaptureMouse();
     }
 
-    //old chart:
-    //ForcePointer(&rMEvt); //shouldn't be necessary if pointer was set correct in mousemove ....
-    //SuspendSelectionChangeBroadcasting aSelectionSuspender( pViewShell );
-    //pViewShell->SetMousePos( aMPos );
-
-    //??? select Fu ( SchFuDraw SchFuText SchFuSelection ) and call MouseButtonDown there
+    if( m_pDrawViewWrapper->IsTextEdit() )
+    {
+        if( m_pDrawViewWrapper->IsTextEditHit( aMPos, HITPIX) )
+        {
+            m_pDrawViewWrapper->MouseButtonDown(rMEvt,m_pChartWindow);
+            return;
+        }
+        else
+        {
+            this->EndTextEdit();
+            return;
+        }
+    }
 
     //abort running action
     if( pDrawViewWrapper->IsAction() )
@@ -421,6 +431,12 @@ void ChartController::execute_MouseMove( const MouseEvent& rMEvt )
     if(!pDrawViewWrapper)
         return;
 
+    if( m_pDrawViewWrapper->IsTextEdit() )
+    {
+        if( m_pDrawViewWrapper->MouseMove(rMEvt,m_pChartWindow) )
+            return;
+    }
+
     //ForcePointer(&rMEvt); should be sufficient and correct to do it at the end
     //??? select Fu ( SchFuDraw SchFuText SchFuSelection ) and call MouseMove there
 
@@ -488,6 +504,11 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 
     if(!pDrawViewWrapper)
         return;
+    if( m_pDrawViewWrapper->IsTextEdit() )
+    {
+        if( m_pDrawViewWrapper->MouseButtonUp(rMEvt,m_pChartWindow) )
+            return;
+    }
     if(pDrawViewWrapper->IsDragObj())
     {
         if( pDrawViewWrapper->EndDragObj(rMEvt.IsMod1()) )
@@ -538,7 +559,11 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 
 void ChartController::execute_DoubleClick()
 {
-    executeDispatch_ObjectProperties();
+    ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelectedObjectCID );
+    if( OBJECTTYPE_TITLE==eObjectType )
+        executeDispatch_EditText();
+    else
+        executeDispatch_ObjectProperties();
 }
 
 void ChartController::execute_Resize()
@@ -619,6 +644,50 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
         uno::Sequence< beans::PropertyValue > aArgs;
         this->dispatch( aURL, aArgs );
     }
+}
+
+bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
+{
+    bool bReturn=false;
+    if( m_pDrawViewWrapper->IsTextEdit() )
+    {
+        if( m_pDrawViewWrapper->KeyInput(rKEvt,m_pChartWindow) )
+        {
+            bReturn = true;
+            if( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE )
+            {
+                this->EndTextEdit();
+            }
+        }
+
+    }
+
+    //if( m_pDrawViewWrapper->IsAction() );
+
+    /* old chart:
+    if (pFuActual)
+        bReturn = pFuActual->KeyInput(rKEvt);
+
+    if (!bReturn && GetWindow())
+    {
+        KeyCode aKeyCode = rKEvt.GetKeyCode();
+
+        if (aKeyCode.IsMod1() && aKeyCode.IsShift()
+            && aKeyCode.GetCode() == KEY_R)
+        {
+                // 3D-Kontext wieder zerstoeren
+            Base3D* pBase3D = (Base3D*) GetWindow()->Get3DContext();
+
+            if (pBase3D)
+            {
+                pBase3D->Destroy(GetWindow());
+            }
+            GetWindow()->Invalidate();
+            bReturn = TRUE;
+        }
+    }
+    */
+    return bReturn;
 }
 //-----------------------------------------------------------------
 // XSelectionSupplier (optional interface)
