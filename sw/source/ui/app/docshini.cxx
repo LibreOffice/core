@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:33:13 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
 #endif
+#ifndef _SFX_BINDINGS_HXX //autogen
+#include <sfx2/bindings.hxx>
+#endif
 #ifndef _SVX_ASIANCFG_HXX
 #include <svx/asiancfg.hxx>
 #endif
@@ -172,6 +175,9 @@
 
 #include <vcl/svapp.hxx>
 
+#ifndef _SWVIEW_HXX
+#include <view.hxx>
+#endif
 #ifndef _PRTOPT_HXX
 #include <prtopt.hxx>
 #endif
@@ -246,6 +252,9 @@
 #endif
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
 #endif
 
 #ifndef _SWSWERROR_H
@@ -614,6 +623,10 @@ void SwDocShell::UpdateFontList()
             pFontList = new FontList( Application::GetDefaultDevice() );
 
         PutItem( SvxFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST ) );
+
+        SfxViewFrame* pFrm = pWrtShell ? pWrtShell->GetView().GetViewFrame() : 0;
+        if( pFrm )
+            pFrm->GetBindings().Invalidate( SID_ATTR_CHAR_FONTLIST );
     }
 }
 
