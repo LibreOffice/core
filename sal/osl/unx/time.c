@@ -2,9 +2,9 @@
  *
  *  $RCSfile: time.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-08 13:25:59 $
+ *  last change: $Author: obr $ $Date: 2001-06-08 13:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 
 #elif defined(SOLARIS)
 #define HAS_ALTZONE 1
+#endif
 
 /*--------------------------------------------------
  * osl_getSystemTime
