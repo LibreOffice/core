@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2002-11-25 18:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,10 +186,6 @@ void ScTabView::ShowRefTip()
 
 void ScTabView::StopRefMode()
 {
-    //  SC_FOLLOW_NONE: nur aktiven Part umschalten
-    //  auch ohne IsRefMode, fuer RangeFinder-Verschieberei
-    AlignToCursor( aViewData.GetCurX(), aViewData.GetCurY(), SC_FOLLOW_NONE );
-
     if (aViewData.IsRefMode())
     {
         aViewData.SetRefMode( FALSE, SC_REFTYPE_NONE );
@@ -224,6 +220,13 @@ void ScTabView::StopRefMode()
             pGridWin[eOld]->MoveMouseStatus(*pGridWin[eNew]);
         }
     }
+
+    //  AlignToCursor(SC_FOLLOW_NONE): Only switch active part.
+    //  This must also be done if no RefMode was active (for RangeFinder dragging),
+    //  but if RefMode was set, AlignToCursor must be after SelectionEngine reset,
+    //  so the SelectionEngine SetWindow call from AlignToCursor doesn't capture
+    //  the mouse again when called from Tracking/MouseButtonUp (#94562#).
+    AlignToCursor( aViewData.GetCurX(), aViewData.GetCurY(), SC_FOLLOW_NONE );
 }
 
 void ScTabView::DoneRefMode( BOOL bContinue )
