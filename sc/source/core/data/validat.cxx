@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-17 08:52:06 $
+ *  last change: $Author: nn $ $Date: 2001-12-19 19:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,32 +333,12 @@ BOOL ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
         aMacroStr += pMethod->GetName();
         String aBasicStr;
 
-        BOOL bFound = FALSE;
-        BasicManager* pBasMgr = pSfxApp->GetBasicManager();
-        SfxObjectShell* pShell = 0;
-        while ( !bFound && pBasMgr )
-        {
-            USHORT nLibs = pBasMgr->GetLibCount();
-            for ( USHORT nLib = 0; nLib < nLibs; nLib++ )
-            {
-                StarBASIC* pB = pBasMgr->GetLib( nLib );
-                if ( pB == pBasic )
-                {
-                    bFound = TRUE;
-                    break;
-                }
-            }
-            if ( !bFound )
-            {
-                if ( pShell  )
-                    pShell = SfxObjectShell::GetNext( *pShell );
-                else
-                    pShell = SfxObjectShell::GetFirst();
-            }
-            pBasMgr = ( pShell ? pShell->GetBasicManager() : 0 );
-        }
+        //  #95867# the distinction between document- and app-basic has to be done
+        //  by checking the parent (as in ScInterpreter::ScMacro), not by looping
+        //  over all open documents, because this may be called from within loading,
+        //  when SfxObjectShell::GetFirst/GetNext won't find the document.
 
-        if ( pShell )
+        if ( pObject->GetParent() )
             aBasicStr = pObject->GetParent()->GetName();    // Dokumentenbasic
         else
             aBasicStr = SFX_APP()->GetName();               // Applikationsbasic
