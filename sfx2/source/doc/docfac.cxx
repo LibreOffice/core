@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:12:38 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,20 +490,24 @@ sal_uInt16 SfxObjectFactory::GetExplorerImageId() const
 
 void SfxObjectFactory::SetStandardTemplate( const String& rServiceName, const String& rTemplate )
 {
-    SvtModuleOptions aModOpt;
-    SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
-    if ( SvtModuleOptions::ClassifyFactoryByName( rServiceName, eFac ) )
-        aModOpt.SetFactoryStandardTemplate( eFac, rTemplate );
+    SvtModuleOptions::EFactory eFac = SvtModuleOptions::ClassifyFactoryByServiceName(rServiceName);
+    if (eFac == SvtModuleOptions::E_UNKNOWN_FACTORY)
+        eFac = SvtModuleOptions::ClassifyFactoryByShortName(rServiceName);
+    if (eFac != SvtModuleOptions::E_UNKNOWN_FACTORY)
+        SvtModuleOptions().SetFactoryStandardTemplate(eFac, rTemplate);
 }
 
 String SfxObjectFactory::GetStandardTemplate( const String& rServiceName )
 {
-    SvtModuleOptions aModOpt;
-    SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
-    if ( SvtModuleOptions::ClassifyFactoryByName( rServiceName, eFac ) )
-        return aModOpt.GetFactoryStandardTemplate( eFac );
+    SvtModuleOptions::EFactory eFac = SvtModuleOptions::ClassifyFactoryByServiceName(rServiceName);
+    if (eFac == SvtModuleOptions::E_UNKNOWN_FACTORY)
+        eFac = SvtModuleOptions::ClassifyFactoryByShortName(rServiceName);
 
-    return String();
+    String sTemplate;
+    if (eFac != SvtModuleOptions::E_UNKNOWN_FACTORY)
+        sTemplate = SvtModuleOptions().GetFactoryStandardTemplate(eFac);
+
+    return sTemplate;
 }
 
 /*
