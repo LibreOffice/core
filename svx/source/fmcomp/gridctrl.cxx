@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 10:48:23 $
+ *  last change: $Author: hr $ $Date: 2001-07-11 13:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,7 +575,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     Font aOutputFont = m_aAbsolute.GetFont();
     if (aOutputFont.GetSize().Height() > nH)
     {
-        Font aApplFont = System::GetStandardFont(STDFONT_SWISS);
+        Font aApplFont = System::_GetStandardFont(_STDFONT_SWISS);
         aApplFont.SetSize(Size(0, nH-2));
         m_aAbsolute.SetFont(aApplFont);
 
