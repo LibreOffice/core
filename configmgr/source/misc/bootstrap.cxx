@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-18 16:12:20 $
+ *  last change: $Author: jb $ $Date: 2001-05-22 07:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,15 @@
 #endif
 #ifndef _CONFIGMGR_MISC_HASHHELPER_HXX
 #include "hashhelper.hxx"
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_MISSINGBOOTSTRAPFILEEXCEPTION_HPP_
+#include <com/sun/star/configuration/MissingBootstrapFileException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_INVALIDBOOTSTRAPFILEEXCEPTION_HPP_
+#include <com/sun/star/configuration/InvalidBootstrapFileException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_INSTALLATIONINCOMPLETEEXCEPTION_HPP_
+#include <com/sun/star/configuration/InstallationIncompleteException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -261,11 +270,29 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------
     void raiseBootstrapException( BootstrapResult rc, OUString const& sURL, Reference< XInterface > xContext )
     {
-        if (rc != BOOTSTRAP_DATA_OK)
+        using namespace ::com::sun::star::configuration;
+
+        sal_Char const sBaseMessage[] = "Cannot locate Configuration: ";
+
+        OUString sMessage = OUString::createFromAscii(sBaseMessage);
+        sMessage += getBootstrapErrorMessage( rc );
+
+        switch (rc)
         {
-            sal_Char const sBaseMessage[] = "Cannot locate Configuration: ";
-            OUString sMessage = OUString::createFromAscii(sBaseMessage);
-            sMessage += getBootstrapErrorMessage( rc );
+        case MISSING_BOOTSTRAP_FILE:
+            throw MissingBootstrapFileException(sMessage, xContext, sURL);
+
+        case INVALID_BOOTSTRAP_DATA:
+            throw InvalidBootstrapFileException(sMessage, xContext, sURL);
+
+        case INVALID_INSTALLATION:
+            throw InstallationIncompleteException(sMessage, xContext);
+
+        default: OSL_ENSURE(false, "Undefined BootstrapResult code");
+        case BOOTSTRAP_FAILURE:
+            throw CannotLoadConfigurationException(sMessage, xContext);
+
+        case BOOTSTRAP_DATA_OK:     break;
         }
     }
 
@@ -273,6 +300,83 @@ namespace configmgr
     void raiseBootstrapException( BootstrapSettings const& rBootstrapData, Reference< XInterface > xContext )
     {
         raiseBootstrapException(rBootstrapData.status,rBootstrapData.url,xContext);
+    }
+
+// ---------------------------------------------------------------------------------------
+    OUString Settings::Setting::toString() const
+    {
+        OUString sReturn;
+
+        sal_Bool bSuccess = this->m_aValue >>= sReturn;
+
+        OSL_ENSURE(bSuccess, "Settings::Setting::toString: setting is not a string!");
+
+        return sReturn;
+    }
+
+// ---------------------------------------------------------------------------------------
+    sal_Int32 Settings::Setting::toInt32() const
+    {
+        sal_Int32 nReturn = 0;
+
+        sal_Bool bSuccess = this->m_aValue >>= nReturn;
+        if (!bSuccess)
+        {
+            OUString sValue;
+            if (this->m_aValue >>= sValue)
+            {
+                nReturn = sValue.toInt32();
+                bSuccess = (nReturn != 0);
+            }
+        }
+        OSL_ENSURE(bSuccess, "Settings::getIntSetting: setting is not an integer!");
+        return nReturn;
+    }
+
+// ---------------------------------------------------------------------------------------
+    sal_Bool Settings::Setting::toBool() const
+    {
+        sal_Bool bReturn = false;
+
+        switch (this->m_aValue.getValueTypeClass())
+        {
+        case uno::TypeClass_BOOLEAN:
+            bReturn = *static_cast<sal_Bool const*>(this->m_aValue.getValue());
+            break;
+
+        case uno::TypeClass_LONG:
+            bReturn = (0 != *static_cast<sal_Int32 const*>(this->m_aValue.getValue()));
+            break;
+
+        case uno::TypeClass_STRING:
+            {
+
+                OUString sValue; OSL_VERIFY(this->m_aValue >>= sValue);
+                if (sValue.getLength() == 0)
+                {
+                    bReturn = false;
+                }
+                else if (sValue.equalsIgnoreAsciiCase(OUString::createFromAscii("true")) ||
+                         sValue.equalsIgnoreAsciiCase(OUString::createFromAscii("yes")) )
+                {
+                    bReturn = true;
+                }
+                else if (sValue.equalsIgnoreAsciiCase(OUString::createFromAscii("false")) ||
+                         sValue.equalsIgnoreAsciiCase(OUString::createFromAscii("no")) )
+                {
+                    bReturn = false;
+                }
+                else
+                    OSL_ENSURE(false, "Settings::Setting::toBool: string setting is no known bool value name!");
+
+            } break;
+
+        default:
+            OSL_ENSURE(false, "Settings::Setting::toBool: setting is not a boolean!");
+            break;
+        }
+
+        return bReturn;
     }
 
 // ---------------------------------------------------------------------------------------
@@ -389,6 +493,15 @@ namespace configmgr
     }
 
 // ---------------------------------------------------------------------------------------
+    Settings::Origin Settings::getOrigin(Name const& _pName) const
+    {
+        Iterator aPos = m_aImpl.find(_pName);
+
+        // have a setting at all ?
+        return (aPos != m_aImpl.end()) ? aPos->second.origin() : SO_NOT_SET;
+    }
+
+// ---------------------------------------------------------------------------------------
     Settings::Setting Settings::getMaybeSetting(Name const& _pName) const
     {
         Iterator aPos = m_aImpl.find(_pName);
@@ -411,73 +524,24 @@ namespace configmgr
     OUString Settings::getStringSetting(Name const& _pName) const
     {
         Setting aSetting = this->getSetting(_pName);
-        OUString sReturn;
-#ifdef _DEBUG
-        sal_Bool bSuccess =
-#endif
-        aSetting.aValue >>= sReturn;
-        OSL_ENSURE(bSuccess, "Settings::getStringSetting: setting is not a string!");
-        return sReturn;
+
+        return aSetting.toString();
     }
 
 // ---------------------------------------------------------------------------------------
     sal_Int32 Settings::getIntSetting(Name const& _pName) const
     {
         Setting aSetting = this->getSetting(_pName);
-        sal_Int32 nReturn = 0;
-#ifdef _DEBUG
-        sal_Bool bSuccess =
-#endif
-        aSetting.aValue >>= nReturn;
-        OSL_ENSURE(bSuccess, "Settings::getIntSetting: setting is not an integer!");
-        return nReturn;
+
+        return aSetting.toInt32();
     }
 
 // ---------------------------------------------------------------------------------------
     sal_Bool Settings::getBoolSetting(Name const& _pName) const
     {
         Setting aSetting = this->getSetting(_pName);
-        sal_Bool bReturn = false;
 
-        switch (aSetting.aValue.getValueTypeClass())
-        {
-        case uno::TypeClass_BOOLEAN:
-            bReturn = *static_cast<sal_Bool const*>(aSetting.aValue.getValue());
-            break;
-
-        case uno::TypeClass_LONG:
-            bReturn = (0 != *static_cast<sal_Int32 const*>(aSetting.aValue.getValue()));
-            break;
-
-        case uno::TypeClass_STRING:
-            {
-
-                OUString sValue; OSL_VERIFY(aSetting.aValue >>= sValue);
-                if (sValue.getLength() == 0)
-                {
-                    bReturn = false;
-                }
-                else if (sValue.equalsIgnoreAsciiCase(OUString::createFromAscii("true")) ||
-                         sValue.equalsIgnoreAsciiCase(OUString::createFromAscii("yes")) )
-                {
-                    bReturn = true;
-                }
-                else if (sValue.equalsIgnoreAsciiCase(OUString::createFromAscii("false")) ||
-                         sValue.equalsIgnoreAsciiCase(OUString::createFromAscii("no")) )
-                {
-                    bReturn = false;
-                }
-                else
-                    OSL_ENSURE(false, "Settings::getBoolSetting: string setting is no known bool value name!");
-
-            } break;
-
-        default:
-            OSL_ENSURE(false, "Settings::getBoolSetting: setting is not a boolean!");
-            break;
-        }
-
-        return bReturn;
+        return aSetting.toBool();
     }
 
 // ---------------------------------------------------------------------------------------
@@ -485,8 +549,12 @@ namespace configmgr
                                             Settings::Origin _eOrigin)
     : m_aSettings(_rOverrides, _eOrigin)
     {
+
         // translate old compatibility settings
         implTranslateCompatibilitySettings();
+
+        implNormalizePathSetting(SETTING_SOURCEPATH);
+        implNormalizePathSetting(SETTING_UPDATEPATH);
     }
 
 // ---------------------------------------------------------------------------------------
@@ -548,7 +616,7 @@ namespace configmgr
     }
 
 // ---------------------------------------------------------------------------------------
-    sal_Bool ConnectionSettings::implPutPathSetting(Settings::Name const& _pSetting, OUString const& _sSystemPath, Settings::Origin _eOrigin)
+    sal_Bool ConnectionSettings::implPutSystemPathSetting(Settings::Name const& _pSetting, OUString const& _sSystemPath, Settings::Origin _eOrigin)
     {
         OUString sNormalized;
 
@@ -568,7 +636,36 @@ namespace configmgr
             clearSetting(_pSetting);
         }
 
-        return bOK;;
+        return bOK;
+    }
+
+// ---------------------------------------------------------------------------------------
+    sal_Bool ConnectionSettings::implNormalizePathSetting(Settings::Name const& _pSetting)
+    {
+        sal_Bool bOK = haveSetting(_pSetting);
+        if (bOK)
+        {
+            Settings::Setting aSetting = getSetting(_pSetting);
+
+            OUString sRawPath = aSetting.toString();
+            OUString sNormalized;
+
+        #ifdef TF_FILEURL
+            bOK = oslOK(osl_getFileURLFromSystemPath(sRawPath.pData, &sNormalized.pData));
+        #else
+            bOK = oslOK(osl_normalizePath(sRawPath.pData, &sNormalized.pData));
+        #endif
+            if (bOK)
+            {
+                putSetting(_pSetting, Settings::Setting(sNormalized,aSetting.origin()) );
+            }
+            else
+            {
+                CFG_TRACE_WARNING_NI("provider bootstrapping: could not normalize a given path (setting: %s, value: %s)", _pSetting.getStr(), OUSTRING2ASCII(sRawPath));
+                //clearSetting(_pSetting);
+            }
+        }
+        return bOK;
     }
 
 // ---------------------------------------------------------------------------------------
@@ -856,8 +953,8 @@ namespace configmgr
         OUString sSourcePath    = getProfileStringItem(rProfile, SREGISTRY_SECTION_LOCAL, SREGISTRY_KEY_SOURCEPATH, nExtEncoding);
         OUString sUpdatePath    = getProfileStringItem(rProfile, SREGISTRY_SECTION_LOCAL, SREGISTRY_KEY_UPDATEPATH, nExtEncoding);
 
-        implPutPathSetting(SETTING_SOURCEPATH, sSourcePath, eOrigin);
-        implPutPathSetting(SETTING_UPDATEPATH, sUpdatePath, eOrigin);
+        implPutSystemPathSetting(SETTING_SOURCEPATH, sSourcePath, eOrigin);
+        implPutSystemPathSetting(SETTING_UPDATEPATH, sUpdatePath, eOrigin);
 
         // remote session settings
         OUString sServerAndPort = getProfileStringItem(rProfile, SREGISTRY_SECTION_REMOTE, SREGISTRY_KEY_SERVER, nExtEncoding);
@@ -930,13 +1027,13 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------
     void ConnectionSettings::implClearIrrelevantItems()
     {
-        if (m_aSettings.getMaybeSetting(SETTING_SERVERTYPE).eOrigin == Settings::SO_OVERRIDE)
+        if (m_aSettings.getOrigin(SETTING_SERVERTYPE) == Settings::SO_OVERRIDE)
         {   // the session type is a runtime override
             // clear the user if it's origin is SREGISTRY
-            if (m_aSettings.getMaybeSetting(SETTING_USER).eOrigin == Settings::SO_INIFILE)
+            if (m_aSettings.getOrigin(SETTING_USER) == Settings::SO_INIFILE)
                 clearSetting(SETTING_USER);
             // same for the password
-            if (m_aSettings.getMaybeSetting(SETTING_PASSWORD).eOrigin == Settings::SO_INIFILE)
+            if (m_aSettings.getOrigin(SETTING_PASSWORD) == Settings::SO_INIFILE)
                 clearSetting(SETTING_PASSWORD);
         }
     }
