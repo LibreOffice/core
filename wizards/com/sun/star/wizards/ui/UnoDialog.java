@@ -2,9 +2,9 @@
 *
 *  $RCSfile: UnoDialog.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: obo $ $Date: 2004-09-08 14:07:03 $
+*  last change: $Author: pjunck $ $Date: 2004-10-27 13:42:44 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -231,6 +231,18 @@ public class UnoDialog implements EventNames {
             xListBox.removeItems(SelList[i], (short) 1);
         }
     }
+
+
+    public static int getListBoxItemCount(XListBox _xListBox){
+        String[] fieldnames = (String[]) Helper.getUnoPropertyValue(getModel(_xListBox), "StringItemList");
+        return fieldnames.length;
+    }
+
+    public static short getSelectedItemPos(XListBox _xListBox){
+        short ipos[] = (short[]) Helper.getUnoPropertyValue(getModel(_xListBox), "SelectedItems");
+        return ipos[0];
+    }
+
 
     public void addSingleItemtoListbox(XListBox xListBox, String ListItem, short iSelIndex) {
         xListBox.addItem(ListItem, xListBox.getItemCount());
