@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3irange.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:08 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,12 @@
 #ifndef _BGFX_RANGE_B3IRANGE_HXX
 #define _BGFX_RANGE_B3IRANGE_HXX
 
+#ifndef _BGFX_POINT_B3IPOINT_HXX
+#include <basegfx/point/b3ipoint.hxx>
+#endif
+#ifndef _BGFX_POINT_B3DPOINT_HXX
+#include <basegfx/point/b3dpoint.hxx>
+#endif
 #ifndef _BGFX_TUPLE_B3ITUPLE_HXX
 #include <basegfx/tuple/b3ituple.hxx>
 #endif
@@ -212,18 +218,18 @@ namespace basegfx
             return maRangeZ.getRange();
         }
 
-        B3ITuple getMinimum() const
+        B3IPoint getMinimum() const
         {
-            return B3ITuple(
+            return B3IPoint(
                 maRangeX.getMinimum(),
                 maRangeY.getMinimum(),
                 maRangeZ.getMinimum()
                 );
         }
 
-        B3ITuple getMaximum() const
+        B3IPoint getMaximum() const
         {
-            return B3ITuple(
+            return B3IPoint(
                 maRangeX.getMaximum(),
                 maRangeY.getMaximum(),
                 maRangeZ.getMaximum()
@@ -239,9 +245,9 @@ namespace basegfx
                 );
         }
 
-        B3DTuple getCenter() const
+        B3DPoint getCenter() const
         {
-            return B3DTuple(
+            return B3DPoint(
                 maRangeX.getCenter(),
                 maRangeY.getCenter(),
                 maRangeZ.getCenter()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2irange.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:07 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,12 @@
 #ifndef _BGFX_RANGE_B2IRANGE_HXX
 #define _BGFX_RANGE_B2IRANGE_HXX
 
+#ifndef _BGFX_POINT_B2IPOINT_HXX
+#include <basegfx/point/b2ipoint.hxx>
+#endif
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
 #ifndef _BGFX_TUPLE_B2ITUPLE_HXX
 #include <basegfx/tuple/b2ituple.hxx>
 #endif
@@ -177,17 +183,17 @@ namespace basegfx
             return maRangeY.getRange();
         }
 
-        B2ITuple getMinimum() const
+        B2IPoint getMinimum() const
         {
-            return B2ITuple(
+            return B2IPoint(
                 maRangeX.getMinimum(),
                 maRangeY.getMinimum()
                 );
         }
 
-        B2ITuple getMaximum() const
+        B2IPoint getMaximum() const
         {
-            return B2ITuple(
+            return B2IPoint(
                 maRangeX.getMaximum(),
                 maRangeY.getMaximum()
                 );
@@ -201,9 +207,9 @@ namespace basegfx
                 );
         }
 
-        B2DTuple getCenter() const
+        B2DPoint getCenter() const
         {
-            return B2DTuple(
+            return B2DPoint(
                 maRangeX.getCenter(),
                 maRangeY.getCenter()
                 );
