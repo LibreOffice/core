@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:04:36 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #ifndef _NODE_HXX
 #define _NODE_HXX
 
-
 #ifndef _SVMEMPOOL_HXX //autogen
 #include <tools/mempool.hxx>
 #endif
@@ -70,6 +69,9 @@
 #include <tools/gen.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _NDARR_HXX
 #include <ndarr.hxx>
 #endif
@@ -118,7 +120,7 @@ struct SwPosition;
 // --------------------
 // class SwNode
 // --------------------
-class SwNode : private /* public*/ BigPtrEntry
+class SW_DLLPUBLIC SwNode : private /* public*/ BigPtrEntry
 {
     friend class SwNodes;
 
@@ -277,6 +279,7 @@ public:
 private:
     // privater Constructor, weil nie kopiert werden darf !!
     SwNode( const SwNode & rNodes );
+    SwNode & operator= ( const SwNode & rNodes );
 };
 
 // --------------------
@@ -309,6 +312,7 @@ public:
 private:
     // privater Constructor, weil nie kopiert werden darf !!
     SwStartNode( const SwStartNode & rNode );
+    SwStartNode & operator= ( const SwStartNode & rNode );
 };
 
 
@@ -332,6 +336,7 @@ protected:
 private:
     // privater Constructor, weil nie kopiert werden darf !!
     SwEndNode( const SwEndNode & rNode );
+    SwEndNode & operator= ( const SwEndNode & rNode );
 };
 
 
@@ -455,6 +460,7 @@ public:
 private:
     // privater Constructor, weil nie kopiert werden darf !!
     SwCntntNode( const SwCntntNode & rNode );
+    SwCntntNode & operator= ( const SwCntntNode & rNode );
 };
 
 
@@ -495,6 +501,7 @@ public:
 private:
     // privater Constructor, weil nie kopiert werden darf !!
     SwTableNode( const SwTableNode & rNode );
+    SwTableNode & operator= ( const SwTableNode & rNode );
 };
 
 
@@ -548,6 +555,7 @@ public:
 private:
     // privater Constructor, weil nie kopiert werden darf !!
     SwSectionNode( const SwSection& rNode );
+    SwSectionNode & operator= ( const SwSection& rNode );
 };
 
 
