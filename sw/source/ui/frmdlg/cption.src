@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:48:51 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,7 @@ ModalDialog DLG_CAPTION
         Text [ norwegian ] = "Settings" ;
         Text [ italian ] = "Impostazioni" ;
         Text [ portuguese_brazilian ] = "Par‚metros" ;
-        Text [ portuguese ] = "PredefiniÁıes" ;
+        Text [ portuguese ] = "DefiniÁıes" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
         Text [ french ] = "ParamËtres" ;
@@ -397,7 +397,7 @@ ModalDialog DLG_CAPTION
         Text[ russian ] = "¬ Ì‡˜‡ÎÂ";
         Text[ polish ] = "Na poczπtku";
         Text[ japanese ] = "ç≈èâÇ…";
-        Text[ chinese_traditional ] = "¶b≠∫∫›";
+        Text[ chinese_traditional ] = "¶b∞_©l¶Ï∏m";
         Text[ arabic ] = "›Ì «·»œ«Ì…";
         Text[ greek ] = "”ÙÁÌ ·Ò˜ﬁ";
         Text[ korean ] = "¿ß";
