@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-23 20:08:02 $
+ *  last change: $Author: nn $ $Date: 2000-11-24 20:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,16 +127,16 @@ static SfxItemInfo __READONLY_DATA  aItemInfos[] =
     { SID_ATTR_CHAR_SHADOWED,       SFX_ITEM_POOLABLE },    // ATTR_FONT_SHADOWED
     { SID_ATTR_CHAR_COLOR,          SFX_ITEM_POOLABLE },    // ATTR_FONT_COLOR
     { SID_ATTR_CHAR_LANGUAGE,       SFX_ITEM_POOLABLE },    // ATTR_FONT_LANGUAGE
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT            from 614
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_HEIGHT     from 614
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_WEIGHT     from 614
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_POSTURE    from 614
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_LANGUAGE   from 614
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT            from 614
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_HEIGHT     from 614
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_WEIGHT     from 614
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_POSTURE    from 614
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_LANGUAGE   from 614
+    { SID_ATTR_CHAR_CJK_FONT,       SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT            from 614
+    { SID_ATTR_CHAR_CJK_FONTHEIGHT, SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_HEIGHT     from 614
+    { SID_ATTR_CHAR_CJK_WEIGHT,     SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_WEIGHT     from 614
+    { SID_ATTR_CHAR_CJK_POSTURE,    SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_POSTURE    from 614
+    { SID_ATTR_CHAR_CJK_LANGUAGE,   SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_LANGUAGE   from 614
+    { SID_ATTR_CHAR_CTL_FONT,       SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT            from 614
+    { SID_ATTR_CHAR_CTL_FONTHEIGHT, SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_HEIGHT     from 614
+    { SID_ATTR_CHAR_CTL_WEIGHT,     SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_WEIGHT     from 614
+    { SID_ATTR_CHAR_CTL_POSTURE,    SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_POSTURE    from 614
+    { SID_ATTR_CHAR_CTL_LANGUAGE,   SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_LANGUAGE   from 614
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_FONT_EMPHASISMARK   from 614
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_FONT_TWOLINES       from 614
     { SID_ATTR_ALIGN_HOR_JUSTIFY,   SFX_ITEM_POOLABLE },    // ATTR_HOR_JUSTIFY
