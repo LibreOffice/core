@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,8 +353,13 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         */
         case VCLEVENT_WINDOW_ACTIVATE:
         {
-            aNewValue <<= accessibility::AccessibleStateType::ACTIVE;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            // avoid notification if a child frame is already active
+            // only one frame may be active at a given time
+            if( !pWindow->HasActiveChildFrame() )
+            {
+                aNewValue <<= accessibility::AccessibleStateType::ACTIVE;
+                NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            }
         }
         break;
         case VCLEVENT_WINDOW_DEACTIVATE:
