@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-12 21:31:17 $
+ *  last change: $Author: aw $ $Date: 2002-07-18 09:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,9 @@ BYTE FuSelection::Command(const CommandEvent& rCEvt)
 
 BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     if ( pView->IsAction() )
     {
         if ( rMEvt.IsRight() )
@@ -327,6 +330,9 @@ BOOL __EXPORT FuSelection::MouseMove(const MouseEvent& rMEvt)
 
 BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     BOOL bReturn = FuDraw::MouseButtonUp(rMEvt);
 //  BOOL bOle    = pViewShell->GetViewData()->IsOle();
     BOOL bOle    = pViewShell->GetViewFrame()->ISA(SfxInPlaceFrame);

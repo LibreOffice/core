@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-22 09:40:23 $
+ *  last change: $Author: aw $ $Date: 2002-07-18 09:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,9 @@ FuConstUnoControl::~FuConstUnoControl()
 
 BOOL __EXPORT FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !pView->IsAction() )
@@ -419,6 +422,9 @@ BOOL __EXPORT FuConstUnoControl::MouseMove(const MouseEvent& rMEvt)
 
 BOOL __EXPORT FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     BOOL bReturn = FALSE;
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-02 21:09:13 $
+ *  last change: $Author: aw $ $Date: 2002-07-18 09:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,9 @@ BYTE FuConstruct::Command(const CommandEvent& rCEvt)
 
 BOOL __EXPORT FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     BOOL bReturn = FuDraw::MouseButtonDown(rMEvt);
 
     if ( pView->IsAction() )
@@ -371,6 +374,9 @@ BOOL __EXPORT FuConstruct::MouseMove(const MouseEvent& rMEvt)
 
 BOOL __EXPORT FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     BOOL bReturn = SimpleMouseButtonUp( rMEvt );
 
     //      Doppelklick auf Textobjekt? (->fusel)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-22 09:41:04 $
+ *  last change: $Author: aw $ $Date: 2002-07-18 09:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,9 @@ FuPoor::FuPoor(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
     pDrDoc(pDoc),
     aSfxRequest(rReq),
     pDialog(NULL),
-    bIsInDragMode(FALSE)
+    bIsInDragMode(FALSE),
+    // #95491# remember MouseButton state
+    mnCode(0)
 {
     aScrollTimer.SetTimeoutHdl( LINK(this, FuPoor, ScrollHdl) );
     aScrollTimer.SetTimeout(SELENG_AUTOREPEAT_INTERVAL);
@@ -383,10 +385,32 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, pTimer )
 {
     Point aPosPixel = pWindow->GetPointerPosPixel();
-    MouseMove(MouseEvent(aPosPixel));
+
+    // #95491# use remembered MouseButton state to create correct
+    // MouseEvents for this artifical MouseMove.
+    MouseMove(MouseEvent(aPosPixel, 1, 0, GetMouseButtonCode()));
+
     return 0;
 }
 IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
+
+// #95491# moved from inline to *.cxx
+BOOL FuPoor::MouseButtonUp(const MouseEvent& rMEvt)
+{
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
+    return FALSE;
+}
+
+// #95491# moved from inline to *.cxx
+BOOL FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
+{
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
+    return FALSE;
+}
 
 /*************************************************************************
 |*

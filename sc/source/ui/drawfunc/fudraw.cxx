@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-07 17:39:54 $
+ *  last change: $Author: aw $ $Date: 2002-07-18 09:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,9 @@ void FuDraw::ResetModifiers()
 
 BOOL __EXPORT FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     DoModifiers( rMEvt );
     return FALSE;
 }
@@ -211,6 +214,9 @@ BOOL __EXPORT FuDraw::MouseMove(const MouseEvent& rMEvt)
 
 BOOL __EXPORT FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     ResetModifiers();
     return FALSE;
 }

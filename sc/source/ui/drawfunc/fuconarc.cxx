@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconarc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-22 09:33:53 $
+ *  last change: $Author: aw $ $Date: 2002-07-18 09:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@ FuConstArc::~FuConstArc()
 
 BOOL __EXPORT FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     BOOL bReturn = FuConstruct::MouseButtonDown( rMEvt );
 
     if ( rMEvt.IsLeft() && !pView->IsAction() )
@@ -151,6 +154,9 @@ BOOL __EXPORT FuConstArc::MouseMove( const MouseEvent& rMEvt )
 
 BOOL __EXPORT FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     BOOL bReturn = FALSE;
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )

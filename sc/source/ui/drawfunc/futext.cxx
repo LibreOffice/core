@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-07 17:39:54 $
+ *  last change: $Author: aw $ $Date: 2002-07-18 09:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,9 @@ FuText::~FuText()
 
 BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     BOOL bReturn = FALSE;
 
     if ( pView->MouseButtonDown(rMEvt, pWindow) )
@@ -398,6 +401,9 @@ BOOL __EXPORT FuText::MouseMove(const MouseEvent& rMEvt)
 
 BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     BOOL bReturn = FALSE;
 
     if (aDragTimer.IsActive() )

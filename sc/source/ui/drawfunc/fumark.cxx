@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fumark.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:37:41 $
+ *  last change: $Author: aw $ $Date: 2002-07-18 09:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@ FuMarkRect::~FuMarkRect()
 
 BOOL FuMarkRect::MouseButtonDown(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     pWindow->CaptureMouse();
     pView->UnmarkAll();         // der Einheitlichkeit halber und wegen #50558#
     bStartDrag = TRUE;
@@ -158,6 +161,9 @@ BOOL FuMarkRect::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     if ( bVisible )
     {
         // Hide ZoomRect

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconpol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-22 09:36:37 $
+ *  last change: $Author: aw $ $Date: 2002-07-18 09:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,9 @@ FuConstPolygon::~FuConstPolygon()
 
 BOOL __EXPORT FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     SdrViewEvent aVEvt;
@@ -259,6 +262,9 @@ BOOL __EXPORT FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
 
 BOOL __EXPORT FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     BOOL bReturn = FALSE;
     BOOL bSimple = FALSE;
 
