@@ -2,9 +2,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-12-16 10:43:29 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:44:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,16 +62,11 @@
 
 package installer::download;
 
+use installer::exiter;
+use installer::files;
 use installer::globals;
 use installer::pathanalyzer;
 use installer::systemactions;
-
-# use installer::control;
-# use installer::converter;
-# use installer::files;
-# use installer::logger;
-# use installer::mail;
-# use installer::worker;
 
 ##################################################################
 # Including the lowercase product name into the script template
@@ -85,7 +80,7 @@ sub put_productname_into_script
     $productname = lc($productname);
     $productname =~ s/\.//g;    # openoffice.org -> openofficeorg
 
-    my $infoline = "Adding productname $productname into language pack script\n";
+    my $infoline = "Adding productname $productname into download shell script\n";
     push( @installer::globals::logfileinfo, $infoline);
 
     for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
@@ -104,7 +99,7 @@ sub put_linenumber_into_script
 
     my $linenumber =  $#{$scriptfile} + 2;
 
-    my $infoline = "Adding linenumber $linenumber into language pack script\n";
+    my $infoline = "Adding linenumber $linenumber into download shell script\n";
     push( @installer::globals::logfileinfo, $infoline);
 
     for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
@@ -144,6 +139,73 @@ sub save_script_file
     push( @installer::globals::logfileinfo, $infoline);
 
     return $newscriptfilename;
+}
+
+#########################################################
+# Including checksum and size into script file
+#########################################################
+
+sub put_checksum_and_size_into_script
+{
+    my ($scriptfile, $sumout) = @_;
+
+    my $checksum = "";
+    my $size = "";
+
+    if  ( $sumout =~ /^\s*(\d+)\s+(\d+)\s*$/ )
+    {
+        $checksum = $1;
+        $size = $2;
+    }
+    else
+    {
+        installer::exiter::exit_program("ERROR: Incorrect return value from /usr/bin/sum: $sumout", "put_checksum_and_size_into_script");
+    }
+
+    my $infoline = "Adding checksum $checksum and size $size into download shell script\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
+    {
+        ${$scriptfile}[$i] =~ s/CHECKSUMPLACEHOLDER/$checksum/;
+        ${$scriptfile}[$i] =~ s/DISCSPACEPLACEHOLDER/$size/;
+    }
+
+}
+
+#########################################################
+# Determining checksum and size of tar file
+#########################################################
+
+sub call_sum
+{
+    my ($installdir) = @_;
+
+    my $systemcall = "cd $installdir; tar -cf - * | /usr/bin/sum |";
+
+    my $sumoutput = "";
+
+    open (SUM, "$systemcall");
+    $sumoutput = <SUM>;
+    close (SUM);
+
+    my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    return $sumoutput;
 }
 
 #########################################################
@@ -213,13 +275,596 @@ sub resolve_variables_in_downloadname
     return $downloadname;
 }
 
+##################################################################
+# Windows: Replacing one placeholder with the specified value
+##################################################################
+
+sub replace_one_variable
+{
+    my ($templatefile, $placeholder, $value) = @_;
+
+    my $infoline = "Replacing $placeholder by $value in nsi file\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    for ( my $i = 0; $i <= $#{$templatefile}; $i++ )
+    {
+        ${$templatefile}[$i] =~ s/$placeholder/$value/;
+    }
+
+}
+
+##################################################################
+# Windows: Including the product name into nsi template
+##################################################################
+
+sub put_windows_productname_into_template
+{
+    my ($templatefile, $variableshashref) = @_;
+
+    my $productname = $variableshashref->{'PRODUCTNAME'};
+    $productname =~ s/\.//g;    # OpenOffice.org -> OpenOfficeorg
+
+    replace_one_variable($templatefile, "PRODUCTNAMEPLACEHOLDER", $productname);
+}
+
+##################################################################
+# Windows: Including the path to the banner.bmp into nsi template
+##################################################################
+
+sub put_banner_bmp_into_template
+{
+    my ($templatefile, $includepatharrayref) = @_;
+
+    my $filename = "downloadbanner.bmp";
+
+    my $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
+
+    if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "put_banner_bmp_into_template"); }
+
+    replace_one_variable($templatefile, "BANNERBMPPLACEHOLDER", $$completefilenameref);
+}
+
+##################################################################
+# Windows: Including the path to the welcome.bmp into nsi template
+##################################################################
+
+sub put_welcome_bmp_into_template
+{
+    my ($templatefile, $includepatharrayref) = @_;
+
+    my $filename = "downloadbitmap.bmp";
+
+    my $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
+
+    if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "put_welcome_bmp_into_template"); }
+
+    replace_one_variable($templatefile, "WELCOMEBMPPLACEHOLDER", $$completefilenameref);
+}
+
+##################################################################
+# Windows: Including the path to the setup.ico into nsi template
+##################################################################
+
+sub put_setup_ico_into_template
+{
+    my ($templatefile, $includepatharrayref) = @_;
+
+    my $filename = "downloadsetup.ico";
+
+    my $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
+
+    if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "put_setup_ico_into_template"); }
+
+    replace_one_variable($templatefile, "SETUPICOPLACEHOLDER", $$completefilenameref);
+}
+
+##################################################################
+# Windows: Including the publisher into nsi template
+##################################################################
+
+sub put_publisher_into_template
+{
+    my ($templatefile) = @_;
+
+    my $publisher = "Sun Microsystems, Inc.";
+
+    replace_one_variable($templatefile, "PUBLISHERPLACEHOLDER", $publisher);
+}
+
+##################################################################
+# Windows: Including the web site into nsi template
+##################################################################
+
+sub put_website_into_template
+{
+    my ($templatefile) = @_;
+
+    my $website = "http\:\/\/www\.sun\.com\/staroffice";
+
+    replace_one_variable($templatefile, "WEBSITEPLACEHOLDER", $website);
+}
+
+##################################################################
+# Windows: Including the product version into nsi template
+##################################################################
+
+sub put_windows_productversion_into_template
+{
+    my ($templatefile, $variableshashref) = @_;
+
+    my $productversion = $variableshashref->{'PRODUCTVERSION'};
+
+    replace_one_variable($templatefile, "PRODUCTVERSIONPLACEHOLDER", $productversion);
+}
+
+##################################################################
+# Windows: Including download file name into nsi template
+##################################################################
+
+sub put_outputfilename_into_template
+{
+    my ($templatefile, $downloadname) = @_;
+
+    $downloadname = $downloadname . ".exe";
+
+    replace_one_variable($templatefile, "DOWNLOADNAMEPLACEHOLDER", $downloadname);
+}
+
+##################################################################
+# Windows: Generating the file list in nsi file format
+##################################################################
+
+sub get_file_list
+{
+    my ( $basedir ) = @_;
+
+    my @filelist = ();
+
+    my $alldirs = installer::systemactions::get_all_directories($basedir);
+    unshift(@{$alldirs}, $basedir); # $basedir is the first directory in $alldirs
+
+    for ( my $i = 0; $i <= $#{$alldirs}; $i++ )
+    {
+        my $onedir = ${$alldirs}[$i];
+
+        # Syntax:
+        # SetOutPath "$INSTDIR"
+        # SetOutPath "$INSTDIR\adabas"
+
+        my $relativedir = $onedir;
+        $relativedir =~ s/\Q$basedir\E//;
+
+        my $oneline = " " . "SetOutPath" . " " . "\"\$INSTDIR" . $relativedir . "\"" . "\n";
+
+        push(@filelist, $oneline);
+
+        # Collecting all files in the specific directory
+
+        my $files = installer::systemactions::get_all_files_from_one_directory($onedir);
+
+        for ( my $j = 0; $j <= $#{$files}; $j++ )
+        {
+            my $onefile = ${$files}[$j];
+
+            my $fileline = "  " . "File" . " " . "\"" . $onefile . "\"" . "\n";
+            push(@filelist, $fileline);
+        }
+    }
+
+    return \@filelist;
+}
+
+##################################################################
+# Windows: Including list of all files into nsi template
+##################################################################
+
+sub put_filelist_into_template
+{
+    my ($templatefile, $installationdir) = @_;
+
+    my $filelist = get_file_list($installationdir);
+
+    my $filestring = "";
+
+    for ( my $i = 0; $i <= $#{$filelist}; $i++ )
+    {
+        $filestring = $filestring . ${$filelist}[$i];
+    }
+
+    $filestring =~ s/\s*$//;
+
+    replace_one_variable($templatefile, "ALLFILESPLACEHOLDER", $filestring);
+}
+
+##################################################################
+# Windows: NSIS uses specific language names
+##################################################################
+
+sub nsis_language_converter
+{
+    my ($language) = @_;
+
+    my $nsislanguage = "";
+
+    if ( $language eq "en-US" ) { $nsislanguage = "English"; }
+    elsif ( $language eq "de" ) { $nsislanguage = "German"; }
+    elsif ( $language eq "fr" ) { $nsislanguage = "French"; }
+    elsif ( $language eq "it" ) { $nsislanguage = "Italian"; }
+    elsif ( $language eq "es" ) { $nsislanguage = "Spanish"; }
+    elsif ( $language eq "sv" ) { $nsislanguage = "Swedish"; }
+    elsif ( $language eq "pt-BR" ) { $nsislanguage = "PortugueseBR"; }
+    elsif ( $language eq "ja" ) { $nsislanguage = "Japanese"; }
+    elsif ( $language eq "ko" ) { $nsislanguage = "Korean"; }
+    elsif ( $language eq "zh-CN" ) { $nsislanguage = "SimpChinese"; }
+    elsif ( $language eq "zh-TW" ) { $nsislanguage = "TradChinese"; }
+    else { installer::exiter::exit_program("ERROR: Could not find nsis language for $language!", "nsis_language_converter");  }
+
+    return $nsislanguage;
+}
+
+##################################################################
+# Windows: Including list of all languages into nsi template
+##################################################################
+
+sub put_language_list_into_template
+{
+    my ($templatefile, $languagesarrayref) = @_;
+
+    my $alllangstring = "";
+
+    for ( my $i = 0; $i <= $#{$languagesarrayref}; $i++ )
+    {
+        my $onelanguage = ${$languagesarrayref}[$i];
+        my $nsislanguage = nsis_language_converter($onelanguage);
+        # Syntax: !insertmacro MUI_LANGUAGE "English"
+        my $langstring = "\!insertmacro MUI_LANGUAGE_PACK " . $nsislanguage . "\n";
+        $alllangstring = $alllangstring . $langstring;
+    }
+
+    $alllangstring =~ s/\s*$//;
+
+    replace_one_variable($templatefile, "ALLLANGUAGESPLACEHOLDER", $alllangstring);
+}
+
+##################################################################
+# Windows: Collecting all identifier from mlf file
+##################################################################
+
+sub get_identifier
+{
+    my ( $mlffile ) = @_;
+
+    my @identifier = ();
+
+    for ( my $i = 0; $i <= $#{$mlffile}; $i++ )
+    {
+        my $oneline = ${$mlffile}[$i];
+
+        if ( $oneline =~ /^\s*\[(.+)\]\s*$/ )
+        {
+            my $identifier = $1;
+            push(@identifier, $identifier);
+        }
+    }
+
+    return \@identifier;
+}
+
+##############################################################
+# Returning the complete block in all languages
+# for a specified string
+##############################################################
+
+sub get_language_block_from_language_file
+{
+    my ($searchstring, $languagefile) = @_;
+
+    my @language_block = ();
+
+    for ( my $i = 0; $i <= $#{$languagefile}; $i++ )
+    {
+        if ( ${$languagefile}[$i] =~ /^\s*\[\s*$searchstring\s*\]\s*$/ )
+        {
+            my $counter = $i;
+
+            push(@language_block, ${$languagefile}[$counter]);
+            $counter++;
+
+            while (( $counter <= $#{$languagefile} ) && (!( ${$languagefile}[$counter] =~ /^\s*\[/ )))
+            {
+                push(@language_block, ${$languagefile}[$counter]);
+                $counter++;
+            }
+
+            last;
+        }
+    }
+
+    return \@language_block;
+}
+
+##############################################################
+# Returning a specific language string from the block
+# of all translations
+##############################################################
+
+sub get_language_string_from_language_block
+{
+    my ($language_block, $language) = @_;
+
+    my $newstring = "";
+
+    for ( my $i = 0; $i <= $#{$language_block}; $i++ )
+    {
+        if ( ${$language_block}[$i] =~ /^\s*$language\s*\=\s*\"(.*)\"\s*$/ )
+        {
+            $newstring = $1;
+            last;
+        }
+    }
+
+    if ( $newstring eq "" )
+    {
+        $language = "en-US";    # defaulting to english
+
+        for ( my $i = 0; $i <= $#{$language_block}; $i++ )
+        {
+            if ( ${$language_block}[$i] =~ /^\s*$language\s*\=\s*\"(.*)\"\s*$/ )
+            {
+                $newstring = $1;
+                last;
+            }
+        }
+    }
+
+    return $newstring;
+}
+
+##################################################################
+# Windows: Replacing strings in NSIS nsh file
+# nsh file syntax:
+# !define MUI_TEXT_DIRECTORY_TITLE "Zielverzeichnis auswählen"
+##################################################################
+
+sub replace_identifier_in_nshfile
+{
+    my ( $nshfile, $identifier, $newstring, $nshfilename, $onelanguage ) = @_;
+
+    for ( my $i = 0; $i <= $#{$nshfile}; $i++ )
+    {
+        if ( ${$nshfile}[$i] =~ /^\s*\!define\s+\Q$identifier\E\s+\"(.+)\"\s*$/ )
+        {
+            my $oldstring = $1;
+            ${$nshfile}[$i] =~ s/\Q$oldstring\E/$newstring/;
+            my $infoline = "NSIS replacement in $nshfilename ($onelanguage): $oldstring \-\> $newstring\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
+}
+
+##################################################################
+# Windows: Replacing strings in NSIS nlf file
+# nlf file syntax (2 lines):
+# # ^DirSubText
+# Zielverzeichnis
+##################################################################
+
+sub replace_identifier_in_nlffile
+{
+    my ( $nlffile, $identifier, $newstring, $nlffilename, $onelanguage ) = @_;
+
+    for ( my $i = 0; $i <= $#{$nlffile}; $i++ )
+    {
+        if ( ${$nlffile}[$i] =~ /^\s*\#\s+\^\s*\Q$identifier\E\s*$/ )
+        {
+            my $next = $i+1;
+            my $oldstring = ${$nlffile}[$next];
+            ${$nlffile}[$next] = $newstring . "\n";
+            $oldstring =~ s/\s*$//;
+            my $infoline = "NSIS replacement in $nlffilename ($onelanguage): $oldstring \-\> $newstring\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
+}
+
+##################################################################
+# Windows: Translating the NSIS nsh and nlf file
+##################################################################
+
+sub translate_nsh_nlf_file
+{
+    my ($nshfile, $nlffile, $mlffile, $onelanguage, $nshfilename, $nlffilename) = @_;
+
+    # Analyzing the mlf file, collecting all Identifier
+    my $allidentifier = get_identifier($mlffile);
+
+    for ( my $i = 0; $i <= $#{$allidentifier}; $i++ )
+    {
+        my $identifier = ${$allidentifier}[$i];
+        my $language_block = get_language_block_from_language_file($identifier, $mlffile);
+        my $newstring = get_language_string_from_language_block($language_block, $onelanguage);
+
+        # removing mask
+        $newstring =~ s/\\\'/\'/g;
+
+        replace_identifier_in_nshfile($nshfile, $identifier, $newstring, $nshfilename, $onelanguage);
+        replace_identifier_in_nlffile($nlffile, $identifier, $newstring, $nlffilename, $onelanguage);
+    }
+}
+
+##################################################################
+# Windows: Copying NSIS language files to local nsis directory
+##################################################################
+
+sub copy_and_translate_nsis_language_files
+{
+    my ($nsispath, $localnsisdir, $languagesarrayref, $mlffile) = @_;
+
+    my $nlffilepath = $nsispath . $installer::globals::separator . "Contrib" . $installer::globals::separator . "Language files" . $installer::globals::separator;
+    my $nshfilepath = $nsispath . $installer::globals::separator . "Contrib" . $installer::globals::separator . "Modern UI" . $installer::globals::separator . "Language files" . $installer::globals::separator;
+
+    for ( my $i = 0; $i <= $#{$languagesarrayref}; $i++ )
+    {
+        my $onelanguage = ${$languagesarrayref}[$i];
+        my $nsislanguage = nsis_language_converter($onelanguage);
+
+        # Copying the nlf file
+        my $sourcepath = $nlffilepath . $nsislanguage . "\.nlf";
+        if ( ! -f $sourcepath ) { installer::exiter::exit_program("ERROR: Could not find nsis file: $sourcepath!", "copy_and_translate_nsis_language_files"); }
+        my $nlffilename = $localnsisdir . $installer::globals::separator . $nsislanguage . "_pack.nlf";
+        installer::systemactions::copy_one_file($sourcepath, $nlffilename);
+
+        # Copying the nsh file
+        $sourcepath = $nshfilepath . $nsislanguage . "\.nsh";
+        if ( ! -f $sourcepath ) { installer::exiter::exit_program("ERROR: Could not find nsis file: $sourcepath!", "copy_and_translate_nsis_language_files"); }
+        my $nshfilename = $localnsisdir . $installer::globals::separator . $nsislanguage . "_pack.nsh";
+        installer::systemactions::copy_one_file($sourcepath, $nshfilename);
+
+        # Changing the macro name in nsh file: MUI_LANGUAGEFILE_BEGIN -> MUI_LANGUAGEFILE_PACK_BEGIN
+        my $nshfile = installer::files::read_file($nshfilename);
+        replace_one_variable($nshfile, "MUI_LANGUAGEFILE_BEGIN", "MUI_LANGUAGEFILE_PACK_BEGIN");
+
+        # Translate the files
+        my $nlffile = installer::files::read_file($nlffilename);
+        translate_nsh_nlf_file($nshfile, $nlffile, $mlffile, $onelanguage, $nshfilename, $nlffilename);
+
+        installer::files::save_file($nshfilename, $nshfile);
+        installer::files::save_file($nlffilename, $nlffile);
+    }
+
+}
+
+##################################################################
+# Windows: Including the nsis path into the nsi template
+##################################################################
+
+sub put_nsis_path_into_template
+{
+    my ($templatefile, $nsisdir) = @_;
+
+    replace_one_variable($templatefile, "NSISPATHPLACEHOLDER", $nsisdir);
+}
+
+##################################################################
+# Windows: Including the output path into the nsi template
+##################################################################
+
+sub put_output_path_into_template
+{
+    my ($templatefile, $downloaddir) = @_;
+
+    replace_one_variable($templatefile, "OUTPUTDIRPLACEHOLDER", $downloaddir);
+}
+
+##################################################################
+# Windows: Finding the path to the nsis SDK
+##################################################################
+
+sub get_path_to_nsis_sdk
+{
+    my $nsispath = "";
+
+    if ( $ENV{'ENV_ROOT'} ) { $nsispath = $ENV{'ENV_ROOT'}; }
+    else { installer::exiter::exit_program("ERROR: Environment variable \"ENV_ROOT\" not set!", "get_path_to_nsis_sdk"); }
+
+    $nsispath = $nsispath . $installer::globals::separator . "NSIS";
+
+    if ( $ENV{'NSISSDK_SOURCE'} ) { $nsispath = $ENV{'NSISSDK_SOURCE'}; }   # overriding the NSIS SDK with NSISSDK_SOURCE
+
+    return $nsispath;
+}
+
+##################################################################
+# Windows: Executing NSIS to create the installation set
+##################################################################
+
+sub call_nsis
+{
+    my ( $nsispath, $nsifile ) = @_;
+
+    my $makensisexe = $nsispath . $installer::globals::separator . "makensis.exe";
+
+    print "... starting $makensisexe ... \n";
+
+    my $systemcall = "$makensisexe $nsifile |";
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    my @nsisoutput = ();
+
+    open (NSI, "$systemcall");
+    while (<NSI>) {push(@nsisoutput, $_); }
+    close (NSI);
+
+    my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: $systemcall !\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    for ( my $i = 0; $i <= $#nsisoutput; $i++ ) { push( @installer::globals::logfileinfo, "$nsisoutput[$i]"); }
+
+}
+
+#################################################################################
+# Replacing one variable in one files
+#################################################################################
+
+sub replace_one_variable_in_translationfile
+{
+    my ($translationfile, $variable, $searchstring) = @_;
+
+    for ( my $i = 0; $i <= $#{$translationfile}; $i++ )
+    {
+        ${$translationfile}[$i] =~ s/\%$searchstring/$variable/g;
+    }
+}
+
+#################################################################################
+# Replacing the variables in the translation file
+#################################################################################
+
+sub replace_variables
+{
+    my ($translationfile, $variableshashref) = @_;
+
+    foreach $key (keys %{$variableshashref})
+    {
+        my $value = $variableshashref->{$key};
+        replace_one_variable_in_translationfile($translationfile, $value, $key);
+    }
+}
+
+#########################################################
+# Getting the translation file for the nsis installer
+#########################################################
+
+sub get_translation_file
+{
+    my ($allvariableshashref) = @_;
+    my $translationfilename = $installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::nsisfilename;
+    if ( ! -f $translationfilename ) { installer::exiter::exit_program("ERROR: Could not find language file $translationfilename!", "get_translation_file"); }
+    my $translationfile = installer::files::read_file($translationfilename);
+    replace_variables($translationfile, $allvariableshashref);
+
+    return $translationfile;
+}
+
 ####################################################
 # Creating download installation sets
 ####################################################
 
 sub create_download_sets
 {
-    my ($installationdir, $includepatharrayref, $allvariableshashref, $downloadname, $languagestringref) = @_;
+    my ($installationdir, $includepatharrayref, $allvariableshashref, $downloadname, $languagestringref, $languagesarrayref) = @_;
 
     print "\n******************************************\n";
     print "... creating download installation set ...\n";
@@ -253,6 +898,8 @@ sub create_download_sets
 
     installer::systemactions::create_directory($downloaddir);
 
+    $installer::globals::saveinstalldir = $downloaddir;
+
     # evaluating the name of the download file
 
     $downloadname = resolve_variables_in_downloadname($allvariableshashref, $downloadname, $languagestringref);
@@ -274,6 +921,12 @@ sub create_download_sets
         # replace linenumber in script template
         put_linenumber_into_script($scriptfile);
 
+        # calling sum to determine checksum and size of the tar file
+        my $sumout = call_sum($installationdir);
+
+        # writing checksum and size into scriptfile
+        put_checksum_and_size_into_script($scriptfile, $sumout);
+
         # saving the script file
         my $newscriptfilename = determine_scriptfile_name($downloadname);
 
@@ -284,17 +937,44 @@ sub create_download_sets
     }
     else    # Windows specific part
     {
-        # copying the installation set into a sub directory
+        my $localnsisdir = installer::systemactions::create_directories("nsis", $languagestringref);
+        # push(@installer::globals::removedirs, $localnsisdir);
 
-        # print "... copying installation set ... \n";
-        # my $subdirname = "packingdir";
-        # my $subdir = $downloaddir . $installer::globals::separator . $subdirname;
-        # installer::systemactions::create_directory($subdir);
-        # installer::systemactions::copy_complete_directory($installationdir, $subdir);
+        # find nsis in the system
+        my $nsispath = get_path_to_nsis_sdk();
 
-        # remove old directory
-        # installer::systemactions::remove_complete_directory($subdir);
+        # find the ulf file for translation
+        my $mlffile = get_translation_file($allvariableshashref);
 
+        # copy language files into nsis directory and translate them
+        copy_and_translate_nsis_language_files($nsispath, $localnsisdir, $languagesarrayref, $mlffile);
+
+        # find and read the nsi file template
+        my $templatefilename = "downloadtemplate.nsi";
+        my $templateref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$templatefilename, $includepatharrayref, 0);
+        if ($$templateref eq "") { installer::exiter::exit_program("ERROR: Could not find nsi template file $templatefilename!", "create_download_sets"); }
+        my $templatefile = installer::files::read_file($$templateref);
+
+        # add product name into script template
+        put_windows_productname_into_template($templatefile, $allvariableshashref);
+        put_banner_bmp_into_template($templatefile, $includepatharrayref);
+        put_welcome_bmp_into_template($templatefile, $includepatharrayref);
+        put_setup_ico_into_template($templatefile, $includepatharrayref);
+        put_publisher_into_template($templatefile);
+        put_website_into_template($templatefile);
+        put_windows_productversion_into_template($templatefile, $allvariableshashref);
+        put_outputfilename_into_template($templatefile, $downloadname);
+        put_filelist_into_template($templatefile, $installationdir);
+        put_language_list_into_template($templatefile, $languagesarrayref);
+        put_nsis_path_into_template($templatefile, $localnsisdir);
+        put_output_path_into_template($templatefile, $downloaddir);
+
+        my $nsifilename = save_script_file($localnsisdir, $templatefilename, $templatefile);
+
+        print "... created NSIS file $nsifilename ... \n";
+
+        # starting the NSIS SDK to create the download file
+        call_nsis($nsispath, $nsifilename);
 
     }
 
