@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sb $ $Date: 2001-06-20 12:01:52 $
+ *  last change: $Author: dg $ $Date: 2001-06-22 11:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ SvtInetOptions::Impl::notifyListeners(
 
 //============================================================================
 SvtInetOptions::Impl::Impl():
-    ConfigItem(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Inet")))
+    ConfigItem(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Inet/Settings")))
 {
     m_aEntries[INDEX_DNS_SERVER].m_aName
         = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetDNSServer"));
