@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlprmap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-25 13:55:54 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,7 @@ sal_Bool XMLPropertySetMapper::importXML(
 const sal_Int32 XMLPropertySetMapper::GetEntryIndex(
         sal_uInt16 nNamespace,
         const OUString& rStrName,
+        sal_uInt32 nPropType,
         sal_Int32 nStartAt /* = -1 */ ) const
 {
     sal_Int32 nEntries = GetEntryCount();
@@ -232,7 +233,8 @@ const sal_Int32 XMLPropertySetMapper::GetEntryIndex(
     do
     {
         const XMLPropertySetMapperEntry_Impl& rEntry = aMapEntries[nIndex];
-        if( rEntry.nXMLNameSpace == nNamespace &&
+        if( (!nPropType || nPropType == rEntry.GetPropType()) &&
+            rEntry.nXMLNameSpace == nNamespace &&
             rStrName == rEntry.sXMLAttributeName )
             return nIndex;
         else
