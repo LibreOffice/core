@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuarea.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:55 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "fuarea.hxx"
+
 #include <svx/svxids.hrc>
 #ifndef _SVX_TAB_AREA_HXX //autogen
 #include <svx/tabarea.hxx>
@@ -83,15 +85,20 @@
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
-#ifndef _SD_VIEWSHEL_HXX
-#include "viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
 #endif
 
 #include "drawdoc.hxx"
-#include "sdview.hxx"
-#include "sdwindow.hxx"
-#include "fuarea.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "app.hrc"
+
+namespace sd {
 
 TYPEINIT1( FuArea, FuPoor );
 
@@ -101,8 +108,12 @@ TYPEINIT1( FuArea, FuPoor );
 |*
 \************************************************************************/
 
-FuArea::FuArea(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-               SdDrawDocument* pDoc, SfxRequest& rReq)
+FuArea::FuArea (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -148,4 +159,4 @@ FuArea::FuArea(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
 }
 
-
+} // end of namespace sd
