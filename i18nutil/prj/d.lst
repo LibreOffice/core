@@ -1,0 +1,20 @@
+
+mkdir: %_DEST%\inc%_EXT%\i18nutil
+
+..\inc\i18nutil\casefolding.hxx %_DEST%\inc%_EXT%\i18nutil\casefolding.hxx
+..\inc\i18nutil\oneToOneMapping.hxx %_DEST%\inc%_EXT%\i18nutil\oneToOneMapping.hxx
+..\inc\i18nutil\unicode.hxx %_DEST%\inc%_EXT%\i18nutil\unicode.hxx
+..\inc\i18nutil\widthfolding.hxx %_DEST%\inc%_EXT%\i18nutil\widthfolding.hxx
+..\inc\i18nutil\x_rtl_ustring.h %_DEST%\inc%_EXT%\i18nutil\x_rtl_ustring.h
+
+..\%__SRC%\bin\i18nutil*.dll %_DEST%\bin%_EXT%\i18nutil*.dll
+..\%__SRC%\lib\libi18nutil*.so %_DEST%\lib%_EXT%\libi18nutil*.so
+..\%__SRC%\lib\libi18nutil*.dylib %_DEST%\lib%_EXT%\libi18nutil*.dylib
+..\%__SRC%\lib\ii18nutil.lib %_DEST%\lib%_EXT%\ii18nutil.lib
+
+..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
