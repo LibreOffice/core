@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2002-11-21 16:15:30 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,14 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_REFLECTION_XIDLMETHOD_HPP_
+#include <com/sun/star/reflection/XIdlMethod.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_SHEET_LOCALIZEDNAME_HPP_
+#include <com/sun/star/sheet/LocalizedName.hpp>
+#endif
+
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
 #endif
@@ -127,6 +135,63 @@ enum ScAddInArgumentType
     SC_ADDINARG_VARARGS                 // sequence<any>
 };
 
+//------------------------------------------------------------------------
+
+struct ScAddInArgDesc
+{
+    String              aName;
+    String              aDescription;
+    ScAddInArgumentType eType;
+    BOOL                bOptional;
+};
+
+class ScUnoAddInFuncData
+{
+private:
+    String              aOriginalName;      // kept in formula
+    String              aLocalName;         // for display
+    String              aUpperName;         // for entering formulas
+    String              aUpperLocal;        // for entering formulas
+    String              aDescription;
+    com::sun::star::uno::Reference< com::sun::star::reflection::XIdlMethod> xFunction;
+    com::sun::star::uno::Any            aObject;
+    long                nArgCount;
+    ScAddInArgDesc*     pArgDescs;
+    long                nCallerPos;
+    USHORT              nCategory;
+    USHORT              nHelpId;
+    mutable com::sun::star::uno::Sequence< com::sun::star::sheet::LocalizedName> aCompNames;
+    mutable BOOL        bCompInitialized;
+
+public:
+                ScUnoAddInFuncData( const String& rNam, const String& rLoc,
+                                    const String& rDesc,
+                                    USHORT nCat, USHORT nHelp,
+                                    const com::sun::star::uno::Reference<
+                                        com::sun::star::reflection::XIdlMethod>& rFunc,
+                                    const com::sun::star::uno::Any& rO,
+                                    long nAC, const ScAddInArgDesc* pAD,
+                                    long nCP );
+                ~ScUnoAddInFuncData();
+
+    const String&           GetOriginalName() const     { return aOriginalName; }
+    const String&           GetLocalName() const        { return aLocalName; }
+    const String&           GetUpperName() const        { return aUpperName; }
+    const String&           GetUpperLocal() const       { return aUpperLocal; }
+    const com::sun::star::uno::Reference< com::sun::star::reflection::XIdlMethod>&   GetFunction() const
+                                                        { return xFunction; }
+    const com::sun::star::uno::Any& GetObject() const   { return aObject; }
+    long                    GetArgumentCount() const    { return nArgCount; }
+    const ScAddInArgDesc*   GetArguments() const        { return pArgDescs; }
+    long                    GetCallerPos() const        { return nCallerPos; }
+    const String&           GetDescription() const      { return aDescription; }
+    USHORT                  GetCategory() const         { return nCategory; }
+    USHORT                  GetHelpId() const           { return nHelpId; }
+
+    const com::sun::star::uno::Sequence< com::sun::star::sheet::LocalizedName>&  GetCompNames() const;
+};
+
+//------------------------------------------------------------------------
 
 class ScUnoAddInCollection
 {
