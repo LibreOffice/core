@@ -7474,7 +7474,7 @@ SfxVoidItem ShiftBackspace FN_SHIFT_BACKSPACE
 
 //--------------------------------------------------------------------------
 SfxVoidItem ShowMultiplePages FN_SHOW_MULTIPLE_PAGES
-()
+( SfxUInt16Item Columns SID_ATTR_TABLE_COLUMN,SfxUInt16Item Rows SID_ATTR_TABLE_ROW )
 [
     /* flags: */
     AutoUpdate = FALSE,
