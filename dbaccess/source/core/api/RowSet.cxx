@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 09:14:30 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1440,6 +1440,18 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
             if(m_xStatement.is())
             {
                 Reference<XPropertySet> xProp(m_xStatement,UNO_QUERY);
+
+                try
+                {
+                    xProp->setPropertyValue(PROPERTY_USEBOOKMARKS,makeAny(sal_True));
+                    xProp->setPropertyValue(PROPERTY_RESULTSETTYPE,makeAny(ResultSetType::SCROLL_SENSITIVE));
+
+                }
+                catch(SQLException&)
+                {
+                    // this exception doesn't matter here because when we catch an exception
+                    // than the driver doesn't support this feature
+                }
                 //  xProp->setPropertyValue(PROPERTY_RESULTSETTYPE,makeAny(m_nResultSetType));
                 //  xProp->setPropertyValue(PROPERTY_RESULTSETCONCURRENCY,makeAny(m_nResultSetConcurrency));
                 //  if(m_nFetchDirection != FetchDirection::FORWARD)
