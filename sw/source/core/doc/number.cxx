@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-07-02 14:25:51 $
+ *  last change: $Author: os $ $Date: 2001-07-09 13:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,9 +741,10 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
 //!!!   aRule.SetAbsSpaces( bAbsSpaces );
     for( USHORT n = 0; n < MAXLEVEL; ++n )
     {
-        const SwNumFmt rNumFmt = Get(n);
-//      SvxNumberFormat aSvxFormat = rNumFmt.MakeSvxFormat();
-        aRule.SetLevel(n, rNumFmt, aFmts[n] != 0);
+        SwNumFmt aNumFmt = Get(n);
+        if(aNumFmt.GetCharFmt())
+            aNumFmt.SetCharFmtName(aNumFmt.GetCharFmt()->GetName());
+        aRule.SetLevel(n, aNumFmt, aFmts[n] != 0);
     }
     return aRule;
 }
