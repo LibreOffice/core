@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:39:55 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,11 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 // document basic
                 SfxObjectShell* pShell = pCurWin->GetShell();
                 if ( pShell )
-                    pShell->ExecuteSlot( rReq );
+                {
+                    SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst( pShell );
+                    if ( pViewFrame )
+                        pViewFrame->GetBindings().Execute( nSlot );
+                }
 
                 SfxBindings &rBindings = BasicIDE::GetBindings();
                 rBindings.Invalidate( SID_DOC_MODIFIED );
@@ -694,7 +698,7 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     {
                         SfxMedium* pMedium = pObjShell->GetMedium();
                         if ( ( pMedium && aDocument == String(pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE )) ) ||
-                                aDocument == pObjShell->GetTitle( SFX_TITLE_FILENAME ) )
+                                aDocument == pObjShell->GetTitle( SFX_TITLE_CAPTION ) )
                         {
                             pShell = pObjShell;
                             break;
