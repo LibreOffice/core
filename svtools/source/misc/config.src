@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:20:41 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ String STR_WARNING_ITEM
     TEXT[ arabic ] = "ÇáÅÏÎÇá áå ÅÕÏÇÑ ÎÇØÆ!";
     TEXT[ dutch ] = "Verkeerde versie van item!";
     TEXT[ chinese_simplified ] = "ÌõÄ¿°æ±¾ÎŞĞ§";
-    TEXT[ greek ] = "Ç åããñáöŞ õğÜñ÷åé óå ëÜèïò İêäïóç!";
+    TEXT[ greek ] = "Ç êáôá÷şñéóç õğÜñ÷åé óå ëÜèïò İêäïóç!";
     TEXT[ korean ] = "¾ÆÀÌÅÛÀÌ Àß¸øµÈ ¹öÁ¯À» °¡Áö°í ÀÖ½À´Ï´Ù!";
     TEXT[ turkish ] = "Girişin sürümü yanlış!";
     TEXT[ language_user1 ] = " ";
@@ -242,7 +242,7 @@ String STR_KEY_DATABASE_PATH
     Text [ finnish ] = "Tietokanta" ;
     Text [ danish ] = "Databaseforespørgsler" ;
     Text [ french ] = "Interrogations de B.D." ;
-    Text [ swedish ] = "Databasfrågor" ;
+    Text [ swedish ] = "Databasförfrågningar" ;
     Text [ dutch ] = "Database query's" ;
     Text [ spanish ] = "Consulta de base de datos" ;
     Text [ english_us ] = "Database Queries" ;
@@ -542,7 +542,7 @@ String STR_KEY_GALLERY_DIR
     Text[ chinese_simplified ] = "»­ÀÈ";
     Text[ russian ] = "Ãàëåğåÿ";
     Text[ polish ] = "Galeria";
-    Text[ japanese ] = "·Ş¬×Ø°";
+    Text[ japanese ] = "·Ş¬×Ø";
     Text[ chinese_traditional ] = "µe´Y";
     Text[ arabic ] = "ÇáÌÇáíÑí";
     Text[ dutch ] = "Gallery";
