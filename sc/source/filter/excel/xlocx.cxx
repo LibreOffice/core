@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:37 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,14 +103,22 @@
 #include "drwlayer.hxx"
 #endif
 
-#include "XclImpObjects.hxx"
+#ifndef SC_FAPIHELPER_HXX
+#include "fapihelper.hxx"
+#endif
+#ifndef SC_XIESCHER_HXX
+#include "xiescher.hxx"
+#endif
+
 #include "xcl97rec.hxx"
 
 
+using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::container::XIndexContainer;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::awt::XControlModel;
@@ -170,28 +178,75 @@ XclImpOcxConverter::XclImpOcxConverter( const XclRoot& rRoot ) :
     mxStrm = ScfTools::OpenStorageStreamRead( GetRootStorage(), EXC_STREAMNAME_CTLS );
 }
 
-void XclImpOcxConverter::ReadControl( XclImpEscherOle& rObj )
+bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOleObj )
 {
-    DBG_ASSERT( rObj.GetObjType() == otCtrl, "XclOcxConverter::ReadControl - no control object" );
-    if( mxStrm.Is() && (rObj.GetObjType() == otCtrl) )
+    DBG_ASSERT( rOleObj.IsControl(), "XclOcxConverter::CreateSdrUnoObj - no control object" );
+    if( mxStrm.Is() && rOleObj.IsControl() )
     {
         // virtual call of GetDrawPage() needs current sheet index
-        SetCurrTab( rObj.GetTab() );
+        SetCurrTab( rOleObj.GetTab() );
 
         // stream position of the extra data for this control
-        sal_uInt32 nStrmPos = rObj.GetCtrlStreamPos();
+        sal_uInt32 nStrmPos = rOleObj.GetCtrlStreamPos();
         mxStrm->Seek( nStrmPos );
 
         // the shape to fill
-        Reference< XShape > xShape = ::GetXShapeForSdrObject( const_cast< SdrObject* >( rObj.GetSdrObj() ) );
+        Reference< XShape > xShape;
 
         // reads from mxStrm into xShape, inserts the control into the document
         if( ReadOCXExcelKludgeStream( mxStrm, &xShape, TRUE ) )
         {
             if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
-                rObj.SetSdrObj( pSdrObj );
+            {
+                // let the Escher control object set additional properties
+                Reference< XControlShape > xControlShape( xShape, UNO_QUERY );
+                if( xControlShape.is() )
+                {
+                    Reference< XPropertySet > xPropSet( xControlShape->getControl(), UNO_QUERY );
+                    if( xPropSet.is() )
+                        rOleObj.SetProperties( xPropSet );
+                }
+
+                rOleObj.SetSdrObj( pSdrObj );
+                return true;
+            }
         }
     }
+    return false;
+}
+
+bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherCtrl& rCtrlObj )
+{
+    // virtual call of GetDrawPage() needs current sheet index
+    SetCurrTab( rCtrlObj.GetTab() );
+
+    const Reference< XMultiServiceFactory >& rxServiceFactory = GetServiceFactory();
+    if( rxServiceFactory.is() )
+    {
+        Reference< XInterface > xInt( rxServiceFactory->createInstance( rCtrlObj.GetServiceName() ) );
+        Reference< XFormComponent > xFormComp( xInt, UNO_QUERY );
+        Reference< XPropertySet > xPropSet( xInt, UNO_QUERY );
+        if( xFormComp.is() && xPropSet.is() )
+        {
+            // set the control properties
+            rCtrlObj.SetProperties( xPropSet );
+            // the shape to fill
+            Reference< XShape > xShape;
+            // dummy size -> is done in XclImpEscherCtrl::Apply
+            ::com::sun::star::awt::Size aSize;
+
+            // try to insert the control into the form
+            if( InsertControl( xFormComp, aSize, &xShape, TRUE ) )
+            {
+                if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
+                {
+                    rCtrlObj.SetSdrObj( pSdrObj );
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 sal_Bool XclImpOcxConverter::InsertControl(
