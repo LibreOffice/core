@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.17 $
-# Date:        $Date: 2004-03-09 12:31:38 $
+# Version:     $Revision: 1.18 $
+# Date:        $Date: 2004-06-16 10:48:31 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -73,7 +73,7 @@ my ( $BIG_SVX, $COM, $CPU, $CPUNAME, $CVER, $DLLSUFFIX, $GLIBC, $GUI, $GUIBASE, 
 my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, 
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
      $SOLARENVINC, $USR_DT, $USR_OPENWIN, $TCSH_PATH, $XLIB, $XINC,
-     $CYGWIN, $language, $dict, $ASM_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
+     $CYGWIN_PATH, $language, $dict, $ASM_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
      $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH );
 
 # Environment variables.
@@ -83,9 +83,9 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $SHELL,
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $STAR_REGISTRY, $STAR_RESOURCEPATH, $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH, 
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH, $WDEVENV_PATH, 
-     $LD_LIBRARY_PATH, $PATH, $SOLARDEF, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARINCLUDES, $SOLARLIB, 
+     $LD_LIBRARY_PATH, $PATH, $SOLARDEF, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $MAC_LIB, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
-     $COMP_ENV, $IENV, $ILIB, $WIN_INCLUDE, $JAVAHOME, $WIN_LIB, $PSDK_HOME, $USE_NEW_SDK, $FRAME_HOME, 
+     $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $USE_NEW_SDK, $FRAME_HOME, 
      $NO_HIDS, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $USE_GCC3, $ENABLE_DEBUG, $ENABLE_STATIC_GTK,
      $PYTHONPATH, $PYTHONHOME );
@@ -795,12 +795,12 @@ if ($platform eq "$Winnt")
    # Change $SYSTEMDRIVE to lower case.
    $SYSTEMDRIVE          = lc $SYSTEMDRIVE;
    use Env qw(SYSTEMROOT);
-   $CYGWIN               = PosixFormat('@CYGWIN@'); # Windows bash path
-   $WIN_GREP             = '$CYGWIN'.$ds."grep.exe";
-   $WIN_FIND             = '$CYGWIN'.$ds."find.exe";
-   $WIN_LS               = '$CYGWIN'.$ds."ls.exe";
-   $WIN_GNUCOPY          = '$CYGWIN'.$ds."cp.exe";
-   $WIN_TOUCH            = '$CYGWIN'.$ds."touch.exe";
+   $CYGWIN_PATH          = PosixFormat('@CYGWIN_PATH@'); # Windows bash path
+   $WIN_GREP             = '$CYGWIN_PATH'.$ds."grep.exe";
+   $WIN_FIND             = '$CYGWIN_PATH'.$ds."find.exe";
+   $WIN_LS               = '$CYGWIN_PATH'.$ds."ls.exe";
+   $WIN_GNUCOPY          = '$CYGWIN_PATH'.$ds."cp.exe";
+   $WIN_TOUCH            = '$CYGWIN_PATH'.$ds."touch.exe";
 }
 
 if ( $JAVA_HOME ne "" )
@@ -1004,49 +1004,13 @@ elsif ($platform ne $Winnt )
 {  AddWarning( "set_soenv", "$platform not configured for linkage create libraries" );
 }
 
-# Compiler include search directory paths.
-if (($platform eq "$Solaris") || ($platform eq "$Linux") ||
-	($platform eq "$FreeBSD") || ($platform eq "$NetBSD") ||
-	($platform eq "$Tru64")   || ($platform eq "$Irix") ||
-	($platform eq "$Irix64")  || ($platform eq "AIX" )) 
-{  $SOLARINCLUDES     = $I.'$SOLARENV'.$INC;
-}
-elsif ($platform eq "$Winnt")
-{  $SOLARINCLUDES     = $I.$SOLARVER.$INC.
-                        $I.$SOLARENV.$ds.$INPATH.$INC.
-                        $I.$SOLARENV.$INC.
-                        $I."'".$PSDK_HOME.$INCLUDE."'";
-   # Mingw is different
-   if ( $COM eq "MSC" )
-   {   $SOLARINCLUDES .= $I.'$COMPATH'.$ds."include";
-   }
-}
-elsif ($platform eq "$Macosx")
-{  $SOLARINCLUDES     = $I.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$INC.
-                        $I.'$SOLARENV'.$ds.'$OUTPATH'.$INC.
-                        $I.'$SOLARENV'.$INC.
-                        $I.'$SRC_ROOT'.$ds."res";
-}                        
-else
-{  AddWarning( "set_soenv", "$platform not configured for compiler search paths" );
-}
-                        
 # Windows NT only variables
 if ($platform eq "$Winnt")
 {  $COMP_ENV          = $OUTPATH;
 
    $JAVAHOME          = '$JAVA_HOME';
 
-   $IENV              = $cur_dir.
-                        $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$INC.
-                        $ps.$SOLARENV.$ds.$OUTPATH.$INC.
-                        $ps.$SOLARENV.$INC.
-                        $ps.'$PSDK_HOME'.$INCLUDE;
-   # Mingw is different
-   if ( $COM eq "MSC" )
-   {  $IENV          .= $ps.'$COMPATH'.$INCLUDE;
-   }
-   $WIN_LIB             = $cur_dir.$ps_STLPORT_LIB.$ps.
+   $ILIB             = $cur_dir.$ps_STLPORT_LIB.$ps.
                         $ps.$SOLARVER.$ds.$UPD.$LIB.
                         $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$LIB.
                         $ps.$SOLARENV.$ds.$OUTPATH.$LIB.
@@ -1055,19 +1019,10 @@ if ($platform eq "$Winnt")
                         $ps.'$FRAME_HOME'.$LIB;
    # Mingw is different
    if ( $COM eq "MSC" )
-   {  $WIN_LIB       .= $ps.'$COMPATH'.$LIB;
+   {  $ILIB       .= $ps.'$COMPATH'.$LIB;
    }
-   if ( $JAVA_HOME ne "" )
-   {
-      $IENV .=          $ps.'$JAVA_HOME'.$INCLUDE;
-      $IENV .=          $ps.'$JAVA_HOME'.$INCLUDE.$ds."win32";
-   }
-
-   $WIN_INCLUDE       = $IENV;
 
    $JAVAHOME          = '$JAVA_HOME';
-
-   $ILIB              = '.'.$ps_STLPORT_LIB.$ps.$WIN_LIB;
 
 }
      
@@ -1178,10 +1133,10 @@ elsif ($platform eq "$Winnt")
    {  
        $PATH          .= $ps.PosixFormat('@ZIP_HOME@');
    }
-   # Check if $CYGWIN is already set in PATH
-   if ( ! $noldPATH =~ /(?:[:]|\A)(?:$CYGWIN)(?:[:]|\Z)/ )
+   # Check if $CYGWIN_PATH is already set in PATH
+   if ( ! $noldPATH =~ /(?:[:]|\A)(?:$CYGWIN_PATH)(?:[:]|\Z)/ )
    {
-	   $PATH      .= $ps.'$CYGWIN';
+	   $PATH      .= $ps.'$CYGWIN_PATH';
    }
    $PATH              .= $ps.$noldPATH.
                          $ps_STLPORT_LIB;
@@ -1339,7 +1294,7 @@ elsif ($platform eq "$Winnt")
 {  $SOLARINC         .= $STLPORT_stlport.
                         $I.'$JAVA_HOME'.$ds."include".$ds."win32".
                         $I.'$JAVA_HOME'.$ds."include".
-                        $I."'".$PSDK_HOME.$INCLUDE."'";
+                        $I.'$PSDK_HOME'.$INCLUDE;
    # Mingw is different
    if ( $COM eq "MSC" )
    { $SOLARINC       .= $I.'$COMPATH'.$ds."include";
@@ -1461,9 +1416,9 @@ if ('@WITH_LANG@' =~ m/ALL,/s)
 else
 {	
    foreach $language (@LANGUAGES)
-   {   if ('@WITH_LANG@' =~ m/$language,/s)
-       {   my $val="TRUE";
-           ToFile( "RES_$language",     $val,          "e" );
+   {   if ('@WITH_LANG@' =~ m/$language,/s || $language eq "ENUS" )
+       {
+           ToFile( "RES_$language",   "TRUE",          "e" );
        }
        else
        {   my $val;
@@ -1716,7 +1671,7 @@ ToFile( "WRAPCMD",           $WRAPCMD,           "e" );
 # (c = comment, e = environment variable, a = alias, n = newline )
 ToFile( "Variable values.",  $empty,             "c" );
 if ( $platform eq "$Winnt" )
-{  ToFile( "CYGWIN",            $CYGWIN,            "e" );
+{  ToFile( "CYGWIN_PATH",       $CYGWIN_PATH,       "e" );
    ToFile( "PSDK_HOME",         $PSDK_HOME,         "e" );
    ToFile( "USE_NEW_SDK",       $USE_NEW_SDK,       "e" );
    ToFile( "NO_HIDS",           $NO_HIDS,           "e" );
@@ -1763,7 +1718,6 @@ ToFile( "SOLARDEF",          $SOLARDEF,          "e" );
 ToFile( "SCPDEFS",           '@SCPDEFS@',        "e" );
 ToFile( "SOLAREXTRAINC",     $SOLAREXTRAINC,     "e" );
 ToFile( "SOLAREXTRALIB",     $SOLAREXTRALIB,     "e" );
-ToFile( "SOLARINCLUDES",     $SOLARINCLUDES,     "e" );
 ToFile( "PATH",              $PATH,              "e" );
 ToFile( "PATHEXTRA",         $PATHEXTRA,         "e" );
 ToFile( "SOLARLIB",          $SOLARLIB,          "e" );
@@ -1775,8 +1729,11 @@ ToFile( "CXX",               $CXX,               "e" );
 if ( $COM ne "MSC" ) {
   ToFile( "LINK",			 $CC,				 "e" );
 }
-ToFile( "ENABLE_SYMBOLS",    "@ENABLE_SYMBOLS@",   "e" );
-ToFile( "ENABLE_CRASHDUMP",  "@ENABLE_CRASHDUMP@", "e" );
+ToFile( "ENABLE_SYMBOLS",    "@ENABLE_SYMBOLS@",    "e" );
+ToFile( "ENABLE_CRASHDUMP",  "@ENABLE_CRASHDUMP@",  "e" );
+ToFile( "ENABLE_CUPS",       "@ENABLE_CUPS@",       "e" );
+ToFile( "ENABLE_FONTCONFIG", "@ENABLE_FONTCONFIG@", "e" );
+ToFile( "DIRECTX_SUPPORT",   "@ENABLE_DIRECTX@",    "e" );
 ToFile( "VC_STANDARD",       "@VC_STANDARD@",      "e" );
 ToFile( "WITH_GPC",          "@WITH_GPC@",         "e" );
 ToFile( "WITH_LIBART",       "@WITH_LIBART@",      "e" );
@@ -1806,10 +1763,7 @@ if (( $platform eq "$Winnt" ) and ( '@USE_SHELL@' ne "4nt" )) {
 if ( $platform eq "$Winnt" )
 {
    # these variables marked with "j" are used with cygwin only
-   ToFile( "LIB",               $WIN_LIB,           "j" );
-   ToFile( "IENV",              $IENV,              "j" );
    ToFile( "ILIB",              $ILIB,              "j" );
-   ToFile( "INCLUDE",           $WIN_INCLUDE,       "j" );
    
    ToFile( "GREP",              $WIN_GREP,          "e" );
    ToFile( "FIND",              $WIN_FIND,          "e" );
@@ -2228,7 +2182,7 @@ sub ToFile
 # Return value:  Reformatted String
 #----------------------------------------------------------
 sub PosixFormat
-{  my ( $variable );
+{  my ( $variable, $d1, $d2 );
    $variable = $_[ 0 ];
    # ToDo: Do the replacement only if "Winnt" and var contains "\" and ":"
    if ( $platform eq "$Winnt" )
@@ -2242,6 +2196,14 @@ sub PosixFormat
 	   }
 	   $variable =~ s!\\!/!g;
 	   $variable =~ s/;/:/g;
+
+	   # Search for posix path :path with space: and replace with short dos path
+	   while ( $variable =~ /(?::|\A)[\'\"]?([^:]+ [^:]+)[\'\"]?(?::|\Z)/ ) {
+		 $d1 = $1 ;
+		 chomp( $d2 = qx{cygpath -d "$d1"} ) || die( "Path with space: $1 propably doesn't exist!" );
+		 chomp( $d2 = qx{cygpath -u "$d2"} ) ;
+		 $variable =~ s/$d1/$d2/ ;
+	   }
    }
    return $variable;
 }
