@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:24:49 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ String STR_NODEFPRINTER
     TEXT [ italian ] = "Stampante predefinita non trovata.\nScegliere una stampante e riprovare." ;
     TEXT [ portuguese_brazilian ] = "Nenhuma impressora padr o encontrada.\nEscolha uma impressora e tente novamente." ;
     TEXT [ portuguese ] = "Nenhuma impressora padrão encontrada.\nEscolha uma impressora e tente novamente." ;
-    TEXT [ finnish ] = "Oletuskirjoitinta ei löydy.\nValitse kirjoitin ja yritä uudelleen." ;
+    TEXT [ finnish ] = "Oletustulostinta ei ole.\nValitse tulostin ja yritä uudelleen." ;
     TEXT [ danish ] = "Der blev ikke fundet nogen standardprinter.\nVælg venligst en printer og prøv igen." ;
     TEXT [ french ] = "Impossible de détecter l'imprimante par défaut.\nVeuillez sélectionner une imprimante et recommencer." ;
     TEXT [ swedish ] = "Ingen standardskrivare hittades.\nVälj en skrivare och försök igen." ;
@@ -100,7 +100,7 @@ String STR_NOSTARTPRINTER
     TEXT [ italian ] = "Impossibile avviare la stampante.\nVerificare la configurazione della stampante." ;
     TEXT [ portuguese_brazilian ] = "Não consegui iniciar a impressora.\nVerifique a configuração da impressora." ;
     TEXT [ portuguese ] = "Foi impossível iniciar a impressora.\nPor favor, verifique a configuração da impressora." ;
-    TEXT [ finnish ] = "Kirjoitinta ei voi käynnistää.\nTarkista kirjoittimen asetukset." ;
+    TEXT [ finnish ] = "Tulostinta ei voi käynnistää.\nTarkista tulostimen kokoonpano." ;
     TEXT [ danish ] = "Det var ikke muligt at starte printeren.\nKontroller venligst din printerkonfiguration." ;
     TEXT [ french ] = "Impossible de démarrer l'imprimante !\nVérifiez-en la configuration." ;
     TEXT [ swedish ] = "Det gick inte att starta skrivaren.\nKontrollera skrivarkonfigurationen." ;
@@ -127,7 +127,7 @@ String STR_PRINTER_NOTAVAIL
     TEXT [ italian ] = "Questo documento era stato formattato in precedenza per la stampante $1. La stampante, però, non esiste.\nUsare la stampante predefinita $2?" ;
     TEXT [ portuguese_brazilian ] = "Este documento foi formatado anterior para a impressora" ;
     TEXT [ portuguese ] = "O documento foi formatado para a impressora $1. A impressora não está disponível.\nUsar a impressora padrão $2?" ;
-    TEXT [ finnish ] = "Tämä asiakirja on aiemmin muotoiltu kirjoittimelle " ;
+    TEXT [ finnish ] = "Asiakirja on muotoiltu tulostinta $1 varten. Määritetty tulostin ei ole käytettävissä. \nHaluatko käyttää vakiotulostinta $2 ?" ;
     TEXT [ danish ] = "Dette dokument er formateret til printeren $1. Denne printer er ikke tilgængelig.\nVil du bruge standardprinteren $2?" ;
     TEXT [ french ] = "Ce document a été mis en page pour l'imprimante $1. L'imprimante n'est pas disponible.\nUtiliser $2 comme imprimante par défaut ?" ;
     TEXT [ swedish ] = "Dokumentet har formaterats för skrivaren $1. Denna skrivare är inte tillgänglig.\nSkall standardskrivaren $2 användas?" ;
@@ -170,6 +170,7 @@ String STR_MENU_NEWMAIL
     Text[ turkish ] = "Y~eni ileti";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nuevo ~mensaje";
+    Text[ finnish ] = "Uusi viesti";
 };
 String STR_PRINT_OPTIONS
 {
@@ -179,7 +180,7 @@ String STR_PRINT_OPTIONS
     Text [ italian ] = "Opzioni..." ;
     Text [ portuguese_brazilian ] = "Opções..." ;
     Text [ portuguese ] = "Opções..." ;
-    Text [ finnish ] = "Määritykset..." ;
+    Text [ finnish ] = "Asetukset" ;
     Text [ danish ] = "Flere..." ;
     Text [ french ] = "Options..." ;
     Text [ swedish ] = "Fler..." ;
@@ -206,7 +207,7 @@ String STR_PRINT_OPTIONS_TITLE
     Text [ italian ] = "Opzioni stampante" ;
     Text [ portuguese_brazilian ] = "Opções de Impressora" ;
     Text [ portuguese ] = "Opções de impressão" ;
-    Text [ finnish ] = "Kirjoittimen asetukset" ;
+    Text [ finnish ] = "Tulostimen määritykset" ;
     Text [ danish ] = "Printerindstillinger" ;
     Text [ french ] = "Options d'impression" ;
     Text [ swedish ] = "Skrivaralternativ" ;
@@ -233,7 +234,7 @@ String STR_ERROR_PRINTER_BUSY
     Text [ italian ] = "stampante occupata" ;
     Text [ portuguese_brazilian ] = "Impressora ocupada" ;
     Text [ portuguese ] = "Impressora ocupada" ;
-    Text [ finnish ] = "Kirjoitin varattu" ;
+    Text [ finnish ] = "Tulostin käytössä" ;
     Text [ danish ] = "Printeren er optaget" ;
     Text [ french ] = "Imprimante occupée" ;
     Text [ swedish ] = "Skrivaren är upptagen" ;
@@ -260,7 +261,7 @@ String STR_ERROR_PRINT
     Text [ italian ] = "Errore durante la stampa" ;
     Text [ portuguese_brazilian ] = "Erro ao imprimir" ;
     Text [ portuguese ] = "Erro ao imprimir" ;
-    Text [ finnish ] = "Tulostusvirhe" ;
+    Text [ finnish ] = "Virhe tulostettaessa" ;
     Text [ danish ] = "Fejl ved udskrivning" ;
     Text [ french ] = "Erreur lors de l'impression" ;
     Text [ swedish ] = "Fel vid utskrift" ;
@@ -287,7 +288,7 @@ String STR_PRINTING
     Text [ italian ] = "Stampa" ;
     Text [ portuguese_brazilian ] = "Impressão" ;
     Text [ portuguese ] = "A imprimir" ;
-    Text [ finnish ] = "Tulostus" ;
+    Text [ finnish ] = "Tulostetaan" ;
     Text [ danish ] = "Udskriver" ;
     Text [ french ] = "Impression en cours" ;
     Text [ swedish ] = "Skriver ut" ;
@@ -314,7 +315,7 @@ String STR_PAGE
     Text [ italian ] = "Pagina " ;
     Text [ portuguese_brazilian ] = "Página " ;
     Text [ portuguese ] = "Página " ;
-    Text [ finnish ] = "Sivu " ;
+    Text [ finnish ] = "Sivu" ;
     Text [ danish ] = "Side " ;
     Text [ french ] = "Page " ;
     Text [ swedish ] = "Sida  " ;
@@ -368,7 +369,7 @@ String STR_ERROR_SAVE_TEMPLATE
     Text [ italian ] = "Errore durante la scrittura del modello " ;
     Text [ portuguese_brazilian ] = "Erro ao gravar o modelo " ;
     Text [ portuguese ] = "Erro ao gravar o modelo " ;
-    Text [ finnish ] = "Virhe kirjoitettaessa mallia " ;
+    Text [ finnish ] = "On ilmennyt virhe tallennettaessa mallipohjaa" ;
     Text [ danish ] = "Fejl under skrivning af skabelon " ;
     Text [ french ] = "Erreur lors de l'écriture du modèle " ;
     Text [ swedish ] = "Fel vid skrivning av mall  " ;
@@ -438,6 +439,7 @@ String STR_PRINT_NEWORI
     Text[ turkish ] = "Sayfa duruþ ayarýný deðiþtirdiniz.\nDeðiþtirilen ayar\nbelgede kullanýlsýn mý?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La orientación de la página ha sido modificada.\n¿Desea aplicar las modificaciones al documento\n actual?";
+    Text[ finnish ] = "Sivun suuntaa on muutettu.\nTallennetaanko uudet asetukset \naktiiviseen asiakirjaan?";
 };
 String STR_PRINT_NEWSIZE
 {
@@ -463,6 +465,7 @@ String STR_PRINT_NEWSIZE
     Text[ turkish ] = "Sayfa boyutunu deðiþtirdiniz.\nDeðiþtirilen ayarlar\nbelgede kullanýlsýn mý?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El tamaño de la página se ha modificado.\n¿Desea aplicar las modificaciones al documento\nactual?";
+    Text[ finnish ] = "Sivun kokoa on muutettu.\nTallennetaanko uudet asetukset\naktiiviseen asiakirjaan?";
 };
 String STR_PRINT_NEWORISIZE
 {
@@ -488,6 +491,7 @@ String STR_PRINT_NEWORISIZE
     Text[ turkish ] = "Sayfa boyutunu ve sayfa duruþunu deðiþtirdiniz. Deðiþtirilen\n ayarlar\nbelgede kullanýlsýn mý?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El tamaño y orientación de la página se han modificado\n. ¿Desea aplicar las modificaciones al\ndocumento actual?";
+    Text[ finnish ] = "Sivun kokoa ja suuntaa on muutettu.\nHaluatko tallentaa uudet asetukset\naktiiviseen asiakirjaan?";
 };
 String STR_PLUGINVIEW
 {
@@ -525,6 +529,7 @@ String RID_EXPLORERTOOLSTOOLBOX
     Text[ turkish ] = "Masaüstü araç çubuðu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de herramientas del escritorio";
+    Text[ finnish ] = "Työpöydän työkalurivi";
 };
 String STR_PREVIEW_DOCINFO
 {
@@ -550,6 +555,7 @@ String STR_PREVIEW_DOCINFO
     Text[ turkish ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titel:</b><dd>$(TITEL)<dt><b>Konu:</b><dd>$(THEME)<dt><b>Anahtar sözcük:</b><dd>$(KEYWORDS)<dt><b>Taným:</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Título:</b><dd>$(TITULO)<dt><b>Tema:</b><dd>$(THEME)<dt><b>Contraseñas:</b><dd>$(KEYWORDS)<dt><b>Descripción:</b><dd>$(TEXT)</dl></font></body></html>";
+    Text[ finnish ] = "<html><body BGCOLOR=\"c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Otsikko:</b><dd>$(TITEL)<dt><b>Aihe:</b><dd>$(THEME)<dt><b>Avainsanat:</b><dd>$(KEYWORDS)<dt><b>Kuvaus:</b><dd>$(TEXT)</dl></font></body></html>";
 };
 String STR_PREVIEW_NODOCINFO
 {
@@ -575,6 +581,7 @@ String STR_PREVIEW_NODOCINFO
     Text[ turkish ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Belge özellikleri bulunamadý.</B></FONT></P></BODY></HTML>";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>No se encontraron propiedades de documentos.</B></FONT></P></BODY></HTML>";
+    Text[ finnish ] = "<HTML><BODY BGCOLOR=\"c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Asiakirjan ominaisuuksia ei löydy.</B></FONT></P></BODY></HTML>";
 };
 String STR_EXPLORERVIEW
 {
@@ -600,6 +607,7 @@ String STR_EXPLORERVIEW
     Text[ turkish ] = "Explorer";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Explorador";
+    Text[ finnish ] = "Resurssienhallinta";
 };
  // -----------------------------------------------------------------------
 InfoBox MSG_CANT_CLOSE
@@ -626,6 +634,7 @@ InfoBox MSG_CANT_CLOSE
     Message[ turkish ] = "Belge, devam eden bir yazdýrma iþi nedeniyle\nþu an kapatýlamýyor.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "El documento no se puede cerrar por ahora\nya que todavía se está imprimiendo.";
+    Message[ finnish ] = "Das Dokument kann zur Zeit nicht geschlossen werden,\nda noch ein Druckauftrag läuft.";
 };
  // DLG_PRINTMONITOR ------------------------------------------------------
 
@@ -641,7 +650,7 @@ InfoBox MSG_CANT_CLOSE
     Text [ danish ] = "Udskriftsskærm" ; \
     Text [ portuguese_brazilian ] = "O monitor de impressão" ; \
     Text [ portuguese ] = "Monitor de impressão" ; \
-    TEXT [ finnish ] = "Tulostuksen tarkkailu" ; \
+    TEXT [ finnish ] = "Tulostuksenvalvonta" ; \
     TEXT[ chinese_simplified ] = "´òÓ¡¼àÊÓÆ÷"; \
     TEXT[ russian ] = "Ìîíèòîð ïå÷àòè"; \
     TEXT[ polish ] = "Monitor wydruku"; \
@@ -678,7 +687,7 @@ ModelessDialog DLG_PRINTMONITOR
         TEXT [ italian ] = "viene stampato su" ;
         TEXT [ portuguese_brazilian ] = "está sendo impresso na" ;
         TEXT [ portuguese ] = "está a ser impresso na" ;
-        TEXT [ finnish ] = "tulostetaan laitteella " ;
+        TEXT [ finnish ] = "tulostuu tulostimessa" ;
         TEXT [ danish ] = "udskrives på" ;
         TEXT [ french ] = "en cours d'impression sur" ;
         TEXT [ swedish ] = "skrivs ut på" ;
@@ -728,7 +737,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE [ italian ] = "Errore durante l'invio del messaggio." ;
     MESSAGE [ portuguese_brazilian ] = "Erro ao enviar correio." ;
     MESSAGE [ portuguese ] = "Erro ao enviar correio." ;
-    MESSAGE [ finnish ] = "Virhe sähköpostia lähetettäessä." ;
+    MESSAGE [ finnish ] = "Virhe postia lähetettäessä." ;
     MESSAGE [ danish ] = "Fejl ved afsendelse af meddelelsen." ;
     MESSAGE [ french ] = "Erreur lors de l'envoi du message." ;
     MESSAGE [ swedish ] = "Fel vid sändning av meddelande." ;
@@ -800,6 +809,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Adjuntar";
+        Text[ finnish ] = "~Liitä";
     };
     Text[ chinese_simplified ] = "¼Ä·¢ÓÊ¼þ";
     Text[ russian ] = "Îòïðàâèòü ñîîáùåíèå";
@@ -832,6 +842,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text[ arabic ] = "ÍÝÙ æÅÑÝÇÞ";
         Text[ turkish ] = "~Kaydet ve iliþtir";
         Text[ catalan ] = "~Guardar y adjuntar";
+        Text[ finnish ] = "~Tallenna ja liitä";
     };
     RadioButton BTN_MAILBODY
     {
@@ -859,6 +870,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text[ turkish ] = "Posta içeriði olarak kullan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Como contenido del mensaje";
+        Text[ finnish ] = "~Sähköpostina";
     };
     RadioButton BTN_SAVE_AND_MAILBODY
     {
@@ -886,6 +898,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text[ arabic ] = "ÍÝÙ æÇÓÊÎÏÇã ßãÍÊæì ÑÓÇáÉ";
         Text[ turkish ] = "Kaydet ve ileti içeriði olarak kullan";
         Text[ catalan ] = "Gu~ardar y usar como contenido del mensaje";
+        Text[ finnish ] = "~Tallenna ja käytä sähköpostina";
     };
     RadioButton BTN_SELECTION
     {
@@ -913,6 +926,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text[ turkish ] = "Seçimi kullan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Utilizar la ~selección";
+        Text[ finnish ] = "~Käytä valintaa";
     };
     RadioButton BTN_NO_ATTACH
     {
@@ -940,6 +954,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text[ turkish ] = "Kullanma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~No usar";
+        Text[ finnish ] = "~Älä käytä";
     };
     GroupBox GB_DOC
     {
@@ -967,6 +982,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text[ turkish ] = "Belge";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Documento";
+        Text[ finnish ] = "Asiakirja";
     };
     OKButton BTN_OK
     {
@@ -990,6 +1006,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
     Text[ turkish ] = "Posta gönder";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Enviar mensaje";
+    Text[ finnish ] = "Lähetä posti";
 };
  // ErrorBox --------------------------------------------------------------
 ErrorBox ERRBOX_SFX_INVALID_MERGEOPT
@@ -1020,6 +1037,7 @@ ErrorBox ERRBOX_SFX_INVALID_MERGEOPT
     Message[ language_user1 ] = " ";
     Message[ turkish ] = "Internet üzerinden ileti gönderebilmek için önce\n e-posta adresinizi ve bir SMTP sunucusu belirtmeniz gerekiyor.\nÝleti göndermeden önce bu ayarlar için,\n\"Araçlar\\Seçenekler\\Genel...\\Kullanýcý\\E-Posta\" ve\n\"Araçlar\\Seçenekler\\Internet\\E-Posta/Haber Grubu\\Giden Posta\" \nalanlarýna girin.";
     Message[ catalan ] = "Para enviar un mensaje a través de Internet\nse necesitan su dirección de correo electrónico y un servidor SMTP para el envío.\nAntes de enviar el próximo mensaje, introduzca por favor estas informaciones en\n\"Herramientas\\Opciones\\Generales...\\Datos de usuario\\E-mail y en\n\"Herramientas\\Opciones\\Internet\\Correo/Noticias\\Correo saliente\".";
+    Message[ finnish ] = "Ennen kuin voit lähettää sähköpostia tai uutisryhmäsanomia, sähköpostiosoite ja SMTP-palvelin\non määritettävä.\nMääritä asetukset valitsemalla \nTyökalut\\Asetukset\\Yleistä\\Käyttäjätiedot\\Sähköposti ja\n\"Työkalut\\Asetukset\\Internet\\Sähköposti ja uutisryhmät\\Lähtevä posti\".\nYritä lähettää viesti uudelleen sen jälkeen, kun olet määrittänyt asetukset.";
 };
 ErrorBox ERRBOX_SFX_NO_OUTBOX
 {
@@ -1047,6 +1065,7 @@ ErrorBox ERRBOX_SFX_NO_OUTBOX
     Message[ turkish ] = "Seçtiðiniz iþlem için giden kutusu gerekiyor.\nBu iþlemi yeniden yürütmeden önce giden kutusunu oluþturun.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Se necesitará una carpeta de salida para ejecutar esta acción.\nPor favor cree una carpeta de salida antes de reiniciar la acción.";
+    Message[ finnish ] = "Tämän toiminnon suorittamiseen tarvitaan Lähtevät-laatikko.\nLuo Lähtevät-laatikko, ennen kuin suoritat tämän toiminnon uudelleen.";
 };
  // QueryBoxen ------------------------------------------------------------
 QueryBox MSG_QUERY_OPENASTEMPLATE
@@ -1078,6 +1097,7 @@ QueryBox MSG_QUERY_OPENASTEMPLATE
     Message[ turkish ] = "Belge (muhtemelen eriþim hakký olmamasý nedeniyle)\n düzenleme için açýlamýyor. Belgeyi yeni bir\nbelge için þablon olarak kullanmak istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "No es posible abrir el documento \npara la edición (p.ej. por falta de derechos). ¿Desea usarlo como plantilla \npara un nuevo documento?";
+    Message[ finnish ] = "Asiakirjaa ei voi avata muokattavaksi, käyttöoikeudet\nsaattavat olla puutteelliset. Haluatko käyttää asiakirjaa uuden\nasiakirjan mallipohjana?";
 };
 String STR_FRAMESIZE
 {
@@ -1102,6 +1122,7 @@ String STR_FRAMESIZE
     Text[ turkish ] = "Frame boyutu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tamaño del frame";
+    Text[ finnish ] = "Kehyksen koko";
 };
 String RID_EXTERNALFRAME_TOOLBOX
 {
@@ -1127,6 +1148,7 @@ String RID_EXTERNALFRAME_TOOLBOX
     Text[ turkish ] = "Araç çubuðu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de funciones";
+    Text[ finnish ] = "Toimintopalkki";
 };
 ToolBox RID_EXTERNALFRAME_TOOLBOX
 {
@@ -1298,6 +1320,7 @@ String STR_FORWARDMAIL
     Text[ arabic ] = "ÑÓÇáÉ Êã ÊãÑíÑåÇ ÍÓÈ ÇáÞÇÚÏÉ.\nÇáÑÓÇáÉ ÇáÃÕáíÉ ßãÑÝÞÇÊ.";
     Text[ turkish ] = "Kurala göre aktarýlan ileti.\nEk olarak özgün ileti.";
     Text[ catalan ] = "Mensaje transmitido por regla.\nEl mensaje original como anexo.";
+    Text[ finnish ] = "Viesti edelleenlähetettiin säännön mukaan.\nAlkuperäinen viesti liitteenä.";
 };
 
 
