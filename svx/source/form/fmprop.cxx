@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmprop.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:20:06 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:14:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,6 +307,7 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SPINVALUE_MAX       , "SpinValueMin"       );
     IMPLEMENT_CONSTASCII_USTRING( FM_PROP_DEFAULT_SPINVALUE   , "DefaultSpinValue"   );
     IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SPININCREMENT       , "SpinIncrement"      );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_LINEENDFORMAT       , "LineEndFormat"      );
 
 }   // namespace svxform
 
