@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-13 13:50:23 $
+ *  last change: $Author: fme $ $Date: 2002-11-15 09:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,11 +753,12 @@ class SwUndoTblNdsChg : public SwUndo
     ULONG nSttNode, nCurrBox;
     USHORT nCount, nRelDiff, nAbsDiff, nSetColType;
     BOOL bFlag;
+    BOOL bSameHeight;                   // only used for SplitRow
 public:
     SwUndoTblNdsChg( USHORT UndoId,
                     const SwSelBoxes& rBoxes,
                     const SwTableNode& rTblNd,
-                    USHORT nCnt, BOOL bFlg );
+                    USHORT nCnt, BOOL bFlg, BOOL bSameHeight = FALSE );
 
     // fuer SetColWidth
     SwUndoTblNdsChg( USHORT UndoId, const SwSelBoxes& rBoxes,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ama $ $Date: 2002-09-02 12:24:26 $
+ *  last change: $Author: fme $ $Date: 2002-11-15 09:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1407,7 +1407,8 @@ public:
     sal_Bool DeleteRow( const SwCursor& rCursor );
     sal_Bool DeleteCol( const SwCursor& rCursor );
         // teilen / zusammenfassen von Boxen in der Tabelle
-    sal_Bool SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert = sal_True, sal_uInt16 nCnt=1 );
+    sal_Bool SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert = sal_True,
+                       sal_uInt16 nCnt = 1, sal_Bool bSameHeight = sal_False );
         // returnt den enum TableMergeErr
     sal_uInt16 MergeTbl( SwPaM& rPam );
     String GetUniqueTblName() const;

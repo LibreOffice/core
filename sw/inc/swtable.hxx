@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-18 15:32:45 $
+ *  last change: $Author: fme $ $Date: 2002-11-15 09:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,8 @@ public:
     BOOL DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, SwUndo* pUndo = 0,
                             const BOOL bDelMakeFrms = TRUE,
                             const BOOL bCorrBorder = TRUE );
-    BOOL SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt=1 );
+    BOOL SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt=1,
+                   BOOL bSameHeight = FALSE );
     BOOL SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt=1 );
     BOOL Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                 SwTableBox* pMergeBox, SwUndoTblMerge* = 0 );

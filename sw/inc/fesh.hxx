@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-09-26 12:57:13 $
+ *  last change: $Author: fme $ $Date: 2002-11-15 09:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,8 +580,8 @@ public:
 
     USHORT MergeTab();          //Merged selektierte Tabellenteile zusammen
                                 //Fehler ueber enum zurueck
-    BOOL SplitTab( BOOL nVert = TRUE, USHORT nCnt = 1); //Zelle Vertikal oder
-                                                        //Horizontal s plitten.
+    // Zelle Vertikal oder Horizontal splitten.
+    BOOL SplitTab( BOOL nVert = TRUE, USHORT nCnt = 1, BOOL bSameHeight = FALSE );
     BOOL Sort(const SwSortOptions&);    //Sortieren.
 
     void SetRowHeight( const SwFmtFrmSize &rSz );
