@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:23:51 $
+ *  last change: $Author: oj $ $Date: 2001-05-22 11:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 
 extern "C" void SAL_CALL createRegistryInfo_OTableControl()
@@ -497,12 +500,8 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             if(!m_xTable.is()) // correct name and try again
             {
                 // it can be that someone inserted new data for us
-                ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
-                xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-                xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-                xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
-
-                ::dbtools::composeTableName(m_xConnection->getMetaData(),sCatalog,sSchema,sTable,sComposedName,sal_False);
+                ::rtl::OUString sComposedName;
+                ::dbaui::composeTableName(m_xConnection->getMetaData(),xTable,sComposedName,sal_False);
                 m_sName = sComposedName;
                 assignTable();
             }
@@ -542,7 +541,6 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
                     }
                 }
             }
-
         }
         else if(m_xTable.is())
         {
@@ -708,15 +706,6 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
         getView()->initialize();    // show the windows and fill with our informations
         getUndoMgr()->Clear();      // clear all undo redo things
         setModified(sal_False);     // and we are not modified yet
-        // set the title of the beamer
-        Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
-        if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE))
-        {
-            ::rtl::OUString sName = String(ModuleRes(STR_TABLEDESIGN_TITLE));
-            sName += ::rtl::OUString::createFromAscii(": ");
-            sName += m_sDataSourceName;
-            xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sName));
-        }
     }
     catch(SQLException&)
     {
@@ -1665,6 +1654,7 @@ void OTableController::dropKey()
 // -----------------------------------------------------------------------------
 void OTableController::assignTable()
 {
+    ::rtl::OUString sComposedName;
     // get the table
     if(m_sName.getLength())
     {
@@ -1695,7 +1685,12 @@ void OTableController::assignTable()
                 InvalidateAll();
             }
         }
+        if(m_xTable.is())
+            ::dbaui::composeTableName(m_xConnection->getMetaData(),m_xTable,sComposedName,sal_False);
+        else
+            sComposedName = m_sName;
     }
+    setTitle(sComposedName);
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableController::isAddAllowed() const
@@ -1774,6 +1769,21 @@ void OTableController::reSyncRows()
 String OTableController::getMenu() const
 {
     return String::CreateFromInt32(RID_TABLE_DESIGN_MAIN_MENU);
+}
+// -----------------------------------------------------------------------------
+void OTableController::setTitle(const ::rtl::OUString & _rTitle)
+{
+    Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
+    if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE))
+    {
+        ::rtl::OUString sName = String(ModuleRes(STR_TABLEDESIGN_TITLE));
+        sName += ::rtl::OUString::createFromAscii(": ");
+        if(_rTitle.getLength())
+            sName += _rTitle;
+        else
+            sName += m_sDataSourceName;
+        xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sName));
+    }
 }
 // -----------------------------------------------------------------------------
 

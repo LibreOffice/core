@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-16 15:24:43 $
+ *  last change: $Author: oj $ $Date: 2001-05-22 11:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,6 +701,21 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
         if(m_bDesign && !m_sName.getLength())
             Execute(ID_BROWSER_ADDTABLE);
         setModified(sal_False);
+
+        // set the title of the beamer
+        Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
+        if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE))
+        {
+            ::rtl::OUString sName = m_sName;
+            if(!sName.getLength())
+            {
+                String aName = String(ModuleRes(m_bCreateView ? STR_VIEW_TITLE : STR_QRY_TITLE));
+                aName = aName.GetToken(0,' ');
+                sName = ::dbtools::createUniqueName(getElements(),aName);
+                sName = aName + ::rtl::OUString::createFromAscii(": ") + sName;
+            }
+            xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sName));
+        }
     }
     catch(SQLException&)
     {
