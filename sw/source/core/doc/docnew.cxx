@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-06 17:41:03 $
+ *  last change: $Author: jp $ $Date: 2001-04-26 19:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,24 +92,30 @@
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
 #endif
-#ifndef _ZFORLIST_HXX //autogen
+#ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
 #endif
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include <svx/forbiddencharacterstable.hxx>
 #endif
+#ifndef _SVDPAGE_HXX
+#include <svx/svdpage.hxx>
+#endif
 
-#ifndef _FMTCNTNT_HXX //autogen
+#ifndef _FMTCNTNT_HXX
 #include <fmtcntnt.hxx>
 #endif
-#ifndef _FMTANCHR_HXX //autogen
+#ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
 #endif
-#ifndef _FMTFSIZE_HXX //autogen
+#ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
 #endif
-#ifndef _FMTFORDR_HXX //autogen
+#ifndef _FMTFORDR_HXX
 #include <fmtfordr.hxx>
+#endif
+#ifndef _FMTPDSC_HXX
+#include <fmtpdsc.hxx>
 #endif
 #ifndef _PVPRTDAT_HXX
 #include <pvprtdat.hxx>
@@ -207,6 +213,9 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
+#endif
+#ifndef _MVSAVE_HXX
+#include <mvsave.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -756,6 +765,8 @@ const SfxDocumentInfo* SwDoc::GetInfo()
 
 void SwDoc::ClearDoc()
 {
+    BOOL bOldUndo = bUndo;
+    DelAllUndoObj();
     bUndo = FALSE;          // immer das Undo abschalten !!
 
     // Undo-Benachrichtigung vom Draw abschalten
@@ -766,8 +777,11 @@ void SwDoc::ClearDoc()
     }
 
     // stehen noch FlyFrames rum, loesche auch diese
-    for( USHORT n = 0; n < GetSpzFrmFmts()->Count(); ++n )
-        DelLayoutFmt( (*pSpzFrmFmtTbl)[n] );
+    USHORT n;
+    while( n = GetSpzFrmFmts()->Count() )
+        DelLayoutFmt( (*pSpzFrmFmtTbl)[ n-1 ] );
+    ASSERT( !pDrawModel || !pDrawModel->GetPage(0)->GetObjCount(),
+                "not all DrawObjects removed from the page" );
 
     pRedlineTbl->DeleteAndDestroy( 0, pRedlineTbl->Count() );
 
@@ -778,15 +792,32 @@ void SwDoc::ClearDoc()
     // loesche der Nodes geloescht werden.
     pBookmarkTbl->DeleteAndDestroy( 0, pBookmarkTbl->Count() );
     pTOXTypes->DeleteAndDestroy( 0, pTOXTypes->Count() );
-    aPageDescs.DeleteAndDestroy( 0, aPageDescs.Count() );
-
     pNumRuleTbl->DeleteAndDestroy( 0, pNumRuleTbl->Count() );
+
+    // create a dummy pagedesc for the layout
+    sal_uInt16 nDummyPgDsc = MakePageDesc( String::CreateFromAscii( "?DUMMY?" ));
+    SwPageDesc* pDummyPgDsc = aPageDescs[ nDummyPgDsc ];
 
     SwNodeIndex aSttIdx( *GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
     // den ersten immer wieder neu anlegen (ohne Attribute/Vorlagen/...)
     SwTxtNode* pFirstNd = GetNodes().MakeTxtNode( aSttIdx, pDfltTxtFmtColl );
+
+    if( pLayout )
+    {
+        // set the layout to the dummy pagedesc
+        pFirstNd->SwCntntNode::SetAttr( SwFmtPageDesc( pDummyPgDsc ));
+
+        SwPosition aPos( *pFirstNd, SwIndex( pFirstNd ));
+        ::PaMCorrAbs( aSttIdx, SwNodeIndex( GetNodes().GetEndOfContent() ),
+                         aPos );
+    }
+
     GetNodes().Delete( aSttIdx,
             GetNodes().GetEndOfContent().GetIndex() - aSttIdx.GetIndex() );
+
+    //remove the dummy pagedec from the array and delete all the old ones
+    aPageDescs.Remove( nDummyPgDsc );
+    aPageDescs.DeleteAndDestroy( 0, aPageDescs.Count() );
 
     // Delete fuer Collections
     // damit die Abhaengigen wech sind
@@ -802,10 +833,18 @@ void SwDoc::ClearDoc()
         pTxtFmtCollTbl->DeleteAndDestroy( 2, pTxtFmtCollTbl->Count()-2 );
     pTxtFmtCollTbl->DeleteAndDestroy( 1, pTxtFmtCollTbl->Count()-1 );
     pGrfFmtCollTbl->DeleteAndDestroy( 1, pGrfFmtCollTbl->Count()-1 );
-    pFrmFmtTbl->DeleteAndDestroy( 1, pFrmFmtTbl->Count()-1 );
     pCharFmtTbl->DeleteAndDestroy( 1, pCharFmtTbl->Count()-1 );
 
-    ReleaseDrawModel();
+    if( pLayout )
+    {
+        // search the FrameFormat of the root frm. This is not allowed to delete
+        pFrmFmtTbl->Remove( pFrmFmtTbl->GetPos( pLayout->GetFmt() ) );
+        pFrmFmtTbl->DeleteAndDestroy( 1, pFrmFmtTbl->Count()-1 );
+        pFrmFmtTbl->Insert( pLayout->GetFmt(), pFrmFmtTbl->Count() );
+    }
+    else
+        pFrmFmtTbl->DeleteAndDestroy( 1, pFrmFmtTbl->Count()-1 );
+
     xForbiddenCharsTable.unbind();
 
     pFldTypes->DeleteAndDestroy( INIT_FLDTYPES,
@@ -815,6 +854,14 @@ void SwDoc::ClearDoc()
 
     GetPageDescFromPool( RES_POOLPAGE_STANDARD );
     pFirstNd->ChgFmtColl( GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
+    nDummyPgDsc = aPageDescs.Count();
+    aPageDescs.Insert( pDummyPgDsc, nDummyPgDsc );
+    // set the layout back to the new standard pagedesc
+    pFirstNd->ResetAllAttr();
+    // delete now the dummy pagedesc
+    DelPageDesc( nDummyPgDsc );
+
+    bUndo = bOldUndo;
 }
 
 void SwDoc::SetPreViewPrtData( const SwPagePreViewPrtData* pNew )
