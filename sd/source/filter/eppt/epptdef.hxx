@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptdef.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,32 +248,32 @@
 #define EPP_GrColorAtom                10002
 #define EPP_GLPointAtom                10003
 
-#define EPP_PLACEHOLDER_NONE                  0 /*  0 None                        */
-#define EPP_PLACEHOLDER_MASTERTITLE           1 /*  1 Master title                */
-#define EPP_PLACEHOLDER_MASTERBODY            2 /*  2 Master body                 */
-#define EPP_PLACEHOLDER_MASTERCENTEREDTITLE   3 /*  3 Master centered title       */
-#define EPP_PLACEHOLDER_MASTERNOTESSLIDEIMAGE 4 /*  4 Master notes slide image    */
-#define EPP_PLACEHOLDER_MASTERNOTESBODYIMAGE  5 /*  5 Master notes body image     */
-#define EPP_PLACEHOLDER_MASTERDATE            6 /*  6 Master date                 */
-#define EPP_PLACEHOLDER_MASTERSLIDENUMBER     7 /*  7 Master slide number         */
-#define EPP_PLACEHOLDER_MASTERFOOTER          8 /*  8 Master footer               */
-#define EPP_PLACEHOLDER_MASTERHEADER          9 /*  9 Master header               */
-#define EPP_PLACEHOLDER_MASTERSUBTITLE       10 /* 10 Master subtitle             */
-#define EPP_PLACEHOLDER_GENERICTEXTOBJECT    11 /* 11 Generic text object         */
-#define EPP_PLACEHOLDER_TITLE                13 /* 12 Title                       */
-#define EPP_PLACEHOLDER_BODY                 14 /* 13 Body                        */
-#define EPP_PLACEHOLDER_NOTESBODY            12 /* 14 Notes body                  */
-#define EPP_PLACEHOLDER_CENTEREDTITLE        15 /* 15 Centered title              */
-#define EPP_PLACEHOLDER_SUBTITLE             16 /* 16 Subtitle                    */
-#define EPP_PLACEHOLDER_VERTICALTEXTTITLE    17 /* 17 Vertical text title         */
-#define EPP_PLACEHOLDER_VERTICALTEXTBODY     18 /* 18 Vertical text body          */
-#define EPP_PLACEHOLDER_NOTESSLIDEIMAGE      19 /* 19 Notes slide image           */
-#define EPP_PLACEHOLDER_OBJECT               20 /* 20 Object (no matter the size) */
-#define EPP_PLACEHOLDER_GRAPH                21 /* 21 Graph                       */
-#define EPP_PLACEHOLDER_TABLE                22 /* 22 Table                       */
-#define EPP_PLACEHOLDER_CLIPART              23 /* 23 Clip Art                    */
-#define EPP_PLACEHOLDER_ORGANISZATIONCHART   24 /* 24 Organization Chart          */
-#define EPP_PLACEHOLDER_MEDIACLIP            25 /* 25 Media Clip                  */
+#define EPP_PLACEHOLDER_NONE                    0   //  0 None
+#define EPP_PLACEHOLDER_MASTERTITLE             1   //  1 Master title
+#define EPP_PLACEHOLDER_MASTERBODY              2   //  2 Master body
+#define EPP_PLACEHOLDER_MASTERCENTEREDTITLE     3   //  3 Master centered title
+#define EPP_PLACEHOLDER_MASTERSUBTITLE          4   // 10 Master subtitle
+#define EPP_PLACEHOLDER_MASTERNOTESSLIDEIMAGE   5   //  4 Master notes slide image
+#define EPP_PLACEHOLDER_MASTERNOTESBODYIMAGE    6   //  5 Master notes body image
+#define EPP_PLACEHOLDER_MASTERDATE              7   //  6 Master date
+#define EPP_PLACEHOLDER_MASTERSLIDENUMBER       8   //  7 Master slide number
+#define EPP_PLACEHOLDER_MASTERFOOTER            9   //  8 Master footer
+#define EPP_PLACEHOLDER_MASTERHEADER            10  //  9 Master header
+#define EPP_PLACEHOLDER_GENERICTEXTOBJECT           // 11 Generic text object
+#define EPP_PLACEHOLDER_TITLE                   13  // 12 Title
+#define EPP_PLACEHOLDER_BODY                    14  // 13 Body
+#define EPP_PLACEHOLDER_NOTESBODY               12  // 14 Notes body
+#define EPP_PLACEHOLDER_CENTEREDTITLE           15  // 15 Centered title
+#define EPP_PLACEHOLDER_SUBTITLE                16  // 16 Subtitle
+#define EPP_PLACEHOLDER_VERTICALTEXTTITLE       17  // 17 Vertical text title
+#define EPP_PLACEHOLDER_VERTICALTEXTBODY        18  // 18 Vertical text body
+#define EPP_PLACEHOLDER_NOTESSLIDEIMAGE         11  // 19 Notes slide image
+#define EPP_PLACEHOLDER_OBJECT                  19  // 20 Object (no matter the size)
+#define EPP_PLACEHOLDER_GRAPH                   20  // 21 Graph
+#define EPP_PLACEHOLDER_TABLE                   21  // 22 Table
+#define EPP_PLACEHOLDER_CLIPART                 22  // 23 Clip Art
+#define EPP_PLACEHOLDER_ORGANISZATIONCHART      23  // 24 Organization Chart
+#define EPP_PLACEHOLDER_MEDIACLIP               24  // 25 Media Clip
 
 #define EPP_TEXTTYPE_Title              0
 #define EPP_TEXTTYPE_Body               1
