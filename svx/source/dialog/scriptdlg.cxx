@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:34:12 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include "fmresids.hrc"
 #include "scriptdlg.hxx"
 #include "dialmgr.hxx"
+#include "selector.hxx"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -132,7 +133,6 @@ SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rRes ) :
 {
     FreeResource();
     SetSelectionMode( SINGLE_SELECTION );
-    OSL_TRACE("setting default node images");
 
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
                    WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HIDESELECTION |
@@ -144,8 +144,6 @@ SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rRes ) :
 
 SFTreeListBox::~SFTreeListBox()
 {
-    OSL_TRACE("Entering SFTreeListBox::~SFTreeListBox()");
-    OSL_TRACE("Leaving SFTreeListBox::~SFTreeListBox()");
     deleteAllTree();
 }
 
@@ -155,8 +153,6 @@ void SFTreeListBox::delUserData( SvLBoxEntry* pEntry )
     {
 
         String text = GetEntryText( pEntry );
-        OSL_TRACE("delete userdata  on node named %s",
-            ::rtl::OUStringToOString( text , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         SFEntry* pUserData = (SFEntry*)pEntry->GetUserData();
         if ( pUserData )
         {
@@ -173,17 +169,12 @@ void SFTreeListBox::delUserData( SvLBoxEntry* pEntry )
 
 void SFTreeListBox::deleteTree( SvLBoxEntry* pEntry )
 {
-
-    OSL_TRACE("delete tree  on node named %s",
-        ::rtl::OUStringToOString( GetEntryText(pEntry) , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     SvLBoxEntry* treeToRemove = pEntry;
 
     delUserData( pEntry );
     pEntry = FirstChild( pEntry );
     while ( pEntry )
     {
-        OSL_TRACE("while: delete tree  on node named %s",
-            ::rtl::OUStringToOString( GetEntryText(pEntry) , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         SvLBoxEntry* pNextEntry = NextSibling( pEntry );
         deleteTree( pEntry );
         GetModel()->Remove( pEntry );
@@ -201,8 +192,6 @@ void SFTreeListBox::deleteAllTree()
         while ( pEntry )
         {
             String text = GetEntryText( pEntry );
-            OSL_TRACE("** ** ** call deleteTree on node named %s",
-                ::rtl::OUStringToOString( text , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             SvLBoxEntry* pNextEntry = NextSibling( pEntry ) ;
             deleteTree( pEntry );
             GetModel()->Remove( pEntry );
@@ -213,118 +202,113 @@ void SFTreeListBox::deleteAllTree()
 
 void SFTreeListBox::Init( const ::rtl::OUString& language  )
 {
-    OSL_TRACE("Entering Init()");
     SetUpdateMode( FALSE );
 
     deleteAllTree();
 
-    ::rtl::OUString userStr = ::rtl::OUString::createFromAscii("user");
-    ::rtl::OUString shareStr = ::rtl::OUString::createFromAscii("share");
     Reference< browse::XBrowseNode > rootNode;
     Reference< XComponentContext > xCtx;
-        try
-        {
-            Reference < beans::XPropertySet > xProps(
-                ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-            xCtx.set( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
-            Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
-                ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
-            rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROORGANIZER ) );
-        }
-        catch( Exception& e )
-        {
-            OSL_TRACE(" Caught some exception whilst retrieving browse nodes from factory... Exception: %s",
-            ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-            // TODO exception handling
-        }
-    if (  rootNode.is() )
+
+    Sequence< Reference< browse::XBrowseNode > > children;
+
+    ::rtl::OUString userStr = ::rtl::OUString::createFromAscii("user");
+    ::rtl::OUString shareStr = ::rtl::OUString::createFromAscii("share");
+
+    ::rtl::OUString singleton = ::rtl::OUString::createFromAscii(
+        "/singletons/com.sun.star.script.browse.theBrowseNodeFactory" );
+
+    try
     {
-        if ( rootNode->hasChildNodes() == sal_True )
+        Reference < beans::XPropertySet > xProps(
+            ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+
+        xCtx.set( xProps->getPropertyValue( rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("DefaultContext" ))), UNO_QUERY_THROW );
+
+        Reference< browse::XBrowseNodeFactory > xFac(
+            xCtx->getValueByName( singleton ), UNO_QUERY_THROW );
+
+        rootNode.set( xFac->createView(
+            browse::BrowseNodeFactoryViewTypes::MACROORGANIZER ) );
+
+        if (  rootNode.is() && rootNode->hasChildNodes() == sal_True )
         {
-            Sequence< Reference< browse::XBrowseNode > > children
-                = rootNode->getChildNodes();
-            // sort the children
-            // this may be fixed at the XBrowseNode impl at some stage
-            ::std::vector< Reference< browse::XBrowseNode > > childList;
-            sal_Int32 n = 0;
-            for ( n = 0; n < children.getLength(); n++ )
+            children = rootNode->getChildNodes();
+        }
+    }
+    catch( Exception& e )
+    {
+        OSL_TRACE("Exception getting root browse node from factory: %s",
+            ::rtl::OUStringToOString(
+                e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        // TODO exception handling
+    }
+
+    for ( sal_Int32 n = 0; n < children.getLength(); n++ )
+    {
+        BOOL app = false;
+        ::rtl::OUString uiName = children[ n ]->getName();
+        ::rtl::OUString factoryURL;
+        if ( uiName.equals( userStr ) || uiName.equals( shareStr ) )
+        {
+            app = true;
+            if ( uiName.equals( userStr ) )
             {
-                childList.push_back( children[ n ] );
+                uiName = m_sMyMacros;
             }
-            ::std::sort( childList.begin(), childList.end(), dialogSort1 );
-            for ( n = 0; n < childList.size(); n++ )
+            else
             {
-                BOOL app = false;
-                ::rtl::OUString uiName = childList[ n ]->getName();
-                ::rtl::OUString factoryURL;
-                if ( uiName.equals( userStr ) ||
-                    uiName.equals( shareStr ) )
-                {
-                    app = true;
-                    if ( uiName.equals( userStr ) )
-                    {
-                        uiName = m_sMyMacros;
-                    }
-                    else
-                    {
-                        uiName = m_sProdMacros;
-                    }
-                }
-                else
-                {
-                    Reference<XInterface> xDocumentModel = getDocumentModel(xCtx, uiName );
-                    if ( xDocumentModel.is() )
-                    {
-                        Reference< ::drafts::com::sun::star::frame::XModuleManager >
-                            xModuleManager(
-                                xCtx->getServiceManager()
-                                    ->createInstanceWithContext(
-                                        ::rtl::OUString::createFromAscii("drafts." // xxx todo
-                                              "com.sun.star.frame.ModuleManager"),
-                                        xCtx ),
+                uiName = m_sProdMacros;
+            }
+        }
+        else
+        {
+            Reference<XInterface> xDocumentModel =
+                getDocumentModel(xCtx, uiName );
+
+            if ( xDocumentModel.is() )
+            {
+                Reference< ::drafts::com::sun::star::frame::XModuleManager >
+                    xModuleManager( xCtx->getServiceManager()->createInstanceWithContext(
+                        ::rtl::OUString::createFromAscii("drafts." // xxx todo
+                              "com.sun.star.frame.ModuleManager"), xCtx ),
                                     UNO_QUERY_THROW );
-                        Reference<container::XNameAccess> xModuleConfig(
-                            xModuleManager, UNO_QUERY_THROW );
-                        // get the long name of the document:
-                        Sequence<beans::PropertyValue> moduleDescr;
-                        try{
-                            ::rtl::OUString appModule = xModuleManager->identify( xDocumentModel );
-                            xModuleConfig->getByName(appModule) >>= moduleDescr;
-                        } catch(const uno::Exception&)
-                            {}
 
-                        beans::PropertyValue const * pmoduleDescr =
-                            moduleDescr.getConstArray();
-                        for ( sal_Int32 pos = moduleDescr.getLength(); pos--; )
-                        {
-                            if (pmoduleDescr[ pos ].Name.equalsAsciiL(
-                                    RTL_CONSTASCII_STRINGPARAM(
-                                        "ooSetupFactoryEmptyDocumentURL") ))
-                            {
-                                pmoduleDescr[ pos ].Value >>= factoryURL;
-                                OSL_TRACE("factory url for doc images is %s",
-                                ::rtl::OUStringToOString( factoryURL , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                                break;
-                            }
-                        }
+                Reference<container::XNameAccess> xModuleConfig(
+                    xModuleManager, UNO_QUERY_THROW );
+                // get the long name of the document:
+                Sequence<beans::PropertyValue> moduleDescr;
+                try{
+                    ::rtl::OUString appModule = xModuleManager->identify( xDocumentModel );
+                    xModuleConfig->getByName(appModule) >>= moduleDescr;
+                } catch(const uno::Exception&)
+                    {}
+
+                beans::PropertyValue const * pmoduleDescr =
+                    moduleDescr.getConstArray();
+                for ( sal_Int32 pos = moduleDescr.getLength(); pos--; )
+                {
+                    if (pmoduleDescr[ pos ].Name.equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM(
+                                "ooSetupFactoryEmptyDocumentURL") ))
+                    {
+                        pmoduleDescr[ pos ].Value >>= factoryURL;
+                        break;
                     }
                 }
-
-                ::rtl::OUString lang( language );
-                Reference< browse::XBrowseNode > langEntries =
-                    getLangNodeFromRootNode( childList[ n ], lang );
-                SvLBoxEntry* pBasicManagerRootEntry = insertEntry(
-                                       uiName,
-                                        app == true ? IMG_HARDDISK : IMG_DOCUMENT,
-                                        0, true,
-                                    std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries )), factoryURL );
-
             }
         }
 
+        ::rtl::OUString lang( language );
+        Reference< browse::XBrowseNode > langEntries =
+            getLangNodeFromRootNode( children[ n ], lang );
+
+        SvLBoxEntry* pBasicManagerRootEntry =
+            insertEntry( uiName, app == true ? IMG_HARDDISK : IMG_DOCUMENT,
+                0, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries )), factoryURL );
     }
+
     SetUpdateMode( TRUE );
-    OSL_TRACE("Leaving Init()");
 }
 
 Reference< XInterface  >
@@ -349,7 +333,8 @@ SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OU
             components->nextElement(), UNO_QUERY );
         if ( model.is() )
         {
-            ::rtl::OUString sTdocUrl = xModelToDocTitle( model );
+            ::rtl::OUString sTdocUrl;
+            SvxScriptSelectorDialog::GetDocTitle( model, sTdocUrl );
             if( sTdocUrl.equals( docName ) )
             {
                 xModel = model;
@@ -360,135 +345,59 @@ SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OU
     return xModel;
 }
 
-::rtl::OUString SFTreeListBox::xModelToDocTitle( const Reference< frame::XModel >& xModel )
-{
-    // Set a default name, this should never be seen.
-    ::rtl::OUString docNameOrURL =
-        ::rtl::OUString::createFromAscii("Unknown");
-    if ( xModel.is() )
-    {
-        ::rtl::OUString tempName;
-        try
-        {
-            Reference< beans::XPropertySet > propSet( xModel->getCurrentController()->getFrame(), UNO_QUERY );
-            if ( propSet.is() )
-            {
-                if ( sal_True == ( propSet->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) ) >>= tempName ) )
-                {
-                    docNameOrURL = tempName;
-                    if ( xModel->getURL().getLength() == 0 )
-                    {
-                        // process "UntitledX - YYYYYYYY"
-                        // to get UntitledX
-                        sal_Int32 pos = 0;
-                        docNameOrURL = tempName.getToken(0,' ',pos);
-                        OSL_TRACE("xModelToDocTitle() Title for document is %s.",
-                            ::rtl::OUStringToOString( docNameOrURL,
-                                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                    }
-                    else
-                    {
-                        Reference< document::XDocumentInfoSupplier >  xDIS( xModel, UNO_QUERY_THROW );
-                        Reference< beans::XPropertySet > xProp (xDIS->getDocumentInfo(),  UNO_QUERY_THROW );
-                        Any aTitle = xProp->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) );
-
-                        aTitle >>= docNameOrURL;
-                        if ( docNameOrURL.getLength() == 0 )
-                        {
-                            docNameOrURL =  parseLocationName( xModel->getURL() );
-                        }
-                    }
-                }
-            }
-        }
-        catch ( Exception& e )
-        {
-            OSL_TRACE("MiscUtils::xModelToDocTitle() exception thrown: !!! %s",
-                ::rtl::OUStringToOString( e.Message,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        }
-
-    }
-    else
-    {
-        OSL_TRACE("MiscUtils::xModelToDocTitle() doc model is null" );
-    }
-    return docNameOrURL;
-}
-
-::rtl::OUString SFTreeListBox::parseLocationName( const ::rtl::OUString& location )
-{
-    // strip out the last leaf of location name
-    // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
-    ::rtl::OUString temp = location;
-    sal_Int32 lastSlashIndex = temp.lastIndexOf( ::rtl::OUString::createFromAscii( "/" ) );
-
-    if ( ( lastSlashIndex + 1 ) <  temp.getLength()  )
-    {
-        temp = temp.copy( lastSlashIndex + 1 );
-    }
-    // maybe we should throw here!!!
-    else
-    {
-        OSL_TRACE("Something wrong with name, perhaps we should throw an exception");
-    }
-    return temp;
-}
-
 Reference< browse::XBrowseNode >
 SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNode, ::rtl::OUString& language )
 {
-    OSL_TRACE("Entering getLangNodeFromRootNode");
-    Sequence < Reference< browse::XBrowseNode > > children = rootNode->getChildNodes();
     Reference< browse::XBrowseNode > langNode;
-    for ( sal_Int32 n = 0; n < children.getLength(); n++ )
+
+    try
     {
-        if ( children[ n ]->getName().equals( language ) )
+        Sequence < Reference< browse::XBrowseNode > > children = rootNode->getChildNodes();
+        for ( sal_Int32 n = 0; n < children.getLength(); n++ )
         {
-            langNode = children[ n ];
-            break;
+            if ( children[ n ]->getName().equals( language ) )
+            {
+                langNode = children[ n ];
+                break;
+            }
         }
     }
-    OSL_TRACE("Leaving getLangNodeFromRootNode");
+    catch ( Exception& e )
+    {
+        // if getChildNodes() throws an exception we just return
+        // the empty Reference
+    }
     return langNode;
 }
 
 void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::com::sun::star::script::browse::XBrowseNode >& node )
 {
-    OSL_TRACE("RequestSubEntries ");
     if (! node.is() )
     {
-        OSL_TRACE("root node not not available");
         return;
     }
-    OSL_TRACE("Processing node %s",
-        ::rtl::OUStringToOString( node->getName() , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-    Sequence< Reference< browse::XBrowseNode > > children = node->getChildNodes();
-    ::std::vector< Reference< browse::XBrowseNode > > childList;
-    sal_Int32 n = 0;
-    for ( n = 0; n < children.getLength(); n++ )
+
+    Sequence< Reference< browse::XBrowseNode > > children;
+    try
     {
-        childList.push_back( children[ n ] );
+        children = node->getChildNodes();
     }
-    // sort the children
-    // this may be fixed at the XBrowseNode impl at some stage
-    ::std::sort( childList.begin(), childList.end(), dialogSort2 );
-    for ( n = 0; n < childList.size(); n++ )
+    catch ( Exception& e )
     {
-        if (  childList[ n ]->getType() !=  browse::BrowseNodeTypes::SCRIPT)
+        // if we catch an exception in getChildNodes then no entries are added
+    }
+
+    for ( sal_Int32 n = 0; n < children.getLength(); n++ )
+    {
+        if (  children[ n ]->getType() !=  browse::BrowseNodeTypes::SCRIPT)
         {
-            OSL_TRACE("******   Creating container entry for %s",
-            ::rtl::OUStringToOString( childList[ n ]->getName() , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                SvLBoxEntry* container = insertEntry( childList[ n ]->getName(), IMG_LIB, pRootEntry, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, childList[ n ] )));
+            SvLBoxEntry* container = insertEntry( children[ n ]->getName(), IMG_LIB, pRootEntry, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, children[ n ] )));
         }
         else
         {
-            OSL_TRACE("RequestSubEntries no children");
-            if ( childList[ n ]->getType() == browse::BrowseNodeTypes::SCRIPT )
+            if ( children[ n ]->getType() == browse::BrowseNodeTypes::SCRIPT )
             {
-                OSL_TRACE("creating node for script %s",
-                    ::rtl::OUStringToOString( childList[ n ]->getName() , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                insertEntry( childList[ n ]->getName(), IMG_MACRO, pRootEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, childList[ n ] )));
+                insertEntry( children[ n ]->getName(), IMG_MACRO, pRootEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, children[ n ] )));
 
             }
         }
@@ -497,27 +406,20 @@ void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::co
 
 void SFTreeListBox::UpdateEntries()
 {
-    OSL_TRACE("Update Entries()");
 }
-
 
 SvLBoxEntry* SFTreeListBox::FindEntry( SvLBoxEntry* pParent, const String& rText, BYTE nType )
 {
-    OSL_TRACE("FindEntry");
     return 0;
 }
 
 long SFTreeListBox::ExpandingHdl()
 {
-    OSL_TRACE("ExpandingHdl");
-    OSL_TRACE("expanding depth: %d",GetModel()->GetDepth( GetHdlEntry() ));
     return TRUE;
 }
 
 void SFTreeListBox::ExpandAllTrees()
 {
-    OSL_TRACE("Entering ExpandAllTrees");
-    OSL_TRACE("Leaving ExpandAllTrees");
 }
 
 SvLBoxEntry * SFTreeListBox::insertEntry(
@@ -527,7 +429,6 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
     SvLBoxEntry * p;
     if( nBitmap == IMG_DOCUMENT && factoryURL.getLength() > 0 )
     {
-        OSL_TRACE("=================================> adding icons for document");
         Image aImage = SvFileInformationManager::GetFileImage(
             INetURLObject(factoryURL), false,
             BMP_COLOR_NORMAL );
@@ -559,13 +460,11 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
     }
     else if( nBitmap == IMG_LIB )
     {
-        OSL_TRACE("setting image for library");
         aImage = m_libImage;
         aHCImage = m_libImage_hc;
     }
     else if( nBitmap == IMG_MACRO )
     {
-        OSL_TRACE("setting image for macro");
         aImage = m_macImage;
         aHCImage = m_macImage_hc;
     }
@@ -584,8 +483,6 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
 
 void __EXPORT SFTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 {
-    OSL_TRACE("Entering Requesting Childs ");
-
     SFEntry* userData = 0;
     if ( !pEntry )
     {
@@ -604,7 +501,6 @@ void __EXPORT SFTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 
 void __EXPORT SFTreeListBox::ExpandedHdl()
 {
-        OSL_TRACE("BasicTreeListBox::ExpandedHdl()");
 /*        SvLBoxEntry* pEntry = GetHdlEntry();
         DBG_ASSERT( pEntry, "Was wurde zugeklappt?" );
 
@@ -767,17 +663,12 @@ short SvxScriptOrgDialog::Execute()
 
 void SvxScriptOrgDialog::EnableButton( Button& rButton, BOOL bEnable )
 {
-    OSL_TRACE("Entering SvxScriptOrgDialog::EnableButton()");
-    OSL_TRACE("Leaving SvxScriptOrgDialog::EnableButton()");
 }
 
 void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
 {
-    OSL_TRACE("Entering SvxScriptOrgDialog::CheckButtons()");
     if ( node.is() )
     {
-        OSL_TRACE("got ok node %d",node->getType());
-        OSL_TRACE("node name: %s", ::rtl::OUStringToOString( node->getName(), RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         if ( node->getType() == browse::BrowseNodeTypes::SCRIPT)
         {
             aRunButton.Enable();
@@ -790,7 +681,6 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
 
         if ( !xProps.is() )
         {
-            OSL_TRACE("no props");
             aEditButton.Disable();
             aDelButton.Disable();
             aCreateButton.Disable();
@@ -845,7 +735,6 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
     }
     else
     {
-        OSL_TRACE("No node info available for selected");
         // no node info available, disable all configurable actions
         aDelButton.Disable();
         aCreateButton.Disable();
@@ -853,13 +742,10 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
         aRunButton.Disable();
         aRenameButton.Disable();
     }
-    OSL_TRACE("Leaving SvxScriptOrgDialog::CheckButtons()");
 }
 
 IMPL_LINK_INLINE_START( SvxScriptOrgDialog, MacroDoubleClickHdl, SvTreeListBox *, EMPTYARG )
 {
-    OSL_TRACE("Entering SvxScriptOrgDialog::MacroDoubleClickHdl()");
-    OSL_TRACE("Leaving SvxScriptOrgDialog::MacroDoubleClickHdl()");
     return 0;
 }
 
@@ -867,10 +753,8 @@ IMPL_LINK_INLINE_END( SvxScriptOrgDialog, MacroDoubleClickHdl, SvTreeListBox *, 
 
 IMPL_LINK( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox )
 {
-    OSL_TRACE("Entering SvxScriptOrgDialog::ScriptSelectHdl()");
     if ( !pBox->IsSelected( pBox->GetHdlEntry() ) )
     {
-        OSL_TRACE("ScriptSelectHdl entry not selected");
         return 0;
     }
 
@@ -879,7 +763,6 @@ IMPL_LINK( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox )
     SFEntry* userData = 0;
     if ( !pEntry )
     {
-        OSL_TRACE("No entry for selected position");
         return 0;
     }
     userData = (SFEntry*)pEntry->GetUserData();
@@ -887,19 +770,15 @@ IMPL_LINK( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox )
     Reference< browse::XBrowseNode > node;
     if ( userData )
     {
-        OSL_TRACE("Got userdata");
               node = userData->GetNode();
         CheckButtons( node );
     }
 
-    OSL_TRACE("Leaving SvxScriptOrgDialog::ScriptSelectHdl()");
     return 0;
 }
 
 IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
 {
-    OSL_TRACE("Entering SvxScriptOrgDialog::ButtonHdl()");
-
     if ( pButton == &aCloseButton )
     {
         StoreCurrentSelection();
@@ -918,7 +797,6 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
             SFEntry* userData = 0;
             if ( !pEntry )
             {
-                OSL_TRACE("No entry for selected position");
                 return 0;
             }
             userData = (SFEntry*)pEntry->GetUserData();
@@ -928,34 +806,24 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                 node = userData->GetNode();
                 if ( !node.is() )
                 {
-                    OSL_TRACE("No valid node ");
                     return 0;
                 }
                 if ( pButton == &aRunButton )
                 {
-                    OSL_TRACE("run button pressed ");
                     ::rtl::OUString tmpString;
                     Reference< beans::XPropertySet > xProp( node, UNO_QUERY );
                     Reference< provider::XScriptProvider > mspNode;
                     if( !xProp.is() )
                     {
-                        OSL_TRACE("no xprop ");
                         return 0;
                     }
-                    if ( pEntry )
+
+                    SvLBoxEntry* pParent = aScriptsBox.GetParent( pEntry );
+                    while ( pParent && !mspNode.is() )
                     {
-                        SvLBoxEntry* pLibEntry = aScriptsBox.GetParent( pEntry );
-                        if ( pLibEntry )
-                        {
-                            SvLBoxEntry* pMSPEntry = aScriptsBox.GetParent( pLibEntry );
-                            if ( pMSPEntry )
-                            {
-                    SFEntry* mspUserData = (SFEntry*)pMSPEntry->GetUserData();
-                                mspNode.set( mspUserData->GetNode() , UNO_QUERY );
-
-                            }
-                        }
-
+                        SFEntry* mspUserData = (SFEntry*)pParent->GetUserData();
+                        mspNode.set( mspUserData->GetNode() , UNO_QUERY );
+                        pParent = aScriptsBox.GetParent( pParent );
                     }
                     xProp->getPropertyValue( String::CreateFromAscii("URI" ) ) >>= tmpString;
                     const String scriptURL( tmpString );
@@ -1021,23 +889,19 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                 }
                 else if ( pButton == &aCreateButton )
                 {
-                    OSL_TRACE("New button pushed");
                     createEntry( pEntry );
                 }
                 else if ( pButton == &aDelButton )
                 {
-                    OSL_TRACE("Delete button pushed");
                     deleteEntry( pEntry );
                 }
                 else if ( pButton == &aRenameButton )
                 {
-                    OSL_TRACE("Rename button pushed");
                     renameEntry( pEntry );
                 }
             }
         }
     }
-    OSL_TRACE("Leaving SvxScriptOrgDialog::ButtonHdl()");
     return 0;
 }
 
@@ -1084,16 +948,22 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
 
         Sequence< Reference< browse::XBrowseNode > > childNodes;
         // no children => ok to create Parcel1 or Script1 without checking
-        if( node->hasChildNodes() == sal_False )
+        try
         {
-            OSL_TRACE("has no childnodes");
-            aNewName = aNewStdName;
-            aNewName += String::CreateFromInt32( i );
-            bValid = TRUE;
+            if( node->hasChildNodes() == sal_False )
+            {
+                aNewName = aNewStdName;
+                aNewName += String::CreateFromInt32( i );
+                bValid = TRUE;
+            }
+            else
+            {
+                childNodes = node->getChildNodes();
+            }
         }
-        else
+        catch ( Exception& e )
         {
-            childNodes = node->getChildNodes();
+            // ignore, will continue on with empty sequence
         }
 
         ::rtl::OUString extn;
@@ -1101,9 +971,6 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         {
             aNewName = aNewStdName;
             aNewName += String::CreateFromInt32( i );
-            OSL_TRACE("trying %s, %d",
-                ::rtl::OUStringToOString(
-                    aNewName, RTL_TEXTENCODING_ASCII_US ).pData->buffer, childNodes.getLength() );
             BOOL bFound = FALSE;
             if(childNodes.getLength() > 0 )
             {
@@ -1111,15 +978,11 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
                 sal_Int32 extnPos = nodeName.lastIndexOf( '.' );
                 if(extnPos>0)
                     extn = nodeName.copy(extnPos);
-                OSL_TRACE("extn is %s",
-                    ::rtl::OUStringToOString(
-                        extn, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             }
             for( sal_Int32 index = 0; index < childNodes.getLength(); index++ )
             {
                 if ( (aNewName+extn).equals( childNodes[index]->getName() ) )
                 {
-                    OSL_TRACE("has childnode %d",i);
                     bFound = TRUE;
                     break;
                 }
@@ -1130,18 +993,15 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
             }
             else
             {
-                OSL_TRACE("valid for %d",i);
                 bValid = TRUE;
             }
         }
 
-        OSL_TRACE("about to popup dialog");
         std::auto_ptr< InputDialog > xNewDlg( new InputDialog( static_cast<Window*>(this), nMode ) );
         xNewDlg->SetObjectName( aNewName );
 
         do
         {
-            OSL_TRACE("about to popup dialog (really)");
             if ( xNewDlg->Execute() && xNewDlg->GetObjectName().Len() )
             {
                 ::rtl::OUString aUserSuppliedName = xNewDlg->GetObjectName();
@@ -1175,8 +1035,6 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         // open up parent node (which ensures it's loaded)
         aScriptsBox.RequestingChilds( pEntry );
 
-        OSL_TRACE("create for other language using XInvocation....");
-        OSL_TRACE("creating with default name= %s",::rtl::OUStringToOString( aNewName, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         Sequence< Any > args( 1 );
         args[ 0 ] <<= aNewName;
         Sequence< Any > outArgs( 0 );
@@ -1198,7 +1056,6 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
     }
     if ( aChildNode.is() )
     {
-        OSL_TRACE("Create seemed to succeed ");
         String aChildName = aChildNode->getName();
         SvLBoxEntry* pNewEntry = NULL;
 
@@ -1234,7 +1091,6 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
     }
     else
     {
-        OSL_TRACE("Create seemed to fail");
         //ISSUE L10N & message from exception?
         String aError( m_createErrStr );
         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
@@ -1262,14 +1118,12 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
         }
         USHORT nMode = INPUTMODE_RENAME;
 
-        OSL_TRACE("about to popup dialog");
         std::auto_ptr< InputDialog > xNewDlg( new InputDialog( static_cast<Window*>(this), nMode ) );
         xNewDlg->SetObjectName( aNewName );
 
         BOOL bValid;
         do
         {
-            OSL_TRACE("about to popup dialog (really)");
             if ( xNewDlg->Execute() && xNewDlg->GetObjectName().Len() )
             {
                 ::rtl::OUString aUserSuppliedName = xNewDlg->GetObjectName();
@@ -1300,8 +1154,6 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
         }
         while ( !bValid );
 
-        OSL_TRACE("create for other language using XInvocation....");
-        OSL_TRACE("creating with default name= %s",::rtl::OUStringToOString( aNewName, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         Sequence< Any > args( 1 );
         args[ 0 ] <<= aNewName;
         Sequence< Any > outArgs( 0 );
@@ -1330,7 +1182,6 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
     }
     else
     {
-        OSL_TRACE("Rename seemed to fail");
         //ISSUE L10N & message from exception?
         String aError( m_renameErrStr );
         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
@@ -1355,7 +1206,6 @@ void SvxScriptOrgDialog::deleteEntry( SvLBoxEntry* pEntry )
     Reference< script::XInvocation > xInv( node, UNO_QUERY );
     if ( xInv.is() )
     {
-        OSL_TRACE("delete for other language using XInvocation....");
         Sequence< Any > args( 0 );
         Sequence< Any > outArgs( 0 );
         Sequence< sal_Int16 > outIndex;
@@ -1375,13 +1225,11 @@ void SvxScriptOrgDialog::deleteEntry( SvLBoxEntry* pEntry )
 
     if ( result == sal_True )
     {
-        OSL_TRACE("Delete worked, remove nodes from ui");
         aScriptsBox.deleteTree( pEntry );
         aScriptsBox.GetModel()->Remove( pEntry );
     }
     else
     {
-        OSL_TRACE("Delete failed");
         //ISSUE L10N & message from exception?
         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, m_delErrStr );
         aErrorBox.SetText( m_delErrTitleStr );
@@ -1393,7 +1241,6 @@ void SvxScriptOrgDialog::deleteEntry( SvLBoxEntry* pEntry )
 BOOL SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& xProps,
                 ::rtl::OUString& propName )
 {
-    OSL_TRACE("Entering getBoolProperty");
     BOOL result = false;
     try
     {
@@ -1403,10 +1250,8 @@ BOOL SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& xPro
     }
     catch ( Exception& e )
     {
-        OSL_TRACE("caught exception getBoolProperty");
         return result;
     }
-    OSL_TRACE("Leaving getBoolProperty");
     return result;
 }
 
@@ -1419,15 +1264,24 @@ String SvxScriptOrgDialog::getListOfChildren( Reference< browse::XBrowseNode > n
         result.Append( String::CreateFromAscii( "\t" ) );
     }
     result.Append( String( node->getName() ) );
-    if ( node->hasChildNodes() == sal_True )
+
+    try
     {
-        Sequence< Reference< browse::XBrowseNode > > children
-            = node->getChildNodes();
-        for ( sal_Int32 n = 0; n < children.getLength(); n++ )
+        if ( node->hasChildNodes() == sal_True )
         {
-            result.Append( getListOfChildren( children[ n ] , depth+1 ) );
+            Sequence< Reference< browse::XBrowseNode > > children
+                = node->getChildNodes();
+            for ( sal_Int32 n = 0; n < children.getLength(); n++ )
+            {
+                result.Append( getListOfChildren( children[ n ] , depth+1 ) );
+            }
         }
     }
+    catch ( Exception& e )
+    {
+        // ignore, will return an empty string
+    }
+
     return result;
 }
 
@@ -1447,16 +1301,12 @@ void SvxScriptOrgDialog::StoreCurrentSelection()
                 aDescription.Insert( ';', 0 );
         }
         ::rtl::OUString sDesc( aDescription );
-        OSL_TRACE( "entry to store is %s, for lang %s", ::rtl::OUStringToOString( sDesc , RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-        ::rtl::OUStringToOString( m_sLanguage , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
         m_lastSelection[ m_sLanguage ] = sDesc;
     }
 }
 
 void SvxScriptOrgDialog::RestorePreviousSelection()
 {
-    OSL_TRACE( "entry to restore is %s, for lang %s", ::rtl::OUStringToOString(  m_lastSelection[ m_sLanguage ], RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-    ::rtl::OUStringToOString( m_sLanguage , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
     String aStoredEntry = String( m_lastSelection[ m_sLanguage ] );
     if( aStoredEntry.Len() <= 0 )
         return;
@@ -1467,11 +1317,9 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
         String aTmp( aStoredEntry.GetToken( 0, ';', nIndex ) );
         SvLBoxEntry* pTmpEntry = aScriptsBox.FirstChild( pEntry );
         ::rtl::OUString debugStr(aTmp);
-        OSL_TRACE( "looking for token %s", ::rtl::OUStringToOString( debugStr , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
         while ( pTmpEntry )
         {
             debugStr = ::rtl::OUString(aScriptsBox.GetEntryText( pTmpEntry ));
-            OSL_TRACE( "checking %s", ::rtl::OUStringToOString( debugStr , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
             if ( aScriptsBox.GetEntryText( pTmpEntry ) == aTmp )
             {
                 pEntry = pTmpEntry;
@@ -1714,12 +1562,10 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     if ( aException.getValueType() ==
          ::getCppuType( (const reflection::InvocationTargetException* ) NULL ) )
     {
-        OSL_TRACE("Detected InvocationTarget");
         reflection::InvocationTargetException ite;
         aException >>= ite;
         if ( ite.TargetException.getValueType() == ::getCppuType( ( const provider::ScriptErrorRaisedException* ) NULL ) )
         {
-            OSL_TRACE("Detected ScriptErrorRaisedException in InvocationTarget");
             // Error raised by script
             provider::ScriptErrorRaisedException scriptError;
             ite.TargetException >>= scriptError;
@@ -1727,7 +1573,6 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
         }
         else if ( ite.TargetException.getValueType() == ::getCppuType( ( const provider::ScriptExceptionRaisedException* ) NULL ) )
         {
-            OSL_TRACE("Detected ScriptExceptionRaisedException in InvocationTarget");
             // Exception raised by script
             provider::ScriptExceptionRaisedException scriptException;
             ite.TargetException >>= scriptException;
@@ -1737,13 +1582,11 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
         {
             // Unknown error, shouldn't happen
             // OSL_ASSERT(...)
-            OSL_TRACE("Unknown error");
         }
 
     }
     else if ( aException.getValueType() == ::getCppuType( ( const provider::ScriptFrameworkErrorException* ) NULL ) )
     {
-        OSL_TRACE("Detected ScriptFrameworkErrorException ");
         // A Script Framework error has occured
         provider::ScriptFrameworkErrorException sfe;
         aException >>= sfe;
