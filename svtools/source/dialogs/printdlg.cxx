@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-10 15:07:14 $
+ *  last change: $Author: gt $ $Date: 2002-10-30 12:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,13 @@
 #include <prnsetup.hxx>
 #include <printdlg.hxx>
 #include <svtdata.hxx>
+
+#ifndef _PICKERHELPER_HXX
+#include "pickerhelper.hxx"
+#endif
+#ifndef _SVT_HELPID_HRC
+#include "helpid.hrc"
+#endif
 
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -421,6 +428,8 @@ IMPL_LINK( PrintDialog, ImplBrowseHdl, void*, EMPTYARG )
         Reference< XFilterManager > xFilterMgr( xFilePicker, UNO_QUERY );
         if( xInit.is() && xFilePicker.is() && xFilterMgr.is() )
         {
+            svt::SetDialogHelpId( xFilePicker, HID_PRINTDIALOG_TOFILE );
+
             Sequence< Any > aServiceType( 1 );
             aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;
             xInit->initialize( aServiceType );
