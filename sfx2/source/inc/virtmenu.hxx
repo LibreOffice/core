@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:37:33 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ public:
     String          GetItemText( USHORT nId ) const;
     String          GetItemHelpText( USHORT nId ) const;
 
-    void            InvalidateKeyCodes();
+    //void            InvalidateKeyCodes();
 
     SfxVirtualMenu* GetParentMenu() const { return pParent; }
     void            SetParentMenu( SfxVirtualMenu* pNewParent )
