@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-07 14:47:33 $
+ *  last change: $Author: cd $ $Date: 2002-04-26 05:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@
 #include "menu.hrc"
 #include "viewfrm.hxx"
 #include "viewsh.hxx"
+#include "objface.hxx"
 
 static const USHORT nCompatVersion = 4;
 static const USHORT nVersion = 5;
@@ -1226,6 +1227,58 @@ BOOL SfxMenuBarManager::Load( SvStream& rStream, BOOL bOLEServer )
 }
 */
 
+// Menubars loaded from XML configuration doesn't have correct item ids as
+// the framework based implementation has no access to the SlotPool. This method
+// remaps the uno command names to the correct SlotIDs.
+void SfxMenuBarManager::RestoreSlotIds( Menu* pMenu, USHORT nPopupMenuId )
+{
+    USHORT nCount = pMenu->GetItemCount();
+    for ( USHORT nSVPos = 0; nSVPos < nCount; nSVPos++ )
+    {
+        USHORT nId = pMenu->GetItemId( nSVPos );
+
+        PopupMenu* pPopupMenu = pMenu->GetPopupMenu( nId );
+        if ( pPopupMenu )
+            RestoreSlotIds( pPopupMenu, nId );
+        else
+        {
+            if ( nId < SID_SFX_START )
+            {
+                String aLabel = pMenu->GetItemText( nId );
+                String aCommand = pMenu->GetItemCommand( nId );
+                if ( aCommand.CompareToAscii(".uno:", 5 ) == COMPARE_EQUAL )
+                {
+                    // Non mapped ID, have to retrieve ID from command name through matching it with SlotPool entries
+                    SfxShell *pShell=0;
+                    USHORT nIdx;
+                    for (nIdx=0; (pShell=pBindings->GetDispatcher()->GetShell(nIdx)); nIdx++)
+                    {
+                        const SfxInterface *pIFace = pShell->GetInterface();
+                        const SfxSlot* pSlot = pIFace->GetSlot( aCommand );
+                        if ( pSlot )
+                        {
+                            USHORT          nNewId      = pSlot->GetSlotId();
+                            ULONG           nUserValue  = pMenu->GetUserValue( nId );
+                            MenuItemBits    nBits       = pMenu->GetItemBits( nId );
+
+                            //Special case for open doc
+                            if ( nPopupMenuId == SID_PICKLIST &&
+                                 aCommand.CompareToAscii( ".uno:Open" ) == COMPARE_EQUAL )
+                                nNewId = SID_OPENDOC;
+
+                            // There is no VCL method to reset the item ID, so I have to remove/insert the menu entry
+                            pMenu->RemoveItem( nSVPos );
+                            pMenu->InsertItem( nNewId, aLabel, nBits, nSVPos );
+                            pMenu->SetUserValue( nNewId, nUserValue );
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 MenuBar* SfxMenuBarManager::LoadMenuBar( SvStream& rStream )
 {
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xInputStream =
@@ -1559,6 +1612,8 @@ int SfxMenuBarManager::Load( SotStorage& rStorage )
         Menu *pSVMenu = LoadMenuBar( *xStream );
         if ( pSVMenu )
         {
+            // Restore slot ids
+            RestoreSlotIds( pSVMenu, 0 );
             Construct_Impl( pSVMenu, FALSE );
             SetDefault( FALSE );
             return ERR_OK;
