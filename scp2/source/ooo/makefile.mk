@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2004-10-18 14:43:19 $
+#   last change: $Author: rt $ $Date: 2004-10-22 08:00:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,6 +112,10 @@ SCPDEFS+=-DUSE_SYSTEM_STL
 
 .IF "$(WITH_MOZILLA)" == "NO"
 SCPDEFS+=-DWITHOUT_MOZILA
+.IF "$(LDAPSDKINCLUDES)" == ""
+# see extensions/source/config/ldap
+SCPDEFS+=-DWITHOUT_LDAP
+.ENDIF
 .ENDIF
 
 .IF "$(SYSTEM_CURL)" == "YES"
