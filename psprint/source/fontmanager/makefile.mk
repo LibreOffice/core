@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-20 15:00:13 $
+#   last change: $Author: obo $ $Date: 2004-03-15 12:03:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,17 +66,22 @@ ENABLE_EXCEPTIONS=TRUE
 PRJNAME=psprint
 TARGET=fontman
 
-ENVCFLAGS+= -I..$/fontsubset
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+CFLAGS+= -I..$/fontsubset
+
+.IF "$(ENABLE_FONTCONFIG)" != ""
+CDEFS += -DENABLE_FONTCONFIG
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
     $(SLO)$/fontmanager.obj		\
     $(SLO)$/fontcache.obj		\
+    $(SLO)$/fontconfig.obj		\
     $(SLO)$/parseAFM.obj
 
 .IF "$(OS)$(CPU)"=="SOLARISI"
