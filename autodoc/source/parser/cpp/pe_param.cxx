@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_param.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:19 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,11 +114,14 @@ PE_Parameter::Setup_StatusFunctions()
                                               &PE_Parameter::On_start_Type,
                                               &PE_Parameter::On_start_Type,
                                               &PE_Parameter::On_start_Type,
+
                                               &PE_Parameter::On_start_Type,
                                               &PE_Parameter::On_start_Type,
                                               &PE_Parameter::On_start_Bracket_Right,
                                               &PE_Parameter::On_start_Type,
                                               &PE_Parameter::On_start_Ellipse,
+
+                                              &PE_Parameter::On_start_Type,
                                               &PE_Parameter::On_start_Type,
                                               &PE_Parameter::On_start_Type };
     static INT16 stateT_start[] =           { Tid_Identifier,
@@ -126,13 +129,17 @@ PE_Parameter::Setup_StatusFunctions()
                                               Tid_struct,
                                               Tid_union,
                                               Tid_enum,
+
                                               Tid_const,
                                               Tid_volatile,
                                               Tid_Bracket_Right,
                                               Tid_DoubleColon,
                                               Tid_Ellipse,
+
                                               Tid_BuiltInType,
-                                              Tid_TypeSpecializer };
+                                              Tid_TypeSpecializer,
+                                              Tid_typename };
+
     static F_Tok stateF_expectName[] =      { &PE_Parameter::On_expectName_Identifier,
                                               &PE_Parameter::On_expectName_ArrayBracket_Left,
                                               &PE_Parameter::On_expectName_Bracket_Right,

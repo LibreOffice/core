@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_type.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:19 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,8 @@ PE_Type::Setup_StatusFunctions()
                                                   &PE_Type::On_start_Bracket_Right,
                                                   &PE_Type::On_start_DoubleColon,
                                                   &PE_Type::On_start_BuiltInType,
-                                                  &PE_Type::On_start_TypeSpecializer };
+                                                  &PE_Type::On_start_TypeSpecializer,
+                                                  &PE_Type::On_start_typename };
     static INT16 stateT_start[] =               { Tid_Identifier,
                                                   Tid_class,
                                                   Tid_struct,
@@ -154,7 +155,8 @@ PE_Type::Setup_StatusFunctions()
                                                   Tid_Bracket_Right,
                                                   Tid_DoubleColon,
                                                   Tid_BuiltInType,
-                                                  Tid_TypeSpecializer };
+                                                  Tid_TypeSpecializer,
+                                                  Tid_typename };
 
     static F_Tok stateF_expect_namesegment[] =  { &PE_Type::On_expect_namesegment_Identifier,
                                                   &PE_Type::On_expect_namesegment_Identifier };
@@ -375,6 +377,12 @@ PE_Type::On_start_TypeSpecializer(const char * i_sText)
         pType->Set_Signed();
     else
         csv_assert(false);
+}
+
+void
+PE_Type::On_start_typename(const char *)
+{
+    SetTokenResult(done,stay);
 }
 
 void

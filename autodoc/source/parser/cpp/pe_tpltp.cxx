@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_tpltp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:19 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,10 @@ PE_TemplateTop::Setup_StatusFunctions()
     static F_Tok stateF_start[] =           { &PE_TemplateTop::On_start_Less };
     static INT16 stateT_start[] =           { Tid_Less };
 
-                                            // KORR_FUTURE : add "typename".
-    static F_Tok stateF_expect_qualifier[]= { &PE_TemplateTop::On_expect_qualifier_class };
-    static INT16 stateT_expect_qualifier[]= { Tid_class };
+    static F_Tok stateF_expect_qualifier[]= { &PE_TemplateTop::On_expect_qualifier_ClassOrTypename,
+                                              &PE_TemplateTop::On_expect_qualifier_ClassOrTypename };
+    static INT16 stateT_expect_qualifier[]= { Tid_class,
+                                              Tid_typename };
 
     static F_Tok stateF_expect_name[] =     { &PE_TemplateTop::On_expect_name_Identifier };
     static INT16 stateT_expect_name[] =     { Tid_Identifier };
@@ -146,7 +147,7 @@ PE_TemplateTop::On_start_Less( const char *)
 }
 
 void
-PE_TemplateTop::On_expect_qualifier_class( const char *)
+PE_TemplateTop::On_expect_qualifier_ClassOrTypename( const char *)
 {
     SetTokenResult(done, stay);
     pStati->SetCur(expect_name);
