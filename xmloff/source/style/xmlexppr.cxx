@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-08 13:12:45 $
+ *  last change: $Author: dvo $ $Date: 2002-04-24 10:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,7 +526,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                     pPropIter++;
                     pValues++;
                 }
-                delete aPropIters;
+                delete[] aPropIters;
             }
         }
         else
