@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Factories.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 10:53:19 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,36 +62,31 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Factories" oor:package="org.openoffice.Office.UI" xml:lang="en-US"> <info>
 		<author>CD</author>
-		<desc xml:lang="en-US">Contains implementation of user interface element factories.</desc>
+		<desc >Contains implementation of user interface element factories.</desc>
 	</info>
 	<templates>
 		<group oor:name="FactoryType">
 			<info>
-				<desc xml:lang="en-US">Describes a factory implementation.</desc>
-				<desc xml:lang="zh-CN">Describes a factory implementation.</desc>
+				<desc>Describes a factory implementation.</desc>
 			</info>
 			<prop oor:name="Type" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies a user interface element type that a factory can create.</desc>
-					<desc xml:lang="zh-CN">Specifies a user interface element type that a factory can create.</desc>
+					<desc>Specifies a user interface element type that a factory can create.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Name" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies a name of a single user interface element.</desc>
-					<desc xml:lang="zh-CN">Specifies a name of a single user interface element.</desc>
+					<desc>Specifies a name of a single user interface element.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Module" oor:type="xs:string">
 			    <info>
-			        <desc xml:lang="en-US">Specifies a module that the factory is associated with. An empty string means that the factory can be used for every module.</desc>
-			    	<desc xml:lang="zh-CN">Specifies a module that the factory is associated with. An empty string means that the factory can be used for every module.</desc>
+			        <desc>Specifies a module that the factory is associated with. An empty string means that the factory can be used for every module.</desc>
 			    </info>
 			</prop>
 			<prop oor:name="FactoryImplementation" oor:type="xs:string">
 			    <info>
-			        <desc xml:lang="en-US">Specifies the UNO service implementation name to use to create a specified user interface element.</desc>
-                	<desc xml:lang="zh-CN">Specifies the UNO service implementation name to use to create a specified user interface element.</desc>
+			        <desc>Specifies the UNO service implementation name to use to create a specified user interface element.</desc>
                 </info>
             </prop>
 		</group>
@@ -99,13 +94,11 @@
 	<component>
 		<group oor:name="Registered">
 			<info>
-				<desc xml:lang="en-US">Contains all registered factories for user interface elements.</desc>
-				<desc xml:lang="zh-CN">Contains all registered factories for user interface elements.</desc>
+				<desc>Contains all registered factories for user interface elements.</desc>
 			</info>
 			<set oor:name="UIElementFactories" oor:node-type="FactoryType">
 				<info>
-					<desc xml:lang="en-US">Contains UNO component implementation names that implements a user interface element factory service.</desc>
-					<desc xml:lang="zh-CN">Contains UNO component implementation names that implements a user interface element factory service.</desc>
+					<desc>Contains UNO component implementation names that implements a user interface element factory service.</desc>
 				</info>
 			</set>
 		</group>
