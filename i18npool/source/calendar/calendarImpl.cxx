@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-12 17:25:26 $
+ *  last change: $Author: er $ $Date: 2002-07-16 09:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
+using namespace ::drafts::com::sun::star::i18n;
 using namespace ::rtl;
 
 #define ERROR RuntimeException()
