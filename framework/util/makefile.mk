@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: cd $ $Date: 2001-05-23 11:58:29 $
+#   last change: $Author: cd $ $Date: 2001-05-23 15:01:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,7 +129,8 @@ SHL1OBJS=		$(SLO)$/registerservices.obj		\
                 $(SLO)$/omenudispatcher.obj			\
                  $(SLO)$/timerhelper.obj				\
                 $(SLO)$/helpagentdispatcher.obj		\
-                $(SLO)$/menumanager.obj
+                $(SLO)$/menumanager.obj			\
+                $(SLO)$/xmldocproperties.obj
 
 SHL1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
