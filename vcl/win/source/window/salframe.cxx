@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:12:31 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 15:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3302,22 +3302,39 @@ static UINT ImplStrToNum( const sal_Char* pStr )
 
 // -----------------------------------------------------------------------
 
+LanguageType SalFrame::GetInputLanguage()
+{
+    if( !maFrameData.mnInputLang )
+        return LANGUAGE_DONTKNOW;
+    else
+        return (LanguageType) maFrameData.mnInputLang;
+}
+
+// -----------------------------------------------------------------------
+
 static sal_Unicode ImplGetCharCode( SalFrame* pFrame, WPARAM nCharCode )
 {
+    BOOL bLanguageChange = FALSE;
+    UINT nLang = LOWORD( GetKeyboardLayout( 0 ) );
+    if ( nLang && nLang != pFrame->maFrameData.mnInputLang )
+    {
+        // keep input lang up-to-date
+        pFrame->maFrameData.mnInputLang = nLang;
+        bLanguageChange = TRUE;
+    }
+
     // If we are on Windows NT we use Unicode FrameProcs and so we
     // get Unicode charcodes directly from Windows
     if ( aSalShlData.mbWNT )
         return (sal_Unicode)nCharCode;
 
-    UINT nLang = LOWORD( GetKeyboardLayout( 0 ) );
     if ( !nLang )
     {
         pFrame->maFrameData.mnInputLang     = 0;
         pFrame->maFrameData.mnInputCodePage = GetACP();
     }
-    else if ( nLang != pFrame->maFrameData.mnInputLang )
+    else if ( bLanguageChange )
     {
-        pFrame->maFrameData.mnInputLang = nLang;
         sal_Char aBuf[10];
         if ( GetLocaleInfoA( MAKELCID( nLang, SORT_DEFAULT ), LOCALE_IDEFAULTANSICODEPAGE,
                              aBuf, sizeof(aBuf) ) > 0 )
