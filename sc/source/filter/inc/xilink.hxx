@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:41:56 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ Classes for import of different kinds of internal/external references.
     Example: If the list contains 3;1;2 this means that the second sheet in the file
     was created first, than the third sheet in the file was created and finally the
     first sheet. */
-class XclImpTabIdBuffer
+class XclImpTabInfo
 {
 public:
     /** Reads the TABID record. */
@@ -122,16 +122,16 @@ public:
 
     inline const String&        GetXclName() const { return maXclName; }
     inline const String&        GetScName() const { return maScName; }
-    inline sal_uInt16           GetScTabNum() const { return mnScTab; }
+    inline USHORT               GetScTab() const { return mnScTab; }
     inline const ScRangeData*   GetScRangeData() const { return mpScData; }
-    inline bool                 IsGlobal() const { return mnScTab == EXC_NOTAB; }
+    inline bool                 IsGlobal() const { return mnScTab == SCNOTAB; }
 
 private:
     String                      maXclName;      /// Original name read from the file.
     String                      maScName;       /// Name inserted into the Calc document.
     const ScRangeData*          mpScData;       /// Pointer to Calc defined name (no ownership).
     sal_Unicode                 mcBuiltIn;      /// Excel built-in name index.
-    sal_uInt16                  mnScTab;        /// Sheet index of local names.
+    USHORT                      mnScTab;        /// Calc sheet index of local names.
 };
 
 
@@ -151,10 +151,10 @@ public:
     void                        ReadName( XclImpStream& rStrm );
 
     /** Tries to find the name used in Calc, based on the original Excel defined name.
-        @param nScTab  The sheet index for local names or EXC_NOTAB for global names.
+        @param nScTab  The sheet index for local names or SCNOTAB for global names.
         If no local name is found, tries to find a matching global name.
         @return  Pointer to the defined name or 0 on error. */
-    const XclImpName*           FindName( const String& rXclName, sal_uInt16 nScTab = EXC_NOTAB ) const;
+    const XclImpName*           FindName( const String& rXclName, USHORT nScTab = SCNOTAB ) const;
 
 private:
     typedef ScfDelList< XclImpName > XclImpNameList;
@@ -244,7 +244,7 @@ public:
     /** Returns the Calc sheet index range of the specified XTI entry.
         @return  true = XTI data found, returned sheet index range is valid. */
     bool                        GetScTabRange(
-                                    sal_uInt16& rnFirstScTab, sal_uInt16& rnLastScTab,
+                                    USHORT& rnScTabFirst, USHORT& rnScTabLast,
                                     sal_uInt16 nXtiIndex ) const;
     /** Returns the specified external name or 0 on error. */
     const XclImpExtName*        GetExternName( sal_uInt16 nXtiIndex, sal_uInt16 nExtName ) const;
@@ -256,7 +256,7 @@ public:
 
     /** Returns the Calc sheet index of a table in an external document.
         @return  Calc sheet index or EXC_TAB_INVALID on error. */
-    sal_uInt16                  GetScTab( const String& rUrl, const String& rTabName ) const;
+    USHORT                      GetScTab( const String& rUrl, const String& rTabName ) const;
 
 private:
     typedef ::std::auto_ptr< XclImpLinkManager_Impl > XclImpLinkManager_ImplPtr;
