@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPackage.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:02:07 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ module com { module sun { module star { module deployment {
 /** Objects of this service reflect a bound package and are issued by a
     <type>PackageRegistryBackend</type>.
 
-    @since #i20304#
+    @since OOo 2.0.0
 */
 interface XPackage
 {
