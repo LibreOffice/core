@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-10 08:23:32 $
+ *  last change: $Author: oj $ $Date: 2002-05-22 10:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,26 +599,29 @@ void OTableWindow::Remove()
     pTabWinCont->RemoveTabWin( this );
     pTabWinCont->Invalidate();
 }
-
 //------------------------------------------------------------------------------
-void OTableWindow::KeyInput( const KeyEvent& rEvt )
+BOOL OTableWindow::HandleKeyInput( const KeyEvent& rEvt )
 {
     const KeyCode& rCode = rEvt.GetKeyCode();
     USHORT nCode = rCode.GetCode();
     BOOL   bShift = rCode.IsShift();
     BOOL   bCtrl = rCode.IsMod1();
 
-    if ( rCode.IsMod2() )
-    {
-        m_nMoveCount        = 0; // reset our move ment count
-        m_nMoveIncrement    = 1;
-    }
+    BOOL bHandle = FALSE;
+
+//  if ( rCode.IsMod2() )
+//  {
+//      m_nMoveCount        = 0; // reset our move ment count
+//      m_nMoveIncrement    = 1;
+//  }
     if( !bCtrl && !bShift && (nCode==KEY_DELETE) )
     {
         Remove();
+        bHandle = TRUE;
     }
-    else
-        Window::KeyInput( rEvt );
+//  else
+//      Window::KeyInput( rEvt );
+    return bHandle;
 }
 
 //------------------------------------------------------------------------------
@@ -752,7 +755,7 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
                         aStartPoint.X()  += m_nMoveIncrement;
                         break;
                 }
-                if( bHandled )
+                if( bHandled )//&& aStartPoint.X() > -1 && aStartPoint.Y() > -1 )
                 {
                     // remember how often the user moved our window
                     ++m_nMoveCount;
@@ -761,15 +764,58 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
                     else if( m_nMoveCount > 15 )
                         m_nMoveCount = m_nMoveIncrement = 20;
 
+                    Point aOldDataPoint = GetData()->GetPosition();
+                    Point aNewDataPoint = aStartPoint + getTableView()->GetScrollOffset();
+                    if ( aNewDataPoint.X() > -1 && aNewDataPoint.Y() > -1 )
+                    {
+                        OJoinTableView* pView = getTableView();
+                        if ( pView->isMovementAllowed(aNewDataPoint, GetData()->GetSize()) )
+                        {
+                            SetPosPixel(aStartPoint);
 
-                    SetPosPixel(aStartPoint);
-                    getTableView()->TabWinMoved(this,aStartPoint);
-                    Invalidate(INVALIDATE_NOCHILDREN);
-                    getDesignView()->getController()->setModified( sal_True );
+                            // aNewDataPoint can not be used here because SetPosPixel reset it
+                            pView->EnsureVisible(GetData()->GetPosition(), GetData()->GetSize());
+                            pView->TabWinMoved(this,aOldDataPoint);
+                            Invalidate(INVALIDATE_NOCHILDREN);
+                            getDesignView()->getController()->setModified( sal_True );
+                        }
+                        else
+                        {
+                            m_nMoveCount        = 0; // reset our movement count
+                            m_nMoveIncrement    = 1;
+                        }
+                    }
+                    else
+                    {
+                        m_nMoveCount        = 0; // reset our movement count
+                        m_nMoveIncrement    = 1;
+                    }
+                }
+                else
+                {
+                    m_nMoveCount        = 0; // reset our movement count
+                    m_nMoveIncrement    = 1;
                 }
             }
+            else
+            {
+                m_nMoveCount        = 0; // reset our movement count
+                m_nMoveIncrement    = 1;
+            }
         }
-        break;
+            break;
+        case EVENT_KEYUP:
+        {
+            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+            const KeyCode& rCode = pKeyEvent->GetKeyCode();
+            USHORT nKeyCode = rCode.GetCode();
+            if ( rCode.IsMod2() && nKeyCode != KEY_UP && nKeyCode != KEY_DOWN && nKeyCode != KEY_LEFT && nKeyCode != KEY_RIGHT )
+            {
+                m_nMoveCount        = 0; // reset our movement count
+                m_nMoveIncrement    = 1;
+            }
+        }
+            break;
     }
     if (!bHandled)
         return Window::PreNotify(rNEvt);
