@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:47:22 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ french ] = "Effets d'animation de texte";
         Text[ spanish ] = "Efectos de animación de texto";
         Text[ finnish ] = "Text Animation Effects";
-        Text[ italian ] = "Text Animation Effects";
+        Text[ italian ] = "Effetto animazione";
         Text[ danish ] = "Text Animation Effects";
         Text[ swedish ] = "Effekter animerad text";
         Text[ polish ] = "Efekty animowanego tekstu";
@@ -161,7 +161,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ french ] = "Effet";
         Text[ spanish ] = "Efecto";
         Text[ finnish ] = "Effect";
-        Text[ italian ] = "Effect";
+        Text[ italian ] = "Effetto";
         Text[ danish ] = "Effect";
         Text[ swedish ] = "Effekt";
         Text[ polish ] = "Efekt";
@@ -386,7 +386,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ french ] = "Direction";
         Text[ spanish ] = "Orientación";
         Text[ finnish ] = "Direction";
-        Text[ italian ] = "Direction";
+        Text[ italian ] = "Direzione di scorrimento";
         Text[ danish ] = "Direction";
         Text[ swedish ] = "Riktning";
         Text[ polish ] = "Orientacja";
@@ -538,7 +538,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ french ] = "Propriétés";
         Text[ spanish ] = "Propiedades";
         Text[ finnish ] = "Properties";
-        Text[ italian ] = "Properties";
+        Text[ italian ] = "Proprietà";
         Text[ danish ] = "Properties";
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W³aœciwoœci";
@@ -620,7 +620,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text = "Animationsdurchläufe" ;
         Text [ ENGLISH ] = "Count" ;
         Text [ english_us ] = "Count" ;
-        Text [ italian ] = "Numero" ;
+        Text [ italian ] = "Passaggi animazione" ;
         Text [ spanish ] = "Cantidad" ;
         Text [ french ] = "Cycles d'animation" ;
         Text [ dutch ] = "Aantal" ;
@@ -948,4 +948,5 @@ TabDialog RID_SVXDLG_TEXT
     Text[ finnish ] = "Teksti";
 };
  // ******************************************************************* EOF
+
 
