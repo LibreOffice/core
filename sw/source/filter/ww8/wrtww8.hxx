@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:26:13 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,11 @@ private:
     HdFtPlcDrawObj& operator=(const HdFtPlcDrawObj&);
 };
 
+namespace ww
+{
+    typedef std::vector<sal_uInt8> bytes;
+}
+
 // der WW8-Writer
 class SwWW8Writer: public StgWriter
 {
@@ -637,6 +642,15 @@ public:
         bool bAddZero);
     static void WriteString8(SvStream& rStrm, const String& rStr,
         bool bAddZero, rtl_TextEncoding eCodeSet);
+
+#if 1
+    //Prefer ww::bytes to WW8Bytes, migrate away from the other ones.
+    static void InsUInt16(ww::bytes &rO, sal_uInt16 n);
+    static void InsUInt32(ww::bytes &rO, sal_uInt32 n);
+    static void InsAsString16(ww::bytes &rO, const String& rStr);
+    static void InsAsString8(ww::bytes & O, const String& rStr,
+        rtl_TextEncoding eCodeSet);
+#endif
 
     static void InsUInt16( WW8Bytes& rO, UINT16 );
     static void InsUInt32( WW8Bytes& rO, UINT32 );
