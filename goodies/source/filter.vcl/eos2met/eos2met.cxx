@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eos2met.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:11:34 $
+ *  last change: $Author: sj $ $Date: 2002-07-04 15:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1799,7 +1799,13 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     METSetMix(eGDIRasterOp);
                     METSetColor(aGDILineColor);
                     METBeginPath(1);
-                    METLine(pA->GetPolygon());
+                    Polygon aSimplePoly;
+                    const Polygon& rPoly = pA->GetPolygon();
+                    if ( rPoly.HasFlags() )
+                        rPoly.GetSimple( aSimplePoly );
+                    else
+                        aSimplePoly = rPoly;
+                    METLine( aSimplePoly );
                     METEndPath();
                     METOutlinePath(1);
 
@@ -1812,14 +1818,19 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             case META_POLYGON_ACTION:
             {
                 const MetaPolygonAction* pA = (const MetaPolygonAction*) pMA;
-
+                Polygon aSimplePoly;
+                const Polygon& rPoly = pA->GetPolygon();
+                if ( rPoly.HasFlags() )
+                    rPoly.GetSimple( aSimplePoly );
+                else
+                    aSimplePoly = rPoly;
                 if( aGDIFillColor != Color( COL_TRANSPARENT ) )
                 {
                     METSetMix(eGDIRasterOp);
                     METSetColor(aGDIFillColor );
                     METSetBackgroundColor(aGDIFillColor );
                     METBeginPath(1);
-                    METLine(pA->GetPolygon());
+                    METLine( aSimplePoly );
                     METEndPath();
                     METFillPath(1);
                 }
@@ -1829,7 +1840,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     METSetMix(eGDIRasterOp);
                     METSetColor(aGDILineColor );
                     METBeginPath(1);
-                    METLine(pA->GetPolygon());
+                    METLine( aSimplePoly );
                     METEndPath();
                     METOutlinePath(1);
                 }
@@ -1840,13 +1851,24 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             {
                 const MetaPolyPolygonAction* pA = (const MetaPolyPolygonAction*) pMA;
 
+                PolyPolygon aSimplePolyPoly( pA->GetPolyPolygon() );
+                sal_uInt16 i, nCount = aSimplePolyPoly.Count();
+                for ( i = 0; i < nCount; i++ )
+                {
+                    if ( aSimplePolyPoly[ i ].HasFlags() )
+                    {
+                        Polygon aSimplePoly;
+                        aSimplePolyPoly[ i ].GetSimple( aSimplePoly );
+                        aSimplePolyPoly[ i ] = aSimplePoly;
+                    }
+                }
                 if( aGDIFillColor != Color( COL_TRANSPARENT ) )
                 {
                     METSetMix(eGDIRasterOp);
                     METSetColor(aGDIFillColor);
                     METSetBackgroundColor(aGDIFillColor);
                     METBeginPath(1);
-                    METLine(pA->GetPolyPolygon());
+                    METLine( aSimplePolyPoly );
                     METEndPath();
                     METFillPath(1);
                 }
@@ -1856,7 +1878,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     METSetMix(eGDIRasterOp);
                     METSetColor(aGDILineColor);
                     METBeginPath(1);
-                    METLine(pA->GetPolyPolygon());
+                    METLine( aSimplePolyPoly );
                     METEndPath();
                     METOutlinePath(1);
                 }
