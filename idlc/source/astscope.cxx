@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astscope.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 13:07:49 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 16:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,12 +212,16 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
 
     if ( bFindFirstScope && (firstScope != scopedName) )
     {
-        sal_Int32 nIndex = 1;
+        sal_Int32 nIndex = 0;
+        sal_Int32 nOffset = 2;
         do
         {
             pScope = declAsScope(pDecl);
             if( pScope )
-                pDecl = pScope->lookupByNameLocal(scopedName.getToken(1, ':', nIndex ));
+            {
+                pDecl = pScope->lookupByNameLocal(scopedName.getToken(nOffset, ':', nIndex ));
+                nOffset = 1;
+            }
             if( !pDecl )
                 return NULL;
         } while( nIndex != -1 );

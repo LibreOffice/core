@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdeclaration.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 13:07:49 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 16:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ void AstDeclaration::setName(const ::rtl::OString& name)
 {
     m_scopedName = name;
     sal_Int32 nIndex = name.lastIndexOf( ':' );
-    m_localName = name.copy( nIndex != -1 ? nIndex+1 : 0 );
+    m_localName = name.copy( nIndex+1 );
 
 // Huh ? There is always at least one token
 
