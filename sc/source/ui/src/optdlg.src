@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:30:00 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,7 @@ TabPage RID_SCPAGE_CALC
         Text [ norwegian ] = "~Circular References" ;
         Text [ italian ] = "Riferimenti ~circolari" ;
         Text [ portuguese_brazilian ] = "~Circular References" ;
-        Text [ portuguese ] = "~Referência iteractivas" ;
+        Text [ portuguese ] = "~Referências circulares" ;
         Text [ finnish ] = "~Circular References" ;
         Text [ danish ] = "Cirkulære referencer" ;
         Text [ french ] = "Références circulaires" ;
@@ -1041,7 +1041,7 @@ TabPage RID_SCPAGE_CONTENT
         Text = "Linien" ;
         Text [ ENGLISH ] = "Visual aids" ;
         Text[ english_us ] = "Lines";
-        Text[ portuguese ] = "Visual aids";
+        Text[ portuguese ] = "Linhas";
         Text[ russian ] = "Ëèíèè";
         Text[ greek ] = "Ãñáììİò";
         Text[ dutch ] = "Visual aids";
@@ -1156,7 +1156,7 @@ TabPage RID_SCPAGE_CONTENT
         Text = "H~ilfslinien während der Bewegung" ;
         Text [ ENGLISH ] = "Guides while moving" ;
         Text[ english_us ] = "Guides while moving";
-        Text[ portuguese ] = "Guides while moving";
+        Text[ portuguese ] = "Guias durante o movimento";
         Text[ russian ] = "Íàïğàâëÿşùèå ëèíèè ïğè ïåğåìåùåíèè";
         Text[ greek ] = "Âïçèçô~éêİò ãñáììİò êáôÜ ôç ìåôáêßíçóç";
         Text[ dutch ] = "H~ulplijnen tijdens de beweging";
@@ -1235,7 +1235,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ norwegian ] = "Display" ;
         Text [ italian ] = "Mostra" ;
         Text [ portuguese_brazilian ] = "Display" ;
-        Text [ portuguese ] = "Ver" ;
+        Text [ portuguese ] = "Mostrar" ;
         Text [ finnish ] = "Display" ;
         Text [ danish ] = "Vis" ;
         Text [ french ] = "Afficher" ;
@@ -1298,7 +1298,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ swedish ] = "~Nollvärden" ;
         Text [ dutch ] = "~Nulwaarden" ;
         Text [ spanish ] = "Valores ~cero" ;
-        Text [ english_us ] = "~Zero values" ;
+        Text [ english_us ] = "Z~ero values" ;
         Text[ chinese_simplified ] = "ÁãÖµ(~Z)";
         Text[ russian ] = "Íóëåâûå çíà÷åíèÿ";
         Text[ polish ] = "Wartoœci zerowe";
@@ -1319,7 +1319,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ norwegian ] = "Note Tag~s" ;
         Text [ italian ] = "Indica~zione note" ;
         Text [ portuguese_brazilian ] = "Etiqueta~s de Notas" ;
-        Text [ portuguese ] = "~Indicação de anotações" ;
+        Text [ portuguese ] = "~Indicador de anotações" ;
         Text [ finnish ] = "Huomautus~merkit" ;
         Text [ danish ] = "Noteindikator" ;
         Text [ french ] = "Indicateur de ~notes" ;
@@ -1354,7 +1354,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ swedish ] = "Framhäv ~värden" ;
         Text [ dutch ] = "~Waarden accentueren" ;
         Text [ spanish ] = "D~estacar valores" ;
-        Text [ english_us ] = "~Value highlighting" ;
+        Text [ english_us ] = "Val~ue highlighting" ;
         Text[ chinese_simplified ] = "Í»³öÏÔÊ¾ÊıÖµ(~V)";
         Text[ russian ] = "Âûäåëèòü çíà÷åíèÿ";
         Text[ polish ] = "Wyr~ó¿nianie wartoœci";
@@ -1398,7 +1398,7 @@ TabPage RID_SCPAGE_CONTENT
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Textüberlauf" ;
         Text [ ENGLISH ] = "~Text overflow" ;
-        Text [ english_us ] = "~Text overflow" ;
+        Text [ english_us ] = "Te~xt overflow" ;
         Text [ portuguese_brazilian ] = "~Textüberlauf" ;
         Text [ swedish ] = "Te~xtspill" ;
         Text [ danish ] = "Tekstoverløb" ;
@@ -1424,7 +1424,7 @@ TabPage RID_SCPAGE_CONTENT
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "~Referenzen farbig anzeigen" ;
         Text [ ENGLISH ] = "Show colored references" ;
-        Text [ english_us ] = "~Show references in color" ;
+        Text [ english_us ] = "Show references ~in color" ;
         Text [ portuguese_brazilian ] = "~Referenzen farbig anzeigen" ;
         Text [ swedish ] = "Visa ~referenser i färg" ;
         Text [ danish ] = "Vis farvede referencer" ;
@@ -1432,7 +1432,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ spanish ] = "~Mostrar referencias en color" ;
         Text [ french ] = "Affichage des références en ~couleur" ;
         Text [ dutch ] = "~Verwijzingen in kleur weergeven" ;
-        Text [ portuguese ] = "~Mostrar referências com cor" ;
+        Text [ portuguese ] = "~Mostrar referências a cor" ;
         Text[ chinese_simplified ] = "ÓÃ²ÊÉ«ÏÔÊ¾ÒıÓÃÄÚÈİ";
         Text[ russian ] = "Ïîêàçàòü ññûëêè â öâåòå";
         Text[ polish ] = "Poka¿ odwo³ania w kolorze";
@@ -1488,7 +1488,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ swedish ] = "~Objekt/grafik" ;
         Text [ dutch ] = "~Objecten/afbeeldingen" ;
         Text [ spanish ] = "Objetos/~Imágenes" ;
-        Text [ english_us ] = "~Objects/Graphics" ;
+        Text [ english_us ] = "Ob~jects/Graphics" ;
         Text[ chinese_simplified ] = "¶ÔÏó/Í¼ĞÎ(~O)";
         Text[ russian ] = "Îáúåêòû/Ğèñóíêè";
         Text[ polish ] = "Obiekty/Rysunki";
@@ -1762,7 +1762,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text = "~Metriken" ;
         Text [ ENGLISH ] = "Metrics" ;
         Text[ english_us ] = "Metrics";
-        Text[ portuguese ] = "Metrics";
+        Text[ portuguese ] = "~Métricas";
         Text[ russian ] = "Ìåòğèêè";
         Text[ greek ] = "~ÌåôñéêÜ";
         Text[ dutch ] = "~Metrieken";
@@ -1787,7 +1787,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text = "Maßeinheit" ;
         Text [ ENGLISH ] = "Measurement unit" ;
         Text[ english_us ] = "Measurement unit";
-        Text[ portuguese ] = "Measurement unit";
+        Text[ portuguese ] = "Unidade de medida";
         Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
         Text[ greek ] = "ÌïíÜäá ìİôñçóçò";
         Text[ dutch ] = "Measurement unit";
@@ -2099,7 +2099,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text = "Tabulator" ;
         Text [ ENGLISH ] = "Tab stops" ;
         Text[ english_us ] = "Tab stops";
-        Text[ portuguese ] = "Tab stops";
+        Text[ portuguese ] = "Tabulação";
         Text[ russian ] = "Òàáóëÿòîğ";
         Text[ greek ] = "Óôçëïèİôçò";
         Text[ dutch ] = "Tabstop";
@@ -2140,7 +2140,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text = "Aktualisierung" ;
         Text [ English ] = "Update" ;
         Text[ english_us ] = "Updating";
-        Text[ portuguese ] = "Actualizar";
+        Text[ portuguese ] = "Actualização";
         Text[ russian ] = "Îáíîâëåíèå";
         Text[ dutch ] = "Actualiseren";
         Text[ french ] = "Actualisation";
@@ -2221,7 +2221,7 @@ TabPage RID_SCPAGE_LAYOUT
         TabStop = TRUE ;
         Text[ italian ] = "Su richiesta";
         Text[ portuguese_brazilian ] = "On request";
-        Text[ portuguese ] = "Por ~pedido";
+        Text[ portuguese ] = "A ~pedido";
         Text[ danish ] = "På anmodning";
         Text[ french ] = "Sur ~demande";
         Text[ swedish ] = "På ~begäran";
@@ -2273,7 +2273,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text = "Eingabeeinstellungen" ;
         Text [ ENGLISH ] = "Input settings" ;
         Text[ english_us ] = "Input settings";
-        Text[ portuguese ] = "Input settings";
+        Text[ portuguese ] = "Definições para entrada";
         Text[ russian ] = "Íàñòğîéêè ââîäà";
         Text[ greek ] = "Ñõèìßóåéò åéóáãùãŞò";
         Text[ dutch ] = "Invoerinstellingen";
@@ -2304,7 +2304,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ italian ] = "Premi invio per passare alla prossima selezione" ;
         Text [ spanish ] = "~Pulsar Entrada para desplazar selección hacia" ;
         Text [ french ] = "Touche Entrée pour déplacer la ~sélection" ;
-        Text [ portuguese ] = "Confirmar entrada para mover ~selecção para" ;
+        Text [ portuguese ] = "Confirmar entrada para mover a ~selecção" ;
         Text [ portuguese_brazilian ] = "Eingabebestätigung setzt die Selektion nach" ;
         Text[ chinese_simplified ] = "°´»÷»Ø³µ¼ü×Ô¶¯Ñ¡ÔñÏÂÒ»¸öµ¥Ôª¸ñµÄ·½Ïò";
         Text[ russian ] = "Êëàâèøà (Enter) ïåğåìåùàåò âûäåëåíèå";
@@ -2396,9 +2396,9 @@ TabPage RID_SCPAGE_LAYOUT
         };
         stringlist [ portuguese ] =
         {
-            < "para baixo" ; Default ; > ;
+            < "Em baixo" ; Default ; > ;
             < "direita" ; Default ; > ;
-            < "para cima" ; Default ; > ;
+            < "Em cima" ; Default ; > ;
             < "esquerda" ; Default ; > ;
         };
     StringList [ chinese_simplified ] =
@@ -2512,7 +2512,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ french ] = "Expansion du ~formatage" ;
         Text [ dutch ] = "~Opmaakomvang vergroten" ;
         Text [ portuguese_brazilian ] = "Formatierung ausdehnen" ;
-        Text [ portuguese ] = "Alargar ~formatação" ;
+        Text [ portuguese ] = "Expandir ~formatação" ;
         Text[ chinese_simplified ] = "Ì×ÓÃÇ°Ò»¸öµ¥Ôª¸ñ¸ñÊ½";
         Text[ russian ] = "Ğàñòÿíóòü ôîğìàòèğîâàíèå";
         Text[ polish ] = "Rozszerz formatowanie";
@@ -2538,7 +2538,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ spanish ] = "~Expandir referencias al insertar filas/columnas en los bordes" ;
         Text [ french ] = "Expansion des ~références si insertion de colonnes ou lignes" ;
         Text [ dutch ] = "Ver~wijzingen bij invoegen van kolommen/rijen aan de randen verbreden" ;
-        Text [ portuguese ] = "Expandir ~referências para as margens ao inserir colunas ou linhas " ;
+        Text [ portuguese ] = "Expandir ~referências para as margens ao inserir colunas ou linhas" ;
         Text[ chinese_simplified ] = "À©Õ¹ÏÔÊ¾²åÈëĞĞÁĞµÄÒıÓÃÄÚÈİ";
         Text[ russian ] = "Ğàñòÿãèâàòü ññûëêè ïğè âñòàâêå íîâûõ ñòîëáöîâ/ñòğîê";
         Text[ polish ] = "Rozszerz odwo³ania podczas wstawia~nia kolumn i wierszy do ich krawêdzi";
