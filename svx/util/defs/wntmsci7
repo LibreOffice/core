@@ -23974,3 +23974,6 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?DrawFormText@XOutputDevice@@QAEJPAVDrawPortionInfo@@ABVPolygon@@JEE@Z
 ?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx1581119789@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
 ?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx1870521324@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
+?DrawingText@EditEngine@@UAEXABVPoint@@ABVString@@GGPBJABVSvxFont@@GGE@Z
+?DrawingText@Outliner@@UAEXABVPoint@@ABVString@@GGPBJABVSvxFont@@GGE@Z
+?IsRTL@DrawPortionInfo@@QBEEXZ
