@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSynchronousFrameLoader.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: arellano $ $Date: 2001-04-24 00:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,10 @@
 
 //=============================================================================
 
-/** load a resource into a <type>Frame</type>
+/** loads a resource into a <type>Frame</type>.
 
     <p>
-    Unlike the <type>XFrameLoader</type> interface these loading will be synchronous!
+    Unlike the <type>XFrameLoader</type> interface, this loading will be synchronous.
      </p>
  */
 
@@ -93,8 +93,8 @@ interface XSynchronousFrameLoader: com::sun::star::uno::XInterface
     /** starts the loading of the specified resource into the specified <type>Frame</type>.
 
         <p>
-        Use a <type>MediaDescriptor</type> to describe the document for loading!
-        We return TRUE if loading successful, FALSE otherwise.
+        Use a <type>MediaDescriptor</type> to describe the document for loading.
+        <TRUE/> is returned if loading is successful, otherwise <FALSE/>.
         </p>
      */
     boolean load(   [in]    sequence< com::sun::star::beans::PropertyValue >    aDescriptor ,
