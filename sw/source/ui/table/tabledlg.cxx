@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-06-19 11:53:05 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,9 @@
 #include <table.hrc>
 #endif
 #include <algorithm>
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 #ifdef DEBUG_TBLDLG
 void DbgTblRep(SwTableRep* pRep)
@@ -1816,7 +1818,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
 
         for(i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_REGISTER; ++i)
         {
-            String aFmtName; GetDocPoolNm( i, aFmtName );
+            String aFmtName; SwStyleNameMapper::GetUIName( i, aFmtName );
             if( LISTBOX_ENTRY_NOTFOUND == aPageCollLB.GetEntryPos( aFmtName ))
                 aPageCollLB.InsertEntry( aFmtName );
         }

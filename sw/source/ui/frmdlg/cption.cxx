@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-29 13:37:13 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,9 @@
 #ifndef _CPTION_HRC
 #include <cption.hrc>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 using namespace ::com::sun::star;
 
 extern String* pOldGrfCat;
@@ -281,7 +283,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
         else
         {
             String sTmp;
-            aCategoryBox.SetText( GetDocPoolNm( nPoolId, sTmp ));
+            aCategoryBox.SetText( SwStyleNameMapper::GetUIName( nPoolId, sTmp ));
         }
     }
 

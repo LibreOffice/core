@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdlg2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #include "insfnote.hxx"
 #include "poolfmt.hxx"
 #include "edtwin.hxx"
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 #include "view.hrc"
 
@@ -164,7 +167,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 
     // Existiert Pool-Vorlage gleichen Namens?
     SwWrtShell &rSh = GetWrtShell();
-    USHORT nPoolId = rSh.GetPoolId(rName, GET_POOLID_TXTCOLL);
+    USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, GET_POOLID_TXTCOLL);
     if( USHRT_MAX != nPoolId )
         rSh.GetTxtCollFromPool(nPoolId);
         // Pool-Vorlage existiert nicht: Existiert sie am Dokument?
@@ -263,6 +266,9 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:49  hr
+    initial import
+
     Revision 1.56  2000/09/18 16:06:13  willem.vandorp
     OpenOffice header added.
 

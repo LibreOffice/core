@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-02 09:53:00 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 #ifndef _SFX_FRMDESCRHXX
 #include <sfx2/frmdescr.hxx>
 #endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -253,9 +256,9 @@ void SwXMLTextParagraphExport::exportStyleContent(
                                 XML_CONDITION,
                                 sBuffer.makeStringAndClear() );
                     const String& rName =
-                        SwXStyleFamilies::GetProgrammaticName(
+                        SwStyleNameMapper::GetProgName(
                                     rCond.GetTxtFmtColl()->GetName(),
-                                    SFX_STYLE_FAMILY_PARA );
+                                    GET_POOLID_TXTCOLL );
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                 XML_APPLY_STYLE_NAME, rName );
                     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,

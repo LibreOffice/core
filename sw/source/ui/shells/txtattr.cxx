@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-23 20:08:52 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,9 @@
 #ifndef _SHELLS_HRC
 #include <shells.hrc>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 const SwTwips lFontInc = 2 * 20;           // ==> PointToTwips(2)
 const SwTwips lFontMaxSz = 72 * 20;        // ==> PointToTwips(72)
 
@@ -296,12 +298,12 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             if( USHRT_MAX == aINetFmt.GetVisitedFmtId() )
             {
                 aINetFmt.SetVisitedFmtId(
-                        rWrtSh.GetPoolId( aINetFmt.GetVisitedFmt(), GET_POOLID_CHRFMT));
+                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetVisitedFmt(), GET_POOLID_CHRFMT));
             }
             if( USHRT_MAX == aINetFmt.GetINetFmtId() )
             {
                 aINetFmt.SetINetFmtId(
-                        rWrtSh.GetPoolId( aINetFmt.GetINetFmt(), GET_POOLID_CHRFMT));
+                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetINetFmt(), GET_POOLID_CHRFMT));
             }
 
             if ( pColl )
@@ -756,6 +758,9 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/23 20:08:52  jp
+    Task #80648#: use new class SvxScriptSetItem
+
     Revision 1.2  2000/11/13 13:21:12  jp
     support CJK attributes
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 11:12:26 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,9 @@
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 #include "view.hxx"
 #include "wrtsh.hxx"
@@ -202,7 +204,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     if(pFmt)
                         aName = pFmt->GetName();
                     else
-                        aName = *pShell->GetDoc()->GetTextNmArray()[
+                        aName = *SwStyleNameMapper::GetTextUINameArray()[
                             RES_POOLCOLL_STANDARD - RES_POOLCOLL_TEXT_BEGIN ];
 
                     rSet.Put(SfxTemplateItem(nWhich, aName));
@@ -1198,6 +1200,9 @@ Bitmap SwDocShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/14 11:12:26  os
+    #79626# set metric attribute
+
     Revision 1.2  2000/10/06 13:31:28  jp
     should changes: don't use IniManager
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 13:50:52 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,9 @@
 #include "expfld.hxx"
 #include "app.hrc"
 #include "poolfmt.hrc"
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 #define ENV_NEWDOC      RET_OK
 #define ENV_INSERT      RET_USER
@@ -280,7 +283,7 @@ static USHORT nTitleNo = 0;
     if(pOldSh )
     {
         const SwPageDesc& rCurPageDesc = pOldSh->GetPageDesc(pOldSh->GetCurPageDesc());
-        String sJacket; GetDocPoolNm( RES_POOLPAGE_JAKET, sJacket );
+        String sJacket; SwStyleNameMapper::GetUIName( RES_POOLPAGE_JAKET, sJacket );
         bEnvChange = rCurPageDesc.GetName() == sJacket;
         if(pOldSh->GetPrt(FALSE))
         {

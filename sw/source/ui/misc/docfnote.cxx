@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-07-02 11:52:55 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,9 @@
 #ifndef _FRMUI_HRC
 #include <frmui.hrc>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 SwFootNoteOptionDlg::SwFootNoteOptionDlg( Window *pParent, SwWrtShell &rS ) :
     SfxTabDialog( pParent, SW_RES(DLG_DOC_FOOTNOTE) ),
@@ -302,7 +304,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     }
 
     String sStr;
-    GetDocPoolNm( bEndNote ? RES_POOLCOLL_ENDNOTE
+    SwStyleNameMapper::GetUIName( bEndNote ? RES_POOLCOLL_ENDNOTE
                            : RES_POOLCOLL_FOOTNOTE, sStr );
     if(LISTBOX_ENTRY_NOTFOUND == aParaTemplBox.GetEntryPos( sStr ) )
         aParaTemplBox.InsertEntry( sStr );
@@ -325,7 +327,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
 
         // Seite
     for( USHORT i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_ENDNOTE; ++i )
-        aPageTemplBox.InsertEntry(GetDocPoolNm( i, sStr ));
+        aPageTemplBox.InsertEntry(SwStyleNameMapper::GetUIName( i, sStr ));
 
     USHORT nCount = pSh->GetPageDescCnt();
     for(i = 0; i < nCount; ++i)
@@ -539,6 +541,9 @@ SfxTabPage *SwFootNoteOptionPage::Create(Window *pParent, const SfxItemSet &rSet
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/07/02 11:52:55  os
+    #85609# dont allow counting by chapter an positon at end of document
+
     Revision 1.5  2001/06/01 11:04:53  fme
     Fix #86988#: Redesign of dialogs
 

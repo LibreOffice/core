@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-06-20 14:40:59 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,9 @@
 #ifndef _CFGID_H
 #include <cfgid.h>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 using namespace rtl;
 using namespace com::sun::star;
@@ -1421,7 +1423,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     pColl = rSh.FindTxtFmtCollByName( sTmplNm );
                     if( !pColl )
                     {
-                        USHORT nId = rSh.GetPoolId( sTmplNm, GET_POOLID_TXTCOLL );
+                        USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( sTmplNm, GET_POOLID_TXTCOLL );
                         if( USHRT_MAX != nId )
                             pColl = rSh.GetTxtCollFromPool( nId );
                         else
@@ -1909,7 +1911,7 @@ void SwInsertDBColAutoPilot::Commit()
         bVal = pColumn->bIsDBFmt;
         pSubValues[3].Value.setValue(&bVal, rBoolType);
 
-        GetDocPoolNm( RES_POOLCOLL_STANDARD, sTmp );
+        SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sTmp );
         const SvNumberformat* pNF = rNFmtr.GetEntry( pColumn->nUsrNumFmt );
         LanguageType eLang;
         if( pNF )

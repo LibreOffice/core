@@ -2,9 +2,9 @@
  *
  *  $RCSfile: break.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:28:21 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,9 @@
 #ifndef _CHRDLG_HRC
 #include <chrdlg.hrc>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 void SwBreakDlg::Apply()
 {
@@ -256,7 +258,7 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     String aFmtName;
     for(i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_REGISTER; ++i)
         if(LISTBOX_ENTRY_NOTFOUND == aPageCollBox.GetEntryPos(
-                                    GetDocPoolNm( i, aFmtName )))
+                                    SwStyleNameMapper::GetUIName( i, aFmtName )))
             ::InsertStringSorted(aFmtName, aPageCollBox, TRUE );
 
     CheckEnable();
@@ -298,112 +300,6 @@ void SwBreakDlg::CheckEnable()
     aPageNumEdit.Enable(bEnable);
 }
 
-
-SwBreakDlg::~SwBreakDlg() {}
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2001/04/27 17:53:08  jp
-    use Collator for international string compare
-
-    Revision 1.1.1.1  2000/09/18 17:14:32  hr
-    initial import
-
-    Revision 1.62  2000/09/18 16:05:13  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.61  2000/08/25 10:12:26  os
-    #77214# style listbox sorted
-
-    Revision 1.60  2000/07/26 16:32:15  jp
-    use the new function GetDocPoolNm to get the collectionames
-
-    Revision 1.59  2000/05/26 07:21:28  os
-    old SW Basic API Slots removed
-
-    Revision 1.58  2000/05/10 11:55:37  os
-    Basic API removed
-
-    Revision 1.57  2000/02/11 14:43:29  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.56  1999/06/18 13:45:28  OS
-    #66704# wrong fix fixed
-
-
-      Rev 1.55   18 Jun 1999 15:45:28   OS
-   #66704# wrong fix fixed
-
-      Rev 1.54   09 Jun 1999 08:47:48   OS
-   #66704# no page breaks in header/footer/frame
-
-      Rev 1.53   05 Feb 1999 17:44:20   JP
-   Task #61467#/#61014#: neu FindPageDescByName
-
-      Rev 1.52   21 Nov 1997 12:24:34   MA
-   includes
-
-      Rev 1.51   03 Nov 1997 13:10:20   MA
-   precomp entfernt
-
-      Rev 1.50   30 Jul 1997 18:15:32   HJS
-   includes
-
-      Rev 1.49   23 Jul 1997 20:22:14   HJS
-   includes
-
-      Rev 1.48   27 Jan 1997 16:14:42   OS
-   HtmlMode wird ueber GetHtmlMode ermittelt
-
-      Rev 1.47   18 Dec 1996 19:07:30   MA
-   fix: richtiges enablen
-
-      Rev 1.46   06 Dec 1996 13:53:20   MA
-   Umbrueche fuer Tabellen
-
-      Rev 1.45   11 Nov 1996 09:16:38   MA
-   ResMgr
-
-      Rev 1.44   10 Oct 1996 13:18:52   OS
-   HtmlMode beruecksichtigen
-
-      Rev 1.43   02 Oct 1996 08:36:16   MA
-   Umstellung Enable/Disable
-
-      Rev 1.42   28 Aug 1996 08:59:06   OS
-   includes
-
-      Rev 1.41   06 Feb 1996 15:18:38   JP
-   Link Umstellung 305
-
-      Rev 1.40   24 Nov 1995 16:57:32   OM
-   PCH->PRECOMPILED
-
-      Rev 1.39   08 Nov 1995 12:47:36   OM
-   Change->Set
-
-      Rev 1.38   23 Oct 1995 17:25:10   OS
-   Umbrueche einfuegen recordable
-
-      Rev 1.37   11 Sep 1995 18:47:40   OM
-   Helpbutton eingefuegt
-
-      Rev 1.36   30 Aug 1995 14:08:52   MA
-   fix: sexport'iert
-
-      Rev 1.35   21 Aug 1995 09:22:06   MA
-   chg: swstddlg -> svxstandarddialog, Optimierungen
-
-      Rev 1.34   05 Apr 1995 09:15:28   JP
-   Benutzung vom Link-Makro eingeschraenkt
-
-      Rev 1.33   25 Oct 1994 15:50:04   ER
-   add: PCH
-
-      Rev 1.32   05 Oct 1994 17:45:56   VB
-   Umbruch freigeschaltet
-
-------------------------------------------------------------------------*/
-
-
+SwBreakDlg::~SwBreakDlg()
+{
+}

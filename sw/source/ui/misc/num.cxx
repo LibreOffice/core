@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,9 @@
 #endif
 #ifndef _HELPID_H
 #include <helpid.h>
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
 #endif
 
 
@@ -846,8 +849,8 @@ SwSvxNumBulletTabDialog::~SwSvxNumBulletTabDialog()
 void SwSvxNumBulletTabDialog::PageCreated(USHORT nPageId, SfxTabPage& rPage)
 {
     //Namen der Vorlagen und Metric setzen
-    String sNumCharFmt; GetDocPoolNm( RES_POOLCHR_NUM_LEVEL, sNumCharFmt );
-    String sBulletCharFmt; GetDocPoolNm( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt );
+    String sNumCharFmt; SwStyleNameMapper::GetUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt );
+    String sBulletCharFmt; SwStyleNameMapper::GetUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt );
 
     switch ( nPageId )
     {
@@ -905,6 +908,9 @@ IMPL_LINK(SwSvxNumBulletTabDialog, RemoveNumberingHdl, PushButton*, EMPTYARG)
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/06/01 11:04:53  fme
+      Fix #86988#: Redesign of dialogs
+
       Revision 1.2  2001/02/23 12:45:29  os
       Complete use of DefaultNumbering component
 
