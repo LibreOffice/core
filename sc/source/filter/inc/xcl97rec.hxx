@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:28:23 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _XCL97REC_HXX
 #define _XCL97REC_HXX
+
+#ifndef SC_XLESCHER_HXX
+#include "xlescher.hxx"
+#endif
 
 #include "excrecds.hxx"
 #include "xcl97esc.hxx"
@@ -331,23 +335,25 @@ class XclTxo : public ExcRecord
 {
     friend void XclObjComment::SaveCont( XclExpStream& );
 
-private:
-
-        XclExpUniString     aText;
-        UINT16              nGrbit;
-        UINT16              nRot;
-
-    virtual void                SaveCont( XclExpStream& rStrm );
-
 public:
                                 XclTxo( const String& rStr );
-                                XclTxo( const SdrTextObj& rEditObj );
-    virtual                     ~XclTxo();
+                                XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rEditObj );
 
     virtual void                Save( XclExpStream& rStrm );
 
     virtual UINT16              GetNum() const;
     virtual ULONG               GetLen() const;
+
+private:
+    virtual void                SaveCont( XclExpStream& rStrm );
+
+private:
+    typedef ::std::auto_ptr< XclExpString > XclExpStringPtr;
+
+    XclExpStringPtr             mpString;       /// Text and formatting data.
+    XclTxoHorAlign              meHorAlign;     /// Horizontal alignment.
+    XclTxoVerAlign              meVerAlign;     /// Vertical alignment.
+    XclTxoRotation              meRotation;     /// Text rotation.
 };
 
 
