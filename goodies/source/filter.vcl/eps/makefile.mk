@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:09:22 $
+#   last change: $Author: vg $ $Date: 2003-07-09 10:15:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,7 @@ PRJNAME=goodies
 TARGET=eps
 DEPTARGET=veps
 
-GEN_HID=TRUE
+#GEN_HID=TRUE
 
 # --- Settings -----------------------------------------------------------
 
