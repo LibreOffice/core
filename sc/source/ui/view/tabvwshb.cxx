@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-25 18:44:04 $
+ *  last change: $Author: bm $ $Date: 2001-08-31 09:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,8 +199,14 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
                 {
                     SchMemChart* pMemChart = SchDLL::GetChartData(xIPObj);
                     if (pMemChart)
+                    {
+                        // set handler for highlighting cell ranges
+                        // for selection inside the chart
                         pMemChart->SetSelectionHdl( LINK( GetViewData()->GetDocShell(),
-                                                    ScDocShell, ChartSelectionHdl ) );
+                                                          ScDocShell, ChartSelectionHdl ) );
+                        // disable DataBrowseBox for editing chart data
+                        pMemChart->SetReadOnly( TRUE );
+                    }
                 }
             }
 
