@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 11:40:01 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,15 @@
 
 #include <osl/module.hxx>
 #include <tools/string.hxx>
+#include "cfg.hxx"
 
 SfxAbstractDialogFactory* SfxAbstractDialogFactory::Create()
 {
     return (SfxAbstractDialogFactory*) VclAbstractDialogFactory::Create();
+}
+
+SfxTabPage* SfxAbstractDialogFactory::CreateSfxAcceleratorConfigPage(
+    Window *pParent, const SfxItemSet& rSet )
+{
+    return new SfxAcceleratorConfigPage( pParent, rSet );
 }
