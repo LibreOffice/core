@@ -271,19 +271,20 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getSeriesGroupShapeBackChild(
 }
 
 uno::Reference< drawing::XShapes > VSeriesPlotter::getLabelsGroupShape( VDataSeries& rDataSeries
-                                        , const uno::Reference< drawing::XShapes >& xTarget )
+                                        , const uno::Reference< drawing::XShapes >& xTextTarget )
 {
+    //xTextTarget needs to be a 2D shape container always!
+
     if(rDataSeries.m_xLabelsShape.is())
         return uno::Reference<drawing::XShapes>( rDataSeries.m_xLabelsShape, uno::UNO_QUERY );
 
-    //create a group shape for this series and add to logic target:
+    //create a 2D group shape for texts of this series and add to text target:
     uno::Reference< drawing::XShapes > xShapes(
-        this->createGroupShape( xTarget,rDataSeries.getLabelsCID() ));
+        m_pShapeFactory->createGroup2D( xTextTarget, rDataSeries.getLabelsCID() ));
     uno::Reference<drawing::XShape> xShape =
                 uno::Reference<drawing::XShape>( xShapes, uno::UNO_QUERY );
     rDataSeries.m_xLabelsShape.set(xShape);
     return xShapes;
-
 }
 
 uno::Reference< drawing::XShapes > VSeriesPlotter::getErrorBarsGroupShape( VDataSeries& rDataSeries
@@ -310,15 +311,12 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
                     , const awt::Point& rScreenPosition2D
                     , LabelAlignment eAlignment )
 {
-    if(m_nDimension!=2)
-        return;
     uno::Reference< drawing::XShapes > xTarget_( this->getLabelsGroupShape(rDataSeries, xTarget) );
 
     //check wether the label needs to be created and how:
-    DataPointLabel* pLabel = rDataSeries.getDataPointLabel( nPointIndex );
+    DataPointLabel* pLabel = rDataSeries.getDataPointLabelIfLabel( nPointIndex );
 
-    if( !pLabel || (!pLabel->ShowNumber && !pLabel->ShowNumberInPercent
-        && !pLabel->ShowCategoryName && !pLabel->ShowLegendSymbol ) )
+    if( !pLabel )
         return;
 
     //------------------------------------------------
