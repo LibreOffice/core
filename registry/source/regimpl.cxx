@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-14 09:36:00 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@
 #endif
 
 #if defined ( GCC ) && ( defined ( SCO ) || defined ( OS2 ) )
-NAMESPACE_VOS(ORealDynamicLoader)* NAMESPACE_VOS(ODynamicLoader)<RegistryTypeReader_Api>::m_pLoader = NULL;
+sal_helper::ORealDynamicLoader* sal_helper::ODynamicLoader<RegistryTypeReader_Api>::m_pLoader = NULL;
 #endif
 
 
