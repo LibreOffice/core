@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtypes.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:01:16 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,13 +69,25 @@
 // own includes
 //_________________________________________________________________________________________________________________
 
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
+#endif
+
 //_________________________________________________________________________________________________________________
 // interface includes
 //_________________________________________________________________________________________________________________
 
+#ifndef __COM_SUN_STAR_AWT_KEYEVENT_HPP_
+#include <com/sun/star/awt/KeyEvent.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 // other includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _COMPHELPER_SEQUENCEASVECTOR_HXX_
+#include <comphelper/sequenceasvector.hxx>
+#endif
 
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
@@ -96,13 +108,46 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 
 /**
-    Own hash function used for stl-structures ... e.g. hash tables/maps ...
+    Own hash functions used for stl-structures ... e.g. hash tables/maps ...
 */
 struct OUStringHashCode
 {
     size_t operator()( const ::rtl::OUString& sString ) const
     {
         return sString.hashCode();
+    }
+};
+
+struct ShortHashCode
+{
+    size_t operator()( const sal_Int16& nShort ) const
+    {
+        return (size_t)nShort;
+    }
+};
+
+struct KeyEventHashCode
+{
+    size_t operator()( const css::awt::KeyEvent& aEvent ) const
+    {
+        return (size_t)(aEvent.KeyCode  +
+                        aEvent.KeyChar  +
+                        aEvent.KeyFunc  +
+                        aEvent.Modifiers);
+    }
+};
+
+struct KeyEventEqualsFunc
+{
+    bool operator()(const css::awt::KeyEvent aKey1,
+                    const css::awt::KeyEvent aKey2) const
+    {
+        return (
+                (aKey1.KeyCode   == aKey2.KeyCode  ) &&
+                (aKey1.KeyChar   == aKey2.KeyChar  ) &&
+                (aKey1.KeyFunc   == aKey2.KeyFunc  ) &&
+                (aKey1.Modifiers == aKey2.Modifiers)
+               );
     }
 };
 
@@ -113,7 +158,7 @@ struct OUStringHashCode
     It implements some additional funtionality which can be usefull but
     is missing at the normal vector implementation.
 */
-class OUStringList : public ::std::vector< ::rtl::OUString >
+class OUStringList : public ::comphelper::SequenceAsVector< ::rtl::OUString >
 {
     public:
 
@@ -125,6 +170,11 @@ class OUStringList : public ::std::vector< ::rtl::OUString >
 
         // search for given element
         iterator find( const ::rtl::OUString& sElement )
+        {
+            return ::std::find(begin(), end(), sElement);
+        }
+
+        const_iterator findConst( const ::rtl::OUString& sElement ) const
         {
             return ::std::find(begin(), end(), sElement);
         }
