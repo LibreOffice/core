@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-12 07:29:27 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,7 +738,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ english_us ] = "Mid" ;
         Text[ chinese_simplified ] = "ÖÐ";
         Text[ russian ] = "Ñåðåäèíà";
-        Text[ polish ] = "Œrodek";
+        Text[ polish ] = "Poœrodku";
         Text[ japanese ] = "’†‰›";
         Text[ chinese_traditional ] = "¤¤";
         Text[ arabic ] = "ÇáæÓØ";
