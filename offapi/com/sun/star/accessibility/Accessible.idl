@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Accessible.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 16:43:48 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com { module sun { module star { module accessibility {
 
     @see XAccessible
 
-    @since #107627#
+    @since OOo 1.1.2
 */
 published service Accessible
 {
