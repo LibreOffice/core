@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:28:54 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:17:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,16 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP_
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_URI_XVNDSUNSTARSCRIPTURL_HPP_
+#include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 #include <vcl/svapp.hxx>
 #include <svtools/aeitem.hxx>
 #include <svtools/stritem.hxx>
@@ -67,7 +77,6 @@
 #include <basic/sbmeth.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>
-#include <tools/urlobj.hxx>
 #include <sfx2/app.hxx>
 
 #include "scresid.hxx"
@@ -78,6 +87,8 @@
 #include "validate.hxx"
 #include "compiler.hxx"
 
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
 
 // ============================================================================
 
@@ -685,54 +696,37 @@ IMPL_LINK( ScTPValidationError, ClickSearchHdl, PushButton*, pBtn )
     Application::SetDefDialogParent( this );
 
     // choose macro dialog
-    String aScriptURL = SfxApplication::ChooseMacro(FALSE, TRUE);
+    ::rtl::OUString aScriptURL = SfxApplication::ChooseMacro(FALSE, TRUE);
 
     Application::SetDefDialogParent( pOld );
 
-    // aScriptURL has the following format:
-    // vnd.sun.star.script:language=[language],macro=[macro],location=[location]
-    // [language] = StarBasic
-    // [macro] = libname.modulename.macroname
-    // [location] = application|document
-    // e.g. 'vnd.sun.star.script:language=StarBasic,macro=Standard.Module1.Main,location=document'
+    // a scriptURL has the following format:
+    // vnd.sun.star.script:[name]?language=[language]&location=[location]
+    // [name] = [libname].[modulename].[macroname]
+    // [language] = Basic
+    // [location] = application | document
+    // e.g. "vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"
     //
     // but for the UI we need this format:
     // 'macroname'
 
-    if ( aScriptURL.Len() != 0 )
+    if ( aScriptURL.getLength() != 0 )
     {
-        // parse script URL
-        BOOL bFound;
-        String aValue;
-        INetURLObject aINetScriptURL( aScriptURL );
-
-        // get language
-        String aLanguage;
-        bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("language") ), &aValue );
-        if ( bFound )
-            aLanguage = aValue;
-
-        // get macro
-        String aMacro;
-        String aLibName;
-        String aModuleName;
-        String aMacroName;
-        bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("macro") ), &aValue );
-        if ( bFound )
+        // parse scriptURL
+        Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
+        Reference< com::sun::star::uri::XUriReferenceFactory > xFactory( xSMgr->createInstance(
+            ::rtl::OUString::createFromAscii( "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
+        if ( xFactory.is() )
         {
-            aMacro = aValue;
-            aLibName    = aMacro.GetToken(0, sal_Unicode('.'));
-            aModuleName = aMacro.GetToken(1, sal_Unicode('.'));
-            aMacroName  = aMacro.GetToken(2, sal_Unicode('.'));
+            Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl( xFactory->parse( aScriptURL ), UNO_QUERY );
+            if ( xUrl.is() )
+            {
+                ::rtl::OUString aName = xUrl->getName();
+                sal_Int32 nIndex = 0;
+                String aMacroName = aName.getToken( 2, sal_Unicode( '.' ), nIndex );
+                aEdtTitle.SetText( aMacroName );
+            }
         }
-
-        // get location
-        String aLocation;
-        bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("location") ), &aValue );
-        if ( bFound )
-            aLocation = aValue;
-
-        aEdtTitle.SetText( aMacroName );
     }
 
     return( 0L );
