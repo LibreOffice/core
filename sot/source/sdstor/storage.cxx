@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-06 10:48:21 $
+ *  last change: $Author: mba $ $Date: 2001-02-06 11:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,7 +461,7 @@ void SotStorage::TestMemberInvariant( BOOL bPrint )
     : nError( SVSTREAM_OK )                 \
     , bIsRoot( FALSE )                      \
     , bDelStm( FALSE )                      \
-    , nVersion( SOFFICE_FILEFORMAT_60 )    \
+    , nVersion( SOFFICE_FILEFORMAT_CURRENT )    \
     , pOwnStg( NULL )   \
     , pStorStm( NULL )
 
