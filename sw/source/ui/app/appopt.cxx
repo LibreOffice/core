@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:56:41 $
+ *  last change: $Author: os $ $Date: 2001-03-22 09:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,6 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
     // hier werden die Optionen fuer die Web- und den Textdialog zusmmengesetzt
         SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
         SwMasterUsrPref* pPref = bTextDialog ? pUsrPref : pWebUsrPref;
-        BOOL bFrameDoc = FALSE;
         //kein MakeUsrPref, da hier nur die Optionen von Textdoks genommen werden duerfen
         SwView* pAppView = GetView();
         if(pAppView)
@@ -203,15 +202,10 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
             if( (bWebView &&  !bTextDialog) ||(!bWebView &&  bTextDialog))
             {
                 aViewOpt = *pAppView->GetWrtShell().GetViewOptions();
-                SfxFrameIterator aIter( *pAppView->GetViewFrame()->GetTopFrame() );
-                if( aIter.FirstFrame() )
-                    bFrameDoc = TRUE;
             }
             else
                 pAppView = 0; // mit View kann hier nichts gewonnen werden
         }
-    //  rApp.MakeUsrPref(aViewOpt);
-
 
     /********************************************************************/
     /*                                                                  */
@@ -229,14 +223,11 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
                                     SID_HTML_MODE,          SID_HTML_MODE,
                                     FN_PARAM_SHADOWCURSOR,  FN_PARAM_SHADOWCURSOR,
                                     FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED,
-                                    FN_VIEW_IN_FRAME,       FN_VIEW_IN_FRAME,
 #ifndef PRODUCT
                                     FN_PARAM_SWTEST,        FN_PARAM_SWTEST,
 #endif
                                     0);
 
-    if(bFrameDoc)
-        pRet->Put(SfxBoolItem(FN_VIEW_IN_FRAME, TRUE));
     pRet->Put( SwDocDisplayItem( aViewOpt, FN_PARAM_DOCDISP) );
     pRet->Put( SwElemItem( aViewOpt, FN_PARAM_ELEM) );
     if( bTextDialog )
@@ -527,10 +518,6 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
         case RID_SW_TP_CONTENT_OPT:
         case RID_SW_TP_HTML_CONTENT_OPT:
         pRet = SwContentOptPage::Create(pParent, rSet); break;
-        case RID_SW_TP_HTML_LAYOUT_OPT:
-        case RID_SW_TP_LAYOUT_OPT:
-            pRet = SwLayoutOptPage::Create(pParent, rSet);
-        break;
         case RID_SW_TP_HTML_OPTGRID_PAGE:
         case RID_SVXPAGE_GRID:
             pRet = SvxGridTabPage::Create(pParent, rSet);
@@ -572,8 +559,6 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
         break;
         case RID_SW_TP_OPTSHDWCRSR:     pRet = SwShdwCrsrOptionsTabPage::Create(pParent, rSet); break;
         case RID_SW_TP_REDLINE_OPT:     pRet = SwRedlineOptionsTabPage::Create(pParent, rSet); break;
-        case RID_SW_TP_OPTINSERT_HTML_PAGE:
-        case RID_SW_TP_OPTINSERT_PAGE:  pRet = SwInsertOptPage::Create(pParent, rSet); break;
         case RID_SW_TP_OPTLOAD_PAGE:    pRet = SwLoadOptPage::Create(pParent, rSet); break;
 #ifndef PRODUCT
         case  RID_SW_TP_OPTTEST_PAGE:   pRet = SwTestTabPage::Create(pParent, rSet); break;
@@ -587,6 +572,9 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/02/09 07:56:41  os
+    TabPage size changed
+
     Revision 1.4  2000/10/30 14:33:37  jp
     GetBinding: View must not exist
 
