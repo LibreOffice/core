@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:49:54 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3719,7 +3719,7 @@ String RID_DB_QUERY_WIZARD_START + 5
     Text[ catalan ] = "Duplica el nom del camp. Ja existeix un camp anomenat $1.";
     Text[ finnish ] = "Samat kenttien nimet Kentt� $1 on jo olemassa.";
     Text[ thai ] = "ทำชื่อเขตข้อมูลซ้ำ ชื่อเขตข้อมูล $1 มีอยู่แล้ว";
-    Text[ czech ] = "Duplicate field name. A field named $1 already exists.";
+    Text[ czech ] = "Stejné jméno pole. Pole se jménem $1 již existuje.";
     Text[ hebrew ] = "‮שדה בשם $1 כבר קיים.‬";
     Text[ hindi ] = "क्षेत्र नाम को दोहरा गया है । क्षेत्र का नाम $1 पहिले से अस्तित्व में है ।";
     Text[ slovak ] = "Duplicitný názov poľa. Pole s názvom $1 už existuje.";
@@ -3815,7 +3815,7 @@ String RID_DB_QUERY_WIZARD_START + 8
     Text[ catalan ] = "buit";
     Text[ finnish ] = "tyhj�";
     Text[ thai ] = "ว่าง";
-    Text[ czech ] = "Vyprázdnit";
+    Text[ czech ] = "empty";
     Text[ hebrew ] = "‮ריק‬";
     Text[ hindi ] = "खाली";
     Text[ slovak ] = "prázdny";
@@ -4072,7 +4072,7 @@ String RID_DB_QUERY_WIZARD_START + 16
     Text[ catalan ] = ": Filtre";
     Text[ finnish ] = ": Suodatus";
     Text[ thai ] = ": ตัวกรอง";
-    Text[ czech ] = ": Filter";
+    Text[ czech ] = ": Filtr";
     Text[ hebrew ] = "‮סינון:‬";
     Text[ hindi ] = ": फ़िल्टर";
     Text[ slovak ] = ": Filter";
@@ -4301,7 +4301,7 @@ String RID_DB_QUERY_WIZARD_START + 23
     Text[ catalan ] = "Filtre";
     Text[ finnish ] = "Suodatus";
     Text[ thai ] = "ตัวกรอง";
-    Text[ czech ] = "Filter";
+    Text[ czech ] = "Filtr";
     Text[ hebrew ] = "‮סינון‬";
     Text[ hindi ] = "फ़िल्टर";
     Text[ slovak ] = "Filter";
@@ -4466,7 +4466,7 @@ String RID_DB_QUERY_WIZARD_START + 28
     Text[ czech ] = "pořadí řazení";
     Text[ hebrew ] = "‮סדר מיון‬";
     Text[ hindi ] = "सोर्ट क्रम";
-    Text[ slovak ] = "Poradie radenia";
+    Text[ slovak ] = "Poradie triedenia";
 };
 
 String RID_DB_QUERY_WIZARD_START + 29
@@ -4626,7 +4626,7 @@ String RID_DB_REPORT_WIZARD_START + 0
     Text[ catalan ] = "Informe de l'AutoPilot";
     Text[ finnish ] = "Ohjattu raportin luominen";
     Text[ thai ] = "นำร่องรายงานอัตโนมัติ ";
-    Text[ czech ] = "Sestava průvodce";
+    Text[ czech ] = "Průvodce sestavou";
     Text[ hebrew ] = "‮דו\"ח טייס האוטומטי‬";
     Text[ hindi ] = "ओटोपैलट् रिपोर्ट";
     Text[ slovak ] = "Sprievodca hlásením";
@@ -4915,7 +4915,7 @@ String RID_DB_REPORT_WIZARD_START + 9
     Text[ arabic ] = ": ����� ������";
     Text[ catalan ] = ": Selecci� de taula";
     Text[ thai ] = ": เลือกตาราง";
-    Text[ czech ] = ": Výběr tabulky";
+    Text[ czech ] = "Pole v sestavě";
     Text[ hebrew ] = "‮שדות בדו\"ח‬";
     Text[ hindi ] = ": सारणी चुनाव";
     Text[ slovak ] = "P~olia v správe";
@@ -4949,7 +4949,7 @@ String RID_DB_REPORT_WIZARD_START + 11
     Text[ catalan ] = ": Estructura";
     Text[ finnish ] = ": Rakenne";
     Text[ thai ] = ": โครงสร้าง";
-    Text[ czech ] = ": Struktura";
+    Text[ czech ] = "Seskupení";
     Text[ hebrew ] = "‮חלוקה לקבוצות‬";
     Text[ hindi ] = ": बनावट";
     Text[ slovak ] = "Zoskupenie";
@@ -4982,7 +4982,7 @@ String RID_DB_REPORT_WIZARD_START + 12
     Text[ catalan ] = ": Ordena per opcions";
     Text[ finnish ] = ": Lajitteluvalinnat";
     Text[ thai ] = ": เรียงตัวเลือก";
-    Text[ czech ] = ": Vlastnosti třídění";
+    Text[ czech ] = "Vlastnosti řazení";
     Text[ hebrew ] = "‮אפשריות מיון‬";
     Text[ hindi ] = ": सोर्ट विकल्प";
     Text[ slovak ] = "Možnosti zoraďovania";
@@ -5014,7 +5014,7 @@ String RID_DB_REPORT_WIZARD_START + 13
     Text[ catalan ] = ": Estil de seleccions";
     Text[ finnish ] = ": Tyylin valinta";
     Text[ thai ] = ": เลือกลักษณะ";
-    Text[ czech ] = ": Výběr stylu";
+    Text[ czech ] = "Zvolte rozvržení";
     Text[ hebrew ] = "‮בחירת עיצוב פריסה‬";
     Text[ hindi ] = ": शैली चुनाव";
     Text[ slovak ] = "Vybrať vzhľad";
@@ -5045,7 +5045,7 @@ String RID_DB_REPORT_WIZARD_START + 14
     Text[ arabic ] = ": ����� �������";
     Text[ catalan ] = ": Estils";
     Text[ thai ] = ": ลักษณะ";
-    Text[ czech ] = ": Styly";
+    Text[ czech ] = "Uložit sestavu";
     Text[ hebrew ] = "‮שמירת הדו\"ח‬";
     Text[ hindi ] = ": शैलियाँ";
     Text[ slovak ] = "Uložiť správu";
@@ -5078,7 +5078,7 @@ String RID_DB_REPORT_WIZARD_START + 15
     Text[ catalan ] = ": Crea";
     Text[ finnish ] = ": Luo";
     Text[ thai ] = ": สร้าง";
-    Text[ czech ] = ": Vytvořit";
+    Text[ czech ] = "Rozvržení dat";
     Text[ hebrew ] = "‮עיצוב פריסת הנתונים‬";
     Text[ hindi ] = ": उत्पन्न करो";
     Text[ slovak ] = "Rozloženie dát";
@@ -5110,7 +5110,7 @@ String RID_DB_REPORT_WIZARD_START + 16
     Text[ catalan ] = "Font de dades";
     Text[ finnish ] = "Tietol�hde";
     Text[ thai ] = "แหล่งข้อมูล";
-    Text[ czech ] = "Zdroj dat";
+    Text[ czech ] = "Rozvržení hlaviček a patiček";
     Text[ hebrew ] = "‮עיצוב כותרת עליונה ותחתונה‬";
     Text[ hindi ] = "ड़ॉटा मूल";
     Text[ slovak ] = "Rozloženie záhlaví a zápätí";
@@ -5143,7 +5143,7 @@ String RID_DB_REPORT_WIZARD_START + 19
     Text[ catalan ] = "Organitza els camps";
     Text[ finnish ] = "J�rjestele kent�t";
     Text[ thai ] = "จัดการเขตข้อมูล";
-    Text[ czech ] = "Uspořádat pole";
+    Text[ czech ] = "Pole";
     Text[ hebrew ] = "‮שדות‬";
     Text[ hindi ] = "क्षेत्रों को व्यवस्था करो";
     Text[ slovak ] = "Polia";
@@ -5175,7 +5175,7 @@ String RID_DB_REPORT_WIZARD_START + 20
     Text[ catalan ] = "~Ordre";
     Text[ finnish ] = "~Lajitteluj�rjestys";
     Text[ thai ] = "เ~รียง";
-    Text[ czech ] = "Pořadí třídění";
+    Text[ czech ] = "Seřadit podle";
     Text[ hebrew ] = "‮מיון לפי‬";
     Text[ hindi ] = "~सोर्ट क्रम";
     Text[ slovak ] = "Zor~adiť podľa";
@@ -5241,7 +5241,7 @@ String RID_DB_REPORT_WIZARD_START + 22
     Text[ catalan ] = "~Vertical";
     Text[ finnish ] = "~Pysty";
     Text[ thai ] = "แนว~ตั้ง";
-    Text[ czech ] = "Na výšku";
+    Text[ czech ] = "Orientace";
     Text[ hebrew ] = "‮כיוון‬";
     Text[ hindi ] = "~पोरट्रैट";
     Text[ slovak ] = "Orientácia";
@@ -5273,7 +5273,7 @@ String RID_DB_REPORT_WIZARD_START + 23
     Text[ catalan ] = "~Apaisat";
     Text[ finnish ] = "~Vaaka";
     Text[ thai ] = "แนว~นอน";
-    Text[ czech ] = "Na šířku";
+    Text[ czech ] = "Na výšku";
     Text[ hebrew ] = "‮לאורך הדף‬";
     Text[ hindi ] = "~लान्डस्केप";
     Text[ slovak ] = "Na výšku";
@@ -5305,7 +5305,7 @@ String RID_DB_REPORT_WIZARD_START + 24
     Text[ catalan ] = "~Estil";
     Text[ finnish ] = "T~yyli";
     Text[ thai ] = "~ลักษณะ";
-    Text[ czech ] = "Styl";
+    Text[ czech ] = "Na šířku";
     Text[ hebrew ] = "‮לרוחב הדף‬";
     Text[ hindi ] = "~शैली";
     Text[ slovak ] = "Na šírku";
@@ -5337,7 +5337,7 @@ String RID_DB_REPORT_WIZARD_START + 28
     Text[ arabic ] = "~���� B";
     Text[ catalan ] = "Esq~uerra B";
     Text[ thai ] = "ซ้า~ย B";
-    Text[ czech ] = "Vlevo B";
+    Text[ czech ] = "Která pole chcete mít v sestavě?";
     Text[ hebrew ] = "‮איזה שדות לכלול בדו\"ח?‬";
     Text[ hindi ] = "बा~याँ B";
     Text[ slovak ] = "Ktoré polia chcete mať v správe?";
@@ -5368,7 +5368,7 @@ String RID_DB_REPORT_WIZARD_START + 29
     Text[ arabic ] = "~�����";
     Text[ catalan ] = "~Sagnat";
     Text[ thai ] = "เ~ยื้อง";
-    Text[ czech ] = "Odsazený";
+    Text[ czech ] = "Chcete přidat úrovně seskupení?";
     Text[ hebrew ] = "‮האם להוסיף רמות של חלוקה לקבוצות?‬";
     Text[ hindi ] = "~इन्डेन्ट किया हुआ";
     Text[ slovak ] = "Chcete pridať úrovne zoskupovania?";
@@ -5399,7 +5399,7 @@ String RID_DB_REPORT_WIZARD_START + 30
     Text[ arabic ] = "~���";
     Text[ catalan ] = "~Justificat";
     Text[ thai ] = "~ชิดขอบ";
-    Text[ czech ] = "Zarovnaný";
+    Text[ czech ] = "Podle kterého pole chcete řadit data?";
     Text[ hebrew ] = "‮מיון הנתונים לפי איזה שדות?‬";
     Text[ hindi ] = "~व्यवस्था किया हुआ";
     Text[ slovak ] = "Na základe ktorých polí chcete zradiť dáta?";
@@ -5430,7 +5430,7 @@ String RID_DB_REPORT_WIZARD_START + 31
     Text[ arabic ] = "~����� �������";
     Text[ catalan ] = "Estils";
     Text[ thai ] = "ลักษณะ";
-    Text[ czech ] = "Styly";
+    Text[ czech ] = "Jaký vzhled sestavy si přejete?";
     Text[ hebrew ] = "‮מה המראה הרצוי לד\"ח?‬";
     Text[ hindi ] = "शैलियाँ";
     Text[ slovak ] = "Ako chcete aby vaša správa vyzerala?";
@@ -5465,7 +5465,7 @@ String RID_DB_REPORT_WIZARD_START + 32
     Text[ catalan ] = "~Nom de l'informe";
     Text[ finnish ] = "Raportin ~nimi";
     Text[ thai ] = "~ชื่อรายงาน";
-    Text[ czech ] = "Název sestavy";
+    Text[ czech ] = "Jaký typ sestavy si přejete?";
     Text[ hebrew ] = "‮איזה סוג דו\"ח?‬";
     Text[ hindi ] = "रिपोर्ट का ~नाम";
     Text[ slovak ] = "Aký typ správy chcete";
@@ -5498,7 +5498,7 @@ String RID_DB_REPORT_WIZARD_START + 33
     Text[ catalan ] = "En acab~ar...";
     Text[ finnish ] = "Valmistumisen ~j�lkeen...";
     Text[ thai ] = "หลังจากเสร็จสม~บูรณ์...";
-    Text[ czech ] = "Po dokončení...";
+    Text[ czech ] = "Název sestavy";
     Text[ hebrew ] = "‮כותרת הדו\"ח‬";
     Text[ hindi ] = "समा~प्ती के पश्चात्...";
     Text[ slovak ] = "Názov správy";
@@ -5534,7 +5534,7 @@ String RID_DB_REPORT_WIZARD_START + 34
     Text[ czech ] = "Zobrazit sestavu";
     Text[ hebrew ] = "‮הצגת הדו\"ח‬";
     Text[ hindi ] = "रिपोर्ट दिखाओ";
-    Text[ slovak ] = "Zobraziť hlásenie";
+    Text[ slovak ] = "Zobraziť správu";
 };
 
 String RID_DB_REPORT_WIZARD_START + 35
@@ -5566,7 +5566,7 @@ String RID_DB_REPORT_WIZARD_START + 35
     Text[ czech ] = "Uložit sestavu";
     Text[ hebrew ] = "‮שמירת הדו\"ח‬";
     Text[ hindi ] = "रिपोर्ट संचित करो";
-    Text[ slovak ] = "Uložiť hlásenie";
+    Text[ slovak ] = "Uložiť správu";
 };
 
 String RID_DB_REPORT_WIZARD_START + 36
@@ -5593,7 +5593,7 @@ String RID_DB_REPORT_WIZARD_START + 36
     Text[ catalan ] = "A;Z";
     Text[ finnish ] = "A;Z";
     Text[ thai ] = "จาก~น้อยไปหามาก";
-    Text[ czech ] = "A;Z";
+    Text[ czech ] = "Vzestupně";
     Text[ hebrew ] = "‮סדר עולה‬";
     Text[ hindi ] = "A;Z";
     Text[ slovak ] = "Vzostupne";
@@ -5623,7 +5623,7 @@ String RID_DB_REPORT_WIZARD_START + 37
     Text[ catalan ] = "Els noms d'informe no poden ser m�s llargs de 32 car�cters.";
     Text[ finnish ] = "Raporttien nimet eiv�t saa olla yli 32 merkin pituisia.";
     Text[ thai ] = "ชื่อรายงานต้องยาวไม่เกิน 32 ตัวอักขระ";
-    Text[ czech ] = "Názvy sestav nemohou být delší než 32 znaků.";
+    Text[ czech ] = "Sestupně";
     Text[ hebrew ] = "‮סדר יורד‬";
     Text[ hindi ] = "रिपोर्ट का नाम् 32 अक्षरों से अधिक नहीं हो सकता है ।";
     Text[ slovak ] = "Zostupne";
@@ -5654,7 +5654,7 @@ String RID_DB_REPORT_WIZARD_START + 40
     Text[ arabic ] = "Dynamic report template";
     Text[ catalan ] = "Dynamic report template";
     Text[ thai ] = "Dynamic report template";
-    Text[ czech ] = "Dynamická šablona reportu";
+    Text[ czech ] = "Dynamická šablona sestavy";
     Text[ hebrew ] = "‮תבנית דו\"ח דינמית‬";
     Text[ hindi ] = "Dynamic report template";
     Text[ slovak ] = "Dynamická šablóna správy";
@@ -5685,7 +5685,7 @@ String RID_DB_REPORT_WIZARD_START + 41
     Text[ arabic ] = "Use report template immediately";
     Text[ catalan ] = "Use report template immediately";
     Text[ thai ] = "Use report template immediately";
-    Text[ czech ] = "Ihned použít šablonu reportu";
+    Text[ czech ] = "Ihned použít šablonu sestavy";
     Text[ hebrew ] = "‮יישום מיידי של תבנית הדו\"ח‬";
     Text[ hindi ] = "Use report template immediately";
     Text[ slovak ] = "Okamžite použiť šablónu správy";
@@ -6106,7 +6106,7 @@ String RID_DB_REPORT_WIZARD_START + 60
     Text[ chinese_traditional ] = "無法在報表之中顯示二元欄位";
     Text[ turkish ] = "�kili alanlar raporda g�r�nt�lenemez.";
     Text[ arabic ] = "Binary Fields cannot be displayed in the report";
-    Text[ czech ] = "Binární pole nelze v tomto reportu zobrazit.";
+    Text[ czech ] = "Binární pole nelze v sestavě zobrazit.";
     Text[ hebrew ] = "‮לא ניתן להציג שדות בינריים בדו\"ח.‬";
     Text[ catalan ] = "Binary fields cannot be displayed in the report.";
     Text[ portuguese_brazilian ] = "Campos bin�rios n�o podem ser exibidos no relat�rio.";
@@ -6167,7 +6167,7 @@ String RID_DB_REPORT_WIZARD_START + 62
     Text[ chinese_traditional ] = "正在建立報表...";
     Text[ turkish ] = "Rapor Olu�turuluyor...";
     Text[ arabic ] = "Report is created...";
-    Text[ czech ] = "Vytváření reportu...";
+    Text[ czech ] = "Vytváření sestavy...";
     Text[ hebrew ] = "‮יצירת דו\"ח...‬";
     Text[ catalan ] = "Creating Report...";
     Text[ portuguese_brazilian ] = "Criando o relat�rio...";
@@ -6529,7 +6529,7 @@ String RID_DB_REPORT_WIZARD_START + 74
     Text[ greek ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
     Text[ dutch ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
     Text[ finnish ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
-    Text[ czech ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text[ czech ] = "Kritérium pro řazení '<FIELDNAME>' bylo zvoleno dvakrát. Každé kritérium může být zvoleno pouze jednou.";
     Text[ danish ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
     Text[ polish ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
     Text[ portuguese_brazilian ] = "O crt�rio de ordena��o '<FIELDNAME>' foi escolhido em duplicidade. Cada crit�rio s� pode ser escolhido uma vez.";
@@ -6539,6 +6539,7 @@ String RID_DB_REPORT_WIZARD_START + 74
     Text[ catalan ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
     Text[ thai ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
     Text[ slovak ] = "Zoraďovacie kritérium '<FIELDNAME>' bolo vybrané dvakrát. Každé kritérium môže byť vybrané len raz.";
+    Text[ hindi ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
 };
 
 
@@ -6559,7 +6560,7 @@ String RID_DB_REPORT_WIZARD_START + 75
     Text[ greek ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
     Text[ dutch ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
     Text[ finnish ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
-    Text[ czech ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+    Text[ czech ] = "Poznámka: Vyplňující text bude po vytvoření reportu nahrazen daty z databáze.";
     Text[ danish ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
     Text[ polish ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
     Text[ portuguese_brazilian ] = "Nota: O texto fict�cio ser� substitu�do por dados do banco de dados quando o relat�rio for criado. ";
@@ -6569,6 +6570,7 @@ String RID_DB_REPORT_WIZARD_START + 75
     Text[ catalan ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
     Text[ thai ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
     Text[ slovak ] = "poznámka: Text bude nahradený dátami z databáze pri vytvorení správy.";
+    Text[ hindi ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
 };
 
 
@@ -6924,7 +6926,7 @@ String RID_DB_TABLE_WIZARD_START + 10
     Text[ catalan ] = "Bases de dades";
     Text[ finnish ] = "Tietokannat";
     Text[ thai ] = "ฐานข้อมูล";
-    Text[ czech ] = "Databases";
+    Text[ czech ] = "Databáze";
     Text[ hebrew ] = "‮מסדי נתונים‬";
     Text[ hindi ] = "लेखासंचय";
     Text[ slovak ] = "Databázy";
@@ -7084,7 +7086,7 @@ String RID_DB_TABLE_WIZARD_START + 15
     Text[ catalan ] = "~Aplica";
     Text[ finnish ] = "K�~yt�";
     Text[ thai ] = "ใ~ช้";
-    Text[ czech ] = "Aplikuj";
+    Text[ czech ] = "Aplikovat";
     Text[ hebrew ] = "‮ישום‬";
     Text[ hindi ] = "~लागू करो";
     Text[ slovak ] = "~Použiť";
@@ -7313,7 +7315,7 @@ String RID_DB_GRID_WIZARD_START + 2
     Text[ catalan ] = "(Data)";
     Text[ finnish ] = "(P�iv�m��r�)";
     Text[ thai ] = "(วันที่)";
-    Text[ czech ] = "(Date)";
+    Text[ czech ] = "(Datum)";
     Text[ hebrew ] = "‮(תאריך)‬";
     Text[ hindi ] = "(दिनांक)";
     Text[ slovak ] = "(Dátum)";
@@ -7506,7 +7508,7 @@ String RID_DB_GRID_WIZARD_START + 8
     Text[ catalan ] = ": Estils";
     Text[ finnish ] = ": Tyylit";
     Text[ thai ] = ": ลักษณะ";
-    Text[ czech ] = ": Styles";
+    Text[ czech ] = ": Styly";
     Text[ hebrew ] = "‮סגנונות:‬";
     Text[ hindi ] = ": शैलियाँ";
     Text[ slovak ] = ": Štýly";
@@ -7571,7 +7573,7 @@ String RID_DB_GRID_WIZARD_START + 10
     Text[ catalan ] = "Base de dades";
     Text[ finnish ] = "Tietokanta";
     Text[ thai ] = "ฐานข้อมูล";
-    Text[ czech ] = "Database";
+    Text[ czech ] = "Databáze";
     Text[ hebrew ] = "‮מסד נתונים‬";
     Text[ hindi ] = "लेखासंचय";
     Text[ slovak ] = "Databáza";
@@ -7603,7 +7605,7 @@ String RID_DB_GRID_WIZARD_START + 11
     Text[ catalan ] = "Camps existents";
     Text[ finnish ] = "Nykyiset kent�t";
     Text[ thai ] = "เขตข้อมูลที่มีอยู่แล้ว";
-    Text[ czech ] = "Existing fields";
+    Text[ czech ] = "Existující pole";
     Text[ hebrew ] = "‮שדות קיימים‬";
     Text[ hindi ] = "अस्तित्व में रहनेवाला क्षेत्र";
     Text[ slovak ] = "Existujúce polia";
@@ -8024,7 +8026,7 @@ String RID_DB_COMBO_WIZARD_START + 11
     Text[ catalan ] = "Camps existents";
     Text[ finnish ] = "Nykyiset kent�t";
     Text[ thai ] = "เขตข้อมูลที่มีอยู่แล้ว";
-    Text[ czech ] = "Existing fields";
+    Text[ czech ] = "Existující pole";
     Text[ hebrew ] = "‮שדות קיימים‬";
     Text[ hindi ] = "अस्तित्व में रहनेवाला क्षेत्र";
     Text[ slovak ] = "Existujúce polia";
@@ -8152,7 +8154,7 @@ String RID_DB_COMBO_WIZARD_START + 15
     Text[ catalan ] = "Informaci�";
     Text[ finnish ] = "Tiedot";
     Text[ thai ] = "ข้อมูล";
-    Text[ czech ] = "Information";
+    Text[ czech ] = "Informace";
     Text[ hebrew ] = "‮מידע‬";
     Text[ hindi ] = "सूचना";
     Text[ slovak ] = "Informácia";
@@ -8384,6 +8386,64 @@ String RID_DB_COMBO_WIZARD_START + 22
 };
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
