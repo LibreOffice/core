@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cli_cs_testobj.cs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 14:53:57 $
+ *  last change: $Author: rt $ $Date: 2004-09-22 08:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,11 +613,6 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         aSeqDim3 = _arLong3;
 
     }
-
-    public TestPolyStruct getNullPolyBadEnum()
-{
-    return new TestPolyStruct();
-}
 
     public TestPolyStruct transportPolyBoolean(/*[in]*/TestPolyStruct arg)
     {
