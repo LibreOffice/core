@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_typetext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:34:36 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,8 @@ class HF_IdlTypeText : public HtmlFactory_Idl
                             const String &      i_ce,
                             const String &      i_member,
                             int                 i_sequenceCount,
-                            E_Existence         i_ceExists ) const;
+                            E_Existence         i_ceExists,
+                            ary::idl::Type_id   i_nTemplateType = ary::idl::Type_id::Null_() ) const;
     void                produce_BuiltIn(
                             const String &      i_type,
                             int                 i_sequenceCount ) const;
