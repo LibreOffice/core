@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-31 17:04:45 $
+ *  last change: $Author: ka $ $Date: 2001-11-06 12:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,6 +567,11 @@ void GalleryTransferable::InitData()
 
             case( SGA_OBJ_SVDRAW ):
             {
+                Graphic aGraphic;
+
+                if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
+                    mpGraphicObject = new GraphicObject( aGraphic );
+
                 mpModel = new FmFormModel;
 
                 if( !mpTheme->GetModel( mnObjectPos, *mpModel ) )
@@ -589,6 +594,9 @@ void GalleryTransferable::AddSupportedFormats()
 {
     InitData();
 
+    if( mpURL )
+        AddFormat( FORMAT_FILE );
+
     if( mpModel )
     {
         Graphic     aGraphic;
@@ -601,47 +609,25 @@ void GalleryTransferable::AddSupportedFormats()
             delete mpGraphicObject, mpGraphicObject = new GraphicObject( aGraphic );
             delete mpImageMap, mpImageMap = new ImageMap( aImageMap );
 
-            AddFormat( SOT_FORMATSTR_ID_SVXB );
             AddFormat( SOT_FORMATSTR_ID_SVIM );
-
-            if( mpGraphicObject->GetType() == GRAPHIC_GDIMETAFILE )
-            {
-                AddFormat( FORMAT_GDIMETAFILE );
-                AddFormat( FORMAT_BITMAP );
-            }
-            else
-            {
-                AddFormat( FORMAT_BITMAP );
-                AddFormat( FORMAT_GDIMETAFILE );
-            }
         }
         else
-        {
             AddFormat( SOT_FORMATSTR_ID_DRAWING );
-            AddFormat( SOT_FORMATSTR_ID_SVXB );
+    }
+
+    if( mpGraphicObject )
+    {
+        AddFormat( SOT_FORMATSTR_ID_SVXB );
+
+        if( mpGraphicObject->GetType() == GRAPHIC_GDIMETAFILE )
+        {
             AddFormat( FORMAT_GDIMETAFILE );
             AddFormat( FORMAT_BITMAP );
         }
-    }
-    else
-    {
-        if( mpURL )
-            AddFormat( FORMAT_FILE );
-
-        if( mpGraphicObject )
+        else
         {
-            AddFormat( SOT_FORMATSTR_ID_SVXB );
-
-            if( mpGraphicObject->GetType() == GRAPHIC_GDIMETAFILE )
-            {
-                AddFormat( FORMAT_GDIMETAFILE );
-                AddFormat( FORMAT_BITMAP );
-            }
-            else
-            {
-                AddFormat( FORMAT_BITMAP );
-                AddFormat( FORMAT_GDIMETAFILE );
-            }
+            AddFormat( FORMAT_BITMAP );
+            AddFormat( FORMAT_GDIMETAFILE );
         }
     }
 }
