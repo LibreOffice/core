@@ -1,10 +1,10 @@
-/*************************************************************************
+/************************************************************************
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-15 08:36:18 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include "ssoinit.hxx"
 #include "configinit.hxx"
 #include "lockfile.hxx"
-#include "testtool.hxx"
 #include "checkinstall.hxx"
 #include "cmdlinehelp.hxx"
 #include "userinstall.hxx"
@@ -185,6 +184,9 @@
 
 #include <com/sun/star/java/XJavaVM.hpp>
 
+#ifndef _TOOLS_TESTTOOLLOADER_HXX_
+#include <tools/testtoolloader.hxx>
+#endif
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -1416,7 +1418,7 @@ void Desktop::Main()
             DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
 
         // initialize test-tool library (if available)
-        InitTestToolLib();
+        tools::InitTestToolLib();
 
         // License Dialog
         Reference< XJob > xLicense(xSMgr->createInstance(
@@ -1607,7 +1609,7 @@ void Desktop::Main()
 
     DeregisterServices();
 
-    DeInitTestToolLib();
+    tools::DeInitTestToolLib();
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> dispose path/language options" );
     delete pLanguageOptions;
