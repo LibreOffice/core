@@ -85,6 +85,11 @@ private:
 
     std::vector<PrevwPage*> maPrevwPages;
 
+    // OD 07.11.2003 #i22014# - internal booleans to indicate, that a new print
+    // preview layout has been created during a paint.
+    mutable bool mbInPaint;
+    mutable bool mbNewLayoutDuringPaint;
+
     /** clear internal data about current page preview
 
         OD 11.12.2002 #103492#
