@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:42:27 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -980,22 +980,13 @@ Sequence< OUString > SwXFrame::getSupportedServiceNames(void) throw( RuntimeExce
     pArray[2] = C2U("com.sun.star.document.LinkTarget");
     return aRet;
 }
-/*-- 11.12.98 15:05:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-SwXFrame::SwXFrame(  ) :
-    eType(FLYCNTTYPE_FRM),
-    aLstnrCntnr( (container::XNamed*)this),
-    aPropSet(0),
-    _pMap(0),
-    bIsDescriptor(sal_False),
-    pProps(0)
-{
-}
+
 /*-- 14.01.99 11:31:52---------------------------------------------------
     Dieser CTor legt den Frame als Descriptor an
   -----------------------------------------------------------------------*/
-SwXFrame::SwXFrame(FlyCntType eSet, const SfxItemPropertyMap* pMap, SwDoc *pDoc ) :
+SwXFrame::SwXFrame(FlyCntType eSet, const SfxItemPropertyMap* pMap, SwDoc *pDoc)
+    :
     aLstnrCntnr( (container::XNamed*)this),
     eType(eSet),
     aPropSet(pMap),
