@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmeta.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-21 14:38:35 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 14:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,22 +273,9 @@ void SwXMLExport::_ExportMeta()
 {
     SvXMLExport::_ExportMeta();
 
-    SwDocStat aDocStat( GetDoc().GetDocStat() );
-    if( aDocStat.bModified )
-        GetDoc().UpdateDocStat( aDocStat
-#if SUPD < 614
-                 ,0
-#endif
-                );
-
-    if( bShowProgress )
-    {
-        ProgressBarHelper *pProgress = GetProgressBarHelper();
-        pProgress->SetReference( 20 + 2*aDocStat.nPara );
-        pProgress->SetValue( 20 );
-    }
     OUStringBuffer aOut(16);
 
+    SwDocStat aDocStat( GetDoc().GetDocStat() );
     aOut.append( (sal_Int32)aDocStat.nTbl );
     AddAttribute( XML_NAMESPACE_META, sXML_table_count,
                   aOut.makeStringAndClear() );

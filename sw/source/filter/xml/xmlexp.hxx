@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-21 14:38:35 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 14:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ class SwXMLExport : public SvXMLExport
     UniReference < XMLPropertySetMapper > xParaPropMapper;
 //  UniReference < XMLTextMasterPageExport> xMasterPageExport;
 
+    sal_Int32                   nContentProgressStart;
     sal_Bool                    bExportWholeDoc : 1;// export whole document?
     sal_Bool                    bExportFirstTableOnly : 1;
     sal_Bool                    bShowProgress : 1;

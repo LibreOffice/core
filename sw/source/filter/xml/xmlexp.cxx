@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-21 14:38:34 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 14:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
 #endif
+#ifndef _DOCSTAT_HXX
+#include "docstat.hxx"
+#endif
 
 
 #ifndef _XMLOFF_NMSPMAP_HXX
@@ -107,6 +110,9 @@
 #endif
 #ifndef _XMLOFF_XMLCNITM_HXX
 #include <xmloff/xmlcnitm.hxx>
+#endif
+#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
+#include <xmloff/ProgressBarHelper.hxx>
 #endif
 
 #ifndef _XMLTEXTE_HXX
@@ -173,6 +179,7 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
 #endif
     pTableItemMapper( 0 ),
     pTableLines( 0 ),
+    nContentProgressStart( 0 ),
     bExportWholeDoc( bExpWholeDoc ),
     bExportFirstTableOnly( bExpFirstTableOnly ),
     bShowProgress( bShowProg ),
@@ -221,9 +228,24 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
 
     _InitItemExport();
 
-//  if( bShowProgress )
+    // Update doc stat, so that correct values are exported and
+    // the progress works correctly.
+    SwDocStat aDocStat( GetDoc().GetDocStat() );
+    if( aDocStat.bModified )
+        GetDoc().UpdateDocStat( aDocStat
+#if SUPD < 614
+                 ,0
+#endif
+                );
+    if( bShowProgress )
+    {
 //      ::StartProgress( STR_STATSTR_W4WWRITE, 0, pDoc->GetNodes().Count(),
 //                       pDoc->GetDocShell() );
+        nContentProgressStart = (sal_Int32)aDocStat.nPara / 2;
+        ProgressBarHelper *pProgress = GetProgressBarHelper();
+        pProgress->SetReference( nContentProgressStart + 2*aDocStat.nPara );
+        pProgress->SetValue( 0 );
+    }
 
     SfxObjectShell* pObjSh = pDoc->GetDocShell();
     if( pObjSh )

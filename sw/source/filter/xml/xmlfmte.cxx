@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-21 14:38:35 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 14:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include <xmloff/families.hxx>
+#endif
+#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
+#include <xmloff/ProgressBarHelper.hxx>
 #endif
 
 #ifndef _FORMAT_HXX //autogen wg. SwFmt
@@ -444,6 +447,12 @@ void SwXMLExport::_ExportStyles( sal_Bool bUsed )
 
 void SwXMLExport::_ExportAutoStyles()
 {
+    if( bShowProgress )
+    {
+        ProgressBarHelper *pProgress = GetProgressBarHelper();
+        pProgress->SetValue( nContentProgressStart );
+        GetTextParagraphExport()->SetProgress( nContentProgressStart );
+    }
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
 
