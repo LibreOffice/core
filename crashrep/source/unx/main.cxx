@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 13:59:29 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <pwd.h>
 #include <pthread.h>
 
-#ifdef LINUX
+#if defined (LINUX) || (FREEBSD)
 #include <netinet/in.h>
 #endif
 
