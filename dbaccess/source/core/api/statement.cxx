@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statement.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-10 13:21:59 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,18 @@ void OStatementBase::disposing()
     }
 
     if ( m_xAggregateAsSet.is() )
-        Reference< XCloseable > (m_xAggregateAsSet, UNO_QUERY)->close();
+    {
+        try
+        {
+            Reference< XCloseable > (m_xAggregateAsSet, UNO_QUERY)->close();
+        }
+        catch(DisposedException& e)
+        {// don't care for anymore
+        }
+        catch(RuntimeException& e)
+        {// don't care for anymore
+        }
+    }
     m_xAggregateAsSet = NULL;
 
     // free the parent at last
@@ -361,7 +372,8 @@ Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  ) throw(SQLExcep
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
-    if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsMultipleResultSets())
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    if (!xMeta.is() && !xMeta->supportsMultipleResultSets())
         throwFunctionSequenceException(*this);
 
     return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY)->getResultSet();
@@ -374,7 +386,8 @@ sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  ) throw(SQLException, Runtim
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
-    if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsMultipleResultSets())
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    if (!xMeta.is() && !xMeta->supportsMultipleResultSets())
         throwFunctionSequenceException(*this);
 
     return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY)->getUpdateCount();
@@ -387,7 +400,9 @@ sal_Bool SAL_CALL OStatementBase::getMoreResults(  ) throw(SQLException, Runtime
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
-    if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsMultipleResultSets())
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    if (!xMeta.is() && !xMeta->supportsMultipleResultSets())
+        throwFunctionSequenceException(*this);
         throwFunctionSequenceException(*this);
 
     // free the previous results
@@ -404,7 +419,8 @@ void SAL_CALL OStatementBase::addBatch(  ) throw(SQLException, RuntimeException)
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
-    if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsBatchUpdates())
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    if (!xMeta.is() && !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
 
     Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->addBatch();
@@ -417,7 +433,8 @@ void SAL_CALL OStatementBase::clearBatch(  ) throw(SQLException, RuntimeExceptio
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
-    if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsBatchUpdates())
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    if (!xMeta.is() && !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
 
     Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->clearBatch();
@@ -430,7 +447,8 @@ Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  ) throw(SQLExcepti
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
-    if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsBatchUpdates())
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    if (!xMeta.is() && !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
 
     // free the previous results
@@ -540,7 +558,8 @@ Reference< XResultSet > OStatement::executeQuery(const rtl::OUString& sql) throw
     Reference< XResultSet > xDrvResultSet = Reference< XStatement >(m_xAggregateAsSet, UNO_QUERY)->executeQuery(sql);
     if (xDrvResultSet.is())
     {
-        sal_Bool bCaseSensitive = Reference< XConnection >(m_xParent, UNO_QUERY)->getMetaData()->supportsMixedCaseQuotedIdentifiers();
+        Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+        sal_Bool bCaseSensitive = xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers();
         xResultSet = new OResultSet(xDrvResultSet, *this, bCaseSensitive);
 
         // keep the resultset weak
