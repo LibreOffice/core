@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortresult.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-14 08:42:00 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 13:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1501,7 +1501,7 @@ void SortedResultSet::Initialize(
             nIndex++;
         }
     }
-    catch ( SQLException ) { OSL_ENSHURE( sal_False, "SortedResultSet::Initialize() : Got unexpected SQLException" ); }
+    catch ( SQLException ) { OSL_ENSURE( sal_False, "SortedResultSet::Initialize() : Got unexpected SQLException" ); }
 
     // when we have fetched all the elements, we can create the
     // original to sorted mapping list from the s2o list
@@ -1856,7 +1856,7 @@ void SortedResultSet::ResortModified( EventList* pList )
             }
         }
     }
-    catch ( SQLException ) { OSL_ENSHURE( sal_False, "SortedResultSet::ResortModified() : Got unexpected SQLException" ); }
+    catch ( SQLException ) { OSL_ENSURE( sal_False, "SortedResultSet::ResortModified() : Got unexpected SQLException" ); }
 
     maModList.Clear();
 }
@@ -1889,7 +1889,7 @@ void SortedResultSet::ResortNew( EventList* pList )
             pList->AddEvent( ListActionType::INSERTED, nNewPos, 1 );
         }
     }
-    catch ( SQLException ) { OSL_ENSHURE( sal_False, "SortedResultSet::ResortNew() : Got unexpected SQLException" ); }
+    catch ( SQLException ) { OSL_ENSURE( sal_False, "SortedResultSet::ResortNew() : Got unexpected SQLException" ); }
 }
 
 //-------------------------------------------------------------------------
