@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-13 10:53:17 $
+ *  last change: $Author: cl $ $Date: 2001-07-24 09:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,39 +202,46 @@ void CheckSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) thr
     DBG_ASSERT( pForwarder, "I need a valid SvxTextForwarder!" );
     if( pForwarder )
     {
-        ESelection aMaxSelection;
-        GetSelection( aMaxSelection, pForwarder );
+        if( rSel.nStartPara == 0xffff )
+        {
+            ::GetSelection( rSel, pForwarder );
+        }
+        else
+        {
+            ESelection aMaxSelection;
+            GetSelection( aMaxSelection, pForwarder );
 
-        // check start position
-        if( rSel.nStartPara < aMaxSelection.nStartPara )
-        {
-            rSel.nStartPara = aMaxSelection.nStartPara;
-            rSel.nStartPos = aMaxSelection.nStartPos;
-        }
-        else if( rSel.nStartPara > aMaxSelection.nEndPara )
-        {
-            rSel.nStartPara = aMaxSelection.nEndPara;
-            rSel.nStartPos = aMaxSelection.nEndPos;
-        }
-        else if( rSel.nStartPos  > pForwarder->GetTextLen( rSel.nStartPara ) )
-        {
-            rSel.nStartPos = pForwarder->GetTextLen( rSel.nStartPara );
-        }
+            // check start position
+            if( rSel.nStartPara < aMaxSelection.nStartPara )
+            {
+                rSel.nStartPara = aMaxSelection.nStartPara;
+                rSel.nStartPos = aMaxSelection.nStartPos;
+            }
+            else if( rSel.nStartPara > aMaxSelection.nEndPara )
+            {
+                rSel.nStartPara = aMaxSelection.nEndPara;
+                rSel.nStartPos = aMaxSelection.nEndPos;
+            }
+            else if( rSel.nStartPos  > pForwarder->GetTextLen( rSel.nStartPara ) )
+            {
+                rSel.nStartPos = pForwarder->GetTextLen( rSel.nStartPara );
+            }
 
-        // check end position
-        if( rSel.nEndPara < aMaxSelection.nStartPara )
-        {
-            rSel.nEndPara = aMaxSelection.nStartPara;
-            rSel.nEndPos = aMaxSelection.nStartPos;
-        }
-        else if( rSel.nEndPara > aMaxSelection.nEndPara )
-        {
-            rSel.nEndPara = aMaxSelection.nEndPara;
-            rSel.nEndPos = aMaxSelection.nEndPos;
-        }
-        else if( rSel.nEndPos > pForwarder->GetTextLen( rSel.nEndPara ) )
-        {
-            rSel.nEndPos = pForwarder->GetTextLen( rSel.nEndPara );
+            // check end position
+            if( rSel.nEndPara < aMaxSelection.nStartPara )
+            {
+                rSel.nEndPara = aMaxSelection.nStartPara;
+                rSel.nEndPos = aMaxSelection.nStartPos;
+            }
+            else if( rSel.nEndPara > aMaxSelection.nEndPara )
+            {
+                rSel.nEndPara = aMaxSelection.nEndPara;
+                rSel.nEndPos = aMaxSelection.nEndPos;
+            }
+            else if( rSel.nEndPos > pForwarder->GetTextLen( rSel.nEndPara ) )
+            {
+                rSel.nEndPos = pForwarder->GetTextLen( rSel.nEndPara );
+            }
         }
     }
 }
@@ -290,10 +297,7 @@ void SvxUnoTextRangeBase::SetEditSource( SvxEditSource* pSource ) throw()
 
     pEditSource = pSource;
 
-    ESelection aSelection;
-    ::GetSelection( aSelection, pEditSource->GetTextForwarder() );
-    SetSelection( aSelection );
-
+    aSelection.nStartPara = 0xffff;
 }
 
 /** puts a field item with a copy of the given FieldData into the itemset
