@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:16:23 $
+ *  last change: $Author: nn $ $Date: 2001-11-01 18:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1642,9 +1642,17 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
         if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
              (rDCEvt.GetFlags() & SETTINGS_STYLE) )
         {
-            //  RepeatResize falls sich die Scrollbar-Groesse geaendert hat
-            if ( eWhich == pViewData->GetActivePart() )     // einmal reicht
-                pViewData->GetView()->RepeatResize();
+            if ( eWhich == pViewData->GetActivePart() )     // only once for the view
+            {
+                ScTabView* pView = pViewData->GetView();
+
+                //  update scale in case the UI ScreenZoom has changed
+                ScGlobal::UpdatePPT(this);
+                pView->RecalcPPT();
+
+                //  RepeatResize in case scroll bar sizes have changed
+                pView->RepeatResize();
+            }
         }
 
         Invalidate();
