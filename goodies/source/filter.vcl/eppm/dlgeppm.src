@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeppm.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:47:23 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ ModalDialog DLG_EXPORT_EPPM
         Text[ czech ] = "Formát souboru";
         Text[ hebrew ] = "‮צורת תוכן קובץ‬";
         Text[ hindi ] = "फाइल रचना";
+        Text[ slovak ] = "Formát súboru";
     };
     RadioButton RB_RAW
     {
@@ -157,6 +158,7 @@ ModalDialog DLG_EXPORT_EPPM
         Text[ czech ] = "Binární";
         Text[ hebrew ] = "‮בינרי‬";
         Text[ hindi ] = "~बैनरी";
+        Text[ slovak ] = "~Binárny";
     };
     RadioButton RB_ASCII
     {
@@ -192,6 +194,7 @@ ModalDialog DLG_EXPORT_EPPM
         Text[ czech ] = "Textový";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "~टेक्स्ट्";
+        Text[ slovak ] = "~Textový";
     };
     Text[ italian ] = "Opzioni PPM";
     Text[ portuguese_brazilian ] = "Op��es PPM";
@@ -219,7 +222,10 @@ ModalDialog DLG_EXPORT_EPPM
     Text[ czech ] = "Volby pro formát PPM";
     Text[ hebrew ] = "‮אפשרויות PPM‬";
     Text[ hindi ] = "PPM विकल्प";
+    Text[ slovak ] = "Nastavenia pre PPM formát";
 };
+
+
 
 
 
