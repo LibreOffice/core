@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-09 17:51:29 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,9 @@
 #endif
 #ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
+#endif
+#ifndef _SVX_CHARHIDDENITEM_HXX
+#include <svx/charhiddenitem.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -520,7 +523,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_ATTR_CHAR_TWO_LINES, SFX_ITEM_POOLABLE },     // RES_CHRATR_TWO_LINES
     { SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEM_POOLABLE },    // RES_CHRATR_SCALEW
     { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },        // RES_CHRATR_RELIEF
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
+    { SID_ATTR_CHAR_HIDDEN, SFX_ITEM_POOLABLE },        // RES_CHRATR_HIDDEN
 
     { FN_TXTATR_INET, 0 },                              // RES_TXTATR_INETFMT
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY4
@@ -761,9 +764,10 @@ void _InitCore()
     aAttrTab[ RES_CHRATR_TWO_LINES - POOLATTR_BEGIN ] = new SvxTwoLinesItem( FALSE );
     aAttrTab[ RES_CHRATR_SCALEW - POOLATTR_BEGIN ] = new SvxCharScaleWidthItem;
     aAttrTab[ RES_CHRATR_RELIEF - POOLATTR_BEGIN ] = new SvxCharReliefItem;
+    aAttrTab[ RES_CHRATR_HIDDEN - POOLATTR_BEGIN ] = new SvxCharHiddenItem( FALSE, RES_CHRATR_HIDDEN );
 
 // CharakterAttr - Dummies
-    aAttrTab[ RES_CHRATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY1 );
+    //no dummy available
 // CharakterAttr - Dummies
 
 // TextAttr Ende - Dummies
