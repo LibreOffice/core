@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxf2mtf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-29 10:04:09 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,7 @@ void DXF2GDIMetaFile::DrawTextEntity(const DXFTextEntity & rE, const DXFTransfor
     aT.TransDir(DXFVector(1,0,0),aV);
     if ( SetFontAttribute( rE,nAng, nHeight, aV. Abs() ) )
     {
-        String aUString( aStr, RTL_TEXTENCODING_IBM_437 );
+        String aUString( aStr, pDXF->getTextEncoding() );
         aT.Transform( DXFVector( 0, 0, 0 ), aPt );
         pVirDev->DrawText( aPt, aUString );
     }
@@ -492,7 +492,7 @@ void DXF2GDIMetaFile::DrawAttribEntity(const DXFAttribEntity & rE, const DXFTran
         aT.TransDir(DXFVector(1,0,0),aV);
         if (SetFontAttribute(rE,nAng,nHeight,aV.Abs()))
         {
-            String aUString( aStr, RTL_TEXTENCODING_IBM_437 );
+            String aUString( aStr, pDXF->getTextEncoding() );
             aT.Transform( DXFVector( 0, 0, 0 ), aPt );
             pVirDev->DrawText( aPt, aUString );
         }
