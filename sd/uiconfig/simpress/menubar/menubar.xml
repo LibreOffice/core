@@ -134,7 +134,16 @@
                     <menu:menuitem menu:id=".uno:HandoutMasterPage" menu:helpid="27349" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
+            <menu:menu menu:id=".uno:MasterLayoutsMenu" menu:label="">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:MasterLayoutsSlide" menu:helpid="27408" menu:label="" />
+                    <menu:menuitem menu:id=".uno:MasterLayoutsNotes" menu:helpid="27409" menu:label="" />
+                    <menu:menuitem menu:id=".uno:MasterLayoutsHandouts" menu:helpid="27410" menu:label="" />
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuitem menu:id=".uno:LayerMode" menu:helpid="27050" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:HeaderAndFooter" menu:helpid="27407" menu:label="" />
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:GridMenu" menu:label="" >
                 <menu:menupopup>
@@ -161,6 +170,8 @@
             <menu:menuitem menu:id=".uno:DuplicatePage" menu:helpid="27342" menu:label="" />
             <menu:menuitem menu:id=".uno:ExpandPage" menu:helpid="27343" menu:label="" />
             <menu:menuitem menu:id=".uno:SummaryPage" menu:helpid="27344" menu:label="" />
+            <menu:menuitem menu:id=".uno:InsertPageNumber" menu:helpid="27411" menu:label="" />
+            <menu:menuitem menu:id=".uno:InsertDateAndTime" menu:helpid="27412" menu:label="" />
             <menu:menu menu:id=".uno:FieldMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertDateFieldFix" menu:helpid="27358" menu:label="" />
