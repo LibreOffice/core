@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:56:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ public:
     virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, ULONG nPaperBin );
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData );
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
+    virtual DuplexMode          GetDuplexMode( const ImplJobSetup* pSetupData );
 };
 
 class PspSalPrinter : public SalPrinter
