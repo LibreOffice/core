@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2002-01-10 12:34:47 $
+ *  last change: $Author: kz $ $Date: 2002-01-16 21:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ ModalDialog DLG_NEW_FILE
         Text[ chinese_simplified ] = "ι™„ε (~M)";
         Text[ russian ] = "~Αξλόψε";
         Text[ polish ] = "~Dodatki";
-        Text[ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³(~M)";
+        Text[ japanese ] = "θ©³η΄°(~M)";
         Text[ chinese_traditional ] = "ι™„ε (~M)";
         Text[ arabic ] = "ΕΦΗέΗΚ";
         Text[ greek ] = "Πρόσθετα";
