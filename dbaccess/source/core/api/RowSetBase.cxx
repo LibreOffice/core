@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-05 07:51:27 $
+ *  last change: $Author: oj $ $Date: 2001-04-05 13:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1114,6 +1114,9 @@ void SAL_CALL ORowSetBase::refreshRow(  ) throw(SQLException, RuntimeException)
     if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
+    if(m_bBeforeFirst || m_bAfterLast)
+        return; // nothing to do here
+
     ::osl::MutexGuard aGuard( m_rMutex );
     if(m_aBookmark.hasValue())
         m_pCache->moveToBookmark(m_aBookmark);
@@ -1125,7 +1128,7 @@ sal_Bool SAL_CALL ORowSetBase::rowUpdated(  ) throw(SQLException, RuntimeExcepti
     if (m_rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
+    if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -1137,7 +1140,7 @@ sal_Bool SAL_CALL ORowSetBase::rowInserted(  ) throw(SQLException, RuntimeExcept
     if (m_rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
+    if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -1149,7 +1152,7 @@ sal_Bool SAL_CALL ORowSetBase::rowDeleted(  ) throw(SQLException, RuntimeExcepti
     if (m_rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
+    if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
     ::osl::MutexGuard aGuard( m_rMutex );

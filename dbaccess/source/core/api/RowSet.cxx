@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-05 07:51:27 $
+ *  last change: $Author: oj $ $Date: 2001-04-05 13:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1965,7 +1965,8 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                         {
                             Reference<XPropertySet> xColumn;
                             ::cppu::extractInterface(xColumn,m_xColumns->getByName(*pBegin));
-                            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
+                            Reference<XPropertySetInfo> xInfo = xColumn->getPropertySetInfo();
+                            if(xInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
                                 aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
 
                             ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
@@ -1981,16 +1982,24 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
 
                             try
                             {
-                                pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
-                                nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
+                                if(xInfo->hasPropertyByName(PROPERTY_ALIGN))
+                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
+
+                                nFormatKey = 0;
+                                if(xInfo->hasPropertyByName(PROPERTY_NUMBERFORMAT))
+                                    nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
                                 if(!nFormatKey)
                                     nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
 
                                 pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
-                                pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
-                                pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
-                                pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
-                                pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
+                                if(xInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
+                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
+                                if(xInfo->hasPropertyByName(PROPERTY_WIDTH))
+                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
+                                if(xInfo->hasPropertyByName(PROPERTY_HIDDEN))
+                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
+                                if(xInfo->hasPropertyByName(PROPERTY_CONTROLMODEL))
+                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
                             }
                             catch(Exception&)
                             {
