@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:24:32 $
+ *  last change: $Author: ka $ $Date: 2001-04-03 14:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,7 +407,7 @@ Paragraph* SdOutlineView::GetPrevTitle(const Paragraph* pPara)
         while (nPos && !pResult)
         {
             pPara = pOutliner->GetParagraph(--nPos);
-            if ( pOutliner->GetDepth( nPos ) == 0 )
+            if ( pOutliner->GetDepth( (USHORT) nPos ) == 0 )
             {
                 pResult = (Paragraph*)pPara;
             }
@@ -432,9 +432,9 @@ Paragraph* SdOutlineView::GetNextTitle(const Paragraph* pPara)
     {
         pResult = pOutliner->GetParagraph(++nPos);
     }
-    while (pResult && pOutliner->GetDepth( nPos ) != 0);
+    while (pResult && pOutliner->GetDepth( (USHORT) nPos ) != 0);
 
-    if (pResult && pOutliner->GetDepth( nPos ) != 0)
+    if (pResult && pOutliner->GetDepth( (USHORT) nPos ) != 0)
     {
         pResult = NULL;
     }
@@ -451,7 +451,7 @@ IMPL_LINK( SdOutlineView, ParagraphInsertedHdl, Outliner *, pOutliner )
 {
     Paragraph* pPara = pOutliner->GetHdlParagraph();
 
-    if ( pOutliner->GetDepth( pOutliner->GetAbsPos( pPara ) ) == 0 )
+    if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0 )
     {
         // wieviele Titel sind vor dem neuen Titelabsatz?
         ULONG nExample = 0L;            // Position der "Vorbild"seite
@@ -577,7 +577,7 @@ IMPL_LINK( SdOutlineView, ParagraphInsertedHdl, Outliner *, pOutliner )
 IMPL_LINK( SdOutlineView, ParagraphRemovingHdl, Outliner *, pOutliner )
 {
     Paragraph* pPara = pOutliner->GetHdlParagraph();
-    if ( pOutliner->GetDepth( pOutliner->GetAbsPos( pPara ) ) == 0 )
+    if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0 )
     {
         // wieviele Titel sind vor dem fraglichen Titelabsatz?
         ULONG nPos = 0L;
@@ -640,7 +640,7 @@ IMPL_LINK( SdOutlineView, ParagraphRemovingHdl, Outliner *, pOutliner )
 IMPL_LINK( SdOutlineView, DepthChangedHdl, Outliner *, pOutliner )
 {
     Paragraph* pPara = pOutliner->GetHdlParagraph();
-    if ( pOutliner->GetDepth( pOutliner->GetAbsPos( pPara ) ) == 0 )
+    if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0 )
     {
         // werden da etwa mehrere Level-1-Absaetze auf Level 0 gebracht und
         // wir sollten eine Fortschrittsanzeige oder Eieruhr aufsetzen und
@@ -654,7 +654,7 @@ IMPL_LINK( SdOutlineView, DepthChangedHdl, Outliner *, pOutliner )
             Paragraph*    pParagraph   = (Paragraph*)pList->First();
             while (pParagraph)
             {
-                if ( pOutliner->GetDepth( pOutliner->GetAbsPos( pParagraph ) ) == 1 )
+                if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pParagraph ) ) == 1 )
                     nPagesToProcess++;
                 pParagraph = (Paragraph*)pList->Next();
             }
@@ -755,7 +755,7 @@ IMPL_LINK( SdOutlineView, DepthChangedHdl, Outliner *, pOutliner )
         }
         pOutliner->UpdateFields();
     }
-    else if ( (pOutliner->GetPrevDepth() == 1) && ( pOutliner->GetDepth( pOutliner->GetAbsPos( pPara ) ) == 2 ) )
+    else if ( (pOutliner->GetPrevDepth() == 1) && ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 2 ) )
     {
         // wieviele Titel sind vor dem fraglichen Titelabsatz?
         ULONG nPos = -1L;
@@ -770,7 +770,7 @@ IMPL_LINK( SdOutlineView, DepthChangedHdl, Outliner *, pOutliner )
 
         if(0 <= nPos)
         {
-            SdPage*pPage = (SdPage*)pDoc->GetSdPage(nPos, PK_STANDARD);
+            SdPage*pPage = (SdPage*)pDoc->GetSdPage( (USHORT) nPos, PK_STANDARD);
 
             if(pPage && pPage->GetPresObj(PRESOBJ_TEXT))
                 pOutliner->SetDepth( pPara, 1 );
@@ -791,13 +791,13 @@ IMPL_LINK( SdOutlineView, DepthChangedHdl, Outliner *, pOutliner )
 
     if( 0 <= nPos)
     {
-        SdPage* pPage = (SdPage*) pDoc->GetSdPage( nPos, PK_STANDARD );
+        SdPage* pPage = (SdPage*) pDoc->GetSdPage( (USHORT) nPos, PK_STANDARD );
 
         if( pPage )
         {
             SfxStyleSheet* pStyleSheet = NULL;
             ULONG nPara = pOutliner->GetAbsPos( pPara );
-            ULONG nDepth = pOutliner->GetDepth( nPara );
+            ULONG nDepth = pOutliner->GetDepth( (USHORT) nPara );
             BOOL bSubTitle = pPage->GetPresObj(PRESOBJ_TEXT) != NULL;
 
             if( nDepth == 0 )
@@ -891,7 +891,7 @@ IMPL_LINK( SdOutlineView, BeginMovingHdl, Outliner *, pOutliner )
     Paragraph* pPara = (Paragraph*)pSelectedParas->First();
     while (pPara)
     {
-        if ( pOutliner->GetDepth( pOutliner->GetAbsPos( pPara ) ) > 0 )
+        if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) > 0 )
         {
             pSelectedParas->Remove();
             pPara = (Paragraph*)pSelectedParas->GetCurObject();
@@ -910,7 +910,7 @@ IMPL_LINK( SdOutlineView, BeginMovingHdl, Outliner *, pOutliner )
 
     while (pPara)
     {
-        if ( pOutliner->GetDepth( nParaPos ) == 0 )                     // eine Seite?
+        if ( pOutliner->GetDepth( (USHORT) nParaPos ) == 0 )                     // eine Seite?
         {
             pOldParaOrder->Insert(pPara, LIST_APPEND);
             SdPage* pPage = pDoc->GetSdPage(nPos, PK_STANDARD);
@@ -948,7 +948,7 @@ IMPL_LINK( SdOutlineView, EndMovingHdl, Outliner *, pOutliner )
     Paragraph*  pPrev = NULL;
     while (pPara && pPara != pSearchIt)
     {
-        if (pOutliner->GetDepth( nParaPos ) == 0)
+        if (pOutliner->GetDepth( (USHORT) nParaPos ) == 0)
         {
             nPosNewOrder++;
             pPrev = pPara;
@@ -1149,7 +1149,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                 }
 
                 pTO  = new SdrRectObj(OBJ_TITLETEXT);
-                pOPO = pOutliner->CreateParaObject( pOutliner->GetAbsPos( pPara ), 1 );
+                pOPO = pOutliner->CreateParaObject( (USHORT) pOutliner->GetAbsPos( pPara ), 1 );
                 pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
                 pTO->SetEmptyPresObj(FALSE);
 
@@ -1175,7 +1175,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                     bBegUndoDone = TRUE;
                 }
 
-                pOPO = pOutliner->CreateParaObject( pOutliner->GetAbsPos( pPara ), 1 );
+                pOPO = pOutliner->CreateParaObject( (USHORT) pOutliner->GetAbsPos( pPara ), 1 );
                 pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
                 // loescht altes OutlinerParaObject
                 AddUndo(new SdrUndoObjSetText(*pTO));
@@ -1255,7 +1255,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                 ULONG nParaPos = nTitlePara;
                 ULONG nParasInLayout = 0L;
                 pPara = pOutliner->GetParagraph( ++nParaPos );
-                while (pPara && pOutliner->GetDepth( nParaPos ) != 0)
+                while (pPara && pOutliner->GetDepth( (USHORT) nParaPos ) != 0)
                 {
                     nParasInLayout++;
                     pPara = pOutliner->GetParagraph( ++nParaPos );
@@ -1263,7 +1263,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
 
                 // ein OutlinerParaObject erzeugen
                 pPara = pOutliner->GetParagraph(nTitlePara + 1);
-                pOPO  = pOutliner->CreateParaObject( nTitlePara + 1, nParasInLayout );
+                pOPO  = pOutliner->CreateParaObject( (USHORT) nTitlePara + 1, (USHORT) nParasInLayout );
                 pOPO->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
             }
 
@@ -1341,7 +1341,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                     }
 
                     delete pOPO;
-                    pOPO = pOutl->CreateParaObject( 0, nCount );
+                    pOPO = pOutl->CreateParaObject( 0, (USHORT) nCount );
                     pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
                     pOutl->Clear();
                 }
@@ -1637,7 +1637,7 @@ void SdOutlineView::FillOutliner()
                         for (ULONG nPara = nParaCount1; nPara < nParaCount2; nPara++)
                         {
                             pPara = pOutliner->GetParagraph(nPara);
-                            if(pPara && pOutliner->GetDepth( nPara ) != 1 )
+                            if(pPara && pOutliner->GetDepth( (USHORT) nPara ) != 1 )
                                 pOutliner->SetDepth(pPara, 1);
                         }
                     }
@@ -1687,7 +1687,7 @@ IMPL_LINK( SdOutlineView, RemovingPagesHdl, OutlinerView *, pOutlinerView )
     pPara = (Paragraph*)pList->First();
     while (pPara)
     {
-        if ( pOutliner->GetDepth( pOutlinerView->GetOutliner()->GetAbsPos( pPara ) ) == 0 )
+        if ( pOutliner->GetDepth( (USHORT) pOutlinerView->GetOutliner()->GetAbsPos( pPara ) ) == 0 )
         {
             // welche Seite?
             USHORT nPage = 0;
@@ -1837,7 +1837,7 @@ SdPage* SdOutlineView::GetActualPage()
     Outliner*      pOutl            = pActiveView->GetOutliner();
     List*          pSelList         = (List*)pActiveView->CreateSelectionList();
     Paragraph*     pPara            = (Paragraph*)pSelList->First();
-    if ( pOutl->GetDepth( pOutl->GetAbsPos( pPara ) ) > 0 )
+    if ( pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) ) > 0 )
     {
         pPara = GetPrevTitle(pPara);
     }
@@ -1885,7 +1885,7 @@ void SdOutlineView::SetSelectedPages()
 
     while (pPara)
     {
-        if ( pOutliner->GetDepth( pOutliner->GetAbsPos( pPara ) ) > 0 )
+        if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) > 0 )
         {
             pSelParas->Remove();
             pPara = (Paragraph*) pSelParas->GetCurObject();
@@ -1904,7 +1904,7 @@ void SdOutlineView::SetSelectedPages()
 
     while (pPara)
     {
-        if ( pOutliner->GetDepth( nParaPos ) == 0 )                     // eine Seite?
+        if ( pOutliner->GetDepth( (USHORT) nParaPos ) == 0 )                     // eine Seite?
         {
             SdPage* pPage = pDoc->GetSdPage(nPos, PK_STANDARD);
             pPage->SetSelected(FALSE);
