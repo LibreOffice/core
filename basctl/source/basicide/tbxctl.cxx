@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-14 08:44:31 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 08:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
             }
             if( nTemp )
             {
-                Image aImage = SFX_IMAGEMANAGER()->GetImage( nTemp );
+                Image aImage = GetBindings().GetImageManager()->GetImage( nTemp );
                 GetToolBox().SetItemImage( SID_CHOOSE_CONTROLS, aImage );
                 nLastSlot = nLastEnum;
             }
