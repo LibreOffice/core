@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:29:26 $
+ *  last change: $Author: dl $ $Date: 2000-12-15 09:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,14 +218,15 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
             // keine Praesentationsobjektvorlagen, die werden nur
             // implizit zugewiesen
-            if (pStyleSheet && pStyleSheet->GetFamily() != SFX_STYLE_FAMILY_PSEUDO )
+            if ( pStyleSheet && pStyleSheet->GetFamily() != SFX_STYLE_FAMILY_PSEUDO )
             {
                 // Es darf auch keinen Praesentationsobjekten Vorlagen zugewiesen werden
-                // Ausnahme: Hintergrundobjekte
+                // Ausnahme: Hintergrundobjekte oder Draw (damit Praesentationsobjektvorlagen ueberteuert werden koennen)
                 SfxStyleSheet* pOldStyleSheet = pView->GetStyleSheet();
                 if( !pOldStyleSheet ||
                     pOldStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PARA ||
-                    pOldStyleSheet->GetHelpId( String() ) == HID_PSEUDOSHEET_BACKGROUNDOBJECTS )
+                    pOldStyleSheet->GetHelpId( String() ) == HID_PSEUDOSHEET_BACKGROUNDOBJECTS ||
+                    pDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW )
                 {
                     pView->SetStyleSheet( (SfxStyleSheet*) pStyleSheet);
                     pDoc->SetChanged(TRUE);
