@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:03:25 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 13:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,8 +603,11 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
         {
             StartAllAction();
             pFmt->GetDoc()->SetAttr( aAnch, *pFmt );
-            if( nAnchorId == FLY_AUTO_CNTNT && pFly && pFly->IsFlyAtCntFrm() )
-                ((SwFlyAtCntFrm*)pFly)->CheckCharRect();
+            if ( nAnchorId == FLY_AUTO_CNTNT && pFly && pFly->IsFlyAtCntFrm() )
+            {
+                // OD 11.11.2003 #i22341#
+                static_cast<SwFlyAtCntFrm*>(pFly)->CheckCharRectAndTopOfLine();
+            }
             EndAllAction();
         }
     }
