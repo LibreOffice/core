@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:46:50 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,9 +227,33 @@ struct ObjectFunction
     char somecode[12];
     typelib_TypeDescription * _pTypeDescr; // type of object
 
+    inline static void * operator new ( size_t nSize );
+    inline static void operator delete ( void * pMem );
+
     ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpFunc ) throw ();
     ~ObjectFunction() throw ();
 };
+
+inline void * ObjectFunction::operator new ( size_t nSize )
+{
+    void * pMem = rtl_allocateMemory( nSize );
+    if (pMem != 0)
+    {
+        DWORD old_protect;
+#if OSL_DEBUG_LEVEL > 0
+        BOOL success =
+#endif
+        VirtualProtect( pMem, nSize, PAGE_EXECUTE_READWRITE, &old_protect );
+        OSL_ENSURE( success, "VirtualProtect() failed!" );
+    }
+    return pMem;
+}
+
+inline void ObjectFunction::operator delete ( void * pMem )
+{
+    rtl_freeMemory( pMem );
+}
+
 //__________________________________________________________________________________________________
 ObjectFunction::ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpFunc ) throw ()
     : _pTypeDescr( pTypeDescr )
