@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:30:09 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,6 +363,7 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        a
         }
         else if ( aURL.Complete.compareToAscii( ".uno:load" ) == 0 )
         {
+/*
             aGuard.unlock();
 
             // load menu from xml stream
@@ -397,9 +398,11 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        a
             }
 
             impl_sendStatusEvent( xFrame, aURL.Complete, ( pNewMenuBar != 0 ));
+*/
         }
         else if ( aURL.Complete.compareToAscii( ".uno:save" ) == 0 )
         {
+/*
             // save menu to xml stream
             int         nPropertyCount      = seqProperties.getLength();
             sal_Bool    bStoreSuccessfull   = sal_False;
@@ -430,8 +433,8 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        a
                     }
                 }
             }
-
             impl_sendStatusEvent( xFrame, aURL.Complete, bStoreSuccessfull );
+*/
         }
         else if ( aURL.Complete.compareToAscii( ".uno:close" ) == 0 )
         {
