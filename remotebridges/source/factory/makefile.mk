@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-22 16:39:16 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:43:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,14 +63,15 @@
 PRJ=..$/..
 
 PRJNAME=remotebridges
-TARGET=brdgfctr
+TARGET = bridgefac.uno
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
-COMP1TYPELIST=$(TARGET)
+COMP1TYPELIST = brdgfctr
 COMPRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
+DLLPRE =
 # ------------------------------------------------------------------
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
@@ -82,7 +83,7 @@ SLOFILES= \
     $(SLO)$/bridgeimpl.obj 
 
 SHL1TARGET= $(TARGET)
-SHL1VERSIONMAP=	$(TARGET).map
+SHL1VERSIONMAP = brdgfctr.map
 
 SHL1STDLIBS= \
         $(SALLIB)	\
