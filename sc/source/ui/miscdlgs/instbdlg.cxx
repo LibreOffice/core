@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-11 12:43:07 $
+ *  last change: $Author: er $ $Date: 2001-10-17 17:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ const String* ScInsertTableDlg::GetNextTable( USHORT* pN )
 
 IMPL_LINK( ScInsertTableDlg, CountHdl_Impl, NumericField*, EMPTYARG )
 {
-    nTableCount = aNfCount.GetText().ToInt32();
+    nTableCount = aNfCount.GetValue();
     if ( nTableCount==1)
     {
         String aName;

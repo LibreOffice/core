@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-08-06 10:19:06 $
+ *  last change: $Author: er $ $Date: 2001-10-17 17:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1301,7 +1301,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
     rOpt.SetCharSet( eCharSet );
     rOpt.SetCharSetSystem( bCharSetSystem );
     rOpt.SetFixedLen( bFix );
-    USHORT nRow=(USHORT)aNfRow.GetText().ToInt32();
+    USHORT nRow = (USHORT) aNfRow.GetValue();
 
     rOpt.SetStartRow(nRow);
 
