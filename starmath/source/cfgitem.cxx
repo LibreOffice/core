@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-06 14:23:03 $
+ *  last change: $Author: tl $ $Date: 2001-07-17 08:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,8 +264,12 @@ SmCfgOther::SmCfgOther()
 
 SmFontFormat::SmFontFormat()
 {
-    aName.AssignAscii( "StarMath" );
-    nCharSet = nFamily = nPitch = nWeight = nItalic = 0;
+    aName.AssignAscii( FONTNAME_MATH );
+    nCharSet    = RTL_TEXTENCODING_UNICODE;
+    nFamily     = FAMILY_DONTKNOW;
+    nPitch      = PITCH_DONTKNOW;
+    nWeight     = WEIGHT_DONTKNOW;
+    nItalic     = ITALIC_NONE;
 }
 
 

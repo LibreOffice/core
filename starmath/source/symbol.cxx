@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-29 08:43:40 $
+ *  last change: $Author: tl $ $Date: 2001-07-17 08:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,6 +281,8 @@ SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode aChar,
     Name        = aExportName   = rName;
     Face        = rFont;
     Character   = aChar;
+    if (RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet())
+        Character |= 0xF000;
     aSetName    = rSet;
     bPredefined = bIsPredefined;
     bDocSymbol  = FALSE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-12 08:25:53 $
+ *  last change: $Author: tl $ $Date: 2001-07-17 08:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,12 +93,14 @@
 // und Symbolen ein "normales"(ungecliptes) SmRect zu erhalten).
 static xub_Unicode __READONLY_DATA aMathAlpha[] =
 {
-    MS_ALEPH,       MS_IM,          MS_RE,          MS_WP,
-    xub_Unicode('\x70'), MS_EMPTYSET,    xub_Unicode('\xF0'),   xub_Unicode('\xF1'),
-    xub_Unicode('\xF2'),    xub_Unicode('\xF3'),    xub_Unicode('\xF4'), MS_HBAR,
-    MS_LAMBDABAR,   MS_SETN,        MS_SETZ,        MS_SETQ,
-    MS_SETR,        MS_SETC,        xub_Unicode('\xB4'),        xub_Unicode('\xB5'),
-    xub_Unicode('\xB8'),    xub_Unicode('\xB9'),    xub_Unicode('\xBA'),
+    MS_ALEPH,               MS_IM,                  MS_RE,
+    MS_WP,                  xub_Unicode(0xE070),    MS_EMPTYSET,
+    xub_Unicode(0x2113),    xub_Unicode(0xE0D6),    xub_Unicode(0xE0D7),
+    xub_Unicode(0xE0D8),    xub_Unicode(0x210A),    MS_HBAR,
+    MS_LAMBDABAR,           MS_SETN,                MS_SETZ,
+    MS_SETQ,                MS_SETR,                MS_SETC,
+    xub_Unicode(0xE0A4),    xub_Unicode(0xE0A5),    xub_Unicode(0x2112),
+    xub_Unicode(0x2130),    xub_Unicode(0x2131),
     xub_Unicode('\0')
 };
 
@@ -113,7 +115,7 @@ BOOL SmIsMathAlpha(const XubString &rText)
     xub_Unicode cChar = rText.GetChar(0);
 
     // ist es ein griechisches Zeichen ?
-    if (xub_Unicode('\xC6') <= cChar  &&  cChar <= xub_Unicode('\xEE'))
+    if (xub_Unicode(0xE0AC) <= cChar  &&  cChar <= xub_Unicode(0xE0D4))
         return TRUE;
     else
     {
@@ -191,7 +193,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
     aSize = Size(rDev.GetTextWidth(rText), rDev.GetTextHeight());
 
     const FontMetric  aFM (rDev.GetFontMetric());
-    BOOL              bIsMath  = aFM.GetName().EqualsIgnoreCaseAscii("StarMath");
+    BOOL              bIsMath  = aFM.GetName().EqualsIgnoreCaseAscii( FONTNAME_MATH );
     BOOL              bAllowSmaller = bIsMath && !SmIsMathAlpha(rText);
     const long        nFontHeight = rDev.GetFont().GetSize().Height();
 

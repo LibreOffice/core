@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-15 06:41:18 $
+ *  last change: $Author: tl $ $Date: 2001-07-17 08:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _SV_COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
+#endif
+#ifndef _SVX_CHARMAP_HXX
+#include <svx/charmap.hxx>
 #endif
 #ifndef _SVX_OPTGENRL_HXX //autogen
 #include <svx/optgenrl.hxx>
@@ -447,38 +450,6 @@ public:
     void    SelectSymbol(USHORT nSymbolNo);
 };
 
-/**************************************************************************/
-
-class SmShowCharset : public Control
-{
-    Link    aSelectHdlLink;
-    Link    aDblClickHdlLink;
-    USHORT  nLen;
-    USHORT  nRows, nColumns;
-    xub_Unicode aChar;
-
-    virtual void    Paint(const Rectangle&);
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    KeyInput(const KeyEvent& rKEvt);
-
-public:
-    SmShowCharset(Window *pParent, const ResId& rResId);
-
-    void    SetSelectHdl(const Link& rLink)
-    {
-        aSelectHdlLink = rLink;
-    }
-
-    void    SetDblClickHdl(const Link& rLink)
-    {
-        aDblClickHdlLink = rLink;
-    }
-
-    void    SetFont(const Font &rFont);
-    void    SelectChar(xub_Unicode aChar);
-    xub_Unicode GetSelectChar() const { return aChar; }
-};
-
 ////////////////////////////////////////////////////////////////////////////////
 
 class SmShowChar : public Control
@@ -499,31 +470,33 @@ public:
 
 class SmSymDefineDialog : public ModalDialog
 {
-    FixedText     aOldSymbolText;
-    ComboBox      aOldSymbols;
-    FixedText     aOldSymbolSetText;
-    ComboBox      aOldSymbolSets;
-    SmShowCharset aCharsetDisplay;
-    FixedText     aSymbolText;
-    ComboBox      aSymbols;
-    FixedText     aSymbolSetText;
-    ComboBox      aSymbolSets;
-    FixedText     aFontText;
-    ListBox       aFonts;
-    FixedText     aStyleText;
-    FontStyleBox  aStyles;
-    FixedText     aOldSymbolName;
-    SmShowChar    aOldSymbolDisplay;
-    FixedText     aOldSymbolSetName;
-    FixedText     aSymbolName;
-    SmShowChar    aSymbolDisplay;
-    FixedText     aSymbolSetName;
-    OKButton      aOkBtn;
-    CancelButton  aCancelBtn;
-    PushButton    aAddBtn;
-    PushButton    aChangeBtn;
-    PushButton    aDeleteBtn;
-    FixedImage    aRightArrow;
+    FixedText       aOldSymbolText;
+    ComboBox        aOldSymbols;
+    FixedText       aOldSymbolSetText;
+    ComboBox        aOldSymbolSets;
+    SvxShowCharSet  aCharsetDisplay;
+    FixedText       aSymbolText;
+    ComboBox        aSymbols;
+    FixedText       aSymbolSetText;
+    ComboBox        aSymbolSets;
+    FixedText       aFontText;
+    ListBox         aFonts;
+    FixedText       aFontsSubsetFT;
+    ListBox         aFontsSubsetLB;
+    FixedText       aStyleText;
+    FontStyleBox    aStyles;
+    FixedText       aOldSymbolName;
+    SmShowChar      aOldSymbolDisplay;
+    FixedText       aOldSymbolSetName;
+    FixedText       aSymbolName;
+    SmShowChar      aSymbolDisplay;
+    FixedText       aSymbolSetName;
+    OKButton        aOkBtn;
+    CancelButton    aCancelBtn;
+    PushButton      aAddBtn;
+    PushButton      aChangeBtn;
+    PushButton      aDeleteBtn;
+    FixedImage      aRightArrow;
 
     SmSymSetManager     aSymSetMgrCopy,
                        &rSymSetMgr;
@@ -536,7 +509,7 @@ class SmSymDefineDialog : public ModalDialog
     DECL_LINK(ModifyHdl, ComboBox *);
     DECL_LINK(FontChangeHdl, ListBox *);
     DECL_LINK(StyleChangeHdl, ComboBox *);
-    DECL_LINK(CharSelectHdl, SmShowCharset *);
+    DECL_LINK( CharHighlightHdl, Control* pControl );
     DECL_LINK(AddClickHdl, Button *);
     DECL_LINK(ChangeClickHdl, Button *);
     DECL_LINK(DeleteClickHdl, Button *);

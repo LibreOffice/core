@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+ *  last change: $Author: tl $ $Date: 2001-07-17 08:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef UTILITY_HXX
 #include "utility.hxx"
 #endif
+#ifndef TYPES_HXX
+#include <types.hxx>
+#endif
 
 
 #define SM_FMT_VERSION_51   ((BYTE) 0x01)
@@ -84,7 +87,7 @@
 #endif
 #define FNTNAME_HELV    "Helvetica"
 #define FNTNAME_COUR    "Courier"
-#define FNTNAME_MATH    "StarMath"
+#define FNTNAME_MATH    FONTNAME_MATH
 
 
 // symbolic names used as array indices

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-07-11 17:20:48 $
+ *  last change: $Author: tl $ $Date: 2001-07-17 08:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1510,136 +1510,6 @@ const SmSym * SmSymbolDialog::GetSymbol() const
 }
 
 
-/**************************************************************************/
-
-
-void SmShowCharset::Paint(const Rectangle&)
-{
-    Size OutputSize = GetOutputSizePixel();
-
-    int i;
-    for (i = 1; i < (int) nColumns; i++)
-    {
-        int nLenI = nLen * i;
-
-        DrawLine(Point(nLenI, 0), Point(nLenI, OutputSize.Height()));
-    }
-
-    for (i = 1; i < (int) nRows; i++)
-    {
-        int nLenI = nLen * i;
-
-        DrawLine(Point(0, nLenI), Point(OutputSize.Width(), nLenI));
-    }
-
-    for (i = 1; i < 256; i++)
-    {
-        int x = (i % nColumns) * nLen;
-        int y = (i / nColumns) * nLen;
-
-        XubString aChar((xub_Unicode) i);
-        Size aTextSize(GetTextWidth(aChar), GetTextHeight());
-
-        DrawText(Point(x + (nLen - aTextSize.Width())  / 2,
-                       y + (nLen - aTextSize.Height()) / 2), aChar);
-    }
-}
-
-
-void SmShowCharset::MouseButtonDown(const MouseEvent& rMEvt)
-{
-    if (rMEvt.IsLeft())
-    {
-        GrabFocus();
-
-        USHORT n = (USHORT) ((rMEvt.GetPosPixel().Y() / nLen) * nColumns +
-                             (rMEvt.GetPosPixel().X() / nLen));
-        SelectChar((xub_Unicode)Min((USHORT) n, (USHORT) 255));
-
-        aSelectHdlLink.Call(this);
-
-        if (rMEvt.GetClicks() > 1)
-            aDblClickHdlLink.Call(this);
-    }
-    else Control::MouseButtonDown (rMEvt);
-}
-
-
-void SmShowCharset::KeyInput(const KeyEvent& rKEvt)
-{
-    xub_Unicode n = aChar;
-
-    switch (rKEvt.GetKeyCode().GetCode())
-    {
-        case KEY_DOWN:      n += (xub_Unicode) nColumns;    break;
-        case KEY_UP:        n -= (xub_Unicode) nColumns;    break;
-        case KEY_LEFT:      n -= 1;                 break;
-        case KEY_RIGHT:     n += 1;                 break;
-        case KEY_HOME:      n  = 0;                 break;
-        case KEY_END:       n  = (xub_Unicode) 255;     break;
-        case KEY_PAGEUP:    n -= (xub_Unicode) nColumns;    break;
-        case KEY_PAGEDOWN:  n += (xub_Unicode) nColumns;    break;
-
-        default:
-            Control::KeyInput(rKEvt);
-            return;
-    }
-
-    SelectChar(n);
-    aSelectHdlLink.Call(this);
-}
-
-
-SmShowCharset::SmShowCharset(Window *pParent, const ResId& rResId) :
-    Control(pParent, rResId)
-{
-    aChar = xub_Unicode('\0');
-
-    Size    aOutputSize (GetOutputSizePixel());
-
-    nColumns = 32;
-    nRows    = 8;
-
-    // FontSize passend wählen
-    nLen = Min(aOutputSize.Width() / nColumns, aOutputSize.Height() / nRows);
-
-    // Fenster genau passend machen (wird höchstens kleiner!)
-    aOutputSize.Width()  = nColumns * nLen;
-    aOutputSize.Height() = nRows * nLen;
-
-    SetOutputSizePixel(aOutputSize);
-}
-
-
-void SmShowCharset::SetFont(const Font &rFont)
-{
-    Font  aFont (rFont);
-
-    // etwas kleinere FontSize nehmen (als nLen) um etwas Luft zu haben
-    // (hofentlich auch genug für links und rechts)
-    aFont.SetSize(Size(0, nLen - (nLen / 3)));
-    aFont.SetTransparent(TRUE);
-    Control::SetFont(aFont);
-
-    Invalidate();
-}
-
-
-void SmShowCharset::SelectChar(xub_Unicode aCharP)
-{
-    int c = aChar & 0xFF;
-    Size aNSize (nLen, nLen);
-
-    Invalidate(Rectangle(Point((c % nColumns) * nLen, (c / nColumns) * nLen), aNSize));
-
-    aChar = aCharP;
-    c     = aChar & 0xFF;
-    Invalidate(Rectangle(Point((c % nColumns) * nLen, (c / nColumns) * nLen), aNSize));
-
-    Update();
-}
-
-
 ////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1834,14 +1704,18 @@ IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox *, pComboBox )
 }
 
 
-IMPL_LINK_INLINE_START( SmSymDefineDialog, CharSelectHdl, SmShowCharset *, pShowCharset )
+IMPL_LINK( SmSymDefineDialog, CharHighlightHdl, Control *, EMPTYARG )
 {
-    DBG_ASSERT(pShowCharset == &aCharsetDisplay, "Sm : falsches Argument");
-
-    SelectChar(aCharsetDisplay.GetSelectChar());
+    sal_Unicode cChar = aCharsetDisplay.GetSelectCharacter();
+/*
+    const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
+    if (pSubset)
+        aFontsSubsetLB.SelectEntry( pSubset->GetName() );
+*/
+    aSymbolDisplay.SetChar( cChar );
+    UpdateButtons();
     return 0;
 }
-IMPL_LINK_INLINE_END( SmSymDefineDialog, CharSelectHdl, SmShowCharset *, pShowCharset )
 
 
 IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, pButton )
@@ -1863,7 +1737,7 @@ IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, pButton )
 
     // Symbol ins SymbolSet einfügen
     SmSym *pSym = new SmSym(aSymbols.GetText(), aCharsetDisplay.GetFont(),
-                            aCharsetDisplay.GetSelectChar(),
+                            aCharsetDisplay.GetSelectCharacter(),
                             aSymbolSets.GetText());
     pSymSet->AddSymbol(pSym);
 
@@ -1903,13 +1777,14 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, pButton )
 
     // das (alte) Symbol besorgen
     USHORT nSymbol = pOldSymSet->GetSymbolPos(aOldSymbols.GetText());
+    DBG_ASSERT( SYMBOL_NONE != nSymbol, "symbol not found" );
     SmSym *pSym    = (SmSym *) &pOldSymSet->GetSymbol(nSymbol);
     DBG_ASSERT(pSym, "Sm : NULL pointer");
 
     // Änderungen durchführen;
     pSym->SetName( aSymbols.GetText() );
     pSym->SetFace( aCharsetDisplay.GetFont() );
-    pSym->SetCharacter( aCharsetDisplay.GetSelectChar() );
+    pSym->SetCharacter( aCharsetDisplay.GetSelectCharacter() );
 
     // das SymbolSet wechseln wenn nötig
     if (pOldSymSet != pNewSymSet)
@@ -1988,7 +1863,7 @@ void SmSymDefineDialog::UpdateButtons()
                     && aSymbolName.Equals(pOrigSymbol->GetName())
                     && aFonts.GetSelectEntry().EqualsIgnoreCaseAscii(pOrigSymbol->GetFace().GetName())
                     && aStyles.GetText().EqualsIgnoreCaseAscii(GetFontStyleName(pOrigSymbol->GetFace()))
-                    && aCharsetDisplay.GetSelectChar() == pOrigSymbol->GetCharacter();
+                    && aCharsetDisplay.GetSelectCharacter() == pOrigSymbol->GetCharacter();
 
         // hinzufügen nur wenn es noch kein Symbol desgleichen Namens gibt
         bAdd    = aSymSetMgrCopy.GetSymbol(aSymbolName) == NULL;
@@ -2022,6 +1897,8 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent, SmSymSetManager &rMgr, BO
     aSymbolSets         (this, ResId(5)),
     aFontText           (this, ResId(3)),
     aFonts              (this, ResId(1)),
+    aFontsSubsetFT      (this, ResId( FT_FONTS_SUBSET )),
+    aFontsSubsetLB      (this, ResId( LB_FONTS_SUBSET )),
     aStyleText          (this, ResId(4)),
     aStyles             (this, ResId(3)),
     aOldSymbolName      (this, ResId(7)),
@@ -2081,7 +1958,7 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent, SmSymSetManager &rMgr, BO
     aAddBtn        .SetClickHdl (LINK(this, SmSymDefineDialog, AddClickHdl));
     aChangeBtn     .SetClickHdl (LINK(this, SmSymDefineDialog, ChangeClickHdl));
     aDeleteBtn     .SetClickHdl (LINK(this, SmSymDefineDialog, DeleteClickHdl));
-    aCharsetDisplay.SetSelectHdl(LINK(this, SmSymDefineDialog, CharSelectHdl));
+    aCharsetDisplay.SetHighlightHdl( LINK( this, SmSymDefineDialog, CharHighlightHdl ) );
 }
 
 
@@ -2346,8 +2223,8 @@ BOOL SmSymDefineDialog::SelectStyle(const XubString &rStyleName, BOOL bApplyFont
 
 void SmSymDefineDialog::SelectChar(xub_Unicode cChar)
 {
-    aCharsetDisplay.SelectChar(cChar);
-    aSymbolDisplay.SetChar(cChar);
+    aCharsetDisplay.SelectCharacter( cChar );
+    aSymbolDisplay.SetChar( cChar );
 
     UpdateButtons();
 }

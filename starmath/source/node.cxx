@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-28 13:51:13 $
+ *  last change: $Author: tl $ $Date: 2001-07-17 08:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1779,8 +1779,7 @@ long SmOperNode::CalcSymbolHeight(const SmNode &rSymbol,
         nHeight = nHeight * 686L / 845L;
     }
 
-    // correct user-defined symbols to match height of sum from StarMath
-    // font
+    // correct user-defined symbols to match height of sum from used font
     if (rSymbol.GetToken().eType == TSPECIAL)
         nHeight = nHeight * 845L / 686L;
 
@@ -2672,8 +2671,9 @@ void SmMathSymbolNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocSh
 {
     SmNode::Prepare(rFormat, rDocShell);
 
-    DBG_ASSERT(GetFont().GetCharSet() == RTL_TEXTENCODING_SYMBOL,
-        "Sm : falsches CHARSET für Zeichen aus dem StarMath Font");
+    DBG_ASSERT(GetFont().GetCharSet() == RTL_TEXTENCODING_SYMBOL  ||
+               GetFont().GetCharSet() == RTL_TEXTENCODING_UNICODE,
+        "incorrect charset for character from StarMath/StarSymbol font");
 
     Flags() |= FLG_FONT | FLG_ITALIC;
 };
@@ -2722,14 +2722,13 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
 
     Size  aOldSize = GetFont().GetSize();
     if (pSym = rDocShell.GetSymSetManager().GetSymbol(GetToken().aText))
-    {   SetText( pSym->GetCharacter() );
+    {
+        SetText( pSym->GetCharacter() );
         GetFont() = pSym->GetFace();
-
-        if (GetFont().GetName().EqualsIgnoreCaseAscii("StarMath"))
-            GetFont().SetCharSet(RTL_TEXTENCODING_SYMBOL);
     }
     else
-    {   SetText( GetToken().aText );
+    {
+        SetText( GetToken().aText );
         GetFont() = rFormat.GetFont(FNT_VARIABLE);
     }
     GetFont().SetSize(aOldSize);
