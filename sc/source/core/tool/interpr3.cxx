@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:51:14 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1484,7 +1484,7 @@ void ScInterpreter::ScZTest()
         break;
         case svMatrix :
         {
-            ScMatrix* pMat = PopMatrix();
+            ScMatrixRef pMat = PopMatrix();
             if (pMat)
             {
                 ULONG nCount = pMat->GetElementCount();
@@ -1538,9 +1538,8 @@ void ScInterpreter::ScTTest()
         return;
     }
 
-    USHORT nMatInd1, nMatInd2;
-    ScMatrix* pMat2 = GetMatrix(nMatInd2);
-    ScMatrix* pMat1 = GetMatrix(nMatInd1);
+    ScMatrixRef pMat2 = GetMatrix();
+    ScMatrixRef pMat1 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
         SetIllegalParameter();
@@ -1709,9 +1708,8 @@ void ScInterpreter::ScFTest()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
-    USHORT nMatInd1, nMatInd2;
-    ScMatrix* pMat2 = GetMatrix(nMatInd2);
-    ScMatrix* pMat1 = GetMatrix(nMatInd1);
+    ScMatrixRef pMat2 = GetMatrix();
+    ScMatrixRef pMat1 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
         SetIllegalParameter();
@@ -1786,9 +1784,8 @@ void ScInterpreter::ScChiTest()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
-    USHORT nMatInd1, nMatInd2;
-    ScMatrix* pMat2 = GetMatrix(nMatInd2);
-    ScMatrix* pMat1 = GetMatrix(nMatInd1);
+    ScMatrixRef pMat2 = GetMatrix();
+    ScMatrixRef pMat1 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
         SetIllegalParameter();
@@ -1915,7 +1912,7 @@ void ScInterpreter::ScKurt()
             break;
             case svMatrix :
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     ULONG nCount = pMat->GetElementCount();
@@ -1990,20 +1987,24 @@ void ScInterpreter::ScKurt()
             break;
             case svMatrix :
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     ULONG nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
                         for (ULONG i = 0; i < nCount; i++)
+                        {
                             fSum += pow(pMat->GetDouble(i) - fMean, fPow);
+                        }
                     }
                     else
                     {
                         for (ULONG i = 0; i < nCount; i++)
+                        {
                             if (!pMat->IsString(i))
                                 fSum += pow(pMat->GetDouble(i) - fMean, fPow);
+                        }
                     }
                 }
             }
@@ -2020,7 +2021,7 @@ void ScInterpreter::ScHarMean()
 {
     BYTE nParamCount = GetByte();
     double nVal = 0.0;
-    ULONG nCount = 0;
+    double nValCount = 0.0;
     ScAddress aAdr;
     ScRange aRange;
     for (short i = 0; i < nParamCount && (nGlobalError == 0); i++)
@@ -2033,10 +2034,10 @@ void ScInterpreter::ScHarMean()
                 if (x > 0.0)
                 {
                     nVal += 1.0/x;
-                    nCount++;
+                    nValCount++;
                 }
                 else
-                    SetIllegalArgument();
+                    SetError( errIllegalArgument);
                 break;
             }
             case svSingleRef :
@@ -2049,10 +2050,10 @@ void ScInterpreter::ScHarMean()
                     if (x > 0.0)
                     {
                         nVal += 1.0/x;
-                        nCount++;
+                        nValCount++;
                     }
                     else
-                        SetIllegalArgument();
+                        SetError( errIllegalArgument);
                 }
                 break;
             }
@@ -2067,20 +2068,20 @@ void ScInterpreter::ScHarMean()
                     if (nCellVal > 0.0)
                     {
                         nVal += 1.0/nCellVal;
-                        nCount++;
+                        nValCount++;
                     }
                     else
-                        SetIllegalArgument();
+                        SetError( errIllegalArgument);
                     SetError(nErr);
                     while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
                     {
                         if (nCellVal > 0.0)
                         {
                             nVal += 1.0/nCellVal;
-                            nCount++;
+                            nValCount++;
                         }
                         else
-                            SetIllegalArgument();
+                            SetError( errIllegalArgument);
                     }
                     SetError(nErr);
                 }
@@ -2088,7 +2089,7 @@ void ScInterpreter::ScHarMean()
             break;
             case svMatrix :
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     ULONG nCount = pMat->GetElementCount();
@@ -2100,10 +2101,10 @@ void ScInterpreter::ScHarMean()
                             if (x > 0.0)
                             {
                                 nVal += 1.0/x;
-                                nCount++;
+                                nValCount++;
                             }
                             else
-                                SetIllegalArgument();
+                                SetError( errIllegalArgument);
                         }
                     }
                     else
@@ -2115,10 +2116,10 @@ void ScInterpreter::ScHarMean()
                                 if (x > 0.0)
                                 {
                                     nVal += 1.0/x;
-                                    nCount++;
+                                    nValCount++;
                                 }
                                 else
-                                    SetIllegalArgument();
+                                    SetError( errIllegalArgument);
                             }
                     }
                 }
@@ -2128,14 +2129,16 @@ void ScInterpreter::ScHarMean()
         }
     }
     if (nGlobalError == 0)
-        PushDouble((double)nCount/nVal);
+        PushDouble((double)nValCount/nVal);
+    else
+        PushInt(0);
 }
 
 void ScInterpreter::ScGeoMean()
 {
     BYTE nParamCount = GetByte();
     double nVal = 0.0;
-    ULONG nCount = 0;
+    double nValCount = 0.0;
     ScAddress aAdr;
     ScRange aRange;
     for (short i = 0; i < nParamCount && (nGlobalError == 0); i++)
@@ -2148,10 +2151,10 @@ void ScInterpreter::ScGeoMean()
                 if (x > 0.0)
                 {
                     nVal += log(x);
-                    nCount++;
+                    nValCount++;
                 }
                 else
-                    SetIllegalArgument();
+                    SetError( errIllegalArgument);
                 break;
             }
             case svSingleRef :
@@ -2164,10 +2167,10 @@ void ScInterpreter::ScGeoMean()
                     if (x > 0.0)
                     {
                         nVal += log(x);
-                        nCount++;
+                        nValCount++;
                     }
                     else
-                        SetIllegalArgument();
+                        SetError( errIllegalArgument);
                 }
                 break;
             }
@@ -2182,20 +2185,20 @@ void ScInterpreter::ScGeoMean()
                     if (nCellVal > 0.0)
                     {
                         nVal += log(nCellVal);
-                        nCount++;
+                        nValCount++;
                     }
                     else
-                        SetIllegalArgument();
+                        SetError( errIllegalArgument);
                     SetError(nErr);
                     while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
                     {
                         if (nCellVal > 0.0)
                         {
                             nVal += log(nCellVal);
-                            nCount++;
+                            nValCount++;
                         }
                         else
-                            SetIllegalArgument();
+                            SetError( errIllegalArgument);
                     }
                     SetError(nErr);
                 }
@@ -2203,7 +2206,7 @@ void ScInterpreter::ScGeoMean()
             break;
             case svMatrix :
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     ULONG nCount = pMat->GetElementCount();
@@ -2215,10 +2218,10 @@ void ScInterpreter::ScGeoMean()
                             if (x > 0.0)
                             {
                                 nVal += log(x);
-                                nCount++;
+                                nValCount++;
                             }
                             else
-                                SetIllegalArgument();
+                                SetError( errIllegalArgument);
                         }
                     }
                     else
@@ -2230,10 +2233,10 @@ void ScInterpreter::ScGeoMean()
                                 if (x > 0.0)
                                 {
                                     nVal += log(x);
-                                    nCount++;
+                                    nValCount++;
                                 }
                                 else
-                                    SetIllegalArgument();
+                                    SetError( errIllegalArgument);
                             }
                     }
                 }
@@ -2243,7 +2246,9 @@ void ScInterpreter::ScGeoMean()
         }
     }
     if (nGlobalError == 0)
-        PushDouble(exp(nVal/(double)nCount));
+        PushDouble(exp(nVal/(double)nValCount));
+    else
+        PushInt(0);
 }
 
 void ScInterpreter::ScStandard()
@@ -2321,7 +2326,7 @@ void ScInterpreter::ScSkew()
             break;
             case svMatrix :
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     ULONG nCount = pMat->GetElementCount();
@@ -2394,20 +2399,24 @@ void ScInterpreter::ScSkew()
             break;
             case svMatrix :
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     ULONG nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
                         for (ULONG i = 0; i < nCount; i++)
+                        {
                             fSum += pow(pMat->GetDouble(i) - fMean, fPow);
+                        }
                     }
                     else
                     {
                         for (ULONG i = 0; i < nCount; i++)
+                        {
                             if (!pMat->IsString(i))
                                 fSum += pow(pMat->GetDouble(i) - fMean, fPow);
+                        }
                     }
                 }
             }
@@ -2908,7 +2917,7 @@ void ScInterpreter::GetSortArray(BYTE nParamCount, double** ppSortArray, ULONG& 
             break;
             case svMatrix :
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     ULONG nCount = pMat->GetElementCount();
@@ -2992,7 +3001,7 @@ void ScInterpreter::GetSortArray(BYTE nParamCount, double** ppSortArray, ULONG& 
             break;
             case svMatrix :
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     ULONG nCount = pMat->GetElementCount();
@@ -3154,7 +3163,7 @@ void ScInterpreter::ScRank()
         break;
         case svMatrix :
         {
-            ScMatrix* pMat = PopMatrix();
+            ScMatrixRef pMat = PopMatrix();
             double fVal = GetDouble();
             if (pMat)
             {
@@ -3248,7 +3257,7 @@ void ScInterpreter::ScAveDev()
             break;
             case svMatrix :
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     ULONG nCount = pMat->GetElementCount();
@@ -3316,20 +3325,24 @@ void ScInterpreter::ScAveDev()
             break;
             case svMatrix :
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     ULONG nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
                         for (ULONG i = 0; i < nCount; i++)
+                        {
                             rVal += fabs(pMat->GetDouble(i) - nMiddle);
+                        }
                     }
                     else
                     {
                         for (ULONG i = 0; i < nCount; i++)
+                        {
                             if (!pMat->IsString(i))
                                 rVal += fabs(pMat->GetDouble(i) - nMiddle);
+                        }
                     }
                 }
             }
@@ -3365,9 +3378,8 @@ void ScInterpreter::ScProbability()
         fLo = fUp;
         fUp = fTemp;
     }
-    USHORT nMatInd1, nMatInd2;
-    ScMatrix* pMatP = GetMatrix(nMatInd1);
-    ScMatrix* pMatW = GetMatrix(nMatInd2);
+    ScMatrixRef pMatP = GetMatrix();
+    ScMatrixRef pMatW = GetMatrix();
     if (!pMatP || !pMatW)
         SetIllegalParameter();
     else
@@ -3401,7 +3413,7 @@ void ScInterpreter::ScProbability()
                     }
                 }
                 else
-                    SetIllegalArgument();
+                    SetError( errIllegalArgument);
             }
             if (bStop || fabs(fSum -1.0) > 1.0E-7)
                 SetNoValue();
@@ -3415,9 +3427,8 @@ void ScInterpreter::ScCorrel()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
-    USHORT nMatInd1, nMatInd2;
-    ScMatrix* pMat1 = GetMatrix(nMatInd2);
-    ScMatrix* pMat2 = GetMatrix(nMatInd1);
+    ScMatrixRef pMat1 = GetMatrix();
+    ScMatrixRef pMat2 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
         SetIllegalParameter();
@@ -3465,9 +3476,8 @@ void ScInterpreter::ScCovar()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
-    USHORT nMatInd1, nMatInd2;
-    ScMatrix* pMat1 = GetMatrix(nMatInd2);
-    ScMatrix* pMat2 = GetMatrix(nMatInd1);
+    ScMatrixRef pMat1 = GetMatrix();
+    ScMatrixRef pMat2 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
         SetIllegalParameter();
@@ -3509,9 +3519,8 @@ void ScInterpreter::ScPearson()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
-    USHORT nMatInd1, nMatInd2;
-    ScMatrix* pMat1 = GetMatrix(nMatInd2);
-    ScMatrix* pMat2 = GetMatrix(nMatInd1);
+    ScMatrixRef pMat1 = GetMatrix();
+    ScMatrixRef pMat2 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
         SetIllegalParameter();
@@ -3559,9 +3568,8 @@ void ScInterpreter::ScRSQ()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
-    USHORT nMatInd1, nMatInd2;
-    ScMatrix* pMat1 = GetMatrix(nMatInd2);
-    ScMatrix* pMat2 = GetMatrix(nMatInd1);
+    ScMatrixRef pMat1 = GetMatrix();
+    ScMatrixRef pMat2 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
         SetIllegalParameter();
@@ -3608,9 +3616,8 @@ void ScInterpreter::ScSTEXY()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
-    USHORT nMatInd1, nMatInd2;
-    ScMatrix* pMat1 = GetMatrix(nMatInd2);
-    ScMatrix* pMat2 = GetMatrix(nMatInd1);
+    ScMatrixRef pMat1 = GetMatrix();
+    ScMatrixRef pMat2 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
         SetIllegalParameter();
@@ -3658,9 +3665,8 @@ void ScInterpreter::ScSlope()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
-    USHORT nMatInd1, nMatInd2;
-    ScMatrix* pMat1 = GetMatrix(nMatInd2);
-    ScMatrix* pMat2 = GetMatrix(nMatInd1);
+    ScMatrixRef pMat1 = GetMatrix();
+    ScMatrixRef pMat2 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
         SetIllegalParameter();
@@ -3705,9 +3711,8 @@ void ScInterpreter::ScIntercept()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
-    USHORT nMatInd1, nMatInd2;
-    ScMatrix* pMat1 = GetMatrix(nMatInd2);
-    ScMatrix* pMat2 = GetMatrix(nMatInd1);
+    ScMatrixRef pMat1 = GetMatrix();
+    ScMatrixRef pMat2 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
         SetIllegalParameter();
@@ -3753,9 +3758,8 @@ void ScInterpreter::ScForecast()
 {
     if ( !MustHaveParamCount( GetByte(), 3 ) )
         return;
-    USHORT nMatInd1, nMatInd2;
-    ScMatrix* pMat1 = GetMatrix(nMatInd2);
-    ScMatrix* pMat2 = GetMatrix(nMatInd1);
+    ScMatrixRef pMat1 = GetMatrix();
+    ScMatrixRef pMat2 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
         SetIllegalParameter();
