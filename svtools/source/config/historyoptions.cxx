@@ -2,9 +2,9 @@
  *
  *  $RCSfile: historyoptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2000-12-04 12:01:29 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 17:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 #endif
 
 #ifndef __SGI_STL_DEQUE
-#include <stl/deque>
+#include <deque>
 #endif
 
 //_________________________________________________________________________________________________________________
