@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:32:42 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,87 +67,16 @@
 #include <osl/security.h>
 #include <osl/nlsupport.h>
 #include <osl/mutex.h>
+#include <osl/thread.h>
 
 #include "procimpl.h"
 #include "sockimpl.h"
 #include <rtl/ustrbuf.h>
 #include <rtl/alloc.h>
 
-LPWSTR *lpArgvW = NULL;
-int nArgnW = 0;
-
-extern void _imp_getProcessLocale( rtl_Locale ** ppLocale );
-
-rtl_Locale * theProcessLocale = NULL;
-
-/***************************************************************************/
-
-oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
-{
-    osl_acquireMutex( *osl_getGlobalMutex() );
-
-    /* determine the users default locale */
-    if( NULL == theProcessLocale )
-        _imp_getProcessLocale( &theProcessLocale );
-
-    /* or return the cached value */
-    *ppLocale = theProcessLocale;
-
-    osl_releaseMutex( *osl_getGlobalMutex() );
-    return osl_Process_E_None;
-}
-
-/***************************************************************************/
-
-oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
-{
-    osl_acquireMutex( *osl_getGlobalMutex() );
-
-    /* check if locale is supported */
-    if( RTL_TEXTENCODING_DONTKNOW == osl_getTextEncodingFromLocale( pLocale ) )
-        return osl_Process_E_Unknown;
-
-    /* just remember the locale here */
-    theProcessLocale = pLocale;
-
-    osl_releaseMutex( *osl_getGlobalMutex() );
-    return osl_Process_E_None;
-}
-
-/***************************************************************************/
-
-extern oslMutex g_CurrentDirectoryMutex;
-
-oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
-{
-    TCHAR   szBuffer[MAX_PATH];
-    DWORD   dwLen;
-
-
-    osl_acquireMutex( g_CurrentDirectoryMutex );
-    dwLen = GetCurrentDirectory( sizeof(szBuffer) / sizeof(TCHAR), szBuffer );
-    osl_releaseMutex( g_CurrentDirectoryMutex );
-
-    if ( dwLen )
-    {
-        oslFileError    eError;
-        rtl_uString     *ustrTemp = NULL;;
-
-        rtl_uString_newFromStr_WithLength( &ustrTemp, szBuffer, dwLen );
-        eError = osl_getFileURLFromSystemPath( ustrTemp, pustrWorkingDir );
-
-        rtl_uString_release( ustrTemp );
-
-        if ( osl_File_E_None != eError )
-            return osl_Process_E_Unknown;
-        else
-            return osl_Process_E_None;
-    }
-    else
-        return osl_Process_E_Unknown;
-}
-
-/***************************************************************************/
+/***************************************************************************
+ * Process.
+ ***************************************************************************/
 
 oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
 {
@@ -306,35 +235,134 @@ oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const Ti
     return osl_error;
 }
 
-/***************************************************************************/
+/***************************************************************************
+ * Command Line Arguments.
+ ***************************************************************************/
 
-oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **pustrFile )
+struct CommandArgs_Impl
 {
-    oslProcessError eRet = osl_Process_E_Unknown;
-    rtl_uString* ustrTmp = NULL;
+    sal_uInt32     m_nCount;
+    rtl_uString ** m_ppArgs;
+};
 
-    /* let GetModuleFileName directly write into ustring buffer */
-    rtl_uString_new_WithLength( &ustrTmp, MAX_PATH );
-    ustrTmp->length = GetModuleFileNameW( NULL, ustrTmp->buffer, MAX_PATH );
+static struct CommandArgs_Impl g_command_args =
+{
+    0,
+    0
+};
 
-    if( ustrTmp->length > 0 );
+static rtl_uString ** osl_createCommandArgs_Impl (int argc, char ** argv)
+{
+    rtl_uString ** ppArgs =
+        (rtl_uString**)rtl_allocateZeroMemory (argc * sizeof(rtl_uString*));
+    if (ppArgs != 0)
     {
-        if( osl_File_E_None == osl_getFileURLFromSystemPath( ustrTmp, pustrFile ) )
-            eRet = osl_Process_E_None;
-    }
+        rtl_TextEncoding encoding = osl_getThreadTextEncoding();
 
-    rtl_uString_release( ustrTmp );
-    return eRet;
+        int i;
+        for (i = 0; i < argc; i++)
+        {
+            /* Convert from LPSTR */
+            rtl_string2UString (
+                &(ppArgs[i]),
+                argv[i], rtl_str_getLength (argv[i]), encoding,
+                OSTRING_TO_OUSTRING_CVTFLAGS);
+        }
+        if (ppArgs[0] != 0)
+        {
+            /* see @ osl_getExecutableFile() */
+            rtl_uString * pResult = 0;
+            osl_getFileURLFromSystemPath (ppArgs[0], &pResult);
+            if (pResult != 0)
+            {
+                rtl_uString_assign (&(ppArgs[0]), pResult);
+                rtl_uString_release (pResult);
+            }
+        }
+    }
+    return (ppArgs);
 }
 
 /***************************************************************************/
 
-/* #109941# because of a bug in the M$ unicows library we have to
+oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **ppustrFile )
+{
+    oslProcessError result = osl_Process_E_NotFound;
+
+    osl_acquireMutex (*osl_getGlobalMutex());
+    if (g_command_args.m_nCount > 0)
+    {
+        /* CommandArgs set. Obtain arv[0]. */
+        rtl_uString_assign (ppustrFile, g_command_args.m_ppArgs[0]);
+        result = osl_Process_E_None;
+    }
+    osl_releaseMutex (*osl_getGlobalMutex());
+
+    return (result);
+}
+
+/***************************************************************************/
+
+sal_uInt32 SAL_CALL osl_getCommandArgCount(void)
+{
+    sal_uInt32 result = 0;
+
+    osl_acquireMutex (*osl_getGlobalMutex());
+    if (g_command_args.m_nCount > 0)
+    {
+        /* We're not counting argv[0] here. */
+        result = g_command_args.m_nCount - 1;
+    }
+    osl_releaseMutex (*osl_getGlobalMutex());
+
+    return (result);
+}
+
+/***************************************************************************/
+
+oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCommandArg)
+{
+    oslProcessError result = osl_Process_E_NotFound;
+
+    osl_acquireMutex (*osl_getGlobalMutex());
+    if (g_command_args.m_nCount > (nArg + 1))
+    {
+        /* We're not counting argv[0] here. */
+        rtl_uString_assign (strCommandArg, g_command_args.m_ppArgs[nArg + 1]);
+        result = osl_Process_E_None;
+    }
+    osl_releaseMutex (*osl_getGlobalMutex());
+
+    return (result);
+}
+
+/***************************************************************************/
+
+void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
+{
+    osl_acquireMutex (*osl_getGlobalMutex());
+    if (g_command_args.m_nCount == 0)
+    {
+        rtl_uString** ppArgs = osl_createCommandArgs_Impl (argc, argv);
+        if (ppArgs != 0)
+        {
+            g_command_args.m_nCount = argc;
+            g_command_args.m_ppArgs = ppArgs;
+        }
+    }
+    osl_releaseMutex (*osl_getGlobalMutex());
+}
+
+/***************************************************************************
+ * Environment
+ ***************************************************************************/
+/*
+   #109941# because of a bug in the M$ unicows library we have to
    allocate a buffer large enough to hold the requested environment
    variable instead of testing for the required size. This wastes
    some stack space, maybe we should revoke this work around if
-   unicows library is fixed */
-
+   unicows library is fixed.
+*/
 #define ENV_BUFFER_SIZE (32*1024-1)
 
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)
@@ -349,35 +377,82 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
     return osl_Process_E_Unknown;
 }
 
-/***************************************************************************/
+/***************************************************************************
+ * Current Working Directory.
+ ***************************************************************************/
 
-sal_uInt32 SAL_CALL osl_getCommandArgCount(void)
+extern oslMutex g_CurrentDirectoryMutex;
+
+oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
 {
-    if (lpArgvW == NULL)
-    {
-        lpArgvW = CommandLineToArgvW( GetCommandLineW(), &nArgnW );
-    }
+    TCHAR   szBuffer[MAX_PATH];
+    DWORD   dwLen;
 
-    return nArgnW ? nArgnW - 1 : 0;
+
+    osl_acquireMutex( g_CurrentDirectoryMutex );
+    dwLen = GetCurrentDirectory( sizeof(szBuffer) / sizeof(TCHAR), szBuffer );
+    osl_releaseMutex( g_CurrentDirectoryMutex );
+
+    if ( dwLen )
+    {
+        oslFileError    eError;
+        rtl_uString     *ustrTemp = NULL;;
+
+        rtl_uString_newFromStr_WithLength( &ustrTemp, szBuffer, dwLen );
+        eError = osl_getFileURLFromSystemPath( ustrTemp, pustrWorkingDir );
+
+        rtl_uString_release( ustrTemp );
+
+        if ( osl_File_E_None != eError )
+            return osl_Process_E_Unknown;
+        else
+            return osl_Process_E_None;
+    }
+    else
+        return osl_Process_E_Unknown;
 }
 
+/***************************************************************************
+ * Process Locale.
+ ***************************************************************************/
+
+extern void _imp_getProcessLocale( rtl_Locale ** ppLocale );
+
+static rtl_Locale * g_theProcessLocale = NULL;
+
 /***************************************************************************/
 
-oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCommandArg)
+oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
 {
-    if (lpArgvW == NULL)
-    {
-        lpArgvW = CommandLineToArgvW( GetCommandLineW(), &nArgnW );
-    }
+    osl_acquireMutex( *osl_getGlobalMutex() );
 
-    if (++nArg < (sal_uInt32)nArgnW)
-    {
-        rtl_uString_newFromStr(strCommandArg, lpArgvW[nArg]);
-    }
+    /* determine the users default locale */
+    if( NULL == g_theProcessLocale )
+        _imp_getProcessLocale( &g_theProcessLocale );
 
+    /* or return the cached value */
+    *ppLocale = g_theProcessLocale;
+
+    osl_releaseMutex( *osl_getGlobalMutex() );
     return osl_Process_E_None;
 }
 
+/***************************************************************************/
+
+oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
+{
+    osl_acquireMutex( *osl_getGlobalMutex() );
+
+    /* check if locale is supported */
+    if( RTL_TEXTENCODING_DONTKNOW == osl_getTextEncodingFromLocale( pLocale ) )
+        return osl_Process_E_Unknown;
+
+    /* just remember the locale here */
+    g_theProcessLocale = pLocale;
+
+    osl_releaseMutex( *osl_getGlobalMutex() );
+    return osl_Process_E_None;
+}
 
 /************************************************
  * Portal send/receive interface implementation
