@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OpenQuery.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:17:06 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -83,7 +83,7 @@ public class OpenQuery {
 
     protected void openQuery() throws com.sun.star.uno.Exception, java.lang.Exception {
         xRemoteServiceManager = this.getRemoteServiceManager(
-        "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
+        "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
 
         // first we create our RowSet object and get its XRowSet interface
         Object rowSet = xRemoteServiceManager.createInstanceWithContext(

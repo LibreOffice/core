@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CodeSamples.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:16:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -61,7 +61,7 @@ public class CodeSamples
     public static void main(String argv[]) throws java.lang.Exception
     {
         try{
-            rSmgr = connect("socket,host=localhost,port=8100");
+            rSmgr = connect("socket,host=localhost,port=2083");
             //  checkConnection( openConnectionWithDriverManager(rSmgr) );
             //  checkConnection( openConnectionWithDriver(rSmgr) );
             createQuerydefinition( rSmgr );
