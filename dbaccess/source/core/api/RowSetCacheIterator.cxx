@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCacheIterator.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 10:12:41 $
+ *  last change: $Author: oj $ $Date: 2001-06-27 10:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,9 @@ ORowSetCacheIterator::operator ORowSetMatrix::iterator()
     if(m_aIter->second.aIterator == NULL ||
        m_aIter->second.aIterator == m_pCache->m_pMatrix->end())
     {
-        OSL_ENSURE(m_aIter->second.aBookmark.hasValue(),"bookmark has no value!");
-        m_pCache->moveToBookmark(m_aIter->second.aBookmark);
-        m_aIter->second.aIterator = m_pCache->m_aMatrixIter;
+//      OSL_ENSURE(m_aIter->second.aBookmark.hasValue(),"bookmark has no value!");
+//      m_pCache->moveToBookmark(m_aIter->second.aBookmark);
+//      m_aIter->second.aIterator = m_pCache->m_aMatrixIter;
     }
     return m_aIter->second.aIterator;
 }
