@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-04 17:07:59 $
+ *  last change: $Author: ssa $ $Date: 2002-03-22 17:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6064,6 +6064,8 @@ void OutputDevice::DrawText( const Rectangle& rRect,
     BOOL  bRestoreFillColor;
     if ( nStyle & TEXT_DRAW_DISABLE )
     {
+        BOOL  bHighContrastBlack = GetBackground().GetColor().IsDark();
+        BOOL  bHighContrastWhite = GetBackground().GetColor().IsBright();
         aOldTextColor = GetTextColor();
         if ( IsTextFillColor() )
         {
@@ -6072,11 +6074,16 @@ void OutputDevice::DrawText( const Rectangle& rRect,
         }
         else
             bRestoreFillColor = FALSE;
-        SetTextColor( GetSettings().GetStyleSettings().GetLightColor() );
-        Rectangle aRect = rRect;
-        aRect.Move( 1, 1 );
-        DrawText( aRect, rOrigStr, nStyle & ~TEXT_DRAW_DISABLE );
-        SetTextColor( GetSettings().GetStyleSettings().GetShadowColor() );
+        if( !bHighContrastBlack && !bHighContrastWhite )
+        {
+            SetTextColor( GetSettings().GetStyleSettings().GetLightColor() );
+            Rectangle aRect = rRect;
+            aRect.Move( 1, 1 );
+            DrawText( aRect, rOrigStr, nStyle & ~TEXT_DRAW_DISABLE );
+            SetTextColor( GetSettings().GetStyleSettings().GetShadowColor() );
+        }
+        else
+            SetTextColor( bHighContrastBlack ? COL_GREEN : COL_LIGHTGREEN );
     }
 
     long        nWidth          = rRect.GetWidth();
@@ -6589,6 +6596,8 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         Color aOldTextColor;
         Color aOldTextFillColor;
         BOOL  bRestoreFillColor;
+        BOOL  bHighContrastBlack = GetBackground().GetColor().IsDark();
+        BOOL  bHighContrastWhite = GetBackground().GetColor().IsBright();
         aOldTextColor = GetTextColor();
         if ( IsTextFillColor() )
         {
@@ -6597,14 +6606,20 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         }
         else
             bRestoreFillColor = FALSE;
-        SetTextColor( GetSettings().GetStyleSettings().GetLightColor() );
-        DrawText( Point( rPos.X()+1, rPos.Y()+1 ), aStr, nIndex, nLen );
-        if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) )
+
+        if( !bHighContrastBlack && !bHighContrastWhite )
         {
-            if ( nMnemonicPos != STRING_NOTFOUND )
-                ImplDrawMnemonicLine( nMnemonicX+1, nMnemonicY+1, cMnemonic );
+            SetTextColor( GetSettings().GetStyleSettings().GetLightColor() );
+            DrawText( Point( rPos.X()+1, rPos.Y()+1 ), aStr, nIndex, nLen );
+            if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) )
+            {
+                if ( nMnemonicPos != STRING_NOTFOUND )
+                    ImplDrawMnemonicLine( nMnemonicX+1, nMnemonicY+1, cMnemonic );
+            }
+            SetTextColor( GetSettings().GetStyleSettings().GetShadowColor() );
         }
-        SetTextColor( GetSettings().GetStyleSettings().GetShadowColor() );
+        else
+            SetTextColor( bHighContrastBlack ? COL_GREEN : COL_LIGHTGREEN );
         DrawText( rPos, aStr, nIndex, nLen );
         if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) )
         {
