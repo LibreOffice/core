@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unxmgr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+ *  last change: $Author: pl $ $Date: 2001-06-07 09:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,23 +160,26 @@ Sequence< ::com::sun::star::plugin::PluginDescription > XPluginManager_Impl::get
 
                 while( pDIR && readdir_r( pDIR, &aEntry, &pEntry ) )
                 {
-                    struct stat aStat;
-                    ByteString aFile( aPath );
-                    aFile += '/';
-                    aFile += aEntry.d_name;
-                    if( ! stat( aFile.GetBuffer(), &aStat ) &&
-                        S_ISREG( aStat.st_mode )            &&
-                        ! strncmp( aEntry.d_name, "libnullplugin", 13 )
-                        )
+                    if( strncmp( aEntry.d_name, "libnullplugin", 13 )   &&
+                        strcmp( aEntry.d_name, "npnrvp.so" )            &&
+                        strcmp( aEntry.d_name, "libnprvp.so" ) )
                     {
-                        int nStructs;
-                        ::com::sun::star::plugin::PluginDescription** pStructs =
-                            CheckPlugin( aFile, nStructs );
-                        if( pStructs )
+                        struct stat aStat;
+                        ByteString aFile( aPath );
+                        aFile += '/';
+                        aFile += aEntry.d_name;
+                        if( ! stat( aFile.GetBuffer(), &aStat )             &&
+                            S_ISREG( aStat.st_mode ) )
                         {
-                            for( int i = 0; i < nStructs; i++ )
-                                aPlugins.push_back( pStructs[i] );
-                            delete pStructs;
+                            int nStructs;
+                            ::com::sun::star::plugin::PluginDescription** pStructs =
+                                  CheckPlugin( aFile, nStructs );
+                            if( pStructs )
+                            {
+                                for( int i = 0; i < nStructs; i++ )
+                                    aPlugins.push_back( pStructs[i] );
+                                delete pStructs;
+                            }
                         }
                     }
                 }
