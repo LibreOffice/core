@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-12 08:35:13 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 11:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,13 @@
 
 // =======================================================================
 
+// -----------------------------------------------------------------------
+
 void ImplDrawSpinButton( OutputDevice* pOutDev,
                          const Rectangle& rUpperRect,
                          const Rectangle& rLowerRect,
                          BOOL bUpperIn, BOOL bLowerIn,
-                         BOOL bUpperEnabled, BOOL bLowerEnabled, BOOL bHorz )
+                         BOOL bUpperEnabled, BOOL bLowerEnabled, BOOL bHorz, BOOL bMirrorHorz )
 {
     DecorationView aDecoView( pOutDev );
 
@@ -100,8 +102,8 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
     {
         if ( bHorz )
         {
-            eType1 = SYMBOL_ARROW_LEFT;
-            eType2 = SYMBOL_ARROW_RIGHT;
+            eType1 = bMirrorHorz ? SYMBOL_ARROW_RIGHT : SYMBOL_ARROW_LEFT;
+            eType2 = bMirrorHorz ? SYMBOL_ARROW_LEFT : SYMBOL_ARROW_RIGHT;
         }
         else
         {
@@ -113,8 +115,8 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
     {
         if ( bHorz )
         {
-            eType1 = SYMBOL_SPIN_LEFT;
-            eType2 = SYMBOL_SPIN_RIGHT;
+            eType1 = bMirrorHorz ? SYMBOL_SPIN_RIGHT : SYMBOL_SPIN_LEFT;
+            eType2 = bMirrorHorz ? SYMBOL_SPIN_LEFT : SYMBOL_SPIN_RIGHT;
         }
         else
         {
@@ -216,7 +218,7 @@ void SpinField::ImplInit( Window* pParent, WinBits nWinStyle )
         SetSubEdit( mpEdit );
 
         maRepeatTimer.SetTimeoutHdl( LINK( this, SpinField, ImplTimeout ) );
-        maRepeatTimer.SetTimeout( SPIN_DELAY );
+        maRepeatTimer.SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
         if ( nWinStyle & WB_REPEAT )
             mbRepeat = TRUE;
 
@@ -346,7 +348,7 @@ void SpinField::MouseButtonUp( const MouseEvent& rMEvt )
     ReleaseMouse();
     mbInitialUp = mbInitialDown = FALSE;
     maRepeatTimer.Stop();
-    maRepeatTimer.SetTimeout( SPIN_DELAY );
+    maRepeatTimer.SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
 
     if ( mbUpperIn )
     {
@@ -736,9 +738,9 @@ USHORT SpinField::GetMaxVisChars() const
 
 IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer )
 {
-    if ( pTimer->GetTimeout() == SPIN_DELAY )
+    if ( pTimer->GetTimeout() == GetSettings().GetMouseSettings().GetButtonStartRepeat() )
     {
-        pTimer->SetTimeout( SPIN_SPEED );
+        pTimer->SetTimeout( GetSettings().GetMouseSettings().GetButtonRepeat() );
         pTimer->Start();
     }
     else
