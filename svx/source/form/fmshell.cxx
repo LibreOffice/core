@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-01 15:52:15 $
+ *  last change: $Author: fs $ $Date: 2002-01-16 07:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,6 @@
 #ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_DATA_XDATABASEDIALOGS_HPP_
-//#include <com/sun/star/data/XDatabaseDialogs.hpp>
-//#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
 #endif
@@ -377,6 +374,8 @@ sal_uInt16 AutoSlotMap[] =
     0
 };
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::svxform;
 
 //========================================================================
@@ -1040,15 +1039,34 @@ void FmFormShell::Execute(SfxRequest &rReq)
         {
             if (GetImpl()->SaveModified(GetImpl()->getActiveController()))
             {
-                Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(GetImpl()->getActiveForm(), UNO_QUERY);
+                DBG_ASSERT( GetImpl()->getNavController()->getModel() == GetImpl()->getActiveForm(),
+                    "FmFormShell::Execute: why this different forms?" );
+                    // FS: just wondering: the previous "last" block worked with the nav controller (which seems the
+                    // most appropriate), the old "new" implementation here uses the active form
+                    // So they should be equal ....
+
+                // don't even want to guess what happens when the "active controller" (which is used for the SaveModified)
+                // is not the "nav controller"
+                // TODO: This all seems to be worth an additional deeper look ....
+
+                // additional TODO: why this "DO_SAFE" instead of handling any SQLExceptions which may occur?????
+                // I remember me introducing this DO_SAFE a very long time ago (it was in pre-5.2 times me thinks), perhaps
+                // this was appropriate then. But now, we should really handle these error instead of silencing them!
+                // In theory, we're a SQLErrorListener at the database form, so all errors occured should be notified
+                // to us instead of beeing thrown. But nevertheless, this DO_SAFE looks strange to me ....
+
+                Reference< XResultSet >  xCursor( GetImpl()->getNavController()->getModel(), UNO_QUERY );
+                DO_SAFE( xCursor->last(); );
+
+                Reference< XResultSetUpdate >  xUpdateCursor( GetImpl()->getActiveForm(), UNO_QUERY );
                 DO_SAFE( xUpdateCursor->moveToInsertRow(); );
             }
             rReq.Done();
         }   break;
         case SID_FM_RECORD_DELETE:
         {
-            Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getActiveForm(), UNO_QUERY);
-            Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(xCursor, UNO_QUERY);
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+            ::com::sun::star::uno::Reference< XResultSetUpdate >  xUpdateCursor(xCursor, ::com::sun::star::uno::UNO_QUERY);
 
             Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->getActiveForm(), UNO_QUERY);
             sal_uInt32 nCount = ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_ROWCOUNT));
