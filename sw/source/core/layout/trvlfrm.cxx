@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:19:26 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@
 #ifndef _FRMSH_HXX
 #include <frmsh.hxx>
 #endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
 
 
 //Fuer SwFlyFrm::GetCrsrOfst
@@ -289,16 +292,17 @@ BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             aIter.Top();
             while ( aIter() )
             {
-                SwVirtFlyDrawObj *pObj = (SwVirtFlyDrawObj*)aIter();
-                SwFlyFrm *pFly = pObj ? pObj->GetFlyFrm() : 0;
+                SwVirtFlyDrawObj* pObj = (SwVirtFlyDrawObj*)aIter();
+                SwFlyFrm* pFly = pObj ? pObj->GetFlyFrm() : 0;
                 if ( pFly &&
-                     ((pCMS?pCMS->bSetInReadOnly:FALSE) ||
-                      !pFly->IsProtected())
-                     && pFly->GetCrsrOfst( pPos, aPoint, pCMS ) )
+                     ( ( pCMS ? pCMS->bSetInReadOnly : FALSE ) ||
+                       !pFly->IsProtected() ) &&
+                     pFly->GetCrsrOfst( pPos, aPoint, pCMS ) )
                 {
                     bRet = TRUE;
                     break;
                 }
+
                 if ( pCMS && pCMS->bStop )
                     return FALSE;
                 aIter.Prev();
@@ -324,10 +328,17 @@ BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                     return FALSE;
                 ASSERT( pCnt, "Crsr is gone to a Black hole" );
                 if( pCMS && pCMS->pFill && pCnt->IsTxtFrm() )
-                    pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
+                    bRet = pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
                 else
-                    pCnt->GetCrsrOfst( pPos, aPoint, pCMS );
-                bRet = TRUE;
+                    bRet = pCnt->GetCrsrOfst( pPos, aPoint, pCMS );
+
+                if ( !bRet )
+                {
+                    // Set point to pCnt, delete mark
+                    // this may happen, if pCnt is hidden
+                    *pPos = SwPosition( *pCnt->GetNode(), SwIndex( (SwTxtNode*)pCnt->GetNode(), 0 ) );
+                    bRet = TRUE;
+                }
             }
         }
         pPage = (const SwPageFrm*)pPage->GetNext();
