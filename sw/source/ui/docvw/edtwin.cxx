@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:44:33 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,11 @@
 #endif
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
+#endif
+
+// OD 18.09.2003 #i18732#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
 #endif
 
 #include <charfmt.hxx>
@@ -854,11 +859,13 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
     SwRect aTmp = rSh.GetFlyRect();
     if( aTmp.HasArea() )
     {
+        // OD 18.09.2003 #i18732# - add item <RES_FOLLOW_TEXT_FLOW>
         SfxItemSet aSet(rSh.GetAttrPool(),
                         RES_FRM_SIZE, RES_FRM_SIZE,
                         RES_VERT_ORIENT, RES_ANCHOR,
                         RES_COL, RES_COL,
-                        RES_PROTECT, RES_PROTECT, 0);
+                        RES_PROTECT, RES_PROTECT,
+                        RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW, 0);
         rSh.GetFlyFrmAttr( aSet );
         const SvxProtectItem& rProtect = ((SvxProtectItem&)aSet.Get(RES_PROTECT));
         if( rProtect.IsSizeProtected() ||
@@ -886,7 +893,16 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
 
         SwRect aBoundRect;
         Point aRefPoint;
-        rSh.CalcBoundRect( aBoundRect, eAnchorId, FRAME, FALSE, &aRefPoint );
+        // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
+        //      aligned to page for fly frame anchored to paragraph or to character.
+        {
+            SwFmtVertOrient aVert( (SwFmtVertOrient&)aSet.Get(RES_VERT_ORIENT) );
+            const bool bFollowTextFlow =
+                    static_cast<const SwFmtFollowTextFlow&>(aSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
+            rSh.CalcBoundRect( aBoundRect, eAnchorId, FRAME,
+                               aVert.GetRelationOrient(), bFollowTextFlow,
+                               false, &aRefPoint );
+        }
         long nLeft = Min( aTmp.Left() - aBoundRect.Left(), aSnap.Width() );
         long nRight = Min( aBoundRect.Right() - aTmp.Right(), aSnap.Width() );
         long nUp = Min( aTmp.Top() - aBoundRect.Top(), aSnap.Height() );
