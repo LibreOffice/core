@@ -965,13 +965,35 @@ else
    AC_MSG_WARN([Windows / Cygwin b2x does not have tcsh])
    TCSH="NO_TCSH"
 fi
+
 dnl ===================================================================
 dnl Checks for libraries.
 dnl ===================================================================
+dnl Check for Mac OS X native GUI, which may be used instead of X11.
+dnl Check for a lack of --with-x option on Darwin.  If it is missing, look to
+dnl see if we have the AppKit framework for building with Quartz graphics.
+
+if test  "$_os" = "Darwin"  -a  "x$with_x" != "xyes"  -a  "x$x_includes" = "xNONE"  -a  "x$x_libraries" = "xNONE"; then
+   dnl System is either Mac OS X or pure Darwin, and --with-x was not specified
+   dnl Default to Aqua graphics if available.
+   AC_MSG_CHECKING([for /System/Library/Frameworks/AppKit.framework])
+   if test -d "/System/Library/Frameworks/AppKit.framework/"; then
+      AC_MSG_RESULT([yes])
+      x_includes="no_x_includes"
+      x_libraries="no_x_libraries"
+   else
+      AC_MSG_RESULT([no])
+      dnl Probably a pure Darwin system. Check for X11 below.
+   fi
+fi
+
 dnl ***************************************
 dnl testing for X libraries and includes...
 dnl ***************************************
-if test "$_os" != "WINNT" -a "$_os" != "Darwin"; then
+if test "$_os" = "Darwin" -a "x$x_includes" = "xno_x_includes"; then
+   dnl Mac OS X using Aqua graphics. Don't check for X11.
+   :
+elif test "$_os" != "WINNT" ; then
    AC_PATH_X
    AC_PATH_XTRA
    if test "x$x_includes" = "x"; then
