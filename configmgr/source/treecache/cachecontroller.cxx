@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 10:30:12 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,11 @@
 #include <rtl/logfile.hxx>
 #endif
 
+#ifndef _CONFIGMGR_BOOTSTRAP_HXX
+#include "bootstrap.hxx"
+#endif
+
+
 #define RTL_LOGFILE_OU2A(rtlOUString)   (::rtl::OUStringToOString((rtlOUString), RTL_TEXTENCODING_ASCII_US).getStr())
 
 namespace configmgr
@@ -115,20 +120,27 @@ namespace configmgr
 // -------------------------------------------------------------------------
     namespace backend
     {
+
+static const rtl::OUString kCacheDisposeDelay(
+    RTL_CONSTASCII_USTRINGPARAM( CONTEXT_ITEM_PREFIX_ "CacheDisposeDelay"));
+static const rtl::OUString kCacheDisposeInterval(
+    RTL_CONSTASCII_USTRINGPARAM( CONTEXT_ITEM_PREFIX_ "CacheDisposeInterval"));
+static const rtl::OUString kCacheWriteInterval(
+    RTL_CONSTASCII_USTRINGPARAM( CONTEXT_ITEM_PREFIX_ "CacheWriteInterval"));
 // -------------------------------------------------------------------------
 
-OTreeDisposeScheduler* CacheController::createDisposer()
+OTreeDisposeScheduler* CacheController::createDisposer(const CreationContext& _xContext)
 {
-    // TODO: parameterize the delays
-#if OSL_DEBUG_LEVEL == 0
-    const sal_uInt32 minute         = 60; // units are seconds
-    // for initial debugging: use seconds instead of minutes
-#else
-    const sal_uInt32 minute         = 1;
-#endif
+    ContextReader aReader(_xContext);
+    sal_uInt32 c_nDefaultDelay = 0;
+    OUString sDefaultDelay;
+    aReader.getBestContext()->getValueByName(kCacheDisposeDelay) >>= sDefaultDelay;
+    c_nDefaultDelay = sDefaultDelay.toInt32()==0?900:sDefaultDelay.toInt32() ;
 
-    const sal_uInt32 c_nDefaultDelay    = 15 * minute;
-    const sal_uInt32 c_nDefaultInterval =  1 * minute;
+    sal_uInt32 c_nDefaultInterval = 0;
+    OUString sDefaultInterval;
+    aReader.getBestContext()->getValueByName(kCacheDisposeInterval) >>= sDefaultInterval;
+    c_nDefaultInterval = sDefaultInterval.toInt32()==0?60:sDefaultInterval.toInt32();
 
     TimeInterval aDelay(c_nDefaultDelay);
     TimeInterval aInterval(c_nDefaultInterval);
@@ -138,10 +150,13 @@ OTreeDisposeScheduler* CacheController::createDisposer()
 
 // -----------------------------------------------------------------------------
 
-OCacheWriteScheduler* CacheController::createCacheWriter()
+OCacheWriteScheduler* CacheController::createCacheWriter(const CreationContext& _xContext)
 {
-    const sal_uInt32 seconds = 1;
-    const sal_uInt32 c_nDefaultInterval =  2 * seconds;
+    ContextReader aReader(_xContext);
+    sal_uInt32 c_nDefaultInterval=0;
+    OUString sDefaultInterval;
+    aReader.getBestContext()->getValueByName(kCacheWriteInterval) >>= sDefaultInterval;
+    c_nDefaultInterval = sDefaultInterval.toInt32()==0?2:sDefaultInterval.toInt32();
 
     TimeInterval aInterval(c_nDefaultInterval);
     return new OCacheWriteScheduler(*this, aInterval);
@@ -349,7 +364,9 @@ void CacheController::implDisposeOne(CacheRef const & _aDisposedCache, RequestOp
 }
 
 // -------------------------------------------------------------------------
-CacheController::CacheController(BackendRef const & _xBackend, memory::HeapManager & _rCacheHeapManager)
+CacheController::CacheController(BackendRef const & _xBackend,
+                                 memory::HeapManager & _rCacheHeapManager,
+                                 const uno::Reference<uno::XComponentContext>& xContext)
 : m_aNotifier()
 , m_xBackend(_xBackend)
 , m_aCacheList()
@@ -358,8 +375,8 @@ CacheController::CacheController(BackendRef const & _xBackend, memory::HeapManag
 , m_pCacheWriter()
 , m_bDisposing(false)
 {
-    m_pDisposer = this->createDisposer();
-    m_pCacheWriter = this->createCacheWriter();
+    m_pDisposer = this->createDisposer(xContext);
+    m_pCacheWriter = this->createCacheWriter(xContext);
 }
 
 // -------------------------------------------------------------------------
@@ -374,8 +391,14 @@ CacheController::~CacheController()
 // -------------------------------------------------------------------------
 void CacheController::closeModules(Cache::DisposeList & _aList, RequestOptions const & _aOptions)
 {
+    //Remove listeners from Backend as module no longer in cache
+    for (sal_uInt32 i =0; i < _aList.size(); ++i)
+    {
+        Name aModuleName = _aList[i]->getModuleName();
+        ComponentRequest aRequest(aModuleName, _aOptions);
+        m_xBackend->removeRequestListener(this, aRequest);
+    }
 }
-
 // -------------------------------------------------------------------------
 #if 0
 static
@@ -447,7 +470,7 @@ CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
     }
     else
     {
-        ComponentResult aData = this->loadDirectly(_aRequest);
+        ComponentResult aData = this->loadDirectly(_aRequest,true);
 
         bool bWithDefaults = ! m_xBackend->isStrippingDefaults();
 
@@ -470,13 +493,15 @@ CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
 }
 // -------------------------------------------------------------------------
 
-ComponentResult CacheController::getComponentData(ComponentRequest const & _aRequest) CFG_UNO_THROW_ALL()
+ComponentResult CacheController::getComponentData(ComponentRequest const & _aRequest,
+                                                  bool _bAddListenter ) CFG_UNO_THROW_ALL()
 {
     // TODO: Insert check here, if the data is in the cache already - and then clone
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::CacheController", "jb99855", "configmgr: CacheController::getComponentData()");
     RTL_LOGFILE_CONTEXT_TRACE1(aLog, "component: %s", RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) );
 
-    ComponentResult aRet = this->loadDirectly(_aRequest);
+
+    ComponentResult aRet = this->loadDirectly(_aRequest, _bAddListenter);
 
     return aRet;
 }
@@ -736,7 +761,7 @@ bool CacheController::normalizeResult(std::auto_ptr<ISubtree> &  _aResult, Reque
 }
 // -----------------------------------------------------------------------------
 
-ComponentResult CacheController::loadDirectly(ComponentRequest const & _aRequest) CFG_UNO_THROW_ALL(  )
+ComponentResult CacheController::loadDirectly(ComponentRequest const & _aRequest, bool _bAddListenter) CFG_UNO_THROW_ALL(  )
 {
     CFG_TRACE_INFO("CacheController: loading data for component '%s' from the backend", OUSTRING2ASCII(_aRequest.getComponentName().toString()));
 
@@ -744,7 +769,7 @@ ComponentResult CacheController::loadDirectly(ComponentRequest const & _aRequest
 
     NodeRequest aNodeRequest(aRequestPath, _aRequest.getOptions());
 
-    ComponentResult aResult = m_xBackend->getNodeData(_aRequest, this);
+    ComponentResult aResult = m_xBackend->getNodeData(_aRequest, this, _bAddListenter?this:NULL);
 
     OSL_PRECOND(aResult.mutableInstance().mutableData().get(), "loadDirectly: Data must not be NULL");
 
@@ -887,6 +912,10 @@ void CacheController::freeComponent(ComponentRequest const & _aRequest) CFG_NOTH
     }
 }
 
+void CacheController::dataChanged(const ComponentRequest& _aRequest) CFG_NOTHROW()
+{
+    refreshComponent(_aRequest);
+}
 // INotifyListener
 // ----------------------------------------------------------------------------
 /*
