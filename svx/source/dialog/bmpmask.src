@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:32:12 $
+ *  last change: $Author: gt $ $Date: 2002-09-02 10:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,10 @@
 #include "dialogs.hrc"
 #include "bmpmask.hrc"
 #include "helpid.hrc"
- // pragma ----------------------------------------------------------------
+
+
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+
 
  // RID_SVXDLG_BMPMASK ----------------------------------------------------
 DockingWindow RID_SVXDLG_BMPMASK
@@ -445,7 +448,7 @@ DockingWindow RID_SVXDLG_BMPMASK
                 ItemImage = Image
                 {
                     ImageBitmap = Bitmap { File = "sc10350.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                    MASKCOLOR
                 };
                 Text [ dutch ] = "Pipet" ;
                 Text [ english_us ] = "Eyedropper" ;
@@ -505,13 +508,13 @@ DockingWindow RID_SVXDLG_BMPMASK
     Image IMG_PIPETTE
     {
         ImageBitmap = Bitmap { File = "sc10350.bmp" ; };
-        MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+        MASKCOLOR
     };
 
     Image IMG_PIPETTE_H
     {
         ImageBitmap = Bitmap { File = "sc10350_h.bmp" ; };
-        MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+        MASKCOLOR
     };
 };
 
