@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 12:35:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ void ScInterpreter::ReplaceCell( ScAddress& rPos )
 }
 
 
-void ScInterpreter::ReplaceCell( USHORT& rCol, USHORT& rRow, USHORT& rTab )
+void ScInterpreter::ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab )
 {
     ScAddress aPos( rCol, rRow, rTab );
     ScInterpreterTableOpParams* pTOp = pDok->aTableOpList.First();
@@ -372,30 +372,33 @@ USHORT ScInterpreter::GetCellErrCode( const ScBaseCell* pCell )
 }
 
 
-BOOL ScInterpreter::CreateDoubleArr(USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                            USHORT nCol2, USHORT nRow2, USHORT nTab2, BYTE* pCellArr)
+BOOL ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2, BYTE* pCellArr)
 {
+#if SC_ROWLIMIT_MORE_THAN_64K
+#error row limit 64k
+#endif
     USHORT nCount = 0;
     USHORT* p = (USHORT*) pCellArr;
-    *p++ = nCol1;
-    *p++ = nRow1;
-    *p++ = nTab1;
-    *p++ = nCol2;
-    *p++ = nRow2;
-    *p++ = nTab2;
+    *p++ = static_cast<USHORT>(nCol1);
+    *p++ = static_cast<USHORT>(nRow1);
+    *p++ = static_cast<USHORT>(nTab1);
+    *p++ = static_cast<USHORT>(nCol2);
+    *p++ = static_cast<USHORT>(nRow2);
+    *p++ = static_cast<USHORT>(nTab2);
     USHORT* pCount = p;
     *p++ = 0;
     USHORT nPos = 14;
-    USHORT nTab = nTab1;
+    SCTAB nTab = nTab1;
     ScAddress aAdr;
     while (nTab <= nTab2)
     {
         aAdr.SetTab( nTab );
-        USHORT nRow = nRow1;
+        SCROW nRow = nRow1;
         while (nRow <= nRow2)
         {
             aAdr.SetRow( nRow );
-            USHORT nCol = nCol1;
+            SCCOL nCol = nCol1;
             while (nCol <= nCol2)
             {
                 aAdr.SetCol( nCol );
@@ -427,9 +430,9 @@ BOOL ScInterpreter::CreateDoubleArr(USHORT nCol1, USHORT nRow1, USHORT nTab1,
                     {
                         if ((nPos + (4 * sizeof(USHORT)) + sizeof(double)) > MAXARRSIZE)
                             return FALSE;
-                        *p++ = nCol;
-                        *p++ = nRow;
-                        *p++ = nTab;
+                        *p++ = static_cast<USHORT>(nCol);
+                        *p++ = static_cast<USHORT>(nRow);
+                        *p++ = static_cast<USHORT>(nTab);
                         *p++ = nErr;
                         memcpy( p, &nVal, sizeof(double));
                         nPos += 8 + sizeof(double);
@@ -448,28 +451,31 @@ BOOL ScInterpreter::CreateDoubleArr(USHORT nCol1, USHORT nRow1, USHORT nTab1,
 }
 
 
-BOOL ScInterpreter::CreateStringArr(USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                                    USHORT nCol2, USHORT nRow2, USHORT nTab2,
+BOOL ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                    SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     BYTE* pCellArr)
 {
+#if SC_ROWLIMIT_MORE_THAN_64K
+#error row limit 64k
+#endif
     USHORT nCount = 0;
     USHORT* p = (USHORT*) pCellArr;
-    *p++ = nCol1;
-    *p++ = nRow1;
-    *p++ = nTab1;
-    *p++ = nCol2;
-    *p++ = nRow2;
-    *p++ = nTab2;
+    *p++ = static_cast<USHORT>(nCol1);
+    *p++ = static_cast<USHORT>(nRow1);
+    *p++ = static_cast<USHORT>(nTab1);
+    *p++ = static_cast<USHORT>(nCol2);
+    *p++ = static_cast<USHORT>(nRow2);
+    *p++ = static_cast<USHORT>(nTab2);
     USHORT* pCount = p;
     *p++ = 0;
     USHORT nPos = 14;
-    USHORT nTab = nTab1;
+    SCTAB nTab = nTab1;
     while (nTab <= nTab2)
     {
-        USHORT nRow = nRow1;
+        SCROW nRow = nRow1;
         while (nRow <= nRow2)
         {
-            USHORT nCol = nCol1;
+            SCCOL nCol = nCol1;
             while (nCol <= nCol2)
             {
                 ScBaseCell* pCell;
@@ -514,9 +520,9 @@ BOOL ScInterpreter::CreateStringArr(USHORT nCol1, USHORT nRow1, USHORT nTab1,
 
                         if (((ULONG)nPos + (5 * sizeof(USHORT)) + nLen) > MAXARRSIZE)
                             return FALSE;
-                        *p++ = nCol;
-                        *p++ = nRow;
-                        *p++ = nTab;
+                        *p++ = static_cast<USHORT>(nCol);
+                        *p++ = static_cast<USHORT>(nRow);
+                        *p++ = static_cast<USHORT>(nTab);
                         *p++ = nErr;
                         *p++ = nLen;
                         memcpy( p, aTmp.GetBuffer(), nStrLen + 1);
@@ -539,31 +545,34 @@ BOOL ScInterpreter::CreateStringArr(USHORT nCol1, USHORT nRow1, USHORT nTab1,
 }
 
 
-BOOL ScInterpreter::CreateCellArr(USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                                  USHORT nCol2, USHORT nRow2, USHORT nTab2,
+BOOL ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                  SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                   BYTE* pCellArr)
 {
+#if SC_ROWLIMIT_MORE_THAN_64K
+#error row limit 64k
+#endif
     USHORT nCount = 0;
     USHORT* p = (USHORT*) pCellArr;
-    *p++ = nCol1;
-    *p++ = nRow1;
-    *p++ = nTab1;
-    *p++ = nCol2;
-    *p++ = nRow2;
-    *p++ = nTab2;
+    *p++ = static_cast<USHORT>(nCol1);
+    *p++ = static_cast<USHORT>(nRow1);
+    *p++ = static_cast<USHORT>(nTab1);
+    *p++ = static_cast<USHORT>(nCol2);
+    *p++ = static_cast<USHORT>(nRow2);
+    *p++ = static_cast<USHORT>(nTab2);
     USHORT* pCount = p;
     *p++ = 0;
     USHORT nPos = 14;
-    USHORT nTab = nTab1;
+    SCTAB nTab = nTab1;
     ScAddress aAdr;
     while (nTab <= nTab2)
     {
         aAdr.SetTab( nTab );
-        USHORT nRow = nRow1;
+        SCROW nRow = nRow1;
         while (nRow <= nRow2)
         {
             aAdr.SetRow( nRow );
-            USHORT nCol = nCol1;
+            SCCOL nCol = nCol1;
             while (nCol <= nCol2)
             {
                 aAdr.SetCol( nCol );
@@ -603,9 +612,9 @@ BOOL ScInterpreter::CreateCellArr(USHORT nCol1, USHORT nRow1, USHORT nTab1,
                     {
                         if ((nPos + (5 * sizeof(USHORT))) > MAXARRSIZE)
                             return FALSE;
-                        *p++ = nCol;
-                        *p++ = nRow;
-                        *p++ = nTab;
+                        *p++ = static_cast<USHORT>(nCol);
+                        *p++ = static_cast<USHORT>(nRow);
+                        *p++ = static_cast<USHORT>(nTab);
                         *p++ = nErr;
                         *p++ = nType;
                         nPos += 10;
@@ -803,7 +812,7 @@ const String& ScInterpreter::PopString()
 }
 
 
-void ScInterpreter::PopSingleRef(USHORT& rCol, USHORT &rRow, USHORT& rTab)
+void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
 {
     if( sp )
     {
@@ -826,11 +835,11 @@ void ScInterpreter::PopSingleRef(USHORT& rCol, USHORT &rRow, USHORT& rTab)
                 rTab = aPos.Tab() + rRef.nRelTab;
             else
                 rTab = rRef.nTab;
-            if( rCol < 0 || rCol > MAXCOL || rRef.IsColDeleted() )
+            if( !ValidCol( rCol) || rRef.IsColDeleted() )
                 SetError( errNoRef ), rCol = 0;
-            if( rRow < 0 || rRow > MAXROW || rRef.IsRowDeleted() )
+            if( !ValidRow( rRow) || rRef.IsRowDeleted() )
                 SetError( errNoRef ), rRow = 0;
-            if( rTab < 0 || rTab >= pDok->GetTableCount() || rRef.IsTabDeleted() )
+            if( !ValidTab( rTab, pDok->GetTableCount()) || rRef.IsTabDeleted() )
                 SetError( errNoRef ), rTab = 0;
             if ( pDok->aTableOpList.Count() > 0 )
                 ReplaceCell( rCol, rRow, rTab );
@@ -853,7 +862,9 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
             nGlobalError = pErrorStack[ sp ];
         if( p->GetType() == svSingleRef )
         {
-            short nCol, nRow, nTab;
+            SCsCOL nCol;
+            SCsROW nRow;
+            SCsTAB nTab;
             const SingleRefData& rRef = p->GetSingleRef();
             if ( rRef.IsColRel() )
                 nCol = aPos.Col() + rRef.nRelCol;
@@ -867,13 +878,13 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
                 nTab = aPos.Tab() + rRef.nRelTab;
             else
                 nTab = rRef.nTab;
-            if( nCol < 0 || nCol > MAXCOL || rRef.IsColDeleted() )
+            if( !ValidCol( nCol) || rRef.IsColDeleted() )
                 SetError( errNoRef ), nCol = 0;
-            if( nRow < 0 || nRow > MAXROW || rRef.IsRowDeleted() )
+            if( !ValidRow( nRow) || rRef.IsRowDeleted() )
                 SetError( errNoRef ), nRow = 0;
-            if( nTab < 0 || nTab >= pDok->GetTableCount() || rRef.IsTabDeleted() )
+            if( !ValidTab( (SCTAB)nTab, pDok->GetTableCount()) || rRef.IsTabDeleted() )
                 SetError( errNoRef ), nTab = 0;
-            rAdr.Set( (USHORT)nCol, (USHORT)nRow, (USHORT)nTab );
+            rAdr.Set( (SCCOL)nCol, (SCROW)nRow, (SCTAB)nTab );
             if ( pDok->aTableOpList.Count() > 0 )
                 ReplaceCell( rAdr );
             return;
@@ -886,12 +897,12 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
 
 
 void ScInterpreter::DoubleRefToVars( const ScToken* p,
-        USHORT& rCol1, USHORT &rRow1, USHORT& rTab1,
-        USHORT& rCol2, USHORT &rRow2, USHORT& rTab2,
+        SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
+        SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
         BOOL bDontCheckForTableOp )
 {
     const ComplRefData& rCRef = p->GetDoubleRef();
-    USHORT nMaxTab = pDok->GetTableCount();
+    SCTAB nMaxTab = pDok->GetTableCount() - 1;
     {
         const SingleRefData& rRef = rCRef.Ref1;
         if ( rRef.IsColRel() )
@@ -906,11 +917,11 @@ void ScInterpreter::DoubleRefToVars( const ScToken* p,
             rTab1 = aPos.Tab() + rRef.nRelTab;
         else
             rTab1 = rRef.nTab;
-        if( rCol1 < 0 || rCol1 > MAXCOL || rRef.IsColDeleted() )
+        if( !ValidCol(rCol1) || rRef.IsColDeleted() )
             SetError( errNoRef ), rCol1 = 0;
-        if( rRow1 < 0 || rRow1 > MAXROW || rRef.IsRowDeleted() )
+        if( !ValidRow(rRow1) || rRef.IsRowDeleted() )
             SetError( errNoRef ), rRow1 = 0;
-        if( rTab1 < 0 || rTab1 >= nMaxTab || rRef.IsTabDeleted() )
+        if( !ValidTab(rTab1,nMaxTab) || rRef.IsTabDeleted() )
             SetError( errNoRef ), rTab1 = 0;
     }
     {
@@ -927,11 +938,11 @@ void ScInterpreter::DoubleRefToVars( const ScToken* p,
             rTab2 = aPos.Tab() + rRef.nRelTab;
         else
             rTab2 = rRef.nTab;
-        if( rCol2 < 0 || rCol2 > MAXCOL || rRef.IsColDeleted() )
+        if( !ValidCol(rCol2) || rRef.IsColDeleted() )
             SetError( errNoRef ), rCol2 = 0;
-        if( rRow2 < 0 || rRow2 > MAXROW || rRef.IsRowDeleted() )
+        if( !ValidRow(rRow2) || rRef.IsRowDeleted() )
             SetError( errNoRef ), rRow2 = 0;
-        if( rTab2 < 0 || rTab2 >= nMaxTab || rRef.IsTabDeleted() )
+        if( !ValidTab(rTab2,nMaxTab) || rRef.IsTabDeleted() )
             SetError( errNoRef ), rTab2 = 0;
     }
     if ( pDok->aTableOpList.Count() > 0 && !bDontCheckForTableOp )
@@ -943,8 +954,8 @@ void ScInterpreter::DoubleRefToVars( const ScToken* p,
 }
 
 
-void ScInterpreter::PopDoubleRef(USHORT& rCol1, USHORT &rRow1, USHORT& rTab1,
-                                 USHORT& rCol2, USHORT &rRow2, USHORT& rTab2,
+void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
+                                 SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
                                  BOOL bDontCheckForTableOp )
 {
     if( sp )
@@ -977,8 +988,10 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, BOOL bDontCheckForTableOp )
         if( p->GetType() == svDoubleRef )
         {
             const ComplRefData& rCRef = p->GetDoubleRef();
-            short nCol, nRow, nTab;
-            USHORT nMaxTab = pDok->GetTableCount();
+            SCsCOL nCol;
+            SCsROW nRow;
+            SCsTAB nTab;
+            SCTAB nMaxTab = pDok->GetTableCount() - 1;
             {
                 const SingleRefData& rRef = rCRef.Ref1;
                 if ( rRef.IsColRel() )
@@ -993,13 +1006,13 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, BOOL bDontCheckForTableOp )
                     nTab = aPos.Tab() + rRef.nRelTab;
                 else
                     nTab = rRef.nTab;
-                if( nCol < 0 || nCol > MAXCOL || rRef.IsColDeleted() )
+                if( !ValidCol( nCol) || rRef.IsColDeleted() )
                     SetError( errNoRef ), nCol = 0;
-                if( nRow < 0 || nRow > MAXROW || rRef.IsRowDeleted() )
+                if( !ValidRow( nRow) || rRef.IsRowDeleted() )
                     SetError( errNoRef ), nRow = 0;
-                if( nTab < 0 || nTab >= nMaxTab || rRef.IsTabDeleted() )
+                if( !ValidTab( (SCTAB)nTab, nMaxTab) || rRef.IsTabDeleted() )
                     SetError( errNoRef ), nTab = 0;
-                rRange.aStart.Set( (USHORT)nCol, (USHORT)nRow, (USHORT)nTab );
+                rRange.aStart.Set( (SCCOL)nCol, (SCROW)nRow, (SCTAB)nTab );
             }
             {
                 const SingleRefData& rRef = rCRef.Ref2;
@@ -1015,13 +1028,13 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, BOOL bDontCheckForTableOp )
                     nTab = aPos.Tab() + rRef.nRelTab;
                 else
                     nTab = rRef.nTab;
-                if( nCol < 0 || nCol > MAXCOL || rRef.IsColDeleted() )
+                if( !ValidCol( nCol) || rRef.IsColDeleted() )
                     SetError( errNoRef ), nCol = 0;
-                if( nRow < 0 || nRow > MAXROW || rRef.IsRowDeleted() )
+                if( !ValidRow( nRow) || rRef.IsRowDeleted() )
                     SetError( errNoRef ), nRow = 0;
-                if( nTab < 0 || nTab >= nMaxTab || rRef.IsTabDeleted() )
+                if( !ValidTab( (SCTAB)nTab, nMaxTab) || rRef.IsTabDeleted() )
                     SetError( errNoRef ), nTab = 0;
-                rRange.aEnd.Set( (USHORT)nCol, (USHORT)nRow, (USHORT)nTab );
+                rRange.aEnd.Set( (SCCOL)nCol, (SCROW)nRow, (SCTAB)nTab );
             }
             if ( pDok->aTableOpList.Count() > 0 && !bDontCheckForTableOp )
             {
@@ -1082,7 +1095,7 @@ bool ScInterpreter::ConvertMatrixParameters()
     USHORT nParams = pCur->GetParamCount();
     OpCode eOp = pCur->GetOpCode();
     DBG_ASSERT( nParams <= sp, "ConvertMatrixParameters: stack/param count mismatch");
-    USHORT nJumpCols = 0, nJumpRows = 0;
+    SCSIZE nJumpCols = 0, nJumpRows = 0;
     for ( USHORT i=1; i <= nParams && i <= sp; ++i )
     {
         ScToken* p = pStack[ sp - i ];
@@ -1109,7 +1122,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                             SetError( errUnknownVariable);
                         else
                         {
-                            USHORT nCols, nRows;
+                            SCSIZE nCols, nRows;
                             pMat->GetDimensions( nCols, nRows);
                             if ( nJumpCols < nCols )
                                 nJumpCols = nCols;
@@ -1125,7 +1138,12 @@ bool ScInterpreter::ConvertMatrixParameters()
                         ScParameterClassification::GetParameterType( pCur, nParams - i);
                     if ( eType != ScParameterClassification::Reference )
                     {
-                        USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+                        SCCOL nCol1;
+                        SCROW nRow1;
+                        SCTAB nTab1;
+                        SCCOL nCol2;
+                        SCROW nRow2;
+                        SCTAB nTab2;
                         DoubleRefToVars( p, nCol1, nRow1, nTab1, nCol2, nRow2,
                                 nTab2);
                         ScMatrixRef pMat = CreateMatrixFromDoubleRef(
@@ -1134,10 +1152,10 @@ bool ScInterpreter::ConvertMatrixParameters()
                         {
                             if ( eType == ScParameterClassification::Value )
                             {   // only if single value expected
-                                if ( nJumpCols < nCol2 - nCol1 + 1 )
-                                    nJumpCols = nCol2 - nCol1 + 1;
-                                if ( nJumpRows < nRow2 - nRow1 + 1 )
-                                    nJumpRows = nRow2 - nRow1 + 1;
+                                if ( nJumpCols < static_cast<SCSIZE>(nCol2 - nCol1 + 1) )
+                                    nJumpCols = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
+                                if ( nJumpRows < static_cast<SCSIZE>(nRow2 - nRow1 + 1) )
+                                    nJumpRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
                             }
                             ScMatrixToken* pNew = new ScMatrixToken( pMat);
                             pNew->IncRef();
@@ -1234,7 +1252,7 @@ void ScInterpreter::PushString( const String& rString )
 }
 
 
-void ScInterpreter::PushSingleRef(USHORT nCol, USHORT nRow, USHORT nTab)
+void ScInterpreter::PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
     SingleRefData aRef;
     aRef.InitFlags();
@@ -1245,8 +1263,8 @@ void ScInterpreter::PushSingleRef(USHORT nCol, USHORT nRow, USHORT nTab)
 }
 
 
-void ScInterpreter::PushDoubleRef(USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                                  USHORT nCol2, USHORT nRow2, USHORT nTab2)
+void ScInterpreter::PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                  SCCOL nCol2, SCROW nRow2, SCTAB nTab2)
 {
     ComplRefData aRef;
     aRef.InitFlags();
@@ -1360,7 +1378,7 @@ BOOL ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& r
             SetError( errIllegalArgument);
         else
         {
-            USHORT nC, nR;
+            SCSIZE nC, nR;
             pJumpMatrix->GetPos( nC, nR);
             rAdr.SetCol( rRange.aStart.Col() + nC);
             rAdr.SetRow( rRange.aStart.Row() + nR);
@@ -1374,10 +1392,12 @@ BOOL ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& r
         return bOk;
     }
 
-    USHORT nMyCol = aPos.Col();
-    USHORT nMyRow = aPos.Row();
-    USHORT nMyTab = aPos.Tab();
-    USHORT nCol, nRow, nTab;
+    SCCOL nMyCol = aPos.Col();
+    SCROW nMyRow = aPos.Row();
+    SCTAB nMyTab = aPos.Tab();
+    SCCOL nCol;
+    SCROW nRow;
+    SCTAB nTab;
     nTab = rRange.aStart.Tab();
     if ( rRange.aStart.Col() <= nMyCol && nMyCol <= rRange.aEnd.Col() )
     {
@@ -1478,7 +1498,7 @@ double ScInterpreter::GetDouble()
                 nVal = pMat->GetDouble( 0 );
             else
             {
-                USHORT nCols, nRows, nC, nR;
+                SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
@@ -1560,7 +1580,7 @@ const String& ScInterpreter::GetString()
                 return pMat->GetString( 0, 0);  // x,y checks if string
             else
             {
-                USHORT nCols, nRows, nC, nR;
+                SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
@@ -1580,7 +1600,7 @@ const String& ScInterpreter::GetString()
 
 void ScInterpreter::ScDBGet()
 {
-    USHORT nTab;
+    SCTAB nTab;
     ScQueryParam aQueryParam;
     BOOL bMissingField = FALSE;
     if (GetDBParams( nTab, aQueryParam, bMissingField))
@@ -1712,7 +1732,12 @@ void ScInterpreter::ScExternal()
                         break;
                     case PTR_DOUBLE_ARR :
                         {
-                            USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+                            SCCOL nCol1;
+                            SCROW nRow1;
+                            SCTAB nTab1;
+                            SCCOL nCol2;
+                            SCROW nRow2;
+                            SCTAB nTab2;
                             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
                             pCellArr[i-1] = new BYTE[MAXARRSIZE];
                             if (!CreateDoubleArr(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, pCellArr[i-1]))
@@ -1723,7 +1748,12 @@ void ScInterpreter::ScExternal()
                         break;
                     case PTR_STRING_ARR :
                         {
-                            USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+                            SCCOL nCol1;
+                            SCROW nRow1;
+                            SCTAB nTab1;
+                            SCCOL nCol2;
+                            SCROW nRow2;
+                            SCTAB nTab2;
                             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
                             pCellArr[i-1] = new BYTE[MAXARRSIZE];
                             if (!CreateStringArr(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, pCellArr[i-1]))
@@ -1734,7 +1764,12 @@ void ScInterpreter::ScExternal()
                         break;
                     case PTR_CELL_ARR :
                         {
-                            USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+                            SCCOL nCol1;
+                            SCROW nRow1;
+                            SCTAB nTab1;
+                            SCCOL nCol2;
+                            SCROW nRow2;
+                            SCTAB nTab2;
                             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
                             pCellArr[i-1] = new BYTE[MAXARRSIZE];
                             if (!CreateCellArr(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, pCellArr[i-1]))
@@ -1797,13 +1832,12 @@ void ScInterpreter::ScExternal()
                         if ( !pAs )
                         {
                             pAs = new ScAddInAsync( nHandle, nIndex, pDok );
-                            pMyFormulaCell->StartListening( *pAs, TRUE );
+                            pMyFormulaCell->StartListening( *pAs );
                         }
                         else
                         {
                             // falls per cut/copy/paste
-                            if ( !pMyFormulaCell->IsListening( *pAs ) )
-                                pMyFormulaCell->StartListening( *pAs, TRUE );
+                            pMyFormulaCell->StartListening( *pAs );
                             // in anderes Dokument?
                             if ( !pAs->HasDocument( pDok ) )
                                 pAs->AddDocument( pDok );
@@ -2152,12 +2186,11 @@ void ScInterpreter::ScExternal()
                 if ( !pLis )
                 {
                     pLis = ScAddInListener::CreateListener( xResult, pDok );
-                    pMyFormulaCell->StartListening( *pLis, TRUE );
+                    pMyFormulaCell->StartListening( *pLis );
                 }
                 else
                 {
-                    if ( !pMyFormulaCell->IsListening( *pLis ) )
-                        pMyFormulaCell->StartListening( *pLis, TRUE );
+                    pMyFormulaCell->StartListening( *pLis );
                     if ( !pLis->HasDocument( pDok ) )
                         pLis->AddDocument( pDok );
                 }
@@ -2174,7 +2207,8 @@ void ScInterpreter::ScExternal()
             {
                 const ScMatrix* pLinkMat = aCall.GetMatrix();       // not NULL
 
-                USHORT nC, nR;                              // copy matrix result
+                // copy matrix result
+                SCSIZE nC, nR;
                 pLinkMat->GetDimensions(nC, nR);
                 ScMatrixRef pNewMat = GetNewMat( nC, nR);
                 if (pNewMat)
@@ -2284,7 +2318,12 @@ void ScInterpreter::ScMacro()
             break;
             case svDoubleRef:
             {
-                USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+                SCCOL nCol1;
+                SCROW nRow1;
+                SCTAB nTab1;
+                SCCOL nCol2;
+                SCROW nRow2;
+                SCTAB nTab2;
                 PopDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
                 if( nTab1 != nTab2 )
                 {
@@ -2294,19 +2333,19 @@ void ScInterpreter::ScMacro()
                 else
                 {
                     SbxDimArrayRef refArray = new SbxDimArray;
-                    refArray->AddDim( 1, nRow2 - nRow1 + 1 );
-                    refArray->AddDim( 1, nCol2 - nCol1 + 1 );
+                    refArray->AddDim32( 1, nRow2 - nRow1 + 1 );
+                    refArray->AddDim32( 1, nCol2 - nCol1 + 1 );
                     ScAddress aAdr( nCol1, nRow1, nTab1 );
-                    for( USHORT nRow = nRow1; bOk && nRow <= nRow2; nRow++ )
+                    for( SCROW nRow = nRow1; bOk && nRow <= nRow2; nRow++ )
                     {
                         aAdr.SetRow( nRow );
-                        short nIdx[ 2 ];
+                        INT32 nIdx[ 2 ];
                         nIdx[ 0 ] = nRow-nRow1+1;
-                        for( USHORT nCol = nCol1; bOk && nCol <= nCol2; nCol++ )
+                        for( SCCOL nCol = nCol1; bOk && nCol <= nCol2; nCol++ )
                         {
                             aAdr.SetCol( nCol );
                             nIdx[ 1 ] = nCol-nCol1+1;
-                            SbxVariable* p = refArray->Get( nIdx );
+                            SbxVariable* p = refArray->Get32( nIdx );
                             bOk = SetSbxVariable( p, aAdr );
                         }
                     }
@@ -2317,21 +2356,21 @@ void ScInterpreter::ScMacro()
             case svMatrix:
             {
                 ScMatrixRef pMat = PopMatrix();
-                USHORT nC, nR;
+                SCSIZE nC, nR;
                 if (pMat)
                 {
                     pMat->GetDimensions(nC, nR);
                     SbxDimArrayRef refArray = new SbxDimArray;
-                    refArray->AddDim( 1, nR );
-                    refArray->AddDim( 1, nC );
-                    for( USHORT j = 0; j < nR; j++ )
+                    refArray->AddDim32( 1, static_cast<INT32>(nR) );
+                    refArray->AddDim32( 1, static_cast<INT32>(nC) );
+                    for( SCSIZE j = 0; j < nR; j++ )
                     {
-                        short nIdx[ 2 ];
-                        nIdx[ 0 ] = j+1;
-                        for( USHORT i = 0; i < nC; i++ )
+                        INT32 nIdx[ 2 ];
+                        nIdx[ 0 ] = static_cast<INT32>(j+1);
+                        for( SCSIZE i = 0; i < nC; i++ )
                         {
-                            nIdx[ 1 ] = i+1;
-                            SbxVariable* p = refArray->Get( nIdx );
+                            nIdx[ 1 ] = static_cast<INT32>(i+1);
+                            SbxVariable* p = refArray->Get32( nIdx );
                             if (pMat->IsString(i, j))
                                 p->PutString( pMat->GetString(i, j) );
                             else
@@ -2370,13 +2409,14 @@ void ScInterpreter::ScMacro()
             short nDim = pDimArray->GetDims();
             if ( 1 <= nDim && nDim <= 2 )
             {
-                short nCs, nCe, nRs, nRe;
-                USHORT nC, nR;
-                USHORT nColIdx, nRowIdx;
+                INT32 nCs, nCe, nRs, nRe;
+                SCSIZE nC, nR;
+                SCCOL nColIdx;
+                SCROW nRowIdx;
                 if ( nDim == 1 )
                 {   // array( cols )  eine Zeile, mehrere Spalten
-                    pDimArray->GetDim( 1, nCs, nCe );
-                    nC = USHORT(nCe - nCs + 1);
+                    pDimArray->GetDim32( 1, nCs, nCe );
+                    nC = static_cast<SCSIZE>(nCe - nCs + 1);
                     nRs = nRe = 0;
                     nR = 1;
                     nColIdx = 0;
@@ -2384,10 +2424,10 @@ void ScInterpreter::ScMacro()
                 }
                 else
                 {   // array( rows, cols )
-                    pDimArray->GetDim( 1, nRs, nRe );
-                    nR = USHORT(nRe - nRs + 1);
-                    pDimArray->GetDim( 2, nCs, nCe );
-                    nC = USHORT(nCe - nCs + 1);
+                    pDimArray->GetDim32( 1, nRs, nRe );
+                    nR = static_cast<SCSIZE>(nRe - nRs + 1);
+                    pDimArray->GetDim32( 2, nCs, nCe );
+                    nC = static_cast<SCSIZE>(nCe - nCs + 1);
                     nColIdx = 1;
                     nRowIdx = 0;
                 }
@@ -2396,16 +2436,16 @@ void ScInterpreter::ScMacro()
                 {
                     SbxVariable* pV;
                     SbxDataType eType;
-                    for ( USHORT j=0; j < nR; j++ )
+                    for ( SCSIZE j=0; j < nR; j++ )
                     {
-                        short nIdx[ 2 ];
+                        INT32 nIdx[ 2 ];
                         // bei eindimensionalem array( cols ) wird nIdx[1]
                         // von SbxDimArray::Get ignoriert
-                        nIdx[ nRowIdx ] = nRs + j;
-                        for ( USHORT i=0; i < nC; i++ )
+                        nIdx[ nRowIdx ] = nRs + static_cast<INT32>(j);
+                        for ( SCSIZE i=0; i < nC; i++ )
                         {
-                            nIdx[ nColIdx ] = nCs + i;
-                            pV = pDimArray->Get( nIdx );
+                            nIdx[ nColIdx ] = nCs + static_cast<INT32>(i);
+                            pV = pDimArray->Get32( nIdx );
                             eType = pV->GetType();
                             if ( eType >= SbxINTEGER && eType <= SbxDOUBLE )
                                 pMat->PutDouble( pV->GetDouble(), i, j );
@@ -2605,11 +2645,11 @@ void ScInterpreter::ScDBArea()
     {
         ComplRefData aRefData;
         aRefData.InitFlags();
-        pDBData->GetArea( (USHORT&) aRefData.Ref1.nTab,
-                          (USHORT&) aRefData.Ref1.nCol,
-                          (USHORT&) aRefData.Ref1.nRow,
-                          (USHORT&) aRefData.Ref2.nCol,
-                          (USHORT&) aRefData.Ref2.nRow);
+        pDBData->GetArea( (SCTAB&) aRefData.Ref1.nTab,
+                          (SCCOL&) aRefData.Ref1.nCol,
+                          (SCROW&) aRefData.Ref1.nRow,
+                          (SCCOL&) aRefData.Ref2.nCol,
+                          (SCROW&) aRefData.Ref2.nRow);
         aRefData.Ref2.nTab    = aRefData.Ref1.nTab;
         aRefData.CalcRelFromAbs( aPos );
         PushTempToken( new ScDoubleRefToken( aRefData ) );
@@ -2625,7 +2665,10 @@ void ScInterpreter::ScColRowNameAuto()
     aRefData.CalcAbsIfRel( aPos );
     if ( aRefData.Valid() )
     {
-        INT16 nStartCol, nStartRow, nCol2, nRow2;
+        SCsCOL nStartCol;
+        SCsROW nStartRow;
+        SCsCOL nCol2;
+        SCsROW nRow2;
         // evtl. Begrenzung durch definierte ColRowNameRanges merken
         nCol2 = aRefData.Ref2.nCol;
         nRow2 = aRefData.Ref2.nRow;
@@ -2633,11 +2676,11 @@ void ScInterpreter::ScColRowNameAuto()
         nStartCol = aRefData.Ref2.nCol = aRefData.Ref1.nCol;
         nStartRow = aRefData.Ref2.nRow = aRefData.Ref1.nRow;
         aRefData.Ref2.nTab = aRefData.Ref1.nTab;
-        pDok->GetDataArea(  (USHORT) aRefData.Ref1.nTab,
-                            (USHORT&) aRefData.Ref1.nCol,
-                            (USHORT&) aRefData.Ref1.nRow,
-                            (USHORT&) aRefData.Ref2.nCol,
-                            (USHORT&) aRefData.Ref2.nRow,
+        pDok->GetDataArea(  (SCTAB&) aRefData.Ref1.nTab,
+                            (SCCOL&) aRefData.Ref1.nCol,
+                            (SCROW&) aRefData.Ref1.nRow,
+                            (SCCOL&) aRefData.Ref2.nCol,
+                            (SCROW&) aRefData.Ref2.nRow,
                             TRUE );
         // DataArea im Ursprung begrenzen
         aRefData.Ref1.nCol = nStartCol;
@@ -2650,7 +2693,7 @@ void ScInterpreter::ScColRowNameAuto()
             // evtl. vorherige Begrenzung durch definierte ColRowNameRanges erhalten
             if ( aRefData.Ref2.nRow > nRow2 )
                 aRefData.Ref2.nRow = nRow2;
-            USHORT nMyRow;
+            SCROW nMyRow;
             if ( aPos.Col() == nStartCol
               && nStartRow <= (nMyRow = aPos.Row()) && nMyRow <= aRefData.Ref2.nRow )
             {   // Formel in gleicher Spalte und innerhalb des Range
@@ -2673,7 +2716,7 @@ void ScInterpreter::ScColRowNameAuto()
             // evtl. vorherige Begrenzung durch definierte ColRowNameRanges erhalten
             if ( aRefData.Ref2.nCol > nCol2 )
                 aRefData.Ref2.nCol = nCol2;
-            USHORT nMyCol;
+            SCCOL nMyCol;
             if ( aPos.Row() == nStartRow
               && nStartCol <= (nMyCol = aPos.Col()) && nMyCol <= aRefData.Ref2.nCol )
             {   // Formel in gleicher Zeile und innerhalb des Range
@@ -3058,7 +3101,6 @@ StackVar ScInterpreter::Interpret()
 
     nGlobError = nGlobalError;
     nGlobalError = 0;
-    ppGlobSortArray = NULL;
     nStackBase = sp = maxsp = 0;
     nRetFmtType = NUMBERFORMAT_UNDEFINED;
     nFuncFmtType = NUMBERFORMAT_UNDEFINED;
@@ -3663,12 +3705,6 @@ StackVar ScInterpreter::Interpret()
     if ( nGlobalError || !(rArr.GetError() == errCircularReference && !pDok->GetDocOptions().IsIter()) )
         rArr.SetError( nGlobalError );
 
-    if (ppGlobSortArray)
-#ifdef WIN
-        SvMemFree(*ppGlobSortArray);
-#else
-        delete [] (*ppGlobSortArray);
-#endif
     // release tokens in expression stack
     ScToken** p = pStack;
     while( maxsp-- )
