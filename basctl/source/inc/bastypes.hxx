@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 14:34:26 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ class SfxItemSet;
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
 
+#include <hash_map>
 
 #define LINE_SEP_CR     0x0D
 #define LINE_SEP        0x0A
@@ -199,24 +200,16 @@ public:
 
 class BasicIDETabBar : public TabBar
 {
-private:
-    StarBASIC*      pCurrentLib;
-
 protected:
-    //virtual BOOL    Drop( const DropEvent& rEvt );
-    //virtual BOOL    QueryDrop( DropEvent& rEvt );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    Command( const CommandEvent& rCEvt );
 
     virtual long    AllowRenaming();
     virtual void    EndRenaming();
-//  virtual BOOL    AllowRenamingTab( USHORT nCurId, const String& rNewName );
-//  virtual void    TabRenamed( USHORT nCurId, const String& rNewName );
 
 public:
                     BasicIDETabBar( Window* pParent );
 
-    void            SetCurrentLib( StarBASIC* pL ) { pCurrentLib = pL; }
     void            Sort();
 };
 
@@ -228,13 +221,13 @@ public:
 
 class SfxUndoManager;
 class SfxObjectShell;
+class BasicEntryDescriptor;
 
 class IDEBaseWindow : public Window
 {
 private:
     ScrollBar*      pShellHScrollBar;
     ScrollBar*      pShellVScrollBar;
-    StarBASICRef    xBasic;
 
     DECL_LINK( ScrollHdl, ScrollBar * );
     BYTE            nStatus;
@@ -248,7 +241,7 @@ protected:
 
 public:
                     TYPEINFO();
-                    IDEBaseWindow( Window* pParent, StarBASIC* pBasic, SfxObjectShell* pShell, String aLibName, String aName );
+                    IDEBaseWindow( Window* pParent, SfxObjectShell* pShell, String aLibName, String aName );
     virtual         ~IDEBaseWindow();
 
     void            Init();
@@ -258,7 +251,6 @@ public:
 
     ScrollBar*      GetHScrollBar() const { return pShellHScrollBar; }
     ScrollBar*      GetVScrollBar() const { return pShellVScrollBar; }
-    StarBASIC*      GetBasic() { return xBasic; }
 
     virtual void    ExecuteCommand( SfxRequest& rReq );
     virtual void    GetState( SfxItemSet& );
@@ -271,7 +263,7 @@ public:
 
     virtual String  GetTitle();
     String          CreateQualifiedName();
-    virtual String  CreateSbxDescription();
+    virtual BasicEntryDescriptor CreateEntryDescriptor() = 0;
 
     virtual BOOL    IsModified();
     virtual BOOL    IsPasteAllowed();
@@ -306,51 +298,78 @@ public:
     void            SetName( const String& aName ) { m_aName = aName; }
 };
 
-struct MacroInfo
+class LibInfoKey
 {
-    BasicManager*   pBasMgr;
-    String          aLib;
-    String          aMod;
-    String          aMacroName;
-    String          aDescr;
+private:
+    SfxObjectShell* m_pShell;
+    String          m_aLibName;
 
-    MacroInfo ()    { pBasMgr = 0; }
-    MacroInfo ( const MacroInfo& r )
-        :   aLib( r.aLib ), aMod( r.aMod ),
-            aMacroName( r.aMacroName ), aDescr( r.aDescr )
-            { pBasMgr = r.pBasMgr; }
-};
-
-
-
-struct LibInfo
-{
-    StarBASIC*  pLib;
-
-    String      aCurrentModule;
-};
-
-class LibInfos : private Table
-{
 public:
-                ~LibInfos();
+    LibInfoKey();
+    LibInfoKey( SfxObjectShell* pShell, const String& rLibName );
+    ~LibInfoKey();
 
-    void        InsertInfo( const LibInfo& rInf );
-    void        DestroyInfo( LibInfo* pInfo );
-    void        DestroyInfo( StarBASIC* pLib );
+    LibInfoKey( const LibInfoKey& rKey );
+    LibInfoKey& operator=( const LibInfoKey& rKey );
 
-    LibInfo*    GetInfo( StarBASIC* pLib, BOOL bCreateIfNotExist = FALSE );
+    bool operator==( const LibInfoKey& rKey ) const;
+
+    SfxObjectShell* GetShell() const { return m_pShell; }
+    const String&   GetLibName() const { return m_aLibName; }
 };
 
+class LibInfoItem
+{
+private:
+    SfxObjectShell* m_pShell;
+    String          m_aLibName;
+    String          m_aCurrentName;
+    USHORT          m_nCurrentType;
 
+public:
+    LibInfoItem();
+    LibInfoItem( SfxObjectShell* pShell, const String& rLibName, const String& rCurrentName, USHORT nCurrentType );
+    ~LibInfoItem();
+
+    LibInfoItem( const LibInfoItem& rItem );
+    LibInfoItem& operator=( const LibInfoItem& rItem );
+
+    SfxObjectShell* GetShell() const { return m_pShell; }
+    const String&   GetLibName() const { return m_aLibName; }
+    const String&   GetCurrentName() const { return m_aCurrentName; }
+    USHORT          GetCurrentType() const { return m_nCurrentType; }
+};
+
+class LibInfos
+{
+private:
+
+    struct LibInfoKeyHash
+    {
+        size_t operator()( const LibInfoKey& rKey ) const
+        {
+            size_t nHash = (size_t) rKey.GetShell();
+            nHash += (size_t) ::rtl::OUString( rKey.GetLibName() ).hashCode();
+            return nHash;
+        }
+    };
+
+    typedef ::std::hash_map< LibInfoKey, LibInfoItem*, LibInfoKeyHash, ::std::equal_to< LibInfoKey > > LibInfoMap;
+    LibInfoMap  m_aLibInfoMap;
+
+public:
+                    LibInfos();
+                    ~LibInfos();
+
+    void            InsertInfo( LibInfoItem* pItem );
+    void            RemoveInfo( const LibInfoKey& rKey );
+
+    LibInfoItem*    GetInfo( const LibInfoKey& rKey );
+};
 
 void            CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, BOOL bEraseTrailingEmptyLines = FALSE );
 String          CreateMgrAndLibStr( const String& rMgrName, const String& rLibName );
-String          GetMgrFromMgrAndLib( const String& rMgrAndLib );
-String          GetLibFromMgrAndLib( const String& rMgrAndLib );
 ULONG           CalcLineCount( SvStream& rStream );
-String          CreateEntryDescription( const SvTreeListBox& rBox, SvLBoxEntry* pEntry );
-SvLBoxEntry*    FindMostMatchingEntry( const SvTreeListBox& rBox, const String& rDesrc );
 
 BOOL            QueryReplaceMacro( const String& rName, Window* pParent = 0 );
 BOOL            QueryDelMacro( const String& rName, Window* pParent = 0 );
