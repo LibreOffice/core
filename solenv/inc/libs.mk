@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.73 $
+#   $Revision: 1.74 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-01 09:10:01 $
+#   last change: $Author: hjs $ $Date: 2004-06-28 16:51:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.73 $$"
+LIBSMKREV!:="$$Revision: 1.74 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -167,7 +167,7 @@ CHANELLIB=-lcha$(OFFICEUPD)$(DLLPOSTFIX)
 BASICLIB=-lsb$(OFFICEUPD)$(DLLPOSTFIX)
 BASICLIGHTLIB=-lsbl$(OFFICEUPD)$(DLLPOSTFIX)
 SDBLIB=-lsdb$(OFFICEUPD)$(DLLPOSTFIX)
-DBTOOLSLIB=-ldbtools$(DBTOOLS_MAJOR)
+DBTOOLSLIB=-ldbtools$(OFFICEUPD)$(DLLPOSTFIX)
 HM2LIBSH=-lhmwrpdll
 HM2LIBST=-lhmwrap
 LINGULIB=$(HM2LIBST)
