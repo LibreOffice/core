@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:49:04 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 07:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1060,7 +1060,7 @@ String STR_INSERTSECTION
     TEXT [ english_us ] = "Insert section" ;
     TEXT[ chinese_simplified ] = "²åÈëÇøÓò";
     TEXT[ russian ] = "Âñòàâèòü îáëàñòü";
-    TEXT[ polish ] = "Wstaw sekcjê";
+    TEXT[ polish ] = "Wstaw obszar";
     TEXT[ japanese ] = "”ÍˆÍ‚Ì‘}“ü";
     TEXT[ chinese_traditional ] = "´¡¤J°Ï°ì";
     TEXT[ arabic ] = "ÅÏÑÇÌ äØÇŞ";
@@ -1718,7 +1718,7 @@ String STR_TRANSLITERATE
     TEXT[ polish ] = "Wielkie i ma³e litery";
     TEXT[ portuguese_brazilian ] = "Change case";
     TEXT[ japanese ] = "‘å•¶š/¬•¶š";
-    TEXT[ korean ] = "Change case";
+    TEXT[ korean ] = "´ë/¼Ò¹®ÀÚ";
     TEXT[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´";
     TEXT[ chinese_traditional ] = "¦r¥À¤j¤p¼g";
     TEXT[ turkish ] = "Change case";
@@ -2505,7 +2505,7 @@ String STR_UNDO_SETRUBYATTR
     Text[ polish ] = "OsadŸ znaki diakrytyczne";
     Text[ portuguese_brazilian ] = "Set phonetic Symbols";
     Text[ japanese ] = "ÙËŞİ’è";
-    Text[ korean ] = "Set phonetic Symbols";
+    Text[ korean ] = "·çºñ";
     Text[ chinese_simplified ] = "¼ÓÉÏÆ´Òô»ò×¢Òô·ûºÅ";
     Text[ chinese_traditional ] = "¥[¤Wª`­µ²Å¸¹";
     Text[ turkish ] = "Set phonetic Symbols";
