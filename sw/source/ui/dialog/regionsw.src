@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:15:11 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,8 @@
     Text[ thai ] = "~ส่วน"; \
     Text[ czech ] = "Oblast";   \
     Text[ hebrew ] = "‮מיקטע‬";    \
-    Text[ hindi ] = "~विभाग";
+    Text[ hindi ] = "~विभाग"; \
+    Text[ slovak ] = "Obla~sť";
 
 #define CB_HIDE_TEXT \
     Text = "Aus~blenden" ; \
@@ -124,7 +125,8 @@
     Text[ thai ] = "ซ่~อน"; \
     Text[ czech ] = "Skrýt";   \
     Text[ hebrew ] = "Aus~blenden"; \
-    Text[ hindi ] = "छि~पाओ";
+    Text[ hindi ] = "छि~पाओ"; \
+    Text[ slovak ] = "S~kryť";
 
 #define FL_HIDE_TEXT \
     Text = "Ausblenden" ; \
@@ -153,7 +155,8 @@
     Text[ thai ] = "ซ่อน";  \
     Text[ czech ] = "Skrýt";   \
     Text[ hebrew ] = "Ausblenden";  \
-    Text[ hindi ] = "छिपाओ";
+    Text[ hindi ] = "छिपाओ";  \
+    Text[ slovak ] = "Skryť";
 
 #define CB_CONDITION_TEXT  \
     Text = "Mi~t Bedingung" ; \
@@ -181,7 +184,8 @@
     Text[ thai ] = "~ด้วยเงื่อนไข"; \
     Text[ czech ] = "S podmínkou"; \
     Text[ hebrew ] = "Mi~t Bedingung";  \
-    Text[ hindi ] = "~शर्त के सहित";
+    Text[ hindi ] = "~शर्त के सहित";    \
+    Text[ slovak ] = "S ~podmienkou";
 
 #define FL_FILE_TEXT \
     Text = "Verkn�pfung" ; \
@@ -209,7 +213,8 @@
     Text[ thai ] = "เชื่อมโยง";   \
     Text[ czech ] = "Odkaz";    \
     Text[ hebrew ] = "Verknüpfung";    \
-    Text[ hindi ] = "लिंक";
+    Text[ hindi ] = "लिंक"; \
+    Text[ slovak ] = "Odkaz";
 
 #define CB_FILE_TEXT\
         Text = "~Verkn�pfen" ; \
@@ -237,7 +242,8 @@
     Text[ thai ] = "เ~ชื่อมโยง";  \
     Text[ czech ] = "Odkaz";    \
     Text[ hebrew ] = "~Verknüpfen";    \
-    Text[ hindi ] = "~की संख्या";
+    Text[ hindi ] = "~की संख्या";   \
+    Text[ slovak ] = "O~dkaz";
 
 #define CB_DDE_TEXT \
     Text = "~DDE" ; \
@@ -265,7 +271,8 @@
     Text[ thai ] = "DD~E";  \
     Text[ czech ] = "DDE";  \
     Text[ hebrew ] = "~DDE";    \
-    Text[ hindi ] = "DD~E";
+    Text[ hindi ] = "DD~E"; \
+    Text[ slovak ] = "DD~E";
 
 #define FT_DDE_TEXT \
     Text = "DDE~-Befehl" ; \
@@ -293,7 +300,8 @@
     Text[ thai ] = "~คำสั่ง DDE ";  \
     Text[ czech ] = "DDE příkaz"; \
     Text[ hebrew ] = "DDE~-Befehl"; \
-    Text[ hindi ] = "DDE ~आज्ञा";
+    Text[ hindi ] = "DDE ~आज्ञा"; \
+    Text[ slovak ] = "DDE ~príkaz";
 
 #define FT_FILE_TEXT \
     Text = "Dateina~me" ; \
@@ -321,7 +329,8 @@
     Text[ thai ] = "ชื่อแ~ฟ้ม"; \
     Text[ czech ] = "Jméno souboru";   \
     Text[ hebrew ] = "‮שם קובץ‬"; \
-    Text[ hindi ] = "~फाइल नाम";
+    Text[ hindi ] = "~फाइल नाम";  \
+    Text[ slovak ] = "~Meno súboru";
 
 
 #define GB_HIDE_TEXT \
@@ -350,7 +359,8 @@
     Text[ thai ] = "ซ่อน";  \
     Text[ czech ] = "Skrýt";   \
     Text[ hebrew ] = "Verstecken";  \
-    Text[ hindi ] = "छिपाओ";
+    Text[ hindi ] = "छिपाओ";  \
+    Text[ slovak ] = "Skryť";
 
 #define GB_OPTIONS_TEXT \
     Text = "Optionen" ; \
@@ -379,7 +389,8 @@
     Text[ thai ] = "ตัวเลือก";  \
     Text[ czech ] = "Volby";    \
     Text[ hebrew ] = "‮אפשרויות‬";  \
-    Text[ hindi ] = "विकल्प ";
+    Text[ hindi ] = "विकल्प ";  \
+    Text[ slovak ] = "Nastavenia";
 
 #define FL_PROTECT_TEXT \
         Text = "Schreibschutz" ;\
@@ -407,7 +418,8 @@
     Text[ thai ] = "ป้องกันการเขียน"; \
     Text[ czech ] = "Ochrana proti zápisu";    \
     Text[ hebrew ] = "Schreibschutz";   \
-    Text[ hindi ] = "लिखने से सुरक्षित";
+    Text[ hindi ] = "लिखने से सुरक्षित";  \
+    Text[ slovak ] = "Ochrana proti zápisu";
 
 #define CB_PASSWD_TEXT\
         Text = "Mit Kenn~wort" ;\
@@ -435,7 +447,8 @@
     Text[ thai ] = "ด้ว~ยรหัสผ่าน"; \
     Text[ czech ] = "S heslem"; \
     Text[ hebrew ] = "Mit Kenn~wort";   \
-    Text[ hindi ] = "कूटशब्द ~सहित";
+    Text[ hindi ] = "कूटशब्द ~सहित";  \
+    Text[ slovak ] = "S ~heslom";
 
 /*************************************************************************
 
@@ -495,6 +508,7 @@ ModalDialog MD_EDIT_REGION
         Text[ czech ] = "Sekce";
         Text[ hebrew ] = "‮מיקטע‬";
         Text[ hindi ] = "विभाग";
+        Text[ slovak ] = "Sekcia";
     };
     Edit ED_RANAME
     {
@@ -619,6 +633,7 @@ ModalDialog MD_EDIT_REGION
         Text[ czech ] = "Zamknuto";
         Text[ hebrew ] = "~Geschützt";
         Text[ hindi ] = "~सुरक्षित";
+        Text[ slovak ] = "~Zamknuté";
     };
     CheckBox CB_PASSWD
     {
@@ -710,6 +725,7 @@ ModalDialog MD_EDIT_REGION
         Text[ czech ] = "Volby...";
         Text[ hebrew ] = "‮אפשרויות...‬";
         Text[ hindi ] = "~विकल्प...";
+        Text[ slovak ] = "V~oľby...";
     };
     PushButton CB_DISMISS
     {
@@ -744,6 +760,7 @@ ModalDialog MD_EDIT_REGION
         Text[ czech ] = "Zpět";
         Text[ hebrew ] = "‮הסרה‬";
         Text[ hindi ] = "~अनावृत्ति";
+        Text[ slovak ] = "~Späť";
     };
     HelpButton PB_HELP
     {
@@ -788,6 +805,7 @@ ModalDialog MD_EDIT_REGION
     Text[ czech ] = "Upravit sekce";
     Text[ hebrew ] = "Bereiche bearbeiten";
     Text[ hindi ] = "विभागों का संपादन";
+    Text[ slovak ] = "Upraviť sekcie";
 };
 String STR_REG_DUPLICATE
 {
@@ -818,6 +836,7 @@ String STR_REG_DUPLICATE
     Text[ czech ] = "Název oblasti změněn:";
     Text[ hebrew ] = "Bereichsname geändert:";
     Text[ hindi ] = "विभाग नाम बदला:";
+    Text[ slovak ] = "Názov oblasti zmenený:";
 };
 String STR_INFO_DUPLICATE
 {
@@ -829,7 +848,7 @@ String STR_INFO_DUPLICATE
     Text [ portuguese ] = "Nome de sec��o duplo" ;
     Text [ finnish ] = "Kopioi osan nimi" ;
     Text [ danish ] = "Dobbelt omr�denavn" ;
-    Text [ french ] = "Dupliquer nom de la section" ;
+    Text [ french ] = "Dupliquer le nom de la section" ;
     Text [ swedish ] = "Dubbelt omr�desnamn" ;
     Text [ dutch ] = "Dubbele bereiknaam" ;
     Text [ spanish ] = "Nombre doble de la secci�n" ;
@@ -848,6 +867,7 @@ String STR_INFO_DUPLICATE
     Text[ czech ] = "Duplikovat název sekce";
     Text[ hebrew ] = "Doppelter Bereichsname";
     Text[ hindi ] = "नकली विभाग नाम";
+    Text[ slovak ] = "Duplikovať názov sekcie";
 };
 QueryBox QB_CONNECT
 {
@@ -879,6 +899,7 @@ QueryBox QB_CONNECT
     Message[ czech ] = "Připojení souboru smaže obsah aktuální sekce. Opravdu připojit?";
     Message[ hebrew ] = "Eine Dateiverbindung löscht den aktuellen Inhalt des Bereichs. Trotzdem verbinden ?";
     Message[ hindi ] = "फाइल कनेक्शन करने से वर्तमान विभाग विषय मिट सकता है । किसी तरह कनेक्ट करना है?";
+    Message[ slovak ] = "Pripojenie súboru vymaže obsah aktuálnej sekcie. Naozaj pripojiť?";
 };
 InfoBox REG_WRONG_PASSWORD
 {
@@ -910,6 +931,7 @@ InfoBox REG_WRONG_PASSWORD
     Message[ czech ] = "Zadané heslo je neplatné.";
     Message[ hebrew ] = "Es wurde ein falsches Kennwort eingegeben.";
     Message[ hindi ] = "प्रविष्ट की हुयी कूटशब्द अमान्य है ।";
+    Message[ slovak ] = "Uvedené heslo je neplatné.";
 };
 InfoBox REG_WRONG_PASSWD_REPEAT
 {
@@ -941,6 +963,7 @@ InfoBox REG_WRONG_PASSWD_REPEAT
     Message[ czech ] = "Heslo nebylo nastaveno.";
     Message[ hebrew ] = "Das Kennwort wurde nicht gesetzt.";
     Message[ hindi ] = "कूटशब्द को सेट्ट नहीं किया ।";
+    Message[ slovak ] = "Heslo nebolo nastavené.";
 };
 
 TabDialog DLG_INSERT_SECTION
@@ -997,6 +1020,7 @@ TabDialog DLG_INSERT_SECTION
                 Text[ czech ] = "Sekce";
                 Text[ hebrew ] = "‮מיקטע‬";
                 Text[ hindi ] = "विभाग";
+                Text[ slovak ] = "Sekcia";
             };
             PageItem
             {
@@ -1029,6 +1053,7 @@ TabDialog DLG_INSERT_SECTION
                 Text[ czech ] = "Sloupce";
                 Text[ hebrew ] = "‮טורים‬";
                 Text[ hindi ] = "स्तंभ";
+                Text[ slovak ] = "Stĺpce";
             };
             PageItem
             {
@@ -1061,6 +1086,7 @@ TabDialog DLG_INSERT_SECTION
                 Text[ czech ] = "Pozadí";
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
+                Text[ slovak ] = "Pozadie";
             };
             PageItem
             {
@@ -1092,6 +1118,7 @@ TabDialog DLG_INSERT_SECTION
                 Text[ czech ] = "Poznámky pod čarou/vysvětlivky";
                 Text[ hebrew ] = "Fuß-/Endnoten";
                 Text[ hindi ] = "पृष्ठ के नीचे की टीका/अंतिम टीका";
+                Text[ slovak ] = "Poznámky pod čiarou/vysvetlivky";
             };
         };
     };
@@ -1124,6 +1151,7 @@ TabDialog DLG_INSERT_SECTION
         Text[ czech ] = "Vložit";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "जोड़ो";
+        Text[ slovak ] = "Vložiť";
     };
     Text[ russian ] = "�������� ������";
     Text[ greek ] = "�������� �����";
@@ -1139,6 +1167,7 @@ TabDialog DLG_INSERT_SECTION
     Text[ czech ] = "Vložit sekci";
     Text[ hebrew ] = "‮הוספת קטע‬";
     Text[ hindi ] = "विभाग जोड़ो";
+    Text[ slovak ] = "Vložiť oblasť";
 };
 
 TabPage TP_INSERT_SECTION
@@ -1179,6 +1208,7 @@ TabPage TP_INSERT_SECTION
         Text[ czech ] = "Nová sekce";
         Text[ hebrew ] = "Neuer Bereich";
         Text[ hindi ] = "नया विभाग";
+        Text[ slovak ] = "Nová oblasť";
     };
     ComboBox ED_RNAME
     {
@@ -1294,6 +1324,7 @@ TabPage TP_INSERT_SECTION
         Text[ czech ] = "Zamknout";
         Text[ hebrew ] = "~Schützen";
         Text[ hindi ] = "~रक्षा करो";
+        Text[ slovak ] = "~Zamknúť";
     };
     CheckBox CB_PASSWD
     {
@@ -1383,6 +1414,7 @@ TabDialog DLG_SECTION_PROPERTIES
                 Text[ czech ] = "Sloupce";
                 Text[ hebrew ] = "‮טורים‬";
                 Text[ hindi ] = "स्तंभें";
+                Text[ slovak ] = "Stĺpce";
             };
             PageItem
             {
@@ -1415,6 +1447,7 @@ TabDialog DLG_SECTION_PROPERTIES
                 Text[ czech ] = "Pozadí";
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
+                Text[ slovak ] = "Pozadie";
             };
             PageItem
             {
@@ -1446,6 +1479,7 @@ TabDialog DLG_SECTION_PROPERTIES
                 Text[ czech ] = "Poznámky pod čarou/vysvětlivky";
                 Text[ hebrew ] = "Fuß-/Endnoten";
                 Text[ hindi ] = "पृष्ठ के नीचे की टीका/अंतिम टीका";
+                Text[ slovak ] = "Poznámky pod čiarou/vysvetlivky";
             };
         };
     };
@@ -1473,6 +1507,7 @@ TabDialog DLG_SECTION_PROPERTIES
     Text[ czech ] = "Volby";
     Text[ hebrew ] = "‮אפשרויות‬";
     Text[ hindi ] = "विकल्प";
+    Text[ slovak ] = "Nastavenia";
 };
 
 
@@ -1514,6 +1549,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ czech ] = "Poznámky pod čarou";
         Text[ hebrew ] = "‮הערות שוליים‬";
         Text[ hindi ] = "पृष्ठ के नीचे की टीका";
+        Text[ slovak ] = "Poznámky pod čiarou";
     };
     CheckBox CB_FTN_AT_TXTEND
     {
@@ -1547,6 +1583,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ czech ] = "Shromáždit na konci textu";
         Text[ hebrew ] = "am ~Textende sammeln";
         Text[ hindi ] = "~टेक्स्ट् के अंत में संग्रह करो";
+        Text[ slovak ] = "Z~hromaždiť na konci textu";
     };
     CheckBox CB_FTN_NUM
     {
@@ -1579,6 +1616,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ czech ] = "Restartovat číslování";
         Text[ hebrew ] = "‮מיספור-ספירה חדשה‬";
         Text[ hindi ] = "~संख्या देना पुनः प्रारंभ करो";
+        Text[ slovak ] = "~Reštartovať číslovanie";
     };
     FixedText FT_FTN_OFFSET
     {
@@ -1611,6 +1649,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ czech ] = "Začít od";
         Text[ hebrew ] = "~Beginn bei";
         Text[ hindi ] = "~से प्रारंभ करो";
+        Text[ slovak ] = "~Začať od";
     };
     NumericField FLD_FTN_OFFSET
     {
@@ -1655,6 +1694,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ czech ] = "Vlastní formát";
         Text[ hebrew ] = "eigenes ~Format";
         Text[ hindi ] = "~रचना व्यवस्था करो";
+        Text[ slovak ] = "Vlastný ~formát";
     };
     FixedText FT_FTN_PREFIX
     {
@@ -1688,6 +1728,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ czech ] = "Před";
         Text[ hebrew ] = "~Davor";
         Text[ hindi ] = "से ~पहिले";
+        Text[ slovak ] = "P~red";
     };
     Edit ED_FTN_PREFIX
     {
@@ -1739,6 +1780,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ czech ] = "Za";
         Text[ hebrew ] = "Dah~inter";
         Text[ hindi ] = "~के पश्चात्";
+        Text[ slovak ] = "~Za";
     };
     Edit ED_FTN_SUFFIX
     {
@@ -1782,6 +1824,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ czech ] = "Vysvětlivky";
         Text[ hebrew ] = "Endnoten";
         Text[ hindi ] = "अंतिम टीका";
+        Text[ slovak ] = "Vysvetlivky";
     };
     CheckBox CB_END_AT_TXTEND
     {
@@ -1814,6 +1857,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ czech ] = "Shromáždit na konci oblasti";
         Text[ hebrew ] = "~am Bereichsende sammeln";
         Text[ hindi ] = "वि~भाग के अंत में संग्रह करो";
+        Text[ slovak ] = "Zhr~omaždiť na konci oblasti";
     };
     CheckBox CB_END_NUM
     {
@@ -1846,6 +1890,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ czech ] = "Restartovat číslování";
         Text[ hebrew ] = "‮מיספור-ספירה חדשה‬";
         Text[ hindi ] = "~संख्या देना पुनः प्रारंभ करो";
+        Text[ slovak ] = "~Reštartovať číslovanie";
     };
     FixedText FT_END_OFFSET
     {
@@ -1878,6 +1923,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ czech ] = "Začít od";
         Text[ hebrew ] = "Be~ginn bei";
         Text[ hindi ] = "~से प्रारंभ करो";
+        Text[ slovak ] = "~Začať od";
     };
     NumericField FLD_END_OFFSET
     {
@@ -1922,6 +1968,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ czech ] = "Uživatelský formát";
         Text[ hebrew ] = "~eigenes Format";
         Text[ hindi ] = "रचना व्यवस्था करो";
+        Text[ slovak ] = "Užívateľský formát";
     };
 
     FixedText FT_END_PREFIX
@@ -1956,6 +2003,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ czech ] = "Před";
         Text[ hebrew ] = "Da~vor";
         Text[ hindi ] = "से ~पहिले";
+        Text[ slovak ] = "P~red";
     };
     Edit ED_END_PREFIX
     {
@@ -2018,6 +2066,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ czech ] = "Za";
         Text[ hebrew ] = "Dahinte~r";
         Text[ hindi ] = "~के पश्चात्";
+        Text[ slovak ] = "Z~a";
     };
     Edit ED_END_SUFFIX
     {
@@ -2029,6 +2078,8 @@ TabPage TP_SECTION_FTNENDNOTES
         MaxTextLength = 50 ;
     };
 };
+
+
 
 
 
