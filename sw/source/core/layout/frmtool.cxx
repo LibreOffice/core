@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:06:56 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,17 @@ SwFrmNotify::SwFrmNotify( SwFrm *pF ) :
     ,bValidSize( pF->GetValidSizeFlag() )
 #endif
 {
+    if ( pF->IsTxtFrm() )
+    {
+        mnFlyAnchorOfst = ((SwTxtFrm*)pF)->GetBaseOfstForFly( sal_True );
+        mnFlyAnchorOfstNoWrap = ((SwTxtFrm*)pF)->GetBaseOfstForFly( sal_False );
+    }
+    else
+    {
+        mnFlyAnchorOfst = 0;
+        mnFlyAnchorOfstNoWrap = 0;
+    }
+
     bHadFollow = pF->IsCntntFrm() ?
                     (((SwCntntFrm*)pF)->GetFollow() ? TRUE : FALSE) :
                     FALSE;
@@ -214,6 +225,10 @@ SwFrmNotify::~SwFrmNotify()
             (aFrm.*fnRect->fnGetWidth)() != (pFrm->Frm().*fnRect->fnGetWidth)();
     const FASTBOOL bChgHeight =
             (aFrm.*fnRect->fnGetHeight)()!=(pFrm->Frm().*fnRect->fnGetHeight)();
+    const FASTBOOL bChgFlyBasePos = pFrm->IsTxtFrm() &&
+       ( ( mnFlyAnchorOfst != ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( sal_True ) ) ||
+         ( mnFlyAnchorOfstNoWrap != ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( sal_False ) ) );
+
     if ( pFrm->IsFlowFrm() && !pFrm->IsInFtn() )
     {
         SwFlowFrm *pFlow = SwFlowFrm::CastFlowFrm( pFrm );
@@ -292,7 +307,7 @@ SwFrmNotify::~SwFrmNotify()
 
     const FASTBOOL bPrtP = POS_DIFF( aPrt, pFrm->Prt() );
     if ( bAbsP || bPrtP || bChgWidth || bChgHeight ||
-         bPrtWidth || bPrtHeight )
+         bPrtWidth || bPrtHeight || bChgFlyBasePos )
     {
 #ifdef ACCESSIBLE_LAYOUT
         if( pFrm->IsAccessibleFrm() )
@@ -365,8 +380,10 @@ SwFrmNotify::~SwFrmNotify()
                             {
                                 bNotify = TRUE;
                             }
-                            if ( rHori.GetHoriOrient() != HORI_NONE &&
-                                 ( bChgWidth || bPrtWidth ) )
+                            if ( ( rHori.GetHoriOrient() != HORI_NONE ||
+                                   rHori.GetRelationOrient()== PRTAREA ||
+                                   rHori.GetRelationOrient()== FRAME ) &&
+                                 ( bChgWidth || bPrtWidth || bChgFlyBasePos ) )
                             {
                                 bNotify = TRUE;
                             }
@@ -385,13 +402,13 @@ SwFrmNotify::~SwFrmNotify()
                         pFly->_Invalidate();
                     }
                 }
-                else if ( bAbsP )
+                else if ( bAbsP || bChgFlyBasePos )
                 {
                     SwFrmFmt *pFrmFmt = FindFrmFmt( pObj );
                     if( !pFrmFmt ||
                         FLY_IN_CNTNT != pFrmFmt->GetAnchor().GetAnchorId() )
                     {
-                        pObj->SetAnchorPos( pFrm->GetAnchorPos() );
+                        pObj->SetAnchorPos( pFrm->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
                         ((SwDrawContact*)GetUserCall(pObj))->ChkPage();
                     }
                 }
