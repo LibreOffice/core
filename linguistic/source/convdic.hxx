@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convdic.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:05:58 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 08:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,8 @@ struct StrEQ
     }
 };
 
+namespace std
+{
 struct std::hash< const rtl::OUString >
 {
     inline size_t operator()( const rtl::OUString &rTxt ) const
@@ -131,6 +133,7 @@ struct std::hash< const rtl::OUString >
         return (size_t) rTxt.hashCode();
     }
 };
+}
 
 typedef std::hash_multimap< const rtl::OUString, const rtl::OUString,
                        std::hash< const rtl::OUString >, StrEQ > ConvMap;
