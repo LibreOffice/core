@@ -2,7 +2,7 @@
  *
  *  $RCSfile: ScAccessiblePageHeader.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
  *  last change: $Author: vg $
  *
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.awt.XWindow;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
@@ -171,7 +172,7 @@ public class ScAccessiblePageHeader extends TestCase {
                 UnoRuntime.queryInterface(XDispatchProvider.class, xController);
             XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
                 UnoRuntime.queryInterface(XURLTransformer.class,
-            Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
+            ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
@@ -192,7 +193,7 @@ public class ScAccessiblePageHeader extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole
@@ -301,7 +302,7 @@ public class ScAccessiblePageHeader extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println("creating a spreadsheetdocument");

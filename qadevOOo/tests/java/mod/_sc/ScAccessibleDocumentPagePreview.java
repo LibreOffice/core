@@ -2,7 +2,7 @@
  *
  *  $RCSfile: ScAccessibleDocumentPagePreview.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
  *  last change: $Author: vg $
  *
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.awt.XWindow;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
@@ -181,7 +182,7 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
                 UnoRuntime.queryInterface(XDispatchProvider.class, xController);
             XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
                 UnoRuntime.queryInterface(XURLTransformer.class,
-            Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
+            ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
@@ -202,7 +203,7 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
         //at.printAccessibleTree(log,xRoot);
         XAccessibleContext mainWin = at.getAccessibleObjectForRole(xRoot,AccessibleRole.TOOL_BAR,"Page View");
@@ -238,7 +239,7 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         XDesktop desk = (XDesktop) UnoRuntime.queryInterface(
-                XDesktop.class,util.DesktopTools.createDesktop(Param.getMSF()));
+                XDesktop.class,util.DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()));
         final XWindow win = desk.getCurrentFrame().getComponentWindow();
 
         tEnv.addObjRelation("EventProducer",
@@ -280,7 +281,7 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println("creating a spreadsheetdocument");
