@@ -2,9 +2,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: oj $ $Date: 2000-10-06 06:19:39 $
+#   last change: $Author: oj $ $Date: 2000-10-19 11:58:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,21 +124,21 @@ ADABAS_CPP=1
 
 ADABAS=$(ADABAS_TARGET_TARGET)_$(CMPEXT)
 
-# ----------------------------flat settings-----------------------------------#
+# ----------------------------dbtools settings-----------------------------------#
 # target
-FLAT_TARGET=flat
+DBTOOLS_TARGET=dbtools
 
 # the major 
-FLAT_MAJOR=2
+DBTOOLS_MAJOR=2
 # the minor 
-FLAT_MINOR=0
+DBTOOLS_MINOR=0
 # the micro 
-FLAT_MICRO=0
+DBTOOLS_MICRO=0
 
 # this is a c++ compatible library 
-FLAT_CPP=1
+DBTOOLS_CPP=1
 
-FLAT=$(FLAT_TARGET_TARGET)_$(CMPEXT)
+DBTOOLS=$(DBTOOLS_TARGET_TARGET)_$(CMPEXT)
 
 # -----------------------DRIVER MANAGER settings--------------------------------#
 # target
