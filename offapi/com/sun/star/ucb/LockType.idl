@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LockType.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-26 15:25:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ module com { module sun { module star { module ucb {
 
     @see LockEntry
 */
-enum LockType
+published enum LockType
 {
     //-------------------------------------------------------------------------
     /** specifies a write lock.
