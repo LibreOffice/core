@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navtoolbar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 09:40:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ namespace frm
 
     public:
         ImplNavToolBar( Window* _pParent )
-            :ToolBox( _pParent )
+            :ToolBox( _pParent, WB_3DLOOK )
             ,m_pDispatcher( NULL )
         {
         }
