@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateConversion.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:23:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::dbtools;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -324,7 +325,31 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
             xVariant->updateTime(toTime(rValue));
             break;
         default:
-            xVariant->updateDouble(rValue);
+            {
+                double nValue = rValue;
+//              Reference<XPropertySet> xProp(xVariant,UNO_QUERY);
+//              if (    xProp.is()
+//                  &&  xProp->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSIGNED))
+//                  && !::comphelper::getBOOL(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSIGNED))) )
+//              {
+//                  switch (::comphelper::getINT32(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
+//                  {
+//                      case DataType::TINYINT:
+//                          nValue = static_cast<sal_uInt8>(rValue);
+//                          break;
+//                      case DataType::SMALLINT:
+//                          nValue = static_cast<sal_uInt16>(rValue);
+//                          break;
+//                      case DataType::INTEGER:
+//                          nValue = static_cast<sal_uInt32>(rValue);
+//                          break;
+//                      case DataType::BIGINT:
+//                          nValue = static_cast<sal_uInt64>(rValue);
+//                          break;
+//                  }
+//              }
+                xVariant->updateDouble(nValue);
+            }
     }
 }
 
@@ -344,7 +369,27 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
             case NumberFormat::TIME:
                 return toDouble(xVariant->getTime());
             default:
+            {
+                Reference<XPropertySet> xProp(xVariant,UNO_QUERY);
+                if (    xProp.is()
+                    &&  xProp->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSIGNED))
+                    && !::comphelper::getBOOL(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSIGNED))) )
+                {
+                    switch (::comphelper::getINT32(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
+                    {
+                        case DataType::TINYINT:
+                            return static_cast<double>(static_cast<sal_uInt8>(xVariant->getByte()));
+                        case DataType::SMALLINT:
+                            return static_cast<double>(static_cast<sal_uInt16>(xVariant->getShort()));
+                        case DataType::INTEGER:
+                            return static_cast<double>(static_cast<sal_uInt32>(xVariant->getInt()));
+                        case DataType::BIGINT:
+                            return static_cast<double>(static_cast<sal_uInt64>(xVariant->getLong()));
+                    }
+                }
+
                 return xVariant->getDouble();
+            }
         }
     }
     catch(const Exception& )
@@ -353,7 +398,7 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
     }
 }
 //------------------------------------------------------------------------------
-::rtl::OUString DBTypeConversion::getValue(const Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
+::rtl::OUString DBTypeConversion::getValue(const Reference< XPropertySet>& _xColumn,
                                            const Reference<XNumberFormatter>& _xFormatter,
                                            const ::com::sun::star::lang::Locale& _rLocale,
                                            const Date& _rNullDate)
