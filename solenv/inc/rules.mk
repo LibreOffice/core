@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: armin $ $Date: 2001-03-09 11:51:43 $
+#   last change: $Author: hjs $ $Date: 2001-03-09 18:55:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -860,7 +860,7 @@ $(MISC)$/%_description.cxx : %.xml
 
 #generate private rdb
 $(BIN)$/%.rdb: $(COMPRDB) $(MISC)$/%.mk
-    +rdbmaker -BUCR -O$(BIN)$/$*.rdb $(foreach,i,$($(@:b)_XML2CMPTYPES) -T$i ) $(COMPRDB)
+    +rdbmaker -BUCR -O$(BIN)$/$*.rdb @$(mktmp $(foreach,i,$($(@:b)_XML2CMPTYPES) -T$i ) $(COMPRDB))
 
 #strip dos lineends
 $(MISC)$/%.sh : %.sh
