@@ -6,7 +6,7 @@
 			<Text id="a" xml:lang="en-US">Welcome</Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-02-14 11:40:14 $</Text>
+			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-03-10 11:26:14 $</Text>
 		</Paragraph>
 		<Paragraph id="A3" style="H1">
 			<Text id="a" xml:lang="en-US">OpenOffice.org 2.0 ReadMe</Text>
@@ -436,8 +436,8 @@
 		</Paragraph>
 		<Paragraph id="A3">
 			<Text id="a" xml:lang="en-US" url="ahead">At </Text>
-			<Text id="a" xml:lang="en-US" url="true">http://projects.openoffice.org/index.html</Text>
-			<Text id="a" xml:lang="en-US"> you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just by spreading the word and telling a friend about this office suite.</Text>
+			<Text id="b" xml:lang="en-US" url="true">http://projects.openoffice.org/index.html</Text>
+			<Text id="c" xml:lang="en-US"> you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just by spreading the word and telling a friend about this office suite.</Text>
 		</Paragraph>
 		<Paragraph id="A4">
 			<Text id="a" xml:lang="en-US" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here: </Text>
