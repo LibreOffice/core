@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 16:36:13 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,7 @@ ModalDialog DLG_START_PRESENTATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Pausendauer";
     };
     CheckBox CBX_AUTOLOGO
     {
