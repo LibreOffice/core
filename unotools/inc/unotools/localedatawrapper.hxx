@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2001-07-09 17:26:44 $
+ *  last change: $Author: er $ $Date: 2001-07-09 17:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,12 +277,13 @@ public:
                                     ) const;
 
 #if SUPD >= 638
-                                /** Simple number formatting, nNumber is
-                                    value * 10**nDecimals
+                                /** Simple number formatting
+                                    @param nNumber
+                                        value * 10**nDecimals
                                     @param bTrailingZeros
-                                    </TRUE> := always display trailing zeros in
+                                    </TRUE>  := always display trailing zeros in
                                         decimal places, even if integer value.
-                                    </FALSE := trailing zeros are only displayed
+                                    </FALSE> := trailing zeros are only displayed
                                         if the value is not an integer value.
                                  */
             String              getNum( long nNumber, USHORT nDecimals,
