@@ -2,9 +2,9 @@
  *
  *  $RCSfile: startoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:09:30 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+#include <rtl/logfile.hxx>
+#include "itemholder1.hxx"
 //_________________________________________________________________________________________________________________
 //  namespaces
 //_________________________________________________________________________________________________________________
@@ -416,7 +418,11 @@ SvtStartOptions::SvtStartOptions()
     // ... and initialize ouer data container only if it not already!
     if( m_pDataContainer == NULL )
     {
+        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtStartOptions_Impl::ctor()");
         m_pDataContainer = new SvtStartOptions_Impl();
+
+        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
+        pHolder->holdConfigItem(E_STARTOPTIONS);
     }
 }
 
