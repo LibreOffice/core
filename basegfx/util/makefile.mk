@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: thb $ $Date: 2003-10-17 12:32:55 $
+#   last change: $Author: aw $ $Date: 2003-10-28 11:15:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,9 +73,14 @@ TARGET=basegfx
 
 LIB1TARGET=$(SLB)$/basegfx.lib
 LIB1FILES=\
-    $(SLB)$/base1d.lib	\
-    $(SLB)$/base2d.lib	\
-    $(SLB)$/base3d.lib
+    $(SLB)$/curve.lib	\
+    $(SLB)$/matrix.lib	\
+    $(SLB)$/numeric.lib	\
+    $(SLB)$/point.lib	\
+    $(SLB)$/polygon.lib	\
+    $(SLB)$/range.lib	\
+    $(SLB)$/tuple.lib	\
+    $(SLB)$/vector.lib
 
 SHL1TARGET= basegfx$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= ibasegfx
@@ -104,6 +109,4 @@ DEFLIB1NAME	=basegfx
 
 $(MISC)$/$(SHL1TARGET).flt : makefile.mk
     @+$(TYPE) $(TARGET).flt > $@
-
-
 
