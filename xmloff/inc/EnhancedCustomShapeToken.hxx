@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeToken.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:08:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ namespace xmloff { namespace EnhancedCustomShapeToken {
         EAS_glue_point_leaving_directions,
         EAS_text_path,
         EAS_text_path_mode,
-        EAS_text_path_scale_x,
+        EAS_text_path_scale,
         EAS_text_path_same_letter_heights,
         EAS_modifiers,
         EAS_equation,
