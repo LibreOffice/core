@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-02-26 09:54:48 $
+ *  last change: $Author: dbo $ $Date: 2001-02-27 12:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,17 +72,10 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-
-
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
+
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <xmlscript/xml_helper.hxx>
 
@@ -920,9 +913,9 @@ void ElementDescriptor::dump( Reference< xml::sax::XExtendedDocumentHandler > co
 }
 
 //==================================================================================================
-SAL_DLLEXPORT void SAL_CALL exportDialogModel(
-    Reference< container::XNameContainer > const & xDialogModel,
-    Reference< xml::sax::XExtendedDocumentHandler > const & xOut )
+static void exportDialogModel(
+    Reference< xml::sax::XExtendedDocumentHandler > const & xOut,
+    Reference< container::XNameContainer > const & xDialogModel )
     throw (Exception)
 {
     StyleBag all_styles;
@@ -1135,7 +1128,7 @@ SAL_DLLEXPORT void SAL_CALL exportDialogModel(
             }
             else
             {
-                throw Exception(
+                throw RuntimeException(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("unknown control type: ") ) + aControlType,
                     Reference< XInterface >() );
             }
@@ -1153,8 +1146,6 @@ SAL_DLLEXPORT void SAL_CALL exportDialogModel(
         OUString aWindowName( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":window") );
         ElementDescriptor * pWindow = new ElementDescriptor( xProps, xPropState, aWindowName );
         Reference< xml::sax::XAttributeList > xWindow( pWindow );
-        pWindow->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("xmlns:" XMLNS_DIALOGS_PREFIX) ),
-                          OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_URI) ) );
         pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
                                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":label") ) );
         pWindow->readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),
@@ -1192,71 +1183,31 @@ SAL_DLLEXPORT void SAL_CALL exportDialogModel(
     }
 }
 
-
 //==================================================================================================
-SAL_DLLEXPORT void SAL_CALL exportDialogModelToByteSequence(
-    uno::Reference< container::XNameContainer > const & xDialogModel,
-    uno::Sequence< sal_Int8 >& aDestSequence )
-    throw (uno::Exception)
+SAL_DLLEXPORT void SAL_CALL exportDialogModels(
+    Reference< xml::sax::XExtendedDocumentHandler > const & xOut,
+    Sequence< Reference< container::XNameContainer > > const & rInModels )
+    throw (Exception)
 {
-    Reference< lang::XMultiServiceFactory > xSMgr( comphelper::getProcessServiceFactory() );
-    if( !xSMgr.is() )
-        return;
+    // open up dialogs
+    OUString aDialogsName( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":dialogs") );
+    ElementDescriptor * pDialogs = new ElementDescriptor( aDialogsName );
+    Reference< xml::sax::XAttributeList > xDialogs( pDialogs );
+    pDialogs->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("xmlns:" XMLNS_DIALOGS_PREFIX) ),
+                       OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_URI) ) );
+    xOut->ignorableWhitespace( OUString() );
+    xOut->startElement( aDialogsName, xDialogs );
 
-    Reference< xml::sax::XExtendedDocumentHandler >
-        xHandler( xSMgr->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ) ), UNO_QUERY );
-    OSL_ASSERT( xHandler.is() );
-    if (! xHandler.is())
+    // write windows
+    Reference< container::XNameContainer > const * pModels = rInModels.getConstArray();
+    for ( sal_Int32 nPos = 0; nPos < rInModels.getLength(); ++nPos )
     {
-        OSL_ENSURE( 0, "### couln't create sax-writer component\n" );
+        exportDialogModel( xOut, pModels[ nPos ] );
     }
 
-    Reference< io::XActiveDataSource > xSource( xHandler, UNO_QUERY );
-    xSource->setOutputStream( ::xmlscript::createOutputStream( (ByteSequence*)&aDestSequence ) );
-
-    xHandler->startDocument();
-
-    ::xmlscript::exportDialogModel(
-        xDialogModel,   Reference< xml::sax::XExtendedDocumentHandler >::query( xHandler ) );
-
-    xHandler->endDocument();
+    // end dialogs
+    xOut->ignorableWhitespace( OUString() );
+    xOut->endElement( aDialogsName );
 }
-
-//==================================================================================================
-SAL_DLLEXPORT void SAL_CALL importDialogModelFromByteSequence(
-    uno::Reference< container::XNameContainer > const & xDialogModel,
-    uno::Sequence< sal_Int8 > const& aSourceSequence )
-    throw (uno::Exception)
-{
-    Reference< lang::XMultiServiceFactory > xSMgr( comphelper::getProcessServiceFactory() );
-    if( !xSMgr.is() )
-        return;
-
-    Reference< xml::sax::XParser > xParser( xSMgr->createInstance(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
-    if (xParser.is())
-    {
-        //ErrorHandler * pHandler = new ErrorHandler();
-        //xParser->setErrorHandler( (xml::sax::XErrorHandler *)pHandler );
-        //xParser->setEntityResolver( (xml::sax::XEntityResolver *)pHandler );
-
-        OSL_ASSERT( xDialogModel.is() );
-        xParser->setDocumentHandler( ::xmlscript::importDialogModel( xDialogModel ) );
-
-
-        xml::sax::InputSource source;
-        source.aInputStream = ::xmlscript::createInputStream( *(ByteSequence*)&aSourceSequence );
-        source.sSystemId    = OUString::createFromAscii( "virtual file" );
-
-        // start parsing
-        xParser->parseStream( source );
-    }
-    else
-    {
-        OSL_ENSURE( 0, "### couln't create sax-parser component\n" );
-    }
-}
-
 
 };

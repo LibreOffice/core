@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dbo $ $Date: 2001-02-16 14:14:48 $
+#   last change: $Author: dbo $ $Date: 2001-02-27 12:45:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,8 @@ SLOFILES = \
     $(SLO)$/xmldlg_import.obj		\
     $(SLO)$/xmldlg_impmodels.obj		\
     $(SLO)$/xmldlg_export.obj		\
-    $(SLO)$/xmldlg_expmodels.obj
+    $(SLO)$/xmldlg_expmodels.obj		\
+    $(SLO)$/xmldlg_addfunc.obj
 
 # --- Targets ------------------------------------------------------
 

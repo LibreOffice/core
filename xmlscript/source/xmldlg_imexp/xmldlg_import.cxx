@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-21 20:49:27 $
+ *  last change: $Author: dbo $ $Date: 2001-02-27 12:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <xmlscript/xml_helper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
@@ -879,7 +880,7 @@ void ControlImportContext::importEvents(
                 getStringAttr( &descr.ScriptType,
                                OUString( RTL_CONSTASCII_USTRINGPARAM("script-type") ),
                                xEvent );
-                getStringAttr( &descr.ScriptType,
+                getStringAttr( &descr.ScriptCode,
                                OUString( RTL_CONSTASCII_USTRINGPARAM("script-code") ),
                                xEvent );
                 getStringAttr( &descr.AddListenerParam,
@@ -980,6 +981,11 @@ ElementBase::~ElementBase()
     {
         _pParent->release();
     }
+
+#ifdef DEBUG
+    OString aStr( OUStringToOString( _aLocalName, RTL_TEXTENCODING_ASCII_US ) );
+    OSL_TRACE( "ElementBase::~ElementBase(): %s\n", aStr.getStr() );
+#endif
 }
 
 //##################################################################################################
@@ -1017,17 +1023,31 @@ Reference< xml::XImportContext > DialogImport::createRootContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (nUid == XMLNS_DIALOGS_UID &&
-        rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("window") ))
+    if (XMLNS_DIALOGS_UID != nUid)
     {
-        return new WindowElement( rLocalName, xAttributes, 0, this );
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // dialogs
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dialogs") ))
+    {
+        return new DialogsElement( rLocalName, xAttributes, 0, this );
     }
     else
     {
         throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal root element given for dialog: ") ) +
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal root element (expected dialogs) given: ") ) +
             rLocalName, Reference< XInterface >(), Any() );
     }
+}
+//__________________________________________________________________________________________________
+DialogImport::~DialogImport()
+    throw ()
+{
+#ifdef DEBUG
+    OSL_TRACE( "DialogImport::~DialogImport().\n" );
+#endif
 }
 
 //__________________________________________________________________________________________________
@@ -1057,19 +1077,26 @@ Reference< xml::XImportContext > DialogImport::getStyle(
 //##################################################################################################
 
 //==================================================================================================
-SAL_DLLEXPORT Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
-    Reference< container::XNameContainer > const & xDialogModel )
+SAL_DLLEXPORT Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModels(
+    Sequence< Reference< container::XNameContainer > > * pOutModels )
     throw (Exception)
 {
-    NameSpaceUid arNamespaceUids[] =
+    Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    if (! xMgr.is())
     {
+        throw Exception(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("no service manager available!") ),
+            Reference< XInterface >() );
+    }
+
+    NameSpaceUid arNamespaceUids[] = {
         NameSpaceUid( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_URI) ), XMLNS_DIALOGS_UID )
     };
 
     return ::xmlscript::createDocumentHandler(
         arNamespaceUids, sizeof(arNamespaceUids) / sizeof(NameSpaceUid),
         -1 /* unknown namespace id */,
-        static_cast< xml::XImporter * >( new DialogImport( xDialogModel ) ) );
+        static_cast< xml::XImporter * >( new DialogImport( xMgr, pOutModels ) ) );
 }
 
 };

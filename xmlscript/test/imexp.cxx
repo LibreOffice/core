@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-20 14:05:25 $
+ *  last change: $Author: dbo $ $Date: 2001-02-27 12:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,52 +96,6 @@ using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-
-
-//-----------------------------------------
-// The document handler, which is needed for the saxparser
-// The Documenthandler for reading sax
-//-----------------------------------------
-class ErrorHandler :
-    public WeakImplHelper2< xml::sax::XEntityResolver , xml::sax::XErrorHandler >
-{
-public:
-    ErrorHandler()
-        {}
-
-public: // Error handler
-    virtual void SAL_CALL error(const Any& aSAXParseException) throw (xml::sax::SAXException, RuntimeException)
-    {
-        OSL_ENSURE( 0, "Error !\n" );
-        Exception exc;
-        OSL_VERIFY( aSAXParseException >>= exc );
-        throw exc;
-    }
-    virtual void SAL_CALL fatalError(const Any& aSAXParseException) throw (xml::sax::SAXException, RuntimeException)
-    {
-        OSL_ENSURE( 0, "Fatal Error !\n" );
-        Exception exc;
-        OSL_VERIFY( aSAXParseException >>= exc );
-        throw exc;
-    }
-    virtual void SAL_CALL warning(const Any& aSAXParseException) throw (xml::sax::SAXException, RuntimeException)
-    {
-        OSL_ENSURE( 0, "Warning !\n" );
-        Exception exc;
-        OSL_VERIFY( aSAXParseException >>= exc );
-        throw exc;
-    }
-
-    virtual xml::sax::InputSource SAL_CALL resolveEntity(
-        const OUString& sPublicId,
-        const OUString& sSystemId)
-        throw (xml::sax::SAXException,RuntimeException)
-    {
-        OSL_ENSURE( 0, "not impl !\n" );
-        return xml::sax::InputSource();
-    }
-};
 
 
 
@@ -255,87 +209,43 @@ Reference< lang::XMultiServiceFactory > createApplicationServiceManager()
 
 // -----------------------------------------------------------------------
 
-Reference< container::XNameContainer > importFile(
-    char const * fname,
-    Reference< lang::XMultiServiceFactory > const & xSMgr )
+Sequence< Reference< container::XNameContainer > > importFile(
+    char const * fname )
 {
-    Reference< xml::sax::XParser > xParser( xSMgr->createInstance(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
-    if (xParser.is())
+    // create the input stream
+    FILE *f = ::fopen( fname, "rb" );
+    if (f)
     {
-        ErrorHandler * pHandler = new ErrorHandler();
-        xParser->setErrorHandler( (xml::sax::XErrorHandler *)pHandler );
-        xParser->setEntityResolver( (xml::sax::XEntityResolver *)pHandler );
+        ::fseek( f, 0 ,SEEK_END );
+        int nLength = ::ftell( f );
+        ::fseek( f, 0, SEEK_SET );
 
-        Reference< container::XNameContainer > xModel( xSMgr->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel") ) ), UNO_QUERY );
-        OSL_ASSERT( xModel.is() );
-        xParser->setDocumentHandler( ::xmlscript::importDialogModel( xModel ) );
+        Sequence< sal_Int8 > bytes( nLength );
+        ::fread( bytes.getArray(), nLength, 1, f );
+        ::fclose( f );
 
-        // create the input stream
-        FILE *f = ::fopen( fname, "rb" );
-        if (f)
-        {
-            ::fseek( f, 0 ,SEEK_END );
-            int nLength = ::ftell( f );
-            ::fseek( f, 0, SEEK_SET );
-
-            ByteSequence seqIn( nLength );
-            ::fread( seqIn.getArray(), nLength, 1, f );
-            ::fclose( f );
-
-            xml::sax::InputSource source;
-            source.aInputStream = ::xmlscript::createInputStream( seqIn );
-            source.sSystemId    = OUString::createFromAscii( fname );
-
-            // start parsing
-            xParser->parseStream( source );
-            return xModel;
-        }
-        else
-        {
-            OSL_ENSURE( 0, "### Cannot read file!\n" );
-        }
+        Sequence< Reference< container::XNameContainer > > models;
+        ::xmlscript::importDialogModelsFromByteSequence( &models, bytes );
+        return models;
     }
     else
     {
-        OSL_ENSURE( 0, "### couln't create sax-parser component\n" );
+        throw Exception( OUString( RTL_CONSTASCII_USTRINGPARAM("### Cannot read file!") ),
+                         Reference< XInterface >() );
     }
-    return Reference< container::XNameContainer >();
 }
 
-bool exportToFile(
+void exportToFile(
     char const * fname,
-    Reference< container::XNameContainer > const & xModel,
-    Reference< lang::XMultiServiceFactory > const & xSMgr )
+    Sequence< Reference< container::XNameContainer > > const & models )
 {
-    Reference< xml::sax::XExtendedDocumentHandler > xHandler(
-        xSMgr->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ) ), UNO_QUERY );
-    OSL_ASSERT( xHandler.is() );
-    if (! xHandler.is())
-    {
-        OSL_ENSURE( 0, "### couln't create sax-writer component\n" );
-        return false;
-    }
-
-    ByteSequence seq;
-    Reference< io::XActiveDataSource > xSource( xHandler, UNO_QUERY );
-    xSource->setOutputStream( ::xmlscript::createOutputStream( &seq ) );
-
-    xHandler->startDocument();
-
-    ::xmlscript::exportDialogModel(
-        xModel,
-        Reference< xml::sax::XExtendedDocumentHandler >::query( xHandler ) );
-
-    xHandler->endDocument();
+    Sequence< sal_Int8 > bytes;
+    ::xmlscript::exportDialogModelsToByteSequence( &bytes, models );
 
     FILE * f = ::fopen( fname, "w" );
-    ::fwrite( seq.getConstArray(), 1 ,seq.getLength(), f );
+    ::fwrite( bytes.getConstArray(), 1, bytes.getLength(), f );
     ::fflush( f );
     ::fclose( f );
-    return true;
 }
 
 
@@ -369,25 +279,29 @@ void MyApp::Main()
         Reference< awt::XToolkit> xToolkit( xMSF->createInstance(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), UNO_QUERY );
 
-        // import dialog
+        // import dialogs
         OString aParam1( OUStringToOString( OUString( GetCommandLineParam( 0 ) ), RTL_TEXTENCODING_ASCII_US ) );
-        Reference< container::XNameContainer > xImport( importFile( aParam1.getStr(), xMSF ) );
+        Sequence< Reference< container::XNameContainer > > models( importFile( aParam1.getStr() ) );
 
         if (GetCommandLineParamCount() == 2)
         {
             // write and read again dialogs
             OString aParam2( OUStringToOString( OUString( GetCommandLineParam( 1 ) ), RTL_TEXTENCODING_ASCII_US ) );
-            exportToFile( aParam2.getStr(), xImport, xMSF );
+            exportToFile( aParam2.getStr(), models );
             // re-import
-            xImport = importFile( aParam2.getStr(), xMSF );
+            models = importFile( aParam2.getStr() );
         }
 
-        Reference< awt::XControl > xDlg( xMSF->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), UNO_QUERY );
-        xDlg->setModel( Reference< awt::XControlModel >::query( xImport ) );
-        xDlg->createPeer( xToolkit, NULL );
-        Reference< awt::XDialog > xD( xDlg, UNO_QUERY );
-        xD->execute();
+        Reference< container::XNameContainer > const * pModels = models.getConstArray();
+        for ( sal_Int32 nPos = 0; nPos < models.getLength(); ++nPos )
+        {
+            Reference< awt::XControl > xDlg( xMSF->createInstance(
+                OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), UNO_QUERY );
+            xDlg->setModel( Reference< awt::XControlModel >::query( pModels[ nPos ] ) );
+            xDlg->createPeer( xToolkit, 0 );
+            Reference< awt::XDialog > xD( xDlg, UNO_QUERY );
+            xD->execute();
+        }
     }
     catch (uno::Exception & rExc)
     {

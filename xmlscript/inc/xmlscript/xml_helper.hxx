@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_helper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-16 14:14:47 $
+ *  last change: $Author: dbo $ $Date: 2001-02-27 12:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,22 @@
 #ifndef _XMLSCRIPT_XML_HELPER_HXX_
 #define _XMLSCRIPT_XML_HELPER_HXX_
 
+#ifndef _RTL_BYTESEQ_HXX_
 #include <rtl/byteseq.hxx>
+#endif
 
+#ifndef _COM_SUN_STAR_XML_XIMPORTER_HXX_
 #include <com/sun/star/xml/XImporter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HXX_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-
+#endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HXX_
 #include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HXX_
 #include <com/sun/star/io/XOutputStream.hpp>
+#endif
 
 
 namespace xmlscript
@@ -85,7 +94,7 @@ struct NameSpaceUid
 };
 
 //==================================================================================================
-::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
+SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL createDocumentHandler(
     NameSpaceUid const * pNamespaceUids, sal_Int32 nNameSpaceUids,
     sal_Int32 nUnknownNamespaceUid,
@@ -94,12 +103,12 @@ SAL_CALL createDocumentHandler(
     throw ();
 
 //==================================================================================================
-::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
 SAL_CALL createInputStream(
     ::rtl::ByteSequence const & rInData )
     throw ();
 //==================================================================================================
-::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
 SAL_CALL createOutputStream(
     ::rtl::ByteSequence * pOutData )
     throw ();

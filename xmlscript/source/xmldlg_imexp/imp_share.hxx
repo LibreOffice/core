@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-21 20:49:26 $
+ *  last change: $Author: dbo $ $Date: 2001-02-27 12:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,8 @@ struct DialogImport
     vector< OUString > _styleNames;
     vector< Reference< xml::XImportContext > > _styles;
 
+    Reference< lang::XMultiServiceFactory > _xMgr;
+    Sequence< Reference< container::XNameContainer > > * _pOutModels;
 public:
     Reference< container::XNameContainer > _xDialogModel;
     Reference< lang::XMultiServiceFactory > _xDialogModelFactory;
@@ -164,10 +166,14 @@ public:
         throw ();
 
     inline DialogImport(
-        Reference< container::XNameContainer > const & xDialogModel )
-        : _xDialogModel( xDialogModel )
-        , _xDialogModelFactory( xDialogModel, UNO_QUERY )
-        {}
+        Reference< lang::XMultiServiceFactory > const & xMgr,
+        Sequence< Reference< container::XNameContainer > > * pOutModels )
+        throw ()
+        : _xMgr( xMgr )
+        , _pOutModels( pOutModels )
+        { *_pOutModels = Sequence< Reference< container::XNameContainer > >(); }
+    virtual ~DialogImport()
+        throw ();
 
     // XImporter
     virtual void SAL_CALL startDocument()
@@ -388,6 +394,24 @@ public:
     bool importTimeFormatProperty(
         OUString const & rPropName, OUString const & rAttrName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
+};
+//==================================================================================================
+class DialogsElement
+    : public ControlElement
+{
+public:
+    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+
+    inline DialogsElement(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        throw ()
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
 };
 //==================================================================================================
 class WindowElement

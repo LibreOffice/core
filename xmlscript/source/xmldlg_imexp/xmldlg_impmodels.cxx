@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-21 20:49:27 $
+ *  last change: $Author: dbo $ $Date: 2001-02-27 12:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1552,6 +1552,63 @@ void WindowElement::endElement()
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
             makeAny( aValue ) );
+    }
+}
+
+//##################################################################################################
+
+// dialogs
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > DialogsElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // window
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("window") ))
+    {
+        // new model
+        _pImport->_xDialogModel = Reference< container::XNameContainer >::query( _pImport->_xMgr->createInstance(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlDialogModel") ) ) );
+        OSL_ASSERT( _pImport->_xDialogModel.is() );
+        if (! _pImport->_xDialogModel.is())
+        {
+            throw RuntimeException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("could not instanciate dialog model!") ),
+                Reference< XInterface >() );
+        }
+
+        _pImport->_xDialogModelFactory = Reference< lang::XMultiServiceFactory >::query(
+            _pImport->_xDialogModel );
+        OSL_ASSERT( _pImport->_xDialogModelFactory.is() );
+        if (! _pImport->_xDialogModel.is())
+        {
+            throw RuntimeException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("could not query for dialog model factory!") ),
+                Reference< XInterface >() );
+        }
+
+        // new style set
+        _pImport->_styleNames.clear();
+        _pImport->_styles.clear();
+
+        sal_Int32 nSize = _pImport->_pOutModels->getLength();
+        _pImport->_pOutModels->realloc( nSize +1 );
+        _pImport->_pOutModels->getArray()[ nSize ] = _pImport->_xDialogModel;
+
+        return new WindowElement( rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected window element, not ") ) +
+            rLocalName, Reference< XInterface >(), Any() );
     }
 }
 
