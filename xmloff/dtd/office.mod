@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.32 2001-02-26 14:53:39 cl Exp $
+	$Id: office.mod,v 1.33 2001-03-04 23:16:09 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -81,6 +81,63 @@
 						   spreadsheet|chart) #REQUIRED>
 
 <!ATTLIST office:document office:version	%string; #IMPLIED>
+
+<!-- document-styles -->
+<!ELEMENT office:document-styles ( 
+							office:font-decls?,
+							office:styles?,
+							office:automatic-styles?,
+							office:master-styles? >
+
+<!ATTLIST office:document-styles xmlns:office	CDATA #FIXED "&nOffice;">
+<!ATTLIST office:document-styles xmlns:meta	CDATA #FIXED "&nMeta;">
+<!ATTLIST office:document-styles xmlns:script	CDATA #FIXED "&nScript;">
+<!ATTLIST office:document-styles xmlns:style	CDATA #FIXED "&nStyle;">
+<!ATTLIST office:document-styles xmlns:text	CDATA #FIXED "&nText;">
+<!ATTLIST office:document-styles xmlns:table	CDATA #FIXED "&nTable;">
+<!ATTLIST office:document-styles xmlns:draw	CDATA #FIXED "&nDraw;">
+<!ATTLIST office:document-styles xmlns:chart	CDATA #FIXED "&nChart;">
+<!ATTLIST office:document-styles xmlns:number	CDATA #FIXED "&nNumber;">
+<!ATTLIST office:document-styles xmlns:fo		CDATA #FIXED "&nFO;">
+<!ATTLIST office:document-styles xmlns:xlink	CDATA #FIXED "&nXLink;">
+<!ATTLIST office:document-styles xmlns:svg		CDATA #FIXED "&nSVG;">
+<!ATTLIST office:document-styles xmlns:dc		CDATA #FIXED "&nDC;">
+
+<!ATTLIST office:document-styles office:class
+						  (text|online-text|
+						   drawing|presentation|
+						   spreadsheet|chart) #REQUIRED>
+
+<!ATTLIST office:document-styles office:version	%string; #IMPLIED>
+
+<!-- document-content -->
+
+<!ELEMENT office:document-conent ( 
+							office:script?,
+							office:font-decls?,
+							office:automatic-styles?,
+							office:body ) >
+
+<!ATTLIST office:document-conent xmlns:office	CDATA #FIXED "&nOffice;">
+<!ATTLIST office:document-conent xmlns:meta	CDATA #FIXED "&nMeta;">
+<!ATTLIST office:document-conent xmlns:script	CDATA #FIXED "&nScript;">
+<!ATTLIST office:document-conent xmlns:style	CDATA #FIXED "&nStyle;">
+<!ATTLIST office:document-conent xmlns:text	CDATA #FIXED "&nText;">
+<!ATTLIST office:document-conent xmlns:table	CDATA #FIXED "&nTable;">
+<!ATTLIST office:document-conent xmlns:draw	CDATA #FIXED "&nDraw;">
+<!ATTLIST office:document-conent xmlns:chart	CDATA #FIXED "&nChart;">
+<!ATTLIST office:document-conent xmlns:number	CDATA #FIXED "&nNumber;">
+<!ATTLIST office:document-conent xmlns:fo		CDATA #FIXED "&nFO;">
+<!ATTLIST office:document-conent xmlns:xlink	CDATA #FIXED "&nXLink;">
+<!ATTLIST office:document-conent xmlns:svg		CDATA #FIXED "&nSVG;">
+<!ATTLIST office:document-conent xmlns:dc		CDATA #FIXED "&nDC;">
+
+<!ATTLIST office:document-conent office:class
+						  (text|online-text|
+						   drawing|presentation|
+						   spreadsheet|chart) #REQUIRED>
+
+<!ATTLIST office:document-conent office:version	%string; #IMPLIED>
 
 
 <!ENTITY % meta "(meta:generator?,

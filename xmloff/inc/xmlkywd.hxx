@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 15:52:21 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 23:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,7 +566,7 @@ XML_CONSTASCII_ACTION( sXML_distribute_space, "distribute-space" );
 XML_CONSTASCII_ACTION( sXML_divide, "divide" );
 XML_CONSTASCII_ACTION( sXML_document, "document" );
 XML_CONSTASCII_ACTION( sXML_document_meta, "document-meta" );
-XML_CONSTASCII_ACTION( sXML_document_styles, "document-styes" );
+XML_CONSTASCII_ACTION( sXML_document_styles, "document-styles" );
 XML_CONSTASCII_ACTION( sXML_document_content, "document-content" );
 XML_CONSTASCII_ACTION( sXML_document_statistic, "document-statistic" );
 XML_CONSTASCII_ACTION( sXML_domain, "domain" );
