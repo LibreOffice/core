@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:52:33 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,8 +175,10 @@ private:
     UINT16                      nAktRow;    // fuer'n Iterator
     UINT16                      nAktCol;
 
-    static ExcRowBlock*         pRowBlock;  // buffer for ROW recs
+    ExcRowBlock*                pRowBlock;  // buffer for ROW recs
     DefRowXFs*                  pDefRowXFs;
+
+    NameBuffer*                 pTabNames;
 
     void                        Clear();
     void                        NullTab( const String* pCodename = NULL );
@@ -219,10 +221,6 @@ private:
     ExcTable            aHeader;
 
     XclExpRecordList< ExcTable > maTableList;
-
-    ScProgress*         pPrgrsBar;
-
-    static NameBuffer*  pTabNames;
 
     XclExpChangeTrack*  pExpChangeTrack;
 
