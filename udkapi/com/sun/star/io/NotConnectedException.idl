@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NotConnectedException.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module io {
 /** is thrown when a read/write operation is tried on an instance that has
     not been chained properly.
  */
-exception NotConnectedException: com::sun::star::io::IOException
+published exception NotConnectedException: com::sun::star::io::IOException
 {
 };
 
