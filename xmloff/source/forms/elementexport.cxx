@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:11:47 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,12 @@
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #endif
 
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#include <algorithm>
+
+
 //.........................................................................
 namespace xmloff
 {
@@ -319,8 +325,8 @@ namespace xmloff
 
         // now write this
         AddAttribute(
-            getCommonControlAttributeNamespace(CCA_SERVICE_NAME),
-            getCommonControlAttributeName(CCA_SERVICE_NAME),
+            OAttributeMetaData::getCommonControlAttributeNamespace(CCA_SERVICE_NAME),
+            OAttributeMetaData::getCommonControlAttributeName(CCA_SERVICE_NAME),
             sToWriteServiceName);
     }
 
@@ -370,8 +376,8 @@ namespace xmloff
         if (CCA_NAME & m_nIncludeCommon)
         {
             exportStringPropertyAttribute(
-                getCommonControlAttributeNamespace(CCA_NAME),
-                getCommonControlAttributeName(CCA_NAME),
+                OAttributeMetaData::getCommonControlAttributeNamespace(CCA_NAME),
+                OAttributeMetaData::getCommonControlAttributeName(CCA_NAME),
                 PROPERTY_NAME
                 );
         #ifdef DBG_UTIL
@@ -395,8 +401,8 @@ namespace xmloff
         {
             OSL_ENSURE(m_sControlId.getLength(), "OControlExport::exportOuterAttributes: have no control id for the control!");
             AddAttribute(
-                getCommonControlAttributeNamespace(CCA_CONTROL_ID),
-                getCommonControlAttributeName(CCA_CONTROL_ID),
+                OAttributeMetaData::getCommonControlAttributeNamespace(CCA_CONTROL_ID),
+                OAttributeMetaData::getCommonControlAttributeName(CCA_CONTROL_ID),
                 m_sControlId);
         #ifdef DBG_UTIL
             //  reset the bit for later checking
@@ -524,8 +530,8 @@ namespace xmloff
                     {
                         m_rContext.getGlobalContext().ClearAttrList();
                         AddAttribute(
-                            getCommonControlAttributeNamespace(CCA_LABEL),
-                            getCommonControlAttributeName(CCA_LABEL),
+                            OAttributeMetaData::getCommonControlAttributeNamespace(CCA_LABEL),
+                            OAttributeMetaData::getCommonControlAttributeName(CCA_LABEL),
                             *pListItems);
                         SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "item", sal_True, sal_True);
                     }
@@ -587,8 +593,8 @@ namespace xmloff
                 if (nStringPropertyAttributeIds[i] & m_nIncludeCommon)
                 {
                     exportStringPropertyAttribute(
-                        getCommonControlAttributeNamespace(nStringPropertyAttributeIds[i]),
-                        getCommonControlAttributeName(nStringPropertyAttributeIds[i]),
+                        OAttributeMetaData::getCommonControlAttributeNamespace(nStringPropertyAttributeIds[i]),
+                        OAttributeMetaData::getCommonControlAttributeName(nStringPropertyAttributeIds[i]),
                         aStringPropertyNames[i]
                         );
                 #ifdef DBG_UTIL
@@ -624,8 +630,8 @@ namespace xmloff
                 if (nBooleanPropertyAttributeIds[i] & m_nIncludeCommon)
                 {
                     exportBooleanPropertyAttribute(
-                        getCommonControlAttributeNamespace(nBooleanPropertyAttributeIds[i]),
-                        getCommonControlAttributeName(nBooleanPropertyAttributeIds[i]),
+                        OAttributeMetaData::getCommonControlAttributeNamespace(nBooleanPropertyAttributeIds[i]),
+                        OAttributeMetaData::getCommonControlAttributeName(nBooleanPropertyAttributeIds[i]),
                         *(pBooleanPropertyNames[i]),
                         nBooleanPropertyAttrFlags[i]);
         #ifdef DBG_UTIL
@@ -667,8 +673,8 @@ namespace xmloff
                 if (nIntegerPropertyAttributeIds[i] & m_nIncludeCommon)
                 {
                     exportInt16PropertyAttribute(
-                        getCommonControlAttributeNamespace(nIntegerPropertyAttributeIds[i]),
-                        getCommonControlAttributeName(nIntegerPropertyAttributeIds[i]),
+                        OAttributeMetaData::getCommonControlAttributeNamespace(nIntegerPropertyAttributeIds[i]),
+                        OAttributeMetaData::getCommonControlAttributeName(nIntegerPropertyAttributeIds[i]),
                         *(pIntegerPropertyNames[i]),
                         nIntegerPropertyAttrDefaults[i]);
         #ifdef DBG_UTIL
@@ -686,8 +692,8 @@ namespace xmloff
             if (m_nIncludeCommon & CCA_BUTTON_TYPE)
             {
                 exportEnumPropertyAttribute(
-                    getCommonControlAttributeNamespace(CCA_BUTTON_TYPE),
-                    getCommonControlAttributeName(CCA_BUTTON_TYPE),
+                    OAttributeMetaData::getCommonControlAttributeNamespace(CCA_BUTTON_TYPE),
+                    OAttributeMetaData::getCommonControlAttributeName(CCA_BUTTON_TYPE),
                     PROPERTY_BUTTONTYPE,
                     OEnumMapper::getEnumMap(OEnumMapper::epButtonType),
                     FormButtonType_PUSH);
@@ -699,8 +705,8 @@ namespace xmloff
             if ( m_nIncludeCommon & CCA_ORIENTATION )
             {
                 exportEnumPropertyAttribute(
-                    getCommonControlAttributeNamespace( CCA_ORIENTATION ),
-                    getCommonControlAttributeName( CCA_ORIENTATION ),
+                    OAttributeMetaData::getCommonControlAttributeNamespace( CCA_ORIENTATION ),
+                    OAttributeMetaData::getCommonControlAttributeName( CCA_ORIENTATION ),
                     PROPERTY_ORIENTATION,
                     OEnumMapper::getEnumMap( OEnumMapper::epOrientation ),
                     ScrollBarOrientation::HORIZONTAL
@@ -714,8 +720,8 @@ namespace xmloff
             if ( m_nIncludeCommon & CCA_VISUAL_EFFECT )
             {
                 exportEnumPropertyAttribute(
-                    getCommonControlAttributeNamespace( CCA_VISUAL_EFFECT ),
-                    getCommonControlAttributeName( CCA_VISUAL_EFFECT ),
+                    OAttributeMetaData::getCommonControlAttributeNamespace( CCA_VISUAL_EFFECT ),
+                    OAttributeMetaData::getCommonControlAttributeName( CCA_VISUAL_EFFECT ),
                     PROPERTY_VISUAL_EFFECT,
                     OEnumMapper::getEnumMap( OEnumMapper::epVisualEffect ),
                     VisualEffect::LOOK3D
@@ -753,8 +759,8 @@ namespace xmloff
 
             // export it
             exportInt16PropertyAttribute(
-                getCommonControlAttributeNamespace( CCA_MAX_LENGTH ),
-                getCommonControlAttributeName( CCA_MAX_LENGTH ),
+                OAttributeMetaData::getCommonControlAttributeNamespace( CCA_MAX_LENGTH ),
+                OAttributeMetaData::getCommonControlAttributeName( CCA_MAX_LENGTH ),
                 sTextLenPropertyName,
                 0
             );
@@ -795,8 +801,8 @@ namespace xmloff
             if (m_sReferringControls.getLength())
             {   // there is at least one control referring to the one we're handling currently
                 AddAttribute(
-                    getCommonControlAttributeNamespace(CCA_FOR),
-                    getCommonControlAttributeName(CCA_FOR),
+                    OAttributeMetaData::getCommonControlAttributeNamespace(CCA_FOR),
+                    OAttributeMetaData::getCommonControlAttributeName(CCA_FOR),
                     m_sReferringControls);
             }
         #ifdef DBG_UTIL
@@ -813,10 +819,10 @@ namespace xmloff
             // get the property names
             getValuePropertyNames(m_eType, m_nClassId, pCurrentValuePropertyName, pValuePropertyName);
 
-            static const sal_Char* pCurrentValueAttributeName = getCommonControlAttributeName(CCA_CURRENT_VALUE);
-            static const sal_Char* pValueAttributeName = getCommonControlAttributeName(CCA_VALUE);
-            static const sal_uInt16 nCurrentValueAttributeNamespaceKey = getCommonControlAttributeNamespace(CCA_CURRENT_VALUE);
-            static const sal_uInt16 nValueAttributeNamespaceKey = getCommonControlAttributeNamespace(CCA_VALUE);
+            static const sal_Char* pCurrentValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_VALUE);
+            static const sal_Char* pValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_VALUE);
+            static const sal_uInt16 nCurrentValueAttributeNamespaceKey = OAttributeMetaData::getCommonControlAttributeNamespace(CCA_CURRENT_VALUE);
+            static const sal_uInt16 nValueAttributeNamespaceKey = OAttributeMetaData::getCommonControlAttributeNamespace(CCA_VALUE);
 
             // add the atrtributes if necessary and possible
             if (pCurrentValuePropertyName && (CCA_CURRENT_VALUE & m_nIncludeCommon))
@@ -866,8 +872,8 @@ namespace xmloff
         if (DA_DATA_FIELD & m_nIncludeDatabase)
         {
             exportStringPropertyAttribute(
-                getDatabaseAttributeNamespace(DA_DATA_FIELD),
-                getDatabaseAttributeName(DA_DATA_FIELD),
+                OAttributeMetaData::getDatabaseAttributeNamespace(DA_DATA_FIELD),
+                OAttributeMetaData::getDatabaseAttributeName(DA_DATA_FIELD),
                 PROPERTY_DATAFIELD);
         #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
@@ -879,8 +885,8 @@ namespace xmloff
         if (DA_BOUND_COLUMN & m_nIncludeDatabase)
         {
             exportInt16PropertyAttribute(
-                getDatabaseAttributeNamespace(DA_BOUND_COLUMN),
-                getDatabaseAttributeName(DA_BOUND_COLUMN),
+                OAttributeMetaData::getDatabaseAttributeNamespace(DA_BOUND_COLUMN),
+                OAttributeMetaData::getDatabaseAttributeName(DA_BOUND_COLUMN),
                 PROPERTY_BOUNDCOLUMN,
                 0);
         #if OSL_DEBUG_LEVEL > 0
@@ -893,8 +899,8 @@ namespace xmloff
         if (DA_CONVERT_EMPTY & m_nIncludeDatabase)
         {
             exportBooleanPropertyAttribute(
-                getDatabaseAttributeNamespace(DA_CONVERT_EMPTY),
-                getDatabaseAttributeName(DA_CONVERT_EMPTY),
+                OAttributeMetaData::getDatabaseAttributeNamespace(DA_CONVERT_EMPTY),
+                OAttributeMetaData::getDatabaseAttributeName(DA_CONVERT_EMPTY),
                 PROPERTY_EMPTY_IS_NULL,
                 BOOLATTR_DEFAULT_FALSE
                 );
@@ -908,8 +914,8 @@ namespace xmloff
         if (DA_LIST_SOURCE_TYPE & m_nIncludeDatabase)
         {
             exportEnumPropertyAttribute(
-                getDatabaseAttributeNamespace(DA_LIST_SOURCE_TYPE),
-                getDatabaseAttributeName(DA_LIST_SOURCE_TYPE),
+                OAttributeMetaData::getDatabaseAttributeNamespace(DA_LIST_SOURCE_TYPE),
+                OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE_TYPE),
                 PROPERTY_LISTSOURCETYPE,
                 OEnumMapper::getEnumMap(OEnumMapper::epListSourceType),
                 ListSourceType_VALUELIST
@@ -1002,8 +1008,8 @@ namespace xmloff
                 if ( *pAttributeId& m_nIncludeSpecial)
                 {
                     exportBooleanPropertyAttribute(
-                        getSpecialAttributeNamespace( *pAttributeId ),
-                        getSpecialAttributeName( *pAttributeId ),
+                        OAttributeMetaData::getSpecialAttributeNamespace( *pAttributeId ),
+                        OAttributeMetaData::getSpecialAttributeName( *pAttributeId ),
                         *(*pPropertyName),
                         ( *pAttributeId == SCA_FOCUS_ON_CLICK ) ? BOOLATTR_DEFAULT_TRUE : BOOLATTR_DEFAULT_FALSE
                     );
@@ -1044,8 +1050,8 @@ namespace xmloff
                 if ( nIntegerPropertyAttributeIds[i] & m_nIncludeSpecial )
                 {
                     exportInt32PropertyAttribute(
-                        getSpecialAttributeNamespace( nIntegerPropertyAttributeIds[i] ),
-                        getSpecialAttributeName( nIntegerPropertyAttributeIds[i] ),
+                        OAttributeMetaData::getSpecialAttributeNamespace( nIntegerPropertyAttributeIds[i] ),
+                        OAttributeMetaData::getSpecialAttributeName( nIntegerPropertyAttributeIds[i] ),
                         *( pIntegerPropertyNames[i] ),
                         nIntegerPropertyAttrDefaults[i]
                     );
@@ -1067,8 +1073,8 @@ namespace xmloff
 
                 if ( sPropertyName.getLength() )
                     exportInt32PropertyAttribute(
-                        getSpecialAttributeNamespace( SCA_STEP_SIZE ),
-                        getSpecialAttributeName( SCA_STEP_SIZE ),
+                        OAttributeMetaData::getSpecialAttributeNamespace( SCA_STEP_SIZE ),
+                        OAttributeMetaData::getSpecialAttributeName( SCA_STEP_SIZE ),
                         sPropertyName,
                         1
                     );
@@ -1087,8 +1093,8 @@ namespace xmloff
             if (SCA_STATE & m_nIncludeSpecial)
             {
                 exportEnumPropertyAttribute(
-                    getSpecialAttributeNamespace(SCA_STATE),
-                    getSpecialAttributeName(SCA_STATE),
+                    OAttributeMetaData::getSpecialAttributeNamespace(SCA_STATE),
+                    OAttributeMetaData::getSpecialAttributeName(SCA_STATE),
                     PROPERTY_DEFAULT_STATE,
                     OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
                     STATE_NOCHECK);
@@ -1101,8 +1107,8 @@ namespace xmloff
             if (SCA_CURRENT_STATE & m_nIncludeSpecial)
             {
                 exportEnumPropertyAttribute(
-                    getSpecialAttributeNamespace(SCA_CURRENT_STATE),
-                    getSpecialAttributeName(SCA_CURRENT_STATE),
+                    OAttributeMetaData::getSpecialAttributeNamespace(SCA_CURRENT_STATE),
+                    OAttributeMetaData::getSpecialAttributeName(SCA_CURRENT_STATE),
                     PROPERTY_STATE,
                     OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
                     STATE_NOCHECK);
@@ -1125,8 +1131,8 @@ namespace xmloff
                 {
                     ::rtl::OUString sCharacter(reinterpret_cast<const sal_Unicode*>(&nValue), 1);
                     AddAttribute(
-                        getSpecialAttributeNamespace(SCA_ECHO_CHAR),
-                        getSpecialAttributeName(SCA_ECHO_CHAR),
+                        OAttributeMetaData::getSpecialAttributeNamespace(SCA_ECHO_CHAR),
+                        OAttributeMetaData::getSpecialAttributeName(SCA_ECHO_CHAR),
                         sCharacter);
                 }
                 exportedProperty(PROPERTY_ECHO_CHAR);
@@ -1153,10 +1159,10 @@ namespace xmloff
                 "OControlExport::exportCommonControlAttributes: no property found for the max value attribute!");
 
             // add the two attributes
-            static const sal_Char* pMinValueAttributeName = getSpecialAttributeName(SCA_MIN_VALUE);
-            static const sal_Char* pMaxValueAttributeName = getSpecialAttributeName(SCA_MAX_VALUE);
-            static const sal_uInt16 nMinValueNamespaceKey = getSpecialAttributeNamespace(SCA_MIN_VALUE);
-            static const sal_uInt16 nMaxValueNamespaceKey = getSpecialAttributeNamespace(SCA_MAX_VALUE);
+            static const sal_Char* pMinValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCA_MIN_VALUE);
+            static const sal_Char* pMaxValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCA_MAX_VALUE);
+            static const sal_uInt16 nMinValueNamespaceKey = OAttributeMetaData::getSpecialAttributeNamespace(SCA_MIN_VALUE);
+            static const sal_uInt16 nMaxValueNamespaceKey = OAttributeMetaData::getSpecialAttributeNamespace(SCA_MAX_VALUE);
 
             if (pMinValuePropertyName && (SCA_MIN_VALUE & m_nIncludeSpecial))
                 exportGenericPropertyAttribute(
@@ -1217,8 +1223,8 @@ namespace xmloff
         if ( sListSource.getLength() )
         {   // the ListSource property needs to be exported as attribute, and it is not empty
             AddAttribute(
-                getDatabaseAttributeNamespace(DA_LIST_SOURCE),
-                getDatabaseAttributeName(DA_LIST_SOURCE),
+                OAttributeMetaData::getDatabaseAttributeNamespace(DA_LIST_SOURCE),
+                OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE),
                 sListSource);
         }
     }
@@ -1275,8 +1281,8 @@ namespace xmloff
             {
                 // there is an item at this position
                 AddAttribute(
-                    getCommonControlAttributeNamespace(CCA_LABEL),
-                    getCommonControlAttributeName(CCA_LABEL),
+                    OAttributeMetaData::getCommonControlAttributeNamespace(CCA_LABEL),
+                    OAttributeMetaData::getCommonControlAttributeName(CCA_LABEL),
                     *pItems);
                 ++pItems;
             }
@@ -1284,8 +1290,8 @@ namespace xmloff
             {
                 // there is an value at this position
                 AddAttribute(
-                    getCommonControlAttributeNamespace(CCA_VALUE),
-                    getCommonControlAttributeName(CCA_VALUE),
+                    OAttributeMetaData::getCommonControlAttributeNamespace(CCA_VALUE),
+                    OAttributeMetaData::getCommonControlAttributeName(CCA_VALUE),
                     *pValues);
                 ++pValues;
             }
@@ -1294,8 +1300,8 @@ namespace xmloff
             if (aSelection.end() != aSelectedPos)
             {   // the item at this position is selected
                 AddAttribute(
-                    getCommonControlAttributeNamespace(CCA_CURRENT_SELECTED),
-                    getCommonControlAttributeName(CCA_CURRENT_SELECTED),
+                    OAttributeMetaData::getCommonControlAttributeNamespace(CCA_CURRENT_SELECTED),
+                    OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED),
                     sTrue
                     );
                 aSelection.erase(aSelectedPos);
@@ -1305,8 +1311,8 @@ namespace xmloff
             if (aDefaultSelection.end() != aDefaultSelectedPos)
             {   // the item at this position is selected as default
                 AddAttribute(
-                    getCommonControlAttributeNamespace(CCA_SELECTED),
-                    getCommonControlAttributeName(CCA_SELECTED),
+                    OAttributeMetaData::getCommonControlAttributeNamespace(CCA_SELECTED),
+                    OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED),
                     sTrue
                     );
                 aDefaultSelection.erase(aDefaultSelectedPos);
@@ -1340,8 +1346,8 @@ namespace xmloff
                 if (aSelection.end() != aSelection.find(i))
                 {   // the (not existent) item at this position is selected
                     AddAttribute(
-                        getCommonControlAttributeNamespace(CCA_CURRENT_SELECTED),
-                        getCommonControlAttributeName(CCA_CURRENT_SELECTED),
+                        OAttributeMetaData::getCommonControlAttributeNamespace(CCA_CURRENT_SELECTED),
+                        OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED),
                         sTrue
                         );
                 }
@@ -1349,8 +1355,8 @@ namespace xmloff
                 if (aDefaultSelection.end() != aDefaultSelection.find(i))
                 {   // the (not existent) item at this position is selected as default
                     AddAttribute(
-                        getCommonControlAttributeNamespace(CCA_SELECTED),
-                        getCommonControlAttributeName(CCA_SELECTED),
+                        OAttributeMetaData::getCommonControlAttributeNamespace(CCA_SELECTED),
+                        OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED),
                         sTrue
                         );
                 }
@@ -1699,8 +1705,8 @@ namespace xmloff
             {
                 // ....................................................
                 AddAttribute(
-                    getBindingAttributeNamespace( BA_LINKED_CELL ),
-                    getBindingAttributeName( BA_LINKED_CELL ),
+                    OAttributeMetaData::getBindingAttributeNamespace( BA_LINKED_CELL ),
+                    OAttributeMetaData::getBindingAttributeName( BA_LINKED_CELL ),
                     aHelper.getStringAddressFromCellBinding( xBinding )
                 );
 
@@ -1717,8 +1723,8 @@ namespace xmloff
                     );
 
                     AddAttribute(
-                        getBindingAttributeNamespace( BA_LIST_LINKING_TYPE ),
-                        getBindingAttributeName( BA_LIST_LINKING_TYPE ),
+                        OAttributeMetaData::getBindingAttributeNamespace( BA_LIST_LINKING_TYPE ),
+                        OAttributeMetaData::getBindingAttributeName( BA_LIST_LINKING_TYPE ),
                         sBuffer.makeStringAndClear()
                     );
                 }
@@ -1746,8 +1752,8 @@ namespace xmloff
                 FormCellBindingHelper aHelper( m_xProps, NULL );
 
                 AddAttribute(
-                    getBindingAttributeNamespace( BA_LIST_CELL_RANGE ),
-                    getBindingAttributeName( BA_LIST_CELL_RANGE ),
+                    OAttributeMetaData::getBindingAttributeNamespace( BA_LIST_CELL_RANGE ),
+                    OAttributeMetaData::getBindingAttributeName( BA_LIST_CELL_RANGE ),
                     aHelper.getStringAddressFromCellListSource( xSource )
                 );
             }
@@ -1900,7 +1906,9 @@ namespace xmloff
             m_rContext.getGlobalContext().GetNamespaceMap().GetQNameByKey(
                 XML_NAMESPACE_OOO, sColumnServiceName );
         // add the attribute
-        AddAttribute(getCommonControlAttributeNamespace(CCA_SERVICE_NAME), getCommonControlAttributeName(CCA_SERVICE_NAME), sColumnServiceName);
+        AddAttribute( OAttributeMetaData::getCommonControlAttributeNamespace(CCA_SERVICE_NAME)
+                    , OAttributeMetaData::getCommonControlAttributeName(CCA_SERVICE_NAME)
+                    , sColumnServiceName);
         // flag the property as "handled"
         exportedProperty(PROPERTY_COLUMNSERVICENAME);
 
@@ -1919,8 +1927,8 @@ namespace xmloff
 
         // the attribute "label"
         exportStringPropertyAttribute(
-            getCommonControlAttributeNamespace(CCA_LABEL),
-            getCommonControlAttributeName(CCA_LABEL),
+            OAttributeMetaData::getCommonControlAttributeNamespace(CCA_LABEL),
+            OAttributeMetaData::getCommonControlAttributeName(CCA_LABEL),
             PROPERTY_LABEL);
 
         // the style attribute
@@ -1928,8 +1936,8 @@ namespace xmloff
         if ( sStyleName.getLength() )
         {
             AddAttribute(
-                getSpecialAttributeNamespace( SCA_COLUMN_STYLE_NAME ),
-                getSpecialAttributeName( SCA_COLUMN_STYLE_NAME ),
+                OAttributeMetaData::getSpecialAttributeNamespace( SCA_COLUMN_STYLE_NAME ),
+                OAttributeMetaData::getSpecialAttributeName( SCA_COLUMN_STYLE_NAME ),
                 sStyleName
             );
         }
@@ -1956,6 +1964,7 @@ namespace xmloff
     OFormExport::OFormExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxForm,
         const Sequence< ScriptEventDescriptor >& _rEvents)
         :OElementExport(_rContext, _rxForm, _rEvents)
+        ,m_bCreateConnectionResourceElement(sal_False)
     {
         OSL_ENSURE(m_xProps.is(), "OFormExport::OFormExport: invalid arguments!");
     }
@@ -1969,9 +1978,26 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OFormExport::exportSubTags()
     {
+        if ( m_bCreateConnectionResourceElement && m_xProps.is() )
+        {
+            m_rContext.getGlobalContext().ClearAttrList();
+            ::rtl::OUString sPropValue;
+            m_xProps->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sPropValue; // if set it is a file url
+            if ( !sPropValue.getLength() )
+                m_xProps->getPropertyValue( PROPERTY_URL ) >>= sPropValue;
+            if ( sPropValue.getLength() )
+                AddAttribute(
+                    OAttributeMetaData::getCommonControlAttributeNamespace(CCA_TARGET_LOCATION),
+                    OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_LOCATION),
+                    sPropValue);
+            if ( m_rContext.getGlobalContext().GetAttrList().getLength() )
+            {
+                SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, xmloff::token::XML_CONNECTION_RESOURCE, sal_True, sal_True);
+            }
+        }
+
         // let the base class export the remaining properties and the events
         OElementExport::exportSubTags();
-
         // loop through all children
         Reference< XIndexAccess > xCollection(m_xProps, UNO_QUERY);
         OSL_ENSURE(xCollection.is(), "OFormLayerXMLExport::implExportForm: a form which is not an index access? Suspicíous!");
@@ -1990,11 +2016,11 @@ namespace xmloff
         {
             static FormAttributes eStringPropertyIds[] =
             {
-                faName, /*faAction,*/ faCommand, faDatasource, faFilter, faOrder
+                faName, /*faAction,*/ faCommand, faFilter, faOrder
             };
             static ::rtl::OUString aStringPropertyNames[] =
             {
-                PROPERTY_NAME, /*PROPERTY_TARGETURL,*/ PROPERTY_COMMAND, PROPERTY_DATASOURCENAME, PROPERTY_FILTER, PROPERTY_ORDER
+                PROPERTY_NAME, /*PROPERTY_TARGETURL,*/ PROPERTY_COMMAND, PROPERTY_FILTER, PROPERTY_ORDER
             };
             sal_Int32 nIdCount = sizeof(eStringPropertyIds) / sizeof(eStringPropertyIds[0]);
         #ifdef DBG_UTIL
@@ -2004,9 +2030,25 @@ namespace xmloff
         #endif
             for (i=0; i<nIdCount; ++i)
                 exportStringPropertyAttribute(
-                    getFormAttributeNamespace(eStringPropertyIds[i]),
-                    getFormAttributeName(eStringPropertyIds[i]),
+                    OAttributeMetaData::getFormAttributeNamespace(eStringPropertyIds[i]),
+                    OAttributeMetaData::getFormAttributeName(eStringPropertyIds[i]),
                     aStringPropertyNames[i]);
+            // now export the data source name or databaselocation or connection resource
+            ::rtl::OUString sPropValue;
+            m_xProps->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sPropValue;
+            if ( !(m_bCreateConnectionResourceElement = !sPropValue.getLength()) )
+            {
+                INetURLObject aURL(sPropValue);
+                if ( ! (m_bCreateConnectionResourceElement = ( aURL.GetProtocol() == INET_PROT_FILE )) )
+                    exportStringPropertyAttribute(
+                        OAttributeMetaData::getFormAttributeNamespace(faDatasource),
+                        OAttributeMetaData::getFormAttributeName(faDatasource),
+                        PROPERTY_DATASOURCENAME);
+            }
+            else
+                exportedProperty(PROPERTY_URL);
+            if ( m_bCreateConnectionResourceElement )
+                exportedProperty(PROPERTY_DATASOURCENAME);
         }
 
         // ----------------------
@@ -2033,8 +2075,8 @@ namespace xmloff
         #endif
             for (i=0; i<nIdCount; ++i)
                 exportBooleanPropertyAttribute(
-                    getFormAttributeNamespace(eBooleanPropertyIds[i]),
-                    getFormAttributeName(eBooleanPropertyIds[i]),
+                    OAttributeMetaData::getFormAttributeNamespace(eBooleanPropertyIds[i]),
+                    OAttributeMetaData::getFormAttributeName(eBooleanPropertyIds[i]),
                     *(pBooleanPropertyNames[i]),
                     nBooleanPropertyAttrFlags[i]
                 );
@@ -2074,8 +2116,8 @@ namespace xmloff
         #endif
             for (i=0; i<nIdCount; ++i)
                 exportEnumPropertyAttribute(
-                    getFormAttributeNamespace(eEnumPropertyIds[i]),
-                    getFormAttributeName(eEnumPropertyIds[i]),
+                    OAttributeMetaData::getFormAttributeNamespace(eEnumPropertyIds[i]),
+                    OAttributeMetaData::getFormAttributeName(eEnumPropertyIds[i]),
                     pEnumPropertyNames[i],
                     OEnumMapper::getEnumMap(eEnumPropertyMaps[i]),
                     nEnumPropertyAttrDefaults[i],
@@ -2092,16 +2134,15 @@ namespace xmloff
 
         // master fields
         exportStringSequenceAttribute(
-            getFormAttributeNamespace(faMasterFields),
-            getFormAttributeName(faMasterFields),
+            OAttributeMetaData::getFormAttributeNamespace(faMasterFields),
+            OAttributeMetaData::getFormAttributeName(faMasterFields),
             PROPERTY_MASTERFIELDS);
         // detail fields
         exportStringSequenceAttribute(
-            getFormAttributeNamespace(faDetailFiels),
-            getFormAttributeName(faDetailFiels),
+            OAttributeMetaData::getFormAttributeNamespace(faDetailFiels),
+            OAttributeMetaData::getFormAttributeName(faDetailFiels),
             PROPERTY_DETAILFIELDS);
     }
-
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
