@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:51:30 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 13:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,13 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUTEXT_HXX
-#define _SD_FUTEXT_HXX
+#ifndef SD_FU_TEXT_HXX
+#define SD_FU_TEXT_HXX
 
 #ifndef _EDITDATA_HXX
 #include <svx/editdata.hxx>
 #endif
-#ifndef _SD_FUCONSTR_HXX
+#ifndef SD_FU_CONSTRUCT_HXX
 #include "fuconstr.hxx"
 #endif
 
@@ -73,33 +73,26 @@ struct StyleRequestData;
 class SdrTextObj;
 class OutlinerParaObject;
 
+namespace sd {
+
 /*************************************************************************
 |*
 |* Basisklasse fuer Textfunktionen
 |*
 \************************************************************************/
-class FuText : public FuConstruct
+
+class FuText
+    : public FuConstruct
 {
-    // #97016#
-    void ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj);
-    void ImpSetAttributesFitToSize(SdrTextObj* pTxtObj);
-    void ImpSetAttributesFitToSizeVertical(SdrTextObj* pTxtObj);
-    void ImpSetAttributesFitCommon(SdrTextObj* pTxtObj);
-
- protected:
-    SdrTextObj*         pTextObj;
-    Link                aOldLink;
-    BOOL                bFirstObjCreated;
-
-    SfxRequest&         rRequest;
-
- public:
+public:
     TYPEINFO();
 
-    FuText(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-           SdDrawDocument* pDoc, SfxRequest& rReq);
-
-    virtual ~FuText();
+    FuText (ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuText (void);
 
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
@@ -162,8 +155,22 @@ class FuText : public FuConstruct
             call is silentyl ignored.
     */
     void TextEditingHasEnded (const SdrTextObj* pTextObject);
+
+protected:
+    SdrTextObj*         pTextObj;
+    Link                aOldLink;
+    BOOL                bFirstObjCreated;
+
+    SfxRequest&         rRequest;
+
+private:
+    // #97016#
+    void ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj);
+    void ImpSetAttributesFitToSize(SdrTextObj* pTxtObj);
+    void ImpSetAttributesFitToSizeVertical(SdrTextObj* pTxtObj);
+    void ImpSetAttributesFitCommon(SdrTextObj* pTxtObj);
 };
 
+} // end of namespace sd
 
-
-#endif      // _SD_FUTEXT_HXX
+#endif
