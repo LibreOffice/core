@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hro $ $Date: 2000-12-20 17:32:02 $
+ *  last change: $Author: iha $ $Date: 2001-01-19 17:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3504,7 +3504,7 @@ sal_Bool SAL_CALL shell::uncheckMountPoint( const rtl::OUString&  aUnqPath,
              ( aRealUnqPath.getLength() == nL || aRealUnqPath[nL] == '/' ) )
         {
             aRedirectedPath = m_vecMountPoint[j].m_aMountPoint;
-            aRedirectedPath += aUnqPath.copy( nL );
+            aRedirectedPath += aRealUnqPath.copy( nL );
             return true;
         }
 #else
