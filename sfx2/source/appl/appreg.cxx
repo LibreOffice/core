@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 07:08:31 $
+ *  last change: $Author: cd $ $Date: 2002-10-11 15:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ void SfxApplication::Registrations_Impl()
     SfxHistoryToolBoxControl_Impl::RegisterControl( SID_BROWSE_FORWARD );
     SfxHistoryToolBoxControl_Impl::RegisterControl( SID_BROWSE_BACKWARD );
     SfxReloadToolBoxControl_Impl::RegisterControl( SID_RELOAD );
+    SfxAddonsToolBoxControl_Impl::RegisterControl( SID_ADDONS );
 };
 
 //--------------------------------------------------------------------
