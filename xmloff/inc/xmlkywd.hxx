@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-14 18:32:56 $
+ *  last change: $Author: mib $ $Date: 2000-11-15 14:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ XML_CONSTASCII_ACTION( sXML__colon, ":" );
 XML_CONSTASCII_ACTION( sXML__empty, "" );
 XML_CONSTASCII_ACTION( sXML__unknown_, "_unknown_" );
 XML_CONSTASCII_ACTION( sXML_a, "a" );
+XML_CONSTASCII_ACTION( sXML_above, "above" );
 XML_CONSTASCII_ACTION( sXML_abs, "abs" );
 XML_CONSTASCII_ACTION( sXML_accent, "accent" );
 XML_CONSTASCII_ACTION( sXML_accentunder, "accentunder" );
@@ -221,6 +222,7 @@ XML_CONSTASCII_ACTION( sXML_background_stretch, "stretch" );
 XML_CONSTASCII_ACTION( sXML_bar, "bar" );
 XML_CONSTASCII_ACTION( sXML_base_cell_address, "base-cell-address");
 XML_CONSTASCII_ACTION( sXML_baseline, "baseline" );
+XML_CONSTASCII_ACTION( sXML_below , "below" );
 XML_CONSTASCII_ACTION( sXML_bevel , "bevel" );
 XML_CONSTASCII_ACTION( sXML_bibiliographic_type, "bibiliographic-type" );
 XML_CONSTASCII_ACTION( sXML_bibliography, "bibliography" );
@@ -443,6 +445,7 @@ XML_CONSTASCII_ACTION( sXML_detective, "detective" );
 XML_CONSTASCII_ACTION( sXML_determinant, "determinant" );
 XML_CONSTASCII_ACTION( sXML_diff, "diff");
 XML_CONSTASCII_ACTION( sXML_direction, "direction");
+XML_CONSTASCII_ACTION( sXML_disc, "disc" );
 XML_CONSTASCII_ACTION( sXML_display, "display" );
 XML_CONSTASCII_ACTION( sXML_display_border, "display-border");
 XML_CONSTASCII_ACTION( sXML_display_details, "display-details");
@@ -456,9 +459,12 @@ XML_CONSTASCII_ACTION( sXML_display_name, "display-name" );
 XML_CONSTASCII_ACTION( sXML_display_outline_level, "display-outline-level" );
 XML_CONSTASCII_ACTION( sXML_dissolve, "dissolve" );
 XML_CONSTASCII_ACTION( sXML_distance, "distance" );
+XML_CONSTASCII_ACTION( sXML_distribute_letter, "distribute-letter" );
+XML_CONSTASCII_ACTION( sXML_distribute_space, "distribute-space" );
 XML_CONSTASCII_ACTION( sXML_divide, "divide" );
 XML_CONSTASCII_ACTION( sXML_document, "document" );
 XML_CONSTASCII_ACTION( sXML_domain, "domain" );
+XML_CONSTASCII_ACTION( sXML_dot, "dot" );
 XML_CONSTASCII_ACTION( sXML_dotted, "dotted" );
 XML_CONSTASCII_ACTION( sXML_double, "double" );
 XML_CONSTASCII_ACTION( sXML_draw, "draw" );
@@ -748,6 +754,7 @@ XML_CONSTASCII_ACTION( sXML_length, "length" );
 XML_CONSTASCII_ACTION( sXML_leq, "leq" );
 XML_CONSTASCII_ACTION( sXML_letter_kerning, "letter-kerning" );
 XML_CONSTASCII_ACTION( sXML_letter_spacing, "letter-spacing" );
+XML_CONSTASCII_ACTION( sXML_letters, "letters" );
 XML_CONSTASCII_ACTION( sXML_level, "level" );
 XML_CONSTASCII_ACTION( sXML_limit, "limit" );
 XML_CONSTASCII_ACTION( sXML_line, "line" );
@@ -1060,6 +1067,7 @@ XML_CONSTASCII_ACTION( sXML_region_center, "region-center" );
 XML_CONSTASCII_ACTION( sXML_region_left, "region-left" );
 XML_CONSTASCII_ACTION( sXML_region_right, "region-right" );
 XML_CONSTASCII_ACTION( sXML_register_true, "register-true" );
+XML_CONSTASCII_ACTION( sXML_register_truth_ref_style_name, "register-truth-ref-style-name" );
 XML_CONSTASCII_ACTION( sXML_rel_column_width, "rel-column-width" );
 XML_CONSTASCII_ACTION( sXML_rel_width, "rel-width" );
 XML_CONSTASCII_ACTION( sXML_relative, "relative" ) ;
@@ -1092,6 +1100,11 @@ XML_CONSTASCII_ACTION( sXML_round , "round" );
 XML_CONSTASCII_ACTION( sXML_row, "row");
 XML_CONSTASCII_ACTION( sXML_row_height, "row-height" );
 XML_CONSTASCII_ACTION( sXML_row_number, "row-number" );
+XML_CONSTASCII_ACTION( sXML_ruby, "ruby" );
+XML_CONSTASCII_ACTION( sXML_ruby_align, "ruby-align" );
+XML_CONSTASCII_ACTION( sXML_ruby_base, "ruby-base" );
+XML_CONSTASCII_ACTION( sXML_ruby_position, "ruby-position" );
+XML_CONSTASCII_ACTION( sXML_ruby_text, "ruby-text" );
 XML_CONSTASCII_ACTION( sXML_run_through, "run-through" );
 XML_CONSTASCII_ACTION( sXML_rx, "rx" );
 XML_CONSTASCII_ACTION( sXML_ry, "ry" );
@@ -1265,8 +1278,12 @@ XML_CONSTASCII_ACTION( sXML_text_align_source, "text-align-source" );
 XML_CONSTASCII_ACTION( sXML_text_background_color, "text-background-color" );
 XML_CONSTASCII_ACTION( sXML_text_blinking, "text-blinking" );
 XML_CONSTASCII_ACTION( sXML_text_box, "text-box" );
+XML_CONSTASCII_ACTION( sXML_text_combine, "text-combine" );
+XML_CONSTASCII_ACTION( sXML_text_combine_start_char, "text-combine-start-char" );
+XML_CONSTASCII_ACTION( sXML_text_combine_end_char, "text-combine-end-char" );
 XML_CONSTASCII_ACTION( sXML_text_content, "text-content" );
 XML_CONSTASCII_ACTION( sXML_text_crossing_out, "text-crossing-out" );
+XML_CONSTASCII_ACTION( sXML_text_emphasize, "text-emphasize" );
 XML_CONSTASCII_ACTION( sXML_text_indent, "text-indent" );
 XML_CONSTASCII_ACTION( sXML_text_input, "text-input" );
 XML_CONSTASCII_ACTION( sXML_text_outline, "text-outline" );

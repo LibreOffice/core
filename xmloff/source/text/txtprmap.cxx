@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: mib $ $Date: 2000-11-15 14:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,49 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "CharBackColor",   STYLE,  text_background_color, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
     M_E( "CharBackTransparent", STYLE,  text_background_color, XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     M_E( "CharBackColor",   FO, text_background_color, XML_TYPE_COLOR|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_OLDTEXTBACKGROUND ),
+    // RES_CHRATR_CJK_FONT
+    M_E( "CharFontNameAsian",   STYLE,  font_name_asian,            XML_TYPE_STRING, CTF_FONTNAME_CJK ),
+    M_E( "CharFontNameAsian",   STYLE,      font_family_asian,      XML_TYPE_TEXT_FONTFAMILYNAME, CTF_FONTFAMILYNAME_CJK ),
+    M_E( "CharFontStyleNameAsian",STYLE,    font_style_name_asian,  XML_TYPE_STRING, CTF_FONTSTYLENAME_CJK ),
+    M_E( "CharFontFamilyAsian", STYLE,  font_family_generic_asian,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY_CJK ),
+    M_E( "CharFontPitchAsian",  STYLE,  font_pitch_asian,           XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH_CJK ),
+    M_E( "CharFontCharSetAsian",    STYLE,  font_charset_asian,     XML_TYPE_TEXT_FONTENCODING, CTF_FONTCHARSET_CJK ),
+    // RES_CHRATR_CJK_FONTSIZE
+    M_E( "CharHeightAsian",       STYLE,    font_size_asian,            XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_CJK ),
+    M_E( "CharPropFontHeightAsian",STYLE,   font_size_asian,            XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL_CJK ),
+    M_E( "CharDiffFontHeightAsian",STYLE,font_size_rel_asian,       XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF_CJK ),
+    // RES_CHRATR_CJK_LANGUAGE
+    M_E( "CharLocaleAsian",     STYLE,      language_asian,             XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    M_E( "CharLocaleAsian",     STYLE,      country_asian,          XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 ),
+    // RES_CHRATR_CJK_POSTURE
+    M_E( "CharPostureAsian",        STYLE,      font_style_asian,           XML_TYPE_TEXT_POSTURE, 0 ),
+    // RES_CHRATR_CJK_WEIGHT
+    M_E( "CharWeightAsian",     STYLE,      font_weight_asian,      XML_TYPE_TEXT_WEIGHT, 0 ),
+    // RES_CHRATR_CTL_FONT
+    M_E( "CharFontNameComplex", STYLE,  font_name_complex,          XML_TYPE_STRING, CTF_FONTNAME_CTL ),
+    M_E( "CharFontNameComplex", STYLE,      font_family_complex,        XML_TYPE_TEXT_FONTFAMILYNAME, CTF_FONTFAMILYNAME_CTL ),
+    M_E( "CharFontStyleNameComplex",STYLE,  font_style_name_complex,    XML_TYPE_STRING, CTF_FONTSTYLENAME_CTL ),
+    M_E( "CharFontFamilyComplex",   STYLE,  font_family_generic_complex,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY_CTL ),
+    M_E( "CharFontPitchComplex",    STYLE,  font_pitch_complex,         XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH_CTL ),
+    M_E( "CharFontCharSetComplex",  STYLE,  font_charset_complex,       XML_TYPE_TEXT_FONTENCODING, CTF_FONTCHARSET_CTL ),
+    // RES_CHRATR_CTL_FONTSIZE
+    M_E( "CharHeightComplex",         STYLE,    font_size_asian,            XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_CTL ),
+    M_E( "CharPropFontHeightComplex",STYLE, font_size_asian,            XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL_CTL ),
+    M_E( "CharDiffFontHeightComplex",STYLE,font_size_rel_asian,     XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF_CTL ),
+    // RES_CHRATR_CTL_LANGUAGE
+    M_E( "CharLocaleComplex",       STYLE,      language_complex,           XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    M_E( "CharLocaleComplex",       STYLE,      country_complex,            XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 ),
+    // RES_CHRATR_CTL_POSTURE
+    M_E( "CharPostureComplex",      STYLE,      font_style_complex,         XML_TYPE_TEXT_POSTURE, 0 ),
+    // RES_CHRATR_CTL_WEIGHT
+    M_E( "CharWeightComplex",       STYLE,      font_weight_complex,        XML_TYPE_TEXT_WEIGHT, 0 ),
+    // RES_CHRATR_WRITING_DIRECTION
+    // RES_CHRATR_EMPHASIS_MARK
+    M_E( "CharEmphasisMark",        STYLE,      text_emphasize,             XML_TYPE_TEXT_EMPHASIZE, 0 ),
+    // RES_CHRATR_TWO_LINES
+    M_E( "CharTwoLines",            STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE, 0 ),
+    M_E( "CharTwoLinesStartChar",   STYLE,      text_combine_start_char,    XML_TYPE_TEXT_COMBINECHAR, 0 ),
+    M_E( "CharTwoLinesEndChar",     STYLE,      text_combine_end_char,      XML_TYPE_TEXT_COMBINECHAR, 0 ),
     // RES_TXTATR_INETFMT
     // TODO
     // RES_TXTATR_REFMARK
@@ -146,6 +189,8 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // TODO
     // RES_TXTATR_CHARFMT
 //  M_E_SI( TEXT,   style_name,         RES_TXTATR_CHARFMT, 0 ),
+    // RES_TXTATR_CJK_RUBY
+    // TODO
     // RES_TXTATR_FIELD
     // TODO
     // RES_TXTATR_FLYCNT
@@ -375,6 +420,13 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_E( "CharPostureComplex",      STYLE,      font_style_complex,         XML_TYPE_TEXT_POSTURE, 0 ),
     // RES_CHRATR_CTL_WEIGHT
     M_E( "CharWeightComplex",       STYLE,      font_weight_complex,        XML_TYPE_TEXT_WEIGHT, 0 ),
+    // RES_CHRATR_WRITING_DIRECTION
+    // RES_CHRATR_EMPHASIS_MARK
+    M_E( "CharEmphasisMark",        STYLE,      text_emphasize,             XML_TYPE_TEXT_EMPHASIZE, 0 ),
+    // RES_CHRATR_TWO_LINES
+    M_E( "CharTwoLines",            STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE, 0 ),
+    M_E( "CharTwoLinesStartChar",   STYLE,      text_combine_start_char,    XML_TYPE_TEXT_COMBINECHAR, 0 ),
+    M_E( "CharTwoLinesEndChar",     STYLE,      text_combine_end_char,      XML_TYPE_TEXT_COMBINECHAR, 0 ),
     // RES_TXTATR_INETFMT
     // TODO
     // RES_TXTATR_REFMARK
@@ -383,6 +435,8 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     // TODO
     // RES_TXTATR_CHARFMT
 //  M_E_SI( TEXT,   style_name,         RES_TXTATR_CHARFMT, 0 ),
+    // RES_TXTATR_CJK_RUBY
+    // TODO
     // RES_TXTATR_FIELD
     // TODO
     // RES_TXTATR_FLYCNT
@@ -555,15 +609,18 @@ XMLPropertyMapEntry aXMLSectionPropMap[] =
 {
     // RES_COL
     M_E( "TextColumns",         STYLE,  columns,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_COLUMNS, CTF_TEXTCOLUMNS ),
-
     // RES_BACKGROUND
     M_E( "BackColor",   FO, background_color,       XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
     M_E( "BackTransparent", FO, background_color,       XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     M_E( "BackGraphicLocation", STYLE,  position,   MID_FLAG_SPECIAL_ITEM|XML_TYPE_BUILDIN_CMP_ONLY, CTF_BACKGROUND_POS  ),
     M_E( "BackGraphicFilter",STYLE, filter_name,    MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_FILTER ),
     M_E( "BackGraphicURL",  STYLE,  background_image,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_URL ),
-
     M_E( "IsProtected",         STYLE,  protect,    XML_TYPE_BOOL, 0 ),
+    { 0, 0, 0, 0 }
+};
+
+XMLPropertyMapEntry aXMLRubyPropMap[] =
+{
     { 0, 0, 0, 0 }
 };
 
@@ -590,6 +647,9 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
         break;
     case TEXT_PROP_MAP_SECTION:
         pMap = aXMLSectionPropMap;
+        break;
+    case TEXT_PROP_MAP_RUBY:
+        pMap = aXMLRubyPropMap;
         break;
     }
     DBG_ASSERT( pMap, "illegal map type" );

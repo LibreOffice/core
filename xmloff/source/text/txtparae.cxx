@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: mib $ $Date: 2000-11-15 14:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,9 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
     case XML_STYLE_FAMILY_TEXT_SECTION:
         xPropMapper = GetSectionPropMapper();
         break;
+    case XML_STYLE_FAMILY_TEXT_RUBY:
+        xPropMapper = GetRubyPropMapper();
+        break;
     }
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
 
@@ -311,6 +314,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             }
             break;
         case XML_STYLE_FAMILY_TEXT_SECTION:
+        case XML_STYLE_FAMILY_TEXT_RUBY:
             ; // section styles have no parents
             break;
         }
@@ -341,6 +345,9 @@ OUString XMLTextParagraphExport::Find(
         break;
     case XML_STYLE_FAMILY_TEXT_SECTION:
         xPropMapper = GetSectionPropMapper();
+        break;
+    case XML_STYLE_FAMILY_TEXT_RUBY:
+        xPropMapper = GetRubyPropMapper();
         break;
     }
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
@@ -653,6 +660,13 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sPrefix = OUString( RTL_CONSTASCII_USTRINGPARAM( "Sect" ) );
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_SECTION, sFamily,
                               xSectionPropMapper, sPrefix );
+
+    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_RUBY );
+    xRubyPropMapper = new SvXMLExportPropertyMapper( xPropMapper );
+    sFamily = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_ruby ) );
+    sPrefix = OUString( RTL_CONSTASCII_USTRINGPARAM( "Ru" ) );
+    rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_RUBY, sFamily,
+                              xRubyPropMapper, sPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME );
     xFramePropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
@@ -1017,7 +1031,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
         const Reference < XEnumeration > & rTextEnum,
         sal_Bool bAutoStyles )
 {
-    sal_Bool bPrevCharIsSpace = sal_False;
+    sal_Bool bPrevCharIsSpace = sal_True;
 
     while( rTextEnum->hasMoreElements() )
     {
@@ -1822,6 +1836,11 @@ void XMLTextParagraphExport::exportTextAutoStyles()
                                    GetExport().GetNamespaceMap() );
 
     GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_SECTION,
+                                  GetExport().GetDocHandler(),
+                                  GetExport().GetMM100UnitConverter(),
+                                  GetExport().GetNamespaceMap() );
+
+    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_RUBY,
                                   GetExport().GetDocHandler(),
                                   GetExport().GetMM100UnitConverter(),
                                   GetExport().GetNamespaceMap() );

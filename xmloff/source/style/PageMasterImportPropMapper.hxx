@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportPropMapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-26 10:35:27 $
+ *  last change: $Author: mib $ $Date: 2000-11-15 14:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,23 +66,28 @@
 #include "xmlimppr.hxx"
 #endif
 
+class SvXMLImport;
+
 class PageMasterImportPropertyMapper : public SvXMLImportPropertyMapper
 {
+    SvXMLImport& rImport;
+
 protected:
 
 public:
 
     PageMasterImportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper );
+            const UniReference< XMLPropertySetMapper >& rMapper,
+            SvXMLImport& rImp);
     virtual ~PageMasterImportPropertyMapper();
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
-/*  virtual sal_Bool handleSpecialItem(
+    virtual sal_Bool handleSpecialItem(
             XMLPropertyState& rProperty,
             ::std::vector< XMLPropertyState >& rProperties,
             const ::rtl::OUString& rValue,
             const SvXMLUnitConverter& rUnitConverter,
-            const SvXMLNamespaceMap& rNamespaceMap ) const;*/
+            const SvXMLNamespaceMap& rNamespaceMap ) const;
 
     /** this method is called for every item that has the MID_FLAG_NO_ITEM_IMPORT flag set */
 /*  virtual sal_Bool handleNoItem(

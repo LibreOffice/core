@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-26 08:42:28 $
+ *  last change: $Author: mib $ $Date: 2000-11-15 14:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #endif
 #ifndef _XMLOFF_XMLTEXTCOLUMNSPPROPERTYHANDLER_HXX
 #include "XMLTextColumnsPropertyHandler.hxx"
+#endif
+#ifndef _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX
+#include "NamedBoolPropertyHdl.hxx"
 #endif
 #ifndef _XMLOFF_TXTPRHDL_HXX
 #include "txtprhdl.hxx"
@@ -883,7 +886,174 @@ XMLGrfMirrorPropHdl_Impl::~XMLGrfMirrorPropHdl_Impl()
 {
 }
 
+// ---------------------------------------------------------------------------
 
+enum XMLFontEmphasisMark { XML_EMPHASISMARK_NONE,
+                        XML_EMPHASISMARK_DOTS_ABOVE,
+                        XML_EMPHASISMARK_DOTS_BELOW,
+                        XML_EMPHASISMARK_SIDE_DOTS,
+                        XML_EMPHASISMARK_CIRCLE_ABOVE };
+
+SvXMLEnumMapEntry __READONLY_DATA pXML_Emphasize_Enum[] =
+{
+    { sXML_none,    XML_EMPHASISMARK_NONE },
+    { sXML_accent,  XML_EMPHASISMARK_SIDE_DOTS },
+    { sXML_dot,     XML_EMPHASISMARK_DOTS_ABOVE },
+    { sXML_circle,  XML_EMPHASISMARK_CIRCLE_ABOVE },
+    { sXML_disc,    XML_EMPHASISMARK_DOTS_ABOVE },
+    { 0, 0 }
+};
+class XMLTextEmphasizePropHdl_Impl : public XMLPropertyHandler
+{
+public:
+    XMLTextEmphasizePropHdl_Impl() {}
+    virtual ~XMLTextEmphasizePropHdl_Impl();
+
+    virtual sal_Bool importXML(
+            const ::rtl::OUString& rStrImpValue,
+            ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML(
+            ::rtl::OUString& rStrExpValue,
+            const ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+sal_Bool XMLTextEmphasizePropHdl_Impl::importXML(
+        const OUString& rStrImpValue,
+           Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_True;
+    sal_uInt16 nVal = XML_EMPHASISMARK_NONE;
+    sal_Bool bBelow = sal_False;
+    sal_Bool bHasPos = sal_False, bHasType = sal_False;
+    OUString aToken;
+
+    SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
+    while( aTokenEnum.getNextToken( aToken ) )
+    {
+        if( !bHasPos &&
+            aToken.equalsAsciiL( sXML_above, sizeof(sXML_above)-1 ) )
+        {
+            bBelow = sal_False;
+            bHasPos = sal_True;
+        }
+        else if( bHasPos &&
+                 aToken.equalsAsciiL( sXML_below, sizeof(sXML_below)-1 ) )
+        {
+            bBelow = sal_True;
+            bHasPos = sal_True;
+        }
+        else if( !bHasType &&
+                  rUnitConverter.convertEnum( nVal, rStrImpValue,
+                                             pXML_Emphasize_Enum ))
+        {
+            bHasType = sal_True;
+        }
+        else
+        {
+            bRet = sal_False;
+            break;
+        }
+    }
+
+    if( bRet )
+    {
+        if( XML_EMPHASISMARK_NONE != nVal && bBelow )
+            nVal = XML_EMPHASISMARK_DOTS_BELOW;
+        rValue <<= (sal_Int16)nVal;
+    }
+
+    return bRet;
+}
+
+sal_Bool XMLTextEmphasizePropHdl_Impl::exportXML(
+        OUString& rStrExpValue,
+        const Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    OUStringBuffer aOut( 15 );
+    sal_Bool bRet = sal_True;
+    sal_Int16 nType;
+    const sal_Char *pPos = sXML_above;
+    if( rValue >>= nType )
+    {
+        switch( nType )
+        {
+        case XML_EMPHASISMARK_NONE:
+            aOut.appendAscii( sXML_none );
+            break;
+        case XML_EMPHASISMARK_DOTS_BELOW:
+            aOut.appendAscii( sXML_dot );
+            pPos = sXML_below;
+            break;
+        default:
+            bRet = rUnitConverter.convertEnum( aOut, nType,
+                                               pXML_Emphasize_Enum,
+                                               sXML_dot );
+            break;
+        }
+    }
+    if( bRet )
+    {
+        aOut.append( (sal_Unicode)' ' );
+        aOut.appendAscii( pPos );
+        rStrExpValue = aOut.makeStringAndClear();
+    }
+
+    return bRet;
+}
+
+XMLTextEmphasizePropHdl_Impl::~XMLTextEmphasizePropHdl_Impl()
+{
+}
+
+
+// ---------------------------------------------------------------------------
+
+class XMLTextCombineCharPropHdl_Impl : public XMLPropertyHandler
+{
+public:
+    XMLTextCombineCharPropHdl_Impl() {}
+    virtual ~XMLTextCombineCharPropHdl_Impl();
+
+    virtual sal_Bool importXML(
+            const ::rtl::OUString& rStrImpValue,
+            ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML(
+            ::rtl::OUString& rStrExpValue,
+            const ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+sal_Bool XMLTextCombineCharPropHdl_Impl::importXML(
+        const OUString& rStrImpValue,
+           Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    if( rStrImpValue.getLength() )
+        rValue <<= rStrImpValue.copy( 0, 1 );
+    else
+        rValue <<= rStrImpValue;
+
+    return sal_True;
+}
+
+sal_Bool XMLTextCombineCharPropHdl_Impl::exportXML(
+        OUString& rStrExpValue,
+        const Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    rValue >>= rStrExpValue;
+
+    return sal_True;
+}
+
+XMLTextCombineCharPropHdl_Impl::~XMLTextCombineCharPropHdl_Impl()
+{
+}
 // ---------------------------------------------------------------------------
 class XMLTextPropertyHandlerFactory_Impl
 {
@@ -971,6 +1141,17 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         break;
     case XML_TYPE_TEXT_CLIP:
         pHdl = new XMLClipPropertyHandler;
+        break;
+    case XML_TYPE_TEXT_EMPHASIZE:
+        pHdl = new XMLTextEmphasizePropHdl_Impl;
+        break;
+    case XML_TYPE_TEXT_COMBINE:
+        pHdl = new XMLNamedBoolPropertyHdl(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_lines ) ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_lines ) ) );
+        break;
+    case XML_TYPE_TEXT_COMBINECHAR:
+        pHdl = new XMLTextCombineCharPropHdl_Impl;
         break;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
+ *  last change: $Author: mib $ $Date: 2000-11-15 14:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,6 +618,10 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
             pStyle = new XMLTextStyleContext( GetImport(), nPrefix, rLocalName,
                                               xAttrList, *this );
             break;
+        case XML_STYLE_FAMILY_TEXT_RUBY:
+            pStyle = new XMLPropStyleContext( GetImport(), nPrefix, rLocalName,
+                                              xAttrList, *this );
+            break;
         case XML_STYLE_FAMILY_SCH_CHART_ID:
             pStyle = new XMLChartStyleContext( GetImport(), nPrefix, rLocalName,
                                                xAttrList, *this );
@@ -690,6 +694,10 @@ sal_uInt16 SvXMLStylesContext::GetFamily(
     {
         nFamily = XML_STYLE_FAMILY_SCH_CHART_ID;
     }
+    else if ( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_ruby) ) )
+    {
+        nFamily = XML_STYLE_FAMILY_TEXT_RUBY;
+    }
 
     return nFamily;
 }
@@ -730,6 +738,14 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
             GetSectionImportPropertySetMapper();
         break;
 
+    case XML_STYLE_FAMILY_TEXT_RUBY:
+        // don't cache section mapper, as it's rarely used
+        // *sigh*, cast to non-const, because this is a const method,
+        // but SvXMLImport::GetTextImport() isn't.
+        xMapper = ((SvXMLStylesContext*)this)->GetImport().GetTextImport()->
+            GetRubyImportPropertySetMapper();
+        break;
+
     case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
     case XML_STYLE_FAMILY_SD_PRESENTATION_ID:
     case XML_STYLE_FAMILY_SD_POOL_ID:
@@ -752,8 +768,11 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
     case XML_STYLE_FAMILY_PAGE_MASTER:
         if( ! xPageImpPropMapper.is() )
         {
-            XMLPropertySetMapper *pPropMapper = new XMLPageMasterPropSetMapper();
-            xPageImpPropMapper = new PageMasterImportPropertyMapper( pPropMapper );
+            XMLPropertySetMapper *pPropMapper =
+                new XMLPageMasterPropSetMapper();
+            xPageImpPropMapper =
+                new PageMasterImportPropertyMapper( pPropMapper,
+                                    ((SvXMLStylesContext*)this)->GetImport() );
         }
         xMapper = xPageImpPropMapper;
         break;

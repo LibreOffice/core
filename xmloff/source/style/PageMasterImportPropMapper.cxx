@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportPropMapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-03 11:00:39 $
+ *  last change: $Author: mib $ $Date: 2000-11-15 14:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,12 @@
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _XMLOFF_XMLIMP_HXX
+#include "xmlimp.hxx"
+#endif
 
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1
@@ -84,10 +90,14 @@
 #define XML_LINE_BOTTOM 3
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
 
 PageMasterImportPropertyMapper::PageMasterImportPropertyMapper(
-        const UniReference< XMLPropertySetMapper >& rMapper ) :
-    SvXMLImportPropertyMapper( rMapper )
+        const UniReference< XMLPropertySetMapper >& rMapper,
+        SvXMLImport& rImp ) :
+    SvXMLImportPropertyMapper( rMapper ),
+    rImport( rImp )
 {
 }
 
@@ -95,15 +105,37 @@ PageMasterImportPropertyMapper::~PageMasterImportPropertyMapper()
 {
 }
 
-/*sal_Bool PageMasterImportPropertyMapper::handleSpecialItem(
+sal_Bool PageMasterImportPropertyMapper::handleSpecialItem(
         XMLPropertyState& rProperty,
         ::std::vector< XMLPropertyState >& rProperties,
         const ::rtl::OUString& rValue,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const
 {
-    return sal_True;
-}*/
+    sal_Bool bRet = sal_False;
+    sal_Int16 nContextID =
+            getPropertySetMapper()->GetEntryContextId(rProperty.mnIndex);
+
+    if( CTF_PM_REGISTER_STYLE==nContextID )
+    {
+        Reference < XNameContainer > xParaStyles =
+            rImport.GetTextImport()->GetParaStyles();
+        if( xParaStyles.is() && xParaStyles->hasByName( rValue ) )
+        {
+            rProperty.maValue <<= rValue;
+            bRet = sal_True;
+        }
+    }
+    else
+    {
+        bRet = SvXMLImportPropertyMapper::handleSpecialItem(
+                    rProperty, rProperties, rValue,
+                    rUnitConverter, rNamespaceMap );
+    }
+
+    return bRet;
+}
+
 
 /*sal_Bool PageMasterImportPropertyMapper::handleNoItem(
         sal_Int32 nIndex,

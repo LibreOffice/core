@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: mib $ $Date: 2000-11-15 14:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_line_break, XML_TOK_TEXT_LINE_BREAK },
     { XML_NAMESPACE_TEXT, sXML_s, XML_TOK_TEXT_S },
     { XML_NAMESPACE_TEXT, sXML_a, XML_TOK_TEXT_HYPERLINK },
+    { XML_NAMESPACE_TEXT, sXML_ruby, XML_TOK_TEXT_RUBY },
 
     { XML_NAMESPACE_TEXT, sXML_footnote, XML_TOK_TEXT_FOOTNOTE },
     { XML_NAMESPACE_TEXT, sXML_endnote, XML_TOK_TEXT_ENDNOTE },
@@ -534,6 +535,9 @@ XMLTextImportHelper::XMLTextImportHelper(
 
     pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_SECTION );
     xSectionImpPrMap = new XMLTextImportPropertyMapper( pPropMapper );
+
+    pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_RUBY );
+    xRubyImpPrMap = new SvXMLImportPropertyMapper( pPropMapper );
 }
 
 XMLTextImportHelper::~XMLTextImportHelper()
@@ -879,6 +883,34 @@ void XMLTextImportHelper::SetHyperlink(
         {
             aAny <<= rVisitedStyleName;
             xPropSet->setPropertyValue( sVisitedCharStyleName, aAny );
+        }
+    }
+}
+
+void XMLTextImportHelper::SetRuby(
+    const Reference < XTextCursor >& rCursor,
+    const OUString& rStyleName,
+    const OUString& rTextStyleName,
+    const OUString& rText )
+{
+    XMLPropStyleContext *pStyle = 0;
+    if( rStyleName.getLength() && xAutoStyles.Is() )
+    {
+        pStyle = PTR_CAST( XMLPropStyleContext,
+              ((SvXMLStylesContext *)&xAutoStyles)->
+                    FindStyleChildContext( XML_STYLE_FAMILY_TEXT_RUBY,
+                                           rStyleName, sal_True ) );
+    }
+
+    Any aAny;
+    if( xTextStyles.is() )
+    {
+        if( rTextStyleName.getLength() &&
+/*          xPropSetInfo->hasPropertyByName( sUnvisitedCharStyleName ) && */
+            xTextStyles->hasByName( rTextStyleName ) )
+        {
+            aAny <<= rTextStyleName;
+/*          xPropSet->setPropertyValue( sUnvisitedCharStyleName, aAny ); */
         }
     }
 }

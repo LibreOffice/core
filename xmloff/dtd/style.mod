@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.10 2000-11-13 08:42:12 mib Exp $
+	$Id: style.mod,v 1.11 2000-11-15 14:01:52 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -233,6 +233,7 @@
 <!ATTLIST style:drop-cap style:style-name %styleName; #IMPLIED>
 
 <!ATTLIST style:properties style:register-true %boolean; #IMPLIED>
+<!ATTLIST style:properties style:register-truth-ref-style-name %styleName; #IMPLIED>
 <!ATTLIST style:properties fo:margin-left %positiveLengthOrPercentage; #IMPLIED>
 <!ATTLIST style:properties fo:margin-right %positiveLengthOrPercentage;
 						   #IMPLIED>

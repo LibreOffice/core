@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:09 $
+ *  last change: $Author: mib $ $Date: 2000-11-15 14:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ using namespace ::com::sun::star::drawing;
 #define XML_HINT_STYLE 1
 #define XML_HINT_REFERENCE 2
 #define XML_HINT_HYPERLINK 3
+#define XML_HINT_RUBY 4
 
 
 class XMLHint_Impl
@@ -246,6 +247,29 @@ public:
     const OUString& GetStyleName() const { return sStyleName; }
     void SetVisitedStyleName( const OUString& s ) { sVisitedStyleName = s; }
     const OUString& GetVisitedStyleName() const { return sVisitedStyleName; }
+};
+
+class XMLRubyHint_Impl : public XMLHint_Impl
+{
+    OUString                 sStyleName;
+    OUString                 sTextStyleName;
+    OUString                 sText;
+
+public:
+
+    XMLRubyHint_Impl( const Reference < XTextRange > & rPos ) :
+        XMLHint_Impl( XML_HINT_RUBY, rPos, rPos )
+    {
+    }
+
+    virtual ~XMLRubyHint_Impl() {}
+
+    void SetStyleName( const OUString& s ) { sStyleName = s; }
+    const OUString& GetStyleName() const { return sStyleName; }
+    void SetTextStyleName( const OUString& s ) { sTextStyleName = s; }
+    const OUString& GetTextStyleName() const { return sTextStyleName; }
+    void AppendText( const OUString& s ) { sText += s; }
+    const OUString& GetText() const { return sText; }
 };
 
 typedef XMLHint_Impl *XMLHint_ImplPtr;
@@ -597,6 +621,233 @@ void XMLImpHyperlinkContext_Impl::Characters( const OUString& rChars )
 
 // ---------------------------------------------------------------------
 
+class XMLImpRubyBaseContext_Impl : public SvXMLImportContext
+{
+    XMLHints_Impl&  rHints;
+
+    sal_Bool&       rIgnoreLeadingSpace;
+
+public:
+
+    TYPEINFO();
+
+    XMLImpRubyBaseContext_Impl(
+            SvXMLImport& rImport,
+            sal_uInt16 nPrfx,
+            const OUString& rLName,
+            const Reference< xml::sax::XAttributeList > & xAttrList,
+            XMLHints_Impl& rHnts,
+            sal_Bool& rIgnLeadSpace );
+
+    virtual ~XMLImpRubyBaseContext_Impl();
+
+    virtual SvXMLImportContext *CreateChildContext(
+            sal_uInt16 nPrefix, const OUString& rLocalName,
+            const Reference< xml::sax::XAttributeList > & xAttrList );
+
+    virtual void Characters( const OUString& rChars );
+};
+
+TYPEINIT1( XMLImpRubyBaseContext_Impl, SvXMLImportContext );
+
+XMLImpRubyBaseContext_Impl::XMLImpRubyBaseContext_Impl(
+        SvXMLImport& rImport,
+        sal_uInt16 nPrfx,
+        const OUString& rLName,
+        const Reference< xml::sax::XAttributeList > & xAttrList,
+        XMLHints_Impl& rHnts,
+        sal_Bool& rIgnLeadSpace ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    rHints( rHnts ),
+    rIgnoreLeadingSpace( rIgnLeadSpace )
+{
+}
+
+XMLImpRubyBaseContext_Impl::~XMLImpRubyBaseContext_Impl()
+{
+}
+
+SvXMLImportContext *XMLImpRubyBaseContext_Impl::CreateChildContext(
+        sal_uInt16 nPrefix, const OUString& rLocalName,
+        const Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    const SvXMLTokenMap& rTokenMap =
+        GetImport().GetTextImport()->GetTextPElemTokenMap();
+    sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
+
+    return XMLImpSpanContext_Impl::CreateChildContext( GetImport(), nPrefix,
+                                                       rLocalName, xAttrList,
+                               nToken, rHints, rIgnoreLeadingSpace );
+}
+
+void XMLImpRubyBaseContext_Impl::Characters( const OUString& rChars )
+{
+    GetImport().GetTextImport()->InsertString( rChars, rIgnoreLeadingSpace );
+}
+
+// ---------------------------------------------------------------------
+
+class XMLImpRubyTextContext_Impl : public SvXMLImportContext
+{
+    XMLRubyHint_Impl    *pHint;
+
+public:
+
+    TYPEINFO();
+
+    XMLImpRubyTextContext_Impl(
+            SvXMLImport& rImport,
+            sal_uInt16 nPrfx,
+            const OUString& rLName,
+            const Reference< xml::sax::XAttributeList > & xAttrList,
+            XMLRubyHint_Impl *pHint );
+
+    virtual ~XMLImpRubyTextContext_Impl();
+
+    virtual void Characters( const OUString& rChars );
+};
+
+TYPEINIT1( XMLImpRubyTextContext_Impl, SvXMLImportContext );
+
+XMLImpRubyTextContext_Impl::XMLImpRubyTextContext_Impl(
+        SvXMLImport& rImport,
+        sal_uInt16 nPrfx,
+        const OUString& rLName,
+        const Reference< xml::sax::XAttributeList > & xAttrList,
+        XMLRubyHint_Impl *pHt ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    pHint( pHt )
+{
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString& rValue = xAttrList->getValueByIndex( i );
+
+        OUString aLocalName;
+        sal_uInt16 nPrefix =
+            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                            &aLocalName );
+        if( XML_NAMESPACE_TEXT == nPrefix &&
+            aLocalName.equalsAsciiL( sXML_style_name,
+                                     sizeof(sXML_style_name)-1 ) )
+        {
+            pHint->SetTextStyleName( rValue );
+            break;
+        }
+    }
+}
+
+XMLImpRubyTextContext_Impl::~XMLImpRubyTextContext_Impl()
+{
+}
+
+void XMLImpRubyTextContext_Impl::Characters( const OUString& rChars )
+{
+    pHint->AppendText( rChars );
+}
+
+// ---------------------------------------------------------------------
+
+class XMLImpRubyContext_Impl : public SvXMLImportContext
+{
+    XMLHints_Impl&  rHints;
+    XMLRubyHint_Impl    *pHint;
+
+    sal_Bool&       rIgnoreLeadingSpace;
+
+public:
+
+    TYPEINFO();
+
+    XMLImpRubyContext_Impl(
+            SvXMLImport& rImport,
+            sal_uInt16 nPrfx,
+            const OUString& rLName,
+            const Reference< xml::sax::XAttributeList > & xAttrList,
+            XMLHints_Impl& rHnts,
+            sal_Bool& rIgnLeadSpace );
+
+    virtual ~XMLImpRubyContext_Impl();
+
+    virtual SvXMLImportContext *CreateChildContext(
+            sal_uInt16 nPrefix, const OUString& rLocalName,
+            const Reference< xml::sax::XAttributeList > & xAttrList );
+};
+
+TYPEINIT1( XMLImpRubyContext_Impl, SvXMLImportContext );
+
+XMLImpRubyContext_Impl::XMLImpRubyContext_Impl(
+        SvXMLImport& rImport,
+        sal_uInt16 nPrfx,
+        const OUString& rLName,
+        const Reference< xml::sax::XAttributeList > & xAttrList,
+        XMLHints_Impl& rHnts,
+        sal_Bool& rIgnLeadSpace ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    rHints( rHnts ),
+    rIgnoreLeadingSpace( rIgnLeadSpace ),
+    pHint( new XMLRubyHint_Impl(
+              GetImport().GetTextImport()->GetCursorAsRange()->getStart() ) )
+{
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString& rValue = xAttrList->getValueByIndex( i );
+
+        OUString aLocalName;
+        sal_uInt16 nPrefix =
+            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                            &aLocalName );
+        if( XML_NAMESPACE_TEXT == nPrefix &&
+            aLocalName.equalsAsciiL( sXML_style_name,
+                                     sizeof(sXML_style_name)-1 ) )
+        {
+            pHint->SetStyleName( rValue );
+            break;
+        }
+    }
+    rHints.Insert( pHint, rHints.Count() );
+}
+
+XMLImpRubyContext_Impl::~XMLImpRubyContext_Impl()
+{
+    if( pHint )
+        pHint->SetEnd( GetImport().GetTextImport()
+                            ->GetCursorAsRange()->getStart() );
+}
+
+SvXMLImportContext *XMLImpRubyContext_Impl::CreateChildContext(
+        sal_uInt16 nPrefix, const OUString& rLocalName,
+        const Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    SvXMLImportContext *pContext;
+    if( XML_NAMESPACE_TEXT == nPrefix )
+    {
+        if( rLocalName.equalsAsciiL( sXML_ruby_base,
+            sizeof(sXML_ruby_base)-1 ) )
+            pContext = new XMLImpRubyBaseContext_Impl( GetImport(), nPrefix,
+                                                       rLocalName,
+                                                       xAttrList,
+                                                       rHints,
+                                                       rIgnoreLeadingSpace );
+        else if( rLocalName.equalsAsciiL( sXML_ruby_text,
+                 sizeof(sXML_ruby_text)-1 ) )
+            pContext = new XMLImpRubyTextContext_Impl( GetImport(), nPrefix,
+                                                       rLocalName,
+                                                       xAttrList,
+                                                       pHint );
+    }
+    else
+        pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName,
+                                                            xAttrList );
+
+    return pContext;
+}
+
+// ---------------------------------------------------------------------
+
 TYPEINIT1( XMLImpSpanContext_Impl, SvXMLImportContext );
 
 XMLImpSpanContext_Impl::XMLImpSpanContext_Impl(
@@ -710,6 +961,13 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         }
         break;
     }
+
+    case XML_TOK_TEXT_RUBY:
+        pContext = new XMLImpRubyContext_Impl( rImport, nPrefix,
+                                               rLocalName, xAttrList,
+                                               rHints,
+                                               rIgnoreLeadingSpace );
+        break;
 
     case XML_TOK_TEXT_ENDNOTE:
     case XML_TOK_TEXT_FOOTNOTE:
@@ -949,6 +1207,16 @@ XMLParaContext::~XMLParaContext()
                                               pHHint->GetTargetFrameName(),
                                               pHHint->GetStyleName(),
                                               pHHint->GetVisitedStyleName() );
+                }
+                break;
+            case XML_HINT_RUBY:
+                {
+                    const XMLRubyHint_Impl *pRHint =
+                        (const XMLRubyHint_Impl *)pHint;
+                    xTxtImport->SetRuby( xAttrCursor,
+                                         pRHint->GetStyleName(),
+                                         pRHint->GetTextStyleName(),
+                                         pRHint->GetText() );
                 }
                 break;
             default:
