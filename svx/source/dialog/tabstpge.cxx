@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 10:27:34 $
+ *  last change: $Author: os $ $Date: 2001-09-05 14:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,6 @@ static USHORT pRanges[] =
     0
 };
 
-// const -----------------------------------------------------------------
-
-const long lA3Width = 16837;          // A3   297mm in twips
-
 // C-Funktion ------------------------------------------------------------
 
 void FillUpWithDefTabs_Impl( long nDefDist, SvxTabStopItem& rTabs )
@@ -192,7 +188,7 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
-    eDefUnit = FUNIT_TWIP;
+    eDefUnit = FUNIT_100TH_MM;
 
     // Metrik einstellen
     FieldUnit eFUnit = GetModuleFieldUnit( &rAttr );
@@ -283,7 +279,7 @@ BOOL SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
         aNewTabs.Insert( aNull );
     }
 
-    if ( MAP_TWIP != eUnit )
+    if ( MAP_100TH_MM != eUnit )
     {
         SvxTabStopItem aTmp( aNewTabs );
         aTmp.Remove( 0, aTmp.Count() );
@@ -292,7 +288,7 @@ BOOL SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
         {
             SvxTabStop aTmpStop = aNewTabs[i];
             aTmpStop.GetTabPos() =
-                LogicToLogic( aTmpStop.GetTabPos(), MAP_TWIP, eUnit );
+                LogicToLogic( aTmpStop.GetTabPos(), MAP_100TH_MM, eUnit );
             aTmp.Insert( aTmpStop );
         }
 
@@ -330,7 +326,7 @@ void SvxTabulatorTabPage::Reset( const SfxItemSet& rSet )
 
     if ( pItem )
     {
-        if ( MAP_TWIP != eUnit )
+        if ( MAP_100TH_MM != eUnit )
         {
             SvxTabStopItem aTmp( *( (const SvxTabStopItem*)pItem ) );
             aNewTabs.Remove( 0, aNewTabs.Count() );
@@ -339,7 +335,7 @@ void SvxTabulatorTabPage::Reset( const SfxItemSet& rSet )
             {
                 SvxTabStop aTmpStop = aTmp[i];
                 aTmpStop.GetTabPos() =
-                    LogicToLogic( aTmpStop.GetTabPos(), eUnit, MAP_TWIP );
+                    LogicToLogic( aTmpStop.GetTabPos(), eUnit, MAP_100TH_MM );
                 aNewTabs.Insert( aTmpStop );
             }
         }
@@ -355,7 +351,7 @@ void SvxTabulatorTabPage::Reset( const SfxItemSet& rSet )
 
     if ( pItem )
         nDefDist = LogicToLogic(
-            (long)((const SfxUInt16Item*)pItem)->GetValue(), eUnit, MAP_TWIP );
+            (long)((const SfxUInt16Item*)pItem)->GetValue(), eUnit, MAP_100TH_MM );
 
     // Aktuell selektierte Tab-Pos
     USHORT nTabPos = 0;
