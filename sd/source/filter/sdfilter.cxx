@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdfilter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-15 18:43:57 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 22:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#endif
 
 #include <tools/debug.hxx>
 #include <osl/file.hxx>
@@ -149,21 +153,18 @@ SdFilter::~SdFilter()
 
 void SdFilter::CreateStatusIndicator()
 {
-    if( mxModel.is() )
+    if (mxModel.is())
     {
-        Reference< XController > xController( mxModel->getCurrentController() );
-
-        if( xController.is() )
+        Reference< XController > xController( mxModel->getCurrentController());
+        if( xController.is())
         {
-            Reference< XFrame > xFrame( xController->getFrame() );
-
-            if( xFrame.is() )
+            Reference< XFrame > xFrame( xController->getFrame());
+            if( xFrame.is())
             {
-                Reference< XStatusIndicatorSupplier > xSupplier( xFrame, UNO_QUERY );
-
-                if( xSupplier.is() )
+                Reference< XStatusIndicatorFactory > xFactory( xFrame, UNO_QUERY );
+                if( xFactory.is())
                 {
-                    mxStatusIndicator = xSupplier->getStatusIndicator();
+                    mxStatusIndicator = xFactory->createStatusIndicator();
                 }
             }
         }
