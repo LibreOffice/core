@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-27 16:30:13 $
+ *  last change: $Author: nn $ $Date: 2002-08-15 14:35:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,6 +933,7 @@ String ScConditionEntry::GetExpression( const ScAddress& rCursor, USHORT nIndex,
             ScCompiler aComp(pDoc, rCursor, *pFormula2);
             aComp.SetCompileEnglish( bEnglish );
             aComp.SetCompileXML( bCompileXML );
+            aComp.SetImportXML( bTextToReal );          // set only from CompileXML method
             aComp.CreateStringFromTokenArray( aRet );
         }
         else if (bIsStr2)
