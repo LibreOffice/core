@@ -16,10 +16,6 @@ NO_BSYMBOLIC=TRUE
 nojava:
     @echo "Not building odk/source/OOSupport because Java has been disabled"
 .ENDIF
-.IF "$(JDK)"=="gcj"
-all:
-        @echo This dir cannot be build with gcj because of jawt.h
-.ENDIF
 .IF "$(OS)"=="MACOSX"
 dummy:
     @echo "Nothing to build for OS $(OS)"
@@ -38,6 +34,10 @@ SHL1STDLIBS=-ljawt
 SHL1STDLIBS+=-lzip -lawt
 .ENDIF
 SHL1STDLIBS+=-lstdc++
+.ENDIF
+
+.IF "$(JDK)" == "gcj"
+SHL1STDLIBS+=-lgcj
 .ENDIF
 
 NO_SHL1DESCRIPTION=TRUE
