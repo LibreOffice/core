@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:13:15 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,11 +476,10 @@ uno::Sequence< Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
                         {
                             if(!pSet)
                             {
-                                pSet = new SfxItemSet(pUnoCrsr->GetDoc()->GetAttrPool(),
-                                    RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
+                                   pSet = new SfxItemSet(pUnoCrsr->GetDoc()->GetAttrPool(),
+                                    RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
                                     RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                                     RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
-                                    RES_FILL_ORDER,     RES_FRMATR_END -1,
                                     0L);
                                 SwXTextCursor::GetCrsrAttr(*pUnoCrsr, *pSet);
                             }
@@ -495,7 +494,7 @@ uno::Sequence< Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
         delete pSet;
     }
     else
-        throw RuntimeException();
+        throw uno::RuntimeException();
     return aValues;
 }
 /*-- 11.12.98 09:56:58---------------------------------------------------
