@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-12 10:54:42 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@
 
 #ifndef _COM_SUN_STAR_TEXT_CHARACTERCOMPRESSIONTYPE_HPP_
 #include <com/sun/star/text/CharacterCompressionType.hpp>
+#endif
+#ifndef _VCL_PDFEXTOUTDEVDATA_HXX
+#include <vcl/pdfextoutdevdata.hxx>
 #endif
 
 #include <comphelper/processfactory.hxx>
@@ -2813,6 +2816,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
     DBG_ASSERT( GetParaPortions().Count(), "Keine ParaPortion?!" );
     SvxFont aTmpFont( GetParaPortions()[0]->GetNode()->GetCharAttribs().GetDefFont() );
     Font aOldFont( pOutDev->GetFont() );
+    vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, pOutDev->GetExtOutDevData() );
+
     // Bei gedrehtem Text wird aStartPos als TopLeft angesehen, da andere
     // Informationen fehlen, und sowieso das ganze Object ungescrollt
     // dargestellt wird.
@@ -2842,6 +2847,25 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
         // Unsichtbare Portions koennen ungueltig sein.
         if ( pPortion->IsVisible() && pPortion->IsInvalid() )
             return;
+
+        if ( pPDFExtOutDevData )
+        {
+            String aActualParaText;
+            pPDFExtOutDevData->BeginStructureElement( vcl::PDFWriter::Paragraph );
+            sal_uInt16 i, j, nPortions, nLines = pPortion->GetLines().Count();
+            for ( i = 0; i < nLines; i++ )
+            {
+                pLine = pPortion->GetLines().GetObject( i );
+                nPortions = pPortion->GetTextPortions().Count();
+                for ( j = 0; j < nPortions; j++ )
+                {
+                    TextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( j );
+                    aActualParaText.Append( *pPortion->GetNode() );
+                }
+            }
+            pPDFExtOutDevData->SetActualText( aActualParaText );
+        }
+
         long nParaHeight = pPortion->GetHeight();
         sal_uInt16 nIndex = 0;
         if ( pPortion->IsVisible() && (
@@ -3004,7 +3028,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     if( pMtf )
                                     {
                                         SvxFieldItem* pFieldItem = PTR_CAST( SvxFieldItem, pAttr->GetItem() );
-
                                         if( pFieldItem )
                                         {
                                             const SvxFieldData* pFieldData = pFieldItem->GetField();
@@ -3141,6 +3164,37 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                             Rectangle aRect( aTopLeft, pTextPortion->GetSize() );
                                             pOutDev->DrawRect( aRect );
                                         }
+
+
+                                        // PDF export:
+                                        if ( pPDFExtOutDevData )
+                                        {
+                                            if ( pTextPortion->GetKind() == PORTIONKIND_FIELD )
+                                            {
+                                                EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature( nIndex );
+                                                SvxFieldItem* pFieldItem = PTR_CAST( SvxFieldItem, pAttr->GetItem() );
+                                                if( pFieldItem )
+                                                {
+                                                    const SvxFieldData* pFieldData = pFieldItem->GetField();
+                                                    if ( pFieldData->ISA( SvxURLField ) )
+                                                    {
+                                                        Point aTopLeft( aTmpPos );
+                                                        aTopLeft.Y() -= pLine->GetMaxAscent();
+//                                                      if ( nOrientation )
+//                                                          aTopLeft = lcl_ImplCalcRotatedPos( aTopLeft, aOrigin, nSin, nCos );
+                                                        Rectangle aRect( aTopLeft, pTextPortion->GetSize() );
+                                                        sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink( aRect );
+                                                        pPDFExtOutDevData->SetLinkURL( nLinkId, ((SvxURLField*)pFieldData)->GetURL() );
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        // comment
+
+
+
+
                                     }
 
 #ifndef SVX_LIGHT
@@ -3273,6 +3327,9 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
             else
                 aStartPos.X() -= nParaHeight;
         }
+
+        if ( pPDFExtOutDevData )
+            pPDFExtOutDevData->EndStructureElement();
 
         // keine sichtbaren Aktionen mehr?
         if ( !IsVertical() && ( aStartPos.Y() > aClipRec.Bottom() ) )
