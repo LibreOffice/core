@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:14:28 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,9 +227,13 @@ private:
 
     sal_Bool                        m_bIsDisposed;
 
+    void prependArg( const char* pName, const char* pValue ); // arguments will be strdup'ed
     void initArgs( const Sequence< rtl::OUString >& argn,
                    const Sequence< rtl::OUString >& argv,
                    sal_Int16 mode );
+    void freeArgs();
+    void handleSpecialArgs();
+
     void loadPlugin();
     void destroyInstance();
     void modelChanged();
@@ -412,7 +416,7 @@ class PluginInputStream :
 {
 private:
     ::ucb::Content*             m_pContent;
-    UINT32                      m_nMode;
+    sal_Int32                   m_nMode;
     UINT32                      m_nWritePos;
 
     Reference< com::sun::star::io::XActiveDataSource >  m_xSource;
@@ -420,6 +424,9 @@ private:
 
     Reference< com::sun::star::io::XConnectable >           m_xPredecessor;
     Reference< com::sun::star::io::XConnectable >           m_xSuccessor;
+
+    // needed to hold a reference to self in NP_SEEK mode
+    Reference< com::sun::star::io::XOutputStream >          m_xSelf;
 
     SvFileStream                m_aFileStream;
 public:
@@ -432,11 +439,15 @@ public:
 
     virtual PluginStreamType getStreamType();
 
-    void setMode( UINT32 nMode );
+    void setMode( sal_Int32 nMode );
     UINT32 read( UINT32 offset, sal_Int8* buffer, UINT32 size );
     void setSource( const Reference< com::sun::star::io::XActiveDataSource >& xSource ) { m_xSource = xSource; }
     // get contents ot url via ucb::Content
     void load();
+
+    // clear reference
+    bool releaseSelf()
+    { bool bRet = m_xSelf.is(); m_xSelf.clear();  return bRet; }
 
     // XOutputStream
     virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& ) throw();
