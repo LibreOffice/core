@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComplexDescGetter.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-05-03 08:48:01 $
+ *  last change:$Date: 2004-11-02 11:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ import share.DescGetter;
 import share.ComplexTest;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 /**
@@ -103,35 +104,60 @@ public class ComplexDescGetter extends DescGetter {
 
     protected DescEntry getDescriptionForSingleJob(String className, String descPath, boolean debug) {
         DynamicClassLoader dcl = new DynamicClassLoader();
+        String methodNames[] = null;
         boolean returnVal = true;
 
         if (debug) {
             System.out.println("Searching Class: " + className);
         }
 
+        int index = className.indexOf("::");
+        if (index != -1) {
+            String method = className.substring(index + 2);
+            className = className.substring(0, index);
+            Vector methods = new Vector();
+            StringTokenizer t = new StringTokenizer(method, ",");
+            while (t.hasMoreTokens()) {
+                String m = t.nextToken();
+                if (m.endsWith("()"))
+                    m = m.substring(0, m.length() - 2);
+                methods.add(m);
+            }
+            methodNames = new String[methods.size()];
+            methodNames = (String[])methods.toArray(methodNames);
+        }
+
         // create an instance
         try {
             testClass = (ComplexTestCase)dcl.getInstance(className);
         }
-        catch(java.lang.Exception e) {
-            System.out.println("Could not load class " + className);
-            e.printStackTrace();
+        catch(java.lang.IllegalArgumentException e) {
+            System.out.println("Error while getting description for test '" +className + "' as a Complex test.");
             return null;
         }
+        catch(java.lang.ClassCastException e) {
+            System.out.println("The given class '" +className + "' is not a Complex test.");
+            return null;
+        }
+
 
         if (debug) {
             System.out.println("Got test: "+((Object)testClass).toString());
         }
 
-        String testObjectName = testClass.getTestObjectName();
+/*        String testObjectName = testClass.getTestObjectName();
         if (testObjectName != null) {
             if (testObjectName.equals(""))
                 testObjectName = className;
         }
-        else
-            testObjectName = className;
+        else */
+        String testObjectName = className;
 
         String[] testMethodName = testClass.getTestMethodNames();
+        if (methodNames != null) {
+            testMethodName = methodNames;
+        }
+
         DescEntry dEntry = new DescEntry();
 
         dEntry.entryName = testObjectName;
