@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:18:39 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,6 @@
 
 #include <basidesh.hrc>
 #include <basidesh.hxx>
-#define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
 #include <basobj.hxx>
 
 #include <basicbox.hxx>
@@ -74,14 +72,16 @@
 #include <iderdll.hxx>
 #include <bastypes.hxx>
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
+#ifndef _BASTYPE2_HXX
+#include "bastype2.hxx"
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
-#include <com/sun/star/frame/XDispatchProvider.hpp>
+#ifndef _BASDOC_HXX
+#include "basdoc.hxx"
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
 
 SFX_IMPL_TOOLBOX_CONTROL( LibBoxControl, SfxStringItem );
 
@@ -139,7 +139,7 @@ BasicLibBox::BasicLibBox( Window* pParent, const uno::Reference< frame::XFrame >
     bFillBox = TRUE;
     SelectEntryPos( 0 );
     aCurText = GetEntry( 0 );
-    SetSizePixel( Size( 165, 200 ) );
+    SetSizePixel( Size( 250, 200 ) );
     bIgnoreSelect = FALSE;
     StartListening( *SFX_APP(), TRUE /* Nur einmal anmelden */ );
 }
@@ -196,23 +196,7 @@ void __EXPORT BasicLibBox::SFX_NOTIFY(  SfxBroadcaster& rBC, const TypeId&,
         }
         else if ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_SAVEASDOC )
         {
-            // Wenn das aktuell angezeigte Doc umbenannt wird...
-            // Funktioniert nicht, da ich den alten Namen nicht bekomme
-//          String aCurLib( GetLibFromMgrAndLib( aCurText ) );
-//          String aCurMgr( GetMgrFromMgrAndLib( aCurText ) );
-//          String aCurDoc = SfxObjectShell::Current()->GetTitle();
-//          if ( aCurMgr == aCurDoc )
-//          {
-//              FillBox( FALSE );
-//              aCurText = CreateMgrAndLibStr( aCurDoc, aCurLib );
-//              bIgnoreSelect = TRUE;
-//              SelectEntry( aCurText );
-//              InfoBox( 0, aCurText ).Execute();
-//              bIgnoreSelect = FALSE;
-//          }
-//          else
-                FillBox( TRUE );
-
+            FillBox( TRUE );
         }
         else if ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_CLOSEDOC )
         {
@@ -222,27 +206,30 @@ void __EXPORT BasicLibBox::SFX_NOTIFY(  SfxBroadcaster& rBC, const TypeId&,
     }
 }
 
-
-
 void BasicLibBox::FillBox( BOOL bSelect )
 {
     SetUpdateMode( FALSE );
     bIgnoreSelect = TRUE;
 
     aCurText = GetSelectEntry();
-    USHORT nCurPos = GetSelectEntryPos();
 
     SelectEntryPos( 0 );
     Clear();
 
-    SvStrings* pStrings = BasicIDE::CreateBasicLibBoxEntries();
-    for ( USHORT n = 0; n < pStrings->Count(); n++ )
+    // create list box entries
+    USHORT nPos = InsertEntry( String( IDEResId( RID_STR_ALL ) ), LISTBOX_APPEND );
+    SetEntryData( nPos, new BasicLibEntry( 0, LIBRARY_LOCATION_UNKNOWN, String() ) );
+    InsertEntries( 0, LIBRARY_LOCATION_USER );
+    InsertEntries( 0, LIBRARY_LOCATION_SHARE );
+    SfxObjectShell* pShell = SfxObjectShell::GetFirst();
+    while ( pShell )
     {
-        String* pStr = pStrings->GetObject( n );
-        InsertEntry( *pStr, LISTBOX_APPEND );
+        // only if there's a corresponding window (not for remote documents)
+        if ( SfxViewFrame::GetFirst( pShell ) && !pShell->ISA( BasicDocShell ) )
+            InsertEntries( pShell, LIBRARY_LOCATION_DOCUMENT );
+
+        pShell = SfxObjectShell::GetNext( *pShell );
     }
-    pStrings->DeleteAndDestroy( 0, pStrings->Count() );
-    delete pStrings;
 
     SetUpdateMode( TRUE );
 
@@ -256,6 +243,26 @@ void BasicLibBox::FillBox( BOOL bSelect )
         }
     }
     bIgnoreSelect = FALSE;
+}
+
+void BasicLibBox::InsertEntries( SfxObjectShell* pShell, LibraryLocation eLocation )
+{
+    // get a sorted list of library names
+    Sequence< ::rtl::OUString > aLibNames = BasicIDE::GetLibraryNames( pShell );
+    sal_Int32 nLibCount = aLibNames.getLength();
+    const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
+
+    for ( sal_Int32 i = 0 ; i < nLibCount ; ++i )
+    {
+        String aLibName = pLibNames[ i ];
+        if ( eLocation == BasicIDE::GetLibraryLocation( pShell, aLibName ) )
+        {
+            String aName( BasicIDE::GetTitle( pShell, eLocation, SFX_TITLE_FILENAME ) );
+            String aEntryText( CreateMgrAndLibStr( aName, aLibName ) );
+            USHORT nPos = InsertEntry( aEntryText, LISTBOX_APPEND );
+            SetEntryData( nPos, new BasicLibEntry( pShell, eLocation, aLibName ) );
+        }
+    }
 }
 
 long BasicLibBox::PreNotify( NotifyEvent& rNEvt )
@@ -314,37 +321,24 @@ void __EXPORT BasicLibBox::Select()
     }
 }
 
-
-
 void BasicLibBox::NotifyIDE()
 {
-    String aLib;
-    if ( GetSelectEntryPos() )
-        aLib = GetSelectEntry();
-
-    SfxStringItem aLibName( SID_BASICIDE_ARG_LIBNAME, aLib );
-
-    uno::Any a;
-    uno::Sequence< beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LibSelect" ));
-    aLibName.QueryValue( a );
-    aArgs[0].Value = a;
-    SfxToolBoxControl::Dispatch(
-        uno::Reference< frame::XDispatchProvider >( m_xFrame->getController(), uno::UNO_QUERY ),
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LibSelect" )),
-        aArgs );
-/*
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-    if( pDispatcher )
+    USHORT nSelPos = GetSelectEntryPos();
+    BasicLibEntry* pEntry = (BasicLibEntry*)GetEntryData( nSelPos );
+    if ( pEntry )
     {
-        pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
-                              SFX_CALLMODE_SYNCHRON, &aLibName, 0L );
+        SfxObjectShell* pShell = pEntry->GetShell();
+        SfxObjectShellItem aShellItem( SID_BASICIDE_ARG_SHELL, pShell );
+        String aLibName = pEntry->GetLibName();
+        SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+        if ( pDispatcher )
+        {
+            pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
+                                  SFX_CALLMODE_SYNCHRON, &aShellItem, &aLibNameItem, 0L );
+        }
     }
-*/
     ReleaseFocus();
 }
-
-
-
