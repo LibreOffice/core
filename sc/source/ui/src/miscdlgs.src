@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-19 21:15:39 $
+ *  last change: $Author: kz $ $Date: 2002-02-21 21:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3217,7 +3217,7 @@ ModalDialog RID_SCDLG_GROUP
         Text[ chinese_traditional ] = "ε•ε‹•η”¨ζ–Ό";
         Text[ arabic ] = "ΚδΤνΨ γδ ΓΜα";
         Text[ greek ] = "Ενεργοποίηση για";
-        Text[ korean ] = "μ ν™μ„±ν™”";
+        Text[ korean ] = "κ·Έλ£Ήν™”ν•λ” λ€μƒ";
         Text[ turkish ] = "ήunun iηin etkinleώtir:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Inclou";
@@ -3494,7 +3494,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ chinese_traditional ] = "ζ–°ε»Ίεη¨±εΎ";
         Text[ arabic ] = "ΕδΤΗΑ ΓΣγΗΑ γδ";
         Text[ greek ] = "Δημιουργία ονόματος από";
-        Text[ korean ] = "λ΅λ¶€ν„° μ΄λ¦„ λ§λ“¤κΈ°";
+        Text[ korean ] = "μ΄λ¦„μΌλ΅ μ“°λ” μ„μΉ";
         Text[ turkish ] = "Ad iηin kaynak";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre a partir de ";
