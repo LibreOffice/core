@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: af $ $Date: 2002-11-25 12:49:49 $
+ *  last change: $Author: af $ $Date: 2002-11-26 12:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 #include "valueimp.hxx"
@@ -2364,7 +2367,16 @@ void ValueSet::SetItemText( USHORT nItemId, const XubString& rText )
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
+
     ValueSetItem* pItem = mpItemList->GetObject( nPos );
+
+    // Remember old and new name for accessibility event.
+    ::com::sun::star::uno::Any aOldName, aNewName;
+    ::rtl::OUString sString (pItem->maText);
+    aOldName <<= sString;
+    sString = rText;
+    aNewName <<= sString;
+
     pItem->maText = rText;
 
     if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
@@ -2376,6 +2388,16 @@ void ValueSet::SetItemText( USHORT nItemId, const XubString& rText )
 
         if ( nTempId == nItemId )
             ImplDrawItemText( pItem->maText );
+    }
+
+    if (ImplHasAccessibleListeners())
+    {
+        ::com::sun::star::uno::Reference<
+              ::drafts::com::sun::star::accessibility::XAccessible> xAccessible (
+                  pItem->GetAccessible());
+        static_cast<ValueItemAcc*>(xAccessible.get())->FireAccessibleEvent (
+            ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_NAME_EVENT,
+            aOldName, aNewName);
     }
 }
 
