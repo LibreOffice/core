@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plctrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase4.hxx>
 
 #include <list>
 
@@ -160,9 +160,8 @@ using namespace com::sun::star::uno;
 class SystemChildWindow;
 
 //==================================================================================================
-class PluginControl_Impl : public ::cppu::WeakAggImplHelper5<
+class PluginControl_Impl : public ::cppu::WeakAggImplHelper4<
       ::com::sun::star::awt::XControl,
-      ::com::sun::star::awt::XControlModel,
       ::com::sun::star::awt::XWindow,
       ::com::sun::star::awt::XFocusListener,
       ::com::sun::star::awt::XView >
@@ -174,10 +173,9 @@ public:
     virtual Reference< XInterface > SAL_CALL getContext() throw( RuntimeException )
     { return _xContext; }
 
-    virtual sal_Bool SAL_CALL setModel( const Reference< ::com::sun::star::awt::XControlModel > & Model ) throw( RuntimeException )
-    { DBG_ERROR( "### setModel() illegal on plugincontrol!" ); return sal_False; }
-    virtual Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel() throw( RuntimeException )
-    { return (::com::sun::star::awt::XControlModel*)this; }
+    virtual sal_Bool SAL_CALL setModel( const Reference< ::com::sun::star::awt::XControlModel > & Model ) throw( RuntimeException ) = NULL;
+//  { DBG_ERROR( "### setModel() illegal on plugincontrol!" ); return sal_False; }
+    virtual Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel() throw( RuntimeException ) = NULL;
 
     virtual Reference< ::com::sun::star::awt::XView > SAL_CALL getView() throw( RuntimeException )
     { return (::com::sun::star::awt::XView*)this; }
