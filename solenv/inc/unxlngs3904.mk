@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngs3904.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 10:02:43 $
+#   last change: $Author: vg $ $Date: 2003-12-17 18:10:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@
 ASM=
 AFLAGS=
 
-SOLAR_JAVA=TRUE
+SOLAR_JAVA*=TRUE
 JAVAFLAGSDEBUG=-g
 
 # filter for supressing verbose messages from linker
