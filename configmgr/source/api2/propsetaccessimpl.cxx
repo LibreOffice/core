@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
+ *  last change: $Author: fs $ $Date: 2000-11-21 19:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,22 +59,48 @@
  *
  ************************************************************************/
 
+#ifndef CONFIGMGR_API_PROPERTYSETIMPL_HXX_
 #include "propsetaccessimpl.hxx"
+#endif
 
+#ifndef CONFIGMGR_API_NODEACCESS_HXX_
 #include "apinodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_API_NODEUPDATE_HXX_
 #include "apinodeupdate.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGE_HXX_
 #include "nodechange.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGGROUP_HXX_
 #include "configgroup.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNOTIFIER_HXX_
 #include "confignotifier.hxx"
+#endif
+#ifndef CONFIGMGR_APITYPES_HXX_
+#include "confapitypes.hxx"
+#endif
 #include "broadcaster.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 
 namespace configmgr
@@ -106,6 +132,137 @@ namespace configmgr
         using configuration::RelativePath;
         using configuration::validateNodeName;
 
+        using namespace beans;
+        using namespace uno;
+
+//-----------------------------------------------------------------------------------
+// a helper class
+//-----------------------------------------------------------------------------------
+
+class CollectProperties : configuration::NodeVisitor
+{
+    std::vector< Property >     m_aProperties;
+    sal_Bool                    m_bReadonly;
+
+public:
+    CollectProperties(sal_Bool _bReadonly) :m_bReadonly(_bReadonly) { }
+    CollectProperties(sal_Bool _bReadonly, sal_Int32 _nCount) :m_bReadonly(_bReadonly) { m_aProperties.reserve(_nCount); }
+
+    Property forNode(const NodeRef& _rNode)
+    {
+        reset();
+        _rNode.accept(*this);
+        OSL_ENSURE(m_aProperties.size() == 1, "CollectProperties::forNode: not exactly one result property!");
+        return m_aProperties[0];
+    }
+    Sequence<Property> forChildren(Tree& _rTree)
+    {
+        reset();
+        _rTree.dispatchToChildren(_rTree.getRootNode(), *this);
+        return Sequence<Property>(&m_aProperties[0], m_aProperties.size());
+    }
+
+private:
+    typedef sal_Int16 PropAttributes;
+
+    void    reset() { m_aProperties.clear(); }
+    void    setAttributes(PropAttributes& _rPropAttr, const NodeRef& _rNode);
+    Result  handle(const NodeRef& _rValue);
+};
+
+//-----------------------------------------------------------------------------------
+void CollectProperties::setAttributes(PropAttributes& _rPropAttr, const NodeRef& _rNode)
+{
+    configuration::Attributes nNodeAttr = _rNode.getAttributes();
+
+    if (!nNodeAttr.writable)    _rPropAttr |= PropertyAttribute::READONLY;
+    if (nNodeAttr.nullable)     _rPropAttr |= PropertyAttribute::MAYBEVOID;
+    if (nNodeAttr.notified)     _rPropAttr |= PropertyAttribute::BOUND;
+    if (nNodeAttr.constrained)  _rPropAttr |= PropertyAttribute::CONSTRAINED;
+    if (nNodeAttr.defaultable)  _rPropAttr |= PropertyAttribute::MAYBEDEFAULT;
+
+    if (!m_bReadonly)
+        _rPropAttr |= PropertyAttribute::READONLY;
+}
+
+//-----------------------------------------------------------------------------------
+CollectProperties::Result CollectProperties::handle(const NodeRef& _rValue)
+{
+    // can be default ?
+    PropAttributes nAttributes = 0;
+    setAttributes(nAttributes, _rValue);
+
+    m_aProperties.push_back(
+                Property(   _rValue.getName().toString(),
+                            sal_Int32(-1),
+                            _rValue.getUnoType(),
+                            nAttributes
+                        )
+            );
+
+    return CONTINUE;
+}
+
+//-----------------------------------------------------------------------------------
+// another helper class
+//-----------------------------------------------------------------------------------
+
+class NodePropertySetInfo
+    :public ::cppu::WeakImplHelper1< beans::XPropertySetInfo >
+{
+    configapi::NodeAccess&  m_rNode;
+    configuration::Tree     m_aTree;
+    sal_Bool                m_bReadonly;
+
+public:
+    NodePropertySetInfo(NodeGroupInfoAccess& _rNode, sal_Bool _bReadonly )
+        :m_rNode(_rNode)
+        ,m_aTree(_rNode.getTree())
+        ,m_bReadonly(_bReadonly)
+    {
+        // TODO: need to be a event listener on the node
+    }
+
+    // XPropertySetInfo
+    virtual Sequence< Property > SAL_CALL getProperties() throw(RuntimeException);
+    virtual Property SAL_CALL   getPropertyByName(const OUString& _rPropertyName) throw(UnknownPropertyException, RuntimeException);
+    virtual sal_Bool SAL_CALL   hasPropertyByName(const OUString& _rPropertyName) throw(RuntimeException);
+};
+
+//-----------------------------------------------------------------------------------
+uno::Sequence< beans::Property > SAL_CALL NodePropertySetInfo::getProperties() throw(RuntimeException)
+{
+    OReadSynchronized aGuard(m_rNode.getDataLock());
+    return CollectProperties(m_bReadonly).forChildren(m_aTree);
+}
+
+//-----------------------------------------------------------------------------------
+Property SAL_CALL NodePropertySetInfo::getPropertyByName(const OUString& _rPropertyName)
+    throw(UnknownPropertyException, RuntimeException)
+{
+    OReadSynchronized aGuard(m_rNode.getDataLock());
+    if (!hasPropertyByName(_rPropertyName))
+    {
+        OUString sMessage = OUString::createFromAscii("getPropertyByName: ");
+        sMessage += OUString::createFromAscii("No Property named '");
+        sMessage += _rPropertyName;
+        sMessage += OUString::createFromAscii("'");
+        throw UnknownPropertyException(sMessage, static_cast<XPropertySetInfo*>(this));
+    }
+
+    NodeRef aNode = m_aTree.getChild(m_aTree.getRootNode(), Name(_rPropertyName, Name::NoValidate()));
+    OSL_ENSURE(aNode.isValid(), "NodePropertySetInfo::getPropertyByName: got no node despite of hasPropertyByName() returned TRUE!");
+    return CollectProperties(m_bReadonly, 1).forNode(aNode);
+}
+
+//-----------------------------------------------------------------------------------
+sal_Bool SAL_CALL NodePropertySetInfo::hasPropertyByName(const OUString& _rPropertyName)
+    throw(RuntimeException)
+{
+    OReadSynchronized aGuard(m_rNode.getDataLock());
+    return m_aTree.hasChild(m_aTree.getRootNode(), Name(_rPropertyName, Name::NoValidate()));
+}
+
 // Interface methods
 //-----------------------------------------------------------------------------------
 
@@ -115,11 +272,10 @@ namespace configmgr
 
 // XPropertySet & XMultiPropertySet
 //-----------------------------------------------------------------------------------
-Reference< beans::XPropertySetInfo > implGetPropertySetInfo( NodeGroupInfoAccess& rNode )
+Reference< beans::XPropertySetInfo > implGetPropertySetInfo( NodeGroupInfoAccess& rNode, sal_Bool _bWriteable )
     throw(RuntimeException)
 {
-    // TODO: Implement
-    return 0;
+    return new NodePropertySetInfo(rNode, !_bWriteable);
 }
 
 // XHierarchicalPropertySet & XHierarchicalMultiPropertySet
