@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 06:35:10 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,12 +247,12 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ FRENCH ] = "<Par défaut>" ;
         Text [ ITALIAN ] = "<standard>" ;
         Text [ DUTCH ] = "<Standaard>" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "<padrÒo>" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "<padr?o>" ;
         Text [ SWEDISH ] = "<standard>" ;
         Text [ PORTUGUESE ] = "<padrão>" ;
         Text[ chinese_simplified ] = "<Ä¬ÈÏ>";
         Text[ russian ] = "<Ñòàíäàðò>";
-        Text[ polish ] = "<Domyœlnie>";
+        Text[ polish ] = "<Domy?lnie>";
         Text[ japanese ] = "<•W€>";
         Text[ chinese_traditional ] = "<Àq»{>";
         Text[ arabic ] = "<ÇÝÊÑÇÖí>";
