@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Controller.xcu,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:08:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,52 @@
         </prop>
         <prop oor:name="Controller">
           <value>com.sun.star.sdb.ApplicationToolboxController</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="StatusBar">
+      <node oor:name="c1" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBStatusType</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.DatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.sdb.ApplicationStatusbarController</value>
+        </prop>
+      </node>
+      <node oor:name="c2" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBStatusDBName</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.DatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.sdb.ApplicationStatusbarController</value>
+        </prop>
+      </node>
+      <node oor:name="c3" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBStatusUserName</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.DatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.sdb.ApplicationStatusbarController</value>
+        </prop>
+      </node>
+      <node oor:name="c4" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBStatusHostName</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.DatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.sdb.ApplicationStatusbarController</value>
         </prop>
       </node>
     </node>
