@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-22 08:51:50 $
+ *  last change: $Author: ka $ $Date: 2002-05-16 16:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,7 +503,7 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
             {
                 BOOL bDrawn = FALSE;
 
-                if( nStyle & ( IMAGE_DRAW_COLORTRANSFORM | IMAGE_DRAW_HIGHLIGHT | IMAGE_DRAW_DEACTIVE ) )
+                if( nStyle & ( IMAGE_DRAW_COLORTRANSFORM | IMAGE_DRAW_HIGHLIGHT | IMAGE_DRAW_DEACTIVE | IMAGE_DRAW_SEMITRANSPARENT ) )
                 {
                     Bitmap          aTmpBmp( aBmp ), aTmpMsk( aMask );
                     const Rectangle aCropRect( aPos, aSize );
@@ -593,7 +593,27 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
                         }
                     }
 
-                    pOutDev->DrawBitmapEx( aOutPos, BitmapEx( aTmpBmp, aTmpMsk ) );
+                    BitmapEx aTmpBmpEx;
+
+                    if( nStyle && IMAGE_DRAW_SEMITRANSPARENT )
+                    {
+                        if( aTmpMsk.IsEmpty() )
+                        {
+                            aTmpMsk = Bitmap( aTmpBmp.GetSizePixel(), 8 );
+                            aTmpMsk.Erase( Color( 128, 128, 128 ) );
+                        }
+                        else
+                        {
+                            aTmpMsk.Convert( BMP_CONVERSION_8BIT_GREYS );
+                            aTmpMsk.Adjust( 50 );
+                        }
+
+                        aTmpBmpEx = BitmapEx( aTmpBmp, AlphaMask( aTmpMsk ) );
+                    }
+                    else
+                        aTmpBmpEx = BitmapEx( aTmpBmp, aTmpMsk );
+
+                    pOutDev->DrawBitmapEx( aOutPos, aTmpBmpEx );
                     bDrawn = TRUE;
                 }
 
