@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-26 12:01:42 $
+ *  last change: $Author: cmc $ $Date: 2001-05-24 09:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2171,6 +2171,13 @@ void WW8TabDesc::AdjustNewBand( SwWW8ImplReader* pReader )
                 nW = pActBand->nCenter[j+1] - pActBand->nCenter[j];
             else
                 nW = nMaxRight - pActBand->nCenter[j];
+            /*
+            #74387# If the margins are so large as to make the displayable
+            area inside them smaller than the minimum allowed then adjust the
+            width to fit.
+            */
+            if ((nW - pActBand->nGapHalf * 2) < MINLAY)
+                nW = MINLAY + pActBand->nGapHalf * 2;
             pActBand->nWidth[ j ] = nW;
         }
 
@@ -3066,11 +3073,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.10 2001-04-26 12:01:42 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.11 2001-05-24 09:43:17 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/04/26 12:01:42  cmc
+      ##777## table next row begin cp position not updated after row end properties fetched
+
       Revision 1.9  2001/04/23 11:16:23  cmc
       Enable automatic text foreground color {im|ex}port
 
