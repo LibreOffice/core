@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterComponent.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:04:54 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,6 @@ public class FilterComponent{
         String sName = getControlName(EventObject.Source);
         togglefollowingControlRow(sName);
     }
-
 
     public void disposing(com.sun.star.lang.EventObject eventObject) {
     }
