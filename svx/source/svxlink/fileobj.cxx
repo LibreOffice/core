@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-03 17:44:48 $
+ *  last change: $Author: jp $ $Date: 2002-03-15 14:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,8 @@ JP 28.02.96: noch eine Baustelle:
 
                     // falls es uebers Internet gesogen wurde, nicht
                     // wieder versuchen
-                    bLoadAgain = !xMed->IsRemote();
+                    if( !bGetSynchron )
+                        bLoadAgain = !xMed->IsRemote();
                     bLoadError = !GetGraphic_Impl( aGrf, xMed->GetInStream() );
                 }
                 else if( !LoadFile_Impl() ||
