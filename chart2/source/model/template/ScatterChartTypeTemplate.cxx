@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScatterChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-08 15:46:09 $
+ *  last change: $Author: bm $ $Date: 2003-12-15 15:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
 #include <drafts/com/sun/star/chart2/Symbol.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
+#include <com/sun/star/drawing/LineStyle.hpp>
 #endif
 
 #ifndef CHART_PROPERTYHELPER_HXX
@@ -178,11 +181,13 @@ ScatterChartTypeTemplate::ScatterChartTypeTemplate(
     const OUString & rServiceName,
     chart2::CurveStyle eCurveStyle,
     bool bSymbols,
+    bool bHasLines /* = true */,
     sal_Int32 nDim /* = 2 */ ) :
         ChartTypeTemplate( xContext, rServiceName ),
         ::property::OPropertySet( m_aMutex ),
     m_eCurveStyle( eCurveStyle ),
     m_bHasSymbols( bSymbols ),
+    m_bHasLines( bHasLines ),
     m_nDim( nDim )
 {}
 
@@ -269,6 +274,10 @@ Reference< chart2::XDiagram > SAL_CALL
         ? chart2::SymbolStyle_STANDARD
         : chart2::SymbolStyle_NONE;
 
+    uno::Any aLineStyleToSet( uno::makeAny(
+                                  m_bHasLines
+                                  ? drawing::LineStyle_SOLID
+                                  : drawing::LineStyle_NONE ));
     for( sal_Int32 i = 0; i < aSeriesSeq.getLength(); ++i )
     {
         try
@@ -282,6 +291,19 @@ Reference< chart2::XDiagram > SAL_CALL
                     aSymbProp.nStandardSymbol = i;
                 xProp->setPropertyValue( C2U( "Symbol" ), uno::makeAny( aSymbProp ));
             }
+
+            if( m_bHasLines )
+            {
+                // keep line-styles that are not NONE
+                drawing::LineStyle eLineStyle;
+                if( (xProp->getPropertyValue( C2U( "LineStyle" )) >>= eLineStyle ) &&
+                    eLineStyle == drawing::LineStyle_NONE )
+                {
+                    xProp->setPropertyValue( C2U( "LineStyle" ), aLineStyleToSet );
+                }
+            }
+            else
+                xProp->setPropertyValue( C2U( "LineStyle" ), aLineStyleToSet );
         }
         catch( uno::Exception & ex )
         {
@@ -334,14 +356,15 @@ sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
             try
             {
                 chart2::Symbol aSymbProp;
+                drawing::LineStyle eLineStyle;
                 Reference< beans::XPropertySet > xProp( aSeriesSeq[i], uno::UNO_QUERY_THROW );
-                if( (xProp->getPropertyValue( C2U( "Symbol" )) >>= aSymbProp ) )
+                if( ( (xProp->getPropertyValue( C2U( "Symbol" )) >>= aSymbProp) &&
+                      (aSymbProp.aStyle != eStyle) ) ||
+                    ( (xProp->getPropertyValue( C2U( "LineStyle" )) >>= eLineStyle) &&
+                      (m_bHasLines != ( eLineStyle != drawing::LineStyle_NONE )) ) )
                 {
-                    if( aSymbProp.aStyle != eStyle )
-                    {
-                        bResult = false;
-                        break;
-                    }
+                    bResult = false;
+                    break;
                 }
             }
             catch( uno::Exception & ex )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScatterChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-20 18:12:27 $
+ *  last change: $Author: bm $ $Date: 2003-12-15 15:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,9 @@ public:
             ::com::sun::star::uno::XComponentContext > const & xContext,
         const ::rtl::OUString & rServiceName,
         ::drafts::com::sun::star::chart2::CurveStyle eCurveStyle,
-        bool bSymbols, sal_Int32 nDim = 2 );
+        bool bSymbols,
+        bool bHasLines = true,
+        sal_Int32 nDim = 2 );
     virtual ~ScatterChartTypeTemplate();
 
     /// XServiceInfo declarations
@@ -133,6 +135,7 @@ private:
     ::drafts::com::sun::star::chart2::CurveStyle
                        m_eCurveStyle;
     bool               m_bHasSymbols;
+    bool               m_bHasLines;
     sal_Int32          m_nDim;
 };
 

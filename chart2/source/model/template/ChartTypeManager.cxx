@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeManager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-08 15:46:06 $
+ *  last change: $Author: bm $ $Date: 2003-12-15 15:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,31 +580,31 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
 
             case TEMPLATE_SCATTERLINESYMBOL:
                 xTemplate.set( new ScatterChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::CurveStyle_LINES, true ));
+                    chart2::CurveStyle_LINES, /* bSymbols */ true ));
                 break;
             case TEMPLATE_CUBICSPLINESCATTER:
                 xTemplate.set( new ScatterChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::CurveStyle_CUBIC_SPLINES, false ));
+                    chart2::CurveStyle_CUBIC_SPLINES, /* bSymbols */ false ));
                 break;
             case TEMPLATE_CUBICSPLINESCATTERSYMBOL:
                 xTemplate.set( new ScatterChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::CurveStyle_CUBIC_SPLINES, true ));
+                    chart2::CurveStyle_CUBIC_SPLINES, /* bSymbols */ true ));
                 break;
             case TEMPLATE_BSPLINESCATTER:
                 xTemplate.set( new ScatterChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::CurveStyle_B_SPLINES, false ));
+                    chart2::CurveStyle_B_SPLINES, /* bSymbols */ false ));
                 break;
             case TEMPLATE_BSPLINESCATTERSYMBOL:
                 xTemplate.set( new ScatterChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::CurveStyle_B_SPLINES, true ));
+                    chart2::CurveStyle_B_SPLINES, /* bSymbols */ true ));
                 break;
             case TEMPLATE_SCATTERLINE:
                 xTemplate.set( new ScatterChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::CurveStyle_LINES, false ));
+                    chart2::CurveStyle_LINES, /* bSymbols */ false ));
                 break;
             case TEMPLATE_SCATTERSYMBOL:
                 xTemplate.set( new ScatterChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::CurveStyle_NONE, true ));
+                    chart2::CurveStyle_LINES, /* bSymbols */ true, /* bHasLines */ false ));
                 break;
 
             // TEST !!!
