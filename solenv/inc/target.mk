@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.124 $
+#   $Revision: 1.125 $
 #
-#   last change: $Author: hjs $ $Date: 2002-09-05 15:49:47 $
+#   last change: $Author: hjs $ $Date: 2002-09-09 11:55:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2641,7 +2641,7 @@ do_copy_mk .IGNORE .SILENT :
     @+-$(COPY) /u $(SOLARENV)$/inc$/startup$/os2$/*.mk $(OS2_SOLENV_INC)$/startup$/os2 >& $(NULLDEV)
 
 killbin:
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)$(USE_SHELL)"=="WNT4nt"
     @+if exist $(BIN)\$(SHL1TARGET).dll @del $(BIN)\$(SHL1TARGET).dll
     @+if exist $(BIN)\$(SHL2TARGET).dll @del $(BIN)\$(SHL2TARGET).dll
     @+if exist $(BIN)\$(SHL3TARGET).dll @del $(BIN)\$(SHL3TARGET).dll
