@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2000-10-23 07:52:49 $
+ *  last change: $Author: kso $ $Date: 2000-10-25 06:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,12 +93,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
-#include <com/sun/star/frame/XConfigManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XPROPERTYSETREGISTRYFACTORY_HPP_
 #include <com/sun/star/ucb/XPropertySetRegistryFactory.hpp>
@@ -397,50 +391,10 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
     rtl::OUString Store = rtl::OUString::createFromAscii( "com.sun.star.ucb.Store" );
     uno::Reference< XPropertySetRegistryFactory > xRegFac( m_xMultiServiceFactory->createInstance( Store ),
                                                            uno::UNO_QUERY );
-
-    rtl::OUString Special = rtl::OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" );
-
-    uno::Reference< registry::XSimpleRegistry > xCfgReg( m_xMultiServiceFactory->createInstance( Special ),
-                                                         uno::UNO_QUERY );
-
-    uno::Reference< frame::XConfigManager > xCfgMgr( xCfgReg,uno::UNO_QUERY );
-
-
-    if ( xRegFac.is() && xCfgReg.is() && xCfgMgr.is() )
+    if ( xRegFac.is() )
     {
-        rtl::OUString aRegURL;
-
-        try
-        {
-            uno::Reference< registry::XRegistryKey > xRegistryKey( xCfgReg->getRootKey() );
-            if ( xRegistryKey.is() )
-                xRegistryKey = xRegistryKey->openKey(
-                    rtl::OUString::createFromAscii( "Directories/Storage-Dir") );
-
-            if ( xRegistryKey.is() )
-                aRegURL = xRegistryKey->getStringValue();
-        }
-        catch ( registry::InvalidRegistryException& )
-        {
-        }
-
-        aRegURL = xCfgMgr->substituteVariables( aRegURL );
-
-        if ( aRegURL.getLength() )
-        {
-            rtl::OUString aRegUNC;
-            osl::FileBase::normalizePath( aRegURL,aRegUNC );
-
-            rtl::OUString aLastChar( aRegUNC.copy( aRegUNC.getLength() - 1 ) );
-            rtl::OUString aTmpOWStr = rtl::OUString::createFromAscii ( "/" );
-            if ( aLastChar != aTmpOWStr )
-                aRegUNC += aTmpOWStr;
-
-            aRegUNC += rtl::OUString::createFromAscii( "file.rdb" );
-            osl::FileBase::getFileURLFromNormalizedPath( aRegUNC,aRegURL );
-            // Open/create a registry
-            m_xFileRegistry = xRegFac->createPropertySetRegistry( aRegURL );
-        }
+        // Open/create a registry
+        m_xFileRegistry = xRegFac->createPropertySetRegistry( rtl::OUString() );
     }
 }
 
