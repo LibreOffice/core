@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:10:26 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,41 +398,6 @@ void lcl_ConvertTabsToSpaces( String& rLine )
     }
 }
 
-/*-----------------18.11.96 12.12-------------------
-
---------------------------------------------------*/
-
-void lcl_SetFont(SwSrcView* pView, const String& rStyle)
-{
-    const SvxFontListItem* pFontListItem = (const SvxFontListItem* )pView->GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST );
-    const FontList*  pList = pFontListItem->GetFontList();
-
-    FontInfo aInfo = pList->Get(rStyle,WEIGHT_NORMAL, ITALIC_NONE);
-
-    SwSrcEditWindow& rEditWin = pView->GetEditWin();
-    const Font& rFont = rEditWin.GetTextEngine()->GetFont();
-    Font aFont(aInfo);
-    aFont.SetSize(rFont.GetSize());
-    rEditWin.GetTextEngine()->SetFont( aFont );
-    rEditWin.GetOutWin()->SetFont(aFont);
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-SwSrcView::SwSrcView(SfxViewFrame* pFrame, const SwSrcView&) :
-    SfxViewShell( pFrame, SWSRCVIEWFLAGS ),
-    aEditWin( &pFrame->GetWindow(), this ),
-    pSearchItem(0),
-    bSourceSaved(FALSE),
-    eLoadEncoding(RTL_TEXTENCODING_DONTKNOW)
-{
-    Init();
-}
-
-
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -578,20 +543,6 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 SfxMedium aMedium( xFP->getFiles().getConstArray()[0],
                                     STREAM_WRITE | STREAM_SHARE_DENYNONE,
                                     FALSE );
-#ifdef USED
-                // set the filter for the correct handling of
-                // extended attributes
-                SfxObjectFactory& rFac = GetDocShell()->GetFactory();
-                for( USHORT i = 0; i < rFac.GetFilterCount(); i++ )
-                {
-                    const SfxFilter* pFlt = rFac.GetFilter( i );
-                    if( pFlt && pFlt->GetFilterName() == sHtml )
-                    {
-                        aMedium.SetFilter( pFlt );
-                        break;
-                    }
-                }
-#endif
                 SvStream* pOutStream = aMedium.GetOutStream();
                 pOutStream->SetStreamCharSet(lcl_GetStreamCharSet(eLoadEncoding));
                 aEditWin.Write( *pOutStream );
