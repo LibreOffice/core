@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-13 10:31:51 $
+ *  last change: $Author: mba $ $Date: 2002-10-22 15:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,6 +384,10 @@ BOOL Storage::IsStorageFile( SvStream* pStream )
     StgHeader aHdr;
     ULONG nPos = pStream->Tell();
     BOOL bRet = ( aHdr.Load( *pStream ) && aHdr.Check() );
+
+    // It's not a stream error if it is too small for a OLE storage header
+    if ( pStream->GetErrorCode() == ERRCODE_IO_CANTSEEK )
+        pStream->ResetError();
     pStream->Seek( nPos );
     return bRet;
 }

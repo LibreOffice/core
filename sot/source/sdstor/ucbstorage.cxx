@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-21 08:02:45 $
+ *  last change: $Author: mba $ $Date: 2002-10-22 15:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3197,7 +3197,7 @@ BOOL UCBStorage::IsStorageFile( SvStream* pFile )
 
     ULONG nPos = pFile->Tell();
     pFile->Seek( STREAM_SEEK_TO_END );
-    if ( !pFile->Tell() )
+    if ( pFile->Tell() < 4 )
         return FALSE;
 
     pFile->Seek(0);
