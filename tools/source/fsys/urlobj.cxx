@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:44:42 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ using namespace com::sun;
 
    ; private
    private-url = "PRIVATE:" path ["?" *uric]
-   path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~"
+   path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")
 
 
    ; private
@@ -205,12 +205,12 @@ using namespace com::sun;
 
    ; private
    slot-url = "SLOT:" path ["?" *uric]
-   path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~"
+   path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")
 
 
    ; private
    macro-url = "MACRO:" path ["?" *uric]
-   path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~"
+   path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")
 
 
    ; private
@@ -263,12 +263,13 @@ using namespace com::sun;
 
 
    ; private
-   uno-url = ".UNO:" *uric
+   uno-url = ".UNO:" path ["?" *uric]
+   path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")
 
 
    ; private
    component-url = ".COMPONENT:" path ["?" *uric]
-   path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~"
+   path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")
 
 
    ; private
@@ -437,7 +438,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
         { "vim", "vim://", 0, true, true, false, true, false, false, true,
           false },
         { ".uno", ".uno:", 0, false, false, false, false, false, false,
-          false, false },
+          false, true },
         { ".component", ".component:", 0, false, false, false, false,
           false, false, false, true },
         { "vnd.sun.star.pkg", "vnd.sun.star.pkg://", 0, true, false, false,
@@ -2570,6 +2571,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
         case INET_PROT_PRIV_SOFFICE:
         case INET_PROT_SLOT:
         case INET_PROT_MACRO:
+        case INET_PROT_UNO:
         case INET_PROT_COMPONENT:
         case INET_PROT_LDAP:
             while (pPos < pEnd && *pPos != nQueryDelimiter
@@ -2605,7 +2607,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
         case INET_PROT_JAVASCRIPT:
         case INET_PROT_DATA:
         case INET_PROT_CID:
-        case INET_PROT_UNO:
         case INET_PROT_DB:
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
