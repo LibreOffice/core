@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-18 16:41:52 $
+#   last change: $Author: rt $ $Date: 2004-05-03 09:10:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,6 +60,7 @@
 #
 #*************************************************************************
 PRJ=..$/..$/..
+INCPRE+= $(PRJ)$/qa$/inc
 
 PRJNAME=sal
 TARGET=rtl_math
@@ -94,10 +95,41 @@ DEF1NAME    =$(SHL1TARGET)
 # DEF1EXPORTFILE= export.exp
 SHL1VERSIONMAP = export.map
 
+# --- BEGIN --------------------------------------------------------
+SHL2OBJS=  \
+    $(SLO)$/rtl_math.obj
+SHL2TARGET= rtl_math2
+SHL2STDLIBS=\
+    $(SALLIB) \
+    $(CPPUNITLIB)
+
+SHL2IMPLIB= i$(SHL2TARGET)
+DEF2NAME=    $(SHL2TARGET)
+SHL2VERSIONMAP = export.map
+
+
+
+# # --- BEGIN --------------------------------------------------------
+# LLA: this is an old test, which seems not to work
+# sal_setInt64()
+# sal_getInt64()
+# does not exist.
+#
+# SHL3OBJS=  \
+# 	$(SLO)$/rtl_old_testint64.obj
+# SHL3TARGET= rtl_old_testint64
+# SHL3STDLIBS=\
+# 	$(SALLIB) \
+# 	$(CPPUNITLIB)
+# 
+# SHL3IMPLIB= i$(SHL3TARGET)
+# DEF3NAME=    $(SHL3TARGET)
+# SHL3VERSIONMAP = export.map
+# 
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS)
+# SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
