@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:31:41 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,6 +413,8 @@ namespace svxform
     //------------------------------------------------------------------------------
     sal_Bool NavigatorTree::implPrepareExchange( sal_Int8 _nAction )
     {
+        sal_Int32 i;
+
         EndSelection();
 
         sal_Bool bHasNonHidden = sal_False;
@@ -422,7 +424,7 @@ namespace svxform
         m_aControlExchange.prepareDrag();
         m_aControlExchange->setFocusEntry( GetCurEntry() );
 
-        for (sal_Int32 i=0; i<m_arrCurrentSelection.Count(); ++i)
+        for ( i = 0; i < m_arrCurrentSelection.Count(); ++i )
             m_aControlExchange->addSelectedEntry(m_arrCurrentSelection[(sal_uInt16)i]);
 
         m_aControlExchange->setFormsRoot( GetNavModel()->GetFormPage()->GetForms() );
