@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:06:21 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,6 @@ namespace com
         {
             namespace sdb
             {
-                class XSingleSelectQueryAnalyzer;
                 class XSingleSelectQueryComposer;
             }
             namespace sdbc
@@ -141,7 +140,6 @@ namespace dbaui
         String          aSTR_NOENTRY;
         ::rtl::OUString m_sOrgOrder;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer> m_xQueryAnalyzer;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer> m_xQueryComposer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xColumns;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>      m_xConnection;
@@ -156,7 +154,7 @@ namespace dbaui
     public:
         DlgOrderCrit(   Window * pParent,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer>& _rxQueryComposer,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& _rxComposer,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols);
 
                         ~DlgOrderCrit();
