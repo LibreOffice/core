@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_cache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
+ *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 #include <stdio.h>
 #include <list>
 
+#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
 
 #include "urp_threadid.hxx"
-
 #include "urp_cache.h"
 
 namespace bridges_urp

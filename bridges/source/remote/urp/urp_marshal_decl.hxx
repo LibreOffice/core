@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_marshal_decl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: willem.vandorp $ $Date: 2000-09-29 13:03:19 $
+ *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,9 @@ namespace bridges_urp
               );
         ~Marshal( );
 
-        inline void pack( void *pSource , typelib_TypeDescription *pType );
+        inline sal_Bool pack( void *pSource , typelib_TypeDescription *pType );
 
-        void packRecursive( void *pSource, typelib_TypeDescription *pType );
+        sal_Bool packRecursive( void *pSource, typelib_TypeDescription *pType );
 
         void packTid( const ::rtl::ByteSequence &id, sal_Bool bIgnoreCache = sal_False );
         void packOid( const ::rtl::OUString &oid );
@@ -97,7 +97,7 @@ namespace bridges_urp
         inline void packInt16( void *pSource );
         inline void packInt32( void *pSource );
         inline void packString( void *pSource );
-        inline void packAny( void *pSource );
+        inline sal_Bool packAny( void *pSource );
         inline void packByteSequence( sal_Int8 *pBuffer , sal_Int32 nSize );
 
         // can be called during marshaling, but not between

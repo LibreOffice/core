@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_property.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
+ *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,18 @@
  ************************************************************************/
 #ifndef _URP_PROPERTY_HXX_
 #define _URP_PROPERTY_HXX_
-#include <bridges/remote/remote.h>
 
+#ifndef _BRIDGES_REMOTE_REMOTE_H_
+#include <bridges/remote/remote.h>
+#endif
+
+#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
+
+#ifndef _RTL_BYTESEQ_HXX_
 #include <rtl/byteseq.hxx>
+#endif
 
 namespace bridges_urp
 {

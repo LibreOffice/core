@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_marshal.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
+ *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,25 @@
 #ifndef _URP_MARSHAL_HXX_
 #define _URP_MARSHAL_HXX_
 
-#include <rtl/ustring.hxx>
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
+#ifndef _RTL_BYTESEQ_HXX_
 #include <rtl/byteseq.hxx>
+#endif
 
+#ifndef _COM_SUN_STAR_UNO_TYPE_HXX_
 #include <com/sun/star/uno/Type.hxx>
+#endif
 
+#ifndef _URP_BRIDGEIMPL_HXX_
 #include "urp_bridgeimpl.hxx"
+#endif
+
+#ifndef _URP_MARSHAL_DECL_HXX_
 #include "urp_marshal_decl.hxx"
+#endif
 
 struct remote_Interface;
 
@@ -172,8 +184,9 @@ namespace bridges_urp
         m_pos += nLength;
     }
 
-    inline void Marshal::packAny( void *pSource )
+    inline sal_Bool Marshal::packAny( void *pSource )
     {
+        sal_Bool bSuccess = sal_True;
         uno_Any *pAny = (uno_Any * ) pSource;
 
         // pack the type
@@ -181,8 +194,20 @@ namespace bridges_urp
         // pack the value
         typelib_TypeDescription *pType = 0;
         TYPELIB_DANGER_GET( &pType, pAny->pType );
-        pack( pAny->pData , pType );
-        TYPELIB_DANGER_RELEASE( pType );
+        if( pType )
+        {
+            pack( pAny->pData , pType );
+            TYPELIB_DANGER_RELEASE( pType );
+        }
+        else
+        {
+            rtl::OUStringBuffer buf( 128 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("couldn't get typedescription for type " ) );
+            buf.append( pAny->pType->pTypeName );
+            m_pBridgeImpl->addError( buf.makeStringAndClear() );
+            bSuccess = sal_False;
+        }
+        return bSuccess;
     }
 
     inline void Marshal::packInt32( void *pSource )
@@ -221,8 +246,9 @@ namespace bridges_urp
         }
     }
 
-    inline void Marshal::pack( void *pSource , typelib_TypeDescription *pType )
+    inline sal_Bool Marshal::pack( void *pSource , typelib_TypeDescription *pType )
     {
+        sal_Bool bSuccess = sal_True;
         switch( pType->eTypeClass )
         {
         case typelib_TypeClass_BYTE:
@@ -296,12 +322,13 @@ namespace bridges_urp
         }
         case typelib_TypeClass_ANY:
         {
-            packAny( pSource );
+            bSuccess = packAny( pSource );
             break;
         }
         case typelib_TypeClass_TYPEDEF:
         {
-            OSL_ASSERT( 0 ); // should never occur
+            bSuccess = sal_False;
+            m_pBridgeImpl->addError( "can't handle typedef typedescriptions" );
             break;
         }
         case typelib_TypeClass_INTERFACE:
@@ -338,12 +365,23 @@ namespace bridges_urp
         case typelib_TypeClass_STRUCT:
         case typelib_TypeClass_SEQUENCE:
         {
-            packRecursive( pSource, pType );
+            bSuccess = packRecursive( pSource, pType );
             break;
         }
         default:
-            OSL_ASSERT( 0 );
+        {
+            bSuccess = sal_False;
+            rtl::OUStringBuffer buf( 128 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "can't handle values with typeclass " ) );
+            buf.append( (sal_Int32 ) pType->eTypeClass , 10 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " (" ) );
+            buf.append( pType->pTypeName );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ")" ) );
+            m_pBridgeImpl->addError( buf.makeStringAndClear() );
+            break;
         }
+        }
+        return bSuccess;
     }
 }
 

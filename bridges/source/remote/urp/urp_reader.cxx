@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_reader.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-14 09:57:58 $
+ *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #include <string.h>
 
 #include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <bridges/remote/connection.h>
 #include <bridges/remote/counter.hxx>
@@ -612,7 +613,8 @@ void OReaderThread::run()
 
                         if( !pLastRemoteI &&
                             REMOTE_RELEASE_METHOD_INDEX != flags.nMethodId &&
-                            OUString::createFromAscii( g_NameOfUrpProtocolPropertiesObject ).equals( *ppLastOid ) )
+                            0 == rtl_ustr_ascii_compare_WithLength(
+                                (*ppLastOid)->buffer, (*ppLastOid)->length, g_NameOfUrpProtocolPropertiesObject ) )
                         {
                             // check for bridge internal propertyobject
                             pLastRemoteI = m_pBridgeImpl->m_pPropertyObject;
@@ -674,7 +676,7 @@ void OReaderThread::run()
                         pMultiJob->setInterface( pLastRemoteI );
                     else
                         pMultiJob->setOid( *ppLastOid );
-                }
+                } /* getMemberTypeDescription */
                 else
                 {
                     delete pMultiJob;
@@ -756,6 +758,12 @@ void OReaderThread::run()
                 OSL_ASSERT( pClientJob || m_pBridgeImpl->m_bDisposed );
                 if( ! pClientJob )
                 {
+                    OUStringBuffer error( 128 );
+                    error.appendAscii( "ThreadID " );
+                    OString o = byteSequence2HumanReadableString( *(ByteSequence* )ppLastTid );
+                    error.appendAscii( o.getStr(), o.getLength() );
+                    error.appendAscii( " unknown, so couldn't unmarshal reply" );
+                    m_pBridgeImpl->addError( error.makeStringAndClear() );
                     pLastRemoteI = 0;
                     disposeEnvironment();
                     break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-14 09:57:58 $
+ *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <osl/mutex.hxx>
 
 #include <rtl/alloc.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <uno/threadpool.h>
 
@@ -145,7 +146,7 @@ namespace bridges_urp
                 {
                     typelib_TypeDescription *pType = 0;
                     TYPELIB_DANGER_GET( &pType , m_pMethodType->pReturnTypeRef );
-                    m_pUnmarshal->unpack( m_pReturn , pType );
+                    bReturn = m_pUnmarshal->unpack( m_pReturn , pType ) && bReturn;
                     TYPELIB_DANGER_RELEASE( pType );
                 }
 
@@ -161,7 +162,7 @@ namespace bridges_urp
                         {
                             uno_destructData( m_ppArgs[i] , pType , ::bridges_remote::remote_release );
                         }
-                        m_pUnmarshal->unpack( m_ppArgs[i] , pType );
+                        bReturn = m_pUnmarshal->unpack( m_ppArgs[i] , pType ) && bReturn;
                         TYPELIB_DANGER_RELEASE( pType );
                     }
                 }
@@ -170,7 +171,7 @@ namespace bridges_urp
             {
                 typelib_TypeDescription *pType = 0;
                 TYPELIB_DANGER_GET( &pType , m_pAttributeType->pAttributeTypeRef );
-                m_pUnmarshal->unpack( m_pReturn , pType );
+                bReturn = m_pUnmarshal->unpack( m_pReturn , pType ) && bReturn;
                 TYPELIB_DANGER_RELEASE( pType );
             }
             else if( m_pAttributeType && m_ppArgs )
@@ -181,9 +182,8 @@ namespace bridges_urp
             {
                 OSL_ASSERT( 0 );
             }
-            *m_ppException = 0;
         }
-        return sal_True;
+        return bReturn;
     }
 
     //-------------------------------------------------------------------------------------------
@@ -195,12 +195,15 @@ namespace bridges_urp
     //--------------------------------------------------------------------------------------------
     sal_Bool ClientJob::pack()
     {
+        sal_Bool bSuccess = sal_True;
         MutexGuard guard( m_pBridgeImpl->m_marshalingMutex );
 
         if( m_pBridgeImpl->m_bDisposed )
         {
-              prepareRuntimeExceptionClientSide(
-                  m_ppException , OUString( RTL_CONSTASCII_USTRINGPARAM( "URP-Bridge: disposed" )) );
+            OUStringBuffer buf( 128 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "URP-Bridge: disposed" ) );
+            buf.append( m_pBridgeImpl->getErrorsAsString() );
+              prepareRuntimeExceptionClientSide( m_ppException , buf.makeStringAndClear() );
             return sal_False;
         }
 
@@ -318,8 +321,20 @@ namespace bridges_urp
                 {
                       typelib_TypeDescription *pType = 0;
                       TYPELIB_DANGER_GET( &pType , m_pMethodType->pParams[i].pTypeRef );
-                    m_pBridgeImpl->m_blockMarshaler.pack( m_ppArgs[i] , pType );
-                      TYPELIB_DANGER_RELEASE( pType );
+                    if( pType )
+                    {
+                        bSuccess =
+                            bSuccess && m_pBridgeImpl->m_blockMarshaler.pack( m_ppArgs[i] , pType );
+                        TYPELIB_DANGER_RELEASE( pType );
+                    }
+                    else
+                    {
+                        bSuccess = sal_False;
+                        OUStringBuffer buffer( 128 );
+                        buffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "no typedescription available for type" ) );
+                        buffer.append( m_pMethodType->pParams[i].pTypeRef->pTypeName );
+                        m_pBridgeImpl->addError( buffer.makeStringAndClear() );
+                    }
                 }
             }
         }
@@ -331,8 +346,19 @@ namespace bridges_urp
         {
               typelib_TypeDescription *pType = 0;
               TYPELIB_DANGER_GET( &pType , m_pAttributeType->pAttributeTypeRef );
-            m_pBridgeImpl->m_blockMarshaler.pack( m_ppArgs[0] , pType );
-              TYPELIB_DANGER_RELEASE( pType );
+            if( pType )
+            {
+                bSuccess = bSuccess && m_pBridgeImpl->m_blockMarshaler.pack( m_ppArgs[0] , pType );
+                TYPELIB_DANGER_RELEASE( pType );
+            }
+            else
+            {
+                bSuccess = sal_False;
+                OUStringBuffer buffer( 128 );
+                buffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "no typedescription available for type" ) );
+                buffer.append( m_pAttributeType->pAttributeTypeRef->pTypeName );
+                m_pBridgeImpl->addError( buffer.makeStringAndClear() );
+            }
         }
         else
         {
@@ -346,23 +372,45 @@ namespace bridges_urp
                                                m_pAttributeType->aBase.pMemberName );
 #endif
 
-        if( ! m_bOneway )
+        if( bSuccess )
         {
-            uno_threadpool_attach( m_pBridgeImpl->m_hThreadPool );
-            m_pBridgeImpl->m_clientJobContainer.add( *(ByteSequence*)&(m_pTid), this );
+            if( ! m_bOneway )
+            {
+                uno_threadpool_attach( m_pBridgeImpl->m_hThreadPool );
+                m_pBridgeImpl->m_clientJobContainer.add( *(ByteSequence*)&(m_pTid), this );
+            }
+
+            m_pBridgeImpl->m_nMarshaledMessages ++;
+            //---------------------------
+            // Inform the writer thread, that there is some work to do
+            //---------------------------
+            m_pBridgeImpl->m_pWriter->touch( ! m_bOneway );
+
+            if( m_bOneway )
+            {
+                *m_ppException = 0;
+            }
         }
-
-        m_pBridgeImpl->m_nMarshaledMessages ++;
-        //---------------------------
-        // Inform the writer thread, that there is some work to do
-        //---------------------------
-        m_pBridgeImpl->m_pWriter->touch( ! m_bOneway );
-
-        if( m_bOneway )
+        else
         {
-            *m_ppException = 0;
+            // Something went wrong during packing, which means, that the caches may not be in sync
+            // anymore. So we have no other choice than to dispose the environment.
+            m_pEnvRemote->dispose( m_pEnvRemote );
+            OUStringBuffer buf( 128 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Error during marshaling " )  );
+            if( m_pMethodType )
+            {
+                buf.append( m_pMethodType->aBase.aBase.pTypeName );
+            }
+            else if( m_pAttributeType )
+            {
+                buf.append( m_pAttributeType->aBase.aBase.pTypeName );
+            }
+            buf.appendAscii( "\n" );
+            buf.append( m_pBridgeImpl->getErrorsAsString() );
+            prepareRuntimeExceptionClientSide( m_ppException , buf.makeStringAndClear() );
         }
-        return sal_True;
+        return bSuccess;
         // release the guard
     }
 
@@ -379,27 +427,34 @@ namespace bridges_urp
         if( ! pDisposeReason )
         {
             // thread has been disposed !
-            // avoid leak due continous calling on a disposed reference.
-            if( m_pBridgeImpl->m_clientJobContainer.remove( *(ByteSequence*) &m_pTid ) )
+            // avoid leak due continous calling on a disposed reference. The
+            // reply may or may not be within the container. If the reader thread
+            // got into problems during unmarshaling the reply for this request,
+            // it won't be in the container anymore, but it is eiterway safe to call
+            // the method
+            ClientJob *pJob =
+                m_pBridgeImpl->m_clientJobContainer.remove( *(ByteSequence*) &m_pTid );
+            if( pJob != this )
             {
-                // OK, we retrieved the job from the container
-                OUString sMessage( RTL_CONSTASCII_USTRINGPARAM( "URP_Bridge : disposed\n" ) );
-                sMessage += m_pBridgeImpl->getErrorsAsString();
-                prepareRuntimeExceptionClientSide( m_ppException, sMessage );
+                // this is not our job, it is probably one of the callstack below, so
+                // push it back
+                m_pBridgeImpl->m_clientJobContainer.add( *(ByteSequence*) &m_pTid , pJob );
             }
-            else
-            {
-                // the Job MUST BE still in the container,
-                // because the threadpool is disposed after the reader thread
-                // is in a known state.
-                OSL_ASSERT( !"we should never be here" );
-            }
+
+            OUStringBuffer sMessage( 256 );
+            sMessage.appendAscii( RTL_CONSTASCII_STRINGPARAM( "URP_Bridge : disposed\n" ) );
+            sMessage.append( m_pBridgeImpl->getErrorsAsString() );
+            prepareRuntimeExceptionClientSide( m_ppException, sMessage.makeStringAndClear() );
+            m_bExceptionOccured = sal_True;
         }
         else
         {
             OSL_ASSERT( pDisposeReason == (void*)this );
         }
-
+        if( !m_bExceptionOccured )
+        {
+            *m_ppException = 0;
+        }
         uno_threadpool_detach( m_pBridgeImpl->m_hThreadPool );
     }
 

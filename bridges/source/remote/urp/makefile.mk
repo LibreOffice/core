@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: jbu $ $Date: 2001-07-04 14:29:29 $
+#   last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,8 @@ SLOFILES= 	\
         $(SLO)$/urp_writer.obj \
         $(SLO)$/urp_log.obj \
         $(SLO)$/urp_bridgeimpl.obj \
-        $(SLO)$/urp_propertyobject.obj
+        $(SLO)$/urp_propertyobject.obj \
+        $(SLO)$/urp_threadid.obj
 
 .IF "$(COM)"=="GCC"
 NOOPTFILES= \

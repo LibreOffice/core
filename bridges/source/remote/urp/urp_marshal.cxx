@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_marshal.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
+ *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,8 +179,9 @@ void Marshal::packType( void *pSource )
     }
 }
 
-void Marshal::packRecursive( void *pSource , typelib_TypeDescription *pType )
+sal_Bool Marshal::packRecursive( void *pSource , typelib_TypeDescription *pType )
 {
+    sal_Bool bSuccess = sal_True;
     switch( pType->eTypeClass )
     {
     case typelib_TypeClass_EXCEPTION:
@@ -190,7 +191,7 @@ void Marshal::packRecursive( void *pSource , typelib_TypeDescription *pType )
 
         if (pCompType->pBaseTypeDescription)
         {
-            pack( pSource , (typelib_TypeDescription*) pCompType->pBaseTypeDescription );
+            bSuccess = pack( pSource , (typelib_TypeDescription*) pCompType->pBaseTypeDescription );
         }
 
         // then construct members
@@ -202,8 +203,19 @@ void Marshal::packRecursive( void *pSource , typelib_TypeDescription *pType )
         {
               typelib_TypeDescription * pMemberType = 0;
               TYPELIB_DANGER_GET( &pMemberType, ppTypeRefs[nPos] );
-            pack( (char*)pSource + pMemberOffsets[nPos] , pMemberType );
-              TYPELIB_DANGER_RELEASE( pMemberType );
+            if( pMemberType )
+            {
+                bSuccess = bSuccess && pack( (char*)pSource + pMemberOffsets[nPos] , pMemberType );
+                TYPELIB_DANGER_RELEASE( pMemberType );
+            }
+            else
+            {
+                OUStringBuffer buf( 64 );
+                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("Couldn't get typedescription for type "));
+                buf.append( ppTypeRefs[nPos]->pTypeName );
+                m_pBridgeImpl->addError( buf.makeStringAndClear() );
+                bSuccess = sal_False;
+            }
         }
         break;
     }
@@ -231,17 +243,25 @@ void Marshal::packRecursive( void *pSource , typelib_TypeDescription *pType )
                 packCompressedSize( nElements );
                 for ( sal_Int32 i = 0 ; i < nElements; i++ )
                 {
-                    pack( pSourceElements + (nElementSize*i) , pElementType );
+                    bSuccess = bSuccess && pack( pSourceElements + (nElementSize*i) , pElementType );
                 }
                 TYPELIB_DANGER_RELEASE( pElementType );
             }
+            else
+            {
+                bSuccess = sal_False;
+                OUStringBuffer buf( 64 );
+                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("Couldn't get typedescription for type "));
+                buf.append( pIndirectType->pType->pTypeName );
+                m_pBridgeImpl->addError( buf.makeStringAndClear() );
+            }
         }
-
         break;
     }
     default:
         OSL_ASSERT( 0 );
     }
+    return bSuccess;
 }
 
 } // end namespace bridges

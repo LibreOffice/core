@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_propertyobject.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
+ *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,16 +60,33 @@
  ************************************************************************/
 #include <stdio.h>
 
+#ifndef _OSL_INTERLCK_H_
 #include <osl/interlck.h>
+#endif
+
+#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
+#endif
+
+#ifndef _OSL_CONDITN_H_
 #include <osl/conditn.h>
+#endif
 
+#ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
+#endif
+
+#ifndef _UNO_SEQUENCE2_H_
 #include <uno/sequence2.h>
+#endif
 
+#ifndef _BRIDGES_REMOTE_REMOTE_H_
 #include <bridges/remote/remote.h>
+#endif
 
+#ifndef _URP_PROPERTY_HXX_
 #include "urp_property.hxx"
+#endif
 
 namespace bridges_urp {
 

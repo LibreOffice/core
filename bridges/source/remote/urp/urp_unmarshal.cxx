@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_unmarshal.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2001-07-04 10:16:27 $
+ *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <osl/diagnose.h>
 
 #include <rtl/alloc.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <uno/data.h>
 #include <uno/any2.h>
@@ -123,10 +124,14 @@ sal_Bool Unmarshal::unpackTid( sal_Sequence **ppThreadId )
                 bReturn = sal_False;
                 rtl_byte_sequence_construct( ppThreadId , 0 );
 
-                OUString error( RTL_CONSTASCII_USTRINGPARAM( "cache index for tids out of range(" ));
-                error += OUString::valueOf( (sal_Int32) nIndex ,16 );
-                error += OUString::createFromAscii( ")" );
-                m_pBridgeImpl->addError( error );
+                OUStringBuffer error( 128 );
+                error.appendAscii( "cache index for tid " );
+                OString o = byteSequence2HumanReadableString( *(ByteSequence * ) ppThreadId );
+                error.appendAscii( o.getStr(), o.getLength() );
+                error.appendAscii( "out of range(0x");
+                error.append(  (sal_Int32) nIndex ,16 );
+                error.appendAscii( ")" );
+                m_pBridgeImpl->addError( error.makeStringAndClear() );
             }
         }
         else
@@ -142,10 +147,11 @@ sal_Bool Unmarshal::unpackTid( sal_Sequence **ppThreadId )
             {
                 bReturn = sal_False;
                 rtl_byte_sequence_construct( ppThreadId , 0 );
-                OUString error( RTL_CONSTASCII_USTRINGPARAM( "cache index for tids out of range(" ));
-                error += OUString::valueOf( (sal_Int32) nIndex ,16 );
-                error += OUString::createFromAscii( ")" );
-                m_pBridgeImpl->addError( error );
+                OUStringBuffer error(128);
+                error.appendAscii( "cache index for tids out of range(0x" );
+                error.append( (sal_Int32) nIndex ,16 );
+                error.appendAscii( ")" );
+                m_pBridgeImpl->addError( error.makeStringAndClear() );
             }
         }
     }
@@ -179,7 +185,16 @@ sal_Bool Unmarshal::unpackOid( rtl_uString **ppOid )
                 }
                 else
                 {
+                    OUStringBuffer error( 128 );
+                    error.appendAscii( "new oid provided (" );
+                    error.append( *ppOid );
+                    error.appendAscii( "), but new cache index is out of range(0x");
+                    error.append(  (sal_Int32) nCacheIndex ,16 );
+                    error.appendAscii( ")" );
+                    m_pBridgeImpl->addError( error.makeStringAndClear() );
+
                     bReturn = sal_False;
+                    rtl_uString_new( ppOid );
                 }
             }
         }
@@ -193,6 +208,13 @@ sal_Bool Unmarshal::unpackOid( rtl_uString **ppOid )
             else
             {
                 bReturn = sal_False;
+                rtl_uString_new( ppOid );
+
+                OUStringBuffer error( 128 );
+                error.appendAscii( "cache index for oids out of range(0x");
+                error.append(  (sal_Int32) nCacheIndex ,16 );
+                error.appendAscii( ")" );
+                m_pBridgeImpl->addError( error.makeStringAndClear() );
             }
         }
     }
@@ -246,6 +268,14 @@ sal_Bool Unmarshal::unpackType( void *pDest )
                                 // as there must be inconsistent type base between both processes
                                 // or trash comes over the wire ...
                                 bReturn = sal_False;
+                                OUStringBuffer error( 128 );
+                                error.appendAscii( "it is tried to introduce type " );
+                                error.append( pString );
+                                error.appendAscii( "with typeclass " );
+                                error.append( (sal_Int32)( nTypeClass & 0x7f ) , 10 );
+                                error.appendAscii( " , which does not match with typeclass " );
+                                error.append(  (sal_Int32) pType->eTypeClass ,10 );
+                                m_pBridgeImpl->addError( error.makeStringAndClear() );
                             }
                             typelib_typedescription_release( pType );
                             pType = 0;
@@ -265,6 +295,12 @@ sal_Bool Unmarshal::unpackType( void *pDest )
                             {
                                 // typeclass is out of range !
                                 bReturn = sal_False;
+                                OUStringBuffer error( 128 );
+                                error.appendAscii( "it is tried to introduce type " );
+                                error.append( pString );
+                                error.appendAscii( "with an out of range typeclass " );
+                                error.append( (sal_Int32)( nTypeClass & 0x7f ) , 10 );
+                                m_pBridgeImpl->addError( error.makeStringAndClear() );
                             }
                         }
 
@@ -277,6 +313,13 @@ sal_Bool Unmarshal::unpackType( void *pDest )
                             else
                             {
                                 bReturn = sal_False;
+                                OUStringBuffer error( 128 );
+                                error.appendAscii( "cache index for type " );
+                                error.append( pString );
+                                error.appendAscii( "out of range(0x" );
+                                error.append( (sal_Int32) nCacheIndex ,16 );
+                                error.appendAscii( ")" );
+                                m_pBridgeImpl->addError( error.makeStringAndClear() );
                             }
                         }
                     }
@@ -295,6 +338,11 @@ sal_Bool Unmarshal::unpackType( void *pDest )
                     else
                     {
                         bReturn = sal_False;
+                        OUStringBuffer error;
+                        error.appendAscii( "cache index for types out of range(0x" );
+                        error.append( (sal_Int32) nCacheIndex ,16 );
+                        error.appendAscii( ")" );
+                        m_pBridgeImpl->addError( error.makeStringAndClear() );
                     }
                 }
             }
@@ -370,6 +418,14 @@ sal_Bool Unmarshal::unpackAny( void *pDest )
             }
 
             bReturn = unpack( pAny->pData , pType );
+        }
+        else
+        {
+            OUStringBuffer error;
+            error.appendAscii( "can't unmarshal any because typedescription for " );
+            error.append( pAny->pType->pTypeName );
+            error.appendAscii( " is missing" );
+            m_pBridgeImpl->addError( error.makeStringAndClear() );
         }
     }
 
@@ -476,6 +532,11 @@ sal_Bool Unmarshal::unpackRecursive( void *pDest , typelib_TypeDescription *pTyp
             {
                 bReturn = sal_False;
                 uno_constructData( &pSequence , pType );
+                OUStringBuffer error;
+                error.appendAscii( "can't unmarshal sequence, because there is no typedescription for element type " );
+                error.append( pETRef->pTypeName );
+                error.appendAscii( " available" );
+                m_pBridgeImpl->addError( error.makeStringAndClear() );
             }
         }
         else

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: urp_threadid.hxx,v $
+ *  $RCSfile: urp_threadid.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
  *
@@ -58,44 +58,22 @@
  *
  *
  ************************************************************************/
-#ifndef _URP_THREADID_HXX_
-#define _URP_THREADID_HXX_
+#include "urp_threadid.hxx"
 
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
+#include <rtl/strbuf.hxx>
 
-#ifndef _RTL_BYTESEQ_HXX_
-#include <rtl/byteseq.hxx>
-#endif
-
-#ifndef _RTL_STRING_HXX_
-#include <rtl/string.hxx>
-#endif
+using namespace rtl;
 
 namespace bridges_urp
 {
-
-    struct EqualThreadId
+    rtl::OString byteSequence2HumanReadableString( const rtl::ByteSequence &a )
     {
-        sal_Int32 operator () ( const ::rtl::ByteSequence &a , const ::rtl::ByteSequence &b ) const
-            {
-                return a == b;
-            }
-    };
-
-    struct HashThreadId
-    {
-        sal_Int32 operator () ( const ::rtl::ByteSequence &a  )  const
-            {
-                if( a.getLength() >= 4 )
-                {
-                    return *(sal_Int32*) a.getConstArray();
-                }
-                return 0;
-            }
-    };
-
-    rtl::OString byteSequence2HumanReadableString( const rtl::ByteSequence &a );
+        const sal_uInt8 *p = (const sal_uInt8 * ) a.getConstArray();
+        sal_Int32 nLength = a.getLength();
+        OStringBuffer buf( a.getLength() * 2 + 2 );
+        buf.append( RTL_CONSTASCII_STRINGPARAM( "0x" ) );
+        for( sal_Int32 i = 0 ; i < nLength ; i ++ )
+            buf.append( (sal_Int32)  p[i] , 16 );
+        return buf.makeStringAndClear();
+    }
 }
-#endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_unmarshal.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
+ *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,29 @@
 #ifndef _URP_UNMARSHAL_HXX_
 #define _URP_UNMARSHAL_HXX_
 
+#ifndef _RTL_BYTESEQ_HXX_
 #include <rtl/byteseq.hxx>
+#endif
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
+#ifndef _BRIDGES_REMOTE_CONTEXT_H_
 #include <bridges/remote/context.h>
-#include <bridges/remote/helper.hxx>
+#endif
 
+#ifndef _BRIDGES_REMOTE_HELPER_HXX_
+#include <bridges/remote/helper.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_TYPE_HXX_
 #include <com/sun/star/uno/Type.hxx>
+#endif
+
+#ifndef _URP_BRIDGEIMPL_HXX_
+#include "urp_bridgeimpl.hxx"
+#endif
 
 typedef struct _uno_Environment uno_Environment;
 struct remote_Interface;
@@ -143,8 +160,11 @@ inline sal_Bool Unmarshal::setSize( sal_Int32 nSize )
 
 inline sal_Bool Unmarshal::checkOverflow( sal_Int32 nNextMem )
 {
-    return nNextMem < 0 ||
+    sal_Bool bOverflow = nNextMem < 0 ||
            (((sal_Int32)( m_pos - m_base )) + nNextMem ) > m_nLength;
+    if( bOverflow )
+        m_pBridgeImpl->addError( "message too short" );
+    return bOverflow;
 }
 
 
@@ -389,7 +409,14 @@ inline sal_Bool Unmarshal::unpack( void *pDest , typelib_TypeDescription *pType 
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
     case typelib_TypeClass_UNKNOWN:
     default:
-        OSL_ASSERT( 0 );
+    {
+        ::rtl::OUStringBuffer buffer( 128 );
+        buffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Unsupported typeclass during unmarshaling ("));
+        buffer.append( ( sal_Int32 ) pType->eTypeClass , 10 );
+        buffer.appendAscii( ")" );
+        m_pBridgeImpl->addError( buffer.makeStringAndClear() );
+        bReturn = sal_False;
+    }
     }
 
     return bReturn;

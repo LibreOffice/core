@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_bridgeimpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-14 09:57:58 $
+ *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,20 +62,46 @@
 #define _URP_BRIDGEIMPL_HXX_
 
 #include <stdio.h>
+
+#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
+#endif
+
+#ifndef _OSL_CONDITN_HXX_
 #include <osl/conditn.hxx>
+#endif
 
+#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
+
+#ifndef _RTL_BYTESEQ_HXX_
 #include <rtl/byteseq.hxx>
+#endif
 
+#ifndef _UNO_THREADPOOL_H_
 #include <uno/threadpool.h>
+#endif
 
+#ifndef _BRIDGES_REMOTE_BRIDGEIMPL_HXX_
 #include <bridges/remote/bridgeimpl.hxx>
+#endif
 
+#ifndef _URP_CACHE_HXX_
 #include "urp_cache.hxx"
+#endif
+
+#ifndef _URP_MARSHAL_DECL_HXX_
 #include "urp_marshal_decl.hxx"
+#endif
+
+#ifndef _URP_REPLYCONTAINER_HXX_
 #include "urp_replycontainer.hxx"
+#endif
+
+#ifndef _URP_PROPERTY_HXX_
 #include "urp_property.hxx"
+#endif
 
 
 namespace bridges_urp
