@@ -2,9 +2,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:02:55 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #include "debug.hxx"
 #include "appdef.hxx"
 
-#include <iostream.h>
+#include <iostream>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
