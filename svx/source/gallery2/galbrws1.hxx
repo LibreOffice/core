@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:18 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 13:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
+#include <vcl/menu.hxx>
 #include "galbrws.hxx"
 
 // -----------------------

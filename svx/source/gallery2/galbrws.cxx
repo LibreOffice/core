@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 14:55:36 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 13:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #include <vcl/split.hxx>
 #include <vcl/ctrl.hxx>
+#include <svtools/pathoptions.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
 #include "gallery.hrc"
 #include "galmisc.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-25 14:46:39 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 13:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <unotools/datetime.hxx>
 #include <vcl/msgbox.hxx>
 #include <ucbhelper/content.hxx>
+#include <sfx2/app.hxx>
 #include "gallery1.hxx"
 #include "galtheme.hxx"
 #include "galmisc.hxx"
