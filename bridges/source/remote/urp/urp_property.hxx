@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_property.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _URP_PROPERTY_HXX_
 #define _URP_PROPERTY_HXX_
-
 #ifndef _BRIDGES_REMOTE_REMOTE_H_
 #include <bridges/remote/remote.h>
 #endif
@@ -93,16 +92,16 @@ namespace bridges_urp
         sal_Bool            bForceSynchronous;
 
         inline Properties()
-            : nFlushBlockSize( 4*1024 )
-            , nTypeCacheSize( 256 )
-            , nOnewayTimeoutMUSEC( 10000 )
+            : nTypeCacheSize( 256 )
             , nOidCacheSize( 256 )
             , nTidCacheSize( 256 )
-            , sVersion( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "1.0" ) ) )
             , sSupportedVersions( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "1.0" ) ) )
-            , bSupportsMultipleSynchronous( sal_False )
+            , sVersion( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "1.0" )))
+            , nFlushBlockSize( 4*1024 )
+            , nOnewayTimeoutMUSEC( 10000 )
             , bSupportsMustReply( sal_False )
             , bSupportsSynchronous( sal_False )
+            , bSupportsMultipleSynchronous( sal_False )
             , bClearCache( sal_False )
             , bNegotiate( sal_True )
             , bForceSynchronous( sal_False )
