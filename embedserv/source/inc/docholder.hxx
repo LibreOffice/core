@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:26:01 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,8 +216,8 @@ public:
     IDispatch* GetIDispatch();
 
     HRESULT GetDocumentBorder( RECT *pRect );
-    HRESULT SetVisArea( const RECTL *pRect );
-    HRESULT GetVisArea( RECTL *pRect );
+    // HRESULT SetVisArea( const RECTL *pRect );
+    // HRESULT GetVisArea( RECTL *pRect );
     HRESULT SetExtent( const SIZEL *pSize );
     HRESULT GetExtent( SIZEL *pSize );
     // sets extension on the hatchwindow
