@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlotterBase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-12 17:43:22 $
+ *  last change: $Author: bm $ $Date: 2003-12-15 08:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,6 @@ public:
           const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
         , const ::com::sun::star::drawing::Position3D & rPos
-        , const PlottingPositionHelper & rPositionHelper
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > & xErrorBarProperties
         , const ::com::sun::star::uno::Sequence< double > & rData

@@ -714,7 +714,6 @@ void AreaChart::createShapes()
 
                                     createErrorBar(   xErrorBarsGroup_Shapes
                                                     , aUnScaledPoint
-                                                    , *m_pPosHelper
                                                     , xErrorBarProp
                                                     , (*aSeriesIter)->getAllY()
                                                     , nIndex

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlotterBase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-12 17:43:24 $
+ *  last change: $Author: bm $ $Date: 2003-12-15 08:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,6 @@ void lcl_getErrorBarPosAndSize(
 void PlotterBase::createErrorBar(
       const uno::Reference< drawing::XShapes >& xTarget
     , const drawing::Position3D& rPos
-    , const PlottingPositionHelper & rPositionHelper
     , const uno::Reference< beans::XPropertySet > & xErrorBarProperties
     , const uno::Sequence< double > & rData
     , sal_Int32 nIndex
@@ -343,7 +342,7 @@ void PlotterBase::createErrorBar(
 
             drawing::Position3D  aPos( rPos );
             drawing::Direction3D aSize;
-            lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, rPositionHelper, aPos, aSize );
+            lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, *m_pPosHelper, aPos, aSize );
 
             m_pShapeFactory->createErrorBar2D( xTarget, aPos, aSize, eErrorBarDir );
         }
@@ -359,7 +358,7 @@ void PlotterBase::createErrorBar(
 
             drawing::Position3D  aPos( rPos );
             drawing::Direction3D aSize;
-            lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, rPositionHelper, aPos, aSize );
+            lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, *m_pPosHelper, aPos, aSize );
 
             m_pShapeFactory->createErrorBar2D( xTarget, aPos, aSize, eErrorBarDir );
         }
