@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberingtypelistbox.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:00:30 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,12 +134,12 @@ Resource STRRES_NUMTYPES
     ItemList [ greek ] =
     {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "\\" ;                0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "\\" ;                1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+        < "Á, Â, Ã, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+        < "á, â, ã, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
         < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
         < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "\\" ;    9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "\\" ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+        < "Á, .., ÁÁ, .., ÁÁÁ, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+        < "á, .., áá, .., ááá, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
         < "Êïõêßäá" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
         < "Ãñáöéêü" ;                   8/*SVX_NUM_BITMAP              */; > ;
         < "ÊáíÝíá" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
@@ -153,7 +153,7 @@ Resource STRRES_NUMTYPES
         < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
         < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
         < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "Opsommingsteken" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
         < "Afbeelding" ;                    8/*SVX_NUM_BITMAP              */; > ;
         < "Geen" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
     };
@@ -430,8 +430,26 @@ Resource STRRES_NUMTYPES
         < "ObrÃ¡zky" ;                  8/*SVX_NUM_BITMAP              */; > ;
         < "Å½iadne" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
     };
+    ItemList [ hungarian ] =
+    {
+         < "1, 2, 3, ..." ;                 4/*SVX_NUM_ARABIC              */; > ;
+        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+    };
+    ItemList [ slovenian ] =
+    {
+         < "1, 2, 3, ..." ;                 4/*SVX_NUM_ARABIC              */; > ;
+        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+    };
     };
 };
+
+
 
 
 
