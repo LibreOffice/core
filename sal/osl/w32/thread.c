@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-14 14:02:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <rtl/alloc.h>
 #include <osl/time.h>
 #include <osl/interlck.h>
+#include <rtl/tencinfo.h>
 
 /*
     Thread-data structure hidden behind oslThread:
@@ -89,9 +90,6 @@ static HRESULT WINAPI osl_CoInitializeEx(LPVOID pvReserved, DWORD dwCoInit);
 typedef HRESULT (WINAPI *CoInitializeEx_PROC)(LPVOID pvReserved, DWORD dwCoInit);
 
 CoInitializeEx_PROC _CoInitializeEx = osl_CoInitializeEx;
-
-/* implemented in nlsupport.c */
-rtl_TextEncoding GetTextEncodingFromCodePage( UINT );
 
 /*****************************************************************************/
 /* oslWorkerWrapperFunction */
@@ -619,7 +617,7 @@ rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding()
         if ( NULL != (pszEncoding = getenv( "SOLAR_USER_RTL_TEXTENCODING" )) )
             _encoding = atoi(pszEncoding);
         else
-            _encoding = GetTextEncodingFromCodePage( GetACP() );
+            _encoding = rtl_getTextEncodingFromWindowsCodePage( GetACP() );
 
         TlsSetValue( g_dwTLSTextEncodingIndex, (LPVOID)MAKELONG( _encoding, TRUE ) );
     }
