@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-26 12:08:41 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
+#endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -276,28 +279,32 @@ void ScXMLBodyContext::EndElement()
                 SvXMLUnitConverter::decodeBase64(aPass, sPassword);
             pDoc->SetDocProtection(bProtected, aPass);
         }
+        std::vector<rtl::OUString> aTableStyleNames(GetScImport().GetTableStyle());
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetScImport().GetModel(), uno::UNO_QUERY );
-        if ( xSpreadDoc.is() )
+        if ( xSpreadDoc.is() && !aTableStyleNames.empty())
         {
-            uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
-            uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
+            uno::Reference <container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
             if ( xIndex.is() )
             {
-                uno::Any aSheet = xIndex->getByIndex(0);
-                uno::Reference< sheet::XSpreadsheet > xSheet;
-                if ( aSheet >>= xSheet )
+                sal_Int32 nTableCount = xIndex->getCount();
+                sal_Int32 nSize(aTableStyleNames.size());
+                DBG_ASSERT(nTableCount == nSize, "every table should have a style name");
+                for(sal_uInt32 i = 0; i < nTableCount; i++)
                 {
-                    uno::Reference <beans::XPropertySet> xProperties(xSheet, uno::UNO_QUERY);
-                    if (xProperties.is())
+                    if (i < nSize)
                     {
-                        XMLTableStylesContext *pStyles = (XMLTableStylesContext *)GetScImport().GetAutoStyles();
-                        rtl::OUString sTableStyleName(GetScImport().GetFirstTableStyle());
-                        if (sTableStyleName.getLength())
+                        uno::Reference <beans::XPropertySet> xProperties(xIndex->getByIndex(i), uno::UNO_QUERY);
+                        if (xProperties.is())
                         {
-                            XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                                XML_STYLE_FAMILY_TABLE_TABLE, sTableStyleName, sal_True);
-                            if (pStyle)
-                                pStyle->FillPropertySet(xProperties);
+                            rtl::OUString sTableStyleName(aTableStyleNames[i]);
+                            XMLTableStylesContext *pStyles = (XMLTableStylesContext *)GetScImport().GetAutoStyles();
+                            if (sTableStyleName.getLength())
+                            {
+                                XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                                    XML_STYLE_FAMILY_TABLE_TABLE, sTableStyleName, sal_True);
+                                if (pStyle)
+                                    pStyle->FillPropertySet(xProperties);
+                            }
                         }
                     }
                 }
