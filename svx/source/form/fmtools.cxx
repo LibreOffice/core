@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:36 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,7 @@ Reference< XInterface > cloneUsingProperties(const Reference< ::com::sun::star::
         }
     }
 
-    return xDestSet;
+    return xDestSet.get();
 }
 
 //------------------------------------------------------------------------------
@@ -809,6 +809,10 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
             // objects with that service name should exist as they aren't compatible with older versions
         return OBJ_FM_FORMATTEDFIELD;
     }
+    if ( sPersistentServiceName.equals( FM_SUN_COMPONENT_SCROLLBAR ) )
+        return OBJ_FM_SCROLLBAR;
+    if ( sPersistentServiceName.equals( FM_SUN_COMPONENT_SPINBUTTON) )
+        return OBJ_FM_SPINBUTTON;
 
     DBG_ERROR("::getControlTypeByObject : unknown object type !");
     return OBJ_FM_CONTROL;
@@ -838,6 +842,8 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
         case OBJ_FM_HIDDEN          : return FM_COMPONENT_HIDDENCONTROL;
         case OBJ_FM_IMAGECONTROL    : return FM_COMPONENT_IMAGECONTROL;
         case OBJ_FM_FORMATTEDFIELD  : return FM_COMPONENT_FORMATTEDFIELD;
+        case OBJ_FM_SCROLLBAR       : return FM_SUN_COMPONENT_SCROLLBAR;
+        case OBJ_FM_SPINBUTTON      : return FM_SUN_COMPONENT_SPINBUTTON;
     }
     return ::rtl::OUString();
 }
