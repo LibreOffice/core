@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:30:09 $
+ *  last change: $Author: ama $ $Date: 2000-12-01 10:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -901,17 +901,26 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             if(pFmt)
             {
                 SwAttrSet aSet(pFmt->GetAttrSet());
-                if(pFmt->GetDoc()->GetRootFrm() &&
-                    COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPE))
+                if( pFmt->GetDoc()->GetRootFrm() )
                 {
                     UnoActionContext aCtx(pFmt->GetDoc());
-                    SdrObject* pObj = pFmt->FindSdrObject();
-                    SdrMarkList aList;
-                    SdrMark aMark(pObj);
-                    aList.InsertEntry(aMark);
-                    sal_Int16 nAnchor;
-                    aValue >>= nAnchor;
-                    pFmt->GetDoc()->ChgAnchor( aList, nAnchor, sal_False, sal_True );
+                     if(    COMPARE_EQUAL ==
+                        rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPE) )
+                    {
+                        SdrObject* pObj = pFmt->FindSdrObject();
+                        SdrMarkList aList;
+                        SdrMark aMark(pObj);
+                        aList.InsertEntry(aMark);
+                        sal_Int16 nAnchor;
+                        aValue >>= nAnchor;
+                        pFmt->GetDoc()->ChgAnchor( aList, nAnchor,
+                                                   sal_False, sal_True );
+                    }
+                    else
+                    {
+                        aPropSet.setPropertyValue(*pMap, aValue, aSet);
+                        pFmt->SetAttr(aSet);
+                    }
                 }
                 else
                 {
@@ -965,7 +974,13 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             if(aPSet.getValueType() != rPSetType || !aPSet.getValue())
                 throw uno::RuntimeException();
             xPrSet = *(uno::Reference< XPropertySet >*)aPSet.getValue();
-            xPrSet->setPropertyValue(rPropertyName, aValue);
+            if( pFmt && pFmt->GetDoc()->GetRootFrm() )
+            {
+                UnoActionContext aCtx(pFmt->GetDoc());
+                xPrSet->setPropertyValue(rPropertyName, aValue);
+            }
+            else
+                xPrSet->setPropertyValue(rPropertyName, aValue);
         }
     }
 }
