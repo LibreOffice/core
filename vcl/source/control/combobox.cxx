@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:41:42 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1228,8 +1228,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, U
         // aRect.Top() += nEditHeight;
         if ( bBorder )
         {
-            DecorationView aDecoView( pDev );
-            aRect = aDecoView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
+            ImplDrawFrame( pDev, aRect );
         }
         if ( bBackground )
         {
