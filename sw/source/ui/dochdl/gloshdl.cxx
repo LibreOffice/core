@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-05 10:24:56 $
+ *  last change: $Author: mtg $ $Date: 2001-09-27 12:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,15 @@
 #endif
 
 #pragma hdrstop
-
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-
+#ifndef _SVX_WGHTITEM_HXX
+#include <svx/wghtitem.hxx>
+#endif
+#ifndef _SVX_ADJITEM_HXX
+#include <svx/adjitem.hxx>
+#endif
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif
@@ -102,8 +106,15 @@
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
 #endif
-
-
+#ifndef _POOLFMT_HXX
+#include <poolfmt.hxx>
+#endif
+#ifndef _FMTCOL_HXX
+#include <fmtcol.hxx>
+#endif
+#ifndef _DOCARY_HXX
+#include <docary.hxx>
+#endif
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
 #endif
@@ -160,7 +171,9 @@
 #ifndef _SWERROR_H
 #include <swerror.h>
 #endif
-
+#ifndef _FRMMGR_HXX
+#include <frmmgr.hxx>
+#endif
 
 // PUBLIC METHODES -------------------------------------------------------
 struct TextBlockInfo_Impl
@@ -728,10 +741,47 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
             }
             if(!bApi)
             {
-                String aTmp( SW_RES(STR_NOGLOS1));
-                aTmp += aShortName;
-                aTmp += SW_RESSTR(STR_NOGLOS2);
-                InfoBox( pWrtShell->GetView().GetWindow(), aTmp ).Execute();
+                if ( aShortName.EqualsAscii ( "StarWriterTeam", 0, 14 ) )
+                {
+                    String sGraphicName ( RTL_CONSTASCII_USTRINGPARAM ( "StarWriter team photo" ) );
+                    String sTeamCredits ( RTL_CONSTASCII_USTRINGPARAM ( "StarWriter team credits" ) );
+                    pWrtShell->StartUndo ( UNDO_INSGLOSSARY );
+                    pWrtShell->StartAllAction();
+                    if(pWrtShell->HasSelection())
+                        pWrtShell->DelLeft();
+                    Bitmap aBitmap ( SW_RES ( BMP_SW_TEAM_MUGSHOT ) );
+                    pWrtShell->Insert ( aEmptyStr, aEmptyStr, aBitmap);
+                    pWrtShell->SetFlyName ( sGraphicName );
+                    SwTxtFmtColl* pColl = pWrtShell->GetTxtCollFromPool ( RES_POOLCOLL_LABEL_ABB );
+                    SwFieldType* pType = pWrtShell->GetDoc()->GetFldType( RES_SETEXPFLD, pColl->GetName() );
+                    sal_uInt16 nId = pWrtShell->GetDoc()->GetFldTypes()->GetPos( pType );
+                    pWrtShell->InsertLabel( LTYPE_OBJECT, aEmptyStr, FALSE, nId );
+                    pWrtShell->SwFEShell::SetFlyName( sTeamCredits );
+                    pWrtShell->SwFEShell::SelectObj ( Point ( ULONG_MAX, ULONG_MAX ) );
+                    pWrtShell->EnterStdMode();
+                    pWrtShell->EndPara ( TRUE );
+                    String aTmp ( SW_RES ( STR_SW_TEAM_NAMES ) );
+                    pWrtShell->Insert ( aTmp );
+                    SvxAdjustItem aAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST );
+                    pWrtShell->SetAttr( aAdjustItem );
+                    pWrtShell->SttPara ();
+                    pWrtShell->SplitNode();
+                    pWrtShell->Left();
+                    SvxWeightItem aWeightItem ( WEIGHT_BOLD );
+                    pWrtShell->Insert ( String ( RTL_CONSTASCII_USTRINGPARAM ( "The StarWriter development team!" ) ) );
+                    pWrtShell->SttPara ( TRUE );
+                    pWrtShell->SetAttr( aWeightItem);
+                    pWrtShell->GotoFly ( sTeamCredits);
+                    pWrtShell->EndAllAction();
+                    pWrtShell->EndUndo( UNDO_INSGLOSSARY );
+                }
+                else
+                {
+                    String aTmp( SW_RES(STR_NOGLOS1));
+                    aTmp += aShortName;
+                    aTmp += SW_RESSTR(STR_NOGLOS2);
+                    InfoBox( pWrtShell->GetView().GetWindow(), aTmp ).Execute();
+                }
             }
         }
 
@@ -1023,113 +1073,3 @@ String SwGlossaryHdl::GetValidShortCut( const String& rLong,
         sRet = pGlossary->GetValidShortCut( rLong, bCheckInBlock );
     return sRet;
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2001/05/18 14:30:04  vg
-    #65293# Corrected for use under Solaris
-
-    Revision 1.6  2001/04/27 17:17:52  jp
-    use Collator for international string compare
-
-    Revision 1.5  2001/03/20 10:52:16  os
-    #85103# enable rename and delete for old text blocks
-
-    Revision 1.4  2001/03/08 15:38:59  os
-    #84732# skip invalid auto text groups
-
-    Revision 1.3  2001/02/02 17:46:27  jp
-    use new clipboard
-
-    Revision 1.2  2000/10/17 15:15:44  os
-    Change: SfxMedium Ctor
-
-    Revision 1.1.1.1  2000/09/18 17:14:34  hr
-    initial import
-
-    Revision 1.150  2000/09/18 16:05:22  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.149  2000/07/07 13:25:39  jp
-    must changes VCL
-
-    Revision 1.148  2000/06/26 13:12:30  os
-    INetURLObject::SmartRelToAbs removed
-
-    Revision 1.147  2000/06/13 09:59:20  os
-    using UCB
-
-    Revision 1.146  2000/06/09 06:51:31  os
-    using UCB
-
-    Revision 1.145  2000/05/23 20:09:50  jp
-    Bugfixes for Unicode
-
-    Revision 1.144  2000/04/17 12:54:30  os
-    UNICODE
-
-    Revision 1.143  2000/04/17 12:36:14  os
-    #74949# search for AutoText short name via SwGlossaryList
-
-    Revision 1.142  2000/04/13 08:22:23  os
-    UNICODE
-
-    Revision 1.141  2000/03/06 08:46:06  os
-    #70359# GetGroupName: if no title is set - set group name as title
-
-    Revision 1.140  2000/02/14 14:49:37  os
-    #70473# Unicode
-
-    Revision 1.139  2000/02/10 10:33:49  os
-    #70359# titles added to AutoText groups
-
-    Revision 1.138  2000/02/09 11:41:28  jp
-    Task #72579#: WW8Reader can import glossaries
-
-    Revision 1.137  2000/02/03 11:08:22  jp
-    Task #72579#: new method GetValidShortCut
-
-    Revision 1.136  2000/02/02 17:01:52  jp
-    Task #72579#: WW8Reader can import glossaries
-
-    Revision 1.135  1999/12/22 09:20:47  os
-    #71203# editing of AutoText: keep macros
-
-    Revision 1.134  1999/11/16 16:18:20  jp
-    remove unused Dialog-Pointer
-
-    Revision 1.133  1999/09/15 14:03:11  os
-    language improvements
-
-    Revision 1.132  1999/08/24 08:28:02  OS
-    #68352# NewGlossary et. al.: GPF if AutoText path settings were wrong
-
-
-      Rev 1.131   24 Aug 1999 10:28:02   OS
-   #68352# NewGlossary et. al.: GPF if AutoText path settings were wrong
-
-      Rev 1.130   29 Jul 1999 09:10:02   OS
-   CopyToClipboard
-
-      Rev 1.129   23 Jul 1999 10:26:32   OS
-   #67828# glossary - methods on doc level
-
-      Rev 1.128   14 Jun 1999 14:40:26   JP
-   Bug #66858#: there is no MDIApplication
-
-      Rev 1.127   14 Jun 1999 08:51:54   OS
-   #66858# MDIApplication::GetActiveWindow now static
-
-      Rev 1.126   19 Feb 1999 16:46:20   OS
-   IsCaseSensitive nicht mehr inline
-
-      Rev 1.125   10 Feb 1999 16:11:58   OS
-   #61050# bei gleichen Gruppennamen immer den richtigen finden
-
-      Rev 1.124   09 Feb 1999 10:46:38   OS
-   #61205# AutoText-Gruppen koennen beliebige Namen erhalten
-
-------------------------------------------------------------------------*/
-
-
