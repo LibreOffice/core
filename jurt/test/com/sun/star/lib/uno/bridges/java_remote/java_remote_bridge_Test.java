@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge_Test.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-04 12:03:40 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 17:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,246 +61,277 @@
 
 package com.sun.star.lib.uno.bridges.java_remote;
 
-
-import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-
-import java.lang.reflect.InvocationTargetException;
-
+import com.sun.star.bridge.XBridge;
+import com.sun.star.bridge.XInstanceProvider;
+import com.sun.star.comp.connections.PipedConnection;
+import com.sun.star.connection.XConnection;
+import com.sun.star.container.NoSuchElementException;
+import com.sun.star.lib.uno.environments.java.java_environment;
+import com.sun.star.uno.IQueryInterface;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 import java.util.Vector;
 
+public final class java_remote_bridge_Test {
+    public static boolean test(Vector notPassed, String protocol)
+        throws Exception
+    {
+        System.err.println("java_remote_bridge, testing with protocol: "
+                           + protocol + "...");
 
-import com.sun.star.bridge.XInstanceProvider;
-
-import com.sun.star.comp.connections.PipedConnection;
-
-import com.sun.star.connection.XConnection;
-
-import com.sun.star.uno.IEnvironment;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.XInterface;
-
-import com.sun.star.lib.uno.environments.java.java_environment;
-import com.sun.star.lib.uno.environments.java.Proxy;
-
-import com.sun.star.lib.uno.environments.remote.IProtocol;
-
-
-public class java_remote_bridge_Test {
-    static IEnvironment __java_environment_A;
-    static IEnvironment __java_environment_B;
-
-    static java_remote_bridge __java_remote_bridge_A;
-    static java_remote_bridge __java_remote_bridge_B;
-
-    static PipedConnection __xConnection_A;
-    static PipedConnection __xConnection_B;
-
-    static XInstanceProvider __xInstanceProvider;
-
-    static byte __bytes[] = new byte[] {(byte)255, (byte)0, (byte)128};
-
-    static class YXInstanceProvider implements XInstanceProvider {
-        Object _object;
-
-        void createNewObject() {
-            _object = new TestInterface_Object(); // create the instance, which is to be mapped from A to B
-        }
-
-        public Object getInstance(String name) throws com.sun.star.container.NoSuchElementException, com.sun.star.uno.RuntimeException {
-//              System.err.println("\t\tTest_XInstanceProvider.getInstance:" + name);
-
-            Object object = _object;
-
-            if(name.equals("return_null"))
-                object = null;
-
-            else if(name.equals("throw_com.sun.star.uno.RuntimeException"))
-                throw new com.sun.star.uno.RuntimeException(getClass().getName() + " - throwing:" + name);
-
-            else if(name.equals("throw_com.sun.star.container.NoSuchElementException"))
-                throw new com.sun.star.container.NoSuchElementException(getClass().getName() + " - throwing:" + name);
-
-            return object;
-        }
-    }
-
-    static boolean test_lifecycle(int objects, YXInstanceProvider yXInstanceProvider) throws Exception {
-        System.err.println("\tjava_remote_bridge - testing lifecycle...");
+        XConnection connectionA = new PipedConnection(new Object[0]);
+        XConnection connectionB = new PipedConnection(
+            new Object[] { connectionA });
+        java_remote_bridge bridgeA = new java_remote_bridge(
+            new java_environment(null), null,
+            new Object[] { protocol, connectionA, new TestInstanceProvider() });
+        java_remote_bridge bridgeB = new java_remote_bridge(
+            new java_environment(null), null,
+            new Object[] { protocol, connectionB, null });
 
         boolean passed = true;
+        passed &= testGetInstance(bridgeA, bridgeB);
+        passed &= testLifeCycle(bridgeA, bridgeB);
+            // the bridges are disposed afterwards...
+        passed &= testReleaseOutmappedObjects();
 
-//          XInterface theProxy = (XInterface)__java_remote_bridge_B.mapInterfaceFrom("testinstance", XInterface.class); // map the instance back from oid world to Bs real world
-        XInterface theProxy = (XInterface)Proxy.create(__java_remote_bridge_B, "testinstance", new Type(XInterface.class), true, false);
-
-
-        TestInterface theProxy_TestInterfaces[] = new TestInterface[objects];
-
-        for(int i = 0; i < objects; ++ i) {
-            yXInstanceProvider.createNewObject();
-
-            // map object
-            theProxy_TestInterfaces[i] = (TestInterface)com.sun.star.uno.UnoRuntime.queryInterface(TestInterface.class, theProxy);
-            theProxy_TestInterfaces[i].function(); // call the function
-
-            // remap object once
-            TestInterface remappedObject = (TestInterface)com.sun.star.uno.UnoRuntime.queryInterface(TestInterface.class, theProxy);
-            remappedObject.function(); // call the function
-
-            // remap object twice
-            remappedObject = (TestInterface)com.sun.star.uno.UnoRuntime.queryInterface(TestInterface.class, theProxy);
-            remappedObject.function(); // call the function
+        String result = "java_remote_bridge, " + protocol + " test passed? "
+            + passed;
+        System.err.println(result);
+        if (!passed && notPassed != null) {
+            notPassed.addElement(result);
         }
-
-        System.err.println("\t\tobject method called " + TestInterface_Object.__called + " times, should be " + (objects * 3) + " - passed?" + (TestInterface_Object.__called == (objects * 3)));
-
-
-        System.err.println("\t\tbridge A life count: " + __java_remote_bridge_A.getLifeCount() + " should be " + objects + " - passed?" + (__java_remote_bridge_A.getLifeCount() == objects));
-        passed = passed && (__java_remote_bridge_A.getLifeCount() == objects);
-        System.err.println("\t\tbridge B life count: " + __java_remote_bridge_B.getLifeCount() + " should be " + objects + " - passed?" + (__java_remote_bridge_B.getLifeCount() == objects));
-        passed = passed && (__java_remote_bridge_B.getLifeCount() == objects);
-        System.err.println("\t\tproxy count:" + Proxy.getInstances() + " should be " + (objects + 1) + " - passed?" + (Proxy.getInstances() == (objects + 1)));
-        passed = passed && (Proxy.getInstances() == (objects + 1));
-
-          theProxy = null;
-        theProxy_TestInterfaces = null;
-
-        System.err.println("\t\twaiting for gc to clear all proxies");
-        while(Proxy.getInstances() > 0) { // try to force proxy recycling
-            System.gc();
-            System.runFinalization();
-
-            byte bytes[] = new byte[1024];
-        }
-
-          IProtocol protocol_A = __java_remote_bridge_A.getProtocol();
-          IProtocol protocol_B = __java_remote_bridge_B.getProtocol();
-
-        System.err.println("\t\twaiting for pending messages to be done");
-        while(protocol_B.getRequestsSendCount() > protocol_A.getRequestsReceivedCount()) {// wait while messages are pending
-            System.err.println("pending:" + (protocol_B.getRequestsSendCount() - protocol_A.getRequestsReceivedCount()));
-            Thread.sleep(100);
-        }
-        System.err.println("\t\tbridge A life count: " + __java_remote_bridge_A.getLifeCount() + " should be 0" + " - passed?" + (__java_remote_bridge_A.getLifeCount() == 0));
-        passed = passed && (__java_remote_bridge_A.getLifeCount() == 0);
-        System.err.println("\t\tbridge B life count: " + __java_remote_bridge_B.getLifeCount() + " should be 0" + " - passed?" + (__java_remote_bridge_B.getLifeCount() == 0));
-        passed = passed && (__java_remote_bridge_B.getLifeCount() == 0);
-        System.err.println("\t\tproxy count:" + Proxy.getInstances() + " should be 0" + " - passed?" + (Proxy.getInstances() == 0));
-        passed = passed && (Proxy.getInstances() == 0);
-
-
-        // both bridges should be disposed now
-
         return passed;
     }
 
+    private static boolean testGetInstance(XBridge bridgeA, XBridge bridgeB) {
+        System.err.println("\ttesting getInstance...");
 
-    static boolean test_releasing_of_outmapped_objects() throws InterruptedException {
-        System.err.println("\tjava_remote_bridge - testing release of outmapped objects - not implemented yet");
+        boolean passed = true;
+        boolean stepPassed;
 
+        stepPassed
+            = bridgeB.getInstance(TestInstanceProvider.NAME_NULL) == null;
+        System.err.println("\t\treturn null: passed? " + stepPassed);
+        passed &= stepPassed;
+
+        try {
+            bridgeB.getInstance(TestInstanceProvider.NAME_RUNTIME_EXCEPTION);
+            stepPassed = false;
+        } catch (com.sun.star.uno.RuntimeException e) {
+            stepPassed = e.getMessage().indexOf(
+                TestInstanceProvider.NAME_RUNTIME_EXCEPTION) != -1;
+        }
+        System.err.println("\t\tthrow RuntimeException: passed? " + stepPassed);
+        passed &= stepPassed;
+
+        try {
+            bridgeB.getInstance(
+                TestInstanceProvider.NAME_NO_SUCH_ELEMENT_EXCEPTION);
+            stepPassed = false;
+        } catch (com.sun.star.uno.RuntimeException e) {
+            stepPassed = e.getMessage().indexOf(
+                TestInstanceProvider.NAME_NO_SUCH_ELEMENT_EXCEPTION) != -1;
+        }
+        System.err.println("\t\tthrow NoSuchElementException: passed? "
+                           + stepPassed);
+        passed &= stepPassed;
+
+        try {
+            bridgeA.getInstance(TestInstanceProvider.NAME_ANYTHING);
+            stepPassed = false;
+        } catch (com.sun.star.uno.RuntimeException e) {
+            stepPassed
+                = e.getMessage().indexOf("no instance provider set") != -1;
+        }
+        System.err.println("\t\tno instance provider: passed? " + stepPassed);
+        passed &= stepPassed;
+
+        System.err.println("\ttesting getInstance: passed? " + passed);
+        return passed;
+    }
+
+    private static boolean testLifeCycle(java_remote_bridge bridgeA,
+                                         java_remote_bridge bridgeB)
+        throws InterruptedException
+    {
+        // Repeatedly, objects are mapped from bridgeA to bridgeB, where proxies
+        // for those objects (for the XInterface and TestInterface facets) are
+        // created.  The proxies at bridgeB keep both bridges alive; after those
+        // proxies have been garbage-collected, both bridges should be disposed.
+        // It does not work to map a local object from bridgeA to bridgeB, as
+        // bridgeB would find this object as a local one, too (via the shared,
+        // static localObjects Registry in java_environment): bridgeB would not
+        // create a proxy, would rather send back a "release" to bridgeA, and
+        // both bridges would be disposed while the first object is being
+        // mapped.  Therefore, a HACK is used to install TestProxy objects
+        // (which behave as if they got mapped in to bridgeA from somewhere
+        // else) at bridgeA and map those.
+
+        System.err.println("\ttesting life cycle...");
+
+        final int COUNT = 100;
+        XInterface[] proxyBXInterface = new XInterface[COUNT];
+        TestInterface[] proxyBTestInterface = new TestInterface[COUNT];
+        for (int i = 0; i < COUNT; ++i) {
+            String name = "TestOID" + i;
+            Object proxyA = new TestProxy(name);
+            bridgeA.getSourceEnvironment().registerInterface(
+                proxyA, new String[] { name }, new Type(XInterface.class));
+
+            proxyBXInterface[i] = (XInterface) bridgeB.getInstance(name);
+
+            // map object:
+            proxyBTestInterface[i] = (TestInterface) UnoRuntime.queryInterface(
+                TestInterface.class, proxyBXInterface[i]);
+            proxyBTestInterface[i].function();
+
+            // remap object once:
+            TestInterface remapped = (TestInterface) UnoRuntime.queryInterface(
+                TestInterface.class, proxyBXInterface[i]);
+            remapped.function();
+
+            // remap object twice:
+            remapped = (TestInterface) UnoRuntime.queryInterface(
+                TestInterface.class, proxyBXInterface[i]);
+            remapped.function();
+        }
+
+        boolean passed = true;
+        boolean stepPassed;
+
+        stepPassed = TestProxy.getCount() == 3 * COUNT;
+        System.err.println("\t\tobject method called " + TestProxy.getCount()
+                           + " times, should be " + (3 * COUNT) + ", passed? "
+                           + stepPassed);
+        passed &= stepPassed;
+
+        // The following checks rely on the implementation detail that mapping
+        // different facets of a UNO object (XInterface and TestInterface) leads
+        // to different proxies:
+
+        stepPassed = bridgeA.getLifeCount() == 2 * COUNT;
+        System.err.println("\t\tbridge A life count: " + bridgeA.getLifeCount()
+                           + ", should be " + (2 * COUNT) + ", passed? "
+                           + stepPassed);
+        passed &= stepPassed;
+
+        stepPassed = bridgeB.getLifeCount() == 2 * COUNT;
+        System.err.println("\t\tbridge B life count: " + bridgeB.getLifeCount()
+                           + ", should be " + 2 * COUNT + ", passed? "
+                           + stepPassed);
+        passed &= stepPassed;
+
+        stepPassed = ProxyFactory.getDebugCount() == 2 * COUNT;
+        System.err.println(
+            "\t\tproxy count: " + ProxyFactory.getDebugCount() + ", should be "
+            + (2 * COUNT) + ", passed? " + stepPassed);
+        passed &= stepPassed;
+
+        System.err.println("\t\twaiting for gc to clear all proxies");
+        proxyBXInterface = null;
+        proxyBTestInterface = null;
+        while (ProxyFactory.getDebugCount() > 0)
+        {
+            System.gc();
+            System.runFinalization();
+            byte[] bytes = new byte[1024];
+        }
+
+        System.err.println("\t\twaiting for pending messages to be done");
+        while (bridgeB.getProtocol().getRequestsSendCount()
+               > bridgeA.getProtocol().getRequestsReceivedCount()) {
+            System.err.println(
+                "pending: " + bridgeB.getProtocol().getRequestsSendCount()
+                + ", " + bridgeA.getProtocol().getRequestsReceivedCount());
+            Thread.sleep(100);
+        }
+
+        stepPassed = bridgeA.getLifeCount() == 0;
+        System.err.println("\t\tbridge A life count: " + bridgeA.getLifeCount()
+                           + ", should be 0, passed? " + stepPassed);
+        passed &= stepPassed;
+
+        stepPassed = bridgeB.getLifeCount() == 0;
+        System.err.println("\t\tbridge B life count: " + bridgeB.getLifeCount()
+                           + ", should be 0, passed? " + stepPassed);
+        passed &= stepPassed;
+
+        stepPassed = ProxyFactory.getDebugCount() == 0;
+        System.err.println("\t\tproxy count: " + ProxyFactory.getDebugCount()
+                           + " should be 0, passed? " + stepPassed);
+        passed &= stepPassed;
+
+        System.err.println("\ttesting life cycle: passed? " + passed);
+        return passed;
+    }
+
+    private static boolean testReleaseOutmappedObjects() {
+        System.err.println(
+            "\ttesting release of outmapped objects: not yet implemented");
         return true;
     }
 
-    static boolean test_getInstance() throws Exception {
-        boolean passed = true;
-
-        System.err.println("\tjava_remote_bridge - testing getInstance...");
-
-
-        boolean tmp_passed = (__java_remote_bridge_B.getInstance("return_null") == null);
-        System.err.println("\t\treturn null: passed? " + tmp_passed);
-
-        passed = passed && tmp_passed;
-
-        try {
-            __java_remote_bridge_B.getInstance("throw_com.sun.star.uno.RuntimeException");
-
-            tmp_passed = false;
-        }
-        catch(com.sun.star.uno.RuntimeException runtimeException) {
-            tmp_passed = runtimeException.getMessage().indexOf("throw_com.sun.star.uno.RuntimeException") != -1;
+    private static final class TestInstanceProvider
+        implements XInstanceProvider
+    {
+        public Object getInstance(String name) throws NoSuchElementException {
+            if (name.equals(NAME_NULL)) {
+                return null;
+            } else if (name.equals(NAME_RUNTIME_EXCEPTION)) {
+                throw new com.sun.star.uno.RuntimeException(
+                    getClass().getName() + ", throwing: " + name);
+            } else if (name.equals(NAME_NO_SUCH_ELEMENT_EXCEPTION)) {
+                throw new NoSuchElementException(
+                    getClass().getName() + ", throwing: " + name);
+            } else {
+                throw new IllegalStateException();
+            }
         }
 
-        System.err.println("\t\tthrow RuntimeException: passed? " + tmp_passed);
-        passed = passed && tmp_passed;
-
-          try {
-             __java_remote_bridge_B.getInstance("throw_com.sun.star.container.NoSuchElementException");
-
-            tmp_passed = false;
-          }
-          catch(com.sun.star.uno.RuntimeException runtimeException) {
-            tmp_passed =  (runtimeException.getMessage().indexOf("throw_com.sun.star.container.NoSuchElementException") != -1);
-          }
-
-        System.err.println("\t\tthrow NoSuchElementException: passed? " + tmp_passed);
-        passed = passed && tmp_passed;
-
-
-          try {
-             __java_remote_bridge_A.getInstance("blabla");
-
-            tmp_passed = false;
-          }
-          catch(com.sun.star.uno.RuntimeException runtimeException) {
-            tmp_passed =  (runtimeException.getMessage().indexOf("no instance provider set") != -1);
-          }
-
-        System.err.println("\t\tno instance provider: passed? " + tmp_passed);
-
-        passed = passed && tmp_passed;
-
-        System.err.println("\tjava_remote_bridge - testing getInstance: passed?" +  passed);
-
-        return passed;
+        public static final String NAME_NULL = "return null";
+        public static final String NAME_RUNTIME_EXCEPTION
+        = "throw RuntimeException";
+        public static final String NAME_NO_SUCH_ELEMENT_EXCEPTION
+        = "throw NoSuchElementException";
+        public static final String NAME_ANYTHING = "anything";
     }
 
-    static public boolean test(Vector notpassed, String protocol) throws Exception {
-        System.err.println("java_remote_bridge - testing with protocol: " + protocol + "...");
-        __xConnection_A = new PipedConnection(new Object[0]);
-        __xConnection_B = new PipedConnection(new Object[]{__xConnection_A});
+    private static final class TestProxy
+        implements com.sun.star.lib.uno.Proxy, IQueryInterface, XInterface,
+            TestInterface
+    {
+        public TestProxy(String oid) {
+            this.oid = oid;
+        }
 
-        __java_environment_A = new java_environment(null);
-        __java_environment_B = new java_environment(null);
+        public Object queryInterface(Type type) {
+            // type should be either XInterface or TestInterface...
+            return this;
+        }
 
+        public boolean isSame(Object object) {
+            return object instanceof TestProxy
+                && oid.equals(((TestProxy) object).oid);
+        }
 
-        YXInstanceProvider yXInstanceProvider = new YXInstanceProvider();
+        public String getOid() {
+            return oid;
+        }
 
-          __xInstanceProvider = yXInstanceProvider;
+        public void function() {
+            synchronized (getClass()) {
+                ++count;
+            }
+        }
 
-        __java_remote_bridge_A = new java_remote_bridge(__java_environment_A, null, new Object[]{protocol, __xConnection_A, __xInstanceProvider});
-        __java_remote_bridge_B = new java_remote_bridge(__java_environment_B, null, new Object[]{protocol, __xConnection_B, null});
+        public static synchronized int getCount() {
+            return count;
+        }
 
+        private final String oid;
 
-
-
-          boolean passed = true;
-        boolean tmp_passed = false;
-
-        tmp_passed = test_getInstance();
-        passed = passed && tmp_passed;
-
-        tmp_passed = test_lifecycle(100, yXInstanceProvider);
-        passed = passed && tmp_passed;
-
-        tmp_passed = test_releasing_of_outmapped_objects();
-        passed = passed && tmp_passed;
-
-        System.err.println("java_remote_bridge_Test - " + protocol + " test passed?" + passed);
-        if(!passed && notpassed != null)
-            notpassed.addElement("java_remote_bridge_Test - " + protocol + " test passed?" + passed);
-
-        return passed;
-    }
-
-    static public void main(String args[]) throws Exception {
-        if(args.length == 1)
-            test(null, args[0]);
-        else
-            test(null, "iiop");
-
-//          System.exit(0);
+        private static int count = 0;
     }
 }
-
