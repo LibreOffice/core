@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:26:46 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,23 +70,23 @@
 #include "refreshtimer.hxx"
 #endif
 
-#ifndef _EMBOBJ_HXX
-#include <so3/embobj.hxx>
-#endif
+//REMOVE    #ifndef _EMBOBJ_HXX
+//REMOVE    #include <so3/embobj.hxx>
+//REMOVE    #endif
 
 #ifndef _LNKBASE_HXX //autogen
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 
-#ifndef SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-#define SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-SO2_DECL_REF(SvEmbeddedObject)
-#endif
+#include <sfx2/objsh.hxx>
+//REMOVE    #ifndef SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
+//REMOVE    #define SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
+//REMOVE    SO2_DECL_REF(SvEmbeddedObject)
+//REMOVE    #endif
 
 class ScDocShell;
-class SfxObjectShell;
 
-class ScTableLink : public ::so3::SvBaseLink, public ScRefreshTimer
+class ScTableLink : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {
 private:
     ScDocShell* pDocShell;      // Container
@@ -135,7 +135,7 @@ class SC_DLLPUBLIC ScDocumentLoader
 {
 private:
     ScDocShell*         pDocShell;
-    SvEmbeddedObjectRef aRef;
+    SfxObjectShellRef   aRef;
     SfxMedium*          pMedium;
 
 public:
