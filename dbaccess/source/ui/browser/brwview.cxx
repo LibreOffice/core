@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:42:27 $
+ *  last change: $Author: fs $ $Date: 2000-11-06 17:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,10 +213,13 @@ void UnoDataBrowserView::setSplitter(Splitter* _pSplitter)
 {
     m_pSplitter = _pSplitter;
     m_pSplitter->SetSplitHdl( LINK( this, UnoDataBrowserView, SplitHdl ) );
+    LINK( this, UnoDataBrowserView, SplitHdl ).Call(m_pSplitter);
 }
 // -------------------------------------------------------------------------
 void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
 {
+    if (m_pTreeView)
+        delete m_pTreeView;
     m_pTreeView = _pTreeView;
 }
 // -------------------------------------------------------------------------
