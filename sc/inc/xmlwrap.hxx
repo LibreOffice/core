@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-09 20:00:41 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 17:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,20 @@ class ScXMLImportWrapper
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator> GetStatusIndicator(
         com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel);
+
+    sal_Bool ImportFromComponent(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceFactory,
+        com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,
+        com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xXMLParser,
+        com::sun::star::xml::sax::InputSource& aParserInput,
+        const rtl::OUString& sComponentName, const rtl::OUString& sDocName,
+        com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs);
+
+    sal_Bool ExportToComponent(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceFactory,
+        com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,
+        com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xWriter,
+        com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aDescriptor,
+        const rtl::OUString& sName, const rtl::OUString& sMediaType, const rtl::OUString& sComponentName,
+        const sal_Bool bCompress, com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs);
 
 public:
     ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, SvStorage* pS);
