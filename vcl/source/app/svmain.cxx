@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-24 10:58:37 $
+ *  last change: $Author: th $ $Date: 2001-07-25 11:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,12 +143,6 @@
 #endif
 #ifndef _SV_SETTINGS_HXX
 #include <settings.hxx>
-#endif
-#ifndef TF_SVDATA
-// HACK: Only for Exception-Hack
-#ifndef _SV_SYSEXCHG_HXX
-#include <sysexchg.hxx>
-#endif
 #endif
 
 #include <vos/process.hxx>
@@ -370,38 +364,6 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     pSVData->maGDIData.mpScreenFontCache  = new ImplFontCache( FALSE );
 
     pSVData->maAppData.mpSolarMutex->acquire(); // mutex should be aquired for startup
-#if SUPD < 638
-    // 638: changed startup behaviour
-    // sfx will now wait for startup condition, not vcl
-    // RVP version checking is performed on client only now because
-    // client has not connected yet
-    pSVData->mpStartUpCond->wait();
-    delete pSVData->mpStartUpCond;
-    pSVData->mpStartUpCond = NULL;
-    // we have to acquire solar mutex before we do our first rvp call!
-    pSVData->maAppData.mpSolarMutex->acquire();
-
-    if( pSVData->mxClientFactory.is() )
-    {
-        if ( pSVData->mnRemoteVersion != REMOTE_VCLVERSION )
-        {
-            CHECK_FOR_RVPSYNC_NORMAL();
-            try
-            {
-                pSVData->mxStatus->Quit();
-            }
-            catch( RuntimeException &e )
-            {
-                rvpExceptionHandler();
-            }
-            return sal_False;
-        }
-    }
-    else
-    {
-        return sal_False;
-    }
-#endif // SUPD < 638
 
     ImplInitRemotePrinterList();
     }
@@ -423,13 +385,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
     // convert path to native file format
     rtl::OUString aNativeFileName;
-#ifdef TF_FILEURL
-    OSL_VERIFY( osl_File_E_None ==
-                osl::FileBase::getSystemPathFromFileURL(aExeFileName, aNativeFileName) );
-#else
-    osl::FileBase::getSystemPathFromNormalizedPath(aExeFileName, aNativeFileName);
-#endif
-
+    osl::FileBase::getSystemPathFromFileURL( aExeFileName, aNativeFileName );
     pSVData->maAppData.mpAppFileName = new String( aNativeFileName );
 
     // Initialize global data
