@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanja.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:44:46 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,23 +61,15 @@
 #ifndef SVX_HANGUL_HANJA_CONVERSION_HXX
 #include "hangulhanja.hxx"
 #endif
-//CHINA001 #ifndef SVX_HANGUL_HANJA_DLG_HXX
-//CHINA001 #include "hangulhanjadlg.hxx"
-//CHINA001 #endif
-#ifndef _SV_DIALOG_HXX
-#include <vcl/dialog.hxx> //add CHINA001
-#endif
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx> //add CHINA001
-#endif
-#ifndef _SV_LSTBOX_HXX
-#include <vcl/lstbox.hxx> //add CHINA001
-#endif
-#ifndef _SV_FIXED_HXX
-#include <vcl/fixed.hxx> //add CHINA001
-#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx> //add CHINA001
+#endif
+// header for class SvtLinguConfig
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
+#endif
+#ifndef _SVTOOLS_LINGUPROPS_HXX_
+#include <svtools/linguprops.hxx>
 #endif
 
 #include <set>
@@ -173,8 +165,9 @@ namespace svx
         typedef ::std::map< OUString, OUString, ::std::less< OUString > >   StringMap;
 
     private:
-        static  StringBag                       m_sIgnoreList;
-                StringMap                       m_aChangeList;
+        StringBag               m_sIgnoreList;
+        StringMap               m_aChangeList;
+        static StringMap        m_aRecentlyUsedList;
 
         // general
         AbstractHangulHanjaConversionDialog* //CHINA001 HangulHanjaConversionDialog*
@@ -208,15 +201,20 @@ namespace svx
         HHC::ConversionDirection    m_ePrimaryConversionDirection;  // the primary conversion direction
         HHC::ConversionDirection    m_eCurrentConversionDirection;  // the primary conversion direction
 
+        //options from Hangul/Hanja Options dialog (also saved to configuration)
+        bool                    m_bIgnorePostPositionalWord;
+        bool                    m_bShowRecentlyUsedFirst;
+        bool                    m_bAutoReplaceUnique;
+
         // state
         OUString                m_sCurrentPortion;      // the text which we are currently working on
-        OUString                m_sCurrentUnit;         // the current text unit within m_sCurrentPortion to be checked for conversions
         sal_Int32               m_nCurrentStartIndex;   // the start index within m_sCurrentPortion of the current convertible portion
         sal_Int32               m_nCurrentEndIndex;     // the end index (excluding) within m_sCurrentPortion of the current convertible portion
         sal_Int32               m_nReplacementBaseIndex;// index which ReplaceUnit-calls need to be relative to
         Sequence< OUString >
                                 m_aCurrentSuggestions;  // the suggestions for the current unit
                                                         // (means for the text [m_nCurrentStartIndex, m_nCurrentEndIndex) in m_sCurrentPortion)
+        sal_Bool                m_bTryBothDirections;   // specifies if noth conversion directions should be tried when looking for convertible characters
 
 
     public:
@@ -231,11 +229,17 @@ namespace svx
             HangulHanjaConversion* _pAntiImpl );
 
     public:
+
+        static void         SetUseSavedConversionDirectionState( sal_Bool bVal );
+
                 void        DoDocumentConversion( );
 
         inline  sal_Bool    IsByCharacter( ) const { return m_bByCharacter; }
 
         inline  sal_Bool    IsValid() const { return m_xConverter.is(); }
+
+        inline sal_Bool                 GetTryBothDirections()          { return m_bTryBothDirections; }
+        inline HHC::ConversionDirection GetPrimaryConversionDirection() { return m_ePrimaryConversionDirection; }
 
         inline LanguageType GetSourceLang() const   { return m_nSourceLang; }
         inline LanguageType GetTargetLang() const   { return m_nTargetLang; }
@@ -254,6 +258,7 @@ namespace svx
         sal_Bool ContinueConversion( bool _bRepeatCurrentUnit );
 
     private:
+        DECL_LINK( OnOptionsChanged, void* );
         DECL_LINK( OnIgnore, void* );
         DECL_LINK( OnIgnoreAll, void* );
         DECL_LINK( OnChange, void* );
@@ -295,16 +300,48 @@ namespace svx
         bool        implRetrieveNextPortion( );
 
         /** fill in m_ePrimaryConversionDirection from m_sCurrentPortion
+            (used to determine the initial(!) conversion direction)
+
             @return
                 <FALSE/> if and only if something went wrong
         */
         bool        implDeterminePrimaryDirection( );
+
+        /** member m_aCurrentSuggestions and m_nCurrentEndIndex are updated according to the other settings and current dictionaries
+
+            if _bAllowSearchNextConvertibleText is true _nStartAt is used as starting point to search the next
+            convertible text portion. This may result in changing of the member m_nCurrentStartIndex additionally.
+
+            @return
+                <TRUE/> if Suggestions were found
+        */
+        bool        implUpdateSuggestions( const bool _bAllowSearchNextConvertibleText=false, const sal_Int32 _nStartAt=-1 );
+
+        /** reads the options from Hangul/Hanja Options dialog that are saved to configuration
+        */
+        void implReadOptionsFromConfiguration();
+
+        /** get the string currently considered to be replaced or ignored
+        */
+        ::rtl::OUString GetCurrentUnit() const;
+
+        /** read options from configuration, update suggestion list and dialog content
+        */
+        void implUpdateData();
+
+        /** get the conversion direction dependent from m_eConvType and m_ePrimaryConversionDirection
+            in case of switching the direction is allowed this can be triggered with parameter bSwitchDirection
+        */
+        sal_Int16 implGetConversionType( bool bSwitchDirection=false ) const;
     };
 
     //=========================================================================
     //= HangulHanjaConversion_Impl
     //=========================================================================
-    HangulHanjaConversion_Impl::StringBag HangulHanjaConversion_Impl::m_sIgnoreList;
+    //-------------------------------------------------------------------------
+    // static member initialization
+    HangulHanjaConversion_Impl::StringMap HangulHanjaConversion_Impl::m_aRecentlyUsedList = HangulHanjaConversion_Impl::StringMap();
+
     //-------------------------------------------------------------------------
     HangulHanjaConversion_Impl::HangulHanjaConversion_Impl( Window* _pUIParent,
         const Reference< XMultiServiceFactory >& _rxORB,
@@ -320,6 +357,7 @@ namespace svx
         ,m_nCurrentStartIndex( 0 )
         ,m_nCurrentEndIndex( 0 )
         ,m_nReplacementBaseIndex( 0 )
+        ,m_bTryBothDirections( sal_True )
         ,m_xORB( _rxORB )
         ,m_aSourceLocale( _rSourceLocale )
         ,m_nSourceLang( SvxLocaleToLanguage( _rSourceLocale ) )
@@ -327,6 +365,8 @@ namespace svx
         ,m_pTargetFont( _pTargetFont )
         ,m_bIsInteractive( _bIsInteractive )
     {
+        implReadOptionsFromConfiguration();
+
         DBG_ASSERT( m_xORB.is(), "HangulHanjaConversion_Impl::HangulHanjaConversion_Impl: no ORB!" );
 
         // determine conversion type
@@ -352,6 +392,7 @@ namespace svx
             if ( !m_xConverter.is() )
                 ShowServiceNotAvailableError( m_pUIParent, sTextConversionService, sal_True );
         }
+
     }
 
     //-------------------------------------------------------------------------
@@ -363,8 +404,6 @@ namespace svx
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
-
-                //CHINA001 m_pConversionDialog = new HangulHanjaConversionDialog( m_pUIParent, m_ePrimaryConversionDirection );
                 m_pConversionDialog = pFact->CreateHangulHanjaConversionDialog(m_pUIParent, m_ePrimaryConversionDirection, ResId(RID_SVX_MDLG_HANGULHANJA));
                 DBG_ASSERT(m_pConversionDialog, "Dialogdiet fail!");//CHINA001
 
@@ -372,8 +411,10 @@ namespace svx
 
                 m_pConversionDialog->SetByCharacter( m_bByCharacter );
                 m_pConversionDialog->SetConversionFormat( m_eConversionFormat );
+                m_pConversionDialog->SetConversionDirectionState( m_bTryBothDirections, m_ePrimaryConversionDirection );
 
                 // the handlers
+                m_pConversionDialog->SetOptionsChangedHdl( LINK( this, HangulHanjaConversion_Impl, OnOptionsChanged ) );
                 m_pConversionDialog->SetIgnoreHdl( LINK( this, HangulHanjaConversion_Impl, OnIgnore ) );
                 m_pConversionDialog->SetIgnoreAllHdl( LINK( this, HangulHanjaConversion_Impl, OnIgnoreAll ) );
                 m_pConversionDialog->SetChangeHdl( LINK( this, HangulHanjaConversion_Impl, OnChange ) );
@@ -386,46 +427,37 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    bool HangulHanjaConversion_Impl::implNextConvertibleUnit( const sal_Int32 _nStartAt )
+    sal_Int16 HangulHanjaConversion_Impl::implGetConversionType( bool bSwitchDirection ) const
     {
-        m_aCurrentSuggestions.realloc( 0 );
-
-        // ask the TextConversion service for the next convertible piece of text
-        sal_Int32 nStartLookupAt = _nStartAt;
-
-        // parameters for the converter
-        sal_Int32 nLength = m_sCurrentPortion.getLength() - _nStartAt;
-
         sal_Int16 nConversionType = -1;
         if (m_eConvType == HHC::eConvHangulHanja)
-            nConversionType = HHC::eHangulToHanja == m_ePrimaryConversionDirection ? TO_HANJA : TO_HANGUL;
+            nConversionType = HHC::eHangulToHanja == ( m_ePrimaryConversionDirection && !bSwitchDirection ) ? TO_HANJA : TO_HANGUL;
         else if (m_eConvType == HHC::eConvSimplifiedTraditional)
             nConversionType = LANGUAGE_CHINESE_SIMPLIFIED == m_nTargetLang ? TO_SCHINESE : TO_TCHINESE;
         DBG_ASSERT( nConversionType != -1, "unexpected conversion type" );
+        return nConversionType;
+    }
+
+    //-------------------------------------------------------------------------
+    bool HangulHanjaConversion_Impl::implUpdateSuggestions( bool _bAllowSearchNextConvertibleText, const sal_Int32 _nStartAt )
+    {
+        // parameters for the converter
+        sal_Int32 nStartSearch = m_nCurrentStartIndex;
+        if( _bAllowSearchNextConvertibleText )
+            nStartSearch = _nStartAt;
+
+        sal_Int32 nLength = m_sCurrentPortion.getLength() - nStartSearch;
+        sal_Int16 nConversionType = implGetConversionType();
         sal_Int32 nConversionOption = IsByCharacter() ? CHARACTER_BY_CHARACTER : NONE;
-
-        // - eConvHangulHanja: if the dialog does not yet exist we stay with the
-        // primary conversion direction only
-        // - eConvSimplifiedTraditional: there is only a single direction
-        // specified by m_nTargetLang
-        sal_Bool bTryBothDirections = sal_False;
-        if (m_eConvType == HHC::eConvHangulHanja)
-            bTryBothDirections = m_pConversionDialog ? m_pConversionDialog->GetUseBothDirections() : sal_False;
-
-        // until we know better, assume that this very conversion attempt will end up with
-        // the conversion direction which is our primary direction
-        // (used for eConvHangulHanja only)
-        m_eCurrentConversionDirection = m_ePrimaryConversionDirection;
-
-        // curent unit within text portion to be checked for conversions
-        m_sCurrentUnit = m_sCurrentPortion.copy( _nStartAt, nLength );
+        if( m_bIgnorePostPositionalWord )
+            nConversionOption = nConversionOption | IGNORE_POST_POSITIONAL_WORD;
 
         sal_Bool bFoundAny = sal_True;
         try
         {
             TextConversionResult aResult = m_xConverter->getConversions(
                 m_sCurrentPortion,
-                _nStartAt,
+                nStartSearch,
                 nLength,
                 m_aSourceLocale,
                 nConversionType,
@@ -434,14 +466,14 @@ namespace svx
             sal_Bool bFoundPrimary = aResult.Boundary.startPos < aResult.Boundary.endPos;
             bFoundAny = bFoundPrimary;
 
-            if ( bTryBothDirections )
+            if ( m_bTryBothDirections )
             {   // see if we find another convertible when assuming the other direction
                 TextConversionResult aSecondResult = m_xConverter->getConversions(
                     m_sCurrentPortion,
-                    _nStartAt,
+                    nStartSearch,
                     nLength,
                     m_aSourceLocale,
-                    HHC::eHangulToHanja == m_ePrimaryConversionDirection ? TO_HANGUL : TO_HANJA,    // switched!
+                    implGetConversionType( true ), // switched!
                     nConversionOption
                 );
                 if ( aSecondResult.Boundary.startPos < aSecondResult.Boundary.endPos )
@@ -465,9 +497,51 @@ namespace svx
                 }
             }
 
-            m_aCurrentSuggestions = aResult.Candidates;
-            m_nCurrentStartIndex = aResult.Boundary.startPos;
-            m_nCurrentEndIndex = aResult.Boundary.endPos;
+            if( _bAllowSearchNextConvertibleText )
+            {
+                //this might change the current position
+                m_aCurrentSuggestions = aResult.Candidates;
+                m_nCurrentStartIndex = aResult.Boundary.startPos;
+                m_nCurrentEndIndex = aResult.Boundary.endPos;
+            }
+            else
+            {
+                //the change of starting position is not allowed
+                if( m_nCurrentStartIndex == aResult.Boundary.startPos
+                    && aResult.Boundary.endPos != aResult.Boundary.startPos )
+                {
+                    m_aCurrentSuggestions = aResult.Candidates;
+                    m_nCurrentEndIndex = aResult.Boundary.endPos;
+                }
+                else
+                {
+                    m_aCurrentSuggestions.realloc( 0 );
+                    if( m_sCurrentPortion.getLength() >= m_nCurrentStartIndex+1 )
+                        m_nCurrentEndIndex = m_nCurrentStartIndex+1;
+                }
+            }
+
+            //put recently used string to front:
+            if( m_bShowRecentlyUsedFirst && m_aCurrentSuggestions.getLength()>1 )
+            {
+                ::rtl::OUString sCurrentUnit( GetCurrentUnit() );
+                StringMap::const_iterator aRecentlyUsed = m_aRecentlyUsedList.find( sCurrentUnit );
+                bool bUsedBefore = aRecentlyUsed != m_aRecentlyUsedList.end();
+                if( bUsedBefore && m_aCurrentSuggestions[0] != aRecentlyUsed->second )
+                {
+                    sal_Int32 nCount = m_aCurrentSuggestions.getLength();
+                    Sequence< ::rtl::OUString > aTmp(nCount);
+                    aTmp[0]=aRecentlyUsed->second;
+                    sal_Int32 nDiff = 1;
+                    for( sal_Int32 n=1; n<nCount; n++)//we had 0 already
+                    {
+                        if( nDiff && m_aCurrentSuggestions[n-nDiff]==aRecentlyUsed->second )
+                            nDiff=0;
+                        aTmp[n]=m_aCurrentSuggestions[n-nDiff];
+                    }
+                    m_aCurrentSuggestions = aTmp;
+                }
+            }
         }
         catch( const Exception& e )
         {
@@ -478,6 +552,44 @@ namespace svx
             //!!! to avoid an endless loop...
             return false;
         }
+        return bFoundAny;
+    }
+
+    //-------------------------------------------------------------------------
+    bool HangulHanjaConversion_Impl::implNextConvertibleUnit( const sal_Int32 _nStartAt )
+    {
+        m_aCurrentSuggestions.realloc( 0 );
+
+        // ask the TextConversion service for the next convertible piece of text
+        sal_Int32 nStartLookupAt = _nStartAt;
+
+        // get current primary conversion direction to use (if set)
+        if (m_pAntiImpl->IsUseSavedConversionDirectionState())
+            m_ePrimaryConversionDirection = m_pAntiImpl->m_ePrimaryConversionDirectionSave;
+        else if (m_pConversionDialog && !m_pConversionDialog->GetUseBothDirections())
+        {
+            m_ePrimaryConversionDirection
+                    = m_pConversionDialog->GetDirection( m_ePrimaryConversionDirection );
+        }
+        // save curently used value for possible later use
+        m_pAntiImpl->m_ePrimaryConversionDirectionSave = m_ePrimaryConversionDirection;
+
+        if (m_eConvType == HHC::eConvHangulHanja) // for eConvSimplifiedTraditional: there is only a single direction (specified by m_nTargetLang)
+        {
+            if (m_pAntiImpl->IsUseSavedConversionDirectionState())
+                m_bTryBothDirections = m_pAntiImpl->m_bTryBothDirectionsSave;
+            else
+                // if the dialog does not yet exist we'll try both conversion directions
+                m_bTryBothDirections = m_pConversionDialog ? m_pConversionDialog->GetUseBothDirections() : sal_True;
+            // save curently used value for possible later use
+            m_pAntiImpl->m_bTryBothDirectionsSave = m_bTryBothDirections;
+        }
+
+        // until we know better, assume that this very conversion attempt will end up with
+        // the conversion direction which is our primary direction
+        m_eCurrentConversionDirection = m_ePrimaryConversionDirection;
+
+        bool bFoundAny = implUpdateSuggestions( true, _nStartAt );
 
         return  bFoundAny &&
                 (m_nCurrentStartIndex < m_sCurrentPortion.getLength());
@@ -526,6 +638,20 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
+    ::rtl::OUString HangulHanjaConversion_Impl::GetCurrentUnit() const
+    {
+        DBG_ASSERT( m_nCurrentStartIndex < m_sCurrentPortion.getLength(),
+            "HangulHanjaConversion_Impl::GetCurrentUnit: invalid index into current portion!" );
+        DBG_ASSERT( m_nCurrentEndIndex <= m_sCurrentPortion.getLength(),
+            "HangulHanjaConversion_Impl::GetCurrentUnit: invalid index into current portion!" );
+        DBG_ASSERT( m_nCurrentStartIndex <= m_nCurrentEndIndex,
+            "HangulHanjaConversion_Impl::GetCurrentUnit: invalid interval!" );
+
+        ::rtl::OUString sCurrentUnit = m_sCurrentPortion.copy( m_nCurrentStartIndex, m_nCurrentEndIndex - m_nCurrentStartIndex );
+        return sCurrentUnit;
+    }
+
+    //-------------------------------------------------------------------------
     sal_Bool HangulHanjaConversion_Impl::ContinueConversion( bool _bRepeatCurrentUnit )
     {
         sal_Bool bNeedUserInteraction = sal_False;  // when we leave here, do we need user interaction?
@@ -533,71 +659,45 @@ namespace svx
 
         while ( !bDocumentDone && !bNeedUserInteraction && implNextConvertible( _bRepeatCurrentUnit ) )
         {
-            DBG_ASSERT( m_nCurrentStartIndex < m_sCurrentPortion.getLength(),
-                "HangulHanjaConversion_Impl::ContinueConversion: invalid index into current portion!" );
-            DBG_ASSERT( m_nCurrentStartIndex <= m_nCurrentEndIndex,
-                "HangulHanjaConversion_Impl::ContinueConversion: invalid interval!" );
+            ::rtl::OUString sCurrentUnit( GetCurrentUnit() );
 
-            OUString sCurrentUnit = m_sCurrentPortion.copy( m_nCurrentStartIndex, m_nCurrentEndIndex - m_nCurrentStartIndex );
+            // do we need to ignore it?
+            sal_Bool bAlwaysIgnoreThis = m_sIgnoreList.end() != m_sIgnoreList.find( sCurrentUnit );
+
+            // do we need to change it?
+            StringMap::const_iterator aChangeListPos = m_aChangeList.find( sCurrentUnit );
+            sal_Bool bAlwaysChangeThis = m_aChangeList.end() != aChangeListPos;
+
+            // do we automatically change this?
+            sal_Bool bAutoChange = m_bAutoReplaceUnique && m_aCurrentSuggestions.getLength() == 1;
 
             if (!m_bIsInteractive)
             {
-                // automatic conversion (e.g. for simplified/traditional Chinese)...
-
-                sal_Int32 nSugg = m_aCurrentSuggestions.getLength();
-                DBG_ASSERT( nSugg == 0 || nSugg == 1,
-                        "for automatic conversion there should be at most one suggestion" );
-                if (nSugg > 0)
-                {
-                    const OUString *pSugg = m_aCurrentSuggestions.getConstArray();
-                    if (GetSourceLang() != GetTargetLang() ||
-                        pSugg[0] != m_sCurrentUnit)
-                        implChange( pSugg[0] );
-                }
+                // silent conversion (e.g. for simplified/traditional Chinese)...
+                if(m_aCurrentSuggestions.getLength()>0)
+                    implChange( m_aCurrentSuggestions.getConstArray()[0] );
             }
-            else
+            else if (bAutoChange)
             {
-                // interactive conversion...
+                implChange( m_aCurrentSuggestions.getConstArray()[0] );
+            }
+            else if ( bAlwaysChangeThis )
+            {
+                implChange( aChangeListPos->second );
+            }
+            else if ( !bAlwaysIgnoreThis )
+            {
+                // here we need to ask the user for what to do with the text
+                // for this, allow derivees to highlight the current text unit in a possible document view
+                m_pAntiImpl->HandleNewUnit( m_nCurrentStartIndex - m_nReplacementBaseIndex, m_nCurrentEndIndex - m_nReplacementBaseIndex );
 
-                // do we need to ignore it?
-                sal_Bool bAlwaysIgnoreThis = m_sIgnoreList.end() != m_sIgnoreList.find( sCurrentUnit );
+                DBG_ASSERT( m_pConversionDialog, "we should always have a dialog here!" );
+                if( m_pConversionDialog )
+                    m_pConversionDialog->SetCurrentString( sCurrentUnit, m_aCurrentSuggestions );
 
-                // do we need to change it?
-                StringMap::const_iterator aChangeListPos = m_aChangeList.find( sCurrentUnit );
-                sal_Bool bAlwaysChangeThis = m_aChangeList.end() != aChangeListPos;
-
-                if ( bAlwaysChangeThis )
-                {
-                    implChange( aChangeListPos->second );
-                }
-                else if ( !bAlwaysIgnoreThis )
-                {
-                    // here we need to ask the user for what to do with the text
-                    // for this, allow derivees to highlight the current text unit in a possible document view
-                    m_pAntiImpl->HandleNewUnit( m_nCurrentStartIndex - m_nReplacementBaseIndex, m_nCurrentEndIndex - m_nReplacementBaseIndex );
-
-                    if ( !m_pConversionDialog )
-                    {
-                        // the dialog does not yet exists (it's our first encounter)
-                        createDialog();
-                        // initially fill the dialog
-                        m_pConversionDialog->SetCurrentString( sCurrentUnit, m_aCurrentSuggestions );
-                        // execute it. It will automatically advance
-                        m_pConversionDialog->Execute();
-                        // we're done
-                        DELETEZ( m_pConversionDialog );
-
-                        bDocumentDone = sal_True;
-                    }
-                    else
-                    {
-                        m_pConversionDialog->SetCurrentString( sCurrentUnit, m_aCurrentSuggestions );
-
-                        // do not look for the next convertible: We have to wait for the user to interactivly
-                        // decide what happens with the current convertible
-                        bNeedUserInteraction = sal_True;
-                    }
-                }
+                // do not look for the next convertible: We have to wait for the user to interactivly
+                // decide what happens with the current convertible
+                bNeedUserInteraction = sal_True;
             }
         }
 
@@ -686,7 +786,7 @@ namespace svx
 
         // first of all, we need to guess the direction of our conversion - it is determined by the first
         // hangul or hanja character in the first text
-        if ( !implRetrieveNextPortion( ) )
+        if ( !implRetrieveNextPortion() )
         {
             DBG_WARNING( "HangulHanjaConversion_Impl::DoDocumentConversion: why did you call me if you do have nothing to convert?" );
             // nothing to do
@@ -696,11 +796,23 @@ namespace svx
             // something went wrong, has already been asserted
             return;
 
+
+        if (m_bIsInteractive  &&  m_eConvType == HHC::eConvHangulHanja)
+        {
+            //always open dialog if at least having a hangul or hanja text portion
+            createDialog();
+            implUpdateData();
+            m_pConversionDialog->Execute();
+            DELETEZ( m_pConversionDialog );
+        }
+        else
+        {
 #ifdef DBG_UTIL
-        sal_Bool bCompletelyDone =
+            sal_Bool bCompletelyDone =
 #endif
-        ContinueConversion( sal_False );
-        DBG_ASSERT( bCompletelyDone, "HangulHanjaConversion_Impl::DoDocumentConversion: ContinueConversion should have returned true here!" );
+            ContinueConversion( sal_False );
+            DBG_ASSERT( bCompletelyDone, "HangulHanjaConversion_Impl::DoDocumentConversion: ContinueConversion should have returned true here!" );
+        }
     }
 
     //-------------------------------------------------------------------------
@@ -717,6 +829,9 @@ namespace svx
     //-------------------------------------------------------------------------
     void HangulHanjaConversion_Impl::implChange( const OUString& _rChangeInto )
     {
+        if( !_rChangeInto.getLength() )
+            return;
+
         // translate the conversion format into a replacement action
         // this translation depends on whether we have a Hangul original, or a Hanja original
 
@@ -749,11 +864,51 @@ namespace svx
         sal_Int32 nStartIndex = m_nCurrentStartIndex - m_nReplacementBaseIndex;
         sal_Int32 nEndIndex = m_nCurrentEndIndex - m_nReplacementBaseIndex;
 
+        //remind this decision
+        m_aRecentlyUsedList[ GetCurrentUnit() ] = _rChangeInto;
+
         // do the replacement
         m_pAntiImpl->ReplaceUnit( nStartIndex, nEndIndex, _rChangeInto, eAction );
 
+
         // adjust the replacement base
         m_nReplacementBaseIndex = m_nCurrentEndIndex;
+    }
+
+    //-------------------------------------------------------------------------
+    void HangulHanjaConversion_Impl::implReadOptionsFromConfiguration()
+    {
+        SvtLinguConfig  aLngCfg;
+        aLngCfg.GetProperty( UPH_IS_IGNORE_POST_POSITIONAL_WORD ) >>= m_bIgnorePostPositionalWord;
+        aLngCfg.GetProperty( UPH_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST ) >>= m_bShowRecentlyUsedFirst;
+        aLngCfg.GetProperty( UPH_IS_AUTO_REPLACE_UNIQUE_ENTRIES ) >>= m_bAutoReplaceUnique;
+    }
+
+    //-------------------------------------------------------------------------
+    void HangulHanjaConversion_Impl::implUpdateData()
+    {
+        implReadOptionsFromConfiguration();
+        implUpdateSuggestions();
+
+        if(m_pConversionDialog)
+        {
+            ::rtl::OUString sCurrentUnit( GetCurrentUnit() );
+
+            m_pConversionDialog->SetCurrentString( sCurrentUnit, m_aCurrentSuggestions );
+            m_pConversionDialog->FocusSuggestion();
+        }
+
+        m_pAntiImpl->HandleNewUnit( m_nCurrentStartIndex - m_nReplacementBaseIndex, m_nCurrentEndIndex - m_nReplacementBaseIndex );
+    }
+
+    //-------------------------------------------------------------------------
+    IMPL_LINK( HangulHanjaConversion_Impl, OnOptionsChanged, void*, NOTINTERESTEDIN )
+    {
+        //options and dictionaries might have been changed
+        //-> update our internal settings and the dialog
+        implUpdateData();
+
+        return 0L;
     }
 
     //-------------------------------------------------------------------------
@@ -789,7 +944,9 @@ namespace svx
     IMPL_LINK( HangulHanjaConversion_Impl, OnChange, void*, NOTINTERESTEDIN )
     {
         // change
-        implChange( m_pConversionDialog->GetCurrentSuggestion( ) );
+        DBG_ASSERT( m_pConversionDialog, "we should always have a dialog here!" );
+        if( m_pConversionDialog )
+            implChange( m_pConversionDialog->GetCurrentSuggestion( ) );
         // and proceed
         implProceed( sal_False );
 
@@ -805,11 +962,14 @@ namespace svx
             OUString sCurrentUnit( m_pConversionDialog->GetCurrentString() );
             OUString sChangeInto( m_pConversionDialog->GetCurrentSuggestion( ) );
 
-            // change the current occurence
-            implChange( sChangeInto );
+            if( sChangeInto.getLength() )
+            {
+                // change the current occurence
+                implChange( sChangeInto );
 
-            // put into the "change all" list
-            m_aChangeList.insert( StringMap::value_type( sCurrentUnit, sChangeInto ) );
+                // put into the "change all" list
+                m_aChangeList.insert( StringMap::value_type( sCurrentUnit, sChangeInto ) );
+            }
 
             // and proceed
             implProceed( sal_False );
@@ -824,18 +984,16 @@ namespace svx
         m_bByCharacter = _pBox->IsChecked();
 
         // continue conversion, without advancing to the next unit, but instead continuing with the current unit
-        implProceed( m_bByCharacter ? sal_True : sal_False );
-            // if we just switched to "by character", then we want to start over with the current word
-            // if we just switched to "by word", then we don't want to start over with word which contains the current
-            //    character, because this may be potentially dagerous in case a character within this word
-            //    has already been replaced
+        implProceed( sal_True );
         return 0L;
     }
 
     //-------------------------------------------------------------------------
     IMPL_LINK( HangulHanjaConversion_Impl, OnConversionTypeChanged, void*, NOTINTERESTEDIN )
     {
-        m_eConversionFormat = m_pConversionDialog->GetConversionFormat( );
+        DBG_ASSERT( m_pConversionDialog, "we should always have a dialog here!" );
+        if( m_pConversionDialog )
+            m_eConversionFormat = m_pConversionDialog->GetConversionFormat( );
         return 0L;
     }
 
@@ -849,6 +1007,7 @@ namespace svx
             {
                 OUString sNewOriginal( m_pConversionDialog->GetCurrentSuggestion( ) );
                 Sequence< OUString > aSuggestions;
+
                 DBG_ASSERT( m_xConverter.is(), "HangulHanjaConversion_Impl::OnFind: no converter!" );
                 TextConversionResult aToHanja = m_xConverter->getConversions(
                     sNewOriginal,
@@ -903,6 +1062,13 @@ namespace svx
     //= HangulHanjaConversion
     //=========================================================================
     //-------------------------------------------------------------------------
+
+    // static member initialization
+    sal_Bool    HangulHanjaConversion::m_bUseSavedValues        = sal_False;
+    sal_Bool    HangulHanjaConversion::m_bTryBothDirectionsSave = sal_False;
+    HHC::ConversionDirection HangulHanjaConversion::m_ePrimaryConversionDirectionSave   = HHC::eHangulToHanja;
+
+    //-------------------------------------------------------------------------
     HangulHanjaConversion::HangulHanjaConversion( Window* _pUIParent,
         const Reference< XMultiServiceFactory >& _rxORB,
         const Locale& _rSourceLocale, const Locale& _rTargetLocale,
@@ -915,6 +1081,18 @@ namespace svx
     //-------------------------------------------------------------------------
     HangulHanjaConversion::~HangulHanjaConversion( )
     {
+    }
+
+    //-------------------------------------------------------------------------
+    void HangulHanjaConversion::SetUseSavedConversionDirectionState( sal_Bool bVal )
+    {
+        m_bUseSavedValues = bVal;
+    }
+
+    //-------------------------------------------------------------------------
+    sal_Bool HangulHanjaConversion::IsUseSavedConversionDirectionState()
+    {
+        return m_bUseSavedValues;
     }
 
     //-------------------------------------------------------------------------
