@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 15:16:22 $
+#   last change: $Author: kz $ $Date: 2005-03-01 13:11:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,17 +61,34 @@
 #*************************************************************************
 
 PRJ=.
-PRJNAME=so_rhino
-TARGET=so_rhino
+
+PRJNAME=ooo_rhino
+TARGET=ooo_rhino
 
 .IF "$(SOLAR_JAVA)"!=""
 .IF "$(JDK)" == "gcj"
 all:
         @echo This dir cannot be build with gcj because of javax.swing.JTextArea.replaceRange
 .ELSE
-.INCLUDE : ant.mk
 
-ALLTAR : ANTBUILD
+# --- Settings -----------------------------------------------------
+
+.INCLUDE :	settings.mk
+
+# --- Files --------------------------------------------------------
+
+TARFILE_NAME=rhino15R4
+TARFILE_ROOTDIR=rhino1_5R4
+PATCH_FILE_NAME=rhino1_5R4.patch
+
+BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
+
+# --- Targets ------------------------------------------------------
+
+.INCLUDE : set_ext.mk
+.INCLUDE : target.mk
+.INCLUDE : tg_ext.mk
+
 .ENDIF
 .ELSE
 all:
