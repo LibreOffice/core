@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modulemanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:35:33 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
@@ -130,20 +130,16 @@
 namespace css = ::com::sun::star;
 #endif
 
-#ifndef dcss
-namespace dcss = ::drafts::com::sun::star;
-#endif
-
 namespace framework
 {
 
 //_______________________________________________
 /**
-    implements the service drafts.com.sun.star.frame.ModuleManager
+    implements the service com.sun.star.frame.ModuleManager
  */
 class ModuleManager : public  css::lang::XTypeProvider
                     , public  css::lang::XServiceInfo
-                    , public  dcss::frame::XModuleManager
+                    , public  css::frame::XModuleManager
                     , public  css::container::XNameAccess // => XElementAccess
                     // attention! Must be the first base class to guarentee right initialize lock ...
                     , private ThreadHelpBase
@@ -183,7 +179,7 @@ class ModuleManager : public  css::lang::XTypeProvider
         // XModuleManager
         virtual ::rtl::OUString SAL_CALL identify(const css::uno::Reference< css::uno::XInterface >& xModule)
             throw(css::lang::IllegalArgumentException,
-                  dcss::frame::UnknownModuleException,
+                  css::frame::UnknownModuleException,
                   css::uno::RuntimeException         );
 
         // XNameAccess
@@ -244,11 +240,11 @@ class ModuleManager : public  css::lang::XTypeProvider
 
             @return The identifier (uno service name) of the given module.
 
-            @throw  dcss::frame::UnknownModuleException
+            @throw  css::frame::UnknownModuleException
                     if the module has no valid configuration.
          */
         ::rtl::OUString impl_identify(const css::uno::Reference< css::lang::XServiceInfo >& xModule)
-            throw(dcss::frame::UnknownModuleException);
+            throw(css::frame::UnknownModuleException);
 };
 
 } // namespace framework
