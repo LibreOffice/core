@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-30 09:53:33 $
+ *  last change: $Author: pl $ $Date: 2001-08-30 12:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,7 +667,8 @@ inline SalFrameData::~SalFrameData()
      *  if so, free it
      */
     SalFrame* pStatusFrame = I18NStatus::get().getStatusFrame();
-    if( pSalData->pFirstFrame_ == pStatusFrame
+    if( pStatusFrame
+        && pSalData->pFirstFrame_ == pStatusFrame
         && pSalData->pFirstFrame_->maFrameData.GetNextFrame() == NULL )
         ::vcl::I18NStatus::free();
 }
@@ -2576,6 +2577,8 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
                   &xp, &yp, &wp, &hp, &bw, &d );
     nRight_     = wp - w - nLeft_;
     nBottom_    = hp - h - nTop_;
+    bool bResized = w != aPosSize_.GetWidth() || h != aPosSize_.GetHeight();
+    aPosSize_   = Rectangle( Point( xp+nLeft_, yp+nTop_ ), Size( w, h ) );
 
     XSizeHints* pHints = XAllocSizeHints();
     long nSuppliedFlags;
@@ -2628,6 +2631,8 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
 
             SetSize (aSize);
         }
+        else if( bResized )
+            Call( SALEVENT_RESIZE, NULL );
     }
 
     return 1;
