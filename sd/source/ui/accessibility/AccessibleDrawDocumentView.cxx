@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-08 10:01:33 $
+ *  last change: $Author: af $ $Date: 2002-05-13 12:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,9 +379,8 @@ void SAL_CALL
             // Inform the children manager to forget all children and give
             // him the new ones.
             mpChildrenManager->ClearAccessibleShapeList ();
-            uno::Reference<drawing::XShapes> xShapeList (
-                xView->getCurrentPage(), uno::UNO_QUERY);
-            mpChildrenManager->SetShapeList (xShapeList);
+            mpChildrenManager->SetShapeList (uno::Reference<drawing::XShapes> (
+                xView->getCurrentPage(), uno::UNO_QUERY));
             mpChildrenManager->AddAccessibleShape (std::auto_ptr<AccessibleShape>(CreateDrawPageShape ()));
             mpChildrenManager->Update (false);
         }
