@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:37 $
+ *  last change: $Author: af $ $Date: 2001-04-06 12:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 
 #ifndef _SV_LSTBOX_HXX //autogen    // !!!TEMP
 #include <vcl/lstbox.hxx>
+#endif
+
+#ifndef _SFXAPP_HXX //autogen
+#include <sfx2/app.hxx>
 #endif
 
 enum OutputType { OUTPUT_PAGE, OUTPUT_OVERHEAD, OUTPUT_SLIDE, OUTPUT_PRESENTATION, OUTPUT_ORIGINAL };
