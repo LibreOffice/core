@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:23:28 $
+ *  last change: $Author: mtg $ $Date: 2001-11-29 13:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 
 /** This class is used to write Zip files
  */
-ZipOutputStream::ZipOutputStream( Reference < XOutputStream > &xOStream, sal_Bool bNewSpanning )
+ZipOutputStream::ZipOutputStream( Reference < XOutputStream > &xOStream )
 : xStream(xOStream)
 , aChucker(xOStream)
 , nMethod(DEFLATED)
@@ -108,7 +108,6 @@ ZipOutputStream::ZipOutputStream( Reference < XOutputStream > &xOStream, sal_Boo
 , bEncryptCurrentEntry(sal_False)
 , aBuffer(n_ConstBufferSize)
 , aDeflater(DEFAULT_COMPRESSION, sal_True)
-, bSpanning ( bNewSpanning )
 {
 }
 
@@ -139,16 +138,6 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
                         sal_Bool bEncrypt)
     throw(IOException, RuntimeException)
 {
-    if ( bSpanning && ! aZipList.size() )
-    {
-        Sequence < sal_Int8 > aSequence ( 4 );
-        sal_Int8 *pNum = aSequence.getArray();
-        pNum[0] = 'P';
-        pNum[1] = 'K';
-        pNum[2] = 7;
-        pNum[3] = 8;
-        aChucker.writeBytes( aSequence, 4, pNum );
-    }
     if (pCurrentEntry != NULL)
         closeEntry();
     if (rEntry.nTime == -1)
