@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uinums.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 10:42:00 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 09:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
 #include <tools/stream.hxx>
 #endif
 #ifndef _SFX_INIMGR_HXX
-#include <sfx2/inimgr.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
