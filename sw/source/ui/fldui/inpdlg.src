@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:58:16 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 23:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,14 +145,14 @@ ModalDialog DLG_FLD_INPUT
         Text [ portuguese ] = "Editar" ;
         Text [ finnish ] = "Muokkaa" ;
         Text [ danish ] = "Rediger" ;
-        Text [ french ] = "Modifier" ;
+        Text [ french ] = "…diter" ;
         Text [ swedish ] = "Redigera" ;
         Text [ dutch ] = "Be~werken" ;
         Text [ spanish ] = "Editar" ;
         Text [ english_us ] = "Edit" ;
         Text[ chinese_simplified ] = "±‡º≠";
         Text[ russian ] = "œ‡‚Í‡";
-        Text[ polish ] = "Edycja";
+        Text[ polish ] = "Edytuj";
         Text[ japanese ] = "ï“èW";
         Text[ chinese_traditional ] = "ΩsøË";
         Text[ arabic ] = " Õ—Ì—";
@@ -232,3 +232,4 @@ ModalDialog DLG_FLD_INPUT
     Text[ catalan ] = "Campo de entrada";
     Text[ finnish ] = "Syˆttˆkentt‰";
 };
+
