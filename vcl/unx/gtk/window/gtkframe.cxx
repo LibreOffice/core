@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-11 10:23:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,14 +243,6 @@ void GtkSalFrame::InitCommon()
     m_bSendModChangeOnRelease = false;
     m_pIMContext        = NULL;
     m_bWasPreedit       = false;
-    // delete graphics if InitCommon is called not from destructor
-    for( int i = 0; i < nMaxGraphics; i++ )
-    {
-        m_aGraphics[i].bInUse = false;
-        delete m_aGraphics[i].pGraphics;
-        m_aGraphics[i].pGraphics = NULL;
-    }
-
     m_aPrevKeyPresses.clear();
     m_nPrevKeyPresses = 0;
 
@@ -396,7 +388,9 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     m_pWindow = GTK_WINDOW( gtk_widget_new( GTK_TYPE_WINDOW, "type", ((nStyle & SAL_FRAME_STYLE_FLOAT) && ! (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION)) ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL, "visible", FALSE, NULL ) );
     m_pParent = static_cast<GtkSalFrame*>(pParent);
     m_pForeignParent = NULL;
+    m_aForeignParentWindow = None;
     m_pForeignTopLevel = NULL;
+    m_aForeignTopLevelWindow = None;
     m_nStyle = nStyle;
 
     if( m_pParent && m_pParent->m_pWindow && ! (m_pParent->m_nStyle & SAL_FRAME_STYLE_CHILD) )
@@ -470,9 +464,11 @@ GdkNativeWindow GtkSalFrame::findTopLevelSystemWindow( GdkNativeWindow aWindow )
 void GtkSalFrame::Init( SystemParentData* pSysData )
 {
     m_pParent = NULL;
-    m_pForeignParent = gdk_window_foreign_new_for_display( getGdkDisplay(), (GdkNativeWindow)pSysData->aWindow );
+    m_aForeignParentWindow = (GdkNativeWindow)pSysData->aWindow;
+    m_pForeignParent = gdk_window_foreign_new_for_display( getGdkDisplay(), m_aForeignParentWindow );
     gdk_window_set_events( m_pForeignParent, GDK_STRUCTURE_MASK );
-    m_pForeignTopLevel = gdk_window_foreign_new_for_display( getGdkDisplay(), findTopLevelSystemWindow( (GdkNativeWindow)pSysData->aWindow ) );
+    m_aForeignTopLevelWindow = findTopLevelSystemWindow( (GdkNativeWindow)pSysData->aWindow );
+    m_pForeignTopLevel = gdk_window_foreign_new_for_display( getGdkDisplay(), m_aForeignTopLevelWindow );
     gdk_window_set_events( m_pForeignTopLevel, GDK_STRUCTURE_MASK );
     m_pWindow = GTK_WINDOW(gtk_window_new( GTK_WINDOW_POPUP ));
     m_nStyle = SAL_FRAME_STYLE_CHILD;
@@ -1475,12 +1471,34 @@ void GtkSalFrame::SetParent( SalFrame* pNewParent )
 
 bool GtkSalFrame::SetPluginParent( SystemParentData* pSysParent )
 {
-    gtk_widget_destroy( GTK_WIDGET(m_pWindow) );
+    if( m_pIMContext )
+    {
+        gtk_im_context_reset( m_pIMContext );
+        gtk_im_context_set_client_window( m_pIMContext, NULL );
+        g_object_unref( m_pIMContext );
+    }
+    if( m_pFixedContainer )
+        gtk_widget_destroy( GTK_WIDGET(m_pFixedContainer) );
+    if( m_pWindow )
+        gtk_widget_destroy( GTK_WIDGET(m_pWindow) );
     if( m_pForeignParent )
         gdk_window_destroy( m_pForeignParent );
     if( m_pForeignTopLevel )
         gdk_window_destroy( m_pForeignTopLevel );
-    Init( pSysParent );
+
+    // init new window
+    if( pSysParent && pSysParent->aWindow != None )
+        Init( pSysParent );
+    else
+        Init( NULL, SAL_FRAME_STYLE_DEFAULT );
+
+    // update graphics if necessary
+    for( unsigned int i = 0; i < sizeof(m_aGraphics)/sizeof(m_aGraphics[0]); i++ )
+    {
+        if( m_aGraphics[i].bInUse )
+            m_aGraphics[i].pGraphics->SetDrawable( GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window) );
+    }
+
     return true;
 }
 
@@ -1490,7 +1508,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
 
     if( m_pForeignParent &&
         pEvent->type == ConfigureNotify &&
-        pEvent->xconfigure.window == GDK_WINDOW_XWINDOW(m_pForeignParent)
+        pEvent->xconfigure.window == m_aForeignParentWindow
         )
     {
         bContinueDispatch = false;
@@ -1498,7 +1516,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
     }
     else if( m_pForeignTopLevel &&
              pEvent->type == ConfigureNotify &&
-             pEvent->xconfigure.window == GDK_WINDOW_XWINDOW(m_pForeignTopLevel)
+             pEvent->xconfigure.window == m_aForeignTopLevelWindow
              )
     {
         bContinueDispatch = false;
