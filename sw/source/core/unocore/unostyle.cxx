@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-29 15:16:14 $
+ *  last change: $Author: mtg $ $Date: 2001-11-01 15:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,12 +656,12 @@ sal_Int32 lcl_GetCountOrName ( const SwDoc &rDoc, SfxStyleFamily eFamily, String
                     continue;
                 if ( IsPoolUserFmt ( pFmt->GetPoolFmtId() ) )
                 {
-                    nCount++;
-                    if ( nIndex == i )
+                    if ( nIndex == nCount )
                     {
                         *pString = pFmt->GetName();
                         break;
                     }
+                    nCount++;
                 }
             }
             nCount += nBaseCount;
@@ -684,12 +684,12 @@ sal_Int32 lcl_GetCountOrName ( const SwDoc &rDoc, SfxStyleFamily eFamily, String
                     continue;
                 if ( IsPoolUserFmt ( pColl->GetPoolFmtId() ) )
                 {
-                    nCount++;
-                    if ( nIndex == i )
+                    if ( nIndex == nCount )
                     {
                         *pString = pColl->GetName();
                         break;
                     }
+                    nCount++;
                 }
             }
             nCount += nBaseCount;
@@ -707,12 +707,12 @@ sal_Int32 lcl_GetCountOrName ( const SwDoc &rDoc, SfxStyleFamily eFamily, String
                     continue;
                 if ( IsPoolUserFmt ( pFmt->GetPoolFmtId() ) )
                 {
-                    nCount++;
-                    if ( nIndex == i )
+                    if ( nIndex == nCount )
                     {
                         *pString = pFmt->GetName();
                         break;
                     }
+                    nCount++;
                 }
             }
             nCount += nBaseCount;
@@ -731,12 +731,12 @@ sal_Int32 lcl_GetCountOrName ( const SwDoc &rDoc, SfxStyleFamily eFamily, String
                     continue;*/
                 if ( IsPoolUserFmt ( rDesc.GetPoolFmtId() ) )
                 {
-                    nCount++;
-                    if ( nIndex == i )
+                    if ( nIndex == nCount )
                     {
                         *pString = rDesc.GetName();
                         break;
                     }
+                    nCount++;
                 }
             }
             nCount += nBaseCount;
@@ -754,12 +754,12 @@ sal_Int32 lcl_GetCountOrName ( const SwDoc &rDoc, SfxStyleFamily eFamily, String
                     continue;
                 if ( IsPoolUserFmt ( rRule.GetPoolFmtId() ) )
                 {
-                    nCount++;
-                    if ( nIndex == i )
+                    if ( nIndex == nCount )
                     {
                         *pString = rRule.GetName();
                         break;
                     }
+                    nCount++;
                 }
             }
             nCount += nBaseCount;
