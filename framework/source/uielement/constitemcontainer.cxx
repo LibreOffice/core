@@ -2,9 +2,9 @@
  *
  *  $RCSfile: constitemcontainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 17:00:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
@@ -242,49 +241,52 @@ ConstItemContainer::ConstItemContainer( const Reference< XIndexAccess >& rSource
     {
     }
 
-    try
+    if ( rSourceContainer.is() )
     {
-        sal_Int32 nCount = rSourceContainer->getCount();
-        if ( bFastCopy )
+        try
         {
-            for ( sal_Int32 i = 0; i < nCount; i++ )
+            sal_Int32 nCount = rSourceContainer->getCount();
+            if ( bFastCopy )
             {
-                Sequence< PropertyValue > aPropSeq;
-                Any a = rSourceContainer->getByIndex( i );
-                if ( a >>= aPropSeq )
-                    m_aItemVector.push_back( aPropSeq );
-            }
-        }
-        else
-        {
-            for ( sal_Int32 i = 0; i < nCount; i++ )
-            {
-                Sequence< PropertyValue > aPropSeq;
-                Any a = rSourceContainer->getByIndex( i );
-                if ( a >>= aPropSeq )
+                for ( sal_Int32 i = 0; i < nCount; i++ )
                 {
-                    sal_Int32 nContainerIndex = -1;
-                    Reference< XIndexAccess > xIndexAccess;
-                    for ( sal_Int32 j = 0; j < aPropSeq.getLength(); j++ )
+                    Sequence< PropertyValue > aPropSeq;
+                    Any a = rSourceContainer->getByIndex( i );
+                    if ( a >>= aPropSeq )
+                        m_aItemVector.push_back( aPropSeq );
+                }
+            }
+            else
+            {
+                for ( sal_Int32 i = 0; i < nCount; i++ )
+                {
+                    Sequence< PropertyValue > aPropSeq;
+                    Any a = rSourceContainer->getByIndex( i );
+                    if ( a >>= aPropSeq )
                     {
-                        if ( aPropSeq[j].Name.equalsAscii( "ItemDescriptorContainer" ))
+                        sal_Int32 nContainerIndex = -1;
+                        Reference< XIndexAccess > xIndexAccess;
+                        for ( sal_Int32 j = 0; j < aPropSeq.getLength(); j++ )
                         {
-                            aPropSeq[j].Value >>= xIndexAccess;
-                            nContainerIndex = j;
-                            break;
+                            if ( aPropSeq[j].Name.equalsAscii( "ItemDescriptorContainer" ))
+                            {
+                                aPropSeq[j].Value >>= xIndexAccess;
+                                nContainerIndex = j;
+                                break;
+                            }
                         }
+
+                        if ( xIndexAccess.is() && nContainerIndex >= 0 )
+                            aPropSeq[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess );
+
+                        m_aItemVector.push_back( aPropSeq );
                     }
-
-                    if ( xIndexAccess.is() && nContainerIndex >= 0 )
-                        aPropSeq[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess );
-
-                    m_aItemVector.push_back( aPropSeq );
                 }
             }
         }
-    }
-    catch ( IndexOutOfBoundsException& )
-    {
+        catch ( IndexOutOfBoundsException& )
+        {
+        }
     }
 }
 
