@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 15:17:14 $
+ *  last change: $Author: kz $ $Date: 2000-11-10 15:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ String S_READING_FILE
     Text[ swedish ] = "Reading the files";
     Text[ polish ] = "Czytanie plików";
     Text[ portuguese_brazilian ] = "Einlesen der Dateien";
-    Text[ japanese ] = "Ì§²Ù‚Ì“Ç‚İ‚İ";
+    Text[ japanese ] = "Ì§²Ù‚Ì“Ç‚İæ‚è";
     Text[ korean ] = "ÆÄÀÏ ÀĞ±â";
     Text[ chinese_simplified ] = "¶ÁÈ¡ÎÄ¼ş";
     Text[ chinese_traditional ] = "Åª¨úÀÉ®×";
