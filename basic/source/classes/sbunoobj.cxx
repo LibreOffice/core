@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-29 15:20:08 $
+ *  last change: $Author: ab $ $Date: 2002-04-08 14:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2025,6 +2025,10 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
         catch( RuntimeException& e2 )
         {
             StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e2 ) );
+        }
+        catch( Exception& e3 )
+        {
+            StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e3 ) );
         }
     }
 
