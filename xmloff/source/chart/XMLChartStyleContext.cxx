@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartStyleContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
+ *  last change: $Author: bm $ $Date: 2001-08-14 11:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,12 +63,17 @@
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
 #endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include "xmlnmspe.hxx"
+#endif
 #ifndef _XMLOFF_XMLNUMFI_HXX
 #include "xmlnumfi.hxx"
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include "families.hxx"
 #endif
+
+#include "XMLChartPropertyContext.hxx"
 
 using namespace com::sun::star;
 using ::xmloff::token::IsXMLToken;
@@ -100,7 +105,7 @@ void XMLChartStyleContext::SetAttribute(
 XMLChartStyleContext::XMLChartStyleContext(
     SvXMLImport& rImport, sal_uInt16 nPrfx,
     const ::rtl::OUString& rLName,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+    const uno::Reference< xml::sax::XAttributeList > & xAttrList,
     SvXMLStylesContext& rStyles, sal_uInt16 nFamily ) :
 
         XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
@@ -128,4 +133,29 @@ void XMLChartStyleContext::FillPropertySet(
                                         aNumberFormat );
         }
     }
+}
+
+SvXMLImportContext *XMLChartStyleContext::CreateChildContext(
+    sal_uInt16 nPrefix,
+    const ::rtl::OUString& rLocalName,
+    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    SvXMLImportContext* pContext = NULL;
+
+    if( XML_NAMESPACE_STYLE == nPrefix &&
+        IsXMLToken( rLocalName, ::xmloff::token::XML_PROPERTIES ) )
+    {
+        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+            GetStyles()->GetImportPropertyMapper( GetFamily() );
+        if( xImpPrMap.is() )
+            pContext = new XMLChartPropertyContext(
+                GetImport(), nPrefix, rLocalName, xAttrList,
+                GetProperties(), xImpPrMap );
+    }
+
+    if( !pContext )
+        pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
+                                                          xAttrList );
+
+    return pContext;
 }

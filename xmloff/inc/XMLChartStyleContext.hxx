@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartStyleContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-14 17:14:32 $
+ *  last change: $Author: bm $ $Date: 2001-08-14 11:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,12 @@ public:
     void FillPropertySet(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > & rPropSet );
+
+    /// necessary for property context (element-property symbol-image)
+    virtual SvXMLImportContext *CreateChildContext(
+        sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 };
 
 #endif  // _XMLOFF_XMLCHARTSTYLECONTEXT_HXX_
