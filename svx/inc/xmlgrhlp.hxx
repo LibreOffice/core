@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $
+ *  last change: $Author: cl $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@
 #include <stl/utility>
 #endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
-#include <com/sun/star/container/XIndexContainer.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XGRAPHICOBJECTRESOLVER_HPP_
+#include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #endif
 
 // ----------------------
@@ -104,7 +104,7 @@ enum SvXMLGraphicHelperMode
 
 class SvStorage;
 
-class SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper1< ::com::sun::star::container::XIndexContainer >
+class SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper1< ::com::sun::star::document::XGraphicObjectResolver >
 {
 private:
 
@@ -159,40 +159,8 @@ public:
 
 public:
 
-    // XIndexContainer
-    virtual void SAL_CALL                           insertByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
-                                                        throw(  ::com::sun::star::lang::IllegalArgumentException,
-                                                                ::com::sun::star::lang::IndexOutOfBoundsException,
-                                                                ::com::sun::star::lang::WrappedTargetException,
-                                                                ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL                           removeByIndex( sal_Int32 Index )
-                                                        throw(  ::com::sun::star::lang::IndexOutOfBoundsException,
-                                                                ::com::sun::star::lang::WrappedTargetException,
-                                                                ::com::sun::star::uno::RuntimeException );
-
-    // XIndexReplace
-    virtual void SAL_CALL                           replaceByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
-                                                        throw(  ::com::sun::star::lang::IllegalArgumentException,
-                                                                ::com::sun::star::lang::IndexOutOfBoundsException,
-                                                                ::com::sun::star::lang::WrappedTargetException,
-                                                                ::com::sun::star::uno::RuntimeException );
-
-    // XIndexAccess
-    virtual sal_Int32 SAL_CALL                      getCount()
-                                                        throw(  ::com::sun::star::uno::RuntimeException );
-
-    virtual ::com::sun::star::uno::Any SAL_CALL     getByIndex( sal_Int32 Index )
-                                                        throw(  ::com::sun::star::lang::IndexOutOfBoundsException,
-                                                                ::com::sun::star::lang::WrappedTargetException,
-                                                                ::com::sun::star::uno::RuntimeException );
-
-    // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL    getElementType()
-                                                        throw(  ::com::sun::star::uno::RuntimeException );
-
-    virtual sal_Bool SAL_CALL                       hasElements()
-                                                        throw(  ::com::sun::star::uno::RuntimeException );
+    // XGraphicObjectResolver
+    virtual ::rtl::OUString SAL_CALL resolveGraphicObjectURL( const ::rtl::OUString& aURL ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 #endif

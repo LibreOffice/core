@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $
+ *  last change: $Author: cl $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 // - Defines -
 // -----------
 
+using namespace rtl;
+using namespace com::sun::star;
+
 #define XML_GRAPHICSTORAGE_NAME     "Pictures"
 #define XML_PACKAGE_URL_BASE        "vnd.sun.star.Package:"
 #define XML_GRAPHICOBJECT_URL_BASE  "vnd.sun.star.GraphicObject:"
@@ -85,7 +88,7 @@
 // ----------------------
 
 SvXMLGraphicHelper::SvXMLGraphicHelper() :
-    ::cppu::WeakComponentImplHelper1< ::com::sun::star::container::XIndexContainer >( maMutex )
+    ::cppu::WeakComponentImplHelper1< ::com::sun::star::document::XGraphicObjectResolver >( maMutex )
 {
 }
 
@@ -404,108 +407,13 @@ void SvXMLGraphicHelper::Flush()
 
 }
 
-// -----------------------------------------------------------------------------
-
-void SAL_CALL SvXMLGraphicHelper::insertByIndex( sal_Int32 nIndex, const ::com::sun::star::uno::Any& rElement )
-    throw(  ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException )
-{
-    ::osl::MutexGuard   aGuard( maMutex );
-    ::rtl::OUString     aStr;
-
-    rElement >>= aStr;
-
-    if( aStr.getLength() )
-    {
-        if( nIndex == (sal_Int32) maGrfURLs.size() )
-            maGrfURLs.push_back( ::_STL::make_pair( aStr, ::rtl::OUString() ) );
-        else
-        {
-             if( nIndex > (sal_Int32) maGrfURLs.size() )
-                maGrfURLs.resize( nIndex + 1 );
-
-            maGrfURLs[ nIndex ] = ::_STL::make_pair( aStr, ::rtl::OUString() );
-        }
-
-        ImplInsertGraphicURL( aStr, nIndex );
-    }
-}
-
-// -----------------------------------------------------------------------------
-
-void SAL_CALL SvXMLGraphicHelper::removeByIndex( sal_Int32 nIndex )
-    throw(  ::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException )
-{
-    ::osl::MutexGuard aGuard( maMutex );
-
-    DBG_ASSERT( nIndex < getCount(), "invalid Index" );
-    maGrfURLs.erase( maGrfURLs.begin() + nIndex );
-}
-
-// -----------------------------------------------------------------------------
-
-void SAL_CALL SvXMLGraphicHelper::replaceByIndex( sal_Int32 nIndex, const ::com::sun::star::uno::Any& rElement )
-    throw(  ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException )
-{
-    ::osl::MutexGuard   aGuard( maMutex );
-    ::rtl::OUString     aStr;
-
-    rElement >>= aStr;
-
-    if( aStr.getLength() )
-    {
-        DBG_ASSERT( nIndex < getCount(), "invalid Index" );
-        maGrfURLs[ nIndex ] = ::_STL::make_pair( aStr, ::rtl::OUString() );
-        ImplInsertGraphicURL( aStr, nIndex );
-    }
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Int32 SAL_CALL SvXMLGraphicHelper::getCount()
-    throw(  ::com::sun::star::uno::RuntimeException )
-{
-    ::osl::MutexGuard aGuard( maMutex );
-    return maGrfURLs.size();
-}
-
-// -----------------------------------------------------------------------------
-
-::com::sun::star::uno::Any SAL_CALL SvXMLGraphicHelper::getByIndex( sal_Int32 nIndex )
-    throw(  ::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException )
+// XGraphicObjectResolver
+OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& aURL )
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard           aGuard( maMutex );
-    ::com::sun::star::uno::Any  aAny;
-
-    DBG_ASSERT( nIndex < getCount(), "invalid Index" );
-    aAny <<= maGrfURLs[ nIndex ].second;
-
-    return aAny;
-}
-
-// -----------------------------------------------------------------------------
-
-::com::sun::star::uno::Type SAL_CALL SvXMLGraphicHelper::getElementType()
-    throw(  ::com::sun::star::uno::RuntimeException )
-{
-    ::osl::MutexGuard aGuard( maMutex );
-    return ::getCppuType( (const ::rtl::OUString*) 0 );
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SAL_CALL SvXMLGraphicHelper::hasElements()
-    throw(  ::com::sun::star::uno::RuntimeException )
-{
-    ::osl::MutexGuard aGuard( maMutex );
-    return maGrfURLs.size() > 0;
+    const sal_Int32 nIndex = maGrfURLs.size();
+    maGrfURLs.push_back( ::_STL::make_pair( aURL, ::rtl::OUString() ) );
+    ImplInsertGraphicURL( aURL, nIndex );
+    return maGrfURLs[ nIndex ].second;
 }
