@@ -1,77 +1,110 @@
-	.globl privateSnippetExecutor
-	.align 4
-privateSnippetExecutor:
-.L21:
-		subl	$32, %esp
-		/ original %ebx, %eax, %ecx saved by jmp snippet into -12, -16, -20 resp
-		movl	%esp, -24(%ebp)
-		movl	%ecx, -28(%ebp)
+    .align 4
+    .globl privateSnippetExecutorGeneral
+privateSnippetExecutorGeneral:
+    movl    %esp,%ecx
+    pushl   %ebp              / proper stack frame needed for exception handling
+    movl    %esp,%ebp
+    andl    $0xFFFFFFF8,%esp  / align following 64bit arg
+    subl    $0x8,%esp         / 64bit nRegReturn
+    pushl   %ecx              / 32bit pCallStack
+    pushl   %edx              / 32bit nVtableOffset
+    pushl   %eax              / 32bit nFunctionIndex
+    call    cpp_vtable_call
+    movl    12(%esp),%eax     / 64 bit nRegReturn, lower half
+    leave
+    ret
+    .type privateSnippetExecutorGeneral, @function
+    .size privateSnippetExecutorGeneral, .-privateSnippetExecutorGeneral
 
-		/ real code
-		movl	%ebp, %eax
-		addl	$4, %eax
-		pushl	%eax
-		pushl	%ebx / nTablePos
+    .align 4
+    .globl privateSnippetExecutorVoid
+privateSnippetExecutorVoid:
+    movl    %esp,%ecx
+    pushl   %ebp              / proper stack frame needed for exception handling
+    movl    %esp,%ebp
+    andl    $0xFFFFFFF8,%esp  / align following 64bit arg
+    subl    $0x8,%esp         / 64bit nRegReturn
+    pushl   %ecx              / 32bit pCallStack
+    pushl   %edx              / 32bit nVtableOffset
+    pushl   %eax              / 32bit nFunctionIndex
+    call    cpp_vtable_call
+    leave
+    ret
+    .type privateSnippetExecutorVoid, @function
+    .size privateSnippetExecutorVoid, .-privateSnippetExecutorVoid
 
-		/ set ebx to GOT
-.L_GOT_BEGIN:
-		call	.L_GOT_END
-.L_GOT_END:
-		popl	%ebx
-		addl	$_GLOBAL_OFFSET_TABLE_+[.-.L_GOT_END],%ebx
+    .align 4
+    .globl privateSnippetExecutorHyper
+privateSnippetExecutorHyper:
+    movl    %esp,%ecx
+    pushl   %ebp              / proper stack frame needed for exception handling
+    movl    %esp,%ebp
+    andl    $0xFFFFFFF8,%esp  / align following 64bit arg
+    subl    $0x8,%esp         / 64bit nRegReturn
+    pushl   %ecx              / 32bit pCallStack
+    pushl   %edx              / 32bit nVtableOffset
+    pushl   %eax              / 32bit nFunctionIndex
+    call    cpp_vtable_call
+    movl    12(%esp),%eax     / 64 bit nRegReturn, lower half
+    movl    16(%esp),%edx     / 64 bit nRegReturn, upper half
+    leave
+    ret
+    .type privateSnippetExecutorHyper, @function
+    .size privateSnippetExecutorHyper, .-privateSnippetExecutorHyper
 
-		/ call collector
-		call	__1cHsunpro5Pcpp_vtable_call6Fippv_v_@PLT
-.L22:
-		movl	-28(%ebp), %ecx
-		cmp		$0, %ecx / float
-		jne		.L23
-		flds	-8(%ebp)
-		jmp		.L29
-.L23:
-		cmp		$1, %ecx / double
-		jne		.L24
-		fldl	-8(%ebp)
-		jmp		.L29
-.L24:
-		cmp		$2, %ecx / longlong
-		jne		.L25
-		movl	-4(%ebp), %edx
-		movl	-8(%ebp), %eax
-		jmp		.L29
-.L25:
-		cmp		$3, %ecx / long
-		jne		.L28
-		movl	-8(%ebp), %eax
-		jmp		.L29
-.L28:
-		movl	-16(%ebp), %eax
-.L29:		
-		movl	-12(%ebp), %ebx
-		movl	-20(%ebp), %ecx
-		movl	%ebp, %esp
-		popl	%ebp
-		ret
-	.type privateSnippetExecutor, @function
-	.size privateSnippetExecutor, .-privateSnippetExecutor
-		
-	.globl privateSnippetExceptionHandler
-privateSnippetExceptionHandler:
-/	movl	-12(%ebp), %ebx
-	movl	-16(%ebp), %eax
-	movl	-20(%ebp), %ecx
-	movl	-24(%ebp), %esp
-	
-	/ DBO fix: set ebx to GOT
-	call	.L_GOT_END_3
-.L_GOT_END_3:
-	popl	%ebx
-	addl	$_GLOBAL_OFFSET_TABLE_+[.-.L_GOT_END_3],%ebx
-	
-	call	__1cG__CrunMex_rethrow_q6F_v_@PLT
-	ret
-	.type privateSnippetExceptionHandler, @function
-	.size privateSnippetExceptionHandler, .-privateSnippetExceptionHandler
+    .align 4
+    .globl privateSnippetExecutorFloat
+privateSnippetExecutorFloat:
+    movl    %esp,%ecx
+    pushl   %ebp              / proper stack frame needed for exception handling
+    movl    %esp,%ebp
+    andl    $0xFFFFFFF8,%esp  / align following 64bit arg
+    subl    $0x8,%esp         / 64bit nRegReturn
+    pushl   %ecx              / 32bit pCallStack
+    pushl   %edx              / 32bit nVtableOffset
+    pushl   %eax              / 32bit nFunctionIndex
+    call    cpp_vtable_call
+    flds    12(%esp)          / 64 bit nRegReturn, lower half
+    leave
+    ret
+    .type privateSnippetExecutorFloat, @function
+    .size privateSnippetExecutorFloat, .-privateSnippetExecutorFloat
+
+    .align 4
+    .globl privateSnippetExecutorDouble
+privateSnippetExecutorDouble:
+    movl    %esp,%ecx
+    pushl   %ebp              / proper stack frame needed for exception handling
+    movl    %esp,%ebp
+    andl    $0xFFFFFFF8,%esp  / align following 64bit arg
+    subl    $0x8,%esp         / 64bit nRegReturn
+    pushl   %ecx              / 32bit pCallStack
+    pushl   %edx              / 32bit nVtableOffset
+    pushl   %eax              / 32bit nFunctionIndex
+    call    cpp_vtable_call
+    fldl    12(%esp)          / 64 bit nRegReturn
+    leave
+    ret
+    .type privateSnippetExecutorDouble, @function
+    .size privateSnippetExecutorDouble, .-privateSnippetExecutorDouble
+
+    .align 4
+    .globl privateSnippetExecutorStruct
+privateSnippetExecutorStruct:
+    movl    %esp,%ecx
+    pushl   %ebp              / proper stack frame needed for exception handling
+    movl    %esp,%ebp
+    andl    $0xFFFFFFF8,%esp  / align following 64bit arg
+    subl    $0x8,%esp         / 64bit nRegReturn
+    pushl   %ecx              / 32bit pCallStack
+    pushl   %edx              / 32bit nVtableOffset
+    pushl   %eax              / 32bit nFunctionIndex
+    call    cpp_vtable_call
+    movl    12(%esp),%eax     / 64 bit nRegReturn, lower half
+    leave
+    ret     $4
+    .type privateSnippetExecutorStruct, @function
+    .size privateSnippetExecutorStruct, .-privateSnippetExecutorStruct
 
 	.align 4
 	.globl callVirtualMethod
@@ -209,10 +242,6 @@ callVirtualMethodExceptionHandler:
 	.section	.exception_ranges,"aw"
 	.align		4
 
-	.4byte		.L21@rel
-	.4byte		.L22-.L21
-	.4byte		privateSnippetExceptionHandler-.L21
-	.zero		8
 	.4byte		.callBeginPosition@rel
 	.4byte		.callVirtualMethodExceptionPosition-.callBeginPosition
 	.4byte		callVirtualMethodExceptionHandler-.callBeginPosition
