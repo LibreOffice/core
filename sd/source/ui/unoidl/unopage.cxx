@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 16:07:00 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 22:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,7 @@ using namespace ::com::sun::star;
 #define WID_PAGE_PREVIEW 16
 #define WID_PAGE_VISIBLE 17
 #define WID_PAGE_SOUNDFILE 18
+#define WID_PAGE_BACKFULL 19
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
@@ -259,6 +260,7 @@ const SfxItemPropertyMap* ImplGetMasterPagePropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    &::getCppuType((const sal_Int16*)0),            beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    &::getCppuType((const view::PaperOrientation*)0),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     &::getCppuType((const sal_Int32*)0),            0,  0},
+        { MAP_CHAR_LEN("BackgroundFullSize"),           WID_PAGE_BACKFULL,  &::getBooleanCppuType(),                        0, 0},
         {0,0,0,0,0}
     };
     return aMasterPagePropertyMap_Impl;
@@ -519,6 +521,14 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             mpPage->SetSound( sal_True );
             break;
         }
+        case WID_PAGE_BACKFULL:
+        {
+            sal_Bool    bFullSize;
+            if( ! ( aValue >>= bFullSize ) )
+                throw lang::IllegalArgumentException();
+            mpPage->SetBackgroundFullSize( bFullSize );
+            break;
+        }
         default:
             throw beans::UnknownPropertyException();
             break;
@@ -637,7 +647,7 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
     case WID_PAGE_VISIBLE :
     {
         sal_Bool bVisible = mpPage->IsExcluded() == FALSE;
-        aAny <<= bVisible;
+        aAny <<= uno::Any( &bVisible, ::getBooleanCppuType() );
         break;
     }
 
@@ -647,6 +657,12 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
         if( mpPage->IsSoundOn() )
             aURL = mpPage->GetSoundFile();
         aAny <<= aURL;
+        break;
+    }
+    case WID_PAGE_BACKFULL:
+    {
+        sal_Bool bFullSize = mpPage->GetBackgroundFullSize();
+        aAny = uno::Any( &bFullSize, ::getBooleanCppuType() );
         break;
     }
 
@@ -1644,31 +1660,7 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
     }
     else
     {
-        // prepare background object
-        SdrObject* pObj = NULL;
-        if( mpPage->GetObjCount() >= 1 )
-        {
-            pObj = mpPage->GetObj(0);
-            if( pObj->GetObjInventor() != SdrInventor || pObj->GetObjIdentifier() != OBJ_RECT )
-                pObj = NULL;
-        }
-
-        if( pObj == NULL )
-            return;
-
-/*
-        const sal_Int32 nLeft = mpPage->GetLftBorder();
-        const sal_Int32 nRight = mpPage->GetRgtBorder();
-        const sal_Int32 nUpper = mpPage->GetUppBorder();
-        const sal_Int32 nLower = mpPage->GetLwrBorder();
-
-        awt::Point aPos ( nLeft, nRight );
-        awt::Size aSize( mpPage->GetSize().Width(), mpPage->GetSize().Height() );
-        aSize.Width  -= nLeft  + nRight - 1;
-        aSize.Height -= nUpper + nLower - 1;
-        Rectangle aRect( aPos.X, aPos.Y, aSize.Width, aSize.Height );
-        pObj->SetLogicRect( aRect );
-*/
+        // first fill an item set
         // is it our own implementation?
         SdUnoPageBackground* pBack = SdUnoPageBackground::getImplementation( xSet );
 
@@ -1703,7 +1695,30 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
             pBackground->fillItemSet( (SdDrawDocument*)mpPage->GetModel(), aSet );
         }
 
-//-/        pObj->NbcSetAttributes( aSet, sal_False );
+        // if we find the background style, copy the set to the background
+        SdDrawDocument* pDoc = (SdDrawDocument*)mpPage->GetModel();
+        SfxStyleSheetBasePool* pSSPool = pDoc->GetDocSh()->GetStyleSheetPool();
+        SfxStyleSheetBase* pStyleSheet = NULL;
+        if(pSSPool)
+        {
+            String aStr(SdResId(STR_PSEUDOSHEET_BACKGROUND));
+            pStyleSheet = pSSPool->Find( aStr, SFX_STYLE_FAMILY_PSEUDO);
+
+            if( pStyleSheet )
+            {
+                SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
+                rStyleSet.Put( aSet );
+                mpPage->SendRepaintBroadcast();
+                return;
+            }
+        }
+
+
+        // if no background style is available, try the background object
+        SdrObject* pObj = mpPage->GetPresObj(PRESOBJ_BACKGROUND);
+        if( pObj == NULL )
+            return;
+
         pObj->SetItemSet(aSet);
 
         mpPage->SendRepaintBroadcast();
@@ -1712,7 +1727,10 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
 
 void SdMasterPage::getBackground( uno::Any& rValue ) throw()
 {
-    if( mpModel && mpModel->IsImpressDocument() )
+    if( mpModel == NULL )
+        return;
+
+    if( mpModel->IsImpressDocument() )
     {
         try
         {
