@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:52:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,61 +300,13 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, PrintDialog* pDlg)
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
         rOutliner.SetControlWord( nCntrl );
 
-        // Pruefen des Seitenformates und ggfs. Dialog hochbringen
-        const SfxItemSet&   rOptions = pPrinter->GetOptions();
+        // old place of FitPageToPrinterWithDialog().
         SdOptionsPrintItem* pPrintOpts = NULL;
-        BOOL                bScalePage = TRUE;
-        BOOL                bTilePage = FALSE;
-        BOOL                bPrintBooklet = FALSE;
-
-        if( rOptions.GetItemState( ATTR_OPTIONS_PRINT, FALSE, (const SfxPoolItem**) &pPrintOpts ) == SFX_ITEM_SET )
+        if (pPrinter->GetOptions().GetItemState(
+            ATTR_OPTIONS_PRINT, FALSE,
+            (const SfxPoolItem**) &pPrintOpts ) != SFX_ITEM_SET )
         {
-            bScalePage = pPrintOpts->IsPagesize();
-            bPrintBooklet = pPrintOpts->IsBooklet();
-            pPrintOpts->SetCutPage( FALSE );
-        }
-        else
             pPrintOpts = NULL;
-
-        SdPage* pPage = mrViewShell.GetDocument()->GetSdPage( 0, PK_STANDARD );
-        Size    aPageSize( pPage->GetSize() );
-        Size    aPrintSize( pPrinter->GetOutputSize() );
-        long    nPageWidth = aPageSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder();
-        long    nPageHeight = aPageSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder();
-        long    nPrintWidth = aPrintSize.Width();
-        long    nPrintHeight = aPrintSize.Height();
-        USHORT  nRet = RET_OK;
-
-        if( !bScalePage && !bTilePage && !bPrintBooklet &&
-            ( ( nPageWidth > nPrintWidth || nPageHeight > nPrintHeight ) &&
-              ( nPageWidth > nPrintHeight || nPageHeight > nPrintWidth ) ) )
-        {
-            //CHINA001 SdPrintDlg aDlg (mrViewShell.GetWindow());
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-            AbstractSdPrintDlg* pDlg = pFact->CreateSdPrintDlg(ResId( DLG_PRINT_WARNINGS ), mrViewShell.GetWindow() );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-            nRet = pDlg->Execute(); //CHINA001 nRet = aDlg.Execute();
-            if( nRet == RET_OK )
-            {
-                USHORT nOption = pDlg->GetAttr(); //CHINA001 USHORT nOption = aDlg.GetAttr();
-
-                if( nOption == 1 )
-                    pPrintOpts->SetPagesize();
-
-                // ( nOption == 2 ) ist der Default
-
-                if( nOption == 3 )
-                    pPrintOpts->SetCutPage();
-            }
-            delete pDlg; //add by CHINA001
-        }
-
-        if( nRet == RET_CANCEL )
-        {
-            pPrinter->SetPrinterOptions( aOldPrinterOptions );
-            pPrinter->SetMapMode( aOldMap );
-            return 0;
         }
 
         // Wenn wir im Gliederungsmodus sind, muss das Model auf Stand gebracht werden
@@ -617,9 +569,15 @@ ErrCode PrintManager::DoPrint (
 {
     ErrCode nResult = ERRCODE_NONE;
 
-    ViewShell* pShell = mrViewShell.GetMainViewShell();
-    if (pShell != NULL)
+    do
     {
+        ViewShell* pShell = mrViewShell.GetMainViewShell();
+        if (pShell == NULL)
+            break;
+
+        if ( ! FitPageToPrinterWithDialog(pPrinter, bSilent))
+            break;
+
         const SdrMarkList& rMarkList = pShell->GetView()->GetMarkedObjectList();
 
         // Retrieve the range of marked pages.
@@ -662,6 +620,7 @@ ErrCode PrintManager::DoPrint (
             RestrictPrintingToSelection (FALSE);
         }
     }
+    while(false);
 
     return nResult;
 }
@@ -751,6 +710,104 @@ void PrintManager::RestrictPrintingToSelection (bool bFlag)
 void PrintManager::SetPrintingPageRange (const String& rsPageRange)
 {
     msPageRange = rsPageRange;
+}
+
+
+
+
+bool PrintManager::FitPageToPrinterWithDialog (
+    SfxPrinter* pPrinter,
+    bool bSilent)
+{
+    bool bContinuePrinting = true;
+
+    if (pPrinter != NULL)
+    {
+        // Remember old printer values so that they can be restored when
+        // printing is aborted by the user.
+        const PrinterOptions aOldPrinterOptions (pPrinter->GetPrinterOptions());
+        const MapMode aOldMap (pPrinter->GetMapMode());
+
+        // Get values from the priner in order to decide whether to show a
+        // dialog.
+        const SfxItemSet&   rOptions = pPrinter->GetOptions();
+        SdOptionsPrintItem* pPrintOpts = NULL;
+        BOOL                bScalePage = TRUE;
+        BOOL                bTilePage = FALSE;
+        BOOL                bPrintBooklet = FALSE;
+
+        if( rOptions.GetItemState( ATTR_OPTIONS_PRINT, FALSE, (const SfxPoolItem**) &pPrintOpts ) == SFX_ITEM_SET )
+        {
+            bScalePage = pPrintOpts->IsPagesize();
+            bPrintBooklet = pPrintOpts->IsBooklet();
+            pPrintOpts->SetCutPage( FALSE );
+        }
+        else
+            pPrintOpts = NULL;
+
+        SdPage* pPage = mrViewShell.GetDocument()->GetSdPage( 0, PK_STANDARD );
+        Size    aPageSize( pPage->GetSize() );
+        Size    aPrintSize( pPrinter->GetOutputSize() );
+        long    nPageWidth = aPageSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder();
+        long    nPageHeight = aPageSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder();
+        long    nPrintWidth = aPrintSize.Width();
+        long    nPrintHeight = aPrintSize.Height();
+        USHORT  nRet = RET_OK;
+
+        // When necessary then show a dialog that asks the user how to fit
+        // the pages to be printed to the (smaller) printer pages.
+        if ( !bScalePage
+            && !bTilePage
+            && !bPrintBooklet
+            && ( ( nPageWidth > nPrintWidth || nPageHeight > nPrintHeight )
+                && ( nPageWidth > nPrintHeight || nPageHeight > nPrintWidth )
+                )
+            )
+        {
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");
+            AbstractSdPrintDlg* pDlg = pFact->CreateSdPrintDlg(ResId( DLG_PRINT_WARNINGS ), mrViewShell.GetWindow() );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            // Do not show the dialog when the bSilent flag is set.  We do
+            // create the dialog anyway so that we can extract the default
+            // method of mapping internal pages to printer pages from it.
+            if ( ! bSilent)
+                nRet = pDlg->Execute();
+            if( nRet == RET_OK )
+            {
+                switch (pDlg->GetAttr())
+                {
+                    case 1:
+                        pPrintOpts->SetPagesize();
+                        break;
+
+                    case 2:
+                        // Tiling is the default behaviour in
+                        // ViewShell::PrintStdOrNotes().  The poperty of
+                        // pPrintOpts is ignored there so setting it here
+                        // may only lead to unwanted side effects.
+                        break;
+
+                    case 3:
+                        pPrintOpts->SetCutPage();
+                        break;
+                }
+                bContinuePrinting = true;
+            }
+            delete pDlg;
+        }
+
+        // The user has pressed the 'Cancel' button.  Restore the old values and
+        // return a flag to tell the caller to abort printing.
+        if( nRet == RET_CANCEL )
+        {
+            pPrinter->SetPrinterOptions( aOldPrinterOptions );
+            pPrinter->SetMapMode( aOldMap );
+            bContinuePrinting = false;
+        }
+    }
+
+    return bContinuePrinting;
 }
 
 
