@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:41:37 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,6 +577,16 @@ String RID_STR_PARAGRAPH
     Text[ hindi ] = "Paragraph is %x";
     Text[ slovak ] = "Odstavec je %x";
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
