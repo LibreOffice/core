@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDispatchProviderInterception.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:38:41 $
+ *  last change:$Date: 2004-07-23 10:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,13 +117,13 @@ public class _XDispatchProviderInterception extends MultiMethodTest {
         }
 
         public XDispatch queryDispatch(URL url, String frame, int flags) {
-            log.println("queryDispatch('" + url.Complete + "', '" +
+            log.println("my queryDispatch('" + url.Complete + "', '" +
                 frame + "', " + flags + ") called.") ;
-            return master.queryDispatch(url, frame, flags) ;
+            return slave.queryDispatch(url, frame, flags) ;
         }
         public XDispatch[] queryDispatches(DispatchDescriptor[] desc) {
-            log.println("queryDispatch() called.") ;
-            return master.queryDispatches(desc) ;
+            log.println("my queryDispatches() called.") ;
+            return slave.queryDispatches(desc) ;
         }
     }
 
