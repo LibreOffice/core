@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:25:18 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,19 +66,12 @@
 
 String STR_NOGLOS1
 {
-    /* ### ACHTUNG: Neuer Text in Resource? AutoText zum Kürzel ' : AutoText zum Kürzel '' */
-    /* ### ACHTUNG: Neuer Text in Resource? AutoText zum Kürzel ' : AutoText zum Kürzel '' */
-    /* ### ACHTUNG: Neuer Text in Resource? AutoText zum Kürzel ' : AutoText zum K³rzel ' */
     Text [ de ] = "AutoText zum Kürzel '" ;
     Text [ en-US ] = "AutoText for Shortcut '" ;
     Text [ x-comment ] = " ";
 };
 String STR_NOGLOS2
 {
-    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
-    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
-    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
-    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
     Text [ de ] = "' nicht gefunden." ;
     Text [ en-US ] = "' not found." ;
     Text [ x-comment ] = " ";
@@ -117,7 +110,6 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
 
 String STR_PRIVATETEXT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? StarWriter : Formatierter Text [StarWriter] */
     Text [ de ] = "%PRODUCTNAME Writer" ;
     Text [ en-US ] = "%PRODUCTNAME Writer" ;
     Text [ x-comment ] = " ";
@@ -134,7 +126,6 @@ String STR_PRIVATEOLE
 };
 String STR_DDEFORMAT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? DDE Verknüpfung : DDE Verkn³pfung */
     Text [ de ] = "DDE Verknüpfung" ;
     Text [ en-US ] = "DDE link" ;
     Text [ x-comment ] = " ";
@@ -146,6 +137,6 @@ Bitmap BMP_SW_TEAM_MUGSHOT
 
 String STR_SW_TEAM_NAMES
 {
-    TEXT = "Back row: Aidan Butler, Peter Burow, Caolán McNamara, Michael Brauer, Martin Maher, Gunnar Timm\nFront row: Thomas Lange, Oliver-Rainer Düsterhöft, Henning Brinkmann,  Andreas Martens, Oliver Specht, Frank Meies, Daniel Vogelheim";
+    TEXT = "Back row: Aidan Butler, Hans-Peter Burow, Caolán McNamara, Michael Brauer, Martin Maher, Gunnar Timm\nFront row: Thomas Lange, Oliver-Rainer Düsterhöft, Henning Brinkmann, Andreas Martens, Oliver Specht, Frank Meies, Daniel Vogelheim";
 };
 
