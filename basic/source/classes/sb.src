@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:14:05 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Syntaktická chyba";
         Text[ hebrew ] = "‮שגיאת תחביר‬";
         Text[ hindi ] = "सिन्टाक्स गलती";
+        Text[ slovak ] = "Syntaktická chyba";
     };
     String SbERR_NO_GOSUB & ERRCODE_RES_MASK
     {
@@ -132,6 +133,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Return bez Gosub";
         Text[ hebrew ] = "‮Return ללא Gosub‬";
         Text[ hindi ] = "Gosub रहित वापसी";
+        Text[ slovak ] = "Return bez Gosub";
     };
     String SbERR_REDO_FROM_START & ERRCODE_RES_MASK
     {
@@ -165,6 +167,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Nesprávná položka. Prosím, opakujte zadání";
         Text[ hebrew ] = "‮ערך שגוי, נא לנסות שוב‬";
         Text[ hindi ] = "गलत प्रविष्टि; कृपया फिर से प्रयत्न करो";
+        Text[ slovak ] = "Nesprávna položka. Prosím, opakujte zadanie";
     };
     String SbERR_BAD_ARGUMENT & ERRCODE_RES_MASK
     {
@@ -199,6 +202,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neplatné volání procedury";
         Text[ hebrew ] = "‮קריאה שגויה לשיגרה‬";
         Text[ hindi ] = "अमान्य कार्यप्रणाली बुलावा";
+        Text[ slovak ] = "Neplatné volanie procedúry";
     };
     String SbERR_MATH_OVERFLOW & ERRCODE_RES_MASK
     {
@@ -233,6 +237,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Přetečení";
         Text[ hebrew ] = "‮הצפה‬";
         Text[ hindi ] = "अधिकता";
+        Text[ slovak ] = "Pretečenie";
     };
     String SbERR_NO_MEMORY & ERRCODE_RES_MASK
     {
@@ -267,6 +272,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Nedostatek paměti";
         Text[ hebrew ] = "‮חסר זכרון‬";
         Text[ hindi ] = "मेमरी प्राप्य नहीं";
+        Text[ slovak ] = "Nedostatok pamäti";
     };
     String SbERR_ALREADY_DIM & ERRCODE_RES_MASK
     {
@@ -287,7 +293,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "����������� ������� ��� ������";
         Text[ polish ] = "Macierz zosta�a ju� zwymiarowana";
         Text[ japanese ] = "配列の次元化済み";
-        Text[ chinese_traditional ] = "行列已經設定好數值";
+        Text[ chinese_traditional ] = "陣列已經設定好數值";
         Text[ arabic ] = "����� ������ ����� ������";
         Text[ dutch ] = "Het aantal dimensies van de matrix is al bepaald";
         Text[ chinese_simplified ] = "数组已经被定尺度";
@@ -300,6 +306,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Pole již má rozměry";
         Text[ hebrew ] = "‮למערך זה יש כבר הגדרת מימדים‬";
         Text[ hindi ] = "श्रेणी को पहिले से ही परिमण दिया गया है";
+        Text[ slovak ] = "Pole už má rozmery";
     };
     String SbERR_OUT_OF_RANGE & ERRCODE_RES_MASK
     {
@@ -334,6 +341,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Index mimo definovaný rozsah";
         Text[ hebrew ] = "‮מונה מחוץ לתחום‬";
         Text[ hindi ] = "अनुक्रमणी परिभाषित फैलाव से बाहर है";
+        Text[ slovak ] = "Index mimo rozsah";
     };
     String SbERR_DUPLICATE_DEF & ERRCODE_RES_MASK
     {
@@ -367,6 +375,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Dvojí definice";
         Text[ hebrew ] = "‮הגדרה כפולה‬";
         Text[ hindi ] = "परिभाषा की नकल";
+        Text[ slovak ] = "Dvojitá definícia";
     };
     String SbERR_ZERODIV & ERRCODE_RES_MASK
     {
@@ -400,6 +409,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Dělení nulou";
         Text[ hebrew ] = "‮חלוקה באפס‬";
         Text[ hindi ] = "शून्य से विभाजन";
+        Text[ slovak ] = "Delenie nulou";
     };
     String SbERR_VAR_UNDEFINED & ERRCODE_RES_MASK
     {
@@ -420,7 +430,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "���������� �� ����������";
         Text[ polish ] = "Zmienna niezdefiniowana";
         Text[ japanese ] = "変数の未定義";
-        Text[ chinese_traditional ] = "沒有設定變量";
+        Text[ chinese_traditional ] = "沒有設定變數";
         Text[ arabic ] = "�������� ��� �����";
         Text[ dutch ] = "Er is geen variabele gedefinieerd";
         Text[ chinese_simplified ] = "没有定义变数";
@@ -433,6 +443,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Proměnná nedefinována";
         Text[ hebrew ] = "‮משתנה לא מוגדר‬";
         Text[ hindi ] = "परिवर्ती परिभाषित नहीं";
+        Text[ slovak ] = "Premenná nedefinovaná";
     };
     String SbERR_CONVERSION & ERRCODE_RES_MASK
     {
@@ -467,6 +478,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Datové typy nesouhlasí";
         Text[ hebrew ] = "‮אי התאמה בטיפוסי הנתונים‬";
         Text[ hindi ] = "भिन्न ड़ॉटा वर्ग";
+        Text[ slovak ] = "Dátové typy nesúhlasia";
     };
     String SbERR_BAD_PARAMETER & ERRCODE_RES_MASK
     {
@@ -501,6 +513,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neplatný parametr";
         Text[ hebrew ] = "‮פרמטר שגוי‬";
         Text[ hindi ] = "अमान्य पैरामीटर";
+        Text[ slovak ] = "Neplatný parameter";
     };
     String SbERR_USER_ABORT & ERRCODE_RES_MASK
     {
@@ -534,6 +547,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Proces přerušen uživatelem";
         Text[ hebrew ] = "‮הפעולה הופסקה על ידי המשתמש‬";
         Text[ hindi ] = "Process interrupted by user";
+        Text[ slovak ] = "Proces prerušený užívateľom";
     };
     String SbERR_BAD_RESUME & ERRCODE_RES_MASK
     {
@@ -567,6 +581,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Pokračovat bez chyb";
         Text[ hebrew ] = "‮להמשיך בתנאי שאין שגיאה‬";
         Text[ hindi ] = "गलती के बिना जारी रखो";
+        Text[ slovak ] = "Pokračovať bez chýb";
     };
     String SbERR_STACK_OVERFLOW & ERRCODE_RES_MASK
     {
@@ -601,6 +616,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Nedostatek paměti v zásobníku";
         Text[ hebrew ] = "‮אין מספיק זכרון מחסנית‬";
         Text[ hindi ] = "स्टॉक मेमरी प्राप्य नहीं है";
+        Text[ slovak ] = "Nedostatok pamäti v zásobníku";
     };
     String SbERR_PROC_UNDEFINED & ERRCODE_RES_MASK
     {
@@ -634,6 +650,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Podprocedura nebo funkční procedura není definována";
         Text[ hebrew ] = "‮שגרה או פעולה לא מוגדרת‬";
         Text[ hindi ] = "अधीन-कार्यप्रणाली अथवा फंक्शन कार्यप्रणाली को परिभाषा नहीं दिया है";
+        Text[ slovak ] = "Podprocedúra alebo funkčná procedúra nieje definovaná";
     };
     String SbERR_BAD_DLL_LOAD & ERRCODE_RES_MASK
     {
@@ -667,6 +684,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Chyba při zavádění souboru DLL";
         Text[ hebrew ] = "‮שגיאה בטעינת קובץ DLL‬";
         Text[ hindi ] = "DLL फाइलों को लोड करने के समय गलती";
+        Text[ slovak ] = "Chyba pri zavádzaní­ súboru DLL";
     };
     String SbERR_BAD_DLL_CALL & ERRCODE_RES_MASK
     {
@@ -700,6 +718,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Chyba konvence volání DLL";
         Text[ hebrew ] = "‮שגיאה תחביר קריאת DLL‬";
         Text[ hindi ] = "DLL बुलावा रीति गलत है ";
+        Text[ slovak ] = "Chyba konvencie volanie DLL";
     };
     String SbERR_INTERNAL_ERROR & ERRCODE_RES_MASK
     {
@@ -733,6 +752,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Interní chyba $(ARG1)";
         Text[ hebrew ] = "‮שגיאה פנימית $(ARG1)‬";
         Text[ hindi ] = "भीतरी गलती $(ARG1)";
+        Text[ slovak ] = "Interná chyba $(ARG1)";
     };
     String SbERR_BAD_CHANNEL & ERRCODE_RES_MASK
     {
@@ -766,6 +786,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neplatný název souboru nebo číslo souboru";
         Text[ hebrew ] = "‮שם קובץ או מספר קובץ שגוי‬";
         Text[ hindi ] = "अमान्य फाइल नाम अथवा फाइल संख्या";
+        Text[ slovak ] = "Neplatný názov súboru alebo číslo súboru";
     };
     String SbERR_FILE_NOT_FOUND & ERRCODE_RES_MASK
     {
@@ -799,6 +820,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Soubor nenalezen";
         Text[ hebrew ] = "‮קובץ לא אותר‬";
         Text[ hindi ] = "फाइल नहीं मिला";
+        Text[ slovak ] = "Súbor nenájdený";
     };
     String SbERR_BAD_FILE_MODE & ERRCODE_RES_MASK
     {
@@ -832,6 +854,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Nesprávný mód souboru";
         Text[ hebrew ] = "‮הרשאות הקובץ אינן נכונות‬";
         Text[ hindi ] = "गलत फाइल प्रकार";
+        Text[ slovak ] = "Nesprávny mód súboru";
     };
     String SbERR_FILE_ALREADY_OPEN & ERRCODE_RES_MASK
     {
@@ -866,6 +889,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Soubor již otevřen";
         Text[ hebrew ] = "‮קובץ זה כבר פתוח‬";
         Text[ hindi ] = "फाइल पहिले से ही खुला है";
+        Text[ slovak ] = "Súbor je už otvorený";
     };
     String SbERR_IO_ERROR & ERRCODE_RES_MASK
     {
@@ -900,6 +924,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Chyba zařízení I/O";
         Text[ hebrew ] = "‮שגיאת קלט\\פלט על הכונן‬";
         Text[ hindi ] = "साधन I/O गलती";
+        Text[ slovak ] = "Chyba zariadenia I/O";
     };
     String SbERR_FILE_EXISTS & ERRCODE_RES_MASK
     {
@@ -933,6 +958,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Soubor již existuje";
         Text[ hebrew ] = "‮קובץ זה כבר קיים‬";
         Text[ hindi ] = "फाइल पहिले से ही अस्तित्व में है";
+        Text[ slovak ] = "Súbor už existuje";
     };
     String SbERR_BAD_RECORD_LENGTH & ERRCODE_RES_MASK
     {
@@ -967,6 +993,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neznámá délka záznamu";
         Text[ hebrew ] = "‮אורך רשומה לא נכון‬";
         Text[ hindi ] = "गलत लेखा विस्तार";
+        Text[ slovak ] = "Neznáma dĺžka záznamu";
     };
     String SbERR_DISK_FULL & ERRCODE_RES_MASK
     {
@@ -1000,6 +1027,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Disk je plný";
         Text[ hebrew ] = "‮הכונן מלא‬";
         Text[ hindi ] = "डिस्क् अथवा हार्ड ड्रइव भर गया है";
+        Text[ slovak ] = "Disk je plný";
     };
     String SbERR_READ_PAST_EOF & ERRCODE_RES_MASK
     {
@@ -1034,6 +1062,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Načítání překročilo konec souboru";
         Text[ hebrew ] = "‮נסיון לקרוא מעבר לסוף הקובץ‬";
         Text[ hindi ] = "पढ़ना EOF सीमा से बाहर है";
+        Text[ slovak ] = "Načítavanie prekročilo koniec súboru";
     };
     String SbERR_BAD_RECORD_NUMBER & ERRCODE_RES_MASK
     {
@@ -1067,6 +1096,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neznámé číslo záznamu";
         Text[ hebrew ] = "‮מספר רשומה לא נכון‬";
         Text[ hindi ] = "गलत लेखा संख्या";
+        Text[ slovak ] = "Neznáme číslo záznamu";
     };
     String SbERR_TOO_MANY_FILES & ERRCODE_RES_MASK
     {
@@ -1100,6 +1130,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Příliš mnoho souborů";
         Text[ hebrew ] = "‮יותר מידי קבצים‬";
         Text[ hindi ] = "बहुत अधिक फाइलें";
+        Text[ slovak ] = "Príliš veľa súborov";
     };
     String SbERR_NO_DEVICE & ERRCODE_RES_MASK
     {
@@ -1134,6 +1165,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Zařízení je nedostupné";
         Text[ hebrew ] = "‮כונן לא זמין‬";
         Text[ hindi ] = "Device not available";
+        Text[ slovak ] = "Zariadenie nedostupné";
     };
     String SbERR_ACCESS_DENIED & ERRCODE_RES_MASK
     {
@@ -1167,6 +1199,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Přístup odmítnut";
         Text[ hebrew ] = "‮אין הרשאות לגישה זו‬";
         Text[ hindi ] = "प्रवेश निषेधित";
+        Text[ slovak ] = "Prístup odmietnutý";
     };
     String SbERR_NOT_READY & ERRCODE_RES_MASK
     {
@@ -1200,6 +1233,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Disk není připraven";
         Text[ hebrew ] = "‮דיסק לא מוכן‬";
         Text[ hindi ] = "डिस्क् तैयार नहीं";
+        Text[ slovak ] = "Disk nie je pripravený";
     };
     String SbERR_NOT_IMPLEMENTED & ERRCODE_RES_MASK
     {
@@ -1233,6 +1267,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neimplementováno";
         Text[ hebrew ] = "‮לא מייושם‬";
         Text[ hindi ] = "कार्यान्वित नहीं किया है";
+        Text[ slovak ] = "Neimplementované";
     };
     String SbERR_DIFFERENT_DRIVE & ERRCODE_RES_MASK
     {
@@ -1267,6 +1302,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Přejmenování na různých discích není možné";
         Text[ hebrew ] = "‮לא ניתן לשנות את מרכיב הכונן של שם קובץ‬";
         Text[ hindi ] = "अलग अलग ड्रइवों में पुनः नाम देना असंभव है";
+        Text[ slovak ] = "Premenovanie na rôznych diskoch nie je možné";
     };
     String SbERR_ACCESS_ERROR & ERRCODE_RES_MASK
     {
@@ -1300,6 +1336,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Chyba při přístupu k souboru";
         Text[ hebrew ] = "‮שגיאה בגישה למסלול הספריות או לקובץ‬";
         Text[ hindi ] = "मार्ग/फाइल प्रवेश में गलती";
+        Text[ slovak ] = "Chyba pri prístupe k súboru";
     };
     String SbERR_PATH_NOT_FOUND & ERRCODE_RES_MASK
     {
@@ -1333,6 +1370,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Cesta nenalezena";
         Text[ hebrew ] = "‮מסלול הספריות לא נמצא‬";
         Text[ hindi ] = "मार्ग नहीं मिला";
+        Text[ slovak ] = "Cesta nenájdená";
     };
     String SbERR_NO_OBJECT & ERRCODE_RES_MASK
     {
@@ -1353,7 +1391,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "���������� �� �����������";
         Text[ polish ] = "Nie ustawiono zmiennej obiektu";
         Text[ japanese ] = "オブジェクト変数は設定できていません";
-        Text[ chinese_traditional ] = "還沒有設定物件變量";
+        Text[ chinese_traditional ] = "還沒有設定物件變數";
         Text[ arabic ] = "�� ��� ����� ������� ������";
         Text[ dutch ] = "Objectvariabele niet ingesteld";
         Text[ chinese_simplified ] = "还没有设定对象变量";
@@ -1366,6 +1404,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Proměnná objektu není nastavena";
         Text[ hebrew ] = "‮לא הושם ערך למשתנה עצם‬";
         Text[ hindi ] = "वस्तु परिवर्ती सेट्ट नहीं है";
+        Text[ slovak ] = "Premenná objektu nie je nastavená";
     };
     String SbERR_BAD_PATTERN & ERRCODE_RES_MASK
     {
@@ -1400,6 +1439,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Chybný řetězec";
         Text[ hebrew ] = "‮תבנית מחרוזת לא חוקית‬";
         Text[ hindi ] = "अमान्य स्ट्रिंग नमूना";
+        Text[ slovak ] = "Chybný reťazec";
     };
     String SBERR_IS_NULL & ERRCODE_RES_MASK
     {
@@ -1434,6 +1474,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Použití nuly nedovoleno";
         Text[ hebrew ] = "‮שימוש באפס בהקשר זה לא חוקי‬";
         Text[ hindi ] = "शून्य का उपयोग स्वीकृत नहीं है";
+        Text[ slovak ] = "Nedovolené použitie nuly";
     };
     String SbERR_DDE_ERROR & ERRCODE_RES_MASK
     {
@@ -1467,6 +1508,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "DDE chyba";
         Text[ hebrew ] = "‮שגיאת DDE‬";
         Text[ hindi ] = "DDE गलती";
+        Text[ slovak ] = "DDE chyba";
     };
     String SbERR_DDE_WAITINGACK & ERRCODE_RES_MASK
     {
@@ -1500,6 +1542,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Čeká se odezva na připojení DDE";
         Text[ hebrew ] = "‮ממתין לתשובה לקריאת DDE‬";
         Text[ hindi ] = "DDE कनेक्शन केलिए उत्तर की प्रतीक्षा हो रहा है";
+        Text[ slovak ] = "Čaká sa odozva na pripojenie DDE";
     };
     String SbERR_DDE_OUTOFCHANNELS & ERRCODE_RES_MASK
     {
@@ -1534,6 +1577,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Nedostupné kanály DDE";
         Text[ hebrew ] = "‮אין ערוצי DDE זמינים‬";
         Text[ hindi ] = "कोई DDE चैन्नल्स उपलब्ध नहीं है";
+        Text[ slovak ] = "Nedostupné kanály DDE";
     };
     String SbERR_DDE_NO_RESPONSE & ERRCODE_RES_MASK
     {
@@ -1567,6 +1611,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Na zahájení DDE spojení neodpověděla žádná aplikace";
         Text[ hebrew ] = "‮אין תשובה לקריאת קשר ה DDE‬";
         Text[ hindi ] = "DDE कनेक्ट प्रारंभ करने केलिए कोई कार्यक्रम से उत्तर नहीं है";
+        Text[ slovak ] = "Na inicializáciu DDE spojenia neodpovedala žiadna aplikácia";
     };
     String SbERR_DDE_MULT_RESPONSES & ERRCODE_RES_MASK
     {
@@ -1600,6 +1645,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Na zahájení DDE spojení odpovědělo příliš mnoho aplikací";
         Text[ hebrew ] = "‮תשובות רבות מדי לקריאת קשר ה DDE‬";
         Text[ hindi ] = "Too many applications responded to DDE connect initiation";
+        Text[ slovak ] = "Na inicializáciu DDE spojenia odpovedalo príliš veľa aplikácií";
     };
     String SbERR_DDE_CHANNEL_LOCKED & ERRCODE_RES_MASK
     {
@@ -1633,6 +1679,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "DDE kanál je zamčen";
         Text[ hebrew ] = "‮ערוץ ה DDE נעול‬";
         Text[ hindi ] = "DDE चैन्नल को ताला लगा दिया है";
+        Text[ slovak ] = "DDE kanál zamknutý";
     };
     String SbERR_DDE_NOTPROCESSED & ERRCODE_RES_MASK
     {
@@ -1667,6 +1714,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Externí aplikace nemůže provést DDE operaci";
         Text[ hebrew ] = "‮יישום חיצוני אינו רשאי לבצע פעולת DDE‬";
         Text[ hindi ] = "बाहरी कार्यक्रम DDE कार्य को नहीं चला सकता है";
+        Text[ slovak ] = "Externá aplikácia nemôže vykonať DDE operáciu";
     };
     String SbERR_DDE_TIMEOUT & ERRCODE_RES_MASK
     {
@@ -1701,6 +1749,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Vypršel čas při čekání na DDE odpověď";
         Text[ hebrew ] = "‮פג זמן ההמתנה לתשובת DDE‬";
         Text[ hindi ] = "DDE की जवाब के लिए प्रतीक्षा करते हुए समय समाप्त हो गया ";
+        Text[ slovak ] = "Timeout počas čakania na DDE odpoveď";
     };
     String SbERR_DDE_USER_INTERRUPT & ERRCODE_RES_MASK
     {
@@ -1735,6 +1784,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Uživatel stisknul ESCAPE během DDE operace.";
         Text[ hebrew ] = "‮המשתמש לחץ ESCAPE במהלך פעולת DDE.‬";
         Text[ hindi ] = "DDE कार्य के समय उपभोक्ता ने ESCAPE दबाया है ।";
+        Text[ slovak ] = "Užívateľ stlačil ESCAPE počas DDE operácie.";
     };
     String SbERR_DDE_BUSY & ERRCODE_RES_MASK
     {
@@ -1768,6 +1818,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Externí aplikace běží";
         Text[ hebrew ] = "‮יישום חיצוני תפוס‬";
         Text[ hindi ] = "बाहरी कार्यक्रम कार्य में निरत है";
+        Text[ slovak ] = "Externá aplikácia je zaneprázdnená­";
     };
     String SbERR_DDE_NO_DATA & ERRCODE_RES_MASK
     {
@@ -1801,6 +1852,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "DDE operace bez dat";
         Text[ hebrew ] = "‮פעולת DDE ללא נתונים‬";
         Text[ hindi ] = "ड़ॉटा के बिना DDE कार्य";
+        Text[ slovak ] = "DDE operácia bez dát";
     };
     String SbERR_DDE_WRONG_DATA_FORMAT & ERRCODE_RES_MASK
     {
@@ -1834,6 +1886,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Data jsou ve špatném formátu";
         Text[ hebrew ] = "‮הצורה של הנתונים אינה מתאימה‬";
         Text[ hindi ] = "डॉटा गलत रचना में है";
+        Text[ slovak ] = "Dáta v nesprávnom formáte";
     };
     String SbERR_DDE_PARTNER_QUIT & ERRCODE_RES_MASK
     {
@@ -1867,6 +1920,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Externí aplikace byla ukončena";
         Text[ hebrew ] = "‮יישום חיצוני הופסק‬";
         Text[ hindi ] = "बाहरी कार्यक्रम को समाप्त किया गया";
+        Text[ slovak ] = "Externá aplikácia bola ukončená";
     };
     String SbERR_DDE_CONV_CLOSED & ERRCODE_RES_MASK
     {
@@ -1901,6 +1955,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Spojení DDE přerušeno nebo změněno";
         Text[ hebrew ] = "‮קשר ה DDE שונה או הופסק‬";
         Text[ hindi ] = "DDE कनेक्शन को रोक दिया गया है अथवा सुधार किया गया है";
+        Text[ slovak ] = "Spojenie DDE prerušené alebo zmenené";
     };
     String SbERR_DDE_NO_CHANNEL & ERRCODE_RES_MASK
     {
@@ -1934,6 +1989,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Byla vyvolána DDE metoda bez otevřeného kanálu";
         Text[ hebrew ] = "‮שיגרת DDE נקראה ללא ערוץ פתוח‬";
         Text[ hindi ] = "कोई चैन्नल को बिना खुला रखते हुए DDE मेथड को बुलाया गया है";
+        Text[ slovak ] = "Bola vyvolaná DDE metóda bez otvoreného kanálu";
     };
     String SbERR_DDE_INVALID_LINK & ERRCODE_RES_MASK
     {
@@ -1968,6 +2024,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neplatný formát odkazu DDE";
         Text[ hebrew ] = "‮צורת הקישור ה DDE לא חוקי‬";
         Text[ hindi ] = "DDE लिंक रचना अमान्य है";
+        Text[ slovak ] = "Neplatný formát odkazu DDE";
     };
     String SbERR_DDE_QUEUE_OVERFLOW & ERRCODE_RES_MASK
     {
@@ -2001,6 +2058,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "DDE zpráva se ztratila";
         Text[ hebrew ] = "‮הודעת DDE אבדה‬";
         Text[ hindi ] = "DDE संदेश नष्ट हो गया";
+        Text[ slovak ] = "DDE správa sa stratila";
     };
     String SbERR_DDE_LINK_ALREADY_EST & ERRCODE_RES_MASK
     {
@@ -2035,6 +2093,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Vložení odkazu již provedeno";
         Text[ hebrew ] = "‮קישור הדבקה כבר בוצעה‬";
         Text[ hindi ] = "लिंक छिपकाने का कार्य पहिले से ही पूरा हुआ";
+        Text[ slovak ] = "Vloženie odkazu už vykonané";
     };
     String SbERR_DDE_LINK_INV_TOPIC & ERRCODE_RES_MASK
     {
@@ -2069,6 +2128,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Nelze provést nastavení odkazu z důvodu špatného předmětu odkazu";
         Text[ hebrew ] = "‮לא ניתן לעבור למצב ההפעלה של קשר כי נושא הקשר אינו חוקי‬";
         Text[ hindi ] = "अमान्य लिंक विषय की कारण लिंक प्रकार को सेट्ट नहीं कर सकते है";
+        Text[ slovak ] = "Odkazový mód nemôže byť nastavený kvôli neplatnej téme odkazu";
     };
     String SbERR_DDE_DLL_NOT_FOUND & ERRCODE_RES_MASK
     {
@@ -2103,6 +2163,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "DDE vyžaduje soubor DDEML.DLL";
         Text[ hebrew ] = "‮DDE דורש את קובץ ה DDEML.DLL‬";
         Text[ hindi ] = "DDE को DDEML.DLL फाइल की ज़रूरत है";
+        Text[ slovak ] = "DDE vyžaduje súbor DDEML.DLL";
     };
     String SbERR_CANNOT_LOAD & ERRCODE_RES_MASK
     {
@@ -2124,7 +2185,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "��������� ������ ����������; �������� ������";
         Text[ polish ] = "Modu�u nie mo�na za�adowa�, nieprawid�owy format";
         Text[ japanese ] = "モジュールが読み込めません。無効な書式です。";
-        Text[ chinese_traditional ] = "格式無效﹐因而無法載入模塊";
+        Text[ chinese_traditional ] = "格式無效﹐因而無法載入模組";
         Text[ arabic ] = "�� ���� ����� ������ ������� � ����� ��� ����";
         Text[ dutch ] = "De module kan niet worden geladen, ongeldige indeling";
         Text[ chinese_simplified ] = "格式无效，因而无法装入这个程序模块";
@@ -2137,6 +2198,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Modul nelze zavést, má špatný formát";
         Text[ hebrew ] = "‮צורת תוכן שגויה ולכן לא ניתן להפעיל את יחידת התוכנה שצוינה‬";
         Text[ hindi ] = "मोड्यूल् को लोड़ नहीं कर सकते है; अमान्य रचना";
+        Text[ slovak ] = "Modul nemôže byť čítaný; nesprávny formát";
     };
     String SbERR_BAD_INDEX & ERRCODE_RES_MASK
     {
@@ -2171,6 +2233,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neplatný index objektu";
         Text[ hebrew ] = "‮מצביע לא תקף לעצם‬";
         Text[ hindi ] = "वस्तु अनुक्रमणिका अमान्य है";
+        Text[ slovak ] = "Neplatný index objektu";
     };
     String SbERR_NO_ACTIVE_OBJECT & ERRCODE_RES_MASK
     {
@@ -2205,6 +2268,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Objekt není dostupný";
         Text[ hebrew ] = "‮עצם לא זמין‬";
         Text[ hindi ] = "वस्तु उपलब्ध नहीं है";
+        Text[ slovak ] = "Objekt nie je dostupný";
     };
     String SbERR_BAD_PROP_VALUE & ERRCODE_RES_MASK
     {
@@ -2239,6 +2303,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neznámá hodnota vlastnosti";
         Text[ hebrew ] = "‮ערך שגוי לתכונה‬";
         Text[ hindi ] = "गलत विशेषता मूल्य";
+        Text[ slovak ] = "Neznáma hodnota vlastnosti";
     };
     String SbERR_PROP_READONLY & ERRCODE_RES_MASK
     {
@@ -2273,6 +2338,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Tato vlastnost je pouze pro čtení";
         Text[ hebrew ] = "‮תכונה זו לקריאה בלבד‬";
         Text[ hindi ] = "यह विशेषता केवल पढ़ने योग्य है";
+        Text[ slovak ] = "Táto vlastnosť je iba na čítanie";
     };
     String SbERR_PROP_WRITEONLY & ERRCODE_RES_MASK
     {
@@ -2307,6 +2373,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Tato vlastnost je pouze pro zápis";
         Text[ hebrew ] = "‮תכונה זו לכתיבה בלבד‬";
         Text[ hindi ] = "यह विशेषता केवल लिखने योग्य है";
+        Text[ slovak ] = "Táto vlastnosť je iba na zápis";
     };
     String SbERR_INVALID_OBJECT & ERRCODE_RES_MASK
     {
@@ -2341,6 +2408,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neplatná reference na objekt";
         Text[ hebrew ] = "‮הצבעה לא תקפה לעצם‬";
         Text[ hindi ] = "वस्तु का रेफरेन्स अमान्य है";
+        Text[ slovak ] = "Neplatná referencia na objekt";
     };
     String SbERR_NO_METHOD & ERRCODE_RES_MASK
     {
@@ -2374,6 +2442,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Vlastnost nebo metoda nenalezena";
         Text[ hebrew ] = "‮התכונה או השיגרה שצוין לא נמצאת‬";
         Text[ hindi ] = "विशेषता अथवा मेथड नहीं मिला";
+        Text[ slovak ] = "Vlastnosť alebo metóda nenájdená";
     };
     String SbERR_NEEDS_OBJECT & ERRCODE_RES_MASK
     {
@@ -2407,6 +2476,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Požadovaný objekt";
         Text[ hebrew ] = "‮נדרש עצם‬";
         Text[ hindi ] = "वस्तु की ज़रूरत";
+        Text[ slovak ] = "Požadovaný objekt";
     };
     String SbERR_INVALID_USAGE_OBJECT & ERRCODE_RES_MASK
     {
@@ -2440,6 +2510,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neplatné použití objektu";
         Text[ hebrew ] = "‮שימוש לא חוקי בעצם‬";
         Text[ hindi ] = "वस्तु का उपयोग अमान्य है";
+        Text[ slovak ] = "Neplatné použitie objektu";
     };
     String SbERR_NO_OLE & ERRCODE_RES_MASK
     {
@@ -2474,6 +2545,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "OLE není tímto objektem podporováno";
         Text[ hebrew ] = "‮העצם אינו תומך ב OLE Automation‬";
         Text[ hindi ] = "OLE स्वचालित यह वस्तु से असमर्थित है";
+        Text[ slovak ] = "OLE Automation nieje podporovaná týmto objektom";
     };
     String SbERR_BAD_METHOD & ERRCODE_RES_MASK
     {
@@ -2508,6 +2580,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Tato vlastnost nebo metoda není objektem podporována";
         Text[ hebrew ] = "‮העצם אינו תומך בתכונה או בשיגרה זו‬";
         Text[ hindi ] = "यह विशेषता अथवा मेथड़ दिया हुआ वस्तु से असमर्थित है";
+        Text[ slovak ] = "Táto vlastnosť alebo metóda nieje podporovaná objektom";
     };
     String SbERR_OLE_ERROR & ERRCODE_RES_MASK
     {
@@ -2541,6 +2614,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Chyba OLE automation";
         Text[ hebrew ] = "‮שגיאה ב OLE Automation‬";
         Text[ hindi ] = "OLE स्वचालित गलती";
+        Text[ slovak ] = "Chyba OLE automation";
     };
     String SbERR_BAD_ACTION & ERRCODE_RES_MASK
     {
@@ -2575,6 +2649,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Tato akce není daným objektem podporována";
         Text[ hebrew ] = "‮העצם שצוין אינו תומך בפעולה זו‬";
         Text[ hindi ] = "यह कार्य दी हुयी वस्तु से असमर्थित है";
+        Text[ slovak ] = "Táto činnosť nieje podporovaná zvoleným objektom";
     };
     String SbERR_NO_NAMED_ARGS & ERRCODE_RES_MASK
     {
@@ -2596,7 +2671,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "��������� ��������� ������ �������� �� ��������������";
         Text[ polish ] = "Nazwane argumenty nie s� obs�ugiwane przez podany obiekt";
         Text[ japanese ] = "指名された引数は指定されたオブジェクトから支援されません";
-        Text[ chinese_traditional ] = "指定的自變量不受指定物件的支援";
+        Text[ chinese_traditional ] = "指定的參數不受指定物件的支援";
         Text[ arabic ] = "������ ������ �� ���� ������� �������";
         Text[ dutch ] = "Genoemde argumenten worden niet ondersteund door het opgegeven object";
         Text[ chinese_simplified ] = "给定对象不支持指定的自变量";
@@ -2609,6 +2684,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Pojmenované argumenty nejsou daným objektem podporovány";
         Text[ hebrew ] = "‮העצם שצוין אינו תומך בפרמטרים בעלי השמות שצוינו‬";
         Text[ hindi ] = "नामयुक्त आर्गुमेन्ट् दी हुयी वस्तु से असमर्थित है";
+        Text[ slovak ] = "Uvedené argumenty nie sú podporované zvoleným objektom";
     };
     String SbERR_BAD_LOCALE & ERRCODE_RES_MASK
     {
@@ -2643,6 +2719,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Nastavení locale není daným objektem podporováno";
         Text[ hebrew ] = "‮העצם שצוין אינו תומך בלוקייל הנוכחי‬";
         Text[ hindi ] = "वर्तमान लॉकले निर्धारण दी हुयी वस्तु से असमर्थित है";
+        Text[ slovak ] = "Súčasné nastavenie locale nieje podporované zvoleným objektom.";
     };
     String SbERR_NAMED_NOT_FOUND & ERRCODE_RES_MASK
     {
@@ -2663,7 +2740,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "��������� �������� �� ������";
         Text[ polish ] = "Nie znaleziono nazwanego argumentu";
         Text[ japanese ] = "指名した引数は見つかりません";
-        Text[ chinese_traditional ] = "沒有找到指定的自變量";
+        Text[ chinese_traditional ] = "沒有找到指定的參數";
         Text[ arabic ] = "�� ����� ��� ������� �������";
         Text[ dutch ] = "Genoemd argument niet gevonden";
         Text[ chinese_simplified ] = "没有找到指定的自变量";
@@ -2676,6 +2753,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Pojmenovaný argument nenalezen";
         Text[ hebrew ] = "‮פרמטר בשם זה לא נמצא‬";
         Text[ hindi ] = "नामयुक्त आर्गुमेन्ट् नहीं मिला";
+        Text[ slovak ] = "Pomenovaný argument nebol nájdený";
     };
     String SbERR_NOT_OPTIONAL & ERRCODE_RES_MASK
     {
@@ -2696,7 +2774,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "�������� �������� ������������";
         Text[ polish ] = "Argument nie jest opcjonalny";
         Text[ japanese ] = "引数はオプションではありません";
-        Text[ chinese_traditional ] = "非可選的自變量";
+        Text[ chinese_traditional ] = "非可選的參數";
         Text[ arabic ] = "������� ��� ��������";
         Text[ dutch ] = "Het argument is niet optioneel";
         Text[ chinese_simplified ] = "非可选的自变量";
@@ -2709,6 +2787,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Argument není volitelný";
         Text[ hebrew ] = "‮פרמטר זה חובה‬";
         Text[ hindi ] = "आर्गुमेन्ट् वैकल्पिक नहीं है";
+        Text[ slovak ] = "Argument nieje voliteľný";
     };
     String SbERR_WRONG_ARGS & ERRCODE_RES_MASK
     {
@@ -2729,7 +2808,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "������������ ����� ����������";
         Text[ polish ] = "Nieprawid�owa liczba argument�w";
         Text[ japanese ] = "引数の数が正しくありません";
-        Text[ chinese_traditional ] = "無效的自變量數目";
+        Text[ chinese_traditional ] = "無效的參數數目";
         Text[ arabic ] = "��� ������� ��� ����";
         Text[ dutch ] = "Ongeldig aantal argumenten";
         Text[ chinese_simplified ] = "无效的自变量数目";
@@ -2742,6 +2821,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neplatný počet argumentů";
         Text[ hebrew ] = "‮מספר לא נכון של פרמטרים‬";
         Text[ hindi ] = "आर्गुमेन्ट् संख्या अमान्य है";
+        Text[ slovak ] = "Neplatný počet argumentov";
     };
     String SbERR_NOT_A_COLL & ERRCODE_RES_MASK
     {
@@ -2775,6 +2855,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Objekt není seznamem";
         Text[ hebrew ] = "‮העצם אינו רשימה‬";
         Text[ hindi ] = "वस्तु, सूची नहीं है";
+        Text[ slovak ] = "Objekt nie je zoznamom";
     };
     String SbERR_BAD_ORDINAL & ERRCODE_RES_MASK
     {
@@ -2809,6 +2890,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neplatné pořadové číslo";
         Text[ hebrew ] = "‮מספר מונה לא חוקי‬";
         Text[ hindi ] = "क्रमवाचक संख्या अमान्य है";
+        Text[ slovak ] = "Neplatné poradové číslo";
     };
     String SbERR_DLLPROC_NOT_FOUND & ERRCODE_RES_MASK
     {
@@ -2842,6 +2924,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Daná funkce DLL nenalezena";
         Text[ hebrew ] = "‮לא ניתן לאתר את שגרת ה-DLL המבוקשת‬";
         Text[ hindi ] = "निर्दिष्ट कया हुआ DLL फंक्शन नहीं मिला";
+        Text[ slovak ] = "Daná funkcia DLL nenájdená";
     };
     String SbERR_BAD_CLIPBD_FORMAT & ERRCODE_RES_MASK
     {
@@ -2849,7 +2932,7 @@ Resource RID_BASIC_START
         Text = "Ung�ltiges Zwischenablagen-Format" ;
         Text [ ENGLISH ] = "Invalid clipboard format" ;
         Text [ norwegian ] = "Invalid clipboard format" ;
-        Text [ italian ] = "Formato clipboard non valido" ;
+        Text [ italian ] = "Formato Appunti non valido" ;
         Text [ portuguese_brazilian ] = "O formato da �rea de transfer�ncia � inv�lido" ;
         Text [ portuguese ] = "Formato da �rea de transfer�ncia n�o v�lido" ;
         Text [ french ] = "Format de presse-papiers incorrect" ;
@@ -2876,6 +2959,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neplatný formát schránky";
         Text[ hebrew ] = "‮צורה לא חוקית של לוח טיוטה‬";
         Text[ hindi ] = "क्लिपबॉर्ड़ रचना अमान्य है";
+        Text[ slovak ] = "Neplatný formát schránky";
     };
     String SbERR_PROPERTY_NOT_FOUND & ERRCODE_RES_MASK
     {
@@ -2909,6 +2993,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Objekt nemá tuto vlastnost";
         Text[ hebrew ] = "‮אין לעצם מאפיין זה‬";
         Text[ hindi ] = "इस विशेषता वस्तु से असंबन्धित है";
+        Text[ slovak ] = "Objekt nemá túto vlastnosť";
     };
     String SbERR_METHOD_NOT_FOUND & ERRCODE_RES_MASK
     {
@@ -2942,6 +3027,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Objekt nemá tuto metodu";
         Text[ hebrew ] = "‮אין לעצם שגרה זו‬";
         Text[ hindi ] = "इस मेथड वस्तु से असंबन्धित है";
+        Text[ slovak ] = "Objekt nemá túto metódu";
     };
     String SbERR_ARG_MISSING & ERRCODE_RES_MASK
     {
@@ -2962,7 +3048,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "���������� ������������ ���������";
         Text[ polish ] = "Brakuje wymaganego argumentu";
         Text[ japanese ] = "必要な引数が足りません";
-        Text[ chinese_traditional ] = "缺少必要的自變量";
+        Text[ chinese_traditional ] = "缺少必要的參數";
         Text[ arabic ] = "������� �������� ��� �����";
         Text[ dutch ] = "Vereist argument ontbreekt";
         Text[ chinese_simplified ] = "缺少必要的自变量";
@@ -2975,6 +3061,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Chybí požadovaný argument";
         Text[ hebrew ] = "‮חסר פרמטר נדרש‬";
         Text[ hindi ] = "आवश्यक आर्गुमेन्ट् की कमी";
+        Text[ slovak ] = "Chýba požadovaný argument";
     };
     String SbERR_BAD_NUMBER_OF_ARGS & ERRCODE_RES_MASK
     {
@@ -2996,7 +3083,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "������������ ���������� ����������";
         Text[ polish ] = "Nieprawid�owa liczba argument�w";
         Text[ japanese ] = "引数の数に問題があります";
-        Text[ chinese_traditional ] = "自變量數目無效";
+        Text[ chinese_traditional ] = "參數數目無效";
         Text[ arabic ] = "��� ����� ��� ����";
         Text[ dutch ] = "Ongeldig aantal argumenten";
         Text[ chinese_simplified ] = "无效的自变量数目";
@@ -3009,6 +3096,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neplatný počet argumentů";
         Text[ hebrew ] = "‮מספר הפרמטרים לא נכון‬";
         Text[ hindi ] = "आर्गुमेन्ट् संख्या अमान्य है";
+        Text[ slovak ] = "Neplatný počet argumentov";
     };
     String SbERR_METHOD_FAILED & ERRCODE_RES_MASK
     {
@@ -3043,6 +3131,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Chyba při vykonání metody";
         Text[ hebrew ] = "‮שגיאה בעת הפעלת שגרה‬";
         Text[ hindi ] = "मेथड़ को पूरा करने के समय गलती";
+        Text[ slovak ] = "Chyba pri vykonaní­ metódy";
     };
     String SbERR_SETPROP_FAILED & ERRCODE_RES_MASK
     {
@@ -3076,6 +3165,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Nelze nastavit vlastnost";
         Text[ hebrew ] = "‮לא ניתן לקבוע מאפיין זה‬";
         Text[ hindi ] = "विशेषता सेट्ट करने में असमर्थ";
+        Text[ slovak ] = "Nieje možné nastaviť vlastnosť";
     };
     String SbERR_GETPROP_FAILED & ERRCODE_RES_MASK
     {
@@ -3109,6 +3199,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Nelze určit vlastnost";
         Text[ hebrew ] = "‮לא ניתן לזהות מאפיין זה‬";
         Text[ hindi ] = "विशेषता निर्धारण करने में असमर्थ";
+        Text[ slovak ] = "Nieje možné určiť vlastnosť";
     };
      // Compiler errors. These are not runtime errors.
     String SbERR_UNEXPECTED & ERRCODE_RES_MASK
@@ -3143,6 +3234,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neočekávaný symbol: $(ARG1)";
         Text[ hebrew ] = "‮תו לא צפוי:$(ARG1)‬";
         Text[ hindi ] = "प्रतीक्षा न की हुयी संकेत: $(ARG1)";
+        Text[ slovak ] = "Neočakávaný symbol: $(ARG1)";
     };
     String SbERR_EXPECTED & ERRCODE_RES_MASK
     {
@@ -3176,6 +3268,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Očekává se: $(ARG1)";
         Text[ hebrew ] = "‮$(ARG1) היה צפוי‬";
         Text[ hindi ] = "प्रतीक्षा: $(ARG1)";
+        Text[ slovak ] = "Očakáva sa: $(ARG1)";
     };
     String SbERR_SYMBOL_EXPECTED & ERRCODE_RES_MASK
     {
@@ -3209,6 +3302,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Očekáván symbol";
         Text[ hebrew ] = "‮מצופה לתו‬";
         Text[ hindi ] = "संकेत की प्रतीक्षा";
+        Text[ slovak ] = "Očakávaný symbol";
     };
     String SbERR_VAR_EXPECTED & ERRCODE_RES_MASK
     {
@@ -3229,7 +3323,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "��������� ����������";
         Text[ polish ] = "Oczekiwano zmiennej";
         Text[ japanese ] = "変数が必要です";
-        Text[ chinese_traditional ] = "等待變量";
+        Text[ chinese_traditional ] = "等待變數";
         Text[ arabic ] = "����� ������";
         Text[ dutch ] = "Variabele verwacht";
         Text[ chinese_simplified ] = "等待变量";
@@ -3242,6 +3336,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Očekávána proměnná";
         Text[ hebrew ] = "‮מצופה למשתנה‬";
         Text[ hindi ] = "परिवर्ती की प्रतीक्षा";
+        Text[ slovak ] = "Premenná očakávaná";
     };
     String SbERR_LABEL_EXPECTED & ERRCODE_RES_MASK
     {
@@ -3275,6 +3370,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Očekáváno návěští";
         Text[ hebrew ] = "‮מצופה לתווית‬";
         Text[ hindi ] = "लेबिल की प्रतीक्षा";
+        Text[ slovak ] = "Očakávané návestie";
     };
     String SbERR_LVALUE_EXPECTED & ERRCODE_RES_MASK
     {
@@ -3308,6 +3404,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Hodnotu nelze použít";
         Text[ hebrew ] = "‮לא ניתן לפעול לפי ערך זה‬";
         Text[ hindi ] = "मूल्य को नियुक्त नहीं कर सकते है";
+        Text[ slovak ] = "Hodnotu nie je možné použiť";
     };
     String SbERR_VAR_DEFINED & ERRCODE_RES_MASK
     {
@@ -3328,7 +3425,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "���������� $(ARG1) ��� ����������";
         Text[ polish ] = "Zmienna $(ARG1) ju� zdefiniowana";
         Text[ japanese ] = "変数$(ARG1)はすでに定義されています";
-        Text[ chinese_traditional ] = "已經定義了變量 $(ARG1)";
+        Text[ chinese_traditional ] = "已經定義變數 $(ARG1)";
         Text[ arabic ] = "�������� $(ARG1) ������ ������";
         Text[ dutch ] = "Variabele $(ARG1) reeds gedefinieerd";
         Text[ chinese_simplified ] = "已经定义了变量 $(ARG1)";
@@ -3341,6 +3438,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Proměnná $(ARG1) je již definována";
         Text[ hebrew ] = "‮המשתנה $(ARG1) מוגדר כבר‬";
         Text[ hindi ] = "Variable $(ARG1) already defined";
+        Text[ slovak ] = "Premenná $(ARG1) je už definovaná";
     };
     String SbERR_PROC_DEFINED & ERRCODE_RES_MASK
     {
@@ -3374,6 +3472,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Pod procedura nebo funkční procedura $(ARG1) je již definována";
         Text[ hebrew ] = "‮תת השגרה או תפקוד $(ARG1) כבר מוגדר‬";
         Text[ hindi ] = "Sub procedure or function procedure $(ARG1) already defined";
+        Text[ slovak ] = "Subprocedúra alebo funkčná procedúra $(ARG1) je už definovaná";
     };
     String SbERR_LABEL_DEFINED & ERRCODE_RES_MASK
     {
@@ -3407,6 +3506,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Návěští $(ARG1) je již definováno";
         Text[ hebrew ] = "‮תווית $(ARG1) מוגדרת כבר‬";
         Text[ hindi ] = "लेबिल $(ARG1) पहिले से ही परिभाषित है";
+        Text[ slovak ] = "Návestie $(ARG1) je už definované";
     };
     String SbERR_UNDEF_VAR & ERRCODE_RES_MASK
     {
@@ -3427,7 +3527,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "���������� $(ARG1) �� �������";
         Text[ polish ] = "Zmiennej $(ARG1) nie znaleziono";
         Text[ japanese ] = "変数$(ARG1)は見つかりません";
-        Text[ chinese_traditional ] = "沒有找到變量$(ARG1)";
+        Text[ chinese_traditional ] = "沒有找到變數 $(ARG1)";
         Text[ arabic ] = "�� ��� ������ ��� ���������$(ARG1) ";
         Text[ dutch ] = "Variabele $(ARG1) niet gevonden";
         Text[ chinese_simplified ] = "没有找到变量 $(ARG1)";
@@ -3440,6 +3540,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Proměnná $(ARG1) nenalezena";
         Text[ hebrew ] = "‮משתנה $(ARG1) לא אותר‬";
         Text[ hindi ] = "परिवर्ती $(ARG1) नहीं मिला";
+        Text[ slovak ] = "Premenná $(ARG1) nenájdená";
     };
     String SbERR_UNDEF_ARRAY & ERRCODE_RES_MASK
     {
@@ -3460,7 +3561,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "������ ��� ��������� $(ARG1) �� �������";
         Text[ polish ] = "Nie znaleziono macierzy lub procedury $(ARG1)";
         Text[ japanese ] = "配列またはプロシージャ$(ARG1)は見つかりません";
-        Text[ chinese_traditional ] = "沒有找到行列或過程$(ARG1)";
+        Text[ chinese_traditional ] = "沒有找到陣列或過程 $(ARG1)";
         Text[ arabic ] = "$(ARG1) �� ��� ������ ��� ������ �� �������";
         Text[ dutch ] = "Matrix of procedure $(ARG1) niet gevonden";
         Text[ chinese_simplified ] = "没有找到数组或过程 $(ARG1)";
@@ -3473,6 +3574,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Pole nebo procedura $(ARG1) nenalezena";
         Text[ hebrew ] = "‮מערך או שגרה $(ARG1) לא אותר‬";
         Text[ hindi ] = "श्रेणी अथवा कार्यप्रणाली $(ARG1) नहीं मिला";
+        Text[ slovak ] = "Pole alebo procedúra $(ARG1) nenájdená";
     };
     String SbERR_UNDEF_PROC & ERRCODE_RES_MASK
     {
@@ -3506,6 +3608,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Procedura $(ARG1) nenalezena";
         Text[ hebrew ] = "‮שגרה $(ARG1) לא אותרה‬";
         Text[ hindi ] = "कार्यप्रणाली $(ARG1) नहीं मिला";
+        Text[ slovak ] = "Procedúra $(ARG1) nenájdená";
     };
     String SbERR_UNDEF_LABEL & ERRCODE_RES_MASK
     {
@@ -3539,6 +3642,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Návěští $(ARG1) nenalezeno";
         Text[ hebrew ] = "‮תווית $(ARG1) לא מוגדרת‬";
         Text[ hindi ] = "लेबिल $(ARG1) परिभाषित नहीं है";
+        Text[ slovak ] = "Návestie $(ARG1) nedefinované";
     };
     String SbERR_UNDEF_TYPE & ERRCODE_RES_MASK
     {
@@ -3572,6 +3676,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neznámý typ dat $(ARG1)";
         Text[ hebrew ] = "‮טיפוס נתונים לא מוכר $(ARG1)‬";
         Text[ hindi ] = "अज्ञात डॉटा वर्ग $(ARG1)";
+        Text[ slovak ] = "Neznámy typ dát $(ARG1)";
     };
     String SbERR_BAD_EXIT & ERRCODE_RES_MASK
     {
@@ -3605,6 +3710,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Očekáván exit $(ARG1)";
         Text[ hebrew ] = "‮פרמטר יציאה $(ARG1) היה צפוי‬";
         Text[ hindi ] = "निर्गम $(ARG1) की प्रतीक्षा";
+        Text[ slovak ] = "Exit $(ARG1) očakávaný";
     };
     String SbERR_BAD_BLOCK & ERRCODE_RES_MASK
     {
@@ -3638,6 +3744,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Blok příkazů je stále otevřen: chybí $(ARG1)";
         Text[ hebrew ] = "‮פרשת קוד עדיין פתוחה: חסר $(ARG1)‬";
         Text[ hindi ] = "वाक्यों का विभाग अभी भी खुला है: $(ARG1) अनुपस्थित लुप्त है";
+        Text[ slovak ] = "Blok príkazov je stále otvorený: chýba $(ARG1)";
     };
     String SbERR_BAD_BRACKETS & ERRCODE_RES_MASK
     {
@@ -3671,6 +3778,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Uvozovky nesouhlasí";
         Text[ hebrew ] = "‮סוגריים לא מאוזנים‬";
         Text[ hindi ] = "कोष्ठक में अनुपमता";
+        Text[ slovak ] = "Úvodzovky nesúhlasia";
     };
     String SbERR_BAD_DECLARATION & ERRCODE_RES_MASK
     {
@@ -3704,6 +3812,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Symbol $(ARG1) již byl definován odlišně";
         Text[ hebrew ] = "‮הסימן $(ARG1) כבר מוגדר באופן אחר‬";
         Text[ hindi ] = "$(ARG1) संकेत पहिले से ही अलग से परिभाषित है";
+        Text[ slovak ] = "Symbol $(ARG1) už bol definovaný ináč";
     };
     String SbERR_BAD_PARAMETERS & ERRCODE_RES_MASK
     {
@@ -3724,7 +3833,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "��������� �� ������������� ���������";
         Text[ polish ] = "Parametry nie odpowiadaj� procedurze";
         Text[ japanese ] = "パラメータはプロシージャに合いません";
-        Text[ chinese_traditional ] = "助變量和過程不匹配";
+        Text[ chinese_traditional ] = "參數和過程不匹配";
         Text[ arabic ] = "�� ������ �������� �� �������";
         Text[ dutch ] = "Parameters passen niet bij procedure";
         Text[ chinese_simplified ] = "助变量和过程不匹配";
@@ -3737,6 +3846,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Parametry procedury neodpovídají";
         Text[ hebrew ] = "‮הפרמטרים אינם מתאימים להגדרת השגרה‬";
         Text[ hindi ] = "पैरामीटर्स कार्यप्रणाली से सादृश्य नहीं है";
+        Text[ slovak ] = "Parametre nesúhlasia s procedúrou";
     };
     String SbERR_BAD_CHAR_IN_NUMBER & ERRCODE_RES_MASK
     {
@@ -3771,6 +3881,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neplatný znak v čísle";
         Text[ hebrew ] = "‮תו לא חוקי בתוך מספר‬";
         Text[ hindi ] = "संख्या में अमान्य अक्षर";
+        Text[ slovak ] = "Neplatný znak v čísle";
     };
     String SbERR_MUST_HAVE_DIMS & ERRCODE_RES_MASK
     {
@@ -3792,7 +3903,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "���������� ������ ����������� �������";
         Text[ polish ] = "Macierz nale�y zwymiarowa�";
         Text[ japanese ] = "配列の次元化が必要です";
-        Text[ chinese_traditional ] = "行列必須設定好數值";
+        Text[ chinese_traditional ] = "陣列必須設定好數值";
         Text[ arabic ] = "��� ����� ����� ������";
         Text[ dutch ] = "Het aantal dimensies van de matrix moet nog worden bepaald";
         Text[ chinese_simplified ] = "必须为数组定尺度";
@@ -3805,6 +3916,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Pole musí mít rozměr";
         Text[ hebrew ] = "‮חובה להגדיר מידות המערך‬";
         Text[ hindi ] = "श्रेणी को परिमाण देना ज़रूरी है";
+        Text[ slovak ] = "Pole musí mať rozmer";
     };
     String SbERR_NO_IF & ERRCODE_RES_MASK
     {
@@ -3838,6 +3950,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Else/Endif bez If";
         Text[ hebrew ] = "Else/Endif ‮ללא‬ If";
         Text[ hindi ] = "If के बिना Else/Endif";
+        Text[ slovak ] = "Inak/Koniec ak bez ak";
     };
     String SbERR_NOT_IN_SUBR & ERRCODE_RES_MASK
     {
@@ -3872,6 +3985,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "(ARG1) není povolen v této proceduře";
         Text[ hebrew ] = "‮$(ARG1) אינו חוקי בתוך שגרה‬";
         Text[ hindi ] = "$(ARG1) कार्यप्रणाली के भीतर स्वीकृत नहीं है";
+        Text[ slovak ] = "$(ARG1) nieje povolený v tejto procedúre";
     };
     String SbERR_NOT_IN_MAIN & ERRCODE_RES_MASK
     {
@@ -3906,6 +4020,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "$(ARG1) není povolen vně procedury";
         Text[ hebrew ] = "‮$(ARG1) לא חוקי מחוץ לשגרה‬";
         Text[ hindi ] = "$(ARG1) कार्यप्रणाली के बाहर स्वीकृत नहीं है";
+        Text[ slovak ] = "$(ARG1) nieje dovolený mimo procedúry";
     };
     String SbERR_WRONG_DIMS & ERRCODE_RES_MASK
     {
@@ -3939,6 +4054,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Nesouhlasí zadání rozměrů pole";
         Text[ hebrew ] = "‮הגדרות המידות אינן מתאימות‬";
         Text[ hindi ] = "विस्तार विशेषिकरण में अनुपमता";
+        Text[ slovak ] = "Nesúhlasí zadanie rozmerov poľa";
     };
     String SbERR_BAD_OPTION & ERRCODE_RES_MASK
     {
@@ -3972,6 +4088,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Neznámá volba: $(ARG1)";
         Text[ hebrew ] = "‮אופציה לא מוכרת: $(ARG1)‬";
         Text[ hindi ] = "अज्ञात विकल्प: $(ARG1)";
+        Text[ slovak ] = "Neznáma voľba: $(ARG1)";
     };
     String SbERR_CONSTANT_REDECLARED & ERRCODE_RES_MASK
     {
@@ -4005,6 +4122,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Konstanta $(ARG1) předefinována";
         Text[ hebrew ] = "‮הגדרה חוזרת של ערך קבוע: $(ARG1)‬";
         Text[ hindi ] = "स्थिर $(ARG1) को फ़िर से परिभाषा दिया है";
+        Text[ slovak ] = "Konštanta $(ARG1) predefinovaná";
     };
     String SbERR_PROG_TOO_LARGE & ERRCODE_RES_MASK
     {
@@ -4039,6 +4157,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Program je příliš velký";
         Text[ hebrew ] = "‮התוכנית גדולה מדי‬";
         Text[ hindi ] = "प्रोग्राम् बहुत बड़ा है";
+        Text[ slovak ] = "Program je príliš veľký";
     };
     String SbERR_NO_STRINGS_ARRAYS & ERRCODE_RES_MASK
     {
@@ -4060,7 +4179,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "������ ��� ������� �����������";
         Text[ polish ] = "Ci�gi znak�w i macierze s� niedozwolone";
         Text[ japanese ] = "文字列または配列は許可されません";
-        Text[ chinese_traditional ] = "不允許字串或行列";
+        Text[ chinese_traditional ] = "不允許字串或陣列";
         Text[ arabic ] = "��� ����� ���� ������� �� �������";
         Text[ dutch ] = "Tekenreeksen en matrices niet toegestaan";
         Text[ chinese_simplified ] = "不允许字串或数组";
@@ -4073,6 +4192,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Řetězce nebo pole nejsou povoleny";
         Text[ hebrew ] = "‮מחרוזות ומערכים אינם חוקיים בהקשר זה‬";
         Text[ hindi ] = "स्ट्रिंग्स अथवा श्रेणी स्वीकृत नहीं है";
+        Text[ slovak ] = "Reťazce alebo polia nie sú povolené";
     };
     String ERRCODE_BASIC_EXCEPTION & ERRCODE_RES_MASK
     {
@@ -4106,6 +4226,7 @@ Resource RID_BASIC_START
         Text[ czech ] = "Vyskytla se výjimka $(ARG1)";
         Text[ hebrew ] = "‮ארעה חריגה: $(ARG1)‬";
         Text[ hindi ] = "एक अक्षेप घटित हुआ $(ARG1)";
+        Text[ slovak ] = "Vyskytla sa výnimka $(ARG1)";
     };
 };
  // Hinweis: IDS_SBERR_TERMINATED = IDS_SBERR_START+2000.
@@ -4141,6 +4262,7 @@ String IDS_SBERR_TERMINATED
     Text[ czech ] = "Běžící makro bylo přerušeno";
     Text[ hebrew ] = "‮המקרו שפעל הופסק‬";
     Text[ hindi ] = "जो मॉक्रो चल रहा था, उसे रोका है";
+    Text[ slovak ] = "Bežiace makro bolo prerušené";
 };
 String IDS_SBERR_STOREREF
 {
@@ -4175,6 +4297,7 @@ String IDS_SBERR_STOREREF
     Text[ czech ] = "Odkaz nebyl uložen: ";
     Text[ hebrew ] = "‮הציון לא ישמר‬";
     Text[ hindi ] = "रेफरेन्स को संचित नहीं कर सकते है: ";
+    Text[ slovak ] = "Odkaz nebude uložený: ";
 };
 String ERRCODE_BASMGR_LIBLOAD & ERRCODE_RES_MASK
 {
@@ -4211,6 +4334,7 @@ String ERRCODE_BASMGR_LIBLOAD & ERRCODE_RES_MASK
     Text[ czech ] = "Chyba při načtení knihovny '$(ARG1)'";
     Text[ hebrew ] = "‮ארעה שגיאה בטעינת הספריה: '$(ARG1)'‬";
     Text[ hindi ] = "लैब्ररी लोड करने के समय गलती '$(ARG1)'";
+    Text[ slovak ] = "Chyba pri načítaní­ knižnice '$(ARG1)'";
 };
 String ERRCODE_BASMGR_LIBSAVE & ERRCODE_RES_MASK
 {
@@ -4247,6 +4371,7 @@ String ERRCODE_BASMGR_LIBSAVE & ERRCODE_RES_MASK
     Text[ czech ] = "Chyba při ukládání knihovny: '$(ARG1)'";
     Text[ hebrew ] = "‮ארעה שגיאה בשמירת הספריה: '$(ARG1)'‬";
     Text[ hindi ] = "लैब्ररी संचित करने के समय गलती: '$(ARG1)'";
+    Text[ slovak ] = "Chyba pri ukladaní­: '$(ARG1)'";
 };
 String ERRCODE_BASMGR_MGROPEN & ERRCODE_RES_MASK
 {
@@ -4283,6 +4408,7 @@ String ERRCODE_BASMGR_MGROPEN & ERRCODE_RES_MASK
     Text[ czech ] = "Nelze inicializovat BASIC ze souboru '$(ARG1)'";
     Text[ hebrew ] = "‮לא ניתן לאתחל את תוכנית הבייסיק מקובץ '$(ARG1)'‬";
     Text[ hindi ] = "'$(ARG1)' फाइल से BASIC को को इनिश्यलैज़ नहीं कर सकते है";
+    Text[ slovak ] = "BASIC zo súboru '$(ARG1)' nemohol byť inicializovaný";
 };
 String ERRCODE_BASMGR_MGRSAVE & ERRCODE_RES_MASK
 {
@@ -4315,6 +4441,7 @@ String ERRCODE_BASMGR_MGRSAVE & ERRCODE_RES_MASK
     Text[ czech ] = "Chyba při ukládání BASICu: '$(ARG1)'";
     Text[ hebrew ] = "‮ארעה שגיה בשמירת תוכנית הבייסיק: '$(ARG1)'‬";
     Text[ hindi ] = "BASIC संचित करने के समय गलती: '$(ARG1)'";
+    Text[ slovak ] = "Chyba pri ukladaní­ BASICu: '$(ARG1)'";
 };
 String ERRCODE_BASMGR_REMOVELIB & ERRCODE_RES_MASK
 {
@@ -4347,6 +4474,7 @@ String ERRCODE_BASMGR_REMOVELIB & ERRCODE_RES_MASK
     Text[ czech ] = "Chyba při odstraňování knihovny";
     Text[ hebrew ] = "‮ארעה שגיאה בעת מחיקת הספריה‬";
     Text[ hindi ] = "लैब्ररी हटाने के समय गलती";
+    Text[ slovak ] = "Chyba pri odstraňovaní­ knižnice";
 };
 String ERRCODE_BASMGR_UNLOADLIB & ERRCODE_RES_MASK
 {
@@ -4379,7 +4507,10 @@ String ERRCODE_BASMGR_UNLOADLIB & ERRCODE_RES_MASK
     Text[ czech ] = "Knihovnu nelze odstranit z paměti.";
     Text[ hebrew ] = "‮לא ניתן להסיר את הספריה מהזכרון.‬";
     Text[ hindi ] = "लैब्ररी को मेमरी से नहीं हटा सकते है ।";
+    Text[ slovak ] = "Knižnica nemohla byť odstránená z pamäti.";
 };
+
+
 
 
 
