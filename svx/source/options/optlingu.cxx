@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-27 09:22:28 $
+ *  last change: $Author: tl $ $Date: 2000-11-27 10:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,9 @@
 #ifndef _LINGU_LNGPROPS_HHX_
 #include <lingu/lngprops.hxx>
 #endif
-#ifndef _LINGUISTIC_LNGPROPS_HHX_
-#include <linguistic/lngprops.hxx>
-#endif
+//#ifndef _LINGUISTIC_LNGPROPS_HHX_
+//#include <linguistic/lngprops.hxx>
+//#endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
@@ -267,7 +267,7 @@ void DicUserData::SetChecked( BOOL bVal )
 
 void lcl_SetCheckButton( SvLBoxEntry* pEntry, BOOL bCheck )
 {
-    SvLBoxButton* pItem = (SvLBoxButton*)pEntry->GetItem( 1 );
+    SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
 
     DBG_ASSERT(pItem,"SetCheckButton:Item not found")
     if (((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON)
@@ -324,6 +324,9 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent) :
 {
     pCheckButtonData = NULL;
     FreeResource();
+
+    aModulesCLB.SetWindowBits( WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
+    aDicsCLB.SetWindowBits( WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
     aModulesCLB.SetHighlightRange();
     aDicsCLB.SetHighlightRange();
     aModulesCLB.SetHelpId(HID_CLB_EDIT_MODULES_MODULES );
@@ -333,6 +336,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent) :
     aDicsCLB.SetSelectHdl( LINK( this, SvxEditModulesDlg, SelectHdl_Impl ));
     aNewPB.SetClickHdl( LINK( this, SvxEditModulesDlg, ClickHdl_Impl ));
     aEditPB.SetClickHdl( LINK( this, SvxEditModulesDlg, ClickHdl_Impl ));
+    aClosePB.SetClickHdl( LINK( this, SvxEditModulesDlg, ClickHdl_Impl ));
     aDeletePB.SetClickHdl( LINK( this, SvxEditModulesDlg, ClickHdl_Impl ));
     aLanguageLB.SetSelectHdl( LINK( this, SvxEditModulesDlg, SelectHdlLB_Impl ));
 
@@ -357,37 +361,6 @@ SvxEditModulesDlg::~SvxEditModulesDlg()
 }
 
 
-BOOL SvxEditModulesDlg::Close()
-{
-    BOOL bAllowClose = TRUE;
-
-    ULONG nEntries = aDicsCLB.GetEntryCount();
-    for (ULONG i = 0;  i < nEntries;  ++i)
-    {
-        INT32 nDics = aDics.getLength();
-        const Reference< XDictionary > *pDic = aDics.getConstArray();
-
-        SvLBoxEntry *pEntry = aDicsCLB.GetEntry( i );
-        if (pEntry)
-        {
-            DicUserData aData( (ULONG)pEntry->GetUserData() );
-            if (aData.GetEntryId() < nDics)
-            {
-                BOOL bChecked = aDicsCLB.IsChecked( i );
-                Reference< XDictionary > xDic( aDics.getConstArray()[ i ] );
-                if (xDic.is())
-                {
-                    String aDicName( xDic->getName() );
-                    xDic->setActive( bChecked );
-                }
-            }
-        }
-    }
-
-    return bAllowClose;
-}
-
-
 SvLBoxEntry* SvxEditModulesDlg::CreateEntry( String& rTxt, USHORT nCol )
 {
     SvLBoxEntry* pEntry = new SvLBoxEntry;
@@ -399,13 +372,12 @@ SvLBoxEntry* SvxEditModulesDlg::CreateEntry( String& rTxt, USHORT nCol )
         pCheckButtonData->aBmps[SV_BMP_CHECKED]   = aChkchBmp;
     }
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
-
     String sEmpty;
     if (CBCOL_FIRST == nCol)
         pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
     if (CBCOL_SECOND == nCol)
         pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
     pEntry->AddItem( new BrwStringDic_Impl( pEntry, 0, rTxt ) );
 
     return pEntry;
@@ -490,7 +462,38 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdlLB_Impl, ListBox *, pBox )
 
 IMPL_LINK( SvxEditModulesDlg, ClickHdl_Impl, PushButton *, pBtn )
 {
-    if (&aNewPB == pBtn)
+    if (&aClosePB == pBtn)
+    {
+        // activate dictionaries according to checkbox state
+        ULONG nEntries = aDicsCLB.GetEntryCount();
+        for (ULONG i = 0;  i < nEntries;  ++i)
+        {
+            INT32 nDics = aDics.getLength();
+            const Reference< XDictionary > *pDic = aDics.getConstArray();
+
+            SvLBoxEntry *pEntry = aDicsCLB.GetEntry( i );
+            if (pEntry)
+            {
+                DicUserData aData( (ULONG)pEntry->GetUserData() );
+                if (aData.GetEntryId() < nDics)
+                {
+                    BOOL bChecked = aDicsCLB.IsChecked( (USHORT) i );
+                    Reference< XDictionary > xDic( aDics.getConstArray()[ i ] );
+                    if (xDic.is())
+                    {
+                        if (SvxGetIgnoreAllList() == xDic)
+                            bChecked = TRUE;
+#ifndef PRODUCT
+                        String aDicName( xDic->getName() );
+#endif
+                        xDic->setActive( bChecked );
+                    }
+                }
+            }
+        }
+        EndDialog( RET_OK );
+    }
+    else if (&aNewPB == pBtn)
     {
         SvxNewDictionaryDialog aDlg( this, Reference< XSpellChecker1 >() );
 
@@ -1074,15 +1077,10 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     aChkunBmp           ( ResId( BMP_CHKBUT_UNCHECKED ) ),
     aChkchBmp           ( ResId( BMP_CHKBUT_CHECKED ) ),
     pLinguData          (new SvxLinguData_Impl)
-
-#ifdef NEVER
-    aPreBreakEdit       ( this, ResId( ED_PREBREAK ) ),
-    aAfterBreakEdit     ( this, ResId( ED_AFTERBREAK ) ),
-#endif
 {
     pCheckButtonData = NULL;
-    aLinguModulesCLB.SetWindowBits( WB_HASBUTTONS|WB_HASBUTTONSATROOT|
-                            WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
+    aLinguModulesCLB.SetWindowBits( WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
+    aLinguOptionsCLB.SetWindowBits( WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
     aLinguModulesCLB.SetHighlightRange();
     aLinguOptionsCLB.SetHighlightRange();
     aLinguModulesCLB.SetHelpId(HID_CLB_LINGU_MODULES );
@@ -1751,13 +1749,12 @@ SvLBoxEntry* SvxLinguTabPage::CreateEntry(String& rTxt, USHORT nCol)
         pCheckButtonData->aBmps[SV_BMP_CHECKED]   = aChkchBmp;
     }
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
-
     String sEmpty;
     if (CBCOL_FIRST == nCol)
         pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
     if (CBCOL_SECOND == nCol)
         pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
     pEntry->AddItem( new BrwString_Impl( pEntry, 0, rTxt ) );
 
     return pEntry;
