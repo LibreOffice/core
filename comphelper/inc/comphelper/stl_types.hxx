@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stl_types.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-25 10:48:01 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 09:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@ using namespace std;
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
 #endif
 
 //... namespace comphelper ................................................
