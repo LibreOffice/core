@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-02 12:03:53 $
+#   last change: $Author: hjs $ $Date: 2001-02-19 19:12:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,12 +123,16 @@ $(DEF$(TNR)TARGETN) .PHONY : \
         $(DEF$(TNR)EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl update $(DEFSTAG)
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -156,12 +160,16 @@ $(DEF$(TNR)TARGETN) .PHONY : \
     +-$(RM) $(SHL$(TNR)TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl commit
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(DEF$(TNR)EXPORT1)"!=""
     @echo $(DEF$(TNR)EXPORT1)										>>$@

@@ -20,12 +20,16 @@ $(DEF1TARGETN) .PHONY : \
         $(DEF1EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl update $(DEFSTAG)
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -53,12 +57,16 @@ $(DEF1TARGETN) .PHONY : \
     +-$(RM) $(SHL1TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl commit
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB1NAME)"!=""
 .IF "$(DEF1EXPORT1)"!=""
     @echo $(DEF1EXPORT1)										>>$@
@@ -171,12 +179,16 @@ $(DEF2TARGETN) .PHONY : \
         $(DEF2EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl update $(DEFSTAG)
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -204,12 +216,16 @@ $(DEF2TARGETN) .PHONY : \
     +-$(RM) $(SHL2TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl commit
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB2NAME)"!=""
 .IF "$(DEF2EXPORT1)"!=""
     @echo $(DEF2EXPORT1)										>>$@
@@ -322,12 +338,16 @@ $(DEF3TARGETN) .PHONY : \
         $(DEF3EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl update $(DEFSTAG)
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -355,12 +375,16 @@ $(DEF3TARGETN) .PHONY : \
     +-$(RM) $(SHL3TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl commit
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB3NAME)"!=""
 .IF "$(DEF3EXPORT1)"!=""
     @echo $(DEF3EXPORT1)										>>$@
@@ -473,12 +497,16 @@ $(DEF4TARGETN) .PHONY : \
         $(DEF4EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl update $(DEFSTAG)
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -506,12 +534,16 @@ $(DEF4TARGETN) .PHONY : \
     +-$(RM) $(SHL4TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl commit
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB4NAME)"!=""
 .IF "$(DEF4EXPORT1)"!=""
     @echo $(DEF4EXPORT1)										>>$@
@@ -624,12 +656,16 @@ $(DEF5TARGETN) .PHONY : \
         $(DEF5EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl update $(DEFSTAG)
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -657,12 +693,16 @@ $(DEF5TARGETN) .PHONY : \
     +-$(RM) $(SHL5TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl commit
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB5NAME)"!=""
 .IF "$(DEF5EXPORT1)"!=""
     @echo $(DEF5EXPORT1)										>>$@
@@ -775,12 +815,16 @@ $(DEF6TARGETN) .PHONY : \
         $(DEF6EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl update $(DEFSTAG)
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -808,12 +852,16 @@ $(DEF6TARGETN) .PHONY : \
     +-$(RM) $(SHL6TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl commit
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB6NAME)"!=""
 .IF "$(DEF6EXPORT1)"!=""
     @echo $(DEF6EXPORT1)										>>$@
@@ -926,12 +974,16 @@ $(DEF7TARGETN) .PHONY : \
         $(DEF7EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl update $(DEFSTAG)
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -959,12 +1011,16 @@ $(DEF7TARGETN) .PHONY : \
     +-$(RM) $(SHL7TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl commit
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB7NAME)"!=""
 .IF "$(DEF7EXPORT1)"!=""
     @echo $(DEF7EXPORT1)										>>$@
@@ -1077,12 +1133,16 @@ $(DEF8TARGETN) .PHONY : \
         $(DEF8EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl update $(DEFSTAG)
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -1110,12 +1170,16 @@ $(DEF8TARGETN) .PHONY : \
     +-$(RM) $(SHL8TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl commit
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB8NAME)"!=""
 .IF "$(DEF8EXPORT1)"!=""
     @echo $(DEF8EXPORT1)										>>$@
@@ -1228,12 +1292,16 @@ $(DEF9TARGETN) .PHONY : \
         $(DEF9EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl update $(DEFSTAG)
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -1261,12 +1329,16 @@ $(DEF9TARGETN) .PHONY : \
     +-$(RM) $(SHL9TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl commit
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB9NAME)"!=""
 .IF "$(DEF9EXPORT1)"!=""
     @echo $(DEF9EXPORT1)										>>$@
@@ -1379,12 +1451,16 @@ $(DEF10TARGETN) .PHONY : \
         $(DEF10EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl update $(DEFSTAG)
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -1412,12 +1488,16 @@ $(DEF10TARGETN) .PHONY : \
     +-$(RM) $(SHL10TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl commit
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB10NAME)"!=""
 .IF "$(DEF10EXPORT1)"!=""
     @echo $(DEF10EXPORT1)										>>$@
