@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: as $ $Date: 2001-10-24 09:36:15 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:28:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,13 +66,10 @@ PRJNAME=sfx2
 TARGET=bastyp
 ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -96,7 +93,8 @@ SLOFILES =\
         $(SLO)$/fltlst.obj				\
         $(SLO)$/helper.obj
 
-SRCFILES =\
+SRS1NAME=$(TARGET)
+SRC1FILES =\
         fltdlg.src	\
         fltfnc.src	\
         bastyp.src	\
