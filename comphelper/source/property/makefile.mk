@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:13:20 $
+#   last change: $Author: cl $ $Date: 2001-03-14 15:55:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files -------------------------------------
 
-SLOFILES=	$(SLO)$/composedprops.obj \
+SLOFILES=	$(SLO)$/propertysethelper.obj \
+            $(SLO)$/propertysetinfo.obj \
+            $(SLO)$/composedprops.obj \
             $(SLO)$/propagg.obj \
             $(SLO)$/property.obj \
             $(SLO)$/propmultiplex.obj \
