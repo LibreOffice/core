@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 15:02:37 $
+ *  last change: $Author: cd $ $Date: 2002-05-02 07:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,17 @@ int SfxImageManager_Impl::Load( SotStorage& rStorage )
         Bitmap aBmp;
         Bitmap aHCBmp;
         LoadBitmap( aBmp, rStorage, pList->aURL );
-        LoadBitmap( aHCBmp, rStorage, pList->aHighContrastURL );
+
+        if ( pList->aHighContrastURL.Len() == 0 )
+        {
+            // Use normal images for high contrast mode as we need the same number of images
+            // for the high contrast image list!! The normal case for 6.1 should be that both
+            // lists are filled, so this document was created by 6.0.
+            // #98979#
+            LoadBitmap( aHCBmp, rStorage, pList->aURL );
+        }
+        else
+            LoadBitmap( aHCBmp, rStorage, pList->aHighContrastURL );
 
         // get the Ids of the ImageList
         USHORT* pIds = new USHORT[nCount];
@@ -507,7 +517,18 @@ int SfxImageManager_Impl::Load( SotStorage& rStorage )
             Bitmap aMask;
             LoadBitmap( aMask, rStorage, pList->aMaskURL );
             m_pUserImageList = new ImageList( aBmp, aMask, nCount, pIds );
-            LoadBitmap( aMask, rStorage, pList->aHighContrastMaskURL );
+
+            if ( pList->aHighContrastMaskURL.Len() == 0 )
+            {
+                // Use normal mask images for high contrast mode as we need the same number of images
+                // for the high contrast image list!! The normal case for 6.1 should be that both
+                // lists are filled, so this document was created by 6.0.
+                // #98979#
+                LoadBitmap( aMask, rStorage, pList->aMaskURL );
+            }
+            else
+                LoadBitmap( aMask, rStorage, pList->aHighContrastMaskURL );
+
             m_pHCUserImageList = new ImageList( aHCBmp, aMask, nCount, pIds );
         }
 
