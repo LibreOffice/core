@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 10:11:43 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,13 +64,12 @@
 #include <tools/link.hxx>
 #include <salunx.h>
 #include <X11/SM/SMlib.h>
-#include <osl/conditn.h>
+#include <salsession.hxx>
 
 class SessionManagerClient
 {
     static SmcConn          aSmcConnection;
     static ByteString       aClientID;
-    static oslCondition aSaveCond;
     static bool         bDocSaveDone;
 
     static void SaveYourselfProc(       SmcConn connection,
@@ -85,20 +84,42 @@ class SessionManagerClient
                                         SmPointer client_data );
     static void ShutdownCanceledProc(   SmcConn connection,
                                         SmPointer client_data );
+    static void InteractProc(           SmcConn connection,
+                                        SmPointer clientData );
 
     static const ByteString& getPreviousSessionID();
 
     DECL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void* );
+    DECL_STATIC_LINK( SessionManagerClient, ShutDownCancelHdl, void* );
     DECL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void* );
+    DECL_STATIC_LINK( SessionManagerClient, InteractionHdl, void* );
 public:
     static void open();
     static void close();
-    static void checkSaveYourselfCond();
 
     static bool checkDocumentsSaved();
+    static bool queryInteraction();
+    static void saveDone();
+    static void interactionDone();
 
     static String getExecName();
     static const ByteString&  getSessionID() { return aClientID; }
+};
+
+class SalFrame;
+
+class IceSalSession : public SalSession
+{
+public:
+    IceSalSession();
+    virtual ~IceSalSession();
+
+    virtual void queryInteraction();
+    virtual void interactionDone();
+    virtual void saveDone();
+    virtual bool cancelShutdown();
+
+    static void handleOldX11SaveYourself( SalFrame* pFrame );
 };
 
 #endif
