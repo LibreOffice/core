@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativeview.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:36:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -61,7 +61,7 @@
  * Method:    getNativeWindowSystemType
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_OfficeDev_samples_DesktopEnvironment_NativeView_getNativeWindowSystemType
+JNIEXPORT jint JNICALL Java_NativeView_getNativeWindowSystemType
   (JNIEnv * env, jobject obj_this)
 {
     return (SYSTEM_XWINDOW);
@@ -73,7 +73,7 @@ JNIEXPORT jint JNICALL Java_OfficeDev_samples_DesktopEnvironment_NativeView_getN
  * Method:    getNativeWindow
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_OfficeDev_samples_DesktopEnvironment_NativeView_getNativeWindow
+JNIEXPORT jlong JNICALL Java_NativeView_getNativeWindow
   (JNIEnv * env, jobject obj_this)
 {
     jboolean                    result  ;
