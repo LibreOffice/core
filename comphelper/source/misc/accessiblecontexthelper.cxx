@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-26 07:25:50 $
+ *  last change: $Author: fs $ $Date: 2002-04-26 14:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,8 @@ namespace comphelper
         if ( aListeners.getLength() )
         {
             AccessibleEventObject aEvent;
-            aEvent.Source = *this;
+            aEvent.Source = m_pImpl->getCreator();
+            OSL_ENSURE( aEvent.Source.is(), "OAccessibleContextHelper::NotifyAccessibleEvent: invalid creator!" );
             aEvent.EventId = _nEventId;
             aEvent.OldValue = _rOldValue;
             aEvent.NewValue = _rNewValue;
@@ -268,6 +269,12 @@ namespace comphelper
     void OAccessibleContextHelper::lateInit( const Reference< XAccessible >& _rxAccessible )
     {
         m_pImpl->setCreator( _rxAccessible );
+    }
+
+    //---------------------------------------------------------------------
+    Reference< XAccessible > OAccessibleContextHelper::getAccessibleCreator( ) const
+    {
+        return m_pImpl->getCreator();
     }
 
     //---------------------------------------------------------------------
@@ -348,6 +355,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2002/04/26 07:25:50  fs
+ *  #98750# corrected NotifyAccessibleEvent
+ *
  *  Revision 1.2  2002/04/26 05:52:18  fs
  *  #98750# use correct broadcasthelper (in the WeagAggComponentImpl* base)
  *
