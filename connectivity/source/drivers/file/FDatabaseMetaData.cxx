@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-12 06:51:32 $
+ *  last change: $Author: fs $ $Date: 2001-10-26 10:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         {
             bKnowCaseSensivity = sal_True;
             bCaseSensitiveDir = isCaseSensitiveParentFolder( m_pConnection->getURL(), aURL.getName() );
+            m_pConnection->setCaseSensitiveExtension( bCaseSensitiveDir, OConnection::GrantAccess() );
             if ( !bCaseSensitiveDir )
                 aFilenameExtension.ToLowerAscii();
         }
