@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:23:18 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
  * Dieses File enthaelt alle Ausgabe-Funktionen des RTF-Writers;
  * fuer alle Nodes, Attribute, Formate und Chars.
  */
-
-
-#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -535,12 +532,12 @@ void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
     //output alignment
     if (bFrameDirOut && !bAdjustOut && !rWrt.pFlyFmt && !rWrt.bOutPageDesc)
     {
-        if (pOut = aRTFAttrFnTab[RES_PARATR_ADJUST - RES_CHRATR_BEGIN])
+        if ((pOut = aRTFAttrFnTab[RES_PARATR_ADJUST - RES_CHRATR_BEGIN]))
             (*pOut)(rWrt, rSet.Get(RES_PARATR_ADJUST));
     }
     if (rWrt.pFlyFmt && !rWrt.bOutPageDesc && !bFrameDirOut)
     {
-        if (pOut = aRTFAttrFnTab[RES_FRAMEDIR - RES_CHRATR_BEGIN])
+        if ((pOut = aRTFAttrFnTab[RES_FRAMEDIR - RES_CHRATR_BEGIN]))
             (*pOut)(rWrt, rSet.Get(RES_FRAMEDIR));
     }
 
@@ -921,9 +918,9 @@ void SttEndPos::AddAttr( const SfxPoolItem& rAttr )
 #endif
 }
 
-RTFEndPosLst::RTFEndPosLst( SwRTFWriter& rWriter, const SwTxtNode& rNd,
-                            xub_StrLen nStart )
-    : rNode( rNd ), rWrt( rWriter ), nCurPos( -1 )
+RTFEndPosLst::RTFEndPosLst(SwRTFWriter& rWriter, const SwTxtNode& rNd,
+    xub_StrLen nStart)
+    : rNode(rNd), rWrt(rWriter), nCurPos(STRING_NOTFOUND)
 {
     pOldPosLst = rWrt.pCurEndPosLst;
     rWrt.pCurEndPosLst = this;
@@ -1027,7 +1024,7 @@ void RTFEndPosLst::OutAttrs( xub_StrLen nStrPos )
             }
         }
 
-    nCurPos = -1;
+    nCurPos = STRING_NOTFOUND;
 }
 
 void RTFEndPosLst::OutFontAttrs( USHORT nScript )
@@ -1826,7 +1823,6 @@ static void OutSwTblBorder(SwRTFWriter& rWrt, const SvxBoxItem& rBox,
     {
         sRTF_CLPADFL, sRTF_CLPADFT, sRTF_CLPADFB, sRTF_CLPADFR
     };
-    const USHORT* pBrd = aBorders;
     for (int i = 0; i < 4; ++i)
     {
         if (const SvxBorderLine* pLn = rBox.GetLine(aBorders[i]))
@@ -1856,7 +1852,6 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
 {
     SwRTFWriter & rRTFWrt = (SwRTFWriter&)rWrt;
     const SwTable& rTbl = rNode.GetTable();
-    const SwTableLines& rLns = rTbl.GetTabLines();
     SwTwips nPageSize = 0, nTblOffset = 0;
 
 /*
@@ -1894,12 +1889,16 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     SwTwips nTblSz = pFmt->GetFrmSize().GetWidth();
 
     ByteString aTblAdjust( sRTF_TRQL );
-    switch( pFmt->GetHoriOrient().GetHoriOrient() )
+    switch (pFmt->GetHoriOrient().GetHoriOrient())
     {
-    case HORI_CENTER:   aTblAdjust = sRTF_TRQC; break;
-    case HORI_RIGHT:    aTblAdjust = sRTF_TRQR; break;
-    case HORI_NONE:
-    case HORI_LEFT_AND_WIDTH:
+        case HORI_CENTER:
+            aTblAdjust = sRTF_TRQC;
+            break;
+        case HORI_RIGHT:
+            aTblAdjust = sRTF_TRQR;
+            break;
+        case HORI_NONE:
+        case HORI_LEFT_AND_WIDTH:
             {
                 const SvxLRSpaceItem& rLRSp = pFmt->GetLRSpace();
                 nTblOffset = rLRSp.GetLeft();
@@ -1908,7 +1907,8 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                 aTblAdjust += ByteString::CreateFromInt32( nTblOffset );
             }
             break;
-//  case case FLY_HORI_FULL:
+        default:
+            break;
     }
 
     if (rRTFWrt.TrueFrameDirection(*pFmt) == FRMDIR_HORI_RIGHT_TOP)
@@ -1933,7 +1933,6 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     USHORT* pRowSpans = new USHORT[ nColCnt ];
     memset( pBoxArr, 0, sizeof( pBoxArr[0] ) * nColCnt );
     memset( pRowSpans, 0, sizeof( pRowSpans[0] ) * nColCnt );
-    long nLastHeight = 0;
     const SwWriteTableRows& rRows = pTableWrt->GetRows();
     for( USHORT nLine = 0; nLine < rRows.Count(); ++nLine )
     {
@@ -2018,7 +2017,6 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             {
                 sRTF_TRPADDFT, sRTF_TRPADDFL, sRTF_TRPADDFB, sRTF_TRPADDFR
             };
-            const USHORT* pBrd = aBorders;
             for (int i = 0; i < 4; ++i)
             {
                 rWrt.Strm() << aRowPadUnits[i];
@@ -2170,7 +2168,10 @@ Writer& OutRTF_SwSectionNode( Writer& rWrt, SwSectionNode& rNode )
         if( SFX_ITEM_SET == rSet.GetItemState( RES_COL, FALSE, &pItem ))
             OutRTF_SwFmtCol( rWrt, *pItem );
         else
-            rWrt.Strm() << sRTF_COLS << '1' << sRTF_COLSX << '709';
+        {
+            rWrt.Strm() << sRTF_COLS << '1' << sRTF_COLSX;
+            rWrt.OutULong(709);
+        }
 
         if( SFX_ITEM_SET == rSet.GetItemState( RES_COLUMNBALANCE,
             FALSE, &pItem ) && ((SwFmtNoBalancedColumns*)pItem)->GetValue() )
@@ -2351,19 +2352,25 @@ static Writer& OutRTF_SwCharScaleW( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-static Writer& OutRTF_SwCharRelief( Writer& rWrt, const SfxPoolItem& rHt )
+static Writer& OutRTF_SwCharRelief(Writer& rWrt, const SfxPoolItem& rHt)
 {
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
-    const SvxCharReliefItem& rAttr = (SvxCharReliefItem&)rHt;
+    const SvxCharReliefItem& rAttr = (const SvxCharReliefItem&)rHt;
     const sal_Char* pStr;
-    switch( ((SvxCharReliefItem&)rHt).GetValue() )
+    switch (rAttr.GetValue())
     {
-    case RELIEF_EMBOSSED:   pStr = sRTF_EMBO;   break;
-    case RELIEF_ENGRAVED:   pStr = sRTF_IMPR;   break;
-    default:                pStr = 0;           break;
+        case RELIEF_EMBOSSED:
+            pStr = sRTF_EMBO;
+            break;
+        case RELIEF_ENGRAVED:
+            pStr = sRTF_IMPR;
+            break;
+        default:
+            pStr = 0;
+            break;
     }
 
-    if( pStr )
+    if (pStr)
     {
         rRTFWrt.bOutFmtAttr = TRUE;
         rWrt.Strm() << pStr;
@@ -2486,23 +2493,59 @@ static Writer& OutRTF_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
     const char* pStr = 0;
     switch( ((const SvxUnderlineItem&)rHt).GetUnderline() )
     {
-    case UNDERLINE_SINGLE:          pStr = sRTF_UL;         break;
-    case UNDERLINE_DOUBLE:          pStr = sRTF_ULDB;       break;
-    case UNDERLINE_NONE:            pStr = sRTF_ULNONE;     break;
-    case UNDERLINE_DOTTED:          pStr = sRTF_ULD;        break;
-    case UNDERLINE_DASH:            pStr = sRTF_ULDASH;     break;
-    case UNDERLINE_DASHDOT:         pStr = sRTF_ULDASHD;    break;
-    case UNDERLINE_DASHDOTDOT:      pStr = sRTF_ULDASHDD;   break;
-    case UNDERLINE_BOLD:            pStr = sRTF_ULTH;       break;
-    case UNDERLINE_WAVE:            pStr = sRTF_ULWAVE;     break;
-    case UNDERLINE_BOLDDOTTED:      pStr = sRTF_ULTHD;      break;
-    case UNDERLINE_BOLDDASH:        pStr = sRTF_ULTHDASH;   break;
-    case UNDERLINE_LONGDASH:        pStr = sRTF_ULLDASH;    break;
-    case UNDERLINE_BOLDLONGDASH:    pStr = sRTF_ULTHLDASH;  break;
-    case UNDERLINE_BOLDDASHDOT:     pStr = sRTF_ULTHDASHD;  break;
-    case UNDERLINE_BOLDDASHDOTDOT:  pStr = sRTF_ULTHDASHDD; break;
-    case UNDERLINE_BOLDWAVE:        pStr = sRTF_ULHWAVE;    break;
-    case UNDERLINE_DOUBLEWAVE:      pStr = sRTF_ULULDBWAVE; break;
+        case UNDERLINE_SINGLE:
+            pStr = sRTF_UL;
+            break;
+        case UNDERLINE_DOUBLE:
+            pStr = sRTF_ULDB;
+            break;
+        case UNDERLINE_NONE:
+            pStr = sRTF_ULNONE;
+            break;
+        case UNDERLINE_DOTTED:
+            pStr = sRTF_ULD;
+            break;
+        case UNDERLINE_DASH:
+            pStr = sRTF_ULDASH;
+            break;
+        case UNDERLINE_DASHDOT:
+            pStr = sRTF_ULDASHD;
+            break;
+        case UNDERLINE_DASHDOTDOT:
+            pStr = sRTF_ULDASHDD;
+            break;
+        case UNDERLINE_BOLD:
+            pStr = sRTF_ULTH;
+            break;
+        case UNDERLINE_WAVE:
+            pStr = sRTF_ULWAVE;
+            break;
+        case UNDERLINE_BOLDDOTTED:
+            pStr = sRTF_ULTHD;
+            break;
+        case UNDERLINE_BOLDDASH:
+            pStr = sRTF_ULTHDASH;
+            break;
+        case UNDERLINE_LONGDASH:
+            pStr = sRTF_ULLDASH;
+            break;
+        case UNDERLINE_BOLDLONGDASH:
+            pStr = sRTF_ULTHLDASH;
+            break;
+        case UNDERLINE_BOLDDASHDOT:
+            pStr = sRTF_ULTHDASHD;
+            break;
+        case UNDERLINE_BOLDDASHDOTDOT:
+            pStr = sRTF_ULTHDASHDD;
+            break;
+        case UNDERLINE_BOLDWAVE:
+            pStr = sRTF_ULHWAVE;
+            break;
+        case UNDERLINE_DOUBLEWAVE:
+            pStr = sRTF_ULULDBWAVE;
+            break;
+        default:
+            break;
     }
 
     if( pStr )
@@ -3538,20 +3581,26 @@ static Writer& OutRTF_SwFmtVertOrient ( Writer& rWrt, const SfxPoolItem& rHt )
             pOrient = sRTF_PVPARA;
         rWrt.Strm() << pOrient;
 
-        switch( rFlyVert.GetVertOrient() )
+        switch (rFlyVert.GetVertOrient())
         {
-        case VERT_TOP:
-        case VERT_LINE_TOP:     rWrt.Strm() << sRTF_POSYT;  break;
-        case VERT_BOTTOM:
-        case VERT_LINE_BOTTOM:  rWrt.Strm() << sRTF_POSYB;  break;
-        case VERT_CENTER:
-        case VERT_LINE_CENTER:  rWrt.Strm() << sRTF_POSYC;  break;
-        case VERT_NONE:
-            {
+            case VERT_TOP:
+            case VERT_LINE_TOP:
+                rWrt.Strm() << sRTF_POSYT;
+                break;
+            case VERT_BOTTOM:
+            case VERT_LINE_BOTTOM:
+                rWrt.Strm() << sRTF_POSYB;
+                break;
+            case VERT_CENTER:
+            case VERT_LINE_CENTER:
+                rWrt.Strm() << sRTF_POSYC;
+                break;
+            case VERT_NONE:
                 rWrt.Strm() << sRTF_POSY;
-                rWrt.OutULong( rFlyVert.GetPos() );
-            }
-            break;
+                rWrt.OutULong(rFlyVert.GetPos());
+                break;
+            default:
+                break;
         }
     }
     else if( !rRTFWrt.bRTFFlySyntax )
@@ -3589,25 +3638,25 @@ static Writer& OutRTF_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt )
         rWrt.Strm() << pS;
 
         pS = 0;
-        switch( rFlyHori.GetHoriOrient() )
+        switch(rFlyHori.GetHoriOrient())
         {
-        case HORI_RIGHT:        pS = rFlyHori.IsPosToggle()
-                                    ? sRTF_POSXO
-                                    : sRTF_POSXR;
-                                break;
-        case HORI_LEFT:         pS = rFlyHori.IsPosToggle()
-                                    ? sRTF_POSXI
-                                    : sRTF_POSXL;
-                                break;
-        case HORI_CENTER:       pS = sRTF_POSXC;    break;
-        case HORI_NONE:
-                {
-                    rWrt.Strm() << sRTF_POSX;
-                    rWrt.OutULong( rFlyHori.GetPos() );
-                }
+            case HORI_RIGHT:
+                pS = rFlyHori.IsPosToggle() ? sRTF_POSXO : sRTF_POSXR;
+                break;
+            case HORI_LEFT:
+                pS = rFlyHori.IsPosToggle() ? sRTF_POSXI : sRTF_POSXL;
+                break;
+            case HORI_CENTER:
+                pS = sRTF_POSXC;
+                break;
+            case HORI_NONE:
+                rWrt.Strm() << sRTF_POSX;
+                rWrt.OutULong( rFlyHori.GetPos() );
+                break;
+            default:
                 break;
         }
-        if( pS )
+        if (pS)
             rWrt.Strm() << pS;
     }
     else
@@ -3917,34 +3966,33 @@ static Writer& OutRTF_SwLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const SvxLineSpacingItem &rLs = (const SvxLineSpacingItem&)rHt;
 
-    switch( rLs.GetLineSpaceRule() )
+    switch (rLs.GetLineSpaceRule())
     {
-    case SVX_LINE_SPACE_AUTO:
-    case SVX_LINE_SPACE_FIX:
-    case SVX_LINE_SPACE_MIN:
+        default:
+            break;
+        case SVX_LINE_SPACE_AUTO:
+        case SVX_LINE_SPACE_FIX:
+        case SVX_LINE_SPACE_MIN:
         {
             ((SwRTFWriter&)rWrt).bOutFmtAttr = TRUE;
             rWrt.Strm() << sRTF_SL;
             sal_Char cMult = '0';
-            switch( rLs.GetInterLineSpaceRule() )
+            switch (rLs.GetInterLineSpaceRule())
             {
-            case SVX_INTER_LINE_SPACE_FIX:      // unser Durchschuss
-                // gibt es aber nicht in WW - also wie kommt man an
-                // die MaxLineHeight heran?
-                rWrt.OutLong( (short)rLs.GetInterLineSpace() );
-                break;
-
-            case SVX_INTER_LINE_SPACE_PROP:
-                rWrt.OutLong( (240L * rLs.GetPropLineSpace()) / 100L );
-                cMult = '1';
-                break;
-
-            default:
-                if( SVX_LINE_SPACE_FIX == rLs.GetLineSpaceRule() )
-                    rWrt.Strm() << '-';
-
-                rWrt.OutLong( rLs.GetLineHeight() );
-                break;
+                case SVX_INTER_LINE_SPACE_FIX:
+                    // unser Durchschuss gibt es aber nicht in WW - also wie
+                    // kommt man an die MaxLineHeight heran?
+                    rWrt.OutLong((short)rLs.GetInterLineSpace());
+                    break;
+                case SVX_INTER_LINE_SPACE_PROP:
+                    rWrt.OutLong((240L * rLs.GetPropLineSpace()) / 100L);
+                    cMult = '1';
+                    break;
+                default:
+                    if (SVX_LINE_SPACE_FIX == rLs.GetLineSpaceRule())
+                        rWrt.Strm() << '-';
+                    rWrt.OutLong( rLs.GetLineHeight() );
+                    break;
             }
             rWrt.Strm() << sRTF_SLMULT << cMult;
         }
@@ -4045,16 +4093,24 @@ static Writer& OutRTF_SwTabStop( Writer& rWrt, const SfxPoolItem& rHt )
             }
 
             const sal_Char* pAdjStr = 0;
-            switch( rTS.GetAdjustment() )
+            switch (rTS.GetAdjustment())
             {
-            case SVX_TAB_ADJUST_RIGHT:      pAdjStr = sRTF_TQR;     break;
-            case SVX_TAB_ADJUST_DECIMAL:    pAdjStr = sRTF_TQDEC;   break;
-            case SVX_TAB_ADJUST_CENTER:     pAdjStr = sRTF_TQC;     break;
+                case SVX_TAB_ADJUST_RIGHT:
+                    pAdjStr = sRTF_TQR;
+                    break;
+                case SVX_TAB_ADJUST_DECIMAL:
+                    pAdjStr = sRTF_TQDEC;
+                    break;
+                case SVX_TAB_ADJUST_CENTER:
+                    pAdjStr = sRTF_TQC;
+                    break;
+                default:
+                    break;
             }
-            if( pAdjStr )
+            if (pAdjStr)
                 rWrt.Strm() << pAdjStr;
             rWrt.Strm() << sRTF_TX;
-            rWrt.OutLong( rTS.GetTabPos() + nOffset );
+            rWrt.OutLong(rTS.GetTabPos() + nOffset);
         }
     }
     rRTFWrt.bOutFmtAttr = TRUE;
