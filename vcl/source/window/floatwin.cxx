@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:22 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
 #endif
-#pragma hdrstop
+
 
 // =======================================================================
 
