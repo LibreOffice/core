@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:22:47 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include <errno.h>
 
 #ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
+//#include <tools/intn.hxx>
 #endif
 #ifndef _DATE_HXX //autogen
 #include <tools/date.hxx>
@@ -77,9 +77,6 @@
 #endif
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
