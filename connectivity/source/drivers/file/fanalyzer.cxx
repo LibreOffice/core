@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-31 14:48:20 $
+ *  last change: $Author: oj $ $Date: 2001-06-27 10:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,10 @@ OOperandAttr* OSQLAnalyzer::createOperandAttr(sal_Int32 _nPos,
     return new OOperandAttr(_nPos,_xCol);
 }
 // -----------------------------------------------------------------------------
+BOOL OSQLAnalyzer::hasRestriction() const
+{
+    return m_aCompiler.hasCode();
+}
 
 
 

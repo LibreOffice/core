@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:10:29 $
+ *  last change: $Author: oj $ $Date: 2001-06-27 10:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,6 +466,7 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
             // special methods
             inline sal_Int32 mapColumn(sal_Int32    column);
             virtual BOOL OpenImpl();
+            virtual void doTableSpecials(const OSQLTable& _xTable);
 
             sal_Int32 getRowCountResult() const { return m_nRowCountResult; }
             void setParameterRow(const OValueRow& _rParaRow) { m_aParameterRow = _rParaRow; }

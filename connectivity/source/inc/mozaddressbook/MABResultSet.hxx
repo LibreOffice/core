@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABResultSet.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 13:06:43 $
+ *  last change: $Author: oj $ $Date: 2001-06-27 10:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,10 @@ namespace connectivity
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
             virtual sal_Bool fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex);
+
+            // here we create a SQL analyzer which doesn't support any restrictions
+            // these are already done by the server side
+            virtual file::OSQLAnalyzer* createAnalyzer();
         public:
             DECLARE_SERVICE_INFO();
 
@@ -127,7 +131,8 @@ namespace connectivity
             virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             // special methods
-            virtual BOOL OpenImpl();
+            //  virtual BOOL OpenImpl();
+            virtual void doTableSpecials(const OSQLTable& _xTable);
         };
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABTable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-06-01 09:07:27 $
+ *  last change: $Author: oj $ $Date: 2001-06-27 10:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@ namespace connectivity
 
         protected:
             virtual void FileClose();
+
+            // special ctor is needed for clone
+            OMozabTable(const OMozabTable* _pTable);
         public:
             virtual void refreshColumns();
             virtual void refreshIndexes();
@@ -156,10 +159,12 @@ namespace connectivity
             virtual BOOL InsertRow(connectivity::OValueVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual BOOL DeleteRow(const OSQLColumns& _rCols);
             virtual BOOL UpdateRow(connectivity::OValueVector& rRow, connectivity::OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
-            // WvD
-            void getColumnInfo(sal_Int32, ::rtl::OUString& rName, sal_Int32& rDataType);
 
             void fillRowData( connectivity::OSQLParseTreeIterator& _aSQLIterator );
+
+            // returns a copy of this object
+            OMozabTable* clone() const;
+
             // WvD
         };
     }
