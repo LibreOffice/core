@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:14:38 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 21:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1409,6 +1409,7 @@ String RID_SVXSTR_FONTWORK_UNDOCREATE
     Text[ finnish ] = "Luo fonttityöobjekti";
 };
  // ********************************************************************** EOF
+
 
 
 
