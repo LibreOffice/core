@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:38:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,9 +67,7 @@ TARGET=engine3d
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
@@ -138,11 +136,6 @@ SLOFILES= \
         $(OBJ)$/view3d1.obj       \
         $(OBJ)$/e3dcmpt.obj
 
-
-.IF "$(COM)"=="ICC"
-NOOPTFILES=\
-    $(SLO)$/class3d.obj
-.ENDIF
 
 .INCLUDE :  target.mk
 
