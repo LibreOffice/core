@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-25 11:41:50 $
+ *  last change: $Author: dv $ $Date: 2001-07-25 15:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,6 +701,16 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
         aServiceType[0] <<= TemplateDescription::FILEOPEN_READONLY_VERSION;
         mbHasVersions = sal_True;
         break;
+    case FILEOPEN_LINK_PREVIEW:
+        aServiceType[0] <<= TemplateDescription::FILEOPEN_LINK_PREVIEW;
+        mbHasPreview = sal_True;
+        mbHasLink = sal_True;
+
+        // aPreviewTimer
+          maPreViewTimer.SetTimeout( 500 );
+        maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+        break;
+
     default:
         aServiceType[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
         DBG_ERRORFILE( "FileDialogHelper::ctor with unknown type" );
@@ -1538,7 +1548,12 @@ const short FileDialogHelper::getDialogType( sal_uInt32 nFlags ) const
             nDialogType = FILESAVE_SIMPLE;
     }
     else if ( nFlags & SFXWB_GRAPHIC )
-        nDialogType = FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE;
+    {
+        if ( nFlags & SFXWB_SHOWSTYLES )
+            nDialogType = FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE;
+        else
+            nDialogType = FILEOPEN_LINK_PREVIEW;
+    }
     else if ( SFXWB_INSERT != ( nFlags & SFXWB_INSERT ) )
         nDialogType = FILEOPEN_READONLY_VERSION;
 
