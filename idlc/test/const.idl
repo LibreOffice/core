@@ -1,3 +1,5 @@
+module idlc
+{
 module test
 {
     const long l = 1;
@@ -45,4 +47,5 @@ constants USER
     const long FLAG12 = FLAG10 / 8;
 };
 
+};
 };
