@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:54:04 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 17:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ ModelessDialog DLG_JOIN_TABADD
     Text [ DANISH ] = "Tilføj tabeller" ;
     Text [ ENGLISH_US ] = "Add Tables" ;
     Text [ SPANISH ] = "Añadir tablas" ;
-    Text [ FINNISH ] = "Lisää taulukoita" ;
+    Text [ FINNISH ] = "Lisää tauluja" ;
     Text [ FRENCH ] = "Ajouter des tables" ;
     Text [ ITALIAN ] = "Aggiungi tabelle" ;
     Text [ DUTCH ] = "Tabellen toevoegen" ;
@@ -102,7 +102,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ DANISH ] = "~Tabelnavn" ;
         Text [ ENGLISH_US ] = "~Table name" ;
         Text [ SPANISH ] = "~Nombre de la tabla" ;
-        Text [ FINNISH ] = "~Taulukon nimi" ;
+        Text [ FINNISH ] = "~Taulun nimi" ;
         Text [ FRENCH ] = "~Nom de la table" ;
         Text [ ITALIAN ] = "Nome ~tabella" ;
         Text [ DUTCH ] = "~Tabelnaam" ;
@@ -217,7 +217,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ DANISH ] = "Tabel" ;
         Text [ ENGLISH_US ] = "Table" ;
         Text [ SPANISH ] = "Tabla" ;
-        Text [ FINNISH ] = "Lomake" ;
+        Text [ FINNISH ] = "Taulu" ;
         Text [ FRENCH ] = "Table" ;
         Text [ ITALIAN ] = "Tabella" ;
         Text [ DUTCH ] = "Tabel" ;
@@ -247,7 +247,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ DANISH ] = "<Standard>" ;
         Text [ ENGLISH_US ] = "<default>" ;
         Text [ SPANISH ] = "<predeterminado>" ;
-        Text [ FINNISH ] = "<oletusarvo>" ;
+        Text [ FINNISH ] = "<oletus>" ;
         Text [ FRENCH ] = "<Par défaut>" ;
         Text [ ITALIAN ] = "<standard>" ;
         Text [ DUTCH ] = "<Standaard>" ;
@@ -255,7 +255,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ SWEDISH ] = "<standard>" ;
         Text [ PORTUGUESE ] = "<padrão>" ;
         Text[ chinese_simplified ] = "<é»˜è®¤>";
-        Text[ russian ] = "<Ñòàíäàðò>";
+        Text[ russian ] = "<ñòàíäàðò>";
         Text[ polish ] = "<Domyœlnie>";
         Text[ japanese ] = "<æ¨™æº–>";
         Text[ chinese_traditional ] = "<é»˜èª>";
