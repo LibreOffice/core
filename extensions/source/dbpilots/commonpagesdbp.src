@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:29:12 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 13:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,12 +284,12 @@ TabPage RID_PAGE_OPTION_DBFIELD
     RadioButton RB_STOREINFIELD_YES
     {
         Pos = MAP_APPFONT ( 7 , 53  ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 10 ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 20, 10 ) ;
         Group = TRUE;
         TabStop = TRUE;
         Text = "~Ja, und zwar in folgendem Datenbankfeld :";
-        Text [ english ] = "~Yes, save it in the following database field:";
-        Text [ english_us ] = "~Yes, I want to save it in the following database field:";
+        Text [ english ] = "~Yes, in the following database field:";
+        Text [ english_us ] = "~Yes, in the following database field:";
         Text [ portuguese ] = "Sim, no seguinte:";
         Text [ russian ] = "Да. В следующем поле базы данных:";
         Text [ dutch ] = "Ja, en wel in het volgende databaseveld :";
@@ -312,8 +312,8 @@ TabPage RID_PAGE_OPTION_DBFIELD
     };
     ListBox LB_STOREINFIELD
     {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 51 ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 14 ) ;
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 23, 51 ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 30, 14 ) ;
         TabStop = TRUE;
         SVLook = TRUE ;
         Border = TRUE ;
@@ -352,6 +352,9 @@ TabPage RID_PAGE_OPTION_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/03/21 20:29:12  kz
+ *  Merge SRC626: 21.03.01 - 21:29:27 (NoBranch)
+ *
  *  Revision 1.5  2001/03/19 11:40:39  kz
  *  Merge SRC625: 19.03.01 - 12:40:34 (NoBranch)
  *
