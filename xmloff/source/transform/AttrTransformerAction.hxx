@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AttrTransformerAction.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:20:40 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,15 @@ enum XMLAttrTransformerAction
                                          // - param1: pacakage URI are supported
     XML_ATACTION_URI_OASIS,              // an URI in OASIS notation
                                          // - param1: pacakage URI are supported
+    XML_ATACTION_RENAME_ATTRIBUTE,       // rename up to 3 different possible values of an attrbiute
+                                         // - param1: token of old attribute value (lower 16 bit)
+                                         //           + token of new attribute value (upper 16 bit)
+                                         // - param2: token of old attribute value
+                                         //           + token of new attribute value
+                                         // - param3: token of old attribute value
+                                         //           + token of new attribute value
+                                         // if param2 or param3 are unused they must contain
+                                         // XML_TOKEN_INVALID
     XML_ATACTION_USER_DEFINED=0x80000000,// user defined actions start here
     XML_ATACTION_END=XML_TACTION_END
 };
