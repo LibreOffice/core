@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jsc $ $Date: 2001-06-20 14:52:32 $
+ *  last change: $Author: jsc $ $Date: 2001-06-20 15:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,16 +379,4 @@ sal_Int32 FileStream::getSize()
         size = ftell(f);
     fclose(f);
     return size;
-}
-
-ostream &operator <<(ostream& o, OString* s)
-{
-    o << s->getStr();
-    return o;
-}
-
-ostream &operator <<(ostream& o, const OString& s)
-{
-    o << s.getStr();
-    return o;
 }
