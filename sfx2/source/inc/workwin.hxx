@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:59:55 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,8 @@
 #include "shell.hxx"
 #include "minarray.hxx"
 #include "ctrlitem.hxx"
-#include "stbmgr.hxx"
 #include "viewfrm.hxx"
 
-class SfxToolBoxManager;
 class SfxInPlaceEnv_Impl;
 class SfxPlugInEnv_Impl;
 class SfxSplitWindow;
@@ -381,12 +379,12 @@ public:
     void                    ResetStatusBar_Impl();
     void                    SetStatusBar_Impl(const ResId&, SfxShell *pShell, SfxBindings& );
     void                    UpdateStatusBar_Impl();
-    SfxStatusBarManager*    GetStatusBarManager_Impl();
-    SfxStatusBarManager*    MakeStatusBarManager_Impl( BOOL bCreate );
-    SfxStatBar_Impl*        GetStatusBar_Impl();
+    //SfxStatusBarManager*    GetStatusBarManager_Impl();
+    //SfxStatusBarManager*    MakeStatusBarManager_Impl( BOOL bCreate );
+    //SfxStatBar_Impl*        GetStatusBar_Impl();
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > GetStatusIndicator();
 };
-
+/*
 class SfxPIWorkWin_Impl : public SfxWorkWindow
 {
     SfxPlugInEnv_Impl*  pEnv;
@@ -421,7 +419,7 @@ private:
     virtual void        ArrangeChilds_Impl();
     virtual void        SaveStatus_Impl(SfxChildWindow*, const SfxChildWinInfo&);
 };
-
+*/
 class SfxFrameWorkWin_Impl : public SfxWorkWindow
 {
     SfxFrame*           pMasterFrame;
