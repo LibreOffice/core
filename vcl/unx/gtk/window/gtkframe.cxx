@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:50:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ static USHORT GetKeyCode( guint keyval )
     return nCode;
 }
 
-static USHORT GetCharCodeFromUnicode( sal_Unicode cCode )
+static USHORT GetKeyCodeFromUnicode( sal_Unicode cCode )
 {
     USHORT nRet = 0;
 
@@ -1127,7 +1127,7 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     // menu highlighting
     aHighlightColor = getColor( pStyle->bg[ GTK_STATE_SELECTED ] );
     aStyleSet.SetMenuHighlightColor( aHighlightColor );
-    aHighlightTextColor = getColor( pStyle->fg[ GTK_STATE_PRELIGHT ] );
+    aHighlightTextColor = getColor( pStyle->text[ GTK_STATE_PRELIGHT ] );
     aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
 
     // UI font
@@ -1517,7 +1517,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget* pWidget, GdkEventConfigure* pE
 
     if( x != pThis->maGeometry.nX || y != pThis->maGeometry.nY )
         bMoved = true;
-    if( (unsigned int)pEvent->width != pThis->maGeometry.nWidth || (unsigned int)pEvent->height != pThis->maGeometry.nHeight )
+    if( pEvent->width != (int)pThis->maGeometry.nWidth || pEvent->height != (int)pThis->maGeometry.nHeight )
         bSized = true;
 
     pThis->maGeometry.nX        = x;
@@ -1776,21 +1776,18 @@ void GtkSalFrame::signalIMCommit( GtkIMContext* pContext, gchar* pText, gpointer
      */
     if( ! pThis->m_bWasPreedit && aTextEvent.maText.Len() == 1 )
     {
-        USHORT nCharCode = GetCharCodeFromUnicode( aTextEvent.maText.GetChar( 0 ) );
-        if( nCharCode != 0 )
-        {
-            SalKeyEvent aEvent;
+        USHORT nCharCode = GetKeyCodeFromUnicode( aTextEvent.maText.GetChar( 0 ) );
+        SalKeyEvent aEvent;
 
-            aEvent.mnTime           = 0;
-            aEvent.mnCode           = nCharCode;
-            aEvent.mnCharCode       = aTextEvent.maText.GetChar(0);
-            aEvent.mnRepeat         = 0;
+        aEvent.mnTime           = 0;
+        aEvent.mnCode           = nCharCode;
+        aEvent.mnCharCode       = aTextEvent.maText.GetChar(0);
+        aEvent.mnRepeat         = 0;
 
-            pThis->m_bWasPreedit = false;
-            pThis->CallCallback( SALEVENT_KEYINPUT, &aEvent );
-            pThis->CallCallback( SALEVENT_KEYUP, &aEvent );
-            return;
-        }
+        pThis->m_bWasPreedit = false;
+        pThis->CallCallback( SALEVENT_KEYINPUT, &aEvent );
+        pThis->CallCallback( SALEVENT_KEYUP, &aEvent );
+        return;
     }
 
     pThis->m_bWasPreedit = false;
