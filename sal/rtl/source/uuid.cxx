@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uuid.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2002-11-14 10:40:13 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,7 @@ static void get6ByteRandomValue( sal_uInt8 *pNode )
     {
         static sal_uInt8 node[ 6 ];
         oslProcessInfo data;
+        memset(&data, 0, sizeof(data));
         rtlRandomPool pool = rtl_random_createPool ();
 
         /* improve random value with the process identifier. This reduces the chance
