@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:22:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,8 +282,9 @@ void OutlineViewShell::Construct(DrawDocShell* pDocSh)
 
     SetZoom(69);
 
-    // create uno view
-    mxSubController = static_cast<XWeak*>(new SdUnoOutlineView (*pView, *this));
+    // Create uno controller.
+    mpController = new SdUnoOutlineView (GetViewShellBase(), *this, *pView);
+    mxController = static_cast<XWeak*>(mpController);
 
     // Create the object bars and register them at the sub shell
     // manager.
@@ -333,8 +334,7 @@ OutlineViewShell::OutlineViewShell (
       pOlView(NULL),
       pLastPage( NULL ),
       pClipEvtLstnr(NULL),
-      bPastePossible(FALSE),
-      pController(NULL)
+      bPastePossible(FALSE)
 {
     if (pFrameViewArgument != NULL)
         pFrameView = pFrameViewArgument;
@@ -363,8 +363,7 @@ OutlineViewShell::OutlineViewShell(SfxViewFrame* pFrame,
     pOlView(NULL),
     pLastPage( NULL ),
     pClipEvtLstnr(NULL),
-    bPastePossible(FALSE),
-    pController(NULL)
+    bPastePossible(FALSE)
 {
     pFrameView = new FrameView(GetDoc());
     pFrameView->Connect();
@@ -2522,9 +2521,9 @@ void OutlineViewShell::VisAreaChanged(const Rectangle& rRect)
 {
     ViewShell::VisAreaChanged( rRect );
 
-    if( pController )
+    if (mpController != NULL)
     {
-        pController->FireVisAreaChanged( rRect );
+        mpController->FireVisAreaChanged( rRect );
     }
 }
 
