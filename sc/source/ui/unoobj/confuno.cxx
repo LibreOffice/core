@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-07 11:10:35 $
+ *  last change: $Author: sab $ $Date: 2001-09-28 17:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                             SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
                             SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS,
                             NULL );
-                    pDoc->SetPrinter( SfxPrinter::Create( aStream, pSet ) );
+                    pDocShell->SetPrinter( SfxPrinter::Create( aStream, pSet ) );
                 }
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_APPLYDOCINF ) == 0 )
