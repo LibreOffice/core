@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:56:57 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #include "otlnbuff.hxx"
 #include "excrecds.hxx"
 #include "xcl97rec.hxx"
+#include "formel.hxx"
 
 #ifndef SC_XCLIMPPIVOTTABES_HXX
 #include "XclImpPivotTables.hxx"
@@ -113,7 +114,6 @@ RootData::RootData( void )
     eDateiTyp = eHauptDateiTyp = BiffX;
     pExtSheetBuff = NULL;
     pTabNameBuff = NULL;
-    pRNameBuff = NULL;
     pShrfmlaBuff = NULL;
     pExtNameBuff = NULL;
     pFmlaConverter = NULL;
@@ -122,10 +122,13 @@ RootData::RootData( void )
 
     bCellCut = FALSE;
     bBreakSharedFormula = TRUE;
-    bDefaultPage = bChartTab = FALSE;
+    bChartTab = FALSE;
 
     pRootStorage = pPivotCacheStorage = /*pCtrlStorage = */NULL;
     pImpPivotCacheList = NULL;
+    pAutoFilterBuffer = NULL;
+    pPrintRanges = new _ScRangeListTabs;
+    pPrintTitles = new _ScRangeListTabs;
 
     pRootStorage = NULL;
     pTabId = NULL;
@@ -143,9 +146,6 @@ RootData::RootData( void )
 
     bWriteVBAStorage = FALSE;
 
-    pStyleSheet = NULL;
-    pStyleSheetItemSet = NULL;
-
     pLastHlink = NULL;
 
     pIR = NULL;
@@ -157,7 +157,6 @@ RootData::~RootData()
 {
     delete pExtSheetBuff;
     delete pTabNameBuff;
-    delete pRNameBuff;
     delete pShrfmlaBuff;
     delete pExtNameBuff;
 
@@ -170,6 +169,11 @@ RootData::~RootData()
         delete pImpPivotCacheList;
     if( pPivotCacheList )
         delete pPivotCacheList;
+
+    delete pAutoFilterBuffer;
+    delete pPrintRanges;
+    delete pPrintTitles;
+
 
     if( pLastHlink )
         delete pLastHlink;
@@ -520,6 +524,12 @@ void ExcScenario::Apply( ScDocument& r, const BOOL bLast )
 
     if( bLast )
         r.SetActiveScenario( nNewTab, TRUE );
+
+    // #111896# modify what the Active tab is set to if the new
+    // scenario tab occurs before the active tab.
+    ScExtDocOptions* pExtDocOptions = r.GetExtDocOptions();
+    if(pExtDocOptions && nTab < pExtDocOptions->nActTab)
+        pExtDocOptions->SetActTab((pExtDocOptions->nActTab) + 1);
 }
 
 
