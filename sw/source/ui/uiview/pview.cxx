@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 10:13:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,14 +259,15 @@ USHORT lcl_GetNextZoomStep(USHORT nCurrentZoom, BOOL bZoomIn)
     {
         25, 50, 75, 100, 150, 200, 400, 600
     };
+    const sal_uInt16 nZoomArrSize = sizeof(aZoomArr)/sizeof(USHORT);
     if(bZoomIn)
-        for(USHORT i = sizeof(aZoomArr) / sizeof(USHORT); i >= 0 ; i--)
+        for(USHORT i = nZoomArrSize-1; i >= 0 ; --i)
         {
             if(nCurrentZoom > aZoomArr[i] || !i)
                 return aZoomArr[i];
         }
     else
-        for(USHORT i = 0; i < sizeof(aZoomArr) / sizeof(USHORT); i++)
+        for(USHORT i = 0; i < nZoomArrSize; ++i)
         {
             if(nCurrentZoom < aZoomArr[i])
                 return aZoomArr[i];
@@ -853,7 +854,8 @@ SwPagePreViewWin::SwPagePreViewWin( Window *pParent, SwPagePreView& rPView )
     const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(FALSE);
     mnRow = pUsrPref->GetPagePrevRow();     // 1 Zeile
     mnCol = pUsrPref->GetPagePrevCol();     // 1 Spalte
-    mnVirtPage = mnSttPage = USHRT_MAX;
+    // OD 24.03.2003 #108282# - member <mnVirtPage> no longer exists.
+    mnSttPage = USHRT_MAX;
 }
 
 /*--------------------------------------------------------------------
@@ -886,8 +888,7 @@ void  SwPagePreViewWin::Paint( const Rectangle& rRect )
 
         Rectangle aRect( LogicToPixel( rRect ));
         mpPgPrevwLayout->Prepare( 1, Point(0,0), maPxWinSize,
-                                  mnSttPage, mnVirtPage,
-                                  maPaintedPreviewDocRect );
+                                  mnSttPage, maPaintedPreviewDocRect );
         SetSelectedPage( 1 );
         mpPgPrevwLayout->Paint( PixelToLogic( aRect ) );
         SetPagePreview(mnRow, mnCol);
@@ -922,7 +923,7 @@ void SwPagePreViewWin::CalcWish( BYTE nNewRow, BYTE nNewCol )
 
     mpPgPrevwLayout->Init( mnCol, mnRow, maPxWinSize, true );
     mpPgPrevwLayout->Prepare( mnSttPage, Point(0,0), maPxWinSize,
-                              mnSttPage, mnVirtPage, maPaintedPreviewDocRect );
+                              mnSttPage, maPaintedPreviewDocRect );
     SetSelectedPage( mnSttPage );
     SetPagePreview(mnRow, mnCol);
     maScale = GetMapMode().GetScaleX();
@@ -933,12 +934,13 @@ void SwPagePreViewWin::CalcWish( BYTE nNewRow, BYTE nNewCol )
         mrView.ScrollDocSzChg();
 
     // Sortierung muss eingehalten werden!!
+    // OD 24.03.2003 #108282# - additional invalidate page status.
     static USHORT __READONLY_DATA aInval[] =
     {
         SID_ATTR_ZOOM, SID_ZOOM_OUT, SID_ZOOM_IN,
         FN_PREVIEW_ZOOM,
         FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
-        FN_STAT_ZOOM,
+        FN_STAT_PAGE, FN_STAT_ZOOM,
         FN_SHOW_TWO_PAGES, FN_SHOW_MULTIPLE_PAGES,
         0
     };
@@ -1026,7 +1028,7 @@ int SwPagePreViewWin::MovePage( int eMoveMode )
     }
 
     mpPgPrevwLayout->Prepare( nNewSttPage, Point(0,0), maPxWinSize,
-                              nNewSttPage, mnVirtPage,
+                              nNewSttPage,
                               maPaintedPreviewDocRect, bPaintPageAtFirstCol );
     if( nNewSttPage == mnSttPage &&
         eMoveMode != MV_SELPAGE )
@@ -1035,9 +1037,11 @@ int SwPagePreViewWin::MovePage( int eMoveMode )
     SetPagePreview(mnRow, mnCol);
     mnSttPage = nNewSttPage;
 
+    // OD 24.03.2003 #108282# - additional invalidate page status.
     static USHORT __READONLY_DATA aInval[] =
     {
-        FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN, 0
+        FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
+        FN_STAT_PAGE, 0
     };
 
     SfxBindings& rBindings = mrView.GetViewFrame()->GetBindings();
@@ -1069,7 +1073,7 @@ void SwPagePreViewWin::SetWinSize( const Size& rNewSize )
         maScale = GetMapMode().GetScaleX();
     }
     mpPgPrevwLayout->Prepare( mnSttPage, Point(0,0), maPxWinSize,
-                              mnSttPage, mnVirtPage, maPaintedPreviewDocRect );
+                              mnSttPage, maPaintedPreviewDocRect );
     if ( mbCalcScaleForPreviewLayout )
     {
         SetSelectedPage( mnSttPage );
@@ -1087,14 +1091,24 @@ void SwPagePreViewWin::SetWinSize( const Size& rNewSize )
 
 void SwPagePreViewWin::GetStatusStr( String& rStr, USHORT nPageCnt ) const
 {
-    // Logische Seite gegebenenfalls davor haengen
-    USHORT nStt = mnSttPage > 1 ? mnSttPage : 1;
-    if( mnVirtPage && mnVirtPage != nStt )
+    // OD 24.03.2003 #108282# - show physical and virtual page number of
+    // selected page, if it's visible.
+    sal_uInt16 nPageNum;
+    if ( mpPgPrevwLayout->IsPageVisible( mpPgPrevwLayout->SelectedPage() ) )
     {
-        rStr += String::CreateFromInt32( mnVirtPage );
+        nPageNum = mpPgPrevwLayout->SelectedPage();
+    }
+    else
+    {
+        nPageNum = mnSttPage > 1 ? mnSttPage : 1;
+    }
+    sal_uInt16 nVirtPageNum = mpPgPrevwLayout->GetVirtPageNumByPageNum( nPageNum );
+    if( nVirtPageNum && nVirtPageNum != nPageNum )
+    {
+        rStr += String::CreateFromInt32( nVirtPageNum );
         rStr += ' ';
     }
-    rStr += String::CreateFromInt32( nStt );
+    rStr += String::CreateFromInt32( nPageNum );
     rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM(" / "));
     rStr += String::CreateFromInt32( nPageCnt );
 }
@@ -1192,6 +1206,13 @@ void SwPagePreViewWin::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 mrView.SetVScrollbarThumbPos( nNewSelectedPage );
             }
+            // OD 24.03.2003 #108282# - invalidate page status.
+            static USHORT __READONLY_DATA aInval[] =
+            {
+                FN_STAT_PAGE, 0
+            };
+            SfxBindings& rBindings = mrView.GetViewFrame()->GetBindings();
+            rBindings.Invalidate( aInval );
     }
 }
 
@@ -1327,9 +1348,11 @@ void SwPagePreView::_ExecPgUpAndPgDown( const bool  _bPgUp,
                 aViewWin.SetSelectedPage( nNewSelectedPageNum );
             }
             ScrollViewSzChg();
+            // OD 24.03.2003 #108282# - additional invalidate page status.
             static USHORT __READONLY_DATA aInval[] =
             {
-                FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN, 0
+                FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
+                FN_STAT_PAGE, 0
             };
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
             rBindings.Invalidate( aInval );
@@ -1478,6 +1501,13 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
                     bRefresh = 0 != nRet;
                 }
                 GetViewShell()->ShowPreViewSelection( nNewSelectedPage );
+                // OD 24.03.2003 #108282# - invalidate page status.
+                static USHORT __READONLY_DATA aInval[] =
+                {
+                    FN_STAT_PAGE, 0
+                };
+                SfxBindings& rBindings = GetViewFrame()->GetBindings();
+                rBindings.Invalidate( aInval );
                 rReq.Done();
             }
             break;
@@ -2250,9 +2280,11 @@ IMPL_LINK( SwPagePreView, EndScrollHdl, SwScrollbar *, pScrollbar )
         long nThmbPos = pScrollbar->GetThumbPos();
         aViewWin.Scroll(nThmbPos - aViewWin.GetPaintedPreviewDocRect().Left(), 0);
     }
+    // OD 24.03.2003 #108282# - additional invalidate page status.
     static USHORT __READONLY_DATA aInval[] =
     {
-        FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN, 0
+        FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
+        FN_STAT_PAGE, 0
     };
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
     rBindings.Invalidate( aInval );
@@ -2622,7 +2654,7 @@ void SwPagePreViewWin::AdjustPreviewToNewZoom( const sal_uInt16 nZoomFactor)
     //          due to property changes.
     maScale = aNewScale;
     mpPgPrevwLayout->Prepare( 0, aNewPaintStartPos, maPxWinSize,
-                              mnSttPage, mnVirtPage, maPaintedPreviewDocRect );
+                              mnSttPage, maPaintedPreviewDocRect );
 
 }
 /* -----------------04.12.2002 10:46-----------------
@@ -2634,7 +2666,7 @@ void SwPagePreViewWin::Scroll(long nXMove, long nYMove)
 {
     maPaintedPreviewDocRect.Move(nXMove, nYMove);
     mpPgPrevwLayout->Prepare( 0, maPaintedPreviewDocRect.TopLeft(),
-                              maPxWinSize, mnSttPage, mnVirtPage,
+                              maPxWinSize, mnSttPage,
                               maPaintedPreviewDocRect );
 
 }
