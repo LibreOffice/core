@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:23:05 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 09:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -923,7 +923,7 @@ SfxConfigManager* SfxObjectShell::GetConfigManager( BOOL bForceCreation )
 {
     if ( !pImp->pCfgMgr )
     {
-        if ( bForceCreation || HasName() && SfxConfigManager::HasConfiguration( *GetStorage() ) )
+        if ( bForceCreation || HasStorage() && SfxConfigManager::HasConfiguration( *GetStorage() ) )
         {
             pImp->pCfgMgr = new SfxConfigManager( *this );
             SfxConfigItem* pItem = GetEventConfig_Impl( FALSE );
