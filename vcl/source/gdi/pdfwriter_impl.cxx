@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-12 12:18:46 $
+ *  last change: $Author: pl $ $Date: 2002-09-12 16:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
     aLine.append( " 0 R\r\n" );
     if( m_nPageWidth && m_nPageHeight )
     {
-        aLine.append( "  /MediaBox [ 0 0 " );
+        aLine.append( "   /MediaBox [ 0 0 " );
         aLine.append( m_nPageWidth );
         aLine.append( ' ' );
         aLine.append( m_nPageHeight );
@@ -2414,7 +2414,7 @@ void PDFWriterImpl::drawText( const Point& rPos, const String& rText, xub_StrLen
     SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, nIndex, nLen, rPos );
     if( pLayout )
     {
-        drawLayout( *pLayout, rText.Copy( nIndex, nLen ) );
+        drawLayout( *pLayout, rText );
         pLayout->Release();
     }
 }
@@ -2430,7 +2430,7 @@ void PDFWriterImpl::drawTextArray( const Point& rPos, const String& rText, const
     SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, nIndex, nLen, rPos, 0, pDXArray );
     if( pLayout )
     {
-        drawLayout( *pLayout, rText.Copy( nIndex, nLen ) );
+        drawLayout( *pLayout, rText );
         pLayout->Release();
     }
 }
@@ -2446,7 +2446,7 @@ void PDFWriterImpl::drawStretchText( const Point& rPos, ULONG nWidth, const Stri
     SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, nIndex, nLen, rPos, nWidth );
     if( pLayout )
     {
-        drawLayout( *pLayout, rText.Copy( nIndex, nLen ) );
+        drawLayout( *pLayout, rText );
         pLayout->Release();
     }
 }
@@ -3773,14 +3773,14 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
 
     Bitmap  aBitmap;
     Color   aTransparentColor( COL_TRANSPARENT );
-    bool    bDrawMask = false;
+    bool    bWriteMask = false;
     if( ! bMask )
     {
         aBitmap = rObject.m_aBitmap.GetBitmap();
         if( rObject.m_aBitmap.IsAlpha() )
         {
             if( m_eVersion >= PDFWriter::PDF_1_4 )
-                bDrawMask = true;
+                bWriteMask = true;
             // else draw without alpha channel
         }
         else
@@ -3788,16 +3788,15 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             switch( rObject.m_aBitmap.GetTransparentType() )
             {
                 case TRANSPARENT_NONE:
-                    // comes from drawMask
-                    if( aBitmap.GetBitCount() == 1 &&
-                        rObject.m_aBitmap.GetTransparentColor() == Color(COL_BLACK) )
+                    // comes from drawMask function
+                    if( aBitmap.GetBitCount() == 1 && rObject.m_bDrawMask )
                         bMask = true;
                     break;
                 case TRANSPARENT_COLOR:
                     aTransparentColor = rObject.m_aBitmap.GetTransparentColor();
                     break;
                 case TRANSPARENT_BITMAP:
-                    bDrawMask = true;
+                    bWriteMask = true;
                     break;
             }
         }
@@ -3906,7 +3905,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
 
     if( ! bMask && m_eVersion > PDFWriter::PDF_1_2 )
     {
-        if( bDrawMask )
+        if( bWriteMask )
         {
             nMaskObject = createObject();
             if( rObject.m_aBitmap.IsAlpha() && m_eVersion > PDFWriter::PDF_1_3 )
@@ -4082,7 +4081,7 @@ void PDFWriterImpl::drawMask( const Point& rDestPoint, const Size& rDestSize, co
     m_aBitmaps.push_back( BitmapEmit() );
     m_aBitmaps.back().m_nObject             = createObject();
     m_aBitmaps.back().m_aBitmap             = aBitmap;
-    m_aBitmaps.back().m_aBitmap.SetTransparentColor( Color( COL_BLACK ) );
+    m_aBitmaps.back().m_bDrawMask           = true;
 
     drawBitmap( rDestPoint, rDestSize, m_aBitmaps.back(), rFillColor );
 }

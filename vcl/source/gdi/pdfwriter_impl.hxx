@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-11 14:59:26 $
+ *  last change: $Author: pl $ $Date: 2002-09-12 16:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,9 @@ public:
     {
         BitmapEx    m_aBitmap;
         sal_Int32   m_nObject;
+        bool        m_bDrawMask;
+
+        BitmapEmit() : m_bDrawMask( false ) {}
     };
 
     struct JPGEmit
