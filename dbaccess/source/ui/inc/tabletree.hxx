@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 14:10:59 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 08:20:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XDRIVER_HPP_
+#include <com/sun/star/sdbc/XDriver.hpp>
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -111,13 +114,22 @@ public:
         The given URL is used to obtain a <type scope="com.sun.star.sdbc">Driver</type> object which can
         handle it. After this, the driver is asked (<type scope="com.sun.star.sdbcx">XDataDefinitionSupplier</type>)
         for a <type scope="com.sun.star.sdbcx">DatabaseDefinition</type> object for the connection.
-        @return     the connection which was created for the given URL and the given params.
-        @throws     <type scope="com::sun::star::sdbc">SQLException</type> if no connection could be created
+        @param _rConnectionURL
+            the connection URL
+        @param _rProperties
+            additional properties for creating the connection
+        @param _rxCreator
+            will, upon return, contain the XDriver which was used to create the connection
+        @return
+            the connection which was created for the given URL and the given params.
+        @throws
+            <type scope="com::sun::star::sdbc">SQLException</type> if no connection could be created
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
             UpdateTableList(
                 const   ::rtl::OUString& _rConnectionURL,
-                const   ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > _rProperties
+                const   ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > _rProperties,
+                        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _rxCreator
             )   throw(::com::sun::star::sdbc::SQLException);
 
     /** fill the table list with the tables and views determined by the two given containers
@@ -189,6 +201,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/08/14 14:10:59  fs
+ *  #86945# removed the tables container parameter from UpdateTableList
+ *
  *  Revision 1.6  2001/08/14 12:00:23  fs
  *  preparations for #86945#
  *

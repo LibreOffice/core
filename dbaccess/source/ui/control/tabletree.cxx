@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 14:13:33 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 08:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,11 +198,12 @@ void OTableTreeListBox::Command( const CommandEvent& rEvt )
 }
 
 //------------------------------------------------------------------------
-Reference< XConnection > OTableTreeListBox::UpdateTableList(
-        const ::rtl::OUString& _rConnectionURL, const Sequence< PropertyValue > _rProperties) throw(SQLException)
+Reference< XConnection > OTableTreeListBox::UpdateTableList( const ::rtl::OUString& _rConnectionURL,
+    const Sequence< PropertyValue > _rProperties, Reference< XDriver >& _rxCreator ) throw(SQLException)
 {
     Reference< XDatabaseMetaData > xMetaData;
     Reference< XConnection > xConnection;
+    _rxCreator.clear();
 
     Sequence< ::rtl::OUString > sTables, sViews;
     DBG_ASSERT(m_xORB.is(), "OTableTreeListBox::UpdateTableList : please use setServiceFactory to give me a service factory !");
@@ -234,14 +235,14 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(
 
 
             sCurrentActionError = String(ModuleRes(STR_NOREGISTEREDDRIVER));
-            Reference< XDriver > xDriver = xDriverManager->getDriverByURL(_rConnectionURL);
-            if (!xDriver.is())
+            _rxCreator = xDriverManager->getDriverByURL(_rConnectionURL);
+            if (!_rxCreator.is())
                 // will be caught and translated into an SQLContext exception
                 throw Exception();
 
             sCurrentActionError = String(ModuleRes(STR_COULDNOTCONNECT));
             sCurrentActionDetails = String(ModuleRes(STR_COULDNOTCONNECT_PLEASECHECK));
-            xConnection = xDriver->connect(_rConnectionURL, _rProperties);
+            xConnection = _rxCreator->connect(_rConnectionURL, _rProperties);
                 // exceptions thrown by connect will be caught and re-routed
             DBG_ASSERT(xConnection.is(), "OTableTreeListBox::UpdateTableList : got an invalid connection!");
                 // if no exception was thrown, the connection should be no-NULL)
@@ -251,8 +252,7 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(
             xMetaData = xConnection->getMetaData();
 
             // get the (very necessary) interface XDataDefinitionSupplier
-            Reference< XDataDefinitionSupplier > xDefinitionAccess;
-            xDefinitionAccess = Reference< XDataDefinitionSupplier >(xDriver, UNO_QUERY);
+            Reference< XDataDefinitionSupplier > xDefinitionAccess(_rxCreator, UNO_QUERY);
             if (!xDefinitionAccess.is())
             {
                 // okay, the driver's programmer was lazy :)
@@ -601,6 +601,9 @@ void OTableTreeListBox::removedTable( const Reference< XConnection >& _rxConn, c
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/08/14 14:13:33  fs
+ *  #86945# removed the tables container parameter from UpdateTableList
+ *
  *  Revision 1.17  2001/08/14 12:13:53  fs
  *  preparations for #86945#
  *
