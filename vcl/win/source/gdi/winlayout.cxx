@@ -3,9 +3,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hdu $ $Date: 2002-07-23 08:06:43 $
+ *  last change: $Author: hdu $ $Date: 2002-07-26 11:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ private:
     int*            mpGlyphAdvances;
     UINT*           mpChars2Glyphs;
     UINT*           mpGlyphs2Chars;
+    int             mnNotdefWidth;
     long            mnWidth;
 };
 
@@ -145,6 +146,7 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs,
     mpGlyphAdvances( NULL ),
     mpChars2Glyphs( NULL ),
     mpGlyphs2Chars( NULL ),
+    mnNotdefWidth( -1 ),
     mnWidth( 0 )
 {}
 
@@ -184,7 +186,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     else
         aGCP.lpOutString = mpOutGlyphs;
 
-    DWORD nGcpOption = 0;//###GCP_DISPLAYZWG;
+    DWORD nGcpOption = 0;   // TODO: decide if GCP_DISPLAYZWG
     // enable kerning if requested
     if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
         nGcpOption |= GCP_USEKERNING;
@@ -201,8 +203,6 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         pGcpClass = new char[nMaxGlyphCount];
         pGcpClass[0] = (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) ?
             GCPCLASS_PREBOUNDLTR : GCPCLASS_PREBOUNDRTL;
-        for( int i = 0; i < nMaxGlyphCount; ++i )
-            pGcpClass[i] = pGcpClass[0];
         nGcpOption  |= (GCP_REORDER | GCP_CLASSIN);
         aGCP.lpClass = pGcpClass;
     }
@@ -217,12 +217,12 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     {
         // convert into ANSI code page
         UINT nACP = GetACP();
-        int nMBLen = WideCharToMultiByte( nACP, 0, rArgs.mpStr + rArgs.mnFirstCharIndex,
+        int nMBLen = ::WideCharToMultiByte( nACP, 0, rArgs.mpStr + rArgs.mnFirstCharIndex,
             nMaxGlyphCount, NULL, 0, NULL, NULL );
         if( (nMBLen <= 0) || (nMBLen >= 8 * nMaxGlyphCount) )
             return false;
         char* pMBStr = (char*)alloca( nMBLen+1 );
-        WideCharToMultiByte( nACP, 0, rArgs.mpStr + rArgs.mnFirstCharIndex,
+        ::WideCharToMultiByte( nACP, 0, rArgs.mpStr + rArgs.mnFirstCharIndex,
             nMaxGlyphCount, pMBStr, nMBLen, NULL, NULL );
         // note: because aGCP.lpOutString==NULL GCP_RESULTSA is compatible with GCP_RESULTSW
         nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
@@ -236,6 +236,24 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
 
     if( !nRC )
         return false;
+
+    // #101097# fixup display of notdef glyphs
+    // TODO: is there a way to convince Win32(incl W95) API to use notdef directly?
+    for( int i = 0; i < nMaxGlyphCount; ++i )
+    {
+        if( !mpGlyphAdvances[i] && (!aGCP.lpGlyphs || (mpOutGlyphs[i] == 3)) )
+        {
+            if( mnNotdefWidth < 0 )
+            {
+                SIZE aExtent;
+                char c = 0;
+                mnNotdefWidth = GetTextExtentPoint32A(mhDC,&c,1,&aExtent) ? aExtent.cx : 0;
+            }
+            mpOutGlyphs[i] = 0;
+            mpGlyphAdvances[i] = mnNotdefWidth;
+            mnWidth += mnNotdefWidth;
+        }
+    }
 
     // fixup strong RTL layout by reversing glyph order
     // TODO: mirror glyphs
@@ -351,9 +369,11 @@ void SimpleWinLayout::Draw() const
 #ifndef DEBUG_GETNEXTGLYPHS
     Point aPos = GetDrawPosition();
 
-    static const char* pEnv = getenv("SAL_RTL_ENABLED" );
+/* TODO: remove
+    static const char* pEnv = getenv( "SAL_RTL_ENABLED" );
     if( pEnv )  // HACK for Bidi-Testing
         aPos.X() = aPos.X() - mnWidth;
+*/
 
     ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
         mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
@@ -1367,14 +1387,8 @@ SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs )
         // #99019# don't use glyph indices for non-TT fonts
         // also for printer, because the drivers often transparently replace TTs with PS fonts
         // TODO: use a cached value from SetFont
-        bool bEnableGlyphs = (maGraphicsData.mbPrinter == FALSE);
-        if( bEnableGlyphs )
-        {
-            TEXTMETRICA aTextMetric;
-            BOOL nRC = ::GetTextMetricsA( maGraphicsData.mhDC, &aTextMetric );
-            bEnableGlyphs = (nRC != 0) &&((aTextMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0);
-        }
-
+        DWORD nFLI = GetFontLanguageInfo( maGraphicsData.mhDC );
+        bool bEnableGlyphs = ((nFLI & FLI_GLYPHS) != 0);
         pWinLayout = new SimpleWinLayout( maGraphicsData.mhDC, rArgs, bEnableGlyphs );
     }
 
