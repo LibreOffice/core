@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:03:12 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,12 @@
 
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
+#include <com/sun/star/util/Date.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
+#include <com/sun/star/util/Time.hpp>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -2121,3 +2127,175 @@ OUString SvXMLUnitConverter::encodeStyleName(
     return aBuffer.makeStringAndClear();
 }
 
+sal_Bool SvXMLUnitConverter::convertAny(      ::rtl::OUStringBuffer&    sValue,
+                                              ::rtl::OUStringBuffer&    sType ,
+                                        const com::sun::star::uno::Any& aValue)
+{
+    sal_Bool bConverted = sal_False;
+
+    sValue.setLength(0);
+    sType.setLength (0);
+
+    switch(aValue.getValueTypeClass())
+    {
+        case com::sun::star::uno::TypeClass_BYTE :
+        case com::sun::star::uno::TypeClass_SHORT :
+        case com::sun::star::uno::TypeClass_UNSIGNED_SHORT :
+        case com::sun::star::uno::TypeClass_LONG :
+        case com::sun::star::uno::TypeClass_UNSIGNED_LONG :
+            {
+                sal_Int32 nTempValue = 0;
+                if (aValue >>= nTempValue)
+                {
+                    sType.appendAscii("integer");
+                    bConverted = sal_True;
+                    SvXMLUnitConverter::convertNumber(sValue, nTempValue);
+                }
+            }
+            break;
+
+        case com::sun::star::uno::TypeClass_BOOLEAN :
+            {
+                sal_Bool bTempValue = sal_False;
+                if (aValue >>= bTempValue)
+                {
+                    sType.appendAscii("boolean");
+                    bConverted = sal_True;
+                    SvXMLUnitConverter::convertBool(sValue, bTempValue);
+                }
+            }
+            break;
+
+        case com::sun::star::uno::TypeClass_FLOAT :
+        case com::sun::star::uno::TypeClass_DOUBLE :
+            {
+                double fTempValue = 0.0;
+                if (aValue >>= fTempValue)
+                {
+                    sType.appendAscii("float");
+                    bConverted = sal_True;
+                    SvXMLUnitConverter::convertDouble(sValue, fTempValue);
+                }
+            }
+            break;
+
+        case com::sun::star::uno::TypeClass_STRING :
+            {
+                ::rtl::OUString sTempValue;
+                if (aValue >>= sTempValue)
+                {
+                    sType.appendAscii("string");
+                    bConverted = sal_True;
+                    sValue.append(sTempValue);
+                }
+            }
+            break;
+
+        case com::sun::star::uno::TypeClass_STRUCT :
+            {
+                com::sun::star::util::Date     aDate    ;
+                com::sun::star::util::Time     aTime    ;
+                com::sun::star::util::DateTime aDateTime;
+
+                if (aValue >>= aDate)
+                {
+                    sType.appendAscii("date");
+                    bConverted = sal_True;
+                    com::sun::star::util::DateTime aTempValue;
+                    aTempValue.Day              = aDate.Day;
+                    aTempValue.Month            = aDate.Month;
+                    aTempValue.Year             = aDate.Year;
+                    aTempValue.HundredthSeconds = 0;
+                    aTempValue.Seconds          = 0;
+                    aTempValue.Minutes          = 0;
+                    aTempValue.Hours            = 0;
+                    SvXMLUnitConverter::convertDateTime(sValue, aTempValue);
+                }
+                else
+                if (aValue >>= aTime)
+                {
+                    sType.appendAscii("time");
+                    bConverted = sal_True;
+                    com::sun::star::util::DateTime aTempValue;
+                    aTempValue.Day              = 0;
+                    aTempValue.Month            = 0;
+                    aTempValue.Year             = 0;
+                    aTempValue.HundredthSeconds = aTime.HundredthSeconds;
+                    aTempValue.Seconds          = aTime.Seconds;
+                    aTempValue.Minutes          = aTime.Minutes;
+                    aTempValue.Hours            = aTime.Hours;
+                    SvXMLUnitConverter::convertTime(sValue, aTempValue);
+                }
+                else
+                if (aValue >>= aDateTime)
+                {
+                    sType.appendAscii("date");
+                    bConverted = sal_True;
+                    SvXMLUnitConverter::convertDateTime(sValue, aDateTime);
+                }
+            }
+            break;
+    }
+
+    return bConverted;
+}
+
+sal_Bool SvXMLUnitConverter::convertAny(      com::sun::star::uno::Any& aValue,
+                                        const ::rtl::OUString&          sType ,
+                                        const ::rtl::OUString&          sValue)
+{
+    sal_Bool bConverted = sal_False;
+
+    if (sType.equalsAscii("boolean"))
+    {
+        sal_Bool bTempValue = sal_False;
+        SvXMLUnitConverter::convertBool(bTempValue, sValue);
+        aValue <<= bTempValue;
+        bConverted = sal_True;
+    }
+    else
+    if (sType.equalsAscii("integer"))
+    {
+        sal_Int32 nTempValue = 0;
+        SvXMLUnitConverter::convertNumber(nTempValue, sValue);
+        aValue <<= nTempValue;
+        bConverted = sal_True;
+    }
+    else
+    if (sType.equalsAscii("float"))
+    {
+        double fTempValue = 0.0;
+        SvXMLUnitConverter::convertDouble(fTempValue, sValue);
+        aValue <<= fTempValue;
+        bConverted = sal_True;
+    }
+    else
+    if (sType.equalsAscii("string"))
+    {
+        aValue <<= sValue;
+        bConverted = sal_True;
+    }
+    else
+    if (sType.equalsAscii("date"))
+    {
+        com::sun::star::util::DateTime aTempValue;
+        SvXMLUnitConverter::convertDateTime(aTempValue, sValue);
+        aValue <<= aTempValue;
+        bConverted = sal_True;
+    }
+    else
+    if (sType.equalsAscii("time"))
+    {
+        com::sun::star::util::DateTime aTempValue;
+        com::sun::star::util::Time     aConvValue;
+        SvXMLUnitConverter::convertTime(aTempValue, sValue);
+        aConvValue.HundredthSeconds = aTempValue.HundredthSeconds;
+        aConvValue.Seconds          = aTempValue.Seconds;
+        aConvValue.Minutes          = aTempValue.Minutes;
+        aConvValue.Hours            = aTempValue.Hours;
+        aValue <<= aConvValue;
+        bConverted = sal_True;
+    }
+
+    return bConverted;
+}
