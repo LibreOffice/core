@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-12 18:52:54 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 09:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,7 +447,7 @@ Reference< XSingleServiceFactory > SAL_CALL loadSharedLibComponentFactory(
             OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
             Mapping aUno2Cpp( aUnoEnvTypeName, aCppEnvTypeName );
             Mapping aCpp2Uno( aCppEnvTypeName, aUnoEnvTypeName );
-            OSL_ENSHURE( aUno2Cpp.is() && aCpp2Uno.is(), "### cannot get uno mappings!" );
+            OSL_ENSURE( aUno2Cpp.is() && aCpp2Uno.is(), "### cannot get uno mappings!" );
 
             if (aUno2Cpp.is() && aCpp2Uno.is())
             {
