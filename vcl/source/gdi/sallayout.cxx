@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-20 13:58:12 $
+ *  last change: $Author: hdu $ $Date: 2002-11-21 14:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,9 @@
 
 #include <limits.h>
 #include <unicode/ubidi.h>
+#include <unicode/uchar.h>
 
-// -----------------------------------------------------------------------
+// =======================================================================
 
 int GetVerticalFlags( sal_Unicode nChar )
 {
@@ -115,13 +116,61 @@ int GetVerticalFlags( sal_Unicode nChar )
         ||  nChar == 0xFF3B || nChar == 0xFF3D
         || (nChar >= 0xFF5B && nChar <= 0xFF9F) // halfwidth forms
         ||  nChar == 0xFFE3 )
-            return GF_NONE;   // not rotated
+            return GF_NONE; // not rotated
         else if( nChar == 0x30fc )
-            return GF_ROTR;  // right
-        return GF_ROTL;      // left
+            return GF_ROTR; // right
+        return GF_ROTL;     // left
     }
 
     return GF_NONE;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Unicode GetVerticalChar( sal_Unicode nChar )
+{
+    int nVert = 0;
+    switch( nChar )
+    {
+        // CJK compatibility forms
+        case 0x2025: nVert = 0xFE30; break;
+        case 0x2014: nVert = 0xFE31; break;
+        case 0x2013: nVert = 0xFE32; break;
+        case 0x005F: nVert = 0xFE33; break;
+        case 0x0028: nVert = 0xFE35; break;
+        case 0x0029: nVert = 0xFE36; break;
+        case 0x007B: nVert = 0xFE37; break;
+        case 0x007D: nVert = 0xFE38; break;
+        case 0x3014: nVert = 0xFE39; break;
+        case 0x3015: nVert = 0xFE3A; break;
+        case 0x3010: nVert = 0xFE3B; break;
+        case 0x3011: nVert = 0xFE3C; break;
+        case 0x300A: nVert = 0xFE3D; break;
+        case 0x300B: nVert = 0xFE3E; break;
+        case 0x3008: nVert = 0xFE3F; break;
+        case 0x3009: nVert = 0xFE40; break;
+        case 0x300C: nVert = 0xFE41; break;
+        case 0x300D: nVert = 0xFE42; break;
+        case 0x300E: nVert = 0xFE43; break;
+        case 0x300F: nVert = 0xFE44; break;
+        // #104627# special treatment for some unicodes
+        case 0x002C: nVert = 0x3001; break;
+        case 0x002E: nVert = 0x3002; break;
+        case 0x2018: nVert = 0xFE41; break;
+        case 0x2019: nVert = 0xFE42; break;
+        case 0x201C: nVert = 0xFE43; break;
+        case 0x201D: nVert = 0xFE44; break;
+    }
+
+    return nVert;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Unicode GetMirroredChar( sal_Unicode nChar )
+{
+    nChar = u_charMirror( nChar );
+    return nChar;
 }
 
 // =======================================================================
@@ -175,7 +224,7 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
         ubidi_setLine( pParaBidi, mnMinCharPos, mnEndCharPos, pLineBidi, &rcI18n );
     }
 
-    // do Bidi analysis if necessary
+    // do BiDi analysis if necessary
     int nRunCount = ubidi_countRuns( pLineBidi, &rcI18n );
     maRuns.resize( 2 * nRunCount );
     for( int i = 0; i < nRunCount; ++i )
@@ -188,13 +237,13 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
         maRuns[ j ] += nLength;
     }
 
-    mnRunIndex = 0;
-    mnCurCharPos = maRuns[ 0 ];
-
-    // cleanup Bidi engine
+    // cleanup BiDi engine
     if( pLineBidi != pParaBidi )
         ubidi_close( pLineBidi );
     ubidi_close( pParaBidi );
+
+    // prepare calls to GetNextPos/GetNextRun
+    ResetPos();
 }
 
 // -----------------------------------------------------------------------
@@ -205,8 +254,8 @@ bool ImplLayoutArgs::GetNextPos( int* nCharPos, bool* bRightToLeft )
         return false;
 
     // update position in run
-    int nEndRunPos = maRuns[ mnRunIndex+1 ];
-    bool bRTL = (mnCurCharPos > nEndRunPos );
+    int nRunPos1 = maRuns[ mnRunIndex+1 ];
+    bool bRTL = (mnCurCharPos > nRunPos1 );
     *bRightToLeft = bRTL;
     if( bRTL )
         *nCharPos = --mnCurCharPos;
@@ -214,7 +263,7 @@ bool ImplLayoutArgs::GetNextPos( int* nCharPos, bool* bRightToLeft )
         *nCharPos = mnCurCharPos++;
 
     // drop processed runs
-    if( mnCurCharPos == nEndRunPos )
+    if( mnCurCharPos == nRunPos1 )
         if( (mnRunIndex += 2) < maRuns.size() )
             mnCurCharPos = maRuns[ mnRunIndex ];
 
@@ -228,21 +277,21 @@ bool ImplLayoutArgs::GetNextRun( int* nMinRunPos, int* nEndRunPos, bool* bRightT
     if( mnRunIndex >= maRuns.size() )
         return false;
 
-    int nMin = maRuns[ mnRunIndex+0 ];
-    int nEnd = maRuns[ mnRunIndex+1 ];
+    int nRunPos0 = maRuns[ mnRunIndex+0 ];
+    int nRunPos1 = maRuns[ mnRunIndex+1 ];
     if( (mnRunIndex += 2) < maRuns.size() )
         mnCurCharPos = maRuns[ mnRunIndex ];
-    if( nMin < nEnd )
+    if( nRunPos0 < nRunPos1 )
     {
         *bRightToLeft = false;
-        *nMinRunPos = nMin;
-        *nEndRunPos = nEnd;
+        *nMinRunPos = nRunPos0;
+        *nEndRunPos = nRunPos1;
     }
     else
     {
         *bRightToLeft = true;
-        *nMinRunPos = nEnd;
-        *nEndRunPos = nMin;
+        *nMinRunPos = nRunPos1;
+        *nEndRunPos = nRunPos0;
     }
 
     return true;
@@ -257,7 +306,7 @@ void ImplLayoutArgs::NeedFallback( int nCharPos, bool bRTL )
     if( --nIndex > 0 )
     {
         int nLastPos = maReruns[ nIndex ];
-        if( nCharPos + bRTL == nLastPos )
+        if( (nCharPos + bRTL) == nLastPos )
         {
             // merge with current run
             maReruns[ nIndex ] = nCharPos + !bRTL;
@@ -272,11 +321,19 @@ void ImplLayoutArgs::NeedFallback( int nCharPos, bool bRTL )
 
 // -----------------------------------------------------------------------
 
-void ImplLayoutArgs::NeedFallback( int nMinCharPos, int nEndCharPos, bool bRTL )
+void ImplLayoutArgs::NeedFallback( int nCharPos0, int nCharPos1, bool bRTL )
 {
+    // swap if needed
+    if( (nCharPos0 < nCharPos1) ^ bRTL )
+    {
+        int nTemp = nCharPos0;
+        nCharPos0 = nCharPos1;
+        nCharPos1 = nTemp;
+    }
+
     // append new run
-    maReruns.push_back( nMinCharPos );
-    maReruns.push_back( nEndCharPos );
+    maReruns.push_back( nCharPos0 );
+    maReruns.push_back( nCharPos1 );
 }
 
 // -----------------------------------------------------------------------
@@ -289,17 +346,8 @@ bool ImplLayoutArgs::SetFallbackArgs()
     DBG_ASSERT( !(nSize & 1), "odd ImplLayoutArgs run size" );
     maRuns = maReruns;
     maReruns.clear();
-    mnRunIndex = 0;
-    mnCurCharPos = maRuns[0];
+    ResetPos();
     return true;
-}
-
-// -----------------------------------------------------------------------
-
-void ImplLayoutArgs::ResetPos( void )
-{
-    mnRunIndex = 0;
-    mnCurCharPos = maRuns[0];
 }
 
 // =======================================================================
