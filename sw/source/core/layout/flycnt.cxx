@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-10 08:47:28 $
+ *  last change: $Author: od $ $Date: 2002-10-10 09:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,16 +441,10 @@ void SwFlyAtCntFrm::MakeAll()
             FASTBOOL bExtra = Lower() && Lower()->IsColumnFrm();
 
             do {
-#ifdef VERTICAL_LAYOUT
                 SWRECTFN( this )
                 Point aOldPos( (Frm().*fnRect->fnGetPos)() );
                 SwFlyFreeFrm::MakeAll();
                 BOOL bPosChg = aOldPos != (Frm().*fnRect->fnGetPos)();
-#else
-                Point aOldPos( Frm().Pos() );
-                SwFlyFreeFrm::MakeAll();
-                BOOL bPosChg = aOldPos != Frm().Pos();
-#endif
                 if( !bLockedAnchor )
                 {
                     if( GetAnchor()->IsInSct() )
@@ -462,11 +456,7 @@ void SwFlyAtCntFrm::MakeAll()
                     GetAnchor()->Calc();
                 }
 
-#ifdef VERTICAL_LAYOUT
                 if( aOldPos != (Frm().*fnRect->fnGetPos)() ||
-#else
-                if( aOldPos != Frm().Pos() ||
-#endif
                     ( !GetValidPosFlag() &&( pFooter || bPosChg ) ) )
                     bOsz = aOszCntrl.ChkOsz();
                 if( bExtra && Lower() && !Lower()->GetValidPosFlag() )
@@ -1093,8 +1083,6 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
 |*
 |*************************************************************************/
 
-#ifdef VERTICAL_LAYOUT
-
 void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 {
     SwPageFrm *pOldPage = FindPageFrm();
@@ -1280,125 +1268,6 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
                              FALSE );
 }
 
-#else
-
-void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
-{
-    SwPageFrm *pOldPage = FindPageFrm();
-    const SwRect aOld( AddSpacesToFrm() );
-    SwCntntFrm *pCnt = (SwCntntFrm*)::FindAnchor( GetAnchor(), rNew );
-    if( pCnt->IsProtected() )
-        pCnt = (SwCntntFrm*)GetAnchor();
-
-    Point aNew( rNew );
-    SwPageFrm *pPage = 0;
-    if ( pCnt->IsInDocBody() )
-    {
-        //#38848 Vom Seitenrand in den Body ziehen.
-        pPage = pCnt->FindPageFrm();
-        ::lcl_PointToPrt( aNew, pPage->GetUpper() );
-        SwRect aTmp( aNew, Size( 0, 0 ) );
-        pPage = (SwPageFrm*)::FindPage( aTmp, pPage );
-        ::lcl_PointToPrt( aNew, pPage );
-    }
-
-    //RelPos einstellen, nur auf Wunsch invalidieren.
-    //rNew ist eine Absolute Position. Um die RelPos korrekt einzustellen
-    //muessen wir uns die Entfernung von rNew zum Anker im Textfluss besorgen.
-//!!!!!Hier kann Optimiert werden: FindAnchor koennte die RelPos mitliefern!
-    const SwFrm *pFrm = 0;
-    SwTwips nY;
-    if ( pCnt->Frm().IsInside( aNew ) )
-        nY = rNew.Y() - pCnt->Frm().Top();
-    else
-    {
-        SwDistance aDist;
-        pFrm = ::lcl_CalcDownDist( aDist, aNew, pCnt );
-        nY = aDist.nMain + aDist.nSub;
-    }
-
-    SwTwips nX = 0;
-
-    if ( pCnt->IsFollow() )
-    {
-        //Flys haengen niemals an einem Follow sondern immer am
-        //Master, den suchen wir uns jetzt.
-        const SwCntntFrm *pOriginal = pCnt;
-        const SwCntntFrm *pFollow = pCnt;
-        while ( pCnt->IsFollow() )
-        {
-            do
-            {   pCnt = pCnt->GetPrevCntntFrm();
-            } while ( pCnt->GetFollow() != pFollow );
-            pFollow = pCnt;
-        }
-        SwTwips nDiff = 0;
-        do
-        {   const SwFrm *pUp = pFollow->GetUpper();
-            nDiff += pUp->Prt().Height() - pFollow->GetRelPos().Y();
-            pFollow = pFollow->GetFollow();
-        } while ( pFollow != pOriginal );
-        nY += nDiff;
-        nX = pCnt->Frm().Left() - pOriginal->Frm().Left();
-    }
-
-    if ( nY == LONG_MAX )
-        nY = rNew.Y() - pCnt->Frm().Top();
-
-    if ( !pFrm )
-        nX += rNew.X() - pCnt->Frm().Left();
-    else
-        nX = rNew.X() - pFrm->Frm().Left();
-
-    GetFmt()->GetDoc()->StartUndo( UNDO_START );
-
-    if( pCnt != GetAnchor() || ( IsAutoPos() && pCnt->IsTxtFrm() &&
-                                  GetFmt()->GetDoc()->IsHTMLMode() ) )
-    {
-        //Das Ankerattribut auf den neuen Cnt setzen.
-        SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
-        SwFmtAnchor aAnch( pFmt->GetAnchor() );
-        SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
-        if( IsAutoPos() && pCnt->IsTxtFrm() )
-        {
-            SwCrsrMoveState eTmpState( MV_SETONLYTEXT );
-            Point aPt( rNew );
-            if( pCnt->GetCrsrOfst( pPos, aPt, &eTmpState )
-                && pPos->nNode == *pCnt->GetNode() )
-            {
-                aLastCharRect.Height( 0 );
-                if( REL_CHAR == pFmt->GetVertOrient().GetRelationOrient() )
-                    nY = LONG_MAX;
-                if( REL_CHAR == pFmt->GetHoriOrient().GetRelationOrient() )
-                    nX = LONG_MAX;
-            }
-            else
-            {
-                pPos->nNode = *pCnt->GetNode();
-                pPos->nContent.Assign( pCnt->GetNode(), 0 );
-            }
-        }
-        else
-        {
-            pPos->nNode = *pCnt->GetNode();
-            pPos->nContent.Assign( pCnt->GetNode(), 0 );
-        }
-        pFmt->GetDoc()->SetAttr( aAnch, *pFmt );
-    }
-    else if ( pPage && pPage != GetPage() )
-        GetPage()->MoveFly( this, pPage );
-
-    const Point aRelPos( nX, nY );
-    ChgRelPos( aRelPos );
-
-    GetFmt()->GetDoc()->EndUndo( UNDO_END );
-
-    if ( pOldPage != FindPageFrm() )
-        ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE,
-                             FALSE );
-}
-#endif
-
 /*************************************************************************
 |*
 |*  SwFlyAtCntFrm::MakeFlyPos()
@@ -1486,16 +1355,10 @@ void DeepCalc( const SwFrm *pFrm )
                  !((SwLayoutFrm*)pUp)->Lower()->IsColumnFrm() ) &&
                  !pUp->IsSctFrm() )
             {
-#ifdef VERTICAL_LAYOUT
                 SWRECTFN( pUp )
                 const Point aPt( (pUp->Frm().*fnRect->fnGetPos)() );
                 ::DeepCalc( pUp );
                 bContinue = aPt != (pUp->Frm().*fnRect->fnGetPos)();
-#else
-                const Point aPt( pUp->Frm().Pos() );
-                ::DeepCalc( pUp );
-                bContinue = aPt != pUp->Frm().Pos();
-#endif
             }
         }
         else
@@ -1556,13 +1419,9 @@ const SwFrm *GetVirtualHoriAnchor( const SwFrm *pAssumed, const SwFlyFrm *pFly )
             if ( pFlow->IsCntntFrm() &&
                  ((SwCntntFrm*)pFly->GetAnchor())->IsAnFollow( (SwCntntFrm*)pFlow ) )
             {
-#ifdef VERTICAL_LAYOUT
                 SWRECTFN( pFlow )
                 SwTwips nDiff = (pFly->Frm().*fnRect->fnGetTop)() -
                                 (pFlow->Frm().*fnRect->fnGetTop)();
-#else
-                SwTwips nDiff = pFly->Frm().Top() - pFlow->Frm().Top();
-#endif
                 if ( (nDiff = Abs(nDiff)) < nCntDiff )
                 {
                     pRet = pFlow;           //Der ist dichter dran
@@ -1698,30 +1557,49 @@ BOOL MA_FASTCALL lcl_Minor( SwRelationOrient eRelO, SwRelationOrient eRelO2,
     return aRight[ eRelO ] >= aRight[ eRelO2 ];
 }
 
-#ifndef VERTICAL_LAYOUT
-#define PHEIGHT , pHeight
-#endif
-
 void SwFlyAtCntFrm::MakeFlyPos()
 {
-    if ( !bValidPos )
+    /// OD 02.10.2002 #102646#
+    /// if fly frame position is valid, nothing is to do, Thus, return
+    if ( bValidPos )
     {
-        const SwFrm* pFooter = GetAnchor()->FindFooterOrHeader();
-        if( pFooter && !pFooter->IsFooterFrm() )
-            pFooter = NULL;
-        const FASTBOOL bBrowse = GetAnchor()->IsInDocBody() && !GetAnchor()->IsInTab() ?
-                                     GetFmt()->GetDoc()->IsBrowseMode() : FALSE;
-        FASTBOOL bInvalidatePage = FALSE;
-        SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
-        const SvxLRSpaceItem &rLR = pFmt->GetLRSpace();
-        const SvxULSpaceItem &rUL = pFmt->GetULSpace();
-        const FASTBOOL bNoSurround
-            = pFmt->GetSurround().GetSurround() == SURROUND_NONE;
-        BOOL bGrow =
-            !GetAnchor()->IsInTab() || !pFmt->GetFrmSize().GetHeightPercent();
+        return;
+    }
 
-        for (;;)
-        {
+    /// OD 02.10.2002 #102646# - NOTE
+    /// declare and set <pFooter> to footer frame, if fly frame is anchored
+    /// at a frame belonging to the footer.
+    const SwFrm* pFooter = GetAnchor()->FindFooterOrHeader();
+    if( pFooter && !pFooter->IsFooterFrm() )
+        pFooter = NULL;
+
+    /// OD 02.10.2002 #102646# - NOTE
+    /// declare and set <bBrowse> to TRUE, if document is in browser mode and
+    /// fly frame is anchored at the body, but not at frame belonging to a table.
+    const FASTBOOL bBrowse = GetAnchor()->IsInDocBody() && !GetAnchor()->IsInTab() ?
+                                 GetFmt()->GetDoc()->IsBrowseMode() : FALSE;
+
+    /// OD 02.10.2002 #102646# - NOTE
+    /// declare and init <bInvalidatePage> to FALSE, in order to invalidate
+    /// page size, if <bInvalidatePage> is set during the calculation of the
+    /// fly frame position.
+    FASTBOOL bInvalidatePage = FALSE;
+
+    /// OD 02.10.2002 #102646# - NOTE
+    /// determine fly frame format and its left/right and its upper/lower spacing.
+    SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
+    const SvxLRSpaceItem &rLR = pFmt->GetLRSpace();
+    const SvxULSpaceItem &rUL = pFmt->GetULSpace();
+
+    /// OD 02.10.2002 #102646# - NOTE
+    /// determine, if fly frame has no surrounding.
+    const FASTBOOL bNoSurround
+        = pFmt->GetSurround().GetSurround() == SURROUND_NONE;
+    BOOL bGrow =
+        !GetAnchor()->IsInTab() || !pFmt->GetFrmSize().GetHeightPercent();
+
+    for (;;)
+    {
         bValidPos = TRUE;
         if( !pFooter )
             ::DeepCalc( GetAnchor() );
@@ -1761,7 +1639,6 @@ void SwFlyAtCntFrm::MakeFlyPos()
 
         //Horizontale und vertikale Positionen werden getrennt berechnet.
         //Sie koennen jeweils Fix oder Variabel sein.
-#ifdef VERTICAL_LAYOUT
         SWRECTFN( pAutoOrient )
 
         //Zuerst die vertikale Position, damit feststeht auf welcher Seite
@@ -1842,6 +1719,9 @@ void SwFlyAtCntFrm::MakeFlyPos()
         SwTwips nRelDiff = 0;
         if ( aVert.GetVertOrient() == VERT_NONE )
         {
+            /// OD 02.10.2002 #102646# - NOTE
+            /// local variable <nRel> for calculation of relative vertical
+            /// distance to anchor.
             SwTwips nRel;
             if( pAutoPos && REL_CHAR == aVert.GetRelationOrient() )
             {
@@ -1864,7 +1744,18 @@ void SwFlyAtCntFrm::MakeFlyPos()
                 }
             }
             else
+            {
+                /// OD 02.10.2002 #102646#
+                /// consider that vertical position can be relativ to "margin"
+                /// or to "text area".
+                /// Thus, increase <nRel> by margin height, if position is
+                /// vertical to "text area"
                 nRel = aVert.GetPos();
+                if ( aVert.GetRelationOrient() == PRTAREA )
+                {
+                    nRel += (pAutoOrient->*fnRect->fnGetTopMargin)();
+                }
+            }
 
             // Einen einspaltigen Bereich koennen wir getrost ignorieren,
             // er hat keine Auswirkung auf die Fly-Position
@@ -2505,517 +2396,10 @@ void SwFlyAtCntFrm::MakeFlyPos()
             aRelPos.Y() = nRelPosX;
         else
             aRelPos.X() = nRelPosX;
-#else
-        //Zuerst die vertikale Position, damit feststeht auf welcher Seite
-        //bzw. in welchen Upper sich der Fly befindet.
-        if ( aVert.GetVertOrient() != VERT_NONE )
-        {
-            pOrient = pAutoOrient;
-            if( !pFooter )
-                ::DeepCalc( pOrient );
-            SwTwips nHeight, nAdd;
-            if ( aVert.GetRelationOrient() == PRTAREA )
-            {
-                nHeight = pOrient->Prt().Height();
-                nAdd = pOrient->Prt().Top();
-            }
-            else if( pAutoPos && REL_CHAR == aVert.GetRelationOrient() )
-            {
-                nHeight = pAutoPos->Height();
-                nAdd = pAutoPos->Top() - pAutoOrient->Frm().Top();
-            }
-            else
-            {   nHeight = pOrient->Frm().Height();
-                nAdd = 0;
-            }
-            if ( aVert.GetVertOrient() == VERT_CENTER )
-                aRelPos.Y() = (nHeight / 2) - (aFrm.Height() / 2);
-            else if ( aVert.GetVertOrient() == VERT_BOTTOM )
-            {
-                if( bNoSurround )
-                    aRelPos.Y() = nHeight + rUL.GetUpper();
-                else
-                    aRelPos.Y() = nHeight - (aFrm.Height() + rUL.GetLower());
-            }
-            else  if( pAutoPos && aVert.GetVertOrient() == VERT_CHAR_BOTTOM )
-                aRelPos.Y() = nHeight + rUL.GetUpper();
-            else
-                aRelPos.Y() = rUL.GetUpper();
-            aRelPos.Y() += nAdd;
-            SwTwips nBot = pOrient->Frm().Top() + aRelPos.Y() + Frm().Height()
-                           - pOrient->GetUpper()->Frm().Top()
-                           - pOrient->GetUpper()->Prt().Bottom() - 1;
-            if( nBot > 0 )
-                aRelPos.Y() -= nBot;
-            aRelPos.Y() = Max( aRelPos.Y(), 0L );
-            //Da die relative Position immer zum Anker relativ ist, muss dessen
-            //Entfernung zum virtuellen Anker aufaddiert werden.
-            if ( GetAnchor() != pOrient )
-                aRelPos.Y() += pOrient->Frm().Top() - GetAnchor()->Frm().Top();
-
-            if ( aRelPos.Y() != aVert.GetPos() )
-            {   aVert.SetPos( aRelPos.Y() );
-                bVertChgd = TRUE;
-            }
-        }
-
-        pOrient = aVert.GetVertOrient() == VERT_NONE ?
-                  GetAnchor()->GetUpper() : pAutoOrient->GetUpper();
-        if( !pFooter )
-            ::DeepCalc( pOrient );
-
-        SwTwips nRelDiff = 0;
-        if ( aVert.GetVertOrient() == VERT_NONE )
-        {
-            SwTwips nRel;
-            if( pAutoPos && REL_CHAR == aVert.GetRelationOrient() )
-            {
-                nRel = pAutoPos->Bottom() - pAutoOrient->Frm().Top() + 1
-                       - aVert.GetPos();
-                if( pAutoOrient != GetAnchor() )
-                {
-                    SwTxtFrm* pTmp = (SwTxtFrm*)GetAnchor();
-                    nRel -= pTmp->GetRelPos().Y();
-                    while( pTmp != pAutoOrient )
-                    {
-                        nRel += pTmp->GetUpper()->Prt().Height();
-                        pTmp = pTmp->GetFollow();
-                    }
-                }
-            }
-            else
-                nRel = aVert.GetPos();
-
-            // Einen einspaltigen Bereich koennen wir getrost ignorieren,
-            // er hat keine Auswirkung auf die Fly-Position
-            while( pOrient->IsSctFrm() )
-                pOrient = pOrient->GetUpper();
-            //pOrient ist das LayoutBlatt, das gerade verfolgt wird.
-            //nRel    enthaelt die noch zu verarbeitende relative Entfernung.
-            //nAvail  enthaelt die Strecke die im LayoutBlatt, das gerade
-            //        verfolgt wird zur Verfuegung steht.
-
-            if( nRel <= 0 )
-                aRelPos.Y() = 0;
-            else
-            {
-                SwTwips nAvail = pOrient->Frm().Top() + pOrient->Prt().Top()
-                    + pOrient->Prt().Height() - GetAnchor()->Frm().Top();
-                const BOOL bFtn = GetAnchor()->IsInFtn();
-                while ( nRel )
-                {   if ( nRel <= nAvail ||
-                            (bBrowse &&
-                            ((SwFrm*)pOrient)->Grow( nRel-nAvail PHEIGHT, TRUE)) ||
-                            (pOrient->IsInTab() && bGrow && //MA_FLY_HEIGHT
-                            ((SwFrm*)pOrient)->Grow( nRel-nAvail PHEIGHT, TRUE)))
-                    {   aRelPos.Y() = (pOrient->Frm().Top() +
-                                        pOrient->Prt().Top() +
-                                        (pOrient->Prt().Height() -
-                                        nAvail) + nRel) -
-                                        GetAnchor()->Frm().Top();
-                        if ( ( bBrowse || ( pOrient->IsInTab() && bGrow ) )
-                             && nRel - nAvail > 0 )
-                        {
-                            nRel = ((SwFrm*)pOrient)->Grow( nRel-nAvail PHEIGHT );
-                            SwFrm *pTmp = (SwFrm*) pOrient->FindPageFrm();
-                            ::ValidateSz( pTmp );
-                            bInvalidatePage = TRUE;
-                            //Schon mal einstellen, weil wir wahrscheinlich
-                            //wegen Invalidierung eine Ehrenrunde drehen.
-                            aFrm.Pos().Y() = aFrm.Top() + nRel;
-                        }
-                        nRel = 0;
-                    }
-                    else if ( bMoveable )
-                    {   //Dem Textfluss folgen.
-                        nRel -= nAvail;
-                        const BOOL bSct = pOrient->IsInSct();
-                        MakePageType eMakePage = bFtn ? MAKEPAGE_NONE
-                                                      : MAKEPAGE_APPEND;
-                        if( bSct )
-                            eMakePage = MAKEPAGE_NOSECTION;
-                        const SwFrm *pTmp = pOrient->
-                            GetLeaf( eMakePage, TRUE, GetAnchor() );
-                        if ( pTmp && ( !bSct || pOrient->FindSctFrm()->
-                                IsAnFollow( pTmp->FindSctFrm() ) ) )
-                        {
-                            pOrient = pTmp;
-                            bMoveable =
-                                    ::lcl_IsMoveable( this, (SwLayoutFrm*)pOrient);
-                            if( !pFooter )
-                                ::DeepCalc( pOrient );
-                            nAvail = pOrient->Prt().Height();
-                        }
-                        else
-                        {
-                            // Wenn wir innerhalb des (spaltigen) Bereichs nicht genug
-                            // Platz ist, wird es Zeit, diesen zu verlassen. Wir gehen
-                            // also in seinen Upper und nehmen als nAvail den Platz, der
-                            // hinter dem Bereich ist. Sollte dieser immer noch nicht
-                            // ausreichen, wandern wir weiter, es hindert uns aber nun
-                            // niemand mehr, neue Seiten anzulegen.
-                            if( bSct )
-                            {
-                                const SwFrm* pSct = pOrient->FindSctFrm();
-                                pOrient = pSct->GetUpper();
-                                nAvail = pOrient->Frm().Top() + pOrient->Prt().Bottom()
-                                            - pSct->Frm().Top() - pSct->Prt().Bottom();
-                            }
-                            else
-                            {
-                                nRelDiff = nRel;
-                                nRel = 0;
-                            }
-                        }
-                    }
-                    else
-                        nRel = 0;
-                }
-                if ( !bValidPos )
-                    continue;
-            }
-        }
-        //Damit das Teil ggf. auf die richtige Seite gestellt und in die
-        //PrtArea des LayLeaf gezogen werden kann, muss hier seine
-        //absolute Position berechnet werden.
-        aFrm.Pos().Y() = GetAnchor()->Frm().Top() +
-                         (aRelPos.Y() - nRelDiff);
-
-        //Bei automatischer Ausrichtung nicht ueber die Oberkante hinausschiessen.
-        if ( aVert.GetVertOrient() != VERT_NONE )
-        {
-            SwTwips nTop = pOrient->Frm().Top();
-            if ( aVert.GetRelationOrient() == PRTAREA )
-                nTop += pOrient->Prt().Top();
-            if ( aFrm.Top() < nTop )
-            {
-                aFrm.Pos().Y() = nTop;
-                aRelPos.Y() = nTop - GetAnchor()->Frm().Top();
-                bHeightClipped = TRUE;
-            }
-        }
-
-        const BOOL bFtn = GetAnchor()->IsInFtn();
-        while( pOrient->IsSctFrm() )
-            pOrient = pOrient->GetUpper();
-        if ( aFrm.Bottom() > (pOrient->Frm().Top() + pOrient->Prt().Bottom()) )
-        {
-                                                           //MA_FLY_HEIGHT
-            if ( ( bBrowse && GetAnchor()->IsMoveable() ) ||
-                 ( GetAnchor()->IsInTab() && bGrow ) )
-            {
-                ((SwFrm*)pOrient)->Grow(
-                        aFrm.Bottom() - (pOrient->Frm().Top() + pOrient->Prt().Bottom()) PHEIGHT );
-                SwFrm *pTmp = (SwFrm*) pOrient->FindPageFrm();
-                ::ValidateSz( pTmp );
-                bInvalidatePage = TRUE;
-            }
-
-            while ( bMoveable &&
-                    aFrm.Bottom() > (pOrient->Frm().Top() + pOrient->Prt().Bottom()) )
-            {
-                // Vorsicht, auch innerhalb von Bereichen duerfen keine neuen Seiten angelegt werden
-                BOOL bSct = pOrient->IsInSct();
-                if( bSct )
-                {
-                    const SwFrm* pTmp = pOrient->FindSctFrm()->GetUpper();
-                    if( aFrm.Bottom() > (pTmp->Frm().Top() + pTmp->Prt().Bottom()) )
-                        pOrient = pTmp;
-                    else
-                        break;
-                    bSct = pOrient->IsInSct();
-                }
-                if ( !bSct && Frm().Top() == pOrient->Frm().Top() + pOrient->Prt().Top() )
-                    //Das teil passt nimmer, da hilft auch kein moven.
-                    break;
-
-                const SwLayoutFrm *pNextLay = pOrient->GetLeaf( bSct ?
-                    MAKEPAGE_NOSECTION : bFtn ? MAKEPAGE_NONE : MAKEPAGE_APPEND,
-                    TRUE, GetAnchor() );
-                if ( pNextLay && ( !bSct || ( pOrient->FindSctFrm()->
-                     IsAnFollow( pNextLay->FindSctFrm() ) && pNextLay->Prt().Height() ) ) )
-                {
-                    if( !pFooter )
-                        ::DeepCalc( pNextLay );
-                    aRelPos.Y() = pNextLay->Frm().Top() + pNextLay->Prt().Top()
-                                  - GetAnchor()->Frm().Top();
-                    pOrient = pNextLay;
-                    bMoveable = ::lcl_IsMoveable( this, (SwLayoutFrm*)pOrient );
-                    if ( bMoveable && !pFooter )
-                        ::DeepCalc( pOrient );
-                    aFrm.Pos().Y() = GetAnchor()->Frm().Top() + aRelPos.Y();
-                }
-                else if( bSct )
-                {
-                    // Wenn wir innerhalb des Bereich nicht genug Platz haben, gucken
-                    // wir uns mal die Seite an.
-                    const SwFrm* pTmp = pOrient->FindSctFrm()->GetUpper();
-                    if( aFrm.Bottom() > (pTmp->Frm().Top() + pTmp->Prt().Bottom()) )
-                        pOrient = pTmp;
-                    else
-                        break;
-                }
-                else
-                    bMoveable = FALSE;
-            }
-        }
-        AssertPage();
-
-        //Horizontale Ausrichtung.
-        //Die absolute Pos in der vertikalen muss schon mal eingestellt
-        //werden, sonst habe ich Schwierigkeiten den virtuellen Anker
-        //zu ermitteln.
-        aFrm.Pos().Y() = aRelPos.Y() + GetAnchor()->Frm().Top();
-
-        //Den Frm besorgen, an dem sich die horizontale Ausrichtung orientiert.
-        pOrient = ::GetVirtualHoriAnchor( pOrient, this );
-
-        if( !pFooter )
-            ::DeepCalc( pOrient );
-
-        // Achtung: pPage ist nicht unbedingt ein PageFrm, es kann auch ein
-        // SwFlyFrm oder SwCellFrm dahinterstecken
-        const SwFrm *pPage = pOrient;
-        while( !pPage->IsPageFrm() && !pPage->IsFlyFrm() && !pPage->IsCellFrm() )
-        {
-            ASSERT( pPage->GetUpper(), "MakeFlyPos: No Page/FlyFrm Found" );
-            pPage = pPage->GetUpper();
-        }
-
-        const BOOL bEven = !pPage->OnRightPage();
-        const BOOL bToggle = aHori.IsPosToggle() && bEven;
-        BOOL bTmpToggle = bToggle;
-        BOOL bPageRel = FALSE;
-        SwTwips nWidth, nAdd;
-        switch ( aHori.GetRelationOrient() )
-        {
-            case PRTAREA:
-            {
-                nWidth = pOrient->Prt().Width();
-                nAdd = pOrient->Prt().Left();
-                break;
-            }
-            case REL_PG_LEFT:
-                bTmpToggle = !bToggle;
-                // kein break;
-            case REL_PG_RIGHT:
-            {
-                if ( bTmpToggle )    // linker Seitenrand
-                {
-                    nWidth = pPage->Prt().Left();
-                    nAdd = pPage->Frm().Left() - pOrient->Frm().Left();
-                }
-                else            // rechter Seitenrand
-                {
-                    nWidth = pPage->Frm().Width();
-                    nAdd = pPage->Prt().Right();
-                    nWidth -= nAdd;
-                    nAdd += pPage->Frm().Left() - pOrient->Frm().Left();
-                }
-                bPageRel = TRUE;
-                break;
-            }
-            case REL_FRM_LEFT:
-                bTmpToggle = !bToggle;
-                // kein break;
-            case REL_FRM_RIGHT:
-            {
-                if ( bTmpToggle )    // linker Absatzrand
-                {
-                    nWidth = pOrient->Prt().Left();
-                    nAdd = 0;
-                }
-                else            // rechter Absatzrand
-                {
-                    nWidth = pOrient->Frm().Width();
-                    nAdd = pOrient->Prt().Right();
-                    nWidth -= nAdd;
-                }
-                break;
-            }
-            case REL_CHAR:
-            {
-                if( pAutoPos )
-                {
-                    nWidth = 0;
-                    nAdd = pAutoPos->Left() - pAutoOrient->Frm().Left();
-                    break;
-                }
-                // No Break!
-            }
-            case REL_PG_PRTAREA:
-            {
-                nWidth = pPage->Prt().Width();
-                nAdd = pPage->Frm().Left() + pPage->Prt().Left()
-                       - pOrient->Frm().Left();
-                bPageRel = TRUE;
-                break;
-            }
-            case REL_PG_FRAME:
-            {
-                nWidth = pPage->Frm().Width();
-                nAdd = pPage->Frm().Left() - pOrient->Frm().Left();
-                bPageRel = TRUE;
-                break;
-            }
-            default:
-            {
-                nWidth = pOrient->Frm().Width();
-                nAdd = 0;
-                break;
-            }
-        }
-        if ( aHori.GetHoriOrient() == HORI_NONE )
-        {
-            if( pAutoPos && REL_CHAR == aHori.GetRelationOrient() )
-                aRelPos.X() = aHori.GetPos() + nAdd;
-            else if( bToggle )
-                aRelPos.X() = nWidth - aFrm.Width() - aHori.GetPos();
-            else
-                aRelPos.X() = aHori.GetPos() + nAdd;
-            //Da die relative Position immer zum Anker relativ ist,
-            //muss dessen Entfernung zum virtuellen Anker aufaddiert werden.
-            if ( GetAnchor() != pOrient )
-            {
-                long nTmp = pOrient->Frm().Left();
-                aRelPos.X() += nTmp - GetAnchor()->Frm().Left();
-                //fix(18546): Kleine Notbremse, wenn der Rahmen jetzt so positioniert
-                //wird, dass er den Anker verdraengt, muessen wir unbedingt agieren.
-                //fix(22698): in Ergaenzung zu obigem Bug passen wir jetzt etwas
-                //grundlicher auf.
-                if( !bPageRel && nTmp > pAnchor->Frm().Right() &&
-                    Frm().Top() < GetAnchor()->Frm().Bottom() )
-                {
-                    nTmp = aRelPos.X() + GetAnchor()->Frm().Left();
-                    if ( nTmp < GetAnchor()->Frm().Right() )
-                        aRelPos.X() = GetAnchor()->Frm().Width()+1;
-                }
-            }
-            if( GetAnchor()->Frm().Left() + aRelPos.X() + aFrm.Width() >
-                pPage->Frm().Right() )
-                aRelPos.X() = pPage->Frm().Right() - GetAnchor()->Frm().Left()
-                              - aFrm.Width();
-            if( GetAnchor()->Frm().Left() + aRelPos.X() < pPage->Frm().Left() )
-                aRelPos.X() = pPage->Frm().Left() - GetAnchor()->Frm().Left();
-        }
-        else
-        {
-            SwHoriOrient eHOri = aHori.GetHoriOrient();
-            SwRelationOrient eRelO = aHori.GetRelationOrient();
-            if( bToggle )
-            {
-                if( HORI_RIGHT == eHOri )
-                    eHOri = HORI_LEFT;
-                else if( HORI_LEFT == eHOri )
-                    eHOri = HORI_RIGHT;
-                if( REL_PG_RIGHT == eRelO )
-                    eRelO = REL_PG_LEFT;
-                else if( REL_PG_LEFT == eRelO )
-                    eRelO = REL_PG_RIGHT;
-                else if( REL_FRM_RIGHT == eRelO )
-                    eRelO = REL_FRM_LEFT;
-                else if( REL_FRM_LEFT == eRelO )
-                    eRelO = REL_FRM_RIGHT;
-            }
-            if ( eHOri == HORI_CENTER )
-                aRelPos.X() = (nWidth / 2) - (aFrm.Width() / 2);
-            else if ( eHOri == HORI_RIGHT )
-                aRelPos.X() = nWidth - (aFrm.Width() + rLR.GetRight());
-            else
-                aRelPos.X() = rLR.GetLeft();
-            aRelPos.X() += nAdd;
-
-            //Da die relative Position immer zum Anker relativ ist,
-            //muss dessen Entfernung zum virtuellen Anker aufaddiert werden.
-            if ( GetAnchor() != pOrient )
-                aRelPos.X() += pOrient->Frm().Left() -
-                               GetAnchor()->Frm().Left();
-
-            if( GetAnchor()->Frm().Left() + aRelPos.X() + aFrm.Width() >
-                pPage->Frm().Right() )
-                aRelPos.X() = pPage->Frm().Right() - GetAnchor()->Frm().Left()
-                              - aFrm.Width();
-            if( GetAnchor()->Frm().Left() + aRelPos.X() < pPage->Frm().Left() )
-                aRelPos.X() = pPage->Frm().Left() - GetAnchor()->Frm().Left();
-
-            //Es muss allen Rahmen ausgewichen werden, die die selbe
-            //automatische Ausrichtung haben und die unter dem Rahmen liegen.
-            if ( HORI_CENTER != eHOri && REL_CHAR != eRelO )
-            {
-                SwRect aTmpFrm( GetAnchor()->Frm().Pos() + aRelPos, Frm().SSize() );
-                const UINT32 nMyOrd = GetVirtDrawObj()->GetOrdNum();
-                SwOrderIter aIter( FindPageFrm(), TRUE );
-                const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)aIter.Bottom())->GetFlyFrm();
-                const SwFrm *pKontext = ::FindKontext( GetAnchor(), FRM_COLUMN );
-                while ( pFly && nMyOrd > pFly->GetVirtDrawObj()->GetOrdNumDirect() )
-                {
-                    if ( pFly->IsFlyAtCntFrm() && //pFly->IsValid() &&
-                         pFly->Frm().Bottom() >= aTmpFrm.Top() &&
-                         pFly->Frm().Top() <= aTmpFrm.Bottom() &&
-                         ::FindKontext( pFly->GetAnchor(), FRM_COLUMN ) == pKontext )
-                    {
-                        const SwFmtHoriOrient &rHori = pFly->GetFmt()->GetHoriOrient();
-                        SwRelationOrient eRelO2 = rHori.GetRelationOrient();
-                        if( REL_CHAR != eRelO2 )
-                        {
-                            SwHoriOrient eHOri2 = rHori.GetHoriOrient();
-                            if( bEven && rHori.IsPosToggle() )
-                            {
-                                if( HORI_RIGHT == eHOri2 )
-                                    eHOri2 = HORI_LEFT;
-                                else if( HORI_LEFT == eHOri2 )
-                                    eHOri2 = HORI_RIGHT;
-                                if( REL_PG_RIGHT == eRelO2 )
-                                    eRelO2 = REL_PG_LEFT;
-                                else if( REL_PG_LEFT == eRelO2 )
-                                    eRelO2 = REL_PG_RIGHT;
-                                else if( REL_FRM_RIGHT == eRelO2 )
-                                    eRelO2 = REL_FRM_LEFT;
-                                else if( REL_FRM_LEFT == eRelO2 )
-                                    eRelO2 = REL_FRM_RIGHT;
-                            }
-                            if ( eHOri2 == eHOri &&
-                                 lcl_Minor( eRelO, eRelO2, HORI_LEFT == eHOri ) )
-                            {
-                                //Die Berechnung wird dadurch etwas aufwendiger, das die
-                                //Ausgangsbasis der Flys unterschiedlich sein koennen.
-                                const SvxLRSpaceItem &rLRI = pFly->GetFmt()->GetLRSpace();
-                                const SwTwips nFlyLeft = pFly->Frm().Left() - rLRI.GetLeft();
-                                const SwTwips nFlyRight = pFly->Frm().Right() + rLRI.GetRight();
-                                // Hier wird noch abgefangen, dass die beiden Rahmen in verschiedenen
-                                // Spalten stehen, aber an ein und demselben TxtFrm (Master/Follow)
-                                // verankert sind. Das FindKontext ist nur bedingt aussagekraeftig,
-                                // da es sich immer auf den Master bezieht.
-                                if( nFlyLeft <= aTmpFrm.Right() + rLR.GetRight() &&
-                                    nFlyRight >= aTmpFrm.Left() - rLR.GetLeft() )
-                                {
-                                    // Im folgenden GetAnchor() und nicht pOrient!
-                                    if ( eHOri == HORI_LEFT )
-                                        aRelPos.X() = Max( aRelPos.X(), nFlyRight+1
-                                            +rLRI.GetRight() -GetAnchor()->Frm().Left());
-                                    else if ( eHOri == HORI_RIGHT )
-                                        aRelPos.X() = Min( aRelPos.X(), nFlyLeft-1
-                                            -rLRI.GetLeft() - Frm().Width() - GetAnchor()->Frm().Left());
-                                    aTmpFrm.Pos() = GetAnchor()->Frm().Pos() + aRelPos;
-                                }
-                            }
-                        }
-                    }
-                    pFly = ((SwVirtFlyDrawObj*)aIter.Next())->GetFlyFrm();
-                }
-            }
-
-            if ( aHori.GetPos() != aRelPos.X() )
-            {   aHori.SetPos( aRelPos.X() );
-                bHoriChgd = TRUE;
-            }
-        }
-#endif
         AssertPage();
 
         //Die AbsPos ergibt sich aus der Absoluten Position des Ankers
         //plus der relativen Position
-#ifdef VERTICAL_LAYOUT
         if( bVert )
         {
             aFrm.Pos().X() = GetAnchor()->Frm().Left() +
@@ -3026,9 +2410,6 @@ void SwFlyAtCntFrm::MakeFlyPos()
         }
         else
             aFrm.Pos( aRelPos + GetAnchor()->Frm().Pos() );
-#else
-        aFrm.Pos( aRelPos + GetAnchor()->Frm().Pos() );
-#endif
         //Und ggf. noch die aktuellen Werte im Format updaten, dabei darf
         //zu diesem Zeitpunkt natuerlich kein Modify verschickt werden.
         pFmt->LockModify();
@@ -3039,15 +2420,13 @@ void SwFlyAtCntFrm::MakeFlyPos()
         pFmt->UnlockModify();
 
         break;
-        }
-        if ( bInvalidatePage )
-            FindPageFrm()->InvalidateSize();
-        if ( !bValidPos && !GetAnchor()->IsValid() )
-        {
-//          ASSERT( StackHack::IsLocked(), "invalid Anchor" );
-            bValidPos = TRUE;
-        }
+    } /// OD 02.10.2002 #102646# - End of loop
+
+    if ( bInvalidatePage )
+        FindPageFrm()->InvalidateSize();
+    if ( !bValidPos && !GetAnchor()->IsValid() )
+    {
+//      ASSERT( StackHack::IsLocked(), "invalid Anchor" );
+        bValidPos = TRUE;
     }
 }
-
-
