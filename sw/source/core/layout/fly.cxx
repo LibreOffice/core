@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:46:39 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2082,7 +2082,10 @@ void SwFrm::AppendDrawObj( SwDrawContact *pNew )
     {
         SwRect aTmpRect;
         SwPosition *pPos = (SwPosition*)rAnch.GetCntntAnchor();
-        GetCharRect( aTmpRect, *pPos );
+        if ( IsValid() )
+            GetCharRect( aTmpRect, *pPos );
+        else
+            aTmpRect = Frm();
         pNew->GetMaster()->SetAnchorPos( aTmpRect.Pos() );
     }
     else if( FLY_IN_CNTNT != rAnch.GetAnchorId() )
