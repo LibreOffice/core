@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:09:22 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,17 +154,22 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator( SalFrame* pFrame )
     }
 #endif
 
+    if( pSalDisplay->getWMAdaptor()->getWindowManagerName().EqualsAscii( "KWin" ) )
+        return new KDEIntegrator( pFrame );
+
     // actually this is not that good an indicator for a GNOME running
     // but there currently does not seem to be a better one
     nDtAtom = XInternAtom( pDisplay, "GNOME_SM_PROXY", True );
-    if( nDtAtom )
+    Atom nDtAtom2 = XInternAtom( pDisplay, "NAUTILUS_DESKTOP_WINDOW_ID", True );
+    if( nDtAtom || nDtAtom2 )
     {
         int nProperties = 0;
         Atom* pProperties = XListProperties( pDisplay, pSalDisplay->GetRootWindow(), &nProperties );
         if( pProperties && nProperties )
         {
             for( int i = 0; i < nProperties; i++ )
-                if( pProperties[ i ] == nDtAtom )
+                if( pProperties[ i ] == nDtAtom ||
+                    pProperties[ i ] == nDtAtom2 )
                 {
                     XFree( pProperties );
                     return new GNOMEIntegrator( pFrame );
@@ -172,9 +177,6 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator( SalFrame* pFrame )
             XFree( pProperties );
         }
     }
-
-    if( pSalDisplay->getWMAdaptor()->getWindowManagerName().EqualsAscii( "KWin" ) )
-        return new KDEIntegrator( pFrame );
 
     // default: generic implementation
     return new DtIntegrator( pFrame );
