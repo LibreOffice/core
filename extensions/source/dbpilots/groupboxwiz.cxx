@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxwiz.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:41:17 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ORadioSelectionPage::commitPage(COMMIT_REASON _eReason)
+    sal_Bool ORadioSelectionPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
     {
         if (!OGBWPage::commitPage(_eReason))
             return sal_False;
@@ -439,7 +439,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ODefaultFieldSelectionPage::commitPage(COMMIT_REASON _eReason)
+    sal_Bool ODefaultFieldSelectionPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
     {
         if (!OMaybeListSelectionPage::commitPage(_eReason))
             return sal_False;
@@ -526,7 +526,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OOptionValuesPage::commitPage(COMMIT_REASON _eReason)
+    sal_Bool OOptionValuesPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
     {
         if (!OGBWPage::commitPage(_eReason))
             return sal_False;
@@ -594,7 +594,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OFinalizeGBWPage::commitPage(COMMIT_REASON _eReason)
+    sal_Bool OFinalizeGBWPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
     {
         if (!OGBWPage::commitPage(_eReason))
             return sal_False;
