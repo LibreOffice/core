@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1031,7 +1031,7 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry, const Outp
         {
             if( !nPoints )
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "SalGraphics::DrawPolygon !nPoints\n" );
 #endif
             }
