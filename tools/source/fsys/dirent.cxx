@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:06 $
+ *  last change: $Author: hro $ $Date: 2000-10-18 15:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2183,8 +2183,17 @@ const DirEntry& DirEntry::SetTempNameBase( const String &rBase )
         ByteString aName( aTempDir.GetFull(), osl_getThreadTextEncoding());
         if ( access( aName.GetBuffer(), W_OK | X_OK | R_OK ) )
         {
-                aTempDir.MakeDir();
-                chmod( aName.GetBuffer(), S_IRWXU | S_IRWXG | S_IRWXO );
+            // Create the directory and only on success give all rights to
+            // everyone. Use mkdir instead of DirEntry::MakeDir because
+            // this returns TRUE even if directory already exists.
+
+                if ( !mkdir( aName.GetBuffer ) )
+                    chmod( aName.GetBuffer(), S_IRWXU | S_IRWXG | S_IRWXO );
+
+            // This will not create a directory but perhaps FileStat called
+            // there modifies the DirEntry
+
+            aTempDir.MakeDir();
         }
 #else
         aTempDir.MakeDir();
