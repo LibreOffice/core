@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_writer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-16 08:47:31 $
+ *  last change: $Author: jbu $ $Date: 2001-04-17 15:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,8 @@ namespace bridges_urp
         void write();
         oslCondition m_oslCondition;
         sal_Bool m_bAbort;
-        sal_Bool m_bWaitForTimeout;
+        sal_Bool m_bInBlockingWait;
+        sal_Bool m_bEnterBlockingWait;
         remote_Connection *m_pConnection;
         urp_BridgeImpl *m_pBridgeImpl;
         uno_Environment *m_pEnvRemote; // this is held weak only

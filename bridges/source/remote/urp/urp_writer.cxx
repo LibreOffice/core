@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_writer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-16 08:47:31 $
+ *  last change: $Author: jbu $ $Date: 2001-04-17 15:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,10 @@ OWriterThread::OWriterThread( remote_Connection *pConnection, urp_BridgeImpl *pB
     m_pConnection( pConnection ),
     m_bAbort( sal_False ),
     m_pBridgeImpl( pBridgeImpl ),
-    m_pEnvRemote( pEnvRemote )
+    m_pEnvRemote( pEnvRemote ),
+    m_bInBlockingWait( sal_False ),
+    m_bEnterBlockingWait( sal_False )
+
 {
     m_oslCondition = osl_createCondition();
     osl_resetCondition( m_oslCondition );
@@ -123,13 +126,34 @@ void OWriterThread::touch( sal_Bool bImmediately )
       {
         write();
       }
+    else
+    {
+        // wake the writer thread up
+        if( m_bInBlockingWait )
+        {
+            m_bInBlockingWait = sal_False;
+            osl_setCondition( m_oslCondition );
+        }
+        else
+        {
+            // ensure, that the writing thread does not enter blocking mode
+              m_bEnterBlockingWait = sal_False;
+        }
+    }
 }
 
 
 void OWriterThread::abort()
 {
+    MutexGuard guard( m_pBridgeImpl->m_marshalingMutex );
+
     m_bAbort = sal_True;
-    osl_setCondition( m_oslCondition );
+    m_bEnterBlockingWait = sal_False;
+    if( m_bInBlockingWait )
+    {
+        m_bInBlockingWait = sal_False;
+        osl_setCondition( m_oslCondition );
+    }
 }
 
 
@@ -182,79 +206,84 @@ void OWriterThread::insertReleaseRemoteCall(
 void OWriterThread::executeReleaseRemoteCalls()
 {
     sal_Bool bFound = sal_True;
-    while( bFound )
+    ::std::list< struct RemoteReleaseCall > lstReleaseCalls;
     {
-        struct RemoteReleaseCall call;
+        ::osl::MutexGuard guard( m_releaseCallMutex );
+        lstReleaseCalls.swap( m_lstReleaseCalls );
+    }
+
+    for( ::std::list< struct RemoteReleaseCall >::iterator ii = lstReleaseCalls.begin();
+         ii != lstReleaseCalls.end();
+         ++ ii )
+    {
+        struct RemoteReleaseCall &call = (*ii) ;
+
+        typelib_TypeDescription *pInterfaceTypeDesc = 0;
+        typelib_TypeDescription *pReleaseMethod = 0;
+
+        call.typeInterface.getDescription( &pInterfaceTypeDesc );
+        if( ! pInterfaceTypeDesc->bComplete )
         {
-            ::osl::MutexGuard guard( m_releaseCallMutex );
-            if( m_lstReleaseCalls.size() )
-            {
-                call = m_lstReleaseCalls.front();
-                m_lstReleaseCalls.pop_front();
-            }
-            else
-            {
-                bFound = sal_False;
-            }
+            typelib_typedescription_complete( &pInterfaceTypeDesc );
         }
-        if( bFound )
-        {
-            sal_Bool bNeedsRelease = sal_False;
 
-            typelib_TypeDescription *pInterfaceTypeDesc = 0;
-            typelib_TypeDescription *pReleaseMethod = 0;
+        uno_Any any;
+        uno_Any *pAny = &any;
 
-            call.typeInterface.getDescription( &pInterfaceTypeDesc );
-            if( ! pInterfaceTypeDesc->bComplete )
-            {
-                typelib_typedescription_complete( &pInterfaceTypeDesc );
-            }
+        typelib_typedescriptionreference_getDescription(
+            &pReleaseMethod ,
+            ((typelib_InterfaceTypeDescription*)pInterfaceTypeDesc)->ppAllMembers[REMOTE_RELEASE_METHOD_INDEX] );
 
-            uno_Any any;
-            uno_Any *pAny = &any;
+        urp_sendRequest( m_pEnvRemote , pReleaseMethod, call.sOid.pData,
+                         (typelib_InterfaceTypeDescription*) pInterfaceTypeDesc,
+                         0, 0 , &pAny );
 
-            typelib_typedescriptionreference_getDescription(
-                &pReleaseMethod ,
-                ((typelib_InterfaceTypeDescription*)pInterfaceTypeDesc)->ppAllMembers[REMOTE_RELEASE_METHOD_INDEX] );
-
-            urp_sendRequest( m_pEnvRemote , pReleaseMethod, call.sOid.pData,
-                             (typelib_InterfaceTypeDescription*) pInterfaceTypeDesc,
-                             0, 0 , &pAny );
-
-            typelib_typedescription_release( pReleaseMethod );
-            typelib_typedescription_release( pInterfaceTypeDesc );
-        }
+        typelib_typedescription_release( pReleaseMethod );
+        typelib_typedescription_release( pInterfaceTypeDesc );
     }
 }
 
 
 void OWriterThread::run()
 {
-    while( sal_True )
+    while( ! m_bAbort )
     {
-        // Wait for some work to do
+        sal_Bool bWait;
+        {
+            MutexGuard guard( m_pBridgeImpl->m_marshalingMutex );
+            bWait = m_bEnterBlockingWait;
+            if( bWait )
+            {
+                osl_resetCondition( m_oslCondition );
+                m_bInBlockingWait = sal_True;
+            }
+            m_bEnterBlockingWait = sal_True;
+        }
+
+        // wait for some notification
+        if( bWait )
+            osl_waitCondition( m_oslCondition , 0 );
+        // (m_bInBlockingWait = sal_False was set by the activating thread)
+
+          if( m_bAbort )
+              break;
+
+        // Wait for the timeout
         TimeValue value = { 0 , 1000 * m_pBridgeImpl->m_properties.nOnewayTimeoutMUSEC };
         osl_resetCondition( m_oslCondition );
         osl_waitCondition( m_oslCondition , &value );
 
-        {
-            // check if there are some release calls to be sent ....
-              executeReleaseRemoteCalls();
+        // check if there are some release calls to be sent ....
+        executeReleaseRemoteCalls();
 
+        {
             // write to the socket
             MutexGuard guard( m_pBridgeImpl->m_marshalingMutex );
-            m_bWaitForTimeout = sal_False;
             if( ! m_pBridgeImpl->m_blockMarshaler.empty() )
             {
                 write();
             }
-            osl_resetCondition( m_oslCondition );
         }
-        if( m_bAbort )
-        {
-            break;
-        }
-
     }
 }
 
