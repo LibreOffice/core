@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:09:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,10 +110,10 @@ long PivotGlobal::nSelSpace  = 0;
 
 struct FuncData
 {
-    short  nCol;
+    SCsCOL  nCol;
     USHORT nFuncMask;
 
-    FuncData( short col, USHORT funcs = PIVOT_FUNC_SUM )
+    FuncData( SCsCOL col, USHORT funcs = PIVOT_FUNC_SUM )
         : nCol(col), nFuncMask(funcs) {}
 
     BOOL operator==( const FuncData& r )
@@ -259,16 +259,16 @@ void __EXPORT ScDPLayoutDlg::Init()
     aRowArr.resize( MAX_FIELDS );
     aDataArr.resize( MAX_FIELDS );
 
-    InitWndSelect( thePivotData.ppLabelArr, thePivotData.nLabels );
-    InitWnd( thePivotData.aPageArr, thePivotData.nPageCount, TYPE_PAGE );
-    InitWnd( thePivotData.aColArr,  thePivotData.nColCount,  TYPE_COL );
-    InitWnd( thePivotData.aRowArr,  thePivotData.nRowCount,  TYPE_ROW );
-    InitWnd( thePivotData.aDataArr, thePivotData.nDataCount, TYPE_DATA );
+    InitWndSelect( thePivotData.ppLabelArr, static_cast<long>(thePivotData.nLabels) );
+    InitWnd( thePivotData.aPageArr, static_cast<long>(thePivotData.nPageCount), TYPE_PAGE );
+    InitWnd( thePivotData.aColArr,  static_cast<long>(thePivotData.nColCount),  TYPE_COL );
+    InitWnd( thePivotData.aRowArr,  static_cast<long>(thePivotData.nRowCount),  TYPE_ROW );
+    InitWnd( thePivotData.aDataArr, static_cast<long>(thePivotData.nDataCount), TYPE_DATA );
 
     aSlider.SetPageSize( PAGE_SIZE );
     aSlider.SetVisibleSize( PAGE_SIZE );
     aSlider.SetLineSize( LINE_SIZE );
-    aSlider.SetRange( Range( 0, ((thePivotData.nLabels+LINE_SIZE-1)/LINE_SIZE)*LINE_SIZE ) );
+    aSlider.SetRange( Range( 0, static_cast<long>(((thePivotData.nLabels+LINE_SIZE-1)/LINE_SIZE)*LINE_SIZE) ) );
 
     if ( thePivotData.nLabels > PAGE_SIZE )
     {
@@ -422,7 +422,7 @@ void ScDPLayoutDlg::InitWnd( PivotField* pArr, long nCount, ScDPFieldType eType 
             long j=0;
             for ( long i=0; (i<nCount); i++ )
             {
-                USHORT nCol = pArr[i].nCol;
+                SCCOL nCol = pArr[i].nCol;
                 USHORT nMask = pArr[i].nFuncMask;
 
                 if ( nCol != PIVOT_DATA_FIELD )
@@ -1049,7 +1049,7 @@ void ScDPLayoutDlg::Deactivate()
 
 //----------------------------------------------------------------------------
 
-BOOL ScDPLayoutDlg::Contains( FuncDataVec* pArr, short nCol, size_t& nAt )
+BOOL ScDPLayoutDlg::Contains( FuncDataVec* pArr, SCsCOL nCol, size_t& nAt )
 {
     if ( !pArr )
         return FALSE;
@@ -1105,7 +1105,7 @@ void ScDPLayoutDlg::Insert( FuncDataVec* pArr, const FuncData& rFData, size_t nA
 
 //----------------------------------------------------------------------------
 
-LabelData* ScDPLayoutDlg::GetLabelData( short nCol, size_t* pPos )
+LabelData* ScDPLayoutDlg::GetLabelData( SCsCOL nCol, size_t* pPos )
 {
     LabelData*  pData   = NULL;
     BOOL        bFound  = FALSE;
@@ -1130,7 +1130,7 @@ LabelData* ScDPLayoutDlg::GetLabelData( short nCol, size_t* pPos )
 
 //----------------------------------------------------------------------------
 
-String ScDPLayoutDlg::GetLabelString( short nCol )
+String ScDPLayoutDlg::GetLabelString( SCsCOL nCol )
 {
     LabelData* pData = GetLabelData( nCol );
     DBG_ASSERT( pData, "LabelData not found" );
@@ -1528,7 +1528,7 @@ IMPL_LINK( ScDPLayoutDlg, ScrollHdl, ScrollBar *, EMPTYARG )
     nOffset = nNewOffset;
 
     LabelData*  pData   = NULL;
-    size_t      nFields = Min( nLabelCount - nOffset, PAGE_SIZE );
+    size_t      nFields = Min( static_cast<size_t>(nLabelCount - nOffset), static_cast<size_t>(PAGE_SIZE) );
 
     aWndSelect.ClearFields();
 
