@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementparser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:43:33 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include "typeconverter.hxx"
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/SchemaAttribute.hpp>
-#include <drafts/com/sun/star/configuration/backend/NodeAttribute.hpp>
+#include <com/sun/star/configuration/backend/SchemaAttribute.hpp>
+#include <com/sun/star/configuration/backend/NodeAttribute.hpp>
 
 // -----------------------------------------------------------------------------
 
@@ -285,7 +285,10 @@ Operation::Enum ElementParser::getOperation(SaxAttributeList const& xAttribs,Ele
 
     else if (sOpName.equals(OPERATION_REMOVE))
         return Operation::remove;
-
+#if 0
+    else if (sOpName.equals(OPERATION_CLEAR))
+        return Operation::clear;
+#endif
     else
         return Operation::unknown;
 }
@@ -302,8 +305,8 @@ bool ElementParser::getLanguage(SaxAttributeList const& xAttribs, OUString& _rsL
 /// reads attributes for nodes from the attribute list
 ElementInfo::FlagsType ElementParser::getNodeFlags(SaxAttributeList const& xAttribs,ElementType::Enum _eType) const
 {
-    namespace NodeAttribute   = drafts::com::sun::star::configuration::backend::NodeAttribute;
-    namespace SchemaAttribute = drafts::com::sun::star::configuration::backend::SchemaAttribute;
+    namespace NodeAttribute   = ::com::sun::star::configuration::backend::NodeAttribute;
+    namespace SchemaAttribute = ::com::sun::star::configuration::backend::SchemaAttribute;
 
     bool bValue;
 
