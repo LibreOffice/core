@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 13:21:37 $
+#   last change: $Author: rt $ $Date: 2003-04-08 16:15:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,6 +98,7 @@ UNOTYPES+= \
     com.sun.star.i18n.XTransliteration      \
     com.sun.star.util.SearchFlags           \
     com.sun.star.util.XTextSearch			\
+    drafts.com.sun.star.i18n.XExtendedTransliteration      \
     drafts.com.sun.star.i18n.XNativeNumberSupplier	
 
 
