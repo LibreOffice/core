@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-24 13:59:52 $
+ *  last change: $Author: mib $ $Date: 2001-10-23 11:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,12 +296,12 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
                 *pPrefix = rEntry.sPrefix;
             if ( pLocalName )
                 *pLocalName = rEntry.sName;
+            nKey = rEntry.nKey;
             if ( pNamespace )
             {
                 NameSpaceMap::const_iterator aMapIter = aNameMap.find (nKey);
                 *pNamespace = aMapIter != aNameMap.end() ? (*aMapIter).second->sName : sEmpty;
             }
-            nKey = rEntry.nKey;
         }
         else
         {
