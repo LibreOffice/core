@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-03 11:32:02 $
+ *  last change: $Author: nn $ $Date: 2000-11-15 18:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1008,6 +1008,9 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                     {
                         switch ( nFmtType )
                         {
+                            // for type 0 (not recognized as a special type),
+                            // write a "normal" number
+                            case 0:
                             case NUMBERFORMAT_NUMBER:
                             case NUMBERFORMAT_CURRENCY:
                             case NUMBERFORMAT_PERCENT:
