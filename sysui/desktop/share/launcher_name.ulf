@@ -15,7 +15,7 @@ zh-TW = "%PRODUCTNAME 印表機管理"
 0en = "%PRODUCTNAME Printer Administration"
 el = "%PRODUCTNAME Drucker Verwaltung"
 fi = "%PRODUCTNAME Drucker Verwaltung"
-cs = "%PRODUCTNAME Drucker Verwaltung"
+cs = "Administrace tiskáren %PRODUCTNAME"
 ar = "%PRODUCTNAME Drucker Verwaltung"
 he = "%PRODUCTNAME Drucker Verwaltung"
 ca = "%PRODUCTNAME Drucker Verwaltung"
@@ -26,7 +26,8 @@ tr = "%PRODUCTNAME Drucker Verwaltung"
 th = "%PRODUCTNAME Drucker Verwaltung"
 hi-IN = "%PRODUCTNAME Drucker Verwaltung"
 sk = "Správa tlačiarní %PRODUCTNAME"
-sk = "Správa tlačiarní %PRODUCTNAME"
+0pt = "%PRODUCTNAME Drucker Verwaltung"
+0ru = "%PRODUCTNAME Drucker Verwaltung"
 
 [template]
 en = "%PRODUCTNAME From Template"
@@ -46,7 +47,7 @@ zh-CN = "%PRODUCTNAME 采用样式"
 zh-TW = "%PRODUCTNAME 採用樣式"
 0en = "%PRODUCTNAME From Template"
 fi = "%PRODUCTNAME Aus Vorlage"
-cs = "%PRODUCTNAME Aus Vorlage"
+cs = "Ze šablony %PRODUCTNAME"
 ar = "%PRODUCTNAME Aus Vorlage"
 he = "%PRODUCTNAME Aus Vorlage"
 ca = "%PRODUCTNAME Aus Vorlage"
@@ -56,7 +57,12 @@ tr = "%PRODUCTNAME Aus Vorlage"
 th = "%PRODUCTNAME Aus Vorlage"
 hi-IN = "%PRODUCTNAME Aus Vorlage"
 
-sk = "%PRODUCTNAME Zo šablóny"
+sk = "Zo šablóny %PRODUCTNAME"
+0pt = "%PRODUCTNAME Aus Vorlage"
+
+
+
+
 
 
 
