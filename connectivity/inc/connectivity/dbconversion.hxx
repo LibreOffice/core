@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-24 08:54:40 $
+ *  last change: $Author: fs $ $Date: 2000-10-27 07:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,9 @@ public:
 
     static sal_Int32    toINT32(const ::com::sun::star::util::Date& rVal);
     static sal_Int32    toINT32(const ::com::sun::star::util::Time& rVal);
+
+    static starutil::Date   toDate(sal_Int32 _nVal);
+    static starutil::Time   toTime(sal_Int32 _nVal);
 
     /** convert a double which is a date value relative to a given fixed date into a date value relative
         to the standard db null date.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:00:32 $
+ *  last change: $Author: fs $ $Date: 2000-10-27 07:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,26 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
     return aString;
 }
 
+//------------------------------------------------------------------------------
+starutil::Date DBTypeConversion::toDate(sal_Int32 _nVal)
+{
+    starutil::Date aReturn;
+    aReturn.Day = (sal_uInt16)(_nVal % 100);
+    aReturn.Month = (sal_uInt16)((_nVal  / 100) % 100);
+    aReturn.Year = (sal_uInt16)(_nVal  / 10000);
+    return aReturn;
+}
+
+//------------------------------------------------------------------------------
+starutil::Time DBTypeConversion::toTime(sal_Int32 _nVal)
+{
+    starutil::Time aReturn;
+    aReturn.Hours = (sal_uInt16)(((sal_uInt32)(_nVal >= 0 ? _nVal : _nVal*-1)) / 1000000);
+    aReturn.Minutes = (sal_uInt16)((((sal_uInt32)(_nVal >= 0 ? _nVal : _nVal*-1)) / 10000) % 100);
+    aReturn.Seconds = (sal_uInt16)((((sal_uInt32)(_nVal >= 0 ? _nVal : _nVal*-1)) / 100) % 100);
+    aReturn.HundredthSeconds = (sal_uInt16)(((sal_uInt32)(_nVal >= 0 ? _nVal : _nVal*-1)) % 100);
+    return aReturn;
+}
 
 const double fMilliSecondsPerDay = 86400000.0;
 //------------------------------------------------------------------------------
@@ -632,6 +652,9 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/24 15:00:32  oj
+ *  make strings unique for lib's
+ *
  *  Revision 1.2  2000/10/19 11:46:15  oj
  *  remove tools from dbtools
  *
