@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tocntntanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:03:02 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,9 +700,14 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                         // relative vertical position to object's environment.
                         const SwFrm& rVertEnvironLayFrm =
                             aEnvOfObj.GetVertEnvironmentLayoutFrm( *pUpperOfOrientFrm, false );
+                        // --> OD 2004-08-20 - do not check, if bottom of
+                        // anchored object would fit into environment layout
+                        // frame, if anchored object has to follow the text flow.
+                        const bool bCheckBottom = !bFollowTextFlow;
                         nTmpRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert,
                                                          rVertEnvironLayFrm,
-                                                         nTmpRelPosY );
+                                                         nTmpRelPosY,
+                                                         bCheckBottom );
                         // <--
                         if ( bVert )
                             aRelPos.X() = nTmpRelPosY;
