@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-24 16:36:45 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ String STR_ObjNameSingulGRUPEMPTY
     Text [ danish ] = "Tomt gruppeobjekt" ;
     Text [ italian ] = "Gruppo di oggetti vuoto" ;
     Text [ spanish ] = "Objeto de grupo vacío" ;
-    Text [ french ] = "Objet groupé vide" ;
+    Text [ french ] = "Objet de groupe vide" ;
     Text [ dutch ] = "Leeg groepsobject" ;
     Text[ chinese_simplified ] = "¿ÕµÄ·Ö×é¶ÔÏó";
     Text[ russian ] = "ïóñòîé ãğóïïîâîé îáúåêò";
@@ -238,7 +238,7 @@ String STR_ObjNameSingulGRUPLNK
     Text [ danish ] = "Kædet gruppeobjekt" ;
     Text [ italian ] = "Gruppo di oggetti collegato" ;
     Text [ spanish ] = "Objeto de grupo enlazado" ;
-    Text [ french ] = "Objet groupé lié" ;
+    Text [ french ] = "Objet de groupe lié" ;
     Text [ dutch ] = "Gekoppeld groepsobject" ;
     Text[ chinese_simplified ] = "Á´½ÓµÄ·Ö×é¶ÔÏó";
     Text[ russian ] = "ñâÿçàííûé ãğóïïîâîé îáúåêò";
@@ -1477,7 +1477,7 @@ String STR_ObjNameSingulPATHLINE
     Text[ dutch ] = "Bézierboog";
     Text[ chinese_simplified ] = "Bézier ÇúÏß";
     Text[ greek ] = "Êáìğıëç Bezier";
-    Text[ korean ] = "º£Áö¾î °î¼±";
+    Text[ korean ] = "º£Áö¿¡ °î¼±";
     Text[ turkish ] = "Bézier eğrisi";
     Text[ language_user1 ] = " ";
 };
@@ -1505,7 +1505,7 @@ String STR_ObjNamePluralPATHLINE
     Text[ dutch ] = "Bézierbogen";
     Text[ chinese_simplified ] = "Bézier ÇúÏß";
     Text[ greek ] = "Êáìğıëåò Bezier";
-    Text[ korean ] = "º£Áö¾î °î¼±";
+    Text[ korean ] = "º£Áö¿¡ °î¼±";
     Text[ turkish ] = "Bézier eğrileri";
     Text[ language_user1 ] = " ";
 };
@@ -1533,7 +1533,7 @@ String STR_ObjNameSingulPATHFILL
     Text[ dutch ] = "Bézierboog";
     Text[ chinese_simplified ] = "Bézier ÇúÏß";
     Text[ greek ] = "Êáìğıëç Bezier";
-    Text[ korean ] = "º£Áö¾î °î¼±";
+    Text[ korean ] = "º£Áö¿¡ °î¼±";
     Text[ turkish ] = "Bézier eğrisi";
     Text[ language_user1 ] = " ";
 };
@@ -1561,7 +1561,7 @@ String STR_ObjNamePluralPATHFILL
     Text[ dutch ] = "Bézierbogen";
     Text[ chinese_simplified ] = "Bézier ÇúÏß";
     Text[ greek ] = "Êáìğıëåò Bezier";
-    Text[ korean ] = "º£Áö¾î °î¼±";
+    Text[ korean ] = "º£Áö¿¡ °î¼±";
     Text[ turkish ] = "Bézier eğrileri";
     Text[ language_user1 ] = " ";
 };
@@ -3918,7 +3918,7 @@ String STR_EditMovToTop
     Text[ dutch ] = "%O verder naar voren plaatsen";
     Text[ chinese_simplified ] = "%O ÔÙÇ°ÖÃ";
     Text[ greek ] = "Ìåôáêßíçóç %O ğñïò ôá åìğñüò";
-    Text[ korean ] = "%O °è¼Ó ¾ÕÀ¸·Î ÀÌµ¿";
+    Text[ korean ] = "%O °è¼ÓÇØ¼­ ¾ÕÀ¸·Î ÀÌµ¿";
     Text[ turkish ] = "Bir öne getir: %O";
     Text[ language_user1 ] = " ";
 };
@@ -3946,7 +3946,7 @@ String STR_EditMovToBtm
     Text[ dutch ] = "%O verder naar achteren plaatsen";
     Text[ chinese_simplified ] = "%O ÔÙºóÖÃ";
     Text[ greek ] = "Ìåôáêßíçóç %O ğñïò ôá ğßóù";
-    Text[ korean ] = "%O °è¼Ó µÚ·Î ÀÌµ¿";
+    Text[ korean ] = "%O °è¼ÓÇØ¼­ µÚ·Î ÀÌµ¿";
     Text[ turkish ] = "Bir alta gönder: %O";
     Text[ language_user1 ] = " ";
 };
@@ -4392,7 +4392,7 @@ String STR_EditSetPointsSmooth
     Text[ dutch ] = "Bézier-eigenschappen van %O wijzigen";
     Text[ chinese_simplified ] = "¸ü¸Ä %O µÄBézier ÊôĞÔ";
     Text[ greek ] = "Ôñïğïğïßçóç éäéïôŞôùí êáìğıëçò ôïõ %O";
-    Text[ korean ] = "%OÀÇ º£Áö¾î ¼Ó¼º º¯°æ";
+    Text[ korean ] = "%O º£Áö¿¡ ¼Ó¼º º¯°æ";
     Text[ turkish ] = "Bézier özelliklerini değiştir: %O";
     Text[ language_user1 ] = " ";
 };
@@ -4420,7 +4420,7 @@ String STR_EditSetSegmentsKind
     Text[ dutch ] = "Bézier-eigenschappen van %O wijzigen";
     Text[ chinese_simplified ] = "¸ü¸Ä %O µÄBézier ÊôĞÔ";
     Text[ greek ] = "Ôñïğïğïßçóç éäéïôŞôùí êáìğıëçò ôïõ %O";
-    Text[ korean ] = "%OÀÇ º£Áö¾î ¼Ó¼º º¯°æ";
+    Text[ korean ] = "%O º£Áö¿¡ ¼Ó¼º º¯°æ";
     Text[ turkish ] = "Bézier özelliklerini değiştir: %O";
     Text[ language_user1 ] = " ";
 };
@@ -4676,7 +4676,7 @@ String STR_EditDelStylesheet
     Text[ dutch ] = "Opmaakprofiel van %O verwijderen";
     Text[ chinese_simplified ] = "´Ó %O Ö®ÖĞÉ¾³ıÑùÊ½";
     Text[ greek ] = "ÄéáãñáöŞ ğñïôığïõ áğü %O";
-    Text[ korean ] = "%OÀÇ ¼­½Ä Á¦°Å";
+    Text[ korean ] = "%O¿¡¼­  ¼­½Ä Á¦°Å";
     Text[ turkish ] = "Biçimini kaldır: %O";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM - -";
 };
@@ -5038,7 +5038,7 @@ String STR_EditAlignHCenter
     Text[ dutch ] = "%O verticaal centreren";
     Text[ chinese_simplified ] = "%O ´¹Ö±¾ÓÖĞ";
     Text[ greek ] = "Êåíôñáñéóìİíá êáôáêüñõöá %O";
-    Text[ korean ] = "%O ¼öÁ÷ °¡¿îµ¥ ¸ÂÃã";
+    Text[ korean ] = "%O ¼öÁ÷À¸·Î °¡¿îµ¥ ¸ÂÃã";
     Text[ turkish ] = "Dikey ortala: %O";
     Text[ language_user1 ] = " ";
 };
@@ -5891,7 +5891,7 @@ String STR_DragMethCrook
     Text[ dutch ] = "%O in cirkel schikken";
     Text[ chinese_simplified ] = "ÅÅĞò %O ³ÉÔ²ĞÎ";
     Text[ greek ] = "Ôïğïèİôçóç óå êıêëï %O";
-    Text[ korean ] = "%OÀ» ¿ø ¾È¿¡¼­ Á¤·Ä";
+    Text[ korean ] = "%OÀ»(¸¦) ¿ø ¾È¿¡¼­ Á¤·Ä";
     Text[ turkish ] = "Daire biçiminde düzenle: %O";
     Text[ language_user1 ] = " ";
 };
@@ -6121,7 +6121,7 @@ String STR_DragCircAngle
     Text[ dutch ] = "Hoek van %O wijzigen";
     Text[ chinese_simplified ] = "¸ü¸Ä %O µÄ½Ç¶È";
     Text[ greek ] = "ÁëëáãŞ ãùíßáò %O";
-    Text[ korean ] = "%OÀÇ ¸ğ¼­¸® ÀÌµ¿";
+    Text[ korean ] = "%O °¢ ÀÌµ¿";
     Text[ turkish ] = "Açısını değiştir: %O";
     Text[ language_user1 ] = " ";
 };
@@ -13452,7 +13452,7 @@ String SIP_SA_EDGELINEDELTAANZ
     Text[ dutch ] = "Aantal verplaatsbare lijnen";
     Text[ chinese_simplified ] = "¸÷ÖÖÏßÌõÊıÄ¿";
     Text[ greek ] = "Áñéèìüò ãñáììşí ğïõ ìåôáêéíïıíôáé";
-    Text[ korean ] = "ÀÌµ¿¼± °³¼ö";
+    Text[ korean ] = "ÀÌµ¿°¡´ÉÇÑ ¼±ÀÇ °³¼ö";
     Text[ turkish ] = "Taşınabilir çizgi sayısı";
 };
 
@@ -15846,7 +15846,7 @@ String SIP_EE_CHAR_FONTINFO
     Text[ dutch ] = "Tekenset";
     Text[ chinese_simplified ] = "×ÖÌå";
     Text[ greek ] = "Óåô ÷áñáêôŞñùí";
-    Text[ korean ] = "¹®ÀÚ ¼¼Æ®";
+    Text[ korean ] = "¹®ÀÚÁıÇÕ";
     Text[ turkish ] = "Karakter kümesi";
 };
 
@@ -16500,7 +16500,7 @@ String SIP_SA_GRAFCROP
     Text[ polish ] = "Przytnij";
     Text[ portuguese_brazilian ] = "Crop";
     Text[ japanese ] = "ÄØĞİ¸Ş";
-    Text[ korean ] = "Crop";
+    Text[ korean ] = "´Ùµë±â";
     Text[ chinese_simplified ] = "¼ô²Ã";
     Text[ chinese_traditional ] = "µô°Å";
     Text[ turkish ] = "Crop";
