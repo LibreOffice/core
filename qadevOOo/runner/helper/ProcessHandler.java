@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProcessHandler.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Date: 2005-02-02 13:56:23 $
+ *  last change: $Date: 2005-02-24 17:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,11 +420,11 @@ public class ProcessHandler {
             proc.destroy();
             log.println("Process has been destroyed!");
         }
-
-        try {
-            stdout.join();
-            stderr.join();
-        } catch (InterruptedException e) {}
+//  Removed as hung up in SDK test 'PathSettings'
+//        try {
+//            stdout.join();
+//            stderr.join();
+//        } catch (InterruptedException e) {}
 
         return isFinished() ;
     }
