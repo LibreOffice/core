@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-12 14:43:24 $
+ *  last change: $Author: cp $ $Date: 2000-12-13 20:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,6 +704,165 @@ PrinterFontXlfd::AddEncoding( const Xlfd *pXlfd )
     return False;
 }
 
+/* ------- virtual fonts for user interface ------------------------------- */
+
+VirtualXlfd::ExtEncodingInfo&
+VirtualXlfd::ExtEncodingInfo::operator= ( const ExtendedXlfd *pXlfd )
+{
+    mnFoundry  = pXlfd->mnFoundry;
+    mnFamily   = pXlfd->mnFamily;
+    mnWeight   = pXlfd->mnWeight;
+    mnSlant    = pXlfd->mnSlant;
+    mnSetwidth = pXlfd->mnSetwidth;
+
+    return *this;
+}
+
+VirtualXlfd::ExtEncodingInfo&
+VirtualXlfd::ExtEncodingInfo::operator= ( const VirtualXlfd::ExtEncodingInfo& rInfo )
+{
+    mnFoundry  = rInfo.mnFoundry;
+    mnFamily   = rInfo.mnFamily;
+    mnWeight   = rInfo.mnWeight;
+    mnSlant    = rInfo.mnSlant;
+    mnSetwidth = rInfo.mnSetwidth;
+
+    return *this;
+}
+
+VirtualXlfd::VirtualXlfd() : mpExtEncodingInfo(NULL)
+{
+    mnFoundry  = 0;
+    mnFamily   = 0;
+    mnWeight   = 0;
+    mnSlant    = 0;
+    mnSetwidth = 0;
+}
+
+VirtualXlfd::~VirtualXlfd()
+{
+    if ( mpExtEncodingInfo != NULL )
+        free (mpExtEncodingInfo);
+}
+
+Bool
+VirtualXlfd::AddEncoding( const Xlfd *pXlfd )
+{
+    return False;
+}
+
+Bool
+VirtualXlfd::AddEncoding( const ExtendedXlfd *pXlfd )
+{
+    for (int i = 0; i < pXlfd->NumEncodings(); i++)
+    {
+        rtl_TextEncoding nEncoding = pXlfd->GetEncoding(i);
+        if (!HasEncoding(nEncoding))
+        {
+            /* deep copy of the xlfd information */
+            mpFactory  = pXlfd->mpFactory;
+            mnFoundry  = pXlfd->mnFoundry;
+            mnFamily   = pXlfd->mnFamily;
+            mnWeight   = pXlfd->mnWeight;
+            mnSlant    = pXlfd->mnSlant;
+            mnSetwidth = pXlfd->mnSetwidth;
+
+            mpEncodingInfo = (EncodingInfo*)Realloc( mpEncodingInfo,
+                                        (mnEncodings + 1) * sizeof(EncodingInfo) );
+            mpEncodingInfo[ mnEncodings ] = pXlfd->mpEncodingInfo[i];
+            mpExtEncodingInfo = (ExtEncodingInfo*)Realloc( mpExtEncodingInfo,
+                                        (mnEncodings + 1) * sizeof(ExtEncodingInfo) );
+            mpExtEncodingInfo[ mnEncodings ] = pXlfd;
+
+            mnEncodings++;
+        }
+    }
+
+    return mnEncodings > 0 ? True : False;
+}
+
+void
+VirtualXlfd::ToString( ByteString &rString, unsigned short nPixelSize,
+           rtl_TextEncoding nEncoding ) const
+{
+    int nIdx = GetEncodingIdx( nEncoding );
+    if ( nIdx < 0 )
+        return;
+
+    ExtEncodingInfo &rExtInfo = mpExtEncodingInfo[ nIdx ];
+
+    AppendAttribute( mpFactory->RetrieveFoundry(rExtInfo.mnFoundry),   rString );
+    AppendAttribute( mpFactory->RetrieveFamily(rExtInfo.mnFamily),     rString );
+    AppendAttribute( mpFactory->RetrieveWeight(rExtInfo.mnWeight),     rString );
+    AppendAttribute( mpFactory->RetrieveSlant(rExtInfo.mnSlant),       rString );
+    AppendAttribute( mpFactory->RetrieveSetwidth(rExtInfo.mnSetwidth), rString );
+
+    EncodingInfo& rInfo = mpEncodingInfo[ nIdx ];
+    AppendAttribute( mpFactory->RetrieveAddstyle(rInfo.mnAddstyle), rString );
+
+    rString += '-';
+    rString += ByteString::CreateFromInt32( nPixelSize );
+    rString += "-0-0-0-";
+    rString += rInfo.mcSpacing;
+    rString += "-0";
+
+    AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
+}
+
+void
+VirtualXlfd::ToString( ByteString &rString, unsigned short nPixelSize,
+        char* pMatricsString, rtl_TextEncoding nEncoding ) const
+{
+    int nIdx = GetEncodingIdx( nEncoding );
+    if ( nIdx < 0 )
+        return;
+
+    ExtEncodingInfo &rExtInfo = mpExtEncodingInfo[ nIdx ];
+
+    AppendAttribute( mpFactory->RetrieveFoundry(rExtInfo.mnFoundry),   rString );
+    AppendAttribute( mpFactory->RetrieveFamily(rExtInfo.mnFamily),     rString );
+    AppendAttribute( mpFactory->RetrieveWeight(rExtInfo.mnWeight),     rString );
+    AppendAttribute( mpFactory->RetrieveSlant(rExtInfo.mnSlant),       rString );
+    AppendAttribute( mpFactory->RetrieveSetwidth(rExtInfo.mnSetwidth), rString );
+
+    EncodingInfo& rInfo = mpEncodingInfo[ nIdx ];
+    AppendAttribute( mpFactory->RetrieveAddstyle(rInfo.mnAddstyle), rString );
+
+    rString += "-*-";
+    char pTmp[256];
+    sprintf( pTmp, pMatricsString, nPixelSize, nPixelSize );
+    rString += pTmp;
+    rString += "-*-*-";
+    rString += rInfo.mcSpacing;
+    rString += "-*";
+
+    AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
+}
+
+void
+VirtualXlfd::ToImplFontData( ImplFontData *pFontData ) const
+{
+    pFontData->mpSysData = (void*)this;
+
+    pFontData->meFamily    = FAMILY_SWISS;
+    pFontData->meWeight    = WEIGHT_NORMAL;
+    pFontData->meItalic    = ITALIC_NONE;
+    pFontData->meWidthType = WIDTH_NORMAL;
+
+    // family name
+    static const String aFontName( RTL_CONSTASCII_USTRINGPARAM("Interface User") );
+    pFontData->maName = aFontName;
+    // pFontData->maStyleName = aStyleName;
+    pFontData->meCharSet     =
+    pFontData->mbOrientation = TRUE;
+    pFontData->mbDevice      = TRUE;
+    pFontData->mePitch       = PITCH_VARIABLE;
+    pFontData->meType        = TYPE_SCALABLE;
+    pFontData->mnWidth       = 0;
+    pFontData->mnHeight      = 0;
+    pFontData->mnQuality     = 1024;
+}
+
 // ------ font list -------------------------------------------------------
 
 void
@@ -800,6 +959,37 @@ const ExtendedXlfd*
 XlfdStorage::Get( int nIdx ) const
 {
     return nIdx >= 0 && nIdx < mnCount ? mpList[nIdx] : NULL ;
+}
+
+void
+XlfdStorage::InterfaceFont (AttributeProvider* pFactory)
+{
+    VirtualXlfd* pVirtualFont = new VirtualXlfd();
+
+    for ( int i = 0; i < mnCount; i++ )
+    {
+        FontType   eType   = mpList[i]->GetFontType();
+        FontWeight eWeight = mpList[i]->GetWeight();
+        FontItalic eItalic = mpList[i]->GetItalic();
+
+        if (    (eType   == TYPE_SCALABLE)
+            && ((eWeight == WEIGHT_NORMAL) || (eWeight == WEIGHT_MEDIUM))
+            && ((eItalic == ITALIC_NORMAL) || (eItalic == ITALIC_NONE))
+           )
+        {
+            Attribute *pFamily   = pFactory->RetrieveFamily(mpList[i]->mnFamily);
+            Attribute *pSetWidth = pFactory->RetrieveSetwidth(mpList[i]->mnSetwidth);
+
+            if (   pFamily->HasFeature( XLFD_FEATURE_INTERFACE_FONT )
+                && !pSetWidth->HasFeature( XLFD_FEATURE_NARROW ))
+            {
+                pVirtualFont->AddEncoding( mpList[i] );
+            }
+        }
+    }
+
+    if (pVirtualFont->NumEncodings() > 0)
+        Add (pVirtualFont);
 }
 
 // ------ bitmap font list --------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-10 20:14:58 $
+ *  last change: $Author: cp $ $Date: 2000-12-13 20:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,13 @@ class ByteString;
 
 // base class
 
+class VirtualXlfd;
+class XlfdStorage;
+
 class ExtendedXlfd {
+
+    friend VirtualXlfd;
+    friend XlfdStorage;
 
     public:
                              ExtendedXlfd();
@@ -248,6 +254,7 @@ class XlfdStorage {
         unsigned short      GetCount() const
                                     { return mnCount; }
         const ExtendedXlfd* Get(int nIdx) const;
+        void                InterfaceFont( AttributeProvider* pFactory);
         #ifdef DEBUG
         void                Dump() const ;
         #endif
@@ -270,6 +277,43 @@ class BitmapXlfdStorage : public XlfdStorage {
 
         void                AddBitmapFont( const Xlfd *pXlfd );
         void                AddScalableFont( const ScalableXlfd *pScaleFnt );
+};
+
+
+/* Virtual font for User Interface */
+
+class VirtualXlfd : public ExtendedXlfd
+{
+    public:
+                             VirtualXlfd();
+        virtual             ~VirtualXlfd();
+        virtual Bool        AddEncoding( const Xlfd *pXlfd );
+        Bool                AddEncoding( const ExtendedXlfd *pXlfd );
+        virtual void        ToString( ByteString &rString,
+                                    unsigned short nPixelSize,
+                                       rtl_TextEncoding nEncoding ) const ;
+        virtual void        ToString( ByteString &rString,
+                                      unsigned short nPixelSize,
+                                     char* pMatricsString,
+                                       rtl_TextEncoding nEncoding  ) const;
+
+        virtual void        ToImplFontData( ImplFontData *pFontData ) const ;
+        virtual FontType    GetFontType() const
+                                    { return TYPE_SCALABLE; }
+    protected:
+
+        struct ExtEncodingInfo {
+            unsigned short      mnFoundry;
+            unsigned short      mnFamily;
+            unsigned short      mnWeight;
+            unsigned short      mnSlant;
+            unsigned short      mnSetwidth;
+
+            ExtEncodingInfo&    operator= ( const ExtendedXlfd *pXlfd );
+            ExtEncodingInfo&    operator= ( const ExtEncodingInfo& rInfo );
+        } *mpExtEncodingInfo;
+
+    friend class ExtEncodingInfo;
 };
 
 #endif /* XLFD_EXTENDED_HXX */

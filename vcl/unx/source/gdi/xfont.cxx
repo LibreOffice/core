@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-06 10:10:41 $
+ *  last change: $Author: cp $ $Date: 2000-12-13 20:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,14 @@ ExtendedFontStruct::GetDefaultWidth( SalConverterCache* pCvt )
 
         sal_Size nSize = ConvertStringUTF16( &nQuestionMark, 1, pBuffer,
                         sizeof(pBuffer), pCvt->GetU2TConverter(nEncoding) );
+
+        // XXX FIXME
+        if ( nEncoding == RTL_TEXTENCODING_GB_2312 )
+            for (int n_char = 0; n_char < nSize; n_char++ )
+            {
+                pBuffer[ n_char ] &= 0x7F;
+            }
+
         if ( nSize == 2 )
         {
             nChar =  ((sal_MultiByte)pBuffer[0] << 8)
@@ -552,6 +560,12 @@ ExtendedFontStruct::GetCharWidth16( SalConverterCache *pCvt,
             nSize = ConvertStringUTF16( &nUniIdx, 1,
                             (sal_Char*)pBuffer, sizeof(pBuffer),
                             pCvt->GetU2TConverter(nEncoding) );
+            // XXX FIXME
+            if ( nEncoding == RTL_TEXTENCODING_GB_2312 )
+                for (int n_char = 0; n_char < nSize; n_char++ )
+                {
+                    pBuffer[ n_char ] &= 0x7F;
+                }
         }
 
         // query font metrics

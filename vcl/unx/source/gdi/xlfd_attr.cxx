@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-10 20:14:58 $
+ *  last change: $Author: cp $ $Date: 2000-12-13 20:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,18 @@ Attribute::TagFeature( unsigned short nFeature )
             || (strcmp(mpName, "interface system") == 0)))
     {
         mnFeature |= XLFD_FEATURE_APPLICATION_FONT;
+    }
+    if (   (nFeature & XLFD_FEATURE_INTERFACE_FONT)
+        && (   (strcmp(mpName, "arial")       == 0) /* european */
+            || (strcmp(mpName, "helvetica")   == 0)
+            || (strcmp(mpName, "hg mincho l") == 0) /* japanese */
+            || (strcmp(mpName, "heiseimin")   == 0)
+            || (strcmp(mpName, "myeongjo")    == 0)
+            || (strcmp(mpName, "kai")         == 0) /* chinese */
+           )
+       )
+    {
+        mnFeature |= XLFD_FEATURE_INTERFACE_FONT;
     }
 
     if ( nFeature & XLFD_FEATURE_REDUNDANTSTYLE )
@@ -651,6 +663,7 @@ AttributeProvider::TagFeature()
                                       XLFD_FEATURE_OL_GLYPH
                                     | XLFD_FEATURE_OL_CURSOR
                                     | XLFD_FEATURE_NARROW
+                                    | XLFD_FEATURE_INTERFACE_FONT
                                     | XLFD_FEATURE_APPLICATION_FONT);
 
     mpField[ eXLFDSetwidthName ]->TagFeature(

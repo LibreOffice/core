@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-10 20:14:58 $
+ *  last change: $Author: cp $ $Date: 2000-12-13 20:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,11 @@ SalDisplay::GetXlfdList()
             {
                 continue;
             }
+            // exclude "interface system" and "interface user" in bold
+            if (pAttr->HasFeature( XLFD_FEATURE_APPLICATION_FONT ) )
+            {
+                continue;
+            }
 
             Bool bSameOutline = pXlfdList[i].SameFontoutline(pXlfdList + nFrom);
             XlfdFonttype eType = pXlfdList[i].Fonttype();
@@ -328,6 +333,9 @@ SalDisplay::GetXlfdList()
         mpFontList->Add( pScalableFont );
         mpFontList->Add( pPrinterFont );
         mpFontList->Add( &aBitmapList );
+
+        // create a font set for user interface
+        mpFontList->InterfaceFont( mpFactory );
 
         // cleanup the list of simple font information
         if ( pXlfdList != NULL )
@@ -602,6 +610,14 @@ ConvertTextItem16( XTextItem16* pTextItem,
             }
             pTextItem->nchars = nSize / 2;
         }
+
+        // XXX FIXME
+        if ( nEncoding == RTL_TEXTENCODING_GB_2312 )
+            for (int n_char = 0; n_char < m; n_char++ )
+            {
+                pTextChars[ n_char ] &= 0x7F;
+            }
+
     }
 }
 
