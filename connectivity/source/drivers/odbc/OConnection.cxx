@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:27:55 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 14:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,8 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
 
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
-    ::rtl::OUString aDSN(url.copy(nLen+1)),aUID,aPWD;
+    ::rtl::OUString aDSN(RTL_CONSTASCII_USTRINGPARAM("DSN=")), aUID, aPWD;
+    aDSN += url.copy(nLen+1);
 
     sal_Int32 nTimeout = 20;
     sal_Bool bSilent = sal_True;
