@@ -2,9 +2,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: oj $ $Date: 2002-11-11 08:57:19 $
+#   last change: $Author: vg $ $Date: 2003-06-02 07:53:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -239,4 +239,19 @@ MYSQL_CPP=1
 
 MYSQL=$(MYSQL_TARGET_TARGET)_$(CMPEXT)
 
+# ----------------------------Evoab settings-----------------------------------#
+# target
+EVOAB_TARGET=evoab
+
+# the major 
+EVOAB_MAJOR=1
+# the minor 
+EVOAB_MINOR=0
+# the micro 
+EVOAB_MICRO=0
+
+# this is a c++ compatible library 
+EVOAB_CPP=1
+
+EVOAB=$(EVOAB_TARGET_TARGET)_$(CMPEXT)
 
