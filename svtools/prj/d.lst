@@ -304,6 +304,7 @@ hedabu: ..\inc\localresaccess.hxx %_DEST%\inc%_EXT%\svtools\localresaccess.hxx
 hedabu: ..\inc\wizardmachine.hxx %_DEST%\inc%_EXT%\svtools\wizardmachine.hxx
 hedabu: ..\inc\helpagentwindow.hxx %_DEST%\inc%_EXT%\svtools\helpagentwindow.hxx
 hedabu: ..\inc\pickerhistory.hxx %_DEST%\inc%_EXT%\svtools\pickerhistory.hxx
+hedabu: ..\inc\regoptions.hxx %_DEST%\inc%_EXT%\svtools\regoptions.hxx
 
 hedabu: ..\inc\lngmisc.hxx %_DEST%\inc%_EXT%\svtools\lngmisc.hxx
 hedabu: ..\inc\lingucfg.hxx %_DEST%\inc%_EXT%\svtools\lingucfg.hxx
