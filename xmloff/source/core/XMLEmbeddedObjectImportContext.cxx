@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectImportContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-05 08:16:47 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,12 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _GLOBNAME_HXX
+#include <tools/globname.hxx>
+#endif
+#ifndef _SOT_CLSIDS_HXX
+#include <sot/clsids.hxx>
+#endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
@@ -115,7 +121,7 @@ struct XMLServiceMapEntry_Impl
 
 #define SERVICE_MAP_ENTRY( cls, app ) \
     { XML_##cls, \
-      XML_IMPORT_FILTER_##app, sizeof(XML_IMPORT_FILTER_##app)-1 }
+      XML_IMPORT_FILTER_##app, sizeof(XML_IMPORT_FILTER_##app)-1}
 
 const XMLServiceMapEntry_Impl aServiceMap[] =
 {
@@ -231,10 +237,13 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
         const Reference< XAttributeList >& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
+    SvGlobalName aName;
+
     if( nPrfx == XML_NAMESPACE_MATH &&
         IsXMLToken( rLName, XML_MATH ) )
     {
         sFilterService = OUString( RTL_CONSTASCII_USTRINGPARAM(XML_IMPORT_FILTER_MATH) );
+        aName = SvGlobalName(SO3_SM_CLASSID);
     }
     else if( nPrfx == XML_NAMESPACE_OFFICE &&
         IsXMLToken( rLName, XML_DOCUMENT ) )
@@ -265,12 +274,25 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
                     sFilterService = OUString( pEntry->sFilterService,
                                                pEntry->nFilterServiceLen,
                                                RTL_TEXTENCODING_ASCII_US );
+
+                    switch( pEntry->eClass )
+                    {
+                    case XML_TEXT:          aName = SvGlobalName(SO3_SW_CLASSID); break;
+                    case XML_ONLINE_TEXT:   aName = SvGlobalName(SO3_SWWEB_CLASSID); break;
+                    case XML_SPREADSHEET:   aName = SvGlobalName(SO3_SC_CLASSID); break;
+                    case XML_DRAWING:       aName = SvGlobalName(SO3_SDRAW_CLASSID); break;
+                    case XML_PRESENTATION:  aName = SvGlobalName(SO3_SIMPRESS_CLASSID); break;
+                    case XML_CHART:         aName = SvGlobalName(SO3_SCH_CLASSID); break;
+                    }
+
                     break;
                 }
                 pEntry++;
             }
         }
     }
+
+    sCLSID = aName.GetHexName();
 }
 
 XMLEmbeddedObjectImportContext::~XMLEmbeddedObjectImportContext()
