@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obr $ $Date: 2001-07-26 13:09:12 $
+ *  last change: $Author: ssa $ $Date: 2001-07-27 13:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4863,7 +4863,6 @@ void Window::SetCursorRect( const Rectangle* pRect, long nExtTextInputWidth )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-#ifndef REMOTE_APPSERVER
     ImplWinData* pWinData = ImplGetWinData();
     if ( pWinData->mpCursorRect )
     {
@@ -4882,8 +4881,10 @@ void Window::SetCursorRect( const Rectangle* pRect, long nExtTextInputWidth )
     }
 
     pWinData->mnCursorExtWidth = nExtTextInputWidth;
-#else
-    ImplGetFrame()->SetCursorRect( pRect, nExtTextInputWidth );
+
+#ifdef REMOTE_APPSERVER
+    // update remote cursor pos
+    ImplUpdateCursorRect( this );
 #endif
 }
 
