@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:57:25 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,70 +306,16 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
             sal_Bool *pOldInCallAliveFlag = pImp->pInCallAliveFlag;
             pImp->pInCallAliveFlag = &bThisDispatcherAlive;
 
-            // eigentlichen Call durchf"uhren
-            sal_Bool bDone = sal_False;
-/*
-            SfxViewFrame *pViewFrame = GetFrame();
-            if ( pViewFrame )
-            {
-                SFX_REQUEST_ARG(rReq, pInterceptorItem, SfxBoolItem, SID_INTERCEPTOR, sal_False);
-                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >  xProv( pViewFrame->GetFrame()->GetInterceptor_Impl() );
-                sal_Bool bDirect = ( pInterceptorItem != 0 );
-                if ( bDirect )
-                {
-                    bDirect = !pInterceptorItem->GetValue();
-                    rReq.RemoveItem( SID_INTERCEPTOR );
-                }
+            SfxViewFrame* pView = GetFrame();
+            if ( !pView )
+                pView = SfxViewFrame::Current();
 
-                if ( xProv.is() && !bDirect )
-                {
-                    bDone = sal_True;
-                    ::com::sun::star::util::URL aURL;
-                    String aName( rSlot.GetUnoName() );
-                    String aCmd;
-                    if ( aName.getLength() )
-                    {
-                        aCmd = ".uno:";
-                        aCmd += aName;
-                    }
-                    else
-                    {
-                        aCmd = "slot:";
-                        aCmd += rSlot.GetSlotId();
-                    }
+//            Help* pHelp = Application::GetHelp();
+//            if ( pHelp && pView )
+//              ((SfxHelp_Impl*)pHelp)->OpenHelpAgent( pView->GetFrame(), rReq.GetSlot() );
 
-                    aURL.Complete = S2U( aCmd );
-                    SfxURLTransformer aTrans;
-                    aTrans.parseStrict( aURL );
-                    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = xProv->queryDispatch( aURL, "", 0 );
-                    if ( xDisp.is() )
-                    {
-// automatisch auskommentiert - [getImplementation] - Wird von OWeakObject nicht weiter unterstützt!
-//                      void* pDisp = xDisp->getImplementation( ::getCppuType((const SfxOfficeDispatch*)0) );
-
-                        if ( pDisp)
-                            bDone = sal_False;
-                        else
-                        {
-                            ::com::sun::star::uno::Sequence <PropertyValue> aSequ;
-                            if ( rReq.GetArgs() )
-                                TransformItems( rSlot.GetSlotId(), *rReq.GetArgs(), aSequ, &rSlot );
-                            xDisp->dispatch( aURL, aSequ );
-                        }
-                    }
-                }
-            }
-*/
-            if ( !bDone )
-            {
-                // Bei neuen/komplizierten Funktionen den HelpAgent feuern...
-  //              Help* pHelp = Application::GetHelp();
-  //              if ( pHelp )
-  //                  ((SfxHelp_Impl*)pHelp)->SlotExecutedOrFocusChanged( rReq.GetSlot(), sal_True, SvtHelpOptions().IsHelpAgentAutoStartMode() );
-
-                SfxExecFunc pFunc = rSlot.GetExecFnc();
-                rShell.CallExec( pFunc, rReq );
-            }
+            SfxExecFunc pFunc = rSlot.GetExecFnc();
+            rShell.CallExec( pFunc, rReq );
 
             // falls 'this' noch lebt
             if ( bThisDispatcherAlive )
