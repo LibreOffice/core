@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 13:28:25 $
+ *  last change: $Author: jp $ $Date: 2001-06-14 16:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,13 +545,13 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
     for( ; p->pName; ++p, ++i )
     {
         // set the name
-        const SwPropNameLen& rPropNm = GetPropName( (USHORT)p->pName );
+        const SwPropNameLen& rPropNm = GetPropName( (USHORT)(long)p->pName );
         p->pName = rPropNm.pName;
         p->nNameLen = rPropNm.nNameLen;
 
         // set the cppu tpye
         const com::sun::star::uno::Type** ppType = &p->pType;
-        switch( (USHORT)p->pType )
+        switch( (USHORT)(long)p->pType )
         {
         case CPPUTYPE_BOOLEAN:      *ppType = &::getBooleanCppuType();  break;
         case CPPUTYPE_INT8:         *ppType = &::getCppuType( (sal_Int8*)0 );   break;
