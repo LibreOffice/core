@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-09-10 08:07:34 $
+ *  last change: $Author: os $ $Date: 2002-11-22 07:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,20 +189,25 @@ String  SvxNumberType::GetNumStr( ULONG nNo, const Locale& rLocale ) const
             break;
             default:
                 {
-
-                    Sequence< PropertyValue > aProperties(2);
-                    PropertyValue* pValues = aProperties.getArray();
-                    pValues[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingType"));
-                    pValues[0].Value <<= nNumType;
-                    pValues[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
-                    pValues[1].Value <<= (sal_Int32)nNo;
-
-                    try
+                    //#95525# '0' allowed for ARABIC numberings
+                    if(NumberingType::ARABIC == nNumType && 0 == nNo )
+                        aTmpStr = '0';
+                    else
                     {
-                        aTmpStr = xFormatter->makeNumberingString( aProperties, rLocale );
-                    }
-                    catch(Exception&)
-                    {
+                        Sequence< PropertyValue > aProperties(2);
+                        PropertyValue* pValues = aProperties.getArray();
+                        pValues[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingType"));
+                        pValues[0].Value <<= nNumType;
+                        pValues[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
+                        pValues[1].Value <<= (sal_Int32)nNo;
+
+                        try
+                        {
+                            aTmpStr = xFormatter->makeNumberingString( aProperties, rLocale );
+                        }
+                        catch(Exception&)
+                        {
+                        }
                     }
                 }
         }
