@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:15:12 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,7 +432,11 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
         return;
 
     StartAllAction();
-    StartUndo(UNDO_INSERT);
+
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_GRAPHIC));
+
+    StartUndo(UNDO_INSERT, &aRewriter);
 
     if ( HasSelection() )
         DelRight();
@@ -671,6 +675,7 @@ BOOL SwWrtShell::InsertOle( SvInPlaceObjectRef aRef )
     {
         ResetCursorStack();
         StartAllAction();
+
         StartUndo(UNDO_INSERT);
 
         //Some differences between StarMath and any other objects:
@@ -743,7 +748,18 @@ BOOL SwWrtShell::InsertOle( SvInPlaceObjectRef aRef )
 
         EndAllAction();
         GetView().AutoCaption(OLE_CAP, &aCLSID);
-        EndUndo(UNDO_INSERT);
+
+        SwRewriter aRewriter;
+
+        if (SotExchange::IsMath(*aRef->GetSvFactory()))
+            aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_FORMULA));
+        else if (SotExchange::IsChart(*aRef->GetSvFactory()))
+            aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_CHART));
+        else
+            aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_OLE));
+
+
+        EndUndo(UNDO_INSERT, &aRewriter);
 
         return bActivate;
     }
@@ -1492,6 +1508,7 @@ SwWrtShell::SwWrtShell( SwWrtShell& rSh, Window *pWin, SwView &rShell )
 {
     BITFLD_INI_LIST
     SET_CURR_SHELL( this );
+
     SetSfxViewShell( (SfxViewShell *)&rShell );
     SetFlyMacroLnk( LINK(this, SwWrtShell, ExecFlyMac) );
 }
@@ -1562,6 +1579,34 @@ void SwWrtShell::ChgDBData(const SwDBData& aDBData)
     GetView().NotifyDBChanged();
 }
 
+String SwWrtShell::GetSelDescr() const
+{
+    String aResult;
 
+    int nSelType = GetSelectionType();
+    switch (nSelType)
+    {
+    case SEL_GRF:
+        aResult = SW_RES(STR_GRAPHIC);
 
+        break;
+    case SEL_FRM:
+        {
+            const SwFrmFmt * pFrmFmt = GetCurFrmFmt();
 
+            if (pFrmFmt)
+                aResult = pFrmFmt->GetDescription();
+        }
+        break;
+    case SEL_DRW:
+        {
+            aResult = SW_RES(STR_DRAWING_OBJECTS);
+        }
+        break;
+    default:
+        if (0 != pDoc)
+            aResult = GetCrsrDescr();
+    }
+
+    return aResult;
+}
