@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-06 14:34:31 $
+ *  last change: $Author: th $ $Date: 2001-07-06 15:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,12 +344,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 #ifdef REMOTE_APPSERVER
     // create condition now to avoid race
     pSVData->mpStartUpCond = new vos::OCondition;
-
     pSVData->mpUserInfo = new UserOnPrintServer;
-
-#if SUPD < 638
-    Application::EnterMultiThread( TRUE );
-#endif
 #endif
 
     if( pSVData->mpApp )
