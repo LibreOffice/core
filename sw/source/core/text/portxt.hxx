@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: ama $ $Date: 2000-10-30 10:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,10 @@ public:
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
     virtual short GetEscapement() const;
+    virtual long CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
 
     // zaehlt die Spaces fuer Blocksatz
     xub_StrLen GetSpaceCnt( const SwTxtSizeInfo &rInf, xub_StrLen& rCnt ) const;
-    long CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
     xub_StrLen GetCrsrOfst( const KSHORT nOfst, SwTxtSizeInfo &rSizeInf ) const;
 
     sal_Bool IsHyphenate( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess );

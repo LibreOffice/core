@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-26 07:37:25 $
+ *  last change: $Author: ama $ $Date: 2000-10-30 09:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,15 @@ struct SwBracket
 class SwMultiPortion : public SwLinePortion
 {
     SwLineLayout aRoot;     // One or more lines
-    SwFldPortion *pFldRest; // a field rest from the previous line
+    SwFldPortion *pFldRest; // A field rest from the previous line
     SwBracket* pBracket;    // Surrounding brackets
     SwTwips nLineDiff;      // Difference of the width of the both lines
+    xub_StrLen nBlank1;     // Number of blanks in the first line
+    xub_StrLen nBlank2;     // Number of blanks in the second line
+    sal_Bool bTabulator;    // Multiportion includes tabulator
 public:
-    SwMultiPortion( xub_StrLen nEnd ) : pFldRest( 0 ), pBracket( 0 )
+    SwMultiPortion( xub_StrLen nEnd ) : pFldRest( 0 ), pBracket( 0 ),
+        bTabulator( sal_False )
         { SetWhichPor( POR_MULTI ); SetLen( nEnd ); }
     ~SwMultiPortion();
 
@@ -119,7 +123,20 @@ public:
     inline void ClearBrackets(){ pBracket->nPreWidth = pBracket->nPostWidth=0; }
     inline KSHORT BracketWidth(){ return PreWidth() + PostWidth(); }
 
+    void CalcBlanks( SwTxtFormatInfo &rInf );
+    sal_Bool ChangeSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd );
+    static void ResetSpaceAdd( SwLineLayout* pCurr );
+    inline SwTwips GetLineDiff() const { return nLineDiff; }
+    inline sal_Bool HasTabulator() const { return bTabulator; }
+    inline xub_StrLen GetSpaceCnt() const
+        { return ( nLineDiff < 0 ) ? nBlank2 : nBlank1; }
+    inline xub_StrLen GetSmallerSpaceCnt() const
+        { return ( nLineDiff < 0 ) ? nBlank1 : nBlank2; }
+    inline xub_StrLen GetBlank1() const { return nBlank1; }
+    inline xub_StrLen GetBlank2() const { return nBlank2; }
+
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
+    virtual long CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
 
     // Summarize the internal lines to calculate the (external) size
     void CalcSize( SwTxtFormatter& rLine );
@@ -133,10 +150,12 @@ class SwTxtCursorSave
 {
     SwTxtCursor* pTxtCrsr;
     SwLineLayout* pCurr;
+    SwTwips nWidth;
     xub_StrLen nStart;
+    sal_Bool bSpaceChg;
 public:
     SwTxtCursorSave( SwTxtCursor* pTxtCursor, SwMultiPortion* pMulti,
-        SwTwips nY, xub_StrLen nCurrStart );
+        SwTwips nY, xub_StrLen nCurrStart, short nSpaceAdd );
     ~SwTxtCursorSave();
 };
 

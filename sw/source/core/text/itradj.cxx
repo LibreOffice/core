@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-10-30 09:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include "porlay.hxx"
 #include "porfly.hxx"       // CalcFlyAdjust()
 #include "pordrop.hxx"       // CalcFlyAdjust()
+#include "pormulti.hxx"
 
 
 /*************************************************************************
@@ -167,9 +168,10 @@ void SwTxtAdjuster::FormatBlock( )
  *************************************************************************/
 
 void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
-                                  const SwLinePortion *pStopAt )
+                                  const SwLinePortion *pStopAt, SwTwips nReal )
 {
-    ASSERT( SVX_ADJUST_BLOCK == GetAdjust(), "CalcNewBlock: Why?" );
+    ASSERT( GetInfo().IsMulti() || SVX_ADJUST_BLOCK == GetAdjust(),
+            "CalcNewBlock: Why?" );
     ASSERT( pCurr->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
 
     pCurr->InitSpaceAdd();
@@ -180,7 +182,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
 
     // Nicht vergessen:
     // CalcRightMargin() setzt pCurr->Width() auf die Zeilenbreite !
-    CalcRightMargin( pCurr );
+    CalcRightMargin( pCurr, nReal );
 
     SwLinePortion *pPos = pCurr->GetPortion();
 
@@ -193,6 +195,20 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
         }
         if ( pPos->InTxtGrp() )
             nGluePortion += ((SwTxtPortion*)pPos)->GetSpaceCnt( GetInfo(), nCharCnt );
+        else if( pPos->IsMultiPortion() )
+        {
+            SwMultiPortion* pMulti = (SwMultiPortion*)pPos;
+            if( pMulti->HasTabulator() )
+            {
+                if ( nSpaceIdx == pCurr->GetSpaceAdd().Count() )
+                    pCurr->GetSpaceAdd().Insert( nNull, nSpaceIdx );
+                nSpaceIdx++;
+                nGluePortion = 0;
+                nCharCnt = 0;
+            }
+            else
+                nGluePortion += pMulti->GetSpaceCnt();
+        }
 
         if( pPos->InGlueGrp() )
         {
@@ -236,33 +252,39 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
  *                    SwTxtAdjuster::CalcRightMargin()
  *************************************************************************/
 
-SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurr )
+SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurr,
+    SwTwips nReal )
 {
-    const long nRealWidth = GetLineWidth();
+    long nRealWidth;
     const long nHeight = GetLineHeight();
     KSHORT nPrtWidth = pCurr->PrtWidth();
-
     SwLinePortion *pLast = pCurr->FindLastPortion();
 
-    // Fuer jeden FlyFrm, der in den rechten Rand hineinragt,
-    // wird eine FlyPortion angelegt.
-    const long nLeftMar = GetLeftMargin();
-    SwRect aCurrRect( nLeftMar + nPrtWidth, Y(),
-                      nRealWidth - nPrtWidth, nHeight );
-
-    SwFlyPortion *pFly = CalcFlyPortion( nRealWidth, aCurrRect );
-    while( pFly && long( nPrtWidth )< nRealWidth )
+    if( GetInfo().IsMulti() )
+        nRealWidth = nReal;
+    else
     {
-        pLast->Append( pFly );
-        pLast = pFly;
-        if( pFly->Fix() > nPrtWidth )
-            pFly->Width( ( pFly->Fix() - nPrtWidth) + pFly->Width() + 1);
-        nPrtWidth += pFly->Width() + 1;
-        aCurrRect.Left( nLeftMar + nPrtWidth );
-        pFly = CalcFlyPortion( nRealWidth, aCurrRect );
+        nRealWidth = GetLineWidth();
+        // Fuer jeden FlyFrm, der in den rechten Rand hineinragt,
+        // wird eine FlyPortion angelegt.
+        const long nLeftMar = GetLeftMargin();
+        SwRect aCurrRect( nLeftMar + nPrtWidth, Y(),
+                          nRealWidth - nPrtWidth, nHeight );
+
+        SwFlyPortion *pFly = CalcFlyPortion( nRealWidth, aCurrRect );
+        while( pFly && long( nPrtWidth )< nRealWidth )
+        {
+            pLast->Append( pFly );
+            pLast = pFly;
+            if( pFly->Fix() > nPrtWidth )
+                pFly->Width( ( pFly->Fix() - nPrtWidth) + pFly->Width() + 1);
+            nPrtWidth += pFly->Width() + 1;
+            aCurrRect.Left( nLeftMar + nPrtWidth );
+            pFly = CalcFlyPortion( nRealWidth, aCurrRect );
+        }
+        if( pFly )
+            delete pFly;
     }
-    if( pFly )
-        delete pFly;
 
     SwMarginPortion *pRight = new SwMarginPortion( 0 );
     pLast->Append( pRight );

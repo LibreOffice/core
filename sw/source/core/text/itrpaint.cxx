@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-16 13:05:00 $
+ *  last change: $Author: ama $ $Date: 2000-10-30 09:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,10 +152,10 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
                        < nPaintOfst )
         {
             DBG_LOOP;
-            if( pPor->InTxtGrp() && GetInfo().GetSpaceAdd() )
+            if( pPor->InSpaceGrp() && GetInfo().GetSpaceAdd() )
             {
-                long nTmp = GetInfo().X() +pPor->Width() +((SwTxtPortion*)pPor)
-                    ->CalcSpacing( GetInfo().GetSpaceAdd(), GetInfo() );
+                long nTmp = GetInfo().X() +pPor->Width() +
+                    pPor->CalcSpacing( GetInfo().GetSpaceAdd(), GetInfo() );
                 if( nTmp + (pPor->Height()/2) >= nPaintOfst )
                     break;
                 GetInfo().X( nTmp );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-26 07:36:55 $
+ *  last change: $Author: ama $ $Date: 2000-10-30 09:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,8 +390,8 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         while( pPor && !pPor->GetLen() )
         {
             nX += pPor->Width();
-            if ( pPor->InTxtGrp() && nSpaceAdd )
-                nX += ( (SwTxtPortion*)pPor )->CalcSpacing( nSpaceAdd, aInf );
+            if ( pPor->InSpaceGrp() && nSpaceAdd )
+                nX += pPor->CalcSpacing( nSpaceAdd, aInf );
             if( bNoTxt )
                 nFirst = nX;
             // 8670: EndPortions zaehlen hier einmal als TxtPortions.
@@ -399,6 +399,14 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
             {
                 bNoTxt = sal_False;
                 nFirst = nX;
+            }
+            if( pPor->IsMultiPortion() &&
+                ((SwMultiPortion*)pPor)->HasTabulator() )
+            {
+                if ( ++nSpaceIdx < pSpaceAdd->Count() )
+                    nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                else
+                    nSpaceAdd = 0;
             }
             if( pPor->InFixMargGrp() )
             {
@@ -440,9 +448,9 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 }
                 if ( aInf.GetIdx() + pPor->GetLen() <= nOfst )
                 {
-                    if ( pPor->InTxtGrp() && nSpaceAdd )
-                        nX += pPor->PrtWidth() + ( (SwTxtPortion*)pPor )->
-                            CalcSpacing( nSpaceAdd, aInf );
+                    if ( pPor->InSpaceGrp() && nSpaceAdd )
+                        nX += pPor->PrtWidth() +
+                              pPor->CalcSpacing( nSpaceAdd, aInf );
                     else
                     {
                         if( pPor->InFixMargGrp() && pSpaceAdd )
@@ -458,6 +466,15 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                 !pPor->GetPortion()->IsMarginPortion() ) )
                             nX += pPor->PrtWidth();
                     }
+                    if( pPor->IsMultiPortion() &&
+                        ((SwMultiPortion*)pPor)->HasTabulator() )
+                    {
+                        if ( ++nSpaceIdx < pSpaceAdd->Count() )
+                            nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                        else
+                            nSpaceAdd = 0;
+                    }
+
                     aInf.SetIdx( aInf.GetIdx() + pPor->GetLen() );
                     pPor = pPor->GetPortion();
                 }
@@ -465,7 +482,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 {
                     if( pPor->IsMultiPortion() )
                     {
-                        // In a multi-portion we use GetCharRect()-funtion
+                        // In a multi-portion we use GetCharRect()-function
                         // rekursively and must add the x-position
                         // of the multi-portion.
                         xub_StrLen nOldStart = nStart;
@@ -474,11 +491,15 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         pCurr = &((SwMultiPortion*)pPor)->GetRoot();
                         if( nStart + pCurr->GetLen() <= nOfst )
                             Next();
+                        sal_Bool bSpaceChg = ((SwMultiPortion*)pPor)->
+                            ChangeSpaceAdd( pCurr, nSpaceAdd );
                         bRet = GetCharRect( pOrig, nOfst, pCMS, nMax );
                         pOrig->Pos().X() += nX;
                         if( ((SwMultiPortion*)pPor)->HasBrackets() )
                             pOrig->Pos().X() +=
                                 ((SwMultiPortion*)pPor)->PreWidth();
+                        if( bSpaceChg )
+                            SwMultiPortion::ResetSpaceAdd( pCurr );
                         pCurr = pOldCurr;
                         nStart = nOldStart;
                         return bRet;
@@ -495,9 +516,8 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             aInf.SetOnWin( sal_False ); // keine BULLETs!
                             nX += pPor->GetTxtSize( aInf ).Width();
                             aInf.SetOnWin( bOldOnWin );
-                            if ( pPor->InTxtGrp() && nSpaceAdd )
-                                nX += ( (SwTxtPortion*)pPor )->CalcSpacing(
-                                                                    nSpaceAdd, aInf );
+                            if ( pPor->InSpaceGrp() && nSpaceAdd )
+                                nX += pPor->CalcSpacing( nSpaceAdd, aInf );
                         }
                         pPor->SetLen( nOldLen );
                     }
@@ -555,9 +575,9 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                        pPor->IsKernPortion() ||
                        ( !bEmptyFld && pPor->InFldGrp() ) ) )
                 {
-                    if ( pPor->InTxtGrp() && nSpaceAdd )
-                        nX += pPor->PrtWidth() + ( (SwTxtPortion*)pPor )->
-                            CalcSpacing( nSpaceAdd, aInf );
+                    if ( pPor->InSpaceGrp() && nSpaceAdd )
+                        nX += pPor->PrtWidth() +
+                              pPor->CalcSpacing( nSpaceAdd, aInf );
                     else
                     {
                         if( pPor->InFixMargGrp() && pSpaceAdd )
@@ -572,6 +592,14 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         if ( !pPor->IsFlyPortion() || ( pPor->GetPortion() &&
                                 !pPor->GetPortion()->IsMarginPortion() ) )
                             nX += pPor->PrtWidth();
+                    }
+                    if( pPor->IsMultiPortion() &&
+                        ((SwMultiPortion*)pPor)->HasTabulator() )
+                    {
+                        if ( ++nSpaceIdx < pSpaceAdd->Count() )
+                            nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                        else
+                            nSpaceAdd = 0;
                     }
                     if( !pPor->IsFlyPortion() )
                     {
@@ -730,19 +758,19 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     KSHORT nWidth = pPor->Width();
     if ( pSpaceAdd )
     {
-        if ( pPor->InTxtGrp() && nSpaceAdd )
+        if ( pPor->InSpaceGrp() && nSpaceAdd )
         {
             ((SwTxtSizeInfo&)GetInfo()).SetIdx( nCurrStart );
-            nWidth += ((SwTxtPortion*)pPor)->CalcSpacing( nSpaceAdd, GetInfo() );
+            nWidth += pPor->CalcSpacing( nSpaceAdd, GetInfo() );
         }
-        else if( pPor->InFixMargGrp() )
+        if( pPor->InFixMargGrp() ||
+            (pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->HasTabulator()))
         {
             if ( ++nSpaceIdx < pSpaceAdd->Count() )
                 nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
             else
                 nSpaceAdd = 0;
         }
-
     }
 
     KSHORT nWidth30 = !nWidth && pPor->GetLen() && pPor->InToxRefOrFldGrp()
@@ -761,12 +789,13 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         nWidth = pPor->Width();
         if ( pSpaceAdd )
         {
-            if ( pPor->InTxtGrp() && nSpaceAdd )
+            if ( pPor->InSpaceGrp() && nSpaceAdd )
             {
                 ((SwTxtSizeInfo&)GetInfo()).SetIdx( nCurrStart );
-                nWidth += ((SwTxtPortion*)pPor)->CalcSpacing( nSpaceAdd, GetInfo() );
+                nWidth += pPor->CalcSpacing( nSpaceAdd, GetInfo() );
             }
-            else if( pPor->InFixMargGrp() )
+            if( pPor->InFixMargGrp() || ( pPor->IsMultiPortion() &&
+                ((SwMultiPortion*)pPor)->HasTabulator() ) )
             {
                 if ( ++nSpaceIdx < pSpaceAdd->Count() )
                     nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
@@ -895,7 +924,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         {
             // In a multi-portion we use GetCrsrOfst()-funtion rekursively
             SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
-                rPoint.Y(), nCurrStart );
+                rPoint.Y(), nCurrStart, nSpaceAdd );
             if( ((SwMultiPortion*)pPor)->HasBrackets() )
                 nX -= ((SwMultiPortion*)pPor)->PreWidth();
             return GetCrsrOfst( pPos, Point( nLeftMargin + nX, rPoint.Y() ),

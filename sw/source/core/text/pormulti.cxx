@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-26 07:37:52 $
+ *  last change: $Author: ama $ $Date: 2000-10-30 09:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,86 @@ void SwMultiPortion::FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWidth )
     nMaxWidth += rInf.X();
 }
 
+/*-----------------26.10.00 10:36-------------------
+ * SwMultiPortion::CalcBlanks
+ * calculates the number of blanks in each line and
+ * the difference of the width of the two lines.
+ * These results are used from the text adjustment.
+ * --------------------------------------------------*/
+
+void SwMultiPortion::CalcBlanks( SwTxtFormatInfo &rInf )
+{
+    SwLinePortion* pPor = aRoot.GetFirstPortion();
+    xub_StrLen nNull = 0;
+    xub_StrLen nStart = rInf.GetIdx();
+    bTabulator = sal_False;
+    for( nBlank1 = 0; pPor; pPor = pPor->GetPortion() )
+    {
+        if( pPor->InTxtGrp() )
+            nBlank1 += ((SwTxtPortion*)pPor)->GetSpaceCnt( rInf, nNull );
+        rInf.SetIdx( rInf.GetIdx() + pPor->GetLen() );
+        if( pPor->InTabGrp() )
+            bTabulator = sal_True;
+    }
+    nLineDiff = aRoot.Width();
+    if( aRoot.GetNext() )
+    {
+        pPor = aRoot.GetNext()->GetFirstPortion();
+        nLineDiff -= aRoot.GetNext()->Width();
+    }
+    for( nBlank2 = 0; pPor; pPor = pPor->GetPortion() )
+    {
+        if( pPor->InTxtGrp() )
+            nBlank2 += ((SwTxtPortion*)pPor)->GetSpaceCnt( rInf, nNull );
+        rInf.SetIdx( rInf.GetIdx() + pPor->GetLen() );
+        if( pPor->InTabGrp() )
+            bTabulator = sal_True;
+    }
+    rInf.SetIdx( nStart );
+}
+
+long SwMultiPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const
+{
+    return HasTabulator() ? 0 : GetSpaceCnt() * nSpaceAdd;
+}
+
+sal_Bool SwMultiPortion::ChangeSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd )
+{
+    sal_Bool bRet = sal_False;
+    if( !HasTabulator() && nSpaceAdd > 0 )
+    {
+        if( pCurr->IsNoSpaceAdd() )
+        {
+            pCurr->CreateSpaceAdd();
+            ( pCurr->GetSpaceAdd() )[0] = nSpaceAdd;
+            bRet = sal_True;
+        }
+        else
+        {
+            xub_StrLen nMyBlank = GetSmallerSpaceCnt();
+            xub_StrLen nOther = GetSpaceCnt();
+            SwTwips nMultiSpace = pCurr->GetSpaceAdd()[0] * nMyBlank
+                                  + nOther * nSpaceAdd;
+            if( nMyBlank )
+                nMultiSpace /= nMyBlank;
+            if( nMultiSpace < KSHRT_MAX )
+            {
+                pCurr->GetpSpaceAdd()->Insert(KSHORT(nMultiSpace),0);
+                bRet = sal_True;
+            }
+        }
+    }
+    return bRet;
+}
+
+void SwMultiPortion::ResetSpaceAdd( SwLineLayout* pCurr )
+{
+    pCurr->GetSpaceAdd().Remove(0);
+    if( !pCurr->GetSpaceAdd().Count() )
+        pCurr->FinishSpaceAdd();
+}
+
+
 /*-----------------13.10.00 16:22-------------------
  * If we're inside a two-line-attribute,
  * the attribute will be returned,
@@ -271,7 +351,18 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     KSHORT nOldY = GetInfo().Y();
     xub_StrLen nOldIdx = GetInfo().GetIdx();
     SvShorts *pOldSpaceAdd = GetInfo().GetpSpaceAdd();
-    GetInfo().SetSpaceAdd( NULL );
+    MSHORT nOldSpIdx = GetInfo().GetSpaceIdx();
+    sal_Bool bSpaceChg = sal_False;
+    short nSpaceAdd = ( pOldSpaceAdd && !rMulti.HasTabulator() ) ?
+                      GetInfo().GetSpaceAdd() : 0;
+    if( rMulti.GetRoot().GetpSpaceAdd() )
+    {
+        GetInfo().SetSpaceAdd( rMulti.GetRoot().GetpSpaceAdd() );
+        GetInfo().ResetSpaceIdx();
+        bSpaceChg = rMulti.ChangeSpaceAdd( &rMulti.GetRoot(), nSpaceAdd );
+    }
+    else if( rMulti.HasTabulator() )
+        GetInfo().SetSpaceAdd( NULL );
     if( rMulti.HasBrackets() )
     {
         SeekAndChg( GetInfo() );
@@ -337,25 +428,48 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             pPor = pLay->GetFirstPortion();
             bRest = pLay->IsRest();
             GetInfo().X( nTmpX );
+            if( bSpaceChg )
+            {
+                GetInfo().GetpSpaceAdd()->Remove( 0 );
+                bSpaceChg = sal_False;
+            }
+            if( pLay->GetpSpaceAdd() )
+            {
+                GetInfo().SetSpaceAdd( pLay->GetpSpaceAdd() );
+                GetInfo().ResetSpaceIdx();
+                bSpaceChg = rMulti.ChangeSpaceAdd( pLay, nSpaceAdd );
+            }
+            else
+            {
+                GetInfo().SetSpaceAdd( rMulti.HasTabulator() ? 0:pOldSpaceAdd );
+                GetInfo().SetSpaceIdx( nOldSpIdx);
+            }
             // We switch to the baseline of the next inner line
             GetInfo().Y( GetInfo().Y() + rMulti.GetRoot().Height()
                 - rMulti.GetRoot().GetAscent() + pLay->GetAscent() );
         }
     } while( pPor );
 
+    if( bSpaceChg )
+    {
+        GetInfo().GetpSpaceAdd()->Remove( 0 );
+        bSpaceChg = sal_False;
+    }
     GetInfo().SetIdx( nOldIdx );
     GetInfo().Y( nOldY );
 
     if( rMulti.HasBrackets() )
     {
         SeekAndChg( GetInfo() );
-        GetInfo().X( nOldX + rMulti.Width() - rMulti.PostWidth() );
+        GetInfo().X( nOldX + rMulti.Width() - rMulti.PostWidth() +
+            ( nSpaceAdd > 0 ? rMulti.CalcSpacing( nSpaceAdd, GetInfo() ) :0 ) );
         rMulti.PaintBracket( GetInfo(), sal_False );
     }
     // Restore the saved values
     GetInfo().X( nOldX );
     GetInfo().SetLen( nOldLen );
     GetInfo().SetSpaceAdd( pOldSpaceAdd );
+    GetInfo().SetSpaceIdx( nOldSpIdx);
 }
 
 /*-----------------13.10.00 16:46-------------------
@@ -443,8 +557,26 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     nStart = nOldStart;
     rMulti.SetLen( rMulti.GetRoot().GetLen() + ( rMulti.GetRoot().GetNext() ?
         rMulti.GetRoot().GetNext()->GetLen() : 0 ) );
+    rMulti.CalcBlanks( rInf );
+    if( rMulti.GetLineDiff() )
+    {
+        SwLineLayout* pLine = &rMulti.GetRoot();
+        if( rMulti.GetLineDiff() > 0 )
+        {
+            rInf.SetIdx( nStartIdx + pLine->GetLen() );
+            pLine = pLine->GetNext();
+        }
+        if( pLine )
+        {
+            GetInfo().SetMulti( sal_True );
+            CalcNewBlock( pLine, NULL, rMulti.Width() );
+            GetInfo().SetMulti( sal_False );
+        }
+        rInf.SetIdx( nStartIdx );
+    }
     if( rMulti.HasBrackets() )
-        rMulti.Width( rMulti.Width() + rMulti.PreWidth() + rMulti.PostWidth() );
+        rMulti.Width( rMulti.Width() + rMulti.BracketWidth() );
+
     if( bRet )
     {
         SwMultiPortion *pTmp = new SwMultiPortion( nMultiLen + rInf.GetIdx() );
@@ -475,7 +607,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
  * --------------------------------------------------*/
 
 SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
-    SwMultiPortion* pMulti, SwTwips nY, xub_StrLen nCurrStart )
+    SwMultiPortion* pMulti, SwTwips nY, xub_StrLen nCurrStart, short nSpaceAdd )
 {
     pTxtCrsr = pTxtCursor;
     nStart = pTxtCursor->nStart;
@@ -485,10 +617,17 @@ SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
     while( pTxtCursor->Y() + pTxtCursor->GetLineHeight() < nY &&
         pTxtCursor->Next() )
         ; // nothing
+    bSpaceChg = pMulti->ChangeSpaceAdd( pTxtCursor->pCurr, nSpaceAdd );
+    nWidth = pTxtCursor->pCurr->Width();
+    if( nSpaceAdd > 0 && !pMulti->HasTabulator() )
+        pTxtCursor->pCurr->Width( nWidth + nSpaceAdd * pMulti->GetSpaceCnt() );
 }
 
 SwTxtCursorSave::~SwTxtCursorSave()
 {
+    if( bSpaceChg )
+        SwMultiPortion::ResetSpaceAdd( pTxtCrsr->pCurr );
+    pTxtCrsr->pCurr->Width( nWidth );
     pTxtCrsr->pCurr = pCurr;
     pTxtCrsr->nStart = nStart;
 }

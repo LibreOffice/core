@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-23 10:15:30 $
+ *  last change: $Author: ama $ $Date: 2000-10-30 09:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,13 +245,11 @@ class SwTxtAdjuster : public SwTxtMargin
     // Gleicht die Portions aus, wenn Adjustment und FlyFrms vorliegen.
     void CalcFlyAdjust( SwLineLayout *pCurr );
 
-    // spannt beim Blocksatz die Glues auf.
-    void CalcNewBlock( SwLineLayout *pCurr, const SwLinePortion *pStopAt );
     // ruft SplitGlues und CalcBlockAdjust
     void FormatBlock( );
 
     // Erstellt bei kurzen Zeilen die Glue-Kette.
-    SwMarginPortion *CalcRightMargin( SwLineLayout *pCurr );
+    SwMarginPortion *CalcRightMargin( SwLineLayout *pCurr, SwTwips nReal = 0 );
 
     // Berechnung des Adjustments (FlyPortions)
     SwFlyPortion *CalcFlyPortion( const long nRealWidth,
@@ -259,6 +257,9 @@ class SwTxtAdjuster : public SwTxtMargin
 
 protected:
     inline SwTxtAdjuster() { }
+    // spannt beim Blocksatz die Glues auf.
+    void CalcNewBlock( SwLineLayout *pCurr, const SwLinePortion *pStopAt,
+        SwTwips nReal = 0 );
 public:
     inline SwTxtAdjuster( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf )
            { SwTxtMargin::CtorInit( pFrm, pInf ); }

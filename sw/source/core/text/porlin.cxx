@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-10-30 10:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include "porlin.hxx"
 #include "inftxt.hxx"
 #include "portxt.hxx"
+#include "pormulti.hxx"
 #include "porglue.hxx"
 #include "inftxt.hxx"
 #include "blink.hxx"
@@ -155,9 +156,8 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo &rInf, SwLinePortion *pLast )
 
     KSHORT nPos = rInf.X();
     KSHORT pLastWidth = pLast->Width();
-    if ( pLast->InTxtGrp() && rInf.GetSpaceAdd() )
-        pLastWidth += ((SwTxtPortion*)pLast)->CalcSpacing( rInf.GetSpaceAdd(),
-                                                           rInf );
+    if ( pLast->InSpaceGrp() && rInf.GetSpaceAdd() )
+        pLastWidth += pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
     if( pLast && pLastWidth > nHalfView )
         nPos += pLastWidth - nHalfView;
 
@@ -377,9 +377,8 @@ void SwLinePortion::FormatEOL( SwTxtFormatInfo &rInf )
 
 void SwLinePortion::Move( SwTxtPaintInfo &rInf )
 {
-    if ( InTxtGrp() && rInf.GetSpaceAdd() )
-        rInf.X( rInf.X() + PrtWidth() +
-            ( (SwTxtPortion*)this )->CalcSpacing( rInf.GetSpaceAdd(), rInf ) );
+    if ( InSpaceGrp() && rInf.GetSpaceAdd() )
+        rInf.X( rInf.X() + PrtWidth() + CalcSpacing(rInf.GetSpaceAdd(),rInf) );
     else
     {
         if( InFixMargGrp() )
@@ -390,7 +389,19 @@ void SwLinePortion::Move( SwTxtPaintInfo &rInf )
         }
         rInf.X( rInf.X() + PrtWidth() );
     }
+    if( IsMultiPortion() && ((SwMultiPortion*)this)->HasTabulator() )
+        rInf.IncSpaceIdx();
+
     rInf.SetIdx( rInf.GetIdx() + GetLen() );
+}
+
+/*************************************************************************
+ *              virtual SwLinePortion::CalcSpacing()
+ *************************************************************************/
+
+long SwLinePortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const
+{
+    return 0;
 }
 
 /*************************************************************************

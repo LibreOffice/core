@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-16 12:53:04 $
+ *  last change: $Author: ama $ $Date: 2000-10-30 10:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,8 @@ public:
         { return nWhichPor & PORGRP_FLDGLU ? sal_True : sal_False;  }
     inline const sal_Bool InFixMargGrp( )const
         { return nWhichPor & PORGRP_FIXMARG ? sal_True : sal_False;  }
+    inline const sal_Bool InSpaceGrp( )const
+        { return InTxtGrp() || IsMultiPortion();  }
 // Individuelle Abfragen:
     inline const sal_Bool IsGrfNumPortion( )const{ return nWhichPor == POR_GRFNUM; }
     inline const sal_Bool IsFlyCntPortion( )const{ return nWhichPor == POR_FLYCNT; }
@@ -275,6 +277,9 @@ public:
 
     // fuer SwFldPortion, SwSoftHyphPortion
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
+
+    // for text- and multi-portions
+    virtual long CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
 
     OUTPUT_OPERATOR
 };
