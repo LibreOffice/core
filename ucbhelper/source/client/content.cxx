@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:42:21 $
+ *  last change: $Author: sb $ $Date: 2001-10-22 13:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1416,7 +1416,12 @@ void Content_Impl::reinit( const Reference< XContent >& xContent )
 
     if ( xContent.is() )
     {
-        m_xContent->removeContentEventListener( m_xContentEventListener );
+        try
+        {
+            m_xContent->removeContentEventListener( m_xContentEventListener );
+        }
+        catch (RuntimeException const &)
+        {}
         m_xContent = xContent;
         m_xContent->addContentEventListener( m_xContentEventListener );
 
@@ -1427,7 +1432,12 @@ void Content_Impl::reinit( const Reference< XContent >& xContent )
     }
     else
     {
-        m_xContent->removeContentEventListener( m_xContentEventListener );
+        try
+        {
+            m_xContent->removeContentEventListener( m_xContentEventListener );
+        }
+        catch (RuntimeException const &)
+        {}
         m_xContent = 0;
     }
 }
@@ -1437,7 +1447,12 @@ void Content_Impl::reinit( const Reference< XContent >& xContent )
 Content_Impl::~Content_Impl()
 {
     if ( m_xContent.is() )
-        m_xContent->removeContentEventListener( m_xContentEventListener );
+        try
+        {
+            m_xContent->removeContentEventListener( m_xContentEventListener );
+        }
+        catch (RuntimeException const &)
+        {}
 }
 
 //=========================================================================
