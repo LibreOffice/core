@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:19:48 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,158 +697,6 @@ SfxObjectShell* SfxApplication::GetActiveObjectShell() const
 
 //--------------------------------------------------------------------
 
-sal_Bool IsTemplate_Impl( const String& aPath )
-{
-    INetURLObject aObj( aPath );
-    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-
-    if ( aObj.getExtension().CompareIgnoreCaseToAscii( "vor" ) == COMPARE_EQUAL )
-        return sal_True;
-
-    SvEaMgr aMgr( aPath );
-    String aType;
-
-    if ( aMgr.GetFileType(aType) )
-    {
-        const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( aType );
-        if( pFilter && pFilter->IsOwnTemplateFormat() )
-            return sal_True;
-    }
-
-    return sal_False;
-}
-
-extern void FATToVFat_Impl( String& );
-
-#if 0
-String GetURL_Impl( const String& rName )
-{
-    // if the filename is a physical name, it is the client file system, not the file system
-    // of the machine where the office is running ( if this are different machines )
-    // so in the remote case we can't handle relative filenames as arguments, because they
-    // are parsed relative to the program path
-    // the file system of the client is addressed through the "file:" protocol
-    ::rtl::OUString aProgName, aTmp;
-    ::vos::OStartupInfo aInfo;
-    aInfo.getExecutableFile( aProgName );
-    aTmp = aProgName;
-    INetURLObject aObj( aTmp );
-    bool bWasAbsolute;
-    INetURLObject aURL = aObj.smartRel2Abs( rName, bWasAbsolute );
-    return aURL.GetMainURL(INetURLObject::NO_DECODE);
-}
-
-void SfxApplication::HandleAppEvent( const ApplicationEvent& rAppEvent )
-{
-    if ( rAppEvent.IsOpenEvent() )
-    {
-        // die Parameter enthalten die zu "offnenden Dateien
-        for(sal_uInt16 i=0;i<rAppEvent.GetParamCount();i++)
-        {
-            // Dateiname rausholen
-            String aName( rAppEvent.GetParam(i) );
-            if ( COMPARE_EQUAL == aName.CompareToAscii("/userid:",8) )
-                continue;
-#ifdef WNT
-            FATToVFat_Impl( aName );
-#endif
-            aName = GetURL_Impl(aName);
-            SfxStringItem aFileName( SID_FILE_NAME, aName );
-
-            // is it a template ?
-            const SfxPoolItem* pItem = NULL;
-            SfxBoolItem aTemplate( SID_TEMPLATE, TRUE );
-            if ( IsTemplate_Impl( aName ) )
-                pItem = &aTemplate;
-
-            // open the document
-            if ( pItem || !DocAlreadyLoaded( aName, sal_True, sal_True, sal_False ) )
-            {
-                SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_False );
-                SfxStringItem aTargetName( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
-                SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:OpenEvent") );
-                pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
-                        &aTargetName, &aFileName, &aNewView, &aReferer, pItem, 0L );
-            }
-        }
-    }
-    else if(rAppEvent.IsPrintEvent() )
-    {
-        // loop on parameters: files to print and name of printer
-        SfxStringItem aPrinterName(SID_PRINTER_NAME, String());
-        for (sal_uInt16 i=0;i<rAppEvent.GetParamCount();i++)
-        {
-            // is the parameter a printername ?
-            String aName(rAppEvent.GetParam(i));
-            if(aName.Len()>1 && *aName.GetBuffer()=='@')
-            {
-                aPrinterName.SetValue( aName.Copy(1) );
-                continue;
-            }
-
-#ifdef WNT
-            FATToVFat_Impl( aName );
-#endif
-            SfxStringItem aTargetName( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
-            SfxStringItem aFileName( SID_FILE_NAME, GetURL_Impl( aName ) );
-            SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, sal_True);
-            SfxBoolItem aHidden(SID_HIDDEN, sal_True);
-            SfxBoolItem aSilent(SID_SILENT, sal_True);
-            const SfxPoolItem *pRet = pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
-                    &aTargetName, &aFileName, &aNewView, &aHidden, &aSilent, 0L );
-            if ( !pRet )
-                continue;
-
-            const SfxViewFrameItem *pFrameItem = PTR_CAST(SfxViewFrameItem, pRet);
-            if ( pFrameItem && pFrameItem->GetFrame() )
-            {
-                SfxViewFrame *pFrame = pFrameItem->GetFrame();
-                SfxBoolItem aSilent( SID_SILENT, sal_True );
-                pFrame->GetDispatcher()->Execute( SID_PRINTDOC, SFX_CALLMODE_SYNCHRON,
-                        &aPrinterName, &aSilent, 0L );
-                pFrame->GetFrame()->DoClose();
-            }
-        }
-    }
-    else if ( rAppEvent.GetEvent() == "APPEAR" )
-    {
-        if( !pAppData_Impl->bInvisible )
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >
-                    xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
-                    ::com::sun::star::uno::UNO_QUERY );
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xTask = xDesktop->getActiveFrame();
-            if ( !xTask.is() )
-            {
-                // If no frame is currently active - we searh for any other one which exist in general.
-                ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > xList( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
-                sal_Int32 nCount = xList->getCount();
-                if (nCount>0)
-                {
-                    ::com::sun::star::uno::Any aItem = xList->getByIndex(0);
-                    if ( !(aItem>>=xTask) || !xTask.is() )
-                        pAppData_Impl->bInvisible = TRUE;
-                }
-            }
-
-            if ( xTask.is() )
-            {
-                Window* pWindow = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
-                pWindow->ToTop();
-            }
-        }
-
-        if( pAppData_Impl->bInvisible )
-        {
-            pAppData_Impl->bInvisible = FALSE;
-            OpenClients();
-        }
-    }
-}
-#endif
-
-//--------------------------------------------------------------------
-
 long SfxAppFocusChanged_Impl( void* pObj, void* pArg )
 {
 /*
@@ -1101,66 +949,13 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
 
 //--------------------------------------------------------------------
 
-//--------------------------------------------------------------------
-/*
-sal_uInt32 SfxApplication::DetectFilter( const String &rFileName,
-                                    const SfxFilter **ppFilter,
-                                    sal_uInt16 nFilterClass )
-{
-    SfxMedium aSfxMedium(rFileName,(STREAM_READ | STREAM_SHARE_DENYNONE),sal_False);
-
-    return DetectFilter(aSfxMedium, ppFilter, nFilterClass );
-}
-
-//-------------------------------------------------------------------------
-
-sal_uInt32 SfxApplication::DetectFilter(
-    SfxMedium& rMedium,const SfxFilter **ppFilter, sal_uInt16 nFilterClass )
-{
-    const SfxFilter *pFilter=0;
-    SvEaMgr aMgr( rMedium.GetName() );
-    String aType;
-    if ( !SfxObjectFactory::HasObjectFactories() )
-        return 1; HACK(Error-Code verwenden) ;
-
-    SfxFilterMatcher rMatcher( SfxObjectFactory::GetDefaultFactory().GetFilterContainer()  );
-    if( aMgr.GetFileType( aType ))
-        pFilter = rMatcher.GetFilter4EA( aType );
-
-    if( !pFilter)
-    {
-        if ( !rMedium.IsRemote() )
-        {
-            SvStorageRef aStor = rMedium.GetStorage();
-            if ( !aStor.Is() )
-                return ERRCODE_IO_GENERAL;
-            pFilter = rMatcher.GetFilter4ClipBoardId(aStor->GetFormat());
-        }
-        else
-        {
-            // Finden anhand der Extension
-            pFilter = rMatcher.GetFilter4Extension( INetURLObject( rMedium.GetName() ).GetName() );
-            if ( pFilter && pFilter->UsesStorage() )
-                pFilter = 0;
-        }
-    }
-
-    if(pFilter)
-        *ppFilter=pFilter;
-
-    return pFilter? 0: 1; HACK(Error-Code verwenden)
-}
-*/
-
-//--------------------------------------------------------------------
-
 SfxNewFileDialog*  SfxApplication::CreateNewDialog()
 {
     return new SfxNewFileDialog(GetTopWindow(), SFXWB_DOCINFO | SFXWB_PREVIEW );
 }
 
 //--------------------------------------------------------------------
-
+/*
 const SfxFilter* SfxApplication::GetFilter
 (
     const SfxObjectFactory &rFact,
@@ -1171,7 +966,7 @@ const SfxFilter* SfxApplication::GetFilter
                 "SfxApplication::GetFilter erwartet unqualifizierte Namen" );
     return rFact.GetFilterContainer()->GetFilter4FilterName(rFilterName);
 }
-
+*/
 //--------------------------------------------------------------------
 
 short SfxApplication::QuerySave_Impl( SfxObjectShell& rDoc, sal_Bool bAutoSave )
@@ -1206,110 +1001,6 @@ sal_Bool SfxApplication::IsInException() const
 
 sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
 {
-    if ( pAppData_Impl->bInException )
-        Application::Abort( pImp->aDoubleExceptionString );
-
-    pAppData_Impl->bInException = sal_True;
-
-    if( SfxNewHdl::Get() )
-    {
-        SfxNewHdl::Get()->FlushWarnMem();
-        SfxNewHdl::Get()->FlushExceptMem();
-    }
-
-    INetURLObject aSaveObj( SvtPathOptions().GetBackupPath() );
-
-    // save all modified documents and close all documents
-    // Do it only, if it's allowed! Ask configuration for right flag.
-    if( Application::IsInExecute() )
-    {
-        SfxObjectShell *pIter, *pNext;
-        for(pIter = SfxObjectShell::GetFirst(); pIter; pIter = pNext)
-        {
-            pNext = SfxObjectShell::GetNext(*pIter);
-            if( pIter->IsModified() && pIter->GetName().CompareToAscii("BasicIDE") != COMPARE_EQUAL && !pIter->IsLoading() )
-            {
-                //try
-                {
-                    // backup unsaved document
-                    SFX_ITEMSET_ARG( pIter->GetMedium()->GetItemSet(), pPassItem, SfxStringItem, SID_PASSWORD, sal_False );
-                    SfxRequest aReq(SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, pIter->GetPool());
-
-                    sal_Bool        bHadName    = pIter->HasName()                  ;
-                    INetURLObject   aOldURL( pIter->GetMedium()->GetName() );
-                    String          aOldName    = pIter->GetTitle()                 ;
-
-                    const SfxFilter *pFilter = pIter->GetMedium()->GetFilter();
-                    const SfxFilter *pOrigFilter = pFilter;
-                    if ( !pFilter || ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) || !( pFilter->GetFilterFlags() & SFX_FILTER_EXPORT ) )
-                        // packed files must be saved with default format, but remember original filter !
-                        pFilter = pIter->GetFactory().GetFilter(0);
-
-                    String aSaveName, aSavePath = aSaveObj.GetMainURL( INetURLObject::NO_DECODE );
-                    String aFilterName;
-                    if ( pFilter )
-                    {
-                        aFilterName = pFilter->GetFilterName();
-                        ::utl::TempFile aTempFile( &aSavePath );
-                        aSaveName = aTempFile.GetURL();
-                    }
-                    else
-                    {
-                        String aExt( DEFINE_CONST_UNICODE( ".sav" ) );
-                        ::utl::TempFile aTempFile( DEFINE_CONST_UNICODE( "exc" ), &aExt, &aSavePath );
-                        aSaveName = aTempFile.GetURL();
-                    }
-
-                    aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aSaveName ) );
-                    aReq.AppendItem( SfxStringItem( SID_FILTER_NAME, aFilterName ) );
-                    if ( pPassItem )
-                        aReq.AppendItem( *pPassItem );
-
-                    pIter->ExecuteSlot(aReq);
-
-                    pInternalOptions->PushRecoveryItem( bHadName ? aOldURL.GetMainURL( INetURLObject::NO_DECODE ) : aOldName                ,
-                                                        pOrigFilter ? pOrigFilter->GetFilterName() : aFilterName      ,
-                                                        aSaveName                                               );
-                }
-                /*catch ( ::Exception & )
-                {
-                }*/
-            }
-        }
-
-        if ( ( nError & EXC_MAJORTYPE ) != EXC_DISPLAY && ( nError & EXC_MAJORTYPE ) != EXC_REMOTE )
-        {
-            Window *pTopWindow = GetTopWindow(); // GCC needs temporary
-            WarningBox( pTopWindow, SfxResId(STR_RECOVER_PREPARED) ).Execute();
-        }
-    }
-
-    // transfer configuration data
-    ::utl::ConfigManager::GetConfigManager()->StoreConfigItems();
-
-    // make sure that it is written to disk
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-        xProvider( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), ::com::sun::star::uno::UNO_QUERY );
-    if ( xProvider.is() )
-        xProvider->dispose();
-
-    switch( nError & EXC_MAJORTYPE )
-    {
-        case EXC_USER:
-            if( nError == EXC_OUTOFMEMORY )
-                Application::Abort( pImp->aMemExceptionString );
-            break;
-
-        case EXC_RSCNOTLOADED:
-            Application::Abort( pImp->aResExceptionString );
-            break;
-
-        case EXC_SYSOBJNOTCREATED:
-            Application::Abort( pImp->aSysResExceptionString );
-            break;
-    }
-
-    pAppData_Impl->bInException = sal_False;
     return 0;
 }
 
