@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:15:15 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,6 +584,9 @@ USHORT SwDoc::EndUndo(USHORT nUndoId, const SwRewriter * pRewriter)
     return nUndoId;
 }
 
+// liefert die Id der letzten Undofaehigen Aktion zurueck oder 0
+// fuellt ggf. VARARR mit User-UndoIds
+
 String SwDoc::GetUndoIdsStr( String* pStr, SwUndoIds *pUndoIds) const
 {
     String aTmpStr;
@@ -596,7 +599,7 @@ String SwDoc::GetUndoIdsStr( String* pStr, SwUndoIds *pUndoIds) const
     else
         GetUndoIds( &aTmpStr, pUndoIds);
 
-    // --> FME 2004-08-11 #i30716# Correct initialization for nId
+    // --> FME 2004-08-11 #i30716# Correct initializazion for nId
     const USHORT nId = 0 < nUndoPos ?
                        (*pUndos)[ nUndoPos - 1 ]->GetId() :
                        UNDO_END;
@@ -608,87 +611,158 @@ String SwDoc::GetUndoIdsStr( String* pStr, SwUndoIds *pUndoIds) const
     return aTmpStr;
 }
 
+/**
+   Returns id and comment for a certain undo object in an undo stack.
 
-// liefert die Id der letzten Undofaehigen Aktion zurueck oder 0
-// fuellt ggf. VARARR mit User-UndoIds
-USHORT SwDoc::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
+   Remark: In the following the object type referred to is always the
+   effective object type. If an UNDO_START or UNDO_END has a user type
+   it is referred to as this type.
+
+   If the queried object is an UNDO_END and has no user id the result
+   is taken from the first object that is not an UNDO_END nor an
+   UNDO_START preceeding the queried object.
+
+   If the queried object is an UNDO_START and has no user id the
+   result is taken from the first object that is not an UNDO_END nor
+   an UNDO_START preceeding the UNDO_END object belonging to the
+   queried object.
+
+   In all other cases the result is taken from the queried object.
+
+   @param rUndos           the undo stack
+   @param nPos             position of the undo object to query
+
+   @return SwUndoIdAndName object containing the query result
+ */
+SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, int nPos)
 {
-    int nSize = nUndoPos;
-    if ( nSize-- == 0 )
-        return 0;
+    SwUndo * pUndo = rUndos[nPos];
+    USHORT nId = 0;
+    String sStr("??", RTL_TEXTENCODING_ASCII_US);
 
-    USHORT nId;
-    SwUndo* pUndo;
+    ASSERT(nPos >= 0 && nPos < rUndos.Count(), "nPos out of range");
 
-    String sTmp;
-    if( pUndoIds && pStr)
-        *pStr = sTmp;
-
-    do {
-        USHORT nUndoEndPos = USHRT_MAX;
-        pUndo = (*pUndos)[nSize];
-        nId = pUndo->GetId();
-        if( UNDO_END == nId )
-            nUndoEndPos = nSize;
-
-        switch( nId )
+    switch (pUndo->GetId())
+    {
+    case UNDO_START:
         {
-        case UNDO_START:
-            nId = ((SwUndoStart*)pUndo)->GetUserId();
-            break;
-        case UNDO_END:
-            nId = ((SwUndoStart*)pUndo)->GetUserId();
+            SwUndoStart * pUndoStart = (SwUndoStart *) pUndo;
+            nId = pUndoStart->GetUserId();
 
-            if (UNDO_END == nId)
+            if (nId <= UNDO_END)
             {
-                nSize--;
-                while (nSize >= 0)
+                /**
+                   Start at the according UNDO_END.  Search backwards
+                   for first objects that is not a UNDO_END.
+                 */
+                int nTmpPos = nPos + pUndoStart->GetEndOffset();
+                int nSubstitute = -1;
+
+                SwUndo * pTmpUndo;
+                do
                 {
-                    SwUndo * pTmpUndo = (*pUndos)[nSize];
-                    if (pTmpUndo->GetId() != UNDO_END ||
-                        ((SwUndoEnd *) pTmpUndo)->GetUserId()
-                        != UNDO_END)
-                    {
-                        nId = pTmpUndo->GetId();
+                    nTmpPos--;
+                    pTmpUndo = rUndos[nTmpPos];
 
-                        if (UNDO_END == nId)
-                            nId = ((SwUndoEnd *) pTmpUndo)->GetUserId();
+                    if (pTmpUndo->GetEffectiveId() > UNDO_END)
+                        nSubstitute = nTmpPos;
+                }
+                while (nSubstitute < 0 && nTmpPos > nPos);
 
-                        pUndo = pTmpUndo;
-
-                        break;
-                    }
-
-                    nSize--;
+                if (nSubstitute >= 0)
+                {
+                    SwUndo * pSubUndo = rUndos[nSubstitute];
+                    nId = pSubUndo->GetEffectiveId();
+                    sStr = pSubUndo->GetComment();
                 }
             }
-            break;
-        case UNDO_REDLINE:
-            nId = ((SwUndoRedline*)pUndo)->GetUserId();
-            break;
-        default:
-            break;
+            else
+                sStr = pUndo->GetComment();
         }
 
-        sTmp = pUndo->GetComment();
+        break;
 
-        if( pStr )
-            *pStr = sTmp;
-
-        if( !nSize && UNDO_END == nId )
-            nId = 0;
-        else if( pUndoIds )
+    case UNDO_END:
         {
-            SwUndoIdAndName* pNew = new SwUndoIdAndName( nId, &sTmp );
-            pUndoIds->Insert( pNew, pUndoIds->Count() );
+            SwUndoEnd * pUndoEnd = (SwUndoEnd *) pUndo;
+            nId = pUndoEnd->GetUserId();
 
-            if( USHRT_MAX != nUndoEndPos )
-                nSize = nUndoEndPos - ((SwUndoEnd*)(*pUndos)[
-                                            nUndoEndPos ])->GetSttOffset();
-            if( !nSize-- )
-                break;
+            if (nId <= UNDO_END)
+            {
+                /**
+                   Start at this UNDO_END.  Search backwards
+                   for first objects that is not a UNDO_END.
+                 */
+
+                int nTmpPos = nPos;
+                int nUndoStart = nTmpPos - pUndoEnd->GetSttOffset();
+                int nSubstitute = -1;
+
+                if (nTmpPos > 0)
+                {
+                    SwUndo * pTmpUndo;
+
+                    do
+                    {
+                        nTmpPos--;
+                        pTmpUndo = rUndos[nTmpPos];
+
+                        if (pTmpUndo->GetEffectiveId() > UNDO_END)
+                            nSubstitute = nTmpPos;
+                    }
+                    while (nSubstitute < 0 && nTmpPos > nUndoStart);
+
+                    if (nSubstitute >= 0)
+                    {
+                        SwUndo * pSubUndo = rUndos[nSubstitute];
+                        nId = pSubUndo->GetEffectiveId();
+                        sStr = pSubUndo->GetComment();
+                    }
+                }
+            }
+            else
+                sStr = pUndo->GetComment();
         }
-    } while( pUndoIds );
+
+        break;
+
+    default:
+        nId = pUndo->GetId();
+        sStr = pUndo->GetComment();
+    }
+
+    return new SwUndoIdAndName(nId, &sStr);
+}
+
+USHORT SwDoc::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
+{
+    int nTmpPos = nUndoPos - 1;
+    USHORT nId = 0;
+
+    while (nTmpPos >= 0)
+    {
+        SwUndo * pUndo = (*pUndos)[nTmpPos];
+
+        SwUndoIdAndName * pIdAndName = lcl_GetUndoIdAndName(*pUndos, nTmpPos);
+
+        if (nTmpPos == nUndoPos - 1)
+        {
+            nId = pIdAndName->GetUndoId();
+
+            if (pStr)
+                *pStr = *pIdAndName->GetUndoStr();
+        }
+
+        if (pUndoIds)
+            pUndoIds->Insert(pIdAndName, pUndoIds->Count());
+        else
+            break;
+
+        if (pUndo->GetId() == UNDO_END)
+            nTmpPos -= ((SwUndoEnd *) pUndo)->GetSttOffset();
+
+        nTmpPos--;
+    }
 
     return nId;
 }
@@ -853,72 +927,33 @@ String SwDoc::GetRedoIdsStr( String* pStr, SwUndoIds *pRedoIds ) const
 
 USHORT SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
 {
-    USHORT nSize, nId;
-    if( ( nSize = nUndoPos) == pUndos->Count() )
-        return 0;
+    int nTmpPos = nUndoPos;
+    USHORT nId = 0;
 
-    SwUndo* pUndo;
-    String sTmp;
-    if( pRedoIds && pStr)
-        *pStr = sTmp;
+    while (nTmpPos < pUndos->Count())
+    {
+        SwUndo * pUndo = (*pUndos)[nTmpPos];
 
-    do {
+        SwUndoIdAndName * pIdAndName = lcl_GetUndoIdAndName(*pUndos, nTmpPos);
 
-        USHORT nUndoSttPos = USHRT_MAX;
-
-        if( UNDO_START == ( nId = ( pUndo = (*pUndos)[nSize] )->GetId() ) )
-            nUndoSttPos = nSize;
-
-        sTmp = pUndo->GetComment();
-
-        if( USHRT_MAX == nUndoSttPos ||  // no UndoStart
-            UNDO_START != ( nId = ((SwUndoStart*)pUndo)->GetUserId() ) )
+        if (nTmpPos == nUndoPos)
         {
-            if( UNDO_REDLINE == nId )
-                nId = ((SwUndoRedline*)pUndo)->GetUserId();
+            nId = pIdAndName->GetUndoId();
 
-            if( pStr )
-                *pStr = sTmp;
+            if (pStr)
+                *pStr = *pIdAndName->GetUndoStr();
         }
+
+        if (pRedoIds)
+            pRedoIds->Insert(pIdAndName, pRedoIds->Count());
         else
-        {
-            ASSERT( UNDO_END != nId, "falsches Ende der Undoklammerung!");
+            break;
 
-            // auf den vorm Ende der Klammerung
-            nUndoSttPos = nSize;
-            nSize += ((SwUndoStart*)pUndo)->GetEndOffset();
-            while( nSize &&
-                    UNDO_END == ( nId = ( pUndo = (*pUndos)[ --nSize ] )->GetId()) &&
-                    UNDO_END == ( nId = ((SwUndoEnd*)pUndo)->GetUserId() ) )
-                ;
+        if (pUndo->GetId() == UNDO_START)
+            nTmpPos += ((SwUndoStart *) pUndo)->GetEndOffset();
 
-            if( !nSize )
-                nId = 0;
-            else if( UNDO_REDLINE == nId )
-                nId = ((SwUndoRedline*)pUndo)->GetUserId();
-
-            sTmp = pUndo->GetComment();
-
-            if( pStr )
-                *pStr = sTmp;
-
-            nSize = nUndoSttPos;
-        }
-
-        if( pRedoIds )
-        {
-            SwUndoIdAndName* pNew = new SwUndoIdAndName( nId, &sTmp );
-            pRedoIds->Insert( pNew, pRedoIds->Count() );
-
-            if( USHRT_MAX != nUndoSttPos )
-                nSize = nUndoSttPos +
-                    ((SwUndoStart*)(*pUndos)[nUndoSttPos])->GetEndOffset();
-
-            if( ++nSize >= pUndos->Count() )
-                break;
-        }
-
-    } while( pRedoIds && nSize < pUndos->Count() );
+        nTmpPos++;
+    }
 
     return nId;
 }
