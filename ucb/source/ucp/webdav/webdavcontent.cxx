@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:53:00 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 13:44:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
@@ -606,14 +609,43 @@ uno::Any SAL_CALL Content::execute(
                 ( aOpenCommand.Mode == star::ucb::OpenMode::FOLDERS ) ||
                 ( aOpenCommand.Mode == star::ucb::OpenMode::DOCUMENTS ) );
 
-        if ( bOpenFolder && isFolder( Environment ) )
+        if ( bOpenFolder )
         {
-            // Open collection.
+            if ( isFolder( Environment ) )
+            {
+                // Open collection.
 
-            uno::Reference< star::ucb::XDynamicResultSet > xSet
-                = new DynamicResultSet(
-                        m_xSMgr, this, aOpenCommand, Environment );
-            aRet <<= xSet;
+                uno::Reference< star::ucb::XDynamicResultSet > xSet
+                    = new DynamicResultSet(
+                            m_xSMgr, this, aOpenCommand, Environment );
+                aRet <<= xSet;
+            }
+            else
+            {
+                // Error: Not a folder!
+
+                rtl::OUStringBuffer aMsg;
+                if ( getResourceType( Environment ) == FTP )
+                {
+                    // #114653#
+                    aMsg.appendAscii( "FTP over HTTP proxy: resource cannot "
+                                      "be opened as folder! Wrong Open Mode!" );
+                }
+                else
+                {
+                    aMsg.appendAscii( "Non-folder resource cannot be "
+                                      "opened as folder! Wrong Open Mode!" );
+                }
+
+                ucbhelper::cancelCommandExecution(
+                    uno::makeAny(
+                        lang::IllegalArgumentException(
+                            aMsg.makeStringAndClear(),
+                            static_cast< cppu::OWeakObject * >( this ),
+                            -1 ) ),
+                    Environment );
+                // Unreachable
+            }
         }
 
         if ( aOpenCommand.Sink.is() )
@@ -2118,20 +2150,21 @@ void Content::insert(
         // ==> Complain on PUT, continue on MKCOL.
         if ( !m_bTransient || ( m_bTransient && !m_bCollection  ) )
         {
-            uno::Any aEx( uno::makeAny(
-                            star::ucb::UnsupportedNameClashException(
-                                rtl::OUString::createFromAscii(
-                                    "Unable to write without overwrite!" ),
-                                static_cast< cppu::OWeakObject * >( this ),
-                                star::ucb::NameClash::ERROR ) ) );
+            star::ucb::UnsupportedNameClashException aEx(
+                rtl::OUString::createFromAscii(
+                    "Unable to write without overwrite!" ),
+                static_cast< cppu::OWeakObject * >( this ),
+                star::ucb::NameClash::ERROR );
 
             uno::Reference< task::XInteractionHandler > xIH
                 = Environment->getInteractionHandler();
             if ( xIH.is() )
             {
+                uno::Any aExAsAny( uno::makeAny( aEx ) );
+
                 rtl::Reference< ucbhelper::SimpleInteractionRequest > xRequest
                     = new ucbhelper::SimpleInteractionRequest(
-                        aEx,
+                        aExAsAny,
                         ucbhelper::CONTINUATION_APPROVE
                             | ucbhelper::CONTINUATION_DISAPPROVE );
                 xIH->handle( xRequest.get() );
@@ -2155,7 +2188,7 @@ void Content::insert(
                         throw star::ucb::CommandFailedException(
                                     rtl::OUString(),
                                     uno::Reference< uno::XInterface >(),
-                                    aEx );
+                                    aExAsAny );
 //                        break;
 
                     default:
@@ -2166,7 +2199,7 @@ void Content::insert(
                                     rtl::OUString::createFromAscii(
                                         "Unknown interaction selection!" ),
                                     uno::Reference< uno::XInterface >(),
-                                    aEx );
+                                    aExAsAny );
 //                        break;
                 }
             }
