@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsave.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-17 18:26:15 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,10 @@ public:
     BOOL                    operator== ( const ScDPSaveMember& r ) const;
 
     const String&           GetName()   { return aName; }
+    BOOL                    HasIsVisible();
     void                    SetIsVisible(BOOL bSet);
     BOOL                    GetIsVisible() { return BOOL(nVisibleMode); }
+    BOOL                    HasShowDetails();
     void                    SetShowDetails(BOOL bSet);
     BOOL                    GetShowDetails() { return BOOL(nShowDetailsMode); }
 
@@ -115,6 +117,7 @@ class ScDPSaveDimension
 private:
     String      aName;
     String*     pLayoutName;        // alternative name for layout, not used (yet)
+    String*     pSelectedPage;
     BOOL        bIsDataLayout;
     BOOL        bDupFlag;
     USHORT      nOrientation;
@@ -159,8 +162,13 @@ public:
     BOOL                    HasLayoutName() const;
     void                    ResetLayoutName();
 
+    void                    SetCurrentPage( const String* pPage );      // NULL = no selection (all)
+    BOOL                    HasCurrentPage() const;
+    const String&           GetCurrentPage() const;
+
     USHORT                  GetOrientation() const  { return nOrientation; }
 
+    ScDPSaveMember*         GetExistingMemberByName(const String& rName);
     ScDPSaveMember*         GetMemberByName(const String& rName);
 
     void                    WriteToSource( const com::sun::star::uno::Reference<
