@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:51:57 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
 #endif
-#ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
-#include <comphelper/propertycontainer.hxx>
+#ifndef COMPHELPER_PROPERTYSTATECONTAINER_HXX
+#include <comphelper/propertystatecontainer.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
@@ -150,7 +150,7 @@ namespace dbaccess
     class ORowSetCacheIterator;
     class ORowSetDataColumn;
     class ORowSetBase : public ORowSetBase_BASE,
-                        public ::comphelper::OPropertyContainer,
+                        public ::comphelper::OPropertyStateContainer,
                         public ::comphelper::OPropertyArrayUsageHelper<ORowSetBase> // this class hold the static property info
     {
     protected:
@@ -213,7 +213,8 @@ namespace dbaccess
         // notify the change of a boolean property
         void fireProperty( sal_Int32 _nProperty, sal_Bool _bNew, sal_Bool _bOld );
 
-    // OPropertyContainer
+    // OPropertyStateContainer
+        virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const;
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
         // postions the cache which the currently bookmark m_aBookmark
         void positionCache();
