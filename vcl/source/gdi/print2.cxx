@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-04 11:38:56 $
+ *  last change: $Author: ka $ $Date: 2001-07-04 12:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,11 +425,16 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
         // watch for transparent drawing actions
         for( pAct = ( (GDIMetaFile&) rInMtf ).FirstAction(); pAct && !bTransparent; pAct = ( (GDIMetaFile&) rInMtf ).NextAction() )
         {
-            if( ( META_TRANSPARENT_ACTION == pAct->GetType() ) ||
-                ( META_FLOATTRANSPARENT_ACTION == pAct->GetType() ) )
-            {
+            if( META_TRANSPARENT_ACTION == pAct->GetType() )
                 bTransparent = TRUE;
-            }
+            else if( META_FLOATTRANSPARENT_ACTION == pAct->GetType() )
+                bTransparent = TRUE;
+            else if( META_BMPEX_ACTION == pAct->GetType() )
+                bTransparent = ( (MetaBmpExAction*) pAct )->GetBitmapEx().IsAlpha();
+            else if( META_BMPEXSCALE_ACTION == pAct->GetType() )
+                bTransparent = ( (MetaBmpExScaleAction*) pAct )->GetBitmapEx().IsAlpha();
+            else if( META_BMPEXSCALEPART_ACTION == pAct->GetType() )
+                bTransparent = ( (MetaBmpExScalePartAction*) pAct )->GetBitmapEx().IsAlpha();
         }
     }
 
@@ -456,9 +461,19 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
         for( i = 0, pO = pRects, pAct = ( (GDIMetaFile&) rInMtf ).FirstAction(); pAct;
              pAct = ( (GDIMetaFile&) rInMtf ).NextAction(), i++, pO++ )
         {
-            // is it a special action
-            bTransparent = ( ( META_TRANSPARENT_ACTION == pAct->GetType() ) ||
-                             ( META_FLOATTRANSPARENT_ACTION == pAct->GetType() ) );
+            // set transparency flag
+            if( META_TRANSPARENT_ACTION == pAct->GetType() )
+                bTransparent = TRUE;
+            else if( META_FLOATTRANSPARENT_ACTION == pAct->GetType() )
+                bTransparent = TRUE;
+            else if( META_BMPEX_ACTION == pAct->GetType() )
+                bTransparent = ( (MetaBmpExAction*) pAct )->GetBitmapEx().IsAlpha();
+            else if( META_BMPEXSCALE_ACTION == pAct->GetType() )
+                bTransparent = ( (MetaBmpExScaleAction*) pAct )->GetBitmapEx().IsAlpha();
+            else if( META_BMPEXSCALEPART_ACTION == pAct->GetType() )
+                bTransparent = ( (MetaBmpExScalePartAction*) pAct )->GetBitmapEx().IsAlpha();
+            else
+                bTransparent = FALSE;
 
             // execute action to get correct MapMode's etc.
             pAct->Execute( &aPaintVDev );
