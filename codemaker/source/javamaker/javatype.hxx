@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:14:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,14 @@ namespace codemaker { class GeneratedTypeSet; }
 namespace rtl { class OString; }
 class JavaOptions;
 class TypeManager;
+class RegistryKey;
 
 bool produceType(
-    rtl::OString const & type, TypeManager & manager,
-    codemaker::GeneratedTypeSet & generated, JavaOptions * options);
+    rtl::OString const & type, TypeManager const & manager,
+    codemaker::GeneratedTypeSet & generated, JavaOptions * pOptions);
+
+bool produceType(RegistryKey& typeName, bool bIsExtraType, TypeManager const & typeMgr,
+                 codemaker::GeneratedTypeSet & generated,
+                 JavaOptions* pOptions);
 
 #endif
