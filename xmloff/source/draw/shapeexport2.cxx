@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-26 10:26:58 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 16:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -986,6 +986,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         // write graphic object
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_image, sal_True, sal_True);
         ImpExportEvents( xShape );
+        ImpExportText( xShape );
     }
 }
 
