@@ -1,4 +1,12 @@
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
+
 mkdir: %_DEST%\bin%_EXT%\userscripts
-..\%__SRC%\bin\* %_DEST%\bin%_EXT%\userscripts\*
+..\%__SRC%\bin\install %_DEST%\bin%_EXT%\userscripts\install
+..\%__SRC%\bin\uninstall %_DEST%\bin%_EXT%\userscripts\uninstall
+..\%__SRC%\bin\admin %_DEST%\bin%_EXT%\userscripts\admin
+
+..\%__SRC%\bin\ulfconv %_DEST%\bin%_EXT%\ulfconv
+..\%__SRC%\bin\langpackscript.sh %_DEST%\bin%_EXT%\langpackscript.sh
+..\source\win32\msi-encodinglist.txt %_DEST%\bin%_EXT%\msi-encodinglist.txt
 
