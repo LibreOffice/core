@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:13:43 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,9 @@ BreakIteratorImpl::BreakIteratorImpl()
 BreakIteratorImpl::~BreakIteratorImpl()
 {
         // Clear lookuptable
-        for (lookupTableItem *listItem = (lookupTableItem*)lookupTable.First();
-                        listItem; listItem = (lookupTableItem*)lookupTable.Next())
-            delete listItem;
-        lookupTable.Clear();
+        for (sal_Int32 l = 0; l < lookupTable.size(); l++)
+            delete lookupTable[l];
+        lookupTable.clear();
 }
 
 #define LBI getLocaleSpecificBreakIterator(rLocale)
@@ -476,8 +475,8 @@ static inline sal_Bool operator == (const Locale& l1, const Locale& l2) {
 sal_Bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUString& aLocaleName) throw( RuntimeException )
 {
         // to share service between same Language but different Country code, like zh_CN and zh_TW
-        for (lookupTableItem *listItem = (lookupTableItem*)lookupTable.First();
-                    listItem; listItem = (lookupTableItem*)lookupTable.Next()) {
+        for (sal_Int32 l = 0; l < lookupTable.size(); l++) {
+            lookupTableItem *listItem = lookupTable[l];
             if (aLocaleName == listItem->aLocale.Language) {
                 xBI = listItem->xBI;
                 return sal_True;
@@ -490,7 +489,7 @@ sal_Bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUS
         if ( xI.is() ) {
             xI->queryInterface( getCppuType((const Reference< XBreakIterator>*)0) ) >>= xBI;
             if (xBI.is()) {
-                lookupTable.Insert(new lookupTableItem(Locale(aLocaleName, aLocaleName, aLocaleName), xBI));
+                lookupTable.push_back(new lookupTableItem(Locale(aLocaleName, aLocaleName, aLocaleName), xBI));
                 return sal_True;
             }
         }
@@ -505,8 +504,8 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
         else if (xMSF.is()) {
             aLocale = rLocale;
 
-            for (lookupTableItem *listItem = (lookupTableItem*)lookupTable.First();
-                        listItem; listItem = (lookupTableItem*)lookupTable.Next()) {
+            for (sal_Int32 i = 0; i < lookupTable.size(); i++) {
+                lookupTableItem *listItem = lookupTable[i];
                 if (rLocale == listItem->aLocale)
                     return xBI = listItem->xBI;
             }
@@ -537,7 +536,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
                     createLocaleSpecificBreakIterator(rLocale.Language)) ||
                     // load default service with name <base>_Unicode
                     createLocaleSpecificBreakIterator(OUString::createFromAscii("Unicode"))) {
-                lookupTable.Insert( new lookupTableItem(aLocale, xBI) );
+                lookupTable.push_back( new lookupTableItem(aLocale, xBI) );
                 return xBI;
             }
         }
