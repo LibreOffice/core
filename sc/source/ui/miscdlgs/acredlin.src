@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:46:45 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,7 +686,7 @@ Menu RID_POPUP_CHANGES
                         Text[ russian ] = "Äåéñòâèå";
                         Text[ polish ] = "Akcja";
                         Text[ japanese ] = "±¸¼®Ý";
-                        Text[ chinese_traditional ] = "¾Þ§@";
+                        Text[ chinese_traditional ] = "°Ê§@";
                         Text[ arabic ] = "ÅÌÑÇÁ";
                         Text[ dutch ] = "Activiteit";
                         Text[ chinese_simplified ] = "²Ù×÷";
