@@ -23527,3 +23527,8 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?disposing@SvXMLGraphicHelper@@MAAXXZ
 ??0SvXMLEmbeddedObjectHelper@@QAE@AAVSvPersist@@W4SvXMLEmbeddedObjectHelperMode@@@Z
 ?disposing@SvXMLEmbeddedObjectHelper@@MAAXXZ
+?AddTabPage@IconChoiceDialog@@QAEXGABVString@@ABVImage@@1P6APAVIconChoicePage@@PAVWindow@@ABVSfxItemSet@@@ZP6APAGXZEK@Z
+?DataChanged@SvxXMeasurePreview@@UAEXABVDataChangedEvent@@@Z
+?GetWindow@AccessibleShapeTreeInfo@accessibility@@QBEPAVWindow@@XZ
+?GetEditSource@AccessibleTextHelper@accessibility@@UBEABVSvxEditSource@@XZ
+?GetOffset@AccessibleTextHelper@accessibility@@UBE?AVPoint@@XZ
