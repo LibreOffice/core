@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-13 11:15:07 $
+ *  last change: $Author: tl $ $Date: 2001-10-02 12:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@ public:
 
     BOOL            IsPredefined() const    { return bPredefined; }
     const String &  GetSetName() const      { return aSetName; }
+    void            SetSetName( const String &rName )    { aSetName = rName; }
     const String &  GetExportName() const   { return aExportName; }
     void            SetExportName( const String &rName )    { aExportName = rName; }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-13 11:21:41 $
+ *  last change: $Author: tl $ $Date: 2001-10-02 12:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,8 @@ USHORT SmSymSet::AddSymbol(SmSym* pSymbol)
 {
     DBG_ASSERT(pSymbol, "Kein Symbol");
 
+    if (pSymbol)
+        pSymbol->SetSetName( GetName() );
     SymbolList.Insert(pSymbol, LIST_APPEND);
     DBG_ASSERT(SymbolList.GetPos(pSymbol) == SymbolList.Count() - 1,
         "Sm : ... ergibt falschen return Wert");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-13 11:16:08 $
+ *  last change: $Author: tl $ $Date: 2001-10-02 12:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1863,8 +1863,20 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, pButton )
     // das SymbolSet wechseln wenn nötig
     if (pOldSymSet != pNewSymSet)
     {
+        pNewSymSet->AddSymbol( new SmSym( *pSym ) );
         pOldSymSet->DeleteSymbol(nSymbol);
-        pNewSymSet->AddSymbol(pSym);
+
+        //
+        // update controls
+        //
+        // actualize symbol-lists in the dialog
+        String  aOldSymbolName( pOrigSymbol->GetName() );
+        aOldSymbols.SetText( String() );
+        aOldSymbols.RemoveEntry( aOldSymbolName );
+        if (aSymbolSets.GetText() == aOldSymbolSets.GetText())
+            aSymbols.RemoveEntry( aOldSymbolName );
+        // clear display for original symbol
+        SetOrigSymbol(NULL, XubString());
     }
 
     //!! den SymbolSet Manger dazu zwingen seinen HashTable zu aktualisieren,
@@ -1894,8 +1906,6 @@ IMPL_LINK( SmSymDefineDialog, DeleteClickHdl, Button *, pButton )
         USHORT    nSymbolNo   = pSymSet->GetSymbolPos(aOldSymbolName);
         DBG_ASSERT(nSymbolNo != SYMBOL_NONE, "Sm : kein Symbol");
         // Bezüge auf das Symbols löschen
-        DBG_ASSERT(pOrigSymbol == &pSymSet->GetSymbol(nSymbolNo),
-            "Sm : Fehler beim löschen des Symbols");
         SetOrigSymbol(NULL, XubString());
         // und weg mit dem Symbol
         pSymSet->DeleteSymbol(nSymbolNo);
@@ -2044,6 +2054,7 @@ SmSymDefineDialog::~SmSymDefineDialog()
 {
     delete pFontList;
     delete pSubsetMap;
+    delete pOrigSymbol;
 }
 
 
@@ -2148,12 +2159,17 @@ BOOL SmSymDefineDialog::SelectSymbolSet(ComboBox &rComboBox,
 void SmSymDefineDialog::SetOrigSymbol(const SmSym *pSymbol,
                                       const XubString &rSymbolSetName)
 {
-    pOrigSymbol = pSymbol;
+    // clear old symbol
+    delete pOrigSymbol;
+    pOrigSymbol = 0;
 
-    XubString  aSymName,
-              aSymSetName;
+    XubString   aSymName,
+                aSymSetName;
     if (pSymbol)
     {
+        // set new symbol
+        pOrigSymbol = new SmSym( *pSymbol );
+
         aSymName    = pSymbol->GetName();
         aSymSetName = rSymbolSetName;
         aOldSymbolDisplay.SetFont(pSymbol->GetFace());
