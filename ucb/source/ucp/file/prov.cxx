@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-15 15:37:05 $
+ *  last change: $Author: abi $ $Date: 2001-06-22 10:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,12 +267,15 @@ FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& 
             rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
 
         uno::Sequence< uno::Any > aArguments( 1 );
-#if SUPD > 604
+#if SUPD > 636
         aArguments[0] <<=
-            rtl::OUString::createFromAscii( "org.openoffice.Security" );
+          rtl::OUString::createFromAscii( "org.openoffice.Webtop.Security" );
+#elsif SUPD > 604
+        aArguments[0] <<=
+          rtl::OUString::createFromAscii( "org.openoffice.Security" );
 #else
         aArguments[0] <<=
-            rtl::OUString::createFromAscii( "com.sun.star.Security" );
+          rtl::OUString::createFromAscii( "com.sun.star.Security" );
 #endif
         uno::Reference< container::XHierarchicalNameAccess > xHierAccess(
             sProvider->createInstanceWithArguments( sReaderService,aArguments ),
