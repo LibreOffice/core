@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-01 10:35:10 $
+ *  last change: $Author: sab $ $Date: 2001-08-01 12:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1420,8 +1420,11 @@ void ScXMLExport::_ExportContent()
                             sal_Bool bRet = GetFormExport()->seekPage( xDrawPage );
                             DBG_ASSERT( bRet, "OFormLayerXMLExport::seekPage failed!" );
                         }
-                        GetShapeExport()->seekShapes(uno::Reference<drawing::XShapes>(pSharedData->GetDrawPage(nTable), uno::UNO_QUERY));
-                        WriteTableShapes();
+                        if (pSharedData->HasDrawPage())
+                        {
+                            GetShapeExport()->seekShapes(uno::Reference<drawing::XShapes>(pSharedData->GetDrawPage(nTable), uno::UNO_QUERY));
+                            WriteTableShapes();
+                        }
                         table::CellRangeAddress aRange = GetEndAddress(xTable, nTable);
                         pSharedData->SetLastColumn(nTable, aRange.EndColumn);
                         pSharedData->SetLastRow(nTable, aRange.EndRow);
