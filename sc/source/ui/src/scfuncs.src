@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-22 21:13:19 $
+ *  last change: $Author: kz $ $Date: 2002-02-26 14:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -17626,7 +17626,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Functie ter berekening van subtotalen in werkbladen";
             Text[ chinese_simplified ] = "θ®΅η®—ζ•°ζ®ε•ζ–ζ•°ζ®εΊ“δΈ­η„ε†η±»ζ±‡ζ€»γ€‚";
             Text[ greek ] = "Συνάρτηση για τον υπολογισμό των μερικών αποτελεσμάτων σε πίνακες.";
-            Text[ korean ] = "μ¤ν”„λ λ“μ‹νΈμ—μ„ μ†κ³„ κ³„μ‚°γ€€ν•¨μ";
+            Text[ korean ] = "μ¤ν”„λ λ“μ‹νΈμ—μ„ λ¶€λ¶„ν•© κ³„μ‚°γ€€ν•¨μ";
             Text[ turkish ] = "Tablolarda ara toplam hesaplama fonksiyonu.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Calcula els subtotals d'un full de cΰlcul.";
@@ -39717,7 +39717,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Geen scheidingstekens voor duizendtallen. Als de waarheidswaarde, indien voorhanden, WAAR (ongelijk aan O) is, dan worden er geen scheidingstekens gezet.";
             Text[ chinese_simplified ] = "εƒδ½η‚Ήγ€‚η»™ε®ζ―ε¦δ½Ώη”¨εƒδ½η‚Ήγ€‚ε¦‚ζι€»θΎ‘ε€Όε­ε¨εΉ¶δΈ”ζ― true(δΈη­‰δΊ0)οΌε™δΈδ½Ώη”¨εƒδ½η‚Ήγ€‚";
             Text[ greek ] = "Διαχωριστικό χιλίων. Ορίζει αν εμφανίζονται διαχωριστικά χιλίων.";
-            Text[ korean ] = "μ²λ‹¨μ„ λ¶„λ¦¬ λ¶€νΈ μ—†μ. λ…Όλ¦¬ κ°’κ³Ό TRUE (0κ³Ό κ°™μ§€ μ•μ)λ” μ²λ‹¨μ„ λ¶„λ¦¬ λ¶€νΈλ¥Ό μ‚¬μ©ν•μ§€ μ•μµλ‹λ‹¤.";
+            Text[ korean ] = "μ²λ‹¨μ„ λ¶„λ¦¬ λ¶€νΈ μ—†μ. λ…Όλ¦¬ κ°’κ³Ό TRUE (0κ³Ό λ‹¤λ¦„)λ” μ²λ‹¨μ„ λ¶„λ¦¬ λ¶€νΈλ¥Ό μ‚¬μ©ν•μ§€ μ•μµλ‹λ‹¤.";
             Text[ turkish ] = "Binler hanesi ayύrύcύsύ. Binler hanesi ayύrύcύlarύ kullanύlύp kullanύlmayacaπύnύ belirler.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Delimitador de milers. Defineix si s'han d'establir els delimitadors de milers.";
