@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 16:54:22 $
+ *  last change: $Author: kr $ $Date: 2000-10-17 15:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.4 $ $ $Date: 2000-09-28 16:54:22 $
+ * @version     $Revision: 1.5 $ $ $Date: 2000-10-17 15:44:59 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -265,14 +265,16 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                 while(!_quit);
             }
             catch(EOFException eofException) {
-                if(!_quit) {
+                if(!_quit && DEBUG) {
                     System.err.println(getClass() + " - reading message - exception occurred: \"" + eofException + "\"");
                     System.err.println(getClass() + " - giving up");
                 }
             }
             catch(Exception exception) {
-                System.err.println(getClass() + " - reading message - exception occurred: \"" + exception + "\"");
-                System.err.println(getClass() + " - giving up");
+                if(DEBUG) {
+                    System.err.println(getClass() + " - reading message - exception occurred: \"" + exception + "\"");
+                    System.err.println(getClass() + " - giving up");
+                }
                   if(DEBUG);
                     exception.printStackTrace();
             }
@@ -662,7 +664,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                 freeHolders();
 
                 // see if life count is zero, if not give a warning
-                if(_life_count != 0)
+                if(_life_count != 0 && DEBUG)
                     System.err.println(getClass().getName() + ".dispose - life count (proxies left):" + _life_count);
 
 
