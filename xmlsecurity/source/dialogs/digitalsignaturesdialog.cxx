@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 15:45:14 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 15:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@
 
 #include "dialogs.hrc"
 #include "resourcemanager.hxx"
+
+#include <vcl/msgbox.hxx> // Until encrypted docs work...
 
 using namespace ::com::sun::star::security;
 
@@ -255,7 +257,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
                         {
                             bBinaryMode = true;
                             // opening encrypted stream soesn't work, so don't sign ecncrypted docs in EA
-                            DBG_ERROR( "Can't open encrypted streams..." );
+                            ErrorBox( this, WB_OK, String( RTL_CONSTASCII_USTRINGPARAM( "This version does not support signing of encrypted documents right now." ) ) ).Execute();
                             return -1;
                         }
                     }
