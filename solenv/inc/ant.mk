@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ant.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-18 16:27:59 $
+#   last change: $Author: rt $ $Date: 2004-04-15 08:33:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ SOLARCOMMONBINDIR=$(SOLARVERSION)$/common$(PROEXT)$/bin$(EXT_UPDMINOR)
 
 .IF "$(ANT_HOME)" == ""
 ANT_HOME*:=$(COMMON_BUILD_TOOLS)$/apache-ant-1.6.1
+.EXPORT : ANT_HOME
 .ENDIF
 ANT_LIB*:=$(ANT_HOME)$/lib
 
