@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtimp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-23 21:26:48 $
+ *  last change: $Author: cl $ $Date: 2001-02-27 14:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ protected:
                                       const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 private:
-    const ::com::sun::star::uno::Reference<::com::sun::star::container::XNameContainer > & mrTable;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & mrTable;
 };
 
 #endif

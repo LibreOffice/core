@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtexp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-23 21:26:48 $
+ *  last change: $Author: cl $ $Date: 2001-02-27 14:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,9 @@ public:
 
     ~SvxXMLXTableExportComponent();
 
-    static sal_Bool save( const rtl::OUString& rURL, const com::sun::star::uno::Reference<::com::sun::star::container::XNameContainer >& xTable ) throw();
+    static sal_Bool save( const rtl::OUString& rURL, const com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xTable ) throw();
 
-    sal_Bool export() throw();
+    sal_Bool exportTable() throw();
 
     // methods without content:
     virtual void _ExportAutoStyles();

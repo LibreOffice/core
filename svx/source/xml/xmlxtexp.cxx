@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtexp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-23 21:35:17 $
+ *  last change: $Author: cl $ $Date: 2001-02-27 14:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ public:
     SvxXMLTableEntryExporter( SvXMLExport& rExport ) : mrExport( rExport ) {}
     virtual ~SvxXMLTableEntryExporter();
 
-    virtual void export( const OUString& rStrName, const Any& rValue ) = 0;
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) = 0;
 
 protected:
     SvXMLExport& mrExport;
@@ -182,7 +182,7 @@ public:
     SvxXMLColorEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLColorEntryExporter();
 
-    virtual void export( const OUString& rStrName, const Any& rValue );
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue );
 };
 
 class SvxXMLLineEndEntryExporter : public SvxXMLTableEntryExporter
@@ -192,7 +192,7 @@ public:
     SvxXMLLineEndEntryExporter();
     virtual ~SvxXMLLineEndEntryExporter();
 
-    virtual void export( const OUString& rStrName, const Any& rValue );
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue );
 private:
     XMLMarkerStyle maMarkerStyle;
 };
@@ -203,7 +203,7 @@ public:
     SvxXMLDashEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLDashEntryExporter();
 
-    virtual void export( const OUString& rStrName, const Any& rValue );
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue );
 
 private:
     XMLDashStyle maDashStyle;
@@ -215,7 +215,7 @@ public:
     SvxXMLHatchEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLHatchEntryExporter();
 
-    virtual void export( const OUString& rStrName, const Any& rValue );
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue );
 private:
     XMLHatchStyle maHatchStyle;
 };
@@ -226,7 +226,7 @@ public:
     SvxXMLGradientEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLGradientEntryExporter();
 
-    virtual void export( const OUString& rStrName, const Any& rValue );
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue );
 private:
     XMLGradientStyle maGradientStyle;
 };
@@ -237,7 +237,7 @@ public:
     SvxXMLBitmapEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLBitmapEntryExporter();
 
-    virtual void export( const OUString& rStrName, const Any& rValue );
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue );
 
 private:
     XMLImageStyle maImageStyle;
@@ -336,7 +336,7 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
 
             const OUString aName;
             SvxXMLXTableExportComponent aExporter( aName, xHandler, xTable, xGrfResolver );
-            bRet = aExporter.export();
+            bRet = aExporter.exportTable();
 
         }
         while( 0 );
@@ -355,7 +355,7 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
     return bRet;
 }
 
-sal_Bool SvxXMLXTableExportComponent::export() throw()
+sal_Bool SvxXMLXTableExportComponent::exportTable() throw()
 {
     sal_Bool bRet = sal_False;
 
@@ -431,7 +431,7 @@ sal_Bool SvxXMLXTableExportComponent::export() throw()
             for( nIndex = 0; nIndex < nCount; nIndex++, pNames++ )
             {
                 aAny = mxTable->getByName( *pNames );
-                pExporter->export( *pNames, aAny );
+                pExporter->exportEntry( *pNames, aAny );
             }
 
             bRet = sal_True;
@@ -470,7 +470,7 @@ SvxXMLColorEntryExporter::~SvxXMLColorEntryExporter()
 {
 }
 
-void SvxXMLColorEntryExporter::export( const OUString& rStrName, const Any& rValue )
+void SvxXMLColorEntryExporter::exportEntry( const OUString& rStrName, const Any& rValue )
 {
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_name, rStrName );
 
@@ -495,7 +495,7 @@ SvxXMLLineEndEntryExporter::~SvxXMLLineEndEntryExporter()
 {
 }
 
-void SvxXMLLineEndEntryExporter::export( const OUString& rStrName, const Any& rValue )
+void SvxXMLLineEndEntryExporter::exportEntry( const OUString& rStrName, const Any& rValue )
 {
     maMarkerStyle.exportXML( rStrName, rValue );
 }
@@ -511,7 +511,7 @@ SvxXMLDashEntryExporter::~SvxXMLDashEntryExporter()
 {
 }
 
-void SvxXMLDashEntryExporter::export( const OUString& rStrName, const Any& rValue )
+void SvxXMLDashEntryExporter::exportEntry( const OUString& rStrName, const Any& rValue )
 {
     maDashStyle.exportXML( rStrName, rValue );
 }
@@ -527,7 +527,7 @@ SvxXMLHatchEntryExporter::~SvxXMLHatchEntryExporter()
 {
 }
 
-void SvxXMLHatchEntryExporter::export( const OUString& rStrName, const Any& rValue )
+void SvxXMLHatchEntryExporter::exportEntry( const OUString& rStrName, const Any& rValue )
 {
     maHatchStyle.exportXML( rStrName, rValue );
 }
@@ -543,7 +543,7 @@ SvxXMLGradientEntryExporter::~SvxXMLGradientEntryExporter()
 {
 }
 
-void SvxXMLGradientEntryExporter::export( const OUString& rStrName, const Any& rValue )
+void SvxXMLGradientEntryExporter::exportEntry( const OUString& rStrName, const Any& rValue )
 {
     maGradientStyle.exportXML( rStrName, rValue );
 }
@@ -559,7 +559,7 @@ SvxXMLBitmapEntryExporter::~SvxXMLBitmapEntryExporter()
 {
 }
 
-void SvxXMLBitmapEntryExporter::export( const OUString& rStrName, const Any& rValue )
+void SvxXMLBitmapEntryExporter::exportEntry( const OUString& rStrName, const Any& rValue )
 {
     maImageStyle.exportXML( rStrName, rValue, mrExport );
 }
