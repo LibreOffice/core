@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:42:40 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,12 @@ TabPage TP_ENV_PRT
         Text[ ENGLISH ] = "Envelope orientation" ;
         Text[ english_us ] = "Envelope orientation";
         Text[ portuguese ] = "Orientaзгo do envelope";
-        Text[ russian ] = "Способ подачи конверта";
+        Text[ russian ] = "Ориентация конверта";
         Text[ greek ] = "Envelope orientation";
         Text[ dutch ] = "Envelopinvoer";
         Text[ french ] = "Orientation de l'enveloppe";
         Text[ spanish ] = "Orientaciуn del sobre";
-        Text[ finnish ] = "Envelope orientation";
+        Text[ finnish ] = "Kirjekuorisuunta";
         Text[ italian ] = "Caricamento busta";
         Text[ danish ] = "Konvolutindryk";
         Text[ swedish ] = "Kuvertmatning";
@@ -144,7 +144,7 @@ TabPage TP_ENV_PRT
         Text [ DANISH ] = "Forsiden opad" ;
         Text [ ENGLISH_US ] = "~Print from top" ;
         Text [ SPANISH ] = "Imprimir r~everso" ;
-        Text [ FINNISH ] = "~Tulosta alusta" ;
+        Text [ FINNISH ] = "Tulosta ~alusta" ;
         Text [ FRENCH ] = "Imprimer а partir du haut" ;
         Text [ ITALIAN ] = "Stampa da sopra" ;
         Text [ DUTCH ] = "B~ovenkant bedrukken" ;
@@ -177,7 +177,7 @@ TabPage TP_ENV_PRT
         Text [ DANISH ] = "Forsiden nedad" ;
         Text [ ENGLISH_US ] = "Print from ~bottom" ;
         Text [ SPANISH ] = "Imprimir ~anverso" ;
-        Text [ FINNISH ] = "~Tulosta lopusta" ;
+        Text [ FINNISH ] = "Tulosta ~lopusta" ;
         Text [ FRENCH ] = "Imprimer а partir du bas" ;
         Text [ ITALIAN ] = "Stampa da sotto" ;
         Text [ DUTCH ] = "~Onderkant bedrukken" ;
@@ -208,7 +208,7 @@ TabPage TP_ENV_PRT
         Text [ DANISH ] = "Mod hшjre" ;
         Text [ ENGLISH_US ] = "~Shift right" ;
         Text [ SPANISH ] = "Hacia la ~derecha" ;
-        Text [ FINNISH ] = "~Siirrд oikealle" ;
+        Text [ FINNISH ] = "Siirrд ~oikealle" ;
         Text [ FRENCH ] = "Vers la droite" ;
         Text [ ITALIAN ] = "Sposta a destra" ;
         Text [ DUTCH ] = "Naar re~chts" ;
@@ -217,7 +217,7 @@ TabPage TP_ENV_PRT
         Text [ PORTUGUESE ] = "А direita" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "еђ‘еЏі(~S)";
-        Text[ russian ] = "Вправо";
+        Text[ russian ] = "Сдвиг вправо";
         Text[ polish ] = "Na prawo";
         Text[ japanese ] = "еЏігЃ«(~S)";
         Text[ chinese_traditional ] = "еђ‘еЏі(~S)";
@@ -256,7 +256,7 @@ TabPage TP_ENV_PRT
         Text [ DANISH ] = "Nedad" ;
         Text [ ENGLISH_US ] = "Shift ~down" ;
         Text [ SPANISH ] = "Hacia a~bajo" ;
-        Text [ FINNISH ] = "~Siirrд alas" ;
+        Text [ FINNISH ] = "Siirrд ~alas" ;
         Text [ FRENCH ] = "Vers le bas" ;
         Text [ ITALIAN ] = "Sposta in basso" ;
         Text [ DUTCH ] = "~Naar beneden" ;
@@ -265,7 +265,7 @@ TabPage TP_ENV_PRT
         Text [ PORTUGUESE ] = "Para baixo" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "еђ‘дё‹(~D)";
-        Text[ russian ] = "Вниз";
+        Text[ russian ] = "Сдвиг вниз";
         Text[ polish ] = "W dуі";
         Text[ japanese ] = "дё‹гЃ«(~D)";
         Text[ chinese_traditional ] = "еђ‘дё‹(~D)";
@@ -304,10 +304,10 @@ TabPage TP_ENV_PRT
         Text[ portuguese ] = "Impressora activa";
         Text[ russian ] = "Текущий принтер";
         Text[ greek ] = "Current printer";
-        Text[ dutch ] = "Actuele printer";
+        Text[ dutch ] = "Huidige printer";
         Text[ french ] = "Imprimante active";
         Text[ spanish ] = "Impresora actual";
-        Text[ finnish ] = "Current printer";
+        Text[ finnish ] = "Nykyinen tulostin";
         Text[ italian ] = "Stampante attuale";
         Text[ danish ] = "Aktuel printer";
         Text[ swedish ] = "Aktuell skrivare";
@@ -341,7 +341,7 @@ TabPage TP_ENV_PRT
         Text [ PORTUGUESE ] = "- Nenhuma impressora instalada -" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "- жІЎжњ‰е®‰иЈ…ж‰“еЌ°жњє -";
-        Text[ russian ] = "- Принтер не инсталлирован -";
+        Text[ russian ] = "- Принтер не установлен -";
         Text[ polish ] = "- Drukarka nie jest zainstalowana -";
         Text[ japanese ] = "- гѓ—гѓЄгѓіг‚їгЃЊг‚¤гѓіг‚№гѓ€гѓјгѓ«гЃ•г‚ЊгЃ¦гЃ„гЃѕгЃ›г‚“ -";
         Text[ chinese_traditional ] = "- жІ’жњ‰е®‰иЈќеЌ°иЎЁж©џ -";
@@ -366,11 +366,11 @@ TabPage TP_ENV_PRT
         Text [ french ] = "Paramйtrer..." ;
         Text [ dutch ] = "~Configureren..." ;
         Text [ swedish ] = "Stдll ~in..." ;
-        Text [ danish ] = "Indstil..." ;
+        Text [ danish ] = "In~dstil..." ;
         Text [ portuguese_brazilian ] = "Einrichten..." ;
         Text [ portuguese ] = "~Configurar..." ;
         Text[ chinese_simplified ] = "и®ѕзЅ®...";
-        Text[ russian ] = "Настроить...";
+        Text[ russian ] = "Установить...";
         Text[ polish ] = "Konfiguruj...";
         Text[ japanese ] = "иЁ­е®љ...";
         Text[ language_user1 ] = " ";
@@ -380,7 +380,7 @@ TabPage TP_ENV_PRT
         Text[ korean ] = "м„¤м№...";
         Text[ turkish ] = "Ayarlar...";
         Text[ catalan ] = "Configura...";
-        Text[ finnish ] = "Asennus";
+        Text[ finnish ] = "Asennus...";
         Text[ thai ] = "аё•аёґаё”аё•аё±а№‰аё‡...";
     };
 };
