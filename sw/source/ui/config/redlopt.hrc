@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *  last change: $Author: os $ $Date: 2001-03-22 09:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,26 +58,29 @@
  *
  *
  ************************************************************************/
-#define RB_INSERT       1
-#define RB_DELETED      2
-#define RB_CHANGED      3
-#define FT_TE_ATTRIB    4
-#define LB_TE_ATTRIB    5
-#define LB_TL_ATTRIB    6
-#define LB_TC_ATTRIB    7
-#define FT_TE_COL       8
-#define LB_TE_COL       9
-#define LB_TL_COL       10
-#define LB_TC_COL       11
-#define WIN_TE          12
-#define GB_TE           13
+#define FT_INS_ATTR         1
+#define LB_INS_ATTR         2
+#define FT_INS_COL          3
+#define LB_INS_COL          4
+#define WIN_INS             5
+#define FT_DEL_ATTR         6
+#define LB_DEL_ATTR         7
+#define FT_DEL_COL          8
+#define LB_DEL_COL          9
+#define WIN_DEL             10
+#define FT_CHG_ATTR         11
+#define LB_CHG_ATTR         12
+#define FT_CHG_COL          13
+#define LB_CHG_COL          14
+#define WIN_CHG             15
+#define GB_TE               16
 
-#define FT_MARKPOS      14
-#define LB_MARKPOS      15
-#define FT_LC_COL       16
-#define LB_LC_COL       17
-#define WIN_MARK        18
-#define GB_LC           19
-#define STR_AUTHOR      20
-#define STR_NOTHING     21
+#define FT_MARKPOS          17
+#define LB_MARKPOS          18
+#define FT_LC_COL           19
+#define LB_LC_COL           20
+#define WIN_MARK            21
+#define GB_LC               22
+#define STR_AUTHOR          23
+#define STR_NOTHING         24
 

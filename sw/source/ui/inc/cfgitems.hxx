@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitems.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: os $ $Date: 2001-03-22 09:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ class ViewShell;
 class SwViewOption;
 class SwPrintOptions;
 class SwContentOptPage;
-class SwLayoutOptPage;
+class SwShdwCrsrOptionsTabPage;
 class SwDocEditDialog;
 
 SfxPrinter* GetPrt( ViewShell* );
@@ -90,12 +90,10 @@ void        SetPrt( SfxPrinter* );
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog - Dokumentanzeige
 --------------------------------------------------------- */
-#ifdef FN_PARAM_DOCDISP
-
 class SwDocDisplayItem : public SfxPoolItem
 {
     friend SwWriterApp;
-    friend SwContentOptPage;
+    friend SwShdwCrsrOptionsTabPage;
     friend SwModule;
 
     BOOL bParagraphEnd      :1;
@@ -105,15 +103,6 @@ class SwDocDisplayItem : public SfxPoolItem
     BOOL bSoftHyphen        :1;
     BOOL bHiddenText        :1;
     BOOL bManualBreak       :1;
-    BOOL bIndexEntry        :1;
-    BOOL bIndexBackground   :1;
-    BOOL bFootnoteBackground:1;
-    BOOL bField             :1;
-    BOOL bTable             :1;
-    BOOL bGraphic           :1;
-    BOOL bDrawing           :1;
-    BOOL bFieldName         :1;
-    BOOL bNotes             :1;
     BOOL bShowHiddenPara    :1;
 
     Color aIndexBackgrndCol;
@@ -133,27 +122,37 @@ public:
     void                        operator=( const SwDocDisplayItem& );
     void                        FillViewOptions( SwViewOption& rVOpt) const;
 };
-#endif
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog, Elementeseite
 --------------------------------------------------------- */
-#ifdef FN_PARAM_ELEM
 class SwElemItem : public SfxPoolItem
 {
+    //view
     BOOL bHorzScrollbar :1;
     BOOL bVertScrollbar :1;
     BOOL bHorzRuler     :1;
     BOOL bVertRuler     :1;
+    BOOL bSmoothScroll  :1;
+    //visual aids
     BOOL bTableBounds   :1;
     BOOL bSectionBounds :1;
     BOOL bCrosshair     :1;
     BOOL bHandles       :1;
     BOOL bBigHandles    :1;
     BOOL bBounds        :1;
-    BOOL bStatusLine    :1;
-    BOOL bSmoothScroll  :1;
+    //highlighting
+    BOOL bIndexEntry        :1;
+    BOOL bIndexBackground   :1;
+    BOOL bFootnoteBackground:1;
+    BOOL bField             :1;
+    //display
+    BOOL bTable             :1;
+    BOOL bGraphic           :1;
+    BOOL bDrawing           :1;
+    BOOL bFieldName         :1;
+    BOOL bNotes             :1;
 
-    friend SwLayoutOptPage;
+    friend SwContentOptPage;
 
 public:
                             TYPEINFO();
@@ -168,21 +167,17 @@ public:
 
     void                    FillViewOptions( SwViewOption& rVOpt) const;
 
-    void        SetStatusLine(BOOL bSet){bStatusLine = bSet;}
-    BOOL        IsStatusLine()const     {return bStatusLine;}
 };
-#endif
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog - Drucker/Zusaetze
 --------------------------------------------------------- */
-#ifdef FN_PARAM_ADDPRINTER
 
 class SwAddPrinterItem : public SfxPoolItem
 {
     friend  SwAddPrinterTabPage;
 
     String sFaxName;
-    UINT16 nPrintPostIts;
+    ULONG nPrintPostIts;
 
     BOOL bPrintGraphic      :1,
          bPrintTable        :1,
@@ -223,16 +218,14 @@ public:
     BOOL IsPrintPageBackground() const { return bPrintPageBackground; }
     BOOL IsPrintBlackFont() const { return bPrintBlackFont; }
     BOOL IsPrintSingleJobs() const { return bPrintSingleJobs; }
-    UINT16 GetPrintPostIts () const { return nPrintPostIts; }
+    ULONG GetPrintPostIts () const { return nPrintPostIts; }
 
 };
-#endif
 
 
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog, ShadowCursorSeite
 --------------------------------------------------------- */
-#ifdef FN_PARAM_SHADOWCURSOR
 
 class SwShadowCursorItem : public SfxPoolItem
 {
@@ -260,7 +253,6 @@ public:
     void SetMode( BYTE eM )             { eMode = eM; }
     void SetOn( BOOL bFlag )            { bOn = bFlag; }
 };
-#endif
 
 #ifndef PRODUCT
 /*--------OS 12.01.95 -----------------------------------

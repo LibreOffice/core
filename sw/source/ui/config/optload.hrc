@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *  last change: $Author: os $ $Date: 2001-03-22 09:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,54 @@
  *
  ************************************************************************/
 
-#define GB_LINK                 1
+#define GB_UPDATE               1
 #define RB_ALWAYS               2
 #define RB_REQUEST              3
 #define RB_NEVER                4
-#define CB_FLD_DOCONLY          5
+
 #define CB_MERGE_PARA_DIST      6
 #define GB_COMPAT               7
 #define CB_AUTO_UPDATE_FIELDS   8
 #define CB_AUTO_UPDATE_CHARTS   9
 #define FT_UPDATE_LINKS         10
-#define CB_LINK_DOCONLY         11
-#define GB_FIELD                13
+
 #define CB_MERGE_PARA_DIST_PAGESTART 14
+#define GB_SETTINGS     15
+#define ST_METRIC       16
+#define FT_TAB          17
+#define MF_TAB          18
+#define LB_METRIC       19
+#define FT_LINK         20
+#define FT_FIELD        21
+#define FT_METRIC       22
+#define CB_CAPTION      23
+#define PB_OPTIONS      24
+#define TXT_OPTIONS     25
+#define GB_CAPTION      26
+
+#define CLB_OBJECTS         1
+#define STR_TABLE           2
+#define STR_FRAME           3
+#define STR_GRAPHIC         4
+#define STR_OLE             5
+
+#define TXT_CATEGORY        5
+#define BOX_CATEGORY        6
+#define TXT_FORMAT          7
+#define BOX_FORMAT          8
+#define TXT_TEXT            9
+#define EDT_TEXT           10
+#define TXT_POS            11
+#define BOX_POS            12
+#define TXT_SAMPLE         13
+#define GRP_SETTINGS       14
+#define STR_BEGINNING      15
+#define STR_END            16
+#define STR_ABOVE          17
+#define STR_CP_BELOW       18
+#define FT_LEVEL           19
+#define LB_LEVEL           20
+#define FT_SEPARATOR       21
+#define ED_SEPARATOR       22
+
 

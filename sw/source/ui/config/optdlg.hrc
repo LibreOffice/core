@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:57:51 $
+ *  last change: $Author: os $ $Date: 2001-03-22 09:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,6 @@
 #define GB_NOPRINT              2
 #define GB_WINDOW               3
 #define GB_BACK                 4
-#define GB_METRIC       5
-#define ST_METRIC       6
-#define GB_TAB          7
-#define MF_TAB                  8
 
 #define CB_GRF              1
 #define CB_TBL                  2
@@ -92,7 +88,7 @@
 #define CB_FLDBACK              21
 #define GB_LINE                 22
 #define CB_POSTIT               23
-#define LB_METRIC       24
+
 #define CB_BIGHANDLE                  25
 
 #define CB_TEST1        25
@@ -154,52 +150,8 @@
 #define RB_PAGEEND         83
 #define LB_FAX             86
 #define CB_BLACK_FONT      87
-
-//Grid-Page
-#define GB_GRID             90
-#define MTR_FLD_GRID        2
-#define BTN_MORE            3
-#define GRP_DRAWGRID        4
-#define GRP_OPTIONS         5
-#define GRP_SNAPGRID        6
-#define GRP_ORIGIN          7
-#define CBX_GRID_SNAP       8
-#define CBX_SYNCHRONIZE     9
-#define CBX_EQUAL_GRID     10
-#define CBX_SNAPGRID       11
-#define CBX_ORIGIN          12
-#define CBX_GRID_VISIBLE    13
-#define MTR_FLD_DRAW_Y      18
-#define MTR_FLD_DRAW_X      21
-#define MTR_FLD_DIVISION_X  22
-#define MTR_FLD_DIVISION_Y  23
-#define FT_DRAW_X           26
-#define FT_DRAW_Y           27
-#define FT_RESOLUTION       28
-#define FT_DIVISION         29
-#define CBX_CROSSHAIR       30
-#define CB_RULER            31
-
-
-// DefaultFarben
-#define SW_COLOR_START              1
-#define CL_BLACK                    (SW_COLOR_START +  0)
-#define CL_BLUE                     (SW_COLOR_START +  1)
-#define CL_GREEN                    (SW_COLOR_START +  2)
-#define CL_CYAN                     (SW_COLOR_START +  3)
-#define CL_RED                      (SW_COLOR_START +  4)
-#define CL_MAGENTA                  (SW_COLOR_START +  5)
-#define CL_BROWN                    (SW_COLOR_START +  6)
-#define CL_GRAY                     (SW_COLOR_START +  7)
-#define CL_LIGHTGRAY                (SW_COLOR_START +  8)
-#define CL_LIGHTBLUE                (SW_COLOR_START +  9)
-#define CL_LIGHTGREEN               (SW_COLOR_START + 10)
-#define CL_LIGHTCYAN                (SW_COLOR_START + 11)
-#define CL_LIGHTRED                 (SW_COLOR_START + 12)
-#define CL_LIGHTMAGENTA             (SW_COLOR_START + 13)
-#define CL_YELLOW                   (SW_COLOR_START + 14)
-#define CL_WHITE                    (SW_COLOR_START + 15)
-#define SW_COLOR_END                CL_WHITE
+#define LB_HMETRIC         88
+#define LB_VMETRIC         89
 
 // Tabpage Grundschriften
 #define FT_STANDARD         90
@@ -217,25 +169,34 @@
 #define CB_DOCONLY                     102
 
 //Tabpage Tabelle
-#define GB_MOVE             110
+#define CB_HEADER           101
+#define CB_REPEAT_HEADER    102
+#define CB_DONT_SPLIT       103
+#define CB_BORDER           104
+#define CB_NUMFORMATTING    105
+#define CB_NUMALIGNMENT     106
+#define GB_TABLE            107
+#define GB_TABLE_INSERT     108
+#define CB_NUMFMT_FORMATTING    109
+#define GB_MOVE                 110
 #define FT_ROWMOVE                  111
 #define MF_ROWMOVE                  112
 #define FT_COLMOVE                  113
 #define MF_COLMOVE                  114
-#define GB_INSERT                   115
+#define FT_INSERT                   115
 #define FT_ROWINSERT                    116
 #define MF_ROWINSERT                    117
 #define FT_COLINSERT                    118
 #define MF_COLINSERT                    119
-#define GB_HANDLING                     120
+#define FT_HANDLING                     120
 #define RB_FIX                      121
 #define RB_FIXPROP                  122
 #define RB_VAR                      123
 #define FT_FIX                      124
 #define FT_FIXPROP                  125
 #define FT_VAR                      126
-#define FT_DESC                     127
 
+#define FT_MOVE                     128
 #define GB_COLOR                    130
 #define FT_SGML                     131
 #define LB_SGML                     132
