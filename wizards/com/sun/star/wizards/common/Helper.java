@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Helper.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:36:26 $
+*  last change: $Author: obo $ $Date: 2004-09-08 14:01:43 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -60,13 +60,21 @@
 
 package com.sun.star.wizards.common;
 
+import java.util.Calendar;
+
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.i18n.NumberFormatIndex;
+import com.sun.star.lang.Locale;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.DateTime;
+import com.sun.star.util.XNumberFormatsSupplier;
+import com.sun.star.util.XNumberFormatter;
 
 public class Helper {
 
@@ -90,7 +98,7 @@ public class Helper {
                 xPSet.setPropertyValue(PropertyName, PropertyValue);
             else{
                 Property[] selementnames = xPSet.getPropertySetInfo().getProperties();
-                throw new Exception();
+                throw new java.lang.IllegalArgumentException("No Such Property: '" + PropertyName+ "'");
             }
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
@@ -127,7 +135,10 @@ public class Helper {
             if (oUnoObject != null) {
                 XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oUnoObject);
                 Object oObject = xPSet.getPropertyValue(PropertyName);
-                return com.sun.star.uno.AnyConverter.toObject(new com.sun.star.uno.Type(xClass), oObject);
+                if ( AnyConverter.isVoid(oObject) )
+                    return null;
+                else
+                    return com.sun.star.uno.AnyConverter.toObject(new com.sun.star.uno.Type(xClass), oObject);
             }
             return null;
         } catch (Exception exception) {
@@ -219,7 +230,14 @@ public class Helper {
     public static void setUnoPropertyValues(Object oUnoObject, String[] PropertyNames, Object[] PropertyValues) {
         try {
             com.sun.star.beans.XMultiPropertySet xMultiPSetLst = (com.sun.star.beans.XMultiPropertySet) UnoRuntime.queryInterface(com.sun.star.beans.XMultiPropertySet.class, oUnoObject);
-            xMultiPSetLst.setPropertyValues(PropertyNames, PropertyValues);
+            if (xMultiPSetLst != null)
+                xMultiPSetLst.setPropertyValues(PropertyNames, PropertyValues);
+            else
+                for (int i = 0; i < PropertyNames.length; i++) {
+                    //System.out.println(PropertyNames[i] + "=" + PropertyValues[i]);
+                    setUnoPropertyValue(oUnoObject, PropertyNames[i], PropertyValues[i]);
+                }
+
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
@@ -245,5 +263,106 @@ public class Helper {
             return null;
         }
     }
+
+    private static long DAY_IN_MILLIS = ( 24 * 60 * 60 * 1000 );
+
+    public static class DateUtils {
+
+        private long docNullTime;
+        private XNumberFormatter formatter;
+        private XNumberFormatsSupplier formatSupplier;
+        private Calendar calendar;
+
+        public DateUtils(XMultiServiceFactory xmsf, Object document) throws Exception {
+            XMultiServiceFactory docMSF = (XMultiServiceFactory)UnoRuntime.queryInterface(XMultiServiceFactory.class,document);
+
+            Object defaults = docMSF.createInstance("com.sun.star.text.Defaults");
+            Locale  l = (Locale) Helper.getUnoStructValue(defaults, "CharLocale");
+
+            java.util.Locale jl = new java.util.Locale(
+                    l.Language , l.Country, l.Variant );
+
+            calendar = Calendar.getInstance(jl);
+
+            formatSupplier = (XNumberFormatsSupplier)UnoRuntime.queryInterface(XNumberFormatsSupplier.class,document);
+
+            Object formatSettings = formatSupplier.getNumberFormatSettings();
+            com.sun.star.util.Date date = (com.sun.star.util.Date)Helper.getUnoPropertyValue( formatSettings, "NullDate");
+
+            calendar.set(date.Year, date.Month - 1 , date.Day);
+
+            docNullTime = calendar.getTimeInMillis();
+
+            formatter  = Desktop.createNumberFormatter(xmsf, formatSupplier );
+
+        }
+
+        /**
+         * @param format a constant of the enumeration NumberFormatIndex
+         * @return
+         */
+        public int getFormat( short format ) {
+            return Desktop.getNumberFormatterKey( formatSupplier , format);
+        }
+
+        public XNumberFormatter getFormatter() {
+            return formatter;
+        }
+
+        /**
+         * @param date a VCL date in form of 20041231
+         * @return a document relative date
+         */
+        public synchronized double getDocumentDateAsDouble(int date) {
+            calendar.clear();
+            calendar.set( date / 10000 ,
+                        ( date % 10000 ) / 100 - 1 ,
+                          date % 100 ) ;
+
+            long date1 = calendar.getTimeInMillis();
+
+            /*
+             * docNullTime and date1 are in millis, but
+             * I need a day...
+             */
+            double daysDiff = ( date1 - docNullTime ) / DAY_IN_MILLIS + 1;
+
+            return daysDiff;
+        }
+
+        public double getDocumentDateAsDouble(DateTime date) {
+            return getDocumentDateAsDouble (date.Year * 10000 + date.Month * 100 + date.Day );
+        }
+
+        public synchronized double getDocumentDateAsDouble(long javaTimeInMillis) {
+            calendar.clear();
+            calendar.setTimeInMillis( javaTimeInMillis ) ;
+
+            long date1 = calendar.getTimeInMillis();
+
+            /*
+             * docNullTime and date1 are in millis, but
+             * I need a day...
+             */
+            double daysDiff = ( date1 - docNullTime ) / DAY_IN_MILLIS + 1;
+
+            return daysDiff;
+
+        }
+
+        public String format(int formatIndex, int date) {
+            return formatter.convertNumberToString( formatIndex, getDocumentDateAsDouble(date));
+        }
+
+        public String format(int formatIndex, DateTime date) {
+            return formatter.convertNumberToString( formatIndex, getDocumentDateAsDouble(date));
+        }
+
+        public String format(int formatIndex, long javaTimeInMillis) {
+            return formatter.convertNumberToString( formatIndex, getDocumentDateAsDouble(javaTimeInMillis));
+        }
+
+    }
+
 
 }
