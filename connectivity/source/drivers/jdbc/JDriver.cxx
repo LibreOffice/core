@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:15:29 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _CONNECTIVITY_JAVA_SQL_DRIVER_HXX_
 #include "java/sql/Driver.hxx"
 #endif
@@ -219,7 +218,7 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
                 ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
                 );
-        return Sequence< DriverPropertyInfo >(aDriverInfo.begin(),aDriverInfo.size());
+        return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size());
     }
     ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
     return Sequence< DriverPropertyInfo >();
