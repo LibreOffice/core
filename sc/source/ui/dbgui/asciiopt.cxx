@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-10-17 17:39:29 $
+ *  last change: $Author: dr $ $Date: 2002-07-05 15:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #include "asciiopt.hxx"
 #include "asciiopt.hrc"
 
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
@@ -79,32 +82,20 @@
 #endif
 
 
-//------------------------------------------------------------------------
+// ============================================================================
 
-#define ASCIIDLG_MAXFIELDS      256
-
+//! TODO make dynamic
 #ifdef WIN
-    #define ASCIIDLG_MAXROWS                10000
+const sal_Int32 ASCIIDLG_MAXROWS                = 10000;
 #else
-    #define ASCIIDLG_MAXROWS                32000
+const sal_Int32 ASCIIDLG_MAXROWS                = 32000;
 #endif
-
- // da max. 5 Decimalstellen
-#define ASCIIDLG_1COL_SIZE          5
-#define ASCIIDLG_LASTCOL_SIZE       10000
 
 static const sal_Char __FAR_DATA pStrFix[] = "FIX";
 static const sal_Char __FAR_DATA pStrMrg[] = "MRG";
 
 
-//  Liste der Spaltentypen passend zum String SCSTR_COLUMN_USER
-
-static BYTE nColTypeList[] =
-    { SC_COL_STANDARD, SC_COL_TEXT, SC_COL_DMY, SC_COL_MDY, SC_COL_YMD,
-        SC_COL_ENGLISH, SC_COL_SKIP };
-
-
-//------------------------------------------------------------------------
+// ============================================================================
 
 ScAsciiOptions::ScAsciiOptions() :
     bFixedLen       ( FALSE ),
@@ -177,6 +168,29 @@ void ScAsciiOptions::SetColInfo( USHORT nCount, const xub_StrLen* pStart, const 
     {
         pColStart = NULL;
         pColFormat = NULL;
+    }
+}
+
+
+void ScAsciiOptions::SetColumnInfo( const ScCsvExtColPosVec& rColPosVec, const ScCsvExtColTypeVec& rColTypeVec )
+{
+    DBG_ASSERT( rColPosVec.size() == rColTypeVec.size(), "ScAsciiOptions::SetColInfo - vector sizes not equal" );
+
+    delete[] pColStart;
+    pColStart = NULL;
+    delete[] pColFormat;
+    pColFormat = NULL;
+
+    nInfoCount = static_cast< sal_uInt16 >( rColPosVec.size() );
+    if( nInfoCount )
+    {
+        pColStart = new xub_StrLen[ nInfoCount ];
+        pColFormat = new sal_uInt8[ nInfoCount ];
+        for( sal_uInt16 nIx = 0; nIx < nInfoCount; ++nIx )
+        {
+            pColStart[ nIx ] = rColPosVec[ nIx ];
+            pColFormat[ nIx ] = rColTypeVec[ nIx ];
+        }
     }
 }
 
@@ -469,8 +483,8 @@ void ScAsciiOptions::InterpretColumnList( const String& rString )
 }
 #endif
 
-//------------------------------------------------------------------------
 
+// ============================================================================
 
 void lcl_FillCombo( ComboBox& rCombo, const String& rList, sal_Unicode cSelect )
 {
@@ -492,7 +506,6 @@ void lcl_FillCombo( ComboBox& rCombo, const String& rList, sal_Unicode cSelect )
     }
 }
 
-
 sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
 {
     sal_Unicode c = 0;
@@ -512,9 +525,13 @@ sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
 }
 
 
+// ----------------------------------------------------------------------------
+
 ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
                                     SvStream* pInStream, sal_Unicode cSep ) :
         ModalDialog ( pParent, ScResId( RID_SCDLG_ASCII ) ),
+        pDatStream  ( pInStream ),
+
         aRbFixed    ( this, ScResId( RB_FIXED ) ),
         aRbSeparated( this, ScResId( RB_SEPARATED ) ),
 
@@ -528,10 +545,8 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         aFtRow      ( this, ScResId( FT_AT_ROW  ) ),
         aNfRow      ( this, ScResId( NF_AT_ROW  ) ),
 
-        aTableBox   ( this, ScResId( CTR_TABLE  ) ),
         aFtCharSet  ( this, ScResId( FT_CHARSET ) ),
         aLbCharSet  ( this, ScResId( LB_CHARSET ) ),
-        bCharSetSystem  ( FALSE ),
         aFlSepOpt   ( this, ScResId( FL_SEPOPT ) ),
         aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
         aCbTextSep  ( this, ScResId( CB_TEXTSEP ) ),
@@ -539,59 +554,42 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         aCkbAsOnce  ( this, ScResId( CB_ASONCE) ),
         aFtType     ( this, ScResId( FT_TYPE ) ),
         aLbType     ( this, ScResId( LB_TYPE1 ) ),
-        aScrollbar  ( this, ScResId( SB_COLUMN ) ),
-        aVScroll    ( this, ScResId( SB_ROW ) ),
+        maTableBox  ( this, ScResId( CTR_TABLEBOX ) ),
         aFlWidth    ( this, ScResId( FL_WIDTH ) ),
         aBtnOk      ( this, ScResId( BTN_OK ) ),
         aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp    ( this, ScResId( BTN_HELP ) ),
-        aStringCol  ( ScResId( STR_COL ) ),
-        aStringTo   ( ScResId( STR_TO ) ),
         aCharSetUser( ScResId( SCSTR_CHARSET_USER ) ),
         aColumnUser ( ScResId( SCSTR_COLUMN_USER ) ),
         aFldSepList ( ScResId( SCSTR_FIELDSEP ) ),
         aTextSepList( ScResId( SCSTR_TEXTSEP ) ),
-        pEndValues  ( NULL ),
-        pFlags      ( NULL ),
         pRowPosArray( NULL ),
-        pRowPosArrayUnicode( NULL )
+        pRowPosArrayUnicode( NULL ),
+        bVFlag      ( FALSE )
 {
+    FreeResource();
+
     String aName = GetText();
     aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" - ["));
     aName += aDatName;
     aName += ']';
     SetText( aName );
 
-    FreeResource();
-    bVFlag=FALSE;
-    String aSizeString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("00000"));
-    Font aTBFont=OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US, 0 );
-    Size aTBSize=aTableBox.GetFont().GetSize();
-    aTBSize.Width()=aTBFont.GetSize().Width();
-    aTBFont.SetSize(aTBSize);
-    aTableBox.SetFont(aTBFont);
-
-    pDatStream=pInStream;
-    aTableBox.InsertCol(0,2);
-    aTableBox.InsertRow(0,4);
-
-    aTableBox.SetNumOfCharsForCol(0,aSizeString.Len());
-
     switch(cSep)
     {
-        case '\t'   :aCkbTab        .Check();break;
-        case ';'    :aCkbSemicolon  .Check();break;
-        case ','    :aCkbComma      .Check();break;
-        case ' '    :aCkbSpace      .Check();break;
-        default     :aCkbOther      .Check();
-                     aEdOther.SetText(cSep);
-                     break;
+        case '\t':  aCkbTab.Check();        break;
+        case ';':   aCkbSemicolon.Check();  break;
+        case ',':   aCkbComma.Check();      break;
+        case ' ':   aCkbSpace.Check();      break;
+        default:
+            aCkbOther.Check();
+            aEdOther.SetText( cSep );
     }
 
     nArrayEndPos = nArrayEndPosUnicode = 0;
     USHORT nField;
     BOOL bPreselectUnicode = FALSE;
-    if(pDatStream!=NULL)
+    if( pDatStream )
     {
         USHORT j;
         pRowPosArray=new ULONG[ASCIIDLG_MAXROWS+2];
@@ -606,16 +604,13 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         pDatStream->SetBufferSize(ASCIIDLG_MAXROWS);
         pDatStream->SetStreamCharSet( gsl_getSystemTextEncoding() );    //!???
         pDatStream->Seek( 0 );
-        for ( j=0; j < SC_ASCIIOPT_PREVIEW_LINES; j++ )
+        for ( j=0; j < CSV_PREVIEW_LINES; j++ )
         {
             pRowPosArray[nArrayEndPos++]=pDatStream->Tell();
             if(!pDatStream->ReadLine( aPreviewLine[j] ))
             {
                 bVFlag=TRUE;
-                aVScroll.SetPageSize( aTableBox.GetYMaxVisChars()-1);
-                aVScroll.SetThumbPos(0);
-                aVScroll.SetRange( Range( 0, j) );
-                aVScroll.SetVisibleSize(j);
+                maTableBox.CommitRequest( CSVREQ_LINECOUNT, j );
                 break;
             }
         }
@@ -646,7 +641,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
             }
             pDatStream->Seek( nUniPos );
         }
-        for ( j=0; j < SC_ASCIIOPT_PREVIEW_LINES; j++ )
+        for ( j=0; j < CSV_PREVIEW_LINES; j++ )
         {
             pRowPosArrayUnicode[nArrayEndPosUnicode++] = pDatStream->Tell();
             if( !pDatStream->ReadUniStringLine( aPreviewLineUnicode[j] ) )
@@ -659,34 +654,22 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         }
         nStreamPosUnicode = pDatStream->Tell();
     }
-    nScrollPos = 0;
-    nUsedCols = 0;
-    pEndValues  = new USHORT[ASCIIDLG_MAXFIELDS];
-    pFlags      = new BYTE[ASCIIDLG_MAXFIELDS];
-    for (nField=0; nField<ASCIIDLG_MAXFIELDS; nField++)
-    {
-        pEndValues[nField] = 0;
-        pFlags[nField] = SC_COL_STANDARD;
-    }
 
+    // *** Separator characters ***
     lcl_FillCombo( aCbTextSep, aTextSepList, 34 );      // Default "
 
-    Link aVarSepLink=LINK( this, ScImportAsciiDlg, VarSepHdl );
-    aCbTextSep.SetSelectHdl( aVarSepLink);
-    aCbTextSep.SetModifyHdl( aVarSepLink);
+    Link aSeparatorHdl =LINK( this, ScImportAsciiDlg, SeparatorHdl );
+    aCbTextSep.SetSelectHdl( aSeparatorHdl );
+    aCbTextSep.SetModifyHdl( aSeparatorHdl );
+    aCkbTab.SetClickHdl( aSeparatorHdl );
+    aCkbSemicolon.SetClickHdl( aSeparatorHdl );
+    aCkbComma.SetClickHdl( aSeparatorHdl );
+    aCkbAsOnce.SetClickHdl( aSeparatorHdl );
+    aCkbSpace.SetClickHdl( aSeparatorHdl );
+    aCkbOther.SetClickHdl( aSeparatorHdl );
+    aEdOther.SetModifyHdl( aSeparatorHdl );
 
-    aCkbTab.SetClickHdl( aVarSepLink);
-    aCkbSemicolon.SetClickHdl(aVarSepLink);
-    aCkbComma.SetClickHdl( aVarSepLink);
-    aCkbAsOnce.SetClickHdl( aVarSepLink);
-    aCkbSpace.SetClickHdl( aVarSepLink);
-    aCkbOther.SetClickHdl( aVarSepLink);
-    aEdOther.SetModifyHdl( aVarSepLink);
-
-    aTableBox.SetSelectionHdl(LINK( this, ScImportAsciiDlg, SelectHdl ));
-
-    //  CharacterSet / TextEncoding - Listbox
-
+    // *** text encoding ListBox ***
     // all encodings allowed, including Unicode
     aLbCharSet.FillFromTextEncodingTable();
     // Insert one "SYSTEM" entry for compatibility in AsciiOptions and system
@@ -694,432 +677,114 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     aLbCharSet.InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, aCharSetUser );
     aLbCharSet.SelectTextEncoding( bPreselectUnicode ?
         RTL_TEXTENCODING_UNICODE : gsl_getSystemTextEncoding() );
-    GetCharSet();
+    SetSelectedCharSet();
     aLbCharSet.SetSelectHdl( LINK( this, ScImportAsciiDlg, CharSetHdl ) );
 
-    //  Column type - Listboxes
-
-    ListBox* pType =&aLbType;
+    // *** column type ListBox ***
     xub_StrLen nCount = aColumnUser.GetTokenCount();
     for (xub_StrLen i=0; i<nCount; i++)
-    {
-        String aToken = aColumnUser.GetToken(i);
-        pType->InsertEntry(aToken);
-        aTableBox.InsertContextEntry(100+i,aToken);
-    }
-    pType->SetSelectHdl( LINK( this, ScImportAsciiDlg, ColTypeHdl ) );
-    aTableBox.SetModifyColHdl(LINK( this, ScImportAsciiDlg, ColTypeHdl ) );
+        aLbType.InsertEntry( aColumnUser.GetToken( i ) );
 
-    aScrollbar.SetRange( Range( 0, ASCIIDLG_MAXFIELDS ) );      // initial getrennt
-    aScrollbar.SetPageSize( aTableBox.GetXMaxVisChars() );
-    //aScrollbar.SetVisibleSize( 3 );
-    aScrollbar.SetScrollHdl( LINK( this, ScImportAsciiDlg, ScrollHdl ) );
+    aLbType.SetSelectHdl( LINK( this, ScImportAsciiDlg, LbColTypeHdl ) );
+    aFtType.Disable();
+    aLbType.Disable();
+
+    // *** table box preview ***
+    maTableBox.SetUpdateTextHdl( LINK( this, ScImportAsciiDlg, UpdateTextHdl ) );
+    maTableBox.InitTypes( aLbType );
+    maTableBox.SetColSelectHdl( LINK( this, ScImportAsciiDlg, ColSelectHdl ) );
 
     if(!bVFlag)
-    {
-        aVScroll.SetRange( Range( 0, ASCIIDLG_MAXROWS ) );      // initial getrennt
-        aVScroll.SetPageSize( aTableBox.GetYMaxVisChars()-2 );
-        aVScroll.SetVisibleSize(aTableBox.GetYMaxVisChars()-1);
-    }
-    aVScroll.SetScrollHdl( LINK( this, ScImportAsciiDlg, ScrollHdl ) );
-    aRbSeparated.SetClickHdl( LINK( this, ScImportAsciiDlg, VarFixHdl ) );
-    aRbFixed.SetClickHdl( LINK( this, ScImportAsciiDlg, VarFixHdl ) );
+        maTableBox.CommitRequest( CSVREQ_LINECOUNT, ASCIIDLG_MAXROWS );
 
-    long nBarSize = GetSettings().GetStyleSettings().GetScrollBarSize();
-    Size aSize = aVScroll.GetSizePixel();
-    aSize.Width() = nBarSize;
-    aVScroll.SetSizePixel( aSize );
-    aSize = aScrollbar.GetSizePixel();
-    aSize.Height() = nBarSize;
-    aScrollbar.SetSizePixel( aSize );
 
-    CheckScrollPos();
-    CheckColTypes(FALSE);
-    CheckValues();
-    CheckDisable();
-    VarFixHdl(&aRbFixed);
+    aRbSeparated.SetClickHdl( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
+    aRbFixed.SetClickHdl( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
+
+    SetupSeparatorCtrls();
+    RbSepFixHdl( &aRbFixed );
+
+    UpdateTextHdl( &maTableBox );
 }
 
 
 ScImportAsciiDlg::~ScImportAsciiDlg()
 {
-    delete[] pEndValues;
-    delete[] pFlags;
     delete[] pRowPosArray;
     delete[] pRowPosArrayUnicode;
 
 }
 
-
-IMPL_LINK( ScImportAsciiDlg, VarFixHdl, void *, pCtr )
+void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
 {
-    if((RadioButton *)pCtr==&aRbFixed ||(RadioButton *)pCtr==&aRbSeparated )
+    rOpt.SetCharSet( meCharSet );
+    rOpt.SetCharSetSystem( mbCharSetSystem );
+    rOpt.SetFixedLen( aRbFixed.IsChecked() );
+    rOpt.SetStartRow( (USHORT)aNfRow.GetValue() );
+    maTableBox.FillColumnData( rOpt );
+    if( aRbSeparated.IsChecked() )
     {
-        aTableBox.ClearTable();
-        aTableBox.InsertRow(0,4);
-        aTableBox.InsertCol(0,2);
-        aTableBox.SetNumOfCharsForCol(0,ASCIIDLG_1COL_SIZE);
-        for (int i=0; i<ASCIIDLG_MAXFIELDS; i++)
-        {
-            pFlags[i] = SC_COL_STANDARD;
-        }
-        aLbType.SelectEntryPos(0);
-        CheckValues();
-        CheckScrollRange();
-        ScrollHdl(&aScrollbar);
-        CheckDisable();
-        aTableBox.SetSelectedCol(1);
-    }
-    else
-    {
-        CheckValues();
-        CheckScrollRange();
-        ScrollHdl(&aScrollbar);
-        CheckDisable();
-    }
-    return 0;
-}
-
-IMPL_LINK( ScImportAsciiDlg, VarSepHdl, void*, pCtr )
-{
-    if (!aRbFixed.IsChecked())
-    {
-        aTableBox.ClearTable();
-        aTableBox.InsertRow(0,4);
-        aTableBox.InsertCol(0,2);
-        aTableBox.SetNumOfCharsForCol(0,5); // da max. 5 Decimalstellen
-        if((Edit *)pCtr==&aEdOther)
-        {
-            aCkbOther.Check((aEdOther.GetText().Len()>0));
-        }
-
-        DelimitedPreview();         // Preview mit neuen Einstellungen
-        CheckScrollRange();
-        ScrollHdl(&aScrollbar);
-    }
-    return 0;
-}
-
-
-IMPL_LINK( ScImportAsciiDlg, ScrollHdl, void*, pScroll )
-{
-    if((ScrollBar *)pScroll==&aScrollbar)
-    {
-        long nNew = aScrollbar.GetThumbPos();
-        if ( nNew >= 0)
-        {
-            nScrollPos = (USHORT) nNew;
-
-            CheckScrollPos();
-            CheckColTypes(FALSE);
-            CheckValues();
-            String aSizeString('W');
-            aTableBox.SetXTablePos((short)(nNew *
-                aTableBox.GetTextWidth(aSizeString)));
-        }
-    }
-    else if((ScrollBar *)pScroll==&aVScroll)
-    {
-        BOOL bVFlag1=bVFlag;
-        if(pDatStream !=NULL) UpdateVertical();
-        if(bVFlag!=bVFlag1) UpdateVertical();
-        CheckScrollPos();
-        CheckColTypes(FALSE);
-        CheckValues();
-        CheckScrollRange();
-        //CheckDisable();
-    }
-    return 0;
-}
-
-
-IMPL_LINK( ScImportAsciiDlg, CharSetHdl, void*, EMPTY_ARG )
-{
-    if ( aLbCharSet.GetSelectEntryCount() == 1 )
-    {
-        CharSet eOldCharSet = eCharSet;
-        GetCharSet();
-        if ( eOldCharSet != eCharSet &&
-                (eCharSet == RTL_TEXTENCODING_UNICODE ||
-                eOldCharSet == RTL_TEXTENCODING_UNICODE) )
-        {   // switching to/from Unicode invalidates all positions
-            if ( pDatStream !=NULL )
-                UpdateVertical( TRUE );
-            CheckScrollPos();
-            CheckColTypes(FALSE);
-        }
-        CheckValues();              // Preview anpassen
-    }
-
-    return 0;
-}
-
-
-IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, void*, pCtr )
-{
-    CheckColTypes( TRUE, pCtr);
-
-    return 0;
-}
-
-
-IMPL_LINK( ScImportAsciiDlg, SelectHdl, ScTableWithRuler*, pModified )
-{
-    long nPos=aTableBox.GetSelectedCol();
-
-    if(aTableBox.GetSelectedCol()>0)
-    {
-
-        if ( nPos-1 < ASCIIDLG_MAXFIELDS )
-        {
-            BYTE nType = pFlags[nPos-1];
-            USHORT nCount = sizeof(nColTypeList) / sizeof(BYTE);
-            USHORT nPos1 = nCount-1;
-            for (USHORT j=0; j<nCount; j++)
-                if ( nColTypeList[j] == nType )
-                    nPos1 = j;
-            aLbType.SelectEntryPos(nPos1);
-        }
-    }
-    return 0;
-}
-
-void ScImportAsciiDlg::CheckScrollRange()
-{
-    USHORT nScrollEnd = nUsedCols + 1;
-    if ( nScrollEnd < 3 )
-        nScrollEnd = 3;
-    String aSizeString('W');
-
-    long nMaxSize=aTableBox.GetXMaxTableSize();
-
-    xub_StrLen nNumOfChars=aTableBox.GetNumOfCharsForCol(0);
-    if(nMaxSize<0) nMaxSize=0;
-    aScrollbar.SetRange(Range(0,nNumOfChars+nMaxSize/aTableBox.GetTextWidth(aSizeString)));
-    aScrollbar.SetPageSize((long)(aTableBox.GetXMaxVisChars()-nNumOfChars));
-    aScrollbar.SetVisibleSize((long)(aTableBox.GetXMaxVisChars()-nNumOfChars));
-
-    if(aScrollbar.GetThumbPos()>nMaxSize)
-    {
-        aScrollbar.SetThumbPos(0);
+        rOpt.SetFieldSeps( GetSeparators() );
+        rOpt.SetMergeSeps( aCkbAsOnce.IsChecked() );
+        rOpt.SetTextSep( lcl_CharFromCombo( aCbTextSep, aTextSepList ) );
     }
 }
 
-
-void ScImportAsciiDlg::CheckValues( BOOL bReadVal, USHORT nEditField )
+void ScImportAsciiDlg::SetSelectedCharSet()
 {
-//  String aSizeString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("999"));
-    USHORT i;
-
-    if ( !aRbFixed.IsChecked() )
-    {
-        DelimitedPreview();     // nur Preview anpassen
-        return;
-    }
-
-    aTableBox.RulerEnabled();
-    //  Dialog anpassen
-    USHORT  nNumOfCols=aTableBox.GetNumberOfCols();
-    xub_StrLen nVal = 0;
-    USHORT nRowNum=aVScroll.GetThumbPos()+1;
-    String aField;
-
-    for ( USHORT j=0; j < SC_ASCIIOPT_PREVIEW_LINES; j++ )
-    {
-        aField = String::CreateFromInt32( nRowNum++ );
-
-        String aPreviewConv = (eCharSet == RTL_TEXTENCODING_UNICODE ?
-            aPreviewLineUnicode[j] : String( aPreviewLine[j], eCharSet ) );
-        aTableBox.SetDataAtRowCol(j+1,0,aField);
-        //aTableBox.SetNumOfCharsForCol(0,aField.Len()+2);
-
-        String aPrevStr;
-
-        if(nNumOfCols>2) nVal= 0;
-        xub_StrLen nPrevious = 0;
-        for (i=0; i<nNumOfCols-1; i++)
-        {
-            USHORT nPos = i+1;
-            if ( nPos < ASCIIDLG_MAXFIELDS )
-            {
-                if(nNumOfCols<=2)
-                {
-                    if( nVal < aPreviewConv.Len())
-                    {
-                        nVal=aPreviewConv.Len();
-                        if(nVal<aTableBox.GetXMaxVisChars()-ASCIIDLG_1COL_SIZE)
-                            nVal=aTableBox.GetXMaxVisChars();
-                    }
-                }
-                else
-                {
-                    nVal += aTableBox.GetNumOfCharsForCol(nPos);
-                }
-
-                String aStart = String::CreateFromInt32(nPrevious);
-                aStart += ' ';
-                aStart += aStringTo;
-                if(i+1<nNumOfCols-1)
-                {
-                    aPrevStr = aPreviewConv.Copy( nPrevious, nVal-nPrevious );
-                    aTableBox.SetNumOfCharsForCol(i+1, nVal-nPrevious );
-                }
-                else
-                {
-                    aPrevStr = aPreviewConv.Copy(nPrevious);
-                    if(aPrevStr.Len()>aTableBox.GetNumOfCharsForCol(i+1))
-                    {
-                        aTableBox.SetNumOfCharsForCol(i+1, aPrevStr.Len());
-                    }
-                }
-                aTableBox.SetDataAtRowCol(j+1,i+1,aPrevStr);
-                nPrevious  += aTableBox.GetNumOfCharsForCol(nPos);
-            }
-        }
-    }
-    aTableBox.SetNumOfCharsForCol(0,aField.Len()+2);
-    nNumOfCols=aTableBox.GetNumberOfCols();
-    for (i=0; i<nNumOfCols-1; i++)
-    {
-        if ( i < ASCIIDLG_MAXFIELDS )
-        {
-            BYTE nType = pFlags[i];
-            USHORT nCount = sizeof(nColTypeList) / sizeof(BYTE);
-            USHORT nPos1 = nCount-1;
-            for (USHORT j=0; j<nCount; j++)
-                if ( nColTypeList[j] == nType )
-                    nPos1 = j;
-            aTableBox.SetDataAtRowCol(0,i+1,aLbType.GetEntry(nPos1));
-        }
-    }
+    meCharSet = aLbCharSet.GetSelectTextEncoding();
+    mbCharSetSystem = (meCharSet == RTL_TEXTENCODING_DONTKNOW);
+    if( mbCharSetSystem )
+        meCharSet = gsl_getSystemTextEncoding();
 }
 
-void ScImportAsciiDlg::DelimitedPreview()
+String ScImportAsciiDlg::GetSeparators() const
 {
-    aTableBox.RulerEnabled(FALSE);
-    String aSeps;
-    if(aCkbTab.IsChecked())         aSeps+='\t';
-    if(aCkbSemicolon.IsChecked())   aSeps+=';';
-    if(aCkbComma.IsChecked())       aSeps+=',';
-    if(aCkbSpace.IsChecked())       aSeps+=' ';
-    if(aCkbOther.IsChecked())
-    {
-        aSeps+=aEdOther.GetText();
-    }
-    BOOL bMerge = FALSE;
-    if(aCkbAsOnce.IsChecked()) bMerge=TRUE;
-
-    sal_Unicode cTextSep = lcl_CharFromCombo( aCbTextSep, aTextSepList );
-
-    //  Preview-String von vorne her aufteilen...
-    USHORT nPos,nMaxCol;
-    xub_StrLen nMaxWidth[ASCIIDLG_MAXFIELDS];
-    int i;
-    for (i=0; i<ASCIIDLG_MAXFIELDS; i++)
-    {
-        nMaxWidth[i]=5;
-    }
-    nMaxCol=0;
-    USHORT nRowNum=aVScroll.GetThumbPos()+1;
-    USHORT  nNumOfCols=aTableBox.GetNumberOfCols();
-    String aField;
-
-    const sal_Unicode* pSeps = aSeps.GetBuffer();
-    for ( USHORT j=0; j < SC_ASCIIOPT_PREVIEW_LINES; j++ )
-    {
-        String aPreviewConv = (eCharSet == RTL_TEXTENCODING_UNICODE ?
-            aPreviewLineUnicode[j] : String( aPreviewLine[j], eCharSet ) );
-
-        const sal_Unicode* p = aPreviewConv.GetBuffer();
-        String aPrevStr;
-        aField = String::CreateFromInt32( nRowNum++ );
-        aTableBox.SetDataAtRowCol(j+1,0,aField);
-        //aTableBox.SetNumOfCharsForCol(0,aField.Len()+2);
-
-        BOOL bCont = TRUE;
-        for (nPos=0; nPos < ASCIIDLG_MAXFIELDS && bCont; nPos++)
-        {
-            if ( *p )
-            {
-                p = ScImportExport::ScanNextFieldFromString( p, aField, cTextSep, pSeps, bMerge );
-                if ( !*p && aField.Len() && (ScGlobal::UnicodeStrChr( pSeps, *(p-1) ) == NULL) )
-                    bCont = FALSE;      // letztes Feld, mit Inhalt
-            }
-            else
-            {
-                bCont = FALSE;          // letztes Feld, ohne Inhalt
-                aField.Erase();
-            }
-
-            if(nMaxWidth[nPos+1]<aField.Len())
-                nMaxWidth[nPos+1]=aField.Len();
-
-            aTableBox.SetDataAtRowCol(j+1,nPos+1,aField);
-        }
-        if(nMaxCol<nPos+1) nMaxCol=nPos+1;
-        aField.Erase();
-        for(;nPos<nNumOfCols-1;nPos++)
-            aTableBox.SetDataAtRowCol(j+1,nPos+1,aField);
-    }
-    aField = String::CreateFromInt32( nRowNum-1 );
-    aTableBox.SetNumOfCharsForCol(0,aField.Len()+2);
-
-    if(nMaxCol<nNumOfCols)
-            aTableBox.DeleteCol(nMaxCol,nNumOfCols-nMaxCol);
-
-    for (i=1; i<nMaxCol; i++)
-    {
-        aTableBox.SetNumOfCharsForCol(i,nMaxWidth[i]);
-    }
-
-    for (i=0; i<nMaxCol-1; i++)
-    {
-        if ( i < ASCIIDLG_MAXFIELDS )
-        {
-            BYTE nType = pFlags[i];
-            USHORT nCount = sizeof(nColTypeList) / sizeof(BYTE);
-            USHORT nPos1 = nCount-1;
-            for (USHORT j=0; j<nCount; j++)
-                if ( nColTypeList[j] == nType )
-                    nPos1 = j;
-            aTableBox.SetDataAtRowCol(0,i+1,aLbType.GetEntry(nPos1));
-        }
-    }
+    String aSepChars;
+    if( aCkbTab.IsChecked() )
+        aSepChars += '\t';
+    if( aCkbSemicolon.IsChecked() )
+        aSepChars += ';';
+    if( aCkbComma.IsChecked() )
+        aSepChars += ',';
+    if( aCkbSpace.IsChecked() )
+        aSepChars += ' ';
+    if( aCkbOther.IsChecked() )
+        aSepChars += aEdOther.GetText();
+    return aSepChars;
 }
 
-
-void ScImportAsciiDlg::CheckScrollPos()
+void ScImportAsciiDlg::SetupSeparatorCtrls()
 {
-    /*
-    FixedText* pTitle[3] = { &aFtCol1, &aFtCol2, &aFtCol3 };
-
-    for (USHORT i=0; i<3; i++)
-    {
-        String aStr = aStringCol;
-        aStr += ' ';
-        aStr += ( nScrollPos + i + 1 );
-        pTitle[i]->SetText(aStr);
-    }
-    */
+    BOOL bEnable = aRbSeparated.IsChecked();
+    aCkbTab.Enable( bEnable );
+    aCkbSemicolon.Enable( bEnable );
+    aCkbComma.Enable( bEnable );
+    aCkbSpace.Enable( bEnable );
+    aCkbOther.Enable( bEnable );
+    aEdOther.Enable( bEnable );
+    aCkbAsOnce.Enable( bEnable );
+    aFtTextSep.Enable( bEnable );
+    aCbTextSep.Enable( bEnable );
 }
 
-void ScImportAsciiDlg::UpdateVertical( BOOL bSwitchToFromUnicode )
+void ScImportAsciiDlg::UpdateVertical( bool bSwitchToFromUnicode )
 {
     if ( bSwitchToFromUnicode )
     {
         bVFlag = FALSE;
-        aVScroll.SetThumbPos( 0 );
-        aVScroll.SetRange( Range( 0, ASCIIDLG_MAXROWS ) );
+        maTableBox.CommitRequest( CSVREQ_LINECOUNT, ASCIIDLG_MAXROWS );
     }
     ULONG nNew = 0;
-    if(!bVFlag && aVScroll.GetType()==SCROLL_DRAG)
+    if(!bVFlag)
     {
+        // dragging the scrollbar -> read entire file
+        SetPointer( Pointer( POINTER_WAIT ) );
         bVFlag=TRUE;
-        SetPointer(Pointer(POINTER_WAIT));
         ULONG nRows = 0;
 
         pDatStream->Seek(0);
-        if ( eCharSet == RTL_TEXTENCODING_UNICODE )
+        if ( meCharSet == RTL_TEXTENCODING_UNICODE )
         {
             String aStringUnicode;
             pDatStream->StartReadingUnicodeText();
@@ -1149,23 +814,19 @@ void ScImportAsciiDlg::UpdateVertical( BOOL bSwitchToFromUnicode )
             nStreamPos = pDatStream->Tell();
         }
 
-        double fNew = ((double) (aVScroll.GetThumbPos())*nRows)/ASCIIDLG_MAXROWS;
-        nNew = (ULONG) fNew;
-        aVScroll.SetPageSize( aTableBox.GetYMaxVisChars()-1);
-        aVScroll.SetThumbPos(nNew);
-        aVScroll.SetRange( Range( 0, nRows) );
-        SetPointer(Pointer(POINTER_ARROW));
+        maTableBox.CommitRequest( CSVREQ_LINECOUNT, nRows );
+        SetPointer( Pointer( POINTER_ARROW ) );
     }
 
-    nNew = aVScroll.GetThumbPos();
+    nNew = maTableBox.GetFirstVisLine();
 
-    if ( eCharSet == RTL_TEXTENCODING_UNICODE )
+    if ( meCharSet == RTL_TEXTENCODING_UNICODE )
     {
         if ( bVFlag || nNew <= nArrayEndPosUnicode )
             pDatStream->Seek( pRowPosArrayUnicode[nNew] );
         else
             pDatStream->Seek( nStreamPosUnicode );
-        for ( USHORT j=0; j < SC_ASCIIOPT_PREVIEW_LINES; j++ )
+        for ( USHORT j=0; j < CSV_PREVIEW_LINES; j++ )
         {
             if( !bVFlag && nNew+j >= nArrayEndPos )
             {
@@ -1180,9 +841,7 @@ void ScImportAsciiDlg::UpdateVertical( BOOL bSwitchToFromUnicode )
                  !bVFlag )
             {
                 bVFlag = TRUE;
-                aVScroll.SetPageSize( aTableBox.GetYMaxVisChars()-1 );
-                aVScroll.SetThumbPos( nNew-1 );
-                aVScroll.SetRange( Range( 0, nArrayEndPosUnicode ) );
+                maTableBox.CommitRequest( CSVREQ_LINECOUNT, nArrayEndPosUnicode );
             }
         }
         nStreamPosUnicode = pDatStream->Tell();
@@ -1193,7 +852,7 @@ void ScImportAsciiDlg::UpdateVertical( BOOL bSwitchToFromUnicode )
             pDatStream->Seek( pRowPosArray[nNew] );
         else
             pDatStream->Seek( nStreamPos );
-        for ( USHORT j=0; j < SC_ASCIIOPT_PREVIEW_LINES; j++ )
+        for ( USHORT j=0; j < CSV_PREVIEW_LINES; j++ )
         {
             if( !bVFlag && nNew+j >= nArrayEndPos )
             {
@@ -1203,9 +862,7 @@ void ScImportAsciiDlg::UpdateVertical( BOOL bSwitchToFromUnicode )
             if( !pDatStream->ReadLine( aPreviewLine[j] ) && !bVFlag )
             {
                 bVFlag = TRUE;
-                aVScroll.SetPageSize( aTableBox.GetYMaxVisChars()-1 );
-                aVScroll.SetThumbPos( nNew-1 );
-                aVScroll.SetRange( Range( 0, nArrayEndPos ) );
+                maTableBox.CommitRequest( CSVREQ_LINECOUNT, nArrayEndPos );
             }
         }
         nStreamPos = pDatStream->Tell();
@@ -1213,164 +870,102 @@ void ScImportAsciiDlg::UpdateVertical( BOOL bSwitchToFromUnicode )
 }
 
 
+// ----------------------------------------------------------------------------
 
-void ScImportAsciiDlg::CheckColTypes(BOOL bReadVal,void *pCtr)
+IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, RadioButton*, pButton )
 {
-    USHORT i, nPos;
-    BYTE nType = SC_COL_STANDARD;
+    DBG_ASSERT( pButton, "ScImportAsciiDlg::RbSepFixHdl - missing sender" );
 
-    if((ScTableWithRuler*) pCtr== &aTableBox)
+    if( (pButton == &aRbFixed) || (pButton == &aRbSeparated) )
     {
-        USHORT  nNumOfCols=aTableBox.GetNumberOfCols();
-        for (i=1; i<nNumOfCols; i++)
-        {
-            nPos =i-1;
-            if ( nPos < ASCIIDLG_MAXFIELDS )
-            {
-                String aString=aTableBox.GetDataAtRowCol(0,i);
-                USHORT nSel = aLbType.GetEntryPos(aString);
-                nType = nColTypeList[nSel];
-                pFlags[nPos] = nType;
-            }
-        }
+        if( aRbFixed.IsChecked() )
+            maTableBox.SetFixedWidthMode();
+        else
+            maTableBox.SetSeparatorsMode();
+
+        aLbType.SelectEntryPos( 0 );
+        SetupSeparatorCtrls();
     }
-    else
-    {
-        nPos = aTableBox.GetSelectedCol()-1;
-        if ( nPos < ASCIIDLG_MAXFIELDS )
-        {
-            if ( aLbType.GetSelectEntryCount() == 1 )
-            {
-                USHORT nSel = aLbType.GetSelectEntryPos();
-                nType = nColTypeList[nSel];
-                aTableBox.SetDataAtRowCol(0,nPos+1,aLbType.GetSelectEntry());
-                aTableBox.Update();
-            }
-            pFlags[nPos] = nType;
-        }
-    }
+    return 0;
 }
 
-
-void lcl_DoEnable( Window& rWin, BOOL bEnable )
+IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
 {
-    if (bEnable)
-        rWin.Enable();
-    else
-        rWin.Disable();
-    rWin.Invalidate();
-    rWin.Update();
+    DBG_ASSERT( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );
+    DBG_ASSERT( !aRbFixed.IsChecked(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
 
+    aCkbOther.Check( aEdOther.GetText().Len() > 0 );
+    maTableBox.CommitRequest( CSVREQ_NEWCELLTEXTS );
+    return 0;
 }
 
-
-void ScImportAsciiDlg::CheckDisable()
+IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
 {
-    BOOL bFix = aRbFixed.IsChecked();
+    DBG_ASSERT( pCharSetBox, "ScImportAsciiDlg::CharSetHdl - missing sender" );
 
-    BOOL bVar = !bFix;
-    lcl_DoEnable( aCkbTab,      bVar );
-    lcl_DoEnable( aCkbSemicolon,bVar );
-    lcl_DoEnable( aCkbComma,    bVar );
-    lcl_DoEnable( aCkbSpace,    bVar );
-    lcl_DoEnable( aCkbOther,    bVar );
-    lcl_DoEnable( aEdOther,     bVar );
-    lcl_DoEnable( aCkbAsOnce,   bVar );
-    lcl_DoEnable( aFtTextSep,   bVar );
-    lcl_DoEnable( aCbTextSep,   bVar );
-}
-
-
-void ScImportAsciiDlg::GetCharSet()
-{
-    eCharSet = aLbCharSet.GetSelectTextEncoding();
-    if ( eCharSet == RTL_TEXTENCODING_DONTKNOW )
+    if( (pCharSetBox == &aLbCharSet) && (pCharSetBox->GetSelectEntryCount() == 1) )
     {
-        eCharSet = gsl_getSystemTextEncoding();
-        bCharSetSystem = TRUE;
-    }
-    else
-        bCharSetSystem = FALSE;
-}
-
-
-void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
-{
-    BOOL bFix = aRbFixed.IsChecked();
-
-    rOpt.SetCharSet( eCharSet );
-    rOpt.SetCharSetSystem( bCharSetSystem );
-    rOpt.SetFixedLen( bFix );
-    USHORT nRow = (USHORT) aNfRow.GetValue();
-
-    rOpt.SetStartRow(nRow);
-
-    if ( bFix )
-    {
-        nUsedCols=aTableBox.GetNumberOfCols();
-        xub_StrLen* pOptStart = new xub_StrLen[ nUsedCols+1 ];
-        BYTE*   pOptType  = new BYTE[ nUsedCols+1 ];
-        USHORT nCount = 0;
-        xub_StrLen nLastEnd = 0;
-        xub_StrLen nStart = 0;
-        xub_StrLen nEnd   = 0;
-        for (USHORT i=1; i<nUsedCols; i++)
+        CharSet eOldCharSet = meCharSet;
+        SetSelectedCharSet();
+        if( (meCharSet == RTL_TEXTENCODING_UNICODE) != (eOldCharSet == RTL_TEXTENCODING_UNICODE) )
         {
-            nEnd+=aTableBox.GetNumOfCharsForCol(i);
-            if ( nEnd > nStart )
-            {
-                pOptStart[nCount] = nStart;
-                pOptType[nCount] = pFlags[i-1];
-                ++nCount;
-                nLastEnd = nEnd;
-            }
-            nStart +=aTableBox.GetNumOfCharsForCol(i);
+            // switching to/from Unicode invalidates all positions
+            if( pDatStream )
+                UpdateVertical( TRUE );
         }
-        pOptStart[nCount] = ASCIIDLG_LASTCOL_SIZE;//fuer den Rest
-        //pOptStart[nCount] = nLastEnd;         // den Rest ueberspringen
-        pOptType[nCount] = SC_COL_SKIP;
-        ++nCount;
 
-        rOpt.SetColInfo( nCount, pOptStart, pOptType );
-        delete[] pOptStart;
-        delete[] pOptType;
+        maTableBox.CommitRequest( CSVREQ_NEWCELLTEXTS );
     }
+    return 0;
+}
+
+IMPL_LINK( ScImportAsciiDlg, LbColTypeHdl, ListBox*, pListBox )
+{
+    DBG_ASSERT( pListBox, "ScImportAsciiDlg::LbColTypeHdl - missing sender" );
+    if( pListBox == &aLbType )
+        maTableBox.CommitRequest( CSVREQ_COLUMNTYPE, pListBox->GetSelectEntryPos() );
+    return 0;
+}
+
+IMPL_LINK( ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox*, pTableBox )
+{
+    DBG_ASSERT( pTableBox, "ScImportAsciiDlg::UpdateTextHdl - missing sender" );
+
+    BOOL bVFlag1 = bVFlag;
+    if( pDatStream )
+        UpdateVertical();
+    if( bVFlag != bVFlag1 )
+        UpdateVertical();
+
+    sal_Unicode cTextSep = lcl_CharFromCombo( aCbTextSep, aTextSepList );
+    bool bMergeSep = (aCkbAsOnce.IsChecked() == TRUE);
+
+    if( meCharSet == RTL_TEXTENCODING_UNICODE )
+        maTableBox.SetUniStrings( aPreviewLineUnicode, GetSeparators(), cTextSep, bMergeSep );
     else
-    {
-        sal_Unicode cTextSep = lcl_CharFromCombo( aCbTextSep, aTextSepList );
+        maTableBox.SetByteStrings( aPreviewLine, meCharSet, GetSeparators(), cTextSep, bMergeSep );
 
+    return 0;
+}
 
-        String aSeps;
-        if(aCkbTab.IsChecked())         aSeps+='\t';
-        if(aCkbSemicolon.IsChecked())   aSeps+=';';
-        if(aCkbComma.IsChecked())       aSeps+=',';
-        if(aCkbSpace.IsChecked())       aSeps+=' ';
-        if(aCkbOther.IsChecked())
-        {
-            aSeps+=aEdOther.GetText();
-        }
-        rOpt.SetMergeSeps(aCkbAsOnce.IsChecked());
-        rOpt.SetFieldSeps( aSeps );
-        rOpt.SetTextSep( cTextSep );
+IMPL_LINK( ScImportAsciiDlg, ColSelectHdl, ScCsvTableBox*, pTableBox )
+{
+    DBG_ASSERT( pTableBox, "ScImportAsciiDlg::ColSelectHdl - missing sender" );
+    Link aSelHdl = aLbType.GetSelectHdl();
+    aLbType.SetSelectHdl( Link() );
 
-        //  Spaltentypen
+    sal_Int32 nType = pTableBox->GetSelColumnType();
+    bool bEmpty = (nType == CSV_TYPE_MULTI);
+    bool bEnable = ((0 <= nType) && (nType < aLbType.GetEntryCount())) || bEmpty;
 
-        xub_StrLen* pColNum  = new xub_StrLen[ASCIIDLG_MAXFIELDS];
-        BYTE*       pColType = new BYTE[ASCIIDLG_MAXFIELDS];
+    aFtType.Enable( bEnable );
+    aLbType.Enable( bEnable );
+    if( bEmpty )
+        aLbType.SetNoSelection();
+    else if( bEnable )
+        aLbType.SelectEntryPos( static_cast< sal_uInt16 >( nType ) );
 
-        USHORT nCount = 0;
-        for (USHORT i=0; i<ASCIIDLG_MAXFIELDS; i++)
-            if (pFlags[i] != SC_COL_STANDARD)
-            {
-                pColNum[nCount] = i+1;          // 1-based
-                pColType[nCount] = pFlags[i];
-                ++nCount;
-            }
-
-        rOpt.SetColInfo( nCount, pColNum, pColType );
-
-        delete[] pColType;
-        delete[] pColNum;
-    }
+    aLbType.SetSelectHdl( aSelHdl );
+    return 0;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-22 21:08:43 $
+ *  last change: $Author: dr $ $Date: 2002-07-05 15:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Camps";
         Text[ finnish ] = "Kent�t";
+        Text[ thai ] = "เขตข้อมูล";
     };
     FixedText FT_TYPE
     {
@@ -134,6 +135,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "T~ip";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "T~ipus";
+        Text[ thai ] = "=ช~นิดคอลัมน์";
     };
     ListBox LB_TYPE1
     {
@@ -171,6 +173,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions de separaci�";
         Text[ finnish ] = "Erottimen asetukset";
+        Text[ thai ] = "ตัวเลือกตัวแยก";
     };
     RadioButton RB_FIXED
     {
@@ -202,6 +205,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Amplada fixa";
         Text[ finnish ] = "~Kiinte� leveys";
+        Text[ thai ] = "~ซ่อมความกว้าง";
     };
     RadioButton RB_SEPARATED
     {
@@ -234,6 +238,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Separat per";
         Text[ finnish ] = "~Erottimena";
+        Text[ thai ] = "แ~ยกโดย";
     };
     FixedText FT_CHARSET
     {
@@ -264,6 +269,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "~Karakter k�mesi";
         Text[ catalan ] = "Joc de c~ar�cters";
         Text[ finnish ] = "~Merkist�";
+        Text[ thai ] = "ชุดตัว~อักขระ";
     };
     ListBox LB_CHARSET
     {
@@ -302,6 +308,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Importaci�";
         Text[ finnish ] = "Tuo";
+        Text[ thai ] = "นำเข้า";
     };
     FixedText FT_TEXTSEP
     {
@@ -332,6 +339,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Delimitador de te~xt";
         Text[ finnish ] = "~Tekstin erottimet";
+        Text[ thai ] = "ตัวคั่นข้~อความ";
     };
     ComboBox CB_TEXTSEP
     {
@@ -358,62 +366,6 @@ ModalDialog RID_SCDLG_ASCII
         Pos = MAP_APPFONT ( 264 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-    };
-    String STR_COL
-    {
-        Text = "Spalte" ;
-        Text [ ENGLISH ] = "Column" ;
-        Text [ DANISH ] = "Kolonne" ;
-        Text [ ENGLISH_US ] = "Column" ;
-        Text [ SPANISH ] = "Columna" ;
-        Text [ FRENCH ] = "Colonne" ;
-        Text [ ITALIAN ] = "Colonna" ;
-        Text [ DUTCH ] = "Kolom" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Spalte" ;
-        Text [ SWEDISH ] = "Kolumn" ;
-        Text [ PORTUGUESE ] = "Coluna" ;
-        Text[ chinese_simplified ] = "列";
-        Text[ russian ] = "�������";
-        Text[ polish ] = "Kolumna";
-        Text[ japanese ] = "列";
-        Text[ chinese_traditional ] = "欄";
-        Text[ arabic ] = "����";
-        Text[ dutch ] = "Kolom";
-        Text[ chinese_simplified ] = "列";
-        Text[ greek ] = "�����";
-        Text[ korean ] = "단";
-        Text[ turkish ] = "S�tun";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Columna";
-        Text[ finnish ] = "Sarake";
-    };
-    String STR_TO
-    {
-        Text = "bis" ;
-        Text [ ENGLISH ] = "to" ;
-        Text [ DANISH ] = "til" ;
-        Text [ ENGLISH_US ] = "to" ;
-        Text [ SPANISH ] = "hasta" ;
-        Text [ FRENCH ] = "�" ;
-        Text [ ITALIAN ] = "fino a" ;
-        Text [ DUTCH ] = "tot" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "bis" ;
-        Text [ SWEDISH ] = "till" ;
-        Text [ PORTUGUESE ] = "at�" ;
-        Text[ chinese_simplified ] = "至";
-        Text[ russian ] = "��";
-        Text[ polish ] = "do";
-        Text[ japanese ] = "終りの行";
-        Text[ chinese_traditional ] = "至";
-        Text[ arabic ] = "���";
-        Text[ dutch ] = "tot";
-        Text[ chinese_simplified ] = "至";
-        Text[ greek ] = "���";
-        Text[ korean ] = "까지";
-        Text[ turkish ] = "son";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "a";
-        Text[ finnish ] = "kohde";
     };
     CheckBox CKB_TAB
     {
@@ -445,6 +397,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Pestanya";
         Text[ finnish ] = "~Sarkain";
+        Text[ thai ] = "~ระยะกั้น";
     };
     CheckBox CKB_SEMICOLON
     {
@@ -476,6 +429,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "P~unt i coma";
         Text[ finnish ] = "~Puolipiste";
+        Text[ thai ] = "อั~ฒภาค";
     };
     CheckBox CKB_COMMA
     {
@@ -507,6 +461,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Coma";
         Text[ finnish ] = "~Pilkku";
+        Text[ thai ] = "~จุลภาค";
     };
     CheckBox CKB_SPACE
     {
@@ -538,6 +493,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Es~pai";
         Text[ finnish ] = "~V�li";
+        Text[ thai ] = "ช่~องว่าง";
     };
     CheckBox CKB_OTHER
     {
@@ -569,6 +525,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Altres";
         Text[ finnish ] = "~Muu";
+        Text[ thai ] = "~อื่น ๆ";
     };
     Edit ED_OTHER
     {
@@ -607,6 +564,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Des de la f~ila";
         Text[ finnish ] = "Rivilt�";
+        Text[ thai ] = "จากแถ~ว";
     };
     NumericField NF_AT_ROW
     {
@@ -616,27 +574,17 @@ ModalDialog RID_SCDLG_ASCII
         Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
+        Repeat = TRUE ;
         Minimum = 1 ;
         Maximum = 32000 ;
     };
-    Control CTR_TABLE
+    Control CTR_TABLEBOX
     {
         HelpId = HID_SC_ASCII_TABCTR ;
         Border = TRUE ;
+        DialogControl = TRUE ;
         Pos = MAP_APPFONT ( 12 , 159 ) ;
-        Size = MAP_APPFONT ( 235 , 72 ) ;
-    };
-    ScrollBar SB_COLUMN
-    {
-        Pos = MAP_APPFONT ( 12 , 231 ) ;
-        Size = MAP_APPFONT ( 235 , 8 ) ;
-        HScroll = TRUE ;
-    };
-    ScrollBar SB_ROW
-    {
-        Pos = MAP_APPFONT ( 247 , 159 ) ;
-        Size = MAP_APPFONT ( 8 , 72 ) ;
-        VScroll = TRUE ;
+        Size = MAP_APPFONT ( 243 , 82 ) ;
     };
     CheckBox CB_ASONCE
     {
@@ -668,6 +616,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fusiona els ~delimitadors";
         Text[ finnish ] = "~Yhdist� erottimet";
+        Text[ thai ] = "ผสาน~ตัวคั่น";
     };
     Text[ chinese_simplified ] = "输入文字";
     Text[ russian ] = "������ ������";
@@ -683,6 +632,7 @@ ModalDialog RID_SCDLG_ASCII
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Importaci� de text";
     Text[ finnish ] = "Tekstin tuonti";
+    Text[ thai ] = "นำเข้าข้อความ";
 };
 
 
