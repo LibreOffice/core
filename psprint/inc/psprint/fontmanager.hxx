@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-20 15:21:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,6 @@ class PrintFontManager
     ::std::hash_multimap< sal_uInt8, sal_Unicode >  m_aAdobecodeToUnicode;
 
     mutable FontCache*                          m_pFontCache;
-    mutable bool                                m_bFlushFontCache;
 
     ::rtl::OString getAfmFile( PrintFont* pFont ) const;
     ::rtl::OString getFontFile( PrintFont* pFont ) const;
