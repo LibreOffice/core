@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:52:10 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,139 +780,6 @@ main()
         {
             printf("BAD vnd.sun.star.hier test 6\n");
             bSuccess = false;
-        }
-    }
-
-    if (true)
-    {
-        if (INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                            "vnd.sun.star.script:"))).
-                HasError())
-        {
-            printf("BAD vnd.sun.star.script:\n");
-            bSuccess = false;
-        }
-        if (!INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                             "vnd.sun.star.script:abc"))).
-                 HasError())
-        {
-            printf("BAD vnd.sun.star.script:abc\n");
-            bSuccess = false;
-        }
-        if (!INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                             "vnd.sun.star.script:a=b,c"))).
-                 HasError())
-        {
-            printf("BAD vnd.sun.star.script:a=b,c\n");
-            bSuccess = false;
-        }
-        if (!INetURLObject(rtl::OUString(
-                               RTL_CONSTASCII_USTRINGPARAM(
-                                   "vnd.sun.star.script:a=b,c=d,"))).
-                 HasError())
-        {
-            printf("BAD vnd.sun.star.script:a=b,c=d,\n");
-            bSuccess = false;
-        }
-        if (!INetURLObject(rtl::OUString(
-                               RTL_CONSTASCII_USTRINGPARAM(
-                                   "vnd.sun.star.script:a=b,,c=d"))).
-                 HasError())
-        {
-            printf("BAD vnd.sun.star.script:a=b,,c=d\n");
-            bSuccess = false;
-        }
-        {
-            INetURLObject
-                aObj(rtl::OUString(
-                         RTL_CONSTASCII_USTRINGPARAM(
-                             "vnd.sun.star.script:A%3dB=,b%C3%A4h=b%c3%b6h,"
-                                 "a=3,a=4,x=%3D%2C")));
-            {
-                bool bFound
-                    = aObj.getParameter(rtl::OUString(
-                                            RTL_CONSTASCII_USTRINGPARAM(
-                                                "a=")),
-                                        0);
-                if (bFound)
-                {
-                    printf("BAD a=\n");
-                    bSuccess = false;
-                }
-            }
-            {
-                UniString aValue;
-                bool bFound
-                    = aObj.getParameter(rtl::OUString(
-                                            RTL_CONSTASCII_USTRINGPARAM(
-                                                "a=b")),
-                                        &aValue);
-                if (!bFound
-                    || !rtl::OUString(aValue).
-                            equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("")))
-                {
-                    printf("BAD a=b\n");
-                    bSuccess = false;
-                }
-            }
-            {
-                UniString aValue;
-                bool bFound
-                    = aObj.getParameter(rtl::OUString(
-                                            RTL_CONSTASCII_USTRINGPARAM(
-                                                "A=B")),
-                                        &aValue);
-                if (!bFound
-                    || !rtl::OUString(aValue).
-                            equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("")))
-                {
-                    printf("BAD A=B\n");
-                    bSuccess = false;
-                }
-            }
-            {
-                sal_Unicode const aKey[] = { 'b', 0xE4, 'h' };
-                sal_Unicode const aGoodValue[] = { 'b', 0xF6, 'h' };
-                UniString aValue;
-                bool bFound = aObj.getParameter(rtl::OUString(aKey, 3),
-                                                &aValue);
-                if (!bFound
-                    || rtl::OUString(aValue) != rtl::OUString(aGoodValue, 3))
-                {
-                    printf("BAD b\\u00E4h\n");
-                    bSuccess = false;
-                }
-            }
-            {
-                UniString aValue;
-                bool bFound
-                    = aObj.getParameter(rtl::OUString(
-                                            RTL_CONSTASCII_USTRINGPARAM(
-                                                "a")),
-                                        &aValue);
-                if (!bFound
-                    || !rtl::OUString(aValue).
-                            equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("3")))
-                {
-                    printf("BAD a\n");
-                    bSuccess = false;
-                }
-            }
-            {
-                UniString aValue;
-                bool bFound
-                    = aObj.getParameter(rtl::OUString(
-                                            RTL_CONSTASCII_USTRINGPARAM(
-                                                "x")),
-                                        &aValue);
-                if (!bFound
-                    || !rtl::OUString(aValue).
-                            equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=,")))
-                {
-                    printf("BAD a\n");
-                    bSuccess = false;
-                }
-            }
         }
     }
 
