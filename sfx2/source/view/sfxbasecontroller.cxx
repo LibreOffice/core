@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:09:33 $
+ *  last change: $Author: rt $ $Date: 2000-10-24 08:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,7 +510,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
             if ( sTargetFrameName.compareToAscii( "_beamer" ) == COMPARE_EQUAL )
             {
                 SfxViewFrame *pFrame = m_pData->m_pViewShell->GetViewFrame();
-                if ( eSearchFlags & ::com::sun::star::frame::FrameSearchFlag::CREATE )
+                if ( eSearchFlags & ( ::com::sun::star::frame::FrameSearchFlag::CREATE ))
                     pFrame->SetChildWindow( SID_PARTWIN, TRUE );
                 SfxChildWindow* pChildWin = pFrame->GetChildWindow( SID_PARTWIN );
                 REFERENCE < XFRAME > xFrame( pChildWin->GetFrame() );
