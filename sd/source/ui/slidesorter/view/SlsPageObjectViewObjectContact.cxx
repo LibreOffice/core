@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:35:35 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ BitmapEx PageObjectViewObjectContact::CreatePreview (DisplayInfo& rDisplayInfo)
         const Rectangle& aPaintRectangle (
             static_cast<PageObjectViewContact&>(GetViewContact()
                 ).GetPageObject().GetCurrentBoundRect());
-        ExtOutputDevice* pOriginalExtOutDev
+        XOutputDevice* pOriginalExtOutDev
             = rDisplayInfo.GetExtendedOutputDevice();
         const Rectangle aPaintRectanglePixel(
             pDevice->LogicToPixel(aPaintRectangle));
