@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 12:23:40 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1607,7 +1607,9 @@ void SwXShape::dispose(void) throw( RuntimeException )
         // OD 10.07.2003 #110742# - safety assertion:
         // <pObj> must be the same as <pFmt->FindSdrObject()>, if <pObj> isn't
         // a 'virtual' drawing object.
-        ASSERT( !pObj->ISA(SwDrawVirtObj) || pObj == pFmt->FindSdrObject(),
+        // OD 25.08.2003 #111713# - refine assertion for safety reason.
+        ASSERT( !pObj ||
+                !pObj->ISA(SwDrawVirtObj) || pObj == pFmt->FindSdrObject(),
                 "<SwXShape::dispose(..) - different 'master' drawing objects!!" );
         // OD 10.07.2003 #110742# - perform delete of draw frame format *not*
         // for 'virtual' drawing objects.
