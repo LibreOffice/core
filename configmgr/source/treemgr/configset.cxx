@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:39:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,7 +648,7 @@ Path::Component TreeSetUpdater::implValidateElement(ElementRef const& aElement, 
 {
     doValidateElement(aElement,bReqRemovable,m_aParentTree);
 
-#if 0 // maybe reeanable for DEBUG ?
+#if 0 // maybe reeanable for OSL_DEBUG_LEVEL>1 ?
     ElementTreeImpl* pElement = TreeImplHelper::elementImpl(aTree)->isTemplateInstance();
     OSL_ENSURE( pElement, "INTERNAL ERROR: Set Element has wrong type of tree");
     OSL_ENSURE( !pElement || pElement->isTemplateInstance(), "INTERNAL ERROR: Set Element without associated template found");
@@ -664,7 +664,7 @@ Path::Component ValueSetUpdater::implValidateElement(ElementRef const& aElement,
 {
     doValidateElement(aElement,mReqRemovable,m_aParentTree);
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     UnoType aNodeType = ElementHelper::getUnoType(aElement.getElementTree(m_aParentTree.getDataAccessor()));
 
     OSL_ENSURE(aNodeType.getTypeClass() != uno::TypeClass_VOID, "INTERNAL ERROR: Set Element without associated type found");
