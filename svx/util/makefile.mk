@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: fs $ $Date: 2000-10-20 16:31:06 $
+#   last change: $Author: kz $ $Date: 2000-10-25 09:02:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,6 +118,7 @@ SHL1STDLIBS= \
             $(RTLLIB) \
             $(CPPULIB) \
             $(CPPUHELPERLIB)	\
+            $(COMPHELPERLIB) \
             $(UCBHELPERLIB)	\
             $(UNOTOOLSLIB)
 
@@ -269,6 +270,7 @@ LIB2TARGET      =$(SLB)$/dl.lib
 LIB2FILES       = $(LIBEXTRAFILES)
 .ELSE
 LIB1FILES+=$(LIBEXTRAFILES)
+SHL1STDLIBS+=$(DBTOOLSLIB) 
 .ENDIF
 
 .IF "$(GUI)" == "OS2" || "(GUIBASE)" == "WIN"
