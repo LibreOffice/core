@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2004-12-17 14:13:03 $
+#   last change: $Author: rt $ $Date: 2005-01-03 09:04:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,11 +83,11 @@ INC+= -DNP_LINUX
 .ENDIF
 PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE: pkg_config.mk
-.ENDIF
-.IF "$(GUI)"=="WNT"
+.ENDIF          # "$(ENABLE_GTK)"==""
+.ENDIF          # "$(GUI)"=="UNX"
+.IF "$(GUI)"=="WNT" 
 INC+= -DENGLISH
 .ENDIF
-.ENDIF          # "$(ENABLE_GTK)"==""
 # --- Files -------------------------------------
 
 SLOFILES=       $(SLO)$/npshell.obj \
