@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-18 15:02:09 $
+ *  last change: $Author: cl $ $Date: 2002-01-09 14:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1390,9 +1390,19 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         // Vorlagen werden
         SdStyleSheetPool* pSPool = (SdStyleSheetPool*) GetStyleSheetPool();
         SfxStyleSheet*    pSheet = NULL;
+        USHORT nPage, nPageCount;
+
+        // #96323# create missing layout style sheets for broken documents
+        //         that where created with the 5.2
+        nPageCount = GetMasterSdPageCount( PK_STANDARD );
+        for (nPage = 0; nPage < nPageCount; nPage++)
+        {
+            SdPage* pPage = GetMasterSdPage(nPage, PK_STANDARD);
+            pSPool->CreateLayoutStyleSheets( pPage->GetName(), sal_True );
+        }
 
         // Standard- und Notizseiten:
-        for (USHORT nPage = 0; nPage < GetPageCount(); nPage++)
+        for (nPage = 0; nPage < GetPageCount(); nPage++)
         {
             SdPage* pPage = (SdPage*)GetPage(nPage);
 
