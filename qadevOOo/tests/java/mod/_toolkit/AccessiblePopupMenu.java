@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePopupMenu.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-11-02 12:15:32 $
+ *  last change:$Date: 2004-12-10 17:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ public class AccessiblePopupMenu extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        shortWait();
+        shortWait(tParam);
 
         XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
                                                            xTextDoc);
@@ -198,7 +198,7 @@ public class AccessiblePopupMenu extends TestCase {
             log.println("couldn't press mouse button");
         }
 
-        shortWait();
+        shortWait(tParam);
 
         XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, toolkit);
@@ -245,11 +245,7 @@ public class AccessiblePopupMenu extends TestCase {
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
-    private void shortWait() {
-        try {
-            Thread.currentThread().sleep(500);
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e);
-        }
+    private void shortWait(TestParameters tParam) {
+        util.utils.shortWait(tParam.getInt(util.PropertyName.SHORT_WAIT));
     }
 }
