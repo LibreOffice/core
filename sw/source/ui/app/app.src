@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2002-09-13 08:47:37 $
+ *  last change: $Author: os $ $Date: 2002-09-13 09:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2760,7 +2760,7 @@ QueryBox MSG_COMCORE_ASKSEARCH
 {
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
-    Message = "Diese Aktion benötigt fürs Undo sehr viel Speicher.\nWollen Sie das Undo abschalten?" ;
+    Message = "Zum Fortsetzen des Vorgangs, muss die Rückgängig-Funktion abgeschaltet werden. Wollen Sie die Rückgängig-Funktion abschalten?";
     Message [ English ] = "This action needs for undo many memory.\nWould you disable undo?" ;
     Message [ norwegian ] = "Hvis du vil angre denne handlingen trenger du mye minne.\nVil du sperre angrefunksjonen?" ;
     Message [ italian ] = "L'annullamento di questa azione occorre molta memoria.\nVolete disattivare la possibilità di annullare?" ;
