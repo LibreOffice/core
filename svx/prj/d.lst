@@ -55,6 +55,7 @@ hedabu: ..\inc\svxitems.hrc %_DEST%\inc%_EXT%\svx\svxitems.hrc
 hedabu: ..\inc\multipat.hxx %_DEST%\inc%_EXT%\svx\multipat.hxx
 hedabu: ..\inc\fontlb.hxx %_DEST%\inc%_EXT%\svx\fontlb.hxx
 hedabu: ..\inc\optcolor.hxx %_DEST%\inc%_EXT%\svx\optcolor.hxx
+hedabu: ..\inc\optctl.hxx %_DEST%\inc%_EXT%\svx\optctl.hxx
 hedabu: ..\inc\optgrid.hxx %_DEST%\inc%_EXT%\svx\optgrid.hxx
 hedabu: ..\inc\svddef.hxx %_DEST%\inc%_EXT%\svx\svddef.hxx
 hedabu: ..\inc\svdfppt.hxx %_DEST%\inc%_EXT%\svx\svdfppt.hxx
