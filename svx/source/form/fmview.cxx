@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 13:48:08 $
+ *  last change: $Author: fs $ $Date: 2001-02-27 17:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,23 +567,10 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
             break;
         case FormComponentType::LISTBOX:
         case FormComponentType::COMBOBOX:
-            // Hat die ::com::sun::star::form eine Verbindung zur Datenbank?
-        {
-            sal_Bool bDataForm = sal_False;
-            try
-            {
-                bDataForm = xForm.is() && ::dbtools::calcConnection(xForm, ::comphelper::getProcessServiceFactory()).is();
-            }
-            catch(Exception&)
-            {
-            }
-
-            if (bDataForm)
-            {
-                sWizardName.AssignAscii("ComboWizard.ComboWizard.MainWithDefault");
-                aObj <<= xChild;
-            }
-        }   break;
+            bIsUNOPilot = sal_True;
+            sWizardName.AssignAscii("com.sun.star.sdb.ListComboBoxAutoPilot");
+            aObj <<= xChild;
+            break;
         case FormComponentType::GROUPBOX:
             bIsUNOPilot = sal_True;
             sWizardName.AssignAscii("com.sun.star.sdb.GroupBoxAutoPilot");
