@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:36:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 10:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,12 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef SVX_SOURCE_INC_FMDOCUMENTCLASSIFICATION_HXX
+#include "fmdocumentclassification.hxx"
+#endif
+#ifndef IMPROVEFORMS_SVX_SOURCE_FORM_FORMTOOLBARS_HXX
+#include "formtoolbars.hxx"
+#endif
 
 #include "svxdlg.hxx" //CHINA001
 #include <dialogs.hrc> //CHINA001
@@ -348,6 +354,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
+using namespace ::drafts::com::sun::star::frame;
 using namespace ::svxform;
 
 //========================================================================
@@ -458,13 +465,22 @@ FmDesignModeChangedHint::~FmDesignModeChangedHint()
 #endif
 
 //========================================================================
-const sal_uInt32 FM_UI_FEATURE_SHOW_DATABASEBAR      = 0x00000001;
-const sal_uInt32 FM_UI_FEATURE_SHOW_FIELD            = 0x00000002;
-const sal_uInt32 FM_UI_FEATURE_SHOW_PROPERTIES       = 0x00000004;
-const sal_uInt32 FM_UI_FEATURE_SHOW_EXPLORER         = 0x00000008;
-const sal_uInt32 FM_UI_FEATURE_SHOW_FILTERBAR        = 0x00000010;
-const sal_uInt32 FM_UI_FEATURE_SHOW_FILTERNAVIGATOR  = 0x00000020;
-const sal_uInt32 FM_UI_FEATURE_SHOW_TEXT_CONTROL_BAR = 0x00000040;
+const sal_uInt32 FM_UI_FEATURE_SHOW_DATABASEBAR         = 0x00000001;
+const sal_uInt32 FM_UI_FEATURE_SHOW_FIELD               = 0x00000002;
+const sal_uInt32 FM_UI_FEATURE_SHOW_PROPERTIES          = 0x00000004;
+const sal_uInt32 FM_UI_FEATURE_SHOW_EXPLORER            = 0x00000008;
+const sal_uInt32 FM_UI_FEATURE_SHOW_FILTERBAR           = 0x00000010;
+const sal_uInt32 FM_UI_FEATURE_SHOW_FILTERNAVIGATOR     = 0x00000020;
+const sal_uInt32 FM_UI_FEATURE_SHOW_TEXT_CONTROL_BAR    = 0x00000040;
+const sal_uInt32 FM_UI_FEATURE_TB_CONTROLS_DBFORMS      = 0x00000080;
+const sal_uInt32 FM_UI_FEATURE_TB_CONTROLS_XFORMS       = 0x00000100;
+const sal_uInt32 FM_UI_FEATURE_TB_CONTROLS_GENERIC      = 0x00000200;
+const sal_uInt32 FM_UI_FEATURE_TB_MORECONTROLS_DBFORMS  = 0x00000480;
+const sal_uInt32 FM_UI_FEATURE_TB_MORECONTROLS_XFORMS   = 0x00000800;
+const sal_uInt32 FM_UI_FEATURE_TB_MORECONTROLS_GENERIC  = 0x00001000;
+const sal_uInt32 FM_UI_FEATURE_TB_FORMDESIGN_DBFORMS    = 0x00002000;
+const sal_uInt32 FM_UI_FEATURE_TB_FORMDESIGN_XFORMS     = 0x00004000;
+const sal_uInt32 FM_UI_FEATURE_TB_FORMDESIGN_GENERIC    = 0x00008000;
 
 SFX_IMPL_INTERFACE(FmFormShell, SfxShell, SVX_RES(RID_STR_FORMSHELL))
 {
@@ -484,6 +500,45 @@ SFX_IMPL_INTERFACE(FmFormShell, SfxShell, SVX_RES(RID_STR_FORMSHELL))
     SFX_FEATURED_CHILDWINDOW_REGISTRATION(SID_FM_SHOW_PROPERTIES, FM_UI_FEATURE_SHOW_PROPERTIES);
     SFX_FEATURED_CHILDWINDOW_REGISTRATION(SID_FM_SHOW_FMEXPLORER, FM_UI_FEATURE_SHOW_EXPLORER);
     SFX_FEATURED_CHILDWINDOW_REGISTRATION(SID_FM_FILTER_NAVIGATOR, FM_UI_FEATURE_SHOW_FILTERNAVIGATOR);
+
+    // the usual "Controls" toolbars - one for each possible "forms module"
+    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
+        SVX_RES( RID_SVXTBX_CONTROLS_DBFORMS ),
+        FM_UI_FEATURE_TB_CONTROLS_DBFORMS );
+
+    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
+        SVX_RES( RID_SVXTBX_CONTROLS_XFORMS ),
+        FM_UI_FEATURE_TB_CONTROLS_XFORMS );
+
+    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
+        SVX_RES( RID_SVXTBX_CONTROLS_GENERIC ),
+        FM_UI_FEATURE_TB_CONTROLS_GENERIC );
+
+    // the "More controls" toolbars - one for each possible "forms module"
+    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
+        SVX_RES( RID_SVXTBX_MORECONTROLS_DBFORMS ),
+        FM_UI_FEATURE_TB_MORECONTROLS_DBFORMS );
+
+    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
+        SVX_RES( RID_SVXTBX_MORECONTROLS_XFORMS ),
+        FM_UI_FEATURE_TB_MORECONTROLS_XFORMS );
+
+    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
+        SVX_RES( RID_SVXTBX_MORECONTROLS_GENERIC ),
+        FM_UI_FEATURE_TB_MORECONTROLS_GENERIC );
+
+    // the usual "Form design" toolbars - one for each possible "forms module"
+    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
+        SVX_RES( RID_SVXTBX_FORMDESIGN_DBFORMS ),
+        FM_UI_FEATURE_TB_FORMDESIGN_DBFORMS );
+
+    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
+        SVX_RES( RID_SVXTBX_FORMDESIGN_XFORMS ),
+        FM_UI_FEATURE_TB_FORMDESIGN_XFORMS );
+
+    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
+        SVX_RES( RID_SVXTBX_FORMDESIGN_GENERIC ),
+        FM_UI_FEATURE_TB_FORMDESIGN_GENERIC );
 }
 
 //========================================================================
@@ -656,11 +711,30 @@ sal_Bool FmFormShell::HasUIFeature( sal_uInt32 nFeature )
     {
         bResult = m_pImpl->IsActiveControl( true );
     }
+    else if (  ( nFeature & FM_UI_FEATURE_TB_CONTROLS_DBFORMS )
+            || ( nFeature & FM_UI_FEATURE_TB_MORECONTROLS_DBFORMS )
+            || ( nFeature & FM_UI_FEATURE_TB_FORMDESIGN_DBFORMS )
+            )
+    {
+        bResult = ( GetImpl()->m_eDocumentType == eDatabaseForm );
+    }
+    else if (  ( nFeature & FM_UI_FEATURE_TB_CONTROLS_XFORMS )
+            || ( nFeature & FM_UI_FEATURE_TB_MORECONTROLS_XFORMS )
+            || ( nFeature & FM_UI_FEATURE_TB_FORMDESIGN_XFORMS )
+            )
+    {
+        bResult = ( GetImpl()->m_eDocumentType == eElectronicForm );
+    }
+    else if (  ( nFeature & FM_UI_FEATURE_TB_CONTROLS_GENERIC )
+            || ( nFeature & FM_UI_FEATURE_TB_MORECONTROLS_GENERIC )
+            || ( nFeature & FM_UI_FEATURE_TB_FORMDESIGN_GENERIC )
+            )
+    {
+        bResult = ( GetImpl()->m_eDocumentType != eDatabaseForm ) && ( GetImpl()->m_eDocumentType != eElectronicForm );
+    }
+
     return bResult;
 }
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
 
 //------------------------------------------------------------------------
 void FmFormShell::Execute(SfxRequest &rReq)
@@ -853,6 +927,15 @@ void FmFormShell::Execute(SfxRequest &rReq)
     // Individuelle Aktionen
     switch( nSlot )
     {
+        case SID_FM_MORE_CONTROLS:
+        case SID_FM_FORM_DESIGN_TOOLS:
+        {
+            FormToolboxes aToolboxAccess( GetImpl()->m_xAttachedFrame );
+            aToolboxAccess.toggleToolbox( nSlot );
+            rReq.Done();
+        }
+        break;
+
         case SID_FM_GRABCONTROLFOCUS:
         {
             FmFormView* pFormView = GetFormView();
@@ -1136,6 +1219,14 @@ void FmFormShell::GetState(SfxItemSet &rSet)
     {
         switch( nWhich )
         {
+            case SID_FM_MORE_CONTROLS:
+            case SID_FM_FORM_DESIGN_TOOLS:
+            {
+                FormToolboxes aToolboxAccess( GetImpl()->m_xAttachedFrame );
+                rSet.Put( SfxBoolItem( nWhich, aToolboxAccess.isToolboxVisible( nWhich ) ) );
+            }
+            break;
+
             case SID_FM_FILTER_EXECUTE:
             case SID_FM_FILTER_EXIT:
                 if (!GetImpl()->isInFilterMode())
@@ -1283,6 +1374,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_CONFIG:
                 rSet.Put(SfxUInt16Item(nWhich, m_nLastSlot));
                 break;
+
             case SID_FM_DESIGN_MODE:
                 if (!m_pFormView)
                     rSet.DisableItem( nWhich );
