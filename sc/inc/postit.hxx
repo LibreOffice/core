@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:37:33 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:21:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,12 +148,12 @@ public:
     Rectangle   MimicOldRectangle(const ScAddress& rPos) const ;
     SfxItemSet  DefaultItemSet() const ;
     inline const Rectangle& GetRectangle() const {return maRectangle;}
-    inline void     SetRectangle(const Rectangle& aRect) {maRectangle = aRect;}
+    void         SetRectangle(const Rectangle& aRect);
     inline const SfxItemSet&    GetItemSet() const {return maItemSet;}
     void         SetItemSet(const SfxItemSet& aItemSet);
     void         SetAndApplyItemSet(const SfxItemSet& aItemSet);
 
-    void         InsertObject( SdrCaptionObj* pObj, ScDocument& rDoc, SCTAB nTab) const;
+    void         InsertObject( SdrCaptionObj* pObj, ScDocument& rDoc, SCTAB nTab, sal_Bool bVisible) const;
     void         RemoveObject( SdrCaptionObj* pObj, ScDocument& rDoc, SCTAB nTab) const;
 
     const ScPostIt& operator= ( const ScPostIt& rCpy );
