@@ -3,9 +3,9 @@
 #*    $Workfile:$
 #*
 #*    Creation date     KR 28.06.99
-#*    last change       $Author: hjs $ $Date: 2001-05-10 14:48:35 $
+#*    last change       $Author: abi $ $Date: 2001-05-14 07:23:40 $
 #*
-#*    $Revision: 1.15 $
+#*    $Revision: 1.16 $
 #*
 #*    $Logfile:$
 #*
@@ -35,7 +35,6 @@ UNIXTEXT= \
 # --- Files --------------------------------------------------------
 
 JAVACLASSFILES = \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpServer.class                   \
     $(CLASSDIR)$/$(PACKAGE)$/HelpContentIdentifier.class        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpProvider.class                 \
     $(CLASSDIR)$/$(PACKAGE)$/HelpContent.class                  \
