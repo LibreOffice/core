@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:33:39 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,55 +241,15 @@ const SwFrm& lcl_TheAnchor( const SdrObject* pObj )
     return *pRet;
 }
 
-/*****************************************************************************
- * lcl_MaxAscDescent liefert die max. Ascents und Descents in der Zeile ohne
- * FlyPortions (abs. und seitengeb. Objekte), einmal mit und einmal ohne
- * Beruecksichtigung der zeichengeb. Objekte.
- * Diese Werte sind fuer das SetBase der zeichengebundenen Objekte wichtig,
- * wenn diese an den Zeichen oder an der Zeile ausgerichtet werden sollen.
- *****************************************************************************/
-
-void lcl_MaxAscDescent( SwLinePortion* pPos, long &rAscent, long &rDescent,
-     long &rFlyAscent, long &rFlyDescent, SwLinePortion* pNot = NULL )
-{
-    rAscent = 0;
-    rDescent = 0;
-    rFlyAscent = 0;
-    rFlyDescent = 0;
-
-    if( !pPos->GetLen() && ( pPos->IsParaPortion() || pPos->IsLayPortion() ) )
-        pPos = pPos->GetPortion();
-
-    while ( pPos )
-    {
-        if( !pPos->IsBreakPortion() && !pPos->IsFlyPortion() )
-        {
-            sal_Bool bFlyCmp = pPos->IsFlyCntPortion() ?
-                           ((SwFlyCntPortion*)pPos)->IsMax() :  pPos != pNot;
-            if( bFlyCmp )
-            {
-                rFlyAscent = Max( rFlyAscent, (long)pPos->GetAscent() );
-                rFlyDescent = Max( rFlyDescent,
-                        (long)( pPos->Height() - pPos->GetAscent() ) );
-            }
-            if( !pPos->IsFlyCntPortion() && !pPos->IsGrfNumPortion() )
-            {
-                rAscent = Max( rAscent, (long)pPos->GetAscent() );
-                rDescent = Max( rDescent,
-                    (long)( pPos->Height() - pPos->GetAscent() ) );
-            }
-        }
-        pPos = pPos->GetPortion();
-    }
-}
-
 void SwTxtFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
 {
     ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
             "SwTxtFormatter::CalcUnclipped with unswapped frame" )
 
     long nFlyAsc, nFlyDesc;
-    lcl_MaxAscDescent( pCurr, rTop, rBottom, nFlyAsc, nFlyDesc );
+    // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
+    //lcl_MaxAscDescent( pCurr, rTop, rBottom, nFlyAsc, nFlyDesc );
+    pCurr->MaxAscentDescent( rTop, rBottom, nFlyAsc, nFlyDesc );
     rTop = Y() + GetCurr()->GetAscent();
     rBottom = rTop + nFlyDesc;
     rTop -= nFlyAsc;
@@ -322,7 +282,10 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
     aTmpInf.SetPos( aStart );
 
     long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
-    lcl_MaxAscDescent( pPos, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
+    // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
+    //lcl_MaxAscDescent( pPos, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
+    pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
+
     KSHORT nTmpHeight = pCurr->GetRealHeight();
     KSHORT nAscent = pCurr->GetAscent() + nTmpHeight - pCurr->Height();
     objectpositioning::AsCharFlags nFlags = AS_CHAR_ULSPACE;
@@ -358,8 +321,11 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
         if( ( pPos->IsFlyCntPortion() || pPos->IsGrfNumPortion() )
             && ( bAllWays || !IsQuick() ) )
         {
-            lcl_MaxAscDescent( pFirst, nTmpAscent, nTmpDescent,
-                               nFlyAsc, nFlyDesc, pPos );
+            // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
+            //lcl_MaxAscDescent( pFirst, nTmpAscent, nTmpDescent,
+            //                  nFlyAsc, nFlyDesc, pPos );
+            pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, pPos );
+
             if( pPos->IsGrfNumPortion() )
             {
                 if( !nFlyAsc && !nFlyDesc )
@@ -450,8 +416,11 @@ void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
     {
         if( pPos->IsFlyCntPortion() || pPos->IsGrfNumPortion() )
         {
-            lcl_MaxAscDescent( pFirst, nTmpAscent, nTmpDescent,
-                               nFlyAsc, nFlyDesc, pPos );
+            // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
+            //lcl_MaxAscDescent( pFirst, nTmpAscent, nTmpDescent,
+            //                  nFlyAsc, nFlyDesc, pPos );
+            pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, pPos );
+
             if( pPos->IsGrfNumPortion() )
                 ((SwGrfNumPortion*)pPos)->SetBase( nTmpAscent, nTmpDescent,
                                                    nFlyAsc, nFlyDesc );
@@ -812,10 +781,11 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
     //             hinter der aktuellen Portion
     // aBase.Y() = LineIter.Y() + Ascent der aktuellen Portion
 
-    SwLinePortion *pPos = pCurr->GetFirstPortion();
-
     long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
-    lcl_MaxAscDescent( pPos, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
+    // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
+    //SwLinePortion *pPos = pCurr->GetFirstPortion();
+    //lcl_MaxAscDescent( pPos, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
+    pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
 
     // Wenn der Ascent des Rahmens groesser als der Ascent der akt. Portion
     // ist, wird dieser bei der Base-Berechnung verwendet, sonst wuerde
