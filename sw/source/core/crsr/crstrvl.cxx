@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:33:43 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,16 +275,7 @@ FASTBOOL SwCrsrShell::GotoHeaderTxt()
         Point aPt( pFrm->Frm().Pos() + pFrm->Prt().Pos() );
         pFrm->GetCrsrOfst( pCurCrsr->GetPoint(), aPt );
         if( !pCurCrsr->IsSelOvr() )
-        {
-#ifdef USED
-    // wenn wir immer auf der akt. Seite bleiben wollen, dann benutzen.
-    // zur Zeit immer zur naechst gelegene !!
-                // diese Seite, diese Fusszeile !!
-                // diese Seite, diese Kopfzeile !!
-            pCurCrsr->GetPtPos() = aPt;
-#endif
             UpdateCrsr();
-        }
         else
             pFrm = 0;
     }
@@ -319,15 +310,7 @@ FASTBOOL SwCrsrShell::GotoFooterTxt()
             Point aPt( pLower->Frm().Pos() + pLower->Prt().Pos() );
             pLower->GetCrsrOfst( pCurCrsr->GetPoint(), aPt );
             if( !pCurCrsr->IsSelOvr() )
-            {
-#ifdef USED
-    // wenn wir immer auf der akt. Seite bleiben wollen, dann benutzen.
-    // zur Zeit immer zur naechst gelegene !!
-                // diese Seite, diese Fusszeile !!
-                pCurCrsr->GetPtPos() = aPt;
-#endif
                 UpdateCrsr();
-            }
             else
                 pFrm = 0;
         }
