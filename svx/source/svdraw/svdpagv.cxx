@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-07 08:52:56 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 16:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,7 @@ void SAL_CALL SdrUnoControlRec::propertyChange( const ::com::sun::star::beans::P
     }
     else
     {
+        ::vos::OGuard aGuard(Application::GetSolarMutex());
         // Attributaenderung:
         // Bereich neu Zeichnen
         OutputDevice* pOut = pObj->GetOutputDevice(xControl);
