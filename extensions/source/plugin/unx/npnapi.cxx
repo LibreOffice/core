@@ -2,7 +2,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.4 2003-05-28 12:38:30 vg Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.5 2003-06-30 15:14:52 hr Exp $
 
 *************************************************************************/
 #include <plugin/unx/plugcon.hxx>
@@ -114,16 +114,18 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                 NPSavedData* pSave = NULL;
                 NPError aRet = aPluginFuncs.destroy( instance, &pSave );
                 if( pSave )
+                {
                     Respond( pMessage->m_nID,
                              (char*)&aRet, sizeof( aRet ),
                              pSave->buf, pSave->len,
                              NULL );
+                    delete [] pSave->buf;
+                }
                 else
                     Respond( pMessage->m_nID,
                              (char*)&aRet, sizeof( aRet ),
                              "0000", 4,
                              NULL );
-                delete [] pSave->buf;
                 delete m_aInstances.Remove( nInstance );
                 delete instance;
             }
