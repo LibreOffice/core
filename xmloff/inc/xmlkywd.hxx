@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-20 10:42:40 $
+ *  last change: $Author: sab $ $Date: 2001-02-21 10:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,8 @@ XML_CONSTASCII_ACTION( sXML_acceptance_state, "acceptance-state" );
 XML_CONSTASCII_ACTION( sXML_accepted, "accepted" );
 XML_CONSTASCII_ACTION( sXML_action, "action" );
 XML_CONSTASCII_ACTION( sXML_active, "active" );
+XML_CONSTASCII_ACTION( sXML_active_split_range, "active-split-range" );
+XML_CONSTASCII_ACTION( sXML_active_table, "active-table" );
 XML_CONSTASCII_ACTION( sXML_actuate, "actuate" );
 XML_CONSTASCII_ACTION( sXML_add_in, "add-in" );
 XML_CONSTASCII_ACTION( sXML_add_in_name, "add-in-name" );
@@ -456,6 +458,7 @@ XML_CONSTASCII_ACTION( sXML_currency, "currency");
 XML_CONSTASCII_ACTION( sXML_currency_style, "currency-style" );
 XML_CONSTASCII_ACTION( sXML_currency_symbol, "currency-symbol" );
 XML_CONSTASCII_ACTION( sXML_current, "current" );
+XML_CONSTASCII_ACTION( sXML_cursor_position, "cursor-position" );
 XML_CONSTASCII_ACTION( sXML_custom1, "custom1" );
 XML_CONSTASCII_ACTION( sXML_custom2, "custom2" );
 XML_CONSTASCII_ACTION( sXML_custom3, "custom3" );
@@ -739,6 +742,8 @@ XML_CONSTASCII_ACTION( sXML_frame, "frame" );
 XML_CONSTASCII_ACTION( sXML_frame_content, "frame-content" );
 XML_CONSTASCII_ACTION( sXML_frame_end_margin, "frame-end-margin" );
 XML_CONSTASCII_ACTION( sXML_frame_start_margin, "frame-start-margin" );
+XML_CONSTASCII_ACTION( sXML_freeze, "freeze" );
+XML_CONSTASCII_ACTION( sXML_freeze_position, "freeze-position" );
 XML_CONSTASCII_ACTION( sXML_from_another_table, "from-another-table" );
 XML_CONSTASCII_ACTION( sXML_from_inside, "from-inside" );
 XML_CONSTASCII_ACTION( sXML_from_left, "from-left" );
@@ -806,6 +811,7 @@ XML_CONSTASCII_ACTION( sXML_horizontal_on_left_pages, "horizontal-on-left-pages"
 XML_CONSTASCII_ACTION( sXML_horizontal_on_right_pages, "horizontal-on-right-pages" );
 XML_CONSTASCII_ACTION( sXML_horizontal_pos, "horizontal-pos" );
 XML_CONSTASCII_ACTION( sXML_horizontal_rel, "horizontal-rel" );
+XML_CONSTASCII_ACTION( sXML_horizontal_scroll_bar_width, "horizontal-scroll-bar-width" );
 XML_CONSTASCII_ACTION( sXML_horizontal_segments, "horizontal-segments" );
 XML_CONSTASCII_ACTION( sXML_horizontal_stripes, "horizontal-stripes" );
 XML_CONSTASCII_ACTION( sXML_hours, "hours" );
@@ -908,6 +914,7 @@ XML_CONSTASCII_ACTION( sXML_last_row_spanned, "last-row-spanned" );
 XML_CONSTASCII_ACTION( sXML_leader_char, "leader-char" );
 XML_CONSTASCII_ACTION( sXML_left, "left" );
 XML_CONSTASCII_ACTION( sXML_left_outside, "left-outside" );
+XML_CONSTASCII_ACTION( sXML_left_top_position, "left-top-position" );
 XML_CONSTASCII_ACTION( sXML_legend, "legend" );
 XML_CONSTASCII_ACTION( sXML_legend_position, "legend-position" );
 XML_CONSTASCII_ACTION( sXML_length, "length" );
@@ -1137,6 +1144,7 @@ XML_CONSTASCII_ACTION( sXML_open_horizontal, "open-horizontal" );
 XML_CONSTASCII_ACTION( sXML_open_vertical, "open-vertical" );
 XML_CONSTASCII_ACTION( sXML_operation, "operation");
 XML_CONSTASCII_ACTION( sXML_operator, "operator");
+XML_CONSTASCII_ACTION( sXML_optimal, "optimal");
 XML_CONSTASCII_ACTION( sXML_or, "or");
 XML_CONSTASCII_ACTION( sXML_order, "order");
 XML_CONSTASCII_ACTION( sXML_ordered_list, "ordered-list" );
@@ -1176,6 +1184,7 @@ XML_CONSTASCII_ACTION( sXML_page_thumbnail, "page-thumbnail" );
 XML_CONSTASCII_ACTION( sXML_page_usage, "page-usage" );
 XML_CONSTASCII_ACTION( sXML_page_variable_get, "page-variable-get" );
 XML_CONSTASCII_ACTION( sXML_page_variable_set, "page-variable-set" );
+XML_CONSTASCII_ACTION( sXML_page_view_zoom, "page-view-zoom" );
 XML_CONSTASCII_ACTION( sXML_page_width, "page-width" );
 XML_CONSTASCII_ACTION( sXML_pages, "pages" );
 XML_CONSTASCII_ACTION( sXML_paper_tray_number, "paper-tray-number" );
@@ -1441,6 +1450,10 @@ XML_CONSTASCII_ACTION( sXML_spiralin_right, "spiralin-right" );
 XML_CONSTASCII_ACTION( sXML_spiralout_left, "spiralout-left" );
 XML_CONSTASCII_ACTION( sXML_spiralout_right, "spiralout-right" );
 XML_CONSTASCII_ACTION( sXML_splines, "splines" );
+XML_CONSTASCII_ACTION( sXML_split, "split" );
+XML_CONSTASCII_ACTION( sXML_split_column, "split-column" );
+XML_CONSTASCII_ACTION( sXML_split_position, "split-position" );
+XML_CONSTASCII_ACTION( sXML_split_row, "split-row" );
 XML_CONSTASCII_ACTION( sXML_spreadsheet , "spreadsheet" );
 XML_CONSTASCII_ACTION( sXML_sql_statement, "sql-statement");
 XML_CONSTASCII_ACTION( sXML_stacked, "stacked" );
@@ -1527,6 +1540,7 @@ XML_CONSTASCII_ACTION( sXML_table_row, "table-row" );
 XML_CONSTASCII_ACTION( sXML_table_row_group, "table-row-group" );
 XML_CONSTASCII_ACTION( sXML_table_rows, "table-rows" );
 XML_CONSTASCII_ACTION( sXML_table_source, "table-source" );
+XML_CONSTASCII_ACTION( sXML_table_view, "table-view" );
 XML_CONSTASCII_ACTION( sXML_tan, "tan" );
 XML_CONSTASCII_ACTION( sXML_tanh, "tanh" );
 XML_CONSTASCII_ACTION( sXML_target_cell_address, "target-cell-address");
@@ -1688,6 +1702,7 @@ XML_CONSTASCII_ACTION( sXML_vertical_pos, "vertical-pos" );
 XML_CONSTASCII_ACTION( sXML_vertical_rel, "vertical-rel" );
 XML_CONSTASCII_ACTION( sXML_vertical_segments, "vertical-segments" );
 XML_CONSTASCII_ACTION( sXML_vertical_stripes, "vertical-stripes" );
+XML_CONSTASCII_ACTION( sXML_view, "view" );
 XML_CONSTASCII_ACTION( sXML_viewBox, "viewBox" );
 XML_CONSTASCII_ACTION( sXML_view_settings, "view-settings" );
 XML_CONSTASCII_ACTION( sXML_visibility, "visibility" );
@@ -1710,6 +1725,7 @@ XML_CONSTASCII_ACTION( sXML_week_of_year, "week-of-year" );
 XML_CONSTASCII_ACTION( sXML_weight_bold, "bold" );
 XML_CONSTASCII_ACTION( sXML_weight_normal, "normal" );
 XML_CONSTASCII_ACTION( sXML_white, "white" );
+XML_CONSTASCII_ACTION( sXML_whole_page, "whole-page" );
 XML_CONSTASCII_ACTION( sXML_widows, "widows" );
 XML_CONSTASCII_ACTION( sXML_width, "width" );
 XML_CONSTASCII_ACTION( sXML_word, "word" );
@@ -1734,6 +1750,7 @@ XML_CONSTASCII_ACTION( sXML_year, "year" );
 XML_CONSTASCII_ACTION( sXML_yellow, "yellow" );
 XML_CONSTASCII_ACTION( sXML_zero_values, "zero-values" );
 XML_CONSTASCII_ACTION( sXML_zindex, "z-index" );
+XML_CONSTASCII_ACTION( sXML_zoom, "zoom" );
 
 XML_CONSTASCII_ACTION( sXML_start_shape, "start-shape");
 XML_CONSTASCII_ACTION( sXML_start_glue_point, "start-glue-point");
