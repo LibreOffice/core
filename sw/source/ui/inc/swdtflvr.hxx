@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:32:14 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,16 +64,16 @@
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
-#ifndef _EMBOBJ_HXX
-#include <so3/embobj.hxx>
-#endif
 #ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
 #endif
 #ifndef _LNKBASE_HXX
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
 
 class Graphic;
 class ImageMap;
@@ -107,10 +107,10 @@ enum TransferBufferType
 class SwTransferable : public TransferableHelper
 {
     friend class SwView_Impl;
-    SvEmbeddedObjectRef             aDocShellRef;
+    SfxObjectShellRef             aDocShellRef;
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
-    ::so3::SvBaseLinkRef            refDdeLink;
+    ::sfx2::SvBaseLinkRef            refDdeLink;
 
     SwWrtShell      *pWrtShell;
     /* #96392# Added pCreatorView to distinguish SwFrameShell from
@@ -128,7 +128,7 @@ class SwTransferable : public TransferableHelper
     BOOL bCleanUp   :1; //D&D cleanup after Drop (not by internal Drop)
 
     // helper methods for the copy
-    SvEmbeddedObject* FindOLEObj() const;
+    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > FindOLEObj() const;
     void DeleteSelection();
 
     // helper methods for the paste
@@ -203,7 +203,7 @@ public:
 
     // set properties on the document, like PageMargin, VisArea.
     // And set real Size
-    static void InitOle( SvEmbeddedObjectRef rRef, SwDoc& rDoc );
+    static void InitOle( SfxObjectShell* pDoc, SwDoc& rDoc );
 
     // copy - methods and helper methods for the copy
     int  Cut();
