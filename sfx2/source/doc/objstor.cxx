@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-10 10:38:18 $
+ *  last change: $Author: mba $ $Date: 2001-07-12 10:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,6 +563,8 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         {
             ::rtl::OUString aURL = GetMedium()->GetOrigURL();
             SfxItemSet *pSet = GetMedium()->GetItemSet();
+            if ( !GetMedium()->IsReadOnly() )
+                pSet->ClearItem( SID_INPUTSTREAM );
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
             TransformItems( SID_OPENDOC, *pSet, aArgs );
             xModel->attachResource( aURL, aArgs );
@@ -940,10 +942,6 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             if ( xNewTempRef.Is() )
                 // if the new object storage is a temporary one, because the target format is an alien format
                 SaveCompleted( xNewTempRef );
-            else if ( !bOk && IsHandsOff() )
-                // critical case: avoid "HandsOff" states
-                // usually the caller doesn't know that this method has set the document into the "HandsOff" state
-                DoSaveCompleted( &rMedium );
         }
     }
 
@@ -1430,7 +1428,8 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         pMediumTmp->Close();
         delete pMediumTmp;
 
-        DoHandsOff();
+        if ( !IsHandsOff() )
+            DoHandsOff();
         sal_Bool bOpen = DoSaveCompleted(pMedium);
         if (  bOpen && aKey.Len() )
             pMedium->GetStorage()->SetKey( aKey );
@@ -1451,7 +1450,10 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         SfxContentHelper::Kill( aTmp );
 
         // reconnect to object storage
-        DoSaveCompleted( (SvStorage*)0 );
+        if ( IsHandsOff() )
+            DoSaveCompleted( pMedium );
+        else
+            DoSaveCompleted( (SvStorage*)0 );
     }
 
     SetModified( !bSaved );
@@ -1886,7 +1888,10 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         SetError( pNewFile->GetErrorCode() );
 
         // reconnect to the old storage
-        DoSaveCompleted( (SvStorage*)0 );
+        if ( IsHandsOff() )
+            DoSaveCompleted( pMedium );
+        else
+            DoSaveCompleted( (SvStorage*)0 );
     }
 
     if( !bOk )
