@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2001-10-19 21:31:11 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 21:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1496,27 +1496,27 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ korean ] =
     {
-            < "alpha" ; > ;
+            < "알파" ; > ;
         < "ALPHA" ; > ;
-        < "beta" ; > ;
+        < "베타" ; > ;
         < "BETA" ; > ;
-        < "gamma" ; > ;
+        < "감마" ; > ;
         < "GAMMA" ; > ;
-        < "delta" ; > ;
+        < "델타" ; > ;
         < "DELTA" ; > ;
-        < "epsilon" ; > ;
+        < "엡실론" ; > ;
         < "EPSILON" ; > ;
-        < "zeta" ; > ;
+        < "제타" ; > ;
         < "ZETA" ; > ;
-        < "eta" ; > ;
+        < "에타" ; > ;
         < "ETA" ; > ;
-        < "theta" ; > ;
+        < "쎄타" ; > ;
         < "THETA" ; > ;
-        < "jota" ; > ;
+        < "호타" ; > ;
         < "JOTA" ; > ;
-        < "kappa" ; > ;
+        < "카파" ; > ;
         < "KAPPA" ; > ;
-        < "lambda" ; > ;
+        < "람다" ; > ;
         < "LAMBDA" ; > ;
         < "my" ; > ;
         < "MY" ; > ;
@@ -1530,19 +1530,19 @@ Resource RID_LOCALIZED_NAMES
         < "PI" ; > ;
         < "rho" ; > ;
         < "RHO" ; > ;
-        < "sigma" ; > ;
+        < "시그마" ; > ;
         < "SIGMA" ; > ;
         < "tau" ; > ;
         < "TAU" ; > ;
-        < "ypsilon" ; > ;
+        < "입실론" ; > ;
         < "YPSILON" ; > ;
-        < "phi" ; > ;
+        < "파이" ; > ;
         < "PHI" ; > ;
         < "chi" ; > ;
         < "CHI" ; > ;
-        < "psi" ; > ;
+        < "사이" ; > ;
         < "PSI" ; > ;
-        < "omega" ; > ;
+        < "오메가" ; > ;
         < "OMEGA" ; > ;
         < "varepsilon" ; > ;
         < "vartheta" ; > ;
@@ -1979,6 +1979,7 @@ Resource RID_LOCALIZED_NAMES
     };
     };
 };
+
 
 
 
