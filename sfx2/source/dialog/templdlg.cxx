@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-30 09:27:41 $
+ *  last change: $Author: fs $ $Date: 2002-09-11 14:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,6 +433,12 @@ SfxActionListBox::SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent,
 
 PopupMenu* SfxActionListBox::CreateContextMenu( void )
 {
+    //added by BerryJia for fixing Bug102739 2002-9-9 17:00(Beijing Time)
+    if( !GetSelectionCount() > 0 )
+    {
+        pDialog->EnableEdit( FALSE );
+        pDialog->EnableDel( FALSE );
+    }
     return pDialog->CreateContextMenu();
 }
 
