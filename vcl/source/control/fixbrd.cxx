@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixbrd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:18:37 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,8 +162,26 @@ void FixedBorder::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
          (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
         nBorderStyle |= FRAME_DRAW_MONO;
 
-    DecorationView  aDecoView( pDev );
-    aDecoView.DrawFrame( aRect, nBorderStyle );
+    /*
+    // seems only to be used in tools->options around a tabpage (ie, no tabcontrol!)
+    // as tabpages that are not embedded in a tabcontrol should not be drawn natively
+    // the fixedborder must also not be drawn (reason was, that it looks too ugly, dialogs must be redesigned)
+    Window *pWin = pDev->GetOutDevType() == OUTDEV_WINDOW ? (Window*) pDev : NULL;
+    if( !(nBorderStyle & FRAME_DRAW_MONO) && pWin && pWin->IsNativeControlSupported( CTRL_FIXEDBORDER, PART_ENTIRE_CONTROL ) )
+    {
+        ImplControlValue aControlValue;
+        Point aPt;
+        Region aCtrlRegion( Rectangle( aPt, GetOutputSizePixel() ) );
+        ControlState nState = IsEnabled() ? CTRL_STATE_ENABLED : 0;
+        pWin->DrawNativeControl( CTRL_FIXEDBORDER, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
+                                 aControlValue, rtl::OUString() );
+    }
+    else
+    */
+    {
+        DecorationView  aDecoView( pDev );
+        aDecoView.DrawFrame( aRect, nBorderStyle );
+    }
 }
 
 // -----------------------------------------------------------------------
