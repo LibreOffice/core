@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-24 11:17:42 $
+#   last change: $Author: obo $ $Date: 2005-01-25 12:59:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,13 @@ TARGET=so_python
 
 .INCLUDE :	settings.mk
 .INCLUDE :      pyversion.mk
+
+.IF "$(SYSTEM_PYTHON)" == "YES"
+all:
+    @echo "An already available installation of python should exist on your system."
+    @echo "Therefore the version provided here does not need to be built in addition."
+.ENDIF
+
 
 # --- Files --------------------------------------------------------
 
