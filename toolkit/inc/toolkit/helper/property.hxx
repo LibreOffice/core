@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 14:35:15 $
+ *  last change: $Author: mt $ $Date: 2001-03-23 13:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@ namespace rtl {
 #define BASEPROPERTY_MOVEABLE               70  // sal_Bool
 #define BASEPROPERTY_CLOSEABLE              71  // sal_Bool
 #define BASEPROPERTY_SIZEABLE               72  // sal_Bool
+#define BASEPROPERTY_HELPTEXT               73  // ::rtl::OUString
 
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
