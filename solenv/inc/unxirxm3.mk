@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxirxm3.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:17 $
+#   last change: $Author: vg $ $Date: 2003-12-17 18:08:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,99 +60,119 @@
 #
 #*************************************************************************
 
-# Makefile for IRIX/mips using MIPSpro 7.2+ compiler for n32 ABI
+
+# Makefile for IRIX/mips
 ASM=
 AFLAGS=
 
-#
-# Compiler flags:
-#
-# -ptused :	Instantiate templates while they're in
-#		use. This switch was added because a static member function
-#		couldn't be instantiated.
-#		(ts&sdo/10.06.98)
-#
-#CC=			cc -KPIC -c -n32 -ansi
-CC=			cc -KPIC -c -n32
-#CXX=			CC -KPIC -c -n32 -ptused -OPT:Olimit=20523 
-CXX=			CC -KPIC -c -n32 -ansi -ptused -OPT:Olimit=20523 
-CFLAGS=		$(INCLUDE)
-CDEFS+=-D_PTHREADS
-CDEFS+=	-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
-# CFLAGS+=	-D__STL_NATIVE_INCLUDE_PATH=/usr/include -D__STL_NATIVE_C_INCLUDE_PATH=/usr/include
-# CFLAGS+=	-D_STL_NATIVE_INCLUDE_PATH=/usr/include -D_STL_NATIVE_C_INCLUDE_PATH=/usr/include
-# 1009    ...nested comment is not allowed...
-# 1021    ...type qualifiers are meaningless in this declaration...
-# 1107    ...signed bit field of length 1...
-# 1110    ...statement not reached...
-# 1155    ...unrecognized #pragma...
-# 1171    ...expression has no effect...
-# 1183    ...comparison of unsigned integer with zero... 
-# 1185    ...enumerated type mixed with another type... 
-# 1188    ...type qualifier is meaningless on cast type... 
-# 1233    ...explicit type is missing ("int" assumed)...
-# 1234    ...access control not specified...
-# 1257    ...NULL reference is not allowed...
-# 1440    ...initial value of reference to non-const must be an lvalue...
-# 1516    ...pointless comparison of unsigned integer with a negative constant
-# 1681    ...virtual function override intended...
-# 1682    ...is only partially overridden in class...
-CFLAGSCC=	-Xcpluscomm -woff 1009,1021,1107,1110,1155,1171,1183,1185,1188,1233,1234,1257,1440,1516,1681,1682
-CFLAGSCXX=	-woff 1009,1021,1107,1110,1155,1171,1183,1185,1188,1233,1234,1257,1440,1516,1681,1682
+SOLAR_JAVA*=TRUE
+JAVADEF=-DSOLAR_JAVA
+#JAVAFLAGSDEBUG=-g
+
+.IF "$(debug)"==""
+JAVA_RUNTIME=-ljava
+.ELSE
+JAVA_RUNTIME=-ljava_g
+.ENDIF
+
+
+CC= cc
+CXX= CC
+CFLAGS= -c $(INCLUDE)
+CDEFS+= -DSTLPORT_VERSION=0x450 -D_USE_NAMESPACE=1 -DNEW_SOLAR
+CFLAGSCC=
+CFLAGSCXX=      -LANG:ansi-for-init-scope=OFF -LANG:std=ON -LANG:libc_in_namespace_std=ON
+
+# Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
+# Compiler flags for compiling static object in single threaded environment with character user interface
 CFLAGSOBJCUIST=
+# Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=
+# Compiler flags for compiling static object in multi threaded environment with character user interface
 CFLAGSOBJCUIMT=
-CFLAGSSLOGUIMT=
-CFLAGSSLOCUIMT=
+# Compiler flags for compiling shared object in multi threaded environment with graphical user interface
+CFLAGSSLOGUIMT=-KPIC
+# Compiler flags for compiling shared object in multi threaded environment with character user interface
+CFLAGSSLOCUIMT=-KPIC
+# Compiler flags for profiling
 CFLAGSPROF=
-CFLAGSDEBUG=	-g
+# Compiler flags for debugging
+CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
-CFLAGSOPT=		-O
-CFLAGSNOOPT=
-CFLAGSOUTOBJ=	-o
+# Compiler flags for enabling optimizations
+CFLAGSOPT=-O2
+# Compiler flags for disabling optimizations
+CFLAGSNOOPT=-O0
+# Compiler flags for describing the output path
+CFLAGSOUTOBJ=-o
+# Enable all warnings
+CFLAGSWALL=-fullwarn
+# Set the default warn level
+CFLAGSDFLTWARN=-w
+# exception flags
+CFLAGSEXCEPTIONS=-LANG:exceptions=ON
+CFLAGS_NO_EXCEPTIONS=-LANG:exceptions=OFF
+#CFLAGS_NO_EXCEPTIONS=
 
-STATIC=			-B static
-DYNAMIC=		-B dynamic
+STATIC=                 -Wl,-Bstatic
+DYNAMIC=                -Wl,-Bdynamic
 
 #
-# Link flags:
+# To use the map files, you need to have a gcc_specs file which contains:
+# *linker:
+# /path/to/bin/ld.sh
+# where ld.sh is a wrapper script that does some conversion of the
+# map files on the fly.
 #
-# -update_registry <file> :	Is needed to link several shared libraries
-#				**VALID MECHANISM SOMETIMES MISSING FOR LOCAL STANDS**
-#
-LINK=			CC
-LINKFLAGS=		
-LINKFLAGSAPPGUI=-n32 -multigot -L/usr/lib32
-LINKFLAGSSHLGUI=-B symbolic -soname $(DLLPRE)$(SHL$(TNR)TARGET)$(DLLPOSTFIX)$(DLLPOST) $(DYNAMIC) -shared -n32 -multigot -update_registry $(SOLARLIBDIR)/so_locations -L/usr/lib32
-LINKFLAGSAPPCUI=-n32 -multigot -L/usr/lib32
-LINKFLAGSSHLCUI=-B symbolic -soname $(DLLPRE)$(SHL$(TNR)TARGET)$(DLLPOSTFIX)$(DLLPOST) $(DYNAMIC) -shared -n32 -multigot -update_registry $(SOLARLIBDIR)/so_locations -L/usr/lib32
+LINK= CC
+LINKFLAGS=      -L/usr/lib32 -Wl,-no_unresolved
+LINKVERSIONMAPFLAG= -Wl,-exports_file
+
+.IF "$(TARGETTHREAD)"=="MT"
+LINKFLAGSAPPGUI= $(THREADLIB)
+LINKFLAGSAPPCUI= $(THREADLIB)
+LINKFLAGSSHLGUI= $(THREADLIB)
+LINKFLAGSSHLCUI= $(THREADLIB)
+.ENDIF
+LINKFLAGSAPPGUI+= -Wl,-multigot
+LINKFLAGSAPPCUI+= -Wl,-multigot
+LINKFLAGSSHLGUI+= -shared
+LINKFLAGSSHLCUI+= -shared
+
 LINKFLAGSTACK=
 LINKFLAGSPROF=
-LINKFLAGSDEBUG=
+LINKFLAGSDEBUG= -g
 LINKFLAGSOPT=
+
+LINKFLAGSSHLGUI += -Wl,-Bsymbolic
+LINKFLAGSSHLCUI += -Wl,-Bsymbolic
+
 APPLINKSTATIC=-Bstatic
 APPLINKSHARED=-Bsymbolic
+
+SONAME_SWITCH = -Wl,-soname -Wl,
 
 # Sequence of libraries DOES matter!
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
-# STDLIBGUIST=	$(DYNAMIC) -lX11 -lc -lm
-STDLIBGUIST=	$(DYNAMIC) -lX11 -lc -lm
-STDLIBCUIST=	$(DYNAMIC) -lc -lm
-# STDLIBGUIMT=	$(THREADLIB) $(DYNAMIC) -lX11 -lc -lm
-STDLIBGUIMT=	$(THREADLIB) $(DYNAMIC) -lX11 -lc -lm
-STDLIBCUIMT=	$(THREADLIB) $(DYNAMIC) -lc -lm
-# STDSHLGUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lX11 -lc -lm
-STDSHLGUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lX11 -lc -lm
-STDSHLCUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lc -lm
-THREADLIB=		-lpthread
+STDLIBGUIST=    $(DYNAMIC) -lX11 -lc -lm
+STDLIBCUIST=    $(DYNAMIC) -lc -lm
+STDLIBGUIMT=    $(THREADLIB) $(DYNAMIC) -lX11 -lm -lc
+STDLIBCUIMT=    $(THREADLIB) $(DYNAMIC) -lc -lm
+STDSHLGUIMT=    -L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lX11 -lm -lc
+STDSHLCUIMT=    -L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lm -lc
+THREADLIB=              -lpthread
 
-LIBMGR=			ar
-LIBFLAGS=		-r
-# LIBEXT=		.so
+#LIBSTLPORT=$(DYNAMIC) -lstlport_mipspro
+LIBSTLPORT=$(DYNAMIC)
+LIBSTLPORTST=
+#LIBSTLPORTST= -lstlport_mipspro
+
+LIBMGR=                 ar
+LIBFLAGS=               -r
 
 IMPLIB=
 IMPLIBFLAGS=
@@ -160,38 +180,17 @@ IMPLIBFLAGS=
 MAPSYM=
 MAPSYMFLAGS=
 
-RC=				irc
-RCFLAGS=		-fo$@ $(RCFILES)
+RC=                             irc
+RCFLAGS=                -fo$@ $(RCFILES)
 RCLINK=
 RCLINKFLAGS=
 RCSETVERSION=
 
-DLLPOSTFIX=		im
-.IF "$(WORK_STAMP)"=="MIX364"
-DLLPOSTFIX=
-.ENDIF
-DLLPRE=			lib
-DLLPOST=		.so
+DLLPOSTFIX=             im
+DLLPRE=                 lib
+DLLPOST=                .so
 
 
-LDUMP=
+LDUMP=c++filt
 
-
-# --------------------------
-# FROM THE OLE ENVIRONMENT:
-# --------------------------
-#
-# Linking of a static library:
-#	ar -r ...
-#
-# Linking of a shared library:
-#	CC -B symbolic -soname <...> -B dynamic -shared -n32 -multigot
-#		-update_registry <...> ...
-#
-# Linking of an application with static libraries:
-#	CC -B static ...
-#
-# Linking of an application with shared libraries:
-#	CC -n32 -multigot ...
-#
 
