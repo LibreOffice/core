@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:58:18 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,6 +560,27 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
         DBG_ASSERT( mpIMEInfos, "COMMAND_ENDEXTTEXTINPUT => Kein Start ?" );
         if( mpIMEInfos )
         {
+            // #102812# convert quotes in IME text
+            // works on the last input character, this is escpecially in Korean text often done
+            // quotes that are inside of the string are not replaced!
+            // Borrowed from sw: edtwin.cxx
+            if ( mpIMEInfos->nLen )
+            {
+                EditSelection aSel( mpIMEInfos->aPos );
+                aSel.Min().GetIndex() += mpIMEInfos->nLen-1;
+                aSel.Max().GetIndex() += mpIMEInfos->nLen;
+                // #102812# convert quotes in IME text
+                // works on the last input character, this is escpecially in Korean text often done
+                // quotes that are inside of the string are not replaced!
+                const sal_Unicode nCharCode = aSel.Min().GetNode()->GetChar( aSel.Min().GetIndex() );
+                if ( ( GetStatus().DoAutoCorrect() ) && ( ( nCharCode == '\"' ) || ( nCharCode == '\'' ) ) )
+                {
+                    aSel = DeleteSelected( aSel );
+                    aSel = AutoCorrect( aSel, nCharCode, mpIMEInfos->bWasCursorOverwrite );
+                    pView->pImpEditView->SetEditSelection( aSel );
+                }
+            }
+
             ParaPortion* pPortion = FindParaPortion( mpIMEInfos->aPos.GetNode() );
             pPortion->MarkSelectionInvalid( mpIMEInfos->aPos.GetIndex(), 0 );
 
@@ -625,6 +646,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 else
                 {
                     mpIMEInfos->DestroyAttribs();
+                    mpIMEInfos->nLen = pData->GetText().Len();
                 }
 
                 ParaPortion* pPortion = FindParaPortion( mpIMEInfos->aPos.GetNode() );
@@ -3736,8 +3758,12 @@ long ImpEditEngine::GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT 
                     TextPortion* pNextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion+1 );
                     if ( pNextPortion->GetKind() != PORTIONKIND_TAB )
                     {
-                        DBG_ASSERT( !bPreferPortionStart, "GetXPos - How can we this tab portion here???" );
-                        nX = GetXPos( pParaPortion, pLine, nIndex, TRUE );
+                        // DBG_ASSERT( !bPreferPortionStart, "GetXPos - How can we this tab portion here???" );
+                        // #109879# We loop if nIndex == pLine->GetEnd, because bPreferPortionStart will be reset
+                        if ( !bPreferPortionStart )
+                            nX = GetXPos( pParaPortion, pLine, nIndex, TRUE );
+                        else if ( !IsRightToLeft( GetEditDoc().GetPos( pParaPortion->GetNode() ) ) )
+                            nX += nPortionTextWidth;
                     }
                 }
                 else if ( !IsRightToLeft( GetEditDoc().GetPos( pParaPortion->GetNode() ) ) )
