@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-30 07:54:09 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1152,7 +1152,7 @@ void DbFormattedField::Init(Window* pParent, const Reference< XRowSet >& xCursor
         Reference< XRowSet >  xCursorForm(xCursor, UNO_QUERY);
         if (xCursorForm.is())
         {   // wenn wir vom Cursor den Formatter nehmen, dann auch den Key vom Feld, an das wir gebunden sind
-            m_xSupplier = getNumberFormats(getRowsetConnection(xCursorForm), sal_False);
+            m_xSupplier = getNumberFormats(getRowSetConnection(xCursorForm), sal_False);
 
             if (m_rColumn.GetField().is())
                 nFormatKey = ::comphelper::getINT32(m_rColumn.GetField()->getPropertyValue(FM_PROP_FORMATKEY));
@@ -1678,7 +1678,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
         if ( m_rColumn.GetParent().getDataSource() )
             xForm = Reference< XRowSet >( ( Reference< XInterface > )*m_rColumn.GetParent().getDataSource(), UNO_QUERY );
         if ( xForm.is() )
-            xSupplier = getNumberFormats( getRowsetConnection( xForm ), sal_True );
+            xSupplier = getNumberFormats( getRowSetConnection( xForm ), sal_True );
         SvNumberFormatter* pFormatterUsed = NULL;
         if ( xSupplier.is() )
         {
@@ -2647,7 +2647,7 @@ sal_Bool DbFilterField::commitControl()
 
                 Reference< XRowSet > xDataSourceRowSet(
                     (Reference< XInterface >)*m_rColumn.GetParent().getDataSource(), UNO_QUERY);
-                Reference< XConnection >  xConnection(getRowsetConnection(xDataSourceRowSet));
+                Reference< XConnection >  xConnection(getRowSetConnection(xDataSourceRowSet));
 
                 xParseNode->parseNodeToPredicateStr(aPreparedText,
                                                     xConnection->getMetaData(),
@@ -2736,7 +2736,7 @@ void DbFilterField::Update()
         if (!xForm.is())
             return;
 
-        Reference< XConnection >  xConnection(getRowsetConnection(xForm));
+        Reference< XConnection >  xConnection(getRowSetConnection(xForm));
         if (!xConnection.is())
             return;
 

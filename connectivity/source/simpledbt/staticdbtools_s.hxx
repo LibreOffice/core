@@ -2,9 +2,9 @@
  *
  *  $RCSfile: staticdbtools_s.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 14:50:00 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,11 @@ namespace connectivity
         ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) );
 
         // ------------------------------------------------
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getRowSetConnection(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet)
+                const SAL_THROW ( (::com::sun::star::uno::RuntimeException) );
+
+        // ------------------------------------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
             sal_Bool _bAllowDefault
@@ -179,6 +184,24 @@ namespace connectivity
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
         ) const;
 
+        // ------------------------------------------------
+        /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
+            @param      _rxCursorSet    the property set
+        */
+        virtual sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
+
+        // ------------------------------------------------
+        /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::UPDATE
+            @param      _rxCursorSet    the property set
+        */
+        virtual sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
+
+        // ------------------------------------------------
+        /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::DELETE
+            @param      _rxCursorSet    the property set
+        */
+        virtual sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
+
         // disambiguate IReference
         // ------------------------------------------------
         virtual oslInterlockedCount SAL_CALL acquire();
@@ -194,6 +217,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/08/06 14:50:00  fs
+ *  #87690# +connectRowset / some other methods needed later on (to make writer link-time independent og dbtools)
+ *
  *  Revision 1.1  2001/07/25 13:30:17  fs
  *  initial checkin - class for load-on-demand usage of the statis DBTOOLS helper functions
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUser.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ void OAdabasUser::findPrivilegesAndGrantPrivileges(const ::rtl::OUString& objNam
     // first we need to create the sql stmt to select the privs
     Reference<XDatabaseMetaData> xMeta = m_pConnection->getMetaData();
     ::rtl::OUString sCatalog,sSchema,sTable;
-    ::dbtools::qualifiedNameComponents(xMeta,objName,sCatalog,sSchema,sTable);
+    ::dbtools::qualifiedNameComponents(xMeta,objName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
     Reference<XStatement> xStmt = m_pConnection->createStatement();
     ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("SELECT REFTABLENAME,PRIVILEGES FROM DOMAIN.USR_USES_TAB WHERE REFOBJTYPE <> 'SYSTEM' AND DEFUSERNAME = '");
     sSql += m_Name;
@@ -273,7 +273,7 @@ void SAL_CALL OAdabasUser::grantPrivileges( const ::rtl::OUString& objName, sal_
         sGrant += sPrivs;
         sGrant += ::rtl::OUString::createFromAscii(" ON ");
         Reference<XDatabaseMetaData> xMeta = m_pConnection->getMetaData();
-        sGrant += ::dbtools::quoteTableName(xMeta,objName);
+        sGrant += ::dbtools::quoteTableName(xMeta,objName,::dbtools::eInDataManipulation);
         sGrant += ::rtl::OUString::createFromAscii(" TO ");
         sGrant += m_Name;
 
@@ -296,7 +296,7 @@ void SAL_CALL OAdabasUser::revokePrivileges( const ::rtl::OUString& objName, sal
         sGrant += sPrivs;
         sGrant += ::rtl::OUString::createFromAscii(" ON ");
         Reference<XDatabaseMetaData> xMeta = m_pConnection->getMetaData();
-        sGrant += ::dbtools::quoteTableName(xMeta,objName);
+        sGrant += ::dbtools::quoteTableName(xMeta,objName,::dbtools::eInDataManipulation);
         sGrant += ::rtl::OUString::createFromAscii(" FROM ");
         sGrant += m_Name;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-09 14:26:59 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,7 +724,7 @@ IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
                 {
                     // Nur bei Datenbankformularen erfolgt eine aktivierung
                     Reference< XRowSet >  xForm(xController->getModel(), UNO_QUERY);
-                    if (xForm.is() && getRowsetConnection(xForm).is())
+                    if (xForm.is() && OStaticDataAccessTools().getRowSetConnection(xForm).is())
                     {
                         Reference< XPropertySet >  xFormSet(xForm, UNO_QUERY);
                         if (xFormSet.is())
@@ -938,10 +938,10 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     SQLErrorEvent aError;
     try
     {
-        xDataSource = getDatasourceObject(sDataSource, getORB());
+        xDataSource = OStaticDataAccessTools().getDataSource(sDataSource, getORB());
         // and the connection, if necessary
         if ( !bForeignConnection )
-            xConnection = getDatasourceConnection(sDataSource, getORB());
+            xConnection = OStaticDataAccessTools().getConnection_withFeedback(sDataSource,::rtl::OUString(),::rtl::OUString(), getORB());
     }
     catch(const SQLContext& e) { aError.Reason <<= e; }
     catch(const SQLWarning& e) { aError.Reason <<= e; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-26 10:00:49 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,26 +281,6 @@ namespace svxform
     // modes for the XModeSelector
     DECLARE_CONSTASCII_USTRING(DATA_MODE);
     DECLARE_CONSTASCII_USTRING(FILTER_MODE);
-
-    //------------------------------------------------------------------------------
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getRowsetConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxRowSet) throw (::com::sun::star::uno::RuntimeException);
-
-    //------------------------------------------------------------------------------
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getDatasourceConnection(
-        const ::rtl::OUString& _rDatasourceName, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
-
-    //------------------------------------------------------------------------------
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > getDatasourceObject(
-        const ::rtl::OUString& _rDatasourceName, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
-
-    //------------------------------------------------------------------------------
-    sal_Bool canInsertRecords(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
-
-    //------------------------------------------------------------------------------
-    sal_Bool canUpdateRecords(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
-
-    //------------------------------------------------------------------------------
-    sal_Bool canDeleteRecords(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
 
 }   // namespace svxform
 
@@ -695,11 +675,6 @@ sal_Int16   GridView2ModelPos(const ::com::sun::star::uno::Reference< ::com::sun
 sal_Int16   GridViewColumnCount(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& rColumns);
 
 //==================================================================
-UniString quoteName(const UniString& rQuote, const UniString& rName);
-UniString quoteTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& xMeta, const UniString& rName);
-
-//==================================================================
-//::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getTableFields(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn, const ::rtl::OUString& _rsName);
 sal_Bool isLoadable(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xLoad);
 sal_Bool isRowSetAlive(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxRowSet);
     // checks if the ::com::sun::star::sdbcx::XColumnsSupplier provided by _rxRowSet supllies any columns

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-26 07:42:32 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1631,7 +1631,7 @@ sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
     Reference< XRowSet> xDB(xForm, UNO_QUERY);
     DBG_ASSERT(xDB.is(), "FmXFormShell::GetY2KState : current form has no dbform-interface !");
 
-    Reference< XNumberFormatsSupplier> xSupplier( getNumberFormats(getRowsetConnection(xDB), sal_False));
+    Reference< XNumberFormatsSupplier> xSupplier( getNumberFormats(OStaticDataAccessTools().getRowSetConnection(xDB), sal_False));
     if (xSupplier.is())
     {
         Reference< XPropertySet> xSet(xSupplier->getNumberFormatSettings());
@@ -1660,7 +1660,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
     Reference< XRowSet> xDB(xActiveForm, UNO_QUERY);
     if (xDB.is())
     {
-        Reference< XNumberFormatsSupplier> xSupplier( getNumberFormats(getRowsetConnection(xDB), sal_False));
+        Reference< XNumberFormatsSupplier> xSupplier( getNumberFormats(getRowSetConnection(xDB), sal_False));
         if (xSupplier.is())
         {
             Reference< XPropertySet> xSet(xSupplier->getNumberFormatSettings());
@@ -1700,7 +1700,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
         Reference< XRowSet> xDB(xCurrentElement, UNO_QUERY);
         if (xDB.is())
         {
-            Reference< XNumberFormatsSupplier> xSupplier( getNumberFormats(getRowsetConnection(xDB), sal_False));
+            Reference< XNumberFormatsSupplier> xSupplier( getNumberFormats(getRowSetConnection(xDB), sal_False));
             if (!xSupplier.is())
                 continue;
 
@@ -1766,7 +1766,7 @@ sal_Bool FmXFormShell::CanMoveRight(const Reference< XPropertySet>& _xController
     sal_Int32 nCount        = ::comphelper::getINT32(_xControllerModel->getPropertyValue(FM_PROP_ROWCOUNT));
     sal_Bool  bIsModified   = ::comphelper::getBOOL(_xControllerModel->getPropertyValue(FM_PROP_ISMODIFIED));
     sal_Bool  bIsNew        = ::comphelper::getBOOL(_xControllerModel->getPropertyValue(FM_PROP_ISNEW));
-    sal_Bool  bCanInsert    = canInsertRecords(_xControllerModel);
+    sal_Bool  bCanInsert    = OStaticDataAccessTools().canInsert(_xControllerModel);
 
     return  (
                 (   nCount
@@ -2268,7 +2268,7 @@ void FmXFormShell::UpdateFormDispatcher(FmFormNavigationDispatcher* _pDisp)
                 if (::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW)))
                     bEnable = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISMODIFIED));
                 else
-                    bEnable = canInsertRecords(xSet);
+                    bEnable = canInsert(xSet);
             }
             break;
         }
@@ -2603,7 +2603,7 @@ void FmXFormShell::startListening()
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     Reference< XRowSet> xDatabaseForm(m_xActiveForm, UNO_QUERY);
-    if (xDatabaseForm.is() && getRowsetConnection(xDatabaseForm).is())
+    if (xDatabaseForm.is() && getRowSetConnection(xDatabaseForm).is())
     {
         Reference< XPropertySet> xActiveFormSet(m_xActiveForm, UNO_QUERY);
         if (xActiveFormSet.is())
@@ -2623,7 +2623,7 @@ void FmXFormShell::startListening()
                 sal_Bool bUseEscapeProcessing = ::comphelper::getBOOL(xActiveFormSet->getPropertyValue(FM_PROP_ESCAPE_PROCESSING));
                 if (bUseEscapeProcessing)
                 {
-                    Reference< XSQLQueryComposerFactory> xFactory(getRowsetConnection(xDatabaseForm), UNO_QUERY);
+                    Reference< XSQLQueryComposerFactory> xFactory(getRowSetConnection(xDatabaseForm), UNO_QUERY);
                     if (xFactory.is())
                         m_xParser = xFactory->createQueryComposer();
                 }

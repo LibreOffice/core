@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-23 09:49:36 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
+#include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -202,13 +205,18 @@ namespace svxform
         if (getFactory().is())
              m_xDataAccessTools = getFactory()->getDataAccessTools();
     }
+    //--------------------------------------------------------------------
+    void OStaticDataAccessTools::checkIfLoaded() const
+    {
+        if (!m_xDataAccessTools.is())
+            create();
+    }
 
     //--------------------------------------------------------------------
     Reference< XNumberFormatsSupplier > OStaticDataAccessTools::getNumberFormats(const Reference< XConnection>& _rxConn, sal_Bool _bAllowDefault) const
     {
         Reference< XNumberFormatsSupplier > xReturn;
-        if (!m_xDataAccessTools.is())
-            create();
+        checkIfLoaded();
         if (m_xDataAccessTools.is())
             xReturn = m_xDataAccessTools->getNumberFormats(_rxConn, _bAllowDefault);
         return xReturn;
@@ -220,8 +228,7 @@ namespace svxform
             SAL_THROW ( (SQLException) )
     {
         Reference< XConnection > xReturn;
-        if (!m_xDataAccessTools.is())
-            create();
+        checkIfLoaded();
         if (m_xDataAccessTools.is())
             xReturn = m_xDataAccessTools->getConnection_withFeedback(_rDataSourceName, _rUser, _rPwd, _rxFactory);
         return xReturn;
@@ -231,10 +238,19 @@ namespace svxform
     Reference< XConnection > OStaticDataAccessTools::calcConnection(const Reference< XRowSet >& _rxRowSet, const Reference< XMultiServiceFactory >& _rxFactory) const SAL_THROW ( (SQLException, RuntimeException) )
     {
         Reference< XConnection > xReturn;
-        if (!m_xDataAccessTools.is())
-            create();
+        checkIfLoaded();
         if (m_xDataAccessTools.is())
             xReturn = m_xDataAccessTools->calcConnection(_rxRowSet, _rxFactory);
+        return xReturn;
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XConnection > OStaticDataAccessTools::getRowSetConnection(const Reference< XRowSet >& _rxRowSet) const SAL_THROW ( (RuntimeException) )
+    {
+        Reference< XConnection > xReturn;
+        checkIfLoaded();
+        if (m_xDataAccessTools.is())
+            xReturn = m_xDataAccessTools->getRowSetConnection(_rxRowSet);
         return xReturn;
     }
 
@@ -242,8 +258,7 @@ namespace svxform
     void OStaticDataAccessTools::TransferFormComponentProperties(const Reference< XPropertySet>& _rxOld,
         const Reference< XPropertySet>& _rxNew, const Locale& _rLocale) const
     {
-        if (!m_xDataAccessTools.is())
-            create();
+        checkIfLoaded();
         if (m_xDataAccessTools.is())
             m_xDataAccessTools->TransferFormComponentProperties(_rxOld, _rxNew, _rLocale);
     }
@@ -252,8 +267,7 @@ namespace svxform
     ::rtl::OUString OStaticDataAccessTools::quoteName(const ::rtl::OUString& _rQuote, const ::rtl::OUString& _rName) const
     {
         ::rtl::OUString sReturn;
-        if (!m_xDataAccessTools.is())
-            create();
+        checkIfLoaded();
         if (m_xDataAccessTools.is())
             sReturn = m_xDataAccessTools->quoteName(_rQuote, _rName);
         return sReturn;
@@ -263,8 +277,7 @@ namespace svxform
     ::rtl::OUString OStaticDataAccessTools::quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName) const
     {
         ::rtl::OUString sReturn;
-        if (!m_xDataAccessTools.is())
-            create();
+        checkIfLoaded();
         if (m_xDataAccessTools.is())
             sReturn = m_xDataAccessTools->quoteTableName(_rxMeta, _rName);
         return sReturn;
@@ -275,11 +288,51 @@ namespace svxform
         const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails) const
     {
         SQLContext aReturn;
-        if (!m_xDataAccessTools.is())
-            create();
+        checkIfLoaded();
         if (m_xDataAccessTools.is())
             aReturn = m_xDataAccessTools->prependContextInfo(_rException, _rxContext, _rContextDescription, _rContextDetails);
         return aReturn;
+    }
+
+    //----------------------------------------------------------------
+    Reference< XDataSource > OStaticDataAccessTools::getDataSource( const ::rtl::OUString& _rsRegisteredName, const Reference< XMultiServiceFactory>& _rxFactory ) const
+    {
+        Reference< XDataSource > xReturn;
+        checkIfLoaded();
+        if (m_xDataAccessTools.is())
+            xReturn = m_xDataAccessTools->getDataSource(_rsRegisteredName,_rxFactory);
+
+        return xReturn;
+    }
+
+    //----------------------------------------------------------------
+    sal_Bool OStaticDataAccessTools::canInsert(const Reference< XPropertySet>& _rxCursorSet) const
+    {
+        sal_Bool bRet = sal_False;
+        checkIfLoaded();
+        if (m_xDataAccessTools.is())
+            bRet = m_xDataAccessTools->canInsert( _rxCursorSet );
+        return bRet;
+    }
+
+    //----------------------------------------------------------------
+    sal_Bool OStaticDataAccessTools::canUpdate(const Reference< XPropertySet>& _rxCursorSet) const
+    {
+        sal_Bool bRet = sal_False;
+        checkIfLoaded();
+        if (m_xDataAccessTools.is())
+            bRet = m_xDataAccessTools->canUpdate( _rxCursorSet );
+        return bRet;
+    }
+
+    //----------------------------------------------------------------
+    sal_Bool OStaticDataAccessTools::canDelete(const Reference< XPropertySet>& _rxCursorSet) const
+    {
+        sal_Bool bRet = sal_False;
+        checkIfLoaded();
+        if (m_xDataAccessTools.is())
+            bRet = m_xDataAccessTools->canDelete( _rxCursorSet );
+        return bRet;
     }
 
 //........................................................................
@@ -289,6 +342,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2002/09/23 09:49:36  oj
+ *  #103585# only revoke client when already loaded
+ *
  *  Revision 1.4  2002/09/12 14:15:51  fs
  *  #97420# (on behalf of BerryJia@openoffice.org) lazy construction, to load the dbtools lib only if needed
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-01 14:04:27 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,11 +594,12 @@ void FmXFormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) c
         case FM_ATTR_FILTER_CRITERIA:
         {
             ::rtl::OUString aFilter;
-            Reference<XConnection> xConnection(getRowsetConnection(Reference< XRowSet>(m_xModelAsIndex, UNO_QUERY)));
+            OStaticDataAccessTools aStaticTools;
+            Reference<XConnection> xConnection(aStaticTools.getRowSetConnection(Reference< XRowSet>(m_xModelAsIndex, UNO_QUERY)));
             if (xConnection.is())
             {
                 Reference< ::com::sun::star::sdbc::XDatabaseMetaData> xMetaData(xConnection->getMetaData());
-                Reference< ::com::sun::star::util::XNumberFormatsSupplier> xFormatSupplier( OStaticDataAccessTools().getNumberFormats(xConnection, sal_True));
+                Reference< ::com::sun::star::util::XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats(xConnection, sal_True));
                 Reference< ::com::sun::star::util::XNumberFormatter> xFormatter(m_xORB
                                 ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
                 xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
@@ -1954,7 +1955,8 @@ void FmXFormController::loaded(const ::com::sun::star::lang::EventObject& rEvent
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< ::com::sun::star::sdbc::XRowSet >  xForm(rEvent.Source, UNO_QUERY);
     // do we have a connected data source
-    if (xForm.is() && getRowsetConnection(xForm).is())
+    OStaticDataAccessTools aStaticTools;
+    if (xForm.is() && aStaticTools.getRowSetConnection(xForm).is())
     {
         Reference< XPropertySet >  xSet(xForm, UNO_QUERY);
         if (xSet.is())
@@ -1963,8 +1965,8 @@ void FmXFormController::loaded(const ::com::sun::star::lang::EventObject& rEvent
             sal_Int32 aVal2;
             ::cppu::enum2int(aVal2,aVal);
             m_bCycle        = !aVal.hasValue() || aVal2 == ::com::sun::star::form::TabulatorCycle_RECORDS;
-            m_bCanUpdate    = canUpdateRecords(xSet);
-            m_bCanInsert    = canInsertRecords(xSet);
+            m_bCanUpdate    = aStaticTools.canUpdate(xSet);
+            m_bCanInsert    = aStaticTools.canInsert(xSet);
             m_bCurrentRecordModified = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISMODIFIED));
             m_bCurrentRecordNew      = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
             if (m_bCanInsert || m_bCanUpdate)   // modificationen sind moeglich
@@ -2289,7 +2291,7 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     // create the composer
     Reference< XRowSet > xForm(m_xModelAsIndex, UNO_QUERY);
-    Reference< XConnection > xConnection(getRowsetConnection(xForm));
+    Reference< XConnection > xConnection(OStaticDataAccessTools().getRowSetConnection(xForm));
     if (xForm.is())
     {
         Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory >  xFactory(xConnection, UNO_QUERY);
@@ -2304,7 +2306,7 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
                 m_xComposer->setQuery(aStatement);
                 m_xComposer->setFilter(aFilter);
             }
-            catch(...)
+            catch(const Exception&)
             {
                 DBG_ERROR("Exception occured!");
             }
@@ -2446,7 +2448,8 @@ void FmXFormController::startFiltering()
         return;
     }
 
-    Reference< XConnection >  xConnection( getRowsetConnection( Reference< XRowSet >( m_xModelAsIndex, UNO_QUERY ) ) );
+    OStaticDataAccessTools aStaticTools;
+    Reference< XConnection >  xConnection( aStaticTools.getRowSetConnection( Reference< XRowSet >( m_xModelAsIndex, UNO_QUERY ) ) );
     if ( !xConnection.is() )
         // nothing to do - can't filter a form which is not connected
         // 98023 - 19.03.2002 - fs@openoffice.org
@@ -2470,7 +2473,7 @@ void FmXFormController::startFiltering()
     // the control we have to activate after replacement
     Reference< ::com::sun::star::awt::XControl >  xNewActiveControl;
     Reference< ::com::sun::star::sdbc::XDatabaseMetaData >  xMetaData(xConnection->getMetaData());
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSupplier = OStaticDataAccessTools().getNumberFormats(xConnection, sal_True);
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSupplier = aStaticTools.getNumberFormats(xConnection, sal_True);
     Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(m_xORB
                         ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
     xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
@@ -3052,7 +3055,7 @@ sal_Bool SAL_CALL FmXFormController::approveParameter(const ::com::sun::star::fo
             // the request
             ParametersRequest aRequest;
             aRequest.Parameters = aEvent.Parameters;
-            aRequest.Connection = getRowsetConnection(Reference< XRowSet >(aEvent.Source, UNO_QUERY));
+            aRequest.Connection = OStaticDataAccessTools().getRowSetConnection(Reference< XRowSet >(aEvent.Source, UNO_QUERY));
             OInteractionRequest* pParamRequest = new OInteractionRequest(makeAny(aRequest));
             Reference< XInteractionRequest > xParamRequest(pParamRequest);
             // some knittings

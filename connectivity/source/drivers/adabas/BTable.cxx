@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-02 07:07:28 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,7 @@ void SAL_CALL OAdabasTable::rename( const ::rtl::OUString& newName ) throw(SQLEx
         OTable_TYPEDEF::rename(newName);
     }
     else
-        ::dbtools::qualifiedNameComponents(xMeta,newName,m_CatalogName,m_SchemaName,m_Name);
+        ::dbtools::qualifiedNameComponents(xMeta,newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::eInTableDefinitions);
 }
 // -------------------------------------------------------------------------
 // XAlterTable

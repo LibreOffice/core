@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-09 14:27:00 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1149,7 +1149,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                     xCursor->relative(bRight ? 1 : -1);
                 else
                 {
-                    sal_Bool bCanInsert = canInsertRecords(xSet);
+                    sal_Bool bCanInsert = GetImpl()->canInsert(xSet);
                     // kann noch ein Datensatz eingefuegt weden
                     try
                     {
@@ -1818,11 +1818,11 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             case SID_FM_RECORD_NEW:
             {
                 Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), UNO_QUERY);
-                bEnable = canInsertRecords(xActiveSet);
+                bEnable = GetImpl()->canInsert(xActiveSet);
                 // if we are inserting we can move to the next row if the current record is modified
                 bEnable  = ::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_ISNEW))
                     ? GetImpl()->isActiveModified() || ::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_ISMODIFIED))
-                    : canInsertRecords(xActiveSet);
+                    : GetImpl()->canInsert(xActiveSet);
             }   break;
             case SID_FM_RECORD_DELETE:
             {
@@ -1833,7 +1833,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
                 {
                     Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(xCursor, UNO_QUERY);
                     // allowed to delete the row ?
-                    bEnable = !::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_ISNEW)) && canDeleteRecords(xActiveSet);
+                    bEnable = !::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_ISNEW)) && GetImpl()->canDelete(xActiveSet);
                 }
                 else
                     bEnable = sal_False;
@@ -1855,7 +1855,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
                         {
                             // Sonderfall, es koennen keine Datensaetze eingefuegt werden
                             // und es gibt keinen Datensatz -> dann
-                            if (nCount == 0 && !canInsertRecords(xNavSet))
+                            if (nCount == 0 && !GetImpl()->canInsert(xNavSet))
                             {
                                 bEnable = sal_False;
                             }
@@ -1943,7 +1943,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             {
                 Reference< ::com::sun::star::sdbc::XRowSet >            xRowSet(GetImpl()->getActiveForm(), UNO_QUERY);
                 Reference< ::com::sun::star::beans::XPropertySet >      xSet(GetImpl()->getActiveForm(), UNO_QUERY);
-                bEnable = getRowsetConnection(xRowSet).is() && ::comphelper::getString(xSet->getPropertyValue(FM_PROP_ACTIVECOMMAND)).getLength();
+                bEnable = GetImpl()->getRowSetConnection(xRowSet).is() && ::comphelper::getString(xSet->getPropertyValue(FM_PROP_ACTIVECOMMAND)).getLength();
             }   break;
             case SID_FM_FORM_FILTERED:
             {

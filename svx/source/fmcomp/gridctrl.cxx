@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-24 11:08:56 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1499,7 +1499,8 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
 
     // get a new formatter and data cursor
     m_xFormatter = NULL;
-    Reference< XNumberFormatsSupplier >  xSupplier = OStaticDataAccessTools().getNumberFormats(getRowsetConnection(_xCursor), sal_True);
+    OStaticDataAccessTools aStaticTools;
+    Reference< XNumberFormatsSupplier >  xSupplier = aStaticTools.getNumberFormats(aStaticTools.getRowSetConnection(_xCursor), sal_True);
     if (xSupplier.is() && m_xServiceFactory.is())
     {
         m_xFormatter =  Reference< XNumberFormatter >(

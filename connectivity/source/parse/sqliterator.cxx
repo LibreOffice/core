@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 11:01:52 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,8 @@ void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableNam
                                 aSchema,
                                 aTableName,
                                 aComposedName,
-                                sal_False);
+                                sal_False,
+                                ::dbtools::eInDataManipulation);
     // if there is no alias for the table name assign the orignal name to it
     if (!aTableRange.getLength())
         aTableRange = aComposedName;
@@ -278,7 +279,8 @@ void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableNam
                                                                      sSchema,
                                                                      sName,
                                                                      aComposedName,
-                                                                     sal_False);
+                                                                     sal_False,
+                                                                     ::dbtools::eInDataManipulation);
                 }
             }
             if(m_xTables->hasByName(aComposedName)) // the name can be changed before

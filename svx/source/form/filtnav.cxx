@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-01 13:44:29 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1027,8 +1027,9 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniS
     // check the input
     Reference< XPropertySet >   xField(m_pAdapter->getField(pItem->GetTextComponent()));
 
-    Reference< XConnection > xConnection(getRowsetConnection(Reference< XRowSet > (m_xController->getModel(), UNO_QUERY)));
-    Reference< XNumberFormatsSupplier >  xFormatSupplier = OStaticDataAccessTools().getNumberFormats(xConnection, sal_True);
+    OStaticDataAccessTools aStaticTools;
+    Reference< XConnection > xConnection(aStaticTools.getRowSetConnection(Reference< XRowSet > (m_xController->getModel(), UNO_QUERY)));
+    Reference< XNumberFormatsSupplier >  xFormatSupplier = aStaticTools.getNumberFormats(xConnection, sal_True);
 
     Reference< XNumberFormatter >  xFormatter(m_xORB->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
     xFormatter->attachNumberFormatsSupplier(xFormatSupplier);

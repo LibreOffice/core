@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-26 10:01:44 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         {   // the transferable did not contain the connection -> build an own one
             try
             {
-                xConnection = getDatasourceConnection(sDatasouce, static_cast<FmGridControl*>(GetParent())->getServiceManager());
+                xConnection = OStaticDataAccessTools().getConnection_withFeedback(sDatasouce, ::rtl::OUString(),::rtl::OUString(),static_cast<FmGridControl*>(GetParent())->getServiceManager());
             }
             catch(NoSuchElementException&)
             {   // allowed, means sDatasouce isn't a valid data source name ....

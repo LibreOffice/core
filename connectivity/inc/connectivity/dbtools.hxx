@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 14:07:17 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,14 @@ namespace task {
 //.........................................................................
 namespace dbtools
 {
+    enum EComposeRule
+    {
+        eInTableDefinitions,
+        eInIndexDefinitions,
+        eInDataManipulation,
+        eInProcedureCalls,
+        eInPrivilegeDefinitions
+    };
 //=========================================================================
     // date conversion
 
@@ -211,7 +219,7 @@ namespace dbtools
 
     /** quote the given table name (which may contain a catalog and a schema) according to the rules provided by the meta data
     */
-    ::rtl::OUString quoteTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName);
+    ::rtl::OUString quoteTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName,EComposeRule _eComposeRule);
 
     /** split a fully qualified table name (including catalog and schema, if appliable) into it's component parts.
         @param  _rxConnMetaData     meta data describing the connection where you got the table name from
@@ -219,9 +227,10 @@ namespace dbtools
         @param  _rCatalog           (out parameter) upon return, contains the catalog name
         @param  _rSchema            (out parameter) upon return, contains the schema name
         @param  _rName              (out parameter) upon return, contains the table name
+        @param  _eComposeRule       where do you need the name for
     */
     void qualifiedNameComponents(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
-        const ::rtl::OUString& _rQualifiedName, ::rtl::OUString& _rCatalog, ::rtl::OUString& _rSchema, ::rtl::OUString& _rName);
+        const ::rtl::OUString& _rQualifiedName, ::rtl::OUString& _rCatalog, ::rtl::OUString& _rSchema, ::rtl::OUString& _rName,EComposeRule _eComposeRule);
 
     /** calculate a NumberFormatsSupplier for use with an given connection
         @param      _rxConn         the connection for which the formatter is requested
@@ -278,7 +287,8 @@ namespace dbtools
                             const ::rtl::OUString& _rSchema,
                             const ::rtl::OUString& _rName,
                             ::rtl::OUString& _rComposedName,
-                            sal_Bool _bQuote);
+                            sal_Bool _bQuote,
+                            EComposeRule _eComposeRule);
 
     sal_Int32 getSearchColumnFlag( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
                                     sal_Int32 _nDataType);

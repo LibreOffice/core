@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-12 14:15:27 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,8 @@ namespace svxform
         //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
         void create() const;
 
+        void checkIfLoaded() const;
+
     public:
         OStaticDataAccessTools();
 
@@ -148,6 +150,11 @@ namespace svxform
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
         ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) );
+
+        // ------------------------------------------------
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getRowSetConnection(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet)
+                const SAL_THROW ( (::com::sun::star::uno::RuntimeException) );
 
         // ------------------------------------------------
         void TransferFormComponentProperties(
@@ -175,6 +182,30 @@ namespace svxform
             const ::rtl::OUString& _rContextDescription,
             const ::rtl::OUString& _rContextDetails
         ) const;
+
+        // ------------------------------------------------
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > getDataSource(
+                const ::rtl::OUString& _rsRegisteredName,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
+            ) const;
+
+        // ------------------------------------------------
+        /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
+            @param      _rxCursorSet    the property set
+        */
+        sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
+
+        // ------------------------------------------------
+        /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::UPDATE
+            @param      _rxCursorSet    the property set
+        */
+        sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
+
+        // ------------------------------------------------
+        /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::DELETE
+            @param      _rxCursorSet    the property set
+        */
+        sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
     };
 //........................................................................
 }   // namespace svxform
@@ -185,6 +216,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/09/12 14:15:27  fs
+ *  #97420# (on behalf of BerryJia@openoffice.org) lazy construction, to load the dbtools lib only if needed
+ *
  *  Revision 1.1  2001/07/25 13:34:28  fs
  *  initial checkin - base class for accessing DBTOOLS with load-on-demand
  *

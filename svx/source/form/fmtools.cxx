@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-25 12:43:34 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,81 +354,6 @@ _Optlink
 {
     return ((::com::sun::star::beans::Property*)pFirst)->Name.compareTo(((::com::sun::star::beans::Property*)pSecond)->Name);
 }
-
-
-namespace svxform
-{
-
-    //------------------------------------------------------------------------------
-    Reference< XConnection > getRowsetConnection(const Reference< XInterface >& _rxRowSet) throw (RuntimeException)
-    {
-        Reference< XConnection> xReturn;
-        Reference< XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
-        if (xRowSetProps.is())
-            xRowSetProps->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) >>= xReturn;
-        return xReturn;
-    }
-
-    //------------------------------------------------------------------------------
-    Reference< XDataSource > getDatasourceObject(const ::rtl::OUString& _rDatasourceName, const Reference< XMultiServiceFactory >& _rxORB)
-    {
-        Reference< XDataSource > xDatasource;
-        try
-        {
-            Reference< XNameAccess > xDatabaseContext(_rxORB->createInstance(SRV_SDB_DATABASE_CONTEXT), UNO_QUERY);
-            if (xDatabaseContext.is() && xDatabaseContext->hasByName(_rDatasourceName))
-                xDatabaseContext->getByName(_rDatasourceName) >>= xDatasource;
-        }
-        catch(Exception&)
-        {
-            OSL_ENSURE(sal_False, "getDatasourceConnection: caught an exception!");
-        }
-        return xDatasource;
-    }
-
-    //------------------------------------------------------------------------------
-    Reference< XConnection > getDatasourceConnection(const ::rtl::OUString& _rDatasourceName, const Reference< XMultiServiceFactory >& _rxORB)
-    {
-        Reference< XConnection > xReturn;
-        try
-        {
-            Reference< XCompletedConnection > xDataSource(getDatasourceObject(_rDatasourceName, _rxORB), UNO_QUERY);
-            if (xDataSource.is())
-            {
-                Reference< XInteractionHandler > xHandler(_rxORB->createInstance(SRV_SDB_INTERACTION_HANDLER), UNO_QUERY);
-                xReturn = xDataSource->connectWithCompletion(xHandler);
-            }
-        }
-        catch(SQLException&)
-        {
-            // allowed to pass
-            throw;
-        }
-        catch(Exception&)
-        {
-            OSL_ENSURE(sal_False, "getDatasourceConnection: caught an exception!");
-        }
-        return xReturn;
-    }
-
-    //------------------------------------------------------------------------------
-    sal_Bool canInsertRecords(const Reference< XPropertySet>& _rxCursorSet)
-    {
-        return ((_rxCursorSet.is() && (::comphelper::getINT32(_rxCursorSet->getPropertyValue(FM_PROP_PRIVILEGES)) & Privilege::INSERT) != 0));
-    }
-
-    //------------------------------------------------------------------------------
-    sal_Bool canUpdateRecords(const Reference< XPropertySet>& _rxCursorSet)
-    {
-        return ((_rxCursorSet.is() && (::comphelper::getINT32(_rxCursorSet->getPropertyValue(FM_PROP_PRIVILEGES)) & Privilege::UPDATE) != 0));
-    }
-
-    //------------------------------------------------------------------------------
-    sal_Bool canDeleteRecords(const Reference< XPropertySet>& _rxCursorSet)
-    {
-        return ((_rxCursorSet.is() && (::comphelper::getINT32(_rxCursorSet->getPropertyValue(FM_PROP_PRIVILEGES)) & Privilege::DELETE) != 0));
-    }
-}   // namespace svxform
 
 //------------------------------------------------------------------------------
 Reference< XInterface> clone(const Reference< ::com::sun::star::io::XPersistObject>& _xObj)
@@ -1717,56 +1642,7 @@ sal_Int16   GridViewColumnCount(const Reference< ::com::sun::star::container::XI
     }
     return 0;
 }
-
-// dbtools
 //------------------------------------------------------------------------------
-UniString quoteName(const UniString& rQuote, const UniString& rName)
-{
-    UniString sReturn(rQuote);
-    sReturn += rName;
-    sReturn += rQuote;
-    return sReturn;
-}
-
-//------------------------------------------------------------------------------
-UniString quoteTableName(const Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta, const UniString& rName)
-{
-    UniString sQuote = _rxMeta->getIdentifierQuoteString();
-    UniString sQuotedName;
-    UniString aTableName(rName);
-
-    if (_rxMeta->supportsCatalogsInDataManipulation())
-    {
-        sal_Unicode cSeparator = '.';
-        UniString sSeparator = _rxMeta->getCatalogSeparator();
-        if (sSeparator.Len() != 0)
-            cSeparator = sSeparator.GetChar(0);
-
-        if (aTableName.GetTokenCount(cSeparator) >= 2)
-        {
-            UniString aDatabaseName(aTableName.GetToken(0,cSeparator));
-            sQuotedName += quoteName(sQuote, aDatabaseName);
-            sQuotedName += cSeparator;
-            aTableName.Erase(0, aDatabaseName.Len() + 1);
-        }
-    }
-    if (_rxMeta->supportsSchemasInDataManipulation())
-    {
-        if (aTableName.GetTokenCount('.') == 2)
-        {
-            sQuotedName += quoteName(sQuote, aTableName.GetToken(0,'.'));
-            sQuotedName += '.';
-            sQuotedName += quoteName(sQuote, aTableName.GetToken(1,'.'));
-        }
-        else
-            sQuotedName += quoteName(sQuote, aTableName);
-    }
-    else
-        sQuotedName += quoteName(sQuote, aTableName);
-
-    return sQuotedName;
-}
-
 //==============================================================================
 // FmSlotDispatch - some kind of translator between the Sfx-Slots and the UNO-dispatchers
 //==============================================================================
@@ -2095,29 +1971,6 @@ sal_Bool isLoadable(const Reference< XInterface>& xLoad)
 }
 
 //------------------------------------------------------------------------------
-Reference< ::com::sun::star::container::XNameAccess> getTableFields(const Reference< ::com::sun::star::sdbc::XConnection>& _rxConn, const ::rtl::OUString& _rsName)
-{
-    Reference< ::com::sun::star::sdbcx::XTablesSupplier> xSupplyTables(_rxConn, UNO_QUERY);
-    DBG_ASSERT(xSupplyTables.is(), "::getTableFields : invalid connection !");
-        // the conn already said it would support the service sdb::Connection
-    Reference< ::com::sun::star::container::XNameAccess> xTables( xSupplyTables->getTables());
-    if (xTables.is() && xTables->hasByName(_rsName))
-    {
-        Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xTableCols;
-        xTables->getByName(_rsName) >>= xTableCols;
-        DBG_ASSERT(xTableCols.is(), "::getTableFields : invalid table !");
-            // the table is expected to support the service sddb::Table, which requires an ::com::sun::star::sdbcx::XColumnsSupplier interface
-
-        Reference< ::com::sun::star::container::XNameAccess> xFieldNames(xTableCols->getColumns(), UNO_QUERY);
-        DBG_ASSERT(xFieldNames.is(), "::getTableFields : TableCols->getColumns doesn't export a NameAccess !");
-        return xFieldNames;
-    }
-
-    return Reference< ::com::sun::star::container::XNameAccess>();
-}
-
-
-//------------------------------------------------------------------------------
 void setConnection(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet, const Reference< ::com::sun::star::sdbc::XConnection>& _rxConn)
 {
     Reference< ::com::sun::star::beans::XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
@@ -2135,204 +1988,6 @@ void setConnection(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
 
     }
 }
-
-// retrieve the current command of a rowset
-//------------------------------------------------------------------------------
-::rtl::OUString getCommand(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet, sal_Bool& bEscapeProcessing, Reference< ::com::sun::star::sdbc::XConnection>& xConn)
-{
-    ::rtl::OUString aReturn;
-    Reference< ::com::sun::star::beans::XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
-    if (xRowSetProps.is())
-    {
-        try
-        {
-            Any aConn( xRowSetProps->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) );
-            if (aConn.getValueTypeClass() != TypeClass_INTERFACE)
-                return ::rtl::OUString();
-
-            ::cppu::extractInterface(xConn, aConn);
-
-            // which escapeProcessing we use?
-            bEscapeProcessing = ::comphelper::getBOOL(xRowSetProps->getPropertyValue(FM_PROP_ESCAPE_PROCESSING));
-
-            // get the command
-            ::rtl::OUString aCommand(::comphelper::getString( xRowSetProps->getPropertyValue(FM_PROP_COMMAND) ));
-
-            // and the command type
-            sal_Int32 nType = ::comphelper::getINT32(xRowSetProps->getPropertyValue(FM_PROP_COMMANDTYPE));
-            switch (nType)
-            {
-                case ::com::sun::star::sdb::CommandType::TABLE:
-                {
-                    //  Reference< ::com::sun::star::sdbc::XDatabaseMetaData> xMeta( xConn->getMetaData());
-                    UniString aStmt;
-                    aStmt.AssignAscii("SELECT * FROM ");
-                    aStmt += quoteTableName(xConn->getMetaData(), aCommand);
-                    aReturn = aStmt;
-                }   break;
-                case ::com::sun::star::sdb::CommandType::QUERY:
-                {
-                    Reference< ::com::sun::star::sdb::XQueriesSupplier> xQueriesAccess(xConn, UNO_QUERY);
-                    if (xQueriesAccess.is())
-                    {
-                        Reference< ::com::sun::star::container::XNameAccess> xQueries(xQueriesAccess->getQueries());
-                        if (xQueries->hasByName(aCommand))
-                        {
-                            Reference< ::com::sun::star::beans::XPropertySet> xQuery;
-                            xQueries->getByName(aCommand) >>= xQuery;
-                            OSL_ENSURE(xQuery.is(),"xQuery is null!");
-                            aReturn= ::comphelper::getString(xQuery->getPropertyValue(FM_PROP_COMMAND));
-                            bEscapeProcessing = ::comphelper::getBOOL(xQuery->getPropertyValue(FM_PROP_ESCAPE_PROCESSING));
-                        }
-                    }
-                }   break;
-                default:
-                    aReturn = aCommand;
-            }
-
-
-        }
-        catch(Exception&)
-        {
-        }
-
-    }
-    return aReturn;
-}
-
-//------------------------------------------------------------------------------
-Reference< ::com::sun::star::sdb::XSQLQueryComposer> getCurrentSettingsComposer(const Reference< ::com::sun::star::beans::XPropertySet>& _rxRowSetProps)
-{
-    Reference< ::com::sun::star::sdb::XSQLQueryComposer> xReturn;
-    Reference< ::com::sun::star::sdbc::XRowSet> xRowSet(_rxRowSetProps, UNO_QUERY);
-    try
-    {
-        // get the connection of the rowset
-        Reference< XConnection> xConn = OStaticDataAccessTools().calcConnection(xRowSet, ::comphelper::getProcessServiceFactory());
-
-        if (xConn.is())     // implies xRowSet.is() implies _rxRowSetProps.is()
-        {
-            // build the statement the row set is based on (can't use the ActiveCommand property of the set
-            // as this reflects the status after the last execute, not the currently set properties
-
-            ::rtl::OUString sStatement;
-            // first ensure we have all properties needed
-            if (::comphelper::hasProperty(FM_PROP_COMMAND, _rxRowSetProps) && ::comphelper::hasProperty(FM_PROP_COMMANDTYPE, _rxRowSetProps)
-                && ::comphelper::hasProperty(FM_PROP_FILTER_CRITERIA, _rxRowSetProps) && ::comphelper::hasProperty(FM_PROP_SORT, _rxRowSetProps)
-                && ::comphelper::hasProperty(FM_PROP_ESCAPE_PROCESSING, _rxRowSetProps) && ::comphelper::hasProperty(FM_PROP_APPLYFILTER, _rxRowSetProps))
-            {
-                sal_Int32 nCommandType = ::comphelper::getINT32(_rxRowSetProps->getPropertyValue(FM_PROP_COMMANDTYPE));
-                ::rtl::OUString sCommand = ::comphelper::getString(_rxRowSetProps->getPropertyValue(FM_PROP_COMMAND));
-                sal_Bool bEscapeProcessing = ::comphelper::getBOOL(_rxRowSetProps->getPropertyValue(FM_PROP_ESCAPE_PROCESSING));
-                switch (nCommandType)
-                {
-                    case ::com::sun::star::sdb::CommandType::COMMAND:
-                        if (!bEscapeProcessing)
-                        {   // native sql -> no parsable statement
-                            sStatement = ::rtl::OUString::createFromAscii("");
-                        }
-                        else
-                        {
-                            sStatement = sCommand;
-                        }
-                        break;
-                    case ::com::sun::star::sdb::CommandType::TABLE:
-                    {
-                        if (!sCommand.getLength())
-                            break;
-
-                        UniString sTableName = quoteTableName(xConn->getMetaData(), sCommand);
-                        sStatement = ::rtl::OUString::createFromAscii("SELECT * FROM ");
-                        sStatement += sTableName;
-                    }
-                    break;
-                    case ::com::sun::star::sdb::CommandType::QUERY:
-                    {
-                        // ask the connection for the query
-                        Reference< ::com::sun::star::sdb::XQueriesSupplier> xSupplyQueries(xConn, UNO_QUERY);
-                        if (!xSupplyQueries.is())
-                            break;
-
-                        Reference< ::com::sun::star::container::XNameAccess> xQueries(xSupplyQueries->getQueries(), UNO_QUERY);
-                        if (!xQueries.is() || !xQueries->hasByName(sCommand))
-                            break;
-
-                        Reference< ::com::sun::star::beans::XPropertySet> xQueryProps;
-                        xQueries->getByName(sCommand) >>= xQueryProps;
-                        if (!xQueryProps.is())
-                            break;
-
-                        //  a native query ?
-                        if (!::comphelper::hasProperty(FM_PROP_ESCAPE_PROCESSING, xQueryProps))
-                            break;
-                        if (!::comphelper::getBOOL(xQueryProps->getPropertyValue(FM_PROP_ESCAPE_PROCESSING)))
-                            break;
-
-                        if (!::comphelper::hasProperty(FM_PROP_COMMAND, xQueryProps))
-                            break;
-
-                        // the command used by the query
-                        sStatement = ::comphelper::getString(xQueryProps->getPropertyValue(FM_PROP_COMMAND));
-
-                        // use an additional composer to build a statement from the query filter/order props
-                        Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory> xFactory(xConn, UNO_QUERY);
-                        Reference< ::com::sun::star::sdb::XSQLQueryComposer> xLocalComposer;
-                        if (xFactory.is())
-                            xLocalComposer = xFactory->createQueryComposer();
-                        if (!xLocalComposer.is())
-                            break;
-
-                        xLocalComposer->setQuery(sStatement);
-                        // the sort order
-                        if (::comphelper::hasProperty(FM_PROP_SORT, xQueryProps))
-                            xLocalComposer->setOrder(::comphelper::getString(xQueryProps->getPropertyValue(FM_PROP_SORT)));
-
-                        sal_Bool bApplyFilter = sal_False;
-                        if (::comphelper::hasProperty(FM_PROP_APPLYFILTER, xQueryProps))
-                            bApplyFilter = ::comphelper::getBOOL(xQueryProps->getPropertyValue(FM_PROP_APPLYFILTER));
-
-                        if (bApplyFilter)
-                        {
-                            if (::comphelper::hasProperty(FM_PROP_FILTER_CRITERIA, xQueryProps))
-                                xLocalComposer->setFilter(::comphelper::getString(xQueryProps->getPropertyValue(FM_PROP_FILTER_CRITERIA)));
-                        }
-                        sStatement = xLocalComposer->getComposedQuery();
-                    }
-                    break;
-                    default:
-                        DBG_ERROR("::getCurrentSettingsComposer : no table, no query, no statement - what else ?!");
-                        break;
-                }
-            }
-
-            if (sStatement.getLength())
-            {
-                // create an composer
-                Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory> xFactory(xConn, UNO_QUERY);
-                if (xFactory.is())
-                    xReturn = xFactory->createQueryComposer();
-                if (xReturn.is())
-                {
-                    xReturn->setQuery(sStatement);
-                    // append filter/sort
-                    xReturn->setOrder(::comphelper::getString(_rxRowSetProps->getPropertyValue(FM_PROP_SORT)));
-                    sal_Bool bApplyFilter = ::comphelper::getBOOL(_rxRowSetProps->getPropertyValue(FM_PROP_APPLYFILTER));
-                    if (bApplyFilter)
-                        xReturn->setFilter(::comphelper::getString(_rxRowSetProps->getPropertyValue(FM_PROP_FILTER_CRITERIA)));
-                }
-            }
-        }
-    }
-    catch(Exception&)
-    {
-        DBG_ERROR("::getCurrentSettingsComposer : catched an exception !");
-        xReturn = NULL;
-    }
-
-
-    return xReturn;
-}
-
 //------------------------------------------------------------------------------
 sal_Bool isRowSetAlive(const Reference< XInterface>& _rxRowSet)
 {

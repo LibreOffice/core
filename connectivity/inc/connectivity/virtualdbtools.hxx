@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualdbtools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 10:58:12 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,7 @@
 #ifndef _COM_SUN_STAR_SDBC_SQLEXCEPTION_HPP_
 #include <com/sun/star/sdbc/SQLException.hpp>
 #endif
-#ifndef _VECTOR_
 #include <vector>
-#endif
 
 //========================================================================
 //= forward declarations
@@ -167,6 +165,10 @@ namespace connectivity
                 sal_Bool _bSetAsActiveConnection
             ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ) = 0;
 
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getRowSetConnection(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet)
+                const SAL_THROW ( (::com::sun::star::uno::RuntimeException) ) = 0;
+
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
                 sal_Bool _bAllowDefault
@@ -205,6 +207,21 @@ namespace connectivity
                 const ::rtl::OUString& _rsRegisteredName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
             ) const = 0;
+
+            /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
+                @param      _rxCursorSet    the property set
+            */
+            virtual sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const = 0;
+
+            /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::UPDATE
+                @param      _rxCursorSet    the property set
+            */
+            virtual sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const = 0;
+
+            /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::DELETE
+                @param      _rxCursorSet    the property set
+            */
+            virtual sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const = 0;
         };
 
         //================================================================
@@ -330,6 +347,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2002/09/27 10:58:12  oj
+ *  #97230# new interface for ParseContext
+ *
  *  Revision 1.3  2001/08/13 14:53:21  fs
  *  #90761# +IDataAccessCharset / +createCharsetHelper
  *

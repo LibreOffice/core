@@ -2,9 +2,9 @@
  *
  *  $RCSfile: staticdbtools_s.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 14:50:00 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,14 @@ namespace connectivity
         return ::dbtools::calcConnection(_rxRowSet, _rxFactory);
     }
 
+    // ------------------------------------------------
+    Reference< XConnection> ODataAccessStaticTools::getRowSetConnection(
+                const Reference< XRowSet>& _rxRowSet)
+                const SAL_THROW ( (RuntimeException) )
+    {
+        return ::dbtools::getConnection(_rxRowSet);
+    }
+
     //----------------------------------------------------------------
     Reference< XNumberFormatsSupplier> ODataAccessStaticTools::getNumberFormats(const Reference< XConnection>& _rxConn, sal_Bool _bAllowDefault) const
     {
@@ -182,7 +190,7 @@ namespace connectivity
     //----------------------------------------------------------------
     ::rtl::OUString ODataAccessStaticTools::quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName) const
     {
-        return ::dbtools::quoteTableName(_rxMeta, _rName);
+        return ::dbtools::quoteTableName(_rxMeta, _rName,::dbtools::eInDataManipulation);
     }
 
     //----------------------------------------------------------------
@@ -198,6 +206,24 @@ namespace connectivity
         return ::dbtools::getDataSource( _rsRegisteredName, _rxFactory );
     }
 
+    //----------------------------------------------------------------
+    sal_Bool ODataAccessStaticTools::canInsert(const Reference< XPropertySet>& _rxCursorSet) const
+    {
+        return ::dbtools::canInsert( _rxCursorSet );
+    }
+
+    //----------------------------------------------------------------
+    sal_Bool ODataAccessStaticTools::canUpdate(const Reference< XPropertySet>& _rxCursorSet) const
+    {
+        return ::dbtools::canUpdate( _rxCursorSet );
+    }
+
+    //----------------------------------------------------------------
+    sal_Bool ODataAccessStaticTools::canDelete(const Reference< XPropertySet>& _rxCursorSet) const
+    {
+        return ::dbtools::canDelete( _rxCursorSet );
+    }
+
 //........................................................................
 }   // namespace connectivity
 //........................................................................
@@ -205,6 +231,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/08/06 14:50:00  fs
+ *  #87690# +connectRowset / some other methods needed later on (to make writer link-time independent og dbtools)
+ *
  *  Revision 1.1  2001/07/25 13:30:10  fs
  *  initial checkin - class for load-on-demand usage of the statis DBTOOLS helper functions
  *
