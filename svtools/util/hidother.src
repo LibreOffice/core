@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-01 07:19:31 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 09:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,3 +64,4 @@
 hidspecial HID_TEMPLATEDLG_ICONCTRL             { HelpID = HID_TEMPLATEDLG_ICONCTRL; };
 hidspecial HID_TEMPLATEDLG_FILEVIEW             { HelpID = HID_TEMPLATEDLG_FILEVIEW; };
 
+hidspecial HID_ADDRTEMPL_FIELD_ASSIGNMENT       { HelpID = HID_ADDRTEMPL_FIELD_ASSIGNMENT; };

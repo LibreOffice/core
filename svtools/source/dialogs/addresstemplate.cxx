@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-20 08:29:59 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 09:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _SVTOOLS_HRC
 #include "svtools.hrc"
+#endif
+#ifndef _SVT_HELPID_HRC
+#include "helpid.hrc"
 #endif
 #ifndef _SVTOOLS_SVTDATA_HXX
 #include "svtdata.hxx"
@@ -354,6 +357,8 @@ namespace svt
                 m_pFields[row * 2 + column] = new ListBox(&m_aFieldsFrame, ResId((USHORT)(LB_FIELD_BASE + row * 2 + column)));
                 m_pFields[row * 2 + column]->SetDropDownLineCount(8);
                 m_pFields[row * 2 + column]->SetSelectHdl(LINK(this, AddressBookSourceDialog, OnFieldSelect));
+
+                m_pFields[row * 2 + column]->SetHelpId(HID_ADDRTEMPL_FIELD_ASSIGNMENT);
             }
         }
 
@@ -437,6 +442,7 @@ namespace svt
         // initialize the field controls
         resetFields();
         m_aFieldScroller.SetThumbPos(0);
+        m_nFieldScrollPos = -1;
         implScrollFields(0, sal_False, sal_False);
 
         // the logical names
