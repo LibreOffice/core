@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:02:58 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef UUI_IAHNDL_HXX
 #include "iahndl.hxx"
 #endif
@@ -1441,28 +1440,7 @@ UUIInteractionHandler::executeErrorDialog(
             xBox.reset(new QueryBox(getParentProperty(),
                                     nButtonMask,
                                     aText.makeStringAndClear()));
-
-            USHORT aResult = xBox->Execute();
-            switch( aResult )
-            {
-                case BUTTONID_OK:
-                    aResult = ERRCODE_BUTTON_OK;
-                    break;
-                case BUTTONID_CANCEL:
-                    aResult = ERRCODE_BUTTON_CANCEL;
-                    break;
-                case BUTTONID_YES:
-                    aResult = ERRCODE_BUTTON_YES;
-                    break;
-                case BUTTONID_NO:
-                    aResult = ERRCODE_BUTTON_NO;
-                    break;
-                case BUTTONID_RETRY:
-                    aResult = ERRCODE_BUTTON_RETRY;
-                    break;
-            }
-
-            return aResult;
+            break;
         }
     }
     catch (std::bad_alloc const &)
@@ -1472,7 +1450,27 @@ UUIInteractionHandler::executeErrorDialog(
                   *this);
     }
 
-    return xBox->Execute();
+    USHORT aResult = xBox->Execute();
+    switch( aResult )
+    {
+        case BUTTONID_OK:
+            aResult = ERRCODE_BUTTON_OK;
+            break;
+        case BUTTONID_CANCEL:
+            aResult = ERRCODE_BUTTON_CANCEL;
+            break;
+        case BUTTONID_YES:
+            aResult = ERRCODE_BUTTON_YES;
+            break;
+        case BUTTONID_NO:
+            aResult = ERRCODE_BUTTON_NO;
+            break;
+        case BUTTONID_RETRY:
+            aResult = ERRCODE_BUTTON_RETRY;
+            break;
+    }
+
+    return aResult;
 }
 
 USHORT
@@ -2384,8 +2382,9 @@ UUIInteractionHandler::handleErrorRequest(
 
     aMessage = replaceMessageWithArguments( aMessage, rArguments );
 
-    switch (executeErrorDialog(
-                eClassification, aContext, aMessage, nButtonMask ))
+    USHORT nResult = executeErrorDialog(
+                eClassification, aContext, aMessage, nButtonMask );
+    switch (nResult)
     {
     case ERRCODE_BUTTON_OK:
         OSL_ENSURE(xApprove.is() || xAbort.is(), "unexpected situation");
