@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfmtf.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-18 13:25:00 $
+ *  last change: $Author: sj $ $Date: 2002-08-14 15:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,12 +123,16 @@ protected:
     SdrPage*                    pPage;
     SdrModel*                   pModel;
     SdrLayerID                  nLayer;
+    Color                       aOldLineColor;
 
+    sal_Bool                    bMov;
+    sal_Bool                    bSize;
+    Point                       aOfs;
     double                      fScaleX;
     double                      fScaleY;
+    Fraction                    aScaleX;
+    Fraction                    aScaleY;
 
-    sal_Bool                    bPenDirty;
-    sal_Bool                    bBrsDirty;
     sal_Bool                    bFntDirty;
 
     // fuer Optimierung von (PenNULL,Brush,DrawPoly),(Pen,BrushNULL,DrawPoly) -> aus 2 mach ein
@@ -162,27 +166,26 @@ protected:
     void DoAction(MetaHatchAction           & rAct);
     void DoAction(MetaLineColorAction       & rAct);
     void DoAction(MetaMapModeAction         & rAct);
-    void DoAction(MetaFillColorAction       & rAct) { rAct.Execute(&aVD); bBrsDirty=TRUE; }
-    void DoAction(MetaTextColorAction       & rAct) { rAct.Execute(&aVD); bBrsDirty=TRUE; }
-    void DoAction(MetaTextFillColorAction   & rAct) { rAct.Execute(&aVD); bBrsDirty=TRUE; }
+    void DoAction(MetaFillColorAction       & rAct) { rAct.Execute(&aVD); }
+    void DoAction(MetaTextColorAction       & rAct) { rAct.Execute(&aVD); }
+    void DoAction(MetaTextFillColorAction   & rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaFontAction            & rAct) { rAct.Execute(&aVD); bFntDirty=TRUE; }
     void DoAction(MetaClipRegionAction      & rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaRasterOpAction        & rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaPushAction            & rAct) { rAct.Execute(&aVD); }
-    void DoAction(MetaPopAction             & rAct) { rAct.Execute(&aVD); bPenDirty=TRUE; bBrsDirty=TRUE; bFntDirty=TRUE; }
+    void DoAction(MetaPopAction             & rAct) { rAct.Execute(&aVD); bFntDirty=TRUE; }
     void DoAction(MetaMoveClipRegionAction  & rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaISectRectClipRegionAction& rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaISectRegionClipRegionAction& rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaCommentAction& rAct, GDIMetaFile* pMtf);
 
-    void ImportText(const Point& rPos, const XubString& rStr);
+    void ImportText( const Point& rPos, const XubString& rStr, const MetaAction& rAct );
     void SetAttributes(SdrObject* pObj, FASTBOOL bForceTextAttr=FALSE);
-    void InsertObj(SdrObject* pObj);
+    void InsertObj( SdrObject* pObj, sal_Bool bScale = sal_True );
     void MapScaling();
 
-    // Optimierung:
-    FASTBOOL CheckLastLineMerge(const XPolygon& rSrcPoly);
-    FASTBOOL CheckLastPolyLineAndFillMerge(const XPolyPolygon& rPoly);
+    sal_Bool CheckLastLineMerge(const XPolygon& rSrcPoly);
+    sal_Bool CheckLastPolyLineAndFillMerge(const XPolyPolygon& rPoly);
 
 public:
     ImpSdrGDIMetaFileImport(SdrModel& rModel);
