@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:54:12 $
+ *  last change: $Author: hr $ $Date: 2003-06-16 11:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,27 +347,27 @@ void DocumentHolder::resizeWin( const SIZEL& rNewSize )
                 HDC hdc = GetDC( NULL );
                 SetMapMode( hdc, MM_HIMETRIC );
 
-                RECT aRectOld = { 0, 0, 0, 0 };
-                aRectOld.right = aOldSize.cx;
-                aRectOld.bottom = -aOldSize.cy;
-                LPtoDP( hdc, (POINT*)&aRectOld, 2 );
+                POINT aOldOffset;
+                aOldOffset.x = aOldSize.cx;
+                aOldOffset.y = aOldSize.cy;
+                BOOL bIsOk = LPtoDP( hdc, &aOldOffset, 1 );
 
-                RECT aRectNew = { 0, 0, 0, 0 };
-                aRectNew.right = rNewSize.cx;
-                aRectNew.bottom = -rNewSize.cy;
-                LPtoDP( hdc, (POINT*)&aRectNew, 2 );
+                POINT aNewOffset;
+                aNewOffset.x = rNewSize.cx;
+                aNewOffset.y = rNewSize.cy;
+                bIsOk = LPtoDP( hdc, &aNewOffset, 1 );
 
                 ReleaseDC( NULL, hdc );
 
                 awt::Rectangle aWinRect = xWindow->getPosSize();
-                sal_Int32 aWidthDelta = aWinRect.Width - ( aRectOld.right - aRectOld.left );
-                sal_Int32 aHeightDelta = aWinRect.Height - ( aRectOld.bottom - aRectOld.top );
+                sal_Int32 aWidthDelta = aWinRect.Width - aOldOffset.x;
+                sal_Int32 aHeightDelta = aWinRect.Height - aOldOffset.y;
 
                 if ( aWidthDelta > 0 && aHeightDelta > 0 )
                     xWindow->setPosSize(0,
                                         0,
-                                        aRectNew.right - aRectNew.left + aWidthDelta,
-                                        aRectNew.bottom - aRectNew.top + aHeightDelta,
+                                        aNewOffset.x + aWidthDelta,
+                                        aNewOffset.y + aHeightDelta,
                                         awt::PosSize::SIZE );
             }
         }
@@ -587,7 +587,7 @@ HRESULT DocumentHolder::SetExtent( const SIZEL *pSize )
 HRESULT DocumentHolder::GetExtent( SIZEL *pSize )
 {
     RECTL aRect;
-    if ( pSize && GetVisArea( &aRect ) )
+    if ( pSize && SUCCEEDED( GetVisArea( &aRect ) ) )
     {
         pSize->cx = aRect.right - aRect.left;
         pSize->cy = aRect.top - aRect.bottom;
