@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:40:31 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ TabDialog DLG_TEMPLATE_1
     Text[ russian ] = "Ñòèëü çíàêîâ";
     Text[ polish ] = "Styl znaku";
     Text[ japanese ] = "•¶š½À²Ù";
-    Text[ chinese_traditional ] = "¦r«¬¼Ë¦¡";
+    Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡";
     Text[ arabic ] = "äãØ ÇáÃÍÑİ";
     Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
     Text[ korean ] = "¹®ÀÚ À¯Çü";
@@ -926,7 +926,7 @@ String STR_PAGE_FOOTER
     Text[ russian ] = "Íèæíèé êîëîíòèòóë";
     Text[ polish ] = "Stopka";
     Text[ japanese ] = "Ì¯À";
-    Text[ chinese_traditional ] = "­¶¸}";
+    Text[ chinese_traditional ] = "­¶§À";
     Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ";
     Text[ greek ] = "Õğïóİëéäï";
     Text[ korean ] = "¹Ù´Ú±Û";
