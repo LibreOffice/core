@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-11-24 11:39:12 $
+ *  last change: $Author: mba $ $Date: 2000-11-30 09:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         case USERINSTALLURL:
             sPath += C2U("UserProfile/Office"); break;
         case LOCALE:            sPath += C2U("UserProfile/International"); break;
+        case PRODUCTNAME:            sPath += C2U("Setup/Product"); break;
         case OFFICEINSTALL:
         case OFFICEINSTALLURL:
             sPath += C2U("Office.Common/Path/Current"); break;
@@ -318,6 +319,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         {
             case INSTALLPATH:   sProperty = C2U("InstallPath"); break;
             case LOCALE:        sProperty = C2U("Locale"); break;
+            case PRODUCTNAME:        sProperty = C2U("Name"); break;
             case OFFICEINSTALL: sProperty = C2U("OfficeInstall"); break;
             case USERINSTALLURL:   sProperty = C2U("InstallURL"); break;
             case OFFICEINSTALLURL: sProperty = C2U("OfficeInstallURL"); break;
