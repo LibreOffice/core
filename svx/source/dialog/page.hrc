@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *  last change: $Author: ma $ $Date: 2001-03-27 12:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,17 +71,19 @@
 #define ED_TOP_MARGIN           15
 #define FT_BOTTOM_MARGIN        16
 #define ED_BOTTOM_MARGIN        17
-#define GB_MARGIN               18
+#define FL_MARGIN               18
 
 #define LB_LAYOUT               20
-#define GB_PAGE                 21
+#define FT_PAGELAYOUT           21
 
 #define LB_NUMBER_FORMAT        30
-#define GB_NUMBER_FORMAT        31
+#define FL_NUMBER_FORMAT        31
+#define FT_NUMBER_FORMAT        32
 
 #define WN_BSP                  40
-#define GB_BSP                  41
+#define FL_BSP                  41
 
+#define FT_PAPER_FORMAT         49
 #define LB_PAPER_SIZE           50
 #define RB_PORTRAIT             51
 #define RB_LANDSCAPE            52
@@ -91,18 +93,18 @@
 #define ED_PAPER_HEIGHT         56
 #define FT_PAPER_TRAY           57
 #define LB_PAPER_TRAY           58
-#define GB_PAPER_SIZE           59
+#define FL_PAPER_SIZE           59
 
 #define CB_REGISTER             60
 #define FT_REGISTER             61
 #define LB_REGISTER             62
-#define GB_REGISTER             63
+#define FL_REGISTER             63
 
 #define CB_HORZ                 70
 #define CB_VERT                 71
 #define CB_ADAPT                72
 #define FT_PAGE_NAME            73
-#define GB_EXTRA                74
+#define FL_EXTRA                74
 
 #define PB_BACK                 80
 

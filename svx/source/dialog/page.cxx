@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 12:20:14 $
+ *  last change: $Author: ma $ $Date: 2001-03-27 12:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,13 +236,15 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aTopMarginEdit      ( this, ResId( ED_TOP_MARGIN ) ),
     aBottomMarginLbl    ( this, ResId( FT_BOTTOM_MARGIN ) ),
     aBottomMarginEdit   ( this, ResId( ED_BOTTOM_MARGIN ) ),
-    aMarginFrm          ( this, ResId( GB_MARGIN ) ),
+    aMarginFl           ( this, ResId( FL_MARGIN ) ),
     aLayoutBox          ( this, ResId( LB_LAYOUT ) ),
-    aPageFrm            ( this, ResId( GB_PAGE ) ),
+    aPageText           ( this, ResId( FT_PAGELAYOUT ) ),
     aNumberFormatBox    ( this, ResId( LB_NUMBER_FORMAT ) ),
-    aNumberFormatFrm    ( this, ResId( GB_NUMBER_FORMAT ) ),
+    aNumberFormatText   ( this, ResId( FT_NUMBER_FORMAT ) ),
+    aNumberFormatFl     ( this, ResId( FL_NUMBER_FORMAT ) ),
     aBspWin             ( this, ResId( WN_BSP ) ),
-    aBspFrm             ( this, ResId( GB_BSP ) ),
+    aBspFl              ( this, ResId( FL_BSP ) ),
+    aPaperFormatText    ( this, ResId( FT_PAPER_FORMAT ) ),
     aPaperSizeBox       ( this, ResId( LB_PAPER_SIZE ) ),
     aPortraitBtn        ( this, ResId( RB_PORTRAIT ) ),
     aLandscapeBtn       ( this, ResId( RB_LANDSCAPE ) ),
@@ -252,17 +254,17 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aPaperHeightEdit    ( this, ResId( ED_PAPER_HEIGHT ) ),
     aPaperTrayLbl       ( this, ResId( FT_PAPER_TRAY ) ),
     aPaperTrayBox       ( this, ResId( LB_PAPER_TRAY ) ),
-    aPaperSizeFrm       ( this, ResId( GB_PAPER_SIZE ) ),
+    aPaperSizeFl        ( this, ResId( FL_PAPER_SIZE ) ),
     aHorzBox            ( this, ResId( CB_HORZ ) ),
     aVertBox            ( this, ResId( CB_VERT ) ),
     aAdaptBox           ( this, ResId( CB_ADAPT ) ),
     aPageName           ( this, ResId( FT_PAGE_NAME ) ),
-    aExtraFrm           ( this, ResId( GB_EXTRA ) ),
+    aExtraFl            ( this, ResId( FL_EXTRA ) ),
 
     aRegisterCB         ( this, ResId( CB_REGISTER ) ),
     aRegisterFT         ( this, ResId( FT_REGISTER ) ),
     aRegisterLB         ( this, ResId( LB_REGISTER ) ),
-    aRegisterGB         ( this, ResId( GB_REGISTER ) ),
+    aRegisterFl         ( this, ResId( FL_REGISTER ) ),
 
     aInsideText         (       ResId( STR_INSIDE ) ),
     aOutsideText        (       ResId( STR_OUTSIDE ) ),
@@ -598,7 +600,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
             //!!! hidden, weil von StarDraw nicht implementiert
             aLayoutBox.Hide();
-            aPageFrm.Hide();
+            aPageText.Hide();
 
             break;
         }
@@ -618,7 +620,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     }
 
     if ( nResId )
-        aExtraFrm.SetText( SVX_RESSTR( nResId ) );
+        aExtraFl.SetText( SVX_RESSTR( nResId ) );
 
     // im Beispiel Hintergrund und Umrandung anzeigen
     ResetBackground_Impl( rSet );
@@ -1666,11 +1668,11 @@ void SvxPageDescPage::SetCollectionList(const List* pList)
     }
 
     aPageName .Hide();
-    aExtraFrm .Hide();
+    aExtraFl .Hide();
     aRegisterCB  .Show();
     aRegisterFT  .Show();
     aRegisterLB.Show();
-    aRegisterGB  .Show();
+    aRegisterFl  .Show();
     aRegisterCB.SetClickHdl(LINK(this, SvxPageDescPage, RegisterModify));
 }
 
