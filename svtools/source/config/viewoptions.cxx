@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-10 11:47:48 $
+ *  last change: $Author: as $ $Date: 2000-11-10 12:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,19 @@ using namespace ::com::sun::star::beans ;
 #define SEPERATOR_NOT_FOUND                 -1
 #define PATHSEPERATOR                       sal_Unicode('/')
 #define ROOTNODE                            OUString(RTL_CONSTASCII_USTRINGPARAM("/"                        ))
+
+//_________________________________________________________________________________________________________________
+//  initialization!
+//_________________________________________________________________________________________________________________
+
+SvtViewDialogOptions_Impl*      SvtViewOptions::m_pDataContainer_Dialogs    =   NULL    ;
+sal_Int32                       SvtViewOptions::m_nRefCount_Dialogs         =   0       ;
+SvtViewTabDialogOptions_Impl*   SvtViewOptions::m_pDataContainer_TabDialogs =   NULL    ;
+sal_Int32                       SvtViewOptions::m_nRefCount_TabDialogs      =   0       ;
+SvtViewTabPageOptions_Impl*     SvtViewOptions::m_pDataContainer_TabPages   =   NULL    ;
+sal_Int32                       SvtViewOptions::m_nRefCount_TabPages        =   0       ;
+SvtViewWindowOptions_Impl*      SvtViewOptions::m_pDataContainer_Windows    =   NULL    ;
+sal_Int32                       SvtViewOptions::m_nRefCount_Windows         =   0       ;
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
