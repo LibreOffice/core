@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 14:00:20 $
+ *  last change: $Author: rt $ $Date: 2004-05-27 11:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,9 +246,14 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
                 for( pEqual = (*ppStr)+4; *pEqual && *pEqual != '='; ++pEqual )
                     ;
                 if( *pEqual )
-                m_aReplacements.push_back( std::pair< OString, OString >
-                                           ( OString( (*ppStr)+4, pEqual - *ppStr - 4 ),
-                                             OString( pEqual+1 ) ) );
+                {
+                    const ByteString    aPath( pEqual + 1 );
+                    DirEntry            aDir( String( aPath, RTL_TEXTENCODING_ASCII_US ) );
+
+                    aDir.ToAbs();
+                    m_aReplacements.push_back( std::pair< OString, OString >( OString( (*ppStr)+4, pEqual - *ppStr - 4 ),
+                                                                              ByteString( aDir.GetFull(), RTL_TEXTENCODING_ASCII_US ) ) );
+                }
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "PreLoad" ) )
             { // Alle Ressourcen mit Preload
@@ -286,9 +291,11 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "lip", 3 ) )
             {  // additional language specific include for system dependent files
-                const ByteString aSysSearchDir( (*ppStr)+4 );
+                const ByteString    aSysSearchDir( (*ppStr)+4 );
+                DirEntry            aSysDir( String( aSysSearchDir, RTL_TEXTENCODING_ASCII_US ) );
 
-                m_aOutputFiles.back().aSysSearchDirs.push_back( aSysSearchDir );
+                aSysDir.ToAbs();
+                m_aOutputFiles.back().aSysSearchDirs.push_back( ByteString( aSysDir.GetFull(), RTL_TEXTENCODING_ASCII_US ) );
 
                 if( m_aOutputFiles.back().aLangSearchPath.Len() )
                     m_aOutputFiles.back().aLangSearchPath.Append( ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US ) );
@@ -1267,11 +1274,8 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
         while( ( aDirIter != rOutputFile.aSysSearchDirs.end() ) && !bFound )
         {
             const DirEntry  aPath( String( *aDirIter, RTL_TEXTENCODING_ASCII_US ) );
-            DirEntry aTestPath( aPath );
-
-            ( aTestPath += DirEntry( String( *aFileIter, RTL_TEXTENCODING_ASCII_US ) ) ).ToAbs();
-
-            const String    aFullPath( aTestPath.GetFull() );
+            DirEntry        aTestPath( aPath );
+            const String    aFullPath( ( aTestPath += DirEntry( String( *aFileIter, RTL_TEXTENCODING_ASCII_US ) ) ).GetFull() );
             const FileStat  aFS( aFullPath );
 
 #if OSL_DEBUG_LEVEL > 1
