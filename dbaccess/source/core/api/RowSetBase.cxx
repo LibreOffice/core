@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 12:14:47 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 10:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,7 +524,13 @@ Reference< XResultSetMetaData > SAL_CALL ORowSetBase::getMetaData(  ) throw(SQLE
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
-    return m_pCache ? m_pCache->getMetaData() : new OEmptyMetaData();
+    Reference< XResultSetMetaData > xMeta;
+    if(m_pCache)
+        xMeta = m_pCache->getMetaData();
+    else
+        xMeta = new OEmptyMetaData();
+
+    return xMeta;
 }
 // -------------------------------------------------------------------------
 
