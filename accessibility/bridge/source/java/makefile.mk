@@ -64,6 +64,8 @@ USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 VERSIONOBJ=
 
+USE_JAVAVER:=TRUE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -71,6 +73,7 @@ VERSIONOBJ=
 # --- Files --------------------------------------------------------
 
 .IF "$(GUI)"=="WNT"
+.IF "$(JAVANUMVER:s/.//)" >= "000100040000"
 
 SLOFILES= $(SLO)$/WindowsAccessBridgeAdapter.obj
 
@@ -85,13 +88,21 @@ DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
 SHL1HEADER=$(OUT)$/inc$/WindowsAccessBridgeAdapter.h
-.ENDIF
+
+.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(JAVANUMVER:s/.//)" >= "000100040000"
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
 
+.IF "$(GUI)"=="WNT"
+.IF "$(JAVANUMVER:s/.//)" >= "000100040000"
+
 $(SLO)$/WindowsAccessBridgeAdapter.obj : $(SHL1HEADER)
 
 $(SHL1HEADER) :
     + javah -classpath $(OUT)$/class -o $(SHL1HEADER) org.openoffice.accessibility.WindowsAccessBridgeAdapter
+
+.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(JAVANUMVER:s/.//)" >= "000100040000"
