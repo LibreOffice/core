@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:05:33 $
+ *  last change: $Author: nn $ $Date: 2001-05-03 18:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1305,11 +1305,13 @@ void ScTable::FillSeries( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2
             }
             else if (eCellType == CELLTYPE_VALUE || eCellType == CELLTYPE_FORMULA)
             {
-                double nVal;
+                double nStartVal;
                 if (eCellType == CELLTYPE_VALUE)
-                    nVal = ((ScValueCell*)pSrcCell)->GetValue();
+                    nStartVal = ((ScValueCell*)pSrcCell)->GetValue();
                 else
-                    nVal = ((ScFormulaCell*)pSrcCell)->GetValue();
+                    nStartVal = ((ScFormulaCell*)pSrcCell)->GetValue();
+                double nVal = nStartVal;
+                long nIndex = 0;
 
                 BOOL bError = FALSE;
                 BOOL bOverflow = FALSE;
@@ -1322,8 +1324,15 @@ void ScTable::FillSeries( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2
                         switch (eFillCmd)
                         {
                             case FILL_LINEAR:
-                                if (!SubTotal::SafePlus(nVal, nStepValue))
-                                    bError = TRUE;
+                                {
+                                    //  #86365# use multiplication instead of repeated addition
+                                    //  to avoid accumulating rounding errors
+                                    nVal = nStartVal;
+                                    double nAdd = nStepValue;
+                                    if ( !SubTotal::SafeMult( nAdd, (double) ++nIndex ) ||
+                                         !SubTotal::SafePlus( nVal, nAdd ) )
+                                        bError = TRUE;
+                                }
                                 break;
                             case FILL_GROWTH:
                                 if (!SubTotal::SafeMult(nVal, nStepValue))
@@ -1388,7 +1397,9 @@ void ScTable::FillSeries( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2
                 short nHeadNoneTail = lcl_DecompValueString( aValue, nStringValue, &nMinDigits );
                 if ( nHeadNoneTail )
                 {
-                    double nVal = (double)nStringValue;
+                    double nStartVal = (double)nStringValue;
+                    double nVal = nStartVal;
+                    long nIndex = 0;
                     BOOL bError = FALSE;
                     BOOL bOverflow = FALSE;
 
@@ -1399,8 +1410,15 @@ void ScTable::FillSeries( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2
                             switch (eFillCmd)
                             {
                                 case FILL_LINEAR:
-                                    if (!SubTotal::SafePlus(nVal, nStepValue))
-                                        bError = TRUE;
+                                    {
+                                        //  #86365# use multiplication instead of repeated addition
+                                        //  to avoid accumulating rounding errors
+                                        nVal = nStartVal;
+                                        double nAdd = nStepValue;
+                                        if ( !SubTotal::SafeMult( nAdd, (double) ++nIndex ) ||
+                                             !SubTotal::SafePlus( nVal, nAdd ) )
+                                            bError = TRUE;
+                                    }
                                     break;
                                 case FILL_GROWTH:
                                     if (!SubTotal::SafeMult(nVal, nStepValue))
