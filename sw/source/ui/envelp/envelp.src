@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envelp.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ String STR_BTN_NEW_DOC
     Text[ chinese_simplified ] = "ĞÂ½¨ÎÄµµ(~N)";
     Text[ russian ] = "Íîâûé äîêóìåíò";
     Text[ polish ] = "Nowy dok.";
-    Text[ japanese ] = "V‚µ‚¢•¶‘(~N)";
+    Text[ japanese ] = "VÄŞ·­ÒİÄ(~N)";
     Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)";
     Text[ arabic ] = "ãÓÊäÏ ÌÏíÏ";
     Text[ dutch ] = "~Nieuw document";
@@ -164,7 +164,7 @@ String STR_BTN_NEWDOC
     Text[ swedish ] = "~Nytt dok.";
     Text[ polish ] = "Nowy dok.";
     Text[ portuguese_brazilian ] = "~New doc.";
-    Text[ japanese ] = "V‚µ‚¢•¶‘(~N)";
+    Text[ japanese ] = "VÄŞ·­ÒİÄ(~N)";
     Text[ chinese_simplified ] = "ĞÂ½¨ÎÄµµ(~N)";
     Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)";
     Text[ arabic ] = "ãÓÊäÏ ÌÏíÏ";
