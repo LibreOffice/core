@@ -59,7 +59,7 @@ mkdir: %_DEST%\lib%_EXT%\python\idlelib\Icons
 ..\%__SRC%\misc\build\python-inst\lib\python2.3\lib-dynload\* %_DEST%\lib%_EXT%\python\lib-dynload\*
 ..\%__SRC%\misc\build\python-inst\bin\python %_DEST%\bin%_EXT%\python
 ..\%__SRC%\misc\build\python-inst\bin\idle %_DEST%\bin%_EXT%\idle
-..\%__SRC%\misc\build\python-inst\lib\libpython2.3.so %_DEST%\lib%_EXT%\libpython2.3.so.1.0
+..\%__SRC%\misc\build\python-inst\lib\libpython2.3.so.1.0 %_DEST%\lib%_EXT%\libpython2.3.so.1.0
 symlink: %_DEST%\lib%_EXT%\libpython2.3.so.1.0 %_DEST%\lib%_EXT%\libpython2.3.so
 
 # WINDOWS ONLY !
