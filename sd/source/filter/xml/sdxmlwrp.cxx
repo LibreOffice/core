@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:10:20 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -841,6 +841,12 @@ sal_Bool SdXMLFilter::Export()
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "StreamName" ), 0,
                   &::getCppuType( (OUString *)0 ),
+                  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "StyleNames" ), 0,
+                  &::getCppuType( (Sequence<OUString>*)0 ),
+                  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "StyleFamilies" ), 0,
+                  &::getCppuType( (Sequence<sal_Int32>*)0 ),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
