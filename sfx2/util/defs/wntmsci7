@@ -8221,3 +8221,5 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ?set@?$Reference@VXDispatchResultListener@frame@star@sun@com@@@uno@star@sun@com@@QAAEPAVXDispatchResultListener@frame@345@@Z
 ?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx2702916519@@YAXABVSbxVariableRef@@PAX@Z
 ?GetFilterNameWithPrefix@SfxFilter@@QBE?AVString@@XZ
+?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx2558827599@@YAXABVSbxVariableRef@@PAX@Z
+?compareToAscii@OUString@rtl@@QBEJPBDJ@Z
