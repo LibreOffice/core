@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: thb $ $Date: 2001-06-27 17:48:47 $
+#   last change: $Author: ka $ $Date: 2001-09-04 14:36:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -160,7 +160,8 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
 EXCEPTIONSFILES= \
         $(SLO)$/futext2.obj		\
         $(SLO)$/fupngdlg.obj	\
-        $(SLO)$/fuinsfil.obj
+        $(SLO)$/fuinsfil.obj	\
+        $(SLO)$/fuinsert.obj	
 
 SLOFILES = \
         $(SLO)$/fuhtmlex.obj	\

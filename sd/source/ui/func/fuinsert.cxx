@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-17 13:07:02 $
+ *  last change: $Author: ka $ $Date: 2001-09-04 14:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,7 @@ FuInsertClipboard::FuInsertClipboard(SdViewShell* pViewSh, SdWindow* pWin, SdVie
     SvPasteObjectDialog*                        pDlg = new SvPasteObjectDialog();
     const String                                aEmptyString;
     ::com::sun::star::datatransfer::DataFlavor  aFlavor;
+    ULONG                                       nFormatId;
 
     pDlg->Insert( SOT_FORMATSTR_ID_EMBED_SOURCE, aEmptyString );
     pDlg->Insert( SOT_FORMATSTR_ID_LINK_SOURCE, aEmptyString );
@@ -269,7 +270,14 @@ FuInsertClipboard::FuInsertClipboard(SdViewShell* pViewSh, SdWindow* pWin, SdVie
     pDlg->Insert( FORMAT_RTF, aEmptyString );
     pDlg->Insert( SOT_FORMATSTR_ID_EDITENGINE, aEmptyString );
 
-    const ULONG nFormatId = pDlg->Execute( pWindow, aDataHelper.GetTransferable() );
+    try
+    {
+        nFormatId = pDlg->Execute( pWindow, aDataHelper.GetTransferable() );
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+        nFormatId = 0;
+    }
 
     if( nFormatId && aDataHelper.GetTransferable().is() )
     {

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ka $ $Date: 2001-03-08 11:04:21 $
+#   last change: $Author: ka $ $Date: 2001-09-04 14:38:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,9 @@ SLOFILES =	\
         $(SLO)$/optsitem.obj	\
         $(SLO)$/sdresid.obj		\
         $(SLO)$/sdpopup.obj		\
+        $(SLO)$/sdxfer.obj		
+
+EXCEPTIONSFILES= \
         $(SLO)$/sdxfer.obj		
 
 .IF "$(GUI)" == "WNT"
