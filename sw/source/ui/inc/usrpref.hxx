@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 16:07:14 $
+ *  last change: $Author: os $ $Date: 2001-02-13 09:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <fldupde.hxx>
 #endif
 #include "viewopt.hxx"
+
+#ifndef _VCL_FLDUNIT_HXX
+#include <vcl/fldunit.hxx>
+#endif
 
 /* -----------------------------28.09.00 09:45--------------------------------
 
@@ -146,17 +150,36 @@ class SwCursorConfig : public utl::ConfigItem
 /* -----------------------------28.09.00 09:45--------------------------------
 
  ---------------------------------------------------------------------------*/
+class SwWebColorConfig : public utl::ConfigItem
+{
+    SwMasterUsrPref&        rParent;
+    com::sun::star::uno::Sequence<rtl::OUString> aPropNames;
+
+    public:
+        SwWebColorConfig(SwMasterUsrPref& rParent);
+        ~SwWebColorConfig();
+
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void            Commit();
+    void                    Load();
+    void                    SetModified(){ConfigItem::SetModified();}
+};
+/* -----------------------------28.09.00 09:45--------------------------------
+
+ ---------------------------------------------------------------------------*/
 class SwMasterUsrPref : public SwViewOption
 {
     friend class SwContentViewConfig;
     friend class SwLayoutViewConfig;
     friend class SwGridConfig;
     friend class SwCursorConfig;
+    friend class SwWebColorConfig;
 
     SwContentViewConfig aContentConfig;
     SwLayoutViewConfig  aLayoutConfig;
     SwGridConfig        aGridConfig;
     SwCursorConfig      aCursorConfig;
+    SwWebColorConfig*   pWebColorConfig;
 
     sal_Int32   nFldUpdateFlags;    //udpate of fields and charts
     sal_Bool    bFldUpdateInCurrDoc;
@@ -168,6 +191,7 @@ class SwMasterUsrPref : public SwViewOption
 
 public:
     SwMasterUsrPref(BOOL bWeb);
+    ~SwMasterUsrPref();
 
     void SetUsrPref(const SwViewOption &rCopy);
 
@@ -177,6 +201,8 @@ public:
             aLayoutConfig.Commit();
             aGridConfig.Commit();
             aCursorConfig.Commit();
+            if(pWebColorConfig)
+                pWebColorConfig->Commit();
         }
     void SetModified()
         {
@@ -184,6 +210,8 @@ public:
             aLayoutConfig.SetModified();
             aGridConfig.SetModified();
             aCursorConfig.SetModified();
+            if(pWebColorConfig)
+                pWebColorConfig->SetModified();
         }
 
     void SetUpdateLinkMode(sal_Int32 nSet)  {nLinkUpdateMode = nSet; SetModified();}
@@ -234,6 +262,7 @@ public:
 
     sal_Int32   GetDefTab() const { return nDefTab;}
     void        SetDefTab( sal_Int32  nSet ) {  nDefTab = nSet; SetModified();}
+
 };
 
 #endif

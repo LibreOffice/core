@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 16:08:03 $
+ *  last change: $Author: os $ $Date: 2001-02-13 09:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     aLayoutConfig(bWeb, *this),
     aGridConfig(bWeb, *this),
     aCursorConfig(*this),
+    pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : 0),
     bFldUpdateInCurrDoc(sal_False),
     nFldUpdateFlags(0),
     bLinkUpdateInCurrDoc(sal_False),
@@ -128,6 +129,15 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     aLayoutConfig.Load();
     aGridConfig.Load();
     aCursorConfig.Load();
+    if(pWebColorConfig)
+        pWebColorConfig->Load();
+}
+/* -----------------------------13.02.01 09:48--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwMasterUsrPref::~SwMasterUsrPref()
+{
+    delete pWebColorConfig;
 }
 /*-- 28.09.00 09:55:32---------------------------------------------------
 
@@ -199,7 +209,6 @@ void SwContentViewConfig::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
 
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
@@ -347,7 +356,6 @@ void SwLayoutViewConfig::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
 
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
@@ -476,7 +484,6 @@ void SwGridConfig::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
 
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
@@ -583,7 +590,6 @@ void SwCursorConfig::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
 
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
@@ -636,6 +642,70 @@ void SwCursorConfig::Load()
             }
         }
         rParent.SetSnapSize(aSnap);
+    }
+}
+/*-- 28.09.00 09:55:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar) :
+    ConfigItem(C2U("Office.WriterWeb/Background")),
+    rParent(rPar),
+    aPropNames(1)
+{
+    aPropNames.getArray()[0] = C2U("Color");
+}
+/*-- 28.09.00 09:55:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwWebColorConfig::~SwWebColorConfig()
+{
+}
+/*-- 28.09.00 09:55:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwWebColorConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)
+{
+    Load();
+}
+/*-- 28.09.00 09:55:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwWebColorConfig::Commit()
+{
+    Sequence<Any> aValues(aPropNames.getLength());
+    Any* pValues = aValues.getArray();
+    for(int nProp = 0; nProp < aPropNames.getLength(); nProp++)
+    {
+        switch(nProp)
+        {
+            case  0: pValues[nProp] <<= (sal_Int32)rParent.GetRetoucheColor().GetColor();   break;// "Color",
+        }
+    }
+    PutProperties(aPropNames, aValues);
+}
+/*-- 28.09.00 09:55:34---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwWebColorConfig::Load()
+{
+    Sequence<Any> aValues = GetProperties(aPropNames);
+    EnableNotification(aPropNames);
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aPropNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aPropNames.getLength())
+    {
+        for(int nProp = 0; nProp < aPropNames.getLength(); nProp++)
+        {
+            if(pValues[nProp].hasValue())
+            {
+                switch(nProp)
+                {
+                    case  0:
+                        sal_Int32 nSet; pValues[nProp] >>= nSet; rParent.SetRetoucheColor(nSet);
+                    break;// "Color",
+                }
+            }
+        }
     }
 }
 
