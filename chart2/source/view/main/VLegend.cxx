@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 16:43:20 $
+ *  last change: $Author: bm $ $Date: 2003-12-18 15:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,10 @@ uno::Reference< drawing::XShape >
                 uno::Reference< beans::XPropertySet > xCTProp( xChartType, uno::UNO_QUERY_THROW );
                 if(( xCTProp->getPropertyValue( C2U( "Dimension" )) >>= nDim ) &&
                    nDim == 3 )
+                {
                     eSymbolStyle = chart2::LegendSymbolStyle_BOX;
+                    ePropType = VLegendSymbolFactory::PROP_TYPE_FILLED_SERIES;
+                }
             }
             catch( uno::Exception & ex )
             {
