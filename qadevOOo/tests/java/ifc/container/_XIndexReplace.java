@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XIndexReplace.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:37 $
+ *  last change:$Date: 2003-09-08 10:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,14 @@
 
 package ifc.container;
 
+import lib.MultiMethodTest;
+import util.ValueComparer;
+
 import com.sun.star.container.XIndexReplace;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import util.ValueComparer;
 
 
 /**
