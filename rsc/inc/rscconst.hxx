@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscconst.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,10 +125,10 @@ public:
     BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
 
     ERRTYPE         SetConst( const RSCINST & rInst, HASHID nValueId,
-                              long nValue );
-    ERRTYPE         SetNumber( const RSCINST & rInst, long nValue );
+                              INT32 nValue );
+    ERRTYPE         SetNumber( const RSCINST & rInst, INT32 nValue );
     ERRTYPE         GetConst( const RSCINST & rInst, HASHID * );
-    ERRTYPE         GetNumber( const RSCINST & rInst, long * nValue );
+    ERRTYPE         GetNumber( const RSCINST & rInst, INT32 * nValue );
     void            WriteSrc( const RSCINST &rInst, FILE * fOutput,
                               RscTypCont * pTC, USHORT nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
