@@ -40,7 +40,7 @@ $(OUT_COMP_GEN) : $(OUT)
 $(OUT_COMP_INC)/so_activex.h : so_activex.idl $(OUT_COMP_GEN)
 	midl.exe /tlb $(OUT_COMP_GEN)/so_activex.tlb /h $(OUT_COMP_INC)/so_activex.h \
 	/iid $(OUT_COMP_INC)/so_activex_i.c /proxy $(OUT_COMP_INC)/so_activex_p.c /dlldata \
-	$(OUT_MISC)/dlldata.c /Oicf $<
+	$(OUT_COMP_INC)/dlldata.c /Oicf $<
 
 $(OUT_COMP_GEN)/so_activex.res : so_activex.rc $(OUT_COMP_INC)/so_activex.h $(OUT_COMP_GEN)
 	rc $(CC_INCLUDES) /R /FO$@ so_activex.rc			       
