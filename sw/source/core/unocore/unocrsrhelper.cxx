@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-05-09 09:27:51 $
+ *  last change: $Author: mib $ $Date: 2001-06-07 08:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,35 +208,33 @@ namespace SwUnoCursorHelper
  * --------------------------------------------------*/
 sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                                         , SwPaM& rPam
-                                        , const SfxItemSet& rSet
-                                        , Any& rAny
+                                        , Any *pAny
                                         , PropertyState& eState
                                         , const SwTxtNode* pNode  )
 {
-
-    eState = PropertyState_DIRECT_VALUE;
+    PropertyState eNewState = PropertyState_DIRECT_VALUE;
 //    PropertyState_DEFAULT_VALUE
 //    PropertyState_AMBIGUOUS_VALUE
     sal_Bool bDone = sal_True;
     switch(pMap->nWID)
     {
         case FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL:
-        {
-            SwFmtColl* pFmt = 0;
-            if(pNode)
-                pFmt = pNode->GetFmtColl();
-            else
-                pFmt = SwXTextCursor::GetCurTxtFmtColl(rPam, FALSE);
-            sal_Int8 nRet = -1;
-            if(pFmt && ((SwTxtFmtColl*)pFmt)->GetOutlineLevel() != NO_NUMBERING)
-                nRet = ((SwTxtFmtColl*)pFmt)->GetOutlineLevel();
-            rAny <<= nRet;
-        }
+            if( pAny )
+            {
+                SwFmtColl* pFmt = 0;
+                if(pNode)
+                    pFmt = pNode->GetFmtColl();
+                else
+                    pFmt = SwXTextCursor::GetCurTxtFmtColl(rPam, FALSE);
+                sal_Int8 nRet = -1;
+                if(pFmt && ((SwTxtFmtColl*)pFmt)->GetOutlineLevel() != NO_NUMBERING)
+                    nRet = ((SwTxtFmtColl*)pFmt)->GetOutlineLevel();
+                *pAny <<= nRet;
+            }
         break;
         case FN_UNO_PARA_CONDITIONAL_STYLE_NAME:
         case FN_UNO_PARA_STYLE :
         {
-            String sVal;
             SwFmtColl* pFmt = 0;
             if(pNode)
                 pFmt = FN_UNO_PARA_CONDITIONAL_STYLE_NAME == pMap->nWID
@@ -244,25 +242,32 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
             else
                 pFmt = SwXTextCursor::GetCurTxtFmtColl(rPam, FN_UNO_PARA_CONDITIONAL_STYLE_NAME == pMap->nWID);
             if(pFmt)
-                sVal = SwXStyleFamilies::GetProgrammaticName(pFmt->GetName(), SFX_STYLE_FAMILY_PARA);
-            rAny <<= OUString(sVal);
-            if(!sVal.Len())
-                eState = PropertyState_AMBIGUOUS_VALUE;
+            {
+                if( pAny )
+                {
+                    String sVal = SwXStyleFamilies::GetProgrammaticName(pFmt->GetName(), SFX_STYLE_FAMILY_PARA);
+                    *pAny <<= OUString(sVal);
+                }
+            }
+            else
+                eNewState = PropertyState_AMBIGUOUS_VALUE;
         }
         break;
         case FN_UNO_PAGE_STYLE :
         {
             String sVal = GetCurPageStyle(rPam);
-            rAny <<= OUString(sVal);
+            if( pAny )
+                *pAny <<= OUString(sVal);
             if(!sVal.Len())
-                eState = PropertyState_AMBIGUOUS_VALUE;
+                eNewState = PropertyState_AMBIGUOUS_VALUE;
         }
         break;
         case FN_UNO_NUM_START_VALUE  :
-        {
-            sal_Int16 nValue = IsNodeNumStart(rPam, eState);
-            rAny <<= nValue;
-        }
+            if( pAny )
+            {
+                sal_Int16 nValue = IsNodeNumStart(rPam, eNewState);
+                *pAny <<= nValue;
+            }
         break;
         case FN_UNO_NUM_LEVEL  :
         case FN_UNO_IS_NUMBER  :
@@ -273,58 +278,55 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
             // hier wird Multiselektion nicht beruecksichtigt
             if( pRule && pTxtNd->GetNum() )
             {
-                if(pMap->nWID == FN_UNO_NUM_LEVEL)
-                    rAny <<= (sal_Int16)(pTxtNd->GetNum()->GetLevel()&~NO_NUMLEVEL);
-                else if(pMap->nWID == FN_UNO_IS_NUMBER)
+                if( pAny )
                 {
-                    BOOL bIsNumber = 0 == (pTxtNd->GetNum()->GetLevel() & NO_NUMLEVEL);
-                    rAny.setValue(&bIsNumber, ::getBooleanCppuType());
-                }
-                else /*if(pMap->nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
-                {
-                    BOOL bIsRestart = pTxtNd->GetNum()->IsStart();
-                    rAny.setValue(&bIsRestart, ::getBooleanCppuType());
+                    if(pMap->nWID == FN_UNO_NUM_LEVEL)
+                        *pAny <<= (sal_Int16)(pTxtNd->GetNum()->GetLevel()&~NO_NUMLEVEL);
+                    else if(pMap->nWID == FN_UNO_IS_NUMBER)
+                    {
+                        BOOL bIsNumber = 0 == (pTxtNd->GetNum()->GetLevel() & NO_NUMLEVEL);
+                        pAny->setValue(&bIsNumber, ::getBooleanCppuType());
+                    }
+                    else /*if(pMap->nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
+                    {
+                        BOOL bIsRestart = pTxtNd->GetNum()->IsStart();
+                        pAny->setValue(&bIsRestart, ::getBooleanCppuType());
+                    }
                 }
             }
             else
-                eState = PropertyState_DEFAULT_VALUE;
+                eNewState = PropertyState_DEFAULT_VALUE;
             //PROPERTY_MAYBEVOID!
         }
         break;
         case FN_UNO_NUM_RULES  :
-            rAny = getNumberingProperty(rPam, eState);
-        break;
-        case RES_PAGEDESC      :
-        if(MID_PAGEDESC_PAGEDESCNAME == pMap->nMemberId )
-        {
-            const SfxPoolItem* pItem;
-            if(SFX_ITEM_SET == rSet.GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
+            if( pAny )
             {
-                const SwPageDesc* pDesc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
-                if(pDesc)
-                    rAny <<= OUString(
-                        SwXStyleFamilies::GetProgrammaticName(pDesc->GetName(), SFX_STYLE_FAMILY_PAGE));
+                *pAny = getNumberingProperty(rPam, eNewState);
             }
             else
-                eState = PropertyState_DEFAULT_VALUE;
-        }
-        else
-            bDone = sal_False;
-        break;
+            {
+                if( !rPam.GetDoc()->GetCurrNumRule( *rPam.GetPoint() ) )
+                    eNewState = PropertyState_DEFAULT_VALUE;
+            }
+            break;
         case FN_UNO_DOCUMENT_INDEX_MARK:
         {
             SwTxtAttr* pTxtAttr = rPam.GetNode()->GetTxtNode()->GetTxtAttr(
                                 rPam.GetPoint()->nContent, RES_TXTATR_TOXMARK);
             if(pTxtAttr)
             {
-                const SwTOXMark& rMark = pTxtAttr->GetTOXMark();
-                Reference< XDocumentIndexMark >  xRef = SwXDocumentIndexMark::GetObject(
-                        (SwTOXType*)rMark.GetTOXType(), &rMark, rPam.GetDoc());
-                rAny.setValue(&xRef, ::getCppuType((Reference<XDocumentIndex>*)0));
+                if( pAny )
+                {
+                    const SwTOXMark& rMark = pTxtAttr->GetTOXMark();
+                    Reference< XDocumentIndexMark >  xRef = SwXDocumentIndexMark::GetObject(
+                            (SwTOXType*)rMark.GetTOXType(), &rMark, rPam.GetDoc());
+                    pAny->setValue(&xRef, ::getCppuType((Reference<XDocumentIndex>*)0));
+                }
             }
             else
                 //auch hier - nicht zu unterscheiden
-                eState = PropertyState_DEFAULT_VALUE;
+                eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
         case FN_UNO_DOCUMENT_INDEX:
@@ -333,12 +335,15 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                                                     *rPam.Start() );
             if( pBase )
             {
-                Reference< XDocumentIndex > aRef =
-                    SwXDocumentIndexes::GetObject((SwTOXBaseSection*)pBase);
-                rAny.setValue(&aRef, ::getCppuType((Reference<XDocumentIndex>*)0));
+                if( pAny )
+                {
+                    Reference< XDocumentIndex > aRef =
+                        SwXDocumentIndexes::GetObject((SwTOXBaseSection*)pBase);
+                    pAny->setValue(&aRef, ::getCppuType((Reference<XDocumentIndex>*)0));
+                }
             }
             else
-                eState = PropertyState_DEFAULT_VALUE;
+                eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
         case FN_UNO_TEXT_FIELD:
@@ -351,24 +356,26 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                        : 0;
             if(pTxtAttr)
             {
-
-                const SwFmtFld& rFld = pTxtAttr->GetFld();
-                SwClientIter aIter(*rFld.GetFld()->GetTyp());
-                SwXTextField* pFld = 0;
-                SwXTextField* pTemp = (SwXTextField*)aIter.First(TYPE(SwXTextField));
-                while(pTemp && !pFld)
+                if( pAny )
                 {
-                    if(pTemp->GetFldFmt() == &rFld)
-                        pFld = pTemp;
-                    pTemp = (SwXTextField*)aIter.Next();
+                    const SwFmtFld& rFld = pTxtAttr->GetFld();
+                    SwClientIter aIter(*rFld.GetFld()->GetTyp());
+                    SwXTextField* pFld = 0;
+                    SwXTextField* pTemp = (SwXTextField*)aIter.First(TYPE(SwXTextField));
+                    while(pTemp && !pFld)
+                    {
+                        if(pTemp->GetFldFmt() == &rFld)
+                            pFld = pTemp;
+                        pTemp = (SwXTextField*)aIter.Next();
+                    }
+                    if(!pFld)
+                        pFld = new SwXTextField( rFld, rPam.GetDoc());
+                    Reference< XTextField >  xRet = pFld;
+                    pAny->setValue(&xRet, ::getCppuType((Reference<XTextField>*)0));
                 }
-                if(!pFld)
-                    pFld = new SwXTextField( rFld, rPam.GetDoc());
-                Reference< XTextField >  xRet = pFld;
-                rAny.setValue(&xRet, ::getCppuType((Reference<XTextField>*)0));
             }
             else
-                eState = PropertyState_DEFAULT_VALUE;
+                eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
 /*              laesst sich nicht feststellen
@@ -388,23 +395,26 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
             SwStartNodeType eType = pSttNode->GetStartNodeType();
             if(SwTableBoxStartNode == eType)
             {
-                const SwTableNode* pTblNode = pSttNode->FindTableNode();
-                SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
-                SwTable& rTable = ((SwTableNode*)pSttNode)->GetTable();
-                if(FN_UNO_TEXT_TABLE == pMap->nWID)
+                if( pAny )
                 {
-                    Reference< XTextTable >  xTable = SwXTextTables::GetObject(*pTableFmt);
-                    rAny.setValue(&xTable, ::getCppuType((Reference<XTextTable>*)0));
-                }
-                else
-                {
-                    SwTableBox* pBox = pSttNode->GetTblBox();
-                    Reference< XCell >  xCell = SwXCell::CreateXCell(pTableFmt, pBox);
-                    rAny.setValue(&xCell, ::getCppuType((Reference<XCell>*)0));
+                    const SwTableNode* pTblNode = pSttNode->FindTableNode();
+                    SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
+                    SwTable& rTable = ((SwTableNode*)pSttNode)->GetTable();
+                    if(FN_UNO_TEXT_TABLE == pMap->nWID)
+                    {
+                        Reference< XTextTable >  xTable = SwXTextTables::GetObject(*pTableFmt);
+                        pAny->setValue(&xTable, ::getCppuType((Reference<XTextTable>*)0));
+                    }
+                    else
+                    {
+                        SwTableBox* pBox = pSttNode->GetTblBox();
+                        Reference< XCell >  xCell = SwXCell::CreateXCell(pTableFmt, pBox);
+                        pAny->setValue(&xCell, ::getCppuType((Reference<XCell>*)0));
+                    }
                 }
             }
             else
-                eState = PropertyState_DEFAULT_VALUE;
+                eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
         case FN_UNO_TEXT_FRAME:
@@ -415,11 +425,14 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
             SwFrmFmt* pFmt;
             if(eType == SwFlyStartNode && 0 != (pFmt = pSttNode->GetFlyFmt()))
             {
-                Reference< XTextFrame >  xFrm = (SwXTextFrame*) SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM);
-                rAny.setValue(&xFrm, ::getCppuType((Reference<XTextFrame>*)0));
+                if( pAny )
+                {
+                    Reference< XTextFrame >  xFrm = (SwXTextFrame*) SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM);
+                    pAny->setValue(&xFrm, ::getCppuType((Reference<XTextFrame>*)0));
+                }
             }
             else
-                eState = PropertyState_DEFAULT_VALUE;
+                eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
         case FN_UNO_TEXT_SECTION:
@@ -427,11 +440,14 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
             SwSection* pSect = rPam.GetDoc()->GetCurrSection(*rPam.GetPoint());
             if(pSect)
             {
-                Reference< XTextSection >  xSect = SwXTextSections::GetObject( *pSect->GetFmt() );
-                rAny.setValue(&xSect, ::getCppuType((Reference<XTextSection>*)0) );
+                if( pAny )
+                {
+                    Reference< XTextSection >  xSect = SwXTextSections::GetObject( *pSect->GetFmt() );
+                    pAny->setValue(&xSect, ::getCppuType((Reference<XTextSection>*)0) );
+                }
             }
             else
-                eState = PropertyState_DEFAULT_VALUE;
+                eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
         case FN_UNO_ENDNOTE:
@@ -444,14 +460,17 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                 const SwFmtFtn& rFtn = pTxtAttr->GetFtn();
                 if(rFtn.IsEndNote() == (FN_UNO_ENDNOTE == pMap->nWID))
                 {
-                    Reference< XFootnote >  xFoot = new SwXFootnote(rPam.GetDoc(), rFtn);
-                    rAny.setValue(&xFoot, ::getCppuType((Reference<XFootnote>*)0));
+                    if( pAny )
+                    {
+                        Reference< XFootnote >  xFoot = new SwXFootnote(rPam.GetDoc(), rFtn);
+                        pAny->setValue(&xFoot, ::getCppuType((Reference<XFootnote>*)0));
+                    }
                 }
                 else
-                    eState = PropertyState_DEFAULT_VALUE;
+                    eNewState = PropertyState_DEFAULT_VALUE;
             }
             else
-                eState = PropertyState_DEFAULT_VALUE;
+                eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
         case FN_UNO_REFERENCE_MARK:
@@ -460,18 +479,23 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                                         GetTxtAttr(rPam.GetPoint()->nContent, RES_TXTATR_REFMARK);
             if(pTxtAttr)
             {
-                const SwFmtRefMark& rRef = pTxtAttr->GetRefMark();
-                Reference< XTextContent >  xRef = SwXReferenceMarks::GetObject( rPam.GetDoc(), &rRef );
-                rAny.setValue(&xRef, ::getCppuType((Reference<XTextContent>*)0));
+                if( pAny )
+                {
+                    const SwFmtRefMark& rRef = pTxtAttr->GetRefMark();
+                    Reference< XTextContent >  xRef = SwXReferenceMarks::GetObject( rPam.GetDoc(), &rRef );
+                    pAny->setValue(&xRef, ::getCppuType((Reference<XTextContent>*)0));
+                }
             }
             else
-                eState = PropertyState_DEFAULT_VALUE;
+                eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
         case RES_TXTATR_CHARFMT:
         // kein break hier!
         default: bDone = sal_False;
     }
+    if( bDone )
+        eState = eNewState;
     return bDone;
 };
 /* -----------------30.06.98 10:30-------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: os $ $Date: 2001-05-29 12:54:27 $
+ *  last change: $Author: mib $ $Date: 2001-06-07 08:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1848,24 +1848,24 @@ Any SwXTextCursor::GetPropertyValue(
         throw( UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     Any aAny;
-    SfxItemSet aSet(rPaM.GetDoc()->GetAttrPool(),
-        RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
-        RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
-        RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
-        RES_FILL_ORDER,     RES_FRMATR_END -1,
-        0L);
-    SwXTextCursor::GetCrsrAttr(rPaM, aSet);
-
-    String aPropertyName(rPropertyName);
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                 rPropSet.getPropertyMap(), rPropertyName);
-    BOOL bDone = FALSE;
     if(pMap)
     {
         PropertyState eTemp;
-        bDone = SwUnoCursorHelper::getCrsrPropertyValue(pMap, rPaM, aSet, aAny, eTemp );
+        BOOL bDone = SwUnoCursorHelper::getCrsrPropertyValue(pMap, rPaM, &aAny, eTemp );
         if(!bDone)
+        {
+            SfxItemSet aSet(rPaM.GetDoc()->GetAttrPool(),
+                RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
+                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
+                RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
+                RES_FILL_ORDER,     RES_FRMATR_END -1,
+                0L);
+            SwXTextCursor::GetCrsrAttr(rPaM, aSet);
+
             aAny = rPropSet.getPropertyValue(*pMap, aSet);
+        }
     }
     else
         throw UnknownPropertyException();
@@ -1909,34 +1909,39 @@ PropertyState lcl_SwXTextCursor_GetPropertyState( SfxItemSet** ppSet,
 {
     PropertyState eRet = PropertyState_DEFAULT_VALUE;
 
-    if( !*ppSet )
+    BOOL bDone = SwUnoCursorHelper::getCrsrPropertyValue(&rMap, rPaM, 0, eRet );
+    if(!bDone )
     {
-        *ppSet = new SfxItemSet( rPaM.GetDoc()->GetAttrPool(),
-                RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
-                RES_FILL_ORDER,     RES_FRMATR_END -1,
-                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
-                RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
-                0L );
-        SwXTextCursor::GetCrsrAttr( rPaM, **ppSet, FALSE );
-    }
-
-    Any aAny;
-    BOOL bDone = SwUnoCursorHelper::getCrsrPropertyValue(&rMap, rPaM, **ppSet, aAny, eRet );
-    if(!bDone)
-        eRet = rPropSet.getPropertyState( rMap,**ppSet );
-
-    //try again to find out if a value has been inherited
-    if( beans::PropertyState_DIRECT_VALUE == eRet )
-    {
-        if( !*ppSetParent )
+        if( !*ppSet )
         {
-            *ppSetParent = (*ppSet)->Clone( FALSE );
-            SwXTextCursor::GetCrsrAttr( rPaM, **ppSetParent, TRUE );
+            *ppSet = new SfxItemSet( rPaM.GetDoc()->GetAttrPool(),
+                    RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
+                    RES_FILL_ORDER,     RES_FRMATR_END -1,
+                    RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
+                    RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
+                    0L );
+            SwXTextCursor::GetCrsrAttr( rPaM, **ppSet, FALSE );
         }
-        bDone = SwUnoCursorHelper::getCrsrPropertyValue( &rMap, rPaM, **ppSetParent,
-                                            aAny, eRet );
-        if( !bDone )
-            eRet = rPropSet.getPropertyState( rMap, **ppSetParent );
+
+        if( (*ppSet)->Count() )
+            eRet = rPropSet.getPropertyState( rMap,**ppSet );
+        else
+            eRet = PropertyState_DEFAULT_VALUE;
+
+        //try again to find out if a value has been inherited
+        if( beans::PropertyState_DIRECT_VALUE == eRet )
+        {
+            if( !*ppSetParent )
+            {
+                *ppSetParent = (*ppSet)->Clone( FALSE );
+                SwXTextCursor::GetCrsrAttr( rPaM, **ppSetParent, TRUE );
+            }
+
+            if( (*ppSetParent)->Count() )
+                eRet = rPropSet.getPropertyState( rMap, **ppSetParent );
+            else
+                eRet = PropertyState_DEFAULT_VALUE;
+        }
     }
     return eRet;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2001-06-05 07:43:27 $
+ *  last change: $Author: mib $ $Date: 2001-06-07 08:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,8 +847,7 @@ OUString SwXCell::getFormula(void) throw( uno::RuntimeException )
     OUString sRet;
     if(IsValid())
     {
-        SwAttrSet aSet(pBox->ClaimFrmFmt()->GetAttrSet());
-        SwTblBoxFormula aFormula((const SwTblBoxFormula&)  aSet.Get( RES_BOXATR_FORMULA ));
+        SwTblBoxFormula aFormula( pBox->GetFrmFmt()->GetTblBoxFormula() );
         SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
         aFormula.PtrToBoxNm( pTable );
         sRet = aFormula.GetFormula();
@@ -897,9 +896,7 @@ double SwXCell::getValue(void) throw( uno::RuntimeException )
     double fRet = 0.;
     if(IsValid())
     {
-
-        SwAttrSet aSet(pBox->ClaimFrmFmt()->GetAttrSet());
-        fRet = ((SwTblBoxValue&)aSet.Get(RES_BOXATR_VALUE)).GetValue();
+        fRet = pBox->GetFrmFmt()->GetTblBoxValue().GetValue();
     }
     return fRet;
 }
@@ -1068,7 +1065,7 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
         }
         else
         {
-            SwFrmFmt* pBoxFmt = pBox->ClaimFrmFmt();
+            const SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
             const SwAttrSet& rSet = pBoxFmt->GetAttrSet();
             aRet = aPropSet.getPropertyValue(rPropertyName, rSet);
         }

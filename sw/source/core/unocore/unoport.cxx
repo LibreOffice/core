@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-05-09 09:43:44 $
+ *  last change: $Author: mib $ $Date: 2001-06-07 08:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,75 +313,17 @@ void SwXTextPortion::setPropertyValue(const OUString& rPropertyName,
 /*-- 11.12.98 09:56:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SwXTextPortion::getPropertyValue(
-    const OUString& rPropertyName)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    Sequence<OUString> aPropertyNames(1);
-    aPropertyNames.getArray()[0] = rPropertyName;
-    Sequence< Any > aRet = getPropertyValues(aPropertyNames );
-    return aRet.getConstArray()[0];
-}
-/* -----------------------------02.04.01 11:44--------------------------------
 
- ---------------------------------------------------------------------------*/
-void SwXTextPortion::setPropertyValues(
-    const Sequence< OUString >& rPropertyNames,
-    const Sequence< Any >& aValues )
-        throw(PropertyVetoException, IllegalArgumentException,
-            WrappedTargetException, RuntimeException)
+void SwXTextPortion::GetPropertyValues( const OUString *pPropertyNames,
+                                   uno::Any *pValues,
+                                      sal_Int32 nLength )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
     if(pUnoCrsr)
     {
-        const OUString* pPropertyNames = rPropertyNames.getConstArray();
-        const Any* pValues = aValues.getConstArray();
+        SfxItemSet *pSet = 0;
         const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
-        OUString sTmp;
-        for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
-        {
-            pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
-            if(pMap)
-            {
-                SwXTextCursor::SetPropertyValue(
-                    *pUnoCrsr, aPropSet, sTmp, pValues[nProp], pMap);
-            }
-            else
-            {
-                UnknownPropertyException aExcept;
-                aExcept.Message = pPropertyNames[nProp];
-                throw aExcept;
-            }
-        }
-    }
-    else
-        throw uno::RuntimeException();
-}
-/* -----------------------------02.04.01 11:44--------------------------------
-
- ---------------------------------------------------------------------------*/
-Sequence< Any > SwXTextPortion::getPropertyValues(
-    const Sequence< OUString >& rPropertyNames )
-        throw(RuntimeException)
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    Sequence< Any > aValues(rPropertyNames.getLength());
-    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
-    if(pUnoCrsr)
-    {
-        SfxItemSet aSet(pUnoCrsr->GetDoc()->GetAttrPool(),
-            RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
-            RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
-            RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
-            RES_FILL_ORDER,     RES_FRMATR_END -1,
-            0L);
-        sal_Bool bAttributesFilled = sal_False;
-        Any* pValues = aValues.getArray();
-        const OUString* pPropertyNames = rPropertyNames.getConstArray();
-        const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
-        for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
+        for(sal_Int32 nProp = 0; nProp < nLength; nProp++)
         {
             pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
             if(pMap)
@@ -481,19 +423,73 @@ Sequence< Any > SwXTextPortion::getPropertyValues(
                     }
                     break;
                     default:
-                        if(!bAttributesFilled)
-                        {
-                            SwXTextCursor::GetCrsrAttr(*pUnoCrsr, aSet);
-                            bAttributesFilled = sal_True;
-                        }
-                        BOOL bDone = FALSE;
                         PropertyState eTemp;
-                        bDone = SwUnoCursorHelper::getCrsrPropertyValue(
-                                            pMap, *pUnoCrsr, aSet, pValues[nProp], eTemp );
+                        BOOL bDone = SwUnoCursorHelper::getCrsrPropertyValue(
+                                            pMap, *pUnoCrsr, &(pValues[nProp]), eTemp );
                         if(!bDone)
-                            pValues[nProp] = aPropSet.getPropertyValue(*pMap, aSet);
+                        {
+                            if(!pSet)
+                            {
+                                   pSet = new SfxItemSet(pUnoCrsr->GetDoc()->GetAttrPool(),
+                                    RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
+                                    RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
+                                    RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
+                                    RES_FILL_ORDER,     RES_FRMATR_END -1,
+                                    0L);
+                                SwXTextCursor::GetCrsrAttr(*pUnoCrsr, *pSet);
+                            }
+                            pValues[nProp] = aPropSet.getPropertyValue(*pMap, *pSet);
+                        }
                 }
                 pMap++;
+            }
+            else
+            {
+                UnknownPropertyException aExcept;
+                aExcept.Message = pPropertyNames[nProp];
+                throw aExcept;
+            }
+        }
+
+        delete pSet;
+    }
+    else
+        throw uno::RuntimeException();
+}
+
+uno::Any SwXTextPortion::getPropertyValue(
+    const OUString& rPropertyName)
+        throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Any aAny;
+    GetPropertyValues( &rPropertyName, &aAny, 1 );
+    return aAny;
+}
+/* -----------------------------02.04.01 11:44--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXTextPortion::setPropertyValues(
+    const Sequence< OUString >& rPropertyNames,
+    const Sequence< Any >& aValues )
+        throw(PropertyVetoException, IllegalArgumentException,
+            WrappedTargetException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
+    if(pUnoCrsr)
+    {
+        const OUString* pPropertyNames = rPropertyNames.getConstArray();
+        const Any* pValues = aValues.getConstArray();
+        const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
+        OUString sTmp;
+        for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
+        {
+            pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
+            if(pMap)
+            {
+                SwXTextCursor::SetPropertyValue(
+                    *pUnoCrsr, aPropSet, sTmp, pValues[nProp], pMap);
             }
             else
             {
@@ -505,6 +501,20 @@ Sequence< Any > SwXTextPortion::getPropertyValues(
     }
     else
         throw uno::RuntimeException();
+}
+/* -----------------------------02.04.01 11:44--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence< Any > SwXTextPortion::getPropertyValues(
+    const Sequence< OUString >& rPropertyNames )
+        throw(RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< Any > aValues(rPropertyNames.getLength());
+
+    GetPropertyValues( rPropertyNames.getConstArray(),
+                       aValues.getArray(),
+                       rPropertyNames.getLength() );
     return aValues;
 }
 /* -----------------------------02.04.01 11:44--------------------------------

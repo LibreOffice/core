@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-05-30 11:28:11 $
+ *  last change: $Author: mib $ $Date: 2001-06-07 08:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,7 @@ void SwXParagraph::setPropertyValues(
                 }
                 SwXTextCursor::SetPropertyValue(*pUnoCrsr, aPropSet,
                                         sTmp, pValues[nProp], pMap);
+                pMap++;
             }
             else
             {
@@ -352,7 +353,7 @@ Sequence< Any > SwXParagraph::getPropertyValues(
                     BOOL bDone = FALSE;
                     PropertyState eTemp;
                     bDone = SwUnoCursorHelper::getCrsrPropertyValue(
-                                pMap, *pUnoCrsr, rAttrSet, pValues[nProp], eTemp, rTxtNode.GetTxtNode() );
+                                pMap, *pUnoCrsr, &(pValues[nProp]), eTemp, rTxtNode.GetTxtNode() );
                     if(!bDone)
                         pValues[nProp] = aPropSet.getPropertyValue(*pMap, rAttrSet);
                 }
@@ -462,7 +463,8 @@ void SwXParagraph::removeVetoableChangeListener(const OUString& PropertyName, co
 beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             SwUnoCrsr& rUnoCrsr,
                             const SwAttrSet** ppSet,
-                            const SfxItemPropertyMap& rMap )
+                            const SfxItemPropertyMap& rMap,
+                            sal_Bool &rAttrSetFetched )
                                 throw( beans::UnknownPropertyException)
 {
     beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
@@ -471,34 +473,41 @@ beans::PropertyState lcl_SwXParagraph_getPropertyState(
             RES_SURROUND == rMap.nWID  && MID_SURROUND_SURROUNDTYPE == rMap.nMemberId )
         return eRet;
 
-    if(!(*ppSet))
+    if(!(*ppSet) && !rAttrSetFetched )
     {
         SwNode& rTxtNode = rUnoCrsr.GetPoint()->nNode.GetNode();
         (*ppSet) = ((SwTxtNode&)rTxtNode).GetpSwAttrSet();
+        rAttrSetFetched = sal_True;
     }
-    if(rMap.nWID == FN_UNO_NUM_RULES)
+    switch( rMap.nWID )
     {
+    case FN_UNO_NUM_RULES:
         //wenn eine Numerierung gesetzt ist, dann hier herausreichen, sonst nichts tun
         SwUnoCursorHelper::getNumberingProperty( rUnoCrsr, eRet );
+        break;
+    case FN_UNO_PARA_STYLE:
+    case FN_UNO_PARA_CONDITIONAL_STYLE_NAME:
+        {
+            SwFmtColl* pFmt = SwXTextCursor::GetCurTxtFmtColl(
+                rUnoCrsr, rMap.nWID == FN_UNO_PARA_CONDITIONAL_STYLE_NAME);
+            if( !pFmt )
+                eRet = beans::PropertyState_AMBIGUOUS_VALUE;
+        }
+        break;
+    case FN_UNO_PAGE_STYLE:
+        {
+            String sVal = SwUnoCursorHelper::GetCurPageStyle( rUnoCrsr );
+            if( !sVal.Len() )
+                eRet = beans::PropertyState_AMBIGUOUS_VALUE;
+        }
+        break;
+    default:
+        if((*ppSet) && SFX_ITEM_SET == (*ppSet)->GetItemState(rMap.nWID, FALSE))
+            eRet = beans::PropertyState_DIRECT_VALUE;
+        else
+            eRet = beans::PropertyState_DEFAULT_VALUE;
+        break;
     }
-    else if(rMap.nWID == FN_UNO_PARA_STYLE ||
-            rMap.nWID == FN_UNO_PARA_CONDITIONAL_STYLE_NAME )
-    {
-        SwFmtColl* pFmt = SwXTextCursor::GetCurTxtFmtColl(
-            rUnoCrsr, rMap.nWID == FN_UNO_PARA_CONDITIONAL_STYLE_NAME);
-        if( !pFmt )
-            eRet = beans::PropertyState_AMBIGUOUS_VALUE;
-    }
-    else if(rMap.nWID == FN_UNO_PAGE_STYLE)
-    {
-        String sVal = SwUnoCursorHelper::GetCurPageStyle( rUnoCrsr );
-        if( !sVal.Len() )
-            eRet = beans::PropertyState_AMBIGUOUS_VALUE;
-    }
-    else if((*ppSet) && SFX_ITEM_SET == (*ppSet)->GetItemState(rMap.nWID, FALSE))
-        eRet = beans::PropertyState_DIRECT_VALUE;
-    else
-        eRet = beans::PropertyState_DEFAULT_VALUE;
 
     return eRet;
 }
@@ -523,7 +532,9 @@ beans::PropertyState SwXParagraph::getPropertyState(const OUString& rPropertyNam
             aExcept.Message = rPropertyName;
             throw aExcept;
         }
-        eRet = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet, *pMap );
+        sal_Bool bDummy = sal_False;
+        eRet = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet, *pMap,
+                                                     bDummy );
     }
     else
         throw uno::RuntimeException();
@@ -547,6 +558,7 @@ uno::Sequence< beans::PropertyState > SwXParagraph::getPropertyStates(
     if( pUnoCrsr )
     {
         const SwAttrSet* pSet = 0;
+        sal_Bool bAttrSetFetched = sal_False;
         for(sal_Int32 i = 0, nEnd = PropertyNames.getLength(); i < nEnd; i++ )
         {
             pMap = SfxItemPropertyMap::GetByName( pMap, pNames[i] );
@@ -556,7 +568,10 @@ uno::Sequence< beans::PropertyState > SwXParagraph::getPropertyStates(
                 aExcept.Message = pNames[i];
                 throw aExcept;
             }
-            pStates[i] = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet,*pMap);
+
+            pStates[i] = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet,*pMap, bAttrSetFetched );
+
+            pMap++;
         }
     }
     else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-05-23 09:07:32 $
+ *  last change: $Author: mib $ $Date: 2001-06-07 08:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,7 +616,8 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
             nMovePos = nFirstFrameIndex;
 
         if(nMovePos > nCurrentIndex)
-            pUnoCrsr->Right(nMovePos - nCurrentIndex);
+//          pUnoCrsr->Right(nMovePos - nCurrentIndex);
+            pUnoCrsr->GetPoint()->nContent = nMovePos;
         else
         {
             // ensure proper exit: move to paragraph end
