@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:40:13 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,8 @@ public:
             nToggleBiDiAttrFlags &= ~(1 << nId);
     }
     USHORT GetToggleBiDiAttrFlags() const { return nToggleBiDiAttrFlags; }
-
+    void SetToggleAttrFlags(USHORT nFlags) { nToggleAttrFlags = nFlags; }
+    void SetToggleBiDiAttrFlags(USHORT nFlags) {nToggleBiDiAttrFlags = nFlags;}
 
     const SfxPoolItem* GetFmtAttr(const SwPosition& rPos, USHORT nWhich);
     const SfxPoolItem* GetStackAttr(const SwPosition& rPos, USHORT nWhich);
@@ -917,6 +918,12 @@ private:
     wwSectionManager maSectionManager;
 
     /*
+    A map of of tables to their follow nodes for use in inserting tables into
+    already existing document, i.e. insert file
+    */
+    sw::util::InsertedTablesManager maInsertedTables;
+
+    /*
     Creates unique names to give to (file link) sections (WW1/WW2/...)
     */
     wwSectionNamer maSectionNameGenerator;
@@ -1242,8 +1249,10 @@ private:
     SdrObject* ImportOleBase( Graphic& rGraph, const Graphic* pGrf=0,
         const SfxItemSet* pFlySet=0 );
 
-    SwFrmFmt* ImportOle( const Graphic* = 0, const SfxItemSet* pFlySet = 0 );
-    SwFlyFrmFmt* InsertOle(SdrOle2Obj &rObject, const SfxItemSet &rFlySet);
+    SwFrmFmt* ImportOle( const Graphic* = 0, const SfxItemSet* pFlySet = 0,
+        const SfxItemSet* pGrfSet = 0);
+    SwFlyFrmFmt* InsertOle(SdrOle2Obj &rObject, const SfxItemSet &rFlySet,
+        const SfxItemSet &rGrfSet);
 
     bool ImportFormulaControl(WW8FormulaControl &rBox,WW8_CP nStart,
         SwWw8ControlType nWhich);
@@ -1409,6 +1418,13 @@ private:
 public:     // eigentlich private, geht aber leider nur public
     void ConvertUFName( String& rName );
 
+
+    USHORT GetToggleAttrFlags() const;
+    USHORT GetToggleBiDiAttrFlags() const;
+    void SetToggleAttrFlags(USHORT nFlags);
+    void SetToggleBiDiAttrFlags(USHORT nFlags);
+
+
     long Read_Ftn(WW8PLCFManResult* pRes);
     sal_uInt16 End_Ftn();
     long Read_Field(WW8PLCFManResult* pRes);
@@ -1523,7 +1539,7 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_Author( WW8FieldDesc*, String& );
     eF_ResT Read_F_TemplName( WW8FieldDesc*, String& );
     short GetTimeDatePara(String& rStr, ULONG& rFormat, USHORT &rLang,
-        bool bHijri = false);
+        int nWhichDefault, bool bHijri = false);
     bool ForceFieldLanguage(SwField &rFld, USHORT nLang);
     eF_ResT Read_F_DateTime( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_FileName( WW8FieldDesc*, String& rStr);
@@ -1598,6 +1614,8 @@ String BookmarkToWriter(const String &rBookmark);
 bool RTLGraphicsHack(long &rLeft, long nWidth,
     SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, SwTwips nPageLeft,
     SwTwips nPageRight, SwTwips nPageSize);
+void MatchEscherMirrorIntoFlySet(const SvxMSDffImportRec &rRecord,
+    SfxItemSet &rFlySet);
 bool RTLDrawingsHack(long &rLeft, long nWidth,
     SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, SwTwips nPageLeft,
     SwTwips nPageRight, SwTwips nPageSize);
