@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mhu $ $Date: 2000-09-28 17:43:39 $
+#   last change: $Author: kso $ $Date: 2000-10-11 07:55:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ UNOTYPES=\
     com.sun.star.beans.PropertyAttribute \
     com.sun.star.beans.PropertyState \
     com.sun.star.beans.XPropertySetInfo \
-    com.sun.star.chaos.WallPaper \
     com.sun.star.container.XNameAccess \
     com.sun.star.container.XNameContainer \
     com.sun.star.io.XActiveDataControl \
