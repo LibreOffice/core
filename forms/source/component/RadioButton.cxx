@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:01:18 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,9 +406,9 @@ void ORadioButtonModel::fillProperties(
         DECL_PROP1(TAG,                 ::rtl::OUString,            BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,                  BOUND);
         DECL_PROP1(CONTROLSOURCE,       rtl::OUString,              BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,   READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,   BOUND, MAYBEVOID);
-        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
+        DECL_IFACE_PROP3(BOUNDFIELD,    XPropertySet,               BOUND,READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,               BOUND, MAYBEVOID);
+        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,          READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
 
@@ -488,9 +488,10 @@ void ORadioButtonModel::_propertyChanged(const PropertyChangeEvent& _rEvent) thr
             ::osl::MutexGuard aGuard(m_aMutex);
 
             // as we aren't commitable we have to take care of the field we are bound to ourself
-            if (m_xField.is() && !m_bInReset)
+            Reference<XPropertySet> xField = getField();
+            if (xField.is() && !m_bInReset)
             {
-                m_xField->setPropertyValue(PROPERTY_VALUE, makeAny(m_sReferenceValue));
+                xField->setPropertyValue(PROPERTY_VALUE, makeAny(m_sReferenceValue));
             }
         }
     }
@@ -548,15 +549,16 @@ sal_Bool ORadioButtonModel::_commit()
 
     // we're in reset, so this commit means "put the value into the field you're bound to"
     // 72769 - 08.02.00 - FS
-    DBG_ASSERT(m_xField.is(), "ORadioButtonModel::_commit : committing while resetting, but not bound ?");
-    if (m_xField.is())
+    Reference<XPropertySet> xField = getField();
+    DBG_ASSERT(xField.is(), "ORadioButtonModel::_commit : committing while resetting, but not bound ?");
+    if (xField.is())
     {
         try
         {
             sal_Int16 nValue;
             m_xAggregateSet->getPropertyValue(PROPERTY_STATE) >>= nValue;
             if (nValue == 1)
-                m_xField->setPropertyValue(PROPERTY_VALUE, makeAny(m_sReferenceValue));
+                xField->setPropertyValue(PROPERTY_VALUE, makeAny(m_sReferenceValue));
         }
         catch(Exception&)
         {
