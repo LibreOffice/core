@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npwrap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:16:01 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 09:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,8 @@ Display*    pAppDisplay = NULL;
 extern void* pPluginLib;
 extern NPError (*pNP_Shutdown)();
 
+void LoadAdditionalLibs(const char*);
+
 XtAppContext app_context;
 Widget topLevel = NULL, topBox = NULL;
 int wakeup_fd[2] = { 0, 0 };
@@ -136,10 +138,11 @@ IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, pMediator )
 Widget createSubWidget( char* pPluginText, Widget shell, XLIB_Window aParentWindow )
 {
     Widget newWidget = XtVaCreateManagedWidget(
-          "drawingArea",
 #if defined USE_MOTIF
+          "drawingArea",
         xmDrawingAreaWidgetClass,
 #else
+        "",
         labelWidgetClass,
 #endif
           shell,
@@ -206,22 +209,6 @@ static void CheckPlugin( const char* pPath )
     dlclose( pLib );
 }
 
-static void LoadAdditionalLibs( const char* pPluginLib )
-{
-    void *pLib;
-#if 0 // defined GCC
-#define OPEN_FLAGS (RTLD_LAZY | RTLD_GLOBAL)
-    medDebug( 1, "LoadAdditionalLibs %s\n", pPluginLib );
-    if( ! strncmp( pPluginLib, "rpnp.so", 7 ) ||
-        ! strncmp( pPluginLib, "libflashplayer.so", 17 )
-        )
-    {
-        pLib = dlopen( "libg++.so.2.7.2", OPEN_FLAGS );
-        medDebug( !pLib, "dlopen of libg++.so.2.7.2 failed because of:\n\t%s\n", dlerror() );
-    }
-#endif
-}
-
 #if OSL_DEBUG_LEVEL > 1 && defined LINUX
 #include <execinfo.h>
 #endif
@@ -275,8 +262,6 @@ int main( int argc, char **argv)
     }
     nAppArguments = argc;
     pAppArguments = argv;
-
-    XInitThreads();
 
     XSetErrorHandler( plugin_x_error_handler );
 
