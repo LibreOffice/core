@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:54:26 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 09:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -999,6 +999,17 @@ BOOL DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
 {
     BOOL bOK = FALSE;
+
+    // With the current implementation of FuSlideShow there is a problem
+    // when it dsplays the show in a window: When the show is stopped it
+    // returns at one point in time SDRPAGE_NOTFOUND as current page index.
+    // Because FuSlideShow is currently being rewritten this bug is fixed
+    // here.
+    // This is not as bad a hack as it may lock since making SwitchPage()
+    // more robust with respect to invalid page numbers this if statement is
+    // a good thing anyway.
+    if (nSelectedPage == SDRPAGE_NOTFOUND)
+        nSelectedPage = 0;
 
     if (IsSwitchPageAllowed())
     {
