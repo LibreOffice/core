@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:27:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,9 +707,11 @@ public:
     // for all invalidation methods.
     // OD 2004-05-19 #i28701# - use method <_InvalidationAllowed(..)> to
     // decide, if invalidation will to be performed or not.
+    // --> OD 2004-10-08 #i26945# - no additional invalidation, if it's already
+    // invalidate.
     void _InvalidateSize()
     {
-        if ( _InvalidationAllowed( INVALID_SIZE ) )
+        if ( bValidSize && _InvalidationAllowed( INVALID_SIZE ) )
         {
             bValidSize = FALSE;
             _ActionOnInvalidation( INVALID_SIZE );
@@ -717,7 +719,7 @@ public:
     }
     void _InvalidatePrt()
     {
-        if ( _InvalidationAllowed( INVALID_PRTAREA ) )
+        if ( bValidPrtArea && _InvalidationAllowed( INVALID_PRTAREA ) )
         {
             bValidPrtArea = FALSE;
             _ActionOnInvalidation( INVALID_PRTAREA );
@@ -725,7 +727,7 @@ public:
     }
     void _InvalidatePos()
     {
-        if ( _InvalidationAllowed( INVALID_POS ) )
+        if ( bValidPos && _InvalidationAllowed( INVALID_POS ) )
         {
             bValidPos = FALSE;
             _ActionOnInvalidation( INVALID_POS );
@@ -733,7 +735,7 @@ public:
     }
     void _InvalidateLineNum()
     {
-        if ( _InvalidationAllowed( INVALID_LINENUM ) )
+        if ( bValidLineNum && _InvalidationAllowed( INVALID_LINENUM ) )
         {
             bValidLineNum = FALSE;
             _ActionOnInvalidation( INVALID_LINENUM );
@@ -741,13 +743,14 @@ public:
     }
     void _InvalidateAll()
     {
-        if ( _InvalidationAllowed( INVALID_ALL ) )
+        if ( ( bValidSize || bValidPrtArea || bValidPos ) &&
+             _InvalidationAllowed( INVALID_ALL ) )
         {
             bValidSize = bValidPrtArea = bValidPos = FALSE;
             _ActionOnInvalidation( INVALID_ALL );
         }
     }
-
+    // <--
     //Benachrichtigen gleich die Seite mit.
     inline void InvalidateSize();
     inline void InvalidatePrt();
