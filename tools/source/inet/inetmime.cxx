@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetmime.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:03:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,7 @@ bool parseParameters(ParameterList const & rInput,
         for (Parameter * p = rInput.m_pList; p;)
         {
             bool bCharset = p->m_aCharset.Len() != 0;
-            rtl_TextEncoding eEncoding;
+            rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
             if (bCharset)
                 eEncoding
                     = INetMIME::getCharsetEncoding(p->m_aCharset.GetBuffer(),
@@ -2450,7 +2450,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                     // not contain encoded-words):
                     enum Entity { ENTITY_JUNK, ENTITY_NON_PHRASE,
                                   ENTITY_PHRASE };
-                    Entity eEntity;
+                    Entity eEntity = ENTITY_JUNK;
                     switch (*pBodyPtr)
                     {
                         case '.':
@@ -3131,12 +3131,12 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
             const sal_Char * q = p + 1;
             bool bEncodedWord = q != pEnd && *q++ == '?';
 
-            rtl_TextEncoding eCharsetEncoding;
+            rtl_TextEncoding eCharsetEncoding = RTL_TEXTENCODING_DONTKNOW;
             if (bEncodedWord)
             {
                 const sal_Char * pCharsetBegin = q;
                 const sal_Char * pLanguageBegin = 0;
-                int nAlphaCount;
+                int nAlphaCount = 0;
                 for (bool bDone = false; !bDone;)
                     if (q == pEnd)
                     {
@@ -3191,7 +3191,7 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                     }
             }
 
-            bool bEncodingB;
+            bool bEncodingB = false;
             if (bEncodedWord)
                 if (q == pEnd)
                     bEncodedWord = false;
@@ -4024,8 +4024,8 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
 
                 // The non UTF-8 code will only work for stateless single byte
                 // character encodings (see also below):
-                sal_Char * pTargetBuffer;
-                sal_Size nTargetSize;
+                sal_Char * pTargetBuffer = NULL;
+                sal_Size nTargetSize = 0;
                 sal_uInt32 nSize;
                 if (eMIMEEncoding == RTL_TEXTENCODING_UTF8)
                 {
@@ -4067,6 +4067,7 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                                   & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL))
                             break;
                         delete[] pTargetBuffer;
+                        pTargetBuffer = NULL;
                         rtl_resetUnicodeToTextContext(hConverter, hContext);
                     }
                     rtl_destroyUnicodeToTextContext(hConverter, hContext);
