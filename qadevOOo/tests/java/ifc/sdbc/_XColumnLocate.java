@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XColumnLocate.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:54 $
+ *  last change:$Date: 2003-09-08 10:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.sdbc;
 
-import com.sun.star.sdbc.SQLException;
-import com.sun.star.sdbc.XColumnLocate;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
+
+import com.sun.star.sdbc.SQLException;
+import com.sun.star.sdbc.XColumnLocate;
 
 /**
 /**
