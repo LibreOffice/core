@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 13:07:50 $
+#   last change: $Author: rt $ $Date: 2004-03-30 16:47:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,17 +129,18 @@ OBJFILES=   \
 APP1TARGET= $(TARGET)
 APP1OBJS=   $(OBJFILES)
 
-APP1STDLIBS=\
-        $(SALLIB)	\
-        $(SALHELPERLIB)
+APP1STDLIBS = \
+    $(REGLIB) \
+    $(SALLIB) \
+    $(SALHELPERLIB)
 
 # --- Targets ------------------------------------------------------
 
-#.IF "$(debug)" == ""
-#YACCFLAGS+=-l
-#.ELSE
-#YACCFLAGS+=-v
-#.ENDIF
+.IF "$(debug)" == ""
+YACCFLAGS+=-l
+.ELSE
+YACCFLAGS+=-v
+.ENDIF
     
 .INCLUDE :  target.mk
 
