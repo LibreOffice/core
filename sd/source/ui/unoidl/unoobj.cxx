@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:03:40 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1818,5 +1818,3 @@ uno::Sequence< OUString > SAL_CALL SdUnoEventsAccess::getSupportedServiceNames( 
     uno::Sequence< OUString > aStr( &maStrServiceName, 1 );
     return aStr;
 }
-
-
