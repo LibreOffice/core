@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-27 19:29:36 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,25 @@ ModalDialog RID_SCDLG_LINKAREA
         Size = MAP_APPFONT ( 204 , 8 ) ;
         Text = "~URL der externen Datenquelle" ;
         Text [ ENGLISH ] = "External Data Source Location" ;
+        Text[ english_us ] = "External Data Source Location";
+        Text[ portuguese ] = "External Data Source Location";
+        Text[ russian ] = "External Data Source Location";
+        Text[ greek ] = "External Data Source Location";
+        Text[ dutch ] = "~URL van de externe gegevensbron";
+        Text[ french ] = "~URL de la source de données externe";
+        Text[ spanish ] = "~URL de la fuente de datos externa";
+        Text[ italian ] = "External Data Source Location";
+        Text[ danish ] = "External Data Source Location";
+        Text[ swedish ] = "~URL för extern datakälla";
+        Text[ polish ] = "Adres URL zewnêtrznego Ÿród³a danych";
+        Text[ portuguese_brazilian ] = "External Data Source Location";
+        Text[ japanese ] = "External Data Source Location";
+        Text[ korean ] = "External Data Source Location";
+        Text[ chinese_simplified ] = "External Data Source Location";
+        Text[ chinese_traditional ] = "External Data Source Location";
+        Text[ turkish ] = "External Data Source Location";
+        Text[ arabic ] = "External Data Source Location";
+        Text[ catalan ] = "External Data Source Location";
     };
     ComboBox CB_URL
     {
@@ -113,6 +132,25 @@ ModalDialog RID_SCDLG_LINKAREA
         WordBreak = TRUE ;
         Text = "(URL des Quelldokuments im lokalen Dateisystem oder im Internet)" ;
         Text [ ENGLISH ] = "(Insert a local file location or an URL from a web site here)" ;
+        Text[ english_us ] = "(Insert a local file location or an URL from a web site here)";
+        Text[ portuguese ] = "(Insert a local file location or an URL from a web site here)";
+        Text[ russian ] = "(Insert a local file location or an URL from a web site here)";
+        Text[ greek ] = "(Insert a local file location or an URL from a web site here)";
+        Text[ dutch ] = "(URL van het brondocument in het lokale bestandssysteem of in Internet)";
+        Text[ french ] = "(URL du document source dans le système de fichiers local ou dans l'Internet)";
+        Text[ spanish ] = "(URL del documento fuente en el sistema de archivos local o en Internet)";
+        Text[ italian ] = "(Insert a local file location or an URL from a web site here)";
+        Text[ danish ] = "(Insert a local file location or an URL from a web site here)";
+        Text[ swedish ] = "(Källdokumentets URL i det lokala filsystemet eller på Internet)";
+        Text[ polish ] = "(Adres URL dokumentu Ÿród³owego w lokalnym systemie plików lub w Internecie)";
+        Text[ portuguese_brazilian ] = "(Insert a local file location or an URL from a web site here)";
+        Text[ japanese ] = "(Insert a local file location or an URL from a web site here)";
+        Text[ korean ] = "(Insert a local file location or an URL from a web site here)";
+        Text[ chinese_simplified ] = "(Insert a local file location or an URL from a web site here)";
+        Text[ chinese_traditional ] = "(Insert a local file location or an URL from a web site here)";
+        Text[ turkish ] = "(Insert a local file location or an URL from a web site here)";
+        Text[ arabic ] = "(Insert a local file location or an URL from a web site here)";
+        Text[ catalan ] = "(Insert a local file location or an URL from a web site here)";
     };
     FixedText FT_RANGES
     {
@@ -120,6 +158,25 @@ ModalDialog RID_SCDLG_LINKAREA
         Size = MAP_APPFONT ( 198 , 8 ) ;
         Text = "~Verfügbare Tabellen/Bereiche" ;
         Text [ ENGLISH ] = "Available Tables/Ranges" ;
+        Text[ english_us ] = "Available Tables/Ranges";
+        Text[ portuguese ] = "Available Tables/Ranges";
+        Text[ russian ] = "Available Tables/Ranges";
+        Text[ greek ] = "Available Tables/Ranges";
+        Text[ dutch ] = "~Beschikbare tabellen/Bereiken";
+        Text[ french ] = "Tables/Plages dis~ponibles";
+        Text[ spanish ] = "Tablas/Áreas dispo~nibles";
+        Text[ italian ] = "Available Tables/Ranges";
+        Text[ danish ] = "Available Tables/Ranges";
+        Text[ swedish ] = "T~illgängliga tabeller/områden";
+        Text[ polish ] = "Dostêpne tabele/obszary";
+        Text[ portuguese_brazilian ] = "Available Tables/Ranges";
+        Text[ japanese ] = "Available Tables/Ranges";
+        Text[ korean ] = "Available Tables/Ranges";
+        Text[ chinese_simplified ] = "Available Tables/Ranges";
+        Text[ chinese_traditional ] = "Available Tables/Ranges";
+        Text[ turkish ] = "Available Tables/Ranges";
+        Text[ arabic ] = "Available Tables/Ranges";
+        Text[ catalan ] = "Available Tables/Ranges";
     };
     MultiListBox LB_RANGES
     {
@@ -135,6 +192,25 @@ ModalDialog RID_SCDLG_LINKAREA
         TabStop = TRUE ;
         Text = "~Aktualisierung alle" ;
         Text [ ENGLISH ] = "Auto reload data every" ;
+        Text[ english_us ] = "~Update every";
+        Text[ portuguese ] = "Auto reload data every";
+        Text[ russian ] = "Auto reload data every";
+        Text[ greek ] = "Auto reload data every";
+        Text[ dutch ] = "~Actualisering alle";
+        Text[ french ] = "Tout ~actualiser";
+        Text[ spanish ] = "Actuali~zar cada";
+        Text[ italian ] = "Auto reload data every";
+        Text[ danish ] = "Auto reload data every";
+        Text[ swedish ] = "Uppd~atering var";
+        Text[ polish ] = "Aktualizuj wszystko";
+        Text[ portuguese_brazilian ] = "Auto reload data every";
+        Text[ japanese ] = "Auto reload data every";
+        Text[ korean ] = "Auto reload data every";
+        Text[ chinese_simplified ] = "Auto reload data every";
+        Text[ chinese_traditional ] = "Auto reload data every";
+        Text[ turkish ] = "Auto reload data every";
+        Text[ arabic ] = "Auto reload data every";
+        Text[ catalan ] = "Auto reload data every";
     };
     NumericField NF_DELAY
     {
@@ -153,6 +229,44 @@ ModalDialog RID_SCDLG_LINKAREA
         Size = MAP_APPFONT ( 59 , 8 ) ;
         Text = "Sekunden" ;
         Text [ ENGLISH ] = "seconds" ;
+        Text[ english_us ] = "seconds";
+        Text[ portuguese ] = "seconds";
+        Text[ russian ] = "seconds";
+        Text[ greek ] = "seconds";
+        Text[ dutch ] = "seconden";
+        Text[ french ] = "secondes";
+        Text[ spanish ] = "segundos";
+        Text[ italian ] = "seconds";
+        Text[ danish ] = "seconds";
+        Text[ swedish ] = "sekund";
+        Text[ polish ] = "sekundy";
+        Text[ portuguese_brazilian ] = "seconds";
+        Text[ japanese ] = "seconds";
+        Text[ korean ] = "seconds";
+        Text[ chinese_simplified ] = "seconds";
+        Text[ chinese_traditional ] = "seconds";
+        Text[ turkish ] = "seconds";
+        Text[ arabic ] = "seconds";
+        Text[ catalan ] = "seconds";
     };
+    Text[ english_us ] = "External Data Source";
+    Text[ portuguese ] = "External Data Source";
+    Text[ russian ] = "External Data Source";
+    Text[ greek ] = "External Data Source";
+    Text[ dutch ] = "Externe gegevensbron";
+    Text[ french ] = "Source de données externe";
+    Text[ spanish ] = "Fuente de datos externa";
+    Text[ italian ] = "External Data Source";
+    Text[ danish ] = "External Data Source";
+    Text[ swedish ] = "Extern datakälla";
+    Text[ polish ] = "Zewnêtrzne Ÿród³o danych";
+    Text[ portuguese_brazilian ] = "External Data Source";
+    Text[ japanese ] = "External Data Source";
+    Text[ korean ] = "External Data Source";
+    Text[ chinese_simplified ] = "External Data Source";
+    Text[ chinese_traditional ] = "External Data Source";
+    Text[ turkish ] = "External Data Source";
+    Text[ arabic ] = "External Data Source";
+    Text[ catalan ] = "External Data Source";
 };
 
