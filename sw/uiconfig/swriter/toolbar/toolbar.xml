@@ -1,33 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
-<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:InsertCtrl" toolbar:helpid="helpid:52822" toolbar:text="" toolbar:style="dropdown" />
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <toolbar:toolbaritem xlink:href=".uno:InsertCtrl" toolbar:helpid="52822"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertFieldCtrl" toolbar:helpid="helpid:52824" toolbar:text="" toolbar:style="dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:InsertObjCtrl" toolbar:helpid="helpid:52823" toolbar:text="" toolbar:style="dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:InsertDraw" toolbar:helpid="helpid:10244" toolbar:text="" toolbar:style="dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater" toolbar:helpid="helpid:10977" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:helpid="helpid:11002" toolbar:text="" toolbar:style="radio dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:helpid="helpid:11003" toolbar:text="" toolbar:style="radio dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes" toolbar:helpid="helpid:11004" toolbar:text="" toolbar:style="radio dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes" toolbar:helpid="helpid:11005" toolbar:text="" toolbar:style="radio dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:CalloutShapes" toolbar:helpid="helpid:11006" toolbar:text="" toolbar:style="radio dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:StarShapes" toolbar:helpid="helpid:11007" toolbar:text="" toolbar:style="radio dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:helpid="helpid:10593" toolbar:text="" toolbar:style="dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:ShadowCursor" toolbar:helpid="22204"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:EditGlossary" toolbar:helpid="helpid:20620" toolbar:text="" toolbar:style="dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:InsertCaptionDialog" toolbar:helpid="helpid:20310" toolbar:text="" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:InsertIndexesEntry" toolbar:helpid="helpid:20335" toolbar:text="" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:InsertReferenceField" toolbar:helpid="helpid:20313" toolbar:text="" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:ShadowCursor" toolbar:helpid="helpid:22204" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:Hyphenate" toolbar:helpid="20605"/>
+ <toolbar:toolbaritem xlink:href=".uno:ThesaurusDialog" toolbar:helpid="20603"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Hyphenate" toolbar:helpid="helpid:20605" toolbar:text="" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:ThesaurusDialog" toolbar:helpid="helpid:20603" toolbar:text="" toolbar:visible="false" />
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:helpid="helpid:5961" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:helpid="helpid:6660" toolbar:text="" />
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:helpid="helpid:10000" toolbar:text="" toolbar:visible="false" />
-  <toolbar:toolbaritem xlink:href=".uno:Graphic" toolbar:helpid="helpid:20213" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:BrowseView" toolbar:helpid="helpid:6313" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:Graphic" toolbar:helpid="20213"/>
+ <toolbar:toolbaritem xlink:href=".uno:BrowseView" toolbar:helpid="6313"/>
 </toolbar:toolbar>
