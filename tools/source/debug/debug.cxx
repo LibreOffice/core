@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gh $ $Date: 2002-05-29 07:22:51 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 11:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #endif
 
 #include <time.h>
-#if SUPD > 652
-#include <stdarg.h> // include both to satisfy all compiler/platform
-#endif
 #include <cstdarg>  // combinations
 #include <stdlib.h>
 #include <string.h>

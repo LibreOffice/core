@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-02 13:41:36 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 11:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1776,26 +1776,6 @@ CalendarWrapper& DateFormatter::GetCalendarWrapper() const
     return *mpCalendarWrapper;
 }
 
-#if SUPD < 651
-
-// -----------------------------------------------------------------------
-
-void DateFormatter::SetDateFormat( DateFormat eFormat )
-{
-    DBG_ERROR( "Who is using DateFormatter::SetDateFormat?\nPlease report to Malte Timmermann" );
-    mnDateFormat = eFormat;
-}
-
-// -----------------------------------------------------------------------
-
-DateFormat DateFormatter::GetDateFormat() const
-{
-    DBG_ERROR( "Who is using DateFormatter::GetDateFormat?\nPlease report to Malte Timmermann" );
-    return ( mnDateFormat != 0xFFFF ) ? (DateFormat)mnDateFormat : ImplGetLocaleDataWrapper().getDateFormat();
-}
-
-#endif
-
 // -----------------------------------------------------------------------
 
 void DateFormatter::SetExtDateFormat( ExtDateFieldFormat eFormat )
@@ -2281,15 +2261,6 @@ void DateField::Last()
     ImplNewFieldValue( maLast );
     SpinField::Last();
 }
-
-// -----------------------------------------------------------------------
-
-#if SUPD < 651
-void DateField::SetExtFormat( ExtDateFieldFormat eFormat )
-{
-    DateFormatter::SetExtDateFormat( eFormat );
-}
-#endif
 
 // -----------------------------------------------------------------------
 
