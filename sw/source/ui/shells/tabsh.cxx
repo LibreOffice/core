@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-11-22 07:27:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,9 @@
 #endif
 #ifndef _HELPID_H
 #include <helpid.h>
+#endif
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
 #endif
 
 #define SwTableShell
@@ -897,12 +900,18 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 }
         break;
         case FN_TABLE_ADJUST_CELLS:
-            if ( rSh.IsAdjustCellWidthAllowed() )
-                rSh.AdjustCellWidth();
-        break;
         case FN_TABLE_BALANCE_CELLS:
-            if ( rSh.IsAdjustCellWidthAllowed(TRUE) )
-                rSh.AdjustCellWidth(TRUE);
+        {
+            BOOL bBalance = (FN_TABLE_BALANCE_CELLS == nSlot);
+            if ( rSh.IsAdjustCellWidthAllowed(bBalance) )
+            {
+                {
+                    // remove actions to make a valid table selection
+                    UnoActionRemoveContext aRemoveContext(rSh.GetDoc());
+                }
+                rSh.AdjustCellWidth(bBalance);
+            }
+        }
         break;
         case FN_TABLE_BALANCE_ROWS:
             if ( rSh.BalanceRowHeight(TRUE) )
