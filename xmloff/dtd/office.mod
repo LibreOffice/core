@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.14 2000-11-30 16:46:14 dvo Exp $
+	$Id: office.mod,v 1.15 2000-12-02 21:43:39 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -112,13 +112,15 @@
 
 <!-- Validity constraint: The elements
 		text:outline-style,
-		text:footnotes-configuration and
-		text:endnotes-configuration
+		text:footnotes-configuration,
+		text:endnotes-configuration and
+		text:bibliography-configuration
 	may appear only once!
 	Unfortunatetly, this constraint cannot be easily specified in the DTD.
 -->
 <!ELEMENT office:styles (%styles;|text:outline-style|
-		text:footnotes-configuration|text:endnotes-configuration)*>
+		text:footnotes-configuration|text:endnotes-configuration|
+		text:bibliography-configuration)*>
 
 <!ELEMENT office:automatic-styles (%styles;|style:page-master)*>
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
+ *  last change: $Author: dvo $ $Date: 2000-12-02 21:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,14 @@
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
+#include <com/sun/star/uno/XInterface.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_TEXT_BIBLIOGRAPHYDATAFIELD_HPP_
 #include <com/sun/star/text/BibliographyDataField.hpp>
 #endif
@@ -178,6 +186,8 @@ using ::com::sun::star::beans::PropertyState;
 using ::com::sun::star::container::XIndexReplace;
 using ::com::sun::star::container::XNamed;
 using ::com::sun::star::lang::XServiceInfo;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::uno::XInterface;
 
 
 
@@ -237,6 +247,7 @@ XMLSectionExport::XMLSectionExport(
             RTL_CONSTASCII_USTRINGPARAM("CreateFromLevelParagraphStyles")),
         sDocumentIndex(RTL_CONSTASCII_USTRINGPARAM("DocumentIndex")),
         sContentSection(RTL_CONSTASCII_USTRINGPARAM("ContentSection")),
+        sHeaderSection(RTL_CONSTASCII_USTRINGPARAM("HeaderSection")),
         sTableOfContent(RTL_CONSTASCII_USTRINGPARAM(sXML_table_of_content)),
         sIllustrationIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_illustration_index)),
         sAlphabeticalIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_alphabetical_index)),
@@ -245,6 +256,7 @@ XMLSectionExport::XMLSectionExport(
         sBibliography(RTL_CONSTASCII_USTRINGPARAM(sXML_bibliography)),
         sUserIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_user_index)),
         sIndexBody(RTL_CONSTASCII_USTRINGPARAM(sXML_index_body)),
+        sIndexTitle(RTL_CONSTASCII_USTRINGPARAM(sXML_index_title)),
         sEmpty()
 {
 }
@@ -271,11 +283,18 @@ void XMLSectionExport::ExportSectionStart(
 
         // export index or regular section
         Reference<XDocumentIndex> xIndex;
-        GetIndex(rSection, xIndex);
-        if (xIndex.is())
+        if (GetIndex(rSection, xIndex))
         {
-            // we are an index
-            ExportIndexStart(xIndex);
+            if (xIndex.is())
+            {
+                // we are an index
+                ExportIndexStart(xIndex);
+            }
+            else
+            {
+                // we are an index header
+                ExportIndexHeaderStart(rSection);
+            }
         }
         else
         {
@@ -285,11 +304,12 @@ void XMLSectionExport::ExportSectionStart(
     }
 }
 
-void XMLSectionExport::GetIndex(
+sal_Bool XMLSectionExport::GetIndex(
     const Reference<XTextSection> & rSection,
     Reference<XDocumentIndex> & rIndex)
 {
     // first, reset result
+    sal_Bool bRet = sal_False;
     rIndex = NULL;
 
     // get section Properties
@@ -316,12 +336,27 @@ void XMLSectionExport::GetIndex(
             if (rSection == xEnclosingSection)
             {
                 rIndex = xDocumentIndex;
+                bRet = sal_True;
             }
-            // else: we are no index
+            // else: index header or regular section
+
+            // is the enclosing index identical with the header section?
+            aAny = xIndexPropSet->getPropertyValue(sHeaderSection);
+            // now mis-named: contains header section
+            aAny >>= xEnclosingSection;
+
+            // if the enclosing section is "our" section, then we are an index!
+            if (rSection == xEnclosingSection)
+            {
+                bRet = sal_True;
+            }
+            // else: regular section
         }
         // else: we aren't even inside of an index
     }
     // else: we don't even know what an index is.
+
+    return bRet;
 }
 
 
@@ -336,51 +371,58 @@ void XMLSectionExport::ExportSectionEnd(
 
         // export index or regular section end
         Reference<XDocumentIndex> xIndex;
-        GetIndex(rSection, xIndex);
-        if (xIndex.is())
+        if (GetIndex(rSection, xIndex))
         {
-
-            // index end: close index body element
-            GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
-            GetExport().GetDocHandler()->endElement(
-                GetExport().GetNamespaceMap().GetQNameByKey(
-                    XML_NAMESPACE_TEXT, sIndexBody));
-            GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
-
-            switch (MapSectionType(xIndex->getServiceName()))
+            if (xIndex.is())
             {
-                case TEXT_SECTION_TYPE_TOC:
-                    pElementName = sXML_table_of_content;
-                    break;
+                // index end: close index body element
+                GetExport().GetDocHandler()->ignorableWhitespace(
+                    GetExport().sWS);
+                GetExport().GetDocHandler()->endElement(
+                    GetExport().GetNamespaceMap().GetQNameByKey(
+                        XML_NAMESPACE_TEXT, sIndexBody));
+                GetExport().GetDocHandler()->ignorableWhitespace(
+                    GetExport().sWS);
 
-                case TEXT_SECTION_TYPE_ILLUSTRATION:
-                    pElementName = sXML_illustration_index;
-                    break;
+                switch (MapSectionType(xIndex->getServiceName()))
+                {
+                    case TEXT_SECTION_TYPE_TOC:
+                        pElementName = sXML_table_of_content;
+                        break;
 
-                case TEXT_SECTION_TYPE_ALPHABETICAL:
-                    pElementName = sXML_alphabetical_index;
-                    break;
+                    case TEXT_SECTION_TYPE_ILLUSTRATION:
+                        pElementName = sXML_illustration_index;
+                        break;
 
-                case TEXT_SECTION_TYPE_TABLE:
-                    pElementName = sXML_table_index;
-                    break;
+                    case TEXT_SECTION_TYPE_ALPHABETICAL:
+                        pElementName = sXML_alphabetical_index;
+                        break;
 
-                case TEXT_SECTION_TYPE_OBJECT:
-                    pElementName = sXML_object_index;
-                    break;
+                    case TEXT_SECTION_TYPE_TABLE:
+                        pElementName = sXML_table_index;
+                        break;
 
-                case TEXT_SECTION_TYPE_USER:
-                    pElementName = sXML_user_index;
-                    break;
+                    case TEXT_SECTION_TYPE_OBJECT:
+                        pElementName = sXML_object_index;
+                        break;
 
-                case TEXT_SECTION_TYPE_BIBLIOGRAPHY:
-                    pElementName = sXML_bibliography;
-                    break;
+                    case TEXT_SECTION_TYPE_USER:
+                        pElementName = sXML_user_index;
+                        break;
 
-                default:
-                    DBG_ERROR("unknown index type");
-                    // default: skip index!
-                    break;
+                    case TEXT_SECTION_TYPE_BIBLIOGRAPHY:
+                        pElementName = sXML_bibliography;
+                        break;
+
+                    default:
+                        DBG_ERROR("unknown index type");
+                        // default: skip index!
+                        break;
+                }
+            }
+            else
+            {
+                pElementName = sXML_index_title;
             }
         }
         else
@@ -450,6 +492,23 @@ void XMLSectionExport::ExportIndexStart(
             DBG_ERROR("unknown index type");
             break;
     }
+}
+
+void XMLSectionExport::ExportIndexHeaderStart(
+    const Reference<XTextSection> & rSection)
+{
+    // export name, dammit!
+    Reference<XNamed> xName(rSection, UNO_QUERY);
+    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_name, xName->getName());
+
+    // format already handled -> export only start element
+    GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
+    GetExport().GetDocHandler()->startElement(
+        GetExport().GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TEXT,
+                                                    sIndexTitle),
+        GetExport().GetXAttrList() );
+    GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
+    GetExport().ClearAttrList();
 }
 
 
@@ -1515,5 +1574,113 @@ void XMLSectionExport::ExportBoolean(
         GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
                                       pAttributeName,
                                       bDefault ? sXML_false : sXML_true);
+    }
+}
+
+const sal_Char sAPI_FieldMaster_Bibliography[] =
+                                "com.sun.star.text.FieldMaster.Bibliography";
+const sal_Char sAPI_SortKey[] = "SortKey";
+const sal_Char sAPI_IsSortAscending[] = "IsSortAscending";
+
+void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
+{
+    // first: get field master
+    // (we'll create one, and get the only master for this type)
+    Reference<XMultiServiceFactory> xFactory(rExport.GetModel(),UNO_QUERY);
+    if( xFactory.is() )
+    {
+        const OUString sFieldMaster_Bibliography(
+            RTL_CONSTASCII_USTRINGPARAM(sAPI_FieldMaster_Bibliography));
+
+        const OUString sBracketBefore(
+            RTL_CONSTASCII_USTRINGPARAM("BracketBefore"));
+        const OUString sBracketAfter(
+            RTL_CONSTASCII_USTRINGPARAM("BracketAfter"));
+        const OUString sIsNumberEntries(
+            RTL_CONSTASCII_USTRINGPARAM("IsNumberEntries"));
+        const OUString sIsSortByPosition(
+            RTL_CONSTASCII_USTRINGPARAM("IsSortByPosition"));
+        const OUString sSortKeys(
+            RTL_CONSTASCII_USTRINGPARAM("SortKeys"));
+
+        Reference<XInterface> xIfc =
+            xFactory->createInstance(sFieldMaster_Bibliography);
+        if( xIfc.is() )
+        {
+            Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
+
+            Any aAny;
+            OUString sTmp;
+
+            aAny = xPropSet->getPropertyValue(sBracketBefore);
+            aAny >>= sTmp;
+            rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_prefix, sTmp);
+
+            aAny = xPropSet->getPropertyValue(sBracketAfter);
+            aAny >>= sTmp;
+            rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_suffix, sTmp);
+
+            aAny = xPropSet->getPropertyValue(sIsNumberEntries);
+            if (*(sal_Bool*)aAny.getValue())
+            {
+                rExport.AddAttributeASCII(XML_NAMESPACE_TEXT,
+                                          sXML_numbered_entries, sXML_true);
+            }
+
+            aAny = xPropSet->getPropertyValue(sIsSortByPosition);
+            if (! *(sal_Bool*)aAny.getValue())
+            {
+                rExport.AddAttributeASCII(XML_NAMESPACE_TEXT,
+                                          sXML_sort_by_position, sXML_false);
+            }
+
+            // configuration elementXML_CONSTASCII_ACTION( sXML_suffix, "suffix" );
+
+            SvXMLElementExport aElement(rExport, XML_NAMESPACE_TEXT,
+                                        sXML_bibliography_configuration,
+                                        sal_True, sal_True);
+
+            // sort keys
+            aAny = xPropSet->getPropertyValue(sSortKeys);
+            Sequence<Sequence<PropertyValue> > aKeys;
+            aAny >>= aKeys;
+            sal_Int32 nKeysCount = aKeys.getLength();
+            for(sal_Int32 nKeys = 0; nKeys < nKeysCount; nKeys++)
+            {
+                Sequence<PropertyValue> & rKey = aKeys[nKeys];
+
+                sal_Int32 nKeyCount = rKey.getLength();
+                for(sal_Int32 nKey = 0; nKey < nKeyCount; nKey++)
+                {
+                    PropertyValue& rValue = rKey[nKey];
+
+                    if (rValue.Name.equalsAsciiL(sAPI_SortKey,
+                                                 sizeof(sAPI_SortKey)-1))
+                    {
+                        sal_Int16 nKey;
+                        rValue.Value >>= nKey;
+                        OUStringBuffer sBuf;
+                        if (SvXMLUnitConverter::convertEnum( sBuf, nKey,
+                                                 aBibliographyDataFieldMap ) )
+                        {
+                            rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_key,
+                                                 sBuf.makeStringAndClear());
+                        }
+                    }
+                    else if (rValue.Name.equalsAsciiL(sAPI_IsSortAscending,
+                                            sizeof(sAPI_IsSortAscending)-1))
+                    {
+                        sal_Bool bTmp = *(sal_Bool*)rValue.Value.getValue();
+                        rExport.AddAttributeASCII(XML_NAMESPACE_TEXT,
+                                                  sXML_sort_ascending,
+                                                bTmp ? sXML_true : sXML_false);
+                    }
+                }
+
+                SvXMLElementExport aKeyElem(rExport,
+                                            XML_NAMESPACE_TEXT, sXML_sort_key,
+                                            sal_True, sal_True);
+            }
+        }
     }
 }

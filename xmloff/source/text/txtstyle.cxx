@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:09 $
+ *  last change: $Author: dvo $ $Date: 2000-12-02 21:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #ifndef _XMLOFF_XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
+#ifndef _XMLOFF_XMLSECTIONEXPORT_HXX
+#include "XMLSectionExport.hxx"
+#endif
 
 #ifndef _XMLOFF_STYLEEXP_HXX
 //#include "styleexp.hxx"
@@ -190,6 +193,7 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed )
                        bUsed, XML_STYLE_FAMILY_TEXT_FRAME );
     exportNumStyles( bUsed );
     exportTextFootnoteConfiguration();
+    XMLSectionExport::ExportBibliographyConfiguration(GetExport());
 }
 
 

@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.9 2000-12-01 17:24:27 cl Exp $
+	$Id: text.mod,v 1.10 2000-12-02 21:43:39 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -684,7 +684,8 @@
 						draw:a|draw:text-box|draw:image|text:section|
 						text:table-of-content|text:illustration-index|
 						text:table-index|text:object-index|text:user-index|
-						text:alphabetical-index|text:bibliography)*">
+						text:alphabetical-index|text:bibliography|
+						text:index-title)*">
 
 <!ELEMENT text:section ((text:section-source|office:dde-source)?,
 						%sectionText;) >
@@ -743,7 +744,7 @@
 <!ATTLIST text:illustration-index-source text:use-caption %boolean; "true">
 <!ATTLIST text:illustration-index-source text:caption-sequence-name 
 									%string; #IMPLIED>
-<!ATTLIST text:illustration-index-source text:sequence-format 
+<!ATTLIST text:illustration-index-source text:caption-sequence-format 
 								(text|category-and-value|caption) #IMPLIED>
 
 <!ELEMENT text:illustration-index-entry-template 
@@ -766,7 +767,7 @@
 <!ATTLIST text:table-index-source text:use-caption %boolean; "true">
 <!ATTLIST text:table-index-source text:caption-sequence-name 
 									%string; #IMPLIED>
-<!ATTLIST text:table-index-source text:sequence-format 
+<!ATTLIST text:table-index-source text:caption-sequence-format 
 								(text|category-and-value|caption) #IMPLIED>
 
 <!ELEMENT text:table-index-entry-template ( text:index-entry-page-number |
@@ -884,6 +885,14 @@
 
 <!ELEMENT text:index-body %sectionText; >
 
+<!-- 
+Validity constraint: text:index-title elements may appear only in
+indices, and there may be only one text:index-title element.  
+-->
+<!ELEMENT text:index-title %sectionText; >
+<!ATTLIST text:index-title text:style-name %styleName; #IMPLIED>
+<!ATTLIST text:index-title text:name %string; #IMPLIED>
+
 <!ELEMENT text:index-title-template (#PCDATA)>
 <!ATTLIST text:index-title-template text:style-name %styleName; #IMPLIED>
 
@@ -972,3 +981,18 @@
 <!ATTLIST text:alphabetical-index-mark text:key1 %string; #IMPLIED>
 <!ATTLIST text:alphabetical-index-mark text:key2 %string; #IMPLIED>
 <!ATTLIST text:alphabetical-index-mark text:main-etry %boolean; "false">
+
+<!ELEMENT text:bibliography-configuration (text:sort-key)*>
+<!ATTLIST text:bibliography-configuration text:prefix %string; #IMPLIED>
+<!ATTLIST text:bibliography-configuration text:suffix %string; #IMPLIED>
+<!ATTLIST text:bibliography-configuration text:sort-by-position %boolean; "true">
+<!ATTLIST text:bibliography-configuration text:numbered-entries %boolean; "false">
+
+<!ELEMENT text:sort-key EMPTY>
+<!ATTLIST text:sort-key text:key ( address | annote | author | 
+	bibiliographic_type | booktitle | chapter | custom1 | custom2 | 
+	custom3 | custom4 | custom5 | edition | editor | howpublished | 
+	identifier | institution | isbn | journal | month | note | number | 
+	organizations | pages | publisher | report_type | school | series | 
+	title | url | volume | year ) #REQUIRED>
+<!ATTLIST text:sort-key text:sort-ascending %boolean; "true">

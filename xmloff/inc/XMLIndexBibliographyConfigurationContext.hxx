@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLSectionImportContext.hxx,v $
+ *  $RCSfile: XMLIndexBibliographyConfigurationContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-02 21:43:40 $
+ *  last change: $Author: dvo $ $Date: 2000-12-02 21:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,69 +59,68 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLSECTIONIMPORTCONTEXT_HXX_
-#define _XMLOFF_XMLSECTIONIMPORTCONTEXT_HXX_
+#ifndef _XMLOFF_XMLINDEXBIBLIOGRAPHYCONFIGURATIONCONTEXT_HXX_
+#define _XMLOFF_XMLINDEXBIBLIOGRAPHYCONFIGURATIONCONTEXT_HXX_
 
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#ifndef _XMLOFF_XMLSTYLE_HXX
+#include "xmlstyle.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+#include <vector>
+
 namespace com { namespace sun { namespace star {
-    namespace text { class XTextRange;  }
-    namespace beans { class XPropertySet; }
     namespace xml { namespace sax { class XAttributeList; } }
 } } }
 namespace rtl { class OUString; }
-class XMLTextImportHelper;
-
 
 /**
- * Import text sections.
+ * Import bibliography configuration.
  *
- * This context may *also* be used for index header sections. The
- * differentiates its behaviour based on GetLocalName().
+ * Little cheat: Cover all child elements in CreateChildContext.
  */
-class XMLSectionImportContext : public SvXMLImportContext
+class XMLIndexBibliographyConfigurationContext : public SvXMLStyleContext
 {
-    /// start position; ranges aquired via getStart(),getEnd() don't move
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextRange> xStartRange;
+    const ::rtl::OUString sFieldMaster_Bibliography;
+    const ::rtl::OUString sBracketBefore;
+    const ::rtl::OUString sBracketAfter;
+    const ::rtl::OUString sIsNumberEntries;
+    const ::rtl::OUString sIsSortByPosition;
+    const ::rtl::OUString sSortKeys;
+    const ::rtl::OUString sSortKey;
+    const ::rtl::OUString sIsSortAscending;
 
-    /// end position
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextRange> xEndRange;
+    ::rtl::OUString sSuffix;
+    ::rtl::OUString sPrefix;
+    sal_Bool bNumberedEntries;
+    sal_Bool bSortByPosition;
 
-    /// TextSection (as XPropertySet) for passing down to data source elements
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xSectionPropertySet;
-
-    const ::rtl::OUString sTextSection;
-    const ::rtl::OUString sIndexHeaderSection;
-    const ::rtl::OUString sCondition;
-    const ::rtl::OUString sIsVisible;
-    const ::rtl::OUString sEmpty;
-
-    ::rtl::OUString sStyleName;
-    ::rtl::OUString sName;
-    ::rtl::OUString sCond;
-    sal_Bool bCondOK;
-    sal_Bool bIsVisible;
-    sal_Bool bValid;
+    ::std::vector< ::com::sun::star::uno::Sequence<
+                        ::com::sun::star::beans::PropertyValue> > aSortKeys;
 
 public:
 
     TYPEINFO();
 
-    XMLSectionImportContext(
+    XMLIndexBibliographyConfigurationContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
-    ~XMLSectionImportContext();
+    ~XMLIndexBibliographyConfigurationContext();
 
 protected:
 
@@ -137,9 +136,9 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 
-    void ProcessAttributes(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
+    void ProcessAttribute(
+        const ::rtl::OUString sLocalName,
+        const ::rtl::OUString sValue);
 };
 
 #endif

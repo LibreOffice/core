@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
+ *  last change: $Author: dvo $ $Date: 2000-12-02 21:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ using namespace ::com::sun::star::text;
 TYPEINIT1( XMLSectionImportContext, SvXMLImportContext );
 
 const sal_Char sAPI_TextSection[] = "com.sun.star.text.TextSection";
+const sal_Char sAPI_IndexHeaderSection[] = "com.sun.star.text.IndexHeaderSection";
 const sal_Char sAPI_IsProtected[] = "IsProtected";
 const sal_Char sAPI_Condition[] = "Condition";
 const sal_Char sAPI_IsVisible[] = "IsVisible";
@@ -176,6 +177,8 @@ XMLSectionImportContext::XMLSectionImportContext(
         xEndRange(),
         xSectionPropertySet(),
         sTextSection(RTL_CONSTASCII_USTRINGPARAM(sAPI_TextSection)),
+        sIndexHeaderSection(RTL_CONSTASCII_USTRINGPARAM(
+            sAPI_IndexHeaderSection)),
         sCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_Condition)),
         sIsVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsVisible)),
         sStyleName(),
@@ -198,6 +201,14 @@ void XMLSectionImportContext::StartElement(
     // process attributes
     ProcessAttributes(xAttrList);
 
+    // process index headers:
+    sal_Bool bIsIndexHeader = GetLocalName().equalsAsciiL(
+        sXML_index_title, sizeof(sXML_index_title)-1);
+    if (bIsIndexHeader)
+    {
+        bValid = sal_True;
+    }
+
     UniReference<XMLTextImportHelper> rHelper = GetImport().GetTextImport();
 
     // valid?
@@ -209,7 +220,8 @@ void XMLSectionImportContext::StartElement(
         if (xFactory.is())
         {
             Reference<XInterface> xIfc =
-                xFactory->createInstance( sTextSection );
+                xFactory->createInstance( bIsIndexHeader ? sIndexHeaderSection
+                                                        : sTextSection );
             if (xIfc.is())
             {
                 Reference<XPropertySet> xPropSet(xIfc, UNO_QUERY);
@@ -233,14 +245,17 @@ void XMLSectionImportContext::StartElement(
                     }
                 }
 
-                // IsVisible and condition
-                Any aAny;
-                aAny.setValue( &bIsVisible, ::getBooleanCppuType() );
-                xPropSet->setPropertyValue( sIsVisible, aAny );
-                if (bCondOK)
+                // IsVisible and condition (not for index headers)
+                if (! bIsIndexHeader)
                 {
-                    aAny <<= sCond;
-                    xPropSet->setPropertyValue( sCondition, aAny );
+                    Any aAny;
+                    aAny.setValue( &bIsVisible, ::getBooleanCppuType() );
+                    xPropSet->setPropertyValue( sIsVisible, aAny );
+                    if (bCondOK)
+                    {
+                        aAny <<= sCond;
+                        xPropSet->setPropertyValue( sCondition, aAny );
+                    }
                 }
 
                 // insert X, <paragraph>, X; then insert

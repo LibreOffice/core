@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
+ *  last change: $Author: dvo $ $Date: 2000-12-02 21:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ enum SectionTypeEnum
     TEXT_SECTION_TYPE_BIBLIOGRAPHY,
 
     // index header sections:
-    // todo
+    TEXT_SECTION_TYPE_HEADER,
 
     TEXT_SECTION_TYPE_UNKNOWN
 };
@@ -168,6 +168,7 @@ class XMLSectionExport
     const ::rtl::OUString sCreateFromLevelParagraphStyles;
     const ::rtl::OUString sDocumentIndex;
     const ::rtl::OUString sContentSection;
+    const ::rtl::OUString sHeaderSection;
 
     const ::rtl::OUString sTableOfContent;
     const ::rtl::OUString sIllustrationIndex;
@@ -177,6 +178,7 @@ class XMLSectionExport
     const ::rtl::OUString sBibliography;
     const ::rtl::OUString sUserIndex;
     const ::rtl::OUString sIndexBody;
+    const ::rtl::OUString sIndexTitle;
 
     const ::rtl::OUString sEmpty;
 
@@ -205,6 +207,13 @@ public:
             ::com::sun::star::text::XTextSection > & rSection,
         sal_Bool bAutoStyles);
 
+    /**
+     * Export the configuration element for bibliography indices.
+     *
+     * (This is part of XMLSectionExport because all section- and
+     *  index-related items are handled here.)
+     */
+    static void ExportBibliographyConfiguration(SvXMLExport& rExport);
 
 protected:
 
@@ -213,10 +222,15 @@ protected:
 
     // export methods for section and index start:
 
-    /// export an index start element. This method is to be called
+    /// export an index start element.
     void ExportIndexStart(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XDocumentIndex > & rSection);
+
+    /// export an index header start element.
+    void ExportIndexHeaderStart(
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::text::XTextSection > & rSection);
 
     /// export a proper section (and source elements)
     void ExportRegularSectionStart(
@@ -262,10 +276,15 @@ protected:
     // helper methods:
 
     /**
-     * If this section is an index, return the index; else return an
-     * empty reference.
-     */
-    void GetIndex(
+     * If this section is an index, the index is written in the
+     * rIndex parameter. The return value is sal_True for all "special"
+     * sections.
+     *
+     * Thus we have:
+     * return sal_False: regular section
+     * return sal_True, xIndex is empty: index header section
+     * return sal_True, xIndex is set: index section */
+    sal_Bool GetIndex(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextSection > & rSection,
         ::com::sun::star::uno::Reference <

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
+#   last change: $Author: dvo $ $Date: 2000-12-02 21:43:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,6 +97,7 @@ CXXFILES = \
         XMLFootnoteConfigurationImportContext.cxx \
         XMLFootnoteImportContext.cxx \
         XMLIndexAlphabeticalSourceContext.cxx \
+        XMLIndexBibliographyConfigurationContext.cxx \
         XMLIndexBibliographyEntryContext.cxx \
         XMLIndexBibliographySourceContext.cxx \
         XMLIndexBodyContext.cxx \
@@ -159,6 +160,7 @@ SLOFILES =	\
         $(SLO)$/XMLFootnoteImportContext.obj \
         $(SLO)$/XMLIndexAlphabeticalSourceContext.obj \
         $(SLO)$/XMLIndexBodyContext.obj \
+        $(SLO)$/XMLIndexBibliographyConfigurationContext.obj \
         $(SLO)$/XMLIndexBibliographyEntryContext.obj \
         $(SLO)$/XMLIndexBibliographySourceContext.obj \
         $(SLO)$/XMLIndexChapterInfoEntryContext.obj \

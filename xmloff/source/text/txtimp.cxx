@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
+ *  last change: $Author: dvo $ $Date: 2000-12-02 21:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,8 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_illustration_index, XML_TOK_TEXT_ILLUSTRATION_INDEX },
     { XML_NAMESPACE_TEXT, sXML_user_index,      XML_TOK_TEXT_USER_INDEX },
     { XML_NAMESPACE_TEXT, sXML_alphabetical_index, XML_TOK_TEXT_ALPHABETICAL_INDEX },
-    { XML_NAMESPACE_TEXT, sXML_bibliography,    XML_TOK_TEXT_BIBLIOGRAPHY_INDEX },
+    { XML_NAMESPACE_TEXT, sXML_bibliography, XML_TOK_TEXT_BIBLIOGRAPHY_INDEX },
+    { XML_NAMESPACE_TEXT, sXML_index_title,     XML_TOK_TEXT_INDEX_TITLE },
 
     XML_TOKEN_MAP_END
 };
@@ -1085,6 +1086,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         }
         break;
 
+    case XML_TOK_TEXT_INDEX_TITLE:
     case XML_TOK_TEXT_SECTION:
         pContext = new XMLSectionImportContext( rImport, nPrefix, rLocalName );
         break;
