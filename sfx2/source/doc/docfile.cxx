@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-14 11:26:33 $
+ *  last change: $Author: mba $ $Date: 2001-06-20 09:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1261,6 +1261,24 @@ void SfxMedium::Transfer_Impl()
         if ( ! xContent.is() )
         {
             eError = ERRCODE_IO_NOTEXISTS;
+            return;
+        }
+
+        SFX_ITEMSET_ARG( GetItemSet(), pSegmentSize, SfxInt32Item, SID_SEGMENTSIZE, sal_False);
+        if ( pSegmentSize )
+        {
+            // this file must be stored into a disk spanned package
+            SotStorageRef xStor = new SotStorage( TRUE, GetName(), STREAM_STD_READWRITE | STREAM_TRUNC, STORAGE_TRANSACTED );
+            if ( xStor->GetError() == ERRCODE_NONE )
+            {
+                ::com::sun::star::uno::Any aAny;
+                aAny <<= pSegmentSize->GetValue();
+                xStor->SetProperty( String::CreateFromAscii("SegmentSize"), aAny );
+                GetStorage()->CopyTo( xStor );
+                xStor->Commit();
+            }
+            else
+                eError = ERRCODE_IO_GENERAL;
             return;
         }
 
