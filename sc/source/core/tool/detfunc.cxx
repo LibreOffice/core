@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-09 15:09:26 $
+ *  last change: $Author: nn $ $Date: 2001-03-02 21:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
+#include <svx/outlobj.hxx>
 #include <svx/sdshitm.hxx>
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdtditm.hxx>
@@ -760,6 +761,10 @@ SdrObject* ScDetectiveFunc::DrawCaption( USHORT nCol, USHORT nRow, const String&
 
     // #78611# for SetText, the object must already be inserted
     pCaption->SetText( rText );
+
+    OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject();
+    if ( pOPO )
+        pOPO->SetVertical( FALSE );         // notes are always horizontal
 
     //  SetAttributes must be after SetText, because the font attributes
     //  are applied to the text.
