@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:38:29 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,14 @@
 #endif
 
 #include <numeric>
+
+// #i37443#
+#define ANGLE_BOUND_START_VALUE     (2.25)
+#define ANGLE_BOUND_MINIMUM_VALUE   (0.1)
+#define COUNT_SUBDIVIDE_DEFAULT     (4L)
+#ifdef DBG_UTIL
+static double fAngleBoundStartValue = ANGLE_BOUND_START_VALUE;
+#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -319,6 +327,20 @@ namespace basegfx
                 const sal_uInt32 nPointCount(rCandidate.isClosed() ? rCandidate.count() : rCandidate.count() - 1L);
                 aRetval.clear();
 
+                // #i37443# prepare convenient AngleBound if none was given
+                if(0.0 == fAngleBound)
+                {
+#ifdef DBG_UTIL
+                    fAngleBound = fAngleBoundStartValue;
+#else
+                    fAngleBound = ANGLE_BOUND_START_VALUE;
+#endif
+                }
+                else if(fTools::less(fAngleBound, ANGLE_BOUND_MINIMUM_VALUE))
+                {
+                    fAngleBound = 0.1;
+                }
+
                 for(sal_uInt32 a(0L); a < nPointCount; a++)
                 {
                     const B2DVector aVectorA(rCandidate.getControlVectorA(a));
@@ -335,17 +357,67 @@ namespace basegfx
                         B2DCubicBezier aBezier(
                             aPointA, B2DPoint(aPointA + aVectorA), B2DPoint(aPointA + aVectorB), aPointB);
 
-                        // generate AngleBound
-                        double fBound(fAngleBound);
+                        // call adaptive subdivide, do not add last point
+                        // #i37443# allow unsharpen the criteria
+                        aBezier.adaptiveSubdivideByAngle(aRetval, fAngleBound, false, true);
+                    }
+                    else
+                    {
+                        // no vectors used, add point
+                        aRetval.append(rCandidate.getB2DPoint(a));
+                    }
+                }
 
-                        // make sure angle bound is not too small
-                        if(fTools::less(fAngleBound, 0.1))
-                        {
-                            fAngleBound = 0.1;
-                        }
+                // add last point if not closed. If the last point had vectors,
+                // they are lost since they make no sense.
+                if(!rCandidate.isClosed())
+                {
+                    aRetval.append(rCandidate.getB2DPoint(rCandidate.count() - 1));
+                }
+
+                // check closed flag, aRetval was cleared and thus it may be invalid.
+                if(aRetval.isClosed() != rCandidate.isClosed())
+                {
+                    aRetval.setClosed(rCandidate.isClosed());
+                }
+            }
+
+            return aRetval;
+        }
+
+        B2DPolygon adaptiveSubdivideByCount(const B2DPolygon& rCandidate, sal_uInt32 nCount)
+        {
+            B2DPolygon aRetval(rCandidate);
+
+            if(aRetval.areControlPointsUsed())
+            {
+                const sal_uInt32 nPointCount(rCandidate.isClosed() ? rCandidate.count() : rCandidate.count() - 1L);
+                aRetval.clear();
+
+                // #i37443# prepare convenient count if none was given
+                if(0L == nCount)
+                {
+                    nCount = COUNT_SUBDIVIDE_DEFAULT;
+                }
+
+                for(sal_uInt32 a(0L); a < nPointCount; a++)
+                {
+                    const B2DVector aVectorA(rCandidate.getControlVectorA(a));
+                    const B2DVector aVectorB(rCandidate.getControlVectorB(a));
+
+                    if(!aVectorA.equalZero() || !aVectorB.equalZero())
+                    {
+                        // vectors are used, get points
+                        const sal_uInt32 nNext(getIndexOfSuccessor(a, rCandidate));
+                        B2DPoint aPointA(rCandidate.getB2DPoint(a));
+                        B2DPoint aPointB(rCandidate.getB2DPoint(nNext));
+
+                        // build CubicBezier segment
+                        B2DCubicBezier aBezier(
+                            aPointA, B2DPoint(aPointA + aVectorA), B2DPoint(aPointA + aVectorB), aPointB);
 
                         // call adaptive subdivide, do not add last point
-                        adaptiveSubdivideByAngle(aRetval, aBezier, fBound, false);
+                        aBezier.adaptiveSubdivideByCount(aRetval, nCount, false);
                     }
                     else
                     {
