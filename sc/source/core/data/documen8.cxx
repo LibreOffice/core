@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:25:02 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,7 @@ BOOL ScDocument::RemovePageStyleInUse( const String& rStyle )
         if ( pTab[i]->GetPageStyle() == rStyle )
         {
             bWasInUse = TRUE;
-            pTab[i]->SetPageStyle( STR_STANDARD );
+            pTab[i]->SetPageStyle( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
         }
 
     return bWasInUse;
