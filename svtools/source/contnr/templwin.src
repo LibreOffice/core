@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 21:38:25 $
+ *  last change: $Author: kz $ $Date: 2001-07-02 23:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,6 +845,7 @@ ItemList [ language_user1 ] =
         < "Größe" ; DI_SIZE ; > ;
     };
     };
+
 
 
 
