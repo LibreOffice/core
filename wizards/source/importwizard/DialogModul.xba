@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="DialogModul" script:language="StarBasic">Option Explicit
 
 Public Const bDebugWizard=True
@@ -97,7 +97,7 @@ End Sub
 
 Sub FillStep_InputPaths(OfficeIndex as Integer, bStartup as Boolean)
 Dim Index as Integer
-	If bStartup Then
+	If bStartup And Not bDoKeepApplValues Then
 	    If ImportDialog.OptMSDocuments.State = 1 Then
 			SetupMSConfiguration()
 		Else
@@ -167,7 +167,9 @@ Dim BoolValue as Boolean
 			Applications(a,SBTEMPLSOURCE) = GetTemplateDefaultPath(i)
 			Applications(a,SBTEMPLTARGET) = GetTargetTemplatePath(i)
 			Applications(a,SBAPPLKEY) = i
-      		If ChkApplication(i).State = 1 Then a = a + 1
+      		If ChkApplication(i).State = 1 Then 
+      			a = a + 1
+      		End If
 		Next i
 		ApplCount = a
 	End If
