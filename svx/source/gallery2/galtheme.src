@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2001-10-24 20:28:14 $
+ *  last change: $Author: kz $ $Date: 2001-11-01 21:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ String RID_GALLERYSTR_THEME_BULLETS
     Text[ chinese_traditional ] = "é …ç›®ç¬¦è™Ÿ";
     Text[ arabic ] = "ÚáÇãÇÊ ÊÚÏÇÏ";
     Text[ greek ] = "Êïõêßäåò";
-    Text[ korean ] = "ê¸€ë¨¸ë¦¬ê¸°í˜¸";
+    Text[ korean ] = "ê¸€ë¨¸ë¦¬ ê¸°í˜¸";
     Text[ turkish ] = "Madde iþaretleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Viñetas";
@@ -990,7 +990,7 @@ String RID_GALLERYSTR_THEME_SCREENBEANS
     Text[ swedish ] = "Screen Beans";
     Text[ polish ] = "ScreenBeans";
     Text[ portuguese_brazilian ] = "ScreenBeans";
-    Text[ japanese ] = "ScreenBeans";
+    Text[ japanese ] = "Screen Beans";
     Text[ korean ] = "ScreenBeans";
     Text[ chinese_simplified ] = "Screen Beans";
     Text[ chinese_traditional ] = "Screen Beans";
@@ -1006,6 +1006,7 @@ String RID_GALLERYSTR_THEME_DUMMY5
     // !!! Don't translate, please !!!
     Text = "Dummy 5";
 };
+
 
 
 
