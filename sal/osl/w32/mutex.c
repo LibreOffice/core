@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:27:15 $
+ *  last change: $Author: obr $ $Date: 2001-04-06 14:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,4 +227,14 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
     return sal_True;
 }
 
+/*****************************************************************************/
+/* osl_getGlobalMutex */
+/*****************************************************************************/
 
+/* initialized in dllentry.c */
+oslMutex g_Mutex;
+
+oslMutex * SAL_CALL osl_getGlobalMutex()
+{
+    return &g_Mutex;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-14 08:51:16 $
+ *  last change: $Author: obr $ $Date: 2001-04-06 14:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <systools/win32/user9x.h>
 
 #include <osl/diagnose.h>
+#include <osl/mutex.h>
 #include <sal/types.h>
 
 #define _DIRW9X_INITIALIZE_
@@ -86,6 +87,7 @@ extern LPWSTR *lpArgvW;
 extern DWORD            g_dwTLSTextEncodingIndex;
 extern void SAL_CALL    _osl_callThreadKeyCallbackOnThreadDetach(void);
 extern CRITICAL_SECTION g_ThreadKeyListCS;
+extern oslMutex g_Mutex;
 
 //------------------------------------------------------------------------------
 // defines
@@ -183,9 +185,13 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
                     (SystemInfo.dwProcessorType != PROCESSOR_INTEL_PENTIUM))
                     showMessage(ERR_GENERAL_WRONG_CPU);
 #endif
-                // Suppress file error messages from system like "Floppy A: not inserted"
+                /* Suppress file error messages from system like "Floppy A: not inserted" */
                 SetErrorMode( SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS );
 
+                /* initialize global mutex */
+                g_Mutex = osl_createMutex();
+
+                /* request winsock rev. 1.1 */
                 wVersionRequested = MAKEWORD(1, 1);
 
                 error = WSAStartup(wVersionRequested, &wsaData);
@@ -240,16 +246,16 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
             }
 
         case DLL_PROCESS_DETACH:
-            {
-                WSACleanup( );
-                if ( lpArgvW )
-                    GlobalFree( lpArgvW );
 
-                TlsFree( g_dwTLSTextEncodingIndex );
-                DeleteCriticalSection( &g_ThreadKeyListCS );
+            WSACleanup( );
+            if ( lpArgvW )
+                GlobalFree( lpArgvW );
 
-                break;
-            }
+            TlsFree( g_dwTLSTextEncodingIndex );
+            DeleteCriticalSection( &g_ThreadKeyListCS );
+
+            osl_destroyMutex( g_Mutex );
+            break;
 
         case DLL_THREAD_ATTACH:
             break;
