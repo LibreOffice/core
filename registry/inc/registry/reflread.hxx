@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflread.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:33:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,9 @@ public:
     inline sal_uInt16       getMajorVersion() const;
 
     /** returns the typeclass of the type represented by this blob.
+
+        This function will always return the type class without the internal
+        RT_TYPE_PUBLISHED flag set.
      */
     inline RTTypeClass      getTypeClass() const;
 
