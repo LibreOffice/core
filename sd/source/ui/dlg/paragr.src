@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:00:19 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ TabDialog TAB_PARAGRAPH
                 Text[ czech ] = "Odsazení a proklad";
                 Text[ hebrew ] = "‮שוליים ורוחים‬";
                 Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
+                Text[ slovak ] = "Odsadenie a riadkovanie";
             };
             PageItem
             {
@@ -153,6 +154,7 @@ TabDialog TAB_PARAGRAPH
                 Text[ czech ] = "Zarovnání";
                 Text[ hebrew ] = "‮ישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
+                Text[ slovak ] = "Zarovnanie";
             };
             PageItem
             {
@@ -184,6 +186,7 @@ TabDialog TAB_PARAGRAPH
                 Text[ czech ] = "Asijská typografie";
                 Text[ hebrew ] = "Asiatische Typographie";
                 Text[ hindi ] = "ऐशियन टइपोग्रफी";
+                Text[ slovak ] = "Ázijská typografia";
             };
             /*
             PageItem  {
@@ -236,6 +239,7 @@ TabDialog TAB_PARAGRAPH
                 Text[ czech ] = "Tabulátory";
                 Text[ hebrew ] = "Tabulator";
                 Text[ hindi ] = "टॉब्स";
+                Text[ slovak ] = "Tabulátory";
             };
         };
     };
@@ -291,6 +295,7 @@ TabDialog TAB_PARAGRAPH
         Text[ czech ] = "Návrat";
         Text[ hebrew ] = "Zurück";
         Text[ hindi ] = "लौटना";
+        Text[ slovak ] = "Návrat";
     };
     Text[ chinese_simplified ] = "段落";
     Text[ russian ] = "�����";
@@ -307,7 +312,10 @@ TabDialog TAB_PARAGRAPH
     Text[ czech ] = "Odstavec";
     Text[ hebrew ] = "‮פסקאות‬";
     Text[ hindi ] = "परिच्छेद";
+    Text[ slovak ] = "Odstavec";
 };
+
+
 
 
 
