@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:27:17 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include "msg.hxx"
 #include "macrconf.hxx"
 #include "app.hxx"
+#include "filedlghelper.hxx"
 
 #include "dialog.hrc"
 #include "cfg.hrc"
@@ -497,24 +498,25 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
         (nCode1 != KEY_PAGEDOWN)
        )
     {
-        // yes - select next entry
-        USHORT i = 0;
-        for (i=0; i<KEYCODE_ARRAY_SIZE; ++i)
+        SvLBoxEntry* pEntry = First();
+        while (pEntry)
         {
-            KeyCode aCode2(KEYCODE_ARRAY[i]);
-            USHORT  nCode2 = aCode2.GetCode();
-            USHORT  nMod2  = aCode2.GetModifier();
-
-            if (
-                (nCode1 == nCode2) &&
-                (nMod1  == nMod2 )
-               )
+            TAccInfo* pUserData = (TAccInfo*)pEntry->GetUserData();
+            if (pUserData)
             {
-                SvLBoxEntry* pEntry = GetEntry(0, i);
-                Select     (pEntry);
-                MakeVisible(pEntry);
-                return;
+                USHORT nCode2 = pUserData->m_aKey.GetCode();
+                USHORT nMod2  = pUserData->m_aKey.GetModifier();
+                if (
+                    (nCode1 == nCode2) &&
+                    (nMod1  == nMod2 )
+                   )
+                {
+                    Select     (pEntry);
+                    MakeVisible(pEntry);
+                    return;
+                }
             }
+            pEntry = Next(pEntry);
         }
     }
 
@@ -791,11 +793,27 @@ void SfxAcceleratorConfigPage::ResetConfig()
     aEntriesBox.Clear();
 }
 
+String FileDialog_Impl( Window *pParent, WinBits nBits, const String& rTitle )
+{
+    BOOL bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
+    short nDialogType = bSave? ::sfx2::FILESAVE_SIMPLE : ::sfx2::FILEOPEN_SIMPLE;
+
+    sfx2::FileDialogHelper aFileDlg( nDialogType, 0 );
+    aFileDlg.SetTitle( rTitle );
+//  aFileDlg.SetDialogHelpId( bSave? HID_CONFIG_SAVE : HID_CONFIG_LOAD );
+    aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_ALL) ), DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
+    aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_CFG)),DEFINE_CONST_UNICODE("*.cfg") );
+    if ( ERRCODE_NONE == aFileDlg.Execute() )
+        return aFileDlg.GetPath();
+    else
+        return String();
+}
+
 //-----------------------------------------------
 IMPL_LINK(SfxAcceleratorConfigPage, Load, Button*, pButton)
 {
     // ask for filename, where we should load the new config data from
-    ::rtl::OUString sCfgName = SfxConfigDialog::FileDialog_Impl(this, WB_OPEN | WB_STDMODAL | WB_3DLOOK, String(SfxResId(STR_LOADACCELCONFIG)));
+    ::rtl::OUString sCfgName = FileDialog_Impl(this, WB_OPEN | WB_STDMODAL | WB_3DLOOK, String(SfxResId(STR_LOADACCELCONFIG)));
     if (!sCfgName.getLength())
         return 0;
 
@@ -874,7 +892,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, Load, Button*, pButton)
 //-----------------------------------------------
 IMPL_LINK(SfxAcceleratorConfigPage, Save, Button*, pButton)
 {
-    ::rtl::OUString sCfgName = SfxConfigDialog::FileDialog_Impl(this, WB_SAVEAS | WB_STDMODAL | WB_3DLOOK, String(SfxResId(STR_SAVEACCELCONFIG)));
+    ::rtl::OUString sCfgName = FileDialog_Impl(this, WB_SAVEAS | WB_STDMODAL | WB_3DLOOK, String(SfxResId(STR_SAVEACCELCONFIG)));
     if (!sCfgName.getLength())
         return 0;
 
