@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:04:42 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 13:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ String SV_STDTEXT_SERVICENOTAVAILABLE
     Text[ french ] = "Impossible de charger l'un des composants (%s).\nVeuillez red�marrer le programme d'installation (Setup) et ex�cuter une r�paration.";
     Text[ spanish ] = "El componente (%s) no se pudo cargar.\nInicie el programa de instalaci�n y ejecute una reparaci�n.";
     Text[ italian ] = "Impossibile caricare il componente (%s).\nRiavviate il setup e eseguite la riparazione.";
-    Text[ danish ] = "Det var ikke muligt at indl�se en komponent (%s).\nStart venligst installationsprogrammet (Setup) og udf�r en reparation.";
+    Text[ danish ] = "Komponenten (%s) kunne ikke indl�ses.\nStart venligst installationsprogrammet og udf�r en reparation.";
     Text[ swedish ] = "Det gick inte att ladda en komponent (%s).\nStarta setupprogrammet och g�r en reparation.";
     Text[ polish ] = "Nie mo�na za�adowa� komponentu (%s).\nUruchom program instalacyjny i wybierz opcj� naprawy.";
     Text[ portuguese_brazilian ] = "N�o foi poss�vel carregar o componente (%s).\nReinicie o setup com a op��o \"Reparar\".";
@@ -95,6 +95,8 @@ String SV_STDTEXT_SERVICENOTAVAILABLE
     Text[ hebrew ] = "‮לא ניתן להפעיל את(%s)\n. נא לנסות להפעילו עם אופצית ההתעוששות (repair option)‬";
     Text[ hindi ] = "कोम्पनेन्ट (%s) को लोड़ नहीं कर सकते है ।\nकृपया सेट्टप को रिपेर् ओप्शन के साथ प्रारंभ कीजिए ।";
     Text[ slovak ] = "Komponent (%s) nemôže byť načítaný.\nProsím reštartujte setup s voľbou opraviť.";
+    Text[ hungarian ] = "A(z) %s komponens nem tölthető be.\nFuttassa újra a telepítőt 'Helyreállítás' módban!";
+    Text[ slovenian ] = "Komponente (%s) ni mogoče naložiti.\nZaženite namestitev z možnostjo Popravi.";
 };
 
 String SV_STDTEXT_DONTHINTAGAIN
@@ -110,7 +112,7 @@ String SV_STDTEXT_DONTHINTAGAIN
     Text[ spanish ] = "No volver a mostrar esta advertencia.";
     Text[ finnish ] = "�l� n�yt� varoitusta vastaisuudessa.";
     Text[ italian ] = "Non mostrare pi� questo avviso.";
-    Text[ danish ] = "Vis ikke denne henvisning igen.";
+    Text[ danish ] = "Vis ikke den oplysning igen.";
     Text[ swedish ] = "Visa inte den h�r informationen mer.";
     Text[ polish ] = "Nie wy�wietlaj wi�cej ostrze�enia.";
     Text[ portuguese_brazilian ] = "N�o mostrar mais esta informa��o.";
@@ -126,6 +128,8 @@ String SV_STDTEXT_DONTHINTAGAIN
     Text[ hebrew ] = "Diesen Hinweis nicht mehr anzeigen.";
     Text[ hindi ] = "Do not show this information again.";
     Text[ slovak ] = "Túto informáciu viackrát nezobrazovať.";
+    Text[ hungarian ] = "Ez az információ ne jelenjen meg még egyszer.";
+    Text[ slovenian ] = "Teh informacij ne kaži več.";
 };
 
 String SV_STDTEXT_DONTASKAGAIN
@@ -141,7 +145,7 @@ String SV_STDTEXT_DONTASKAGAIN
     Text[ spanish ] = "No volver a mostrar esta pregunta.";
     Text[ finnish ] = "Do not show this question again.";
     Text[ italian ] = "Non mostrare pi� questa domanda.";
-    Text[ danish ] = "Do not show this question again.";
+    Text[ danish ] = "Vis ikke dette sp�rgsm�l igen.";
     Text[ swedish ] = "Visa inte den h�r fr�gan mer.";
     Text[ polish ] = "Do not show this question again.";
     Text[ portuguese_brazilian ] = "N�o mostrar mais esta pergunta.";
@@ -157,6 +161,8 @@ String SV_STDTEXT_DONTASKAGAIN
     Text[ hebrew ] = "Diese Frage nicht mehr anzeigen.";
     Text[ hindi ] = "Do not show this question again.";
     Text[ slovak ] = "Túto otázku viackrát nezobrazovať.";
+    Text[ hungarian ] = "Ez a kérdés ne jelenjen meg még egyszer.";
+    Text[ slovenian ] = "Tega vprašanja ne kaži več.";
 };
 
 String SV_STDTEXT_DONTWARNAGAIN
@@ -171,7 +177,7 @@ String SV_STDTEXT_DONTWARNAGAIN
     Text[ french ] = "Ne plus afficher cet avertissement";
     Text[ spanish ] = "No mostrar m�s esta advertencia.";
     Text[ italian ] = "Non mostrare pi� questo avviso.";
-    Text[ danish ] = "Vis ikke denne henvisning igen.";
+    Text[ danish ] = "Vis ikke denne advarsel igen.";
     Text[ swedish ] = "Visa inte den h�r varningen mer.";
     Text[ polish ] = "Nie pokazuj wi�cej ostrze�enia.";
     Text[ portuguese_brazilian ] = "N�o mostrar mais este aviso.";
@@ -188,6 +194,8 @@ String SV_STDTEXT_DONTWARNAGAIN
     Text[ hebrew ] = "‮לא להציג אזהרה זו שנית.‬";
     Text[ hindi ] = "Do not show warning again.";
     Text[ slovak ] = "Nabudúce nezobraziť upozornenie";
+    Text[ hungarian ] = "Ne jelenjen meg újra a figyelmeztetés.";
+    Text[ slovenian ] = "Ne kaži več opozorila.";
 };
 
 String SV_ACCESSERROR_WRONG_VERSION
@@ -203,7 +211,7 @@ String SV_ACCESSERROR_WRONG_VERSION
     Text[ spanish ] = "Versi�n incorrecta";
     Text[ finnish ] = "Wrong Version";
     Text[ italian ] = "Versione sbagliata";
-    Text[ danish ] = "Wrong Version";
+    Text[ danish ] = "Forkert version";
     Text[ swedish ] = "Fel version";
     Text[ polish ] = "Wrong Version";
     Text[ portuguese_brazilian ] = "Vers�o incorreta";
@@ -219,6 +227,8 @@ String SV_ACCESSERROR_WRONG_VERSION
     Text[ hebrew ] = "‮גרסה לא נכונה‬";
     Text[ hindi ] = "Wrong Version";
     Text[ slovak ] = "Chybná verzia";
+    Text[ hungarian ] = "Rossz verzió";
+    Text[ slovenian ] = "Napačna različica";
 };
 
 String SV_ACCESSERROR_BRIDGE_MSG
@@ -229,12 +239,12 @@ String SV_ACCESSERROR_BRIDGE_MSG
     Text[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
     Text[ russian ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
     Text[ greek ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
-    Text[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION vereist een Java Access Bridge 1.03 of later. Installeer a.u.b. de nieuwste versie.";
     Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION requiert Java Access Bridge 1.0.3 ou version ult�rieure pour le support d'accessibilit�.";
     Text[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION requiere Java Access Bridge 1.0.3 o una versi�n superior para admitir la accesibilidad.";
     Text[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
     Text[ italian ] = "%PRODUCTNAME %PRODUCTVERSION richiede una versione di Java Access Bridge 1.0.3 o pi� recente per il supporto dell'accesso facilitato.";
-    Text[ danish ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTVERSION kr�ver Java Access Bridge 1.03 eller nyere for at underst�tte tilg�ngelighedsfunktioner.";
     Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION kr�ver version 1.0.3 eller senare av Java Access Bridge f�r att st�dja tillg�nglighet.";
     Text[ polish ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
     Text[ portuguese_brazilian ] = "O %PRODUCTNAME %PRODUCTVERSION requer uma Java Access Bridge vers�o 1.03 ou posterior. Instale a ultima vers�o da Java Access Bridge. Clique em '%IGNORE' para iniciar o %PRODUCTNAME %PRODUCTVERSION sem suporte a acessibilidade ou clique em '%CANCEL'.";
@@ -250,6 +260,8 @@ String SV_ACCESSERROR_BRIDGE_MSG
     Text[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.0.3 or later version to support accessibility.";
     Text[ hindi ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.0.3 or later version to support accessibility.";
     Text[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION vyžaduje Java Access Bridge 1.0.3 alebo neskoršie pre podporu dostupnosti.";
+    Text[ hungarian ] = "Az %PRODUCTNAME %PRODUCTVERSION programnak szüksége van a Java Access Bridge 1.0.3-as vagy annál újabb verziójára a kisegítő lehetőségek támogatásához.";
+    Text[ slovenian ] = "%PRODUCTNAME %PRODUCTVERSION zahteva Java Access Bridge 1.0.3 ali novejšo za podporo pripomočkom za invalide.";
 };
 
 String SV_ACCESSERROR_OK_CANCEL_MSG
@@ -267,10 +279,10 @@ String SV_ACCESSERROR_OK_CANCEL_MSG
     Text[ chinese_traditional ] = "按一下「%OK」，省去協助工具支援，而直接啟動安裝 %PRODUCTNAME %PRODUCTVERSION，或者按一下「%CANCEL」結束程式。";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION program�n� eri�ilebilirlik deste�i olmadan �al��t�mak i�in '%OK' d��mesine, programdan ��kmak i�in '%CANCEL' d��mesine t�klay�n.";
     Text[ greek ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
-    Text[ dutch ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
+    Text[ dutch ] = " Klik '%IGNORE' om %PRODUCTNAME %PRODUCTVERSION te starten zonder ondersteuning voor Toegankelijkheid, of '%CANCEL' om %PRODUCTNAME %PRODUCTVERSION af te sluiten.";
     Text[ finnish ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
     Text[ czech ] = "Klepněte na '%OK' pro spuštění %PRODUCTNAME %PRODUCTVERSION bez podpory přístupnosti, nebo klepněte na '%CANCEL' pro opuštění %PRODUCTNAME %PRODUCTVERSION.";
-    Text[ danish ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
+    Text[ danish ] = "Klik p� '%OK' for at starte %PRODUCTNAME %PRODUCTVERSION uden underst�ttelse af tilg�ngelighedsfunktioner eller klik p� '%CANCEL' for at afslutte %PRODUCTNAME %PRODUCTVERSION.";
     Text[ arabic ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
     Text[ hebrew ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
     Text[ catalan ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
@@ -281,6 +293,8 @@ String SV_ACCESSERROR_OK_CANCEL_MSG
     Text[ thai ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
     Text[ hindi ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
     Text[ slovak ] = "Kliknite na '%OK' pre spustenie %PRODUCTNAME %PRODUCTVERSION bez podpory prístupnosti, alebo kliknite na '%CANCEL' pre ukončenie %PRODUCTNAME %PRODUCTVERSION.";
+    Text[ hungarian ] = "Ha az %PRODUCTNAME %PRODUCTVERSION programot a kisegítő lehetőségek nélkül szeretné használni, kattintson az '%OK' gombra, vagy kattintson a '%CANCEL' gombra az %PRODUCTNAME %PRODUCTVERSION bezárásához.";
+    Text[ slovenian ] = "Kliknite '%OK', da zaženete %PRODUCTNAME %PRODUCTVERSION brez podpore pripomočkom za invalide, oziroma kliknite '%CANCEL' za izhod iz programa %PRODUCTNAME %PRODUCTVERSION.";
 };
 
 String SV_ACCESSERROR_MISSING_BRIDGE
@@ -291,12 +305,12 @@ String SV_ACCESSERROR_MISSING_BRIDGE
     Text[ portuguese ] = "No Java Access Bridge";
     Text[ russian ] = "No Java Access Bridge";
     Text[ greek ] = "No Java Access Bridge";
-    Text[ dutch ] = "No Java Access Bridge";
+    Text[ dutch ] = "Geen Java Access Bridge";
     Text[ french ] = "Pas de Java Access Bridge";
     Text[ spanish ] = "Sin Java Access Bridge";
     Text[ finnish ] = "No Java Access Bridge";
     Text[ italian ] = "Manca Java Access Bridge";
-    Text[ danish ] = "No Java Access Bridge";
+    Text[ danish ] = "Ingen Java Access Bridge";
     Text[ swedish ] = "Ingen Java Access Bridge";
     Text[ polish ] = "No Java Access Bridge";
     Text[ portuguese_brazilian ] = "Sem Java Access Bridge";
@@ -312,6 +326,8 @@ String SV_ACCESSERROR_MISSING_BRIDGE
     Text[ hebrew ] = "‮אין  Access Bridge לג'אווה‬";
     Text[ hindi ] = "No Java Access Bridge";
     Text[ slovak ] = "Nebol nájdený Java Access Bridge";
+    Text[ hungarian ] = "Nincs Java Access Bridge";
+    Text[ slovenian ] = "Brez Java Access Bridge";
 };
 
 String SV_ACCESSERROR_FAULTY_JAVA
@@ -322,12 +338,12 @@ String SV_ACCESSERROR_FAULTY_JAVA
     Text[ portuguese ] = "Faulty Java Installation";
     Text[ russian ] = "Faulty Java Installation";
     Text[ greek ] = "Faulty Java Installation";
-    Text[ dutch ] = "Faulty Java Installation";
+    Text[ dutch ] = "Incorrecte Java Installatie";
     Text[ french ] = "Installation Java d�fectueuse";
     Text[ spanish ] = "Instalaci�n defectuosa de Java";
     Text[ finnish ] = "Faulty Java Installation";
     Text[ italian ] = "Installazione corrotta di Java";
-    Text[ danish ] = "Faulty Java Installation";
+    Text[ danish ] = "Fejlholdig Java-installation";
     Text[ swedish ] = "Felaktig Java-installation";
     Text[ polish ] = "Faulty Java Installation";
     Text[ portuguese_brazilian ] = "Instala��o Java com defeito";
@@ -343,6 +359,8 @@ String SV_ACCESSERROR_FAULTY_JAVA
     Text[ hebrew ] = "‮התקנה לקויה של הג'אווה‬";
     Text[ hindi ] = "Faulty Java Installation";
     Text[ slovak ] = "Chybná inštalácia Javy";
+    Text[ hungarian ] = "Hibás Java-telepítés";
+    Text[ slovenian ] = "Pomanjkljiva namestitev Jave";
 };
 
 String SV_ACCESSERROR_JAVA_MSG
@@ -353,12 +371,12 @@ String SV_ACCESSERROR_JAVA_MSG
     Text[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
     Text[ russian ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
     Text[ greek ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
-    Text[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION vereist Java 1.4.0_02 of nieuwer voor ondersteuning van Toegankelijkheid.";
     Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION requiert Java 1.4.0_02 ou version ult�rieure pour le support d'accessibilit�.";
     Text[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION requiere Java 1.4.0_02 o una versi�n superior para admitir la accesibilidad.";
     Text[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
     Text[ italian ] = "PRODUCTNAME %PRODUCTVERSION richiede una versione di Java 1.4.0_02 o pi� recente per il supporto dell'accesso facilitato.";
-    Text[ danish ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTVERSION kr�ver Java 1.4.0_02 eller nyere for at underst�tte tilg�ngelighedsfunktioner.";
     Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION kr�ver version 1.4.0_02 eller senare f�r att kunna st�dja tillg�nglighet.";
     Text[ polish ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
     Text[ portuguese_brazilian ] = "O %PRODUCTNAME %PRODUCTVERSION detectou uma instala��o Java com defeito em seu sistema. Conserte ou renove sua instala��o Java. Clique em '%IGNORE' para iniciar o %PRODUCTNAME %PRODUCTVERSION sem suporte a acessibilidade, ou  clique em '%CANCEL'.";
@@ -374,6 +392,8 @@ String SV_ACCESSERROR_JAVA_MSG
     Text[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION requires Java 1.4.0_02 or later version to support accessibility.";
     Text[ hindi ] = "%PRODUCTNAME %PRODUCTVERSION requires Java 1.4.0_02 or later version to support accessibility.";
     Text[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION vyžaduje Java 1.4.0_02 alebo neskoršie pre podporu dostupnosti.";
+    Text[ hungarian ] = "Az %PRODUCTNAME %PRODUCTVERSION programnak szüksége van a Java 1.4.0_02-es vagy annál újabb verziójára a kisegítő lehetőségek támogatásához.";
+    Text[ slovenian ] = "%PRODUCTNAME %PRODUCTVERSION zahteva Java 1.4.0 ali novejšo za podporo pripomočkom za invalide.";
 };
 
 String SV_ACCESSERROR_MISSING_JAVA
@@ -384,12 +404,12 @@ String SV_ACCESSERROR_MISSING_JAVA
     Text[ portuguese ] = "No Java Installation";
     Text[ russian ] = "No Java Installation";
     Text[ greek ] = "No Java Installation";
-    Text[ dutch ] = "No Java Installation";
+    Text[ dutch ] = "Geen Java Installatie";
     Text[ french ] = "Aucune installation Java";
     Text[ spanish ] = "Instalaci�n de Java inexistente";
     Text[ finnish ] = "No Java Installation";
     Text[ italian ] = "Manca un'installazione di Java";
-    Text[ danish ] = "No Java Installation";
+    Text[ danish ] = "Ingen Java-installation";
     Text[ swedish ] = "Ingen Java-installation";
     Text[ polish ] = "No Java Installation";
     Text[ portuguese_brazilian ] = "Sem Java instalado";
@@ -405,6 +425,8 @@ String SV_ACCESSERROR_MISSING_JAVA
     Text[ hebrew ] = "‮ג'אווה לא מותקנת‬";
     Text[ hindi ] = "No Java Installation";
     Text[ slovak ] = "Inštalácia Javy nebola nájdená";
+    Text[ hungarian ] = "Nincs Java-telepítés";
+    Text[ slovenian ] = "Brez namestitve Jave";
 };
 
 String SV_ACCESSERROR_JAVA_NOT_CONFIGURED
@@ -422,10 +444,10 @@ String SV_ACCESSERROR_JAVA_NOT_CONFIGURED
     Text[ chinese_traditional ] = "沒有找到 Java 配置";
     Text[ turkish ] = "Java Ayarlar� Eksik";
     Text[ greek ] = "Missing Java Configuration";
-    Text[ dutch ] = "Missing Java Configuration";
+    Text[ dutch ] = "Ontbrekende Java Configuratie";
     Text[ finnish ] = "Missing Java Configuration";
     Text[ czech ] = "Chybí konfigurace Javy";
-    Text[ danish ] = "Missing Java Configuration";
+    Text[ danish ] = "Mangler Java-konfiguration";
     Text[ arabic ] = "Missing Java Configuration";
     Text[ hebrew ] = "Missing Java Configuration";
     Text[ catalan ] = "Missing Java Configuration";
@@ -436,6 +458,8 @@ String SV_ACCESSERROR_JAVA_NOT_CONFIGURED
     Text[ thai ] = "Missing Java Configuration";
     Text[ hindi ] = "Missing Java Configuration";
     Text[ slovak ] = "Nastavenie Javy nebolo nájdené";
+    Text[ hungarian ] = "Hiányzó Java-beállítások";
+    Text[ slovenian ] = "Manjkajoča konfiguracija Jave";
 };
 
 String SV_ACCESSERROR_JAVA_DISABLED
@@ -453,10 +477,10 @@ String SV_ACCESSERROR_JAVA_DISABLED
     Text[ chinese_traditional ] = "禁用 Java";
     Text[ turkish ] = "Java Etkin De�il";
     Text[ greek ] = "Java Disabled";
-    Text[ dutch ] = "Java Disabled";
+    Text[ dutch ] = "Java Uitgeschakeld";
     Text[ finnish ] = "Java Disabled";
     Text[ czech ] = "Podpora Javy je vypnuta";
-    Text[ danish ] = "Java Disabled";
+    Text[ danish ] = "Java deaktiveret";
     Text[ arabic ] = "Java Disabled";
     Text[ hebrew ] = "Java Disabled";
     Text[ catalan ] = "Java Disabled";
@@ -467,6 +491,8 @@ String SV_ACCESSERROR_JAVA_DISABLED
     Text[ thai ] = "Java Disabled";
     Text[ hindi ] = "Java Disabled";
     Text[ slovak ] = "Podpora Javy vypnutá";
+    Text[ hungarian ] = "A Java le van tiltva";
+    Text[ slovenian ] = "Java onemogočena";
 };
 
 String SV_ACCESSERROR_TURNAROUND_MSG
@@ -484,10 +510,10 @@ String SV_ACCESSERROR_TURNAROUND_MSG
     Text[ chinese_traditional ] = "無法啓動 Java Access Bridge 。";
     Text[ turkish ] = "Java Eri�im K�pr�s� ba�lat�lamad�";
     Text[ greek ] = "The Java Access Bridge could not be started.";
-    Text[ dutch ] = "The Java Access Bridge could not be started.";
+    Text[ dutch ] = "De Java Access Bridge kon niet worden gestart.";
     Text[ finnish ] = "The Java Access Bridge could not be started.";
     Text[ czech ] = "Java Access Bridge nebylo možné spustit.";
-    Text[ danish ] = "The Java Access Bridge could not be started.";
+    Text[ danish ] = "Java Access Bridge kunne ikke startes.";
     Text[ arabic ] = "The Java Access Bridge could not be started.";
     Text[ hebrew ] = "The Java Access Bridge could not be started.";
     Text[ catalan ] = "The Java Access Bridge could not be started.";
@@ -498,7 +524,10 @@ String SV_ACCESSERROR_TURNAROUND_MSG
     Text[ thai ] = "The Java Access Bridge could not be started.";
     Text[ hindi ] = "The Java Access Bridge could not be started.";
     Text[ slovak ] = "Java Access Bridge nemohol byť spustený.";
+    Text[ hungarian ] = "A Java Access Bridge indítása nem sikerült. ";
+    Text[ slovenian ] = "Programa Java Access Bridge ni mogoče zagnati.";
 };
+
 
 
 
