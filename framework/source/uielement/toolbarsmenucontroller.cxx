@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:13:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-21 12:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ DEFINE_INIT_SERVICE                     (   ToolbarsMenuController, {} )
 ToolbarsMenuController::ToolbarsMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     PopupMenuControllerBase( xServiceManager ),
     m_bModuleIdentified( sal_False ),
-    m_aIntlWrapper( xServiceManager, Application::GetSettings().GetLocale() )
+    m_aIntlWrapper( xServiceManager, Application::GetSettings().GetLocale() ),
     m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( "UIName" )),
     m_aPropResourceURL( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ))
 {
