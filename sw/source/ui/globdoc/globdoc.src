@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:43:16 $
+ *  last change: $Author: jp $ $Date: 2001-04-03 08:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,13 +88,14 @@ String STR_HUMAN_SWGLOBDOC_NAME
 };
 String STR_WRITER_GLOBALDOC_FULLTYPE_40
 {
-    Text = "StarOffice 4.0 Global Document" ;
+    Text = "%PRODUCTNAME 4.0 Global Document" ;
 };
 String STR_WRITER_GLOBALDOC_FULLTYPE_50
 {
-    Text = "StarOffice 5.0 Global Document" ;
+    Text = "%PRODUCTNAME 5.0 Global Document" ;
 };
 String STR_WRITER_GLOBALDOC_FULLTYPE
 {
-    Text = "StarOffice 6.0 Global Document" ;
+    Text = "%PRODUCTNAME 6.0 Global Dokument" ;
+    TEXT [ English ] = "%PRODUCTNAME 6.0 Master Document" ;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-21 21:03:05 $
+ *  last change: $Author: jp $ $Date: 2001-04-03 08:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,26 +159,8 @@ String STR_WRITER_WEBDOC_FULLTYPE_50
 };
 String STR_WRITER_WEBDOC_FULLTYPE
 {
-    Text = "%PRODUCTNAME 6.0 HTML" ;
-    Text [ English ] = "StarOffice 6.0 HTML" ;
-    Text[ english_us ] = "%PRODUCTNAME 6.0 HTML";
-    Text[ portuguese ] = "HTML (%PRODUCTNAME 5.0)";
-    Text[ russian ] = "HTML â %PRODUCTNAME 6.0 ";
-    Text[ greek ] = "%PRODUCTNAME 6.0 HTML";
-    Text[ dutch ] = "%PRODUCTNAME 5.0 HTML";
-    Text[ french ] = "%PRODUCTNAME 5.0 HTML";
-    Text[ spanish ] = "%PRODUCTNAME 6.0 HTML";
-    Text[ italian ] = "HTML %PRODUCTNAME 5.0";
-    Text[ danish ] = "%PRODUCTNAME 5.0 HTML";
-    Text[ swedish ] = "%PRODUCTNAME 6.0 HTML";
-    Text[ polish ] = "HTML %PRODUCTNAME 6.0";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME 5.0 HTML";
-    Text[ japanese ] = "%PRODUCTNAME 6.0 HTML";
-    Text[ korean ] = "%PRODUCTNAME 5.£°HTML ";
-    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 HTML";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 HTML";
-    Text[ turkish ] = "%PRODUCTNAME 5.0 HTML";
-    Text[ arabic ] = "%PRODUCTNAME 6.0 HTML";
+    Text = "%PRODUCTNAME 6.0 HTML Dokument" ;
+    Text [ English ] = "%PRODUCTNAME 6.0 HTML Document" ;
 };
 String STR_SHELLNAME_WEBTEXT
 {
