@@ -23979,3 +23979,7 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?IsRTL@DrawPortionInfo@@QBEEXZ
 ?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx2671560@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
 ?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx3029626411@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
+?SetCJKFont@SvxFontPrevWindow@@QAEXABVSvxFont@@@Z
+?SetFont@SvxFontPrevWindow@@QAEXABVSvxFont@@0@Z
+?DataChanged@SvxRubyDialog@@MAEXABVDataChangedEvent@@@Z
+?UpdateColors@SvxRubyDialog@@AAEXXZ
