@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-20 09:22:52 $
+ *  last change: $Author: fs $ $Date: 2002-08-22 07:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
 
 #ifndef _FILEDLGHELPER_HXX
@@ -549,6 +552,8 @@ void FileDialogHelper_Impl::dispose()
         Reference< XFilePickerNotifier > xNotifier( mxFileDlg, UNO_QUERY );
         if ( xNotifier.is() )
             xNotifier->removeFilePickerListener( this );
+
+        ::comphelper::disposeComponent( mxFileDlg );
         mxFileDlg.clear();
     }
 }
@@ -1168,6 +1173,8 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
         delete mpMatcher;
 
     maPreViewTimer.SetTimeoutHdl( Link() );
+
+    ::comphelper::disposeComponent( mxFileDlg );
 }
 
 #define nMagic (sal_Int16) 0xFFFF
