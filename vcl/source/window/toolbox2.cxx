@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:22:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,12 +117,16 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData() : m_pLayoutData( NULL )
     maMenuType = TOOLBOX_MENUTYPE_NONE;
     maMenubuttonItem.maItemSize = Size( TB_MENUBUTTON_SIZE+TB_MENUBUTTON_OFFSET, TB_MENUBUTTON_SIZE+TB_MENUBUTTON_OFFSET );
     maMenubuttonItem.meState = STATE_NOCHECK;
+    mnMenuButtonWidth = TB_MENUBUTTON_SIZE;
 
     mbIsLocked = FALSE;
+    mbNativeButtons = FALSE;
     mbIsPaintLocked = FALSE;
     mbAssumeDocked = FALSE;
+    mbAssumePopupMode = FALSE;
     mbAssumeFloating = FALSE;
     mbKeyInputDisabled = FALSE;
+    mbMenubuttonSelected = FALSE;
     mbPageScroll = FALSE;
 
     m_nUpdateAutoSizeTries = 0;
@@ -151,6 +155,7 @@ ImplToolItem::ImplToolItem()
     mbShowWindow    = FALSE;
     mbBreak         = FALSE;
     mnSepSize       = TB_SEP_SIZE;
+    mnDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
     mnImageAngle    = 0;
     mbMirrorMode    = FALSE;
     mbVisibleText   = FALSE;
@@ -175,6 +180,7 @@ ImplToolItem::ImplToolItem( USHORT nItemId, const Image& rImage,
     mbShowWindow    = FALSE;
     mbBreak         = FALSE;
     mnSepSize       = TB_SEP_SIZE;
+    mnDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
     mnImageAngle    = 0;
     mbMirrorMode    = false;
     mbVisibleText   = false;
@@ -199,6 +205,7 @@ ImplToolItem::ImplToolItem( USHORT nItemId, const XubString& rText,
     mbShowWindow    = FALSE;
     mbBreak         = FALSE;
     mnSepSize       = TB_SEP_SIZE;
+    mnDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
     mnImageAngle    = 0;
     mbMirrorMode    = false;
     mbVisibleText   = false;
@@ -224,6 +231,7 @@ ImplToolItem::ImplToolItem( USHORT nItemId, const Image& rImage,
     mbShowWindow    = FALSE;
     mbBreak         = FALSE;
     mnSepSize       = TB_SEP_SIZE;
+    mnDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
     mnImageAngle    = 0;
     mbMirrorMode    = false;
     mbVisibleText   = false;
@@ -246,6 +254,7 @@ ImplToolItem::ImplToolItem( const ImplToolItem& rItem ) :
         maRect                  ( rItem.maRect ),
         maCalcRect              ( rItem.maCalcRect ),
         mnSepSize               ( rItem.mnSepSize ),
+        mnDropDownArrowWidth    ( rItem.mnDropDownArrowWidth ),
         maItemSize              ( rItem.maItemSize ),
         mbVisibleText           ( rItem.mbVisibleText ),
         meType                  ( rItem.meType ),
@@ -284,6 +293,7 @@ ImplToolItem& ImplToolItem::operator=( const ImplToolItem& rItem )
     maRect                  = rItem.maRect;
     maCalcRect              = rItem.maCalcRect;
     mnSepSize               = rItem.mnSepSize;
+    mnDropDownArrowWidth    = rItem.mnDropDownArrowWidth;
     maItemSize              = rItem.maItemSize;
     mbVisibleText           = rItem.mbVisibleText;
     meType                  = rItem.meType;
@@ -422,14 +432,22 @@ Rectangle ImplToolItem::GetDropDownRect( BOOL bHorz ) const
         aRect = maRect;
         if( mbVisibleText && !bHorz )
             // item will be rotated -> place dropdown to the bottom
-            aRect.Top() = aRect.Bottom() - TB_DROPDOWNARROWWIDTH;
+            aRect.Top() = aRect.Bottom() - mnDropDownArrowWidth;
         else
             // place dropdown to the right
-            aRect.Left() = aRect.Right() - TB_DROPDOWNARROWWIDTH;
+            aRect.Left() = aRect.Right() - mnDropDownArrowWidth;
     }
     return aRect;
 }
 
+// -----------------------------------------------------------------------
+
+BOOL ImplToolItem::IsClipped() const
+{
+    return ( meType == TOOLBOXITEM_BUTTON && mbVisible && maRect.IsEmpty() );
+}
+
+// -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 
 const XubString& ToolBox::ImplConvertMenuString( const XubString& rStr )
@@ -1659,14 +1677,16 @@ void ToolBox::SetItemDown( USHORT nItemId, BOOL bDown, BOOL bRelease )
             if ( nPos != mnCurPos )
             {
                 mnCurPos = nPos;
-                ImplDrawItem( mnCurPos );
+                ImplDrawItem( mnCurPos, TRUE );
+                Flush();
             }
         }
         else
         {
             if ( nPos == mnCurPos )
             {
-                ImplDrawItem( mnCurPos );
+                ImplDrawItem( mnCurPos, FALSE );
+                Flush();
                 mnCurPos = TOOLBOX_ITEM_NOTFOUND;
             }
         }
@@ -2140,7 +2160,7 @@ BOOL ToolBox::ImplHasClippedItems()
     std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
     while ( it != mpData->m_aItems.end() )
     {
-        if( it->meType == TOOLBOXITEM_BUTTON && it->mbVisible && it->maRect.IsEmpty() )
+        if( it->IsClipped() )
             return TRUE;
         it++;
     }
@@ -2174,7 +2194,7 @@ void ToolBox::ImplUpdateCustomMenu()
         std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.end();
         while ( --it >= mpData->m_aItems.begin() )
         {
-            if( it->meType == TOOLBOXITEM_BUTTON && it->mbVisible && it->maRect.IsEmpty() )
+            if( it->IsClipped() )
             {
                 USHORT id = it->mnId + TOOLBOX_MENUITEM_START;
                 pMenu->InsertItem( id, it->maText, it->maImage, 0, 0 );
@@ -2239,7 +2259,7 @@ void ToolBox::ImplExecuteCustomMenu()
             }
         }
 
-        GetMenu()->Execute( pWin, Rectangle( ImplGetPopupPosition( aMenuRect, Size() ), Size() ),
+        USHORT uId = GetMenu()->Execute( pWin, Rectangle( ImplGetPopupPosition( aMenuRect, Size() ), Size() ),
                                 POPUPMENU_EXECUTE_DOWN | POPUPMENU_NOMOUSEUPCLOSE );
 
         if ( aDelData.IsDelete() )
@@ -2256,6 +2276,9 @@ void ToolBox::ImplExecuteCustomMenu()
         }
 
         pWin->Invalidate( aMenuRect );
+
+        if( uId )
+            GrabFocusToDocument();
     }
 }
 
@@ -2284,6 +2307,18 @@ BOOL ToolBox::ImplIsFloatingMode() const
         return TRUE;
     else
         return IsFloatingMode();
+}
+
+// checks override first, useful during calculation of sizes
+BOOL ToolBox::ImplIsInPopupMode() const
+{
+    if( mpData->mbAssumePopupMode )
+        return TRUE;
+    else
+    {
+        ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+        return ( pWrapper && pWrapper->GetFloatingWindow() && pWrapper->GetFloatingWindow()->IsInPopupMode() );
+    }
 }
 
 // -----------------------------------------------------------------------
