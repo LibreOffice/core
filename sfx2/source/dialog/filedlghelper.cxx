@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-19 16:07:48 $
+ *  last change: $Author: dv $ $Date: 2001-07-20 09:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,8 +590,18 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
 
     if ( ! maGraphic )
     {
-        OUString aPath;
-        nRet = getGraphic( aPath, rGraphic );
+        OUString aPath;;
+        Sequence < OUString > aPathSeq = mxFileDlg->getFiles();
+
+        if ( aPathSeq.getLength() == 1 )
+        {
+            aPath = aPathSeq[0];
+        }
+
+        if ( aPath.getLength() )
+            nRet = getGraphic( aPath, rGraphic );
+        else
+            nRet = ERRCODE_IO_GENERAL;
     }
     else
         rGraphic = maGraphic;
