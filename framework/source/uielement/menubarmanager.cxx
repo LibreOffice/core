@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-03 14:19:49 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,94 +807,79 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException )
 {
     ::rtl::OUString aFeatureURL = Event.FeatureURL.Complete;
-    MenuItemHandler* pStatusChangedMenu = NULL;
 
+    OGuard  aGuard( Application::GetSolarMutex() );
     {
         ResetableGuard aGuard( m_aLock );
 
         if ( m_bDisposed )
             return;
 
+        // We have to check all menu entries as there can be identical entries in a popup menu.
         std::vector< MenuItemHandler* >::iterator p;
         for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
         {
             MenuItemHandler* pMenuItemHandler = *p;
             if ( pMenuItemHandler->aMenuItemURL == aFeatureURL )
             {
-                pStatusChangedMenu = pMenuItemHandler;
-                break;
-            }
-        }
-    }
+                sal_Bool            bCheckmark( sal_False );
+                sal_Bool            bMenuItemEnabled( m_pVCLMenu->IsItemEnabled( pMenuItemHandler->nItemId ));
+                rtl::OUString       aItemText;
+                status::Visibility  aVisibilityStatus;
 
-    if ( pStatusChangedMenu )
-    {
-        OGuard  aGuard( Application::GetSolarMutex() );
-        {
-            ResetableGuard aGuard( m_aLock );
+                // Enable/disable item
+                if ( Event.IsEnabled != bMenuItemEnabled )
+                    m_pVCLMenu->EnableItem( pMenuItemHandler->nItemId, Event.IsEnabled );
 
-            sal_Bool            bCheckmark( sal_False );
-            sal_Bool            bMenuItemEnabled( m_pVCLMenu->IsItemEnabled( pStatusChangedMenu->nItemId ));
-            rtl::OUString       aItemText;
-            status::Visibility  aVisibilityStatus;
-
-            if ( aFeatureURL.equalsAscii( ".uno:ChangeCaseToHalfWidth" ))
-            {
-                int a = 1;
-            }
-
-            // Enable/disable item
-            if ( Event.IsEnabled != bMenuItemEnabled )
-                m_pVCLMenu->EnableItem( pStatusChangedMenu->nItemId, Event.IsEnabled );
-
-            if ( Event.State >>= bCheckmark )
-            {
-                // Checkmark
-                m_pVCLMenu->ShowItem( pStatusChangedMenu->nItemId, TRUE );
-                m_pVCLMenu->CheckItem( pStatusChangedMenu->nItemId, bCheckmark );
-            }
-            else if ( Event.State >>= aItemText )
-            {
-                // Replacement for place holders
-                if ( aItemText.matchAsciiL( "($1)", 4 ))
+                if ( Event.State >>= bCheckmark )
                 {
-                    String aResStr = String( FwkResId( STR_UPDATEDOC ));
-                    rtl::OUString aTmp( aResStr );
-                    aTmp += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ));
-                    aTmp += aItemText.copy( 4 );
-                    aItemText = aTmp;
+                    // Checkmark
+                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, TRUE );
+                    m_pVCLMenu->CheckItem( pMenuItemHandler->nItemId, bCheckmark );
                 }
-                else if ( aItemText.matchAsciiL( "($2)", 4 ))
+                else if ( Event.State >>= aItemText )
                 {
-                    String aResStr = String( FwkResId( STR_CLOSEDOC_ANDRETURN ));
-                    rtl::OUString aTmp( aResStr );
-                    aTmp += aItemText.copy( 4 );
-                    aItemText = aTmp;
-                }
-                else if ( aItemText.matchAsciiL( "($3)", 4 ))
-                {
-                    String aResStr = String( FwkResId( STR_SAVECOPYDOC ));
-                    rtl::OUString aTmp( aResStr );
-                    aTmp += aItemText.copy( 4 );
-                    aItemText = aTmp;
-                }
+                    // Replacement for place holders
+                    if ( aItemText.matchAsciiL( "($1)", 4 ))
+                    {
+                        String aResStr = String( FwkResId( STR_UPDATEDOC ));
+                        rtl::OUString aTmp( aResStr );
+                        aTmp += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ));
+                        aTmp += aItemText.copy( 4 );
+                        aItemText = aTmp;
+                    }
+                    else if ( aItemText.matchAsciiL( "($2)", 4 ))
+                    {
+                        String aResStr = String( FwkResId( STR_CLOSEDOC_ANDRETURN ));
+                        rtl::OUString aTmp( aResStr );
+                        aTmp += aItemText.copy( 4 );
+                        aItemText = aTmp;
+                    }
+                    else if ( aItemText.matchAsciiL( "($3)", 4 ))
+                    {
+                        String aResStr = String( FwkResId( STR_SAVECOPYDOC ));
+                        rtl::OUString aTmp( aResStr );
+                        aTmp += aItemText.copy( 4 );
+                        aItemText = aTmp;
+                    }
 
-                m_pVCLMenu->ShowItem( pStatusChangedMenu->nItemId, TRUE );
-                m_pVCLMenu->SetItemText( pStatusChangedMenu->nItemId, aItemText );
+                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, TRUE );
+                    m_pVCLMenu->SetItemText( pMenuItemHandler->nItemId, aItemText );
+                }
+                else if ( Event.State >>= aVisibilityStatus )
+                {
+                    // Visibility
+                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, aVisibilityStatus.bVisible );
+                }
+                else
+                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, TRUE );
             }
-            else if ( Event.State >>= aVisibilityStatus )
+
+            if ( Event.Requery )
             {
-                // Visibility
-                m_pVCLMenu->ShowItem( pStatusChangedMenu->nItemId, aVisibilityStatus.bVisible );
+                // Release dispatch object - will be requeried on the next activate!
+                pMenuItemHandler->xMenuItemDispatch.clear();
             }
-            else
-                m_pVCLMenu->ShowItem( pStatusChangedMenu->nItemId, TRUE );
-        }
-
-        if ( Event.Requery )
-        {
-            // Release dispatch object - will be requeried on the next activate!
-            pStatusChangedMenu->xMenuItemDispatch.clear();
         }
     }
 }
