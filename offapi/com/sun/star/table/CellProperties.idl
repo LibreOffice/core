@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellProperties.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:57:04 $
+ *  last change: $Author: nn $ $Date: 2002-04-08 14:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,19 @@ service CellProperties
 
     //-------------------------------------------------------------------------
 
+    /** selects Asian character orientation in vertical orientation.
+
+        <p>If the <member>CellProperties::Orientation</member> property is
+        <const>CellOrientation::STACKED</const>, in Asian mode only Asian
+        characters are printed in horizontal orientation instead of all
+        characters.
+        For other values of <member>CellProperties::Orientation</member>,
+        this value is not used.</p>
+     */
+    [optional, property] boolean AsianVerticalMode;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::table::CellProperties::CellProtection
     /** contains a description of the cell
         protection.
@@ -231,6 +244,9 @@ service CellProperties
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/10/25 15:57:04  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.5  2000/12/21 08:35:19  mi
     @see interface/service/... ident -> @see ident - for new docu generator
 
