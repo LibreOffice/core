@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWeb.xcs,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:19 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,13 @@
 				<desc xml:lang="x-comment">; Contains settings for various content elements.</desc>
 				<desc xml:lang="zh-CN">含有各种内容元素的设定。</desc>
 				<desc xml:lang="ja">各種の内容要素に関する設定が含まれます。</desc>
+				<desc xml:lang="el">Contains settings for various content elements.</desc>
+				<desc xml:lang="nl">Contains settings for various content elements.</desc>
+				<desc xml:lang="hu">Contains settings for various content elements.</desc>
+				<desc xml:lang="cs">Contains settings for various content elements.</desc>
+				<desc xml:lang="sk">Contains settings for various content elements.</desc>
+				<desc xml:lang="da">Contains settings for various content elements.</desc>
+				<desc xml:lang="sl">Contains settings for various content elements.</desc>
 			</info>
 			<group oor:name="Display">
 				<info>
@@ -79,6 +86,13 @@
 					<desc xml:lang="x-comment">; Contains settings for the visibility of various elements.</desc>
 					<desc xml:lang="zh-CN">含有各种元素的可见性设定。</desc>
 					<desc xml:lang="ja">各種の要素を表示するかどうか指定する設定が含まれます。</desc>
+					<desc xml:lang="el">Contains settings for the visibility of various elements.</desc>
+					<desc xml:lang="nl">Contains settings for the visibility of various elements.</desc>
+					<desc xml:lang="hu">Contains settings for the visibility of various elements.</desc>
+					<desc xml:lang="cs">Contains settings for the visibility of various elements.</desc>
+					<desc xml:lang="sk">Contains settings for the visibility of various elements.</desc>
+					<desc xml:lang="da">Contains settings for the visibility of various elements.</desc>
+					<desc xml:lang="sl">Contains settings for the visibility of various elements.</desc>
 				</info>
 				<prop oor:name="GraphicObject" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Content/Display -->
@@ -90,10 +104,24 @@
 							<desc xml:lang="x-comment">; Specifies if graphics and objects are displayed.</desc>
 							<desc xml:lang="zh-CN">指定是否显示图形和对象。</desc>
 							<desc xml:lang="ja">図とオブジェクトを表示するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if graphics and objects are displayed.</desc>
+							<desc xml:lang="nl">Specifies if graphics and objects are displayed.</desc>
+							<desc xml:lang="hu">Specifies if graphics and objects are displayed.</desc>
+							<desc xml:lang="cs">Specifies if graphics and objects are displayed.</desc>
+							<desc xml:lang="sk">Specifies if graphics and objects are displayed.</desc>
+							<desc xml:lang="da">Specifies if graphics and objects are displayed.</desc>
+							<desc xml:lang="sl">Specifies if graphics and objects are displayed.</desc>
 						<label xml:lang="en-US">Graphics and Objects</label>
 						<label xml:lang="x-comment">; Graphics and Objects</label>
 						<label xml:lang="zh-CN">图形和对象</label>
 						<label xml:lang="ja">図とオブジェクト</label>
+						<label xml:lang="el">Graphics and Objects</label>
+						<label xml:lang="nl">Graphics and Objects</label>
+						<label xml:lang="hu">Graphics and Objects</label>
+						<label xml:lang="cs">Graphics and Objects</label>
+						<label xml:lang="sk">Graphics and Objects</label>
+						<label xml:lang="da">Graphics and Objects</label>
+						<label xml:lang="sl">Graphics and Objects</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -107,6 +135,13 @@
 							<desc xml:lang="x-comment">; Specifies if tables are displayed.</desc>
 							<desc xml:lang="zh-CN">指定是否显示表格。</desc>
 							<desc xml:lang="ja">表を表示するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if tables are displayed.</desc>
+							<desc xml:lang="nl">Specifies if tables are displayed.</desc>
+							<desc xml:lang="hu">Specifies if tables are displayed.</desc>
+							<desc xml:lang="cs">Specifies if tables are displayed.</desc>
+							<desc xml:lang="sk">Specifies if tables are displayed.</desc>
+							<desc xml:lang="da">Specifies if tables are displayed.</desc>
+							<desc xml:lang="sl">Specifies if tables are displayed.</desc>
 						<label xml:lang="en-US">Tables</label>
 						<label xml:lang="x-comment">; Tables</label>
 						<label xml:lang="fr">~Tables</label>
@@ -130,6 +165,8 @@
 						<label xml:lang="ca">Taules</label>
 						<label xml:lang="th">ตาราง</label>
 						<label xml:lang="sk">Tabuľky</label>
+						<label xml:lang="hu">Tables</label>
+						<label xml:lang="sl">Tables</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -143,10 +180,24 @@
 							<desc xml:lang="x-comment">; Specifies if drawings and controls are displayed.</desc>
 							<desc xml:lang="zh-CN">指定是否显示绘图和控件。</desc>
 							<desc xml:lang="ja">図形描画とコントロールを表示するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if drawings and controls are displayed.</desc>
+							<desc xml:lang="nl">Specifies if drawings and controls are displayed.</desc>
+							<desc xml:lang="hu">Specifies if drawings and controls are displayed.</desc>
+							<desc xml:lang="cs">Specifies if drawings and controls are displayed.</desc>
+							<desc xml:lang="sk">Specifies if drawings and controls are displayed.</desc>
+							<desc xml:lang="da">Specifies if drawings and controls are displayed.</desc>
+							<desc xml:lang="sl">Specifies if drawings and controls are displayed.</desc>
 						<label xml:lang="en-US">Drawings and controls</label>
 						<label xml:lang="x-comment">; Drawings and controls</label>
 						<label xml:lang="zh-CN">绘图和控件</label>
 						<label xml:lang="ja">図形描画とコントロール</label>
+						<label xml:lang="el">Drawings and controls</label>
+						<label xml:lang="nl">Drawings and controls</label>
+						<label xml:lang="hu">Drawings and controls</label>
+						<label xml:lang="cs">Drawings and controls</label>
+						<label xml:lang="sk">Drawings and controls</label>
+						<label xml:lang="da">Drawings and controls</label>
+						<label xml:lang="sl">Drawings and controls</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -160,10 +211,24 @@
 							<desc xml:lang="x-comment">; Specifies if field codes are displayed.</desc>
 							<desc xml:lang="zh-CN">指定是否显示字段代码。</desc>
 							<desc xml:lang="ja">フィールドコードを表示するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if field codes are displayed.</desc>
+							<desc xml:lang="nl">Specifies if field codes are displayed.</desc>
+							<desc xml:lang="hu">Specifies if field codes are displayed.</desc>
+							<desc xml:lang="cs">Specifies if field codes are displayed.</desc>
+							<desc xml:lang="sk">Specifies if field codes are displayed.</desc>
+							<desc xml:lang="da">Specifies if field codes are displayed.</desc>
+							<desc xml:lang="sl">Specifies if field codes are displayed.</desc>
 						<label xml:lang="en-US">Field codes</label>
 						<label xml:lang="x-comment">; Field codes</label>
 						<label xml:lang="zh-CN">字段代码</label>
 						<label xml:lang="ja">フィールドコード</label>
+						<label xml:lang="el">Field codes</label>
+						<label xml:lang="nl">Field codes</label>
+						<label xml:lang="hu">Field codes</label>
+						<label xml:lang="cs">Field codes</label>
+						<label xml:lang="sk">Field codes</label>
+						<label xml:lang="da">Field codes</label>
+						<label xml:lang="sl">Field codes</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -177,6 +242,13 @@
 							<desc xml:lang="x-comment">; Specifies if notes are displayed.</desc>
 							<desc xml:lang="zh-CN">指定是否显示备注。</desc>
 							<desc xml:lang="ja">メモを表示するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if notes are displayed.</desc>
+							<desc xml:lang="nl">Specifies if notes are displayed.</desc>
+							<desc xml:lang="hu">Specifies if notes are displayed.</desc>
+							<desc xml:lang="cs">Specifies if notes are displayed.</desc>
+							<desc xml:lang="sk">Specifies if notes are displayed.</desc>
+							<desc xml:lang="da">Specifies if notes are displayed.</desc>
+							<desc xml:lang="sl">Specifies if notes are displayed.</desc>
 						<label xml:lang="en-US">Notes</label>
 						<label xml:lang="x-comment">; Notes</label>
 						<label xml:lang="fr">Mode Note</label>
@@ -201,6 +273,8 @@
 						<label xml:lang="he">‮הערות‬</label>
 						<label xml:lang="th">หมายเหตุ</label>
 						<label xml:lang="sk">Poznámky</label>
+						<label xml:lang="hu">Notes</label>
+						<label xml:lang="sl">Notes</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -212,10 +286,24 @@
 							<desc xml:lang="x-comment">; Enables the writer to prevent the display of help tips programmatically.</desc>
 							<desc xml:lang="zh-CN">开放 Writer 以防止用编程方式显示帮助提示。</desc>
 							<desc xml:lang="ja">Writer でヒントヘルプのプログラムによる表示を抑止することを許可します。</desc>
+							<desc xml:lang="el">Enables the writer to prevent the display of help tips programmatically.</desc>
+							<desc xml:lang="nl">Enables the writer to prevent the display of help tips programmatically.</desc>
+							<desc xml:lang="hu">Enables the writer to prevent the display of help tips programmatically.</desc>
+							<desc xml:lang="cs">Enables the writer to prevent the display of help tips programmatically.</desc>
+							<desc xml:lang="sk">Enables the writer to prevent the display of help tips programmatically.</desc>
+							<desc xml:lang="da">Enables the writer to prevent the display of help tips programmatically.</desc>
+							<desc xml:lang="sl">Enables the writer to prevent the display of help tips programmatically.</desc>
 						<label xml:lang="en-US">Prevent help tips</label>
 						<label xml:lang="x-comment">; Prevent help tips</label>
 						<label xml:lang="zh-CN">不显示帮助提示</label>
 						<label xml:lang="ja">ヒントヘルプの抑止</label>
+						<label xml:lang="el">Prevent help tips</label>
+						<label xml:lang="nl">Prevent help tips</label>
+						<label xml:lang="hu">Prevent help tips</label>
+						<label xml:lang="cs">Prevent help tips</label>
+						<label xml:lang="sk">Prevent help tips</label>
+						<label xml:lang="da">Prevent help tips</label>
+						<label xml:lang="sl">Prevent help tips</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -226,6 +314,13 @@
 					<desc xml:lang="x-comment">; Contains settings for the visibility of various non-printing characters.</desc>
 					<desc xml:lang="zh-CN">含有各种非打印字符的可见性设定。</desc>
 					<desc xml:lang="ja">各種の非印刷文字を表示するかどうかを指定する設定が含まれます。</desc>
+					<desc xml:lang="el">Contains settings for the visibility of various non-printing characters.</desc>
+					<desc xml:lang="nl">Contains settings for the visibility of various non-printing characters.</desc>
+					<desc xml:lang="hu">Contains settings for the visibility of various non-printing characters.</desc>
+					<desc xml:lang="cs">Contains settings for the visibility of various non-printing characters.</desc>
+					<desc xml:lang="sk">Contains settings for the visibility of various non-printing characters.</desc>
+					<desc xml:lang="da">Contains settings for the visibility of various non-printing characters.</desc>
+					<desc xml:lang="sl">Contains settings for the visibility of various non-printing characters.</desc>
 				</info>
 				<prop oor:name="MetaCharacters" oor:type="xs:boolean">
 					<!-- UIHints: View - Nonprinting Characters -->
@@ -235,10 +330,24 @@
 							<desc xml:lang="x-comment">; Determines whether certain settings are applied or not (display of tab stops, spaces, breaks).</desc>
 							<desc xml:lang="zh-CN">确定是否采用某些设定 (制表符、空格、换行符的显示)。</desc>
 							<desc xml:lang="ja">特定の設定 (タブストップ、スペース、区切りの表示) を適用するかどうか指定します。</desc>
+							<desc xml:lang="el">Determines whether certain settings are applied or not (display of tab stops, spaces, breaks).</desc>
+							<desc xml:lang="nl">Determines whether certain settings are applied or not (display of tab stops, spaces, breaks).</desc>
+							<desc xml:lang="hu">Determines whether certain settings are applied or not (display of tab stops, spaces, breaks).</desc>
+							<desc xml:lang="cs">Determines whether certain settings are applied or not (display of tab stops, spaces, breaks).</desc>
+							<desc xml:lang="sk">Determines whether certain settings are applied or not (display of tab stops, spaces, breaks).</desc>
+							<desc xml:lang="da">Determines whether certain settings are applied or not (display of tab stops, spaces, breaks).</desc>
+							<desc xml:lang="sl">Determines whether certain settings are applied or not (display of tab stops, spaces, breaks).</desc>
 						<label xml:lang="en-US">Meta characters</label>
 						<label xml:lang="x-comment">; Meta characters</label>
 						<label xml:lang="zh-CN">图元字符</label>
 						<label xml:lang="ja">メタ文字</label>
+						<label xml:lang="el">Meta characters</label>
+						<label xml:lang="nl">Meta characters</label>
+						<label xml:lang="hu">Meta characters</label>
+						<label xml:lang="cs">Meta characters</label>
+						<label xml:lang="sk">Meta characters</label>
+						<label xml:lang="da">Meta characters</label>
+						<label xml:lang="sl">Meta characters</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -252,10 +361,24 @@
 							<desc xml:lang="x-comment">; Specifies if paragraph ends are shown on the screen.</desc>
 							<desc xml:lang="zh-CN">指定是否在屏幕上显示段落结束标记。</desc>
 							<desc xml:lang="ja">画面に段落末を表示するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if paragraph ends are shown on the screen.</desc>
+							<desc xml:lang="nl">Specifies if paragraph ends are shown on the screen.</desc>
+							<desc xml:lang="hu">Specifies if paragraph ends are shown on the screen.</desc>
+							<desc xml:lang="cs">Specifies if paragraph ends are shown on the screen.</desc>
+							<desc xml:lang="sk">Specifies if paragraph ends are shown on the screen.</desc>
+							<desc xml:lang="da">Specifies if paragraph ends are shown on the screen.</desc>
+							<desc xml:lang="sl">Specifies if paragraph ends are shown on the screen.</desc>
 						<label xml:lang="en-US">Paragraph end</label>
 						<label xml:lang="x-comment">; Paragraph end</label>
 						<label xml:lang="zh-CN">段落的结束位置</label>
 						<label xml:lang="ja">段落末</label>
+						<label xml:lang="el">Paragraph end</label>
+						<label xml:lang="nl">Paragraph end</label>
+						<label xml:lang="hu">Paragraph end</label>
+						<label xml:lang="cs">Paragraph end</label>
+						<label xml:lang="sk">Paragraph end</label>
+						<label xml:lang="da">Paragraph end</label>
+						<label xml:lang="sl">Paragraph end</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -269,10 +392,24 @@
 							<desc xml:lang="x-comment">; Specifies if optional hyphens are shown on the screen.</desc>
 							<desc xml:lang="zh-CN">指定是否在屏幕上显示可选的连字符。</desc>
 							<desc xml:lang="ja">画面にソフトハイフンを表示するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if optional hyphens are shown on the screen.</desc>
+							<desc xml:lang="nl">Specifies if optional hyphens are shown on the screen.</desc>
+							<desc xml:lang="hu">Specifies if optional hyphens are shown on the screen.</desc>
+							<desc xml:lang="cs">Specifies if optional hyphens are shown on the screen.</desc>
+							<desc xml:lang="sk">Specifies if optional hyphens are shown on the screen.</desc>
+							<desc xml:lang="da">Specifies if optional hyphens are shown on the screen.</desc>
+							<desc xml:lang="sl">Specifies if optional hyphens are shown on the screen.</desc>
 						<label xml:lang="en-US">Optional hyphens</label>
 						<label xml:lang="x-comment">; Optional hyphens</label>
 						<label xml:lang="zh-CN">自定的连字符</label>
 						<label xml:lang="ja">ソフトハイフン</label>
+						<label xml:lang="el">Optional hyphens</label>
+						<label xml:lang="nl">Optional hyphens</label>
+						<label xml:lang="hu">Optional hyphens</label>
+						<label xml:lang="cs">Optional hyphens</label>
+						<label xml:lang="sk">Optional hyphens</label>
+						<label xml:lang="da">Optional hyphens</label>
+						<label xml:lang="sl">Optional hyphens</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -286,10 +423,24 @@
 							<desc xml:lang="x-comment">; Specifies if spaces are shown on the screen.</desc>
 							<desc xml:lang="zh-CN">指定是否在屏幕上显示空格。</desc>
 							<desc xml:lang="ja">画面にスペースを表示するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if spaces are shown on the screen.</desc>
+							<desc xml:lang="nl">Specifies if spaces are shown on the screen.</desc>
+							<desc xml:lang="hu">Specifies if spaces are shown on the screen.</desc>
+							<desc xml:lang="cs">Specifies if spaces are shown on the screen.</desc>
+							<desc xml:lang="sk">Specifies if spaces are shown on the screen.</desc>
+							<desc xml:lang="da">Specifies if spaces are shown on the screen.</desc>
+							<desc xml:lang="sl">Specifies if spaces are shown on the screen.</desc>
 						<label xml:lang="en-US">Spaces</label>
 						<label xml:lang="x-comment">; Spaces</label>
 						<label xml:lang="zh-CN">空格</label>
 						<label xml:lang="ja">スペース</label>
+						<label xml:lang="el">Spaces</label>
+						<label xml:lang="nl">Spaces</label>
+						<label xml:lang="hu">Spaces</label>
+						<label xml:lang="cs">Spaces</label>
+						<label xml:lang="sk">Spaces</label>
+						<label xml:lang="da">Spaces</label>
+						<label xml:lang="sl">Spaces</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -303,10 +454,24 @@
 							<desc xml:lang="x-comment">; Specifies if protected spaces are shown on the screen.</desc>
 							<desc xml:lang="zh-CN">指定是否在屏幕上显示受保护的空格。</desc>
 							<desc xml:lang="ja">画面に保護スペースを表示するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if protected spaces are shown on the screen.</desc>
+							<desc xml:lang="nl">Specifies if protected spaces are shown on the screen.</desc>
+							<desc xml:lang="hu">Specifies if protected spaces are shown on the screen.</desc>
+							<desc xml:lang="cs">Specifies if protected spaces are shown on the screen.</desc>
+							<desc xml:lang="sk">Specifies if protected spaces are shown on the screen.</desc>
+							<desc xml:lang="da">Specifies if protected spaces are shown on the screen.</desc>
+							<desc xml:lang="sl">Specifies if protected spaces are shown on the screen.</desc>
 						<label xml:lang="en-US">Protected Spaces</label>
 						<label xml:lang="x-comment">; Protected Spaces</label>
 						<label xml:lang="zh-CN">受保护的空格字符</label>
 						<label xml:lang="ja">保護スペース</label>
+						<label xml:lang="el">Protected Spaces</label>
+						<label xml:lang="nl">Protected Spaces</label>
+						<label xml:lang="hu">Protected Spaces</label>
+						<label xml:lang="cs">Protected Spaces</label>
+						<label xml:lang="sk">Protected Spaces</label>
+						<label xml:lang="da">Protected Spaces</label>
+						<label xml:lang="sl">Protected Spaces</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -320,6 +485,13 @@
 							<desc xml:lang="x-comment">; Specifies if breaks are shown on the screen.</desc>
 							<desc xml:lang="zh-CN">指定是否在屏幕上显示换行符。</desc>
 							<desc xml:lang="ja">画面に改ページを表示するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if breaks are shown on the screen.</desc>
+							<desc xml:lang="nl">Specifies if breaks are shown on the screen.</desc>
+							<desc xml:lang="hu">Specifies if breaks are shown on the screen.</desc>
+							<desc xml:lang="cs">Specifies if breaks are shown on the screen.</desc>
+							<desc xml:lang="sk">Specifies if breaks are shown on the screen.</desc>
+							<desc xml:lang="da">Specifies if breaks are shown on the screen.</desc>
+							<desc xml:lang="sl">Specifies if breaks are shown on the screen.</desc>
 						<label xml:lang="en-US">Breaks</label>
 						<label xml:lang="x-comment">; Breaks</label>
 						<label xml:lang="fr">Sauts</label>
@@ -335,6 +507,11 @@
 						<label xml:lang="he">‮מעברים‬</label>
 						<label xml:lang="sk">Zalomenia</label>
 						<label xml:lang="pt-BR">Quebras</label>
+						<label xml:lang="el">Breaks</label>
+						<label xml:lang="nl">Breaks</label>
+						<label xml:lang="hu">Breaks</label>
+						<label xml:lang="da">Breaks</label>
+						<label xml:lang="sl">Breaks</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -345,6 +522,13 @@
 					<desc xml:lang="x-comment">; Contains settings for highlighting contents.</desc>
 					<desc xml:lang="zh-CN">含有有关突出显示内容的设定。</desc>
 					<desc xml:lang="ja">内容の強調表示設定を含みます。</desc>
+					<desc xml:lang="el">Contains settings for highlighting contents.</desc>
+					<desc xml:lang="nl">Contains settings for highlighting contents.</desc>
+					<desc xml:lang="hu">Contains settings for highlighting contents.</desc>
+					<desc xml:lang="cs">Contains settings for highlighting contents.</desc>
+					<desc xml:lang="sk">Contains settings for highlighting contents.</desc>
+					<desc xml:lang="da">Contains settings for highlighting contents.</desc>
+					<desc xml:lang="sl">Contains settings for highlighting contents.</desc>
 				</info>
 				<prop oor:name="Field" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Content/Highlighting -->
@@ -356,6 +540,13 @@
 							<desc xml:lang="x-comment">; Specifies if fields are highlighted.</desc>
 							<desc xml:lang="zh-CN">指定是否突出显示字段。</desc>
 							<desc xml:lang="ja">フィールドを強調表示するかどうか指定します。</desc>
+							<desc xml:lang="el">Specifies if fields are highlighted.</desc>
+							<desc xml:lang="nl">Specifies if fields are highlighted.</desc>
+							<desc xml:lang="hu">Specifies if fields are highlighted.</desc>
+							<desc xml:lang="cs">Specifies if fields are highlighted.</desc>
+							<desc xml:lang="sk">Specifies if fields are highlighted.</desc>
+							<desc xml:lang="da">Specifies if fields are highlighted.</desc>
+							<desc xml:lang="sl">Specifies if fields are highlighted.</desc>
 						<label xml:lang="en-US">Fields</label>
 						<label xml:lang="x-comment">; Fields</label>
 						<label xml:lang="fr">Champ</label>
@@ -381,6 +572,8 @@
 						<label xml:lang="ca">Camps</label>
 						<label xml:lang="th">เขตข้อมูล</label>
 						<label xml:lang="sk">Polia</label>
+						<label xml:lang="hu">Fields</label>
+						<label xml:lang="sl">Fields</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -392,6 +585,13 @@
 				<desc xml:lang="x-comment">; Contains layout-specific settings.</desc>
 				<desc xml:lang="zh-CN">含有版式设定。</desc>
 				<desc xml:lang="ja">レイアウトごとの設定を含みます。</desc>
+				<desc xml:lang="el">Contains layout-specific settings.</desc>
+				<desc xml:lang="nl">Contains layout-specific settings.</desc>
+				<desc xml:lang="hu">Contains layout-specific settings.</desc>
+				<desc xml:lang="cs">Contains layout-specific settings.</desc>
+				<desc xml:lang="sk">Contains layout-specific settings.</desc>
+				<desc xml:lang="da">Contains layout-specific settings.</desc>
+				<desc xml:lang="sl">Contains layout-specific settings.</desc>
 			</info>
 			<group oor:name="Line">
 				<info>
@@ -399,6 +599,13 @@
 					<desc xml:lang="x-comment">; Contains settings for guiding lines or points (for example when selecting/moving an object or frame).</desc>
 					<desc xml:lang="zh-CN">含有辅助线或辅助点的设定 (例如，选择/移动对象或框时)。</desc>
 					<desc xml:lang="ja">補助線または補助ポイントに関する設定が含まれます (たとえば、オブジェクトまたはフレームの選択/移動時など)。</desc>
+					<desc xml:lang="el">Contains settings for guiding lines or points (for example when selecting/moving an object or frame).</desc>
+					<desc xml:lang="nl">Contains settings for guiding lines or points (for example when selecting/moving an object or frame).</desc>
+					<desc xml:lang="hu">Contains settings for guiding lines or points (for example when selecting/moving an object or frame).</desc>
+					<desc xml:lang="cs">Contains settings for guiding lines or points (for example when selecting/moving an object or frame).</desc>
+					<desc xml:lang="sk">Contains settings for guiding lines or points (for example when selecting/moving an object or frame).</desc>
+					<desc xml:lang="da">Contains settings for guiding lines or points (for example when selecting/moving an object or frame).</desc>
+					<desc xml:lang="sl">Contains settings for guiding lines or points (for example when selecting/moving an object or frame).</desc>
 				</info>
 				<prop oor:name="Guide" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Layout/Lines -->
@@ -410,6 +617,13 @@
 							<desc xml:lang="x-comment">; Displays guides around the frames when frames are moved.</desc>
 							<desc xml:lang="zh-CN">移动框时，在框对象的周围显示辅助线。</desc>
 							<desc xml:lang="ja">フレームの移動時にフレームの周囲に補助線を表示します。</desc>
+							<desc xml:lang="el">Displays guides around the frames when frames are moved.</desc>
+							<desc xml:lang="nl">Displays guides around the frames when frames are moved.</desc>
+							<desc xml:lang="hu">Displays guides around the frames when frames are moved.</desc>
+							<desc xml:lang="cs">Displays guides around the frames when frames are moved.</desc>
+							<desc xml:lang="sk">Displays guides around the frames when frames are moved.</desc>
+							<desc xml:lang="da">Displays guides around the frames when frames are moved.</desc>
+							<desc xml:lang="sl">Displays guides around the frames when frames are moved.</desc>
 						<label xml:lang="en-US">Guides</label>
 						<label xml:lang="x-comment">; Guides</label>
 						<label xml:lang="fr">Repères</label>
@@ -435,6 +649,8 @@
 						<label xml:lang="ca">Ajudes visuals</label>
 						<label xml:lang="th">คำแนะนำ</label>
 						<label xml:lang="sk">Vodítka</label>
+						<label xml:lang="hu">Guides</label>
+						<label xml:lang="sl">Guides</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -448,10 +664,24 @@
 							<desc xml:lang="x-comment">; Displays the control points as simple squares without a 3D effect.</desc>
 							<desc xml:lang="zh-CN">控点显示为无 3 维效果的简单正方形。</desc>
 							<desc xml:lang="ja">3D 効果を適用しない単純な正方形として制御点を表示します。</desc>
+							<desc xml:lang="el">Displays the control points as simple squares without a 3D effect.</desc>
+							<desc xml:lang="nl">Displays the control points as simple squares without a 3D effect.</desc>
+							<desc xml:lang="hu">Displays the control points as simple squares without a 3D effect.</desc>
+							<desc xml:lang="cs">Displays the control points as simple squares without a 3D effect.</desc>
+							<desc xml:lang="sk">Displays the control points as simple squares without a 3D effect.</desc>
+							<desc xml:lang="da">Displays the control points as simple squares without a 3D effect.</desc>
+							<desc xml:lang="sl">Displays the control points as simple squares without a 3D effect.</desc>
 						<label xml:lang="en-US">Simple control points</label>
 						<label xml:lang="x-comment">; Simple control points</label>
 						<label xml:lang="zh-CN">标准控点</label>
 						<label xml:lang="ja">単純な制御点</label>
+						<label xml:lang="el">Simple control points</label>
+						<label xml:lang="nl">Simple control points</label>
+						<label xml:lang="hu">Simple control points</label>
+						<label xml:lang="cs">Simple control points</label>
+						<label xml:lang="sk">Simple control points</label>
+						<label xml:lang="da">Simple control points</label>
+						<label xml:lang="sl">Simple control points</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -465,10 +695,24 @@
 							<desc xml:lang="x-comment">; Displays larger control points.</desc>
 							<desc xml:lang="zh-CN">显示较大的控点。</desc>
 							<desc xml:lang="ja">大きな制御点を表示します。</desc>
+							<desc xml:lang="el">Displays larger control points.</desc>
+							<desc xml:lang="nl">Displays larger control points.</desc>
+							<desc xml:lang="hu">Displays larger control points.</desc>
+							<desc xml:lang="cs">Displays larger control points.</desc>
+							<desc xml:lang="sk">Displays larger control points.</desc>
+							<desc xml:lang="da">Displays larger control points.</desc>
+							<desc xml:lang="sl">Displays larger control points.</desc>
 						<label xml:lang="en-US">Large control points</label>
 						<label xml:lang="x-comment">; Large control points</label>
 						<label xml:lang="zh-CN">大控点</label>
 						<label xml:lang="ja">大きな制御点</label>
+						<label xml:lang="el">Large control points</label>
+						<label xml:lang="nl">Large control points</label>
+						<label xml:lang="hu">Large control points</label>
+						<label xml:lang="cs">Large control points</label>
+						<label xml:lang="sk">Large control points</label>
+						<label xml:lang="da">Large control points</label>
+						<label xml:lang="sl">Large control points</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -479,6 +723,13 @@
 					<desc xml:lang="x-comment">; Contains various settings for the window, such as scrollbars, rules, etc.</desc>
 					<desc xml:lang="zh-CN">含有视窗的各种设定 (例如滚动条、标尺等)。</desc>
 					<desc xml:lang="ja">スクロールバー、ルーラーなどのウィンドウの各種設定を含みます。</desc>
+					<desc xml:lang="el">Contains various settings for the window, such as scrollbars, rules, etc.</desc>
+					<desc xml:lang="nl">Contains various settings for the window, such as scrollbars, rules, etc.</desc>
+					<desc xml:lang="hu">Contains various settings for the window, such as scrollbars, rules, etc.</desc>
+					<desc xml:lang="cs">Contains various settings for the window, such as scrollbars, rules, etc.</desc>
+					<desc xml:lang="sk">Contains various settings for the window, such as scrollbars, rules, etc.</desc>
+					<desc xml:lang="da">Contains various settings for the window, such as scrollbars, rules, etc.</desc>
+					<desc xml:lang="sl">Contains various settings for the window, such as scrollbars, rules, etc.</desc>
 				</info>
 				<prop oor:name="HorizontalScroll" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Layout/Window -->
@@ -490,10 +741,24 @@
 							<desc xml:lang="x-comment">; Specifies if the horizontal scroll bar is displayed.</desc>
 							<desc xml:lang="zh-CN">指定是否显示水平滚动条。</desc>
 							<desc xml:lang="ja">水平方向のスクロールバーを表示するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if the horizontal scroll bar is displayed.</desc>
+							<desc xml:lang="nl">Specifies if the horizontal scroll bar is displayed.</desc>
+							<desc xml:lang="hu">Specifies if the horizontal scroll bar is displayed.</desc>
+							<desc xml:lang="cs">Specifies if the horizontal scroll bar is displayed.</desc>
+							<desc xml:lang="sk">Specifies if the horizontal scroll bar is displayed.</desc>
+							<desc xml:lang="da">Specifies if the horizontal scroll bar is displayed.</desc>
+							<desc xml:lang="sl">Specifies if the horizontal scroll bar is displayed.</desc>
 						<label xml:lang="en-US">Horizontal scroll</label>
 						<label xml:lang="x-comment">; Horizontal scroll</label>
 						<label xml:lang="zh-CN">水平滚动条</label>
 						<label xml:lang="ja">水平方向のスクロール</label>
+						<label xml:lang="el">Horizontal scroll</label>
+						<label xml:lang="nl">Horizontal scroll</label>
+						<label xml:lang="hu">Horizontal scroll</label>
+						<label xml:lang="cs">Horizontal scroll</label>
+						<label xml:lang="sk">Horizontal scroll</label>
+						<label xml:lang="da">Horizontal scroll</label>
+						<label xml:lang="sl">Horizontal scroll</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -507,10 +772,24 @@
 							<desc xml:lang="x-comment">; Specifies if the vertical scroll bar is displayed.</desc>
 							<desc xml:lang="zh-CN">指定是否显示垂直滚动条。</desc>
 							<desc xml:lang="ja">垂直方向のスクロールバーを表示するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if the vertical scroll bar is displayed.</desc>
+							<desc xml:lang="nl">Specifies if the vertical scroll bar is displayed.</desc>
+							<desc xml:lang="hu">Specifies if the vertical scroll bar is displayed.</desc>
+							<desc xml:lang="cs">Specifies if the vertical scroll bar is displayed.</desc>
+							<desc xml:lang="sk">Specifies if the vertical scroll bar is displayed.</desc>
+							<desc xml:lang="da">Specifies if the vertical scroll bar is displayed.</desc>
+							<desc xml:lang="sl">Specifies if the vertical scroll bar is displayed.</desc>
 						<label xml:lang="en-US">Vertical Scroll</label>
 						<label xml:lang="x-comment">; Vertical Scroll</label>
 						<label xml:lang="zh-CN">垂直滚动条</label>
 						<label xml:lang="ja">垂直方向のスクロール</label>
+						<label xml:lang="el">Vertical Scroll</label>
+						<label xml:lang="nl">Vertical Scroll</label>
+						<label xml:lang="hu">Vertical Scroll</label>
+						<label xml:lang="cs">Vertical Scroll</label>
+						<label xml:lang="sk">Vertical Scroll</label>
+						<label xml:lang="da">Vertical Scroll</label>
+						<label xml:lang="sl">Vertical Scroll</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -522,10 +801,24 @@
 							<desc xml:lang="x-comment">; Specifies whether rulers are displayed. It filters the values of HorizontalRuler and VerticalRuler</desc>
 							<desc xml:lang="zh-CN">指定是否显示标尺。筛选 HorizontalRuler 和 VerticalRuler 的值</desc>
 							<desc xml:lang="ja">ルーラーを表示するかどうかを指定します。HorizontalRuler と VerticalRule の値をフィルタリングします。</desc>
+							<desc xml:lang="el">Specifies whether rulers are displayed. It filters the values of HorizontalRuler and VerticalRuler</desc>
+							<desc xml:lang="nl">Specifies whether rulers are displayed. It filters the values of HorizontalRuler and VerticalRuler</desc>
+							<desc xml:lang="hu">Specifies whether rulers are displayed. It filters the values of HorizontalRuler and VerticalRuler</desc>
+							<desc xml:lang="cs">Specifies whether rulers are displayed. It filters the values of HorizontalRuler and VerticalRuler</desc>
+							<desc xml:lang="sk">Specifies whether rulers are displayed. It filters the values of HorizontalRuler and VerticalRuler</desc>
+							<desc xml:lang="da">Specifies whether rulers are displayed. It filters the values of HorizontalRuler and VerticalRuler</desc>
+							<desc xml:lang="sl">Specifies whether rulers are displayed. It filters the values of HorizontalRuler and VerticalRuler</desc>
 						<label xml:lang="en-US">Show rulers</label>
 						<label xml:lang="x-comment">; Show rulers</label>
 						<label xml:lang="zh-CN">显示标尺</label>
 						<label xml:lang="ja">ルーラーを表示</label>
+						<label xml:lang="el">Show rulers</label>
+						<label xml:lang="nl">Linialen weergeven</label>
+						<label xml:lang="hu">Show rulers</label>
+						<label xml:lang="cs">Show rulers</label>
+						<label xml:lang="sk">Show rulers</label>
+						<label xml:lang="da">Show rulers</label>
+						<label xml:lang="sl">Show rulers</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -539,10 +832,24 @@
 							<desc xml:lang="x-comment">; Specifies if the horizontal ruler is displayed.</desc>
 							<desc xml:lang="zh-CN">指定是否显示水平标尺。</desc>
 							<desc xml:lang="ja">水平方向のルーラーを表示するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if the horizontal ruler is displayed.</desc>
+							<desc xml:lang="nl">Specifies if the horizontal ruler is displayed.</desc>
+							<desc xml:lang="hu">Specifies if the horizontal ruler is displayed.</desc>
+							<desc xml:lang="cs">Specifies if the horizontal ruler is displayed.</desc>
+							<desc xml:lang="sk">Specifies if the horizontal ruler is displayed.</desc>
+							<desc xml:lang="da">Specifies if the horizontal ruler is displayed.</desc>
+							<desc xml:lang="sl">Specifies if the horizontal ruler is displayed.</desc>
 						<label xml:lang="en-US">Horizontal ruler</label>
 						<label xml:lang="x-comment">; Horizontal ruler</label>
 						<label xml:lang="zh-CN">水平标尺</label>
 						<label xml:lang="ja">水平方向のルーラー</label>
+						<label xml:lang="el">Horizontal ruler</label>
+						<label xml:lang="nl">Horizontale liniaal</label>
+						<label xml:lang="hu">Horizontal ruler</label>
+						<label xml:lang="cs">Horizontal ruler</label>
+						<label xml:lang="sk">Horizontal ruler</label>
+						<label xml:lang="da">Horizontal ruler</label>
+						<label xml:lang="sl">Horizontal ruler</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -555,10 +862,24 @@
 							<desc xml:lang="x-comment">; Specifies the measurement unit for the horizontal ruler.</desc>
 							<desc xml:lang="zh-CN">指定水平标尺的定量单位。</desc>
 							<desc xml:lang="ja">水平方向のルーラーの単位を指定します。</desc>
+							<desc xml:lang="el">Specifies the measurement unit for the horizontal ruler.</desc>
+							<desc xml:lang="nl">Specifies the measurement unit for the horizontal ruler.</desc>
+							<desc xml:lang="hu">Specifies the measurement unit for the horizontal ruler.</desc>
+							<desc xml:lang="cs">Specifies the measurement unit for the horizontal ruler.</desc>
+							<desc xml:lang="sk">Specifies the measurement unit for the horizontal ruler.</desc>
+							<desc xml:lang="da">Specifies the measurement unit for the horizontal ruler.</desc>
+							<desc xml:lang="sl">Specifies the measurement unit for the horizontal ruler.</desc>
 						<label xml:lang="en-US">Horizontal ruler measure unit</label>
 						<label xml:lang="x-comment">; Horizontal ruler measure unit</label>
 						<label xml:lang="zh-CN">水平标尺的定量单位</label>
 						<label xml:lang="ja">水平方向のルーラーの単位</label>
+						<label xml:lang="el">Horizontal ruler measure unit</label>
+						<label xml:lang="nl">Maatstaf horizontale liniaal</label>
+						<label xml:lang="hu">Horizontal ruler measure unit</label>
+						<label xml:lang="cs">Horizontal ruler measure unit</label>
+						<label xml:lang="sk">Horizontal ruler measure unit</label>
+						<label xml:lang="da">Horizontal ruler measure unit</label>
+						<label xml:lang="sl">Horizontal ruler measure unit</label>
 					</info>
 					<constraints>
 						<enumeration oor:value="1">
@@ -588,6 +909,8 @@
 								<desc xml:lang="ca">Mil?l?metre</desc>
 								<desc xml:lang="th">มิลลิเมตร</desc>
 								<desc xml:lang="sk">Milimeter</desc>
+								<desc xml:lang="hu">Millimeter</desc>
+								<desc xml:lang="sl">Millimeter</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -617,6 +940,8 @@
 								<desc xml:lang="ca">Centímetre</desc>
 								<desc xml:lang="th">เซนติเมตร</desc>
 								<desc xml:lang="sk">Centimeter</desc>
+								<desc xml:lang="hu">Centimeter</desc>
+								<desc xml:lang="sl">Centimeter</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -646,6 +971,8 @@
 								<desc xml:lang="ca">Metre</desc>
 								<desc xml:lang="th">เมตร</desc>
 								<desc xml:lang="sk">Meter</desc>
+								<desc xml:lang="hu">Meter</desc>
+								<desc xml:lang="sl">Meter</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="4">
@@ -675,6 +1002,8 @@
 								<desc xml:lang="ca">Quilòmetre</desc>
 								<desc xml:lang="th">กิโลเมตร</desc>
 								<desc xml:lang="sk">Kilometer</desc>
+								<desc xml:lang="hu">Kilometer</desc>
+								<desc xml:lang="sl">Kilometer</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="6">
@@ -704,6 +1033,8 @@
 								<desc xml:lang="ca">Punt</desc>
 								<desc xml:lang="th">พ้อยนท์</desc>
 								<desc xml:lang="sk">Bod</desc>
+								<desc xml:lang="hu">Point</desc>
+								<desc xml:lang="sl">Point</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="7">
@@ -733,6 +1064,8 @@
 								<desc xml:lang="ca">Piques</desc>
 								<desc xml:lang="th">พิคา</desc>
 								<desc xml:lang="sk">Pika</desc>
+								<desc xml:lang="hu">Pica</desc>
+								<desc xml:lang="sl">Pica</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="8">
@@ -762,6 +1095,8 @@
 								<desc xml:lang="ca">Polzada</desc>
 								<desc xml:lang="th">นิ้ว</desc>
 								<desc xml:lang="sk">Palec</desc>
+								<desc xml:lang="hu">Inch</desc>
+								<desc xml:lang="sl">Inch</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="9">
@@ -791,6 +1126,8 @@
 								<desc xml:lang="ca">Peu</desc>
 								<desc xml:lang="th">ฟุต</desc>
 								<desc xml:lang="sk">Stopa</desc>
+								<desc xml:lang="hu">Foot</desc>
+								<desc xml:lang="sl">Foot</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="10">
@@ -820,6 +1157,8 @@
 								<desc xml:lang="ca">Milles</desc>
 								<desc xml:lang="th">ไมล์</desc>
 								<desc xml:lang="sk">Míle</desc>
+								<desc xml:lang="hu">Miles</desc>
+								<desc xml:lang="sl">Miles</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -834,6 +1173,13 @@
 							<desc xml:lang="x-comment">; Specifies if the vertical ruler is displayed.</desc>
 							<desc xml:lang="zh-CN">指定是否显示垂直标尺。</desc>
 							<desc xml:lang="ja">垂直方向のルーラーを表示するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if the vertical ruler is displayed.</desc>
+							<desc xml:lang="nl">Specifies if the vertical ruler is displayed.</desc>
+							<desc xml:lang="hu">Specifies if the vertical ruler is displayed.</desc>
+							<desc xml:lang="cs">Specifies if the vertical ruler is displayed.</desc>
+							<desc xml:lang="sk">Specifies if the vertical ruler is displayed.</desc>
+							<desc xml:lang="da">Specifies if the vertical ruler is displayed.</desc>
+							<desc xml:lang="sl">Specifies if the vertical ruler is displayed.</desc>
 						<label xml:lang="en-US">Vertical Ruler</label>
 						<label xml:lang="x-comment">; Vertical Ruler</label>
 						<label xml:lang="fr">Règle verticale</label>
@@ -857,6 +1203,9 @@
 						<label xml:lang="ca">Regle vertical</label>
 						<label xml:lang="th">ไม้บรรทัดแนวตั้ง</label>
 						<label xml:lang="sk">Zvislé pravítko</label>
+						<label xml:lang="nl">Verticale Liniaal</label>
+						<label xml:lang="hu">Vertical Ruler</label>
+						<label xml:lang="sl">Vertical Ruler</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -869,10 +1218,24 @@
 							<desc xml:lang="x-comment">; Specifies the measurement unit for the vertical ruler.</desc>
 							<desc xml:lang="zh-CN">指定垂直标尺的定量单位。</desc>
 							<desc xml:lang="ja">垂直方向のルーラーの単位を指定します。</desc>
+							<desc xml:lang="el">Specifies the measurement unit for the vertical ruler.</desc>
+							<desc xml:lang="nl">Specifies the measurement unit for the vertical ruler.</desc>
+							<desc xml:lang="hu">Specifies the measurement unit for the vertical ruler.</desc>
+							<desc xml:lang="cs">Specifies the measurement unit for the vertical ruler.</desc>
+							<desc xml:lang="sk">Specifies the measurement unit for the vertical ruler.</desc>
+							<desc xml:lang="da">Specifies the measurement unit for the vertical ruler.</desc>
+							<desc xml:lang="sl">Specifies the measurement unit for the vertical ruler.</desc>
 						<label xml:lang="en-US">Vertical ruler measure unit</label>
 						<label xml:lang="x-comment">; Vertical ruler measure unit</label>
 						<label xml:lang="zh-CN">垂直标尺的定量单位</label>
 						<label xml:lang="ja">垂直方向のルーラーの単位</label>
+						<label xml:lang="el">Vertical ruler measure unit</label>
+						<label xml:lang="nl">Maatstaf verticale liniaal</label>
+						<label xml:lang="hu">Vertical ruler measure unit</label>
+						<label xml:lang="cs">Vertical ruler measure unit</label>
+						<label xml:lang="sk">Vertical ruler measure unit</label>
+						<label xml:lang="da">Vertical ruler measure unit</label>
+						<label xml:lang="sl">Vertical ruler measure unit</label>
 					</info>
 					<constraints>
 						<enumeration oor:value="1">
@@ -902,6 +1265,8 @@
 								<desc xml:lang="ca">Mil?l?metre</desc>
 								<desc xml:lang="th">มิลลิเมตร</desc>
 								<desc xml:lang="sk">Milimeter</desc>
+								<desc xml:lang="hu">Millimeter</desc>
+								<desc xml:lang="sl">Millimeter</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -931,6 +1296,8 @@
 								<desc xml:lang="ca">Centímetre</desc>
 								<desc xml:lang="th">เซนติเมตร</desc>
 								<desc xml:lang="sk">Centimeter</desc>
+								<desc xml:lang="hu">Centimeter</desc>
+								<desc xml:lang="sl">Centimeter</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -960,6 +1327,8 @@
 								<desc xml:lang="ca">Metre</desc>
 								<desc xml:lang="th">เมตร</desc>
 								<desc xml:lang="sk">Meter</desc>
+								<desc xml:lang="hu">Meter</desc>
+								<desc xml:lang="sl">Meter</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="4">
@@ -989,6 +1358,8 @@
 								<desc xml:lang="ca">Quilòmetre</desc>
 								<desc xml:lang="th">กิโลเมตร</desc>
 								<desc xml:lang="sk">Kilometer</desc>
+								<desc xml:lang="hu">Kilometer</desc>
+								<desc xml:lang="sl">Kilometer</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="6">
@@ -1018,6 +1389,8 @@
 								<desc xml:lang="ca">Punt</desc>
 								<desc xml:lang="th">พ้อยนท์</desc>
 								<desc xml:lang="sk">Bod</desc>
+								<desc xml:lang="hu">Point</desc>
+								<desc xml:lang="sl">Point</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="7">
@@ -1047,6 +1420,8 @@
 								<desc xml:lang="ca">Piques</desc>
 								<desc xml:lang="th">พิคา</desc>
 								<desc xml:lang="sk">Pika</desc>
+								<desc xml:lang="hu">Pica</desc>
+								<desc xml:lang="sl">Pica</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="8">
@@ -1076,6 +1451,8 @@
 								<desc xml:lang="ca">Polzada</desc>
 								<desc xml:lang="th">นิ้ว</desc>
 								<desc xml:lang="sk">Palec</desc>
+								<desc xml:lang="hu">Inch</desc>
+								<desc xml:lang="sl">Inch</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="9">
@@ -1105,6 +1482,8 @@
 								<desc xml:lang="ca">Peu</desc>
 								<desc xml:lang="th">ฟุต</desc>
 								<desc xml:lang="sk">Stopa</desc>
+								<desc xml:lang="hu">Foot</desc>
+								<desc xml:lang="sl">Foot</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="10">
@@ -1134,6 +1513,8 @@
 								<desc xml:lang="ca">Milles</desc>
 								<desc xml:lang="th">ไมล์</desc>
 								<desc xml:lang="sk">Míle</desc>
+								<desc xml:lang="hu">Miles</desc>
+								<desc xml:lang="sl">Miles</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -1148,10 +1529,24 @@
 							<desc xml:lang="x-comment">; Activates the smooth page scrolling function.</desc>
 							<desc xml:lang="zh-CN">启用平滑页面滚动功能。</desc>
 							<desc xml:lang="ja">滑らかなページスクロールをアクティブにします。</desc>
+							<desc xml:lang="el">Activates the smooth page scrolling function.</desc>
+							<desc xml:lang="nl">Activates the smooth page scrolling function.</desc>
+							<desc xml:lang="hu">Activates the smooth page scrolling function.</desc>
+							<desc xml:lang="cs">Activates the smooth page scrolling function.</desc>
+							<desc xml:lang="sk">Activates the smooth page scrolling function.</desc>
+							<desc xml:lang="da">Activates the smooth page scrolling function.</desc>
+							<desc xml:lang="sl">Activates the smooth page scrolling function.</desc>
 						<label xml:lang="en-US">Smooth scroll</label>
 						<label xml:lang="x-comment">; Smooth scroll</label>
 						<label xml:lang="zh-CN">平滑滚动</label>
 						<label xml:lang="ja">滑らかなスクロール</label>
+						<label xml:lang="el">Smooth scroll</label>
+						<label xml:lang="nl">Vloeiend scrollen</label>
+						<label xml:lang="hu">Smooth scroll</label>
+						<label xml:lang="cs">Smooth scroll</label>
+						<label xml:lang="sk">Smooth scroll</label>
+						<label xml:lang="da">Smooth scroll</label>
+						<label xml:lang="sl">Smooth scroll</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1162,6 +1557,13 @@
 					<desc xml:lang="x-comment">; Contains miscellaneous settings.</desc>
 					<desc xml:lang="zh-CN">含有其他设定。</desc>
 					<desc xml:lang="ja">その他の設定が含まれます。</desc>
+					<desc xml:lang="el">Contains miscellaneous settings.</desc>
+					<desc xml:lang="nl">Contains miscellaneous settings.</desc>
+					<desc xml:lang="hu">Contains miscellaneous settings.</desc>
+					<desc xml:lang="cs">Contains miscellaneous settings.</desc>
+					<desc xml:lang="sk">Contains miscellaneous settings.</desc>
+					<desc xml:lang="da">Contains miscellaneous settings.</desc>
+					<desc xml:lang="sl">Contains miscellaneous settings.</desc>
 				</info>
 				<prop oor:name="MeasureUnit" oor:type="xs:int">
 					<!-- OldPath: HTML_Editor/Layout/Window -->
@@ -1173,6 +1575,13 @@
 							<desc xml:lang="x-comment">; Specifies the measurement units.</desc>
 							<desc xml:lang="zh-CN">指定定量单位。</desc>
 							<desc xml:lang="ja">単位を指定します。</desc>
+							<desc xml:lang="el">Specifies the measurement units.</desc>
+							<desc xml:lang="nl">Specifies the measurement units.</desc>
+							<desc xml:lang="hu">Specifies the measurement units.</desc>
+							<desc xml:lang="cs">Specifies the measurement units.</desc>
+							<desc xml:lang="sk">Specifies the measurement units.</desc>
+							<desc xml:lang="da">Specifies the measurement units.</desc>
+							<desc xml:lang="sl">Specifies the measurement units.</desc>
 						<label xml:lang="en-US">Measure unit</label>
 						<label xml:lang="x-comment">; Measure unit</label>
 						<label xml:lang="fr">Unité de mesure</label>
@@ -1198,6 +1607,8 @@
 						<label xml:lang="ca">Unitat de mesura</label>
 						<label xml:lang="th">หน่วยมาตรวัด</label>
 						<label xml:lang="sk">Merná jednotka</label>
+						<label xml:lang="hu">Measure unit</label>
+						<label xml:lang="sl">Measure unit</label>
 					</info>
 					<constraints>
 						<enumeration oor:value="1">
@@ -1227,6 +1638,8 @@
 								<desc xml:lang="ca">Mil?l?metre</desc>
 								<desc xml:lang="th">มิลลิเมตร</desc>
 								<desc xml:lang="sk">Milimeter</desc>
+								<desc xml:lang="hu">Millimeter</desc>
+								<desc xml:lang="sl">Millimeter</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -1256,6 +1669,8 @@
 								<desc xml:lang="ca">Centímetre</desc>
 								<desc xml:lang="th">เซนติเมตร</desc>
 								<desc xml:lang="sk">Centimeter</desc>
+								<desc xml:lang="hu">Centimeter</desc>
+								<desc xml:lang="sl">Centimeter</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -1285,6 +1700,8 @@
 								<desc xml:lang="ca">Metre</desc>
 								<desc xml:lang="th">เมตร</desc>
 								<desc xml:lang="sk">Meter</desc>
+								<desc xml:lang="hu">Meter</desc>
+								<desc xml:lang="sl">Meter</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="4">
@@ -1314,6 +1731,8 @@
 								<desc xml:lang="ca">Quilòmetre</desc>
 								<desc xml:lang="th">กิโลเมตร</desc>
 								<desc xml:lang="sk">Kilometer</desc>
+								<desc xml:lang="hu">Kilometer</desc>
+								<desc xml:lang="sl">Kilometer</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="6">
@@ -1343,6 +1762,8 @@
 								<desc xml:lang="ca">Punt</desc>
 								<desc xml:lang="th">พ้อยนท์</desc>
 								<desc xml:lang="sk">Bod</desc>
+								<desc xml:lang="hu">Point</desc>
+								<desc xml:lang="sl">Point</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="7">
@@ -1372,6 +1793,8 @@
 								<desc xml:lang="ca">Piques</desc>
 								<desc xml:lang="th">พิคา</desc>
 								<desc xml:lang="sk">Pika</desc>
+								<desc xml:lang="hu">Pica</desc>
+								<desc xml:lang="sl">Pica</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="8">
@@ -1401,6 +1824,8 @@
 								<desc xml:lang="ca">Polzada</desc>
 								<desc xml:lang="th">นิ้ว</desc>
 								<desc xml:lang="sk">Palec</desc>
+								<desc xml:lang="hu">Inch</desc>
+								<desc xml:lang="sl">Inch</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="9">
@@ -1430,6 +1855,8 @@
 								<desc xml:lang="ca">Peu</desc>
 								<desc xml:lang="th">ฟุต</desc>
 								<desc xml:lang="sk">Stopa</desc>
+								<desc xml:lang="hu">Foot</desc>
+								<desc xml:lang="sl">Foot</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="10">
@@ -1459,6 +1886,8 @@
 								<desc xml:lang="ca">Milles</desc>
 								<desc xml:lang="th">ไมล์</desc>
 								<desc xml:lang="sk">Míle</desc>
+								<desc xml:lang="hu">Miles</desc>
+								<desc xml:lang="sl">Miles</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -1470,6 +1899,13 @@
 					<desc xml:lang="x-comment">; Contains zoom specific settings.</desc>
 					<desc xml:lang="zh-CN">含有显示比例设定。</desc>
 					<desc xml:lang="ja">ズーム固有の設定を含みます。</desc>
+					<desc xml:lang="el">Contains zoom specific settings.</desc>
+					<desc xml:lang="nl">Contains zoom specific settings.</desc>
+					<desc xml:lang="hu">Contains zoom specific settings.</desc>
+					<desc xml:lang="cs">Contains zoom specific settings.</desc>
+					<desc xml:lang="sk">Contains zoom specific settings.</desc>
+					<desc xml:lang="da">Contains zoom specific settings.</desc>
+					<desc xml:lang="sl">Contains zoom specific settings.</desc>
 				</info>
 				<prop oor:name="Type" oor:type="xs:int">
 					<!-- UIHints: (Status Bar) -->
@@ -1479,10 +1915,24 @@
 							<desc xml:lang="x-comment">; Specifies the zoom type.</desc>
 							<desc xml:lang="zh-CN">指定显示比例的类型。</desc>
 							<desc xml:lang="ja">ズームの種類を指定します。</desc>
+							<desc xml:lang="el">Specifies the zoom type.</desc>
+							<desc xml:lang="nl">Specifies the zoom type.</desc>
+							<desc xml:lang="hu">Specifies the zoom type.</desc>
+							<desc xml:lang="cs">Specifies the zoom type.</desc>
+							<desc xml:lang="sk">Specifies the zoom type.</desc>
+							<desc xml:lang="da">Specifies the zoom type.</desc>
+							<desc xml:lang="sl">Specifies the zoom type.</desc>
 						<label xml:lang="en-US">Zoom Type</label>
 						<label xml:lang="x-comment">; Zoom Type</label>
 						<label xml:lang="zh-CN">显示比例类型</label>
 						<label xml:lang="ja">ズームの種類</label>
+						<label xml:lang="el">Zoom Type</label>
+						<label xml:lang="nl">Zoom Type</label>
+						<label xml:lang="hu">Zoom Type</label>
+						<label xml:lang="cs">Zoom Type</label>
+						<label xml:lang="sk">Zoom Type</label>
+						<label xml:lang="da">Zoom Type</label>
+						<label xml:lang="sl">Zoom Type</label>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -1512,6 +1962,8 @@
 								<desc xml:lang="ca">Percentatge</desc>
 								<desc xml:lang="th">เปอร์เซ็นต์</desc>
 								<desc xml:lang="sk">Percent</desc>
+								<desc xml:lang="hu">Percent</desc>
+								<desc xml:lang="sl">Percent</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -1541,6 +1993,8 @@
 								<desc xml:lang="ca">Whole Page</desc>
 								<desc xml:lang="th">Whole Page</desc>
 								<desc xml:lang="sk">Whole Page</desc>
+								<desc xml:lang="hu">Whole Page</desc>
+								<desc xml:lang="sl">Whole Page</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -1570,6 +2024,8 @@
 								<desc xml:lang="ca">Ample de pàgina</desc>
 								<desc xml:lang="th">ความกว้างของหน้า</desc>
 								<desc xml:lang="sk">Šírka strany</desc>
+								<desc xml:lang="hu">Page Width</desc>
+								<desc xml:lang="sl">Page Width</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -1583,10 +2039,24 @@
 							<desc xml:lang="x-comment">; Specifies the zoom value.</desc>
 							<desc xml:lang="zh-CN">指定显示比例的值。</desc>
 							<desc xml:lang="ja">ズーム値を指定します。</desc>
+							<desc xml:lang="el">Specifies the zoom value.</desc>
+							<desc xml:lang="nl">Specifies the zoom value.</desc>
+							<desc xml:lang="hu">Specifies the zoom value.</desc>
+							<desc xml:lang="cs">Specifies the zoom value.</desc>
+							<desc xml:lang="sk">Specifies the zoom value.</desc>
+							<desc xml:lang="da">Specifies the zoom value.</desc>
+							<desc xml:lang="sl">Specifies the zoom value.</desc>
 						<label xml:lang="en-US">Zoom Value</label>
 						<label xml:lang="x-comment">; Zoom Value</label>
 						<label xml:lang="zh-CN">显示比例值</label>
 						<label xml:lang="ja">ズーム値</label>
+						<label xml:lang="el">Zoom Value</label>
+						<label xml:lang="nl">Zoomwaarde</label>
+						<label xml:lang="hu">Zoom Value</label>
+						<label xml:lang="cs">Zoom Value</label>
+						<label xml:lang="sk">Zoom Value</label>
+						<label xml:lang="da">Zoom Value</label>
+						<label xml:lang="sl">Zoom Value</label>
 					</info>
 					<value>100</value>
 				</prop>
@@ -1598,6 +2068,13 @@
 				<desc xml:lang="x-comment">; Contains various items for the grid that are not listed in other sections.</desc>
 				<desc xml:lang="zh-CN">含有其他区域中未列出的网格的各种项。</desc>
 				<desc xml:lang="ja">ほかのセクションで表示されないグリッド用の各種項目を含みます。</desc>
+				<desc xml:lang="el">Contains various items for the grid that are not listed in other sections.</desc>
+				<desc xml:lang="nl">Contains various items for the grid that are not listed in other sections.</desc>
+				<desc xml:lang="hu">Contains various items for the grid that are not listed in other sections.</desc>
+				<desc xml:lang="cs">Contains various items for the grid that are not listed in other sections.</desc>
+				<desc xml:lang="sk">Contains various items for the grid that are not listed in other sections.</desc>
+				<desc xml:lang="da">Contains various items for the grid that are not listed in other sections.</desc>
+				<desc xml:lang="sl">Contains various items for the grid that are not listed in other sections.</desc>
 			</info>
 			<group oor:name="Option">
 				<info>
@@ -1605,6 +2082,13 @@
 					<desc xml:lang="x-comment">; Contains options for the grid.</desc>
 					<desc xml:lang="zh-CN">含有网格选项。</desc>
 					<desc xml:lang="ja">グリッドのオプションが含まれます。</desc>
+					<desc xml:lang="el">Contains options for the grid.</desc>
+					<desc xml:lang="nl">Contains options for the grid.</desc>
+					<desc xml:lang="hu">Contains options for the grid.</desc>
+					<desc xml:lang="cs">Contains options for the grid.</desc>
+					<desc xml:lang="sk">Contains options for the grid.</desc>
+					<desc xml:lang="da">Contains options for the grid.</desc>
+					<desc xml:lang="sl">Contains options for the grid.</desc>
 				</info>
 				<prop oor:name="SnapToGrid" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Grid/Option -->
@@ -1616,6 +2100,13 @@
 							<desc xml:lang="x-comment">; Moves frames, drawing elements, and form functions only between the grid points.</desc>
 							<desc xml:lang="zh-CN">仅在网格点之间移动框、图形元素和表单功能。</desc>
 							<desc xml:lang="ja">フレーム、図形描画要素、フォーム関数の移動をグリッド点間に限定します。</desc>
+							<desc xml:lang="el">Moves frames, drawing elements, and form functions only between the grid points.</desc>
+							<desc xml:lang="nl">Moves frames, drawing elements, and form functions only between the grid points.</desc>
+							<desc xml:lang="hu">Moves frames, drawing elements, and form functions only between the grid points.</desc>
+							<desc xml:lang="cs">Moves frames, drawing elements, and form functions only between the grid points.</desc>
+							<desc xml:lang="sk">Moves frames, drawing elements, and form functions only between the grid points.</desc>
+							<desc xml:lang="da">Moves frames, drawing elements, and form functions only between the grid points.</desc>
+							<desc xml:lang="sl">Moves frames, drawing elements, and form functions only between the grid points.</desc>
 						<label xml:lang="en-US">Snap to grid</label>
 						<label xml:lang="x-comment">; Snap to grid</label>
 						<label xml:lang="fr">Utiliser la grille de capture</label>
@@ -1641,6 +2132,8 @@
 						<label xml:lang="ca">Captura la graella</label>
 						<label xml:lang="th">จัดชิดกับเส้นตาราง</label>
 						<label xml:lang="sk">Zachytiť na mriežku</label>
+						<label xml:lang="hu">Snap to grid</label>
+						<label xml:lang="sl">Snap to grid</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1654,10 +2147,24 @@
 							<desc xml:lang="x-comment">; Displays the grid.</desc>
 							<desc xml:lang="zh-CN">显示网格。</desc>
 							<desc xml:lang="ja">グリッドを表示します。</desc>
+							<desc xml:lang="el">Displays the grid.</desc>
+							<desc xml:lang="nl">Geeft het raster weer.</desc>
+							<desc xml:lang="hu">Displays the grid.</desc>
+							<desc xml:lang="cs">Displays the grid.</desc>
+							<desc xml:lang="sk">Displays the grid.</desc>
+							<desc xml:lang="da">Displays the grid.</desc>
+							<desc xml:lang="sl">Displays the grid.</desc>
 						<label xml:lang="en-US">Visible grid</label>
 						<label xml:lang="x-comment">; Visible grid</label>
 						<label xml:lang="zh-CN">显示网格</label>
 						<label xml:lang="ja">グリッドを表示</label>
+						<label xml:lang="el">Visible grid</label>
+						<label xml:lang="nl">Raster zichtbaar</label>
+						<label xml:lang="hu">Visible grid</label>
+						<label xml:lang="cs">Visible grid</label>
+						<label xml:lang="sk">Visible grid</label>
+						<label xml:lang="da">Visible grid</label>
+						<label xml:lang="sl">Visible grid</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1671,10 +2178,24 @@
 							<desc xml:lang="x-comment">; Changes the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis remains the same.</desc>
 							<desc xml:lang="zh-CN">对称地更改当前的网格设定。X 轴和 Y 轴的分辨率和线点间隔保持相同。</desc>
 							<desc xml:lang="ja">現在のグリッド設定を対称的に変更します。X/Y 軸の解像度と点の間隔を同じままに維持します。</desc>
+							<desc xml:lang="el">Changes the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis remains the same.</desc>
+							<desc xml:lang="nl">Changes the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis remains the same.</desc>
+							<desc xml:lang="hu">Changes the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis remains the same.</desc>
+							<desc xml:lang="cs">Changes the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis remains the same.</desc>
+							<desc xml:lang="sk">Changes the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis remains the same.</desc>
+							<desc xml:lang="da">Changes the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis remains the same.</desc>
+							<desc xml:lang="sl">Changes the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis remains the same.</desc>
 						<label xml:lang="en-US">Synchronize axes</label>
 						<label xml:lang="x-comment">; Synchronize axes</label>
 						<label xml:lang="zh-CN">同步化轴数值</label>
 						<label xml:lang="ja">軸を同期する</label>
+						<label xml:lang="el">Synchronize axes</label>
+						<label xml:lang="nl">Assen synchroniseren</label>
+						<label xml:lang="hu">Synchronize axes</label>
+						<label xml:lang="cs">Synchronize axes</label>
+						<label xml:lang="sk">Synchronize axes</label>
+						<label xml:lang="da">Synchronize axes</label>
+						<label xml:lang="sl">Synchronize axes</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1685,6 +2206,13 @@
 					<desc xml:lang="x-comment">; Contains settings for specifying the grid resolution.</desc>
 					<desc xml:lang="zh-CN">含有用于指定网格分辨率的设定。</desc>
 					<desc xml:lang="ja">グリッドの解像度に関する設定が含まれます。</desc>
+					<desc xml:lang="el">Contains settings for specifying the grid resolution.</desc>
+					<desc xml:lang="nl">Contains settings for specifying the grid resolution.</desc>
+					<desc xml:lang="hu">Contains settings for specifying the grid resolution.</desc>
+					<desc xml:lang="cs">Contains settings for specifying the grid resolution.</desc>
+					<desc xml:lang="sk">Contains settings for specifying the grid resolution.</desc>
+					<desc xml:lang="da">Contains settings for specifying the grid resolution.</desc>
+					<desc xml:lang="sl">Contains settings for specifying the grid resolution.</desc>
 				</info>
 				<prop oor:name="XAxis" oor:type="xs:int">
 					<!-- OldPath: HTML_Editor/Grid/Resolution -->
@@ -1696,10 +2224,24 @@
 							<desc xml:lang="x-comment">; Defines the distance between the grid points on the X-axis [UNIT=1/100 mm].</desc>
 							<desc xml:lang="zh-CN">定义 X 轴上网格点之间的间隔 [UNIT=1/100 mm] 。</desc>
 							<desc xml:lang="ja">X 軸上のグリッドポイント間の距離を指定します [単位 = 1/100 mm]。</desc>
+							<desc xml:lang="el">Defines the distance between the grid points on the X-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="nl">Defines the distance between the grid points on the X-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="hu">Defines the distance between the grid points on the X-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="cs">Defines the distance between the grid points on the X-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="sk">Defines the distance between the grid points on the X-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="da">Defines the distance between the grid points on the X-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="sl">Defines the distance between the grid points on the X-axis [UNIT=1/100 mm].</desc>
 						<label xml:lang="en-US">X Axis Resolution</label>
 						<label xml:lang="x-comment">; X Axis Resolution</label>
 						<label xml:lang="zh-CN">X 轴的分辨率</label>
 						<label xml:lang="ja">X 軸の解像度</label>
+						<label xml:lang="el">X Axis Resolution</label>
+						<label xml:lang="nl">Resolutie X-as</label>
+						<label xml:lang="hu">X Axis Resolution</label>
+						<label xml:lang="cs">X Axis Resolution</label>
+						<label xml:lang="sk">X Axis Resolution</label>
+						<label xml:lang="da">X Axis Resolution</label>
+						<label xml:lang="sl">X Axis Resolution</label>
 					</info>
 					<value>1000</value>
 				</prop>
@@ -1713,10 +2255,24 @@
 							<desc xml:lang="x-comment">; Defines the distance between the grid points on the Y-axis [UNIT=1/100 mm].</desc>
 							<desc xml:lang="zh-CN">定义 Y 轴上网格点之间的间隔 [UNIT=1/100 mm] 。</desc>
 							<desc xml:lang="ja">Y 軸上のグリッドポイント間の距離を指定します [単位 = 1/100 mm]。</desc>
+							<desc xml:lang="el">Defines the distance between the grid points on the Y-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="nl">Defines the distance between the grid points on the Y-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="hu">Defines the distance between the grid points on the Y-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="cs">Defines the distance between the grid points on the Y-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="sk">Defines the distance between the grid points on the Y-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="da">Defines the distance between the grid points on the Y-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="sl">Defines the distance between the grid points on the Y-axis [UNIT=1/100 mm].</desc>
 						<label xml:lang="en-US">Y Axis Resolution</label>
 						<label xml:lang="x-comment">; Y Axis Resolution</label>
 						<label xml:lang="zh-CN">Y 轴的分辨率</label>
 						<label xml:lang="ja">Y 軸の解像度</label>
+						<label xml:lang="el">Y Axis Resolution</label>
+						<label xml:lang="nl">Resolutie Y-as</label>
+						<label xml:lang="hu">Y Axis Resolution</label>
+						<label xml:lang="cs">Y Axis Resolution</label>
+						<label xml:lang="sk">Y Axis Resolution</label>
+						<label xml:lang="da">Y Axis Resolution</label>
+						<label xml:lang="sl">Y Axis Resolution</label>
 					</info>
 					<value>1000</value>
 				</prop>
@@ -1727,6 +2283,13 @@
 					<desc xml:lang="x-comment">; Contains settings for subdividing of the grid.</desc>
 					<desc xml:lang="zh-CN">含有网格的线点间隔设定。</desc>
 					<desc xml:lang="ja">グリッドの分割設定を含みます。</desc>
+					<desc xml:lang="el">Contains settings for subdividing of the grid.</desc>
+					<desc xml:lang="nl">Contains settings for subdividing of the grid.</desc>
+					<desc xml:lang="hu">Contains settings for subdividing of the grid.</desc>
+					<desc xml:lang="cs">Contains settings for subdividing of the grid.</desc>
+					<desc xml:lang="sk">Contains settings for subdividing of the grid.</desc>
+					<desc xml:lang="da">Contains settings for subdividing of the grid.</desc>
+					<desc xml:lang="sl">Contains settings for subdividing of the grid.</desc>
 				</info>
 				<prop oor:name="XAxis" oor:type="xs:int">
 					<!-- OldPath: HTML_Editor/Grid/Subdivision -->
@@ -1738,10 +2301,24 @@
 							<desc xml:lang="x-comment">; Specifies the number of intervals between two grid points on the X-axis.</desc>
 							<desc xml:lang="zh-CN">指定 X 轴上两个网格点之间的接点数。</desc>
 							<desc xml:lang="ja">X 軸上にある２つのグリッド点間に含まれる間隔の数を指定します。</desc>
+							<desc xml:lang="el">Specifies the number of intervals between two grid points on the X-axis.</desc>
+							<desc xml:lang="nl">Specifies the number of intervals between two grid points on the X-axis.</desc>
+							<desc xml:lang="hu">Specifies the number of intervals between two grid points on the X-axis.</desc>
+							<desc xml:lang="cs">Specifies the number of intervals between two grid points on the X-axis.</desc>
+							<desc xml:lang="sk">Specifies the number of intervals between two grid points on the X-axis.</desc>
+							<desc xml:lang="da">Specifies the number of intervals between two grid points on the X-axis.</desc>
+							<desc xml:lang="sl">Specifies the number of intervals between two grid points on the X-axis.</desc>
 						<label xml:lang="en-US">X Axis Subdivision</label>
 						<label xml:lang="x-comment">; X Axis Subdivision</label>
 						<label xml:lang="zh-CN">X 轴的线点间隔</label>
 						<label xml:lang="ja">X 軸の点の間隔</label>
+						<label xml:lang="el">X Axis Subdivision</label>
+						<label xml:lang="nl">Onderverdeling X-as</label>
+						<label xml:lang="hu">X Axis Subdivision</label>
+						<label xml:lang="cs">X Axis Subdivision</label>
+						<label xml:lang="sk">X Axis Subdivision</label>
+						<label xml:lang="da">X Axis Subdivision</label>
+						<label xml:lang="sl">X Axis Subdivision</label>
 					</info>
 					<value>1</value>
 				</prop>
@@ -1755,10 +2332,24 @@
 							<desc xml:lang="x-comment">; Defines the distance between the grid points on the Y-axis.</desc>
 							<desc xml:lang="zh-CN">定义 Y 轴上网格点之间的间隔。</desc>
 							<desc xml:lang="ja">Y 軸のグリッド点の間隔を定義します。</desc>
+							<desc xml:lang="el">Defines the distance between the grid points on the Y-axis.</desc>
+							<desc xml:lang="nl">Defines the distance between the grid points on the Y-axis.</desc>
+							<desc xml:lang="hu">Defines the distance between the grid points on the Y-axis.</desc>
+							<desc xml:lang="cs">Defines the distance between the grid points on the Y-axis.</desc>
+							<desc xml:lang="sk">Defines the distance between the grid points on the Y-axis.</desc>
+							<desc xml:lang="da">Defines the distance between the grid points on the Y-axis.</desc>
+							<desc xml:lang="sl">Defines the distance between the grid points on the Y-axis.</desc>
 						<label xml:lang="en-US">Y Axis Subdivision</label>
 						<label xml:lang="x-comment">; Y Axis Subdivision</label>
 						<label xml:lang="zh-CN">Y 轴的线点间隔</label>
 						<label xml:lang="ja">Y 軸の点の間隔</label>
+						<label xml:lang="el">Y Axis Subdivision</label>
+						<label xml:lang="nl">Onderverdeling X-as</label>
+						<label xml:lang="hu">Y Axis Subdivision</label>
+						<label xml:lang="cs">Y Axis Subdivision</label>
+						<label xml:lang="sk">Y Axis Subdivision</label>
+						<label xml:lang="da">Y Axis Subdivision</label>
+						<label xml:lang="sl">Y Axis Subdivision</label>
 					</info>
 					<value>1</value>
 				</prop>
@@ -1770,6 +2361,13 @@
 				<desc xml:lang="x-comment">; Contains settings for printing.</desc>
 				<desc xml:lang="zh-CN">含有打印设定。</desc>
 				<desc xml:lang="ja">印刷設定を含みます。</desc>
+				<desc xml:lang="el">Contains settings for printing.</desc>
+				<desc xml:lang="nl">Contains settings for printing.</desc>
+				<desc xml:lang="hu">Contains settings for printing.</desc>
+				<desc xml:lang="cs">Contains settings for printing.</desc>
+				<desc xml:lang="sk">Contains settings for printing.</desc>
+				<desc xml:lang="da">Contains settings for printing.</desc>
+				<desc xml:lang="sl">Contains settings for printing.</desc>
 			</info>
 			<group oor:name="Content">
 				<info>
@@ -1777,6 +2375,13 @@
 					<desc xml:lang="x-comment">; Contains settings for specifying which content types are printed.</desc>
 					<desc xml:lang="zh-CN">含有用于指定打印何种内容的设定。</desc>
 					<desc xml:lang="ja">印刷対象コンテンツのタイプを指定する設定を含みます。</desc>
+					<desc xml:lang="el">Contains settings for specifying which content types are printed.</desc>
+					<desc xml:lang="nl">Contains settings for specifying which content types are printed.</desc>
+					<desc xml:lang="hu">Contains settings for specifying which content types are printed.</desc>
+					<desc xml:lang="cs">Contains settings for specifying which content types are printed.</desc>
+					<desc xml:lang="sk">Contains settings for specifying which content types are printed.</desc>
+					<desc xml:lang="da">Contains settings for specifying which content types are printed.</desc>
+					<desc xml:lang="sl">Contains settings for specifying which content types are printed.</desc>
 				</info>
 				<prop oor:name="Graphic" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Print/Contents -->
@@ -1788,6 +2393,13 @@
 							<desc xml:lang="x-comment">; Specifies if graphics are printed.</desc>
 							<desc xml:lang="zh-CN">指定是否打印图形。</desc>
 							<desc xml:lang="ja">図を印刷するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if graphics are printed.</desc>
+							<desc xml:lang="nl">Specifies if graphics are printed.</desc>
+							<desc xml:lang="hu">Specifies if graphics are printed.</desc>
+							<desc xml:lang="cs">Specifies if graphics are printed.</desc>
+							<desc xml:lang="sk">Specifies if graphics are printed.</desc>
+							<desc xml:lang="da">Specifies if graphics are printed.</desc>
+							<desc xml:lang="sl">Specifies if graphics are printed.</desc>
 						<label xml:lang="en-US">Graphics</label>
 						<label xml:lang="x-comment">; Graphics</label>
 						<label xml:lang="fr">Image</label>
@@ -1801,7 +2413,7 @@
 						<label xml:lang="pt">Imagem</label>
 						<label xml:lang="ru">Графика</label>
 						<label xml:lang="el">Γραφικό</label>
-						<label xml:lang="nl">Afbeelding</label>
+						<label xml:lang="nl">Afbeeldingen</label>
 						<label xml:lang="fi">Kuvat</label>
 						<label xml:lang="cs">Grafika</label>
 						<label xml:lang="da">Grafik</label>
@@ -1813,6 +2425,8 @@
 						<label xml:lang="ca">Gràfics</label>
 						<label xml:lang="th">กราฟิค</label>
 						<label xml:lang="sk">Obrázky</label>
+						<label xml:lang="hu">Graphics</label>
+						<label xml:lang="sl">Graphics</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1826,6 +2440,13 @@
 							<desc xml:lang="x-comment">; Specifies if tables are printed.</desc>
 							<desc xml:lang="zh-CN">指定是否打印表格。</desc>
 							<desc xml:lang="ja">テーブルを印刷するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if tables are printed.</desc>
+							<desc xml:lang="nl">Specifies if tables are printed.</desc>
+							<desc xml:lang="hu">Specifies if tables are printed.</desc>
+							<desc xml:lang="cs">Specifies if tables are printed.</desc>
+							<desc xml:lang="sk">Specifies if tables are printed.</desc>
+							<desc xml:lang="da">Specifies if tables are printed.</desc>
+							<desc xml:lang="sl">Specifies if tables are printed.</desc>
 						<label xml:lang="en-US">Tables</label>
 						<label xml:lang="x-comment">; Tables</label>
 						<label xml:lang="fr">~Tables</label>
@@ -1849,6 +2470,8 @@
 						<label xml:lang="ca">Taules</label>
 						<label xml:lang="th">ตาราง</label>
 						<label xml:lang="sk">Tabuľky</label>
+						<label xml:lang="hu">Tables</label>
+						<label xml:lang="sl">Tables</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1862,6 +2485,13 @@
 							<desc xml:lang="x-comment">; Specifies if controls are printed.</desc>
 							<desc xml:lang="zh-CN">指定是否打印控件。</desc>
 							<desc xml:lang="ja">コントロールを印刷するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if controls are printed.</desc>
+							<desc xml:lang="nl">Specifies if controls are printed.</desc>
+							<desc xml:lang="hu">Specifies if controls are printed.</desc>
+							<desc xml:lang="cs">Specifies if controls are printed.</desc>
+							<desc xml:lang="sk">Specifies if controls are printed.</desc>
+							<desc xml:lang="da">Specifies if controls are printed.</desc>
+							<desc xml:lang="sl">Specifies if controls are printed.</desc>
 						<label xml:lang="en-US">Controls</label>
 						<label xml:lang="x-comment">; Controls</label>
 						<label xml:lang="fr">Contrôles</label>
@@ -1875,7 +2505,7 @@
 						<label xml:lang="pt">Controlos</label>
 						<label xml:lang="ru">Элементы управления</label>
 						<label xml:lang="el">Στοιχεία ελέγχου</label>
-						<label xml:lang="nl">Controles</label>
+						<label xml:lang="nl">Controls</label>
 						<label xml:lang="fi">Ohjaimet</label>
 						<label xml:lang="cs">Ovládací prvky</label>
 						<label xml:lang="da">Kontrolelementer</label>
@@ -1887,6 +2517,8 @@
 						<label xml:lang="ca">Elements de control</label>
 						<label xml:lang="th">ตัวควบคุม</label>
 						<label xml:lang="sk">Ovládacie prvky</label>
+						<label xml:lang="hu">Controls</label>
+						<label xml:lang="sl">Controls</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1900,6 +2532,13 @@
 							<desc xml:lang="x-comment">; Specifies if background objects are printed.</desc>
 							<desc xml:lang="zh-CN">指定是否打印背景对象。</desc>
 							<desc xml:lang="ja">背景オブジェクトを印刷するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if background objects are printed.</desc>
+							<desc xml:lang="nl">Specifies if background objects are printed.</desc>
+							<desc xml:lang="hu">Specifies if background objects are printed.</desc>
+							<desc xml:lang="cs">Specifies if background objects are printed.</desc>
+							<desc xml:lang="sk">Specifies if background objects are printed.</desc>
+							<desc xml:lang="da">Specifies if background objects are printed.</desc>
+							<desc xml:lang="sl">Specifies if background objects are printed.</desc>
 						<label xml:lang="en-US">Background</label>
 						<label xml:lang="x-comment">; Background</label>
 						<label xml:lang="fr">Arrière-plan</label>
@@ -1925,6 +2564,8 @@
 						<label xml:lang="ca">Fons</label>
 						<label xml:lang="th">พื้นหลัง</label>
 						<label xml:lang="sk">Pozadie</label>
+						<label xml:lang="hu">Background</label>
+						<label xml:lang="sl">Background</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1938,10 +2579,24 @@
 							<desc xml:lang="x-comment">; Specifies if text is always printed in black.</desc>
 							<desc xml:lang="zh-CN">指定是否总是使用黑色打印文字。</desc>
 							<desc xml:lang="ja">テキストを常に黒で印刷するかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if text is always printed in black.</desc>
+							<desc xml:lang="nl">Specifies if text is always printed in black.</desc>
+							<desc xml:lang="hu">Specifies if text is always printed in black.</desc>
+							<desc xml:lang="cs">Specifies if text is always printed in black.</desc>
+							<desc xml:lang="sk">Specifies if text is always printed in black.</desc>
+							<desc xml:lang="da">Specifies if text is always printed in black.</desc>
+							<desc xml:lang="sl">Specifies if text is always printed in black.</desc>
 						<label xml:lang="en-US">Print black</label>
 						<label xml:lang="x-comment">; Print black</label>
 						<label xml:lang="zh-CN">打印黑色</label>
 						<label xml:lang="ja">黒で印刷</label>
+						<label xml:lang="el">Print black</label>
+						<label xml:lang="nl">Zwart afdrukken</label>
+						<label xml:lang="hu">Print black</label>
+						<label xml:lang="cs">Print black</label>
+						<label xml:lang="sk">Print black</label>
+						<label xml:lang="da">Print black</label>
+						<label xml:lang="sl">Print black</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1955,6 +2610,13 @@
 						<desc xml:lang="x-comment">; Specifies if notes are printed and how they are printed.</desc>
 						<desc xml:lang="zh-CN">指定是否以及如何打印备注。</desc>
 						<desc xml:lang="ja">メモを印刷するかどうか、またその印刷方法を指定します。</desc>
+						<desc xml:lang="el">Specifies if notes are printed and how they are printed.</desc>
+						<desc xml:lang="nl">Specifies if notes are printed and how they are printed.</desc>
+						<desc xml:lang="hu">Specifies if notes are printed and how they are printed.</desc>
+						<desc xml:lang="cs">Specifies if notes are printed and how they are printed.</desc>
+						<desc xml:lang="sk">Specifies if notes are printed and how they are printed.</desc>
+						<desc xml:lang="da">Specifies if notes are printed and how they are printed.</desc>
+						<desc xml:lang="sl">Specifies if notes are printed and how they are printed.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -1984,6 +2646,8 @@
 								<desc xml:lang="ca">Cap</desc>
 								<desc xml:lang="th">ไม่มี</desc>
 								<desc xml:lang="sk">Žiadne</desc>
+								<desc xml:lang="hu">None</desc>
+								<desc xml:lang="sl">None</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -2001,7 +2665,7 @@
 								<desc xml:lang="pt">Notes only</desc>
 								<desc xml:lang="ru">Notes only</desc>
 								<desc xml:lang="el">Notes only</desc>
-								<desc xml:lang="nl">Notes only</desc>
+								<desc xml:lang="nl">Alleen aantekeningen</desc>
 								<desc xml:lang="fi">Notes only</desc>
 								<desc xml:lang="cs">Notes only</desc>
 								<desc xml:lang="da">Notes only</desc>
@@ -2013,6 +2677,8 @@
 								<desc xml:lang="ca">Notes only</desc>
 								<desc xml:lang="th">Notes only</desc>
 								<desc xml:lang="sk">Notes only</desc>
+								<desc xml:lang="hu">Notes only</desc>
+								<desc xml:lang="sl">Notes only</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -2030,7 +2696,7 @@
 								<desc xml:lang="pt">End of document</desc>
 								<desc xml:lang="ru">End of document</desc>
 								<desc xml:lang="el">End of document</desc>
-								<desc xml:lang="nl">End of document</desc>
+								<desc xml:lang="nl">Einde van document</desc>
 								<desc xml:lang="fi">End of document</desc>
 								<desc xml:lang="cs">End of document</desc>
 								<desc xml:lang="da">End of document</desc>
@@ -2042,6 +2708,8 @@
 								<desc xml:lang="ca">End of document</desc>
 								<desc xml:lang="th">End of document</desc>
 								<desc xml:lang="sk">End of document</desc>
+								<desc xml:lang="hu">End of document</desc>
+								<desc xml:lang="sl">End of document</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -2059,7 +2727,7 @@
 								<desc xml:lang="pt">End of page</desc>
 								<desc xml:lang="ru">End of page</desc>
 								<desc xml:lang="el">End of page</desc>
-								<desc xml:lang="nl">End of page</desc>
+								<desc xml:lang="nl">Einde van pagina</desc>
 								<desc xml:lang="fi">End of page</desc>
 								<desc xml:lang="cs">End of page</desc>
 								<desc xml:lang="da">End of page</desc>
@@ -2071,6 +2739,8 @@
 								<desc xml:lang="ca">End of page</desc>
 								<desc xml:lang="th">End of page</desc>
 								<desc xml:lang="sk">End of page</desc>
+								<desc xml:lang="hu">End of page</desc>
+								<desc xml:lang="sl">End of page</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -2083,6 +2753,13 @@
 					<desc xml:lang="x-comment">; Specifies which pages are printed and how they are printed.</desc>
 					<desc xml:lang="zh-CN">指定打印哪些页面以及如何打印这些页面。</desc>
 					<desc xml:lang="ja">印刷対象ページと印刷方法を指定します。</desc>
+					<desc xml:lang="el">Specifies which pages are printed and how they are printed.</desc>
+					<desc xml:lang="nl">Specifies which pages are printed and how they are printed.</desc>
+					<desc xml:lang="hu">Specifies which pages are printed and how they are printed.</desc>
+					<desc xml:lang="cs">Specifies which pages are printed and how they are printed.</desc>
+					<desc xml:lang="sk">Specifies which pages are printed and how they are printed.</desc>
+					<desc xml:lang="da">Specifies which pages are printed and how they are printed.</desc>
+					<desc xml:lang="sl">Specifies which pages are printed and how they are printed.</desc>
 				</info>
 				<prop oor:name="Reversed" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Print/Pages -->
@@ -2094,10 +2771,24 @@
 							<desc xml:lang="x-comment">; Reverses the printing order.</desc>
 							<desc xml:lang="zh-CN">反向打印顺序。</desc>
 							<desc xml:lang="ja">印刷順序を入れ替えます。</desc>
+							<desc xml:lang="el">Reverses the printing order.</desc>
+							<desc xml:lang="nl">Reverses the printing order.</desc>
+							<desc xml:lang="hu">Reverses the printing order.</desc>
+							<desc xml:lang="cs">Reverses the printing order.</desc>
+							<desc xml:lang="sk">Reverses the printing order.</desc>
+							<desc xml:lang="da">Reverses the printing order.</desc>
+							<desc xml:lang="sl">Reverses the printing order.</desc>
 						<label xml:lang="en-US">Reversed</label>
 						<label xml:lang="x-comment">; Reversed</label>
 						<label xml:lang="zh-CN">反向</label>
 						<label xml:lang="ja">入れ替え済み</label>
+						<label xml:lang="el">Reversed</label>
+						<label xml:lang="nl">Omgekeerd</label>
+						<label xml:lang="hu">Reversed</label>
+						<label xml:lang="cs">Reversed</label>
+						<label xml:lang="sk">Reversed</label>
+						<label xml:lang="da">Reversed</label>
+						<label xml:lang="sl">Reversed</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -2111,10 +2802,24 @@
 							<desc xml:lang="x-comment">; Prints in brochure format.</desc>
 							<desc xml:lang="zh-CN">以小手册格式打印。</desc>
 							<desc xml:lang="ja">パンフレットの書式で印刷します。</desc>
+							<desc xml:lang="el">Prints in brochure format.</desc>
+							<desc xml:lang="nl">Prints in brochure format.</desc>
+							<desc xml:lang="hu">Prints in brochure format.</desc>
+							<desc xml:lang="cs">Prints in brochure format.</desc>
+							<desc xml:lang="sk">Prints in brochure format.</desc>
+							<desc xml:lang="da">Prints in brochure format.</desc>
+							<desc xml:lang="sl">Prints in brochure format.</desc>
 						<label xml:lang="en-US">Brochure</label>
 						<label xml:lang="x-comment">; Brochure</label>
 						<label xml:lang="zh-CN">小手册</label>
 						<label xml:lang="ja">パンフレット形式</label>
+						<label xml:lang="el">Brochure</label>
+						<label xml:lang="nl">Brochure</label>
+						<label xml:lang="hu">Brochure</label>
+						<label xml:lang="cs">Brochure</label>
+						<label xml:lang="sk">Brochure</label>
+						<label xml:lang="da">Brochure</label>
+						<label xml:lang="sl">Brochure</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -2125,6 +2830,13 @@
 					<desc xml:lang="x-comment">; Contains output-specific settings.</desc>
 					<desc xml:lang="zh-CN">含有输出设定。</desc>
 					<desc xml:lang="ja">出力に固有の設定を含みます。</desc>
+					<desc xml:lang="el">Contains output-specific settings.</desc>
+					<desc xml:lang="nl">Contains output-specific settings.</desc>
+					<desc xml:lang="hu">Contains output-specific settings.</desc>
+					<desc xml:lang="cs">Contains output-specific settings.</desc>
+					<desc xml:lang="sk">Contains output-specific settings.</desc>
+					<desc xml:lang="da">Contains output-specific settings.</desc>
+					<desc xml:lang="sl">Contains output-specific settings.</desc>
 				</info>
 				<prop oor:name="SinglePrintJob" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Print/Output -->
@@ -2136,10 +2848,24 @@
 							<desc xml:lang="x-comment">; Controls the print output.</desc>
 							<desc xml:lang="zh-CN">控制打印输出。</desc>
 							<desc xml:lang="ja">印刷出力を制御します。</desc>
+							<desc xml:lang="el">Controls the print output.</desc>
+							<desc xml:lang="nl">Controls the print output.</desc>
+							<desc xml:lang="hu">Controls the print output.</desc>
+							<desc xml:lang="cs">Controls the print output.</desc>
+							<desc xml:lang="sk">Controls the print output.</desc>
+							<desc xml:lang="da">Controls the print output.</desc>
+							<desc xml:lang="sl">Controls the print output.</desc>
 						<label xml:lang="en-US">Create single print jobs</label>
 						<label xml:lang="x-comment">; Create single print jobs</label>
 						<label xml:lang="zh-CN">生成单个打印任务</label>
 						<label xml:lang="ja">単一印刷ジョブの作成</label>
+						<label xml:lang="el">Create single print jobs</label>
+						<label xml:lang="nl">Afzonderlijke afdruktaken aanmaken</label>
+						<label xml:lang="hu">Create single print jobs</label>
+						<label xml:lang="cs">Create single print jobs</label>
+						<label xml:lang="sk">Create single print jobs</label>
+						<label xml:lang="da">Create single print jobs</label>
+						<label xml:lang="sl">Create single print jobs</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -2153,6 +2879,13 @@
 							<desc xml:lang="x-comment">; Specifies which fax machine is used when faxing directly from the document</desc>
 							<desc xml:lang="zh-CN">指定从文档中直接发送传真时所使用的传真机。</desc>
 							<desc xml:lang="ja">文書から直接 Fax する場合、Fax 装置を使用するかどうか指定します。</desc>
+							<desc xml:lang="el">Specifies which fax machine is used when faxing directly from the document</desc>
+							<desc xml:lang="nl">Specifies which fax machine is used when faxing directly from the document</desc>
+							<desc xml:lang="hu">Specifies which fax machine is used when faxing directly from the document</desc>
+							<desc xml:lang="cs">Specifies which fax machine is used when faxing directly from the document</desc>
+							<desc xml:lang="sk">Specifies which fax machine is used when faxing directly from the document</desc>
+							<desc xml:lang="da">Specifies which fax machine is used when faxing directly from the document</desc>
+							<desc xml:lang="sl">Specifies which fax machine is used when faxing directly from the document</desc>
 						<label xml:lang="en-US">Fax</label>
 						<label xml:lang="x-comment">; Fax</label>
 						<label xml:lang="fr">~Fax</label>
@@ -2174,6 +2907,10 @@
 						<label xml:lang="ar">الفاكس</label>
 						<label xml:lang="he">‮פקס‬</label>
 						<label xml:lang="th">โทรสาร</label>
+						<label xml:lang="hu">Fax</label>
+						<label xml:lang="cs">Fax</label>
+						<label xml:lang="sk">Fax</label>
+						<label xml:lang="sl">Fax</label>
 					</info>
 					<value/>
 					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -2185,6 +2922,13 @@
 					<desc xml:lang="x-comment">; Contains settings for printers with multiple paper trays.</desc>
 					<desc xml:lang="zh-CN">含有有关具有多个纸张来源的打印机的设定。</desc>
 					<desc xml:lang="ja">複数のペーパートレイの付いたプリンタ用の設定を含みます。</desc>
+					<desc xml:lang="el">Contains settings for printers with multiple paper trays.</desc>
+					<desc xml:lang="nl">Contains settings for printers with multiple paper trays.</desc>
+					<desc xml:lang="hu">Contains settings for printers with multiple paper trays.</desc>
+					<desc xml:lang="cs">Contains settings for printers with multiple paper trays.</desc>
+					<desc xml:lang="sk">Contains settings for printers with multiple paper trays.</desc>
+					<desc xml:lang="da">Contains settings for printers with multiple paper trays.</desc>
+					<desc xml:lang="sl">Contains settings for printers with multiple paper trays.</desc>
 				</info>
 				<prop oor:name="FromPrinterSetup" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Papertray -->
@@ -2196,10 +2940,24 @@
 							<desc xml:lang="x-comment">; Specifies that the defined paper source in the printer setup is used for printers with multiple trays.</desc>
 							<desc xml:lang="zh-CN">指定对于具有多个纸张来源的打印机，打印机设定中定义的纸张来源。</desc>
 							<desc xml:lang="ja">プリンタのセットアップで指定した用紙ソースを、複数のトレイの付いたプリンタで使用するように指定します。</desc>
+							<desc xml:lang="el">Specifies that the defined paper source in the printer setup is used for printers with multiple trays.</desc>
+							<desc xml:lang="nl">Specifies that the defined paper source in the printer setup is used for printers with multiple trays.</desc>
+							<desc xml:lang="hu">Specifies that the defined paper source in the printer setup is used for printers with multiple trays.</desc>
+							<desc xml:lang="cs">Specifies that the defined paper source in the printer setup is used for printers with multiple trays.</desc>
+							<desc xml:lang="sk">Specifies that the defined paper source in the printer setup is used for printers with multiple trays.</desc>
+							<desc xml:lang="da">Specifies that the defined paper source in the printer setup is used for printers with multiple trays.</desc>
+							<desc xml:lang="sl">Specifies that the defined paper source in the printer setup is used for printers with multiple trays.</desc>
 						<label xml:lang="en-US">From printer setup</label>
 						<label xml:lang="x-comment">; From printer setup</label>
 						<label xml:lang="zh-CN">采用打印机设定的纸张来源</label>
 						<label xml:lang="ja">プリンタのセットアップから</label>
+						<label xml:lang="el">From printer setup</label>
+						<label xml:lang="nl">Uit printerinstellingen</label>
+						<label xml:lang="hu">From printer setup</label>
+						<label xml:lang="cs">From printer setup</label>
+						<label xml:lang="sk">From printer setup</label>
+						<label xml:lang="da">From printer setup</label>
+						<label xml:lang="sl">From printer setup</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -2211,6 +2969,13 @@
 				<desc xml:lang="x-comment">; Contains settings for tables.</desc>
 				<desc xml:lang="zh-CN">含有表格设定。</desc>
 				<desc xml:lang="ja">表の設定を含みます。</desc>
+				<desc xml:lang="el">Contains settings for tables.</desc>
+				<desc xml:lang="nl">Contains settings for tables.</desc>
+				<desc xml:lang="hu">Contains settings for tables.</desc>
+				<desc xml:lang="cs">Contains settings for tables.</desc>
+				<desc xml:lang="sk">Contains settings for tables.</desc>
+				<desc xml:lang="da">Contains settings for tables.</desc>
+				<desc xml:lang="sl">Contains settings for tables.</desc>
 			</info>
 			<group oor:name="Shift">
 				<info>
@@ -2218,6 +2983,13 @@
 					<desc xml:lang="x-comment">; Contains settings used when shifting table rows/columns.</desc>
 					<desc xml:lang="zh-CN">含有在表格中移动行/列时使用的设定。</desc>
 					<desc xml:lang="ja">テーブルの行または列のシフトに使用する設定を含みます。</desc>
+					<desc xml:lang="el">Contains settings used when shifting table rows/columns.</desc>
+					<desc xml:lang="nl">Contains settings used when shifting table rows/columns.</desc>
+					<desc xml:lang="hu">Contains settings used when shifting table rows/columns.</desc>
+					<desc xml:lang="cs">Contains settings used when shifting table rows/columns.</desc>
+					<desc xml:lang="sk">Contains settings used when shifting table rows/columns.</desc>
+					<desc xml:lang="da">Contains settings used when shifting table rows/columns.</desc>
+					<desc xml:lang="sl">Contains settings used when shifting table rows/columns.</desc>
 				</info>
 				<prop oor:name="Row" oor:type="xs:int">
 					<!-- OldPath: HTML_Editor/Table/Shift -->
@@ -2230,6 +3002,13 @@
 							<desc xml:lang="x-comment">; Specifies the default value for moving a table row [UNIT=1/100 mm].</desc>
 							<desc xml:lang="zh-CN">指定移动表格行时采用的默认值 [UNIT=1/100 mm] 。</desc>
 							<desc xml:lang="ja">表の行移動のデフォルト値を指定します [単位 = 1/100 mm]。</desc>
+							<desc xml:lang="el">Specifies the default value for moving a table row [UNIT=1/100 mm].</desc>
+							<desc xml:lang="nl">Specifies the default value for moving a table row [UNIT=1/100 mm].</desc>
+							<desc xml:lang="hu">Specifies the default value for moving a table row [UNIT=1/100 mm].</desc>
+							<desc xml:lang="cs">Specifies the default value for moving a table row [UNIT=1/100 mm].</desc>
+							<desc xml:lang="sk">Specifies the default value for moving a table row [UNIT=1/100 mm].</desc>
+							<desc xml:lang="da">Specifies the default value for moving a table row [UNIT=1/100 mm].</desc>
+							<desc xml:lang="sl">Specifies the default value for moving a table row [UNIT=1/100 mm].</desc>
 						<label xml:lang="en-US">Row</label>
 						<label xml:lang="x-comment">; Row</label>
 						<label xml:lang="fr">Ligne</label>
@@ -2255,6 +3034,8 @@
 						<label xml:lang="ca">fila</label>
 						<label xml:lang="th">แถว</label>
 						<label xml:lang="sk">Riadok</label>
+						<label xml:lang="hu">Row</label>
+						<label xml:lang="sl">Row</label>
 					</info>
 					<value>500</value>
 				</prop>
@@ -2269,6 +3050,13 @@
 							<desc xml:lang="x-comment">; Specifies the default value for shifting a table column [UNIT=1/100 mm].</desc>
 							<desc xml:lang="zh-CN">指定移动表格列时采用的默认值 [UNIT=1/100 mm]。</desc>
 							<desc xml:lang="ja">表の列シフトのデフォルト値を指定します [UNIT = 1/100 mm]。</desc>
+							<desc xml:lang="el">Specifies the default value for shifting a table column [UNIT=1/100 mm].</desc>
+							<desc xml:lang="nl">Specifies the default value for shifting a table column [UNIT=1/100 mm].</desc>
+							<desc xml:lang="hu">Specifies the default value for shifting a table column [UNIT=1/100 mm].</desc>
+							<desc xml:lang="cs">Specifies the default value for shifting a table column [UNIT=1/100 mm].</desc>
+							<desc xml:lang="sk">Specifies the default value for shifting a table column [UNIT=1/100 mm].</desc>
+							<desc xml:lang="da">Specifies the default value for shifting a table column [UNIT=1/100 mm].</desc>
+							<desc xml:lang="sl">Specifies the default value for shifting a table column [UNIT=1/100 mm].</desc>
 						<label xml:lang="en-US">Column</label>
 						<label xml:lang="x-comment">; Column</label>
 						<label xml:lang="fr">Colonne</label>
@@ -2292,6 +3080,8 @@
 						<label xml:lang="he">‮עמודה‬</label>
 						<label xml:lang="th">คอลัมน์</label>
 						<label xml:lang="sk">Stĺpec</label>
+						<label xml:lang="hu">Column</label>
+						<label xml:lang="sl">Column</label>
 					</info>
 					<value>500</value>
 				</prop>
@@ -2302,6 +3092,13 @@
 					<desc xml:lang="x-comment">; Contains settings used when inserting table rows/columns.</desc>
 					<desc xml:lang="zh-CN">含有在表格中插入行/列时使用的设定。</desc>
 					<desc xml:lang="ja">表への行または列挿入用の設定を含みます。</desc>
+					<desc xml:lang="el">Contains settings used when inserting table rows/columns.</desc>
+					<desc xml:lang="nl">Contains settings used when inserting table rows/columns.</desc>
+					<desc xml:lang="hu">Contains settings used when inserting table rows/columns.</desc>
+					<desc xml:lang="cs">Contains settings used when inserting table rows/columns.</desc>
+					<desc xml:lang="sk">Contains settings used when inserting table rows/columns.</desc>
+					<desc xml:lang="da">Contains settings used when inserting table rows/columns.</desc>
+					<desc xml:lang="sl">Contains settings used when inserting table rows/columns.</desc>
 				</info>
 				<prop oor:name="Row" oor:type="xs:int">
 					<!-- OldPath: HTML_Editor/Table/Insert -->
@@ -2314,6 +3111,13 @@
 							<desc xml:lang="x-comment">; Specifies the default value for inserting rows [UNIT=1/100 mm].</desc>
 							<desc xml:lang="zh-CN">指定插入行时采用的默认值 [UNIT=1/100 mm]。</desc>
 							<desc xml:lang="ja">行挿入のデフォルト値を指定します [UNIT = 1/100 mm]。</desc>
+							<desc xml:lang="el">Specifies the default value for inserting rows [UNIT=1/100 mm].</desc>
+							<desc xml:lang="nl">Specifies the default value for inserting rows [UNIT=1/100 mm].</desc>
+							<desc xml:lang="hu">Specifies the default value for inserting rows [UNIT=1/100 mm].</desc>
+							<desc xml:lang="cs">Specifies the default value for inserting rows [UNIT=1/100 mm].</desc>
+							<desc xml:lang="sk">Specifies the default value for inserting rows [UNIT=1/100 mm].</desc>
+							<desc xml:lang="da">Specifies the default value for inserting rows [UNIT=1/100 mm].</desc>
+							<desc xml:lang="sl">Specifies the default value for inserting rows [UNIT=1/100 mm].</desc>
 						<label xml:lang="en-US">Row</label>
 						<label xml:lang="x-comment">; Row</label>
 						<label xml:lang="fr">Ligne</label>
@@ -2339,6 +3143,8 @@
 						<label xml:lang="ca">fila</label>
 						<label xml:lang="th">แถว</label>
 						<label xml:lang="sk">Riadok</label>
+						<label xml:lang="hu">Row</label>
+						<label xml:lang="sl">Row</label>
 					</info>
 					<value>500</value>
 				</prop>
@@ -2353,6 +3159,13 @@
 							<desc xml:lang="x-comment">; Specifies the default value for inserting columns [UNIT=1/100 mm].</desc>
 							<desc xml:lang="zh-CN">指定插入列时采用的默认值 [UNIT=1/100 mm] 。</desc>
 							<desc xml:lang="ja">列の挿入用のデフォルト値を指定します [単位 = 1/100 mm]。</desc>
+							<desc xml:lang="el">Specifies the default value for inserting columns [UNIT=1/100 mm].</desc>
+							<desc xml:lang="nl">Specifies the default value for inserting columns [UNIT=1/100 mm].</desc>
+							<desc xml:lang="hu">Specifies the default value for inserting columns [UNIT=1/100 mm].</desc>
+							<desc xml:lang="cs">Specifies the default value for inserting columns [UNIT=1/100 mm].</desc>
+							<desc xml:lang="sk">Specifies the default value for inserting columns [UNIT=1/100 mm].</desc>
+							<desc xml:lang="da">Specifies the default value for inserting columns [UNIT=1/100 mm].</desc>
+							<desc xml:lang="sl">Specifies the default value for inserting columns [UNIT=1/100 mm].</desc>
 						<label xml:lang="en-US">Column</label>
 						<label xml:lang="x-comment">; Column</label>
 						<label xml:lang="fr">Colonne</label>
@@ -2376,6 +3189,8 @@
 						<label xml:lang="he">‮עמודה‬</label>
 						<label xml:lang="th">คอลัมน์</label>
 						<label xml:lang="sk">Stĺpec</label>
+						<label xml:lang="hu">Column</label>
+						<label xml:lang="sl">Column</label>
 					</info>
 					<value>2500</value>
 				</prop>
@@ -2386,6 +3201,13 @@
 					<desc xml:lang="x-comment">; Contains settings specifying the effect that modifying rows/columns has on a table.</desc>
 					<desc xml:lang="zh-CN">含有用于指定修改行/列对表格所造成的影响的设定。</desc>
 					<desc xml:lang="ja">表の行または列を変更する効果を指定する設定を含みます。</desc>
+					<desc xml:lang="el">Contains settings specifying the effect that modifying rows/columns has on a table.</desc>
+					<desc xml:lang="nl">Contains settings specifying the effect that modifying rows/columns has on a table.</desc>
+					<desc xml:lang="hu">Contains settings specifying the effect that modifying rows/columns has on a table.</desc>
+					<desc xml:lang="cs">Contains settings specifying the effect that modifying rows/columns has on a table.</desc>
+					<desc xml:lang="sk">Contains settings specifying the effect that modifying rows/columns has on a table.</desc>
+					<desc xml:lang="da">Contains settings specifying the effect that modifying rows/columns has on a table.</desc>
+					<desc xml:lang="sl">Contains settings specifying the effect that modifying rows/columns has on a table.</desc>
 				</info>
 				<prop oor:name="Effect" oor:type="xs:int">
 					<!-- OldPath: HTML_Editor/Table -->
@@ -2397,6 +3219,13 @@
 						<desc xml:lang="x-comment">; Determines the relative effect of rows and columns to adjacent rows or columns, as well as to the entire table.</desc>
 						<desc xml:lang="zh-CN">确定更改行/列时对相邻行/列以及整个表格的影响。</desc>
 						<desc xml:lang="ja">行と列の、隣接行または列、および表全体への相対効果を決定します。</desc>
+						<desc xml:lang="el">Determines the relative effect of rows and columns to adjacent rows or columns, as well as to the entire table.</desc>
+						<desc xml:lang="nl">Determines the relative effect of rows and columns to adjacent rows or columns, as well as to the entire table.</desc>
+						<desc xml:lang="hu">Determines the relative effect of rows and columns to adjacent rows or columns, as well as to the entire table.</desc>
+						<desc xml:lang="cs">Determines the relative effect of rows and columns to adjacent rows or columns, as well as to the entire table.</desc>
+						<desc xml:lang="sk">Determines the relative effect of rows and columns to adjacent rows or columns, as well as to the entire table.</desc>
+						<desc xml:lang="da">Determines the relative effect of rows and columns to adjacent rows or columns, as well as to the entire table.</desc>
+						<desc xml:lang="sl">Determines the relative effect of rows and columns to adjacent rows or columns, as well as to the entire table.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -2426,6 +3255,8 @@
 								<desc xml:lang="ca">Fix</desc>
 								<desc xml:lang="th">คงที่</desc>
 								<desc xml:lang="sk">Písmo s nemennou šírkou</desc>
+								<desc xml:lang="hu">Fixed</desc>
+								<desc xml:lang="sl">Fixed</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -2443,7 +3274,7 @@
 								<desc xml:lang="pt">FixedProportional</desc>
 								<desc xml:lang="ru">FixedProportional</desc>
 								<desc xml:lang="el">FixedProportional</desc>
-								<desc xml:lang="nl">FixedProportional</desc>
+								<desc xml:lang="nl">VastProportioneel</desc>
 								<desc xml:lang="fi">FixedProportional</desc>
 								<desc xml:lang="cs">FixedProportional</desc>
 								<desc xml:lang="da">FixedProportional</desc>
@@ -2455,6 +3286,8 @@
 								<desc xml:lang="ca">FixedProportional</desc>
 								<desc xml:lang="th">FixedProportional</desc>
 								<desc xml:lang="sk">FixedProportional</desc>
+								<desc xml:lang="hu">FixedProportional</desc>
+								<desc xml:lang="sl">FixedProportional</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -2484,6 +3317,8 @@
 								<desc xml:lang="ca">Variable</desc>
 								<desc xml:lang="th">ตัวแปร</desc>
 								<desc xml:lang="sk">Premenný</desc>
+								<desc xml:lang="hu">Variable</desc>
+								<desc xml:lang="sl">Variable</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -2496,6 +3331,13 @@
 					<desc xml:lang="x-comment">; Contains settings used when inputting text or data in tables.</desc>
 					<desc xml:lang="zh-CN">含有在表格中输入文字或数据时使用的设定。</desc>
 					<desc xml:lang="ja">テキストまたはデータの、表への入力に使用する設定を含みます。</desc>
+					<desc xml:lang="el">Contains settings used when inputting text or data in tables.</desc>
+					<desc xml:lang="nl">Contains settings used when inputting text or data in tables.</desc>
+					<desc xml:lang="hu">Contains settings used when inputting text or data in tables.</desc>
+					<desc xml:lang="cs">Contains settings used when inputting text or data in tables.</desc>
+					<desc xml:lang="sk">Contains settings used when inputting text or data in tables.</desc>
+					<desc xml:lang="da">Contains settings used when inputting text or data in tables.</desc>
+					<desc xml:lang="sl">Contains settings used when inputting text or data in tables.</desc>
 				</info>
 				<prop oor:name="NumberRecognition" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Insert/IntoTables -->
@@ -2507,6 +3349,13 @@
 							<desc xml:lang="x-comment">; Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
 							<desc xml:lang="zh-CN">指定是识别表格中的数字，还是将数字保存为文字格式。</desc>
 							<desc xml:lang="ja">表中の数字を認識するか、テキスト形式で保存するかについて指定します。</desc>
+							<desc xml:lang="el">Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
+							<desc xml:lang="nl">Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
+							<desc xml:lang="hu">Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
+							<desc xml:lang="cs">Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
+							<desc xml:lang="sk">Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
+							<desc xml:lang="da">Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
+							<desc xml:lang="sl">Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
 						<label xml:lang="en-US">Number recognition</label>
 						<label xml:lang="x-comment">; Number recognition</label>
 						<label xml:lang="fr">Reconnaissance des nombres</label>
@@ -2532,6 +3381,8 @@
 						<label xml:lang="ca">Reconeixement de números</label>
 						<label xml:lang="th">จดจำตัวเลข</label>
 						<label xml:lang="sk">Rozpoznávanie čísel</label>
+						<label xml:lang="hu">Number recognition</label>
+						<label xml:lang="sl">Number recognition</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2545,6 +3396,13 @@
 							<desc xml:lang="x-comment">; Specifies that only entries with the defined format are accepted. This option is only available if number format recognition is active (NumberRecognition=True).</desc>
 							<desc xml:lang="zh-CN">指定只接受已定义格式的条目。此选项仅在启动识别数字格式时可用 (NumberRecognition=True)。</desc>
 							<desc xml:lang="ja">指定された書式でのエントリのみ受け入れるように指定します。このオプションは、「数の書式を認識」が有効な場合(NumberRecognition = True) のみ使用できます。.</desc>
+							<desc xml:lang="el">Specifies that only entries with the defined format are accepted. This option is only available if number format recognition is active (NumberRecognition=True).</desc>
+							<desc xml:lang="nl">Specifies that only entries with the defined format are accepted. This option is only available if number format recognition is active (NumberRecognition=True).</desc>
+							<desc xml:lang="hu">Specifies that only entries with the defined format are accepted. This option is only available if number format recognition is active (NumberRecognition=True).</desc>
+							<desc xml:lang="cs">Specifies that only entries with the defined format are accepted. This option is only available if number format recognition is active (NumberRecognition=True).</desc>
+							<desc xml:lang="sk">Specifies that only entries with the defined format are accepted. This option is only available if number format recognition is active (NumberRecognition=True).</desc>
+							<desc xml:lang="da">Specifies that only entries with the defined format are accepted. This option is only available if number format recognition is active (NumberRecognition=True).</desc>
+							<desc xml:lang="sl">Specifies that only entries with the defined format are accepted. This option is only available if number format recognition is active (NumberRecognition=True).</desc>
 						<label xml:lang="en-US">Number format recognition</label>
 						<label xml:lang="x-comment">; Number format recognition</label>
 						<label xml:lang="fr">Reconnaissance du format numérique</label>
@@ -2570,6 +3428,8 @@
 						<label xml:lang="ca">Reconeixement format ~numèric</label>
 						<label xml:lang="th">จดจำรูปแบบตัวเลข</label>
 						<label xml:lang="sk">Rozpoznanie formátu čísel</label>
+						<label xml:lang="hu">Number format recognition</label>
+						<label xml:lang="sl">Number format recognition</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2583,6 +3443,13 @@
 							<desc xml:lang="x-comment">; Specifies if all of the numbers are aligned below right of the cell and not above left (as in text). This option is only available if number format recognition is active (NumberRecognition=True).</desc>
 							<desc xml:lang="zh-CN">指定所有数字在单元格中的对齐方式为右下而不是左上 (与文字中一样)。此选项仅在启动识别数字格式时可用 (NumberRecognition=True)。</desc>
 							<desc xml:lang="ja">すべての数字を、セルの左上でなく (テキストと同様) 右下に揃えるかどうかを指定します。このオプションは、「数の書式を認識」が有効な場合(NumberRecognition = True) のみ使用できます。.</desc>
+							<desc xml:lang="el">Specifies if all of the numbers are aligned below right of the cell and not above left (as in text). This option is only available if number format recognition is active (NumberRecognition=True).</desc>
+							<desc xml:lang="nl">Specifies if all of the numbers are aligned below right of the cell and not above left (as in text). This option is only available if number format recognition is active (NumberRecognition=True).</desc>
+							<desc xml:lang="hu">Specifies if all of the numbers are aligned below right of the cell and not above left (as in text). This option is only available if number format recognition is active (NumberRecognition=True).</desc>
+							<desc xml:lang="cs">Specifies if all of the numbers are aligned below right of the cell and not above left (as in text). This option is only available if number format recognition is active (NumberRecognition=True).</desc>
+							<desc xml:lang="sk">Specifies if all of the numbers are aligned below right of the cell and not above left (as in text). This option is only available if number format recognition is active (NumberRecognition=True).</desc>
+							<desc xml:lang="da">Specifies if all of the numbers are aligned below right of the cell and not above left (as in text). This option is only available if number format recognition is active (NumberRecognition=True).</desc>
+							<desc xml:lang="sl">Specifies if all of the numbers are aligned below right of the cell and not above left (as in text). This option is only available if number format recognition is active (NumberRecognition=True).</desc>
 						<label xml:lang="en-US">Alignment</label>
 						<label xml:lang="x-comment">; Alignment</label>
 						<label xml:lang="fr">Adaptation</label>
@@ -2608,6 +3475,8 @@
 						<label xml:lang="ca">Alineament</label>
 						<label xml:lang="th">การจัดตำแหน่ง</label>
 						<label xml:lang="sk">Zarovnanie</label>
+						<label xml:lang="hu">Alignment</label>
+						<label xml:lang="sl">Alignment</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2619,6 +3488,13 @@
 				<desc xml:lang="x-comment">; Specifies the settings for inserting various object types.</desc>
 				<desc xml:lang="zh-CN">指定有关插入各种对象类型的设定。</desc>
 				<desc xml:lang="ja">各種オブジェクトの挿入に関する設定を指定します。</desc>
+				<desc xml:lang="el">Specifies the settings for inserting various object types.</desc>
+				<desc xml:lang="nl">Specifies the settings for inserting various object types.</desc>
+				<desc xml:lang="hu">Specifies the settings for inserting various object types.</desc>
+				<desc xml:lang="cs">Specifies the settings for inserting various object types.</desc>
+				<desc xml:lang="sk">Specifies the settings for inserting various object types.</desc>
+				<desc xml:lang="da">Specifies the settings for inserting various object types.</desc>
+				<desc xml:lang="sl">Specifies the settings for inserting various object types.</desc>
 			</info>
 			<group oor:name="Table">
 				<info>
@@ -2626,6 +3502,13 @@
 					<desc xml:lang="x-comment">; Specifies the default settings for inserting tables.</desc>
 					<desc xml:lang="zh-CN">指定有关插入表格的默认设定。</desc>
 					<desc xml:lang="ja">表挿入のデフォルト設定を指定します。</desc>
+					<desc xml:lang="el">Specifies the default settings for inserting tables.</desc>
+					<desc xml:lang="nl">Specifies the default settings for inserting tables.</desc>
+					<desc xml:lang="hu">Specifies the default settings for inserting tables.</desc>
+					<desc xml:lang="cs">Specifies the default settings for inserting tables.</desc>
+					<desc xml:lang="sk">Specifies the default settings for inserting tables.</desc>
+					<desc xml:lang="da">Specifies the default settings for inserting tables.</desc>
+					<desc xml:lang="sl">Specifies the default settings for inserting tables.</desc>
 				</info>
 				<prop oor:name="Header" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Insert/Tables -->
@@ -2637,6 +3520,13 @@
 							<desc xml:lang="x-comment">; Specifies if the table has a header</desc>
 							<desc xml:lang="zh-CN">指定表格是否具有标题</desc>
 							<desc xml:lang="ja">表に見出しを設けるかどうか指定します。</desc>
+							<desc xml:lang="el">Specifies if the table has a header</desc>
+							<desc xml:lang="nl">Specifies if the table has a header</desc>
+							<desc xml:lang="hu">Specifies if the table has a header</desc>
+							<desc xml:lang="cs">Specifies if the table has a header</desc>
+							<desc xml:lang="sk">Specifies if the table has a header</desc>
+							<desc xml:lang="da">Specifies if the table has a header</desc>
+							<desc xml:lang="sl">Specifies if the table has a header</desc>
 						<label xml:lang="en-US">Header</label>
 						<label xml:lang="x-comment">; Header</label>
 						<label xml:lang="fr">Titre</label>
@@ -2662,6 +3552,8 @@
 						<label xml:lang="ca">Capçalera</label>
 						<label xml:lang="th">หัวกระดาษ</label>
 						<label xml:lang="sk">Záhlavie</label>
+						<label xml:lang="hu">Header</label>
+						<label xml:lang="sl">Header</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2675,10 +3567,24 @@
 							<desc xml:lang="x-comment">; Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header=True.</desc>
 							<desc xml:lang="zh-CN">指定在插入换页时是否在新页面中采用标题。此选项仅在 Header=True 时可用。</desc>
 							<desc xml:lang="ja">改ページを挿入する際、新しいページにヘッダを採用するかどうかを指定します。このオプションは Header = True の場合にのみ有効。</desc>
+							<desc xml:lang="el">Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header=True.</desc>
+							<desc xml:lang="nl">Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header=True.</desc>
+							<desc xml:lang="hu">Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header=True.</desc>
+							<desc xml:lang="cs">Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header=True.</desc>
+							<desc xml:lang="sk">Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header=True.</desc>
+							<desc xml:lang="da">Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header=True.</desc>
+							<desc xml:lang="sl">Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header=True.</desc>
 						<label xml:lang="en-US">Repeat header</label>
 						<label xml:lang="x-comment">; Repeat header</label>
 						<label xml:lang="zh-CN">重复标题</label>
 						<label xml:lang="ja">各ページに繰り返し</label>
+						<label xml:lang="el">Repeat header</label>
+						<label xml:lang="nl">Kop herhalen</label>
+						<label xml:lang="hu">Repeat header</label>
+						<label xml:lang="cs">Repeat header</label>
+						<label xml:lang="sk">Repeat header</label>
+						<label xml:lang="da">Repeat header</label>
+						<label xml:lang="sl">Repeat header</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2692,6 +3598,13 @@
 							<desc xml:lang="x-comment">; Specifies if table cells have a border by default.</desc>
 							<desc xml:lang="zh-CN">指定表格单元格在默认情况下是否具有边框。</desc>
 							<desc xml:lang="ja">表のセルにデフォルトの外枠を設けるかどうかを指定します。</desc>
+							<desc xml:lang="el">Specifies if table cells have a border by default.</desc>
+							<desc xml:lang="nl">Specifies if table cells have a border by default.</desc>
+							<desc xml:lang="hu">Specifies if table cells have a border by default.</desc>
+							<desc xml:lang="cs">Specifies if table cells have a border by default.</desc>
+							<desc xml:lang="sk">Specifies if table cells have a border by default.</desc>
+							<desc xml:lang="da">Specifies if table cells have a border by default.</desc>
+							<desc xml:lang="sl">Specifies if table cells have a border by default.</desc>
 						<label xml:lang="en-US">Border</label>
 						<label xml:lang="x-comment">; Border</label>
 						<label xml:lang="fr">Cadre</label>
@@ -2717,6 +3630,8 @@
 						<label xml:lang="ca">Vora</label>
 						<label xml:lang="th">เส้นขอบ</label>
 						<label xml:lang="sk">Okraj</label>
+						<label xml:lang="hu">Border</label>
+						<label xml:lang="sl">Border</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2729,6 +3644,13 @@
 				<desc xml:lang="x-comment">; Specifies the settings for the object bar.</desc>
 				<desc xml:lang="zh-CN">指定对象栏设定。</desc>
 				<desc xml:lang="ja">オブジェクトバーの設定を指定します。</desc>
+				<desc xml:lang="el">Specifies the settings for the object bar.</desc>
+				<desc xml:lang="nl">Specifies the settings for the object bar.</desc>
+				<desc xml:lang="hu">Specifies the settings for the object bar.</desc>
+				<desc xml:lang="cs">Specifies the settings for the object bar.</desc>
+				<desc xml:lang="sk">Specifies the settings for the object bar.</desc>
+				<desc xml:lang="da">Specifies the settings for the object bar.</desc>
+				<desc xml:lang="sl">Specifies the settings for the object bar.</desc>
 			</info>
 			<group oor:name="Selection">
 				<!-- OldLocation: Soffice.cfg -->
@@ -2739,6 +3661,13 @@
 					<desc xml:lang="x-comment">; Specifies the type of object bar that is visible.</desc>
 					<desc xml:lang="zh-CN">指定可见对象栏的类型。</desc>
 					<desc xml:lang="ja">表示するオブジェクトバーの種類を指定します。</desc>
+					<desc xml:lang="el">Specifies the type of object bar that is visible.</desc>
+					<desc xml:lang="nl">Specifies the type of object bar that is visible.</desc>
+					<desc xml:lang="hu">Specifies the type of object bar that is visible.</desc>
+					<desc xml:lang="cs">Specifies the type of object bar that is visible.</desc>
+					<desc xml:lang="sk">Specifies the type of object bar that is visible.</desc>
+					<desc xml:lang="da">Specifies the type of object bar that is visible.</desc>
+					<desc xml:lang="sl">Specifies the type of object bar that is visible.</desc>
 				</info>
 				<prop oor:name="Graphic" oor:type="xs:int">
 					<info>
@@ -2746,6 +3675,13 @@
 						<desc xml:lang="x-comment">; Specifies whether the Graphic Object Bar or the Text Object Bar/Web is the visible toolbar when a graphic is selected.</desc>
 						<desc xml:lang="zh-CN">指定在选定图形时是显示 [图形对象栏] 还是显示 [文字对象栏/万维网]。</desc>
 						<desc xml:lang="ja">画像が選択されたときに、図オブジェクトバー、テキストオブジェクトバー、Web をツールバーに表示するかどうかを指定します。</desc>
+						<desc xml:lang="el">Specifies whether the Graphic Object Bar or the Text Object Bar/Web is the visible toolbar when a graphic is selected.</desc>
+						<desc xml:lang="nl">Specifies whether the Graphic Object Bar or the Text Object Bar/Web is the visible toolbar when a graphic is selected.</desc>
+						<desc xml:lang="hu">Specifies whether the Graphic Object Bar or the Text Object Bar/Web is the visible toolbar when a graphic is selected.</desc>
+						<desc xml:lang="cs">Specifies whether the Graphic Object Bar or the Text Object Bar/Web is the visible toolbar when a graphic is selected.</desc>
+						<desc xml:lang="sk">Specifies whether the Graphic Object Bar or the Text Object Bar/Web is the visible toolbar when a graphic is selected.</desc>
+						<desc xml:lang="da">Specifies whether the Graphic Object Bar or the Text Object Bar/Web is the visible toolbar when a graphic is selected.</desc>
+						<desc xml:lang="sl">Specifies whether the Graphic Object Bar or the Text Object Bar/Web is the visible toolbar when a graphic is selected.</desc>
 					</info>
 					<value>-1</value>
 				</prop>
@@ -2755,6 +3691,13 @@
 						<desc xml:lang="x-comment">; Specifies whether the Table Object Bar or the Text Object Bar/Web is visible toolbar when a table is selected.</desc>
 						<desc xml:lang="zh-CN">指定在选定表格时是显示 [表格对象栏] 还是显示 [文字对象栏/万维网]。</desc>
 						<desc xml:lang="ja">表が選択されたときに、表オブジェクトバー、テキストオブジェクトバー、Web をツールバーに表示するかどうかを指定します。</desc>
+						<desc xml:lang="el">Specifies whether the Table Object Bar or the Text Object Bar/Web is visible toolbar when a table is selected.</desc>
+						<desc xml:lang="nl">Specifies whether the Table Object Bar or the Text Object Bar/Web is visible toolbar when a table is selected.</desc>
+						<desc xml:lang="hu">Specifies whether the Table Object Bar or the Text Object Bar/Web is visible toolbar when a table is selected.</desc>
+						<desc xml:lang="cs">Specifies whether the Table Object Bar or the Text Object Bar/Web is visible toolbar when a table is selected.</desc>
+						<desc xml:lang="sk">Specifies whether the Table Object Bar or the Text Object Bar/Web is visible toolbar when a table is selected.</desc>
+						<desc xml:lang="da">Specifies whether the Table Object Bar or the Text Object Bar/Web is visible toolbar when a table is selected.</desc>
+						<desc xml:lang="sl">Specifies whether the Table Object Bar or the Text Object Bar/Web is visible toolbar when a table is selected.</desc>
 					</info>
 					<value>-1</value>
 				</prop>
@@ -2764,6 +3707,13 @@
 						<desc xml:lang="x-comment">; Specifies whether the Numbering Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected.</desc>
 						<desc xml:lang="zh-CN">指定在选定编号/列单时是显示 [编号对象栏] 还是显示 [文字对象栏/万维网]。</desc>
 						<desc xml:lang="ja">番号付けしたテキスト、またはリストに書式化したテキストが選択されたときに、番号付けオブジェクトバー、テキストオブジェクトバー、Web をツールバーに表示するかどうか指定します。</desc>
+						<desc xml:lang="el">Specifies whether the Numbering Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected.</desc>
+						<desc xml:lang="nl">Specifies whether the Numbering Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected.</desc>
+						<desc xml:lang="hu">Specifies whether the Numbering Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected.</desc>
+						<desc xml:lang="cs">Specifies whether the Numbering Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected.</desc>
+						<desc xml:lang="sk">Specifies whether the Numbering Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected.</desc>
+						<desc xml:lang="da">Specifies whether the Numbering Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected.</desc>
+						<desc xml:lang="sl">Specifies whether the Numbering Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected.</desc>
 					</info>
 					<value>-1</value>
 				</prop>
@@ -2773,6 +3723,13 @@
 						<desc xml:lang="x-comment">; Specifies whether the Numbering Object Bar, the Table Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected in a table.</desc>
 						<desc xml:lang="zh-CN">指定在选定编号/列单时是显示 [编号对象栏]、[表格对象栏] 还是显示 [文字对象栏/万维网]。</desc>
 						<desc xml:lang="ja">表中で、番号付けしたテキスト、またはリストに書式化したテキストが選択されたときに、番号付けオブジェクトバー、表オブジェクトバー、テキストオブジェクトバー、Web をツールバーに表示するかどうか指定します。</desc>
+						<desc xml:lang="el">Specifies whether the Numbering Object Bar, the Table Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected in a table.</desc>
+						<desc xml:lang="nl">Specifies whether the Numbering Object Bar, the Table Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected in a table.</desc>
+						<desc xml:lang="hu">Specifies whether the Numbering Object Bar, the Table Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected in a table.</desc>
+						<desc xml:lang="cs">Specifies whether the Numbering Object Bar, the Table Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected in a table.</desc>
+						<desc xml:lang="sk">Specifies whether the Numbering Object Bar, the Table Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected in a table.</desc>
+						<desc xml:lang="da">Specifies whether the Numbering Object Bar, the Table Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected in a table.</desc>
+						<desc xml:lang="sl">Specifies whether the Numbering Object Bar, the Table Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected in a table.</desc>
 					</info>
 					<value>-1</value>
 				</prop>
@@ -2782,6 +3739,13 @@
 						<desc xml:lang="x-comment">; Specifies whether the Bezier Object Bar or the Draw Object Bar is the visible toolbar with a Bezier object in edit mode.</desc>
 						<desc xml:lang="zh-CN">指定在编辑模式下，[曲线对象栏] 和 [绘图对象栏] 哪个是具有曲线对象的可见图标栏。</desc>
 						<desc xml:lang="ja">ベジェ曲線オブジェクトが編集モードのとき、ベジェ曲線オブジェクトバーまたは、図形描画オブジェクトバーをツールバーに表示するかどうか指定します。</desc>
+						<desc xml:lang="el">Specifies whether the Bezier Object Bar or the Draw Object Bar is the visible toolbar with a Bezier object in edit mode.</desc>
+						<desc xml:lang="nl">Specifies whether the Bezier Object Bar or the Draw Object Bar is the visible toolbar with a Bezier object in edit mode.</desc>
+						<desc xml:lang="hu">Specifies whether the Bezier Object Bar or the Draw Object Bar is the visible toolbar with a Bezier object in edit mode.</desc>
+						<desc xml:lang="cs">Specifies whether the Bezier Object Bar or the Draw Object Bar is the visible toolbar with a Bezier object in edit mode.</desc>
+						<desc xml:lang="sk">Specifies whether the Bezier Object Bar or the Draw Object Bar is the visible toolbar with a Bezier object in edit mode.</desc>
+						<desc xml:lang="da">Specifies whether the Bezier Object Bar or the Draw Object Bar is the visible toolbar with a Bezier object in edit mode.</desc>
+						<desc xml:lang="sl">Specifies whether the Bezier Object Bar or the Draw Object Bar is the visible toolbar with a Bezier object in edit mode.</desc>
 					</info>
 					<value>-1</value>
 				</prop>
@@ -2793,6 +3757,13 @@
 				<desc xml:lang="x-comment">; Contains settings for the background of a document.</desc>
 				<desc xml:lang="zh-CN">含有文档背景设定。</desc>
 				<desc xml:lang="ja">文書の背景設定を含みます。</desc>
+				<desc xml:lang="el">Contains settings for the background of a document.</desc>
+				<desc xml:lang="nl">Contains settings for the background of a document.</desc>
+				<desc xml:lang="hu">Contains settings for the background of a document.</desc>
+				<desc xml:lang="cs">Contains settings for the background of a document.</desc>
+				<desc xml:lang="sk">Contains settings for the background of a document.</desc>
+				<desc xml:lang="da">Contains settings for the background of a document.</desc>
+				<desc xml:lang="sl">Contains settings for the background of a document.</desc>
 			</info>
 			<prop oor:name="Color" oor:type="xs:int">
 				<!-- OldPath: HTML_Editor/Background -->
@@ -2804,6 +3775,13 @@
 						<desc xml:lang="x-comment">; Determines the background color.</desc>
 						<desc xml:lang="zh-CN">确定背景颜色。</desc>
 						<desc xml:lang="ja">背景色を決定します。</desc>
+						<desc xml:lang="el">Determines the background color.</desc>
+						<desc xml:lang="nl">Determines the background color.</desc>
+						<desc xml:lang="hu">Determines the background color.</desc>
+						<desc xml:lang="cs">Determines the background color.</desc>
+						<desc xml:lang="sk">Determines the background color.</desc>
+						<desc xml:lang="da">Determines the background color.</desc>
+						<desc xml:lang="sl">Determines the background color.</desc>
 					<label xml:lang="en-US">Background color</label>
 					<label xml:lang="x-comment">; Background color</label>
 					<label xml:lang="fr">Couleur d&apos;arrière-plan</label>
@@ -2829,6 +3807,8 @@
 					<label xml:lang="ca">Color de fons</label>
 					<label xml:lang="th">สีพื้นหลัง</label>
 					<label xml:lang="sk">Farba pozadia</label>
+					<label xml:lang="hu">Background color</label>
+					<label xml:lang="sl">Background color</label>
 				</info>
 			</prop>
 		</group>
@@ -2838,6 +3818,13 @@
 				<desc xml:lang="x-comment">; Contains settings for gallery items that can be added to the document.</desc>
 				<desc xml:lang="zh-CN">含有有关可添加到文档的画廊项的设定。</desc>
 				<desc xml:lang="ja">文書に追加できるギャラリ項目の設定を含みます。</desc>
+				<desc xml:lang="el">Contains settings for gallery items that can be added to the document.</desc>
+				<desc xml:lang="nl">Contains settings for gallery items that can be added to the document.</desc>
+				<desc xml:lang="hu">Contains settings for gallery items that can be added to the document.</desc>
+				<desc xml:lang="cs">Contains settings for gallery items that can be added to the document.</desc>
+				<desc xml:lang="sk">Contains settings for gallery items that can be added to the document.</desc>
+				<desc xml:lang="da">Contains settings for gallery items that can be added to the document.</desc>
+				<desc xml:lang="sl">Contains settings for gallery items that can be added to the document.</desc>
 			</info>
 			<prop oor:name="AddGraphic" oor:type="xs:boolean">
 				<!--OldLocation: Soffice.cfg -->
@@ -2848,12 +3835,29 @@
 					<desc xml:lang="x-comment">; Specifies if a graphic is embedded or added as link when it is inserted into the Gallery.</desc>
 					<desc xml:lang="zh-CN">指定在将图形插入画廊时，是嵌入图形还是将其加入为链接。</desc>
 					<desc xml:lang="ja">画像をギャラリに挿入する場合、埋め込みにするか追加するかを指定します。</desc>
+					<desc xml:lang="el">Specifies if a graphic is embedded or added as link when it is inserted into the Gallery.</desc>
+					<desc xml:lang="nl">Specifies if a graphic is embedded or added as link when it is inserted into the Gallery.</desc>
+					<desc xml:lang="hu">Specifies if a graphic is embedded or added as link when it is inserted into the Gallery.</desc>
+					<desc xml:lang="cs">Specifies if a graphic is embedded or added as link when it is inserted into the Gallery.</desc>
+					<desc xml:lang="sk">Specifies if a graphic is embedded or added as link when it is inserted into the Gallery.</desc>
+					<desc xml:lang="da">Specifies if a graphic is embedded or added as link when it is inserted into the Gallery.</desc>
+					<desc xml:lang="sl">Specifies if a graphic is embedded or added as link when it is inserted into the Gallery.</desc>
 				</info>
 				<value>true</value>
 			</prop>
 		</group>
 	</component>
 </oor:component-schema>
+
+
+
+
+
+
+
+
+
+
 
 
 
