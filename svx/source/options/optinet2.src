@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-11-21 16:21:06 $
+ *  last change: $Author: rt $ $Date: 2000-11-29 09:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ chinese_simplified ] = "~Http ´úÀí";
         Text[ russian ] = "~Http-ïðîêñè";
         Text[ polish ] = "Http Proxy";
-        Text[ japanese ] = "Http ÌßÛ·¼(~H)";
+        Text[ japanese ] = "~Http ÌßÛ·¼";
         Text[ chinese_traditional ] = "~Http ¥N²z";
         Text[ arabic ] = "Http Proxy~";
         Text[ greek ] = "~Http Proxy";
@@ -357,7 +357,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ chinese_simplified ] = "~Ftp ´úÀí";
         Text[ russian ] = "~Ftp-ïðîêñè";
         Text[ polish ] = "Ftp Proxy";
-        Text[ japanese ] = "Ftp ÌßÛ·¼(~F)";
+        Text[ japanese ] = "~Ftp ÌßÛ·¼";
         Text[ chinese_traditional ] = "~Ftp ¥N²z";
         Text[ arabic ] = "Ftp Proxy~";
         Text[ greek ] = "~Ftp Proxy";
@@ -421,7 +421,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ chinese_simplified ] = "~Socks ´úÀí";
         Text[ russian ] = "~Socks-ïðîêñè";
         Text[ polish ] = "Socks Proxy";
-        Text[ japanese ] = "Socks ÌßÛ·¼(~S)";
+        Text[ japanese ] = "~Socks ÌßÛ·¼";
         Text[ chinese_traditional ] = "~Socks ¥N²z";
         Text[ arabic ] = "Socks proxy~";
         Text[ greek ] = "~Socks Proxy";
@@ -683,7 +683,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ chinese_simplified ] = "ºÍ(~N)";
         Text[ russian ] = "È";
         Text[ polish ] = "I";
-        Text[ japanese ] = "And(~A)";
+        Text[ japanese ] = "A~nd";
         Text[ chinese_traditional ] = "©M(~A)";
         Text[ arabic ] = "æ";
         Text[ greek ] = "Êáé";
@@ -1436,7 +1436,7 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
         Text[ chinese_simplified ] = "~ClassPath";
         Text[ russian ] = "~Class Path";
         Text[ polish ] = "ClassPath";
-        Text[ japanese ] = "ClassPath(~C)";
+        Text[ japanese ] = "~ClassPath";
         Text[ chinese_traditional ] = "~ClassPath";
         Text[ arabic ] = "Class path~";
         Text[ greek ] = "~Class path";
