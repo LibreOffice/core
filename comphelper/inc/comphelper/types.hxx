@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: oj $ $Date: 2000-10-20 11:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,18 @@ namespace comphelper
             _rxComp = NULL;
         }
     }
+    //-------------------------------------------------------------------------
+    template <class TYPE>
+    sal_Bool getImplementation(TYPE*& _pObject, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace)
+    {
+        _pObject = NULL;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(_rxIFace, UNO_QUERY);
+        if (xTunnel.is())
+            _pObject = reinterpret_cast< TYPE* >(xTunnel->getSomething(TYPE::getUnoTunnelImplementationId()));
+
+        return (_pObject != NULL);
+    }
+
 
     //-------------------------------------------------------------------------
     /** get a com::sun::star::awt::FontDescriptor that is fully initialized with
