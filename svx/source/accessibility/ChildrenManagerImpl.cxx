@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:27 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
@@ -87,6 +90,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
+
 
 namespace accessibility {
 
@@ -269,7 +273,11 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
     {
         ::osl::MutexGuard aGuard (maMutex);
         adjustIndexInParentOfShapes(aNewChildList);
-        maVisibleChildren = aNewChildList;
+
+        // Use swap to copy the contents of the new list in constant time.
+        maVisibleChildren.swap (aNewChildList);
+        aNewChildList.clear();
+
         maVisibleArea = aVisibleArea;
     }
 
@@ -277,12 +285,12 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
     // change of their bounding boxes for all shapes that are members of
     // both the current and the new list of visible shapes.
     if (maVisibleArea != aVisibleArea)
-        SendVisibleAreaEvents (aNewChildList);
+        SendVisibleAreaEvents (maVisibleChildren);
 
     // 6. If children have to be created immediately and not on demand then
     // create the missing accessible objects now.
     if ( ! bCreateNewObjectsOnDemand)
-        CreateAccessibilityObjects (aNewChildList);
+        CreateAccessibilityObjects (maVisibleChildren);
 }
 
 
@@ -426,8 +434,9 @@ void ChildrenManagerImpl::CreateAccessibilityObjects (
         // it does not yet exist.
         if ( ! I->mxAccessibleShape.is() )
             GetChild (*I,nPos);
-        if ( I->mxAccessibleShape.is() && I->mbCreateEventPending )
+        if (I->mxAccessibleShape.is() && I->mbCreateEventPending)
         {
+            I->mbCreateEventPending = false;
             mrContext.CommitChange (
                 AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
                 uno::makeAny(I->mxAccessibleShape),
@@ -455,6 +464,7 @@ void ChildrenManagerImpl::AddShape (const Reference<drawing::XShape>& rxShape)
             aPos.Y,
             aPos.X + aSize.Width,
             aPos.Y + aSize.Height);
+
         // Add the shape only when it belongs to the list of shapes stored
         // in mxShapeList (which is either a page or a group shape).
         Reference<container::XChild> xChild (rxShape, uno::UNO_QUERY);
@@ -547,6 +557,7 @@ void ChildrenManagerImpl::ClearAccessibleShapeList (void)
     for (I=maVisibleChildren.begin(); I != aEnd; ++I)
         if ( I->mxAccessibleShape.is() && I->mxShape.is() )
             I->disposeAccessibleObject(mrContext);
+
     maVisibleChildren.clear ();
 
 
@@ -870,7 +881,8 @@ void ChildrenManagerImpl::UpdateSelection (void)
             }
             else if (xSelectedShapeAccess.is())
             {
-                for (sal_Int32 i=0,nCount=xSelectedShapeAccess->getCount(); i<nCount&&!bShapeIsSelected; i++)
+                sal_Int32 nCount=xSelectedShapeAccess->getCount();
+                for (sal_Int32 i=0; i<nCount&&!bShapeIsSelected; i++)
                     if (xSelectedShapeAccess->getByIndex(i) == I->mxShape)
                     {
                         bShapeIsSelected = true;
@@ -910,8 +922,31 @@ void ChildrenManagerImpl::UpdateSelection (void)
         if (pNewFocusedShape != NULL)
             pNewFocusedShape->SetState (AccessibleStateType::FOCUSED);
     }
+
+    // Remember whether there is a shape that now has the focus.
+    mpFocusedShape = pNewFocusedShape;
 }
-// -----------------------------------------------------------------------------
+
+
+
+
+bool ChildrenManagerImpl::HasFocus (void)
+{
+    return mpFocusedShape != NULL;
+}
+
+
+
+
+void ChildrenManagerImpl::RemoveFocus (void)
+{
+    if (mpFocusedShape != NULL)
+    {
+        mpFocusedShape->ResetState (AccessibleStateType::FOCUSED);
+        mpFocusedShape = NULL;
+    }
+}
+
 
 
 void ChildrenManagerImpl::RegisterAsDisposeListener (
@@ -1008,3 +1043,4 @@ void ChildDescriptor::disposeAccessibleObject (AccessibleContextBase& rParent)
 
 
 } // end of namespace accessibility
+
