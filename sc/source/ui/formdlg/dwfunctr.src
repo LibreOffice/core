@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:38:17 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,10 +173,10 @@ DockingWindow FID_FUNCTION_BOX
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Recentemente usadas" ; Default ; > ;
-            < "Todas as funções" ; Default ; > ;
+            < "As últimas usadas" ; Default ; > ;
+            < "Todas" ; Default ; > ;
             < "Banco de Dados" ; Default ; > ;
-            < "Data & Hora" ; Default ; > ;
+            < "Data&Hora" ; Default ; > ;
             < "Financeiras" ; Default ; > ;
             < "Informação" ; Default ; > ;
             < "Lógicas" ; Default ; > ;
@@ -185,7 +185,7 @@ DockingWindow FID_FUNCTION_BOX
             < "Estatísticas" ; Default ; > ;
             < "Planilha" ; Default ; > ;
             < "Texto" ; Default ; > ;
-            < "Aditivos" ; Default ; > ;
+            < "Add-in" ; Default ; > ;
              //         < "Definido pelo usuário"; Default; >;
         };
         StringList [ portuguese ] =
@@ -443,11 +443,11 @@ DockingWindow FID_FUNCTION_BOX
         < "Çìåñïìçíßá êáé ¿ñá" ; Default ; > ;
         < "ÏéêïíïìéêÜ" ; Default ; > ;
         < "Ðëçñïöïñßåò" ; Default ; > ;
-        < "ËïãéêÜ" ; Default ; > ;
+        < "ËïãéêÝò" ; Default ; > ;
         < "ÌáèçìáôéêÜ" ; Default ; > ;
-        < "ÌÞôñá" ; Default ; > ;
-        < "ÓôáôéóôéêÜ" ; Default ; > ;
         < "Ðßíáêáò" ; Default ; > ;
+        < "ÓôáôéóôéêÜ" ; Default ; > ;
+        < "Õðïëïãéóôéêü öýëëï" ; Default ; > ;
         < "Êåßìåíï" ; Default ; > ;
         < "Ðñüóèåôï (Add-In)" ; Default ; > ;
     };
@@ -702,6 +702,7 @@ DockingWindow FID_FUNCTION_BOX
     Text[ slovak ] = "Funkcie";
 };
  // ********************************************************************** EOF
+
 
 
 
