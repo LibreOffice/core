@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWeb.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 09:48:02 $
+ *  last change: $Author: os $ $Date: 2002-09-20 11:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,15 @@
           <info>
             <desc xml:lang="en-US">Specifies, if the vertical scroll bar is displayed</desc>
             <label xml:lang="en-US">Vertical Scroll</label>
+          </info>
+        </prop>
+        <prop oor:name="ShowRulers" oor:type="xs:boolean">
+          <!-- Responsible: OS -->
+          <!-- UIHints: Tools - Options - Text document - View - [Section] View -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">Specifies, if rulers are displayed. It filters the values of HorizontalRuler and VerticalRuler</desc>
+            <label xml:lang="en-US">Show rulers</label>
           </info>
         </prop>
         <prop oor:name="HorizontalRuler" oor:type="xs:boolean">
