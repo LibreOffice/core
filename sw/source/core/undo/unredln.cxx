@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unredln.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 15:13:25 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 13:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,7 @@ void SwUndoRejectRedline::Repeat( SwUndoIter& rIter )
 
 SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, BOOL bIns )
     : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRg ), pRedlData( 0 ),
-    pUnDel( 0 ), pRedlSaveData( 0 ), bInsert( bIns )
+    pUnDel( 0 ), pUnDel2( 0 ), pRedlSaveData( 0 ), bInsert( bIns )
 {
     SwDoc* pDoc = (SwDoc*)rRg.GetDoc();
     if( pDoc->IsRedlineOn() )
@@ -403,7 +403,7 @@ SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, BOOL bIns )
 
 SwUndoCompDoc::SwUndoCompDoc( const SwRedline& rRedl )
     : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRedl ), pRedlData( 0 ),
-    pUnDel( 0 ), pRedlSaveData( 0 ),
+    pUnDel( 0 ), pUnDel2( 0 ), pRedlSaveData( 0 ),
     // fuers MergeDoc wird aber der jeweils umgekehrte Zweig benoetigt!
     bInsert( REDLINE_DELETE == rRedl.GetType() )
 {
@@ -423,6 +423,7 @@ SwUndoCompDoc::~SwUndoCompDoc()
 {
     delete pRedlData;
     delete pUnDel;
+    delete pUnDel2;
     delete pRedlSaveData;
 }
 
@@ -443,6 +444,17 @@ void SwUndoCompDoc::Undo( SwUndoIter& rIter )
 
         pDoc->SetRedlineMode_intern( eOld );
 
+        //per definition Point is end (in SwUndRng!)
+        SwCntntNode* pCSttNd = pPam->GetCntntNode( FALSE );
+        SwCntntNode* pCEndNd = pPam->GetCntntNode( TRUE );
+
+        // if start- and end-content is zero, then the doc-compare moves
+        // complete nodes into the current doc. And then the selection
+        // must be from end to start, so the delete join into the right
+        // direction.
+        if( !nSttCntnt && !nEndCntnt )
+            pPam->Exchange();
+
         BOOL bJoinTxt, bJoinPrev;
         ::lcl_GetJoinFlags( *pPam, bJoinTxt, bJoinPrev );
 
@@ -450,6 +462,16 @@ void SwUndoCompDoc::Undo( SwUndoIter& rIter )
 
         if( bJoinTxt )
             ::lcl_JoinText( *pPam, bJoinPrev );
+
+        if( pCSttNd && !pCEndNd )
+        {
+            pPam->SetMark();
+            pPam->GetPoint()->nNode++;
+            pPam->GetBound( TRUE ).nContent.Assign( 0, 0 );
+            pPam->GetBound( FALSE ).nContent.Assign( 0, 0 );
+            pUnDel2 = new SwUndoDelete( *pPam, TRUE );
+        }
+        pPam->DeleteMark();
     }
     else
     {
@@ -460,6 +482,7 @@ void SwUndoCompDoc::Undo( SwUndoIter& rIter )
             if( pRedlSaveData )
                 SetSaveData( *pDoc, *pRedlSaveData );
         }
+        SetPaM( rIter, TRUE );
     }
 }
 
@@ -497,89 +520,23 @@ void SwUndoCompDoc::Redo( SwUndoIter& rIter )
 //      SwRedlineMode eOld = pDoc->GetRedlineMode();
 //      pDoc->SetRedlineMode_intern( ( eOld & ~REDLINE_IGNORE) | REDLINE_ON );
 
+        if( pUnDel2 )
+        {
+            pUnDel2->Undo( rIter );
+            delete pUnDel2, pUnDel2 = 0;
+        }
         pUnDel->Undo( rIter );
         delete pUnDel, pUnDel = 0;
 
+        SetPaM( *pPam );
         SwRedline* pTmp = new SwRedline( *pRedlData, *pPam );
         ((SwRedlineTbl&)pDoc->GetRedlineTbl()).Insert( pTmp );
         pTmp->InvalidateRange();
 
 //      pDoc->SetRedlineMode_intern( eOld );
     }
+
+    SetPaM( rIter, TRUE );
 }
 
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unredln.cxx,v 1.2 2000-10-25 15:13:25 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/19 00:08:28  hr
-      initial import
-
-      Revision 1.19  2000/09/18 16:04:29  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.18  2000/07/20 13:15:39  jp
-      change old txtatr-character to the two new characters
-
-      Revision 1.17  2000/05/19 12:53:54  jp
-      use WordSelection class for check chars
-
-      Revision 1.16  2000/05/09 10:04:31  jp
-      Changes for Unicode
-
-      Revision 1.15  1998/11/10 11:29:32  JP
-      Bug #59223#: Undo CompDoc - das Join der Nodes nicht vergessen
-
-
-      Rev 1.14   10 Nov 1998 12:29:32   JP
-   Bug #59223#: Undo CompDoc - das Join der Nodes nicht vergessen
-
-      Rev 1.13   22 Sep 1998 10:11:08   JP
-   Bug #55909#: SwUndoCompDoc - die alten Redlines im Bereich merken
-
-      Rev 1.12   07 Jul 1998 13:23:22   JP
-   DocComp: Undo/Redo muessen das Layout invalidieren (fuer die korrekte Redlineanzeige)
-
-      Rev 1.11   02 Apr 1998 15:14:10   JP
-   Redo: Undo-Flag wird schon von der EditShell abgeschaltet
-
-      Rev 1.10   05 Mar 1998 19:30:52   JP
-   UndoRedlineDelete: CanCombine nur wenn sich alles in einem Node abspielt
-
-      Rev 1.9   05 Mar 1998 12:57:56   JP
-   SwUndoCompareDoc: fuers Merge doch einen eigene CTOR
-
-      Rev 1.8   02 Mar 1998 09:50:12   JP
-   UndoCompare: fuers MergeDoc erweitert und umgestellt
-
-      Rev 1.7   12 Feb 1998 16:51:04   JP
-   neu: Undo fuer Dokumentvergleich
-
-      Rev 1.6   30 Jan 1998 19:34:50   JP
-   bei vorhandenen versteckten Redlines die NodeIndizies korrigieren
-
-      Rev 1.5   29 Jan 1998 22:50:26   JP
-   RedlSaveData muss in Redo neu besorgt werden, wenn versteckte Deletes existierten
-
-      Rev 1.4   28 Jan 1998 19:50:56   JP
-   nach Redo: Pam auf jedenfall in ContentNodes setzen
-
-      Rev 1.3   22 Jan 1998 20:53:12   JP
-   CTOR des SwPaM umgestellt
-
-      Rev 1.2   13 Jan 1998 21:38:10   JP
-   neu: Undo fuer Accept-/Reject-Redline
-
-      Rev 1.1   08 Jan 1998 21:09:28   JP
-   weitere Redlining Erweiterung
-
-      Rev 1.0   06 Jan 1998 16:27:40   JP
-   Initial revision.
-
-*************************************************************************/
 

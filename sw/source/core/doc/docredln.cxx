@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-20 12:44:27 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 13:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1327,13 +1327,29 @@ BOOL lcl_AcceptRedline( SwRedlineTbl& rArr, USHORT& rPos,
             if( pDelStt && pDelEnd )
             {
                 SwPaM aPam( *pDelStt, *pDelEnd );
+                SwCntntNode* pCSttNd = pDelStt->nNode.GetNode().GetCntntNode();
+                SwCntntNode* pCEndNd = pDelEnd->nNode.GetNode().GetCntntNode();
 
                 if( bDelRedl )
                     delete pRedl;
 
                 SwRedlineMode eOld = rDoc.GetRedlineMode();
                 rDoc.SetRedlineMode_intern( eOld & ~(REDLINE_ON | REDLINE_IGNORE) );
-                rDoc.DeleteAndJoin( aPam );
+
+                if( pCSttNd && pCEndNd )
+                    rDoc.DeleteAndJoin( aPam );
+                else
+                {
+                    rDoc.Delete( aPam );
+
+                    if( pCSttNd && !pCEndNd )
+                    {
+                        aPam.GetBound( TRUE ).nContent.Assign( 0, 0 );
+                        aPam.GetBound( FALSE ).nContent.Assign( 0, 0 );
+                        aPam.DeleteMark();
+                        rDoc.DelFullPara( aPam );
+                    }
+                }
                 rDoc.SetRedlineMode_intern( eOld );
             }
             else if( bDelRedl )
@@ -1421,12 +1437,29 @@ BOOL lcl_RejectRedline( SwRedlineTbl& rArr, USHORT& rPos,
             {
                 SwPaM aPam( *pDelStt, *pDelEnd );
 
+                SwCntntNode* pCSttNd = pDelStt->nNode.GetNode().GetCntntNode();
+                SwCntntNode* pCEndNd = pDelEnd->nNode.GetNode().GetCntntNode();
+
                 if( bDelRedl )
                     delete pRedl;
 
                 SwRedlineMode eOld = rDoc.GetRedlineMode();
                 rDoc.SetRedlineMode_intern( eOld & ~(REDLINE_ON | REDLINE_IGNORE) );
-                rDoc.DeleteAndJoin( aPam );
+
+                if( pCSttNd && pCEndNd )
+                    rDoc.DeleteAndJoin( aPam );
+                else
+                {
+                    rDoc.Delete( aPam );
+
+                    if( pCSttNd && !pCEndNd )
+                    {
+                        aPam.GetBound( TRUE ).nContent.Assign( 0, 0 );
+                        aPam.GetBound( FALSE ).nContent.Assign( 0, 0 );
+                        aPam.DeleteMark();
+                        rDoc.DelFullPara( aPam );
+                    }
+                }
                 rDoc.SetRedlineMode_intern( eOld );
             }
             else if( bDelRedl )
@@ -3031,9 +3064,12 @@ void SwRedline::DelCopyOfSection()
                 }
 
                 SwPosition aEnd( *pEnd );
+                *GetPoint() = *pEnd;
+                *GetMark() = *pEnd;
+                DeleteMark();
 
-                aPam.GetPoint()->nContent.Assign( 0, 0 );
-                aPam.GetMark()->nContent.Assign( 0, 0 );
+                aPam.GetBound( TRUE ).nContent.Assign( 0, 0 );
+                aPam.GetBound( FALSE ).nContent.Assign( 0, 0 );
                 aPam.DeleteMark();
                 pDoc->DelFullPara( aPam );
 
@@ -3115,7 +3151,13 @@ void SwRedline::MoveFromSection()
             USHORT nPos = GetPoint()->nContent.GetIndex();
 
             SwPosition aPos( *GetPoint() );
-            pDoc->Move( aPam, aPos, DOC_MOVEALLFLYS );
+            if( bDelLastPara && *aPam.GetPoint() == *aPam.GetMark() )
+            {
+                aPos.nNode--;
+                pDoc->AppendTxtNode( aPos );
+            }
+            else
+                pDoc->Move( aPam, aPos, DOC_MOVEALLFLYS );
             SetMark();
             *GetPoint() = aPos;
             GetMark()->nNode = aNdIdx.GetIndex() + 1;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-12 11:57:39 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 13:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _LIST_HXX
+#include <tools/list.hxx>
+#endif
 #ifndef _SV_FONTTYPE_HXX //autogen
 #include <vcl/fonttype.hxx>
 #endif
@@ -119,8 +122,11 @@
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
 #endif
-#ifndef _LIST_HXX
-#include <tools/list.hxx>
+#ifndef _SECTION_HXX
+#include <section.hxx>
+#endif
+#ifndef _TOX_HXX
+#include <tox.hxx>
 #endif
 
 
@@ -923,20 +929,6 @@ void Compare::ShiftBoundaries( CompareData& rData1, CompareData& rData2 )
 
 /*  */
 
-inline ULONG NextIdx( const SwNode* pNd )
-{
-    if( pNd->IsStartNode() )
-        pNd = pNd->EndOfSectionNode();
-    return pNd->GetIndex() + 1;
-}
-
-inline ULONG PrevIdx( const SwNode* pNd )
-{
-    if( pNd->IsEndNode() )
-        pNd = pNd->StartOfSectionNode();
-    return pNd->GetIndex() - 1;
-}
-
 class SwCompareLine : public CompareLine
 {
     const SwNode& rNode;
@@ -967,6 +959,9 @@ class SwCompareData : public CompareData
 {
     SwDoc& rDoc;
     SwPaM *pInsRing, *pDelRing;
+
+    ULONG PrevIdx( const SwNode* pNd );
+    ULONG NextIdx( const SwNode* pNd );
 
     virtual void CheckRanges( CompareData& );
     virtual void ShowInsert( ULONG nStt, ULONG nEnd );
@@ -1023,7 +1018,11 @@ ULONG SwCompareLine::GetHashValue() const
         break;
 
     case ND_SECTIONNODE:
-        // sollte nie auftauchen (oder?)
+        {
+            String sStr( GetText() );
+            for( xub_StrLen n = 0; n < sStr.Len(); ++n )
+                ( nRet <<= 1 ) += sStr.GetChar( n );
+        }
         break;
 
     case ND_GRFNODE:
@@ -1044,7 +1043,12 @@ const SwNode& SwCompareLine::GetEndNode() const
         break;
 
     case ND_SECTIONNODE:
-        // sollte nie auftauchen (oder?)
+        {
+            const SwSectionNode& rSNd = (SwSectionNode&)rNode;
+            const SwSection& rSect = rSNd.GetSection();
+            if( CONTENT_SECTION != rSect.GetType() || rSect.IsProtect() )
+                pNd = rNode.EndOfSectionNode();
+        }
         break;
     }
     return *pNd;
@@ -1077,16 +1081,54 @@ BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
 
     case ( ND_SECTIONNODE * 256 ) + ND_SECTIONNODE:
         {
-            const SwSectionNode& rSSrcNd = (SwSectionNode&)rSrcNd;
-            const SwSectionNode& rSDstNd = (SwSectionNode&)rDstNd;
+            const SwSectionNode& rSSrcNd = (SwSectionNode&)rSrcNd,
+                               & rSDstNd = (SwSectionNode&)rDstNd;
+            const SwSection& rSrcSect = rSSrcNd.GetSection(),
+                           & rDstSect = rSDstNd.GetSection();
+            SectionType eSrcSectType = rSrcSect.GetType(),
+                        eDstSectType = rDstSect.GetType();
+            switch( eSrcSectType )
+            {
+            case CONTENT_SECTION:
+                bRet = CONTENT_SECTION == eDstSectType &&
+                        rSrcSect.IsProtect() == rDstSect.IsProtect();
+                if( bRet && rSrcSect.IsProtect() )
+                {
+                    // the only have they both the same size
+                    bRet = ( rSSrcNd.EndOfSectionIndex() - rSSrcNd.GetIndex() ) ==
+                              ( rSDstNd.EndOfSectionIndex() - rSDstNd.GetIndex() );
+                }
+                break;
 
-            bRet = ( rSSrcNd.EndOfSectionIndex() - rSSrcNd.GetIndex() ) ==
-                   ( rSDstNd.EndOfSectionIndex() - rSDstNd.GetIndex() );
+            case TOX_HEADER_SECTION:
+            case TOX_CONTENT_SECTION:
+                if( TOX_HEADER_SECTION == eDstSectType ||
+                    TOX_CONTENT_SECTION == eDstSectType )
+                {
+                    // the same type of TOX?
+                    const SwTOXBase* pSrcTOX = rSrcSect.GetTOXBase();
+                    const SwTOXBase* pDstTOX = rDstSect.GetTOXBase();
+                    bRet =  pSrcTOX && pDstTOX
+                            && pSrcTOX->GetType() == pDstTOX->GetType()
+                            && pSrcTOX->GetTitle() == pDstTOX->GetTitle()
+                            && pSrcTOX->GetTypeName() == pDstTOX->GetTypeName()
+//                          && pSrcTOX->GetTOXName() == pDstTOX->GetTOXName()
+                            ;
+                }
+                break;
+
+            case DDE_LINK_SECTION:
+            case FILE_LINK_SECTION:
+                bRet = eSrcSectType == eDstSectType &&
+                        rSrcSect.GetLinkFileName() ==
+                        rDstSect.GetLinkFileName();
+                break;
+            }
         }
         break;
 
     case ( ND_ENDNODE * 256 ) + ND_ENDNODE:
-        if( rSrcNd.FindStartNode()->IsTableNode() &&
+/*      if( rSrcNd.FindStartNode()->IsTableNode() &&
             rDstNd.FindStartNode()->IsTableNode() )
         {
 
@@ -1095,7 +1137,7 @@ BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
                  rDstNd.FindStartNode()->IsTableNode() )
         {
         }
-        break;
+*/      break;
     }
     return bRet;
 }
@@ -1128,7 +1170,37 @@ String SwCompareLine::GetText() const
         break;
 
     case ND_SECTIONNODE:
-        sRet.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Section - Node:" ));
+        {
+            sRet.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Section - Node:" ));
+
+            const SwSectionNode& rSNd = (SwSectionNode&)rNode;
+            const SwSection& rSect = rSNd.GetSection();
+            switch( rSect.GetType() )
+            {
+            case CONTENT_SECTION:
+                if( rSect.IsProtect() )
+                    sRet.Append( String::CreateFromInt32(
+                            rSNd.EndOfSectionIndex() - rSNd.GetIndex() ));
+                break;
+
+            case TOX_HEADER_SECTION:
+            case TOX_CONTENT_SECTION:
+                {
+                    const SwTOXBase* pTOX = rSect.GetTOXBase();
+                    if( pTOX )
+                        sRet.Append( pTOX->GetTitle() )
+                            .Append( pTOX->GetTypeName() )
+//                          .Append( pTOX->GetTOXName() )
+                            .Append( String::CreateFromInt32( pTOX->GetType() ));
+                }
+                break;
+
+            case DDE_LINK_SECTION:
+            case FILE_LINK_SECTION:
+                sRet += rSect.GetLinkFileName();
+                break;
+            }
+        }
         break;
 
     case ND_GRFNODE:
@@ -1258,6 +1330,35 @@ SwCompareData::~SwCompareData()
     }
 }
 
+ULONG SwCompareData::NextIdx( const SwNode* pNd )
+{
+    if( pNd->IsStartNode() )
+    {
+        const SwSectionNode* pSNd;
+        if( pNd->IsTableNode() ||
+            ( 0 != (pSNd = pNd->GetSectionNode() ) &&
+                ( CONTENT_SECTION != pSNd->GetSection().GetType() ||
+                    pSNd->GetSection().IsProtect() ) ) )
+            pNd = pNd->EndOfSectionNode();
+    }
+    return pNd->GetIndex() + 1;
+}
+
+ULONG SwCompareData::PrevIdx( const SwNode* pNd )
+{
+    if( pNd->IsEndNode() )
+    {
+        const SwSectionNode* pSNd;
+        if( pNd->StartOfSectionNode()->IsTableNode() ||
+            ( 0 != (pSNd = pNd->StartOfSectionNode()->GetSectionNode() ) &&
+                ( CONTENT_SECTION != pSNd->GetSection().GetType() ||
+                    pSNd->GetSection().IsProtect() ) ) )
+            pNd = pNd->StartOfSectionNode();
+    }
+    return pNd->GetIndex() - 1;
+}
+
+
 void SwCompareData::CheckRanges( CompareData& rData )
 {
     const SwNodes& rSrcNds = ((SwCompareData&)rData).rDoc.GetNodes();
@@ -1266,13 +1367,10 @@ void SwCompareData::CheckRanges( CompareData& rData )
     const SwNode& rSrcEndNd = rSrcNds.GetEndOfContent();
     const SwNode& rDstEndNd = rDstNds.GetEndOfContent();
 
-    SwNodeIndex aSrcIdx( *rSrcEndNd.FindStartNode(), 1 );
-    SwNodeIndex aDstIdx( *rDstEndNd.FindStartNode(), 1 );
-
-    ULONG nSrcSttIdx = aSrcIdx.GetIndex();
+    ULONG nSrcSttIdx = NextIdx( rSrcEndNd.FindStartNode() );
     ULONG nSrcEndIdx = rSrcEndNd.GetIndex();
 
-    ULONG nDstSttIdx = aDstIdx.GetIndex();
+    ULONG nDstSttIdx = NextIdx( rDstEndNd.FindStartNode() );
     ULONG nDstEndIdx = rDstEndNd.GetIndex();
 
     while( nSrcSttIdx < nSrcEndIdx && nDstSttIdx < nDstEndIdx )
@@ -1286,8 +1384,8 @@ void SwCompareData::CheckRanges( CompareData& rData )
         nDstSttIdx = NextIdx( pDstNd );
     }
 
-    --nSrcEndIdx;
-    --nDstEndIdx;
+    nSrcEndIdx = PrevIdx( &rSrcEndNd );
+    nDstEndIdx = PrevIdx( &rDstEndNd );
     while( nSrcSttIdx < nSrcEndIdx && nDstSttIdx < nDstEndIdx )
     {
         const SwNode* pSrcNd = rSrcNds[ nSrcEndIdx ];
@@ -1348,7 +1446,12 @@ void SwCompareData::ShowDelete( const CompareData& rData, ULONG nStt,
 
     const SwNode* pLineNd;
     if( pLine )
-        pLineNd = &((SwCompareLine*)pLine)->GetNode();
+    {
+        if( nOffset )
+            pLineNd = &((SwCompareLine*)pLine)->GetEndNode();
+        else
+            pLineNd = &((SwCompareLine*)pLine)->GetNode();
+    }
     else
     {
         pLineNd = &rDoc.GetNodes().GetEndOfContent();
@@ -1359,7 +1462,7 @@ void SwCompareData::ShowDelete( const CompareData& rData, ULONG nStt,
     SwNodeIndex aSavePos( aInsPos, -1 );
 
     ((SwCompareData&)rData).rDoc.CopyWithFlyInFly( aRg, aInsPos );
-
+    rDoc.SetModified();
     aSavePos++;
 
     SwPaM* pTmp = new SwPaM( aSavePos.GetNode(), aInsPos.GetNode(), 0, 0,
@@ -1414,7 +1517,6 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo, const SwDoc& rSrcDoc )
 
     if( pTmp )
     {
-
         SwRedlineData aRedlnData( REDLINE_DELETE, nAuthor, aTimeStamp,
                                     aEmptyStr, 0, 0 );
         do {
@@ -1534,6 +1636,7 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
     {
         SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
         aD1.SetRedlinesToDoc( !bDocWasModified, rSrcDoc );
+        SetModified();
     }
 
 #ifdef JP_DUMP
