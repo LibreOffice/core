@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:30:12 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,8 @@
 #include <glyphcache.hxx>
 #include <rtl/textcvt.h>
 
-#include <freetype/freetype.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 class FreetypeServerFont;
 struct FT_GlyphRec_;
 
