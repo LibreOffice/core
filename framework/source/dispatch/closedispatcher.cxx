@@ -2,9 +2,9 @@
  *
  *  $RCSfile: closedispatcher.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:55:19 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,9 +95,17 @@
 #include <properties.h>
 #endif
 
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -135,6 +143,7 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
+#include <svtools/moduleoptions.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
@@ -162,17 +171,19 @@ namespace framework{
 //  declarations
 //_________________________________________________________________________________________________________________
 
-DEFINE_XINTERFACE_3( CloseDispatcher                                 ,
+DEFINE_XINTERFACE_4( CloseDispatcher                                 ,
                      OWeakObject                                     ,
                      DIRECT_INTERFACE(css::lang::XTypeProvider      ),
                      DIRECT_INTERFACE(css::frame::XNotifyingDispatch),
-                     DIRECT_INTERFACE(css::frame::XDispatch         )
+                     DIRECT_INTERFACE(css::frame::XDispatch         ),
+                     DIRECT_INTERFACE(css::frame::XStatusListener   )
                    )
 
-DEFINE_XTYPEPROVIDER_3( CloseDispatcher               ,
+DEFINE_XTYPEPROVIDER_4( CloseDispatcher               ,
                         css::lang::XTypeProvider      ,
                         css::frame::XNotifyingDispatch,
-                        css::frame::XDispatch
+                        css::frame::XDispatch         ,
+                        css::frame::XStatusListener
                       )
 
 //_______________________________________________
@@ -286,10 +297,20 @@ void SAL_CALL CloseDispatcher::addStatusListener( const css::uno::Reference< css
     if (xController.is())
         xModel = xController->getModel();
 
-    css::uno::Reference< css::beans::XPropertySet > xSet(xTarget, css::uno::UNO_QUERY);
+    // SAFE ->
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< dcss::frame::XModuleManager > xDetector(m_xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY);
+    aReadLock.unlock();
+    // <- SAFE
+
     sal_Bool bIsTargetAlreadyBackingWindow = sal_False;
-    if (xSet.is())
-        xSet->getPropertyValue(FRAME_PROPNAME_ISBACKINGMODE)>>=bIsTargetAlreadyBackingWindow;
+    try
+    {
+        ::rtl::OUString sModule = xDetector->identify(xTarget);
+        bIsTargetAlreadyBackingWindow = sModule.equals(SERVICENAME_STARTMODULE);
+    }
+    catch(const css::uno::Exception&)
+        { bIsTargetAlreadyBackingWindow = sal_False; }
 
     sal_Bool bIsEnabled = (
                             ( aURL.Complete.equalsAscii(URL_CLOSEDOC) && ( xModel.is() || xController.is() ) )
@@ -377,6 +398,35 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification( /*IN*/ const css::util:
     else
     if (bCloseFrame)
         impl_dispatchCloseFrame(lArguments, xListener);
+}
+
+//_______________________________________________
+
+/**
+    @short  special way to get notifications from the special menu closer.
+
+    @descr  Its not part of the specification of this object doing so.
+            But our new layout manager doesnt provide any other mechanis.
+            So this special dispatcher is registered for the menu closer as callback ...
+
+    @param  aState
+            normaly not needed - because the call itself is enough.
+ */
+void SAL_CALL CloseDispatcher::statusChanged( const css::frame::FeatureStateEvent& aState )
+    throw(css::uno::RuntimeException)
+{
+    impl_dispatchCloseWin(css::uno::Sequence< css::beans::PropertyValue >(), css::uno::Reference< css::frame::XDispatchResultListener >());
+}
+
+//_______________________________________________
+
+/**
+    @short  does nothing! But its needed by XStatusListener interface .-(
+ */
+void SAL_CALL CloseDispatcher::disposing( const css::lang::EventObject& aSource )
+    throw(css::uno::RuntimeException)
+{
+    LOG_WARNING("CloseDispatcher::disposing()", "This interface is needed by another hacked mechanism! Dont use it!!!")
 }
 
 //_______________________________________________
@@ -681,33 +731,43 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, pVoid )
     css::uno::Reference< css::uno::XInterface > xHoldAliveForThisCall = m_xSelfHold;
                                                 m_xSelfHold           = css::uno::Reference< css::uno::XInterface >();
 
-    // decide, which operation must be done here
-    sal_Bool bSuccess = sal_False;
-    if (m_eAsyncOperation == E_ESTABLISH_BACKINGMODE)
-        bSuccess = impl_establishBackingMode();
-    else
-    if (m_eAsyncOperation == E_CLOSE_TARGET)
-        bSuccess = impl_closeFrame(m_xTarget, sal_True);
-    else
-    if (m_eAsyncOperation == E_EXIT_APP)
-        bSuccess = impl_exitApp(m_xTarget);
+    try
+    {
+        // decide, which operation must be done here
+        sal_Bool bSuccess = sal_False;
+        if (m_eAsyncOperation == E_ESTABLISH_BACKINGMODE)
+            if (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
+                bSuccess = impl_establishBackingMode();
+            else
+                bSuccess = impl_exitApp(m_xTarget);
+        else
+        if (m_eAsyncOperation == E_CLOSE_TARGET)
+            bSuccess = impl_closeFrame(m_xTarget, sal_True);
+        else
+        if (m_eAsyncOperation == E_EXIT_APP)
+            bSuccess = impl_exitApp(m_xTarget);
 
-    // notify a possible interested dispatch result listener
-    if (bSuccess)
-    {
-        impl_notifyResultListener(
-            m_xResultListener,
-            css::frame::DispatchResultState::SUCCESS,
-            css::uno::Any());
+        // notify a possible interested dispatch result listener
+        if (bSuccess)
+        {
+            impl_notifyResultListener(
+                m_xResultListener,
+                css::frame::DispatchResultState::SUCCESS,
+                css::uno::Any());
+        }
+        else
+        {
+            impl_notifyResultListener(
+                m_xResultListener,
+                css::frame::DispatchResultState::FAILURE,
+                css::uno::Any());
+        }
+        m_xResultListener.clear();
     }
-    else
+    catch(const css::uno::Exception&)
     {
-        impl_notifyResultListener(
-            m_xResultListener,
-            css::frame::DispatchResultState::FAILURE,
-            css::uno::Any());
+        LOG_ASSERT(sal_False, "You found the reason for the stacktrace bug #113002#. Please try to reproduce it.")
     }
-    m_xResultListener = css::uno::Reference< css::frame::XDispatchResultListener >();
 
     aWriteLock.unlock();
     /* } SAFE */
@@ -741,7 +801,7 @@ sal_Bool CloseDispatcher::impl_establishBackingMode()
             lArgs[0] <<= xContainerWindow;
 
             css::uno::Reference< css::frame::XController > xBackingComp(
-                m_xSMGR->createInstanceWithArguments(DECLARE_ASCII("com.sun.star.comp.sfx2.view.BackingComp"), lArgs),
+                m_xSMGR->createInstanceWithArguments(SERVICENAME_STARTMODULE, lArgs),
                 css::uno::UNO_QUERY);
 
             if (xBackingComp.is())
@@ -781,8 +841,6 @@ sal_Bool CloseDispatcher::impl_exitApp( css::uno::Reference< css::frame::XFrame 
     sal_Bool bTerminated = sal_False;
     if (xDesktop.is())
         bTerminated = xDesktop->terminate();
-    if (bTerminated)
-        xTarget = css::uno::Reference< css::frame::XFrame >();
     return bTerminated;
 }
 
@@ -832,24 +890,21 @@ sal_Bool CloseDispatcher::impl_closeFrame( /*INOUT*/ css::uno::Reference< css::f
     try
     {
         if (xCloseable.is())
-        {
-            xCloseable->close(sal_False); // don't deliver the ownership! We will control next closing try!
-            bClosed = sal_True;
-        }
+            xCloseable->close(sal_False); // don't deliver the ownership! The UI user will try it later :-)
         else
         if (xDisposeable.is())
-        {
             xDisposeable->dispose();
-            bClosed = sal_True;
-        }
+        bClosed = sal_True;
     }
-    catch( css::uno::Exception& )
-    {
-        bClosed = sal_False;
-    }
+    catch(const css::lang::DisposedException&)
+        { bClosed = sal_True; } // disposed is already closed!
+    catch(const css::uno::RuntimeException&)
+        { throw; } // dont hide runtime errors
+    catch(const css::util::CloseVetoException&)
+        { bClosed = sal_False; }
 
     if (bClosed)
-        xFrame = css::uno::Reference< css::frame::XFrame >();
+        xFrame.clear();
 
     return bClosed;
 }
