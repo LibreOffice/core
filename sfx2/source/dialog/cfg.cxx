@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-27 07:58:20 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 08:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1050,7 +1050,6 @@ void SfxStatusBarConfigPage::Apply( SfxStatusBarManager* pStbMgr, BOOL bIsDefaul
     {
         pStbMgr->UseDefault();
         pStbMgr->SetDefault(TRUE);
-        pStbMgr->StoreConfig();
         return;
     }
 
@@ -1067,7 +1066,7 @@ void SfxStatusBarConfigPage::Apply( SfxStatusBarManager* pStbMgr, BOOL bIsDefaul
         }
     }
 
-    pStbMgr->StoreConfig();
+    pStbMgr->SetDefault( FALSE );
 }
 
 IMPL_LINK( SfxStatusBarConfigPage, Default, PushButton *, pPushButton )
@@ -1210,7 +1209,6 @@ IMPL_LINK( SfxStatusBarConfigPage, Save, Button *, pButton )
             // create new StatusBarManager and apply changes
             SfxStatusBarManager* pStbMgr = new SfxStatusBarManager( this, *pMgr, pCfgMgr );
             Apply( pStbMgr, FALSE );
-            pStbMgr->SetDefault( FALSE );
             pCfgMgr->StoreConfigItem( *pStbMgr );
             pCfgMgr->StoreConfiguration();
 

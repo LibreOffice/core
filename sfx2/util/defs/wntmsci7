@@ -7487,3 +7487,9 @@ _TI4?AVout_of_range@_STL@@
 ?CallStarBasicScript@SfxObjectShell@@QAEKABVString@@0PAX1@Z
 ?lcl_translateBasic2Uno@?%O:\SRC640\src\sfx2\source\doc\objmisc.cxx30094655@@YAXABVSbxVariableRef@@PAX@Z
 ?lcl_translateBasic2Uno@?%O:\SRC640\src\sfx2\source\doc\objmisc.cxx597012142@@YAXABVSbxVariableRef@@PAX@Z
+?X@@YA?AVString@@ABV1@@Z
+?lcl_translateBasic2Uno@?%F:\SRC640\sfx2\source\doc\objmisc.cxx93876749@@YAXABVSbxVariableRef@@PAX@Z
+?SetShell@SfxInPlaceObject@@IAEXPAVSfxObjectShell@@@Z
+?lcl_translateBasic2Uno@?%F:\SRC640\sfx2\source\doc\objmisc.cxx23695527@@YAXABVSbxVariableRef@@PAX@Z
+?GetAnyFilter@SfxFilterContainer@@QBEPBVSfxFilter@@KK@Z
+?lcl_translateBasic2Uno@?%F:\SRC640\sfx2\source\doc\objmisc.cxx847520077@@YAXABVSbxVariableRef@@PAX@Z

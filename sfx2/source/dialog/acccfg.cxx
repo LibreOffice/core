@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-24 07:59:53 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 08:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,7 +477,6 @@ void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr, BOOL bIsDe
     {
         pAccMgr->UseDefault();
         pAccMgr->SetDefault(TRUE);
-        pAccMgr->StoreConfig();
         return;
     }
 
@@ -532,8 +531,7 @@ void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr, BOOL bIsDe
     for (i=0; i<aListOfIds.Count(); i++)
         SFX_APP()->GetMacroConfig()->ReleaseSlotId(aListOfIds[i]);
 
-    pAccMgr->StoreConfig();
-    pAccMgr->Reconfigure();
+    pAccMgr->SetDefault(FALSE);
 }
 
 IMPL_LINK( SfxAcceleratorConfigPage, Load, Button *, pButton )
@@ -646,7 +644,6 @@ IMPL_LINK( SfxAcceleratorConfigPage, Save, Button *, pButton )
             // create new AcceleratorManager and apply changes
             SfxAcceleratorManager* pAccMgr = new SfxAcceleratorManager( *pMgr, pCfgMgr );
             Apply( pAccMgr, FALSE );
-            pAccMgr->SetDefault( FALSE );
             pCfgMgr->StoreConfigItem( *pAccMgr );
             if ( !bLoadedDocument )
                 pCfgMgr->StoreConfiguration();

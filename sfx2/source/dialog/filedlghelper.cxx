@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 08:16:11 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 08:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <vos/thread.hxx>
-#include <vos/mutex.hxx>
 
 #include <vcl/cvtgrf.hxx>
 
@@ -234,7 +232,6 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
     OUString                maSelectFilter;
     Timer                   maPreViewTimer;
     Graphic                 maGraphic;
-    FileDialogHelper*       mpParent;
 
     ErrCode                 mnError;
     sal_Bool                mbHasPassword   : 1;
@@ -266,7 +263,6 @@ private:
     void                    setDefaultValues();
 
     DECL_LINK( TimeOutHdl_Impl, Timer* );
-    DECL_LINK( HandleEvent, FileDialogHelper* );
 
 public:
     // XFilePickerListener methods
@@ -279,18 +275,9 @@ public:
     // XEventListener methods
     virtual void SAL_CALL       disposing( const EventObject& Source ) throw ( RuntimeException );
 
-    // handle XFilePickerListener events
-    void                    handleFileSelectionChanged( const FilePickerEvent& aEvent );
-    void                    handleDirectoryChanged( const FilePickerEvent& aEvent );
-    OUString                handleHelpRequested( const FilePickerEvent& aEvent );
-    void                    handleControlStateChanged( const FilePickerEvent& aEvent );
-    void                    handleDialogSizeChanged();
-
     // Own methods
-                            FileDialogHelper_Impl( FileDialogHelper* pParent,
-                                                   const short nDialogType,
-                                                   sal_uInt32 nFlags );
-                           ~FileDialogHelper_Impl();
+                                FileDialogHelper_Impl( const short nDialogType, sal_uInt32 nFlags );
+                               ~FileDialogHelper_Impl();
 
     ErrCode                 execute( SvStringsDtor*& rpURLList,
                                      SfxItemSet *&   rpSet,
@@ -316,63 +303,6 @@ public:
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::fileSelectionChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-#if SUPD > 639
-    mpParent->FileSelectionChanged( aEvent );
-#else
-    handleFileSelectionChanged( aEvent );
-#endif
-}
-
-// ------------------------------------------------------------------------
-void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
-{
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-#if SUPD > 639
-    mpParent->DirectoryChanged( aEvent );
-#else
-    handleDirectoryChanged( aEvent );
-#endif
-}
-
-// ------------------------------------------------------------------------
-OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& aEvent ) throw ( RuntimeException )
-{
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-#if SUPD > 639
-    return mpParent->HelpRequested( aEvent );
-#else
-    return handleHelpRequested( aEvent );
-#endif
-}
-
-// ------------------------------------------------------------------------
-void SAL_CALL FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
-{
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-#if SUPD > 639
-    mpParent->ControlStateChanged( aEvent );
-#else
-    handleControlStateChanged( aEvent );
-#endif
-}
-
-// ------------------------------------------------------------------------
-void SAL_CALL FileDialogHelper_Impl::dialogSizeChanged() throw ( RuntimeException )
-{
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-#if SUPD > 639
-    mpParent->DialogSizeChanged();
-#else
-    handleDialogSizeChanged();
-#endif
-}
-
-// ------------------------------------------------------------------------
-// handle XFilePickerListener events
-// ------------------------------------------------------------------------
-void FileDialogHelper_Impl::handleFileSelectionChanged( const FilePickerEvent& aEvent )
-{
     if ( mbHasVersions )
         updateVersions();
 
@@ -381,19 +311,19 @@ void FileDialogHelper_Impl::handleFileSelectionChanged( const FilePickerEvent& a
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::handleDirectoryChanged( const FilePickerEvent& aEvent )
+void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
     if ( mbShowPreview )
         TimeOutHdl_Impl( NULL );
 }
 
 // ------------------------------------------------------------------------
-OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEvent )
+OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
     //!!! todo: cache the help strings (here or TRA)
 
     ULONG nHelpId = 0;
-    // mapping from element id -> help id
+    // mapping frrom element id -> help id
     switch ( aEvent.ElementId )
     {
         case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION :
@@ -452,7 +382,7 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aEvent )
+void SAL_CALL FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
     if ( ( aEvent.ElementId == CommonFilePickerElementIds::LISTBOX_FILTER ) && mbHasPassword )
         enablePasswordBox();
@@ -480,7 +410,7 @@ void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aE
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::handleDialogSizeChanged()
+void SAL_CALL FileDialogHelper_Impl::dialogSizeChanged() throw ( RuntimeException )
 {
     if ( mbShowPreview )
         TimeOutHdl_Impl( NULL );
@@ -491,7 +421,6 @@ void FileDialogHelper_Impl::handleDialogSizeChanged()
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::disposing( const EventObject& Source ) throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     dispose();
 }
 
@@ -710,34 +639,23 @@ ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
 
     ErrCode nRet = ERRCODE_NONE;
 
-#if SUPD>639
     sal_uInt32 nFilterImportFlags = GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG;
-#endif
+
     // non-local?
     if ( INET_PROT_FILE != aURLObj.GetProtocol() )
     {
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( rURL, STREAM_READ );
 
-#if SUPD>639
         if( pStream )
             nRet = mpGraphicFilter->ImportGraphic( rGraphic, rURL, *pStream, nFilter, NULL, nFilterImportFlags );
         else
             nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter, NULL, nFilterImportFlags );
-#else
-        if( pStream )
-            nRet = mpGraphicFilter->ImportGraphic( rGraphic, rURL, *pStream, nFilter );
-        else
-            nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter );
-#endif
+
         delete pStream;
     }
     else
     {
-#if SUPD>639
         nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter, NULL, nFilterImportFlags );
-#else
-        nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter );
-#endif
     }
 
     return nRet;
@@ -773,8 +691,7 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
 // -----------      FileDialogHelper_Impl       ---------------------------
 // ------------------------------------------------------------------------
 
-FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
-                                              const short nDialogType,
+FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
                                               sal_uInt32 nFlags )
 {
     OUString aService( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_SERVICE_NAME ) );
@@ -784,7 +701,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
     // create the file open dialog
     // the flags can be SFXWB_INSERT or SFXWB_MULTISELECTION
 
-    mpParent        = pParent;
     mnError         = ERRCODE_NONE;
     mbHasAutoExt    = sal_False;
     mbHasPassword   = sal_False;
@@ -835,12 +751,10 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
         break;
     case FILESAVE_AUTOEXTENSION_SELECTION:
         aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
-        mbHasAutoExt = sal_True;
         mbIsSaveDlg = sal_True;
         break;
     case FILESAVE_AUTOEXTENSION_TEMPLATE:
         aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE;
-        mbHasAutoExt = sal_True;
         mbIsSaveDlg = sal_True;
         break;
     case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
@@ -851,7 +765,9 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
         // aPreviewTimer
           maPreViewTimer.SetTimeout( 500 );
         maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+
         break;
+
     case FILEOPEN_PLAY:
         aServiceType[0] <<= TemplateDescription::FILEOPEN_PLAY;
         break;
@@ -863,17 +779,13 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
         aServiceType[0] <<= TemplateDescription::FILEOPEN_LINK_PREVIEW;
         mbHasPreview = sal_True;
         mbHasLink = sal_True;
+
         // aPreviewTimer
           maPreViewTimer.SetTimeout( 500 );
         maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+
         break;
-#if SUPD>639
-    case FILESAVE_AUTOEXTENSION:
-        aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION;
-        mbHasAutoExt = sal_True;
-        mbIsSaveDlg = sal_True;
-        break;
-#endif
+
     default:
         aServiceType[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
         DBG_ERRORFILE( "FileDialogHelper::ctor with unknown type" );
@@ -888,6 +800,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
 
     if ( mbHasLink )        // generate graphic filter only on demand
         addGraphicFilter();
+
 
     // the "insert file" dialog needs another title
     if ( mbInsert )
@@ -921,39 +834,6 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
     maPreViewTimer.SetTimeoutHdl( Link() );
 }
 
-#define nMagic (sal_Int16) 0xFFFF
-
-class PickerThread_Impl : public ::vos::OThread
-{
-    Reference < XFilePicker > mxPicker;
-    ::vos::OMutex           maMutex;
-    virtual void SAL_CALL   run();
-    sal_Int16               mnRet;
-public:
-                            PickerThread_Impl( const Reference < XFilePicker >& rPicker )
-                            : mxPicker( rPicker ), mnRet(nMagic) {}
-
-    sal_Int16               GetReturnValue()
-                            { ::vos::OGuard aGuard( maMutex ); return mnRet; }
-
-    void                    SetReturnValue( sal_Int16 aRetValue )
-                            { ::vos::OGuard aGuard( maMutex ); mnRet = aRetValue; }
-};
-
-void SAL_CALL PickerThread_Impl::run()
-{
-    try
-    {
-        sal_Int16 n = mxPicker->execute();
-        SetReturnValue( n );
-    }
-    catch( RuntimeException& )
-    {
-        SetReturnValue( ExecutableDialogResults::CANCEL );
-        DBG_ERRORFILE( "RuntimeException caught" );
-    }
-}
-
 // ------------------------------------------------------------------------
 ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                                         SfxItemSet *&   rpSet,
@@ -969,18 +849,13 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
     setDefaultValues();
     enablePasswordBox();
 
-    PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );
-    pThread->create();
-    while ( pThread->GetReturnValue() == nMagic )
-        Application::Yield();
+    // show the dialog
+    sal_Int16 nRet = mxFileDlg->execute();
 
-    pThread->join();
-    sal_Int16 nRet = pThread->GetReturnValue();
-    delete pThread;
+    saveConfig();
 
     if ( nRet != ExecutableDialogResults::CANCEL )
     {
-        saveConfig();
 
         // create an itemset
         rpSet = new SfxAllItemSet( SFX_APP()->GetPool() );
@@ -1095,25 +970,17 @@ ErrCode FileDialogHelper_Impl::execute()
     setDefaultValues();
     enablePasswordBox();
 
-    PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );
-    pThread->create();
-
-    while ( pThread->GetReturnValue() == nMagic )
-        Application::Yield();
-
-    pThread->join();
-    sal_Int16 nRet = pThread->GetReturnValue();
-    delete pThread;
+    // show the dialog
+    sal_Int16 nRet = mxFileDlg->execute();
 
     maPath = mxFileDlg->getDisplayDirectory();
+
+    saveConfig();
 
     if ( nRet == ExecutableDialogResults::CANCEL )
         return ERRCODE_ABORT;
     else
-    {
-        saveConfig();
         return ERRCODE_NONE;
-    }
 }
 
 // ------------------------------------------------------------------------
@@ -1170,20 +1037,21 @@ OUString FileDialogHelper_Impl::getRealFilter() const
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::setPath( const OUString& rPath )
 {
-    // We check wether the path points to a dirctory or not
-    //
     // We set the display directory only, when it is on a local / remote(?)
     // filesystem
-
-    if ( ! rPath.getLength() )
-        return;
-    /* if (! utl::LocalFileHelper::IsLocalFile( rPath ) )
+    /*
+    String aTmp;
+    utl::LocalFileHelper::ConvertURLToSystemPath( aPath, aTmp );
+    if ( aTmp.Len() )
+        ...
+    */
+    if ( ! rPath.getLength() ||
+         ! utl::LocalFileHelper::IsLocalFile( rPath ) )
     {
         return;
-    }*/
+    }
 
     OUString aName;
-    OUString aPath;
 
     INetURLObject aObj( rPath );
 
@@ -1197,12 +1065,7 @@ void FileDialogHelper_Impl::setPath( const OUString& rPath )
         aObj.removeSegment();
     }
 
-    aPath = aObj.GetMainURL( INetURLObject::NO_DECODE );
-
-    if ( ! utl::UCBContentHelper::IsFolder( aPath ) )
-        return;
-    else
-        maPath = aPath;
+    maPath = aObj.GetMainURL( INetURLObject::NO_DECODE );
 
     // set the path
     if ( mxFileDlg.is() )
@@ -1507,9 +1370,6 @@ void FileDialogHelper_Impl::saveConfig()
         if ( bWriteConfig )
             aDlgOpt.SetUserData( aUserData );
     }
-
-    SfxApplication *pSfxApp = SFX_APP();
-    pSfxApp->SetLastDir_Impl( getPath() );
 }
 
 // ------------------------------------------------------------------------
@@ -1544,14 +1404,7 @@ void FileDialogHelper_Impl::loadConfig()
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
 
                 if ( ! maPath.getLength() )
-                {
-                    SfxApplication *pSfxApp = SFX_APP();
-                    OUString aPath = pSfxApp->GetLastDir_Impl();
-                    if ( !aPath.getLength() )
-                        aPath = aUserData.GetToken( 2, ' ' );
-
-                    setPath( aPath );
-                }
+                    setPath( aUserData.GetToken( 2, ' ' ) );
 
                 if ( ! maCurFilter.getLength() )
                 {
@@ -1578,14 +1431,7 @@ void FileDialogHelper_Impl::loadConfig()
             aUserData = String::CreateFromAscii( STD_CONFIG_STR );
 
         if ( ! maPath.getLength() )
-        {
-            SfxApplication *pSfxApp = SFX_APP();
-            OUString aPath = pSfxApp->GetLastDir_Impl();
-            if ( !aPath.getLength() )
-                aPath = aUserData.GetToken( 1, ' ' );
-
-            setPath( aPath );
-        }
+            setPath( aUserData.GetToken( 1, ' ' ) );
 
         if ( mbHasAutoExt )
         {
@@ -1633,7 +1479,7 @@ void FileDialogHelper_Impl::setDefaultValues()
 FileDialogHelper::FileDialogHelper( sal_uInt32 nFlags,
                                     const SfxObjectFactory& rFact )
 {
-    mpImp = new FileDialogHelper_Impl( this, getDialogType( nFlags ), nFlags );
+    mpImp = new FileDialogHelper_Impl( getDialogType( nFlags ), nFlags );
     mxImp = mpImp;
 
     // create the list of filters
@@ -1645,7 +1491,7 @@ FileDialogHelper::FileDialogHelper( sal_uInt32 nFlags )
 {
     const short nDialogType = getDialogType( nFlags );
 
-    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags );
+    mpImp = new FileDialogHelper_Impl( nDialogType, nFlags );
     mxImp = mpImp;
 }
 
@@ -1654,7 +1500,7 @@ FileDialogHelper::FileDialogHelper( const short nDialogType,
                                     sal_uInt32 nFlags,
                                     const SfxObjectFactory& rFact )
 {
-    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags );
+    mpImp = new FileDialogHelper_Impl( nDialogType, nFlags );
     mxImp = mpImp;
 
     // create the list of filters
@@ -1665,7 +1511,7 @@ FileDialogHelper::FileDialogHelper( const short nDialogType,
 FileDialogHelper::FileDialogHelper( const short nDialogType,
                                     sal_uInt32 nFlags )
 {
-    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags );
+    mpImp = new FileDialogHelper_Impl( nDialogType, nFlags );
     mxImp = mpImp;
 }
 
@@ -1823,40 +1669,6 @@ const short FileDialogHelper::getDialogType( sal_uInt32 nFlags ) const
 
     return nDialogType;
 }
-
-#if SUPD > 639
-// ------------------------------------------------------------------------
-// XFilePickerListener Methods
-// ------------------------------------------------------------------------
-void SAL_CALL FileDialogHelper::FileSelectionChanged( const FilePickerEvent& aEvent )
-{
-    mpImp->handleFileSelectionChanged( aEvent );
-}
-
-// ------------------------------------------------------------------------
-void SAL_CALL FileDialogHelper::DirectoryChanged( const FilePickerEvent& aEvent )
-{
-    mpImp->handleDirectoryChanged( aEvent );
-}
-
-// ------------------------------------------------------------------------
-OUString SAL_CALL FileDialogHelper::HelpRequested( const FilePickerEvent& aEvent )
-{
-    return mpImp->handleHelpRequested( aEvent );
-}
-
-// ------------------------------------------------------------------------
-void SAL_CALL FileDialogHelper::ControlStateChanged( const FilePickerEvent& aEvent )
-{
-    mpImp->handleControlStateChanged( aEvent );
-}
-
-// ------------------------------------------------------------------------
-void SAL_CALL FileDialogHelper::DialogSizeChanged()
-{
-    mpImp->handleDialogSizeChanged();
-}
-#endif
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------

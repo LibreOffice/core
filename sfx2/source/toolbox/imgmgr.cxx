@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 10:09:07 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 08:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,17 +663,21 @@ SfxImageManager::~SfxImageManager()
 
 BOOL SfxImageManager::Import( SvStream& rInStream, SotStorage& rOutStorage )
 {
+/*
     SfxImageManager_Impl aImpl( NULL );
     aImpl.Load( rInStream );
     aImpl.Store( rOutStorage );
+ */
     return TRUE;
 }
 
 BOOL SfxImageManager::Export( SotStorage& rInStorage, SvStream& rOutStream )
 {
+/*
     SfxImageManager_Impl aImpl( NULL );
     aImpl.Load( rInStorage );
     aImpl.Store( rOutStream );
+ */
     return TRUE;
 }
 

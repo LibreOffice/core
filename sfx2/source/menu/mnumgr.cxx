@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-27 07:58:59 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 08:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,9 @@ SfxMenuIter_Impl::SfxMenuIter_Impl
     _nLevel( pPrev ? ( pPrev->_nLevel + 1 ) : 0 )
 {
     _aCommand = pMenu->GetItemCommand( _nId );
+    if ( _aCommand.CompareToAscii("slot:", 5) == 0 )
+        _aCommand.Erase();
+
     _pPopup = pMenu->GetPopupMenu( _nId );
 }
 
@@ -231,6 +234,8 @@ SfxMenuIter_Impl* SfxMenuIter_Impl::NextItem()
     // bleibt in diesem Menu
     _nId = _pMenu->GetItemId(_nPos);
     _aCommand = _pMenu->GetItemCommand( _nId );
+    if ( _aCommand.CompareToAscii("slot:", 5) == 0 )
+        _aCommand.Erase();
     _pPopup = _pMenu->GetPopupMenu(_nId);
 
     // nicht alles wird angezeigt
@@ -384,9 +389,10 @@ BOOL SfxMenuManager::StoreMenu( SvStream& rStream, Menu* pMenu, SfxModule* pMod 
             String aTitle = pIterator->GetItemText();
             if( pIterator->IsBinding( pMod ) )
             {
-                if ( pIterator->GetCommand().Len() && !pMC->IsMacroSlot( nId ) )
+                String aCmd( pIterator->GetCommand() );
+                if ( aCmd.CompareToAscii("macro:", 6) == 0 && !pMC->IsMacroSlot( nId ) )
                 {
-                    SfxMacroInfo aInfo( pIterator->GetCommand() );
+                    SfxMacroInfo aInfo( aCmd );
                     pMC->GetSlotId( &aInfo );
                     nId = aInfo.GetSlotId();
                     aMacroSlots.Insert( nId, aMacroSlots.Count() );

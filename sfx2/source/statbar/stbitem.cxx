@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:35 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 08:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,12 +145,12 @@ void SfxStatusBarControl::StateChanged
     DBG_MEMTEST();
     DBG_ASSERT( pBar != 0, "setting state to dangling StatusBar" );
 
-    if ( eState == SFX_ITEM_AVAILABLE && pState->ISA(SfxStringItem) )
-        pBar->SetItemText( nSID,
-                    PTR_CAST(SfxStringItem,pState)->GetValue() );
+    const SfxStringItem* pStr = PTR_CAST( SfxStringItem, pState );
+    if ( eState == SFX_ITEM_AVAILABLE && pStr )
+        pBar->SetItemText( nSID, pStr->GetValue() );
     else
     {
-        DBG_ASSERT( eState != SFX_ITEM_AVAILABLE|| pState->ISA(SfxVoidItem),
+        DBG_ASSERT( eState != SFX_ITEM_AVAILABLE || pState->ISA(SfxVoidItem),
                     "wrong SfxPoolItem subclass in SfxStatusBarControl" );
         pBar->SetItemText( nSID, String() );
     }
