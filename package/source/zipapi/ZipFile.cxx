@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 12:28:06 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ ZipFile::ZipFile( Reference < XInputStream > &xInput, const Reference < XMultiSe
 , aGrabber(xInput)
 , aInflater (sal_True)
 , xFactory ( xNewFactory )
+, bRecoveryMode( sal_False )
 {
     if (bInitialise)
     {
@@ -152,6 +153,7 @@ ZipFile::ZipFile( Reference < XInputStream > &xInput, const Reference < XMultiSe
 , aInflater (sal_True)
 , xFactory ( xNewFactory )
 , xProgressHandler( xProgress )
+, bRecoveryMode( bForceRecovery )
 {
     if (bInitialise)
     {
@@ -543,7 +545,7 @@ Reference < XInputStream > ZipFile::createUnbufferedStream(
             sal_Bool bIsEncrypted,
             ::rtl::OUString aMediaType )
 {
-    return new XUnbufferedStream ( rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType );
+    return new XUnbufferedStream ( rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode );
 }
 
 
@@ -665,7 +667,7 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
     aGrabber >> nTestSig;
 
     if (nTestSig != LOCSIG)
-        throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid LOC header (bad signature") ), Reference < XInterface > () );
+        throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid LOC header (bad signature") ), Reference < XInterface > () );
     aGrabber >> nVersion;
     aGrabber >> nFlag;
     aGrabber >> nHow;
@@ -686,8 +688,8 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
                     || rEntry.nTime != nTime
                     || rEntry.nNameLen != nNameLen;
 
-    if ( bBroken )
-        throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM( "The stream seems to be broken!" ) ),
+    if ( bBroken && !bRecoveryMode )
+        throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "The stream seems to be broken!" ) ),
                             Reference< XInterface >() );
 
     return sal_True;
