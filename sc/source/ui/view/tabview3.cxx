@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-25 15:22:27 $
+ *  last change: $Author: nn $ $Date: 2002-10-01 17:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2534,8 +2534,10 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
     {
         bInActivatePart = TRUE;
 
-        //  #40565# die HasEditView Abfrage bei SetCursor geht sonst schief
-        if ( aViewData.HasEditView(eOld) && !SC_MOD()->IsFormulaMode() )
+        BOOL bRefMode = SC_MOD()->IsFormulaMode();
+
+        //  #40565# the HasEditView call during SetCursor would fail otherwise
+        if ( aViewData.HasEditView(eOld) && !bRefMode )
             UpdateInputLine();
 
         ScHSplitPos eOldH = WhichH(eOld);
@@ -2595,8 +2597,12 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
         pGridWin[eOld]->ShowCursor();
         pGridWin[eWhich]->ShowCursor();
 
-        aViewData.GetViewShell()->SetWindow( pGridWin[eWhich] );
-        if ( bFocus && !aViewData.IsAnyFillMode() && !SC_MOD()->IsFormulaMode() )
+        //  #103823# don't switch ViewShell's active window during RefInput, because the focus
+        //  might change, and subsequent SetReference calls wouldn't find the right EditView
+        if ( !bRefMode )
+            aViewData.GetViewShell()->SetWindow( pGridWin[eWhich] );
+
+        if ( bFocus && !aViewData.IsAnyFillMode() && !bRefMode )
         {
             //  GrabFocus nur, wenn vorher das andere GridWindow den Focus hatte
             //  (z.B. wegen Suchen & Ersetzen)
