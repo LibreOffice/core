@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkobject.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:53:24 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent )
         g_signal_connect( G_OBJECT(m_pSocket), "button-release-event", G_CALLBACK(signalButton), this );
         g_signal_connect( G_OBJECT(m_pSocket), "focus-in-event", G_CALLBACK(signalFocus), this );
         g_signal_connect( G_OBJECT(m_pSocket), "focus-out-event", G_CALLBACK(signalFocus), this );
+        g_signal_connect( G_OBJECT(m_pSocket), "destroy", G_CALLBACK(signalDestroy), this );
     }
 }
 
@@ -120,7 +121,8 @@ GtkSalObject::~GtkSalObject()
 
 void GtkSalObject::ResetClipRegion()
 {
-    gdk_window_shape_combine_region( m_pSocket->window, NULL, 0, 0 );
+    if( m_pSocket )
+        gdk_window_shape_combine_region( m_pSocket->window, NULL, 0, 0 );
 }
 
 USHORT GtkSalObject::GetClipRegionType()
@@ -148,7 +150,8 @@ void GtkSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight 
 
 void GtkSalObject::EndSetClipRegion()
 {
-    gdk_window_shape_combine_region( m_pSocket->window, m_pRegion, 0, 0 );
+    if( m_pSocket )
+        gdk_window_shape_combine_region( m_pSocket->window, m_pRegion, 0, 0 );
 }
 
 void GtkSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
@@ -217,4 +220,13 @@ gboolean GtkSalObject::signalFocus( GtkWidget* pWidget, GdkEventFocus* pEvent, g
     pThis->CallCallback( pEvent->in ? SALOBJ_EVENT_GETFOCUS : SALOBJ_EVENT_LOSEFOCUS, NULL );
 
     return FALSE;
+}
+
+void GtkSalObject::signalDestroy( GtkObject* pObj, gpointer object )
+{
+    GtkSalObject* pThis = (GtkSalObject*)object;
+    if( GTK_WIDGET(pObj) == pThis->m_pSocket )
+    {
+        pThis->m_pSocket = NULL;
+    }
 }
