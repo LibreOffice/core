@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-21 15:26:23 $
+ *  last change: $Author: mt $ $Date: 2001-03-23 08:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,21 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
                     aDebStr += ByteString::CreateFromInt32( pFmt->GetFirstLineOffset() );
                     aDebStr += ",";
                     aDebStr += ByteString::CreateFromInt32( pFmt->GetAbsLSpace() );
+                    aDebStr += ",";
+                    if ( pFmt->GetNumberingType() == SVX_NUM_BITMAP )
+                    {
+                        aDebStr += "Bitmap";
+                    }
+                    else if( pFmt->GetNumberingType() != SVX_NUM_CHAR_SPECIAL )
+                    {
+                        aDebStr += "Number";
+                    }
+                    else
+                    {
+                        aDebStr += "Char='";
+                        aDebStr += pFmt->GetBulletChar();
+                        aDebStr += "'";
+                    }
                     aDebStr += ") ";
                 }
             }
@@ -422,7 +437,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
         fprintf( fp, "\n==================   Stylesheets   =============================================" );
         fprintf( fp, "\n================================================================================" );
         fprintf( fp, "\n#Vorlagen:   %lu\n", nStyles );
-        SfxStyleSheetIterator aIter( pEE->pImpEditEngine->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
+        SfxStyleSheetIterator aIter( pEE->pImpEditEngine->GetStyleSheetPool(), SFX_STYLE_FAMILY_ALL );
         SfxStyleSheetBase* pStyle = aIter.First();
         while ( pStyle )
         {
