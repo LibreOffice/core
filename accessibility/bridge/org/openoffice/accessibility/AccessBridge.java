@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessBridge.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obr $ $Date: 2002-10-08 06:50:15 $
+ *  last change: $Author: obr $ $Date: 2002-12-06 11:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,7 @@ import java.lang.reflect.InvocationTargetException;
 
 
 public class AccessBridge {
-    // Needed to attach the accessibility event monitor to all windows
-    static XTopWindowListener xTopWindowListener = null;
+
 
     //
     static public class _AccessBridge implements XAccessibleTopWindowMap, XInitialization {
@@ -95,9 +94,66 @@ public class AccessBridge {
         XMultiServiceFactory serviceManager;
         java.util.Hashtable frameMap;
 
+        AccessibleObjectFactory factory;
+
+        protected class JABWEventListener implements java.awt.event.AWTEventListener {
+            Method registerVirtualFrame;
+            Method revokeVirtualFrame;
+
+            // On Windows all native frames must be registered to the access bridge. Therefor
+            // the bridge exports two methods that we try to find here.
+            public JABWEventListener() {
+                try {
+                    Class bridge = Class.forName("com.sun.java.accessibility.AccessBridge");
+                    Class[] parameterTypes = { javax.accessibility.Accessible.class, Integer.class };
+
+                    if (bridge != null) {
+                        registerVirtualFrame = bridge.getMethod("registerVirtualFrame", parameterTypes);
+                        revokeVirtualFrame = bridge.getMethod("revokeVirtualFrame", parameterTypes);
+                    }
+                } catch (NoSuchMethodException e) {
+                    System.err.println("ERROR: incompatible AccessBridge found: " + e.getMessage());
+
+                    // Forward this exception to UNO to indicate that the service will not work correctly.
+                    throw new com.sun.star.uno.RuntimeException("incompatible AccessBridge class: " + e.getMessage());
+                } catch (java.lang.SecurityException e) {
+                    System.err.println("ERROR: no access to AccessBridge: " + e.getMessage());
+
+                    // Forward this exception to UNO to indicate that the service will not work correctly.
+                    throw new com.sun.star.uno.RuntimeException("Security exception caught: " + e.getMessage());
+                } catch(ClassNotFoundException e) {
+                    // Forward this exception to UNO to indicate that the service will not work correctly.
+                    throw new com.sun.star.uno.RuntimeException("ClassNotFound exception caught: " + e.getMessage());
+                }
+            }
+
+            public void eventDispatched(java.awt.AWTEvent e) {
+                switch (e.getID()) {
+                    case java.awt.event.WindowEvent.WINDOW_OPENED:
+                        if (Build.DEBUG) {
+                            System.err.println("retrieved WINDOW_OPENED");
+                        }
+                        break;
+                    case java.awt.event.WindowEvent.WINDOW_CLOSED:
+                        break;
+                    case java.awt.event.WindowEvent.WINDOW_GAINED_FOCUS:
+                        if (Build.DEBUG) {
+                            System.err.println("retrieved WINDOW_GAINED_FOCUS");
+                        }
+                    case java.awt.event.FocusEvent.FOCUS_GAINED:
+                        if (Build.DEBUG) {
+                            System.err.println("retrieved FOCUS_GAINED");
+                        }
+                    default:
+                        break;
+                }
+            }
+        }
+
         public _AccessBridge(XMultiServiceFactory xMultiServiceFactory) {
             serviceManager = xMultiServiceFactory;
             frameMap = new java.util.Hashtable();
+            factory = AccessibleObjectFactory.getDefault();
         }
 
         /*
@@ -135,25 +191,20 @@ public class AccessBridge {
             try {
                 // The office sometimes registers frames more than once, so check here if already done
                 Integer handle = new Integer(AnyConverter.toInt(any));
-                if( ! frameMap.containsKey(handle) ) {
+                if (! frameMap.containsKey(handle)) {
                     if( Build.DEBUG ) {
                         System.out.println("register native frame: " + handle);
                     }
 
-                    // Needed to attach C++ accessibility event monitor. This is extremly important to avoid
-                    // deadlocks with frames that are not created in the VCL main thread, because they use a
-                    // synchronous SendMessage call with acquired SolarMutex !!!
-//                  if( xTopWindowListener != null ) {
-//                      xTopWindow.addTopWindowListener(xTopWindowListener);
-//                  }
-
-                    // Add the window fake object as top window listener to receive activate/deactivate events
-                    frameMap.put(handle, new WindowFake(xAccessible, xTopWindow));
+                    java.awt.Window w = factory.getTopWindow(xAccessible);
+                    if (w != null) {
+                        frameMap.put(handle, w);
+                    }
                 }
-            }
-
-            catch(com.sun.star.lang.IllegalArgumentException exception) {
-                System.err.println("IllegalArgumentException caught: " + exception.getMessage());
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
+                System.err.println("IllegalArgumentException caught: " + e.getMessage());
+            } catch (java.lang.Exception e) {
+                System.err.println("Exception caught: " + e.getMessage());
             }
         }
 
@@ -162,15 +213,17 @@ public class AccessBridge {
                 Integer handle = new Integer(AnyConverter.toInt(any));
 
                 // Remember the accessible object associated to this frame
-                WindowFake w = (WindowFake) frameMap.remove(handle);
+                java.awt.Window w = (java.awt.Window) frameMap.remove(handle);
 
-                if( w != null && Build.DEBUG ) {
-                    System.out.println("revoke native frame: " + handle);
+                if (w != null) {
+                    if (Build.DEBUG) {
+                        System.out.println("revoke native frame: " + handle);
+                    }
+
+                    w.dispose();
                 }
-            }
-
-            catch(com.sun.star.lang.IllegalArgumentException exception) {
-                System.err.println("IllegalArgumentException caught: " + exception.getMessage());
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
+                System.err.println("IllegalArgumentException caught: " + e.getMessage());
             }
         }
     }
@@ -181,6 +234,9 @@ public class AccessBridge {
 
         public _WinAccessBridge(XMultiServiceFactory xMultiServiceFactory) {
             super(xMultiServiceFactory);
+
+            java.awt.Toolkit tk = java.awt.Toolkit.getDefaultToolkit();
+            tk.addAWTEventListener(new JABWEventListener(), java.awt.AWTEvent.WINDOW_EVENT_MASK);
 
             // On Windows all native frames must be registered to the access bridge. Therefor
             // the bridge exports two methods that we try to find here.
@@ -216,9 +272,9 @@ public class AccessBridge {
         }
 
         // Registers the native frame at the Windows access bridge
-        protected void registerAccessibleNativeFrameImpl(Integer handle, WindowFake w) {
+        protected void registerAccessibleNativeFrameImpl(Integer handle, Accessible a) {
             // register this frame to the access bridge
-            Object[] args = { w, handle };
+            Object[] args = { a, handle };
 
             try {
                 registerVirtualFrame.invoke(null, args);
@@ -238,8 +294,8 @@ public class AccessBridge {
         }
 
         // Revokes the native frame from the Windows access bridge
-        protected void revokeAccessibleNativeFrameImpl(Integer handle, WindowFake w) {
-            Object[] args = { w, handle };
+        protected void revokeAccessibleNativeFrameImpl(Integer handle, Accessible a) {
+            Object[] args = { a, handle };
 
             try {
                 revokeVirtualFrame.invoke(null, args);
@@ -267,24 +323,19 @@ public class AccessBridge {
                 // The office sometimes registers frames more than once, so check here if already done
                 Integer handle = new Integer(AnyConverter.toInt(any));
                 if( ! frameMap.containsKey(handle) ) {
-                    // Needed to attach C++ accessibility event monitor. This is extremly important to avoid
-                    // deadlocks with frames that are not created in the VCL main thread, because they use a
-                    // synchronous SendMessage call with acquired SolarMutex !!!
-                    if( xTopWindowListener != null ) {
-                        xTopWindow.addTopWindowListener(xTopWindowListener);
-                        AccessibleObjectFactory.autoPopulate = false;
-                    }
+                    java.awt.Window w = factory.getTopWindow(xAccessible);
 
-                    WindowFake w = new WindowFake(xAccessible, xTopWindow);
                     if( Build.DEBUG ) {
                         System.out.println("register native frame: " + handle);
                     }
 
-                    // Add the window fake object as top window listener to receive activate/deactivate events
-                    frameMap.put(handle, w);
+                    if (w != null) {
+                        // Add the window proxy object to the frame list
+                        frameMap.put(handle, w);
 
-                    // Also register the frame with the access bridge object
-                    registerAccessibleNativeFrameImpl(handle,w);
+                        // Also register the frame with the access bridge object
+                        registerAccessibleNativeFrameImpl(handle,w);
+                    }
                 }
             }
 
@@ -298,15 +349,17 @@ public class AccessBridge {
                 Integer handle = new Integer(AnyConverter.toInt(any));
 
                 // Remember the accessible object associated to this frame
-                WindowFake w = (WindowFake) frameMap.remove(handle);
+                java.awt.Window w = (java.awt.Window) frameMap.remove(handle);
 
-                if( w != null )  {
+                if (w != null)  {
                     // Revoke the frame with the access bridge object
                     revokeAccessibleNativeFrameImpl(handle, w);
 
-                    if( Build.DEBUG ) {
+                    if (Build.DEBUG) {
                         System.out.println("revoke native frame: " + handle);
                     }
+
+                    w.dispose();
                 }
             }
 
@@ -335,7 +388,6 @@ public class AccessBridge {
                         UnoRuntime.queryInterface(XAccessibilityInformationProvider.class, instance);
 
                     if(infoProvider != null) {
-                        AccessibleObjectFactory.getDefault().setInformationProvider(infoProvider);
                         if( Build.DEBUG ) {
                             logPath = infoProvider.getEnvironment("ACCESSBRIDGE_LOGPATH");
                         }
@@ -343,10 +395,6 @@ public class AccessBridge {
                         System.err.println("InfoProvider does not implement XAccessibleInformationProvider.");
                     }
 
-                    xTopWindowListener = (XTopWindowListener) UnoRuntime.queryInterface(XTopWindowListener.class, instance);
-                    if( xTopWindowListener == null ) {
-                        System.err.println("InfoProvider does not implement XTopWindowListener.");
-                    }
                 } else {
                     System.err.println("InfoProvider service not found.");
                     throw new com.sun.star.uno.RuntimeException("RemoteAccessBridge service not found.\n");
