@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-12 13:45:41 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 13:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2109,6 +2109,16 @@ BOOL SdrMarkView::ReadRecord(const SdrIOHeader& rViewHead,
     }
     if (!bRet) bRet=SdrSnapView::ReadRecord(rViewHead,rSubHead,rIn);
     return bRet;
+}
+
+void SdrMarkView::SetMoveOutside(BOOL bOn)
+{
+    aHdl.SetMoveOutside(bOn);
+}
+
+BOOL SdrMarkView::IsMoveOutside() const
+{
+    return aHdl.IsMoveOutside();
 }
 
 void SdrMarkView::SetDesignMode(BOOL bOn)
