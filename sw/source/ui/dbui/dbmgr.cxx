@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:48:37 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2131,6 +2131,7 @@ void    SwNewDBMgr::CloseAll(BOOL bIncludingMerge)
         {
             pParam->nSelectionIndex = 0;
             pParam->bAfterSelection = sal_False;
+            pParam->bEndOfDB = sal_False;
             try
             {
                 if(!bInMerge && pParam->xResultSet.is())
