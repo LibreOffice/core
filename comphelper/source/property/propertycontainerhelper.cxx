@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainerhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:13:13 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,14 +204,14 @@ void OPropertyContainerHelper::implPushBackProperty(const PropertyDescription& _
     // need one more element
     sal_Int32 nOldLen = m_aProperties.size();
     m_aProperties.resize(nOldLen + 1);
-    PropertyDescription* pProps = m_aProperties.begin() + nOldLen - 1;
+    PropertiesIterator aIter = m_aProperties.begin() + nOldLen - 1;
 
     // search the corect position, shifting the elements to the tail if needed
     sal_Int32 nPos = nOldLen;
-    while (nPos && (_rProp.nHandle < pProps->nHandle))
+    while (nPos && (_rProp.nHandle < aIter->nHandle))
     {
-        *(pProps+1) = *pProps;
-        --pProps;
+        *(aIter+1) = *aIter;
+        --aIter;
         --nPos;
     }
 
@@ -300,7 +300,8 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
             {
                 OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < (sal_Int32)m_aHoldProperties.size(),
                     "OPropertyContainerHelper::convertFastPropertyValue: invalid position !");
-                pPropContainer = m_aHoldProperties.begin() + aPos->aLocation.nOwnClassVectorIndex;
+                PropertyContainerIterator aIter = m_aHoldProperties.begin() + aPos->aLocation.nOwnClassVectorIndex;
+                pPropContainer = &(*aIter);
             }
             else
                 pPropContainer = reinterpret_cast<Any*>(aPos->aLocation.pDerivedClassMember);
