@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APIDescGetter.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-10-06 12:38:32 $
+ *  last change:$Date: 2003-11-18 16:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,10 +125,12 @@ public class APIDescGetter extends DescGetter{
         }
         DescEntry entry = null;
         if (descPath != null) {
-            System.out.println("## reading from File "+descPath);
+            if (debug)
+                System.out.println("## reading from File "+descPath);
             entry = getFromDirectory(descPath, job, debug);
         } else {
-            System.out.println("## reading from jar");
+            if (debug)
+                System.out.println("## reading from jar");
             entry = getFromClassPath(job, debug);
         }
         boolean foundInterface = false;
@@ -334,7 +336,8 @@ public class APIDescGetter extends DescGetter{
                 boolean found = false;
                 while(buf.ready() && !found) {
                     String entry = buf.readLine();
-                    System.out.println("Read: "+ entry);
+                    if (debug)
+                        System.out.println("Read: "+ entry);
                     if (entry.endsWith(shortName.trim()+".csv")) {
                         InputStream input =
                             this.getClass().getResourceAsStream("/objdsc/"+module+"/" + entry);
@@ -342,8 +345,8 @@ public class APIDescGetter extends DescGetter{
                             new BufferedReader(new InputStreamReader(input));
                         found = true;
                     }
-
                 }
+                buf.close();
             }
         }
         catch(java.io.IOException e) {
