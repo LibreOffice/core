@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:33:58 $
+ *  last change: $Author: jb $ $Date: 2001-05-22 09:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::configmgr::ServiceInfo;
 using ::configmgr::AsciiServiceName;
 
+#if SUPD<633
 typedef Reference< XSingleServiceFactory > (SAL_CALL * createFactoryFunc)
         (
             const Reference< XMultiServiceFactory > & rServiceManager,
@@ -91,6 +92,16 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL * createFactoryFunc)
             ::cppu::ComponentInstantiation pCreateFunction,
             const Sequence< OUString > & rServiceNames
         );
+#else
+typedef Reference< XSingleServiceFactory > (SAL_CALL * createFactoryFunc)
+        (
+            const Reference< XMultiServiceFactory > & rServiceManager,
+            const OUString & rComponentName,
+            ::cppu::ComponentInstantiation pCreateFunction,
+            const Sequence< OUString > & rServiceNames,
+            rtl_ModuleCount*
+        );
+#endif
 
 typedef Reference< XSingleServiceFactory > (SAL_CALL * createProviderFactoryFunc)
         (
@@ -168,7 +179,11 @@ struct ServiceImplementationRequest
         {
             const Sequence< OUString > Services=  configmgr::ServiceComponentImpl::getServiceNames(pInfo);
 
+#if SUPD<633
             xRet = creator( m_xServiceManager, OUString::createFromAscii(pInfo->implementationName),Factory, Services);
+#else
+            xRet = creator( m_xServiceManager, OUString::createFromAscii(pInfo->implementationName),Factory, Services,0);
+#endif
             OSL_ENSURE(xRet.is(), "CreateProvider : WHERE IS THE return value !");
         }
         catch(Exception&)
