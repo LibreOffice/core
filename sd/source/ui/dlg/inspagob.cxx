@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:16:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,8 @@ void SdInsertPagesObjsDlg::Reset()
     if( pMedium )
     {
         aLbTree.SetSelectionMode( MULTIPLE_SELECTION );
+
+        // transfer ownership of Medium
         aLbTree.Fill( pDoc, pMedium, rName );
     }
     else
