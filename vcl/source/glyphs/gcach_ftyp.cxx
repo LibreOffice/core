@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.77 $
- *  last change: $Author: hdu $ $Date: 2002-09-16 13:59:11 $
+ *  $Revision: 1.78 $
+ *  last change: $Author: hdu $ $Date: 2002-10-11 13:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,15 +77,20 @@
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 
-// VERSION_MINOR in freetype.h is too coarse, we need to fine-tune ourselves:
-#define FTVERSION 205
-
 #include "freetype/freetype.h"
 #include "freetype/ftglyph.h"
 #include "freetype/ftoutln.h"
 #include "freetype/tttables.h"
 #include "freetype/tttags.h"
 #include "freetype/ttnameid.h"
+
+#ifndef FREETYPE_PATCH
+    // VERSION_MINOR in freetype.h is too coarse
+    // if patch-level is not available we need to fine-tune the version ourselves
+    #define FTVERSION 205
+#else
+    #define FTVERSION (100*FREETYPE_MAJOR + 10*FREETYPE_MAJOR + FREETYPE_PATCH)
+#endif
 
 #include <vector>
 
@@ -643,7 +648,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 int GetVerticalFlags( sal_Unicode nChar )
 {
     if( (nChar >= 0x1100 && nChar <= 0x11f9)    // Hangul Jamo
-     || (nChar == 0x2030)                       // per mille sign
+     || (nChar == 0x2030 || nChar == 0x2031)    // per mille sign
      || (nChar >= 0x3000 && nChar <= 0xfaff)    // unified CJK
      || (nChar >= 0xfe20 && nChar <= 0xfe6f)    // CJK compatibility
      || (nChar >= 0xff00 && nChar <= 0xfffd) )  // other CJK
@@ -840,7 +845,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
         nLoadFlags |= FT_LOAD_NO_HINTING;
 
     FT_Error rc = -1;
-#if (FTVERSION <= 205)
+#if (FTVERSION <= 208)
     // #88364# freetype<=205 prefers autohinting to embedded bitmaps
     // => first we have to try without hinting
     if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
@@ -850,8 +855,9 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
             rc = -1; // mark as "loading embedded bitmap" was unsuccessful
         nLoadFlags |= FT_LOAD_NO_BITMAP;
     }
-#endif
+
     if( rc != FT_Err_Ok )
+#endif
         rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
 
     if( rc != FT_Err_Ok )
@@ -924,7 +930,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 #endif
 
     FT_Error rc = -1;
-#if (FTVERSION <= 205)
+#if (FTVERSION <= 208)
     // #88364# freetype<=205 prefers autohinting to embedded bitmaps
     // => first we have to try without hinting
     if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
@@ -934,9 +940,9 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
             rc = -1; // mark as "loading embedded bitmap" was unsuccessful
         nLoadFlags |= FT_LOAD_NO_BITMAP;
     }
-#endif
 
     if( rc != FT_Err_Ok )
+#endif
         rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
     if( rc != FT_Err_Ok )
         return false;
@@ -1017,7 +1023,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
-#if (FTVERSION <= 205)
+#if (FTVERSION <= 208)
     // #88364# freetype<=205 prefers autohinting to embedded bitmaps
     // => first we have to try without hinting
     if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
@@ -1027,9 +1033,9 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
             rc = -1; // mark as "loading embedded bitmap" was unsuccessful
         nLoadFlags |= FT_LOAD_NO_BITMAP;
     }
-#endif
 
     if( rc != FT_Err_Ok )
+#endif
         rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
 
     if( rc != FT_Err_Ok )
@@ -1123,6 +1129,34 @@ ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
 {
     int nRangeCount = 0;
 
+#if 0 && (FTVERSION >= 212)
+    // TODO: enable new version when it is fast enough for big fonts
+    // TODO: implement Get_Next_Missing_Char() and use this
+    FT_UInt nGlyphIndex = 0;
+    sal_uInt32 aChar = FT_Get_First_Char( maFaceFT, &nGlyphIndex );
+    if( nGlyphIndex )
+        nRangeCount = 1;
+    if( pCodes )
+        *(pCodes++) = aChar;            // start of first range
+    for(;;)
+    {
+        sal_uInt32 bChar = FT_Get_Next_Char( maFaceFT, aChar, &nGlyphIndex );
+        if( !nGlyphIndex )
+            break;
+        if( bChar != aChar+1 )
+        {
+            ++nRangeCount;
+            if( pCodes )
+            {
+                *(pCodes++) = aChar+1;  // end of old range
+                *(pCodes++) = bChar;    // start of new range
+            }
+        }
+        aChar = bChar;
+    }
+    if( pCodes && nRangeCount )
+        *(pCodes++) = aChar+1;          // end of last range
+#else
     const unsigned char* pCmap = NULL;
     ULONG nLength = 0;
     if( FT_IS_SFNT( maFaceFT ) )
@@ -1190,6 +1224,7 @@ ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
                 *(pCodes++) = cCode;
         }
     }
+#endif
 
     return nRangeCount;
 }
