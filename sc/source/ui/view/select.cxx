@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-30 18:42:35 $
+ *  last change: $Author: nn $ $Date: 2002-09-27 11:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,9 @@ BOOL ScViewFunctionSet::SetCursorAtCell( short nPosX, short nPosY, BOOL bScroll 
             long nSizeX = 0;
             if ( bNegX )
             {
-                ++nPosX;
+                //  #94321# in SetCursorAtPoint hidden columns are skipped.
+                //  They must be skipped here too, or the result will always be the first hidden column.
+                do ++nPosX; while ( nPosX<nStartX && ( pDoc->GetColFlags( nPosX, nTab ) & CR_HIDDEN ) );
                 for (i=nPosX; i<nStartX; i++)
                     nSizeX += pDoc->GetColWidth( i, nTab );
             }
@@ -479,7 +481,9 @@ BOOL ScViewFunctionSet::SetCursorAtCell( short nPosX, short nPosY, BOOL bScroll 
             long nSizeY = 0;
             if ( bNegY )
             {
-                ++nPosY;
+                //  #94321# in SetCursorAtPoint hidden rows are skipped.
+                //  They must be skipped here too, or the result will always be the first hidden row.
+                do ++nPosY; while ( nPosY<nStartY && ( pDoc->GetRowFlags( nPosY, nTab ) & CR_HIDDEN ) );
                 for (i=nPosY; i<nStartY; i++)
                     nSizeY += pDoc->GetRowHeight( i, nTab );
             }
