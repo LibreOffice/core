@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscibas.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-25 11:34:42 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,8 @@
 #include <tools/intn.hxx>
 #include <tools/rc.h>
 #include <tools/color.hxx>
-#include <tools/vclrsc.hxx>
+
+#include <vclrsc.hxx>
 
 #ifndef _RSCCONST_HXX
 #include <rscconst.hxx>
