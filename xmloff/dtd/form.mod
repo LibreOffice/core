@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.13 2002-11-01 12:30:41 fs Exp $
+	$Id: form.mod,v 1.14 2003-10-21 08:37:17 obo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -91,6 +91,9 @@
 <!ENTITY % bound-column "form:bound-column CDATA #IMPLIED">
 <!ENTITY % convert-empty "form:convert-empty-to-null  %boolean; 'false'">
 <!ENTITY % data-field "form:data-field CDATA #IMPLIED">
+<!ENTITY % linked-cell "form:linked-cell CDATA #IMPLIED">
+<!ENTITY % list-linkage-type "form:list-linkage-type (selection|selection-indexes) #IMPLIED">
+<!ENTITY % source-cell-range "form:source-cell-range CDATA #IMPLIED">
 <!ENTITY % list-source "form:list-source CDATA #IMPLIED">
 <!ENTITY % list-source-types "(table|query|sql|sql-pass-through|value-list|table-fields)">
 <!ENTITY % list-source-type "form:list-source-type %list-source-types; #IMPLIED">
@@ -139,7 +142,8 @@
                     %title;
                     %value;
                     %convert-empty;
-                    %data-field;>
+                    %data-field;
+                    %linked-cell;>
 
 <!ELEMENT form:textarea (form:properties?, office:events?)>
 <!ATTLIST form:textarea %current-value;
@@ -152,7 +156,8 @@
                         %title;
                         %value;
                         %convert-empty;
-                        %data-field;>
+                        %data-field;
+                        %linked-cell;>
 
 <!ELEMENT form:password (form:properties?, office:events?)>
 <!ATTLIST form:password %disabled;
@@ -162,7 +167,8 @@
                         %tab-stop;
                         %title;
                         %value;
-						%convert-empty;>
+						%convert-empty;
+                        %linked-cell;>
 
 <!ATTLIST form:password form:echo-char CDATA "*">
 
@@ -188,7 +194,9 @@
                               %title;
                               %value;
                               %convert-empty;
-                              %data-field;>
+                              %data-field;
+                              %linked-cell;>
+
 <!ATTLIST form:formatted-text form:max-value CDATA #IMPLIED>
 <!ATTLIST form:formatted-text form:min-value CDATA #IMPLIED>
 <!ATTLIST form:formatted-text form:validation %boolean; "false">
@@ -216,7 +224,10 @@
                         %convert-empty;
                         %data-field;
                         %list-source;
-                        %list-source-type;>
+                        %list-source-type;
+                        %linked-cell;
+                        %source-cell-range;>
+
 <!ATTLIST form:combobox form:auto-complete %boolean; #IMPLIED>
 
 <!ELEMENT form:item (#PCDATA)>
@@ -233,7 +244,11 @@
                        %bound-column;
                        %data-field;
                        %list-source;
-                       %list-source-type;>
+                       %list-source-type;
+                       %linked-cell;
+                       %list-linkage-type;
+                       %source-cell-range;>
+
 <!ATTLIST form:listbox form:multiple %boolean; "false">
 
 <!ELEMENT form:option (#PCDATA)>
@@ -276,7 +291,9 @@
                         %tab-stop;
                         %title;
                         %value;
-                        %data-field;>
+                        %data-field;
+                        %linked-cell;>
+
 <!ENTITY % states "(unchecked|checked|unknown)">
 <!ATTLIST form:checkbox form:current-state %states; #IMPLIED>
 <!ATTLIST form:checkbox form:is-tristate %boolean; "false">
@@ -292,7 +309,8 @@
                      %tab-stop;
                      %title;
                      %value;
-                     %data-field;>
+                     %data-field;
+                     %linked-cell;>
 
 <!ELEMENT form:frame (form:properties?, office:events?)>
 <!ATTLIST form:frame %disabled;
