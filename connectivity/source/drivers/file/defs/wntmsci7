@@ -2479,3 +2479,4 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?bind@?$ORef@VOKeySet@connectivity@@@vos@@QAAXPAVOKeySet@connectivity@@@Z
 ?release@?$ORefVector@J@connectivity@@QAEXXZ
 ?GetOrderbyKeyValue@OResultSet@file@connectivity@@IAEPAVOKeyValue@3@V?$ORef@VOValueVector@connectivity@@@vos@@@Z
+?_Construct@_STL@@YAXPAFABF@Z
