@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoreddrawobject.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: od $ $Date: 2004-08-03 05:50:32 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _ANCHOREDOBJECT_HXX
 #include <anchoredobject.hxx>
 #endif
+#ifndef _GEN_HXX
+#include <tools/gen.hxx>
+#endif
 
 /** class for the positioning of drawing objects
 
@@ -83,35 +86,42 @@ class SwAnchoredDrawObject : public SwAnchoredObject
 
         // boolean, indicating that anchored drawing object hasn't been attached
         // to a anchor frame yet. Once, it is attached to a anchor frame the
-        // boolean change its state.
+        // boolean changes its state.
         bool mbNotYetAttachedToAnchorFrame;
 
-        /** method to determine positioning attributes as long as the anchored
-            drawing object isn't attached to a anchor frame
+        // --> OD 2004-08-09 #i28749# - boolean, indicating that anchored
+        // drawing object hasn't been positioned yet. Once, it's positioned the
+        // boolean changes its state.
+        bool mbNotYetPositioned;
 
-            The positioning attributes are determined by the current object
-            geometry.
+        /** method to convert positioning attributes from horizontal
+            left-to-right layout to the layout direction of its anchor frame
+
+            OD 2004-08-09 #i28749#
+            The positioning attributes are converted by the current object geometry.
+            Conversion has to be done for drawing objects (not anchored
+            as-character) imported from OpenOffice.org file format only once
+            and directly before the first positioning.
 
             @author OD
         */
-        void _SetPositioningAttr();
+        void _ConvertPositioningAttr();
 
         /** method to set internal anchor position of <SdrObject> instance
-            of the drawing according to its positioning alignments.
+            of the drawing object
 
             For drawing objects the internal anchor position of the <SdrObject>
-            instance has to be set. The <SdrObject> instance represents
-            the drawing object in the drawing layer and is responsible for
-            storing the position coordinates in the file format.
-            The setting has to be performed according to its positioning
-            alignments, in order to get the correct positioning coordinates
-            saved in the file format.
+            instance has to be set.
             Note: This adjustment is not be done for as-character anchored
             drawing object - the positioning code takes care of this.
+            OD 2004-07-29 #i31698# - API for drawing objects in Writer has
+            been adjusted. Thus, this method will only set the internal anchor
+            position of the <SdrObject> instance to the anchor position given
+            by its anchor frame.
 
             @author OD
         */
-        void _SetDrawObjAnchor( const Point _aOffsetToFrmAnchorPos );
+        void _SetDrawObjAnchor();
 
         /** method to invalidate the given page frame
 
@@ -122,12 +132,6 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         void _InvalidatePage( SwPageFrm* _pPageFrm );
 
     protected:
-
-        /** method to indicate, that anchored drawing object is attached to
-            a anchor frame
-
-            @author OD
-        */
         virtual void ObjectAttachedToAnchorFrame();
 
         /** method to assure that anchored object is registered at the correct
@@ -173,17 +177,15 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         */
         void AdjustPositioningAttr( const SwFrm* _pNewAnchorFrm );
 
-        /** method to set positioning attributes as long as the anchored drawing
-            object isn't attached to a anchor frame
+        /** anchored drawing object not yet attached to a anchor frame
+
+            OD 2004-08-04 #i31698#
 
             @author OD
         */
-        inline void SetPositioningAttr()
+        inline bool NotYetAttachedToAnchorFrm() const
         {
-            if ( mbNotYetAttachedToAnchorFrame )
-            {
-                _SetPositioningAttr();
-            }
+            return mbNotYetAttachedToAnchorFrame;
         }
 
         /** method to notify background of drawing object
