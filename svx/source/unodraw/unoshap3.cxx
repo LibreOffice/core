@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-07 15:24:20 $
+ *  last change: $Author: aw $ $Date: 2000-12-12 14:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,7 +885,41 @@ uno::Any SAL_CALL Svx3DLatheObject::getPropertyValue( const OUString& aPropertyN
     if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformation in eine homogene Matrix packen
-        OBJECT_TO_HOMOGEN_MATRIX
+        drawing::HomogenMatrix aHomMat;
+        Matrix4D aMat = ((E3dObject*)pObj)->GetTransform();
+
+        // test for transformed PolyPolygon3D
+        const PolyPolygon3D& rPolyPoly = ((E3dExtrudeObj*)pObj)->GetExtrudePolygon();
+        if(rPolyPoly.Count() && rPolyPoly[0].GetPointCount())
+        {
+            const Vector3D& rFirstPoint = rPolyPoly[0][0];
+            if(rFirstPoint.Z() != 0.0)
+            {
+                // change transformation so that source poly lies in Z == 0,
+                // so it can be exported as 2D polygon
+                aMat.TranslateZ(rFirstPoint.Z());
+            }
+        }
+
+        // pack evtl. transformed matrix to output
+        aHomMat.Line1.Column1 = aMat[0][0];
+        aHomMat.Line1.Column2 = aMat[0][1];
+        aHomMat.Line1.Column3 = aMat[0][2];
+        aHomMat.Line1.Column4 = aMat[0][3];
+        aHomMat.Line2.Column1 = aMat[1][0];
+        aHomMat.Line2.Column2 = aMat[1][1];
+        aHomMat.Line2.Column3 = aMat[1][2];
+        aHomMat.Line2.Column4 = aMat[1][3];
+        aHomMat.Line3.Column1 = aMat[2][0];
+        aHomMat.Line3.Column2 = aMat[2][1];
+        aHomMat.Line3.Column3 = aMat[2][2];
+        aHomMat.Line3.Column4 = aMat[2][3];
+        aHomMat.Line4.Column1 = aMat[3][0];
+        aHomMat.Line4.Column2 = aMat[3][1];
+        aHomMat.Line4.Column3 = aMat[3][2];
+        aHomMat.Line4.Column4 = aMat[3][3];
+
+        return uno::Any( &aHomMat, ::getCppuType((const drawing::HomogenMatrix*)0) );
     }
     else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
@@ -957,7 +991,41 @@ uno::Any SAL_CALL Svx3DExtrudeObject::getPropertyValue( const OUString& aPropert
     if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformation in eine homogene Matrix packen
-        OBJECT_TO_HOMOGEN_MATRIX
+        drawing::HomogenMatrix aHomMat;
+        Matrix4D aMat = ((E3dObject*)pObj)->GetTransform();
+
+        // test for transformed PolyPolygon3D
+        const PolyPolygon3D& rPolyPoly = ((E3dExtrudeObj*)pObj)->GetExtrudePolygon();
+        if(rPolyPoly.Count() && rPolyPoly[0].GetPointCount())
+        {
+            const Vector3D& rFirstPoint = rPolyPoly[0][0];
+            if(rFirstPoint.Z() != 0.0)
+            {
+                // change transformation so that source poly lies in Z == 0,
+                // so it can be exported as 2D polygon
+                aMat.TranslateZ(rFirstPoint.Z());
+            }
+        }
+
+        // pack evtl. transformed matrix to output
+        aHomMat.Line1.Column1 = aMat[0][0];
+        aHomMat.Line1.Column2 = aMat[0][1];
+        aHomMat.Line1.Column3 = aMat[0][2];
+        aHomMat.Line1.Column4 = aMat[0][3];
+        aHomMat.Line2.Column1 = aMat[1][0];
+        aHomMat.Line2.Column2 = aMat[1][1];
+        aHomMat.Line2.Column3 = aMat[1][2];
+        aHomMat.Line2.Column4 = aMat[1][3];
+        aHomMat.Line3.Column1 = aMat[2][0];
+        aHomMat.Line3.Column2 = aMat[2][1];
+        aHomMat.Line3.Column3 = aMat[2][2];
+        aHomMat.Line3.Column4 = aMat[2][3];
+        aHomMat.Line4.Column1 = aMat[3][0];
+        aHomMat.Line4.Column2 = aMat[3][1];
+        aHomMat.Line4.Column3 = aMat[3][2];
+        aHomMat.Line4.Column4 = aMat[3][3];
+
+        return uno::Any( &aHomMat, ::getCppuType((const drawing::HomogenMatrix*)0) );
     }
     else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
