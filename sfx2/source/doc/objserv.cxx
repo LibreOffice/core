@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-12 08:21:13 $
+ *  last change: $Author: vg $ $Date: 2002-04-12 13:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,20 +76,20 @@
 #include <com/sun/star/awt/XDialog.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HDL_
-#include <com/sun/star/lang/XMultiServiceFactory.hdl>
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HDL_
-#include <com/sun/star/beans/XPropertyAccess.hdl>
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
+#include <com/sun/star/beans/XPropertyAccess.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HDL_
-#include <com/sun/star/beans/PropertyValue.hdl>
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HDL_
-#include <com/sun/star/container/XNameAccess.hdl>
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
