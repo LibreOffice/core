@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-11 17:35:10 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:41:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -193,34 +193,31 @@ LIB1FILES+= \
 .IF "$(GUI)" == "UNX"
 .IF "$(USE_XPRINT)" != "TRUE"
     SHL1STDLIBS=-lpsp$(VERSION)$(DLLPOSTFIX)
-.ENDIF
-.ENDIF
-
-.IF "$(USE_BUILTIN_RASTERIZER)"!=""
-    LIB1FILES +=    $(SLB)$/glyphs.lib
-    SHL1STDLIBS+=   $(FREETYPELIB)
-.ENDIF
-
-.IF "$(ENABLE_CTL)"!=""
-    SHL1STDLIBS+= $(ICUI18NLIB)
-.ENDIF
+.ENDIF # ! USE_XPRINT
+.ENDIF # UNX
 
 SHL1TARGET= vcl$(VERSION)$(DLLPOSTFIX)
 SHL1IMPLIB= ivcl
 SHL1STDLIBS+=\
-            $(TOOLSLIB)         \
             $(SOTLIB)           \
-            $(VOSLIB)           \
-            $(SALLIB)           \
-            $(CPPUHELPERLIB)    \
-            $(UCBHELPERLIB)     \
-            $(CPPULIB)          \
             $(UNOTOOLSLIB)      \
-            $(COMPHELPERLIB)
+            $(TOOLSLIB)         \
+            $(COMPHELPERLIB)	\
+            $(UCBHELPERLIB)     \
+            $(CPPUHELPERLIB)    \
+            $(CPPULIB)          \
+            $(VOSLIB)           \
+            $(SALLIB)
 
-.IF "$(remote)" != ""
-SHL1STDLIBS+=   $(UNOLIB)
-.ENDIF
+.IF "$(ENABLE_CTL)"!=""
+    SHL1STDLIBS+= $(ICUUCLIB) $(ICULELIB)
+.ENDIF # ENABLE_CTL
+
+.IF "$(USE_BUILTIN_RASTERIZER)"!=""
+    LIB1FILES +=    $(SLB)$/glyphs.lib
+    SHL1STDLIBS+=   $(FREETYPELIBST)
+.ENDIF # USE_BUILTIN_RASTERIZER
+
 
 .IF "$(GUI)"!="MAC"
 SHL1DEPN=   $(L)$/itools.lib $(L)$/sot.lib
@@ -305,6 +302,10 @@ SHL1STDLIBS += -lXext -lSM -lICE -lX11
 
 .IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
 SHL1STDLIBS += -laudio
+.IF "$(OS)"=="SOLARIS"
+# needed by libaudio.a
+SHL1STDLIBS += -ldl -lnsl -lsocket
+.ENDIF # SOLARIS
 .ENDIF          # "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
 
 .ENDIF          # "$(GUI)"=="UNX"
