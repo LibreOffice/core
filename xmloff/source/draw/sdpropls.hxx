@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-25 16:27:15 $
+ *  last change: $Author: cl $ $Date: 2001-04-30 09:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,14 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define CTF_FONTWORK_FORM               1031
 #define CTF_FONTWORK_HIDEFORM           1032
 #define CTF_FONTWORK_SHADOWTRANSPARENCE 1033
+
+//////////////////////////////////////////////////////////////////////////////
+// OLE
+#define CTF_SD_OLE_VIS_AREA_LEFT        1040
+#define CTF_SD_OLE_VIS_AREA_TOP         1041
+#define CTF_SD_OLE_VIS_AREA_WIDTH       1042
+#define CTF_SD_OLE_VIS_AREA_HEIGHT      1043
+#define CTF_SD_OLE_ISINTERNAL           1044
 
 //////////////////////////////////////////////////////////////////////////////
 // #FontWork# types

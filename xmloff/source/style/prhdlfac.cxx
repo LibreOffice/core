@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-28 09:02:20 $
+ *  last change: $Author: cl $ $Date: 2001-04-30 09:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@
 #ifndef _XMLOFF_PROPERTYHANDLER_DURATIONS_HXX
 #include "durationhdl.hxx"
 #endif
+#ifndef _XMLOFF_XMLRECTANGLEMEMBERSHANDLER_HXX
+#include "XMLRectangleMembersHandler.hxx"
+#endif
 
 using namespace ::com::sun::star;
 
@@ -291,6 +294,13 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 
                 break;
             case XML_TYPE_BUILDIN_CMP_ONLY :
                 pPropHdl = new XMLCompareOnlyPropHdl;
+                break;
+
+            case XML_TYPE_RECTANGLE_LEFT :
+            case XML_TYPE_RECTANGLE_TOP :
+            case XML_TYPE_RECTANGLE_WIDTH :
+            case XML_TYPE_RECTANGLE_HEIGHT :
+                pPropHdl = new XMLRectangleMembersHdl( nType );
                 break;
 
             case XML_TYPE_TEXT_CROSSEDOUT:

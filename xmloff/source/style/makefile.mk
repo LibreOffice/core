@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:21:33 $
+#   last change: $Author: cl $ $Date: 2001-04-30 09:01:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
+        XMLRectangleMembersHandler.cxx \
         adjushdl.cxx	\
         backhdl.cxx		\
         bordrhdl.cxx	\
@@ -164,6 +165,7 @@ CXXFILES = \
 
 
 SLOFILES =	\
+        $(SLO)$/XMLRectangleMembersHandler.obj \
         $(SLO)$/adjushdl.obj	\
         $(SLO)$/backhdl.obj		\
         $(SLO)$/bordrhdl.obj	\

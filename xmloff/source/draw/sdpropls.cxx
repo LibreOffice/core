@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-25 16:26:39 $
+ *  last change: $Author: cl $ $Date: 2001-04-30 09:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,10 +362,19 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "FontWorkHideForm",               XML_NAMESPACE_DRAW, sXML_fontwork_hide_form,            XML_TYPE_BOOL,              CTF_FONTWORK_HIDEFORM   },
     { "FontWorkShadowTransparence",     XML_NAMESPACE_DRAW, sXML_fontwork_shadow_transparence,  XML_TYPE_PERCENT,           CTF_FONTWORK_SHADOWTRANSPARENCE },
 
-    // control attributes (border exists one mor time for the text additions
-    // of shapes)
-    { "ControlBorder",                  XML_NAMESPACE_FO,   sXML_border,                XML_SD_TYPE_CONTROL_BORDER|MID_FLAG_MULTI_PROPERTY, 0 },
+    // control attributes (border exists one mor time for the text additions of shapes)
+    { "ControlBorder",                  XML_NAMESPACE_FO,   sXML_border,                XML_SD_TYPE_CONTROL_BORDER, 0 },
 
+    // special entries for floating frames
+    { "FrameIsAutoScroll",          XML_NAMESPACE_DRAW, sXML_frame_display_scrollbar,   XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_SCROLLBAR },
+    { "FrameIsBorder",              XML_NAMESPACE_DRAW, sXML_frame_display_border,      XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_BORDER },
+    { "FrameMarginWidth",           XML_NAMESPACE_DRAW, sXML_frame_margin_horizontal,   XML_TYPE_MEASURE_PX|MID_FLAG_MULTI_PROPERTY,        CTF_FRAME_MARGIN_HORI },
+    { "FrameMarginHeight",          XML_NAMESPACE_DRAW, sXML_frame_margin_vertical,     XML_TYPE_MEASURE_PX|MID_FLAG_MULTI_PROPERTY,        CTF_FRAME_MARGIN_VERT },
+    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_left,         XML_TYPE_RECTANGLE_LEFT|MID_FLAG_MERGE_PROPERTY,    CTF_SD_OLE_VIS_AREA_LEFT },
+    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_top,          XML_TYPE_RECTANGLE_TOP|MID_FLAG_MERGE_PROPERTY,     CTF_SD_OLE_VIS_AREA_TOP },
+    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_width,        XML_TYPE_RECTANGLE_WIDTH|MID_FLAG_MERGE_PROPERTY,   CTF_SD_OLE_VIS_AREA_WIDTH },
+    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_height,       XML_TYPE_RECTANGLE_HEIGHT|MID_FLAG_MERGE_PROPERTY,  CTF_SD_OLE_VIS_AREA_HEIGHT },
+    { "IsInternal",                 XML_NAMESPACE_DRAW, NULL,                           XML_TYPE_BUILDIN_CMP_ONLY,                          CTF_SD_OLE_ISINTERNAL },
     { 0L }
 };
 
@@ -1012,6 +1021,13 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     XMLPropertyState* pFontWorkHideform = NULL;
     XMLPropertyState* pFontWorkShadowTransparence = NULL;
 
+    // OLE
+    XMLPropertyState* pOLEVisAreaLeft = NULL;
+    XMLPropertyState* pOLEVisAreaTop = NULL;
+    XMLPropertyState* pOLEVisAreaWidth = NULL;
+    XMLPropertyState* pOLEVisAreaHeight = NULL;
+    XMLPropertyState* pOLEIsInternal = NULL;
+
     // filter properties
     for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
          property != rProperties.end();
@@ -1102,7 +1118,29 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_FONTWORK_FORM:                 pFontWorkForm = property;               break;
             case CTF_FONTWORK_HIDEFORM:             pFontWorkHideform = property;           break;
             case CTF_FONTWORK_SHADOWTRANSPARENCE:   pFontWorkShadowTransparence = property; break;
+
+            // OLE
+            case CTF_SD_OLE_VIS_AREA_LEFT:          pOLEVisAreaLeft = property;     break;
+            case CTF_SD_OLE_VIS_AREA_TOP:           pOLEVisAreaTop = property;      break;
+            case CTF_SD_OLE_VIS_AREA_WIDTH:         pOLEVisAreaWidth = property;    break;
+            case CTF_SD_OLE_VIS_AREA_HEIGHT:        pOLEVisAreaHeight = property;   break;
+            case CTF_SD_OLE_ISINTERNAL:             pOLEIsInternal = property;      break;
         }
+    }
+
+    // do not export visual area for internal ole objects
+    if( pOLEIsInternal )
+    {
+        sal_Bool bInternal;
+        if( (pOLEIsInternal->maValue >>= bInternal) && bInternal )
+        {
+            if( pOLEVisAreaLeft ) pOLEVisAreaLeft->mnIndex = -1;
+            if( pOLEVisAreaTop ) pOLEVisAreaTop->mnIndex = -1;
+            if( pOLEVisAreaWidth ) pOLEVisAreaWidth->mnIndex = -1;
+            if( pOLEVisAreaHeight ) pOLEVisAreaHeight->mnIndex = -1;
+        }
+
+        pOLEIsInternal->mnIndex = -1;
     }
 
     if( pTextAnimationBlinking && pTextAnimationKind )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-29 16:48:43 $
+ *  last change: $Author: cl $ $Date: 2001-04-30 09:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,4 +467,89 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
 };
 
+//////////////////////////////////////////////////////////////////////////////
+// draw:applet
+
+class SdXMLAppletShapeContext : public SdXMLShapeContext
+{
+private:
+    rtl::OUString maAppletName;
+    rtl::OUString maAppletCode;
+    rtl::OUString maHref;
+    sal_Bool mbIsScript;
+
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > maParams;
+
+public:
+    TYPEINFO();
+
+    SdXMLAppletShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+    virtual ~SdXMLAppletShapeContext();
+
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
+
+    virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+};
+
+//////////////////////////////////////////////////////////////////////////////
+// draw:plugin
+
+class SdXMLPluginShapeContext : public SdXMLShapeContext
+{
+private:
+    rtl::OUString maMimeType;
+    rtl::OUString maHref;
+
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > maParams;
+
+public:
+    TYPEINFO();
+
+    SdXMLPluginShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+    virtual ~SdXMLPluginShapeContext();
+
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
+
+    virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+};
+
+//////////////////////////////////////////////////////////////////////////////
+// draw:frame
+
+class SdXMLFrameShapeContext : public SdXMLShapeContext
+{
+private:
+    rtl::OUString maFrameName;
+    rtl::OUString maHref;
+
+public:
+    TYPEINFO();
+
+    SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+    virtual ~SdXMLFrameShapeContext();
+
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+};
 #endif  //  _XIMPSHAPE_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 18:04:11 $
+ *  last change: $Author: cl $ $Date: 2001-04-30 09:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1681,20 +1681,32 @@ void SdXMLGraphicObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const
 void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 {
     // create graphic object shape
-    AddShape( "com.sun.star.drawing.GraphicObjectShape" );
+    char *pService;
+
+    if(maPresentationClass.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_graphic ) ) )
+    {
+        pService = "com.sun.star.presentation.GraphicObjectShape";
+    }
+    else
+    {
+        pService = "com.sun.star.drawing.GraphicObjectShape";
+    }
+
+    AddShape( pService );
+
     if(mxShape.is())
     {
         SetStyle();
         SetLayer();
-        if( !mbIsPlaceholder )
+        uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+        if(xProps.is())
         {
-            uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
-            if(xProps.is())
-            {
-                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
-                if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") )))
-                    xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ), ::cppu::bool2any( sal_False ) );
+            uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+            if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") )))
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ), ::cppu::bool2any( mbIsPlaceholder ) );
 
+            if( !mbIsPlaceholder )
+            {
                 if( maURL.getLength() )
                 {
                     uno::Any aAny;
@@ -1992,3 +2004,357 @@ void SdXMLObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl:
 
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
+
+//////////////////////////////////////////////////////////////////////////////
+
+TYPEINIT1( SdXMLAppletShapeContext, SdXMLShapeContext );
+
+SdXMLAppletShapeContext::SdXMLAppletShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes)
+: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
+  mbIsScript( sal_False )
+{
+}
+
+SdXMLAppletShapeContext::~SdXMLAppletShapeContext()
+{
+}
+
+void SdXMLAppletShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+{
+    char* pService = "com.sun.star.drawing.AppletShape";
+    AddShape( pService );
+
+    if( mxShape.is() )
+    {
+        SetLayer();
+
+        // set pos, size, shear and rotate
+        SetTransformation();
+        GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+    }
+}
+
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLAppletShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    switch( nPrefix )
+    {
+    case XML_NAMESPACE_DRAW:
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_applet_name)) )
+        {
+            maAppletName = rValue;
+            return;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_code)) )
+        {
+            maAppletCode = rValue;
+            return;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_may_script)) )
+        {
+            mbIsScript = rValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_true));
+            return;
+        }
+        break;
+    case XML_NAMESPACE_XLINK:
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_href)) )
+        {
+            maHref = rValue;
+            return;
+        }
+        break;
+    }
+
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
+}
+
+void SdXMLAppletShapeContext::EndElement()
+{
+    uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+    if( xProps.is() )
+    {
+        uno::Any aAny;
+
+        if( maParams.getLength() )
+        {
+            aAny <<= maParams;
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletCommands" ) ), aAny );
+        }
+
+        if( maHref.getLength() )
+        {
+            aAny <<= maHref;
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletCodeBase" ) ), aAny );
+        }
+
+        if( maAppletName.getLength() )
+        {
+            aAny <<= maAppletName;
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletName" ) ), aAny );
+        }
+
+        if( mbIsScript )
+        {
+            aAny <<= mbIsScript;
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletIsScript" ) ), aAny );
+
+        }
+
+        if( maAppletCode.getLength() )
+        {
+            aAny <<= maAppletCode;
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletCode" ) ), aAny );
+        }
+    }
+}
+
+SvXMLImportContext * SdXMLAppletShapeContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
+{
+    SvXMLImportContext * pContext = NULL;
+
+    if( nPrefix == XML_NAMESPACE_DRAW && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_param ) ) )
+    {
+        OUString aParamName, aParamValue;
+        const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        // now parse the attribute list and look for draw:name and draw:value
+        for(sal_Int16 a(0); a < nAttrCount; a++)
+        {
+            const OUString& rAttrName = xAttrList->getNameByIndex(a);
+            OUString aLocalName;
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
+            const OUString aValue( xAttrList->getValueByIndex(a) );
+
+            if( nPrefix == XML_NAMESPACE_DRAW )
+            {
+                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_name ) ) )
+                {
+                    aParamName = aValue;
+                }
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_value ) ) )
+                {
+                    aParamValue = aValue;
+                }
+            }
+
+            if( aParamName.getLength() )
+            {
+                sal_Int32 nIndex = maParams.getLength();
+                maParams.realloc( nIndex + 1 );
+                maParams[nIndex].Name = aParamName;
+                maParams[nIndex].Handle = -1;
+                maParams[nIndex].Value <<= aParamValue;
+                maParams[nIndex].State = beans::PropertyState_DIRECT_VALUE;
+            }
+        }
+
+        return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    }
+
+    return SdXMLShapeContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+TYPEINIT1( SdXMLPluginShapeContext, SdXMLShapeContext );
+
+SdXMLPluginShapeContext::SdXMLPluginShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes)
+: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+{
+}
+
+SdXMLPluginShapeContext::~SdXMLPluginShapeContext()
+{
+}
+
+void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+{
+    char* pService = "com.sun.star.drawing.PluginShape";
+    AddShape( pService );
+
+    if( mxShape.is() )
+    {
+        SetLayer();
+
+        // set pos, size, shear and rotate
+        SetTransformation();
+        GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+    }
+}
+
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLPluginShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    switch( nPrefix )
+    {
+    case XML_NAMESPACE_DRAW:
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_mime_type)) )
+        {
+            maMimeType = rValue;
+            return;
+        }
+        break;
+    case XML_NAMESPACE_XLINK:
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_href)) )
+        {
+            maHref = rValue;
+            return;
+        }
+        break;
+    }
+
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
+}
+
+void SdXMLPluginShapeContext::EndElement()
+{
+    uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+    if( xProps.is() )
+    {
+        uno::Any aAny;
+
+        if( maParams.getLength() )
+        {
+            aAny <<= maParams;
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginCommands" ) ), aAny );
+        }
+
+        if( maMimeType.getLength() )
+        {
+            aAny <<= maMimeType;
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginMimeType" ) ), aAny );
+        }
+
+        if( maHref.getLength() )
+        {
+            aAny <<= maHref;
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginURL" ) ), aAny );
+        }
+    }
+}
+
+SvXMLImportContext * SdXMLPluginShapeContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
+{
+    SvXMLImportContext * pContext = NULL;
+
+    if( nPrefix == XML_NAMESPACE_DRAW && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_param ) ) )
+    {
+        OUString aParamName, aParamValue;
+        const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        // now parse the attribute list and look for draw:name and draw:value
+        for(sal_Int16 a(0); a < nAttrCount; a++)
+        {
+            const OUString& rAttrName = xAttrList->getNameByIndex(a);
+            OUString aLocalName;
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
+            const OUString aValue( xAttrList->getValueByIndex(a) );
+
+            if( nPrefix == XML_NAMESPACE_DRAW )
+            {
+                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_name ) ) )
+                {
+                    aParamName = aValue;
+                }
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_value ) ) )
+                {
+                    aParamValue = aValue;
+                }
+            }
+
+            if( aParamName.getLength() )
+            {
+                sal_Int32 nIndex = maParams.getLength();
+                maParams.realloc( nIndex + 1 );
+                maParams[nIndex].Name = aParamName;
+                maParams[nIndex].Handle = -1;
+                maParams[nIndex].Value <<= aParamValue;
+                maParams[nIndex].State = beans::PropertyState_DIRECT_VALUE;
+            }
+        }
+
+        return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    }
+
+    return SdXMLShapeContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+TYPEINIT1( SdXMLFrameShapeContext, SdXMLShapeContext );
+
+SdXMLFrameShapeContext::SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes)
+: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+{
+}
+
+SdXMLFrameShapeContext::~SdXMLFrameShapeContext()
+{
+}
+
+void SdXMLFrameShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+{
+    char* pService = "com.sun.star.drawing.FrameShape";
+    AddShape( pService );
+
+    if( mxShape.is() )
+    {
+        SetLayer();
+
+        // set pos, size, shear and rotate
+        SetTransformation();
+
+        uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+        if( xProps.is() )
+        {
+            uno::Any aAny;
+
+            if( maFrameName.getLength() )
+            {
+                aAny <<= maFrameName;
+                xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FrameName" ) ), aAny );
+            }
+
+            if( maHref.getLength() )
+            {
+                aAny <<= maHref;
+                xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FrameURL" ) ), aAny );
+            }
+        }
+
+        SetStyle();
+        GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+    }
+}
+
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLFrameShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    switch( nPrefix )
+    {
+    case XML_NAMESPACE_DRAW:
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_frame_name)) )
+        {
+            maFrameName = rValue;
+            return;
+        }
+        break;
+    case XML_NAMESPACE_XLINK:
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_href)) )
+        {
+            maHref = rValue;
+            return;
+        }
+        break;
+    }
+
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
+}
+

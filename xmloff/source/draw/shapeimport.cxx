@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-27 16:09:08 $
+ *  last change: $Author: cl $ $Date: 2001-04-30 09:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,10 @@ static __FAR_DATA SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
     { XML_NAMESPACE_DR3D,           sXML_scene,         XML_TOK_GROUP_3DSCENE       },
     { XML_NAMESPACE_DRAW,           sXML_object,        XML_TOK_GROUP_OBJECT        },
     { XML_NAMESPACE_DRAW,           sXML_object_ole,    XML_TOK_GROUP_OBJECT_OLE    },
+
+    { XML_NAMESPACE_DRAW,           sXML_plugin,        XML_TOK_GROUP_PLUGIN        },
+    { XML_NAMESPACE_DRAW,           sXML_floating_frame,XML_TOK_GROUP_FRAME         },
+    { XML_NAMESPACE_DRAW,           sXML_applet,        XML_TOK_GROUP_APPLET        },
 
     XML_TOKEN_MAP_END
 };
@@ -782,6 +786,24 @@ SvXMLImportContext* XMLShapeImportHelper::CreateGroupChildContext(
         {
             // draw:object or draw:object_ole
             pContext = new SdXMLObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_GROUP_PLUGIN:
+        {
+            // draw:plugin
+            pContext = new SdXMLPluginShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_GROUP_FRAME:
+        {
+            // draw:frame
+            pContext = new SdXMLFrameShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_GROUP_APPLET:
+        {
+            // draw:applet
+            pContext = new SdXMLAppletShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
             break;
         }
         // add other shapes here...

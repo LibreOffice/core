@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-24 11:34:51 $
+ *  last change: $Author: cl $ $Date: 2001-04-30 09:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1387,3 +1387,125 @@ void XMLShapeExport::ImpExportCaptionShape(
     ImpExportText( xShape );
 }
 
+//////////////////////////////////////////////////////////////////////////////
+
+void XMLShapeExport::ImpExportFrameShape(
+    const uno::Reference< drawing::XShape >& xShape,
+    XmlShapeType eShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint)
+{
+    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    if(xPropSet.is())
+    {
+        // Transformation
+        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+        // export frame url
+        OUString aStr;
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FrameURL" ) ) ) >>= aStr;
+        rExport.AddAttribute      ( XML_NAMESPACE_XLINK, sXML_href, aStr );
+        rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
+        rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_show, sXML_embed );
+        rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
+
+        // export name
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FrameName" ) ) ) >>= aStr;
+        if( aStr.getLength() )
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_frame_name, aStr );
+
+        // write floating frame
+        SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_floating_frame, sal_True, sal_True);
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void XMLShapeExport::ImpExportAppletShape(
+    const uno::Reference< drawing::XShape >& xShape,
+    XmlShapeType eShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint)
+{
+    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    if(xPropSet.is())
+    {
+        // Transformation
+        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+        // export frame url
+        OUString aStr;
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletCodeBase" ) ) ) >>= aStr;
+        rExport.AddAttribute      ( XML_NAMESPACE_XLINK, sXML_href, aStr );
+        rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
+        rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_show, sXML_embed );
+        rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
+
+        // export draw:applet-name
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletName" ) ) ) >>= aStr;
+        if( aStr.getLength() )
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_applet_name, aStr );
+
+        // export draw:code
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletCode" ) ) ) >>= aStr;
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_code, aStr );
+
+        // export draw:may-script
+        sal_Bool bIsScript;
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletIsScript" ) ) ) >>= bIsScript;
+        rExport.AddAttributeASCII( XML_NAMESPACE_DRAW, sXML_may_script, bIsScript ? sXML_true : sXML_false );
+
+        // write applet
+        SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_applet, sal_True, sal_True);
+
+        // export parameters
+        uno::Sequence< beans::PropertyValue > aCommands;
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletCommands" ) ) ) >>= aCommands;
+        const sal_Int32 nCount = aCommands.getLength();
+        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+        {
+            aCommands[nIndex].Value >>= aStr;
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_name, aCommands[nIndex].Name );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_value, aStr );
+            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, sXML_param, sal_False, sal_True );
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void XMLShapeExport::ImpExportPluginShape(
+    const uno::Reference< drawing::XShape >& xShape,
+    XmlShapeType eShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint)
+{
+    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    if(xPropSet.is())
+    {
+        // Transformation
+        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+        // export plugin url
+        OUString aStr;
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginURL" ) ) ) >>= aStr;
+        rExport.AddAttribute      ( XML_NAMESPACE_XLINK, sXML_href, aStr );
+        rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
+        rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_show, sXML_embed );
+        rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
+
+        // export mime-type
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginMimeType" ) ) ) >>= aStr;
+        if(aStr.getLength())
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_mime_type, aStr );
+
+        // write plugin
+        SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_plugin, sal_True, sal_True);
+
+        // export parameters
+        uno::Sequence< beans::PropertyValue > aCommands;
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginCommands" ) ) ) >>= aCommands;
+        const sal_Int32 nCount = aCommands.getLength();
+        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+        {
+            aCommands[nIndex].Value >>= aStr;
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_name, aCommands[nIndex].Name );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_value, aStr );
+            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, sXML_param, sal_False, sal_True );
+        }
+    }
+}

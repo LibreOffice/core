@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-19 12:00:46 $
+ *  last change: $Author: cl $ $Date: 2001-04-30 09:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,8 +553,25 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             break;
         }
 
-        case XmlShapeTypePresOrgChartShape:
         case XmlShapeTypeDrawFrameShape:
+        {
+            ImpExportFrameShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypeDrawAppletShape:
+        {
+            ImpExportAppletShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypeDrawPluginShape:
+        {
+            ImpExportPluginShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypePresOrgChartShape:
         case XmlShapeTypeUnknown:
         case XmlShapeTypeNotYetSet:
         default:
@@ -774,7 +791,9 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 }
                 else if(aType.EqualsAscii("Page", 21, 4)) { eShapeType = XmlShapeTypeDrawPageShape; }
                 else if(aType.EqualsAscii("Frame", 21, 5)) { eShapeType = XmlShapeTypeDrawFrameShape; }
-                else if(aType.EqualsAscii("Caption", 21, 6)) { eShapeType = XmlShapeTypeDrawCaptionShape; }
+                else if(aType.EqualsAscii("Caption", 21, 7)) { eShapeType = XmlShapeTypeDrawCaptionShape; }
+                else if(aType.EqualsAscii("Plugin", 21, 6)) { eShapeType = XmlShapeTypeDrawPluginShape; }
+                else if(aType.EqualsAscii("Applet", 21, 6)) { eShapeType = XmlShapeTypeDrawAppletShape; }
 
                 // 3D shapes
                 else if(aType.EqualsAscii("Scene", 21 + 7, 5)) { eShapeType = XmlShapeTypeDraw3DSceneObject; }
