@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 07:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
 #endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
 
 //........................................................................
 namespace dbaccess
@@ -112,7 +115,7 @@ typedef ::cppu::WeakImplHelper2<
 class OCommandDefinition    :public OCommandDefinition_Base
                             ,public OCommandBase
                             ,public OContainerElement
-                            ,public OMutexAndBroadcastHelper
+                            ,public comphelper::OMutexAndBroadcastHelper
                             ,public ::comphelper::OPropertyContainer
                             ,public OConfigurationFlushable
                             ,public ::comphelper::OPropertyArrayUsageHelper< OCommandDefinition >

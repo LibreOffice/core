@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 07:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
-#ifndef _DBASHARED_STRINGCONSTANTS_HRC_
-#include "stringconstants.hrc"
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+#include "dbastrings.hrc"
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -82,12 +82,15 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
-using namespace ::com::sun::star::container;
+//  using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 15:19:55 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 07:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _DBA_CORE_RESOURCE_HXX_
 #include "core_resource.hxx"
 #endif
-#ifndef _DBASHARED_STRINGCONSTANTS_HRC_
-#include "stringconstants.hrc"
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+#include "dbastrings.hrc"
 #endif
 #ifndef _DBA_CORE_REGISTRYHELPER_HXX_
 #include "registryhelper.hxx"

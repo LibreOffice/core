@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 07:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
 #endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
 
 //........................................................................
 namespace dbaccess
@@ -118,8 +121,8 @@ typedef ::cppu::WeakImplHelper2<
 class ODocumentDefinition
         :public ODocumentDefinition_Base
         ,public OContainerElement
+        ,public comphelper::OMutexAndBroadcastHelper
         ,public OConfigurationFlushable
-        ,public OMutexAndBroadcastHelper
         ,public ::cppu::OPropertySetHelper
         ,public ::comphelper::OPropertyArrayUsageHelper< ODocumentDefinition >
 {

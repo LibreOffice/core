@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 15:02:00 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 07:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBA_COREDATAACCESS_DOCUMENTDEFINITION_HXX_
 #include "documentdefinition.hxx"
 #endif
-#ifndef _DBASHARED_STRINGCONSTANTS_HRC_
-#include "stringconstants.hrc"
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+#include "dbastrings.hrc"
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -87,6 +87,9 @@
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -213,6 +216,7 @@ sal_Int64 SAL_CALL ODocumentDefinition::getSomething( const ::com::sun::star::un
 }
 
 //------------------------------------------------------------------------------
+
 void ODocumentDefinition::flush_NoBroadcast_NoCommit(  )
 {
     // only one property to write to the configuration
