@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-15 10:35:49 $
+ *  last change: $Author: nn $ $Date: 2000-11-28 11:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2120,19 +2120,11 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
             }
         }
 
-        if ( !bEditView )
-        {
-            pScMod->SetInputMode( SC_INPUT_TABLE );     // start cell editing
-        }
-
         ScInputHandler* pHdl = pScMod->GetInputHdl( pViewData->GetViewShell() );
-        if ( pHdl && pViewData->HasEditView( eWhich ) )
+        if ( pHdl )
         {
-            EditView* pEditView = pViewData->GetEditView( eWhich ); // ist dann nicht 0
-            pHdl->DataChanging();
-            pEditView->Command( rCEvt );
-            pHdl->DataChanged();
-            return;                                     // erledigt
+            pHdl->InputCommand( rCEvt, TRUE );
+            return;                                     // done
         }
 
         Window::Command( rCEvt );
