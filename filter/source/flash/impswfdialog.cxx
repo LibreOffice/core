@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impswfdialog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-24 16:24:22 $
+ *  last change: $Author: cl $ $Date: 2002-10-30 12:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,8 @@ ImpSWFDialog::ImpSWFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
     maBtnHelp( this, ResId( BTN_HELP ) ),
     maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Flash/Export/" ) ), &rFilterData )
 {
-    const ULONG nCompressMode = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 0 );
+    const ULONG nCompressMode = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 75 );
+    maNumFldQuality.SetValue( nCompressMode );
 
     FreeResource();
 }
@@ -94,10 +95,10 @@ ImpSWFDialog::~ImpSWFDialog()
 
 Sequence< PropertyValue > ImpSWFDialog::GetFilterData()
 {
-    sal_Int32 nCompressMode;
-
+    sal_Int32 nCompressMode = (sal_Int32)maNumFldQuality.GetValue();
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), nCompressMode );
     Sequence< PropertyValue > aRet( maConfigItem.GetFilterData() );
+
     return aRet;
 }
 
