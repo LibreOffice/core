@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigSet.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 12:35:40 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel {
         Object[] names = childrenMap.keySet().toArray();
 
         if (ConfigNode.class.isAssignableFrom(childClass)) {
+            //first I remove all the children from the configuration.
             String children[] = Configuration.getChildrenNames(configView);
             for (int i = 0; i<children.length; i++)
                   try {
@@ -139,7 +140,7 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel {
                       ex.printStackTrace();
                   }
 
-
+            // and add them new.
             for (int i = 0; i < names.length; i++) {
                 try {
                     ConfigNode child = (ConfigNode) getElement(names[i]);
@@ -200,6 +201,11 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel {
     public void remove(int i) {
         Object o = getElementAt(i);
         remove(o);
+    }
+
+    public void clear() {
+        childrenMap.clear();
+        childrenList.clear();
     }
 
     public void update(int i) {
@@ -380,6 +386,10 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel {
                 Configuration.set(index++, indexPropertyName, member);
         }
 
+    }
+
+    public void sort(Comparator comparator) {
+        Collections.sort(this.childrenList, comparator);
     }
 
 }
