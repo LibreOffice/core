@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 12:03:52 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,8 +738,8 @@ sal_Bool OTableController::Construct(Window* pParent)
 {
     m_pView = new OTableDesignView(pParent,m_xMultiServiceFacatory,this);
     OTableController_BASE::Construct(pParent);
-    m_pView->Construct(NULL);
-    m_pView->Show();
+//  m_pView->Construct();
+//  m_pView->Show();
     return sal_True;
 }
 // -----------------------------------------------------------------------------

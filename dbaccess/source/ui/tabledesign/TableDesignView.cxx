@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 13:43:46 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,9 @@ OTableBorderWindow::~OTableBorderWindow()
     m_pFieldDescWin->Hide();
 
     delete m_pEditorCtrl;
+    m_pEditorCtrl = NULL;
     delete m_pFieldDescWin;
+    m_pFieldDescWin = NULL;
 }
 // -----------------------------------------------------------------------------
 void OTableBorderWindow::Resize()
@@ -288,7 +290,7 @@ void OTableDesignView::initialize()
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
-void OTableDesignView::resizeControl(Rectangle& _rPlayground)
+void OTableDesignView::resizeDocumentView(Rectangle& _rPlayground)
 {
     m_pWin->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
 

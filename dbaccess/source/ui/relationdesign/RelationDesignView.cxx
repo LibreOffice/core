@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDesignView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:24:04 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,10 +145,10 @@ ORelationDesignView::~ORelationDesignView()
     DBG_DTOR(ORelationDesignView,NULL);
 }
 // -------------------------------------------------------------------------
-void ORelationDesignView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
+void ORelationDesignView::Construct()
 {
     m_pTableView    = new ORelationTableView(m_pScrollWindow,this);
-    OJoinDesignView::Construct(xModel); // initialize m_xMe
+    OJoinDesignView::Construct();
 }
 // -----------------------------------------------------------------------------
 void ORelationDesignView::initialize()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 13:43:04 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,8 +447,8 @@ sal_Bool ORelationController::Construct(Window* pParent)
 {
     m_pView = new ORelationDesignView(pParent,this,m_xMultiServiceFacatory);
     OJoinController::Construct(pParent);
-    m_pView->Construct(NULL);
-    m_pView->Show();
+//  m_pView->Construct();
+//  m_pView->Show();
     return sal_True;
 }
 // -----------------------------------------------------------------------------

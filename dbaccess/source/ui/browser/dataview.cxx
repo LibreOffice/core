@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-16 14:22:02 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,21 +122,12 @@ namespace dbaui
     {
         DBG_CTOR(ODataView,NULL);
     }
+
     // -------------------------------------------------------------------------
-    void ODataView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
+    void ODataView::Construct()
     {
-        try
-        {
-            // our UNO representation
-            m_xMe = VCLUnoHelper::CreateControlContainer(this);
-            DBG_ASSERT(m_xMe.is(), "ODataView::Construct : no UNO representation");
-        }
-        catch(Exception&)
-        {
-            ::comphelper::disposeComponent(m_xMe);
-            throw;
-        }
     }
+
     // -------------------------------------------------------------------------
     ODataView::~ODataView()
     {
@@ -144,7 +135,6 @@ namespace dbaui
 
         enableSeparator( sal_False );
 
-        ::comphelper::disposeComponent(m_xMe);
         DBG_DTOR(ODataView,NULL);
     }
 
@@ -189,7 +179,7 @@ namespace dbaui
         Resize();
     }
     // -------------------------------------------------------------------------
-    void ODataView::resizeControl( Rectangle& _rPlayground )
+    void ODataView::resizeDocumentView( Rectangle& _rPlayground )
     {
     }
 
@@ -208,11 +198,11 @@ namespace dbaui
     }
 
     // -------------------------------------------------------------------------
-    void ODataView::Resize()
+    void ODataView::resizeAll( const Rectangle& _rPlayground )
     {
-        Window::Resize();
-        Rectangle aPlayground( Point(0, 0), GetOutputSizePixel() );
+        Rectangle aPlayground( _rPlayground );
 
+        // position thew separator
         if ( m_pSeparator )
         {
             Size aSeparatorSize = Size( aPlayground.GetWidth(), 2 );
@@ -222,6 +212,7 @@ namespace dbaui
             aPlayground.Top() += aSeparatorSize.Height() + 1;
         }
 
+        // position the tool box
         if ( m_pToolBox )
         {
             m_pToolBox->SetPosPixel( aPlayground.TopLeft() );
@@ -232,7 +223,15 @@ namespace dbaui
             aPlayground.Top() += aToolboxSize.Height();
         }
 
-        resizeControl( aPlayground );
+        // position the controls of the document's view
+        resizeDocumentView( aPlayground );
+    }
+
+    // -------------------------------------------------------------------------
+    void ODataView::Resize()
+    {
+        Window::Resize();
+        resizeAll( Rectangle( Point( 0, 0), GetSizePixel() ) );
     }
 
 //.........................................................................

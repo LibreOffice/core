@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-16 10:39:41 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,14 @@ OGenericUnoController::OGenericUnoController(const Reference< ::com::sun::star::
 // -----------------------------------------------------------------------------
 sal_Bool OGenericUnoController::Construct(Window* pParent)
 {
-    OSL_ENSURE(m_pView,"the view is NULL!");
+    OSL_ENSURE( getView(), "the view is NULL!" );
+
+    if ( getView() )
+    {
+        getView()->Construct();
+        getView()->Show();
+    }
+
     // want to have a toolbox ?
     ToolBox* pTB = CreateToolBox(getView());
     getView()->setToolBox(pTB);

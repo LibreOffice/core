@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 13:40:00 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,11 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
 {
     try
     {
-        ODataView::Construct(xModel);
+        ODataView::Construct();
+
+        // our UNO representation
+        m_xMe = VCLUnoHelper::CreateControlContainer(this);
+
         // create the (UNO-) control
         m_xGrid = new SbaXGridControl(getORB());
         DBG_ASSERT(m_xGrid.is(), "UnoDataBrowserView::Construct : could not create a grid control !");
@@ -172,7 +176,9 @@ UnoDataBrowserView::~UnoDataBrowserView()
         delete m_pStatus;
         m_pStatus = NULL;
     }
+
     ::comphelper::disposeComponent(m_xGrid);
+    ::comphelper::disposeComponent(m_xMe);
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( UnoDataBrowserView, SplitHdl, void*, p )
@@ -228,7 +234,7 @@ void UnoDataBrowserView::hideStatus()
 }
 
 // -------------------------------------------------------------------------
-void UnoDataBrowserView::resizeControl(Rectangle& _rPlayground)
+void UnoDataBrowserView::resizeDocumentView(Rectangle& _rPlayground)
 {
     Point   aSplitPos;
     Size    aSplitSize;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-16 10:59:42 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2373,7 +2373,7 @@ void SbaXDataBrowserController::LoadFinished(sal_Bool /*bWasSynch*/)
         }
         catch(Exception&)
         {
-            DBG_WARNING("SbaXDataBrowserController::Construct : something went wrong while creating the parser !");
+            DBG_WARNING("SbaXDataBrowserController::LoadFinished: something went wrong while creating the parser !");
             m_xParser = NULL;
             // no further handling, we ignore the error
         }
