@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:13 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:36:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1586,7 +1586,7 @@ void SbaGridControl::DoRowDrag(sal_Int16 nRowPos)
         aSelectedRows.realloc(1);
         aSelectedRows[0] <<= (sal_Int32)(nRowPos + 1);
     }
-    else if (!IsAllSelected())
+    else if ( !IsAllSelected() && GetSelectRowCount() )
     {
         aSelectedRows.realloc(GetSelectRowCount());
         Any* pSelectedRows = aSelectedRows.getArray();
@@ -1600,14 +1600,20 @@ void SbaGridControl::DoRowDrag(sal_Int16 nRowPos)
     }
 
     Reference< XResultSet> xRowSetClone;
-    Reference< XResultSetAccess > xResultSetAccess(xDataSource,UNO_QUERY);
-    if ( xResultSetAccess.is() )
-        xRowSetClone = xResultSetAccess->createResultSet();
+    try
+    {
+        Reference< XResultSetAccess > xResultSetAccess(xDataSource,UNO_QUERY);
+        if ( xResultSetAccess.is() )
+            xRowSetClone = xResultSetAccess->createResultSet();
 
-    ODataClipboard* pTransfer = new ODataClipboard(xDataSource, aSelectedRows,xRowSetClone);
+        ODataClipboard* pTransfer = new ODataClipboard(xDataSource, aSelectedRows,xRowSetClone);
 
-    Reference< XTransferable > xEnsureDelete = pTransfer;
-    pTransfer->StartDrag(this, DND_ACTION_COPY | DND_ACTION_LINK);
+        Reference< XTransferable > xEnsureDelete = pTransfer;
+        pTransfer->StartDrag(this, DND_ACTION_COPY | DND_ACTION_LINK);
+    }
+    catch(Exception&)
+    {
+    }
 }
 
 // -----------------------------------------------------------------------
