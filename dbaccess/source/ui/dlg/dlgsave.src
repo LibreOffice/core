@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:23:18 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ ModalDialog DLG_SAVE_AS
         Text[ portuguese ] = "Please enter the name of the object to be created:";
         Text[ russian ] = "Задайте, пожалуйста, имя для создаваемого объекта:";
         Text[ greek ] = "Please enter the name of the object to be created:";
-        Text[ dutch ] = "Please enter the name of the object to be created:";
+        Text[ dutch ] = "Vul een naam in voor het object dat u wil  creлren:";
         Text[ french ] = "Saisissez un nom pour l'objet а crйer :";
         Text[ spanish ] = "Please enter the name of the object to be created:";
         Text[ italian ] = "Indicate il nome dell'oggetto da creare:";
@@ -378,7 +378,7 @@ ModalDialog DLG_SAVE_AS
         Text[ portuguese ] = "Paste as";
         Text[ russian ] = "Вставить как";
         Text[ greek ] = "Paste as";
-        Text[ dutch ] = "Paste as";
+        Text[ dutch ] = "Invoegen als";
         Text[ french ] = "Insйrer comme";
         Text[ spanish ] = "Paste as";
         Text[ italian ] = "Incolla come";
