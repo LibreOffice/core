@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-12 16:06:31 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #include "updatedata.hxx"
 
-#include <drafts/com/sun/star/configuration/backend/XLayerHandler.hpp>
+#include <com/sun/star/configuration/backend/XLayerHandler.hpp>
 
 #include <iterator>
 #include <algorithm>
@@ -225,7 +225,7 @@ void NodeModification::writeToLayer(backenduno::XLayerHandler * _pLayer)
         !this->hasChildren() )              // we need to write
         return;                             // nothing
 
-    _pLayer->overrideNode( this->getName(), this->updateFlags() );
+    _pLayer->overrideNode( this->getName(), this->updateFlags(), false );
     this->writeChildrenToLayer(_pLayer);
     _pLayer->endNode();
 }
@@ -335,12 +335,12 @@ bool PropertyUpdate::setValueFor(OUString const & _aLocale, uno::Any const & _aV
 
     if (_aValueUpdate.hasValue())
     {
-        if (m_aType == uno::Type())
+        if (m_aType.getTypeClass() == uno::TypeClass_ANY)
             m_aType = _aValueUpdate.getValueType();
 
         else
             OSL_ENSURE( m_aType == _aValueUpdate.getValueType() ||
-                        m_aType.getTypeClass() == uno::TypeClass_ANY,
+                        m_aType == uno::Type(),
                         "ValueType mismatch in PropertyUpdate");
     }
     return m_aValues.insert( ValueList::value_type(_aLocale,_aValueUpdate) ).second;
@@ -441,7 +441,7 @@ void PropertyUpdate::writeToLayer(backenduno::XLayerHandler * _pLayer)
 {
     OSL_ASSERT(_pLayer);
 
-    _pLayer->overrideProperty( this->getName(), this->updateFlags(), this->m_aType );
+    _pLayer->overrideProperty( this->getName(), this->updateFlags(), this->m_aType, false );
     this->writeValuesToLayer(_pLayer);
     _pLayer->endProperty();
 }
