@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mcnttype.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-13 13:04:11 $
+ *  last change: $Author: mh $ $Date: 2001-08-23 09:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 // includes
 //------------------------------------------------------------------------
 
-#ifndef _CPPUHELPER_COMPBASE1_HXX_
-#include <cppuhelper/compbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 
 #ifndef _RTL_USTRING_
