@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 16:35:18 $
+ *  last change: $Author: pl $ $Date: 2002-09-18 09:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,7 +737,7 @@ void SalGraphics::CopyArea ( long nDestX,    long nDestY,
         aPosAry.mnSrcWidth  = nSrcWidth;
         aPosAry.mnSrcHeight = nSrcHeight;
 
-        CopyBits ( &aPosAry, 0, pOutDev, pOutDev );
+        SalGraphics::CopyBits ( &aPosAry, 0, pOutDev, pOutDev );
 
 #ifndef _USE_PRINT_EXTENSION_
     }
