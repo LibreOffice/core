@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: DispatchResultEvent.idl,v $
+ *  $RCSfile: DispatchResultState.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: mba $ $Date: 2001-11-21 12:49:54 $
  *
@@ -59,35 +59,23 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_frame_DispatchResultEvent_idl__
-#define __com_sun_star_frame_DispatchResultEvent_idl__
+#ifndef __com_sun_star_frame_DispatchResultState_idl__
+#define __com_sun_star_frame_DispatchResultState_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
-#include <com/sun/star/lang/EventObject.idl>
-#endif
 
-#ifndef __com_sun_star_util_URL_idl__
-#include <com/sun/star/util/URL.idl>
-#endif
+module com { module sun { module star { module frame {
 
 //=============================================================================
+/**
+ */
 
- module com {  module sun {  module star {  module frame {
-
-//=============================================================================
-
-struct DispatchResultEvent: com::sun::star::lang::EventObject
+constants DispatchResultState
 {
-    //-------------------------------------------------------------------------
-        /**Contains the result of the dispatch action, if State is set to SUCCESS.
-                The type of the result is dispatch action dependend.<BR>
-                The member State can be set to one of the values defined in <type>DispatchResultState</type>.<BR>
-                If State is set to FAILURE, Result may specify the reason (or is empty).
-                The type is also dispatch action dependend.<BR>
-                If State is set to DONTKNOW, Result is empty.<BR>
-    */
-        short State;
-        any Result;
+        const short FAILURE        = 0;
+
+        const short SUCCESS        = 1;
+
+        const short DONTKNOW       = 2;
 };
 
 //=============================================================================

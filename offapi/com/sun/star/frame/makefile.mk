@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mba $ $Date: 2001-11-09 16:20:07 $
+#   last change: $Author: mba $ $Date: 2001-11-21 12:49:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,7 @@ IDLFILES=\
     DesktopTask.idl\
     DesktopTasks.idl\
     DispatchDescriptor.idl\
-    DocumentTemplates.idl\
+        DocumentTemplates.idl\
     FeatureStateEvent.idl\
     Frame.idl\
     FrameAction.idl\
@@ -127,6 +127,7 @@ IDLFILES=\
     XTerminateListener.idl\
     XUrlList.idl\
     XWindowArranger.idl\
+        DispatchResultState.idl\
         DispatchResultEvent.idl\
         XDispatchResultListener.idl\
         XNotifyingDispatch.idl\
