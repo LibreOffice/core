@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-07 11:23:10 $
+ *  last change: $Author: tra $ $Date: 2001-03-14 14:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,6 @@
 
 #ifndef _DTOBJFACTORY_HXX_
 #include "..\..\inc\DtObjFactory.hxx"
-#endif
-
-#ifndef _MTAOLECLIPB_H_
-#include <systools\win32\MtaOleClipb.h>
 #endif
 
 #ifndef _APNDATAOBJECT_HXX_
@@ -152,15 +148,15 @@ Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( Runtime
 {
     MutexGuard  aGuard( m_aMutex );
 
+    Reference< XTransferable > rClipContent;
+
     if ( m_rCurrentClipbContent.is( ) )
-    {
-        return m_rCurrentClipbContent;
-    }
+        rClipContent = m_rCurrentClipbContent;
     else
     {
         // get the current dataobject from clipboard
         IDataObjectPtr pIDataObject;
-        MTAGetClipboard( &pIDataObject );
+        m_MtaOleClipboard.getClipboard( &pIDataObject );
 
         // create an apartment neutral dataobject and initialize it with a
         // com smart pointer to the IDataObject from clipboard
@@ -169,8 +165,10 @@ Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( Runtime
         CDTransObjFactory objFactory;
 
         // remeber pIDo destroys itself due to the smart pointer
-        return objFactory.createTransferableFromDataObj( m_pWinClipboard->m_SrvMgr, pIDo );
+        rClipContent = objFactory.createTransferableFromDataObj( m_pWinClipboard->m_SrvMgr, pIDo );
     }
+
+    return rClipContent;
 }
 
 //------------------------------------------------------------------------
@@ -203,7 +201,7 @@ void SAL_CALL CWinClipbImpl::setContents( const Reference< XTransferable >& xTra
     m_pWinClipboard->m_aCondition.reset( );
     aGuard.clear( );
 
-    MTASetClipboard( pIDataObj );
+    m_MtaOleClipboard.setClipboard( pIDataObj );
 }
 
 //------------------------------------------------------------------------
@@ -230,25 +228,26 @@ sal_Int8 SAL_CALL CWinClipbImpl::getRenderingCapabilities(  ) throw( RuntimeExce
 
 void SAL_CALL CWinClipbImpl::flushClipboard( ) throw( RuntimeException )
 {
-    MTAFlushClipboard( );
+    if ( m_rCurrentClipbContent.is( ) )
+        m_MtaOleClipboard.flushClipboard( );
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CWinClipbImpl::registerClipboardViewer( ) const
+void SAL_CALL CWinClipbImpl::registerClipboardViewer( )
 {
-    MTARegisterClipboardViewer( CWinClipbImpl::onClipboardContentChanged );
+    m_MtaOleClipboard.registerClipViewer( CWinClipbImpl::onClipboardContentChanged );
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CWinClipbImpl::unregisterClipboardViewer( ) const
+void SAL_CALL CWinClipbImpl::unregisterClipboardViewer( )
 {
-    MTARegisterClipboardViewer( NULL );
+    m_MtaOleClipboard.registerClipViewer( NULL );
 }
 
 //------------------------------------------------------------------------
@@ -261,37 +260,37 @@ void SAL_CALL CWinClipbImpl::dispose() throw( RuntimeException )
                 !m_rOldClipbOwner.is( ) &&
                 !m_rCurrentClipbContent.is( ) &&
                 !m_rCurrentClipbOwner.is( ),
-                "Clipboard was not flushed before!" );
+                "Clipboard was not flushed before shutdown!" );
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-void CALLBACK CWinClipbImpl::onClipboardContentChanged( void )
+void WINAPI CWinClipbImpl::onClipboardContentChanged( void )
 {
     ClearableMutexGuard aGuard( s_pCWinClipbImpl->m_aMutex );
 
     Reference< XTransferable >   xClipbContent;
     Reference< XClipboardOwner > xClipbOwner;
 
-    if ( s_pCWinClipbImpl->m_rOldClipbContent.is( ) &&
-         s_pCWinClipbImpl->m_rOldClipbOwner.is( ) )
+    if ( s_pCWinClipbImpl->m_rOldClipbContent.is( ) )
     {
         // release the condition because of expected callbacks
         // to the clipboard service (remeber: the mutex is already
         // released)
         s_pCWinClipbImpl->m_pWinClipboard->m_aCondition.set( );
 
-        s_pCWinClipbImpl->m_rOldClipbOwner->lostOwnership(
-            s_pCWinClipbImpl->m_pWinClipboard, s_pCWinClipbImpl->m_rOldClipbContent );
+        // notify the old ClipboardOwner
+        if ( s_pCWinClipbImpl->m_rOldClipbOwner.is( ) )
+            s_pCWinClipbImpl->m_rOldClipbOwner->lostOwnership(
+                s_pCWinClipbImpl->m_pWinClipboard, s_pCWinClipbImpl->m_rOldClipbContent );
 
         s_pCWinClipbImpl->m_rOldClipbOwner   = Reference< XClipboardOwner >( );
         s_pCWinClipbImpl->m_rOldClipbContent = Reference< XTransferable >( );
     }
     else if ( !s_pCWinClipbImpl->m_bSelfTriggered &&
-              ( s_pCWinClipbImpl->m_rCurrentClipbContent.is( ) &&
-                s_pCWinClipbImpl->m_rCurrentClipbOwner.is( ) ) )
+              s_pCWinClipbImpl->m_rCurrentClipbContent.is( ) )
     {
         // save the state variables locally
         xClipbContent = s_pCWinClipbImpl->m_rCurrentClipbContent;
@@ -306,7 +305,8 @@ void CALLBACK CWinClipbImpl::onClipboardContentChanged( void )
         s_pCWinClipbImpl->m_pWinClipboard->m_aCondition.set( );
 
         // notify the old ClipboardOwner
-        xClipbOwner->lostOwnership( s_pCWinClipbImpl->m_pWinClipboard, xClipbContent );
+        if ( xClipbOwner.is( ) )
+            xClipbOwner->lostOwnership( s_pCWinClipbImpl->m_pWinClipboard, xClipbContent );
     }
 
     s_pCWinClipbImpl->m_pWinClipboard->m_aCondition.set( );

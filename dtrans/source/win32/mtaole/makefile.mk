@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: tra $ $Date: 2001-03-14 14:43:42 $
+#   last change: $Author: tra $ $Date: 2001-03-14 14:46:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -42,13 +42,13 @@
 #   License at http://www.openoffice.org/license.html.
 #
 #   Software provided under this License is provided on an "AS IS" basis,
-#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
-#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
 #   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
 #   See the License for the specific provisions governing your rights and
 #   obligations concerning the Software.
 #
-#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc..
 #
 #   Copyright: 2000 by Sun Microsystems, Inc.
 #
@@ -61,64 +61,25 @@
 #*************************************************************************
 
 PRJ=..$/..$/..
-
 PRJNAME=dtrans
-TARGET=sysdtrans
-ENABLE_EXCEPTIONS=TRUE
+TARGET=mtaolecb
 LIBTARGET=NO
-COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/applicat.rdb
-USE_BOUNDCHK=
 
-.IF "$(USE_BOUNDCHK)"=="TR"
-bndchk=tr
-stoponerror=tr
+# --- Settings ----------------------------------
+
+.INCLUDE : settings.mk
+
+# --- Targets ----------------------------------
+
+.IF "$(GUI)"=="WNT"
+
+# --- static lib --------------------------
+
+SLOFILES=$(SLO)$/MtaOleClipb.obj
+
+LIB1TARGET=$(SLB)$/$(TARGET).lib
+LIB1OBJFILES=$(SLOFILES)
+                 
 .ENDIF
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-# ------------------------------------------------------------------
-
-.INCLUDE : ..$/..$/cppumaker.mk
-
-CFLAGS+=/GR -DUNICODE -D_UNICODE
-
-SLOFILES=$(SLO)$/WinClipboard.obj \
-         $(SLO)$/WinClipbImpl.obj \
-         $(SLO)$/wcbentry.obj\
-         $(SLO)$/APNDataObject.obj
-
-SHL1TARGET=$(TARGET)
-
-SHL1STDLIBS= \
-        $(SALLIB)	\
-        $(CPPULIB) 	\
-        $(CPPUHELPERLIB) \
-        ole32.lib\
-        comsupp.lib\
-        oleaut32.lib\
-        gdi32.lib
-
-SHL1DEPN=
-SHL1IMPLIB=i$(SHL1TARGET) 
-
-#--- comment -----------------
-
-SHL1LIBS=	\
-            $(SOLARLIBDIR)$/user9x.lib\
-            $(SOLARLIBDIR)$/tools32.lib\
-            $(SLB)$/dtutils.lib\
-            $(SLB)$/dtobjfact.lib\
-            $(SLB)$/mtaolecb.lib
-
-SHL1OBJS=		$(SLOFILES)
-SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
+.INCLUDE : target.mk

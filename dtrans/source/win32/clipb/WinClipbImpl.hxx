@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-07 11:23:10 $
+ *  last change: $Author: tra $ $Date: 2001-03-14 14:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #endif
 
+#ifndef _MTAOLECLIPB_HXX_
+#include "..\..\inc\MtaOleClipb.hxx"
+#endif
+
 #include <windows.h>
 #include <comdef.h>
 
@@ -137,14 +141,15 @@ protected:
     // member functions
     //------------------------------------------------
 
-    void SAL_CALL registerClipboardViewer( ) const;
-    void SAL_CALL unregisterClipboardViewer( ) const;
+    void SAL_CALL registerClipboardViewer( );
+    void SAL_CALL unregisterClipboardViewer( );
 
-    static void CALLBACK onClipboardContentChanged( void );
+    static void WINAPI onClipboardContentChanged( void );
 
     sal_Bool SAL_CALL isInDispose( ) const;
 
     ::rtl::OUString                                                                             m_itsName;
+    CMtaOleClipboard                                                                            m_MtaOleClipboard;
     static CWinClipbImpl*                                                                       s_pCWinClipbImpl;
     CWinClipboard*                                                                              m_pWinClipboard;
     sal_Bool                                                                                    m_bInDispose;
@@ -156,6 +161,10 @@ protected:
     osl::Mutex                                                                                  m_aMutex;
 
     friend class CWinClipboard;
+
+private:
+    CWinClipbImpl( const CWinClipbImpl& );
+    CWinClipbImpl& operator=( const CWinClipbImpl& );
 };
 
 #endif

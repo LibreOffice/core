@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_wincb.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 12:11:56 $
+ *  last change: $Author: tra $ $Date: 2001-03-14 14:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 //_________________________________________________________________________________________________________________________
 
 
-#include "..\ImplHelper.hxx"
+#include "..\misc\ImplHelper.hxx"
 
 //_________________________________________________________________________________________________________________________
 //  other includes
@@ -91,11 +91,19 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XFLUSHABLECLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
 
@@ -115,7 +123,7 @@
 #include <windows.h>
 #include <objbase.h>
 
-#include <memory>
+#include <stl/memory>
 
 #include <process.h>
 
@@ -124,7 +132,7 @@
 //-------------------------------------------------------------
 
 #define TEST_CLIPBOARD
-#define RDB_SYSPATH  "d:\\projects\\src616\\dtrans\\wntmsci7\\bin\\applicat.rdb"
+#define RDB_SYSPATH  "d:\\projects\\src623\\dtrans\\wntmsci7\\bin\\applicat.rdb"
 #define WINCLIPBOARD_SERVICE_NAME L"com.sun.star.datatransfer.clipboard.SystemClipboard"
 #define  WRITE_CB
 #define EVT_MANUAL_RESET     TRUE
@@ -155,6 +163,37 @@ HANDLE  g_hEvtThreadWakeup;
 //
 //------------------------------------------------------------
 
+class CClipboardListener : public WeakImplHelper1 < XClipboardListener >
+{
+public:
+    ~CClipboardListener( );
+
+    //-------------------------------------------------
+    // XClipboardListener
+    //-------------------------------------------------
+
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException);
+    virtual void SAL_CALL changedContents( const ClipboardEvent& event ) throw( RuntimeException );
+};
+
+CClipboardListener::~CClipboardListener( )
+{
+}
+
+void SAL_CALL CClipboardListener::disposing( const EventObject& Source ) throw(RuntimeException)
+{
+
+}
+
+void SAL_CALL CClipboardListener::changedContents( const ClipboardEvent& event ) throw( RuntimeException )
+{
+    //MessageBox( NULL, TEXT("Clipboard content changed"), TEXT("Info"), MB_OK | MB_ICONINFORMATION );
+}
+
+//------------------------------------------------------------
+//
+//------------------------------------------------------------
+
 class CTransferable : public WeakImplHelper2< XClipboardOwner, XTransferable >
 {
 public:
@@ -164,18 +203,22 @@ public:
     // XTransferable
     //-------------------------------------------------
 
-    virtual Any SAL_CALL getTransferData( const DataFlavor& aFlavor ) throw(UnsupportedFlavorException, IOException, RuntimeException);
+    virtual Any SAL_CALL getTransferData( const DataFlavor& aFlavor )
+        throw(UnsupportedFlavorException, IOException, RuntimeException);
+
     virtual Sequence< DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(RuntimeException);
+
     virtual sal_Bool SAL_CALL isDataFlavorSupported( const DataFlavor& aFlavor ) throw(RuntimeException);
 
     //-------------------------------------------------
     // XClipboardOwner
     //-------------------------------------------------
 
-    virtual void SAL_CALL lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans ) throw(RuntimeException);
+    virtual void SAL_CALL lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans )
+        throw(RuntimeException);
 
 private:
-    Sequence< DataFlavor > m_seqDFlv;
+    Sequence< DataFlavor > m_FlavorList;
     OUString               m_Data;
 };
 
@@ -184,23 +227,15 @@ private:
 //----------------------------------------------------------------
 
 CTransferable::CTransferable( ) :
-    m_seqDFlv( 1 ),
-    m_Data( L"Ich habe mir ein neues Fahrrad gekauft!" )
+    m_FlavorList( 1 ),
+    m_Data( OUString::createFromAscii( "Ich habe mir ein neues Fahrrad gekauft!" ) )
 {
     DataFlavor df;
 
-    /*
-    df.MimeType = L"text/plain; charset=unicode";
+    df.MimeType = L"text/plain;charset=utf-16";
     df.DataType = getCppuType( ( OUString* )0 );
 
-    m_seqDFlv[0] = df;
-    */
-
-    //df.MimeType = L"text/plain; charset=windows1252";
-    df.MimeType = L"text/html";
-    df.DataType = getCppuType( ( Sequence< sal_Int8 >* )0 );
-
-    m_seqDFlv[0] = df;
+    m_FlavorList[0] = df;
 }
 
 //----------------------------------------------------------------
@@ -212,21 +247,8 @@ Any SAL_CALL CTransferable::getTransferData( const DataFlavor& aFlavor )
 {
     Any anyData;
 
-    /*if ( aFlavor == m_seqDFlv[0] )
-    {
+    if ( aFlavor.MimeType == m_FlavorList[0].MimeType )
         anyData = makeAny( m_Data );
-    }
-    else*/ if ( aFlavor == m_seqDFlv[0] )
-    {
-        OString aStr( m_Data.getStr( ), m_Data.getLength( ), 1252 );
-        Sequence< sal_Int8 > sOfChars( aStr.getLength( ) );
-        sal_Int32 lenStr = aStr.getLength( );
-
-        for ( sal_Int32 i = 0; i < lenStr; ++i )
-            sOfChars[i] = aStr[i];
-
-        anyData = makeAny( sOfChars );
-    }
 
     return anyData;
 }
@@ -238,7 +260,7 @@ Any SAL_CALL CTransferable::getTransferData( const DataFlavor& aFlavor )
 Sequence< DataFlavor > SAL_CALL CTransferable::getTransferDataFlavors(  )
     throw(RuntimeException)
 {
-    return m_seqDFlv;
+    return m_FlavorList;
 }
 
 //----------------------------------------------------------------
@@ -248,72 +270,25 @@ Sequence< DataFlavor > SAL_CALL CTransferable::getTransferDataFlavors(  )
 sal_Bool SAL_CALL CTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
     throw(RuntimeException)
 {
-    sal_Int32 nLength = m_seqDFlv.getLength( );
-    sal_Bool bRet     = sal_False;
+    sal_Int32 nLength = m_FlavorList.getLength( );
 
     for ( sal_Int32 i = 0; i < nLength; ++i )
-    {
-        if ( m_seqDFlv[i] == aFlavor )
-        {
-            bRet = sal_True;
-            break;
-        }
-    }
+        if ( m_FlavorList[i].MimeType == aFlavor.MimeType )
+            return sal_True;
 
-    return bRet;
+    return sal_False;
 }
 
 //----------------------------------------------------------------
 //  lostOwnership
 //----------------------------------------------------------------
 
-void SAL_CALL CTransferable::lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans )
+void SAL_CALL CTransferable::lostOwnership(
+    const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans )
     throw(RuntimeException)
 {
+    //MessageBox( NULL, TEXT("No longer clipboard owner"), TEXT("Info"), MB_OK | MB_ICONINFORMATION );
 }
-
-//################################################################
-// a thread in another apartment to test apartment transparency
-
-unsigned int _stdcall ThreadProc(LPVOID pParam)
-{
-    // setup another apartment
-    HRESULT hr = CoInitialize( NULL );
-    //HRESULT hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );
-
-    WaitForSingleObject( g_hEvtThreadWakeup, INFINITE );
-
-    Sequence< DataFlavor > flavorList = rXTransfRead->getTransferDataFlavors( );
-    sal_Int32 nFlavors = flavorList.getLength( );
-    OUString  mimeType;
-    OUString  hpName;
-    for ( sal_Int32 i = 0; i < nFlavors; ++i )
-    {
-        mimeType = flavorList[i].MimeType;
-        hpName   = flavorList[i].HumanPresentableName;
-    }
-
-    /*
-    try
-    {
-        DataFlavor flv;
-        flv.MimeType = L"text/html";
-        flv.DataType = getCppuType( ( Sequence< sal_Int8 >* )0 );
-
-        rXTransfRead->getTransferData( flv );
-    }
-    catch( UnsupportedFlavorException& ex )
-    {
-        OSL_ENSURE( false, "### DataFlavor not supported" );
-    }
-    */
-
-    CoUninitialize( );
-
-    return 0;
-}
-
-//################################################################
 
 //----------------------------------------------------------------
 //  main
@@ -328,25 +303,10 @@ int SAL_CALL main( int nArgc, char* Argv[] )
     //HRESULT hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );
     HRESULT hr = CoInitialize( NULL );
 
-
-#ifndef WRITE_CB
-
-    g_hEvtThreadWakeup = CreateEvent( 0,
-                                      EVT_MANUAL_RESET,
-                                      EVT_INIT_NONSIGNALED,
-                                      EVT_NONAME );
-
-    unsigned uThreadId;
-    HANDLE   hThread;
-
-    // create a thread in another apartment
-    hThread = (void*)_beginthreadex( NULL, 0, ThreadProc, NULL, 0, &uThreadId );
-
-#endif
-
     //-------------------------------------------------
     // get the global service-manager
     //-------------------------------------------------
+
     OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
@@ -363,50 +323,33 @@ int SAL_CALL main( int nArgc, char* Argv[] )
 
     Reference< XTransferable > rXTransf( static_cast< XTransferable* >( new CTransferable ) );
 
-    Reference< XClipboard > xClipboard( g_xFactory->createInstance( OUString( WINCLIPBOARD_SERVICE_NAME ) ), UNO_QUERY );
+    Reference< XClipboard >
+        xClipboard( g_xFactory->createInstance( OUString( WINCLIPBOARD_SERVICE_NAME ) ), UNO_QUERY );
     if ( !xClipboard.is( ) )
     {
-        OSL_ENSURE( sal_False, "Error creating FolderPicker Service" );
+        OSL_ENSURE( sal_False, "Error creating Clipboard Service" );
         return(-1);
     }
 
-    Reference< XTypeProvider > rXTypProv( xClipboard, UNO_QUERY );
+    Reference< XClipboardNotifier > xClipNotifier( xClipboard, UNO_QUERY );
+    Reference< XClipboardListener > rXClipListener( static_cast< XClipboardListener* >( new CClipboardListener() ) );
+    xClipNotifier->addClipboardListener( rXClipListener );
 
-    if ( rXTypProv.is( ) )
-    {
-        Sequence< Type >     seqType = rXTypProv->getTypes( );
-        sal_Int32 nLen = seqType.getLength( );
-        for ( sal_Int32 i = 0; i < nLen; ++nLen )
-        {
-            Type nxtType = seqType[i];
-        }
 
-        Sequence< sal_Int8 > seqInt8 = rXTypProv->getImplementationId( );
-    }
-
-#ifdef WRITE_CB
-
+    // set new clipboard content
     xClipboard->setContents( rXTransf, Reference< XClipboardOwner >( rXTransf, UNO_QUERY )  );
 
-#else
 
-    rXTransfRead = xClipboard->getContents( );
+    MessageBox( NULL, TEXT("Stop"), TEXT("INFO"), MB_OK|MB_ICONINFORMATION);
 
-    // wakeup the thread and waiting util it ends
-    SetEvent( g_hEvtThreadWakeup );
+    // flush the clipboard content
+    Reference< XFlushableClipboard > rXFlushableClip( xClipboard, UNO_QUERY );
+    rXFlushableClip->flushClipboard( );
+    rXFlushableClip = Reference< XFlushableClipboard >( );
 
-    // wait for thread end
-    WaitForSingleObject( hThread, INFINITE );
-
-    // destroy the transferable explicitly
-    rXTransfRead = Reference< XTransferable>( );
-
-#endif
-
-    // destroy the clipboard
-    xClipboard = Reference< XClipboard >( );
-
-    CoUninitialize( );
+    xClipNotifier->removeClipboardListener( rXClipListener );
+    rXClipListener = Reference< XClipboardListener >( );
+    xClipNotifier  = Reference< XClipboardNotifier >( );
 
     //--------------------------------------------------
     // shutdown the service manager
@@ -420,8 +363,12 @@ int SAL_CALL main( int nArgc, char* Argv[] )
 
     // Dispose and clear factory
     xComponent->dispose();
+    xComponent = Reference< XComponent >( );
+
     g_xFactory.clear();
     g_xFactory = Reference< XMultiServiceFactory >();
+
+    CoUninitialize( );
 
     return 0;
 }

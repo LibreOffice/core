@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DtObjFactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 17:20:33 $
+ *  last change: $Author: tra $ $Date: 2001-03-14 14:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,6 @@
 #include "DOTransferable.hxx"
 #endif
 
-/*
-#ifndef _WRPDOTRANSFERABLE_HXX_
-#include "WrpDOTransferable.hxx"
-#endif
-*/
-
 //------------------------------------------------------------------------
 // namespace directives
 //------------------------------------------------------------------------
@@ -96,10 +90,6 @@ using namespace com::sun::star::lang;
 IDataObjectPtr SAL_CALL CDTransObjFactory::createDataObjFromTransferable( const Reference< XMultiServiceFactory >& aServiceManager,
                                                                        const Reference< XTransferable >& refXTransferable )
 {
-    /*
-    Reference< XTransferable > wrpTransf( new CWrpDOTransferable( aServiceManager, refXTransferable, sal_False ) );
-    return ( IDataObjectPtr( new CXTDataObject( aServiceManager, wrpTransf ) ) );
-    */
     return ( IDataObjectPtr( new CXTDataObject( aServiceManager, refXTransferable ) ) );
 }
 
@@ -112,8 +102,6 @@ Reference< XTransferable > SAL_CALL CDTransObjFactory::createTransferableFromDat
     pTransf->acquire( );
     pTransf->initFlavorList( );
     pTransf->release( );
-
-    //return Reference< XTransferable >( new CWrpDOTransferable( aServiceManager, refDOTransf ) );
 
     return refDOTransf;
 }

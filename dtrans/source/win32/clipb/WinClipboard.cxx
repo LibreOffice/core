@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipboard.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-09 08:45:20 $
+ *  last change: $Author: tra $ $Date: 2001-03-14 14:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,8 @@ void SAL_CALL CWinClipboard::notifyAllClipboardListener( )
     if ( pICHelper )
     {
         OInterfaceIteratorHelper iter( *pICHelper );
-        ClipboardEvent aClipbEvent( *this, m_pImpl->getContents( ) );
+        Reference< XTransferable > rXTransf = m_pImpl->getContents( );
+        ClipboardEvent aClipbEvent( static_cast< XClipboard* >( this ), rXTransf );
 
         while( iter.hasMoreElements( ) )
         {

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mh $ $Date: 2001-01-31 15:37:21 $
+#   last change: $Author: tra $ $Date: 2001-03-14 14:54:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,8 +90,8 @@ CFLAGS+=/D_WIN32_DCOM /EHsc
 
 OBJFILES=   	$(OBJ)$/test_wincb.obj
 APP1TARGET=		$(TARGET)
-APP1OBJS=		$(OBJ)$/test_wincb.obj\
-                $(OBJ)$/ImplHelper.obj
+APP1OBJS=		$(OBJ)$/test_wincb.obj
+                
                 
 APP1STDLIBS=	$(SALLIB) \
                 $(CPPULIB)			\
@@ -99,7 +99,7 @@ APP1STDLIBS=	$(SALLIB) \
                 user32.lib \
                 ole32.lib
 
-APP1LIBS= $(LB)$/dtutils.lib\
+APP1LIBS= $(SLB)$/dtutils.lib\
           $(SOLARLIBDIR)$/user9x.lib\
           $(SOLARLIBDIR)$/tools32.lib
 
