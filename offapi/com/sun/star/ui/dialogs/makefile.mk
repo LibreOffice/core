@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tra $ $Date: 2001-08-30 10:22:18 $
+#   last change: $Author: fs $ $Date: 2001-09-14 09:52:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,7 @@ IDLFILES=\
     XFilePickerListener.idl\
     XFilePickerNotifier.idl\
     XFilePreview.idl\
+    XFilterGroupManager.idl\
     XFilterManager.idl\
     XFolderPicker.idl
 
