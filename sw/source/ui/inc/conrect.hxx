@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conrect.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: jp $ $Date: 2001-09-28 11:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 class ConstRectangle : public SwDrawBase
 {
     BOOL bMarquee;
+    BOOL bCapVertical;
 
  public:
     ConstRectangle(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);

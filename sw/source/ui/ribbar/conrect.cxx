@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conrect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-16 14:46:39 $
+ *  last change: $Author: jp $ $Date: 2001-09-28 12:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 #pragma hdrstop
 
+
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
@@ -95,6 +96,17 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
+#ifndef _SVDCAPT_HXX
+#include <svx/svdocapt.hxx>
+#endif
+#ifndef _OUTLOBJ_HXX
+#include <svx/outlobj.hxx>
+#endif
+//#define ITEMID_ADJUST EE_PARA_JUST
+//#ifndef _SVX_ADJITEM_HXX
+//#include <svx/adjitem.hxx>
+//#endif
+
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -166,48 +178,59 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
     Point aPnt(pWin->PixelToLogic(rMEvt.GetPosPixel()));
 
     BOOL bRet = SwDrawBase::MouseButtonUp(rMEvt);
-
-    if (bRet && pWin->GetDrawMode() == OBJ_TEXT)
+    if( bRet )
     {
         SdrView *pSdrView = pSh->GetDrawView();
-
-        if (bMarquee)
+        const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+        SdrObject* pObj = rMarkList.GetMark(0) ? rMarkList.GetMark(0)->GetObj()
+                                               : 0;
+        switch( pWin->GetDrawMode() )
         {
-            BOOL bNewMode = (::GetHtmlMode(pView->GetDocShell()) & HTMLMODE_ON) != 0;
+        case OBJ_TEXT:
+            if( bMarquee )
+            {
+                BOOL bNewMode = 0 != (::GetHtmlMode(pView->GetDocShell())
+                                                        & HTMLMODE_ON);
                 pSh->ChgAnchor(FLY_IN_CNTNT);
 
-            const SdrMarkList& rMarkList = pSdrView->GetMarkList();
-
-            if (rMarkList.GetMark(0))
-            {
-                SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
-
-                // die fuer das Scrollen benoetigten Attribute setzen
-                SfxItemSet aItemSet( pSdrView->GetModel()->GetItemPool(),
+                if( pObj )
+                {
+                    // die fuer das Scrollen benoetigten Attribute setzen
+                    SfxItemSet aItemSet( pSdrView->GetModel()->GetItemPool(),
                                         SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
 
-                aItemSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
-                aItemSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
-                aItemSet.Put( SdrTextAniKindItem( SDRTEXTANI_SCROLL ) );
-                aItemSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
-                aItemSet.Put( SdrTextAniCountItem( 0 ) );
-                aItemSet.Put( SdrTextAniAmountItem((INT16)pWin->PixelToLogic(Size(2,1)).Width()) );
+                    aItemSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
+                    aItemSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
+                    aItemSet.Put( SdrTextAniKindItem( SDRTEXTANI_SCROLL ) );
+                    aItemSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
+                    aItemSet.Put( SdrTextAniCountItem( 0 ) );
+                    aItemSet.Put( SdrTextAniAmountItem(
+                            (INT16)pWin->PixelToLogic(Size(2,1)).Width()) );
 
 //-/                pObj->SetAttributes(aItemSet, FALSE);
-                pObj->SetItemSetAndBroadcast(aItemSet);
+                    pObj->SetItemSetAndBroadcast(aItemSet);
+                }
             }
-        }
+            if( pObj )
+            {
+                SdrPageView* pPV = pSdrView->GetPageViewPvNum(0);
+                pView->BeginTextEdit( pObj, pPV, pWin, TRUE );
+            }
+            pView->LeaveDrawCreate();   // In Selektionsmode wechseln
+            pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
+            break;
 
-        const SdrMarkList& rMarkList = pSdrView->GetMarkList();
-        if (rMarkList.GetMark(0))
-        {
-            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
-            SdrPageView* pPV = pSdrView->GetPageViewPvNum(0);
-            pView->BeginTextEdit( pObj, pPV, pWin, TRUE );
+        case OBJ_CAPTION:
+            if( bCapVertical && pObj )
+            {
+                SdrCaptionObj* pCaptObj = (SdrCaptionObj*)pObj;
+                pCaptObj->ForceOutlinerParaObject();
+                OutlinerParaObject* pOPO = pCaptObj->GetOutlinerParaObject();
+                if( pOPO && !pOPO->IsVertical() )
+                    pOPO->SetVertical( TRUE );
+            }
+            break;
         }
-
-        pView->LeaveDrawCreate();   // In Selektionsmode wechseln
-        pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
     }
     return bRet;
 }
@@ -220,7 +243,7 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 
 void ConstRectangle::Activate(const USHORT nSlotId)
 {
-    bMarquee = FALSE;
+    bMarquee = bCapVertical = FALSE;
 
     switch (nSlotId)
     {
@@ -244,8 +267,10 @@ void ConstRectangle::Activate(const USHORT nSlotId)
         pWin->SetDrawMode(OBJ_TEXT);
         break;
 
-    case SID_DRAW_CAPTION:
     case SID_DRAW_CAPTION_VERTICAL:
+        bCapVertical = TRUE;
+        // no break
+    case SID_DRAW_CAPTION:
         pWin->SetDrawMode(OBJ_CAPTION);
         break;
 
@@ -262,6 +287,9 @@ void ConstRectangle::Activate(const USHORT nSlotId)
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/03/16 14:46:39  jp
+      new: vertical support for textboxes
+
       Revision 1.2  2000/10/30 12:08:27  aw
       change SdrObjects to use SfxItemSet instead of SfxSetItems.
       Removed TakeAttributes() and SetAttributes(), new ItemSet
