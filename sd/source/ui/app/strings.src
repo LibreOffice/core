@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-19 17:59:21 $
+ *  last change: $Author: kz $ $Date: 2001-12-20 21:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8053,7 +8053,7 @@ String STR_EFFECT_DISCARD_S_FROM_B
     Text[ greek ] = "Óıíôïìç åìöÜíéóç áğü êÜôù";
     Text[ dutch ] = "Kort binnenvliegen vanaf beneden";
     Text[ french ] = "Arrivée furtive du bas";
-    Text[ spanish ] = "Entrar localmente desde abajo";
+    Text[ spanish ] = "Entrada furtiva desde abajo";
     Text[ finnish ] = "Poista objektin peite alhaalta";
     Text[ italian ] = "Sovrapponi dal basso da un punto interno";
     Text[ danish ] = "Discard short from Bottom";
@@ -13696,6 +13696,7 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transparència";
     Text[ finnish ] = "Läpikuultavuus";
 };
+
 
 
 
