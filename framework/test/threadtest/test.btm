@@ -1,0 +1,29 @@
+@echo off
+pushd
+
+rem TESTCOUNT   = Anzahl von Test-Durchlaeufen
+rem THREADCOUNT = Anzahl konk. Threads
+rem LOOPS		= Anzahl Durchlaeufe pro Test
+rem OWNER		= Numer des Threads, welcher Testklasse "besitzt" ... er muss diese initialisieren und deinitialisieren!
+
+echo "set test parameter ..."
+set _TESTCOUNT=100
+set _THREADCOUNT=30
+set _LOOPS=50
+set _OWNER=10
+
+cd bin
+
+echo "delete old log files ..."
+*del .\threadtest_statistic.csv
+*del .\threadtest.log
+
+echo "start test ..."
+.\threadtest.exe %_TESTCOUNT% %_THREADCOUNT% %_LOOPS% %_OWNER%
+
+echo "show log files ..."
+edit .\threadtest_statistic.csv
+edit .\threadtest.log
+
+popd
+echo on
