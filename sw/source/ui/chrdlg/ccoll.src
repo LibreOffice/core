@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:45:44 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,14 +113,14 @@ TabPage TP_CONDCOLL
         Text [ danish ] = "Som betinget typografi" ;
         Text [ portuguese_brazilian ] = "~Als bedingte Vorlage" ;
         Text [ portuguese ] = "~Estilo condicional" ;
-        Text[ chinese_simplified ] = "µ±×÷ÓĞÌõ¼şµÄÑùÊ½(~S)";
+        Text[ chinese_simplified ] = "µ±×÷ÓĞÌõ¼şµÄÑùÊ½(~C)";
         Text[ russian ] = "Êàê óñëîâíûé ñòèëü";
         Text[ polish ] = "Jako warunkowy szablon";
-        Text[ japanese ] = "ğŒ•t‚«½À²Ù‚Æ‚µ‚Ä(~S)";
-        Text[ chinese_traditional ] = "·í§@¦³±ø¥óªº¼Ë¦¡(~S)";
+        Text[ japanese ] = "ğŒ•t‚«½À²Ù‚Æ‚µ‚Ä(~C)";
+        Text[ chinese_traditional ] = "·í§@¦³±ø¥óªº¼Ë¦¡(~C)";
         Text[ arabic ] = "ßäãØ ãÔÑæØ";
         Text[ greek ] = "Ùò åîáñôşìåíï ğñüôõğï";
-        Text[ korean ] = "Á¶°ÇÀû À¯Çü";
+        Text[ korean ] = "Á¶°ÇÀû À¯Çü(~C)";
         Text[ turkish ] = "~Koşullu biçim olarak";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are capitalized. EM15.5.00";
     };
@@ -140,14 +140,14 @@ TabPage TP_CONDCOLL
         Text [ danish ] = "Kontekst" ;
         Text [ portuguese ] = "~Contexto" ;
         Text [ portuguese_brazilian ] = "~Kontext" ;
-        Text[ chinese_simplified ] = "ÉÏÏÂÎÄ(~C)";
+        Text[ chinese_simplified ] = "ÉÏÏÂÎÄ(~X)";
         Text[ russian ] = "~Êîíòåêñò";
         Text[ polish ] = "Kontekst";
-        Text[ japanese ] = "ºİÃ·½Ä(~C)";
-        Text[ chinese_traditional ] = "¤W¤U¤å(~C)";
+        Text[ japanese ] = "ºİÃ·½Ä(~X)";
+        Text[ chinese_traditional ] = "¤W¤U¤å(~X)";
         Text[ arabic ] = "ÇáÓíÇŞ";
         Text[ greek ] = "ĞåñéâÜëëïí";
-        Text[ korean ] = "³»¿ë(~C)";
+        Text[ korean ] = "³»¿ë(~X)";
         Text[ turkish ] = "Bağlam";
         Text[ language_user1 ] = " ";
     };
@@ -204,14 +204,14 @@ TabPage TP_CONDCOLL
         Text [ danish ] = "Afsnitstypografier" ;
         Text [ portuguese ] = "Estilos de parágrafo" ;
         Text [ portuguese_brazilian ] = "Absatzvorlagen" ;
-        Text[ chinese_simplified ] = "¶ÎÂäÑùÊ½";
+        Text[ chinese_simplified ] = "¶ÎÂäÑùÊ½(~P)";
         Text[ russian ] = "Ñòèëè àáçàöà";
         Text[ polish ] = "Style akapitu";
-        Text[ japanese ] = "’i—½À²Ù";
-        Text[ chinese_traditional ] = "¬q¸¨¼Ë¦¡";
+        Text[ japanese ] = "’i—½À²Ù(~P)";
+        Text[ chinese_traditional ] = "¬q¸¨¼Ë¦¡(~P)";
         Text[ arabic ] = "ÃäãÇØ İŞÑÉ";
         Text[ greek ] = "Ğñüôõğá ğáñáãñÜöïõ";
-        Text[ korean ] = "´Ü¶ô À¯Çü";
+        Text[ korean ] = "´Ü¶ô À¯Çü(~P)";
         Text[ turkish ] = "Paragraf biçimi";
         Text[ language_user1 ] = " ";
     };
@@ -252,11 +252,11 @@ TabPage TP_CONDCOLL
         Text [ danish ] = "Fjern" ;
         Text [ portuguese ] = "~Remover" ;
         Text [ portuguese_brazilian ] = "~Entfernen" ;
-        Text[ chinese_simplified ] = "É¾³ı(~R)";
+        Text[ chinese_simplified ] = "É¾³ı(~M)";
         Text[ russian ] = "~Óäàëèòü";
         Text[ polish ] = "~Usuñ";
-        Text[ japanese ] = "íœ(~R)";
-        Text[ chinese_traditional ] = "§R°£(~R)";
+        Text[ japanese ] = "íœ(~M)";
+        Text[ chinese_traditional ] = "§R°£(~M)";
         Text[ arabic ] = "ÅÒÇáÉ";
         Text[ greek ] = "ÄéáãñáöŞ";
         Text[ korean ] = "Á¦°Å(~M)";
