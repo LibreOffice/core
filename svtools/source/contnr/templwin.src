@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-12 20:25:37 $
+ *  last change: $Author: vg $ $Date: 2001-10-17 20:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,6 +843,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Mida" ; DI_SIZE ; > ;
     };
 };
+
 
 
 
