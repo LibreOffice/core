@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-01 19:24:07 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 21:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3599,12 +3599,12 @@ Resource RID_BASIC_START
         Text = "Es ist eine Exception aufgetreten $(ARG1)" ;
         Text [ ENGLISH ] = "An exception occurred $(ARG1)" ;
         Text [ norwegian ] = "Not implemented in VBScript" ;
-        Text [ italian ] = "Non contenuto nello script  VB" ;
+        Text [ italian ] = "An exception occurred $(ARG1)" ;
         Text [ portuguese_brazilian ] = "Not implemented in VBScript" ;
-        Text [ portuguese ] = "Não contido no Script VB" ;
+        Text [ portuguese ] = "Excepção $(ARG1)" ;
         Text [ french ] = "Exception $(ARG1)" ;
         Text [ dutch ] = "Bevindt zich niet in VBScript" ;
-        Text [ spanish ] = "Exception $(ARG1)" ;
+        Text [ spanish ] = "Ha ocurrido la excepción $(ARG1)" ;
         Text [ danish ] = "Ikke indeholdt i VB-script" ;
         Text [ swedish ] = "Det har uppstått ett undantag $(ARG1)" ;
         Text [ finnish ] = "Ei sisälly VB-komentosarjaan" ;
@@ -3864,3 +3864,4 @@ String ERRCODE_BASMGR_UNLOADLIB & ERRCODE_RES_MASK
     Text[ catalan ] = "No se pudo eliminar la biblioteca de la memoria.";
     Text[ finnish ] = "Kirjastoa ei voitu poistaa muistista.";
 };
+
