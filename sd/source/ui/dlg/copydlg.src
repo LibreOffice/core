@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-31 20:44:15 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,14 +118,14 @@ ModalDialog DLG_COPY
         Text [ dutch ] = "~Aantal kopieën" ;
         Text [ spanish ] = "Número de c~opias" ;
         Text [ english_us ] = "Number of ~copies" ;
-        Text[ chinese_simplified ] = "¸´ÖÆ¼şÊı(~C)";
+        Text[ chinese_simplified ] = "å¤åˆ¶ä»¶æ•°(~C)";
         Text[ russian ] = "×èñëî êîïèé";
         Text[ polish ] = "Liczba kopii";
-        Text[ japanese ] = "ºËß°‚Ì”(~C)";
-        Text[ chinese_traditional ] = "½Æ¦L¥ó¼Æ(~C)";
+        Text[ japanese ] = "ï½ºï¾‹ï¾Ÿï½°ã®æ•°(~C)";
+        Text[ chinese_traditional ] = "è¤‡å°ä»¶æ•¸(~C)";
         Text[ arabic ] = "ÚÏÏ ÇáäÓÎ";
         Text[ greek ] = "Áñéèìüò áíôéãñÜöùí";
-        Text[ korean ] = "º¹»ç ¼ö·®(~C)";
+        Text[ korean ] = "ë³µì‚¬ ìˆ˜ëŸ‰(~C)";
         Text[ turkish ] = "Kopya sayısı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Número de c~opias";
@@ -168,12 +168,12 @@ ModalDialog DLG_COPY
         QuickHelpText [ portuguese ] = "Aplica os valores seleccionados" ;
         QuickHelpText[ russian ] = "Ïğèíÿòü çíà÷åíèÿ èç îòáîğà";
         QuickHelpText[ polish ] = "Wpisz wartoœci selekcji";
-        QuickHelpText[ japanese ] = "‘I‘ğ‚µ‚½”’l‚ğ‘‚«‚±‚Ş";
-        QuickHelpText[ chinese_simplified ] = "½ÓÊÜÑ¡ÔñµÄÊıÖµ";
-        QuickHelpText[ chinese_traditional ] = "¨Ï¥Î¿ï¨úªº¼Æ­È";
+        QuickHelpText[ japanese ] = "é¸æŠã—ãŸæ•°å€¤ã‚’æ›¸ãã“ã‚€";
+        QuickHelpText[ chinese_simplified ] = "æ¥å—é€‰æ‹©çš„æ•°å€¼";
+        QuickHelpText[ chinese_traditional ] = "ä½¿ç”¨é¸å–çš„æ•¸å€¼";
         QuickHelpText[ arabic ] = "ÇáŞíã ÍÓÈ ÇáÊÍÏíÏ";
         QuickHelpText[ greek ] = "Ôéìİò áğü åğéëïãŞ";
-        QuickHelpText[ korean ] = "¼±ÅÃÀ¸·ÎºÎÅÍÀÇ¡¡°ª¡¡ÀÎ¼ö";
+        QuickHelpText[ korean ] = "ì„ íƒìœ¼ë¡œë¶€í„°ì˜ã€€ê°’ã€€ì¸ìˆ˜";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Werte von Selektion aufnehmen";
         QuickHelpText[ catalan ] = "Valores seleccionados";
@@ -198,10 +198,10 @@ ModalDialog DLG_COPY
         Text[ swedish ] = "~Standard";
         Text[ polish ] = "Domyœlnie";
         Text[ portuguese_brazilian ] = "~Default";
-        Text[ japanese ] = "•W€(~D)";
-        Text[ korean ] = "±âº»(~D)";
-        Text[ chinese_simplified ] = "Ä¬ÈÏ(~D)";
-        Text[ chinese_traditional ] = "Àq»{(~D)";
+        Text[ japanese ] = "æ¨™æº–(~D)";
+        Text[ korean ] = "ê¸°ë³¸(~D)";
+        Text[ chinese_simplified ] = "é»˜è®¤(~D)";
+        Text[ chinese_traditional ] = "é»˜èª(~D)";
         Text[ arabic ] = "ÇİÊÑÇÖí";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
@@ -232,14 +232,14 @@ ModalDialog DLG_COPY
         CustomUnitText [ french ] = " degrés" ;
         CustomUnitText [ dutch ] = "Graden" ;
         CustomUnitText [ portuguese ] = "~Graus" ;
-        CustomUnitText[ chinese_simplified ] = "¶È";
+        CustomUnitText[ chinese_simplified ] = "åº¦";
         CustomUnitText[ russian ] = "Ãğàäóñ";
         CustomUnitText[ polish ] = "Stopieñ";
-        CustomUnitText[ japanese ] = "“x";
-        CustomUnitText[ chinese_traditional ] = "«×";
+        CustomUnitText[ japanese ] = "åº¦";
+        CustomUnitText[ chinese_traditional ] = "åº¦";
         CustomUnitText[ arabic ] = "ÏÑÌÉ/ÏÑÌÇÊ";
         CustomUnitText[ greek ] = "Ìïßñåò";
-        CustomUnitText[ korean ] = "µµ";
+        CustomUnitText[ korean ] = "ë„";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ catalan ] = "grados";
@@ -262,14 +262,14 @@ ModalDialog DLG_COPY
         Text [ dutch ] = "Draa~ihoek" ;
         Text [ spanish ] = "Á~ngulo de rot." ;
         Text [ english_us ] = "~Angle" ;
-        Text[ chinese_simplified ] = "Ğı×ª½Ç¶È(~A)";
+        Text[ chinese_simplified ] = "æ—‹è½¬è§’åº¦(~A)";
         Text[ russian ] = "~Óãîë ïîâîğîòà";
         Text[ polish ] = "K¹t obrotowy";
-        Text[ japanese ] = "‰ñ“]Šp“x(~A)";
-        Text[ chinese_traditional ] = "±ÛÂà¨¤«×(~A)";
+        Text[ japanese ] = "å›è»¢è§’åº¦(~A)";
+        Text[ chinese_traditional ] = "æ—‹è½‰è§’åº¦(~A)";
         Text[ arabic ] = "ÒÇæíÉ ÇáÏæÑÇä";
         Text[ greek ] = "~Ãùíßá ğåñéóôñïöŞò";
-        Text[ korean ] = "È¸Àü°¢(~A)";
+        Text[ korean ] = "íšŒì „ê°(~A)";
         Text[ turkish ] = "Açı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Á~ngulo de rot.";
@@ -291,14 +291,14 @@ ModalDialog DLG_COPY
         Text [ dutch ] = "~X-as" ;
         Text [ spanish ] = "Eje ~X" ;
         Text [ english_us ] = "~X axis" ;
-        Text[ chinese_simplified ] = "~X Öá";
+        Text[ chinese_simplified ] = "~X è½´";
         Text[ russian ] = "Îñü ~X";
         Text[ polish ] = "Oœ X";
-        Text[ japanese ] = "~X ²";
-        Text[ chinese_traditional ] = "~X ¶b";
+        Text[ japanese ] = "~X è»¸";
+        Text[ chinese_traditional ] = "~X è»¸";
         Text[ arabic ] = "ÇáãÍæÑ Ó";
         Text[ greek ] = "¢îïíáò X";
-        Text[ korean ] = "~X Ãà";
+        Text[ korean ] = "~X ì¶•";
         Text[ turkish ] = "X ekseni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eje ~X";
@@ -388,14 +388,14 @@ ModalDialog DLG_COPY
         Text [ dutch ] = "~Y-as" ;
         Text [ spanish ] = "Eje ~Y" ;
         Text [ english_us ] = "~Y axis" ;
-        Text[ chinese_simplified ] = "~Y Öá";
+        Text[ chinese_simplified ] = "~Y è½´";
         Text[ russian ] = "Îñü ~Y";
         Text[ polish ] = "Oœ Y";
-        Text[ japanese ] = "~Y ²";
-        Text[ chinese_traditional ] = "~Y ¶b";
+        Text[ japanese ] = "~Y è»¸";
+        Text[ chinese_traditional ] = "~Y è»¸";
         Text[ arabic ] = "ÇáãÍæÑ Õ";
         Text[ greek ] = "¢îïíáò ~Õ";
-        Text[ korean ] = "~Y Ãà";
+        Text[ korean ] = "~Y ì¶•";
         Text[ turkish ] = "Y ekseni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eje ~Y";
@@ -417,14 +417,14 @@ ModalDialog DLG_COPY
         Text [ dutch ] = "B~reedte" ;
         Text [ spanish ] = "~Ancho" ;
         Text [ english_us ] = "~Width" ;
-        Text[ chinese_simplified ] = "¿í¶È(~W)";
+        Text[ chinese_simplified ] = "å®½åº¦(~W)";
         Text[ russian ] = "~Øèğèíà";
         Text[ polish ] = "Szer.";
-        Text[ japanese ] = "•(~W)";
-        Text[ chinese_traditional ] = "¼e«×(~W)";
+        Text[ japanese ] = "å¹…(~W)";
+        Text[ chinese_traditional ] = "å¯¬åº¦(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ(~W)";
+        Text[ korean ] = "ë„ˆë¹„(~W)";
         Text[ turkish ] = "Genişlik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ancho";
@@ -446,14 +446,14 @@ ModalDialog DLG_COPY
         Text [ dutch ] = "~Hoogte" ;
         Text [ spanish ] = "A~ltura" ;
         Text [ english_us ] = "~Height" ;
-        Text[ chinese_simplified ] = "¸ß¶È(~H)";
+        Text[ chinese_simplified ] = "é«˜åº¦(~H)";
         Text[ russian ] = "Âûñîòà";
         Text[ polish ] = "Wys.";
-        Text[ japanese ] = "‚‚³(~H)";
-        Text[ chinese_traditional ] = "°ª«×(~H)";
+        Text[ japanese ] = "é«˜ã•(~H)";
+        Text[ chinese_traditional ] = "é«˜åº¦(~H)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "~¾øïò";
-        Text[ korean ] = "³ôÀÌ(~H)";
+        Text[ korean ] = "ë†’ì´(~H)";
         Text[ turkish ] = "Yüks.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~ltura";
@@ -475,14 +475,14 @@ ModalDialog DLG_COPY
         Text [ dutch ] = "Verplaatsing" ;
         Text [ spanish ] = "Desplazamiento" ;
         Text [ english_us ] = "Placement" ;
-        Text[ chinese_simplified ] = "ÒÆ¶¯";
+        Text[ chinese_simplified ] = "ç§»åŠ¨";
         Text[ russian ] = "Ñìåùåíèå";
         Text[ polish ] = "Przesuniêcie";
-        Text[ japanese ] = "ˆÚ“®";
-        Text[ chinese_traditional ] = "²¾°Ê";
+        Text[ japanese ] = "ç§»å‹•";
+        Text[ chinese_traditional ] = "ç§»å‹•";
         Text[ arabic ] = "ÅÒÇÍÉ";
         Text[ greek ] = "Ìåôáêßíçóç";
-        Text[ korean ] = "ÀÌµ¿";
+        Text[ korean ] = "ì´ë™";
         Text[ turkish ] = "Kaydırma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desplazamiento";
@@ -504,14 +504,14 @@ ModalDialog DLG_COPY
         Text [ dutch ] = "Vergroting" ;
         Text [ spanish ] = "Aumento" ;
         Text [ english_us ] = "Enlargement" ;
-        Text[ chinese_simplified ] = "·Å´ó";
+        Text[ chinese_simplified ] = "æ”¾å¤§";
         Text[ russian ] = "Óâåëè÷åíèå";
         Text[ polish ] = "Powiêkszenie";
-        Text[ japanese ] = "Šg‘å";
-        Text[ chinese_traditional ] = "©ñ¤j";
+        Text[ japanese ] = "æ‹¡å¤§";
+        Text[ chinese_traditional ] = "æ”¾å¤§";
         Text[ arabic ] = "ÊßÈíÑ";
         Text[ greek ] = "Ìåãİèõíóç";
-        Text[ korean ] = "È®´ë";
+        Text[ korean ] = "í™•ëŒ€";
         Text[ turkish ] = "Büyütme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aumento";
@@ -531,14 +531,14 @@ ModalDialog DLG_COPY
         Text [ danish ] = "Farver" ;
         Text [ portuguese ] = "Cores" ;
         Text [ portuguese_brazilian ] = "Farben" ;
-        Text[ chinese_simplified ] = "ÑÕÉ«";
+        Text[ chinese_simplified ] = "é¢œè‰²";
         Text[ russian ] = "Öâåòà";
         Text[ polish ] = "Kolory";
-        Text[ japanese ] = "F";
-        Text[ chinese_traditional ] = "ÃC¦â";
+        Text[ japanese ] = "è‰²";
+        Text[ chinese_traditional ] = "é¡”è‰²";
         Text[ arabic ] = "ÇáÃáæÇä";
         Text[ greek ] = "×ñşìáôá";
-        Text[ korean ] = "»ö»ó";
+        Text[ korean ] = "ìƒ‰ìƒ";
         Text[ turkish ] = "Renkler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Colores";
@@ -568,14 +568,14 @@ ModalDialog DLG_COPY
         Text [ danish ] = "Start" ;
         Text [ portuguese ] = "~Início" ;
         Text [ portuguese_brazilian ] = "~Anfang" ;
-        Text[ chinese_simplified ] = "¿ªÊ¼(~S)";
+        Text[ chinese_simplified ] = "å¼€å§‹(~S)";
         Text[ russian ] = "~Íà÷àëî";
         Text[ polish ] = "Pocz¹tek";
-        Text[ japanese ] = "n‚ß(~S)";
-        Text[ chinese_traditional ] = "¶}©l(~S)";
+        Text[ japanese ] = "å§‹ã‚(~S)";
+        Text[ chinese_traditional ] = "é–‹å§‹(~S)";
         Text[ arabic ] = "ÇáÈÏÇíÉ";
         Text[ greek ] = "Áñ÷Ş";
-        Text[ korean ] = "½ÃÀÛ(~S)";
+        Text[ korean ] = "ì‹œì‘(~S)";
         Text[ turkish ] = "İlk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Comienzo";
@@ -599,37 +599,38 @@ ModalDialog DLG_COPY
         Text [ dutch ] = "~Einde" ;
         Text [ english_us ] = "~End" ;
         Text [ italian ] = "Fine" ;
-        Text [ spanish ] = "~Terminar" ;
+        Text [ spanish ] = "~Fin" ;
         Text [ french ] = "~Fin" ;
         Text [ swedish ] = "Sl~ut" ;
         Text [ danish ] = "Slut" ;
         Text [ portuguese ] = "~Fim" ;
         Text [ portuguese_brazilian ] = "~Ende" ;
-        Text[ chinese_simplified ] = "½áÊø(~E)";
+        Text[ chinese_simplified ] = "ç»“æŸ(~E)";
         Text[ russian ] = "Êîíåö";
         Text[ polish ] = "Koniec";
-        Text[ japanese ] = "I‚è(~E)";
-        Text[ chinese_traditional ] = "µ²§ô(~E)";
+        Text[ japanese ] = "çµ‚ã‚Š(~E)";
+        Text[ chinese_traditional ] = "çµæŸ(~E)";
         Text[ arabic ] = "ÇáäåÇíÉ";
         Text[ greek ] = "Ôİëïò";
-        Text[ korean ] = "³¡(~E)";
+        Text[ korean ] = "ë(~E)";
         Text[ turkish ] = "Son";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Terminar";
         Text[ finnish ] = "~Loppu";
     };
-    Text[ chinese_simplified ] = "¸´ÖÆ¼ş";
+    Text[ chinese_simplified ] = "å¤åˆ¶ä»¶";
     Text[ russian ] = "Äóáëèğîâàòü";
     Text[ polish ] = "Duplikuj";
-    Text[ japanese ] = "•¡»";
-    Text[ chinese_traditional ] = "½Æ»s¥ó";
+    Text[ japanese ] = "è¤‡è£½";
+    Text[ chinese_traditional ] = "è¤‡è£½ä»¶";
     Text[ arabic ] = "äÓÎÉ ãØÇÈŞÉ";
     Text[ greek ] = "ÁíáğáñáãùãŞ";
-    Text[ korean ] = "Áßº¹";
+    Text[ korean ] = "ì¤‘ë³µ";
     Text[ turkish ] = "Çoğalt";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Duplicar";
 };
+
 
 
 
