@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-16 18:55:38 $
+ *  last change: $Author: nn $ $Date: 2001-03-02 21:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,8 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_ATTR_PARA_LINESPACE_20 );
     rBindings.Invalidate( SID_SET_SUPER_SCRIPT );
     rBindings.Invalidate( SID_SET_SUB_SCRIPT );
+    rBindings.Invalidate( SID_TEXTDIRECTION_LEFT_TO_RIGHT );
+    rBindings.Invalidate( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
 }
 
 void ScDrawView::DrawMarks( OutputDevice* pOut ) const
