@@ -2,9 +2,9 @@
  *
  *  $RCSfile: customshapeproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:10:12 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,28 +152,52 @@ namespace sdr
         {
             SdrObjCustomShape& rObj = (SdrObjCustomShape&)GetSdrObject();
 
-            if( SFX_ITEM_SET == rSet.GetItemState( SDRATTR_TEXT_AUTOGROWSIZE ) )
+            if( SFX_ITEM_SET == rSet.GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) )
             {
-                rObj.bTextFrame = ((SdrTextAutoGrowSizeItem&)rSet.Get( SDRATTR_TEXT_AUTOGROWSIZE )).GetValue() != 0;
+                rObj.bTextFrame = ((SdrTextAutoGrowHeightItem&)rSet.Get( SDRATTR_TEXT_AUTOGROWHEIGHT )).GetValue() != 0;
             }
 
             // call parent
             TextProperties::ItemSetChanged(rSet);
 
-            // local changes
-            delete rObj.pRenderedCustomShape, rObj.pRenderedCustomShape = 0L;
+            // local changes, removing cached objects
+            rObj.mXRenderedCustomShape = NULL;
         }
         void CustomShapeProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
         {
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
             OutlinerParaObject* pParaObj = rObj.GetOutlinerParaObject();
 
-            if( pNewItem && ( SDRATTR_TEXT_AUTOGROWSIZE == nWhich ) )
+            if( pNewItem && ( SDRATTR_TEXT_AUTOGROWHEIGHT == nWhich ) )
             {
-                rObj.bTextFrame = ((SdrTextAutoGrowSizeItem*)pNewItem)->GetValue() != 0;
+                rObj.bTextFrame = ((SdrTextAutoGrowHeightItem*)pNewItem)->GetValue() != 0;
             }
             // call parent
             TextProperties::ItemChange( nWhich, pNewItem );
+        }
+        void CustomShapeProperties::ForceDefaultAttributes()
+        {
+/* SJ: Following is is no good if creating customshapes leading to objects that are white after loading via xml
+
+            SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
+            sal_Bool bTextFrame(rObj.IsTextFrame());
+
+            // force ItemSet
+            GetObjectItemSet();
+
+            if(bTextFrame)
+            {
+                mpItemSet->Put(XLineStyleItem(XLINE_NONE));
+                mpItemSet->Put(XFillColorItem(String(), Color(COL_WHITE)));
+                mpItemSet->Put(XFillStyleItem(XFILL_NONE));
+            }
+            else
+            {
+                mpItemSet->Put(SvxAdjustItem(SVX_ADJUST_CENTER));
+                mpItemSet->Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
+                mpItemSet->Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
+            }
+*/
         }
         CustomShapeProperties::CustomShapeProperties(SdrObject& rObj)
         :   TextProperties(rObj)
