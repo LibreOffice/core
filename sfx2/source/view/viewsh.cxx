@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:16:35 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,6 @@
  *
  ************************************************************************/
 
-#ifndef _PLUGIN_HXX //autogen
-#include <so3/plugin.hxx>
-#endif
-#ifndef _APPLET_HXX //autogen
-#include <so3/applet.hxx>
-#endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
@@ -76,9 +70,6 @@
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SOERR_HXX //autogen
-#include <so3/soerr.hxx>
 #endif
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
@@ -96,10 +87,17 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDMISC_HPP_
+#include <com/sun/star/embed/EmbedMisc.hpp>
+#endif
 
 #include <tools/urlobj.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
+#include <svtools/soerr.hxx>
 #ifndef INCLUDED_SVTOOLS_INTERNALOPTIONS_HXX
 #include <svtools/internaloptions.hxx>
 #endif
@@ -116,16 +114,13 @@
 
 #include "viewsh.hxx"
 #include "viewimp.hxx"
-
 #include "sfxresid.hxx"
 #include "request.hxx"
 #include "templdlg.hxx"
-#include "interno.hxx"
 #include "printer.hxx"
 #include "docfile.hxx"
 #include "dispatch.hxx"
 #include "arrdecl.hxx"
-#include "ipenv.hxx"
 #include "accmgr.hxx"
 #include "intfrm.hxx"
 #include "docfac.hxx"
@@ -134,19 +129,21 @@
 #include "virtmenu.hxx"
 #include "objuno.hxx"
 #include "sfxlocal.hrc"
-#include "frameobj.hxx"
 #include "sfxbasecontroller.hxx"
 #include "topfrm.hxx"
 #include "mailmodel.hxx"
 #include "event.hxx"
 #include "appdata.hxx"
 #include "fcontnr.hxx"
+#include "ipclient.hxx"
+#include "workwin.hxx"
 
 // #110897#
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
@@ -165,13 +162,6 @@ SFX_IMPL_INTERFACE(SfxViewShell,SfxShell,SfxResId(0))
 }
 
 TYPEINIT2(SfxViewShell,SfxShell,SfxListener);
-
-//--------------------------------------------------------------------
-
-ErrCode SfxViewShell::DirectLoad( SfxFrame* pFrame, SfxMedium& rMedium )
-{
-    return ERRCODE_SFX_FORCEDOCLOAD;
-}
 
 //--------------------------------------------------------------------
 
@@ -285,13 +275,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                         if ( pView )
                         {
                             pView->pImp->bPlugInsActive = bActive;
-                            SfxInPlaceObject *pObj =
-                                pFrame->GetCurrentDocument()->GetInPlaceObject();
-                            if ( pObj )
-                            {
-                                Rectangle aVisArea = pObj->GetVisArea();
-                                VisAreaChanged(aVisArea);
-                            }
+                            Rectangle aVisArea = GetObjectShell()->GetVisArea();
+                            VisAreaChanged(aVisArea);
                         }
                     }
 
@@ -414,144 +399,70 @@ void SfxViewShell::SetZoomFactor( const Fraction &rZoomX,
 }
 
 //--------------------------------------------------------------------
-
-SfxInPlaceClient* SfxViewShell::CreateIPClient
-(
-    WorkWindow*     pTop,
-    WorkWindow*     pDoc,
-    Window*         pDraw
-)
+ErrCode SfxViewShell::DoVerb(long nVerb)
 
 /*  [Beschreibung]
 
-    "Uber diese Factory-Methode erzeugt der SFx spezielle SfxShell-Instanzen,
-    die als Stellvertreter f"ur InPlace-Objekte dienen. Solle  auf Callbacks
-    dieser Stellvertreter reagiert werden, die dieses "uber eine eigene
-    SfxInPlaceClient-Subklasse zu realisieren und diese Factory zu "uberladen.
+    Virtuelle Methode, um am selektierten Objekt ein Verb auszuf"uhren.
+    Da dieses Objekt nur den abgeleiteten Klassen bekannt ist, muá DoVerb
+    dort "uberlschrieben werden.
+
 */
 
 {
-    HACK(kann raus)
-    return new SfxInPlaceClient( this, pDraw );
+    return ERRCODE_SO_NOVERBS;
 }
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::UIActivate
-(
-    SvInPlaceObject*    pObj    // das Objekt, welched deaktiv wurde
-)
-
-/*  [Beschreibung]
-
-    Dieser Handler wird gerufen, wenn ein mit der Methode
-    <SfxViewShell::DoVerb()> angesteuertes Objekt aktiviert
-    wurde.
-
-    Die Basisimplementation braucht nicht gerufen zu werden.
-
-
-    [Querverweise]
-    <SfxViewShell::UIDeactivate(SvInPlaceObject)>
-*/
-
+void SfxViewShell::OutplaceActivated( sal_Bool bActive, SfxInPlaceClient* pClient )
 {
+    if ( !bActive )
+        GetFrame()->GetFrame()->Appear();
 }
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::UIDeactivate
-(
-    SvInPlaceObject*    pObj    // das Objekt, welched deaktiv wurde
-)
-
-/*  [Beschreibung]
-
-    Dieser Handler wird gerufen, wenn ein mit der Methode
-    <SfxViewShell::DoVerb()> aktiviertes Objekt deaktiviert
-    wurde. Dies kann von der Server-Applikation oder durch die Client-
-    Applikation hervorgerufen worden sein.
-
-    Die Basisimplementation braucht nicht gerufen zu werden.
-
-
-    [Querverweise]
-    <SfxViewShell::UIDeactivate(SvInPlaceObject)>
-*/
-
+void SfxViewShell::InplaceActivating( SfxInPlaceClient* pClient )
 {
+    // TODO/LATER: painting of the bitmap can be stopped, it is required if CLIPCHILDREN problem #i25788# is not solved,
+    // but may be the bug will not affect the real office vcl windows, then it is not required
 }
 
 //--------------------------------------------------------------------
 
-ErrCode SfxViewShell::DoVerb
-(
-    SfxInPlaceClient*   pIPClient,  // zu aktivierender <SfxInPlaceClient>
-    long                nVerb       // auszuf"uhrendes Verb (default = 0)
-)
-
-/*  [Beschreibung]
-
-    [Beispiel]
-
-    ErrCode SwView::DoVerb( SwSoNode *pSoNode, long nVerb )
-    {
-        SwIPClientRef xIPCli = (SwIPClient*)
-                pViewSh->FindIPClient( pSoNode->GetObject() );
-        if ( !xIPCli.Is() )
-            xIPCli = new SwIPClient( pViewSh, pEditWin, .... );
-        pSoNode->GetObject()->DoConnect( xIPCli );
-        xIPCli->GetEnv()->SetObjArea( Rectangle( ... ) );
-        ...
-        return DoVerb( xIPCli, nVerb );
-    }
-*/
-
+void SfxViewShell::InplaceDeactivated( SfxInPlaceClient* pClient )
 {
-    DBG_ASSERT( pIPClient->GetEmbedObj(), "DoVerb aber nicht connected?!" );
+    // TODO/LATER: paint the replacement image in normal way if the painting was stopped
+}
 
-    // falls neu, in Liste eintragen
-    // Passiert jetzt schon im Connect !
-//  if ( LIST_ENTRY_NOTFOUND == aIPClientList.GetPos( pIPClient ) )
-//      aIPClientList.Insert(pIPClient);
+//--------------------------------------------------------------------
 
-    // und ab gehts (kein SetModified rufen, das mach das Obj schon selbst)
-    SfxErrorContext aEc( ERRCTX_SO_DOVERB, GetWindow(), RID_SO_ERRCTX );
-    SvPersist* pPersist = GetObjectShell()->GetInPlaceObject();
-    if ( !pPersist )
-        pPersist = GetObjectShell();
-    pPersist->StartActivation( pIPClient->GetEmbedObj() );
-    ErrCode nErr = pIPClient->GetEmbedObj()->DoVerb( nVerb );
-    if( nErr )
-        ErrorHandler::HandleError( nErr );
-    return nErr;
+void SfxViewShell::UIActivating( SfxInPlaceClient* pClient )
+{
+    pFrame->GetBindings().HidePopups(TRUE);
+    pFrame->GetDispatcher()->Update_Impl( TRUE );
+}
+
+//--------------------------------------------------------------------
+
+void SfxViewShell::UIDeactivated( SfxInPlaceClient* pClient )
+{
+    if ( !pFrame->GetFrame()->IsClosing_Impl() ||
+        SFX_APP()->GetViewFrame() != pFrame )
+            pFrame->GetDispatcher()->Update_Impl( TRUE );
+    pFrame->GetBindings().HidePopups(FALSE);
 }
 
 //--------------------------------------------------------------------
 
 SfxInPlaceClient* SfxViewShell::FindIPClient
 (
-    SvEmbeddedObject*   pObj,           /*  <SfxInPlaceClient> f"ur dieses
-                                            <SvEmbeddedObject> suchen */
-    Window*             pObjParentWin   /*  SfxInPlaceClient, der in diesem
-                                            Window dargestellt wird */
+    const uno::Reference < embed::XEmbeddedObject >& xObj,
+    Window*             pObjParentWin
 )   const
-
-/*  [Beschreibung]
-
-    Sucht nach einem exisitierenden SfxInPlaceClient f"ur das angegebene
-    Objekt/Window-Paar.
-
-    Wird keins gefunden, wird 0 zur"uckgegeben.
-
-
-    [Querverweise]
-
-    <SfxViewShell::DoVerb(SfxInPlaceClient*,long)>
-*/
-
 {
-    SvInPlaceClientMemberList *pClients = GetIPClientList_Impl(FALSE);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
     if ( !pClients )
         return 0;
 
@@ -560,8 +471,7 @@ SfxInPlaceClient* SfxViewShell::FindIPClient
     for (USHORT n=0; n < pClients->Count(); n++)
     {
         SfxInPlaceClient *pIPClient = (SfxInPlaceClient*) pClients->GetObject(n);
-        if ( pIPClient->GetEmbedObj() == pObj &&
-             pIPClient->GetEnv()->GetEditWin() == pObjParentWin )
+        if ( pIPClient->GetObject() == xObj && pIPClient->GetEditWin() == pObjParentWin )
             return pIPClient;
     }
 
@@ -579,27 +489,18 @@ SfxInPlaceClient* SfxViewShell::GetIPClient() const
 
 SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
 {
-    SvInPlaceClientMemberList *pClients = GetIPClientList_Impl(FALSE);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
     if ( !pClients )
         return 0;
 
-    SvInPlaceClient *pIPClient=0;
-    SvInPlaceClientRef aIPClient;
-
     for (USHORT n=0; n < pClients->Count(); n++)
     {
-        aIPClient = pClients->GetObject(n);
-        if( aIPClient.Is() )
-        {
-            if (aIPClient->GetProtocol().IsUIActive())
-            {
-                pIPClient = aIPClient;
-                break;
-            }
-        }
+        SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+        if ( pIPClient->IsObjectUIActive() )
+            return pIPClient;
     }
 
-    return (SfxInPlaceClient*) pIPClient;
+    return NULL;
 }
 
 //--------------------------------------------------------------------
@@ -788,6 +689,8 @@ void SfxViewShell::InvalidateBorder()
     DBG_ASSERT( GetViewFrame(), "SfxViewShell without SfxViewFrame" );
 
     GetViewFrame()->InvalidateBorderImpl( this );
+    if ( pImp->pController )
+        pImp->pController->BorderWidthsChanged_Impl();
 }
 
 //--------------------------------------------------------------------
@@ -797,7 +700,14 @@ void SfxViewShell::SetBorderPixel( const SvBorder &rBorder )
     DBG_CHKTHIS(SfxViewShell, 0);
     DBG_ASSERT( GetViewFrame(), "SfxViewShell without SfxViewFrame" );
 
-    GetViewFrame()->SetBorderPixelImpl( this, rBorder );
+    //if ( rBorder != GetBorderPixel())
+    {
+        GetViewFrame()->SetBorderPixelImpl( this, rBorder );
+
+        // notify related controller that border size is changed
+        if ( pImp->pController )
+            pImp->pController->BorderWidthsChanged_Impl();
+    }
 }
 
 //--------------------------------------------------------------------
@@ -831,26 +741,10 @@ void SfxViewShell::SetWindow
         return;
 
     // ggf. vorhandene IP-Clients disconnecten
-    SvInPlaceClientMemberList *pClients = GetIPClientList_Impl(FALSE);
-    if ( pClients )
-    {
-        SvInPlaceClientRef aIPClient;
-        USHORT nCount = (USHORT)pClients->Count();
-        for (USHORT n=0; n<nCount; n++)
-        {
-            // Da beim DisConnect der Client immer aus der Liste entfernt wird,
-            // immer das 0-te Element holen
-            aIPClient = pClients->GetObject(0);
-            if( aIPClient.Is() )
-            {
-                if (aIPClient->GetIPObj())
-                {
-                    aIPClient->DoDisconnect();
-                    aIPClient.Clear();
-                }
-            }
-        }
-    }
+    DisconnectAllClients();
+
+    //TODO: should we have a "ReconnectAllClients" method?
+    DiscardClients_Impl();
 
     // View-Port austauschen
     BOOL bHadFocus = pWindow ? pWindow->HasChildPathFocus( TRUE ) : FALSE;
@@ -900,6 +794,7 @@ SfxViewShell::SfxViewShell
     pImp->pController = 0;
     pImp->bIsShowView =
         !(SFX_VIEW_NO_SHOW == (nFlags & SFX_VIEW_NO_SHOW));
+
     pImp->bUseObjectSize =
         SFX_CREATE_MODE_EMBEDDED==pFrame->GetObjectShell()->GetCreateMode() &&
         SFX_VIEW_OBJECTSIZE_EMBEDDED == (nFlags & SFX_VIEW_OBJECTSIZE_EMBEDDED);
@@ -909,6 +804,7 @@ SfxViewShell::SfxViewShell
         SFX_VIEW_HAS_PRINTOPTIONS == (nFlags & SFX_VIEW_HAS_PRINTOPTIONS);
     pImp->bPlugInsActive = TRUE;
     pImp->bGotOwnerShip = FALSE;
+    pImp->bGotFrameOwnerShip = FALSE;
     if ( pFrame->GetParentViewFrame() )
         pImp->bPlugInsActive = pFrame->GetParentViewFrame()->GetViewShell()->pImp->bPlugInsActive;
     pImp->eScroll = SCROLLING_DEFAULT;
@@ -969,10 +865,7 @@ SfxViewShell::~SfxViewShell()
 
     delete pImp->pMenuBarResId;
     delete pImp;
-
-#if !SFX_VIEWSH_INCLUDES_CLIENTSH_HXX
     delete pIPClientList;
-#endif
 }
 
 //--------------------------------------------------------------------
@@ -1356,24 +1249,7 @@ void SfxViewShell::GotFocus() const
 }
 
 //--------------------------------------------------------------------
-
-ErrCode SfxViewShell::DoVerb(long nVerb)
-
-/*  [Beschreibung]
-
-    Virtuelle Methode, um am selektierten Objekt ein Verb auszuf"uhren.
-    Da dieses Objekt nur den abgeleiteten Klassen bekannt ist, muï¿½ DoVerb
-    dort "uberlschrieben werden.
-
-*/
-
-{
-    return ERRCODE_SO_NOVERBS;
-}
-
-//--------------------------------------------------------------------
-
-void SfxViewShell::DisconnectClients_Impl(SvInPlaceClient *pIP)
+void SfxViewShell::ResetAllClients( SfxInPlaceClient *pIP, BOOL bDisconnect )
 
 /*  [Beschreibung]
 
@@ -1387,18 +1263,15 @@ void SfxViewShell::DisconnectClients_Impl(SvInPlaceClient *pIP)
     // SO2 stellt sicher, da\s nur ein Object gleichzeitig UI-aktiv ist.
     // Aus Speicherplatzgr"unden werden aber alle Objekte, die nicht aktiv
     // sind oder sein m"ussen, disconnected.
-
-    SvInPlaceClientMemberList *pClients = GetIPClientList_Impl(FALSE);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
     if ( !pClients )
         return;
 
-    SvInPlaceClientRef aIPClient;
     for ( USHORT n=0; n < pClients->Count(); n++ )
     {
-        aIPClient = pClients->GetObject(n);
-        if( aIPClient.Is() && aIPClient != pIP && aIPClient->GetIPObj() &&
-                !(aIPClient->GetIPObj()->GetMiscStatus() & SVOBJ_MISCSTATUS_ACTIVATEWHENVISIBLE) )
-            aIPClient->GetProtocol().Reset2Connect();
+        SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+        if( pIPClient != pIP && pIPClient->GetObject().is() && !(pIPClient->GetObjectMiscStatus() & SVOBJ_MISCSTATUS_ACTIVATEWHENVISIBLE) )
+            pIPClient->SetObjectState( bDisconnect ? embed::EmbedStates::LOADED : embed::EmbedStates::RUNNING );
     }
 }
 
@@ -1406,19 +1279,13 @@ void SfxViewShell::DisconnectClients_Impl(SvInPlaceClient *pIP)
 
 void SfxViewShell::DisconnectAllClients()
 {
-    SvInPlaceClientMemberList *pClients = GetIPClientList_Impl(FALSE);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
     if ( !pClients )
         return;
 
-    SvInPlaceClientRef aIPClient;
     for ( USHORT n=0; n<pClients->Count(); )
-    {
-        aIPClient = pClients->GetObject(n);
-        if( aIPClient.Is() && aIPClient->GetIPObj() )
-            aIPClient->DoDisconnect();
-        else
-            n++;
-    }
+        // clients will remove themselves from the list
+        delete pClients->GetObject(n);
 }
 
 //--------------------------------------------------------------------
@@ -1439,130 +1306,49 @@ void SfxViewShell::QueryObjAreaPixel( Rectangle& ) const
 void SfxViewShell::AdjustVisArea(const Rectangle& rRect)
 {
     DBG_ASSERT (pFrame, "Kein Frame?");
-
-    SfxInPlaceObject *pObj = pFrame->GetObjectShell()->GetInPlaceObject();
-    if ( !pObj )
-        return;
-
     if ( UseObjectSize() )
     {
         Point aPos = rRect.TopLeft();
-        Size aSize = pObj->GetVisArea().GetSize();
-        pObj->SetVisArea( Rectangle(aPos, aSize) );
+        Size aSize = GetObjectShell()->GetVisArea().GetSize();
+        GetObjectShell()->SetVisArea( Rectangle(aPos, aSize) );
     }
     else
-        pObj->SetVisArea( rRect );
+        GetObjectShell()->SetVisArea( rRect );
 }
 
 //--------------------------------------------------------------------
 
 void SfxViewShell::VisAreaChanged(const Rectangle& rVisArea)
 {
-    SvInPlaceClientMemberList *pClients = GetIPClientList_Impl(FALSE);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
     if ( !pClients )
         return;
 
-    SvInPlaceClientRef aIPClient;
     for (USHORT n=0; n < pClients->Count(); n++)
     {
-        // Die Liste enth"alt alle connected clients
-        aIPClient = pClients->GetObject(n);
-        if( aIPClient.Is() )
-            CheckIPClient_Impl( aIPClient, rVisArea );
+        SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+        if ( pIPClient->IsObjectInPlaceActive() )
+            // client is active, notify client that the VisArea might have changed
+            pIPClient->VisAreaChanged();
     }
 }
 
-
 //--------------------------------------------------------------------
-
-void SfxViewShell::CheckIPClient_Impl( SvInPlaceClient *pIPClient,
-                                       const Rectangle& rVisArea )
+void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectangle& rVisArea )
 {
     if ( GetObjectShell()->IsInClose() )
         return;
 
-    BOOL bApplets = SvtJavaOptions().IsExecuteApplets();
-    BOOL bActive = pIPClient->IsInPlaceActive();
-    BOOL bPlugIn = SvtMiscOptions().IsPluginsEnabled();
-
-    SvAppletObjectRef aAppRef = pIPClient->GetIPObj();
-    SvPlugInObjectRef aPlugRef = pIPClient->GetIPObj();
-    SfxFrameObjectRef aFrameRef = pIPClient->GetIPObj();
-
-    if ( !pImp->bPlugInsActive && ( aPlugRef.Is() || aAppRef.Is() || aFrameRef.Is() ) )
+    // this method is called when either a client is created
+    if ( !pIPClient->IsObjectInPlaceActive() )
     {
-        if ( bActive )
-            pIPClient->GetProtocol().Reset2Open();
-        return;
-    }
-
-    BOOL bAlwaysActive = ( pIPClient->GetIPObj()->GetMiscStatus() == SVOBJ_MISCSTATUS_ALWAYSACTIVATE );
-
-    if ( bAlwaysActive || rVisArea.IsOver( pIPClient->GetClientData()->GetObjArea()) )
-    {
-        // Der Client ist connected und sichtbar.
-        if ( bActive )
-        {
-            // Wenn er aktiv ist, mu\s er benachrichtigt werden.
-            pIPClient->GetEnv()->OutDevScaleChanged();
-
-            if ( aPlugRef.Is() )
-            {
-                // Plugins sind nur sichtbar, wenn das entsprechende
-                // flag auch angeschaltet ist
-                if ( !bPlugIn )
-                {
-                    pIPClient->GetProtocol().Reset2Open();
-                }
-                else if ( aPlugRef->GetPlugInMode() == PLUGIN_FULL )
-                {
-                    SetBorderPixel(SvBorder());
-                    Window *pWin = GetWindow();
-                    Size aSize = pWin->GetOutputSizePixel();
-                    aSize = pWin->PixelToLogic(aSize);
-                    Rectangle aRect = Rectangle ( pWin->PixelToLogic(Point()), aSize);
-                    pIPClient->GetClientData()->SetObjArea(aRect);
-                }
-            }
-            else if ( aAppRef.Is() && !bApplets )
-            {
-                // Java-Applets sind nicht aktiv, wenn Java in den
-                // Options ausgeschaltet wurde
-                pIPClient->GetProtocol().Reset2Open();
-            }
-        }
-        else
-        {
-            // Ist er es nicht, aber da\s Object soll aktiv sein,
-            // wenn es sichtbar ist, mu\s das Object aktiviert werden;
-            // bei Plugins und Applets sind noch die Flags auszuwerten
-            if ( pIPClient->GetIPObj()->GetMiscStatus() &
-                        SVOBJ_MISCSTATUS_ACTIVATEWHENVISIBLE )
-            {
-                BOOL bActivate = TRUE;
-                if ( aPlugRef.Is() )
-                    bActivate = bPlugIn;
-                else if ( aAppRef.Is() )
-                    bActivate = bApplets;
-                if ( bActivate )
-                    pIPClient->GetIPObj()->DoVerb(0);
-            }
-        }
-    }
-    else if ( bActive )
-    {
-        // Wenn er aktiv ist, mu\s er benachrichtigt werden.
-        pIPClient->GetEnv()->OutDevScaleChanged();
-
-        // Ein nicht sichtbarer client soll disconnected werden, wenn
-        // er (nur) aktiv ist, wenn er sichtbar ist.
-        // Wenn er dann wieder sichtbar wird, mu\s die Applikation
-        // ihn connecten, damit er in der client list erscheint!
-
-        // Auf Wunsch von MB erst mal entfernt !!
-//              if ( pIPClient->GetIPObj()->GetMiscStatus() &
-//                  SVOBJ_MISCSTATUS_ACTIVATEWHENVISIBLE )
-//                pIPClient->DoDisconnect();
+        // object in client is currently not active
+        // check if the object wants to be activated always or when it becomes at least partially visible
+        // TODO/LATER: maybe we should use the scaled area instead of the ObjArea?!
+        BOOL bAlwaysActive =  ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY );
+        if ( bAlwaysActive || ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE ) &&
+                rVisArea.IsOver( pIPClient->GetObjArea() ) )
+            pIPClient->DoVerb( 0 );
     }
 }
 
@@ -1574,7 +1360,6 @@ BOOL SfxViewShell::PlugInsActive() const
 }
 
 //--------------------------------------------------------------------
-
 void SfxViewShell::DiscardClients_Impl()
 
 /*  [Beschreibung]
@@ -1585,24 +1370,12 @@ void SfxViewShell::DiscardClients_Impl()
 */
 
 {
-    SvInPlaceClientMemberList *pClients = GetIPClientList_Impl(FALSE);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
     if ( !pClients )
         return;
 
-    SvInPlaceClientRef aIPClient;
-    for (USHORT n=0; n < pClients->Count(); n++)
-    {
-        aIPClient = pClients->GetObject(n);
-        if( aIPClient.Is() )
-        {
-            if (aIPClient->GetIPObj())
-            {
-                aIPClient->GetIPObj()->SetAutoSave(FALSE);
-                aIPClient->DoDisconnect();
-                aIPClient.Clear();
-            }
-        }
-    }
+    for (USHORT n=0; n < pClients->Count(); )
+        delete pClients->GetObject(n);
 }
 
 //--------------------------------------------------------------------
@@ -1706,28 +1479,12 @@ void SfxViewShell::JumpToMark( const String& rMark )
 
 //------------------------------------------------------------------------
 
-#if !SFX_VIEWSH_INCLUDES_CLIENTSH_HXX
-
-void SfxViewShell::NewIPClient_Impl( SfxInPlaceClient *pIPClient )
-{
-    SvInPlaceClientMemberList *pClients = GetIPClientList_Impl(TRUE);
-    pClients->Insert(pIPClient);
-}
-
-void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient *pIPClient )
-{
-    SvInPlaceClientMemberList *pClients = GetIPClientList_Impl(TRUE);
-    pClients->Remove(pIPClient);
-}
-
-SvInPlaceClientMemberList* SfxViewShell::GetIPClientList_Impl( BOOL bCreate ) const
+SfxInPlaceClientList* SfxViewShell::GetIPClientList_Impl( BOOL bCreate ) const
 {
     if ( !pIPClientList && bCreate )
-        ( (SfxViewShell*) this )->pIPClientList = new SvInPlaceClientMemberList;
+        ( (SfxViewShell*) this )->pIPClientList = new SfxInPlaceClientList;
     return pIPClientList;
 }
-
-#endif
 
 void SfxViewShell::ReleaseMenuBar_Impl()
 {
@@ -1781,8 +1538,6 @@ void SfxViewShell::SetController( SfxBaseController* pController )
 
 Reference < XController > SfxViewShell::GetController()
 {
-    if ( !pImp->pController )
-        new SfxBaseController( this );
     return pImp->pController;
 }
 
@@ -1911,9 +1666,46 @@ void SfxViewShell::TakeOwnerShip_Impl()
     pImp->bGotOwnerShip = TRUE;
 }
 
-BOOL SfxViewShell::GotOwnerShip_Impl()
+void SfxViewShell::TakeFrameOwnerShip_Impl()
 {
-    return pImp->bGotOwnerShip;
+    // currently there is only one reason to take OwnerShip: a hidden frame is printed
+    // so the ViewShell will check this on EndPrint (->prnmon.cxx)
+    pImp->bGotFrameOwnerShip = TRUE;
+}
+
+void SfxViewShell::CheckOwnerShip_Impl()
+{
+    if( pImp->bGotFrameOwnerShip )
+    {
+        com::sun::star::uno::Reference < com::sun::star::util::XCloseable > xFrame(
+                GetViewFrame()->GetFrame()->GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
+        if ( xFrame.is() )
+        {
+            try
+            {
+                xFrame->close( sal_True );
+            }
+            catch ( com::sun::star::util::CloseVetoException& )
+            {
+            }
+        }
+    }
+
+    if( pImp->bGotOwnerShip )
+    {
+        com::sun::star::uno::Reference < com::sun::star::util::XCloseable > xModel(
+                GetObjectShell()->GetModel(), com::sun::star::uno::UNO_QUERY );
+        if ( xModel.is() )
+        {
+            try
+            {
+                xModel->close( sal_True );
+            }
+            catch ( com::sun::star::util::CloseVetoException& )
+            {
+            }
+        }
+    }
 }
 
 long SfxViewShell::HandleNotifyEvent_Impl( NotifyEvent& rEvent )
@@ -1937,4 +1729,9 @@ void SfxViewShell::SetAdditionalPrintOptions( const com::sun::star::uno::Sequenc
 {
     pImp->aPrintOpts = rOpts;
      GetObjectShell()->Broadcast( SfxPrintingHint( -3, NULL, NULL, rOpts ) );
+}
+
+BOOL SfxViewShell::Escape()
+{
+    return GetViewFrame()->GetBindings().Execute( SID_TERMINATE_INPLACEACTIVATION );
 }
