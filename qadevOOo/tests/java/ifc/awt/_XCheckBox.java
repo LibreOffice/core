@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCheckBox.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:39 $
+ *  last change:$Date: 2003-09-08 10:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,9 @@
 package ifc.awt;
 
 
-import com.sun.star.awt.XCheckBox;
 import lib.MultiMethodTest;
+
+import com.sun.star.awt.XCheckBox;
 
 /**
 * Testing <code>com.sun.star.awt.XCheckBox</code>
