@@ -2,9 +2,9 @@
  *
  *  $RCSfile: entrylisthelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:01:03 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,11 @@
 #ifndef FORMS_ENTRYLISTHELPER_HXX
 #define FORMS_ENTRYLISTHELPER_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_FORM_XLISTENTRYSINK_HDL_
-#include <drafts/com/sun/star/form/XListEntrySink.hpp>
+#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSINK_HDL_
+#include <com/sun/star/form/binding/XListEntrySink.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FORM_XLISTENTRYLISTENER_HDL_
-#include <drafts/com/sun/star/form/XListEntryListener.hpp>
+#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYLISTENER_HDL_
+#include <com/sun/star/form/binding/XListEntryListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -83,8 +83,8 @@ namespace frm
     //=====================================================================
     //= OEntryListHelper
     //=====================================================================
-    typedef ::cppu::ImplHelper2 <   ::drafts::com::sun::star::form::XListEntrySink
-                                ,   ::drafts::com::sun::star::form::XListEntryListener
+    typedef ::cppu::ImplHelper2 <   ::com::sun::star::form::binding::XListEntrySink
+                                ,   ::com::sun::star::form::binding::XListEntryListener
                                 >   OEntryListHelper_BASE;
 
     class OEntryListHelper : public OEntryListHelper_BASE
@@ -92,7 +92,7 @@ namespace frm
     private:
         ::osl::Mutex&   m_rMutex;
 
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XListEntrySource >
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >
                         m_xListSource;      /// our external list source
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
                         m_aStringItems;     /// "overridden" StringItemList property value
@@ -104,7 +104,7 @@ namespace frm
         /// returns the current string item list
         inline const ::com::sun::star::uno::Sequence< ::rtl::OUString >&
                     getStringItemList() const { return m_aStringItems; }
-        inline const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XListEntrySource >&
+        inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >&
                     getExternalListEntrySource() const { return m_xListSource; }
 
         /// determines whether we actually have an external list source
@@ -165,13 +165,13 @@ namespace frm
 
     private:
         // XListEntrySink
-        virtual void SAL_CALL setListEntrySource( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XListEntrySource >& _rxSource ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XListEntrySource > SAL_CALL getListEntrySource(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setListEntrySource( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource > SAL_CALL getListEntrySource(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XListEntryListener
-        virtual void SAL_CALL entryChanged( const ::drafts::com::sun::star::form::ListEntryEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL entryRangeInserted( const ::drafts::com::sun::star::form::ListEntryEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL entryRangeRemoved( const ::drafts::com::sun::star::form::ListEntryEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL entryChanged( const ::com::sun::star::form::binding::ListEntryEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL entryRangeInserted( const ::com::sun::star::form::binding::ListEntryEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL entryRangeRemoved( const ::com::sun::star::form::binding::ListEntryEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL allEntriesChanged( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException);
     private:
         /** disconnects from the active external list source, if present
@@ -185,7 +185,7 @@ namespace frm
             @see disconnectExternalListSource
         */
         void        connectExternalListSource(
-                        const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XListEntrySource >& _rxSource
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource
                     );
 
     private:

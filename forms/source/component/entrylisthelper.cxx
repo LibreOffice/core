@@ -2,9 +2,9 @@
  *
  *  $RCSfile: entrylisthelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:00:54 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ namespace frm
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
-    using namespace ::drafts::com::sun::star::form;
+    using namespace ::com::sun::star::form::binding;
 
     //=====================================================================
     //= OEntryListHelper
