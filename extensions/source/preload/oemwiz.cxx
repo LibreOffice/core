@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oemwiz.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-03 10:34:11 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,10 +282,11 @@ namespace preload
     sal_Bool OEMPreloadDialog::LoadFromLocalFile(const String& rFileName, String& rContent)
     {
         SvtPathOptions aPathOpt;
-        String sFileName = aPathOpt.GetModulePath();
+        String sFileName = aPathOpt.GetUserConfigPath();//GetModulePath();
         sFileName = URIHelper::SmartRelToAbs(sFileName);
         INetURLObject aURLObject(sFileName);
-        aURLObject.removeSegment();
+        aURLObject.removeSegment(); //remove '/config'
+        aURLObject.removeSegment(); //remove '/user'
         sFileName = aURLObject.GetMainURL(INetURLObject::DECODE_TO_IURI);
         sFileName += rFileName;
 
