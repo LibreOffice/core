@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-01 13:57:31 $
+ *  last change: $Author: cl $ $Date: 2002-10-17 15:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3019,7 +3019,11 @@ OUString SAL_CALL SvxShape::getImplementationName()
 #define STAR_NAMESPACE "com.sun.star."
 
 const char* sUNO_service_style_ParagraphProperties          = STAR_NAMESPACE "style.ParagraphProperties";
+const char* sUNO_service_style_ParagraphPropertiesComplex   = STAR_NAMESPACE "style.ParagraphPropertiesComplex";
+const char* sUNO_service_style_ParagraphPropertiesAsian     = STAR_NAMESPACE "style.ParagraphPropertiesAsian";
 const char* sUNO_service_style_CharacterProperties          = STAR_NAMESPACE "style.CharacterProperties";
+const char* sUNO_service_style_CharacterPropertiesComplex   = STAR_NAMESPACE "style.CharacterPropertiesComplex";
+const char* sUNO_service_style_CharacterPropertiesAsian     = STAR_NAMESPACE "style.CharacterPropertiesAsian";
 
 const char* sUNO_service_drawing_FillProperties             = STAR_NAMESPACE "drawing.FillProperties";
 const char* sUNO_service_drawing_TextProperties             = STAR_NAMESPACE "drawing.TextProperties";
@@ -3107,7 +3111,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                     {
                         static uno::Sequence< OUString > SvxShape_LineServices;
 
-                        SvxServiceInfoHelper::addToSequence( SvxShape_LineServices,10,
+                        SvxServiceInfoHelper::addToSequence( SvxShape_LineServices,14,
                             sUNO_service_drawing_LineShape,
 
                             sUNO_service_drawing_Shape,
@@ -3116,7 +3120,11 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Text,
                             sUNO_service_drawing_TextProperties,
                             sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
                             sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_PolyPolygonDescriptor,
                             sUNO_service_drawing_ShadowProperties,
@@ -3138,7 +3146,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                     {
                         static uno::Sequence< OUString > SvxShape_RectServices;
 
-                        SvxServiceInfoHelper::addToSequence( SvxShape_RectServices,10,
+                        SvxServiceInfoHelper::addToSequence( SvxShape_RectServices,14,
                             sUNO_service_drawing_RectangleShape,
 
                             sUNO_service_drawing_Shape,
@@ -3148,7 +3156,11 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Text,
                             sUNO_service_drawing_TextProperties,
                             sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
                             sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
                             sUNO_service_drawing_RotationDescriptor);
@@ -3172,7 +3184,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                     {
                         static uno::Sequence< OUString > SvxShape_CircServices;
 
-                        SvxServiceInfoHelper::addToSequence( SvxShape_CircServices,10,
+                        SvxServiceInfoHelper::addToSequence( SvxShape_CircServices,14,
                             sUNO_service_drawing_EllipseShape,
 
                             sUNO_service_drawing_Shape,
@@ -3182,7 +3194,11 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Text,
                             sUNO_service_drawing_TextProperties,
                             sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
                             sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
                             sUNO_service_drawing_RotationDescriptor);
@@ -3204,7 +3220,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                     if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_PathServices;
-                        SvxServiceInfoHelper::addToSequence( SvxShape_PathServices,10,
+                        SvxServiceInfoHelper::addToSequence( SvxShape_PathServices,14,
                             sUNO_service_drawing_PolyLineShape,
 
                             sUNO_service_drawing_Shape,
@@ -3215,7 +3231,11 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Text,
                             sUNO_service_drawing_TextProperties,
                             sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
                             sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
                             sUNO_service_drawing_RotationDescriptor);
@@ -3235,7 +3255,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                     if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_PolyServices;
-                        SvxServiceInfoHelper::addToSequence( SvxShape_PolyServices,11,
+                        SvxServiceInfoHelper::addToSequence( SvxShape_PolyServices,15,
                             sUNO_service_drawing_PolyPolygonShape,
 
                             sUNO_service_drawing_Shape,
@@ -3247,7 +3267,11 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Text,
                             sUNO_service_drawing_TextProperties,
                             sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
                             sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
                             sUNO_service_drawing_RotationDescriptor);
@@ -3269,7 +3293,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                     {
                         static uno::Sequence< OUString > SvxShape_FreeLineServices;
 
-                        SvxServiceInfoHelper::addToSequence( SvxShape_FreeLineServices,11,
+                        SvxServiceInfoHelper::addToSequence( SvxShape_FreeLineServices,15,
                             sUNO_service_drawing_OpenBezierShape,
 
                             sUNO_service_drawing_Shape,
@@ -3281,7 +3305,11 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Text,
                             sUNO_service_drawing_TextProperties,
                             sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
                             sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
                             sUNO_service_drawing_RotationDescriptor);
@@ -3303,7 +3331,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                     if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_FreeFillServices;
-                        SvxServiceInfoHelper::addToSequence( SvxShape_FreeFillServices,11,
+                        SvxServiceInfoHelper::addToSequence( SvxShape_FreeFillServices,15,
                             sUNO_service_drawing_ClosedBezierShape,
 
                             sUNO_service_drawing_Shape,
@@ -3315,7 +3343,11 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Text,
                             sUNO_service_drawing_TextProperties,
                             sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
                             sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
                             sUNO_service_drawing_RotationDescriptor);
@@ -3337,7 +3369,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                     if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_TextServices;
-                        SvxServiceInfoHelper::addToSequence( SvxShape_TextServices,10,
+                        SvxServiceInfoHelper::addToSequence( SvxShape_TextServices,14,
                             sUNO_service_drawing_TextShape,
 
                             sUNO_service_drawing_Shape,
@@ -3347,7 +3379,11 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Text,
                             sUNO_service_drawing_TextProperties,
                             sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
                             sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
                             sUNO_service_drawing_RotationDescriptor);
@@ -3367,7 +3403,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                     if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_GrafServices;
-                        SvxServiceInfoHelper::addToSequence( SvxShape_GrafServices, 8,
+                        SvxServiceInfoHelper::addToSequence( SvxShape_GrafServices, 12,
                             sUNO_service_drawing_GraphicObjectShape,
 
                             sUNO_service_drawing_Shape,
@@ -3375,7 +3411,11 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Text,
                             sUNO_service_drawing_TextProperties,
                             sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
                             sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
                             sUNO_service_drawing_RotationDescriptor);
@@ -3416,7 +3456,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                     {
                         static uno::Sequence< OUString > SvxShape_CaptionServices;
 
-                        SvxServiceInfoHelper::addToSequence( SvxShape_CaptionServices,10,
+                        SvxServiceInfoHelper::addToSequence( SvxShape_CaptionServices,14,
                             sUNO_service_drawing_CaptionShape,
 
                             sUNO_service_drawing_Shape,
@@ -3426,7 +3466,11 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Text,
                             sUNO_service_drawing_TextProperties,
                             sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
                             sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
                             sUNO_service_drawing_RotationDescriptor);
@@ -3468,7 +3512,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                     if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_MeasureServices;
-                        SvxServiceInfoHelper::addToSequence( SvxShape_MeasureServices,11,
+                        SvxServiceInfoHelper::addToSequence( SvxShape_MeasureServices,15,
                             sUNO_service_drawing_MeasureShape,
 
                             sUNO_service_drawing_MeasureProperties,
@@ -3479,7 +3523,11 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Text,
                             sUNO_service_drawing_TextProperties,
                             sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
                             sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_PolyPolygonDescriptor,
                             sUNO_service_drawing_ShadowProperties,
@@ -3542,7 +3590,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                     {
                         static uno::Sequence< OUString > SvxShape_EdgeServices;
 
-                        SvxServiceInfoHelper::addToSequence( SvxShape_EdgeServices,11,
+                        SvxServiceInfoHelper::addToSequence( SvxShape_EdgeServices,15,
                             sUNO_service_drawing_ConnectorShape,
                             sUNO_service_drawing_ConnectorProperties,
 
@@ -3552,7 +3600,11 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Text,
                             sUNO_service_drawing_TextProperties,
                             sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
                             sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_PolyPolygonDescriptor,
                             sUNO_service_drawing_ShadowProperties,
