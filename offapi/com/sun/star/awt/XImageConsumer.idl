@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XImageConsumer.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:01:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 
  module com {  module sun {  module star {  module awt {
 
-interface XImageProducer;
+ published interface XImageProducer;
 
 //=============================================================================
 
@@ -80,7 +80,7 @@ interface XImageProducer;
 
     @see XImageProducer
  */
-interface XImageConsumer: com::sun::star::uno::XInterface
+published interface XImageConsumer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
