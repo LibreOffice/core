@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:12:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,14 @@
 #include <pgjump.hxx>
 #endif
 
+#include "res_bmp.hrc"
+#include "sdresid.hxx"
+#include "vcl/canvastools.hxx"
+#include "comphelper/anytostring.hxx"
+#include "cppuhelper/exc_hlp.hxx"
+#include "rtl/ref.hxx"
+
+
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Any;
@@ -154,10 +162,12 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 
+using ::rtl::OUString;
+using ::rtl::OString;
 using ::comphelper::ImplementationReference;
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::drafts::com::sun::star;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing;
 
@@ -302,7 +312,12 @@ void AnimationPageList::fillSequences( Sequence< Reference< XDrawPage > >& rSlid
     catch( uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::AnimationPageList::fillSequences(), exception caught!");
+        DBG_ERROR(
+            (OString("sd::AnimationPageList::fillSequences(), "
+                     "exception caught: ") +
+             rtl::OUStringToOString(
+                 comphelper::anyToString( cppu::getCaughtException() ),
+                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 }
 
@@ -363,13 +378,30 @@ SlideshowImpl::~SlideshowImpl()
     delete mpSaveOptions;
 }
 
-void SlideshowImpl::startPreview(
+bool SlideshowImpl::startPreview(
         const Reference< XDrawPage >& xDrawPage,
         const Reference< animations::XAnimationNode >& xAnimationNode,
         ::Window* pParent )
 {
+    bool bRet = false;
+
     try
     {
+        const Reference<lang::XServiceInfo> xServiceInfo( xDrawPage, UNO_QUERY );
+        if (xServiceInfo.is()) {
+            const Sequence<OUString> supportedServices(
+                xServiceInfo->getSupportedServiceNames() );
+            for ( sal_Int32 pos = supportedServices.getLength(); pos--; ) {
+                if (supportedServices[pos].equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM(
+                            "com.sun.star.drawing.MasterPage") )) {
+                    DBG_ERROR("sd::SlideshowImpl::startPreview() "
+                              "not allowed on master page!");
+                    return false;
+                }
+            }
+        }
+
         mxPreviewDrawPage = xDrawPage;
         mxPreviewAnimationNode = xAnimationNode;
         meAnimationMode = ANIMATIONMODE_PREVIEW;
@@ -430,26 +462,36 @@ void SlideshowImpl::startPreview(
         Sequence< Reference< XDrawPage > > aSlides(&mxPreviewDrawPage, 1);
         Sequence< Reference< animations::XAnimationNode > > aRootNodes(&mxPreviewAnimationNode, 1);
 
-        startShowImpl( aSlides, aRootNodes, aProperties );
+        bRet = startShowImpl( aSlides, aRootNodes, aProperties );
 
-        if( meAnimationMode == ANIMATIONMODE_PREVIEW )
+        if( mpShowWindow != 0 && meAnimationMode == ANIMATIONMODE_PREVIEW )
             mpShowWindow->SetPreviewMode();
 
     }
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::SlideshowImpl::startPreview(), exception cought!");
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::startPreview(), "
+                     "exception caught: ") +
+             rtl::OUStringToOString(
+                 comphelper::anyToString( cppu::getCaughtException() ),
+                 RTL_TEXTENCODING_UTF8 )).getStr() );
+        bRet = false;
     }
+
+    return bRet;
 }
 
-void SlideshowImpl::startShow( PresentationSettings* pPresSettings )
+bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
 {
+    const rtl::Reference<SlideshowImpl> this_(this);
+
     DBG_ASSERT( !mxShow.is(), "sd::SlideshowImpl::startShow(), called twice!" );
     if( mxShow.is() )
-        return;
+        return true;
 
-    acquire();
+    bool bRet = false;
 
     try
     {
@@ -603,45 +645,78 @@ void SlideshowImpl::startShow( PresentationSettings* pPresSettings )
 
         mpShowWindow->GrabFocus();
 
-        Sequence< beans::PropertyValue > aProperties(4);
+        std::vector<beans::PropertyValue> aProperties;
+        aProperties.reserve( 4 );
 
-        aProperties[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("AdvanceOnClick") );
-        aProperties[0].Value <<= maPresSettings.mbLockedPages ? sal_False : sal_True;
+        aProperties.push_back(
+            beans::PropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("AdvanceOnClick") ),
+                -1, Any( ! (maPresSettings.mbLockedPages != sal_False) ),
+                beans::PropertyState_DIRECT_VALUE ) );
 
-        aProperties[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("ImageAnimationsAllowed") );
-        aProperties[1].Value <<= maPresSettings.mbAnimationAllowed ? sal_True : sal_False;
+        aProperties.push_back(
+            beans::PropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("ImageAnimationsAllowed") ),
+                -1, Any( maPresSettings.mbAnimationAllowed != sal_False ),
+                beans::PropertyState_DIRECT_VALUE ) );
 
-        aProperties[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("MouseVisible") );
-        aProperties[2].Value <<= maPresSettings.mbMouseVisible ? sal_True : sal_False;
+        aProperties.push_back(
+            beans::PropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("MouseVisible") ),
+                -1, Any( maPresSettings.mbMouseVisible != sal_False ),
+                beans::PropertyState_DIRECT_VALUE ) );
 
-        aProperties[3].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("ForceManualAdvance") );
-        aProperties[3].Value <<= maPresSettings.mbManual ? sal_True : sal_False;
+        aProperties.push_back(
+            beans::PropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("ForceManualAdvance") ),
+                -1, Any( maPresSettings.mbManual != sal_False ),
+                beans::PropertyState_DIRECT_VALUE ) );
 
         if( maPresSettings.mbMouseAsPen )
          {
-             aProperties.realloc(5);
-            aProperties[4].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("UserPaintColor") );
-            aProperties[4].Value = uno::makeAny( (sal_Int32)0x0000FF00L );
+            aProperties.push_back(
+                beans::PropertyValue(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("UserPaintColor") ),
+                    -1, Any( static_cast<sal_Int32>(0x0000FF00L) ),
+                    beans::PropertyState_DIRECT_VALUE ) );
+        }
+
+        if (mbRehearseTimings) {
+            aProperties.push_back(
+                beans::PropertyValue(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("RehearseTimings") ),
+                    -1, Any(true), beans::PropertyState_DIRECT_VALUE ) );
         }
 
         Sequence< Reference< XDrawPage > > aSlides;
         Sequence< Reference< animations::XAnimationNode > > aRootNodes;
         mpAnimationPageList->fillSequences( aSlides, aRootNodes );
 
-        startShowImpl( aSlides, aRootNodes, aProperties );
+        bRet = startShowImpl( aSlides, aRootNodes,
+                              Sequence<beans::PropertyValue>(
+                                  &aProperties[0], aProperties.size() ) );
 
     }
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::SlideshowImpl::startShowImpl(), exception caught!");
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::startShow(), "
+                     "exception caught: ") +
+             rtl::OUStringToOString(
+                 comphelper::anyToString( cppu::getCaughtException() ),
+                 RTL_TEXTENCODING_UTF8 )).getStr() );
         stopShow();
+        bRet = false;
     }
 
-    release();
+    return bRet;
 }
 
-void SlideshowImpl::startShowImpl( const Sequence< Reference< XDrawPage > >& aSlides, const Sequence< Reference< animations::XAnimationNode > >& aRootNodes, const Sequence< beans::PropertyValue >& aProperties )
+bool SlideshowImpl::startShowImpl(
+    const Sequence< Reference< XDrawPage > >& aSlides,
+    const Sequence< Reference< animations::XAnimationNode > >& aRootNodes,
+    const Sequence< beans::PropertyValue >& aProperties_ )
 {
     try
     {
@@ -652,6 +727,26 @@ void SlideshowImpl::startShowImpl( const Sequence< Reference< XDrawPage > >& aSl
         {
             mxView = mxView.createFromQuery( new SlideShowView( *mpShowWindow, mpDoc, meAnimationMode, this ) );
 
+            Sequence<beans::PropertyValue> aProperties(aProperties_);
+            // try add wait symbol to properties:
+            const Reference<rendering::XSpriteCanvas> xSpriteCanvas(
+                mxView->getCanvas() );
+            if (xSpriteCanvas.is()) {
+                BitmapEx waitSymbolBitmap( SdResId(BMP_WAIT_ICON) );
+                const Reference<rendering::XBitmap> xBitmap(
+                    vcl::unotools::xBitmapFromBitmapEx(
+                        xSpriteCanvas->getDevice(), waitSymbolBitmap ) );
+                if (xBitmap.is()) {
+                    aProperties.realloc( aProperties.getLength() + 1 );
+                    aProperties[ aProperties.getLength() - 1 ] =
+                        beans::PropertyValue(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                          "WaitSymbolBitmap") ),
+                            -1, Any( xBitmap ),
+                            beans::PropertyState_DIRECT_VALUE );
+                }
+            }
+
             mxShow->addView( mxView.getRef() );
             mxShow->addSlideShowListener( Reference< XSlideShowListener >( this ) );
             const sal_Int32 nStartIndex = mpAnimationPageList->getStartPageIndex();
@@ -660,12 +755,20 @@ void SlideshowImpl::startShowImpl( const Sequence< Reference< XDrawPage > >& aSl
 //          update is now started in onFirstPaint()
 //          update();
         }
+
+        return true;
     }
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::SlideshowImpl::startShowImpl(), exception caught!");
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::startShowImpl(), "
+                     "exception caught: ") +
+             rtl::OUStringToOString(
+                 comphelper::anyToString( cppu::getCaughtException() ),
+                 RTL_TEXTENCODING_UTF8 )).getStr() );
         stopShow();
+        return false;
     }
 }
 
@@ -918,7 +1021,12 @@ void SlideshowImpl::removeShapeEvents()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::SlideshowImpl::removeShapeEvents(), exception caught!" );
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::removeShapeEvents(), "
+                     "exception caught: ") +
+             rtl::OUStringToOString(
+                 comphelper::anyToString( cppu::getCaughtException() ),
+                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 }
 
@@ -988,7 +1096,12 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nPageNumber)
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::SlideshowImpl::registerShapeEvents(), exception caught!" );
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::registerShapeEvents(), "
+                     "exception caught: ") +
+             rtl::OUStringToOString(
+                 comphelper::anyToString( cppu::getCaughtException() ),
+                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 }
 
@@ -1069,6 +1182,23 @@ void SlideshowImpl::gotoSlideIndex( sal_Int32 nPageIndex )
     {
         mxShow->displaySlide( nPageIndex );
         update();
+    }
+}
+
+void SlideshowImpl::enablePen()
+{
+    if( mxShow.is())
+    {
+        uno::Any aValue;
+        if( maPresSettings.mbMouseAsPen )
+            // todo: take color from configuration
+            aValue <<= (sal_Int32)0x0000FF00L;
+
+        beans::PropertyValue aPenProp;
+        aPenProp.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UserPaintColor" ));
+        aPenProp.Value = aValue;
+
+        mxShow->setProperty( aPenProp );
     }
 }
 
@@ -1327,16 +1457,16 @@ bool SlideshowImpl::isDrawingPossible()
 
 double SlideshowImpl::update()
 {
-    double fUpdate = -1;
-    if( mxShow.is() && mpShowWindow )
+    double fUpdate = -1.0;
+    const Reference<XSlideShow> xShow(mxShow);
+    if (xShow.is())
     {
-        Reference< XSlideShow > xShow( mxShow );
-        // mpShowWindow->DrawWaitIcon();
-
-        bool bUpdate = mxShow->update(fUpdate);
-        if( bUpdate )
+        const bool bUpdate = xShow->update(fUpdate);
+        if (bUpdate)
         {
-            maUpdateTimer.SetTimeout( (ULONG)fUpdate );
+            if (fUpdate == 0.0) // ASAP case
+                fUpdate = 0.033; // lowest time resolution: 30 updates per sec
+            maUpdateTimer.SetTimeout( static_cast<ULONG>(fUpdate * 1000.0) );
             maUpdateTimer.Start();
         }
         else
@@ -1344,7 +1474,6 @@ double SlideshowImpl::update()
             maUpdateTimer.Stop();
             fUpdate = -1.0;
         }
-        // mpShowWindow->ClearWaitIcon();
     }
     return fUpdate;
 }
@@ -1356,30 +1485,31 @@ double SlideshowImpl::update()
 IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
 {
     // doing some nMagic
-    acquire();
+    const rtl::Reference<SlideshowImpl> this_(this);
 
     try
     {
         const sal_uInt32 nLoopTime = osl_getGlobalTimer();
+        double fUpdate = update();
 
-        double fUpdate = update();;
-
-        while( mxShow.is() && (fUpdate >=0) && (fUpdate <= 50) && (( osl_getGlobalTimer() - nLoopTime) < 500) )
+        while (mxShow.is() &&
+               (fUpdate >= 0.0) && (fUpdate <= 0.05) &&
+               ((osl_getGlobalTimer() - nLoopTime) < 500))
         {
             Application::Reschedule();
-            // nMagic strikes again!
-            if( mxShow.is() )
-                fUpdate = update();
+            fUpdate = update();
         }
     }
     catch( Exception& e )
     {
-        (void)e;
-        DBG_ERROR("sd::SlideshowImpl(), exception cought!");
+        e;
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::updateHdl(), "
+                     "exception caught: ") +
+             rtl::OUStringToOString(
+                 comphelper::anyToString( cppu::getCaughtException() ),
+                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
-
-    // undoing some nMagic
-    release();
 
     return 0;
 }
@@ -1513,7 +1643,12 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow() const
     catch( uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::SlideshowImpl::createSlideShow(), exception catched!" );
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::createSlideShow(), "
+                     "exception caught: ") +
+             rtl::OUStringToOString(
+                 comphelper::anyToString( cppu::getCaughtException() ),
+                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 
     return xShow;
@@ -1780,11 +1915,11 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
 
     switch ( rReq.GetSlot() )
     {
-/*
         case SID_NAVIGATOR_PEN:
-            bMouseAsPen = !bMouseAsPen;
+            maPresSettings.mbMouseAsPen = !maPresSettings.mbMouseAsPen;
+            enablePen();
         break;
-*/
+
         case SID_NAVIGATOR_PAGE:
         {
             PageJump    eJump = (PageJump)((SfxAllEnumItem&) pArgs->Get(SID_NAVIGATOR_PAGE)).GetValue();
