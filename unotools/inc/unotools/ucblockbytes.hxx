@@ -55,8 +55,6 @@ class UcbLockBytesHandler : public SvRefBase
 public:
     enum LoadHandlerItem
     {
-        BEFOREWAIT,
-        AFTERWAIT,
         DATA_AVAILABLE,
         DONE,
         CANCEL
