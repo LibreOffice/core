@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-21 06:48:07 $
+ *  last change: $Author: rt $ $Date: 2002-08-01 20:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ Control CTRL_FILEVIEW
 String STR_SVT_NEWDOC
 {
     Text = "Neues Dokument";
-    Text [ english_us ] = "~New Document";
+    Text [ english_us ] = "New Document";
     Text[ portuguese ] = "Novo documento";
     Text[ russian ] = "Íîâûé äîêóìåíò";
     Text[ greek ] = "New Document";
@@ -87,7 +87,7 @@ String STR_SVT_NEWDOC
     Text[ spanish ] = "Nuevo documento";
     Text[ finnish ] = "Uusi asiakirja";
     Text[ italian ] = "Nuovo documento";
-    Text[ danish ] = "New Document";
+    Text[ danish ] = "Nyt dokument";
     Text[ swedish ] = "Nytt dokument";
     Text[ polish ] = "Nowy dokument";
     Text[ portuguese_brazilian ] = "New Document";
@@ -116,7 +116,7 @@ Image IMG_SVT_NEWDOC_HC
 String STR_SVT_MYDOCS
 {
     Text = "Eigene Dateien";
-    Text [ english_us ] = "~My Documents";
+    Text [ english_us ] = "My Documents";
     Text[ portuguese ] = "Meus documentos";
     Text[ russian ] = "Ìîè äîêóìåíòû";
     Text[ greek ] = "My Documents";
@@ -125,7 +125,7 @@ String STR_SVT_MYDOCS
     Text[ spanish ] = "Mis documentos";
     Text[ finnish ] = "Omat asiakirjat";
     Text[ italian ] = "Documenti";
-    Text[ danish ] = "My Documents";
+    Text[ danish ] = "Egne filer";
     Text[ swedish ] = "Mina dokument";
     Text[ polish ] = "Moje dokumenty";
     Text[ portuguese_brazilian ] = "My Documents";
@@ -154,7 +154,7 @@ Image IMG_SVT_MYDOCS_HC
 String STR_SVT_TEMPLATES
 {
     Text = "Vorlagen";
-    Text [ english_us ] = "~Templates";
+    Text [ english_us ] = "Templates";
     Text[ portuguese ] = "Modelos";
     Text[ russian ] = "Øàáëîíû";
     Text[ greek ] = "Templates";
@@ -163,7 +163,7 @@ String STR_SVT_TEMPLATES
     Text[ spanish ] = "Plantillas";
     Text[ finnish ] = "Mallipohjat";
     Text[ italian ] = "Modelli";
-    Text[ danish ] = "Templates";
+    Text[ danish ] = "Typografier";
     Text[ swedish ] = "Mallar";
     Text[ polish ] = "Szablony";
     Text[ portuguese_brazilian ] = "Templates";
@@ -192,7 +192,7 @@ Image IMG_SVT_TEMPLATES_HC
 String STR_SVT_SAMPLES
 {
     Text = "Beispiele";
-    Text [ english_us ] = "~Samples";
+    Text [ english_us ] = "Samples";
     Text[ portuguese ] = "Exemplos";
     Text[ russian ] = "Îáðàçöû";
     Text[ greek ] = "Samples";
@@ -200,7 +200,7 @@ String STR_SVT_SAMPLES
     Text[ french ] = "Exemples";
     Text[ spanish ] = "Ejemplos";
     Text[ italian ] = "Esempi";
-    Text[ danish ] = "Samples";
+    Text[ danish ] = "Eksempler:";
     Text[ swedish ] = "Exempel";
     Text[ polish ] = "Przyk³ady";
     Text[ portuguese_brazilian ] = "Samples";
@@ -247,7 +247,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ french ] = "Précédent";
             Text[ spanish ] = "Regresar";
             Text[ italian ] = "Indietro";
-            Text[ danish ] = "Back";
+            Text[ danish ] = "Tilbage";
             Text[ swedish ] = "Tillbaka";
             Text[ polish ] = "Wstecz";
             Text[ portuguese_brazilian ] = "Back";
@@ -275,7 +275,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ french ] = "Au répertoire supérieur";
             Text[ spanish ] = "Subir un nivel";
             Text[ italian ] = "Alla cartella superiore";
-            Text[ danish ] = "Higher";
+            Text[ danish ] = "Et bibliotek op";
             Text[ swedish ] = "Upp en nivå";
             Text[ polish ] = "Katalog wy¿ej";
             Text[ portuguese_brazilian ] = "Higher";
@@ -307,7 +307,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ french ] = "Imprimer";
             Text[ spanish ] = "Imprimir";
             Text[ italian ] = "Stampa";
-            Text[ danish ] = "Print";
+            Text[ danish ] = "Udskriv";
             Text[ swedish ] = "Skriv ut";
             Text[ polish ] = "Drukuj";
             Text[ portuguese_brazilian ] = "Print";
@@ -407,7 +407,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ spanish ] = "Propiedades del documento";
             Text[ finnish ] = "Asiakirjan ominaisuudet";
             Text[ italian ] = "Proprietà documento";
-            Text[ danish ] = "Docinfo";
+            Text[ danish ] = "Dokumentegenskaber";
             Text[ swedish ] = "Dokumentegenskaper";
             Text[ polish ] = "W³aœciwoœci dokumentu";
             Text[ portuguese_brazilian ] = "Docinfo";
@@ -436,7 +436,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ spanish ] = "Previsualización";
             Text[ finnish ] = "Esikatselu";
             Text[ italian ] = "Anteprima";
-            Text[ danish ] = "Preview";
+            Text[ danish ] = "Eksempel";
             Text[ swedish ] = "Förhandsvisning";
             Text[ polish ] = "Podgl¹d";
             Text[ portuguese_brazilian ] = "Preview";
@@ -508,7 +508,7 @@ ModalDialog DLG_DOCTEMPLATE
     Text[ french ] = "Modèles et documents";
     Text[ spanish ] = "Plantillas y documentos";
     Text[ italian ] = "Modelli e documenti";
-    Text[ danish ] = "Templates and Documents";
+    Text[ danish ] = "Skabeloner og dokumenter";
     Text[ swedish ] = "Mallar och dokument";
     Text[ polish ] = "Szablony i dokumenty";
     Text[ portuguese_brazilian ] = "Templates and Documents";
@@ -539,7 +539,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ french ] = "~Gérer...";
         Text[ spanish ] = "~Administrar...";
         Text[ italian ] = "Gestisci...";
-        Text[ danish ] = "Manage...";
+        Text[ danish ] = "~Administrer...";
         Text[ swedish ] = "~Administrera...";
         Text[ polish ] = "Zarz¹dzaj...";
         Text[ portuguese_brazilian ] = "Manage...";
@@ -566,7 +566,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ french ] = "Éditer";
         Text[ spanish ] = "Edi~tar";
         Text[ italian ] = "Modifica";
-        Text[ danish ] = "Edit";
+        Text[ danish ] = "~Rediger";
         Text[ swedish ] = "~Redigera";
         Text[ polish ] = "~Edytuj";
         Text[ portuguese_brazilian ] = "Edit";
@@ -594,7 +594,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ french ] = "~Ouvrir";
         Text[ spanish ] = "~Abrir";
         Text[ italian ] = "~Apri";
-        Text[ danish ] = "Open";
+        Text[ danish ] = "Å~bn";
         Text[ swedish ] = "Ö~ppna";
         Text[ polish ] = "Otwórz";
         Text[ portuguese_brazilian ] = "Open";
@@ -790,16 +790,16 @@ StringArray STRARY_SVT_DOCINFO
     };
     ItemList [ danish ] =
     {
-        < "Overskrift" ; DI_TITLE ; > ;
-        < "Fra" ; DI_FROM ; > ;
+        < "Titel" ; DI_TITLE ; > ;
+        < "Af" ; DI_FROM ; > ;
         < "Dato" ; DI_DATE ; > ;
         < "Nøgleord" ; DI_KEYWORDS ; > ;
         < "Beskrivelse" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Geändert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "Indholdstype" ; DI_MIMETYPE ; > ;
+        < "Ændringsdato" ; DI_MODIFIEDDATE ; > ;
+        < "Ændret af" ; DI_MODIFIEDBY ; > ;
+        < "Udskriftsdato" ; DI_PRINTDATE ; > ;
+        < "Udskrevet af" ; DI_PRINTBY ; > ;
         < "Emne" ; DI_THEME ; > ;
         < "Størrelse" ; DI_SIZE ; > ;
     };
@@ -974,20 +974,88 @@ String STR_SVT_NEWDOC_HELP
 {
     Text = "Von hier können Sie neue Dokumente erstellen.";
     Text [ english_us ] = "Click here to create new documents.";
+    Text[ portuguese ] = "Click here to create new documents.";
+    Text[ russian ] = "Click here to create new documents.";
+    Text[ greek ] = "Click here to create new documents.";
+    Text[ dutch ] = "Click here to create new documents.";
+    Text[ french ] = "Click here to create new documents.";
+    Text[ spanish ] = "Click here to create new documents.";
+    Text[ finnish ] = "Click here to create new documents.";
+    Text[ italian ] = "Click here to create new documents.";
+    Text[ danish ] = "Click here to create new documents.";
+    Text[ swedish ] = "Click here to create new documents.";
+    Text[ polish ] = "Click here to create new documents.";
+    Text[ japanese ] = "Click here to create new documents.";
+    Text[ korean ] = "Click here to create new documents.";
+    Text[ chinese_simplified ] = "Click here to create new documents.";
+    Text[ chinese_traditional ] = "Click here to create new documents.";
+    Text[ turkish ] = "Click here to create new documents.";
+    Text[ arabic ] = "Click here to create new documents.";
 };
 String STR_SVT_MYDOCS_HELP
 {
     Text = "Enthält Ihre Briefe, Berichte und andere Dokumente";
     Text [ english_us ] = "Contains your letters, reports and other documents";
+    Text[ portuguese ] = "Contains your letters, reports and other documents";
+    Text[ russian ] = "Contains your letters, reports and other documents";
+    Text[ greek ] = "Contains your letters, reports and other documents";
+    Text[ dutch ] = "Contains your letters, reports and other documents";
+    Text[ french ] = "Contains your letters, reports and other documents";
+    Text[ spanish ] = "Contains your letters, reports and other documents";
+    Text[ finnish ] = "Contains your letters, reports and other documents";
+    Text[ italian ] = "Contains your letters, reports and other documents";
+    Text[ danish ] = "Contains your letters, reports and other documents";
+    Text[ swedish ] = "Contains your letters, reports and other documents";
+    Text[ polish ] = "Contains your letters, reports and other documents";
+    Text[ japanese ] = "Contains your letters, reports and other documents";
+    Text[ korean ] = "Contains your letters, reports and other documents";
+    Text[ chinese_simplified ] = "Contains your letters, reports and other documents";
+    Text[ chinese_traditional ] = "Contains your letters, reports and other documents";
+    Text[ turkish ] = "Contains your letters, reports and other documents";
+    Text[ arabic ] = "Contains your letters, reports and other documents";
 };
 String STR_SVT_TEMPLATES_HELP
 {
     Text = "Enthält Vorlagen aus denen Sie neue Dokumente erstellen können";
     Text [ english_us ] = "Contains templates for creating new documents";
+    Text[ portuguese ] = "Contains templates for creating new documents";
+    Text[ russian ] = "Contains templates for creating new documents";
+    Text[ greek ] = "Contains templates for creating new documents";
+    Text[ dutch ] = "Contains templates for creating new documents";
+    Text[ french ] = "Contains templates for creating new documents";
+    Text[ spanish ] = "Contains templates for creating new documents";
+    Text[ finnish ] = "Contains templates for creating new documents";
+    Text[ italian ] = "Contains templates for creating new documents";
+    Text[ danish ] = "Contains templates for creating new documents";
+    Text[ swedish ] = "Contains templates for creating new documents";
+    Text[ polish ] = "Contains templates for creating new documents";
+    Text[ japanese ] = "Contains templates for creating new documents";
+    Text[ korean ] = "Contains templates for creating new documents";
+    Text[ chinese_simplified ] = "Contains templates for creating new documents";
+    Text[ chinese_traditional ] = "Contains templates for creating new documents";
+    Text[ turkish ] = "Contains templates for creating new documents";
+    Text[ arabic ] = "Contains templates for creating new documents";
 };
 String STR_SVT_SAMPLES_HELP
 {
     Text = "Enthält Beispieldokumente für Briefe, Berichte und andere Dokumente";
     Text [ english_us ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ portuguese ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ russian ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ greek ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ dutch ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ french ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ spanish ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ finnish ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ italian ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ danish ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ swedish ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ polish ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ japanese ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ korean ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ chinese_simplified ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ chinese_traditional ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ turkish ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ arabic ] = "Contains a selection of sample letters, reports and other documents";
 };
 
