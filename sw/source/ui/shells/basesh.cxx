@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:49:21 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -948,12 +948,12 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_CONVERT_TEXT_TABLE:
         {
             sal_Unicode cDelim = 0;
-            USHORT nInsTblFlags = ALL_TBL_INS_ATTR;
+            SwInsertTableOptions aInsTblOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
             SwTableAutoFmt* pTAFmt = 0;
             SwConvertTableDlg *pDlg = new SwConvertTableDlg( GetView() );
             if( RET_OK == pDlg->Execute() )
             {
-                pDlg->GetValues( cDelim, nInsTblFlags, pTAFmt );
+                pDlg->GetValues( cDelim, aInsTblOpts, pTAFmt );
 
             }
             delete pDlg;
@@ -966,8 +966,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 if( rSh.GetTableFmt() )
                     rSh.TableToText( cDelim );
                 else
-                    bInserted = rSh.TextToTable( cDelim, HORI_FULL,
-                                                nInsTblFlags, pTAFmt );
+                    bInserted = rSh.TextToTable( aInsTblOpts, cDelim, HORI_FULL, pTAFmt );
                 rSh.EnterStdMode();
 
                 if( bInserted )
