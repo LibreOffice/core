@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 17:01:55 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 20:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,8 @@
 #endif
 
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
@@ -1119,13 +1119,13 @@ uno::Reference< container::XContainerQuery > SfxStoringHelper::GetFilterQuery()
 }
 
 //-------------------------------------------------------------------------
-uno::Reference< ::drafts::com::sun::star::frame::XModuleManager > SfxStoringHelper::GetModuleManager()
+uno::Reference< ::com::sun::star::frame::XModuleManager > SfxStoringHelper::GetModuleManager()
 {
     if ( !m_xModuleManager.is() )
     {
-        m_xModuleManager = uno::Reference< ::drafts::com::sun::star::frame::XModuleManager >(
+        m_xModuleManager = uno::Reference< ::com::sun::star::frame::XModuleManager >(
             GetServiceFactory()->createInstance(
-                    ::rtl::OUString::createFromAscii( "drafts.com.sun.star.frame.ModuleManager" ) ),
+                    ::rtl::OUString::createFromAscii( "com.sun.star.frame.ModuleManager" ) ),
             uno::UNO_QUERY );
 
         if ( !m_xModuleManager.is() )
