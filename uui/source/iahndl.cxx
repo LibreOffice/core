@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 10:04:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_STRATUMCREATIONEXCEPTION_HPP_
 #include <com/sun/star/configuration/backend/StratumCreationException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XFORMS_INVALIDDATAONSUBMITEXCEPTION_HPP_
+#include <com/sun/star/xforms/InvalidDataOnSubmitException.hpp>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include "osl/diagnose.h"
@@ -1178,6 +1181,19 @@ UUIInteractionHandler::handle_impl(
                                aArguments,
                                rRequest->getContinuations());
             return;
+        }
+
+        star::xforms::InvalidDataOnSubmitException aInvalidDataOnSubmitException;
+        if (aAnyRequest >>= aInvalidDataOnSubmitException)
+        {
+            const ErrCode nErrorCode = ERRCODE_UUI_INVALID_XFORMS_SUBMISSION_DATA;
+
+            std::vector< rtl::OUString > aArguments;
+
+            handleErrorRequest(star::task::InteractionClassification_QUERY,
+                               nErrorCode,
+                               aArguments,
+                               rRequest->getContinuations());
         }
     }
     catch (std::bad_alloc const &)
