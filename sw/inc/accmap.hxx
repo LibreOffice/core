@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-06 08:06:57 $
+ *  last change: $Author: mib $ $Date: 2002-03-08 13:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,18 +79,26 @@ class Rectangle;
 class SwFrm;
 class SwRootFrm;
 class SwAccessibleContext;
-class SwAccessibleMap_Impl;
+class SwAccessibleContextMap_Impl;
+class SwAccessibleEventList_Impl;
+class SwAccessibleEventMap_Impl;
+struct SwAccessibleEvent_Impl;
 class SwRect;
 class ViewShell;
 
 class SwAccessibleMap
 {
     ::vos::OMutex aMutex;
-    SwAccessibleMap_Impl *pMap;
+    ::vos::OMutex aEventMutex;
+    SwAccessibleContextMap_Impl *pMap;
+    SwAccessibleEventList_Impl *pEvents;
+    SwAccessibleEventMap_Impl *pEventMap;
     ViewShell *pVSh;
     sal_Int32 nPara;
     sal_Int32 nFootnote;
     sal_Int32 nEndnote;
+
+    void AppendEvent( const SwAccessibleEvent_Impl& rEvent );
 
 public:
 
@@ -115,6 +123,10 @@ public:
     void DisposeFrm( const SwFrm *pFrm );
 
     void MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm );
+
+    void InvalidateFrmContent( const SwFrm *pFrm );
+
+    void FireEvents();
 };
 
 #endif

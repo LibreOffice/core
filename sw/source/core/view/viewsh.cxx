@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-06 11:33:27 $
+ *  last change: $Author: mib $ $Date: 2002-03-08 13:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,6 +415,11 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
     {
         GetDrawView()->AdjustMarkHdl(FALSE);
     }
+
+#ifdef ACCESSIBLE_LAYOUT
+    if( Imp()->IsAccessible() )
+        Imp()->FireAccessibleEvents();
+#endif
 }
 
 /******************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-06 11:36:47 $
+ *  last change: $Author: mib $ $Date: 2002-03-08 13:22:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,13 @@ public:
 
     // Move a frame's position in the accessible view
     void MoveAccessibleFrm( const SwFrm *pFrm, const SwRect& rOldFrm );
+
+    // Invalidate accessible frame's frame's content
+    void InvalidateAccessibleFrmContent( const SwFrm *pFrm );
+
+    // Fire all accessible events that have been collected so far
+    void FireAccessibleEvents();
+
 #endif
 };
 
