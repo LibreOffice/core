@@ -1,0 +1,245 @@
+/*************************************************************************
+ *
+ *  $RCSfile: scmdstrm.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mh $ $Date: 2002-11-18 15:28:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2002
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2002 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2002 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SFXINTITEM_HXX //autogen
+#include <svtools/intitem.hxx>
+#endif
+#ifndef _SFXSTRITEM_HXX //autogen
+#include <svtools/stritem.hxx>
+#endif
+#ifndef _SFXENUMITEM_HXX //autogen
+#include <svtools/eitem.hxx>
+#endif
+
+#ifndef _SCMDSTRM_HXX
+#include "scmdstrm.hxx"
+#endif
+#include "svcommstream.hxx"
+#include "rcontrol.hxx"
+
+#ifdef DEBUG
+#ifndef _EDITWIN_HXX
+#include "editwin.hxx"
+#endif
+#include "statemnt.hxx"
+#endif
+
+SCmdStream::SCmdStream(SvStream *pIn)
+{
+    pSammel = pIn;
+    pCommStream = new SvCommStream( pSammel );
+//  SetCommStream( pCommStream );
+}
+
+SCmdStream::~SCmdStream()
+{
+    delete pCommStream;
+}
+
+void SCmdStream::Read (String &aString)
+{
+    comm_UniChar* pStr;
+    USHORT nLenInChars;
+    Read( pStr, nLenInChars );
+
+    aString = String( pStr, nLenInChars );
+    delete [] pStr;
+}
+
+void SCmdStream::Read ( SfxPoolItem *&pItem )
+{
+    USHORT nType;
+    USHORT nId;
+    Read(nId);
+#ifdef DEBUG
+        StatementList::m_pDbgWin->AddText( "Parameter: " );
+        StatementList::m_pDbgWin->AddText( String::CreateFromInt32( nId ) );
+        StatementList::m_pDbgWin->AddText( " " );
+#endif
+    Read( nType );
+    switch (nType)
+    {
+        case BinUSHORT:
+            {
+                USHORT nNr;
+                Read (nNr );
+                pItem = new SfxUInt16Item(nId,nNr);
+#ifdef DEBUG
+                StatementList::m_pDbgWin->AddText( "USHORT:" );
+                StatementList::m_pDbgWin->AddText( String::CreateFromInt32( nNr ) );
+#endif
+            }
+            break;
+        case BinULONG:
+            {
+                ULONG nNr;
+                Read (nNr );
+                pItem = new SfxUInt32Item(nId,nNr);
+#ifdef DEBUG
+                StatementList::m_pDbgWin->AddText( "ULONG:" );
+                StatementList::m_pDbgWin->AddText( String::CreateFromInt64( nNr ) );
+#endif
+            }
+            break;
+        case BinString:
+            {
+                String aString;
+                Read (aString);
+
+                pItem = new SfxStringItem(nId,aString);
+#ifdef DEBUG
+                StatementList::m_pDbgWin->AddText( "String:" );
+                StatementList::m_pDbgWin->AddText( aString );
+#endif
+            }
+            break;
+        case BinBool:
+            {
+                BOOL bBool;
+                Read (bBool);
+                pItem = new SfxBoolItem(nId,bBool);
+#ifdef DEBUG
+                StatementList::m_pDbgWin->AddText( "BOOL:" );
+                StatementList::m_pDbgWin->AddText( bBool ? "TRUE" : "FALSE" );
+#endif
+            }
+            break;
+        default:
+            DBG_ERROR1( "Ungültiger Typ im Stream:%hu", nType );
+#ifdef DEBUG
+            StatementList::m_pDbgWin->AddText( "Ungültiger Typ !!!! " );
+#endif
+            break;
+    }
+#ifdef DEBUG
+        StatementList::m_pDbgWin->AddText( "\n" );
+#endif
+}
+
+void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
+{
+    USHORT nType;
+    String aId;
+    Read(aId);
+    rItem.Name = rtl::OUString( aId );
+#ifdef DEBUG
+        StatementList::m_pDbgWin->AddText( "Parameter: " );
+        StatementList::m_pDbgWin->AddText( aId );
+        StatementList::m_pDbgWin->AddText( " " );
+#endif
+    nType = GetNextType();
+    switch (nType)
+    {
+        case BinUSHORT:
+            {
+                USHORT nNr;
+                Read (nNr );
+                rItem.Value <<= nNr;
+#ifdef DEBUG
+                StatementList::m_pDbgWin->AddText( "USHORT:" );
+                StatementList::m_pDbgWin->AddText( String::CreateFromInt32( nNr ) );
+#endif
+            }
+            break;
+        case BinULONG:
+            {
+                ULONG nNr;
+                Read (nNr );
+                rItem.Value <<= nNr;
+#ifdef DEBUG
+                StatementList::m_pDbgWin->AddText( "ULONG:" );
+                StatementList::m_pDbgWin->AddText( String::CreateFromInt64( nNr ) );
+#endif
+            }
+            break;
+        case BinString:
+            {
+                String aString;
+                Read (aString);
+                rItem.Value <<= ::rtl::OUString( aString );
+#ifdef DEBUG
+                StatementList::m_pDbgWin->AddText( "String:" );
+                StatementList::m_pDbgWin->AddText( aString );
+#endif
+            }
+            break;
+        case BinBool:
+            {
+                BOOL bBool;
+                Read (bBool);
+                rItem.Value <<= bBool;
+#ifdef DEBUG
+                StatementList::m_pDbgWin->AddText( "BOOL:" );
+                StatementList::m_pDbgWin->AddText( bBool ? "TRUE" : "FALSE" );
+#endif
+            }
+            break;
+        default:
+            DBG_ERROR1( "Ungültiger Typ im Stream:%hu", nType );
+#ifdef DEBUG
+            StatementList::m_pDbgWin->AddText( "Ungültiger Typ !!!! " );
+#endif
+            break;
+    }
+#ifdef DEBUG
+        StatementList::m_pDbgWin->AddText( "\n" );
+#endif
+}
+
