@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoviwou.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-29 15:49:18 $
+ *  last change: $Author: thb $ $Date: 2002-07-31 09:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,25 @@
 
 
 SvxDrawOutlinerViewForwarder::SvxDrawOutlinerViewForwarder( OutlinerView& rOutl ) :
-    mrOutlinerView ( rOutl )
+    mrOutlinerView ( rOutl ), maTextShapeTopLeft()
+{
+}
+
+SvxDrawOutlinerViewForwarder::SvxDrawOutlinerViewForwarder( OutlinerView& rOutl, const Point& rShapePosTopLeft ) :
+    mrOutlinerView ( rOutl ), maTextShapeTopLeft( rShapePosTopLeft )
 {
 }
 
 SvxDrawOutlinerViewForwarder::~SvxDrawOutlinerViewForwarder()
 {
+}
+
+Point SvxDrawOutlinerViewForwarder::GetTextOffset() const
+{
+    // #101029# calc text offset from shape anchor
+    Rectangle aOutputRect( mrOutlinerView.GetOutputArea() );
+
+    return aOutputRect.TopLeft() - maTextShapeTopLeft;
 }
 
 BOOL SvxDrawOutlinerViewForwarder::IsValid() const
@@ -93,6 +106,10 @@ Rectangle SvxDrawOutlinerViewForwarder::GetVisArea() const
     if( pOutDev )
     {
         Rectangle aVisArea = mrOutlinerView.GetVisArea();
+
+        // #101029#
+        Point aTextOffset( GetTextOffset() );
+        aVisArea.Move( aTextOffset.X(), aTextOffset.Y() );
 
         // figure out map mode from edit engine
         Outliner* pOutliner = mrOutlinerView.GetOutliner();
@@ -117,11 +134,18 @@ Point SvxDrawOutlinerViewForwarder::LogicToPixel( const Point& rPoint, const Map
 
     if( pOutDev )
     {
+        Point aPoint1( rPoint );
+        Point aTextOffset( GetTextOffset() );
+
+        // #101029#
+        aPoint1.X() += aTextOffset.X();
+        aPoint1.Y() += aTextOffset.Y();
+
         MapMode aMapMode(pOutDev->GetMapMode());
-        Point aPoint( OutputDevice::LogicToLogic( rPoint, rMapMode,
-                                                  aMapMode.GetMapUnit() ) );
+        Point aPoint2( OutputDevice::LogicToLogic( aPoint1, rMapMode,
+                                                   aMapMode.GetMapUnit() ) );
         aMapMode.SetOrigin(Point());
-        return pOutDev->LogicToPixel( aPoint, aMapMode );
+        return pOutDev->LogicToPixel( aPoint2, aMapMode );
     }
 
     return Point();
@@ -135,10 +159,17 @@ Point SvxDrawOutlinerViewForwarder::PixelToLogic( const Point& rPoint, const Map
     {
         MapMode aMapMode(pOutDev->GetMapMode());
         aMapMode.SetOrigin(Point());
-        Point aPoint( pOutDev->PixelToLogic( rPoint, aMapMode ) );
-        return OutputDevice::LogicToLogic( aPoint,
-                                           aMapMode.GetMapUnit(),
-                                           rMapMode );
+        Point aPoint1( pOutDev->PixelToLogic( rPoint, aMapMode ) );
+        Point aPoint2( OutputDevice::LogicToLogic( aPoint1,
+                                                   aMapMode.GetMapUnit(),
+                                                   rMapMode ) );
+        // #101029#
+        Point aTextOffset( GetTextOffset() );
+
+        aPoint2.X() -= aTextOffset.X();
+        aPoint2.Y() -= aTextOffset.Y();
+
+        return aPoint2;
     }
 
     return Point();
@@ -172,4 +203,9 @@ sal_Bool SvxDrawOutlinerViewForwarder::Paste()
 {
     mrOutlinerView.Paste();
     return sal_True;
+}
+
+void SvxDrawOutlinerViewForwarder::SetShapePos( const Point& rShapePosTopLeft )
+{
+    maTextShapeTopLeft = rShapePosTopLeft;
 }
