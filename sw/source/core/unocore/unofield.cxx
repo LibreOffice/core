@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:42:16 $
+ *  last change: $Author: tl $ $Date: 2002-06-17 13:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2513,11 +2513,12 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( RuntimeExc
 
     String sName(rName), sTypeName;
     sal_uInt16 nResId = lcl_GetIdByName( sName, sTypeName );
-    if( USHRT_MAX == nResId )
-        throw NoSuchElementException();
-
-    sName.Erase(0, sTypeName.Len()+1);
-    sal_Bool bRet = USHRT_MAX != nResId && 0 != GetDoc()->GetFldType(nResId, sName);
+    sal_Bool bRet = sal_False;
+    if( USHRT_MAX != nResId )
+    {
+        sName.Erase(0, sTypeName.Len()+1);
+        bRet = USHRT_MAX != nResId && 0 != GetDoc()->GetFldType(nResId, sName);
+    }
     return bRet;
 }
 /*-- 21.12.98 10:37:34---------------------------------------------------
