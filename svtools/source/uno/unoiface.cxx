@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:24:27 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ namespace
 
 extern "C" {
 
-Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, Window* pParent, sal_uInt32 nWinBits )
+Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, Window* pParent, WinBits nWinBits )
 {
     Window* pWindow = NULL;
     String aServiceName( pDescriptor->WindowServiceName );
