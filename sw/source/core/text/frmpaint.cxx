@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:19:01 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
         ASSERT( pFmt, "PaintExtraData without CharFmt" );
         pFnt = new SwFont( &pFmt->GetAttrSet(), pFrm->GetTxtNode()->GetDoc() );
         pFnt->Invalidate();
-        pFnt->ChgPhysFnt( pSh, pSh->GetOut() );
+        pFnt->ChgPhysFnt( pSh, *pSh->GetOut() );
         pFnt->SetVertical( 0, pFrm->IsVertical() );
         nLineNr += pFrm->GetAllLines() - pFrm->GetThisLines();
         LineNumberPosition ePos = rLineInf.GetPos();
@@ -302,7 +302,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
 #endif
 
     sal_Bool bTooBig = pFnt->GetSize( pFnt->GetActual() ).Height() > nMax &&
-                pFnt->GetHeight( pSh, pSh->GetOut() ) > nMax;
+                pFnt->GetHeight( pSh, *pSh->GetOut() ) > nMax;
     SwFont* pTmpFnt;
     if( bTooBig )
     {
@@ -326,7 +326,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
             aTmpPos.X() -= aSize.Width();
         // calculate rectangle containing the line number
         SwRect aRct( Point( aTmpPos.X(),
-                         aTmpPos.Y() - pTmpFnt->GetAscent( pSh, pSh->GetOut() )
+                         aTmpPos.Y() - pTmpFnt->GetAscent( pSh, *pSh->GetOut() )
                           ), aSize );
         if( !aRect.IsInside( aRct ) )
         {
@@ -412,7 +412,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
 #endif
 
         SwExtraPainter aExtra( this, pSh, rLineInf, rRect,
-            rLineNum.GetStartValue(), eHor, bLineNum );
+            (USHORT)rLineNum.GetStartValue(), eHor, bLineNum );
 
         if( HasPara() )
         {
@@ -493,7 +493,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
                 ( aExtra.HasNumber() || aExtra.HasDivider() ) )
             {
                 aExtra.PaintExtra( Frm().Top()+Prt().Top(), aExtra.GetFont()
-                    ->GetAscent( pSh, pSh->GetOut() ), Prt().Height(), bRedLine );
+                    ->GetAscent( pSh, *pSh->GetOut() ), Prt().Height(), bRedLine );
             }
             else if( bRedLine )
                 aExtra.PaintRedline( Frm().Top()+Prt().Top(), Prt().Height() );
@@ -611,7 +611,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 aLayoutModeModifier.Modify( IsRightToLeft() );
 
                 pFnt->Invalidate();
-                pFnt->ChgPhysFnt( pSh, pSh->GetOut() );
+                pFnt->ChgPhysFnt( pSh, *pSh->GetOut() );
                 Point aPos = Frm().Pos() + Prt().Pos();
 
                 const SvxLRSpaceItem &rSpace =
@@ -629,7 +629,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 else
                     pClip = NULL;
 
-                aPos.Y() += pFnt->GetAscent( pSh, pSh->GetOut() );
+                aPos.Y() += pFnt->GetAscent( pSh, *pSh->GetOut() );
 
                 if ( GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
                      IsInDocBody() )
@@ -639,7 +639,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                     {
                         // center character in grid line
                         aPos.Y() += ( pGrid->GetBaseHeight() -
-                                      pFnt->GetHeight( pSh, pSh->GetOut() ) ) / 2;
+                                      pFnt->GetHeight( pSh, *pSh->GetOut() ) ) / 2;
 
                         if ( ! pGrid->GetRubyTextBelow() )
                             aPos.Y() += pGrid->GetRubyHeight();
@@ -762,7 +762,7 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
         // in unsere Zeile ragt, schaltet sich der SwTxtFly einfach ab:
         aInf.GetTxtFly()->Relax();
 
-        OutputDevice *pOut = aInf.GetOut();
+        OutputDevice* pOut = aInf.GetOut();
         const sal_Bool bOnWin = pSh->GetWin() != 0;
 
         SwSaveClip aClip( bOnWin || IsUndersized() ? pOut : 0 );
