@@ -2,8 +2,8 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.5 $
- *  last change: $Author: hro $ $Date: 2000-10-23 11:07:49 $
+ *  $Revision: 1.6 $
+ *  last change: $Author: hro $ $Date: 2001-05-10 10:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -936,11 +936,19 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
     {
         ::rtl::OUString aTmp;
         ::rtl::OUString aOInitName;
+#ifdef TF_FILEURL
+        if ( FileBase::getFileURLFromSystemPath( OUString( rInitName ), aTmp ) == osl_File_E_None )
+        {
+            FileBase::getSystemPathFromFileURL( aTmp, aOInitName );
+            aTmpName = ByteString( String(aOInitName), osl_getThreadTextEncoding() );
+        }
+#else
         if ( FileBase::normalizePath( OUString( rInitName ), aTmp ) == osl_File_E_None )
         {
             FileBase::getSystemPathFromNormalizedPath( aTmp, aOInitName );
             aTmpName = ByteString( String(aOInitName), osl_getThreadTextEncoding() );
         }
+#endif
 
 #ifdef DBG_UTIL
         // ASF nur bei Default eStyle, nicht z.B. aus MakeShortName()

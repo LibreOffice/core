@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sb $ $Date: 2001-04-24 16:28:32 $
+ *  last change: $Author: hro $ $Date: 2001-05-10 10:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4873,6 +4873,19 @@ UniString INetURLObject::PathToFileName() const
 {
     if (m_eScheme != INET_PROT_FILE)
         return UniString();
+
+#ifdef TF_FILEURL
+    rtl::OUString aSystemPath;
+    if (osl::FileBase::getSystemPathFromFileURL(
+                decode(m_aAbsURIRef.GetBuffer(),
+                       m_aAbsURIRef.GetBuffer() + m_aPath.getEnd(),
+                       getEscapePrefix(), NO_DECODE, RTL_TEXTENCODING_UTF8),
+                aSystemPath)
+            != osl::FileBase::E_None)
+        return UniString();
+    else
+        return aSystemPath;
+#else
     rtl::OUString aNormalizedPath;
     if (osl::FileBase::getNormalizedPathFromFileURL(
                 decode(m_aAbsURIRef.GetBuffer(),
@@ -4887,6 +4900,7 @@ UniString INetURLObject::PathToFileName() const
             != osl::FileBase::E_None)
         return UniString();
     return aSystemPath;
+#endif
 }
 
 //============================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strmwnt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:09 $
+ *  last change: $Author: hro $ $Date: 2001-05-10 10:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,10 +173,16 @@ SvFileStream::SvFileStream( const String& rFileName, StreamMode nMode )
     SetBufferSize( 8192 );
     // convert URL to SystemPath, if necessary
     ::rtl::OUString aFileName, aNormPath;
+
+#ifdef TF_FILEURL
+    if ( FileBase::getSystemPathFromFileURL( rFileName, aFileName ) != FileBase::E_None )
+        aFileName = rFileName;
+#else
     if ( FileBase::getNormalizedPathFromFileURL( rFileName, aNormPath ) == FileBase::E_None )
         FileBase::getSystemPathFromNormalizedPath( aNormPath, aFileName );
     else
         aFileName = rFileName;
+#endif
     Open( aFileName, nMode );
 }
 

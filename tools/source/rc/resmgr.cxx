@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-05 09:01:31 $
+ *  last change: $Author: hro $ $Date: 2001-05-10 10:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1257,7 +1257,11 @@ ResMgr* ResMgr::SearchCreateResMgr(
     ::rtl::OUString aRtlUniAppFileName;
     osl_getExecutableFile( &aRtlUniAppFileName.pData );
     ::rtl::OUString aRtlAppFileName;
+#ifdef TF_FILEURL
+    ::osl::FileBase::getSystemPathFromFileURL( aRtlUniAppFileName, aRtlAppFileName );
+#else
     ::osl::FileBase::getSystemPathFromNormalizedPath( aRtlUniAppFileName, aRtlAppFileName );
+#endif
     String aAppFileName( aRtlAppFileName );
 
     const sal_Char* pLang = GetLang( nType, 0 );
