@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:40 $
+ *  last change: $Author: sj $ $Date: 2001-05-17 08:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #define PAGE1_OLD_DESIGN    4
 #define PAGE1_DESIGNS       5
 #define PAGE1_DEL_DESIGN    6
+#define PAGE1_DESC          7
 
 //////////////////////////////
 
@@ -116,6 +117,7 @@
 #define PAGE3_RESOLUTION_3  59
 #define PAGE3_TITEL_3       60
 #define PAGE3_SLD_SOUND     61
+#define PAGE3_VERT          62
 
 //////////////////////////////
 
@@ -168,6 +170,7 @@
 #define BUT_FINISH 202
 #define BUT_CANCEL 203
 #define BUT_HELP 204
+#define BOTTOM_LINE 205
 
 //////////////////////////////
 

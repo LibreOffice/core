@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 20:23:12 $
+ *  last change: $Author: sj $ $Date: 2001-05-17 08:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,15 +109,16 @@ class SdPublishingDlg : public ModalDialog
 private:
     // page 1 controls
     FixedBitmap*    pPage1_Bmp;
-    GroupBox*       pPage1_Titel;
+    FixedLine*      pPage1_Titel;
     RadioButton*    pPage1_NewDesign;
     RadioButton*    pPage1_OldDesign;
     ListBox*        pPage1_Designs;
     PushButton*     pPage1_DelDesign;
+    FixedText*      pPage1_Desc;
 
     // page 2 controls
     FixedBitmap*    pPage2_Bmp;
-    GroupBox*       pPage2_Titel;
+    FixedLine*      pPage2_Titel;
     RadioButton*    pPage2_Standard;
     RadioButton*    pPage2_Frames;
     RadioButton*    pPage2_Kiosk;
@@ -127,11 +128,11 @@ private:
     FixedBitmap*    pPage2_Kiosk_FB;
     FixedBitmap*    pPage2_WebCast_FB;
 
-    GroupBox*       pPage2_Titel_Html;
+    FixedLine*      pPage2_Titel_Html;
     CheckBox*       pPage2_Content;
     CheckBox*       pPage2_Notes;
 
-    GroupBox*       pPage2_Titel_WebCast;
+    FixedLine*      pPage2_Titel_WebCast;
     RadioButton*    pPage2_ASP;
     RadioButton*    pPage2_PERL;
     FixedText*      pPage2_URL_txt;
@@ -141,7 +142,7 @@ private:
     FixedText*      pPage2_Index_txt;
     Edit*           pPage2_Index;
 
-    GroupBox*       pPage2_Titel_Kiosk;
+    FixedLine*      pPage2_Titel_Kiosk;
     RadioButton*    pPage2_ChgDefault;
     RadioButton*    pPage2_ChgAuto;
     FixedText*      pPage2_Duration_txt;
@@ -150,21 +151,22 @@ private:
 
     // page 3 controls
     FixedBitmap*    pPage3_Bmp;
-    GroupBox*       pPage3_Titel1;
+    FixedLine*      pPage3_Titel1;
     RadioButton*    pPage3_Gif;
     RadioButton*    pPage3_Jpg;
     FixedText*      pPage3_Quality_txt;
     ComboBox*       pPage3_Quality;
-    GroupBox*       pPage3_Titel2;
+    FixedLine*      pPage3_Vert;
+    FixedLine*      pPage3_Titel2;
     RadioButton*    pPage3_Resolution_1;
     RadioButton*    pPage3_Resolution_2;
     RadioButton*    pPage3_Resolution_3;
-    GroupBox*       pPage3_Titel3;
+    FixedLine*      pPage3_Titel3;
     CheckBox*       pPage3_SldSound;
     // page 4 controls
 
     FixedBitmap*    pPage4_Bmp;
-    GroupBox*       pPage4_Titel1;
+    FixedLine*      pPage4_Titel1;
     FixedText*      pPage4_Author_txt;
     Edit*           pPage4_Author;
     FixedText*      pPage4_Email_txt;
@@ -179,14 +181,14 @@ private:
     // page 5 controls
 
     FixedBitmap*    pPage5_Bmp;
-    GroupBox*       pPage5_Titel;
+    FixedLine*      pPage5_Titel;
     CheckBox*       pPage5_TextOnly;
     ValueSet*       pPage5_Buttons;
 
     // page 6 controls
 
     FixedBitmap*    pPage6_Bmp;
-    GroupBox*       pPage6_Titel;
+    FixedLine*      pPage6_Titel;
     RadioButton*    pPage6_Default;
     RadioButton*    pPage6_User;
     PushButton*     pPage6_Back;
@@ -200,6 +202,7 @@ private:
 //  CheckBox*       pPage6_Sound;
 
     // standard controls
+    FixedLine       aBottomLine;
     OKButton        aFinishButton;
     CancelButton    aCancelButton;
     HelpButton      aHelpButton;
