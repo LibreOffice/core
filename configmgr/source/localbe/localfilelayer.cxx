@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilelayer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:29:20 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,15 +438,15 @@ static bool findSubLayers(const rtl::OUString& aResDir,
 
     // Extract the directory where the file is located
     osl::Directory directory(aResDir) ;
-    if (directory.open() != osl_File_E_None) return false;
+    if (directory.open() != osl::Directory::E_None) return false;
 
     osl::DirectoryItem item ;
     osl::FileStatus status(osl_FileStatus_Mask_Type |
                            osl_FileStatus_Mask_FileURL) ;
 
-    while (directory.getNextItem(item) == osl_File_E_None)
+    while (directory.getNextItem(item) == osl::Directory::E_None)
     {
-        if (item.getFileStatus(status) == osl_File_E_None)
+        if (item.getFileStatus(status) == osl::Directory::E_None)
         {
             if (status.getFileType() == osl::FileStatus::Directory)
             {
