@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:55:34 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1893,12 +1893,18 @@ const ScFuncDesc* ScFunctionMgr::Next() const
 
 //------------------------------------------------------------------------
 
-::utl::TransliterationWrapper* GetScGlobalpTransliteration()//add by CHINA001
+utl::TransliterationWrapper* ScGlobal::GetpTransliteration() //add by CHINA001
 {
-    return ScGlobal::pTransliteration;
+    DBG_ASSERT(
+        pTransliteration,
+        "ScGlobal::GetpTransliteration() called before ScGlobal::Init()");
+    return pTransliteration;
 }
 
-const LocaleDataWrapper* GetScGlobalpLocaleData()
+const LocaleDataWrapper* ScGlobal::GetpLocaleData()
 {
-    return ScGlobal::pLocaleData;
+    DBG_ASSERT(
+        pLocaleData,
+        "ScGlobal::GetpLocaleData() called before ScGlobal::Init()");
+    return pLocaleData;
 }
