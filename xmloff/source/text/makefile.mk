@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: dvo $ $Date: 2001-01-24 16:49:52 $
+#   last change: $Author: ganaya $ $Date: 2001-01-31 18:22:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,7 +96,6 @@ CXXFILES = \
         XMLChangedRegionImportContext.cxx \
         XMLChangeElementImportContext.cxx \
         XMLChangeInfoContext.cxx \
-        XMLChangeImportContext.cxx \
         XMLFootnoteBodyImportContext.cxx \
         XMLFootnoteConfigurationImportContext.cxx \
         XMLFootnoteImportContext.cxx \
@@ -129,7 +128,6 @@ CXXFILES = \
         XMLSectionImportContext.cxx \
         XMLSectionSourceDDEImportContext.cxx \
         XMLSectionSourceImportContext.cxx \
-        XMLStringBufferImportContext.cxx \
         XMLTextColumnsContext.cxx \
         XMLTextColumnsExport.cxx \
         XMLTextFrameContext.cxx \
@@ -169,7 +167,6 @@ SLOFILES =	\
         $(SLO)$/XMLChangedRegionImportContext.obj \
         $(SLO)$/XMLChangeElementImportContext.obj \
         $(SLO)$/XMLChangeInfoContext.obj \
-        $(SLO)$/XMLChangeImportContext.obj \
         $(SLO)$/XMLFootnoteBodyImportContext.obj \
         $(SLO)$/XMLFootnoteConfigurationImportContext.obj \
         $(SLO)$/XMLFootnoteImportContext.obj \
@@ -202,7 +199,6 @@ SLOFILES =	\
         $(SLO)$/XMLSectionImportContext.obj \
         $(SLO)$/XMLSectionSourceDDEImportContext.obj \
         $(SLO)$/XMLSectionSourceImportContext.obj \
-        $(SLO)$/XMLStringBufferImportContext.obj \
         $(SLO)$/XMLTextColumnsContext.obj \
         $(SLO)$/XMLTextColumnsExport.obj \
         $(SLO)$/XMLTextFrameContext.obj \
@@ -222,6 +218,12 @@ SLOFILES =	\
         $(SLO)$/XMLTextTableContext.obj \
         $(SLO)$/XMLTrackedChangesImportContext.obj
 
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+SLOFILES+=$(SLO)$/staticmbtext.obj
+.ENDIF
 
 # --- Tagets -------------------------------------------------------
 
