@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-05 10:21:40 $
+ *  last change: $Author: tl $ $Date: 2002-10-17 07:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,8 +743,8 @@ void SmStructureNode::GetAccessibleText( String &rText ) const
             if (pNode->IsVisible())
                 ((SmStructureNode *) pNode)->nAccIndex = rText.Len();
             pNode->GetAccessibleText( rText );
-            if (rText.Len()  &&  ' ' != rText.GetChar( rText.Len() - 1 ))
-                rText += String::CreateFromAscii( " " );
+//            if (rText.Len()  &&  ' ' != rText.GetChar( rText.Len() - 1 ))
+//                rText += String::CreateFromAscii( " " );
         }
     }
 }
