@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 07:02:39 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ ModalDialog DLG_NUM_NAMES
         Text[ greek ] = "ÌïñöÞ";
         Text[ korean ] = "¼­½Ä";
         Text[ turkish ] = "Format";
+        Text[ catalan ] = "Forma";
     };
     ListBox LB_FORM
     {
@@ -393,6 +394,18 @@ ModalDialog DLG_NUM_NAMES
         < " " ; > ;
         < " " ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Sin nombre 1" ; > ;
+        < "Sin nombre 2" ; > ;
+        < "Sin nombre 3" ; > ;
+        < "Sin nombre 4" ; > ;
+        < "Sin nombre 5" ; > ;
+        < "Sin nombre 6" ; > ;
+        < "Sin nombre 7" ; > ;
+        < "Sin nombre 8" ; > ;
+        < "Sin nombre 9" ; > ;
+    };
     };
     Edit ED_FORM
     {
@@ -407,6 +420,7 @@ ModalDialog DLG_NUM_NAMES
     Text[ korean ] = "´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀå";
     Text[ turkish ] = "Farklý kaydet...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Guardar como";
 };
 /**************************************************************************/
 /*                                                                        */
@@ -425,7 +439,7 @@ TabDialog DLG_TAB_OUTLINE
     Text [ portuguese ] = "Numeração de capítulos" ;
     Text [ finnish ] = "Jäsennysnumerointi" ;
     Text [ danish ] = "Kapitelnummerering" ;
-    Text [ french ] = "Numérotation de chapitres" ;
+    Text [ french ] = "Numérotation des chapitres" ;
     Text [ swedish ] = "Kapitelnumrering" ;
     Text [ dutch ] = "Hoofdstuknummering" ;
     Text [ spanish ] = "Numeración de capítulos" ;
@@ -460,6 +474,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ korean ] = "¹øÈ£¸Å±â±â";
                 Text[ turkish ] = "Numaralama";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Numeración";
             };
             PageItem
             {
@@ -485,6 +500,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ korean ] = "À§Ä¡";
                 Text[ turkish ] = "Konum";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Posición";
             };
         };
     };
@@ -511,6 +527,7 @@ TabDialog DLG_TAB_OUTLINE
         Text[ greek ] = "Ìïñ~öÞ";
         Text[ korean ] = "¼­½Ä(~F)";
         Text[ turkish ] = "Format";
+        Text[ catalan ] = "~Forma";
     };
     Menu MN_FORM
     {
@@ -543,6 +560,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ korean ] = "Á¦¸ñ¾øÀ½ 1";
                 Text[ turkish ] = "Adsýz 1";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sin nombre 1";
             };
             MenuItem
             {
@@ -571,6 +589,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ korean ] = "Á¦¸ñ¾øÀ½2";
                 Text[ turkish ] = "Adsýz 2";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sin nombre 2";
             };
             MenuItem
             {
@@ -599,6 +618,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ korean ] = "Á¦¸ñ¾øÀ½3";
                 Text[ turkish ] = "Adsýz 3";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sin nombre 3";
             };
             MenuItem
             {
@@ -627,6 +647,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ korean ] = "Á¦¸ñ¾øÀ½4";
                 Text[ turkish ] = "Adsýz 4";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sin nombre 4";
             };
             MenuItem
             {
@@ -655,6 +676,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ korean ] = "Á¦¸ñ¾øÀ½5";
                 Text[ turkish ] = "Adsýz 5";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sin nombre 5";
             };
             MenuItem
             {
@@ -683,6 +705,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ korean ] = "Á¦¸ñ¾øÀ½6";
                 Text[ turkish ] = "Adsýz 6";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sin nombre 6";
             };
             MenuItem
             {
@@ -711,6 +734,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ korean ] = "Á¦¸ñ¾øÀ½7";
                 Text[ turkish ] = "Adsýz 7";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sin nombre 7";
             };
             MenuItem
             {
@@ -739,6 +763,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ korean ] = "Á¦¸ñ¾øÀ½8";
                 Text[ turkish ] = "Adsýz 8";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sin nombre 8";
             };
             MenuItem
             {
@@ -767,6 +792,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ korean ] = "Á¦¸ñ¾øÀ½9";
                 Text[ turkish ] = "Adsýz 9";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sin nombre 9";
             };
             MenuItem
             {
@@ -797,6 +823,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ chinese_traditional ] = "Àx¦s·sÀÉ(~A)...";
                 Text[ turkish ] = "Farklý kaydet...";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "G~uardar como...";
             };
         };
     };
@@ -810,6 +837,7 @@ TabDialog DLG_TAB_OUTLINE
     Text[ korean ] = "Àå ¹øÈ£¸Å±â±â";
     Text[ turkish ] = "Bölüm numaralama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Numeración de capítulos";
 };
 /**************************************************************************/
 /*                                                                        */
@@ -857,6 +885,7 @@ TabPage TP_OUTLINE_NUM
         Text[ korean ] = "¼öÁØ";
         Text[ turkish ] = "Düzey";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nivel";
     };
     FixedText FT_COLL
     {
@@ -887,6 +916,7 @@ TabPage TP_OUTLINE_NUM
         Text[ greek ] = "Ðñüôõðá ðáñáãñÜöïõ";
         Text[ korean ] = "´Ü¶ô À¯Çü(~P)";
         Text[ turkish ] = "Paragraf þablonu";
+        Text[ catalan ] = "Estilo de ~párrafo";
     };
     ListBox LB_COLL
     {
@@ -927,6 +957,7 @@ TabPage TP_OUTLINE_NUM
         Text[ korean ] = "¹øÈ£(~N)";
         Text[ turkish ] = "Numara";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Número";
     };
     ListBox LB_NUMBER
     {
@@ -962,6 +993,7 @@ TabPage TP_OUTLINE_NUM
         Text[ korean ] = "¹®ÀÚ À¯Çü(~C)";
         Text[ turkish ] = "Karakter þablonu";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
+        Text[ catalan ] = "E~stilo de carácter";
     };
     ListBox LB_CHARFMT
     {
@@ -997,6 +1029,7 @@ TabPage TP_OUTLINE_NUM
         Text[ korean ] = "¿Ïº®ÇÏ°Ô(~W)";
         Text[ turkish ] = "Tüm düzeyler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Completo";
     };
     NumericField NF_ALL_LEVEL
     {
@@ -1041,6 +1074,7 @@ TabPage TP_OUTLINE_NUM
         Text[ korean ] = "±¸ºÐÀÚ";
         Text[ turkish ] = "Ayýrma iþareti";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Separador";
     };
     FixedText FT_PREFIX
     {
@@ -1070,6 +1104,7 @@ TabPage TP_OUTLINE_NUM
         Text[ korean ] = "Àü¿¡(~B)";
         Text[ turkish ] = "Baþ. ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~delante";
     };
     Edit ED_PREFIX
     {
@@ -1108,6 +1143,7 @@ TabPage TP_OUTLINE_NUM
         Text[ korean ] = "ÈÄ¿¡(~A)";
         Text[ turkish ] = "Son. ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "d~etrás";
     };
     Edit ED_SUFFIX
     {
@@ -1146,6 +1182,7 @@ TabPage TP_OUTLINE_NUM
         Text[ korean ] = "¿¡¼­ ½ÃÀÛ(~S)";
         Text[ turkish ] = "Baþlangýç:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Comen~zar en";
     };
     NumericField ED_START
     {
@@ -1190,6 +1227,7 @@ TabPage TP_OUTLINE_NUM
         Text[ korean ] = "¹øÈ£¸Å±â±â";
         Text[ turkish ] = "Numaralama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Numeración";
     };
     Window WIN_PREVIEW
     {
@@ -1221,6 +1259,7 @@ TabPage TP_OUTLINE_NUM
         Text[ korean ] = "¹Ì¸®º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Previsualización";
     };
     String ST_NO_COLL
     {
@@ -1247,6 +1286,7 @@ TabPage TP_OUTLINE_NUM
         TEXT[ korean ] = "(¾øÀ½)";
         TEXT[ turkish ] = "(Yok)";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "(ninguna)";
     };
 };
 
