@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 15:38:20 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4040,11 +4040,6 @@ SfxChildWindow* SfxViewFrame::GetChildWindow(USHORT nId)
 SfxAcceleratorManager* SfxViewFrame::GetAcceleratorManager()
 {
     return GetObjectShell()->GetAccMgr_Impl();
-}
-
-SfxImageManager* SfxViewFrame::GetImageManager()
-{
-    return GetObjectShell()->GetImageManager_Impl();
 }
 
 SfxMacro* SfxViewFrame::GetRecordingMacro_Impl()
