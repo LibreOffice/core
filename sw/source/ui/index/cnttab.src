@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 21:18:30 $
+ *  last change: $Author: obo $ $Date: 2001-07-24 20:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1526,7 +1526,7 @@ TabPage TP_TOX_SELECT
         Text[ portuguese_brazilian ] = "Case sensitive";
         Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê";
         Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ";
-        Text[ chinese_simplified ] = "Çø·Ö´óĞ¡Ğ´";
+        Text[ chinese_simplified ] = "Çø·Ö×ÖÄ¸´óĞ¡Ğ´";
         Text[ chinese_traditional ] = "°Ï¤À¦r¥À¤j¤p¼g";
         Text[ arabic ] = "ãÑÇÚÇÉ ÇáÃÍÑİ ÇáßÈíÑÉ/ÇáÕÛíÑÉ";
         Text[ turkish ] = "Büyük/küçük harf duyarlı";
@@ -4804,6 +4804,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
+
 
 
 
