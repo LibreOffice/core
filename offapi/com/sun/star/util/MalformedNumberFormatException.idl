@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MalformedNumberFormatException.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 /** is thrown when a NumberFormat string is syntactically
     incorrect.
  */
-exception MalformedNumberFormatException: com::sun::star::uno::Exception
+published exception MalformedNumberFormatException: com::sun::star::uno::Exception
 {
     //-------------------------------------------------------------------------
 
