@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-02-27 08:41:47 $
+ *  last change: $Author: cd $ $Date: 2002-05-30 15:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,8 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
 {
     aScriptType = String(SfxResId(STR_BASICNAME));
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
-    SetNodeBitmaps( Image( BMP_COLLAPSED ), Image( BMP_EXPANDED ) );
+    SetNodeBitmaps( Image( BMP_COLLAPSED ), Image( BMP_EXPANDED ) , BMP_COLOR_NORMAL );
+    SetNodeBitmaps( Image( BMP_COLLAPSED_HC ), Image( BMP_EXPANDED_HC ), BMP_COLOR_HIGHCONTRAST );
 }
 
 
@@ -1243,14 +1244,9 @@ SfxStatusBarConfigListBox::SfxStatusBarConfigListBox( Window* pParent, const Res
  , pCurEntry(0)
  , bDefault(TRUE)
 {
-    pButton = new SvLBoxButtonData();
-    pButton->aBmps[SV_BMP_UNCHECKED]   = Bitmap(SfxResId(CHKBTN_UNCHECKED));
-    pButton->aBmps[SV_BMP_CHECKED]     = Bitmap(SfxResId(CHKBTN_CHECKED));
-    pButton->aBmps[SV_BMP_HICHECKED]   = Bitmap(SfxResId(CHKBTN_HICHECKED));
-    pButton->aBmps[SV_BMP_HIUNCHECKED] = Bitmap(SfxResId(CHKBTN_HIUNCHECKED));
-    pButton->aBmps[SV_BMP_TRISTATE]    = Bitmap(SfxResId(CHKBTN_TRISTATE));
-    pButton->aBmps[SV_BMP_HITRISTATE]  = Bitmap(SfxResId(CHKBTN_HITRISTATE));
 
+    pButton = new SvLBoxButtonData();
+    pButton->SetDefaultImages( NULL );
     EnableCheckButton(pButton);
 
     DragDropMode aDDMode = SV_DRAGDROP_CTRL_MOVE;
