@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpdirp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-17 16:28:21 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ sal_Bool FTPDirectoryParser::parseDOS (
         STATE_ERROR
     };
 
-    int nDigits;
+    int nDigits = 0;
     enum StateType eState = STATE_INIT_LWS;
     for (const sal_Char *p = pBuffer;
          eState != STATE_ERROR && *p;
@@ -917,7 +917,8 @@ sal_Bool FTPDirectoryParser::parseUNIX (
         FOUND_NONE, FOUND_SIZE, FOUND_MONTH, FOUND_DAY, FOUND_YEAR_TIME
     };
 
-    const sal_Char *pDayStart, *pDayEnd;
+    const sal_Char *pDayStart = 0;
+    const sal_Char *pDayEnd = 0;
     Mode eMode;
     for (eMode = FOUND_NONE; *p1 && eMode != FOUND_YEAR_TIME; p1 = p2 + 1)
     {
