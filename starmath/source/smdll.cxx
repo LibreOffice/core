@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smdll.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:25:07 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,29 +124,24 @@ void SmDLL::Init()
 
     bInitialized = TRUE;
 
-    // called directly after loading the DLL
-    // do whatever you want, you may use Sd-DLL too
-
-    // the SdModule must be created
+    SfxObjectFactory& rFactory = SmDocShell::Factory();
 
     SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
-    *ppShlPtr = new SmModule( &SmDocShell::Factory() );
-
-    SmDocShell::RegisterFactory(SDT_SMA_DOCFACTPRIO);
-    //SmDocShell::InitFactory();
+    *ppShlPtr = new SmModule( &rFactory );
 
     SfxModule *p = SM_MOD1();
     SmModule *pp = (SmModule *) p;
 
-    SmModule::RegisterInterface(pp);
+    rFactory.RegisterHelpFile (C2S("smath.svh"));
+    rFactory.SetDocumentServiceName( String::CreateFromAscii("com.sun.star.formula.FormulaProperties") );
+    rFactory.RegisterMenuBar( SmResId(RID_SMMENU) );
+    rFactory.RegisterAccel ( SmResId(RID_SMACCEL) );
 
-    SmDocShell::Factory().RegisterMenuBar( SmResId(RID_SMMENU) );
-    SmDocShell::Factory().RegisterPluginMenuBar( SmResId(RID_SMPLUGINMENU) );
-    SmDocShell::Factory().RegisterAccel ( SmResId(RID_SMACCEL) );
+    SmModule::RegisterInterface(pp);
     SmDocShell::RegisterInterface(pp);
+    SmViewShell::RegisterInterface(pp);
 
     SmViewShell::RegisterFactory(1);
-    SmViewShell::RegisterInterface(pp);
 
     SvxZoomStatusBarControl::RegisterControl( SID_ATTR_ZOOM, pp );
     SvxModifyControl::RegisterControl( SID_TEXTSTATUS, pp );
@@ -172,113 +167,3 @@ void SmDLL::Exit()
 
     *GetAppData(SHL_SM) = 0;
 }
-/*
-ULONG SmDLL::DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter,
-                            SfxFilterFlags nMust, SfxFilterFlags nDont )
-{
-    ULONG nReturn = ERRCODE_ABORT;
-    if( SVSTREAM_OK != rMedium.GetError() )
-        nReturn = rMedium.GetError();
-    else if ( rMedium.IsStorage() )
-    {
-        // Storage
-        SvStorage* pStorage = rMedium.GetStorage();
-
-        if( !pStorage )
-            nReturn = ULONG_MAX;
-        else
-        {
-            // Erkennung ueber contained streams (StarChart 3.0)
-            static const sal_Char sStrmNm_0[] = "StarMathDocument";
-            static const sal_Char sFltrNm_0[] = "StarMath 5.0";
-            static const sal_Char sStrmNm_1[] = "Equation Native";
-            static const sal_Char sFltrNm_1[] = "MathType 3.x";
-            static const sal_Char sStrmNm_2[] = "content.xml";
-            static const sal_Char sFltrNm_2[] = STAROFFICE_XML;
-            static const sal_Char sStrmNm_3[] = "Content.xml";
-            static const sal_Char sFltrNm_3[] = STAROFFICE_XML;
-
-            const sal_uInt16 nCount = 4;
-            const sal_Char *aStrmNms[nCount] =
-                { sStrmNm_0, sStrmNm_1, sStrmNm_2, sStrmNm_3 };
-            const sal_Char *aFltrNms[nCount] =
-                { sFltrNm_0, sFltrNm_1, sFltrNm_2, sFltrNm_3 };
-
-            String aStreamName;
-            String sFilterName;
-            if( *ppFilter )
-            {
-                for( sal_uInt16 i=0; i < nCount; i++ )
-                {
-                    if( (*ppFilter)->GetFilterName().EqualsAscii(aFltrNms[i]) )
-                    {
-                        aStreamName.AssignAscii( aStrmNms[i] );
-                        if( pStorage->IsStream( aStreamName ) &&
-                            ((*ppFilter)->GetFilterFlags() & nMust) == nMust &&
-                            ((*ppFilter)->GetFilterFlags() & nDont) == 0 )
-                            nReturn = ERRCODE_NONE;
-
-                        break;  // The old XML filter (Content.xml) will be
-                                // detected in the next loop.
-                    }
-                }
-            }
-
-            if( ERRCODE_NONE != nReturn )
-            {
-                for( sal_uInt16 i=0; i < nCount; i++ )
-                {
-                    aStreamName.AssignAscii( aStrmNms[i] );
-                    if( pStorage->IsStream( aStreamName ))
-                    {
-                        sFilterName.AssignAscii( aFltrNms[i] );
-                        const SfxFilter* pFilt = SFX_APP()->GetFilter(
-                                    SmDocShell::Factory(), sFilterName );
-
-                        if( pFilt &&
-                            (pFilt->GetFilterFlags() & nMust) == nMust &&
-                            (pFilt->GetFilterFlags() & nDont) == 0)
-                        {
-                            *ppFilter = pFilt;
-                            nReturn = ERRCODE_NONE;
-                        }
-
-                        break; // There are no two filters with the same strm name
-                    }
-                }
-            }
-        }
-    }
-    else
-    {
-        //Test to see if this begins with xml and if so run it through
-        //the MathML filter. There are all sorts of things wrong with
-        //this approach, to be fixed at a better level than here
-        SvStream *pStrm = rMedium.GetInStream();
-        if (pStrm && !pStrm->GetError())
-        {
-            const int nSize = 5;
-            sal_Char aBuffer[nSize+1];
-            aBuffer[nSize] = 0;
-            ULONG nBytesRead = pStrm->Read( aBuffer, nSize );
-            pStrm->Seek( STREAM_SEEK_TO_BEGIN );
-            if (nBytesRead == nSize)
-            {
-                if (0 == strncmp( "<?xml",aBuffer,nSize))
-                {
-                    static const sal_Char sFltrNm_2[] = MATHML_XML;
-
-                    String sFltrNm;
-                    sFltrNm.AssignAscii( sFltrNm_2 );
-                    const SfxFilter* pFilt = SFX_APP()->GetFilter(
-                                    SmDocShell::Factory(), sFltrNm );
-                    *ppFilter = pFilt;
-
-                    nReturn = ERRCODE_NONE;
-                }
-            }
-        }
-    }
-    return nReturn;
-}
-*/
