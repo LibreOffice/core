@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-18 10:42:18 $
+ *  last change: $Author: fs $ $Date: 2001-07-18 11:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,8 +990,25 @@ void SbaTableQueryBrowser::checkDocumentDataSource()
     sal_Bool bKnownDocDataSource = (NULL != pObjectEntry);
     if (!bKnownDocDataSource)
     {
-        // TODO: should we expand the object container? This may be too expensive just for checking ....
-        bKnownDocDataSource = (NULL != pDataSourceEntry) && (NULL != pContainerEntry);
+        if (NULL != pDataSourceEntry)
+        {   // at least the data source is know
+            if (NULL != pContainerEntry)
+                bKnownDocDataSource = sal_True; // assume we know it.
+                // TODO: should we expand the object container? This may be too expensive just for checking ....
+            else
+            {
+                if ((NULL == pObjectEntry) && m_aDocumentDataSource.has(daCommandType) && m_aDocumentDataSource.has(daCommand))
+                {   // maybe we have a command to be displayed ?
+                    sal_Int32 nCommandType = CommandType::TABLE;
+                    m_aDocumentDataSource[daCommandType] >>= nCommandType;
+
+                    ::rtl::OUString sCommand;
+                    m_aDocumentDataSource[daCommand] >>= sCommand;
+
+                    bKnownDocDataSource = (CommandType::COMMAND == nCommandType) && (0 != sCommand.getLength());
+                }
+            }
+        }
     }
 
     m_aDispatchStates[ID_BROWSER_DOCUMENT_DATASOURCE] = m_aDispatchStates[ID_BROWSER_DOCUMENT_DATASOURCE] && bKnownDocDataSource;
