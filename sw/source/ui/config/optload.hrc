@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:39:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 10:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define RB_ALWAYS               2
 #define RB_REQUEST              3
 #define RB_NEVER                4
-
+#define CB_PRINTER_METRICS      5
 #define CB_MERGE_PARA_DIST      6
 #define FL_COMPAT               7
 #define CB_AUTO_UPDATE_FIELDS   8
