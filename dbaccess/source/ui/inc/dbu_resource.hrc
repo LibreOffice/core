@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:39 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@
 #define DLG_DEADDOCUMENTLINK            RID_DIALOG_START + 21
 #define DLG_DIRECTSQL                   RID_DIALOG_START + 22
 #define DLG_PASSWORD                    RID_DIALOG_START + 23
+#define DLG_DOMAINPASSWORD              RID_DIALOG_START + 24
 
 //========================================================================
 // tab pages
@@ -376,6 +377,12 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.81.24.1  2003/04/17 10:36:13  oj
+ *  #109006# add adabas strings
+ *
+ *  Revision 1.81  2003/03/19 17:52:39  hr
+ *  MWS_SRX644: migrate branch mws_srx644 -> HEAD
+ *
  *  Revision 1.80.2.1  2003/02/20 22:52:47  hr
  *  INTEGRATION: CWS dba02 (1.80.18); FILE MERGED
  *  2003/01/29 10:30:44 oj 1.80.18.1: #i11039# allow user defined driver types to appear in the data source admin dialog
