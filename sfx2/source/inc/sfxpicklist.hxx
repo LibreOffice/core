@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-10 05:29:08 $
+ *  last change: $Author: cd $ $Date: 2001-11-09 14:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,13 @@
 #include <svtools/lstner.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XSTRINGWIDTH_HPP_
+#include <com/sun/star/util/XStringWidth.hpp>
+#endif
+
 #include <vector>
 
-#define PICKLIST_MAXSIZE  10
+#define PICKLIST_MAXSIZE  100
 
 class SfxPickList : public SfxListener
 {
@@ -100,6 +104,7 @@ class SfxPickList : public SfxListener
 
     std::vector< PickListEntry* >   m_aPicklistVector;
     sal_uInt32                      m_nAllowedMenuSize;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > m_xStringLength;
 
                             SfxPickList( ULONG nMenuSize );
                             ~SfxPickList();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-01 18:09:22 $
+ *  last change: $Author: cd $ $Date: 2001-11-09 14:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,15 @@
 #include <osl/file.hxx>
 #endif
 
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
+
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+
+
 // ----------------------------------------------------------------------------
 
 #include "app.hxx"
@@ -115,11 +124,28 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
 
 // ----------------------------------------------------------------------------
 
 osl::Mutex*     SfxPickList::pMutex = 0;
 SfxPickList*    SfxPickList::pUniqueInstance = 0;
+
+// ----------------------------------------------------------------------------
+
+class StringLength : public ::cppu::WeakImplHelper1< XStringWidth >
+{
+    public:
+        StringLength() {}
+        virtual ~StringLength() {}
+
+        // XStringWidth
+        sal_Int32 SAL_CALL queryStringWidth( const ::rtl::OUString& aString )
+            throw (::com::sun::star::uno::RuntimeException)
+        {
+            return aString.getLength();
+        }
+};
 
 // ----------------------------------------------------------------------------
 
@@ -140,26 +166,52 @@ String  SfxPickList::CreatePicklistMenuTitle( const String& aURLString, sal_uInt
 #ifdef MAC
     String aPickEntry;
 #else
-    String aPickEntry( '~' );
-    aPickEntry += String::CreateFromInt32( nNo + 1 );
+    String aPickEntry;
+
+    if ( nNo < 9 )
+    {
+        aPickEntry += '~';
+        aPickEntry += String::CreateFromInt32( nNo + 1 );
+    }
+    else if ( nNo == 9 )
+        aPickEntry += DEFINE_CONST_UNICODE("1~0");
+    else
+        aPickEntry += String::CreateFromInt32( nNo + 1 );
     aPickEntry += DEFINE_CONST_UNICODE(": ");
 #endif
 
-    aPickEntry += aURLString;
-    if ( aPickEntry.Len() > 50 )
+    INetURLObject   aURL( aURLString );
+    if ( aURL.GetProtocol() == INET_PROT_FILE )
     {
-        aPickEntry.Erase( 48 );
-        aPickEntry += DEFINE_CONST_UNICODE("...");
+        // Do handle file URL differently => convert it to a system
+        // path and abbreviate it with a special function:
+        String aPhysicalName;
+        ::utl::LocalFileHelper::ConvertURLToPhysicalName( aURLString, aPhysicalName );
+
+        ::rtl::OUString aSystemPath( aPhysicalName );
+        ::rtl::OUString aCompactedSystemPath;
+
+        oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
+        if ( !nError )
+            aPickEntry += String( aCompactedSystemPath );
+        else
+            aPickEntry += aPhysicalName;
+
+        if ( aPickEntry.Len() > 50 )
+        {
+            aPickEntry.Erase( 47 );
+            aPickEntry += DEFINE_CONST_UNICODE("...");
+        }
     }
+    else
+    {
+        // Use INetURLObject to abbreviate all other URLs
+        String  aShortURL;
+        aShortURL = aURL.getAbbreviated( m_xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
+        aPickEntry += aShortURL;
+    }
+
     return aPickEntry;
-
-//  some code for bug #90000#
-//  String          aShortURL;
-//  INetURLObject   aURL( aURLString );
-//  aShortURL = aURL.getAbbreviated( 48 );
-//  aPickEntry += aShortURL;
-
-//  return aPickEntry;
 }
 
 void SfxPickList::RemovePickListEntries()
@@ -207,7 +259,8 @@ void SfxPickList::Delete()
 SfxPickList::SfxPickList( sal_uInt32 nAllowedMenuSize ) :
     m_nAllowedMenuSize( nAllowedMenuSize )
 {
-    OSL_ASSERT( m_nAllowedMenuSize <= PICKLIST_MAXSIZE );
+    m_xStringLength = new StringLength;
+    m_nAllowedMenuSize = ::std::min( m_nAllowedMenuSize, (sal_uInt32)PICKLIST_MAXSIZE );
     StartListening( *SFX_APP() );
 }
 
@@ -294,8 +347,8 @@ void SfxPickList::CreateMenuEntries( Menu* pMenu )
 
         pMenu->InsertItem(
                 (USHORT)(START_ITEMID_PICKLIST + i),
-                CreatePicklistMenuTitle( pEntry->aTitle, i ) );
-//              CreatePicklistMenuTitle( pEntry->aName, i ) );
+//              CreatePicklistMenuTitle( pEntry->aTitle, i ) );
+                CreatePicklistMenuTitle( pEntry->aName, i ) );
     }
 
     bPickListMenuInitializing = sal_False;
