@@ -1,10 +1,10 @@
 /*************************************************************************
-*
+ *
  *  $RCSfile: osl_File_Const.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:38:33 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -76,13 +79,9 @@
 #include <rtl/textenc.h>
 #endif
 
-#ifndef _RTL_USTRING_H_
-#include <rtl/ustring.h>
-#endif
+#include <rtl/ustring.hxx>
+#include <rtl/uri.hxx>
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 
 
 //------------------------------------------------------------------------
@@ -170,8 +169,10 @@ const sal_Char pBuffer_Blank[]  = "";
 //------------------------------------------------------------------------
 
 #define OSLTEST_DECLARE( str_name, str_value ) \
-    ::rtl::OUString a##str_name                 = rtl::OUString::createFromAscii( str_value )
+    ::rtl::OUString a##str_name = rtl::OUString::createFromAscii( ( str_value ) )
 
+#define OSLTEST_DECLARE_UTF8(str_name, str_value ) \
+    ::rtl::OUString a##str_name = ::rtl::Uri::decode( ::rtl::OUString::createFromAscii( ( str_value ) ), rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8)
 
 //------------------------------------------------------------------------
 // OS independent file definition
@@ -202,7 +203,7 @@ OSLTEST_DECLARE( TmpName6, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpnam
 OSLTEST_DECLARE( TmpName7, FILE_PREFIX TEST_PLATFORM "tmpname" );
 OSLTEST_DECLARE( TmpName8, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpname/tmpdir" );
 OSLTEST_DECLARE( TmpName9, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpdir/../tmpdir/./" );
-OSLTEST_DECLARE( TmpName10, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/ÄãºÃ¤³¤ó¤Ë¤Á¤Ï" );
+OSLTEST_DECLARE_UTF8( TmpName10, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/%E6%9C%AA%E5%91%BD%E5%90%8Dzhgb18030" );
 
 OSLTEST_DECLARE( RelURL1,  "relative/file1" );
 OSLTEST_DECLARE( RelURL2,  "relative/./file2" );
@@ -220,7 +221,7 @@ OSLTEST_DECLARE( SysPath1, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/system.path" 
 OSLTEST_DECLARE( SysPath2, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/system/path" );
 OSLTEST_DECLARE( SysPath3, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpdir" );
 OSLTEST_DECLARE( SysPath4, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpname" );
-OSLTEST_DECLARE( SysPath5, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/ÄãºÃ¤³¤ó¤Ë¤Á¤Ï" );
+OSLTEST_DECLARE_UTF8( SysPath5, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/%E6%9C%AA%E5%91%BD%E5%90%8Dzhgb18030" ); // OLD: ÄãºÃ¤³¤ó¤Ë¤Á¤Ï
 OSLTEST_DECLARE( FifoSys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpdir/fifo" );
 
 //------------------------------------------------------------------------
@@ -244,7 +245,11 @@ OSLTEST_DECLARE( TypeURL3,  FILE_PREFIX "" );
 //------------------------------------------------------------------------
 #if ( defined UNX ) || ( defined OS2 )                  //          Unix
 OSLTEST_DECLARE( VolURL1,  FILE_PREFIX  "");            //ufs       Solaris/Linux
+#ifdef SOLARIS
 OSLTEST_DECLARE( VolURL2,  FILE_PREFIX  "dev/fd" );     //fd        Solaris
+#else
+OSLTEST_DECLARE( VolURL2,  FILE_PREFIX  "dev/floppy/0u1440" );  //fd0       Linux
+#endif
 OSLTEST_DECLARE( VolURL3,  FILE_PREFIX  "proc" );       //proc      Solaris/Linux
 OSLTEST_DECLARE( VolURL4,  FILE_PREFIX  "staroffice" ); //nfs       Solaris/Linux
 OSLTEST_DECLARE( VolURL5,  FILE_PREFIX  "tmp" );        //tmpfs     Solaris
