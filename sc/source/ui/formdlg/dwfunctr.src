@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:23:44 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ DockingWindow FID_FUNCTION_BOX
             < "Information" ; Default ; > ;
             < "Logical" ; Default ; > ;
             < "Mathematical" ; Default ; > ;
-            < "Matrix" ; Default ; > ;
+            < "Array" ; Default ; > ;
             < "Statistical" ; Default ; > ;
             < "Spreadsheet" ; Default ; > ;
             < "Text" ; Default ; > ;
