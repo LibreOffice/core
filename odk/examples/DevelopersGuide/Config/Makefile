@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:22:28 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:19:15 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,39 +48,58 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT_NAME=ConfigExamples
-OUT_COMP_CLASS = $(OUT_CLASS)/$(COMPONENT_NAME)
+SAMPLE_NAME=DevGuideConfigExamples
+SAMPLE_CLASS_OUT = $(OUT_CLASS)/$(SAMPLE_NAME)
+SAMPLE_GEN_OUT = $(OUT_MISC)/$(SAMPLE_NAME)
 
-JAVAFILES  = \
-	   ConfigExamples.java
-
-CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
+# some special macro names for separating the example jar stuff
+APP1_NAME=ConfigExamples
+APP1_CLASS_OUT=$(SAMPLE_CLASS_OUT)/$(APP1_NAME)
+APP1_GEN_OUT=$(SAMPLE_GEN_OUT)/$(APP1_NAME)
+APP1_JAR=$(SAMPLE_CLASS_OUT)/$(APP1_NAME).jar
+APP1_JAR_MANIFEST=$(APP1_GEN_OUT)/$(APP1_NAME).mf
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
-		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
-
+		$(PATH_SEPARATOR)$(SAMPLE_CLASS_OUT)\
+		$(PATH_SEPARATOR)$(APP1_CLASS_OUT))
 
 # Targets
 .PHONY: ALL
-ALL : \
-    ConfigExample
+ALL : $(SAMPLE_NAME)
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_CLASS)/%.class : %.java
+# rule for example application class files
+$(APP1_CLASS_OUT)/%.class : %.java
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $<
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(APP1_CLASS_OUT) $<
 
-ConfigExample : $(CLASSFILES)
+# rule for client/example application manifest file
+$(APP1_GEN_OUT)/%.mf :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo Main-Class: com.sun.star.lib.loader.Loader> $@
+	$(ECHOLINE)>> $@
+	@echo Name: com/sun/star/lib/loader/Loader.class>> $@
+	@echo Application-Class: $*>> $@
+
+# rule for client/example application jar file
+$(APP1_JAR) : $(APP1_JAR_MANIFEST) $(APP1_CLASS_OUT)/$(APP1_NAME).class
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(SDK_JAR) cvfm $@  $< -C $(APP1_CLASS_OUT) .
+	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
+
+$(SAMPLE_NAME) : $(APP1_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo make ConfigExamples.run
+	@echo make $(APP1_NAME).run
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(OUT_COMP_CLASS)/%.class
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
+%.run: $(SAMPLE_CLASS_OUT)/%.jar
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<
 
 .PHONY: clean
 clean :
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_CLASS_OUT))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_GEN_OUT))
