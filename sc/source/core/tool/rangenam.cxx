@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-08-06 10:17:27 $
+ *  last change: $Author: er $ $Date: 2002-11-28 16:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,13 +97,11 @@ ScRangeData::ScRangeData( USHORT n )
 ScRangeData::ScRangeData( ScDocument* pDok,
                           const String& rName,
                           const String& rSymbol,
-                          USHORT nCol,
-                          USHORT nRow,
-                          USHORT nTab,
+                          const ScAddress& rAddress,
                           RangeType nType,
                           BOOL bEnglish ) :
                 aName       ( rName ),
-                aPos        ( nCol, nRow, nTab ),
+                aPos        ( rAddress ),
                 eType       ( nType ),
                 pDoc        ( pDok ),
                 nIndex      ( 0 ),
@@ -138,12 +136,10 @@ ScRangeData::ScRangeData( ScDocument* pDok,
 ScRangeData::ScRangeData( ScDocument* pDok,
                           const String& rName,
                           const ScTokenArray& rArr,
-                          USHORT nCol,
-                          USHORT nRow,
-                          USHORT nTab,
+                          const ScAddress& rAddress,
                           RangeType nType ) :
                 aName       ( rName ),
-                aPos        ( nCol, nRow, nTab ),
+                aPos        ( rAddress ),
                 eType       ( nType ),
                 pDoc        ( pDok ),
                 nIndex      ( 0 ),

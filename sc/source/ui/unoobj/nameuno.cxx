@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-11 09:52:12 $
+ *  last change: $Author: er $ $Date: 2002-11-28 16:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,8 +192,7 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const String* pNewCon
                     nType = *pNewType;
 
                 ScRangeData* pNew = new ScRangeData( pDoc, aInsName, aContent,
-                                                    aPos.Col(), aPos.Row(), aPos.Tab(),
-                                                    nType, sal_True );
+                                                    aPos, nType, sal_True );
                 pNew->SetIndex( pOld->GetIndex() );
 
                 aNewRanges.AtFree( nPos );
@@ -480,8 +479,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
         {
             ScRangeName aNewRanges( *pNames );
             ScRangeData* pNew = new ScRangeData( pDoc, aNameStr, aContStr,
-                                                aPos.Col(), aPos.Row(), aPos.Tab(),
-                                                nNewType, sal_True );
+                                                aPos, nNewType, sal_True );
             if ( aNewRanges.Insert(pNew) )
             {
                 ScDocFunc aFunc(*pDocShell);

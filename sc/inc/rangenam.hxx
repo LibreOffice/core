@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-20 14:17:55 $
+ *  last change: $Author: er $ $Date: 2002-11-28 16:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,17 +122,13 @@ public:
                     ScRangeData( ScDocument* pDoc,
                                  const String& rName,
                                  const String& rSymbol,
-                                 USHORT nCol = 0,
-                                 USHORT nRow = 0,
-                                 USHORT nTab = 0,
+                                 const ScAddress& rAdr = ScAddress(),
                                  RangeType nType = RT_NAME,
                                  BOOL bEnglish = FALSE );
                     ScRangeData( ScDocument* pDoc,
                                  const String& rName,
                                  const ScTokenArray& rArr,
-                                 USHORT nCol = 0,
-                                 USHORT nRow = 0,
-                                 USHORT nTab = 0,
+                                 const ScAddress& rAdr = ScAddress(),
                                  RangeType nType = RT_NAME );
                     ScRangeData( ScDocument* pDoc,
                                  const String& rName,

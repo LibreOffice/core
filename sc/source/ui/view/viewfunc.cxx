@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-20 14:34:35 $
+ *  last change: $Author: er $ $Date: 2002-11-28 16:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2584,8 +2584,8 @@ BOOL ScViewFunc::InsertName( const String& rName, const String& rSymbol,
 
     RangeType nType = RT_NAME;
     ScRangeData* pNewEntry = new ScRangeData( pDoc, rName, rSymbol,
-                                    GetViewData()->GetCurX(), GetViewData()->GetCurY(), nTab,
-                                    nType );
+            ScAddress( GetViewData()->GetCurX(), GetViewData()->GetCurY(),
+                nTab), nType );
     String aUpType = rType;
     aUpType.ToUpperAscii();
     if ( aUpType.Search( 'P' ) != STRING_NOTFOUND )

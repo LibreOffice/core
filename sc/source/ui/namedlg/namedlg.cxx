@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-17 15:17:06 $
+ *  last change: $Author: er $ $Date: 2002-11-28 16:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,9 +463,7 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
                 pNewEntry = new ScRangeData( pDoc,
                                              aNewEntry,
                                              theSymbol,
-                                             theCursorPos.Col(),
-                                             theCursorPos.Row(),
-                                             theCursorPos.Tab(),
+                                             theCursorPos,
                                              nType );
                 if (pNewEntry)
                 {
