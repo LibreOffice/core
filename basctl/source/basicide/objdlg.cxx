@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-04 13:33:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 14:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _SFX_IPFRM_HXX
+#include <sfx2/ipfrm.hxx>
+#endif
 
 #include <ide_pch.hxx>
 
@@ -266,11 +269,16 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
         case TBITEM_SHOW:
         {
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-            DBG_ASSERT( pViewFrame != NULL, "No current view frame!" );
-            SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-            if( pDispatcher )
+            SfxDispatcher* pDispatcher = ( pViewFrame && !pViewFrame->ISA( SfxInPlaceFrame ) ) ? pViewFrame->GetDispatcher() : NULL;
+            if ( pDispatcher )
             {
                 pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
+            }
+            else
+            {
+                SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+                SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
+                SFX_APP()->ExecuteSlot( aRequest );
             }
             SvLBoxEntry* pCurEntry = aMacroTreeList.GetCurEntry();
             DBG_ASSERT( pCurEntry, "Entry?!" );
