@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptinfo.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:28:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ class SwScanner
     XubString aWord;
     const SwWrongList* pWrong;
     const SwTxtNode& rNode;
+    xub_StrLen nStartPos;
     xub_StrLen nEndPos;
     xub_StrLen nBegin;
     xub_StrLen nLen;
@@ -99,10 +100,12 @@ class SwScanner
     BOOL bReverse;
     BOOL bStart;
     BOOL bIsOnlineSpell;
+    BOOL bClip;
 
 public:
     SwScanner( const SwTxtNode& rNd, const SwWrongList* pWrng, USHORT nWordType,
-               xub_StrLen nStart, xub_StrLen nEnde, BOOL bRev, BOOL bOS );
+               xub_StrLen nStartPos, xub_StrLen nEndPos, BOOL bRev, BOOL bOS,
+               BOOL bClip = FALSE );
 
     // This next word function tries to find the language for the next word
     // It should currently _not_ be used for spell checking, and works only for
