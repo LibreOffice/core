@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-11 15:20:25 $
+ *  last change: $Author: tl $ $Date: 2002-11-12 12:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1591,7 +1591,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
 
     delete pShell;
 
-    if ( bSelection )
+    if ( !pPDFOut && bSelection )
     {
          // damit das Dokument nicht den Drucker mit ins Grab nimmt
         pPrtDoc->_SetPrt( NULL );
