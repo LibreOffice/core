@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-07 14:12:44 $
+ *  last change: $Author: pl $ $Date: 2001-05-28 16:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,6 @@ class SalFrameData
 
             SalGraphics    *pGraphics_;         // current frame graphics
             SalGraphics    *pFreeGraphics_;     // first free frame graphics
-            XLIB_Region     pPaintRegion_;
 
              XLIB_Time      nReleaseTime_;      // timestamp of last key release
             USHORT          nKeyCode_;          // last key code
@@ -164,6 +163,8 @@ class SalFrameData
 
             int             nScreenSaversTimeout_;
             Timer           maResizeTimer;
+            Rectangle       maResizeBuffer;
+            Rectangle       maPaintRegion;
 
             SystemChildData maSystemChildData;
 
@@ -225,8 +226,6 @@ public:
     inline  SalFrame       *GetNextFrame() const { return pNextFrame_; }
     inline  XLIB_Cursor     GetCursor() const { return hCursor_; }
     inline  BOOL            IsCaptured() const { return nCaptured_ == 1; }
-    inline  BOOL            IsWaitingForExpose() const
-                                { return !!pPaintRegion_; }
     #if !defined(__synchronous_extinput__)
             void            HandleExtTextEvent (XClientMessageEvent *pEvent);
             void            PostExtTextEvent (sal_uInt16 nExtTextEventType,

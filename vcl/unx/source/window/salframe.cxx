@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-17 11:09:02 $
+ *  last change: $Author: pl $ $Date: 2001-05-28 16:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,7 +543,6 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
 
     pGraphics_                  = NULL;
     pFreeGraphics_              = NULL;
-    pPaintRegion_               = NULL;
 
     hCursor_                    = None;
     nCaptured_                  = 0;
@@ -2251,7 +2250,7 @@ inline SalPeekExpose::SalPeekExpose( XEvent *p ) : pEvent_( p )
 long SalFrameData::HandleExposeEvent( XEvent *pEvent )
 {
     XRectangle  aRect;
-    USHORT      nCount;
+    USHORT      nCount = 0;
 
     if( pEvent->type == Expose )
     {
@@ -2275,60 +2274,20 @@ long SalFrameData::HandleExposeEvent( XEvent *pEvent )
         // focus is probably lost, so reget it
         XSetInputFocus( GetXDisplay(), XtWindow( hShell_ ), RevertToNone, CurrentTime );
 
-    if( !IsWaitingForExpose() )
-    {
-        // complete painting
-        if( !nCount
-            && !aRect.x
-            && !aRect.y
-            && aRect.width  == nWidth_
-            && aRect.height == nHeight_ )
-        {
-            SalPaintEvent aPEvt;
+    maPaintRegion.Union( Rectangle( Point(aRect.x, aRect.y), Size(aRect.width, aRect.height) ) );
 
-            aPEvt.mnBoundX          = 0;
-            aPEvt.mnBoundY          = 0;
-            aPEvt.mnBoundWidth      = nWidth_;
-            aPEvt.mnBoundHeight     = nHeight_;
-
-            Call( SALEVENT_PAINT, &aPEvt );
-
-            return 1;
-        }
-
-        pPaintRegion_ = XCreateRegion();
-    }
-
-    XUnionRectWithRegion( &aRect, pPaintRegion_, pPaintRegion_ );
-
-    if( nCount ) // wait for last expose rectangle
+    if( nCount || maResizeTimer.IsActive() ) // wait for last expose rectangle
         return 1;
-
-    if( QLength( pEvent->xany.display ) )
-    {
-        SalPeekExpose Peek( pEvent );
-
-        if( pEvent->xexpose.count )
-        {
-            stderr1( "SalFrameData::HandleExposeEvent %s\n",
-                     ServerVendor(GetXDisplay()) );
-            return 1;
-        }
-    }
 
     SalPaintEvent aPEvt;
 
-    XClipBox( pPaintRegion_, &aRect );
-
-    aPEvt.mnBoundX          = aRect.x;
-    aPEvt.mnBoundY          = aRect.y;
-    aPEvt.mnBoundWidth      = aRect.width;
-    aPEvt.mnBoundHeight     = aRect.height;
+    aPEvt.mnBoundX          = maPaintRegion.Left();
+    aPEvt.mnBoundY          = maPaintRegion.Top();
+    aPEvt.mnBoundWidth      = maPaintRegion.GetWidth();
+    aPEvt.mnBoundHeight     = maPaintRegion.GetHeight();
 
     Call( SALEVENT_PAINT, &aPEvt );
-
-    XDestroyRegion( pPaintRegion_ );
-    pPaintRegion_   = NULL;
+    maPaintRegion = Rectangle();
 
     return 1;
 }
@@ -2453,11 +2412,8 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
         }
     }
 
-    aPosSize_.SetPos( Point( pEvent->x, pEvent->y ) );
-    aPosSize_.SetSize( Size( pEvent->width, pEvent->height ) );
-
-    // update children's position
-    RepositionChildren();
+    maResizeBuffer.SetPos( Point( pEvent->x, pEvent->y ) );
+    maResizeBuffer.SetSize( Size( pEvent->width, pEvent->height ) );
 
     if( nWidth_ != pEvent->width || nHeight_ != pEvent->height )
     {
@@ -2468,14 +2424,28 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
             XtResizeWidget(hComposite_, nWidth_, nHeight_, 0);
 
         maResizeTimer.Start();
-//      Call( SALEVENT_RESIZE, NULL );
     }
     return 1;
 }
 
 IMPL_LINK( SalFrameData, HandleResizeTimer, void*, pDummy )
 {
+    aPosSize_ = maResizeBuffer;
+    // update children's position
+    RepositionChildren();
+
     Call( SALEVENT_RESIZE, NULL );
+
+    SalPaintEvent aPEvt;
+
+    aPEvt.mnBoundX          = maPaintRegion.Left();
+    aPEvt.mnBoundY          = maPaintRegion.Top();
+    aPEvt.mnBoundWidth      = maPaintRegion.GetWidth();
+    aPEvt.mnBoundHeight     = maPaintRegion.GetHeight();
+
+    Call( SALEVENT_PAINT, &aPEvt );
+    maPaintRegion = Rectangle();
+
     return 0;
 }
 
