@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-03-09 15:44:26 $
+ *  last change: $Author: th $ $Date: 2001-03-12 15:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,6 +550,7 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
         return aEmptryStr;
     }
 
+    // Search Fontname
     ImplFontListNameInfo* pData = ImplFindByName( rInfo.GetName() );
     if ( !pData )
     {
@@ -558,61 +559,27 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
         return maMapNotAvailable;
     }
 
-    USHORT nType = pData->mnType;
-    if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_PRINTER )
-    {
-        if ( !maMapPrinterOnly.Len() )
-            ((FontList*)this)->maMapPrinterOnly = XubString( SvtResId( STR_SVT_FONTMAP_PRINTERONLY ) );
-        return maMapPrinterOnly;
-    }
-    else if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_SCREEN )
-    {
-        if ( !maMapScreenOnly.Len() )
-            ((FontList*)this)->maMapScreenOnly = XubString( SvtResId( STR_SVT_FONTMAP_SCREENONLY ) );
-        return maMapScreenOnly;
-    }
-    else
+    // search for synthetic style
+    USHORT              nType       = pData->mnType;
+    const XubString&    rStyleName  = rInfo.GetStyleName();
+    if ( rStyleName.Len() )
     {
         BOOL                    bNotSynthetic = FALSE;
         BOOL                    bNoneAvailable = FALSE;
-        const XubString&        rStyleName = rInfo.GetStyleName();
-        FontWeight              eMinWeight = pData->mpFirst->GetWeight();
         FontWeight              eWeight = rInfo.GetWeight();
         FontItalic              eItalic = rInfo.GetItalic();
         ImplFontListFontInfo*   pFontInfo = pData->mpFirst;
-        if ( rStyleName.Len() )
+        while ( pFontInfo )
         {
-            while ( pFontInfo )
+            if ( (eWeight == pFontInfo->GetWeight()) &&
+                 (eItalic == pFontInfo->GetItalic()) )
             {
-                if ( (eWeight == pFontInfo->GetWeight()) &&
-                     (eItalic == pFontInfo->GetItalic()) )
-                {
-                    bNotSynthetic = TRUE;
-                    break;
-                }
-
-                pFontInfo = pFontInfo->mpNext;
+                bNotSynthetic = TRUE;
+                break;
             }
 
-            if ( !bNotSynthetic )
-            {
-                bNoneAvailable = TRUE;
-
-                // Testen, ob es ein syntetischer Style ist
-                if ( eMinWeight <= WEIGHT_NORMAL )
-                {
-                    if ( (rStyleName == maNormal) || (rStyleName == maLight) ||
-                         (rStyleName == maNormalItalic) || (rStyleName == maLightItalic) )
-                    bNoneAvailable = FALSE;
-                }
-
-                if ( (rStyleName == maBold) || (rStyleName == maBlack) ||
-                     (rStyleName == maBoldItalic) || (rStyleName == maBlackItalic) )
-                    bNoneAvailable = FALSE;
-            }
+            pFontInfo = pFontInfo->mpNext;
         }
-        else
-            bNotSynthetic = TRUE;
 
         if ( bNoneAvailable )
         {
@@ -625,24 +592,39 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
                 ((FontList*)this)->maMapStyleNotAvailable = XubString( SvtResId( STR_SVT_FONTMAP_STYLENOTAVAILABLE ) );
             return maMapStyleNotAvailable;
         }
-        else
-        {
-            /* Size not available not implemented yet
-            if ( !(nType & FONTLIST_FONTNAMETYPE_SCALABLE) )
-            {
-                ...
-                {
-                    if ( !maMapSizeNotAvailable.Len() )
-                         ((FontList*)this)->maMapSizeNotAvailable = XubString( SvtResId( STR_SVT_FONTMAP_SIZENOTAVAILABLE ) );
-                    return maMapSizeNotAvailable;
-                }
-            }
-            */
+    }
 
-            if ( !maMapBoth.Len() )
-                ((FontList*)this)->maMapBoth = XubString( SvtResId( STR_SVT_FONTMAP_BOTH ) );
-            return maMapBoth;
+    /* Size not available not implemented yet
+    if ( !(nType & FONTLIST_FONTNAMETYPE_SCALABLE) )
+    {
+        ...
+        {
+            if ( !maMapSizeNotAvailable.Len() )
+                 ((FontList*)this)->maMapSizeNotAvailable = XubString( SvtResId( STR_SVT_FONTMAP_SIZENOTAVAILABLE ) );
+            return maMapSizeNotAvailable;
         }
+    }
+    */
+
+    // Only Printer-Font?
+    if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_PRINTER )
+    {
+        if ( !maMapPrinterOnly.Len() )
+            ((FontList*)this)->maMapPrinterOnly = XubString( SvtResId( STR_SVT_FONTMAP_PRINTERONLY ) );
+        return maMapPrinterOnly;
+    }
+    // Only Screen-Font?
+    else if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_SCREEN )
+    {
+        if ( !maMapScreenOnly.Len() )
+            ((FontList*)this)->maMapScreenOnly = XubString( SvtResId( STR_SVT_FONTMAP_SCREENONLY ) );
+        return maMapScreenOnly;
+    }
+    else
+    {
+        if ( !maMapBoth.Len() )
+            ((FontList*)this)->maMapBoth = XubString( SvtResId( STR_SVT_FONTMAP_BOTH ) );
+        return maMapBoth;
     }
 }
 
