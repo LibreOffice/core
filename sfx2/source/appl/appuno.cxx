@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2000-12-06 12:14:01 $
+ *  last change: $Author: mba $ $Date: 2000-12-10 14:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ using namespace ::rtl;
 #include "frame.hxx"
 #include "sfxbasic.hxx"
 #include "objsh.hxx"
+#include "objuno.hxx"
 
 #define FRAMELOADER_SERVICENAME     "com.sun.star.frame.FrameLoader"
 
@@ -206,7 +207,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
     if ( nSlotId == SID_OPENURL )
         nSlotId = SID_OPENDOC;
 
-    sal_uInt16 nCount = rArgs.getLength();
+    sal_Int32 nCount = rArgs.getLength();
     const ::com::sun::star::beans::PropertyValue* pPropsVal = rArgs.getConstArray();
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
@@ -541,6 +542,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
 
 SV_IMPL_PTRARR( SfxComponentKeyArr_Impl, SfxComponentKeyPtr_Impl );
 
+#if 0
+
 // Implementation of XInterface, XTypeProvider, XServiceInfo, helper- and static-methods
 SFX_IMPL_XINTERFACE_1( SfxComponentFactory, OWeakObject, ::com::sun::star::lang::XMultiServiceFactory )
 SFX_IMPL_XTYPEPROVIDER_1( SfxComponentFactory, ::com::sun::star::lang::XMultiServiceFactory )
@@ -575,7 +578,7 @@ void SfxComponentFactory::Init_Impl()
             {
                 ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = xKey->getAsciiListValue();
                 const ::rtl::OUString* pStr = aNames.getConstArray();
-                for ( sal_uInt32 n=0; n<aNames.getLength(); n++ )
+                for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
                 {
                     ::rtl::OUString aKeyStr = DEFINE_CONST_UNICODE("/IMPLEMENTATIONS/");
                     aKeyStr += pStr[n];
@@ -798,6 +801,8 @@ void SfxComponentFactory::Init_Impl()
 
     return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ();
 }
+
+#endif
 
 #if 0 // (mba)
 #ifdef SOLAR_JAVA
@@ -1180,6 +1185,14 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     Reference< XRegistryKey > xLoaderKey;
 
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxStandaloneDocumentInfoObject::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.document.StandaloneDocumentInfo") );
+
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += DownloaderLoader::impl_getStaticImplementationName();
 
     aTempStr = aImpl;
@@ -1194,7 +1207,7 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
     Sequence < ::rtl::OUString > aServices = SfxFrameLoader_Impl::impl_getStaticSupportedServiceNames();
-    sal_Int16 nCount = aServices.getLength();
+    sal_Int32 nCount = aServices.getLength();
     for ( sal_Int16 i=0; i<nCount; i++ )
         xNewKey->createKey( aServices.getConstArray()[i] );
 
@@ -1254,6 +1267,7 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
         IF_NAME_CREATECOMPONENTFACTORY( DownloaderLoader )
         IF_NAME_CREATECOMPONENTFACTORY( SfxFrameLoader_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( SfxMacroLoader )
+        IF_NAME_CREATECOMPONENTFACTORY( SfxStandaloneDocumentInfoObject )
 
         // Factory is valid - service was found.
         if ( xFactory.is() )
