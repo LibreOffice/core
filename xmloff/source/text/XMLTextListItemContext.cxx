@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextListItemContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-09-18 08:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,9 @@ SvXMLImportContext *XMLTextListItemContext::CreateChildContext(
         pContext = new XMLParaContext( GetImport(),
                                        nPrefix, rLocalName,
                                        xAttrList, bHeading );
+        if (rTxtImport.IsProgress())
+            GetImport().GetProgressBarHelper()->Increment();
+
         break;
     case XML_TOK_TEXT_ORDERED_LIST:
         bOrdered = sal_True;
