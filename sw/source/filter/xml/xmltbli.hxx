@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-11 20:15:55 $
+ *  last change: $Author: dvo $ $Date: 2001-02-20 10:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,8 @@ public:
                      const SwStartNode *pStNd=0,
                      SwXMLTableContext *pTable=0,
                      ::rtl::OUString *pFormula=0,
-                     double fValue=0.0);
+                     sal_Bool bHasValue = sal_False,
+                     double fValue = 0.0 );
     void InsertRow( const ::rtl::OUString& rStyleName,
                     sal_Bool bInHead );
     void FinishRow();

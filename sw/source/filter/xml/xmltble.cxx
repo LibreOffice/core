@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-29 11:12:23 $
+ *  last change: $Author: dvo $ $Date: 2001-02-20 10:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,10 +842,13 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan )
                     else if (-1 != nNumberFormat)
                     {
                         // number format key:
+                        // (export values only if cell contains text;
+                        //  cf. #83755#)
                         XMLNumberFormatAttributesExportHelper::
                             SetNumberFormatAttributes(
                                 *this, nNumberFormat, xCell->getValue(),
-                                XML_NAMESPACE_TABLE, sal_True);
+                                XML_NAMESPACE_TABLE,
+                                (xRange->getString().getLength() > 0) );
                     }
                     // else: invalid key; ignore
                 }
