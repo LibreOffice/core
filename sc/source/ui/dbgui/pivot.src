@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:37:16 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ norwegian ] = "Utgående fra " ;
         Text [ italian ] = "Risultato da" ;
         Text [ portuguese_brazilian ] = "Sa?da de" ;
-        Text [ portuguese ] = "Saída de" ;
+        Text [ portuguese ] = "~Resultado em" ;
         Text [ finnish ] = "Tulokset kohteeseen" ;
         Text [ danish ] = "Output fra" ;
         Text [ french ] = "Destination" ;
@@ -817,5 +817,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Text[ catalan ] = "Piloto de datos";
     Text[ finnish ] = "Tietojen ohjaus";
 };
+
 
 
