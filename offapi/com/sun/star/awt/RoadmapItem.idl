@@ -1,0 +1,112 @@
+/*************************************************************************
+ *
+ *  $RCSfile: RoadmapItem.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2004-05-19 14:04:43 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_RoadmapItem_idl__
+#define __com_sun_star_awt_RoadmapItem_idl__
+
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/* specifies a RoadmapItem which serves as an Element in a Container like the Roadmap
+ * specified in com::sun::star::awt::UnoControlRoadmapModel and
+ * com::sun::star::awt::UnoControlRoadmap
+ */
+service RoadmapItem
+{
+    /** The ID uniquely identifies the roadmap item.
+     *  When the RoadmapItem is inserted into the Roadmap via "insertByIndex"
+     *  the default value of the ID is the first available absolute digit that
+     *  has not yet been assigned to other existing RoadmapItems.
+    */
+     [property] short ID;
+
+    /** The Label of the RoadmapItem does not include its Prefix that is auto
+     * matically set after the following algorithm:
+     * (Index + 1) + ". " + Label
+     */
+    [property] string Label;
+
+
+    /** When "Interactive" is true the RoadmapItem supports a certain "HyperLabel
+     *  functionality":
+     *  Moving the Mousepointer over the RoadmapItem will change it to a Refhand and
+     *  underline the Label for the time the mousepointer resides over the RoadmapItem.
+     *  Clicking the mousepointer will then notify the Roadmap Container.
+     *  The property Interactive" is readonly because it is adapted from the container of the
+     *  RoadmapItem.
+     */
+    [property] boolean Interactive;
+
+
+    /** determines whether a control is enabled or disabled.
+     */
+    [property] boolean Enabled;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
