@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-25 13:34:16 $
+ *  last change: $Author: rt $ $Date: 2001-06-29 02:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,7 +560,7 @@ ModalDialog DLG_ASS
         Text[ english_us ] = "Select a slide transition";
         Text[ portuguese ] = "Seleccione o modo de transição de diapositivos";
         Text[ russian ] = "Âûáåðèòå òèï ïåðåõîäà ñëàéäà";
-        Text[ dutch ] = "Kies uw diawisseling";
+        Text[ dutch ] = "Kies een diawisseling";
         Text[ french ] = "Transition entre les diapos";
         Text[ spanish ] = "Elija un cambio de diapositiva";
         Text[ italian ] = "Scegliete un cambio diapositive";
@@ -587,27 +587,27 @@ ModalDialog DLG_ASS
         Size = MAP_APPFONT ( 60 , 10 );
         Text = "~Effekt";
         Text [ ENGLISH ] = "~Effect";
-        Text[ english_us ] = "~Effect";
-        Text[ portuguese ] = "~Efeito";
-        Text[ russian ] = "~Ýôôåêò";
-        Text[ dutch ] = "~Effect";
-        Text[ french ] = "~Effet";
-        Text[ spanish ] = "~Efecto";
-        Text[ italian ] = "Effetto";
-        Text[ danish ] = "Effekt";
-        Text[ swedish ] = "~Effekt";
-        Text[ polish ] = "Efekt";
-        Text[ portuguese_brazilian ] = "~Effect";
-        Text[ japanese ] = "Œø‰Ê(~E)";
+        Text[ english_us ] = "~Effect:";
+        Text[ portuguese ] = "~Efeito:";
+        Text[ russian ] = "~Ýôôåêò:";
+        Text[ dutch ] = "~Effect:";
+        Text[ french ] = "~Effet :";
+        Text[ spanish ] = "~Efecto:";
+        Text[ italian ] = "Effetto:";
+        Text[ danish ] = "Effekt:";
+        Text[ swedish ] = "~Effekt:";
+        Text[ polish ] = "Efekt:";
+        Text[ portuguese_brazilian ] = "~Effect:";
+        Text[ japanese ] = "Œø‰Ê(~E):";
         Text[ chinese_simplified ] = "Ð§¹û(~E)£º";
         Text[ chinese_traditional ] = "®ÄªG(~E)¡G";
-        Text[ arabic ] = "ÇáÊÃËíÑ";
-        Text[ greek ] = "ÅöÝ";
-        Text[ korean ] = "È¿°ú(~E)";
-        Text[ turkish ] = "Efekt";
+        Text[ arabic ] = "ÇáÊÃËíÑ:";
+        Text[ greek ] = "ÅöÝ:";
+        Text[ korean ] = "È¿°ú(~E):";
+        Text[ turkish ] = "Efekt:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Efecto";
-        Text[ finnish ] = "~Vaikutus";
+        Text[ catalan ] = "~Efecto:";
+        Text[ finnish ] = "~Vaikutus:";
     };
 
     ListBox LB_PAGE3_EFFECT
@@ -627,27 +627,27 @@ ModalDialog DLG_ASS
         Size = MAP_APPFONT ( 60 , 10 );
         Text = "~Geschwindigkeit";
         Text [ ENGLISH ] = "~Speed";
-        Text[ english_us ] = "~Speed";
-        Text[ portuguese ] = "~Velocidade";
-        Text[ russian ] = "~Ñêîðîñòü";
-        Text[ dutch ] = "~Snelheid";
-        Text[ french ] = "~Vitesse";
-        Text[ spanish ] = "Vel~ocidad";
-        Text[ italian ] = "Velocità";
-        Text[ danish ] = "Hastighed";
-        Text[ swedish ] = "~Hastighet";
-        Text[ polish ] = "Szy~bkoœæ";
-        Text[ portuguese_brazilian ] = "~Speed";
-        Text[ japanese ] = "½Ëß°ÄÞ(~S)";
+        Text[ english_us ] = "~Speed:";
+        Text[ portuguese ] = "~Velocidade:";
+        Text[ russian ] = "~Ñêîðîñòü:";
+        Text[ dutch ] = "~Snelheid:";
+        Text[ french ] = "~Vitesse :";
+        Text[ spanish ] = "Vel~ocidad:";
+        Text[ italian ] = "Velocità:";
+        Text[ danish ] = "Hastighed:";
+        Text[ swedish ] = "~Hastighet:";
+        Text[ polish ] = "Szy~bkoœæ:";
+        Text[ portuguese_brazilian ] = "~Speed:";
+        Text[ japanese ] = "½Ëß°ÄÞ(~S):";
         Text[ chinese_simplified ] = "ËÙ¶È(~S)£º";
         Text[ chinese_traditional ] = "³t«×(~S)¡G";
-        Text[ arabic ] = "ÇáÓÑÚÉ";
-        Text[ greek ] = "Ôá÷ýôçôá";
-        Text[ korean ] = "¼Óµµ(~S)";
-        Text[ turkish ] = "Hýz";
+        Text[ arabic ] = "ÇáÓÑÚÉ:";
+        Text[ greek ] = "Ôá÷ýôçôá:";
+        Text[ korean ] = "¼Óµµ(~S):";
+        Text[ turkish ] = "Hýz:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Vel~ocidad";
-        Text[ finnish ] = "~Nopeus";
+        Text[ catalan ] = "Vel~ocidad:";
+        Text[ finnish ] = "~Nopeus:";
     };
 
     ListBox LB_PAGE3_SPEED
@@ -1257,6 +1257,7 @@ ModalDialog DLG_ASS
     Text[ catalan ] = "AutoPiloto Presentación";
     Text[ finnish ] = "Automaattinen esityksen ohjaus";
 };
+
 
 
 
