@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: mba $ $Date: 2002-02-01 17:10:28 $
+ *  last change: $Author: mav $ $Date: 2002-02-19 17:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1167,6 +1167,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
     {
         // modified streams with OLEStorages on it have autocommit; it is assumed that the OLEStorage
         // was commited as well ( if not opened in direct mode )
+
         if ( m_bModified )
         {
             try
@@ -1180,9 +1181,6 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 DBG_ASSERT( m_aTempURL.Len(), "No temporary file to read from!");
                 Reference < XInputStream > xStream = new FileStreamWrapper_Impl( m_aTempURL );
 
-                // wrapper now controls lifetime of temporary file
-                m_aTempURL.Erase();
-
                 Any aAny;
                 InsertCommandArgument aArg;
                 aArg.Data = xStream;
@@ -1190,11 +1188,14 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 aAny <<= aArg;
                 m_pContent->executeCommand( ::rtl::OUString::createFromAscii("insert"), aAny );
 
+                // wrapper now controls lifetime of temporary file
+                m_aTempURL.Erase();
+
                 INetURLObject aObj( m_aURL );
                 aObj.SetName( m_aName );
                 m_aURL = aObj.GetMainURL();
                 m_bModified = FALSE;
-                m_bSourceRead = FALSE;
+                m_bSourceRead = TRUE;
             }
             catch ( CommandAbortedException& )
             {
