@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-04 12:11:53 $
+ *  last change: $Author: os $ $Date: 2002-08-01 11:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -870,7 +870,11 @@ String STR_HELP_FIRST_HTML
 {
     Text = "<html></head><body><center><br></br><br></br><p><tt>%1</tt></center></body></html>";
 };
-
+String STR_HELP_MENU_TEXT_SELECTION_MODE
+{
+    Text = "Text auswählen";
+    Text [english_us] = "Select Text";
+};
 ModalDialog DLG_HELP_ADDBOOKMARK
 {
     Size = MAP_APPFONT ( 208 , 43 ) ;

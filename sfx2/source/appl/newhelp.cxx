@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-04 08:22:11 $
+ *  last change: $Author: os $ $Date: 2002-08-01 11:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,7 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define TBI_BOOKMARKS       1007
 #define TBI_SEARCHDIALOG    1008
 #define TBI_SOURCEVIEW      1009
+#define TBI_SELECTIONMODE   1010
 
 #define CONFIGNAME_HELPWIN      DEFINE_CONST_UNICODE("OfficeHelp")
 #define CONFIGNAME_INDEXWIN     DEFINE_CONST_UNICODE("OfficeHelpIndex")
@@ -1979,7 +1980,6 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aIndexOffText   ( SfxResId( STR_HELP_BUTTON_INDEX_OFF ) ),
     aIndexOnImage   ( SfxResId( IMG_HELP_TOOLBOX_INDEX_ON ) ),
     aIndexOffImage  ( SfxResId( IMG_HELP_TOOLBOX_INDEX_OFF ) )
-
 {
     sfx2::AddToTaskPaneList( &aToolBox );
 
@@ -2221,6 +2221,9 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu.InsertItem( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ),
                 Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_BOOKMARKS : IMG_HELP_TOOLBOX_BOOKMARKS ) ) );
             aMenu.SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
+            aMenu.InsertSeparator();
+            aMenu.InsertItem( TBI_SELECTIONMODE, String( SfxResId( STR_HELP_MENU_TEXT_SELECTION_MODE ) ) );
+            aMenu.SetHelpId( TBI_SELECTIONMODE, HID_HELP_TEXT_SELECTION_MODE );
             aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_COPY, GET_SLOT_NAME( SID_COPY ),
                 Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_COPY : IMG_HELP_TOOLBOX_COPY ) ) );
@@ -2895,6 +2898,7 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
         case TBI_SOURCEVIEW :
         case TBI_SEARCHDIALOG :
         case TBI_COPY :
+        case TBI_SELECTIONMODE:
         {
             Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
             if ( xProv.is() )
@@ -2906,6 +2910,8 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
                     aURL.Complete = DEFINE_CONST_UNICODE(".uno:SourceView");
                 else if ( TBI_COPY == nActionId )
                     aURL.Complete = DEFINE_CONST_UNICODE(".uno:Copy");
+                else if ( TBI_SELECTIONMODE == nActionId )
+                    aURL.Complete = DEFINE_CONST_UNICODE(".uno:SelectTextMode");
                 else
                     aURL.Complete = DEFINE_CONST_UNICODE(".uno:SearchDialog");
                 PARSE_URL( aURL );
