@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarwrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:44:59 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,6 +407,40 @@ throw (::com::sun::star::uno::RuntimeException)
         ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
         if ( pToolBarManager )
             pToolBarManager->notifyRegisteredControllers( aUIElementName, aCommand );
+    }
+}
+
+void SAL_CALL ToolBarWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any&  aValue ) throw( com::sun::star::uno::Exception )
+{
+    ResetableGuard aLock( m_aLock );
+    sal_Bool bNoClose( m_bNoClose );
+    aLock.unlock();
+
+    UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast( nHandle, aValue );
+
+    aLock.lock();
+
+    sal_Bool bNewNoClose( m_bNoClose );
+    if ( m_xToolBarManager.is() && !m_bDisposed && ( bNewNoClose != bNoClose ))
+    {
+        ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
+        if ( pToolBarManager )
+        {
+            ToolBox* pToolBox = pToolBarManager->GetToolBar();
+            if ( pToolBox )
+            {
+                if ( bNewNoClose )
+                {
+                    pToolBox->SetStyle( pToolBox->GetStyle() & ~WB_CLOSEABLE );
+                    pToolBox->SetFloatStyle( pToolBox->GetFloatStyle() & ~WB_CLOSEABLE );
+                }
+                else
+                {
+                    pToolBox->SetStyle( pToolBox->GetStyle() | WB_CLOSEABLE );
+                    pToolBox->SetFloatStyle( pToolBox->GetFloatStyle() | WB_CLOSEABLE );
+                }
+            }
+        }
     }
 }
 
