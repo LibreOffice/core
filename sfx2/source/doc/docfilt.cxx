@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfilt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:33:42 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,7 @@ String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com:
                 lang::WrappedTargetException,
                 uno::RuntimeException )
 {
+    SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
     const char* pType=0;
     String aName;
     if ( pFilterName )
@@ -396,15 +397,26 @@ String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com:
             {
                 SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
                 if ( bTemplate )
-                    nMust |= SFX_FILTER_TEMPLATE;
+                    // template filter was preselected, try to verify
+                    nMust |= SFX_FILTER_TEMPLATEPATH;
                 else
-                    nDont |= SFX_FILTER_TEMPLATE;
+                    // template filters shouldn't be detected if not explicitly asked for
+                    nDont |= SFX_FILTER_TEMPLATEPATH;
 
                 const SfxFilter* pFilter = 0;
                 if ( aName.Len() )
-                    pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aName );
+                    // get preselected Filter if it matches the desired filter flags
+                    pFilter = rMatcher.GetFilter4FilterName( aName, nMust, nDont );
+
                 if ( !pFilter || pFilter->GetFormat() != nClipId )
-                    pFilter = SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( nClipId );
+                {
+                    // get filter from storage MediaType
+                    pFilter = rMatcher.GetFilter4ClipBoardId( nClipId, nMust, nDont );
+                    if ( !pFilter && bTemplate )
+                        // template filter is asked for , but there isn't one; so at least the "normal" format should be detected
+                        pFilter = rMatcher.GetFilter4ClipBoardId( nClipId );
+                }
+
                 if ( pFilter )
                 {
                     if ( pFilterName )
@@ -422,7 +434,7 @@ String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com:
     {
         aRet = String::CreateFromAscii(pType);
         if ( pFilterName )
-            *pFilterName = SFX_APP()->GetFilterMatcher().GetFilter4EA( aRet )->GetName();
+            *pFilterName = rMatcher.GetFilter4EA( aRet )->GetName();
     }
 
     return aRet;
