@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:10:22 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,7 +552,17 @@
 
 #define STR_UNDO_TAB_RTL                        391
 #define STR_UNDO_HANGULHANJA        392
-#define STR_COUNT                   393
+
+#define STR_NAME_INPUT_CELL         393
+#define STR_NAME_INPUT_RANGE        394
+#define STR_NAME_INPUT_DBRANGE      395
+#define STR_NAME_INPUT_ROW          396
+#define STR_NAME_INPUT_SHEET        397
+#define STR_NAME_INPUT_DEFINE       398
+#define STR_NAME_ERROR_SELECTION    399
+#define STR_NAME_ERROR_NAME         400
+
+#define STR_COUNT                   401
 
 
 #endif
