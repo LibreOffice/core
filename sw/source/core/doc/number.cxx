@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:53:42 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,4 +744,9 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
 }
 
 
-
+/* #109308# */
+void SwNumRule::SetNumAdjust(SvxAdjust eNumAdjust)
+{
+    for (int i = 0; i < MAXLEVEL; i++)
+        aFmts[i]->SetNumAdjust(eNumAdjust);
+}
