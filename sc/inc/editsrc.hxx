@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-11 15:23:13 $
+ *  last change: $Author: thb $ $Date: 2002-02-25 16:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,8 @@ public:
 
     virtual SvxEditSource*      Clone() const ;
     virtual SvxTextForwarder*   GetTextForwarder();
-    virtual void                UpdateData();
 
-    virtual SfxBroadcaster&     GetBroadcaster() const;
+    virtual void                UpdateData();
 
 };
 
@@ -153,9 +152,8 @@ public:
 
     virtual SvxEditSource*      Clone() const;
     virtual SvxTextForwarder*   GetTextForwarder();
-    virtual void                UpdateData();
 
-    virtual SfxBroadcaster&     GetBroadcaster() const;
+    virtual void                UpdateData();
 
     void                        SetDoUpdateData(sal_Bool bValue);
     sal_Bool                    IsDirty() const;
@@ -190,8 +188,6 @@ public:
     virtual SvxTextForwarder*   GetTextForwarder();
     virtual void                UpdateData();
 
-    virtual SfxBroadcaster&     GetBroadcaster() const;
-
     virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
 
@@ -210,8 +206,6 @@ public:
     virtual SvxEditSource*      Clone() const ;
     virtual SvxTextForwarder*   GetTextForwarder();
     virtual void                UpdateData();
-
-    virtual SfxBroadcaster&     GetBroadcaster() const;
 
 };
 
