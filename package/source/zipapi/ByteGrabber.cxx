@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteGrabber.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-28 12:52:33 $
+ *  last change: $Author: mtg $ $Date: 2001-05-31 09:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,11 @@ using namespace ::com::sun::star;
 ByteGrabber::ByteGrabber(uno::Reference  < io::XInputStream > xIstream)
 : xStream(xIstream)
 , xSeek (xIstream, uno::UNO_QUERY )
+, aSequence ( 4 )
 {
+    pSequence = aSequence.getArray();
 }
+
 ByteGrabber::~ByteGrabber()
 {
 }
@@ -144,92 +147,62 @@ sal_Int64 SAL_CALL ByteGrabber::getLength(  )
 }
 ByteGrabber& ByteGrabber::operator >> (sal_Int8& rInt8)
 {
-    uno::Sequence< sal_Int8 > aSequence (1);
-
     if (xStream->readBytes(aSequence,1) != 1)
-    {
         rInt8 = 0;
-        return *this;
-    }
-    const sal_Int8 *pArray = aSequence.getArray();
-    rInt8 = *(pArray) & 0xFF;
+    else
+        rInt8 = pSequence[0] & 0xFF;
     return *this;
 }
 ByteGrabber& ByteGrabber::operator >> (sal_Int16& rInt16)
 {
-    uno::Sequence< sal_Int8 > aSequence (2);
-
-    if (xStream->readBytes(aSequence, 2) != 2)
-    {
+    if (xStream->readBytes ( aSequence, 2) != 2)
         rInt16 = 0;
-        return *this;
-    }
-    const sal_Int8 *pArray = aSequence.getArray();
-    rInt16 = static_cast <sal_Int16>
-            ((* pArray   & 0xFF)
-           | (*(pArray+1)& 0xFF) << 8);
+    else
+        rInt16 = static_cast <sal_Int16>
+               ( pSequence[0] & 0xFF
+              | (pSequence[1] & 0xFF) << 8);
     return *this;
 }
 ByteGrabber& ByteGrabber::operator >> (sal_Int32& rInt32)
 {
-    uno::Sequence< sal_Int8 > aSequence (4);
-
     if (xStream->readBytes(aSequence, 4) != 4)
-    {
         rInt32 = 0;
-        return *this;
-    }
-    const sal_Int8 *pArray = aSequence.getArray();
-    rInt32 = static_cast < sal_Int32 >
-            ((* (pArray  ) & 0xFF)
-           | (* (pArray+1) & 0xFF) << 8
-           | (* (pArray+2) & 0xFF) << 16
-           | (* (pArray+3) & 0xFF) << 24 );
+    else
+        rInt32 = static_cast < sal_Int32 >
+                ( pSequence[0] & 0xFF
+              | ( pSequence[1] & 0xFF ) << 8
+              | ( pSequence[2] & 0xFF ) << 16
+              | ( pSequence[3] & 0xFF ) << 24 );
     return *this;
 }
 
-ByteGrabber& ByteGrabber::operator >> (sal_uInt8& ruInt8)
+ByteGrabber& ByteGrabber::operator >> (sal_uInt8& rInt8)
 {
-    uno::Sequence< sal_Int8 > aSequence (1);
-
     if (xStream->readBytes(aSequence,1) != 1)
-    {
-        ruInt8 = 0;
-        return *this;
-    }
-    const sal_Int8 *pArray = aSequence.getArray();
-    ruInt8 = static_cast <sal_uInt8> (* (pArray  ) & 0xFF);
+        rInt8 = 0;
+    else
+        rInt8 = static_cast < sal_uInt8 > (pSequence[0] & 0xFF );
     return *this;
 }
-ByteGrabber& ByteGrabber::operator >> (sal_uInt16& ruInt16)
+ByteGrabber& ByteGrabber::operator >> (sal_uInt16& rInt16)
 {
-    uno::Sequence< sal_Int8 > aSequence (2);
-
     if (xStream->readBytes(aSequence, 2) != 2)
-    {
-        ruInt16 = 0;
-        return *this;
-    }
-    const sal_Int8 *pArray = aSequence.getArray();
-    ruInt16 = static_cast <sal_uInt16>
-             ((* pArray   & 0xFF)
-            | (*(pArray+1)& 0xFF) << 8);
+        rInt16 = 0;
+    else
+        rInt16 = static_cast <sal_uInt16>
+               ( pSequence[0] & 0xFF
+              | (pSequence[1] & 0xFF) << 8);
     return *this;
 }
 ByteGrabber& ByteGrabber::operator >> (sal_uInt32& ruInt32)
 {
-    uno::Sequence< sal_Int8 > aSequence (4);
-
     if (xStream->readBytes(aSequence, 4) != 4)
-    {
         ruInt32 = 0;
-        return *this;
-    }
-    const sal_Int8 *pArray = aSequence.getArray();
-    ruInt32 = static_cast < sal_uInt32 >
-            ((* (pArray  ) & 0xFF)
-           | (* (pArray+1) & 0xFF) << 8
-           | (* (pArray+2) & 0xFF) << 16
-           | (* (pArray+3) & 0xFF) << 24 );
+    else
+        ruInt32 = static_cast < sal_uInt32 >
+                ( pSequence[0] & 0xFF
+              | ( pSequence[1] & 0xFF ) << 8
+              | ( pSequence[2] & 0xFF ) << 16
+              | ( pSequence[3] & 0xFF ) << 24 );
     return *this;
 }
