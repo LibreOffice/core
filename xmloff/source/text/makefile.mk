@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: dvo $ $Date: 2000-12-11 19:14:26 $
+#   last change: $Author: dvo $ $Date: 2001-01-02 14:38:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,6 +120,7 @@ CXXFILES = \
         XMLLineNumberingImportContext.cxx \
         XMLLineNumberingSeparatorImportContext.cxx \
         XMLPropertyBackpatcher.cxx \
+        XMLRedlineExport.cxx \
         XMLSectionExport.cxx \
         XMLSectionImportContext.cxx \
         XMLSectionSourceDDEImportContext.cxx \
@@ -185,6 +186,7 @@ SLOFILES =	\
         $(SLO)$/XMLLineNumberingImportContext.obj \
         $(SLO)$/XMLLineNumberingSeparatorImportContext.obj \
         $(SLO)$/XMLPropertyBackpatcher.obj \
+        $(SLO)$/XMLRedlineExport.obj \
         $(SLO)$/XMLSectionExport.obj \
         $(SLO)$/XMLSectionImportContext.obj \
         $(SLO)$/XMLSectionSourceDDEImportContext.obj \

@@ -1,0 +1,176 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XMLRedlineExport.hxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:38:40 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _XMLOFF_XMLREDLINEEXPORT_HXX
+#define _XMLOFF_XMLREDLINEEXPORT_HXX
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+
+#include <list>
+
+class SvXMLExport;
+namespace com { namespace sun { namespace star {
+    namespace beans { class XPropertySet; }
+ } } }
+namespace rtl {
+    class OUString;
+    class OUStringBuffer;
+}
+
+typedef ::std::list<
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet> > ChangesListType;
+
+/**
+ * This class handles the export of redline portions.
+ * It is to be called from XMLTextParagraphExport.
+ */
+class XMLRedlineExport
+{
+    const ::rtl::OUString sDelete;
+    const ::rtl::OUString sDeletion;
+    const ::rtl::OUString sFormat;
+    const ::rtl::OUString sFormatChange;
+    const ::rtl::OUString sInsert;
+    const ::rtl::OUString sInsertion;
+    const ::rtl::OUString sIsCollapsed;
+    const ::rtl::OUString sIsStart;
+    const ::rtl::OUString sRL;
+    const ::rtl::OUString sRedlineAuthor;
+    const ::rtl::OUString sRedlineComment;
+    const ::rtl::OUString sRedlineDateTime;
+    const ::rtl::OUString sRedlineSuccessorData;
+    const ::rtl::OUString sRedlineType;
+    const ::rtl::OUString sStyle;
+    const ::rtl::OUString sTextTable;
+    const ::rtl::OUString sUnknownChange;
+
+    SvXMLExport& rExport;
+
+    ChangesListType aChangesList;   /// list of changes
+    sal_Int32 nCountCallsExportChangedRegion;
+    sal_Int32 nCountCallsExportChangeInline;
+
+
+public:
+    XMLRedlineExport(SvXMLExport& rExp);
+
+    ~XMLRedlineExport();
+
+    /// export a change
+    /// convenience method:calls CollectChange() if
+    /// bAutoStyle is set, and ExportChangeInline() if not
+    void ExportChange(
+        /// PropertySet of RedlinePortion
+        const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::beans::XPropertySet> & rPropSet,
+        /// if (bAutoStyle) CollectChange(..) else ExoirtChangeInline(...)
+        sal_Bool bAutoStyle);
+
+
+    /// put a RedlinePortion into the list of changes
+    void CollectChange(
+        /// PropertySet of RedlinePortion
+        const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::beans::XPropertySet> & rPropSet);
+
+    /// process the list of changes that have been previously
+    /// registered using the CollectChange() method
+    void ExportChangesList();
+
+    /// export the change mark contained in the text body
+    void ExportChangeInline(
+        /// PropertySet of RedlinePortion
+        const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::beans::XPropertySet> & rPropSet);
+
+private:
+    /// export the changed-region element
+    void ExportChangedRegion(
+        const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::beans::XPropertySet> & rPropSet);
+
+    /// export an change-info element
+    void ExportChangeInfo(
+        const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::beans::XPropertySet> & rPropSet);
+
+    /// convert the change type from API to XML names
+    const ::rtl::OUString ConvertTypeName(const ::rtl::OUString& sApiName);
+
+    // HACK: IDs need to be dealt with properly!!!
+    /// Get ID string!
+    const ::rtl::OUString GetRedlineID(
+        const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::beans::XPropertySet> & rPropSet,
+        sal_Bool bFirstPass, sal_Bool bIsStart);
+
+};
+
+#endif

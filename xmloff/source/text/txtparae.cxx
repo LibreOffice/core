@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:05:02 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,10 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
+
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
 #endif
@@ -232,6 +236,9 @@
 #endif
 #ifndef _XMLOFF_XMLEVENTEXPORT_HXX
 #include "XMLEventExport.hxx"
+#endif
+#ifndef _XMLOFF_XMLREDLINEEXPORT_HXX
+#include "XMLRedlineExport.hxx"
 #endif
 
 using namespace ::rtl;
@@ -620,6 +627,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     pFrameEmbeddedIdxs( 0 ),
     pSectionExport( NULL ),
     pIndexMarkExport( NULL ),
+    pRedlineExport( NULL ),
     pFrameShapeIdxs( 0 ),
     sParagraphService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Paragraph")),
     sTableService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextTable")),
@@ -690,6 +698,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sContourPolyPolygon(RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon")),
     sAnchorCharStyleName(RTL_CONSTASCII_USTRINGPARAM("AnchorCharStyleName")),
     sServerMap(RTL_CONSTASCII_USTRINGPARAM("ServerMap")),
+    sRedline(RTL_CONSTASCII_USTRINGPARAM("Redline")),
     nProgress( nProg )
 {
     UniReference < XMLPropertySetMapper > xPropMapper =
@@ -740,10 +749,12 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     pFieldExport = new XMLTextFieldExport( rExp );
     pSectionExport = new XMLSectionExport( rExp, *this );
     pIndexMarkExport = new XMLIndexMarkExport( rExp, *this );
+    pRedlineExport = new XMLRedlineExport( rExp );
 }
 
 XMLTextParagraphExport::~XMLTextParagraphExport()
 {
+    delete pRedlineExport;
     delete pIndexMarkExport;
     delete pSectionExport;
     delete pFieldExport;
@@ -1268,6 +1279,11 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             else if (sType.equals(sDocumentIndexMark))
             {
                 pIndexMarkExport->ExportIndexMark(xPropSet, bAutoStyles);
+            }
+            else if (sType.equals(sRedline))
+            {
+                // disable change tracking until implemented properly:
+                // pRedlineExport->ExportChange(xPropSet, bAutoStyles);
             }
             else
                 DBG_ERROR("unknown text portion type");
@@ -2243,6 +2259,12 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
 void XMLTextParagraphExport::exportTextDeclarations()
 {
     pFieldExport->ExportFieldDeclarations();
+}
+
+void XMLTextParagraphExport::exportTrackedChanges()
+{
+    // disable change tracking until implemented properly:
+    // pRedlineExport->ExportChangesList();
 }
 
 void XMLTextParagraphExport::exportTextAutoStyles()
