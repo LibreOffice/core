@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:20:12 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,8 +840,7 @@ void View::SetMarkedOriginalSize()
                 uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObj)->GetObjRef();
                 if( xObj.is() )
                 {
-                    // TODO/LEAN: working with VisualArea still needs running state
-                    svt::EmbeddedObjectRef::TryRunningState( xObj );
+                    // TODO/LEAN: working with VisualArea can switch object to running state
                     MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( ((SdrOle2Obj*)pObj)->GetAspect() ) );
                     awt::Size aSz = xObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
                     Size        aOleSize( OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aUnit, MAP_100TH_MM) );
@@ -979,9 +978,7 @@ void View::DoConnect(SdrOle2Obj* pObj)
                 pSdClient = new Client(pObj, pViewSh, pWindow);
                 Rectangle aRect = pObj->GetLogicRect();
                 {
-                    // TODO/LEAN: working with visual area still needs running state
-                    svt::EmbeddedObjectRef::TryRunningState( xObj );
-
+                    // TODO/LEAN: working with visual area can switch object to running state
                     Size aDrawSize = aRect.GetSize();
                     awt::Size aSz = xObj->getVisualAreaSize( pSdClient->GetAspect() );
                     Size aObjAreaSize( aSz.Width, aSz.Height );
