@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:49:53 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,6 @@
 #include <sfx2/printer.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
-#include <vcl/system.hxx>
 #include <comphelper/processfactory.hxx>
 #ifndef _SVTOOLS_PASSWORDHELPER_HXX
 #include <svtools/PasswordHelper.hxx>
