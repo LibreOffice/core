@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-12-05 12:20:00 $
+ *  last change: $Author: er $ $Date: 2000-12-08 13:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,7 +641,7 @@ SchMemChart* ScChartArray::CreateMemChart()
         return CreateMemChartMulti();   // kann 0 Range besser ab als Single
 }
 
-SchMemChart* ScChartArray::CreateMemChartSingle() const
+SchMemChart* ScChartArray::CreateMemChartSingle()
 {
     USHORT i,nCol,nRow;
 
@@ -849,7 +849,7 @@ SchMemChart* ScChartArray::CreateMemChartSingle() const
         //  Parameter-Strings
         //
 
-        SetExtraStrings(*pMemChart);
+        SetExtraStrings( *pMemChart, TRUE );
     }
     else
         DBG_ERROR("SchDLL::NewMemChart gibt 0 zurueck!");
@@ -1036,7 +1036,7 @@ SchMemChart* ScChartArray::CreateMemChartMulti()
         //  Parameter-Strings
         //
 
-        SetExtraStrings(*pMemChart);
+        SetExtraStrings( *pMemChart, TRUE );
     }
     else
         DBG_ERROR("SchDLL::NewMemChart gibt 0 zurueck!");
@@ -1044,7 +1044,7 @@ SchMemChart* ScChartArray::CreateMemChartMulti()
     return pMemChart;
 }
 
-void ScChartArray::SetExtraStrings(SchMemChart& rMem) const
+void ScChartArray::SetExtraStrings( SchMemChart& rMem, BOOL bDontCreateSeriesRanges )
 {
     const sal_Unicode cTok = ';';
     String aRef;
@@ -1078,6 +1078,58 @@ void ScChartArray::SetExtraStrings(SchMemChart& rMem) const
 
     rMem.SomeData1() = aRef;
     rMem.SomeData2() = aFlags;
+
+    if ( !bDontCreateSeriesRanges )
+    {
+        CreatePositionMap();
+        USHORT nColCount = pPositionMap->GetColCount();
+        USHORT nRowCount = pPositionMap->GetRowCount();
+        USHORT nCol, nRow;
+
+        ScRangeListRef xRL = new ScRangeList;
+        com::sun::star::uno::Sequence<
+            com::sun::star::chart::ChartSeriesAddress > aSeriesSeq( nColCount );
+        ULONG nIndex = 0;
+        for ( nCol = 0; nCol < nColCount; nCol++ )
+        {
+            xRL->RemoveAll();
+            for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
+            {
+                const ScAddress* pPos = pPositionMap->GetPosition( nIndex );
+                if ( pPos )
+                    xRL->Join( *pPos );
+            }
+            com::sun::star::chart::ChartSeriesAddress aSeries;
+            String aStr;
+            xRL->Format( aStr, SCR_ABS_3D, pDocument );
+            aSeries.DataRangeAddress = aStr;
+            if ( bColHeaders )
+            {
+                const ScAddress* pPos = pPositionMap->GetColHeaderPosition( nCol );
+                if ( pPos )
+                {
+                    pPos->Format( aStr, SCR_ABS_3D, pDocument );
+                    aSeries.LabelAddress = aStr;
+                }
+            }
+            aSeriesSeq[nCol] = aSeries;
+        }
+        rMem.SetSeriesAddresses( aSeriesSeq );
+
+        xRL->RemoveAll();
+        if ( bRowHeaders )
+        {
+            for ( nRow = 0; nRow < nRowCount; nRow++ )
+            {
+                const ScAddress* pPos = pPositionMap->GetRowHeaderPosition( nRow );
+                if ( pPos )
+                    xRL->Join( *pPos );
+            }
+        }
+        String aCategoriesStr;
+        xRL->Format( aCategoriesStr, SCR_ABS_3D, pDocument );
+        rMem.SetCategoriesRangeAddress( aCategoriesStr );
+    }
 
     rMem.SetReadOnly( TRUE );   // Daten nicht im Chart per Daten-Fenster veraendern
 }

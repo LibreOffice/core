@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartarr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: er $ $Date: 2000-12-08 13:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ class ScChartArray : public DataObject              // nur noch Parameter-Struct
 
 private:
     void        CheckColRowHeaders();
-    SchMemChart* CreateMemChartSingle() const;
+    SchMemChart* CreateMemChartSingle();
     SchMemChart* CreateMemChartMulti();
 
     void        GlueState();        // zusammengefasste Bereiche
@@ -206,7 +206,7 @@ public:
     BOOL    operator==(const ScChartArray& rCmp) const;
 
     SchMemChart* CreateMemChart();
-    void        SetExtraStrings(SchMemChart& rMem) const;
+    void        SetExtraStrings( SchMemChart& rMem, BOOL bDontCreateSeriesRanges = FALSE );
 
     void                    InvalidateGlue()
                                 {
