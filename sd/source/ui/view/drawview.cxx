@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-26 11:12:20 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,22 +842,12 @@ void SdDrawView::PresPaint(const Region& rRegion)
 
         if( pPageView )
         {
-            // #110325#
-            // in the case that the first page is not yet displayed and there
-            // is a fade effect set on the first page, we don't want to redraw
-            // the page before it is faded in. An indicator that no page is
-            // faded in yet is that GetActualPage() from the slideshow return
-            // null. In that case and if the first page contain a fade effect
-            // we only display the black background and not the page. This
-            // will fade in from the presentation later.
+            // #i18640#
+            // We know always display a black page only before the
+            // presentation displays anything
             bool bAllowPaint = true;
-
             if( pFuSlideShow && (pFuSlideShow->GetActualPage() == NULL) )
-            {
-                const USHORT nCurPage = pFuSlideShow->GetCurrentPage();
-                SdPage* pCurPage = pDoc->GetSdPage( nCurPage, PK_STANDARD );
-                bAllowPaint = pCurPage && pCurPage->GetFadeEffect() == com::sun::star::presentation::FadeEffect_NONE;
-            }
+                bAllowPaint = false;
 
             if( bAllowPaint )
             {
