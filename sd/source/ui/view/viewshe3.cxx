@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-22 14:06:48 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,7 +474,14 @@ SfxPrinter* SdViewShell::GetPrinter(BOOL bCreate)
 |*
 \************************************************************************/
 USHORT  SdViewShell::SetPrinter(SfxPrinter* pNewPrinter,
-                                            USHORT nDiffFlags)
+                USHORT nDiffFlags)
+{
+    return SetPrinterOptDlg(pNewPrinter,nDiffFlags);
+}
+
+USHORT SdViewShell::SetPrinterOptDlg(SfxPrinter* pNewPrinter,
+                 USHORT nDiffFlags,
+                BOOL _bShowDialog )
 {
     pDocSh->SetPrinter(pNewPrinter);
 
@@ -487,9 +494,13 @@ USHORT  SdViewShell::SetPrinter(SfxPrinter* pNewPrinter,
         pNewPrinter->SetMapMode(aMap);
         Size aNewSize = pNewPrinter->GetOutputSize();
 
-        WarningBox aWarnBox(pWindow, (WinBits)(WB_YES_NO | WB_DEF_YES),
+        BOOL bScaleAll = FALSE;
+        if ( _bShowDialog )
+        {
+            WarningBox aWarnBox(pWindow, (WinBits)(WB_YES_NO | WB_DEF_YES),
                             String(SdResId(STR_SCALE_OBJS_TO_PAGE)));
-        BOOL bScaleAll = (aWarnBox.Execute() == RET_YES);
+            bScaleAll = (aWarnBox.Execute() == RET_YES);
+        }
 
         if( this->ISA( SdDrawViewShell ) )
         {
