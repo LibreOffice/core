@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 12:04:46 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,17 +222,6 @@ namespace xmloff
             const rtl::OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttribs);
 
-        /**
-        */
-        XMLPropStyleContext* createControlStyleContext(
-            sal_uInt16 _nPrefix,
-            const ::rtl::OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList,
-            SvXMLStylesContext& _rParentStyles,
-            sal_uInt16 _nFamily = 0,
-            sal_Bool _bDefaultStyle = sal_False
-        );
-
         /** get the control with the given id
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
@@ -265,6 +254,14 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12.66.1  2004/06/08 14:49:18  mib
+ *  - #i20153#: form controls
+ *
+ *  Revision 1.12  2003/12/01 12:04:46  rt
+ *  INTEGRATION: CWS geordi2q09 (1.11.24); FILE MERGED
+ *  2003/11/24 15:19:46 obo 1.11.24.2: undo last change
+ *  2003/11/21 17:04:39 obo 1.11.24.1: #111934# join CWS comboboxlink
+ *
  *  Revision 1.11.24.2  2003/11/24 15:19:46  obo
  *  undo last change
  *
