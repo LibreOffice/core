@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 13:24:39 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,23 +143,16 @@ private:
 class SmXMLImport : public SvXMLImport
 {
 public:
-    SmXMLImport(sal_uInt16 nImportFlags=IMPORT_ALL) :
-        SvXMLImport( nImportFlags ),
-        pMathElemTokenMap(0), pPresLayoutElemTokenMap(0), pPresElemTokenMap(0),
-        pPresScriptEmptyElemTokenMap(0), pPresTableElemTokenMap(0),
-        pPresLayoutAttrTokenMap(0),pFencedAttrTokenMap(0),
-        pOperatorAttrTokenMap(0),pColorTokenMap(0),pAnnotationAttrTokenMap(0),
-        bSuccess(sal_False)
-        {}
+    // #110680#
     SmXMLImport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        sal_uInt16 nImportFlags=IMPORT_ALL);
+
+    // #110680#
+    SmXMLImport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
-        const rtl::OUString &rFileName) : SvXMLImport(rModel) ,
-        pMathElemTokenMap(0), pPresLayoutElemTokenMap(0), pPresElemTokenMap(0),
-        pPresScriptEmptyElemTokenMap(0), pPresTableElemTokenMap(0),
-        pPresLayoutAttrTokenMap(0),pFencedAttrTokenMap(0),
-        pOperatorAttrTokenMap(0),pColorTokenMap(0),pAnnotationAttrTokenMap(0),
-        bSuccess(sal_False)
-        {}
+        const rtl::OUString &rFileName);
 
     // XServiceInfo (override parent method)
     ::rtl::OUString SAL_CALL getImplementationName()
@@ -419,11 +412,18 @@ enum SmXMLAnnotationAttrTokenMap
 class SmXMLExport : public SvXMLExport
 {
 public:
-    SmXMLExport(sal_uInt16 nExportFlags=EXPORT_ALL);
-    SmXMLExport(const SmNode *pIn,const rtl::OUString &rFileName,
-        com::sun::star::uno::Reference<
-        com::sun::star::xml::sax::XDocumentHandler> &rHandler) :
-        SvXMLExport(rFileName,rHandler), pTree(pIn), bSuccess(sal_False) {}
+    // #110680#
+    SmXMLExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        sal_uInt16 nExportFlags=EXPORT_ALL);
+
+    // #110680#
+    SmXMLExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const SmNode *pIn,
+        const rtl::OUString &rFileName,
+        com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
+
     virtual ~SmXMLExport() {};
 
     // XServiceInfo (override parent method)
