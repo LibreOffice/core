@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSortedDynamicResultSetFactory.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 12:30:55 $
+ *  last change:$Date: 2003-09-08 11:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 package ifc.ucb;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.beans.Property;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.XResultSet;
@@ -75,11 +77,9 @@ import com.sun.star.ucb.XContentIdentifierFactory;
 import com.sun.star.ucb.XContentProvider;
 import com.sun.star.ucb.XDynamicResultSet;
 import com.sun.star.ucb.XSortedDynamicResultSetFactory;
-import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
 
 /**
 * Testing <code>com.sun.star.ucb.XSortedDynamicResultSetFactory</code>
