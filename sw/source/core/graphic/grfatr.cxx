@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfatr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:34:13 $
+ *  last change: $Author: tl $ $Date: 2002-09-18 13:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,18 +371,8 @@ BOOL SwTransparencyGrf::QueryValue( com::sun::star::uno::Any& rVal,
 {
     DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!")
     sal_Int16 nRet = GetValue();
-    //convert from 0...255 to -100 ... +100
-    nRet -= 128;
-    if(nRet >= 0 )
-    {
-        nRet = nRet * 100 / 127;
-    }
-    else
-    {
-        nRet = nRet * 100 / 128;
-    }
+    DBG_ASSERT( 0 <= nRet && nRet <= 100, "value out of range" );
     rVal <<= nRet;
-
     return TRUE;
 }
 // ------------------------------------------------------------------
@@ -394,11 +384,13 @@ BOOL SwTransparencyGrf::PutValue( const com::sun::star::uno::Any& rVal,
     sal_Int16 nVal;
     if(!(rVal >>= nVal) || nVal < -100 || nVal > 100)
         return FALSE;
-    if(nVal >= 0)
-        nVal = nVal * 127 / 100;
-    else
+    if(nVal < 0)
+    {
+        // for compatibility with old documents
         nVal = nVal * 128 / 100;
-    nVal += 128;
+        nVal += 128;
+    }
+    DBG_ASSERT( 0 <= nVal && nVal <= 100, "value out of range" );
     SetValue(nVal);
     return TRUE;
 }
