@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:42:23 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,40 +124,9 @@ using namespace com::sun::star::uno;
 #define IMPGRF_INIKEY_PREVIEW       "ImportGraphicPreview"
 #define IMPGRF_CONFIGNAME           String(DEFINE_CONST_UNICODE("ImportGraphicDialog"))
 
-
-// -----------------------------------------------------------------------
-
-GraphicFilter* DialogsResMgr::GetGrfFilter_Impl()
-{
-    if( !pGrapicFilter )
-    {
-#ifndef SVX_LIGHT
-        pGrapicFilter = new GraphicFilter;
-#else
-        pGrapicFilter = new GraphicFilter(sal_False);
-#endif
-        ::FillFilter( *pGrapicFilter );
-    }
-    const Link aLink;
-    pGrapicFilter->SetStartFilterHdl( aLink );
-    pGrapicFilter->SetEndFilterHdl( aLink );
-    pGrapicFilter->SetUpdatePercentHdl( aLink );
-    return pGrapicFilter;
-}
-
-// -----------------------------------------------------------------------
-
 GraphicFilter* GetGrfFilter()
 {
-    return (*(DialogsResMgr**)GetAppData(SHL_SVX))->GetGrfFilter_Impl();
-}
-
-// -----------------------------------------------------------------------
-
-USHORT FillFilter( GraphicFilter& rFilter )
-{
-    ResMgr* pMgr = DIALOG_MGR();
-    return rFilter.GetImportFormatCount();
+    return GraphicFilter::GetGraphicFilter();
 }
 
 // -----------------------------------------------------------------------
