@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:37:19 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ Menu MN_READONLY_POPUP
             HelpID = HID_SOURCEVIEW ;
             Text = "HTM~L - Quelltext" ;
             Text [ English ] = "~HTML ~source" ;
-            Text [ dutch ] = "~HTML - brontekst" ;
+            Text [ dutch ] = "~HTML-brontekst" ;
             Text [ english_us ] = "HT~ML Source" ;
             Text [ italian ] = "Testo sorgente HTML" ;
             Text [ spanish ] = "Texto fuente ~HTML" ;
@@ -271,7 +271,7 @@ Menu MN_READONLY_POPUP
             Text[ japanese ] = "HT~ML г‚Ѕгѓјг‚№гѓ†г‚­г‚№гѓ€";
             Text[ chinese_traditional ] = "HT~ML еЋџе§‹жЄ”";
             Text[ arabic ] = "HTML гХПС";
-            Text[ dutch ] = "~HTML - brontekst";
+            Text[ dutch ] = "~HTML-brontekst";
             Text[ chinese_simplified ] = "HT~ML жєђж–‡жњ¬";
             Text[ greek ] = "КеЯменп рспЭлехузт HTM~L";
             Text[ korean ] = "HT~ML м†ЊмЉ¤н…ЌмЉ¤нЉё";
@@ -354,7 +354,7 @@ Menu MN_READONLY_POPUP
             Text [ italian ] = "A~vanti" ;
             Text [ spanish ] = "~Continuar" ;
             Text [ french ] = "~Suivant" ;
-            Text [ dutch ] = "~Vooruit" ;
+            Text [ dutch ] = "~Voorwaarts" ;
             Text [ swedish ] = "~Framеt" ;
             Text [ danish ] = "~Nжste" ;
             Text [ portuguese ] = "~Seguinte" ;
@@ -366,7 +366,7 @@ Menu MN_READONLY_POPUP
             Text[ chinese_traditional ] = "еђ‘е‰Ќ(~F)";
             Text[ arabic ] = "ббГгЗг";
             Text[ language_user1 ] = " ";
-            Text[ dutch ] = "~Vooruit";
+            Text[ dutch ] = "~Voorwaarts";
             Text[ chinese_simplified ] = "еђ‘е‰Ќ(~F)";
             Text[ greek ] = "Емрсь~т";
             Text[ korean ] = "м•ћмњјлЎњ(~F)";
@@ -392,7 +392,7 @@ Menu MN_READONLY_POPUP
             Text [ portuguese ] = "~Guardar imagem..." ;
             Text [ portuguese_brazilian ] = "~Grafik speichern..." ;
             Text[ chinese_simplified ] = "е­з›е›ѕеЅў...";
-            Text[ russian ] = "Сохранить рисунок...";
+            Text[ russian ] = "Сохранить графический объект...";
             Text[ polish ] = "Zapisz grafikк...";
             Text[ japanese ] = "е›ігЃ®дїќе­...";
             Text[ chinese_traditional ] = "е„Іе­ењ–еЅў...";
@@ -404,7 +404,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Grafiрi kaydet...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Desa ~imatge...";
-            Text[ finnish ] = "Tallenna kuvat...";
+            Text[ finnish ] = "Tallenna grafiikka...";
             Text[ thai ] = "аёљаё±аё™аё—аё¶аёЃаёЃаёЈаёІаёџаёґаё„...";
         };
         MenuItem
@@ -492,7 +492,7 @@ Menu MN_READONLY_POPUP
             Text [ french ] = "~Ajouter une image" ;
             Text [ dutch ] = "Afbeelding t~oevoegen" ;
             Text[ chinese_simplified ] = "ж–°еўће›ѕеЅў";
-            Text[ russian ] = "Добавить рисунок";
+            Text[ russian ] = "Добавить графический объект";
             Text[ polish ] = "Dodaj grafikк";
             Text[ japanese ] = "е›ігЃ®иїЅеЉ ";
             Text[ chinese_traditional ] = "ж–°еўћењ–еЅў";
@@ -504,7 +504,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Grafik ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Afegeix imatge";
-            Text[ finnish ] = "Lisдд kuva";
+            Text[ finnish ] = "Lisдд grafiikka";
             Text[ thai ] = "а№Ђаёћаёґа№€аёЎаёЃаёЈаёІаёџаёґаё„";
         };
         MenuItem
@@ -623,7 +623,7 @@ Menu MN_READONLY_POPUP
             Text [ dutch ] = "A~chtergrond toevoegen" ;
             Text [ portuguese ] = "Adicionar plano de ~fundo" ;
             Text[ chinese_simplified ] = "ж–°еўћиѓЊж™Ї";
-            Text[ russian ] = "Вставить фон";
+            Text[ russian ] = "Добавить фон";
             Text[ polish ] = "Dodaj tіo";
             Text[ japanese ] = "иѓЊж™ЇгЃ®иїЅеЉ ";
             Text[ chinese_traditional ] = "ж–°еўћиѓЊж™Ї";
@@ -689,7 +689,7 @@ Menu MN_READONLY_POPUP
             Text [ portuguese ] = "Co~piar imagem" ;
             Text [ portuguese_brazilian ] = "Grafik ~kopieren" ;
             Text[ chinese_simplified ] = "е¤Ќе€¶е›ѕеЅў(~G)";
-            Text[ russian ] = "Копировать рисунок";
+            Text[ russian ] = "Копировать графический объект";
             Text[ polish ] = "Kopiuj grafikк";
             Text[ japanese ] = "е›ігЃ®г‚ігѓ”гѓј(~G)";
             Text[ chinese_traditional ] = "и¤‡иЈЅењ–еЅў(~G)";
@@ -701,7 +701,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Grafiрi kopyala";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Copia imatge";
-            Text[ finnish ] = "~Kopioi kuva";
+            Text[ finnish ] = "~Kopioi grafiikkaa";
             Text[ thai ] = "аё„аё±аё”аёҐаё­аёЃ~аёЃаёЈаёІаёџаёґаё„";
         };
         SEPARATOR
@@ -721,7 +721,7 @@ Menu MN_READONLY_POPUP
             Text [ portuguese ] = "~Carregar imagens" ;
             Text [ portuguese_brazilian ] = "G~rafiken laden" ;
             Text[ chinese_simplified ] = "иЈ…е…Ґе›ѕеЅў";
-            Text[ russian ] = "Загрузить рисунки";
+            Text[ russian ] = "Загрузить графические объекты";
             Text[ polish ] = "Zaіaduj grafiki";
             Text[ japanese ] = "е›ігЃ®иЄ­гЃїиѕјгЃї";
             Text[ chinese_traditional ] = "иј‰е…Ґењ–еЅў";
@@ -733,7 +733,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Grafikleri yьkle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Carrega ~imatges";
-            Text[ finnish ] = "Lataa kuvat";
+            Text[ finnish ] = "Lataa grafiikka";
             Text[ thai ] = "а№‚аё«аёҐаё”аёЃаёЈаёІаёџаёґаё„";
         };
         MenuItem
@@ -752,7 +752,7 @@ Menu MN_READONLY_POPUP
             Text [ portuguese ] = "~Ocultar imagens" ;
             Text [ portuguese_brazilian ] = "Grafiken ~ausschalten" ;
             Text[ chinese_simplified ] = "йљђе…Ґе›ѕеЅў";
-            Text[ russian ] = "Отключить рисунки";
+            Text[ russian ] = "Выключить графические объекты";
             Text[ polish ] = "Wyі№cz grafiki";
             Text[ japanese ] = "е›ігЃ®йќћиЎЁз¤є";
             Text[ chinese_traditional ] = "йљ±е…Ґењ–еЅў";
@@ -764,7 +764,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Grafikleri kapat";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Desactiva ~imatges";
-            Text[ finnish ] = "Grafiikka pois kдytцstд";
+            Text[ finnish ] = "Grafiikka poissa kдytцstд";
             Text[ thai ] = "а№„аёЎа№€аёЎаёµаёЃаёЈаёІаёџаёґаё„";
         };
 #ifdef WNT
@@ -784,7 +784,7 @@ Menu MN_READONLY_POPUP
             Text [ portuguese ] = "Desactivar ~PlugIns" ;
             Text [ portuguese_brazilian ] = "~PlugIns ausschalten" ;
             Text[ chinese_simplified ] = "дёЌдЅїз”Ё Plug-In";
-            Text[ russian ] = "Отключить Plug-Ins";
+            Text[ russian ] = "Выключить подключаемые модули";
             Text[ polish ] = "Wyі№cz wtyczki ~plug-in";
             Text[ japanese ] = "гѓ—гѓ©г‚°г‚¤гѓіг‚Єгѓ•";
             Text[ chinese_traditional ] = "й—њй–‰ PlugIn";
@@ -796,7 +796,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Plug-in'leri kapat";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Connectors desactivats";
-            Text[ finnish ] = "Lisдosat pois kдytцstд";
+            Text[ finnish ] = "Lisдosat poissa kдytцstд";
             Text[ thai ] = "аё›аёґаё”аё›аёҐаё±а№ЉаёЃаё­аёґаё™";
         };
 #endif
@@ -820,7 +820,7 @@ Menu MN_READONLY_POPUP
             Text[ polish ] = "Leave Full-Screen Mode";
             Text[ portuguese_brazilian ] = "Leave Full-Screen Mode";
             Text[ japanese ] = "Leave Full-Screen Mode";
-            Text[ korean ] = "Leave Full-Screen Mode";
+            Text[ korean ] = "м „мІґ н™”л©ґ лЄЁл“њ л§€м№Ё";
             Text[ chinese_simplified ] = "Leave Full-Screen Mode";
             Text[ chinese_traditional ] = "Leave Full-Screen Mode";
             Text[ turkish ] = "Leave Full-Screen Mode";
@@ -844,7 +844,7 @@ String STR_EXPORT_GRAFIK_TITLE
     Text [ portuguese ] = "Exportar imagem" ;
     Text [ portuguese_brazilian ] = "Grafik-Export" ;
     Text[ chinese_simplified ] = "иѕ“е‡єе›ѕеЅў";
-    Text[ russian ] = "Экспорт рисунка";
+    Text[ russian ] = "Экспорт графического объекта";
     Text[ polish ] = "Eksport grafiki";
     Text[ japanese ] = "е›ігЃ®г‚Ёг‚Їг‚№гѓќгѓјгѓ€";
     Text[ chinese_traditional ] = "еЊЇе‡єењ–еЅў";
@@ -871,14 +871,14 @@ String STR_CHAIN_OK
     Text [ italian ] = "Per collegare la cornice cliccate con il tasto sinistro del mouse." ;
     Text [ spanish ] = "Pulse el botуn izquierdo del ratуn para vincular las marcos." ;
     Text [ french ] = "Cliquez sur le bouton gauche de la souris pour lier les cadres." ;
-    Text [ dutch ] = "Gebruik de linker muistoets om het kader te koppelen." ;
+    Text [ dutch ] = "Gebruik de linkermuistoets om het kader te koppelen." ;
     Text[ chinese_simplified ] = "иЇ·ж‚ЁйЂљиї‡жЊ‰е‡»йј ж ‡е·¦й”®жќҐиїћжЋҐжЎ†гЂ‚";
     Text[ russian ] = "Нажмите левую клавишу мыши для связи рамки.";
     Text[ polish ] = "Kliknij lewy przycisk myszy, by poі№czyж ramki.";
     Text[ japanese ] = "гѓћг‚¦г‚№гЃ®е·¦г‚ЇгѓЄгѓѓг‚ЇгЃ§гѓ†г‚­г‚№гѓ€жћ гЃЊйЂЈзµђгЃ—гЃѕгЃ™гЂ‚";
     Text[ chinese_traditional ] = "и«‹жЊ‰ж»‘йј е·¦йЌµп№ђйЂЈзµђиЁЉжЎ†гЂ‚";
     Text[ arabic ] = ".ЗдЮС ИЗбТС ЗбГнУС ббгЗжУ бСИШ ЗбЯжЗПС";
-    Text[ dutch ] = "Gebruik de linker muistoets om het kader te koppelen.";
+    Text[ dutch ] = "Gebruik de linkermuistoets om het kader te koppelen.";
     Text[ chinese_simplified ] = "иЇ·ж‚ЁйЂљиї‡жЊ‰е‡»йј ж ‡е·¦й”®жќҐиїћжЋҐжЎ†гЂ‚";
     Text[ greek ] = "РбфЮуфе фп бсйуфесь рлЮкфсп фпх рпнфйкйпэ гйб нб ухндеипэн фб ресйгсЬммбфб.";
     Text[ korean ] = "н”„л €мћ„м—ђ м—°кІ°н•кё° мњ„н•ґ м™јмЄЅ л§€мљ°мЉ¤ лІ„нЉјмќ„ нЃґл¦­н•м‹­м‹њм¤.";
@@ -931,7 +931,7 @@ String STR_CHAIN_IS_IN_CHAIN
     Text [ french ] = "Le cadre cible est dйjа liй." ;
     Text [ dutch ] = "Het doelkader is reeds gekoppeld." ;
     Text[ chinese_simplified ] = "е·Із»Џй“ѕжЋҐз›®ж ‡жЎ†гЂ‚";
-    Text[ russian ] = "Целеавя рамка уже связана.";
+    Text[ russian ] = "Целевая рамка уже связана.";
     Text[ polish ] = "Ramka docelowa jest juї poі№czona.";
     Text[ japanese ] = "з›®жЁ™гЃ®гѓ†г‚­г‚№гѓ€жћ гЃЇгЃ™гЃ§гЃ«йЂЈзµђгЃ•г‚ЊгЃ¦гЃ„гЃѕгЃ™гЂ‚";
     Text[ chinese_traditional ] = "е·Із¶“йЂЈзµђз›®жЁ™ж–№еЎЉгЂ‚";
@@ -960,7 +960,7 @@ String STR_CHAIN_WRONG_AREA
     Text [ french ] = "Le cadre-cible se trouve dans une section ne pouvant pas faire l'objet d'un lien." ;
     Text [ dutch ] = "Het bronkader staat in een bereik waarin geen koppeling mogelijk is." ;
     Text[ chinese_simplified ] = "з›®ж ‡жЎ†е¤„дєЋдёЂдёЄж— жі•й“ѕжЋҐзљ„еЊєеџџгЂ‚";
-    Text[ russian ] = "Целевая рамка находится в области, в которой связь невозможна.";
+    Text[ russian ] = "Целевая рамка находится в области, связь в которой невозможна.";
     Text[ polish ] = "Ramka docelowa znajduje siк w obszarze, w ktуrym niemoїliwe jest poі№czenie.";
     Text[ japanese ] = "з›®жЁ™гЃ®гѓ†г‚­г‚№гѓ€жћ гЃЇйЂЈзµђгЃ§гЃЌгЃЄгЃ„зЇ„е›ІгЃ«гЃ‚г‚ЉгЃѕгЃ™гЂ‚";
     Text[ chinese_traditional ] = "з›®жЁ™иЁЉжЎ†и™•ж–јдёЂеЂ‹з„Ўжі•иЁЉжЎ†зљ„еЌЂеџџгЂ‚";
@@ -987,14 +987,14 @@ String STR_CHAIN_NOT_FOUND
     Text [ italian ] = "Impossibile trovare una cornice di destinazione nella posizione corrente." ;
     Text [ spanish ] = "En la posiciуn actual no se puede encontrar ningъn marco destino." ;
     Text [ french ] = "Aucun cadre cible ne peut кtre trouvй а la position courante." ;
-    Text [ dutch ] = "Op de actuele positie kan geen doelkader worden gevonden." ;
+    Text [ dutch ] = "Op de huidige positie kan geen doelkader worden gevonden." ;
     Text[ chinese_simplified ] = "ењЁеЅ“е‰Ќзљ„дЅЌзЅ®жІЎжњ‰ж‰ѕе€°з›®ж ‡жЎ†гЂ‚";
-    Text[ russian ] = "В текущей позиции целевая рамка необнаружена.";
+    Text[ russian ] = "В текущей позиции целевая рамка не обнаружена.";
     Text[ polish ] = "Przy aktualnej pozycji nie znaleziono ramki docelowej.";
     Text[ japanese ] = "зЏѕдЅЌзЅ®гЃ«з›®жЁ™гЃ®гѓ†г‚­г‚№гѓ€жћ гЃЇгЃ‚г‚ЉгЃѕгЃ›г‚“гЂ‚";
     Text[ chinese_traditional ] = "ењЁз›®е‰Ќзљ„дЅЌзЅ®жІ’жњ‰ж‰ѕе€°з›®жЁ™ж–№еЎЉгЂ‚";
     Text[ arabic ] = ".бЗ нжМП ЯЗПС еПЭ Эн ЗбгжЮЪ ЗбНЗбн";
-    Text[ dutch ] = "Op de actuele positie kan geen doelkader worden gevonden.";
+    Text[ dutch ] = "Op de huidige positie kan geen doelkader worden gevonden.";
     Text[ chinese_simplified ] = "ењЁеЅ“е‰Ќзљ„дЅЌзЅ®жІЎжњ‰ж‰ѕе€°з›®ж ‡жЎ†гЂ‚";
     Text[ greek ] = "Ден еЯнбй дхнбфьн нб всеиеЯ рлбЯуйп рсппсйумпэ уфзн фсЭчпхуб иЭуз.";
     Text[ korean ] = "н„мћ¬мќ мњ„м№м—ђм„њ лЄ©н‘њ н”„л €мћ„мќ„гЂЂм°ѕмќ„м€гЂЂм—†мЉµл‹€л‹¤.";
@@ -1047,7 +1047,7 @@ String STR_CHAIN_SELF
     Text [ french ] = "Une chaine fermйe n'est pas possible." ;
     Text [ dutch ] = "Een gesloten koppeling is niet mogelijk." ;
     Text[ chinese_simplified ] = "дёЂдёЄе°Ѓй—­ејЏзљ„й“ѕжЋҐжЇдёЌеЏЇиѓЅзљ„гЂ‚";
-    Text[ russian ] = "Замкнутая цепь невозможна.";
+    Text[ russian ] = "Невозможна замкнутая цепь.";
     Text[ polish ] = "Zamkniкte і№cze nie jest moїliwe.";
     Text[ japanese ] = "еѕЄз’°гЃ™г‚‹йЂЈзµђгЃЇгЃ§гЃЌгЃѕгЃ›г‚“гЂ‚";
     Text[ chinese_traditional ] = "дёЂеЂ‹е°Ѓй–‰ејЏзљ„йЂЈзµђжЇдёЌеЏЇиѓЅзљ„гЂ‚";
@@ -1161,14 +1161,14 @@ String STR_REDLINE_TABLE
     Text [ italian ] = "Tabella modificata" ;
     Text [ spanish ] = "Tabla modificada" ;
     Text [ french ] = "Tableau modifiй" ;
-    Text [ dutch ] = "Tabel veranderd" ;
+    Text [ dutch ] = "Tabel gewijzigd" ;
     Text[ chinese_simplified ] = "иЎЁж је·Іиў«ж›ґж”№";
     Text[ russian ] = "Таблица изменена";
     Text[ polish ] = "Tabela zmieniona";
     Text[ japanese ] = "иЎЁгЃЇе¤‰ж›ґгЃ•г‚ЊгЃ¦гЃ„гЃѕгЃ™";
     Text[ chinese_traditional ] = "иЎЁж је·Іиў«и®Љж›ґ";
     Text[ arabic ] = "КЫннС ЗбМПжб";
-    Text[ dutch ] = "Tabel veranderd";
+    Text[ dutch ] = "Tabel gewijzigd";
     Text[ chinese_simplified ] = "иЎЁж је·Іиў«ж›ґж”№";
     Text[ greek ] = "ёчпхн гЯней бллбгЭт уфпн рЯнбкб";
     Text[ korean ] = "н‘њк°Ђ л°”лЂЊм—€мЉµл‹€л‹¤.";
@@ -1219,21 +1219,21 @@ String STR_ENDNOTE
     Text [ italian ] = "Nota di chiusura: " ;
     Text [ spanish ] = "Nota final:  " ;
     Text [ french ] = "Note de fin : " ;
-    Text [ dutch ] = "Eindnoot:   " ;
+    Text [ dutch ] = "Eindnoot:" ;
     Text[ chinese_simplified ] = "е°ѕжіЁ: ";
     Text[ russian ] = "Концевая сноска:  ";
     Text[ polish ] = "Przypis koсcowy:  ";
     Text[ japanese ] = "ж–‡жњ«и„љжіЁ: ";
     Text[ chinese_traditional ] = "е°ѕиЁ»: ";
     Text[ arabic ] = "КЪбнЮЗК ОКЗгнЙ: ";
-    Text[ dutch ] = "Eindnoot:   ";
+    Text[ dutch ] = "Eindnoot:";
     Text[ chinese_simplified ] = "е°ѕжіЁ: ";
     Text[ greek ] = "УзмеЯщуз фЭлпхт: ";
     Text[ korean ] = "лЇёмЈј: ";
     Text[ turkish ] = "Son not: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nota final:";
-    Text[ finnish ] = "Loppuhuomautus: ";
+    Text[ finnish ] = "Loppuviite: ";
     Text[ thai ] = "аё­а№‰аёІаё‡аё­аёґаё‡аё—а№‰аёІаёўа№ЂаёЈаё·а№€аё­аё‡: ";
 };
 String STR_FTNNOTE
@@ -1248,14 +1248,14 @@ String STR_FTNNOTE
     Text [ italian ] = "Nota a piи pagina: " ;
     Text [ spanish ] = "Nota al pie:  " ;
     Text [ french ] = "Note de bas de page : " ;
-    Text [ dutch ] = "Voetnoot:  " ;
+    Text [ dutch ] = "Voetnoot:" ;
     Text[ chinese_simplified ] = "жіЁи„љ: ";
     Text[ russian ] = "Сноска:  ";
     Text[ polish ] = "Przypis dolny:   ";
     Text[ japanese ] = "и„љжіЁ: ";
     Text[ chinese_traditional ] = "иЁ»и…і: ";
     Text[ arabic ] = "НжЗФн УЭбнЙ: ";
-    Text[ dutch ] = "Voetnoot:  ";
+    Text[ dutch ] = "Voetnoot:";
     Text[ chinese_simplified ] = "жіЁи„љ: ";
     Text[ greek ] = "ХрпузмеЯщуз: ";
     Text[ korean ] = "к°ЃмЈј: ";
@@ -1272,7 +1272,7 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE [ English ] = "Readonly content may not be changed." ;
     MESSAGE[ english_us ] = "Readonly content cannot be changed.\nNo modifications will be accepted";
     MESSAGE[ portuguese ] = "A selecзгo encontra-se numa posiзгo protegida.\nImpossнvel qualquer modificaзгo.";
-    MESSAGE[ russian ] = "Метка записи или выделение находится в защищенной позиции.\nПоэтому изменения не принимаются.";
+    MESSAGE[ russian ] = "Невозможно изменить параметр \"только для чтения\".\nИзменения не принимаются.";
     MESSAGE[ dutch ] = "De cursor of de selectie bevindt zich op een schrijfbeveiligde positie.\nDe inhoud kan daarom niet worden gewijzigd.";
     MESSAGE[ french ] = "Le contenu du signet ou de la sйlection est en lecture seule.\nAucune modification permise.";
     MESSAGE[ spanish ] = "La marca o selecciуn se encuentra en una posiciуn protegida.\nPor ello no se puede aceptar una modificaciуn.";
@@ -1292,7 +1292,7 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ turkish ] = "Salt okunur bir iзerik deрiюtirilemez.\nYapэlan deрiюiklikler nu nedenle kabul edilmeyecek.";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "La marca o selecciу es troba en una posiciу protegida.\nPer aixт no es pot acceptar una modificaciу.";
-    MESSAGE[ finnish ] = "Vain luku -sisдltцд ei voi muuttaa.\nMuokkauksia ei hyvдksytд";
+    MESSAGE[ finnish ] = "Vain luku -sisдltцд ei voi muuttaa.\nMuutoksia ei hyvдksytд";
     MESSAGE[ thai ] = "а№„аёЎа№€аёЄаёІаёЎаёІаёЈаё–а№Ђаё›аёҐаёµа№€аёўаё™а№Ѓаё›аёҐаё‡а№Ђаё™аё·а№‰аё­аё«аёІа№Ѓаёљаёљаё­а№€аёІаё™аё­аёўа№€аёІаё‡а№Ђаё”аёµаёўаё§\nа№„аёЎа№€аёўаё­аёЎаёЈаё±аёљаёЃаёІаёЈаё”аё±аё”а№Ѓаё›аёҐаё‡а№ЃаёЃа№‰а№„аё‚";
 };
 
