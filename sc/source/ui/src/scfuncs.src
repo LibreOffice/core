@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:30:12 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ѕодсчитывает все €чейки области данных, содержимое которых соответствует услови€м поиска.";
             Text[ polish ] = "Liczy wszystkie komуrki z obszaru danych, ktуrych zawartoЬci odpowiadajє podanym kryteriom wyszukiwania.";
             Text[ japanese ] = "√ё∞јФЌИЌУаВ≈БAМЯНхПрМПВ…НЗВЅВљЊўВћРФВрРФВ¶В№ВЈБB";
-            Text[ chinese_traditional ] = "≠pЇв§@≠”ЄкЃ∆∞ѕ∞м§Ї≤≈¶XіMІд±ш•у™Їјx¶sЃжЉ∆•Ў°C";
+            Text[ chinese_traditional ] = "≠pЇв§@≠”ЄкЃ∆∞ѕ∞м§Ї≤≈¶XЈjіM±ш•у™Їјx¶sЃжЉ∆•Ў°C";
             Text[ arabic ] = " Џѕ яб «бќб«н« «бгжћжѕ… Ён дЎ«ё »н«д«  г« ж«б н  Ён гЌ жн« е« »гЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Telt alle cellen van een gegevensbereik, waarvan de inhoud aan de criteria voldoet.";
             Text[ chinese_simplified ] = "Љ∆Ћг“їЄц эЊЁ«ш”тƒЏЈыЇѕЋ——∞ћхЉюµƒµ•‘™Єс эƒњ°£";
@@ -260,7 +260,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет поле базы данных (столбец) дл€ критериев поиска";
             Text[ polish ] = "Definiuje pole bazy danych (kolumnк) dla kryteriуw wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрВ†ВƒВЌВяВй√ё∞јЌё∞љћ®∞ўƒё(Чс)БB";
-            Text[ chinese_traditional ] = "Іt¶≥іMІд±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
+            Text[ chinese_traditional ] = "Іt¶≥ЈjіM±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
             Text[ arabic ] = "нЌѕѕ Ќёб ё«Џѕ… «б»н«д«  бгЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt het database-veld (kolom) voor de zoekcriteria.";
             Text[ chinese_simplified ] = "÷Єґ®“™µ±„чЋ——∞ћхЉюµƒ эЊЁЅ–°£";
@@ -324,7 +324,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "«адает диапазон €чеек, который содержит услови€ поиска.";
             Text[ polish ] = "Wyznacza zakres komуrek zawierajєcych kryteria wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрК№ВёЊўФЌИЌБB";
-            Text[ chinese_traditional ] = "Іt¶≥іMІд±ш•у™Їјx¶sЃж∞ѕ∞м°C";
+            Text[ chinese_traditional ] = "Іt¶≥ЈjіM±ш•у™Їјx¶sЃж∞ѕ∞м°C";
             Text[ arabic ] = "дЎ«ё «бќб«н« «б–н нЌ жн Џбм гЏ«нн— ё«Џѕ… «б»н«д« .";
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "Їђ”–Ћ——∞ћхЉюµƒµ•‘™Єс«ш”т°£";
@@ -360,7 +360,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ѕодсчитывает все заполненные €чейки области данных, содержимое которых соответствует услови€м поиска.";
             Text[ polish ] = "Liczy wszystkie niepuste komуrki obszaru danych, ktуrych zawartoЬci odpowiadajє kryteriom wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрЦЮВљВЈУаЧeВћ√ё∞јФЌИЌВрСќПџВ…БAЛуФТВ≈В»ВҐВЈВ„ВƒВћЊўВћРФВрРФВ¶В№ВЈБB";
-            Text[ chinese_traditional ] = "≠pЇв§@≠”ЄкЃ∆∞ѕ∞м§Ї≤≈¶XіMІд±ш•у™Ї§£ђO™≈•’™Їјx¶sЃжЉ∆•Ў°C";
+            Text[ chinese_traditional ] = "≠pЇв§@≠”ЄкЃ∆∞ѕ∞м§Ї≤≈¶XЈjіM±ш•у™Ї§£ђO™≈•’™Їјx¶sЃжЉ∆•Ў°C";
             Text[ arabic ] = " Џѕ яб «бќб«н« џн— «бЁ«—џ… «бгжћжѕ… Ён дЎ«ё »н«д«  г«° ж«б н  Ён гЌ жн« е« »гЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Telt alle niet-lege cellen van een gegevensbereik waarvan de inhoud aan de zoekcriteria voldoet.";
             Text[ chinese_simplified ] = "Љ∆Ћг“їЄц эЊЁ«ш”тƒЏЈыЇѕЋ——∞ћхЉюµƒ«“≤ї «њ’∞„µƒµ•‘™Єс эƒњ°£";
@@ -495,7 +495,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет поле базы данных (столбец) дл€ критериев поиска.";
             Text[ polish ] = "Definiuje pole bazy danych (kolumnк) dla kryteriуw wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрВ†ВƒВЌВяВй√ё∞јЌё∞љћ®∞ўƒё(Чс)БB";
-            Text[ chinese_traditional ] = "Іt¶≥іMІд±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
+            Text[ chinese_traditional ] = "Іt¶≥ЈjіM±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
             Text[ arabic ] = "нЌѕѕ Ќёб ё«Џѕ… «б»н«д«  бгЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt het database-veld (kolom) voor de zoekcriteria.";
             Text[ chinese_simplified ] = "÷Єґ®“™µ±„чЋ——∞ћхЉюµƒ эЊЁЅ–°£";
@@ -559,7 +559,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "«адает диапазон €чеек, который содержит услови€ поиска.";
             Text[ polish ] = "Wyznacza zakres komуrek zawierajєcych kryteria wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрК№ВёЊўФЌИЌБB";
-            Text[ chinese_traditional ] = "Іt¶≥іMІд±ш•у™Їјx¶sЃж∞ѕ∞м°C";
+            Text[ chinese_traditional ] = "Іt¶≥ЈjіM±ш•у™Їјx¶sЃж∞ѕ∞м°C";
             Text[ arabic ] = "дЎ«ё «бќб«н« «б–н нЌ жн Џбм гЏ«нн— ё«Џѕ… «б»н«д« .";
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "Їђ”–Ћ——∞ћхЉюµƒµ•‘™Єс«ш”т°£";
@@ -595,7 +595,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќбразует среднее значение всех €чеек одного диапазона данных, содержимое которых соответствует критери€м поиска.";
             Text[ polish ] = "Wyznacza Ьredniє wszystkich komуrek zakresu danych, zawartoЬci ktуrych odpowiada kryteriom wyszukiwania.";
             Text[ japanese ] = "√ё∞јФЌИЌУаВ≈БAМЯНхПрМПВ…НЗВЅВљВЈВ„ВƒВћЊўВћХљЛѕТlВрХ‘ВµВ№ВЈБB";
-            Text[ chinese_traditional ] = "≠pЇв§@≠”ЄкЃ∆∞ѕ∞м§§≤≈¶XіMІд±ш•у™ЇЉ∆ЊЏ™Ї•≠І°≠»°C";
+            Text[ chinese_traditional ] = "≠pЇв§@≠”ЄкЃ∆∞ѕ∞м§§≤≈¶XЈjіM±ш•у™ЇЉ∆ЊЏ™Ї•≠І°≠»°C";
             Text[ arabic ] = " яжд «бж”Ў «бЌ”«»н бяб «бќб«н« «бгжћжѕ… дЎ«ё »н«д«  г« ж«б н  Ён гЌ жн« е« »гЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Berekent de gemiddelde waarde van alle cellen van een gegevensbereik waarvan de inhoud overeenkomt met de zoekcriteria.";
             Text[ chinese_simplified ] = "Љ∆Ћг“їЄц эЊЁ«ш”т÷–ЈыЇѕЋ——∞ћхЉюµƒ эЊЁµƒ∆љЊщ÷µ°£";
@@ -688,7 +688,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ portuguese ] = "Campo" ;
             Text [ finnish ] = "Datenbankfeld" ;
             Text [ danish ] = "Databasefelt" ;
-            Text [ french ] = "Champ de B.D." ;
+            Text [ french ] = "Champ de BD" ;
             Text [ swedish ] = "databasfдlt" ;
             Text [ dutch ] = "Database-veld" ;
             Text [ spanish ] = "Campo de base de datos" ;
@@ -730,7 +730,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет поле базы данных (столбец) дл€ критериев поиска.";
             Text[ polish ] = "Definiuje pole bazy danych (kolumnк) dla kryteriуw wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрВ†ВƒВЌВяВй√ё∞јЌё∞љћ®∞ўƒё(Чс)БB";
-            Text[ chinese_traditional ] = "Іt¶≥іMІд±ш•у™ЇЄкЃ∆Ѓw¶WЇў©ќƒжЄє°C";
+            Text[ chinese_traditional ] = "Іt¶≥ЈjіM±ш•у™ЇЄкЃ∆Ѓw¶WЇў©ќƒжЄє°C";
             Text[ arabic ] = "нЌѕѕ Ќёб ё«Џѕ… «б»н«д«  бгЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt het database-veld (kolom) voor de zoekcriteria.";
             Text[ chinese_simplified ] = "Їђ”–Ћ——∞ћхЉюµƒ эЊЁњв√ы≥∆їтЅ–Ї≈°£";
@@ -794,7 +794,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "«адает диапазон €чеек, который содержит услови€ поиска.";
             Text[ polish ] = "Wyznacza zakres komуrek zawierajєcych kryteria wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрК№ВёЊўФЌИЌБB";
-            Text[ chinese_traditional ] = "Іt¶≥іMІд±ш•у™Їјx¶sЃж∞ѕ∞м°C";
+            Text[ chinese_traditional ] = "Іt¶≥ЈjіM±ш•у™Їјx¶sЃж∞ѕ∞м°C";
             Text[ arabic ] = "дЎ«ё «бќб«н« «б–н нЌ жн Џбм гЏ«нн— ё«Џѕ… «б»н«д« .";
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "Їђ”–Ћ——∞ћхЉюµƒµ•‘™Єс«ш”т°£";
@@ -830,7 +830,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "¬озвращает содержимое €чейки диапазона данных, содержимое которых соответствует критери€м поиска.";
             Text[ polish ] = "OkreЬla zawartoЬж pierwszej komуrki obszaru danych, ktуra odpowiada kryteriom wyszukiwania.";
             Text[ japanese ] = "√ё∞јФЌИЌУаВ≈БAМЯНхПрМПВ…НЗВЅВљЊўВћУаЧeВрХ‘ВµВ№ВЈБB";
-            Text[ chinese_traditional ] = "љT©w§@≠”≤≈¶XіMІд±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м™Ї≤ƒ§@≠”јx¶sЃж™Ї§ЇЃe°C";
+            Text[ chinese_traditional ] = "љT©w§@≠”≤≈¶XЈjіM±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м™Ї≤ƒ§@≠”јx¶sЃж™Ї§ЇЃe°C";
             Text[ arabic ] = " ” ќ—ћ гЌ жм ќбн… дЎ«ё »н«д«   Ён »гЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Geeft de inhoud van de cel in een gegevensbereik waarvan de inhoud voldoet aan de zoekcriteria.";
             Text[ chinese_simplified ] = "»Јґ®“їЄц эЊЁ«ш”тƒЏЈыЇѕЋ——∞ћхЉюµƒµЏ“їЄцµ•‘™ЄсµƒƒЏ»Ё°£";
@@ -965,7 +965,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет поле базы данных (столбец) дл€ критериев поиска.";
             Text[ polish ] = "Definiuje pole bazy danych (kolumnк) dla kryteriуw wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрВ†ВƒВЌВяВй√ё∞јЌё∞љћ®∞ўƒё(Чс)БB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
             Text[ arabic ] = "нЌѕѕ Ќёб ё«Џѕ… «б»н«д«  бгЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt het database-veld (kolom) voor de zoekcriteria.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒ эЊЁњв«ш”т(Ѕ–)°£";
@@ -1029,7 +1029,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "«адает диапазон €чеек, который содержит услови€ поиска.";
             Text[ polish ] = "Wyznacza zakres komуrek zawierajєcych kryteria wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрК№ВёЊўФЌИЌБB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™Їјx¶sЃж∞ѕ∞м°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™Їјx¶sЃж∞ѕ∞м°C";
             Text[ arabic ] = "дЎ«ё «бќб«н« «б–н нЌ жн Џбм гЏ«нн— ё«Џѕ… «б»н«д« .";
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒµ•‘™Єс«ш”т°£";
@@ -1065,7 +1065,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет максимальное значение всех €чеек диапазона данных, содержимое которых соответствует критери€м поиска.";
             Text[ polish ] = "OkreЬla maksimum wszystkich komуrek obszaru danych, ktуrych zawartoЬci odpowiadajє kryteriom wyszukiwania.";
             Text[ japanese ] = "√ё∞јФЌИЌУаВ≈БAМЯНхПрМПВ…НЗВЅВљЊўВћН≈НВТlВрХ‘ВµВ№ВЈБB";
-            Text[ chinese_traditional ] = "Ід•XЉ∆ЊЏ∞ѕ∞м§§≤≈¶XіMІд±ш•у™Їјx¶sЃж™Ї≥ћ§jЉ∆≠»°C";
+            Text[ chinese_traditional ] = "Ід•XЉ∆ЊЏ∞ѕ∞м§§≤≈¶XЈjіM±ш•у™Їјx¶sЃж™Ї≥ћ§jЉ∆≠»°C";
             Text[ arabic ] = " Ќѕѕ «бЌѕ «б√ё’м бяб ќб«н« дЎ«ё »н«д«  г«  Ён гЌ жн« е« »гЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt de maximumwaarde van alle cellen van een gegevensbereik waarvan de inhoud voldoet aan de zoekcriteria.";
             Text[ chinese_simplified ] = "’“≥ц эЊЁ«ш”т÷–ЈыЇѕЋ——∞ћхЉюµƒµ•‘™Єсµƒ„оіу э÷µ°£";
@@ -1200,7 +1200,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет поле базы данных (столбец) дл€ критериев поиска.";
             Text[ polish ] = "Definiuje pole bazy danych (kolumnк) dla kryteriуw wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрВ†ВƒВЌВяВй√ё∞јЌё∞љћ®∞ўƒё(Чс)БB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
             Text[ arabic ] = "нЌѕѕ Ќёб ё«Џѕ… «б»н«д«  бгЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt het database-veld (kolom) voor de zoekcriteria.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒ эЊЁњв«ш”т(Ѕ–)°£";
@@ -1264,7 +1264,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "«адает диапазон €чеек, который содержит услови€ поиска.";
             Text[ polish ] = "Wyznacza zakres komуrek zawierajєcych kryteria wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрК№ВёЊўФЌИЌБB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™Їјx¶sЃж∞ѕ∞м°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™Їјx¶sЃж∞ѕ∞м°C";
             Text[ arabic ] = "дЎ«ё «бќб«н« «б–н нЌ жн Џбм гЏ«нн— ё«Џѕ… «б»н«д« .";
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒµ•‘™Єс«ш”т°£";
@@ -1300,7 +1300,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет минимальное значение всех €чеек диапазона данных, содержимое которых соответствует критери€м поиска.";
             Text[ polish ] = "OkreЬla minimum wszystkich komуrek obszaru danych, ktуrych zawartoЬci odpowiadajє kryteriom wyszukiwania.";
             Text[ japanese ] = "√ё∞јФЌИЌУаВ≈БAМЯНхПрМПВ…НЗВЅВљЊўВћН≈ТбТlВрХ‘ВµВ№ВЈБB";
-            Text[ chinese_traditional ] = "Ід•XЄкЃ∆∞ѕ∞м§§≤≈¶XіMІд±ш•у™Їјx¶sЃж§§™Ї≥ћ§pЉ∆≠»°C";
+            Text[ chinese_traditional ] = "Ід•XЄкЃ∆∞ѕ∞м§§≤≈¶XЈjіM±ш•у™Їјx¶sЃж§§™Ї≥ћ§pЉ∆≠»°C";
             Text[ arabic ] = " Ќѕѕ «бЌѕ «б√ѕдм бяб ќб«н« дЎ«ё »н«д«  г«  Ён гЌ жн« е« »гЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt de minimumwaarde van alle cellen van een gegevensbereik, waarvan de inhoud aan de criteria voldoet.";
             Text[ chinese_simplified ] = "’“≥ц эЊЁ«ш”т÷–ЈыЇѕЋ——∞ћхЉюµƒµ•‘™Єс÷–µƒ„о–° э÷µ°£";
@@ -1435,7 +1435,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет поле базы данных (столбец) дл€ критериев поиска.";
             Text[ polish ] = "Definiuje pole bazy danych (kolumnк) dla kryteriуw wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрВ†ВƒВЌВяВй√ё∞јЌё∞љћ®∞ўƒё(Чс)БB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
             Text[ arabic ] = "нЌѕѕ Ќёб ё«Џѕ… «б»н«д«  бгЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt het database-veld (kolom) voor de criteria.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒ эЊЁњв«ш”т(Ѕ–)°£";
@@ -1499,7 +1499,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "«адает диапазон €чеек, который содержит услови€ поиска.";
             Text[ polish ] = "Wyznacza zakres komуrek zawierajєcych kryteria wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрК№ВёЊўФЌИЌБB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™Їјx¶sЃж∞ѕ∞м°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™Їјx¶sЃж∞ѕ∞м°C";
             Text[ arabic ] = "дЎ«ё «бќб«н« «б–н нЌ жн Џбм гЏ«нн— ё«Џѕ… «б»н«д« .";
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒµ•‘™Єс«ш”т°£";
@@ -1535,7 +1535,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ѕеремножает все €чейки диапазона данных, содержимое которых соответствует критери€м поиска.";
             Text[ polish ] = "Mnoњy wszystkie komуrki zakresu danych, ktуrych zawartoЬci odpowiadajє kryteriom wyszukiwania.";
             Text[ japanese ] = "√ё∞јФЌИЌУаВ≈БAМЯНхПрМПВ…НЗВЅВљЊўВћРѕВрХ‘ВµВ№ВЈБB";
-            Text[ chinese_traditional ] = "§@≠”Љ∆ЊЏ∞ѕ∞м§Ї≤≈¶XіMІд±ш•у™Ї©“¶≥јx¶sЃж™Ї≠Љњn°C";
+            Text[ chinese_traditional ] = "§@≠”Љ∆ЊЏ∞ѕ∞м§Ї≤≈¶XЈjіM±ш•у™Ї©“¶≥јx¶sЃж™Ї≠Љњn°C";
             Text[ arabic ] = " ÷—» ёнг яб ќб«н« дЎ«ё »н«д«  г«  Ён »гЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Vermengvuldigt alle cellen in een gegevensbereik waarvan de inhoud voldoet aan de zoekcriteria.";
             Text[ chinese_simplified ] = "“їЄц эЊЁ«ш”тƒЏЈыЇѕЋ——∞ћхЉюµƒЋщ”–µ•‘™Єсµƒ≥Ћїэ°£";
@@ -1670,7 +1670,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет поле базы данных (столбец) дл€ критериев поиска.";
             Text[ polish ] = "Definiuje pole bazy danych (kolumnк) dla kryteriуw wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрВ†ВƒВЌВяВй√ё∞јЌё∞љћ®∞ўƒё(Чс)БB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
             Text[ arabic ] = "нЌѕѕ Ќёб ё«Џѕ… «б»н«д«  бгЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt het database-veld (kolom) voor de zoekcriteria.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒ эЊЁњв«ш”т(Ѕ–)°£";
@@ -1734,7 +1734,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "«адает диапазон €чеек, который содержит услови€ поиска.";
             Text[ polish ] = "Podaje zakres komуrek z kryteriami wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрК№ВёЊўФЌИЌБB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•ујx¶sЃж∞ѕ∞м°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•ујx¶sЃж∞ѕ∞м°C";
             Text[ arabic ] = "дЎ«ё «бќб«н« «б–н нЌ жн Џбм гЏ«нн— ё«Џѕ… «б»н«д« .";
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒµ•‘™Єс«ш”т°£";
@@ -1770,7 +1770,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет стандартное отклонение всех €чеек диапазона данных, содержимое которых соответствует критери€м поиска.";
             Text[ polish ] = "OkreЬla odchylenie standardowe wszystkich komуrek obszaru danych, ktуrych zawartoЬci odpowiadajє kryteriom wyszukiwania.";
             Text[ japanese ] = "√ё∞јФЌИЌУаВ≈БAМЯНхПрМПВ…НЗВЅВљЊўВћХWПАХќНЈВрХ‘ВµВ№ВЈБB";
-            Text[ chinese_traditional ] = "¶фЇв§@≠”Љ∆ЊЏ∞ѕ∞м§Ї≤≈¶XіMІд±ш•у™Ї©“¶≥јx¶sЃж§§Љ∆ЊЏ™ЇЉ–Ј«∞ЊЃt°C";
+            Text[ chinese_traditional ] = "¶фЇв§@≠”Љ∆ЊЏ∞ѕ∞м§Ї≤≈¶XЈjіM±ш•у™Ї©“¶≥јx¶sЃж§§Љ∆ЊЏ™ЇЉ–Ј«∞ЊЃt°C";
             Text[ arabic ] = " Ќѕѕ «б«дЌ—«Ё «бгЏн«—н бяб ќб«н« дЎ«ё »н«д«  г«° ж«б н  Ён »гЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt de standaarddeviatievan alle cellen in een gegevensbereik, waarvan de inhoud voldoet aan de criteria.";
             Text[ chinese_simplified ] = "єјЋг“їЄц эЊЁ«ш”тƒЏЈыЇѕЋ——∞ћхЉюµƒЋщ”–µ•‘™Єс÷–\n эЊЁµƒ±к„Љ∆Ђ≤о°£";
@@ -1905,7 +1905,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет поле базы данных (столбец) дл€ критериев поиска.";
             Text[ polish ] = "Definiuje pole bazy danych (kolumnк) dla kryteriуw wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрВ†ВƒВЌВяВй√ё∞јЌё∞љћ®∞ўƒё(Чс)БB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
             Text[ arabic ] = "нЌѕѕ Ќёб ё«Џѕ… «б»н«д«  бгЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt het database-veld (kolom) voor de zoekcriteria.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒ эЊЁњв«ш”т(Ѕ–)°£";
@@ -1969,7 +1969,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "«адает диапазон €чеек, который содержит услови€ поиска.";
             Text[ polish ] = "Wyznacza zakres komуrek odpowiadajєcych kryteriom wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрК№ВёЊўФЌИЌБB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™Їјx¶sЃж∞ѕ∞м°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™Їјx¶sЃж∞ѕ∞м°C";
             Text[ arabic ] = "дЎ«ё «бќб«н« «б–н нЌ жн Џбм гЏ«нн— ё«Џѕ… «б»н«д« .";
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒµ•‘™Єс«ш”т°£";
@@ -2005,7 +2005,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет стандартное отклонение генеральной совокупности всех €чеек диапазона данных, содержимое которых соответствует критери€м поиска.";
             Text[ polish ] = "Wyznacza odchylenie standardowe ewent.populacjк komуrek obszaru danych, ktуrych zawartoЬci odpowiadajє kryteriom wyszukiwania.";
             Text[ japanese ] = "√ё∞јФЌИЌУаВ≈БAМЯНхПрМПВ…НЗВЅВљЊўВћХкПWТcВрКоПАВ∆ВµВљХWПАХќНЈВрХ‘ВµВ№ВЈБB";
-            Text[ chinese_traditional ] = "≠pЇв§@≠”Љ∆ЊЏ∞ѕ∞м§Ї≤≈¶XіMІд±ш•у™Ї©“¶≥јx¶sЃж§§Љ∆ЊЏ™ЇЅ`≈йЉ–Ј«∞ЊЃt°C";
+            Text[ chinese_traditional ] = "≠pЇв§@≠”Љ∆ЊЏ∞ѕ∞м§Ї≤≈¶XЈjіM±ш•у™Ї©“¶≥јx¶sЃж§§Љ∆ЊЏ™ЇЅ`≈йЉ–Ј«∞ЊЃt°C";
             Text[ arabic ] = " Ќѕѕ «б«дЌ—«Ё «бгЏн«—н «бг Џбё »«бгћ гЏ »√ябге «” д«ѕ«р бяб ќб«н« дЎ«ё »н«д«   Ён гЌ жн« е« »гЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Berekent de standaarddeviatie m.b.t. de hele populatie van de cellen van een gegevensvbereik, waarvan de inhoud aan de criteria voldoet.";
             Text[ chinese_simplified ] = "Љ∆Ћг“їЄц эЊЁ«ш”тƒЏЈыЇѕЋ——∞ћхЉюµƒЋщ”–µ•‘™Єс÷– эЊЁµƒ„№ће±к„Љ∆Ђ≤о°£";
@@ -2140,7 +2140,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет поле базы данных (столбец) дл€ критериев поиска.";
             Text[ polish ] = "Definiuje pole bazy danych (kolumnк) dla kryteriуw wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрВ†ВƒВЌВяВй√ё∞јЌё∞љћ®∞ўƒё(Чс)БB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
             Text[ arabic ] = "нЌѕѕ Ќёб ё«Џѕ… «б»н«д«  бгЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt het database-veld (kolom) voor de zoekcriteria.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒ эЊЁњв«ш”т(Ѕ–)°£";
@@ -2204,7 +2204,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "«адает диапазон €чеек, который содержит услови€ поиска.";
             Text[ polish ] = "Wyznacza zakres komуrek zawierajєcych kryteria wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрК№ВёЊўФЌИЌБB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™Їјx¶sЃж∞ѕ∞м°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™Їјx¶sЃж∞ѕ∞м°C";
             Text[ arabic ] = "дЎ«ё «бќб«н« «б–н нЌ жн Џбм гЏ«нн— ё«Џѕ… «б»н«д« .";
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒµ•‘™Єс«ш”т°£";
@@ -2240,7 +2240,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "—уммирует все €чейки диапазона данных, содержимое которых соответствует критери€м поиска.";
             Text[ polish ] = "Dodaje zawartoЬci wszystkich komуrek, ktуrych treЬж odpowiada kryteriom wyszukiwania.";
             Text[ japanese ] = "√ё∞јФЌИЌУаВ≈БAМЯНхПрМПВ…НЗВЅВљЊўВћНЗМvВрХ‘ВµВ№ВЈБB";
-            Text[ chinese_traditional ] = "Љ∆ЊЏ∞ѕ∞м§Ї≤≈¶XіMІд±ш•у™Ї©“¶≥јx¶sЃж§§™ЇЉ∆¶r§І©M°C";
+            Text[ chinese_traditional ] = "Љ∆ЊЏ∞ѕ∞м§Ї≤≈¶XЈjіM±ш•у™Ї©“¶≥јx¶sЃж§§™ЇЉ∆¶r§І©M°C";
             Text[ arabic ] = " ћгЏ гЌ жн«  яб ќб«н« дЎ«ё »н«д«  г«  Ён »гЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Berekent de som van alle veld waarden van een gegevensbereik die aan de zoekcriteria voldoen.";
             Text[ chinese_simplified ] = " эЊЁ«ш”тƒЏЈыЇѕЋ——∞ћхЉюµƒЋщ”–µ•‘™Єс÷–µƒ э„÷÷ЃЇЌ°£";
@@ -2375,7 +2375,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет поле базы данных (столбец) дл€ критериев поиска.";
             Text[ polish ] = "Definiuje pole bazy danych (kolumnк) dla kryteriуw wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрВ†ВƒВЌВяВй√ё∞јЌё∞љћ®∞ўƒё(Чс)БB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
             Text[ arabic ] = "нЌѕѕ Ќёб ё«Џѕ… «б»н«д«  бгЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt het database-veld (kolom) voor de zoekcritera.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒ эЊЁњв«ш”т(Ѕ–)°£";
@@ -2439,7 +2439,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "«адает диапазон €чеек, который содержит услови€ поиска.";
             Text[ polish ] = "Wyznacza zakres komуrek zawierajєcych kryteria wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрК№ВёЊўФЌИЌБB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™Їјx¶sЃж∞ѕ∞м°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™Їјx¶sЃж∞ѕ∞м°C";
             Text[ arabic ] = "дЎ«ё «бќб«н« «б–н нЌ жн Џбм гЏ«нн— ё«Џѕ… «б»н«д« .";
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒµ•‘™Єс«ш”т°£";
@@ -2475,7 +2475,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет дисперсию всех €чеек диапазона данных, содержимое которых соответствует критери€м поиска.";
             Text[ polish ] = "OkreЬla wariancjк wszystkich komуrek obszaru danych, ktуrych zawartoЬci odpowiadajє podanym kryteriom wyszukiwania.";
             Text[ japanese ] = "√ё∞јФЌИЌУаВ≈БAМЯНхПрМПВ…НЗВЅВљЊўВћХ™ОUВрХ‘ВµВ№ВЈБB";
-            Text[ chinese_traditional ] = "¶фЇв§@≠”Љ∆ЊЏ∞ѕ∞м§Ї≤≈¶XіMІд±ш•у™Ї©“¶≥јx¶sЃж§§Љ∆ЊЏ™Ї§иЃt°C";
+            Text[ chinese_traditional ] = "¶фЇв§@≠”Љ∆ЊЏ∞ѕ∞м§Ї≤≈¶XЈjіM±ш•у™Ї©“¶≥јx¶sЃж§§Љ∆ЊЏ™Ї§иЃt°C";
             Text[ arabic ] = " Ќѕѕ  »«нд яб ќб«н« дЎ«ё »н«д«  г«  Ён гЌ жн« е« »гЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt de variantie van alle cellen van een gegevensbereik, waarvan de inhoud aan de zoekcriteria voldoet.";
             Text[ chinese_simplified ] = "єјЋг“їЄц эЊЁ«ш”тƒЏЈыЇѕЋ——∞ћхЉюµƒЋщ”–µ•‘™Єс÷– эЊЁµƒЈљ≤о°£";
@@ -2610,7 +2610,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет поле базы данных (столбец) дл€ критериев поиска.";
             Text[ polish ] = "Definiuje pole bazy danych (kolumnк) dla kryteriуw wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрВ†ВƒВЌВяВй√ё∞јЌё∞љћ®∞ўƒё(Чс)БB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
             Text[ arabic ] = "нЌѕѕ Ќёб ё«Џѕ… «б»н«д«  бгЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt het database-veld (kolom) voor de zoekcriteria.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒ эЊЁњв«ш”т(Ѕ–)°£";
@@ -2674,7 +2674,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "«адает диапазон €чеек, который содержит услови€ поиска.";
             Text[ polish ] = "Wyznacza zakres komуrek zawierajєcych kryteria wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрК№ВёЊўФЌИЌБB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™Їјx¶sЃж∞ѕ∞м°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™Їјx¶sЃж∞ѕ∞м°C";
             Text[ arabic ] = "дЎ«ё «бќб«н« «б–н нЌ жн Џбм гЏ«нн— ё«Џѕ… «б»н«д« .";
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒµ•‘™Єс«ш”т°£";
@@ -2710,7 +2710,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет дисперсию генеральной совокупности всех €чеек диапазона данных, содержимое которых соответствует критери€м поиска.";
             Text[ polish ] = "OkreЬla wariancjк lub populacjк wszystkich komуrek obszaru danych, ktуrych zawartoЬci odpowiadajє podanym kryteriom.";
             Text[ japanese ] = "√ё∞јФЌИЌУаВ≈БAМЯНхПрМПВ…НЗВЅВљЊўВћХкПWТcВрКоПАВ∆ВµВљХ™ОUВрХ‘ВµВ№ВЈБB";
-            Text[ chinese_traditional ] = "≠pЇв§@≠”Љ∆ЊЏ∞ѕ∞м§Ї≤≈¶XіMІд±ш•у™Ї©“¶≥јx¶sЃж§§Љ∆ЊЏ™ЇЅ`≈й§иЃt°C";
+            Text[ chinese_traditional ] = "≠pЇв§@≠”Љ∆ЊЏ∞ѕ∞м§Ї≤≈¶XЈjіM±ш•у™Ї©“¶≥јx¶sЃж§§Љ∆ЊЏ™ЇЅ`≈й§иЃt°C";
             Text[ arabic ] = " Ќ”»  »«нд «бгћ гЏ »√ягбе «” д«ѕ«р ≈бм яб ќб«н« дЎ«ё »н«д«  г«  Ён гЌ жн« е« »гЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt de variantie m.b.t. de hele populatie van alle cellen van een gegevensbereik, waarvan de inhoud aan de zoekcriteria voldoet.";
             Text[ chinese_simplified ] = "Љ∆Ћг“їЄц эЊЁ«ш”тƒЏЈыЇѕЋ——∞ћхЉюµƒЋщ”–µ•‘™Єс÷– эЊЁµƒ„№ћеЈљ≤о°£";
@@ -2845,7 +2845,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќпредел€ет поле базы данных (столбец) дл€ критериев поиска.";
             Text[ polish ] = "Definiuje pole bazy danych (kolumnк) dla kryteriуw wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрВ†ВƒВЌВяВй√ё∞јЌё∞љћ®∞ўƒё(Чс)БB";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™ЇЄкЃ∆Ѓw∞ѕ∞м(ƒж)°C";
             Text[ arabic ] = "нЌѕѕ Ќёб ё«Џѕ… «б»н«д«  бгЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Bepaalt het database-veld (kolom) voor de zoekcriteria.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒ эЊЁњв«ш”т(Ѕ–)°£";
@@ -2909,7 +2909,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "«адает диапазон €чеек, который содержит услови€ поиска.";
             Text[ polish ] = "Podaje zakres komуrek zawierajєcych kryteria wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрК№ВёЊўФЌИЌ";
-            Text[ chinese_traditional ] = "љT©wІt¶≥іMІд±ш•у™Їјx¶sЃж∞ѕ∞м°C";
+            Text[ chinese_traditional ] = "љT©wІt¶≥ЈjіM±ш•у™Їјx¶sЃж∞ѕ∞м°C";
             Text[ arabic ] = "дЎ«ё «бќб«н« «б–н нЌ жн Џбм гЏ«нн— ё«Џѕ… «б»н«д« .";
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "»Јґ®Їђ”–Ћ——∞ћхЉюµƒµ•‘™Єс«ш”т°£";
@@ -14863,7 +14863,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ƒиапазон €чеек, к которому примен€ютс€ критерии.";
             Text[ polish ] = "Zakres komуrek, do ktуrego naleњy zastosowaж kryteria.";
             Text[ japanese ] = "ПрМПВрУЦВƒВЌВяВйФЌИЌ";
-            Text[ chinese_traditional ] = "±ƒ•ќіMІд±ш•у™Їјx¶sЃж∞ѕ∞м°C";
+            Text[ chinese_traditional ] = "±ƒ•ќЈjіM±ш•у™Їјx¶sЃж∞ѕ∞м°C";
             Text[ arabic ] = "дЎ«ё «бќб«н« «бг—«ѕ  Ў»нё «бгЏ«нн— Џбне.";
             Text[ dutch ] = "Bereik waarop de criteria worden toegepast.";
             Text[ chinese_simplified ] = "≤…”√Ћ——∞ћхЉюµƒµ•‘™Єс«ш”т°£";
@@ -14927,7 +14927,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ќбласть €чейки, в которой заданы критерии поиска.";
             Text[ polish ] = "Zakres komуrek, w ktуrym wyznaczone zostanє kryteria wyszukiwania.";
             Text[ japanese ] = "МЯНхПрМПВрУЦВƒВЌВяВйЊўФЌИЌБB";
-            Text[ chinese_traditional ] = "≥QЂь©w±ƒ•ќіMІд±ш•у™Їјx¶sЃж∞ѕ∞м°C";
+            Text[ chinese_traditional ] = "≥QЂь©w±ƒ•ќЈjіM±ш•у™Їјx¶sЃж∞ѕ∞м°C";
             Text[ arabic ] = "дЎ«ё «бќб«н« «б–н нжћѕ »е гЏ«нн— «б»ЌЋ.";
             Text[ dutch ] = "Cellenbereik waarin de zoekcriteria zijn aangegeven.";
             Text[ chinese_simplified ] = "±ї÷Єґ®≤…”√—∞’“ћхЉюµƒµ•‘™Єс«ш”т°£";
@@ -37729,7 +37729,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ russian ] = "ѕоиск по строкам и ссылка на €чейки, наход€щиес€ снизу.";
             Text[ polish ] = "Wyszukiwanie poziome i odsy≥acz do komуrek powyњej i poniњej.";
             Text[ japanese ] = "НsВ≤В∆В…МЯНхВµБAОwТиВµВљНsВћЊўОQП∆ВрПгТ[В∆ВµВƒЙЇВрМЯНхВµВ№ВЈБB";
-            Text[ chinese_traditional ] = "§ф•≠§и¶VіMІдђY§@јx¶sЃж®√§ё•ќ®д§U§и™Їјx¶sЃж°C";
+            Text[ chinese_traditional ] = "§ф•≠§и¶VЈjіMђY§@јx¶sЃж®√§ё•ќ®д§U§и™Їјx¶sЃж°C";
             Text[ arabic ] = "»ЌЋ √Ёён ж≈‘«—… ≈бм «бќб«н« «бгжћжѕ… »«б√”Ёб.";
             Text[ dutch ] = "Horizontaal zoeken en verwijzen naar de zich daaronder bevindende cellen.";
             Text[ chinese_simplified ] = "ЋЃ∆љЈљѕтЋ——∞ƒ≥Єцµ•‘™Єс≤Ґ“э”√∆дѕ¬Јљµƒµ•‘™Єс°£";
@@ -37864,7 +37864,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ russian ] = "ћассив или диапазон, в котором производитс€ поиск данных.";
             Text[ polish ] = "Macierz lub obszar dla odsy≥acza.";
             Text[ japanese ] = "ЦЏУIВћ√ё∞јВ™К№В№ВкВйФЌИЌБB";
-            Text[ chinese_traditional ] = "ђOѓx∞}©ќ•ќ®”іMІдЉ∆ЊЏ™Ї∞ѕ∞м°C";
+            Text[ chinese_traditional ] = "ђOѓx∞}©ќ•ќ®”∞—Ј”Љ∆ЊЏ™Ї∞ѕ∞м°C";
             Text[ arabic ] = "’ЁнЁ √ж дЎ«ё нх»ЌЋ Ёне Џд «б»н«д« .";
             Text[ dutch ] = "De matrix of het bereik voor de verwijzing.";
             Text[ chinese_simplified ] = " «ЊЎ’уїт”√јіЋ——∞ эЊЁµƒ«ш”т°£";
@@ -38099,7 +38099,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ russian ] = "«начение, которое необходимо найти в первом столбце.";
             Text[ polish ] = "Wyszukiwana wartoЬж w pierwszej kolumnie macierzy.";
             Text[ japanese ] = "ОwТиВµВљЧсВ≈МЯНхВЈВйТlБB";
-            Text[ chinese_traditional ] = "≠n¶bЉ∆ЊЏ≤’™Ї≤ƒ§@¶C§§іMІд™ЇЉ∆≠»°C";
+            Text[ chinese_traditional ] = "≠n¶bЉ∆ЊЏ≤’™Ї≤ƒ§@¶C§§ЈjіM™ЇЉ∆≠»°C";
             Text[ arabic ] = "«бёнг… «бг—«ѕ «б»ЌЋ Џде« Ён «бЏгжѕ «б√жб.";
             Text[ dutch ] = "De waarde waarnaar in de eerste kolom wordt gezocht.";
             Text[ chinese_simplified ] = "“™‘Џ эЊЁ„йµƒµЏ“їЅ–÷–Ћ——∞µƒ э÷µ°£";
@@ -38737,7 +38737,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = " Ќѕѕ ёнг… г« гд дЎ«ё ’Ё ж«Ќѕ° √ж дЎ«ё Џгжѕ ж«Ќѕ° √ж гд ’ЁнЁ.";
             Text[ dutch ] = "Bepaalt de waarde op een vector door vergelijking van waarden op een andere vector.";
             Text[ chinese_simplified ] = "Ќ®єэЌђЅн“їЄц ЄЅњµƒ э÷µ±»љѕјі»Јґ®‘Џ“їЄц ЄЅњ÷–µƒ э÷µ°£";
-            Text[ greek ] = "ѕсяжей мйб фймё уе Ёнб дй№нхумб ме фз уэгксйуз фймюн уе Ёнб №ллп дй№нхумб.";
+            Text[ greek ] = "ѕсяжей мйб фймё еньт дйбнэумбфпт ухгксянпнфбт фймЁт к№рпйпх №ллпх дйбнэумбфпт.";
             Text[ korean ] = "іўЄ• Ї§≈Ќїуј« ∞™∞ъ Їс±≥«ѕњ© Ї§≈Ќїуј« ∞™јї ∞бЅ§";
             Text[ turkish ] = "Vektцrdeki deрeri, baюka bir vektцr ile deрer karюэlaюtэrmasэ yaparak tanэmlar.";
             Text[ language_user1 ] = " ";
@@ -39101,7 +39101,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ russian ] = "ћассив (диапазон), в котором следует искать.";
             Text[ polish ] = "Macierz (zakres), w ktуrym nastєpi wyszukiwanie.";
             Text[ japanese ] = "МЯНЄТlВрК№ВёЊўФЌИЌ°";
-            Text[ chinese_traditional ] = "≠n¶b®д§§іMІд™ЇЉ∆ЊЏ≤’(∞ѕ∞м)°C";
+            Text[ chinese_traditional ] = "≠n¶b®д§§ЈjіM™ЇЉ∆ЊЏ≤’(∞ѕ∞м)°C";
             Text[ arabic ] = "«бг’ЁжЁ… («бдЎ«ё) «б н ”жЁ н г «б»ЌЋ Ёне«.";
             Text[ dutch ] = "De matrix (het bereik) waarin wordt gezocht.";
             Text[ chinese_simplified ] = "“™‘Џ∆д÷–Ћ——∞µƒ эЊЁ„й(«ш”т)°£";
@@ -42255,7 +42255,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = " ” »ѕб ћ“Ѕ гд д’ г« »д’ √ќ—.";
             Text[ dutch ] = "Vervangt een deel van een tekst door een andere tekst";
             Text[ chinese_simplified ] = "”√ƒ≥“ї„÷іЃћжїї∆дЋь„÷іЃ÷–µƒ≤њЈ÷ƒЏ»Ё°£";
-            Text[ greek ] = "Ѕнфйкбийуф№ Ёнб фмёмб фпх кеймЁнпх ме Ёнб №ллп кеяменп.";
+            Text[ greek ] = "Ѕнфйкбийуф№ Ёнб фмёмб фпх кеймЁнпх ме к№рпйп №ллп кеяменп.";
             Text[ korean ] = "іўЄ• ≈ЎљЇ∆Ѓ єЃјЏњ≠∞ъ ≈ЎљЇ∆Ѓ єЃјЏњ≠ їзјћј« єЃјЏЄ¶ єЁ»ѓ.";
             Text[ turkish ] = "Metnin bir bцlьmьnь baюka bir metin ile deрiюtirir.";
             Text[ language_user1 ] = " ";
