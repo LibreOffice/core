@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-17 09:52:23 $
+ *  last change: $Author: fs $ $Date: 2001-02-21 13:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,15 @@
 #ifndef _COM_SUN_STAR_UTIL_XLOCALIZEDALIASES_HXX_
 #include <com/sun/star/util/XLocalizedAliases.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/XExecutableDialog.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
+#include <com/sun/star/beans/PropertyState.hpp>
+#endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
@@ -222,11 +231,18 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _VCL_STDTEXT_HXX
+#include <vcl/stdtext.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
 using namespace ::svxform;
 
 void getConnectionSpecs(const Reference< XConnection >& _rxConn, ::rtl::OUString& rURL, ::rtl::OUString& _rRegisteredTitle)
@@ -524,37 +540,33 @@ void FmFormView::DeactivateControls(SdrPageView* pPageView)
 //------------------------------------------------------------------------
 void FmFormView::ObjectCreated(FmFormObj* pObj)
 {
-    Reference< ::com::sun::star::beans::XPropertySet >  xSet(pObj->GetUnoControlModel(), UNO_QUERY);
+    Reference< XPropertySet >  xSet(pObj->GetUnoControlModel(), UNO_QUERY);
     if (!xSet.is())
         return;
 
     if (!pFormShell->GetImpl()->GetWizardUsing())
         return;
 
-    if (sal_True)
-        return;
-    // no wizards at the moment. The wizards need a complete rewriting, that's why this feature is disable at the
-    // moment
-
     Any aValue = xSet->getPropertyValue(FM_PROP_CLASSID);
 
     sal_Int16 nClassId;
     if(!(aValue >>= nClassId))
-        nClassId = ::com::sun::star::form::FormComponentType::CONTROL;
+        nClassId = FormComponentType::CONTROL;
 
-    Reference< ::com::sun::star::container::XChild >  xChild(xSet, UNO_QUERY);
+    Reference< XChild >  xChild(xSet, UNO_QUERY);
     Reference< XRowSet >  xForm(xChild->getParent(), UNO_QUERY);
-    String aWizardName;
+    String sWizardName;
     Any aObj;
 
+    sal_Bool bIsUNOPilot = sal_False;
     switch (nClassId)
     {
-        case ::com::sun::star::form::FormComponentType::GRIDCONTROL:
-            aWizardName.AssignAscii("GridWizard.GridWizard.MainWithDefault");
+        case FormComponentType::GRIDCONTROL:
+            sWizardName.AssignAscii("GridWizard.GridWizard.MainWithDefault");
             aObj <<= xChild;
             break;
-        case ::com::sun::star::form::FormComponentType::LISTBOX:
-        case ::com::sun::star::form::FormComponentType::COMBOBOX:
+        case FormComponentType::LISTBOX:
+        case FormComponentType::COMBOBOX:
             // Hat die ::com::sun::star::form eine Verbindung zur Datenbank?
         {
             sal_Bool bDataForm = sal_False;
@@ -562,59 +574,106 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
             {
                 bDataForm = xForm.is() && ::dbtools::calcConnection(xForm, ::comphelper::getProcessServiceFactory()).is();
             }
-            catch(...)
+            catch(Exception&)
             {
             }
 
             if (bDataForm)
             {
-                aWizardName.AssignAscii("ComboWizard.ComboWizard.MainWithDefault");
+                sWizardName.AssignAscii("ComboWizard.ComboWizard.MainWithDefault");
                 aObj <<= xChild;
             }
         }   break;
-        case ::com::sun::star::form::FormComponentType::GROUPBOX:
-            // Hat die ::com::sun::star::form eine Verbindung zur Datenbank?
-            aWizardName.AssignAscii("GroupWizard.GroupWizard.MainWithDefault");
+        case FormComponentType::GROUPBOX:
+            bIsUNOPilot = sal_True;
+            sWizardName.AssignAscii("com.sun.star.sdb.GroupBoxAutoPilot");
             aObj <<= xChild;
             break;
     }
 
-    if (aWizardName.Len() != 0)
+    if (sWizardName.Len() != 0)
     {
-        SfxApplication* pApp = SFX_APP();
-        SbxArrayRef xArray   = new SbxArray();
-        SbxVariableRef xReturn  = new SbxVariable();
-        SbxVariableRef xParam= new SbxVariable();
-        xParam->PutBool(sal_True);
-
-        SbxObjectRef xObj    = ::GetSbUnoObject(String(), aObj);
-        xArray->Put(xObj,1);
-        xArray->Put(xParam,2);
-
-        pApp->EnterBasicCall();
-        ErrCode aResult = pApp->GetMacroConfig()->Call(NULL,aWizardName,pApp->GetBasicManager(),xArray,xReturn);
-        pApp->LeaveBasicCall();
-
-        if (ERRCODE_NONE != aResult)
+        if (bIsUNOPilot)
         {
-            sal_uInt16 nContextId(0);
-            switch (nClassId)
+            // build the argument list
+            Sequence< Any > aWizardArgs(1);
+            // the object affected
+            aWizardArgs[0] = makeAny(PropertyValue(
+                ::rtl::OUString::createFromAscii("ObjectModel"),
+                0,
+                makeAny(xChild),
+                PropertyState_DIRECT_VALUE
+            ));
+
+            // create the wizard object
+            Reference< XExecutableDialog > xWizard;
+            try
             {
-                case ::com::sun::star::form::FormComponentType::GRIDCONTROL:
-                    nContextId = RID_SUB_GRIDCONTROL_WIZARD;
-                    break;
-                case ::com::sun::star::form::FormComponentType::LISTBOX:
-                    nContextId = RID_SUB_LISTBOX_WIZARD;
-                    break;
-                case ::com::sun::star::form::FormComponentType::COMBOBOX:
-                    nContextId = RID_SUB_COMBOBOX_WIZARD;
-                    break;
-                case ::com::sun::star::form::FormComponentType::GROUPBOX:
-                    nContextId = RID_SUB_GROUPBOX_WIZARD;
-                    break;
+                Reference< XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+                xWizard = Reference< XExecutableDialog >(
+                    ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(sWizardName, aWizardArgs),
+                    UNO_QUERY);
             }
-            SfxErrorContext aContext(nContextId, NULL, RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS, DIALOG_MGR());
-            ErrorHandler::HandleError(aResult);
+            catch(Exception&)
+            {
+            }
+            if (!xWizard.is())
+            {
+                ShowServiceNotAvailableError(NULL, sWizardName, sal_True);
+                return;
+            }
+
+            // execute the wizard
+            try
+            {
+                xWizard->execute();
+            }
+            catch(Exception&)
+            {
+                DBG_ERROR("FmFormView::ObjectCreated: could not execute the AutoPilot!");
+                // TODO: real error handling
+            }
+        }
+        else
+        {
+            // disabled for the moment
+            return;
+
+            SfxApplication* pApp = SFX_APP();
+            SbxArrayRef xArray   = new SbxArray();
+            SbxVariableRef xReturn  = new SbxVariable();
+            SbxVariableRef xParam= new SbxVariable();
+            xParam->PutBool(sal_True);
+
+            SbxObjectRef xObj    = ::GetSbUnoObject(String(), aObj);
+            xArray->Put(xObj,1);
+            xArray->Put(xParam,2);
+
+            pApp->EnterBasicCall();
+            ErrCode aResult = pApp->GetMacroConfig()->Call(NULL,sWizardName,pApp->GetBasicManager(),xArray,xReturn);
+            pApp->LeaveBasicCall();
+
+            if (ERRCODE_NONE != aResult)
+            {
+                sal_uInt16 nContextId(0);
+                switch (nClassId)
+                {
+                    case FormComponentType::GRIDCONTROL:
+                        nContextId = RID_SUB_GRIDCONTROL_WIZARD;
+                        break;
+                    case FormComponentType::LISTBOX:
+                        nContextId = RID_SUB_LISTBOX_WIZARD;
+                        break;
+                    case FormComponentType::COMBOBOX:
+                        nContextId = RID_SUB_COMBOBOX_WIZARD;
+                        break;
+                    case FormComponentType::GROUPBOX:
+                        nContextId = RID_SUB_GROUPBOX_WIZARD;
+                        break;
+                }
+                SfxErrorContext aContext(nContextId, NULL, RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS, DIALOG_MGR());
+                ErrorHandler::HandleError(aResult);
+            }
         }
     }
 }
