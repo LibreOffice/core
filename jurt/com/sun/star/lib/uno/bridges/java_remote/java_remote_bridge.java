@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 17:03:59 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 09:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ import com.sun.star.uno.Any;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.29 $ $ $Date: 2003-04-23 17:03:59 $
+ * @version     $Revision: 1.30 $ $ $Date: 2003-07-09 09:21:39 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -344,6 +344,9 @@ public class java_remote_bridge
             // only hold it weakly
     }
 
+    private boolean hasRefHolder(String oid, Type type) {
+        return _refHolders.containsKey(oid + type);
+    }
 
     final void addRefHolder(Object obj, Type type, String oid) {
         acquire();
@@ -581,6 +584,10 @@ public class java_remote_bridge
         if(object instanceof String)
             oid[0] = (String)object;
         else {
+            // TODO  I do not understand if this is correct.  Upon mapping an
+            // object out, its ref count should only be incremented if the
+            // object was not initially mapped in from the other end of this
+            // bridge.
             _java_environment.registerInterface(object, oid, type);
             addRefHolder(object, type, oid[0]);
         }
@@ -603,13 +610,20 @@ public class java_remote_bridge
         // acquire, but before it is guaranteed that a pairing release will be
         // called eventually?
         acquire();
+        // TODO  The following code is not correct.  Assume that X2 is an
+        // interface type derived from X1, the local object o has been sent out
+        // with mapInterfaceTo(o,X2), and is now received back as
+        // mapInterfaceFrom(o,X1).  It should be detected that, since X1 is a
+        // base type of X2, (o,X1) is the local object o registered as (o,X2),
+        // and neither should a proxy be created, nor should a "release" be sent
+        // back:
         String oid = (String) oId;
         Object object = _java_environment.getRegisteredInterface(oid, type);
         if (object == null) {
             object = _java_environment.registerInterface(
                 proxyFactory.create(oid, type), new String[] { oid }, type);
                 // the proxy sends a release when finalized
-        } else {
+        } else if (!hasRefHolder(oid, type)) {
             try {
                 sendRequest(oid, type, "release", null,
                             new Boolean[] { new Boolean(_forceSynchronous) },
