@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobjfac.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:19:42 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 10:58:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,101 +223,122 @@ IMPL_LINK(FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
 {
     if (pObjFactory->nInventor == FmFormInventor)
     {
-        switch (pObjFactory->nIdentifier)
+        ::rtl::OUString sServiceSpecifier;
+
+        typedef ::std::vector< ::std::pair< ::rtl::OUString, Any > > PropertyValueArray;
+        PropertyValueArray aInitialProperties;
+
+        switch ( pObjFactory->nIdentifier )
         {
-            case OBJ_FM_CONTROL:    // allgemeines Object
-            {
-                pObjFactory->pNewObj = new FmFormObj(pObjFactory->nIdentifier);
-            }   break;
             case OBJ_FM_EDIT:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_EDIT,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_EDIT;
+                break;
+
             case OBJ_FM_BUTTON:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_COMMANDBUTTON,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_COMMANDBUTTON;
+                break;
+
             case OBJ_FM_FIXEDTEXT:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_FIXEDTEXT,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_FIXEDTEXT;
+                break;
+
             case OBJ_FM_LISTBOX:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_LISTBOX,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_LISTBOX;
+                break;
+
             case OBJ_FM_CHECKBOX:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_CHECKBOX,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_CHECKBOX;
+                break;
+
             case OBJ_FM_RADIOBUTTON:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_RADIOBUTTON,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_RADIOBUTTON;
+                break;
+
             case OBJ_FM_GROUPBOX:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_GROUPBOX,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_GROUPBOX;
+                break;
+
             case OBJ_FM_COMBOBOX:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_COMBOBOX,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_COMBOBOX;
+                break;
+
             case OBJ_FM_GRID:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_GRID,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_GRID;
+                break;
+
             case OBJ_FM_IMAGEBUTTON:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_IMAGEBUTTON,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_IMAGEBUTTON;
+                break;
+
             case OBJ_FM_FILECONTROL:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_FILECONTROL,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_FILECONTROL;
+                break;
+
             case OBJ_FM_DATEFIELD:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_DATEFIELD,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_DATEFIELD;
+                break;
+
             case OBJ_FM_TIMEFIELD:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_TIMEFIELD,pObjFactory->nIdentifier);
-                lcl_initProperty( static_cast< FmFormObj* >( pObjFactory->pNewObj ), FM_PROP_TIMEMAX, makeAny( (sal_Int32)( Time( 23, 59, 59, 99 ).GetTime() ) ) );
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_TIMEFIELD;
+                aInitialProperties.push_back( PropertyValueArray::value_type( FM_PROP_TIMEMAX, makeAny( (sal_Int32)( Time( 23, 59, 59, 99 ).GetTime() ) ) ) );
+                break;
+
             case OBJ_FM_NUMERICFIELD:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_NUMERICFIELD,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_NUMERICFIELD;
+                break;
+
             case OBJ_FM_CURRENCYFIELD:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_CURRENCYFIELD,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_CURRENCYFIELD;
+                break;
+
             case OBJ_FM_PATTERNFIELD:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_PATTERNFIELD,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_PATTERNFIELD;
+                break;
+
             case OBJ_FM_HIDDEN:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_HIDDEN,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_HIDDEN;
+                break;
+
             case OBJ_FM_IMAGECONTROL:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_IMAGECONTROL,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_IMAGECONTROL;
+                break;
+
             case OBJ_FM_FORMATTEDFIELD:
-            {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_FORMATTEDFIELD,pObjFactory->nIdentifier);
-            }   break;
+                sServiceSpecifier = FM_COMPONENT_FORMATTEDFIELD;
+                break;
+
+            case OBJ_FM_NAVIGATIONBAR:
+                sServiceSpecifier = FM_SUN_COMPONENT_NAVIGATIONBAR;
+                break;
+
             case OBJ_FM_SCROLLBAR:
-            {
-                pObjFactory->pNewObj = new FmFormObj( FM_SUN_COMPONENT_SCROLLBAR, pObjFactory->nIdentifier );
-                lcl_initProperty( static_cast< FmFormObj* >( pObjFactory->pNewObj ), FM_PROP_BORDER, makeAny( (sal_Int16)0 ) );
-            }   break;
+                sServiceSpecifier = FM_SUN_COMPONENT_SCROLLBAR;
+                aInitialProperties.push_back( PropertyValueArray::value_type( FM_PROP_BORDER, makeAny( (sal_Int16)0 ) ) );
+                break;
+
             case OBJ_FM_SPINBUTTON:
-            {
-                pObjFactory->pNewObj = new FmFormObj( FM_SUN_COMPONENT_SPINBUTTON, pObjFactory->nIdentifier );
-                lcl_initProperty( static_cast< FmFormObj* >( pObjFactory->pNewObj ), FM_PROP_BORDER, makeAny( (sal_Int16)0 ) );
-            }   break;
-            default:
-                return 0;
+                sServiceSpecifier = FM_SUN_COMPONENT_SPINBUTTON;
+                aInitialProperties.push_back( PropertyValueArray::value_type( FM_PROP_BORDER, makeAny( (sal_Int16)0 ) ) );
+                break;
+        }
+
+        // create the actual object
+        if ( sServiceSpecifier.getLength() )
+            pObjFactory->pNewObj = new FmFormObj( sServiceSpecifier, pObjFactory->nIdentifier );
+        else
+            pObjFactory->pNewObj = new FmFormObj( pObjFactory->nIdentifier );
+
+        // initialize some properties which we want to differ from the defaults
+        for (   PropertyValueArray::const_iterator aInitProp = aInitialProperties.begin();
+                aInitProp != aInitialProperties.end();
+                ++aInitProp
+            )
+        {
+            lcl_initProperty(
+                static_cast< FmFormObj* >( pObjFactory->pNewObj ),
+                aInitProp->first,
+                aInitProp->second
+            );
         }
     }
 
