@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:36:40 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,7 @@ Menu RID_POPUP_CELLS
             Text[ chinese_simplified ] = "²åÈë(~P)";
             Text[ russian ] = "~Âñòàâèòü";
             Text[ polish ] = "~Wstaw";
-            Text[ japanese ] = "‘}“ü(~P)";
+            Text[ japanese ] = "“\\‚è•t‚¯(~P)";
             Text[ chinese_traditional ] = "´¡¤J(~P)";
             Text[ arabic ] = "áÕŞ";
             Text[ greek ] = "Å~éóáãùãŞ";
@@ -1039,7 +1039,7 @@ Menu RID_POPUP_EDIT
                         Text [ english_us ] = "Do~uble Underline" ;
                         Text [ portuguese_brazilian ] = "Do~ppelt unterstreichen" ;
                         Text = "Do~ppelt unterstreichen" ;
-                        Text [ swedish ] = "Du~bbel understrykning" ;
+                        Text [ swedish ] = "Du~bbelt understruken" ;
                         Text [ danish ] = "Dobbelt understreget" ;
                         Text [ italian ] = "Doppia sottolineatura" ;
                         Text [ spanish ] = "Subrayado ~doble" ;
