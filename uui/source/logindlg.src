@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:13:22 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 05:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ arabic ] = "—”«·… „‰ «·„“Ê¯œ";
         Text[ turkish ] = "Sunucudan ileti";
         Text[ catalan ] = "Mensaje del servidor";
+        Text[ finnish ] = "Viesti palvelimelta";
     };
     FixedText INFO_LOGIN_REQUEST
     {
@@ -134,6 +135,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ arabic ] = "«·—Ã«¡ ≈œŒ«· «”„ «·„” Œœ„ Êﬂ·„… «·”— ·‹ %1 Â‰«.";
         Text[ turkish ] = "%1 iÁin buraya kullan˝c˝ ad˝ ve ˛ifre girin.";
         Text[ catalan ] = "Especifique su nombre de usuario y su contraseÒa para %1.";
+        Text[ finnish ] = "Anna kohteen %1 k‰ytt‰j‰tunnus ja salasana t‰h‰n.";
     };
     FixedText FT_LOGIN_PATH
     {
@@ -160,6 +162,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ arabic ] = "«·„”«—";
         Text[ turkish ] = "Veri yolu";
         Text[ catalan ] = "~Ruta";
+        Text[ finnish ] = "~Polku";
     };
     Edit ED_LOGIN_PATH
     {
@@ -204,6 +207,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ arabic ] = "«”„ «·„” Œœ„";
         Text[ turkish ] = "Kullan˝c˝ ad˝";
         Text[ catalan ] = "~Usuario";
+        Text[ finnish ] = "~K‰ytt‰j‰tunnus";
     };
     Edit ED_LOGIN_USERNAME
     {
@@ -242,6 +246,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ arabic ] = "ﬂ·„… «·”—";
         Text[ turkish ] = "ﬁifre";
         Text[ catalan ] = "~ContraseÒa";
+        Text[ finnish ] = "Sala~sana";
     };
     Edit ED_LOGIN_PASSWORD
     {
@@ -275,6 +280,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ arabic ] = "«‘ —«ﬂ";
         Text[ turkish ] = "Hesap";
         Text[ catalan ] = "~Cuenta";
+        Text[ finnish ] = "T~ili";
     };
     Edit ED_LOGIN_ACCOUNT
     {
@@ -308,6 +314,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ arabic ] = "Õ›Ÿ ﬂ·„… «·”—";
         Text[ turkish ] = "ﬁifreyi kaydet";
         Text[ catalan ] = "Guardar ~contraseÒa";
+        Text[ finnish ] = "~Tallenna salasana";
     };
     GroupBox GB_LOGIN_LOGIN
     {
@@ -334,6 +341,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ arabic ] = " ”ÃÌ· «·œŒÊ·";
         Text[ turkish ] = "Oturum aÁ";
         Text[ catalan ] = "Registrarse";
+        Text[ finnish ] = "Kirjaudu sis‰‰n";
     };
     OKButton BTN_LOGIN_OK
     {
@@ -374,6 +382,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ arabic ] = "⁄·Ï ";
         Text[ turkish ] = "yeri ";
         Text[ catalan ] = "en  ";
+        Text[ finnish ] = "kohde";
     };
     Text [ english_us ] = "User Name and Password Required" ;
     Text [ portuguese_brazilian ] = "Benutzername und Passwort erforderlich" ;
@@ -394,5 +403,6 @@ ModalDialog DLG_UUI_LOGIN
     Text[ arabic ] = "„ÿ·Ê» ≈œŒ«· «”„ «·„” Œœ„ Êﬂ·„… «·”—";
     Text[ turkish ] = "Kullan˝c˝ ad˝ ve ˛ifre gerekli";
     Text[ catalan ] = "Se requieren el nombre de usuario y la contraseÒa";
+    Text[ finnish ] = "K‰ytt‰j‰tunnus ja salasana pakolliset";
 };
 
