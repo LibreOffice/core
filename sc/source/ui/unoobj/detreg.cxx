@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detreg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:41:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,12 +102,10 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void*   pServiceMana
 
     // Eigentliche Implementierung und ihre Services registrieren
     sal_Int32 i;
-    Reference< ::registry::XRegistryKey >  xNewKey;
+    Reference< ::registry::XRegistryKey >  xNewKey(xKey->createKey( aDelimiter + ScFilterDetect::impl_getStaticImplementationName() +
+                               aUnoServices ));
 
-    xNewKey = xKey->createKey( aDelimiter + ScFilterDetect::impl_getStaticImplementationName() +
-                               aUnoServices );
-
-    Sequence< OUString > aServices = ScFilterDetect::impl_getStaticSupportedServiceNames();
+    Sequence< OUString > aServices(ScFilterDetect::impl_getStaticSupportedServiceNames());
     for(i = 0; i < aServices.getLength(); i++ )
         xNewKey->createKey( aServices.getConstArray()[i] );
 
@@ -132,10 +130,10 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImple
 
         if( ScFilterDetect::impl_getStaticImplementationName().equalsAscii( pImplementationName ) )
         {
-            xFactory = ::cppu::createSingleFactory( xServiceManager,
+            xFactory.set(::cppu::createSingleFactory( xServiceManager,
             ScFilterDetect::impl_getStaticImplementationName(),
             ScFilterDetect::impl_createInstance,
-            ScFilterDetect::impl_getStaticSupportedServiceNames() );
+            ScFilterDetect::impl_getStaticSupportedServiceNames() ));
         }
 
         // Factory is valid - service was found.
