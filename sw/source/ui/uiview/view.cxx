@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:16:22 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1793,15 +1793,6 @@ void    SwView::StopShellTimer()
         SelectShell();
         bAttrChgNotified = sal_False;
     }
-}
-
-/*-----------------15.12.97 10:15-------------------
-
---------------------------------------------------*/
-void SwView::PrepareGetSelection()
-{
-    if(!pShell)
-        SelectShell();
 }
 
 /*-----------------09/03/97 04:12pm-----------------
