@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:29 $
+ *  last change: $Author: jp $ $Date: 2000-09-28 11:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,13 +346,7 @@ ViewShell::~ViewShell()
                 aIdx++;
                 if ( 0 != ( pGNd = aIdx.GetNode().GetGrfNode() ) )
                 {
-
-// Code for the new GraphicObject
-#ifdef USE_GRFOBJECT
                     if( pGNd->IsAnimated() )
-#else
-                    if( pGNd->GetGrf().IsAnimated() )
-#endif
                     {
                         SwClientIter aIter( *pGNd );
                         for( SwFrm* pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
@@ -422,6 +416,9 @@ SdrView* ViewShell::GetDrawViewWithValidMarkList()
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/19 00:08:29  hr
+      initial import
+
       Revision 1.132  2000/09/18 16:04:38  willem.vandorp
       OpenOffice header added.
 

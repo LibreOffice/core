@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: jp $ $Date: 2000-09-28 11:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,38 +298,20 @@ BOOL SwEditShell::IsGrfSwapOut( BOOL bOnlyLinked ) const
     SwGrfNode *pGrfNode = _GetGrfNode();
     return pGrfNode &&
         ( ( bOnlyLinked && ( pGrfNode->IsLinkedFile() &&
-// Code for the new GraphicObject
-#ifdef USE_GRFOBJECT
             GRAPHIC_DEFAULT == pGrfNode->GetGrfObj().GetType() )) ||
             pGrfNode->GetGrfObj().IsSwappedOut() );
-#else
-            GRAPHIC_DEFAULT == pGrfNode->GetGrf().GetType() )) ||
-            pGrfNode->GetGrf().IsSwapOut() );
-#endif
 }
 
 const GraphicObject& SwEditShell::GetGraphicObj() const
 {
     SwGrfNode *pGrfNode = _GetGrfNode();
-// Code for the new GraphicObject
-#ifdef USE_GRFOBJECT
     return pGrfNode->GetGrfObj();
-#else
-    const Graphic& rGrf = pGrfNode->GetGrf();
-    return GraphicObject( rGrf );
-#endif
 }
 
 USHORT SwEditShell::GetGraphicType() const
 {
-// Code for the new GraphicObject
-#ifdef USE_GRFOBJECT
     SwGrfNode *pGrfNode = _GetGrfNode();
     return pGrfNode->GetGrfObj().GetType();
-#else
-    const Graphic& rGrf = GetGraphic( FALSE );
-    return rGrf.GetType();
-#endif
 }
 
 /******************************************************************************
