@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:37:55 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,8 +171,13 @@
 #include <algorithm>
 #include "opengrf.hxx"
 
+
 #include "svxdlg.hxx" //CHINA001
 #include "dialogs.hrc" //CHINA001
+#include <sfx2/request.hxx> //CHINA001
+#include <svtools/aeitem.hxx> //add CHINA001
+#include <svtools/stritem.hxx>//add CHINA001
+#include <svtools/slstitm.hxx> //add CHINA001
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -722,6 +727,18 @@ IMPL_LINK(SvxBulletPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
     return 0;
 }
 
+//Add CHINA001
+void SvxBulletPickTabPage::PageCreated(SfxAllItemSet aSet)
+{
+
+    SFX_ITEMSET_ARG (&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT,sal_False);
+
+    if (pBulletCharFmt)
+        SetCharFmtName( pBulletCharFmt->GetValue());
+
+
+}
+//end of add CHINA001
 /**************************************************************************/
 /*                                                                        */
 /*                                                                        */
@@ -993,6 +1010,17 @@ IMPL_LINK(SvxNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
     return 0;
 }
 
+//add CHINA001 begin
+void SvxNumPickTabPage::PageCreated(SfxAllItemSet aSet)
+{
+    SFX_ITEMSET_ARG (&aSet,pNumCharFmt,SfxStringItem,SID_NUM_CHAR_FMT,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT,sal_False);
+
+
+    if (pNumCharFmt &&pBulletCharFmt)
+        SetCharFmtNames( pNumCharFmt->GetValue(),pBulletCharFmt->GetValue());
+}
+//end of CHINA001
 /*-----------------07.02.97 15.59-------------------
 
 --------------------------------------------------*/
@@ -1015,331 +1043,331 @@ void lcl_PaintLevel(OutputDevice* pVDev, sal_Int16 nNumberingType,
         rLeft.X() += pVDev->GetTextWidth(rText);
     }
 }
-void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
-{
-    static USHORT __READONLY_DATA aLinesArr[] =
-    {
-        15, 10,
-        20, 30,
-        25, 50,
-        30, 70,
-        35, 90, // up to here line positions
-        05, 10, // character positions
-        10, 30,
-        15, 50,
-        20, 70,
-        25, 90,
-    };
-
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    const Color aBackColor = rStyleSettings.GetFieldColor();
-    const Color aTextColor = rStyleSettings.GetFieldTextColor();
-
-    OutputDevice*  pDev = rUDEvt.GetDevice();
-    Rectangle aRect = rUDEvt.GetRect();
-    USHORT  nItemId = rUDEvt.GetItemId();
-    long nRectWidth = aRect.GetWidth();
-    long nRectHeight = aRect.GetHeight();
-    Size aRectSize(nRectWidth, aRect.GetHeight());
-    Point aBLPos = aRect.TopLeft();
-    Font aOldFont = pDev->GetFont();
-    Color aOldColor = pDev->GetLineColor();
-    pDev->SetLineColor(aTextColor);
-    Font aFont(OutputDevice::GetDefaultFont(
-                DEFAULTFONT_UI_SANS, ::GetSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
-
-    Size aSize = aFont.GetSize();
-
-    Font aRuleFont( lcl_GetDefaultBulletFont() );
-    aSize.Height() = nRectHeight/6;
-    aRuleFont.SetSize(aSize);
-    aRuleFont.SetColor(aTextColor);
-    aRuleFont.SetFillColor(aBackColor);
-    if(nPageType == NUM_PAGETYPE_BULLET)
-        aFont = aRuleFont;
-    else if(nPageType == NUM_PAGETYPE_NUM)
-    {
-        aSize.Height() = nRectHeight/8;
-    }
-    aFont.SetColor(aTextColor);
-    aFont.SetFillColor(aBackColor);
-    aFont.SetSize( aSize );
-    pDev->SetFont(aFont);
-
-    if(!pVDev)
-    {
-        // Die Linien werden nur einmalig in das VirtualDevice gepainted
-        // nur die Gliederungspage bekommt es aktuell
-        pVDev = new VirtualDevice(*pDev);
-        pVDev->SetMapMode(pDev->GetMapMode());
-        pVDev->EnableRTL( IsRTLEnabled() );
-         pVDev->SetOutputSize( aRectSize );
-        aOrgRect = aRect;
-        pVDev->SetFillColor( aBackColor );
-        pVDev->DrawRect(aOrgRect);
-
-        if(aBackColor == aLineColor)
-            aLineColor.Invert();
-        pVDev->SetLineColor(aLineColor);
-        // Linien nur einmalig Zeichnen
-        if(nPageType != NUM_PAGETYPE_NUM)
-        {
-            Point aStart(aBLPos.X() + nRectWidth *25 / 100,0);
-            Point aEnd(aBLPos.X() + nRectWidth * 9 / 10,0);
-            for( USHORT i = 11; i < 100; i += 33)
-            {
-                aStart.Y() = aEnd.Y() = aBLPos.Y() + nRectHeight  * i / 100;
-                pVDev->DrawLine(aStart, aEnd);
-                aStart.Y() = aEnd.Y() = aBLPos.Y() + nRectHeight  * (i + 11) / 100;
-                pVDev->DrawLine(aStart, aEnd);
-            }
-        }
-    }
-    pDev->DrawOutDev(   aRect.TopLeft(), aRectSize,
-                        aOrgRect.TopLeft(), aRectSize,
-                        *pVDev );
-    // jetzt kommt der Text
-    const OUString sValue(C2U(cValue));
-    if( NUM_PAGETYPE_SINGLENUM == nPageType ||
-            NUM_PAGETYPE_BULLET == nPageType )
-    {
-        Point aStart(aBLPos.X() + nRectWidth / 9,0);
-        for( USHORT i = 0; i < 3; i++ )
-        {
-            USHORT nY = 11 + i * 33;
-            aStart.Y() = aBLPos.Y() + nRectHeight  * nY / 100;
-            String sText;
-            if(nPageType == NUM_PAGETYPE_BULLET)
-            {
-                sText = aBulletTypes[nItemId - 1];
-                aStart.Y() -= pDev->GetTextHeight()/2;
-                aStart.X() = aBLPos.X() + 5;
-            }
-            else
-            {
-                if(xFormatter.is() && aNumSettings.getLength() > nItemId - 1)
-                {
-                    Sequence<PropertyValue> aLevel = aNumSettings.getConstArray()[nItemId - 1];
-                    try
-                    {
-                        aLevel.realloc(aLevel.getLength() + 1);
-                        PropertyValue& rValue = aLevel.getArray()[aLevel.getLength() - 1];
-                        rValue.Name = sValue;
-                        rValue.Value <<= (sal_Int32)(i + 1);
-                        sText = xFormatter->makeNumberingString( aLevel, aLocale );
-                    }
-                    catch(Exception&)
-                    {
-                        DBG_ERROR("Exception in DefaultNumberingProvider::makeNumberingString")
-                    }
-                }
-                // knapp neben dem linken Rand beginnen
-                aStart.X() = aBLPos.X() + 2;
-                aStart.Y() -= pDev->GetTextHeight()/2;
-            }
-            pDev->DrawText(aStart, sText);
-        }
-    }
-    else if(NUM_PAGETYPE_NUM == nPageType )
-    {
-        // Outline numbering has to be painted into the virtual device
-        // to get correct lines
-        // has to be made again
-        pVDev->DrawRect(aOrgRect);
-        long nStartX = aOrgRect.TopLeft().X();
-        long nStartY = aOrgRect.TopLeft().Y();
-
-        if(xFormatter.is() && aOutlineSettings.getLength() > nItemId - 1)
-        {
-            Reference<XIndexAccess> xLevel = aOutlineSettings.getArray()[nItemId - 1];
-            try
-            {
-                OUString sLevelTexts[5];
-                OUString sFontNames[5];
-                OUString sBulletChars[5];
-                sal_Int16 aNumberingTypes[5];
-                OUString sPrefixes[5];
-                OUString sSuffixes[5];
-                sal_Int16 aParentNumberings[5];
-
-                sal_Int32 nLevelCount = xLevel->getCount();
-                if(nLevelCount > 5)
-                    nLevelCount = 5;
-                for( sal_Int32 i = 0; i < nLevelCount && i < 5; i++)
-                {
-                    long nTop = nStartY + nRectHeight * (aLinesArr[2 * i + 11])/100 ;
-                    Point aLeft(nStartX + nRectWidth *  (aLinesArr[2 * i + 10])/ 100, nTop );
-
-                    Any aLevelAny = xLevel->getByIndex(i);
-                    Sequence<PropertyValue> aLevel;
-                    aLevelAny >>= aLevel;
-                    const PropertyValue* pValues = aLevel.getConstArray();
-                    aNumberingTypes[i] = 0;
-                    for(sal_Int32 nProperty = 0; nProperty < aLevel.getLength() - 1; nProperty++)
-                    {
-                        if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cNumberingType)))
-                            pValues[nProperty].Value >>= aNumberingTypes[i];
-                        else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletFontName)))
-                            pValues[nProperty].Value >>= sFontNames[i];
-                        else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletChar)))
-                            pValues[nProperty].Value >>= sBulletChars[i];
-                        else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cPrefix)))
-                            pValues[nProperty].Value >>= sPrefixes[i];
-                        else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSuffix)))
-                            pValues[nProperty].Value >>= sSuffixes[i];
-                        else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cParentNumbering)))
-                            pValues[nProperty].Value >>= aParentNumberings[i];
-                    }
-                    Sequence< PropertyValue > aProperties(2);
-                    PropertyValue* pProperties = aProperties.getArray();
-                    pProperties[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingType"));
-                    pProperties[0].Value <<= aNumberingTypes[i];
-                    pProperties[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
-                    pProperties[1].Value <<= (sal_Int32)1;
-                    try
-                    {
-                        sLevelTexts[i] = xFormatter->makeNumberingString( aProperties, aLocale );
-                    }
-                    catch(Exception&)
-                    {
-                        DBG_ERROR("Exception in DefaultNumberingProvider::makeNumberingString")
-                    }
-
-                    aLeft.Y() -= (pDev->GetTextHeight()/2);
-                    if(sPrefixes[i].getLength() &&
-                        !sPrefixes[i].equalsAsciiL(" ", 1) &&
-                        sPrefixes[i].getStr()[0] != 0)
-                    {
-                        pVDev->SetFont(aFont);
-                        pVDev->DrawText(aLeft, sPrefixes[i]);
-                        aLeft.X() += pDev->GetTextWidth(sPrefixes[i]);
-                    }
-                    if(aParentNumberings[i])
-                    {
-                        //insert old numberings here
-                        sal_Int16 nStartLevel = std::min((sal_Int32)aParentNumberings[i], i);
-                        for(sal_Int16 nParentLevel = i - nStartLevel; nParentLevel < i; nParentLevel++)
-                        {
-                            OUString sTmp(sLevelTexts[nParentLevel]);
-                            sTmp += C2U(".");
-                            lcl_PaintLevel(pVDev,
-                                    aNumberingTypes[nParentLevel],
-                                    sBulletChars[nParentLevel],
-                                    sTmp,
-                                    sFontNames[nParentLevel],
-                                    aLeft,
-                                    aRuleFont,
-                                    aFont);
-                        }
-                    }
-                    lcl_PaintLevel(pVDev,
-                                    aNumberingTypes[i],
-                                    sBulletChars[i],
-                                    sLevelTexts[i],
-                                    sFontNames[i],
-                                    aLeft,
-                                    aRuleFont,
-                                    aFont);
-                    if(sSuffixes[i].getLength()&&
-                        !sSuffixes[i].equalsAsciiL(" ", 1) &&
-                        sSuffixes[i].getStr()[0] != 0)
-                    {
-                        pVDev->SetFont(aFont);
-                        pVDev->DrawText(aLeft, sSuffixes[i]);
-                        aLeft.X() += pDev->GetTextWidth(sSuffixes[i]);
-                    }
-
-                    long nLineTop = nStartY + nRectHeight * aLinesArr[2 * i + 1]/100 ;
-                    Point aLineLeft(aLeft.X() /*+ nStartX + nRectWidth * aLinesArr[2 * i]/ 100*/, nLineTop );
-                    Point aLineRight(nStartX + nRectWidth * 90 /100, nLineTop );
-                    pVDev->DrawLine(aLineLeft,  aLineRight);
-                }
-
-            }
-#ifdef DBG_UTIL
-            catch(Exception&)
-            {
-                static sal_Bool bAssert = FALSE;
-                if(!bAssert)
-                {
-                    DBG_ERROR("exception in ::UserDraw")
-                    bAssert = sal_True;
-                }
-            }
-#else
-            catch(Exception&)
-            {
-            }
-#endif
-        }
-        pDev->DrawOutDev(   aRect.TopLeft(), aRectSize,
-                            aOrgRect.TopLeft(), aRectSize,
-                            *pVDev );
-    }
-
-    pDev->SetFont(aOldFont);
-    pDev->SetLineColor(aOldColor);
-}
-
-/**************************************************************************/
-/*                                                                        */
-/*                                                                        */
-/**************************************************************************/
-
-SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nType ) :
-
-    ValueSet( pParent, rResId ),
-
-    pVDev       ( NULL ),
-    nPageType   ( nType ),
-    bHTMLMode   ( FALSE ),
-    aLineColor  ( COL_LIGHTGRAY )
-{
-    SetColCount( 4 );
-    SetStyle( GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
-    if(NUM_PAGETYPE_BULLET == nType)
-    {
-        for ( USHORT i = 0; i < 8; i++ )
-            InsertItem( i + 1, i );
-    }
-}
-
-/*-----------------08.02.97 12.38-------------------
-
---------------------------------------------------*/
-
- SvxNumValueSet::~SvxNumValueSet()
-{
-    delete pVDev;
-}
-/* -----------------------------30.01.01 16:24--------------------------------
-
- ---------------------------------------------------------------------------*/
-void SvxNumValueSet::SetNumberingSettings(
-    const Sequence<Sequence<PropertyValue> >& aNum,
-    Reference<XNumberingFormatter>& xFormat,
-    const Locale& rLocale   )
-{
-    aNumSettings = aNum;
-    xFormatter = xFormat;
-    aLocale = rLocale;
-    for ( USHORT i = 0; i < aNum.getLength() && i < 8; i++ )
-            InsertItem( i + 1, i );
-}
-/* -----------------------------31.01.01 09:50--------------------------------
-
- ---------------------------------------------------------------------------*/
-void SvxNumValueSet::SetOutlineNumberingSettings(
-            Sequence<Reference<XIndexAccess> >& rOutline,
-            Reference<XNumberingFormatter>& xFormat,
-            const Locale& rLocale)
-{
-    aOutlineSettings = rOutline;
-    xFormatter = xFormat;
-    aLocale = rLocale;
-    for ( sal_uInt16 i = 0; i < aOutlineSettings.getLength() && i < 8; i++ )
-        InsertItem( i + 1, i );
-}
+//CHINA001 void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
+//CHINA001 {
+//CHINA001 static USHORT __READONLY_DATA aLinesArr[] =
+//CHINA001 {
+//CHINA001 15, 10,
+//CHINA001 20, 30,
+//CHINA001 25, 50,
+//CHINA001 30, 70,
+//CHINA001 35, 90,  // up to here line positions
+//CHINA001 05, 10, // character positions
+//CHINA001 10, 30,
+//CHINA001 15, 50,
+//CHINA001 20, 70,
+//CHINA001 25, 90,
+//CHINA001  };
+//CHINA001
+//CHINA001 const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+//CHINA001 const Color aBackColor = rStyleSettings.GetFieldColor();
+//CHINA001 const Color aTextColor = rStyleSettings.GetFieldTextColor();
+//CHINA001
+//CHINA001 OutputDevice*  pDev = rUDEvt.GetDevice();
+//CHINA001 Rectangle aRect = rUDEvt.GetRect();
+//CHINA001 USHORT   nItemId = rUDEvt.GetItemId();
+//CHINA001 long nRectWidth = aRect.GetWidth();
+//CHINA001 long nRectHeight = aRect.GetHeight();
+//CHINA001 Size aRectSize(nRectWidth, aRect.GetHeight());
+//CHINA001 Point aBLPos = aRect.TopLeft();
+//CHINA001 Font aOldFont = pDev->GetFont();
+//CHINA001 Color aOldColor = pDev->GetLineColor();
+//CHINA001 pDev->SetLineColor(aTextColor);
+//CHINA001 Font aFont(OutputDevice::GetDefaultFont(
+//CHINA001 DEFAULTFONT_UI_SANS, ::GetSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
+//CHINA001
+//CHINA001 Size aSize = aFont.GetSize();
+//CHINA001
+//CHINA001 Font aRuleFont( lcl_GetDefaultBulletFont() );
+//CHINA001 aSize.Height() = nRectHeight/6;
+//CHINA001 aRuleFont.SetSize(aSize);
+//CHINA001 aRuleFont.SetColor(aTextColor);
+//CHINA001 aRuleFont.SetFillColor(aBackColor);
+//CHINA001 if(nPageType == NUM_PAGETYPE_BULLET)
+//CHINA001 aFont = aRuleFont;
+//CHINA001  else if(nPageType == NUM_PAGETYPE_NUM)
+//CHINA001 {
+//CHINA001 aSize.Height() = nRectHeight/8;
+//CHINA001  }
+//CHINA001 aFont.SetColor(aTextColor);
+//CHINA001 aFont.SetFillColor(aBackColor);
+//CHINA001 aFont.SetSize( aSize );
+//CHINA001 pDev->SetFont(aFont);
+//CHINA001
+//CHINA001 if(!pVDev)
+//CHINA001 {
+//CHINA001 // Die Linien werden nur einmalig in das VirtualDevice gepainted
+//CHINA001 // nur die Gliederungspage bekommt es aktuell
+//CHINA001 pVDev = new VirtualDevice(*pDev);
+//CHINA001 pVDev->SetMapMode(pDev->GetMapMode());
+//CHINA001 pVDev->EnableRTL( IsRTLEnabled() );
+//CHINA001 pVDev->SetOutputSize( aRectSize );
+//CHINA001 aOrgRect = aRect;
+//CHINA001 pVDev->SetFillColor( aBackColor );
+//CHINA001 pVDev->DrawRect(aOrgRect);
+//CHINA001
+//CHINA001 if(aBackColor == aLineColor)
+//CHINA001 aLineColor.Invert();
+//CHINA001 pVDev->SetLineColor(aLineColor);
+//CHINA001 // Linien nur einmalig Zeichnen
+//CHINA001 if(nPageType != NUM_PAGETYPE_NUM)
+//CHINA001 {
+//CHINA001 Point aStart(aBLPos.X() + nRectWidth *25 / 100,0);
+//CHINA001 Point aEnd(aBLPos.X() + nRectWidth * 9 / 10,0);
+//CHINA001 for( USHORT i = 11; i < 100; i += 33)
+//CHINA001 {
+//CHINA001 aStart.Y() = aEnd.Y() = aBLPos.Y() + nRectHeight  * i / 100;
+//CHINA001 pVDev->DrawLine(aStart, aEnd);
+//CHINA001 aStart.Y() = aEnd.Y() = aBLPos.Y() + nRectHeight  * (i + 11) / 100;
+//CHINA001 pVDev->DrawLine(aStart, aEnd);
+//CHINA001          }
+//CHINA001      }
+//CHINA001  }
+//CHINA001 pDev->DrawOutDev(    aRect.TopLeft(), aRectSize,
+//CHINA001 aOrgRect.TopLeft(), aRectSize,
+//CHINA001 *pVDev );
+//CHINA001 // jetzt kommt der Text
+//CHINA001 const OUString sValue(C2U(cValue));
+//CHINA001 if( NUM_PAGETYPE_SINGLENUM == nPageType ||
+//CHINA001 NUM_PAGETYPE_BULLET == nPageType )
+//CHINA001  {
+//CHINA001 Point aStart(aBLPos.X() + nRectWidth / 9,0);
+//CHINA001 for( USHORT i = 0; i < 3; i++ )
+//CHINA001      {
+//CHINA001 USHORT nY = 11 + i * 33;
+//CHINA001 aStart.Y() = aBLPos.Y() + nRectHeight  * nY / 100;
+//CHINA001 String sText;
+//CHINA001 if(nPageType == NUM_PAGETYPE_BULLET)
+//CHINA001          {
+//CHINA001 sText = aBulletTypes[nItemId - 1];
+//CHINA001 aStart.Y() -= pDev->GetTextHeight()/2;
+//CHINA001 aStart.X() = aBLPos.X() + 5;
+//CHINA001          }
+//CHINA001          else
+//CHINA001          {
+//CHINA001 if(xFormatter.is() && aNumSettings.getLength() > nItemId - 1)
+//CHINA001              {
+//CHINA001 Sequence<PropertyValue> aLevel = aNumSettings.getConstArray()[nItemId - 1];
+//CHINA001 try
+//CHINA001                  {
+//CHINA001 aLevel.realloc(aLevel.getLength() + 1);
+//CHINA001 PropertyValue& rValue = aLevel.getArray()[aLevel.getLength() - 1];
+//CHINA001 rValue.Name = sValue;
+//CHINA001 rValue.Value <<= (sal_Int32)(i + 1);
+//CHINA001 sText = xFormatter->makeNumberingString( aLevel, aLocale );
+//CHINA001                  }
+//CHINA001 catch(Exception&)
+//CHINA001                  {
+//CHINA001 DBG_ERROR("Exception in DefaultNumberingProvider::makeNumberingString")
+//CHINA001                  }
+//CHINA001              }
+//CHINA001 // knapp neben dem linken Rand beginnen
+//CHINA001 aStart.X() = aBLPos.X() + 2;
+//CHINA001 aStart.Y() -= pDev->GetTextHeight()/2;
+//CHINA001          }
+//CHINA001 pDev->DrawText(aStart, sText);
+//CHINA001      }
+//CHINA001  }
+//CHINA001  else if(NUM_PAGETYPE_NUM == nPageType )
+//CHINA001  {
+//CHINA001 // Outline numbering has to be painted into the virtual device
+//CHINA001 // to get correct lines
+//CHINA001 // has to be made again
+//CHINA001 pVDev->DrawRect(aOrgRect);
+//CHINA001 long nStartX = aOrgRect.TopLeft().X();
+//CHINA001 long nStartY = aOrgRect.TopLeft().Y();
+//CHINA001
+//CHINA001 if(xFormatter.is() && aOutlineSettings.getLength() > nItemId - 1)
+//CHINA001      {
+//CHINA001 Reference<XIndexAccess> xLevel = aOutlineSettings.getArray()[nItemId - 1];
+//CHINA001 try
+//CHINA001          {
+//CHINA001 OUString sLevelTexts[5];
+//CHINA001 OUString sFontNames[5];
+//CHINA001 OUString sBulletChars[5];
+//CHINA001 sal_Int16 aNumberingTypes[5];
+//CHINA001 OUString sPrefixes[5];
+//CHINA001 OUString sSuffixes[5];
+//CHINA001 sal_Int16 aParentNumberings[5];
+//CHINA001
+//CHINA001 sal_Int32 nLevelCount = xLevel->getCount();
+//CHINA001 if(nLevelCount > 5)
+//CHINA001 nLevelCount = 5;
+//CHINA001 for( sal_Int32 i = 0; i < nLevelCount && i < 5; i++)
+//CHINA001              {
+//CHINA001 long nTop = nStartY + nRectHeight * (aLinesArr[2 * i + 11])/100 ;
+//CHINA001 Point aLeft(nStartX + nRectWidth *  (aLinesArr[2 * i + 10])/ 100, nTop );
+//CHINA001
+//CHINA001 Any aLevelAny = xLevel->getByIndex(i);
+//CHINA001 Sequence<PropertyValue> aLevel;
+//CHINA001 aLevelAny >>= aLevel;
+//CHINA001 const PropertyValue* pValues = aLevel.getConstArray();
+//CHINA001 aNumberingTypes[i] = 0;
+//CHINA001 for(sal_Int32 nProperty = 0; nProperty < aLevel.getLength() - 1; nProperty++)
+//CHINA001                  {
+//CHINA001 if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cNumberingType)))
+//CHINA001 pValues[nProperty].Value >>= aNumberingTypes[i];
+//CHINA001                      else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletFontName)))
+//CHINA001 pValues[nProperty].Value >>= sFontNames[i];
+//CHINA001                      else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletChar)))
+//CHINA001 pValues[nProperty].Value >>= sBulletChars[i];
+//CHINA001                      else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cPrefix)))
+//CHINA001 pValues[nProperty].Value >>= sPrefixes[i];
+//CHINA001                      else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSuffix)))
+//CHINA001 pValues[nProperty].Value >>= sSuffixes[i];
+//CHINA001                      else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cParentNumbering)))
+//CHINA001 pValues[nProperty].Value >>= aParentNumberings[i];
+//CHINA001                  }
+//CHINA001 Sequence< PropertyValue > aProperties(2);
+//CHINA001 PropertyValue* pProperties = aProperties.getArray();
+//CHINA001 pProperties[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingType"));
+//CHINA001 pProperties[0].Value <<= aNumberingTypes[i];
+//CHINA001 pProperties[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
+//CHINA001 pProperties[1].Value <<= (sal_Int32)1;
+//CHINA001 try
+//CHINA001                  {
+//CHINA001 sLevelTexts[i] = xFormatter->makeNumberingString( aProperties, aLocale );
+//CHINA001                  }
+//CHINA001 catch(Exception&)
+//CHINA001                  {
+//CHINA001 DBG_ERROR("Exception in DefaultNumberingProvider::makeNumberingString")
+//CHINA001                  }
+//CHINA001
+//CHINA001 aLeft.Y() -= (pDev->GetTextHeight()/2);
+//CHINA001 if(sPrefixes[i].getLength() &&
+//CHINA001 !sPrefixes[i].equalsAsciiL(" ", 1) &&
+//CHINA001 sPrefixes[i].getStr()[0] != 0)
+//CHINA001                  {
+//CHINA001 pVDev->SetFont(aFont);
+//CHINA001 pVDev->DrawText(aLeft, sPrefixes[i]);
+//CHINA001 aLeft.X() += pDev->GetTextWidth(sPrefixes[i]);
+//CHINA001                  }
+//CHINA001 if(aParentNumberings[i])
+//CHINA001                  {
+//CHINA001 //insert old numberings here
+//CHINA001 sal_Int16 nStartLevel = std::min((sal_Int32)aParentNumberings[i], i);
+//CHINA001 for(sal_Int16 nParentLevel = i - nStartLevel; nParentLevel < i; nParentLevel++)
+//CHINA001                      {
+//CHINA001 OUString sTmp(sLevelTexts[nParentLevel]);
+//CHINA001 sTmp += C2U(".");
+//CHINA001 lcl_PaintLevel(pVDev,
+//CHINA001 aNumberingTypes[nParentLevel],
+//CHINA001 sBulletChars[nParentLevel],
+//CHINA001 sTmp,
+//CHINA001 sFontNames[nParentLevel],
+//CHINA001 aLeft,
+//CHINA001 aRuleFont,
+//CHINA001 aFont);
+//CHINA001                      }
+//CHINA001                  }
+//CHINA001 lcl_PaintLevel(pVDev,
+//CHINA001 aNumberingTypes[i],
+//CHINA001 sBulletChars[i],
+//CHINA001 sLevelTexts[i],
+//CHINA001 sFontNames[i],
+//CHINA001 aLeft,
+//CHINA001 aRuleFont,
+//CHINA001 aFont);
+//CHINA001 if(sSuffixes[i].getLength()&&
+//CHINA001 !sSuffixes[i].equalsAsciiL(" ", 1) &&
+//CHINA001 sSuffixes[i].getStr()[0] != 0)
+//CHINA001                  {
+//CHINA001 pVDev->SetFont(aFont);
+//CHINA001 pVDev->DrawText(aLeft, sSuffixes[i]);
+//CHINA001 aLeft.X() += pDev->GetTextWidth(sSuffixes[i]);
+//CHINA001                  }
+//CHINA001
+//CHINA001 long nLineTop = nStartY + nRectHeight * aLinesArr[2 * i + 1]/100 ;
+//CHINA001 Point aLineLeft(aLeft.X() /*+ nStartX + nRectWidth * aLinesArr[2 * i]/ 100*/, nLineTop );
+//CHINA001 Point aLineRight(nStartX + nRectWidth * 90 /100, nLineTop );
+//CHINA001 pVDev->DrawLine(aLineLeft,   aLineRight);
+//CHINA001              }
+//CHINA001
+//CHINA001          }
+//CHINA001 #ifdef DBG_UTIL
+//CHINA001 catch(Exception&)
+//CHINA001          {
+//CHINA001 static sal_Bool bAssert = FALSE;
+//CHINA001 if(!bAssert)
+//CHINA001              {
+//CHINA001 DBG_ERROR("exception in ::UserDraw")
+//CHINA001 bAssert = sal_True;
+//CHINA001              }
+//CHINA001          }
+//CHINA001 #else
+//CHINA001 catch(Exception&)
+//CHINA001          {
+//CHINA001          }
+//CHINA001 #endif
+//CHINA001      }
+//CHINA001 pDev->DrawOutDev(    aRect.TopLeft(), aRectSize,
+//CHINA001 aOrgRect.TopLeft(), aRectSize,
+//CHINA001 *pVDev );
+//CHINA001  }
+//CHINA001
+//CHINA001 pDev->SetFont(aOldFont);
+//CHINA001 pDev->SetLineColor(aOldColor);
+//CHINA001 }
+//CHINA001
+//CHINA001 /**************************************************************************/
+//CHINA001 /*                                                                        */
+//CHINA001 /*                                                                        */
+//CHINA001 /**************************************************************************/
+//CHINA001
+//CHINA001 SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nType ) :
+//CHINA001
+//CHINA001 ValueSet( pParent, rResId ),
+//CHINA001
+//CHINA001 pVDev        ( NULL ),
+//CHINA001 nPageType    ( nType ),
+//CHINA001 bHTMLMode    ( FALSE ),
+//CHINA001 aLineColor   ( COL_LIGHTGRAY )
+//CHINA001 {
+//CHINA001 SetColCount( 4 );
+//CHINA001 SetStyle( GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
+//CHINA001 if(NUM_PAGETYPE_BULLET == nType)
+//CHINA001  {
+//CHINA001 for  ( USHORT i = 0; i < 8; i++ )
+//CHINA001 InsertItem( i + 1, i );
+//CHINA001  }
+//CHINA001 }
+//CHINA001
+//CHINA001 /*-----------------08.02.97 12.38-------------------
+//CHINA001
+//CHINA001 --------------------------------------------------*/
+//CHINA001
+//CHINA001 SvxNumValueSet::~SvxNumValueSet()
+//CHINA001 {
+//CHINA001 delete pVDev;
+//CHINA001 }
+//CHINA001 /* -----------------------------30.01.01 16:24--------------------------------
+//CHINA001
+//CHINA001 ---------------------------------------------------------------------------*/
+//CHINA001 void SvxNumValueSet::SetNumberingSettings(
+//CHINA001 const Sequence<Sequence<PropertyValue> >& aNum,
+//CHINA001 Reference<XNumberingFormatter>& xFormat,
+//CHINA001 const Locale& rLocale    )
+//CHINA001 {
+//CHINA001 aNumSettings = aNum;
+//CHINA001 xFormatter = xFormat;
+//CHINA001 aLocale = rLocale;
+//CHINA001 for  ( USHORT i = 0; i < aNum.getLength() && i < 8; i++ )
+//CHINA001 InsertItem( i + 1, i );
+//CHINA001 }
+//CHINA001 /* -----------------------------31.01.01 09:50--------------------------------
+//CHINA001
+//CHINA001 ---------------------------------------------------------------------------*/
+//CHINA001 void SvxNumValueSet::SetOutlineNumberingSettings(
+//CHINA001 Sequence<Reference<XIndexAccess> >& rOutline,
+//CHINA001 Reference<XNumberingFormatter>& xFormat,
+//CHINA001 const Locale& rLocale)
+//CHINA001 {
+//CHINA001 aOutlineSettings = rOutline;
+//CHINA001 xFormatter = xFormat;
+//CHINA001 aLocale = rLocale;
+//CHINA001 for  ( sal_uInt16 i = 0; i < aOutlineSettings.getLength() && i < 8; i++ )
+//CHINA001 InsertItem( i + 1, i );
+//CHINA001 }
 /**************************************************************************/
 /*                                                                        */
 /*                                                                        */
@@ -1609,78 +1637,78 @@ IMPL_LINK(SvxBitmapPickTabPage, LinkBmpHdl_Impl, CheckBox*, pBox )
 
 --------------------------------------------------*/
 
-SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, const List& rStrNames*/ ) :
-
-    SvxNumValueSet( pParent, rResId, NUM_PAGETYPE_BMP ),
-//    rStrList    ( rStrNames ),
-    bGrfNotFound( FALSE )
-
-{
-    GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
-    SetStyle( GetStyle() | WB_VSCROLL );
-    SetLineCount( 3 );
-    aFormatTimer.SetTimeout(300);
-    aFormatTimer.SetTimeoutHdl(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
-}
-
-/*-----------------13.02.97 09.41-------------------
-
---------------------------------------------------*/
-
- SvxBmpNumValueSet::~SvxBmpNumValueSet()
-{
-    GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
-    aFormatTimer.Stop();
-}
-/*-----------------13.02.97 09.41-------------------
-
---------------------------------------------------*/
-
-void    SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
-{
-    SvxNumValueSet::UserDraw(rUDEvt);
-
-    Rectangle aRect = rUDEvt.GetRect();
-    OutputDevice*  pDev = rUDEvt.GetDevice();
-    USHORT  nItemId = rUDEvt.GetItemId();
-    Point aBLPos = aRect.TopLeft();
-
-    int nRectHeight = aRect.GetHeight();
-    Size aSize(nRectHeight/8, nRectHeight/8);
-
-    Graphic aGraphic;
-    if(!GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nItemId - 1,
-                        &aGraphic, NULL))
-    {
-        bGrfNotFound = TRUE;
-    }
-    else
-    {
-        Point aPos(aBLPos.X() + 5, 0);
-        for( USHORT i = 0; i < 3; i++ )
-        {
-            USHORT nY = 11 + i * 33;
-            aPos.Y() = aBLPos.Y() + nRectHeight  * nY / 100;
-            aGraphic.Draw( pDev, aPos, aSize );
-        }
-    }
-}
-
-/*-----------------14.02.97 07.34-------------------
-
---------------------------------------------------*/
-
-IMPL_LINK(SvxBmpNumValueSet, FormatHdl_Impl, Timer*, EMPTYARG)
-{
-    // nur, wenn eine Grafik nicht da war, muss formatiert werden
-    if(bGrfNotFound)
-    {
-        bGrfNotFound = FALSE;
-        Format();
-    }
-    Invalidate();
-    return 0;
-}
+//CHINA001 SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, const List& rStrNames*/ ) :
+//CHINA001
+//CHINA001 SvxNumValueSet( pParent, rResId, NUM_PAGETYPE_BMP ),
+//CHINA001 //    rStrList    ( rStrNames ),
+//CHINA001 bGrfNotFound( FALSE )
+//CHINA001
+//CHINA001 {
+//CHINA001 GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
+//CHINA001 SetStyle( GetStyle() | WB_VSCROLL );
+//CHINA001 SetLineCount( 3 );
+//CHINA001 aFormatTimer.SetTimeout(300);
+//CHINA001 aFormatTimer.SetTimeoutHdl(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
+//CHINA001 }
+//CHINA001
+//CHINA001 /*-----------------13.02.97 09.41-------------------
+//CHINA001
+//CHINA001 --------------------------------------------------*/
+//CHINA001
+//CHINA001 SvxBmpNumValueSet::~SvxBmpNumValueSet()
+//CHINA001 {
+//CHINA001 GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
+//CHINA001 aFormatTimer.Stop();
+//CHINA001 }
+//CHINA001 /*-----------------13.02.97 09.41-------------------
+//CHINA001
+//CHINA001 --------------------------------------------------*/
+//CHINA001
+//CHINA001 void     SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
+//CHINA001 {
+//CHINA001 SvxNumValueSet::UserDraw(rUDEvt);
+//CHINA001
+//CHINA001 Rectangle aRect = rUDEvt.GetRect();
+//CHINA001 OutputDevice*  pDev = rUDEvt.GetDevice();
+//CHINA001 USHORT   nItemId = rUDEvt.GetItemId();
+//CHINA001 Point aBLPos = aRect.TopLeft();
+//CHINA001
+//CHINA001 int nRectHeight = aRect.GetHeight();
+//CHINA001 Size aSize(nRectHeight/8, nRectHeight/8);
+//CHINA001
+//CHINA001 Graphic aGraphic;
+//CHINA001 if(!GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nItemId - 1,
+//CHINA001 &aGraphic, NULL))
+//CHINA001 {
+//CHINA001 bGrfNotFound = TRUE;
+//CHINA001  }
+//CHINA001  else
+//CHINA001 {
+//CHINA001 Point aPos(aBLPos.X() + 5, 0);
+//CHINA001 for( USHORT i = 0; i < 3; i++ )
+//CHINA001 {
+//CHINA001 USHORT nY = 11 + i * 33;
+//CHINA001 aPos.Y() = aBLPos.Y() + nRectHeight  * nY / 100;
+//CHINA001 aGraphic.Draw( pDev, aPos, aSize );
+//CHINA001      }
+//CHINA001  }
+//CHINA001 }
+//CHINA001
+//CHINA001 /*-----------------14.02.97 07.34-------------------
+//CHINA001
+//CHINA001 --------------------------------------------------*/
+//CHINA001
+//CHINA001 IMPL_LINK(SvxBmpNumValueSet, FormatHdl_Impl, Timer*, EMPTYARG)
+//CHINA001 {
+//CHINA001 // nur, wenn eine Grafik nicht da war, muss formatiert werden
+//CHINA001 if(bGrfNotFound)
+//CHINA001 {
+//CHINA001 bGrfNotFound = FALSE;
+//CHINA001 Format();
+//CHINA001  }
+//CHINA001 Invalidate();
+//CHINA001 return 0;
+//CHINA001 }
 /*-----------------01.12.97 16:15-------------------
     Tabpage Numerierungsoptionen
 --------------------------------------------------*/
@@ -3996,3 +4024,40 @@ void SvxNumOptionsTabPage::SetModified(BOOL bRepaint)
     }
 }
 
+//Add CHINA001
+void SvxNumOptionsTabPage::PageCreated(SfxAllItemSet aSet)
+{
+    SFX_ITEMSET_ARG (&aSet,pListItem,SfxStringListItem,SID_CHAR_FMT_LIST_BOX,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pNumCharFmt,SfxStringItem,SID_NUM_CHAR_FMT,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pMetricItem,SfxAllEnumItem,SID_METRIC_ITEM,sal_False);
+
+    if (pNumCharFmt &&pBulletCharFmt)
+        SetCharFmts( pNumCharFmt->GetValue(),pBulletCharFmt->GetValue());
+
+    if (pListItem)
+    {
+        ListBox& myCharFmtLB = GetCharFmtListBox();
+        const List *pList = (pListItem)->GetList();
+        sal_uInt32 nCount = pList->Count();;
+        for(sal_uInt32 i = 0; i < nCount; i++)
+        {
+            myCharFmtLB.InsertEntry(*(const String*)(pList->GetObject(i)) );
+
+        }
+    }
+    if (pMetricItem)
+        SetMetric(static_cast<FieldUnit>(pMetricItem->GetValue()));
+}
+
+//end of add CHINA001
+
+//add CHINA001 begin
+
+void SvxNumPositionTabPage::PageCreated(SfxAllItemSet aSet)
+{
+    SFX_ITEMSET_ARG (&aSet,pMetricItem,SfxAllEnumItem,SID_METRIC_ITEM,sal_False);
+
+    if (pMetricItem)
+        SetMetric(static_cast<FieldUnit>(pMetricItem->GetValue()));
+}
