@@ -47,7 +47,7 @@
     <project-build-dependency>  cppuhelper  </project-build-dependency>
     <project-build-dependency>  cppu        </project-build-dependency>
     <project-build-dependency>  sal         </project-build-dependency>
-    <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
-    <runtime-module-dependency> cppu1       </runtime-module-dependency>
-    <runtime-module-dependency> sal1        </runtime-module-dependency>
+    <runtime-module-dependency> cppuhelper2$(COM)   </runtime-module-dependency>
+    <runtime-module-dependency> cppu2       </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
 </module-description>
