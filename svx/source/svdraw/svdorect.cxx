@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:48:56 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,13 @@ void SdrRectObj::RecalcBoundRect()
 {
     aOutRect=GetSnapRect();
     long nLineWdt=ImpGetLineWdt();
-    nLineWdt++; nLineWdt/=2;
+
+    // #i25616#
+    if(!LineIsOutsideGeometry())
+    {
+        nLineWdt++; nLineWdt/=2;
+    }
+
     if (nLineWdt!=0) {
         long a=nLineWdt;
         if ((aGeo.nDrehWink!=0 || aGeo.nShearWink!=0) && GetEckenradius()==0) {
@@ -290,137 +296,158 @@ void SdrRectObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     }
 }
 
-sal_Bool SdrRectObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+//////////////////////////////////////////////////////////////////////////////
+// #i25616#
+
+void SdrRectObj::ImpDoPaintRectObjShadow(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec,
+    sal_Bool bPaintFill, sal_Bool bPaintLine) const
 {
-    // #110094#-16 Moved to ViewContactOfSdrObj::ShouldPaintObject(..)
-    //// Hidden objects on masterpages, draw nothing
-    //if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
-    //  return TRUE;
-
-    // #110094#-16 Moved to ViewContactOfMasterPage::ShouldPaintObject(..)
-    //// Im Graustufenmodus/Kontrastmodus soll die Hintergrundseite NICHT angezeigt werden
-    //ULONG nMode = rXOut.GetOutDev()->GetDrawMode();
-    //FASTBOOL bGrayscaleMode = ( nMode == (DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
-    //FASTBOOL bSettingsMode = ( nMode == (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT ) );
-    //
-    //if( ( bGrayscaleMode || bSettingsMode ) && pPage && pPage->IsMasterPage() )
-    //{
-    //  Size aPageSize = pPage->GetSize();
-    //  long aRectWidth = aRect.GetSize().Width() - 1;
-    //  long aRectHeight = aRect.GetSize().Height() - 1;
-    //
-    //  // Objekt so gross wie Seite ? -> Hintergrund
-    //  if( aRectWidth == aPageSize.Width() &&
-    //      aRectHeight == aPageSize.Height()  )
-    //  {
-    //      return TRUE;
-    //  }
-    //  // oder so gross wie Seite abzueglich der Raender
-    //  if( aRectWidth == aPageSize.Width() -
-    //          pPage->GetLftBorder() - pPage->GetRgtBorder() &&
-    //      aRectHeight == aPageSize.Height() -
-    //          pPage->GetUppBorder() - pPage->GetLwrBorder() )
-    //  {
-    //      return TRUE;
-    //  }
-    //}
-
-    if (bTextFrame && aGeo.nShearWink!=0) {
-        DBG_WARNING("Shearwinkel vom TextFrame innerhalb von SdrRectObj::DoPaintObject() auf 0 gesetzt");
-        ((SdrRectObj*)this)->ImpCheckShear();
-        ((SdrRectObj*)this)->SetRectsDirty();
-    }
-    sal_Bool bOk(sal_True);
-    BOOL bHideContour(IsHideContour());
-    sal_Int32 nEckRad(GetEckenradius());
-    BOOL bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
-    BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
-
-    // prepare ItemSet of this object
+    const sal_Bool bHideContour(IsHideContour());
     const SfxItemSet& rSet = GetObjectItemSet();
-
-    // perepare ItemSet to avoid old XOut line drawing
-    SfxItemSet aEmptySet(*rSet.GetPool());
-    aEmptySet.Put(XLineStyleItem(XLINE_NONE));
-    aEmptySet.Put(XFillStyleItem(XFILL_NONE));
-
-    // #103692# prepare ItemSet for shadow fill attributes
     SfxItemSet aShadowSet(rSet);
 
-    // prepare line geometry
-    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
-
-    // Shadows
-    if (!bHideContour && ImpSetShadowAttributes(rSet, aShadowSet))
+    if(!bHideContour && ImpSetShadowAttributes(rSet, aShadowSet))
     {
-        if( bIsFillDraft )
-            rXOut.SetFillAttr(aEmptySet);
-        else
-            rXOut.SetFillAttr(aShadowSet);
+        const sal_Bool bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
 
-        UINT32 nXDist=((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
-        UINT32 nYDist=((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
+        // perepare ItemSet to avoid old XOut line drawing
+        SfxItemSet aEmptySet(*rSet.GetPool());
+        aEmptySet.Put(XLineStyleItem(XLINE_NONE));
+        aEmptySet.Put(XFillStyleItem(XFILL_NONE));
+
+        if( bIsFillDraft )
+        {
+            rXOut.SetFillAttr(aEmptySet);
+        }
+        else
+        {
+            rXOut.SetFillAttr(aShadowSet);
+        }
+
+        sal_uInt32 nXDist(((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue());
+        sal_uInt32 nYDist(((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
 
         // avoid shadow line drawing in XOut
         rXOut.SetLineAttr(aEmptySet);
 
+        if(bPaintFill)
         {
             // #100127# Output original geometry for metafiles
             ImpGraphicFill aFill( *this, rXOut, aShadowSet, true );
+            const sal_Int32 nEckRad(GetEckenradius());
 
-            if (PaintNeedsXPoly(nEckRad)) {
+            if (PaintNeedsXPoly(nEckRad))
+            {
                 XPolygon aX(GetXPoly());
                 aX.Move(nXDist,nYDist);
                 rXOut.DrawXPolygon(aX);
-            } else {
+            }
+            else
+            {
                 Rectangle aR(aRect);
                 aR.Move(nXDist,nYDist);
                 rXOut.DrawRect(aR,USHORT(2*nEckRad),USHORT(2*nEckRad));
             }
         }
 
-        // new shadow line drawing
-        if( pLineGeometry.get() )
+        if(bPaintLine)
         {
-            // draw the line geometry
-            ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
+            // prepare line geometry
+            const sal_Bool bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
+            ::std::auto_ptr< SdrLineGeometry > pLineGeometry(ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft));
+
+            // new shadow line drawing
+            if( pLineGeometry.get() )
+            {
+                // draw the line geometry
+                ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
+            }
         }
     }
+}
 
-    // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
-    rXOut.SetLineAttr(aEmptySet);
+//////////////////////////////////////////////////////////////////////////////
+// #i25616#
 
-    rXOut.SetFillAttr( bIsFillDraft ? aEmptySet : rSet );
+void SdrRectObj::ImpDoPaintRectObj(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec,
+    sal_Bool bPaintFill, sal_Bool bPaintLine) const
+{
+    const sal_Bool bHideContour(IsHideContour());
 
-    if (!bHideContour) {
-        // #100127# Output original geometry for metafiles
-        ImpGraphicFill aFill( *this, rXOut, bIsFillDraft ? aEmptySet : rSet );
-
-        if (PaintNeedsXPoly(nEckRad)) {
-            rXOut.DrawXPolygon(GetXPoly());
-        } else {
-            DBG_ASSERT(nEckRad==0,"SdrRectObj::DoPaintObject(): XOut.DrawRect() unterstuetz kein Eckenradius!");
-            rXOut.DrawRect(aRect/*,USHORT(2*nEckRad),USHORT(2*nEckRad)*/);
-        }
-    }
-
-    DBG_ASSERT(aRect.GetWidth()>1 && aRect.GetHeight()>1,"SdrRectObj::DoPaintObject(): Rect hat Nullgroesse (oder negativ)!");
-
-    // Own line drawing
-    if( !bHideContour && pLineGeometry.get() )
+    if(!bHideContour)
     {
-        // draw the line geometry
-        ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
+        // prepare ItemSet of this object
+        const SfxItemSet& rSet = GetObjectItemSet();
+
+        // perepare ItemSet to avoid old XOut line drawing
+        SfxItemSet aEmptySet(*rSet.GetPool());
+        aEmptySet.Put(XLineStyleItem(XLINE_NONE));
+        aEmptySet.Put(XFillStyleItem(XFILL_NONE));
+
+        // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
+        rXOut.SetLineAttr(aEmptySet);
+
+        const sal_Bool bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
+        rXOut.SetFillAttr( bIsFillDraft ? aEmptySet : rSet );
+
+        if (!bHideContour && bPaintFill)
+        {
+            // #100127# Output original geometry for metafiles
+            ImpGraphicFill aFill( *this, rXOut, bIsFillDraft ? aEmptySet : rSet );
+            const sal_Int32 nEckRad(GetEckenradius());
+
+            if (PaintNeedsXPoly(nEckRad))
+            {
+                rXOut.DrawXPolygon(GetXPoly());
+            }
+            else
+            {
+                DBG_ASSERT(nEckRad==0,"SdrRectObj::DoPaintObject(): XOut.DrawRect() unterstuetz kein Eckenradius!");
+                rXOut.DrawRect(aRect/*,USHORT(2*nEckRad),USHORT(2*nEckRad)*/);
+            }
+        }
+
+        DBG_ASSERT(aRect.GetWidth()>1 && aRect.GetHeight()>1,"SdrRectObj::DoPaintObject(): Rect hat Nullgroesse (oder negativ)!");
+
+        // Own line drawing
+        if( !bHideContour && bPaintLine)
+        {
+            // prepare line geometry
+            const sal_Bool bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
+            ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
+
+            if( pLineGeometry.get() )
+            {
+                // draw the line geometry
+                ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
+            }
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+sal_Bool SdrRectObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+{
+    if (bTextFrame && aGeo.nShearWink!=0) {
+        DBG_WARNING("Shearwinkel vom TextFrame innerhalb von SdrRectObj::DoPaintObject() auf 0 gesetzt");
+        ((SdrRectObj*)this)->ImpCheckShear();
+        ((SdrRectObj*)this)->SetRectsDirty();
     }
 
-    if (HasText()) {
+    sal_Bool bOk(sal_True);
+
+    // draw shadow
+    ImpDoPaintRectObjShadow(rXOut, rInfoRec, sal_True, sal_True);
+
+    // draw geometry
+    ImpDoPaintRectObj(rXOut, rInfoRec, sal_True, sal_True);
+
+    // draw text
+    if(HasText() && !LineIsOutsideGeometry())
+    {
         bOk = SdrTextObj::DoPaintObject(rXOut,rInfoRec);
     }
-
-    // #110094#-13
-    //if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
-    //  bOk=PaintGluePoints(rXOut,rInfoRec);
-    //}
 
     return bOk;
 }
@@ -434,7 +461,14 @@ SdrObject* SdrRectObj::ImpCheckHit(const Point& rPnt, USHORT nTol, const SetOfBy
     if (bTextFrame && !bPickThrough) bFilled=TRUE;
     FASTBOOL bLine=HasLine();
 
-    INT32 nWdt=bLine ? ImpGetLineWdt()/2 :0; // Halbe Strichstaerke
+    INT32 nWdt=bLine ? ImpGetLineWdt() :0; // Halbe Strichstaerke
+
+    // #i25616#
+    if(nWdt && !LineIsOutsideGeometry())
+    {
+        nWdt /= 2;
+    }
+
     long nBoundWdt=aRect.GetWidth()-1;
     long nBoundHgt=aRect.GetHeight()-1;
     if (bFilled && nBoundWdt>short(nTol) && nBoundHgt>short(nTol) && Abs(aGeo.nShearWink)<=4500) {
@@ -782,9 +816,14 @@ XubString SdrRectObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 
 SdrGluePoint SdrRectObj::GetVertexGluePoint(USHORT nPosNum) const
 {
-    INT32 nWdt = ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
-    nWdt++;
-    nWdt /= 2;
+    INT32 nWdt = ImpGetLineWdt(); // #i25616# ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
+
+    // #i25616#
+    if(!LineIsOutsideGeometry())
+    {
+        nWdt++;
+        nWdt /= 2;
+    }
 
     Point aPt;
     switch (nPosNum) {
@@ -803,9 +842,14 @@ SdrGluePoint SdrRectObj::GetVertexGluePoint(USHORT nPosNum) const
 
 SdrGluePoint SdrRectObj::GetCornerGluePoint(USHORT nPosNum) const
 {
-    INT32 nWdt = ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
-    nWdt++;
-    nWdt /= 2;
+    INT32 nWdt = ImpGetLineWdt(); // #i25616# ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
+
+    // #i25616#
+    if(!LineIsOutsideGeometry())
+    {
+        nWdt++;
+        nWdt /= 2;
+    }
 
     Point aPt;
     switch (nPosNum) {
