@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-05-27 17:09:16 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-07 16:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,52 +112,65 @@ class LocalSingleBackend : public SingleBackendBase {
 
         // XInitialize
         virtual void SAL_CALL initialize(
-                                const uno::Sequence<uno::Any>& aParameters) ;
+                                const uno::Sequence<uno::Any>& aParameters)
+            throw (uno::RuntimeException, uno::Exception) ;
         // XSingleBackend
         virtual uno::Sequence<rtl::OUString> SAL_CALL listLayerIds(
                                                 const rtl::OUString& aComponent,
                                                 const rtl::OUString& aEntity)
             throw (backend::BackendAccessException,
-                    lang::IllegalArgumentException) ;
+                    lang::IllegalArgumentException,
+                    uno::RuntimeException) ;
         virtual rtl::OUString SAL_CALL getUpdateLayerId(
                                                 const rtl::OUString& aComponent,
                                                 const rtl::OUString& aEntity)
             throw (backend::BackendAccessException,
-                    lang::IllegalArgumentException) ;
-        virtual rtl::OUString SAL_CALL getOwnId(void) ;
+                    lang::IllegalArgumentException,
+                    uno::RuntimeException) ;
+        virtual rtl::OUString SAL_CALL getOwnId(void)
+            throw (uno::RuntimeException) ;
         virtual uno::Reference<backend::XLayer> SAL_CALL getLayer(
                                             const rtl::OUString& aLayerId,
                                             const rtl::OUString& aTimestamp)
             throw (backend::BackendAccessException,
-                    lang::IllegalArgumentException) ;
+                    lang::IllegalArgumentException,
+                    uno::RuntimeException) ;
         virtual uno::Sequence<uno::Reference<backend::XLayer> > SAL_CALL
             getLayers(const uno::Sequence<rtl::OUString>& aLayerIds,
                       const rtl::OUString& aTimestamp)
             throw (backend::BackendAccessException,
-                    lang::IllegalArgumentException) ;
+                    lang::IllegalArgumentException,
+                    uno::RuntimeException) ;
         virtual uno::Sequence<uno::Reference<backend::XLayer> > SAL_CALL
             getMultipleLayers(const uno::Sequence<rtl::OUString>& aLayerIds,
                               const uno::Sequence<rtl::OUString>& aTimestamps)
             throw (backend::BackendAccessException,
-                    lang::IllegalArgumentException) ;
+                    lang::IllegalArgumentException,
+                    uno::RuntimeException) ;
         virtual uno::Reference<backend::XUpdatableLayer> SAL_CALL
             getUpdatableLayer(const rtl::OUString& aLayerId)
             throw (backend::BackendAccessException,
-                    lang::IllegalArgumentException) ;
+                    lang::IllegalArgumentException,
+                    uno::RuntimeException) ;
         virtual uno::Reference<backend::XLayerHandler> SAL_CALL
             getWriteHandler(const rtl::OUString& aLayerId)
             throw (backend::BackendAccessException,
-                    lang::IllegalArgumentException) ;
+                    lang::IllegalArgumentException,
+                    uno::RuntimeException) ;
         virtual uno::Reference<backend::XSchema> SAL_CALL getSchema(
                                             const rtl::OUString& aComponent)
             throw (backend::BackendAccessException,
-                    lang::IllegalArgumentException) ;
+                    lang::IllegalArgumentException,
+                    uno::RuntimeException) ;
         // XServiceInfo
-        virtual rtl::OUString SAL_CALL getImplementationName(void) ;
+        virtual rtl::OUString SAL_CALL getImplementationName(void)
+            throw (uno::RuntimeException) ;
         virtual sal_Bool SAL_CALL supportsService(
-                                            const rtl::OUString& aServiceName) ;
+                                            const rtl::OUString& aServiceName)
+            throw (uno::RuntimeException) ;
         virtual uno::Sequence<rtl::OUString> SAL_CALL
-            getSupportedServiceNames(void) ;
+            getSupportedServiceNames(void)
+            throw (uno::RuntimeException) ;
 
         /**
           Provides the implementation name.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-05-27 17:09:16 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-07 16:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include <rtl/ustrbuf.hxx>
 #endif // _RTL_USTRBUF_HXX_
 
+#ifndef _COM_SUN_STAR_UNO_XCURRENTCONTEXT_HPP_
+#include <com/sun/star/uno/XCurrentContext.hpp>
+#endif // _COM_SUN_STAR_UNO_XCURRENTCONTEXT_HPP_
+
 namespace configmgr {
 
 //==============================================================================
@@ -87,8 +91,31 @@ LocalSingleBackend::LocalSingleBackend(
 }
 //------------------------------------------------------------------------------
 
+static const rtl::OUString kSharedDataUrl(
+        RTL_CONSTASCII_USTRINGPARAM("SharedDataUrl")) ;
+static const rtl::OUString kUserDataUrl(
+        RTL_CONSTASCII_USTRINGPARAM("UserDataUrl")) ;
+static const rtl::OUString kUserName(
+        RTL_CONSTASCII_USTRINGPARAM("UserName")) ;
+
 void SAL_CALL LocalSingleBackend::initialize(
-        const uno::Sequence<uno::Any>& aParameters) {
+        const uno::Sequence<uno::Any>& aParameters)
+    throw (uno::RuntimeException, uno::Exception)
+{
+    if (aParameters.getLength() == 0) {
+        throw lang::IllegalArgumentException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "No parameters provided to SingleBackend")),
+                *this, 0) ;
+    }
+    uno::Reference<uno::XCurrentContext> context ;
+
+    for (sal_Int32 i = 0 ; i < aParameters.getLength() ; ++ i) {
+        if (aParameters [i] >>= context) { break ; }
+    }
+    context->getValueByName(kSharedDataUrl) >>= mSharedDataUrl ;
+    context->getValueByName(kUserDataUrl) >>= mUserDataUrl ;
+    context->getValueByName(kUserName) >>= mOwnId ;
 }
 //------------------------------------------------------------------------------
 
@@ -110,7 +137,8 @@ static const rtl::OUString kDataSuffix(RTL_CONSTASCII_USTRINGPARAM(".xcu")) ;
 
 uno::Sequence<rtl::OUString> SAL_CALL LocalSingleBackend::listLayerIds(
         const rtl::OUString& aComponent, const rtl::OUString& aEntity)
-    throw (backend::BackendAccessException, lang::IllegalArgumentException)
+    throw (backend::BackendAccessException, lang::IllegalArgumentException,
+            uno::RuntimeException)
 {
     if (!aEntity.equals(mOwnId)) {
         throw lang::IllegalArgumentException(
@@ -134,7 +162,8 @@ uno::Sequence<rtl::OUString> SAL_CALL LocalSingleBackend::listLayerIds(
 
 rtl::OUString SAL_CALL LocalSingleBackend::getUpdateLayerId(
         const rtl::OUString& aComponent, const rtl::OUString& aEntity)
-    throw (backend::BackendAccessException, lang::IllegalArgumentException)
+    throw (backend::BackendAccessException, lang::IllegalArgumentException,
+            uno::RuntimeException)
 {
     if (!aEntity.equals(mOwnId)) {
         throw lang::IllegalArgumentException(
@@ -149,7 +178,9 @@ rtl::OUString SAL_CALL LocalSingleBackend::getUpdateLayerId(
 }
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL LocalSingleBackend::getOwnId(void) {
+rtl::OUString SAL_CALL LocalSingleBackend::getOwnId(void)
+    throw (uno::RuntimeException)
+{
     return mOwnId ;
 }
 //------------------------------------------------------------------------------
@@ -171,7 +202,8 @@ static sal_Bool isMoreRecent(const rtl::OUString& aFileUrl,
 
 uno::Reference<backend::XLayer> SAL_CALL LocalSingleBackend::getLayer(
         const rtl::OUString& aLayerId, const rtl::OUString& aTimestamp)
-    throw (backend::BackendAccessException, lang::IllegalArgumentException)
+    throw (backend::BackendAccessException, lang::IllegalArgumentException,
+            uno::RuntimeException)
 {
     if (!isMoreRecent(aLayerId, aTimestamp)) { return NULL ; }
     return new LocalFileLayer(mContext, aLayerId) ;
@@ -181,7 +213,8 @@ uno::Reference<backend::XLayer> SAL_CALL LocalSingleBackend::getLayer(
 uno::Sequence<uno::Reference<backend::XLayer> > SAL_CALL
 LocalSingleBackend::getLayers(const uno::Sequence<rtl::OUString>& aLayerIds,
                               const rtl::OUString& aTimestamp)
-    throw (backend::BackendAccessException, lang::IllegalArgumentException)
+    throw (backend::BackendAccessException, lang::IllegalArgumentException,
+            uno::RuntimeException)
 {
     uno::Sequence<uno::Reference<backend::XLayer> >
                                                 retCode(aLayerIds.getLength()) ;
@@ -197,7 +230,8 @@ uno::Sequence<uno::Reference<backend::XLayer> > SAL_CALL
 LocalSingleBackend::getMultipleLayers(
                         const uno::Sequence<rtl::OUString>& aLayerIds,
                         const uno::Sequence<rtl::OUString>& aTimestamps)
-    throw (backend::BackendAccessException, lang::IllegalArgumentException)
+    throw (backend::BackendAccessException, lang::IllegalArgumentException,
+            uno::RuntimeException)
 {
     if (aLayerIds.getLength() != aTimestamps.getLength()) {
         throw lang::IllegalArgumentException(
@@ -217,7 +251,8 @@ LocalSingleBackend::getMultipleLayers(
 
 uno::Reference<backend::XUpdatableLayer> SAL_CALL
 LocalSingleBackend::getUpdatableLayer(const rtl::OUString& aLayerId)
-    throw (backend::BackendAccessException, lang::IllegalArgumentException)
+    throw (backend::BackendAccessException, lang::IllegalArgumentException,
+            uno::RuntimeException)
 {
     return new LocalFileLayer(mContext, aLayerId) ;
 }
@@ -225,9 +260,12 @@ LocalSingleBackend::getUpdatableLayer(const rtl::OUString& aLayerId)
 
 uno::Reference<backend::XLayerHandler> SAL_CALL
 LocalSingleBackend::getWriteHandler(const rtl::OUString& aLayerId)
-    throw (backend::BackendAccessException, lang::IllegalArgumentException)
+    throw (backend::BackendAccessException, lang::IllegalArgumentException,
+            uno::RuntimeException)
 {
-    return getUpdatableLayer(aLayerId)->getWriteHandler() ;
+    LocalFileLayer layer(mContext, aLayerId) ;
+
+    return layer.getLayerWriter() ;
 }
 //------------------------------------------------------------------------------
 
@@ -239,7 +277,8 @@ static const rtl::OUString kXMLSchemaParser(RTL_CONSTASCII_USTRINGPARAM(
 
 uno::Reference<backend::XSchema> SAL_CALL LocalSingleBackend::getSchema(
                                               const rtl::OUString& aComponent)
-    throw (backend::BackendAccessException, lang::IllegalArgumentException)
+    throw (backend::BackendAccessException, lang::IllegalArgumentException,
+            uno::RuntimeException)
 {
     rtl::OUString subPath = componentToPath(aComponent) ;
     rtl::OUStringBuffer schemaUrl(mSharedDataUrl) ;
@@ -272,7 +311,9 @@ rtl::OUString SAL_CALL LocalSingleBackend::getName(void) {
 }
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL LocalSingleBackend::getImplementationName(void) {
+rtl::OUString SAL_CALL LocalSingleBackend::getImplementationName(void)
+    throw (uno::RuntimeException)
+{
     return getName() ;
 }
 //------------------------------------------------------------------------------
@@ -282,7 +323,9 @@ static const rtl::OUString kSingleBackendServiceName(
             "com.sun.star.configuration.backend.SingleBackend")) ;
 
 sal_Bool SAL_CALL LocalSingleBackend::supportsService(
-                                        const rtl::OUString& aServiceName) {
+                                        const rtl::OUString& aServiceName)
+    throw (uno::RuntimeException)
+{
     return aServiceName.equals(kSingleBackendServiceName) ;
 }
 //------------------------------------------------------------------------------
@@ -293,7 +336,9 @@ uno::Sequence<rtl::OUString> SAL_CALL LocalSingleBackend::getServices(void) {
 //------------------------------------------------------------------------------
 
 uno::Sequence<rtl::OUString>
-SAL_CALL LocalSingleBackend::getSupportedServiceNames(void) {
+SAL_CALL LocalSingleBackend::getSupportedServiceNames(void)
+    throw (uno::RuntimeException)
+{
     return getServices() ;
 }
 //------------------------------------------------------------------------------
