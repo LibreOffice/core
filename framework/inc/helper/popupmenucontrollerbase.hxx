@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popupmenucontrollerbase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:34:21 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,8 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XPOPUPMENUCONTROLLER_HPP_
-#include <drafts/com/sun/star/frame/XPopupMenuController.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XPOPUPMENUCONTROLLER_HPP_
+#include <com/sun/star/frame/XPopupMenuController.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -146,7 +146,7 @@ namespace framework
 {
     class PopupMenuControllerBase :  public com::sun::star::lang::XTypeProvider                 ,
                                      public com::sun::star::lang::XServiceInfo                  ,
-                                     public drafts::com::sun::star::frame::XPopupMenuController ,
+                                     public ::com::sun::star::frame::XPopupMenuController ,
                                      public com::sun::star::lang::XInitialization               ,
                                      public com::sun::star::frame::XStatusListener              ,
                                      public com::sun::star::awt::XMenuListener                  ,
