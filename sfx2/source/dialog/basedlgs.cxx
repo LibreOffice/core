@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-15 15:05:05 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 12:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,20 @@ using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
 #define USERITEM_NAME OUString::createFromAscii( "UserItem" )
+
+class SfxModelessDialog_Impl
+{
+public:
+    ByteString      aWinState;
+    SfxChildWindow* pMgr;
+};
+
+class SfxFloatingWindow_Impl
+{
+public:
+    ByteString      aWinState;
+    SfxChildWindow* pMgr;
+};
 
 // class SfxModalDefParentHelper -----------------------------------------
 
@@ -276,6 +290,48 @@ IMPL_LINK( SfxModalDialog, TimerHdl_Impl, Timer*, EMPTYARG )
 }
 
 //-------------------------------------------------------------------------
+void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
+{
+    if ( nStateChange == STATE_CHANGE_INITSHOW )
+    {
+        if ( pImp->aWinState.Len() )
+        {
+            SetWindowState( pImp->aWinState );
+        }
+        else
+        {
+            Point aPos = GetPosPixel();
+            if ( !aPos.X() )
+            {
+                aSize = GetSizePixel();
+
+                Size aParentSize = GetParent()->GetOutputSizePixel();
+                Size aSize = GetSizePixel();
+                aPos.X() += ( aParentSize.Width() - aSize.Width() ) / 2;
+                aPos.Y() += ( aParentSize.Height() - aSize.Height() ) / 2;
+
+                Point aPoint;
+                Rectangle aRect = GetDesktopRectPixel();
+                aPoint.X() = aRect.Right() - aSize.Width();
+                aPoint.Y() = aRect.Bottom() - aSize.Height();
+
+                aPoint = OutputToScreenPixel( aPoint );
+
+                if ( aPos.X() > aPoint.X() )
+                    aPos.X() = aPoint.X() ;
+                if ( aPos.Y() > aPoint.Y() )
+                    aPos.Y() = aPoint.Y();
+
+                if ( aPos.X() < 0 ) aPos.X() = 0;
+                if ( aPos.Y() < 0 ) aPos.Y() = 0;
+
+                SetPosPixel( aPos );
+            }
+        }
+    }
+
+    ModelessDialog::StateChanged( nStateChange );
+}
 
 void SfxModelessDialog::Initialize(SfxChildWinInfo *pInfo)
 
@@ -288,59 +344,7 @@ void SfxModelessDialog::Initialize(SfxChildWinInfo *pInfo)
 */
 
 {
-/*
-    if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 )
-    {
-        aPos = pInfo->aPos;
-        if ( GetStyle() & WB_SIZEABLE )
-            SetSizePixel( pInfo->aSize );
-
-        // Initiale Gr"o\se aus pInfo merken
-        aSize = GetSizePixel();
-
-        // Soll das FloatingWindow eingezoomt werden ?
-        if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
-            RollUp();
-    }
- */
-    if ( pInfo->aWinState.Len() )
-    {
-        SetWindowState( pInfo->aWinState );
-        if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
-            RollUp();
-    }
-    else
-    {
-        // trick: use VCL method SetWindowState to adjust position and size
-        SetWindowState( GetWindowState() );
-/*
-        // adjust position and size as set in resource or ctor
-        Point aPos;
-        aSize = GetSizePixel();
-
-        Size aParentSize = GetParent()->GetOutputSizePixel();
-        Size aSize = GetSizePixel();
-        aPos.X() += ( aParentSize.Width() - aSize.Width() ) / 2;
-        aPos.Y() += ( aParentSize.Height() - aSize.Height() ) / 2;
-
-        Point aPoint;
-        Rectangle aRect = GetDesktopRectPixel();
-        aPoint.X() = aRect.Right() - aSize.Width();
-        aPoint.Y() = aRect.Bottom() - aSize.Height();
-
-        aPoint = OutputToScreenPixel( aPoint );
-
-        if ( aPos.X() > aPoint.X() )
-            aPos.X() = aPoint.X() ;
-        if ( aPos.Y() > aPoint.Y() )
-            aPos.Y() = aPoint.Y();
-
-        if ( aPos.X() < 0 ) aPos.X() = 0;
-        if ( aPos.Y() < 0 ) aPos.Y() = 0;
-
-        SetPosPixel( aPos );
- */
-    }
+    pImp->aWinState = pInfo->aWinState;
 }
 
 void SfxModelessDialog::Resize()
@@ -366,14 +370,9 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
                         Window* pParent, WinBits nWinBits ) :
     ModelessDialog (pParent, nWinBits),
     pBindings(pBindinx),
-    pMgr(pCW)
-
-/*      [Beschreibung]
-
-    Konstruktor der allgemeinen Basisklasse f"ur nicht-modale Dialoge.
-*/
-
+    pImp( new SfxModelessDialog_Impl )
 {
+    pImp->pMgr = pCW;
     sal_uInt32 nId = GetHelpId();
     SetHelpId(0);
     SetUniqueId( nId );
@@ -386,14 +385,9 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
                         const ResId& rResId ) :
     ModelessDialog(pParent, rResId),
     pBindings(pBindinx),
-    pMgr(pCW)
-
-/*      [Beschreibung]
-
-    Konstruktor der allgemeinen Basisklasse f"ur nicht-modale Dialoge.
-*/
-
+    pImp( new SfxModelessDialog_Impl )
 {
+    pImp->pMgr = pCW;
     sal_uInt32 nId = GetHelpId();
     SetHelpId(0);
     SetUniqueId( nId );
@@ -421,8 +415,8 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
             ModelessDialog::ParentNotify( rEvt );
         return sal_True;
  */
-        pBindings->SetActiveFrame( pMgr->GetFrame() );
-        pMgr->Activate_Impl();
+        pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
+        pImp->pMgr->Activate_Impl();
         Window* pWindow = rEvt.GetWindow();
         ULONG nHelpId  = 0;
         while ( !nHelpId && pWindow )
@@ -437,7 +431,7 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )
     {
         pBindings->SetActiveFrame( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > () );
-        pMgr->Deactivate_Impl();
+        pImp->pMgr->Deactivate_Impl();
     }
     else if( rEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -461,8 +455,9 @@ SfxModelessDialog::~SfxModelessDialog()
 */
 
 {
-    if ( pMgr->GetFrame() == pBindings->GetActiveFrame() )
+    if ( pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
         pBindings->SetActiveFrame( NULL );
+    delete pImp;
 }
 
 //-------------------------------------------------------------------------
@@ -482,9 +477,9 @@ sal_Bool SfxModelessDialog::Close()
 {
     // Execute mit Parametern, da Toggle von einigen ChildWindows ignoriert
     // werden kann
-    SfxBoolItem aValue( pMgr->GetType(), sal_False);
+    SfxBoolItem aValue( pImp->pMgr->GetType(), sal_False);
     pBindings->GetDispatcher_Impl()->Execute(
-        pMgr->GetType(),
+        pImp->pMgr->GetType(),
         SFX_CALLMODE_RECORD|SFX_CALLMODE_SYNCHRON, &aValue, 0L );
     return sal_True;
 }
@@ -535,8 +530,8 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
 
     if ( rEvt.GetType() == EVENT_GETFOCUS )
     {
-        pBindings->SetActiveFrame( pMgr->GetFrame() );
-        pMgr->Activate_Impl();
+        pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
+        pImp->pMgr->Activate_Impl();
         Window* pWindow = rEvt.GetWindow();
         ULONG nHelpId  = 0;
         while ( !nHelpId && pWindow )
@@ -551,7 +546,7 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS )
     {
         if ( !HasChildPathFocus() )
-            pMgr->Deactivate_Impl();
+            pImp->pMgr->Deactivate_Impl();
     }
     else if( rEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -572,14 +567,9 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
                         Window* pParent, WinBits nWinBits) :
     FloatingWindow (pParent, nWinBits),
     pBindings(pBindinx),
-    pMgr(pCW)
-
-/*      [Beschreibung]
-
-    Konstruktor der allgemeinen Basisklasse f"ur FloatingWindows;
-*/
-
+    pImp( new SfxFloatingWindow_Impl )
 {
+    pImp->pMgr = pCW;
     sal_uInt32 nId = GetHelpId();
     SetHelpId(0);
     SetUniqueId( nId );
@@ -593,14 +583,9 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
                         const ResId& rResId) :
     FloatingWindow(pParent, rResId),
     pBindings(pBindinx),
-    pMgr(pCW)
-
-/*      [Beschreibung]
-
-    Konstruktor der allgemeinen Basisklasse f"ur FloatingWindows;
-*/
-
+    pImp( new SfxFloatingWindow_Impl )
 {
+    pImp->pMgr = pCW;
     sal_uInt32 nId = GetHelpId();
     SetHelpId(0);
     SetUniqueId( nId );
@@ -623,9 +608,9 @@ sal_Bool SfxFloatingWindow::Close()
 {
     // Execute mit Parametern, da Toggle von einigen ChildWindows ignoriert
     // werden kann
-    SfxBoolItem aValue( pMgr->GetType(), sal_False);
+    SfxBoolItem aValue( pImp->pMgr->GetType(), sal_False);
     pBindings->GetDispatcher_Impl()->Execute(
-            pMgr->GetType(),
+            pImp->pMgr->GetType(),
             SFX_CALLMODE_RECORD|SFX_CALLMODE_SYNCHRON, &aValue, 0L );
     return sal_True;
 }
@@ -640,8 +625,9 @@ SfxFloatingWindow::~SfxFloatingWindow()
 */
 
 {
-    if ( pMgr->GetFrame() == pBindings->GetActiveFrame() )
+    if ( pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
         pBindings->SetActiveFrame( NULL );
+    delete pImp;
 }
 
 //-------------------------------------------------------------------------
@@ -663,6 +649,18 @@ void SfxFloatingWindow::Resize()
 }
 
 //-------------------------------------------------------------------------
+void SfxFloatingWindow::StateChanged( StateChangedType nStateChange )
+{
+    if ( nStateChange == STATE_CHANGE_INITSHOW )
+    {
+        // FloatingWindows are not centered by default
+        if ( pImp->aWinState.Len() )
+            SetWindowState( pImp->aWinState );
+    }
+
+    FloatingWindow::StateChanged( nStateChange );
+}
+
 
 void SfxFloatingWindow::Initialize(SfxChildWinInfo *pInfo)
 
@@ -673,61 +671,8 @@ void SfxFloatingWindow::Initialize(SfxChildWinInfo *pInfo)
     nach dem ctor und sollte vom ctor der abgeleiteten Klasse
     oder von dem des SfxChildWindows aufgerufen werden.
 */
-
 {
-    if ( pInfo->aWinState.Len() )
-//    if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 )
-    {
-        SetWindowState( pInfo->aWinState );
-/*
-        aPos = pInfo->aPos;
-        if ( GetStyle() & WB_SIZEABLE )
-        {
-            Size aMinSize( GetMinOutputSizePixel() );
-            if ( pInfo->aSize.Width() < aMinSize.Width() )
-                pInfo->aSize.Width() = aMinSize.Width();
-            if ( pInfo->aSize.Height() < aMinSize.Height() )
-                pInfo->aSize.Height() = aMinSize.Height();
-            SetSizePixel( pInfo->aSize );
-        }
-
-        aSize = GetSizePixel();
-        aPos = pInfo->aPos;
-*/
-        if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
-            RollUp();
-    }
-    else
-    {
-        // trick: use VCL method SetWindowState to adjust position and size
-        SetWindowState( GetWindowState() );
-/*
-        // adjust position and size as set in resource or ctor
-        Point aPos;
-        aSize = GetSizePixel();
-        Size aParentSize = GetParent()->GetOutputSizePixel();
-        aPos.X() += (aParentSize.Width() - aSize.Width()) / 2;
-        aPos.Y() += (aParentSize.Height() - aSize.Height()) / 2;
-
-        Point aPoint;
-        Rectangle aRect = GetDesktopRectPixel();
-        Size aSize( GetSizePixel() );
-        aPoint.X() = aRect.Right() - aSize.Width();
-        aPoint.Y() = aRect.Bottom() - aSize.Height();
-
-        aPoint = OutputToScreenPixel( aPoint );
-
-        if ( aPos.X() > aPoint.X() )
-            aPos.X() = aPoint.X() ;
-        if ( aPos.Y() > aPoint.Y() )
-            aPos.Y() = aPoint.Y();
-
-        if ( aPos.X() < 0 ) aPos.X() = 0;
-        if ( aPos.Y() < 0 ) aPos.Y() = 0;
-
-        SetPosPixel( aPos );
-*/
-    }
+    pImp->aWinState = pInfo->aWinState;
 }
 
 //-------------------------------------------------------------------------

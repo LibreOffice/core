@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: gt $ $Date: 2001-11-13 11:25:42 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 12:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,23 +421,6 @@ SfxTemplateDialogWrapper::SfxTemplateDialogWrapper(Window *pParent,
     SfxTemplateDialog *pWin = new SfxTemplateDialog(p, this, pParent);
     pWindow = pWin;
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    Point aEmptyPoint;
-
-    // find topmost parent
-    Window* pTopParent = pParent;
-    Window* pNewParent = pParent->GetParent();
-    while( pNewParent )
-    {
-        pTopParent = pNewParent;
-        pNewParent = pTopParent->GetParent();
-    }
-
-    Size aSize = pTopParent->GetSizePixel();
-    Point aPoint = pTopParent->GetPosPixel();
-    Size aWinSize = pWin->GetSizePixel();
-    aPoint.X() += aSize.Width() - aWinSize.Width() - 20;
-    aPoint.Y() += aSize.Height() / 2 - aWinSize.Height() / 2;
-    pWin->SetFloatingPos( aPoint );
 
     pWin->Initialize( pInfo );
     pWin->SetMinOutputSizePixel(pWin->pImpl->GetMinOutputSizePixel());
@@ -2732,6 +2715,30 @@ void SfxCommonTemplateDialog_Impl::UpdateFamily_Impl()
          0 != pFamilyState[ nActFamily - 1 ] )
         Execute_Impl( SID_STYLE_APPLY, GetSelectedEntry(),
                       String(), (USHORT)GetFamilyItem_Impl()->GetFamily() );
+}
+
+void SfxTemplateDialog::StateChanged( StateChangedType nStateChange )
+{
+    if ( nStateChange == STATE_CHANGE_INITSHOW )
+    {
+        // find topmost parent
+        Window* pTopParent = GetParent();
+        Window* pNewParent = pTopParent->GetParent();
+        while( pNewParent )
+        {
+            pTopParent = pNewParent;
+            pNewParent = pTopParent->GetParent();
+        }
+
+        Size aSize = pTopParent->GetSizePixel();
+        Point aPoint = pTopParent->GetPosPixel();
+        Size aWinSize = GetSizePixel();
+        aPoint.X() += aSize.Width() - aWinSize.Width() - 20;
+        aPoint.Y() += aSize.Height() / 2 - aWinSize.Height() / 2;
+        SetFloatingPos( aPoint );
+    }
+
+    SfxDockingWindow::StateChanged( nStateChange );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-15 15:18:34 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 12:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ class SfxDockingWindow_Impl
 {
 friend class SfxDockingWindow;
 
+    SfxChildWinInfo     aInfo;
     SfxChildAlignment   eLastAlignment;
     SfxChildAlignment   eDockAlignment;
     BOOL                bConstructed;
@@ -132,9 +133,12 @@ void SfxDockingWindow::Resize()
     if ( !pImp->pSplitWin )
     {
         Invalidate();
-        if ( IsFloatingMode() && !GetFloatingWindow()->IsRollUp() )
-            SetFloatingSize(GetOutputSizePixel());
-        pImp->aWinState = GetFloatingWindow()->GetWindowState();
+        if ( pImp->bConstructed )
+        {
+            if ( IsFloatingMode() && !GetFloatingWindow()->IsRollUp() )
+                SetFloatingSize(GetOutputSizePixel());
+            pImp->aWinState = GetFloatingWindow()->GetWindowState();
+        }
     }
 }
 
@@ -708,30 +712,8 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
     if ( pInfo->nFlags & SFX_CHILDWIN_FORCEDOCK )
         SetFloatingMode( FALSE );
 
-    FloatingWindow* pFloatWin = GetFloatingWindow();
-    if ( pFloatWin )
-    {
-        // initialize floating window
-        if ( !pImp->aWinState.Len() )
-            // window state never set before, get if from defaults
-            pImp->aWinState = pFloatWin->GetWindowState();
-
-        // trick: use VCL method SetWindowState to adjust position and size
-        pFloatWin->SetWindowState( pImp->aWinState );
-
-        // remember floating size for calculating alignment and tracking rectangle
-        SetFloatingSize( pFloatWin->GetSizePixel() );
-
-        // some versions of VCL didn't call resize in the current situation
-        Resize();
-    }
-
     if ( IsFloatingMode() )
     {
-        // restore Rollup state (perhaps VCL will later support this in the window state?!)
-        if ( pInfo && (pInfo->nFlags & SFX_CHILDWIN_ZOOMIN) && !pFloatWin->IsRollUp() )
-            pFloatWin->RollUp();
-
         // validate last alignment
         SfxChildAlignment eLastAlign = pImp->GetLastAlignment();
         if ( eLastAlign == SFX_ALIGN_NOALIGNMENT)
@@ -769,6 +751,31 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
 
     // save alignment
     pImp->SetDockAlignment( GetAlignment() );
+}
+
+void SfxDockingWindow::Initialize_Impl()
+{
+    if ( !pMgr )
+        // Bugfix #39771
+        return;
+
+    FloatingWindow* pFloatWin = GetFloatingWindow();
+    if ( pFloatWin )
+    {
+        // initialize floating window
+        if ( !pImp->aWinState.Len() )
+            // window state never set before, get if from defaults
+            pImp->aWinState = pFloatWin->GetWindowState();
+
+        // trick: use VCL method SetWindowState to adjust position and size
+        pFloatWin->SetWindowState( pImp->aWinState );
+
+        // remember floating size for calculating alignment and tracking rectangle
+        SetFloatingSize( pFloatWin->GetSizePixel() );
+
+        // some versions of VCL didn't call resize in the current situation
+        //Resize();
+    }
 
     // allow calling of docking handlers
     pImp->bConstructed = TRUE;
@@ -794,7 +801,7 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
     if ( !pMgr )
         return;
 
-    if ( GetFloatingWindow() )
+    if ( GetFloatingWindow() && pImp->bConstructed )
         pImp->aWinState = GetFloatingWindow()->GetWindowState();
 
     rInfo.aWinState = pImp->aWinState;
@@ -816,11 +823,6 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
     }
 
     rInfo.aExtraString += ')';
-    if (IsFloatingMode() )
-    {
-        if ( GetFloatingWindow()->IsRollUp() )
-            rInfo.nFlags |= SFX_CHILDWIN_ZOOMIN;
-    }
 }
 
 //-------------------------------------------------------------------------
@@ -1469,6 +1471,14 @@ SfxSplitWindow* SfxDockingWindow::GetSplitWindow_Impl() const
 
 void SfxDockingWindow::FadeIn( BOOL bFadeIn )
 {
+}
+
+void SfxDockingWindow::StateChanged( StateChangedType nStateChange )
+{
+    if ( nStateChange == STATE_CHANGE_INITSHOW )
+        Initialize_Impl();
+
+    DockingWindow::StateChanged( nStateChange );
 }
 
 
