@@ -29,6 +29,7 @@ Public Tablename as String
 Public Const SBSIZETEXT = &quot;The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.&quot;
 Public bDisposeDoc as Boolean
 Public bDebug as Boolean
+Public bStartUp as Boolean
 
 &apos; The macro can be called in 4 possible scenarios:
 &apos; Scenario 1. No parameters at given
@@ -63,6 +64,7 @@ Dim i as Integer
 Dim SelCount as Integer
 Dim RetValue as Integer
 Dim SelList(0) as Integer
+Dim LocList() as String
 	SelList(0) = 0
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;WebWizard&quot;)
@@ -98,6 +100,7 @@ Dim SelList(0) as Integer
 	InitializeLabelValues()
 	bNeedFieldRefresh = True
 	SetDialogLanguage()
+	bStartUp = true
 	With DialogModel
 		.cmdBack.Enabled = False
 		.cmdGoOn.Enabled = False
@@ -118,10 +121,11 @@ Dim SelList(0) as Integer
 			DialogModel.lstTables.Enabled = True
 			DialogModel.lblTables.Enabled = True
 			If GetDBMetaData() Then
-				DialogModel.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
+				LocList() = AddListToList(TableNames(), QueryNames())
 				iCommandTypes = CreateCommandTypeList()
 				If Not IsMissing(sContent) Then
 					&apos; Scenario 4: all parameters (data source name, connection, object type and object) are given
+					DialogModel.lstTables.StringItemList() = LocList()
 					iCommandTypes() = CreateCommandTypeList()
 					SelCount = CountItemsInArray(DialogModel.lstTables.StringItemList(), sContent)
 					If SelCount = 1 Then
@@ -137,6 +141,12 @@ Dim SelList(0) as Integer
 					End If
 					CurCommandType = CommandType
 					FillUpFieldsListbox(False)
+				Else
+					LocList() = AddListToList(Array(sSelectDBTable), LocList())
+					DialogModel.lstTables.StringItemList() = LocList()
+					bSelectContent = True
+					DialogModel.lstTables.SelectedItems() = Array(0)
+
 				End If
 			End If
 		Else
@@ -182,6 +192,10 @@ End Sub
 
 Sub FormGetFields()
 Dim i as Integer
+	If bSelectContent Then
+		bSelectContent = False
+		Exit Sub
+	End If
 	DeleteFirstListBoxEntry(&quot;lstTables&quot;, sSelectDBTable)
 	ToggleDatabasePage(False)
 	FillUpFieldsListbox(True)
