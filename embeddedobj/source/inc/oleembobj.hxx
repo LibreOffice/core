@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-14 15:25:05 $
+ *  last change: $Author: mav $ $Date: 2003-11-17 16:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,12 +98,15 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XCLOSELISTENER_HPP_
 #include <com/sun/star/util/XCloseListener.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE7_HXX_
-#include <cppuhelper/implbase7.hxx>
+#ifndef _CPPUHELPER_IMPLBASE8_HXX_
+#include <cppuhelper/implbase8.hxx>
 #endif
 
 namespace cppu {
@@ -111,13 +114,14 @@ namespace cppu {
 }
 
 class OleComponent;
-class OleEmbeddedObject : public ::cppu::WeakImplHelper7
+class OleEmbeddedObject : public ::cppu::WeakImplHelper8
                         < ::com::sun::star::embed::XEmbeddedObject
                         , ::com::sun::star::embed::XVisualObject
                         , ::com::sun::star::embed::XEmbedPersist
                         , ::com::sun::star::embed::XLinkageSupport
                         , ::com::sun::star::embed::XClassifiedObject
                         , ::com::sun::star::embed::XComponentSupplier
+                        , ::com::sun::star::util::XCloseable
                         , ::com::sun::star::document::XEventBroadcaster >
 {
     ::osl::Mutex    m_aMutex;
@@ -165,6 +169,9 @@ protected:
 
     ::com::sun::star::uno::Sequence< sal_Int32 > GetReachableStatesList_Impl(
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescr >& aVerbList );
+
+    void CloseComponent();
+    void Dispose();
 
 public:
     // in case a new object must be created the class ID must be specified
@@ -356,6 +363,19 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL getComponent()
         throw ( ::com::sun::star::uno::RuntimeException );
 
+// XCloseable
+
+    virtual void SAL_CALL close( sal_Bool DeliverOwnership )
+        throw ( ::com::sun::star::util::CloseVetoException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL addCloseListener(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener >& Listener )
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL removeCloseListener(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener >& Listener )
+        throw ( ::com::sun::star::uno::RuntimeException );
 
 // XEventBroadcaster
     virtual void SAL_CALL addEventListener(
@@ -366,17 +386,6 @@ public:
                 const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& Listener )
         throw ( ::com::sun::star::uno::RuntimeException );
 
-// XComponent
-    virtual void SAL_CALL dispose()
-        throw ( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL addEventListener(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
-        throw ( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL removeEventListener(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif

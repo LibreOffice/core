@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-14 15:24:27 $
+ *  last change: $Author: mav $ $Date: 2003-11-17 16:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,12 +331,23 @@ OleComponent::OleComponent( const uno::Reference< lang::XMultiServiceFactory >& 
 //----------------------------------------------
 OleComponent::~OleComponent()
 {
+    OSL_ENSURE( !m_pOleWrapClientSite && !m_pImplAdviseSink && !m_pInterfaceContainer && !m_bOleInitialized,
+                "The object was not closed successfully! DISASTER is possible!" );
+
+    if ( m_pOleWrapClientSite || m_pImplAdviseSink || m_pInterfaceContainer || m_bOleInitialized )
+    {
+        m_refCount++;
+        try {
+            Dispose();
+        } catch( uno::Exception& ) {}
+    }
+}
+
+//----------------------------------------------
+void OleComponent::Dispose()
+{
     if ( m_pOleWrapClientSite )
     {
-        // must be done on close()
-        // here it means an error
-        OSL_ENSURE( sal_False, "Looks like the object was not closed before destruction - DISASTER is possible!" );
-
         m_pOleWrapClientSite->disconnectOleComponent();
         m_pOleWrapClientSite->Release();
         m_pOleWrapClientSite = NULL;
@@ -344,10 +355,6 @@ OleComponent::~OleComponent()
 
     if ( m_pImplAdviseSink )
     {
-        // must be done on close()
-        // here it means an error
-        OSL_ENSURE( sal_False, "Looks like the object was not closed before destruction - DISASTER is possible!" );
-
         m_pImplAdviseSink->disconnectOleComponent();
         m_pImplAdviseSink->Release();
         m_pImplAdviseSink = NULL;
@@ -355,12 +362,20 @@ OleComponent::~OleComponent()
 
     if ( m_pInterfaceContainer )
     {
+        lang::EventObject aEvent( (embed::XEmbeddedObject*)this );
+        m_pInterfaceContainer->disposeAndClear( aEvent );
+
         delete m_pInterfaceContainer;
         m_pInterfaceContainer = NULL;
     }
 
     if ( m_bOleInitialized )
+    {
         OleUninitialize();
+        m_bOleInitialized = sal_False;
+    }
+
+    m_bDisposed = sal_True;
 }
 
 //----------------------------------------------
@@ -956,9 +971,9 @@ void SAL_CALL OleComponent::close( sal_Bool bDeliverOwnership )
                 }
             }
         }
-
-        m_pInterfaceContainer->disposeAndClear( aSource );
     }
+
+    Dispose();
 }
 
 //----------------------------------------------

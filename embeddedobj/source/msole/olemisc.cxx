@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-13 17:01:14 $
+ *  last change: $Author: mav $ $Date: 2003-11-17 16:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,15 +118,44 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 //------------------------------------------------------
 OleEmbeddedObject::~OleEmbeddedObject()
 {
+    OSL_ENSURE( !m_pInterfaceContainer && !m_pOleComponent, "The object is not closed! DISASTER is possible!" );
+
+    if ( m_pOleComponent || m_pInterfaceContainer )
+    {
+        // the component must be cleaned during closing
+        m_refCount++; // to avoid crash
+        try {
+            Dispose();
+        } catch( uno::Exception& ) {}
+    }
+}
+
+//------------------------------------------------------
+void OleEmbeddedObject::Dispose()
+{
+    if ( m_pInterfaceContainer )
+    {
+        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
+        m_pInterfaceContainer->disposeAndClear( aSource );
+        delete m_pInterfaceContainer;
+        m_pInterfaceContainer = NULL;
+    }
+
     if ( m_pOleComponent )
     {
-        // the component must be cleaned during disposing
-        OSL_ENSURE( sal_False, "Looks like the object was not disposed - DISASTER is possible!\n" );
+        if ( m_nObjectState != embed::EmbedStates::EMBED_LOADED )
+        {
+            SaveObject_Impl();
+            m_pOleComponent->CloseObject();
+        }
 
+        m_pOleComponent->removeCloseListener( m_xClosePreventer );
         m_pOleComponent->disconnectEmbeddedObject();
         m_pOleComponent->release();
         m_pOleComponent = NULL;
     }
+
+    m_bDisposed = true;
 }
 
 //------------------------------------------------------
@@ -188,45 +217,63 @@ uno::Reference< lang::XComponent > SAL_CALL OleEmbeddedObject::getComponent()
     return uno::Reference< lang::XComponent >();
 }
 
-// TODO: The object will support XCloseable
-//------------------------------------------------------
-void SAL_CALL OleEmbeddedObject::dispose()
-        throw ( uno::RuntimeException )
+//----------------------------------------------
+void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
+    throw ( util::CloseVetoException,
+            uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
+    uno::Reference< uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >( this ) );
+    lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
+
     if ( m_pInterfaceContainer )
     {
-        lang::EventObject aEvent( (embed::XEmbeddedObject*)this );
-        m_pInterfaceContainer->disposeAndClear( aEvent );
-
-        delete m_pInterfaceContainer;
-        m_pInterfaceContainer = NULL;
-    }
-
-    if ( m_pOleComponent )
-    {
-        if ( m_nObjectState != embed::EmbedStates::EMBED_LOADED )
+        ::cppu::OInterfaceContainerHelper* pContainer =
+            m_pInterfaceContainer->getContainer( ::getCppuType( ( const uno::Reference< util::XCloseListener >*) NULL ) );
+        if ( pContainer != NULL )
         {
-            SaveObject_Impl();
-            m_pOleComponent->CloseObject();
+            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+            while (pIterator.hasMoreElements())
+            {
+                try
+                {
+                    ((util::XCloseListener*)pIterator.next())->queryClosing( aSource, bDeliverOwnership );
+                }
+                catch( uno::RuntimeException& )
+                {
+                    pIterator.remove();
+                }
+            }
         }
 
-        m_pOleComponent->disconnectEmbeddedObject();
-        m_pOleComponent->release();
-        m_pOleComponent = NULL;
+        pContainer = m_pInterfaceContainer->getContainer(
+                                    ::getCppuType( ( const uno::Reference< util::XCloseListener >*) NULL ) );
+        if ( pContainer != NULL )
+        {
+            ::cppu::OInterfaceIteratorHelper pCloseIterator(*pContainer);
+            while (pCloseIterator.hasMoreElements())
+            {
+                try
+                {
+                    ((util::XCloseListener*)pCloseIterator.next())->notifyClosing( aSource );
+                }
+                catch( uno::RuntimeException& )
+                {
+                    pCloseIterator.remove();
+                }
+            }
+        }
     }
 
-    // TODO: dispose object
-
-    m_bDisposed = true;
+    Dispose();
 }
 
-//------------------------------------------------------
-void SAL_CALL OleEmbeddedObject::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
-        throw ( uno::RuntimeException )
+//----------------------------------------------
+void SAL_CALL OleEmbeddedObject::addCloseListener( const uno::Reference< util::XCloseListener >& xListener )
+    throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -235,20 +282,19 @@ void SAL_CALL OleEmbeddedObject::addEventListener( const uno::Reference< lang::X
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
 
-    m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< lang::XEventListener >*)0 ), xListener );
+    m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< util::XCloseListener >*)0 ), xListener );
 }
 
-//------------------------------------------------------
-void SAL_CALL OleEmbeddedObject::removeEventListener(
-                const uno::Reference< lang::XEventListener >& xListener )
-        throw ( uno::RuntimeException )
+//----------------------------------------------
+void SAL_CALL OleEmbeddedObject::removeCloseListener( const uno::Reference< util::XCloseListener >& xListener )
+    throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
     if ( m_pInterfaceContainer )
-        m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< lang::XEventListener >*)0 ),
+        m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< util::XCloseListener >*)0 ),
                                                 xListener );
 }
 

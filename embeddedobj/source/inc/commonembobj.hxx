@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-14 15:24:26 $
+ *  last change: $Author: mav $ $Date: 2003-11-17 16:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
+
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
@@ -132,6 +136,7 @@ class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
                             , public ::com::sun::star::embed::XLinkageSupport
                             , public ::com::sun::star::embed::XClassifiedObject
                             , public ::com::sun::star::embed::XComponentSupplier
+                            , public ::com::sun::star::util::XCloseable
                             , public ::com::sun::star::document::XEventBroadcaster
                             , public ::cppu::OWeakObject
 {
@@ -162,8 +167,6 @@ class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
 
     ::rtl::OUString m_aContainerName;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener > m_xClosePreventer;
-
     Interceptor* m_pInterceptor;
 
     // following information will be used between SaveAs and SaveCompleted
@@ -185,6 +188,8 @@ class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
 
 private:
     void CommonInit_Impl();
+
+    void Dispose();
 
     ::rtl::OUString GetDocumentServiceName() { return m_aDocServiceName; }
 
@@ -423,6 +428,19 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL getComponent()
         throw ( ::com::sun::star::uno::RuntimeException );
 
+// XCloseable
+
+    virtual void SAL_CALL close( sal_Bool DeliverOwnership )
+        throw ( ::com::sun::star::util::CloseVetoException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL addCloseListener(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener >& Listener )
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL removeCloseListener(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener >& Listener )
+        throw ( ::com::sun::star::uno::RuntimeException );
 
 // XEventBroadcaster
     virtual void SAL_CALL addEventListener(
@@ -432,19 +450,6 @@ public:
     virtual void SAL_CALL removeEventListener(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& Listener )
         throw ( ::com::sun::star::uno::RuntimeException );
-
-// XComponent
-    virtual void SAL_CALL dispose()
-        throw ( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL addEventListener(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
-        throw ( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL removeEventListener(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException);
-
 };
 
 #endif

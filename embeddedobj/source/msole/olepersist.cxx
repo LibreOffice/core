@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-13 17:01:14 $
+ *  last change: $Author: mav $ $Date: 2003-11-17 16:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 #endif
 
 #include <olecomponent.hxx>
+#include <closepreventer.hxx>
 
 
 using namespace ::com::sun::star;
@@ -154,7 +155,10 @@ void OleEmbeddedObject::CreateOleComponent_Impl()
     {
         m_pOleComponent = new OleComponent( m_xFactory, this );
         m_pOleComponent->acquire(); // TODO: needs holder?
-        // TODO: register close listener
+        m_xClosePreventer = uno::Reference< util::XCloseListener >(
+                                static_cast< ::cppu::OWeakObject* >( new OClosePreventer ),
+                                uno::UNO_QUERY );
+        m_pOleComponent->addCloseListener( m_xClosePreventer );
     }
     else
         OSL_ENSURE( sal_False, "Trying to recreate OLE component!\n" );

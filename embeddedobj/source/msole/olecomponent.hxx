@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-14 15:24:27 $
+ *  last change: $Author: mav $ $Date: 2003-11-17 16:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@ class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCl
     CComPtr< IStorage > CreateNewIStorage_Impl();
 
     void RetrieveObjectDataFlavors_Impl();
+
+    void Dispose();
 
 public:
     OleComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& m_xFactory,
