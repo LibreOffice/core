@@ -6609,10 +6609,10 @@ SfxBoolItem DrawFontwork SID_DRAW_FONTWORK
     Readonly = FALSE,
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_DRAWING;
 ]
 
@@ -6634,10 +6634,10 @@ SfxBoolItem DrawFontworkVertical SID_DRAW_FONTWORK_VERTICAL
     Readonly = FALSE,
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_DRAWING;
 ]
 
@@ -6660,10 +6660,10 @@ SfxBoolItem LayerDialogChildWindow SID_LAYER_DIALOG_WIN
     Readonly = FALSE,
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_OPTIONS;
 ]
 
