@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-11 10:15:22 $
+ *  last change: $Author: thb $ $Date: 2001-07-11 13:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,9 +458,7 @@ void SdrPaintView::ImpClearVars()
 {
     pXOut=NULL;
     bForeignXOut=FALSE;
-#ifndef SVX_LIGHT
     pItemBrowser=NULL;
-#endif
     bLayerSortedRedraw=FALSE;
     bPageVisible=TRUE;
     bBordVisible=TRUE;
