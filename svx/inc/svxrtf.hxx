@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-10 11:34:57 $
+ *  last change: $Author: jp $ $Date: 2001-02-06 17:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,8 +372,8 @@ protected:
         // wird USHRT_MAX returnt, ansonsten die Anzahl der umgewandelten Ze.
     xub_StrLen HexToBin( String& rToken );
 
-        // got WhichId for latin/asian/complex character attributes
-    USHORT GetAttrWhichID( USHORT eType, USHORT nSlotId );
+        // set latin/asian/complex character attributes
+    void SetScriptAttr( USHORT eType, SfxItemSet& rSet, SfxPoolItem& rItem );
 
 public:
 
@@ -466,11 +466,14 @@ inline SfxItemSet& SvxRTFParser::GetAttrSet()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/inc/svxrtf.hxx,v 1.2 2000-11-10 11:34:57 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/inc/svxrtf.hxx,v 1.3 2001-02-06 17:56:21 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/11/10 11:34:57  jp
+      new Tokens for the CJK-Version
+
       Revision 1.1.1.1  2000/09/18 17:01:01  hr
       initial import
 

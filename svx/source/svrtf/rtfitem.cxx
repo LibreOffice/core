@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 17:55:17 $
+ *  last change: $Author: jp $ $Date: 2001-02-06 17:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,9 @@
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
 #endif
+#ifndef _SFXITEMITER_HXX
+#include <svtools/itemiter.hxx>
+#endif
 
 #include "svxrtf.hxx"
 
@@ -201,11 +204,12 @@ enum RTF_CharTypeDef
 };
 
 
-USHORT SvxRTFParser::GetAttrWhichID( USHORT eType, USHORT nSlotId )
+void SvxRTFParser::SetScriptAttr( USHORT eType, SfxItemSet& rSet,
+                                    SfxPoolItem& rItem )
 {
     const USHORT *pNormal = 0, *pCJK = 0, *pCTL = 0;
     const RTFPlainAttrMapIds* pIds = (RTFPlainAttrMapIds*)aPlainMap.GetData();
-    switch( nSlotId )
+    switch( rItem.Which() )
     {
     case SID_ATTR_CHAR_FONT:
         pNormal = &pIds->nFont;
@@ -237,23 +241,61 @@ USHORT SvxRTFParser::GetAttrWhichID( USHORT eType, USHORT nSlotId )
         pCTL = &pIds->nCTLLanguage;
         break;
 
+    case 0:
+        // it exist no WhichId - don't set this item
+        break;
+
     default:
-       DBG_ASSERT( FALSE, "wrong call to GetAttrWhichId" );
-       return 0;
+       rSet.Put( rItem );
+       break;
     }
 
-    nSlotId = 0;
 
     if( DOUBLEBYTE_CHARTYPE == eType )
     {
-        if( bIsLeftToRightDef )
-            nSlotId = *pCJK;
+        if( bIsLeftToRightDef && *pCJK )
+        {
+            rItem.SetWhich( *pCJK );
+            rSet.Put( rItem );
+        }
     }
     else if( !bIsLeftToRightDef )
-        nSlotId = *pCTL;
+    {
+        if( *pCTL )
+        {
+            rItem.SetWhich( *pCTL );
+            rSet.Put( rItem );
+        }
+    }
     else
-        nSlotId = *pNormal;
-    return nSlotId;
+    {
+        if( LOW_CHARTYPE == eType || HIGH_CHARTYPE == eType )
+        {
+            if( *pNormal )
+            {
+                rItem.SetWhich( *pNormal );
+                rSet.Put( rItem );
+            }
+        }
+        else
+        {
+            if( *pCJK )
+            {
+                rItem.SetWhich( *pCJK );
+                rSet.Put( rItem );
+            }
+            if( *pCTL )
+            {
+                rItem.SetWhich( *pCTL );
+                rSet.Put( rItem );
+            }
+            if( *pNormal )
+            {
+                rItem.SetWhich( *pNormal );
+                rSet.Put( rItem );
+            }
+        }
+    }
 }
 
 // --------------------
@@ -267,7 +309,6 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
     FontEmphasisMark eEmphasis;
     bPardTokenRead = FALSE;
     RTF_CharTypeDef eCharType = NOTDEF_CHARTYPE;
-    USHORT nWhichId;
 
     int bChkStkPos = !bNewGroup && aAttrStack.Top();
 
@@ -560,13 +601,12 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 
 /*  */
             case RTF_B:
-                if( 0 != ( nWhichId =
-                        GetAttrWhichID( eCharType, SID_ATTR_CHAR_WEIGHT )) &&
-                    IsAttrSttPos() )    // nicht im Textfluss ?
+                if( IsAttrSttPos() )    // nicht im Textfluss ?
                 {
-                    pSet->Put( SvxWeightItem(
-                                nTokenValue ? WEIGHT_BOLD : WEIGHT_NORMAL,
-                                nWhichId ));
+                    SetScriptAttr( eCharType, *pSet,
+                                SvxWeightItem(
+                                    nTokenValue ? WEIGHT_BOLD : WEIGHT_NORMAL,
+                                    SID_ATTR_CHAR_WEIGHT ));
                 }
                 break;
 
@@ -661,21 +701,18 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 
             case RTF_F:
             case RTF_AF:
-                if( 0 != ( nWhichId =
-                            GetAttrWhichID( eCharType, SID_ATTR_CHAR_FONT )) )
                 {
                     const Font& rSVFont = GetFont( USHORT(nTokenValue) );
-                    pSet->Put( SvxFontItem( rSVFont.GetFamily(),
-                        rSVFont.GetName(), rSVFont.GetStyleName(),
-                        rSVFont.GetPitch(), rSVFont.GetCharSet(),
-                        nWhichId ));
+                    SetScriptAttr( eCharType, *pSet,
+                                SvxFontItem( rSVFont.GetFamily(),
+                                    rSVFont.GetName(), rSVFont.GetStyleName(),
+                                    rSVFont.GetPitch(), rSVFont.GetCharSet(),
+                                    SID_ATTR_CHAR_FONT ));
                 }
                 break;
 
             case RTF_FS:
             case RTF_AFS:
-                if( 0 != ( nWhichId =
-                    GetAttrWhichID( eCharType, SID_ATTR_CHAR_FONTHEIGHT )) )
                 {
                     if( -1 == nTokenValue )
                         nTokenValue = 240;
@@ -683,20 +720,20 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                         nTokenValue *= 10;
                     if( IsCalcValue() )
                         CalcValue();
-                    SvxFontHeightItem aFH( (const USHORT)nTokenValue, 100,
-                                            nWhichId );
-                    pSet->Put( aFH );
+                    SetScriptAttr( eCharType, *pSet,
+                                    SvxFontHeightItem(
+                                        (const USHORT)nTokenValue, 100,
+                                        SID_ATTR_CHAR_FONTHEIGHT ));
                 }
                 break;
 
             case RTF_I:
-                if( 0 != ( nWhichId =
-                        GetAttrWhichID( eCharType, SID_ATTR_CHAR_POSTURE )) &&
-                    IsAttrSttPos() )        // nicht im Textfluss ?
+                if( IsAttrSttPos() )        // nicht im Textfluss ?
                 {
-                    pSet->Put( SvxPostureItem(
-                                nTokenValue ? ITALIC_NORMAL : ITALIC_NONE,
-                                nWhichId ));
+                    SetScriptAttr( eCharType, *pSet,
+                                SvxPostureItem(
+                                    nTokenValue ? ITALIC_NORMAL : ITALIC_NONE,
+                                    SID_ATTR_CHAR_POSTURE ));
                 }
                 break;
 
@@ -890,11 +927,10 @@ ATTR_SETUNDERLINE:
                 }
                 break;
             case RTF_ALANG:
-                if( 0 != ( nWhichId =
-                        GetAttrWhichID( eCharType, SID_ATTR_CHAR_LANGUAGE )) )
                 {
-                    pSet->Put( SvxLanguageItem( (LanguageType)nTokenValue,
-                                                    nWhichId ));
+                    SetScriptAttr( eCharType, *pSet,
+                                SvxLanguageItem( (LanguageType)nTokenValue,
+                                    SID_ATTR_CHAR_LANGUAGE ));
                 }
                 break;
 
@@ -1686,34 +1722,33 @@ void SvxRTFParser::SetDefault( int nToken, short nValue )
     if( !bNewDoc )
         return;
 
-    USHORT nWhichId;
-    BOOL bLefToRight = TRUE;
+    SfxItemSet aTmp( *pAttrPool, aWhichMap.GetData() );
+    BOOL bOldFlag = bIsLeftToRightDef;
+    bIsLeftToRightDef = TRUE;
     switch( nToken )
     {
-    case RTF_ADEFF: bLefToRight = FALSE;  // no break!
+    case RTF_ADEFF: bIsLeftToRightDef = FALSE;  // no break!
     case RTF_DEFF:
-
-        if( 0 != ( nWhichId = GetAttrWhichID( 0, SID_ATTR_CHAR_FONT )))
         {
             if( -1 == nValue )
                 nValue = 0;
             const Font& rSVFont = GetFont( USHORT(nValue) );
-            pAttrPool->SetPoolDefaultItem( SvxFontItem(
-                    rSVFont.GetFamily(), rSVFont.GetName(),
-                    rSVFont.GetStyleName(), rSVFont.GetPitch(),
-                    rSVFont.GetCharSet(),
-                    nWhichId ));
+            SetScriptAttr( 0, aTmp,
+                            SvxFontItem(
+                                rSVFont.GetFamily(), rSVFont.GetName(),
+                                rSVFont.GetStyleName(), rSVFont.GetPitch(),
+                                rSVFont.GetCharSet(), SID_ATTR_CHAR_FONT ));
         }
         break;
 
-    case RTF_ADEFLANG:  bLefToRight = FALSE;  // no break!
+    case RTF_ADEFLANG:  bIsLeftToRightDef = FALSE;  // no break!
     case RTF_DEFLANG:
         // default Language merken
-        if( -1 != nValue &&
-            0 != ( nWhichId = GetAttrWhichID( 0, SID_ATTR_CHAR_LANGUAGE )))
+        if( -1 != nValue )
         {
-            pAttrPool->SetPoolDefaultItem(
-                SvxLanguageItem( (const LanguageType)nValue, nWhichId ));
+            SetScriptAttr( 0, aTmp,
+                            SvxLanguageItem( (const LanguageType)nValue,
+                                            SID_ATTR_CHAR_LANGUAGE ));
         }
         break;
 
@@ -1749,6 +1784,20 @@ void SvxRTFParser::SetDefault( int nToken, short nValue )
             pAttrPool->SetPoolDefaultItem( aNewTab );
         }
         break;
+    }
+    bIsLeftToRightDef = bOldFlag;
+
+    if( aTmp.Count() )
+    {
+        SfxItemIter aIter( aTmp );
+        const SfxPoolItem* pItem = aIter.GetCurItem();
+        while( TRUE )
+        {
+            pAttrPool->SetPoolDefaultItem( *pItem );
+            if( aIter.IsAtEnd() )
+                break;
+            pItem = aIter.NextItem();
+        }
     }
 }
 
