@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:16:55 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,6 +962,25 @@ void ViewShell::SetUseFormerObjectPositioning( const sal_Bool _bUseFormerObjPos 
         lcl_InvalidateAllObjPos( *this );
     }
 }
+
+// --> FME #108724#
+sal_Bool ViewShell::IsFormerTextWrapping() const
+{
+    return GetDoc()->IsFormerTextWrapping();
+}
+
+void ViewShell::SetUseFormerTextWrapping( const sal_Bool _bUseFormerTextWrapping )
+{
+    if ( GetDoc()->IsFormerTextWrapping() != _bUseFormerTextWrapping )
+    {
+        SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
+        GetDoc()->SetUseFormerTextWrapping( _bUseFormerTextWrapping );
+        const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
+        lcl_InvalidateAllCntnt( *this, nInv );
+    }
+}
+// <--
+
 
 /******************************************************************************
 |*
