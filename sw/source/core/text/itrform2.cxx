@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-18 09:18:41 $
+ *  last change: $Author: fme $ $Date: 2001-06-27 06:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1298,10 +1298,14 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     if ( bOptimizeRepaint )
     {
         GetInfo().SetPaintOfst( CalcOptRepaint( GetInfo(), pFlyStart ) );
-        GetInfo().GetParaPortion()->GetReformat()->LeftMove( GetInfo().GetIdx() );
         if ( pFlyStart )
             delete pFlyStart;
     }
+
+    // This corrects the start of the reformat range if something has
+    // moved to the next line. Otherwise IsFirstReformat in AllowRepaintOpt
+    // will give us a wrong result if we have to reformat another line
+    GetInfo().GetParaPortion()->GetReformat()->LeftMove( GetInfo().GetIdx() );
 
     // delete master copy of rest portion
     if ( pSaveFld )
@@ -1539,7 +1543,7 @@ long SwTxtFormatter::CalcOptRepaint( SwTxtFormatInfo& rInf,
                                      const SvLongs* pFlyStart )
 {
     if ( IsFirstReformat() )
-    // the reformat position is behind out new line, that means
+    // the reformat position is behind our new line, that means
     // something of our text has moved to the next line
         return 0;
 
@@ -1558,11 +1562,16 @@ long SwTxtFormatter::CalcOptRepaint( SwTxtFormatInfo& rInf,
         if ( nReformat <= rInf.GetLineStart() )
             return 0;
 
-        // for different safety reasons (e.g., PostIts) we step back
-        nReformat--;
-        SwRect aRect;
+        // Weird situation: Our line used to end with a hole portion
+        // and we delete some characters at the end of our line. We have
+        // to take care for repainting the blanks which are not anymore
+        // covered by the hole portion
+        while ( --nReformat > rInf.GetLineStart() &&
+                CH_BLANK == rInf.GetChar( nReformat ) )
+            ;
 
         ASSERT( nReformat < rInf.GetIdx(), "Reformat too small for me!" );
+        SwRect aRect;
         GetCharRect( &aRect, nReformat );
 
         return nFormatRepaint ? Min( aRect.Left(), nFormatRepaint ) :

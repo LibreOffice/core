@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-13 08:31:16 $
+ *  last change: $Author: fme $ $Date: 2001-06-27 06:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1078,9 +1078,13 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
         const long nWidthDiff = nOldWidth > pNew->Width()
                                 ? nOldWidth - pNew->Width()
                                 : pNew->Width() - nOldWidth;
+
+        // we only declare a line as unchanged, if its main values have not
+        // changed and it is not the last line (!paragraph end symbol!)
         bUnChg = nOldHeight == pNew->Height() &&
                  nOldAscent == pNew->GetAscent() &&
-                 nWidthDiff <= SLOPPY_TWIPS;
+                 nWidthDiff <= SLOPPY_TWIPS &&
+                 pOldCur->GetNext();
     }
 
     // rRepaint wird berechnet:
