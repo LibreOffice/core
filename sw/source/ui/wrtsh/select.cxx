@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:14:59 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,37 +174,14 @@ BOOL SwWrtShell::SelWrd(const Point *pPt, BOOL )
     return bRet;
 }
 
-/*
-BOOL SwWrtShell::SelSentence(const Point *pPt, BOOL )
+void SwWrtShell::SelSentence(const Point *pPt, BOOL )
 {
     {
         MV_KONTEXT(this);
         ClearMark();
-        if(!_BwdSentence()) {
-            return FALSE;
-        }
+        SwCrsrShell::GoStartSentence();
         SttSelect();
-        if(!_FwdSentence()) {
-            EndSelect();
-            return FALSE;
-        }
-    }
-    EndSelect();
-    return TRUE;
-}
-
-*/
-
-
-
-void SwWrtShell::SelLine(const Point *pPt, BOOL )
-{
-    {
-        MV_KONTEXT(this);
-        ClearMark();
-        SwCrsrShell::LeftMargin();
-        SttSelect();
-        SwCrsrShell::RightMargin();
+        SwCrsrShell::GoEndSentence();
     }
     EndSelect();
     if(pPt)
@@ -213,6 +190,21 @@ void SwWrtShell::SelLine(const Point *pPt, BOOL )
     bSelWrd = FALSE;    // SelWord abschalten, sonst geht kein SelLine weiter
 }
 
+void SwWrtShell::SelPara(const Point *pPt, BOOL )
+{
+    {
+        MV_KONTEXT(this);
+        ClearMark();
+        SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
+        SttSelect();
+        SwCrsrShell::MovePara( fnParaCurr, fnParaEnd );
+    }
+    EndSelect();
+    if(pPt)
+        aStart = *pPt;
+    bSelLn = FALSE;
+    bSelWrd = FALSE;    // SelWord abschalten, sonst geht kein SelLine weiter
+}
 
 
 long SwWrtShell::SelAll()
@@ -569,20 +561,20 @@ long SwWrtShell::ExtSelLn(const Point *pPt, BOOL )
     SwapPam();
 
     // der "Mark" muss am Zeilenende/-anfang stehen
-    if( bToTop ? !IsAtRightMargin() : !IsAtLeftMargin() )
+    if( bToTop ? !IsEndSentence() : !IsStartSentence() )
     {
         if( bToTop )
         {
             if( !IsEndPara() )
                 SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
-            SwCrsrShell::RightMargin();
+            SwCrsrShell::GoEndSentence();
         }
         else
-            SwCrsrShell::LeftMargin();
+            SwCrsrShell::GoStartSentence();
     }
     SwapPam();
 
-    return bToTop ? SwCrsrShell::LeftMargin() : SwCrsrShell::RightMargin();
+    return bToTop ? SwCrsrShell::GoStartSentence() : SwCrsrShell::GoEndSentence();
 }
 
 
@@ -865,11 +857,23 @@ long SwWrtShell::EndDrag(const Point *pPt, BOOL )
     EndSelect();
     return 1;
 }
+
+// --> FME 2004-07-30 #i32329# Enhanced table selection
+FASTBOOL SwWrtShell::SelectTableRowCol( const Point& rPt )
+{
+    if ( SelTblRowCol( rPt ) )
+    {
+        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        fnKillSel = &SwWrtShell::ResetSelect;
+        return TRUE;
+    }
+    return FALSE;
+}
+// <--
+
 /*------------------------------------------------------------------------
  Beschreibung:  Selektion einer Tabellenzeile / Spalte
 ------------------------------------------------------------------------*/
-
-
 
 FASTBOOL SwWrtShell::SelectTableRow()
 {
