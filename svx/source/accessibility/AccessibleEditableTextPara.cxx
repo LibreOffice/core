@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:45:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,20 +103,20 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleTextType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 #ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
@@ -164,7 +164,7 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 
 //------------------------------------------------------------------------
@@ -202,7 +202,7 @@ namespace accessibility
             mxStateSet = pStateSet;
 
             // these are always on
-            pStateSet->AddState( AccessibleStateType::MULTILINE );
+            pStateSet->AddState( AccessibleStateType::MULTI_LINE );
             pStateSet->AddState( AccessibleStateType::FOCUSABLE );
             pStateSet->AddState( AccessibleStateType::VISIBLE );
             pStateSet->AddState( AccessibleStateType::SHOWING );
@@ -355,8 +355,8 @@ namespace accessibility
                 }
                 catch( const uno::Exception& ) {} // optional behaviour
                 // index and therefore description changed
-                FireEvent( AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT, uno::makeAny( getAccessibleDescription() ), aOldDesc );
-                FireEvent( AccessibleEventId::ACCESSIBLE_NAME_EVENT, uno::makeAny( getAccessibleName() ), aOldName );
+                FireEvent( AccessibleEventId::DESCRIPTION_CHANGED, uno::makeAny( getAccessibleDescription() ), aOldDesc );
+                FireEvent( AccessibleEventId::NAME_CHANGED, uno::makeAny( getAccessibleName() ), aOldName );
             }
         }
         catch( const uno::Exception& ) {} // optional behaviour
@@ -419,6 +419,13 @@ namespace accessibility
 
             Dispose();
         }
+
+        // #108900# Init last text content
+        try
+        {
+            TextChanged();
+        }
+        catch( const uno::RuntimeException& ) {}
     }
 
     ESelection AccessibleEditableTextPara::MakeSelection( sal_Int32 nStartEEIndex, sal_Int32 nEndEEIndex )
@@ -786,7 +793,7 @@ namespace accessibility
             !pStateSet->contains(nStateId) )
         {
             pStateSet->AddState( nStateId );
-            GotPropertyEvent( uno::makeAny( nStateId ), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+            GotPropertyEvent( uno::makeAny( nStateId ), AccessibleEventId::STATE_CHANGED );
         }
     }
 
@@ -799,7 +806,20 @@ namespace accessibility
             pStateSet->contains(nStateId) )
         {
             pStateSet->RemoveState( nStateId );
-            LostPropertyEvent( uno::makeAny( nStateId ), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+            LostPropertyEvent( uno::makeAny( nStateId ), AccessibleEventId::STATE_CHANGED );
+        }
+    }
+
+    void AccessibleEditableTextPara::TextChanged()
+    {
+        ::rtl::OUString aCurrentString( OCommonAccessibleText::getText() );
+        uno::Any aDeleted;
+        uno::Any aInserted;
+        if( OCommonAccessibleText::implInitTextChangedEvent( maLastTextString, aCurrentString,
+                                                             aDeleted, aInserted) )
+        {
+            FireEvent( AccessibleEventId::TEXT_CHANGED, aInserted, aDeleted );
+            maLastTextString = aCurrentString;
         }
     }
 
@@ -1041,7 +1061,7 @@ namespace accessibility
     }
 
     // XAccessibleComponent
-    sal_Bool SAL_CALL AccessibleEditableTextPara::contains( const awt::Point& aTmpPoint ) throw (uno::RuntimeException)
+    sal_Bool SAL_CALL AccessibleEditableTextPara::containsPoint( const awt::Point& aTmpPoint ) throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
@@ -1057,7 +1077,7 @@ namespace accessibility
         return aRect.IsInside( aPoint );
     }
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleAt( const awt::Point& _aPoint ) throw (uno::RuntimeException)
+    uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleAtPoint( const awt::Point& _aPoint ) throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
@@ -1239,7 +1259,7 @@ namespace accessibility
         return OCommonAccessibleText::getCharacter( nIndex );
     }
 
-    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
@@ -1297,9 +1317,15 @@ namespace accessibility
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getCharacterBounds: index value overflow");
 
-        CheckIndex( nIndex );
+        // #108900# Have position semantics now for nIndex, as
+        // one-past-the-end values are legal, too.
+        CheckPosition( nIndex );
 
         SvxTextForwarder& rCacheTF = GetTextForwarder();
+#ifdef DBG_UTIL
+        Rectangle aTestRect = rCacheTF.GetCharBounds( static_cast< USHORT >( GetParagraphIndex() ),
+                                                      rCacheTF.GetTextLen(GetParagraphIndex()) );
+#endif
         Rectangle aRect = rCacheTF.GetCharBounds( static_cast< USHORT >( GetParagraphIndex() ), static_cast< USHORT >( nIndex ) );
 
         // offset from parent (paragraph)
@@ -1931,7 +1957,7 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
         // #105185# Using correct service now
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.accessibility.AccessibleParagraphView"));
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessibleParagraphView"));
     }
 
 }  // end of namespace accessibility
