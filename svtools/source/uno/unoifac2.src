@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoifac2.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:41:38 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ Menu RID_CONTEXTMENU
             Text[ czech ] = "Otevřít";
             Text[ hebrew ] = "‮פתיחה‬";
             Text[ hindi ] = "~खोलो";
+            Text[ slovak ] = "O~tvoriť";
         };
         MenuItem
         {
@@ -137,6 +138,7 @@ Menu RID_CONTEXTMENU
             Text[ czech ] = "Otevřít v novém okně";
             Text[ hebrew ] = "‮פתיחה בחלון חדש‬";
             Text[ hindi ] = "Open in New ~Window";
+            Text[ slovak ] = "~Otvoriť v novom okne";
         };
         MenuItem
         {
@@ -171,6 +173,7 @@ Menu RID_CONTEXTMENU
             Text[ czech ] = "Stáhnout...";
             Text[ hebrew ] = "‮הורדת נתונים מהרשת‬";
             Text[ hindi ] = "~डौनलोड...";
+            Text[ slovak ] = "Stia~hnuť...";
         };
         MenuItem
         {
@@ -209,6 +212,7 @@ Menu RID_CONTEXTMENU
             Text[ czech ] = "Přidat odkaz";
             Text[ hebrew ] = "‮הוספת קישור‬";
             Text[ hindi ] = "लिंक जोड़ो";
+            Text[ slovak ] = "P~ridať odkaz";
         };
         MenuItem
         {
@@ -247,9 +251,12 @@ Menu RID_CONTEXTMENU
             Text[ czech ] = "Kopírovat odkaz";
             Text[ hebrew ] = "‮העתקת קישור‬";
             Text[ hindi ] = "लिंक की प्रतिलिपि";
+            Text[ slovak ] = "Ko~pírovať odkaz";
         };
     };
 };
+
+
 
 
 
