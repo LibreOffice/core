@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserlistbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:47 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,23 @@ namespace pcr
         }
 
         return nRet;
+    }
+
+    //------------------------------------------------------------------------
+    void OBrowserListBox::EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable )
+    {
+        // TODO: O(log n) search
+        sal_uInt16 i, nEnd = m_aLines.size();
+        for ( i = 0 ; i<nEnd ; ++i )
+        {
+            OBrowserLine* pLine = m_aLines[i];
+            IBrowserControl* pControl = pLine->getControl();
+            if ( pControl && ( pControl->GetMyName() == _rEntryName ) )
+            {
+                pLine->Enable( _bEnable );
+                break;
+            }
+        }
     }
 
     //------------------------------------------------------------------------

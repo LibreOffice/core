@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserline.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:46 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,16 @@ namespace pcr
     Size OBrowserLine::GetSizePixel()
     {
         return m_aOutputSize;
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserLine::Enable( sal_Bool _bDoEnable )
+    {
+        m_aFtTitle.Enable( _bDoEnable );
+        if ( m_pBrowserControl )
+            m_pBrowserControl->EnableControl( _bDoEnable );
+        if ( m_pXButton )
+            m_pXButton->Enable( _bDoEnable );
     }
 
     //------------------------------------------------------------------
