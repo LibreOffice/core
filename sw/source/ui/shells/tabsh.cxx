@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 15:16:44 $
+ *  last change: $Author: os $ $Date: 2001-10-26 14:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,8 +733,10 @@ void SwTableShell::Execute(SfxRequest &rReq)
             rSh.GetTblAttr(aCoreSet);
             // GetTblAttr buegelt den Background ueber!
             SvxBrushItem aBrush( RES_BACKGROUND );
-                rSh.GetBoxBackground(aBrush);
-            aCoreSet.Put( aBrush );
+            if(rSh.GetBoxBackground(aBrush))
+                aCoreSet.Put( aBrush );
+            else
+                aCoreSet.InvalidateItem( RES_BACKGROUND );
 
             if ( pDlg->Execute() == RET_OK )
             {
