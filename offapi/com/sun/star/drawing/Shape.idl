@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2001-06-07 13:07:29 $
+ *  last change: $Author: cl $ $Date: 2001-08-15 14:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,14 +132,14 @@ service Shape
     /** This is the ID of the <type>Layer</type> to which this
         <type>Shape</type> is attached.
      */
-    [optional, readonly, property] short LayerID;
+    [optional, property] short LayerID;
 
     //-------------------------------------------------------------------------
 
     /** This is the name of the <type>Layer</type> to which this
         <type>Shape</type> is attached.
      */
-    [optional, readonly, property] string LayerName;
+    [optional, property] string LayerName;
 
     //-------------------------------------------------------------------------
 
