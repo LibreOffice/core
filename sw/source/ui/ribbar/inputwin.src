@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "Ğ¡ÓÚ»òµÈÓÚ(~Q)";
                         Text[ russian ] = "Ìåíüøå èëè ğàâíî";
                         Text[ polish ] = "Mniejszy lub równy";
-                        Text[ japanese ] = "¬‚È‚è²º°Ù";
+                        Text[ japanese ] = "ˆÈ‰º(~L)";
                         Text[ chinese_traditional ] = "¤p©ó©Îµ¥©ó(~Q)";
                         Text[ arabic ] = "ÃÕÛÑ ãä Ãæ íÓÇæí";
                         Text[ dutch ] = "~Kleiner dan of gelijk aan";
@@ -490,7 +490,7 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "´óÓÚ»òµÈÓÚ(~G)";
                         Text[ russian ] = "Áîëüøå èëè ğàâíî";
                         Text[ polish ] = "Wiêkszy lub równy";
-                        Text[ japanese ] = "‘å‚È‚è²º°Ù";
+                        Text[ japanese ] = "ˆÈã(~G)";
                         Text[ chinese_traditional ] = "¤j©ó©Îµ¥©ó(~G)";
                         Text[ arabic ] = "ÃßÈÑ ãä Ãæ íÓÇæí";
                         Text[ dutch ] = "G~roter dan of gelijk aan";
@@ -519,7 +519,7 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "Ğ¡ÓÚ(~L)";
                         Text[ russian ] = "Ìåíüøå";
                         Text[ polish ] = "Mniejszy";
-                        Text[ japanese ] = "‚æ‚è­‚È‚¢";
+                        Text[ japanese ] = "‚æ‚è¬‚³‚¢(~L)";
                         Text[ chinese_traditional ] = "¤p©ó(~L)";
                         Text[ arabic ] = "ÃÕÛÑ";
                         Text[ dutch ] = "K~leiner";
@@ -549,7 +549,7 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "´óÓÚ(~R)";
                         Text[ russian ] = "Áîëüøå";
                         Text[ polish ] = "Wiêkszy";
-                        Text[ japanese ] = "‚æ‚è‘å‚«‚¢";
+                        Text[ japanese ] = "‚æ‚è‘å‚«‚¢(~R)";
                         Text[ chinese_traditional ] = "¤j©ó(~R)";
                         Text[ arabic ] = "ÃßÈÑ";
                         Text[ dutch ] = "Gro~ter";
