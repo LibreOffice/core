@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-19 07:57:02 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 11:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,24 @@ void ScAccessibleSpreadsheet::GotFocus()
     CommitChange(aEvent);
 }
 
+void ScAccessibleSpreadsheet::BoundingBoxChanged()
+{
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_BOUNDRECT_EVENT;
+    aEvent.Source = uno::Reference< XAccessible >(this);
+
+    CommitChange(aEvent);
+}
+
+void ScAccessibleSpreadsheet::VisAreaChanged()
+{
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
+    aEvent.Source = uno::Reference< XAccessible >(this);
+
+    CommitChange(aEvent);
+}
+
     //=====  SfxListener  =====================================================
 
 void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -281,13 +299,14 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             else
                 mbDelIns = sal_False;
         }
-        else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        // no longer needed, because the document calls the VisAreaChanged method
+/*      else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
             aEvent.Source = uno::Reference< XAccessible >(this);
 
-            CommitChange(aEvent);
+            CommitChange(aEvent);*/
         // commented out, because to use a ModelChangeEvent is not the right way
         // at the moment there is no way, but the Java/Gnome Api should be extended sometime
 /*          if (mpViewShell)
@@ -304,8 +323,17 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 maVisCells = aNewVisCells;
 
                 CommitTableModelChange(aNewPos.Top(), aNewPos.Left(), aNewPos.Bottom(), aNewPos.Right(), AccessibleTableModelChangeType::UPDATE);
-            }*/
-        }
+            }
+        }*/
+        // no longer needed, because the document calls the BoundingBoxChanged method
+/*        else if (rRef.GetId() == SC_HINT_ACC_WINDOWRESIZED)
+        {
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_BOUNDRECT_EVENT;
+            aEvent.Source = uno::Reference< XAccessible >(this);
+
+            CommitChange(aEvent);
+        }*/
     }
     else if (rHint.ISA( ScUpdateRefHint ))
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-15 10:02:40 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 11:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,10 @@ public:
     virtual void LostFocus();
 
     virtual void GotFocus();
+
+    void BoundingBoxChanged();
+
+    void VisAreaChanged();
 
     ///=====  SfxListener  =====================================================
 
