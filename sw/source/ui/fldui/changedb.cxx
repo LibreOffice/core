@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:45:02 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,8 +211,9 @@ void SwChangeDBDlg::FillDBPopup()
     Sequence<OUString> aDBNames = xDBContext->getElementNames();
     const OUString* pDBNames = aDBNames.getConstArray();
     long nDBCount = aDBNames.getLength();
+    long i;
 
-    for(long i = 0; i < nDBCount; i++)
+    for( i = 0; i < nDBCount; i++)
     {
         String sDBName(pDBNames[i]);
         aAllDBNames.Insert(new String(sDBName), aAllDBNames.Count());
