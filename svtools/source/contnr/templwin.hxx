@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-07 15:37:20 $
+ *  last change: $Author: pb $ $Date: 2002-03-25 13:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,10 +138,12 @@ public:
     String              GetIconText( const String& rURL ) const;
     void                InvalidateIconControl();
     void                SetCursorPos( ULONG nPos );
-    ULONG               GetCursorPos();
+    ULONG               GetCursorPos() const;
+    ULONG               GetSelectEntryPos() const;
     void                SetFocus();
     long                CalcHeight() const;
     sal_Bool            IsRootURL( const String& rURL ) const;
+    ULONG               GetRootPos( const String& rURL ) const;
 
     inline const String&    GetSamplesFolderURL() const;
 };
@@ -288,9 +290,10 @@ private:
     DECL_LINK(          ResizeHdl_Impl, SplitWindow* );     // used for split and initial setting of toolbar pos
 
     void                PrintFile( const String& rURL );
-    void                AppendHistoryURL( const String& rURL );
+    void                AppendHistoryURL( const String& rURL, ULONG nGroup );
     void                OpenHistory();
     void                DoAction( USHORT nAction );
+    void                InitToolboxes();
 
 protected:
     virtual long        PreNotify( NotifyEvent& rNEvt );

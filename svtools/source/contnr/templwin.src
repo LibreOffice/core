@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: nf $ $Date: 2002-02-28 17:19:08 $
+ *  last change: $Author: pb $ $Date: 2002-03-25 13:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 #include "templwin.hrc"
 #include "helpid.hrc"
 
-#define MASK_COL    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+// Magenta and Grey as mask colors
+#define MASK_COL_MAGENTA    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+#define MASK_COL_GREY       Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
 
 Control CTRL_FILEVIEW
 {
@@ -101,7 +103,7 @@ String STR_SVT_NEWDOC
 Image IMG_SVT_NEWDOC
 {
     ImageBitmap = Bitmap { File = "new_doc.bmp" ; };
-    MaskColor = MASK_COL
+    MaskColor = MASK_COL_MAGENTA
 };
 
 String STR_SVT_MYDOCS
@@ -132,7 +134,7 @@ String STR_SVT_MYDOCS
 Image IMG_SVT_MYDOCS
 {
     ImageBitmap = Bitmap { File = "my_docs.bmp" ; };
-    MaskColor = MASK_COL
+    MaskColor = MASK_COL_MAGENTA
 };
 
 String STR_SVT_TEMPLATES
@@ -163,7 +165,7 @@ String STR_SVT_TEMPLATES
 Image IMG_SVT_TEMPLATES
 {
     ImageBitmap = Bitmap { File = "template.bmp" ; };
-    MaskColor = MASK_COL
+    MaskColor = MASK_COL_MAGENTA
 };
 
 String STR_SVT_SAMPLES
@@ -194,32 +196,7 @@ String STR_SVT_SAMPLES
 Image IMG_SVT_SAMPLES
 {
     ImageBitmap = Bitmap { File = "samples.bmp" ; };
-    MaskColor = MASK_COL
-};
-
-String STR_SVT_CATEGORY
-{
-    Text = "Kategorie";
-    Text [ english_us ] = "Category";
-    Text[ portuguese ] = "Categoria";
-    Text[ russian ] = "Êàòåãîðèÿ";
-    Text[ greek ] = "Category";
-    Text[ dutch ] = "Categorie";
-    Text[ french ] = "Catégorie";
-    Text[ spanish ] = "Categoría";
-    Text[ finnish ] = "Luokka";
-    Text[ italian ] = "Categoria";
-    Text[ danish ] = "Category";
-    Text[ swedish ] = "Kategori";
-    Text[ polish ] = "Kategoria";
-    Text[ portuguese_brazilian ] = "Category";
-    Text[ japanese ] = "åˆ†é¡ž";
-    Text[ korean ] = "ë²”ì£¼";
-    Text[ chinese_simplified ] = "åˆ†ç±»";
-    Text[ chinese_traditional ] = "åˆ†é¡ž";
-    Text[ turkish ] = "Category";
-    Text[ arabic ] = "Category";
-    Text[ catalan ] = "Category";
+    MaskColor = MASK_COL_MAGENTA
 };
 
 ToolBox TB_SVT_FILEVIEW
@@ -232,7 +209,6 @@ ToolBox TB_SVT_FILEVIEW
         {
             Identifier = TI_DOCTEMPLATE_BACK;
             HelpId = HID_TEMPLATEDLG_TB_BACK;
-            ItemBitmap = Bitmap { File = "back_small.bmp" ; };
             Text = "Zurück" ;
             Text [ english_us ] = "Back" ;
             Text[ language_user1 ] = " ";
@@ -260,7 +236,6 @@ ToolBox TB_SVT_FILEVIEW
         {
             Identifier = TI_DOCTEMPLATE_PREV;
             HelpId = HID_TEMPLATEDLG_TB_PREV;
-            ItemBitmap = Bitmap { File = "up_small.bmp" ; };
             Text = "Ein Verzeichnis hoch" ;
             Text [ english_us ] = "Up One Level" ;
             Text[ language_user1 ] = " ";
@@ -292,7 +267,6 @@ ToolBox TB_SVT_FILEVIEW
         {
             Identifier = TI_DOCTEMPLATE_PRINT;
             HelpId = HID_TEMPLATEDLG_TB_PRINT;
-            ItemBitmap = Bitmap { File = "sc05509.bmp" ; };
             Text = "Drucken" ;
             Text [ english_us ] = "Print" ;
             Text[ language_user1 ] = " ";
@@ -319,6 +293,37 @@ ToolBox TB_SVT_FILEVIEW
     };
 };
 
+Image IMG_SVT_DOCTEMPLATE_BACK_SMALL
+{
+    ImageBitmap = Bitmap { File = "back_small.bmp" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+Image IMG_SVT_DOCTEMPLATE_BACK_LARGE
+{
+    ImageBitmap = Bitmap { File = "back_large.bmp" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+Image IMG_SVT_DOCTEMPLATE_PREV_SMALL
+{
+    ImageBitmap = Bitmap { File = "up_small.bmp" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+Image IMG_SVT_DOCTEMPLATE_PREV_LARGE
+{
+    ImageBitmap = Bitmap { File = "up_large.bmp" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+Image IMG_SVT_DOCTEMPLATE_PRINT_SMALL
+{
+    ImageBitmap = Bitmap { File = "sc05509.bmp" ; };
+    MaskColor = MASK_COL_GREY
+};
+Image IMG_SVT_DOCTEMPLATE_PRINT_LARGE
+{
+    ImageBitmap = Bitmap { File = "lc05509.bmp" ; };
+    MaskColor = MASK_COL_GREY
+};
+
 ToolBox TB_SVT_FRAMEWIN
 {
     Pos = MAP_APPFONT ( 0 , 0 ) ;
@@ -331,7 +336,6 @@ ToolBox TB_SVT_FRAMEWIN
             AutoCheck = TRUE;
             Identifier = TI_DOCTEMPLATE_DOCINFO;
             HelpId = HID_TEMPLATEDLG_TB_DOCINFO;
-            ItemBitmap = Bitmap { File = "info_small.bmp" ; };
             Text = "Dokumenteigenschaften" ;
             Text [ english_us ] = "Document Properties" ;
             Text[ portuguese ] = "Propriedades do documento";
@@ -360,7 +364,6 @@ ToolBox TB_SVT_FRAMEWIN
             AutoCheck = TRUE;
             Identifier = TI_DOCTEMPLATE_PREVIEW;
             HelpId = HID_TEMPLATEDLG_TB_PREVIEW;
-            ItemBitmap = Bitmap { File = "preview_small.bmp" ; };
             Text = "Vorschau" ;
             Text [ english_us ] = "Preview" ;
             Text[ portuguese ] = "Previsualizar";
@@ -384,6 +387,27 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ catalan ] = "Preview";
         };
     };
+};
+
+Image IMG_SVT_DOCTEMPLATE_DOCINFO_SMALL
+{
+    ImageBitmap = Bitmap { File = "info_small.bmp" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+Image IMG_SVT_DOCTEMPLATE_DOCINFO_LARGE
+{
+    ImageBitmap = Bitmap { File = "info_large.bmp" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+Image IMG_SVT_DOCTEMPLATE_PREVIEW_SMALL
+{
+    ImageBitmap = Bitmap { File = "preview_small.bmp" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+Image IMG_SVT_DOCTEMPLATE_PREVIEW_LARGE
+{
+    ImageBitmap = Bitmap { File = "preview_large.bmp" ; };
+    MaskColor = MASK_COL_MAGENTA
 };
 
 ModalDialog DLG_DOCTEMPLATE

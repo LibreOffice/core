@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-07 15:37:20 $
+ *  last change: $Author: pb $ $Date: 2002-03-25 13:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,22 @@
 #ifndef _SVTOOLS_IMAGEMGR_HXX
 #include "imagemgr.hxx"
 #endif
+#ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
+#include "miscopt.hxx"
+#endif
+#ifndef SFX2_TEMPLATEFOLDERCACHE_HXX
+#include "templatefoldercache.hxx"
+#endif
+#ifndef _SVTOOLS_IMGDEF_HXX
+#include "imgdef.hxx"
+#endif
 
 #ifndef _SVTOOLS_HRC
 #include "svtools.hrc"
 #endif
+#ifndef _SVTOOLS_TEMPLWIN_HRC
 #include "templwin.hrc"
+#endif
 #ifndef _SVT_HELPID_HRC
 #include "helpid.hrc"
 #endif
@@ -201,13 +212,11 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef SFX2_TEMPLATEFOLDERCACHE_HXX
-#include "templatefoldercache.hxx"
-#endif
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
@@ -226,8 +235,24 @@ extern ::rtl::OUString CreateExactSizeText_Impl( sal_Int64 nSize ); // fileview.
 #define ICON_POS_MYDOCS     2
 #define ICON_POS_SAMPLES    3
 
+#define ASCII_STR(s)                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
+#define VIEWSETTING_NEWFROMTEMPLATE     ASCII_STR("NewFromTemplate")
+#define VIEWSETTING_SELECTEDGROUP       ASCII_STR("SelectedGroup")
+#define VIEWSETTING_SELECTEDVIEW        ASCII_STR("SelectedView")
+#define VIEWSETTING_SPLITRATIO          ASCII_STR("SplitRatio")
+#define VIEWSETTING_LASTFOLDER          ASCII_STR("LastFolder")
+
+struct FolderHistory
+{
+    String      m_sURL;
+    ULONG       m_nGroup;
+
+    FolderHistory( const String& _rURL, sal_Int32 _nGroup ) :
+        m_sURL( _rURL ), m_nGroup( _nGroup ) {}
+};
+
+DECLARE_LIST( HistoryList_Impl, FolderHistory* );
 DECLARE_LIST( NewDocList_Impl, ::rtl::OUString* );
-DECLARE_LIST( HistoryList_Impl, String* );
 
 enum SvtDocInfoType
 {
@@ -295,10 +320,10 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     aIconCtrl( this, WB_ICON | WB_NOCOLUMNHEADER |
                      WB_HIGHLIGHTFRAME | WB_NOSELECTION | WB_NODRAGSELECTION | WB_TABSTOP ),
     nMaxTextLength( 0 ),
-    aNewDocumentRootURL( RTL_CONSTASCII_USTRINGPARAM( "private:newdoc" ) ),
+    aNewDocumentRootURL( ASCII_STR("private:newdoc") ),
     aMyDocumentsRootURL( SvtPathOptions().GetWorkPath() ),
-    aSamplesFolderRootURL( SvtPathOptions().SubstituteVariable(
-                                String( RTL_CONSTASCII_USTRINGPARAM( "$(insturl)/share/samples/$(vlang)" ) ) ) )
+    aSamplesFolderRootURL( SvtPathOptions().
+        SubstituteVariable( String( ASCII_STR("$(insturl)/share/samples/$(vlang)") ) ) )
 
 {
     aDummyHeaderBar.Show();
@@ -310,9 +335,8 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     aIconCtrl.Show();
 
     // detect the root URL of templates
-    ::rtl::OUString aService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.DocumentTemplates" ) );
-    Reference< XDocumentTemplates > xTemplates(
-        ::comphelper::getProcessServiceFactory()->createInstance( aService ), UNO_QUERY );
+    Reference< XDocumentTemplates > xTemplates( ::comphelper::getProcessServiceFactory()->
+        createInstance( ASCII_STR("com.sun.star.frame.DocumentTemplates") ), UNO_QUERY );
 
     if ( xTemplates.is() )
     {
@@ -452,7 +476,7 @@ void SvtIconWindow_Impl::InvalidateIconControl()
     aIconCtrl.Invalidate();
 }
 
-ULONG SvtIconWindow_Impl::GetCursorPos()
+ULONG SvtIconWindow_Impl::GetCursorPos() const
 {
     ULONG nPos = -1;
 
@@ -463,10 +487,20 @@ ULONG SvtIconWindow_Impl::GetCursorPos()
     return nPos;
 }
 
+ULONG SvtIconWindow_Impl::GetSelectEntryPos() const
+{
+    ULONG nPos;
+    if ( !aIconCtrl.GetSelectedEntry( nPos ) )
+        nPos = -1;
+    return nPos;
+}
+
 void SvtIconWindow_Impl::SetCursorPos( ULONG nPos )
 {
     SvxIconChoiceCtrlEntry* pEntry = aIconCtrl.GetEntry( nPos );
     aIconCtrl.SetCursor( pEntry );
+    aIconCtrl.Invalidate();
+    aIconCtrl.Update();
 }
 
 void SvtIconWindow_Impl::SetFocus()
@@ -495,6 +529,25 @@ sal_Bool SvtIconWindow_Impl::IsRootURL( const String& rURL ) const
             rURL == aTemplateRootURL ||
             rURL == aMyDocumentsRootURL ||
             rURL == aSamplesFolderRootURL;
+}
+
+ULONG SvtIconWindow_Impl::GetRootPos( const String& rURL ) const
+{
+    ULONG nPos = -1;
+    if ( aNewDocumentRootURL.Match( rURL ) == STRING_MATCH )
+        nPos = 0;
+    else if ( aTemplateRootURL.Match( rURL ) == STRING_MATCH )
+        nPos = 1;
+    else if ( aMyDocumentsRootURL.Match( rURL ) == STRING_MATCH )
+        nPos = 2;
+    else if ( aSamplesFolderRootURL.Match( rURL ) == STRING_MATCH )
+        nPos = 3;
+    else
+    {
+        DBG_ERRORFILE( "SvtIconWindow_Impl::GetRootPos(): invalid position" );
+    }
+
+    return nPos;
 }
 
 // class SvtFileViewWindow_Impl -----------------------------------------_
@@ -543,7 +596,7 @@ void GetMenuEntry_Impl
             aDynamicMenuEntry[i].Value >>= rFrame;
     }
 }
-::com::sun::star::uno::Sequence< ::rtl::OUString > SvtFileViewWindow_Impl::GetNewDocContents() const
+Sequence< ::rtl::OUString > SvtFileViewWindow_Impl::GetNewDocContents() const
 {
     NewDocList_Impl aNewDocs;
     Sequence< Sequence< PropertyValue > > aDynamicMenuEntries;
@@ -555,12 +608,14 @@ void GetMenuEntry_Impl
     ::rtl::OUString aTargetFrame;
 
     UINT32 i, nCount = aDynamicMenuEntries.getLength();
+    ::rtl::OUString sSeparator( ASCII_STR("private:separator") );
+    ::rtl::OUString sSlotURL( ASCII_STR("slot:5500") );
+
     for ( i = 0; i < nCount; ++i )
     {
         GetMenuEntry_Impl( aDynamicMenuEntries[i], aTitle, aURL, aTargetFrame, aImageURL );
 
-        if ( aURL == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:separator" ) ) ||
-             aURL == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:5500" ) ) )
+        if ( aURL == sSeparator || aURL == sSlotURL )
             continue;
         else
         {
@@ -729,16 +784,14 @@ SvtFrameWindow_Impl::SvtFrameWindow_Impl( Window* pParent ) :
     pEditWin = new SvtExtendedMultiLineEdit_Impl( this );
     pEditWin->EnableCursor( FALSE );
     pTextWin = new Window( this );
-    xFrame = ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > (
-            ::comphelper::getProcessServiceFactory()->createInstance(
-            String( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame") ) ), ::com::sun::star::uno::UNO_QUERY );
+    xFrame = Reference < XFrame > ( ::comphelper::getProcessServiceFactory()->
+        createInstance( ASCII_STR("com.sun.star.frame.Frame") ), UNO_QUERY );
     xWindow = VCLUnoHelper::GetInterface( pTextWin );
     xFrame->initialize( xWindow );
 
     // create docinfo instance
-    xDocInfo = ::com::sun::star::uno::Reference < ::com::sun::star::io::XPersist > (
-               ::comphelper::getProcessServiceFactory()->createInstance(
-               String( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentProperties") ) ), ::com::sun::star::uno::UNO_QUERY );
+    xDocInfo = Reference < XPersist > ( ::comphelper::getProcessServiceFactory()->
+        createInstance( ASCII_STR("com.sun.star.document.DocumentProperties") ), UNO_QUERY );
 
     pEmptyWin = new Window( this, WB_BORDER | WB_3DLOOK );
 }
@@ -856,7 +909,7 @@ void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
                             {
                                 LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
                                 String aDateStr = aLocaleWrapper.getDate( aToolsDT );
-                                aDateStr += String::CreateFromAscii( ", " );
+                                aDateStr += String( RTL_CONSTASCII_STRINGPARAM(", ") );
                                 aDateStr += aLocaleWrapper.getTime( aToolsDT );
                                 pEditWin->InsertEntry( aInfoTable.GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), aDateStr );
                             }
@@ -897,7 +950,7 @@ void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
             }
         }
     }
-    catch ( ::com::sun::star::io::IOException& ) {}
+    catch ( IOException& ) {}
     catch ( UnknownPropertyException& ) {}
     catch ( Exception& ) {}
 }
@@ -932,19 +985,19 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview,
     {
         com::sun::star::util::URL aURL;
         aURL.Complete = rURL;
-        Reference < com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                String( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer" ) ) ), UNO_QUERY );
+        Reference < com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->
+            createInstance( ASCII_STR("com.sun.star.util.URLTransformer" ) ), UNO_QUERY );
         xTrans->parseStrict( aURL );
 
         String aTarget;
         Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
         if ( bPreview )
-            aTarget = String( RTL_CONSTASCII_USTRINGPARAM("_self") );
+            aTarget = ASCII_STR("_self");
         else
         {
-            aTarget = String( RTL_CONSTASCII_USTRINGPARAM("_blank") );
-            xProv = Reference < XDispatchProvider >( ::comphelper::getProcessServiceFactory()->createInstance(
-                String( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop" ) ) ), UNO_QUERY );
+            aTarget = ASCII_STR("_blank");
+            xProv = Reference < XDispatchProvider >( ::comphelper::getProcessServiceFactory()->
+                createInstance( ASCII_STR("com.sun.star.frame.Desktop") ), UNO_QUERY );
         }
 
         Reference < XDispatch > xDisp = xProv.is() ?
@@ -963,9 +1016,9 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview,
                 {
                     sal_Bool    b = sal_True;
                     Sequence < PropertyValue > aArgs( 2 );
-                    aArgs[0].Name = String( RTL_CONSTASCII_USTRINGPARAM("Preview") );
+                    aArgs[0].Name = ASCII_STR("Preview");
                     aArgs[0].Value.setValue( &b, ::getBooleanCppuType() );
-                    aArgs[1].Name = String( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") );
+                    aArgs[1].Name = ASCII_STR("ReadOnly");
                     aArgs[1].Value.setValue( &b, ::getBooleanCppuType() );
                     xDisp->dispatch( aURL, aArgs );
                 }
@@ -973,7 +1026,7 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview,
             else if ( bIsTemplate )
             {
                 Sequence < PropertyValue > aArgs( 1 );
-                aArgs[0].Name = String( RTL_CONSTASCII_USTRINGPARAM("AsTemplate") );
+                aArgs[0].Name = ASCII_STR("AsTemplate");
                 aArgs[0].Value <<= bAsTemplate;
                 xDisp->dispatch( aURL, aArgs );
             }
@@ -1033,25 +1086,9 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
     aSelectTimer.SetTimeout( 200 );
     aSelectTimer.SetTimeoutHdl( LINK( this, SvtTemplateWindow, TimeoutHdl_Impl ) );
 
-    // initialize the toolboxes
-    Size aSize = aFileViewTB.CalcWindowSizePixel();
-    aSize.Height() += 4;
-    aFileViewTB.SetPosSizePixel( Point( 0, 2 ), aSize );
-    aFileViewTB.SetOutStyle( TOOLBOX_STYLE_FLAT );
-    aSize = aFrameWinTB.CalcWindowSizePixel();
-    aSize.Height() += 4;
-    aFrameWinTB.SetPosSizePixel( Point( pFrameWin->GetPosPixel().X() + 2, 2 ), aSize );
-    aFrameWinTB.SetOutStyle( TOOLBOX_STYLE_FLAT );
-    Link aLink = LINK( this, SvtTemplateWindow, ClickHdl_Impl );
-
-    aFileViewTB.SetClickHdl( aLink );
-    aFileViewTB.EnableItem( TI_DOCTEMPLATE_BACK, FALSE );
-    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PREV, FALSE );
-    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, FALSE );
-
+    // initialize the toolboxes and then show them
+    InitToolboxes();
     aFileViewTB.Show();
-
-    aFrameWinTB.SetClickHdl( aLink );
     aFrameWinTB.Show();
 
     ReadViewSettings( );
@@ -1120,9 +1157,13 @@ IMPL_LINK ( SvtTemplateWindow , FileDblClickHdl_Impl, SvtFileView *, pView )
 
 IMPL_LINK ( SvtTemplateWindow , NewFolderHdl_Impl, SvtFileView *, pView )
 {
-    String aTemp;
     pFrameWin->OpenFile( String(), sal_True, sal_False, sal_False );
-    AppendHistoryURL( pFileWin->GetFolderURL() );
+    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, FALSE );
+
+    String sURL = pFileWin->GetFolderURL();
+    ULONG nPos = pIconWin->GetRootPos( sURL );
+    AppendHistoryURL( sURL, nPos );
+
     aNewFolderHdl.Call( this );
     return 0;
 }
@@ -1163,13 +1204,15 @@ void SvtTemplateWindow::PrintFile( const String& rURL )
 {
     // open the file readonly and hidden
     Sequence < PropertyValue > aArgs( 2 );
-    aArgs[0].Name = String( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") );
+    aArgs[0].Name = ASCII_STR("ReadOnly");
     aArgs[0].Value <<= sal_True;
-    aArgs[1].Name = String( RTL_CONSTASCII_USTRINGPARAM("Hidden") );
+    aArgs[1].Name = ASCII_STR("Hidden");
     aArgs[1].Value <<= sal_True;
 
-    Reference < XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
-    Reference < XModel > xModel( xDesktop->loadComponentFromURL( rURL, ::rtl::OUString::createFromAscii("_blank"), 0, aArgs ), UNO_QUERY );
+    Reference < XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->
+        createInstance( ASCII_STR("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    Reference < XModel > xModel( xDesktop->loadComponentFromURL(
+        rURL, ASCII_STR("_blank"), 0, aArgs ), UNO_QUERY );
     if ( xModel.is() )
     {
         // print
@@ -1181,11 +1224,11 @@ void SvtTemplateWindow::PrintFile( const String& rURL )
 
 // ------------------------------------------------------------------------
 
-void SvtTemplateWindow::AppendHistoryURL( const String& rURL )
+void SvtTemplateWindow::AppendHistoryURL( const String& rURL, ULONG nGroup )
 {
     if ( !pHistoryList )
         pHistoryList = new HistoryList_Impl;
-    String* pEntry = new String( rURL );
+    FolderHistory* pEntry = new FolderHistory( rURL, nGroup );
     pHistoryList->Insert( pEntry, LIST_APPEND );
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_BACK, pHistoryList->Count() > 1 );
 }
@@ -1194,12 +1237,12 @@ void SvtTemplateWindow::AppendHistoryURL( const String& rURL )
 
 void SvtTemplateWindow::OpenHistory()
 {
-    String* pEntry = pHistoryList->Remove( pHistoryList->Count() - 1 );
+    FolderHistory* pEntry = pHistoryList->Remove( pHistoryList->Count() - 1 );
     pEntry = pHistoryList->Remove( pHistoryList->Count() - 1 );
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_BACK, pHistoryList->Count() > 1 );
-    String aURL( *pEntry );
+    pFileWin->OpenFolder( pEntry->m_sURL );
+    pIconWin->SetCursorPos( pEntry->m_nGroup );
     delete pEntry;
-    pFileWin->OpenFolder( aURL );
 }
 
 // ------------------------------------------------------------------------
@@ -1238,6 +1281,48 @@ void SvtTemplateWindow::DoAction( USHORT nAction )
             break;
         }
     }
+}
+
+// ------------------------------------------------------------------------
+
+void SvtTemplateWindow::InitToolboxes()
+{
+    SvtMiscOptions aMiscOpt;
+    BOOL bLarge = ( aMiscOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE );
+
+    aFileViewTB.SetItemImage( TI_DOCTEMPLATE_BACK, Image( SvtResId(
+        bLarge ? IMG_SVT_DOCTEMPLATE_BACK_LARGE : IMG_SVT_DOCTEMPLATE_BACK_SMALL ) ) );
+    aFileViewTB.SetItemImage( TI_DOCTEMPLATE_PREV, Image( SvtResId(
+        bLarge ? IMG_SVT_DOCTEMPLATE_PREV_LARGE : IMG_SVT_DOCTEMPLATE_PREV_SMALL ) ) );
+    aFileViewTB.SetItemImage( TI_DOCTEMPLATE_PRINT, Image( SvtResId(
+        bLarge ? IMG_SVT_DOCTEMPLATE_PRINT_LARGE : IMG_SVT_DOCTEMPLATE_PRINT_SMALL ) ) );
+
+    aFrameWinTB.SetItemImage( TI_DOCTEMPLATE_DOCINFO, Image( SvtResId(
+        bLarge ? IMG_SVT_DOCTEMPLATE_DOCINFO_LARGE : IMG_SVT_DOCTEMPLATE_DOCINFO_SMALL ) ) );
+    aFrameWinTB.SetItemImage( TI_DOCTEMPLATE_PREVIEW, Image( SvtResId(
+        bLarge ? IMG_SVT_DOCTEMPLATE_PREVIEW_LARGE : IMG_SVT_DOCTEMPLATE_PREVIEW_SMALL ) ) );
+
+    Size aSize = aFileViewTB.CalcWindowSizePixel();
+    aSize.Height() += 4;
+    aFileViewTB.SetPosSizePixel( Point( 0, 2 ), aSize );
+    aSize = aFrameWinTB.CalcWindowSizePixel();
+    aSize.Height() += 4;
+    aFrameWinTB.SetPosSizePixel( Point( pFrameWin->GetPosPixel().X() + 2, 2 ), aSize );
+
+    BOOL bFlat = ( aMiscOpt.GetToolboxStyle() == TOOLBOX_STYLE_FLAT );
+    if ( bFlat )
+    {
+        aFileViewTB.SetOutStyle( TOOLBOX_STYLE_FLAT );
+        aFrameWinTB.SetOutStyle( TOOLBOX_STYLE_FLAT );
+    }
+
+    aFileViewTB.EnableItem( TI_DOCTEMPLATE_BACK, FALSE );
+    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PREV, FALSE );
+    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, FALSE );
+
+    Link aLink = LINK( this, SvtTemplateWindow, ClickHdl_Impl );
+    aFileViewTB.SetClickHdl( aLink );
+    aFrameWinTB.SetClickHdl( aLink );
 }
 
 // ------------------------------------------------------------------------
@@ -1323,12 +1408,13 @@ void SvtTemplateWindow::OpenFile( sal_Bool bNotAsTemplate )
 
 String SvtTemplateWindow::GetFolderTitle() const
 {
-    String aTitle, aTemp;
-    if ( !pFileWin->HasPreviousLevel( aTemp ) )
-        aTitle = pIconWin->GetIconText( pFileWin->GetRootURL() );
+    String sTitle;
+    String sFolderURL = pFileWin->GetFolderURL();
+    if ( pIconWin->IsRootURL( sFolderURL ) )
+        sTitle = pIconWin->GetIconText( sFolderURL );
     else
-        aTitle = pFileWin->GetFolderTitle();
-    return aTitle;
+        sTitle = pFileWin->GetFolderTitle();
+    return sTitle;
 }
 
 // ------------------------------------------------------------------------
@@ -1384,16 +1470,18 @@ void SvtTemplateWindow::ReadViewSettings()
     sal_Int32 nSelectedGroup    =   ICON_POS_TEMPLATES;
     sal_Int32 nSelectedView     =   TI_DOCTEMPLATE_DOCINFO;
     double nSplitRatio          =   0.5;
+    ::rtl::OUString sLastFolder;
 
-    SvtViewOptions aViewSettings( E_DIALOG, ::rtl::OUString::createFromAscii( "NewFromTemplate" ) );
+    SvtViewOptions aViewSettings( E_DIALOG, VIEWSETTING_NEWFROMTEMPLATE );
     if ( aViewSettings.Exists() )
     {
         // read the settings
         Sequence< NamedValue > aSettings = aViewSettings.GetUserData( );
 
-        aViewSettings.GetUserItem( ::rtl::OUString::createFromAscii( "SelectedGroup" ) ) >>= nSelectedGroup;
-        aViewSettings.GetUserItem( ::rtl::OUString::createFromAscii( "SelectedView" ) ) >>= nSelectedView;
-        aViewSettings.GetUserItem( ::rtl::OUString::createFromAscii( "SplitRatio" ) ) >>= nSplitRatio;
+        aViewSettings.GetUserItem( VIEWSETTING_SELECTEDGROUP ) >>= nSelectedGroup;
+        aViewSettings.GetUserItem( VIEWSETTING_SELECTEDVIEW ) >>= nSelectedView;
+        aViewSettings.GetUserItem( VIEWSETTING_SPLITRATIO ) >>= nSplitRatio;
+        aViewSettings.GetUserItem( VIEWSETTING_LASTFOLDER ) >>= sLastFolder;
     }
     // normalize
     if ( nSelectedGroup < ICON_POS_NEWDOC )     nSelectedGroup = ICON_POS_NEWDOC;
@@ -1421,7 +1509,12 @@ void SvtTemplateWindow::ReadViewSettings()
 
     // the selected folder
     pIconWin->SetCursorPos( nSelectedGroup );
-    IconClickHdl_Impl( NULL );
+
+    // open the last folder or the selected group
+    if ( sLastFolder.getLength() > 0 )
+        pFileWin->OpenFolder( sLastFolder );
+    else
+        IconClickHdl_Impl( NULL );
 }
 
 // ------------------------------------------------------------------------
@@ -1429,25 +1522,29 @@ void SvtTemplateWindow::ReadViewSettings()
 void SvtTemplateWindow::WriteViewSettings()
 {
     // collect
-    Sequence< NamedValue > aSettings(3);
+    Sequence< NamedValue > aSettings(4);
 
     // the selected group
-    aSettings[0].Name   =   ::rtl::OUString::createFromAscii( "SelectedGroup" );
+    aSettings[0].Name   =   VIEWSETTING_SELECTEDGROUP;
     pIconWin->SetFocus();
     aSettings[0].Value  <<= (sal_Int32)pIconWin->GetCursorPos( );
 
     // the selected view mode
-    aSettings[1].Name   =   ::rtl::OUString::createFromAscii( "SelectedView" );
+    aSettings[1].Name   =   VIEWSETTING_SELECTEDVIEW;
     aSettings[1].Value  <<= sal_Int32( aFrameWinTB.IsItemChecked( TI_DOCTEMPLATE_DOCINFO ) ? TI_DOCTEMPLATE_DOCINFO : TI_DOCTEMPLATE_PREVIEW );
 
     // the split ratio
-    aSettings[2].Name   =   ::rtl::OUString::createFromAscii( "SplitRatio" );
+    aSettings[2].Name   =   VIEWSETTING_SPLITRATIO;
     sal_Int32 nSplitFileSize = aSplitWin.GetItemSize( FILEWIN_ID );
     sal_Int32 nSplitFileAndFrameSize = nSplitFileSize + aSplitWin.GetItemSize( FRAMEWIN_ID );
     aSettings[2].Value  <<= double( 1.0 * nSplitFileSize / nSplitFileAndFrameSize );
 
+    // last folder
+    aSettings[3].Name   =   VIEWSETTING_LASTFOLDER;
+    aSettings[3].Value  <<= ::rtl::OUString( pFileWin->GetFolderURL() );
+
     // write
-    SvtViewOptions aViewSettings( E_DIALOG, ::rtl::OUString::createFromAscii( "NewFromTemplate" ) );
+    SvtViewOptions aViewSettings( E_DIALOG, VIEWSETTING_NEWFROMTEMPLATE );
     aViewSettings.SetUserData( aSettings );
 }
 
@@ -1612,7 +1709,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog , DoubleClickHdl_Impl, SvtTemplateWindow *
 IMPL_LINK ( SvtDocumentTemplateDialog , NewFolderHdl_Impl, SvtTemplateWindow *, EMPTYARG )
 {
     String aNewTitle( pImpl->aTitle );
-    aNewTitle += String( RTL_CONSTASCII_USTRINGPARAM(" - ") );
+    aNewTitle += String( ASCII_STR(" - ") );
     aNewTitle += pImpl->pWin->GetFolderTitle();
     SetText( aNewTitle );
 
@@ -1659,27 +1756,29 @@ IMPL_LINK ( SvtDocumentTemplateDialog , OrganizerHdl_Impl, PushButton *, pBtn )
 {
     Window* pOldDefWin = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
-    Reference < ::com::sun::star::frame::XFramesSupplier > xDesktop =
-            Reference < ::com::sun::star::frame::XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ) ), UNO_QUERY );
-    Reference < ::com::sun::star::frame::XFrame > xFrame( xDesktop->getActiveFrame() );
+    Reference < XFramesSupplier > xDesktop = Reference < XFramesSupplier >(
+        ::comphelper::getProcessServiceFactory()->
+        createInstance( ASCII_STR("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    Reference < XFrame > xFrame( xDesktop->getActiveFrame() );
     if ( !xFrame.is() )
-        xFrame = Reference < ::com::sun::star::frame::XFrame >( xDesktop, UNO_QUERY );
+        xFrame = Reference < XFrame >( xDesktop, UNO_QUERY );
 
     com::sun::star::util::URL aTargetURL;
-    aTargetURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("slot:5540") );
-    Reference < com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer") ) ), UNO_QUERY );
+    aTargetURL.Complete = ASCII_STR("slot:5540");
+    Reference < com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->
+        createInstance( ASCII_STR("com.sun.star.util.URLTransformer") ), UNO_QUERY );
     xTrans->parseStrict( aTargetURL );
 
-    Reference < ::com::sun::star::frame::XDispatchProvider > xProv( xFrame, UNO_QUERY );
-    Reference < ::com::sun::star::frame::XDispatch > xDisp;
+    Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
+    Reference < XDispatch > xDisp;
     xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 
     if ( xDisp.is() )
     {
         Sequence<PropertyValue> aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Referer") );
-        pArg[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:user") );
+        pArg[0].Name = ASCII_STR("Referer");
+        pArg[0].Value <<= ASCII_STR("private:user");
         xDisp->dispatch( aTargetURL, aArgs );
     }
 
@@ -1692,9 +1791,8 @@ IMPL_LINK ( SvtDocumentTemplateDialog , OrganizerHdl_Impl, PushButton *, pBtn )
 IMPL_LINK ( SvtDocumentTemplateDialog, UpdateHdl_Impl, Timer*, _pEventSource )
 {
     pImpl->pWin->SetFocus( sal_False );
-
-    ::rtl::OUString aService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.DocumentTemplates" ) );
-    Reference< XDocumentTemplates > xTemplates( ::comphelper::getProcessServiceFactory()->createInstance( aService ), UNO_QUERY );
+    Reference< XDocumentTemplates > xTemplates( ::comphelper::getProcessServiceFactory()->
+        createInstance( ASCII_STR("com.sun.star.frame.DocumentTemplates") ), UNO_QUERY );
     if ( xTemplates.is() )
     {
         if ( _pEventSource )
