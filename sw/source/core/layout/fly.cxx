@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:50:33 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,6 +522,13 @@ void SwFlyFrm::FinitDrawObj()
         } while( aIter() );
     }
 
+    // OD, OS 2004-03-31 #116203# - clear user call of Writer fly frame 'master'
+    // <SdrObject> to assure, that a <SwXFrame::dispose()> doesn't delete the
+    // Writer fly frame again.
+    if ( pMyContact )
+    {
+        pMyContact->GetMaster()->SetUserCall( 0 );
+    }
     pDrawObj->SetUserCall( 0 ); //Ruft sonst Delete des ContactObj
     delete pDrawObj;            //Meldet sich selbst beim Master ab.
     if ( pMyContact )
