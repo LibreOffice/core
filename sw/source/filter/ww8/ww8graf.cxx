@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:36:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,6 @@
  ************************************************************************/
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-#pragma hdrstop
 
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -433,7 +431,7 @@ static void SetFill( SfxItemSet& rSet, WW8_DP_FILL& rFill )
              0,  0,  5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80,
             90, 50, 50, 50, 50, 50, 50, 33, 33, 33, 33, 33, 33
     };
-    short nPat = SVBT16ToShort(rFill.flpp);
+    sal_uInt16 nPat = SVBT16ToShort(rFill.flpp);
 
     if (nPat == 0) // transparent
         rSet.Put(XFillStyleItem(XFILL_NONE));
@@ -1527,7 +1525,7 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
     pStrm->Read( &aDo, sizeof( WW8_DO ) );
 
     short nLeft = SVBT16ToShort( aDo.cb ) - sizeof( WW8_DO );
-    while( nLeft > sizeof( WW8_DPHEAD ) )
+    while (nLeft > static_cast<short>(sizeof(WW8_DPHEAD)))
     {
         SfxAllItemSet aSet( pDrawModel->GetItemPool() );
         if (SdrObject *pObject = ReadGrafPrimitive( nLeft, &aDo, aSet ))
@@ -1618,8 +1616,9 @@ const WW8_BordersSO &WW8_BordersSO::Get0x01LineMatch(eBorderCode eCode)
 /*14*/  { DEF_DOUBLE_LINE9_OUT, DEF_DOUBLE_LINE9_IN, DEF_DOUBLE_LINE9_DIST },
 /*15*/  { DEF_DOUBLE_LINE10_OUT,DEF_DOUBLE_LINE10_IN,DEF_DOUBLE_LINE10_DIST}
     };
-    ASSERT(eCode < sizeof(aLineTabVer8), "Impossible");
-    if (eCode >= sizeof(aLineTabVer8))
+    size_t nPos = static_cast<size_t>(eCode);
+    ASSERT(nPos < sizeof(aLineTabVer8), "Impossible");
+    if (nPos >= sizeof(aLineTabVer8))
         eCode = single0;
     return aLineTabVer8[eCode];
 }
@@ -2577,7 +2576,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             eVertRel));
 
         if (
-            (pFSPA->nYaTop < 0) && (eVertOri == HORI_NONE) &&
+            (pFSPA->nYaTop < 0) && (eVertOri == VERT_NONE) &&
             ((eAnchor == FLY_AT_CNTNT) || (eAnchor == FLY_AUTO_CNTNT))
            )
         {
@@ -2604,7 +2603,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     if( nIniFlags & WW8FL_NO_GRAFLAYER )
         return 0;
 
-    ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
+    ::SetProgressState(nProgress, mpDocShell);     // Update
 
     nDrawCpO =    pWwFib->ccpText + pWwFib->ccpFtn
                 + pWwFib->ccpHdr  + pWwFib->ccpMcr
@@ -2665,8 +2664,20 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     Rectangle aRect(pF->nXaLeft,  pF->nYaTop, pF->nXaRight, pF->nYaBottom);
     SvxMSDffImportData aData( aRect );
 
+    /*
+    #i20540#
+    The SdrOle2Obj will try and manage any ole objects it finds, causing all
+    sorts of trouble later on
+    */
+    SwDocShell* pPersist = rDoc.GetDocShell();
+    rDoc.SetDocShell(0);         //#i20540# Persist guard
+
     SdrObject* pObject = 0;
-    if (!(pMSDffManager->GetShape(pF->nSpId, pObject, aData) && pObject))
+    bool bOk = (pMSDffManager->GetShape(pF->nSpId, pObject, aData) && pObject);
+
+    rDoc.SetDocShell(pPersist);  //#i20540# Persist guard
+
+    if (!bOk)
     {
         ASSERT( !this, "Where is the Shape ?" );
         return 0;
@@ -3211,7 +3222,7 @@ void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
          Now the dff manager always needs a controls //converter as well, but a
          control converter may still exist //without a dffmanager. cmc
         */
-        pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(), pPaM);
+        pFormImpl = new SwMSConvertControls(mpDocShell, pPaM);
 
         pWWZOrder = new wwZOrderer(sw::util::SetLayer(rDoc), pDrawPg,
             pMSDffManager ? pMSDffManager->GetShapeOrders() : 0);
