@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2002-12-12 16:46:57 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,24 @@ SV_DECL_IMPL_REF(SbUnoClass);
 // Funktion, um einen globalen Bezeichner im
 // UnoScope zu suchen und fuer Sbx zu wrappen
 SbxVariable* findUnoClass( const String& rName );
+
+
+// #105565 Special Object to wrap a strongly typed Uno Any
+class SbUnoAnyObject: public SbxObject
+{
+    Any     mVal;
+
+public:
+    SbUnoAnyObject( const Any& rVal )
+        : SbxObject( String() )
+        , mVal( rVal )
+    {}
+
+    const Any& getValue( void )
+        { return mVal; }
+
+    TYPEINFO();
+};
 
 
 class StarBASIC;
