@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:50:29 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,65 +69,17 @@ ModalDialog DLG_DOC_TEMPLATE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 280 , 128 ) ;
-    Text = "Dokumentvorlagen" ;
-    Text [ ENGLISH ] = "document templates" ;
-    Text [ norwegian ] = "Rediger dokumetmal" ;
-    Text [ italian ] = "Modelli" ;
-    Text [ portuguese_brazilian ] = "Modelos de documentos" ;
-    Text [ portuguese ] = "Modelos de documentos" ;
-    Text [ finnish ] = "Mallit" ;
-    Text [ danish ] = "Skabeloner" ;
-    Text [ french ] = "Modèles de document" ;
-    Text [ swedish ] = "Dokumentmallar" ;
-    Text [ dutch ] = "Sjablonen" ;
-    Text [ spanish ] = "Plantillas" ;
-    Text [ english_us ] = "Templates" ;
-    Text[ chinese_simplified ] = "æ–‡æ¡£æ ·å¼";
-    Text[ russian ] = "Øàáëîíû";
-    Text[ polish ] = "Szablony";
-    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
-    Text[ chinese_traditional ] = "æ–‡ä»¶æ¨£å¼";
-    Text[ arabic ] = "ŞæÇáÈ ãÓÊäÏ";
-    Text[ greek ] = "Ğñüôõğá åããñÜöïõ";
-    Text[ korean ] = "ì„œì‹ íŒŒì¼";
-    Text[ turkish ] = "Belge şablonu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Plantilles";
+    Text [ de ] = "Dokumentvorlagen" ;
+    Text [ en-US ] = "Templates" ;
+    Text [ x-comment ] = " ";
     Moveable = TRUE ;
     FixedLine FL_EDIT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
-        Text = "Neue Dokumentvorlage" ;
-        Text [ English ] = "New Template" ;
-        Text [ dutch ] = "Nieuwe sjabloon" ;
-        Text [ english_us ] = "New template" ;
-        Text [ italian ] = "Nuovo modello" ;
-        Text [ spanish ] = "Plantilla nueva" ;
-        Text [ french ] = "Nouveau modèle de document" ;
-        Text [ swedish ] = "Ny dokumentmall" ;
-        Text [ danish ] = "Ny skabelon" ;
-        Text [ portuguese_brazilian ] = "Novo modelo" ;
-        Text [ portuguese ] = "Novo modelo" ;
-        Text[ chinese_simplified ] = "æ–°å»ºæ–‡æ¡£æ ·å¼";
-        Text[ russian ] = "Íîâûé øàáëîí";
-        Text[ polish ] = "Nowy szablon dokumentu";
-        Text[ japanese ] = "æ–°ã—ã„ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
-        Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æ–‡ä»¶æ¨£å¼";
-        Text[ arabic ] = "ŞÇáÈ ãÓÊäÏ ÌÏíÏ";
-        Text[ greek ] = "Äçìéïõñãßá ğñïôığïõ";
-        Text[ korean ] = "ìƒˆ ì„œì‹ íŒŒì¼";
-        Text[ turkish ] = "Yeni şablon";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nova plantilla";
-        Text[ finnish ] = "Uusi malli";
-        Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¹ƒà¸«à¸¡à¹ˆ";
-        Text[ czech ] = "NovÃ¡ Å¡ablona";
-        Text[ hebrew ] = "â€®×ª×‘× ×™×ª ×—×“×©×”â€¬";
-        Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤¨à¤®à¥‚à¤¨à¤¾";
-        Text[ slovak ] = "NovÃ¡ Å¡ablÃ³na";
-        Text[ hungarian ] = "Ãšj sablon";
-        Text[ slovenian ] = "Nova predloga";
+        Text [ de ] = "Neue Dokumentvorlage" ;
+        Text [ en-US ] = "New template" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_NAME
     {
@@ -139,73 +91,17 @@ ModalDialog DLG_DOC_TEMPLATE
     {
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
-        Text = "Vorlagen" ;
-        Text [ ENGLISH ] = "Templates" ;
-        Text [ norwegian ] = "Maler" ;
-        Text [ italian ] = "Modelli" ;
-        Text [ portuguese_brazilian ] = "Modelos" ;
-        Text [ portuguese ] = "Modelos" ;
-        Text [ finnish ] = "Mallit" ;
-        Text [ danish ] = "Skabeloner" ;
-        Text [ french ] = "Modèles" ;
-        Text [ swedish ] = "Mallar" ;
-        Text [ dutch ] = "Sjablonen" ;
-        Text [ spanish ] = "Plantillas" ;
-        Text [ english_us ] = "Templates" ;
-        Text[ chinese_simplified ] = "æ ·å¼";
-        Text[ russian ] = "Øàáëîíû";
-        Text[ polish ] = "Szablony";
-        Text[ japanese ] = "ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
-        Text[ chinese_traditional ] = "æ¨£å¼";
-        Text[ arabic ] = "ŞæÇáÈ";
-        Text[ greek ] = "Ğñüôõğá";
-        Text[ korean ] = "ì„œì‹ íŒŒì¼";
-        Text[ turkish ] = "Şablonlar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Plantilles";
-        Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸š";
-        Text[ czech ] = "Å ablony";
-        Text[ hebrew ] = "â€®×ª×‘× ×™×•×ªâ€¬";
-        Text[ hindi ] = "à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
-        Text[ slovak ] = "Å ablÃ³ny";
-        Text[ hungarian ] = "Sablonok";
-        Text[ slovenian ] = "Predloge";
+        Text [ de ] = "Vorlagen" ;
+        Text [ en-US ] = "Templates" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_SECTION
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 97 , 10 ) ;
-        Text = "~Bereiche" ;
-        Text [ ENGLISH ] = "~Groups" ;
-        Text [ norwegian ] = "~Grupper" ;
-        Text [ italian ] = "~Categorie" ;
-        Text [ portuguese_brazilian ] = "~Categorias" ;
-        Text [ portuguese ] = "~Categorias" ;
-        Text [ finnish ] = "~Luokat" ;
-        Text [ danish ] = "~Kategorier" ;
-        Text [ french ] = "~Catégories" ;
-        Text [ swedish ] = "~Kategorier" ;
-        Text [ dutch ] = "~Bereiken" ;
-        Text [ spanish ] = "~Áreas" ;
-        Text [ english_us ] = "~Categories" ;
-        Text[ chinese_simplified ] = "åˆ†ç±»(~C)";
-        Text[ russian ] = "Êàòåãîğèè";
-        Text[ polish ] = "~Kategorie";
-        Text[ japanese ] = "ç¯„å›²(~C)";
-        Text[ chinese_traditional ] = "åˆ†é¡(~C)";
-        Text[ arabic ] = "äØÇŞÇÊ";
-        Text[ greek ] = "Êáôçãïñßåò";
-        Text[ korean ] = "ì˜ì—­(~C)";
-        Text[ turkish ] = "~Kategori";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Categories";
-        Text[ thai ] = "~à¸›à¸£à¸°à¹€à¸ à¸—";
-        Text[ czech ] = "Kategorie";
-        Text[ hebrew ] = "â€®×¡×™×•×•×’×™×â€¬";
-        Text[ hindi ] = "~à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "~KategÃ³rie";
-        Text[ hungarian ] = "~KategÃ³riÃ¡k";
-        Text[ slovenian ] = "~Kategorije";
+        Text [ de ] = "~Bereiche" ;
+        Text [ en-US ] = "~Categories" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_SECTION
     {
@@ -217,37 +113,9 @@ ModalDialog DLG_DOC_TEMPLATE
     {
         Pos = MAP_APPFONT ( 115 , 43 ) ;
         Size = MAP_APPFONT ( 97 , 10 ) ;
-        Text = "~Vorlagen" ;
-        Text [ ENGLISH ] = "~Templates" ;
-        Text [ norwegian ] = "~Maler" ;
-        Text [ italian ] = "~Modelli" ;
-        Text [ portuguese_brazilian ] = "~Modelos" ;
-        Text [ portuguese ] = "Modelos" ;
-        Text [ finnish ] = "Mallit" ;
-        Text [ danish ] = "Skabel~oner" ;
-        Text [ french ] = "~Modèles" ;
-        Text [ swedish ] = "~Mallar" ;
-        Text [ dutch ] = "S~jablonen" ;
-        Text [ spanish ] = "P~lantillas" ;
-        Text [ english_us ] = "~Templates" ;
-        Text[ chinese_simplified ] = "æ ·å¼(~T)";
-        Text[ russian ] = "Øàáëîíû";
-        Text[ polish ] = "~Szablony";
-        Text[ japanese ] = "ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ(~T)";
-        Text[ chinese_traditional ] = "æ¨£å¼(~T)";
-        Text[ arabic ] = "ŞæÇáÈ";
-        Text[ greek ] = "Ğñüôõğá";
-        Text[ korean ] = "ì„œì‹ íŒŒì¼(~T)";
-        Text[ turkish ] = "~Şablon";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Plantilles";
-        Text[ thai ] = "à¹~à¸¡à¹ˆà¹à¸šà¸š";
-        Text[ czech ] = "Å ablony";
-        Text[ hebrew ] = "â€®×ª×‘× ×™×•×ªâ€¬";
-        Text[ hindi ] = "~à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
-        Text[ slovak ] = "Å ablÃ³~ny";
-        Text[ hungarian ] = "~Sablonok";
-        Text[ slovenian ] = "~Predloge";
+        Text [ de ] = "~Vorlagen" ;
+        Text [ en-US ] = "~Templates" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_STYLESHEETS
     {
@@ -276,80 +144,18 @@ ModalDialog DLG_DOC_TEMPLATE
     {
         Pos = MAP_APPFONT ( 224 , 62 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Bearbeiten" ;
-        Text [ English ] = "~Edit" ;
-        Text [ english_us ] = "~Edit" ;
-        Text [ dutch ] = "Be~werken" ;
-        Text [ italian ] = "Modifica" ;
-        Text [ spanish ] = "Editar" ;
-        Text [ french ] = "Éditer" ;
-        Text [ swedish ] = "~Redigera" ;
-        Text [ danish ] = "~Rediger" ;
-        Text [ portuguese ] = "~Editar" ;
-        Text [ portuguese_brazilian ] = "~Editar" ;
-        Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
-        Text[ russian ] = "~Ïğàâêà";
-        Text[ polish ] = "~Edytuj";
-        Text[ japanese ] = "ç·¨é›†(~E)";
-        Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
-        Text[ arabic ] = "ÊÍÑíÑ";
-        Text[ greek ] = "~Åğåîåñãáóßá";
-        Text[ korean ] = "í¸ì§‘(~E)";
-        Text[ turkish ] = "~Düzenle";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Edita";
-        Text[ finnish ] = "~Muokkaa";
-        Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚";
-        Text[ czech ] = "Upravit";
-        Text[ hebrew ] = "â€®×¢×¨×™×›×”â€¬";
-        Text[ hindi ] = "~à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
-        Text[ slovak ] = "~UpraviÅ¥";
-        Text[ hungarian ] = "~SzerkesztÃ©s";
-        Text[ slovenian ] = "~Uredi";
+        Text [ de ] = "~Bearbeiten" ;
+        Text [ en-US ] = "~Edit" ;
+        Text [ x-comment ] = " ";
     };
     PushButton BT_ORGANIZE
     {
         Pos = MAP_APPFONT ( 224 , 79 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "Ver~walten..." ;
-        Text [ English ] = "~Manage..." ;
-        Text [ norwegian ] = "~Styre..." ;
-        Text [ italian ] = "Gestisci..." ;
-        Text [ portuguese_brazilian ] = "~Gerenciador..." ;
-        Text [ portuguese ] = "~Gerir..." ;
-        Text [ finnish ] = "~Järjestelytyökalu..." ;
-        Text [ danish ] = "~Administration..." ;
-        Text [ french ] = "~Gérer..." ;
-        Text [ swedish ] = "~Administrera..." ;
-        Text [ dutch ] = "Be~heren..." ;
-        Text [ spanish ] = "~Administrar..." ;
-        Text [ english_us ] = "~Organizer..." ;
-        Text[ chinese_simplified ] = "ç®¡ç†(~O)...";
-        Text[ russian ] = "Óïğàâëåíèå...";
-        Text[ polish ] = "~Zarz¹dzaj...";
-        Text[ japanese ] = "ç®¡ç†(~O)...";
-        Text[ chinese_traditional ] = "ç®¡ç†(~O)...";
-        Text[ arabic ] = "ÇáÅÏÑÇÉ...";
-        Text[ greek ] = "Äéá÷åßñéóç...";
-        Text[ korean ] = "ê´€ë¦¬(~O)...";
-        Text[ turkish ] = "~Yönet...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Organitzador...";
-        Text[ thai ] = "~à¸•à¸±à¸§à¸ˆà¸±à¸”à¸£à¸°à¹€à¸šà¸µà¸¢à¸š...";
-        Text[ czech ] = "OrganizÃ¡tor...";
-        Text[ hebrew ] = "â€®×¡×“×¨×Ÿ...â€¬";
-        Text[ hindi ] = "~à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾à¤ªà¤•...";
-        Text[ slovak ] = "~OrganizÃ¡tor...";
-        Text[ hungarian ] = "S~zervezÅ‘...";
-        Text[ slovenian ] = "~Organizator...";
+        Text [ de ] = "Ver~walten..." ;
+        Text [ en-US ] = "~Organizer..." ;
+        Text [ x-comment ] = " ";
     };
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸š";
-    Text[ czech ] = "Å ablony";
-    Text[ hebrew ] = "â€®×ª×‘× ×™×•×ªâ€¬";
-    Text[ hindi ] = "à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
-    Text[ slovak ] = "Å ablÃ³ny";
-    Text[ hungarian ] = "Sablonok";
-    Text[ slovenian ] = "Predloge";
 };
 
 
