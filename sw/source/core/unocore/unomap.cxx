@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-29 08:17:50 $
+ *  last change: $Author: os $ $Date: 2001-03-29 09:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,7 +671,7 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
     { SW_PROP_NAME(UNO_NAME_RELATIVE_HEIGHT),       RES_FRM_SIZE,           &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,   MID_FRMSIZE_REL_HEIGHT },            \
     { SW_PROP_NAME(UNO_NAME_RELATIVE_WIDTH),            RES_FRM_SIZE,           &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,   MID_FRMSIZE_REL_WIDTH  },         \
     { SW_PROP_NAME(UNO_NAME_SHADOW_FORMAT),             RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, CONVERT_TWIPS},             \
-    { SW_PROP_NAME(UNO_NAME_IMAGE_MAP),            RES_URL,                    &::getCppuType((Reference<XIndexContainer>*)0), PropertyAttribute::MAYBEVOID, MID_URL_CLIENTMAP}, \
+    { SW_PROP_NAME(UNO_NAME_IMAGE_MAP),            RES_URL,                    &::getCppuType((Reference<XIndexContainer>*)0), PROPERTY_NONE, MID_URL_CLIENTMAP}, \
     { SW_PROP_NAME(UNO_NAME_SERVER_MAP      ),      RES_URL,                &::getBooleanCppuType(),            PROPERTY_NONE ,MID_URL_SERVERMAP   },                      \
     { SW_PROP_NAME(UNO_NAME_SIZE),                  RES_FRM_SIZE,           &::getCppuType((const awt::Size*)0),            PROPERTY_NONE, MID_FRMSIZE_SIZE|CONVERT_TWIPS},        \
     { SW_PROP_NAME(UNO_NAME_SIZE_PROTECTED    ),    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_SIZE    },                      \
