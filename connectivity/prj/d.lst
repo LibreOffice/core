@@ -19,8 +19,8 @@
 mkdir: %_DEST%\inc%_EXT%\connectivity
 mkdir: %_DEST%\inc%_EXT%\connectivity\sdbcx
 
-..\inc\connectivity\*.hxx %_DEST%\inc%_EXT%\connectivity\*.hxx
-..\%__SRC%\inc\sqlbison.hxx %_DEST%\inc%_EXT%\connectivity\sqlbison.hxx
+hedabu: ..\inc\connectivity\*.hxx %_DEST%\inc%_EXT%\connectivity\*.hxx
+hedabu: ..\%__SRC%\inc\sqlbison.hxx %_DEST%\inc%_EXT%\connectivity\sqlbison.hxx
 ..\inc\connectivity\sdbcx\*.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\*.hxx
 ..\version.mk %_DEST%\inc%_EXT%\connectivity\version.mk
 
