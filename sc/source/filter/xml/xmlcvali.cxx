@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-03 14:51:05 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,9 @@ class ScXMLContentValidationContext : public SvXMLImportContext
     rtl::OUString   sErrorMessageType;
     rtl::OUString   sBaseCellAddress;
     rtl::OUString   sCondition;
-    sal_Bool        bAllowEmptyCell : 1;
-    sal_Bool        bDisplayHelp : 1;
-    sal_Bool        bDisplayError : 1;
+    sal_Bool        bAllowEmptyCell;
+    sal_Bool        bDisplayHelp;
+    sal_Bool        bDisplayError;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -309,7 +309,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
             break;
             case XML_TOK_CONTENT_VALIDATION_ALLOW_EMPTY_CELL:
                 if (IsXMLToken(sValue, XML_FALSE))
-                    bAllowEmptyCell = sal_True;
+                    bAllowEmptyCell = sal_False;
             break;
         }
     }
