@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:59:09 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@
 #endif
 
 #ifndef SW_MS_MSFILTER_HXX
-#include "../inc/msfilter.hxx"
+#include <msfilter.hxx>
 #endif
 
 // einige Hilfs-Funktionen
@@ -1135,9 +1135,13 @@ SwRTFParser::~SwRTFParser()
         // exitiert schon ein Layout, dann muss an dieser Tabelle die
         // BoxFrames neu erzeugt
         SwTableNode *pTable = aIter->first;
-        SwNodeIndex *pIndex = aIter->second;
-        pTable->DelFrms();
-        pTable->MakeFrms(pIndex);
+        ASSERT(pTable, "rtf: Why no expected table");
+        if (pTable)
+        {
+            SwNodeIndex *pIndex = aIter->second;
+            pTable->DelFrms();
+            pTable->MakeFrms(pIndex);
+        }
     }
 
     delete pSttNdIdx;
@@ -1152,6 +1156,24 @@ SwRTFParser::~SwRTFParser()
         DELETEZ( pGrfAttrSet );
 }
 
+//i19718
+void SwRTFParser::ReadShpRslt()
+{
+    int nToken;
+    while ('}' != (nToken = GetNextToken() ) && IsParserWorking())
+    {
+        switch(nToken)
+        {
+            case RTF_PAR:
+                break;
+            default:
+                NextToken(nToken);
+                break;
+        }
+    }
+    SkipToken(-1);
+}
+
 extern void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
                                 USHORT& rSubType, ULONG &rFmt,
                                 USHORT nVersion );
@@ -1163,19 +1185,31 @@ void SwRTFParser::NextToken( int nToken )
     switch( nToken )
     {
     case RTF_FOOTNOTE:
-        //We can only insert a footnote if we're not inside a footnote. e.g. #i7713#
+        //We can only insert a footnote if we're not inside a footnote. e.g.
+        //#i7713#
         if (!mbIsFootnote)
         {
             ReadHeaderFooter( nToken );
             SkipToken( -1 );        // Klammer wieder zurueck
         }
         break;
-    case RTF_SWG_PRTDATA:           ReadPrtData();              break;
-    case RTF_FIELD:                 ReadField();                break;
+    case RTF_SWG_PRTDATA:
+        ReadPrtData();
+        break;
+    case RTF_FIELD:
+        ReadField();
+        break;
+    case RTF_SHPRSLT:
+        ReadShpRslt();
+        break;
     case RTF_SHPPICT:
-    case RTF_PICT:                  ReadBitmapData();           break;
+    case RTF_PICT:
+        ReadBitmapData();
+        break;
 #ifdef READ_OLE_OBJECT
-    case RTF_OBJECT:                ReadOLEData();              break;
+    case RTF_OBJECT:
+        ReadOLEData();
+        break;
 #endif
     case RTF_TROWD:                 ReadTable( nToken );        break;
     case RTF_PGDSCTBL:              ReadPageDescTbl();          break;
@@ -1734,8 +1768,17 @@ void rtfSections::push_back(const rtfSection &rSect)
 // lese alle Dokument-Controls ein
 void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
 {
-    maSegments.push_back(rtfSection(*pPam->GetPoint(),
-        SectPageInformation(rInfo)));
+    SectPageInformation aSect(rInfo);
+
+    //If we are at the beginning of the document then start the document with
+    //a segment with these properties. See #i14982# for this requirement
+    if (
+         maSegments.empty() ||
+         (maSegments.back().maStart == pPam->GetPoint()->nNode)
+       )
+    {
+        maSegments.push_back(rtfSection(*pPam->GetPoint(), aSect));
+    }
 
     if (!bSwPageDesc && IsNewDoc())
     {
