@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:44:47 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@
 #include "app.hxx"
 #include "bindings.hxx"
 #include "dispatch.hxx"
-#include "accmgr.hxx"
 #include "childwin.hxx"
 #include "viewsh.hxx"
 #include "sfxhelp.hxx"
