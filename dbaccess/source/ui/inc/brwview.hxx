@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-11 12:46:43 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 #ifndef DBAUI_DATAVIEW_HXX
 #include "dataview.hxx"
 #endif
+#ifndef _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
+#include <unotools/eventlisteneradapter.hxx>
+#endif
+
 
 namespace com { namespace sun { namespace star { namespace awt {
     class XControl;
@@ -97,21 +101,21 @@ namespace dbaui
     class DBTreeView;
     class SbaGridControl;
 
-    class UnoDataBrowserView : public ODataView
+    class UnoDataBrowserView : public ODataView, public ::utl::OEventListenerAdapter
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >                 m_xGrid;            // our grid's UNO representation
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >        m_xMe;              // our own UNO representation
         DBTreeView*             m_pTreeView;
         Splitter*               m_pSplitter;
-        SbaGridControl*         m_pVclControl;  // our grid's VCL representation
+        mutable SbaGridControl* m_pVclControl;  // our grid's VCL representation
         Window*                 m_pStatus;
 
         DECL_LINK( SplitHdl, void* );
     // attribute access
     public:
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >             getGridControl() const  { return m_xGrid; }
-        SbaGridControl*         getVclControl() const   { return m_pVclControl; }
+        SbaGridControl*         getVclControl() const;
 
     public:
         UnoDataBrowserView( Window* pParent,
@@ -142,6 +146,7 @@ namespace dbaui
         virtual long PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
         virtual void resizeDocumentView(Rectangle& rRect);
+        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
     };
 
     class BrowserViewStatusDisplay
