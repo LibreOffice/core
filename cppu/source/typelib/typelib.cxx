@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-06-11 07:50:13 $
+ *  last change: $Author: dbo $ $Date: 2001-10-11 14:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2105,9 +2105,10 @@ extern "C" sal_Bool SAL_CALL typelib_typedescription_complete(
     if (! (*ppTypeDescr)->bComplete)
     {
         OSL_ASSERT( (typelib_TypeClass_STRUCT == (*ppTypeDescr)->eTypeClass ||
-                    typelib_TypeClass_EXCEPTION == (*ppTypeDescr)->eTypeClass ||
-                    typelib_TypeClass_UNION == (*ppTypeDescr)->eTypeClass ||
-                    typelib_TypeClass_INTERFACE == (*ppTypeDescr)->eTypeClass) &&
+                     typelib_TypeClass_EXCEPTION == (*ppTypeDescr)->eTypeClass ||
+                     typelib_TypeClass_UNION == (*ppTypeDescr)->eTypeClass ||
+                     typelib_TypeClass_ENUM == (*ppTypeDescr)->eTypeClass ||
+                     typelib_TypeClass_INTERFACE == (*ppTypeDescr)->eTypeClass) &&
                     !reallyWeak( (*ppTypeDescr)->eTypeClass ) );
 
         if (typelib_TypeClass_INTERFACE == (*ppTypeDescr)->eTypeClass &&
