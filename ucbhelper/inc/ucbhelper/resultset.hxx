@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-06 14:03:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
 #endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 namespace ucb {
 
@@ -128,7 +131,7 @@ struct ResultSet_Impl;
  *
  * @see ResultSetDataSupplier
  */
-class ResultSet :
+class UCBHELPER_DLLPUBLIC ResultSet :
                 public cppu::OWeakObject,
                 public com::sun::star::lang::XTypeProvider,
                 public com::sun::star::lang::XServiceInfo,
