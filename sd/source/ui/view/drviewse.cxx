@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-18 17:09:30 $
+ *  last change: $Author: aw $ $Date: 2001-05-30 11:14:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,6 +514,10 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
     // Jetzt explizit der letzte Slot incl. Update()
     Invalidate();
 }
+
+//////////////////////////////////////////////////////////////////////////////
+// service routine for Undo/Redo implementation
+extern SfxUndoManager* ImpGetUndoManagerFromViewShell(SdDrawViewShell& rDViewShell);
 
 /*************************************************************************
 |*
@@ -1427,31 +1431,25 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
         // #UndoRedo#
         case SID_UNDO :
         {
-            // #87227# end text edit if running, this may add an UNDO step.
-            if(pDrView->IsTextEdit())
-                pDrView->EndTextEdit();
-
+            // #87227#
+            SfxUndoManager* pUndoManager = ImpGetUndoManagerFromViewShell(*this);
             sal_uInt16 nNumber(1);
-
             const SfxItemSet* pReqArgs = rReq.GetArgs();
+
             if(pReqArgs)
             {
                 SfxUInt16Item* pUIntItem = (SfxUInt16Item*)&pReqArgs->Get(SID_UNDO);
                 nNumber = pUIntItem->GetValue();
             }
 
-            if(nNumber)
+            if(nNumber && pUndoManager)
             {
-                SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
-                if(pUndoManager)
+                sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
+                if(nCount >= nNumber)
                 {
-                    sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
-                    if(nCount >= nNumber)
+                    while(nNumber--)
                     {
-                        while(nNumber--)
-                        {
-                            pUndoManager->Undo();
-                        }
+                        pUndoManager->Undo();
                     }
                 }
             }
@@ -1461,27 +1459,25 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
         break;
         case SID_REDO :
         {
+            // #87227#
+            SfxUndoManager* pUndoManager = ImpGetUndoManagerFromViewShell(*this);
             sal_uInt16 nNumber(1);
-
             const SfxItemSet* pReqArgs = rReq.GetArgs();
+
             if(pReqArgs)
             {
                 SfxUInt16Item* pUIntItem = (SfxUInt16Item*)&pReqArgs->Get(SID_REDO);
                 nNumber = pUIntItem->GetValue();
             }
 
-            if(nNumber)
+            if(nNumber && pUndoManager)
             {
-                SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
-                if(pUndoManager)
+                sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
+                if(nCount >= nNumber)
                 {
-                    sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
-                    if(nCount >= nNumber)
+                    while(nNumber--)
                     {
-                        while(nNumber--)
-                        {
-                            pUndoManager->Redo();
-                        }
+                        pUndoManager->Redo();
                     }
                 }
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-29 17:24:46 $
+ *  last change: $Author: aw $ $Date: 2001-05-30 11:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,18 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
+
+//////////////////////////////////////////////////////////////////////////////
+// service routine for Undo/Redo implementation
+
+SfxUndoManager* ImpGetUndoManagerFromViewShell(SdDrawViewShell& rDViewShell)
+{
+    SdViewShell* pViewShell = rDViewShell.GetDocSh()->GetViewShell();
+    if(pViewShell)
+        return pViewShell->GetViewFrame()->GetDispatcher()->GetShell(0)->GetUndoManager();
+    DBG_ASSERT(pViewShell, "ViewShell not found");
+    return 0L;
+}
 
 /*************************************************************************
 |*
@@ -1462,7 +1474,8 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     // #UndoRedo#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_UNDO))
     {
-        SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+        // #87227#
+        SfxUndoManager* pUndoManager = ImpGetUndoManagerFromViewShell(*this);
         sal_Bool bActivate(FALSE);
 
         if(pUndoManager)
@@ -1488,7 +1501,9 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETUNDOSTRINGS))
     {
-        SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+        // #87227#
+        SfxUndoManager* pUndoManager = ImpGetUndoManagerFromViewShell(*this);
+
         if(pUndoManager)
         {
             sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
@@ -1519,7 +1534,8 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_REDO))
     {
-        SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+        // #87227#
+        SfxUndoManager* pUndoManager = ImpGetUndoManagerFromViewShell(*this);
         sal_Bool bActivate(FALSE);
 
         if(pUndoManager)
@@ -1545,7 +1561,9 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETREDOSTRINGS))
     {
-        SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+        // #87227#
+        SfxUndoManager* pUndoManager = ImpGetUndoManagerFromViewShell(*this);
+
         if(pUndoManager)
         {
             sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
