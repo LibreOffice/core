@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerparser.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-13 10:30:21 $
+ *  last change: $Author: jb $ $Date: 2002-10-01 16:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,23 @@
 #include "layerparser.hxx"
 
 // -----------------------------------------------------------------------------
+#ifndef CONFIGMGR_WRAPEXCEPTION_HXX
+#include "wrapexception.hxx"
+#endif
+
+#define WRAP_PARSE_EXCEPTIONS()  \
+    PASS_EXCEPTION(sax::SAXException)       \
+    PASS_EXCEPTION(uno::RuntimeException)   \
+    WRAP_CONFIGDATA_EXCEPTIONS( raiseParseException )   \
+    WRAP_OTHER_EXCEPTIONS( raiseParseException )
+
+#define WRAP_PARSE_EXCEPTIONS_MSG( msg )  \
+    PASS_EXCEPTION(sax::SAXException)       \
+    PASS_EXCEPTION(uno::RuntimeException)   \
+    WRAP_CONFIGDATA_EXCEPTIONS1( raiseParseException, msg ) \
+    WRAP_OTHER_EXCEPTIONS1( raiseParseException, msg )
+
+// -----------------------------------------------------------------------------
 
 namespace configmgr
 {
@@ -97,11 +114,15 @@ void SAL_CALL LayerParser::startDocument(  )
 {
     BasicParser::startDocument();
 
-    OSL_ENSURE(isEmptyNode(), "BasicParser does not mark new document as empty");
+    try
+    {
+        OSL_ENSURE(isEmptyNode(), "BasicParser does not mark new document as empty");
 
-    m_xHandler->startLayer();
-    m_bRemoved = false;
-    m_bNewProp = false;
+        m_xHandler->startLayer();
+        m_bRemoved = false;
+        m_bNewProp = false;
+    }
+    WRAP_PARSE_EXCEPTIONS_MSG("LayerParser - Starting layer")
 }
 // -----------------------------------------------------------------------------
 
@@ -111,7 +132,11 @@ void SAL_CALL LayerParser::endDocument(  ) throw (sax::SAXException, uno::Runtim
 
     BasicParser::endDocument();
 
-    m_xHandler->endLayer();
+    try
+    {
+        m_xHandler->endLayer();
+    }
+    WRAP_PARSE_EXCEPTIONS_MSG("LayerParser - Ending layer")
 }
 // -----------------------------------------------------------------------------
 
@@ -123,35 +148,40 @@ void SAL_CALL LayerParser::startElement( const OUString& aName, const uno::Refer
         this->startSkipping( aName, xAttribs );
         return;
     }
+
     ElementInfo aInfo = getDataParser().parseElementInfo(aName,xAttribs);
 
-    switch (aInfo.type)
+    try
     {
-    case ElementType::group: case ElementType::set:
-        OSL_ENSURE( false, "Layer XML parser - Unexpected: found group/set element (should be 'node')\n");
-        // fall thru
-    case ElementType::layer:
-    case ElementType::node:
-        this->startNode(aInfo,xAttribs);
-        OSL_ASSERT( this->isInNode() && !this->isInProperty() );
-        break;
+        switch (aInfo.type)
+        {
+        case ElementType::group: case ElementType::set:
+            OSL_ENSURE( false, "Layer XML parser - Unexpected: found group/set element (should be 'node')\n");
+            // fall thru
+        case ElementType::layer:
+        case ElementType::node:
+            this->startNode(aInfo,xAttribs);
+            OSL_ASSERT( this->isInNode() && !this->isInProperty() );
+            break;
 
-    case ElementType::property:
-        this->startProperty(aInfo,xAttribs);
-        OSL_ASSERT( this->isInUnhandledProperty() );
-        break;
+        case ElementType::property:
+            this->startProperty(aInfo,xAttribs);
+            OSL_ASSERT( this->isInUnhandledProperty() );
+            break;
 
-    case ElementType::value:
-        this->startValueData(xAttribs);
-        OSL_ASSERT( this->isInValueData() );
-        break;
+        case ElementType::value:
+            this->startValueData(xAttribs);
+            OSL_ASSERT( this->isInValueData() );
+            break;
 
-    default: // skip unknown elements
-        OSL_ENSURE( aInfo.type >= ElementType::other, "Layer XML parser - Unexpected: found schema element in layer data\n");
-        OSL_ENSURE( aInfo.type <  ElementType::other, "Layer XML parser - Warning: ignoring unknown element tag\n");
-        this->startSkipping( aName, xAttribs );
-        return;
+        default: // skip unknown elements
+            OSL_ENSURE( aInfo.type >= ElementType::other, "Layer XML parser - Unexpected: found schema element in layer data\n");
+            OSL_ENSURE( aInfo.type <  ElementType::other, "Layer XML parser - Warning: ignoring unknown element tag\n");
+            this->startSkipping( aName, xAttribs );
+            return;
+        }
     }
+    WRAP_PARSE_EXCEPTIONS_MSG("LayerParser - Starting Element")
 }
 // -----------------------------------------------------------------------------
 
@@ -161,18 +191,22 @@ void SAL_CALL LayerParser::endElement( const OUString& aName )
     if ( this->wasSkipping(aName) )
         return;
 
-    if ( this->isInValueData())
-        this->endValueData();
+    try
+    {
+        if ( this->isInValueData())
+            this->endValueData();
 
-    else if (this->isInProperty())
-        this->endProperty();
+        else if (this->isInProperty())
+            this->endProperty();
 
-    else if (this->isInNode())
-        this->endNode();
+        else if (this->isInNode())
+            this->endNode();
 
-    else {
-        this->raiseParseException("Layer parser: Invalid XML: endElement without matching startElement");
+        else {
+            this->raiseParseException("Layer parser: Invalid XML: endElement without matching startElement");
+        }
     }
+    WRAP_PARSE_EXCEPTIONS_MSG("LayerParser - Ending Element")
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

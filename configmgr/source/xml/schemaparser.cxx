@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemaparser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-23 11:15:37 $
+ *  last change: $Author: jb $ $Date: 2002-10-01 16:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,23 @@
  ************************************************************************/
 
 #include "schemaparser.hxx"
+
+// -----------------------------------------------------------------------------
+#ifndef CONFIGMGR_WRAPEXCEPTION_HXX
+#include "wrapexception.hxx"
+#endif
+
+#define WRAP_PARSE_EXCEPTIONS()  \
+    PASS_EXCEPTION(sax::SAXException)       \
+    PASS_EXCEPTION(uno::RuntimeException)   \
+    WRAP_CONFIGDATA_EXCEPTIONS( raiseParseException )   \
+    WRAP_OTHER_EXCEPTIONS( raiseParseException )
+
+#define WRAP_PARSE_EXCEPTIONS_MSG( msg )  \
+    PASS_EXCEPTION(sax::SAXException)       \
+    PASS_EXCEPTION(uno::RuntimeException)   \
+    WRAP_CONFIGDATA_EXCEPTIONS1( raiseParseException, msg ) \
+    WRAP_OTHER_EXCEPTIONS1( raiseParseException, msg )
 
 // -----------------------------------------------------------------------------
 
@@ -128,68 +145,72 @@ void SAL_CALL SchemaParser::startElement( const OUString& aName, const uno::Refe
 
     ElementInfo aInfo = getDataParser().parseElementInfo(aName,xAttribs);
 
-    switch (aInfo.type)
+    try
     {
-    case ElementType::schema:
-        this->startSchema(aInfo,xAttribs);
-        break;
+        switch (aInfo.type)
+        {
+        case ElementType::schema:
+            this->startSchema(aInfo,xAttribs);
+            break;
 
-    case ElementType::component:
-        this->startSection(selectComponent, aInfo, xAttribs);
-        break;
+        case ElementType::component:
+            this->startSection(selectComponent, aInfo, xAttribs);
+            break;
 
-    case ElementType::templates:
-        this->startSection(selectTemplates, aInfo, xAttribs);
-        break;
+        case ElementType::templates:
+            this->startSection(selectTemplates, aInfo, xAttribs);
+            break;
 
-    case ElementType::import:
-        this->handleImport(aInfo,xAttribs);
-        this->startSkipping( aName, xAttribs );
-        break;
+        case ElementType::import:
+            this->handleImport(aInfo,xAttribs);
+            this->startSkipping( aName, xAttribs );
+            break;
 
-    case ElementType::uses:
-        this->startSkipping( aName, xAttribs );
-        break;
+        case ElementType::uses:
+            this->startSkipping( aName, xAttribs );
+            break;
 
-    case ElementType::instance:
-        this->handleInstance(aInfo,xAttribs);
-        this->startSkipping( aName, xAttribs );
-        break;
+        case ElementType::instance:
+            this->handleInstance(aInfo,xAttribs);
+            this->startSkipping( aName, xAttribs );
+            break;
 
-    case ElementType::item_type:
-        this->handleItemType(aInfo,xAttribs);
-        this->startSkipping( aName, xAttribs );
-        break;
+        case ElementType::item_type:
+            this->handleItemType(aInfo,xAttribs);
+            this->startSkipping( aName, xAttribs );
+            break;
 
-    case ElementType::layer:
-    case ElementType::node:
-        raiseParseException( "Schema XML parser - Invalid data: found unspecified 'node' element.\n");
-        // fall thru
-    case ElementType::group: case ElementType::set:
-        this->startNode(aInfo,xAttribs);
-        OSL_ASSERT( this->isInNode()  );
-        break;
+        case ElementType::layer:
+        case ElementType::node:
+            raiseParseException( "Schema XML parser - Invalid data: found unspecified 'node' element.\n");
+            // fall thru
+        case ElementType::group: case ElementType::set:
+            this->startNode(aInfo,xAttribs);
+            OSL_ASSERT( this->isInNode()  );
+            break;
 
-    case ElementType::property:
-        this->startProperty(aInfo,xAttribs);
-        OSL_ASSERT( this->isInUnhandledProperty() );
-        break;
+        case ElementType::property:
+            this->startProperty(aInfo,xAttribs);
+            OSL_ASSERT( this->isInUnhandledProperty() );
+            break;
 
-    case ElementType::value:
-        this->startValueData(xAttribs);
-        OSL_ASSERT( this->isInValueData() );
-        break;
+        case ElementType::value:
+            this->startValueData(xAttribs);
+            OSL_ASSERT( this->isInValueData() );
+            break;
 
-    default: // skip unknown elements
-        OSL_ENSURE( aInfo.type <= ElementType::other, "Schema XML parser - Error: invalid element type value\n");
-        OSL_ENSURE( aInfo.type >= ElementType::other, "Schema XML parser - Unexpected: found layer element in schema data\n");
-    // accept (and skip) unknown (ElementType::other) tags in schema to allow documentation and constraints to pass without assertion
-      //OSL_ENSURE( aInfo.type <  ElementType::other, "Schema XML parser - Warning: ignoring unknown element tag\n");
+        default: // skip unknown elements
+            OSL_ENSURE( aInfo.type <= ElementType::other, "Schema XML parser - Error: invalid element type value\n");
+            OSL_ENSURE( aInfo.type >= ElementType::other, "Schema XML parser - Unexpected: found layer element in schema data\n");
+        // accept (and skip) unknown (ElementType::other) tags in schema to allow documentation and constraints to pass without assertion
+          //OSL_ENSURE( aInfo.type <  ElementType::other, "Schema XML parser - Warning: ignoring unknown element tag\n");
 
-        this->startSkipping( aName, xAttribs );
-        OSL_ASSERT( this->isSkipping() );
-        return;
+            this->startSkipping( aName, xAttribs );
+            OSL_ASSERT( this->isSkipping() );
+            return;
+        }
     }
+    WRAP_PARSE_EXCEPTIONS_MSG("LayerParser - Starting Element")
 
     OSL_ENSURE(aInfo.op == Operation::none || this->isSkipping(),
                 "Schema Parser: The 'op' attribute is not supported in a schema");
@@ -202,21 +223,24 @@ void SAL_CALL SchemaParser::endElement( const OUString& aName )
     if ( this->wasSkipping(aName) )
         return;
 
-    if ( this->isInValueData())
-        this->endValueData();
+    try
+    {
+        if ( this->isInValueData())
+            this->endValueData();
 
-    else if (this->isInProperty())
-        this->endProperty();
+        else if (this->isInProperty())
+            this->endProperty();
 
-    else if (this->isInNode())
-        this->endNode();
+        else if (this->isInNode())
+            this->endNode();
 
-    else if (this->isSelected())
-        this->endSection();
+        else if (this->isSelected())
+            this->endSection();
 
-    else
-        this->endSchema();
-
+        else
+            this->endSchema();
+    }
+    WRAP_PARSE_EXCEPTIONS_MSG("LayerParser - Ending Element")
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
