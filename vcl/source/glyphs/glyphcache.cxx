@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-16 12:12:21 $
+ *  last change: $Author: hdu $ $Date: 2001-02-27 18:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ bool operator==( const ImplFontSelectData& rA, const ImplFontSelectData& rB )
     if( (rA.maName          == rB.maName)
     &&  (rA.maStyleName     == rB.maStyleName)
     &&  (rA.mnHeight        == rB.mnHeight)
-    &&  (rA.mnWidth         == rB.mnWidth)
+    &&  ((rA.mnWidth==rB.mnWidth) || (!rA.mnWidth && (rA.mnHeight==rB.mnWidth)))
     &&  (rA.mnOrientation   == rB.mnOrientation)
     &&  (rA.mbVertical      == rB.mbVertical)
     &&  (rA.meWeight        == rB.meWeight)
@@ -143,7 +143,7 @@ bool operator==( const ImplFontSelectData& rA, const ImplFontSelectData& rB )
 
 // -----------------------------------------------------------------------
 
-void GlyphCache::EnsureInstance( GlyphCachePeer& rPeer )
+void GlyphCache::EnsureInstance( GlyphCachePeer& rPeer, bool bInitFonts )
 {
     if( pSingleton )
         return;
@@ -151,11 +151,14 @@ void GlyphCache::EnsureInstance( GlyphCachePeer& rPeer )
     static GlyphCache aGlyphCache( 750000 );
     aGlyphCache.pPeer = &rPeer;
 
-    if( const char* pFontPath = ::getenv( "SAL_FONTPATH_PRIVATE" ) )
-        aGlyphCache.AddFontPath( String::CreateFromAscii( pFontPath ) );
-    const String& rFontPath = Application::GetFontPath();
-    if( rFontPath.Len() > 0 )
-        aGlyphCache.AddFontPath( rFontPath );
+    if( bInitFonts )
+    {
+        if( const char* pFontPath = ::getenv( "SAL_FONTPATH_PRIVATE" ) )
+            aGlyphCache.AddFontPath( String::CreateFromAscii( pFontPath ) );
+        const String& rFontPath = Application::GetFontPath();
+        if( rFontPath.Len() > 0 )
+            aGlyphCache.AddFontPath( rFontPath );
+    }
 
     pSingleton = &aGlyphCache;
 }
@@ -188,6 +191,17 @@ void GlyphCache::AddFontPath( const String& rFontPath )
         osl::FileBase::normalizePath( rFontPath.Copy( nBreaker1, nBreaker2 ), aNormalizedName );
         pFtManager->AddFontDir( aNormalizedName );
     }
+#endif // NO_FREETYPE_FONTS
+}
+
+// -----------------------------------------------------------------------
+
+void GlyphCache::AddFontFile( const String& rNormalizedName, int nFaceNum,
+    int nFontId, const ImplFontData* pFontData )
+{
+#ifndef NO_FREETYPE_FONTS
+    if( pFtManager )
+        pFtManager->AddFontFile( rNormalizedName, nFaceNum, nFontId, pFontData );
 #endif // NO_FREETYPE_FONTS
 }
 
