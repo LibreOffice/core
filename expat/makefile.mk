@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2002-07-09 12:24:30 $
+#   last change: $Author: rt $ $Date: 2004-09-08 14:54:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,12 @@ TARGET=so_expat
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+
+.IF "$(SYSTEM_EXPAT)" == "YES"
+all:
+        @echo "An already available installation of expat should exist on your system."
+    @echo "Therefore the version provided here does not need to be built in addition."
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
