@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 09:45:28 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 12:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,11 @@ String STR_TOOLBAR_TITLE_ADDON
     Text [ en-US ] = "Add-On %num%";
 };
 
+String STR_STATUSBAR_LOGOTEXT
+{
+    Text [ en-US ] = "A StarOffice product by Sun Microsystems, Inc.";
+};
+
 // ***********************************************************************
 //       License Dialog
 // ***********************************************************************
@@ -322,5 +327,11 @@ ModalDialog DLG_LICENSE
         Size = MAP_APPFONT ( PD_WIDTH , PB_HEIGHT ) ;
     };
 
+};
+
+Image RID_IMAGE_STATUSBAR_LOGO
+{
+    ImageBitmap = Bitmap { File = "logo.png" ; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
 };
 
