@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lru_cache.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:31:18 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
             m_key2element.erase( entry->m_key );
             entry->m_key = key;
             ::std::pair< typename t_key2element::iterator, bool > insertion(
-                m_key2element.insert( t_key2element::value_type( key, entry ) ) );
+                m_key2element.insert( typename t_key2element::value_type( key, entry ) ) );
 #ifdef __CACHE_DIAGNOSE
             OSL_ENSURE( insertion.second, "### inserting new cache entry failed?!" );
 #endif
