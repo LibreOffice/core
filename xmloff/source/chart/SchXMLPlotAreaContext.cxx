@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-28 11:51:01 $
+ *  last change: $Author: bm $ $Date: 2001-03-28 19:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,11 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
             pContext = new SchXMLWallFloorContext( mrImportHelper, GetImport(), nPrefix, rLocalName, mxDiagram,
                                                    SchXMLWallFloorContext::CONTEXT_TYPE_FLOOR );
             break;
+
+        case XML_TOK_PA_LIGHT_SOURCE:
+            pContext = maSceneImportHelper.create3DLightContext( nPrefix, rLocalName, xAttrList );
+            break;
+
         default:
             pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
@@ -275,18 +280,15 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
 
 void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    awt::Size aSize;
-    awt::Point aPosition;
     uno::Any aTransMatrixAny;
 
     // initialize size and position
     uno::Reference< drawing::XShape > xDiaShape( mxDiagram, uno::UNO_QUERY );
     if( xDiaShape.is())
     {
-        aSize = xDiaShape->getSize();
-        aPosition = xDiaShape->getPosition();
+        maSize = xDiaShape->getSize();
+        maPosition = xDiaShape->getPosition();
     }
-    rtl::OUString sAutoStyleName;
 
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
@@ -303,37 +305,35 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
             case XML_TOK_PA_X:
-                GetImport().GetMM100UnitConverter().convertMeasure( aPosition.X, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasure( maPosition.X, aValue );
                 break;
             case XML_TOK_PA_Y:
-                GetImport().GetMM100UnitConverter().convertMeasure( aPosition.Y, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasure( maPosition.Y, aValue );
                 break;
             case XML_TOK_PA_WIDTH:
-                GetImport().GetMM100UnitConverter().convertMeasure( aSize.Width, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasure( maSize.Width, aValue );
                 break;
             case XML_TOK_PA_HEIGHT:
-                GetImport().GetMM100UnitConverter().convertMeasure( aSize.Height, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasure( maSize.Height, aValue );
                 break;
             case XML_TOK_PA_STYLE_NAME:
-                sAutoStyleName = aValue;
+                msAutoStyleName = aValue;
                 break;
-            case XML_TOK_PA_TRANSFORM:
-                {
-                    SdXMLImExTransform3D aTransform( aValue, GetImport().GetMM100UnitConverter());
-                    if( aTransform.NeedsAction())
-                    {
-                        drawing::HomogenMatrix xHomMat;
-                        if( aTransform.GetFullHomogenTransform( xHomMat ))
-                            aTransMatrixAny <<= xHomMat;
-                    }
-                    break;
-                }
+            default:
+                maSceneImportHelper.processSceneAttribute( nPrefix, aLocalName, aValue );
+                break;
         }
     }
+}
+
+void SchXMLPlotAreaContext::EndElement()
+{
+    sal_Int32 i;
+    sal_Bool bIsThreeDim = sal_False;
 
     // set properties
     uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
-    if( sAutoStyleName.getLength())
+    if( msAutoStyleName.getLength())
     {
         if( xProp.is())
         {
@@ -341,63 +341,42 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
             if( pStylesCtxt )
             {
                 const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+                    mrImportHelper.GetChartFamilyID(), msAutoStyleName );
 
                 if( pStyle && pStyle->ISA( XMLPropStyleContext ))
                     (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
             }
+            xProp->getPropertyValue( ::rtl::OUString::createFromAscii( "Dim3D" )) >>= bIsThreeDim;
         }
     }
 
-    // set rotation - before size!
-    if( xProp.is() &&
-        aTransMatrixAny.hasValue())
+    // set 3d scene attributes
+    if( bIsThreeDim )
     {
-        // set 3d flag before, so that property is available
-        // if chart is 2d with transform matrix the flag will be
-        // reset in the FillPropertySet method
-        try
+        // perform BuildChart to make scene available
+        uno::Reference< chart::XChartDocument > xDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
+        if( xDoc.is() &&
+            xDoc->hasControllersLocked())
         {
-            uno::Any aTrueAny;
-            aTrueAny <<= (sal_Bool)(sal_True);
-
-            // perform build so that 3d scene is available
-            sal_Bool bHasControllersLocked = sal_False;
-            uno::Reference< chart::XChartDocument > xDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
-            if( xDoc.is() &&
-                (bHasControllersLocked = xDoc->hasControllersLocked()) == sal_True )
-                xDoc->unlockControllers();
-
-            xProp->setPropertyValue(
-                ::rtl::OUString::createFromAscii( "Dim3D" ),
-                aTrueAny );
-            xProp->setPropertyValue(
-                ::rtl::OUString::createFromAscii( "D3DTransformMatrix" ),
-                aTransMatrixAny );
-
-            if( bHasControllersLocked )
-                xDoc->lockControllers();
+            xDoc->unlockControllers();
+            xDoc->lockControllers();
         }
-        catch( beans::UnknownPropertyException )
-        {
-            DBG_ERROR( "Transform-Matrix cannot be set" );
-        }
+
+        // set scene attributes at diagram
+        if( xProp.is())
+            maSceneImportHelper.setSceneAttributes( xProp );
     }
 
-    // set changed size and position
+    // set changed size and position after properties (esp. 3d)
+    uno::Reference< drawing::XShape > xDiaShape( mxDiagram, uno::UNO_QUERY );
     if( xDiaShape.is())
     {
-        xDiaShape->setSize( aSize );
-        xDiaShape->setPosition( aPosition );
+        xDiaShape->setSize( maSize );
+        xDiaShape->setPosition( maPosition );
     }
-}
 
-void SchXMLPlotAreaContext::EndElement()
-{
+    // resize data so that all series and data point properties can be set
     mrImportHelper.ResizeChartData( mnSeries, mnMaxSeriesLength );
-
-    uno::Reference< beans::XPropertySet > xProp;
-    sal_Int32 i;
 
     // set autostyles for series and data points
     const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();

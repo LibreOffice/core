@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-28 11:51:12 $
+ *  last change: $Author: bm $ $Date: 2001-03-28 19:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@ private:
     sal_Int32 mnSeries;
     sal_Int32 mnMaxSeriesLength;
     SdXML3DSceneAttributesHelper maSceneImportHelper;
+    com::sun::star::awt::Size maSize;
+    com::sun::star::awt::Point maPosition;
+    ::rtl::OUString msAutoStyleName;
 
 public:
     SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
