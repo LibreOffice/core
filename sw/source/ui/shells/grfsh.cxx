@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 19:59:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
@@ -408,8 +411,15 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
                     if( sGrfNm.Len() )
                     {
-                        SwWait aWait( *GetView().GetDocShell(), TRUE );
-                        rSh.ReRead( URIHelper::SmartRelToAbs( sGrfNm ),
+                        SwDocShell* pDocSh = GetView().GetDocShell();
+                        SwWait aWait( *pDocSh, TRUE );
+                        SfxMedium* pMedium = pDocSh->GetMedium();
+                        INetURLObject aAbs;
+                        if( pMedium )
+                            aAbs = pMedium->GetURLObject();
+                        rSh.ReRead( URIHelper::SmartRel2Abs(
+                                        aAbs, sGrfNm,
+                                        URIHelper::GetMaybeFileHdl() ),
                                      sFilterNm, 0 );
                     }
                 }
