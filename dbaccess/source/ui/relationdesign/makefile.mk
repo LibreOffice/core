@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:03:38 $
+#   last change: $Author: kz $ $Date: 2004-05-19 04:37:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-# IMGLST_SRS=$(SRS)$/$(TARGET).srs
+
 # --- Files --------------------------------------------------------
 
 SLOFILES =\
@@ -84,7 +84,6 @@ SRS1NAME=$(TARGET)
 SRC1FILES =  relation.src
 
 # --- Targets -------------------------------------------------------
-
 
 .INCLUDE :  target.mk
 
