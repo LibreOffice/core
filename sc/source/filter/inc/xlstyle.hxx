@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:29:30 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,13 @@
 
 #ifndef SC_XLSTYLE_HXX
 #define SC_XLSTYLE_HXX
+
+#ifndef _VCL_VCLENUM_HXX
+#include <vcl/vclenum.hxx>
+#endif
+#ifndef _SVX_SVXENUM_HXX
+#include <svx/svxenum.hxx>
+#endif
 
 #ifndef SC_XLTOOLS_HXX
 #include "xltools.hxx"
@@ -133,6 +140,8 @@ enum XclEscapement
 
 // ----------------------------------------------------------------------------
 
+class Font;
+
 /** This struct helps reading and writing Excel fonts.
     @descr  It stores all Excel compatible properties of a font. In detail this is the
     name, family, character set, height, color, boldness, posture, script, underline,
@@ -146,18 +155,57 @@ struct XclFontData
     sal_uInt16                  mnHeight;       /// Font height in twips (1/20 of a point).
     sal_uInt16                  mnColor;        /// Index to color palette.
     sal_uInt16                  mnWeight;       /// Boldness: 400=normal, 700=bold.
-    sal_uInt8                   mnFamily;       /// Font family.
-    sal_uInt8                   mnCharSet;      /// Character set.
+    sal_uInt8                   mnFamily;       /// Windows font family.
+    sal_uInt8                   mnCharSet;      /// Windows character set.
     bool                        mbItalic;       /// true = Italic.
     bool                        mbStrikeout;    /// true = Struck out.
     bool                        mbOutline;      /// true = Outlined.
     bool                        mbShadow;       /// true = Shadowed.
 
-    inline explicit             XclFontData() { Clear(); }
+    /** Constructs an empty font data structure. */
+    explicit                    XclFontData();
+    /** Constructs a font data structure and fills it with the passed font attributes (except color). */
+    explicit                    XclFontData( const Font& rFont );
 
     /** Resets all members to default (empty) values. */
     void                        Clear();
+    /** Fills all members (except color) from the passed font. */
+    void                        FillFromFont( const Font& rFont );
+
+    /** Returns the Calc font family. */
+    FontFamily                  GetScFamily( CharSet eDefCharSet ) const;
+    /** Returns the Calc font character set. */
+    CharSet                     GetScCharSet() const;
+    /** Returns the Calc font posture. */
+    FontItalic                  GetScPosture() const;
+    /** Returns the Calc font weight. */
+    FontWeight                  GetScWeight() const;
+    /** Returns the Calc font underline style. */
+    FontUnderline               GetScUnderline() const;
+    /** Returns the Calc escapement style. */
+    SvxEscapement               GetScEscapement() const;
+    /** Returns the Calc strike-out style. */
+    FontStrikeout               GetScStrikeout() const;
+
+    /** Sets the Calc font height (in twips). */
+    void                        SetScHeight( sal_Int32 nTwips );
+    /** Sets the Calc font family. */
+    void                        SetScFamily( FontFamily eScFamily );
+    /** Sets the Calc character set. */
+    void                        SetScCharSet( CharSet eScCharSet );
+    /** Sets the Calc font posture. */
+    void                        SetScPosture( FontItalic eScPosture );
+    /** Sets the Calc font weight. */
+    void                        SetScWeight( FontWeight eScWeight );
+    /** Sets the Calc underline style. */
+    void                        SetScUnderline( FontUnderline eScUnderl );
+    /** Sets the Calc escapement style. */
+    void                        SetScEscapement( SvxEscapement eScEscapem );
+    /** Sets the Calc strike-out style. */
+    void                        SetScStrikeout( FontStrikeout eScStrikeout );
 };
+
+bool operator==( const XclFontData& rLeft, const XclFontData& rRight );
 
 
 // Cell formatting data (XF) ==================================================
@@ -179,46 +227,46 @@ bool operator==( const XclCellProt& rLeft, const XclCellProt& rRight );
 /** Horizontal alignment of cell contents. */
 enum XclHorAlign
 {
-    xlHAlignGeneral                 = 0x00,
-    xlHAlignLeft                    = 0x01,
-    xlHAlignCenter                  = 0x02,
-    xlHAlignRight                   = 0x03,
-    xlHAlignFill                    = 0x04,
-    xlHAlignJustify                 = 0x05,
-    xlHAlignCenterAcrSel            = 0x06,
-    xlHAlignDistrib                 = 0x07,
-    xlHAlign_Default                = xlHAlignGeneral
+    xlHAlignGeneral             = 0x00,
+    xlHAlignLeft                = 0x01,
+    xlHAlignCenter              = 0x02,
+    xlHAlignRight               = 0x03,
+    xlHAlignFill                = 0x04,
+    xlHAlignJustify             = 0x05,
+    xlHAlignCenterAcrSel        = 0x06,
+    xlHAlignDistrib             = 0x07,
+    xlHAlign_Default            = xlHAlignGeneral
 
 };
 
 /** Vertical alignment of cell contents. */
 enum XclVerAlign
 {
-    xlVAlignTop                     = 0x00,
-    xlVAlignCenter                  = 0x01,
-    xlVAlignBottom                  = 0x02,
-    xlVAlignJustify                 = 0x03,
-    xlVAlignDistrib                 = 0x04,
-    xlVAlign_Default                = xlVAlignBottom
+    xlVAlignTop                 = 0x00,
+    xlVAlignCenter              = 0x01,
+    xlVAlignBottom              = 0x02,
+    xlVAlignJustify             = 0x03,
+    xlVAlignDistrib             = 0x04,
+    xlVAlign_Default            = xlVAlignBottom
 };
 
 /** Text orientation. */
 enum XclTextOrient
 {
-    xlTextOrientNoRot               = 0x00,
-    xlTextOrientTopBottom           = 0x01,
-    xlTextOrient90ccw               = 0x02,
-    xlTextOrient90cw                = 0x03,
-    xlTextOrient_Default            = xlTextOrientNoRot
+    xlTextOrientNoRot           = 0x00,
+    xlTextOrientTopBottom       = 0x01,
+    xlTextOrient90ccw           = 0x02,
+    xlTextOrient90cw            = 0x03,
+    xlTextOrient_Default        = xlTextOrientNoRot
 };
 
 /** CTL text direction. */
 enum XclTextDirection
 {
-    xlTextDirContext                = 0x00,
-    xlTextDirLTR                    = 0x01,
-    xlTextDirRTL                    = 0x02,
-    xlTextDir_Default               = xlTextDirContext
+    xlTextDirContext            = 0x00,
+    xlTextDirLTR                = 0x01,
+    xlTextDirRTL                = 0x02,
+    xlTextDir_Default           = xlTextDirContext
 };
 
 /** Contains all cell alignment attributes. */
