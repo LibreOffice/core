@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:55:33 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:40:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,32 +62,20 @@
 #ifndef _FORMS_RADIOBUTTON_HXX_
 #define _FORMS_RADIOBUTTON_HXX_
 
-#ifndef _FORMS_FORMCOMPONENT_HXX_
-#include "FormComponent.hxx"
-#endif
-
-#ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
-#include <comphelper/propmultiplex.hxx>
+#ifndef EFORMS2_FORMS_SOURCE_COMPONENT_REFVALUECOMPONENT_HXX
+#include "refvaluecomponent.hxx"
 #endif
 
 //.........................................................................
 namespace frm
 {
 
-enum { RB_NOCHECK, RB_CHECK, RB_DONTKNOW };
-
 //==================================================================
 // ORadioButtonModel
 //==================================================================
-class ORadioButtonModel     :public OBoundControlModel
+class ORadioButtonModel     :public OReferenceValueComponent
                             ,public ::comphelper::OAggregationArrayUsageHelper< ORadioButtonModel >
 {
-    ::rtl::OUString     m_sReferenceValue;              // Referenzwert zum Checken des Buttons
-    sal_Int16           m_nDefaultChecked;              // Soll beim Reset gecheckt werden ?
-
-protected:
-    sal_Int16   getState(const ::com::sun::star::uno::Any& rValue);
-
 public:
     DECLARE_DEFAULT_LEAF_XTOR( ORadioButtonModel );
 
@@ -96,12 +84,8 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
     // OPropertySetHelper
-    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
                 throw (::com::sun::star::uno::Exception);
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
-                throw (::com::sun::star::lang::IllegalArgumentException);
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
@@ -131,13 +115,6 @@ protected:
     virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
     virtual ::com::sun::star::uno::Any
                             translateExternalValueToControlValue( );
-    virtual ::com::sun::star::uno::Any
-                            translateControlValueToExternalValue( );
-
-    virtual ::com::sun::star::uno::Any
-                            getDefaultForReset() const;
-
-    virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding );
 
 protected:
     void SetSiblingPropsTo(const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rValue);
