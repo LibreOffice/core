@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-14 17:18:00 $
+ *  last change: $Author: mfe $ $Date: 2001-03-22 10:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ typedef struct {
     sal_Char*        m_name;
     oslCondition     m_started;
     oslProcessImpl*  m_pProcImpl;
+    pthread_mutex_t  m_aMutex;
 } ProcessData;
 
 typedef struct _oslPipeImpl {
@@ -903,7 +904,9 @@ static void ChildStatusProc(void *pData)
 
             osl_releaseMutex(ChildListMutex);
 
+            pthread_mutex_lock(&pdata->m_aMutex);
             osl_setCondition(pdata->m_started);
+            pthread_mutex_unlock(&pdata->m_aMutex);
 
             if ((pid = waitpid(pid, &status, 0)) < 0)
                 OSL_TRACE("Failed to wait for child process, errno=%d (%s)\n", errno, strerror(errno));
@@ -925,7 +928,9 @@ static void ChildStatusProc(void *pData)
                         else
                             pChild->m_status = -1;
 
+                        pthread_mutex_lock(&pdata->m_aMutex);
                         osl_setCondition(pChild->m_terminated);
+                        pthread_mutex_unlock(&pdata->m_aMutex);
                     }
 
                     pChild = pChild->m_pnext;
@@ -939,7 +944,10 @@ static void ChildStatusProc(void *pData)
             OSL_TRACE("ChildStatusProc : starting '%s' failed",data.m_pszArgs[0]);
             OSL_TRACE("Failed to launch child process, child reports errno=%d (%s)\n", status, strerror(status));
 
+            pthread_mutex_lock(&pdata->m_aMutex);
             osl_setCondition(pdata->m_started);
+            pthread_mutex_unlock(&pdata->m_aMutex);
+
         }
     }
 }
@@ -1101,6 +1109,8 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
 
     memset(&Data,0,sizeof(ProcessData));
 
+    pthread_mutex_init(&Data.m_aMutex,0);
+
     if (pszImageName == NULL)
         pszImageName = pszArguments[0];
 
@@ -1161,7 +1171,13 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
     hThread = osl_createThread(ChildStatusProc, &Data);
 
     osl_waitCondition(Data.m_started, NULL);
+
+    pthread_mutex_lock(&Data.m_aMutex);
+    pthread_mutex_unlock(&Data.m_aMutex);
+
     osl_destroyCondition(Data.m_started);
+
+    pthread_mutex_destroy(&Data.m_aMutex);
 
     for (i = 0; Data.m_pszArgs[i] != NULL; i++)
           free((void *)Data.m_pszArgs[i]);
