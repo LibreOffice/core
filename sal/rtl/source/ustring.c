@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: th $ $Date: 2001-07-27 13:24:24 $
+ *  last change: $Author: th $ $Date: 2001-07-30 17:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,14 +232,14 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase( const sal_Unicode* pSt
             c2 += 32;
         nRet = c1-c2;
         if ( nRet != 0 )
-            break;
+            return nRet;
 
         pStr1++;
         pStr2++;
     }
     while ( c2 );
 
-    return nRet;
+    return 0;
 }
 
 /* ----------------------------------------------------------------------- */

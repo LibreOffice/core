@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: th $ $Date: 2001-07-27 13:24:10 $
+ *  last change: $Author: th $ $Date: 2001-07-30 17:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase )( const IMPL_RTL_ST
             c2 += 32;
         nRet = c1-c2;
         if ( nRet != 0 )
-            break;
+            return nRet;
 
         pStr1++;
         pStr2++;
