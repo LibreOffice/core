@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-07 16:59:52 $
+#   last change: $Author: hjs $ $Date: 2001-06-07 18:34:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,6 +59,12 @@
 #
 #
 #*************************************************************************
+
+
+.IF "$(GUI)"=="WNT"
+INCLUDE!:=$(shell echo $(INCLUDE:s/\stl//) | sed "s/[ \t]*-I/;/g" )
+.EXPORT : INCLUDE
+.ENDIF			# "$(GUI)"=="WNT"
 
 #override
 PACKAGE_DIR=build$/$(ROUT)
@@ -134,6 +140,9 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 .ENDIF			# "$(OUT2INC)"!=""
 .IF "$(OUT2BIN)"!=""
     $(GNUCOPY) $(foreach,i,$(OUT2BIN) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(BIN)
+.ENDIF			# "$(OUT2BIN)"!=""
+.IF "$(OUT2CLASS)"!=""
+    $(GNUCOPY) $(foreach,i,$(OUT2CLASS) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(CLASSDIR)
 .ENDIF			# "$(OUT2BIN)"!=""
     +$(TOUCH) $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 
