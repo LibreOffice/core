@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-20 16:13:35 $
+ *  last change: $Author: fs $ $Date: 2001-06-05 10:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #include <svtools/ehdl.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
+#include <com/sun/star/sdb/SQLContext.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
 #endif
@@ -210,9 +213,6 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_UTIL_XLOCALIZEDALIASES_HXX_
-#include <com/sun/star/util/XLocalizedAliases.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/XExecutableDialog.hpp>
 #endif
@@ -234,6 +234,12 @@
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -243,7 +249,9 @@ using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::util;
 using namespace ::svxform;
+using namespace ::dbtools;
 
 void getConnectionSpecs(const Reference< XConnection >& _rxConn, ::rtl::OUString& rURL, ::rtl::OUString& _rRegisteredTitle)
 {
@@ -256,13 +264,41 @@ void getConnectionSpecs(const Reference< XConnection >& _rxConn, ::rtl::OUString
     }
     if (::comphelper::hasProperty(FM_PROP_URL, xURLSupplier))
     {
-        try { rURL = ::comphelper::getString(xURLSupplier->getPropertyValue(FM_PROP_URL)); } catch(...) { }
+        try { rURL = ::comphelper::getString(xURLSupplier->getPropertyValue(FM_PROP_URL)); } catch(const Exception&) { }
     }
 
     if (rURL.getLength())
         _rRegisteredTitle = rURL;
 }
 
+namespace svxform
+{
+    //========================================================================
+    class OAutoDispose
+    {
+    protected:
+        Reference< XComponent > m_xComp;
+
+    public:
+        OAutoDispose( const Reference< XInterface > _rxObject );
+        ~OAutoDispose();
+    };
+
+    //------------------------------------------------------------------------
+    OAutoDispose::OAutoDispose( const Reference< XInterface > _rxObject )
+        :m_xComp(_rxObject, UNO_QUERY)
+    {
+    }
+
+    //------------------------------------------------------------------------
+    OAutoDispose::~OAutoDispose()
+    {
+        if (m_xComp.is())
+            m_xComp->dispose();
+    }
+}
+
+//========================================================================
 //------------------------------------------------------------------------
 TYPEINIT1(FmFormView, E3dView);
 
@@ -707,10 +743,26 @@ void FmFormView::CreateControlWithLabel(OutputDevice* pOutDev, sal_Int32 nYOffse
                 case DataType::INTEGER  : nMinValue = 0x80000000; nMaxValue = 0x7FFFFFFF; break;
                     // um die doubles/singles kuemmere ich mich nicht, da es ein wenig sinnlos ist
             }
+
+            Reference< XPropertySetInfo > xControlPropInfo = xControlSet->getPropertySetInfo();
             Any aVal;
-            aVal <<= nMinValue;
+
+            Property aMinProp = xControlPropInfo->getPropertyByName(FM_PROP_VALUEMIN);
+            if (aMinProp.Type.getTypeClass() == TypeClass_DOUBLE)
+                aVal <<= (double)nMinValue;
+            else if (aMinProp.Type.getTypeClass() == TypeClass_LONG)
+                aVal <<= (sal_Int32)nMinValue;
+            else
+                DBG_ERROR("FmFormView::CreateControlWithLabel: unexpected property type (MinValue)!");
             xControlSet->setPropertyValue(FM_PROP_VALUEMIN,aVal);
-            aVal <<= nMaxValue;
+
+            Property aMaxProp = xControlPropInfo->getPropertyByName(FM_PROP_VALUEMAX);
+            if (aMaxProp.Type.getTypeClass() == TypeClass_DOUBLE)
+                aVal <<= (double)nMaxValue;
+            else if (aMaxProp.Type.getTypeClass() == TypeClass_LONG)
+                aVal <<= (sal_Int32)nMaxValue;
+            else
+                DBG_ERROR("FmFormView::CreateControlWithLabel: unexpected property type (MaxValue)!");
             xControlSet->setPropertyValue(FM_PROP_VALUEMAX,aVal);
         }
 
@@ -749,7 +801,6 @@ void FmFormView::CreateControlWithLabel(OutputDevice* pOutDev, sal_Int32 nYOffse
         {
             DBG_ERROR("FmFormView::CreateControlWithLabel : could not marry the control and the label !");
         }
-        ;
     }
 }
 
@@ -765,7 +816,7 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
     // "Datenbankname";"Tabellen/QueryName";1/0(fuer Tabelle/Abfrage);"Feldname"
     ::rtl::OUString aDatabaseName   = rFieldDesc.GetToken(0,sal_Unicode(11));
     ::rtl::OUString aObjectName     = rFieldDesc.GetToken(1,sal_Unicode(11));
-    sal_uInt16 nObjectType          = rFieldDesc.GetToken(2,sal_Unicode(11)).ToInt32();
+    sal_uInt16 nObjectType          = (sal_uInt16)rFieldDesc.GetToken(2,sal_Unicode(11)).ToInt32();
     ::rtl::OUString aFieldName      = rFieldDesc.GetToken(3,sal_Unicode(11));
 
     if (!aFieldName.getLength() || !aObjectName.getLength() || !aDatabaseName.getLength())
@@ -779,66 +830,32 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
 
 
     ::rtl::OUString sDatabaseName = aDatabaseName;
+    SQLExceptionInfo aInfo;
     try
     {
-        xDataSource = dbtools::getDataSource(sDatabaseName,pImpl->getORB());
-        xConnection = dbtools::getConnection(sDatabaseName,::rtl::OUString(),::rtl::OUString(),pImpl->getORB());
+        xDataSource = ::dbtools::getDataSource(sDatabaseName,pImpl->getORB());
+        ::rtl::OUString sEmpty;
+        xConnection = ::dbtools::getConnection_withFeedback(sDatabaseName, sEmpty, sEmpty, pImpl->getORB());
     }
-    catch(SQLException&)
-    {   // allowed, the env may throw an exception in case of an invalid name
+    catch(const SQLContext& e) { aInfo = e; }
+    catch(const SQLWarning& e) { aInfo = e; }
+    catch(const SQLException& e) { aInfo = e; }
+    if (aInfo.isValid())
+    {
+        showError(aInfo, Reference< ::com::sun::star::awt::XWindow >(), pImpl->getORB());
+        return NULL;
     }
+
+    OAutoDispose aDisposeConnection(xConnection.get());
+        // automatically dispose the connection when leaving this method
+
     if (!xDataSource.is() || !xConnection.is())
     {
-        DBG_ERROR("FmGridHeader::FmFormView::CreateFieldControl : could not retrieve the database access object !");
+        DBG_ERROR("FmGridHeader::FmFormView::CreateFieldControl : could not retrieve the data source or the connection!");
         return NULL;
     }
     try
     {
-        // check if the document is able to handle forms with the given data source
-        Reference< XConnection > xDocParentConn = findConnection(rPage.GetForms());
-        if (xDocParentConn.is())
-        {   // there is a connection which restricts the allowed data sources for the forms
-
-            // check if the new to-be-set data source (connection) complies to this restriction
-            ::rtl::OUString sDocParentConnURL, sDocParentConnTitle;
-            getConnectionSpecs(xDocParentConn, sDocParentConnURL, sDocParentConnTitle);
-
-            ::rtl::OUString sNewConnURL, sNewConnTitle;
-            getConnectionSpecs(xConnection, sNewConnURL, sNewConnTitle);
-
-            sal_Bool bCompliant = sal_True;
-            if (sDocParentConnTitle.getLength() && sNewConnTitle.getLength())
-            {
-                // both databases are registered
-                if (!sDocParentConnTitle.equals(sNewConnTitle))
-                    // and they're registered under different names -> not allowed
-                    bCompliant = sal_False;
-            }
-            else if (sDocParentConnTitle.getLength() + sNewConnTitle.getLength() != 0)
-            {   // exactly one database is registered -> they're not equal -> not allowed
-                bCompliant = sal_False;
-            }
-            else
-            {   // none of the data sources is registered -> compare the URLs
-                INetURLObject aNewConnURL(sNewConnURL);
-                INetURLObject aDocParentConnURL(sDocParentConnURL);
-                if (aNewConnURL != aDocParentConnURL)
-                    bCompliant = sal_False;
-            }
-
-            if (!bCompliant)
-            {
-                pImpl->m_sErrorMessage = String(SVX_RES(RID_STR_CREATECONTROLS_INVALIDSOURCE));
-                pImpl->m_sErrorMessage.SearchAndReplaceAscii("$docname$", sDocParentConnTitle.getLength() ? sDocParentConnTitle : sDocParentConnURL);
-                pImpl->m_sErrorMessage.SearchAndReplaceAscii("$dropname$", sNewConnTitle.getLength() ? sNewConnTitle : sNewConnURL);
-
-                // no message boxes while DnD
-                DBG_ASSERT(pImpl->m_nErrorMessageEvent == 0, "FmFormView::CreateFieldControl : two error events : you can't be that fast !");
-                pImpl->m_nErrorMessageEvent = Application::PostUserEvent(LINK(pImpl, FmXFormView, OnDelayedErrorMessage));
-                return NULL;
-            }
-        }
-
         // Festellen des Feldes
         Reference< ::com::sun::star::container::XNameAccess >   xFields;
         Reference< ::com::sun::star::beans::XPropertySet >      xField;
@@ -917,6 +934,7 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
 
         if ((DataType::BINARY == nDataType) || (DataType::VARBINARY == nDataType))
             return NULL;
+
         //////////////////////////////////////////////////////////////////////
         // Anhand des FormatKeys wird festgestellt, welches Feld benoetigt wird
         sal_uInt16 nOBJID = 0;
@@ -1027,7 +1045,7 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
 
         return pGroup; // und fertig
     }
-    catch(...)
+    catch(const Exception&)
     {
         DBG_ERROR("FmFormView::CreateFieldControl : catched an exception while creating the control !");
         ::comphelper::disposeComponent(xStatement);
