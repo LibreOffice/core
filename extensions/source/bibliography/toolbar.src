@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:27:11 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,6 +561,8 @@ ImageList RID_TOOLBAR_BIGIMGLIST_HC
     MASKCOLOR
     BIB_IMAGES
 };
+
+
 
 
 
