@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dl $ $Date: 2001-10-10 12:35:30 $
+ *  last change: $Author: cl $ $Date: 2002-04-09 08:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,9 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     if ( pViewSh->ISA(SdDrawViewShell) )
         ePageKind = ((SdDrawViewShell*) pViewSh)->GetPageKind();
 
+     // shall we display background area tabpage?
+    bool bDisplayBackgroundTabPage = (ePageKind == PK_STANDARD) ? TRUE : FALSE;
+
     if( ( (SdDrawViewShell*) pViewSh )->GetEditMode() == EM_MASTERPAGE )
     {
         pPage = pDoc->GetSdPage(0, ePageKind);
@@ -291,56 +294,57 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
             pStyleSheet = pSSPool->Find( aStr, SFX_STYLE_FAMILY_PSEUDO);
         }
 
-        if( bMasterPage )
+        if( bDisplayBackgroundTabPage )
         {
-            if(pStyleSheet)
+            if( bMasterPage )
             {
-                SfxItemSet aStyleSet( pStyleSheet->GetItemSet());
-
-                pPtr = aStyleSet.GetRanges();
-                while( *pPtr )
+                if(pStyleSheet)
                 {
-                    p1 = pPtr[0];
-                    p2 = pPtr[1];
+                    SfxItemSet aStyleSet( pStyleSheet->GetItemSet());
 
-                    // erstmal das ganze discret machen
-                    while(pPtr[2] && (pPtr[2] - p2 == 1))
+                    pPtr = aStyleSet.GetRanges();
+                    while( *pPtr )
                     {
-                        p2 = pPtr[3];
+                        p1 = pPtr[0];
+                        p2 = pPtr[1];
+
+                        // erstmal das ganze discret machen
+                        while(pPtr[2] && (pPtr[2] - p2 == 1))
+                        {
+                            p2 = pPtr[3];
+                            pPtr += 2;
+                        }
+                        aMergedAttr.MergeRange( p1, p2 );
                         pPtr += 2;
                     }
-                    aMergedAttr.MergeRange( p1, p2 );
-                    pPtr += 2;
-                }
 
-                aMergedAttr.Put(aStyleSet);
-            }
-        }
-        else
-        {
-            // Only this page
-            SdrObject* pObj = pPage->GetBackgroundObj();
-            if( pObj )
-            {
-//-/                pObj->TakeAttributes( aMergedAttr, TRUE, TRUE );
-                aMergedAttr.Put(pObj->GetItemSet());
+                    aMergedAttr.Put(aStyleSet);
+                }
             }
             else
             {
-                // if the page hasn't got a background-object, than use
-                // the fillstyle-settings of the masterpage for the dialog
-                if( pStyleSheet->GetItemSet().GetItemState( XATTR_FILLSTYLE ) != SFX_ITEM_DEFAULT )
-                    aMergedAttr.Put( pStyleSheet->GetItemSet() );
+                // Only this page
+                SdrObject* pObj = pPage->GetBackgroundObj();
+                if( pObj )
+                {
+    //-/                pObj->TakeAttributes( aMergedAttr, TRUE, TRUE );
+                    aMergedAttr.Put(pObj->GetItemSet());
+                }
                 else
-                    aMergedAttr.Put( XFillStyleItem( XFILL_NONE ) );
+                {
+                    // if the page hasn't got a background-object, than use
+                    // the fillstyle-settings of the masterpage for the dialog
+                    if( pStyleSheet->GetItemSet().GetItemState( XATTR_FILLSTYLE ) != SFX_ITEM_DEFAULT )
+                        aMergedAttr.Put( pStyleSheet->GetItemSet() );
+                    else
+                        aMergedAttr.Put( XFillStyleItem( XFILL_NONE ) );
+                }
             }
         }
 
         aMergedAttr.Put(aNewAttr);
 
-        SdPageDlg* pDlg = new SdPageDlg( pDocSh, NULL, &aMergedAttr,
-                                         // shall we display background area tabpage?
-                                         (ePageKind == PK_STANDARD) ? TRUE : FALSE );
+        SdPageDlg* pDlg = new SdPageDlg( pDocSh, NULL, &aMergedAttr, bDisplayBackgroundTabPage );
 
         USHORT nResult = pDlg->Execute();
 
@@ -351,91 +355,94 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 SfxItemSet aTempSet(*pDlg->GetOutputItemSet());
                 ((SdStyleSheet*)pStyleSheet)->AdjustToFontHeight(aTempSet);
 
-                // if some fillstyle-items are not set in the dialog, then
-                // try to use the items before
-                BOOL bChanges = FALSE;
-                for( int i=XATTR_FILL_FIRST; i<XATTR_FILL_LAST; i++ )
+                if( bDisplayBackgroundTabPage )
                 {
-                    if( aMergedAttr.GetItemState( i ) != SFX_ITEM_DEFAULT )
+                    // if some fillstyle-items are not set in the dialog, then
+                    // try to use the items before
+                    BOOL bChanges = FALSE;
+                    for( int i=XATTR_FILL_FIRST; i<XATTR_FILL_LAST; i++ )
                     {
-                        if( aTempSet.GetItemState( i ) == SFX_ITEM_DEFAULT )
-                            aTempSet.Put( aMergedAttr.Get( i ) );
-                        else
-                            if( aMergedAttr.GetItem( i ) != aTempSet.GetItem( i ) )
-                                bChanges = TRUE;
-                    }
-                }
-
-                // if the background for this page was set to invisible, the background-object has to be deleted, too.
-                if( ( ( (XFillStyleItem*) aTempSet.GetItem( XATTR_FILLSTYLE ) )->GetValue() == XFILL_NONE ) ||
-                    ( ( aTempSet.GetItemState( XATTR_FILLSTYLE ) == SFX_ITEM_DEFAULT ) &&
-                      ( ( (XFillStyleItem*) aMergedAttr.GetItem( XATTR_FILLSTYLE ) )->GetValue() == XFILL_NONE ) ) )
-                    bPageBckgrdDeleted = TRUE;
-
-                // Ask, wether the setting are for the background-page or for the current page
-                if( !bMasterPage && bChanges )
-                {
-                    // But don't ask in notice-view, because we can't change the background of
-                    // notice-masterpage (at the moment)
-                    if( ePageKind != PK_NOTES )
-                    {
-                        String aTit(SdResId( STR_PAGE_BACKGROUND_TITLE ));
-                        String aTxt(SdResId( STR_PAGE_BACKGROUND_TXT ));
-                        MessBox aQuestionBox( (Window*)pWin, WB_YES_NO | WB_DEF_YES,
-                                              aTit,
-                                              aTxt );
-                        aQuestionBox.SetImage( QueryBox::GetStandardImage() );
-                        bMasterPage = ( RET_YES == aQuestionBox.Execute() );
-                    }
-
-                    if( bMasterPage )   // Changes for all pages choosed.
-                    {
-                        // delete background-objects of all pages wich use the same
-                        // background-page as of the current page
-                        SdrPage* pMasterPage = pPage->GetMasterPage( 0 );
-                        for( int i=0; i<pDoc->GetSdPageCount( ePageKind ); i++ )
+                        if( aMergedAttr.GetItemState( i ) != SFX_ITEM_DEFAULT )
                         {
-                            SdPage* pWorkingPage = pDoc->GetSdPage( i, ePageKind );
-
-                            if( pWorkingPage->GetMasterPage( 0 ) == pMasterPage )
-                            {
-                                pWorkingPage->SetBackgroundObj( NULL );
-                            }
+                            if( aTempSet.GetItemState( i ) == SFX_ITEM_DEFAULT )
+                                aTempSet.Put( aMergedAttr.Get( i ) );
+                            else
+                                if( aMergedAttr.GetItem( i ) != aTempSet.GetItem( i ) )
+                                    bChanges = TRUE;
                         }
                     }
-                    else if( bPageBckgrdDeleted )
+
+                    // if the background for this page was set to invisible, the background-object has to be deleted, too.
+                    if( ( ( (XFillStyleItem*) aTempSet.GetItem( XATTR_FILLSTYLE ) )->GetValue() == XFILL_NONE ) ||
+                        ( ( aTempSet.GetItemState( XATTR_FILLSTYLE ) == SFX_ITEM_DEFAULT ) &&
+                          ( ( (XFillStyleItem*) aMergedAttr.GetItem( XATTR_FILLSTYLE ) )->GetValue() == XFILL_NONE ) ) )
+                        bPageBckgrdDeleted = TRUE;
+
+                    // Ask, wether the setting are for the background-page or for the current page
+                    if( !bMasterPage && bChanges )
                     {
-                        // delete background-object of this page (but only when you also
-                        // know the fillstyle)
-                        pPage->SetBackgroundObj( NULL );
+                        // But don't ask in notice-view, because we can't change the background of
+                        // notice-masterpage (at the moment)
+                        if( ePageKind != PK_NOTES )
+                        {
+                            String aTit(SdResId( STR_PAGE_BACKGROUND_TITLE ));
+                            String aTxt(SdResId( STR_PAGE_BACKGROUND_TXT ));
+                            MessBox aQuestionBox( (Window*)pWin, WB_YES_NO | WB_DEF_YES,
+                                                  aTit,
+                                                  aTxt );
+                            aQuestionBox.SetImage( QueryBox::GetStandardImage() );
+                            bMasterPage = ( RET_YES == aQuestionBox.Execute() );
+                        }
+
+                        if( bMasterPage )   // Changes for all pages choosed.
+                        {
+                            // delete background-objects of all pages wich use the same
+                            // background-page as of the current page
+                            SdrPage* pMasterPage = pPage->GetMasterPage( 0 );
+                            for( int i=0; i<pDoc->GetSdPageCount( ePageKind ); i++ )
+                            {
+                                SdPage* pWorkingPage = pDoc->GetSdPage( i, ePageKind );
+
+                                if( pWorkingPage->GetMasterPage( 0 ) == pMasterPage )
+                                {
+                                    pWorkingPage->SetBackgroundObj( NULL );
+                                }
+                            }
+                        }
+                        else if( bPageBckgrdDeleted )
+                        {
+                            // delete background-object of this page (but only when you also
+                            // know the fillstyle)
+                            pPage->SetBackgroundObj( NULL );
+                        }
+
                     }
 
-                }
+                    // Sonderbehandlung: die INVALIDS auf NULL-Pointer
+                    // zurueckgesetzen (sonst landen INVALIDs oder
+                    // Pointer auf die DefaultItems in der Vorlage;
+                    // beides wuerde die Attribut-Vererbung unterbinden)
+                    aTempSet.ClearInvalidItems();
 
-                // Sonderbehandlung: die INVALIDS auf NULL-Pointer
-                // zurueckgesetzen (sonst landen INVALIDs oder
-                // Pointer auf die DefaultItems in der Vorlage;
-                // beides wuerde die Attribut-Vererbung unterbinden)
-                aTempSet.ClearInvalidItems();
+                    if( bMasterPage )
+                    {
+                        StyleSheetUndoAction* pAction = new StyleSheetUndoAction(pDoc, (SfxStyleSheet*)pStyleSheet, &aTempSet);
+                        pDocSh->GetUndoManager()->AddUndoAction(pAction);
+                        pStyleSheet->GetItemSet().Put( aTempSet );
+                        SdStyleSheet* pRealSheet =((SdStyleSheet*)pStyleSheet)->GetRealStyleSheet();
+                        pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                    }
 
-                if( bMasterPage )
-                {
-                    StyleSheetUndoAction* pAction = new StyleSheetUndoAction(pDoc, (SfxStyleSheet*)pStyleSheet, &aTempSet);
-                    pDocSh->GetUndoManager()->AddUndoAction(pAction);
-                    pStyleSheet->GetItemSet().Put( aTempSet );
-                    SdStyleSheet* pRealSheet =((SdStyleSheet*)pStyleSheet)->GetRealStyleSheet();
-                    pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-                }
+                    pDoc->SetChanged(TRUE);
 
-                pDoc->SetChanged(TRUE);
-
-                SdrObject* pObj = ( (SdPage*)( pPage->GetMasterPage( 0 ) ) )->GetPresObj( PRESOBJ_BACKGROUND );
-                if( pObj )
-                {
-                    // BackgroundObj: no hard attributes allowed
-                    SfxItemSet aSet( pDoc->GetPool() );
-//-/                    pObj->NbcSetAttributes( aSet, TRUE );
-                    pObj->SetItemSet(aSet);
+                    SdrObject* pObj = ( (SdPage*)( pPage->GetMasterPage( 0 ) ) )->GetPresObj( PRESOBJ_BACKGROUND );
+                    if( pObj )
+                    {
+                        // BackgroundObj: no hard attributes allowed
+                        SfxItemSet aSet( pDoc->GetPool() );
+    //-/                    pObj->NbcSetAttributes( aSet, TRUE );
+                        pObj->SetItemSet(aSet);
+                    }
                 }
 
                 aNewAttr.Put(aTempSet);
@@ -568,23 +575,27 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     // the background of this page was set to invisible, so it would be a mistake
     // to create a new background-object for this page !
     //
-    if ( !bMasterPage && !bPageBckgrdDeleted )
-    {
-        // Only this page
-        SdrObject* pObj = pPage->GetBackgroundObj();
-        if( !pObj )
-        {
-            pObj = new SdrRectObj();
-            pPage->SetBackgroundObj( pObj );
-        }
 
-        Point aPos ( nLeft, nUpper );
-        Size aSize( pPage->GetSize() );
-        aSize.Width()  -= nLeft  + nRight - 1;
-        aSize.Height() -= nUpper + nLower - 1;
-        Rectangle aRect( aPos, aSize );
-        pObj->SetLogicRect( aRect );
-        pObj->SetItemSet(*pArgs);
+    if( bDisplayBackgroundTabPage )
+    {
+        if ( !bMasterPage && !bPageBckgrdDeleted )
+        {
+            // Only this page
+            SdrObject* pObj = pPage->GetBackgroundObj();
+            if( !pObj )
+            {
+                pObj = new SdrRectObj();
+                pPage->SetBackgroundObj( pObj );
+            }
+
+            Point aPos ( nLeft, nUpper );
+            Size aSize( pPage->GetSize() );
+            aSize.Width()  -= nLeft  + nRight - 1;
+            aSize.Height() -= nUpper + nLower - 1;
+            Rectangle aRect( aPos, aSize );
+            pObj->SetLogicRect( aRect );
+            pObj->SetItemSet(*pArgs);
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
