@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 17:56:06 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 14:47:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,6 +107,8 @@ SHL1STDLIBS+= 	-lsupc++
 .ELSE
 .IF "$(OS)"!="MACOSX"
 SHL1STDLIBS+= 	-lsupc++ -lgcc_s
+.ELSE
+SHL1STDLIBS+= 	-lsupc++
 .ENDIF
 .ENDIF
 .ENDIF
