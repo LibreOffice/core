@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: kz $ $Date: 2000-11-10 15:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ String STR_FILEDLG_SELECT
     Text [ portuguese ] = "Seleccionar directório" ;
     Text [ english_us ] = "Select Directory" ;
     Text [ portuguese_brazilian ] = "Verzeichnis auswählen" ;
-    Text [ swedish ] = "Välj mapp" ;
+    Text [ swedish ] = "Välj katalog" ;
     Text [ danish ] = "Vælg bibliotek" ;
     Text [ italian ] = "Scelta cartella" ;
     Text [ spanish ] = "Seleccionar directorio" ;
@@ -90,7 +90,7 @@ String STR_FILEDLG_CANTCHDIR
     Text [ ENGLISH ] = "Can't change directory" ;
     Text [ english_us ] = "Cannot change to directory" ;
     Text [ portuguese_brazilian ] = "Kann nicht in Verzeichnis wechseln" ;
-    Text [ swedish ] = "Kan inte byta mapp" ;
+    Text [ swedish ] = "Kan inte växla till katalog" ;
     Text [ danish ] = "Kan ikke skifte til bibliotek" ;
     Text [ italian ] = "Impossibile passare alla cartella" ;
     Text [ spanish ] = "No es posible cambiar en directorio" ;
@@ -163,7 +163,7 @@ String STR_FILEDLG_DIR
     Text [ portuguese ] = "~Directório" ;
     Text [ english_us ] = "~Directory" ;
     Text [ portuguese_brazilian ] = "Verzeichnis" ;
-    Text [ swedish ] = "Mapp" ;
+    Text [ swedish ] = "~Katalog" ;
     Text [ danish ] = "Bibliotek" ;
     Text [ italian ] = "Cartella" ;
     Text [ spanish ] = "~Directorio" ;
@@ -235,7 +235,7 @@ String STR_FILEDLG_CANTOPENDIR
     Text [ portuguese ] = "Impossível abrir directório" ;
     Text [ english_us ] = "Can't open directory" ;
     Text [ portuguese_brazilian ] = "Kann Verzeichnis nicht öffnen" ;
-    Text [ swedish ] = "Kan inte öppna mappen" ;
+    Text [ swedish ] = "Kan inte öppna katalog" ;
     Text [ danish ] = "Kan ikke åbne bibliotek" ;
     Text [ italian ] = "Imposibile aprire la cartella" ;
     Text [ spanish ] = "No es posible abrir el directorio" ;
@@ -355,7 +355,7 @@ String STR_FILEDLG_HOME
     Text [ portuguese ] = "Directório do utilizador" ;
     Text [ english_us ] = "User Directory" ;
     Text [ portuguese_brazilian ] = "Verzeichnis" ;
-    Text [ swedish ] = "Användarmapp" ;
+    Text [ swedish ] = "Användarkatalog" ;
     Text [ danish ] = "Brugerbibliotek" ;
     Text [ italian ] = "Cartella utente" ;
     Text [ spanish ] = "Directorio de usuario" ;
@@ -379,7 +379,7 @@ String STR_FILEDLG_NEWDIR
     Text [ portuguese ] = "Criar directório" ;
     Text [ english_us ] = "Create Directory" ;
     Text [ portuguese_brazilian ] = "Verzeichnis" ;
-    Text [ swedish ] = "Skapa mapp" ;
+    Text [ swedish ] = "Skapa katalog" ;
     Text [ danish ] = "Opret bibliotek" ;
     Text [ italian ] = "Crea cartella" ;
     Text [ spanish ] = "Crear directorio" ;
@@ -402,7 +402,7 @@ String STR_FILEDLG_ASKNEWDIR
     Text [ English ] = "Do you want the directory %s to be created ?" ;
     Text [ english_us ] = "Do you want the directory %s to be created ?" ;
     Text [ portuguese_brazilian ] = "Soll das Verzeichnis %s angelegt werden ?" ;
-    Text [ swedish ] = "Skall mappen %s skapas ?" ;
+    Text [ swedish ] = "Skall katalogen %s skapas ?" ;
     Text [ danish ] = "Skal biblioteket %s oprettes?" ;
     Text [ italian ] = "Si deve creare una cartella %s ?" ;
     Text [ spanish ] = "¿Desea crear el directorio %s?" ;
