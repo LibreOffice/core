@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:35:08 $
+ *  last change: $Author: mba $ $Date: 2002-07-10 16:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,8 +772,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     pImp->bSetStandardName=FALSE;
     USHORT nId = rReq.GetSlot();
     if ( !GetMedium() && nId != SID_CLOSEDOC )
+    {
+        rReq.Ignore();
         return;
-
+    }
 
     if( nId == SID_SAVEDOC || nId  == SID_UPDATEDOC )
     {
@@ -787,8 +789,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             return;
         }
 
-        // not-modified => nichts tun, kein BASIC-Laufzeitfehler (API)
-        if ( !IsModified() )
+        SFX_REQUEST_ARG( rReq, pVersionItem, SfxStringItem, SID_DOCINFO_COMMENTS, FALSE);
+        if ( !IsModified() && !pVersionItem )
         {
             rReq.SetReturnValue( SfxBoolItem(0, FALSE) );
             rReq.Done();
@@ -796,29 +798,21 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         }
     }
 
-    // API-Call => suppress dialogs
-    //SfxBoolResetter aSilentReset( pImp->bSilent );
-    //if ( rReq.IsAPI() )
-        //pImp->bSilent = TRUE;
+    SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE);
+    SFX_REQUEST_ARG( rReq, pFilterItem, SfxStringItem, SID_FILTER_NAME, FALSE);
 
     const SfxFilter *pCurFilter = GetMedium()->GetFilter();
     const SfxFilter *pDefFilter = GetFactory().GetFilter(0);
 
-    if ( nId == SID_SAVEDOC &&
-         pCurFilter && !pCurFilter->CanExport() &&
-         pDefFilter && pDefFilter->IsInternal() )
+    if ( nId == SID_SAVEDOC && pCurFilter && !pCurFilter->CanExport() && pDefFilter && pDefFilter->IsInternal() )
         nId = SID_SAVEASDOC;
 
     // interaktiv speichern via (nicht-Default) Filter?
-
-    if ( !rReq.IsAPI() && GetMedium()->GetFilter() && HasName() &&
-         (nId == SID_SAVEDOC || nId == SID_UPDATEDOC) )
+    if ( !pFilterItem && GetMedium()->GetFilter() && HasName() && (nId == SID_SAVEDOC || nId == SID_UPDATEDOC) )
     {
         // aktuellen und Default-Filter besorgen
-
         // Filter kann nicht exportieren und Default-Filter ist verf"ugbar?
-        if ( !pCurFilter->CanExport() &&
-             !pDefFilter->IsInternal() )
+        if ( !pCurFilter->CanExport() && !pDefFilter->IsInternal() )
         {
             // fragen, ob im default-Format gespeichert werden soll
             String aWarn(SfxResId(STR_QUERY_MUSTOWNFORMAT));
@@ -898,10 +892,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     // Speichern eines namenslosen oder readonly Dokumentes
     BOOL bMediumRO = IsReadOnlyMedium();
 
-    if ( ( nId == SID_SAVEDOC || nId == SID_UPDATEDOC ) &&
-         ( !HasName() || bMediumRO ) )
+    if ( ( nId == SID_SAVEDOC || nId == SID_UPDATEDOC ) && ( !HasName() || bMediumRO ) )
     {
-        if ( rReq.IsAPI() )
+        if ( pFileNameItem )
         {
             // FALSE zur"uckliefern
             rReq.SetReturnValue( SfxBoolItem( 0, FALSE ) );
@@ -934,6 +927,20 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     {
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+        case SID_SAVE_VERSION_ON_CLOSE:
+        {
+            BOOL bSet = GetDocInfo().IsSaveVersionOnClose();
+            SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, nId, FALSE);
+            if ( pItem )
+                bSet = pItem->GetValue();
+            GetDocInfo().SetSaveVersionOnClose( bSet );
+            SetModified( TRUE );
+            if ( !pItem )
+                rReq.AppendItem( SfxBoolItem( nId, bSet ) );
+            rReq.Done();
+            return;
+            break;
+        }
         case SID_VERSION:
         {
             SfxViewFrame* pFrame = GetFrame();
@@ -942,13 +949,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( !pFrame )
                 return;
 
-            if ( !rReq.IsAPI() )
+            if ( pFrame->GetFrame()->GetParentFrame() )
             {
-                if ( pFrame->GetFrame()->GetParentFrame() )
-                {
-                    pFrame->GetTopViewFrame()->GetObjectShell()->ExecuteSlot( rReq );
-                    return;
-                }
+                pFrame->GetTopViewFrame()->GetObjectShell()->ExecuteSlot( rReq );
+                return;
             }
 
             if ( !IsOwnStorageFormat_Impl( *GetMedium() ) )
@@ -957,7 +961,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             SfxVersionDialog *pDlg = new SfxVersionDialog( pFrame, NULL );
             pDlg->Execute();
             delete pDlg;
-            rReq.Done();
+            return;
             break;
         }
 
@@ -970,6 +974,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             SfxApplication *pApp = SFX_APP();
             if ( pApp->IsInBasicCall() )
                 pApp->BasicLibExec_Impl( rReq, GetBasicManager() );
+            return;
             break;
         }
 
@@ -1034,7 +1039,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     // ggf. Recorden
                     if ( !rReq.IsRecording() )
                         rReq.AppendItem( SfxDocumentInfoItem( GetTitle(), GetDocInfo() ) );
-                   rReq.Done();
+                    rReq.Done();
                 }
                 else
                     rReq.Ignore();
@@ -1109,6 +1114,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     // aktuelle Dokument aber in einem Frame liegt, soll eigentlich
                     // das FrameSetDocument geclosed werden
                     pFrame->GetTopViewFrame()->GetObjectShell()->ExecuteSlot( rReq );
+                    rReq.Done();
                     return;
                 }
 
@@ -1166,12 +1172,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
                 else
                     SetModified(FALSE);
-            }
-            else if ( rReq.IsAPI() )
-            {
-                SbxBase::SetError( SbxERR_WRONG_ARGS );
-                rReq.Ignore();
-                return;
             }
 
             // Benutzer bricht ab?
@@ -1418,6 +1418,12 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
     {
         switch ( nWhich )
         {
+            case SID_SAVE_VERSION_ON_CLOSE:
+            {
+                rSet.Put( SfxBoolItem( nWhich, GetDocInfo().IsSaveVersionOnClose() ) );
+                break;
+            }
+
             case SID_DOCTEMPLATE :
             {
                 if ( !GetFactory().GetTemplateFilter() )

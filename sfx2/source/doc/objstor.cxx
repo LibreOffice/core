@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-10 07:37:38 $
+ *  last change: $Author: mba $ $Date: 2002-07-10 16:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -966,7 +966,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
         // look for a "version" parameter
         const SfxStringItem *pVersionItem = pSet ? (const SfxStringItem*)
-            SfxRequest::GetItem( pSet, SID_VERSION, sal_False, TYPE(SfxStringItem) ) : NULL;
+            SfxRequest::GetItem( pSet, SID_DOCINFO_COMMENTS, sal_False, TYPE(SfxStringItem) ) : NULL;
 
         if ( pVersionItem )
         {
@@ -1011,6 +1011,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                         xOldVersions->CopyTo( rName, xVersion, rName );
                     pInfo = pList->GetObject(n++);
                 }
+
+                xOldVersions.Clear();
             }
 
             // add new version information into the versionlist and save the versionlist
@@ -1085,6 +1087,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                             xOldVersions->CopyTo( rName, xVersion, rName );
                         pInfo = pList->GetObject(n++);
                     }
+
+                    xOldVersions.Clear();
                 }
 
                 // commit the version storage

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-20 18:00:07 $
+ *  last change: $Author: mba $ $Date: 2002-07-10 16:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,7 +542,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
                 const SfxPoolItem *pPoolItem;
                 if ( bVersion )
                 {
-                    SfxStringItem aItem( SID_VERSION, String( SfxResId( STR_AUTOMATICVERSION ) ) );
+                    SfxStringItem aItem( SID_DOCINFO_COMMENTS, String( SfxResId( STR_AUTOMATICVERSION ) ) );
                     SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
                     const SfxPoolItem* ppArgs[] = { &aItem, &aWarnItem, 0 };
                     pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );

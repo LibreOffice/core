@@ -6481,8 +6481,7 @@ SfxStringItem PrivateUse SID_OFFICE_PRIVATE_USE
 ]
 
 //--------------------------------------------------------------------------
-SfxDocumentInfoItem Properties SID_DOCINFO
-
+SfxVoidItem SetDocumentProperties SID_DOCINFO( SfxDocumentInfoItem Properties SID_DOCINFO )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6496,10 +6495,6 @@ SfxDocumentInfoItem Properties SID_DOCINFO
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
-    Readonly = FALSE,
-
-    /* status: */
-    SlotType = SfxVoidItem;
 
     /* config: */
     AccelConfig = TRUE,
@@ -6880,7 +6875,7 @@ SfxVoidItem RunStarWriter SID_STARTSW
 
 //--------------------------------------------------------------------------
 SfxBoolItem Save SID_SAVEDOC
-(SfxStringItem VersionComment SID_VERSION,SfxStringItem Author SID_DOCINFO_AUTHOR)
+(SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem Author SID_DOCINFO_AUTHOR)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6933,7 +6928,7 @@ SfxBoolItem SaveAll SID_SAVEDOCS
 
 //--------------------------------------------------------------------------
 SfxBoolItem SaveAs SID_SAVEASDOC
-(SfxStringItem FileName SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem PassWord SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_VERSION,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK)
+(SfxStringItem FileName SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem PassWord SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -8455,7 +8450,7 @@ SfxVoidItem VersionDialog SID_VERSION
     Toggle = FALSE,
     Container = TRUE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    NoRecord;
     Asynchron;
 
     /* config: */
@@ -8780,3 +8775,29 @@ SfxImageItem ImageOrientation SID_IMAGE_ORIENTATION
     GroupId = GID_VIEW;
 ]
 
+//--------------------------------------------------------------------------
+SfxBoolItem SaveVersionOnClose SID_SAVE_VERSION_ON_CLOSE
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_VIEW;
+]

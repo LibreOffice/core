@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2002-01-10 11:06:36 $
+ *  last change: $Author: mba $ $Date: 2002-07-10 16:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,8 +262,11 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
 
     if ( pButton == &aSaveCheckBox )
     {
-        pObjShell->GetDocInfo().SetSaveVersionOnClose( aSaveCheckBox.IsChecked() );
-        pObjShell->SetModified( TRUE );
+        SfxBoolItem aSave( SID_SAVE_VERSION_ON_CLOSE, aSaveCheckBox.IsChecked() );
+        const SfxPoolItem* aItems[2];
+        aItems[0] = &aSave;
+        aItems[1] = NULL;
+        pViewFrame->GetBindings().ExecuteSynchron( SID_SAVE_VERSION_ON_CLOSE, aItems, 0 );
     }
     else if ( pButton == &aSaveButton )
     {
@@ -273,10 +276,12 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
         short nRet = pDlg->Execute();
         if ( nRet == RET_OK )
         {
-            SfxStringItem aComment( SID_VERSION, aInfo.aComment );
+            SfxStringItem aComment( SID_DOCINFO_COMMENTS, aInfo.aComment );
             pObjShell->SetModified( TRUE );
-            pViewFrame->GetDispatcher()->Execute(
-                SID_SAVEDOC, SFX_CALLMODE_SYNCHRON, &aComment, 0L );
+            const SfxPoolItem* aItems[2];
+            aItems[0] = &aComment;
+            aItems[1] = NULL;
+            pViewFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, aItems, 0 );
             aVersionBox.SetUpdateMode( FALSE );
             aVersionBox.Clear();
             Init_Impl();
