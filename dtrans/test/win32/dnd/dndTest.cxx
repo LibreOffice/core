@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndTest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-12 13:14:36 $
+ *  last change: $Author: jl $ $Date: 2001-02-20 12:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@ CComModule _Module;
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-#include <com/sun/star/datatransfer/dnd/XDropTargetFactory.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
 #include <com/sun/star/lang/XInitialization.hpp>

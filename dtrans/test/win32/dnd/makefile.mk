@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jl $ $Date: 2001-02-12 13:14:36 $
+#   last change: $Author: jl $ $Date: 2001-02-20 12:55:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,6 @@ UNOTYPES= com.sun.star.lang.XInitialization \
           com.sun.star.lang.XComponent	\
           com.sun.star.datatransfer.dnd.XDropTarget \
           com.sun.star.datatransfer.dnd.XDropTargetListener \
-          com.sun.star.datatransfer.dnd.XDropTargetFactory \
           com.sun.star.datatransfer.dnd.DNDConstants		\
           com.sun.star.datatransfer.dnd.XDragSource
           
