@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-11 13:36:14 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,14 @@
 #include <tools/link.hxx>
 #include <salunx.h>
 #include <X11/SM/SMlib.h>
+#include <osl/conditn.h>
 
 class SessionManagerClient
 {
-    static SmcConn      aSmcConnection;
-    static ByteString   aClientID;
+    static SmcConn          aSmcConnection;
+    static ByteString       aClientID;
+    static oslCondition aSaveCond;
+    static oslCondition aDieCond;
 
     static void SaveYourselfProc(       SmcConn connection,
                                         SmPointer client_data,
@@ -86,9 +89,11 @@ class SessionManagerClient
     static const ByteString& getPreviousSessionID();
 
     DECL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void* );
+    DECL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void* );
 public:
     static void open();
     static void close();
+    static void shutdownDone();
 
     static String getExecName();
     static const ByteString&  getSessionID() { return aClientID; }
