@@ -25,10 +25,10 @@
 <LongDateYearSeparator> г.</LongDateYearSeparator>
 </Separators>
 <Markers>
-<QuotationStart>‘</QuotationStart>
-<QuotationEnd>’</QuotationEnd>
-<DoubleQuotationStart>“</DoubleQuotationStart>
-<DoubleQuotationEnd>”</DoubleQuotationEnd>
+<QuotationStart>„</QuotationStart>
+<QuotationEnd>“</QuotationEnd>
+<DoubleQuotationStart>«</DoubleQuotationStart>
+<DoubleQuotationEnd>»</DoubleQuotationEnd>
 </Markers>
 <TimeAM>AM</TimeAM>
 <TimePM>PM</TimePM>
@@ -351,7 +351,7 @@
 <Currency default="true" usedInCompatibleFormatCodes="true">
 <CurrencyID>р.</CurrencyID>
 <CurrencySymbol>р.</CurrencySymbol>
-<BankSymbol>RUR</BankSymbol>
+<BankSymbol>RUB</BankSymbol>
 <CurrencyName>Ruble</CurrencyName>
 <DecimalPlaces>2</DecimalPlaces>
 </Currency>
