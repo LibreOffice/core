@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cl $ $Date: 2001-11-05 14:02:01 $
+#   last change: $Author: hjs $ $Date: 2001-11-21 18:25:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -207,8 +207,6 @@ SVXLIGHTOBJFILES=\
          $(OBJ)$/svdxcgv.obj
 
 EXCEPTIONSFILES= \
-         $(OBJ)$/sxl_svdogrp.obj         \
-         $(OBJ)$/sxl_svdotxln.obj        \
          $(SLO)$/svdhdl.obj          \
          $(SLO)$/svdmrkv.obj         \
          $(SLO)$/svdogrp.obj         \
@@ -216,6 +214,12 @@ EXCEPTIONSFILES= \
          $(SLO)$/svdouno.obj         \
          $(SLO)$/svdfppt.obj         \
          $(SLO)$/svdpagv.obj
+
+.IF "$(SVXLIGHT)"!=""
+EXCEPTIONSFILES+= \
+         $(OBJ)$/sxl_svdogrp.obj         \
+         $(OBJ)$/sxl_svdotxln.obj
+.ENDIF          # "$(SVXLIGHT)"!=""
 
 SRS1NAME=svdstr
 SRC1FILES=  \
