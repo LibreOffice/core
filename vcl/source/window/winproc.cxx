@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: th $ $Date: 2001-05-18 08:29:14 $
+ *  last change: $Author: th $ $Date: 2001-06-11 14:45:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -836,10 +836,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
     // tracking window gets the mouse events
     BOOL bTracking = FALSE;
     if ( pSVData->maWinData.mpTrackWin )
-    {
         pChild = pSVData->maWinData.mpTrackWin;
-        bTracking = TRUE;
-    }
 
     // handle FloatingMode
     if ( !pSVData->maWinData.mpTrackWin && pSVData->maWinData.mpFirstFloat )
@@ -906,7 +903,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
             nRet = 0;
             if ( nSVEvent == EVENT_MOUSEMOVE )
             {
-                if ( bTracking )
+                if ( pSVData->maWinData.mpTrackWin )
                 {
                     TrackingEvent aTEvt( aMEvt );
                     pChild->Tracking( aTEvt );
@@ -938,7 +935,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
             }
             else if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
             {
-                if ( bTracking &&
+                if ( pSVData->maWinData.mpTrackWin &&
                      !(pSVData->maWinData.mnTrackFlags & STARTTRACK_MOUSEBUTTONDOWN) )
                     nRet = 1;
                 else
@@ -949,7 +946,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
             }
             else
             {
-                if ( bTracking )
+                if ( pSVData->maWinData.mpTrackWin )
                 {
                     pChild->EndTracking();
                     nRet = 1;
