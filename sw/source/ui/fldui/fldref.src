@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldref.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:23:37 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ TabPage TP_FLD_REF
         Text [ portuguese ] = "Marcadores de texto" ;
         Text [ portuguese_brazilian ] = "Textmarken" ;
         Text[ chinese_simplified ] = "КйЗ©";
-        Text[ russian ] = "Закладки";
+        Text[ russian ] = "Текстовые пометки";
         Text[ polish ] = "Zakіadki";
         Text[ japanese ] = "Г·ЅДП°ё";
         Text[ chinese_traditional ] = "¤є¤ејРЕТ";
