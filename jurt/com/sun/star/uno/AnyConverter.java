@@ -1,6 +1,5 @@
 package com.sun.star.uno;
 import com.sun.star.lang.IllegalArgumentException;
-
 /** This class provides static methods which aim at exploring the contents of an
  * Any and extracting its value. All public methods take an Object argument that
  * either is the immediate object, such as Boolean, Type, interface implementation,
@@ -525,26 +524,8 @@ public class AnyConverter
                 break;
             case TypeClass.STRUCT_value:
             case TypeClass.EXCEPTION_value:
-                if (dest_tc == tc)
-                {
-                    Class source_class = type.getZClass();
-                    if (null == source_class)
-                        source_class = object.getClass();
-                    Class dest_class = destType.getZClass();
-                    if (null == dest_class)
-                    {
-                        try
-                        {
-                            dest_class = Class.forName( destType.getTypeName() );
-                        }
-                        catch (ClassNotFoundException exc)
-                        {
-                            throw new com.sun.star.lang.IllegalArgumentException(
-                                "The destination type (STRUCT, EXCEPTION) cannot be resolved!" );
-                        }
-                    }
-                    if (dest_class.isAssignableFrom( source_class ))
-                        return object;
+                if (destType.isSupertypeOf(type)) {
+                    return object;
                 }
                 break;
             case TypeClass.SEQUENCE_value:
