@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:57:40 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1624,7 +1624,7 @@ String STR_LUMINANCE
     Text[ dutch ] = "Helderheid:  ";
     Text[ french ] = "Luminosité : ";
     Text[ spanish ] = "Brillo:  ";
-    Text[ italian ] = "Luminance: ";
+    Text[ italian ] = "Luminosità: ";
     Text[ danish ] = "Lysstyrke: ";
     Text[ swedish ] = "Ljusstyrka:  ";
     Text[ polish ] = "Jasnoœæ: ";
@@ -1648,7 +1648,7 @@ String STR_CHANNELR
     Text[ dutch ] = "Rood:  ";
     Text[ french ] = "Proportion de rouge : ";
     Text[ spanish ] = "Proporción de rojo: ";
-    Text[ italian ] = "Red portion: ";
+    Text[ italian ] = "Percentuale di rosso:  ";
     Text[ danish ] = "Rød-andel: ";
     Text[ swedish ] = "Andel rött:  ";
     Text[ polish ] = "Zawaroœæ czerwonego: ";
@@ -1672,7 +1672,7 @@ String STR_CHANNELG
     Text[ dutch ] = "Green:  ";
     Text[ french ] = "Proportion de vert : ";
     Text[ spanish ] = "Proporción verde: ";
-    Text[ italian ] = "Green portion: ";
+    Text[ italian ] = "Percentuale di verde: ";
     Text[ danish ] = "Grøn-andel: ";
     Text[ swedish ] = "Andel grönt:  ";
     Text[ polish ] = "Zawartoœæ zielonego: ";
@@ -1696,7 +1696,7 @@ String STR_CHANNELB
     Text[ dutch ] = "Blauw:  ";
     Text[ french ] = "Proportion de bleu : ";
     Text[ spanish ] = "Proporción de azul: ";
-    Text[ italian ] = "Blue portion: ";
+    Text[ italian ] = "Percentuale di blu: ";
     Text[ danish ] = "Blå-andel: ";
     Text[ swedish ] = "Andel blått:  ";
     Text[ polish ] = "Zawartoœæ niebieskiego: ";
@@ -1720,7 +1720,7 @@ String STR_CONTRAST
     Text[ dutch ] = "Contrast:  ";
     Text[ french ] = "Contraste : ";
     Text[ spanish ] = "Contraste: ";
-    Text[ italian ] = "Contrast: ";
+    Text[ italian ] = "Contrasto:  ";
     Text[ danish ] = "Kontrast: ";
     Text[ swedish ] = "Kontrast:  ";
     Text[ polish ] = "Kontrast: ";
@@ -1744,7 +1744,7 @@ String STR_GAMMA
     Text[ dutch ] = "Gamma:  ";
     Text[ french ] = "Gamma : ";
     Text[ spanish ] = "Gamma:  ";
-    Text[ italian ] = "Gamma: ";
+    Text[ italian ] = "Gamma:  ";
     Text[ danish ] = "Gamma: ";
     Text[ swedish ] = "Gamma:  ";
     Text[ polish ] = "Gama: ";
@@ -1768,7 +1768,7 @@ String STR_TRANSPARENCY
     Text[ dutch ] = "Transparantie:  ";
     Text[ french ] = "Transparence: ";
     Text[ spanish ] = "Transparencia:  ";
-    Text[ italian ] = "Transparency: ";
+    Text[ italian ] = "Trasparenza: ";
     Text[ danish ] = "Transparens: ";
     Text[ swedish ] = "Transparens:  ";
     Text[ polish ] = "Przezroczystoœæ: ";
@@ -1785,6 +1785,24 @@ String STR_INVERT
 {
     Text = "Invertieren";
     Text[ english ] = "Invert";
+    Text[ english_us ] = "Invert";
+    Text[ portuguese ] = "Invert";
+    Text[ russian ] = "Invert";
+    Text[ greek ] = "Invert";
+    Text[ dutch ] = "Invert";
+    Text[ french ] = "Invert";
+    Text[ spanish ] = "Invert";
+    Text[ italian ] = "Invert";
+    Text[ danish ] = "Invert";
+    Text[ swedish ] = "Invertera";
+    Text[ polish ] = "Invert";
+    Text[ portuguese_brazilian ] = "Invert";
+    Text[ japanese ] = "Invert";
+    Text[ korean ] = "Invert";
+    Text[ chinese_simplified ] = "Invert";
+    Text[ chinese_traditional ] = "Invert";
+    Text[ turkish ] = "Invert";
+    Text[ arabic ] = "Invert";
 };
 String STR_INVERT_NOT
 {
@@ -1797,7 +1815,7 @@ String STR_INVERT_NOT
     Text[ dutch ] = "geen inversie";
     Text[ french ] = "ne pas invertir";
     Text[ spanish ] = "no invertir";
-    Text[ italian ] = "not invert";
+    Text[ italian ] = "Non invertire";
     Text[ danish ] = "ikke invertere";
     Text[ swedish ] = "invertera inte";
     Text[ polish ] = "nie odwracaj";
@@ -1821,7 +1839,7 @@ String STR_DRAWMODE
     Text[ dutch ] = "Afbeeldingenmodus:  ";
     Text[ french ] = "Mode Graphique : ";
     Text[ spanish ] = "Modo gráfico: ";
-    Text[ italian ] = "Graphics mode: ";
+    Text[ italian ] = "Modo immagine: ";
     Text[ danish ] = "Grafikmodus: ";
     Text[ swedish ] = "Grafikläge:  ";
     Text[ polish ] = "Tryb grafiki: ";
@@ -1868,7 +1886,7 @@ String STR_DRAWMODE_GREY
     Text[ dutch ] = "Grijswaarden";
     Text[ french ] = "Niveaux de gris";
     Text[ spanish ] = "Escala de grises";
-    Text[ italian ] = "Greys";
+    Text[ italian ] = "Toni di grigio";
     Text[ danish ] = "Gråtoner";
     Text[ swedish ] = "Gråskalor";
     Text[ polish ] = "Odcienie szaroœci";
@@ -1891,7 +1909,7 @@ String STR_DRAWMODE_BLACKWHITE
     Text[ dutch ] = "Zwart-wit";
     Text[ french ] = "Noir/Blanc";
     Text[ spanish ] = "Negro/Blanco";
-    Text[ italian ] = "Black/White";
+    Text[ italian ] = "Bianco/nero";
     Text[ danish ] = "Sort-hvid";
     Text[ swedish ] = "Svartvitt";
     Text[ polish ] = "Czarno-bia³y";
@@ -1914,7 +1932,7 @@ String STR_DRAWMODE_WATERMARK
     Text[ dutch ] = "Watermerk";
     Text[ french ] = "Filigrane";
     Text[ spanish ] = "Marca de agua";
-    Text[ italian ] = "Watermark";
+    Text[ italian ] = "Filigrana";
     Text[ danish ] = "Vandmærke";
     Text[ swedish ] = "Vattenmärke";
     Text[ polish ] = "Znak wodny";
@@ -1937,7 +1955,7 @@ String STR_ROTATION
     Text[ dutch ] = "Rotatie";
     Text[ french ] = "Rotation";
     Text[ spanish ] = "Rotación";
-    Text[ italian ] = "Rotation";
+    Text[ italian ] = "Rotazione";
     Text[ danish ] = "Rotation";
     Text[ swedish ] = "Rotation";
     Text[ polish ] = "Obrót";
