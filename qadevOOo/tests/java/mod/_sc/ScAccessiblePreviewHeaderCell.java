@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePreviewHeaderCell.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2004-03-19 16:00:01 $
+ *  last change:$Date: 2005-03-01 20:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,15 +100,15 @@ import com.sun.star.util.XURLTransformer;
 /**
  * Object implements the following interfaces:
  * <ul>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleComponent</code>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleComponent</code>
  *  </li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleContext</code>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleContext</code>
  *  </li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleSelection
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleSelection
  *  </code></li>
- *  <li><code>drafts::com::sun::star::accessibility::XAccessibleValue</code>
+ *  <li><code>::com::sun::star::accessibility::XAccessibleValue</code>
  *  </li>
- *  <li><code>drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
+ *  <li><code>::com::sun::star::accessibility::XAccessibleEventBroadcaster
  *  </code></li>
  * </ul>
  * @see com.sun.star.accessibility.XAccessibleComponent
