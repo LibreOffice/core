@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMimeContentTypeFactory.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:18 $
+ *  last change: $Author: tra $ $Date: 2001-03-21 07:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,14 @@ interface XMimeContentTypeFactory : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /**
         @param aContentType
-        a mime contenttype as specified in rfc245/rfc2046
+        a mime content-type as specified in rfc2045/rfc2046
 
         @returns
         com::sun::star::datatransfer::XMimeContentType
 
         @throws com::sun::star::lang::IllegalArgumentException
-        if the string does not conform to rfc2045 or rfc2046
+        if the string does not conform to rfc2045 or rfc2046;
+        exception: quoted parameter values may contain spaces
 
         @see com::sun::star::datatransfer::XMimeContentType
     */

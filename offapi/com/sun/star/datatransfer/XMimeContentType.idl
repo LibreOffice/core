@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMimeContentType.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:18 $
+ *  last change: $Author: tra $ $Date: 2001-03-21 07:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,7 @@ interface XMimeContentType : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** @returns
-        the media type of the contenttype.
-
- <!-- Dennis: Is "contenttype" spelled correctly? -->
+        the media type of the content-type.
     */
     string getMediaType( );
 
@@ -103,9 +101,7 @@ interface XMimeContentType : com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** @returns
-        if the contenttype has the specified parameter
-
- <!-- Dennis: Returns what? -->
+        true if the contenttype has the specified parameter
     */
     boolean hasParameter( [in] string aName );
 
@@ -116,7 +112,7 @@ interface XMimeContentType : com::sun::star::uno::XInterface
         @param
         the name of the parameter
     */
-    string getParameterValue( [in] string aNameaName )
+    string getParameterValue( [in] string aName )
         raises ( com::sun::star::container::NoSuchElementException );
 };
 
