@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-19 11:21:27 $
+ *  last change: $Author: tl $ $Date: 2001-07-19 14:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ class SmXMLWrapper
 public:
     SmXMLWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef)
         : xModel(rRef), bFlat(sal_True) {}
-    sal_Bool Import(SfxMedium &rMedium);
+    ULONG Import(SfxMedium &rMedium);
     sal_Bool Export(SfxMedium &rMedium);
     void SetFlat(sal_Bool bIn) {bFlat = bIn;}
 private:
@@ -97,14 +97,14 @@ private:
     sal_Bool bFlat;     //set true for export to flat .mml, set false for
                         //export to a .sxm (or whatever) package
 
-    sal_Bool ReadThroughComponent(
+    ULONG ReadThroughComponent(
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModelComponent,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
         const sal_Char* pFilterName,
         sal_Bool bEncrypted );
 
-    sal_Bool ReadThroughComponent(
+    ULONG ReadThroughComponent(
         SvStorage* pStorage,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModelComponent,
         const sal_Char* pStreamName,

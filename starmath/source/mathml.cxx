@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-19 11:20:55 $
+ *  last change: $Author: tl $ $Date: 2001-07-19 14:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,13 +175,14 @@ sal_Unicode UnicodeToStarMath(sal_uInt16 rChar)
 }
 
 /// read a component (file + filter version)
-sal_Bool SmXMLWrapper::ReadThroughComponent(
+ULONG SmXMLWrapper::ReadThroughComponent(
     Reference<io::XInputStream> xInputStream,
     Reference<XComponent> xModelComponent,
     Reference<lang::XMultiServiceFactory> & rFactory,
     const sal_Char* pFilterName,
     sal_Bool bEncrypted )
 {
+    ULONG nError = ERRCODE_SFX_DOLOADFAILED;
     DBG_ASSERT(xInputStream.is(), "input stream missing");
     DBG_ASSERT(xModelComponent.is(), "document missing");
     DBG_ASSERT(rFactory.is(), "factory missing");
@@ -198,7 +199,7 @@ sal_Bool SmXMLWrapper::ReadThroughComponent(
         UNO_QUERY );
     DBG_ASSERT( xParser.is(), "Can't create parser" );
     if( !xParser.is() )
-        return sal_False;
+        return nError;
 
     // get filter
     uno::Sequence < uno::Any > aArgs( 0 );
@@ -208,7 +209,7 @@ sal_Bool SmXMLWrapper::ReadThroughComponent(
         UNO_QUERY );
     DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
     if( !xFilter.is() )
-        return sal_False;
+        return nError;
 
     // connect parser and filter
     xParser->setDocumentHandler( xFilter );
@@ -218,8 +219,6 @@ sal_Bool SmXMLWrapper::ReadThroughComponent(
     xImporter->setTargetDocument( xModelComponent );
 
     // finally, parser the stream
-    sal_Bool bRet = sal_True;
-    sal_Bool bCheckEncrypted = sal_False;
     try
     {
         xParser->parseStream( aParserInput );
@@ -229,50 +228,27 @@ sal_Bool SmXMLWrapper::ReadThroughComponent(
             ( xFilter, uno::UNO_QUERY );
         SmXMLImport *pFilter = (SmXMLImport *)xFilterTunnel->getSomething(
             SmXMLImport::getUnoTunnelId() );
-        if( pFilter )
-            bRet = pFilter->GetSuccess();
+        if( pFilter && pFilter->GetSuccess() )
+            nError = 0;
     }
     catch( xml::sax::SAXParseException& )
     {
-        bRet = sal_False;
-        bCheckEncrypted = sal_True;
+        if( bEncrypted )
+            nError = ERRCODE_SFX_WRONGPASSWORD;
     }
     catch( xml::sax::SAXException& )
     {
-        bRet = sal_False;
-        bCheckEncrypted = sal_True;
+        if( bEncrypted )
+            nError = ERRCODE_SFX_WRONGPASSWORD;
     }
     catch( io::IOException& )
     {
-        bRet = sal_False;
     }
 
-    if (!bRet)
-    {
-        // get DocShell
-        uno::Reference< lang::XUnoTunnel > xTunnel( xModel, uno::UNO_QUERY );
-        DBG_ASSERT( xTunnel.is(), "XUnoTunnel interface not supported" );
-        SmModel *pModel = reinterpret_cast<SmModel *>
-                (xTunnel->getSomething(SmModel::getUnoTunnelId()));
-        SmDocShell *pDocShell = 0;
-        if (pModel)
-            pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
-        DBG_ASSERT( pDocShell, "DocShell missing" );
-
-        if (pDocShell)
-        {
-            if (bCheckEncrypted  &&  bEncrypted)
-                pDocShell->SetError( ERRCODE_SFX_WRONGPASSWORD );
-            else
-                pDocShell->SetError( ERRCODE_SFX_DOLOADFAILED );
-        }
-    }
-
-    // success!
-    return bRet;
+    return nError;
 }
 
-sal_Bool SmXMLWrapper::ReadThroughComponent(
+ULONG SmXMLWrapper::ReadThroughComponent(
     SvStorage* pStorage,
     Reference<XComponent> xModelComponent,
     const sal_Char* pStreamName,
@@ -291,12 +267,12 @@ sal_Bool SmXMLWrapper::ReadThroughComponent(
 
         // do we even have an alternative name?
         if ( NULL == pCompatibilityStreamName )
-            return sal_False;
+            return ERRCODE_SFX_DOLOADFAILED;
 
         // if so, does the stream exist?
         sStreamName = rtl::OUString::createFromAscii(pCompatibilityStreamName);
         if (! pStorage->IsStream(sStreamName) )
-            return sal_False;
+            return ERRCODE_SFX_DOLOADFAILED;
     }
 
     // get input stream
@@ -320,15 +296,15 @@ sal_Bool SmXMLWrapper::ReadThroughComponent(
         xInputStream, xModelComponent, rFactory, pFilterName, bEncrypted );
 }
 
-sal_Bool SmXMLWrapper::Import(SfxMedium &rMedium)
+ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
 {
-    sal_Bool bRet=sal_False;
+    ULONG nError = ERRCODE_SFX_DOLOADFAILED;
 
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(
         utl::getProcessServiceFactory());
     DBG_ASSERT(xServiceFactory.is(), "XMLReader::Read: got no service manager");
     if( !xServiceFactory.is() )
-        return sal_False;
+        return nError;
 
     //Make a model component from our SmModel
     uno::Reference< lang::XComponent > xModelComp( xModel, uno::UNO_QUERY );
@@ -344,15 +320,12 @@ sal_Bool SmXMLWrapper::Import(SfxMedium &rMedium)
             rMedium.GetStorage(), xModelComp, "settings.xml", 0, xServiceFactory,
             "com.sun.star.comp.Math.XMLSettingsImporter" );
 
-        bRet = ReadThroughComponent(
+        nError = ReadThroughComponent(
            rMedium.GetStorage(), xModelComp, "content.xml", "Content.xml", xServiceFactory,
            "com.sun.star.comp.Math.XMLImporter" );
-
-
     }
     else
     {
-
         uno::Reference<io::XActiveDataSource> xSource( rMedium.GetDataSource() );
         DBG_ASSERT(xSource.is(),"XMLReader::Read: data source missing");
 
@@ -371,12 +344,12 @@ sal_Bool SmXMLWrapper::Import(SfxMedium &rMedium)
             xSource,uno::UNO_QUERY);
         xSourceControl->start();
 
-        bRet = ReadThroughComponent(
+        nError = ReadThroughComponent(
             xInputStream, xModelComp, xServiceFactory,
             "com.sun.star.comp.Math.XMLImporter", FALSE );
     }
 
-    return bRet;
+    return nError;
 }
 
 const uno::Sequence< sal_Int8 > & SmXMLImport::getUnoTunnelId() throw()

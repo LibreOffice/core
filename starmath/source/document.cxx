@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2001-07-12 10:38:48 $
+ *  last change: $Author: tl $ $Date: 2001-07-19 15:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,7 +695,7 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
             pTree = 0;
         }
         SmXMLWrapper aEquation(GetModel());
-        bSuccess = aEquation.Import(rMedium);
+        bSuccess = 0 == aEquation.Import(rMedium);
     }
     else if( rMedium.IsStorage() && rMedium.GetStorage()->IsStream(
         C2S( "Equation Native" )))
@@ -777,7 +777,9 @@ BOOL SmDocShell::Load(SvStorage *pStor)
             // is this a fabulous math package ?
             SmXMLWrapper aEquation(GetModel());
             SfxMedium aMedium(pStor);
-            bRet = aEquation.Import(aMedium);
+            ULONG nError = aEquation.Import(aMedium);
+            bRet = 0 == nError;
+            SetError( nError );
         }
         else
         {
