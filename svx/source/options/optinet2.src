@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1068,7 +1068,7 @@ TabPage RID_SVXPAGE_INET_CACHE
         Text [ portuguese_brazilian ] = "Kein Cache für" ;
         Text [ portuguese ] = "Não existe cache para" ;
         Text[ chinese_simplified ] = "»º³åÇø²»ÊÊÓÃÓÚ";
-        Text[ russian ] = "Êıø íå èìååòñÿ äëÿ";
+        Text[ russian ] = "Áåç êıø äëÿ";
         Text[ polish ] = "Brak pamiêci podrêcznej dla";
         Text[ japanese ] = "·¬¯¼­‚È‚µ";
         Text[ chinese_traditional ] = "½w¨R°Ï¤£Óì¥Î©ó";
@@ -1217,8 +1217,8 @@ TabPage RID_SVXPAGE_INET_TYPE
         Text [ english_us ] = "~Mime type" ;
         Text [ italian ] = "Tipo Mime" ;
         Text [ spanish ] = "~Tipo MIME" ;
-        Text [ french ] = "~Type MIME" ;
-        Text [ swedish ] = "Mime-t~yp" ;
+        Text [ french ] = "~Type Mime" ;
+        Text [ swedish ] = "MIME-t~yp" ;
         Text [ danish ] = "Mime-type" ;
         Text [ portuguese_brazilian ] = "Mime-~Typ" ;
         Text [ portuguese ] = "Tipo de mime" ;
@@ -2502,7 +2502,7 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
         Text[ japanese ] = "Ìß×¸Ş²İ";
         Text[ chinese_traditional ] = "Plug-Ins";
         Text[ arabic ] = "Plug-Ins";
-        Text[ greek ] = "Plug-Ins";
+        Text[ greek ] = "Óõíäåüìåíåò õğïìïíÜäåò";
         Text[ korean ] = "ÇÃ·¯±×ÀÎ";
         Text[ turkish ] = "Plug-In";
         Text[ language_user1 ] = " ";
@@ -2558,7 +2558,7 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
         Text[ chinese_simplified ] = "Applets";
         Text[ chinese_traditional ] = "Applets";
         Text[ arabic ] = "ÊØÈíŞÇÊ ÕÛíÑÉ";
-        Text[ greek ] = "Applets";
+        Text[ greek ] = "Ìéêñïåöáñìïãİò";
         Text[ korean ] = "¾ÖÇÃ¸´";
         Text[ turkish ] = "Applet'ler";
         Text[ language_user1 ] = " ";
@@ -2615,7 +2615,7 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
         Text[ japanese ] = "Î°ÑÍß°¼Ş";
         Text[ chinese_traditional ] = "¥Dºô­¶";
         Text[ arabic ] = "ÕİÍÉ ÇáÈÏÁ";
-        Text[ greek ] = "ÊåíôñéêŞ óåëßäá";
+        Text[ greek ] = "Áñ÷éêŞ óåëßäá";
         Text[ korean ] = "È¨ÆäÀÌÁö";
         Text[ turkish ] = "Web sayfası";
         Text[ language_user1 ] = " ";
@@ -3165,7 +3165,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ dutch ] = "StarOffice Basic-scripts uitvoeren van" ;
         Text [ portuguese ] = "Executar scripts StarOffice Basic a partir de" ;
         Text[ chinese_simplified ] = "Ö´ĞĞ Star Basic ½Å±¾´Ó";
-        Text[ russian ] = "Âûïîëíèòü Star Basic Scripts èç";
+        Text[ russian ] = "Âûïîëíèòü ñêğèïòû StarOffice Basic èç";
         Text[ polish ] = "Wykonaj skrypty Star Basic z";
         Text[ japanese ] = "StarOffice Basic ½¸ØÌßÄ‚ÌÀsŒó•â";
         Text[ chinese_traditional ] = "°õ¦æStar Basic©R¥O½Z±q";
@@ -3339,7 +3339,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ dutch ] = "StarOffice Basic-Script" ;
         Text [ portuguese ] = "StarOffice Basic-Script" ;
         Text[ chinese_simplified ] = "StarOffice Basic ½Å±¾";
-        Text[ russian ] = "StarOffice Basic Script";
+        Text[ russian ] = "Ñêğèïò StarOffice Basic";
         Text[ polish ] = "Skrypt StarOffice Basic";
         Text[ japanese ] = "StarOffice Basic ½¸ØÌßÄ";
         Text[ chinese_traditional ] = "StarOffice Basic©R¥O½Z";
@@ -3507,7 +3507,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ dutch ] = "Er worden geen StarOffice Basic-scripts uitgevoerd." ;
         Text [ portuguese ] = "Não serão executados nenhuns scripts StarOffice Basic." ;
         Text[ chinese_simplified ] = "²»Ê¹ÓÃ StarOffice Basic ½Å±¾¡£";
-        Text[ russian ] = "StarOffice Basic scripts íå âûïîëíÿşòñÿ.";
+        Text[ russian ] = "Âûïîëíèòü ñêğèïòû StarOffice Basic íåâîçìîæíî.";
         Text[ polish ] = "Skrypty StarOffice Basic nie bêd¹ wykonywane.";
         Text[ japanese ] = "StarOffice Basic ½¸ØÌßÄ‚ÍÀs‚³‚ê‚Ü‚¹‚ñB";
         Text[ chinese_traditional ] = "¤£¨Ï¥ÎStarOffice Basic©R¥O½Z¡C";
@@ -3518,7 +3518,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ language_user1 ] = " ";
     };
     Text[ chinese_simplified ] = "½Å±¾";
-    Text[ russian ] = "Scripting";
+    Text[ russian ] = "Ñêğèïò";
     Text[ polish ] = "Scripting";
     Text[ japanese ] = "½¸ØÌßÄ";
     Text[ chinese_traditional ] = "©R¥O½Z";
@@ -4395,7 +4395,7 @@ TabPage RID_SVXPAGE_INET_COOKIES
         Text [ dutch ] = "~Interactief" ;
         Text [ portuguese ] = "~Confirmar" ;
         Text[ chinese_simplified ] = "ĞèÒªÈ·ÈÏ(~C)";
-        Text[ russian ] = "Èíòåğàêòèâíûé";
+        Text[ russian ] = "Èíòåğàêòèâíî";
         Text[ polish ] = "Interaktywny";
         Text[ japanese ] = "–ˆ‰ñŠm”F‚·‚é(~C)";
         Text[ chinese_traditional ] = "»İ­n½T»{(~C)";
@@ -4619,7 +4619,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text [ spanish ] = "Tenga en cuenta que junto con Java\ntambién desactivará Javascript.\n\n¿Desea aún desactivar Java?";
         Text [ french ] = "Veuillez noter qu'en désactivant Java,\nvous désactiverez également le Javascript.\n\nVoulez-vous vraiment poursuivre ?";
         Text[ portuguese ] = "Note que ao desactivar Java\nestará também a desactivar Javascript.\n\nMesmo assim desactivar?";
-        Text[ russian ] = "Ïîæàëóéñòà, ó÷òèòå, ÷òî îòêëş÷àÿ Java\nÂû îòêëş÷èòå è Javascript.\n\nÎòêëş÷èòü Java íåñìîòğÿ íà ıòî?";
+        Text[ russian ] = "Ïîæàëóéñòà, ó÷òèòå, ÷òî îòêëş÷àÿ Java\nÂû îòêëş÷èòå è JavaScript.\n\nÎòêëş÷èòü Java íåñìîòğÿ íà ıòî?";
         Text[ dutch ] = "Wij wijzen u erop dat u met Java\nook Javascript uitschakelt.\n\nWilt u Java toch uitschakelen?";
         Text[ danish ] = "Bemærk venligst, at du deaktiverer\nJavaScript sammenmed Java.\n\nVil du deaktivere Java alligevel?";
         Text[ swedish ] = "Tänk på att Du även stänger av\nJavascript tillsammans med Java.\n\nVill Du trots det stänga av Java?";
