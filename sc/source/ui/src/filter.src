@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 15:32:32 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 11:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1528,7 +1528,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "å¤§å°å¯«(~S)";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
         Text[ greek ] = "Êåöáëáßá/ĞåæÜ";
-        Text[ korean ] = "ëŒ€/ì†Œë¬¸ì êµ¬ë¶„(~S)";
+        Text[ korean ] = "ëŒ€ë¬¸ì ë° ì†Œë¬¸ì êµ¬ë¶„(~S)";
         Text[ turkish ] = "~Büyük/Küçük harf duyarlı";
         Text[ catalan ] = "Distingeix entre ~majúscules i minúscules";
         Text[ thai ] = "~à¸•à¸£à¸‡à¸•à¸²à¸¡à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆ-à¹€à¸¥à¹‡à¸";
@@ -2000,7 +2000,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "å¤§å°å¯«(~C)";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
         Text[ greek ] = "ĞåæÜ-Êåöáëáßá";
-        Text[ korean ] = "ëŒ€/ì†Œë¬¸ì êµ¬ë¶„(~C)";
+        Text[ korean ] = "ëŒ€ë¬¸ì ë° ì†Œë¬¸ì êµ¬ë¶„(~C)";
         Text[ turkish ] = "~Büyük/Küçük harf duyarlı";
         Text[ catalan ] = "Distingeix entre ~majúscules i minúscules";
         Text[ thai ] = "~à¸•à¸£à¸‡à¸•à¸²à¸¡à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆ-à¹€à¸¥à¹‡à¸";
@@ -3554,7 +3554,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_traditional ] = "å¤§å°å¯«(~C)";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
         Text[ greek ] = "ĞåæÜ-Êåöáëáßá";
-        Text[ korean ] = "ëŒ€/ì†Œë¬¸ì êµ¬ë¶„(~C)";
+        Text[ korean ] = "ëŒ€ë¬¸ì ë° ì†Œë¬¸ì êµ¬ë¶„(~C)";
         Text[ turkish ] = "~Büyük/Küçük harf duyarlı";
         Text[ catalan ] = "Distingeix entre ~majúscules i minúscules";
         Text[ thai ] = "~à¸•à¸£à¸‡à¸•à¸²à¸¡à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆ-à¹€à¸¥à¹‡à¸";
