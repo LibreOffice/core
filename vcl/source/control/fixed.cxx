@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2000-12-07 14:36:20 $
+ *  last change: $Author: mt $ $Date: 2001-03-27 16:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,8 @@ void FixedText::Paint( const Rectangle& rRect )
 void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                       ULONG nFlags )
 {
+    ImplInitSettings( TRUE, TRUE, TRUE );
+
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
     Font        aFont = GetDrawPixelFont( pDev );
