@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-12-03 14:21:54 $
+#   last change: $Author: obo $ $Date: 2005-03-18 09:45:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,18 +68,23 @@ TARGET=rebase
 
 .INCLUDE : settings.mk
 
-$(TARGET) .PHONY :
+.INCLUDE : target.mk
+
+STARTADDRESS=0x68000000
+BASEADDRESSES=$(MISC)$/coffbase.txt
+EXCLUDELIST=no_rebase.txt
+LOGFILE=$(MISC)$/rebase_log.txt
+IMAGENAMES=$(SOLARBINDIR)$/*.dll $(SOLARBINDIR)$/so$/*.dll
+
+ALLTAR : $(BASEADDRESSES)
+
+$(BASEADDRESSES) .PHONY :
 .IF "$(GUI)"=="WNT"
 .IF "$(product)"=="full"
-    @+echo ------ rebase dlls ------
-    +$(WRAPCMD) rebase -v -b 0x68000000 -C $(MISC)$/coffbase.txt -d -l $(MISC)$/rebase_log.txt -R $(SOLARBINDIR) -N no_rebase.txt $(SOLARBINDIR)$/*.dll $(SOLARBINDIR)$/so$/*.dll
+    +$(PERL) rebase.pl -C $(BASEADDRESSES) -b $(STARTADDRESS) -d -e 10000 -l $(LOGFILE) -m $(MISC) -v -R $(SOLARBINDIR) -N $(EXCLUDELIST) $(IMAGENAMES)
 .ENDIF
 .ELSE
     @+echo Nothing to do, 'rebase' is windows only.
 .ENDIF
 
-.ERROR:
-    @+echo ERROR COMMENT: If after rebase dmake dies with error code 227,
-    @+echo ERROR COMMENT: it may be we have got another dll which must not 
-    @+echo ERROR COMMENT: get rebased. Contact JL whether something needs
-    @+echo ERROR COMMENT: to be added to no_rebase.txt
+
