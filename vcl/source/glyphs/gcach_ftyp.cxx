@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-16 13:42:52 $
+ *  last change: $Author: hr $ $Date: 2000-11-20 18:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,7 +539,7 @@ void PolyArgs::ClosePolygon()
 
 // -----------------------------------------------------------------------
 
-static int FT_move_to( FT_Vector* const p0, void* vpPolyArgs )
+int FT_move_to( FT_Vector* const p0, void* vpPolyArgs )
 {
     PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
 
@@ -550,14 +550,14 @@ static int FT_move_to( FT_Vector* const p0, void* vpPolyArgs )
     return 0;
 }
 
-static int FT_line_to( FT_Vector* const p1, void* vpPolyArgs )
+int FT_line_to( FT_Vector* const p1, void* vpPolyArgs )
 {
     PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
     rA.AddPoint( p1->x, p1->y , POLY_NORMAL );
     return 0;
 }
 
-static int FT_conic_to( FT_Vector* const p1, FT_Vector* const p2, void* vpPolyArgs )
+int FT_conic_to( FT_Vector* const p1, FT_Vector* const p2, void* vpPolyArgs )
 {
     PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
 
@@ -574,7 +574,7 @@ static int FT_conic_to( FT_Vector* const p1, FT_Vector* const p2, void* vpPolyAr
     return 0;
 }
 
-static int FT_cubic_to( FT_Vector* const p1, FT_Vector* const p2, FT_Vector* const p3, void* vpPolyArgs )
+int FT_cubic_to( FT_Vector* const p1, FT_Vector* const p2, FT_Vector* const p3, void* vpPolyArgs )
 {
     PolyArgs* const pA = reinterpret_cast<PolyArgs*>(vpPolyArgs);
     pA->AddPoint( p1->x, p1->y, POLY_CONTROL );
