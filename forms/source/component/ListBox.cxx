@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-24 09:08:43 $
+ *  last change: $Author: fs $ $Date: 2001-01-29 12:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1141,9 +1141,9 @@ Sequence< Type> OListBoxControl::_getTypes()
 //------------------------------------------------------------------
 Any SAL_CALL OListBoxControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    Any aReturn = OListBoxControl_BASE::queryInterface(_rType);
+    Any aReturn = OBoundControl::queryAggregation(_rType);
     if (!aReturn.hasValue())
-        aReturn = OBoundControl::queryAggregation(_rType);
+        aReturn = OListBoxControl_BASE::queryInterface(_rType);
 
     return aReturn;
 }
