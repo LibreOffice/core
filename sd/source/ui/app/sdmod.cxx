@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2002-12-11 14:54:56 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,8 +175,8 @@ SdModule::SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact)
                                          ERRCODE_AREA_SD_END,
                                          GetResMgr() );
 
-    mpRefDevice = new VirtualDevice;
-    mpRefDevice->SetMapMode( MAP_100TH_MM );
+    mpVirtualRefDevice = new VirtualDevice;
+    mpVirtualRefDevice->SetMapMode( MAP_100TH_MM );
 }
 
 
@@ -195,7 +195,7 @@ SdModule::~SdModule()
         delete pNumberFormatter;
 
     delete mpErrorHdl;
-    delete static_cast< VirtualDevice* >( mpRefDevice );
+    delete static_cast< VirtualDevice* >( mpVirtualRefDevice );
 }
 
 
@@ -394,19 +394,19 @@ SvNumberFormatter* SdModule::GetNumberFormatter()
 |*
 \************************************************************************/
 
-OutputDevice* SdModule::GetRefDevice( SdDrawDocShell& rDocShell )
+OutputDevice* SdModule::GetVirtualRefDevice (void)
 {
-    return( IsPrinterRefDevice() ? rDocShell.GetPrinter( sal_True ) : mpRefDevice );
+    return mpVirtualRefDevice;
 }
 
-/*************************************************************************
-|*
-\************************************************************************/
-
-sal_Bool SdModule::IsPrinterRefDevice() const
+/** This method is deprecated and only an alias to
+    <member>GetVirtualRefDevice()</member>.  The given argument is ignored.
+*/
+OutputDevice* SdModule::GetRefDevice (SdDrawDocShell& rDocShell)
 {
-    return sal_True;
+    return GetVirtualRefDevice();
 }
+
 
 /*************************************************************************
 |*
