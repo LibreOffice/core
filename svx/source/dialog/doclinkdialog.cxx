@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclinkdialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:18:01 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
 
 #ifndef _SVX_DOCLINKDIALOG_HXX_
 #include "doclinkdialog.hxx"
