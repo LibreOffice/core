@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: mt $ $Date: 2000-10-13 09:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,4 +326,32 @@ TextHint::TextHint( ULONG nId, ULONG nValue ) : SfxSimpleHint( nId )
 {
     mnValue = nValue;
 }
+
+TEIMEInfos::TEIMEInfos( const TextPaM& rPos )
+{
+    aPos = rPos;
+    nLen = 0;
+    bCursor = TRUE;
+    pAttribs = NULL;
+}
+
+TEIMEInfos::~TEIMEInfos()
+{
+    delete pAttribs;
+}
+
+void TEIMEInfos::CopyAttribs( const USHORT* pA, USHORT nL )
+{
+    nLen = nL;
+    delete pAttribs;
+    pAttribs = new USHORT[ nL ];
+    memcpy( pAttribs, pA, nL*sizeof(USHORT) );
+}
+
+void TEIMEInfos::DestroyAttribs()
+{
+    delete pAttribs;
+    pAttribs = NULL;
+}
+
 

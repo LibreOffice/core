@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: mt $ $Date: 2000-10-13 09:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,12 +738,93 @@ void TextView::Command( const CommandEvent& rCEvt )
 {
     mpTextEngine->CheckIdleFormatter(); // Falls schnelles Tippen und MouseButtonDown
     mpTextEngine->SetActiveView( this );
-    BOOL bCallSelectionEngineCommand = TRUE;
-    if ( ( rCEvt.GetCommand() == COMMAND_STARTDRAG ) )
+
+    if ( rCEvt.GetCommand() == COMMAND_STARTEXTTEXTINPUT )
     {
+        DeleteSelected();
+        delete mpTextEngine->mpIMEInfos;
+        mpTextEngine->mpIMEInfos = new TEIMEInfos( GetSelection().GetEnd() );
     }
-    if ( bCallSelectionEngineCommand )
+    else if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
+    {
+        DBG_ASSERT( mpTextEngine->mpIMEInfos, "COMMAND_ENDEXTTEXTINPUT => Kein Start ?" );
+        if( mpTextEngine->mpIMEInfos )
+        {
+            TEParaPortion* pPortion = mpTextEngine->mpTEParaPortions->GetObject( mpTextEngine->mpIMEInfos->aPos.GetPara() );
+            pPortion->MarkSelectionInvalid( mpTextEngine->mpIMEInfos->aPos.GetIndex(), 0 );
+
+            delete mpTextEngine->mpIMEInfos;
+            mpTextEngine->mpIMEInfos = NULL;
+
+            mpTextEngine->FormatAndUpdate( this );
+        }
+    }
+    else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT )
+    {
+        DBG_ASSERT( mpTextEngine->mpIMEInfos, "COMMAND_EXTTEXTINPUT => Kein Start ?" );
+        if( mpTextEngine->mpIMEInfos )
+        {
+            const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
+
+            TextSelection aSel( mpTextEngine->mpIMEInfos->aPos );
+            aSel.GetEnd().GetIndex() += mpTextEngine->mpIMEInfos->nLen;
+            SetSelection( aSel );
+            DeleteSelected();
+            aSel.GetEnd() = aSel.GetStart();
+            aSel = mpTextEngine->ImpInsertText( aSel, pData->GetText() );
+
+            if ( pData->GetTextAttr() )
+            {
+                mpTextEngine->mpIMEInfos->CopyAttribs( pData->GetTextAttr(), pData->GetText().Len() );
+                mpTextEngine->mpIMEInfos->bCursor = pData->IsCursorVisible();
+            }
+            else
+            {
+                mpTextEngine->mpIMEInfos->DestroyAttribs();
+            }
+
+            TEParaPortion* pPPortion = mpTextEngine->mpTEParaPortions->GetObject( mpTextEngine->mpIMEInfos->aPos.GetPara() );
+            pPPortion->MarkSelectionInvalid( mpTextEngine->mpIMEInfos->aPos.GetIndex(), 0 );
+            mpTextEngine->FormatAndUpdate( this );
+
+            aSel.GetStart() = aSel.GetEnd();
+            SetSelection( aSel );
+        }
+    }
+    else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUTPOS )
+    {
+        if ( mpTextEngine->mpIMEInfos && mpTextEngine->mpIMEInfos->nLen )
+        {
+            const CommandExtTextInputPosData* pData = rCEvt.GetExtTextInputPosData();
+
+            USHORT nChars = pData->GetChars();
+            USHORT nStart = mpTextEngine->mpIMEInfos->aPos.GetIndex() + pData->GetFirstPos();
+
+            TextPaM aPaM( mpTextEngine->mpIMEInfos->aPos );
+            Rectangle* pRects = new Rectangle[ nChars ];
+            for ( USHORT n = 0; n < nChars; n++ )
+            {
+                aPaM.GetIndex() = nStart+n;
+                Rectangle aR1 = mpTextEngine->PaMtoEditCursor( aPaM, 0 );
+                aR1.Move( -GetStartDocPos().X(), -GetStartDocPos().Y() );
+                aPaM.GetIndex()++;
+                Rectangle aR2 = mpTextEngine->PaMtoEditCursor( aPaM );
+                aR2.Move( -GetStartDocPos().X(), -GetStartDocPos().Y() );
+
+                pRects[n] = aR1;
+                pRects[n].Right() = aR2.Left();
+
+            }
+            GetWindow()->SetExtTextInputPos( pData->GetFirstPos(), pData->GetChars(), pRects );
+            delete pRects;
+        }
+        else
+            GetWindow()->SetExtTextInputPos( 0, 0, NULL );
+    }
+    else
+    {
         mpSelEngine->Command( rCEvt );
+    }
 }
 
 void TextView::ShowCursor( BOOL bGotoCursor, BOOL bForceVisCursor )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: mt $ $Date: 2000-10-13 09:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #include <unotools/processfactory.hxx>
 #endif
 
+#include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
 
 using namespace ::com::sun::star;
@@ -139,9 +140,11 @@ TextEngine::TextEngine() : maWordDelimiters( String::CreateFromAscii( RTL_CONSTA
     mnMaxTextLen    = 0;
     mnCurTextHeight = 0;
 
-    mpUndoManager = 0;
+    mpUndoManager   = NULL;
 
     mpIdleFormatter = new IdleFormatter;
+
+       mpIMEInfos       = NULL;
 
     mpRefDev = new VirtualDevice;
 
@@ -165,6 +168,7 @@ TextEngine::~TextEngine()
     delete mpViews; // nur die Liste, nicht die Vies
     delete mpRefDev;
     delete mpUndoManager;
+    delete mpIMEInfos;
 }
 
 void TextEngine::InsertView( TextView* pTextView )
@@ -1317,6 +1321,35 @@ void TextEngine::SeekCursor( ULONG nPara, USHORT nPos, Font& rFont )
             pAttrib->GetAttr().SetFont( rFont );
         }
     }
+
+    if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetPara() == nPara ) &&
+        ( nPos > mpIMEInfos->aPos.GetIndex() ) && ( nPos <= ( mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen ) ) )
+    {
+        sal_uInt16 nAttr = mpIMEInfos->pAttribs[ nPos - mpIMEInfos->aPos.GetIndex() - 1 ];
+        if ( nAttr & EXTTEXTINPUT_ATTR_UNDERLINE )
+            rFont.SetUnderline( UNDERLINE_SINGLE );
+        else if ( nAttr & EXTTEXTINPUT_ATTR_BOLDUNDERLINE )
+            rFont.SetUnderline( UNDERLINE_BOLD );
+        else if ( nAttr & EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE )
+            rFont.SetUnderline( UNDERLINE_DOTTED );
+        else if ( nAttr & EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE )
+            rFont.SetUnderline( UNDERLINE_DOTTED );
+        else if ( nAttr & EXTTEXTINPUT_ATTR_REDTEXT )
+            rFont.SetColor( Color( COL_RED ) );
+        if ( nAttr & EXTTEXTINPUT_ATTR_HIGHLIGHT )
+        {
+            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+            rFont.SetColor( rStyleSettings.GetHighlightTextColor() );
+            rFont.SetFillColor( rStyleSettings.GetHighlightColor() );
+            rFont.SetTransparent( FALSE );
+        }
+        else if ( nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE )
+        {
+            rFont.SetUnderline( UNDERLINE_WAVE );
+//          if( pOut )
+//              pOut->SetTextLineColor( Color( COL_LIGHTGRAY ) );
+        }
+    }
 }
 
 void TextEngine::SetUpdateMode( BOOL bUp, TextView* pCurView, BOOL bForceUpdate )
@@ -1616,6 +1649,19 @@ void TextEngine::CreateTextPortions( ULONG nPara, USHORT nStartPos )
         aPositions.Insert( pAttrib->GetEnd() );
     }
     aPositions.Insert( pNode->GetText().Len() );
+
+    if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetPara() == nPara ) )
+    {
+        sal_uInt16 nLastAttr = 0xFFFF;
+        for( sal_uInt16 n = 0; n < mpIMEInfos->nLen; n++ )
+        {
+            if ( mpIMEInfos->pAttribs[n] != nLastAttr )
+            {
+                aPositions.Insert( mpIMEInfos->aPos.GetIndex() + n );
+                nLastAttr = mpIMEInfos->pAttribs[n];
+            }
+        }
+    }
 
     USHORT nTabPos = pNode->GetText().Search( '\t', 0 );
     while ( nTabPos != STRING_NOTFOUND )
