@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-30 15:45:28 $
+ *  last change: $Author: dg $ $Date: 2000-12-03 11:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include "roottree.hxx"
 #include "noderef.hxx"
 #include "objectregistry.hxx"
+
+#ifndef CONFIGMGR_BOOTSTRAP_HXX_
+#include "bootstrap.hxx"
+#endif
 
 #ifndef CONFIGMGR_API_PROVIDER_HXX_
 #include "provider.hxx"
@@ -141,7 +145,7 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     OProviderImpl::OProviderImpl(OProvider* _pProvider,
                                  IConfigSession* _pSession,
-                                 Module& _rModule)
+                                 Module& _rModule, const ConnectionSettings& _rSettings)
                   :m_xDefaultOptions(new OOptions(_rModule.getConverter()))
                   ,m_pTreeMgr(new TreeManager(_pSession, m_xDefaultOptions))
                   ,m_pNewProviders(0)
@@ -157,7 +161,21 @@ namespace configmgr
         rtl::OUString sDefaultLocale(ssDefaultLocale);
         try
         {
-            ISubtree* pSubTree = m_pTreeMgr->requestSubtree(ssUserProfile, m_xDefaultOptions);
+            // if we have a user name, we have to add it for the request and we remember it for the session
+            rtl::OUString sUserName;
+            rtl::OUString sProfile;
+            if (_rSettings.hasUser())
+            {
+                // the username is also part of the connection settings
+                m_xDefaultOptions->setUser(_rSettings.getUser());
+
+                sProfile  = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("["));
+                sProfile  += _rSettings.getUser();
+                sProfile  += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]/"));
+            }
+            sProfile += ssUserProfile;
+
+            ISubtree* pSubTree = m_pTreeMgr->requestSubtree(sProfile, m_xDefaultOptions);
             if (pSubTree)
             {
                 INode* pNode = pSubTree->getChild(ssInternational);
