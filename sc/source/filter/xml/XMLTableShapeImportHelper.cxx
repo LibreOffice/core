@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:49:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,22 +143,22 @@ void XMLTableShapeImportHelper::finishShape(
     {
         if (!pAnnotationContext)
         {
-            Rectangle* pRect = NULL;
+            Rectangle* pRect(NULL);
             sal_Int32 nEndX(-1);
             sal_Int32 nEndY(-1);
             sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
             table::CellAddress aEndCell;
-            rtl::OUString* pRangeList = NULL;
+            rtl::OUString* pRangeList(NULL);
             sal_Int16 nLayerID(-1);
-            for( sal_Int16 i=0; i < nAttrCount; i++ )
+            for( sal_Int16 i=0; i < nAttrCount; ++i )
             {
-                const rtl::OUString& rAttrName = xAttrList->getNameByIndex( i );
-                const rtl::OUString& rValue = xAttrList->getValueByIndex( i );
+                const rtl::OUString& rAttrName(xAttrList->getNameByIndex( i ));
+                const rtl::OUString& rValue(xAttrList->getValueByIndex( i ));
 
                 rtl::OUString aLocalName;
-                sal_uInt16 nPrefix =
+                sal_uInt16 nPrefix(
                     static_cast<ScXMLImport&>(mrImporter).GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                    &aLocalName );
+                                                                    &aLocalName ));
                 if(nPrefix == XML_NAMESPACE_TABLE)
                 {
                     if (IsXMLToken(aLocalName, XML_END_CELL_ADDRESS))
@@ -212,17 +212,15 @@ void XMLTableShapeImportHelper::finishShape(
     }
     else //#99532# this are grouped shapes which should also get the layerid
     {
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
         sal_Int16 nLayerID(-1);
-        for( sal_Int16 i=0; i < nAttrCount; i++ )
+        for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
-            const rtl::OUString& rAttrName = xAttrList->getNameByIndex( i );
-            const rtl::OUString& rValue = xAttrList->getValueByIndex( i );
+            const rtl::OUString& rAttrName(xAttrList->getNameByIndex( i ));
+            const rtl::OUString& rValue(xAttrList->getValueByIndex( i ));
 
             rtl::OUString aLocalName;
-            sal_uInt16 nPrefix =
-                static_cast<ScXMLImport&>(mrImporter).GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                &aLocalName );
+            sal_uInt16 nPrefix(static_cast<ScXMLImport&>(mrImporter).GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName ));
             if(nPrefix == XML_NAMESPACE_TABLE)
             {
                 if (IsXMLToken(aLocalName, XML_TABLE_BACKGROUND))
