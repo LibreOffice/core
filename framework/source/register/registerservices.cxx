@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-02-01 13:31:35 $
+ *  last change: $Author: rt $ $Date: 2001-02-01 16:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <limits>
+#include <ostream>
 
 #ifndef __FRAMEWORK_MACROS_REGISTRATION_HXX_
 #include <macros/registration.hxx>
@@ -116,6 +117,7 @@
 #ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
 #include <services/frame.hxx>
 #endif
+
 
 #ifdef TF_FILTER//MUSTFILTER
     #ifndef __FRAMEWORK_SERVICES_FILTERFACTORY_HXX_
