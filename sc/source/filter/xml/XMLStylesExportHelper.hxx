@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:38:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,9 +174,9 @@ class ScMyDefaultStyles
     ScMyDefaultStyleList* pColDefaults;
 
     sal_Int32 GetStyleNameIndex(const ScFormatRangeStyles* pCellStyles,
-        const sal_uInt16 nTable, const sal_Int32 nPos,
+        const sal_Int32 nTable, const sal_Int32 nPos,
         const sal_Int32 i, const sal_Bool bRow, sal_Bool& bIsAutoStyle);
-    void FillDefaultStyles(const sal_uInt16 nTable,
+    void FillDefaultStyles(const sal_Int32 nTable,
         const sal_Int32 nLastRow, const sal_Int32 nLastCol,
         const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc,
         const sal_Bool bRow);
@@ -184,7 +184,7 @@ public:
     ScMyDefaultStyles() : pRowDefaults(NULL), pColDefaults(NULL) {}
     ~ScMyDefaultStyles();
 
-    void FillDefaultStyles(const sal_uInt16 nTable,
+    void FillDefaultStyles(const sal_Int32 nTable,
         const sal_Int32 nLastRow, const sal_Int32 nLastCol,
         const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc);
 
@@ -263,17 +263,17 @@ public:
 
     void SetRowDefaults(const ScMyDefaultStyleList* pDefaults) { pRowDefaults = pDefaults; }
     void SetColDefaults(const ScMyDefaultStyleList* pDefaults) { pColDefaults = pDefaults; }
-    void AddNewTable(const sal_Int16 nTable);
+    void AddNewTable(const sal_Int32 nTable);
     sal_Bool AddStyleName(rtl::OUString* pString, sal_Int32& rIndex, const sal_Bool bIsAutoStyle = sal_True);
     sal_Int32 GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix, sal_Bool& bIsAutoStyle);
     // does not delete ranges
-    sal_Int32 GetStyleNameIndex(const sal_uInt16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
+    sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
         sal_Bool& bIsAutoStyle) const;
     // deletes not necessary ranges if wanted
-    sal_Int32 GetStyleNameIndex(const sal_uInt16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
+    sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
         sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Bool bRemoveRange = sal_True );
     void GetFormatRanges(const sal_Int32 nStartColumn, const sal_Int32 nEndColumn, const sal_Int32 nRow,
-                    const sal_Int16 nTable, ScRowFormatRanges* pFormatRanges);
+                    const sal_Int32 nTable, ScRowFormatRanges* pFormatRanges);
     void AddRangeStyleName(const com::sun::star::table::CellRangeAddress aCellRangeAddress, const sal_Int32 nStringIndex,
                     const sal_Bool bIsAutoStyle, const sal_Int32 nValidationIndex, const sal_Int32 nNumberFormat);
     rtl::OUString* GetStyleNameByIndex(const sal_Int32 nIndex, const sal_Bool bIsAutoStyle);
@@ -288,10 +288,10 @@ public:
     ScColumnRowStylesBase();
     ~ScColumnRowStylesBase();
 
-    virtual void AddNewTable(const sal_Int16 nTable, const sal_Int32 nFields) = 0;
+    virtual void AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields) = 0;
     sal_Int32 AddStyleName(rtl::OUString* pString);
     sal_Int32 GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix);
-    virtual rtl::OUString* GetStyleName(const sal_Int16 nTable, const sal_Int32 nField) = 0;
+    virtual rtl::OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField) = 0;
     rtl::OUString* GetStyleNameByIndex(const sal_Int32 nIndex);
 };
 
@@ -315,11 +315,11 @@ public:
     ScColumnStyles();
     ~ScColumnStyles();
 
-    virtual void AddNewTable(const sal_Int16 nTable, const sal_Int32 nFields);
-    sal_Int32 GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nField,
+    virtual void AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields);
+    sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField,
         sal_Bool& bIsVisible);
-    void AddFieldStyleName(const sal_Int16 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex, const sal_Bool bIsVisible);
-    virtual rtl::OUString* GetStyleName(const sal_Int16 nTable, const sal_Int32 nField);
+    void AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex, const sal_Bool bIsVisible);
+    virtual rtl::OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField);
 };
 
 typedef std::vector<sal_Int32>  ScMysalInt32Vec;
@@ -333,10 +333,10 @@ public:
     ScRowStyles();
     ~ScRowStyles();
 
-    virtual void AddNewTable(const sal_Int16 nTable, const sal_Int32 nFields);
-    sal_Int32 GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nField);
-    void AddFieldStyleName(const sal_Int16 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex);
-    virtual rtl::OUString* GetStyleName(const sal_Int16 nTable, const sal_Int32 nField);
+    virtual void AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields);
+    sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField);
+    void AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex);
+    virtual rtl::OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField);
 };
 
 #endif
