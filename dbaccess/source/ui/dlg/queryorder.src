@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:26:07 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,11 @@ ModalDialog DLG_ORDERCRIT
             < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "ascendente" ; Default ; > ;
+        < "descendente" ; Default ; > ;
+    };
     };
     ListBox LB_ORDERFIELD2
     {
@@ -350,6 +355,11 @@ ModalDialog DLG_ORDERCRIT
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "ascendente" ; Default ; > ;
+        < "descendente" ; Default ; > ;
     };
     };
     ListBox LB_ORDERFIELD3
@@ -484,6 +494,11 @@ ModalDialog DLG_ORDERCRIT
             < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "ascendente" ; Default ; > ;
+        < "descendente" ; Default ; > ;
+    };
     };
     FixedText FT_ORDERFIELD
     {
@@ -513,6 +528,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ korean ] = "ÇÊµå ÀÌ¸§";
         Text[ turkish ] = "Alan adý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre de campo";
     };
 
     FixedText FT_ORDERVALUE
@@ -543,6 +559,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ korean ] = "¼ø¼­";
         Text[ turkish ] = "Sýra";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Orden";
     };
 
     FixedText FT_ORDERAFTER1
@@ -572,6 +589,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ korean ] = "±× ´ÙÀ½";
         Text[ turkish ] = "Sonra";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "detrás";
     };
     FixedText FT_ORDERAFTER2
     {
@@ -600,6 +618,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ korean ] = "±× ´ÙÀ½";
         Text[ turkish ] = "Sonra";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "detrás";
     };
     FixedText FT_ORDEROPER
     {
@@ -629,6 +648,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ korean ] = "¸µÅ©";
         Text[ turkish ] = "Ýþleç";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Vínculo";
     };
     FixedText FT_ORDERDIR
     {
@@ -658,6 +678,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ korean ] = "¼ø¼­";
         Text[ turkish ] = "Sýra";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Orden";
     };
     OKButton BT_OK
     {
@@ -705,6 +726,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ korean ] = "Á¤·Ä";
         Text[ turkish ] = "Sýralama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Orden";
     };
     String STR_NOENTRY
     {
@@ -731,6 +753,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ korean ] = "<¾øÀ½>";
         Text[ turkish ] = "<hiçbiri>";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "<ninguno>";
     };
     Text[ chinese_simplified ] = "ÅÅÐò";
     Text[ russian ] = "Ñîðòèðîâêà";
@@ -742,4 +765,5 @@ ModalDialog DLG_ORDERCRIT
     Text[ korean ] = "Á¤·Ä";
     Text[ turkish ] = "Sýralama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Orden";
 };
