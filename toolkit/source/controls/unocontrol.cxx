@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:17:20 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,9 +185,9 @@ static Sequence< ::rtl::OUString> lcl_ImplGetPropertyNames( const Reference< XMu
         Sequence< Property> aProps = xPSInf->getProperties();
         sal_Int32 nLen = aProps.getLength();
         aNames = Sequence< ::rtl::OUString>( nLen );
-        ::rtl::OUString* pNames = aNames.getArray() + nLen - 1;
-        const Property* pProps = aProps.getConstArray() + nLen - 1;
-        for ( sal_uInt32 n = nLen; n; --n, --pProps, --pNames)
+        ::rtl::OUString* pNames = aNames.getArray();
+        const Property* pProps = aProps.getConstArray();
+        for ( sal_uInt32 n = 0; n < nLen; ++n, ++pProps, ++pNames)
             *pNames = pProps->Name;
     }
     return aNames;
