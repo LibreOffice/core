@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-07 12:43:36 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,13 +73,19 @@
 
 #include <svx/dialogs.hrc>
 
-#ifdef MAC
 #ifdef ITEMID_FONTLIST
 #undef ITEMID_FONTLIST
 #endif
-#endif
 #define ITEMID_FONTLIST     SID_ATTR_CHAR_FONTLIST
+
+#ifdef ITEMID_ESCAPEMENT
+#undef ITEMID_ESCAPEMENT
+#endif
 #define ITEMID_ESCAPEMENT   SID_ATTR_CHAR_ESCAPEMENT
+
+#ifdef ITEMID_CASEMAP
+#undef ITEMID_CASEMAP
+#endif
 #define ITEMID_CASEMAP      SID_ATTR_CHAR_CASEMAP
 
 #include <svx/chardlg.hxx>
@@ -112,7 +118,7 @@
 #include <svx/xtable.hxx>
 #endif
 
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "tabtempl.hxx"
 #include "tabtempl.hrc"
 #include "sdresid.hxx"
