@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-22 16:59:54 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,7 +736,7 @@ Sequence< ::rtl::OUString > BasicIDE::GetMethodNames( SfxObjectShell* pShell, co
     ::rtl::OUString aOUSource = GetModule( pShell, rLibName, rModName );
 
     SbModuleRef xModule = new SbModule( rModName );
-    xModule->SetSource( String( aOUSource ) );
+    xModule->SetSource32( aOUSource );
     USHORT nCount = xModule->GetMethods()->Count();
     Sequence< ::rtl::OUString > aSeqMethods( nCount );
 
