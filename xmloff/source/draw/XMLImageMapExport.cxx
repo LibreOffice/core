@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLImageMapExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 12:59:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,8 +438,12 @@ void XMLImageMapExport::ExportPolygon(
 
     // parameters svg:x, svg:y, svg:width, svg:height
     OUStringBuffer aBuffer;
-    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_X, XML_0 );
-    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y, XML_0 );
+    rExport.GetMM100UnitConverter().convertMeasure(aBuffer, 0);
+    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_X,
+                          aBuffer.makeStringAndClear() );
+    rExport.GetMM100UnitConverter().convertMeasure(aBuffer, 0);
+    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y,
+                          aBuffer.makeStringAndClear() );
     rExport.GetMM100UnitConverter().convertMeasure(aBuffer, nWidth);
     rExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
                           aBuffer.makeStringAndClear() );
