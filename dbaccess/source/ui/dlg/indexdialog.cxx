@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 05:59:23 $
+ *  last change: $Author: avy $ $Date: 2001-03-22 07:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,7 +572,7 @@ namespace dbaui
         if (pSelected)
         {
             // the descriptor
-            OIndexCollection::const_iterator aSelected = static_cast<OIndexCollection::const_iterator>(pSelected->GetUserData());
+            OIndexCollection::const_iterator aSelected = static_cast<OIndexCollection::iterator>(pSelected->GetUserData());
             if (aSelected->isModified() || aSelected->isNew())
             {
                 QueryBox aQuestion(this, ModuleRes(QUERY_SAVE_CURRENT_INDEX));
@@ -725,7 +725,7 @@ namespace dbaui
         if (_pEntry)
         {
             // the descriptor of the selected index
-            OIndexCollection::const_iterator aSelectedIndex = static_cast<OIndexCollection::const_iterator>(_pEntry->GetUserData());
+            OIndexCollection::const_iterator aSelectedIndex = static_cast<OIndexCollection::iterator>(_pEntry->GetUserData());
 
             // fill the controls
             m_aUnique.Check(aSelectedIndex->bUnique);
@@ -794,6 +794,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/19 05:59:23  fs
+ *  check plausibility before saving
+ *
  *  Revision 1.1  2001/03/16 16:23:02  fs
  *  initial checkin - index design dialog and friends
  *
