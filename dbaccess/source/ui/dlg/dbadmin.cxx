@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-31 16:01:33 $
+ *  last change: $Author: fs $ $Date: 2001-08-01 08:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -915,26 +915,32 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
             addDetailPage(TAB_PAGE_USERADMIN, STR_PAGETITLE_USERADMIN, OUserAdmin::Create);
             addDetailPage(TAB_PAG_ADABAS_SETTINGS, STR_PAGETITLE_ADABAS_STATISTIC, OAdabasAdminSettings::Create);
             addDetailPage(PAGE_ADABAS, STR_PAGETITLE_ADABAS, OAdabasDetailsPage::Create);
-            {
-//              Size aOldSize = pTabControl->GetSizePixel();
-//              pTabControl->SetTabPageSizePixel( ... );
-//              Size aNewSize = pTabControl->GetSizePixel();
-//              if ( aOldSize != aNewSize )
-//                  pTabDialog->AdjustLayout();
-            }
             break;
 
         case DST_ADDRESSBOOK:
-            if(getDatasourceType(*GetExampleSet()) == DST_ADDRESSBOOK)
+        {
+            String sConnectionURL = _pTabPage->getConnectionURL( );
+            switch ( AddressBookTypes::getAddressType( sConnectionURL ) )
             {
-                String sConnectionURL;
-                SFX_ITEMSET_GET(*GetExampleSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
-                sConnectionURL = pUrlItem->GetValue();
-                if ( ABT_LDAP == AddressBookTypes::getAddressType( sConnectionURL ) )
+                case ABT_LDAP:
                     addDetailPage(PAGE_LDAP,STR_PAGETITLE_LDAP,OLDAPDetailsPage::Create);
+                    break;
+
+                case ABT_UNKNOWN:
+                    // no sub-type selected, yet
+                    // -> default it
+#ifdef UNX
+                    sConnectionURL = AddressBookTypes::getAddressURL( ABT_MORK );
+#else
+                    sConnectionURL = AddressBookTypes::getAddressURL( ABT_OE );
+#endif
+                    // re-initialize the current page
+                    _pTabPage->changeConnectionURL( sConnectionURL );
+                    break;
             }
             _pTabPage->disableConnectionURL();
-            break;
+        }
+        break;
     }
 
     if (bResetPasswordRequired)
@@ -2012,6 +2018,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.68  2001/07/31 16:01:33  fs
+ *  #88530# changes to operate the dialog in a mode where no type change is possible
+ *
  *  Revision 1.67  2001/07/30 11:31:52  fs
  *  #88530# changes to allow operating the dialog in a 'edit one single data source only' mode
  *
