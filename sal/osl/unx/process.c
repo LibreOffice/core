@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: svesik $ $Date: 2001-05-14 15:27:17 $
+ *  last change: $Author: obr $ $Date: 2001-06-08 13:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,6 @@ typedef struct {
     oslProcessOption m_options;
     const sal_Char*  m_pszDir;
     const sal_Char*  m_pszEnv[MAX_ENVS + 1];
-    oslIOResource*   m_pRes;
     uid_t            m_uid;
     gid_t            m_gid;
     sal_Char*        m_name;
@@ -150,7 +149,6 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 oslSecurity Security,
                                                 sal_Char *pszDirectory,
                                                 sal_Char *pszEnvironments[],
-                                                oslIOResource* pResources,
                                                 oslProcess *pProcess);
 oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sal_Char* pszPath,
                                         sal_Char Separator, sal_Char *pszBuffer, sal_uInt32 Max);
@@ -807,19 +805,6 @@ static void ChildStatusProc(void *pData)
         /* Child */
         close(channel[0]);
 
-        /* if we transfer resources give our parent a chance to
-           create the communiction pipe */
-        if (data.m_pRes)
-        {
-/*              pid_t   id; */
-
-/*              while (((i = read(channel[1], &id, sizeof(id))) < 0)) */
-/*              { */
-/*                  if (errno != EINTR) */
-/*                      break; */
-/*              } */
-        }
-
         if ((data.m_uid != (uid_t)-1) && ((data.m_uid != getuid()) || (data.m_gid != getgid())))
         {
             OSL_ASSERT(geteuid() == 0);     /* must be root */
@@ -870,15 +855,6 @@ static void ChildStatusProc(void *pData)
         Pipe* rpipe;
 
         close(channel[1]);
-
-        if (pdata->m_pRes)
-        {
-/*              jbu: removed
-/*              rpipe = openPipe(pid); */
-/*              write(channel[0], &pid, sizeof(pid)); */
-
-/*              sendIOResources(rpipe, pdata->m_pRes); */
-        }
 
         while (((i = read(channel[0], &status, sizeof(status))) < 0))
         {
@@ -955,34 +931,27 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
                                             rtl_uString *ustrWorkDir,
                                             rtl_uString *ustrEnvironment[],
                                             sal_uInt32   nEnvironmentVars,
-                                            oslIOResource* pResources,
                                             oslProcess *pProcess)
 {
 
     oslProcessError Error;
-    rtl_String* strImageName=0;
-    rtl_String* strWorkDir=0;
     sal_Char* pszWorkDir=0;
     sal_Char** pArguments=0;
     sal_Char** pEnvironment=0;
     unsigned int index;
 
-    char imagePath[PATH_MAX] = "";
+    char szImagePath[PATH_MAX] = "";
+    char szWorkDir[PATH_MAX] = "";
 
     if ( ustrImageName && ustrImageName->length )
     {
-        FileURLToPath( imagePath, PATH_MAX, ustrImageName );
+        FileURLToPath( szImagePath, PATH_MAX, ustrImageName );
     }
 
-    if ( ustrWorkDir != 0 && ustrWorkDir->buffer[0] != 0 )
+    if ( ustrWorkDir != 0 && ustrWorkDir->length )
     {
-        rtl_uString2String( &strWorkDir,
-                            rtl_uString_getStr(ustrWorkDir),
-                            rtl_uString_getLength(ustrWorkDir),
-                            osl_getThreadTextEncoding(),
-                            OUSTRING_TO_OSTRING_CVTFLAGS );
-
-        pszWorkDir =  rtl_string_getStr(strWorkDir);
+        FileURLToPath( szWorkDir, PATH_MAX, ustrWorkDir );
+        pszWorkDir = szWorkDir;
     }
 
     if ( pArguments == 0 && nArguments > 0 )
@@ -1028,13 +997,12 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
     }
 
 
-    Error = osl_psz_executeProcess(imagePath,
+    Error = osl_psz_executeProcess(szImagePath,
                                    pArguments,
                                    Options,
                                    Security,
                                    pszWorkDir,
                                    pEnvironment,
-                                   pResources,
                                    pProcess);
 
     if ( pArguments != 0 )
@@ -1061,12 +1029,6 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
         free(pEnvironment);
     }
 
-    if ( strWorkDir != 0 )
-    {
-        rtl_string_release(strWorkDir);
-    }
-
-
     return Error;
 }
 
@@ -1077,7 +1039,6 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 oslSecurity Security,
                                                 sal_Char *pszDirectory,
                                                 sal_Char *pszEnvironments[],
-                                                oslIOResource* pResources,
                                                 oslProcess *pProcess)
 {
     int     i;
@@ -1126,8 +1087,6 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
     }
     else
          Data.m_pszEnv[0] = NULL;
-
-    Data.m_pRes = pResources;
 
     if (Security != NULL)
     {
@@ -1788,12 +1747,15 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
 
     Error=osl_psz_getEnvironment(pszVar,pszValue,sizeof(pszValue));
 
-    rtl_string2UString(
-        ustrValue,
-        pszValue,
-        rtl_str_getLength( pszValue ),
-        osl_getThreadTextEncoding(),
-        OUSTRING_TO_OSTRING_CVTFLAGS );
+    if( osl_Process_E_None == Error )
+    {
+        rtl_string2UString(
+            ustrValue,
+            pszValue,
+            rtl_str_getLength( pszValue ),
+            osl_getThreadTextEncoding(),
+            OUSTRING_TO_OSTRING_CVTFLAGS );
+    }
 
     if ( strVar != 0 )
     {

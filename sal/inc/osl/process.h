@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-08 16:35:34 $
+ *  last change: $Author: obr $ $Date: 2001-06-08 13:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,18 +143,6 @@ typedef sal_Int32 oslDescriptorFlag;
 #   pragma pack(1)
 #endif
 
-typedef union {
-    oslSocket Socket;
-    oslFileHandle File;
-} oslResourceDescriptor;
-
-/** */
-typedef struct {
-    oslDescriptorType     Type;
-    oslDescriptorFlag     Flags;
-    oslResourceDescriptor Descriptor;
-} oslIOResource;
-
 typedef struct {
     sal_uInt32              Size;
     oslProcessData          Fields;
@@ -194,7 +182,6 @@ typedef void* oslProcess;
     @param pProcess [out] points to a oslProcess variable, in wich the processhandle is returned.
     @return osl_Process_E_None if the executable could be started, otherwise an error-code.
     @see osl_freeProcessHandle
-    @see osl_getIOResources
     @see osl_loginUser
 */
 oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
@@ -205,7 +192,6 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
                                             rtl_uString *strWorkDir,
                                             rtl_uString *strEnvironment[],
                                             sal_uInt32   nEnvironmentVars,
-                                            oslIOResource* pResources,
                                             oslProcess *pProcess);
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-07 09:24:06 $
+ *  last change: $Author: obr $ $Date: 2001-06-08 13:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,6 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
                                             rtl_uString *ustrWorkDir,
                                             rtl_uString *ustrEnvironmentVars[],
                                             sal_uInt32   nEnvironmentVars,
-                                            oslIOResource* pResources,
                                             oslProcess *pProcess)
 {
     sal_Int32 nIndex;
@@ -323,15 +322,6 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
         oslProcessImpl* pProcImpl;
 
         CloseHandle( processInfo.hThread );
-
-        if (pResources)
-        {
-            // not needed anymore
-            OSL_ASSERT( 0 );
-//              pipe = openPipe(procinfo.dwProcessId);
-
-//              sendIOResources(pipe, pResources, procinfo.hProcess);
-        }
 
         pProcImpl = rtl_allocateMemory( sizeof(oslProcessImpl) );
         pProcImpl->m_hProcess  = processInfo.hProcess;
