@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copy.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:28:50 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,26 @@ namespace cppu
 //##################################################################################################
 //#### copy construction ###########################################################################
 //##################################################################################################
+
+//------------------------------------------------------------------------------
+inline uno_Sequence * allocSeq(
+    sal_Int32 nElementSize, sal_Int32 nElements )
+{
+    OSL_ASSERT( nElements >= 0 && nElementSize >= 0 );
+    uno_Sequence * pSeq = 0;
+    sal_uInt32 nSize = calcSeqMemSize( nElementSize, nElements );
+    if (nSize > 0)
+    {
+        pSeq = (uno_Sequence *) rtl_allocateMemory( nSize );
+        if (pSeq != 0)
+        {
+            // header init
+            pSeq->nRefCount = 1;
+            pSeq->nElements = nElements;
+        }
+    }
+    return pSeq;
+}
 
 //--------------------------------------------------------------------------------------------------
 void copyConstructStruct(
@@ -176,12 +196,13 @@ inline void _copyConstructUnion(
     *(sal_Int64 *)pDest = *(sal_Int64 *)pSource;
     typelib_typedescriptionreference_release( pSetType );
 }
-//--------------------------------------------------------------------------------------------------
-void copyConstructSequence(
-    uno_Sequence ** ppDest, uno_Sequence * pSource,
+
+//------------------------------------------------------------------------------
+uno_Sequence * copyConstructSequence(
+    uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
-    uno_AcquireFunc acquire, uno_Mapping * mapping )
-    SAL_THROW ( () );
+    uno_AcquireFunc acquire, uno_Mapping * mapping );
+
 //--------------------------------------------------------------------------------------------------
 inline void _copyConstructAnyFromData(
     uno_Any * pDestAny, void * pSource,
@@ -333,16 +354,16 @@ inline void _copyConstructAnyFromData(
         pDestAny->pData = &pDestAny->pReserved;
         if (pTypeDescr)
         {
-            copyConstructSequence(
-                (uno_Sequence **)&pDestAny->pReserved, *(uno_Sequence **)pSource,
+            *(uno_Sequence **)&pDestAny->pReserved = copyConstructSequence(
+                *(uno_Sequence **)pSource,
                 ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
                 acquire, mapping );
         }
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            copyConstructSequence(
-                (uno_Sequence **)&pDestAny->pReserved, *(uno_Sequence **)pSource,
+            *(uno_Sequence **)&pDestAny->pReserved = copyConstructSequence(
+                *(uno_Sequence **)pSource,
                 ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
                 acquire, mapping );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
@@ -536,7 +557,7 @@ inline void _copyConstructAny(
                 break;
             case typelib_TypeClass_SEQUENCE:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(uno_Sequence **)&pDestAny->pReserved = _getEmptySequence();
+                *(uno_Sequence **)&pDestAny->pReserved = createEmptySequence();
                 break;
             case typelib_TypeClass_INTERFACE:
                 pDestAny->pData = &pDestAny->pReserved;
@@ -546,18 +567,19 @@ inline void _copyConstructAny(
         }
     }
 }
-//--------------------------------------------------------------------------------------------------
-inline void _copyConstructSequence(
-    uno_Sequence ** ppDest, uno_Sequence * pSource,
+//------------------------------------------------------------------------------
+inline uno_Sequence * icopyConstructSequence(
+    uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    SAL_THROW ( () )
 {
     typelib_TypeClass eTypeClass = pElementType->eTypeClass;
-    if (!mapping || (eTypeClass <= typelib_TypeClass_ENUM && eTypeClass != typelib_TypeClass_ANY))
+    if (!mapping ||
+        (eTypeClass <= typelib_TypeClass_ENUM &&
+         eTypeClass != typelib_TypeClass_ANY))
     {
         ::osl_incrementInterlockedCount( &pSource->nRefCount );
-        *ppDest = pSource;
+        return pSource;
     }
     else // create new sequence
     {
@@ -569,23 +591,27 @@ inline void _copyConstructSequence(
             {
             case typelib_TypeClass_ANY:
             {
-                pDest = (uno_Sequence *)::rtl_allocateMemory(
-                    SAL_SEQUENCE_HEADER_SIZE + (nElements * sizeof(uno_Any)) );
-                uno_Any * pDestElements = (uno_Any *)pDest->elements;
-                uno_Any * pSourceElements = (uno_Any *)pSource->elements;
-                for ( sal_Int32 nPos = nElements; nPos--; )
+                pDest = allocSeq( sizeof (uno_Any), nElements );
+                if (pDest != 0)
                 {
-                    typelib_TypeDescriptionReference * pType = pSourceElements[nPos].pType;
-                    if (typelib_TypeClass_VOID == pType->eTypeClass)
+                    uno_Any * pDestElements = (uno_Any *)pDest->elements;
+                    uno_Any * pSourceElements = (uno_Any *)pSource->elements;
+                    for ( sal_Int32 nPos = nElements; nPos--; )
                     {
-                        CONSTRUCT_EMPTY_ANY( &pDestElements[nPos] );
-                    }
-                    else
-                    {
-                        _copyConstructAnyFromData(
-                            &pDestElements[nPos], pSourceElements[nPos].pData,
-                            pType, 0,
-                            acquire, mapping );
+                        typelib_TypeDescriptionReference * pType =
+                            pSourceElements[nPos].pType;
+                        if (typelib_TypeClass_VOID == pType->eTypeClass)
+                        {
+                            CONSTRUCT_EMPTY_ANY( &pDestElements[nPos] );
+                        }
+                        else
+                        {
+                            _copyConstructAnyFromData(
+                                &pDestElements[nPos],
+                                pSourceElements[nPos].pData,
+                                pType, 0,
+                                acquire, mapping );
+                        }
                     }
                 }
                 break;
@@ -597,16 +623,19 @@ inline void _copyConstructSequence(
                 TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
                 sal_Int32 nElementSize = pElementTypeDescr->nSize;
                 char * pSourceElements = pSource->elements;
-                pDest = (uno_Sequence *)::rtl_allocateMemory(
-                    SAL_SEQUENCE_HEADER_SIZE + (nElements * nElementSize) );
-                char * pElements = pDest->elements;
-                for ( sal_Int32 nPos = nElements; nPos--; )
+                pDest = allocSeq( nElementSize, nElements );
+                if (pDest != 0)
                 {
-                    _copyConstructStruct(
-                        pElements + (nPos * nElementSize),
-                        pSourceElements + (nPos * nElementSize),
-                        (typelib_CompoundTypeDescription *)pElementTypeDescr,
-                        acquire, mapping );
+                    char * pElements = pDest->elements;
+                    for ( sal_Int32 nPos = nElements; nPos--; )
+                    {
+                        _copyConstructStruct(
+                            pElements + (nPos * nElementSize),
+                            pSourceElements + (nPos * nElementSize),
+                            (typelib_CompoundTypeDescription *)
+                            pElementTypeDescr,
+                            acquire, mapping );
+                    }
                 }
                 TYPELIB_DANGER_RELEASE( pElementTypeDescr );
                 break;
@@ -617,16 +646,18 @@ inline void _copyConstructSequence(
                 TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
                 sal_Int32 nElementSize = pElementTypeDescr->nSize;
                 char * pSourceElements = pSource->elements;
-                pDest = (uno_Sequence *)::rtl_allocateMemory(
-                    SAL_SEQUENCE_HEADER_SIZE + (nElements * nElementSize) );
-                char * pElements = pDest->elements;
-                for ( sal_Int32 nPos = nElements; nPos--; )
+                pDest = allocSeq( nElementSize, nElements );
+                if (pDest != 0)
                 {
-                    _copyConstructArray(
-                        pElements + (nPos * nElementSize),
-                        pSourceElements + (nPos * nElementSize),
-                        (typelib_ArrayTypeDescription *)pElementTypeDescr,
-                        acquire, mapping );
+                    char * pElements = pDest->elements;
+                    for ( sal_Int32 nPos = nElements; nPos--; )
+                    {
+                        _copyConstructArray(
+                            pElements + (nPos * nElementSize),
+                            pSourceElements + (nPos * nElementSize),
+                            (typelib_ArrayTypeDescription *)pElementTypeDescr,
+                            acquire, mapping );
+                    }
                 }
                 TYPELIB_DANGER_RELEASE( pElementTypeDescr );
                 break;
@@ -636,91 +667,112 @@ inline void _copyConstructSequence(
                 typelib_TypeDescription * pElementTypeDescr = 0;
                 TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
                 sal_Int32 nElementSize = pElementTypeDescr->nSize;
-                sal_Int32 nValueOffset = ((typelib_UnionTypeDescription *)pElementTypeDescr)->nValueOffset;
-                pDest = (uno_Sequence *)::rtl_allocateMemory(
-                    SAL_SEQUENCE_HEADER_SIZE + (nElements * nElementSize) );
-                char * pElements = pDest->elements;
-                char * pSourceElements = pSource->elements;
-                for ( sal_Int32 nPos = nElements; nPos--; )
+                sal_Int32 nValueOffset =
+                    ((typelib_UnionTypeDescription *)
+                     pElementTypeDescr)->nValueOffset;
+                pDest = allocSeq( nElementSize, nElements );
+                if (pDest != 0)
                 {
-                    char * pDest = pElements + (nPos * nElementSize);
-                    char * pSource = pSourceElements + (nPos * nElementSize);
+                    char * pElements = pDest->elements;
+                    char * pSourceElements = pSource->elements;
+                    for ( sal_Int32 nPos = nElements; nPos--; )
+                    {
+                        char * pDest =
+                            pElements + (nPos * nElementSize);
+                        char * pSource =
+                            pSourceElements + (nPos * nElementSize);
 
-                    typelib_TypeDescriptionReference * pSetType = _unionGetSetType(
-                        pSource, pElementTypeDescr );
-                    ::uno_type_copyAndConvertData(
-                        pDest + nValueOffset, pSource + nValueOffset,
-                        pSetType, mapping );
-                    *(sal_Int64 *)pDest = *(sal_Int64 *)pSource;
-                    ::typelib_typedescriptionreference_release( pSetType );
+                        typelib_TypeDescriptionReference * pSetType =
+                            _unionGetSetType( pSource, pElementTypeDescr );
+                        ::uno_type_copyAndConvertData(
+                            pDest + nValueOffset, pSource + nValueOffset,
+                            pSetType, mapping );
+                        *(sal_Int64 *)pDest = *(sal_Int64 *)pSource;
+                        ::typelib_typedescriptionreference_release( pSetType );
+                    }
                 }
                 TYPELIB_DANGER_RELEASE( pElementTypeDescr );
                 break;
             }
             case typelib_TypeClass_SEQUENCE: // sequence of sequence
             {
-                typelib_TypeDescription * pElementTypeDescr = 0;
-                TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
-                typelib_TypeDescriptionReference * pSeqElementType =
-                    ((typelib_IndirectTypeDescription *)pElementTypeDescr)->pType;
-                pDest = (uno_Sequence *)::rtl_allocateMemory(
-                    SAL_SEQUENCE_HEADER_SIZE + (nElements * sizeof(uno_Sequence *)) );
-                char * pElements = pDest->elements;
-                uno_Sequence ** pSourceElements = (uno_Sequence **)pSource->elements;
-                for ( sal_Int32 nPos = nElements; nPos--; )
+                pDest = allocSeq( sizeof (uno_Sequence *), nElements );
+                if (pDest != 0)
                 {
-                    copyConstructSequence(
-                        (uno_Sequence **)pElements + nPos, pSourceElements[nPos],
-                        pSeqElementType,
-                        acquire, mapping );
+                    typelib_TypeDescription * pElementTypeDescr = 0;
+                    TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
+                    typelib_TypeDescriptionReference * pSeqElementType =
+                        ((typelib_IndirectTypeDescription *)
+                         pElementTypeDescr)->pType;
+
+                    uno_Sequence ** pDestElements =
+                        (uno_Sequence **) pDest->elements;
+                    uno_Sequence ** pSourceElements =
+                        (uno_Sequence **) pSource->elements;
+                    for ( sal_Int32 nPos = nElements; nPos--; )
+                    {
+                        uno_Sequence * pNew = copyConstructSequence(
+                            pSourceElements[nPos],
+                            pSeqElementType,
+                            acquire, mapping );
+                        OSL_ASSERT( pNew != 0 );
+                        // ought never be a memory allocation problem,
+                        // because of reference counted sequence handles
+                        pDestElements[ nPos ] = pNew;
+                    }
+
+                    TYPELIB_DANGER_RELEASE( pElementTypeDescr );
                 }
-                TYPELIB_DANGER_RELEASE( pElementTypeDescr );
                 break;
             }
             case typelib_TypeClass_INTERFACE:
             {
-                pDest = (uno_Sequence *)::rtl_allocateMemory(
-                    SAL_SEQUENCE_HEADER_SIZE + (nElements * sizeof(void *)) );
-                char * pElements = pDest->elements;
-                void ** pSourceElements = (void **)pSource->elements;
-                if (mapping)
+                pDest = allocSeq( sizeof (void *), nElements );
+                if (pDest != 0)
                 {
-                    typelib_TypeDescription * pElementTypeDescr = 0;
-                    TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
-                    for ( sal_Int32 nPos = nElements; nPos--; )
+                    char * pElements = pDest->elements;
+                    void ** pSourceElements = (void **)pSource->elements;
+                    if (mapping)
                     {
-                        ((void **)pElements)[nPos] = 0;
-                        if (((void **)pSourceElements)[nPos])
+                        typelib_TypeDescription * pElementTypeDescr = 0;
+                        TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
+                        for ( sal_Int32 nPos = nElements; nPos--; )
                         {
-                            (*mapping->mapInterface)(
-                                mapping, (void **)pElements + nPos,
-                                pSourceElements[nPos],
-                                (typelib_InterfaceTypeDescription *)pElementTypeDescr );
+                            ((void **)pElements)[nPos] = 0;
+                            if (((void **)pSourceElements)[nPos])
+                            {
+                                (*mapping->mapInterface)(
+                                    mapping, (void **)pElements + nPos,
+                                    pSourceElements[nPos],
+                                    (typelib_InterfaceTypeDescription *)
+                                    pElementTypeDescr );
+                            }
                         }
+                        TYPELIB_DANGER_RELEASE( pElementTypeDescr );
                     }
-                    TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-                }
-                else
-                {
-                    for ( sal_Int32 nPos = nElements; nPos--; )
+                    else
                     {
-                        _acquire( ((void **)pElements)[nPos] = pSourceElements[nPos], acquire );
+                        for ( sal_Int32 nPos = nElements; nPos--; )
+                        {
+                            ((void **)pElements)[nPos] = pSourceElements[nPos];
+                            _acquire( ((void **)pElements)[nPos], acquire );
+                        }
                     }
                 }
                 break;
             }
             default:
-                pDest = (uno_Sequence *)::rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE );
+                OSL_ENSURE( 0, "### unexepcted sequence element type!" );
+                pDest = 0;
                 break;
             }
         }
-        else
+        else // empty sequence
         {
-            pDest = (uno_Sequence *)::rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE );
+            pDest = allocSeq( 0, 0 );
         }
-        pDest->nElements = nElements;
-        pDest->nRefCount = 1;
-        *ppDest = pDest;
+
+        return pDest;
     }
 }
 
@@ -839,16 +891,16 @@ inline void _copyConstructData(
         {
             if (pTypeDescr)
             {
-                _copyConstructSequence(
-                    (uno_Sequence **)pDest, *(uno_Sequence **)pSource,
+                *(uno_Sequence **)pDest = icopyConstructSequence(
+                    *(uno_Sequence **)pSource,
                     ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
                     acquire, mapping );
             }
             else
             {
                 TYPELIB_DANGER_GET( &pTypeDescr, pType );
-                _copyConstructSequence(
-                    (uno_Sequence **)pDest, *(uno_Sequence **)pSource,
+                *(uno_Sequence **)pDest = icopyConstructSequence(
+                    *(uno_Sequence **)pSource,
                     ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
                     acquire, mapping );
                 TYPELIB_DANGER_RELEASE( pTypeDescr );
