@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access_controller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-04-15 14:23:36 $
+ *  last change: $Author: dbo $ $Date: 2002-04-19 15:16:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -117,20 +118,20 @@ static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceNam
 
 //##################################################################################################
 
-/** ac context combiner combining two ac contexts
+/** ac context intersects permissions of two ac contexts
 */
-class acc_Combiner
+class acc_Intersection
     : public WeakImplHelper1< security::XAccessControlContext >
 {
     Reference< security::XAccessControlContext > m_x1, m_x2;
 
-    inline acc_Combiner(
+    inline acc_Intersection(
         Reference< security::XAccessControlContext > const & x1,
         Reference< security::XAccessControlContext > const & x2 )
         SAL_THROW( () );
 
 public:
-    virtual ~acc_Combiner()
+    virtual ~acc_Intersection()
         SAL_THROW( () );
 
     static inline Reference< security::XAccessControlContext > create(
@@ -144,7 +145,7 @@ public:
         throw (RuntimeException);
 };
 //__________________________________________________________________________________________________
-inline acc_Combiner::acc_Combiner(
+inline acc_Intersection::acc_Intersection(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )
     SAL_THROW( () )
@@ -154,13 +155,13 @@ inline acc_Combiner::acc_Combiner(
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
-acc_Combiner::~acc_Combiner()
+acc_Intersection::~acc_Intersection()
     SAL_THROW( () )
 {
     s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
 }
 //--------------------------------------------------------------------------------------------------
-inline Reference< security::XAccessControlContext > acc_Combiner::create(
+inline Reference< security::XAccessControlContext > acc_Intersection::create(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )
     SAL_THROW( () )
@@ -169,15 +170,84 @@ inline Reference< security::XAccessControlContext > acc_Combiner::create(
         return x2;
     if (! x2.is())
         return x1;
-    return new acc_Combiner( x1, x2 );
+    return new acc_Intersection( x1, x2 );
 }
 //__________________________________________________________________________________________________
-void acc_Combiner::checkPermission(
+void acc_Intersection::checkPermission(
     Any const & perm )
     throw (RuntimeException)
 {
     m_x1->checkPermission( perm );
     m_x2->checkPermission( perm );
+}
+
+/** ac context unifies permissions of two ac contexts
+*/
+class acc_Union
+    : public WeakImplHelper1< security::XAccessControlContext >
+{
+    Reference< security::XAccessControlContext > m_x1, m_x2;
+
+    inline acc_Union(
+        Reference< security::XAccessControlContext > const & x1,
+        Reference< security::XAccessControlContext > const & x2 )
+        SAL_THROW( () );
+
+public:
+    virtual ~acc_Union()
+        SAL_THROW( () );
+
+    static inline Reference< security::XAccessControlContext > create(
+        Reference< security::XAccessControlContext > const & x1,
+        Reference< security::XAccessControlContext > const & x2 )
+        SAL_THROW( () );
+
+    // XAccessControlContext impl
+    virtual void SAL_CALL checkPermission(
+        Any const & perm )
+        throw (RuntimeException);
+};
+//__________________________________________________________________________________________________
+inline acc_Union::acc_Union(
+    Reference< security::XAccessControlContext > const & x1,
+    Reference< security::XAccessControlContext > const & x2 )
+    SAL_THROW( () )
+    : m_x1( x1 )
+    , m_x2( x2 )
+{
+    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+}
+//__________________________________________________________________________________________________
+acc_Union::~acc_Union()
+    SAL_THROW( () )
+{
+    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
+}
+//--------------------------------------------------------------------------------------------------
+inline Reference< security::XAccessControlContext > acc_Union::create(
+    Reference< security::XAccessControlContext > const & x1,
+    Reference< security::XAccessControlContext > const & x2 )
+    SAL_THROW( () )
+{
+    if (! x1.is())
+        return Reference< security::XAccessControlContext >(); // unrestricted
+    if (! x2.is())
+        return Reference< security::XAccessControlContext >(); // unrestricted
+    return new acc_Union( x1, x2 );
+}
+//__________________________________________________________________________________________________
+void acc_Union::checkPermission(
+    Any const & perm )
+    throw (RuntimeException)
+{
+    try
+    {
+        m_x1->checkPermission( perm );
+    }
+    catch (security::AccessControlException &)
+    {
+        m_x2->checkPermission( perm );
+    }
 }
 
 /** ac context doing permission checks on static permissions
@@ -320,22 +390,25 @@ static inline Reference< security::XAccessControlContext > getDynamicRestriction
     Reference< XCurrentContext > const & xContext )
     SAL_THROW( (RuntimeException) )
 {
-    Any acc( xContext->getValueByName( s_acRestriction ) );
-    if (typelib_TypeClass_INTERFACE == acc.pType->eTypeClass)
+    if (xContext.is())
     {
-        // avoid ref-counting
-        OUString const & typeName =
-            *reinterpret_cast< OUString const * >( &acc.pType->pTypeName );
-        if (typeName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.security.XAccessControlContext") ))
+        Any acc( xContext->getValueByName( s_acRestriction ) );
+        if (typelib_TypeClass_INTERFACE == acc.pType->eTypeClass)
         {
-            return Reference< security::XAccessControlContext >(
-                *reinterpret_cast< security::XAccessControlContext ** const >( acc.pData ) );
-        }
-        else // try to query
-        {
-            return Reference< security::XAccessControlContext >::query(
-                *reinterpret_cast< XInterface ** const >( acc.pData ) );
+            // avoid ref-counting
+            OUString const & typeName =
+                *reinterpret_cast< OUString const * >( &acc.pType->pTypeName );
+            if (typeName.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("com.sun.star.security.XAccessControlContext") ))
+            {
+                return Reference< security::XAccessControlContext >(
+                    *reinterpret_cast< security::XAccessControlContext ** const >( acc.pData ) );
+            }
+            else // try to query
+            {
+                return Reference< security::XAccessControlContext >::query(
+                    *reinterpret_cast< XInterface ** const >( acc.pData ) );
+            }
         }
     }
     return Reference< security::XAccessControlContext >();
@@ -842,19 +915,22 @@ void AccessController::checkPermission(
     Any const & perm )
     throw (RuntimeException)
 {
+    if (rBHelper.bDisposed)
+    {
+        throw lang::DisposedException(
+            OUSTR("checkPermission() call on disposed AccessController!"), (OWeakObject *)this );
+    }
+
     if (OFF == m_mode)
         return;
 
     // first dynamic check of ac contexts
     Reference< XCurrentContext > xContext;
     ::uno_getCurrentContext( (void **)&xContext, s_envType.pData, 0 );
-    if (xContext.is())
+    Reference< security::XAccessControlContext > xACC( getDynamicRestriction( xContext ) );
+    if (xACC.is())
     {
-        Reference< security::XAccessControlContext > xACC( getDynamicRestriction( xContext ) );
-        if (xACC.is())
-        {
-            xACC->checkPermission( perm );
-        }
+        xACC->checkPermission( perm );
     }
 
     if (DYNAMIC_ONLY == m_mode)
@@ -869,25 +945,25 @@ Any AccessController::doRestricted(
     Reference< security::XAccessControlContext > const & xRestriction )
     throw (Exception)
 {
+    if (rBHelper.bDisposed)
+    {
+        throw lang::DisposedException(
+            OUSTR("doRestricted() call on disposed AccessController!"), (OWeakObject *)this );
+    }
+
     if (OFF == m_mode) // optimize this way, because no dynamic check will be performed
         return xAction->run();
 
-    Reference< XCurrentContext > xContext;
-    ::uno_getCurrentContext( (void **)&xContext, s_envType.pData, 0 );
-
     if (xRestriction.is())
     {
+        Reference< XCurrentContext > xContext;
+        ::uno_getCurrentContext( (void **)&xContext, s_envType.pData, 0 );
+
         // override restriction
-        Reference< security::XAccessControlContext > xOldRestr;
-        if (xContext.is())
-        {
-            xOldRestr = getDynamicRestriction( xContext );
-        }
-
-        Reference< XCurrentContext > xNewContext( new acc_CurrentContext(
-            xContext, acc_Combiner::create( xRestriction, xOldRestr ) ) );
+        Reference< XCurrentContext > xNewContext(
+            new acc_CurrentContext( xContext, acc_Intersection::create(
+                                        xRestriction, getDynamicRestriction( xContext ) ) ) );
         ::uno_setCurrentContext( xNewContext.get(), s_envType.pData, 0 );
-
         cc_reset reset( xContext.get() );
         return xAction->run();
     }
@@ -902,38 +978,58 @@ Any AccessController::doPrivileged(
     Reference< security::XAccessControlContext > const & xRestriction )
     throw (Exception)
 {
-    if (OFF == m_mode) // optimize this way, because no dynamic check will be performed
-        return xAction->run();
+    if (rBHelper.bDisposed)
+    {
+        throw lang::DisposedException(
+            OUSTR("doPrivileged() call on disposed AccessController!"), (OWeakObject *)this );
+    }
 
-    // override restriction
+    if (OFF == m_mode) // no dynamic check will be performed
+    {
+        return xAction->run();
+    }
+
     Reference< XCurrentContext > xContext;
     ::uno_getCurrentContext( (void **)&xContext, s_envType.pData, 0 );
 
-    Reference< XCurrentContext > xNewContext( new acc_CurrentContext(
-        xContext, xRestriction ) );
-    ::uno_setCurrentContext( xNewContext.get(), s_envType.pData, 0 );
+    Reference< security::XAccessControlContext > xOldRestr(
+        getDynamicRestriction( xContext ) );
 
-    cc_reset reset( xContext.get() );
-    return xAction->run();
+    if (xOldRestr.is()) // previous restriction
+    {
+        // override restriction
+        Reference< XCurrentContext > xNewContext(
+            new acc_CurrentContext( xContext, acc_Union::create( xRestriction, xOldRestr ) ) );
+        ::uno_setCurrentContext( xNewContext.get(), s_envType.pData, 0 );
+        cc_reset reset( xContext.get() );
+        return xAction->run();
+    }
+    else // no previous restriction => never current restriction
+    {
+        return xAction->run();
+    }
 }
 //__________________________________________________________________________________________________
 Reference< security::XAccessControlContext > AccessController::getContext()
     throw (RuntimeException)
 {
+    if (rBHelper.bDisposed)
+    {
+        throw lang::DisposedException(
+            OUSTR("getContext() call on disposed AccessController!"), (OWeakObject *)this );
+    }
+
     if (OFF == m_mode) // optimize this way, because no dynamic check will be performed
+    {
         return new acc_Policy( PermissionCollection( new AllPermission() ) );
+    }
 
     Reference< XCurrentContext > xContext;
     ::uno_getCurrentContext( (void **)&xContext, s_envType.pData, 0 );
 
-    Reference< security::XAccessControlContext > xDynamic;
-    if (xContext.is())
-    {
-        xDynamic = getDynamicRestriction( xContext );
-    }
-
-    return acc_Combiner::create(
-        xDynamic, new acc_Policy( getEffectivePermissions( xContext, Any() ) ) );
+    return acc_Intersection::create(
+        getDynamicRestriction( xContext ),
+        new acc_Policy( getEffectivePermissions( xContext, Any() ) ) );
 }
 
 // XServiceInfo impl
