@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:44:02 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1521,7 +1521,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         // determine which controls we should show and which not
 
         // 1. the required control
-        if(pFieldType->bNullable)
+        if ( pFieldType->bNullable )
             ActivateAggregate( tpRequired );
         else
             DeactivateAggregate( tpRequired );
@@ -1748,11 +1748,11 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if(m_pType)
     {
-        USHORT nPos = m_pType->GetEntryPos(String(pFieldDescr->getTypeInfo()->aUIName));
+        USHORT nPos = pFieldType.get() ? m_pType->GetEntryPos(String(pFieldDescr->getTypeInfo()->aUIName)) : LISTBOX_ENTRY_NOTFOUND;
         if(nPos == LISTBOX_ENTRY_NOTFOUND)
         {
             const OTypeInfoMap* pMap = getTypeInfo();
-            OTypeInfoMap::const_iterator aIter = pMap->find(pFieldDescr->getTypeInfo()->nType);
+            OTypeInfoMap::const_iterator aIter = pMap->find(pFieldType.get() ? pFieldDescr->getTypeInfo()->nType : pFieldDescr->GetType());
             if(aIter == pMap->end() && !pMap->empty())
             {
                 aIter = pMap->begin();
@@ -1765,8 +1765,10 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
                 if(!aIter->second->bAutoIncrement && pFieldDescr->IsAutoIncrement())
                     pFieldDescr->SetAutoIncrement(sal_False);
             }
-            if(aIter != pMap->end())
+            if ( aIter != pMap->end() )
+            {
                 pFieldDescr->SetType(aIter->second);
+            }
         }
         m_pType->SelectEntry(pFieldDescr->getTypeInfo()->aUIName);
     }
