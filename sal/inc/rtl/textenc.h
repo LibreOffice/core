@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textenc.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2002-03-18 14:41:28 $
+ *  last change: $Author: sb $ $Date: 2002-03-19 15:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,8 +174,9 @@ typedef sal_uInt16 rtl_TextEncoding;
 #define RTL_TEXTENCODING_GB_18030               (RTL_TEXTENC_CAST( 85 ))
 #define RTL_TEXTENCODING_BIG5_HKSCS             (RTL_TEXTENC_CAST( 86 ))
 #define RTL_TEXTENCODING_TIS_620                (RTL_TEXTENC_CAST( 87 ))
-
-#define RTL_TEXTENCODING_STD_COUNT              (RTL_TEXTENC_CAST( 88 ))
+/* ATTENTION!  Whenever some encoding is added here, make sure to update
+ * rtl_isOctetEncoding in tencinfo.c.
+ */
 
 #define RTL_TEXTENCODING_USER_START             (RTL_TEXTENC_CAST( 0x8000 ))
 #define RTL_TEXTENCODING_USER_END               (RTL_TEXTENC_CAST( 0xEFFF ))

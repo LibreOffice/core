@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2001-05-09 12:54:32 $
+ *  last change: $Author: sb $ $Date: 2002-03-19 15:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@
 #ifndef _RTL_STRING_H_
 #include <rtl/string.h>
 #endif
+
+#include "rtl/tencinfo.h"
 
 /* ======================================================================= */
 
@@ -189,11 +191,8 @@ void SAL_CALL rtl_uString2String( rtl_String** ppThis,
                                   rtl_TextEncoding eTextEncoding,
                                   sal_uInt32 nCvtFlags )
 {
-    OSL_ENSURE( (eTextEncoding != 9) &&
-                (eTextEncoding != RTL_TEXTENCODING_DONTKNOW) &&
-                (eTextEncoding != RTL_TEXTENCODING_UCS2) &&
-                (eTextEncoding != RTL_TEXTENCODING_UCS4),
-                "rtl_uString2String() - Wrong TextEncoding" );
+    OSL_ENSURE(rtl_isOctetTextEncoding(eTextEncoding),
+               "rtl_uString2String() - Wrong TextEncoding");
 
     if ( !nULen )
         rtl_string_new( ppThis );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-29 13:27:54 $
+ *  last change: $Author: sb $ $Date: 2002-03-19 15:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,19 @@ typedef struct _rtl_TextEncodingInfo
     sal_uInt32          Flags;
 } rtl_TextEncodingInfo;
 
+/** Determine whether a text encoding uses single octets as basic units of
+    information (and can thus be used with the conversion routines in
+    rtl/textcvt.h).
+
+    @param nEncoding
+    Any rtl_TextEncoding value.
+
+    @return
+    True if the given encoding uses single octets as basic units of
+    information, false otherwise.
+ */
+sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding);
+
 /** Return information about a text encoding.
 
     @param eTextEncoding
@@ -186,6 +199,19 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
     The best matching numeric Windows charset, or 1 if none matches.
  */
 sal_uInt8       SAL_CALL rtl_getBestWindowsCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding );
+
+/** Map from a text encoding to a corresponding MIME charset name, if
+    available (see <http://www.iana.org/assignments/character-sets>).
+
+    @param nEncoding
+    Any rtl_TextEncoding value.
+
+    @return
+    The (preferred) MIME charset name corresponding to the given encoding, or
+    NULL if none is available.
+ */
+char const * SAL_CALL rtl_getMimeCharsetFromTextEncoding(rtl_TextEncoding
+                                                             nEncoding);
 
 /** Map from a text encoding to the best matching MIME charset.
 

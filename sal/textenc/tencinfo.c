@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sb $ $Date: 2002-03-18 14:43:42 $
+ *  last change: $Author: sb $ $Date: 2002-03-19 15:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,13 @@
 #include <string.h>
 #define INCLUDED_STRING_H
 #endif
+
+sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
+{
+    return nEncoding > RTL_TEXTENCODING_DONTKNOW
+           && nEncoding <= RTL_TEXTENCODING_TIS_620 /* always update this! */
+           && nEncoding != 9; /* RTL_TEXTENCODING_SYSTEM */
+}
 
 /* ======================================================================= */
 
@@ -987,6 +994,14 @@ const sal_Char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncodin
 }
 
 /* ----------------------------------------------------------------------- */
+
+char const * SAL_CALL rtl_getMimeCharsetFromTextEncoding(rtl_TextEncoding
+                                                             nEncoding)
+{
+    ImplTextEncodingData const * p = Impl_getTextEncodingData(nEncoding);
+    return p && (p->mnInfoFlags & RTL_TEXTENCODING_INFO_MIME) != 0 ?
+               p->mpBestMimeCharset : NULL;
+}
 
 const sal_Char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding )
 {

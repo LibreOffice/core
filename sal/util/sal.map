@@ -331,11 +331,13 @@ UDK_3_0_0 {
         rtl_destroyUnicodeToTextContext;
         rtl_resetUnicodeToTextContext;
         rtl_convertUnicodeToText;
+        rtl_isOctetTextEncoding;
         rtl_getTextEncodingInfo;
         rtl_getTextEncodingFromWindowsCharset;
         rtl_getTextEncodingFromUnixCharset;
         rtl_getTextEncodingFromMimeCharset;
         rtl_getBestWindowsCharsetFromTextEncoding;
+        rtl_getMimeCharsetFromTextEncoding;
         rtl_getBestMimeCharsetFromTextEncoding;
         rtl_getBestUnixCharsetFromTextEncoding;
         rtl_allocateZeroMemory;
