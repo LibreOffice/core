@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-01 18:11:29 $
+#   last change: $Author: vg $ $Date: 2005-03-10 12:19:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -244,7 +244,26 @@ IDLFILES=\
     XShapeGrouper.idl\
     XShapeMirror.idl\
     XShapes.idl\
-    XUniversalShapeDescriptor.idl
+    XUniversalShapeDescriptor.idl\
+\
+    XCustomShapeHandle.idl                          \
+    XCustomShapeEngine.idl                          \
+    CustomShapeEngine.idl                           \
+    CustomShape.idl                                 \
+    EnhancedCustomShapeTextPathMode.idl             \
+    EnhancedCustomShapeGluePointType.idl            \
+    EnhancedCustomShapeParameterType.idl            \
+    EnhancedCustomShapeParameter.idl                \
+    EnhancedCustomShapeSegmentCommand.idl           \
+    EnhancedCustomShapeSegment.idl                  \
+    EnhancedCustomShapeParameterPair.idl            \
+    EnhancedCustomShapeTextFrame.idl                \
+    EnhancedCustomShapeAdjustmentValue.idl          \
+    EnhancedCustomShapeGeometry.idl                 \
+    EnhancedCustomShapeExtrusion.idl                \
+    EnhancedCustomShapePath.idl                     \
+    EnhancedCustomShapeTextPath.idl                 \
+    EnhancedCustomShapeHandle.idl
 
 # ------------------------------------------------------------------
 
