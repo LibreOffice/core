@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdlg2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:50:47 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,14 +86,18 @@
 #include "wview.hxx"
 #include "wrtsh.hxx"
 #include "cmdid.h"
-#include "cption.hxx"
+//CHINA001 #include "cption.hxx"
 #include "caption.hxx"
-#include "insfnote.hxx"
+//CHINA001 #include "insfnote.hxx"
 #include "poolfmt.hxx"
 #include "edtwin.hxx"
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+
+#include "swabstdlg.hxx" //CHINA001
+#include "frmui.hrc" //CHINA001
+#include "misc.hrc" //CHINA001
 
 #include "view.hrc"
 
@@ -109,29 +113,47 @@ extern String* pOldDrwCat;
 void SwView::ExecDlgExt(SfxRequest &rReq)
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
-    ModalDialog *pDialog = 0;
+    //CHINA001 ModalDialog *pDialog = 0;
     const SfxItemSet* pOutSet = 0;
 
     switch ( rReq.GetSlot() )
     {
         case FN_INSERT_CAPTION:
         {
-            pDialog = new SwCaptionDialog( pMDI, *this );
+            //CHINA001 pDialog = new SwCaptionDialog( pMDI, *this );
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+            VclAbstractDialog* pDialog = pFact->CreateSwCaptionDialog( pMDI, *this,ResId( DLG_CAPTION ));
+            DBG_ASSERT(pDialog, "Dialogdiet fail!");//CHINA001
+            if ( pDialog )
+            {
+                pDialog->Execute();
+                delete pDialog;
+            }
             break;
         }
         case  FN_EDIT_FOOTNOTE:
         {
-            pDialog = new SwInsFootNoteDlg( pMDI, *pWrtShell, TRUE );
-            pDialog->SetHelpId(FN_EDIT_FOOTNOTE);
-            pDialog->SetText( SW_RESSTR(STR_EDIT_FOOTNOTE) );
+            //CHINA001 pDialog = new SwInsFootNoteDlg( pMDI, *pWrtShell, TRUE );
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg( ResId(DLG_INS_FOOTNOTE),
+                                                        pMDI, *pWrtShell, TRUE );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+
+            pDlg->SetHelpId(FN_EDIT_FOOTNOTE);//CHINA001 pDialog->SetHelpId(FN_EDIT_FOOTNOTE);
+            pDlg->SetText( SW_RESSTR(STR_EDIT_FOOTNOTE) );//CHINA001 pDialog->SetText( SW_RESSTR(STR_EDIT_FOOTNOTE) );
+            pDlg->Execute();
+            delete pDlg;
             break;
         }
     }
-    if ( pDialog )
-    {
-        pDialog->Execute();
-        delete pDialog;
-    }
+//CHINA001  if ( pDialog )
+//CHINA001  {
+//CHINA001  pDialog->Execute();
+//CHINA001  delete pDialog;
+//CHINA001 }
 }
 
 /* -----------------06.11.98 14:53-------------------
