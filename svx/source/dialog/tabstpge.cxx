@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-11-06 10:40:07 $
+ *  last change: $Author: cl $ $Date: 2002-12-02 13:18:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,22 +275,22 @@ BOOL SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
     MapUnit eUnit = (MapUnit)pPool->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
     const SfxPoolItem* pOld = GetOldItem( rSet, SID_ATTR_TABSTOP );
 
-    // Wenn sich im ItemSet ein LRSpaceItem mit negativen Erstzeileneinzug
-    // befindet, muss im TabStopItem auf der Position 0 ein DefTab sein.
-    const SfxPoolItem* pLRSpace;
-    // wenn nicht im neuen Set, dann vielleicht im alten
-    if ( SFX_ITEM_SET !=
-         rSet.GetItemState( GetWhich( SID_ATTR_LRSPACE ), TRUE, &pLRSpace ) )
-        pLRSpace = GetOldItem( rSet, SID_ATTR_LRSPACE );
-
-    if ( pLRSpace && ( (SvxLRSpaceItem*)pLRSpace )->GetTxtFirstLineOfst() < 0 )
-    {
-        SvxTabStop aNull( 0, SVX_TAB_ADJUST_DEFAULT );
-        aNewTabs.Insert( aNull );
-    }
-
     if ( MAP_100TH_MM != eUnit )
     {
+        // Wenn sich im ItemSet ein LRSpaceItem mit negativen Erstzeileneinzug
+        // befindet, muss im TabStopItem auf der Position 0 ein DefTab sein.
+        const SfxPoolItem* pLRSpace;
+        // wenn nicht im neuen Set, dann vielleicht im alten
+        if ( SFX_ITEM_SET !=
+             rSet.GetItemState( GetWhich( SID_ATTR_LRSPACE ), TRUE, &pLRSpace ) )
+            pLRSpace = GetOldItem( rSet, SID_ATTR_LRSPACE );
+
+        if ( pLRSpace && ( (SvxLRSpaceItem*)pLRSpace )->GetTxtFirstLineOfst() < 0 )
+        {
+            SvxTabStop aNull( 0, SVX_TAB_ADJUST_DEFAULT );
+            aNewTabs.Insert( aNull );
+        }
+
         SvxTabStopItem aTmp( aNewTabs );
         aTmp.Remove( 0, aTmp.Count() );
 
