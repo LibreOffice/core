@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:34:01 $
+ *  last change: $Author: oj $ $Date: 2001-03-13 08:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,11 @@ namespace dbaui
 
             for (sal_Int32 i = 0, nCount = rParamContainer->getCount(); i<nCount; ++i, ++pValues)
             {
-                Reference< XPropertySet >  xParamAsSet(*(Reference< XInterface > *)rParamContainer->getByIndex(i).getValue(), UNO_QUERY);
+                Reference< XPropertySet >  xParamAsSet;
+                rParamContainer->getByIndex(i) >>= xParamAsSet;
+                OSL_ENSURE(xParamAsSet.is(),"Parameter is null!");
+                if(!xParamAsSet.is())
+                    continue;
                 pValues->Name = ::comphelper::getString(xParamAsSet->getPropertyValue(PROPERTY_NAME));
                 m_aAllParams.InsertEntry(pValues->Name);
 
@@ -239,6 +243,7 @@ namespace dbaui
     //------------------------------------------------------------------------------
     OSQLParseNode* OParameterDialog::implPredicateTree(::rtl::OUString& _rErrorMessage, const UniString& _rStatement, const Reference< XPropertySet > & _rxField)
     {
+        OSL_ENSURE(_rxField.is(),"Can't be null!");
         ::rtl::OUString aErr;
         OSQLParseNode* pReturn = m_aParser.predicateTree(aErr, _rStatement, m_xFormatter, _rxField);
         _rErrorMessage = aErr;
@@ -282,7 +287,8 @@ namespace dbaui
 
         // transform the current string according to the param field type
         ::rtl::OUString sTransformedText(m_aParam.GetText());
-        Reference< XPropertySet >  xParamAsSet(*(Reference< XInterface > *)m_xParams->getByIndex(m_nCurrentlySelected).getValue(), UNO_QUERY);
+        Reference< XPropertySet >  xParamAsSet;
+        m_xParams->getByIndex(m_nCurrentlySelected) >>= xParamAsSet;
         if (xParamAsSet.is())
         {
             if (m_xConnection.is() && m_xFormatter.is())
@@ -369,7 +375,8 @@ namespace dbaui
                     PropertyValue* pValues = m_aFinalValues.getArray();
                     for (sal_Int32 i = 0, nCount = m_xParams->getCount(); i<nCount; ++i, ++pValues)
                     {
-                        Reference< XPropertySet >  xParamAsSet(*(Reference< XInterface > *)m_xParams->getByIndex(i).getValue(), UNO_QUERY);
+                        Reference< XPropertySet >  xParamAsSet;
+                        m_xParams->getByIndex(i) >>= xParamAsSet;
 
                         sValue = ::comphelper::getString(pValues->Value).getStr();
                         // a little problem : if the field was a text field the OnValueLoseFocus added two
@@ -542,6 +549,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/02/14 14:34:01  oj
+ *  tabledesign changes
+ *
  *  Revision 1.2  2000/10/27 08:07:57  fs
  *  OSQLParser interface was changed - adjustments
  *
