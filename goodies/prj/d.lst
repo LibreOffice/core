@@ -1,3 +1,5 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\lib\mail.lib %_DEST%\lib%_EXT%\mail.lib
 ..\%__SRC%\lib\crypt.lib %_DEST%\lib%_EXT%\crypt.lib
 ..\%__SRC%\lib\icrp.lib %_DEST%\lib%_EXT%\icrp.lib
@@ -5,9 +7,6 @@
 ..\%__SRC%\lib\igo.lib %_DEST%\lib%_EXT%\igo.lib
 ..\%__SRC%\slb\go.lib %_DEST%\lib%_EXT%\xgo.lib
 ..\%__SRC%\slb\gol.lib %_DEST%\lib%_EXT%\gol.lib
-..\%__SRC%\srs\mail.srs %_DEST%\res%_EXT%\mail.srs
-..\%__SRC%\srs\dialog.srs %_DEST%\res%_EXT%\godialog.srs
-..\%__SRC%\misc\goodies.hid %_DEST%\bin%_EXT%\goodies.hid
 ..\%__SRC%\bin\ma?????.* %_DEST%\bin%_EXT%\ma?????.*
 ..\%__SRC%\bin\tfu?????.dll %_DEST%\bin%_EXT%\tfu?????.dll
 ..\%__SRC%\bin\tfu?????.sym %_DEST%\bin%_EXT%\tfu?????.sym
