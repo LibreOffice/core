@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:47:12 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,7 +508,16 @@ class EventsNameReplace_Impl:
                 // booleans
                 case TypeClass_BOOLEAN:
                 {
-                    String aEntries( ModuleRes( RID_STR_BOOL ) );
+                    String aEntries;
+                    if (  _nPropId == PROPERTY_ID_SHOW_POSITION
+                       || _nPropId == PROPERTY_ID_SHOW_NAVIGATION
+                       || _nPropId == PROPERTY_ID_SHOW_RECORDACTIONS
+                       || _nPropId == PROPERTY_ID_SHOW_FILTERSORT
+                       )
+                       aEntries = String( ModuleRes( RID_STR_SHOW_HIDE ) );
+                    else
+                       aEntries = String( ModuleRes( RID_STR_BOOL ) );
+
                     sReturn = ::comphelper::getBOOL( rValue ) ? aEntries.GetToken( 1 ) : aEntries.GetToken( 0 );
                 }
                 break;
@@ -745,7 +754,16 @@ class EventsNameReplace_Impl:
 
                 case TypeClass_BOOLEAN:
                 {
-                    String sBooleanValues(ModuleRes(RID_STR_BOOL));
+                    String sBooleanValues;
+                    if (  _nPropId == PROPERTY_ID_SHOW_POSITION
+                       || _nPropId == PROPERTY_ID_SHOW_NAVIGATION
+                       || _nPropId == PROPERTY_ID_SHOW_RECORDACTIONS
+                       || _nPropId == PROPERTY_ID_SHOW_FILTERSORT
+                       )
+                       sBooleanValues = String( ModuleRes( RID_STR_SHOW_HIDE ) );
+                    else
+                       sBooleanValues = String( ModuleRes( RID_STR_BOOL ) );
+
                     if (sBooleanValues.GetToken(0) == String(_rString))
                         aReturn <<= (sal_Bool)sal_False;
                     else
@@ -2457,7 +2475,16 @@ class EventsNameReplace_Impl:
                 // sal_Bool-Werte
                 if (eType == TypeClass_BOOLEAN )
                 {
-                    String aEntries(ModuleRes(RID_STR_BOOL));
+                    String aEntries;
+                    if (  nPropId == PROPERTY_ID_SHOW_POSITION
+                       || nPropId == PROPERTY_ID_SHOW_NAVIGATION
+                       || nPropId == PROPERTY_ID_SHOW_RECORDACTIONS
+                       || nPropId == PROPERTY_ID_SHOW_FILTERSORT
+                       )
+                       aEntries = String( ModuleRes( RID_STR_SHOW_HIDE ) );
+                    else
+                       aEntries = String( ModuleRes( RID_STR_BOOL ) );
+
                     for ( xub_StrLen i=0; i<2; ++i )
                         pProperty->aListValues.push_back( aEntries.GetToken(i) );
 
