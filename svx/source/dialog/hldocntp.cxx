@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:25:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 08:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const String& rPath, const Stri
         }
         if ( bIsValidURL )
         {
-            sal_Int16 nPos = maLbDocTypes.GetSelectEntryPos();
+            USHORT nPos = maLbDocTypes.GetSelectEntryPos();
             if ( nPos != LISTBOX_ENTRY_NOTFOUND )
                 aURLObject.SetExtension( ((DocumentTypeData*)maLbDocTypes.GetEntryData( nPos ))->aStrExt );
         }
@@ -456,7 +456,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                 if ( aStrNewName != aEmptyStr )
                 {
                     // get private-url
-                    int nPos = maLbDocTypes.GetSelectEntryPos();
+                    USHORT nPos = maLbDocTypes.GetSelectEntryPos();
                     if( nPos == LISTBOX_ENTRY_NOTFOUND )
                         nPos=0;
                     String aStrDocName ( ( ( DocumentTypeData* )
@@ -573,7 +573,7 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
             maLbDocTypes.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
         {
             // get private-url
-            int nPos = maLbDocTypes.GetSelectEntryPos();
+            USHORT nPos = maLbDocTypes.GetSelectEntryPos();
             aNewURL.setExtension( ( ( DocumentTypeData* ) maLbDocTypes.GetEntryData( nPos ) )->aStrExt );
         }
 
