@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXStyle.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:31 $
+ *  last change:$Date: 2003-02-06 14:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  * Test for object which is represented by service
@@ -165,15 +168,21 @@ public class SwXStyle extends TestCase {
             XNameAccess oSF = oSFS.getStyleFamilies();
             XIndexAccess oSFsIA = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class, oSF);
-            oSFNA = (XNameAccess) oSFsIA.getByIndex(0);
+            oSFNA = (XNameAccess) AnyConverter.toObject(
+                        new Type(XNameAccess.class),oSFsIA.getByIndex(0));
             XIndexAccess oSFIA = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class, oSFNA);
-            oStyle = (XStyle) oSFIA.getByIndex(10);
+            oStyle = (XStyle) AnyConverter.toObject(
+                    new Type(XStyle.class),oSFIA.getByIndex(10));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             log.println("Error: exception occured.");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't create environment ", e );
         } catch ( com.sun.star.lang.IndexOutOfBoundsException e ) {
+            log.println("Error: exception occured.");
+            e.printStackTrace(log);
+            throw new StatusException( "Couldn't create environment ", e );
+        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
             log.println("Error: exception occured.");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't create environment ", e );
@@ -197,7 +206,7 @@ public class SwXStyle extends TestCase {
             log.println("FAILED");
         else
             log.println("OK");
-        XNameContainer oSFNC = (XNameContainer)
+            XNameContainer oSFNC = (XNameContainer)
             UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
 
         try {
@@ -272,4 +281,3 @@ public class SwXStyle extends TestCase {
     }
 
 }    // finish class SwXStyle
-

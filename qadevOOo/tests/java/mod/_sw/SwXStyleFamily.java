@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXStyleFamily.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:31 $
+ *  last change:$Date: 2003-02-06 14:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  * Test for object which is represented by service
@@ -152,8 +155,7 @@ public class SwXStyleFamily extends TestCase {
     *      <code>com.sun.star.style.CharacterStyle</code>.</li>
     * </ul>
     */
-    public synchronized TestEnvironment createTestEnvironment(
-            TestParameters Param, PrintWriter log ) throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oInterface = null;
         XInterface oObj = null;
         XNameAccess oSFNA = null;
@@ -172,11 +174,15 @@ public class SwXStyleFamily extends TestCase {
                 UnoRuntime.queryInterface(XIndexAccess.class, oSF);
 
         try {
-            oSFNA = (XNameAccess) oSFIA.getByIndex(0);
+            oSFNA = (XNameAccess) AnyConverter.toObject(
+                        new Type(XNameAccess.class),oSFIA.getByIndex(0));
         } catch ( com.sun.star.lang.IndexOutOfBoundsException e ) {
             e.printStackTrace(log);
             throw new StatusException("Unexpected exception. ", e);
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
+            e.printStackTrace(log);
+            throw new StatusException("Unexpected exception. ", e);
+        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
             e.printStackTrace(log);
             throw new StatusException("Unexpected exception. ", e);
         }
@@ -200,7 +206,10 @@ public class SwXStyleFamily extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oSFNA);
 
-        int THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
+        int THRCNT = 1;
+        if ((String)Param.get("THRCNT") != null) {
+            THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
+        }
         String nr = new Integer(THRCNT+1).toString();
 
         log.println( "adding NameReplaceIndex as mod relation to environment" );
@@ -218,5 +227,4 @@ public class SwXStyleFamily extends TestCase {
         return tEnv;
     }
 
-}    // finish class SwXStyle
-
+}    // finish class SwXStyleFamily

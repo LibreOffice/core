@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextSection.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:24 $
+ *  last change:$Date: 2003-02-06 14:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@ import util.InstCreator;
 import util.SOfficeFactory;
 import util.TableDsc;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
  *
  * initial description
@@ -139,40 +142,40 @@ public class SwXTextSection extends TestCase {
                     ( XTextSectionsSupplier.class, xTextDoc );
             XNameAccess oTSSuppName = oTSSupp.getTextSections();
 
-                //cleanup if necessary
+            //cleanup if necessary
             if (oTSSuppName.hasByName("SwXTextSection")) {
-            XTextSection old = (XTextSection)
+                XTextSection old = (XTextSection)
                         oTSSuppName.getByName("SwXTextSection");
-            XComponent oldC = (XComponent)
+                XComponent oldC = (XComponent)
                         UnoRuntime.queryInterface(XComponent.class,old);
-                    oldC.dispose();
-                    oText.setString("");
-                }
+                oldC.dispose();
+                oText.setString("");
+            }
 
-                //insert two sections parent and child
+            //insert two sections parent and child
             oTS = (XInterface) oDocMSF.createInstance
                     ("com.sun.star.text.TextSection");
             instance = oDocMSF.createInstance("com.sun.star.text.TextSection");
             XTextContent oTSC = (XTextContent)
                     UnoRuntime.queryInterface(XTextContent.class, oTS);
             oText.insertTextContent(oCursor, oTSC, false);
-                XWordCursor oWordC = (XWordCursor)
-                    UnoRuntime.queryInterface(XWordCursor.class, oCursor);
-                oCursor.setString("End of TextSection");
-                oCursor.gotoStart(false);
-                oCursor.setString("Start of TextSection ");
-                oWordC.gotoEndOfWord(false);
-                XInterface oTS2 = (XInterface) oDocMSF.createInstance
-                    ("com.sun.star.text.TextSection");
-                oTSC = (XTextContent)UnoRuntime.queryInterface
-                    (XTextContent.class, oTS2);
-                oText.insertTextContent(oCursor, oTSC, false);
+            XWordCursor oWordC = (XWordCursor)
+                UnoRuntime.queryInterface(XWordCursor.class, oCursor);
+            oCursor.setString("End of TextSection");
+            oCursor.gotoStart(false);
+            oCursor.setString("Start of TextSection ");
+            oWordC.gotoEndOfWord(false);
+            XInterface oTS2 = (XInterface) oDocMSF.createInstance
+                ("com.sun.star.text.TextSection");
+            oTSC = (XTextContent)UnoRuntime.queryInterface(XTextContent.class, oTS2);
+            oText.insertTextContent(oCursor, oTSC, false);
             String[] oTSSNames = oTSSuppName.getElementNames();
             XIndexAccess oTSSuppIndex = (XIndexAccess)
             UnoRuntime.queryInterface(XIndexAccess.class, oTSSuppName);
             int TScount = oTSSuppIndex.getCount();
             log.println( "getting a TextSection with the XTextSectionSupplier()" );
-            xTS = (XTextSection)oTSSuppIndex.getByIndex(0);
+            xTS = (XTextSection) AnyConverter.toObject(
+                        new Type(XTextSection.class),oTSSuppIndex.getByIndex(0));
             XNamed xTSName = (XNamed)
                     UnoRuntime.queryInterface( XNamed.class, xTS);
             xTSName.setName("SwXTextSection");

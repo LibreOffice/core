@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextEmbeddedObject.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:28 $
+ *  last change:$Date: 2003-02-06 14:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 import util.utils;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  *
@@ -169,7 +172,8 @@ public class SwXTextEmbeddedObject extends TestCase {
                                                     XIndexAccess.class, oEmObj);
 
         try{
-            oObj = (XInterface)oEmIn.getByIndex(0);
+            oObj = (XInterface) AnyConverter.toObject(
+                new Type(XInterface.class),oEmIn.getByIndex(0));
         }
         catch(com.sun.star.uno.Exception e){
             e.printStackTrace(log);

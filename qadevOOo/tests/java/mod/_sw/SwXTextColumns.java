@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextColumns.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:30 $
+ *  last change:$Date: 2003-02-06 14:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
  * Test for object which is represented by service
  * <code>com.sun.star.text.TextColumns</code>. <p>
@@ -130,8 +133,7 @@ public class SwXTextColumns extends TestCase {
     * of this style is returned as a test component. Finally, several
     * paragraphs within the text are inserted to a text document.
     */
-    public TestEnvironment createTestEnvironment(
-            TestParameters tParam, PrintWriter log ) throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         XInterface oObj = null;
         TestEnvironment tEnv = null;
         XStyle oStyle = null;
@@ -145,8 +147,10 @@ public class SwXTextColumns extends TestCase {
             UnoRuntime.queryInterface(XIndexAccess.class, oSF);
 
         try {
-            XNameAccess oSFNA = (XNameAccess) oSFIA.getByIndex(2);
-            oStyle = (XStyle) oSFNA.getByName("Standard");
+            XNameAccess oSFNA = (XNameAccess) AnyConverter.toObject(
+                        new Type(XNameAccess.class),oSFIA.getByIndex(2));
+            oStyle = (XStyle) AnyConverter.toObject(
+                    new Type(XStyle.class),oSFNA.getByName("Standard"));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             log.println("Error, exception occured while getting style.");
             e.printStackTrace(log);
@@ -156,6 +160,9 @@ public class SwXTextColumns extends TestCase {
         } catch ( com.sun.star.container.NoSuchElementException e ) {
             log.println("Error, exception occured while getting style.");
             e.printStackTrace(log);
+        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
+            log.println("Error, exception occured while getting style.");
+            e.printStackTrace(log);
         }
 
         try {
@@ -163,11 +170,15 @@ public class SwXTextColumns extends TestCase {
                 + oStyle.getName());
             XPropertySet xProps = (XPropertySet)
                 UnoRuntime.queryInterface(XPropertySet.class,oStyle);
-            oObj = (XTextColumns) xProps.getPropertyValue("TextColumns");
+            oObj = (XTextColumns) AnyConverter.toObject(
+                new Type(XTextColumns.class),xProps.getPropertyValue("TextColumns"));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             log.println("Exception occured while getting style property");
             e.printStackTrace(log);
         } catch ( com.sun.star.beans.UnknownPropertyException e ) {
+            log.println("Exception occured while getting style property");
+            e.printStackTrace(log);
+        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
             log.println("Exception occured while getting style property");
             e.printStackTrace(log);
         }
@@ -203,4 +214,3 @@ public class SwXTextColumns extends TestCase {
     } // finish method getTestEnvironment
 
 }    // finish class SwXTextColumns
-
