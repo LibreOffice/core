@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-13 08:32:25 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 08:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,7 +511,8 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             if( nNxtActual != nLstActual )
             {
                 nLstHeight /= 5;
-                if( nLstHeight )
+                // does the kerning portion still fit into the line?
+                if( nLstHeight && rInf.X() + nLstHeight <= rInf.Width() )
                 {
                     SwKernPortion* pKrn =
                         new SwKernPortion( *rInf.GetLast(), nLstHeight );
@@ -553,7 +554,6 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             ((SwMultiPortion*)pPor)->HasFlyInCntnt() ) )
             SetFlyInCntBase();
 
-        rInf.SetFull( bFull );
         // 5964: bUnderFlow muss zurueckgesetzt werden, sonst wird beim
         //       naechsten Softhyphen wieder umgebrochen!
         if ( !bFull )
@@ -569,11 +569,20 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                     nTmp != rInf.GetTxt().Len() )
                 {
                     USHORT nDist = rInf.GetFont()->GetHeight()/5;
+
                     if( nDist )
-                        new SwKernPortion( *pPor, nDist );
+                    {
+                        // does the kerning portion still fit into the line?
+                        if ( rInf.X() + pPor->Width() + nDist <= rInf.Width() )
+                            new SwKernPortion( *pPor, nDist );
+                        else
+                            bFull = sal_True;
+                    }
                 }
             }
         }
+
+        rInf.SetFull( bFull );
 
         // Restportions von mehrzeiligen Feldern haben bisher noch
         // nicht den richtigen Ascent.
