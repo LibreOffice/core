@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:43:53 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "बन्द करो";
+        Text[ slovak ] = "Zavrieť";
     };
     HelpButton PB_HELP
     {
@@ -144,6 +145,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ czech ] = "Volby";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "ऑप्शन्स";
+        Text[ slovak ] = "Nastavenia";
     };
     FixedText FT_EDIT_MODULES_LANGUAGE
     {
@@ -176,6 +178,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ czech ] = "Jazyk";
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "भाषा";
+        Text[ slovak ] = "Jazyk";
     };
     ListBox LB_EDIT_MODULES_LANGUAGE
     {
@@ -223,6 +226,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ czech ] = "Přesunout nahoru";
         Text[ hebrew ] = "‮הזז למעלה‬";
         Text[ hindi ] = "स्थानान्तर ऊपर";
+        Text[ slovak ] = "Presunúť nahor";
     };
     PushButton PB_EDIT_MODULES_PRIO_DOWN
     {
@@ -255,6 +259,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ czech ] = "Přesunout dolů";
         Text[ hebrew ] = "‮הזז למטה‬";
         Text[ hindi ] = "स्थानान्तर नीचे";
+        Text[ slovak ] = "Presunúť nadol";
     };
     PushButton PB_EDIT_MODULES_PRIO_BACK
     {
@@ -287,6 +292,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ czech ] = "Zpět";
         Text[ hebrew ] = "‮קודם‬";
         Text[ hindi ] = "~पीछे";
+        Text[ slovak ] = "~Späť";
     };
 
     Bitmap BMP_CHKBUT_UNCHECKED
@@ -325,6 +331,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ czech ] = "Kontrola pravopisu";
         Text[ hebrew ] = "‮איות‬";
         Text[ hindi ] = "शब्द-विन्यास";
+        Text[ slovak ] = "Kontrola pravopisu";
     };
     String ST_HYPH
     {
@@ -354,6 +361,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ czech ] = "Dělení slov";
         Text[ hebrew ] = "‮שבירת מלים‬";
         Text[ hindi ] = "हाइफनेशन्";
+        Text[ slovak ] = "Delenie slov";
     };
     String ST_THES
     {
@@ -383,6 +391,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ czech ] = "Slovník synonym";
         Text[ hebrew ] = "‮תסאורוס‬";
         Text[ hindi ] = "विश्वकोश";
+        Text[ slovak ] = "Slovník synoným";
     };
     Text[ english_us ] = "Edit Modules";
     Text[ portuguese ] = "Editar m�dulos";
@@ -399,7 +408,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     Text[ japanese ] = "モジュールの編集";
     Text[ korean ] = "편집 모듈";
     Text[ chinese_simplified ] = "编辑模块";
-    Text[ chinese_traditional ] = "編輯模塊";
+    Text[ chinese_traditional ] = "編輯模組";
     Text[ turkish ] = "Mod�lleri D�zenle";
     Text[ arabic ] = "����� ������� �������";
     Text[ catalan ] = "Edita els m�duls";
@@ -408,6 +417,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     Text[ czech ] = "Upravit moduly";
     Text[ hebrew ] = "‮עריכת מודולים‬";
     Text[ hindi ] = "मोड्यूलों का संपादन";
+    Text[ slovak ] = "Upraviť moduly";
 };
 
 // RID_SVXDLG_LNG_ED_NUM_PREBREAK -------------------------------------------
@@ -497,6 +507,7 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
         Text[ czech ] = "Znaky před zalomením";
         Text[ hebrew ] = "‮תווים לפני שבירה‬";
         Text[ hindi ] = "खण्डन से पहिले अक्षरें";
+        Text[ slovak ] = "Znaky pred zalomením";
     };
     String STR_NUM_POST_BREAK_DLG
     {
@@ -526,6 +537,7 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
         Text[ czech ] = "Znaky po zalomení";
         Text[ hebrew ] = "‮תווים אחרי שבירה‬";
         Text[ hindi ] = "खण्डन के बाद अक्षरें";
+        Text[ slovak ] = "Znaky po zalomení";
     };
     String STR_NUM_MIN_WORDLEN_DLG
     {
@@ -555,6 +567,7 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
         Text[ czech ] = "Minimální délka slova";
         Text[ hebrew ] = "‮אורך מילה מזערי‬";
         Text[ hindi ] = "न्यूनतम शब्द विस्तार";
+        Text[ slovak ] = "Minimálna dĺžka slova";
     };
     Text[ catalan ] = "Separaci� en s�l.labes";
     Text[ finnish ] = "Tavutus";
@@ -562,6 +575,7 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
     Text[ czech ] = "Dělení slov";
     Text[ hebrew ] = "‮שבירת מלים‬";
     Text[ hindi ] = "हाइफनेशन";
+    Text[ slovak ] = "Delenie slov";
 };
 
 // RID_SFXPAGE_LINGU --------------------------------------------------------
@@ -602,6 +616,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Pomůcky pro psaní";
         Text[ hebrew ] = "‮עזרי תחביר‬";
         Text[ hindi ] = "लेखन सहाय";
+        Text[ slovak ] = "Pomôcky pre písanie";
     };
     FixedText FT_LINGU_MODULES
     {
@@ -625,7 +640,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ japanese ] = "使用できる言語モジュール";
         Text[ korean ] = "사용 가능한 언어 모듈";
         Text[ chinese_simplified ] = "可供使用的语言模块";
-        Text[ chinese_traditional ] = "可使用的語言模塊";
+        Text[ chinese_traditional ] = "可使用的語言模組";
         Text[ turkish ] = "Var olan dil mod�lleri:";
         Text[ arabic ] = "����� ����� ������� ��������:";
         Text[ catalan ] = "~M�duls disponibles d'idioma:";
@@ -634,6 +649,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Dostupné jazykové moduly";
         Text[ hebrew ] = "‮מודולי שפה אפשריים‬";
         Text[ hindi ] = "प्राप्य भाषा मोड्यूल्स";
+        Text[ slovak ] = "Dostupné jazykové moduly";
     };
     Control CLB_LINGU_MODULES
     {
@@ -673,6 +689,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Upravit...";
         Text[ hebrew ] = "‮עריכה‬";
         Text[ hindi ] = "~संपादन...";
+        Text[ slovak ] = "~Upraviť...";
     };
     FixedText FT_LINGU_DICS
     {
@@ -705,6 +722,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Uživatelem definované slovníky";
         Text[ hebrew ] = "‮מילונים מוגדרים ע\"י המשתמש‬";
         Text[ hindi ] = "उपभोक्ता से परिभाषित शब्दकोश";
+        Text[ slovak ] = "Užívateľom definované slovníky";
     };
     Control CLB_LINGU_DICS
     {
@@ -744,6 +762,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Nový...";
         Text[ hebrew ] = "‮חדש...‬";
         Text[ hindi ] = "~नया...";
+        Text[ slovak ] = "~Nový...";
     };
     PushButton PB_LINGU_DICS_EDIT_DIC
     {
@@ -776,6 +795,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Upravit...";
         Text[ hebrew ] = "‮עריכה...‬";
         Text[ hindi ] = "~संपादन...";
+        Text[ slovak ] = "~Upraviť...";
     };
     PushButton PB_LINGU_DICS_DEL_DIC
     {
@@ -808,6 +828,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "मिटा~ओ";
+        Text[ slovak ] = "~Zmazať";
     };
     FixedText FT_LINGU_OPTIONS
     {
@@ -840,6 +861,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Volby";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "~ऑप्शन्स";
+        Text[ slovak ] = "V~oľby";
     };
     Control CLB_LINGU_OPTIONS
     {
@@ -879,6 +901,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Upravit...";
         Text[ hebrew ] = "‮עריכה...‬";
         Text[ hindi ] = "सं~पादन...";
+        Text[ slovak ] = "~Upraviť...";
     };
 
     String STR_CAPITAL_WORDS
@@ -909,6 +932,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Zkontrolovat slova psaná velkými písmeny";
         Text[ hebrew ] = "‮בדיקת מילים עם אותיות גדולות‬";
         Text[ hindi ] = "अप्परकेस शब्दों की जाँच";
+        Text[ slovak ] = "Kontrolovať slová písané veľkými písmenami";
     };
     String STR_WORDS_WITH_DIGITS
     {
@@ -938,6 +962,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Zkontrolovat slova s číslicemi";
         Text[ hebrew ] = "‮בדיקת מילים שיש בהן מספרים‬";
         Text[ hindi ] = "संख्या सहित शब्दों की जाँच ";
+        Text[ slovak ] = "Kontrolovať slová s číslicami ";
     };
     String STR_CAPITALIZATION
     {
@@ -967,6 +992,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Zkontrolovat velká písmena";
         Text[ hebrew ] = "‮בדיקת שימוש באותיות גדולות‬";
         Text[ hindi ] = "केपिटलैज़ेशन् की जाँच";
+        Text[ slovak ] = "Kontrolovať veľké písmená";
     };
     String STR_SPELL_SPECIAL
     {
@@ -996,6 +1022,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Zkontrolovat speciální oblasti";
         Text[ hebrew ] = "‮בדיקת איזורים מיוחדים‬";
         Text[ hindi ] = "विशेष प्रदेशों की जाँच";
+        Text[ slovak ] = "Kontrolovať špeciálne oblasti";
     };
     String STR_ALL_LANGUAGES
     {
@@ -1025,6 +1052,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Zkontrolovat ve všech jazycích";
         Text[ hebrew ] = "‮בדיקה בכל השפות‬";
         Text[ hindi ] = "सब भाषाओं में जाँच करो";
+        Text[ slovak ] = "Kontrolovať vo všetkých jazykoch";
     };
     String STR_SPELL_AUTO
     {
@@ -1054,6 +1082,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Automatická kontrola";
         Text[ hebrew ] = "‮בדיקה אוטומטית‬";
         Text[ hindi ] = "स्वचालित जाँच";
+        Text[ slovak ] = "Automatická kontrola";
     };
     String STR_HIDE_MARKINGS
     {
@@ -1083,6 +1112,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Neoznačovat chyby";
         Text[ hebrew ] = "‮לא לסמן טעויות‬";
         Text[ hindi ] = "गलतियों को सूचित मत करो";
+        Text[ slovak ] = "Neoznačovať chyby";
     };
     String STR_OLD_GERMAN
     {
@@ -1112,6 +1142,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Německý pravopis (starý)";
         Text[ hebrew ] = "‮איות גרמני עתיק‬";
         Text[ hindi ] = "जर्मन शब्द-विन्यास - पुराना";
+        Text[ slovak ] = "Nemecký pravopis (starý)";
     };
     String STR_NUM_MIN_WORDLEN
     {
@@ -1141,6 +1172,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Minimální počet znaků pro rozdělení: ";
         Text[ hebrew ] = "‮מספר התווים המזערי במילה לאפשר שבירה: ‬";
         Text[ hindi ] = "हाइफ़नेशन् केलिए न्यूनतम शब्द विस्तार: ";
+        Text[ slovak ] = "Minimálny počet znakov pre rozdelenie: ";
     };
     String STR_NUM_PRE_BREAK
     {
@@ -1151,7 +1183,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ russian ] = "������� ����� ��������� ������: ";
         Text[ greek ] = "���������� ���� ��� ������ �������:";
         Text[ dutch ] = "Tekens voor regelafbreking: ";
-        Text[ french ] = "Caract�res avant le saut : ";
+        Text[ french ] = "Caract�res avant le retour � la ligne : ";
         Text[ spanish ] = "Caracteres antes de salto de fila: ";
         Text[ italian ] = "Caratteri prima dell'interruzione di riga: ";
         Text[ danish ] = "Tegn f�r linjeskift: ";
@@ -1170,6 +1202,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Znaků před zalomením řádku: ";
         Text[ hebrew ] = "‮מספר תווים לפני מעבר שורה‬";
         Text[ hindi ] = "रेखा खण्डन से पहिले का अक्षरें: ";
+        Text[ slovak ] = "Znakov pred zalomením riadku: ";
     };
     String STR_NUM_POST_BREAK
     {
@@ -1180,7 +1213,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ russian ] = "������� ����� �������� ������: ";
         Text[ greek ] = "���������� ���� ��� ������ �������:";
         Text[ dutch ] = "Tekens na regelafbreking: ";
-        Text[ french ] = "Caract�res apr�s le saut : ";
+        Text[ french ] = "Caract�res apr�s le retour � la ligne : ";
         Text[ spanish ] = "Caracteres despu�s de salto de l�nea: ";
         Text[ italian ] = "Caratteri dopo l'interruzione di riga: ";
         Text[ danish ] = "Tegn efter linjeskift: ";
@@ -1199,6 +1232,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Znaků po zalomení řádku: ";
         Text[ hebrew ] = "‮מספר תווים אחרי מעבר שורה: ‬";
         Text[ hindi ] = "रेखा खण्डन के बाद का अक्षरें: ";
+        Text[ slovak ] = "Znakov po zalomení riadku: ";
     };
     String STR_HYPH_AUTO
     {
@@ -1228,6 +1262,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Dělit bez dotazu";
         Text[ hebrew ] = "‮שבירת מילים מבלי לשאול‬";
         Text[ hindi ] = "जाँच किये बिना हाइफ़नेशन्";
+        Text[ slovak ] = "Deliť bez opýtania";
     };
     String STR_HYPH_SPECIAL
     {
@@ -1257,6 +1292,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ czech ] = "Dělit slova ve speciálních oblastech";
         Text[ hebrew ] = "‮שבירת מילים באיזורים מיוחדים‬";
         Text[ hindi ] = "विशेष प्रदेशों को हाइफ़नेट् करो";
+        Text[ slovak ] = "Deliť slová v špeciálnych oblastiach";
     };
 
     Bitmap BMP_CHKBUT_UNCHECKED
@@ -1305,6 +1341,7 @@ QueryBox RID_SFXQB_DELDICT
     Message[ czech ] = "Přejete si odstranit slovník?";
     Message[ hebrew ] = "‮האם למחוק את המילון?‬";
     Message[ hindi ] = "आप शब्दकोश को मिटाना चाहते है?";
+    Message[ slovak ] = "Prajete si odstrániť slovník?";
 };
  // RID_SFXQB_DEL_IGNORELIST ----------------------------------------------
 QueryBox RID_SFXQB_DEL_IGNORELIST
@@ -1340,8 +1377,11 @@ QueryBox RID_SFXQB_DEL_IGNORELIST
     Message[ czech ] = "Přejete si smazat seznam ignorovaných výrazů?";
     Message[ hebrew ] = "‮האם למחוק את רשימת ההתעלמות?‬";
     Message[ hindi ] = "आप उपेक्षा सूची को मिटाना चाहते है?";
+    Message[ slovak ] = "Prajete si zmazať zoznam ignorovaných výrazov?";
 };
  // ******************************************************************* EOF
+
+
 
 
 
