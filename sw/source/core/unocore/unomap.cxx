@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-06 12:33:15 $
+ *  last change: $Author: dvo $ $Date: 2002-02-06 14:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,7 +828,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_FOOTNOTE_LINE_ADJUST), FN_PARAM_FTN_INFO,       CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE ,     MID_LINE_ADJUST     },
                     { SW_PROP_NMID(UNO_NAME_FOOTNOTE_LINE_TEXT_DISTANCE), FN_PARAM_FTN_INFO,        CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE ,     MID_LINE_TEXT_DIST   |CONVERT_TWIPS },
                     { SW_PROP_NMID(UNO_NAME_FOOTNOTE_LINE_DISTANCE), FN_PARAM_FTN_INFO,         CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE ,     MID_LINE_FOOTNOTE_DIST|CONVERT_TWIPS},
-                    { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_WRITINGMODE2), PROPERTY_NONE, 0 },
+                    { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
                         // writing grid
                     { SW_PROP_NMID(UNO_NAME_GRID_COLOR), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_GRID_COLOR},
                     { SW_PROP_NMID(UNO_NAME_GRID_LINES), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, MID_GRID_LINES},
@@ -1079,7 +1079,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_FRAME_WIDTH_ABSOLUTE),          RES_FRM_SIZE,           CPPU_E2T(CPPUTYPE_INT32),       PROPERTY_NONE, MID_FRMSIZE_WIDTH|CONVERT_TWIPS          },
                     { SW_PROP_NMID(UNO_NAME_FRAME_WIDTH_PERCENT),               RES_FRM_SIZE,           CPPU_E2T(CPPUTYPE_INT8),        PROPERTY_NONE, MID_FRMSIZE_REL_WIDTH    },
                     { SW_PROP_NMID(UNO_NAME_SIZE_TYPE), RES_FRM_SIZE,           CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
-                    { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_WRITINGMODE2), PROPERTY_NONE, 0 },
+                    { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aFramePropertyMap_Impl;
