@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseSource.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:38 $
+ *  last change:$Date: 2003-05-27 12:36:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,14 +143,14 @@ public class ODatabaseSource extends TestCase {
         XMultiServiceFactory xMSF = null ;
 
         try {
-            xMSF = Param.getMSF();
+            xMSF = (XMultiServiceFactory)Param.getMSF();
             oInterface = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
 
             xDBContextNameServ = (XNamingService)
                 UnoRuntime.queryInterface(XNamingService.class, oInterface) ;
 
             // retrieving temp directory for database
-            String tmpDatabaseUrl = utils.getOfficeTempDir(Param.getMSF());
+            String tmpDatabaseUrl = utils.getOfficeTempDir((XMultiServiceFactory)Param.getMSF());
 
             tmpDatabaseUrl = "sdbc:dbase:file:///" + tmpDatabaseUrl ;
 
@@ -196,7 +196,7 @@ public class ODatabaseSource extends TestCase {
         // adding obj relation for interface XCompletedConnection
         Object handler = null ;
         try {
-            handler = Param.getMSF().createInstance
+            handler = ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.sdb.InteractionHandler") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Relation for XCompletedConnection wasn't created") ;

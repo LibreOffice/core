@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatasourceBrowser.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:37 $
+ *  last change:$Date: 2003-05-27 12:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._dbaccess;
 
 import com.sun.star.awt.XControl;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
@@ -139,7 +140,7 @@ public class ODatasourceBrowser extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop(Param.getMSF()) );
+                    XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()) );
         System.setProperty("hideMe","false");
     }
 
@@ -211,7 +212,7 @@ public class ODatasourceBrowser extends TestCase {
         if (xTextDoc != null) xTextDoc.dispose();
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println( "creating a text document" );
