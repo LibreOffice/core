@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:58:25 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 21:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,4 +84,5 @@ InfoBox MSG_ERR_TABLE_MERGE
     MESSAGE[ greek ] = "Τα επιλεγμένα κελιά του πίνακα είναι  υπερβολικά περίπλοκα για να γίνει η σύνδεση.";
     MESSAGE[ korean ] = "Ό±ΕΓµΘ Η¥ ΌΏΐΊ ΗΥΊ΄ΗΟ±βΏ΅ ³ΚΉ« ΊΉΐβΗΥ΄Ο΄Ω.";
     MESSAGE[ turkish ] = "Seηilen tablo hόcreleri birleώtirilmek iηin fazla karmaώύk.";
+    MESSAGE[ catalan ] = "Las celdas seleccionadas de la tabla son demasiado complejas para enlazarlas.";
 };
