@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:46:47 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,8 +344,10 @@ ViewShell::~ViewShell()
         SET_CURR_SHELL( this );
         bPaintWorks = FALSE;
 
-        //Die Animierten Grafiken abschalten!
-        if( pDoc )
+        // FME 2004-06-21 #i9684# Stopping the animated graphics is not
+        // necessary during printing or pdf export, because the animation
+        // has not been started in this case.
+        if( pDoc && GetWin() )
         {
             SwNodes& rNds = pDoc->GetNodes();
             SwGrfNode *pGNd;
