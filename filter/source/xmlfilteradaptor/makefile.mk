@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:37:27 $
+#   last change: $Author: kz $ $Date: 2004-06-10 15:57:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,8 @@ SHL1OBJS=		$(SLO)$/genericfilter.obj		\
                 $(SLO)$/XmlFilterAdaptor.obj	\
                 $(SLO)$/streamwrap.obj
 
-SHL1STDLIBS=	$(CPPUHELPERLIB) \
+SHL1STDLIBS=	$(COMPHELPERLIB) \
+                $(CPPUHELPERLIB) \
                 $(CPPULIB) \
                 $(SALLIB)	
 
