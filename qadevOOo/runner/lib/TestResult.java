@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestResult.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:43:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 17:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ public class TestResult {
      * @see #tested(String, Status)
      */
     public boolean tested( String method, boolean result) {
+        System.out.println("Method "+method+" finished with state "+(result?"OK":"FAILED"));
         return tested( method, Status.passed( result ) );
     }
 
