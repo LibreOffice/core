@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: svesik $ $Date: 2000-11-23 02:09:21 $
+#   last change: $Author: fs $ $Date: 2000-12-15 16:29:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,6 @@ LIB1FILES=\
         $(SLB)$/dbashared.lib	
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
-SHL1VERSIONMAP= $(TARGET).map
 
 SHL1STDLIBS= \
         $(SALLIB) \
@@ -139,7 +138,6 @@ LIB2FILES=\
         $(SLB)$/uicontrols.lib
 
 SHL2TARGET=$(TARGET2)$(UPD)$(DLLPOSTFIX)
-SHL2VERSIONMAP= $(TARGET2).map
 
 SHL2STDLIBS= \
         $(SALLIB)				\
