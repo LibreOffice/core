@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:58:30 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1068,10 +1068,15 @@ void XclImpEscherObjList::UpdateCache()
         sal_uInt16 nScTab = pEscherObj->GetTab();
         sal_uInt32 nStrmPos = pEscherObj->GetStrmBegin();
 
-        if( nScTab >= maObjCache.size() )
-            maObjCache.resize( nScTab + 1, XclCacheEntry( GetObjCount() - 1, nStrmPos ) );
-        else if( maObjCache[ nScTab ].mnStrmPos > nStrmPos )
-            maObjCache[ nScTab ].mnStrmPos = nStrmPos;
+        // #110252# ignore faked objects without corresponding Escher data (i.e. sheet-charts)
+        if( nStrmPos != 0 )
+        {
+            if( nScTab >= maObjCache.size() )
+                maObjCache.resize( nScTab + 1, XclCacheEntry( GetObjCount() - 1, nStrmPos ) );
+            else if( maObjCache[ nScTab ].mnStrmPos > nStrmPos )
+                maObjCache[ nScTab ].mnStrmPos = nStrmPos;
+            DBG_ASSERT( !nScTab || (maObjCache[ nScTab - 1 ].mnStrmPos <= nStrmPos), "XclImpEscherObjList::UpdateCache - cache corrupted" );
+        }
     }
 }
 
