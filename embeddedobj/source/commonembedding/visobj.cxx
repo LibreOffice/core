@@ -2,9 +2,9 @@
  *
  *  $RCSfile: visobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:50:21 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,12 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
+    if ( m_nObjectState == -1 )
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no persistence!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+
+    if ( m_nObjectState == embed::EmbedStates::LOADED )
+        changeState( embed::EmbedStates::RUNNING );
 
     if ( !m_pDocHolder->SetExtent( nAspect, aSize ) )
         throw uno::Exception(); // TODO:
@@ -112,9 +115,12 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
+    if ( m_nObjectState == -1 )
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no persistence!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+
+    if ( m_nObjectState == embed::EmbedStates::LOADED )
+        changeState( embed::EmbedStates::RUNNING );
 
     awt::Size aResult;
     if ( !m_pDocHolder->GetExtent( nAspect, &aResult ) )
@@ -130,9 +136,12 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
+    if ( m_nObjectState == -1 )
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no persistence!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+
+    if ( m_nObjectState == embed::EmbedStates::LOADED )
+        changeState( embed::EmbedStates::RUNNING );
 
     sal_Int32 nResult = m_pDocHolder->GetMapUnit( nAspect );
     if ( nResult < 0  )
@@ -152,10 +161,13 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    // TODO: if object is in loaded state it should switch itself to the running state
-    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
+    if ( m_nObjectState == -1 )
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no persistence!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+
+    if ( m_nObjectState == embed::EmbedStates::LOADED )
+        changeState( embed::EmbedStates::RUNNING );
+
     OSL_ENSURE( m_pDocHolder->GetComponent().is(), "Running or Active object has no component!\n" );
 
     // TODO: return for the aspect of the document
