@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 20:34:21 $
+ *  last change: $Author: jp $ $Date: 2000-12-04 17:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1129,11 +1129,11 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
     {
         switch( rMirror.GetValue() )
         {
-        case RES_DONT_MIRROR_GRF:   nMirror = BMP_MIRROR_VERT; break;
+        case RES_DONT_MIRROR_GRF:   nMirror = BMP_MIRROR_HORZ; break;
         case RES_MIRROR_GRF_VERT:   nMirror = BMP_MIRROR_NONE; break;
         case RES_MIRROR_GRF_HOR:    nMirror = BMP_MIRROR_HORZ|BMP_MIRROR_VERT;
                                     break;
-        default:                    nMirror = BMP_MIRROR_HORZ; break;
+        default:                    nMirror = BMP_MIRROR_VERT; break;
         }
     }
     else
@@ -1141,8 +1141,8 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
         {
         case RES_MIRROR_GRF_BOTH:   nMirror = BMP_MIRROR_HORZ|BMP_MIRROR_VERT;
                                     break;
-        case RES_MIRROR_GRF_VERT:   nMirror = BMP_MIRROR_VERT; break;
-        case RES_MIRROR_GRF_HOR:    nMirror = BMP_MIRROR_HORZ; break;
+        case RES_MIRROR_GRF_VERT:   nMirror = BMP_MIRROR_HORZ; break;
+        case RES_MIRROR_GRF_HOR:    nMirror = BMP_MIRROR_VERT; break;
         }
 
     rGA.SetMirrorFlags( nMirror );
