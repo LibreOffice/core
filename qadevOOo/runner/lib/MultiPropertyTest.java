@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiPropertyTest.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-11-18 16:15:26 $
+ *  last change:$Date: 2004-07-23 10:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,9 @@ public class MultiPropertyTest extends MultiMethodTest {
                             log.println("new = " + toString(newValue));
                             log.println("result = " + toString(resValue));
                         } catch(com.sun.star.lang.IllegalArgumentException iae) {
+                            log.println("NOTIFY: this property needs further investigations.");
+                            log.println("\t The type seems to be an Any with value of NULL.");
+                            log.println("\t Maybe the property should get it's own test method.");
                         }
 
                         tRes.tested(propName, false);
@@ -351,6 +354,9 @@ public class MultiPropertyTest extends MultiMethodTest {
                             log.println("new = " + toString(newValue));
                             log.println("result = " + toString(resValue));
                         } catch(com.sun.star.lang.IllegalArgumentException iae) {
+                            log.println("NOTIFY: this property needs further investigations.");
+                            log.println("\t The type seems to be an Any with value of NULL.");
+                            log.println("\t Maybe the property should get it's own test method.");
                         }
                         if (resValue != null ) {
                             if ( (!compare(resValue, oldValue)) || (!resValue.equals(oldValue))) {
