@@ -2,9 +2,9 @@
 *
 *   $RCSfile: ListBox.cxx,v $
 *
-*   $Revision: 1.35 $
+*   $Revision: 1.36 $
 *
-*   last change: $Author: pjunck $ $Date: 2004-10-22 11:39:08 $
+*   last change: $Author: obo $ $Date: 2004-11-16 10:39:57 $
 *
 *   The Contents of this file are made available subject to the terms of
 *   either of the following licenses
@@ -488,7 +488,7 @@ namespace frm
 
             DBG_ASSERT(m_xAggregateFastSet.is(), "OListBoxModel::setFastPropertyValue_NoBroadcast(DEFAULT_SELECT_SEQ) : invalid aggregate !");
             if ( m_xAggregateFastSet.is() )
-                setControlValue( _rValue );
+                setControlValue( _rValue, eOther );
             break;
 
         case PROPERTY_ID_STRINGITEMLIST:
@@ -761,7 +761,7 @@ namespace frm
             readCommonProperties(_rxInStream);
 
         // Nach dem Lesen die Defaultwerte anzeigen
-        if (m_aControlSource.getLength())
+        if ( getControlSource().getLength() )
             // (not if we don't have a control source - the "State" property acts like it is persistent, then
             resetNoBroadcast();
     }
@@ -847,8 +847,8 @@ namespace frm
                     }
                     else if (xFieldsByName.is())
                     {
-                        if (xFieldsByName->hasByName(m_aControlSource))
-                            aFieldName = m_aControlSource;
+                        if ( xFieldsByName->hasByName( getControlSource() ) )
+                            aFieldName = getControlSource();
                         else
                         {
                             // otherwise look for the alias
@@ -875,10 +875,10 @@ namespace frm
                             DBG_ASSERT(xSupplyFields.is(), "OListBoxModel::loadData : invalid query composer !");
 
                             Reference<XNameAccess> xFieldNames = xSupplyFields->getColumns();
-                            if (xFieldNames->hasByName(m_aControlSource))
+                            if ( xFieldNames->hasByName( getControlSource() ) )
                             {
                                 Reference<XPropertySet> xComposerFieldAsSet;
-                                xFieldNames->getByName(m_aControlSource) >>= xComposerFieldAsSet;
+                                xFieldNames->getByName( getControlSource() ) >>= xComposerFieldAsSet;
                                 if (hasProperty(PROPERTY_FIELDSOURCE, xComposerFieldAsSet))
                                     xComposerFieldAsSet->getPropertyValue(PROPERTY_FIELDSOURCE) >>= aFieldName;
                             }
@@ -964,7 +964,7 @@ namespace frm
         vector< ::rtl::OUString >   aValueList, aStringList;
         aValueList.reserve(16);
         aStringList.reserve(16);
-        sal_Bool bUseNULL = getField().is() && !m_bRequired;
+        sal_Bool bUseNULL = getField().is() && !isRequired();
         try
         {
             switch (m_eListSourceType)
@@ -1335,7 +1335,7 @@ namespace frm
             "OListBoxModel::translateExternalValueToControlValue: precondition not met!" );
 
         Sequence< sal_Int16 > aSelectIndexes;
-        if ( m_xExternalBinding.is() )
+        if ( hasExternalValueBinding() )
         {
             switch ( m_eTransferSelectionAs )
             {
@@ -1344,20 +1344,20 @@ namespace frm
                     // unfortunately, our select sequence is a sequence<short>, while the external binding
                     // supplies sequence<int> only -> transform this
                     Sequence< sal_Int32 > aSelectIndexesPure;
-                    m_xExternalBinding->getValue( ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) ) ) >>= aSelectIndexesPure;
+                    getExternalValueBinding()->getValue( ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) ) ) >>= aSelectIndexesPure;
                     aSelectIndexes.realloc( aSelectIndexesPure.getLength() );
                     ::std::copy(
                         aSelectIndexesPure.getConstArray(),
                         aSelectIndexesPure.getConstArray() + aSelectIndexesPure.getLength(),
                         aSelectIndexes.getArray()
-                        );
+                    );
                 }
                 break;
 
             case tsIndex:
                 {
                     sal_Int32 nSelectIndex = -1;
-                    m_xExternalBinding->getValue( ::getCppuType( static_cast< sal_Int32* >( NULL ) ) ) >>= nSelectIndex;
+                    getExternalValueBinding()->getValue( ::getCppuType( static_cast< sal_Int32* >( NULL ) ) ) >>= nSelectIndex;
                     if ( ( nSelectIndex >= 0 ) && ( nSelectIndex < getStringItemList().getLength() ) )
                     {
                         aSelectIndexes.realloc( 1 );
@@ -1370,7 +1370,7 @@ namespace frm
                 {
                     // we can retrieve a string list from the binding for multiple selection
                     Sequence< ::rtl::OUString > aSelectEntries;
-                    m_xExternalBinding->getValue( ::getCppuType( static_cast< Sequence< ::rtl::OUString >* >( NULL ) ) ) >>= aSelectEntries;
+                    getExternalValueBinding()->getValue( ::getCppuType( static_cast< Sequence< ::rtl::OUString >* >( NULL ) ) ) >>= aSelectEntries;
 
                     ::std::set< sal_Int16 > aSelectionSet;
 
@@ -1404,7 +1404,7 @@ namespace frm
             case tsEntry:
                 {
                     ::rtl::OUString sStringToSelect;
-                    m_xExternalBinding->getValue( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) ) >>= sStringToSelect;
+                    getExternalValueBinding()->getValue( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) ) >>= sStringToSelect;
 
                     aSelectIndexes = findValue( getStringItemList(), sStringToSelect, sal_False );
                 }
@@ -1421,23 +1421,23 @@ namespace frm
         OSL_ENSURE( hasExternalValueBinding(), "OListBoxModel::onConnectedExternalValue: no external value binding!" );
 
         // if the binding supports string sequences, we prefer this
-        if ( m_xExternalBinding.is() )
+        if ( getExternalValueBinding().is() )
         {
-            if ( m_xExternalBinding->supportsType( ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) ) ) )
+            if ( getExternalValueBinding()->supportsType( ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) ) ) )
             {
                 m_eTransferSelectionAs = tsIndexList;
             }
-            else if ( m_xExternalBinding->supportsType( ::getCppuType( static_cast< sal_Int32* >( NULL ) ) ) )
+            else if ( getExternalValueBinding()->supportsType( ::getCppuType( static_cast< sal_Int32* >( NULL ) ) ) )
             {
                 m_eTransferSelectionAs = tsIndex;
             }
-            else if ( m_xExternalBinding->supportsType( ::getCppuType( static_cast< Sequence< ::rtl::OUString >* >( NULL ) ) ) )
+            else if ( getExternalValueBinding()->supportsType( ::getCppuType( static_cast< Sequence< ::rtl::OUString >* >( NULL ) ) ) )
             {
                 m_eTransferSelectionAs = tsEntryList;
             }
             else
             {
-                OSL_ENSURE( m_xExternalBinding->supportsType( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) ),
+                OSL_ENSURE( getExternalValueBinding()->supportsType( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) ),
                     "OListBoxModel::onConnectedExternalValue: this should not have survived approveValueBinding!" );
                 m_eTransferSelectionAs = tsEntry;
             }
@@ -1480,7 +1480,7 @@ namespace frm
         {
         case tsIndexList:
             {
-                OSL_ENSURE( m_xExternalBinding->supportsType( ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) ) ),
+                OSL_ENSURE( getExternalValueBinding()->supportsType( ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) ) ),
                     "OListBoxModel::translateControlValueToExternalValue: how this? It does not support string sequences!" );
                 // unfortunately, the select sequence is a sequence<short>, but our binding
                 // expects int's
@@ -1489,7 +1489,7 @@ namespace frm
                     aSelectSequence.getConstArray(),
                     aSelectSequence.getConstArray() + aSelectSequence.getLength(),
                     aTransformed.getArray()
-                    );
+                );
                 aReturn <<= aTransformed;
             }
             break;
@@ -1514,7 +1514,7 @@ namespace frm
                     aSelectSequence.getConstArray() + aSelectSequence.getLength(),
                     aSelectedEntriesTexts.getArray(),
                     ExtractStringFromSequence_Safe( getStringItemList() )
-                    );
+                );
             }
             break;
 
