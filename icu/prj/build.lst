@@ -1,3 +1,3 @@
-ic  icu :	NULL
+ic  icu :	solenv NULL
 ic	icu		usr1	-	all	ic_mkout NULL
 ic	icu		nmake	-	all	ic_icu	NULL
