@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:54:17 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -971,6 +971,39 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
 }
 
 //------------------------------------------------------------------------
+
+BOOL ScGlobal::IsSystemRTL()
+{
+    BOOL bRet = FALSE;
+
+    switch ( Application::GetSettings().GetLanguage() )
+    {
+        // same languages as in GetDefaultFrameDirection in Writer (poolfmt.cxx)
+        case LANGUAGE_ARABIC:
+        case LANGUAGE_ARABIC_SAUDI_ARABIA:
+        case LANGUAGE_ARABIC_IRAQ:
+        case LANGUAGE_ARABIC_EGYPT:
+        case LANGUAGE_ARABIC_LIBYA:
+        case LANGUAGE_ARABIC_ALGERIA:
+        case LANGUAGE_ARABIC_MOROCCO:
+        case LANGUAGE_ARABIC_TUNISIA:
+        case LANGUAGE_ARABIC_OMAN:
+        case LANGUAGE_ARABIC_YEMEN:
+        case LANGUAGE_ARABIC_SYRIA:
+        case LANGUAGE_ARABIC_JORDAN:
+        case LANGUAGE_ARABIC_LEBANON:
+        case LANGUAGE_ARABIC_KUWAIT:
+        case LANGUAGE_ARABIC_UAE:
+        case LANGUAGE_ARABIC_BAHRAIN:
+        case LANGUAGE_ARABIC_QATAR:
+        case LANGUAGE_HEBREW:
+        case LANGUAGE_URDU:
+            bRet = TRUE;
+            break;
+    }
+
+    return bRet;
+}
 
 BYTE ScGlobal::GetDefaultScriptType()
 {
