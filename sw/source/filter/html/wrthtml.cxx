@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:58:07 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,10 @@
 #ifndef _LINKMGR_HXX //autogen
 #include <so3/linkmgr.hxx>
 #endif
-#ifndef _OFA_HTMLCFG_HXX //autogen
-#include <offmgr/htmlcfg.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
+
+#include <svx/htmlcfg.hxx>
+#include <vcl/svapp.hxx>
+
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
@@ -292,7 +290,7 @@ __EXPORT SwHTMLWriter::~SwHTMLWriter()
 sal_uInt32 SwHTMLWriter::WriteStream()
 {
     // neue Konfiguration setzen
-    OfaHtmlOptions* pHtmlOptions = OFF_APP()->GetHtmlOptions();
+    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
 
     // die Fontgroessen 1-7
     aFontHeights[0] = pHtmlOptions->GetFontSize( 0 ) * 20;
