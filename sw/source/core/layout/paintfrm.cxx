@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: od $ $Date: 2002-09-03 14:08:22 $
+ *  last change: $Author: od $ $Date: 2002-09-05 16:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,8 +295,11 @@ public:
 
 static ViewShell *pGlobalShell = 0;
 
+/// OD 05.09.2002 #102912# - <bPageOnly> no longer needed
+/*
 //Fuer PaintBackground, eigentlich lokal, aber fuer SwSavePaintStatics jetzt global
 static FASTBOOL bPageOnly = FALSE;
+*/
 
 //Wenn durchsichtige FlyInCnts im PaintBackground gepainted werden so soll der
 //Hintergrund nicht mehr retouchiert werden.
@@ -407,7 +410,8 @@ SwSavePaintStatics::SwSavePaintStatics() :
     bSPixelHeightOdd    ( bPixelHeightOdd   ),
     bSPixelWidthOdd     ( bPixelWidthOdd    ),
     bSOneBeepOnly       ( bOneBeepOnly      ),
-    bSPageOnly          ( bPageOnly         ),
+/// OD 05.09.2002 #102912# - <bPageOnly> no longer needed
+//   bSPageOnly          ( bPageOnly         ),
     pSGlobalShell       ( pGlobalShell      ),
     pSFlyMetafileOut    ( pFlyMetafileOut   ),
     pSRetoucheFly       ( pRetoucheFly      ),
@@ -426,7 +430,8 @@ SwSavePaintStatics::SwSavePaintStatics() :
     aSScaleX            ( aScaleX           ),
     aSScaleY            ( aScaleY           )
 {
-    bPageOnly = /*bLockFlyBackground = */bFlyMetafile = FALSE;
+    /// OD 05.09.2002 #102912# - <bPageOnly> no longer needed
+    /*bPageOnly = *//*bLockFlyBackground = */bFlyMetafile = FALSE;
     pFlyMetafileOut = 0;
     pRetoucheFly  = 0;
     pRetoucheFly2 = 0;
@@ -450,7 +455,8 @@ SwSavePaintStatics::~SwSavePaintStatics()
     bPixelHeightOdd    = bSPixelHeightOdd;
     bPixelWidthOdd     = bSPixelWidthOdd;
     bOneBeepOnly       = bSOneBeepOnly;
-    bPageOnly          = bSPageOnly;
+/// OD 05.09.2002 #102912# - <bPageOnly> no longer needed
+//   bPageOnly          = bSPageOnly;
     pFlyMetafileOut    = pSFlyMetafileOut;
     pRetoucheFly       = pSRetoucheFly;
     pRetoucheFly2      = pSRetoucheFly2;
@@ -1550,7 +1556,14 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
 
     case GPOS_AREA:
         aGrf = rOrg;
-        bRetouche = FALSE;
+        /// OD 05.09.2002 #102912#
+        /// In spite the fact that the background graphic have to fill the complete
+        /// area, it has been checked, if the graphic will completely fill out
+        /// the region to be painted <rOut> and thus, nothing has to be retouched.
+        /// For example, this is the case for a fly frame without a background
+        /// brush positioned on the border of the page and inherited the
+        /// background brush from the page.
+        bRetouche = !rOut.IsInside( aGrf );
         break;
 
     case GPOS_TILED:
@@ -3430,30 +3443,47 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
 |*  Letzte Aenderung    MA 06. Feb. 97
 |*
 |*************************************************************************/
-
+/// OD 05.09.2002 #102912#
+/// Do not paint background for fly frames without a background brush by
+/// calling <PaintBaBo> at the page or at the fly frame its anchored
 void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                               const SwBorderAttrs & rAttrs,
                              const BOOL bLowerMode,
                              const BOOL bLowerBorder ) const
 {
-    FASTBOOL bResetPageOnly = FALSE;
-
     ViewShell *pSh = pGlobalShell;
     const FASTBOOL bWin = pSh->GetWin() ? TRUE : FALSE;
     const SvxBrushItem* pItem;
+    /// OD 05.09.2002 #102912#
+    /// temporary background brush for a fly frame without a background brush
+    SvxBrushItem* pTmpBackBrush = 0;
     const Color* pCol;
     SwRect aOrigBackRect;
-    FASTBOOL bBack = GetBackgroundBrush( pItem, pCol, aOrigBackRect, bLowerMode );
     const FASTBOOL bPageFrm = IsPageFrm();
     FASTBOOL bLowMode = TRUE;
 
+    FASTBOOL bBack = GetBackgroundBrush( pItem, pCol, aOrigBackRect, bLowerMode );
     //- Ausgabe wenn ein eigener Hintergrund mitgebracht wird.
-    //- Retouche fuer durchsichtige Flys muss vom Hintergrund des Flys
-    //  uebernommen werden.
-    //  ->Selbiges fuer Flys die eine Grafik enthalten.
-    FASTBOOL bFlyBackground = !bFlyMetafile && !bBack && IsFlyFrm();
-    if ( bFlyBackground && (!GetLower() || !((SwFlyFrm*)this)->Lower()->IsNoTxtFrm()) )
-         bPageOnly = bResetPageOnly = TRUE;
+    bool bNoFlyBackground = !bFlyMetafile && !bBack && IsFlyFrm();
+    if ( bNoFlyBackground )
+    {
+        /// OD 05.09.2002 #102912# - Fly frame has no background.
+        /// Try to find background brush at parents, if previous call of
+        /// <GetBackgroundBrush> disabled this option with the parameter <bLowerMode>
+        if ( bLowerMode )
+        {
+            bBack = GetBackgroundBrush( pItem, pCol, aOrigBackRect, false );
+        }
+        /// If still no background found for the fly frame, initialize the
+        /// background brush <pItem> with global retouche color and set <bBack>
+        /// to TRUE, that fly frame will paint its background using this color.
+        if ( !bBack )
+        {
+            pTmpBackBrush = new SvxBrushItem( aGlobalRetoucheColor );
+            pItem = pTmpBackBrush;
+            bBack = true;
+        }
+    }
 
     SwRect aPaintRect( Frm() );
     if( IsTxtFrm() )
@@ -3461,136 +3491,115 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
 
     if ( aPaintRect.IsOver( rRect ) )
     {
-    if ( bFlyBackground )
-    {
-        const SwFrm *pBackFrm = bPageOnly || !((SwFlyFrm*)this)->GetAnchor()->IsInFly()
-                            ? (SwFrm*)pPage
-                            : ((SwFlyFrm*)this)->GetAnchor()->FindFlyFrm();
-
-        SwFlyFrm *pOld = pRetoucheFly;
-        pRetoucheFly = (SwFlyFrm*)this;
-
-        SwRect aRect;
-        ::lcl_CalcBorderRect( aRect, this, rAttrs, FALSE );
-        aRect.Intersection( rRect );
-        pBackFrm->PaintBaBo( aRect, pPage, bLowerBorder );
-        pRetoucheFly = pOld;
-        //Clipping muss aufgehoben werden, weil vom Formatter oft ein Clipping
-        //gesetzt wird.
-        OutputDevice *pOut = pSh->GetOut();
-        pOut->Push( PUSH_CLIPREGION );
-        pOut->SetClipRegion();
-        pLines->PaintLines( GetShell()->GetOut() );
-        pOut->Pop();
-
-    }
-    else if ( bBack || bPageFrm || !bLowerMode )
-    {
-        const FASTBOOL bBrowse = pSh->GetDoc()->IsBrowseMode();
-
-        SwRect aRect;
-        if ( (bPageFrm && bBrowse) ||
-             (IsTxtFrm() && Prt().SSize() == Frm().SSize()) )
+        if ( bBack || bPageFrm || !bLowerMode )
         {
-            aRect = Frm();
-            ::SwAlignRect( aRect, pGlobalShell );
-        }
-        else
-        {
-            ::lcl_CalcBorderRect( aRect, this, rAttrs, FALSE );
-            if ( (IsTxtFrm() || IsTabFrm()) && GetPrev() )
+            const FASTBOOL bBrowse = pSh->GetDoc()->IsBrowseMode();
+
+            SwRect aRect;
+            if ( (bPageFrm && bBrowse) ||
+                 (IsTxtFrm() && Prt().SSize() == Frm().SSize()) )
             {
-                if ( GetPrev()->GetAttrSet()->GetBackground() ==
-                     GetAttrSet()->GetBackground() )
+                aRect = Frm();
+                ::SwAlignRect( aRect, pGlobalShell );
+            }
+            else
+            {
+                ::lcl_CalcBorderRect( aRect, this, rAttrs, FALSE );
+                if ( (IsTxtFrm() || IsTabFrm()) && GetPrev() )
                 {
-                    aRect.Top( Frm().Top() );
+                    if ( GetPrev()->GetAttrSet()->GetBackground() ==
+                         GetAttrSet()->GetBackground() )
+                    {
+                        aRect.Top( Frm().Top() );
+                    }
                 }
             }
-        }
-        aRect.Intersection( rRect );
+            aRect.Intersection( rRect );
 
-        OutputDevice *pOut = pSh->GetOut();
+            OutputDevice *pOut = pSh->GetOut();
 
-        if ( bPageFrm && bWin && !bBrowse )
-        {
-            //Irgendjemand muss sich um den Rand der Seite kuemmern. Eine Farbe
-            //kann fuer diesen Rand niemals angegeben sein.
-            SwRect aPgRect( Prt() );
-            aPgRect.Pos() += Frm().Pos();
-            if ( !aPgRect.IsInside( rRect ) )
+            if ( bPageFrm && bWin && !bBrowse )
             {
-                aPgRect = Frm();
-                aPgRect._Intersection( rRect );
-                SwRegionRects aPgRegion( aPgRect );
-                aPgRegion -= aRect;
-                if ( pPage->GetSortedObjs() )
-                    ::lcl_SubtractFlys( this, pPage, aPgRect, aPgRegion );
-                if ( aPgRegion.Count() )
+                //Irgendjemand muss sich um den Rand der Seite kuemmern. Eine Farbe
+                //kann fuer diesen Rand niemals angegeben sein.
+                SwRect aPgRect( Prt() );
+                aPgRect.Pos() += Frm().Pos();
+                if ( !aPgRect.IsInside( rRect ) )
                 {
-                    if ( pOut->GetFillColor() != aGlobalRetoucheColor )
-                        pOut->SetFillColor( aGlobalRetoucheColor );
-                    for ( USHORT i = 0; i < aPgRegion.Count(); ++i )
+                    aPgRect = Frm();
+                    aPgRect._Intersection( rRect );
+                    SwRegionRects aPgRegion( aPgRect );
+                    aPgRegion -= aRect;
+                    if ( pPage->GetSortedObjs() )
+                        ::lcl_SubtractFlys( this, pPage, aPgRect, aPgRegion );
+                    if ( aPgRegion.Count() )
                     {
-                        if ( 1 < aPgRegion.Count() )
+                        if ( pOut->GetFillColor() != aGlobalRetoucheColor )
+                            pOut->SetFillColor( aGlobalRetoucheColor );
+                        for ( USHORT i = 0; i < aPgRegion.Count(); ++i )
                         {
-                            ::SwAlignRect( aPgRegion[i], pGlobalShell );
-                            if( !aPgRegion[i].HasArea() )
+                            if ( 1 < aPgRegion.Count() )
+                            {
+                                ::SwAlignRect( aPgRegion[i], pGlobalShell );
+                                if( !aPgRegion[i].HasArea() )
+                                    continue;
+                            }
+                            pOut->DrawRect( aPgRegion[i].SVRect() );
+                        }
+                    }
+                }
+            }
+            if ( aRect.HasArea() )
+            {
+                SvxBrushItem* pNewItem;
+                SwRegionRects aRegion( aRect );
+                if( pCol )
+                {
+                    pNewItem = new SvxBrushItem( *pCol );
+                    pItem = pNewItem;
+                }
+                if ( pPage->GetSortedObjs() )
+                    ::lcl_SubtractFlys( this, pPage, aRect, aRegion );
+
+                {
+                    /// OD 06.08.2002 #99657# - determine, if background transparency
+                    ///     have to be considered for drawing.
+                    ///     --> Status Quo: background transparency have to be
+                    ///        considered for fly frames
+                    const sal_Bool bConsiderBackgroundTransparency = IsFlyFrm();
+                    for ( USHORT i = 0; i < aRegion.Count(); ++i )
+                    {
+                        if ( 1 < aRegion.Count() )
+                        {
+                            ::SwAlignRect( aRegion[i], pGlobalShell );
+                            if( !aRegion[i].HasArea() )
                                 continue;
                         }
-                        pOut->DrawRect( aPgRegion[i].SVRect() );
+                        /// OD 06.08.2002 #99657# - add 6th parameter to indicate, if
+                        ///     background transparency have to be considered
+                        ///     Set missing 5th parameter to the default value GRFNUM_NO
+                        ///         - see declaration in /core/inc/frmtool.hxx.
+                        ::DrawGraphic( pItem, pOut, aOrigBackRect, aRegion[i], GRFNUM_NO,
+                                bConsiderBackgroundTransparency );
                     }
                 }
+                if( pCol )
+                    delete pNewItem;
             }
         }
-        if ( aRect.HasArea() )
-        {
-            SvxBrushItem* pNewItem;
-            SwRegionRects aRegion( aRect );
-            if( pCol )
-            {
-                pNewItem = new SvxBrushItem( *pCol );
-                pItem = pNewItem;
-            }
-            if ( pPage->GetSortedObjs() )
-                ::lcl_SubtractFlys( this, pPage, aRect, aRegion );
+        else
+            bLowMode = bLowerMode ? TRUE : FALSE;
+    }
 
-            {
-                /// OD 06.08.2002 #99657# - determine, if background transparency
-                ///     have to be considered for drawing.
-                ///     --> Status Quo: background transparency have to be
-                ///        considered for fly frames
-                const sal_Bool bConsiderBackgroundTransparency = IsFlyFrm();
-                for ( USHORT i = 0; i < aRegion.Count(); ++i )
-                {
-                    if ( 1 < aRegion.Count() )
-                    {
-                        ::SwAlignRect( aRegion[i], pGlobalShell );
-                        if( !aRegion[i].HasArea() )
-                            continue;
-                    }
-                    /// OD 06.08.2002 #99657# - add 6th parameter to indicate, if
-                    ///     background transparency have to be considered
-                    ///     Set missing 5th parameter to the default value GRFNUM_NO
-                    ///         - see declaration in /core/inc/frmtool.hxx.
-                    ::DrawGraphic( pItem, pOut, aOrigBackRect, aRegion[i], GRFNUM_NO,
-                            bConsiderBackgroundTransparency );
-                }
-            }
-            if( pCol )
-                delete pNewItem;
-        }
-    }
-    else
-        bLowMode = bLowerMode ? TRUE : FALSE;
-    }
-    if ( bResetPageOnly )
-        bPageOnly = FALSE;
+    /// OD 05.09.2002 #102912#
+    /// delete temporary background brush.
+    delete pTmpBackBrush;
 
     //Jetzt noch Lower und dessen Nachbarn.
     //Wenn ein Frn dabei die Kette verlaesst also nicht mehr Lower von mir ist
     //so hoert der Spass auf.
     const SwFrm *pFrm = GetLower();
-    if ( !bPageOnly && pFrm )
+    if ( pFrm )
     {
         SwRect aFrmRect;
         SwRect aRect( PaintArea() );
