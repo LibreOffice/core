@@ -160,6 +160,37 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
     }
 
     /**
+     * This is a necessary evil because we don't currently support fomula.
+     * Hopefully one day we will and we will not have to validate every single
+     * cell
+     *
+     *  @param the cell contents to be verified
+     */
+    private boolean validateCell(String cell) {
+
+        boolean validCell = false;
+
+        if (cell.equals("+") ||
+            cell.equals("-") ||
+            cell.equals("*") ||
+            cell.equals("/") ||
+            cell.equals("(") ||
+            cell.equals(")") ||
+            cell.equals("^")) {
+            validCell = true;
+        } else {
+            for(int i = 0;i<cell.length();i++) {
+                char ch = cell.charAt(i);
+                if((ch>='0') && (ch<='9')) {
+                    validCell = true;
+                    break;
+                    }
+            }
+        }
+        return validCell;
+    }
+
+    /**
      *  This method converts a String containing a formula in infix notation
      *  to a String in Reverse Polish Notation (RPN)
      *
@@ -272,6 +303,9 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
             } else
                 nextChar = inputString.substring(i,i+1);
 
+            if(!validateCell(nextChar))
+                return "";
+
             if (nextChar.equals(")")) {
                 topOfStack = (String)aStack.pop();
                 while (!topOfStack.equals("(") && !aStack.empty()) {
@@ -322,8 +356,10 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
 
         if (cellContents.startsWith("=")) {
             cellContents = parseFormula(cellContents);
+            Debug.log(Debug.TRACE,"Parsing Formula");
         }
-        pxlDoc.addCell(row, column, fmt, cellContents);
+        if(cellContents.length()>0)
+            pxlDoc.addCell(row, column, fmt, cellContents);
     }
 
 
@@ -383,13 +419,5 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
     }
 
 
-    /*
-     *  This method returns a MiniCalc style format from the
-     *  <code>Format</code> object.
-     */
-     /*
-    private long getFormat(Format fmt) {
-        return 0;
-    }*/
 }
 

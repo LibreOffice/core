@@ -64,6 +64,7 @@ import java.util.Stack;
 import java.util.LinkedList;
 import java.util.Vector;
 import java.util.Enumeration;
+import java.util.NoSuchElementException;
 
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
@@ -71,6 +72,7 @@ import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Worksheet;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Formula;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.LabelCell;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.CellValue;
@@ -86,12 +88,12 @@ import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.FloatNumber;
 final class PocketExcelDecoder extends SpreadsheetDecoder {
 
     private PxlDocument pxlDoc;
-    private LinkedList ws = new LinkedList();
+    private Worksheet ws;
     private CellValue cell;
     private int maxRows = 0;
     private int maxCols = 0;
     private int wsIndex;
-    private int cellValue=0;
+    private Enumeration cellValue;
     private Format fmt = null;
 
     /**
@@ -153,12 +155,13 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
     public void setWorksheet(int sheetIndex) throws IOException {
         Debug.log(Debug.TRACE,"Setting to worksheet : " + sheetIndex);
         ws =  pxlDoc.getWorksheet(sheetIndex);
+        cellValue = ws.getCellEnumerator();
         wsIndex = sheetIndex;
         while(goToNextCell()) {
             maxRows = Math.max(maxRows, cell.getRow());
             maxCols = Math.max(maxCols, cell.getCol());
         }
-        cellValue = 0;
+        cellValue = ws.getCellEnumerator();
         Debug.log(Debug.TRACE,"Max Cols : " + maxCols + " MaxRows : " + maxRows);
     }
 
@@ -191,14 +194,12 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
 
         boolean success = false;
 
-        if (cellValue < ws.size()){
-            cell = (CellValue) ws.get(cellValue);
-            cellValue++;
+        try {
+            cell = (CellValue) cellValue.nextElement();
+            Debug.log(Debug.TRACE,"Current Cell : " + cell.getString());
             readCellFormat();
-            // Debug.log(Debug.TRACE,"Current Cell : " + cell.getString());
-            return true;
-        }
-        else {
+            success = true;
+        } catch (NoSuchElementException e) {
             Debug.log(Debug.TRACE,"Could't find current cell");
         }
 
