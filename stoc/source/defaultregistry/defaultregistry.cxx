@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultregistry.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-13 12:43:15 $
+ *  last change: $Author: jsc $ $Date: 2001-03-19 12:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1002,7 +1002,7 @@ sal_Bool SAL_CALL NestedKeyImpl::createLink( const OUString& aLinkName, const OU
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
 
-    sal_Bool isCreated = False;
+    sal_Bool isCreated = sal_False;
     if ( !m_localKey.is() && !m_defaultKey.is() )
     {
         throw InvalidRegistryException();
