@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>impress_flash_Export</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Macromedia Flash (SWF)</value>
+            <value>Macromedia Flash (SWF)</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
