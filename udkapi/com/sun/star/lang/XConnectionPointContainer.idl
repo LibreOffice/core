@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnectionPointContainer.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:37 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ interface XConnectionPointContainer: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::lang::XConnectionPointContainer::getConnectionPointTypes
     /** @returns
-            a sequence of all outgoing type spefifies which are supported
+            a sequence of all outgoing types; specifies which are supported
             by this connectable object.
      */
     sequence<type> getConnectionPointTypes();
@@ -124,8 +124,8 @@ interface XConnectionPointContainer: com::sun::star::uno::XInterface
         get with <code>queryConnectionPoint( id )</code>.  </p>
 
         <p>Use this method instead of the advise method at the
-        connection point only if you know that the broadcaster supports
-        the outgoing interface or if it does not matter that the
+        connection point, only if you know that the broadcaster supports
+        the outgoing interface, or if it does not matter that the
         outgoing interface is not supported.  </p>
 
         @see XConnectionPoint::advise
@@ -153,6 +153,9 @@ interface XConnectionPointContainer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/03/16 15:10:37  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.6  2001/01/31 09:45:41  mi
     TYPE_XIDLCLASS is now 'type'
 

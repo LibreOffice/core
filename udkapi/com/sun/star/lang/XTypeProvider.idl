@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTypeProvider.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:37 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ interface XTypeProvider: com::sun::star::uno::XInterface
     /** @returns
             Sequence of all types (usually interface types) provided by the object.
             Important: If the object aggregates other objects the sequence also has
-            to contain all types supportet by the aggregated objects.
+            to contain all types supported by the aggregated objects.
      */
     sequence<type> getTypes();
 
@@ -94,9 +94,9 @@ interface XTypeProvider: com::sun::star::uno::XInterface
     // DocMerge from idl: method com::sun::star::lang::XTypeProvider::getImplementationId
     /** @returns
             a UUID as sequence of 16 bytes as an Id that can be used to unambiguously
-            distinguish between two sets of types, e.g. to realise hashing functionality
+            to distinguish between two sets of types, e.g., to realise hashing functionality
             when the object is introspected. Two objects that return the same UUID also
-            have to return the same set of types in getTypes(). If an unique implementation
+            have to return the same set of types in getTypes(). If a unique implementation
             Id cannot be provided this method has to return an empty sequence.
             Important: If the object aggregates other objects the UUID has to be unique
             for the whole combination of objects.
@@ -111,6 +111,9 @@ interface XTypeProvider: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/03/16 15:10:37  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.6  2001/01/31 09:45:41  mi
     TYPE_XIDLCLASS is now 'type'
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistryKeyType.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:50 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 15:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,7 @@
 // DocMerge from xml: enum com::sun::star::registry::RegistryKeyType
 /** represents all possible types of a key.
 
-
-
-    <p>A key can be a normal key with a value and subkeys or it can be a
+    <p>A key can be a normal key with a value and subkeys, or it can be a
     link which references another key.</p>
  */
 enum RegistryKeyType
@@ -99,6 +97,9 @@ enum RegistryKeyType
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:50  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:32  hjs
     initial import
 

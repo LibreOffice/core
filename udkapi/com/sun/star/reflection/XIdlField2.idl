@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdlField2.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-03 13:58:08 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ interface XIdlField2: com::sun::star::reflection::XIdlMember
     // DocMerge from idl: method com::sun::star::reflection::XIdlField2::getAccessMode
     /** @returns
                 an enumeration value which denotes whether the field is
-                "const", "readonly", "writeonly" or "readwrite".
+                "const", "readonly", "writeonly", or "readwrite".
      */
     com::sun::star::reflection::FieldAccessMode getAccessMode();
 
@@ -139,7 +139,7 @@ interface XIdlField2: com::sun::star::reflection::XIdlMember
                 NULL, the method throws an
                 "IllegalArgumentException". If the specified
                 object is not an instance of the class,
-                interface, struct, union or enum declaring
+                interface, struct, union, or enum declaring
                 the underlying field, the method throws an
                 "IllegalArgumentException".
 
@@ -202,6 +202,9 @@ interface XIdlField2: com::sun::star::reflection::XIdlMember
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/05/03 13:58:08  jsc
+    new
+
 
 =============================================================================*/
 #endif

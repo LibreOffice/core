@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DefaultRegistry.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 13:49:37 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 15:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 /** implicitly supports a local registry and a read-only
     system registry for global information.
     In the context of this service,
-    the functions <code>open</code>, <code>close</code> and <code>destroy</code>
+    the functions <code>open</code>, <code>close</code>, and <code>destroy</code>
     from <type>XSimpleRegistry</type> are not supported and throw an exception
     if they are used.
     <dl>
@@ -194,6 +194,9 @@ service DefaultRegistry
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/19 13:49:37  mi
+    syntax errors in documentation fixed
+
     Revision 1.4  2000/11/08 12:28:50  mi
     moved from api
 

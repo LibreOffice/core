@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dynamic.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-05 10:22:14 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ interface XImplementationLoader;
 
 
 /** makes it possible to access services accessible via a <code>UnoUrlResolver</code>
-    E.g.: instantiation of services in an other process
+    E.g., instantiation of services in another process
  */
 service Dynamic
 {
@@ -80,7 +80,7 @@ service Dynamic
                 implementation.
      */
     /** allows registration and activation of described service.
-        The url parameter has to be a komma separated list of attributes.
+        The url parameter has to be a comma-separated list of attributes.
         The following attribute types are understood:
         servicename = the service name to register this component under
         link        = a parameter given to a resolver to get a <code>SingleServiceFactory</code>

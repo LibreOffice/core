@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdlClass.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:38 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,9 @@ interface XIdlArray;
     <type>XIdlClass</type> object that is shared by all arrays with the
     same element type and number of dimensions. Finally, any of the
     primitive IDL types are also represented as <type>XIdlClass</type>
-    objects. This includes "void, any, boolean, char, float, double, octet,
-    short, long, hypher, unsigned octet, unsigned short, unsigned long" and
-    "unsigned hypher".
+    objects. These include "void, any, boolean, char, float, double, octet,
+    short, long, hypher, unsigned octet, unsigned short, unsigned long, and
+    unsigned hypher".
  */
 interface XIdlClass: com::sun::star::uno::XInterface
 {
@@ -144,7 +144,7 @@ interface XIdlClass: com::sun::star::uno::XInterface
     // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getName
     /** @returns
                     the fully-qualified name of the type of object
-                    (class, interface, array, sequence, struct, union, enum or
+                    (class, interface, array, sequence, struct, union, enum, or
                     primitive) represented by this <type>XIdlClass</type>.
      */
     string getName();
@@ -162,14 +162,14 @@ interface XIdlClass: com::sun::star::uno::XInterface
     // DOCUMENTATION CHANGED FOR XIdlClass::getSuperclasses
 
     // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getSuperclasses
-    /** * If this object represents an interface or a class,
-             * then the objects that represents the superclasses or superinterfaces
-             * of that class are returned.
-             * <p>
-             * If this object is the one that represents the topmost class
-             * or interface, an empty sequence is returned.
-             *
-             * @return  the superclass or interface of the type represented by this object.
+    /** If this object represents an interface or a class,
+         then the objects that represents the superclasses or superinterfaces
+         of that class are returned.
+         <p>
+         If this object is the one that represents the topmost class
+         or interface, an empty sequence is returned.
+
+         @return  the superclass or interface of the type represented by this object.
      */
     sequence<XIdlClass> getSuperclasses();
 
@@ -177,13 +177,13 @@ interface XIdlClass: com::sun::star::uno::XInterface
     // DOCUMENTATION CHANGED FOR XIdlClass::getInterfaces
 
     // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getInterfaces
-    /** * Determines the interfaces implemented by the class or interface
-             * represented by this object.
-             * <p>
-             * If the class or interface implements no interfaces, the method
-             * returns a sequence of length 0.
-             *
-             * @return  a sequence of interfaces implemented by this class.
+    /** Determines the interfaces implemented by the class or interface
+         represented by this object.
+         <p>
+         If the class or interface implements no interfaces, the method
+         returns a sequence of length 0.
+
+         @return  a sequence of interfaces implemented by this class.
      */
     sequence<XIdlClass> getInterfaces();
 
@@ -192,7 +192,7 @@ interface XIdlClass: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::reflection::XIdlClass::getComponentType
     /** If this class represents an array or sequence type, this method
         returns the <type>XIdlClass</type> object representing the
-        component type of the array or sequence; otherwise it returns
+        component type of the array or sequence; otherwise, it returns
         <NULL/>.
      */
     XIdlClass getComponentType();
@@ -202,12 +202,12 @@ interface XIdlClass: com::sun::star::uno::XInterface
     // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getField
     /** @returns
                 an <type>XIdlField</type> that reflects the specified member
-                field of the class, interface, struct, union, enum or
+                field of the class, interface, struct, union, enum, or
                 exception represented by this <type>XIdlClass</type> object.
                 If a field with the specified name is not found, 0 is returned.
 
                 <p>The field to be reflected is located by searching all the
-                member fields of the class, interface, struct, union, enum or
+                member fields of the class, interface, struct, union, enum, or
                 exception represented by this <type>XIdlClass</type> object
                 for a field with the specified name or for NULL, if a field
                 with the specified name is not found.
@@ -221,18 +221,18 @@ interface XIdlClass: com::sun::star::uno::XInterface
     // DOCUMENTATION CHANGED FOR XIdlClass::getFields
 
     // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getFields
-    /** * Returns a sequence containing Field objects reflecting all the
-             * accessible fields of the class, interface, struct, union or enum represented
-             * by this XIdlClass object. Returns a sequence of length 0 if the
-             * class or interface has no accessible fields, or if it
-             * represents an array, a sequence or a primitive type.
-             *
-             * <p>Specifically, if this XIdlClass object represents a class,
-             * returns the fields of this class and of all its
-             * superclasses. If this XIdlClass object represents an interface,
-             * returns the fields of this interface and of all its
-             * superinterfaces. If this XIdlClass object represents an array,
-             * sequence or primitive type, returns a sequence of length 0.
+    /** Returns a sequence containing Field objects reflecting all the
+         accessible fields of the class, interface, struct, union, or enum represented
+         by this XIdlClass object. Returns a sequence of length 0 if the
+         class or interface has no accessible fields, or if it
+         represents an array, a sequence, or a primitive type.
+
+         <p>Specifically, if this XIdlClass object represents a class,
+         returns the fields of this class and of all its
+         superclasses. If this XIdlClass object represents an interface,
+         returns the fields of this interface and of all its
+         superinterfaces. If this XIdlClass object represents an array,
+         sequence or primitive type, returns a sequence of length 0.
      */
     sequence<XIdlField> getFields();
 
@@ -259,13 +259,13 @@ interface XIdlClass: com::sun::star::uno::XInterface
     // DOCUMENTATION CHANGED FOR XIdlClass::getMethods
 
     // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getMethods
-    /** * Returns a sequence containing XIdlMethod objects reflecting all the
-             * <em>member</em> methods of the class or interface
-             * represented by this XIdlClass object, including those declared by
-             * the class or interface and and those inherited from
-             * superclasses and superinterfaces. Returns a sequence of length 0
-             * if the class or interface has no member methods.
-             *
+    /** Returns a sequence containing XIdlMethod objects reflecting all the
+             <em>member</em> methods of the class or interface
+             represented by this XIdlClass object, including those declared by
+             the class or interface and and those inherited from
+             superclasses and superinterfaces. Returns a sequence of length 0
+             if the class or interface has no member methods.
+
      */
     sequence<XIdlMethod> getMethods();
 
@@ -297,6 +297,9 @@ interface XIdlClass: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 15:10:38  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/19 13:49:36  mi
     syntax errors in documentation fixed
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdlField.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-03 13:59:05 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ interface XIdlField: com::sun::star::reflection::XIdlMember
     // DocMerge from idl: method com::sun::star::reflection::XIdlField::getAccessMode
     /** @returns
                 an enumeration value which denotes whether the field is
-                "const", "readonly", "writeonly" or "readwrite".
+                "const", "readonly", "writeonly", or "readwrite".
      */
     com::sun::star::reflection::FieldAccessMode getAccessMode();
 
@@ -140,7 +140,7 @@ interface XIdlField: com::sun::star::reflection::XIdlMember
                 NULL, the method throws an
                 "IllegalArgumentException". If the specified
                 object is not an instance of the class,
-                interface, struct, union or enum declaring
+                interface, struct, union, or enum declaring
                 the underlying field, the method throws an
                 "IllegalArgumentException".
 
@@ -161,8 +161,6 @@ interface XIdlField: com::sun::star::reflection::XIdlMember
     // DocMerge from xml: method com::sun::star::reflection::XIdlField::set
     /** sets the field represented by this <type>XIdlField</type> on the
         specified object argument to the specified new value.
-
-
 
         <p>The operation proceeds as follows:
 
@@ -205,6 +203,9 @@ interface XIdlField: com::sun::star::reflection::XIdlMember
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/05/03 13:59:05  jsc
+    change docu, reference to XIdlField2 because of specification error in set method
+
     Revision 1.5  2001/03/16 15:10:38  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

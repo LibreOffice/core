@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponent.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:37 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,13 +110,13 @@ interface XComponent: com::sun::star::uno::XInterface
             Imagine there was a hole in the floor and some people
             around it are holding a <em>box</em> (our component).
             Everyone who holds the box for a longer time than just
-            temporaryly (i.e. to put something in or get something
+            temporarily (i.e., to put something in or get something
             out) has to watch a light bulb which is attached to
             the box (listening to the <member>XEventListener::disposing</member>
             event).  Now, when the owner of the box switches the light on
             (calling  <member>XComponent::dispose</member>),
             everybody holding the box has to take his hands off
-            (clear the interface handles). If and only if everyone
+            (clear the interface handles). If, and only if, everyone
             does that, then the box falls (getting deleted).
             But only the owner is allowed to switch the light on!
         </blockquote>
@@ -178,6 +178,9 @@ interface XComponent: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/03/16 15:10:37  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.6  2000/12/19 16:15:26  mi
     documentation syntax fixed
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NestedRegistry.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 14:17:15 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 15:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 /** supports a shared view on two different registries. The registry
     files will be opened in two different modes, registry1 will be opened with read/write
     rights and registry2 will be opened read-only.
-    In the context of this service, the functions <code>open</code>, <code>close</code>
+    In the context of this service, the functions <code>open</code>, <code>close</code>,
     and <code>destroy</code> from <type>XSimpleRegistry</type> are not supported and
     throw an exception if they are used.
     <dl>
@@ -201,6 +201,9 @@ service NestedRegistry
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/19 14:17:15  mi
+    documentation sytax fixed
+
     Revision 1.4  2000/11/08 12:28:50  mi
     moved from api
 

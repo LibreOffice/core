@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XProxyFactory.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:38 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,9 @@ interface XProxyFactory: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::reflection::XProxyFactory::createProxy
     /** Creates a new object that represents the given target object and can
-        be aggregated. The proxy object acts UNO conform and does NOT provide
+        be aggregated. The proxy object acts UNO conforming and does NOT provide
         original target interfaces on queryInterface() calls.<br>
-        Be careful, e.g. when registering as a listener at the proxy,
+        Be careful, e.g., when registering as a listener at the proxy,
         you will get event notification from the original object, meaning
         a different object!
      */
@@ -101,6 +101,9 @@ interface XProxyFactory: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/03/16 15:10:38  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.1  2000/11/13 16:16:05  jsc
     moved from com.sun.star.util
 

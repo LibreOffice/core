@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ServiceManager.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-13 10:44:10 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ module com {  module sun {  module star {  module lang {
         </dd>
 
         <dt> <type>XSingleServiceFactory</type> (optional) </dt>
-        <dd>is used to instanciate components from the implementation.
+        <dd>is used to instantiate components from the implementation.
         </dd>
 
         <dt> <type scope="com::sun::star::beans">XPropertySet</type> (optional) </dt>
@@ -137,11 +137,11 @@ service ServiceManager
         <member scope="com::sun::star::util">XComponent::dispose</member>
         at the service manager just before the application terminates.
 
-        <p>The service manager first broadcasts the
+        <p>First, the service manager broadcasts the
         <member scope="com::sun::star::util">XEventListener::disposing()</member>
         message to all registered listeners. In this state you can still get all
         factories from the service manager, but it is not possible to
-        add disposing listeners. Second the service manager calls
+        add disposing listeners. Second, the service manager calls
         <member scope="com::sun::star::util">XComponent::dispose</member>
         at all registered factories that implement <type>XComponent</type>.
         In this second state the service manager does not provide any factory.
@@ -171,7 +171,7 @@ service ServiceManager
 
 
     // DocMerge from xml: service com::sun::star::lang::ServiceManager: interface com::sun::star::lang::XMultiServiceFactory
-    /** Use a service name or an implementation name to instanciate a
+    /** Use a service name or an implementation name to instantiate a
         component with this interface.
 
         <p>First the service manager gets the factory registered
@@ -202,6 +202,9 @@ service ServiceManager
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/06/13 10:44:10  dbo
+    #87233# ServiceManager has to export lang.XMultiComponentFactory
+
     Revision 1.6  2000/12/19 15:32:25  mi
     documentation syntax fixed
 

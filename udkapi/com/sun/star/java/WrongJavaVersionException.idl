@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WrongJavaVersionException.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-07-13 12:51:23 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ module com { module sun { module star { module java {
 
 //============================================================================
 /** indicates that an operation involving Java (probably executing Java code)
-    failed due to a bad Java version.
+    failed due to a wrong Java version.
  */
 exception WrongJavaVersionException: com::sun::star::uno::Exception
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XJavaVM.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:37 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,14 +87,14 @@ interface XJavaVM: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::java::XJavaVM::getJavaVM
     /** returns the address of the Java Virtual Machine.
 
-        <p>If the VM is not already instanciated, it will be now. </p>
+        <p>If the VM is not already instantiated, it will be now. </p>
      */
     any getJavaVM( [in] sequence<byte> processID );
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::java::XJavaVM::isVMStarted
-    /** returns <true/> if the VM is started successfully otherwise <false/>.
+    /** returns <true/> if the VM is started successfully, otherwise <false/>.
      */
     boolean isVMStarted();
 
@@ -116,6 +116,9 @@ interface XJavaVM: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 15:10:37  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/13 15:46:58  mi
     symtactical documentation and minor semantic documentation flaws fixed
 

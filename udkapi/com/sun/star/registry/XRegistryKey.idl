@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRegistryKey.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:39 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 15:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ interface XRegistryKey: com::sun::star::uno::XInterface
          if the registry is not open.
 
          @throws InvalidValueException
-         if the actually value is not of type long list.
+         if the actual value is not of type long list.
     */
     sequence<long> getLongListValue()
             raises( com::sun::star::registry::InvalidRegistryException,
@@ -210,7 +210,7 @@ interface XRegistryKey: com::sun::star::uno::XInterface
          if the registry is not open.
 
          @throws InvalidValueException
-         if the actually value is not of type ascii.
+         if the actual value is not of type ascii.
     */
     string getAsciiValue()
             raises( com::sun::star::registry::InvalidRegistryException,
@@ -238,7 +238,7 @@ interface XRegistryKey: com::sun::star::uno::XInterface
          if the registry is not open.
 
          @throws InvalidValueException
-         if the actually value is not of type ascii list.
+         if the actual value is not of type ascii list.
     */
     sequence<string> getAsciiListValue()
             raises( com::sun::star::registry::InvalidRegistryException,
@@ -266,7 +266,7 @@ interface XRegistryKey: com::sun::star::uno::XInterface
          if the registry is not open.
 
          @throws InvalidValueException
-         if the actually value is not of type string.
+         if the actual value is not of type string.
     */
     string getStringValue()
             raises( com::sun::star::registry::InvalidRegistryException,
@@ -293,7 +293,7 @@ interface XRegistryKey: com::sun::star::uno::XInterface
          if the registry is not open.
 
          @throws InvalidValueException
-         if the actually value is not of type string list.
+         if the actual value is not of type string list.
     */
     sequence<string> getStringListValue()
             raises( com::sun::star::registry::InvalidRegistryException,
@@ -319,7 +319,7 @@ interface XRegistryKey: com::sun::star::uno::XInterface
          if the registry is not open.
 
          @throws InvalidValueException
-         if the actually value is not of type binary.
+         if the actual value is not of type binary.
     */
     sequence<byte> getBinaryValue()
             raises( com::sun::star::registry::InvalidRegistryException,
@@ -369,7 +369,7 @@ interface XRegistryKey: com::sun::star::uno::XInterface
         a NULL interface if the key could not be created.
 
         @throws InvalidRegistryException
-        if the registry is not open, the registry is reaonly
+        if the registry is not open, the registry is readonly
         or if the key exists and is of type LINK.
     */
     com::sun::star::registry::XRegistryKey createKey( [in] string aKeyName )
@@ -404,7 +404,7 @@ interface XRegistryKey: com::sun::star::uno::XInterface
         resolved and the appropriate key will be opened.
 
            @returns
-           an empty sequnece if the key has no subkeys.
+           an empty sequence if the key has no subkeys.
 
            @throws InvalidRegistryException
            if the registry is not open.
@@ -442,7 +442,7 @@ interface XRegistryKey: com::sun::star::uno::XInterface
 
         @throws InvalidRegistryException
         if the registry is not open or the registry is
-        reaonly.
+        readonly.
 
     */
     boolean createLink( [in] string aLinkName,
@@ -482,8 +482,8 @@ interface XRegistryKey: com::sun::star::uno::XInterface
     // DOCUMENTATION CHANGED FOR XRegistryKey::getResolvedName
     /** @returns
         the resolved name of a key. The function resolve the complete name of the key.
-        If a link could not resolved the linktarget concatenate with the unresolved rest
-        of the name will returned.
+        If a link could not be resolved, the linktarget concatenated with the unresolved rest
+        of the name, will be returned.
 
          @param rKeyName
          specifies a relative path from the current key which will be resolved from all links.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistryServiceManager.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 15:32:24 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ module com {  module sun {  module star {  module lang {
         </dd>
 
         <dt> <type>XSingleServiceFactory</type> </dt>
-        <dd>is used to instanciate components from the implementation.
+        <dd>is used to instantiate components from the implementation.
         </dd>
 
         <dt> <type scope="com::sun::star::beans">XPropertySet</type> (optional) </dt>
@@ -150,7 +150,7 @@ service RegistryServiceManager
 
     // DocMerge from xml: service com::sun::star::lang::RegistryServiceManager: interface com::sun::star::beans::XPropertySet
     /** The method <member>getPropertyValue</member> must be implemented
-                to get the readonly property <member>Registry</member>. All
+                to get the read-only property <member>Registry</member>. All
                 other methods are optional.
      */
     interface com::sun::star::beans::XPropertySet;
@@ -175,6 +175,9 @@ service RegistryServiceManager
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/12/19 15:32:24  mi
+    documentation syntax fixed
+
     Revision 1.5  2000/12/13 15:47:00  mi
     symtactical documentation and minor semantic documentation flaws fixed
 
