@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmdirlbox.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-12 09:53:47 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,19 +67,23 @@
 
 namespace svx {
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 
-inline void* lcl_EnumToVoid( SvxFrameDirection eDirection )
+namespace {
+
+inline void* lclEnumToVoid( SvxFrameDirection eDirection )
 {
     return reinterpret_cast< void* >( static_cast< sal_uInt32 >( eDirection ) );
 }
 
-inline SvxFrameDirection lcl_VoidToEnum( void* pDirection )
+inline SvxFrameDirection lclVoidToEnum( void* pDirection )
 {
     return static_cast< SvxFrameDirection >( reinterpret_cast< sal_uInt32 >( pDirection ) );
 }
 
-// ----------------------------------------------------------------------------
+} // namespace
+
+// ============================================================================
 
 FrameDirectionListBox::FrameDirectionListBox( Window* pParent, WinBits nStyle ) :
     ListBox( pParent, nStyle )
@@ -98,19 +102,19 @@ FrameDirectionListBox::~FrameDirectionListBox()
 void FrameDirectionListBox::InsertEntryValue( const String& rString, SvxFrameDirection eDirection, sal_uInt16 nPos )
 {
     sal_uInt16 nRealPos = InsertEntry( rString, nPos );
-    SetEntryData( nRealPos, lcl_EnumToVoid( eDirection ) );
+    SetEntryData( nRealPos, lclEnumToVoid( eDirection ) );
 }
 
 void FrameDirectionListBox::RemoveEntryValue( SvxFrameDirection eDirection )
 {
-    sal_uInt16 nPos = GetEntryPos( lcl_EnumToVoid( eDirection ) );
+    sal_uInt16 nPos = GetEntryPos( lclEnumToVoid( eDirection ) );
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
         RemoveEntry( nPos );
 }
 
 void FrameDirectionListBox::SelectEntryValue( SvxFrameDirection eDirection )
 {
-    sal_uInt16 nPos = GetEntryPos( lcl_EnumToVoid( eDirection ) );
+    sal_uInt16 nPos = GetEntryPos( lclEnumToVoid( eDirection ) );
     if( nPos == LISTBOX_ENTRY_NOTFOUND )
         SetNoSelection();
     else
@@ -122,10 +126,38 @@ SvxFrameDirection FrameDirectionListBox::GetSelectEntryValue() const
     sal_uInt16 nPos = GetSelectEntryPos();
     if( nPos == LISTBOX_ENTRY_NOTFOUND )
         return static_cast< SvxFrameDirection >( 0xFFFF );
-    return lcl_VoidToEnum( GetEntryData( nPos ) );
+    return lclVoidToEnum( GetEntryData( nPos ) );
 }
 
-// ----------------------------------------------------------------------------
+// ============================================================================
+
+FrameDirListBoxWrapper::FrameDirListBoxWrapper( FrameDirListBox& rListBox ) :
+    SingleControlWrapperType( rListBox )
+{
+}
+
+bool FrameDirListBoxWrapper::IsControlDontKnow() const
+{
+    return GetControl().GetSelectEntryCount() == 0;
+}
+
+void FrameDirListBoxWrapper::SetControlDontKnow( bool bSet )
+{
+    if( bSet )
+        GetControl().SetNoSelection();
+}
+
+SvxFrameDirection FrameDirListBoxWrapper::GetControlValue() const
+{
+    return GetControl().GetSelectEntryValue();
+}
+
+void FrameDirListBoxWrapper::SetControlValue( SvxFrameDirection eValue )
+{
+    GetControl().SelectEntryValue( eValue );
+}
+
+// ============================================================================
 
 } // namespace svx
 
