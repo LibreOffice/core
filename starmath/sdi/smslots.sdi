@@ -1,0 +1,505 @@
+/*************************************************************************
+#*
+#*    $Workfile:   SMSLOTS.SDI  $
+#*
+#*
+#*    Beschreibung      Starmath IDL-File
+#*
+#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 16:57:26 $
+#*    $Revision: 1.1.1.1 $
+#*
+#*    $Logfile:   T:/starmath/sdi/smslots.sdv  $
+#*
+#*    Copyright (c) 1989 - 1995, STAR DIVISION
+#*
+#*************************************************************************
+
+      Source Code Control System - Header
+
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/starmath/sdi/smslots.sdi,v 1.1.1.1 2000-09-18 16:57:26 hr Exp $
+
+*************************************************************************/
+
+
+
+import "svxslots.ilb"
+
+module
+"312C4240-35E7-101C-B12A-04021C007002"
+"58216740-35E7-101C-B12A-04021C007002"
+StarMath
+[
+    HelpText ( "StarMath Application" )
+    SlotIdFile ( "starmath.hrc" )
+    SlotIdFile ( "sfx2/sfxsids.hrc" )
+    SlotIdFile ( "svx/svxids.hrc" )
+    TypeLibFile ( "smslots.tlb" )
+]
+{
+    include "smnew.sdi"
+    include "smath.sdi"
+    interface StarMath : Module
+    [
+        uuid ( "92B0FD20-2FC1-11CF-89CA-008029E4B0B1" )
+    ]
+    {
+    SID_CONFIGEVENT //idlpp ole : no , status : no
+    [
+        StateMethod = GetState ;
+        Export = FALSE ;
+    ]
+}
+
+shell SmModule
+{
+    import StarMath[Automation];
+}
+
+interface FormulaDocument : OfficeDocument
+[
+    uuid ( "815CBB20-2FC3-11CF-89CA-008029E4B0B1" )
+]
+{
+    SID_DOCTEMPLATE //idlpp ole : no , status : no
+    [
+        StateMethod = GetState ;
+        Export = FALSE ;
+    ]
+    SID_SYMBOLS_CATALOGUE //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_SYMBOLS_LOAD //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_AUTO_REDRAW //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_TOOLBOX //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp kein Menuepunkt , also keine Texte
+    SID_LOADSYMBOLS //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp kein Menuepunkt , also keine Texte
+    SID_SAVESYMBOLS //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_INSERT_FORMULA //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE ;
+    ]
+    SID_FONT //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTSIZE //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_DISTANCE //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ALIGN //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_TEXTMODE //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp kein Menueeintrag , also keine Texte
+    SID_MODIFYSTATUS //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp kein Menueeintrag , also keine Texte
+    SID_TEXT //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp kein Menueeintrag , also keine Texte
+    SID_GRAPHIC //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp kein Menueeintrag , also keine Texte
+    SID_COPYOBJECT //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp kein Menueeintrag , also keine Texte
+    SID_PASTEOBJECT //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+}
+
+shell SmDocShell : SfxObjectShell
+{
+    import FormulaDocument[Automation];
+}
+
+
+interface FormulaView : View
+[
+    uuid ( "CE1A6C00-2FC3-11CF-89CA-008029E4B0B1" )
+]
+{
+    SID_FORMULACURSOR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_NEXTERR //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PREVERR //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_NEXTMARK //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PREVMARK //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_VIEW050 //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_VIEW100 //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_VIEW200 //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ZOOMIN //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ZOOMOUT //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_DRAW //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ADJUST //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp kein Menueeintrag , also keine Texte
+    SID_FITINWINDOW //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_CUT //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Volatile;
+    ]
+    SID_COPY //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Volatile;
+    ]
+    SID_PASTE //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Volatile;
+    ]
+    SID_DELETE //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Volatile;
+    ]
+    SID_SELECT //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp kein Menueeintrag , also keine Texte
+    SID_INSERTCOMMAND //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp kein Menueeintrag , also keine Texte
+    SID_INSERTTEXT //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp kein Menueeintrag , also keine Texte
+    SID_ATTR_ZOOM //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE ;
+    ]
+    //idlpp kein Menueeintrag , also keine Texte
+    SID_TEXTSTATUS //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp kein Menueeintrag , also keine Texte
+    SID_GETEDITTEXT //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp kein Menueeintrag , also keine Texte
+    SID_CMDBOXWINDOW //idlpp ole : no , status : no
+    [
+        ExecMethod = NoExec ;
+        StateMethod = NoState ;
+    ]
+    //idlpp kein Menueeintrag , also keine Texte
+    SID_TOOLBOXWINDOW //idlpp ole : no , status : no
+    [
+        ExecMethod = NoExec ;
+        StateMethod = NoState ;
+    ]
+}
+
+shell SmViewShell : SfxViewShell
+{
+    import FormulaView[Automation];
+}
+
+}
+
+/*************************************************************************
+
+      Source Code Control System - History
+
+      $Log: not supported by cvs2svn $
+      Revision 1.61  1999/07/02 10:22:24  TL
+      #67357# SID_MARKERROR deleted.
+
+
+      Rev 1.60   02 Jul 1999 12:22:24   TL
+   #67357# SID_MARKERROR deleted.
+
+      Rev 1.59   29 Jun 1999 13:23:38   TL
+   #67233# SID_INSERTDOC in SID_INSERT_FORMULA umbenannt.
+
+      Rev 1.58   23 Mar 1999 12:32:00   MA
+   #63806# ConfigName nur noch in der Resource
+
+      Rev 1.57   17 Mar 1999 15:54:14   MBA
+   #63611#: kein HelpTexte/ConfigNames mehr
+
+      Rev 1.56   17 Feb 1999 15:52:44   OS
+   #61890# Methoden fuer alte Optionsdialoge geloescht
+
+      Rev 1.55   23 Nov 1998 16:02:16   TL
+   Task #58286#: Neuer Slot fuer Textmodus
+
+      Rev 1.54   12 Nov 1998 15:53:32   MA
+   Task #58163#: Slot SDI_FORMULACURSOR neu. (pz von TL gemacht)
+
+      Rev 1.53   02 Oct 1998 19:43:10   MA
+   #57466# RELOAD hat hier nichts zu suchen
+
+      Rev 1.52   22 Jul 1998 12:49:08   MA
+   #53584# Clipboard-Slots mussen volatile sein
+
+      Rev 1.51   07 Jul 1998 15:48:02   MH
+   verlorende header wieder eingesammelt
+
+      Rev 1.50   22 Apr 1998 16:39:24   MA
+   diverse Fixes, komplette Umstellung inplace-Verhalten
+
+      Rev 1.49   09 Mar 1998 19:34:32   RG
+   idl -> sdi
+
+      Rev 1.48   04 Sep 1997 13:34:40   MBA
+   Document von OfficeDocument abgeleitet
+
+      Rev 1.47   03 Sep 1997 16:50:30   MBA
+   Neue Interface-Namen
+
+      Rev 1.46   02 Sep 1997 16:51:50   MBA
+   StarMath von Module abgeleitet
+
+      Rev 1.45   28 Aug 1997 12:32:10   MBA
+   Neue Interface-Namen
+
+      Rev 1.44   27 Jan 1997 18:42:22   MBA
+   [Automation] fehlte beim Import
+
+      Rev 1.43   20 Dec 1996 17:44:52   RB
+   Optionen in Modul verschoben
+
+      Rev 1.42   19 Dec 1996 08:48:16   TRI
+   SID_LASTVERSIONDOC -> SID_RELOAD
+
+      Rev 1.41   11 Dec 1996 12:41:40   TRI
+   kein ofa.ibl benutzen
+
+      Rev 1.40   10 Dec 1996 15:03:56   RB
+   Neuer Name
+
+      Rev 1.39   09 Dec 1996 12:09:44   SOH
+   * OptionsDialogSlot -> SID_SM_EDITOPTIONS
+
+      Rev 1.38   12 Nov 1996 14:30:30   RB
+   Umstellung auf neues DLL-Handling
+
+      Rev 1.37   05 Nov 1996 15:18:10   NF
+   ofa.ilb raus, svxslots rein ...
+
+      Rev 1.36   23 Oct 1996 12:44:22   SOH
+   + include smnew.idl
+
+      Rev 1.35   22 Oct 1996 21:39:16   HJS
+   merge 22.10.96
+
+      Rev 1.34   07 Oct 1996 14:49:18   HJS
+   merge 07.10.96
+
+      Rev 1.33   19 Sep 1996 19:25:38   MBA
+   Syntaxfehler
+
+      Rev 1.32   19 Sep 1996 19:06:14   MBA
+   Anpassung
+
+      Rev 1.31   25 Jul 1996 12:30:34   RB
+   Slot SID_GETEDITTEXT
+
+      Rev 1.30   21 Jun 1996 12:30:28   RB
+   Muss-Umstellungen idlpp
+
+      Rev 1.29   04 Apr 1996 14:38:58   RB
+   Container weg Fensterslots (#26769#)
+
+      Rev 1.28   03 Apr 1996 16:08:38   RB
+   Slots fuer Kommando- und Toolboxfenster
+
+      Rev 1.27   06 Dec 1995 15:47:28   RB
+   uuids verteilt und neue syntax, SID_LASTVERSIONDOC neu
+
+      Rev 1.26   27 Nov 1995 17:26:36   RB
+   include beseitigt
+
+      Rev 1.25   27 Nov 1995 15:02:18   RB
+   initial revision
+
+      Rev 1.24   24 Nov 1995 18:59:18   RB
+   ExecNo beseitigt
+
+      Rev 1.23   24 Nov 1995 14:14:50   RB
+   Export=FALSE und Comments
+
+      Rev 1.22   24 Nov 1995 13:42:56   RB
+   Anpassungen an neue Syntax
+
+      Rev 1.21   24 Nov 1995 12:03:54   RB
+   etwas aufgeraeumt
+
+      Rev 1.20   22 Nov 1995 17:54:54   RB
+   SID_DOCTEMPLATE neu
+
+      Rev 1.19   17 Nov 1995 18:09:20   RB
+   SID_DOCINFO vorbereitet
+
+      Rev 1.18   16 Nov 1995 14:02:26   RB
+   SID_CONFIGEVENT
+
+      Rev 1.17   13 Nov 1995 17:45:58   RB
+   ???
+
+      Rev 1.16   09 Nov 1995 18:02:38   RB
+   SID_ATTR_ZOOM wieder verfuegbar
+
+      Rev 1.15   02 Nov 1995 17:55:18   RB
+   SID_ATTR_ZOOM beseitigt
+
+      Rev 1.14   01 Nov 1995 18:30:00   RB
+   SID_TEXT... wieder verfuegbar
+
+      Rev 1.13   15 Oct 1995 16:19:42   RB
+   Umlaute
+
+      Rev 1.12   12 Oct 1995 12:49:22   RB
+
+      Rev 1.11   07 Oct 1995 15:14:02   RB
+   HelpText und ConfigName eingetragen
+
+      Rev 1.10   04 Oct 1995 18:39:50   RB
+   GID_ geaendert und //idlpp HelpText//idlpp/ ConfigName
+
+      Rev 1.9   03 Oct 1995 15:55:54   RB
+   SID_DOCINFO ueberladen rueckgaengig
+
+      Rev 1.8   29 Sep 1995 13:42:18   RB
+   slots configurierbar (bugfix 15993)
+
+      Rev 1.7   08 Sep 1995 09:01:46   RB
+   SID_DOCINFO ueberladen
+
+      Rev 1.6   12 Aug 1995 12:28:28   TRI
+
+      Rev 1.5   10 Jul 1995 09:15:56   TRI
+   RH Aenderung
+
+      Rev 1.4   06 Jul 1995 01:47:06   MH
+   CutCopyPaste-Fehler beseitigt
+
+      Rev 1.3   19 Jun 1995 08:55:30   TRI
+   Revisions-Nr
+
+
+*************************************************************************/
+
+

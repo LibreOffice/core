@@ -1,0 +1,18 @@
+..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
+..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
+..\%__SRC%\slb\ysm.lib %_DEST%\lib%_EXT%\ysm.lib
+..\%__SRC%\bin\smath3.exe %_DEST%\bin%_EXT%\smath3.exe
+..\%__SRC%\bin\smath3.sym %_DEST%\bin%_EXT%\smath3.sym
+..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
+touch: ..\%__SRC%\misc\sm.hid %_DEST%\bin%_EXT%\sm.hid
+..\%__SRC%\misc\sm.csv %_DEST%\inc%_EXT%\sm.csv
+..\%__SRC%\bin\smslots.tlb %_DEST%\bin%_EXT%\smslots.tlb
+..\%__SRC%\bin\sm%upd%*.dll %_DEST%\bin%_EXT%\sm%upd%*.dll
+..\%__SRC%\bin\sm%upd%*.res %_DEST%\bin%_EXT%\sm%upd%*.res
+..\%__SRC%\bin\sm%upd%*.sym %_DEST%\bin%_EXT%\sm%upd%*.sym
+dos: mkdir %_DEST%\inc\starmath
+
+hedabu: ..\inc\smdll.hxx %_DEST%\inc%_EXT%\starmath\smdll.hxx
+hedabu: ..\inc\smdll0.hxx %_DEST%\inc%_EXT%\starmath\smdll0.hxx
+hedabu: ..\inc\smmod.hxx %_DEST%\inc%_EXT%\starmath\smmod.hxx
+

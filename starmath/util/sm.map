@@ -1,0 +1,9 @@
+SM_1_0 {
+    global:
+        CreateSmDocShellDll;
+        CreateObjSmDocShellDll;
+        InitSmDll;
+        DeInitSmDll;
+    local:
+        *;
+};
