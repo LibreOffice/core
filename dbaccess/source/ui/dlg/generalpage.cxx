@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-11 07:07:26 $
+ *  last change: $Author: hr $ $Date: 2001-10-26 16:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,7 +487,8 @@ namespace dbaui
         String sMessage;
         if (nResId)
         {
-            OLocalResourceAccess aStringResAccess(ModuleRes(PAGE_GENERAL), RSC_TABPAGE);
+            ModuleRes aModuleRes(PAGE_GENERAL);
+            OLocalResourceAccess aStringResAccess(aModuleRes, RSC_TABPAGE);
             sMessage = String(ResId(nResId));
         }
         m_aSpecialMessage.SetText(sMessage);
@@ -1196,7 +1197,8 @@ namespace dbaui
                 }
                 else
                 {
-                    OLocalResourceAccess aLocRes(ModuleRes(PAGE_GENERAL), RSC_TABPAGE);
+                    ModuleRes aModuleRes(PAGE_GENERAL);
+                    OLocalResourceAccess aLocRes(aModuleRes, RSC_TABPAGE);
                     String sError(ResId(STR_NO_ADABASE_DATASOURCES));
                     ErrorBox aBox(this, WB_OK, sError);
                     aBox.Execute();
@@ -1211,7 +1213,8 @@ namespace dbaui
                 if (!aEnumeration.isLoaded())
                 {
                     // show an error message
-                    OLocalResourceAccess aLocRes(ModuleRes(PAGE_GENERAL), RSC_TABPAGE);
+                    ModuleRes aModuleRes(PAGE_GENERAL);
+                    OLocalResourceAccess aLocRes(aModuleRes, RSC_TABPAGE);
                     String sError(ResId(STR_COULDNOTLOAD_ODBCLIB));
                     sError.SearchAndReplaceAscii("#lib#", aEnumeration.getLibraryName());
                     ErrorBox aDialog(this, WB_OK, sError);
@@ -1397,6 +1400,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2001/09/11 07:07:26  fs
+ *  #92027# accept arbitrary valid URLs - not only file URLs - when browsing for a dBase or text directory
+ *
  *  Revision 1.25  2001/08/30 16:12:30  fs
  *  #88427# check for a valid name in implInitControls
  *
