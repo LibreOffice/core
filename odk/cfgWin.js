@@ -209,6 +209,10 @@ function getMakeHome()
         //Check for the make executable
         var sMakePath = sHome + "\\make.exe";
         if (! aFileSystemObject.FileExists(sMakePath))
+	{
+		sMakePath = sHome + "\\mingw32-make.exe";
+	}
+        if (! aFileSystemObject.FileExists(sMakePath))
         {
             stdout.WriteLine("\n Error: Could not find \"" + sMakePath + 
 							 "\". GNU make is required, please specify a GNU " +
