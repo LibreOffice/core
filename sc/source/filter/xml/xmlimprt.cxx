@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:31:37 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,6 +810,14 @@ static __FAR_DATA SvXMLTokenMapEntry aDataPilotFieldAttrTokenMap[] =
     { XML_NAMESPACE_TABLE, XML_ORIENTATION,             XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION           },
     { XML_NAMESPACE_TABLE, XML_SELECTED_PAGE,           XML_TOK_DATA_PILOT_FIELD_ATTR_SELECTED_PAGE         },
     { XML_NAMESPACE_TABLE, XML_USED_HIERARCHY,          XML_TOK_DATA_PILOT_FIELD_ATTR_USED_HIERARCHY        },
+    { XML_NAMESPACE_TABLE, XML_IS_GROUP_FIELD,          XML_TOK_DATA_PILOT_FIELD_ATTR_IS_GROUP_FIELD        },
+    { XML_NAMESPACE_TABLE, XML_GROUP_SOURCE_FIELD_NAME, XML_TOK_DATA_PILOT_FIELD_ATTR_GROUP_SOURCE_FIELD_NAME},
+    { XML_NAMESPACE_TABLE, XML_DATE_START,              XML_TOK_DATA_PILOT_FIELD_ATTR_DATE_START            },
+    { XML_NAMESPACE_TABLE, XML_DATE_END,                XML_TOK_DATA_PILOT_FIELD_ATTR_DATE_END              },
+    { XML_NAMESPACE_TABLE, XML_START,                   XML_TOK_DATA_PILOT_FIELD_ATTR_START                 },
+    { XML_NAMESPACE_TABLE, XML_END,                     XML_TOK_DATA_PILOT_FIELD_ATTR_END                   },
+    { XML_NAMESPACE_TABLE, XML_STEP,                    XML_TOK_DATA_PILOT_FIELD_ATTR_STEP                  },
+    { XML_NAMESPACE_TABLE, XML_GROUP_PART,              XML_TOK_DATA_PILOT_FIELD_ATTR_GROUP_PART            },
     XML_TOKEN_MAP_END
 };
 
@@ -817,6 +825,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDataPilotFieldElemTokenMap[] =
 {
     { XML_NAMESPACE_TABLE, XML_DATA_PILOT_LEVEL,        XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_LEVEL      },
     { XML_NAMESPACE_TABLE, XML_DATA_PILOT_FIELD_REFERENCE, XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_REFERENCE },
+    { XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUPS,       XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_GROUPS },
     XML_TOKEN_MAP_END
 };
 
