@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:33:02 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,6 +713,7 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
             if (pSHGetSpecialFolderPathA(GetActiveWindow(), PathA, nFolder, TRUE))
             {
                 rtl_string2UString( strPath, PathA, strlen(PathA), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
+                OSL_ASSERT(*strPath != NULL);
                 bRet = sal_True;
             }
         }
@@ -798,6 +799,7 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                             CreateDirectoryA(PathA, NULL);
 
                         rtl_string2UString( strPath, PathA, strlen(PathA), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
+                        OSL_ASSERT(*strPath != NULL);
                         bRet = sal_True;
                     }
                    }
