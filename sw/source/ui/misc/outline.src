@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:16:15 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 07:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,7 +509,7 @@ TabDialog DLG_TAB_OUTLINE
         Text[ chinese_traditional ] = "®æ¦¡(~F)";
         Text[ arabic ] = "ÇáÊäÓíŞ";
         Text[ greek ] = "Ìïñ~öŞ";
-        Text[ korean ] = "¼­½Ä";
+        Text[ korean ] = "¼­½Ä(~F)";
         Text[ turkish ] = "Format";
     };
     Menu MN_FORM
@@ -793,7 +793,7 @@ TabDialog DLG_TAB_OUTLINE
     Text[ arabic ] = "...ÍİÙ ßÜ";
                 HelpID = HID_NUM_OUTL_NUM_SAVEAS ;
                 Text[ greek ] = "~ÁğïèŞêåõóç ùò...";
-                Text[ korean ] = "´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀå...";
+                Text[ korean ] = "´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀå(~A)...";
                 Text[ chinese_traditional ] = "Àx¦s·sÀÉ(~A)...";
                 Text[ turkish ] = "Farklı kaydet...";
                 Text[ language_user1 ] = " ";
@@ -885,7 +885,7 @@ TabPage TP_OUTLINE_NUM
         Text[ arabic ] = "äãØ ÇáİŞÑÉ";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
         Text[ greek ] = "Ğñüôõğá ğáñáãñÜöïõ";
-        Text[ korean ] = "´Ü¶ô À¯Çü";
+        Text[ korean ] = "´Ü¶ô À¯Çü(~P)";
         Text[ turkish ] = "Paragraf şablonu";
     };
     ListBox LB_COLL
@@ -924,7 +924,7 @@ TabPage TP_OUTLINE_NUM
         Text[ chinese_traditional ] = "½s¸¹(~N)";
         Text[ arabic ] = "ÑŞã";
         Text[ greek ] = "Áñéèìüò";
-        Text[ korean ] = "¹øÈ£";
+        Text[ korean ] = "¹øÈ£(~N)";
         Text[ turkish ] = "Numara";
         Text[ language_user1 ] = " ";
     };
@@ -952,14 +952,14 @@ TabPage TP_OUTLINE_NUM
         Text [ dutch ] = "~Tekenopmaakprofiel" ;
         Text [ portuguese_brazilian ] = "Zeichenv~orlage" ;
         Text [ portuguese ] = "~Estilo de caracteres:" ;
-        Text[ chinese_simplified ] = "×Ö·ûÑùÊ½";
+        Text[ chinese_simplified ] = "×Ö·ûÑùÊ½(~C)";
         Text[ russian ] = "Ñòèëü çíàêîâ";
         Text[ polish ] = "Styl znaku";
-        Text[ japanese ] = "•¶š½À²Ù";
-        Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡";
+        Text[ japanese ] = "•¶š½À²Ù(~C)";
+        Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡(~C)";
         Text[ arabic ] = "äãØ ÇáÃÍÑİ";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚ À¯Çü";
+        Text[ korean ] = "¹®ÀÚ À¯Çü(~C)";
         Text[ turkish ] = "Karakter şablonu";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
     };
@@ -994,7 +994,7 @@ TabPage TP_OUTLINE_NUM
         Text[ chinese_traditional ] = "§¹¾ãªº(~W)";
         Text[ arabic ] = "ßÇãá";
         Text[ greek ] = "Ïëïêëçñùìİíï";
-        Text[ korean ] = "¿Ïº®ÇÏ°Ô";
+        Text[ korean ] = "¿Ïº®ÇÏ°Ô(~W)";
         Text[ turkish ] = "Tüm düzeyler";
         Text[ language_user1 ] = " ";
     };
@@ -1067,7 +1067,7 @@ TabPage TP_OUTLINE_NUM
         Text[ chinese_traditional ] = "¤§«e(~B)";
         Text[ arabic ] = "ŞÈáå";
         Text[ greek ] = "ğñéí áğü";
-        Text[ korean ] = "Àü¿¡";
+        Text[ korean ] = "Àü¿¡(~B)";
         Text[ turkish ] = "Baş. ekle";
         Text[ language_user1 ] = " ";
     };
@@ -1105,7 +1105,7 @@ TabPage TP_OUTLINE_NUM
         Text[ chinese_traditional ] = "¤§«á(~A)";
         Text[ arabic ] = "ÈÚÏå";
         Text[ greek ] = "ìåôÜ áğü";
-        Text[ korean ] = "ÈÄ¿¡";
+        Text[ korean ] = "ÈÄ¿¡(~A)";
         Text[ turkish ] = "Son. ekle";
         Text[ language_user1 ] = " ";
     };
@@ -1143,7 +1143,7 @@ TabPage TP_OUTLINE_NUM
         Text[ chinese_traditional ] = "¶}©l±q(~S)";
         Text[ arabic ] = "ÈÏÁğ ÈÜ";
         Text[ greek ] = "Èİóç åêêßíçóçò";
-        Text[ korean ] = "¿¡¼­ ½ÃÀÛ";
+        Text[ korean ] = "¿¡¼­ ½ÃÀÛ(~S)";
         Text[ turkish ] = "Başlangıç:";
         Text[ language_user1 ] = " ";
     };
