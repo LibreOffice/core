@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
+ *  last change: $Author: lla $ $Date: 2001-08-01 12:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,10 @@
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 namespace configmgr
@@ -494,6 +498,8 @@ namespace configmgr
     NodeElement* OProviderImpl::buildUpdateAccess(OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions,
                                                   sal_Int32 nMinLevels) throw (uno::Exception, uno::RuntimeException)
     {
+        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderImpl", "jb99855", "buildUpdateAccess()");
+
         CFG_TRACE_INFO("config provider: requesting the tree from the cache manager");
 
         OSL_ASSERT(sal_Int16(nMinLevels) == nMinLevels);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-22 08:26:18 $
+ *  last change: $Author: lla $ $Date: 2001-08-01 12:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 
 #define THISREF() static_cast< ::cppu::OWeakObject* >(this)
 
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 
 //........................................................................
 namespace configmgr
@@ -110,6 +113,7 @@ namespace configmgr
 
         virtual void SAL_CALL disposing(com::sun::star::lang::EventObject const& rEvt) throw()
             {
+                RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "Configmgr::ODisposingListener", "jb99855", "disposing()");
                 m_aFactory.disposing(rEvt);
             }
         ~ODisposingListener()
@@ -160,6 +164,7 @@ namespace configmgr
     //---------------------------------------------------------------------------------------
     void OProviderFactory::ensureBootstrapSettings()
     {
+        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderFactory", "jb99855", "ensureBootstrapSettings()");
         if (!m_pPureSettings)
             m_pPureSettings = new BootstrapSettings();
     }
@@ -269,6 +274,8 @@ namespace configmgr
     Reference< XInterface > OProviderFactory::createProvider()
     {
         MutexGuard aGuard(m_aMutex);
+        RTL_LOGFILE_CONTEXT( aLog, "Configmgr::OProviderFactory::createProvider()" );
+
         ensureDefaultProvider();
         return m_xDefaultProvider;
     }
@@ -276,6 +283,7 @@ namespace configmgr
     //---------------------------------------------------------------------------------------
     Reference< XInterface > OProviderFactory::createProviderWithArguments(const Sequence< Any >& _rArguments)
     {
+        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderFactory", "jb99855", "createProviderWithArguments()");
         ConnectionSettings aSettings(_rArguments);
         return createProviderWithSettings( aSettings );
     }
@@ -415,6 +423,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/06/22 08:26:18  jb
+ *  Correct argument-dependent caching of providers
+ *
  *  Revision 1.10  2001/05/22 07:42:07  jb
  *  #81412# Erroneous handling of default provider
  *
