@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:23:49 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 
 ModalDialog RID_DLG_GROUPBOXWIZARD
 {
-    Text [ de ] = "AutoPilot Gruppenelement";
-    Text [ en-US ] = "AutoPilot Group Element";
+    Text [ de ] = "Gruppenelement-Assistent";
+    Text [ en-US ] = "Group Element Wizard";
 
     OutputSize      = TRUE ;
     SVLook          = TRUE ;
@@ -92,21 +92,20 @@ ModalDialog RID_DLG_GRIDWIZARD
     Closeable       = TRUE ;
     Hide            = TRUE;
 
-    Text [ de ] = "AutoPilot Tabellenelement";
-    Text [ en-US ] = "AutoPilot Table Element";
+    Text [ de ] = "Tabellenelement-Assistent";
+    Text [ en-US ] = "Table Element Wizard";
 };
 
 String RID_STR_LISTWIZARD_TITLE
 {
-    Text [ de ] = "AutoPilot Listenfeld";
-    Text [ en-US ] = "AutoPilot List Box";
+    Text [ de ] = "Listenfeld-Assistent";
+    Text [ en-US ] = "List Box Wizard";
 };
 
 String RID_STR_COMBOWIZARD_TITLE
 {
-    Text [ de ] = "AutoPilot Kombinationsfeld";
-    Text [ en-US ] = "AutoPilot Combo Box";
-    Text [ x-comment ] = " ";
+    Text[ de ] = "Kombinationsfeld-Assistent";
+    Text [ en-US ] = "Combo Box Wizard";
 };
 
 String RID_STR_COULDNOTOPENTABLE
@@ -114,192 +113,5 @@ String RID_STR_COULDNOTOPENTABLE
     Text [ de ] = "Die Tabelle Verbindung zur Datenquelle konnte nicht hergestellt werden.";
     Text [ en-US ] = "The table connection to the data source could not be established.";
 };
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.31.34.3  2004/04/20 18:42:21  hjs
- *  RESYNC: (1.31-1.32); FILE MERGED
- *
- *  Revision 1.32  2003/12/17 18:17:50  vg
- *  INTEGRATION: CWS geordi2q11 (1.31.90); FILE MERGED
- *  2003/12/16 11:43:24 hr 1.31.90.1: #111934#: join CWS ooo111fix1
- *
- *  Revision 1.31.90.1  2003/12/16 11:43:24  hr
- *  #111934#: join CWS ooo111fix1
- *
- *  Revision 1.31.44.1  2003/11/24 13:32:09  ihi
- *  OOo 1.1.1 merge
- *
- *  Revision 1.31  2003/07/17 12:35:33  hr
- *  INTEGRATION: CWS mergerc3 (1.30.6); FILE MERGED
- *  2003/07/16 17:08:00 ihi 1.30.6.1: rc-3 merge all languages
- *
- *  Revision 1.30.6.1  2003/07/16 17:08:00  ihi
- *  rc-3 merge all languages
- *
- *  Revision 1.30  2003/07/03 17:27:58  hr
- *  INTEGRATION: CWS rc2merge (1.29.8); FILE MERGED
- *  2003/07/03 14:40:42 ihi 1.29.8.1: rc-2 merge all languages
- *
- *  Revision 1.29.8.1  2003/07/03 14:40:42  ihi
- *  rc-2 merge all languages
- *
- *  Revision 1.29  2003/06/13 12:47:23  hr
- *  INTEGRATION: CWS rcmerge (1.28.26); FILE MERGED
- *  2003/06/12 11:09:54 gh 1.28.26.1: final Merge RC
- *
- *  Revision 1.28.26.1  2003/06/12 11:09:54  gh
- *  final Merge RC
- *
- *  Revision 1.28  2003/04/29 17:44:33  hr
- *  INTEGRATION: CWS mergem8 (1.18.2.7.6.3.2.1.26); FILE MERGED
- *  2003/04/29 08:35:39 gh 1.18.2.7.6.3.2.1.26.3: final merge for Beta2
- *  2003/04/16 18:58:08 gh 1.18.2.7.6.3.2.1.26.2: RESYNC: (1.18.2.7.6.3.2.1-1.27); FILE MERGED
- *  2003/04/14 14:46:27 gh 1.18.2.7.6.3.2.1.26.1: merging all languages
- *
- *  Revision 1.18.2.7.6.3.2.1.26.3  2003/04/29 08:35:39  gh
- *  final merge for Beta2
- *
- *  Revision 1.18.2.7.6.3.2.1.26.2  2003/04/16 18:58:08  gh
- *  RESYNC: (1.18.2.7.6.3.2.1-1.27); FILE MERGED
- *
- *  Revision 1.18.2.7.6.3.2.1.26.1  2003/04/14 14:46:27  gh
- *  merging all languages
- *
- *  Revision 1.27  2003/03/25 16:03:27  hr
- *  MWS_SRX644: migrate branch mws_srx644 -> HEAD
- *
- *  Revision 1.18.2.7.6.3.2.1  2003/02/22 16:36:26  hr
- *  INTEGRATION: CWS mergep (1.18.2.7.6.3.20); FILE MERGED
- *  2003/02/22 10:35:03 nf 1.18.2.7.6.3.20.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
- *  2003/01/31 12:52:35 hjs 1.18.2.7.6.3.20.1: #107113# merge on SRX644p
- *
- *  Revision 1.18.2.7.6.3.20.2  2003/02/22 10:35:03  nf
- *  #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
- *
- *  Revision 1.18.2.7.6.3.20.1  2003/01/31 12:52:35  hjs
- *  #107113# merge on SRX644p
- *
- *  Revision 1.18.2.7.6.3  2002/11/27 16:57:44  kz
- *  Merge SRX644: 27.11.02 - 17:53:48
- *
- *  Revision 1.18.2.7.6.2  2002/08/02 20:24:28  kz
- *  Merge SRX643: 02.08.02 - 22:21:24
- *
- *  Revision 1.18.2.7.6.1  2002/04/29 20:23:03  rt
- *  Merge SRX642: 29.04.02 - 22:22:29
- *
- *  Revision 1.18.2.7  2001/11/13 23:03:54  kz
- *  Merge SRC641: 11/13/01 - 23:04:40
- *
- *  Revision 1.18.2.6  2001/10/31 21:54:27  kz
- *  Merge SRC641: 31.10.01 - 22:54:33
- *
- *  Revision 1.18.2.5  2001/10/19 21:51:03  vg
- *  Merge SRC641: 19.10.01 - 23:51:23
- *
- *  Revision 1.18.2.4  2001/10/17 21:18:07  kz
- *  Merge SRC641: 17.10.01 - 23:17:43
- *
- *  Revision 1.18.2.3  2001/10/11 21:02:59  rt
- *  Merge SRC641: 11.10.01 - 23:02:03
- *
- *  Revision 1.18.2.2  2001/09/27 20:36:32  kz
- *  Merge SRC641: 27.09.01 - 22:36:02
- *
- *  Revision 1.18.2.1  2001/09/24 20:31:18  kz
- *  Merge SRC641: 09/24/01 - 22:30:52
- *
- *  Revision 1.18  2001/08/07 15:07:19  kz
- *  Merge SRC638: 07.08.01 - 17:06:48
- *
- *  Revision 1.17  2001/07/17 20:31:31  kz
- *  Merge SRC638: 17.07.01 - 22:30:45
- *
- *  Revision 1.16  2001/07/13 21:05:01  kz
- *  Merge SRC638: 13.07.01 - 23:04:02
- *
- *  Revision 1.15  2001/07/03 22:27:07  kz
- *  Merge SRC633: 04.07.01 - 00:25:33
- *
- *  Revision 1.14  2001/07/02 23:57:35  kz
- *  Merge SRC633: 07/03/01 - 01:57:44
- *
- *  Revision 1.13  2001/06/13 22:44:58  kz
- *  Merge SRC633: 06/14/01 - 00:44:11
- *
- *  Revision 1.12  2001/06/08 22:25:16  vg
- *  Merge SRC633: 09.06.01 - 00:24:35
- *
- *  Revision 1.11  2001/05/17 07:43:46  kz
- *  Merge SRC632: 17.05.01 - 09:44:11 (NoBranch)
- *
- *  Revision 1.10  2001/05/10 06:05:23  kz
- *  Merge SRC631: 05/10/01 - 08:05:30 (NoBranch)
- *
- *  Revision 1.9  2001/05/04 20:12:13  kz
- *  Merge SRC630: 05/04/01 - 22:12:15 (NoBranch)
- *
- *  Revision 1.8  2001/04/03 19:25:52  kz
- *  Merge SRC627: 03.04.01 - 21:25:28
- *
- *  Revision 1.7  2001/03/31 06:08:57  kz
- *  Merge SRC627: 31.03.01 - 08:08:38 (NoBranch)
- *
- *  Revision 1.6  2001/03/19 11:42:47  kz
- *  Merge SRC625: 19.03.01 - 12:42:43 (NoBranch)
- *
- *  Revision 1.5  2001/03/09 20:47:44  kz
- *  Merge SRC624: 09.03.01 - 21:47:53 (NoBranch)
- *
- *  Revision 1.4  2001/03/05 14:53:13  fs
- *  finished the grid control wizard
- *
- *  Revision 1.3  2001/02/28 09:18:30  fs
- *  finalized the list/combo wizard
- *
- *  Revision 1.2  2001/02/23 15:19:08  fs
- *  some changes / centralizations - added the list-/combobox wizard
- *
- *  Revision 1.1  2001/02/21 09:22:40  fs
- *  initial checkin - form control auto pilots
- *
- *
- *  Revision 1.0 14.02.01 10:47:53  fs
- ************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
