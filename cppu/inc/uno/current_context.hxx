@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current_context.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-07 15:06:56 $
+ *  last change: $Author: dbo $ $Date: 2001-05-14 09:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,24 +104,6 @@ inline bool SAL_CALL setCurrentContext(
     ::rtl::OUString aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
     return (::uno_setCurrentContext( xContext.get(), aEnvTypeName.pData, 0 ) != sal_False);
 }
-
-//  /** Permission check.
-//  */
-//  inline void SAL_CALL checkPermission(
-//      ::com::sun::star::security::Permission const & rPerm )
-//      SAL_THROW( (::com::sun::star::security::AccessControlException) )
-//  {
-//      Reference< XCurrentContext > xContext( getCurrentContext() );
-//      if (xContext.is())
-//      {
-//          Reference< ::com::sun::star::security::XAccessController > xAC;
-//          if (xContext->getValueByName( OUString(
-//              RTL_CONSTASCII_USTRINGPARAM("com.sun.star.security.AccessController") ) ) >>= xAC)
-//          {
-//              xAC->checkPermission( rPerm );
-//          }
-//      }
-//  }
 
 }
 }
