@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swundo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-21 12:40:10 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 13:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,14 +159,17 @@ enum SwUndoStdId
     UNDO_SETRUBYATTR,                       // 85
 
     UNDO_TMPAUTOCORR,                       // 86 #102505#
-    UNDO_DUMMY_3,                           // 87
-    UNDO_DUMMY_4,                           // 88
-    UNDO_DUMMY_5,                           // 89
-    UNDO_DUMMY_6,                           // 90
-    UNDO_DUMMY_7,                           // 91
-    UNDO_DUMMY_8,                           // 92
-    UNDO_DUMMY_9,                           // 93
-    UNDO_STD_END                            // 94
+    UNDO_TOXCHANGE,                         // 87
+    // -> #111827#
+    UNDO_PASTE_CLIPBOARD,                           // 88
+    UNDO_TYPING,                           // 89
+    // <- #111827#
+    UNDO_CREATE_PAGEDESC,                           // 90
+    UNDO_CHANGE_PAGEDESC,                           // 91
+    UNDO_DELETE_PAGEDESC,                           // 92
+    UNDO_HEADER_FOOTER,                           // 93 #i7983#
+    UNDO_FIELD,                             // 94 #111840#
+    UNDO_STD_END= UNDO_FIELD                            // 94
 };
 
 
