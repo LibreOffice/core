@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:42:42 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:11:36 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -87,7 +87,7 @@ $(EXAMPLE_NAME) : $(APP1_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo make $(APP1_NAME).run
+	@echo $(MAKE) $(APP1_NAME).run
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_APP_CLASS)/%.jar

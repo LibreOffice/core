@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:39:10 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:11:20 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -118,7 +118,7 @@ $(EXAMPLE_NAME) : $(APP1_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo make DesktopExample.run
+	@echo $(MAKE) DesktopExample.run
 	@echo ------
 	@echo If you want to run the $(JAR1_JAR) file please set your
 	@echo CLASSPATH = $(SDK_CLASSPATH)
