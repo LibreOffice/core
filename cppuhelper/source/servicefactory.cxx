@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 13:20:19 $
+ *  last change: $Author: dbo $ $Date: 2002-11-11 16:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,12 +421,6 @@ Reference< XComponentContext > bootstrapInitialContext(
     entry.value <<= create_boostrap_macro_expander_factory();
     context_values.push_back( entry );
 
-    // CoreReflection singleton
-    entry.bLateInitService = true;
-    entry.name = OUSTR("/singletons/com.sun.star.reflection.theCoreReflection");
-    entry.value <<= OUSTR("com.sun.star.reflection.CoreReflection");
-    context_values.push_back( entry );
-
     // ac, policy:
     add_access_control_entries( &context_values, bootstrap );
 
@@ -442,33 +436,26 @@ Reference< XComponentContext > bootstrapInitialContext(
     entry.value <<= OUSTR("com.sun.star.comp.stoc.TypeDescriptionManager");
     context_values.push_back( entry );
 
-    Reference< XComponentContext > xContext;
     Reference< container::XHierarchicalNameAccess > xTDMgr;
 
-    // bootstrap type system
-    if (types_xRegistry.is()) // use type registry?
-    {
-        // rdbtdp: registries to be used
-        entry.bLateInitService = false;
-        entry.name = OUSTR("/implementations/com.sun.star.comp.stoc.RegistryTypeDescriptionProvider/Registries");
-        entry.value <<= Sequence< Reference< registry::XSimpleRegistry > >( &types_xRegistry, 1 );
-        context_values.push_back( entry );
-
-        xContext = createComponentContext(
+    Reference< XComponentContext > xContext(
+        createComponentContext(
             &context_values[ 0 ], context_values.size(),
-            Reference< XComponentContext >() );
-        // set default context
-        Reference< beans::XPropertySet > xProps( xSF, UNO_QUERY );
-        OSL_ASSERT( xProps.is() );
-        if (xProps.is())
-        {
-            xProps->setPropertyValue(
-                OUSTR("DefaultContext"), makeAny( xContext ) );
-        }
+            Reference< XComponentContext >() ) );
+    // set default context
+    Reference< beans::XPropertySet > xProps( xSF, UNO_QUERY );
+    OSL_ASSERT( xProps.is() );
+    if (xProps.is())
+    {
+        xProps->setPropertyValue(
+            OUSTR("DefaultContext"), makeAny( xContext ) );
+    }
 
-        // get tdmgr singleton
-        if (xContext->getValueByName(
+    // get tdmgr singleton
+    if (xContext->getValueByName(
             OUSTR("/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) >>= xTDMgr)
+    {
+        if (types_xRegistry.is()) // insert rdb provider?
         {
             // add registry td provider factory to smgr and instance to tdmgr
             Reference< lang::XSingleComponentFactory > xFac( loadSharedLibComponentFactory(
@@ -481,7 +468,9 @@ Reference< XComponentContext > bootstrapInitialContext(
             // smgr
             Reference< container::XSet > xSet( xSF, UNO_QUERY );
             xSet->insert( makeAny( xFac ) );
-            OSL_ENSURE( xSet->has( makeAny( xFac ) ), "### failed registering registry td provider at smgr!" );
+            OSL_ENSURE(
+                xSet->has( makeAny( xFac ) ),
+                "### failed registering registry td provider at smgr!" );
             // tdmgr
             xSet.set( xTDMgr, UNO_QUERY );
             OSL_ASSERT( xSet.is() );
@@ -489,29 +478,10 @@ Reference< XComponentContext > bootstrapInitialContext(
             Any rdbtdp( makeAny( xFac->createInstanceWithArgumentsAndContext(
                 Sequence< Any >( &types_RDB, 1 ), xContext ) ) );
             xSet->insert( rdbtdp );
-            OSL_ENSURE( xSet->has( rdbtdp ), "### failed inserting registry td provider to tdmgr!" );
+            OSL_ENSURE(
+                xSet->has( rdbtdp ),
+                "### failed inserting registry td provider to tdmgr!" );
         }
-    }
-    else // no type registry
-    {
-        xContext = createComponentContext(
-            &context_values[ 0 ], context_values.size(),
-            Reference< XComponentContext >() );
-        // set default context
-        Reference< beans::XPropertySet > xProps( xSF, UNO_QUERY );
-        OSL_ASSERT( xProps.is() );
-        if (xProps.is())
-        {
-            xProps->setPropertyValue(
-                OUSTR("DefaultContext"), makeAny( xContext ) );
-        }
-        // get tdmgr singleton
-        xContext->getValueByName(
-            OUSTR("/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) >>= xTDMgr;
-    }
-
-    if (xTDMgr.is())
-    {
         // install callback
         installTypeDescriptionManager( xTDMgr );
     }
