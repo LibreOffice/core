@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:07:41 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ czech ] = "Zobrazit změny v sešitu";
         Text[ hebrew ] = "~Änderungen in der Tabelle anzeigen";
         Text[ hindi ] = "स्प्रेडशीट् में परिवर्तनों को ~दिखाओ";
+        Text[ slovak ] = "~Zobraziť zmeny v zošite";
     };
     FixedLine FL_FILTER
     {
@@ -135,6 +136,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ czech ] = "Nastavení filtru";
         Text[ hebrew ] = "Filtereinstellungen";
         Text[ hindi ] = "फिल्टर निर्धारण";
+        Text[ slovak ] = "Nastavenie filtra";
     };
     CheckBox CB_HIGHLIGHT_ACCEPT
     {
@@ -168,6 +170,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ czech ] = "Zobrazit přijaté změny";
         Text[ hebrew ] = "A~kzeptierte Änderungen anzeigen";
         Text[ hindi ] = "~स्वीकृत परिवर्तनों को दिखाओ";
+        Text[ slovak ] = "Zobraziť ~akceptované zmeny";
     };
     CheckBox CB_HIGHLIGHT_REJECT
     {
@@ -201,6 +204,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ czech ] = "Zobrazit odmítnuté změny";
         Text[ hebrew ] = "Ab~gelehnte Änderungen anzeigen";
         Text[ hindi ] = "~अस्वीकृत परिवर्तनों को दिखाओ";
+        Text[ slovak ] = "Zob~raziť odmietnuté zmeny";
     };
     OKButton BTN_OK
     {
@@ -263,6 +267,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         QuickHelpText[ czech ] = "Minimalizovat/Maximalizovat";
         QuickHelpText[ hebrew ] = "Verkleinern/Vergrößern";
         QuickHelpText[ hindi ] = "छोटा करो/बड़ा करो";
+        QuickHelpText[ slovak ] = "Minimalizovať/Maximalizovať";
     };
     Text [ english_us ] = "Show Changes" ;
     Text [ portuguese_brazilian ] = "Mostrar Altera��es" ;
@@ -289,7 +294,10 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     Text[ czech ] = "Zobrazit změny";
     Text[ hebrew ] = "Änderungen anzeigen";
     Text[ hindi ] = "परिवर्तनों को दिखाओ";
+    Text[ slovak ] = "Zobraziť zmeny";
 };
+
+
 
 
 
