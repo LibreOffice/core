@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:01:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ SbaExternalSourceBrowser::SbaExternalSourceBrowser(const Reference< ::com::sun::
     :SbaXDataBrowserController(_rM)
     ,m_pDataSourceImpl(NULL)
     ,m_aModifyListeners(getMutex())
-    ,m_bInQueryDispatch(NULL)
+    ,m_bInQueryDispatch( sal_False )
 {
 }
 
