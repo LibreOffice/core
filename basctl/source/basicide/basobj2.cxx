@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:38:37 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,9 @@ Sequence< ::rtl::OUString > BasicIDE::GetModuleNames( SfxObjectShell* pShell, co
 
         // sort module names
         ::std::vector<String> aModList( nModCount );
-        for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
+        sal_Int32 i;
+
+        for ( i = 0 ; i < nModCount ; i++ )
             aModList[ i ] = pModNames[ i ];
         ::std::sort( aModList.begin() , aModList.end() , StringCompareLessThan );
 
