@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrms.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:18:49 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 13:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,13 @@
 
 #include "flyfrm.hxx"
 
-// OD 01.08.2003 #110978#
+// OD 29.10.2003 #110978#
 namespace objectpositioning
 {
-    class SwAnchoredObjectPosition;
+    class SwToCntntAnchoredObjectPosition;
 }
+// OD 11.11.2003 #i22341#
+class SwFmtAnchor;
 
 //Basisklasse fuer diejenigen Flys, die sich relativ frei Bewegen koennen -
 //also die nicht _im_ Inhalt gebundenen Flys.
@@ -124,14 +126,56 @@ public:
 //Die Flys, die an einem Cntnt haengen nicht aber im Inhalt
 class SwFlyAtCntFrm : public SwFlyFreeFrm
 {
-    // OD 01.08.2003 #110978# - access for calculation of position
-    friend class objectpositioning::SwAnchoredObjectPosition;
+    // OD 29.10.2003 #110978# - access for calculation of position
+    friend class objectpositioning::SwToCntntAnchoredObjectPosition;
     // OD 06.10.2003 #110978# - data of position calculation
-    // frame vertical position is orient at - typically its the anchor frame,
-    // but it could also by a follow or a following layout frame in the text flow.
-    const SwFrm* mpVertPosOrientFrm;
+    // layout frame vertical position is orient at - typically its the upper of
+    // the anchor frame, but it could also by the upper of a follow or
+    // a following layout frame in the text flow.
+    const SwLayoutFrm* mpVertPosOrientFrm;
 
-    SwRect aLastCharRect; // Fuer autopositionierte Frames ( LAYER_IMPL )
+    // Last known anchor character retangle of to-character anchored Writer
+    // fly frames.
+    // Used to decide, if invalidation has to been performed, if anchor position
+    // has changed, and used to position Writer fly frame.
+    SwRect maLastCharRect;
+
+    // OD 11.11.2003 #i22341# - for to-character anchored Writer fly frames:
+    // Last known top of line, in which the anchor character is in.
+    // Used to decide, if invalidation has to been performed, if anchor position
+    // has changed, and used to position Writer fly frame.
+    SwTwips mnLastTopOfLine;
+
+    /** check anchor character rectangle
+
+        OD 11.11.2003 #i22341#
+        helper method for method <CheckCharRectAndTopOfLine()>
+        For to-character anchored Writer fly frames the member <maLastCharRect>
+        is updated. This is checked for change and depending on the applied
+        positioning, it's decided, if the Writer fly frame has to be invalidated.
+
+        @author OD
+
+        @param _rAnch
+        input parameter - reference to anchor position
+    */
+    void _CheckCharRect( const SwFmtAnchor& _rAnch );
+
+    /** check top of line
+
+        OD 11.11.2003 #i22341#
+        helper method for method <CheckCharRectAndTopOfLine()>
+        For to-character anchored Writer fly frames the member <mnLastTopOfLine>
+        is updated. This is checked for change and depending on the applied
+        positioning, it's decided, if the Writer fly frame has to be invalidated.
+
+        @author OD
+
+        @param _rAnch
+        input parameter - reference to anchor position
+    */
+    void _CheckTopOfLine( const SwFmtAnchor& _rAnch );
+
 protected:
     //Stellt sicher, das der Fly an der richtigen Seite haengt.
     void AssertPage();
@@ -145,22 +189,30 @@ public:
 
     void SetAbsPos( const Point &rNew );
 
-    // Fuer autopositionierte Frames ( LAYER_IMPL ), ueberprueft, ob sich
-    // die Ankerposition geaendert hat und invalidiert ggf.
-    void CheckCharRect();
+    /** check anchor character rectangle and top of line
 
-    SwTwips GetLastCharX() const { return aLastCharRect.Left() - Frm().Left(); }
+        OD 11.11.2003 #i22341#
+        For to-character anchored Writer fly frames the members <maLastCharRect>
+        and <maLastTopOfLine> are updated. These are checked for change and
+        depending on the applied positioning, it's decided, if the Writer fly
+        frame has to be invalidated.
+
+        @author OD
+    */
+    void CheckCharRectAndTopOfLine();
+
+    SwTwips GetLastCharX() const { return maLastCharRect.Left() - Frm().Left(); }
 
     SwTwips GetRelCharX( const SwFrm* pFrm ) const
-        { return aLastCharRect.Left() - pFrm->Frm().Left(); }
+        { return maLastCharRect.Left() - pFrm->Frm().Left(); }
     SwTwips GetRelCharY( const SwFrm* pFrm ) const
-        { return aLastCharRect.Bottom() - pFrm->Frm().Top(); }
+        { return maLastCharRect.Bottom() - pFrm->Frm().Top(); }
 
-    void AddLastCharY( long nDiff ){ aLastCharRect.Pos().Y() += nDiff; }
+    void AddLastCharY( long nDiff ){ maLastCharRect.Pos().Y() += nDiff; }
 
     // accessors to data of position calculation
     // frame vertical position is orient at
-    inline const SwFrm* GetVertPosOrientFrm() const
+    inline const SwLayoutFrm* GetVertPosOrientFrm() const
     {
         return mpVertPosOrientFrm;
     }
