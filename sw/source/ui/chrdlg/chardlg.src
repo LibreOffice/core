@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:43:06 $
+ *  last change: $Author: os $ $Date: 2001-02-13 09:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,7 @@ TabPage TP_CHAR_URL
     GroupBox GB_URL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 93 ) ;
+        Size = MAP_APPFONT ( 248 , 97 ) ;
         Text = "Hyperlink" ;
         Text [ English ] = "Hyperlink" ;
         Text [ english_us ] = "Hyperlink" ;
@@ -429,7 +429,7 @@ TabPage TP_CHAR_URL
     };
     FixedText FT_TEXT
     {
-        Pos = MAP_APPFONT ( 12 , 34 ) ;
+        Pos = MAP_APPFONT ( 12 , 33 ) ;
         Size = MAP_APPFONT ( 63 , 8 ) ;
         Text = "Te~xt" ;
         Text [ English ] = "Text" ;
@@ -454,7 +454,7 @@ TabPage TP_CHAR_URL
     };
     Edit ED_TEXT
     {
-        Pos = MAP_APPFONT ( 78 , 32 ) ;
+        Pos = MAP_APPFONT ( 78 , 31 ) ;
         Size = MAP_APPFONT ( 104 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -561,8 +561,8 @@ TabPage TP_CHAR_URL
     };
     GroupBox GB_STYLE
     {
-        Pos = MAP_APPFONT ( 6 , 99 ) ;
-        Size = MAP_APPFONT ( 248 , 42 ) ;
+        Pos = MAP_APPFONT ( 6 , 104 ) ;
+        Size = MAP_APPFONT ( 248 , 43 ) ;
         Text = "Zeichenvorlagen" ;
         Text [ English ] = "Character styles" ;
         Text [ dutch ] = "Tekenopmaakprofielen" ;
@@ -588,7 +588,7 @@ TabPage TP_CHAR_URL
     };
     FixedText FT_VISITED
     {
-        Pos = MAP_APPFONT ( 12 , 112 ) ;
+        Pos = MAP_APPFONT ( 12 , 116 ) ;
         Size = MAP_APPFONT ( 63 , 8 ) ;
         Text = "~Besuchter Link" ;
         Text [ English ] = "Visited link" ;
@@ -615,7 +615,7 @@ TabPage TP_CHAR_URL
     };
     ListBox LB_VISITED
     {
-        Pos = MAP_APPFONT ( 78 , 110 ) ;
+        Pos = MAP_APPFONT ( 78 , 113 ) ;
         Size = MAP_APPFONT ( 104 , 60 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -625,7 +625,7 @@ TabPage TP_CHAR_URL
     };
     FixedText FT_NOT_VISITED
     {
-        Pos = MAP_APPFONT ( 12 , 128 ) ;
+        Pos = MAP_APPFONT ( 12 , 131 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
         Text = "~Unbesuchter Link" ;
         Text [ English ] = "Unvisited link" ;
@@ -652,7 +652,7 @@ TabPage TP_CHAR_URL
     };
     ListBox LB_NOT_VISITED
     {
-        Pos = MAP_APPFONT ( 78 , 126 ) ;
+        Pos = MAP_APPFONT ( 78 , 129 ) ;
         Size = MAP_APPFONT ( 104 , 60 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
