@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-29 08:07:22 $
+ *  last change: $Author: gt $ $Date: 2001-06-29 08:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,7 +579,7 @@ void FilterProgressBar::StartPostLoadProgress( const UINT32 nObj )
         if( nObj )
         {
             pPrgrs = new ScProgress( NULL, ScGlobal::GetRscString( STR_PROGRESS_CALCULATING ), nObj );
-            nUnitSize = ( nObj < 128 )? nObj : nObj / 128;  // I think, this number of steps is enough
+            nUnitSize = ( nObj < 128 )? 1 : nObj / 128; // I think, this number of steps is enough
             nNextUnit = 0;
         }
         else
