@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 09:16:15 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,10 +146,16 @@
 #include <svx/unomodel.hxx>
 #include <svx/svditer.hxx>
 
-#include "docshell.hxx"
-#include "sdview.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "sdpage.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "stlpool.hxx"
 #include "strings.hrc"
@@ -179,7 +185,7 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 // - SdTransferable -
 // ------------------
 
-SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, SdView* pWorkView, BOOL bInitOnGetData ) :
+SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, BOOL bInitOnGetData ) :
     pObjDesc( NULL ),
     pPageDocShell( NULL ),
     pSourceDoc( pSrcDoc ),
@@ -226,7 +232,7 @@ SdTransferable::~SdTransferable()
     if( aDocShellRef.Is() )
     {
         SvEmbeddedObject* pObj = aDocShellRef;
-        SdDrawDocShell* pDocSh = (SdDrawDocShell*) pObj;
+        ::sd::DrawDocShell* pDocSh = static_cast< ::sd::DrawDocShell*>(pObj);
         pDocSh->DoClose();
     }
 
@@ -343,7 +349,7 @@ void SdTransferable::CreateData()
 
         pVDev = new VirtualDevice( *Application::GetDefaultDevice() );
         pVDev->SetMapMode( MapMode( pSdDrawDocumentIntern->GetScaleUnit(), Point(), pSdDrawDocumentIntern->GetScaleFraction(), pSdDrawDocumentIntern->GetScaleFraction() ) );
-        pSdViewIntern = new SdView( pSdDrawDocumentIntern, pVDev );
+        pSdViewIntern = new ::sd::View( pSdDrawDocumentIntern, pVDev );
         pSdViewIntern->EndListening(*pSdDrawDocumentIntern );
         pSdViewIntern->SetMarkHdlHidden( TRUE );
         SdrPageView* pPageView = pSdViewIntern->ShowPage(pPage, Point());
@@ -571,7 +577,11 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
 
             if( !aDocShellRef.Is() )
             {
-                aDocShellRef = new SdDrawDocShell( pSdDrawDocumentIntern, SFX_CREATE_MODE_EMBEDDED, TRUE, pSdDrawDocumentIntern->GetDocumentType() );
+                aDocShellRef = new ::sd::DrawDocShell(
+                    pSdDrawDocumentIntern,
+                    SFX_CREATE_MODE_EMBEDDED,
+                    TRUE,
+                    pSdDrawDocumentIntern->GetDocumentType());
                 bOwnDocument = FALSE;
                 aDocShellRef->DoInitNew( NULL );
             }
@@ -677,7 +687,7 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
 void SdTransferable::DragFinished( sal_Int8 nDropAction )
 {
     if( pSdView )
-        ( (SdView*) pSdView )->DragFinished( nDropAction );
+        ( (::sd::View*) pSdView )->DragFinished( nDropAction );
 }
 
 // -----------------------------------------------------------------------------
