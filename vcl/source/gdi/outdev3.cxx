@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.194 $
+ *  $Revision: 1.195 $
  *
- *  last change: $Author: kz $ $Date: 2005-02-23 18:27:30 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,6 +450,11 @@ static sal_Unicode const aHGPMinchoLSun[] = { 'h','g','p', 0x660E, 0x671D, 'l', 
 static sal_Unicode const aHGGothicBSun[] = { 'h', 'g', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 's', 'u', 'n', 0 };
 static sal_Unicode const aHGPGothicBSun[] = { 'h', 'g', 'p', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 's', 'u', 'n', 0 };
 static sal_Unicode const aHGHeiseiMin[] = { 'h', 'g', 0x5E73, 0x6210, 0x660E, 0x671D, 0x4F53, 0, 'h', 'g', 0x5E73, 0x6210, 0x660E, 0x671D, 0x4F53, 'w', '3', 'x', '1', '2', 0, 0 };
+static sal_Unicode const aIPAMincho[] =  { 'i', 'p', 'a', 0x660E, 0x671D, 0 };
+static sal_Unicode const aIPAPMincho[] = { 'i', 'p', 'a', 'p', 0x660E, 0x671D, 0 };
+static sal_Unicode const aIPAGothic[] =  { 'i', 'p', 'a',  0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
+static sal_Unicode const aIPAPGothic[] =  { 'i', 'p', 'a', 'p', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
+static sal_Unicode const aIPAUIGothic[] =  { 'i', 'p', 'a', 'u', 'i', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
 static sal_Unicode const aSazanamiMincho[] = { 0x3055, 0x3056, 0x306A, 0x307F, 0x660E, 0x671D, 0, 0 };
 static sal_Unicode const aSazanamiGothic[] = { 0x3055, 0x3056, 0x306A, 0x307F, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
 static sal_Unicode const aKochiMincho[] = { 0x6771, 0x98A8, 0x660E, 0x671D, 0, 0 };
@@ -582,6 +587,11 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {   "hgpmincholsun",        aHGPMinchoLSun },
 {   "hgpgothicbsun",        aHGPGothicBSun },
 {   "hgheiseimin",          aHGHeiseiMin },
+{   "ipamincho",            aIPAMincho },
+{   "ipapmincho",           aIPAPMincho },
+{   "ipagothic",            aIPAGothic },
+{   "ipapgothic",           aIPAPGothic },
+{   "ipauigothic",          aIPAUIGothic },
 {   "sazanamimincho",       aSazanamiMincho },
 {   "sazanamigothic",       aSazanamiGothic },
 {   "kochimincho",          aKochiMincho },
@@ -3030,7 +3040,7 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
             "arialunicodems", "cyberbit", "code2000", "",
             "andalesansui", "",
             "starsymbol", "opensymbol", "",
-            "msmincho", "fzmingti", "fzheiti", "sazanamimincho", "kochimincho", "",
+            "msmincho", "fzmingti", "fzheiti", "ipamincho", "sazanamimincho", "kochimincho", "",
             "sunbatang", "sundotum", "baekmukdotum", "gulim", "batang", "dotum", "",
             "hgmincholightj", "msunglightsc", "msunglighttc", "hymyeongjolightk", "",
             "tahoma", "timesnewroman", "lucidatypewriter", "lucidasans", "nimbussansl", "",
@@ -5196,11 +5206,10 @@ void OutputDevice::SetFont( const Font& rNewFont )
 
     if ( mpMetaFile )
     {
-        const Color& rTextFillColor = aFont.GetFillColor();
-
         mpMetaFile->AddAction( new MetaFontAction( aFont ) );
+        // the color and alignment actions don't belong here
+        // TODO: get rid of them without breaking anything...
         mpMetaFile->AddAction( new MetaTextAlignAction( aFont.GetAlign() ) );
-        mpMetaFile->AddAction( new MetaTextColorAction( aFont.GetColor() ) );
         mpMetaFile->AddAction( new MetaTextFillColorAction( aFont.GetFillColor(), !aFont.IsTransparent() ) );
     }
 
@@ -5215,11 +5224,13 @@ void OutputDevice::SetFont( const Font& rNewFont )
         // Optimization MT/HDU: COL_TRANSPARENT means SetFont should ignore the font color,
         // because SetTextColor() is used for this.
         // #i28759# maTextColor might have been changed behind our back, commit then, too.
-        if ( aFont.GetColor() != COL_TRANSPARENT &&
-             ( maFont.GetColor() != aFont.GetColor() || aFont.GetColor() != maTextColor ) )
+        if( aFont.GetColor() != COL_TRANSPARENT
+        && (aFont.GetColor() != maFont.GetColor() || aFont.GetColor() != maTextColor ) )
         {
             maTextColor = aFont.GetColor();
             mbInitTextColor = TRUE;
+            if( mpMetaFile )
+                mpMetaFile->AddAction( new MetaTextColorAction( aFont.GetColor() ) );
         }
         maFont      = aFont;
         mbNewFont   = TRUE;
@@ -5264,9 +5275,6 @@ void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextLanguageAction( eTextLanguage ) );
-
-    if( eTextLanguage == LANGUAGE_SYSTEM )
-        eTextLanguage = GetSystemLanguage();
 
     meTextLanguage = eTextLanguage;
 
