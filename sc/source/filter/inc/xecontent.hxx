@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:08 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #include "rangelst.hxx"
 #endif
 
+#ifndef SC_XLCONTENT_HXX
+#include "xlcontent.hxx"
+#endif
 #ifndef SC_XERECORD_HXX
 #include "xerecord.hxx"
 #endif
@@ -83,6 +86,7 @@ globals for the document).
 - Background bitmap
 - Hyperlinks
 - Label ranges
+- Conditional formatting
 - Data validation
 - Web Queries
 ============================================================================ */
@@ -180,10 +184,6 @@ typedef XclExpRecordList< XclExpHyperlink > XclExpHyperlinkList;
 /** Provides export of the row/column label range list of a sheet. */
 class XclExpLabelranges : public XclExpRecord
 {
-private:
-    ScRangeList                 maRowRanges;    /// Cell range list for row labels.
-    ScRangeList                 maColRanges;    /// Cell range list for column labels.
-
 public:
     /** Fills the cell range lists with all ranges of the current sheet. */
     explicit                    XclExpLabelranges( const XclExpRoot& rRoot );
@@ -200,6 +200,80 @@ private:
 
     /** Writes the body of the LABELRANGES record. */
     virtual void                WriteBody( XclExpStream& rStrm );
+
+private:
+    ScRangeList                 maRowRanges;    /// Cell range list for row labels.
+    ScRangeList                 maColRanges;    /// Cell range list for column labels.
+};
+
+
+// Conditional formatting =====================================================
+
+class ScCondFormatEntry;
+class XclExpCF_Impl;
+
+/** Represents a CF record that contains one condition of a conditional format. */
+class XclExpCF : public XclExpRecord, protected XclExpRoot
+{
+public:
+    explicit                    XclExpCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry );
+    virtual                     ~XclExpCF();
+
+private:
+    /** Writes the body of the CF record. */
+    virtual void                WriteBody( XclExpStream& rStrm );
+
+private:
+    typedef ::std::auto_ptr< XclExpCF_Impl > XclExpCF_ImplPtr;
+    XclExpCF_ImplPtr            mpImpl;
+};
+
+
+// ----------------------------------------------------------------------------
+
+class ScConditionalFormat;
+
+/** Represents a CONDFMT record that contains all conditions of a conditional format.
+    @descr  Contains the conditions which are stored in CF records. */
+class XclExpCondfmt : public XclExpRecord, protected XclExpRoot
+{
+public:
+    explicit                    XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat );
+    virtual                     ~XclExpCondfmt();
+
+    /** Returns true, if this conditional format contains at least one cell range and CF record. */
+    bool                        IsValid() const;
+
+    /** Writes the CONDFMT record with following CF records, if there is valid data. */
+    virtual void                Save( XclExpStream& rStrm );
+
+private:
+    /** Writes the body of the CONDFMT record. */
+    virtual void                WriteBody( XclExpStream& rStrm );
+
+private:
+    typedef XclExpRecordList< XclExpCF > XclExpCFList;
+
+    XclExpCFList                maCFList;       /// List of CF records.
+    ScRangeList                 maRanges;       /// Cell ranges for this conditional format.
+};
+
+
+// ----------------------------------------------------------------------------
+
+/** Contains all conditional formats of a specific sheet. */
+class XclExpCondFormatBuffer : public XclExpRecordBase
+{
+public:
+    /** Constructs CONDFMT and CF records containing the conditional formats of the current sheet. */
+    explicit                    XclExpCondFormatBuffer( const XclExpRoot& rRoot );
+
+    /** Writes all contained CONDFMT records with their CF records. */
+    virtual void                Save( XclExpStream& rStrm );
+
+private:
+    typedef XclExpRecordList< XclExpCondfmt > XclExpCondfmtList;
+    XclExpCondfmtList           maCondfmtList;  /// List of CONDFMT records.
 };
 
 
@@ -211,15 +285,10 @@ class ScValidationData;
     @descr  This record contains the settings for a data validation. In detail
     this is a pointer to the core validation data and a cell range list with all
     affected cells. The handle index is used to optimize list search algorithm. */
-class XclExpDv : public XclExpRecord, protected XclExpRoot
+class XclExpDV : public XclExpRecord, protected XclExpRoot
 {
-private:
-    ScRangeList                 maRanges;       /// A list with all affected cells.
-    const ScValidationData*     mpValData;      /// Pointer to the core data (no ownership).
-    sal_uInt32                  mnHandle;       /// The core handle for quick list search.
-
 public:
-    explicit                    XclExpDv( const XclExpRoot& rRoot, sal_uInt32 nHandle );
+    explicit                    XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nHandle );
 
     /** Returns the core handle of the validation data. */
     inline sal_uInt32           GetHandle() const { return mnHandle; }
@@ -233,6 +302,11 @@ public:
 private:
     /** Writes the body of the DV record. */
     virtual void                WriteBody( XclExpStream& rStrm );
+
+private:
+    ScRangeList                 maRanges;       /// A list with all affected cells.
+    const ScValidationData*     mpValData;      /// Pointer to the core data (no ownership).
+    sal_uInt32                  mnHandle;       /// The core handle for quick list search.
 };
 
 
@@ -241,10 +315,6 @@ private:
 /** This class contains the DV record list following the DVAL record. */
 class XclExpDval : public XclExpRecord, protected XclExpRoot
 {
-private:
-    XclExpRecordList< XclExpDv > maDvList;      /// List of DV records
-    XclExpDv*                   mpLastFoundDv;  /// For search optimization.
-
 public:
     explicit                    XclExpDval( const XclExpRoot& rRoot );
 
@@ -256,11 +326,17 @@ public:
     virtual void                Save( XclExpStream& rStrm );
 
 private:
-    /** Searches for or creates a XclExpDv record object with the specified handle. */
-    XclExpDv&                   SearchOrCreateDv( sal_uInt32 nHandle );
+    /** Searches for or creates a XclExpDV record object with the specified handle. */
+    XclExpDV&                   SearchOrCreateDv( sal_uInt32 nHandle );
 
     /** Writes the body of the DVAL record. */
     virtual void                WriteBody( XclExpStream& rStrm );
+
+private:
+    typedef XclExpRecordList< XclExpDV > XclExpDVList;
+
+    XclExpDVList                maDVList;       /// List of DV records
+    XclExpDV*                   mpLastFoundDV;  /// For search optimization.
 };
 
 
@@ -272,13 +348,6 @@ private:
     mode 3 (custom range list): mpQryTables!=NULL, mbEntireDoc==false. */
 class XclExpWebQuery : public XclExpRecordBase
 {
-private:
-    XclExpString                maDestRange;    /// Destination range.
-    XclExpString                maUrl;          /// Source document URL.
-    XclExpString*               mpQryTables;    /// List of source range names.
-    sal_Int16                   mnRefresh;      /// Refresh time in minutes.
-    bool                        mbEntireDoc;    /// true = entire document.
-
 public:
     /** Constructs a web query record container with settings from Calc. */
     explicit                    XclExpWebQuery(
@@ -290,6 +359,13 @@ public:
 
     /** Writes all needed records for this web query. */
     virtual void                Save( XclExpStream& rStrm );
+
+private:
+    XclExpString                maDestRange;    /// Destination range.
+    XclExpString                maUrl;          /// Source document URL.
+    XclExpString*               mpQryTables;    /// List of source range names.
+    sal_Int16                   mnRefresh;      /// Refresh time in minutes.
+    bool                        mbEntireDoc;    /// true = entire document.
 };
 
 
