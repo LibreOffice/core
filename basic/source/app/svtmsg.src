@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:09:05 $
+ *  last change: $Author: kz $ $Date: 2001-07-27 08:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1094,7 +1094,7 @@ String S_NO_SELECTED_ENTRY_DEPRECATED
     Text[ dutch ] = "Geen item geselecteerd in TreeListBox bij  ($Arg1)";
     Text[ french ] = "Aucune entrée sélectionnée dans la TreeListBox pour ($Arg1)";
     Text[ spanish ] = "No hay ninguna entrada seleccionada en TreeListBox para ($Arg1)";
-    Text[ italian ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ italian ] = "An entry has not been selected at ($Arg1)";
     Text[ danish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ swedish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ polish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
@@ -1118,7 +1118,7 @@ String S_NO_SELECTED_ENTRY
     Text[ dutch ] = "Geen item geselecteerd in ($Arg2) bij  ($Arg1)";
     Text[ french ] = "Aucune entrée sélectionnée dans ($Arg2) pour ($Arg1)";
     Text[ spanish ] = "No hay ninguna entrada seleccionada en ($Arg2) para ($Arg1)";
-    Text[ italian ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ italian ] = "An entry has not been selected at ($Arg2)";
     Text[ danish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ swedish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ polish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
@@ -1582,12 +1582,13 @@ String S_NO_MENU
     Text[ japanese ] = "There is no Help button at ($Arg1)";
     Text[ korean ] = "($Arg1)¿¡ µµ¿ò¸» ¹öÆ°ÀÌ ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "There is no menu at ($Arg1)";
-    Text[ chinese_traditional ] = "There is no Help button at ($Arg1)";
+    Text[ chinese_traditional ] = "There is no menu at ($Arg1)";
     Text[ arabic ] = "There is no Help button at ($Arg1)";
     Text[ turkish ] = "There is no Help button at ($Arg1)";
     Text[ catalan ] = "No existe botón Ayuda para ($Arg1)";
     Text[ finnish ] = "Kohteessa ($Arg1) ei ole Ohje-painiketta";
 };
+
 
 
 
