@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-04 16:24:50 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ static void CreateAfmFile( const INetURLObject& rFontFile )
             int nDescr = open( ByteString( aAfmFile.PathToFileName(), aEncoding ).GetBuffer(),
                                O_CREAT | O_TRUNC| O_WRONLY,
                                00755 );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             if( nDescr < 0 )
                 fprintf( stderr, "open( %s ) failed because of %d\n", ByteString( aAfmFile.GetFull(), aEncoding ).GetBuffer(), errno );
 #endif
@@ -161,7 +161,7 @@ static void CreateAfmFile( const INetURLObject& rFontFile )
                         aFullName.GetBuffer(),
                         NULL );
             }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             else
                 fprintf( stderr, "dup2( %d, %d ) failed because of %d\n", nDescr, STDOUT_FILENO, errno );
 #endif
@@ -176,7 +176,7 @@ static void CreateAfmFile( const INetURLObject& rFontFile )
     ByteString aSysFile( aAfmFile.PathToFileName(), aEncoding );
     if( stat( aSysFile.GetBuffer(), &aStat ) || ! aStat.st_size )
         unlink( aSysFile.GetBuffer() );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, " %s\n", ! access( aSysFile.GetBuffer(), F_OK ) ? "success" : "failed" );
 #endif
     unlink( ByteString( aFontMap.PathToFileName(), aEncoding ).GetBuffer() );
