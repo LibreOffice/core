@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:53:17 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef FORMS_ERRORBROADCASTER_HXX
 #include "errorbroadcaster.hxx"
 #endif
+#ifndef FORMS_SOURCE_COMPONENT_FORMCONTROLFONT_HXX
+#include "formcontrolfont.hxx"
+#endif
 
 //.........................................................................
 namespace frm
@@ -122,6 +125,7 @@ typedef ::cppu::ImplHelper6 <   ::com::sun::star::awt::XControlModel
 class OGridControlModel :public OControlModel
                         ,public OInterfaceContainer
                         ,public OErrorBroadcaster
+                        ,public FontControlModel
                         ,public OAggregationArrayUsageHelper< OGridControlModel >
                             // though we don't use aggregation, we're derived from an OPropertySetAggregationHelper,
                             // which expects that we use an OPropertyArrayAggregationHelper, which we ensure
@@ -134,21 +138,14 @@ class OGridControlModel :public OControlModel
 // [properties]
     ::com::sun::star::uno::Any              m_aRowHeight;           // Zeilenhoehe
     ::com::sun::star::uno::Any              m_aTabStop;
-    ::com::sun::star::uno::Any              m_aTextColor;
     ::com::sun::star::uno::Any              m_aBackgroundColor;
     ::com::sun::star::uno::Any              m_aCursorColor;             // transient
-    ::com::sun::star::awt::FontDescriptor   m_aFont;
-    ::com::sun::star::awt::FontDescriptor   m_aOldFont;
     ::rtl::OUString                         m_aDefaultControl;
     ::rtl::OUString                         m_sHelpText;
-    ::com::sun::star::uno::Any              m_aTextLineColor;
-    sal_Int16                               m_nFontRelief;
-    sal_Int16                               m_nFontEmphasis;
 // [properties]
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xSelection;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >           m_xParentFormLoadable;
-    sal_uInt32                  m_nFontEvent;
 
 // [properties]
     ::rtl::OUString             m_sHelpURL;                 // URL
@@ -260,9 +257,6 @@ protected:
     void lostColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxColumn);
 
     void cloneColumns( const OGridControlModel* _pOriginalContainer );
-
-private:
-    DECL_LINK( OnFontChanged, void* );
 };
 
 //.........................................................................
