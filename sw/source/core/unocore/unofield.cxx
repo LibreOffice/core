@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 12:08:40 $
+ *  last change: $Author: os $ $Date: 2001-03-23 13:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2652,6 +2652,59 @@ void SwXTextField::removeVetoableChangeListener(const OUString& PropertyName, co
 {
     DBG_WARNING("not implemented")
 }
+/* -----------------------------23.03.01 13:15--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXTextField::update(  ) throw (RuntimeException)
+{
+    vos::OGuard  aGuard(Application::GetSolarMutex());
+    const SwField* pFld = GetField();
+    if(pFld)
+    {
+        switch(pFld->Which())
+        {
+            case RES_DATETIMEFLD:
+            ((SwDateTimeField*)pFld)->SetDateTime( Date().GetDate(),
+                                                Time().GetTime() );
+            break;
+
+            case RES_EXTUSERFLD:
+            {
+                SwExtUserField* pExtUserFld = (SwExtUserField*)pFld;
+                pExtUserFld->SetExpansion( ((SwExtUserFieldType*)pFld->GetTyp())->Expand(
+                                            pExtUserFld->GetSubType(),
+                                            pExtUserFld->GetFormat() ) );
+            }
+            break;
+
+            case RES_AUTHORFLD:
+            {
+                SwAuthorField* pAuthorFld = (SwAuthorField*)pFld;
+                pAuthorFld->SetExpansion( ((SwAuthorFieldType*)pFld->GetTyp())->Expand(
+                                            pAuthorFld->GetFormat() ) );
+            }
+            break;
+
+            case RES_FILENAMEFLD:
+            {
+                SwFileNameField* pFileNameFld = (SwFileNameField*)pFld;
+                pFileNameFld->SetExpansion( ((SwFileNameFieldType*)pFld->GetTyp())->Expand(
+                                            pFileNameFld->GetFormat() ) );
+            }
+            break;
+
+            case RES_DOCINFOFLD:
+            {
+                    SwDocInfoField* pDocInfFld = (SwDocInfoField*)pFld;
+                    pDocInfFld->SetExpansion( ((SwDocInfoFieldType*)pFld->GetTyp())->Expand(
+                                                pDocInfFld->GetSubType(),
+                                                pDocInfFld->GetFormat(),
+                                                pDocInfFld->GetLanguage() ) );
+            }
+            break;
+        }
+    }
+}
 /* -----------------19.03.99 14:11-------------------
  *
  * --------------------------------------------------*/
@@ -2680,7 +2733,6 @@ uno::Sequence< OUString > SwXTextField::getSupportedServiceNames(void) throw( un
     pArray[1] = C2U("com.sun.star.text.TextContent");
     return aRet;
 }
-
 /* -----------------14.12.98 12:00-------------------
  *
  * --------------------------------------------------*/

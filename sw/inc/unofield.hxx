@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-08 14:14:55 $
+ *  last change: $Author: os $ $Date: 2001-03-23 13:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
 #include <com/sun/star/util/XRefreshable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XUPDATABLE_HPP_
+#include <com/sun/star/util/XUpdatable.hpp>
 #endif
 #ifndef _CALBCK_HXX //autogen
 #include <calbck.hxx>
@@ -162,12 +165,13 @@ public:
  *
  * --------------------------------------------------*/
 struct SwFieldProperties_Impl;
-class SwXTextField : public cppu::WeakImplHelper4
+class SwXTextField : public cppu::WeakImplHelper5
 <
     ::com::sun::star::text::XDependentTextField,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::beans::XPropertySet,
-    ::com::sun::star::lang::XUnoTunnel
+    ::com::sun::star::lang::XUnoTunnel,
+    ::com::sun::star::util::XUpdatable
 >,
             public SwClient
 {
@@ -224,6 +228,9 @@ public:
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+
+    //XUpdatable
+    virtual void SAL_CALL update(  ) throw (::com::sun::star::uno::RuntimeException);
 
     //SwClient
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
