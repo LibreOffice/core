@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-17 09:31:55 $
+ *  last change: $Author: sj $ $Date: 2002-05-17 13:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2605,6 +2605,9 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
             Apply3dObjectRotation( pScene, Fix16ToAngle( nXRotate ), Fix16ToAngle( nYRotate ) );
 
         // set correct camera depth and evaluate new size
+        fDepth = pScene->GetBoundVolume().GetDepth();
+        if ( fDepth < 1.0 )
+            fDepth = 1.0;
         fDepth = pScene->GetBoundVolume().GetDepth(); // 100.0;
         Vector3D aNewCamPos( 0.0, 0.0, fDepth );
         rCamera.SetPosAndLookAt( aNewCamPos, aLookAt );
