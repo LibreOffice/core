@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmkmenu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-03 17:04:14 $
+ *  last change: $Author: pb $ $Date: 2001-05-11 10:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,9 +124,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
-
-#define S2U(STRING)                     ::rtl::OStringToOUString(STRING, RTL_TEXTENCODING_UTF8)
-#define U2S(STRING)                     ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
 
 namespace framework
 {
@@ -275,13 +272,27 @@ void BmkMenu::Initialize()
             InsertSeparator();
         else
         {
-            USHORT nId = CreateMenuId();
+            sal_Bool    bImageSet = sal_False;
+            USHORT      nId = CreateMenuId();
 
-            Image aImage = GetImageFromURL( m_xFrame, aURL, FALSE );
-            if ( !aImage )
-                InsertItem( nId, aTitle );
-            else
-                InsertItem( nId, aTitle, aImage );
+            if ( aImageId.getLength() > 0 )
+            {
+                Image aImage = GetImageFromURL( m_xFrame, aImageId, FALSE );
+                if ( !!aImage )
+                {
+                    bImageSet = sal_True;
+                    InsertItem( nId, aTitle, aImage );
+                }
+            }
+
+            if ( !bImageSet )
+            {
+                Image aImage = GetImageFromURL( m_xFrame, aURL, FALSE );
+                if ( !aImage )
+                    InsertItem( nId, aTitle );
+                else
+                    InsertItem( nId, aTitle, aImage );
+            }
 
             BmkMenu::Attributes* pUserAttributes = new BmkMenu::Attributes;
             pUserAttributes->aTargetFrame = aTargetFrame;
