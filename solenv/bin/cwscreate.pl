@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwscreate.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 11:26:40 $
+#   last change: $Author: hr $ $Date: 2004-09-01 12:18:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ $SIG{'INT'} = 'INT_handler' if defined($log);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.4 $ ';
+my $id_str = ' $Revision: 1.5 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -201,7 +201,30 @@ sub parse_options
     eval { $result = $eis->getCurrentMilestone($master) };
     if ( !defined $result ) {
         print_error("Master workspace '$masterws' not found in database.", 4);
-    };
+    }
+
+    my $wslocation;
+    if ( defined($log) ) {
+        # check if master is known to 'stand.lst'
+        my $workspace_lst = get_workspace_lst();
+        my $workspace_db = GenInfoParser->new();
+        $success = $workspace_db->load_list($workspace_lst);
+        if ( !$success ) {
+            print_error("Can't load workspace list '$workspace_lst'.", 3);
+        }
+        my $workspace = $workspace_db->get_key($masterws);
+        if ( !$workspace ) {
+            print_error("Master workspace '$masterws' not found in '$workspace_lst' database.", 4);
+        }
+
+        $wslocation = $workspace_db->get_value($masterws."/Drives/o:/UnixVolume");
+        if ( !$wslocation ) {
+            print_error("Location of master workspace '$masterws' not found in '$workspace_lst' database.", 5);
+        }
+    }
+    else {
+        # HACK leave $wslocation undef for now
+    }
 
     my $cws = Cws->new();
     $cws->master($masterws);
