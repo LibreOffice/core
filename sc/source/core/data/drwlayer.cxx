@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:25:27 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -881,15 +881,9 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
     }
     if (!bSetVer)
     {
-        nStartY = 0;
-        SCROW nStartRow = rRange.aStart.Row();
-            SCROW j;
-        for (j=0; j<nStartRow; j++)
-            nStartY +=pDoc->FastGetRowHeight(j,nTab);
-        nEndY = nStartY;
-        SCROW nEndRow = rRange.aEnd.Row();
-        for (j=nStartRow; j<=nEndRow; j++)
-            nEndY += pDoc->FastGetRowHeight(j,nTab);
+        nStartY = pDoc->FastGetRowHeight( 0, rRange.aStart.Row()-1, nTab);
+        nEndY = nStartY + pDoc->FastGetRowHeight( rRange.aStart.Row(),
+                rRange.aEnd.Row(), nTab);
         nStartY = (long)(nStartY * HMM_PER_TWIPS);
         nEndY   = (long)(nEndY   * HMM_PER_TWIPS);
     }
@@ -955,12 +949,12 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
             SCCOL i;
 
             nWidth = 0;
-            for (i=0; i<MAXCOL && nWidth<=nStartX; i++)
+            for (i=0; i<=MAXCOL && nWidth<=nStartX; i++)
                 nWidth += pDoc->GetColWidth(i,nTab);
             rRange.aStart.SetCol( i>0 ? (i-1) : 0 );
 
             nWidth = 0;
-            for (i=0; i<MAXCOL && nWidth<=nEndX; i++)           //! bei Start anfangen
+            for (i=0; i<=MAXCOL && nWidth<=nEndX; i++)          //! bei Start anfangen
                 nWidth += pDoc->GetColWidth(i,nTab);
             rRange.aEnd.SetCol( i>0 ? (i-1) : 0 );
         }
@@ -969,18 +963,11 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
         {
             nStartY = (long) (nStartY / HMM_PER_TWIPS);
             nEndY = (long) (nEndY / HMM_PER_TWIPS);
-            long nHeight;
-            SCROW j;
-
-            nHeight = 0;
-            for (j=0; j<MAXROW && nHeight<=nStartY; j++)
-                nHeight += pDoc->FastGetRowHeight(j,nTab);
-            rRange.aStart.SetRow( j>0 ? (j-1) : 0 );
-
-            nHeight = 0;
-            for (j=0; j<MAXROW && nHeight<=nEndY; j++)
-                nHeight += pDoc->FastGetRowHeight(j,nTab);
-            rRange.aEnd.SetRow( j>0 ? (j-1) : 0 );
+            SCROW nRow = pDoc->FastGetRowForHeight( nTab, nStartY);
+            rRange.aStart.SetRow( nRow>0 ? (nRow-1) : 0);
+            nRow = pDoc->FastGetRowForHeight( nTab, nEndY);
+            rRange.aEnd.SetRow( nRow == MAXROW ? MAXROW :
+                    (nRow>0 ? (nRow-1) : 0));
         }
     }
     else
@@ -1200,11 +1187,9 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
         for (SCsCOL s=-1; s>=nDx; s--)
             aMove.X() -= pDoc->GetColWidth(s+(SCsCOL)nCol1,nTab);
     if (nDy > 0)
-        for (SCsROW s=0; s<nDy; s++)
-            aMove.Y() += pDoc->FastGetRowHeight(s+(SCsROW)nRow1,nTab);
+        aMove.Y() += pDoc->FastGetRowHeight( nRow1, nRow1+nDy-1, nTab);
     else
-        for (SCsROW s=-1; s>=nDy; s--)
-            aMove.Y() -= pDoc->FastGetRowHeight(s+(SCsROW)nRow1,nTab);
+        aMove.Y() -= pDoc->FastGetRowHeight( nRow1+nDy, nRow1-1, nTab);
 
     if ( bNegativePage )
         aMove.X() = -aMove.X();
@@ -1277,8 +1262,7 @@ void ScDrawLayer::HeightChanged( SCTAB nTab, SCROW nRow, long nDifTwips )
     Rectangle aRect;
     Point aTopLeft;
 
-    for (i=0; i<nRow; i++)
-        aRect.Top() += pDoc->FastGetRowHeight(i,nTab);
+    aRect.Top() += pDoc->FastGetRowHeight( 0, nRow-1, nTab);
     aTopLeft.Y() = aRect.Top();
     aRect.Top() += pDoc->FastGetRowHeight(nRow,nTab);
 
@@ -1306,19 +1290,14 @@ BOOL ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
 
     Rectangle aTestRect;
 
-    SCROW i;
-    for (i=0; i<nStartRow; i++)
-        aTestRect.Top() += pDoc->FastGetRowHeight(i,nTab);
+    aTestRect.Top() += pDoc->FastGetRowHeight( 0, nStartRow-1, nTab);
 
     if (nEndRow==MAXROW)
         aTestRect.Bottom() = MAXMM;
     else
     {
         aTestRect.Bottom() = aTestRect.Top();
-        for (i=nStartRow; i<=nEndRow; i++)
-        {
-            aTestRect.Bottom() += pDoc->FastGetRowHeight(i,nTab);
-        }
+        aTestRect.Bottom() += pDoc->FastGetRowHeight( nStartRow, nEndRow, nTab);
         TwipsToMM( aTestRect.Bottom() );
     }
 
