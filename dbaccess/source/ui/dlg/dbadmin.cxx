@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 08:01:04 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 11:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1078,6 +1078,9 @@ void ODbAdminDialog::implSelectDeleted(sal_Int32 _nKey)
 
     // reset the tag pages
     resetPages(Reference< XPropertySet >(), sal_True);
+
+    // disallow reset for deleted pages
+    GetResetButton().Enable(sal_False);
 }
 
 //-------------------------------------------------------------------------
@@ -1095,6 +1098,9 @@ void ODbAdminDialog::implSelectDatasource(const ::rtl::OUString& _rRegisteredNam
     // reset the tag pages
     Reference< XPropertySet > xDatasource = getDatasource(_rRegisteredName);
     resetPages(xDatasource, sal_False);
+
+    // allow reset for non-deleted pages
+    GetResetButton().Enable(sal_True);
 }
 
 //-------------------------------------------------------------------------
@@ -2165,6 +2171,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2000/10/30 08:01:04  fs
+ *  getCurrentSettings: no password dialog if the current data source type does not need authentication
+ *
  *  Revision 1.10  2000/10/26 15:02:16  oj
  *  localstrings for dll
  *
