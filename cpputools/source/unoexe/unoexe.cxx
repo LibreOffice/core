@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:11:28 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,25 +155,32 @@ static OUString convertToFileUrl(const OUString& fileName)
     return uUrlFileName;
 }
 
+static sal_Bool s_quiet = false;
+
 //--------------------------------------------------------------------------------------------------
 static inline void out( const sal_Char * pText )
 {
-    fprintf( stderr, pText );
+    if (! s_quiet)
+        fprintf( stderr, pText );
 }
 //--------------------------------------------------------------------------------------------------
 static inline void out( const OUString & rText )
 {
-    OString aText( OUStringToOString( rText, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, aText.getStr() );
+    if (! s_quiet)
+    {
+        OString aText( OUStringToOString( rText, RTL_TEXTENCODING_ASCII_US ) );
+        fprintf( stderr, aText.getStr() );
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 static const char arUsingText[] =
 "\nusing:\n\n"
-"uno (-c ComponentImplementationName -l LocationUrl | -s ServiceName)\n"
+"uno [-c ComponentImplementationName -l LocationUrl | -s ServiceName]\n"
 "    [-ro ReadOnlyRegistry1] [-ro ReadOnlyRegistry2] ... [-rw ReadWriteRegistry]\n"
-"    [-u uno:(socket[,host=HostName][,port=nnn]|pipe[,name=PipeName]);iiop;Name\n"
+"    [-u uno:(socket[,host=HostName][,port=nnn]|pipe[,name=PipeName]);<protocol>;Name\n"
 "        [--singleaccept] [--singleinstance]]\n"
+"    [--quiet]\n"
 "    [-- Argument1 Argument2 ...]\n";
 
 //--------------------------------------------------------------------------------------------------
@@ -559,7 +566,14 @@ Reference< XInterface > OInstanceProvider::getInstance( const OUString & rName )
         {
             Reference< XInterface > xRet;
 
-            if (_bSingleInstance)
+            if (_aImplName.getLength() == 0 && _aServiceName.getLength() == 0)
+            {
+                OSL_ASSERT(
+                    rName.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("uno.ComponentContext") ) );
+                xRet = _xContext;
+            }
+            else if (_bSingleInstance)
             {
                 if (! _xSingleInstance.is())
                 {
@@ -637,7 +651,6 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
 
     sal_Int32 nRet = 0;
     Reference< XComponentContext > xContext;
-    Reference< XSimpleRegistry > xRegistry;
 
 
     try
@@ -674,6 +687,7 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
                 readOption( &aLocation, "l", &nPos, arg)                ||
                 readOption( &aServiceName, "s", &nPos, arg)             ||
                 readOption( &aUnoUrl, "u", &nPos, arg)                  ||
+                readOption( &s_quiet, "quiet", &nPos, arg)              ||
                 readOption( &bSingleAccept, "singleaccept", &nPos, arg) ||
                 readOption( &bSingleInstance, "singleinstance", &nPos, arg))
             {
@@ -719,8 +733,23 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
             }
         }
 
-        if ((aImplName.getLength() != 0) == (aServiceName.getLength() != 0))
+        if ((aImplName.getLength() != 0) && (aServiceName.getLength() != 0))
             throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("give component exOR service name!" ) ), Reference< XInterface >() );
+        if (aImplName.getLength() == 0 && aServiceName.getLength() == 0)
+        {
+            if (! aUnoUrl.endsWithIgnoreAsciiCaseAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM(";uno.ComponentContext") ))
+                throw RuntimeException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                  "expected UNO-URL with instance name "
+                                  "uno.ComponentContext!") ),
+                    Reference<XInterface>() );
+            if (bSingleInstance)
+                throw RuntimeException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                  "unexpected option --singleinstance!") ),
+                    Reference<XInterface>() );
+        }
         if (aImplName.getLength() && !aLocation.getLength())
             throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("give component location!" ) ), Reference< XInterface >() );
         if (aServiceName.getLength() && aLocation.getLength())
@@ -736,39 +765,53 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
             OSL_VERIFY( rtl_getAppCommandArg( nPos, &pParams[nPos -nOffset].pData ) == osl_Process_E_None );
         }
 
-        //#### create registry #####################################################################
-
-        // ReadOnly registries
-        for ( size_t nReg = 0; nReg < aReadOnlyRegistries.size(); ++nReg )
+        if (aReadOnlyRegistries.size() > 0 ||
+            aReadWriteRegistry.getLength() > 0)
         {
+            //#### create registry #############################################
+
+            Reference< XSimpleRegistry > xRegistry;
+
+            // ReadOnly registries
+            for ( size_t nReg = 0; nReg < aReadOnlyRegistries.size(); ++nReg )
+            {
 #if OSL_DEBUG_LEVEL > 1
-            out( "\n> trying to open ro registry: " );
-            out( OUStringToOString( aReadOnlyRegistries[ nReg ], RTL_TEXTENCODING_ASCII_US ).getStr() );
+                out( "\n> trying to open ro registry: " );
+                out( OUStringToOString(
+                         aReadOnlyRegistries[ nReg ],
+                         RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
-            Reference< XSimpleRegistry > xNewReg(
-                openRegistry( aReadOnlyRegistries[ nReg ], sal_True, sal_False ) );
-            if (xNewReg.is())
-                xRegistry = (xRegistry.is() ? nestRegistries( xNewReg, xRegistry ) : xNewReg);
-        }
-        if (aReadWriteRegistry.getLength())
-        {
+                Reference< XSimpleRegistry > xNewReg(
+                    openRegistry(
+                        aReadOnlyRegistries[ nReg ], sal_True, sal_False ) );
+                if (xNewReg.is())
+                    xRegistry = (xRegistry.is() ? nestRegistries(
+                                     xNewReg, xRegistry ) : xNewReg);
+            }
+            if (aReadWriteRegistry.getLength())
+            {
 #if OSL_DEBUG_LEVEL > 1
-            out( "\n> trying to open rw registry: " );
-            out( OUStringToOString( aReadWriteRegistry, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                out( "\n> trying to open rw registry: " );
+                out( OUStringToOString(
+                         aReadWriteRegistry,
+                         RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
-            // ReadWrite registry
-            Reference< XSimpleRegistry > xNewReg(
-                openRegistry( aReadWriteRegistry, sal_False, sal_True ) );
-            if (xNewReg.is())
-                xRegistry = (xRegistry.is() ? nestRegistries( xNewReg, xRegistry ) : xNewReg);
-        }
+                // ReadWrite registry
+                Reference< XSimpleRegistry > xNewReg(
+                    openRegistry( aReadWriteRegistry, sal_False, sal_True ) );
+                if (xNewReg.is())
+                    xRegistry = (xRegistry.is()
+                                 ? nestRegistries( xNewReg, xRegistry )
+                                 : xNewReg);
+            }
 
-        if (! xRegistry.is())
+            OSL_ASSERT( xRegistry.is() );
+            xContext = bootstrap_InitialComponentContext( xRegistry );
+        }
+        else // defaulting
         {
-            out( "\n> warning: no registry given!" );
+            xContext = defaultBootstrap_InitialComponentContext();
         }
-
-        xContext = bootstrap_InitialComponentContext( xRegistry );
 
         //#### accept, instanciate, etc. ###########################################################
 
