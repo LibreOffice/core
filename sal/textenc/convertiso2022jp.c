@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertiso2022jp.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-11-19 17:58:42 $
+ *  last change: $Author: sb $ $Date: 2001-11-23 09:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ typedef enum /* order is important: */
     IMPL_ISO_2022_JP_TO_UNICODE_STATE_0208_2,
     IMPL_ISO_2022_JP_TO_UNICODE_STATE_ESC,
     IMPL_ISO_2022_JP_TO_UNICODE_STATE_ESC_LPAREN,
-    IMPL_ISO_2022_JP_TO_UNICODE_STATE_ESC_DOLLAR,
+    IMPL_ISO_2022_JP_TO_UNICODE_STATE_ESC_DOLLAR
 } ImplIso2022JpToUnicodeState;
 
 typedef struct
