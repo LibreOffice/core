@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-06-11 08:38:52 $
+ *  last change: $Author: gt $ $Date: 2002-08-07 12:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,26 +381,32 @@ public:
 
 class SwMarkPreview : public Window
 {
-    Color       aTransColor;    // Transparente Farbe
-    Color       aMarkColor;     // Farbe der Markierungen
+    Color           m_aBgCol;           // background
+    Color           m_aTransCol;        // transparency
+    Color           m_aMarkCol;         // marks
+    Color           m_aLineCol;         // general lines
+    Color           m_aShadowCol;       // shadow
+    Color           m_aTxtCol;          // text
+    Color           m_aPrintAreaCol;    // frame for print area
 
-    Rectangle   aPage;
-    Rectangle   aLeftPagePrtArea;
-    Rectangle   aRightPagePrtArea;
+    Rectangle       aPage;
+    Rectangle       aLeftPagePrtArea;
+    Rectangle       aRightPagePrtArea;
 
-    USHORT      nMarkPos;
+    USHORT          nMarkPos;
 
-    void DrawRect(const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor);
-    void Paint(const Rectangle&);
-    void PaintPage(const Rectangle &rRect);
-
+    void            DrawRect(const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor);
+    void            Paint(const Rectangle&);
+    void            PaintPage(const Rectangle &rRect);
+    void            InitColors( void );
+protected:
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 public:
+                    SwMarkPreview(Window* pParent, const ResId& rResID);
+    virtual         ~SwMarkPreview();
 
-     SwMarkPreview(Window* pParent, const ResId& rResID);
-    ~SwMarkPreview();
-
-    inline void SetColor(Color aCol)    { aMarkColor = aCol; }
-    inline void SetMarkPos(USHORT nPos) { nMarkPos = nPos; }
+    inline void     SetColor(const Color& rCol) { m_aMarkCol = rCol; }
+    inline void     SetMarkPos(USHORT nPos) { nMarkPos = nPos; }
 };
 
 /*-----------------------------------------------------------------------

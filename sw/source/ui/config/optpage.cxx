@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-06 08:53:42 $
+ *  last change: $Author: gt $ $Date: 2002-08-07 12:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1428,13 +1428,12 @@ static CharAttr __FAR_DATA aInsertAttr[] =
 SwMarkPreview::SwMarkPreview( Window *pParent, const ResId& rResID ) :
 
     Window(pParent, rResID),
-
-    aTransColor (COL_TRANSPARENT),
-    aMarkColor  (COL_LIGHTRED),
-
+    m_aTransCol( COL_TRANSPARENT ),
+    m_aMarkCol( COL_LIGHTRED ),
     nMarkPos(0)
 
 {
+    InitColors();
     SetMapMode(MAP_PIXEL);
 
     const Size aSz(GetOutputSizePixel());
@@ -1460,33 +1459,47 @@ SwMarkPreview::SwMarkPreview( Window *pParent, const ResId& rResID ) :
     aRightPagePrtArea.Move(aLeftPagePrtArea.GetWidth() + nLBorder + nRBorder + 1, 0);
 }
 
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
 SwMarkPreview::~SwMarkPreview()
 {
 }
 
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
+void SwMarkPreview::InitColors( void )
+{
+    // m_aTransCol and m_aMarkCol are _not_ changed because they are set from outside!
+
+    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+    m_aBgCol = Color( rSettings.GetWindowColor() );
+
+    BOOL bHC = m_aBgCol.IsDark();
+    m_aLineCol = bHC? rSettings.GetWindowTextColor() : Color( COL_BLACK );
+    m_aShadowCol = bHC? m_aBgCol : rSettings.GetShadowColor();
+    m_aTxtCol = bHC? rSettings.GetWindowTextColor() : Color( COL_GRAY );
+    m_aPrintAreaCol = m_aTxtCol;
+}
+
+void SwMarkPreview::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Window::DataChanged( rDCEvt );
+
+    if( rDCEvt.GetType() == DATACHANGED_SETTINGS && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+        InitColors();
+}
 
 void SwMarkPreview::Paint(const Rectangle &rRect)
 {
     // Schatten zeichnen
     Rectangle aShadow(aPage);
     aShadow += Point(3, 3);
-    DrawRect(aShadow, Color(COL_GRAY), aTransColor);
+    DrawRect( aShadow, m_aShadowCol, m_aTransCol );
 
     // Seite zeichnen
-    DrawRect(aPage, Color(COL_WHITE), Color(COL_BLACK));
+    DrawRect( aPage, m_aBgCol, m_aLineCol );
 
     // Separator zeichnen
     Rectangle aPageSeparator(aPage);
     aPageSeparator.SetSize(Size(2, aPageSeparator.GetHeight()));
     aPageSeparator.Move(aPage.GetWidth() / 2 - 1, 0);
-    DrawRect(aPageSeparator, Color(COL_BLACK), aTransColor);
+    DrawRect( aPageSeparator, m_aLineCol, m_aTransCol );
 
     PaintPage(aLeftPagePrtArea);
     PaintPage(aRightPagePrtArea);
@@ -1516,18 +1529,14 @@ void SwMarkPreview::Paint(const Rectangle &rRect)
         default:
             return;
     }
-    DrawRect(aLeftMark, aMarkColor, aTransColor);
-    DrawRect(aRightMark, aMarkColor, aTransColor);
+    DrawRect( aLeftMark, m_aMarkCol, m_aTransCol );
+    DrawRect( aRightMark, m_aMarkCol, m_aTransCol );
 }
-
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
 
 void SwMarkPreview::PaintPage(const Rectangle &rRect)
 {
     // PrintArea zeichnen
-    DrawRect(rRect, aTransColor, Color(COL_GRAY));
+    DrawRect(rRect, m_aTransCol, m_aPrintAreaCol );
 
     // Testabsatz zeichnen
     ULONG nLTxtBorder = 4;
@@ -1554,16 +1563,12 @@ void SwMarkPreview::PaintPage(const Rectangle &rRect)
             aTextLine.SetSize(Size(aTextLine.GetWidth() / 2, aTextLine.GetHeight()));
 
         if (aPage.IsInside(aTextLine))
-            DrawRect(aTextLine, Color(COL_GRAY), aTransColor);
+            DrawRect(aTextLine, m_aTxtCol, m_aTransCol );
 
         aTextLine.Move(0, nStep);
     }
     aTextLine.Move(0, -nStep);
 }
-
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
 
 void SwMarkPreview::DrawRect(const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor)
 {
@@ -1571,10 +1576,6 @@ void SwMarkPreview::DrawRect(const Rectangle &rRect, const Color &rFillColor, co
     SetLineColor(rLineColor);
     Window::DrawRect(rRect);
 }
-
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
 
 SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
@@ -1633,22 +1634,16 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
     aMarkPosLB.SetSelectHdl( aLk );
     aMarkColorLB.SetSelectHdl( aLk );
 }
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
+
 SwRedlineOptionsTabPage::~SwRedlineOptionsTabPage()
 {
 }
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
+
 SfxTabPage* SwRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new SwRedlineOptionsTabPage( pParent, rSet );
 }
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
+
 BOOL SwRedlineOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 {
     CharAttr *pAttr;
@@ -1775,10 +1770,6 @@ BOOL SwRedlineOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 
     return FALSE;
 }
-
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
 
 void SwRedlineOptionsTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -1927,10 +1918,6 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet& rSet )
     ChangedMaskPrevHdl();
 }
 
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
 IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox *, pLB )
 {
     SvxFontPrevWindow *pPrev = 0;
@@ -2037,10 +2024,6 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox *, pLB )
     return 0;
 }
 
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
 IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, ColorListBox *, pColorLB )
 {
     SvxFontPrevWindow *pPrev = 0;
@@ -2107,10 +2090,6 @@ IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, ColorListBox *, pColorLB )
     return 0;
 }
 
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
 IMPL_LINK( SwRedlineOptionsTabPage, ChangedMaskPrevHdl, ListBox *, pLB )
 {
     aMarkPreviewWN.SetMarkPos(aMarkPosLB.GetSelectEntryPos());
@@ -2120,10 +2099,6 @@ IMPL_LINK( SwRedlineOptionsTabPage, ChangedMaskPrevHdl, ListBox *, pLB )
 
     return 0;
 }
-
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
 
 void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 {
