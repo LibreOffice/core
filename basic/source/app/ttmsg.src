@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-23 13:49:53 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 15:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ String S_INVALID_LINE
     Text[ japanese ] = "\"($Arg1)\"s‚Í–³Œø‚Å‚·B";
     Text[ korean ] = "¼± \"($Arg1)\" Àº À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÎŞĞ§µÄĞĞ¡°($Arg1)¡±";
-    Text[ chinese_traditional ] = "¦æ \"($Arg1)\" µL®Ä¡C";
+    Text[ chinese_traditional ] = "¦æ($Arg1)µL®Ä¡C";
     Text[ arabic ] = "Line \"($Arg1)\" is invalid.";
     Text[ turkish ] = "Line \"($Arg1)\" is invalid.";
 };
@@ -311,7 +311,7 @@ String S_APPLICATION_START_FAILED
     Text[ japanese ] = "±ÌßØ¹°¼®İ \"($Arg1)\" ‚Í½À°Ä‚Å‚«‚Ü‚¹‚ñB ";
     Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥ \"($Arg1)\" °¡ ½ÃÀÛµÉ¼ö ¾ø½À´Ï´Ù. ";
     Text[ chinese_simplified ] = "ÎŞ·¨Æô¶¯Ó¦ÓÃ³ÌĞò¡°($Arg1)¡±¡£ ";
-    Text[ chinese_traditional ] = "µLªk±Ò°ÊÀ³¥Îµ{¦¡ \"($Arg1)\" ¡C ";
+    Text[ chinese_traditional ] = "µLªk±Ò°ÊÀ³¥Îµ{¦¡($Arg1)¡C";
     Text[ arabic ] = "Application \"($Arg1)\" cannot be started. ";
     Text[ turkish ] = "Application \"($Arg1)\" cannot be started. ";
 };
@@ -531,7 +531,7 @@ String S_UNKNOWN_SLOT_CONTROL
     Text[ japanese ] = "½Û¯Ä/ºİÄÛ°Ù‚ª‚í‚©‚è‚Ü‚¹‚ñ:\"($Arg1)\"";
     Text[ korean ] = "¾Ë¼ö ¾ø´Â ½½·Ô/ÄÁÆ®·Ñ :\"($Arg1)\"";
     Text[ chinese_simplified ] = "²»Ã÷µÄ Slot/Control£º\"($Arg1)\"";
-    Text[ chinese_traditional ] = "Slot/Control ¤£©ú¡G\"($Arg1)\"";
+    Text[ chinese_traditional ] = "Slot/Control ¤£©ú¡G($Arg1)";
     Text[ arabic ] = "Slot/Control unknown :\"($Arg1)\"";
     Text[ turkish ] = "Slot/Control unknown :\"($Arg1)\"";
 };
@@ -553,7 +553,7 @@ String S_RETURN_SEQUENCE_MISSMATCH
     Text[ japanese ] = "ØÀ°İ½ÄØ°Ñ‚Ì¼°¹İ½‚ªŠÔˆá‚Á‚Ä‚¢‚Ü‚·: ($Arg2) ‚Å‚È‚­ ($Arg1)";
     Text[ korean ] = "Æ²¸° ÀÏ·Ã ¹øÈ£¸¦ Áö´Ñ ¸®ÅÏ ½ºÆ®¸²: ($Arg2) ´ë½Å ($Arg1)";
     Text[ chinese_simplified ] = "º¬ÓĞ´íÎóĞòÁĞµÄ·µ»ØĞÅÏ¢Á÷£º($Arg1) ´úÌæ($Arg2)";
-    Text[ chinese_traditional ] = "ªğ¦^¼ÆÕu¬yªº§Ç¦C¿ù»~¡G($Arg1)¡A À³¸Ó¬O ($Arg2)";
+    Text[ chinese_traditional ] = "ªğ¦^¼Æ¾Ú¬yªº§Ç¦C¿ù»~¡G($Arg1)¡A À³¸Ó¬O ($Arg2)";
     Text[ arabic ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
     Text[ turkish ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
 };
