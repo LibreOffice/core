@@ -206,3 +206,4 @@ mkdir: %_DEST%\pck%_EXT%
 ..\%__SRC%\misc\99\readme99.txt %_DEST%\bin%_EXT%\99\osl\README99
 ..\%__SRC%\misc\99\readme99.html %_DEST%\bin%_EXT%\99\osl\README99.html
 
+..\%__SRC%\misc\THIRDPARTYLICENSEREADME.html %_DEST%\bin%_EXT%\THIRDPARTYLICENSEREADME.html
