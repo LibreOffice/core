@@ -7,8 +7,8 @@
 #*                      Entwicklungtools-Definitionen
 #*
 #*    Ersterstellung    TH 28.03.94
-#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-10-09 16:16:04 $
-#*    $Revision: 1.8 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-10-10 11:22:29 $
+#*    $Revision: 1.9 $
 #*
 #*    $Logfile:   T:/solar/inc/settings.mkv  $
 #*
@@ -920,10 +920,10 @@ JARDIR=$(PRE)$/bin
 
 #now mess around with SOLARINC, SOLARINCLUDES, SOLARLIB and LIB
 .IF "$(UDKVERSION)"!=""
-SOLARINC:=-I$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/inc $(SOLARINC)
-SOLARINCLUDES:=-I$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/inc $(SOLARINCLUDES)
-SOLARLIB:=-L$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/lib $(SOLARLIB)
-ILIB:=$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/lib;$(ILIB)
+SOLARINC!:=-I$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/inc $(SOLARINC)
+SOLARINCLUDES!:=-I$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/inc $(SOLARINCLUDES)
+SOLARLIB!:=-L$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/lib $(SOLARLIB)
+ILIB!:=$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/lib;$(ILIB)
 .ENDIF			# "$(UDKVERSION)"!=""
 
 # muss expandiert sein!!!
