@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interlck.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:21 $
+ *  last change: $Author: hr $ $Date: 2001-02-23 19:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,44 @@
 #include <osl/interlck.h>
 #include <osl/diagnose.h>
 
+#if (defined ( __SUNPRO_C ) || defined ( __SUNPRO_CC )) && defined ( SPARC )
+#error please use asm/interlck_sparc.s
+#elif defined ( GCC ) && defined ( X86 )
+
+/*****************************************************************************/
+/* osl_incrementInterlockedCount */
+/*****************************************************************************/
+oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
+{
+    oslInterlockedCount nCount;
+
+    __asm__ __volatile__ (
+        "movl $1, %0\n\t"
+        "lock\n\t"
+        "xadd %0, %2\n\t"
+        "incl %0"
+    :   "=a" (nCount), "=m" (*pCount)
+    :   "m" (*pCount)
+    :   "memory");
+}
+
+oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
+{
+    oslInterlockedCount nCount;
+
+    __asm__ __volatile__ (
+        "movl $-1, %0\n\t"
+        "lock\n\t"
+        "xadd %0, %2\n\t"
+        "decl %0"
+    :   "=a" (nCount), "=m" (*pCount)
+    :   "m" (*pCount)
+    :   "memory");
+}
+
+#elif
+/* use only if nothinig else works, expensive due to single mutex for all reference counts */
+
 static pthread_mutex_t InterLock = PTHREAD_MUTEX_INITIALIZER;
 
 /*****************************************************************************/
@@ -95,3 +133,4 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
     return (Count);
 }
 
+#endif /* expensive default, works everywhere */
