@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 14:51:04 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1363,7 +1363,7 @@ void Desktop::Main()
 
     // create title string
     sal_Bool    bCheckOk = sal_False;
-    LanguageType aLanguageType;
+    LanguageType aLanguageType = LANGUAGE_DONTKNOW;
     String aMgrName = String::CreateFromAscii( "iso" );
     aMgrName += String::CreateFromInt32(SUPD); // current build version
     ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
