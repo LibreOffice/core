@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: as $ $Date: 2002-06-28 09:15:06 $
+ *  last change: $Author: as $ $Date: 2002-06-28 10:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1253,7 +1253,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                             aSource,
                             ::ucb::InsertOperation_COPY,
                             ::rtl::OUString(sFileName),
-                            ::com::sun::star::ucb::NameClash::ERROR);
+                            ::com::sun::star::ucb::NameClash::OVERWRITE);
                 }
             }
             catch( ::com::sun::star::ucb::ContentCreationException& ) { DBG_ERROR("content create exception"); }
