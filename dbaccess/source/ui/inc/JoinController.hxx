@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:43:52 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ namespace dbaui
         virtual short saveModified() = 0;
         // called when the orignal state should be reseted (first time load)
         virtual void reset()         = 0;
-        virtual void AddSupportedFeatures();
+        virtual void describeSupportedFeatures();
 
         virtual OJoinDesignView*    getJoinView();
     };
