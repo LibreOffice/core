@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:11:06 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:14:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,16 +363,16 @@ String RID_GALLERYSTR_THEME_SCREENBEANS
 
 String RID_GALLERYSTR_THEME_FONTWORK
 {
-    Text [ de ] = "Fontwork";
-    Text [ en-US ] = "Fontwork";
+    // !!! Don't translate, please !!!
+    Text = "private://gallery/hidden/fontwork";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_FONTWORK_VERTICAL
 {
-    Text [ de ] = "Fontwork Vertical";
-    Text [ en-US ] = "Fontwork Vertical";
+    // !!! Don't translate, please !!!
+    Text = "private://gallery/hidden/fontworkvertical";
 };
 
 
