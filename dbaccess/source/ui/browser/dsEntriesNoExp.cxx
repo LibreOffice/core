@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsEntriesNoExp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 08:49:11 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,43 @@ ToolBox* SbaTableQueryBrowser::CreateToolBox(Window* _pParent)
 {
     return new ToolBox( _pParent, ModuleRes( RID_BRW_QRY_TOOLBOX ) );
 }
+// -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::notifyHiContrastChanged()
+{
+    if ( m_pTreeView )
+    {
+        sal_Bool bHiContrast = isHiContrast();
 
+        if ( m_bHiContrast != bHiContrast )
+        {
+            m_bHiContrast = bHiContrast;
+            // change all bitmap entries
+            SvLBoxEntry* pEntryLoop = m_pTreeModel->First();
+            while (pEntryLoop)
+            {
+                DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryLoop->GetUserData());
+                if ( pData )
+                {
+                    ModuleRes aResId(DBTreeListModel::getImageResId(pData->eType,isHiContrast()));
+                    Image aImage(aResId);
+                    USHORT nCount = pEntryLoop->ItemCount();
+                    for (USHORT i=0;i<nCount;++i)
+                    {
+                        SvLBoxItem* pItem = pEntryLoop->GetItem(i);
+                        if ( pItem && pItem->IsA() == SV_ITEM_ID_LBOXCONTEXTBMP)
+                        {
+                            static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap1(pEntryLoop,aImage);
+                            static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap2(pEntryLoop,aImage);
+                            break;
+                        }
+                    }
+                }
+                pEntryLoop = m_pTreeModel->Next(pEntryLoop);
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------
 // .........................................................................
 }   // namespace dbaui
 // .........................................................................
