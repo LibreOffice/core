@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-11 09:26:50 $
+ *  last change: $Author: pb $ $Date: 2001-09-12 09:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,7 @@ private:
                             xFrame;
     sal_Bool                bIsDebug;
     sal_Bool                bIsIndexOn;
+    sal_Bool                bIsInClose;
 
     String                  aIndexOnText;
     String                  aIndexOffText;

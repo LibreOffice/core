@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-11 09:26:50 $
+ *  last change: $Author: pb $ $Date: 2001-09-12 09:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1597,6 +1597,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     pHelpWin        ( pParent ),
     pTextWin        ( new Window( this, 0 ) ),
     bIsDebug        ( sal_False ),
+    bIsInClose      ( sal_False ),
     aIndexOnText    ( SfxResId( STR_HELP_BUTTON_INDEX_ON ) ),
     aIndexOffText   ( SfxResId( STR_HELP_BUTTON_INDEX_OFF ) ),
     aIndexOnImage   ( SfxResId( IMG_HELP_TOOLBOX_INDEX_ON ) ),
@@ -1653,6 +1654,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
 SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
 {
+    bIsInClose = sal_True;
     xFrame->dispose();
 }
 
@@ -1744,17 +1746,20 @@ void SfxHelpTextWindow_Impl::ToggleIndex( sal_Bool bOn )
 
 void SfxHelpTextWindow_Impl::GetFocus()
 {
-    try
+    if ( !bIsInClose )
     {
-        if( xFrame.is() )
+        try
         {
-            Reference< ::com::sun::star::awt::XWindow > xWindow = xFrame->getComponentWindow();
-            if( xWindow.is() )
-                xWindow->setFocus();
+            if( xFrame.is() )
+            {
+                Reference< ::com::sun::star::awt::XWindow > xWindow = xFrame->getComponentWindow();
+                if( xWindow.is() )
+                    xWindow->setFocus();
+            }
         }
-    }
-    catch( ::com::sun::star::uno::Exception& )
-    {
+        catch( ::com::sun::star::uno::Exception& )
+        {
+        }
     }
 }
 
