@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:00:00 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ Window FLT_NAVIGATOR
                 Text[ czech ] = "Živá prezentace";
                 Text[ hebrew ] = "Livemodus";
                 Text[ hindi ] = "प्रत्यक्ष प्रकार";
+                Text[ slovak ] = "Živá prezentácia";
             };
             ToolBoxItem
             {
@@ -154,6 +155,7 @@ Window FLT_NAVIGATOR
                 Text[ czech ] = "Ukazovátko";
                 Text[ hebrew ] = "Stift";
                 Text[ hindi ] = "सूचक डन्डा";
+                Text[ slovak ] = "Ukazovateľ";
             };
             ToolBoxItem
             {
@@ -191,6 +193,7 @@ Window FLT_NAVIGATOR
                 Text[ czech ] = "První snímek";
                 Text[ hebrew ] = "Erste Seite";
                 Text[ hindi ] = "पहिला स्लइड";
+                Text[ slovak ] = "Prvý snímok";
             };
             ToolBoxItem
             {
@@ -224,6 +227,7 @@ Window FLT_NAVIGATOR
                 Text[ czech ] = "Předchozí snímek";
                 Text[ hebrew ] = "vorherige Seite";
                 Text[ hindi ] = "पिछला स्लइड";
+                Text[ slovak ] = "Predchádzajúci snímok";
             };
             ToolBoxItem
             {
@@ -259,6 +263,7 @@ Window FLT_NAVIGATOR
                 Text[ czech ] = "Další snímek";
                 Text[ hebrew ] = "Nächste Seite";
                 Text[ hindi ] = "अगला स्लइड";
+                Text[ slovak ] = "Nasledujúci snímok";
             };
             ToolBoxItem
             {
@@ -292,6 +297,7 @@ Window FLT_NAVIGATOR
                 Text[ czech ] = "Poslední snímek";
                 Text[ hebrew ] = "Letzte Seite";
                 Text[ hindi ] = "अंतिम स्लइड";
+                Text[ slovak ] = "Posledný snímok";
             };
             ToolBoxItem
             {
@@ -331,6 +337,7 @@ Window FLT_NAVIGATOR
                 Text[ czech ] = "Režim přetáhnutí";
                 Text[ hebrew ] = "Dragmodus";
                 Text[ hindi ] = "खींचने का प्रकार";
+                Text[ slovak ] = "Spôsob pretiahnutia";
             };
         };
     };
@@ -373,6 +380,7 @@ Window FLT_NAVIGATOR
         QuickHelpText[ czech ] = "Dokumenty";
         QuickHelpText[ hebrew ] = "‮מסמכים‬";
         QuickHelpText[ hindi ] = "लेखपत्र";
+        QuickHelpText[ slovak ] = "Dokumenty";
     };
 
     #define NAVIGATR_IDLIST \
@@ -405,6 +413,8 @@ Window FLT_NAVIGATOR
         NAVIGATR_IDLIST
     };
 };
+
+
 
 
 
