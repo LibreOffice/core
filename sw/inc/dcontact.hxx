@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:56:23 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,6 @@ public:
         return *(GetAnchorFmt().GetCntntAnchor());
     }
 
-    const SwNodeIndex& GetCntntAnchorNode() const;
     const SwIndex&     GetCntntAnchorIndex() const;
 
     // -------------------------------------------------------------------------
@@ -311,9 +310,6 @@ class SwDrawVirtObj : public SdrVirtObj
         TYPEINFO();
 
         SwDrawVirtObj( SdrObject&       _rNewObj,
-                       SwDrawContact&   _rDrawContact );
-        SwDrawVirtObj( SdrObject&       _rNewObj,
-                       const Point&     _rAnchorPos,
                        SwDrawContact&   _rDrawContact );
         virtual ~SwDrawVirtObj();
 
