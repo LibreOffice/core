@@ -2325,3 +2325,5 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?getValue@OResultSet@file@connectivity@@IAEABVORowSetValue@3@J@Z
 ?updateValue@OResultSet@file@connectivity@@IAEXJABVORowSetValue@3@@Z
 ?checkColumnIndex@OResultSetMetaData@file@connectivity@@AAEXJ@Z
+?copy@OUString@rtl@@QBE?AV12@JJ@Z
+?clearInsertRow@OResultSet@file@connectivity@@IAEXXZ
