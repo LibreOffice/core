@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: nf $ $Date: 2000-12-05 12:37:23 $
+#   last change: $Author: nf $ $Date: 2001-03-30 09:27:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,7 @@ PRJ=..
 PRJNAME=transex
 TARGET=transex3
 TARGETTYPE=CUI
+NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------
 
