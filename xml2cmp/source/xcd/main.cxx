@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2001-03-09 15:23:00 $
+ *  last change: $Author: np $ $Date: 2001-03-12 17:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,12 @@ Create_TypeInfoFile( const char *           o_sOutputFile,
 
         const char * sEnd = strchr( pHeapTop->Key(), ' ' );
         if (sEnd != 0)
+        {
+            const char * sQuali = strrchr( pHeapTop->Key(), ' ' )+1;
+            WriteStr( aOut, sQuali );
+            WriteStr( aOut, "." );
             aOut.write( pHeapTop->Key(), sEnd - pHeapTop->Key() );
+        }
         else
             WriteStr( aOut, pHeapTop->Key() );
     }   // end for
