@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:08:21 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_SVMAIN_CXX
 
 #ifdef WNT
 #include <tools/prewin.h>
@@ -125,7 +123,7 @@
 #include <image.hxx>
 #endif
 #ifndef _SV_RESMGR_HXX
-#include <resmgr.hxx>
+#include <tools/resmgr.hxx>
 #endif
 #ifndef _SV_ACCMGR_HXX
 #include <accmgr.hxx>
