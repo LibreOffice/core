@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 10:08:30 $
+ *  last change: $Author: tl $ $Date: 2000-12-13 10:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,8 +468,12 @@ IMPL_LINK( SvxThesaurusDialog, SynonymHdl_Impl, ListBox *, EMPTYARG )
     if ( aSynonymLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
     {
         String aStr( aSynonymLB.GetSelectEntry() );
-        aStr = aStr.Erase( 0, aStr.Search( sal_Unicode( '*' ) ) );
-        aStr = aStr.Erase( 0, aStr.Search( sal_Unicode( '(' ) ) );
+        xub_StrLen nPos = aStr.Search( sal_Unicode( '*' ) );
+        if (STRING_NOTFOUND != nPos)
+            aStr = aStr.Erase( 0, nPos );
+        nPos = aStr.Search( sal_Unicode( '(' ) );
+        if (STRING_NOTFOUND != nPos)
+            aStr = aStr.Erase( 0, nPos );
         aReplaceEdit.SetText( aStr );
     }
     return 0;
@@ -480,8 +484,12 @@ IMPL_LINK( SvxThesaurusDialog, SynonymHdl_Impl, ListBox *, EMPTYARG )
 IMPL_LINK( SvxThesaurusDialog, SelectHdl_Impl, ListBox *, pBox )
 {
     String aStr( pBox->GetSelectEntry() );
-    //aStr = aStr.Cut( 0, aStr.Search( '*' ) );
-    //aStr = aStr.Cut( 0, aStr.Search( '(' ) );
+    xub_StrLen nPos = aStr.Search( sal_Unicode( '*' ) );
+    if (STRING_NOTFOUND != nPos)
+        aStr = aStr.Erase( 0, nPos );
+    nPos = aStr.Search( sal_Unicode( '(' ) );
+    if (STRING_NOTFOUND != nPos)
+        aStr = aStr.Erase( 0, nPos );
     aReplaceEdit.SetText( aStr );
 
     //! 'aCancelBtn' is used to indicate that the handler is called as result
