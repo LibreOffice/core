@@ -32,9 +32,6 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_CLASS) : $(OUT)
-	$(MKDIR) $(subst /,$(PS),$@)
-
 $(OFFICE_CLASSES_DIR)/cos.jar : 
 	@echo --------------------------------------------------------------------------------
 	@echo You need the servlet support Java archive "$(QM)cos.jar$(QM)" for this example.
@@ -49,8 +46,9 @@ $(OFFICE_CLASSES_DIR)/servlet.jar :
 	@echo and then please copy it into your "$(QM)$(OFFICE_CLASSES_DIR)$(QM)" directory.
 	@echo --------------------------------------------------------------------------------
 
-$(CLASSFILES) : $(OUT_COMP_CLASS) $(JAVAFILES) $(OFFICE_CLASSES_DIR)/cos.jar $(OFFICE_CLASSES_DIR)/servlet.jar
-	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+$(CLASSFILES) : $(JAVAFILES) $(OFFICE_CLASSES_DIR)/cos.jar $(OFFICE_CLASSES_DIR)/servlet.jar
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
 ConverterServletExample : $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
