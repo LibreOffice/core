@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentProviderManager.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
+ *  last change: $Author: kso $ $Date: 2001-01-15 13:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,38 +104,31 @@ interface XContentProviderManager: com::sun::star::uno::XInterface
         the URL scheme for the provided contents. More generally, this may not
         only be a URL scheme, but a URL template.
 
+        <p>
         A URL template is a regular expression (represented as a string) that
         specifies a subset of the set of all possible URLs (this subset
         consists of exactly those URLs that match the regular expression).  The
         language to denote the regular expressions is initially quite limited,
         but it may be extended in the future:
+        </p>
 
-          regexp = scheme / simple / translation
+        <ul>
+        <li>regexp = scheme / simple / translation</li>
+        <li>scheme = ALPHA *(ALPHA / DIGIT / "+" / "-" / ".")</li>
+        <li>simple = simple-prefix / simple-authority / simple-domain</li>
+        <li>translation = trans-prefix / trans-authority / trans-domain</li>
+        <li>simple-prefix = [string] ".*"</li>
+        <li>trans-prefix = [string] "(.*)->" [string] "\1"</li>
+        <li>simple-authority = [string] "([/?#].*)?"</li>
+        <li>trans-authority = [string] "(([/?#].*)?)->" string "\1"</li>
+        <li>simple-domain = [string] "[^/?#]*" string "([/?#].*)?"</li>
+        <li>trans-domain = [string] "([^/?#]*" string "([/?#].*)?)->" string "\1"</li>
+        <li>string = DQUOTE 1*(schar / sescape) DQUOTE  ; DQUOTE is "</li>
+        <li>schar = &lt any UTF-16 character except " or \></li>
+        <li>sescape = "\" (DQUOTE / "\")</li>
+        </ul>
 
-          scheme = ALPHA *(ALPHA / DIGIT / "+" / "-" / ".")
-
-          simple = simple-prefix / simple-authority / simple-domain
-
-          translation = trans-prefix / trans-authority / trans-domain
-
-          simple-prefix = [string] ".*"
-
-          trans-prefix = [string] "(.*)->" [string] "\1"
-
-          simple-authority = [string] "([/?#].*)?"
-
-          trans-authority = [string] "(([/?#].*)?)->" string "\1"
-
-          simple-domain = [string] "[^/?#]*" string "([/?#].*)?"
-
-          trans-domain = [string] "([^/?#]*" string "([/?#].*)?)->" string "\1"
-
-          string = DQUOTE 1*(schar / sescape) DQUOTE  ; DQUOTE is "
-
-          schar = <any UTF-16 character except " or \>
-
-          sescape = "\" (DQUOTE / "\")
-
+        <p>
         A <scheme> matches any URL of exactly the given scheme (ignoring case),
         keeping the extension from URL schemes to URL templates backwards
         compatible.  The <simple> regexps match any URL starting with a given
@@ -152,6 +145,7 @@ interface XContentProviderManager: com::sun::star::uno::XInterface
         <type>XParameterizedContentProvider</type> interface; in all other
         cases, <translation> regexps have the same semantics as their <simple>
         counterparts.
+        </p>
 
         @param ReplaceExisting
         <TRUE/>:  replace the provider possibly registered for

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDynamicResultSetListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 14:59:05 $
+ *  last change: $Author: kso $ $Date: 2001-01-15 13:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,20 +83,31 @@ module com { module sun { module star { module ucb {
 interface XDynamicResultSetListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
-    /** In the first notify-call the listener gets the two
-    <type>XResultSet</type>s and has to hold them. The <type>XResultSet</type>s
-    are implementations of the service <type>ContentResultSet</type>.
+    /** A method used to propagate changes of the resultset.
 
-    <p>The notified new <type>XResultSet</type> will stay valid after returning
+    </p>
+    In the first notify-call the listener gets the two <type>XResultSet</type>s
+    and has to hold them. The <type>XResultSet</type>s are implementations of
+    the service <type>ContentResultSet</type>.
+    </p>
+
+    <p>
+    The notified new <type>XResultSet</type> will stay valid after returning
     notification. The old one will become invalid after returning notification.
+    </p>
 
-    <p>While in notify-call the listener is allowed to read old and new
+    <p>
+    While in notify-call the listener is allowed to read old and new
     version, except in the first call, where only the new Resultset is valid.
+    </p>
 
-    <p>The Listener is allowed to blockade this call, until he really want to go
+    <p>
+    The Listener is allowed to blockade this call, until he really want to go
     to the new version. The only situation, where the listener has to return the
     update call at once is, while he disposes his broadcaster or while he is
     removing himsef as listener (otherwise you deadlock)!!!
+    </p>
+
     */
 
     void notify( [in] ListEvent Changes );

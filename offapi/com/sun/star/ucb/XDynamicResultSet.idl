@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDynamicResultSet.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
+ *  last change: $Author: kso $ $Date: 2001-01-15 13:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,45 +92,62 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** Provides read access to a <type>ContentResultSet</type>.
 
-<p>You can either get a simple static <type>ContentResultSet</type> or you can
-listen to change-notifications and than swap from the old to a new
-<type>ContentResultSet</type>.
+    <p>
+    You can either get a simple static <type>ContentResultSet</type> or you can
+    listen to change-notifications and than swap from the old to a new
+    <type>ContentResultSet</type>.
+    </p>
 
-<p>The following describes the dynamic use:
+    <p>The following describes the dynamic use:</p>
 
-<p><type>XDynamicResultSet</type> provides the possibility to get notifications
-about changes on a <type>ContentResultSet</type> and have an
-listener-controlled update from one Version to the next Version. Two
-<type>ContentResultSet</type>s were given to the listener in the first sended
-notification as interface <type>XResultSet</type>s.
+    <p>
+    <type>XDynamicResultSet</type> provides the possibility to get notifications
+    about changes on a <type>ContentResultSet</type> and have an
+    listener-controlled update from one version to the next version. Two
+    <type>ContentResultSet</type> implementations were given to the listener in
+    the first notification as interface <type>XResultSet</type>.
+    </p>
 
-<p>To get notifications the listener has to be of type
-<type>XDynamicResultSetListener</type>.
+    <p>
+    To get notifications the listener has to be of type
+    <type>XDynamicResultSetListener</type>.
+    </p>
 
-<p>After registration you will get notifications for events of type
-<type>ListEvent</type>.
+    <p>
+    After registration you will get notifications for events of type
+    <type>ListEvent</type>.
+    </p>
 
-<p>The calling of <member>XDynamicResultSetListener::notify</member> has
-to happen in an own thread, because it could take a longer time and any actions
-til the listener returns the call. So don't block the notify-causing action.
+    <p>
+    The calling of <member>XDynamicResultSetListener::notify</member> has
+    to happen in an own thread, because it could take a longer time and any
+    actions til the listener returns the call. So don't block the notify-causing
+    action.
+    </p>
 
-<p>While one notify-call is going on:
-<ol>
-  <li> The listener is allowed to access both ContentResultSets,
-        they must be both valid.
-  <li> It is not allowed to start a second notify-call.
-  <li> All addditional things we want to send as notification are to be queued.
-  <li> Any other calls are to be accepted and treated.
-</ol>
+    <p>
+    While one notify-call is going on:
+    </p>
 
+    <ol>
+      <li> The listener is allowed to access both ContentResultSets,
+         they must be both valid.</li>
+      <li> It is not allowed to start a second notify-call.</li>
+      <li> All addditional things we want to send as notification are to be
+         queued.</li>
+      <li> Any other calls are to be accepted and treated.</li>
+    </ol>
 
-<p>After the listener has returned the notify-call:
-<ol>
+    <p>
+    After the listener has returned the notify-call:
+    </p>
+
+    <ol>
     <li> The listener is allowed to access the new ContentResultSet.
-        The new one is first assigned in the WELCOME-event and than
-        the ResultSets are always swapped.
-    <li> The listener is not allowed to access the old ContentResultSet.
-</ol>
+         The new one is first assigned in the WELCOME-event and than
+         the ResultSets are always swapped.</li>
+    <li> The listener is not allowed to access the old ContentResultSet.</li>
+    </ol>
 */
 
 [ uik(55E5B802-3245-11d4-8B130010-4BCAF449), ident( "XDynamicResultSet", 1.0 ) ]
