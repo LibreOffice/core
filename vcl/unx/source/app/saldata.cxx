@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:41:44 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_SALDATA_CXX
 
 #ifdef USE_XTOOLKIT
 #  define SAL_XT
@@ -146,19 +144,6 @@
 #endif
 #ifndef _SAL_I18N_XKBDEXTENSION_HXX
 #include "i18n_xkb.hxx"
-#endif
-
-// -=-= <signal.h> -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#ifndef UNX
-#ifndef SIGBUS
-#define SIGBUS 10
-#endif
-#ifndef SIGSEGV
-#define SIGSEGV 11
-#endif
-#ifndef SIGIOT
-#define SIGIOT SIGABRT
-#endif
 #endif
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -304,8 +289,6 @@ BEGIN_C
 
 static oslSignalAction SalSignalHdl (void* pData, oslSignalInfo* pInfo)
 {
-    ULONG nException = 0;
-
     switch (pInfo->Signal)
     {
         case osl_Signal_System :
@@ -339,7 +322,7 @@ static int sal_XIOErrorHdl( Display *pDisplay )
 
     // really bad hack
     if( ! SessionManagerClient::checkDocumentsSaved() )
-        oslSignalAction eToDo = osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
+        /* oslSignalAction eToDo = */ osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
 
     fprintf( stderr, "X IO Error\n" );
     fflush( stdout );
@@ -620,8 +603,6 @@ void EmitFontpathWarning( void )
 
 void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
 {
-    char msg[ 120 ] = "";
-
     if( nIgnoreErrorLevel > 0 )
         return;
 
