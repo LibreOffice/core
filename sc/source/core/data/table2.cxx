@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: er $ $Date: 2002-12-05 16:09:00 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2152,6 +2152,9 @@ void ScTable::DBShowRow(USHORT nRow, BOOL bShow)
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
             if ( pCharts && pCharts->GetCount() )
                 pCharts->SetRangeDirty(ScRange( 0, nRow, nTab, MAXCOL, nRow, nTab ));
+
+            if (pOutlineTable)
+                UpdateOutlineRow( nRow, nRow, bShow );
         }
     }
     else
@@ -2205,6 +2208,13 @@ void ScTable::DBShowRows(USHORT nRow1, USHORT nRow2, BOOL bShow)
 
         nStartRow = nEndRow + 1;
     }
+
+    //  #i12341# For Show/Hide rows, the outlines are updated separately from the outside.
+    //  For filtering, the changes aren't visible to the caller, so UpdateOutlineRow has
+    //  to be done here.
+    if (pOutlineTable)
+        UpdateOutlineRow( nRow1, nRow2, bShow );
+
     if( !--nRecalcLvl )
         SetDrawPageSize();
 }
