@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:53:35 $
+#   last change: $Author: rt $ $Date: 2003-04-17 14:12:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ PACKAGE=com$/sun$/star$/configuration
 
 IDLFILES=\
     AdministrationProvider.idl \
+    DefaultProvider.idl \
     CannotLoadConfigurationException.idl \
     InvalidBootstrapFileException.idl \
     MissingBootstrapFileException.idl \
