@@ -143,6 +143,7 @@
 "ODatabaseForm";"com::sun::star::sdb::RowSet";"DataSourceName"
 "ODatabaseForm";"com::sun::star::sdb::RowSet";"Command"
 "ODatabaseForm";"com::sun::star::sdb::RowSet";"CommandType"
+"ODatabaseForm";"com::sun::star::sdb::RowSet";"EscapeProcessing#optional"
 "ODatabaseForm";"com::sun::star::sdb::RowSet";"ActiveCommand"
 "ODatabaseForm";"com::sun::star::sdb::RowSet";"IgnoreResult"
 "ODatabaseForm";"com::sun::star::sdb::RowSet";"Filter"
