@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergewizard.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 13:57:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,38 +270,6 @@ String  SwMailMergeWizard::getStateDisplayName( WizardState _nState )
         case MM_OUTPUTPAGE       : sRet = m_sOutput;        break;
     }
     return sRet;
-}
-/*-- 07.06.2004 15:23:45---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwMailMergeWizard::StateChanged( StateChangedType nStateChange )
-{
-    ::svt::RoadmapWizard::StateChanged(nStateChange);
-    if(nStateChange == STATE_CHANGE_INITSHOW)
-    {
-        //re-position the buttons:
-        Size aOutputSize(GetOutputSizePixel());
-        sal_Int32 nButtonWidth = m_pFinish->GetSizePixel().Width();
-        sal_Int32 nSmallDistance = PixelToLogic(Size(3, 3)).Width();
-        sal_Int32 nBigDistance = 2 * nSmallDistance;
-
-        Point aMostRight(m_pFinish->GetPosPixel());
-
-        Point aFinishPos(aMostRight.X() - nSmallDistance - nButtonWidth, aMostRight.Y());
-        Point aNextPos(aFinishPos.X() - nBigDistance - nButtonWidth, aFinishPos.Y());
-        Point aPrevPos(aNextPos.X() - nSmallDistance - nButtonWidth, aNextPos.Y());
-
-        //help button to the left - same distance as finish from right
-        Point aMostLeft(aMostRight);
-        aMostLeft.X() = aOutputSize.Width() - aMostRight.X() - nButtonWidth;
-        m_pHelp->SetPosPixel(aMostLeft);
-
-        //cancel button to the right
-        m_pCancel->SetPosPixel(aMostRight);
-        m_pFinish->SetPosPixel(aFinishPos);
-        m_pNextPage->SetPosPixel(aNextPos);
-        m_pPrevPage->SetPosPixel(aPrevPos);
-    }
 }
 /*-- 24.06.2004 09:24:45---------------------------------------------------
     enables/disables pages in the roadmap depending on the current
