@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fields.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:40:18 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,8 @@ namespace ww
             /*95*/  "SHAPE"
         };
 
-        if (eIndex >= sizeof(aFieldNames) / sizeof(aFieldNames[0]))
+        size_t nIndex = static_cast<size_t>(eIndex);
+        if (nIndex >= sizeof(aFieldNames) / sizeof(aFieldNames[0]))
             eIndex = eNONE;
         ASSERT(eIndex != eNONE, "Unknown WinWord Field, let cmc know");
         return aFieldNames[eIndex];
