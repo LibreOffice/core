@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BrowseNodeFactoryImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-24 13:08:34 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,15 +63,14 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/reflection/XProxyFactory.hpp>
 
 #include <drafts/com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <drafts/com/sun/star/script/browse/BrowseNodeFactoryViewType.hpp>
@@ -195,6 +194,7 @@ typedef ::std::hash_map< ::rtl::OUString, Reference< browse::XBrowseNode >,
     ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
         BrowseNodeAggregatorHash;
 typedef ::std::vector< ::rtl::OUString > vString;
+
 
 struct alphaSort
 {
@@ -394,33 +394,12 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
         Reference< lang::XMultiComponentFactory > mcf =
             xCtx->getServiceManager();
 
+        Sequence< ::rtl::OUString > openDocs =
+
+        //    MiscUtils::allOpenTDocUrls( xCtx );
+            tdocBugWorkAround( xCtx );
     Reference< provider::XScriptProviderFactory > xFac;
-
-        Reference< frame::XDesktop > desktop (
-            mcf->createInstanceWithContext(
-                ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),                 xCtx ),
-            UNO_QUERY );
-
-        Reference< container::XEnumerationAccess > componentsAccess =
-            desktop->getComponents();
-
-        Reference< container::XEnumeration > components =
-            componentsAccess->createEnumeration();
-
-        ::std::vector< Reference< frame::XModel > > vXModels;
-
-        while (components->hasMoreElements())
-        {
-            Reference< frame::XModel > xModel(
-                components->nextElement(), UNO_QUERY );
-
-            if ( xModel.is() )
-            {
-                vXModels.push_back( xModel );
-            }
-
-        }
-        sal_Int32 initialSize = vXModels.size() + 2;
+        sal_Int32 initialSize = openDocs.getLength() + 2;
         sal_Int32 mspIndex = 0;
 
         Sequence < Reference < browse::XBrowseNode > > locnBNs( initialSize );
@@ -442,22 +421,19 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
             return locnBNs;
         }
 
-        ::std::vector< Reference< frame::XModel > >::const_iterator it  = vXModels.begin();
-
-
-    for ( ; it != vXModels.end() ; ++it )
+    for ( sal_Int32 i = 0; i < openDocs.getLength(); i++ )
         {
 
             try
             {
-                Any aCtx = makeAny( *it );
-            locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( aCtx ), UNO_QUERY_THROW );
+                Reference< frame::XModel > model( MiscUtils::tDocUrlToModel( openDocs[ i ] ), UNO_QUERY_THROW );
+            locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( model ) ), UNO_QUERY_THROW );
             }
             catch( Exception& e )
             {
 
                 OSL_TRACE("Caught Exception creating MSP for %s exception msg: %s",
-                    ::rtl::OUStringToOString( MiscUtils::xModelToDocTitle( *it ), RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+                    ::rtl::OUStringToOString( openDocs[ i ] , RTL_TEXTENCODING_ASCII_US ).pData->buffer,
                     ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             }
 
@@ -475,40 +451,77 @@ struct alphaSortForBNodes
     }
 };
 
-
+typedef ::cppu::WeakImplHelper1< browse::XBrowseNode > t_BrowseNodeBase;
 class DefaultBrowseNode :
-    public ::cppu::WeakImplHelper4< browse::XBrowseNode, beans::XPropertySet,
-            script::XInvocation, provider::XScriptProvider >
+    public t_BrowseNodeBase
 {
 
 private:
-    Reference< browse::XBrowseNode > m_xNode;
+    Reference< browse::XBrowseNode > m_xWrappedBrowseNode;
+    Reference< lang::XTypeProvider > m_xWrappedTypeProv;;
+    Reference< XAggregation >        m_xAggProxy;
+    Reference< XComponentContext >   m_xCtx;
 
+    DefaultBrowseNode();
 public:
-    DefaultBrowseNode() {}
-    DefaultBrowseNode( const Reference< browse::XBrowseNode>& xNode ) : m_xNode( xNode )
+    DefaultBrowseNode( const Reference< XComponentContext >& xCtx, const Reference< browse::XBrowseNode>& xNode ) : m_xWrappedBrowseNode( xNode ), m_xWrappedTypeProv( xNode, UNO_QUERY ), m_xCtx( xCtx, UNO_QUERY )
     {
+        OSL_ENSURE( m_xWrappedBrowseNode.is(), "DefaultBrowseNode::DefaultBrowseNode(): No BrowseNode to wrap" );
+        OSL_ENSURE( m_xWrappedTypeProv.is(), "DefaultBrowseNode::DefaultBrowseNode(): No BrowseNode to wrap" );
+        OSL_ENSURE( m_xCtx.is(), "DefaultBrowseNode::DefaultBrowseNode(): No ComponentContext" );
+    // Use proxy factory service to create aggregatable proxy.
+        try
+        {
+            Reference< lang::XMultiComponentFactory > xMFac( m_xCtx->getServiceManager(), UNO_QUERY_THROW );
+            Reference< reflection::XProxyFactory > xProxyFac(
+                xMFac->createInstanceWithContext(
+                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.reflection.ProxyFactory" ) ),
+                        m_xCtx  ), UNO_QUERY_THROW );
+            m_xAggProxy = xProxyFac->createProxy( m_xWrappedBrowseNode );
+        }
+        catch(  uno::Exception const & )
+        {
+            OSL_ENSURE( false, "DefaultBrowseNode::DefaultBrowseNode: Caught exception!" );
+        }
+        OSL_ENSURE( m_xAggProxy.is(),
+            "DefaultBrowseNode::DefaultBrowseNode: Wrapped BrowseNode cannot be aggregated!" );
+
+        if ( m_xAggProxy.is() )
+        {
+
+            osl_incrementInterlockedCount( &m_refCount );
+            m_xAggProxy->setDelegator( static_cast< cppu::OWeakObject * >( this ) );
+            osl_decrementInterlockedCount( &m_refCount );
+        }
+    }
+
+    ~DefaultBrowseNode()
+    {
+        if ( m_xAggProxy.is() )
+        {
+            m_xAggProxy->setDelegator( uno::Reference< uno::XInterface >() );
+        }
     }
 
     virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
-            getChildNodes()
+                getChildNodes()
     throw ( RuntimeException )
     {
         if ( hasChildNodes() )
         {
             vXBrowseNodes m_vNodes;
             Sequence < Reference< browse::XBrowseNode > > nodes =
-                m_xNode->getChildNodes();
-            sal_Int32 i;
-            for ( i=0; i<nodes.getLength(); i++ )
+                m_xWrappedBrowseNode->getChildNodes();
+            for ( sal_Int32 i=0; i<nodes.getLength(); i++ )
             {
-                m_vNodes.push_back( new DefaultBrowseNode( nodes[ i ] ) );
+                m_vNodes.push_back( new DefaultBrowseNode( m_xCtx, nodes[ i ] ) );
             }
 
             ::std::sort( m_vNodes.begin(), m_vNodes.end(), alphaSortForBNodes() );
             Sequence < Reference< browse::XBrowseNode > > children( m_vNodes.size() );
             vXBrowseNodes::const_iterator it = m_vNodes.begin();
-            for ( i=0; it != m_vNodes.end() && i<children.getLength(); i++, ++it )
+            for ( sal_Int32 i=0; it != m_vNodes.end() && i<children.getLength(); i++, ++it )
             {
                 children[ i ].set( *it );
             }
@@ -526,138 +539,69 @@ public:
     virtual sal_Int16 SAL_CALL getType()
         throw ( RuntimeException )
     {
-        return m_xNode->getType();
+        return m_xWrappedBrowseNode->getType();
     }
 
     virtual ::rtl::OUString
     SAL_CALL getName()
     throw ( RuntimeException )
     {
-        return m_xNode->getName();
+        return m_xWrappedBrowseNode->getName();
     }
 
     virtual sal_Bool SAL_CALL
     hasChildNodes()
         throw ( RuntimeException )
     {
-        return m_xNode->hasChildNodes();
+        return m_xWrappedBrowseNode->hasChildNodes();
     }
 
-    // XPropertySet
-    virtual Reference< beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-        throw (RuntimeException)
+    // XInterface
+    virtual Any SAL_CALL queryInterface( const Type& aType )
+        throw ( com::sun::star::uno::RuntimeException )
     {
-        Reference< beans::XPropertySet > xPropertySet( m_xNode, UNO_QUERY_THROW);
-        return xPropertySet->getPropertySetInfo();
+        Any aRet = t_BrowseNodeBase::queryInterface( aType );
+        if ( aRet.hasValue() )
+        {
+            return aRet;
+        }
+        if ( m_xAggProxy.is() )
+        {
+            return m_xAggProxy->queryAggregation( aType );
+        }
+        else
+        {
+            return Any();
+        }
     }
 
-    virtual void SAL_CALL setPropertyValue(
-        const ::rtl::OUString& aPropertyName, const Any& aValue )
-        throw (beans::UnknownPropertyException, beans::PropertyVetoException,
-                lang::IllegalArgumentException, lang::WrappedTargetException,
-                RuntimeException)
-    {
-        Reference< beans::XPropertySet > xPropertySet( m_xNode, UNO_QUERY_THROW);
-        xPropertySet->setPropertyValue( aPropertyName, aValue );
-    }
+    virtual void SAL_CALL acquire()
+        throw ()
 
-    virtual Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-                RuntimeException)
     {
-        Reference< beans::XPropertySet > xPropertySet( m_xNode, UNO_QUERY_THROW);
-        return xPropertySet->getPropertyValue( PropertyName );
+        osl_incrementInterlockedCount( &m_refCount );
     }
+    virtual void SAL_CALL release()
+        throw ()
+    {
+        if ( osl_decrementInterlockedCount( &m_refCount ) == 0 )
+        {
+            delete this;
+        }
+    }
+    // XTypeProvider (implemnented by base, but needs to be overridden for
+    //                delegating to aggregate)
+    virtual Sequence< Type > SAL_CALL getTypes()
+        throw ( com::sun::star::uno::RuntimeException )
+    {
+        return m_xWrappedTypeProv->getTypes();
+    }
+    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        throw ( com::sun::star::uno::RuntimeException )
+    {
+        return m_xWrappedTypeProv->getImplementationId();
 
-    virtual void SAL_CALL addPropertyChangeListener(
-        const ::rtl::OUString& aPropertyName,
-        const Reference< beans::XPropertyChangeListener >& xListener )
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-                RuntimeException)
-    {
-        Reference< beans::XPropertySet > xPropertySet( m_xNode, UNO_QUERY_THROW);
-        xPropertySet->addPropertyChangeListener( aPropertyName, xListener );
     }
-
-    virtual void SAL_CALL removePropertyChangeListener(
-        const ::rtl::OUString& aPropertyName,
-        const Reference< beans::XPropertyChangeListener >& aListener )
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-                RuntimeException)
-    {
-        Reference< beans::XPropertySet > xPropertySet( m_xNode, UNO_QUERY_THROW);
-        xPropertySet->removePropertyChangeListener( aPropertyName, aListener );
-    }
-
-    virtual void SAL_CALL addVetoableChangeListener(
-        const ::rtl::OUString& PropertyName,
-        const Reference< beans::XVetoableChangeListener >& aListener )
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-                RuntimeException)
-    {
-        Reference< beans::XPropertySet > xPropertySet( m_xNode, UNO_QUERY_THROW);
-        xPropertySet->addVetoableChangeListener( PropertyName, aListener );
-    }
-
-    virtual void SAL_CALL removeVetoableChangeListener(
-        const ::rtl::OUString& PropertyName,
-        const Reference< beans::XVetoableChangeListener >& aListener )
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-                RuntimeException)
-    {
-        Reference< beans::XPropertySet > xPropertySet( m_xNode, UNO_QUERY_THROW);
-        xPropertySet->removeVetoableChangeListener( PropertyName, aListener );
-    }
-
-    //XInvocation
-    virtual Reference< beans::XIntrospectionAccess > SAL_CALL
-        getIntrospection(  ) throw (RuntimeException)
-    {
-        return NULL;
-    }
-
-    virtual Any SAL_CALL invoke( const ::rtl::OUString& aFunctionName,
-        const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex,
-        Sequence< Any >& aOutParam )
-        throw (lang::IllegalArgumentException, script::CannotConvertException,
-            reflection::InvocationTargetException, RuntimeException)
-    {
-        Reference< script::XInvocation > xInvocation( m_xNode, UNO_QUERY_THROW);
-        return xInvocation->invoke( aFunctionName, aParams, aOutParamIndex,
-            aOutParam );
-    }
-
-    virtual void SAL_CALL setValue( const ::rtl::OUString& aPropertyName,
-        const Any& aValue )
-        throw ( beans::UnknownPropertyException, script::CannotConvertException,
-                reflection::InvocationTargetException, RuntimeException)
-    {
-    }
-
-    virtual Any SAL_CALL getValue( const ::rtl::OUString& aPropertyName )
-        throw (beans::UnknownPropertyException, RuntimeException)
-    {
-        return Any();
-    }
-
-    virtual ::sal_Bool SAL_CALL hasMethod( const ::rtl::OUString& aName )
-        throw (RuntimeException)
-    {
-        return sal_False;
-    }
-    virtual ::sal_Bool SAL_CALL hasProperty( const ::rtl::OUString& aName )
-        throw (RuntimeException)
-    {
-        return sal_False;
-    }
-
-    //XScriptProvider
-    virtual Reference< provider::XScript > SAL_CALL getScript( const ::rtl::OUString& sScriptURI ) throw ( lang::IllegalArgumentException, RuntimeException )
-    {
-        Reference< provider::XScriptProvider > xSP( m_xNode, UNO_QUERY_THROW);
-        return xSP->getScript( sScriptURI );
-    }
-
 };
 
 class DefaultRootBrowseNode :
@@ -668,21 +612,23 @@ private:
     vXBrowseNodes m_vNodes;
     ::rtl::OUString m_Name;
 
+    DefaultRootBrowseNode();
 public:
-    DefaultRootBrowseNode() {}
     DefaultRootBrowseNode( const Reference< XComponentContext >& xCtx )
     {
         Sequence < Reference< browse::XBrowseNode > > nodes =
             getAllBrowseNodes( xCtx );
         for ( sal_Int32 i=0; i<nodes.getLength(); i++ )
         {
-            m_vNodes.push_back( new DefaultBrowseNode( nodes[ i ] ) );
+            m_vNodes.push_back( new DefaultBrowseNode( xCtx, nodes[ i ] ) );
         }
+        m_Name = ::rtl::OUString::createFromAscii( "Root" );
+
         m_Name = ::rtl::OUString::createFromAscii( "Root" );
     }
 
     virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
-            getChildNodes()
+                getChildNodes()
     throw ( RuntimeException )
     {
         // no need to sort user, share, doc1...docN
