@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.86 $
+#   $Revision: 1.87 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-18 14:52:14 $
+#   last change: $Author: rt $ $Date: 2005-03-30 08:36:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.86 $$"
+LIBSMKREV!:="$$Revision: 1.87 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -208,13 +208,8 @@ JPEG3RDLIB=-ljpeg
 JPEG3RDLIB=-ljpeglib
 .ENDIF
 NEON3RDLIB=-lneon
-.IF "$(SYSTEM_DB3)"=="YES"
-BERKELEYLIB=-ldb-3
-BERKELEYCPPLIB=-ldb_cxx-3
-.ELSE
-BERKELEYLIB=-ldb-3.2
-BERKELEYCPPLIB=-ldb_cxx-3.2
-.ENDIF
+BERKELEYLIB=-ldb-4.2
+BERKELEYCPPLIB=-ldb_cxx-4.2
 CURLLIB=-lcurl
 SFX2LIB=-lsfx$(OFFICEUPD)$(DLLPOSTFIX)
 SFXLIB=-lsfx$(OFFICEUPD)$(DLLPOSTFIX)
@@ -410,7 +405,7 @@ EXPATASCII3RDLIB=$(LIBPRE) expat_xmltok.lib $(LIBPRE) ascii_expat_xmlparse.lib
 ZLIB3RDLIB=$(LIBPRE) zlib.lib
 JPEG3RDLIB=$(LIBPRE) jpeglib.lib
 NEON3RDLIB=$(LIBPRE) neon.lib
-BERKELEYLIB=$(LIBPRE) libdb32.lib
+BERKELEYLIB=$(LIBPRE) libdb42.lib
 BERKELEYCPPLIB=
 CURLLIB=$(LIBPRE) libcurl.lib
 CHAOSLIB=$(LIBPRE) ichaos.lib
