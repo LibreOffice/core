@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:15:28 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1910,13 +1910,14 @@ void SdrPage::SetChanged()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrPage::BroadcastPageChange() const
-{
-    if(bInserted && pModel)
-    {
-        pModel->Broadcast(SdrHint(*this));
-    }
-}
+// #115423# Not needed
+//void SdrPage::BroadcastPageChange() const
+//{
+//  if(bInserted && pModel)
+//  {
+//      pModel->Broadcast(SdrHint(*this));
+//  }
+//}
 
 //void SdrPage::SendRepaintBroadcast() const
 //{
@@ -1938,24 +1939,38 @@ void SdrPage::InsertMasterPage(USHORT nPgNum, USHORT nPos)
     aMasters.Insert(nPgNum,nPos);
     SetChanged();
 
-    GetViewContact().ActionInserted();
-
-    BroadcastPageChange();
+    SdrPage* pMaster = pModel->GetMasterPage(nPgNum);
+    if(pMaster)
+    {
+        GetViewContact().ActionChildInserted(pMaster->GetViewContact());
+    }
 }
 
 void SdrPage::InsertMasterPage(const SdrMasterPageDescriptor& rMPD, USHORT nPos)
 {
     aMasters.Insert(rMPD,nPos);
     SetChanged();
-    BroadcastPageChange();
+
+    SdrPage* pMaster = pModel->GetMasterPage(rMPD.GetPageNum());
+    if(pMaster)
+    {
+        GetViewContact().ActionChildInserted(pMaster->GetViewContact());
+    }
 }
 
 void SdrPage::RemoveMasterPage(USHORT nPos)
 {
-    if (nPos<aMasters.GetCount()) {
+    if(nPos < aMasters.GetCount())
+    {
+        SdrPage* pMaster = pModel->GetMasterPage(aMasters[nPos].GetPageNum());
+
         aMasters.Remove(nPos);
         SetChanged();
-        BroadcastPageChange();
+
+        if(pMaster)
+        {
+            pMaster->GetViewContact().ActionRemoved();
+        }
     }
 }
 
@@ -1963,11 +1978,16 @@ void SdrPage::MoveMasterPage(USHORT nPos, USHORT nNewPos)
 {
     if(nPos < aMasters.GetCount())
     {
+        SdrPage* pMaster = pModel->GetMasterPage(aMasters[nPos].GetPageNum());
         aMasters.Move(nPos,nNewPos);
+        SetChanged();
 
         // Do necessary ViewContact actions
-        ActionChanged();
-        // BroadcastPageChange();
+        if(pMaster)
+        {
+            pMaster->GetViewContact().ActionRemoved();
+            GetViewContact().ActionChildInserted(pMaster->GetViewContact());
+        }
     }
 }
 
@@ -1982,40 +2002,80 @@ SdrPage* SdrPage::GetMasterPage(USHORT nPos) const
 
 void SdrPage::SetMasterPageNum(USHORT nPgNum, USHORT nPos)
 {
-    aMasters[nPos].SetPageNum(nPgNum);
+    if(nPos < aMasters.GetCount())
+    {
+        sal_uInt16 nOldPageNum(aMasters[nPos].GetPageNum());
 
-    // Do necessary ViewContact actions
-    ActionChanged();
-    // BroadcastPageChange();
+        if(nOldPageNum != nPgNum)
+        {
+            SdrPage* pOldMaster = pModel->GetMasterPage(nOldPageNum);
+            SdrPage* pNewMaster = pModel->GetMasterPage(nPgNum);
+            aMasters[nPos].SetPageNum(nPgNum);
+            SetChanged();
+
+            // Do necessary ViewContact actions
+            if(pOldMaster)
+            {
+                pOldMaster->GetViewContact().ActionRemoved();
+            }
+
+            if(pNewMaster)
+            {
+                GetViewContact().ActionChildInserted(pNewMaster->GetViewContact());
+            }
+        }
+    }
 }
 
 void SdrPage::SetMasterPageVisibleLayers(const SetOfByte& rVL, USHORT nPos)
 {
-    aMasters[nPos].SetVisibleLayers(rVL);
+    if(nPos < aMasters.GetCount())
+    {
+        const SetOfByte& rOldSetOfByte = aMasters[nPos].GetVisibleLayers();
 
-    // Do necessary ViewContact actions
-    ActionChanged();
-    // BroadcastPageChange();
+        if(rOldSetOfByte != rVL)
+        {
+            SdrPage* pMaster = pModel->GetMasterPage(aMasters[nPos].GetPageNum());
+            aMasters[nPos].SetVisibleLayers(rVL);
+            SetChanged();
+
+            // Do necessary ViewContact actions
+            if(pMaster)
+            {
+                pMaster->GetViewContact().ActionChanged();
+            }
+        }
+    }
 }
 
 void SdrPage::SetMasterPageDescriptor(const SdrMasterPageDescriptor& rMPD, USHORT nPos)
 {
-    aMasters[nPos]=rMPD;
+    if(nPos < aMasters.GetCount())
+    {
+        const SdrMasterPageDescriptor& rOldMPD = aMasters[nPos];
 
-    // Do necessary ViewContact actions
-    ActionChanged();
-    // BroadcastPageChange();
+        if(rOldMPD != rMPD)
+        {
+            SdrPage* pOldMaster = pModel->GetMasterPage(rOldMPD.GetPageNum());
+            SdrPage* pNewMaster = pModel->GetMasterPage(rMPD.GetPageNum());
+            aMasters[nPos] = rMPD;
+            SetChanged();
+
+            // Do necessary ViewContact actions
+            if(pOldMaster)
+            {
+                pOldMaster->GetViewContact().ActionRemoved();
+            }
+
+            if(pNewMaster)
+            {
+                GetViewContact().ActionChildInserted(pNewMaster->GetViewContact());
+            }
+        }
+    }
 }
 
-void SdrPage::SetMasterPageDescriptorList(const SdrMasterPageDescriptorList& rMPDL)
-{
-    aMasters=rMPDL;
-
-    // Do necessary ViewContact actions
-    ActionChanged();
-    // BroadcastPageChange();
-}
-
+// #115423# used from SdrModel::RemoveMasterPage
 void SdrPage::ImpMasterPageRemoved(USHORT nMasterPageNum)
 {
     USHORT nMasterAnz=GetMasterPageCount();
@@ -2025,10 +2085,6 @@ void SdrPage::ImpMasterPageRemoved(USHORT nMasterPageNum)
         if (nNum==nMasterPageNum)
         {
             RemoveMasterPage(nm);
-
-            // Do necessary ViewContact actions
-            ActionChanged();
-            //BroadcastPageChange();
         }
         if (nNum>nMasterPageNum) {
             // Hintere anpassen wegen Verschiebung durch entfernen
@@ -2037,6 +2093,7 @@ void SdrPage::ImpMasterPageRemoved(USHORT nMasterPageNum)
     }
 }
 
+// #115423# used from SdrModel::InsertMasterPage
 void SdrPage::ImpMasterPageInserted(USHORT nMasterPageNum)
 {
     USHORT nMasterAnz=GetMasterPageCount();
@@ -2050,6 +2107,7 @@ void SdrPage::ImpMasterPageInserted(USHORT nMasterPageNum)
     }
 }
 
+// #115423# used from SdrModel::MoveMasterPage
 void SdrPage::ImpMasterPageMoved(USHORT nMasterPageNum, USHORT nNewMasterPageNum)
 {
     USHORT nMasterAnz=GetMasterPageCount();
