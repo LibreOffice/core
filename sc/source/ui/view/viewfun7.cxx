@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:29:30 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ void lcl_AdjustInsertPos( ScViewData* pData, Point& rPos, Size& rSize )
     SdrPage* pPage = pData->GetScDrawView()->GetModel()->GetPage( pData->GetTabNo() );
     DBG_ASSERT(pPage,"pPage ???");
     Size aPgSize( pPage->GetSize() );
+    if (aPgSize.Width() < 0)
+        aPgSize.Width() = -aPgSize.Width();
     long x = aPgSize.Width() - rPos.X() - rSize.Width();
     long y = aPgSize.Height() - rPos.Y() - rSize.Height();
     // ggf. Ajustments (80/200) fuer Pixel-Rundungsfehler
@@ -131,6 +133,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         pRef->SetMapMode( MapMode(MAP_100TH_MM) );
     }
 
+    BOOL bNegativePage = GetViewData()->GetDocument()->IsNegativePage( GetViewData()->GetTabNo() );
+
     SdrView* pDragEditView = NULL;
     ScModule* pScMod = SC_MOD();
     const ScDragData& rData = pScMod->GetDragData();
@@ -140,7 +144,14 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         pDragEditView = pDrawTrans->GetDragSourceView();
 
         aPos -= aDragStartDiff;
-        if (aPos.X() < 0) aPos.X() = 0;
+        if ( bNegativePage )
+        {
+            if (aPos.X() > 0) aPos.X() = 0;
+        }
+        else
+        {
+            if (aPos.X() < 0) aPos.X() = 0;
+        }
         if (aPos.Y() < 0) aPos.Y() = 0;
     }
 
@@ -296,8 +307,11 @@ BOOL ScViewFunc::PasteObject( const Point& rPos, SvInPlaceObject* pObj,
             aSize = OutputDevice::LogicToLogic( aSize, aMap100, aMapObj );
             pObj->SetVisAreaSize(aSize);
         }
-        // kein AdjustInsertPos
-        Rectangle aRect( rPos, aSize );
+        // don't call AdjustInsertPos
+        Point aInsPos = rPos;
+        if ( GetViewData()->GetDocument()->IsNegativePage( GetViewData()->GetTabNo() ) )
+            aInsPos.X() -= aSize.Width();
+        Rectangle aRect( aInsPos, aSize );
 
         ScDrawView* pDrView = GetScDrawView();
         SdrOle2Obj* pSdrObj = new SdrOle2Obj( pObj, aName, aRect );
@@ -347,6 +361,9 @@ BOOL ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
 
     Size aSize = pWin->LogicToLogic( rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
 //  lcl_AdjustInsertPos( GetViewData(), aPos, aSize );
+    if ( GetViewData()->GetDocument()->IsNegativePage( GetViewData()->GetTabNo() ) )
+        aPos.X() -= aSize.Width();
+
     GetViewData()->GetViewShell()->SetDrawShell( TRUE );
 
     Rectangle aRect(aPos, aSize);
