@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 15:14:20 $
+#   last change: $Author: vg $ $Date: 2003-04-24 17:46:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,14 @@ PACKAGE=com$/sun$/star$/sheet
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    AccessibleCell.idl								\
+    AccessibleSpreadsheet.idl						\
+    AccessibleSpreadsheetDocumentView.idl			\
+    AccessibleSpreadsheetPageView.idl				\
+    AccessiblePageHeaderFooterAreasView.idl			\
+    AccessibleCsvRuler.idl							\
+    AccessibleCsvTable.idl							\
+    AccessibleCsvCell.idl							\
     CellAnnotationsEnumeration.idl\
     CellAreaLinksEnumeration.idl\
     DatabaseRangesEnumeration.idl\
@@ -181,7 +189,7 @@ IDLFILES=\
     Spreadsheet.idl\
     SpreadsheetDocument.idl\
     SpreadsheetDocumentSettings.idl\
-        SpreadsheetDrawPage.idl\
+    SpreadsheetDrawPage.idl\
     Spreadsheets.idl\
     SpreadsheetView.idl\
     SpreadsheetViewPane.idl\
