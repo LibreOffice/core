@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawAspectHdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: mib $ $Date: 2001-06-29 08:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ sal_Bool DrawAspectHdl::importXML( const OUString& rStrImpValue, uno::Any& rValu
     while( aTokenEnum.getNextToken( aToken ) )
     {
         sal_uInt16 nVal;
-        if( rUnitConverter.convertEnum( nVal, rStrImpValue, pXML_DrawAspect_Enum ) )
+        if( rUnitConverter.convertEnum( nVal, aToken, pXML_DrawAspect_Enum ) )
         {
             nAspect = nAspect | (sal_Int32)nVal;
         }
