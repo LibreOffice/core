@@ -68,7 +68,6 @@ Sub Main
 	oCursor = oBasedocument.Text.CreateTextCursor
 	oCursor.InsertDocumentfromURL(FileStr, NoArgs())
 	SetProgressValue(40)
-	DialogModel.optTiled.State = 1
 	NumberofStyles = FillupWebListbox(oUcb, &quot;/stl&quot;, MainDialog, &quot;lbStyles&quot;, Style())
 	SetProgressValue(50)
 	LoadWebPageStyles(oBaseDocument)
@@ -82,7 +81,6 @@ Sub Main
 	MainDialog.GetControl(&quot;lbTemplate&quot;).SetFocus = True
 	DialogModel.cbGoOn.DefaultButton = True
 	MainDialog.Execute
-
 GLOBALERRORHANDLER:
 	If Err &lt;&gt; 0 Then
 		MsgBox (WebWiz_gErrMsg$, 16, WebWiz_gWizardName$)
@@ -394,7 +392,7 @@ Dim Bitmap As Object
 Dim sBitmapPath as String
 	sBitmapPath = SOBitmapPath &amp; &quot;webwizard.bmp&quot;
 	WebWzrd.ImagePreview.ImageURL = sBitmapPath
-End Sub
+End Sub			
 
 
 Sub ToggleDialogControls(ByVal bDoEnable as Boolean, Optional FocusControlName as String)
@@ -414,6 +412,4 @@ Sub ToggleDialogControls(ByVal bDoEnable as Boolean, Optional FocusControlName a
 		End If
 		ToggleOptionButtons(DialogModel, bDoEnable)
 	End With
-End Sub
-
-</script:module>
+End Sub</script:module>

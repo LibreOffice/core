@@ -20,9 +20,9 @@
   </dlg:menulist>
   <dlg:text dlg:id="lblTemplate" dlg:tab-index="6" dlg:left="6" dlg:top="42" dlg:width="110" dlg:height="10"/>
   <dlg:text dlg:id="lblStyle" dlg:tab-index="7" dlg:left="154" dlg:top="42" dlg:width="110" dlg:height="10" dlg:value="lblStyle"/>
-  <dlg:checkbox dlg:id="chkSaveasTemplate" dlg:tab-index="8" dlg:left="6" dlg:top="164" dlg:width="110" dlg:height="12" dlg:help-url="HID:34207" dlg:value="chkSaveasTemplate"/>
+  <dlg:checkbox dlg:id="chkSaveasTemplate" dlg:tab-index="8" dlg:left="6" dlg:top="164" dlg:width="110" dlg:height="12" dlg:help-url="HID:34207" dlg:value="chkSaveasTemplate" dlg:checked="false"/>
   <dlg:radiogroup>
-   <dlg:radio dlg:id="optTiled" dlg:tab-index="9" dlg:left="161" dlg:top="164" dlg:width="96" dlg:height="10" dlg:tag="11" dlg:help-url="HID:34208" dlg:value="optTiled">
+   <dlg:radio dlg:id="optTiled" dlg:tab-index="9" dlg:left="161" dlg:top="164" dlg:width="96" dlg:height="10" dlg:tag="11" dlg:help-url="HID:34208" dlg:value="optTiled" dlg:checked="true">
     <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="WebWizard.HtmlAutoPilotBasic.SetBackGraphicStyle" script:language="StarBasic"/>
    </dlg:radio>
    <dlg:radio dlg:id="optArea" dlg:tab-index="10" dlg:left="161" dlg:top="177" dlg:width="96" dlg:height="10" dlg:tag="10" dlg:help-url="HID:34209" dlg:value="optArea">

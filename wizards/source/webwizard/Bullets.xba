@@ -40,11 +40,6 @@ Dim oNewBuffer(0) as New com.sun.star.beans.PropertyValue
 		oBookmarkCursor.NumberingRules = oRules
 		oNewBuffer(0).Name = &quot;GraphicURL&quot;
 		oNewBuffer(0).Value = sBulletUrl
-&apos;		oNewBuffer(1).Name = &quot;GraphicSize&quot;
-&apos; Todo: Get the original Size of the Bullet (see Bug #86196)
-&apos;		oSize.Height = 300
-&apos;		oSize.Width = 300
-&apos;		oNewBuffer(1).Value = oSize
 		For n = 0 To oRules.Count - 1
 			oLevel() = oRules.GetByIndex(0)
 			bDoReplace = ModifyPropertyValue(oLevel(), oNewBuffer())
