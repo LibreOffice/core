@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatehandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:48 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,19 @@
 #include "confapifactory.hxx"
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/XLayerHandler.hpp>
-#include <drafts/com/sun/star/configuration/backend/XLayer.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERHANDLER_HPP_
+#include <com/sun/star/configuration/backend/XLayerHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
+#include <com/sun/star/configuration/backend/XLayer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYEXISTEXCEPTION_HPP_
+#include <com/sun/star/beans/PropertyExistException.hpp>
+#endif
 
 // -----------------------------------------------------------------------------
-
+#define OUSTR( str ) OUString( RTL_CONSTASCII_USTRINGPARAM( str ) )
+// -----------------------------------------------------------------------------
 namespace configmgr
 {
 // -----------------------------------------------------------------------------
@@ -82,8 +90,7 @@ namespace configmgr
 // -----------------------------------------------------------------------------
         namespace uno       = ::com::sun::star::uno;
         namespace lang      = ::com::sun::star::lang;
-        namespace container = ::com::sun::star::container;
-        namespace backenduno = drafts::com::sun::star::configuration::backend;
+        namespace backenduno = ::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
 
 uno::Reference< uno::XInterface > SAL_CALL instantiateUpdateMerger
@@ -122,46 +129,49 @@ void LayerUpdateHandler::checkBuilder(bool _bForProperty)
 void LayerUpdateHandler::raiseMalformedDataException(sal_Char const * pMsg)
 {
     OUString sMsg = OUString::createFromAscii(pMsg);
-    throw backenduno::MalformedDataException(sMsg,*this);
+    throw backenduno::MalformedDataException(sMsg,*this,uno::Any());
 }
 // -----------------------------------------------------------------------------
 
 void LayerUpdateHandler::raiseNodeChangedBeforeException(sal_Char const * pMsg)
 {
     OUString sMsg = OUString::createFromAscii(pMsg);
-    throw backenduno::MalformedDataException(sMsg,*this);
+    throw backenduno::MalformedDataException(sMsg,*this,uno::Any());
 }
 // -----------------------------------------------------------------------------
 
 void LayerUpdateHandler::raisePropChangedBeforeException(sal_Char const * pMsg)
 {
     OUString sMsg = OUString::createFromAscii(pMsg);
-    throw backenduno::MalformedDataException(sMsg,*this);
+    throw backenduno::MalformedDataException(sMsg,*this,uno::Any());
 }
 // -----------------------------------------------------------------------------
 
 void LayerUpdateHandler::raisePropExistsException(sal_Char const * pMsg)
 {
     OUString sMsg = OUString::createFromAscii(pMsg);
-    throw beans::PropertyExistException(sMsg,*this);
+    com::sun::star::beans::PropertyExistException e(sMsg,*this);
+
+    throw backenduno::MalformedDataException(sMsg,*this, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
 // XUpdateHandler
 void SAL_CALL
-    LayerUpdateHandler::startUpdate( const OUString& aContext )
-        throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    LayerUpdateHandler::startUpdate(  )
+        throw ( MalformedDataException, lang::IllegalAccessException,
+                lang::WrappedTargetException, uno::RuntimeException)
 {
     this->checkSourceLayer();
-    if (!m_aBuilder.setContext(aContext))
+    if (!m_aBuilder.init())
         raiseMalformedDataException("LayerUpdateHandler: Cannot start update - update is already in progress");
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
     LayerUpdateHandler::endUpdate(  )
-        throw (MalformedDataException, lang::IllegalAccessException, uno::RuntimeException)
-
+        throw ( MalformedDataException, lang::IllegalAccessException,
+                lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder();
 
@@ -178,7 +188,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::modifyNode( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, sal_Bool bReset )
-        throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder();
 
@@ -189,7 +199,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
-        throw (MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder();
 
@@ -199,8 +209,8 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::addOrReplaceNodeFromTemplate( const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-        throw (MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalArgumentException, uno::RuntimeException)
+    LayerUpdateHandler::addOrReplaceNodeFromTemplate( const OUString& aName, sal_Int16 aAttributes, const TemplateIdentifier& aTemplate )
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder();
 
@@ -211,7 +221,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::endNode(  )
-        throw (MalformedDataException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder();
 
@@ -228,7 +238,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::removeNode( const OUString& aName )
-        throw (MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder();
 
@@ -238,19 +248,19 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler:: modifyProperty( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask )
-        throw (MalformedDataException, beans::UnknownPropertyException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    LayerUpdateHandler:: modifyProperty( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, const uno::Type & aType )
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder(false);
 
-    if (!m_aBuilder.modifyProperty(aName,aAttributes,aAttributeMask,uno::Type()))
+    if (!m_aBuilder.modifyProperty(aName,aAttributes,aAttributeMask, aType))
         raisePropChangedBeforeException("LayerUpdateHandler: Cannot start property modification - property has already been changed.");
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
     LayerUpdateHandler:: setPropertyValue( const uno::Any& aValue )
-        throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder(true); // already checks for open property
 
@@ -260,7 +270,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler:: setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
-        throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder(true); // already checks for open property
 
@@ -270,7 +280,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::resetPropertyValue( )
-        throw (MalformedDataException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder(true); // already checks for open property
 
@@ -280,7 +290,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::resetPropertyValueForLocale( const OUString& aLocale )
-        throw (MalformedDataException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder(true); // already checks for open property
 
@@ -290,7 +300,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::endProperty(  )
-        throw (MalformedDataException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder(true); // already checks for open property
 
@@ -300,7 +310,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::resetProperty( const OUString& aName )
-        throw (MalformedDataException, beans::UnknownPropertyException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!m_aBuilder.resetProperty(aName))
         raisePropChangedBeforeException("LayerUpdateHandler: Cannot reset property - property has already been changed.");
@@ -309,7 +319,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::addOrReplaceProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-        throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!m_aBuilder.addNullProperty(aName,aAttributes,aType))
         raisePropExistsException("LayerUpdateHandler: Cannot add property - property exists (and has already been changed).");
@@ -318,7 +328,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::addOrReplacePropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-        throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!m_aBuilder.addProperty(aName,aAttributes,aValue))
         raisePropExistsException("LayerUpdateHandler: Cannot add property - property exists (and has already been changed).");
@@ -327,7 +337,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::removeProperty( const OUString& aName )
-        throw (MalformedDataException, beans::UnknownPropertyException, beans::PropertyExistException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     // treat 'remove' as 'reset'. (Note: does not verify that this actually amounts to dropping the property)
     if (!m_aBuilder.resetProperty(aName))
