@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: cl $ $Date: 2001-07-24 09:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1148,7 +1148,8 @@ void XMLShapeImportHelper::restoreConnections()
                     aAny <<= xShape;
                     xConnector->setPropertyValue( rHint.bStart ? msStartShape : msEndShape, aAny );
 
-                    aAny <<= getGluePointId( xShape, rHint.nDestGlueId );
+                    sal_Int32 nGlueId = rHint.nDestGlueId < 4 ? rHint.nDestGlueId : getGluePointId( xShape, rHint.nDestGlueId );
+                    aAny <<= nGlueId;
                     xConnector->setPropertyValue( rHint.bStart ? msStartGluePointIndex : msEndGluePointIndex, aAny );
                 }
 
