@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-27 10:17:54 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -803,7 +803,7 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
         Text[ portuguese ] = "Título";
         Text[ russian ] = "Çàãîëîâîê";
         Text[ greek ] = "Ôßôëïò";
-        Text[ dutch ] = "Titel";
+        Text[ dutch ] = "Title";
         Text[ french ] = "Titre";
         Text[ spanish ] = "Título";
         Text[ italian ] = "Titolo";
@@ -1028,7 +1028,7 @@ ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
     Text[ russian ] = "Ïğèíÿòü";
     Text[ polish ] = "Zastosuj";
     Text[ japanese ] = "“K—p";
-    Text[ chinese_traditional ] = "¨Ï¥Î";
+    Text[ chinese_traditional ] = "±Ä¥Î";
     Text[ arabic ] = "ÊØÈíŞ";
     Text[ dutch ] = "Overnemen";
     Text[ chinese_simplified ] = "Ì×ÓÃ";
@@ -1149,14 +1149,14 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
         Text[ ENGLISH ] = "ID";
         Text[ english_us ] = "ID";
         Text[ portuguese ] = "ID";
-        Text[ russian ] = "ID";
+        Text[ russian ] = "Èäåíòèôèêàöèîííûé íîìåğ";
         Text[ dutch ] = "ID";
         Text[ french ] = "ID";
         Text[ spanish ] = "ID";
         Text[ italian ] = "ID";
         Text[ danish ] = "ID";
         Text[ swedish ] = "ID";
-        Text[ polish ] = "Identyfikator (ID)";
+        Text[ polish ] = "Identyfikator";
         Text[ portuguese_brazilian ] = "ID";
         Text[ japanese ] = "ID";
         Text[ chinese_simplified ] = "ID";
@@ -1223,16 +1223,16 @@ CheckBox RID_SVXDLG_GALLERY_CBX
     Text [ danish ] = "Underbiblioteker" ;
     Text [ portuguese_brazilian ] = "~Unterverzeichnisse" ;
     Text [ portuguese ] = "~Subdirectórios" ;
-    Text[ chinese_simplified ] = "×ÓÄ¿Â¼(~S)";
+    Text[ chinese_simplified ] = "×ÓÄ¿Â¼(~U)";
     Text[ russian ] = "Ïîäêàòàëîãè";
     Text[ polish ] = "Podkatalogi";
-    Text[ japanese ] = "»ÌŞÃŞ¨Ú¸ÄØ(~S)";
-    Text[ chinese_traditional ] = "¤l¥Ø¿ı(~S)";
+    Text[ japanese ] = "»ÌŞÃŞ¨Ú¸ÄØ(~U)";
+    Text[ chinese_traditional ] = "¤l¥Ø¿ı(~U)";
     Text[ arabic ] = "ÏáÇÆá İÑÚíÉ";
     Text[ dutch ] = "~Submappen";
-    Text[ chinese_simplified ] = "×ÓÄ¿Â¼(~S)";
+    Text[ chinese_simplified ] = "×ÓÄ¿Â¼(~U)";
     Text[ greek ] = "~ÕğïêáôÜëïãïé";
-    Text[ korean ] = "¼­ºêµğ·ºÅä¸®(~S)";
+    Text[ korean ] = "¼­ºêµğ·ºÅä¸®(~U)";
     Text[ turkish ] = "Alt dizinler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Subdirectorios";
@@ -2036,7 +2036,7 @@ String RID_SVXSTR_GALLERY_TITLE
     Text[ polish ] = "Tytu³";
     Text[ portuguese_brazilian ] = "Title";
     Text[ japanese ] = "À²ÄÙ";
-    Text[ korean ] = "Á¦¸ñ(T)";
+    Text[ korean ] = "Á¦¸ñ";
     Text[ chinese_simplified ] = "±êÌâ(T)";
     Text[ chinese_traditional ] = "¼ĞÃD(T)";
     Text[ arabic ] = "ÚäæÇä";
@@ -2296,11 +2296,11 @@ Menu RID_SVXMN_GALLERY1
             Text[ polish ] = "Przypisz ~identyfikator";
             Text[ portuguese_brazilian ] = "Assign ~ID";
             Text[ japanese ] = "~ID Š„‚è“–‚Ä";
-            Text[ chinese_simplified ] = "Ö¸¶¨ ~ID";
-            Text[ chinese_traditional ] = "«ü©w ~ID";
+            Text[ chinese_simplified ] = "·ÖÅä ~ID";
+            Text[ chinese_traditional ] = "¤À°t ~ID";
             Text[ arabic ] = "ÊÚííä ÇáÊÚÑíİ";
             Text[ dutch ] = "~ID bezet";
-            Text[ chinese_simplified ] = "Ö¸¶¨ ~ID";
+            Text[ chinese_simplified ] = "·ÖÅä ~ID";
             Text[ greek ] = "ÁğïíïìŞ ôáõôüôçôáò (~ID)";
             Text[ korean ] = "~ID ÇÒ´ç";
             Text[ turkish ] = "Tanıtıcı ata";
@@ -2651,5 +2651,6 @@ Menu RID_SVXMN_GALLERY2
         };
     };
 };
+
 
 
