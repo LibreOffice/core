@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:25:37 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 09:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2336,7 +2336,7 @@ Resource RID_GLOBSTR
         Text[ polish ] = "Wielkie i ma³e litery";
         Text[ portuguese_brazilian ] = "Change case";
         Text[ japanese ] = "ζ–‡ε­—η¨®γ®ε¤‰ζ›";
-        Text[ korean ] = "λ€/μ†λ¬Έμ κµ¬λ¶„";
+        Text[ korean ] = "λ¬Έμ λª¨μ–‘ λ°”κΎΈκΈ°";
         Text[ chinese_simplified ] = "εε–ε­—ζ―ε’ε­—δ½“ζ ΌεΌ";
         Text[ chinese_traditional ] = "θ®ε–ε­—ζ―ε’ε­—ε‹ζ ΌεΌ";
         Text[ turkish ] = "Change case";
@@ -5661,7 +5661,7 @@ Resource RID_GLOBSTR
         Text[ greek ] = "Δεν είναι δυνατόν να τροποποιηθεί τμήμα μιας μήτρας.";
         Text[ korean ] = "ν–‰λ ¬μ μΌλ¶€λ¥Ό λ³€κ²½ν•  μ μ—†μµλ‹λ‹¤.";
         Text[ turkish ] = "Matrislerin bir kύsmύ deπiώtirilemiyor.";
-        Text[ language_user1 ] = " ";
+        Text[ language_user1 ] = "EM Dec 2002: In other words, you can only change the whole thing.";
         Text[ catalan ] = "No es pot modificar una part d'una matriu.";
         Text[ finnish ] = "Osaa taulukosta ei voi muokata.";
         Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΈ”ΰΈ±ΰΈ”ΰΉΰΈ›ΰΈ¥ΰΈ‡ΰΈªΰΉΰΈ§ΰΈ™ΰΈ‚ΰΈ­ΰΈ‡ΰΉΰΈ–ΰΈ§ΰΈ¥ΰΈ³ΰΈ”ΰΈ±ΰΈ";
