@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helptext.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 21:34:46 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 21:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,5 +388,6 @@ String SV_HELPTEXT_SPLITFIXED
     TEXT[ catalan ] = "Fijar";
     TEXT[ finnish ] = "Stick";
 };
+
 
 
