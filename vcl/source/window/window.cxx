@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-12 10:49:36 $
+ *  last change: $Author: tbe $ $Date: 2002-06-13 10:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7877,7 +7877,7 @@ String Window::GetAccessibleName() const
                 Window *pLabel = GetLabeledBy();
                 if( pLabel )
                     aAccessibleName = pLabel->GetText();
-                else
+                else if ( ( GetType() == WINDOW_LISTBOX ) || ( GetType() == WINDOW_MULTILISTBOX ) )
                     aAccessibleName = GetText();
             }
             break;
@@ -7885,6 +7885,8 @@ String Window::GetAccessibleName() const
                 aAccessibleName = GetText();
                 break;
         }
+
+        aAccessibleName = GetNonMnemonicString( aAccessibleName );
     }
 
     return aAccessibleName;
