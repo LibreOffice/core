@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-27 17:44:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,7 @@ AttributeStorage::~AttributeStorage()
     }
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 void
 AttributeStorage::Dump()
 {
@@ -645,7 +645,7 @@ AttributeProvider::~AttributeProvider()
         delete mpField[ i ];
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 void
 AttributeProvider::Dump()
 {
