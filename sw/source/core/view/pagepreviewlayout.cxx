@@ -89,7 +89,6 @@ void SwPagePreviewLayout::_Clear()
     maPaintedPrevwDocRect.Right() = 0;
     maPaintedPrevwDocRect.Bottom() = 0;
     mnSelectedPageNum = 0;
-    mpSelectedPageFrm = 0;
     _ClearPrevwPageData();
 }
 
@@ -288,6 +287,7 @@ bool SwPagePreviewLayout::ReInit()
 /** prepare paint of page preview
 
     OD 12.12.2002 #103492#
+    OD 21.03.2003 #108282# - delete parameter _onStartPageVirtNum
 
     @author OD
 */
@@ -295,7 +295,6 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
                                    const Point      _aProposedStartPos,
                                    const Size&      _rPxWinSize,
                                    sal_uInt16&      _onStartPageNum,
-                                   sal_uInt16&      _onStartPageVirtNum,
                                    Rectangle&       _orDocPreviewPaintRect,
                                    const bool       _bStartWithPageAtFirstCol
                                  )
@@ -434,7 +433,7 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
         maPaintedPrevwDocRect.Move(
                 -(maWinSize.Width() - maPaintedPrevwDocRect.GetWidth()), 0 );
         Prepare( 0, maPaintedPrevwDocRect.TopLeft(),
-                 _rPxWinSize, _onStartPageNum, _onStartPageVirtNum,
+                 _rPxWinSize, _onStartPageNum,
                  _orDocPreviewPaintRect, _bStartWithPageAtFirstCol );
     }
 
@@ -475,6 +474,7 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
 
     // return start page
     _onStartPageNum = mnPaintPhyStartPageNum;
+    /*
     // return virtual page number of start page
     _onStartPageVirtNum = 0;
     if ( mnPaintPhyStartPageNum <= mnPages )
@@ -487,6 +487,7 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
         if ( pPage )
             _onStartPageVirtNum = pPage->GetVirtPageNum();
     }
+    */
     return true;
 }
 
@@ -1420,5 +1421,24 @@ Size SwPagePreviewLayout::GetPrevwPageSizeByPageNum( sal_uInt16 _nPageNum ) cons
     else
     {
         return Size( 0, 0 );
+    }
+}
+
+/** get virtual page number by its physical page number
+
+    OD 21.03.2003 #108282#
+
+    @author OD
+*/
+sal_uInt16 SwPagePreviewLayout::GetVirtPageNumByPageNum( sal_uInt16 _nPageNum ) const
+{
+    const PrevwPage* pPrevwPage = _GetPrevwPageByPageNum( _nPageNum );
+    if ( pPrevwPage )
+    {
+        return pPrevwPage->pPage->GetVirtPageNum();
+    }
+    else
+    {
+        return 0;
     }
 }
