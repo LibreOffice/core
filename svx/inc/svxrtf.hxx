@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-29 15:47:29 $
+ *  last change: $Author: cmc $ $Date: 2002-07-29 10:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,8 @@ struct RTFPardAttrMapIds
             nFontAlign,
             nScriptSpace,
             nHangPunct,
-            nForbRule
+            nForbRule,
+            nDirection
             ;
     RTFPardAttrMapIds( const SfxItemPool& rPool );
 };
@@ -483,11 +484,14 @@ inline SfxItemSet& SvxRTFParser::GetAttrSet()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/inc/svxrtf.hxx,v 1.8 2001-11-29 15:47:29 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/inc/svxrtf.hxx,v 1.9 2002-07-29 10:03:38 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/11/29 15:47:29  jp
+      Bug #93450#: new picture types
+
       Revision 1.7  2001/08/16 15:41:26  thb
       #90760# Removed VCL define
 
