@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WindowState.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:00:12 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,66 +63,66 @@
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="WindowState" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
     <info>
 		<author>CD</author>
-		<desc xml:lang="en-US">Contains state information of all dockable user interface elements based on a Window class.</desc>
+		<desc>Contains state information of all dockable user interface elements based on a Window class.</desc>
 	</info>
 	<templates>
         <group oor:name="WindowStateType">
             <info>
-                <desc xml:lang="en-US">Provides a mapping between commands and their textual representation on the user interface.</desc>
+                <desc>Provides a mapping between commands and their textual representation on the user interface.</desc>
             </info>
             <prop oor:name="Locked" oor:type="xs:boolean">
                 <info>
-                    <desc xml:lang="en-US">A locked user interface element cannot be moved or undocked by the user. This property is only active when the user interface element is in a docked state.</desc>
+                    <desc>A locked user interface element cannot be moved or undocked by the user. This property is only active when the user interface element is in a docked state.</desc>
                 </info>
             </prop>
             <prop oor:name="Docked" oor:type="xs:boolean">
                 <info>
-                    <desc xml:lang="en-US">Specifies if the user interface element is currently docked.</desc>
+                    <desc>Specifies if the user interface element is currently docked.</desc>
                 </info>
             </prop>
             <prop oor:name="Visible" oor:type="xs:boolean">
                 <info>
-                    <desc xml:lang="en-US">Specifies if the user interface element is visible.</desc>
+                    <desc>Specifies if the user interface element is visible.</desc>
                 </info>
             </prop>
             <prop oor:name="DockingArea" oor:type="xs:int">
                 <info>
-                    <desc xml:lang="en-US">Specifies the docking area to which a user interface element belongs to. Only valid if 'Docked' is true. Top docking area=0, bottom=1, left=2, right=3.</desc>
+                    <desc>Specifies the docking area to which a user interface element belongs to. Only valid if 'Docked' is true. Top docking area=0, bottom=1, left=2, right=3.</desc>
                 </info>
             </prop>            
             <prop oor:name="DockPos" oor:type="xs:string">
                 <info>
-                    <desc xml:lang="en-US">Specifies the position of a docked user interface element. For top/bottom docked elements X describes a pixel position and Y the row number, left/right docked elements uses X for the column and Y for the pixel position. X and Y coordinates must be splitted by an comma.</desc>
+                    <desc>Specifies the position of a docked user interface element. For top/bottom docked elements X describes a pixel position and Y the row number, left/right docked elements uses X for the column and Y for the pixel position. X and Y coordinates must be splitted by an comma.</desc>
                 </info>
             </prop>
             <prop oor:name="DockSize" oor:type="xs:string">
                 <info>
-                    <desc xml:lang="en-US">Specifies the size of a docked user interface element in pixel. The real size can differ if the layout manager decides to resize it due to current circumenstances. Width and height must be splitted by an comma.</desc>
+                    <desc>Specifies the size of a docked user interface element in pixel. The real size can differ if the layout manager decides to resize it due to current circumenstances. Width and height must be splitted by an comma.</desc>
                 </info>
             </prop>
             <prop oor:name="Pos" oor:type="xs:string">
                 <info>
-                    <desc xml:lang="en-US">Specifies the position of a floating user interface element in pixel. X and Y coordinates must be splitted by an comma and are relative to the document frame.</desc>
+                    <desc>Specifies the position of a floating user interface element in pixel. X and Y coordinates must be splitted by an comma and are relative to the document frame.</desc>
                 </info>
             </prop>
             <prop oor:name="Size" oor:type="xs:string">
                 <info>
-                    <desc xml:lang="en-US">Specifies the size of a floating user interface element in pixel. The real size can differ if the layout manager decides to resize it due to current circumenstances. Width and height must be splitted by an comma.</desc>
+                    <desc>Specifies the size of a floating user interface element in pixel. The real size can differ if the layout manager decides to resize it due to current circumenstances. Width and height must be splitted by an comma.</desc>
                 </info>
             </prop>            
             <prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
                 <info>
-                    <desc xml:lang="en-US">Specifies the user interface element name. It is used for floating user interface elements to set the title and for the bubble help.</desc>
+                    <desc>Specifies the user interface element name. It is used for floating user interface elements to set the title and for the bubble help.</desc>
                 </info>
             </prop>
             <prop oor:name="InternalState" oor:type="xs:int">
                 <info>
-                    <desc xml:lang="en-US">Specifies an internal state for the user interface element. Please don't change this value it describes an internal value.</desc>
+                    <desc>Specifies an internal state for the user interface element. Please don't change this value it describes an internal value.</desc>
                 </info>
             </prop>
             <prop oor:name="Style" oor:type="xs:int">
                 <info>
-                    <desc xml:lang="en-US">Specifies the style of a toolbar. This property is only used by toolbar user interface elements.</desc>
+                    <desc>Specifies the style of a toolbar. This property is only used by toolbar user interface elements.</desc>
                 </info>
             </prop>
         </group>
