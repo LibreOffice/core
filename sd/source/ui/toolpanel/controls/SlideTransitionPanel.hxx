@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideTransitionPanel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:26:40 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,14 @@
 #ifndef SD_TOOLPANEL_CONTROLS_SLIDE_TRANSITION_PANEL_HXX
 #define SD_TOOLPANEL_CONTROLS_SLIDE_TRANSITION_PANEL_HXX
 
-#include "../SubToolPanel.hxx"
+#include "taskpane/SubToolPanel.hxx"
 
 namespace sd {
 class ViewShellBase;
 }
 
 namespace sd { namespace toolpanel {
+class ControlFactory;
 class TreeNode;
 } }
 
@@ -81,6 +82,8 @@ public:
         TreeNode* pParent,
         ViewShellBase& rBase);
     virtual ~SlideTransitionPanel (void);
+
+    static std::auto_ptr<ControlFactory> CreateControlFactory (ViewShellBase& rBase);
 
     virtual Size GetPreferredSize (void);
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeigh);
