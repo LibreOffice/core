@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:54:25 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2819,7 +2819,7 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
 {
     Size aFloatSz( maPrefSz );
 
-    long nLeft, nTop, nRight, nBottom;
+    sal_Int32 nLeft, nTop, nRight, nBottom;
     GetBorder( nLeft, nTop, nRight, nBottom );
 
     USHORT nLines = mpImplLB->GetEntryList()->GetEntryCount();
