@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:34:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,7 @@ void GraphCtrl::Paint( const Rectangle& rRect )
         aGraphic.Draw( this, Point(), aGraphSize );
 
     if ( bSdrMode )
-        pView->InitRedraw( this , Region( rRect ) );
+        pView->CompleteRedraw( this , Region( rRect ) );
 }
 
 
@@ -432,7 +432,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
             {
                 pView->DeleteMarked();
                 bProc = TRUE;
-                if( !pView->HasMarkedObj() )
+                if( !pView->AreObjectsMarked() )
                     ((Dialog*)GetParent())->GrabFocusToFirstControl();
             }
         }
@@ -446,7 +446,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 {
                     pView->BrkAction();
                 }
-                else if ( pView->HasMarkedObj() )
+                else if ( pView->AreObjectsMarked() )
                 {
                     const SdrHdlList& rHdlList = pView->GetHdlList();
                     SdrHdl* pHdl = rHdlList.GetFocusHdl();
@@ -560,7 +560,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 nY = 0;
             }
 
-            if (pView->HasMarkedObj() && !aCode.IsMod1() )
+            if (pView->AreObjectsMarked() && !aCode.IsMod1() )
             {
                 if(aCode.IsMod2())
                 {
@@ -851,7 +851,7 @@ SdrObject* GraphCtrl::GetSelectedSdrObject() const
 
     if ( bSdrMode )
     {
-        const SdrMarkList&  rMarkList = pView->GetMarkList();
+        const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
 
         if ( rMarkList.GetMarkCount() == 1 )
             pSdrObj = rMarkList.GetMark( 0 )->GetObj();
