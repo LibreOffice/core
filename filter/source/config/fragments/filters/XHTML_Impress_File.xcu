@@ -7,36 +7,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="pl">XHTML File</value>
-            <value xml:lang="hu">XHTML</value>
-            <value xml:lang="ja">XHTML</value>
-            <value xml:lang="es">XHTML</value>
-            <value xml:lang="tr">XHTML</value>
-            <value xml:lang="ru">XHTML File</value>
-            <value xml:lang="th">XHTML File</value>
-            <value xml:lang="x-comment">EM Aug 2002: Product name, do not translate</value>
-            <value xml:lang="ca">XHTML File</value>
-            <value xml:lang="el">XHTML</value>
-            <value xml:lang="zh-CN">XHTML</value>
-            <value xml:lang="pt">XHTML File</value>
-            <value xml:lang="cs">XHTML</value>
-            <value xml:lang="fr">XHTML</value>
-            <value xml:lang="ar">XHTML File</value>
-            <value xml:lang="zh-TW">XHTML</value>
-            <value xml:lang="sl">XHTML</value>
-            <value xml:lang="fi">XHTML File</value>
-            <value xml:lang="hi-IN">XHTML</value>
-            <value xml:lang="en-US">XHTML</value>
-            <value xml:lang="sk">XHTML</value>
-            <value xml:lang="he">XHTML</value>
-            <value xml:lang="sv">XHTML</value>
-            <value xml:lang="da">XHTML</value>
-            <value xml:lang="de">XHTML</value>
-            <value xml:lang="ko">XHTML</value>
-            <value xml:lang="nl">XHTML File</value>
-            <value xml:lang="pt-BR">XHTML File</value>
-            <value xml:lang="it">XHTML</value>
-            <value xml:lang="x-translate">XHTML</value>
+            <value>XHTML</value>
         </prop>
         <prop oor:name="Flags"><value>EXPORT ALIEN 3RDPARTYFILTER</value></prop>
     </node>
