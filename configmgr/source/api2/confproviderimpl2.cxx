@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-08 09:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ namespace configmgr
 
     // parser methods
     //--------------------------------------------------------------------------
-    void createAndFillAHashSet(HashSet& aArgs)
+    void createAndFillAHashSet2(HashSet& aArgs)
     {
         static bFilled = false;
         if (!bFilled)
@@ -337,7 +337,7 @@ namespace configmgr
         }
     }
 
-    bool lookup(HashSet &aSet, rtl::OUString aWord)
+    bool lookup2(HashSet &aSet, rtl::OUString aWord)
     {
         HashSet::const_iterator it = aSet.find(aWord);
         return it != aSet.end() ? true : false;
@@ -350,13 +350,13 @@ namespace configmgr
         const uno::Any* pCurrent = _rArgs.getConstArray();
 
         static HashSet aSet;
-        createAndFillAHashSet(aSet);
+        createAndFillAHashSet2(aSet);
         bool bParamOk = false;
         for (sal_Int32 i=0; i<_rArgs.getLength(); ++i, ++pCurrent)
         {
             if (*pCurrent >>= aCurrent)
             {
-                if (!lookup(aSet, aCurrent.Name))
+                if (!lookup2(aSet, aCurrent.Name))
                 {
                     rtl::OString aStr = "The argument '";
                     aStr += rtl::OUStringToOString(aCurrent.Name,RTL_TEXTENCODING_ASCII_US).getStr();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-08 09:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,14 +169,6 @@ namespace configmgr
             virtual void SAL_CALL release() throw();
             virtual uno::Any SAL_CALL queryInterface(uno::Type const& rType) throw();
             virtual void SAL_CALL disposing(com::sun::star::lang::EventObject const& rEvt) throw();
-        };
-//-----------------------------------------------------------------------------
-        class ApiRootTreeImpl : ApiTreeImpl
-        {
-            osl::Mutex m_aTreeMutex;
-        public:
-            explicit ApiRootTreeImpl(ApiProvider& rProvider, Tree const& aTree);
-            ~ApiRootTreeImpl();
         };
 //-----------------------------------------------------------------------------
     }
