@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idroptarget.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-26 16:00:59 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
