@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-27 19:09:58 $
+ *  last change: $Author: mib $ $Date: 2001-01-22 12:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ Writer::Writer()
 {
     bWriteAll = bShowProgress = bUCS2_WithStartChar = TRUE;
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
-        bWriteClipboardDoc = bWriteOnlyFirstTable = FALSE;
+        bWriteClipboardDoc = bWriteOnlyFirstTable = bBlock = FALSE;
 }
 
 Writer::~Writer()
@@ -245,7 +245,7 @@ void Writer::ResetWriter()
 
     bShowProgress = bUCS2_WithStartChar = TRUE;
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
-        bWriteClipboardDoc = bWriteOnlyFirstTable = FALSE;
+        bWriteClipboardDoc = bWriteOnlyFirstTable = bBlock = FALSE;
 }
 
 BOOL Writer::CopyNextPam( SwPaM ** ppPam )
@@ -658,11 +658,14 @@ ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.6 2000-11-27 19:09:58 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.7 2001-01-22 12:29:52 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2000/11/27 19:09:58  jp
+      Bug #80732#: AddPutEditEngFontsInAttrPool: use the correct Itempool
+
       Revision 1.5  2000/11/20 11:15:52  mib
       create impl when adding fonts to pool (required for XML filter)
 

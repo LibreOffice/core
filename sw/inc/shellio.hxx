@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 13:49:15 $
+ *  last change: $Author: mib $ $Date: 2001-01-22 12:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,6 +471,8 @@ public:
     BOOL bASCII_ParaAsBlanc : 1;
     BOOL bASCII_NoLastLineEnd : 1;
     BOOL bUCS2_WithStartChar : 1;
+
+    BOOL bBlock : 1;
 
     Writer();
     virtual ~Writer();
