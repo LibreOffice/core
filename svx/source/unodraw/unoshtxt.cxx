@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-04 18:43:44 $
+ *  last change: $Author: thb $ $Date: 2002-06-13 18:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,6 +384,12 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         mpView->GetTextEditOutliner()->SetNotifyHdl( Link() );
 
                     Broadcast( *pSdrHint );
+
+                    // destroy view forwarder, OutlinerView no longer
+                    // valid (no need for UpdateData(), it's been
+                    // synched on EndTextEdit)
+                    delete mpViewForwarder;
+                    mpViewForwarder = NULL;
                 }
                 break;
         }
