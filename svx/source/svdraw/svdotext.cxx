@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-22 12:24:20 $
+ *  last change: $Author: aw $ $Date: 2001-03-01 15:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1316,11 +1316,9 @@ FASTBOOL SdrTextObj::ImpPaintAnimatedText(OutputDevice& rOut, const Point& rOffs
         //AW vertical writing
         // For the outliner::Draw method which takes a start position
         // the upper right position must be offered for vertical writing.
-        Point aPaintPos;
-        if(rOutliner.IsVertical())
-            aPaintPos = rPaintRect.TopRight();
-        else
-            aPaintPos = rPaintRect.TopLeft();
+        // Update: MT changed the method to take the same position as normal,
+        // so I changed this back.
+        Point aPaintPos = rPaintRect.TopLeft();
 
         //aPaintPos-=aAnimationBoundRect.TopLeft();
         // Die RedLines der Online-Rechtschreibpruefung werden via DrawPixel
