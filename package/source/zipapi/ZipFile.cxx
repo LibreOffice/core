@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
+ *  last change: $Author: hr $ $Date: 2001-07-12 17:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
-#include <memory.h> // for memcpy
+#include <string.h> // for memcpy
 #include <vector>
 
 using namespace vos;
