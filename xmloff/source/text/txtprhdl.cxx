@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:45:25 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,8 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_VertRel_Enum[] =
     { XML_PAGE_CONTENT,         RelOrientation::PAGE_PRINT_AREA },
     { XML_FRAME,                RelOrientation::FRAME   },      // import only
     { XML_FRAME_CONTENT,        RelOrientation::PRINT_AREA  },  // import only
+    // OD 13.11.2003 #i22341# - new vertical alignment at top of line
+    { XML_LINE,                 RelOrientation::TEXT_LINE },
     { XML_TOKEN_INVALID, 0 }
 };
 
