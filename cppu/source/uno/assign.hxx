@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assign.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-25 08:32:01 $
+ *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ inline sal_Bool __assignArray(
         for (i=0; i < nTotalElements; i++)
         {
             ::typelib_typedescriptionreference_release( *((typelib_TypeDescriptionReference **)pDest + i) );
-            TYPE_ACQUIRE(
+            __TYPE_ACQUIRE(
                 *((typelib_TypeDescriptionReference **)pDest + i) = *((typelib_TypeDescriptionReference **)pSource + i) );
 
         }
@@ -261,7 +261,7 @@ inline sal_Bool __assignArray(
     case typelib_TypeClass_ENUM:
         for (i=0; i < nTotalElements; i++)
         {
-            *((int *)pDest + i) = *((int *)pSource + i);
+            *((sal_Int32 *)pDest + i) = *((sal_Int32 *)pSource + i);
         }
         bRet = sal_True;
         break;
@@ -540,7 +540,7 @@ inline sal_Bool __assignData(
         {
         case typelib_TypeClass_TYPE:
             ::typelib_typedescriptionreference_release( *(typelib_TypeDescriptionReference **)pDest );
-            TYPE_ACQUIRE(
+            __TYPE_ACQUIRE(
                 *(typelib_TypeDescriptionReference **)pDest = *(typelib_TypeDescriptionReference **)pSource );
             return sal_True;
         }
@@ -552,7 +552,7 @@ inline sal_Bool __assignData(
     case typelib_TypeClass_ENUM:
         if (__type_equals( pDestType, pSourceType ))
         {
-            *(int *)pDest = *(int *)pSource;
+            *(sal_Int32 *)pDest = *(sal_Int32 *)pSource;
             return sal_True;
         }
         return sal_False;

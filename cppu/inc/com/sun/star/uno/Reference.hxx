@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-21 12:42:59 $
+ *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,8 @@ inline interface_type * Reference< interface_type >::__query(
         Any aRet( pInterface->queryInterface( rType ) );
         if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
         {
-            interface_type * pRet = * reinterpret_cast< interface_type ** >( aRet.pData );
-            * reinterpret_cast< interface_type ** >( aRet.pData ) = 0;
+            interface_type * pRet = reinterpret_cast< interface_type * >( aRet.pReserved );
+            aRet.pReserved = 0;
             return pRet;
         }
     }

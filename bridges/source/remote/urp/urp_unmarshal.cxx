@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_unmarshal.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
+ *  last change: $Author: dbo $ $Date: 2001-06-29 11:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,49 @@ sal_Bool Unmarshal::unpackAny( void *pDest )
 
         if( pType )
         {
-            pAny->pData = rtl_allocateMemory( pType->nSize );
+            switch (pType->eTypeClass)
+            {
+            case typelib_TypeClass_HYPER:
+            case typelib_TypeClass_UNSIGNED_HYPER:
+                if (sizeof(void *) < sizeof(sal_Int64))
+                {
+                    pAny->pData = rtl_allocateMemory( sizeof(sal_Int64) );
+                }
+                else
+                {
+                    pAny->pData = &pAny->pReserved;
+                }
+                break;
+            case typelib_TypeClass_FLOAT:
+                if (sizeof(void *) < sizeof(float))
+                {
+                    pAny->pData = rtl_allocateMemory( sizeof(float) );
+                }
+                else
+                {
+                    pAny->pData = &pAny->pReserved;
+                }
+                break;
+            case typelib_TypeClass_DOUBLE:
+                if (sizeof(void *) < sizeof(double))
+                {
+                    pAny->pData = rtl_allocateMemory( sizeof(double) );
+                }
+                else
+                {
+                    pAny->pData = &pAny->pReserved;
+                }
+                break;
+            case typelib_TypeClass_STRUCT:
+            case typelib_TypeClass_UNION:
+            case typelib_TypeClass_EXCEPTION:
+            case typelib_TypeClass_ARRAY:
+                pAny->pData = rtl_allocateMemory( pType->nSize );
+                break;
+            default:
+                pAny->pData = &pAny->pReserved;
+            }
+
             bReturn = unpack( pAny->pData , pType );
         }
     }

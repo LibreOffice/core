@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eq.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 13:27:08 $
+ *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,11 +189,11 @@ inline sal_Bool __equalStruct(
     while (nDescr--)
     {
         sal_Int32 nOffset = pMemberOffsets[nDescr];
-        if (! uno_type_equalData( (char *)pDest + nOffset,
-                                  ppTypeRefs[nDescr],
-                                  (char *)pSource + nOffset,
-                                  ppTypeRefs[nDescr],
-                                  queryInterface, release ))
+        if (! ::uno_type_equalData( (char *)pDest + nOffset,
+                                    ppTypeRefs[nDescr],
+                                    (char *)pSource + nOffset,
+                                    ppTypeRefs[nDescr],
+                                    queryInterface, release ))
         {
             return sal_False;
         }
@@ -306,7 +306,7 @@ inline sal_Bool __equalSequence(
         return sal_True;
     }
     case typelib_TypeClass_ENUM:
-        return (0 == ::rtl_compareMemory( pDestElements, pSourceElements, sizeof(int) * nElements ));
+        return (0 == ::rtl_compareMemory( pDestElements, pSourceElements, sizeof(sal_Int32) * nElements ));
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
@@ -338,9 +338,10 @@ inline sal_Bool __equalSequence(
             char * pDest = (char *)pDestElements + (nPos * nElementSize);
             char * pSource = (char *)pSourceElements + (nPos * nElementSize);
             typelib_TypeDescriptionReference * pSetType = __unionGetSetType( pDest, pElementTypeDescr );
-            sal_Bool bRet = uno_type_equalData( pDest + nValueOffset, pSetType,
-                                                pSource + nValueOffset, pSetType,
-                                                queryInterface, release );
+            sal_Bool bRet = ::uno_type_equalData(
+                pDest + nValueOffset, pSetType,
+                pSource + nValueOffset, pSetType,
+                queryInterface, release );
             ::typelib_typedescriptionreference_release( pSetType );
             if (! bRet)
             {
@@ -658,20 +659,21 @@ inline sal_Bool __equalData(
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_STRING:
-            return ((::rtl::OUString *)pDest)->equals( *(::rtl::OUString *)pSource );
+            return ((::rtl::OUString *)pDest)->equals( *(::rtl::OUString const *)pSource );
         }
         return sal_False;
     case typelib_TypeClass_TYPE:
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_TYPE:
-            return __type_equals( *(typelib_TypeDescriptionReference **)pDest,
-                                  *(typelib_TypeDescriptionReference **)pSource );
+            return __type_equals(
+                *(typelib_TypeDescriptionReference **)pDest,
+                *(typelib_TypeDescriptionReference **)pSource );
         }
         return sal_False;
     case typelib_TypeClass_ENUM:
         return (__type_equals( pDestType, pSourceType ) &&
-                *(int *)pDest == *(int *)pSource);
+                *(sal_Int32 *)pDest == *(sal_Int32 *)pSource);
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
         OSL_ENSURE( sal_False, "### unexpected typedef!" );
@@ -706,7 +708,7 @@ inline sal_Bool __equalData(
             if (pDestTypeDescr)
             {
                 typelib_TypeDescriptionReference * pSetType = __unionGetSetType( pDest, pDestTypeDescr );
-                bRet = uno_type_equalData(
+                bRet = ::uno_type_equalData(
                     (char *)pDest + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset, pSetType,
                     (char *)pSource + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset, pSetType,
                     queryInterface, release );
@@ -716,7 +718,7 @@ inline sal_Bool __equalData(
             {
                 TYPELIB_DANGER_GET( &pDestTypeDescr, pDestType );
                 typelib_TypeDescriptionReference * pSetType = __unionGetSetType( pDest, pDestTypeDescr );
-                bRet = uno_type_equalData(
+                bRet = ::uno_type_equalData(
                     (char *)pDest + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset, pSetType,
                     (char *)pSource + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset, pSetType,
                     queryInterface, release );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: any2.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-17 13:29:24 $
+ *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,12 +88,15 @@ struct _uno_Mapping;
 */
 typedef struct _uno_Any
 {
-    /** type of value<br>
+    /** type of value
     */
     struct _typelib_TypeDescriptionReference * pType;
-    /** pointer to value<br>
+    /** pointer to value
     */
     void * pData;
+    /** reserved space for storing value
+    */
+    void * pReserved;
 } uno_Any;
 
 #ifdef SAL_W32
@@ -104,7 +107,7 @@ typedef struct _uno_Any
 
 /** Assign an any with a given value.
     Interfaces are acquired or released by the given callback functions.
-    <br>
+
     @param pDest            pointer memory of destination any
     @param pSource          pointer to source value; defaults (0) to default constructed value
     @param pTypeDescr       type description of value; defaults (0) to void
@@ -118,7 +121,7 @@ void SAL_CALL uno_any_assign(
     SAL_THROW_EXTERN_C();
 /** Assign an any with a given value.
     Interfaces are acquired or released by the given callback functions.
-    <br>
+
     @param pDest            pointer memory of destination any
     @param pSource          pointer to source value; defaults (0) to default constructed value
     @param pTypeDescr       type description of value; defaults (0) to void
@@ -133,7 +136,7 @@ void SAL_CALL uno_type_any_assign(
 
 /** Constructs an any with a given value.
     Interfaces are acquired by the given callback function.
-    <br>
+
     @param pDest            pointer memory of destination any
     @param pSource          pointer to source value; defaults (0) to default constructed value
     @param pTypeDescr       type description of value; defaults (0) to void
@@ -146,7 +149,7 @@ void SAL_CALL uno_any_construct(
     SAL_THROW_EXTERN_C();
 /** Constructs an any with a given value.
     Interfaces are acquired by the given callback function.
-    <br>
+
     @param pDest            pointer memory of destination any
     @param pSource          pointer to source value; defaults (0) to default constructed value
     @param pType            type of value; defaults (0) to void
@@ -159,7 +162,7 @@ void SAL_CALL uno_type_any_construct(
     SAL_THROW_EXTERN_C();
 
 /** Constructs an any with a given value and converts/ maps interfaces.
-    <br>
+
     @param pDest            pointer memory of destination any
     @param pSource          pointer to source value; defaults (0) to default constructed value
     @param pTypeDescr       type description of value; defaults (0) to void
@@ -171,7 +174,7 @@ void SAL_CALL uno_any_constructAndConvert(
     struct _uno_Mapping * mapping )
     SAL_THROW_EXTERN_C();
 /** Constructs an any with a given value and converts/ maps interfaces.
-    <br>
+
     @param pDest            pointer memory of destination any
     @param pSource          pointer to source value; defaults (0) to default constructed value
     @param pType            type of value; defaults (0) to void
@@ -184,7 +187,7 @@ void SAL_CALL uno_type_any_constructAndConvert(
     SAL_THROW_EXTERN_C();
 
 /** Destructs an any.
-    <br>
+
     @param pValue           pointer to any
     @param release          function called each time an interface needs to be released. defaults (0) to uno
 */

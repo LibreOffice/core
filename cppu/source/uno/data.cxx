@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:10 $
+ *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,9 @@ void destructSequence(
     {
         if (pSequence->nElements)
         {
-            __destructElements( pSequence->elements, pElementType, 0, pSequence->nElements, release );
+            __destructElements(
+                pSequence->elements, pElementType,
+                0, pSequence->nElements, release );
         }
         ::rtl_freeMemory( pSequence );
     }
@@ -235,9 +237,10 @@ sal_Bool SAL_CALL uno_type_equalData(
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    return __equalData( pVal1, pVal1Type, 0,
-                        pVal2, pVal2Type, 0,
-                        queryInterface, release );
+    return __equalData(
+        pVal1, pVal1Type, 0,
+        pVal2, pVal2Type, 0,
+        queryInterface, release );
 }
 //##################################################################################################
 sal_Bool SAL_CALL uno_equalData(
@@ -246,9 +249,10 @@ sal_Bool SAL_CALL uno_equalData(
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    return __equalData( pVal1, pVal1TD->pWeakRef, pVal1TD,
-                        pVal2, pVal2TD->pWeakRef, pVal2TD,
-                        queryInterface, release );
+    return __equalData(
+        pVal1, pVal1TD->pWeakRef, pVal1TD,
+        pVal2, pVal2TD->pWeakRef, pVal2TD,
+        queryInterface, release );
 }
 //##################################################################################################
 sal_Bool SAL_CALL uno_type_assignData(
@@ -257,9 +261,10 @@ sal_Bool SAL_CALL uno_type_assignData(
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    return __assignData( pDest, pDestType, 0,
-                         pSource, pSourceType, 0,
-                         queryInterface, acquire, release );
+    return __assignData(
+        pDest, pDestType, 0,
+        pSource, pSourceType, 0,
+        queryInterface, acquire, release );
 }
 //##################################################################################################
 sal_Bool SAL_CALL uno_assignData(
@@ -268,9 +273,10 @@ sal_Bool SAL_CALL uno_assignData(
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    return __assignData( pDest, pDestTD->pWeakRef, pDestTD,
-                         pSource, pSourceTD->pWeakRef, pSourceTD,
-                         queryInterface, acquire, release );
+    return __assignData(
+        pDest, pDestTD->pWeakRef, pDestTD,
+        pSource, pSourceTD->pWeakRef, pSourceTD,
+        queryInterface, acquire, release );
 }
 }
 
@@ -320,67 +326,87 @@ struct second : public empty
 class BinaryCompatible_Impl
 {
 public:
-    BinaryCompatible_Impl()
-    {
-        if ((SAL_SEQUENCE_HEADER_SIZE % 8) != 0)
-            abort();
-
-        /*
-        If the feature failed search FEATURE_ and correct it.
-        */
-        // the sizeof enum must be the size of an integer
-        // FEATURE_ENUM
-        if( sizeof( TypeClass ) != sizeof( int ) )
-            abort();
-
-        // the sizeof any must be sizeof( void * ) * 2,
-        // the first is a pointer to typelib_TypeDescription, the second is the pointer to the data
-        // FEATURE_ANY
-        if( sizeof( Any ) != sizeof( uno_Any ) )
-            abort();
-        if( sizeof( Any ) != sizeof( void * ) * 2 )
-            abort();
-        if( (sal_Int32)&((Any *) 16)->pType != 16 )
-            abort();
-        if( (sal_Int32)&((Any *) 16)->pData != 16 + sizeof( void * ) )
-            abort();
-
-        // All types can moved from one one memory location to another
-        // without calling the copy constructor and the destructor.
-        // FEATURE_MEMORYMOVE_INVARIANT
-
-        // All types can moved from one one memory location to another
-        // without calling the copy constructor and the destructor.
-        // FEATURE_ZEROCONSTRUCTOR
-
-        // The reference class must be a pointer to XInterface or a subclass of XInterface
-        // FEATURE_INTERFACE
-        if( sizeof( Reference< XInterface > ) != sizeof( XInterface * ) )
-            abort();
-
-        // The reference class must be a pointer to XInterface or a subclass of XInterface
-        // FEATURE_WSTRING
-        if( sizeof( OUString ) != sizeof( rtl_uString * ) )
-            abort();
-
-        // The reference class must be a pointer to XInterface or a subclass of XInterface
-        // FEATURE_ALIGN
-        if( sizeof( M ) != 8 || sizeof( N ) != 12 || sizeof( O ) != 16 )
-            abort();
-
-#ifdef SAL_W32
-        if( sizeof( P ) != 24 )
-            abort();
-#endif
-
-#ifndef __GNUC__
-        // An empty superclass have a size of 0 except for gcc
-        // FEATURE_EMPTYCLASS
-        if( sizeof( second ) != sizeof( int ) )
-            abort();
-#endif
-    }
+    BinaryCompatible_Impl();
 };
+BinaryCompatible_Impl::BinaryCompatible_Impl()
+{
+    // sequence
+    if ((SAL_SEQUENCE_HEADER_SIZE % 8) != 0)
+    {
+        OSL_ENSURE( 0, "### sal sequence header size not aligned to 8?!" );
+        abort();
+    }
+    // enum
+    if( sizeof( TypeClass ) != sizeof( sal_Int32 ) )
+    {
+        OSL_ENSURE( 0, "### enum not 32bit?!" );
+        abort();
+    }
+    // any
+    if (sizeof(void *) < sizeof(sal_Int32))
+    {
+        OSL_ENSURE( 0, "### size of pointer less than 32bit?!" );
+        abort();
+    }
+    if( sizeof( Any ) != sizeof( uno_Any ) )
+    {
+        OSL_ENSURE( 0, "### Any inheritance adds space to uno_Any?!" );
+        abort();
+    }
+    if( sizeof( Any ) != sizeof( void * ) * 3 )
+    {
+        OSL_ENSURE( 0, "### sizeof( Any ) != sizeof( void * ) * 3 ?!" );
+        abort();
+    }
+    if( (sal_Int32)&((Any *) 16)->pType != 16 )
+    {
+        OSL_ENSURE( 0, "### (sal_Int32)&((Any *) 16)->pType != 16 ?!" );
+        abort();
+    }
+    if( (sal_Int32)&((Any *) 16)->pData != 16 + sizeof( void * ) )
+    {
+        OSL_ENSURE( 0, "### (sal_Int32)&((Any *) 16)->pData != 16 + sizeof( void * ) ?!" );
+        abort();
+    }
+    if( (sal_Int32)&((Any *) 16)->pReserved != 16 + (2* sizeof( void * )) )
+    {
+        OSL_ENSURE( 0, "### (sal_Int32)&((Any *) 16)->pReserved != 16 + (2* sizeof( void * )) ?!" );
+        abort();
+    }
+    // interface
+    if( sizeof( Reference< XInterface > ) != sizeof( XInterface * ) )
+    {
+        OSL_ENSURE( 0, "### unexpected size of interface reference?!" );
+        abort();
+    }
+    // string
+    if( sizeof( OUString ) != sizeof( rtl_uString * ) )
+    {
+        OSL_ENSURE( 0, "### unexpected size of string?!" );
+        abort();
+    }
+    // struct
+    if( sizeof( M ) != 8 || sizeof( N ) != 12 || sizeof( O ) != 16 )
+    {
+        OSL_ENSURE( 0, "### unexpected struct alignment?!" );
+        abort();
+    }
+#ifdef SAL_W32
+    if( sizeof( P ) != 24 )
+    {
+        OSL_ENSURE( 0, "### [win] unexpected struct alignment?!" );
+        abort();
+    }
+#endif
+#ifndef __GNUC__
+    if( sizeof( second ) != sizeof( int ) )
+    {
+        OSL_ENSURE( 0, "### unexpected struct size?!" );
+        abort();
+    }
+#endif
+}
+
 #ifdef SAL_W32
 #   pragma pack(pop)
 #elif defined(SAL_OS2)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copy.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 20:12:55 $
+ *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,18 +101,20 @@ inline void __copyConstructStruct(
     {
         while (nDescr--)
         {
-            ::uno_type_copyAndConvertData( (char *)pDest + pMemberOffsets[nDescr],
-                                           (char *)pSource + pMemberOffsets[nDescr],
-                                           ppTypeRefs[nDescr], mapping );
+            ::uno_type_copyAndConvertData(
+                (char *)pDest + pMemberOffsets[nDescr],
+                (char *)pSource + pMemberOffsets[nDescr],
+                ppTypeRefs[nDescr], mapping );
         }
     }
     else
     {
         while (nDescr--)
         {
-            ::uno_type_copyData( (char *)pDest + pMemberOffsets[nDescr],
-                                 (char *)pSource + pMemberOffsets[nDescr],
-                                 ppTypeRefs[nDescr], acquire );
+            ::uno_type_copyData(
+                (char *)pDest + pMemberOffsets[nDescr],
+                (char *)pSource + pMemberOffsets[nDescr],
+                ppTypeRefs[nDescr], acquire );
         }
     }
 }
@@ -133,18 +135,20 @@ inline void __copyConstructArray(
     {
         for(sal_Int32 i = 0; i < nTotalElements; i++)
         {
-            ::uno_type_copyAndConvertData( (sal_Char *)pDest + i * nElementSize,
-                                           (sal_Char *)pSource + i * nElementSize,
-                                           pElementTypeRef, mapping );
+            ::uno_type_copyAndConvertData(
+                (sal_Char *)pDest + i * nElementSize,
+                (sal_Char *)pSource + i * nElementSize,
+                pElementTypeRef, mapping );
         }
     }
     else
     {
         for(sal_Int32 i = 0; i < nTotalElements; i++)
         {
-            ::uno_type_copyData( (sal_Char *)pDest + (i * nElementSize),
-                                 (sal_Char *)pSource + (i * nElementSize),
-                                 pElementTypeRef, acquire );
+            ::uno_type_copyData(
+                (sal_Char *)pDest + (i * nElementSize),
+                (sal_Char *)pSource + (i * nElementSize),
+                pElementTypeRef, acquire );
         }
     }
 }
@@ -186,55 +190,79 @@ inline void __copyConstructAnyFromData(
     uno_AcquireFunc acquire, uno_Mapping * mapping )
     SAL_THROW ( () )
 {
-    TYPE_ACQUIRE( pType );
+    __TYPE_ACQUIRE( pType );
     pDestAny->pType = pType;
 
     switch (pType->eTypeClass)
     {
     case typelib_TypeClass_CHAR:
-        pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Unicode) );
-        *(sal_Unicode *)pDestAny->pData = *(sal_Unicode *)pSource;
+        pDestAny->pData = &pDestAny->pReserved;
+        *(sal_Unicode *)&pDestAny->pReserved = *(sal_Unicode *)pSource;
         break;
     case typelib_TypeClass_BOOLEAN:
-        pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Bool) );
-        *(sal_Bool *)pDestAny->pData = (*(sal_Bool *)pSource != sal_False);
+        pDestAny->pData = &pDestAny->pReserved;
+        *(sal_Bool *)&pDestAny->pReserved = (*(sal_Bool *)pSource != sal_False);
         break;
     case typelib_TypeClass_BYTE:
-        pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Int8) );
-        *(sal_Int8 *)pDestAny->pData = *(sal_Int8 *)pSource;
+        pDestAny->pData = &pDestAny->pReserved;
+        *(sal_Int8 *)&pDestAny->pReserved = *(sal_Int8 *)pSource;
         break;
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Int16) );
-        *(sal_Int16 *)pDestAny->pData = *(sal_Int16 *)pSource;
+        pDestAny->pData = &pDestAny->pReserved;
+        *(sal_Int16 *)&pDestAny->pReserved = *(sal_Int16 *)pSource;
         break;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
-        pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Int32) );
-        *(sal_Int32 *)pDestAny->pData = *(sal_Int32 *)pSource;
+        pDestAny->pData = &pDestAny->pReserved;
+        *(sal_Int32 *)&pDestAny->pReserved = *(sal_Int32 *)pSource;
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Int64) );
-        *(sal_Int64 *)pDestAny->pData = *(sal_Int64 *)pSource;
+        if (sizeof(void *) >= sizeof(sal_Int64))
+        {
+            pDestAny->pData = &pDestAny->pReserved;
+            *(sal_Int64 *)&pDestAny->pReserved = *(sal_Int64 *)pSource;
+        }
+        else
+        {
+            pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Int64) );
+            *(sal_Int64 *)pDestAny->pData = *(sal_Int64 *)pSource;
+        }
         break;
     case typelib_TypeClass_FLOAT:
-        pDestAny->pData = ::rtl_allocateMemory( sizeof(float) );
-        *(float *)pDestAny->pData = *(float *)pSource;
+        if (sizeof(void *) >= sizeof(float))
+        {
+            pDestAny->pData = &pDestAny->pReserved;
+            *(float *)&pDestAny->pReserved = *(float *)pSource;
+        }
+        else
+        {
+            pDestAny->pData = ::rtl_allocateMemory( sizeof(float) );
+            *(float *)pDestAny->pData = *(float *)pSource;
+        }
         break;
     case typelib_TypeClass_DOUBLE:
-        pDestAny->pData = ::rtl_allocateMemory( sizeof(double) );
-        *(double *)pDestAny->pData = *(double *)pSource;
+        if (sizeof(void *) >= sizeof(double))
+        {
+            pDestAny->pData = &pDestAny->pReserved;
+            *(double *)&pDestAny->pReserved = *(double *)pSource;
+        }
+        else
+        {
+            pDestAny->pData = ::rtl_allocateMemory( sizeof(double) );
+            *(double *)pDestAny->pData = *(double *)pSource;
+        }
         break;
     case typelib_TypeClass_STRING:
         ::rtl_uString_acquire( *(rtl_uString **)pSource );
-        pDestAny->pData = ::rtl_allocateMemory( sizeof(rtl_uString *) );
-        *(rtl_uString **)pDestAny->pData = *(rtl_uString **)pSource;
+        pDestAny->pData = &pDestAny->pReserved;
+        *(rtl_uString **)&pDestAny->pReserved = *(rtl_uString **)pSource;
         break;
     case typelib_TypeClass_TYPE:
-        TYPE_ACQUIRE( *(typelib_TypeDescriptionReference **)pSource );
-        pDestAny->pData = ::rtl_allocateMemory( sizeof(typelib_TypeDescriptionReference *) );
-        *(typelib_TypeDescriptionReference **)pDestAny->pData = *(typelib_TypeDescriptionReference **)pSource;
+        __TYPE_ACQUIRE( *(typelib_TypeDescriptionReference **)pSource );
+        pDestAny->pData = &pDestAny->pReserved;
+        *(typelib_TypeDescriptionReference **)&pDestAny->pReserved = *(typelib_TypeDescriptionReference **)pSource;
         break;
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_ANY:
@@ -242,8 +270,9 @@ inline void __copyConstructAnyFromData(
         break;
 #endif
     case typelib_TypeClass_ENUM:
-        pDestAny->pData = ::rtl_allocateMemory( sizeof(int) );
-        *(int *)pDestAny->pData = *(int *)pSource;
+        pDestAny->pData = &pDestAny->pReserved;
+        // enum is forced to 32bit long
+        *(sal_Int32 *)&pDestAny->pReserved = *(sal_Int32 *)pSource;
         break;
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
@@ -306,11 +335,11 @@ inline void __copyConstructAnyFromData(
         }
         break;
     case typelib_TypeClass_SEQUENCE:
-        pDestAny->pData = ::rtl_allocateMemory( sizeof(uno_Sequence *) );
+        pDestAny->pData = &pDestAny->pReserved;
         if (pTypeDescr)
         {
             copyConstructSequence(
-                (uno_Sequence **)pDestAny->pData, *(uno_Sequence **)pSource,
+                (uno_Sequence **)&pDestAny->pReserved, *(uno_Sequence **)pSource,
                 ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
                 acquire, mapping );
         }
@@ -318,21 +347,21 @@ inline void __copyConstructAnyFromData(
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
             copyConstructSequence(
-                (uno_Sequence **)pDestAny->pData, *(uno_Sequence **)pSource,
+                (uno_Sequence **)&pDestAny->pReserved, *(uno_Sequence **)pSource,
                 ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
                 acquire, mapping );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;
     case typelib_TypeClass_INTERFACE:
-        pDestAny->pData = ::rtl_allocateMemory( sizeof(void *) );
+        pDestAny->pData = &pDestAny->pReserved;
         if (mapping)
         {
-            *(void **)pDestAny->pData = __map( *(void **)pSource, pType, pTypeDescr, mapping );
+            pDestAny->pReserved = __map( *(void **)pSource, pType, pTypeDescr, mapping );
         }
         else
         {
-            __acquire( *(void **)pDestAny->pData = *(void **)pSource, acquire );
+            __acquire( pDestAny->pReserved = *(void **)pSource, acquire );
         }
         break;
     }
@@ -375,64 +404,88 @@ inline void __copyConstructAny(
         }
         else // default construct
         {
-            TYPE_ACQUIRE( pType );
+            __TYPE_ACQUIRE( pType );
             pDestAny->pType = pType;
             switch (pType->eTypeClass)
             {
             case typelib_TypeClass_CHAR:
-                pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Unicode) );
-                *(sal_Unicode *)pDestAny->pData = '\0';
+                pDestAny->pData = &pDestAny->pReserved;
+                *(sal_Unicode *)&pDestAny->pReserved = '\0';
                 break;
             case typelib_TypeClass_BOOLEAN:
-                pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Bool) );
-                *(sal_Bool *)pDestAny->pData = sal_False;
+                pDestAny->pData = &pDestAny->pReserved;
+                *(sal_Bool *)&pDestAny->pReserved = sal_False;
                 break;
             case typelib_TypeClass_BYTE:
-                pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Int8) );
-                *(sal_Int8 *)pDestAny->pData = 0;
+                pDestAny->pData = &pDestAny->pReserved;
+                *(sal_Int8 *)&pDestAny->pReserved = 0;
                 break;
             case typelib_TypeClass_SHORT:
             case typelib_TypeClass_UNSIGNED_SHORT:
-                pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Int16) );
-                *(sal_Int16 *)pDestAny->pData = 0;
+                pDestAny->pData = &pDestAny->pReserved;
+                *(sal_Int16 *)&pDestAny->pReserved = 0;
                 break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
-                pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Int32) );
-                *(sal_Int32 *)pDestAny->pData = 0;
+                pDestAny->pData = &pDestAny->pReserved;
+                *(sal_Int32 *)&pDestAny->pReserved = 0;
                 break;
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
-                pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Int64) );
-                *(sal_Int64 *)pDestAny->pData = 0;
+                if (sizeof(void *) >= sizeof(sal_Int64))
+                {
+                    pDestAny->pData = &pDestAny->pReserved;
+                    *(sal_Int64 *)&pDestAny->pReserved = 0;
+                }
+                else
+                {
+                    pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Int64) );
+                    *(sal_Int64 *)pDestAny->pData = 0;
+                }
                 break;
             case typelib_TypeClass_FLOAT:
-                pDestAny->pData = ::rtl_allocateMemory( sizeof(float) );
-                *(float *)pDestAny->pData = 0.0;
+                if (sizeof(void *) >= sizeof(float))
+                {
+                    pDestAny->pData = &pDestAny->pReserved;
+                    *(float *)&pDestAny->pReserved = 0.0;
+                }
+                else
+                {
+                    pDestAny->pData = ::rtl_allocateMemory( sizeof(float) );
+                    *(float *)pDestAny->pData = 0.0;
+                }
                 break;
             case typelib_TypeClass_DOUBLE:
-                pDestAny->pData = ::rtl_allocateMemory( sizeof(double) );
-                *(double *)pDestAny->pData = 0.0;
+                if (sizeof(void *) >= sizeof(double))
+                {
+                    pDestAny->pData = &pDestAny->pReserved;
+                    *(double *)&pDestAny->pReserved = 0.0;
+                }
+                else
+                {
+                    pDestAny->pData = ::rtl_allocateMemory( sizeof(double) );
+                    *(double *)pDestAny->pData = 0.0;
+                }
                 break;
             case typelib_TypeClass_STRING:
-                pDestAny->pData = ::rtl_allocateMemory( sizeof(rtl_uString *) );
-                *(rtl_uString **)pDestAny->pData = 0;
-                rtl_uString_new( (rtl_uString **)pDestAny->pData );
+                pDestAny->pData = &pDestAny->pReserved;
+                *(rtl_uString **)&pDestAny->pReserved = 0;
+                ::rtl_uString_new( (rtl_uString **)&pDestAny->pReserved );
                 break;
             case typelib_TypeClass_TYPE:
-                pDestAny->pData = ::rtl_allocateMemory( sizeof(typelib_TypeDescriptionReference *) );
-                *(typelib_TypeDescriptionReference **)pDestAny->pData = __getVoidType();
+                pDestAny->pData = &pDestAny->pReserved;
+                *(typelib_TypeDescriptionReference **)&pDestAny->pReserved = __getVoidType();
                 break;
             case typelib_TypeClass_ENUM:
-                pDestAny->pData = ::rtl_allocateMemory( sizeof(int) );
+                pDestAny->pData = &pDestAny->pReserved;
                 if (pTypeDescr)
                 {
-                    *(int *)pDestAny->pData = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
+                    *(sal_Int32 *)&pDestAny->pReserved = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
                 }
                 else
                 {
                     TYPELIB_DANGER_GET( &pTypeDescr, pType );
-                    *(int *)pDestAny->pData = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
+                    *(sal_Int32 *)&pDestAny->pReserved = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
                     TYPELIB_DANGER_RELEASE( pTypeDescr );
                 }
                 break;
@@ -489,12 +542,12 @@ inline void __copyConstructAny(
                 }
                 break;
             case typelib_TypeClass_SEQUENCE:
-                pDestAny->pData = ::rtl_allocateMemory( sizeof(uno_Sequence *) );
-                *(uno_Sequence **)pDestAny->pData = __getEmptySequence();
+                pDestAny->pData = &pDestAny->pReserved;
+                *(uno_Sequence **)&pDestAny->pReserved = __getEmptySequence();
                 break;
             case typelib_TypeClass_INTERFACE:
-                pDestAny->pData = ::rtl_allocateMemory( sizeof(void *) );
-                *(void **)pDestAny->pData = 0; // either cpp or c-uno interface
+                pDestAny->pData = &pDestAny->pReserved;
+                pDestAny->pReserved = 0; // either cpp or c-uno interface
                 break;
             }
         }
@@ -508,8 +561,7 @@ inline void __copyConstructSequence(
     SAL_THROW ( () )
 {
     typelib_TypeClass eTypeClass = pElementType->eTypeClass;
-    if (!mapping ||
-        (eTypeClass <= typelib_TypeClass_ENUM && eTypeClass != typelib_TypeClass_ANY))
+    if (!mapping || (eTypeClass <= typelib_TypeClass_ENUM && eTypeClass != typelib_TypeClass_ANY))
     {
         ::osl_incrementInterlockedCount( &pSource->nRefCount );
         *ppDest = pSource;
@@ -601,9 +653,11 @@ inline void __copyConstructSequence(
                     char * pDest = pElements + (nPos * nElementSize);
                     char * pSource = pSourceElements + (nPos * nElementSize);
 
-                    typelib_TypeDescriptionReference * pSetType = __unionGetSetType( pSource, pElementTypeDescr );
-                    ::uno_type_copyAndConvertData( pDest + nValueOffset, pSource + nValueOffset,
-                                                   pSetType, mapping );
+                    typelib_TypeDescriptionReference * pSetType = __unionGetSetType(
+                        pSource, pElementTypeDescr );
+                    ::uno_type_copyAndConvertData(
+                        pDest + nValueOffset, pSource + nValueOffset,
+                        pSetType, mapping );
                     *(sal_Int64 *)pDest = *(sal_Int64 *)pSource;
                     ::typelib_typedescriptionreference_release( pSetType );
                 }
@@ -723,7 +777,7 @@ inline void __copyConstructData(
         *(rtl_uString **)pDest = *(rtl_uString **)pSource;
         break;
     case typelib_TypeClass_TYPE:
-        TYPE_ACQUIRE( *(typelib_TypeDescriptionReference **)pSource );
+        __TYPE_ACQUIRE( *(typelib_TypeDescriptionReference **)pSource );
         *(typelib_TypeDescriptionReference **)pDest = *(typelib_TypeDescriptionReference **)pSource;
         break;
     case typelib_TypeClass_ANY:
@@ -733,7 +787,7 @@ inline void __copyConstructData(
             acquire, mapping );
         break;
     case typelib_TypeClass_ENUM:
-        *(int *)pDest = *(int *)pSource;
+        *(sal_Int32 *)pDest = *(sal_Int32 *)pSource;
         break;
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prim.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-25 08:32:01 $
+ *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,21 +138,30 @@ inline void __acquire( void * p, uno_AcquireFunc acquire )
     if (p)
     {
         if (acquire)
+        {
             (*acquire)( p );
+        }
         else
+        {
             (*((uno_Interface *)p)->acquire)( (uno_Interface *)p );
+        }
     }
 }
 //--------------------------------------------------------------------------------------------------
 inline void __releaseRef( void ** pRef, uno_ReleaseFunc release )
     SAL_THROW( () )
 {
-    if (*pRef)
+    void * p = *pRef;
+    if (p)
     {
         if (release)
-            (*release)( *pRef );
+        {
+            (*release)( p );
+        }
         else
-            (*((uno_Interface *)*pRef)->release)( (uno_Interface *)*pRef );
+        {
+            (*((uno_Interface *)p)->release)( (uno_Interface *)p );
+        }
     }
 }
 
@@ -200,7 +209,7 @@ inline typelib_TypeDescriptionReference * __getVoidType()
 #endif
 
 //--------------------------------------------------------------------------------------------------
-#define TYPE_ACQUIRE( pType ) \
+#define __TYPE_ACQUIRE( pType ) \
     ::osl_incrementInterlockedCount( &(pType)->nRefCount );
 
 //--------------------------------------------------------------------------------------------------

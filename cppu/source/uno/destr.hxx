@@ -2,9 +2,9 @@
  *
  *  $RCSfile: destr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-30 13:41:39 $
+ *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,8 @@ inline void __destructStruct(
     while (nDescr--)
     {
         ::uno_type_destructData(
-            (char *)pValue + pMemberOffsets[nDescr], ppTypeRefs[nDescr], release );
+            (char *)pValue + pMemberOffsets[nDescr],
+            ppTypeRefs[nDescr], release );
     }
 }
 //--------------------------------------------------------------------------------------------------
@@ -127,7 +128,8 @@ inline void __destructArray(
     sal_Int32 nTotalElements = pTypeDescr->nTotalElements;
     for(sal_Int32 i=0; i < nTotalElements; i++)
     {
-        ::uno_type_destructData((sal_Char *)pValue + i * nElementSize,
+        ::uno_type_destructData(
+            (sal_Char *)pValue + i * nElementSize,
             ((typelib_IndirectTypeDescription *)pTypeDescr)->pType, release );
     }
 
@@ -147,62 +149,81 @@ inline void __destructAny(
 {
     typelib_TypeDescriptionReference * pType = pAny->pType;
 
-    if (typelib_TypeClass_VOID != pType->eTypeClass)
+    switch (pType->eTypeClass)
     {
-        switch (pType->eTypeClass)
+    case typelib_TypeClass_HYPER:
+    case typelib_TypeClass_UNSIGNED_HYPER:
+        if (sizeof(void *) < sizeof(sal_Int64))
         {
-        case typelib_TypeClass_STRING:
-            ::rtl_uString_release( *(rtl_uString **)pAny->pData );
-            break;
-        case typelib_TypeClass_TYPE:
-            ::typelib_typedescriptionreference_release( *(typelib_TypeDescriptionReference **)pAny->pData );
-            break;
-        case typelib_TypeClass_ANY:
-            OSL_ENSURE( sal_False, "### unexpected nested any!" );
-            ::uno_any_destruct( (uno_Any *)pAny->pData, release );
-            break;
-#ifdef CPPU_ASSERTIONS
-        case typelib_TypeClass_TYPEDEF:
-            OSL_ENSURE( sal_False, "### unexpected typedef!" );
-            break;
-#endif
-        case typelib_TypeClass_STRUCT:
-        case typelib_TypeClass_EXCEPTION:
+            ::rtl_freeMemory( pAny->pData );
+        }
+        break;
+    case typelib_TypeClass_FLOAT:
+        if (sizeof(void *) < sizeof(float))
         {
-            typelib_TypeDescription * pTypeDescr = 0;
-            TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            __destructStruct( pAny->pData, (typelib_CompoundTypeDescription *)pTypeDescr, release );
-            TYPELIB_DANGER_RELEASE( pTypeDescr );
-            break;
+            ::rtl_freeMemory( pAny->pData );
         }
-        case typelib_TypeClass_UNION:
+        break;
+    case typelib_TypeClass_DOUBLE:
+        if (sizeof(void *) < sizeof(double))
         {
-            typelib_TypeDescription * pTypeDescr = 0;
-            TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            __destructUnion( pAny->pData, pTypeDescr, release );
-            TYPELIB_DANGER_RELEASE( pTypeDescr );
-            break;
+            ::rtl_freeMemory( pAny->pData );
         }
-        case typelib_TypeClass_SEQUENCE:
-        {
-            typelib_TypeDescription * pTypeDescr = 0;
-            TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            destructSequence(
-                (uno_Sequence **)pAny->pData,
-                ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
-                release );
-            TYPELIB_DANGER_RELEASE( pTypeDescr );
-            break;
-        }
-        case typelib_TypeClass_INTERFACE:
-            __releaseRef( (void **)pAny->pData, release );
-            break;
-        }
+        break;
+    case typelib_TypeClass_STRING:
+        ::rtl_uString_release( (rtl_uString *)pAny->pReserved );
+        break;
+    case typelib_TypeClass_TYPE:
+        ::typelib_typedescriptionreference_release(
+            (typelib_TypeDescriptionReference *)pAny->pReserved );
+        break;
+    case typelib_TypeClass_ANY:
+        OSL_ENSURE( sal_False, "### unexpected nested any!" );
+        ::uno_any_destruct( (uno_Any *)pAny->pData, release );
         ::rtl_freeMemory( pAny->pData );
-#ifdef _DEBUG
-        pAny->pData = (void *)0xdeadbeef;
+        break;
+#ifdef CPPU_ASSERTIONS
+    case typelib_TypeClass_TYPEDEF:
+        OSL_ENSURE( sal_False, "### unexpected typedef!" );
+        break;
 #endif
+    case typelib_TypeClass_STRUCT:
+    case typelib_TypeClass_EXCEPTION:
+    {
+        typelib_TypeDescription * pTypeDescr = 0;
+        TYPELIB_DANGER_GET( &pTypeDescr, pType );
+        __destructStruct( pAny->pData, (typelib_CompoundTypeDescription *)pTypeDescr, release );
+        TYPELIB_DANGER_RELEASE( pTypeDescr );
+        ::rtl_freeMemory( pAny->pData );
+        break;
     }
+    case typelib_TypeClass_UNION:
+    {
+        typelib_TypeDescription * pTypeDescr = 0;
+        TYPELIB_DANGER_GET( &pTypeDescr, pType );
+        __destructUnion( pAny->pData, pTypeDescr, release );
+        TYPELIB_DANGER_RELEASE( pTypeDescr );
+        ::rtl_freeMemory( pAny->pData );
+        break;
+    }
+    case typelib_TypeClass_SEQUENCE:
+    {
+        typelib_TypeDescription * pTypeDescr = 0;
+        TYPELIB_DANGER_GET( &pTypeDescr, pType );
+        destructSequence(
+            (uno_Sequence **)&pAny->pReserved,
+            ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
+            release );
+        TYPELIB_DANGER_RELEASE( pTypeDescr );
+        break;
+    }
+    case typelib_TypeClass_INTERFACE:
+        __releaseRef( &pAny->pReserved, release );
+        break;
+    }
+#ifdef _DEBUG
+    pAny->pData = (void *)0xdeadbeef;
+#endif
 
     ::typelib_typedescriptionreference_release( pType );
 }
@@ -263,7 +284,7 @@ inline sal_Int32 __destructElements(
         return sizeof(uno_Any);
     }
     case typelib_TypeClass_ENUM:
-        return sizeof(int);
+        return sizeof(sal_Int32);
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
         OSL_ENSURE( sal_False, "### unexpected typedef!" );
@@ -330,7 +351,9 @@ inline sal_Int32 __destructElements(
             {
                 void * p = ((void **)pElements)[nPos];
                 if (p)
+                {
                     (*release)( p );
+                }
             }
         }
         else
@@ -339,7 +362,9 @@ inline sal_Int32 __destructElements(
             {
                 uno_Interface * p = ((uno_Interface **)pElements)[nPos];
                 if (p)
+                {
                     (*p->release)( p );
+                }
             }
         }
         return sizeof(void *);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 20:12:55 $
+ *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,14 +217,14 @@ static inline void __defaultConstructElements(
     }
     case typelib_TypeClass_ENUM:
     {
-        allocSeq( ppSequence, sizeof(int), nAlloc );
+        allocSeq( ppSequence, sizeof(sal_Int32), nAlloc );
 
         typelib_TypeDescription * pElementTypeDescr = 0;
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
-        int eEnum = ((typelib_EnumTypeDescription *)pElementTypeDescr)->nDefaultEnumValue;
+        sal_Int32 eEnum = ((typelib_EnumTypeDescription *)pElementTypeDescr)->nDefaultEnumValue;
         TYPELIB_DANGER_RELEASE( pElementTypeDescr );
 
-        int * pElements = (int *)(*ppSequence)->elements;
+        sal_Int32 * pElements = (sal_Int32 *)(*ppSequence)->elements;
         for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
         {
             pElements[nPos] = eEnum;
@@ -390,11 +390,11 @@ static inline void __copyConstructElements(
             sizeof(double) * (nStopIndex - nStartIndex) );
         break;
     case typelib_TypeClass_ENUM:
-        allocSeq( ppSequence, sizeof(int), nAlloc );
+        allocSeq( ppSequence, sizeof(sal_Int32), nAlloc );
         ::rtl_copyMemory(
-            (*ppSequence)->elements + (sizeof(int) * nStartIndex),
-            (char *)pSourceElements + (sizeof(int) * nStartIndex),
-            sizeof(int) * (nStopIndex - nStartIndex) );
+            (*ppSequence)->elements + (sizeof(sal_Int32) * nStartIndex),
+            (char *)pSourceElements + (sizeof(sal_Int32) * nStartIndex),
+            sizeof(sal_Int32) * (nStopIndex - nStartIndex) );
         break;
     case typelib_TypeClass_STRING:
     {
@@ -416,7 +416,7 @@ static inline void __copyConstructElements(
             (typelib_TypeDescriptionReference **)(*ppSequence)->elements;
         for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
         {
-            TYPE_ACQUIRE( ((typelib_TypeDescriptionReference **)pSourceElements)[nPos] );
+            __TYPE_ACQUIRE( ((typelib_TypeDescriptionReference **)pSourceElements)[nPos] );
             pDestElements[nPos] = ((typelib_TypeDescriptionReference **)pSourceElements)[nPos];
         }
         break;
@@ -498,9 +498,10 @@ static inline void __copyConstructElements(
             char * pSource = (char *)pSourceElements + (nElementSize * nPos);
 
             typelib_TypeDescriptionReference * pSetType = __unionGetSetType( pSource, pElementTypeDescr );
-            uno_type_copyData( pDest + nValueOffset,
-                               pSource + nValueOffset,
-                               pSetType, acquire );
+            ::uno_type_copyData(
+                pDest + nValueOffset,
+                pSource + nValueOffset,
+                pSetType, acquire );
             *(sal_Int64 *)pDest = *(sal_Int64 *)pSource;
             typelib_typedescriptionreference_release( pSetType );
         }

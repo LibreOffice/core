@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-02 15:38:05 $
+ *  last change: $Author: dbo $ $Date: 2001-06-29 11:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,8 +209,7 @@ void SAL_CALL remote_sendQueryInterface(
         // set out parameter
         if( typelib_TypeClass_INTERFACE == anyInterface.pType->eTypeClass )
         {
-            *ppRemoteI = *( remote_Interface ** )  anyInterface.pData;
-            rtl_freeMemory( anyInterface.pData );
+            *ppRemoteI = ( remote_Interface * )  anyInterface.pReserved;
         }
         typelib_typedescriptionreference_release( anyInterface.pType );
     }

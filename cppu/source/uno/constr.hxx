@@ -2,9 +2,9 @@
  *
  *  $RCSfile: constr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 20:12:55 $
+ *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ inline void __defaultConstructArray(
     case typelib_TypeClass_ENUM:
         for (i=0; i < nTotalElements; i++)
         {
-            *((int *)pMem + i) = ((typelib_EnumTypeDescription *)pElementType)->nDefaultEnumValue;
+            *((sal_Int32 *)pMem + i) = ((typelib_EnumTypeDescription *)pElementType)->nDefaultEnumValue;
         }
         break;
 #ifdef CPPU_ASSERTIONS
@@ -228,7 +228,7 @@ inline void __defaultConstructData(
         break;
     case typelib_TypeClass_STRING:
         *(rtl_uString **)pMem = 0;
-        rtl_uString_new( (rtl_uString **)pMem );
+        ::rtl_uString_new( (rtl_uString **)pMem );
         break;
     case typelib_TypeClass_TYPE:
         *(typelib_TypeDescriptionReference **)pMem = __getVoidType();
@@ -239,12 +239,12 @@ inline void __defaultConstructData(
     case typelib_TypeClass_ENUM:
         if (pTypeDescr)
         {
-            *(int *)pMem = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
+            *(sal_Int32 *)pMem = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
         }
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            *(int *)pMem = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
+            *(sal_Int32 *)pMem = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;
