@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombowizard.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-21 16:28:28 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 13:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,6 +502,7 @@ namespace dbp
     //---------------------------------------------------------------------
     OLinkFieldsPage::OLinkFieldsPage( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_FIELDLINK))
+        ,m_aDescription         (this, ResId(FT_FIELDLINK_DESC))
         ,m_aFrame               (this, ResId(FL_FRAME))
         ,m_aValueListFieldLabel (this, ResId(FT_VALUELISTFIELD))
         ,m_aValueListField      (this, ResId(CMB_VALUELISTFIELD))
@@ -611,6 +612,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/03/21 16:28:28  fs
+ *  #85234# by default, create a drop down control
+ *
  *  Revision 1.4  2001/03/20 15:45:51  fs
  *  #85200# added missing help ids
  *

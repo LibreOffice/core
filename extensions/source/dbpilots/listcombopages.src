@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:33:32 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 13:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,14 +331,22 @@ TabPage RID_PAGE_LCW_FIELDLINK
     Text [ korean ] = "ÇÊµå ¿¬°á";
     Text [ turkish ] = "Alan baðlantýsý";
 
+    FixedText FT_FIELDLINK_DESC
+    {
+        Pos = MAP_APPFONT ( 7 , 6  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14 , 16 ) ;
+        Text = "Wählen Sie hier die Felder aus, deren Inhalt übereinstimmen muß, damit der Wert aus dem Anzeigefeld angezeigt wird.";
+        Text [ english ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
+        Text [ english_us ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
+    };
     FixedLine FL_FRAME
     {
-        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Pos = MAP_APPFONT ( 4 , 25  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
     };
     FixedText FT_VALUELISTFIELD
     {
-        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Pos = MAP_APPFONT ( 7 , 37  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 8 ) ;
         Group = TRUE;
         Text = "Feld aus der ~Wertetabelle";
@@ -366,8 +374,8 @@ TabPage RID_PAGE_LCW_FIELDLINK
     };
     ComboBox CMB_VALUELISTFIELD
     {
-        Pos = MAP_APPFONT ( 7 , 26  ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, WINDOW_SIZE_Y - 32 ) ;
+        Pos = MAP_APPFONT ( 7 , 48  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, WINDOW_SIZE_Y - 54 ) ;
         SVLook = TRUE ;
         Border = TRUE ;
         DropDown = FALSE;
@@ -376,7 +384,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
     };
     FixedText FT_TABLEFIELD
     {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 15 ) ;
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 37 ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 8 ) ;
         Group = TRUE;
         Text = "Feld aus der ~Listentabelle";
@@ -404,8 +412,8 @@ TabPage RID_PAGE_LCW_FIELDLINK
     };
     ComboBox CMB_TABLEFIELD
     {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 26 ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, WINDOW_SIZE_Y - 32 ) ;
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 48 ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, WINDOW_SIZE_Y - 54 ) ;
         SVLook = TRUE ;
         Border = TRUE ;
         DropDown = FALSE;
@@ -443,6 +451,9 @@ String RID_STR_COMBOWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/03/21 20:33:32  kz
+ *  Merge SRC626: 21.03.01 - 21:33:27 (NoBranch)
+ *
  *  Revision 1.5  2001/03/19 11:49:09  kz
  *  Merge SRC625: 19.03.01 - 12:49:04 (NoBranch)
  *

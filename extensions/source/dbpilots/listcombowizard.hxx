@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombowizard.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 13:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,7 @@ namespace dbp
     class OLinkFieldsPage : public OLCPage
     {
     protected:
+        FixedText       m_aDescription;
         FixedLine       m_aFrame;
         FixedText       m_aValueListFieldLabel;
         ComboBox        m_aValueListField;
@@ -266,6 +267,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/03/05 14:53:13  fs
+ *  finished the grid control wizard
+ *
  *  Revision 1.2  2001/02/28 09:18:30  fs
  *  finalized the list/combo wizard
  *
