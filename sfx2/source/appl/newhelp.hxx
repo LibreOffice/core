@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-20 12:53:57 $
+ *  last change: $Author: pb $ $Date: 2000-11-21 14:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,9 +131,9 @@ public:
     virtual void    Resize();
 };
 
-// class HelpIndexWindow -------------------------------------------------
+// class SfxHelpIndexWindow ----------------------------------------------
 
-class HelpIndexWindow : public Window
+class SfxHelpIndexWindow : public Window
 {
 private:
     FixedText           aActiveFT;
@@ -149,17 +149,17 @@ private:
     long                nMinWidth;
 
 public:
-    HelpIndexWindow( Window* pParent );
-    ~HelpIndexWindow();
+    SfxHelpIndexWindow( Window* pParent );
+    ~SfxHelpIndexWindow();
 
     virtual void        Resize();
 
     DECL_LINK(          ActivatePageHdl, TabControl* );
 };
 
-// class HelpTextWindow --------------------------------------------------
+// class SfxHelpTextWindow -----------------------------------------------
 
-class HelpTextWindow : public Window
+class SfxHelpTextWindow : public Window
 {
 private:
     ToolBox                 aToolBox;
@@ -168,8 +168,8 @@ private:
                             xFrame;
 
 public:
-    HelpTextWindow( Window* pParent );
-    ~HelpTextWindow();
+    SfxHelpTextWindow( Window* pParent );
+    ~SfxHelpTextWindow();
 
     virtual void            Paint( const Rectangle& rRect );
     virtual void            Resize();
@@ -188,8 +188,8 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow >
                         xWindow;
 
-    HelpIndexWindow*    pIndexWin;
-    HelpTextWindow*     pTextWin;
+    SfxHelpIndexWindow* pIndexWin;
+    SfxHelpTextWindow*  pTextWin;
 
     sal_Int32           nExpandWidth;
     sal_Int32           nCollapseWidth;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-20 12:53:57 $
+ *  last change: $Author: pb $ $Date: 2000-11-21 14:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,9 +267,9 @@ void SearchTabPage::Resize()
     }
 }
 
-// class HelpIndexWindow -------------------------------------------------
+// class SfxHelpIndexWindow ----------------------------------------------
 
-HelpIndexWindow::HelpIndexWindow( Window* pParent ) :
+SfxHelpIndexWindow::SfxHelpIndexWindow( Window* pParent ) :
 
     Window( pParent, SfxResId( WIN_HELP_INDEX ) ),
 
@@ -285,7 +285,7 @@ HelpIndexWindow::HelpIndexWindow( Window* pParent ) :
 {
     FreeResource();
 
-    aTabCtrl.SetActivatePageHdl( LINK( this, HelpIndexWindow, ActivatePageHdl ) );
+    aTabCtrl.SetActivatePageHdl( LINK( this, SfxHelpIndexWindow, ActivatePageHdl ) );
     aTabCtrl.Show();
     aTabCtrl.SetCurPageId( 1 );
     ActivatePageHdl( &aTabCtrl );
@@ -294,7 +294,7 @@ HelpIndexWindow::HelpIndexWindow( Window* pParent ) :
 
 // -----------------------------------------------------------------------
 
-HelpIndexWindow::~HelpIndexWindow()
+SfxHelpIndexWindow::~SfxHelpIndexWindow()
 {
     delete pCPage;
     delete pIPage;
@@ -303,7 +303,7 @@ HelpIndexWindow::~HelpIndexWindow()
 
 // -----------------------------------------------------------------------
 
-void HelpIndexWindow::Resize()
+void SfxHelpIndexWindow::Resize()
 {
     Size aSize = GetOutputSizePixel();
     Size aNewSize;
@@ -337,7 +337,7 @@ void HelpIndexWindow::Resize()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( HelpIndexWindow, ActivatePageHdl, TabControl *, pTabCtrl )
+IMPL_LINK( SfxHelpIndexWindow, ActivatePageHdl, TabControl *, pTabCtrl )
 {
     const USHORT nId = pTabCtrl->GetCurPageId();
     TabPage* pPage = NULL;
@@ -374,9 +374,9 @@ IMPL_LINK( HelpIndexWindow, ActivatePageHdl, TabControl *, pTabCtrl )
     return 0;
 }
 
-// class HelpTextWindow --------------------------------------------------
+// class SfxHelpTextWindow -----------------------------------------------
 
-HelpTextWindow::HelpTextWindow( Window* pParent ) :
+SfxHelpTextWindow::SfxHelpTextWindow( Window* pParent ) :
 
     Window( pParent, WB_CLIPCHILDREN ),
 
@@ -410,21 +410,21 @@ HelpTextWindow::HelpTextWindow( Window* pParent ) :
 
 // -----------------------------------------------------------------------
 
-HelpTextWindow::~HelpTextWindow()
+SfxHelpTextWindow::~SfxHelpTextWindow()
 {
 //! xFrame->dispose();
 }
 
 // -----------------------------------------------------------------------
 
-void HelpTextWindow::Paint( const Rectangle& rRect )
+void SfxHelpTextWindow::Paint( const Rectangle& rRect )
 {
     aTextWin.DrawText( Point( 3, 3 ), DEFINE_CONST_UNICODE("Hilfe!") );
 }
 
 // -----------------------------------------------------------------------
 
-void HelpTextWindow::Resize()
+void SfxHelpTextWindow::Resize()
 {
     Size aWinSize = GetOutputSizePixel();
     Size aSize = aToolBox.GetSizePixel();
@@ -645,9 +645,9 @@ SfxHelpWindow::SfxHelpWindow( Window* pParent, WinBits nBits ) :
     bIndex          ( sal_True )
 
 {
-    pIndexWin = new HelpIndexWindow( this );
+    pIndexWin = new SfxHelpIndexWindow( this );
     pIndexWin->Show();
-    pTextWin = new HelpTextWindow( this );
+    pTextWin = new SfxHelpTextWindow( this );
     pTextWin->SetSelectHdl( LINK( this, SfxHelpWindow, SelectHdl ) );
     pTextWin->Show();
 
