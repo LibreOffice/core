@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwizard.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 16:48:06 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 11:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,7 +500,16 @@ namespace dbp
         rMoveTo.SetEntryData(nInsertPos, reinterpret_cast<void*>(nRelativeIndex));
 
         // remove the entry from it's old list
-        bMoveRight ? m_aExistFields.RemoveEntry(nSelected) : m_aSelFields.RemoveEntry(nSelected);
+        if (bMoveRight)
+        {
+            m_aExistFields.RemoveEntry(nSelected);
+            m_aExistFields.GrabFocus();
+        }
+        else
+        {
+            m_aSelFields.RemoveEntry(nSelected);
+            m_aSelFields.GrabFocus();
+        }
 
         implCheckButtons();
         return 0;
@@ -525,6 +534,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/05/30 16:48:06  fs
+ *  #86714# show the data source of the form on the first not data source related page
+ *
  *  Revision 1.2  2001/03/20 15:45:51  fs
  *  #85200# added missing help ids
  *
