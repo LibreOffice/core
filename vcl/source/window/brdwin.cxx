@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-10-04 14:28:48 $
+ *  last change: $Author: mt $ $Date: 2001-02-16 11:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,50 +115,6 @@ using namespace ::com::sun::star::uno;
 
 // =======================================================================
 
-// -----------------------
-// - ImplBorderFrameData -
-// -----------------------
-
-struct ImplBorderFrameData
-{
-    ImplBorderWindow*       mpBorderWindow;
-    OutputDevice*           mpOutDev;
-    Rectangle               maTitleRect;
-    Rectangle               maPinRect;
-    Rectangle               maCloseRect;
-    Rectangle               maRollRect;
-    Rectangle               maDockRect;
-    Rectangle               maHideRect;
-    Rectangle               maHelpRect;
-    Point                   maMouseOff;
-    long                    mnWidth;
-    long                    mnHeight;
-    long                    mnTrackX;
-    long                    mnTrackY;
-    long                    mnTrackWidth;
-    long                    mnTrackHeight;
-    long                    mnLeftBorder;
-    long                    mnTopBorder;
-    long                    mnRightBorder;
-    long                    mnBottomBorder;
-    long                    mnNoTitleTop;
-    long                    mnBorderSize;
-    long                    mnTitleHeight;
-    long                    mnTitleOff;
-    USHORT                  mnHitTest;
-    USHORT                  mnPinState;
-    USHORT                  mnCloseState;
-    USHORT                  mnRollState;
-    USHORT                  mnDockState;
-    USHORT                  mnHideState;
-    USHORT                  mnHelpState;
-    USHORT                  mnTitleType;
-    BOOL                    mbFloatWindow;
-    BOOL                    mbDragFull;
-};
-
-// =======================================================================
-
 static void ImplGetPinImage( USHORT nStyle, BOOL bPinIn, Image& rImage )
 {
     // ImageListe laden, wenn noch nicht vorhanden
@@ -232,38 +188,12 @@ static void ImplDrawBrdWinSymbolButton( OutputDevice* pDev,
     ImplDrawBrdWinSymbol( pDev, aTempRect, eSymbol );
 }
 
+
 // =======================================================================
 
 // ------------------------
 // - ImplBorderWindowView -
 // ------------------------
-
-class ImplBorderWindowView
-{
-public:
-    virtual                 ~ImplBorderWindowView();
-
-    virtual BOOL            MouseMove( const MouseEvent& rMEvt );
-    virtual BOOL            MouseButtonDown( const MouseEvent& rMEvt );
-    virtual BOOL            Tracking( const TrackingEvent& rTEvt );
-    virtual USHORT          RequestHelp( const Point& rPos, Rectangle& rHelpRect );
-
-    virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight ) = 0;
-    virtual void            GetBorder( long& rLeftBorder, long& rTopBorder,
-                                       long& rRightBorder, long& rBottomBorder ) const = 0;
-    virtual long            CalcTitleWidth() const = 0;
-    virtual void            DrawWindow( USHORT nDrawFlags ) = 0;
-
-    void                    ImplInitTitle( ImplBorderFrameData* pData );
-    USHORT                  ImplHitTest( ImplBorderFrameData* pData, const Point& rPos );
-    BOOL                    ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
-    BOOL                    ImplMouseButtonDown( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
-    BOOL                    ImplTracking( ImplBorderFrameData* pData, const TrackingEvent& rTEvt );
-    USHORT                  ImplRequestHelp( ImplBorderFrameData* pData, const Point& rPos, Rectangle& rHelpRect );
-    long                    ImplCalcTitleWidth( const ImplBorderFrameData* pData ) const;
-};
-
-// -----------------------------------------------------------------------
 
 ImplBorderWindowView::~ImplBorderWindowView()
 {
@@ -1026,20 +956,6 @@ long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData* pData 
 // - ImplNoBorderWindowView -
 // --------------------------
 
-class ImplNoBorderWindowView : public ImplBorderWindowView
-{
-public:
-                            ImplNoBorderWindowView( ImplBorderWindow* pBorderWindow );
-
-    virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight );
-    virtual void            GetBorder( long& rLeftBorder, long& rTopBorder,
-                                       long& rRightBorder, long& rBottomBorder ) const;
-    virtual long            CalcTitleWidth() const;
-    virtual void            DrawWindow( USHORT nDrawFlags );
-};
-
-// =======================================================================
-
 ImplNoBorderWindowView::ImplNoBorderWindowView( ImplBorderWindow* pBorderWindow )
 {
 }
@@ -1070,7 +986,7 @@ long ImplNoBorderWindowView::CalcTitleWidth() const
 
 // -----------------------------------------------------------------------
 
-void ImplNoBorderWindowView::DrawWindow( USHORT nDrawFlags )
+void ImplNoBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, const Point* )
 {
 }
 
@@ -1079,27 +995,6 @@ void ImplNoBorderWindowView::DrawWindow( USHORT nDrawFlags )
 // -----------------------------
 // - ImplSmallBorderWindowView -
 // -----------------------------
-
-class ImplSmallBorderWindowView : public ImplBorderWindowView
-{
-    ImplBorderWindow*       mpBorderWindow;
-    OutputDevice*           mpOutDev;
-    long                    mnWidth;
-    long                    mnHeight;
-    long                    mnLeftBorder;
-    long                    mnTopBorder;
-    long                    mnRightBorder;
-    long                    mnBottomBorder;
-
-public:
-                            ImplSmallBorderWindowView( ImplBorderWindow* pBorderWindow );
-
-    virtual void            Init( OutputDevice* pOutDev, long nWidth, long nHeight );
-    virtual void            GetBorder( long& rLeftBorder, long& rTopBorder,
-                                       long& rRightBorder, long& rBottomBorder ) const;
-    virtual long            CalcTitleWidth() const;
-    virtual void            DrawWindow( USHORT nDrawFlags );
-};
 
 // =======================================================================
 
@@ -1166,7 +1061,7 @@ long ImplSmallBorderWindowView::CalcTitleWidth() const
 
 // -----------------------------------------------------------------------
 
-void ImplSmallBorderWindowView::DrawWindow( USHORT nDrawFlags )
+void ImplSmallBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, const Point* )
 {
     USHORT nBorderStyle = mpBorderWindow->GetBorderStyle();
     if ( nBorderStyle & WINDOW_BORDER_NOBORDER )
@@ -1209,30 +1104,6 @@ void ImplSmallBorderWindowView::DrawWindow( USHORT nDrawFlags )
 // ---------------------------
 // - ImplStdBorderWindowView -
 // ---------------------------
-
-class ImplStdBorderWindowView : public ImplBorderWindowView
-{
-    ImplBorderFrameData     maFrameData;
-    VirtualDevice*          mpATitleVirDev;
-    VirtualDevice*          mpDTitleVirDev;
-
-public:
-                            ImplStdBorderWindowView( ImplBorderWindow* pBorderWindow );
-                            ~ImplStdBorderWindowView();
-
-    virtual BOOL            MouseMove( const MouseEvent& rMEvt );
-    virtual BOOL            MouseButtonDown( const MouseEvent& rMEvt );
-    virtual BOOL            Tracking( const TrackingEvent& rTEvt );
-    virtual USHORT          RequestHelp( const Point& rPos, Rectangle& rHelpRect );
-
-    virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight );
-    virtual void            GetBorder( long& rLeftBorder, long& rTopBorder,
-                                       long& rRightBorder, long& rBottomBorder ) const;
-    virtual long            CalcTitleWidth() const;
-    virtual void            DrawWindow( USHORT nDrawFlags );
-};
-
-// =======================================================================
 
 ImplStdBorderWindowView::ImplStdBorderWindowView( ImplBorderWindow* pBorderWindow )
 {
@@ -1446,14 +1317,14 @@ long ImplStdBorderWindowView::CalcTitleWidth() const
 
 // -----------------------------------------------------------------------
 
-void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags )
+void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutDev, const Point* pOffset )
 {
     ImplBorderFrameData*    pData = &maFrameData;
-    OutputDevice*           pDev = pData->mpOutDev;
+    OutputDevice*           pDev = pOutDev ? pOutDev : pData->mpOutDev;
     ImplBorderWindow*       pBorderWindow = pData->mpBorderWindow;
-    Point                   aTmpPoint;
+    Point                   aTmpPoint = pOffset ? Point(*pOffset) : Point();
     Rectangle               aInRect( aTmpPoint, Size( pData->mnWidth, pData->mnHeight ) );
-    const StyleSettings&    rStyleSettings = pDev->GetSettings().GetStyleSettings();
+    const StyleSettings&    rStyleSettings = pData->mpOutDev->GetSettings().GetStyleSettings();
     DecorationView          aDecoView( pDev );
     USHORT                  nStyle;
     BOOL                    bActive = pBorderWindow->IsDisplayActive();
@@ -1536,7 +1407,10 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags )
 
             if ( !bDrawRect )
             {
-                pDev->DrawOutDev( aInRect.TopLeft(), aRectSize,
+                Point aDest( aInRect.TopLeft() );
+                if ( pOffset )
+                    aDest.Move( pOffset->X(), pOffset->Y() );
+                pDev->DrawOutDev( aDest, aRectSize,
                                   aTempPoint, aRectSize, *pVirDev );
             }
         }
@@ -1549,6 +1423,9 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags )
 
         if ( pData->mnTitleType != BORDERWINDOW_TITLE_TEAROFF )
         {
+            if ( pOffset )
+                aInRect.Move( pOffset->X(), pOffset->Y() );
+
             aInRect.Left()  += 2;
             aInRect.Right() -= 2;
 
@@ -1573,16 +1450,28 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags )
 
     if ( ((nDrawFlags & BORDERWINDOW_DRAW_CLOSE) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
          !pData->maCloseRect.IsEmpty() )
-        ImplDrawBrdWinSymbolButton( pDev, pData->maCloseRect, SYMBOL_CLOSE, pData->mnCloseState );
-
+    {
+        Rectangle aSymbolRect( pData->maCloseRect );
+        if ( pOffset )
+            aSymbolRect.Move( pOffset->X(), pOffset->Y() );
+        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SYMBOL_CLOSE, pData->mnCloseState );
+    }
     if ( ((nDrawFlags & BORDERWINDOW_DRAW_DOCK) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
          !pData->maDockRect.IsEmpty() )
-        ImplDrawBrdWinSymbolButton( pDev, pData->maDockRect, SYMBOL_DOCK, pData->mnDockState );
-
+    {
+        Rectangle aSymbolRect( pData->maDockRect );
+        if ( pOffset )
+            aSymbolRect.Move( pOffset->X(), pOffset->Y() );
+        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SYMBOL_DOCK, pData->mnDockState );
+    }
     if ( ((nDrawFlags & BORDERWINDOW_DRAW_HIDE) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
          !pData->maHideRect.IsEmpty() )
-        ImplDrawBrdWinSymbolButton( pDev, pData->maHideRect, SYMBOL_HIDE, pData->mnHideState );
-
+    {
+        Rectangle aSymbolRect( pData->maHideRect );
+        if ( pOffset )
+            aSymbolRect.Move( pOffset->X(), pOffset->Y() );
+        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SYMBOL_HIDE, pData->mnHideState );
+    }
     if ( ((nDrawFlags & BORDERWINDOW_DRAW_ROLL) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
          !pData->maRollRect.IsEmpty() )
     {
@@ -1591,13 +1480,20 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags )
             eType = SYMBOL_ROLLDOWN;
         else
             eType = SYMBOL_ROLLUP;
-        ImplDrawBrdWinSymbolButton( pDev, pData->maRollRect, eType, pData->mnRollState );
+        Rectangle aSymbolRect( pData->maRollRect );
+        if ( pOffset )
+            aSymbolRect.Move( pOffset->X(), pOffset->Y() );
+        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, eType, pData->mnRollState );
     }
 
     if ( ((nDrawFlags & BORDERWINDOW_DRAW_HELP) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
          !pData->maHelpRect.IsEmpty() )
-        ImplDrawBrdWinSymbolButton( pDev, pData->maHelpRect, SYMBOL_HELP, pData->mnHelpState );
-
+    {
+        Rectangle aSymbolRect( pData->maHelpRect );
+        if ( pOffset )
+            aSymbolRect.Move( pOffset->X(), pOffset->Y() );
+        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SYMBOL_HELP, pData->mnHelpState );
+    }
     if ( ((nDrawFlags & BORDERWINDOW_DRAW_PIN) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
          !pData->maPinRect.IsEmpty() )
     {
@@ -1605,17 +1501,17 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags )
         ImplGetPinImage( pData->mnPinState, pBorderWindow->mbPined, aImage );
         Size  aImageSize = aImage.GetSizePixel();
         long  nRectHeight = pData->maPinRect.GetHeight();
+        Point aPos( pData->maPinRect.TopLeft() );
+        if ( pOffset )
+            aPos.Move( pOffset->X(), pOffset->Y() );
         if ( nRectHeight < aImageSize.Height() )
         {
-            pDev->DrawImage( Point( pData->maPinRect.Left(), pData->maPinRect.Top() ),
-                             Size( aImageSize.Width(), nRectHeight ),
-                             aImage );
+            pDev->DrawImage( aPos, Size( aImageSize.Width(), nRectHeight ), aImage );
         }
         else
         {
-            pDev->DrawImage( Point( pData->maPinRect.Left(),
-                                    pData->maPinRect.Top()+(nRectHeight-aImageSize.Height())/2 ),
-                             aImage );
+            aPos.Y() += (nRectHeight-aImageSize.Height())/2;
+            pDev->DrawImage( aPos, aImage );
         }
     }
 }
@@ -1643,7 +1539,7 @@ public:
     virtual void            GetBorder( long& rLeftBorder, long& rTopBorder,
                                        long& rRightBorder, long& rBottomBorder ) const;
     virtual long            CalcTitleWidth() const;
-    virtual void            DrawWindow( USHORT nDrawFlags );
+    virtual void            DrawWindow( USHORT nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
 
     Rectangle               DrawOS2TitleButton( const Rectangle& rRect, USHORT nStyle );
 };
@@ -1860,7 +1756,7 @@ long ImplOS2BorderWindowView::CalcTitleWidth() const
 
 // -----------------------------------------------------------------------
 
-void ImplOS2BorderWindowView::DrawWindow( USHORT nDrawFlags )
+void ImplOS2BorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, const Point* )
 {
     ImplBorderFrameData*    pData = &maFrameData;
     OutputDevice*           pDev = pData->mpOutDev;
@@ -2076,7 +1972,7 @@ public:
     virtual void            GetBorder( long& rLeftBorder, long& rTopBorder,
                                        long& rRightBorder, long& rBottomBorder ) const;
     virtual long            CalcTitleWidth() const;
-    virtual void            DrawWindow( USHORT nDrawFlags );
+    virtual void            DrawWindow( USHORT nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
 
     Rectangle               DrawUnxTitleButton( const Rectangle& rRect, USHORT nStyle );
 };
@@ -2285,7 +2181,7 @@ long ImplUnxBorderWindowView::CalcTitleWidth() const
 
 // -----------------------------------------------------------------------
 
-void ImplUnxBorderWindowView::DrawWindow( USHORT nDrawFlags )
+void ImplUnxBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, const Point* )
 {
     ImplBorderFrameData*    pData = &maFrameData;
     OutputDevice*           pDev = pData->mpOutDev;
@@ -2659,7 +2555,7 @@ public:
     virtual void            GetBorder( long& rLeftBorder, long& rTopBorder,
                                        long& rRightBorder, long& rBottomBorder ) const;
     virtual long            CalcTitleWidth() const;
-    virtual void            DrawWindow( USHORT nDrawFlags );
+    virtual void            DrawWindow( USHORT nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
 
     Rectangle               DrawMacTitleButton( const Rectangle& rRect, USHORT nStyle );
 };
@@ -2874,7 +2770,7 @@ long ImplMacBorderWindowView::CalcTitleWidth() const
 
 // -----------------------------------------------------------------------
 
-void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags )
+void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, const Point* )
 {
     ImplBorderFrameData*    pData = &maFrameData;
     OutputDevice*           pDev = pData->mpOutDev;
@@ -3434,6 +3330,11 @@ void ImplBorderWindow::Tracking( const TrackingEvent& rTEvt )
 void ImplBorderWindow::Paint( const Rectangle& rRect )
 {
     mpBorderView->DrawWindow( BORDERWINDOW_DRAW_ALL );
+}
+
+void ImplBorderWindow::Draw( const Rectangle& rRect, OutputDevice* pOutDev, const Point& rPos )
+{
+    mpBorderView->DrawWindow( BORDERWINDOW_DRAW_ALL, pOutDev, &rPos );
 }
 
 // -----------------------------------------------------------------------
