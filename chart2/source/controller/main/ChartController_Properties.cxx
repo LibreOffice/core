@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-10 17:53:30 $
+ *  last change: $Author: iha $ $Date: 2003-11-10 19:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include "MeterHelper.hxx"
 #include "TitleHelper.hxx"
 #include "LegendHelper.hxx"
+#include "ChartTypeHelper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
 #include <drafts/com/sun/star/chart2/XAxisContainer.hpp>
@@ -119,7 +120,7 @@ namespace
 
 ::comphelper::ItemConverter* createItemConverter(
     const ::rtl::OUString & aObjectCID
-    , const uno::Reference< frame::XModel > & xModel
+    , const uno::Reference< frame::XModel > & xChartModel
     , SdrModel & rDrawModel
     , NumberFormatterWrapper * pNumberFormatterWrapper = NULL
     , ExplicitValueProvider * pExplicitValueProvider = NULL
@@ -142,7 +143,7 @@ namespace
     if( !bAffectsMultipleObjects )
     {
         uno::Reference< beans::XPropertySet > xObjectProperties =
-            ObjectIdentifier::getObjectPropertySet( aObjectCID, xModel );
+            ObjectIdentifier::getObjectPropertySet( aObjectCID, xChartModel );
         if(!xObjectProperties.is())
             return NULL;
         //create itemconverter for a single object
@@ -178,7 +179,7 @@ namespace
             case OBJECTTYPE_AXIS:
             {
                 uno::Reference< beans::XPropertySet > xDiaProp;
-                xDiaProp.set( ChartModelHelper::findDiagram( xModel ), uno::UNO_QUERY );
+                xDiaProp.set( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
 
                 // the second property set contains the property CoordinateOrigin
                 // nOriginIndex is the index of the corresponding index of the
@@ -209,16 +210,29 @@ namespace
                     break;
             case OBJECTTYPE_DATA_LABELS:
             case OBJECTTYPE_DATA_SERIES:
-                pItemConverter =  new wrapper::DataPointItemConverter(
-                                        xObjectProperties, rDrawModel.GetItemPool(), rDrawModel,
-                                        pNumberFormatterWrapper );
-                    break;
             case OBJECTTYPE_DATA_LABEL:
             case OBJECTTYPE_DATA_POINT:
+            {
+                wrapper::GraphicPropertyItemConverter::eGraphicObjectType eMapTo =
+                    wrapper::GraphicPropertyItemConverter::FILLED_DATA_POINT;
+
+                uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( aObjectCID, xChartModel );
+                uno::Reference< XChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
+
+                if( !ChartTypeHelper::isSupportingAreaProperties( xChartType ) )
+                    eMapTo = wrapper::GraphicPropertyItemConverter::LINE_DATA_POINT;
+                /*
+                FILLED_DATA_POINT,
+                LINE_DATA_POINT,
+                LINE_PROPERTIES,
+                FILL_PROPERTIES,
+                LINE_AND_FILL_PROPERTIES
+                */
                 pItemConverter =  new wrapper::DataPointItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(), rDrawModel,
-                                        pNumberFormatterWrapper );
+                                        pNumberFormatterWrapper, eMapTo );
                     break;
+            }
             case OBJECTTYPE_DATA_ERRORS:
                     break;
             case OBJECTTYPE_DATA_ERRORS_X:
@@ -247,11 +261,11 @@ namespace
             case OBJECTTYPE_TITLE:
                 break;
             case OBJECTTYPE_AXIS:
-                pItemConverter =  new wrapper::AllAxisItemConverter( xModel, rDrawModel.GetItemPool(),
+                pItemConverter =  new wrapper::AllAxisItemConverter( xChartModel, rDrawModel.GetItemPool(),
                                                                      rDrawModel );
                 break;
             case OBJECTTYPE_GRID:
-                pItemConverter =  new wrapper::AllGridItemConverter( xModel, rDrawModel.GetItemPool(),
+                pItemConverter =  new wrapper::AllGridItemConverter( xChartModel, rDrawModel.GetItemPool(),
                                                                      rDrawModel );
                 break;
             default: //for this type it is not supported to change all elements at once
