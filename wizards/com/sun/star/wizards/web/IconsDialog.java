@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IconsDialog.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:12:06 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,10 @@ public class IconsDialog extends ImageListDialog implements ImageList.ImageRende
 
 
     public String getIconset() {
-        return (String) set.getKey( ((Number)getSelected()).intValue() / icons.length );
+        if (getSelected() == null)
+            return null;
+        else
+            return (String) set.getKey( ((Number)getSelected()).intValue() / icons.length );
     }
 
     public void setIconset(String iconset) {
@@ -182,6 +185,8 @@ public class IconsDialog extends ImageListDialog implements ImageList.ImageRende
      * @see com.sun.star.wizards.common.Renderer#render(java.lang.Object)
      */
     public String render(Object object) {
+        if (object == null)
+           return "";
         int i = ((Number)object).intValue();
         int iset = getIconsetNum(i);
         return getIconset(iset).cp_Name;
