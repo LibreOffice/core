@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arguments.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-25 12:59:40 $
+ *  last change: $Author: as $ $Date: 2002-07-29 08:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,40 +81,40 @@ namespace framework{
                     You can use class ArgumentAnalyzer to set/get it from a given list!
 *//*-*************************************************************************************************************/
 
+#define ARGUMENTNAME_ASTEMPLATE                             DECLARE_ASCII("AsTemplate"          )   // bool
 #define ARGUMENTNAME_CHARACTERSET                           DECLARE_ASCII("CharacterSet"        )   // string
-#define ARGUMENTNAME_MEDIATYPE                              DECLARE_ASCII("MediaType"           )   // string
+#define ARGUMENTNAME_DEEPDETECTION                          DECLARE_ASCII("DeepDetection"       )   // bool
 #define ARGUMENTNAME_DETECTSERVICE                          DECLARE_ASCII("DetectService"       )   // string
 #define ARGUMENTNAME_EXTENSION                              DECLARE_ASCII("Extension"           )   // string
-#define ARGUMENTNAME_URL                                    DECLARE_ASCII("URL"                 )   // string
 #define ARGUMENTNAME_FILTERNAME                             DECLARE_ASCII("FilterName"          )   // string
+#define ARGUMENTNAME_FILTEROPTIONS                          DECLARE_ASCII("FilterOptions"       )   // string
 #define ARGUMENTNAME_FORMAT                                 DECLARE_ASCII("Format"              )   // string
 #define ARGUMENTNAME_FRAMENAME                              DECLARE_ASCII("FrameName"           )   // string
+#define ARGUMENTNAME_HIDDEN                                 DECLARE_ASCII("Hidden"              )   // bool
+#define ARGUMENTNAME_INPUTSTREAM                            DECLARE_ASCII("InputStream"         )   // Reference< XInputStream >
+#define ARGUMENTNAME_INTERACTIONHANDLER                     DECLARE_ASCII("InteractionHandler"  )   // Reference< XInteractionHandler >
+#define ARGUMENTNAME_JUMPMARK                               DECLARE_ASCII("JumpMark"            )   // string
+#define ARGUMENTNAME_MACROEXECUTIONMODE                     DECLARE_ASCII("MacroExecutionMode"  )   // int16
+#define ARGUMENTNAME_MEDIATYPE                              DECLARE_ASCII("MediaType"           )   // string
+#define ARGUMENTNAME_MINIMIZED                              DECLARE_ASCII("Minimized"           )   // bool
+#define ARGUMENTNAME_OPENNEWVIEW                            DECLARE_ASCII("OpenNewView"         )   // bool
+#define ARGUMENTNAME_OUTPUTSTREAM                           DECLARE_ASCII("OutputStream"        )   // Reference< XOutputStream >
 #define ARGUMENTNAME_PATTERN                                DECLARE_ASCII("Pattern"             )   // string
+#define ARGUMENTNAME_POSSIZE                                DECLARE_ASCII("PosSize"             )   // rectangle
 #define ARGUMENTNAME_POSTDATA                               DECLARE_ASCII("PostData"            )   // string
 #define ARGUMENTNAME_POSTSTRING                             DECLARE_ASCII("PostString"          )   // string
+#define ARGUMENTNAME_PREVIEW                                DECLARE_ASCII("Preview"             )   // bool
+#define ARGUMENTNAME_READONLY                               DECLARE_ASCII("ReadOnly"            )   // bool
 #define ARGUMENTNAME_REFERRER                               DECLARE_ASCII("Referer"             )   // string
+#define ARGUMENTNAME_SILENT                                 DECLARE_ASCII("Silent"              )   // bool
+#define ARGUMENTNAME_STATUSINDICATOR                        DECLARE_ASCII("StatusIndicator"     )   // Reference< XStatusIndicator >
 #define ARGUMENTNAME_TEMPLATENAME                           DECLARE_ASCII("TemplateName"        )   // string
 #define ARGUMENTNAME_TEMPLATEREGIONNAME                     DECLARE_ASCII("TemplateRegionName"  )   // string
-#define ARGUMENTNAME_JUMPMARK                               DECLARE_ASCII("JumpMark"            )   // string
 #define ARGUMENTNAME_TYPENAME                               DECLARE_ASCII("TypeName"            )   // string
+#define ARGUMENTNAME_UPDATEDOCMODE                          DECLARE_ASCII("UpdateDocMode"       )   // int16
+#define ARGUMENTNAME_URL                                    DECLARE_ASCII("URL"                 )   // string
 #define ARGUMENTNAME_VERSION                                DECLARE_ASCII("Version"             )   // int16
 #define ARGUMENTNAME_VIEWID                                 DECLARE_ASCII("ViewId"              )   // int16
-#define ARGUMENTNAME_FLAGS                                  DECLARE_ASCII("Flags"               )   // int32
-#define ARGUMENTNAME_ASTEMPLATE                             DECLARE_ASCII("AsTemplate"          )   // bool
-#define ARGUMENTNAME_HIDDEN                                 DECLARE_ASCII("Hidden"              )   // bool
-#define ARGUMENTNAME_OPENNEWVIEW                            DECLARE_ASCII("OpenNewView"         )   // bool
-#define ARGUMENTNAME_READONLY                               DECLARE_ASCII("ReadOnly"            )   // bool
-#define ARGUMENTNAME_PREVIEW                                DECLARE_ASCII("Preview"             )   // bool
-#define ARGUMENTNAME_SILENT                                 DECLARE_ASCII("Silent"              )   // bool
-#define ARGUMENTNAME_POSSIZE                                DECLARE_ASCII("PosSize"             )   // rectangle
-#define ARGUMENTNAME_INPUTSTREAM                            DECLARE_ASCII("InputStream"         )   // Reference< XInputStream >
-#define ARGUMENTNAME_OUTPUTSTREAM                           DECLARE_ASCII("OutputStream"        )   // Reference< XOutputStream >
-#define ARGUMENTNAME_DEEPDETECTION                          DECLARE_ASCII("DeepDetection"       )   // bool
-#define ARGUMENTNAME_STATUSINDICATOR                        DECLARE_ASCII("StatusIndicator"     )   // Reference< XStatusIndicator >
-#define ARGUMENTNAME_INTERACTIONHANDLER                     DECLARE_ASCII("InteractionHandler"  )   // Reference< XInteractionHandler >
-#define ARGUMENTNAME_MACROEXECUTIONMODE                     DECLARE_ASCII("MacroExecutionMode"  )   // int16
-#define ARGUMENTNAME_UPDATEDOCMODE                          DECLARE_ASCII("UpdateDocMode"       )   // int16
-#define ARGUMENTNAME_MINIMIZED                              DECLARE_ASCII("Minimized"           )   // bool
 
 /*-************************************************************************************************************//**
     @short          define our argument mask
@@ -163,43 +163,43 @@ namespace framework{
 
 enum EArgument
 {
-    E_CHARACTERSET          = ARGUMENTLAYER_1 | ARGUMENTFLAG_1  ,
-    E_MEDIATYPE             = ARGUMENTLAYER_1 | ARGUMENTFLAG_2  ,
-    E_DETECTSERVICE         = ARGUMENTLAYER_1 | ARGUMENTFLAG_3  ,
-    E_EXTENSION             = ARGUMENTLAYER_1 | ARGUMENTFLAG_4  ,
-    E_URL                   = ARGUMENTLAYER_1 | ARGUMENTFLAG_5  ,
-    E_FILTERNAME            = ARGUMENTLAYER_1 | ARGUMENTFLAG_6  ,
-    E_FORMAT                = ARGUMENTLAYER_1 | ARGUMENTFLAG_7  ,
-    E_FRAMENAME             = ARGUMENTLAYER_1 | ARGUMENTFLAG_8  ,
-    E_PATTERN               = ARGUMENTLAYER_1 | ARGUMENTFLAG_9  ,
-    E_POSTDATA              = ARGUMENTLAYER_1 | ARGUMENTFLAG_10 ,
-    E_POSTSTRING            = ARGUMENTLAYER_1 | ARGUMENTFLAG_11 ,
-    E_REFERRER              = ARGUMENTLAYER_1 | ARGUMENTFLAG_12 ,
-    E_TEMPLATENAME          = ARGUMENTLAYER_1 | ARGUMENTFLAG_13 ,
-    E_TEMPLATEREGIONNAME    = ARGUMENTLAYER_1 | ARGUMENTFLAG_14 ,
-    E_JUMPMARK              = ARGUMENTLAYER_1 | ARGUMENTFLAG_15 ,
-    E_VERSION               = ARGUMENTLAYER_1 | ARGUMENTFLAG_16 ,
-    E_VIEWID                = ARGUMENTLAYER_1 | ARGUMENTFLAG_17 ,
-    E_FLAGS                 = ARGUMENTLAYER_1 | ARGUMENTFLAG_18 ,
-    E_ASTEMPLATE            = ARGUMENTLAYER_1 | ARGUMENTFLAG_19 ,
-    E_HIDDEN                = ARGUMENTLAYER_1 | ARGUMENTFLAG_20 ,
-    E_OPENNEWVIEW           = ARGUMENTLAYER_1 | ARGUMENTFLAG_21 ,
-    E_READONLY              = ARGUMENTLAYER_1 | ARGUMENTFLAG_22 ,
-    E_PREVIEW               = ARGUMENTLAYER_1 | ARGUMENTFLAG_23 ,
-    E_SILENT                = ARGUMENTLAYER_1 | ARGUMENTFLAG_24 ,
+    E_ASTEMPLATE            = ARGUMENTLAYER_1 | ARGUMENTFLAG_1 ,
+    E_CHARACTERSET          = ARGUMENTLAYER_1 | ARGUMENTFLAG_2 ,
+    E_DEEPDETECTION         = ARGUMENTLAYER_1 | ARGUMENTFLAG_3 ,
+    E_DETECTSERVICE         = ARGUMENTLAYER_1 | ARGUMENTFLAG_4 ,
+    E_EXTENSION             = ARGUMENTLAYER_1 | ARGUMENTFLAG_5 ,
+    E_FILTERNAME            = ARGUMENTLAYER_1 | ARGUMENTFLAG_6 ,
+    E_FILTEROPTIONS         = ARGUMENTLAYER_1 | ARGUMENTFLAG_7 ,
+    E_FORMAT                = ARGUMENTLAYER_1 | ARGUMENTFLAG_8 ,
+    E_FRAMENAME             = ARGUMENTLAYER_1 | ARGUMENTFLAG_9 ,
+    E_HIDDEN                = ARGUMENTLAYER_1 | ARGUMENTFLAG_10,
+    E_INPUTSTREAM           = ARGUMENTLAYER_1 | ARGUMENTFLAG_11,
+    E_INTERACTIONHANDLER    = ARGUMENTLAYER_1 | ARGUMENTFLAG_12,
+    E_JUMPMARK              = ARGUMENTLAYER_1 | ARGUMENTFLAG_13,
+    E_MACROEXECUTIONMODE    = ARGUMENTLAYER_1 | ARGUMENTFLAG_14,
+    E_MEDIATYPE             = ARGUMENTLAYER_1 | ARGUMENTFLAG_15,
+    E_MINIMIZED             = ARGUMENTLAYER_1 | ARGUMENTFLAG_16,
+    E_OPENNEWVIEW           = ARGUMENTLAYER_1 | ARGUMENTFLAG_17,
+    E_OUTPUTSTREAM          = ARGUMENTLAYER_1 | ARGUMENTFLAG_18,
+    E_PATTERN               = ARGUMENTLAYER_1 | ARGUMENTFLAG_19,
+    E_POSSIZE               = ARGUMENTLAYER_1 | ARGUMENTFLAG_20,
+    E_POSTDATA              = ARGUMENTLAYER_1 | ARGUMENTFLAG_21,
+    E_POSTSTRING            = ARGUMENTLAYER_1 | ARGUMENTFLAG_22,
+    E_PREVIEW               = ARGUMENTLAYER_1 | ARGUMENTFLAG_23,
+    E_READONLY              = ARGUMENTLAYER_1 | ARGUMENTFLAG_24,
 
-    E_DEEPDETECTION         = ARGUMENTLAYER_2 | ARGUMENTFLAG_1  ,
-    E_POSSIZE               = ARGUMENTLAYER_2 | ARGUMENTFLAG_2  ,
-    E_INPUTSTREAM           = ARGUMENTLAYER_2 | ARGUMENTFLAG_3  ,
-    E_OUTPUTSTREAM          = ARGUMENTLAYER_2 | ARGUMENTFLAG_4  ,
-    E_TYPENAME              = ARGUMENTLAYER_2 | ARGUMENTFLAG_5  ,
-    E_STATUSINDICATOR       = ARGUMENTLAYER_2 | ARGUMENTFLAG_6  ,
-    E_INTERACTIONHANDLER    = ARGUMENTLAYER_2 | ARGUMENTFLAG_7  ,
-    E_MACROEXECUTIONMODE    = ARGUMENTLAYER_2 | ARGUMENTFLAG_8  ,
-    E_UPDATEDOCMODE         = ARGUMENTLAYER_2 | ARGUMENTFLAG_9,
-    E_MINIMIZED             = ARGUMENTLAYER_2 | ARGUMENTFLAG_10
+    E_REFERRER              = ARGUMENTLAYER_2 | ARGUMENTFLAG_1 ,
+    E_SILENT                = ARGUMENTLAYER_2 | ARGUMENTFLAG_2 ,
+    E_STATUSINDICATOR       = ARGUMENTLAYER_2 | ARGUMENTFLAG_3 ,
+    E_TEMPLATENAME          = ARGUMENTLAYER_2 | ARGUMENTFLAG_4 ,
+    E_TEMPLATEREGIONNAME    = ARGUMENTLAYER_2 | ARGUMENTFLAG_5 ,
+    E_TYPENAME              = ARGUMENTLAYER_2 | ARGUMENTFLAG_6 ,
+    E_UPDATEDOCMODE         = ARGUMENTLAYER_2 | ARGUMENTFLAG_7 ,
+    E_URL                   = ARGUMENTLAYER_2 | ARGUMENTFLAG_8 ,
+    E_VERSION               = ARGUMENTLAYER_2 | ARGUMENTFLAG_9 ,
+    E_VIEWID                = ARGUMENTLAYER_2 | ARGUMENTFLAG_10
 };
 
-}       //  namespace framework
+} // namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_ARGUMENTS_H_
+#endif // #ifndef __FRAMEWORK_ARGUMENTS_H_
