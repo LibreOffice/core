@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: mh $ $Date: 2000-11-10 09:20:19 $
+#   last change: $Author: svesik $ $Date: 2000-11-23 02:09:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,7 +105,7 @@ SHL1STDLIBS= \
         $(COMPHELPERLIB) \
         $(SVTOOLLIB) \
         $(DBTOOLSLIB) \
-        $(COMPHELPERLIB)	\
+        $(COMPHELPERLIB)
 
 .IF "$(DBTOOLSLIB)" == ""
 SHL1STDLIBS+=idbt$(UPD)$(DLLPOSTFIX).lib
