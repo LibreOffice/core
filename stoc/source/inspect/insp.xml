@@ -29,13 +29,16 @@
         <type>  com.sun.star.lang.XInitialization               </type>
         <type>  com.sun.star.lang.XTypeProvider                 </type>
         <type>  com.sun.star.lang.XServiceInfo                  </type>
+        <type>  com.sun.star.lang.XComponent                </type>
         <type>  com.sun.star.lang.XSingleServiceFactory         </type>
+        <type>  com.sun.star.lang.XSingleComponentFactory       </type>
         <type>  com.sun.star.lang.XMultiServiceFactory          </type>
         <type>  com.sun.star.registry.XRegistryKey              </type>
         <type>  com.sun.star.uno.XAggregation                   </type>
         <type>  com.sun.star.uno.XWeak                          </type>
         <type>  com.sun.star.uno.TypeClass                      </type>
         <type>  com.sun.star.uno.DeploymentException                    </type>
+        <type>  com.sun.star.uno.XComponentContext          </type>
         <type>  com.sun.star.container.XEnumerationAccess       </type>
         <type>  com.sun.star.container.XNameContainer           </type>
         <type>  com.sun.star.container.XIndexContainer          </type>
