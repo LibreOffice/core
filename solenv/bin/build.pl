@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: vg $ $Date: 2002-06-28 14:26:53 $
+#   last change: $Author: vg $ $Date: 2002-07-04 14:12:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.59 $ ';
+$id_str = ' $Revision: 1.60 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -97,6 +97,7 @@ $QuantityToBuild = 0;
 %broken_build = ();         # hash of hashes of the modules,
                             # where build was broken (error occurred)
 %folders_hashes = ();
+%running_children = ();
 $dependencies_hash = 0;
 $handler_set = 0;
 $cmd_file = '';
@@ -122,11 +123,12 @@ $build_since = '';
 $dlv_switch = '';
 $child = 0;
 %processes_hash = ();
+%module_annonced = ();
 
 &get_options;
 
 $deliver_commando = $ENV{DELIVER};
-$deliver_commando .= ' '. $dlv_switch;
+$deliver_commando .= ' '. $dlv_switch if ($dlv_switch);
 $ENV{mk_tmp}++;
 %prj_platform = ();
 $check_error_string = '';
@@ -255,7 +257,7 @@ sub BuildAll {
             if ($cmd_file) {
                 print "$deliver_commando\n";
             } else {
-                system ("$deliver_commando") if (!$show);
+                system ("$deliver_commando") if (!$show && ($Prj ne $CurrentPrj));
             };
             print $check_error_string;
             &RemoveFromDependencies($Prj, \%ParentDepsHash);
@@ -289,7 +291,7 @@ sub dmake_dir {
         chdir $BuildDir;
         cwd();
         system ("$dmake");
-        if ($? && ($? != -1)) {
+        if ($? && ($? != -1) && (!$child)) {
             &print_error("Error $? occurred while making $BuildDir");
         };
     };
@@ -308,9 +310,7 @@ sub GetParentsString {
     my ($PrjDir);
     $PrjDir = shift;
     $PrjDir = '.' if ($PrjDir eq $CurrentPrj);
-    if (!open (BUILD_LST, $PrjDir.'/prj/build.lst')) {
-        return '';
-    };
+    return '' if (!open (BUILD_LST, $PrjDir.'/prj/build.lst'));
     while (<BUILD_LST>) {
         if ($_ =~ /#/) {
             if ($`) {
@@ -341,9 +341,7 @@ sub get_prj_platform {
             if ($' =~ /\s+-\s+(\w+)[,\S+]*\s+(\S+)/ ) {
                 my $platform = $1;
                 my $alias = $2;
-                if ($alias eq 'NULL') {
-                    &print_error ("There is no correct alias set in the line $line!");
-                };
+                &print_error ("There is no correct alias set in the line $line!") if ($alias eq 'NULL');
                 &mark_platform($alias, $platform);
             } else {
                 &print_error("Misspelling in line: \n$_");
@@ -583,6 +581,8 @@ sub RemoveFromDependencies {
 #
 sub FindIndepPrj {
     my ($Prj, @Prjs, @PrjDeps, $Dependencies, $i);
+    my $children = &children_number;
+    return '' if ($children && ($children >= $QuantityToBuild));
     $Dependencies = shift;
     @Prjs = keys %$Dependencies;
     if ($#Prjs != -1) {
@@ -594,8 +594,8 @@ sub FindIndepPrj {
             return $Prj if ($#PrjDeps == -1);
         };
         # If there are only dependent projects in hash - generate error
-        return '' if ($build_from);
-        if (&children_number) {
+        return '' if ($BuildAllParents);
+        if ($children) {
             $only_dependent = 1;
             return '';
         };
@@ -640,9 +640,7 @@ sub GetDependenciesArray {
     $string = $DepString;
     $prj = shift;
     while (!($DepString =~ /^NULL/)) {
-        if (!$DepString) {
-            &print_error("Project $prj has wrong written dependencies string:\n $string");
-        };
+        &print_error("Project $prj has wrong written dependencies string:\n $string") if (!$DepString);
         $DepString =~ /(\S+)\s*/;
         $ParentPrj = $1;
         $DepString = $';
@@ -652,9 +650,7 @@ sub GetDependenciesArray {
                 ($prj_platform{$ParentPrj} ne 'all')) {
                 &print_error ("$ParentPrj\.$1 is a wrong dependency identifier!\nCheck if it is platform dependent");
             };
-            if (&CheckPlatform($1)) {
-                $AliveDependencies{$ParentPrj}++;
-            }
+            $AliveDependencies{$ParentPrj}++ if (&CheckPlatform($1));
             push(@Dependencies, $ParentPrj);
         } else {
             if ((exists($prj_platform{$ParentPrj})) &&
@@ -734,17 +730,11 @@ sub get_options {
         $arg =~ /^--help$/      and &usage                          and exit(0);
         push (@dmake_args, $arg);
     };
-    if ($build_from && $build_from_opt) {
-        &print_error('Switches -from and -from_opt collision');
-    };
+    &print_error('Switches -from and -from_opt collision') if ($build_from && $build_from_opt);
 
-    if ($build_from && $build_since) {
-        &print_error('Switches -from and -since collision');
-    };
+    &print_error('Switches -from and -since collision') if ($build_from && $build_since);
     @ARGV = @dmake_args;
-    if ($show) {
-        $cmd_file = '';
-    };
+    $cmd_file = '' if ($show);
     if (($ENV{GUI} eq 'WNT') && $QuantityToBuild) {
         $QuantityToBuild = 0;
         &print_error('-PP switch is unusable under windows!\n');
@@ -774,22 +764,21 @@ sub get_switch_options {
 # cancel build when one of children has error exit code
 #
 sub cancel_build {
-    my $pid = shift;
-    my $exit_code = shift;
-    delete $processes_hash{$pid} if (defined $processes_hash{$pid});
-    kill 9 => -$$;
-    exit($exit_code);
+    while (&children_number) {sleep(1)};
+    print STDERR "\n";
+    foreach (keys %broken_build) {
+        print STDERR "ERROR: error $_ occurred while making", $broken_build{$_}, "\n";
+    };
+    exit(1);
 };
 
 #
 # Function for storing error in multiprocessing AllParents build
 #
 sub store_error {
-    my $pid = shift;
-    my $error_code = shift;
+    my ($pid, $error_code) = @_;
     my $child_nick = $processes_hash{$pid};
-    my $dependencies_hash = $folders_hashes{$child_nick};
-    $broken_build{$dependencies_hash} = $error_code;
+    $broken_build {$error_code} = &CorrectPath($StandDir . $PathHash{$child_nick});
 };
 
 #
@@ -799,13 +788,7 @@ sub handle_dead_child {
     my $pid = 0;
     foreach (keys %processes_hash) {
         if (($pid = waitpid($_, &WNOHANG)) > 0) {
-            if ($?) {
-                if ($BuildAllParents) {
-                    &store_error($pid, $?);
-                } else {
-                    &cancel_build($pid, $?);
-                };
-            };
+            &store_error($pid, $?) if ($?);
             &clear_from_child($pid);
         };
     };
@@ -816,6 +799,7 @@ sub clear_from_child {
     my $child_nick = $processes_hash{$pid};
       &RemoveFromDependencies($child_nick,
                             $folders_hashes{$child_nick});
+    $running_children{$folders_hashes{$child_nick}}--;
     delete $processes_hash{$pid};
     $only_dependent = 0;
 };
@@ -867,12 +851,14 @@ sub children_number {
 };
 
 sub start_child {
+    &cancel_build if (scalar keys %broken_build);
     my $child_nick = shift;
     my $pid;
     if ($pid = fork) { # parent
         $processes_hash{$pid} = $child_nick;
         print 'Running processes: ', &children_number(), "\n";
         $folders_hashes{$child_nick} = $dependencies_hash;
+        $running_children{$dependencies_hash}++;
         sleep(1) if ($BuildAllParents);
     } elsif (defined $pid) { # child
         $child = 1;
@@ -890,7 +876,6 @@ sub build_multiprocessing {
                                 # to build
     do {
         while ($Prj = &PickPrjToBuild(\%ParentDepsHash)) {
-            sleep and last if ($only_dependent);
             if ($build_from_opt) {
                 if ($build_from_opt ne $Prj) {
                     &RemoveFromDependencies($Prj, \%ParentDepsHash);
@@ -908,9 +893,6 @@ sub build_multiprocessing {
                 };
                 next;
             };
-            print $echo.    "=============\n";
-            print $echo.    "Building project $Prj\n";
-            print $echo.    "=============\n";
             push @build_queue, $Prj;
             $projects_deps_hash{$Prj} = {};
             &get_deps_hash(&CorrectPath($StandDir.$Prj), $projects_deps_hash{$Prj});
@@ -933,21 +915,15 @@ sub build_actual_queue {
     my $i = 0;
     do {
         while ($i <= (scalar(@$build_queue) - 1)) {
+            &cancel_build if (scalar keys %broken_build);
             $Prj = $$build_queue[$i];
+            &annonce_module($Prj) if (!(defined $module_annonced{$Prj}));
             $only_dependent = 0;
             $no_projects = 0;
-            if (defined $broken_build{$projects_deps_hash{$Prj}}) {
-                if ($i == 0) {
-                    &print_error("error occurred while making $Prj");
-                    &cancel_build($broken_build{$projects_deps_hash{$Prj}});
-                } else {
-                    next;
-                };
-            };
             &BuildDependent($projects_deps_hash{$Prj});
-            if ($no_projects) {
+            if ($no_projects && ($running_children{$projects_deps_hash{$Prj}} == 0)) {
                 chdir(&CorrectPath($StandDir.$Prj));
-                system ("$deliver_commando") if (!$show);
+                system ("$deliver_commando") if (!$show && ($Prj ne $CurrentPrj));
                 delete $projects_deps_hash{$Prj};
                 &RemoveFromDependencies($Prj, \%ParentDepsHash);
                 splice (@$build_queue, $i, 1);
@@ -959,6 +935,17 @@ sub build_actual_queue {
     } while (!&are_all_dependent($build_queue));
 };
 
+#
+# Print announcement for module just started
+#
+sub annonce_module {
+    my $Prj = shift;
+    print $echo.    "=============\n";
+    print $echo.    "Building project $Prj\n";
+    print $echo.    "=============\n";
+    $module_annonced{$Prj}++;
+};
+
 sub are_all_dependent {
     my $build_queue = shift;
     my $folder = '';
@@ -968,3 +955,4 @@ sub are_all_dependent {
     };
     return '1';
 };
+
