@@ -332,6 +332,10 @@ public class AccessibilityTree
     }
 
 
+    public void disposing (com.sun.star.lang.EventObject e)
+    {
+        System.out.println ("disposing " + e);
+    }
 
 
     /** Remove the specified node and its sub-tree from the tree and the canvas.
