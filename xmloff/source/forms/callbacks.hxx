@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callbacks.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 12:03:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,24 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
             const ::rtl::OUString& _rCellRangeAddress
         ) = 0;
+
+        /** registers a control model for later binding to an XForms binding */
+        virtual void                        registerXFormsValueBinding(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+            const ::rtl::OUString& _rBindingID
+        ) = 0;
+
+        /** registers a control model for later binding an XForms list binding */
+        virtual void                        registerXFormsListBinding(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+            const ::rtl::OUString& _rBindingID
+        ) = 0;
+
+        /** registers a control model for later binding to an XForms submission */
+        virtual void                        registerXFormsSubmission(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+            const ::rtl::OUString& _rBindingID
+        ) = 0;
     };
 
     //=====================================================================
@@ -208,6 +226,25 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11.28.4  2004/10/01 18:04:45  dvo
+ *  #i34802# load/save binding fir lists as form:xforms-list-source
+ *
+ *  Revision 1.11.28.3  2004/08/25 17:48:12  dvo
+ *  #i31958# load/save xforms:submission attribute on buttons
+ *
+ *  Revision 1.11.28.2  2004/03/18 17:38:14  dvo
+ *  #114856# continue XForms implementation
+ *           (also remove define DVO_XFORMS)
+ *
+ *  Revision 1.11.28.1  2004/01/28 14:51:27  dvo
+ *  #114856# load xforms:bind attribute for form controls
+ *           (use DVO_XFORMS define)
+ *
+ *  Revision 1.11  2003/12/01 12:03:25  rt
+ *  INTEGRATION: CWS geordi2q09 (1.10.24); FILE MERGED
+ *  2003/11/24 15:00:21 obo 1.10.24.2: undo last change
+ *  2003/11/21 16:48:36 obo 1.10.24.1: #111934#: join CWS comboboxlink
+ *
  *  Revision 1.10.24.2  2003/11/24 15:00:21  obo
  *  undo last change
  *
