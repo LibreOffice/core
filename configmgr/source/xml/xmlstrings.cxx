@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstrings.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:38:31 $
+ *  last change: $Author: jb $ $Date: 2002-06-17 08:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,10 @@ namespace configmgr
     namespace xml
     {
 //----------------------------------------------------------------------------
-// For now: Include the fixed OOR prefix into (most) tag and attribute names
+// For now: Include the fixed OOR prefix into (most) attribute names
 #define OOR_PREFIX_ "oor:"
+// ... but not into (most) tag names
+#define OOR_TAG_PREFIX_
 //----------------------------------------------------------------------------
     // extern declaration for strings used in the XML format
         // namespace prefixes
@@ -84,18 +86,18 @@ namespace configmgr
         // tag names
         IMPLEMENT_CONSTASCII_USTRING(TAG_SCHEMA,    OOR_PREFIX_"component-schema");
 
-        IMPLEMENT_CONSTASCII_USTRING(TAG_COMPONENT, OOR_PREFIX_"component");
-        IMPLEMENT_CONSTASCII_USTRING(TAG_TEMPLATES, OOR_PREFIX_"templates");
+        IMPLEMENT_CONSTASCII_USTRING(TAG_COMPONENT, OOR_TAG_PREFIX_"component");
+        IMPLEMENT_CONSTASCII_USTRING(TAG_TEMPLATES, OOR_TAG_PREFIX_"templates");
 
-        IMPLEMENT_CONSTASCII_USTRING(TAG_NODE,      OOR_PREFIX_"node");
-        IMPLEMENT_CONSTASCII_USTRING(TAG_GROUP,     OOR_PREFIX_"group");
-        IMPLEMENT_CONSTASCII_USTRING(TAG_SET,       OOR_PREFIX_"set");
-        IMPLEMENT_CONSTASCII_USTRING(TAG_PROP,      OOR_PREFIX_"prop");
+        IMPLEMENT_CONSTASCII_USTRING(TAG_NODE,      OOR_TAG_PREFIX_"node");
+        IMPLEMENT_CONSTASCII_USTRING(TAG_GROUP,     OOR_TAG_PREFIX_"group");
+        IMPLEMENT_CONSTASCII_USTRING(TAG_SET,       OOR_TAG_PREFIX_"set");
+        IMPLEMENT_CONSTASCII_USTRING(TAG_PROP,      OOR_TAG_PREFIX_"prop");
 
-        IMPLEMENT_CONSTASCII_USTRING(TAG_VALUE,     OOR_PREFIX_"value");
-        IMPLEMENT_CONSTASCII_USTRING(TAG_IMPORT,    OOR_PREFIX_"import");
-        IMPLEMENT_CONSTASCII_USTRING(TAG_INSTANCE,  OOR_PREFIX_"node-ref");
-        IMPLEMENT_CONSTASCII_USTRING(TAG_ITEMTYPE,  OOR_PREFIX_"item");
+        IMPLEMENT_CONSTASCII_USTRING(TAG_VALUE,     OOR_TAG_PREFIX_"value");
+        IMPLEMENT_CONSTASCII_USTRING(TAG_IMPORT,    OOR_TAG_PREFIX_"import");
+        IMPLEMENT_CONSTASCII_USTRING(TAG_INSTANCE,  OOR_TAG_PREFIX_"node-ref");
+        IMPLEMENT_CONSTASCII_USTRING(TAG_ITEMTYPE,  OOR_TAG_PREFIX_"item");
 
         // attribute names
         IMPLEMENT_CONSTASCII_USTRING(ATTR_NAME,     OOR_PREFIX_"name");
