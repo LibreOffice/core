@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtexp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:28:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::sax;
+using namespace ::xmloff::token;
 using namespace ::rtl;
 using namespace cppu;
 
@@ -258,6 +259,9 @@ SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
 :   SvXMLExport( xServiceFactory, rFileName, rHandler, NULL, MAP_100TH_MM),
     mxTable( xTable )
 {
+
+    _GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE_OOO), XML_NAMESPACE_OFFICE );
+    _GetNamespaceMap().Add( GetXMLToken(XML_NP_DRAW), GetXMLToken(XML_N_DRAW_OOO), XML_NAMESPACE_DRAW );
     SetGraphicResolver( xGrfResolver );
     setExportFlags( 0 );
 }
