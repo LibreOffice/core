@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-29 21:11:23 $
+ *  last change: $Author: kz $ $Date: 2002-05-16 14:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ ModalDialog DLG_ASS
         Text[ chinese_traditional ] = "η©Ίη™½η°΅ε ±(~E)";
         Text[ arabic ] = "ΪΡΦ ΚήΟνγν έΗΡΫ";
         Text[ greek ] = "Κενή παρουσίαση";
-        Text[ korean ] = "λΉ ν”„λ¦¬μ  ν…μ΄μ…(~E)";
+        Text[ korean ] = "λΉ ν”„λ μ  ν…μ΄μ…(~E)";
         Text[ turkish ] = "Boώ sunu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Presentaciσ buida";
@@ -239,7 +239,7 @@ ModalDialog DLG_ASS
         Text[ chinese_traditional ] = "ζ΅η”¨ζ¨£εΌ(~F)";
         Text[ arabic ] = "γδ ΗαήΗαΘ";
         Text[ greek ] = "Από πρότυπο";
-        Text[ korean ] = "ν…ν”λ¦ΏμΌλ΅λ¶€ν„°(~F)";
+        Text[ korean ] = "μ¤νƒ€μΌλ΅λ¶€ν„°(~F)";
         Text[ turkish ] = "ήablon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Des de la plantilla";
@@ -269,7 +269,7 @@ ModalDialog DLG_ASS
         Text[ chinese_traditional ] = "ι–‹ε•δΈ€ε€‹ηΎε­η„η°΅ε ±(~O)";
         Text[ arabic ] = "έΚΝ ΪΡΦ ΚήΟνγν γζΜζΟ";
         Text[ greek ] = "Άνοιγμα υπάρχουσας παρουσίασης";
-        Text[ korean ] = "κΈ°μ΅΄ ν”„λ¦¬μ  ν…μ΄μ… μ—΄κΈ°(~O)";
+        Text[ korean ] = "κΈ°μ΅΄ ν”„λ μ  ν…μ΄μ… μ—΄κΈ°(~O)";
         Text[ turkish ] = "Mevcut bir sunuyu aη";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Obre una presentaciσ existent";
@@ -338,7 +338,7 @@ ModalDialog DLG_ASS
         Text[ chinese_traditional ] = "θ«‹ζ‚¨ιΈζ“‡δΈ€ε€‹ι ιΆζ¨£εΌ(~S)";
         Text[ arabic ] = "ΗαΡΜΗΑ ΗΞΚνΗΡ ΚΞΨνΨ ΗαΥέΝΙ";
         Text[ greek ] = "Επιλέξτε ένα πρότυπο ~σελίδας";
-        Text[ korean ] = "νμ΄μ§€ ν…ν”λ¦Ώμ„ μ„ νƒν•μ‹­μ‹μ¤(~S)";
+        Text[ korean ] = "νμ΄μ§€ μ¤νƒ€μΌμ„ μ„ νƒν•μ‹­μ‹μ¤(~S)";
         Text[ turkish ] = "Bir sayfa biηimi seηin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Escolliu un ~estil de pΰgina";
@@ -386,7 +386,7 @@ ModalDialog DLG_ASS
         Text[ chinese_traditional ] = "θ«‹ιΈζ“‡δΈ€ε€‹ε—ε°η°΅ε ±η„εª’ι«”";
         Text[ arabic ] = "ΗΞΚΡ ΓΟΗΙ ΗαΪΡΦ ΗαΚήΟνγν";
         Text[ greek ] = "Επιλέξτε μια συσκευή έκδοσης";
-        Text[ korean ] = "ν”„λ¦¬μ  ν…μ΄μ… μ¶λ ¥ λ§¤μ²΄λ¥Ό μ„ νƒν•μ‹­μ‹μ¤";
+        Text[ korean ] = "ν”„λ μ  ν…μ΄μ… μ¶λ ¥ λ§¤μ²΄λ¥Ό μ„ νƒν•μ‹­μ‹μ¤";
         Text[ turkish ] = "Bir ηύktύ ortamύ seηin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Escolliu un mitjΰ de presentaciσ";
@@ -699,7 +699,7 @@ ModalDialog DLG_ASS
         Text[ chinese_traditional ] = "θ«‹ιΈζ“‡δΈ€ε€‹η°΅ε ±η„ι΅ε‹";
         Text[ arabic ] = "ΗΞΚΡ δζΪ ΗαΪΡΦ ΗαΚήΟνγν";
         Text[ greek ] = "Επιλέξτε τον τύπο της παρουσίασης";
-        Text[ korean ] = "ν”„λ¦¬μ  ν…μ΄μ… ν•μ‹μ„ μ„ νƒν•μ‹­μ‹μ¤";
+        Text[ korean ] = "ν”„λ μ  ν…μ΄μ… ν•μ‹μ„ μ„ νƒν•μ‹­μ‹μ¤";
         Text[ turkish ] = "Sunu tόrόnό seηin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Escolliu el tipus de presentaciσ";
@@ -730,7 +730,7 @@ ModalDialog DLG_ASS
         Text[ chinese_traditional ] = "ζ¨™ζΊ–(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έ(~D)";
+        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Per ~defecte";
@@ -1017,7 +1017,7 @@ ModalDialog DLG_ASS
         Text[ chinese_traditional ] = "η°΅ε ±δΈ»ι΅ε…ζ‹¬ι‚£δΊ›ζ–ΉιΆοΌ";
         Text[ arabic ] = "γΗ εζ γζΦζΪ ΗαΪΡΦ ΗαΚήΟνγν ΗαΞΗΥ ΘίΏ";
         Text[ greek ] = "Ποιό είναι το αντικείμενο της παρουσίασης σας;";
-        Text[ korean ] = "ν”„λ¦¬μ  ν…μ΄μ… μ£Όμ λ” λ¬΄μ—‡μ…λ‹κΉ?";
+        Text[ korean ] = "ν”„λ μ  ν…μ΄μ… μ£Όμ λ” λ¬΄μ—‡μ…λ‹κΉ?";
         Text[ turkish ] = "Sununuzun konusu nedir?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Quina ιs la temΰtica de la seva presentaciσ?";
@@ -1284,7 +1284,7 @@ ModalDialog DLG_ASS
     Text[ chinese_traditional ] = "θ‡ªε‹•ζª”ζ΅ε©η† η°΅ε ±";
     Text[ arabic ] = "ΗαγΡΤΟ ΗαΒαν ααΪΡΦ ΗαΚήΟνγν";
     Text[ greek ] = "Παρουσίαση AutoPilot";
-    Text[ korean ] = "μλ™ νμΌλΏ ν”„λ¦¬μ  ν…μ΄μ…";
+    Text[ korean ] = "μλ™ νμΌλΏ ν”„λ μ  ν…μ΄μ…";
     Text[ turkish ] = "Sunu OtoPilotu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Presentaciσ de l'AutoPilot";
