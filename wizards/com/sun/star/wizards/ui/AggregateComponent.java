@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AggregateComponent.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:03:55 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ public class AggregateComponent extends ControlScroller{
             int index = JavaTools.FieldInList(sFunctionOperators, CurDBMetaData.AggregateFieldNames[iduplicate][1]);
             String sDisplayFunction = sFunctions[index];
             sDuplicateAggregateFunction = JavaTools.replaceSubString(sDuplicateAggregateFunction, sDisplayFunction, "<FUNCTION>");
-            SystemDialog.showMessageBox(CurDBMetaData.xMSF, "WarningBox", VclWindowPeerAttribute.OK, sDuplicateAggregateFunction);
+            CurUnoDialog.showMessageBox("WarningBox", VclWindowPeerAttribute.OK, sDuplicateAggregateFunction);
             CurUnoDialog.vetoableChange(new java.beans.PropertyChangeEvent(CurUnoDialog, "Steps", new Integer(1), new Integer(2)));
             return new String[][]{};
         }
