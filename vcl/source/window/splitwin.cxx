@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:09:13 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,10 +144,10 @@ struct ImplSplitSet
     BOOL                mbCalcPix;
 };
 
-#define SPLITWIN_SPLITSIZE              6
-#define SPLITWIN_SPLITSIZEEX            6
-#define SPLITWIN_SPLITSIZEAUTOHIDE      40
-#define SPLITWIN_SPLITSIZEFADE          40
+#define SPLITWIN_SPLITSIZE              3
+#define SPLITWIN_SPLITSIZEEX            4
+#define SPLITWIN_SPLITSIZEAUTOHIDE      36
+#define SPLITWIN_SPLITSIZEFADE          36
 
 #define SPLIT_HORZ              ((USHORT)0x0001)
 #define SPLIT_VERT              ((USHORT)0x0002)
@@ -1711,7 +1711,6 @@ void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, BOOL bTest ) co
     if ( mbAutoHide || mbFadeOut || mbFadeIn )
         nSplitSize += SPLITWIN_SPLITSIZEEX;
 
-/* Wir wollen doch erstmal nicht zentrieren
     long nButtonSize = 0;
     if ( mbFadeIn )
         nButtonSize += SPLITWIN_SPLITSIZEFADE+1;
@@ -1726,7 +1725,6 @@ void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, BOOL bTest ) co
         nCenterEx += ((mnDY-mnTopBorder-mnBottomBorder)-nButtonSize)/2;
     if ( nCenterEx > 0 )
         nEx += nCenterEx;
-*/
 
     if ( meAlign == WINDOWALIGN_TOP )
     {
@@ -1954,42 +1952,119 @@ void SplitWindow::ImplDrawAutoHide( BOOL bInPaint )
 
 // -----------------------------------------------------------------------
 
-static void ImplGetSplitArrowImage( BOOL bHorz, BOOL bLeft, BOOL bPressed,
-                                    Image& rImage )
+void SplitWindow::ImplDrawFadeArrow( const Point& rPt, BOOL bHorz, BOOL bLeft )
 {
-    // ImageListe laden, wenn noch nicht vorhanden
-    ImplSVData* pSVData = ImplGetSVData();
-    ImageList*  pImageList;
-    if ( bHorz )
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
+    int x( rPt.X() );
+    int y( rPt.Y() );
+
+    Color aCol;
+    if( !bHorz )
     {
-        if ( !pSVData->maCtrlData.mpSplitHArwImgList )
+        int dx = 1;
+        if( bLeft )
         {
-            Bitmap aBmp( ResId( SV_RESID_BITMAP_SPLITHARW, ImplGetResMgr() ) );
-            pSVData->maCtrlData.mpSplitHArwImgList = new ImageList( aBmp, Color( 0x00, 0x00, 0xFF ), 4 );
+            x ++;
+            dx = -1;
         }
-        pImageList = pSVData->maCtrlData.mpSplitHArwImgList;
+
+        x++; y++;
+        aCol = Color( COL_WHITE );
+        DrawPixel( Point(x, y), aCol );
+        DrawPixel( Point(x, y+1), aCol );
+        DrawPixel( Point(x, y+2), aCol );
+        DrawPixel( Point(x+dx, y+1), aCol );
+
+        x--; y--;
+        aCol = rStyleSettings.GetDarkShadowColor();
+        DrawPixel( Point(x, y), rStyleSettings.GetDarkShadowColor() );
+        DrawPixel( Point(x, y+1), rStyleSettings.GetDarkShadowColor() );
+        DrawPixel( Point(x, y+2), rStyleSettings.GetDarkShadowColor() );
+        DrawPixel( Point(x+dx, y+1), rStyleSettings.GetDarkShadowColor() );
     }
     else
     {
-        if ( !pSVData->maCtrlData.mpSplitVArwImgList )
+        int dy = 1;
+        if( bLeft )
         {
-            Bitmap aBmp( ResId( SV_RESID_BITMAP_SPLITVARW, ImplGetResMgr() ) );
-            pSVData->maCtrlData.mpSplitVArwImgList = new ImageList( aBmp, Color( 0x00, 0x00, 0xFF ), 4 );
+            y ++;
+            dy = -1;
         }
-        pImageList = pSVData->maCtrlData.mpSplitVArwImgList;
+
+        x++; y++;
+        aCol = Color( COL_WHITE );
+        DrawPixel( Point(x, y), aCol );
+        DrawPixel( Point(x+1, y), aCol );
+        DrawPixel( Point(x+2, y), aCol );
+        DrawPixel( Point(x+1, y+dy), aCol );
+
+        x--; y--;
+        aCol = rStyleSettings.GetDarkShadowColor();
+        DrawPixel( Point(x, y), aCol );
+        DrawPixel( Point(x+1, y), aCol );
+        DrawPixel( Point(x+2, y), aCol );
+        DrawPixel( Point(x+1, y+dy), aCol );
     }
-
-    // Image ermitteln und zurueckgeben
-    USHORT nId = 1;
-    if ( !bLeft )
-        nId += 2;
-    if ( bPressed )
-        nId++;
-
-    rImage = pImageList->GetImage( nId );
 }
 
-// -----------------------------------------------------------------------
+void SplitWindow::ImplDrawGrip( const Rectangle& rRect, BOOL bHorz, BOOL bLeft )
+{
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
+    if( rRect.IsInside( GetPointerPosPixel() ) )
+    {
+        DrawWallpaper( rRect, Wallpaper( Color( COL_WHITE ) ) );
+        DrawSelectionBackground( rRect, 2, FALSE, FALSE, FALSE );
+    }
+
+    if( bHorz )
+    {
+        int width = (int) (0.5 * rRect.getWidth() + 0.5);
+        int i = rRect.nLeft + (rRect.getWidth() - width) / 2;
+        width += i;
+        const int y = rRect.nTop + 1;
+        ImplDrawFadeArrow( Point( i-8, y), bHorz, bLeft );
+        while( i <= width )
+        {
+
+            DrawPixel( Point(i, y), rStyleSettings.GetDarkShadowColor() );
+            DrawPixel( Point(i+1, y), rStyleSettings.GetShadowColor() );
+
+            DrawPixel( Point(i, y+1), rStyleSettings.GetShadowColor() );
+            DrawPixel( Point(i+1, y+1), rStyleSettings.GetFaceColor() );
+            DrawPixel( Point(i+2, y+1), Color(COL_WHITE) );
+
+            DrawPixel( Point(i+1, y+2), Color(COL_WHITE) );
+            DrawPixel( Point(i+2, y+2), Color(COL_WHITE) );
+            i+=4;
+        }
+        ImplDrawFadeArrow( Point( i+3, y), bHorz, bLeft );
+    }
+    else
+    {
+        int height = (int) (0.5 * rRect.getHeight() + 0.5);
+        int i = rRect.nTop + (rRect.getHeight() - height) / 2;
+        height += i;
+        const int x = rRect.nLeft + 1;
+        ImplDrawFadeArrow( Point( x, i-8), bHorz, bLeft );
+        while( i <= height )
+        {
+
+            DrawPixel( Point(x, i), rStyleSettings.GetDarkShadowColor() );
+            DrawPixel( Point(x+1, i), rStyleSettings.GetShadowColor() );
+
+            DrawPixel( Point(x, i+1), rStyleSettings.GetShadowColor() );
+            DrawPixel( Point(x+1, i+1), rStyleSettings.GetFaceColor() );
+            DrawPixel( Point(x+2, i+1), Color(COL_WHITE) );
+
+            DrawPixel( Point(x+1, i+2), Color(COL_WHITE) );
+            DrawPixel( Point(x+2, i+2), Color(COL_WHITE) );
+            i+=4;
+        }
+        ImplDrawFadeArrow( Point( x, i+3), bHorz, bLeft );
+    }
+}
 
 void SplitWindow::ImplDrawFadeIn( BOOL bInPaint )
 {
@@ -2011,21 +2086,10 @@ void SplitWindow::ImplDrawFadeIn( BOOL bInPaint )
         else
             bLeft   = TRUE;
 
-        ImplGetSplitArrowImage( mbHorz, bLeft, mbFadeInPressed, aImage );
-
         if ( !bInPaint )
             Erase( aTempRect );
 
-        Size    aImageSize = aImage.GetSizePixel();
-        Point   aPos( aTempRect.Left()+((aTempRect.GetWidth()-aImageSize.Width())/2),
-                      aTempRect.Top()+((aTempRect.GetHeight()-aImageSize.Height())/2) );
-        long    nSize;
-        if ( mbHorz )
-            nSize = aImageSize.Width();
-        else
-            nSize = aImageSize.Height();
-        ImplDrawButtonRect( aTempRect, nSize );
-        DrawImage( aPos, aImage );
+        ImplDrawGrip( aTempRect, (meAlign == WINDOWALIGN_TOP) || (meAlign == WINDOWALIGN_BOTTOM), bLeft );
     }
 }
 
@@ -2051,21 +2115,10 @@ void SplitWindow::ImplDrawFadeOut( BOOL bInPaint )
         else
             bLeft   = TRUE;
 
-        ImplGetSplitArrowImage( mbHorz, bLeft, mbFadeOutPressed, aImage );
-
         if ( !bInPaint )
             Erase( aTempRect );
 
-        Size    aImageSize = aImage.GetSizePixel();
-        Point   aPos( aTempRect.Left()+((aTempRect.GetWidth()-aImageSize.Width())/2),
-                      aTempRect.Top()+((aTempRect.GetHeight()-aImageSize.Height())/2) );
-        long    nSize;
-        if ( mbHorz )
-            nSize = aImageSize.Width();
-        else
-            nSize = aImageSize.Height();
-        ImplDrawButtonRect( aTempRect, nSize );
-        DrawImage( aPos, aImage );
+        ImplDrawGrip( aTempRect, (meAlign == WINDOWALIGN_TOP) || (meAlign == WINDOWALIGN_BOTTOM), bLeft );
     }
 }
 
@@ -2547,6 +2600,37 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
             mnSplitPos      = 0;
         }
     }
+}
+
+// -----------------------------------------------------------------------
+
+long SplitWindow::PreNotify( NotifyEvent& rNEvt )
+{
+    const MouseEvent* pMouseEvt = NULL;
+
+    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) )
+    {
+        if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
+        {
+            // trigger redraw if mouse over state has changed
+            Rectangle aFadeInRect;
+            Rectangle aFadeOutRect;
+            ImplGetFadeInRect( aFadeInRect );
+            ImplGetFadeOutRect( aFadeOutRect );
+
+            if ( aFadeInRect.IsInside( GetPointerPosPixel() ) != aFadeInRect.IsInside( GetLastPointerPosPixel() ) )
+                Invalidate( aFadeInRect );
+            if ( aFadeOutRect.IsInside( GetPointerPosPixel() ) != aFadeOutRect.IsInside( GetLastPointerPosPixel() ) )
+                Invalidate( aFadeOutRect );
+
+            if( pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow() )
+            {
+                Invalidate( aFadeInRect );
+                Invalidate( aFadeOutRect );
+            }
+        }
+    }
+    return Window::PreNotify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
