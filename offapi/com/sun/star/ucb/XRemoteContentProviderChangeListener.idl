@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderChangeListener.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-03-20 13:33:34 $
+ *  last change: $Author: mi $ $Date: 2001-03-21 16:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,6 @@ module com { module sun { module star { module ucb {
     @version 1.0
     @author Stephan Bergmann
  */
-[uik(A4953A12-1C49-11D5-A0500050-04526AAD),
-    ident("XRemoteContentProviderChangeListener", 1.0)]
 interface XRemoteContentProviderChangeListener:
     com::sun::star::lang::XEventListener
 {
