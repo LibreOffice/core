@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:30:59 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2089,7 +2089,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ portuguese_brazilian ] = "Assign ~ID";
             Text[ japanese ] = "~ID Š„‚è“–‚Ä";
             Text[ chinese_simplified ] = "Ö¸¶¨ ~ID";
-            Text[ chinese_traditional ] = "¤À°t ~ID";
+            Text[ chinese_traditional ] = "«ü©w ~ID";
             Text[ arabic ] = "ÊÚííä ÇáÊÚÑíÝ";
             Text[ dutch ] = "~ID bezet";
             Text[ chinese_simplified ] = "Ö¸¶¨ ~ID";
