@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2004-02-10 10:21:10 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,8 +375,8 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_AREA); //, SvxAreaTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_TRANSPARENCE); //, SvxTransparenceTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_CHAR_NAME );//CHINA001  AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS );//CHINA001 AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_ALIGNMENT, SchAlignmentTabPage::Create, NULL);
             break;
 
@@ -384,8 +384,8 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_AREA); //, SvxAreaTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_TRANSPARENCE); //, SvxTransparenceTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_CHAR_NAME ); //CHINA001 AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS );//CHINA001 AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_LEGEND_POS, SchLegendPosTabPage::Create, NULL);
             break;
 
@@ -401,8 +401,8 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
                 RemoveTabPage(RID_SVXPAGE_AREA);
                 RemoveTabPage(RID_SVXPAGE_TRANSPARENCE);
             }
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_CHAR_NAME ); //CHINA001 AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS );//CHINA001 AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_DATA_DESCR, SchDataDescrTabPage::Create, NULL);
             AddTabPage(TP_STAT, SchStatisticTabPage::Create, NULL);
             if( !m_pParameter->HasStatisticProperties() )
@@ -447,11 +447,11 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
         case OBJECTTYPE_AXIS:
         {
             AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_CHAR_NAME ); //CHINA001 AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS );//CHINA001 AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_AXIS_LABEL, SchAxisLabelTabPage::Create, NULL);
             AddTabPage(TP_SCALE_Y, SchScaleYAxisTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_NUMBERFORMAT, SvxNumberFormatTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_NUMBERFORMAT); //CHINA001 AddTabPage(RID_SVXPAGE_NUMBERFORMAT, SvxNumberFormatTabPage::Create, NULL);
 
             if( !m_pParameter->HasScaleProperties() )
             {
@@ -597,12 +597,17 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
             break;
 
         case RID_SVXPAGE_CHAR_NAME:
-            ((SvxCharNamePage&)rPage).
-                SetFontList(SvxFontListItem(m_pViewElementListProvider->getFontList()));
+
+            //CHINA001 ((SvxCharNamePage&)rPage).
+            //CHINA001     SetFontList(SvxFontListItem(m_pViewElementListProvider->getFontList()));
+            aSet.Put (SvxFontListItem(m_pViewElementListProvider->getFontList(), SID_ATTR_CHAR_FONTLIST)); //CHINA001
+            rPage.PageCreated(aSet); //CHINA001
             break;
 
         case RID_SVXPAGE_CHAR_EFFECTS:
-            ((SvxCharEffectsPage&) rPage).DisableControls( DISABLE_CASEMAP );
+            //CHINA001 ((SvxCharEffectsPage&) rPage).DisableControls( DISABLE_CASEMAP );
+            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP)); //CHINA001
+            rPage.PageCreated(aSet);
             break;
 
         case TP_AXIS_LABEL:
@@ -625,7 +630,9 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
             break;
 
         case RID_SVXPAGE_NUMBERFORMAT:
-            ((SvxNumberFormatTabPage&)rPage).SetNumberFormatList(SvxNumberInfoItem(m_pViewElementListProvider->GetNumFormatter()));
+           //CHINA001  ((SvxNumberFormatTabPage&)rPage).SetNumberFormatList(SvxNumberInfoItem(m_pViewElementListProvider->GetNumFormatter()));
+            aSet.Put (SvxNumberInfoItem( m_pViewElementListProvider->GetNumFormatter(), (const USHORT)SID_ATTR_NUMBERFORMAT_INFO)); //CHINA001
+            rPage.PageCreated(aSet);
             break;
 
         case TP_STAT:
