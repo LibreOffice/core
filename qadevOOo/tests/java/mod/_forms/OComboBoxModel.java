@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OComboBoxModel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:46:29 $
+ *  last change:$Date: 2005-02-24 17:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,27 +59,13 @@
  *
  ************************************************************************/
 package mod._forms;
-
+import com.sun.star.beans.NamedValue;
 import java.io.PrintWriter;
 
-import lib.StatusException;
-import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.FormTools;
-import util.WriterTools;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
-import com.sun.star.form.XBoundComponent;
-import com.sun.star.form.XLoadable;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sdbc.XResultSetUpdate;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.XCloseable;
+import util.DBTools;
 
 
 /**
@@ -148,149 +134,62 @@ import com.sun.star.util.XCloseable;
 * @see ifc.form._XLoadListener
 * @see ifc.container._XChild
 */
-public class OComboBoxModel extends TestCase {
-    XTextDocument xTextDoc;
-
+public class OComboBoxModel extends GenericModelTest {
     /**
-    * Creates Writer document where controls are placed.
-    */
+     * Set some member variable of the super class <CODE>GenericModelTest</CODE>:
+     * <pre>
+     *    super.m_ChangePropertyName = "Text";
+     *    super.m_kindOfControl="ComboBox";
+     *    super.m_ObjectName = "stardiv.one.form.component.ComboBox";
+     *
+     *    NamedValue DataField = new NamedValue();
+     *    DataField.Name = "DataField";
+     *    DataField.Value = DBTools.TST_STRING_F;
+     *    super.m_propertiesToSet.add(DataField);
+     *    super.m_LCShape_Type = "FixedText";
+     * </pre>
+     * Then <CODE>super.initialize()</CODE> was called.
+     * @param tParam the test parameter
+     * @param log the log writer
+     */
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        log.println("creating a textdocument");
-        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory) tParam.getMSF());
+
+        super.m_ChangePropertyName = "Text";
+
+        super.m_kindOfControl="ComboBox";
+
+        super.m_ObjectName = "stardiv.one.form.component.ComboBox";
+
+        NamedValue DataField = new NamedValue();
+        DataField.Name = "DataField";
+        DataField.Value = DBTools.TST_STRING_F;
+        super.m_propertiesToSet.add(DataField);
+
+        super.m_LCShape_Type = "FixedText";
+
+        super.initialize(tParam, log);
+
     }
 
     /**
-    * Disposes Writer document.
-    */
+     * calls <CODE>cleanup()</CODE> from it's super class
+     * @param tParam the test parameter
+     * @param log the log writer
+     */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
-        log.println("    disposing xTextDoc ");
-
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                        XCloseable.class, xTextDoc);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
-        }
+        super.cleanup(tParam, log);
     }
 
+
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
-    * Creates ComboBox in the Form, then binds it to Bibliography
-    * database and returns CheckBox's control. <p>
-    *     Object relations created :
-    * <ul>
-    *  <li> <code>'OBJNAME'</code> for
-    *      {@link ifc.io._XPersistObject} : name of service which is
-    *    represented by this object. </li>
-    *  <li> <code>'LC'</code> for {@link ifc.form._DataAwareControlModel}.
-    *    Specifies the value for LabelControl property. It is
-    *    <code>FixedText</code> component added to the document.</li>
-    *  <li> <code>'FL'</code> for
-    *      {@link ifc.form._DataAwareControlModel} interface.
-    *    Specifies XLoadable implementation which connects form to
-    *    the data source.</li>
-    *  <li> <code>'XUpdateBroadcaster.Checker'</code> : <code>
-    *    _XUpdateBroadcaster.UpdateChecker</code> interface implementation
-    *    which can update, commit data and check if the data was successfully
-    *    commited.</li>
-    * </ul>
-    * @see ifc.form._XUpdateBroadcaster
-    */
+     * calls <CODE>createTestEnvironment()</CODE> from it's super class
+     * @param Param the test parameter
+     * @param log the log writer
+     * @return lib.TestEnvironment
+     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
-        XInterface oObj = null;
-        TestEnvironment tEnv = null;
+        return super.createTestEnvironment(Param, log);
+    }
 
-        XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000,
-                                                            4500, 15000, 10000,
-                                                            "ComboBox");
-
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
-        oObj = aShape.getControl();
-
-        final XLoadable formLoader = FormTools.bindForm(xTextDoc);
-        final XPropertySet ps = (XPropertySet) UnoRuntime.queryInterface(
-                                        XPropertySet.class, oObj);
-
-        // binding control to the "Identifier" field of "biblio" table.
-        try {
-            ps.setPropertyValue("DataField", "Identifier");
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Can't set the property");
-            e.printStackTrace(log);
-            throw new StatusException("Can't create the environment", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Can't set the property");
-            e.printStackTrace(log);
-            throw new StatusException("Can't create the environment", e);
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            log.println("Can't set the property");
-            e.printStackTrace(log);
-            throw new StatusException("Can't create the environment", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Can't set the property");
-            e.printStackTrace(log);
-            throw new StatusException("Can't create the environment", e);
-        }
-
-        log.println("creating a new environment for OComboBoxModel object");
-        tEnv = new TestEnvironment(oObj);
-
-        String objName = "ComboBox";
-        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." +
-                            objName);
-        aShape = FormTools.createControlShape(xTextDoc, 6000, 4500, 15000,
-                                              10000, "FixedText");
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
-
-
-        // added LabelControl for 'DataAwareControlModel'
-        tEnv.addObjRelation("LC", aShape.getControl());
-
-
-        // added FormLoader for 'DataAwareControlModel'
-        tEnv.addObjRelation("FL", formLoader);
-
-
-        //adding ObjRelation for XPersistObject
-        tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true));
-
-        // adding relation for XUpdateBroadcaster
-        final XInterface ctrl = oObj;
-
-        tEnv.addObjRelation("XUpdateBroadcaster.Checker",
-                            new ifc.form._XUpdateBroadcaster.UpdateChecker() {
-            private String lastText = "";
-
-            public void update() throws com.sun.star.uno.Exception {
-                formLoader.load();
-                lastText = ps.getPropertyValue("Text") + "_";
-                ps.setPropertyValue("Text", lastText);
-            }
-
-            public void commit() throws com.sun.star.sdbc.SQLException {
-                XBoundComponent bound = (XBoundComponent) UnoRuntime.queryInterface(
-                                                XBoundComponent.class, ctrl);
-                XResultSetUpdate update = (XResultSetUpdate) UnoRuntime.queryInterface(
-                                                  XResultSetUpdate.class,
-                                                  formLoader);
-
-                bound.commit();
-                update.updateRow();
-            }
-
-            public boolean wasCommited() throws com.sun.star.uno.Exception {
-                formLoader.reload();
-
-                String getS = (String) ps.getPropertyValue("Text");
-
-                return lastText.equals(getS);
-            }
-        });
-
-        return tEnv;
-    } // finish method getTestEnvironment
 } // finish class OComboBoxModel
