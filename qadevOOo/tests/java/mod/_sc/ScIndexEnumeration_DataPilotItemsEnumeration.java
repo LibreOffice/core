@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_DataPilotItemsEnumeration.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2004-04-13 12:20:10 $
+ *  last change:$Date: 2005-01-25 15:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ public class ScIndexEnumeration_DataPilotItemsEnumeration
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
             e.printStackTrace(log);
-            throw new StatusException("Couldn³t create document", e);
+            throw new StatusException("Couldn't create document", e);
         }
     }
 
