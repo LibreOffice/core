@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:26:25 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2215,13 +2215,13 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         sal_uInt32 nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
         if( pGlyphIDs[i] & GF_ISCHAR )
         {
-            nGlyphIdx = MapChar( aSftTTF.get(), nGlyphIdx, (nGlyphIdx & GF_ROTMASK) ? 1 : 0 );
+            nGlyphIdx = MapChar( aSftTTF.get(), nGlyphIdx, (pGlyphIDs[i] & GF_ROTMASK) ? 1 : 0 );
             if( nGlyphIdx == 0 && SYMBOL_CHARSET == (BYTE)pFont->mpSysData )
             {
                 // #i12824# emulate symbol aliasing U+FXXX <-> U+0XXX
                 nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
                 nGlyphIdx = (nGlyphIdx & 0xF000) ? (nGlyphIdx & 0x00FF) : (nGlyphIdx | 0xF000 );
-                nGlyphIdx = MapChar( aSftTTF.get(), nGlyphIdx, (nGlyphIdx & GF_ROTMASK) ? 1 : 0 );
+                nGlyphIdx = MapChar( aSftTTF.get(), nGlyphIdx, (pGlyphIDs[i] & GF_ROTMASK) ? 1 : 0 );
             }
         }
         aShortIDs[i] = static_cast<USHORT>( nGlyphIdx );
