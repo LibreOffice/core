@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:36:38 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,9 @@ public:
         used for that part of the initialisation that can be run only
         after the creation of the new object is finished.  This
         includes registration as listener at event broadcasters.
+
+        Derived classes should call this method at the end of their
+        Init() methods.
     */
     virtual void Init (void);
 
@@ -340,7 +343,13 @@ public:
                             BOOL bBackgroundFullSize );
 
     void    UpdateSlideChangeWindow();
-    void    AssignFromSlideChangeWindow();
+
+    /** Assign the slide change effect that is currently selected in the
+        slide change dialog to the selected slides or master pages.
+        @param eEditMode
+            This defines whether to assign to slides or master pages.
+    */
+    void AssignFromSlideChangeWindow (EditMode eEditMode);
 
     void    SetStartShowWithDialog( BOOL bIn = TRUE ) { bStartShowWithDialog = bIn; }
     BOOL    IsStartShowWithDialog() const { return bStartShowWithDialog; }
