@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XWindowSupplier.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:28:31 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,17 @@
 #include <com/sun/star/awt/XWindow.idl>
 #endif
 
-//=============================================================================
+//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
-/** provide access to a vcl window implementation
+//============================================================================
+/** provides access to a vcl window implementation.
  */
 interface XWindowSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-    /** Allows to get access to a vcl window implementation
+    //------------------------------------------------------------------------
+    /** allows to get access to a vcl window implementation.
 
         @return
             vcl window implementation
@@ -83,7 +83,7 @@ interface XWindowSupplier: com::sun::star::uno::XInterface
     ::com::sun::star::awt::XWindow getWindow();
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
