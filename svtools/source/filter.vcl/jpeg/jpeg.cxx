@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 16:11:16 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,12 @@
  *
  ************************************************************************/
 
+#ifdef SYSTEM_JPEG
+#define INT32 JPEG_INT32
+#endif
+
 #include <tools/solar.h>
+
 extern "C"
 {
     #include "stdio.h"
@@ -67,6 +72,10 @@ extern "C"
     #include "jpeglib.h"
     #include "jerror.h"
 }
+
+#ifdef SYSTEM_JPEG
+#undef INT32
+#endif
 
 #define _JPEGPRIVATE
 #include <tools/new.hxx>
