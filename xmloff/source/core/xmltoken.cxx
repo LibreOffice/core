@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:44:42 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2310,6 +2310,10 @@ namespace xmloff { namespace token {
         TOKEN( "outline-subtotals-bottom"),         // XML_OUTLINE_SUBTOTALS_BOTTOM
         TOKEN( "layout-mode"),                      // XML_LAYOUT_MODE
         TOKEN( "data-pilot-layout-info"),           // XML_DATA_PILOT_LAYOUT_INFO
+
+        TOKEN( "3d" ),                          // XML_3D
+        TOKEN( "image-position" ),              // XML_IMAGE_POSITION
+        TOKEN( "image-align" ),                 // XML_IMAGE_ALIGN
 
         { 0, NULL, NULL }                       // XML_TOKEN_END
     };
