@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:05:36 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ TabDialog TAB_DLG_VALIDATION
                 Text[ czech ] = "Podmínky";
                 Text[ hebrew ] = "Kriterien";
                 Text[ hindi ] = "सिद्धान्त";
+                Text[ slovak ] = "Kritérium";
             };
             PageItem
             {
@@ -139,6 +140,7 @@ TabDialog TAB_DLG_VALIDATION
                 Text[ czech ] = "Nápověda při vstupu";
                 Text[ hebrew ] = "Eingabehilfe";
                 Text[ hindi ] = "इनपुट् सहायता";
+                Text[ slovak ] = "Pomocník pri vstupe";
             };
             PageItem
             {
@@ -170,6 +172,7 @@ TabDialog TAB_DLG_VALIDATION
                 Text[ czech ] = "Chybové hlášení";
                 Text[ hebrew ] = "Fehlermeldung";
                 Text[ hindi ] = "गलती का सावधान";
+                Text[ slovak ] = "Chybové hlásenie";
             };
         };
     };
@@ -197,6 +200,7 @@ TabDialog TAB_DLG_VALIDATION
     Text[ czech ] = "Platnost";
     Text[ hebrew ] = "Gültigkeit";
     Text[ hindi ] = "वैधता";
+    Text[ slovak ] = "Platnosť";
 };
 
 TabPage TP_VALIDATION_VALUES
@@ -236,6 +240,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ czech ] = "Povolit";
         Text[ hebrew ] = "~Zulassen";
         Text[ hindi ] = "~स्वीकृत";
+        Text[ slovak ] = "Povol~iť";
     };
     ListBox LB_ALLOW
     {
@@ -489,6 +494,15 @@ TabPage TP_VALIDATION_VALUES
         < "समय" ; Default ; > ;
         < "टेक्स्ट् लम्बाई" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Všetky hodnoty" ; Default ; > ;
+        < "Celé čísla" ; Default ; > ;
+        < "Desatinné" ; Default ; > ;
+        < "Dátum" ; Default ; > ;
+        < "Čas" ; Default ; > ;
+        < "Dĺžka textu" ; Default ; > ;
+    };
     };
     FixedText FT_VALUE
     {
@@ -520,6 +534,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ czech ] = "Data";
         Text[ hebrew ] = "~Daten";
         Text[ hindi ] = "~ड़ॉटा";
+        Text[ slovak ] = "~Dáta";
     };
     ListBox LB_VALUE
     {
@@ -828,6 +843,17 @@ TabPage TP_VALIDATION_VALUES
         < "बीच में" ; Default ; > ;
         < "बीच में नहीं" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "je rovné" ; Default ; > ;
+        < "je menšie ako" ; Default ; > ;
+        < "je väčší ako" ; Default ; > ;
+        < "je menšie alebo rovné" ; Default ; > ;
+        < "je väčšie alebo sa rovná" ; Default ; > ;
+        < "nie je rovné" ; Default ; > ;
+        < "medzi" ; Default ; > ;
+        < "nie je medzi" ; Default ; > ;
+    };
     };
     FixedText FT_MIN
     {
@@ -859,6 +885,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ czech ] = "Minimum";
         Text[ hebrew ] = "~Minimum";
         Text[ hindi ] = "~न्यूनतम";
+        Text[ slovak ] = "~Minimum";
     };
     Edit EDT_MIN
     {
@@ -897,6 +924,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ czech ] = "Maximum";
         Text[ hebrew ] = "M~aximum";
         Text[ hindi ] = "अ~धिकतम";
+        Text[ slovak ] = "Ma~ximum";
     };
     Edit EDT_MAX
     {
@@ -936,6 +964,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ czech ] = "Povolit mezery";
         Text[ hebrew ] = "~Leerzellen zulassen";
         Text[ hindi ] = "~खाली स्वीकृत करो";
+        Text[ slovak ] = "Povoliť práz~dne";
     };
     Text [ dutch ] = "Waarden" ;
     Text [ english_us ] = "Values" ;
@@ -961,6 +990,7 @@ TabPage TP_VALIDATION_VALUES
     Text[ czech ] = "Hodnoty";
     Text[ hebrew ] = "Werte";
     Text[ hindi ] = "मूल्य";
+    Text[ slovak ] = "Hodnoty";
 };
 
 TabPage TP_VALIDATION_INPUTHELP
@@ -1000,6 +1030,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text[ czech ] = "Zobrazit nápovědu k zadávání údajů, pokud je buňka vybrána";
         Text[ hebrew ] = "E~ingabehilfen bei Selektion einer Zelle anbieten";
         Text[ hindi ] = "कोष्ठ को चुनने के समय इनपुट् सहायता को ~दिखाओ";
+        Text[ slovak ] = "Zobraziť v~stupného pomocníka, pri vybratí bunky";
     };
     FixedLine FL_CONTENT
     {
@@ -1031,6 +1062,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text[ czech ] = "Obsah";
         Text[ hebrew ] = "‮תוכן עיניינים‬";
         Text[ hindi ] = "विषयें";
+        Text[ slovak ] = "Obsah";
     };
     FixedText FT_TITLE
     {
@@ -1062,6 +1094,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text[ czech ] = "Nadpis";
         Text[ hebrew ] = "‮כותרת‬";
         Text[ hindi ] = "~शीर्षक";
+        Text[ slovak ] = "~Nadpis";
     };
     FixedText FT_INPUTHELP
     {
@@ -1093,6 +1126,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text[ czech ] = "Obsah nápovědy";
         Text[ hebrew ] = "~Eingabehilfe";
         Text[ hindi ] = "~इनपुट् सहायता";
+        Text[ slovak ] = "Vstupný po~mocník";
     };
     Edit EDT_TITLE
     {
@@ -1149,6 +1183,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ czech ] = "Obsah";
         Text[ hebrew ] = "‮תוכן עיניינים‬";
         Text[ hindi ] = "विषयें";
+        Text[ slovak ] = "Obsah";
     };
     TriStateBox TSB_SHOW
     {
@@ -1182,6 +1217,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ czech ] = "Zobrazit chybové hlášení pokud jsou zadány neplatné hodnoty";
         Text[ hebrew ] = "Fehler~meldung bei Eingabe ungültiger Werte anzeigen";
         Text[ hindi ] = "अमान्य मूल्यों को प्रविष्ट करने के समय गलती का ~संदेश को दिखाओ";
+        Text[ slovak ] = "Zobraziť chybovú správu pri zada~ní chybných hodnôt";
     };
     MultiLineEdit EDT_ERROR
     {
@@ -1229,6 +1265,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ czech ] = "Chybové hlášení";
         Text[ hebrew ] = "~Fehlermeldung";
         Text[ hindi ] = "~गलती का संदेश";
+        Text[ slovak ] = "Chybová správ~a";
     };
     FixedText FT_TITLE
     {
@@ -1260,6 +1297,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ czech ] = "Nadpis";
         Text[ hebrew ] = "‮כותרת‬";
         Text[ hindi ] = "~शीर्षक";
+        Text[ slovak ] = "~Titulok";
     };
     FixedText FT_ACTION
     {
@@ -1291,6 +1329,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ czech ] = "Akce";
         Text[ hebrew ] = "‮פעולה‬";
         Text[ hindi ] = "~कार्य";
+        Text[ slovak ] = "~Akcia";
     };
     ListBox LB_ACTION
     {
@@ -1489,6 +1528,13 @@ TabPage TP_VALIDATION_ERROR
         < "सूचना" ; Default ; > ;
         < "मॉक्रो" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Zastaviť" ; Default ; > ;
+        < "Upozornenie" ; Default ; > ;
+        < "Informácia" ; Default ; > ;
+        < "Makro" ; Default ; > ;
+    };
     };
     PushButton BTN_SEARCH
     {
@@ -1521,6 +1567,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ czech ] = "Procházet...";
         Text[ hebrew ] = "‮עיון...‬";
         Text[ hindi ] = "~ब्रउज़...";
+        Text[ slovak ] = "~Listovať...";
     };
     Text [ dutch ] = "Foutmelding" ;
     Text [ english_us ] = "Error Alert" ;
@@ -1546,7 +1593,10 @@ TabPage TP_VALIDATION_ERROR
     Text[ czech ] = "Chybové hlášení";
     Text[ hebrew ] = "Fehlermeldung";
     Text[ hindi ] = "गलती का सावधान";
+    Text[ slovak ] = "Chybové hlásenie";
 };
+
+
 
 
 
