@@ -62,6 +62,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Vector;
+import java.util.Stack;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.IntArrayList;
@@ -135,6 +136,179 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
         return pxlDoc;
     }
 
+    /**
+     *  This method returns the priority of operators for the RPN conversion
+     *
+     *  @return  Returns a <code>PxlDocument</code>
+     *
+     *  @throws  IOException  If any I/O error occurs.
+     */
+    private int getPriority(String op) {
+
+        int operatorPriority = -1;
+
+        if (op.equals("("))
+            operatorPriority = 1;
+        else if (op.equals("+"))
+            operatorPriority = 2;
+        else if (op.equals("-"))
+            operatorPriority = 2;
+        else if (op.equals("*"))
+            operatorPriority = 3;
+        else if (op.equals("/"))
+            operatorPriority = 3;
+        else if (op.equals("^"))
+            operatorPriority = 4;
+
+        return(operatorPriority);
+    }
+
+    /**
+     *  This method converts a String containing a formula in infix notation
+     *  to a String in Reverse Polish Notation
+     *
+     *  @return  Returns a <code>PxlDocument</code>
+     *
+     *  @throws  IOException  If any I/O error occurs.
+     */
+    protected String parseFormula(String formula) {
+
+        Debug.log(Debug.TRACE,"parseFormula : " + formula);
+
+        Stack aStack = new Stack();
+        String nextChar;
+        String topOfStack;
+        String outputString = "=";
+        String inputString;
+        StringBuffer inFormula = new StringBuffer(formula);
+        StringBuffer outFormula = new StringBuffer();
+
+        boolean inBrace = false;
+        boolean firstCharAfterBrace = false;
+        boolean firstCharAfterColon = false;
+
+        int len = inFormula.length();
+
+        for (int in = 0; in < len; in++) {
+            switch (inFormula.charAt(in)) {
+            case '[':
+                // We are now inside a StarOffice cell reference.
+                // We also need to strip out the '['
+                inBrace = true;
+
+                // If the next character is a '.', we want to strip it out
+                firstCharAfterBrace = true;
+                break;
+
+            case ']':
+                // We are exiting a StarOffice cell reference
+                // We are stripping out the ']'
+                inBrace = false;
+                break;
+
+            case ':':
+                // We have a cell range reference.
+                // May need to strip out the leading '.'
+                if (inBrace)
+                    firstCharAfterColon = true;
+                outFormula.append(inFormula.charAt(in));
+                break;
+
+            case '.':
+                if (inBrace == true) {
+                    if (firstCharAfterBrace == false &&
+                            firstCharAfterColon == false) {
+                        // Not the first character after the open brace.
+                        // We have hit a separator between a sheet reference
+                        // and a cell reference.  MiniCalc uses a ! as
+                        // this type of separator.
+                        outFormula.append('!');
+                    }
+                    else {
+                        firstCharAfterBrace = false;
+                        firstCharAfterColon = false;
+                        // Since we are in a StarOffice cell reference,
+                        // and we are the first character, we need to
+                        // strip out the '.'
+                    }
+                    break;
+                } else {
+                    // We hit valid data, lets add it to the formula string
+                    outFormula.append(inFormula.charAt(in));
+                    break;
+                }
+
+            case ';':
+                // StarOffice XML format uses ';' as a separator.  MiniCalc (and
+                // many spreadsheets) use ',' as a separator instead.
+                outFormula.append(',');
+                break;
+
+            default:
+                // We hit valid data, lets add it to the formula string
+                outFormula.append(inFormula.charAt(in));
+
+                // Need to make sure that firstCharAfterBrace is not true.
+                firstCharAfterBrace = false;
+                break;
+            }
+        }
+
+        inputString = outFormula.toString();
+
+        for (int i = 1;i<=inputString.length()-1;i++) {
+
+            char ch = inputString.charAt(i);        // Check to see if this is a cell or an operator
+            if(((ch>='a') && (ch<='z')) || (ch>='A') && (ch<='Z'))  {
+                int interval = 1;
+                char nextRef = inputString.charAt(i+interval);
+                if(((nextRef>='a') && (nextRef<='z')) || (nextRef>='A') && (nextRef<='Z')) { // if cell col > 26
+                    interval++;
+                    nextRef = inputString.charAt(i+interval);
+                }
+                while(nextRef>='0' && nextRef<='9') { // Keep reading until we reach another operator or cell reference
+                    interval++;
+                    nextRef = inputString.charAt(i+interval);
+                }
+                nextChar = inputString.substring(i,i+interval); // if cell then read all of the cell reference
+                i += interval-1;
+            } else
+                nextChar = inputString.substring(i,i+1);
+
+            if (nextChar.equals(")")) {
+                topOfStack = (String)aStack.pop();
+                while (!topOfStack.equals("(") && !aStack.empty()) {
+                    outputString += topOfStack;
+                    topOfStack = (String)aStack.pop();
+                }
+            } else if (nextChar.equals("(") || i==1) {
+                    aStack.push(nextChar);
+            } else if ( nextChar.equals("+") ||
+                        nextChar.equals("-") ||
+                        nextChar.equals("*") ||
+                        nextChar.equals("/") ||
+                        nextChar.equals("^")) {
+
+                if(!aStack.empty()) {
+                    topOfStack = (String)aStack.peek();
+                while (getPriority(nextChar) <= getPriority(topOfStack) && !aStack.empty()) {
+                    topOfStack = (String)aStack.pop();
+                    outputString += topOfStack;
+                    if(!aStack.empty())
+                        topOfStack = (String)aStack.peek();
+                    }
+                }
+                aStack.push(nextChar);
+            } else {
+                outputString += nextChar;
+            }
+        }
+        while(!aStack.empty()) {
+            topOfStack = (String)aStack.pop();
+            outputString += topOfStack;
+        }
+        return outputString;
+    }
 
     /**
      *  Add a cell to the current WorkSheet.
@@ -149,6 +323,9 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
      */
     public void addCell(int row, int column, Format fmt, String cellContents) throws IOException {
 
+        if (cellContents.startsWith("=")) {
+            cellContents = parseFormula(cellContents);
+        }
         pxlDoc.addCell(row, column, fmt, cellContents);
     }
 
