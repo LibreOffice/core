@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 06:32:55 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 12:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_LINGUISTIC_XTHESAURUS_HPP_
-#include <com/sun/star/linguistic/XThesaurus.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
 #endif
 
 #ifndef _AEITEM_HXX //autogen
@@ -360,7 +360,7 @@ void SwView::GetState(SfxItemSet &rSet)
 
                     // disable "Thesaurus" (menu entry and key shortcut) if the
                     // language is not supported (by default it is enabled)
-                    uno::Reference< linguistic::XThesaurus >  xThes( ::GetThesaurus() );
+                    uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
                     if (!xThes.is() || nLang == LANGUAGE_NONE ||
                         !xThes->hasLocale( SvxCreateLocale( nLang ) ))
                         rSet.DisableItem(nWhich);

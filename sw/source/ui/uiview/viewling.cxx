@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:38:28 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 12:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #include <svtools/svstdarr.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_LINGUISTIC_XTHESAURUS_HPP_
-#include <com/sun/star/linguistic/XThesaurus.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
 #endif
 #ifndef _LINGU_LNGPROPS_HHX_
 #include <lingu/lngprops.hxx>
@@ -182,6 +182,10 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::linguistic2;
+
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 /*--------------------------------------------------------------------
     Beschreibung:   Lingu-Dispatcher
@@ -230,7 +234,7 @@ void SwView::SpellDocument( const String* pStr, sal_Bool bAllRight )
     SfxErrorContext aContext( ERRCTX_SVX_LINGU_SPELLING, aEmptyStr, pEditWin,
          RID_SVXERRCTX, DIALOG_MGR() );
 
-    uno::Reference< linguistic::XSpellChecker1 >  xSpell = ::GetSpellChecker();
+    Reference< XSpellChecker1 >  xSpell = ::GetSpellChecker();
     if(!xSpell.is())
     {   // keine Arme keine Kekse
         ErrorHandler::HandleError( ERRCODE_SVX_LINGU_LINGUNOTEXISTS );
@@ -276,8 +280,8 @@ void SwView::_SpellDocument( const String* pStr, sal_Bool bAllRight )
     sal_Bool bSelection = ((SwCrsrShell*)pWrtShell)->HasSelection() ||
         pWrtShell->GetCrsr() != pWrtShell->GetCrsr()->GetNext();
 
-    uno::Reference< linguistic::XSpellChecker1 >  xSpell = ::GetSpellChecker();
-    uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
+    Reference< XSpellChecker1 >  xSpell = ::GetSpellChecker();
+    Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
     sal_Bool bIsWrapReverse  = xProp.is() ?
             *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_WRAP_REVERSE) ).getValue() : sal_False;
     sal_Bool bIsSpellSpecial = xProp.is() ?
@@ -295,7 +299,7 @@ void SwView::_SpellDocument( const String* pStr, sal_Bool bAllRight )
         if( aBox.Execute() == RET_YES  &&  xProp.is())
         {
             sal_Bool bTrue = sal_True;
-            uno::Any aTmp(&bTrue, ::getBooleanCppuType());
+            Any aTmp(&bTrue, ::getBooleanCppuType());
             xProp->setPropertyValue( C2U(UPN_IS_SPELL_SPECIAL), aTmp );
         }
         else
@@ -320,7 +324,7 @@ void SwView::_SpellDocument( const String* pStr, sal_Bool bAllRight )
 
 void SwView::SpellStart( SvxSpellArea eWhich, sal_Bool bStartDone, sal_Bool bEndDone )
 {
-    uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
+    Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
     sal_Bool bIsWrapReverse = xProp.is() ?
             *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_WRAP_REVERSE) ).getValue() : sal_False;
 
@@ -492,7 +496,7 @@ void SwView::HyphenateDocument()
     SfxErrorContext aContext( ERRCTX_SVX_LINGU_HYPHENATION, aEmptyStr, pEditWin,
          RID_SVXERRCTX, DIALOG_MGR() );
 
-    uno::Reference< linguistic::XHyphenator >  xHyph( ::GetHyphenator() );
+    Reference< XHyphenator >  xHyph( ::GetHyphenator() );
     if (!xHyph.is())
     {
         ErrorHandler::HandleError( ERRCODE_SVX_LINGU_LINGUNOTEXISTS );
@@ -510,7 +514,7 @@ void SwView::HyphenateDocument()
         sal_Bool bOldIdle = pVOpt->IsIdle();
         pVOpt->SetIdle( sal_False );
 
-        uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
+        Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
 
 
         pWrtShell->StartUndo(UNDO_INSATTR);         // spaeter gueltig
@@ -533,7 +537,7 @@ void SwView::HyphenateDocument()
                 if (xProp.is())
                 {
                     sal_Bool bTrue = sal_True;
-                    uno::Any aTmp(&bTrue, ::getBooleanCppuType());
+                    Any aTmp(&bTrue, ::getBooleanCppuType());
                     xProp->setPropertyValue( C2U(UPN_IS_HYPH_SPECIAL), aTmp );
                 }
             }
@@ -601,7 +605,7 @@ void SwView::StartThesaurus()
     String aTmp = bSelection ?
         pWrtShell->GetSelTxt() : pWrtShell->GetCurWord();
 
-    uno::Reference< linguistic::XThesaurus >  xThes( OFF_APP()->GetThesaurus() );
+    Reference< XThesaurus >  xThes( ::GetThesaurus() );
     SvxThesaurusDialog *pDlg = NULL;
 
     if ( !xThes.is() || !xThes->hasLocale( SvxCreateLocale( eLang ) ) )
@@ -713,7 +717,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
             const sal_Bool bOldViewLock = pWrtShell->IsViewLocked();
             pWrtShell->LockView( sal_True );
             pWrtShell->Push();
-            uno::Reference< linguistic::XSpellAlternatives >  xAlt( pWrtShell->GetCorrection(&rPt) );
+            Reference< XSpellAlternatives >  xAlt( pWrtShell->GetCorrection(&rPt) );
             if ( xAlt.is() )
             {
                 bRet = sal_True;
@@ -730,146 +734,4 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
     }
     return bRet;
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:49  hr
-    initial import
-
-    Revision 1.135  2000/09/18 16:06:13  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.134  2000/08/11 12:41:54  tl
-    #73640# no double interactive spelling/hyphenation, just show warning message
-
-    Revision 1.133  2000/07/04 15:19:51  tl
-    XHyphenator1 => XHyphenator
-
-    Revision 1.132  2000/05/26 07:21:35  os
-    old SW Basic API Slots removed
-
-    Revision 1.131  2000/03/30 13:02:17  os
-    include
-
-    Revision 1.130  2000/03/23 07:50:25  os
-    UNO III
-
-    Revision 1.129  2000/03/03 15:17:04  os
-    StarView remainders removed
-
-    Revision 1.128  2000/02/16 21:01:05  tl
-    #72219# Locale Umstellung
-
-    Revision 1.127  2000/02/11 14:59:35  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.126  2000/02/07 13:28:12  tl
-    #72445# bAllRight passed as argument to spell-wrapper
-
-    Revision 1.125  2000/01/11 10:37:42  tl
-    #70735# CheckSpellChanges called from SW_MOD for ONE_LINGU; used SvxDicListChgClamp
-
-    Revision 1.124  1999/12/10 13:09:48  tl
-    #70383# SvxGetLinguPropertySet => ::GetLinguPropertySet
-
-    Revision 1.123  1999/11/24 18:37:41  tl
-    check for Service availability
-
-    Revision 1.122  1999/11/19 16:40:24  os
-    modules renamed
-
-    Revision 1.121  1999/11/16 14:40:58  hr
-    #65293#: syntax
-
-    Revision 1.120  1999/11/10 11:10:56  tl
-    Ongoing ONE_LINGU implementation
-
-    Revision 1.119  1999/10/25 19:44:24  tl
-    ongoing ONE_LINGU implementation
-
-    Revision 1.118  1999/10/12 16:05:24  mh
-    chg: include
-
-    Revision 1.117  1999/08/31 08:40:00  TL
-    #if[n]def ONE_LINGU inserted (for transition of lingu to StarOne)
-
-
-      Rev 1.116   31 Aug 1999 10:40:00   TL
-   #if[n]def ONE_LINGU inserted (for transition of lingu to StarOne)
-
-      Rev 1.115   24 Aug 1999 14:55:20   TL
-   Lingu StarOne interface selectable with define ONE_LINGU
-
-      Rev 1.114   20 Aug 1999 16:08:42   TL
-   Switched to StarOne Thesaurus interface
-
-      Rev 1.113   08 Jul 1999 18:45:24   MA
-   Use internal object to toggle wait cursor
-
-      Rev 1.112   26 May 1999 14:45:24   HJS
-   fuer os2 umgebaut
-
-      Rev 1.111   11 May 1999 14:14:14   AMA
-   Fix #65174#: Thesaurus-Fehlermeldung, wenn keine Sprache eingstellt ist.
-
-      Rev 1.110   10 May 1999 14:16:32   AMA
-   Fix #65176#: Bei der Lingu-Fehlermeldung keine Sanduhr anzeigen
-
-      Rev 1.109   27 Nov 1998 14:58:04   AMA
-   Fix #59951#59825#: Unterscheiden zwischen Rahmen-,Seiten- und Bereichsspalten
-
-      Rev 1.108   25 Aug 1998 14:01:42   OM
-   #55404# Linguistik-Popup auf bei DrawText-Objekten aufrufen
-
-      Rev 1.107   24 Feb 1998 15:29:08   JP
-   Search..: SWPOSDOC entfernt, auf enums umgestellt
-
-      Rev 1.106   17 Dec 1997 16:28:42   ER
-   cast fuer IRIX
-
-      Rev 1.105   03 Dec 1997 17:10:34   AMA
-   Fix: Paintprobleme durch Actionklammerung bei automatischer Trennung
-
-      Rev 1.104   29 Nov 1997 16:48:38   MA
-   includes
-
-      Rev 1.103   21 Nov 1997 15:00:20   MA
-   includes
-
-      Rev 1.102   27 Oct 1997 12:01:14   AMA
-   Fix #44941#: Thesaurus bei prueft und ersetzt Selektionen genau.
-
-      Rev 1.101   13 Oct 1997 19:10:08   JP
-   pNext vom Ring wurde privat; zugriff ueber GetNext()
-
-      Rev 1.100   30 Sep 1997 16:53:50   TJ
-   include
-
-      Rev 1.99   12 Sep 1997 10:36:10   OS
-   ITEMID_* definiert
-
-      Rev 1.98   11 Sep 1997 12:18:18   AMA
-   Fix #43379# hier unnoetig, denn SpellArgs werden jetzt richtig initialisiert
-
-      Rev 1.97   04 Sep 1997 17:14:46   MA
-   includes
-
-      Rev 1.96   02 Sep 1997 14:38:06   AMA
-   Fix #43379#: Spezialbereiche nur pruefen, wenn sie angezeigt werden.
-
-      Rev 1.95   29 Aug 1997 16:00:36   OS
-   PopupMenu::Execute mit Window* fuer VCL
-
-      Rev 1.94   15 Aug 1997 11:48:00   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.93   11 Aug 1997 10:17:52   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.92   08 Aug 1997 17:26:14   OM
-   Headerfile-Umstellung
-
-------------------------------------------------------------------------*/
-
 

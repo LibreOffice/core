@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlelstnr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 12:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #pragma hdrstop
 
 
-#ifndef _COM_SUN_STAR_LINGUISTIC_DICTIONARYLISTEVENTFLAGS_HPP_
-#include <com/sun/star/linguistic/DictionaryListEventFlags.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_DICTIONARYLISTEVENTFLAGS_HPP_
+#include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #endif
 
 #ifndef _VOS_MUTEX_HXX_
@@ -88,8 +88,9 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::linguistic;
+using namespace ::com::sun::star::linguistic2;
 
 /* -----------------------------17.03.00 09:07--------------------------------
 
@@ -119,9 +120,10 @@ SwDicListEvtListener::~SwDicListEvtListener()
 /* -----------------------------17.03.00 09:06--------------------------------
 
  ---------------------------------------------------------------------------*/
+
 void SwDicListEvtListener::processDictionaryListEvent(
             const DictionaryListEvent& aDicListEvent)
-        throw( ::com::sun::star::uno::RuntimeException )
+        throw( RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -138,27 +140,16 @@ void SwDicListEvtListener::processDictionaryListEvent(
     SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll );
 }
 
-/*------------------------------------------------------------------------
 
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2000/09/18 16:06:15  willem.vandorp
-    OpenOffice header added.
+void SAL_CALL SwDicListEvtListener::disposing(
+            const EventObject& rSource )
+        throw(RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
 
-    Revision 1.5  2000/05/11 12:51:32  tl
-    if[n]def ONE_LINGU entfernt, namespace's verwendet
-
-    Revision 1.4  2000/03/21 15:39:43  os
-    UNOIII
-
-    Revision 1.3  2000/02/11 15:00:05  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.2  2000/01/11 19:38:42  tl
-    #70735# evaluate DictionaryListEvents
-
-    Revision 1.1  2000/01/11 10:49:11  tl
-    #70735# initial revision
-
-
-------------------------------------------------------------------------*/
+    if (xDicList.is()  &&  rSource.Source == xDicList)
+    {
+        xDicList = 0;
+    }
+}
 
