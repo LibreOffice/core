@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:07:28 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,6 @@
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
-#endif
-
 #define _OUTLINER_CXX
 #include <outliner.hxx>
 #include <paralist.hxx>
@@ -1112,7 +1108,7 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                         // Translation...
                         aTextPos += rOrigin;
                         Font aRotatedFont( aBulletFont );
-                        aRotatedFont.SetLineOrientation( nOrientation );
+                        aRotatedFont.SetOrientation( nOrientation );
                         pOutDev->SetFont( aRotatedFont );
                     }
 
