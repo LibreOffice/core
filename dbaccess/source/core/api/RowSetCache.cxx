@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:02:45 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
@@ -446,23 +449,6 @@ void ORowSetCache::setMaxRowSize(sal_Int32 _nSize)
     }
 }
 // -------------------------------------------------------------------------
-// OComponentHelper
-void ORowSetCache::disposing(void)
-{
-}
-// -------------------------------------------------------------------------
-
-// ::com::sun::star::lang::XEventListener
-void ORowSetCache::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
-{
-}
-// -------------------------------------------------------------------------
-
-// XCloseable
-void ORowSetCache::close(  )
-{
-}
-// -------------------------------------------------------------------------
 
 // XResultSetMetaDataSupplier
 Reference< XResultSetMetaData > ORowSetCache::getMetaData(  )
@@ -470,14 +456,6 @@ Reference< XResultSetMetaData > ORowSetCache::getMetaData(  )
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------
-
-// ::com::sun::star::sdbcx::XColumnsSupplier
-Reference< ::com::sun::star::container::XNameAccess > ORowSetCache::getColumns(  ) throw(RuntimeException)
-{
-    return Reference< ::com::sun::star::container::XNameAccess >();
-}
-// -------------------------------------------------------------------------
-
 // XRow
 sal_Bool ORowSetCache::wasNull(  )
 {
@@ -1082,7 +1060,7 @@ sal_Bool ORowSetCache::moveWindow()
 
             sal_Int32 nPos = m_nStartPos + m_nFetchSize + 1;
             sal_Bool bCheck = m_pCacheSet->absolute(nPos);
-            bCheck = fill(aIter,m_pMatrix->end(),nPos,bCheck);
+            bCheck = fill(aIter,aEnd,nPos,bCheck); // refill the region wew don't need anymore
 
 //          // we know that this is the current maximal rowcount here
 //          if ( !m_bRowCountFinal && bCheck )
@@ -1550,17 +1528,6 @@ void ORowSetCache::moveToCurrentRow(  )
 //  }
 }
 // -------------------------------------------------------------------------
-
-// XRowSet
-void ORowSetCache::execute(  )
-{
-}
-// -------------------------------------------------------------------------
-// ::com::sun::star::util::XCancellable
-void ORowSetCache::cancel(  ) throw(RuntimeException)
-{
-}
-// -------------------------------------------------------------------------
 // ::com::sun::star::sdbcx::XDeleteRows
 Sequence< sal_Int32 > ORowSetCache::deleteRows( const Sequence< Any >& rows )
 {
@@ -1622,16 +1589,6 @@ void ORowSetCache::rotateCacheIterator(sal_Int16 _nDist)
             }
         }
     }
-}
-// -----------------------------------------------------------------------------
-// XWarningsSupplier
-Any ORowSetCache::getWarnings(  )
-{
-    return Any ();
-}
-// -------------------------------------------------------------------------
-void ORowSetCache::clearWarnings(  )
-{
 }
 // -------------------------------------------------------------------------
 void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRow)
