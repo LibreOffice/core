@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-27 20:39:35 $
+ *  last change: $Author: jp $ $Date: 2001-10-08 13:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9488,31 +9488,6 @@ SfxSlotInfo FN_EDIT_HYPERLINK
     SlotName[ turkish ] = "Hyperlink'i d�zenle";
     SlotName[ catalan ] = "Editar hiperenlace";
     SlotName[ finnish ] = "Muokkaa hyperlinkki�";
-};
-SfxSlotInfo FN_SECTION_APPENDNODE
-{
-    SlotName = "Absatz an Bereich anf�gen";
-    SlotName [ english ] =  "Append paragraph to section";
-    SlotName[ english_us ] = "Append paragraph to section";
-    SlotName[ portuguese ] = "Append paragraph to section";
-    SlotName[ russian ] = "Append paragraph to section";
-    SlotName[ greek ] = "Append paragraph to section";
-    SlotName[ dutch ] = "Append paragraph to section";
-    SlotName[ french ] = "Ajouter le paragraphe � la section";
-    SlotName[ spanish ] = "Adjuntar p�rrafo al �rea";
-    SlotName[ finnish ] = "Append paragraph to section";
-    SlotName[ italian ] = "Append paragraph to section";
-    SlotName[ danish ] = "Append paragraph to section";
-    SlotName[ swedish ] = "L�gg till stycke till omr�de";
-    SlotName[ polish ] = "Dodaj akapit do obszaru";
-    SlotName[ portuguese_brazilian ] = "Append paragraph to section";
-    SlotName[ japanese ] = "範囲に段落を付け加える";
-    SlotName[ korean ] = "Append paragraph to section";
-    SlotName[ chinese_simplified ] = "添加段落编号";
-    SlotName[ chinese_traditional ] = "段落附加在區域";
-    SlotName[ turkish ] = "Append paragraph to section";
-    SlotName[ arabic ] = "Append paragraph to section";
-    SlotName[ catalan ] = "Append paragraph to section";
 };
 SfxSlotInfo FN_SET_MODOPT_TBLNUMFMT
 {

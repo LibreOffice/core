@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 15:10:28 $
+ *  last change: $Author: jp $ $Date: 2001-10-08 13:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1559,49 +1559,30 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
         default:
         {
-            TypeId pTypeId = 0;
-
             FlushInBuffer( &rSh );
 //???           if( bFlushCharBuffer )
 //???               FlushInBuffer( &rSh );
             switch( eKeyState )
             {
             case KS_AppendNodeInSection:
-            {
                 rSh.AppendNodeInSection();
-            }
-            break;
+                break;
 
             case KS_NoNum:
-            {
                 rSh.NoNum();
-                pTypeId = TYPE(SwListShell);
-            }
-            break;
+                break;
+
             case KS_NumOff:
-            {
                 // Shellwechsel - also vorher aufzeichnen
                 rSh.DelNumRules();
-            }
-            break;
+                break;
 
             case KS_NumDown:
-            {
                 rSh.NumUpDown( TRUE );
-            }
-            break;
+                break;
             case KS_NumUp:
-            {
                 rSh.NumUpDown( FALSE );
-            }
-            break;
-            case KS_NumOrNoNum:
-            {
-                //Backspace in Numerierung und Nummer -> Nummer auschalten
-                //SHIFT-Backspace in Numerierung und NoNum -> Nummer wieder einschalten
-                pTypeId = TYPE(SwListShell);
-            }
-            break;
+                break;
 
             case KS_OutlineDown:
                 rSh.OutlineUpDown( 1 );
@@ -1611,25 +1592,19 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
 
             case KS_NextCell:
-            {
                 //In Tabelle immer 'flushen'
                 rSh.GoNextCell();
-            }
-            break;
-            case KS_PrevCell:
-            {
-                rSh.GoPrevCell();
-            }
-            break;
-            case KS_AutoFmtByInput:
-            {
-                rSh.SplitNode( TRUE );
-                pTypeId = TYPE(SwTextShell);
-            }
-            break;
-
-            case KS_DontExpand:
                 break;
+            case KS_PrevCell:
+                rSh.GoPrevCell();
+                break;
+            case KS_AutoFmtByInput:
+                rSh.SplitNode( TRUE );
+                break;
+
+//          case KS_NumOrNoNum:
+//          case KS_DontExpand:
+//              break;
 
             case KS_GlossaryExpand:
             {
@@ -1669,7 +1644,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
             case KS_EditFormula:
             {
-                pTypeId = TYPE(SwTextShell);
                 const USHORT nId = SwInputChild::GetChildWindowId();
 
                 SfxViewFrame* pVFrame = GetView().GetViewFrame();
@@ -3936,6 +3910,9 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
 /***********************************************************************
 
         $Log: not supported by cvs2svn $
+        Revision 1.10  2001/09/11 15:10:28  jp
+        Task #91678#: 'selection clipbord' implemented
+
         Revision 1.9  2001/05/08 19:13:33  jp
         Bug #86635#: download filter avaiable
 

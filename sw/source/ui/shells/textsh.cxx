@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-28 16:53:33 $
+ *  last change: $Author: jp $ $Date: 2001-10-08 13:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,10 +685,6 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     }
     break;
 
-    case FN_SECTION_APPENDNODE:
-        rReq.SetReturnValue( SfxBoolItem( nSlot, rSh.AppendNodeInSection() ));
-        break;
-
     default:
         ASSERT( !this, "falscher Dispatcher" );
         return;
@@ -831,11 +827,6 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             break;
             case FN_INSERT_HRULER :
                 if(rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel() )
-                    rSet.DisableItem(nWhich);
-            break;
-
-            case FN_SECTION_APPENDNODE:
-                if( !rSh.CanInsertNodeAtEndOfSection() )
                     rSet.DisableItem(nWhich);
             break;
         }
@@ -1069,6 +1060,9 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/09/28 16:53:33  jp
+    Bug #85610#: InsertSymbol - set always the attributes for all scripts of the inserted text
+
     Revision 1.8  2001/07/24 07:53:46  os
     #90122# ruby dialog registered at the thext shell instead of the view
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-08-01 10:35:32 $
+ *  last change: $Author: jp $ $Date: 2001-10-08 13:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,8 +476,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_INSERT_MULTI_TOX         (FN_INSERT2 + 20)   /* insert any TOX */
 #define FN_INSERT_AUTH_ENTRY_DLG    (FN_INSERT2 + 21)   /* insert entry for table of authorities*/
-
-#define FN_SECTION_APPENDNODE       (FN_INSERT2 + 22)   /* insert an Paragraph behind the current section*/
 
 /*--------------------------------------------------------------------
     Bereich: Format
