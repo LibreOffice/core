@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-07 18:51:48 $
+ *  last change: $Author: cp $ $Date: 2001-06-20 10:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ XubString SalData::GetCommandLineParam( USHORT nParam ) const
 {
     if( !nParam ) { return aBinaryPath_; }
     if( nParam >= argc_ ) return String();
-    return String( argv_[nParam], gsl_getSystemTextEncoding() );
+    return String( argv_[nParam], osl_getThreadTextEncoding() );
 }
 
 SalDisplay *SalData::GetDisplay( Display *pDisplay )
@@ -461,6 +461,7 @@ SalXLib::~SalXLib()
 // #endif
 }
 
+
 static char sDISPLAY___[30];
 void SalXLib::Init( int *pArgc, char *ppArgv[] )
 {
@@ -487,10 +488,17 @@ void SalXLib::Init( int *pArgc, char *ppArgv[] )
     {
         char *pDisplayString = getenv ("DISPLAY");
 
+        rtl::OUString aProgramFileURL = pSalData->GetCommandLineParam(0);
+        rtl::OUString aProgramSystemPath;
+        osl_getSystemPathFromFileURL (aProgramFileURL.pData, &aProgramSystemPath.pData);
+        rtl::OString  aProgramName = rtl::OUStringToOString(
+                                            aProgramSystemPath,
+                                            osl_getThreadTextEncoding() );
+
         if( pDisplayString )
         {
             fprintf( stderr, "%s:\n   cannot open display \"%s\"\n",
-                     ppArgv[0],
+                     aProgramName.getStr(),
                      pDisplayString );
             fprintf( stderr, "   Please check your \"DISPLAY\" environment variable\n   as well as the permissions to access that display.\n");
         }
@@ -500,7 +508,7 @@ void SalXLib::Init( int *pArgc, char *ppArgv[] )
                      "%s:\n   cannot open display; DISPLAY environment variable is not set\n"
                      "   please set it to the correct value and check\n"
                      "   the permission to access that display.\n",
-                     ppArgv[0]
+                     aProgramName.getStr()
                      );
         }
         fprintf( stderr, "   (See \"man X\" resp. \"man xhost\" for details)\n");
