@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:21:46 $
+ *  last change: $Author: dr $ $Date: 2001-01-11 09:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     XclExternsheetList* pExternsheetRecs;
     XclObjList*         pObjRecs;
     XclNoteList*        pNoteRecs;
+    String              sAddNoteText;       // text to append at current note (multiple hyperlinks)
     XclEscher*          pEscher;
 
     XclPivotCacheList*  pPivotCacheList;
