@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-02 20:59:11 $
+ *  last change: $Author: rt $ $Date: 2001-10-12 20:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,7 +893,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ portuguese_brazilian ] = "S~ans";
         Text[ japanese ] = "S~ans";
         Text[ korean ] = "S~ans";
-        Text[ chinese_simplified ] = "Sans";
+        Text[ chinese_simplified ] = "S~ans";
         Text[ chinese_traditional ] = "S~ans";
         Text[ turkish ] = "S~ans";
         Text[ arabic ] = "S~ans";
@@ -927,10 +927,10 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ swedish ] = "F~ixed";
         Text[ polish ] = "F~ixed";
         Text[ portuguese_brazilian ] = "F~ixed";
-        Text[ japanese ] = "å›ºå®š";
+        Text[ japanese ] = "å›ºå®š(~I)";
         Text[ korean ] = "F~ixed";
-        Text[ chinese_simplified ] = "å›ºå®šçš„";
-        Text[ chinese_traditional ] = "å›ºå®šçš„";
+        Text[ chinese_simplified ] = "å›ºå®šçš„(~I)";
+        Text[ chinese_traditional ] = "å›ºå®šçš„(~I)";
         Text[ turkish ] = "F~ixed";
         Text[ arabic ] = "F~ixed";
         Text[ catalan ] = "F~ixed";
@@ -1569,7 +1569,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ french ] = "Numérateur";
             Text[ spanish ] = "Altura del ~numerador";
             Text[ finnish ] = "~Osoittaja";
-            Text[ italian ] = "Contatore";
+            Text[ italian ] = "Dist. ~numeratore";
             Text[ danish ] = "~Tællerhøjde:";
             Text[ swedish ] = "~Täljare, höjd";
             Text[ polish ] = "Licznik";
@@ -1598,7 +1598,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ french ] = "Dénominateur";
             Text[ spanish ] = "~Altura del denominador";
             Text[ finnish ] = "~Nimitt?j?";
-            Text[ italian ] = "Prof. del denominatore";
+            Text[ italian ] = "Dist. ~denominatore";
             Text[ danish ] = "~Nævnerdybde:";
             Text[ swedish ] = "~Nämnare, djup:";
             Text[ polish ] = "Mianownik";
@@ -5863,20 +5863,20 @@ FloatingWindow RID_TOOLBOXWINDOW
                 HelpId = HID_SMA_XSLASHY ;
                 Text = "Quotientenmenge" ;
                 Text [ ENGLISH ] = "???" ;
-                Text [ english_us ] = "Quotient Set " ;
+                Text [ english_us ] = "Quotient Set" ;
                 Text [ portuguese_brazilian ] = "Quotientenmenge " ;
-                Text [ swedish ] = "Kvotmängd  " ;
+                Text [ swedish ] = "Kvotmängd" ;
                 Text [ danish ] = "kvotientmængde " ;
-                Text [ italian ] = "Insieme quoziente " ;
-                Text [ spanish ] = "Conjunto cociente " ;
-                Text [ french ] = "Ensemble quotient " ;
+                Text [ italian ] = "Insieme quoziente" ;
+                Text [ spanish ] = "Conjunto cociente" ;
+                Text [ french ] = "Ensemble quotient" ;
                 Text [ dutch ] = "Quotiëntenverzameling  " ;
                 Text [ portuguese ] = "Conjunto de quociente " ;
-                Text[ chinese_simplified ] = "å•†æ•°é›† ";
-                Text[ russian ] = "Ìíîæåñòâî ÷àñòíûõ  ";
-                Text[ polish ] = "Zbiór ilorazów  ";
+                Text[ chinese_simplified ] = "å•†æ•°é›†";
+                Text[ russian ] = "Ìíîæåñòâî ÷àñòíûõ";
+                Text[ polish ] = "Zbiór ilorazów";
                 Text[ japanese ] = "å•†é›†åˆ ";
-                Text[ chinese_traditional ] = "å•†æ•¸é›† ";
+                Text[ chinese_traditional ] = "å•†æ•¸é›†";
                 Text[ arabic ] = "ãÌãæÚÉ ÎÇÑÌ ÇáŞÓãÉ ";
                 Text[ greek ] = "Óıíïëï ğçëßêïõ ";
                 Text[ korean ] = "ìƒì§‘í•© ";
@@ -5891,20 +5891,20 @@ FloatingWindow RID_TOOLBOXWINDOW
                 HelpId = HID_SMA_ALEPH ;
                 Text = "aleph" ;
                 Text [ ENGLISH ] = "aleph" ;
-                            TEXT[ italian ] = "Aleph   ";
+                            TEXT[ italian ] = "Aleph";
                 TEXT[ portuguese_brazilian ] = "aleph ";
                 TEXT[ portuguese ] = "aleph ";
                 TEXT[ danish ] = "aleph ";
-                TEXT[ french ] = "Aleph ";
-                TEXT[ swedish ] = "Alef ";
+                TEXT[ french ] = "Aleph";
+                TEXT[ swedish ] = "Alef";
                 TEXT[ dutch ] = "aleph  ";
-                TEXT[ spanish ] = "aleph ";
-                TEXT[ english_us ] = "Aleph ";
-                TEXT[ chinese_simplified ] = "é˜¿å°”æ³• ";
-                TEXT[ russian ] = "Àëåô  ";
-                TEXT[ polish ] = "Alef ";
+                TEXT[ spanish ] = "aleph";
+                TEXT[ english_us ] = "Aleph";
+                TEXT[ chinese_simplified ] = "aleph";
+                TEXT[ russian ] = "Àëåô";
+                TEXT[ polish ] = "Alef";
                 TEXT[ japanese ] = "ï½±ï¾šï¾Œ ";
-                TEXT[ chinese_traditional ] = "é˜¿çˆ¾æ³• ";
+                TEXT[ chinese_traditional ] = "aleph";
                 TEXT[ arabic ] = "aleph ";
                 TEXT[ greek ] = "aleph ";
                 TEXT[ korean ] = "ì•Œë ˆí”„ ";
@@ -6227,7 +6227,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ swedish ] = "Mängd rationella tal";
                 TEXT[ dutch ] = "Hoeveelheid rationele getallen";
                 TEXT[ spanish ] = "Conjunto de números racionales";
-                TEXT[ english_us ] = "Rational Numbers Set";
+                TEXT[ english_us ] = "Set of Rational Numbers";
                 TEXT[ chinese_simplified ] = "æœ‰ç†æ•°é›†";
                 TEXT[ russian ] = "Ìíîæåñòâî ğàöèîíàëüíûõ ÷èñåë";
                 TEXT[ polish ] = "Zbiór liczb wymiernych";
@@ -8580,19 +8580,19 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ ENGLISH ] = "Double square brackets (scaleable)" ;
                 Text[ english_us ] = "Double Square Brackets (Scalable)";
                 Text[ portuguese ] = "Parênteses rectos (ajustáveis)";
-                Text[ russian ] = "êâàäğàòíûå ñêîáêè (èçì.)";
+                Text[ russian ] = "Äâîéíûå êâàäğàòíûå ñêîáêè (èçì.)";
                 Text[ greek ] = "áãêıëåò (êëéìáêşìåíåò)";
                 Text[ dutch ] = "Dubbele hoekige haakjes (uitbreidbaar)";
-                Text[ french ] = "Crochets (taille variable)";
-                Text[ spanish ] = "corchetes (graduables)";
-                Text[ italian ] = "Parentesi quadre (in scala)";
+                Text[ french ] = "Crochets doubles (taille variable)";
+                Text[ spanish ] = "corchetes dobles (graduables)";
+                Text[ italian ] = "Parentesi quadre doppie (in scala)";
                 Text[ danish ] = "kantede parenteser (skalerbare)";
-                Text[ swedish ] = "Hakparenteser (skalbara)";
+                Text[ swedish ] = "Dubbla hakparenteser (skalbara)";
                 Text[ polish ] = "Nawiasy kwadratowe (zmieniaj¹ce rozmiar)";
                 Text[ portuguese_brazilian ] = "Double square brackets (scaleable)";
                 Text[ japanese ] = "äºŒé‡å¤§ã‹ã£ã“(è‡ªå‹•ï½»ï½²ï½½ï¾)";
                 Text[ korean ] = "ê°ê´„í˜¸(ë°°ìœ¨ì¡°ì • ê°€ëŠ¥)";
-                Text[ chinese_simplified ] = "æ–¹æ‹¬å·(å¯å˜)";
+                Text[ chinese_simplified ] = "åŒé‡æ–¹æ‹¬å·(å¯å˜)";
                 Text[ chinese_traditional ] = "é›™å°–å½¢æ‹¬è™Ÿ(å¯ä¼¸ç¸®)";
                 Text[ arabic ] = "ÃŞæÇÓ ŞÇÆãÉ ÇáÒÇæíÉ (ÇáÍÌã ŞÇÈá ááÊÛííÑ)";
                 Text[ turkish ] = "Köşeli ayraç (ölçeklendirilebilir)";
@@ -11329,6 +11329,7 @@ String RID_MATH_TOOLBOX
     Text[ catalan ] = "Barra de herramientas";
     Text[ finnish ] = "Päätyökalurivi";
 };
+
 
 
 
