@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
+ *  last change: $Author: mib $ $Date: 2001-08-15 11:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,9 @@
 #ifndef _FMTHBSH_HXX //autogen
 #include <fmthbsh.hxx>
 #endif
+#ifndef _FMTFLD_HXX //autogen
+#include <fmtfld.hxx>
+#endif
 
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -218,6 +221,7 @@
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
 #endif
+#include "fldbas.hxx"
 
 #ifndef _HTMLNUM_HXX
 #include <htmlnum.hxx>
@@ -2294,7 +2298,11 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                     else
                     {
                         pTxtHt = pHt;
-                        bWriteBreak = FALSE;    // der Absatz ist aber auch nicht leer
+                        USHORT nFldWhich;
+                        if( RES_TXTATR_FIELD != pHt->Which() ||
+                             ( RES_POSTITFLD != (nFldWhich = ((const SwFmtFld&)pHt->GetAttr()).GetFld()->Which()) &&
+                            RES_SCRIPTFLD != nFldWhich ) )
+                            bWriteBreak = FALSE;
                     }
                     bOutChar = FALSE;       // keine 255 ausgeben
                 }
@@ -3098,11 +3106,14 @@ SwAttrFnTab aHTMLAttrFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlatr.cxx,v 1.7 2001-07-03 07:49:47 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlatr.cxx,v 1.8 2001-08-15 11:35:00 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/07/03 07:49:47  mib
+      #88156#: warning for unconvertable chars
+
       Revision 1.6  2001/02/23 12:45:24  os
       Complete use of DefaultNumbering component
 
