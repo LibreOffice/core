@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 13:04:28 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "¹üÁÖ(~C)";
         Text[ turkish ] = "~Kategori";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Categoría";
     };
     ListBox LB_CATEGORY
     {
@@ -440,6 +441,20 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Todos" ; Default ; > ;
+        < "Definido por el usuario" ; Default ; > ;
+        < "Número" ; Default ; > ;
+        < "Porcentaje" ; Default ; > ;
+        < "Moneda" ; Default ; > ;
+        < "Fecha" ; Default ; > ;
+        < "Hora" ; Default ; > ;
+        < "Ciencia" ; Default ; > ;
+        < "Fracción" ; Default ; > ;
+        < "Valor lógico" ; Default ; > ;
+        < "Texto" ; Default ; > ;
+    };
     };
     FixedText FT_EDFORMAT
     {
@@ -468,6 +483,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "¼­½Ä ÄÚµå(~F)";
         Text[ turkish ] = "Format ~kodu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Código del for~mato";
     };
     Edit ED_FORMAT
     {
@@ -515,6 +531,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "¼­½Ä(~O)";
         Text[ turkish ] = "~Format";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Formato";
     };
 
     ListBox LB_CURRENCY
@@ -611,6 +628,10 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     {
              < "Otomatik" ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+             < "Automático" ; Default ; > ;
+    };
     };
 
     Control LB_FORMAT
@@ -649,6 +670,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "¼Ò¼öÁ¡ ÀÌÇÏ ÀÚ¸®(~D)";
         Text[ turkish ] = "~Ondalýk haneler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Decimales";
     };
     NumericField ED_DECIMALS
     {
@@ -691,6 +713,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "¼±Çà Á¦·Î(~Z)";
         Text[ turkish ] = "Virgül öncesi ~sýfýr sayýsý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ceros a la i~zquierda";
     };
     NumericField ED_LEADZEROES
     {
@@ -732,6 +755,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "(-)´Â Àû»öÀ¸·Î(~N)";
         Text[ turkish ] = "Negatif sayýlar ~kýrmýzý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Negativo en rojo";
     };
     CheckBox BTN_THOUSAND
     {
@@ -760,6 +784,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "Ãµ´ÜÀ§ ±¸ºÐÁ¡(~T)";
         Text[ turkish ] = "~Binlik ayýrýcýsý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Separador de miles";
     };
     GroupBox GB_OPTIONS
     {
@@ -788,6 +813,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "¿É¼Ç";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones";
     };
     FixedText FT_LANGUAGE
     {
@@ -816,6 +842,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "¾ð¾î(~L)";
         Text[ turkish ] = "~Dil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Idioma";
     };
     ListBox LB_LANGUAGE
     {
@@ -852,6 +879,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "¹Ì¸® º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Previsualización";
     };
     Window WND_NUMBER_PREVIEW
     {
@@ -893,6 +921,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Hinzufügen";
+        QuickHelpText[ catalan ] = "Añadir";
     };
     ImageButton IB_REMOVE
     {
@@ -926,6 +955,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Entfernen";
+        QuickHelpText[ catalan ] = "Eliminar";
     };
     ImageButton IB_INFO
     {
@@ -956,6 +986,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Kommentar ändern";
+        QuickHelpText[ catalan ] = "Modificar comentario";
     };
     ImageList IL_ICON
     {
@@ -993,6 +1024,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "À¯·´";
         Text[ turkish ] = "Avrupa";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Europa";
     };
 
     Text[ chinese_simplified ] = "Êý×Ö¸ñÊ½";
@@ -1005,6 +1037,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     Text[ korean ] = "¼ö ¼­½Ä";
     Text[ turkish ] = "Sayý formatý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Formato numérico";
 };
  // ********************************************************************** EOF
 
