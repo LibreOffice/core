@@ -10141,3 +10141,12 @@ _real@8@3ffeccccccccccccd000
 ?storeState@TemplateFolderCache@sfx2@@QAEXXZ
 ?storeState@TemplateFolderCacheImpl@sfx2@@QAEXXZ
 lpfnDrawStateW
+??C?$ORef@UTemplateContent@sfx2@@@vos@@QBAPAUTemplateContent@sfx2@@XZ
+??RReadFolderContent@sfx2@@QBEXABV?$ORef@UTemplateContent@sfx2@@@vos@@@Z
+?DbgName_TemplateContent@sfx2@@YAPAUDbgDataType@@XZ
+??RFilterTitleMatch@?%O:\SRC641\src\svtools\source\filepicker\filepicker.cxx300457751@@QAE_NABUFilterEntry@@@Z
+?GetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx758012086@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx758012086@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx758012086@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx758012086@@YAXPAVControl@@JJAAJ@Z
+?lcl_getHomeDirectory@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx758012086@@YAEABVString@@AAV2@@Z
