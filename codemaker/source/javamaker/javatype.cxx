@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:46:19 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,7 +483,7 @@ SpecialType translateUnoTypeToDescriptor(
                 },
                 { rtl::OString(RTL_CONSTASCII_STRINGPARAM("I")),
                   rtl::OString(
-                      RTL_CONSTASCII_STRINGPARAM("Ljava/lang/;Integer"))
+                      RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Integer;"))
                 },
                 { rtl::OString(RTL_CONSTASCII_STRINGPARAM("J")),
                   rtl::OString(RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Long;"))
