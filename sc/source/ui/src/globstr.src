@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:10:06 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1114,7 +1114,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "§σ·s°Ο°μ";
         Text[ arabic ] = "ΚΝΟνΛ ΗαδΨΗή";
         Text[ greek ] = "Ανανέωση περιοχής";
-        Text[ korean ] = "ΏµΏª »υ·Ξ°νΔ§";
+        Text[ korean ] = "Ήόΐ§ °»½Ε";
         Text[ turkish ] = "Aralύπύ gόncelle";
         Text[ language_user1 ] = " ";
     };
@@ -1644,7 +1644,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "Εά§σΉΟªνΈκ®Ζ°Ο°μ";
         Text[ arabic ] = "ΚΪΟνα δΨΗή ΗαΘνΗδΗΚ ΗαΞΗΥ ΘΡΣγ ΘνΗδν";
         Text[ greek ] = "Αλλαγή περιοχής δεδομένων του διαγράμματος";
-        Text[ korean ] = "ΒχΖ® µ¥ΐΜΕΝ ΏµΏª ΌφΑ¤";
+        Text[ korean ] = "ΒχΖ® µ¥ΐΜΕΝ Ήόΐ§ ΌφΑ¤";
         Text[ turkish ] = "ήemanύn veri aralύπύnύ deπiώtir";
         Text[ language_user1 ] = " ";
     };
@@ -2014,7 +2014,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¦C¦L­S³ς";
         Text[ arabic ] = "δΨΗήΗΚ ΗαΨΘΗΪΙ";
         Text[ greek ] = "Περιοχές εκτύπωσης";
-        Text[ korean ] = "ΐΞΌβ ΏµΏª";
+        Text[ korean ] = "ΐΞΌβ Ήόΐ§";
         Text[ turkish ] = "Yazdύrma aralύπύ";
         Text[ language_user1 ] = " ";
     };
@@ -2088,7 +2088,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "²Ύ°Κ΄«­¶²Ε";
         Text[ arabic ] = "ΚΝΡνί έΗΥα ΥέΝΙ";
         Text[ greek ] = "Μετακίνηση αλλαγής σελίδας";
-        Text[ korean ] = "ΖδΐΜΑφ ³ª΄©±β ΐΜµΏ";
+        Text[ korean ] = "ΖδΐΜ±β- ³ª΄©±β ΐΜµΏ";
         Text[ turkish ] = "Sayfa sonunu taώύ";
         Text[ language_user1 ] = " ";
     };
@@ -2112,7 +2112,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "½sΏθ°Ο°μ¦WΊΩ";
         Text[ arabic ] = "ΚΝΡνΡ ΓΣγΗΑ δΨΗήΗΚ";
         Text[ greek ] = "Επεξεργασία ονομάτων περιοχών";
-        Text[ korean ] = "ΏµΏª ΐΜΈ§ ΖνΑύ";
+        Text[ korean ] = "Ήόΐ§ ΐΜΈ§ ΖνΑύ";
         Text[ turkish ] = "Aralύk adlarύnύ dόzenle";
         Text[ language_user1 ] = " ";
     };
@@ -2296,7 +2296,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "°Ο°μ¨S¦³¦CΌΠΓD΅C\n­n¥Ξ²Δ¤@¦CªΊ¤Ί®e·ν§@¦CΌΠΓD΅H";
         Text[ arabic ] = "εΠΗ ΗαδΨΗή αΗ νΝΚζν Ϊαμ ΡΔζΣ ΓΪγΟΙ.\nεα ΚΡνΟ ΗΣΚΞΟΗγ ΗαΣΨΡ ΗαΓζα ίΡΔζΣ ΓΪγΟΙ.";
         Text[ greek ] = "Η περιοχή δεν περιέχει κεφαλίδα στηλών.\nΘέλετε να χρησιμοποιηθεί η πρώτη στήλη ως κεφαλίδα στηλών;";
-        Text[ korean ] = "ΐΜ ΏµΏªΐΊ Ώ­ΐΗ ΈΣΈ΄±Ϋΐ» ΖχΗΤΗΟ°ν ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.\nΏ­ΐΗ ΈΣΈ®±Ϋ·Ξ ΓΉΉψΒ° ΑΩΐ» »ηΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+        Text[ korean ] = "ΐΜ Ήόΐ§Ώ΅΄Β Ώ­ ΈΣΈ΄±ΫΐΜ ΖχΗΤµΗΎξ ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.\nΓΉΉψΒ° Ηΰΐ» Ώ­ ΈΣΈ®±Ϋ·ΞΌ­ »ηΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
         Text[ turkish ] = "Bu aralύk, sόtun baώlύklarύ iηermiyor.\nέlk satύr sόtun baώlύπύ olarak kullanύlsύn mύ?";
         Text[ language_user1 ] = " ";
     };
@@ -2733,7 +2733,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¤wΈg§Ή¦¨¥ΨΌΠ·j΄M΅C\n";
         Text[ arabic ] = "ΚγΚ ΪγανΙ ΗαΘΝΛ Ϊδ ΗαήνγΙ ΗαεΟέ ΘδΜΗΝ.\n";
         Text[ greek ] = "Η αναζήτηση στόχου πέτυχε.\n";
-        Text[ korean ] = "ΈρΗ¥ Γ£±β°΅ ΌΊ°ψΐϋΐΈ·Ξ ΌφΗΰµΗΎϊ½ΐ΄Ο΄Ω.\n";
+        Text[ korean ] = "ΈρΗ¥°ª  Γ£±β°΅ ΌΊ°ψΐϋΐΈ·Ξ ΌφΗΰµΗΎϊ½ΐ΄Ο΄Ω.\n";
         Text[ turkish ] = "Hedef deπer arama baώarύlύ oldu.\n";
         Text[ language_user1 ] = " ";
     };
@@ -2812,7 +2812,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¥ΨΌΠ·j΄M¨S¦³¦¨¥\\΅C\n";
         Text[ arabic ] = "αγ ΚδΜΝ ΪγανΙ ΗαΘΝΛ Ϊδ ΗαήνγΙ ΗαεΟέ.\n";
         Text[ greek ] = "Η αναζήτηση στόχου δεν πέτυχε.\n";
-        Text[ korean ] = "ΈρΗ¥ Γ£±β°΅ ΌΊ°ψΐϋΐΈ·Ξ ΌφΗΰµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.\n";
+        Text[ korean ] = "ΈρΗ¥°ª Γ£±β°΅ ΌΊ°ψΐϋΐΈ·Ξ ΌφΗΰµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.\n";
         Text[ turkish ] = "Hedef deπer arama baώarύsύz oldu.\n";
         Text[ language_user1 ] = " ";
     };
@@ -3205,7 +3205,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "µLªk§R°£Έκ®Ζ®w°Ο°μ΅C";
         Text[ arabic ] = "αΗ νγίδ ΝΠέ δΨΗή ΗαΘνΗδΗΚ.";
         Text[ greek ] = "Η περιοχή δεδομένων δεν είναι δυνατόν να διαγραφεί.";
-        Text[ korean ] = "µ¥ΐΜΕΝ ΏµΏªΐΜ »θΑ¦µΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "µ¥ΐΜΕΝ ΏµΏªΐΊ »θΑ¦ΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Veri aralύπύ silinemiyor.";
         Text[ language_user1 ] = " ";
     };
@@ -3850,7 +3850,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¤wΈg¥[¤J¤F³o­Σ°Ο°μ΅C";
         Text[ arabic ] = "Κγ ΕΟΡΗΜ εΠΗ ΗαδΨΗή γΣΘήΗπ.";
         Text[ greek ] = "Η περιοχή προστέθηκε ήδη.";
-        Text[ korean ] = "ΐΜ ΏµΏªΐΜΉΜ »πΐΤµΗΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΜ Ήόΐ§΄Β ΐΜΉΜ »πΐΤµΗΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Bu aralύk daha φnce eklendi.";
         Text[ language_user1 ] = " ";
     };
@@ -3904,7 +3904,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "³o­Σ°Ο°μ¨S¦³¦³®ΔªΊ¬dΈί΅C";
         Text[ arabic ] = "αΗ νΝΚζν εΠΗ ΗαδΨΗή Ϊαμ ΗΣΚέΣΗΡ ΥΗαΝ.";
         Text[ greek ] = "Η περιοχή δεν περιέχει έγκυρο ερώτημα.";
-        Text[ korean ] = "ΐΜ ΏµΏªΐΊ ΐ―ΘΏΗΡ ΑϊΐΗΈ¦ ΖχΗΤΗΟ°ν ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω .";
+        Text[ korean ] = "ΐΜ Ήόΐ§Ώ΅΄Β ΐ―ΘΏΗΡ ΑϊΐΗ°΅ ΖχΗΤµΗΎξ ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω .";
         Text[ turkish ] = "Bu aralύk geηerli bir sorgu iηermiyor.";
         Text[ language_user1 ] = " ";
     };
@@ -3931,7 +3931,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "³o­Σ°Ο°μ¨S¦³§t¦³¥τ¦σΏι¤JªΊΈκ®Ζ΅C";
         Text[ arabic ] = "αΗ νΝΚζν εΠΗ ΗαδΨΗή Ϊαμ ΘνΗδΗΚ γΣΚζΡΟΙ.";
         Text[ greek ] = "Αυτή η περιοχή δεν περιέχει εισαγόμενα δεδομένα.";
-        Text[ korean ] = "ΐΜ ΏµΏªΐΊ °΅Α®ΏΒ µ¥ΐΜΕΝΈ¦ ΖχΗΤΗΟ°ν ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΜ Ήόΐ§Ώ΅΄Β °΅Α®ΏΒ µ¥ΐΜΕΝ°΅ ΖχΗΤµΗΎξ ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Bu bφlόm iηe aktarύlmύώ veri iηermiyor.";
         Text[ language_user1 ] = " ";
     };
@@ -4140,7 +4140,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "­n±NΏο¨ϊªΊ°Ο°μ¥[¤J¤θ®Χ΅H";
         Text[ arabic ] = "εα ΚΡνΟ ΕΦΗέΙ ΗαδΨΗήΗΚ ΗαγΝΟΟΙ Εαμ ΗαΣνδΗΡνζΏ";
         Text[ greek ] = "Επέκταση σεναρίου κατά τις επιλεγμένες περιοχές;";
-        Text[ korean ] = "ΗφΐηΐΗ ½Γ³ªΈ®ΏΐΈ¦ Ό±ΕΓµΘ ΏµΏªΏ΅ Γί°΅ΗΥ΄Ο±ξ ?";
+        Text[ korean ] = "½Γ³ªΈ®ΏΐΈ¦ Έ¶Ε·µΘ ΏµΏªΈΈΕ­ Θ®ΐεΗÒ±ξΏδ?";
         Text[ turkish ] = "Seηili aralύklar, senaryoya eklensin mi?";
         Text[ language_user1 ] = " ";
     };
@@ -4167,7 +4167,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "­n«Ψ¥ί¤@­Σ¤θ®Χ΄N¥²¶·¥ύ³]©w¤@­Σ¤θ®Χ°Ο°μ΅C";
         Text[ arabic ] = "αΕδΤΗΑ ΣνδΗΡνζ νΜΘ Γδ νΚγ ΚΝΟνΟ δΨΗήΗΚ ΗαΣνδΗΡνζ.";
         Text[ greek ] = "Για τη δημιουργία ενός σεναρίου πρέπει να επιλεχθούν οι περιοχές του.";
-        Text[ korean ] = "»υ·ΞΏξ ½Γ³ªΈ®ΏΐΈ¦ ΈΈµι±β ΐ§ΗΨΌ­ ½Γ³ªΈ®Ώΐ ΏµΏªΐΜ Ό±ΕΓµΗΎξΑ®Ύί ΗΥ΄Ο΄Ω.";
+        Text[ korean ] = "»υ·ΞΏξ ½Γ³ªΈ®ΏΐΈ¦ ΈΈµι±β ΐ§ΗΨΌ­ ½Γ³ªΈ®Ώΐ Ήόΐ§°΅ Έ¶Ε·µΗΎξΎί ΗΥ΄Ο΄Ω.";
         Text[ turkish ] = "Senaryonun oluώturulabilmesi iηin senaryo aralύklarύ iώaretlenmelidir.";
         Text[ language_user1 ] = " ";
     };
@@ -4193,7 +4193,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¨S¦³ΌΠ°O¥τ¦σ°Ο°μ΅C";
         Text[ arabic ] = "αγ νΚγ ΚΝΟνΟ δΨΗή.";
         Text[ greek ] = "Δεν επιλέχθηκε περιοχή.";
-        Text[ korean ] = "ΏµΏªΐΜ Ό±ΕΓµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "Ήόΐ§°΅ Ό±ΕΓµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Aralύk seηilmedi.";
         Text[ language_user1 ] = " ";
     };
@@ -4733,7 +4733,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "µL®ΔªΊ¦C¦L°Ο°μ";
         Text[ arabic ] = "δΨΗή ΨΘΗΪΙ ΫνΡ ΥΗαΝ";
         Text[ greek ] = "Άκυρη περιοχή εκτύπωσης";
-        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΐΞΌβ ΏµΏª";
+        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΐΞΌβ Ήόΐ§";
         Text[ turkish ] = "Geηersiz yazdύrma aralύπύ";
         Text[ language_user1 ] = " ";
     };
@@ -5884,7 +5884,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "±zΏι¤J¤F¤@­ΣµL®ΔªΊ¦WΊΩ΅C\nµLªk«Ψ¥ί¦Ϋ°Κ®ζ¦΅΅C\n½Π±zΏι¤J¤@­Σ¦³®ΔªΊ¦WΊΩ΅C";
         Text[ arabic ] = "αήΟ ήγΚ ΘΕΟΞΗα ΗΣγ ΫνΡ ΥΗαΝ.\nΚΪΠΡ ΕδΤΗΑ ΗαΚδΣνή ΗαΚαήΗΖν.\nΗαΡΜΗΑ ΗΞΚνΗΡ ΗΣγ ΒΞΡ.";
         Text[ greek ] = "Έχετε εισάγει ένα μη έγκυρο όνομα. Η \nΑυτοΜορφή δεν ήταν δυνατόν να δημιουργηθεί.\nΕπιλέξτε άλλο όνομα.";
-        Text[ korean ] = "΄η½ΕΐΊ ΐίΈψµΘΐΜΈ§ΐ» ΐΤ·ΒΗΟΌΜ½ΐ΄Ο΄Ω .\n±Χ·―ΉΗ·Ξ ΐΪµΏΌ­½ΔΐΊ ΈΈµιΎξΑφΑφ ΎΚ½ΐ΄Ο΄Ω. \n΄ΩΈ¥ ΐΜΈ§ΐΈ·Ξ ΄Ω½Γ ½Γµµ ΗΨ ΑΦ½Κ½ΓΏΐ.";
+        Text[ korean ] = "»ηΏλΐΪ΄Β ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΐΜΈ§ΐ» ΐΤ·ΒΗΟΌΜ½ΐ΄Ο΄Ω .\nµϋ¶σΌ­ ΐΪµΏΌ­½ΔΐΊ ΈΈµιΎξΑφΑφ ΎΚ½ΐ΄Ο΄Ω. \n΄ΩΈ¥ ΐΜΈ§ΐ» Ό±ΕΓΗΟ½Κ½ΓΏΐ.";
         Text[ turkish ] = "Girilen ad geηersiz.\nOtomatik formatlama yapύlamadύ.\nBaώka bir ad ile yeniden deneyin.";
         Text[ language_user1 ] = " ";
     };
@@ -5910,7 +5910,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "°Ο°μ";
         Text[ arabic ] = "ΗαδΨΗή";
         Text[ greek ] = "Περιοχή";
-        Text[ korean ] = "ΏµΏª";
+        Text[ korean ] = "Ήόΐ§";
         Text[ turkish ] = "Aralύk";
         Text[ language_user1 ] = " ";
     };
@@ -6095,7 +6095,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¬°¤F¨Ο¥Ξ¦Ϋ°Κ®ζ¦΅΅A\n±z¥²¶·¦ά¤ΦΏο¨ϊ¤F\n3x3 ¤u§@ªν°Ο°μ΅C";
         Text[ arabic ] = "αίν ΚΣΚΞΟγ ΗαΚδΣνή ΗαΚαήΗΖν΅\nνΜΘ Γδ ΚΝΟΟ δΨΗή έν ΗαΜΟζα αΗ νήα Ϊδ\n3x3 ΞαΗνΗ.";
         Text[ greek ] = "Για να εφαρμοστεί η ΑυτοΜορφή,\nπρέπει να έχει επιλεγεί μια περιοχή ενός πίνακα με κελιά\nδιαστάσεων τουλάχιστον 3χ3.";
-        Text[ korean ] = "ΐΪµΏ Ό­½Δΐ» ΐϋΏλΗΟ±β ΐ§ΗΨΌ±,\nΓΦΌÒΗΡ ΕΧΐΜΊνΐΗΏµΏªΏ΅ \n 3x3ΌΏΐΜ  Ό±ΕΓµΗΎξΎίΈΈ ΗΥ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΪµΏ Ό­½Δΐ» ΐϋΏλΗÒ Όφ ΐΦ±β ΐ§ΗΨΌ­΄Β,\nΓΦΌÒΗΡ \n 3x3ΌΏΐΗ µµΗ¥ ΏµΏªΐΜ Έ¶Ε·µΗΎξΎί ΗΥ΄Ο΄Ω.";
         Text[ turkish ] = "otomatik formatlamayύ kullanabilmek iηin\n en az 3x3 hόcre bόyόklόπόnde bir tablo aralύπύ seηilmiώ olmalύdύr.";
         Text[ language_user1 ] = " ";
     };
@@ -6717,7 +6717,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¨S¦³ΐΛ¬d«χ¦rªΊ¥\\―ΰ΅C\n½ΠΐΛ¬d±zªΊ¦wΈΛ΅A­Y¦³¥²­n½Π¦wΈΛ©Ò­n¨Ο¥ΞªΊ»y¨¥ª©¥»";
         Text[ arabic ] = "ΫνΡ γΚζέΡ ααΚΟήνή ΗαΕγαΗΖν. \nΗαΡΜΗΑ έΝΥ ΗαΚΛΘνΚ ΗαΞΗΥ Θί΅ ζΚΛΘνΚ ΗααΫΙ ΗαγΨαζΘΙ΅ ΕΠΗ αÒγ ΗαΓγΡ";
         Text[ greek ] = "δεν είναι διαθέσιμο για τον έλεγχο.\nΠαρακαλώ ελέγξτε την εγκατάσταση και αν χρειαστεί, να \nγίνει εγκατάσταση της γλώσσας που επιθυμείτε";
-        Text[ korean ] = "ΈΒΓγΉύ °Λ»η°΅ ΊÒ°΅΄ΙΗΥ΄Ο΄Ω\n΄η½ΕΐΗ Ό³Δ΅Έ¦ Θ®ΐΞΗΟ½Γ°ν \nΗΚΏδΗΟ΄ΩΈι ΗΚΏδΗΡ ΎπΎξΈ¦ Ό³Δ΅ ΗΟ½Κ½ΓΏΐ.";
+        Text[ korean ] = " ΈΒΓγΉύ °Λ»η°΅ ΊÒ°΅΄ΙΗΥ΄Ο΄Ω.\n»ηΏλΐΪΐΗ Ό³Δ΅Έ¦ Θ®ΐΞΗΡ ΄Ωΐ½ \nΗΚΏδ½Γ Ώδ±ΈµΗ΄Β ΎπΎξΈ¦ Ό³Δ΅ ΗΟ½Κ½ΓΏΐ.";
         Text[ turkish ] = "denetim iηin mevcut deπil.\nKurulumu kontrol edip\ngerekirse istenen dili yόkleyin";
         Text[ language_user1 ] = " ";
     };
@@ -6817,7 +6817,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "³o­Σ¤u§@ªνªΊ«χ¦rΐΛ¬d¤wΈg§Ή¦¨΅I";
         Text[ arabic ] = "Κγ ΗαΗδΚεΗΑ γδ ΗαΚΟήνή ΗαΕγαΗΖν έν εΠΗ ΗαΜΟζα!";
         Text[ greek ] = "O ορθογραφικός έλεγχος αυτού του πίνακα ολοκληρώθηκε.";
-        Text[ korean ] = "ΐΜ ½ΓΖ®Ώ΅΄λΗΡ ΈΒΓγΉύ °Λ»η°΅ ³΅³µ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΜ ½ΓΖ®Ώ΅ ΄λΗΡ ΈΒΓγΉύ °Λ»η°΅ ΏΟ·αµΗΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Bu tablonun yazύm denetimi tamamlandύ!";
         Text[ language_user1 ] = " ";
     };
@@ -7206,7 +7206,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¦]¬°¦WΊΩ¬Ϋ¦P΅A¥ΨΌΠ¤ε¥σ¤ΊªΊ°Ο°μ¦WΊΩ¤wΈg³QΕά§σ΅I";
         Text[ arabic ] = "δΩΡΗπ αΚΤΗΘε ΗαΓΣγΗΑ΅ Κγ ΚΫννΡ ΗΣγ δΨΗή γζΜζΟ γΣΘήΗπ έν ΗαγΣΚδΟ ΗαεΟέ!";
         Text[ greek ] = "Λόγω της ταύτισης ονόματος έγινε τροποποίηση υπάρχοντος ονόματος περιοχής στο έγγραφο προορισμού!";
-        Text[ korean ] = "°°ΐΊ ΐΜΈ§ΐΈ·Ξ ΐΞΗΟΏ©,ΈρΗ¥ Ή®Ό­ΐΗ ±βΑΈΐΗ ΏµΏª ΐΜΈ§ΐΜ ΉΩ²ξΎϊ½ΐ΄Ο΄Ω!";
+        Text[ korean ] = "°°ΐΊ ΐΜΈ§ΐΈ·Ξ ΐΞΗΨ,ΈρΗ¥ Ή®Ό­ΐΗ ±βΑΈ ΏµΏª ΐΜΈ§ΐΜ Ί―°ζµΗΎϊ½ΐ΄Ο΄Ω!";
         Text[ turkish ] = "Ad eώleώmesi nedeniyle hedef belgede mevcut bir aralύk adύ deπiώtirildi!";
         Text[ language_user1 ] = " ";
     };
@@ -7402,7 +7402,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "°Ο°μ¦WΊΩªΊΏω»~ΏοΎά";
         Text[ arabic ] = "ΚΝΟνΟ ΫνΡ ΥΗαΝ αΓΣγΗΑ δΨΗή.";
         Text[ greek ] = "Λάθος επιλογή για ονόματα περιοχών";
-        Text[ korean ] = "ΏµΏªΐΜΈ§Ώ΅ ΄λΗΡ ΐ―ΘΏΗΟΑφ ΎΚΐΊ Ό±ΕΓ";
+        Text[ korean ] = "Ήόΐ§ ΐΜΈ§Ώ΅ ΄λΗΡ ΐ―ΘΏΗΟΑφ ΎΚΐΊ Ό±ΕΓ";
         Text[ turkish ] = "Aralύk adlarύ iηin geηersiz seηim";
         Text[ language_user1 ] = " ";
     };
@@ -8449,7 +8449,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "°Ε¶KΓ―ªΊ¤Ί®e¤j©σΏο¨ϊªΊ°Ο°μ΅C\n±zΑΩ¬O­n΄΅¤J΅H";
         Text[ arabic ] = "γΝΚζνΗΚ ΗαΝΗέΩΙ Κέζή ΗαδΨΗή΅ ΗαΠν ήγΚ ΘΗΞΚνΗΡε΅ ΝΜγΗπ.\nεα ΚΡνΟ ΗαΕΟΡΗΜ ΘΗαΡΫγ γδ ΠαίΏ";
         Text[ greek ] = "Το περιεχόμενο του πρόχειρου είναι μεγαλύτερο από την επιλεγμένη περιοχή.\nΘέλετε παρ' όλα αυτά να γίνει η εισαγωγή;";
-        Text[ korean ] = "Ε¬Έ³ΊΈµεΐΗ ³»ΏλΐΜ Ό±ΕΓµΘ ΏµΏªΐΗ Ε©±βΊΈ΄Ω Ε®΄Ο΄Ω.\n±Χ·΅µµ »πΐΤΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+        Text[ korean ] = "Ε¬Έ³ΊΈµεΐΗ ³»ΏλΐΜ Ό±ΕΓµΘ ΏµΏªΐΗ ³»ΏλΊΈ΄Ω  Ε©±β°΅ ΄υ Ε®΄Ο΄Ω.\n±Χ·΅µµ »πΐΤΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
         Text[ turkish ] = "Pano iηeriπi, seηilen alandan daha bόyόk.\nYine de eklemek istiyor musunuz?";
         Text[ language_user1 ] = " ";
     };
@@ -8718,7 +8718,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¤wΈg¶WΉL³Μ¦hµL®Δΐx¦s®ζªΊΌΖ¥Ψ΅C\n¨S¦³Ώο¨ϊ¥ώ³΅µL®ΔªΊΐx¦s®ζ΅C";
         Text[ arabic ] = "Κγ ΚΜΗζÒ ΗαΪΟΟ ΗαΓήΥμ ααΞαΗνΗ ΗαΫνΡ ΥΗαΝΙ.\nαγ νΚγ ΚΝΟνΟ ία ΗαΞαΗνΗ ΗαΫνΡ ΥΗαΝΙ.";
         Text[ greek ] = "Υπέρβαση του μέγιστου αριθμού μη έγκυρων κελιών. Δεν \nεκτελέστηκε η σήμανση όλων των μη έγκυρων κελιών.";
-        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΌΏΐΗ ΓΦ΄λ °ΉΌφ°΅ ΓΚ°ϊ µΗΎϊ½ΐ΄Ο΄Ω. \nΈπµη ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΌΏΐΜ Η¥±βµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΌΏΐΗ ΓΦ΄λ °ΉΌφ°΅ ΓΚ°ϊ µΗΎϊ½ΐ΄Ο΄Ω. \nΐ―ΘΏΗΟΑφ ΎΚΐΊ ΌΏΐΜ ΈπµΞ Η¥±βµΗΑφ΄Β  ΎΚΎÒ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Azami geηersiz hόcre sayύsύ aώύldύ.\nGeηersiz hόcrelerin tόmόό seηilmedi.";
         Text[ language_user1 ] = " ";
     };
@@ -8816,7 +8816,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "µL®ΔªΊ°Ο°μ";
         Text[ arabic ] = "δΨΗή ΫνΡ ΥΗαΝ";
         Text[ greek ] = "Μη έγκυρη περιοχή";
-        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΏµΏª";
+        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ Ήόΐ§";
         Text[ turkish ] = "Geηersiz aralύk";
         Text[ language_user1 ] = " ";
     };
@@ -9298,7 +9298,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "°Ο°μ±q #1 ²Ύ°Κ¨μ #2";
         Text[ arabic ] = "ΕÒΗΝΙ ΗαδΨΗή γδ #1 Εαμ #2";
         Text[ greek ] = "Μετακίνηση περιοχής από #1 προς #2";
-        Text[ korean ] = "#1 Ώ΅Ό­ #2·Ξ ΏµΏª ΐΜµΏ";
+        Text[ korean ] = "#1 Ώ΅Ό­ #2·Ξ Ήόΐ§ ΐΜµΏ";
         Text[ turkish ] = "Aralύk taώύndύ; eski konum #1 yeni konum #2";
         Text[ language_user1 ] = " ";
     };
