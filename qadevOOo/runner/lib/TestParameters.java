@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestParameters.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 12:03:39 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 12:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,15 @@ public class TestParameters extends Hashtable {
 
     public String AppExecutionCommand="";
 
+
+    /**
+     * The OfficeProvider contains the full qualified
+     * class that provides a connection to StarOffice<br>
+     * default is helper.OfficeProvider
+     */
+
+    public String OfficeProvider = "helper.OfficeProvider";
+
     /**
      * The Testbase to be executed by the runner<br>
      * default is 'java_fat'
@@ -193,50 +202,57 @@ public class TestParameters extends Hashtable {
      */
     public boolean getBool(Object key) {
         Object val = super.get(key);
-        if (val instanceof Boolean)
-            return ((Boolean)val).booleanValue();
-        else return false;
+        if (val != null) {
+            if (val instanceof String) {
+                String sVal = (String)val;
+                if (sVal.equalsIgnoreCase("true") ||
+                                                sVal.equalsIgnoreCase("yes")) {
+                    return true;
+                }
+                else if (sVal.equalsIgnoreCase("false") ||
+                                                sVal.equalsIgnoreCase("no")) {
+                    return false;
+                }
+            }
+            if (val instanceof Boolean)
+                return ((Boolean)val).booleanValue();
+        }
+        return false;
     }
 
     /**
      * Special get method for integer values: for convenience.
-     * Will return 'false' if the value is not of "Boolean" type.
+     * Will return 0 if the value cannot be interpreted as Integer.
      * @param key A key of this table.
-     * @return The value of this key, castet to a boolean type.
+     * @return The value of this key, castet to an int type.
      */
     public int getInt(Object key) {
         Object val = super.get(key);
-        if (val instanceof Integer)
-            return ((Integer)val).intValue();
-        else return 0;
+        if ( val != null ) {
+            if (val instanceof Integer) {
+                return ((Integer)val).intValue();
+            }
+            else {
+                try {
+                    if ( val instanceof String ) {
+                        Integer nr = new Integer((String)val);
+                        if (nr.intValue() > 0) return nr.intValue();
+                    }
+                } catch ( java.lang.NumberFormatException nfe) {}
+            }
+        }
+        return 0;
     }
 
+
     /**
-     * Wraper around "put()" that converts String values<br>
-     * "false", "true", "yes, "no"<br>
-     * to boolean.
+     * Wraper around "put()"
      * @param key A key of this table.
+     * @param val The value of the key.
      * @return The value of this key.
      * @see java.util.Hashtable
      */
     public Object put(Object key, Object val) {
-        Object ret;
-        if (val instanceof String) {
-            String sVal = (String)val;
-            if (sVal.equalsIgnoreCase("true") ||
-                                            sVal.equalsIgnoreCase("yes")) {
-                return super.put(key,Boolean.TRUE);
-            }
-            else if (sVal.equalsIgnoreCase("false") ||
-                                            sVal.equalsIgnoreCase("no")) {
-
-                return super.put(key,Boolean.FALSE);
-            }
-            try {
-                Integer nr = new Integer(sVal);
-                if (nr.intValue() > 0) return super.put(key,nr);
-            } catch ( java.lang.NumberFormatException nfe) {}
-        }
         return super.put(key,val);
     }
 
@@ -252,6 +268,7 @@ public class TestParameters extends Hashtable {
         put("LoggingIsActive",new Boolean(LoggingIsActive));
         put("DebugIsActive",new Boolean(DebugIsActive));
         put("OutProducer",OutProducer);
+        put("OfficeProvider",OfficeProvider);
         put("LogWriter",LogWriter);
         put("AppExecutionCommand",AppExecutionCommand);
         put("TimeOut",TimeOut);
