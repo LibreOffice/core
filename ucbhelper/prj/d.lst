@@ -28,6 +28,7 @@ mkdir: %_DEST%\inc%_EXT%\ucbhelper
 ..\inc\ucbhelper\activedatasink.hxx %_DEST%\inc%_EXT%\ucbhelper\activedatasink.hxx
 ..\inc\ucbhelper\commandenvironmentproxy.hxx %_DEST%\inc%_EXT%\ucbhelper\commandenvironmentproxy.hxx
 ..\inc\ucbhelper\interactionrequest.hxx %_DEST%\inc%_EXT%\ucbhelper\interactionrequest.hxx
+..\inc\ucbhelper\interceptedinteraction.hxx %_DEST%\inc%_EXT%\ucbhelper\interceptedinteraction.hxx
 ..\inc\ucbhelper\simpleinteractionrequest.hxx %_DEST%\inc%_EXT%\ucbhelper\simpleinteractionrequest.hxx
 ..\inc\ucbhelper\simpleauthenticationrequest.hxx %_DEST%\inc%_EXT%\ucbhelper\simpleauthenticationrequest.hxx
 ..\inc\ucbhelper\simplenameclashresolverequest.hxx %_DEST%\inc%_EXT%\ucbhelper\simplenameclashresolverequest.hxx
