@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-30 13:41:07 $
+ *  last change: $Author: dbo $ $Date: 2002-08-16 15:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,15 @@ public:
         pData = str;
         rtl_uString_acquire( pData );
     }
+    /** New OUString from OUString data without acquiring it.  Takeover of ownership.
+
+        @param str
+               OUString data
+        @param dummy
+               SAL_NO_ACQUIRE to distinguish from other ctors
+    */
+    inline OUString( rtl_uString * str, __sal_NoAcquire ) SAL_THROW( () )
+        { pData = str; }
 
     /**
       New string from a Unicode character buffer array.
