@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:46:59 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,7 +645,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
             if (static_cast<DrawViewShell*>(pViewShell)->GetEditMode() == EM_MASTERPAGE &&
                 !pPage->IsMasterPage())
             {
-                pPage = (SdPage*)pPage->GetMasterPage(0);
+                pPage = (SdPage*)(&(pPage->TRG_GetMasterPage()));
             }
 
             DBG_ASSERT(pPage, "Seite nicht gefunden");
