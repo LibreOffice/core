@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preproc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,10 +161,9 @@ PreProcessor::On_expect_macro_param( cpp::Token & let_drToken )
             nBracketInParameterCounter--;
         else
         {
-            aCurParamText;
             if ( NOT csv::no_str(aCurParamText.c_str()) )
             {
-                aCurMacroParams.push_back( udmstri(aCurParamText.c_str()) );
+                aCurMacroParams.push_back( String(aCurParamText.c_str()) );
             }
             csv_assert( aCurMacroParams.size() == pCurMacro->ParamCount() );
 
