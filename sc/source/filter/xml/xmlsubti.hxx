@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:59:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ private:
     sal_Int16                           nCurrentXShapes;
     sal_Int32                           nTableCount;
     sal_Int32                           nCurrentSheet;
-    sal_Bool                            bProtection : 1;
+    sal_Bool                            bProtection;
 
     sal_Bool                            IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
                                                 const sal_Int32 nCol, const sal_Int32 nRow,
