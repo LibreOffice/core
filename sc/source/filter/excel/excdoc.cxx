@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
+ *  last change: $Author: dr $ $Date: 2001-10-26 16:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,11 +364,11 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
     UINT16  nExcTabCount    = rTabBuffer.GetExcTabCount();
     UINT16  nCodenames      = rR.nCodenames;
 
-    XclSstList*             pSstRecs            = NULL;
+    XclExpSst*              pSstRecs            = NULL;
     XclExpExternsheetList*  pExternsheetRecs    = NULL;     // change: ExternsheetList includes Supbooks
     if ( rR.eDateiTyp >= Biff8 )
     {
-        rR.pSstRecs         = pSstRecs          = new XclSstList;
+        rR.pSstRecs         = pSstRecs          = new XclExpSst;
         rR.pExternsheetRecs = pExternsheetRecs  = new XclExpExternsheetList( rR );
     }
 
@@ -591,7 +591,7 @@ void ExcTable::FillAsTable( void )
     UINT16                  nRow = 0;
 
     UINT16                  nMaxFlagCol = rDoc.GetLastFlaggedCol( nScTab );
-    UINT16                  nMaxFlagRow = rDoc.GetLastFlaggedRow( nScTab );;
+    UINT16                  nMaxFlagRow = rDoc.GetLastFlaggedRow( nScTab );
 
     ExcCell*                pAktExcCell;
     SvNumberFormatter&      rFormatter = *rR.pFormTable;

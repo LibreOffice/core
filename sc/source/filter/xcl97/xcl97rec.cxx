@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-18 15:02:01 $
+ *  last change: $Author: dr $ $Date: 2001-10-26 16:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,70 +144,71 @@
 #include "docoptio.hxx"
 #include "patattr.hxx"
 
-// --- class XclSstList ----------------------------------------------
+//___________________________________________________________________
+// class XclExpSst
 
-XclSstList::~XclSstList()
+XclExpSst::~XclExpSst()
 {
-    for ( XclExpUniString* p = _First(); p; p = _Next() )
-        delete p;
+    for( XclExpUniString* pString = First(); pString; pString = Next() )
+        delete pString;
 }
 
-
-UINT32 XclSstList::Add( XclExpUniString* pStr )
+sal_uInt32 XclExpSst::Insert( XclExpUniString* pString )
 {
-    Insert( pStr, LIST_APPEND );
-    return Count() - 1;
+    List::Insert( pString, LIST_APPEND );
+    return List::Count() - 1;
 }
 
-
-void XclSstList::Save( XclExpStream& rStrm )
+void XclExpSst::Save( XclExpStream& rStrm )
 {
     if ( !List::Count() ) return;
 
-    const UINT32 nCstTotal = (UINT32) List::Count();
-    SvMemoryStream aIsstInf( 8192 );
-    UINT32 nPerBucket = nCstTotal;
-    while ( nPerBucket > 0xFFFF )
-    {   // just fit into 16bit
-        nPerBucket /= 2;
-    }
-    const UINT16 nDsst = Max( (UINT16) 8, (UINT16) nPerBucket );
-    UINT16 nStr = 0;
+    SvMemoryStream aExtSst( 8192 );
+
+    sal_uInt32 nCount = List::Count();
+
+    sal_uInt32 nBucket = nCount;
+    while( nBucket > 0x0100 )
+        nBucket /= 2;
+
+    sal_uInt16 nPerBucket = static_cast< sal_uInt16 >( Max( 8UL, nBucket ) );
+    sal_uInt16 nBucketIndex = 0;
 
     // *** write the SST record ***
 
-    rStrm.StartRecord( 0x00FC, 8 );     // fix len only, real length calculated by XclExpStream
+    rStrm.StartRecord( 0x00FC, 8 );
 
-    rStrm << nCstTotal << nCstTotal;            // Total, Unique
-    for ( XclExpUniString* p = _First(); p; p = _Next() )
+    rStrm << nCount << nCount;
+    for( XclExpUniString* pString = First(); pString; pString = Next() )
     {
-        if ( nStr == 0 )
-        {   // ISSTINF
-            aIsstInf    << (UINT32) rStrm.GetStreamPos()
-//2do: cb ?!? Offset into the SST record that points to where the bucket begins
-                        << (UINT16) 0x0000      // cb
-                        << (UINT16) 0x0000;     // reserved
-        }
-        p->Write( rStrm );
-        if ( ++nStr == nDsst )
-            nStr = 0;
+        if( !nBucketIndex )
+            // write bucket info before string to get correct record position
+            aExtSst << (sal_uInt32) rStrm.GetStreamPos()    // stream position
+                    << (sal_uInt16) (rStrm.GetRecPos() + 4) // position from start of SST or CONTINUE
+                    << (sal_uInt16) 0x0000;                 // reserved
+
+        pString->Write( rStrm );
+
+        if( ++nBucketIndex == nPerBucket )
+            nBucketIndex = 0;
     }
 
     rStrm.EndRecord();
 
     // *** write the EXTSST record ***
 
-    rStrm.StartRecord( 0x00FF, 0 );     // real length calculated by XclExpStream
+    rStrm.StartRecord( 0x00FF, 0 );
 
-    rStrm << nDsst;
-    rStrm.SetSliceLen( 8 ); // sizeof(UINT32) + sizeof(UINT16) + sizeof(UINT16);
-    aIsstInf.Seek( STREAM_SEEK_TO_BEGIN );
-    rStrm.CopyFromStream( aIsstInf );
+    rStrm << nPerBucket;
+    rStrm.SetSliceLen( 8 );     // size of one bucket info
+    aExtSst.Seek( STREAM_SEEK_TO_BEGIN );
+    rStrm.CopyFromStream( aExtSst );
 
     rStrm.EndRecord();
 }
 
 
+//___________________________________________________________________
 
 // --- class XclMsodrawing_Base --------------------------------------
 
@@ -1176,7 +1177,7 @@ ExcLabelSst::ExcLabelSst(
         const String& rNewText ) :
     ExcCell( rPos, pAttr, rRoot )
 {
-    nIsst = rRoot.pSstRecs->Add( new XclExpUniString( rNewText ) );
+    nIsst = rRoot.pSstRecs->Insert( new XclExpUniString( rNewText ) );
 }
 
 
@@ -1191,7 +1192,7 @@ ExcLabelSst::ExcLabelSst(
     String aStr;
     pRS->SetRichData( new ExcRichStr( *this, aStr, pAttr, rEdCell, rRoot, 0xFFFF ) );
     pRS->Assign( aStr );
-    nIsst = rRoot.pSstRecs->Add( pRS );
+    nIsst = rRoot.pSstRecs->Insert( pRS );
 }
 
 

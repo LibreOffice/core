@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-30 11:33:30 $
+ *  last change: $Author: dr $ $Date: 2001-10-26 16:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,23 +68,29 @@
 struct SingleRefData;
 struct ScExtTabOptions;
 
-// --- class XclSstList ----------------------------------------------
+//___________________________________________________________________
 
-class XclSstList : public List, public ExcEmptyRec
+/// SST recod (Shared string table). Contains all strings in the document and writes the SST.
+class XclExpSst : public ExcEmptyRec, private List
 {
 private:
-    inline XclExpUniString*     _First()    { return (XclExpUniString*) List::First(); }
-    inline XclExpUniString*     _Next()     { return (XclExpUniString*) List::Next(); }
+    inline XclExpUniString*     First() { return static_cast< XclExpUniString* >( List::First() ); }
+    inline XclExpUniString*     Next()  { return static_cast< XclExpUniString* >( List::Next() ); }
 
 public:
-    inline                      XclSstList() {}
-    virtual                     ~XclSstList();
+    inline                      XclExpSst() {}
+    virtual                     ~XclExpSst();
 
-            UINT32              Add( XclExpUniString* pStr );
+                                /** Insert a new string.
+                                    @return  the index of the string in the SST. */
+    sal_uInt32                  Insert( XclExpUniString* pString );
 
+                                /// Write the SST and EXTSST records.
     virtual void                Save( XclExpStream& rStrm );
 };
 
+
+//___________________________________________________________________
 
 // --- class XclMsodrawing_Base --------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-18 14:55:34 $
+ *  last change: $Author: dr $ $Date: 2001-10-26 16:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ class XclImpExternsheetBuffer;
 class XclImpTabIdBuffer;
 class XclImpPivotCacheList;
 
+class XclExpSst;
 class XclExpTabNumBuffer;
 class XclExpExternsheetList;
 class XclExpChTrTabId;
@@ -116,7 +117,6 @@ class ExcPalette2;
 class UsedFontList;
 class UsedFormList;
 class UsedAttrList;
-class XclSstList;
 class XclObjList;
 class XclNoteList;
 class XclEscher;
@@ -185,6 +185,7 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 
     // Erweiterungen fuer Export
     XclExpTabNumBuffer*     pTabBuffer;
+    XclExpSst*              pSstRecs;           // pointer to rec list, do not destroy
     XclExpExternsheetList*  pExternsheetRecs;   // pointer to rec list, do not destroy
     XclExpChTrTabId*        pTabId;             // pointer to rec list, do not destroy
     XclExpUserBViewList*    pUserBViewList;     // pointer to rec list, do not destroy
@@ -200,7 +201,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     UINT16              nColMax;
     UINT16              nRowMax;
     // Biff8
-    XclSstList*         pSstRecs;
     XclObjList*         pObjRecs;
     XclNoteList*        pNoteRecs;
     String              sAddNoteText;       // text to append at current note (multiple hyperlinks)
