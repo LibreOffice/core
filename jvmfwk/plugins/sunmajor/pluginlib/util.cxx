@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:59:18 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,12 @@
 
 #include "sunjre.hxx"
 #include "vendorlist.hxx"
+#include "diagnostics.h"
 using namespace rtl;
 using namespace osl;
 using namespace std;
-;
 
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #ifdef WNT
 #define HKEY_SUN_JRE L"Software\\JavaSoft\\Java Runtime Environment"
 #define HKEY_SUN_SDK L"Software\\JavaSoft\\Java Development Kit"
@@ -349,12 +350,14 @@ bool getJavaProps(const OUString & exePath,
 
     FileHandleReader stdoutReader(fileOut);
     AsynchReader stderrReader(fileErr);
+
+    JFW_TRACE2(OUSTR("\n[Java framework] Executing: ") + exePath + OUSTR(".\n"));
     oslProcessError procErr =
         osl_executeProcess_WithRedirectedIO( exePath.pData,//usExe.pData,
                                              args,
                                              3,                 //sal_uInt32   nArguments,
                                              osl_Process_HIDDEN, //oslProcessOption Options,
-                                             Security().getHandle(), //oslSecurity Security,
+                                             NULL, //oslSecurity Security,
                                              usStartDir.pData,//usStartDir.pData,//usWorkDir.pData, //rtl_uString *strWorkDir,
                                              NULL, //rtl_uString *strEnvironment[],
                                              0, //  sal_uInt32   nEnvironmentVars,
@@ -365,11 +368,13 @@ bool getJavaProps(const OUString & exePath,
 
     if( procErr != osl_Process_E_None)
     {
+        JFW_TRACE2("[Java framework] Execution failed. \n");
         *bProcessRun = false;
         return ret;
     }
     else
     {
+        JFW_TRACE2("[Java framework] Java executed successfully.\n");
         *bProcessRun = true;
     }
 
@@ -402,17 +407,14 @@ bool getJavaProps(const OUString & exePath,
 
     //process error stream data
     stderrReader.join();
-#if OSL_DEBUG_LEVEL >=2
-    OString data = stderrReader.getData();
-    fprintf(stderr,"%s\n", data.getStr());
-#endif
+    JFW_TRACE2(OString("[Java framework]  Java wrote to stderr:\" ")
+               + stderrReader.getData() + OString(" \".\n"));
 
+    TimeValue waitMax= {5 ,0};
+    procErr = osl_joinProcessWithTimeout(javaProcess, &waitMax);
+    OSL_ASSERT(procErr == osl_Process_E_None);
 
-   TimeValue waitMax= {5 ,0};
-   procErr = osl_joinProcessWithTimeout(javaProcess, &waitMax);
-   OSL_ASSERT(procErr == osl_Process_E_None);
-
-   return ret;
+    return ret;
 }
 
 /* converts the properties printed by JREProperties.class into
@@ -686,105 +688,6 @@ vector<Reference<VendorBase> > getAllJREInfos()
 }
 
 
-std::vector<rtl::Reference<VendorBase> > getAllJREInfos(
-    const rtl::OUString& sVendor,
-    const rtl::OUString& sMinVersion,
-    const rtl::OUString& sMaxVersion,
-    const std::vector<rtl::OUString> & vecExcludeVersions)
-{
-    vector<rtl::Reference<VendorBase> > ret;
-    vector<rtl::Reference<VendorBase> > vecInfos =
-        getAllJREInfos();
-
-    bool bVendor = sVendor.getLength() > 0 ? true : false;
-    bool bMinVersion = sMinVersion.getLength() > 0 ? true : false;
-    bool bMaxVersion = sMaxVersion.getLength() > 0 ? true : false;
-    bool bExcludeList = vecExcludeVersions.size() > 0 ? true : false;
-    typedef vector<rtl::Reference<VendorBase> >::iterator it;
-    for (it i= vecInfos.begin(); i != vecInfos.end(); i++)
-    {
-
-        rtl::Reference<VendorBase>& cur = *i;
-
-        if (bVendor)
-        {
-            if (sVendor.equals(cur->getVendor()) == sal_False)
-                continue;
-        }
-        if (bMinVersion)
-        {
-            try
-            {
-                if (cur->compareVersions(sMinVersion) == -1)
-                    continue;
-            }
-            catch (MalformedVersionException&)
-            {
-#if OSL_DEBUG_LEVEL >= 1
-                OString _ver = OUStringToOString(
-                    cur->getVersion(), osl_getThreadTextEncoding());
-                fprintf(stderr, "sunjavaplugin: A JRE was detected which version "
-                        "has an unknown format: %s",_ver.getStr());
-#endif
-                continue;
-            }
-        }
-
-        if (bMaxVersion)
-        {
-            try
-            {
-                if (cur->compareVersions(sMaxVersion) == 1)
-                    continue;
-            }
-            catch (MalformedVersionException&)
-            {
-#if OSL_DEBUG_LEVEL >= 1
-                OString _ver = OUStringToOString(
-                    cur->getVersion(), osl_getThreadTextEncoding());
-                fprintf(stderr, "sunjavaplugin: A JRE was detected which version "
-                        "has an unknown format: %s",_ver.getStr());
-#endif
-                continue;
-            }
-        }
-
-        if (bExcludeList)
-        {
-            bool bExclude = false;
-            typedef vector<OUString>::const_iterator it_s;
-            for (it_s ii = vecExcludeVersions.begin();
-                 ii != vecExcludeVersions.end(); ii++)
-            {
-                try
-                {
-                    if (cur->compareVersions(*ii) == 0)
-                    {
-                        bExclude = true;
-                        break;
-                    }
-                }
-                catch (MalformedVersionException&)
-                {
-#if OSL_DEBUG_LEVEL >= 1
-                OString _ver = OUStringToOString(
-                    cur->getVersion(), osl_getThreadTextEncoding());
-                fprintf(stderr, "sunjavaplugin: A JRE was detected which version "
-                        "has an unknown format: %s",_ver.getStr());
-#endif
-                    bExclude = true;
-                    break;
-                }
-            }
-            if (bExclude == true)
-                continue;
-        }
-        ret.push_back(*i);
-    }
-
-     return ret;
-}
-
 vector<OUString> getVectorFromCharArray(char const * const * ar, int size)
 {
     vector<OUString> vec;
@@ -923,10 +826,9 @@ rtl::Reference<VendorBase> getJREInfoByPath(
                            SameOrSubDirJREMap(sResolvedDir));
     if (entry2 != mapJREs.end())
     {
-#if OSL_DEBUG_LEVEL >= 2
-        OString _s = OUStringToOString(sResolvedDir, osl_getThreadTextEncoding());
-        fprintf(stderr,"###JRE found again (detected before): %s\n", _s.getStr());
-#endif
+        JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin"SAL_DLLEXTENSION ": ")
+                   + OUSTR("JRE found again (detected before): ") + sResolvedDir
+                   + OUSTR(".\n"));
         return entry2->second;
     }
 
@@ -978,10 +880,9 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             MapIt entry =  mapJREs.find(sFilePath);
             if (entry != mapJREs.end())
             {
-#if OSL_DEBUG_LEVEL >= 2
-                OString _s = OUStringToOString(sFilePath, osl_getThreadTextEncoding());
-                fprintf(stderr,"###JRE found again (detected before): %s\n", _s.getStr());
-#endif
+                JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin"SAL_DLLEXTENSION ": ")
+                   + OUSTR("JRE found again (detected before): ") + sFilePath
+                   + OUSTR(".\n"));
 
                 return entry->second;
             }
@@ -1047,12 +948,10 @@ rtl::Reference<VendorBase> getJREInfoByPath(
         vecBadPaths.push_back(sResolvedDir);
     else
     {
-#if OSL_DEBUG_LEVEL >= 2
-        OString _s = OUStringToOString(sResolvedDir, osl_getThreadTextEncoding());
-        OString _s2 = OUStringToOString(path, osl_getThreadTextEncoding());
-        fprintf(stderr,"###Detected another JRE: %s\n at: %s\n" ,
-                _s.getStr(), _s2.getStr());
-#endif
+        JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin"SAL_DLLEXTENSION ": ")
+                   + OUSTR("Detected another JRE: ") + sResolvedDir
+                   + OUSTR(" \n at: ") + path + OUSTR(".\n"));
+
         mapJREs.insert(MAPJRE::value_type(sResolvedDir, ret));
         mapJREs.insert(MAPJRE::value_type(sFilePath, ret));
     }
