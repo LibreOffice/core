@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-06 12:52:29 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 15:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@
 
 #ifndef PCH
 #include "scitems.hxx"              // SearchItem
-//#include <segmentc.hxx>
 #endif
 
 // INCLUDE ---------------------------------------------------------------
@@ -256,74 +255,4 @@ BOOL __EXPORT ScUndoWidthOrHeight::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2000/11/16 13:15:06  nn
-    #75222# UndoWidthOrHeight: allow several sheets
-
-    Revision 1.1.1.1  2000/09/18 16:45:07  hr
-    initial import
-
-    Revision 1.18  2000/09/17 14:09:28  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.17  2000/08/31 16:38:39  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.16  1999/10/27 14:46:07  hr
-    #65293#: removed  SEG_EOFGLOBALS() SEG_FUNCDEF
-
-    Revision 1.15  1996/09/04 17:46:18  RJ
-    ueberarbeitet
-
-
-      Rev 1.14   04 Sep 1996 19:46:18   RJ
-   ueberarbeitet
-
-      Rev 1.13   19 Aug 1996 21:29:44   NN
-   Markierungen werden nicht mehr am Dokument gehalten
-
-      Rev 1.12   08 Dec 1995 14:31:46   NN
-   ScSimpleUndo
-
-      Rev 1.11   10 Oct 1995 09:52:12   NN
-   Paint beim Ausblenden
-
-      Rev 1.10   09 Oct 1995 15:49:16   NN
-   ScTabViewTarget fuer Repeat
-
-      Rev 1.9   04 Oct 1995 19:51:52   NN
-   Repeat mit ViewShell als RepeatTarget
-
-      Rev 1.8   12 Jul 1995 15:07:26   NN
-   __EXPORT bei Destruktoren
-
-      Rev 1.7   11 Jul 1995 12:39:06   HJS
-   add: __EXPORT
-
-      Rev 1.6   17 Jun 1995 14:00:04   TRI
-   EXPORTS
-
-      Rev 1.5   15 Jun 1995 08:52:46   TRI
-   EXPORT
-
-      Rev 1.4   06 Jun 1995 12:35:28   NN
-   Abfrage, ob ViewShell vorhanden
-
-      Rev 1.3   24 Mar 1995 18:39:00   SC
-   out of keys hack
-
-      Rev 1.2   22 Mar 1995 16:39:10   STE
-   undoblk3 abgesplittet
-
-      Rev 1.1   21 Mar 1995 14:40:08   TRI
-   Out of Keys - Defines eingebaut
-
-      Rev 1.0   08 Mar 1995 02:51:52   SC
-   aufgeteilt
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
