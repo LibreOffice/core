@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxcustomshapes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:48:26 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,17 @@
 #include <sfx2/tbxctrl.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 /*************************************************************************
 |*
 |* SvxTbxCtlCustomShapes
 |*
 \************************************************************************/
 
-class SvxTbxCtlCustomShapes : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxTbxCtlCustomShapes : public SfxToolBoxControl
 {
 private:
 
