@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:16:39 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ namespace framework{
 
 namespace css = ::com::sun::star;
 //#define css                                                 ::com::sun::star                            /// used for short namespaces!
-//#define dcss                                                ::drafts::com::sun::star                    /// ... too
+#define dcss                                                ::drafts::com::sun::star                    /// ... too
 
 }       //  namespace framework
 
