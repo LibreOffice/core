@@ -1,0 +1,273 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tdoc_passwordrequest.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-04-14 13:42:36 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "osl/mutex.hxx"
+
+#include "com/sun/star/lang/XTypeProvider.hpp"
+#include "com/sun/star/task/DocumentPasswordRequest.hpp"
+
+#include "cppuhelper/typeprovider.hxx"
+#include "ucbhelper/interactionrequest.hxx"
+
+#include "tdoc_passwordrequest.hxx"
+
+using namespace com::sun::star;
+using namespace tdoc_ucp;
+
+namespace tdoc_ucp
+{
+    class InteractionSupplyPassword :
+                      public ucbhelper::InteractionContinuation,
+                      public lang::XTypeProvider,
+                      public task::XInteractionPassword
+    {
+    public:
+        InteractionSupplyPassword( ucbhelper::InteractionRequest * pRequest )
+        : InteractionContinuation( pRequest ) {}
+
+        // XInterface
+        virtual uno::Any SAL_CALL queryInterface( const uno::Type & rType )
+            throw ( uno::RuntimeException );
+        virtual void SAL_CALL acquire()
+            throw ();
+        virtual void SAL_CALL release()
+            throw ();
+
+        // XTypeProvider
+        virtual uno::Sequence< uno::Type > SAL_CALL getTypes()
+            throw ( uno::RuntimeException );
+        virtual uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+            throw ( uno::RuntimeException );
+
+        // XInteractionContinuation
+        virtual void SAL_CALL select()
+            throw ( uno::RuntimeException );
+
+        // XInteractionPassword
+        virtual void SAL_CALL setPassword( const rtl::OUString & aPasswd )
+            throw ( uno::RuntimeException );
+        virtual rtl::OUString SAL_CALL getPassword()
+            throw ( uno::RuntimeException );
+
+    private:
+        osl::Mutex m_aMutex;
+        rtl::OUString m_aPassword;
+    };
+} // namespace tdoc_ucp
+
+//=========================================================================
+//=========================================================================
+//
+// InteractionSupplyPassword Implementation.
+//
+//=========================================================================
+//=========================================================================
+
+//=========================================================================
+//
+// XInterface methods.
+//
+//=========================================================================
+
+// virtual
+void SAL_CALL InteractionSupplyPassword::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
+
+//=========================================================================
+// virtual
+void SAL_CALL InteractionSupplyPassword::release()
+    throw()
+{
+    OWeakObject::release();
+}
+
+//=========================================================================
+// virtual
+uno::Any SAL_CALL
+InteractionSupplyPassword::queryInterface( const uno::Type & rType )
+    throw ( uno::RuntimeException )
+{
+    uno::Any aRet = cppu::queryInterface( rType,
+                static_cast< lang::XTypeProvider * >( this ),
+                static_cast< task::XInteractionContinuation * >( this ),
+                static_cast< task::XInteractionPassword * >( this ) );
+
+    return aRet.hasValue()
+            ? aRet : InteractionContinuation::queryInterface( rType );
+}
+
+//=========================================================================
+//
+// XTypeProvider methods.
+//
+//=========================================================================
+
+// virtual
+uno::Sequence< sal_Int8 > SAL_CALL
+InteractionSupplyPassword::getImplementationId()
+    throw( uno::RuntimeException )
+{
+    static cppu::OImplementationId * pId = 0;
+    if ( !pId )
+    {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if ( !pId )
+        {
+            static cppu::OImplementationId id( sal_False );
+            pId = &id;
+        }
+    }
+    return (*pId).getImplementationId();
+}
+
+//=========================================================================
+// virtual
+uno::Sequence< uno::Type > SAL_CALL InteractionSupplyPassword::getTypes()
+    throw( uno::RuntimeException )
+{
+    static cppu::OTypeCollection * pCollection = 0;
+    if ( !pCollection )
+    {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if ( !pCollection )
+        {
+            static cppu::OTypeCollection collection(
+                getCppuType( static_cast<
+                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
+                getCppuType( static_cast<
+                    uno::Reference< task::XInteractionPassword > * >( 0 ) ) );
+            pCollection = &collection;
+        }
+    }
+    return (*pCollection).getTypes();
+}
+
+//=========================================================================
+//
+// XInteractionContinuation methods.
+//
+//=========================================================================
+
+// virtual
+void SAL_CALL InteractionSupplyPassword::select()
+    throw( uno::RuntimeException )
+{
+    recordSelection();
+}
+
+//=========================================================================
+//
+// XInteractionPassword methods.
+//
+//=========================================================================
+
+// virtual
+void SAL_CALL
+InteractionSupplyPassword::setPassword( const ::rtl::OUString& aPasswd )
+    throw ( uno::RuntimeException )
+{
+    osl::MutexGuard aGuard( m_aMutex );
+    m_aPassword = aPasswd;
+}
+
+// virtual
+rtl::OUString SAL_CALL InteractionSupplyPassword::getPassword()
+    throw ( uno::RuntimeException )
+{
+    osl::MutexGuard aGuard( m_aMutex );
+    return m_aPassword;
+}
+
+//=========================================================================
+//=========================================================================
+//
+// DocumentPasswordRequest Implementation.
+//
+//=========================================================================
+//=========================================================================
+
+DocumentPasswordRequest::DocumentPasswordRequest(
+    task::PasswordRequestMode eMode,
+    const rtl::OUString & rDocumentName )
+{
+    // Fill request...
+    task::DocumentPasswordRequest aRequest;
+//    aRequest.Message        = // OUString
+//    aRequest.Context        = // XInterface
+    aRequest.Classification = task::InteractionClassification_ERROR;
+    aRequest.Mode           = eMode;
+    aRequest.Name           = rDocumentName;
+
+    setRequest( uno::makeAny( aRequest ) );
+
+    // Fill continuations...
+    uno::Sequence<
+        uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
+    aContinuations[ 0 ] = new ucbhelper::InteractionAbort( this );
+    aContinuations[ 1 ] = new ucbhelper::InteractionRetry( this );
+    aContinuations[ 2 ] = new InteractionSupplyPassword( this );
+
+    setContinuations( aContinuations );
+}
+
