@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socketConnector.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-17 09:52:17 $
+ *  last change: $Author: sb $ $Date: 2002-10-07 13:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,190 +61,141 @@
 
 package com.sun.star.lib.connections.socket;
 
-
+import com.sun.star.comp.loader.FactoryHelper;
+import com.sun.star.connection.ConnectionSetupException;
+import com.sun.star.connection.NoConnectException;
+import com.sun.star.connection.XConnection;
+import com.sun.star.connection.XConnector;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.registry.XRegistryKey;
 import java.io.IOException;
-
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-
-import com.sun.star.comp.loader.FactoryHelper;
-
-import com.sun.star.connection.XConnection;
-import com.sun.star.connection.XConnector;
-
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XSingleServiceFactory;
-
-import com.sun.star.registry.XRegistryKey;
-
 /**
- * The socketConnector class is a component,
- * that implements the <code>XConnector</code> Interface.
- * <p>
- * The socketConnector is a specialized component, which uses
- * <code>sockets</code> for communication.
- * The socketConnector is in general used by the Connector service.
- * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-04-17 09:52:17 $
- * @author      Kay Ramme
- * @see         com.sun.star.connections.XAcceptor
- * @see         com.sun.star.connections.XConnector
- * @see         com.sun.star.connections.XConnection
- * @see         com.sun.star.loader.JavaLoader
- * @since       UDK1.0
+ * A component that implements the <code>XConnector</code> interface.
+ *
+ * <p>The <code>socketConnector</code> is a specialized component that uses TCP
+ * sockets for communication.  The <code>socketConnector</code> is generally
+ * used by the <code>com.sun.star.connection.Connector</code> service.</p>
+ *
+ * @see com.sun.star.connections.XAcceptor
+ * @see com.sun.star.connections.XConnection
+ * @see com.sun.star.connections.XConnector
+ * @see com.sun.star.loader.JavaLoader
+ *
+ * @since UDK 1.0
  */
-public class socketConnector implements XConnector {
+public final class socketConnector implements XConnector {
     /**
-     * When set to true, enables various debugging output.
+     * The name of the service.
+     *
+     * <p>The <code>JavaLoader</code> acceses this through reflection.</p>
+     *
+     * @see com.sun.star.comp.loader.JavaLoader
      */
-    static public final boolean DEBUG = false;
+    public static final String __serviceName
+    = "com.sun.star.connection.socketConnector";
 
     /**
-     * The name of the service, the <code>JavaLoader</code> acceses this through reflection.
+     * Returns a factory for creating the service.
+     *
+     * <p>This method is called by the <code>JavaLoader</code>.</p>
+     *
+     * @param implName the name of the implementation for which a service is
+     *     requested.
+     * @param multiFactory the service manager to be used (if needed).
+     * @param regKey the registry key.
+     * @return an <code>XSingleServiceFactory</code> for creating the component.
+     *
+     * @see com.sun.star.comp.loader.JavaLoader
      */
-    static public final String __serviceName = "com.sun.star.connection.socketConnector";
-
-    /**
-     * Gives a factory for creating the service.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns a <code>XSingleServiceFactory</code> for creating the component
-     * @param   implName     the name of the implementation for which a service is desired
-     * @param   multiFactory the service manager to be uses if needed
-     * @param   regKey       the registryKey
-     * @see                  com.sun.star.comp.loader.JavaLoader
-     */
-    public static XSingleServiceFactory __getServiceFactory(String implName,
-                                                          XMultiServiceFactory multiFactory,
-                                                          XRegistryKey regKey)
+    public static XSingleServiceFactory __getServiceFactory(
+        String implName, XMultiServiceFactory multiFactory, XRegistryKey regKey)
     {
-        XSingleServiceFactory xSingleServiceFactory = null;
-
-        if (implName.equals(socketConnector.class.getName()) )
-            xSingleServiceFactory = FactoryHelper.getServiceFactory(socketConnector.class,
-                                                                    multiFactory,
-                                                                    regKey);
-
-        return xSingleServiceFactory;
+        return implName.equals(socketConnector.class.getName())
+            ? FactoryHelper.getServiceFactory(socketConnector.class,
+                                              __serviceName, multiFactory,
+                                              regKey)
+            : null;
     }
 
     /**
      * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey       the registryKey
-     * @see                  com.sun.star.comp.loader.JavaLoader
+     *
+     * <p>This method is called by the <code>JavaLoader</code>.</p>
+     *
+     * @param regKey the registry key.
+     * @return <code>true</code> if the operation succeeded.
+     *
+     * @see com.sun.star.comp.loader.JavaLoader
      */
     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return FactoryHelper.writeRegistryServiceInfo(socketConnector.class.getName(), __serviceName, regKey);
+        return FactoryHelper.writeRegistryServiceInfo(
+            socketConnector.class.getName(), __serviceName, regKey);
     }
-
-
-
-
-    protected String  _description;
-    protected String  _hostname     = "0";
-    protected int     _port         = 6001;
-    protected Boolean _tcpNoDelay    = null;
 
     /**
-     * Connect through the described mechanism to a waiting server.
-     * <p>
-     * The description has the following format:
-     * [,attribute_name=attribute_value]
-     * Supported attributes at the moment are:
+     * Connects via the described socket to a waiting server.
+     *
+     * <p>The connection description has the following format:
+     * <code><var>type</var></code><!--
+     *     -->*(<code><var>key</var>=<var>value</var></code>),
+     * where <code><var>type</var></code> should be <code>socket</code>
+     * (ignoring case).  Supported keys (ignoring case) currently are
      * <dl>
-     * <li> host - the name of interface (defaults to 0 == all interfaces
-     * <li> port - the port number (default to 6001)
-     * </dl>
-     * <p>
-     * @return  an <code>XConnection</code> to the client
-     * @param   description    the description of the network interface
-     * @see     com.sun.star.connections.XAcceptor
-     * @see     com.sun.star.connections.XConnection
+     * <dt><code>host</code>
+     * <dd>The name or address of the server.  Must be present.
+     * <dt><code>port</code>
+     * <dd>The TCP port number of the server (defaults to <code>6001</code>).
+     * <dt><code>tcpnodelay</code>
+     * <dd>A flag (<code>0</code>/<code>1</code>) enabling or disabling Nagle's
+     *     algorithm on the resulting connection.
+     * </dl></p>
+     *
+     * @param connectionDescription the description of the connection.
+     * @return an <code>XConnection</code> to the server.
+     *
+     * @see com.sun.star.connections.XAcceptor
+     * @see com.sun.star.connections.XConnection
      */
-    public synchronized XConnection connect(String description)
-        throws com.sun.star.connection.NoConnectException,
-               com.sun.star.connection.ConnectionSetupException,
-               com.sun.star.uno.RuntimeException
+    public synchronized XConnection connect(String connectionDescription)
+        throws NoConnectException, ConnectionSetupException
     {
-        if(_description != null)
-            throw new com.sun.star.connection.ConnectionSetupException(getClass().getName() + ".connect - alread connected");
-
-        _description = description.trim();
-
-        // find hostname
-        int index = _description.indexOf(':');
-        if(index >= 0) { // old style
-            _hostname = _description.substring(0, index);
-            _description = _description.substring(index + 1);
-
-            // find port
-            index = _description.indexOf(':');
-            if(index > -1) {
-                _port = Integer.parseInt(_description.substring(0, index));
-                _description = _description.substring(index + 1);
-            }
-            else
-                _port = Integer.parseInt(_description);
+        if (connected) {
+            throw new ConnectionSetupException("alread connected");
         }
-        else { // new style: is comma separated list
-            while(_description.length() > 0) {
-                index = _description.indexOf(',');
-
-                String word = null;
-
-                if(index >= 0) {
-                    word = _description.substring(0, index).trim();
-                    _description = _description.substring(index + 1).trim();
-                }
-                else {
-                    word = _description.trim();
-                    _description = "";
-                }
-
-                index = word.indexOf('=');
-                String left = word.substring(0, index).trim().toLowerCase();
-                String right = word.substring(index + 1).trim();
-
-                if(left.equals("host"))
-                    _hostname = right;
-
-                else if(left.equals("port"))
-                    _port = Integer.parseInt(right);
-
-                else if(left.equals("tcpnodelay"))
-                    _tcpNoDelay = new Boolean(Integer.parseInt(right) == 1);
-
-                else
-                    System.err.println(getClass().getName() + ".connect - unknown attribute:" + left);
-            }
-        }
-
-        XConnection xConnection = null;
-
+        ConnectionDescriptor desc;
         try {
-            InetAddress inetAddress = InetAddress.getByName(_hostname);
-            Socket socket = new Socket(inetAddress, _port);
-
-            if(_tcpNoDelay != null) { // trilogic: did the user specify something about nagle?
-                if (DEBUG) System.err.println("##### " + getClass().getName() + ".connect - setting tcpNoDelay with " + _tcpNoDelay.booleanValue());
-                socket.setTcpNoDelay(_tcpNoDelay.booleanValue());
+            desc = new ConnectionDescriptor(connectionDescription);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
+            throw new ConnectionSetupException(e.toString());
+        }
+        if (desc.getHost() == null) {
+            throw new ConnectionSetupException("host parameter missing");
+        }
+        InetAddress adr;
+        try {
+            adr = InetAddress.getByName(desc.getHost());
+        } catch (UnknownHostException e) {
+            throw new ConnectionSetupException(e.toString());
+        }
+        XConnection con;
+        try {
+            Socket socket = new Socket(adr, desc.getPort());
+            if (desc.getTcpNoDelay() != null) {
+                socket.setTcpNoDelay(desc.getTcpNoDelay().booleanValue());
             }
-
-            xConnection = new SocketConnection(description, socket);
+            con = new SocketConnection(connectionDescription, socket);
         }
-        catch(UnknownHostException unknownHostException) {
-            throw new com.sun.star.connection.ConnectionSetupException(unknownHostException.toString());
+        catch (IOException e) {
+            throw new NoConnectException(e.toString());
         }
-        catch(IOException ioException) {
-            throw new com.sun.star.connection.NoConnectException(ioException.toString());
-        }
-
-        return xConnection;
+        connected = true;
+        return con;
     }
-}
 
+    private boolean connected = false;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socketAcceptor.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-17 09:43:05 $
+ *  last change: $Author: sb $ $Date: 2002-10-07 13:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,210 +61,181 @@
 
 package com.sun.star.lib.connections.socket;
 
-
+import com.sun.star.comp.loader.FactoryHelper;
+import com.sun.star.connection.AlreadyAcceptingException;
+import com.sun.star.connection.ConnectionSetupException;
+import com.sun.star.connection.XAcceptor;
+import com.sun.star.connection.XConnection;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.registry.XRegistryKey;
 import java.io.IOException;
-
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
-import com.sun.star.comp.loader.FactoryHelper;
-
-import com.sun.star.connection.XAcceptor;
-import com.sun.star.connection.XConnection;
-
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XSingleServiceFactory;
-
-import com.sun.star.registry.XRegistryKey;
-
 /**
- * The socketAcceptor class is a component,
- * that implements the <code>XAcceptor</code> Interface.
- * <p>
- * The socketAcceptor is a specialized component, which uses
- * <code>sockets</code> for communication.
- * The socketAcceptor is in general used by the Acceptor service.
- * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-04-17 09:43:05 $
- * @author      Kay Ramme
- * @see         com.sun.star.connections.XAcceptor
- * @see         com.sun.star.connections.XConnector
- * @see         com.sun.star.connections.XConnection
- * @see         com.sun.star.loader.JavaLoader
- * @since       UDK1.0
+ * A component that implements the <code>XAcceptor</code> interface.
+ *
+ * <p>The <code>socketAcceptor</code> is a specialized component that uses TCP
+ * sockets for communication.  The <code>socketAcceptor</code> is generally used
+ * by the <code>com.sun.star.connection.Acceptor</code> service.</p>
+ *
+ * @see com.sun.star.connections.XAcceptor
+ * @see com.sun.star.connections.XConnection
+ * @see com.sun.star.connections.XConnector
+ * @see com.sun.star.loader.JavaLoader
+ *
+ * @since UDK 1.0
  */
-public class socketAcceptor implements XAcceptor {
+public final class socketAcceptor implements XAcceptor {
     /**
-     * When set to true, enables various debugging output.
+     * The name of the service.
+     *
+     * <p>The <code>JavaLoader</code> acceses this through reflection.</p>
+     *
+     * @see com.sun.star.comp.loader.JavaLoader
      */
-    static public final boolean DEBUG = false;
+    public static final String __serviceName
+    = "com.sun.star.connection.socketAcceptor";
 
     /**
-     * The name of the service, the <code>JavaLoader</code> acceses this through reflection.
+     * Returns a factory for creating the service.
+     *
+     * <p>This method is called by the <code>JavaLoader</code>.</p>
+     *
+     * @param implName the name of the implementation for which a service is
+     *     requested.
+     * @param multiFactory the service manager to be used (if needed).
+     * @param regKey the registry key.
+     * @return an <code>XSingleServiceFactory</code> for creating the component.
+     *
+     * @see com.sun.star.comp.loader.JavaLoader
      */
-    static public final String __serviceName = "com.sun.star.connection.socketAcceptor";
-
-    /**
-     * Gives a factory for creating the service.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns a <code>XSingleServiceFactory</code> for creating the component
-     * @param   implName     the name of the implementation for which a service is desired
-     * @param   multiFactory the service manager to be uses if needed
-     * @param   regKey       the registryKey
-     * @see                  com.sun.star.comp.loader.JavaLoader
-     */
-    public static XSingleServiceFactory __getServiceFactory(String implName,
-                                                          XMultiServiceFactory multiFactory,
-                                                          XRegistryKey regKey)
+    public static XSingleServiceFactory __getServiceFactory(
+        String implName, XMultiServiceFactory multiFactory, XRegistryKey regKey)
     {
-        XSingleServiceFactory xSingleServiceFactory = null;
-
-        if (implName.equals(socketAcceptor.class.getName()) )
-            xSingleServiceFactory = FactoryHelper.getServiceFactory(socketAcceptor.class,
-                                                                    multiFactory,
-                                                                    regKey);
-
-        return xSingleServiceFactory;
+        return implName.equals(socketAcceptor.class.getName())
+            ? FactoryHelper.getServiceFactory(socketAcceptor.class,
+                                              __serviceName, multiFactory,
+                                              regKey)
+            : null;
     }
 
     /**
      * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey       the registryKey
-     * @see                  com.sun.star.comp.loader.JavaLoader
+     *
+     * <p>This method is called by the <code>JavaLoader</code>.</p>
+     *
+     * @param regKey the registry key.
+     * @return <code>true</code> if the operation succeeded.
+     *
+     * @see com.sun.star.comp.loader.JavaLoader
      */
     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return FactoryHelper.writeRegistryServiceInfo(socketAcceptor.class.getName(), __serviceName, regKey);
+        return FactoryHelper.writeRegistryServiceInfo(
+            socketAcceptor.class.getName(), __serviceName, regKey);
     }
 
-
-    protected ServerSocket _serverSocket;
-    protected int          _port          = 6001;
-    protected String       _hostname      = "0";
-    protected int          _backlog       = 50;
-    protected String       _description;
-    protected Boolean      _tcpNoDelay    = null;
-
     /**
-     * Accepts a connect request through the described socket.
-     * This call blocks until a connection has been established.
-     * <p>
-     * The description has the following format:
-     * [,attribute_name=attribute_value]
-     * Supported attributes at the moment are:
+     * Accepts a connection request via the described socket.
+     *
+     * <p>This call blocks until a connection has been established.</p>
+     *
+     * <p>The connection description has the following format:
+     * <code><var>type</var></code><!--
+     *     -->*(<code><var>key</var>=<var>value</var></code>),
+     * where <code><var>type</var></code> should be <code>socket</code>
+     * (ignoring case).  Supported keys (ignoring case) currently are
      * <dl>
-     * <li> host - the name of interface (defaults to 0 == all interfaces
-     * <li> port - the port number (default to 6001)
-     * </dl>
-     * <p>
-     * @return  an <code>XConnection</code> to the client
-     * @param   description    the description of the network interface
-     * @see     com.sun.star.connections.XConnector
-     * @see     com.sun.star.connections.XConnection
+     * <dt><code>host</code>
+     * <dd>The name or address of the accepting interface (defaults to
+     *     <code>0</code>, meaning any interface).
+     * <dt><code>port</code>
+     * <dd>The TCP port number to accept on (defaults to <code>6001</code>).
+     * <dt><code>backlog</code>
+     * <dd>The maximum length of the acceptor's queue (defaults to
+     *     <code>50</code>).
+     * <dt><code>tcpnodelay</code>
+     * <dd>A flag (<code>0</code>/<code>1</code>) enabling or disabling Nagle's
+     *     algorithm on the resulting connection.
+     * </dl></p>
+     *
+     * @param connectionDescription the description of the connection.
+     * @return an <code>XConnection</code> to the client.
+     *
+     * @see com.sun.star.connections.XConnection
+     * @see com.sun.star.connections.XConnector
      */
-    public XConnection accept(String sConnectionDescription )
-        throws com.sun.star.connection.AlreadyAcceptingException,
-               com.sun.star.connection.ConnectionSetupException,
-               com.sun.star.lang.IllegalArgumentException,
-               com.sun.star.uno.RuntimeException
+    public XConnection accept(String connectionDescription) throws
+        AlreadyAcceptingException, ConnectionSetupException,
+        com.sun.star.lang.IllegalArgumentException
     {
-        XConnection xConnection = null;
-
+        ServerSocket serv;
+        synchronized (this) {
+            if (server == null) {
+                ConnectionDescriptor desc
+                    = new ConnectionDescriptor(connectionDescription);
+                String host = desc.getHost();
+                if (host.equals("0")) {
+                    host = null;
+                }
+                if (DEBUG) {
+                    System.err.println("##### " + getClass().getName()
+                                       + ".accept: creating ServerSocket "
+                                       + desc.getPort() + ", "
+                                       + desc.getBacklog() + ", " + host);
+                }
+                try {
+                    server = new ServerSocket(desc.getPort(), desc.getBacklog(),
+                                              host == null ? null
+                                              : InetAddress.getByName(host));
+                } catch (IOException e) {
+                    throw new ConnectionSetupException(e.toString());
+                }
+                acceptingDescription = connectionDescription;
+                tcpNoDelay = desc.getTcpNoDelay();
+            } else if (!connectionDescription.equals(acceptingDescription)) {
+                throw new AlreadyAcceptingException(acceptingDescription
+                                                    + " vs. "
+                                                    + connectionDescription);
+            }
+            serv = server;
+        }
+        Socket socket;
         try {
-            if(_description == null) {
-                _description = sConnectionDescription;
-
-                // find hostname
-                int index = sConnectionDescription.indexOf(':');
-                if(index >= 0) { // old style
-                    _hostname = sConnectionDescription.substring(0, index);
-                    sConnectionDescription = sConnectionDescription.substring(index + 1);
-
-                    // find port
-                    index = sConnectionDescription.indexOf(':');
-                    if(index > -1) {
-                        _port = Integer.parseInt(sConnectionDescription.substring(0, index));
-                        sConnectionDescription = sConnectionDescription.substring(index + 1);
-                    }
-                    else
-                        _port = Integer.parseInt(sConnectionDescription);
-                }
-                else { // new style: is comma separated list
-                    while(sConnectionDescription.length() > 0) {
-                        index = sConnectionDescription.indexOf(',');
-
-                        String word = null;
-
-                        if(index >= 0) {
-                            word = sConnectionDescription.substring(0, index).trim();
-                            sConnectionDescription = sConnectionDescription.substring(index + 1).trim();
-                        }
-                        else {
-                            word = sConnectionDescription.trim();
-                            sConnectionDescription = "";
-                        }
-
-                        index = word.indexOf('=');
-                        String left = word.substring(0, index).trim();
-                        String right = word.substring(index + 1).trim();
-
-                        if(left.equals("host")) {
-                            _hostname = right;
-                        }
-                        else if(left.equals("port"))
-                            _port = Integer.parseInt(right);
-
-                        else if(left.equals("backlog"))
-                            _backlog = Integer.parseInt(right);
-
-                        else if(left.equals("tcpnodelay"))
-                            _tcpNoDelay = new Boolean(Integer.parseInt(right) == 1);
-
-                        else
-                            System.err.println(getClass().getName() + ".accept - unknown attribute:" + left);
-                    }
-                }
-
-                if (DEBUG) System.err.println("##### " + getClass().getName() + " - creating serverSocket:" + _port + " " + _backlog + " " + _hostname);
-
-                _serverSocket = new ServerSocket(_port, _backlog, _hostname.equals("0")? null: InetAddress.getByName(_hostname));
+            socket = serv.accept();
+            if (DEBUG) {
+                System.err.println("##### " + getClass().getName()
+                                   + ".accept: accepted " + socket);
             }
-            else if(!_description.equals(sConnectionDescription))
-                throw new com.sun.star.lang.IllegalArgumentException(getClass().getName() + ".accept");
-
-            Socket socket = _serverSocket.accept();
-            if (DEBUG) System.err.println("##### " + getClass().getName() + " - accepted from " + socket);
-
-            if(_tcpNoDelay != null) { // trilogic: did the user specify something about nagle?
-                if (DEBUG) System.err.println("##### " + getClass().getName() + ".accept - setting tcpNoDelay with " + _tcpNoDelay.booleanValue());
-                socket.setTcpNoDelay(_tcpNoDelay.booleanValue());
+            if (tcpNoDelay != null) {
+                socket.setTcpNoDelay(tcpNoDelay.booleanValue());
             }
-
-            xConnection = new SocketConnection(_description, socket);
+            return new SocketConnection(acceptingDescription, socket);
         }
-        catch(IOException ioException) {
-            throw new com.sun.star.connection.ConnectionSetupException(ioException.toString());
+        catch(IOException e) {
+            throw new ConnectionSetupException(e.toString());
         }
-
-        return xConnection;
     }
 
-    /**
-     * Unblocks the <code>accept</code> call.
-     */
-    public void stopAccepting(  ) throws com.sun.star.uno.RuntimeException {
+    // see com.sun.star.connection.XAcceptor#stopAccepting
+    public void stopAccepting() {
+        ServerSocket serv;
+        synchronized (this) {
+            serv = server;
+        }
         try {
-            _serverSocket.close();
+            serv.close();
         }
-        catch(Exception exception) {
-            throw new com.sun.star.uno.RuntimeException(exception.toString());
+        catch (IOException e) {
+            throw new com.sun.star.uno.RuntimeException(e.toString());
         }
-
     }
+
+    private static final boolean DEBUG = false;
+
+    private ServerSocket server = null;
+    private String acceptingDescription;
+    private Boolean tcpNoDelay;
 }
-
