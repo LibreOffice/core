@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-23 11:52:34 $
+ *  last change: $Author: os $ $Date: 2000-10-24 10:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,8 @@ const SfxItemPropertyMap* GetGraphicDescMap()
         { SW_PROP_NAME(UNO_NAME_CONTOUR_OUTSIDE),       RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_CONTOUROUTSIDE  },
         { SW_PROP_NAME(UNO_NAME_FRAME_STYLE_NAME),          0,                      &::getCppuType((const OUString*)0),         PROPERTY_NONE, 0},
         { SW_PROP_NAME(UNO_NAME_GRAPHIC_CROP),          RES_GRFATR_CROPGRF,     &::getCppuType((const GraphicCrop*)0),  PROPERTY_NONE, CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_HORI_MIRRORED),             RES_GRFATR_MIRRORGRF,   &::getBooleanCppuType(),            PROPERTY_NONE,      MID_MIRROR_HORZ           },
+        { SW_PROP_NAME(UNO_NAME_HORI_MIRRORED_ON_EVEN_PAGES),   RES_GRFATR_MIRRORGRF,   &::getBooleanCppuType(),            PROPERTY_NONE,      MID_MIRROR_HORZ_EVEN_PAGES            },
+        { SW_PROP_NAME(UNO_NAME_HORI_MIRRORED_ON_ODD_PAGES),    RES_GRFATR_MIRRORGRF,   &::getBooleanCppuType(),            PROPERTY_NONE,      MID_MIRROR_HORZ_ODD_PAGES                 },
         { SW_PROP_NAME(UNO_NAME_HEIGHT),                    RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS         },
         { SW_PROP_NAME(UNO_NAME_HORI_ORIENT ) ,             RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_HORIORIENT_ORIENT    },
         { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_POSITION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_HORIORIENT_POSITION|CONVERT_TWIPS    },
@@ -304,7 +305,6 @@ const SfxItemPropertyMap* GetGraphicDescMap()
         { SW_PROP_NAME(UNO_NAME_HYPER_LINK_NAME ),      RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_HYPERLINKNAME     },
         { SW_PROP_NAME(UNO_NAME_LEFT_MARGIN),           RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
         { SW_PROP_NAME(UNO_NAME_RIGHT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_MIRROR_PAGE_TOGGLE),    RES_GRFATR_MIRRORGRF,   &::getBooleanCppuType(),            PROPERTY_NONE, MID_MIRROR_HORZ_PAGETOGGLE},
         { SW_PROP_NAME(UNO_NAME_OPAQUE),                    RES_OPAQUE,             &::getBooleanCppuType(),            PROPERTY_NONE, 0},
         { SW_PROP_NAME(UNO_NAME_PAGE_TOGGLE),               RES_VERT_ORIENT,        &::getBooleanCppuType(),            PROPERTY_NONE ,MID_HORIORIENT_PAGETOGGLE },
         { SW_PROP_NAME(UNO_NAME_POSITION_PROTECTED),    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_POSITION},
@@ -802,21 +802,21 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
     //Properties fuer alle Frames
     sal_Bool bRet = FillBaseProperties(rFrmSet);
 
-    uno::Any* pHMirror = 0;
-    GetProperty(C2S(UNO_NAME_HORI_MIRRORED), pHMirror);
+    uno::Any* pHEvenMirror = 0;
+    uno::Any* pHOddMirror = 0;
     uno::Any* pVMirror = 0;
+    GetProperty(C2S(UNO_NAME_HORI_MIRRORED_ON_EVEN_PAGES), pHEvenMirror);
+    GetProperty(C2S(UNO_NAME_HORI_MIRRORED_ON_ODD_PAGES), pHOddMirror);
     GetProperty(C2S(UNO_NAME_VERT_MIRRORED), pVMirror);
-    uno::Any* pPageToggle = 0;
-    GetProperty(C2S(UNO_NAME_MIRROR_PAGE_TOGGLE), pPageToggle);
-    if(pHMirror || pVMirror || pPageToggle)
+    if(pHEvenMirror || pHOddMirror || pVMirror )
     {
         SwMirrorGrf aMirror;
-        if(pHMirror)
-            bRet &= ((SfxPoolItem&)aMirror).PutValue(*pHMirror, MID_MIRROR_HORZ);
+        if(pHEvenMirror)
+            bRet &= ((SfxPoolItem&)aMirror).PutValue(*pHEvenMirror, MID_MIRROR_HORZ_EVEN_PAGES);
+        if(pHOddMirror)
+            bRet &= ((SfxPoolItem&)aMirror).PutValue(*pHOddMirror, MID_MIRROR_HORZ_ODD_PAGES);
         if(pVMirror)
             bRet &= ((SfxPoolItem&)aMirror).PutValue(*pVMirror, MID_MIRROR_VERT);
-        if(pPageToggle)
-            bRet &= ((SfxPoolItem&)aMirror).PutValue(*pPageToggle, MID_MIRROR_HORZ_PAGETOGGLE);
         rGrSet.Put(aMirror);
     }
     uno::Any* pCrop;
@@ -2558,6 +2558,9 @@ sal_uInt16 SwXOLEListener::FindEntry( const EventObject& rEvent,SwOLENode** ppNd
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/23 11:52:34  os
+    property defines according to the expansion
+
     Revision 1.2  2000/10/16 13:28:50  os
     #78595# deprecated interface XTextEmbeddedObject no longer supported
 
