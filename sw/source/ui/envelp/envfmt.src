@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:10:53 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ TabPage TP_ENV_FMT
         Text[ korean ] = "¹Þ´Â»ç¶÷";
         Text[ turkish ] = "Alýcý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Destinatario";
     };
     FixedText TXT_ADDR_POS
     {
@@ -105,7 +106,7 @@ TabPage TP_ENV_FMT
         Text = "Position" ;
         Text [ ENGLISH ] = "Position" ;
         Text[ english_us ] = "Position";
-        Text[ portuguese ] = "Position";
+        Text[ portuguese ] = "Posição";
         Text[ russian ] = "Ïîçèöèÿ";
         Text[ greek ] = "ÈÝóç";
         Text[ dutch ] = "Positie";
@@ -122,6 +123,7 @@ TabPage TP_ENV_FMT
         Text[ chinese_traditional ] = "¦ì¸m";
         Text[ turkish ] = "Position";
         Text[ arabic ] = "ÇáãæÖÚ";
+        Text[ catalan ] = "Posición";
     };
     FixedText TXT_ADDR_LEFT
     {
@@ -151,6 +153,7 @@ TabPage TP_ENV_FMT
         Text[ korean ] = "¿ÞÂÊ¿¡¼­";
         Text[ turkish ] = "Soldan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "de izquierda";
     };
     MetricField FLD_ADDR_LEFT
     {
@@ -197,6 +200,7 @@ TabPage TP_ENV_FMT
         Text[ korean ] = "À§¿¡¼­";
         Text[ turkish ] = "Yukardan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "desde arriba";
     };
     MetricField FLD_ADDR_TOP
     {
@@ -223,7 +227,7 @@ TabPage TP_ENV_FMT
         Text = "Format" ;
         Text [ ENGLISH ] = "Format" ;
         Text[ english_us ] = "Format";
-        Text[ portuguese ] = "Format";
+        Text[ portuguese ] = "Formato";
         Text[ russian ] = "Ôîðìàò";
         Text[ greek ] = "ÌÝãåèïò";
         Text[ dutch ] = "Format";
@@ -240,6 +244,7 @@ TabPage TP_ENV_FMT
         Text[ chinese_traditional ] = "®æ¦¡";
         Text[ turkish ] = "Format";
         Text[ arabic ] = "ÇáÊäÓíÞ";
+        Text[ catalan ] = "Formato";
     };
     MenuButton BTN_ADDR_EDIT
     {
@@ -269,6 +274,7 @@ TabPage TP_ENV_FMT
         Text[ greek ] = "Åðåîåñã.";
         Text[ korean ] = "ÆíÁý";
         Text[ turkish ] = "Düzenle";
+        Text[ catalan ] = "Editar";
     };
     GroupBox GRP_SENDER
     {
@@ -297,6 +303,7 @@ TabPage TP_ENV_FMT
         Text[ korean ] = "º¸³½ »ç¶÷";
         Text[ turkish ] = "Gönderen";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Remitente";
     };
     FixedText TXT_SEND_POS
     {
@@ -306,7 +313,7 @@ TabPage TP_ENV_FMT
         Text = "Position" ;
         Text [ ENGLISH ] = "Position" ;
         Text[ english_us ] = "Position";
-        Text[ portuguese ] = "Position";
+        Text[ portuguese ] = "Posição";
         Text[ russian ] = "Ïîçèöèÿ";
         Text[ greek ] = "ÈÝóç";
         Text[ dutch ] = "Positie";
@@ -323,6 +330,7 @@ TabPage TP_ENV_FMT
         Text[ chinese_traditional ] = "¦ì¸m";
         Text[ turkish ] = "Position";
         Text[ arabic ] = "ÇáãæÖÚ";
+        Text[ catalan ] = "Posición";
     };
     FixedText TXT_SEND_LEFT
     {
@@ -352,6 +360,7 @@ TabPage TP_ENV_FMT
         Text[ korean ] = "¿ÞÂÊ¿¡¼­";
         Text[ turkish ] = "Soldan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "de izquierda";
     };
     MetricField FLD_SEND_LEFT
     {
@@ -398,6 +407,7 @@ TabPage TP_ENV_FMT
         Text[ korean ] = "À§¿¡¼­";
         Text[ turkish ] = "Yukardan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "desde arriba";
     };
     MetricField FLD_SEND_TOP
     {
@@ -424,7 +434,7 @@ TabPage TP_ENV_FMT
         Text = "Format" ;
         Text [ ENGLISH ] = "Format" ;
         Text[ english_us ] = "Format";
-        Text[ portuguese ] = "Format";
+        Text[ portuguese ] = "Formato";
         Text[ russian ] = "Ôîðìàò";
         Text[ greek ] = "ÌÝãåèïò";
         Text[ dutch ] = "Formaat";
@@ -441,6 +451,7 @@ TabPage TP_ENV_FMT
         Text[ chinese_traditional ] = "®æ¦¡";
         Text[ turkish ] = "Format";
         Text[ arabic ] = "ÇáÊäÓíÞ";
+        Text[ catalan ] = "Formato";
     };
     MenuButton BTN_SEND_EDIT
     {
@@ -470,6 +481,7 @@ TabPage TP_ENV_FMT
         Text[ greek ] = "Åðåîåñã.";
         Text[ korean ] = "ÆíÁý";
         Text[ turkish ] = "Düzenle";
+        Text[ catalan ] = "Editar";
     };
     GroupBox GRP_SIZE
     {
@@ -498,6 +510,7 @@ TabPage TP_ENV_FMT
         Text[ korean ] = "Å©±â";
         Text[ turkish ] = "Boyut";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tamaño";
     };
     FixedText TXT_SIZE_FORMAT
     {
@@ -527,6 +540,7 @@ TabPage TP_ENV_FMT
         Text[ greek ] = "ÅðéëïãÝò";
         Text[ korean ] = "¼­½Ä(~O)";
         Text[ turkish ] = "Format";
+        Text[ catalan ] = "~Formato";
     };
     ListBox BOX_SIZE_FORMAT
     {
@@ -564,6 +578,7 @@ TabPage TP_ENV_FMT
         Text[ korean ] = "³Êºñ(~W)";
         Text[ turkish ] = "Geniþlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ncho";
     };
     MetricField FLD_SIZE_WIDTH
     {
@@ -610,6 +625,7 @@ TabPage TP_ENV_FMT
         Text[ korean ] = "³ôÀÌ(~H)";
         Text[ turkish ] = "Yükseklik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ltura";
     };
     MetricField FLD_SIZE_HEIGHT
     {
@@ -666,6 +682,7 @@ Menu MNU_EDIT
             TEXT[ greek ] = "~×áñáêôÞñåò...";
             TEXT[ korean ] = "±âÈ£(~H)...";
             TEXT[ turkish ] = "Karakter...";
+            TEXT[ catalan ] = "~Caracteres...";
         };
         MenuItem
         {
@@ -693,6 +710,7 @@ Menu MNU_EDIT
             TEXT[ korean ] = "´Ü¶ô(~A)...";
             TEXT[ turkish ] = "Paragraf...";
             TEXT[ language_user1 ] = " ";
+            TEXT[ catalan ] = "Párrafo...";
         };
     };
 };
