@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-17 10:12:08 $
+#   last change: $Author: obo $ $Date: 2004-04-29 16:47:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,10 +77,8 @@ SLOFILES = \
     $(SLO)$/moduleoptions.obj           \
     $(SLO)$/pathoptions.obj             \
     $(SLO)$/saveopt.obj					\
-    $(SLO)$/undoopt.obj             	\
-    $(SLO)$/helpopt.obj             	\
+    $(SLO)$/helpopt.obj                 \
     $(SLO)$/javaoptions.obj             \
-    $(SLO)$/useroptions.obj             \
     $(SLO)$/securityoptions.obj			\
     $(SLO)$/localisationoptions.obj		\
     $(SLO)$/workingsetoptions.obj		\
@@ -127,6 +125,8 @@ LIB1OBJFILES=  \
         $(SLO)$/ctloptions.obj          \
         $(SLO)$/cjkoptions.obj          \
         $(SLO)$/colorcfg.obj            \
+        $(SLO)$/undoopt.obj                 \
+        $(SLO)$/useroptions.obj      \
     $(SLO)$/syslocaleoptions.obj        
 
 # --- Targets ------------------------------------------------------
