@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SWCHARDLG_HXX
-#define _SWCHARDLG_HXX
+#ifndef _SWTMPDLG_HXX  //CHINA001 _SWCHARDLG_HXX
+#define _SWTMPDLG_HXX //CHINA001 _SWCHARDLG_HXX
 
 #ifndef _SFX_STYLEDLG_HXX //autogen
 #include <sfx2/styledlg.hxx>
