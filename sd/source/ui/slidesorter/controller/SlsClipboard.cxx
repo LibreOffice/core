@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:14:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,8 @@
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsFocusManager.hxx"
 
-#include "SlideChangeChildWindow.hxx"
 #include "Window.hxx"
 #include "fupoor.hxx"
-#include "fuslprms.hxx"
 #include "fuslhide.hxx"
 #include "fuzoom.hxx"
 #include "fucushow.hxx"
