@@ -75,6 +75,7 @@ BEGIN
     $product = "";
     $languagelist = "";
 
+    $destdir = "";
     $rootpath = "";
 
     $productextension = "";
@@ -102,7 +103,6 @@ BEGIN
     $unpackpath = "";
     $idttemplatepath = "";
     $idtlanguagepath = "";
-    $msichildpath = "";
     $packjobref = "";
     $buildid = "Not set";
     $guidcounter = 1000; # for uniqueness of guids
@@ -115,7 +115,6 @@ BEGIN
     $templatefolder = "TemplateFolder";
     $programmenufolder = "ProgramMenuFolder";
     $adafolder = "adabas";
-    $listfileproductname = "";
     $encodinglistname = "msi-encodinglist.txt";
     $msiencoding = "";  # hash reference for msi encodings
     $msilanguage = "";  # hash reference for msi languages LCID
@@ -126,6 +125,8 @@ BEGIN
     $is_special_epm = 0;
     $epm_in_path = 0;
     $epm_path = "";
+    $epmoutpath = "";
+    $simple = 0;
     $call_epm = 1;
     $packageformat = "";
     $packagename = "";
@@ -159,7 +160,7 @@ BEGIN
     $productcode = "";
     $upgradecode = "";
 
-    $javafilespath = "";
+    $addjavainstaller = 0;
     $javalanguagepath = "";
 
     $is_copy_only_project = 0;
@@ -189,11 +190,8 @@ BEGIN
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
     @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "jurt.jar", "juh.jar", "xmerge.jar" );
     @regcompregisterlibs = ( "javavm.uno", "javaloader.uno" );
-    @selfreglibraries = ();
-    $msiassemblyfiles = "";
-    @binarytablefiles = ("gid_File_Lib_Reg4msdocmsi", "gid_File_Lib_Regactivex_Msi", "gid_File_Lib_Jfregca", "gid_File_Lib_Qslnkmsi", "gid_File_Lib_Sdqsmsi", "gid_File_Lib_Shlxtmsi", "gid_File_Lib_Instooofiltmsi");  # to be removed after scp changes, see parameter.pm
-    @add_unocomponent_libraries = ("gid_File_Lib_Gnomevfs");                # to be removed after scp changes
     @languagepackfeature =();
+    $msiassemblyfiles = "";
     $langpackfilename = "Langpack.mlf";
     $languagenames = "";
 
