@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-14 15:25:40 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,7 +561,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ dutch ] = "~Bestanden zoeken...";
         Text[ chinese_simplified ] = "ËÑÑ°ÎÄ¼ş(~F)...";
         Text[ greek ] = "ÁíáæŞôçóç áñ÷åßùí...";
-        Text[ korean ] = "ÆÄÀÏ Ã£±â...";
+        Text[ korean ] = "ÆÄÀÏ Ã£±â(~F)...";
         Text[ turkish ] = "Dosyayı bul";
         Text[ language_user1 ] = " ";
     };
@@ -592,7 +592,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ dutch ] = "Toe~voegen";
         Text[ chinese_simplified ] = "ĞÂÔö(~A)";
         Text[ greek ] = "ĞñïóèŞê~ç";
-        Text[ korean ] = "Ãß°¡";
+        Text[ korean ] = "Ãß°¡(~A)";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
     };
@@ -623,7 +623,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ dutch ] = "~Alle toevoegen";
         Text[ chinese_simplified ] = "È«²¿¼ÓÈë(~D)";
         Text[ greek ] = "ĞñïóèŞêç üë~á";
-        Text[ korean ] = "¸ğµÎ Ãß°¡";
+        Text[ korean ] = "¸ğµÎ Ãß°¡(~D)";
         Text[ turkish ] = "Tümünü ekle";
         Text[ language_user1 ] = " ";
     };
@@ -1638,7 +1638,7 @@ String RID_SVXSTR_GALLERY_BROWSER
     Text[ dutch ] = "~Beheer....";
     Text[ chinese_simplified ] = "¹ÜÀí(~O)...";
     Text[ greek ] = "Äéá÷åßñéóç...";
-    Text[ korean ] = "°ü¸®...";
+    Text[ korean ] = "°ü¸®(~O)...";
     Text[ turkish ] = "Yönet...";
     Text[ language_user1 ] = " ";
 };
@@ -1770,7 +1770,7 @@ String RID_SVXSTR_GALLERY_IMPORTTHEME
     Text[ dutch ] = "Im~porteren...";
     Text[ chinese_simplified ] = "ÊäÈë(~M)...";
     Text[ greek ] = "Å~éóáãùãŞ...";
-    Text[ korean ] = "°¡Á®¿À±â...";
+    Text[ korean ] = "°¡Á®¿À±â(~M)...";
     Text[ turkish ] = "İç~e aktar...";
     Text[ language_user1 ] = " ";
 };
@@ -2056,7 +2056,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ japanese ] = "íœ(~D)";
             Text[ chinese_simplified ] = "É¾³ı(~D)";
             Text[ greek ] = "ÄéáãñáöŞ";
-            Text[ korean ] = "»èÁ¦";
+            Text[ korean ] = "»èÁ¦(~D)";
             Text[ chinese_traditional ] = "§R°£(~D)";
             Text[ arabic ] = "ÍĞİ";
             Text[ turkish ] = "Sil";
@@ -2086,7 +2086,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ dutch ] = "~Naam wijzigen";
             Text[ chinese_simplified ] = "ÖØÃüÃû(~R)";
             Text[ greek ] = "Ìåôïíïìáóßá";
-            Text[ korean ] = "ÀÌ¸§ º¯°æ";
+            Text[ korean ] = "ÀÌ¸§ º¯°æ(~R)";
             Text[ turkish ] = "Ye~niden adlandır";
             Text[ language_user1 ] = " ";
         };
@@ -2117,7 +2117,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ dutch ] = "~ID bezet";
             Text[ chinese_simplified ] = "Ö¸¶¨ ~ID";
             Text[ greek ] = "ÁğïíïìŞ ôáõôüôçôáò (~ID)";
-            Text[ korean ] = "ID ÇÒ´ç";
+            Text[ korean ] = "~ID ÇÒ´ç";
             Text[ turkish ] = "Tanıtıcı ata";
             Text[ language_user1 ] = " ";
         };
@@ -2149,7 +2149,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ dutch ] = "~Eigenschappen ...";
             Text[ chinese_simplified ] = "ÊôĞÔ(~I)...";
             Text[ greek ] = "Éäéüôçô~åò ...";
-            Text[ korean ] = "µî·ÏÁ¤º¸...";
+            Text[ korean ] = "µî·ÏÁ¤º¸(~I)...";
             Text[ turkish ] = "~Özellikler ...";
             Text[ language_user1 ] = " ";
         };
@@ -2199,7 +2199,7 @@ Menu RID_SVXMN_GALLERY2
                         Text[ dutch ] = "~Kopie";
                         Text[ chinese_simplified ] = "¸´ÖÆ(~C)";
                         Text[ greek ] = "Áíôßãñáöï";
-                        Text[ korean ] = "º¹»ç";
+                        Text[ korean ] = "º¹»ç(~C)";
                         Text[ turkish ] = "Kopya";
                         Text[ language_user1 ] = " ";
                     };
@@ -2263,7 +2263,7 @@ Menu RID_SVXMN_GALLERY2
                         Text[ dutch ] = "~Achtergrond";
                         Text[ chinese_simplified ] = "±³¾°(~K)";
                         Text[ greek ] = "Öüíôï";
-                        Text[ korean ] = "¹è°æ";
+                        Text[ korean ] = "¹è°æ(~K)";
                         Text[ turkish ] = "Artalan";
                         Text[ language_user1 ] = " ";
                     };
@@ -2288,7 +2288,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ dutch ] = "~Toevoegen";
             Text[ chinese_simplified ] = "¼ÓÈë(~I)";
             Text[ greek ] = "ÅéóáãùãŞ";
-            Text[ korean ] = "»ğÀÔ";
+            Text[ korean ] = "»ğÀÔ(~I)";
             Text[ turkish ] = "Ekle";
             Text[ language_user1 ] = " ";
         };
@@ -2316,7 +2316,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ japanese ] = "ÌßÚËŞ­°(~P)";
             Text[ chinese_simplified ] = "Ô¤ÀÀ(~P)";
             Text[ greek ] = "Ğñïåğéóêüğçóç";
-            Text[ korean ] = "¹Ì¸®º¸±â";
+            Text[ korean ] = "¹Ì¸®º¸±â(~P)";
             Text[ chinese_traditional ] = "¹wÄı(~P)";
             Text[ arabic ] = "ãÚÇíäÉ";
             Text[ turkish ] = "Önizleme";
@@ -2345,8 +2345,8 @@ Menu RID_SVXMN_GALLERY2
             Text[ polish ] = "~Tytu³";
             Text[ portuguese_brazilian ] = "~Title";
             Text[ japanese ] = "À²ÄÙ(~T)";
-            Text[ korean ] = "Á¦¸ñ";
-            Text[ chinese_simplified ] = "±êÌâ";
+            Text[ korean ] = "Á¦¸ñ(~T)";
+            Text[ chinese_simplified ] = "±êÌâ(~T)";
             Text[ chinese_traditional ] = "¼ĞÃD(~T)";
             Text[ arabic ] = "ÚäæÇä";
             Text[ turkish ] = "Başlık";
@@ -2378,7 +2378,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ japanese ] = "íœ(~D)";
             Text[ chinese_simplified ] = "É¾³ı(~D)";
             Text[ greek ] = "ÄéáãñáöŞ";
-            Text[ korean ] = "»èÁ¦";
+            Text[ korean ] = "»èÁ¦(~D)";
             Text[ chinese_traditional ] = "§R°£(~D)";
             Text[ arabic ] = "ÍĞİ";
             Text[ turkish ] = "Sil";
@@ -2399,8 +2399,8 @@ Menu RID_SVXMN_GALLERY2
             Text [ portuguese ] = "~Copiar" ; \
             Text [ finnish ] = "~Kopioi" ; \
             Text [ danish ] = "K~opier" ; \
-            Text [ french ] = "Co~pier" ; \
-            Text [ swedish ] = "K~opiera" ; \
+            Text [ french ] = "~Copier" ; \
+            Text [ swedish ] = "~Kopiera" ; \
             Text [ dutch ] = "~Kopiëren" ; \
             Text [ spanish ] = "~Copiar" ; \
             Text [ english_us ] = "~Copy" ;\
@@ -2427,7 +2427,7 @@ Menu RID_SVXMN_GALLERY2
             Text [ portuguese ] = "~Inserir" ; \
             Text [ finnish ] = "Lisää" ; \
             Text [ danish ] = "~Indsæt" ; \
-            Text [ french ] = "~Insertion" ; \
+            Text [ french ] = "C~oller" ; \
             Text [ swedish ] = "~Infoga" ; \
             Text [ dutch ] = "~Invoegen" ; \
             Text [ spanish ] = "~Insertar" ; \
@@ -2435,11 +2435,11 @@ Menu RID_SVXMN_GALLERY2
             Text[ chinese_simplified ] = "²åÈë(~I)";    \
             Text[ russian ] = "Âñò~àâêà";       \
             Text[ polish ] = "W~staw";      \
-            Text[ japanese ] = "‘}“ü(~I)";  \
+            Text[ japanese ] = "“\\‚è•t‚¯(~I)"; \
             Text[ chinese_traditional ] = "´¡¤J(~I)"    ;   \
             Text[ greek ] = "~ÅéóáãùãŞ" ;   \
-            Text[ korean ] = "»ğÀÔ" ;   \
-            Text[ arabic ] = "ÅÏ~ÑÇÌ"   ;   \
+            Text[ korean ] = "»ğÀÔ(~I)" ;   \
+            Text[ arabic ] = "ÅÏÑÇÌ"    ;   \
             Text[ turkish ] = "~Ekle"   ;
         };
     };
