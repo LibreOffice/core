@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestComponent.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 12:58:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 14:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,13 +69,16 @@ import com.sun.star.lang.XTypeProvider;
 import com.sun.star.test.performance.ComplexTypes;
 import com.sun.star.test.performance.XPerformanceTest;
 
-import com.sun.star.test.bridge.TestDataElements;
-import com.sun.star.test.bridge.TestElement;
-import com.sun.star.test.bridge.TestEnum;
-import com.sun.star.test.bridge.XBridgeTest;
-import com.sun.star.test.bridge.XBridgeTest2;
-import com.sun.star.test.bridge.XRecursiveCall;
+import test.testtools.bridgetest.TestDataElements;
+import test.testtools.bridgetest.TestElement;
+import test.testtools.bridgetest.TestEnum;
+import test.testtools.bridgetest.TestPolyStruct;
+import test.testtools.bridgetest.XBridgeTest;
+import test.testtools.bridgetest.XBridgeTest2;
+import test.testtools.bridgetest.XMulti;
+import test.testtools.bridgetest.XRecursiveCall;
 
+import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 
@@ -636,6 +639,66 @@ public class TestComponent {
             _testDataElements = testDataElements;
         }
 
+        public int getRaiseAttr1() {
+            throw new com.sun.star.uno.RuntimeException();
+        }
+
+        public void setRaiseAttr1(int n) throws IllegalArgumentException {
+            throw new IllegalArgumentException();
+        }
+
+        public int getRaiseAttr2() throws IllegalArgumentException {
+            throw new IllegalArgumentException();
+        }
+
+        public TestPolyStruct transportPolyBoolean(TestPolyStruct arg) {
+            Boolean dummy = (Boolean) arg.member;
+            return arg;
+        }
+
+        public void transportPolyUnsignedHyper(TestPolyStruct[] arg) {
+            Long dummy = (Long) arg[0].member;
+        }
+
+        public void transportPolySequence(
+            TestPolyStruct arg1, TestPolyStruct[] arg2)
+        {
+            Object[] dummy = (Object[]) arg1.member;
+            arg2[0] = arg1;
+        }
+
+        public TestPolyStruct getNullPolyLong() {
+            return new TestPolyStruct();
+        }
+
+        public TestPolyStruct getNullPolyString() {
+            return new TestPolyStruct();
+        }
+
+        public TestPolyStruct getNullPolyType() {
+            return new TestPolyStruct();
+        }
+
+        public TestPolyStruct getNullPolyAny() {
+            return new TestPolyStruct();
+        }
+
+        public TestPolyStruct getNullPolySequence() {
+            return new TestPolyStruct();
+        }
+
+        public TestPolyStruct getNullPolyEnum() {
+            return new TestPolyStruct();
+        }
+
+        public TestPolyStruct getNullPolyStruct() {
+            return new TestPolyStruct();
+        }
+
+        public TestPolyStruct getNullPolyInterface() {
+            return new TestPolyStruct();
+        }
+
         public Object transportAny(Object value) throws com.sun.star.uno.RuntimeException {
             return value;
         }
@@ -677,7 +740,7 @@ public class TestComponent {
             return _bSequenceOfCallTestPassed;
         }
 
-        public synchronized void callRecursivly(com.sun.star.test.bridge.XRecursiveCall xCall,  int nToCall) throws com.sun.star.uno.RuntimeException {
+        public synchronized void callRecursivly(XRecursiveCall xCall,   int nToCall) throws com.sun.star.uno.RuntimeException {
             if(nToCall != 0)
             {
                 nToCall --;
@@ -685,7 +748,7 @@ public class TestComponent {
             }
         }
 
-        public synchronized void  startRecursiveCall(com.sun.star.test.bridge.XRecursiveCall xCall, int nToCall) throws com.sun.star.uno.RuntimeException {
+        public synchronized void  startRecursiveCall(XRecursiveCall xCall, int nToCall) throws com.sun.star.uno.RuntimeException {
             if(nToCall != 0)
             {
                 nToCall --;
@@ -693,6 +756,32 @@ public class TestComponent {
             }
         }
 
+        public XMulti getMulti() {
+            return new XMulti() {
+                    public int f1() { return 1; }
+
+                    public int f2() { return 2; }
+
+                    public int f3() { return 3; }
+
+                    public int geta() { return a; }
+
+                    public void seta(int value) { a = value; }
+
+                    private int a;
+                };
+        }
+
+        public int testMultiF1(XMulti multi) { return multi.f1(); }
+
+        public int testMultiF2(XMulti multi) { return multi.f2(); }
+
+        public int testMultiF3(XMulti multi) { return multi.f3(); }
+
+        public int testMultiA(XMulti multi, int value) {
+            multi.seta(value);
+            return multi.geta();
+        }
 
         // XBridgeTest
         public TestDataElements raiseException(short nArgumentPos, String rMsg, Object xContext)
