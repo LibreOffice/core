@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-21 18:33:54 $
+ *  last change: $Author: ssa $ $Date: 2002-03-26 08:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1541,7 +1541,6 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
     }
     else
     {
-/*
         Window* pFocusWin = mpFrameData->mpFocusWin;
         if ( pFocusWin )
         {
@@ -1587,7 +1586,6 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
         // Alle FloatingFenster deaktiv zeichnen
         if ( mpFrameData->mbStartFocusState != bHasFocus )
             ImplActivateFloatingWindows( this, bHasFocus );
-*/
     }
 
     return 0;
