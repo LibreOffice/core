@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-19 20:23:49 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,14 +98,14 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ french ] = "~Type" ;
         Text [ dutch ] = "~Type" ;
         Text [ portuguese ] = "~Tipo" ;
-        Text[ chinese_simplified ] = "ÀàĞÍ(~T)";
+        Text[ chinese_simplified ] = "ç±»å‹(~T)";
         Text[ russian ] = "Òèï";
         Text[ polish ] = "Typ";
-        Text[ japanese ] = "í—Ş(~T)";
-        Text[ chinese_traditional ] = "Ãş«¬(~T)";
+        Text[ japanese ] = "ç¨®é¡(~T)";
+        Text[ chinese_traditional ] = "é¡å‹(~T)";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "~Ôığïò";
-        Text[ korean ] = "ÇüÅÂ(~T)";
+        Text[ korean ] = "í˜•íƒœ(~T)";
         Text[ turkish ] = "~Tip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tipo";
@@ -134,14 +134,14 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ french ] = "Décalage de ligne" ;
         Text [ dutch ] = "Lijnopvulling" ;
         Text [ portuguese ] = "Transposição de linhas" ;
-        Text[ chinese_simplified ] = "ÏßÆ«Àë";
+        Text[ chinese_simplified ] = "çº¿åç¦»";
         Text[ russian ] = "Ñìåùåíèå ëèíèè";
         Text[ polish ] = "Przesuniêcie linii";
-        Text[ japanese ] = "ü‚Ì‚¸‚ê";
-        Text[ chinese_traditional ] = "½u°¾Â÷";
+        Text[ japanese ] = "ç·šã®ãšã‚Œ";
+        Text[ chinese_traditional ] = "ç·šåé›¢";
         Text[ arabic ] = "ÊÎÇáİ ÇáÎØæØ";
         Text[ greek ] = "Ìåôáôüğéóç ãñáììŞò";
-        Text[ korean ] = "¼± ºø±è";
+        Text[ korean ] = "ì„  ë¹—ê¹€";
         Text[ turkish ] = "Çizgi eğriliği";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desplazamiento de líneas";
@@ -162,14 +162,14 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ french ] = "Ligne ~1" ;
         Text [ dutch ] = "Lijn ~1" ;
         Text [ portuguese ] = "Linha ~1" ;
-        Text[ chinese_simplified ] = "ÏßÌõ ~1";
+        Text[ chinese_simplified ] = "çº¿æ¡ ~1";
         Text[ russian ] = "Ëèíèÿ ~1";
         Text[ polish ] = "Linia 1";
-        Text[ japanese ] = "ü1";
-        Text[ chinese_traditional ] = "½u±ø ~1";
+        Text[ japanese ] = "ç·š1";
+        Text[ chinese_traditional ] = "ç·šæ¢ ~1";
         Text[ arabic ] = "ÇáÎØ 1";
         Text[ greek ] = "ÃñáììŞ ~1";
-        Text[ korean ] = "¼±1";
+        Text[ korean ] = "ì„ 1";
         Text[ turkish ] = "Çizgi ~1";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Línea ~1";
@@ -206,14 +206,14 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ french ] = "Ligne ~2" ;
         Text [ dutch ] = "Lijn ~2" ;
         Text [ portuguese ] = "Linha ~2" ;
-        Text[ chinese_simplified ] = "ÏßÌõ ~2";
+        Text[ chinese_simplified ] = "çº¿æ¡ ~2";
         Text[ russian ] = "Ëèíèÿ ~2";
         Text[ polish ] = "Linia 2";
-        Text[ japanese ] = "ü2";
-        Text[ chinese_traditional ] = "½u±ø ~2";
+        Text[ japanese ] = "ç·š2";
+        Text[ chinese_traditional ] = "ç·šæ¢ ~2";
         Text[ arabic ] = "ÇáÎØ 2";
         Text[ greek ] = "ÃñáììŞ 2";
-        Text[ korean ] = "¼±2";
+        Text[ korean ] = "ì„ 2";
         Text[ turkish ] = "Çizgi ~2";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Línea ~2";
@@ -250,14 +250,14 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ french ] = "Ligne ~3" ;
         Text [ dutch ] = "Lijn ~3" ;
         Text [ portuguese ] = "Linha ~3" ;
-        Text[ chinese_simplified ] = "ÏßÌõ ~3";
+        Text[ chinese_simplified ] = "çº¿æ¡ ~3";
         Text[ russian ] = "Ëèíèÿ ~3";
         Text[ polish ] = "Linia 3";
-        Text[ japanese ] = "ü3";
-        Text[ chinese_traditional ] = "½u±ø ~3";
+        Text[ japanese ] = "ç·š3";
+        Text[ chinese_traditional ] = "ç·šæ¢ ~3";
         Text[ arabic ] = "ÇáÎØ 3";
         Text[ greek ] = "ÃñáììŞ ~3";
-        Text[ korean ] = "¼±3";
+        Text[ korean ] = "ì„ 3";
         Text[ turkish ] = "Çizgi ~3";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Línea~3";
@@ -294,14 +294,14 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ french ] = "Écart entre les lignes" ;
         Text [ dutch ] = "Lijnafstand" ;
         Text [ portuguese ] = "Intervalo entre linhas" ;
-        Text[ chinese_simplified ] = "Ïß¼ä¸ô";
+        Text[ chinese_simplified ] = "çº¿é—´éš”";
         Text[ russian ] = "Ïğîìåæóòîê ìåæäó ëèíèÿìè";
         Text[ polish ] = "Odstêpy miêdzy liniami";
-        Text[ japanese ] = "üŠÔŠu";
-        Text[ chinese_traditional ] = "½u¶¡¹j";
+        Text[ japanese ] = "ç·šé–“éš”";
+        Text[ chinese_traditional ] = "ç·šé–“éš”";
         Text[ arabic ] = "ÊÈÇÚÏ ÇáÎØæØ";
         Text[ greek ] = "ÄéÜóôé÷ï";
-        Text[ korean ] = "¼± °£°İ";
+        Text[ korean ] = "ì„  ê°„ê²©";
         Text[ turkish ] = "Çizgi aralığı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Distancia entre líneas";
@@ -322,14 +322,14 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ french ] = "Début h~orizontal" ;
         Text [ dutch ] = "Begin h~orizontaal" ;
         Text [ portuguese ] = "Início h~orizontal" ;
-        Text[ chinese_simplified ] = "½ÓÍ·ÎªË®Æ½·½Ïò(~B)";
+        Text[ chinese_simplified ] = "æ¥å¤´ä¸ºæ°´å¹³æ–¹å‘(~B)";
         Text[ russian ] = "Íà÷àëî ãîğèçîíòàëüíî";
         Text[ polish ] = "Pocz¹tek poziomo";
-        Text[ japanese ] = "‰¡ü‚Ìn“_(~B)";
-        Text[ chinese_traditional ] = "°_©l¬O¤ô¥­¤è¦V(~B)";
+        Text[ japanese ] = "æ¨ªç·šã®å§‹ç‚¹(~B)";
+        Text[ chinese_traditional ] = "èµ·å§‹æ˜¯æ°´å¹³æ–¹å‘(~B)";
         Text[ arabic ] = "ÇáÈÏÇíÉ ÃİŞíÇğ";
         Text[ greek ] = "Åêêßíçóç ïñéæüíôéá";
-        Text[ korean ] = "°¡·Î¼± ½ÃÀÛ(~B)";
+        Text[ korean ] = "ê°€ë¡œì„  ì‹œì‘(~B)";
         Text[ turkish ] = "Başı ~yatay";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comienzo h~orizontal";
@@ -366,14 +366,14 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ french ] = "Fin ho~rizontale" ;
         Text [ dutch ] = "Einde ho~rizontaal" ;
         Text [ portuguese ] = "Fim ho~rizontal" ;
-        Text[ chinese_simplified ] = "½áÎ²ÎªË®Æ½·½Ïò(~H)";
+        Text[ chinese_simplified ] = "ç»“å°¾ä¸ºæ°´å¹³æ–¹å‘(~H)";
         Text[ russian ] = "Êîíåö ãîğèçîíòàëüíî";
         Text[ polish ] = "Koniec poziomo";
-        Text[ japanese ] = "‰¡ü‚ÌI“_(~H)";
-        Text[ chinese_traditional ] = "µ²§À¬O¤ô¥­¤è¦V(~H)";
+        Text[ japanese ] = "æ¨ªç·šã®çµ‚ç‚¹(~H)";
+        Text[ chinese_traditional ] = "çµå°¾æ˜¯æ°´å¹³æ–¹å‘(~H)";
         Text[ arabic ] = "ÇáäåÇíÉ ÃİŞíÇğ";
         Text[ greek ] = "Ôİëïò ïñéæïíôßùò";
-        Text[ korean ] = "°¡·Î¼± ³¡(~H)";
+        Text[ korean ] = "ê°€ë¡œì„  ë(~H)";
         Text[ turkish ] = "Sonu ya~tay";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Final hori~zontal";
@@ -410,14 +410,14 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ french ] = "Début ~vertical" ;
         Text [ dutch ] = "Begin ~verticaal" ;
         Text [ portuguese ] = "Início ~vertical" ;
-        Text[ chinese_simplified ] = "ÆğÊ¼²¿·ÖÊÇ´¹Ö±·½Ïò(~V)";
+        Text[ chinese_simplified ] = "èµ·å§‹éƒ¨åˆ†æ˜¯å‚ç›´æ–¹å‘(~V)";
         Text[ russian ] = "Íà÷àëî âåğòèêàëüíî";
         Text[ polish ] = "Pocz¹tek pionowo";
-        Text[ japanese ] = "cü‚Ìn“_(~V)";
-        Text[ chinese_traditional ] = "ªì©l««ª½¤è¦V(~V)";
+        Text[ japanese ] = "ç¸¦ç·šã®å§‹ç‚¹(~V)";
+        Text[ chinese_traditional ] = "åˆå§‹å‚ç›´æ–¹å‘(~V)";
         Text[ arabic ] = "ÇáÈÏÇíÉ ÑÃÓíÇğ";
         Text[ greek ] = "Áñ÷Ş êáôáêüñõ~öá";
-        Text[ korean ] = "¼¼·Î¼± ½ÃÀÛ(~V)";
+        Text[ korean ] = "ì„¸ë¡œì„  ì‹œì‘(~V)";
         Text[ turkish ] = "Başı ~dikey";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comienzo ~vertical";
@@ -454,14 +454,14 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ french ] = "Fin v~erticale" ;
         Text [ dutch ] = "Einde v~erticaal" ;
         Text [ portuguese ] = "Fim v~ertical" ;
-        Text[ chinese_simplified ] = "½áÎ²²¿·ÖÊÇ´¹Ö±·½Ïò(~E)";
+        Text[ chinese_simplified ] = "ç»“å°¾éƒ¨åˆ†æ˜¯å‚ç›´æ–¹å‘(~E)";
         Text[ russian ] = "Êîíåö âåğòèêàëüíî";
         Text[ polish ] = "Koniec pionowo";
-        Text[ japanese ] = "cü‚ÌI“_(~E)";
-        Text[ chinese_traditional ] = "µ²§À³¡¤À¬O««ª½¤è¦V(~E)";
+        Text[ japanese ] = "ç¸¦ç·šã®çµ‚ç‚¹(~E)";
+        Text[ chinese_traditional ] = "çµå°¾éƒ¨åˆ†æ˜¯å‚ç›´æ–¹å‘(~E)";
         Text[ arabic ] = "ÇáäåÇíÉ ÑÃÓíÇğ";
         Text[ greek ] = "Ôİëïò êáôáêüñõöá";
-        Text[ korean ] = "¼¼·Î¼± ³¡(~E)";
+        Text[ korean ] = "ì„¸ë¡œì„  ë(~E)";
         Text[ turkish ] = "Sonu d~ikey";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Final v~ertical";
@@ -504,28 +504,29 @@ TabPage RID_SVXPAGE_CONNECTION
         QuickHelpText[ swedish ] = "Förhandsvisning";
         QuickHelpText[ polish ] = "Podgl¹d";
         QuickHelpText[ portuguese_brazilian ] = "Preview";
-        QuickHelpText[ japanese ] = "ÌßÚËŞ­°";
-        QuickHelpText[ korean ] = "¹Ì¸®º¸±â!";
-        QuickHelpText[ chinese_simplified ] = "Ô¤ÊÓ";
-        QuickHelpText[ chinese_traditional ] = "¹wÄı";
+        QuickHelpText[ japanese ] = "ï¾Œï¾Ÿï¾šï¾‹ï¾ï½­ï½°";
+        QuickHelpText[ korean ] = "ë¯¸ë¦¬ë³´ê¸°!";
+        QuickHelpText[ chinese_simplified ] = "é¢„è§†";
+        QuickHelpText[ chinese_traditional ] = "é è¦½";
         QuickHelpText[ turkish ] = "Preview";
         QuickHelpText[ arabic ] = "Preview";
         QuickHelpText[ catalan ] = "Preview";
     };
-    Text[ chinese_simplified ] = "Á¬½Ó·û";
+    Text[ chinese_simplified ] = "è¿æ¥ç¬¦";
     Text[ russian ] = "Ñîåäèíèòåëüíàÿ ëîìàíàÿ ëèíèÿ";
     Text[ polish ] = "£¹cznik";
-    Text[ japanese ] = "ºÈ¸À";
-    Text[ chinese_traditional ] = "³s±µ²Å";
+    Text[ japanese ] = "ï½ºï¾ˆï½¸ï¾€";
+    Text[ chinese_traditional ] = "é€£æ¥ç¬¦";
     Text[ arabic ] = "ÇáÑÇÈØ";
     Text[ greek ] = "Óıíäåóç";
-    Text[ korean ] = "¿¬°á¼±";
+    Text[ korean ] = "ì—°ê²°ì„ ";
     Text[ turkish ] = "Bağlayıcı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Conector";
     Text[ finnish ] = "Liitin";
 };
  // ******************************************************************* EOF
+
 
 
 
