@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:33 $
+ *  last change: $Author: iha $ $Date: 2003-11-19 13:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,10 @@ public:
     inline double getLogicMaxY() const;
     inline double getLogicMaxZ() const;
 
+    inline bool isMathematicalOrientationX() const;
+    inline bool isMathematicalOrientationY() const;
+    inline bool isMathematicalOrientationZ() const;
+
     void getLogicMinimum( ::com::sun::star::uno::Sequence< double >& rSeq ) const;
     void getLogicMaximum( ::com::sun::star::uno::Sequence< double >& rSeq ) const;
 
@@ -193,6 +197,18 @@ inline double PlottingPositionHelper::getLogicMaxY() const
 inline double PlottingPositionHelper::getLogicMaxZ() const
 {
     return m_aScales[2].Maximum;
+}
+inline bool PlottingPositionHelper::isMathematicalOrientationX() const
+{
+    return ::drafts::com::sun::star::chart2::AxisOrientation_MATHEMATICAL == m_aScales[0].Orientation;
+}
+inline bool PlottingPositionHelper::isMathematicalOrientationY() const
+{
+    return ::drafts::com::sun::star::chart2::AxisOrientation_MATHEMATICAL == m_aScales[1].Orientation;
+}
+inline bool PlottingPositionHelper::isMathematicalOrientationZ() const
+{
+    return ::drafts::com::sun::star::chart2::AxisOrientation_MATHEMATICAL == m_aScales[2].Orientation;
 }
 
 //.............................................................................
