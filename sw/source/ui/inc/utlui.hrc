@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-02 15:17:47 $
+ *  last change: $Author: os $ $Date: 2002-08-13 13:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 
 // Strings in NumberFormatter-Listbox
 #define STR_DEFINE_NUMBERFORMAT                 (RC_UTLUI_BEGIN + 4)
+// hyperlink status bar control
+#define STR_HYPERCTRL_SEL                       (RC_UTLUI_BEGIN + 5)
+#define STR_HYPERCTRL_HYP                       (RC_UTLUI_BEGIN + 6)
 
 // Namene der Inhaltstypen                      (RC_UTLUI_BEGIN + 7)
 #define STR_CONTENT_TYPE_FIRST                  (RC_UTLUI_BEGIN + 8)

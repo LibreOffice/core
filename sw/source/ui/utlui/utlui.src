@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-08 20:10:55 $
+ *  last change: $Author: os $ $Date: 2002-08-13 13:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1892,3 +1892,14 @@ Image IMG_ALL_RIGHT_HC
         Blue = 0xFF00;
     };
 };
+String STR_HYPERCTRL_SEL
+{
+    Text = "SEL" ;
+    Text[ english_us ] = "SEL";
+};
+String STR_HYPERCTRL_HYP
+{
+    Text = "HYP" ;
+    Text[ english_us ] = "HYP";
+};
+
