@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:15:31 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ void VirtDevServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     vdev.SetFont( aFont );
 
     // get glyph metrics
-    long nCharWidth = 10;
+    sal_Int32 nCharWidth = 10;
 // TODO:    vdev.GetCharWidth( nGlyphIndex, nGlyphIndex, &nCharWidth );
     rGD.SetCharWidth( nCharWidth );
 
