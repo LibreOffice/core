@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 13:56:09 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,7 +451,7 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
     DPMAP( "UserDefinedAttributes",     XML_NAMESPACE_TEXT, XML_XMLNS,                  XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
     DPMAP( "Change",                        XML_NAMESPACE_PRESENTATION, XML_TRANSITION_TYPE,    XML_SD_TYPE_PRESPAGE_TYPE, CTF_PAGE_TRANS_TYPE ),
-    DPMAP( "Effect",                        XML_NAMESPACE_PRESENTATION, XML_TRANSITION_STYLE,   XML_SD_TYPE_PRESPAGE_STYLE, (sal_Int16)MID_FLAG_NO_PROPERTY_EXPORT ),
+    DPMAP( "Effect",                        XML_NAMESPACE_PRESENTATION, XML_TRANSITION_STYLE,   XML_SD_TYPE_PRESPAGE_STYLE, CTF_PAGE_TRANS_STYLE ),
     DPMAP( "Speed",                     XML_NAMESPACE_PRESENTATION, XML_TRANSITION_SPEED,   XML_SD_TYPE_PRESPAGE_SPEED, CTF_PAGE_TRANS_SPEED ),
     DPMAP( "Duration",                  XML_NAMESPACE_PRESENTATION, XML_DURATION,           XML_SD_TYPE_PRESPAGE_DURATION, CTF_PAGE_TRANS_DURATION ),
     DPMAP( "Visible",                   XML_NAMESPACE_PRESENTATION, XML_VISIBILITY,         XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_PAGE_VISIBLE ),
@@ -1667,6 +1667,9 @@ void XMLPageExportPropertyMapper::ContextFilter(
                 break;
             case CTF_PAGE_TRANS_TYPE:
                 pTransType = property;
+                break;
+            case CTF_PAGE_TRANS_STYLE:
+                (*property).mnIndex = -1;
                 break;
             case CTF_PAGE_TRANSITION_TYPE:
                 {
