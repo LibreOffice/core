@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 13:28:39 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 15:35:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include "DrawModelWrapper.hxx"
 #include "DrawViewWrapper.hxx"
 #include "DataSeriesTreeHelper.hxx"
+#include "DiagramHelper.hxx"
 
 #include "macros.hxx"
 
@@ -1109,10 +1110,11 @@ void SAL_CALL ChartController::executeDispatch_ChartType()
         if( bChanged &&
             xTemplate.is() )
         {
-            xChartDoc->setDiagram(
+            uno::Reference< XDiagram > xNewDia(
                 xTemplate->createDiagram(
-                    helper::DataSeriesTreeHelper::getDataSeriesFromDiagram(
-                        xChartDoc->getDiagram())));
+                    helper::DataSeriesTreeHelper::getDataSeriesFromDiagram( xDia )));
+            helper::DiagramHelper::changeDiagram( xDia, xNewDia );
+            xChartDoc->setDiagram( xNewDia );
 
             impl_rebuildView();
         }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: bm $ $Date: 2003-11-04 12:37:44 $
+#   last change: $Author: bm $ $Date: 2003-11-04 15:35:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ SLOFILES=	\
                 $(SLO)$/CommonConverters.obj \
                 $(SLO)$/ContextHelper.obj \
                 $(SLO)$/DataSeriesTreeHelper.obj \
+                $(SLO)$/DiagramHelper.obj \
                 $(SLO)$/ImplOPropertySet.obj \
                 $(SLO)$/LayoutHelper.obj \
                 $(SLO)$/OChartElementContainerHelper.obj \
