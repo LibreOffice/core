@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:17:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,6 +438,8 @@ public:
     BOOL            BasicStepOut();
     void            BasicStop();
     BOOL            BasicToggleBreakPoint();
+    void            BasicToggleBreakPointEnabled();
+    void            ManageBreakPoints();
     void            UpdateBreakPoint( const BreakPoint& rBrk );
     void            BasicAddWatch();
     void            BasicRemoveWatch();
