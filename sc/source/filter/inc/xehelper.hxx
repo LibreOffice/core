@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:08 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,16 +71,12 @@
 #include "xestream.hxx"
 #endif
 
-class ScDocument;
-class ScMatrix;
-class XclExpStream;
-
-
 // Byte/Unicode Strings =======================================================
 
 class ScEditCell;
 class ScPatternAttr;
 class EditTextObject;
+class XclExpStream;
 
 /** This class stores an unformatted or formatted string for Excel export.
     @descr  The string may contain 8-bit characters or 16-bit Unicode characters.
@@ -135,8 +131,6 @@ public:
                                     XclStrFlags nFlags = EXC_STR_DEFAULT,
                                     sal_uInt16 nMaxLen = 0xFFFF );
 
-                                ~XclExpString();
-
     /** Assigns an unformatted string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
@@ -185,15 +179,24 @@ public:
 
     /** Sets new formatting runs for the current text. */
     void                        SetFormats( const XclFormatRunVec& rFormats );
+    /** Appends a formatting run. nChar must be greater than last contained character index. */
+    void                        AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIx );
+    /** Removes rormatting runs at the end, if the string contains too much. */
+    void                        LimitFormatCount( sal_uInt16 nMaxCount );
 
     /** Returns the character count of the string. */
     inline sal_uInt16           Len() const { return mnLen; }
     /** Returns true, if the string is empty. */
     inline bool                 IsEmpty() const { return mnLen == 0; }
-    /** Returns true, if the string contains formatting information. */
-    inline bool                 IsRich() const { return mbIsBiff8 && !maFormats.empty(); }
     /** Returns true, if the string contains line breaks. */
     inline bool                 IsWrapped() const { return mbWrapped; }
+
+    /** Returns true, if the string contains formatting information. */
+    inline bool                 IsRich() const { return mbIsBiff8 && !maFormats.empty(); }
+    /** Returns the current count of formatting runs for rich strings. */
+    sal_uInt16                  GetFormatsCount() const;
+    /** Returns the vector with all formatting runs. */
+    inline const XclFormatRunVec& GetFormats() const { return maFormats; }
 
     /** Returns the current string flags field to export. */
     sal_uInt8                   GetFlagField() const;
@@ -205,11 +208,11 @@ public:
     /** Writes the string flags field (1 byte). */
     void                        WriteFlagField( XclExpStream& rStrm ) const;
     /** Writes 8-bit or 16-bit length field and string flags field. */
-    virtual void                WriteHeader( XclExpStream& rStrm ) const;
+    void                        WriteHeader( XclExpStream& rStrm ) const;
     /** Writes the raw character buffer. */
-    virtual void                WriteBuffer( XclExpStream& rStrm ) const;
+    void                        WriteBuffer( XclExpStream& rStrm ) const;
     /** Writes the complete Unicode string. */
-    virtual void                Write( XclExpStream& rStrm ) const;
+    void                        Write( XclExpStream& rStrm ) const;
 
     /** Writes the raw character buffer to memory (8-bit or 16-bit little-endian) */
     void                        WriteBuffer( void* pDest ) const;
@@ -261,9 +264,10 @@ typedef XclExpString XclExpUniString;
 
 // EditEngine->String conversion ==============================================
 
+class EditEngine;
 class ScEditCell;
 class ScPatternAttr;
-class EditTextObject;
+class SdrTextObj;
 
 /** This class provides methods to create an XclExpString.
     @descr  The string can be created from an edit engine text object or
@@ -271,18 +275,6 @@ class EditTextObject;
 class XclExpStringHelper : ScfNoInstance
 {
 public:
-    /** Creates a new formatted string from an edit engine text object.
-        @param rTextObj  The edit engine text object.
-        @param pCellAttr  The set item containing the cell formatting.
-        @param nFlags  Modifiers for string export.
-        @param nMaxLen  The maximum number of characters to store in this string.
-        @return  The new string object. */
-    static XclExpString*        CreateString(
-                                    const XclExpRoot& rRoot,
-                                    const EditTextObject& rTextObj,
-                                    const ScPatternAttr* pCellAttr,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
     /** Creates a new formatted string from a Calc edit cell.
         @param rEditCell  The Calc edit cell object.
         @param pCellAttr  The set item containing the cell formatting.
@@ -293,6 +285,17 @@ public:
                                     const XclExpRoot& rRoot,
                                     const ScEditCell& rEditCell,
                                     const ScPatternAttr* pCellAttr,
+                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
+                                    sal_uInt16 nMaxLen = 0xFFFF );
+
+    /** Creates a new formatted string from a drawing text box.
+        @param rTextObj  The text box object.
+        @param nFlags  Modifiers for string export.
+        @param nMaxLen  The maximum number of characters to store in this string.
+        @return  The new string object. */
+    static XclExpString*        CreateString(
+                                    const XclExpRoot& rRoot,
+                                    const SdrTextObj& rTextObj,
                                     XclStrFlags nFlags = EXC_STR_DEFAULT,
                                     sal_uInt16 nMaxLen = 0xFFFF );
 };
@@ -381,6 +384,8 @@ private:
 
 // Cached Value Lists =========================================================
 
+class XclExpStream;
+
 /** The base class for cached values.
     @descr  Cached values are used to store a list or a 2D array of double,
     string and Boolean values and error codes, for instannce in the records
@@ -434,6 +439,9 @@ public:
 
 
 // ----------------------------------------------------------------------------
+
+class ScDocument;
+class ScMatrix;
 
 /** 2-dimensional matrix of cached values (for EXTERNNAME, tArray, ...).
     @descr  The file format is as follows:
