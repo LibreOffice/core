@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+ *  last change: $Author: fme $ $Date: 2001-06-15 06:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 #endif
 #ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
-#endif
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
 #endif
 #ifndef _SV_COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
@@ -150,16 +147,16 @@ public:
 
 class SmPrintOptionsTabPage : public SfxTabPage
 {
-    FixedLine       aGroupBox1;
+    FixedLine       aFixedLine1;
     CheckBox        aTitle;
     CheckBox        aText;
     CheckBox        aFrame;
-    FixedLine       aGroupBox2;
+    FixedLine       aFixedLine2;
     RadioButton     aSizeNormal;
     RadioButton     aSizeScaled;
     RadioButton     aSizeZoomed;
     MetricField     aZoom;
-    FixedLine       aGroupBox3;
+    FixedLine       aFixedLine3;
     CheckBox        aNoRightSpaces;
 
     DECL_LINK(SizeButtonClickHdl, Button *);
@@ -197,8 +194,7 @@ class SmFontDialog : public ModalDialog
     OKButton        aOKButton1;
     CancelButton    aCancelButton1;
     SmShowFont      aShowFont;
-    GroupBox        aGroupBox1;
-    GroupBox        aGroupBox2;
+    FixedText       aFixedText2;
 
     Font    Face;
 
@@ -229,7 +225,7 @@ class SmFontSizeDialog : public ModalDialog
     MetricField     aOperatorSize;
     FixedText       aFixedText8;
     MetricField     aBorderSize;
-    GroupBox        aGroupBox1;
+    FixedLine       aFixedLine1;
     OKButton        aOKButton1;
     CancelButton    aCancelButton1;
     PushButton      aDefaultButton;
@@ -261,8 +257,8 @@ class SmFontTypeDialog : public ModalDialog
     SmFontPickListBox   aSansFont;
     FixedText           aFixedText7;
     SmFontPickListBox   aFixedFont;
-    GroupBox            aGroupBox1;
-    GroupBox            aGroupBox2;
+    FixedLine           aFixedLine1;
+    FixedLine           aFixedLine2;
     OKButton            aOKButton1;
     CancelButton        aCancelButton1;
     MenuButton          aMenuButton;
@@ -321,7 +317,7 @@ class SmDistanceDialog : public ModalDialog
     MenuButton      aMenuButton;
     PushButton      aDefaultButton;
     FixedBitmap     aBitmap;
-    GroupBox        aGroupBox;
+    FixedLine       aFixedLine;
 
     SmCategoryDesc *Categories[NOCATEGORIES];
     USHORT          nActiveCategory;
@@ -352,7 +348,7 @@ class SmAlignDialog : public ModalDialog
     RadioButton  aLeft;
     RadioButton  aCenter;
     RadioButton  aRight;
-    GroupBox     aGroupBox1;
+    FixedLine    aFixedLine1;
     OKButton     aOKButton1;
     CancelButton aCancelButton1;
     PushButton   aDefaultButton;
@@ -423,12 +419,11 @@ class SmSymbolDialog : public ModalDialog
     FixedText       aSymbolSetText;
     ListBox         aSymbolSets;
     SmShowSymbolSet aSymbolSetDisplay;
-    GroupBox        aGrpBox;
     FixedText       aSymbolName;
     SmShowSymbol    aSymbolDisplay;
+    PushButton      aGetBtn;
     PushButton      aCloseBtn;
     PushButton      aEditBtn;
-    PushButton      aGetBtn;
 
     SmSymSetManager    &rSymSetMgr;
     const SmSymSet     *pSymSet;

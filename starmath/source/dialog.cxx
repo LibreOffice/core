@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-16 11:54:28 $
+ *  last change: $Author: fme $ $Date: 2001-06-15 06:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,16 +224,16 @@ IMPL_LINK_INLINE_END( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, pButt
 
 SmPrintOptionsTabPage::SmPrintOptionsTabPage(Window *pParent, const SfxItemSet &rOptions)
     : SfxTabPage(pParent, SmResId(RID_PRINTOPTIONPAGE), rOptions),
-    aGroupBox1      (this, ResId( GB_PRINTOPTIONS )),
+    aFixedLine1     (this, ResId( FL_PRINTOPTIONS )),
     aTitle          (this, ResId( CB_TITLEROW )),
     aText           (this, ResId( CB_EQUATION_TEXT )),
     aFrame          (this, ResId( CB_FRAME )),
-    aGroupBox2      (this, ResId( GB_PRINT_FORMAT )),
+    aFixedLine2     (this, ResId( FL_PRINT_FORMAT )),
     aSizeNormal     (this, ResId( RB_ORIGINAL_SIZE )),
     aSizeScaled     (this, ResId( RB_FIT_TO_PAGE )),
     aSizeZoomed     (this, ResId( RB_ZOOM )),
     aZoom           (this, ResId( MF_ZOOM )),
-    aGroupBox3      (this, ResId( GB_MISC_OPTIONS )),
+    aFixedLine3      (this, ResId( FL_MISC_OPTIONS )),
     aNoRightSpaces  (this, ResId( CB_IGNORE_SPACING ))
 {
     FreeResource();
@@ -374,8 +374,7 @@ SmFontDialog::SmFontDialog(Window * pParent, BOOL bFreeRes)
     aOKButton1      (this, ResId(1)),
     aCancelButton1  (this, ResId(1)),
     aShowFont       (this, ResId(1)),
-    aGroupBox1      (this, ResId(1)),
-    aGroupBox2      (this, ResId(2))
+    aFixedText2     (this, ResId(2))
 {
     if (bFreeRes)
         FreeResource();
@@ -404,8 +403,9 @@ SmFontDialog::SmFontDialog(Window * pParent, BOOL bFreeRes)
         Face.SetCharSet(RTL_TEXTENCODING_DONTKNOW);
         Face.SetTransparent(TRUE);
 
-        aShowFont.SetFillColor( Color(COL_LIGHTGRAY) );
-
+        Wallpaper aWhiteWall( (Color) Color(COL_WHITE) );
+        aShowFont.SetBackground( aWhiteWall );
+        aShowFont.SetBorderStyle( WINDOW_BORDER_MONO );
         //Application::LeaveWait();
     }
 
@@ -449,7 +449,7 @@ SmFontSizeDialog::SmFontSizeDialog(Window * pParent, BOOL bFreeRes)
     aOperatorSize(this, ResId(7)),
     aFixedText8(this, ResId(8)),
     aBorderSize(this, ResId(8)),
-    aGroupBox1(this, ResId(1)),
+    aFixedLine1(this, ResId(1)),
     aOKButton1(this, ResId(1)),
     aCancelButton1(this, ResId(1)),
     aDefaultButton(this, ResId(1))
@@ -558,8 +558,8 @@ SmFontTypeDialog::SmFontTypeDialog(Window * pParent, BOOL bFreeRes)
     aSansFont      (this, ResId(6)),
     aFixedText7    (this, ResId(7)),
     aFixedFont     (this, ResId(7)),
-    aGroupBox1     (this, ResId(1)),
-    aGroupBox2     (this, ResId(2)),
+    aFixedLine1    (this, ResId(1)),
+    aFixedLine2    (this, ResId(2)),
     aOKButton1     (this, ResId(1)),
     aCancelButton1 (this, ResId(1)),
     aMenuButton    (this, ResId(1)),
@@ -892,7 +892,7 @@ void SmDistanceDialog::SetCategory(USHORT nCategory)
     }
 
     aMenuButton.GetPopupMenu()->CheckItem(nCategory + 1, TRUE);
-    aGroupBox.SetText(Categories[nCategory]->GetName());
+    aFixedLine.SetText(Categories[nCategory]->GetName());
 
     nActiveCategory = nCategory;
 
@@ -918,7 +918,7 @@ SmDistanceDialog::SmDistanceDialog(Window *pParent, BOOL bFreeRes)
     aDefaultButton (this, ResId(1)),
     aCheckBox1     (this, ResId(1)),
     aBitmap        (this, ResId(1)),
-    aGroupBox      (this, ResId(1))
+    aFixedLine     (this, ResId(1))
 {
     for (int i = 0; i < NOCATEGORIES; i++)
         Categories[i] = new SmCategoryDesc(SmResId(i + 1), i);
@@ -927,6 +927,8 @@ SmDistanceDialog::SmDistanceDialog(Window *pParent, BOOL bFreeRes)
 
     if (bFreeRes)
         FreeResource();
+
+    aBitmap.SetBorderStyle( WINDOW_BORDER_MONO );
 
     aMetricField1.SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
     aMetricField2.SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
@@ -1045,7 +1047,7 @@ SmAlignDialog::SmAlignDialog(Window * pParent, BOOL bFreeRes)
     aLeft          (this, ResId(1)),
     aCenter        (this, ResId(2)),
     aRight         (this, ResId(3)),
-    aGroupBox1     (this, ResId(1)),
+    aFixedLine1    (this, ResId(1)),
     aOKButton1     (this, ResId(1)),
     aCancelButton1 (this, ResId(1)),
     aDefaultButton (this, ResId(1))
@@ -1429,7 +1431,6 @@ SmSymbolDialog::SmSymbolDialog(Window *pParent, SmSymSetManager &rMgr, BOOL bFre
     aSymbolSetText      (this, ResId(1)),
     aSymbolSets         (this, ResId(1)),
     aSymbolSetDisplay   (this, ResId(1)),
-    aGrpBox             (this, ResId(1)),
     aSymbolName         (this, ResId(2)),
     aSymbolDisplay      (this, ResId(2)),
     aCloseBtn           (this, ResId(3)),
@@ -1448,6 +1449,7 @@ SmSymbolDialog::SmSymbolDialog(Window *pParent, SmSymSetManager &rMgr, BOOL bFre
     // set background color to white
     Wallpaper aWhiteWall( (Color) Color(COL_WHITE) );
     aSymbolDisplay   .SetBackground( aWhiteWall );
+    aSymbolDisplay   .SetBorderStyle( WINDOW_BORDER_MONO );
     aSymbolSetDisplay.SetBackground( aWhiteWall );
 
     aSymbolSets      .SetSelectHdl  (LINK(this, SmSymbolDialog, SymbolSetChangeHdl));
