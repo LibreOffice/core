@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: th $ $Date: 2000-12-14 13:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ struct SalData
     USHORT                  mnStockPenCount;        // Anzahl statischer Pens
     USHORT                  mnStockBrushCount;      // Anzahl statischer Brushes
     WPARAM                  mnSalObjWantKeyEvt;     // KeyEvent, welcher vom SalObj-Hook verarbeitet werden soll
+    BYTE                    mnCacheDCInUse;         // count of CacheDC in use
     BOOL                    mbObjClassInit;         // Ist SALOBJECTCLASS initialised
     BOOL                    mbInPalChange;          // is in WM_QUERYNEWPALETTE
     DWORD                   mnAppThreadId;          // Id from Applikation-Thread
@@ -287,6 +288,10 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_MSG_CREATESOUND         (WM_USER+118)
 // wParam == 0; lParam == this
 #define SAL_MSG_DESTROYSOUND        (WM_USER+119)
+// wParam == hWnd; lParam == 0; lResult == hDC
+#define SAL_MSG_GETDC               (WM_USER+120)
+// wParam == hWnd; lParam == 0
+#define SAL_MSG_RELEASEDC           (WM_USER+121)
 
 // wParam == 0; lParam == pData
 #define SAL_MSG_USEREVENT           (WM_USER+130)
@@ -304,7 +309,7 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_MSG_POSTMOVE            (WM_USER+136)
 // wParam == wParam; lParam == lParam
 #define SAL_MSG_POSTCALLSIZE        (WM_USER+137)
-// wParam == pRECT
+// wParam == pRECT; lParam == 0
 #define SAL_MSG_POSTPAINT           (WM_USER+138)
 // wParam == 0; lParam == pFrame; lResult 0
 #define SAL_MSG_FORCEPALETTE        (WM_USER+139)

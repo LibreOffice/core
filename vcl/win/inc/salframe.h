@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2000-11-24 18:53:58 $
+ *  last change: $Author: th $ $Date: 2000-12-14 13:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ public:
     HCURSOR                 mhCursor;               // cursor handle
     HIMC                    mhDefIMEContext;        // default IME-Context
     SalGraphics*            mpGraphics;             // current frame graphics
+    SalGraphics*            mpGraphics2;            // current frame graphics for other threads
     SalFrame*               mpNextFrame;            // pointer to next frame
     void*                   mpInst;                 // instance handle for callback
     SALFRAMEPROC            mpProc;                 // callback proc
