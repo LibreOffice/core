@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
+ *  last change: $Author: jp $ $Date: 2002-01-16 16:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2912,18 +2912,30 @@ void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
     USHORT nLevel = 1;
 
     xub_StrLen n;
-    String sKey1;
+    String sKey1, sKey2, sFldTxt;
     long nRet;
     _ReadFieldParams aReadParam( aStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
         switch( nRet )
         {
         case -2:
-            if( !sKey1.Len() )
+            if( !sFldTxt.Len() )
             {
-                sKey1 = aReadParam.GetResult().GetToken(0, ':');
-                if( !sKey1.Len() )
-                    sKey1 = aReadParam.GetResult(); // PrimaryKey ohne ":", 2nd dahinter
+                // PrimaryKey ohne ":", 2nd dahinter
+                sFldTxt = aReadParam.GetResult();
+                xub_StrLen nFnd = sFldTxt.Search( ':' );
+                if( STRING_NOTFOUND != nFnd )  // it exist levels
+                {
+                    sKey1 = sFldTxt.Copy( 0, nFnd );
+
+                    xub_StrLen nScndFnd = sFldTxt.Search( ':', nFnd+1 );
+                    if( STRING_NOTFOUND != nScndFnd )
+                    {
+                        sKey2 = sFldTxt.Copy( nFnd+1, nScndFnd - nFnd - 1 );
+                        nFnd = nScndFnd;
+                    }
+                    sFldTxt.Erase( 0, nFnd+1 );
+                }
             }
             break;
 
@@ -2959,13 +2971,9 @@ void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
     if( eTox != TOX_INDEX )
         aM.SetLevel( nLevel );
 
-    if( sKey1.Len() )
-    {
-        aM.SetAlternativeText( sKey1 ); // WW/SW: unterschiedliche Reihenfolge
-                                        // Text mit Key1 tauschen
-    }
-    else
-        aM.SetAlternativeText( aStr );
+    aM.SetAlternativeText( sFldTxt );
+    aM.SetPrimaryKey( sKey1 );
+    aM.SetSecondaryKey( sKey2 );
 
     if( !aM.IsAlternativeText() )
     {
