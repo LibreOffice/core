@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math_pch.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:52:41 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,8 @@
 #include <tools/date.hxx>
 #include <tools/ownlist.hxx>
 #include <vcl/accel.hxx>
-#include <vcl/resid.hxx>
 #include <tools/resid.hxx>
-#include <vcl/rc.hxx>
+#include <tools/rc.hxx>
 #include <tools/rc.hxx>
 #include <tools/lang.hxx>
 #include <tools/resmgr.hxx>
@@ -111,7 +110,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/cmdevt.hxx>
 #include <vcl/font.hxx>
-#include <vcl/color.hxx>
+#include <tools/color.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/region.hxx>
 #include <vcl/mapmod.hxx>
@@ -131,7 +130,6 @@
 #include <vcl/image.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/window.hxx>
-#include <vcl/icon.hxx>
 #include <sfx2/minarray.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/combobox.h>
@@ -186,7 +184,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/plugapp.hxx>
 #include <sfx2/sfx.hrc>
 #include <svtools/memberid.hrc>
 #include <vcl/syswin.hxx>
@@ -200,7 +197,7 @@
 #include <sfx2/cfgitem.hxx>
 #include <svtools/confitem.hxx>
 #include <xchar.hxx>
-#include <vcl/poly.hxx>
+#include <tools/poly.hxx>
 #include <svx/xpoly.hxx>
 #include <rect.hxx>
 #include <vcl/outdev.hxx>
@@ -770,7 +767,6 @@
 #include <smart/com/sun/star/awt/XView.hxx>
 #endif
 #include <usr/refl.hxx>
-#include <vcl/resid.hxx>
 #include <sfx2/msg.hxx>
 #include <svtools/itemset.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -858,7 +854,6 @@
 #include <sfx2/dockwin.hxx>
 #include <vcl/dockwin.hxx>
 #include <sfx2/viewsh.hxx>
-#include <vcl/icon.hxx>
 #include <sfx2/clientsh.hxx>
 #include <so3/ipclient.hxx>
 #include <so3/client.hxx>
