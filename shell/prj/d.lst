@@ -5,6 +5,7 @@ mkdir: %_DEST%\inc%_EXT%\shell
 ..\%__SRC%\slb\*.lib %_DEST%\lib%_EXT%\*.lib
 ..\%__SRC%\slb\*.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
+..\%__SRC%\lib\*.uno.so %_DEST%\lib%_EXT%\*.uno.so
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
@@ -15,6 +16,7 @@ mkdir: %_DEST%\inc%_EXT%\shell
 ..\%__SRC%\bin\kde-open-url %_DEST%\bin%_EXT%\kde-open-url
 ..\%__SRC%\bin\gnome-open-url %_DEST%\bin%_EXT%\gnome-open-url
 ..\%__SRC%\bin\gnome-open-url.bin %_DEST%\bin%_EXT%\gnome-open-url.bin
+..\%__SRC%\bin\senddoc %_DEST%\bin%_EXT%\senddoc
 
 ..\source\win32\syssh.xml %_DEST%\xml%_EXT%\syssh.xml
 ..\source\unix\exec\syssh.xml %_DEST%\xml%_EXT%\syssh.xml
