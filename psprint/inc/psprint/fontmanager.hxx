@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:45:33 $
+ *  last change: $Author: pl $ $Date: 2001-06-05 17:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,7 @@ class PrintFontManager
     ::std::hash_map< int, family::type >        m_aFamilyTypes;
     ::std::list< ::rtl::OUString >              m_aPrinterDrivers;
     ::std::list< ::rtl::OString >               m_aFontDirectories;
+    ::std::list< int >                          m_aPrivateFontDirectories;
     ::utl::MultiAtomProvider*                   m_pAtoms;
 
     ::std::hash_map< ::rtl::OString, int, ::rtl::OStringHash >
@@ -500,12 +501,22 @@ public:
     bool checkImportPossible() const;
     // expects system paths not UNC paths
     // returns the number of fonts successfully imported
-    int importFonts( const ::std::list< ::rtl::OUString >& rFiles, ImportFontCallback* pCallback = NULL );
+    int importFonts( const ::std::list< ::rtl::OString >& rFiles, bool bLinkOnly = false, ImportFontCallback* pCallback = NULL );
 
     // check wether changeFontProperties would fail due to not writable fonts.dir
     bool checkChangeFontPropertiesPossible( fontID nFont ) const;
     // change fonts.dir entry for font
     bool changeFontProperties( fontID nFont, const ::rtl::OUString& rXLFD );
+
+    // get properties of a not imported font file
+    bool getImportableFontProperties( const ::rtl::OString& rFile, ::std::list< FastPrintFontInfo >& rFontProps );
+
+    // get fonts that come from the same font file
+    bool getFileDuplicates( fontID nFont, ::std::list< fontID >& rFonts ) const;
+    // remove font files
+    bool removeFonts( const ::std::list< fontID >& rFonts );
+
+    bool isPrivateFontFile( fontID ) const;
 };
 
 } // namespace

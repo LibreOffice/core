@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-22 14:25:49 $
+ *  last change: $Author: pl $ $Date: 2001-06-05 17:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1286,6 +1286,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
         m_nNextFontID = 1;
         m_aFonts.clear();
         m_aFontDirectories.clear();
+        m_aPrivateFontDirectories.clear();
     }
 
 #ifdef DEBUG
@@ -1315,6 +1316,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
             ByteString aToken( aPath.GetToken( i, ';' ) );
             normPath( aToken );
             m_aFontDirectories.push_back( aToken );
+            m_aPrivateFontDirectories.push_back( getDirectoryAtom( aToken, true ) );
         }
     }
 
@@ -2123,7 +2125,7 @@ static bool createPath( const ByteString& rPath )
 
 // -------------------------------------------------------------------------
 
-int PrintFontManager::importFonts( const ::std::list< OUString >& rFiles, ImportFontCallback* pCallback )
+int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bLinkOnly, ImportFontCallback* pCallback )
 {
     int nSuccess = 0;
 
@@ -2132,12 +2134,12 @@ int PrintFontManager::importFonts( const ::std::list< OUString >& rFiles, Import
     SvFileStream aFontsDir;
     int nDirID;
     INetURLObject aDir;
-    for( ::std::list< OString >::const_iterator dir_it = m_aFontDirectories.begin();
-         ! ( aFontsDir.IsOpen() && aFontsDir.IsWritable() ) && dir_it != m_aFontDirectories.end(); ++dir_it )
+    for( ::std::list< int >::const_iterator dir_it = m_aPrivateFontDirectories.begin();
+         ! ( aFontsDir.IsOpen() && aFontsDir.IsWritable() ) && dir_it != m_aPrivateFontDirectories.end(); ++dir_it )
     {
         // there must be a writable fonts.dir in that directory
-        aDir = INetURLObject( OStringToOUString( *dir_it, aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-        nDirID = getDirectoryAtom( *dir_it, false );
+        aDir = INetURLObject( OStringToOUString( getDirectory( *dir_it ), aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+        nDirID = *dir_it;
         INetURLObject aFDir( aDir );
         ByteString aDirPath( aFDir.PathToFileName(), aEncoding );
         if( createPath( aDirPath ) )
@@ -2165,10 +2167,10 @@ int PrintFontManager::importFonts( const ::std::list< OUString >& rFiles, Import
 
         // copy the font files and add them to fonts.dir
         // do not overwrite existing files unless user wants it that way
-        for( ::std::list< OUString >::const_iterator font_it = rFiles.begin();
+        for( ::std::list< OString >::const_iterator font_it = rFiles.begin();
              font_it != rFiles.end(); ++font_it )
         {
-            INetURLObject aFrom( *font_it, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+            INetURLObject aFrom( OStringToOUString( *font_it, aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
             INetURLObject aTo( aDir );
             aTo.Append( aFrom.GetName() );
 
@@ -2185,6 +2187,7 @@ int PrintFontManager::importFonts( const ::std::list< OUString >& rFiles, Import
             }
             // look for afm if necessary
             OUString aAfmCopied;
+            FileBase::RC nError;
             if( aFrom.getExtension().EqualsIgnoreCaseAscii( "pfa" ) ||
                 aFrom.getExtension().EqualsIgnoreCaseAscii( "pfb" ) )
             {
@@ -2215,23 +2218,14 @@ int PrintFontManager::importFonts( const ::std::list< OUString >& rFiles, Import
                 INetURLObject aToAfm( aTo );
                 aToAfm.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
                 OUString aFromPath, aToPath;
-#ifdef TF_FILEURL
-                FileBase::RC nError = FileBase::getSystemPathFromFileURL(
-                    aFromAfm.PathToFileName(), aFromPath );
-                if( osl_File_E_None == nError )
+                if( bLinkOnly )
                 {
-                    nError = FileBase::getSystemPathFromFileURL(
-                        aToAfm.PathToFileName(), aToPath );
+                    ByteString aFromPath( aFromAfm.PathToFileName(), aEncoding );
+                    ByteString aToPath( aToAfm.PathToFileName(), aEncoding );
+                    nError = (FileBase::RC)symlink( aFromPath.GetBuffer(), aToPath.GetBuffer() );
                 }
-                if( osl_File_E_None == nError )
-                {
-                    nError = File::copy( aFromPath, aToPath );
-                }
-#else
-                FileBase::normalizePath( aFromAfm.PathToFileName(), aFromPath );
-                FileBase::normalizePath( aToAfm.PathToFileName(), aToPath );
-                FileBase::RC nError = File::copy( aFromPath, aToPath );
-#endif
+                else
+                    nError = File::copy( aFromAfm.GetMainURL(), aToAfm.GetMainURL() );
                 if( nError )
                 {
                     if( pCallback )
@@ -2240,20 +2234,16 @@ int PrintFontManager::importFonts( const ::std::list< OUString >& rFiles, Import
                 }
                 aAfmCopied = aToPath;
             }
+            if( bLinkOnly )
+            {
+                ByteString aFromPath( aFrom.PathToFileName(), aEncoding );
+                ByteString aToPath( aTo.PathToFileName(), aEncoding );
+                nError = (FileBase::RC)symlink( aFromPath.GetBuffer(), aToPath.GetBuffer() );
+            }
+            else
+                nError = File::copy( aFrom.GetMainURL(), aTo.GetMainURL() );
             // copy font file
-            OUString aFontFrom, aFontTo;
-#ifdef TF_FILEURL
-            if( ( osl_File_E_None == FileBase::getFileURLFromSystemPath(
-                   aFrom.PathToFileName(), aFontFrom ) ) &&
-                ( osl_File_E_None == FileBase::getFileURLFromSystemPath(
-                    aTo.PathToFileName(), aFontTo ) ) &&
-                ( osl_File_E_None == File::copy( aFontFrom, aFontTo ) ) )
-#else
-            // copy font file
-            FileBase::normalizePath( aFrom.PathToFileName(), aFontFrom );
-            FileBase::normalizePath( aTo.PathToFileName(), aFontTo );
-            if( File::copy( aFontFrom, aFontTo ) )
-#endif
+            if( nError )
             {
                 if( aAfmCopied.getLength() )
                     File::remove( aAfmCopied );
@@ -2400,15 +2390,9 @@ bool PrintFontManager::checkChangeFontPropertiesPossible( fontID nFontID ) const
         if( aFontsDirPath.getLength() )
         {
             OUString aUniPath, aFDPath;
-#ifdef TF_FILEURL
             FileBase::getFileURLFromSystemPath( OStringToOUString( aFontsDirPath, osl_getThreadTextEncoding() ), aUniPath );
             aUniPath += OUString::createFromAscii( "/fonts.dir" );
             FileBase::getSystemPathFromFileURL( aUniPath, aFDPath );
-#else
-            FileBase::normalizePath( OStringToOUString( aFontsDirPath, osl_getThreadTextEncoding() ), aUniPath );
-            aUniPath += OUString::createFromAscii( "/fonts.dir" );
-            FileBase::getSystemPathFromNormalizedPath( aUniPath, aFDPath );
-#endif
             SvFileStream aFontsDir( aFDPath, STREAM_READ | STREAM_WRITE );
             if( aFontsDir.IsOpen() && aFontsDir.IsWritable() )
                 bSuccess = true;
@@ -2442,16 +2426,9 @@ bool PrintFontManager::changeFontProperties( fontID nFontID, const ::rtl::OUStri
             break;
     }
     OUString aUniPath, aFDPath;
-#ifdef TF_FILEURL
     FileBase::getFileURLFromSystemPath( OStringToOUString( aFontsDirPath, aEncoding ), aUniPath );
     aUniPath += OUString::createFromAscii( "/fonts.dir" );
     FileBase::getSystemPathFromFileURL( aUniPath, aFDPath );
-#else
-    FileBase::normalizePath( OStringToOUString( aFontsDirPath, aEncoding ), aUniPath );
-    aUniPath += OUString::createFromAscii( "/fonts.dir" );
-    FileBase::getSystemPathFromNormalizedPath( aUniPath, aFDPath );
-#endif
-
     SvFileStream aFontsDir( aFDPath, STREAM_READ | STREAM_WRITE );
     aFontsDir.SetLineDelimiter( LINEEND_LF );
     if( aFontsDir.IsOpen() && aFontsDir.IsWritable() )
@@ -2494,4 +2471,171 @@ bool PrintFontManager::changeFontProperties( fontID nFontID, const ::rtl::OUStri
         getFontAttributesFromXLFD( pFont, aXLFD );
     }
     return bSuccess;
+}
+
+// -------------------------------------------------------------------------
+
+bool PrintFontManager::
+getImportableFontProperties(
+                            const OString& rFile,
+                            ::std::list< FastPrintFontInfo >& rFontProps
+                            )
+{
+    rFontProps.clear();
+    int nIndex = rFile.lastIndexOf( '/' );
+    OString aDir, aFile( rFile.copy( nIndex+1 ) );
+    if( nIndex != -1 )
+        aDir = rFile.copy( 0, nIndex );
+    int nDirID = getDirectoryAtom( aDir, true );
+    ::std::list< PrintFont* > aFonts;
+    bool bRet = analyzeFontFile( nDirID, aFile, true, OString(), aFonts );
+    while( aFonts.begin() != aFonts.end() )
+    {
+        PrintFont* pFont = aFonts.front();
+        aFonts.pop_front();
+        FastPrintFontInfo aInfo;
+        fillPrintFontInfo( pFont, aInfo );
+        rFontProps.push_back( aInfo );
+        delete pFont;
+    }
+    return bRet;
+}
+
+// -------------------------------------------------------------------------
+
+bool PrintFontManager::getFileDuplicates( fontID nFont, ::std::list< fontID >& rFonts ) const
+{
+    bool bRet = false;
+
+    rFonts.clear();
+    OString aFile( getFontFileSysPath( nFont ) );
+    if( ! aFile.getLength() )
+        return false;
+
+    for( ::std::hash_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
+    {
+        if( nFont != it->first )
+        {
+            OString aCompFile( getFontFile( it->second ) );
+            if( aCompFile == aFile )
+            {
+                rFonts.push_back( it->first );
+                bRet = true;
+            }
+        }
+    }
+    return bRet;
+}
+
+// -------------------------------------------------------------------------
+
+bool PrintFontManager::removeFonts( const ::std::list< fontID >& rFonts )
+{
+    bool bRet = true;
+    ::std::list< fontID > aDuplicates;
+    for( ::std::list< fontID >::const_iterator it = rFonts.begin(); it != rFonts.end(); ++it )
+    {
+        ::std::hash_map< fontID, PrintFont* >::const_iterator haveFont = m_aFonts.find( *it );
+        if( haveFont == m_aFonts.end() )
+            continue;
+
+        PrintFont* pFont = haveFont->second;
+        bool bRemoveDuplicates = getFileDuplicates( *it, aDuplicates );
+        ByteString aFile( getFontFile( pFont ) );
+        if( aFile.Len() )
+        {
+#ifdef DEBUG
+            fprintf( stderr, "try unlink( \"%s\" ) ... ", aFile.GetBuffer() );
+#endif
+            if( unlink( aFile.GetBuffer() ) )
+            {
+                bRet = false;
+                fprintf( stderr, "failed\n" );
+                continue;
+            }
+            fprintf( stderr, "succeeded\n" );
+            OString aAfm( getAfmFile( pFont ) );
+            if( aAfm.getLength() )
+            {
+#ifdef DEBUG
+                fprintf( stderr, "unlink( \"%s\" )\n", aAfm.getStr() );
+#endif
+                unlink( aAfm.getStr() );
+            }
+            INetURLObject aFontsDirPath( String( aFile, osl_getThreadTextEncoding() ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+            aFontsDirPath.CutName();
+            aFontsDirPath.Append( String( RTL_CONSTASCII_USTRINGPARAM( "fonts.dir" ) ) );
+            ByteString aFontsDirSysPath( aFontsDirPath.PathToFileName(), osl_getThreadTextEncoding() );
+            if( ! access( aFontsDirSysPath.GetBuffer(), R_OK | W_OK ) )
+            {
+                SvFileStream aFontsDir( aFontsDirPath.PathToFileName(), STREAM_READ | STREAM_WRITE );
+                aFontsDir.SetLineDelimiter( LINEEND_LF );
+                if( aFontsDir.IsOpen() )
+                {
+                    ByteString aLine;
+                    // skip entry count
+                    aFontsDir.ReadLine( aLine );
+                    ::std::list< ByteString > aLines;
+                    int nPos = aFile.SearchBackward( '/' );
+                    ByteString aFileName( aFile.Copy( nPos != STRING_NOTFOUND ? nPos+1 : 0 ) );
+                    while( ! aFontsDir.IsEof() )
+                    {
+                        aFontsDir.ReadLine( aLine );
+                        if( aLine.Len() && aLine.CompareTo( aFileName, aFileName.Len() ) != COMPARE_EQUAL )
+                            aLines.push_back( aLine );
+                    }
+                    aFontsDir.SetStreamSize( 0 );
+                    aFontsDir.Seek( 0 );
+                    // write entry count
+                    aFontsDir.WriteLine( ByteString::CreateFromInt32( aLines.size() ) );
+                    while( aLines.begin() != aLines.end() )
+                    {
+                        aFontsDir.WriteLine( aLines.front() );
+                        aLines.pop_front();
+                    }
+                }
+            }
+        }
+        m_aFonts.erase( *it );
+        delete pFont;
+        if( bRemoveDuplicates )
+        {
+            for( ::std::list< fontID >::iterator dup = aDuplicates.begin(); dup != aDuplicates.end(); ++dup )
+            {
+                PrintFont* pDup = m_aFonts[ *dup ];
+                m_aFonts.erase( *dup );
+                delete pDup;
+            }
+        }
+    }
+    return bRet;
+}
+
+// -------------------------------------------------------------------------
+
+bool PrintFontManager::isPrivateFontFile( fontID nFont ) const
+{
+    bool bRet = false;
+    int nDirID = -1;
+    PrintFont* pFont = getFont( nFont );
+    if( pFont )
+    {
+        switch( pFont->m_eType )
+        {
+            case fonttype::Type1: nDirID = static_cast< Type1FontFile* >(pFont)->m_nDirectory;break;
+            case fonttype::TrueType: nDirID = static_cast< TrueTypeFontFile* >(pFont)->m_nDirectory;break;
+        }
+    }
+    if( nDirID != -1 )
+    {
+        for( ::std::list< int >::const_iterator it = m_aPrivateFontDirectories.begin(); it != m_aPrivateFontDirectories.end(); ++it )
+        {
+            if( nDirID == *it )
+            {
+                bRet = true;
+                break;
+            }
+        }
+    }
+    return bRet;
 }
