@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 12:55:36 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 13:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ void OTableController::disposing()
         delete *aIter;
 }
 // -----------------------------------------------------------------------------
-FeatureState OTableController::GetState(sal_uInt16 _nId) const
+FeatureState OTableController::GetState(sal_uInt16 _nId)
 {
     FeatureState aReturn;
     // (disabled automatically)
@@ -324,7 +324,12 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             break;
         case ID_BROWSER_SAVEDOC:
             aReturn.bEnabled = m_bModified;
-            // run through
+            if ( aReturn.bEnabled )
+            {
+                ::std::vector<OTableRow*>::iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),::std::mem_fun(&OTableRow::isValid));
+                aReturn.bEnabled = aIter != m_vRowList.end();
+            }
+            break;
         case ID_BROWSER_SAVEASDOC:
             aReturn.bEnabled |= isConnected();
             if ( aReturn.bEnabled )
