@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:34:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,8 @@ ScConditionEntry::ScConditionEntry( SvStream& rStream, ScMultipleReadHeader& rHd
     pDoc(pDocument),
     bFirstRun(TRUE)
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     USHORT nVer = (USHORT) pDoc->GetSrcVersion();
 
     rHdr.StartEntry();
@@ -366,10 +368,13 @@ ScConditionEntry::ScConditionEntry( SvStream& rStream, ScMultipleReadHeader& rHd
     aSrcPos = aPos;
 
     //  Formelzellen werden erst bei IsValid angelegt
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 void ScConditionEntry::StoreCondition(SvStream& rStream, ScMultipleWriteHeader& rHdr) const
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rHdr.StartEntry();
 
     //  1) Byte fuer die Operation
@@ -411,6 +416,7 @@ void ScConditionEntry::StoreCondition(SvStream& rStream, ScMultipleWriteHeader& 
     }
 
     rHdr.EndEntry();
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
@@ -543,7 +549,7 @@ void ScConditionEntry::CompileXML()
              TRUE, FALSE, TRUE );
 }
 
-void lcl_CondUpdateInsertTab( ScTokenArray& rCode, USHORT nInsTab, USHORT nPosTab, BOOL& rChanged )
+void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab, BOOL& rChanged )
 {
     //  Insert table: only update absolute table references.
     //  (Similar to ScCompiler::UpdateInsertTab with bIsName=TRUE, result is the same as for named ranges)
@@ -575,7 +581,7 @@ void lcl_CondUpdateInsertTab( ScTokenArray& rCode, USHORT nInsTab, USHORT nPosTa
 }
 
 void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, short nDx, short nDy, short nDz )
+                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     BOOL bInsertTab = ( eUpdateRefMode == URM_INSDEL && nDz == 1 );
     BOOL bDeleteTab = ( eUpdateRefMode == URM_INSDEL && nDz == -1 );
@@ -617,7 +623,7 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
     }
 }
 
-void ScConditionEntry::UpdateMoveTab( USHORT nOldPos, USHORT nNewPos )
+void ScConditionEntry::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
     if (pFormula1)
     {
@@ -1065,7 +1071,12 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
                     //  absolut muss getroffen sein, relativ bestimmt Bereich
 
                     BOOL bHit = TRUE;
-                    INT16 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+                    SCsCOL nCol1;
+                    SCsROW nRow1;
+                    SCsTAB nTab1;
+                    SCsCOL nCol2;
+                    SCsROW nRow2;
+                    SCsTAB nTab2;
 
                     if ( aProv.Ref1.IsColRel() )
                         nCol2 = rChanged.Col() - aProv.Ref1.nRelCol;
@@ -1366,13 +1377,13 @@ const String& ScConditionalFormat::GetCellStyle( ScBaseCell* pCell, const ScAddr
 
 void lcl_Extend( ScRange& rRange, ScDocument* pDoc, BOOL bLines )
 {
-    USHORT nTab = rRange.aStart.Tab();
+    SCTAB nTab = rRange.aStart.Tab();
     DBG_ASSERT(rRange.aEnd.Tab() == nTab, "lcl_Extend - mehrere Tabellen?");
 
-    USHORT nStartCol = rRange.aStart.Col();
-    USHORT nStartRow = rRange.aStart.Row();
-    USHORT nEndCol = rRange.aEnd.Col();
-    USHORT nEndRow = rRange.aEnd.Row();
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
+    SCCOL nEndCol = rRange.aEnd.Col();
+    SCROW nEndRow = rRange.aEnd.Row();
 
     BOOL bEx = pDoc->ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nTab );
 
@@ -1518,7 +1529,7 @@ void ScConditionalFormat::CompileXML()
 }
 
 void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, short nDx, short nDy, short nDz )
+                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     for (USHORT i=0; i<nEntryCount; i++)
         ppEntries[i]->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
@@ -1527,7 +1538,7 @@ void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
     pAreas = NULL;
 }
 
-void ScConditionalFormat::UpdateMoveTab( USHORT nOldPos, USHORT nNewPos )
+void ScConditionalFormat::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
     for (USHORT i=0; i<nEntryCount; i++)
         ppEntries[i]->UpdateMoveTab( nOldPos, nNewPos );
@@ -1652,14 +1663,14 @@ void ScConditionalFormatList::CompileXML()
 }
 
 void ScConditionalFormatList::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, short nDx, short nDy, short nDz )
+                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     USHORT nCount = Count();
     for (USHORT i=0; i<nCount; i++)
         (*this)[i]->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
 }
 
-void ScConditionalFormatList::UpdateMoveTab( USHORT nOldPos, USHORT nNewPos )
+void ScConditionalFormatList::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
     USHORT nCount = Count();
     for (USHORT i=0; i<nCount; i++)
