@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-10 19:07:44 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,15 @@ class ScDBData;
 class ScDBCollection;
 class ScDPObject;
 class ScDPSaveData;
+class StrCollection;
 
 // ---------------------------------------------------------------------------
 
 class ScDBFunc : public ScViewFunc
 {
+private:
+    void            GetSelectedMemberList( StrCollection& rEntries, long& rDimension );
+
 public:
                     ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
                     ScDBFunc( Window* pParent, const ScDBFunc& rDBFunc, ScTabViewShell* pViewShell );
@@ -112,6 +116,9 @@ public:
                                     const ScDPObject& rSource, BOOL bApi = FALSE );
     void            DeletePivotTable();
     void            RecalcPivotTable();
+
+    BOOL            HasSelectionForDrillDown( USHORT& rOrientation );
+    void            SetDataPilotDetails( BOOL bShow, const String* pNewDimensionName = NULL );
 
     void            MakeOutline( BOOL bColumns, BOOL bRecord = TRUE );
     void            RemoveOutline( BOOL bColumns, BOOL bRecord = TRUE );
