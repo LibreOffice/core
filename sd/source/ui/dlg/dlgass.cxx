@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: af $ $Date: 2002-09-11 13:34:42 $
+ *  last change: $Author: iha $ $Date: 2002-10-01 09:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,6 +653,8 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
     SetStartType( ST_EMPTY );
 
     ChangePage();
+
+    UpdatePreview( TRUE );
 }
 
 
