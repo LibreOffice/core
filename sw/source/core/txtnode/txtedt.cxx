@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:35:02 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -192,6 +191,9 @@
 #ifndef _SCRIPTINFO_HXX
 #include <scriptinfo.hxx>
 #endif
+#ifndef _DOCSTAT_HXX //autogen
+#include <docstat.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -249,7 +251,7 @@ bool lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode,
     if ( bHideHidden )
     {
         const xub_Unicode cChar = CH_TXTATR_INWORD;
-        SwScriptInfo::MaskHiddenRanges( rNode, rText, &cChar );
+        SwScriptInfo::MaskHiddenRanges( rNode, rText, 0, rText.Len(), cChar );
     }
 
     return bShowChg || bHideHidden;
@@ -1542,3 +1544,47 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
     SwInsTxt aHint( nPos, nTLen );
     SwModify::Modify( 0, &aHint );
 }
+
+void SwTxtNode::CountWords( SwDocStat& rStat,
+                            xub_StrLen nStart, xub_StrLen nEnd ) const
+{
+    if( nStart < nEnd )
+    {
+
+        if ( !HasHiddenCharAttribute( true ) && !HasHiddenParaField() )
+        {
+            String& rWordStr = (String&)GetTxt();
+            String aOldStr( rWordStr );
+
+            // fills the hidden ranges with cChar, so that the break iterator ignores them
+            const xub_Unicode cChar(' ');
+            USHORT nNumOfMaskedChars =
+                    SwScriptInfo::MaskHiddenRanges( *this, rWordStr,
+                                                    nStart, nEnd, cChar );
+
+            if( rWordStr.Len() && pBreakIt->xBreak.is() )
+            {
+                SwScanner aScanner( *this, NULL,
+                                    ::com::sun::star::i18n::WordType::WORD_COUNT,
+                                    nStart, nEnd, sal_False, sal_False );
+
+                while ( aScanner.NextWord() )
+                {
+                    if ( aScanner.GetLen() > 1 ||
+                         CH_TXTATR_BREAKWORD != rWordStr.GetChar( aScanner.GetBegin() ) )
+                        ++rStat.nWord;
+                }
+            }
+
+            ASSERT( rWordStr.Len() >= nNumOfMaskedChars,
+                    "More characters hidden that characters in string!" )
+            rStat.nChar += nEnd - nStart - nNumOfMaskedChars;
+            ++rStat.nPara;
+            rWordStr = aOldStr;
+        }
+    }
+}
+
+
+
+
