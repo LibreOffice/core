@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 12:39:50 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ void lcl_html_outEvents( SvStream& rStrm,
         else
             (((sOut += sHTML_O_sdevent)
                 += ByteString( sListener, RTL_TEXTENCODING_ASCII_US)) += '-')
-                 += ByteString( sMethod, RTL_TEXTENCODING_ASCII_US);
+                += ByteString( sMethod, RTL_TEXTENCODING_ASCII_US);
         sOut += "=\"";
         rStrm << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( rStrm, pDescs[i].ScriptCode, eDestEnc );
@@ -356,7 +356,7 @@ void lcl_html_outEvents( SvStream& rStrm,
         {
             (((((sOut = ' ') += sHTML_O_sdaddparam)
                 += ByteString( sListener, RTL_TEXTENCODING_ASCII_US)) += '-')
-                 += ByteString( sMethod, RTL_TEXTENCODING_ASCII_US))
+                += ByteString( sMethod, RTL_TEXTENCODING_ASCII_US))
                 += "=\"";
             rStrm << sOut.GetBuffer();
             HTMLOutFuncs::Out_String( rStrm, pDescs[i].AddListenerParam,
@@ -417,7 +417,7 @@ void SwHTMLWriter::OutForm( sal_Bool bTagOn, const SwStartNode *pStartNd )
 
     Reference< container::XIndexContainer > xNewFormComps;  // die neue Form
     sal_uInt32 nStartIdx = pStartNd ? pStartNd->GetIndex()
-                                       : pCurPam->GetPoint()->nNode.GetIndex();
+                                    : pCurPam->GetPoint()->nNode.GetIndex();
 
     // Ueberspringen von Controls vor dem interesanten Bereich
     for( sal_uInt16 i=0; i < aHTMLControls.Count() &&
@@ -668,7 +668,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
                     OUString::createFromAscii( "SubmitMethod" ) );
     if( aTmp.getValueType() == ::getCppuType((const form::FormSubmitMethod*)0) )
     {
-         form::FormSubmitMethod eMethod =
+        form::FormSubmitMethod eMethod =
                 *( form::FormSubmitMethod*)aTmp.getValue();
         if( form::FormSubmitMethod_POST==eMethod )
         {
@@ -681,7 +681,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
                     OUString::createFromAscii( "SubmitEncoding" ) );
     if( aTmp.getValueType()==::getCppuType((const form::FormSubmitEncoding*)0) )
     {
-         form::FormSubmitEncoding eEncType =
+        form::FormSubmitEncoding eEncType =
                     *( form::FormSubmitEncoding*)aTmp.getValue();
         const sal_Char *pStr = 0;
         switch( eEncType )
@@ -921,7 +921,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
         {
             const OUString& rVal = *(OUString*)aTmp.getValue();
-            if( !rVal.len() )
+            if( !rVal.getLength() )
                 bEmptyValue = sal_True;
             else if( rVal.compareToAscii( sHTML_on ) != 0 )
                 sValue = rVal;
@@ -1587,11 +1587,14 @@ HTMLControl::~HTMLControl()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlforw.cxx,v 1.3 2001-03-23 12:39:50 jl Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlforw.cxx,v 1.4 2001-05-11 09:54:05 th Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/03/23 12:39:50  jl
+      replaced: Float->float
+
       Revision 1.2  2000/10/20 13:43:01  jp
       use correct INetURL-Decode enum
 

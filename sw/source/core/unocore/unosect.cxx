@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-20 18:51:04 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,7 +589,7 @@ void SwXTextSection::setPropertyValues(
                     {
                         if(pValues[nProperty].getValueType() == ::getCppuType((const text::SectionFileLink*)0))
                         {
-                             text::SectionFileLink* pLink =  (text::SectionFileLink*)   pValues[nProperty].getValue();
+                            text::SectionFileLink* pLink =  (text::SectionFileLink*)    pValues[nProperty].getValue();
                             if(m_bIsDescriptor)
                             {
                                 pProps->bDDE = sal_False;
@@ -599,7 +599,7 @@ void SwXTextSection::setPropertyValues(
                             else
                             {
                                 if(aSection.GetType() != FILE_LINK_SECTION &&
-                                    pLink->FileURL.len())
+                                    pLink->FileURL.getLength())
                                     aSection.SetType(FILE_LINK_SECTION);
                                 String sFileName(URIHelper::SmartRelToAbs( pLink->FileURL) );
                                 sFileName += cTokenSeperator;
@@ -732,7 +732,7 @@ void SwXTextSection::setPropertyValues(
                             pSect->CreateLink(CREATE_CONNECT);
                         }
                         pSect->SetUpdateType(bLinkMode ? LINKUPDATE_ALWAYS
-                                                 : LINKUPDATE_ONCALL);
+                                                : LINKUPDATE_ONCALL);
                     }
                     // section found and processed: break from loop
                     break;
@@ -818,7 +818,7 @@ Sequence< Any > SwXTextSection::getPropertyValues(
                     break;
                     case WID_SECT_LINK     :
                     {
-                         text::SectionFileLink aLink;
+                        text::SectionFileLink aLink;
                         if(m_bIsDescriptor)
                         {
                             if(!pProps->bDDE)
@@ -872,7 +872,7 @@ Sequence< Any > SwXTextSection::getPropertyValues(
                         SwSection* pEnclosingSection = pSect;
                         while ( (pEnclosingSection != NULL) &&
                                 (TOX_CONTENT_SECTION !=
-                                 pEnclosingSection->GetType()) )
+                                pEnclosingSection->GetType()) )
                         {
                             pEnclosingSection = pEnclosingSection->GetParent();
                         }

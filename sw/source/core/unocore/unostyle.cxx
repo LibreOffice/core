@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-04 08:47:42 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,7 +641,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
     sal_Bool    bLoadStyleOverwrite = sal_True;
     sal_Bool    bLoadStyleNumbering = sal_True;
     sal_Bool    bLoadStyleFrame = sal_True;
-    if(IsValid() && rURL.len())
+    if(IsValid() && rURL.getLength())
     {
         const Any* pVal;
         int nCount = aOptions.getLength();
@@ -1316,7 +1316,7 @@ void SwXStyle::setName(const OUString& rName) throw( RuntimeException )
         if(pBase && pBase->IsUserDefined())
         {
             SwDocStyleSheet aTmp( *(SwDocStyleSheet*)pBase );
-             bExcept = !aTmp.SetName(rName);
+            bExcept = !aTmp.SetName(rName);
             if(!bExcept)
                 sStyleName = String(rName);
         }
@@ -2901,7 +2901,7 @@ void SwXPageStyle::setPropertyValue(const OUString& rPropertyName, const Any& rV
     throw( UnknownPropertyException,
         PropertyVetoException,
         lang::IllegalArgumentException,
-         lang::WrappedTargetException,
+        lang::WrappedTargetException,
         RuntimeException)
 {
     const Sequence<OUString> aProperties(&rPropertyName, 1);

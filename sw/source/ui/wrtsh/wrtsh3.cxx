@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ sal_Bool SwWrtShell::SetURLToButton( const String& rURL, const String& rDescr )
                 // Darf man eine util::URL an dem Objekt setzen?
                 uno::Reference< beans::XPropertySetInfo >  xPropInfoSet = xPropSet->getPropertySetInfo();
                 beans::Property aProp = xPropInfoSet->getPropertyByName( C2U("TargetURL") );
-                if (aProp.Name.len())
+                if (aProp.Name.getLength())
                 {
                     // Ja!
                     aTmp <<= OUString(rDescr);
@@ -329,6 +329,9 @@ sal_Bool SwWrtShell::SetURLToButton( const String& rURL, const String& rDescr )
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:53  hr
+    initial import
+
     Revision 1.65  2000/09/18 16:06:27  willem.vandorp
     OpenOffice header added.
 
