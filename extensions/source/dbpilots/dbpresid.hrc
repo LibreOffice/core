@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpresid.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
+ *  last change: $Author: fs $ $Date: 2001-03-21 16:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,22 +62,20 @@
 #ifndef _EXTENSIONS_DBP_DBPRESID_HRC_
 #define _EXTENSIONS_DBP_DBPRESID_HRC_
 
-#ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
+#include "extensio.hrc"
 #endif
 
 //========================================================================
 // basics
 
-#define RID_DBP_START                   RID_EXTENSIONS_START
 #define RID_DIALOG_START                RID_DBP_START
 #define RID_PAGE_START                  RID_DBP_START
 #define RID_STRING_START                RID_DBP_START
-#define RID_UNTYPED_START               RID_DBP_START
 #define RID_ERRORBOX_START              RID_DBP_START
 
 //========================================================================
-// dialogs
+// strings
 
 #define RID_STR_GROUPWIZ_DBFIELD        (RID_STRING_START +  1 )
 #define RID_STR_COMBOWIZ_DBFIELD        (RID_STRING_START +  2 )
@@ -87,12 +85,18 @@
 #define RID_STR_DATEPOSTFIX             (RID_STRING_START +  6 )
 #define RID_STR_TIMEPOSTFIX             (RID_STRING_START +  7 )
 
+// please adjust RID_STRING_END (below) when adding new strings
+#define RID_STRING_END                  RID_STR_TIMEPOSTFIX
+
 //========================================================================
 // dialogs
 
 #define RID_DLG_GROUPBOXWIZARD          ( RID_DIALOG_START +  1 )
 #define RID_DLG_LISTCOMBOWIZARD         ( RID_DIALOG_START +  2 )
 #define RID_DLG_GRIDWIZARD              ( RID_DIALOG_START +  3 )
+
+// please adjust RID_DIALOG_END (below) when adding new dialogs
+#define RID_DIALOG_END                  RID_DLG_GRIDWIZARD
 
 //========================================================================
 // tab pages
@@ -108,10 +112,34 @@
 #define RID_PAGE_LCW_FIELDLINK              ( RID_PAGE_START +  9 )
 #define RID_PAGE_GW_FIELDSELECTION          ( RID_PAGE_START + 10 )
 
+// please adjust RID_PAGE_END (below) when adding new tab pages
+#define RID_PAGE_END                        RID_PAGE_GW_FIELDSELECTION
+
 //========================================================================
 // ErrorBox
 
 #define RID_ERR_INVALID_FORM_CONNECTION     ( RID_ERRORBOX_START +  1 )
+
+// please adjust RID_ERRORBOX_END (below) when adding new error boxes
+#define RID_ERRORBOX_END                    RID_ERR_INVALID_FORM_CONNECTION
+
+
+//========================================================================
+//========================================================================
+//= range checks
+
+#if RID_STRING_END > RID_DBP_END
+    #error "please adjust the resource id ranges!!"
+#endif
+#if RID_DIALOG_END > RID_DBP_END
+    #error "please adjust the resource id ranges!!"
+#endif
+#if RID_PAGE_END > RID_DBP_END
+    #error "please adjust the resource id ranges!!"
+#endif
+#if RID_ERRORBOX_END > RID_DBP_END
+    #error "please adjust the resource id ranges!!"
+#endif
 
 //========================================================================
 // local ids
@@ -221,6 +249,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/03/05 14:53:13  fs
+ *  finished the grid control wizard
+ *
  *  Revision 1.3  2001/02/28 09:18:30  fs
  *  finalized the list/combo wizard
  *
