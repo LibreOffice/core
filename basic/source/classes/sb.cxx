@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-04 17:24:32 $
+ *  last change: $Author: ab $ $Date: 2001-09-17 12:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,7 +469,8 @@ void StarBASIC::DeInitAllModules( void )
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
-        pModule->pImage->bInit = false;
+        if( pModule->pImage )
+            pModule->pImage->bInit = false;
     }
     // Alle Objekte ueberpruefen, ob es sich um ein Basic handelt
     // Wenn ja, auch dort initialisieren
