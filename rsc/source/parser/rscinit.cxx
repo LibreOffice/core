@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscinit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:43:24 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 14:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,7 +511,8 @@ void RscTypCont::Init()
     pRoot->Insert( pClassImage );
 
     /********** I M A G E L I S T ****************************************/
-    pClassImageList = InitClassImageList( pClassMgr, pClassBitmap, pClassColor );
+     pClassImageList = InitClassImageList( pClassMgr, pClassBitmap,
+                                          pClassColor, pStringLongTupelList );
     pRoot->Insert( pClassImageList );
 
     /********** W I N D O W **********************************************/
