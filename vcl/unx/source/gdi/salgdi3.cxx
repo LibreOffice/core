@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2001-02-16 16:22:03 $
+ *  last change: $Author: hdu $ $Date: 2001-02-19 15:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -830,7 +830,7 @@ static void DrawServerAAFontString( ServerFont* pServerFont,
     }
 
     Visual* pVisual = DefaultVisual( pDisplay, 0 );
-    XRenderPictFormat*  pVisualFormat =  XRenderFindVisualFormat( pDisplay, pVisual );
+    XRenderPictFormat*  pVisualFormat =  (*aX11GlyphPeer.pXRenderFindVisualFormat)( pDisplay, pVisual );
 
     static Pixmap aPixmap = NULL;
     static Picture aSrc = NULL;
@@ -845,7 +845,7 @@ static void DrawServerAAFontString( ServerFont* pServerFont,
 
         XRenderPictureAttributes aAttr;
         aAttr.repeat = true;
-        aSrc = XRenderCreatePicture( pDisplay, aPixmap, pVisualFormat, CPRepeat, &aAttr );
+        aSrc = (*aX11GlyphPeer.pXRenderCreatePicture)( pDisplay, aPixmap, pVisualFormat, CPRepeat, &aAttr );
     }
 
     // set foreground
@@ -858,19 +858,19 @@ static void DrawServerAAFontString( ServerFont* pServerFont,
 
     // notify xrender of target drawable
     XRenderPictureAttributes aAttr;
-    Picture aDst = XRenderCreatePicture( pDisplay, nDrawable, pVisualFormat, 0, &aAttr );
+    Picture aDst = (*aX11GlyphPeer.pXRenderCreatePicture)( pDisplay, nDrawable, pVisualFormat, 0, &aAttr );
 
     // set clipping
     if( tmpClipRegion && !XEmptyRegion( tmpClipRegion ) )
-        XRenderSetPictureClipRegion( pDisplay, aDst, tmpClipRegion );
+        (*aX11GlyphPeer.pXRenderSetPictureClipRegion)( pDisplay, aDst, tmpClipRegion );
 
     // draw the string
     GlyphSet aGlyphSet = aX11GlyphPeer.GetGlyphSet( *pServerFont );
-    XRenderCompositeString16( pDisplay, PictOpOver, aSrc, aDst,
+    (*aX11GlyphPeer.pXRenderCompositeString16)( pDisplay, PictOpOver, aSrc, aDst,
         0, aGlyphSet, 0, 0, nX, nY, pGlyphString, nLength );
 
     // cleanup
-    XRenderFreePicture( pDisplay, aDst );
+    (*aX11GlyphPeer.pXRenderFreePicture)( pDisplay, aDst );
 }
 
 #endif

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hdu $ $Date: 2001-02-15 16:52:29 $
+#   last change: $Author: hdu $ $Date: 2001-02-19 15:36:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -204,9 +204,6 @@ LIB1FILES+= \
 .IF "$(GUI)" == "UNX"
 .IF "$(PSPRINT)" != ""
     SHL1STDLIBS=-lpsp$(VERSION)$(DLLPOSTFIX)
-.ENDIF
-.IF "$(USE_XRENDER)" != ""
-    SHL1STDLIBS+=-lXrender
 .ENDIF
 .ENDIF
 

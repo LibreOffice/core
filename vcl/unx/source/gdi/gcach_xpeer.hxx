@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-16 09:21:32 $
+ *  last change: $Author: hdu $ $Date: 2001-02-19 15:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,13 +92,26 @@ protected:
 private:
     enum { EMPTY_KIND=0, PIXMAP_KIND, XRENDER_KIND };
 
+    Display*            mpDisplay;
+    RawBitmap           maRawBitmap;
+
 #ifdef USE_XRENDER
     bool                mbUsingXRender;
     XRenderPictFormat*  mpGlyphFormat;
-#endif // USE_XRENDER
 
-    Display*            mpDisplay;
-    RawBitmap           maRawBitmap;
+public:
+    XRenderPictFormat*  (*pXRenderFindFormat)(Display*,unsigned long,XRenderPictFormat*,int);
+    XRenderPictFormat*  (*pXRenderFindVisualFormat)(Display*,Visual*);
+    Bool        (*pXRenderQueryExtension)(Display*,int*,int*);
+    void        (*pXRenderQueryVersion)(Display*,int*,int*);
+    GlyphSet    (*pXRenderCreateGlyphSet)(Display*,XRenderPictFormat*);
+    void        (*pXRenderFreeGlyphSet)(Display*,GlyphSet);
+    void        (*pXRenderAddGlyphs)(Display*,GlyphSet,Glyph*,XGlyphInfo*,int,char*,int);
+    void        (*pXRenderCompositeString16)(Display*,int,Picture,Picture,XRenderPictFormat*,GlyphSet,int,int,int,int,unsigned short*,int);
+    Picture     (*pXRenderCreatePicture)(Display*,Drawable,XRenderPictFormat*,unsigned long,XRenderPictureAttributes*);
+    void        (*pXRenderSetPictureClipRegion)(Display*,Picture,XLIB_Region);
+    void        (*pXRenderFreePicture)(Display*,Picture);
+#endif // USE_XRENDER
 };
 
 #endif // _SV_GCACH_XPEER_HXX

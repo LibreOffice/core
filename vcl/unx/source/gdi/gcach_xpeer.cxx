@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-16 12:12:24 $
+ *  last change: $Author: hdu $ $Date: 2001-02-19 15:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #include <X11/Xlib.h>
 #include <gcach_xpeer.hxx>
 
+#ifdef USE_XRENDER
+    #include <dlfcn.h>
+#endif // USE_XRENDER
+
 // ---------------------------------------------------------------------------
 
 X11GlyphPeer::X11GlyphPeer()
@@ -86,20 +90,67 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay )
 
 #ifdef USE_XRENDER
     int nDummy;
-    if( !XRenderQueryExtension( mpDisplay, &nDummy, &nDummy ) )
+    if( !XQueryExtension( mpDisplay, "RENDER", &nDummy, &nDummy, &nDummy ) )
         return;
 
+    // we don't know if we are running on a system with xrender library
+    // we don't want to install system libraries ourselves
+    // => load them dynamically when they are there
+    void* pRenderLib = dlopen( "libXrender.so", RTLD_GLOBAL | RTLD_LAZY );
+    if( !pRenderLib ) {
+        printf( "XRender extension but no libXrender.so installed. Please install for improved display quality\n" );
+        return;
+    }
+
+    void* pFunc;
+    pFunc = dlsym( pRenderLib, "XRenderQueryExtension" );
+    if( !pFunc ) return;
+    pXRenderQueryExtension          = (Bool(*)(Display*,int*,int*))pFunc;
+    pFunc = dlsym( pRenderLib, "XRenderQueryVersion" );
+    if( !pFunc ) return;
+    pXRenderQueryVersion            = (void(*)(Display*,int*,int*))pFunc;
+    pFunc = dlsym( pRenderLib, "XRenderFindVisualFormat" );
+    if( !pFunc ) return;
+    pXRenderFindVisualFormat    = (XRenderPictFormat*(*)(Display*,Visual*))pFunc;
+    pFunc = dlsym( pRenderLib, "XRenderFindFormat" );
+    if( !pFunc ) return;
+    pXRenderFindFormat          = (XRenderPictFormat*(*)(Display*,unsigned long,XRenderPictFormat*,int))pFunc;
+    pFunc = dlsym( pRenderLib, "XRenderCreateGlyphSet" );
+    if( !pFunc ) return;
+    pXRenderCreateGlyphSet          = (GlyphSet(*)(Display*,XRenderPictFormat*))pFunc;
+    pFunc = dlsym( pRenderLib, "XRenderFreeGlyphSet" );
+    if( !pFunc ) return;
+    pXRenderFreeGlyphSet            = (void(*)(Display*,GlyphSet))pFunc;
+    pFunc = dlsym( pRenderLib, "XRenderAddGlyphs" );
+    if( !pFunc ) return;
+    pXRenderAddGlyphs               = (void(*)(Display*,GlyphSet,Glyph*,XGlyphInfo*,int,char*,int))pFunc;
+    pFunc = dlsym( pRenderLib, "XRenderCompositeString16" );
+    if( !pFunc ) return;
+    pXRenderCompositeString16       = (void(*)(Display*,int,Picture,Picture,XRenderPictFormat*,GlyphSet,int,int,int,int,unsigned short*,int))pFunc;
+    pFunc = dlsym( pRenderLib, "XRenderCreatePicture" );
+    if( !pFunc ) return;
+    pXRenderCreatePicture           = (Picture(*)(Display*,Drawable,XRenderPictFormat*,unsigned long,XRenderPictureAttributes*))pFunc;
+    pFunc = dlsym( pRenderLib, "XRenderSetPictureClipRegion" );
+    if( !pFunc ) return;
+    pXRenderSetPictureClipRegion    = (void(*)(Display*,Picture,XLIB_Region))pFunc;
+    pFunc = dlsym( pRenderLib, "XRenderFreePicture" );
+    if( !pFunc ) return;
+    pXRenderFreePicture             = (void(*)(Display*,Picture))pFunc;
+
+    // needed to initialize libXrender internals, we already know its there
+    XRenderQueryExtension( mpDisplay, &nDummy, &nDummy );
+
     int nMajor, nMinor;
-    XRenderQueryVersion( mpDisplay, &nMajor, &nMinor );
+    (*pXRenderQueryVersion)( mpDisplay, &nMajor, &nMinor );
     // TODO: enabling/disabling things depending on version
 
     // the 8bit alpha mask format must be there
     XRenderPictFormat aPictFormat={0,0,8,{0,0,0,0,0,0,0,0xFF},0};
-    mpGlyphFormat = XRenderFindFormat( mpDisplay, 0, &aPictFormat, 1 );
+    mpGlyphFormat = (*pXRenderFindFormat)( mpDisplay, 0, &aPictFormat, 1 );
 
     // and support for the visual
     Visual* pVisual = DefaultVisual( mpDisplay, 0 );
-    XRenderPictFormat*  pVisualFormat =  XRenderFindVisualFormat( mpDisplay, pVisual );
+    XRenderPictFormat*  pVisualFormat =  (*pXRenderFindVisualFormat)( mpDisplay, pVisual );
     if( pVisualFormat != NULL )
         mbUsingXRender = true;
 #endif // USE_XRENDER
@@ -116,8 +167,7 @@ void X11GlyphPeer::RemovingFont( ServerFont& rServerFont )
 
 #ifdef USE_XRENDER
         case XRENDER_KIND:
-            XRenderFreeGlyphSet( mpDisplay,
-                (GlyphSet)rServerFont.GetExtPointer() );
+            (*pXRenderFreeGlyphSet)( mpDisplay,(GlyphSet)rServerFont.GetExtPointer() );
             break;
 #endif // USE_XRENDER
     }
@@ -146,7 +196,7 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
             GlyphSet aGlyphSet = GetGlyphSet( rServerFont );
             Glyph nGlyphId = GetGlyphId( rServerFont, nGlyphIndex );
             // current version of XRENDER does not implement XRenderFreeGlyphs()
-//###        XRenderFreeGlyphs( mpDisplay, aGlyphSet, &nGlyphId, 1 );
+//###       (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
             mnBytesUsed -= nHeight * ((nWidth + 3) & ~3);
             break;
         }
@@ -184,7 +234,7 @@ GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont )
                 const ImplFontSelectData& rFSD = rServerFont.GetFontSelData();
                 if( rFSD.mnHeight<250  && (rFSD.mnHeight>=12 || rFSD.mnHeight<8) )
                 {
-                    aGlyphSet = XRenderCreateGlyphSet( mpDisplay, mpGlyphFormat );
+                    aGlyphSet = (*pXRenderCreateGlyphSet)( mpDisplay, mpGlyphFormat );
                     rServerFont.SetExtended( XRENDER_KIND, (void*)aGlyphSet );
                 }
                 else
@@ -314,7 +364,7 @@ Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
 
         aGlyphId = nGlyphIndex;
         const ULONG nBytes = maRawBitmap.mnScanlineSize * maRawBitmap.mnHeight;
-        XRenderAddGlyphs( mpDisplay, aGlyphSet, &aGlyphId, &aGlyphInfo, 1,
+        (*pXRenderAddGlyphs)( mpDisplay, aGlyphSet, &aGlyphId, &aGlyphInfo, 1,
             maRawBitmap.mpBits,  nBytes );
 
         mnBytesUsed += nBytes;
