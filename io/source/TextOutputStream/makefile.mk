@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ganaya $ $Date: 2000-10-13 18:00:29 $
+#   last change: $Author: jbu $ $Date: 2000-10-16 12:12:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,19 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 # ------------------------------------------------------------------
+UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
+UNOUCROUT=$(OUT)$/inc$/textoutputstream
+INCPRE+= $(UNOUCROUT)
+
+UNOTYPES=	com.sun.star.io.XTextOutputStream \
+        com.sun.star.io.XActiveDataSource \
+        com.sun.star.lang.XSingleServiceFactory \
+        com.sun.star.lang.XMultiServiceFactory \
+        com.sun.star.lang.XTypeProvider \
+        com.sun.star.registry.XRegistryKey \
+        com.sun.star.uno.XAggregation \
+        com.sun.star.uno.XWeak 
 
 SLOFILES= \
     $(SLO)$/TextOutputStream.obj
