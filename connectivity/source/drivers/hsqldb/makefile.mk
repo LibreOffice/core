@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-17 10:15:18 $
+#   last change: $Author: rt $ $Date: 2005-03-30 11:52:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,8 @@ SLOFILES=\
         $(SLO)$/StorageNativeOutputStream.obj	\
         $(SLO)$/StorageNativeInputStream.obj	\
         $(SLO)$/StorageFileAccess.obj			\
-        $(SLO)$/Hservices.obj
+        $(SLO)$/Hservices.obj                   \
+        $(SLO)$/accesslog.obj
         
 
 .IF "$(OS)"=="MACOSX"
