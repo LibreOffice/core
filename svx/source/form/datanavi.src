@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datanavi.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:57:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ Window RID_SVXWIN_DATANAVIGATOR
     DialogControl = TRUE ;
     HelpId = HID_DATA_NAVIGATOR_WIN ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 122 , 150 ) ;
+    Size = MAP_APPFONT ( 300 , 400 ) ;
     ListBox LB_MODELS
     {
         HelpId = HID_XFORMS_MODELS_LIST ;
@@ -254,8 +254,8 @@ Window RID_SVXWIN_DATANAVIGATOR
                 {
                     Identifier = MID_INSTANCES_EDIT ;
                     HelpId = HID_MN_XFORMS_INSTANCES_EDIT ;
-                    Text [ de ] = "~Umbenennen..." ;
-                    Text [ en-US ] = "~Rename..." ;
+                    Text [ de ] = "~Bearbeiten..." ;
+                    Text [ en-US ] = "~Edit..." ;
                 };
                 MenuItem
                 {
@@ -333,8 +333,31 @@ QueryBox RID_QRY_REMOVE_ATTRIBUTE
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Möchten Sie das Attribut $ATTRIBUTENAME' wirklich löschen?" ;
+    Message [ de ] = "Möchten Sie das Attribut '$ATTRIBUTENAME' wirklich löschen?" ;
     Message [ en-US ] = "Do you really want to delete the attribute '$ATTRIBUTENAME'?" ;
+};
+
+QueryBox RID_QRY_REMOVE_SUBMISSION
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ de ] = "Das Löschen der Submission '$SUBMISSIONNAME' wirkt sich auf alle Kontrollfelder aus, die damit verbunden sind.\n\nMöchten Sie die Submission wirklich löschen?" ;
+    Message [ en-US ] = "Deleting the submission '$SUBMISSIONNAME' affects all controls currently bound to this submission.\n\nDo you really want to delete this submission?" ;
+};
+
+QueryBox RID_QRY_REMOVE_BINDING
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ de ] = "Das Löschen der Binding '$BINDINGNAME' wirkt sich auf alle Kontrollfelder aus, die damit verbunden sind.\n\nMöchten Sie die Binding wirklich löschen?" ;
+    Message [ en-US ] = "Deleting the binding '$BINDINGNAME' affects all controls currently bound to this binding.\n\nDo you really want to delete this binding?" ;
+};
+
+MessBox RID_QRY_LINK_WARNING
+{
+    Buttons = 0 ;
+    Message [ de ] = "Diese Instanz ist mit dem Formular verknüpft.\n\nÄnderungen an dieser Instanz gehen nach dem Neuladen des Formulars verloren.\n\nWie möchten Sie fortfahren?" ;
+    Message [ en-US ] = "This instance is linked with the form.\n\nThe changes you make to this instance will be lost when the form is reloaded.\n\nHow do you want to proceed?" ;
 };
 
 ErrorBox RID_ERR_INVALID_XMLNAME
@@ -356,6 +379,13 @@ ErrorBox RID_ERR_DOUBLE_MODELNAME
     Buttons = WB_OK ;
     Message [ de ] = "Der angegebene Name '%1' existiert bereits. Bitte geben Sie einen neuen Namen ein." ;
     Message [ en-US ] = "The name '%1' already exists. Please enter a new name." ;
+};
+
+ErrorBox RID_ERR_EMPTY_SUBMISSIONNAME
+{
+    Buttons = WB_OK ;
+    Message [ de ] = "Die Submission muss einen Namen haben." ;
+    Message [ en-US ] = "The submission must have a name." ;
 };
 
 ModalDialog RID_SVXDLG_ADD_DATAITEM
@@ -1158,8 +1188,8 @@ ModalDialog RID_SVXDLG_ADD_INSTANCE
     };
     String STR_EDIT_TEXT
     {
-        Text [ de ] = "Instanz umbenennen" ;
-        Text [ en-US ] = "Rename Instance" ;
+        Text [ de ] = "Instanz bearbeiten" ;
+        Text [ en-US ] = "Edit Instance" ;
     };
 };
 
@@ -1257,5 +1287,10 @@ String RID_STR_DATANAV_REMOVE_SUBMISSION
 {
     Text [ de ] = "Submission löschen" ;
     Text [ en-US ] = "Delete Submission" ;
+};
+String RID_STR_DATANAV_LINKWARN_BUTTON
+{
+    Text [ de ] = "~Bearbeiten" ;
+    Text [ en-US ] = "~Edit" ;
 };
 
