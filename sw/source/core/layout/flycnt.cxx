@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-24 12:50:09 $
+ *  last change: $Author: ama $ $Date: 2002-04-26 07:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include "frmtool.hxx"
 #include "dflyobj.hxx"
 #include "hints.hxx"
+#include "ndtxt.hxx"
 #include "swundo.hxx"
 #include "errhdl.hxx"
 
@@ -2233,6 +2234,7 @@ void SwFlyAtCntFrm::MakeFlyPos()
                 SwOrderIter aIter( FindPageFrm(), TRUE );
                 const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)aIter.Bottom())->GetFlyFrm();
                 const SwFrm *pKontext = ::FindKontext( GetAnchor(), FRM_COLUMN );
+                ULONG nMyIndex = ((SwTxtFrm*)GetAnchor())->GetTxtNode()->GetIndex();
                 while ( pFly && nMyOrd > pFly->GetVirtDrawObj()->GetOrdNumDirect() )
                 {
                     if ( pFly->IsFlyAtCntFrm() && //pFly->IsValid() &&
@@ -2242,63 +2244,69 @@ void SwFlyAtCntFrm::MakeFlyPos()
                             (pFly->Frm().*fnRect->fnGetTop)() ) < 0 &&
                          ::FindKontext( pFly->GetAnchor(), FRM_COLUMN ) == pKontext )
                     {
-                        const SwFmtHoriOrient &rHori = pFly->GetFmt()->GetHoriOrient();
-                        SwRelationOrient eRelO2 = rHori.GetRelationOrient();
-                        if( REL_CHAR != eRelO2 )
+                        ULONG nOtherIndex = ((SwTxtFrm*)pFly->GetAnchor())
+                                            ->GetTxtNode()->GetIndex();
+                        if( nMyIndex > nOtherIndex )
                         {
-                            SwHoriOrient eHOri2 = rHori.GetHoriOrient();
-                            if( bEven && rHori.IsPosToggle() )
+                            const SwFmtHoriOrient &rHori =
+                                                pFly->GetFmt()->GetHoriOrient();
+                            SwRelationOrient eRelO2 = rHori.GetRelationOrient();
+                            if( REL_CHAR != eRelO2 )
                             {
-                                if( HORI_RIGHT == eHOri2 )
-                                    eHOri2 = HORI_LEFT;
-                                else if( HORI_LEFT == eHOri2 )
-                                    eHOri2 = HORI_RIGHT;
-                                if( REL_PG_RIGHT == eRelO2 )
-                                    eRelO2 = REL_PG_LEFT;
-                                else if( REL_PG_LEFT == eRelO2 )
-                                    eRelO2 = REL_PG_RIGHT;
-                                else if( REL_FRM_RIGHT == eRelO2 )
-                                    eRelO2 = REL_FRM_LEFT;
-                                else if( REL_FRM_LEFT == eRelO2 )
-                                    eRelO2 = REL_FRM_RIGHT;
-                            }
-                            if ( eHOri2 == eHOri &&
-                                 lcl_Minor( eRelO, eRelO2, HORI_LEFT == eHOri ) )
-                            {
-                                //Die Berechnung wird dadurch etwas aufwendiger, das die
-                                //Ausgangsbasis der Flys unterschiedlich sein koennen.
-                                if( bVert )
+                                SwHoriOrient eHOri2 = rHori.GetHoriOrient();
+                                if( bEven && rHori.IsPosToggle() )
                                 {
-                                    const SvxULSpaceItem &rULI = pFly->GetFmt()->GetULSpace();
-                                    const SwTwips nFlyTop = pFly->Frm().Top() - rULI.GetUpper();
-                                    const SwTwips nFlyBot = pFly->Frm().Bottom() + rULI.GetLower();
-                                    if( nFlyTop <= aTmpFrm.Bottom() + rUL.GetLower() &&
-                                        nFlyBot >= aTmpFrm.Top() - rUL.GetUpper() )
-                                    {
-                                        if ( eHOri == HORI_LEFT )
-                                            nRelPosX = Max( nRelPosX, nFlyBot+1
-                                                +rULI.GetLower() -GetAnchor()->Frm().Top());
-                                        else if ( eHOri == HORI_RIGHT )
-                                            nRelPosX = Min( nRelPosX, nFlyTop-1
-                                                -rULI.GetUpper() - Frm().Height() - GetAnchor()->Frm().Top());
-                                        aTmpFrm.Pos().Y() = GetAnchor()->Frm().Top() + nRelPosX;
-                                    }
+                                    if( HORI_RIGHT == eHOri2 )
+                                        eHOri2 = HORI_LEFT;
+                                    else if( HORI_LEFT == eHOri2 )
+                                        eHOri2 = HORI_RIGHT;
+                                    if( REL_PG_RIGHT == eRelO2 )
+                                        eRelO2 = REL_PG_LEFT;
+                                    else if( REL_PG_LEFT == eRelO2 )
+                                        eRelO2 = REL_PG_RIGHT;
+                                    else if( REL_FRM_RIGHT == eRelO2 )
+                                        eRelO2 = REL_FRM_LEFT;
+                                    else if( REL_FRM_LEFT == eRelO2 )
+                                        eRelO2 = REL_FRM_RIGHT;
                                 }
-                                else
+                                if ( eHOri2 == eHOri &&
+                                    lcl_Minor( eRelO, eRelO2, HORI_LEFT == eHOri ) )
                                 {
-                                    const SvxLRSpaceItem &rLRI = pFly->GetFmt()->GetLRSpace();
-                                    const SwTwips nFlyLeft = pFly->Frm().Left() - rLRI.GetLeft();
-                                    const SwTwips nFlyRight = pFly->Frm().Right() + rLRI.GetRight();
-                                    if( nFlyLeft <= aTmpFrm.Right() + rLR.GetRight() &&
-                                        nFlyRight >= aTmpFrm.Left() - rLR.GetLeft() )
+                                    //Die Berechnung wird dadurch etwas aufwendiger, das die
+                                    //Ausgangsbasis der Flys unterschiedlich sein koennen.
+                                    if( bVert )
                                     {
-                                        if ( eHOri == HORI_LEFT )
-                                            nRelPosX = Max( nRelPosX, nFlyRight+1
-                                                +rLRI.GetRight() -GetAnchor()->Frm().Left());
-                                        else if ( eHOri == HORI_RIGHT )
-                                            nRelPosX = Min( nRelPosX, nFlyLeft-1
-                                                -rLRI.GetLeft() - Frm().Width() - GetAnchor()->Frm().Left());
-                                        aTmpFrm.Pos().X() = GetAnchor()->Frm().Left() + nRelPosX;
+                                        const SvxULSpaceItem &rULI = pFly->GetFmt()->GetULSpace();
+                                        const SwTwips nFlyTop = pFly->Frm().Top() - rULI.GetUpper();
+                                        const SwTwips nFlyBot = pFly->Frm().Bottom() + rULI.GetLower();
+                                        if( nFlyTop <= aTmpFrm.Bottom() + rUL.GetLower() &&
+                                            nFlyBot >= aTmpFrm.Top() - rUL.GetUpper() )
+                                        {
+                                            if ( eHOri == HORI_LEFT )
+                                                nRelPosX = Max( nRelPosX, nFlyBot+1
+                                                    +rULI.GetLower() -GetAnchor()->Frm().Top());
+                                            else if ( eHOri == HORI_RIGHT )
+                                                nRelPosX = Min( nRelPosX, nFlyTop-1
+                                                    -rULI.GetUpper() - Frm().Height() - GetAnchor()->Frm().Top());
+                                            aTmpFrm.Pos().Y() = GetAnchor()->Frm().Top() + nRelPosX;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        const SvxLRSpaceItem &rLRI = pFly->GetFmt()->GetLRSpace();
+                                        const SwTwips nFlyLeft = pFly->Frm().Left() - rLRI.GetLeft();
+                                        const SwTwips nFlyRight = pFly->Frm().Right() + rLRI.GetRight();
+                                        if( nFlyLeft <= aTmpFrm.Right() + rLR.GetRight() &&
+                                            nFlyRight >= aTmpFrm.Left() - rLR.GetLeft() )
+                                        {
+                                            if ( eHOri == HORI_LEFT )
+                                                nRelPosX = Max( nRelPosX, nFlyRight+1
+                                                    +rLRI.GetRight() -GetAnchor()->Frm().Left());
+                                            else if ( eHOri == HORI_RIGHT )
+                                                nRelPosX = Min( nRelPosX, nFlyLeft-1
+                                                    -rLRI.GetLeft() - Frm().Width() - GetAnchor()->Frm().Left());
+                                            aTmpFrm.Pos().X() = GetAnchor()->Frm().Left() + nRelPosX;
+                                        }
                                     }
                                 }
                             }
