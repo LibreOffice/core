@@ -1,6 +1,5 @@
-<!-- edited with XML Spy v3.0 NT (http://www.xmlspy.com) by Jumper (Star Office GmbH) -->
 <!--
-	$Id: table.mod,v 1.8 2000-10-24 09:54:22 dr Exp $
+	$Id: table.mod,v 1.9 2000-10-24 11:21:33 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -57,12 +56,8 @@
 <!ENTITY % table-header-columns "table:table-header-columns">
 <!ENTITY % table-rows "( table:table-rows | table:table-row+ )">
 <!ENTITY % table-header-rows "table:table-header-rows">
-<!ENTITY % table-column-groups "( %table-header-columns; |
-            (%table-columns;, %table-header-columns;, %table-columns;?) |
-			(%table-header-columns;?, %table-columns;) )">
-<!ENTITY % table-row-groups "( %table-header-rows; |
-            (%table-rows;, %table-header-rows;, %table-rows;?) |
-			(%table-header-rows;?, %table-rows;) )">
+<!ENTITY % table-column-groups "( (%table-columns;,(%table-header-columns;,%table-columns;?)?) | (%table-header-columns;,%table-columns;?) )">
+<!ENTITY % table-row-groups "( (%table-rows;,(%table-header-rows;,%table-rows;?)?) | (%table-header-rows;,%table-rows;?) )">
 <!ELEMENT table:table (table:scenario?, %table-column-groups;, %table-row-groups;)>
 <!ATTLIST table:table
 	table:name %string; #REQUIRED

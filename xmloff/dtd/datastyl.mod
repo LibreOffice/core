@@ -1,6 +1,6 @@
 <!--
 
-   $Id: datastyl.mod,v 1.2 2000-10-18 17:24:56 sab Exp $
+   $Id: datastyl.mod,v 1.3 2000-10-24 11:21:33 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -56,26 +56,26 @@
 
 <!-- data styles -->
 <!ENTITY % any-number "( number:number | number:scientific-number | number:fraction )">
-<!ENTITY % number-style-content "( number:text | (number:text?,%any-number;,number:text?) )">
+<!ENTITY % number-style-content "( (number:text,(%any-number;,number:text?)?) | (%any-number;,number:text?) )">
 <!ELEMENT number:number-style ( style:properties?, %number-style-content;, style:map* )>
 <!ELEMENT number:number EMPTY>
 <!ELEMENT number:scientific-number EMPTY>
 <!ELEMENT number:fraction EMPTY>
 
 <!ENTITY % currency-symbol-and-text "number:currency-symbol,number:text?">
-<!ENTITY % number-and-text "number:number,number:text?">
-<!ENTITY % currency-style-content "( number:text | (number:text?,%number-and-text;,
-	(number:text?,%currency-symbol-and-text;)?) | (%currency-symbol-and-text;,(%number-and-text;)?))">
+<!ENTITY % number-and-text "(number:number,number:text?)">
+<!ENTITY % currency-style-content "( (number:text,(%number-and-text;,(number:text?,%currency-symbol-and-text;)?)?) | (%number-and-text;,(number:text?,%currency-symbol-and-text;)?) | (%currency-symbol-and-text;,%number-and-text;?) )">
+
 <!ELEMENT number:currency-style ( style:properties?, %currency-style-content;, style:map* )>
 <!ELEMENT number:currency-symbol (#PCDATA)>
 <!ATTLIST number:currency-symbol number:language CDATA #IMPLIED>
 <!ATTLIST number:currency-symbol number:country CDATA #IMPLIED>
 
-<!ENTITY % percentage-style-content "( number:text | (number:text?,%number-and-text;) )">
+<!ENTITY % percentage-style-content "( (number:text,%number-and-text;?) | %number-and-text; )">
 <!ELEMENT number:percentage-style ( style:properties?, %percentage-style-content;, style:map* )>
 
 <!ENTITY % any-date "( number:day | number:month | number:year | number:day-of-week | number:week-of-year | number:quarter| number:hours | number:am-pm | number:minutes | number:seconds )">
-<!ENTITY % date-style-content "( number:text | (number:text?,(%any-date;,number:text?)+) )">
+<!ENTITY % date-style-content "( (number:text,(%any-date;,number:text?)+) | (%any-date;,number:text?)+ )">
 <!ELEMENT number:date-style ( style:properties?, %date-style-content;, style:map* )>
 <!ELEMENT number:day EMPTY>
 <!ATTLIST number:day number:style (short|long) "short">
@@ -91,7 +91,7 @@
 <!ATTLIST number:quarter number:style (short|long) "short">
 
 <!ENTITY % any-time "( number:hours | number:am-pm | number:minutes | number:seconds )">
-<!ENTITY % time-style-content "( number:text | (number:text?,(%any-time;,number:text?)+) )">
+<!ENTITY % time-style-content "( (number:text,(%any-time;,number:text?)+) | (%any-time;,number:text?)+)">
 <!ELEMENT number:time-style ( style:properties?, %time-style-content;, style:map* )>
 <!ELEMENT number:hours EMPTY>
 <!ATTLIST number:hours number:style (short|long) "short">
@@ -102,11 +102,11 @@
 <!ATTLIST number:seconds number:decimal-places %integer; "0">
 <!ELEMENT number:am-pm EMPTY>
 
-<!ENTITY % boolean-style-content "(number:text| (number:text?,number:boolean,number:text?))">
+<!ENTITY % boolean-style-content "( (number:text,(number:boolean,number:text?)?) | (number:boolean,number:text?) )">
 <!ELEMENT number:boolean-style ( style:properties?,%boolean-style-content;, style:map* )>
 <!ELEMENT number:boolean EMPTY>
 
-<!ENTITY % text-style-content "(number:text| (number:text?,number:text-content, number:text?))">
+<!ENTITY % text-style-content "( (number:text,(number:text-content,number:text?)?) | (number:text-content,number:text?) )">
 <!ELEMENT number:text-style ( style:properties?,%text-style-content;, style:map* )>
 <!ELEMENT number:text (#PCDATA)>
 <!ELEMENT number:text-content EMPTY>

@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.3 2000-10-19 10:13:54 dr Exp $
+	$Id: drawing.mod,v 1.4 2000-10-24 11:21:33 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -192,7 +192,7 @@
 <!ATTLIST style:properties draw:marker-end-width %length; #IMPLIED>
 <!ATTLIST style:properties draw:marker-start-center %boolean; #IMPLIED>
 <!ATTLIST style:properties draw:marker-end-center %boolean; #IMPLIED>
-<!ATTLIST style:properties svg:stroke-opacity (%float;|%percentage;) #IMPLIED>
+<!ATTLIST style:properties svg:stroke-opacity %floatOrPercentage; #IMPLIED>
 <!ATTLIST style:properties svg:stroke-linejoin (miter|round|bevel|middle|none|inherit) #IMPLIED>
 
 <!-- fill attributes -->
@@ -208,7 +208,8 @@
 <!ATTLIST style:properties draw:refX %percentage; #IMPLIED>
 <!ATTLIST style:properties draw:refY %percentage; #IMPLIED>
 <!ATTLIST style:properties draw:tile-repeat-offset CDATA #IMPLIED>
-<!ATTLIST style:properties draw:transparency (none|%float;|%percentage;) #IMPLIED>
+<!ENTITY % noneOrFloatOrPercentage "CDATA">
+<!ATTLIST style:properties draw:transparency %noneOrFloatOrPercentage; #IMPLIED>
 <!ATTLIST style:properties draw:transparency-name %styleName; #IMPLIED>
 
 <!-- graphic attributes -->
@@ -243,10 +244,10 @@
 <!ATTLIST style:presentation-page-layout style:name %styleName; #REQUIRED>
 <!ELEMENT presentation:placeholder EMPTY >
 <!ATTLIST presentation:placeholder presentation:object (title|outline|subtitle|text|graphic|object|chart|orgchart|page|notes|handout) #REQUIRED>
-<!ATTLIST presentation:placeholder svg:x (%coordinate;|%percentage;) #REQUIRED>
-<!ATTLIST presentation:placeholder svg:y (%coordinate;|%percentage;) #REQUIRED>
-<!ATTLIST presentation:placeholder svg:width (%length;|%percentage;) #REQUIRED>
-<!ATTLIST presentation:placeholder svg:height (%length;|%percentage;) #REQUIRED>
+<!ATTLIST presentation:placeholder svg:x %coordinateOrPercentage; #REQUIRED>
+<!ATTLIST presentation:placeholder svg:y %coordinateOrPercentage; #REQUIRED>
+<!ATTLIST presentation:placeholder svg:width %lengthOrPercentage; #REQUIRED>
+<!ATTLIST presentation:placeholder svg:height %lengthOrPercentage; #REQUIRED>
 
 <!-- presentation page attributes -->
 <!ATTLIST style:properties presentation:transition-type (manual|automatic|semi-automatic) #IMPLIED >

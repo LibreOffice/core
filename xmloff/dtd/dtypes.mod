@@ -1,5 +1,5 @@
 <!--
-	$Id: dtypes.mod,v 1.3 2000-10-19 10:13:54 dr Exp $
+	$Id: dtypes.mod,v 1.4 2000-10-24 11:21:33 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -136,6 +136,9 @@
 <!ENTITY % lengthOrPercentage	"CDATA">
 <!ENTITY % positiveLengthOrPercentage	"CDATA">
 
+<!-- a float or a percentage -->
+<!ENTITY % floatOrPercentage	"CDATA">
+
 <!-- a text encoding -->
 <!ENTITY % textEncoding	"CDATA">
 
@@ -149,6 +152,8 @@
 
 <!-- an svg coordinate in different distance formats -->
 <!ENTITY % coordinate "CDATA">
+
+<!ENTITY % coordinateOrPercentage	"CDATA">
 
 <!ENTITY % shapes "(draw:rect|draw:line|draw:polyline|draw:polygon|draw:polygonpath|draw:circle|draw:ellipse|draw:g|draw:page-thumbnail|text:text-box)" >
 
