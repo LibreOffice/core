@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-30 20:14:44 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1103,7 +1103,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ polish ] = "~Miganie";
         Text[ japanese ] = "“_–Å(~B)";
         Text[ chinese_traditional ] = "°{Ã{(~B)";
-        Text[ arabic ] = "æãÇÖ";
+        Text[ arabic ] = "æãíÖ";
         Text[ greek ] = "Å~öÝ öëáò";
         Text[ korean ] = "±ô¹ÚÀÓ(~B)";
         Text[ turkish ] = "~Yanýp sönen metin";
@@ -2314,7 +2314,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ polish ] = "Po s~³owie";
         Text[ japanese ] = "’PŒê‚²‚Æ‚É‚·‚é(~I)";
         Text[ chinese_traditional ] = "³v¦r(~I)";
-        Text[ arabic ] = "ßáãÇÊ ÝÑÏíÉ";
+        Text[ arabic ] = "ÇáßáãÇÊ ÝÞØ";
         Text[ greek ] = "ÊáôÜ ëÝîç";
         Text[ korean ] = "°³º° ´Ü¾î(~I)";
         Text[ turkish ] = "~Yalnýzca sözcükler";
@@ -2424,13 +2424,47 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT( 254, 10 );
         Text = "Schriftart für westlichen Text";
         Text [ english_us ] = "Schriftart für westlichen Text";
+        Text[ portuguese ] = "Schriftart für westlichen Text";
+        Text[ russian ] = "Schriftart für westlichen Text";
+        Text[ greek ] = "Schriftart für westlichen Text";
+        Text[ dutch ] = "Schriftart für westlichen Text";
+        Text[ french ] = "Schriftart für westlichen Text";
+        Text[ spanish ] = "Schriftart für westlichen Text";
+        Text[ italian ] = "Schriftart für westlichen Text";
+        Text[ danish ] = "Schriftart für westlichen Text";
+        Text[ swedish ] = "Teckensnitt för västlig text";
+        Text[ polish ] = "Czcionka alfabetu zachodniego";
+        Text[ portuguese_brazilian ] = "Schriftart für westlichen Text";
+        Text[ japanese ] = "Schriftart für westlichen Text";
+        Text[ korean ] = "Schriftart für westlichen Text";
+        Text[ chinese_simplified ] = "Schriftart für westlichen Text";
+        Text[ chinese_traditional ] = "Schriftart für westlichen Text";
+        Text[ turkish ] = "Schriftart für westlichen Text";
+        Text[ arabic ] = "ÎØ ÇáäÕ ÇáÛÑÈí";
     };
     FixedText FT_WEST_NAME
     {
         Pos = MAP_APPFONT( 6, 15 );
         Size = MAP_APPFONT( 65, 10 );
         Text = "~Schriftart";
-        Text [ english_us ] = "~Font";
+        Text [ english_us ] = "Font";
+        Text[ portuguese ] = "Font";
+        Text[ russian ] = "Font";
+        Text[ greek ] = "Ãñáììáôï~óåéñÜ";
+        Text[ dutch ] = "Font";
+        Text[ french ] = "Font";
+        Text[ spanish ] = "Font";
+        Text[ italian ] = "Font";
+        Text[ danish ] = "Font";
+        Text[ swedish ] = "Tecken~snitt";
+        Text[ polish ] = "Czcionka";
+        Text[ portuguese_brazilian ] = "Font";
+        Text[ japanese ] = "Font";
+        Text[ korean ] = "Font";
+        Text[ chinese_simplified ] = "Font";
+        Text[ chinese_traditional ] = "Font";
+        Text[ turkish ] = "Font";
+        Text[ arabic ] = "äæÚ ÇáÎØ";
     };
     ComboBox LB_WEST_NAME
     {
@@ -2445,7 +2479,24 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Pos = MAP_APPFONT( 77, 15 );
         Size = MAP_APPFONT( 65, 10 );
         Text = "S~chriftschnitt";
-        Text [ english_us ] = "~Style";
+        Text [ english_us ] = "Type";
+        Text[ portuguese ] = "Type";
+        Text[ russian ] = "Type";
+        Text[ greek ] = "Type";
+        Text[ dutch ] = "Type";
+        Text[ french ] = "Type";
+        Text[ spanish ] = "Type";
+        Text[ italian ] = "Type";
+        Text[ danish ] = "Type";
+        Text[ swedish ] = "Te~ckenstil";
+        Text[ polish ] = "Krój czcionki";
+        Text[ portuguese_brazilian ] = "Type";
+        Text[ japanese ] = "Type";
+        Text[ korean ] = "Type";
+        Text[ chinese_simplified ] = "Type";
+        Text[ chinese_traditional ] = "Type";
+        Text[ turkish ] = "Type";
+        Text[ arabic ] = "Type";
     };
     ComboBox LB_WEST_STYLE
     {
@@ -2474,7 +2525,24 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Pos = MAP_APPFONT( 148, 15 );
         Size = MAP_APPFONT( 40, 10 );
         Text = "Sch~riftgrad";
-        Text [ english_us ] = "S~ize";
+        Text [ english_us ] = "Size";
+        Text[ portuguese ] = "Size";
+        Text[ russian ] = "Size";
+        Text[ greek ] = "ÌÝãåèïò";
+        Text[ dutch ] = "Size";
+        Text[ french ] = "Size";
+        Text[ spanish ] = "Size";
+        Text[ italian ] = "Size";
+        Text[ danish ] = "Size";
+        Text[ swedish ] = "Teckensto~rlek";
+        Text[ polish ] = "Rozmiar czcionki";
+        Text[ portuguese_brazilian ] = "Size";
+        Text[ japanese ] = "Size";
+        Text[ korean ] = "Size";
+        Text[ chinese_simplified ] = "Size";
+        Text[ chinese_traditional ] = "Size";
+        Text[ turkish ] = "Size";
+        Text[ arabic ] = "ÍÌã ÇáÎØ";
     };
     MetricBox LB_WEST_SIZE
     {
@@ -2489,7 +2557,24 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Pos = MAP_APPFONT( 194, 15 );
         Size = MAP_APPFONT( 60, 10 );
         Text = "S~prache";
-        Text [ english_us ] = "~Language";
+        Text [ english_us ] = "Language";
+        Text[ portuguese ] = "Language";
+        Text[ russian ] = "Language";
+        Text[ greek ] = "Ãëþóóá";
+        Text[ dutch ] = "Language";
+        Text[ french ] = "Language";
+        Text[ spanish ] = "Language";
+        Text[ italian ] = "Language";
+        Text[ danish ] = "Language";
+        Text[ swedish ] = "S~pråk";
+        Text[ polish ] = "Jêzyk";
+        Text[ portuguese_brazilian ] = "Language";
+        Text[ japanese ] = "Language";
+        Text[ korean ] = "Language";
+        Text[ chinese_simplified ] = "Language";
+        Text[ chinese_traditional ] = "Language";
+        Text[ turkish ] = "Language";
+        Text[ arabic ] = "ÇááÛÉ";
     };
     ListBox LB_WEST_LANG
     {
@@ -2506,13 +2591,47 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT( 254, 10 );
         Text = "Schriftart für asiatischen Text";
         Text [ english_us ] = "Schriftart für asiatischen Text";
+        Text[ portuguese ] = "Schriftart für asiatischen Text";
+        Text[ russian ] = "Schriftart für asiatischen Text";
+        Text[ greek ] = "Schriftart für asiatischen Text";
+        Text[ dutch ] = "Schriftart für asiatischen Text";
+        Text[ french ] = "Schriftart für asiatischen Text";
+        Text[ spanish ] = "Schriftart für asiatischen Text";
+        Text[ italian ] = "Schriftart für asiatischen Text";
+        Text[ danish ] = "Schriftart für asiatischen Text";
+        Text[ swedish ] = "Teckensnitt för asiatisk text";
+        Text[ polish ] = "Czcionka alfabetu azjatyckiego";
+        Text[ portuguese_brazilian ] = "Schriftart für asiatischen Text";
+        Text[ japanese ] = "Schriftart für asiatischen Text";
+        Text[ korean ] = "Schriftart für asiatischen Text";
+        Text[ chinese_simplified ] = "Schriftart für asiatischen Text";
+        Text[ chinese_traditional ] = "Schriftart für asiatischen Text";
+        Text[ turkish ] = "Schriftart für asiatischen Text";
+        Text[ arabic ] = "ÎØ ÇáäÕ ÇáÂÓíæí";
     };
     FixedText FT_EAST_NAME
     {
         Pos = MAP_APPFONT( 6, 55 );
         Size = MAP_APPFONT( 65, 10 );
         Text = "Schr~iftart";
-        Text [ english_us ] = "F~ont";
+        Text [ english_us ] = "Font";
+        Text[ portuguese ] = "Font";
+        Text[ russian ] = "Font";
+        Text[ greek ] = "Ãñáììáôïóå~éñÜ";
+        Text[ dutch ] = "Font";
+        Text[ french ] = "Font";
+        Text[ spanish ] = "Font";
+        Text[ italian ] = "Font";
+        Text[ danish ] = "Font";
+        Text[ swedish ] = "Teckensn~itt";
+        Text[ polish ] = "Czcionka";
+        Text[ portuguese_brazilian ] = "Font";
+        Text[ japanese ] = "Font";
+        Text[ korean ] = "Font";
+        Text[ chinese_simplified ] = "Font";
+        Text[ chinese_traditional ] = "Font";
+        Text[ turkish ] = "Font";
+        Text[ arabic ] = "äæÚ ÇáÎØ";
     };
     ComboBox LB_EAST_NAME
     {
@@ -2527,7 +2646,24 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Pos = MAP_APPFONT( 77, 55 );
         Size = MAP_APPFONT( 65, 10 );
         Text = "Schri~ftschnitt";
-        Text [ english_us ] = "S~tyle";
+        Text [ english_us ] = "Type";
+        Text[ portuguese ] = "Type";
+        Text[ russian ] = "Type";
+        Text[ greek ] = "Type";
+        Text[ dutch ] = "Type";
+        Text[ french ] = "Type";
+        Text[ spanish ] = "Type";
+        Text[ italian ] = "Type";
+        Text[ danish ] = "Type";
+        Text[ swedish ] = "Teckenst~il";
+        Text[ polish ] = "Krój czcionki";
+        Text[ portuguese_brazilian ] = "Type";
+        Text[ japanese ] = "Type";
+        Text[ korean ] = "Type";
+        Text[ chinese_simplified ] = "Type";
+        Text[ chinese_traditional ] = "Type";
+        Text[ turkish ] = "Type";
+        Text[ arabic ] = "äãØ ÇáÎØ";
     };
     ComboBox LB_EAST_STYLE
     {
@@ -2556,7 +2692,24 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Pos = MAP_APPFONT( 148, 55 );
         Size = MAP_APPFONT( 40, 10 );
         Text = "Schrif~tgrad";
-        Text [ english_us ] = "Si~ze";
+        Text [ english_us ] = "Size";
+        Text[ portuguese ] = "Size";
+        Text[ russian ] = "Size";
+        Text[ greek ] = "ÌÝãåèïò";
+        Text[ dutch ] = "Size";
+        Text[ french ] = "Size";
+        Text[ spanish ] = "Size";
+        Text[ italian ] = "Size";
+        Text[ danish ] = "Size";
+        Text[ swedish ] = "Teckens~torlek";
+        Text[ polish ] = "Rozmiar czcionki";
+        Text[ portuguese_brazilian ] = "Size";
+        Text[ japanese ] = "Size";
+        Text[ korean ] = "Size";
+        Text[ chinese_simplified ] = "Size";
+        Text[ chinese_traditional ] = "Size";
+        Text[ turkish ] = "Size";
+        Text[ arabic ] = "ÍÌã ÇáÎØ";
     };
     MetricBox LB_EAST_SIZE
     {
@@ -2571,7 +2724,24 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Pos = MAP_APPFONT( 194, 55 );
         Size = MAP_APPFONT( 60, 10 );
         Text = "Sprach~e";
-        Text [ english_us ] = "L~anguage";
+        Text [ english_us ] = "Language";
+        Text[ portuguese ] = "Language";
+        Text[ russian ] = "Language";
+        Text[ greek ] = "Ãëþóóá";
+        Text[ dutch ] = "Language";
+        Text[ french ] = "Language";
+        Text[ spanish ] = "Language";
+        Text[ italian ] = "Language";
+        Text[ danish ] = "Language";
+        Text[ swedish ] = "Språ~k";
+        Text[ polish ] = "Jêzyk";
+        Text[ portuguese_brazilian ] = "Language";
+        Text[ japanese ] = "Language";
+        Text[ korean ] = "Language";
+        Text[ chinese_simplified ] = "Language";
+        Text[ chinese_traditional ] = "Language";
+        Text[ turkish ] = "Language";
+        Text[ arabic ] = "ÇááÛÉ";
     };
     ListBox LB_EAST_LANG
     {
@@ -2588,6 +2758,23 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT( 254, 10 );
         Text = "Vorschau";
         Text [ english_us ] = "Preview";
+        Text[ portuguese ] = "Preview";
+        Text[ russian ] = "Preview";
+        Text[ greek ] = "Ðñïåðéóêüðçóç";
+        Text[ dutch ] = "Preview";
+        Text[ french ] = "Preview";
+        Text[ spanish ] = "Preview";
+        Text[ italian ] = "Preview";
+        Text[ danish ] = "Preview";
+        Text[ swedish ] = "Förhandsvisning";
+        Text[ polish ] = "Podgl¹d";
+        Text[ portuguese_brazilian ] = "Preview";
+        Text[ japanese ] = "Preview";
+        Text[ korean ] = "Preview";
+        Text[ chinese_simplified ] = "Preview";
+        Text[ chinese_traditional ] = "Preview";
+        Text[ turkish ] = "Preview";
+        Text[ arabic ] = "ÇáãÚÇíäÉ";
     };
     Window WIN_CHAR_PREVIEW
     {
@@ -2596,6 +2783,23 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT ( 182 , 23 ) ;
         Text = "Beispiel";
         Text [ english_us ] = "Example";
+        Text[ portuguese ] = "Example";
+        Text[ russian ] = "Example";
+        Text[ greek ] = "ÐáñÜäåéãìá";
+        Text[ dutch ] = "Example";
+        Text[ french ] = "Example";
+        Text[ spanish ] = "Example";
+        Text[ italian ] = "Example";
+        Text[ danish ] = "Example";
+        Text[ swedish ] = "Exempel";
+        Text[ polish ] = "Przyk³ad";
+        Text[ portuguese_brazilian ] = "Example";
+        Text[ japanese ] = "Example";
+        Text[ korean ] = "Example";
+        Text[ chinese_simplified ] = "Example";
+        Text[ chinese_traditional ] = "Example";
+        Text[ turkish ] = "Example";
+        Text[ arabic ] = "ãËÇá";
     };
     FixedText FT_CHAR_FONTTYPE
     {
@@ -2682,7 +2886,24 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Pos = MAP_APPFONT( 6, 3 );
         Size = MAP_APPFONT( 68, 10 );
         Text = "~Unterstreichung";
-        Text [ english_us ] = "~Underline" ;
+        Text [ english_us ] = "Underlining" ;
+        Text[ portuguese ] = "Underlining";
+        Text[ russian ] = "Underlining";
+        Text[ greek ] = "Underlining";
+        Text[ dutch ] = "Underlining";
+        Text[ french ] = "Underlining";
+        Text[ spanish ] = "Underlining";
+        Text[ italian ] = "Underlining";
+        Text[ danish ] = "Underlining";
+        Text[ swedish ] = "~Understrykning";
+        Text[ polish ] = "Podkreœlenie";
+        Text[ portuguese_brazilian ] = "Underlining";
+        Text[ japanese ] = "Underlining";
+        Text[ korean ] = "Underlining";
+        Text[ chinese_simplified ] = "Underlining";
+        Text[ chinese_traditional ] = "Underlining";
+        Text[ turkish ] = "Underlining";
+        Text[ arabic ] = "ÎØ ÊÍÊí";
     };
     ListBox LB_UNDERLINE
     {
@@ -2737,7 +2958,24 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Pos = MAP_APPFONT( 80, 3 );
         Size = MAP_APPFONT( 68, 10 );
         Text = "~Farbe";
-        Text [ english_us ] = "~Color";
+        Text [ english_us ] = "Color";
+        Text[ portuguese ] = "Color";
+        Text[ russian ] = "Color";
+        Text[ greek ] = "×ñþìá";
+        Text[ dutch ] = "Color";
+        Text[ french ] = "Color";
+        Text[ spanish ] = "Color";
+        Text[ italian ] = "Color";
+        Text[ danish ] = "Color";
+        Text[ swedish ] = "~Färg";
+        Text[ polish ] = "Kolor";
+        Text[ portuguese_brazilian ] = "Color";
+        Text[ japanese ] = "Color";
+        Text[ korean ] = "»ö";
+        Text[ chinese_simplified ] = "Color";
+        Text[ chinese_traditional ] = "Color";
+        Text[ turkish ] = "Color";
+        Text[ arabic ] = "Çááæä";
     };
     ListBox LB_UNDERLINE_COLOR
     {
@@ -2752,7 +2990,24 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Pos = MAP_APPFONT( 6, 30 );
         Size = MAP_APPFONT( 68, 10 );
         Text = "~Durchstreichung";
-        Text [ english_us ] = "S~trikethrough" ;
+        Text [ english_us ] = "Strikethrough" ;
+        Text[ portuguese ] = "Strikethrough";
+        Text[ russian ] = "Strikethrough";
+        Text[ greek ] = "Strikethrough";
+        Text[ dutch ] = "Strikethrough";
+        Text[ french ] = "Strikethrough";
+        Text[ spanish ] = "Strikethrough";
+        Text[ italian ] = "Strikethrough";
+        Text[ danish ] = "Strikethrough";
+        Text[ swedish ] = "~Genomstrykning";
+        Text[ polish ] = "Przekreœlenie";
+        Text[ portuguese_brazilian ] = "Strikethrough";
+        Text[ japanese ] = "Strikethrough";
+        Text[ korean ] = "Strikethrough";
+        Text[ chinese_simplified ] = "Strikethrough";
+        Text[ chinese_traditional ] = "Strikethrough";
+        Text[ turkish ] = "Strikethrough";
+        Text[ arabic ] = "ÔØÈ";
     };
     ListBox LB_STRIKEOUT
     {
@@ -2785,15 +3040,49 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Pos = MAP_APPFONT( 80, 42 );
         Size = MAP_APPFONT( 68, 10 );
         Text = "~Wortweise";
-        Text [ english_us ] = "~Individual words" ;
+        Text [ english_us ] = "Individual words" ;
         TabStop = TRUE;
+        Text[ portuguese ] = "Individual words";
+        Text[ russian ] = "Individual words";
+        Text[ greek ] = "Individual words";
+        Text[ dutch ] = "Individual words";
+        Text[ french ] = "Individual words";
+        Text[ spanish ] = "Individual words";
+        Text[ italian ] = "Individual words";
+        Text[ danish ] = "Individual words";
+        Text[ swedish ] = "Ord~vis";
+        Text[ polish ] = "Individual words";
+        Text[ portuguese_brazilian ] = "Individual words";
+        Text[ japanese ] = "Individual words";
+        Text[ korean ] = "Individual words";
+        Text[ chinese_simplified ] = "Individual words";
+        Text[ chinese_traditional ] = "Individual words";
+        Text[ turkish ] = "Individual words";
+        Text[ arabic ] = "ÇáßáãÇÊ ÝÞØ";
     };
     FixedText FT_EMPHASIS
     {
         Pos = MAP_APPFONT( 6, 57 );
         Size = MAP_APPFONT( 68, 10 );
         Text = "~Betonungszeichen";
-        Text [ english_us ] = "E~mphasis character" ;
+        Text [ english_us ] = "Emphasis character" ;
+        Text[ portuguese ] = "Emphasis character";
+        Text[ russian ] = "Emphasis character";
+        Text[ greek ] = "Emphasis character";
+        Text[ dutch ] = "Emphasis character";
+        Text[ french ] = "Emphasis character";
+        Text[ spanish ] = "Emphasis character";
+        Text[ italian ] = "Emphasis character";
+        Text[ danish ] = "Emphasis character";
+        Text[ swedish ] = "~Betoningstecken";
+        Text[ polish ] = "Znak intonacji";
+        Text[ portuguese_brazilian ] = "Emphasis character";
+        Text[ japanese ] = "Emphasis character";
+        Text[ korean ] = "Emphasis character";
+        Text[ chinese_simplified ] = "Emphasis character";
+        Text[ chinese_traditional ] = "Emphasis character";
+        Text[ turkish ] = "Emphasis character";
+        Text[ arabic ] = "Emphasis character";
     };
     ListBox LB_EMPHASIS
     {
@@ -2816,7 +3105,24 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Pos = MAP_APPFONT( 80, 57 );
         Size = MAP_APPFONT( 68, 10 );
         Text = "~Position";
-        Text [ english_us ] = "~Position" ;
+        Text [ english_us ] = "Position" ;
+        Text[ portuguese ] = "Position";
+        Text[ russian ] = "Position";
+        Text[ greek ] = "ÈÝóç";
+        Text[ dutch ] = "Position";
+        Text[ french ] = "Position";
+        Text[ spanish ] = "Position";
+        Text[ italian ] = "Position";
+        Text[ danish ] = "Position";
+        Text[ swedish ] = "~Position";
+        Text[ polish ] = "Pozycja";
+        Text[ portuguese_brazilian ] = "Position";
+        Text[ japanese ] = "Position";
+        Text[ korean ] = "Position";
+        Text[ chinese_simplified ] = "Position";
+        Text[ chinese_traditional ] = "Position";
+        Text[ turkish ] = "Position";
+        Text[ arabic ] = "ÇáãæÖÚ";
     };
     ListBox LB_POSITION
     {
@@ -2841,7 +3147,24 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Pos = MAP_APPFONT( 154, 3 );
         Size = MAP_APPFONT( 100, 10 );
         Text = "~Auszeichnungen";
-        Text [ english_us ] = "~Effects" ;
+        Text [ english_us ] = "Effects" ;
+        Text[ portuguese ] = "Effects";
+        Text[ russian ] = "Effects";
+        Text[ greek ] = "Effects";
+        Text[ dutch ] = "Effects";
+        Text[ french ] = "Effects";
+        Text[ spanish ] = "Effects";
+        Text[ italian ] = "Effects";
+        Text[ danish ] = "Effects";
+        Text[ swedish ] = "~Effekter";
+        Text[ polish ] = "Wyró¿nienia";
+        Text[ portuguese_brazilian ] = "Effects";
+        Text[ japanese ] = "Effects";
+        Text[ korean ] = "Effects";
+        Text[ chinese_simplified ] = "Effects";
+        Text[ chinese_traditional ] = "Effects";
+        Text[ turkish ] = "Effects";
+        Text[ arabic ] = "ÇáÊÃËíÑÇÊ";
     };
     Control LB_EFFECTS
     {
@@ -2879,21 +3202,72 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Pos = MAP_APPFONT ( 154 , 31 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Kontur" ;
-        Text [ english_us ] = "~Outline" ;
+        Text [ english_us ] = "Outline" ;
+        Text[ portuguese ] = "Outline";
+        Text[ russian ] = "Outline";
+        Text[ greek ] = "Outline";
+        Text[ dutch ] = "Outline";
+        Text[ french ] = "Outline";
+        Text[ spanish ] = "Outline";
+        Text[ italian ] = "Outline";
+        Text[ danish ] = "Outline";
+        Text[ swedish ] = "~Kontur";
+        Text[ polish ] = "Kontur";
+        Text[ portuguese_brazilian ] = "Outline";
+        Text[ japanese ] = "Outline";
+        Text[ korean ] = "Outline";
+        Text[ chinese_simplified ] = "Outline";
+        Text[ chinese_traditional ] = "Outline";
+        Text[ turkish ] = "Outline";
+        Text[ arabic ] = "ÎØ ßöÝÇÝí";
     };
     TriStateBox CB_SHADOW
     {
         Pos = MAP_APPFONT ( 154 , 44 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Schatten" ;
-        Text [ english_us ] = "Sh~adow" ;
+        Text [ english_us ] = "Shadow" ;
+        Text[ portuguese ] = "Shadow";
+        Text[ russian ] = "Shadow";
+        Text[ greek ] = "Shadow";
+        Text[ dutch ] = "Shadow";
+        Text[ french ] = "Shadow";
+        Text[ spanish ] = "Shadow";
+        Text[ italian ] = "Shadow";
+        Text[ danish ] = "Shadow";
+        Text[ swedish ] = "~Skugga";
+        Text[ polish ] = "Cieñ";
+        Text[ portuguese_brazilian ] = "Shadow";
+        Text[ japanese ] = "Shadow";
+        Text[ korean ] = "Shadow";
+        Text[ chinese_simplified ] = "Shadow";
+        Text[ chinese_traditional ] = "Shadow";
+        Text[ turkish ] = "Shadow";
+        Text[ arabic ] = "Ùá";
     };
     CheckBox CB_BLINKING
     {
         Pos = MAP_APPFONT ( 154 , 57 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "B~linkend" ;
-        Text [ english_us ] = "~Blinking" ;
+        Text [ english_us ] = "Blinking" ;
+        Text[ portuguese ] = "Blinking";
+        Text[ russian ] = "Blinking";
+        Text[ greek ] = "Blinking";
+        Text[ dutch ] = "Blinking";
+        Text[ french ] = "Blinking";
+        Text[ spanish ] = "Blinking";
+        Text[ italian ] = "Blinking";
+        Text[ danish ] = "Blinking";
+        Text[ swedish ] = "~Blinkande";
+        Text[ polish ] = "Miganie";
+        Text[ portuguese_brazilian ] = "Blinking";
+        Text[ japanese ] = "Blinking";
+        Text[ korean ] = "Blinking";
+        Text[ chinese_simplified ] = "Blinking";
+        Text[ chinese_traditional ] = "Blinking";
+        Text[ turkish ] = "Blinking";
+        Text[ arabic ] = "æãíÖ";
     };
     FixedLine FL_EFFECTS_PREVIEW
     {
@@ -2901,6 +3275,23 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Size = MAP_APPFONT( 254, 10 );
         Text = "Vorschau";
         Text [ english_us ] = "Preview" ;
+        Text[ portuguese ] = "Preview";
+        Text[ russian ] = "Preview";
+        Text[ greek ] = "Ðñïåðéóêüðçóç";
+        Text[ dutch ] = "Preview";
+        Text[ french ] = "Preview";
+        Text[ spanish ] = "Preview";
+        Text[ italian ] = "Preview";
+        Text[ danish ] = "Preview";
+        Text[ swedish ] = "Förhandsvisning";
+        Text[ polish ] = "Podgl¹d";
+        Text[ portuguese_brazilian ] = "Preview";
+        Text[ japanese ] = "Preview";
+        Text[ korean ] = "Preview";
+        Text[ chinese_simplified ] = "Preview";
+        Text[ chinese_traditional ] = "Preview";
+        Text[ turkish ] = "Preview";
+        Text[ arabic ] = "ÇáãÚÇíäÉ";
     };
     Window WIN_EFFECTS_PREVIEW
     {
@@ -2919,41 +3310,177 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     {
         Text = "Transparent";
         Text [ english_us ] = "Transparent";
+        Text[ portuguese ] = "Transparent";
+        Text[ russian ] = "Transparent";
+        Text[ greek ] = "Transparent";
+        Text[ dutch ] = "Transparent";
+        Text[ french ] = "Transparent";
+        Text[ spanish ] = "Transparent";
+        Text[ italian ] = "Transparent";
+        Text[ danish ] = "Transparent";
+        Text[ swedish ] = "Transparent";
+        Text[ polish ] = "Przezroczyste";
+        Text[ portuguese_brazilian ] = "Transparent";
+        Text[ japanese ] = "Transparent";
+        Text[ korean ] = "Transparent";
+        Text[ chinese_simplified ] = "Transparent";
+        Text[ chinese_traditional ] = "Transparent";
+        Text[ turkish ] = "Transparent";
+        Text[ arabic ] = "ÔÝÇÝ";
     };
     String STR_EFFECTS_CAPITALS
     {
         Text = "Versalien";
         Text [ english_us ] = "Capitals" ;
+        Text[ portuguese ] = "Capitals";
+        Text[ russian ] = "Capitals";
+        Text[ greek ] = "Capitals";
+        Text[ dutch ] = "Capitals";
+        Text[ french ] = "Capitals";
+        Text[ spanish ] = "Capitals";
+        Text[ italian ] = "Capitals";
+        Text[ danish ] = "Capitals";
+        Text[ swedish ] = "Versaler";
+        Text[ polish ] = "Wersaliki";
+        Text[ portuguese_brazilian ] = "Capitals";
+        Text[ japanese ] = "Capitals";
+        Text[ korean ] = "Capitals";
+        Text[ chinese_simplified ] = "Capitals";
+        Text[ chinese_traditional ] = "Capitals";
+        Text[ turkish ] = "Capitals";
+        Text[ arabic ] = "ÃÍÑÝ ßÈíÑÉ";
     };
     String STR_EFFECTS_LOWERCASE
     {
         Text = "Gemeine";
         Text [ english_us ] = "Lowercase" ;
+        Text[ portuguese ] = "Lowercase";
+        Text[ russian ] = "Lowercase";
+        Text[ greek ] = "Lowercase";
+        Text[ dutch ] = "Lowercase";
+        Text[ french ] = "Lowercase";
+        Text[ spanish ] = "Lowercase";
+        Text[ italian ] = "Lowercase";
+        Text[ danish ] = "Lowercase";
+        Text[ swedish ] = "Gemener";
+        Text[ polish ] = "Ma³e litery";
+        Text[ portuguese_brazilian ] = "Lowercase";
+        Text[ japanese ] = "Lowercase";
+        Text[ korean ] = "Lowercase";
+        Text[ chinese_simplified ] = "Lowercase";
+        Text[ chinese_traditional ] = "Lowercase";
+        Text[ turkish ] = "Lowercase";
+        Text[ arabic ] = "ÃÍÑÝ ÕÛíÑÉ";
     };
     String STR_EFFECTS_TITLE
     {
         Text = "Titelschrift";
         Text [ english_us ] = "Title" ;
+        Text[ portuguese ] = "Title";
+        Text[ russian ] = "Title";
+        Text[ greek ] = "Title";
+        Text[ dutch ] = "Title";
+        Text[ french ] = "Title";
+        Text[ spanish ] = "Title";
+        Text[ italian ] = "Title";
+        Text[ danish ] = "Title";
+        Text[ swedish ] = "Title";
+        Text[ polish ] = "Czcionka tytu³owa";
+        Text[ portuguese_brazilian ] = "Title";
+        Text[ japanese ] = "Title";
+        Text[ korean ] = "Title";
+        Text[ chinese_simplified ] = "Title";
+        Text[ chinese_traditional ] = "Title";
+        Text[ turkish ] = "Title";
+        Text[ arabic ] = "ÎØ ÚäæÇä";
     };
     String STR_EFFECTS_SMALL
     {
         Text = "Kapitälchen";
         Text [ english_us ] = "Small Capitals" ;
+        Text[ portuguese ] = "Small Capitals";
+        Text[ russian ] = "Small Capitals";
+        Text[ greek ] = "Small Capitals";
+        Text[ dutch ] = "Small Capitals";
+        Text[ french ] = "Small Capitals";
+        Text[ spanish ] = "Small Capitals";
+        Text[ italian ] = "Small Capitals";
+        Text[ danish ] = "Small Capitals";
+        Text[ swedish ] = "Kapitäler";
+        Text[ polish ] = "Kapitaliki";
+        Text[ portuguese_brazilian ] = "Small Capitals";
+        Text[ japanese ] = "Small Capitals";
+        Text[ korean ] = "Small Capitals";
+        Text[ chinese_simplified ] = "Small Capitals";
+        Text[ chinese_traditional ] = "Small Capitals";
+        Text[ turkish ] = "Small Capitals";
+        Text[ arabic ] = "ÍÑÝ ÈÏÇíÉ ÃßÈÑ";
     };
     String STR_EFFECTS_OUTLINE
     {
         Text = "Kontur" ;
         Text [ english_us ] = "Outline" ;
+        Text[ portuguese ] = "Outline";
+        Text[ russian ] = "Outline";
+        Text[ greek ] = "Outline";
+        Text[ dutch ] = "Outline";
+        Text[ french ] = "Outline";
+        Text[ spanish ] = "Outline";
+        Text[ italian ] = "Outline";
+        Text[ danish ] = "Outline";
+        Text[ swedish ] = "Kontur";
+        Text[ polish ] = "Outline";
+        Text[ portuguese_brazilian ] = "Outline";
+        Text[ japanese ] = "Outline";
+        Text[ korean ] = "Outline";
+        Text[ chinese_simplified ] = "Outline";
+        Text[ chinese_traditional ] = "Outline";
+        Text[ turkish ] = "Outline";
+        Text[ arabic ] = "ÎØ ßöÝÇÝí";
     };
     String STR_EFFECTS_SHADOW
     {
         Text = "Schatten" ;
         Text [ english_us ] = "Shadow" ;
+        Text[ portuguese ] = "Shadow";
+        Text[ russian ] = "Shadow";
+        Text[ greek ] = "Shadow";
+        Text[ dutch ] = "Shadow";
+        Text[ french ] = "Shadow";
+        Text[ spanish ] = "Shadow";
+        Text[ italian ] = "Shadow";
+        Text[ danish ] = "Shadow";
+        Text[ swedish ] = "Skugga";
+        Text[ polish ] = "Cieñ";
+        Text[ portuguese_brazilian ] = "Shadow";
+        Text[ japanese ] = "Shadow";
+        Text[ korean ] = "Shadow";
+        Text[ chinese_simplified ] = "Shadow";
+        Text[ chinese_traditional ] = "Shadow";
+        Text[ turkish ] = "Shadow";
+        Text[ arabic ] = "Ùá";
     };
     String STR_EFFECTS_BLINKING
     {
         Text = "Blinkend" ;
         Text [ english_us ] = "Blinking" ;
+        Text[ portuguese ] = "Blinking";
+        Text[ russian ] = "Blinking";
+        Text[ greek ] = "Blinking";
+        Text[ dutch ] = "Blinking";
+        Text[ french ] = "Blinking";
+        Text[ spanish ] = "Blinking";
+        Text[ italian ] = "Blinking";
+        Text[ danish ] = "Blinking";
+        Text[ swedish ] = "Blinkande";
+        Text[ polish ] = "Miganie";
+        Text[ portuguese_brazilian ] = "Blinking";
+        Text[ japanese ] = "Blinking";
+        Text[ korean ] = "Blinking";
+        Text[ chinese_simplified ] = "Blinking";
+        Text[ chinese_traditional ] = "Blinking";
+        Text[ turkish ] = "Blinking";
+        Text[ arabic ] = "æãíÖ";
     };
 };
 
@@ -2970,6 +3497,23 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Size = MAP_APPFONT( 254, 10 );
         Text = "Position";
         Text [ english_us ] = "Position" ;
+        Text[ portuguese ] = "Position";
+        Text[ russian ] = "Position";
+        Text[ greek ] = "ÈÝóç";
+        Text[ dutch ] = "Position";
+        Text[ french ] = "Position";
+        Text[ spanish ] = "Position";
+        Text[ italian ] = "Position";
+        Text[ danish ] = "Position";
+        Text[ swedish ] = "Position";
+        Text[ polish ] = "Pozycja";
+        Text[ portuguese_brazilian ] = "Position";
+        Text[ japanese ] = "Position";
+        Text[ korean ] = "Position";
+        Text[ chinese_simplified ] = "Position";
+        Text[ chinese_traditional ] = "Position";
+        Text[ turkish ] = "Position";
+        Text[ arabic ] = "ÇáãæÖÚ";
     };
     RadioButton RB_HIGHPOS
     {
@@ -2978,6 +3522,23 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text = "H~och";
         Text [ english_us ] = "Super" ;
         TabStop = TRUE;
+        Text[ portuguese ] = "Super";
+        Text[ russian ] = "Super";
+        Text[ greek ] = "Super";
+        Text[ dutch ] = "Super";
+        Text[ french ] = "Super";
+        Text[ spanish ] = "Super";
+        Text[ italian ] = "Super";
+        Text[ danish ] = "Super";
+        Text[ swedish ] = "Super";
+        Text[ polish ] = "Indeks górny";
+        Text[ portuguese_brazilian ] = "Super";
+        Text[ japanese ] = "Super";
+        Text[ korean ] = "Super";
+        Text[ chinese_simplified ] = "Super";
+        Text[ chinese_traditional ] = "Super";
+        Text[ turkish ] = "Super";
+        Text[ arabic ] = "ãÑÊÝÚ";
     };
     RadioButton RB_NORMALPOS
     {
@@ -2986,6 +3547,23 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text = "~Normal";
         Text [ english_us ] = "Normal" ;
         TabStop = TRUE;
+        Text[ portuguese ] = "Normal";
+        Text[ russian ] = "Normal";
+        Text[ greek ] = "Êá~íïíéêÜ";
+        Text[ dutch ] = "Normal";
+        Text[ french ] = "Normal";
+        Text[ spanish ] = "Normal";
+        Text[ italian ] = "Normal";
+        Text[ danish ] = "Normal";
+        Text[ swedish ] = "~Normal";
+        Text[ polish ] = "Zwyk³a";
+        Text[ portuguese_brazilian ] = "Normal";
+        Text[ japanese ] = "Normal";
+        Text[ korean ] = "Normal";
+        Text[ chinese_simplified ] = "Normal";
+        Text[ chinese_traditional ] = "Normal";
+        Text[ turkish ] = "Normal";
+        Text[ arabic ] = "ÚÇÏí";
     };
     RadioButton RB_LOWPOS
     {
@@ -2994,6 +3572,23 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text = "~Tief";
         Text [ english_us ] = "Sub" ;
         TabStop = TRUE;
+        Text[ portuguese ] = "Sub";
+        Text[ russian ] = "Sub";
+        Text[ greek ] = "Sub";
+        Text[ dutch ] = "Sub";
+        Text[ french ] = "Sub";
+        Text[ spanish ] = "Sub";
+        Text[ italian ] = "Sub";
+        Text[ danish ] = "Sub";
+        Text[ swedish ] = "Sub";
+        Text[ polish ] = "Indeks dolny";
+        Text[ portuguese_brazilian ] = "Sub";
+        Text[ japanese ] = "Sub";
+        Text[ korean ] = "Sub";
+        Text[ chinese_simplified ] = "Sub";
+        Text[ chinese_traditional ] = "Sub";
+        Text[ turkish ] = "Sub";
+        Text[ arabic ] = "ãäÎÝÖ";
     };
     FixedText FT_HIGHLOW
     {
@@ -3001,6 +3596,23 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Size = MAP_APPFONT( 57, 10 );
         Text = "Ho~ch/Tief um";
         Text [ english_us ] = "Raise/lower by" ;
+        Text[ portuguese ] = "Raise/lower by";
+        Text[ russian ] = "Raise/lower by";
+        Text[ greek ] = "Raise/lower by";
+        Text[ dutch ] = "Raise/lower by";
+        Text[ french ] = "Raise/lower by";
+        Text[ spanish ] = "Raise/lower by";
+        Text[ italian ] = "Raise/lower by";
+        Text[ danish ] = "Raise/lower by";
+        Text[ swedish ] = "Höj/sän~k";
+        Text[ polish ] = "Ind.gr./Ind.dln. przy";
+        Text[ portuguese_brazilian ] = "Raise/lower by";
+        Text[ japanese ] = "Raise/lower by";
+        Text[ korean ] = "Raise/lower by";
+        Text[ chinese_simplified ] = "Raise/lower by";
+        Text[ chinese_traditional ] = "Raise/lower by";
+        Text[ turkish ] = "Raise/lower by";
+        Text[ arabic ] = "ãÑÊÝÚ/ãäÎÝÖ ÈãÞÏÇÑ";
     };
     MetricField ED_HIGHLOW
     {
@@ -3024,6 +3636,23 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Size = MAP_APPFONT( 57, 10 );
         Text = "~Schriftgröße rel.";
         Text [ english_us ] = "Relative font size" ;
+        Text[ portuguese ] = "Relative font size";
+        Text[ russian ] = "Relative font size";
+        Text[ greek ] = "Relative font size";
+        Text[ dutch ] = "Relative font size";
+        Text[ french ] = "Relative font size";
+        Text[ spanish ] = "Relative font size";
+        Text[ italian ] = "Relative font size";
+        Text[ danish ] = "Relative font size";
+        Text[ swedish ] = "Rel. tecken~storlek";
+        Text[ polish ] = "Wzgl. rozm. czcionki";
+        Text[ portuguese_brazilian ] = "Relative font size";
+        Text[ japanese ] = "Relative font size";
+        Text[ korean ] = "Relative font size";
+        Text[ chinese_simplified ] = "Relative font size";
+        Text[ chinese_traditional ] = "Relative font size";
+        Text[ turkish ] = "Relative font size";
+        Text[ arabic ] = "ÇáÍÌã ÇáäÓÈí ááÎØ";
     };
     MetricField ED_FONTSIZE
     {
@@ -3048,6 +3677,23 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text = "A~utomatisch";
         Text [ english_us ] = "Automatic" ;
         TabStop = TRUE;
+        Text[ portuguese ] = "Automatic";
+        Text[ russian ] = "Automatic";
+        Text[ greek ] = "Á~õôüìáôá";
+        Text[ dutch ] = "Automatic";
+        Text[ french ] = "Automatic";
+        Text[ spanish ] = "Automatic";
+        Text[ italian ] = "Automatic";
+        Text[ danish ] = "Automatic";
+        Text[ swedish ] = "A~utomatisk";
+        Text[ polish ] = "Automatycznie";
+        Text[ portuguese_brazilian ] = "Automatic";
+        Text[ japanese ] = "Automatic";
+        Text[ korean ] = "Automatic";
+        Text[ chinese_simplified ] = "Automatic";
+        Text[ chinese_traditional ] = "Automatic";
+        Text[ turkish ] = "Automatic";
+        Text[ arabic ] = "ÊáÞÇÆí";
     };
     FixedLine FL_KERNING2
     {
@@ -3055,6 +3701,23 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Size = MAP_APPFONT( 254, 10 );
         Text = "Laufweite";
         Text [ english_us ] = "Spacing" ;
+        Text[ portuguese ] = "Spacing";
+        Text[ russian ] = "Spacing";
+        Text[ greek ] = "Spacing";
+        Text[ dutch ] = "Spacing";
+        Text[ french ] = "Spacing";
+        Text[ spanish ] = "Spacing";
+        Text[ italian ] = "Spacing";
+        Text[ danish ] = "Spacing";
+        Text[ swedish ] = "Avstånd";
+        Text[ polish ] = "Spacing";
+        Text[ portuguese_brazilian ] = "Spacing";
+        Text[ japanese ] = "Spacing";
+        Text[ korean ] = "Spacing";
+        Text[ chinese_simplified ] = "Spacing";
+        Text[ chinese_traditional ] = "Spacing";
+        Text[ turkish ] = "Spacing";
+        Text[ arabic ] = "ÊÈÇÚÏ ÇáÃÍÑÝ";
     };
     ListBox LB_KERNING2
     {
@@ -3081,6 +3744,23 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Size = MAP_APPFONT( 30, 10 );
         Text = "u~m";
         Text [ english_us ] = "by" ;
+        Text[ portuguese ] = "by";
+        Text[ russian ] = "by";
+        Text[ greek ] = "by";
+        Text[ dutch ] = "by";
+        Text[ french ] = "by";
+        Text[ spanish ] = "by";
+        Text[ italian ] = "by";
+        Text[ danish ] = "by";
+        Text[ swedish ] = "by";
+        Text[ polish ] = "o";
+        Text[ portuguese_brazilian ] = "by";
+        Text[ japanese ] = "by";
+        Text[ korean ] = "by";
+        Text[ chinese_simplified ] = "by";
+        Text[ chinese_traditional ] = "by";
+        Text[ turkish ] = "by";
+        Text[ arabic ] = "ÈãÞÏÇÑ";
     };
     MetricField ED_KERNING2
     {
@@ -3102,6 +3782,23 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text = "~Paarweises Kerning";
         Text [ english_us ] = "~Pair kerning" ;
         TabStop = TRUE;
+        Text[ portuguese ] = "~Pair kerning";
+        Text[ russian ] = "~Pair kerning";
+        Text[ greek ] = "~Pair kerning";
+        Text[ dutch ] = "~Pair kerning";
+        Text[ french ] = "~Pair kerning";
+        Text[ spanish ] = "~Pair kerning";
+        Text[ italian ] = "~Pair kerning";
+        Text[ danish ] = "~Pair kerning";
+        Text[ swedish ] = "~Parvis kerning";
+        Text[ polish ] = "Kerning w parze";
+        Text[ portuguese_brazilian ] = "~Pair kerning";
+        Text[ japanese ] = "~Pair kerning";
+        Text[ korean ] = "~Pair kerning";
+        Text[ chinese_simplified ] = "~Pair kerning";
+        Text[ chinese_traditional ] = "~Pair kerning";
+        Text[ turkish ] = "~Pair kerning";
+        Text[ arabic ] = "ÊÞäíä ÃÍÑÝ ÒæÌí";
     };
     FixedLine FL_POS_PREVIEW
     {
@@ -3109,6 +3806,23 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Size = MAP_APPFONT( 254, 10 );
         Text = "Vorschau";
         Text [ english_us ] = "Preview" ;
+        Text[ portuguese ] = "Preview";
+        Text[ russian ] = "Preview";
+        Text[ greek ] = "Ðñïåðéóêüðçóç";
+        Text[ dutch ] = "Preview";
+        Text[ french ] = "Preview";
+        Text[ spanish ] = "Preview";
+        Text[ italian ] = "Preview";
+        Text[ danish ] = "Preview";
+        Text[ swedish ] = "Förhandsvisning";
+        Text[ polish ] = "Podgl¹d";
+        Text[ portuguese_brazilian ] = "Preview";
+        Text[ japanese ] = "Preview";
+        Text[ korean ] = "Preview";
+        Text[ chinese_simplified ] = "Preview";
+        Text[ chinese_traditional ] = "Preview";
+        Text[ turkish ] = "Preview";
+        Text[ arabic ] = "ÇáãÚÇíäÉ";
     };
     Window WIN_POS_PREVIEW
     {
@@ -3117,6 +3831,23 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 99 ) ;
         Size = MAP_APPFONT ( 248 , 23 ) ;
+        Text[ portuguese ] = "Example";
+        Text[ russian ] = "Example";
+        Text[ greek ] = "ÐáñÜäåéãìá";
+        Text[ dutch ] = "Example";
+        Text[ french ] = "Example";
+        Text[ spanish ] = "Example";
+        Text[ italian ] = "Example";
+        Text[ danish ] = "Example";
+        Text[ swedish ] = "Exempel";
+        Text[ polish ] = "Przyk³ad";
+        Text[ portuguese_brazilian ] = "Example";
+        Text[ japanese ] = "Example";
+        Text[ korean ] = "Example";
+        Text[ chinese_simplified ] = "Example";
+        Text[ chinese_traditional ] = "Example";
+        Text[ turkish ] = "Example";
+        Text[ arabic ] = "ãËÇá";
     };
     FixedText FT_POS_FONTTYPE
     {
@@ -3136,6 +3867,23 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Size = MAP_APPFONT( 254, 10 );
         Text = "Zweizeilig";
         Text [ english_us ] = "Two lines" ;
+        Text[ portuguese ] = "Two lines";
+        Text[ russian ] = "Two lines";
+        Text[ greek ] = "Two lines";
+        Text[ dutch ] = "Two lines";
+        Text[ french ] = "Two lines";
+        Text[ spanish ] = "Two lines";
+        Text[ italian ] = "Two lines";
+        Text[ danish ] = "Two lines";
+        Text[ swedish ] = "Två rader";
+        Text[ polish ] = "Dwa wiersze";
+        Text[ portuguese_brazilian ] = "Two lines";
+        Text[ japanese ] = "Two lines";
+        Text[ korean ] = "Two lines";
+        Text[ chinese_simplified ] = "Two lines";
+        Text[ chinese_traditional ] = "Two lines";
+        Text[ turkish ] = "Two lines";
+        Text[ arabic ] = "ÓØÑíä";
     };
     CheckBox CB_TWOLINES
     {
@@ -3144,6 +3892,23 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text = "Z~weizeillig pro Zeile schreiben";
         Text [ english_us ] = "Two lines each line" ;
         TabStop = TRUE;
+        Text[ portuguese ] = "Two lines each line";
+        Text[ russian ] = "Two lines each line";
+        Text[ greek ] = "Two lines each line";
+        Text[ dutch ] = "Two lines each line";
+        Text[ french ] = "Two lines each line";
+        Text[ spanish ] = "Two lines each line";
+        Text[ italian ] = "Two lines each line";
+        Text[ danish ] = "Two lines each line";
+        Text[ swedish ] = "Skri~v två rader per rad";
+        Text[ polish ] = "Two lines each line";
+        Text[ portuguese_brazilian ] = "Two lines each line";
+        Text[ japanese ] = "Two lines each line";
+        Text[ korean ] = "Two lines each line";
+        Text[ chinese_simplified ] = "Two lines each line";
+        Text[ chinese_traditional ] = "Two lines each line";
+        Text[ turkish ] = "Two lines each line";
+        Text[ arabic ] = "Two lines each line";
     };
     FixedLine FL_ENCLOSE
     {
@@ -3151,6 +3916,23 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Size = MAP_APPFONT( 254, 10 );
         Text = "Einschließende Zeichen";
         Text [ english_us ] = "Enclose character" ;
+        Text[ portuguese ] = "Enclose character";
+        Text[ russian ] = "Enclose character";
+        Text[ greek ] = "Enclose character";
+        Text[ dutch ] = "Enclose character";
+        Text[ french ] = "Enclose character";
+        Text[ spanish ] = "Enclose character";
+        Text[ italian ] = "Enclose character";
+        Text[ danish ] = "Enclose character";
+        Text[ swedish ] = "Enclose character";
+        Text[ polish ] = "Enclose character";
+        Text[ portuguese_brazilian ] = "Enclose character";
+        Text[ japanese ] = "Enclose character";
+        Text[ korean ] = "Enclose character";
+        Text[ chinese_simplified ] = "Enclose character";
+        Text[ chinese_traditional ] = "Enclose character";
+        Text[ turkish ] = "Enclose character";
+        Text[ arabic ] = "Enclose character";
     };
     FixedText FT_STARTBRACKET
     {
@@ -3222,6 +4004,23 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Size = MAP_APPFONT( 254, 10 );
         Text = "Vorschau";
         Text [ english_us ] = "Preview" ;
+        Text[ portuguese ] = "Preview";
+        Text[ russian ] = "Preview";
+        Text[ greek ] = "Ðñïåðéóêüðçóç";
+        Text[ dutch ] = "Preview";
+        Text[ french ] = "Preview";
+        Text[ spanish ] = "Preview";
+        Text[ italian ] = "Preview";
+        Text[ danish ] = "Preview";
+        Text[ swedish ] = "Förhandsvisning";
+        Text[ polish ] = "Podgl¹d";
+        Text[ portuguese_brazilian ] = "Preview";
+        Text[ japanese ] = "Preview";
+        Text[ korean ] = "Preview";
+        Text[ chinese_simplified ] = "Preview";
+        Text[ chinese_traditional ] = "Preview";
+        Text[ turkish ] = "Preview";
+        Text[ arabic ] = "ÇáãÚÇíäÉ";
     };
     Window WIN_TWOLINES_PREVIEW
     {
@@ -3230,6 +4029,23 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Size = MAP_APPFONT ( 248 , 30 ) ;
         Text = "Beispiel";
         Text [ english_us ] = "Example" ;
+        Text[ portuguese ] = "Example";
+        Text[ russian ] = "Example";
+        Text[ greek ] = "ÐáñÜäåéãìá";
+        Text[ dutch ] = "Example";
+        Text[ french ] = "Example";
+        Text[ spanish ] = "Example";
+        Text[ italian ] = "Example";
+        Text[ danish ] = "Example";
+        Text[ swedish ] = "Exempel";
+        Text[ polish ] = "Przyk³ad";
+        Text[ portuguese_brazilian ] = "Example";
+        Text[ japanese ] = "Example";
+        Text[ korean ] = "Example";
+        Text[ chinese_simplified ] = "Example";
+        Text[ chinese_traditional ] = "Example";
+        Text[ turkish ] = "Example";
+        Text[ arabic ] = "ãËÇá";
     };
     FixedText FT_TWOLINES_FONTTYPE
     {
