@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: pb $ $Date: 2002-10-16 12:48:04 $
+ *  last change: $Author: pb $ $Date: 2002-10-23 08:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2317,9 +2317,10 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
          const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
          const KeyCode& rKeyCode = pKEvt->GetKeyCode();
         USHORT nKeyGroup = rKeyCode.GetGroup();
-        if ( KEYGROUP_ALPHA == nKeyGroup && ( rKeyCode.GetCode() != KEY_C || !rKeyCode.IsMod1() ) )
+        if ( KEYGROUP_ALPHA == nKeyGroup &&
+            ( ( rKeyCode.GetCode() != KEY_A && rKeyCode.GetCode() != KEY_C ) || !rKeyCode.IsMod1() ) )
         {
-            // do nothing disables the writer accelerators
+            // do nothing disables the writer accelerators, but <CTRL><A> and <CTRL><C> is enabled
             nDone = 1;
          }
         else if ( rKeyCode.IsMod1() && rKeyCode.GetCode() == KEY_F4 )
