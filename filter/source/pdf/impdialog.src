@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:59:33 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 09:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,15 +131,13 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ de ] = "~Qualität" ;
         Text[ en-US ] = "~Quality";
     };
-    NumericField NF_QUALITY
+    MetricField NF_QUALITY
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 103, 85 ) ;
         Size = MAP_APPFONT ( 65, 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
-        Minimum = 1;
-        Maximum = 100 ;
         StrictFormat = TRUE ;
         Last = 100 ;
         Repeat = TRUE ;
