@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:27:03 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text [ dutch ] = "~Formulier" ;
                         Text [ portuguese ] = "~Formulбrio" ;
                         Text[ chinese_simplified ] = "иЎЁеЌ•";
-                        Text[ russian ] = "~Формуляр";
+                        Text[ russian ] = "~Форма";
                         Text[ polish ] = "Formularz";
                         Text[ japanese ] = "гѓ•г‚©гѓјгѓ ";
                         Text[ chinese_traditional ] = "иЎЁе–®";
@@ -112,7 +112,7 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text[ turkish ] = "Form";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Formulari";
-                        Text[ finnish ] = "muoto";
+                        Text[ finnish ] = "Lomake";
                         Text[ thai ] = "а№Ѓаёљаёљаёџаё­аёЈа№ЊаёЎ";
                     };
                     MenuItem
@@ -333,7 +333,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ turkish ] = "Tasarэm kipinde aз";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Obre en mode disseny";
-            Text[ finnish ] = "Avaa suunnittelunдkymдssд";
+            Text[ finnish ] = "Avaa suunnittelutilassa";
             Text[ thai ] = "а№Ђаё›аёґаё”а№ѓаё™а№‚аё«аёЎаё”аё­аё­аёЃа№Ѓаёљаёљ";
         };
         MenuItem
@@ -344,7 +344,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text [ english ] =  "Automatic control focus";
             Text [ english_us ] = "Automatic Control Focus";
             Text[ portuguese ] = "Foco automбtico de controlo";
-            Text[ russian ] = "Автофокус контрольного элемента";
+            Text[ russian ] = "Автофокус элемента управления";
             Text[ greek ] = "Бхфьмбфз еуфЯбуз уфпйчеЯпх елЭгчпх";
             Text[ dutch ] = "Automatische controle focus";
             Text[ french ] = "Focalisation automatique sur l'йlйment de contrфle";
@@ -408,7 +408,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text [ ENGLISH ] = "~Button" ;
             Text[ english_us ] = "~Button";
             Text[ portuguese ] = "~Botгo";
-            Text[ russian ] = "Клавиша";
+            Text[ russian ] = "Кнопка";
             Text[ greek ] = "РедЯп ерйлпгЮ~т";
             Text[ dutch ] = "~Knop";
             Text[ french ] = "~Bouton";
@@ -436,7 +436,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text [ ENGLISH ] = "~Label" ;
             Text[ english_us ] = "La~bel field";
             Text[ portuguese ] = "Campo de ~rуtulo";
-            Text[ russian ] = "~Поле подписи";
+            Text[ russian ] = "Надпись";
             Text[ greek ] = "РедЯп е~рйгсбцЮт";
             Text[ dutch ] = "~Titelveld";
             Text[ french ] = "~Champ d'йtiquette";
@@ -454,7 +454,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ turkish ] = "Etiket alanэ";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Cam~p d'etiqueta";
-            Text[ finnish ] = "~Nimiцkenttд";
+            Text[ finnish ] = "~Selitekenttд";
             Text[ thai ] = "аё›а№‰аёІаёў~аёЉаё·а№€аё­а№Ђаё‚аё•аё‚а№‰аё­аёЎаё№аёҐ";
         };
         MenuItem
@@ -465,7 +465,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text [ ENGLISH ] = "F~rameControl" ;
             Text[ english_us ] = "G~roup Box";
             Text[ portuguese ] = "Campo de g~rupo";
-            Text[ russian ] = "Рамка группы";
+            Text[ russian ] = "Групповой блок";
             Text[ greek ] = "РлбЯуйп ~пмбдпрпЯзузт";
             Text[ dutch ] = "~Groepskader";
             Text[ french ] = "Zone de ~groupe";
@@ -522,7 +522,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text [ ENGLISH ] = "~Check Box" ;
             Text[ english_us ] = "~Check Box";
             Text[ portuguese ] = "Caixa de ~verificaзгo";
-            Text[ russian ] = "Окно флажка";
+            Text[ russian ] = "Флажок";
             Text[ greek ] = "РедЯп уЮ~мбнузт";
             Text[ dutch ] = "~Markeerveld";
             Text[ french ] = "~Case а cocher";
@@ -751,7 +751,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text [ ENGLISH ] = "C~urrency Field" ;
             Text[ english_us ] = "C~urrency Field";
             Text[ portuguese ] = "Campo para moe~da";
-            Text[ russian ] = "Поле для валюты";
+            Text[ russian ] = "Денежное поле";
             Text[ greek ] = "Ре~дЯп нпмЯумбфпт";
             Text[ dutch ] = "~Valutaveld";
             Text[ french ] = "Champ ~monйtaire";
@@ -779,7 +779,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text [ ENGLISH ] = "~Pattern Field" ;
             Text[ english_us ] = "~Pattern Field";
             Text[ portuguese ] = "~Campo mascarado";
-            Text[ russian ] = "Маскированное поле";
+            Text[ russian ] = "Поле с маской ввода";
             Text[ greek ] = "Кбл~хммЭнп редЯп";
             Text[ dutch ] = "~Patroonveld";
             Text[ french ] = "Champ ~masquй";
@@ -978,7 +978,7 @@ ModalDialog RID_SVXDLG_SETFORM
     Text [ french ] = "Sйlection de formulaire" ;
     Text [ dutch ] = "Formulier selecteren" ;
     Text[ chinese_simplified ] = "йЂ‰ж‹©иЎЁеЌ•";
-    Text[ russian ] = "Выбор формуляра";
+    Text[ russian ] = "Выбор формы";
     Text[ polish ] = "Wybуr formularza";
     Text[ japanese ] = "гѓ•г‚©гѓјгѓ гЃ®йЃёжЉћ";
     Text[ chinese_traditional ] = "йЃёж“‡иЎЁе–®";
@@ -1007,10 +1007,10 @@ DockingWindow RID_SVX_FMEXPLORER
     Text [ italian ] = "Navigatore formulario" ;
     Text [ spanish ] = "Navegador de formulario" ;
     Text [ french ] = "Navigateur de formulaires" ;
-    Text [ dutch ] = "Formuliernavigator" ;
+    Text [ dutch ] = "Formulier-navigator" ;
     Text [ portuguese ] = "Formulбrio Navegador" ;
     Text[ chinese_simplified ] = "иЎЁеЌ•еЉ©ж‰‹";
-    Text[ russian ] = "Навигатор формуляра";
+    Text[ russian ] = "Навигатор элементов управления";
     Text[ polish ] = "Nawigator formularzy";
     Text[ japanese ] = "гѓ•г‚©гѓјгѓ гѓЉгѓ“г‚Ігѓјг‚ї";
     Text[ chinese_traditional ] = "иЎЁе–®еЉ©ж‰‹";
@@ -1020,7 +1020,7 @@ DockingWindow RID_SVX_FMEXPLORER
     Text[ turkish ] = "Form navigatцrь";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Navegador de formularis";
-    Text[ finnish ] = "Lomakkeen siirtymдvalikko";
+    Text[ finnish ] = "Lomakkeen etsin";
     Text[ thai ] = "аё•аё±аё§аё™аёіа№Ѓаёљаёљ";
 };
 
