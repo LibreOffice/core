@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:42:22 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,7 +595,8 @@ XMLTextImportHelper::XMLTextImportHelper(
     sHyperLinkEvents(RTL_CONSTASCII_USTRINGPARAM("HyperLinkEvents")),
     sContent(RTL_CONSTASCII_USTRINGPARAM("Content")),
     sServiceCombinedCharacters(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.text.TextField.CombinedCharacters"))
+        "com.sun.star.text.TextField.CombinedCharacters")),
+    sNumberingStyleName(RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName"))
 {
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
 
@@ -958,7 +959,8 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         SvXMLImport& rImport,
         const Reference < XTextCursor >& rCursor,
         const OUString& rStyleName,
-        sal_Bool bPara )
+        sal_Bool bPara,
+        sal_Int8 nOutlineLevel )
 {
     sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
                                : XML_STYLE_FAMILY_TEXT_TEXT;
@@ -971,7 +973,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                     FindStyleChildContext( nFamily, sStyleName, sal_True ) );
     }
     if( pStyle )
-        sStyleName = pStyle->GetParent();
+        sStyleName = pStyle->GetParentName();
 
     Reference < XPropertySet > xPropSet( rCursor, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
@@ -1189,6 +1191,88 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         }
     }
 
+    // outline level; set after list style has been set
+    if( bPara && nOutlineLevel != -1 )
+    {
+        // find list style name
+        OUString sListStyle;
+        sal_Int8 nDefaultOutlineLevel = -1;
+        if( pStyle != NULL )
+            sListStyle = pStyle->GetListStyle();
+        if( sListStyle.getLength() == 0  &&  xParaStyles->hasByName( sStyleName ) )
+        {
+            Reference<XPropertySet> xStyle(
+                xParaStyles->getByName( sStyleName ), UNO_QUERY );
+            if( xStyle.is() )
+            {
+                xStyle->getPropertyValue( sNumberingStyleName ) >>= sListStyle;
+                OUString sDefaultOutlineLevel( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultOutlineLevel")) );
+                xStyle->getPropertyValue( sDefaultOutlineLevel ) >>= nDefaultOutlineLevel;
+            }
+        }
+
+        // if we have a list style name: find the num-rules
+        Reference<XIndexReplace> xNumRules;
+        if( sListStyle.getLength() > 0 )
+        {
+            // find the numbering rule
+            const Reference<XNameContainer> xNumStyles = GetNumberingStyles();
+            if( xNumStyles.is() && xNumStyles->hasByName( sListStyle ) )
+            {
+                // we have a list style of that name -> use it
+                Reference<XPropertySet> xStyle;
+                xNumStyles->getByName( sListStyle ) >>= xStyle;
+                xStyle->getPropertyValue( sNumberingRules ) >>= xNumRules;
+            }
+            else
+            {
+                // automatic style
+                const SvxXMLListStyleContext* pListStyle =
+                    FindAutoListStyle( sListStyle );
+                if( pListStyle )
+                {
+                    xNumRules = pListStyle->GetNumRules();
+                    if( !xNumRules.is() )
+                    {
+                        pListStyle->CreateAndInsertAuto();
+                        xNumRules = pListStyle->GetNumRules();
+                    }
+                }
+            }
+        }
+
+        // now we (hopefully) have the num rules. So we need to
+        // 1) set them at the paragraph
+        // 2) also set the numbering level
+        // 3) tell our num rule to be an outline rule
+        // else, we record the current style
+        if( xNumRules.is() )
+        {
+            Any aAny;
+
+            OUString sNumberingIsOutline(
+                RTL_CONSTASCII_USTRINGPARAM("NumberingIsOutline") );
+            Reference<XPropertySet> xNumRuleProps( xNumRules, UNO_QUERY );
+            if( xNumRuleProps.is() &&
+                xNumRuleProps->getPropertySetInfo()->
+                    hasPropertyByName( sNumberingIsOutline ) )
+            {
+                aAny <<= true;
+                xNumRuleProps->setPropertyValue( sNumberingIsOutline, aAny );
+            }
+
+            aAny <<= xNumRules;
+            xPropSet->setPropertyValue( sNumberingRules, aAny );
+            aAny <<= static_cast<sal_Int8>( nOutlineLevel - 1 );
+            xPropSet->setPropertyValue( sNumberingLevel, aAny );
+        }
+        else if( nDefaultOutlineLevel == -1 )
+        {
+            SetOutlineStyle( nOutlineLevel, rStyleName );
+        }
+        // else: nothing to do!
+    }
+
     return sStyleName;
 }
 
@@ -1262,23 +1346,26 @@ void XMLTextImportHelper::SetOutlineStyle(
     }
 }
 
-void XMLTextImportHelper::SetOutlineStyles()
+void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
 {
-    if( pOutlineStyles &&
+    if( (pOutlineStyles!=0 || bSetEmptyLevels) &&
         xChapterNumbering.is() &&
         !( IsInsertMode() || IsStylesOnlyMode() ) )
     {
+        OUString sEmpty;
         sal_Int32 nCount = xChapterNumbering->getCount();
         for( sal_Int32 i=0; i < nCount; i++ )
         {
-            Sequence < PropertyValue > aProps( 1 );
-            PropertyValue *pProps = aProps.getArray();
-            pProps->Name = sHeadingStyleName;
-            pProps->Value <<= pOutlineStyles[i];
+            if( bSetEmptyLevels ||
+                (pOutlineStyles && pOutlineStyles[i].getLength() > 0 ) )
+            {
+                Sequence < PropertyValue > aProps( 1 );
+                PropertyValue *pProps = aProps.getArray();
+                pProps->Name = sHeadingStyleName;
+                pProps->Value <<= pOutlineStyles ? pOutlineStyles[i] : sEmpty;
 
-            Any aAny;
-            aAny <<= aProps;
-            xChapterNumbering->replaceByIndex( i, aAny );
+                xChapterNumbering->replaceByIndex( i, makeAny( aProps ) );
+            }
         }
     }
 }
