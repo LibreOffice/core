@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hdu $ $Date: 2002-10-09 12:20:47 $
+ *  last change: $Author: hdu $ $Date: 2002-10-29 13:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,6 @@ class WinLayout : public SalLayout
 public:
                     WinLayout( const ImplLayoutArgs& rArgs )
                         : SalLayout( rArgs ) {}
-
-    virtual bool    LayoutText( const ImplLayoutArgs& ) = 0;
-    virtual void    DrawText( SalGraphics& ) const = 0;
-    virtual void    GetCaretPositions( long* ) const = 0;
 };
 
 // =======================================================================
@@ -108,7 +104,7 @@ public:
 
     virtual         ~SimpleWinLayout();
 
-    virtual bool    LayoutText( const ImplLayoutArgs& );
+    virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
 
     virtual int     GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int&,
@@ -118,6 +114,11 @@ public:
     virtual long    FillDXArray( long* pDXArray ) const;
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
     virtual void    GetCaretPositions( long* ) const;
+
+    // for glyph+font+script fallback
+    virtual bool    ApplyFallback( SalLayout& rFallback );
+    virtual void    UpdateGlyphPos( int nStart, int nXPos );
+    virtual void    RemoveNotdefs();
 
 protected:
     void            Justify( long nNewWidth );
@@ -212,7 +213,7 @@ SimpleWinLayout::~SimpleWinLayout()
 
 // -----------------------------------------------------------------------
 
-bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
+bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     // layout text
     int nMaxGlyphCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
@@ -370,28 +371,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     if( !nRC )
         return false;
 
-    // #101097# fixup display of notdef glyphs
-    // TODO: is there a way to convince Win32(incl W95) API to use notdef directly?
     int i, j;
-    for( i = 0; i < mnGlyphCount; ++i )
-    {
-        if( (mpGlyphAdvances[i] != 0)
-        || ((mpOutGlyphs[i] != 3) && !(mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING)) )
-            continue;
-
-        if( mnNotdefWidth < 0 )
-        {
-            SIZE aExtent;
-            static const WCHAR cNotDef = 0xFFFF;
-            mnNotdefWidth = GetTextExtentPoint32W(mhDC,&cNotDef,1,&aExtent) ? aExtent.cx : 0;
-        }
-        mpOutGlyphs[i] = 0;
-        mpGlyphAdvances[i] = mnNotdefWidth;
-        if( mpGlyphOrigAdvs )
-            mpGlyphOrigAdvs[i] = mnNotdefWidth;
-        mnWidth += mnNotdefWidth;
-    }
-
     // fixup strong RTL layout by reversing glyph order
     // TODO: mirror glyphs
     if( 0 == (~rArgs.mnFlags & (SAL_LAYOUT_BIDI_STRONG|SAL_LAYOUT_BIDI_RTL))
@@ -412,6 +392,39 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         }
         for( i = mnGlyphCount; i < nMaxGlyphCount; ++i )
             mpGlyphs2Chars[ i ] = -1;
+    }
+
+    // #101097# fixup display of notdef glyphs
+    // TODO: is there a way to convince Win32(incl W95) API to use notdef directly?
+    for( i = 0; i < mnGlyphCount; ++i )
+    {
+        // we are only interested in notdef candidates
+        if( mpGlyphAdvances[i] != 0 )
+            continue;
+        if( (mpOutGlyphs[i] != 0)
+        && ((mpOutGlyphs[i] != 3) && !(mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING)) )
+            continue;
+
+        // request fallback
+        int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[ i ] : i;
+        nCharPos += rArgs.mnMinCharPos;
+        bool bRTL = false;  // TODO: get from run
+        rArgs.NeedFallback( nCharPos, bRTL );
+
+        // insert a dummy in the meantime
+        if( mnNotdefWidth < 0 )
+        {
+            SIZE aExtent;
+            static const WCHAR cNotDef = 0xFFFF;
+            mnNotdefWidth = GetTextExtentPoint32W(mhDC,&cNotDef,1,&aExtent) ? aExtent.cx : 0;
+        }
+
+        if( !(mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) )
+            mpOutGlyphs[i] = 0;
+        mpGlyphAdvances[i] = mnNotdefWidth;
+        if( mpGlyphOrigAdvs )
+            mpGlyphOrigAdvs[i] = mnNotdefWidth;
+        mnWidth += mnNotdefWidth;
     }
 
     // calculate mpChars2Glyphs if glyph->char mapping also exists
@@ -801,6 +814,28 @@ void SimpleWinLayout::ApplyDXArray( const long* pDXArray )
     }
 }
 
+// -----------------------------------------------------------------------
+
+bool SimpleWinLayout::ApplyFallback( SalLayout& rFallback )
+{
+    // TODO
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
+void SimpleWinLayout::UpdateGlyphPos( int nStart, int nXPos )
+{
+    // TODO
+}
+
+// -----------------------------------------------------------------------
+
+void SimpleWinLayout::RemoveNotdefs()
+{
+    // TODO
+}
+
 // =======================================================================
 
 #ifdef USE_UNISCRIBE
@@ -823,7 +858,7 @@ public:
                     UniscribeLayout( HDC hDC, const ImplLayoutArgs& );
     virtual         ~UniscribeLayout();
 
-    virtual bool    LayoutText( const ImplLayoutArgs& );
+    virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
     virtual int     GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int&,
                         long* pGlyphAdvances, int* pCharPosAry ) const;
@@ -832,6 +867,11 @@ public:
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
     virtual void    GetCaretPositions( long* ) const;
     virtual Point   GetCharPosition( int nCharPos, bool bRTL ) const;
+
+    // for glyph+font+script fallback
+    virtual bool    ApplyFallback( SalLayout& rFallback );
+    virtual void    UpdateGlyphPos( int nStart, int nXPos );
+    virtual void    RemoveNotdefs();
 
 protected:
     void            Justify( long nNewWidth );
@@ -1002,7 +1042,7 @@ UniscribeLayout::~UniscribeLayout()
 
 // -----------------------------------------------------------------------
 
-bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
+bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     // determine script items from string
     // TODO: try to avoid itemization since it costs a lot of performance
@@ -1152,10 +1192,13 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
             mpVisualAttrs + rVisualItem.mnMinGlyphPos,
             &nGlyphCount );
 
-        // TODO: better fall back to matching font
         if( nRC == USP_E_SCRIPT_NOT_IN_FONT )
         {
-            // fall back to default layout
+            // request fallback using different font
+            rArgs.NeedFallback( rVisualItem.mnMinCharPos, rVisualItem.mnEndCharPos,
+                rVisualItem.mpScriptItem->a.fRTL);
+
+            // for now fall back to default layout
             rVisualItem.mpScriptItem->a.eScript = SCRIPT_UNDEFINED;
             nRC = (*pScriptShape)( mhDC, &maScriptCache,
                 rArgs.mpStr + rVisualItem.mnMinCharPos,
@@ -1170,6 +1213,21 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
 
         if( nRC != 0 )
             continue;
+
+        // request fallback for notdef glyphs
+        for( int i = 0; i < nGlyphCount; ++i )
+        {
+            if( mpOutGlyphs[i] != 0 )
+                continue;
+
+            // TODO: optimize calculation of nCharPos
+            int nCharPos = rVisualItem.mnMinCharPos;
+            for( int j = nCharCount; --j >= 0; ++nCharPos )
+                if( mpLogClusters[ nCharPos ] == i )
+                    break;
+
+            rArgs.NeedFallback( nCharPos, rVisualItem.mpScriptItem->a.fRTL);
+        }
 
         nRC = (*pScriptPlace)( mhDC, &maScriptCache,
             mpOutGlyphs + rVisualItem.mnMinGlyphPos,
@@ -1740,13 +1798,39 @@ void UniscribeLayout::Justify( long nNewWidth )
     }
 }
 
+// -----------------------------------------------------------------------
+
+bool UniscribeLayout::ApplyFallback( SalLayout& rFallback )
+{
+    // TODO
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
+void UniscribeLayout::UpdateGlyphPos( int nStart, int nXPos )
+{
+    // TODO
+}
+
+// -----------------------------------------------------------------------
+
+void UniscribeLayout::RemoveNotdefs()
+{
+    // TODO
+}
+
 #endif // USE_UNISCRIBE
 
 // =======================================================================
 
-SalLayout* SalGraphics::LayoutText( ImplLayoutArgs& rArgs )
+SalLayout* SalGraphics::LayoutText( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
     WinLayout* pWinLayout = NULL;
+
+    // TODO: use nFallbackLevel
+    if( nFallbackLevel > 0 )
+        return NULL;
 
 #ifdef USE_UNISCRIBE
     if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)
