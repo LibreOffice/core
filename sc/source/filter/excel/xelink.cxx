@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:34 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 10:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,7 +464,7 @@ void XclExpXct::StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange )
     {
         for( sal_uInt16 nCol = rRange.aStart.Col(); nCol <= nLastCol; ++nCol )
         {
-            if( !Exists( nCol, nRow ) )
+            if( !maUsedCells.IsCellMarked( nCol, nRow, TRUE ) )
             {
                 if( rDoc.HasValueData( nCol, nRow, nScTab ) )
                 {
@@ -496,14 +496,8 @@ void XclExpXct::StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange )
             }
         }
     }
-}
 
-bool XclExpXct::Exists( sal_uInt16 nCol, sal_uInt16 nRow ) const
-{
-    for( const XclExpCrn* pCrn = maCrnList.First(); pCrn; pCrn = maCrnList.Next() )
-        if( pCrn->IsAddress( nCol, nRow ) )
-            return true;
-    return false;
+    maUsedCells.SetMultiMarkArea( rRange );
 }
 
 void XclExpXct::Save( XclExpStream& rStrm )
@@ -574,8 +568,7 @@ bool XclExpSupbook::IsDdeLink( const String& rApplic, const String& rTopic ) con
 
 void XclExpSupbook::StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange, sal_uInt16 nXct )
 {
-    XclExpXct* pXct = maXctList.GetObject( nXct );
-    if( pXct )
+    if( XclExpXct* pXct = maXctList.GetObject( nXct ) )
         pXct->StoreCellRange( rRoot, rRange );
 }
 
@@ -583,7 +576,7 @@ sal_uInt16 XclExpSupbook::InsertTable( const String& rTabName )
 {
     DBG_ASSERT( meType == xlSBUrl, "XclExpSupbook::InsertTable - don't insert table names here" );
     XclExpXct* pXct = new XclExpXct( rTabName );
-    SetRecSize( GetRecSize() + pXct->GetTableBytes() );
+    SetRecSize( GetRecSize() + pXct->GetTableName().GetSize() );
     maXctList.Append( pXct );
 
     sal_uInt16 nTabNum = static_cast< sal_uInt16 >( ::std::min( maXctList.Count() - 1UL, 0xFFFFUL ) );
@@ -724,9 +717,8 @@ void XclExpSupbookBuffer::StoreCellRange( const ScRange& rRange )
     sal_uInt16 nXclTab = GetTabIdBuffer().GetXclTab( rRange.aStart.Tab() );
     DBG_ASSERT( nXclTab < maXtiBuffer.size(), "XclExpSupbookBuffer::StoreCellRange - out of range" );
 
-    XclExpSupbook* pBook = GetSupbook( nXclTab );
-    if( pBook )
-        pBook->StoreCellRange( *this, rRange, maXtiBuffer[ nXclTab ] );
+    if( XclExpSupbook* pBook = GetSupbook( nXclTab ) )
+        pBook->StoreCellRange( GetRoot(), rRange, maXtiBuffer[ nXclTab ] );
 }
 
 void XclExpSupbookBuffer::InsertAddIn( sal_uInt16& rnSupbook, sal_uInt16& rnExtName, const String& rName )
@@ -747,8 +739,8 @@ void XclExpSupbookBuffer::InsertDde(
 {
     XclExpSupbook* pBook = GetSupbookDde( rnSupbook, rApplic, rTopic );
     if( !pBook )
-        rnSupbook = Append( pBook = new XclExpSupbook( *this, rApplic, rTopic ) );
-    rnExtName = pBook->InsertDde( *this, rItem );
+        rnSupbook = Append( pBook = new XclExpSupbook( GetRoot(), rApplic, rTopic ) );
+    rnExtName = pBook->InsertDde( GetRoot(), rItem );
 }
 
 void XclExpSupbookBuffer::Save( XclExpStream& rStrm )
@@ -805,7 +797,7 @@ void XclExpSupbookBuffer::AddExt( sal_uInt16 nScTab )
     DBG_ASSERT( rUrl.Len(), "XclExpSupbookBuffer::AddExt - missing external linked sheet" );
     XclExpSupbook* pBook = GetSupbookUrl( nPos, rUrl );
     if( !pBook )
-        nPos = Append( pBook = new XclExpSupbook( *this, rUrl ) );
+        nPos = Append( pBook = new XclExpSupbook( GetRoot(), rUrl ) );
     maSBIndexBuffer[ nXclTab ] = nPos;
 
     // append new table name, save position in maXtiBuffer
