@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XXMLEncryption.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:44:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ interface XXMLEncryption : com::sun::star::uno::XInterface
      */
     com::sun::star::xml::crypto::XXMLEncryptionTemplate encrypt(
         [in] com::sun::star::xml::crypto::XXMLEncryptionTemplate aTemplate ,
-        [in] com::sun::star::xml::crypto::XXMLSecurityContext aContext
+        [in] com::sun::star::xml::crypto::XSecurityEnvironment aEnvironment
     ) raises( com::sun::star::xml::crypto::XMLEncryptionException ,
         com::sun::star::uno::SecurityException ) ;
 

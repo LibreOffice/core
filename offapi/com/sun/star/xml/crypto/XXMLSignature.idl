@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XXMLSignature.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:44:45 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ interface XXMLSignature : com::sun::star::uno::XInterface
      */
     com::sun::star::xml::crypto::XXMLSignatureTemplate generate(
         [in] com::sun::star::xml::crypto::XXMLSignatureTemplate aTemplate ,
-        [in] com::sun::star::xml::crypto::XXMLSecurityContext aContext
+        [in] com::sun::star::xml::crypto::XSecurityEnvironment aEnvironment
     ) raises( com::sun::star::xml::crypto::XMLSignatureException ,
         com::sun::star::uno::SecurityException ) ;
 
