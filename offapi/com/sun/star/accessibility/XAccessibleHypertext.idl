@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleHypertext.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 10:57:50 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,13 @@
 #ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 #endif
+#ifndef __com_sun_star_accessibility_XAccessibleText_idl__
+#include <com/sun/star/accessibility/XAccessibleText.idl>
+#endif
 
 module com { module sun { module star { module accessibility {
 
 interface XAccessibleHyperlink;
-interface XAccessibleText;
 
 
 /** Implement this interface to expose the hypertext structure of a document.
