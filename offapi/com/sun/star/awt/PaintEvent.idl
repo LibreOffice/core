@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PaintEvent.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,29 +76,24 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::awt::PaintEvent
 /** specifies the paint event for a component.
-
-
 
     <p>This event is a special type which is used to ensure that
     paint/update method calls are serialized along with the other
-    events delivered from the event queue.
+    events delivered from the event queue.</p>
 
-    </p>@see WindowEvent
+    @see WindowEvent
  */
 struct PaintEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::PaintEvent::UpdateRect
     /** contains the rectangle area which needs to be repainted.
      */
     com::sun::star::awt::Rectangle UpdateRect;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::PaintEvent::Count
     /** contains the number of paint events that follows this event if
         it is a multiple PaintEvent. You can collect the PaintEvent
         until Count is zero.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Point.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,19 +68,16 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::awt::Point
 /** specifies a 2-dimensional point using the Cartesian coordinate system.
  */
 struct Point
 {
-    // DocMerge from xml: field com::sun::star::awt::Point::X
     /** specifies the x-coordinate.
      */
     long X;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::Point::Y
     /** specifies the y-coordinate.
      */
     long Y;
