@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClientView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:30:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ public:
         DrawViewShell* pShell);
     virtual ~ClientView (void);
 
-    virtual void InitRedraw(OutputDevice* pOutDev, const Region& rReg);
+    virtual void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg);
 
     // Wenn die View kein Invalidate() an den Fenstern durchfuehren soll, muss
     // man diese beiden folgenden Methoden ueberladen und entsprechend anders
