@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-10 15:36:36 $
+ *  last change: $Author: ama $ $Date: 2002-01-22 10:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2756,7 +2756,7 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
     {
         const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
         SwTwips nMinHeight = rSz.GetSizeType() == ATT_MIN_SIZE ?
-                ( bVert ? rSz.GetWidth() : rSz.GetHeight() ) : 0;
+                             rSz.GetHeight() : 0;
         SwLayoutFrm *pCell = (SwLayoutFrm*)Lower();
         if( nMinHeight < (Frm().*fnRect->fnGetHeight)() )
         {
