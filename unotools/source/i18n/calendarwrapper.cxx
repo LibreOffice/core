@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarwrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-07-10 12:55:05 $
+ *  last change: $Author: er $ $Date: 2002-03-08 16:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 
 
 #define CALENDAR_LIBRARYNAME "i18n"
-#define CALENDAR_SERVICENAME "com.sun.star.i18n.Calendar"
+#define CALENDAR_SERVICENAME "com.sun.star.i18n.LocaleCalendar"
 
 
 using namespace ::com::sun::star;
