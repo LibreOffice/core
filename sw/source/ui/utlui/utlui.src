@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 11:16:29 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "\"ª½«¬¤Ş¸¹\"¥Ñ%1­Ó¤H¤Ş¸¹%2 ´À¥N";
         Text[ arabic ] = "ÇÓÊÈÏÇá ÚáÇãÇÊ ÊäÕíÕ \"ÚÇÏíÉ\" ÈÜÚáÇãÇÊ ÊäÕíÕ%1ØÈæÛÑÇİíøÉ%2";
         Text[ greek ] = "ÁíôéêáôÜóôáóç \"ßóùí\" åéóáãùãéêşí ìå %1ôõğïãñáöéêÜ%2";
-        Text[ korean ] = "\"Á÷¼±\" ÀÎ¿ëºÎÈ£¸¦ %1ÀÎ¼âÃ¼%2 ÀÎ¿ëºÎÈ£·Î ¹Ù²Ş";
+        Text[ korean ] = "\"Á÷¼±\" ÀÎ¿ëºÎÈ£¸¦ %1ÀÎ¼âÃ¼%2 ÀÎ¿ëºÎÈ£·Î ´ëÃ¼";
         Text[ turkish ] = "\"Düz\" tırnak işaretlerini %1tipografik işaretler ile%2 değiştir";
     };
     String STR_AUTOFMTREDL_USER_STYLE+1
