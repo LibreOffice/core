@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Controller.xcu,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:27:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-10 14:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@
           <value>com.sun.star.comp.framework.MacrosMenuController</value>
         </prop>
       </node>
-      <node oor:name="c9" oor:op="replace">
+      <node oor:name="c10" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:RecentFileList</value>
         </prop>
