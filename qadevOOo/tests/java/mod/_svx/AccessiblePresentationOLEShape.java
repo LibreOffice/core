@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationOLEShape.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-04-28 12:16:26 $
+ *  last change:$Date: 2003-05-27 13:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ public class AccessiblePresentationOLEShape extends TestCase {
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a drawdoc" );
@@ -122,7 +122,7 @@ public class AccessiblePresentationOLEShape extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
         XMultiServiceFactory docMSF = (XMultiServiceFactory)
             UnoRuntime.queryInterface(XMultiServiceFactory.class, xDrawDoc);
         try {
@@ -159,7 +159,7 @@ public class AccessiblePresentationOLEShape extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow (tParam.getMSF(),aModel);
+        XWindow xWindow = at.getCurrentWindow ((XMultiServiceFactory)tParam.getMSF(),aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
         //at.printAccessibleTree(log,xRoot);
 
