@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:18:17 $
+#   last change: $Author: mfe $ $Date: 2001-02-07 12:04:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,10 @@ PRJNAME=vos
 TARGET=vos
 USE_LDUMP2=TRUE
 #USE_DEFFILE=TRUE
+
+.IF "$(GUI)"=="UNX"
+TARGETTYPE=CUI
+.ENDIF
 
 # --- Settings -----------------------------------------------------
 
