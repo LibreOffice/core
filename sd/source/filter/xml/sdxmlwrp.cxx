@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-19 13:20:36 $
+ *  last change: $Author: ka $ $Date: 2001-02-21 13:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #endif //!SVX_LIGHT
 #endif //!MAC
 #include "sdxmlwrp.hxx"
+#include "strmname.h"
 
 #ifndef _XMLEOHLP_HXX
 #include <svx/xmleohlp.hxx>
@@ -123,7 +124,6 @@ using namespace rtl;
 
 char __READONLY_DATA sXML_drawing[] = "drawing";
 char __READONLY_DATA sXML_impress[] = "presentation";
-char __READONLY_DATA sXML_contentStreamName[] = "Content.xml";
 
 // ----------------
 // - SdXMLWrapper -
@@ -194,10 +194,7 @@ sal_Bool SdXMLFilter::Import()
 
             if( pStorage )
             {
-
-                static const String aContentStmName( RTL_CONSTASCII_USTRINGPARAM( sXML_contentStreamName ) );
-
-                xIStm = pStorage->OpenStream( aContentStmName, STREAM_READ | STREAM_NOCREATE );
+                xIStm = pStorage->OpenStream( pStarDrawXMLContent, STREAM_READ | STREAM_NOCREATE );
 
                 if( xIStm.Is() )
                 {
