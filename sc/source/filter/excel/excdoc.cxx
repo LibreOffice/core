@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:54:11 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,40 +990,7 @@ void ExcTable::FillAsTable( void )
         Add( new XclExpWebQueryBuffer( *rR.pER ) );
 
         // conditional formats
-        const ScConditionalFormatList*  pCondFormList = rDoc.GetCondFormList();
-        if( pCondFormList )
-        {
-            UINT32                      nCondCnt = pCondFormList->Count();
-            ScConditionalFormat* const* ppCondForm = pCondFormList->GetData();
-            ScRangeList*                pRangeList = NULL;
-
-            while( nCondCnt )
-            {
-                if( *ppCondForm )
-                {
-                    const ScConditionalFormat&  rCF = **ppCondForm;
-
-                    if( pRangeList )
-                        pRangeList->Clear();
-                    else
-                        pRangeList = new ScRangeList;
-
-                    rDoc.FindConditionalFormat( rCF.GetKey(), *pRangeList, nScTab);
-
-                    if( pRangeList->Count() )
-                    {
-                        Add( new XclCondFormat( rCF, pRangeList, rR ) );
-                        pRangeList = NULL;
-                    }
-                }
-
-                ppCondForm++;
-                nCondCnt--;
-            }
-
-            if( pRangeList )
-                delete pRangeList;
-        }
+        Add( new XclExpCondFormatBuffer( *rR.pER ) );
 
         if( rR.bWriteVBAStorage )
         {
