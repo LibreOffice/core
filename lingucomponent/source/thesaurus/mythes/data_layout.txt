@@ -1,0 +1,130 @@
+Description of the Structure of the Data needed by MyThes
+--------------------------------------------------------
+
+MyThes is very simple.  Almost all of the "smarts" are really
+in the thesaurus data file itself.
+
+The format for this file is at follows:
+
+- no binary data 
+
+- line ending is a newline '\n' and not carriage return/linefeeds
+
+- Line 1 is a character string that describes the encoding
+used for the file.  It is up to the calling program to convert
+to and from this encoding if necessary.
+
+     ISO8859-1 is used by the th_en_US_new.dat file.
+
+     Strings currently recognized by OpenOffice.org are:
+
+     ISO8859-1
+     ISO8859-2
+     ISO8859-3
+     ISO8859-4
+     ISO8859-5
+     ISO8859-6
+     ISO8859-7
+     ISO8859-8
+     ISO8859-9
+     ISO8859-10
+     KOI8-R
+     CP-1251
+     ISO8859-14
+     ISCII-DEVANAGARI
+
+
+- All of the remaning lines of the file follow this structure
+
+entry|num_mean
+pos|syn1_mean|syn2|...
+.
+.
+.
+pos|mean_syn1|syn2|...
+
+
+where:
+
+   entry      - all lowercase version of the word or phrase being described
+   num_mean   - number of meanings for this entry
+
+   There is one meaning per line and each meaning is comprised of
+
+   pos        -  part of speech or other meaning specific description
+   syn1_mean  -  synonym 1 also used to describe the meaning itself 
+   syn2       - synonym 2 for that meaning etc.
+
+
+To make this even more clearer, here is actual data for the
+entry "simple".
+
+simple|9
+(adj)|simple |elemental|ultimate|oversimplified|simplistic|simplex|simplified|unanalyzable|
+undecomposable|uncomplicated|unsophisticated|easy|plain|unsubdivided
+(adj)|elementary|uncomplicated|unproblematic|easy
+(adj)|bare|mere|plain
+(adj)|childlike|wide-eyed|dewy-eyed|naive |naif
+(adj)|dim-witted|half-witted|simple-minded|retarded
+(adj)|simple |unsubdivided|unlobed|smooth
+(adj)|plain
+(noun)|herb|herbaceous plant
+(noun)|simpleton|person|individual|someone|somebody|mortal|human|soul
+
+
+It says that "simple" has 9 different meanings and each 
+meaning will have its part of speech and at least 1 synonym 
+with other if presetn following on the same line.
+
+
+
+Once you ahve created your own structured text file you can use
+the perl program "th_gen_idx.pl" which can be found in this
+directory to create an index file that is used to seek into
+your data file by the MyThes code.
+
+The correct way to run the perl program is as follows:
+
+cat th_en_US_new.dat | ./th_gen_idx.pl > th_en_US_new.idx
+
+
+
+Then if you head the resulting index file you should see the 
+following:
+
+ISO8859-1
+142689
+'hood|10
+'s gravenhage|88
+'tween|173
+'tween decks|196
+.22|231
+.22 caliber|319
+.22 calibre|365
+.38 caliber|411
+.38 calibre|457
+.45 caliber|503
+.45 calibre|549
+0|595
+1|666
+1 chronicles|6283
+1 esdras|6336
+
+
+Line 1 is the same encoding string taken from the 
+structured thesaurus data file.
+
+Line 2 is a count of the total number of entries
+in your thesaurus.
+
+All of the remaining lines are of the form
+
+entry|byte_offset_into_data_file_where_entry_is_found
+
+
+That's all there is too it.
+
+
+Kevin
+kevin.hendricks@sympatico.ca
+
