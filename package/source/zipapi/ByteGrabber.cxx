@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteGrabber.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-13 13:38:01 $
+ *  last change: $Author: obo $ $Date: 2000-11-22 14:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ sal_Int64 SAL_CALL ByteGrabber::seek( sal_Int64 location )
         return location;
     }
     else
-        throw (io::IOException());
+        throw io::IOException();
 }
 sal_Int64 SAL_CALL ByteGrabber::getPosition(  )
         throw(io::IOException, uno::RuntimeException)
@@ -129,7 +129,7 @@ sal_Int64 SAL_CALL ByteGrabber::getPosition(  )
     if (xSeek.is() )
         return xSeek->getPosition();
     else
-        throw (io::IOException());
+        throw io::IOException();
 }
 sal_Int64 SAL_CALL ByteGrabber::getLength(  )
         throw(io::IOException, uno::RuntimeException)
@@ -137,7 +137,7 @@ sal_Int64 SAL_CALL ByteGrabber::getLength(  )
     if (xSeek.is() )
         return xSeek->getLength();
     else
-        throw (io::IOException());
+        throw io::IOException();
 }
 
 sal_Int8 ByteGrabber::getInt8()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-13 13:38:01 $
+ *  last change: $Author: obo $ $Date: 2000-11-22 14:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ sal_Int64 SAL_CALL ByteChucker::seek( sal_Int64 location )
         return location;
     }
     else
-        throw (io::IOException());
+        throw io::IOException();
 }
 sal_Int64 SAL_CALL ByteChucker::getPosition(  )
         throw(io::IOException, uno::RuntimeException)
@@ -117,7 +117,7 @@ sal_Int64 SAL_CALL ByteChucker::getPosition(  )
     if (xSeek.is() )
         return xSeek->getPosition();
     else
-        throw (io::IOException());
+        throw io::IOException();
 }
 sal_Int64 SAL_CALL ByteChucker::getLength(  )
         throw(io::IOException, uno::RuntimeException)
@@ -125,7 +125,7 @@ sal_Int64 SAL_CALL ByteChucker::getLength(  )
     if (xSeek.is() )
         return xSeek->getLength();
     else
-        throw (io::IOException());
+        throw io::IOException();
 }
 void ByteChucker::putInt8( sal_Int8 nInt8)
 {
