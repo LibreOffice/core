@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mxiao $ $Date: 2002-09-17 08:38:40 $
+#   last change: $Author: mxiao $ $Date: 2002-09-19 08:52:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,8 +127,8 @@ $(MISC)$/$(SHL1TARGET).map : sce$/$(SHL1TARGET).sce
     +$(TYPE) mapFooter >> $(MISC)$/$(SHL1TARGET).map
 
 $(MISC)$/$(SHL2TARGET).map : sce$/$(SHL2TARGET).sce
-    +$(RM)  $(MISC)$/$(SHL1TARGET).tst
-    +$(RM)  $(MISC)$/$(SHL1TARGET).map
+    +$(RM)  $(MISC)$/$(SHL2TARGET).tst
+    +$(RM)  $(MISC)$/$(SHL2TARGET).map
     +$(TYPE) $< | sed $(REGEXP) > $@
     +$(TYPE) $@ | sed "s/^/test_/" >> $(MISC)$/$(SHL2TARGET).tst
     +$(TYPE) mapHeader > $(MISC)$/$(SHL2TARGET).map
