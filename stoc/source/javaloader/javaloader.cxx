@@ -1,10 +1,10 @@
-/*************************************************************************
+D/*************************************************************************
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 17:33:44 $
+ *  last change: $Author: kr $ $Date: 2000-10-25 11:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,8 +176,8 @@ namespace loader {
             Sequence<sal_Int8> processID(16);
             rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8 *>(processID.getArray()));
 
-              pJavaVM = *(JavaVM **)(javaVM_xJavaVM->getJavaVM(processID).getValue());
-//              pJavaVM = *reinterpret_cast<JavaVM **>(javaVM_xJavaVM->getJavaVM(processID).getValue());
+            if(javaVM_xJavaVM->getJavaVM(processID).hasValue())
+                pJavaVM = *(JavaVM **)(javaVM_xJavaVM->getJavaVM(processID).getValue());
             if(!pJavaVM) throw RuntimeException(OUString::createFromAscii("javaloader error - 12"), Reference<XInterface>());
 
             xJavaThreadRegister_11 = Reference<XJavaThreadRegister_11>(javaVM, UNO_QUERY);
