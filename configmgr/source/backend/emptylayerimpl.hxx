@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emptylayerimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:47 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,12 @@
 #include <cppuhelper/implbase1.hxx>
 #endif // _CPPUHELPER_IMPLBASE1_HXX_
 
-#include <drafts/com/sun/star/configuration/backend/XLayerHandler.hpp>
-#include <drafts/com/sun/star/configuration/backend/XLayer.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERHANDLER_HPP_
+#include <com/sun/star/configuration/backend/XLayerHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
+#include <com/sun/star/configuration/backend/XLayer.hpp>
+#endif
 
 // -----------------------------------------------------------------------------
 namespace configmgr
@@ -79,10 +83,7 @@ namespace configmgr
         using rtl::OUString;
         namespace uno       = ::com::sun::star::uno;
         namespace lang      = ::com::sun::star::lang;
-        namespace beans     = ::com::sun::star::beans;
-        namespace container = ::com::sun::star::container;
-        namespace backenduno    = ::drafts::com::sun::star::configuration::backend;
-
+        namespace backenduno    = ::com::sun::star::configuration::backend;
         // -----------------------------------------------------------------------------
 
         class EmptyLayer : public cppu::WeakImplHelper1<backenduno::XLayer>
@@ -94,7 +95,7 @@ namespace configmgr
         public:
             virtual void SAL_CALL
                 readData( const uno::Reference< backenduno::XLayerHandler >& aHandler )
-                throw (uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::NullPointerException, lang::WrappedTargetException, uno::RuntimeException);
         };
         // -----------------------------------------------------------------------------
 
@@ -110,55 +111,55 @@ namespace configmgr
         public:
             virtual void SAL_CALL
                 startLayer(  )
-                throw (backenduno::MalformedDataException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endLayer(  )
-                throw (backenduno::MalformedDataException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                overrideNode( const OUString& aName, sal_Int16 aAttributes )
-                throw (backenduno::MalformedDataException, uno::RuntimeException);
+                overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+                    throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
-                throw (backenduno::MalformedDataException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 addOrReplaceNodeFromTemplate( const OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-                throw (backenduno::MalformedDataException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endNode(  )
-                throw (backenduno::MalformedDataException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 dropNode( const OUString& aName )
-                throw (backenduno::MalformedDataException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-                throw (backenduno::MalformedDataException, uno::RuntimeException);
+                overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+                    throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-                throw (backenduno::MalformedDataException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-                throw (backenduno::MalformedDataException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endProperty(  )
-                throw (backenduno::MalformedDataException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 setPropertyValue( const uno::Any& aValue )
-                throw (backenduno::MalformedDataException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
-                throw (backenduno::MalformedDataException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, uno::RuntimeException);
 
         private:
             void failNotEmpty() { fail("layer is not empty"); }
