@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:56:44 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,11 +409,10 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
     {
         if( pMap->nWID >= OWN_ATTR_APPLET_CODEBASE && pMap->nWID <= OWN_ATTR_APPLET_ISSCRIPT )
         {
-            uno::Reference < embed::XComponentSupplier > xSup( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
-            if ( !xSup.is() )
+            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)pObj)->GetObjRef() ) )
                 return;
 
-            uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
+            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)pObj)->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if ( !xSet.is() )
                 return;
 
@@ -447,6 +446,7 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
             {
                 uno::Reference < util::XModifiable > xMod( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
                 if( xMod.is() )
+                    // TODO/MBA: what's this?!
                     xMod->setModified( sal_False );
             }
         }
@@ -463,11 +463,10 @@ Any SAL_CALL SvxAppletShape::getPropertyValue( const OUString& PropertyName ) th
     {
         if( pMap->nWID >= OWN_ATTR_APPLET_CODEBASE && pMap->nWID <= OWN_ATTR_APPLET_ISSCRIPT )
         {
-            uno::Reference < embed::XComponentSupplier > xSup( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
-            if ( !xSup.is() )
+            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)pObj)->GetObjRef() ) )
                 return uno::Any();
 
-            uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
+            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)pObj)->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if ( !xSet.is() )
                 return uno::Any();
 
@@ -523,11 +522,10 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, c
     {
         if( pMap->nWID >= OWN_ATTR_PLUGIN_MIMETYPE && pMap->nWID <= OWN_ATTR_PLUGIN_COMMANDS )
         {
-            uno::Reference < embed::XComponentSupplier > xSup( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
-            if ( !xSup.is() )
+            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)pObj)->GetObjRef() ) )
                 return;
 
-            uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
+            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)pObj)->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if ( !xSet.is() )
                 return;
 
@@ -559,6 +557,7 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, c
             {
                 uno::Reference < util::XModifiable > xMod( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
                 if( xMod.is() )
+                    // TODO/MBA: what's this?!
                     xMod->setModified( sal_False );
             }
         }
@@ -575,11 +574,10 @@ Any SAL_CALL SvxPluginShape::getPropertyValue( const OUString& PropertyName ) th
     {
         if( pMap->nWID >= OWN_ATTR_PLUGIN_MIMETYPE && pMap->nWID <= OWN_ATTR_PLUGIN_COMMANDS )
         {
-            uno::Reference < embed::XComponentSupplier > xSup( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
-            if ( !xSup.is() )
+            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)pObj)->GetObjRef() ) )
                 return uno::Any();
 
-            uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
+            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)pObj)->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if ( !xSet.is() )
                 return uno::Any();
 
@@ -634,11 +632,10 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
     {
         if( pMap->nWID >= OWN_ATTR_FRAME_URL && pMap->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT )
         {
-            uno::Reference < embed::XComponentSupplier > xSup( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
-            if ( !xSup.is() )
+            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)pObj)->GetObjRef() ) )
                 return;
 
-            uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
+            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)pObj)->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if ( !xSet.is() )
                 return;
 
@@ -674,6 +671,7 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
             {
                 uno::Reference < util::XModifiable > xMod( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
                 if( xMod.is() )
+                    // TODO/MBA: what's this?!
                     xMod->setModified( sal_False );
             }
         }
@@ -691,11 +689,10 @@ Any SAL_CALL SvxFrameShape::getPropertyValue( const OUString& PropertyName ) thr
     {
         if( pMap->nWID >= OWN_ATTR_FRAME_URL && pMap->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT )
         {
-            uno::Reference < embed::XComponentSupplier > xSup( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
-            if ( !xSup.is() )
+            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)pObj)->GetObjRef() ) )
                 return uno::Any();
 
-            uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
+            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)pObj)->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if ( !xSet.is() )
                 return uno::Any();
 
