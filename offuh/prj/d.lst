@@ -54,6 +54,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\text
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\ui
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\ui\dialogs
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\uno
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\uri
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\util
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\util\logging
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\view
@@ -198,6 +199,8 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
 ..\%__SRC%\inc\com\sun\star\ui\dialogs\*.hpp %_DEST%\inc%_EXT%\com\sun\star\ui\dialogs\*.hpp
 ..\%__SRC%\inc\com\sun\star\uno\*.hdl %_DEST%\inc%_EXT%\com\sun\star\uno\*.hdl
 ..\%__SRC%\inc\com\sun\star\uno\*.hpp %_DEST%\inc%_EXT%\com\sun\star\uno\*.hpp
+..\%__SRC%\inc\com\sun\star\uri\*.hdl %_DEST%\inc%_EXT%\com\sun\star\uri\*.hdl
+..\%__SRC%\inc\com\sun\star\uri\*.hpp %_DEST%\inc%_EXT%\com\sun\star\uri\*.hpp
 ..\%__SRC%\inc\com\sun\star\util\*.hdl %_DEST%\inc%_EXT%\com\sun\star\util\*.hdl
 ..\%__SRC%\inc\com\sun\star\util\*.hpp %_DEST%\inc%_EXT%\com\sun\star\util\*.hpp
 ..\%__SRC%\inc\com\sun\star\util\logging\*.hdl %_DEST%\inc%_EXT%\com\sun\star\util\logging\*.hdl
