@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-09 12:03:48 $
+ *  last change: $Author: sab $ $Date: 2001-02-15 09:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,7 +464,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
                     if (i->maValue >>= nNumberFormat)
                     {
                         rtl::OUString sAttrValue = rScXMLExport.getDataStyleName(nNumberFormat);
-                        if (sAttrValue.len())
+                        if (sAttrValue.getLength())
                         {
                             rtl::OUString sAttrName( rNamespaceMap.GetQNameByKey(
                                 aPropMapper->GetEntryNameSpace(i->mnIndex), aPropMapper->GetEntryXMLName(i->mnIndex) ) );

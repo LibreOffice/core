@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 07:12:54 $
+ *  last change: $Author: sab $ $Date: 2001-02-15 09:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1386,7 +1386,7 @@ void ScXMLExport::_ExportAutoStyles()
                         {
                             rtl::OUString sParent;
                             rtl::OUString sName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_TABLE_TABLE, sParent, xPropStates);
-                            if (!sName.len())
+                            if (!sName.getLength())
                             {
                                 sName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_TABLE, sParent, xPropStates);
                             }
@@ -1436,7 +1436,7 @@ void ScXMLExport::_ExportAutoStyles()
                                                     sal_Int32 nIndex;
                                                     rtl::OUString sName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_TABLE_CELL, sStyleName, xPropStates);
                                                     sal_Bool bIsAutoStyle = sal_True;
-                                                    if (!sName.len())
+                                                    if (!sName.getLength())
                                                     {
                                                         sName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_CELL, sStyleName, xPropStates);
                                                         rtl::OUString* pTemp = new rtl::OUString(sName);
@@ -1507,7 +1507,7 @@ void ScXMLExport::_ExportAutoStyles()
                                             {
                                                 rtl::OUString sParent;
                                                 rtl::OUString sName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_TABLE_COLUMN, sParent, xPropStates);
-                                                if (!sName.len())
+                                                if (!sName.getLength())
                                                 {
                                                     sName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_COLUMN, sParent, xPropStates);
                                                     rtl::OUString* pTemp = new rtl::OUString(sName);
@@ -1564,7 +1564,7 @@ void ScXMLExport::_ExportAutoStyles()
                                             {
                                                 rtl::OUString sParent;
                                                 rtl::OUString sName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_TABLE_ROW, sParent, xPropStates);
-                                                if (!sName.len())
+                                                if (!sName.getLength())
                                                 {
                                                     sName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_ROW, sParent, xPropStates);
                                                     rtl::OUString* pTemp = new rtl::OUString(sName);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-17 12:03:18 $
+ *  last change: $Author: sab $ $Date: 2001-02-15 09:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,7 +582,7 @@ void XMLTableStyleContext::FillPropertySet(
             const Reference< XPropertySet > & rPropSet )
 {
     XMLPropStyleContext::FillPropertySet(rPropSet);
-    if (sDataStyleName.len())
+    if (sDataStyleName.getLength())
     {
         SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
             XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
@@ -623,7 +623,7 @@ void XMLTableStyleContext::Finish( sal_Bool bOverwrite )
     Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
                 xPropSet->getPropertySetInfo();
-    if( (xPropSetInfo->hasPropertyByName( sNumberFormat )) && sDataStyleName.len() )
+    if( (xPropSetInfo->hasPropertyByName( sNumberFormat )) && sDataStyleName.getLength() )
     {
         Any aAny;
         SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
@@ -838,7 +838,7 @@ Reference < XNameContainer >
 OUString XMLTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 {
     rtl::OUString sServiceName = SvXMLStylesContext::GetServiceName(nFamily);
-    if (!sServiceName.len())
+    if (!sServiceName.getLength())
     {
         switch( nFamily )
         {
