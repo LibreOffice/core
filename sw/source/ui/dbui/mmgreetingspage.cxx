@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmgreetingspage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-29 09:31:21 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,8 +365,8 @@ sal_Bool    SwMailMergeGreetingsPage::commitPage(COMMIT_REASON)
         const SwDBData& rDBData = rConfig.GetCurrentDBData();
         Sequence< ::rtl::OUString> aAssignment = rConfig.GetColumnAssignment( rDBData );
         sal_Int32 nPos = m_aFemaleColumnLB.GetSelectEntryPos();
-        if(aAssignment.getLength() < MM_PART_GENDER)
-            aAssignment.realloc(MM_PART_GENDER);
+        if(aAssignment.getLength() <= MM_PART_GENDER)
+            aAssignment.realloc(MM_PART_GENDER + 1);
         if( nPos > 0 )
             aAssignment[MM_PART_GENDER] = m_aFemaleColumnLB.GetSelectEntry();
         else
