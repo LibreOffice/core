@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tool.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:51:23 $
+ *  last change: $Author: rt $ $Date: 2004-12-14 09:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,15 +247,16 @@ double SnumToDouble( INT16 nVal )
 
 double Snum32ToDouble( UINT32 nValue )
 {
-    double  fValue;
+    double fValue, temp;
 
     fValue = nValue >> 6;
-    if (nValue & 0x0f)
+    temp = nValue & 0x0f;
+    if (temp)
     {
         if (nValue & 0x00000010)
-                fValue /= pow(10, (nValue & 0x0f));
+                fValue /= pow((double)10, temp);
         else
-        fValue *= pow(10, (nValue & 0x0f));
+        fValue *= pow((double)10, temp);
     }
 
     if ((nValue & 0x00000020))
