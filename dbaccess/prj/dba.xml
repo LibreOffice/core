@@ -67,4 +67,17 @@
         <service-dependency>com.sun.star.i18n.LocaleData</service-dependency>
         <service-dependency>com.sun.star.util.NumberFormatter</service-dependency>
     </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.sdb.dbaccess.OQuery</name>
+        <description>Represents a service for query.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.Query</supported-service>
+        <service-dependency>com.sun.star.sdb.DatabaseContext</service-dependency>
+        <service-dependency>com.sun.star.sdb.Connection</service-dependency>
+        <service-dependency>com.sun.star.i18n.LocaleData</service-dependency>
+        <service-dependency>com.sun.star.util.NumberFormatter</service-dependency>
+    </component-description>
 </module-description>
