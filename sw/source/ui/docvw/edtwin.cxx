@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:49:43 $
+ *  last change: $Author: os $ $Date: 2005-03-15 09:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1995,7 +1995,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             {
                 eKeyState = KS_Ende;
                 bNormalChar =
-                        (0 == ((KEY_MOD1 | KEY_MOD2 | KEY_CONTROLMOD) & rKeyCode.GetAllModifier())) &&
+                        (rKeyCode.IsMod2() || (0 == ((KEY_MOD1 | KEY_CONTROLMOD) & rKeyCode.GetAllModifier()))) &&
                                 SW_ISPRINTABLE( aCh );
 
                 if (bNormalChar && rSh.IsInFrontOfLabel())
