@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jl $ $Date: 2000-10-24 09:34:05 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:27:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,17 +80,17 @@ BOOTSTRAP_SERVICE=FALSE
 
 # --- Files ---
 
-UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
+UNOUCRDEP=	$(SOLARBINDIR)$/types.rdb
+UNOUCRRDB=	$(SOLARBINDIR)$/types.rdb
 
 
 UNOUCROUT=	$(OUT)$/inc
-INCPRE+=	$(OUT)$/inc -I$(SOLARINCDIR)$/external$/atl
+INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
 
 
 UNOTYPES=	com.sun.star.lang.XMultiServiceFactory \
             com.sun.star.script.XInvocation			\
-            oletest.XCallback 
+            oletest.XCallback
 
 
 
@@ -99,10 +99,10 @@ UNOTYPES=	com.sun.star.lang.XMultiServiceFactory \
 .ENDIF # depend
 
 APP1TARGET=	$(TARGET)
-APP1OBJS=	$(OBJ)$/testcppuno.obj 
+APP1OBJS=	$(OBJ)$/testcppuno.obj
 
 LIBCMT=msvcrtd.lib
-            
+
 
 APP1STDLIBS= \
     $(SALLIB) \
