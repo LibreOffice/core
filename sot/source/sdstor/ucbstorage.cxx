@@ -1974,7 +1974,20 @@ BOOL UCBStorage::IsStorageFile( SvStream* pFile )
     pFile->Seek(0);
     UINT32 nBytes;
     *pFile >> nBytes;
-    BOOL bRet = ( nBytes == 0x04034b50 );         // magic Bytes!
+
+    // search for the magic bytes
+    BOOL bRet = ( nBytes == 0x04034b50 );
+    if ( !bRet )
+    {
+        // disk spanned file have an additional header in front of the usual one
+        bRet = ( nBytes == 0x08074b50 );
+        if ( bRet )
+        {
+            *pFile >> nBytes;
+            bRet = ( nBytes == 0x04034b50 );
+        }
+    }
+
     pFile->Seek( nPos );
     return bRet;
 }
