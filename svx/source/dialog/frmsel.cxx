@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-02-04 09:32:08 $
+ *  last change: $Author: os $ $Date: 2002-02-04 14:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1321,14 +1321,7 @@ void SvxFrameSelector::LoseFocus()
 /* -----------------------------01.02.2002 16:54------------------------------
 
  ---------------------------------------------------------------------------*/
-//    SvxFrameLine&       GetTop()    { return pImpl->aTopLine; }
-//    SvxFrameLine&       GetBottom() { return pImpl->aBottomLine; }
-//    SvxFrameLine&       GetLeft()   { return pImpl->aLeftLine; }
-//    SvxFrameLine&       GetRight()  { return pImpl->aRightLine; }
-//    SvxFrameLine&       GetHor()    { return pImpl->aHorLine; }
-//    SvxFrameLine&       GetVer()    { return pImpl->aVerLine; }
-
-SvxFrameLine&       SvxFrameSelector::GetAnyLine(SvxFrameSelectorLine eWhich)
+SvxFrameLine&       SvxFrameSelector::GetLine(SvxFrameSelectorLine eWhich)
 {
     SvxFrameLine* pRet = 0;
     switch(eWhich)
