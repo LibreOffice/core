@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyeditor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:57 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ namespace pcr
                 virtual sal_uInt16          GetPropertyPos(const ::rtl::OUString& rEntryName ) const;
                 virtual void                SetPropertyData(const ::rtl::OUString& rEntryName, void* pData);
                 virtual IBrowserControl*    GetPropertyControl( const ::rtl::OUString& rEntryName );
+                        void                EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
 
                 virtual sal_uInt16          InsertEntry(const OLineDescriptor&, sal_uInt16 nPos = EDITOR_LIST_APPEND);
                 virtual void                ChangeEntry(const OLineDescriptor&, sal_uInt16 nPos);
