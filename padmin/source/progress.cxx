@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:56:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ ProgressDialog::ProgressDialog( Window* pParent,
         mnMax( nMax ),
         mbCanceled( FALSE )
 {
+    maFilename.SetStyle( maFilename.GetStyle() | WB_PATHELLIPSIS );
     if( ! bCancelable )
     {
         Point aPos = maProgressBar.GetPosPixel();
