@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 10:01:15 $
+ *  last change: $Author: mib $ $Date: 2001-05-07 07:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,8 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
     }
 
     // char
-    if( style::TabAlign_DECIMAL == pTabStop->Alignment )
+    if( style::TabAlign_DECIMAL == pTabStop->Alignment &&
+        pTabStop->DecimalChar != 0 )
     {
         sBuffer.append( pTabStop->DecimalChar );
         AddAttribute( XML_NAMESPACE_STYLE, sXML_char,
@@ -138,7 +139,7 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
     }
 
     // leader-char
-    if( ' ' != pTabStop->FillChar )
+    if( ' ' != pTabStop->FillChar && 0 != pTabStop->FillChar )
     {
         sBuffer.append( pTabStop->FillChar );
         AddAttribute( XML_NAMESPACE_STYLE, sXML_leader_char,
