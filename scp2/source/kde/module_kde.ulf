@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_kde.ulf,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:22:04 $
+ *  last change: $Author: rt $ $Date: 2004-08-12 08:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@ en-US = "KDE Integration"
 de = "KDE Integration"
 
 [STR_DESC_MODULE_OPTIONAL_KDE]
-en-US = "Inserts %PRODUCTNAME %PRODUCTVERSION into the KDE front panel."
-de = "Fügt %PRODUCTNAME %PRODUCTVERSION in das KDE Frontpanel ein."
+en-US = "System integration of %PRODUCTNAME %PRODUCTVERSION into K Desktop Environment (KDE)."
+de = "Systemintegration von %PRODUCTNAME %PRODUCTVERSION in das K Desktop Environment (KDE)."
 
 
 
