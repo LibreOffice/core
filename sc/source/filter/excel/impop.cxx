@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-09-28 09:28:36 $
+ *  last change: $Author: nn $ $Date: 2000-09-29 14:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,7 @@
 #include <svx/paperinf.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/ulspitem.hxx>
-#include <sfx2/inimgr.hxx>
 #include <svtools/zforlist.hxx>
-#include <tools/solmath.hxx>
 
 #if defined( WNT ) || defined( WIN )
 #include <math.h>
@@ -107,6 +105,7 @@
 #include "docoptio.hxx"
 #include "scextopt.hxx"
 #include "editutil.hxx"
+#include "filtopt.hxx"
 
 #include "imp_op.hxx"
 #include "excimp8.hxx"
@@ -189,19 +188,14 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
 
     pAutoFilter = new AutoFilterBuffer;
 
-    // Optionen aus INI-File
-    SfxIniManager*          pIniManager = SFX_INIMANAGER();
-    String                  aColScale = pIniManager->Get( SFX_GROUP_COMMON, _STRINGCONST( "EXCELCOLSCALE" ) );
-    String                  aRowScale = pIniManager->Get( SFX_GROUP_COMMON, _STRINGCONST( "EXCELROWSCALE" ) );
-    const International&    rIntl = *ScGlobal::pScInternational;
-    DBG_ASSERT( ScGlobal::pScInternational, "-ImportExcel::ImportExcel(): International puddemacht?!" );
-    int                     nDummy;
+    // options from configuration
+    ScFilterOptions aFilterOpt;
 
-    pExcRoot->fColScale = SolarMath::StringToDouble( aColScale.GetBuffer(), rIntl, nDummy );
+    pExcRoot->fColScale = aFilterOpt.GetExcelColScale();
     if( pExcRoot->fColScale <= 0.0 )
         pExcRoot->fColScale = 1.0;
 
-    pExcRoot->fRowScale = SolarMath::StringToDouble( aRowScale.GetBuffer(), rIntl, nDummy );
+    pExcRoot->fRowScale = aFilterOpt.GetExcelRowScale();
     if( pExcRoot->fRowScale <= 0.0 )
         pExcRoot->fRowScale = 1.0;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2000-09-28 09:28:36 $
+ *  last change: $Author: nn $ $Date: 2000-09-29 14:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,9 @@
 #include <offmgr/fltrcfg.hxx>
 #include <offmgr/app.hxx>
 
-#ifndef _SFX_INIMGR_HXX //autogen
-#include <sfx2/inimgr.hxx>
-#endif
-
 #include <sfx2/objsh.hxx>
 #include <sfx2/docinf.hxx>
 #include <svx/svxmsbas.hxx>
-#include <tools/solmath.hxx>
 
 #include "scerrors.hxx"
 #include "scextopt.hxx"
@@ -91,6 +86,7 @@
 #include "xcl97esc.hxx"
 
 #include "document.hxx"
+#include "filtopt.hxx"
 
 
 extern const sal_Char*  pVBAStorageName;
@@ -130,34 +126,24 @@ ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, ScDocument
     if( pDoc->GetExtDocOptions() )
         *pExcRoot->pExtDocOpt = *pDoc->GetExtDocOptions();
 
-    String  aBreakSharedFormula(
-                SFX_INIMANAGER()->Get( SFX_GROUP_COMMON, _STRINGCONST( "EXCELBREAKSHAREDFORMULA" ) ) );
+    // options from configuration
 
-    if( aBreakSharedFormula.Len() )
-        pExcRoot->bBreakSharedFormula = aBreakSharedFormula.ToInt32() != 0;
-    else
-        pExcRoot->bBreakSharedFormula = TRUE;
+    ScFilterOptions aFilterOpt;
+    pExcRoot->bBreakSharedFormula = aFilterOpt.GetBreakShared();
 
-    // Optionen aus INI-File
-    SfxIniManager*          pIniManager = SFX_INIMANAGER();
-    String                  aRowScale = pIniManager->Get( SFX_GROUP_COMMON, _STRINGCONST( "EXCELROWSCALE" ) );
-    const International&    rIntl = *ScGlobal::pScInternational;
-    DBG_ASSERT( ScGlobal::pScInternational, "-ExportBiff5::ExportBiff5(): International puddemacht?!" );
-    int                     nDummy;
-
-    pExcRoot->fRowScale = SolarMath::StringToDouble( aRowScale.GetBuffer(), rIntl, nDummy );
+    pExcRoot->fRowScale = aFilterOpt.GetExcelRowScale();
     if( pExcRoot->fRowScale <= 0.0 )
         pExcRoot->fRowScale = 1.0;
 
-    double                  fColScale = pExcRoot->pExtDocOpt->fColScale;
+    double fColScale = pExcRoot->pExtDocOpt->fColScale;
     if( fColScale <= 0.0 )
     {
-        String              aColScale = pIniManager->Get( SFX_GROUP_COMMON, _STRINGCONST( "EXCELCOLSCALE" ) );
-        fColScale = SolarMath::StringToDouble( aColScale.GetBuffer(), rIntl, nDummy );
+        fColScale = aFilterOpt.GetExcelColScale();
         if( fColScale <= 0.0 )
-            fColScale = 1.027027027027;
-    }
+            fColScale = 1.0;
 
+        fColScale *= 1.027027027027;    // adjustment for export of calc documents
+    }
     pExcRoot->fColScale = fColScale;
 
     pExcDoc = new ExcDocument( pExcRoot );
