@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:08:25 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,7 @@ public:
     bool mbOwnGraphicResolver;
     bool mbOwnEmbeddedResolver;
     INetURLObject aBaseURL;
+    INetURLObject aDocBase;
     // --> OD 2004-08-10 #i28749# - boolean, indicating that position attributes
     // of shapes are given in horizontal left-to-right layout. This is the case
     // for the OpenOffice.org file format.
@@ -966,6 +967,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     uno::Any aAny = xImportInfo->getPropertyValue(sPropName);
                     aAny >>= sBaseURI;
                     pImpl->aBaseURL.SetURL( sBaseURI );
+                    pImpl->aDocBase.SetURL( sBaseURI );
                 }
                 OUString sRelPath;
                 sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("StreamRelPath" ) );
@@ -1791,6 +1793,10 @@ String SvXMLImport::GetBaseURL() const
     return pImpl->aBaseURL.GetMainURL( INetURLObject::NO_DECODE );
 }
 
+String SvXMLImport::GetDocumentBase() const
+{
+    return pImpl->aDocBase.GetMainURL( INetURLObject::NO_DECODE );
+}
 
 // --> OD 2004-08-10 #i28749#
 sal_Bool SvXMLImport::IsShapePositionInHoriL2R() const
