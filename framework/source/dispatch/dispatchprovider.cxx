@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-13 09:43:28 $
+ *  last change: $Author: as $ $Date: 2001-08-16 09:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,12 +126,11 @@
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
 #endif
-/*
-... needed by implts_isLoadableContent() ... but not yet!
+
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDERMANAGER_HPP_
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #endif
-*/
+
 #ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
 #include <com/sun/star/document/XTypeDetection.hpp>
 #endif
@@ -797,54 +796,36 @@ sal_Bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL 
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::document::XTypeDetection > xDetection( m_xFactory->createInstance( SERVICENAME_TYPEDETECTION ), css::uno::UNO_QUERY );
+    css::uno::Reference< css::document::XTypeDetection >     xDetection( m_xFactory->createInstance( SERVICENAME_TYPEDETECTION    ), css::uno::UNO_QUERY );
+    css::uno::Reference< css::ucb::XContentProviderManager > xUCB      ( m_xFactory->createInstance( SERVICENAME_UCBCONTENTBROKER ), css::uno::UNO_QUERY );
     aReadLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     sal_Bool bLoadable = sal_False;
 
-    if( xDetection.is() == sal_True )
+    if( xUCB.is() == sal_True )
+    {
+        bLoadable = xUCB->queryContentProvider( aURL.Complete ).is();
+    }
+    // no else here!
+    if(
+        ( bLoadable       == sal_False )    &&
+        ( xDetection.is() == sal_True  )
+      )
     {
         ::rtl::OUString sTypeName = xDetection->queryTypeByURL( aURL.Complete );
         bLoadable = (sTypeName.getLength()>0);
     }
-
-    if  (   ( sal_False == bLoadable )
-        &&  ( 0 == aURL.Complete.compareToAscii( "private:stream/", 15 ) )
-        )
+    // no else here!
+    if(
+        ( bLoadable                                             == sal_False )  &&
+        ( aURL.Complete.compareToAscii( "private:stream/", 15 ) == 0         )
+      )
     {
         bLoadable = sal_True;
     }
 
     return bLoadable;
-/*
-    // Check some well known protocols before you ask the ucb.
-    // Result will be clear ... and we save time!
-    if(
-        ( aURL.Complete.compareToAscii( ".uno"  , 4 ) == 0 ) ||
-        ( aURL.Complete.compareToAscii( "slot:" , 5 ) == 0 )
-      )
-    {
-        bLoadable = sal_False;
-    }
-    else
-    if(
-        ( aURL.Complete.compareToAscii( "private:factory/", 16 ) == 0 ) ||
-        ( aURL.Complete.compareToAscii( "macro:"          ,  6 ) == 0 )
-      )
-    {
-        bLoadable = sal_True;
-    }
-    else
-    {
-        // ... and try to find content handler or frame loader
-        css::uno::Reference< css::ucb::XContentProviderManager > xUCB( xFactory->createInstance( SERVICENAME_UCBCONTENTBROKER ), css::uno::UNO_QUERY );
-        if( xUCB.is() == sal_True )
-        {
-            bLoadable = xUCB->queryContentProvider( aURL.Complete ).is();
-        }
-    }
-*/
 }
 
 /*-************************************************************************************************************//**
