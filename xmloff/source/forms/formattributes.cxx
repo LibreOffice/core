@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-20 16:49:40 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 07:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,7 @@ namespace xmloff
             case SCA_CURRENT_STATE:         return "current-state";
             case SCA_IS_TRISTATE:           return "is-tristate";
             case SCA_STATE:                 return "state";
+            case SCA_COLUMN_STYLE_NAME:     return "column-style-name";
             default:
                 OSL_ENSURE(sal_False, "OAttributeMetaData::getSpecialAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
@@ -340,6 +341,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/04/20 16:49:40  fs
+ *  tabbing-cycle -> tab-cycle
+ *
  *  Revision 1.8  2001/03/20 13:33:39  fs
  *  #83970# +getOfficeFormsAttributeName(/-space)
  *

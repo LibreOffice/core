@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 13:33:39 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 07:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@ namespace xmloff
     #define SCA_CURRENT_STATE           0x00000400
     #define SCA_IS_TRISTATE             0x00000800
     #define SCA_STATE                   0x00001000
+    #define SCA_COLUMN_STYLE_NAME       0x00002000
 
     // attributes of the office:forms element
     enum OfficeFormsAttributes
@@ -250,7 +251,7 @@ namespace xmloff
     //= OAttribute2Property
     //=====================================================================
     /** some kind of opposite to the OAttributeMetaData class. Able to translate
-        attrbutes into property names/types
+        attributes into property names/types
 
         <p>The construction of this class is rather expensive (or at least it's initialization from outside),
         so it should be shared</p>
@@ -368,6 +369,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/03/20 13:33:39  fs
+ *  #83970# +getOfficeFormsAttributeName(/-space)
+ *
  *  Revision 1.4  2000/12/12 12:01:05  fs
  *  new implementations for the import - still under construction
  *
