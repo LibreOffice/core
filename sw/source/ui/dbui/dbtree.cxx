@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:44:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,18 @@ void SwDBTreeList::InitTreeList()
 
     bInitialized = TRUE;
 }
+/*-- 27.05.2004 09:19:09---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+void    SwDBTreeList::AddDataSource(const String& rSource)
+{
+    Image aImg = aImageList.GetImage(IMG_DB);
+    Image aHCImg = aImageListHC.GetImage(IMG_DB);
+    SvLBoxEntry* pEntry = InsertEntry(rSource, aImg, aImg, NULL, TRUE);
+    SetExpandedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
+    SetCollapsedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
+    SvTreeListBox::Select(pEntry);
+}
 /*------------------------------------------------------------------------
  Beschreibung:
 ------------------------------------------------------------------------*/
@@ -657,9 +668,12 @@ void SwDBTreeList::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
         {
             // Datenbankfeld draggen
             svx::OColumnTransferable aColTransfer(
-                            sDBName, com::sun::star::sdb::CommandType::TABLE,
-                            sTableName, sColumnName,
-                            (CTF_FIELD_DESCRIPTOR |CTF_COLUMN_DESCRIPTOR ));
+                            sDBName
+                            ,::rtl::OUString()
+                            , com::sun::star::sdb::CommandType::TABLE
+                            ,sTableName
+                            , sColumnName
+                            ,(CTF_FIELD_DESCRIPTOR |CTF_COLUMN_DESCRIPTOR ));
             aColTransfer.addDataToContainer( pContainer );
         }
 
