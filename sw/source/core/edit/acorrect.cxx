@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acorrect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 15:32:18 $
+ *  last change: $Author: jp $ $Date: 2001-02-21 17:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,13 +504,7 @@ LanguageType SwAutoCorrDoc::GetLanguage( xub_StrLen nPos, BOOL bPrevPara ) const
                             : rCrsr.GetPoint()->nNode ).GetNode().GetTxtNode();
 
     if( pNd )
-    {
-        SfxItemSet aSet( rEditSh.GetDoc()->GetAttrPool(),
-                        RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE );
-        pNd->GetAttr( aSet, nPos, nPos );
-        eRet = ((const SvxLanguageItem&)aSet.Get( RES_CHRATR_LANGUAGE ))
-                                .GetLanguage();
-    }
+        eRet = pNd->GetLang( nPos, 0 );
     if(LANGUAGE_SYSTEM == eRet)
         eRet = ::GetSystemLang();
     return eRet;
