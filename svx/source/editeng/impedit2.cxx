@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-19 14:16:33 $
+ *  last change: $Author: obr $ $Date: 2001-05-07 06:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,9 +724,8 @@ EditSelection ImpEditEngine::Paste( EditView* pView, BOOL bUseSpecial )
     if ( pView->pImpEditView->DoSingleLinePaste() )
     {
         uno::Reference< datatransfer::XTransferable > xDataObj;
+        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = pView->GetWindow()->GetClipboard();
 
-        uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
         if ( xClipboard.is() )
         {
             const sal_uInt32 nRef = Application::ReleaseSolarMutex();
@@ -2829,8 +2828,14 @@ BOOL ImpEditEngine::HasData( ExchangeType eExchange )
 
     if ( eExchange == EXCHANGE_CLIPBOARD )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
+        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
+
+        DBG_ASSERT( GetActiveView(), "HasData: No active view!" );
+        DBG_ASSERT( GetActiveView()->GetWindow, "HasData: Active view has no window!" );
+
+        if( GetActiveView() && GetActiveView()->GetWindow() )
+            xClipboard = GetActiveView()->GetWindow()->GetClipboard();
+
         if ( xClipboard.is() )
         {
             const sal_uInt32 nRef = Application::ReleaseSolarMutex();
@@ -2890,16 +2895,20 @@ void ImpEditEngine::CopyData( EditSelection aSelection, ExchangeType nType ) con
 
     if ( nType == EXCHANGE_CLIPBOARD )
     {
-        // HACK: Hold Ref to System Clipboard
-        static uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
-        if ( !xClipboard.is() )
+        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
+
+        DBG_ASSERT( GetActiveView(), "CopyData: No active view!" );
+        DBG_ASSERT( GetActiveView()->GetWindow, "CopyData: Active view has no window!" );
+
+        if( GetActiveView() && GetActiveView()->GetWindow() )
+            xClipboard = GetActiveView()->GetWindow()->GetClipboard();
+
+        if( xClipboard.is() )
         {
-            uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-            xClipboard = uno::Reference< datatransfer::clipboard::XClipboard >( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
+            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+            xClipboard->setContents( pDataObj, NULL );
+            Application::AcquireSolarMutex( nRef );
         }
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        xClipboard->setContents( pDataObj, NULL );
-        Application::AcquireSolarMutex( nRef );
     }
     else // DRAGSERVER
     {
@@ -2920,9 +2929,14 @@ EditSelection ImpEditEngine::PasteData( EditPaM aPaM, ExchangeType eExchange, BO
     if ( eExchange == EXCHANGE_CLIPBOARD )
     {
         uno::Reference< datatransfer::XTransferable > xDataObj;
+        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
 
-        uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
+        DBG_ASSERT( GetActiveView(), "PasteData: No active view!" );
+        DBG_ASSERT( GetActiveView()->GetWindow, "PasteData: Active view has no window!" );
+
+        if( GetActiveView() && GetActiveView()->GetWindow() )
+            xClipboard = GetActiveView()->GetWindow()->GetClipboard();
+
         if ( xClipboard.is() )
         {
             const sal_uInt32 nRef = Application::ReleaseSolarMutex();
