@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:50:46 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,11 @@ Resource RID_LOCALIZED_NAMES
     {
          < "ग्रीक" ; > ;
         < "विशेष" ; > ;
+    };
+    ItemList [ slovak ] =
+    {
+         < "Grécky" ; > ;
+        < "Špeciálny" ; > ;
     };
     };
 
@@ -1956,10 +1961,10 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ finnish ] =
     {
-        < "alfa" ; > ;
-        < "alfa" ; > ;
-        < "beeta" ; > ;
-        < "beeta" ; > ;
+        < "alfa" ; > ; 
+        < "alfa" ; > ; 
+        < "beeta" ; > ; 
+        < "beeta" ; > ; 
         < "Gamma" ; > ;
         < "Gamma" ; > ;
         < "Delta" ; > ;
@@ -2006,7 +2011,7 @@ Resource RID_LOCALIZED_NAMES
         < "Omega" ; > ;
         < "Varepsilon" ; > ;
         < "Vartheeta" ; > ;
-        < "Varpii" ; > ;
+        < "Varpii" ; > ; 
         < "Varrhoo" ; >  ;
         < "Varsigma" ; > ;
         < "Varfii" ; > ;
@@ -2299,8 +2304,79 @@ Resource RID_LOCALIZED_NAMES
         < "और" ; > ;
         < "अथवा" ; > ;
     };
+    ItemList [ slovak ] =
+    {
+         < "alpha" ; > ;
+        < "ALPHA" ; > ;
+        < "beta" ; > ;
+        < "BETA" ; > ;
+        < "gamma" ; > ;
+        < "GAMMA" ; > ;
+        < "delta" ; > ;
+        < "DELTA" ; > ;
+        < "epsilon" ; > ;
+        < "EPSILON" ; > ;
+        < "zeta" ; > ;
+        < "ZETA" ; > ;
+        < "eta" ; > ;
+        < "ETA" ; > ;
+        < "theta" ; > ;
+        < "THETA" ; > ;
+        < "iota" ; > ;
+        < "IOTA" ; > ;
+        < "kappa" ; > ;
+        < "KAPPA" ; > ;
+        < "lambda" ; > ;
+        < "LAMBDA" ; > ;
+        < "mu" ; > ;
+        < "MU" ; > ;
+        < "nu" ; > ;
+        < "NU" ; > ;
+        < "xi" ; > ;
+        < "XI" ; > ;
+        < "omicron" ; > ;
+        < "OMICRON" ; > ;
+        < "pi" ; > ;
+        < "PI" ; > ;
+        < "rho" ; > ;
+        < "RHO" ; > ;
+        < "sigma" ; > ;
+        < "SIGMA" ; > ;
+        < "tau" ; > ;
+        < "TAU" ; > ;
+        < "upsilon" ; > ;
+        < "UPSILON" ; > ;
+        < "phi" ; > ;
+        < "PHI" ; > ;
+        < "chi" ; > ;
+        < "CHI" ; > ;
+        < "psi" ; > ;
+        < "PSI" ; > ;
+        < "omega" ; > ;
+        < "OMEGA" ; > ;
+        < "varepsilon" ; > ;
+        < "vartheta" ; > ;
+        < "varpi" ; > ;
+        < "varrho" ; > ;
+        < "varsigma" ; > ;
+        < "varphi" ; > ;
+        < "člen" ; > ;
+        < "nie je členom" ; > ;
+        < "úplne menší než" ; > ;
+        < "úplne väčší než" ; > ;
+        < "nerovná sa" ; > ;
+        < "je totožné s" ; > ;
+        < "blíži sa k" ; > ;
+        < "nekonečno" ; > ;
+        < "uhol" ; > ;
+        < "promile" ; > ;
+        < "a" ; > ;
+        < "alebo" ; > ;
+    };
     };
 };
+
+
 
 
 
