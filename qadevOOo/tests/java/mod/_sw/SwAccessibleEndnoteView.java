@@ -2,7 +2,7 @@
  *
  *  $RCSfile: SwAccessibleEndnoteView.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
  *  last change: $Author: vg $
  *
@@ -163,7 +163,7 @@ public class SwAccessibleEndnoteView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.END_NOTE);
@@ -225,6 +225,6 @@ public class SwAccessibleEndnoteView extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc(Param.getMSF());
+        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
     }
 }
