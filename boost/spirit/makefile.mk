@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 20:49:06 $
+#   last change: $Author: kz $ $Date: 2005-01-18 16:19:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,12 @@ TARGET=ooo_spirit
 
 .INCLUDE :	settings.mk
 
+.IF "$(SYSTEM_BOOST)" == "YES"
+all:
+        @echo "An already available installation of boost should exist on your system."
+        @echo "Therefore the version provided here does not need to be built in addition."
+.ELSE
+
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=spirit-1.6.1
@@ -98,3 +104,4 @@ $(MISC)$/$(TARGET)_remove_build.flag : $(PRJ)$/$(PATCH_FILE_NAME)
     $(REMOVE_PACKAGE_COMMAND)
     +$(TOUCH) $(MISC)$/$(TARGET)_remove_build.flag
 
+.ENDIF
