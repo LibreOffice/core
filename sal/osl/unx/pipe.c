@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-29 07:38:32 $
+ *  last change: $Author: mhu $ $Date: 2002-02-18 11:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,15 +208,15 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 
     if (access(PIPEDEFAULTPATH, O_RDWR) == 0)
     {
-        strcpy(name, PIPEDEFAULTPATH);
+        strncpy(name, PIPEDEFAULTPATH, sizeof(name));
     }
     else
     {
-        strcpy(name, PIPEALTERNATEPATH);
+        strncpy(name, PIPEALTERNATEPATH, sizeof(name));
     }
 
 
-    strcat(name, "/");
+    strncat(name, "/", sizeof(name));
 
     if (Security)
     {
@@ -263,8 +263,8 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     OSL_TRACE("osl_createPipe : Pipe Name '%s'",name);
 
     addr.sun_family = AF_UNIX;
-    strcpy(addr.sun_path, name);
-    len = sizeof(addr.sun_family) + strlen(addr.sun_path);
+    strncpy(addr.sun_path, name, sizeof(addr.sun_path));
+    len = sizeof(addr);
 
     if ( Options & osl_Pipe_CREATE )
     {
@@ -296,7 +296,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         chmod(name,S_IRWXU | S_IRWXG |S_IRWXO);
 
 
-        strcpy(pPipe->m_Name, name);
+        strncpy(pPipe->m_Name, name, sizeof(pPipe->m_Name));
 
         if ( listen(pPipe->m_Socket, 5) < 0 )
         {
@@ -390,8 +390,8 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
         OSL_TRACE("osl_destroyPipe : Pipe Name '%s'",pPipe->m_Name);
 
         addr.sun_family = AF_UNIX;
-        strcpy(addr.sun_path, pPipe->m_Name);
-        len = sizeof(addr.sun_family) + strlen(addr.sun_path);
+        strncpy(addr.sun_path, pPipe->m_Name, sizeof(addr.sun_path));
+        len = sizeof(addr);
 
         nRet = connect( fd, (struct sockaddr *)&addr, len);
 #if defined(DEBUG)
