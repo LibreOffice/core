@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:15:34 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ using namespace ::com::sun::star::lang;
 
 void java_util_Properties::setProperty(const ::rtl::OUString key, const ::rtl::OUString& value)
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     jobject out(0);
     if( t.pEnv )
     {
