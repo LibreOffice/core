@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 18:29:02 $
+ *  last change: $Author: nn $ $Date: 2001-10-18 20:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -940,6 +940,22 @@ ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
     aDestEnd.IncCol(aSrcRange.aEnd.Col() - aSrcRange.aStart.Col());
     aDestEnd.IncTab(aSrcRange.aEnd.Tab() - aSrcRange.aStart.Tab());
 
+    BOOL bIncludeFiltered = bCut;
+    if ( !bIncludeFiltered )
+    {
+        //  manually find number of non-filtered rows
+        USHORT nPastedCount = 0;
+        USHORT nTestEndRow = aSrcRange.aEnd.Row();
+        USHORT nFlagTab = aSrcRange.aStart.Tab();
+        ScDocument* pDoc = pDocShell->GetDocument();
+        for (USHORT nRow = aSrcRange.aStart.Row(); nRow <= nTestEndRow; nRow++)
+            if ( ( pDoc->GetRowFlags( nRow, nFlagTab ) & CR_FILTERED ) == 0 )
+                ++nPastedCount;
+        if ( nPastedCount == 0 )
+            nPastedCount = 1;
+        aDestEnd.SetRow( aNewDestPos.Row() + nPastedCount - 1 );
+    }
+
     aDestRange.aStart = aNewDestPos;
     aDestRange.aEnd = aDestEnd;
 
@@ -1071,7 +1087,14 @@ void __EXPORT ScUndoDragDrop::Redo()
     ScMarkData aDestMark;
     for (nTab=aDestRange.aStart.Tab(); nTab<=aDestRange.aEnd.Tab(); nTab++)
         aDestMark.SelectTable( nTab, TRUE );
-    pDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pClipDoc, TRUE );
+
+    BOOL bIncludeFiltered = bCut;
+    pDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pClipDoc, TRUE, FALSE, bIncludeFiltered );
+
+    // skipped rows and merged cells don't mix
+    if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
+        pDocShell->GetDocFunc().UnmergeCells( aDestRange, FALSE, TRUE );
+
     for (nTab=aDestRange.aStart.Tab(); nTab<=aDestRange.aEnd.Tab(); nTab++)
     {
         USHORT nEndCol = aDestRange.aEnd.Col();

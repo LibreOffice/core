@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-04 17:25:34 $
+ *  last change: $Author: nn $ $Date: 2001-10-18 20:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ class ScTransferObj : public TransferableHelper
 private:
     ScDocument*                     pDoc;
     ScRange                         aBlock;
+    USHORT                          nNonFiltered;       // non-filtered rows
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
     SvEmbeddedObjectRef             aDocShellRef;
@@ -121,6 +122,7 @@ public:
 
     ScDocument*         GetDocument()           { return pDoc; }        // owned by ScTransferObj
     const ScRange&      GetRange() const        { return aBlock; }
+    USHORT              GetNonFilteredRows() const { return nNonFiltered; }
     USHORT              GetDragHandleX() const  { return nDragHandleX; }
     USHORT              GetDragHandleY() const  { return nDragHandleY; }
     USHORT              GetVisibleTab() const   { return nVisibleTab; }

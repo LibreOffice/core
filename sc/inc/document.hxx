@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: dr $ $Date: 2001-09-21 06:12:21 $
+ *  last change: $Author: nn $ $Date: 2001-10-18 20:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,6 +919,9 @@ public:
     void            CopyBlockFromClip( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
                                     const ScMarkData& rMark, short nDx, short nDy,
                                     const ScCopyBlockFromClipParams* pCBFCP );
+    void            CopyNonFilteredFromClip( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
+                                    const ScMarkData& rMark, short nDx, short nDy,
+                                    const ScCopyBlockFromClipParams* pCBFCP );
     void            StartListeningFromClip( USHORT nCol1, USHORT nRow1,
                                         USHORT nCol2, USHORT nRow2,
                                         const ScMarkData& rMark, USHORT nInsFlag );
@@ -930,10 +933,13 @@ public:
                                     ScDocument* pRefUndoDoc = NULL,
                                     ScDocument* pClipDoc = NULL,
                                     BOOL bResetCut = TRUE,
-                                    BOOL bAsLink = FALSE );
+                                    BOOL bAsLink = FALSE,
+                                    BOOL bIncludeFiltered = TRUE );
 
-    void            GetClipArea(USHORT& nClipX, USHORT& nClipY);
+    void            GetClipArea(USHORT& nClipX, USHORT& nClipY, BOOL bIncludeFiltered);
     void            GetClipStart(USHORT& nClipX, USHORT& nClipY);
+
+    BOOL            HasClipFilteredRows();
 
     BOOL            IsClipboardSource() const;
 

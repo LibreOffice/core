@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-15 11:27:28 $
+ *  last change: $Author: nn $ $Date: 2001-10-18 20:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1699,6 +1699,18 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     USHORT nUndoEndCol = nDestCol + ( nEndCol-nStartCol );      // erweitert im Zielblock
     USHORT nUndoEndRow = nDestRow + ( nEndRow-nStartRow );
 
+    BOOL bIncludeFiltered = bCut;
+    if ( !bIncludeFiltered )
+    {
+        //  adjust sizes to include only non-filtered rows
+
+        USHORT nClipX, nClipY;
+        pClipDoc->GetClipArea( nClipX, nClipY, FALSE );
+        USHORT nUndoAdd = nUndoEndRow - nDestEndRow;
+        nDestEndRow = nDestRow + nClipY;
+        nUndoEndRow = nDestEndRow + nUndoAdd;
+    }
+
     if (nUndoEndCol>MAXCOL || nUndoEndRow>MAXROW)
     {
         if (!bApi)
@@ -1818,7 +1830,11 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     aDestMark.SetMarkArea( aPasteDest );
 
         //! markierte Tabellen bei CopyFromClip uebergeben !!!!!
-    pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_ALL, pRefUndoDoc, pClipDoc );
+    pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_ALL, pRefUndoDoc, pClipDoc, TRUE, FALSE, bIncludeFiltered );
+
+    // skipped rows and merged cells don't mix
+    if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
+        UnmergeCells( aPasteDest, FALSE, TRUE );
 
     VirtualDevice aVirtDev;
     BOOL bDestHeight = AdjustRowHeight(

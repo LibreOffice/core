@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: er $ $Date: 2001-10-18 08:59:53 $
+ *  last change: $Author: nn $ $Date: 2001-10-18 20:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1420,10 +1420,54 @@ void ScDocument::CopyBlockFromClip( USHORT nCol1, USHORT nRow1,
 }
 
 
+void ScDocument::CopyNonFilteredFromClip( USHORT nCol1, USHORT nRow1,
+                                    USHORT nCol2, USHORT nRow2,
+                                    const ScMarkData& rMark,
+                                    short nDx, short nDy,
+                                    const ScCopyBlockFromClipParams* pCBFCP )
+{
+    //  call CopyBlockFromClip for ranges of consecutive non-filtered rows
+    //  nCol1/nRow1 etc. is in target doc
+
+    //  filtered state is taken from first used table in clipboard (as in GetClipArea)
+    USHORT nFlagTab = 0;
+    ScTable** ppClipTab = pCBFCP->pClipDoc->pTab;
+    while ( nFlagTab < MAXTAB && !ppClipTab[nFlagTab] )
+        ++nFlagTab;
+
+    USHORT nSourceRow = pCBFCP->pClipDoc->aClipRange.aStart.Row();
+    USHORT nSourceEnd = pCBFCP->pClipDoc->aClipRange.aEnd.Row();
+    USHORT nDestRow = nRow1;
+
+    while ( nSourceRow <= nSourceEnd && nDestRow <= nRow2 )
+    {
+        // skip filtered rows
+        while ( nSourceRow <= nSourceEnd &&
+                ( pCBFCP->pClipDoc->GetRowFlags( nSourceRow, nFlagTab ) & CR_FILTERED ) != 0 )
+            ++nSourceRow;
+
+        if ( nSourceRow <= nSourceEnd )
+        {
+            // look for more non-filtered rows following
+            USHORT nFollow = 0;
+            while ( nSourceRow + nFollow < nSourceEnd && nDestRow + nFollow < nRow2 &&
+                    ( pCBFCP->pClipDoc->GetRowFlags( nSourceRow + nFollow + 1, nFlagTab ) & CR_FILTERED ) == 0 )
+                ++nFollow;
+
+            short nNewDy = ((short)nDestRow) - nSourceRow;
+            CopyBlockFromClip( nCol1, nDestRow, nCol2, nDestRow + nFollow, rMark, nDx, nNewDy, pCBFCP );
+
+            nSourceRow += nFollow + 1;
+            nDestRow += nFollow + 1;
+        }
+    }
+}
+
+
 void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
                                 USHORT nInsFlag,
                                 ScDocument* pRefUndoDoc, ScDocument* pClipDoc, BOOL bResetCut,
-                                BOOL bAsLink )
+                                BOOL bAsLink, BOOL bIncludeFiltered )
 {
     if (!bIsClip)
     {
@@ -1508,8 +1552,12 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             pClipDoc->ExtendMerge( pClipDoc->aClipRange.aStart.Col(),
                                     pClipDoc->aClipRange.aStart.Row(),
                                     nXw, nYw, 0 );
-            nXw -= pClipDoc->aClipRange.aStart.Col();
-            nYw -= pClipDoc->aClipRange.aStart.Row();
+            nXw -= pClipDoc->aClipRange.aEnd.Col();
+            nYw -= pClipDoc->aClipRange.aEnd.Row();         // only extra value from ExtendMerge
+            USHORT nDestAddX, nDestAddY;
+            pClipDoc->GetClipArea( nDestAddX, nDestAddY, bIncludeFiltered );
+            nXw += nDestAddX;
+            nYw += nDestAddY;                               // ClipArea, plus ExtendMerge value
 
             //  Inhalte entweder komplett oder gar nicht loeschen:
             USHORT nDelFlag = IDF_NONE;
@@ -1560,7 +1608,10 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                 {
                     short nDx = ((short)nC1) - nClipStartCol;
                     short nDy = ((short)nR1) - nClipStartRow;
-                    CopyBlockFromClip( nC1, nR1, nC2, nR2, rMark, nDx, nDy, &aCBFCP );
+                    if ( bIncludeFiltered )
+                        CopyBlockFromClip( nC1, nR1, nC2, nR2, rMark, nDx, nDy, &aCBFCP );
+                    else
+                        CopyNonFilteredFromClip( nC1, nR1, nC2, nR2, rMark, nDx, nDy, &aCBFCP );
                     nC1 = nC2 + 1;
                     nC2 = Min((USHORT)(nC1 + nXw), nCol2);
                 }
@@ -1639,12 +1690,33 @@ void ScDocument::SetClipArea( const ScRange& rArea, BOOL bCut )
 }
 
 
-void ScDocument::GetClipArea(USHORT& nClipX, USHORT& nClipY)
+void ScDocument::GetClipArea(USHORT& nClipX, USHORT& nClipY, BOOL bIncludeFiltered)
 {
     if (bIsClip)
     {
         nClipX = aClipRange.aEnd.Col() - aClipRange.aStart.Col();
-        nClipY = aClipRange.aEnd.Row() - aClipRange.aStart.Row();
+
+        if ( bIncludeFiltered )
+            nClipY = aClipRange.aEnd.Row() - aClipRange.aStart.Row();
+        else
+        {
+            //  count non-filtered rows
+            //  count on first used table in clipboard
+            USHORT nCountTab = 0;
+            while ( nCountTab < MAXTAB && !pTab[nCountTab] )
+                ++nCountTab;
+
+            USHORT nEndRow = aClipRange.aEnd.Row();
+            USHORT nResult = 0;
+            for (USHORT nRow = aClipRange.aStart.Row(); nRow <= nEndRow; nRow++)
+                if ( ( GetRowFlags( nRow, nCountTab ) & CR_FILTERED ) == 0 )
+                    ++nResult;
+
+            if ( nResult > 0 )
+                nClipY = nResult - 1;
+            else
+                nClipY = 0;                 // always return at least 1 row
+        }
     }
     else
         DBG_ERROR("GetClipArea: kein Clip");
@@ -1660,6 +1732,22 @@ void ScDocument::GetClipStart(USHORT& nClipX, USHORT& nClipY)
     }
     else
         DBG_ERROR("GetClipStart: kein Clip");
+}
+
+
+BOOL ScDocument::HasClipFilteredRows()
+{
+    //  count on first used table in clipboard
+    USHORT nCountTab = 0;
+    while ( nCountTab < MAXTAB && !pTab[nCountTab] )
+        ++nCountTab;
+
+    USHORT nEndRow = aClipRange.aEnd.Row();
+    for (USHORT nRow = aClipRange.aStart.Row(); nRow <= nEndRow; nRow++)
+        if ( ( GetRowFlags( nRow, nCountTab ) & CR_FILTERED ) != 0 )
+            return TRUE;
+
+    return FALSE;
 }
 
 

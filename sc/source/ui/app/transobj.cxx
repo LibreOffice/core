@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-08 18:07:55 $
+ *  last change: $Author: nn $ $Date: 2001-10-18 20:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,9 +171,13 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     USHORT nCol2;
     USHORT nRow2;
     pDoc->GetClipStart( nCol1, nRow1 );
-    pDoc->GetClipArea( nCol2, nRow2 );
+    pDoc->GetClipArea( nCol2, nRow2, TRUE );    // real source area - include filtered rows
     nCol2 += nCol1;
     nRow2 += nRow1;
+
+    USHORT nDummy;
+    pDoc->GetClipArea( nDummy, nNonFiltered, FALSE );
+    ++nNonFiltered;     // to get count instead of diff
 
     USHORT nTab1=0;
     USHORT nTab2=0;

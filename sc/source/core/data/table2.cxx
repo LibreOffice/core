@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-10-18 08:59:53 $
+ *  last change: $Author: nn $ $Date: 2001-10-18 20:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ void ScTable::CopyToClip(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
         for (USHORT i = nCol1; i <= nCol2; i++)
             aCol[i].CopyToClip(nRow1, nRow2, pTable->aCol[i], bKeepScenarioFlags);
 
-        //  Zeilen-/Spaltenhoehen, und von Flags nur "ausgeblendet" und "manual"
+        //  copy widths/heights, and only "hidden", "filtered" and "manual" flags
 
         if (pColFlags && pTable->pColFlags && pColWidth && pTable->pColWidth)
             for (i=nCol1; i<=nCol2; i++)
@@ -382,7 +382,7 @@ void ScTable::CopyToClip(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
         if (pRowFlags && pTable->pRowFlags && pRowHeight && pTable->pRowHeight)
             for (i=nRow1; i<=nRow2; i++)
             {
-                pTable->pRowFlags[i] = pRowFlags[i] & (CR_HIDDEN | CR_MANUALSIZE);
+                pTable->pRowFlags[i] = pRowFlags[i] & (CR_HIDDEN | CR_FILTERED | CR_MANUALSIZE);
                 pTable->pRowHeight[i] = pRowHeight[i];
             }
 

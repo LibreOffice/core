@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-15 17:55:00 $
+ *  last change: $Author: nn $ $Date: 2001-10-18 20:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2577,6 +2577,9 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
         USHORT nSizeX = aSourceRange.aEnd.Col() - aSourceRange.aStart.Col() + 1;
         USHORT nSizeY = aSourceRange.aEnd.Row() - aSourceRange.aStart.Row() + 1;
 
+        if ( rEvt.mnAction != DND_ACTION_MOVE )
+            nSizeY = rData.pCellTransfer->GetNonFilteredRows();     // copy/link: no filtered rows
+
         short nNewDragX = nPosX - rData.pCellTransfer->GetDragHandleX();
         if (nNewDragX<0) nNewDragX=0;
         if (nNewDragX+(nSizeX-1) > MAXCOL)
@@ -2600,7 +2603,9 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
             return DND_ACTION_NONE;
         }
 
-        if ( nNewDragX != (short) nDragStartX || nNewDragY != (short) nDragStartY || !bDragRect )
+        if ( nNewDragX != (short) nDragStartX || nNewDragY != (short) nDragStartY ||
+             nDragStartX+nSizeX-1 != nDragEndX || nDragStartY+nSizeY-1 != nDragEndY ||
+             !bDragRect )
         {
             if (bDragRect)
                 pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );

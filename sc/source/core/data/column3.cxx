@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-10-18 08:59:52 $
+ *  last change: $Author: nn $ $Date: 2001-10-18 20:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,11 +695,13 @@ void ScColumn::CopyFromClip(USHORT nRow1, USHORT nRow2, short nDy,
             Resize( nNew );
     }
 
-    USHORT nRowDiff = nRow2 - nRow1;
-    USHORT nDestRow;
-    for (USHORT i = 0; (i < nColCount) && (i <= nRowDiff); i++)
+    BOOL bAtEnd = FALSE;
+    for (USHORT i = 0; i < nColCount && !bAtEnd; i++)
     {
-        if ( (nDestRow = rColumn.pItems[i].nRow + nDy) <= nRow2 )
+        USHORT nDestRow = rColumn.pItems[i].nRow + nDy;
+        if ( nDestRow > nRow2 )
+            bAtEnd = TRUE;
+        else if ( nDestRow >= nRow1 )   // rows at the beginning may be skipped if filtered rows are left out
         {
             ScBaseCell* pOld = rColumn.pItems[i].pCell;
             ScBaseCell* pNew;

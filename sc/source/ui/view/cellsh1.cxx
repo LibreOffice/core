@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-25 18:40:50 $
+ *  last change: $Author: nn $ $Date: 2001-10-18 20:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1167,7 +1167,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                         USHORT nPosY = pViewData->GetCurY();
                                         USHORT nClipStartX, nClipStartY, nClipSizeX, nClipSizeY;
                                         pOwnClip->GetDocument()->GetClipStart( nClipStartX, nClipStartY );
-                                        pOwnClip->GetDocument()->GetClipArea( nClipSizeX, nClipSizeY );
+                                        // for CutMode, filtered rows can always be included
+                                        pOwnClip->GetDocument()->GetClipArea( nClipSizeX, nClipSizeY, TRUE );
                                         int nDisableShift = 0;
                                         if ( nClipStartX <= nPosX + nClipSizeX &&
                                                 nPosX <= nClipStartX + nClipSizeX )
