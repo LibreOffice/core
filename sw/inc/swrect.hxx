@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:23:55 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,13 @@ public:
            SwRect &_Intersection( const SwRect &rRect );
     inline SwRect  GetUnion( const SwRect& rRect ) const;
     inline SwRect  GetIntersection( const SwRect& rRect ) const;
+
+    // MB: 24.11.2004
+    // Returns the true distance between point and rectangle.
+    // If the point is inside the rectangle, the result is 0.0f.
+    // The function also returns the point closest point inside
+    // the rectangle relative to the point passed as argument.
+    float GetDistance( const Point &rPOINT, Point rClosest ) const;
 
            BOOL IsInside( const Point& rPOINT ) const;
            BOOL IsNear(const Point& rPoint, long nTolerance ) const;
