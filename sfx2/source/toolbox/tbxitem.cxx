@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-09 07:08:33 $
+ *  last change: $Author: mba $ $Date: 2001-05-03 10:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
 #endif
+
+#include <svtools/imagemgr.hxx>
+
 #pragma hdrstop
 
 #include "tbxctrl.hxx"
@@ -95,7 +98,6 @@
 #include "sfx.hrc"
 #include "module.hxx"
 #include "appdata.hxx"
-#include "expfile.hxx"
 #include "docfile.hxx"
 #include "docfac.hxx"
 #include "referers.hxx"
@@ -668,8 +670,8 @@ void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
         aURL = DEFINE_CONST_UNICODE("private:factory/");
         aURL += String::CreateFromAscii(SfxObjectFactory::GetDefaultFactory().GetShortName());
     }
-    GetToolBox().SetItemImage( SID_NEWDOCDIRECT,
-                               SfxExplorerFile::GetImage( INetURLObject( aURL ), FALSE ) );
+
+    GetToolBox().SetItemImage( SID_NEWDOCDIRECT, SvImageManager::GetImage( INetURLObject( aURL ), FALSE ) );
 }
 
 //--------------------------------------------------------------------

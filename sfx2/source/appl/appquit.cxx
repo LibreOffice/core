@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-28 11:12:39 $
+ *  last change: $Author: mba $ $Date: 2001-05-03 10:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,6 @@
 #include "frameobj.hxx"
 #include "docfile.hxx"
 #include "sfxtypes.hxx"
-#include "explorer.hxx"
 #include "appimp.hxx"
 #include "sfxlocal.hrc"
 #include "dataurl.hxx"

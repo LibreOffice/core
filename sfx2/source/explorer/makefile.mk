@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dv $ $Date: 2001-04-27 11:04:36 $
+#   last change: $Author: mba $ $Date: 2001-05-03 10:31:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,16 +76,9 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-IMGLST_SRS=$(SRS)$/explorer.srs
-BMP_IN=$(PRJ)$/win/res
-
-# --- Files --------------------------------------------------------
-
 SLOFILES = \
         $(SLO)$/ucbhelp.obj		\
         $(SLO)$/nochaos.obj		\
-        $(SLO)$/expfile.obj		\
-        $(SLO)$/explorer.obj	\
         $(SLO)$/exptypes.obj	\
         $(SLO)$/infodlgs.obj	\
         $(SLO)$/iodlg.obj		\

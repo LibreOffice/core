@@ -64,8 +64,6 @@ hedabu: ..\inc\doctdlg.hxx %_DEST%\inc%_EXT%\sfx2\doctdlg.hxx
 hedabu: ..\inc\event.hxx %_DEST%\inc%_EXT%\sfx2\event.hxx
 hedabu: ..\inc\evntconf.hxx %_DEST%\inc%_EXT%\sfx2\evntconf.hxx
 hedabu: ..\inc\exchobj.hxx %_DEST%\inc%_EXT%\sfx2\exchobj.hxx
-hedabu: ..\inc\expfile.hxx %_DEST%\inc%_EXT%\sfx2\expfile.hxx
-hedabu: ..\inc\explorer.hxx %_DEST%\inc%_EXT%\sfx2\explorer.hxx
 hedabu: ..\inc\exptypes.hxx %_DEST%\inc%_EXT%\sfx2\exptypes.hxx
 hedabu: ..\inc\filedlghelper.hxx %_DEST%\inc%_EXT%\sfx2\filedlghelper.hxx
 hedabu: ..\inc\fsetvwsh.hxx %_DEST%\inc%_EXT%\sfx2\fsetvwsh.hxx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-21 13:54:44 $
+ *  last change: $Author: mba $ $Date: 2001-05-03 10:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 
 #include <svtools/urihelper.hxx>
 #include <svtools/useroptions.hxx>
+#include <svtools/imagemgr.hxx>
 
 #pragma hdrstop
 
@@ -83,10 +84,6 @@
 #include "frame.hxx"
 #include "viewfrm.hxx"
 #include "request.hxx"
-#include "expfile.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 #include "exptypes.hxx"
 #include "helper.hxx"
 
@@ -523,7 +520,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     aURL.SetSmartProtocol( INET_PROT_FILE );
     aURL.SetSmartURL( aFactory);
     const String& rMainURL = aURL.GetMainURL();
-    aBmp1.SetImage( SfxExplorerFile::GetImage( aURL, TRUE ) );
+    aBmp1.SetImage( SvImageManager::GetImage( aURL, TRUE ) );
 
     // Bestimmung von Groesse und Typ
     String aSizeText( aUnknownSize );
