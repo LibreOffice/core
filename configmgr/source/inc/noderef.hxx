@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 16:11:15 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,8 @@ namespace configmgr
             virtual Result handle(Tree const& aTree, NodeRef const& aNode) = 0;
             /// do the operation on <var>aValue</var>. needs to be implemented by concrete visitor classes
             virtual Result handle(Tree const& aTree, ValueRef const& aValue) = 0;
+        protected:
+            virtual ~NodeVisitor() {}
         };
     //-------------------------------------------------------------------------
 
