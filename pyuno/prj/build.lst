@@ -1,0 +1,6 @@
+pu	pyuno	:	cppuhelper python NULL
+pu	pyuno				  usr1	-	all	br_mkout NULL
+pu	pyuno\unotypes		nmake	-	all	pu_unotypes NULL
+pu	pyuno\source\module	nmake	-	all	pu_module NULL
+pu	pyuno\source\loader	nmake	-	all	pu_loader pu_module NULL
+#pu	pyuno\source\scriptf	nmake	-	all	pu_scriptf pu_module NULL
