@@ -2,9 +2,9 @@
 #
 #   $RCSfile: archivefiles.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-12-16 10:43:19 $
+#   last change: $Author: vg $ $Date: 2005-02-24 16:19:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -200,7 +200,7 @@ sub resolving_archive_flag
 
                     if ($returnvalue) { installer::exiter::exit_program("ERROR: $infoline", "resolving_archive_flag"); }
 
-                    if ( $^O =~ /cygwin/ and $ENV{'USE_SHELL'} ne "4nt" )
+                    if ( $^O =~ /cygwin/i )
                     {
                         # Make dll's executable
                         $systemcall = "cd $unzipdir; find . -name \\*.dll -exec chmod 775 \{\} \\\;";
@@ -257,7 +257,7 @@ sub resolving_archive_flag
 
                         $zipname =~ s/^\s*\.\///;
 
-                        if ($installer::globals::iswin and $ENV{'USE_SHELL'} eq "4nt") { $zipname =~ s/\//\\/g; }
+                        if ($installer::globals::iswin and $^O =~ /MSWin/i) { $zipname =~ s/\//\\/g; }
 
                         # if ( $zipsize == 0 )  # also files can have a size of 0
                         if ( $zipname =~ /\Q$installer::globals::separator\E\s*$/ ) # slash or backslash at the end characterizes a directory
