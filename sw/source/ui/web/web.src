@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-01 11:34:19 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ String STR_WRITER_WEBDOC_FULLTYPE_40
     Text [ swedish ] = "%PRODUCTNAME 4.0 HTML" ;
     Text [ danish ] = "%PRODUCTNAME 4.0 HTML" ;
     Text [ italian ] = "HTML %PRODUCTNAME 4.0" ;
-    Text [ spanish ] = "HTML de %PRODUCTNAME 4.0" ;
+    Text [ spanish ] = "%PRODUCTNAME 4.0 HTML" ;
     Text [ french ] = "%PRODUCTNAME 4.0 HTML" ;
     Text [ dutch ] = "%PRODUCTNAME 4.0 HTML" ;
     Text [ portuguese ] = "HTML (%PRODUCTNAME 4.0)" ;
@@ -140,7 +140,7 @@ String STR_WRITER_WEBDOC_FULLTYPE
     Text [ swedish ] = "%PRODUCTNAME 5.0 HTML" ;
     Text [ danish ] = "%PRODUCTNAME 5.0 HTML" ;
     Text [ italian ] = "HTML %PRODUCTNAME 5.0" ;
-    Text [ spanish ] = "HTML de %PRODUCTNAME 5.0" ;
+    Text [ spanish ] = "%PRODUCTNAME 5.0 HTML" ;
     Text [ french ] = "%PRODUCTNAME 5.0 HTML" ;
     Text [ dutch ] = "%PRODUCTNAME 5.0 HTML" ;
     Text [ portuguese ] = "HTML (%PRODUCTNAME 5.0)" ;
