@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:38:01 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,12 @@ namespace sdr
         // PaintObject() is called.
         sal_Bool ViewContactOfSdrPage::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
         {
+            // #116481# Test page painting. Suppress output when control layer is painting.
+            if(rDisplayInfo.GetControlLayerPainting())
+            {
+                return sal_False;
+            }
+
             // #115593#
             // As preparation for AF, the ViewContactOfSdrPage says it's painting so that the
             // invalidates for the hierarchy will work
