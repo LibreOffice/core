@@ -27,6 +27,8 @@ import drafts.com.sun.star.accessibility.XAccessibleExtendedComponent;
 import drafts.com.sun.star.accessibility.XAccessibleRelationSet;
 import drafts.com.sun.star.accessibility.XAccessibleStateSet;
 
+import drafts.com.sun.star.awt.XExtendedToolkit;
+
 import java.util.Vector;
 import java.awt.*;
 import java.awt.event.*;
@@ -100,6 +102,8 @@ public class AccessibilityWorkBench
 
     public  AccessibilityWorkBench (int nPortNumber, String sFileName)
     {
+        mbInitialized = false;
+
         msFileName = sFileName;
 
         Layout ();
@@ -214,6 +218,7 @@ public class AccessibilityWorkBench
         aExpandButton = createButton ("Expand All", "expand");
         aTextButton = createButton("Text", "text");
         aQuitButton = createButton ("Quit", "quit");
+        UpdateButtonStates ();
 
         LoadOptions();
 
@@ -361,35 +366,67 @@ public class AccessibilityWorkBench
     }
 
 
+    /** Initialize the AWB.  This includes clearing the canvas, add
+        listeners, creation of a new tree model for the tree list box and
+        the update of the button states.
+
+        This method may be called any number of times.  Note that all
+        actions will be carried out every time.  The main purpose of a
+        second call is that of a re-initialization after a reconnect.
+    */
     protected void initialize ()
     {
         maCanvas.clear();
 
+        AccessibilityTreeModel aModel = null;
         // create new model (with new documents)
         if (maTree.getModel() instanceof AccessibilityTreeModel)
         {
-            AccessibilityTreeModel aModel = (AccessibilityTreeModel)maTree.getModel();
+            aModel = (AccessibilityTreeModel)maTree.getModel();
             aModel.setRoot (createTreeModelRoot());
         }
         else
         {
             System.out.println ("creating new tree model");
-            AccessibilityTreeModel aModel =
-                new AccessibilityTreeModel (createTreeModelRoot(), this, this);
+            aModel = new AccessibilityTreeModel (createTreeModelRoot(), this, this);
             aModel.setCanvas (maCanvas);
             maTree.setModel (aModel);
         }
 
-        aConnectButton.setEnabled (true);
-        aQuitButton.setEnabled (true);
-        aLoadButton.setEnabled (true);
-        aUpdateButton.setEnabled (true);
-        aExpandButton.setEnabled (true);
-        aShapesButton.setEnabled (true);
-        aTextButton.setEnabled (true);
+        if (office != null)
+        {
+            // Add terminate listener.
+            if (office.getDesktop() != null)
+                office.getDesktop().addTerminateListener (this);
 
-        if (office != null && office.getDesktop() != null)
-            office.getDesktop().addTerminateListener (this);
+            // Add top window listener.
+            /*
+            XExtendedToolkit xToolkit = office.getExtendedToolkit();
+            if (xToolkit != null)
+                xToolkit.addTopWindowListener (
+                    new TopWindowListener (aModel, office));
+            */
+        }
+
+        mbInitialized = true;
+        UpdateButtonStates ();
+    }
+
+
+
+
+    /** Update the states of the buttons according to the internal state of
+        the AWB.
+    */
+    protected void UpdateButtonStates ()
+    {
+        aConnectButton.setEnabled (mbInitialized);
+        aQuitButton.setEnabled (mbInitialized);
+        aLoadButton.setEnabled (mbInitialized);
+        aUpdateButton.setEnabled (mbInitialized);
+        aExpandButton.setEnabled (mbInitialized);
+        aShapesButton.setEnabled (mbInitialized);
+        aTextButton.setEnabled (mbInitialized);
     }
 
 
@@ -472,7 +509,9 @@ public class AccessibilityWorkBench
 
 
 
-    /** Create an AccessibilityTreeModel root which contains the documents */
+    /** Create an AccessibilityTreeModel root which contains the documents
+        (top windows) that are present at the moment.
+    */
     private AccessibleTreeNode createTreeModelRoot()
     {
         // create root node
@@ -622,4 +661,6 @@ public class AccessibilityWorkBench
         maMenuBar;
     private String
         msMessage;
+    private boolean
+        mbInitialized;
 }
