@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-11-23 10:52:52 $
+ *  last change: $Author: jbu $ $Date: 2001-12-03 16:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,14 +516,14 @@ Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext
         return xContext;
     }
 }
-
+static void MyDummySymbolWithinLibrary(){}
 //==================================================================================================
 Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext()
     SAL_THROW( (Exception) )
 {
     OSL_TRACE("vcl/source/app/unohelp.cxx: trying rc file...");
     OUString libraryFileUrl;
-    Module::getUrlFromAddress((void *)(Reference<XComponentContext> (*)())defaultBootstrap_InitialComponentContext, libraryFileUrl);
+    Module::getUrlFromAddress((void*)MyDummySymbolWithinLibrary, libraryFileUrl);
 
     OUString iniName = libraryFileUrl.copy(0, libraryFileUrl.lastIndexOf((sal_Unicode)'/') + 1); // cut the library extension
     iniName += OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("uno"))); // add the rc file extension
