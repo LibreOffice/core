@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: cp $ $Date: 2001-11-06 18:11:01 $
+ *  last change: $Author: mt $ $Date: 2001-11-08 14:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1822,6 +1822,10 @@ static char const aImplDef_CJK_SC[] = "MSung Light SC;SimSun;Song;FZSongYi;FZShu
 static char const aImplDef_CJK_TC[] = "MSung Light TC;MingLiU;Ming;PMingLiU";
 static char const aImplDef_CJK_KR_Batang[] = "HY MyeongJo Light K;Batang;Myeongjo";
 static char const aImplDef_CJK_KR_Gulim[] = "Andale Sans UI;Gulim;Roundgothic";
+static char const aImplDef_CJK_JP_Fixed[] = "HG Mincho Light J";
+static char const aImplDef_CJK_SC_Fixed[] = "MSung Light SC";
+static char const aImplDef_CJK_TC_Fixed[] = "MSung Light TC";
+static char const aImplDef_CJK_KR_Fixed[] = "HY MyeongJo Light K";
 
 // -----------------------------------------------------------------------
 
@@ -1958,7 +1962,30 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
         case DEFAULTFONT_UI_FIXED:
             aFont.SetPitch( PITCH_FIXED );
             aFont.SetFamily( FAMILY_MODERN );
-            pSearch1 = aImplDefFixed;
+            switch ( eLang )
+            {
+                case LANGUAGE_JAPANESE:
+                    pSearch1 = aImplDef_CJK_JP_Fixed;
+                    break;
+                case LANGUAGE_CHINESE:
+                case LANGUAGE_CHINESE_SIMPLIFIED:
+                case LANGUAGE_CHINESE_SINGAPORE:
+                    pSearch1 = aImplDef_CJK_SC_Fixed;
+                    break;
+                case LANGUAGE_CHINESE_TRADITIONAL:
+                case LANGUAGE_CHINESE_HONGKONG:
+                case LANGUAGE_CHINESE_MACAU:
+                    pSearch1 = aImplDef_CJK_TC_Fixed;
+                    break;
+                case LANGUAGE_KOREAN:
+                case LANGUAGE_KOREAN_JOHAB:
+                    pSearch1 = aImplDef_CJK_KR_Fixed;
+                    break;
+            }
+            if ( pSearch1 )
+                pSearch2 = aImplDefFixed;
+            else
+                pSearch1 = aImplDefFixed;
             break;
 
         case DEFAULTFONT_SYMBOL:
