@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:17:41 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef _VCL_FONTCFG_HXX
 #include <fontcfg.hxx>
+#endif
+#ifndef VCL_INC_CONFIGSETTINGS_HXX
+#include <configsettings.hxx>
 #endif
 #ifndef _SV_OUTDEV_HXX
 #include <outdev.hxx>
