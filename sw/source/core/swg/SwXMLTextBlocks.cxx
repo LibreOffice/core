@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:06:32 $
+ *  last change: $Author: obo $ $Date: 2005-01-12 09:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
     pDoc->SetOle2Link( Link() );
     pDoc->DoUndo( FALSE );      // always FALSE
     pDoc->AddLink();
+    uno::Reference< embed::XStorage > refStg;
     if( !aDateModified.GetDate() || !aTimeModified.GetTime() )
         Touch();        // falls neu angelegt -> neuen ZeitStempel besorgen
     try
