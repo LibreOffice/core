@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-25 18:15:26 $
+ *  last change: $Author: sj $ $Date: 2001-05-03 13:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,12 @@ const char* FilterConfigCache::FilterConfigCacheEntry::InternalVectorFilterNameL
     EXP_SVMETAFILE, EXP_WMF, EXP_EMF, EXP_SVG, NULL
 };
 
+const char* FilterConfigCache::FilterConfigCacheEntry::ExternalPixelFilterNameList[] =
+{
+    "egi", "epn", "icd", "ipd", "ipx", "ipb", "epb", "epg",
+    "epp", "ira", "era", "itg", "iti", "eti", "exp", NULL
+};
+
 sal_Bool FilterConfigCache::FilterConfigCacheEntry::IsValid()
 {
     return sFilterName.Len() != 0;
@@ -113,7 +119,7 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::IsValid()
 
 sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
 {
-    bIsInternalFilter = sal_False;
+    bIsPixelFormat = bIsInternalFilter = sal_False;
     sFilterName = String( rUserDataEntry );
     const char** pPtr;
     for ( pPtr = InternalPixelFilterNameList; *pPtr && ( bIsInternalFilter == sal_False ); pPtr++ )
@@ -127,13 +133,15 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUSt
     for ( pPtr = InternalVectorFilterNameList; *pPtr && ( bIsInternalFilter == sal_False ); pPtr++ )
     {
         if ( sFilterName.EqualsIgnoreCaseAscii( *pPtr ) )
-        {
             bIsInternalFilter = sal_True;
-            bIsPixelFormat = sal_False;
-        }
     }
     if ( !bIsInternalFilter )
     {
+        for ( pPtr = ExternalPixelFilterNameList; *pPtr && ( bIsPixelFormat == sal_False ); pPtr++ )
+        {
+            if ( sFilterName.EqualsIgnoreCaseAscii( *pPtr ) )
+                bIsPixelFormat = sal_True;
+        }
         String aTemp( OUString::createFromAscii( SVLIBRARY( "?" ) ) );
         xub_StrLen nIndex = aTemp.Search( (sal_Unicode)'?' );
         aTemp.Replace( nIndex, 1, sFilterName );

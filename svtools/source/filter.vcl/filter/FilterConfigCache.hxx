@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-25 16:55:18 $
+ *  last change: $Author: sj $ $Date: 2001-05-03 13:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ class FilterConfigCache
 
             static const char* InternalPixelFilterNameList[];
             static const char* InternalVectorFilterNameList[];
+            static const char* ExternalPixelFilterNameList[];
         };
 
         typedef std::vector< FilterConfigCacheEntry > CacheVector;
