@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:59:21 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,8 @@ public:
     // Direkt das aktuelle Feld aendern
     void            UpdateCurFld(ULONG nFormat,
                                  const String& rPar1,
-                                 const String& rPar2);
+                                 const String& rPar2,
+                                 SwField * _pField = 0); // #111840#
 
     inline const String& GetCurFldPar1() const;
     inline const String& GetCurFldPar2() const;
