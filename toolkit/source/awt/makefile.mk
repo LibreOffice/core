@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pb $ $Date: 2002-02-22 08:39:03 $
+#   last change: $Author: pb $ $Date: 2002-03-05 08:27:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,24 +76,26 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=   \
-            $(SLO)$/vclxaccessiblecomponent.obj 			\
+            $(SLO)$/vclxaccessiblecomponent.obj 		\
+            $(SLO)$/vclxaccessibledropdownlistbox.obj	\
             $(SLO)$/vclxaccessiblelistbox.obj			\
             $(SLO)$/vclxaccessiblelistitem.obj			\
-            $(SLO)$/vclxbitmap.obj 					\
-            $(SLO)$/vclxcontainer.obj 				\
-            $(SLO)$/vclxdevice.obj 					\
-            $(SLO)$/vclxfont.obj 					\
-            $(SLO)$/vclxgraphics.obj 				\
-            $(SLO)$/vclxmenu.obj 					\
-            $(SLO)$/vclxpointer.obj 				\
-            $(SLO)$/vclxprinter.obj 				\
-            $(SLO)$/vclxregion.obj 					\
-            $(SLO)$/vclxsystemdependentwindow.obj			\
-            $(SLO)$/vclxtoolkit.obj 				\
-            $(SLO)$/vclxtopwindow.obj 				\
-            $(SLO)$/vclxwindow.obj 					\
+            $(SLO)$/vclxbitmap.obj 						\
+            $(SLO)$/vclxcontainer.obj 					\
+            $(SLO)$/vclxdevice.obj 						\
+            $(SLO)$/vclxfont.obj 						\
+            $(SLO)$/vclxgraphics.obj 					\
+            $(SLO)$/vclxmenu.obj 						\
+            $(SLO)$/vclxpointer.obj 					\
+            $(SLO)$/vclxprinter.obj 					\
+            $(SLO)$/vclxregion.obj 						\
+            $(SLO)$/vclxsystemdependentwindow.obj		\
+            $(SLO)$/vclxtoolkit.obj 					\
+            $(SLO)$/vclxtopwindow.obj 					\
+            $(SLO)$/vclxwindow.obj 						\
             $(SLO)$/vclxwindows.obj
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+

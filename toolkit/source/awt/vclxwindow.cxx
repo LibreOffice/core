@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2002-02-22 08:38:26 $
+ *  last change: $Author: pb $ $Date: 2002-03-05 08:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,6 @@ void ImplInitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const MouseE
     rEvent.ClickCount = rEvt.GetClicks();
     rEvent.PopupTrigger = sal_False;
 }
-
 
 //  ----------------------------------------------------
 //  class VCLXWindow
@@ -459,7 +458,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXWindow::createAccessibleContext()
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXWindow::CreateAccessibleContext()
 {
     return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
 }
@@ -1386,7 +1385,7 @@ void VCLXWindow::setZoom( float fZoomX, float fZoomY ) throw(::com::sun::star::u
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xC( mxAccessibleContext.get(), ::com::sun::star::uno::UNO_QUERY );
     if ( !xC.is() )
     {
-        xC = createAccessibleContext();
+        xC = CreateAccessibleContext();
         mxAccessibleContext = xC;
     }
 

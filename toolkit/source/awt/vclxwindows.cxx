@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 17:23:23 $
+ *  last change: $Author: pb $ $Date: 2002-03-05 08:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,12 @@
  *
  ************************************************************************/
 
-
+#ifndef _TOOLKIT_AWT_VCLXWINDOWS_HXX_
 #include <toolkit/awt/vclxwindows.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEDROPDOWLISTBOX_HXX_
+#include <toolkit/awt/vclxaccessibledropdownlistbox.hxx>
+#endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLELISTBOX_HXX_
 #include <toolkit/awt/vclxaccessiblelistbox.hxx>
 #endif
@@ -1375,9 +1379,19 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXListBox::createAccessibleContext()
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXListBox::CreateAccessibleContext()
 {
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new ::toolkit::VCLXAccessibleListBox( this );
+    ::vos::OGuard aGuard( GetMutex() );
+
+    sal_Bool bIsDropDownBox = sal_False;
+    ListBox* pBox = static_cast< ListBox* >( GetWindow() );
+    if ( pBox )
+        bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );
+
+    if ( bIsDropDownBox )
+        return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleDropDownListBox( this );
+    else
+        return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleListBox( this );
 }
 
 void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)

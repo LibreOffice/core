@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2002-03-04 15:47:34 $
+ *  last change: $Author: pb $ $Date: 2002-03-05 08:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,3 +537,71 @@ uno::Any VCLXAccessibleComponent::getAccessibleKeyBinding() throw (uno::RuntimeE
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     return uno::Any();
 }
+
+// XAccessibleExtendedComponent
+
+sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    sal_Int32 nColor = 0;
+    if ( GetWindow() )
+       nColor = GetWindow()->GetControlForeground().GetColor();
+
+    return nColor;
+}
+
+sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  ) throw (uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    sal_Int32 nColor = 0;
+    if ( GetWindow() )
+       nColor = GetWindow()->GetControlBackground().GetColor();
+
+    return nColor;
+}
+
+uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  ) throw (uno::RuntimeException)
+{
+    return uno::Reference< awt::XFont >();
+}
+
+awt::FontDescriptor SAL_CALL VCLXAccessibleComponent::getFontMetrics( const uno::Reference< awt::XFont >& xFont ) throw (uno::RuntimeException)
+{
+    return xFont->getFontDescriptor();
+}
+
+sal_Bool SAL_CALL VCLXAccessibleComponent::isEnabled(  ) throw (uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    sal_Bool bEnabled = sal_False;
+    if ( GetWindow() )
+        bEnabled = GetWindow()->IsEnabled();
+
+    return bEnabled;
+}
+
+::rtl::OUString SAL_CALL VCLXAccessibleComponent::getTitledBorderText(  ) throw (uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    ::rtl::OUString sRet;
+    if ( GetWindow() )
+        sRet = GetWindow()->GetText();
+
+    return sRet;
+}
+
+::rtl::OUString SAL_CALL VCLXAccessibleComponent::getToolTipText(  ) throw (uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    ::rtl::OUString sRet;
+    if ( GetWindow() )
+        sRet = GetWindow()->GetQuickHelpText();
+
+    return sRet;
+}
+
