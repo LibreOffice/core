@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlContainer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 13:04:40 $
+ *  last change:$Date: 2003-11-18 16:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,10 @@ import util.WriterTools;
 import util.utils;
 
 import com.sun.star.awt.XControl;
+import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XControlModel;
+import com.sun.star.awt.XDevice;
+import com.sun.star.awt.XGraphics;
 import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
@@ -90,6 +93,7 @@ import com.sun.star.view.XControlAccess;
 public class UnoControlContainer extends TestCase {
     XTextDocument xTextDoc;
     XTextDocument xTD2;
+    XControl xCtrl;
     XControl xCtrl1;
     XControl xCtrl2;
 
@@ -136,9 +140,27 @@ public class UnoControlContainer extends TestCase {
         XWindowPeer the_win = null;
         XToolkit the_kit = null;
 
+        XControlContainer ctrlCont = null;
 
-        // create 2 XControls
+        XGraphics aGraphic = null;
+
+        // create 3 XControls
         // create first XControl
+        shape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000,
+                                             10000, "TextField");
+        WriterTools.getDrawPage(xTextDoc).add((XShape) shape);
+        model = shape.getControl();
+        access = (XControlAccess) UnoRuntime.queryInterface(
+                         XControlAccess.class, xTextDoc.getCurrentController());
+
+        try {
+            xCtrl = access.getControl(model);
+        } catch (Exception e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create XControl", e);
+        }
+
+        // create second XControl
         shape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000,
                                              10000, "TextField");
         WriterTools.getDrawPage(xTextDoc).add((XShape) shape);
@@ -154,7 +176,7 @@ public class UnoControlContainer extends TestCase {
         }
 
 
-        // create second XControl
+        // create third XControl
         shape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000,
                                              10000, "CommandButton");
         WriterTools.getDrawPage(xTextDoc).add((XShape) shape);
@@ -190,7 +212,8 @@ public class UnoControlContainer extends TestCase {
         try {
             the_win = the_access.getControl(the_Model).getPeer();
             the_kit = the_win.getToolkit();
-            //aDevice = the_kit.createScreenCompatibleDevice(200, 200);
+            XDevice aDevice = the_kit.createScreenCompatibleDevice(200, 200);
+            aGraphic = aDevice.createGraphics();
         } catch (Exception e) {
             log.println("Couldn't get ButtonControl");
             e.printStackTrace(log);
@@ -210,11 +233,16 @@ public class UnoControlContainer extends TestCase {
         // create the UnoControlContainer
         try {
             oObj = (XInterface) ( (XMultiServiceFactory) param.getMSF())
-                                     .createInstance("com.sun.star.awt.UnoControlContainer");
+                        .createInstance("com.sun.star.awt.UnoControlContainer");
 
             XControl xCtrl = (XControl) UnoRuntime.queryInterface(
                                      XControl.class, oObj);
             xCtrl.setModel(the_Model);
+
+            ctrlCont = (XControlContainer) UnoRuntime.queryInterface(
+                               XControlContainer.class, oObj);
+
+
         } catch (Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create UnoControlContainer", e);
@@ -228,6 +256,12 @@ public class UnoControlContainer extends TestCase {
         String objName = "UnoControlContainer";
         tEnv.addObjRelation("OBJNAME", "toolkit." + objName);
 
+        // Object relation for XContainer
+        tEnv.addObjRelation("XContainer.Container", ctrlCont);
+        tEnv.addObjRelation("INSTANCE", xCtrl);
+
+        //Adding ObjRelation for XView
+        tEnv.addObjRelation("GRAPHICS", aGraphic);
 
         // Object Relation for XControlContainer
         tEnv.addObjRelation("CONTROL1", xCtrl1);
