@@ -2,9 +2,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:46:04 $
+ *  last change: $Author: pl $ $Date: 2001-05-08 17:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,10 +488,55 @@ PrinterGfx::DrawPolygon (sal_uInt32 nPoints, const Point* pPath)
 void
 PrinterGfx::DrawPolyPolygon (sal_uInt32 nPoly, const sal_uInt32* pSizes, const Point** pPaths )
 {
+    // sanity check
+    if ( !nPoly || !pPaths || !(maFillColor.Is() || maLineColor.Is()))
+        return;
+
     // could optimize for different line-color/fill-color that consecutively
     // invalidate each other
-    for( int i = 0; i < nPoly; i++ )
-        DrawPolygon( pSizes[i], pPaths[i] );
+    if( maFillColor.Is() && maLineColor.Is())
+        PSGSave();
+
+    // first draw area
+    if( maFillColor.Is() )
+    {
+        PSSetColor (maFillColor);
+        for( int i = 0; i < nPoly; i++ )
+        {
+            Point aPoint( 0, 0 );
+            sal_Int32 nColumn( 0 );
+
+            PSBinStartPath();
+            PSBinMoveTo( pPaths[i][0], aPoint, nColumn );
+            for( int n = 0; n < pSizes[i]; n++ )
+                PSBinLineTo( pPaths[i][n], aPoint, nColumn );
+            PSBinEndPath();
+        }
+        WritePS (mpPageBody, "eofill\n");
+    }
+    if( maFillColor.Is() && maLineColor.Is())
+        PSGRestore();
+
+    // now draw outlines
+    if( maLineColor.Is() )
+    {
+        PSSetColor (maLineColor);
+        PSSetLineWidth ();
+        for( int i = 0; i < nPoly; i++ )
+        {
+            Point aPoint( 0, 0 );
+            sal_Int32 nColumn( 0 );
+
+            PSBinStartPath();
+            PSBinMoveTo( pPaths[i][0], aPoint, nColumn );
+            for( int n = 0; n < pSizes[i]; n++ )
+                PSBinLineTo( pPaths[i][n], aPoint, nColumn );
+            if( pPaths[i][0] != pPaths[i][pSizes[i]-1] )
+                PSBinLineTo( pPaths[i][0], aPoint, nColumn );
+            PSBinEndPath();
+        }
+        WritePS (mpPageBody, "stroke\n");
+    }
 }
 
 /*
