@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-17 15:06:38 $
+ *  last change: $Author: fs $ $Date: 2002-10-31 12:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1111,7 +1111,7 @@ void ViewTabListBox_Impl::DoQuickSearch( const xub_Unicode& rChar )
     if ( bFound )
     {
         SvLBoxEntry* pEntry = GetEntry( mnSearchIndex );
-        SvLBox::SelectAll( FALSE );
+        SelectAll( FALSE );
         Select( pEntry );
         SetCurEntry( pEntry );
         MakeVisible( pEntry );
@@ -1472,7 +1472,7 @@ void SvtFileView::ExecuteFilter( const String& rFilter )
 
 void SvtFileView::SetNoSelection()
 {
-    mpImp->mpView->SvLBox::SelectAll( FALSE );
+    mpImp->mpView->SelectAll( FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -2105,7 +2105,7 @@ void SvtFileView_Impl::SetSelectHandler( const Link& _rHdl )
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::InitSelection()
 {
-    mpView->SvLBox::SelectAll( sal_False );
+    mpView->SelectAll( sal_False );
     SvLBoxEntry* pFirst = mpView->First();
     if ( pFirst )
         mpView->SetCursor( pFirst, sal_True );
