@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-21 20:45:18 $
+ *  last change: $Author: jp $ $Date: 2001-03-23 13:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1615,9 +1615,9 @@ String STR_WRITER_DOCUMENT_FULLTYPE_50
     Text = "%PRODUCTNAME 5.0 Text" ;
     Text [ English ] = "StarOffice 5.0 Text" ;
     Text [ english_us ] = "Text (%PRODUCTNAME 5.0)" ;
-    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Text" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 5.0 Text" ;
     Text [ swedish ] = "%PRODUCTNAME 5.0 text" ;
-    Text [ danish ] = "%PRODUCTNAME 4.0 tekst" ;
+    Text [ danish ] = "%PRODUCTNAME 5.0 tekst" ;
     Text [ italian ] = "Testo %PRODUCTNAME 5.0" ;
     Text [ spanish ] = "%PRODUCTNAME 5.0 Texto" ;
     Text [ french ] = "%PRODUCTNAME 5.0 Texte" ;
@@ -1641,22 +1641,22 @@ String STR_WRITER_DOCUMENT_FULLTYPE
     Text = "%PRODUCTNAME 6.0 Text" ;
     Text [ English ] = "StarOffice 6.0 Text" ;
     Text[ english_us ] = "Text (%PRODUCTNAME 6.0)";
-    Text[ portuguese ] = "Texto (%PRODUCTNAME 5.0)";
+    Text[ portuguese ] = "Texto (%PRODUCTNAME 6.0)";
     Text[ russian ] = "“ÂÍÒÚ ‚ %PRODUCTNAME 6.0";
     Text[ greek ] = " ÂﬂÏÂÌÔ %PRODUCTNAME 6.0";
-    Text[ dutch ] = "%PRODUCTNAME 5.0 Tekst";
+    Text[ dutch ] = "%PRODUCTNAME 6.0 Tekst";
     Text[ french ] = "%PRODUCTNAME 6.0 Texte";
     Text[ spanish ] = "%PRODUCTNAME 6.0 Texto";
-    Text[ italian ] = "Testo %PRODUCTNAME 5.0";
-    Text[ danish ] = "%PRODUCTNAME 4.0 tekst";
+    Text[ italian ] = "Testo %PRODUCTNAME 6.0";
+    Text[ danish ] = "%PRODUCTNAME 6.0 tekst";
     Text[ swedish ] = "%PRODUCTNAME 6.0 text";
     Text[ polish ] = "Tekst %PRODUCTNAME 6.0";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Text";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Text";
     Text[ japanese ] = "%PRODUCTNAME 6.0 ï∂èë";
-    Text[ korean ] = "%PRODUCTNAME 5.0°°Text ";
+    Text[ korean ] = "%PRODUCTNAME 6.0°°Text ";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Œƒ◊÷";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 §Â¶r";
-    Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
+    Text[ turkish ] = "%PRODUCTNAME 6.0 metni";
     Text[ arabic ] = "‰’ „‰ %PRODUCTNAME 6.0";
 };
 
