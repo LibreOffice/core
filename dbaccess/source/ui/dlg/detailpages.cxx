@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:51:53 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,6 +773,7 @@ namespace dbaui
             static sal_Int32 nRelevantIds[] =
             {
                 DSID_SQL92CHECK,
+                DSID_DOSLINEENDS,
                 0
             };
             pRelevantIds = nRelevantIds;
