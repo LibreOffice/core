@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:42:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,8 @@ PRJ=..$/..$/..
 PRJNAME=bridges
 TARGET=urp_uno
 ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=TRUE
 NO_BSYMBOLIC=TRUE
+USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -102,6 +102,9 @@ NOOPTFILES= \
 
 SHL1TARGET= $(TARGET)
 
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+SHL1VERSIONMAP=..$/..$/bridge_exports.map
+
 SHL1STDLIBS=\
         $(SALLIB)\
         $(CPPULIB)
@@ -110,19 +113,9 @@ SHL1LIBS=\
             $(SLB)$/$(TARGET).lib \
             $(SLB)$/bridges_remote_static.lib
 
+DEF1NAME=   $(SHL1TARGET)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
-
-$(MISC)$/$(SHL1TARGET).def: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY     $(SHL1TARGET)                                  >$@
-    @echo DESCRIPTION 'URP to UNO binding' 		            >>$@
-    @echo DATA        READ WRITE NONSHARED                          >>$@
-    @echo EXPORTS                                                   >>$@
-    @echo uno_initEnvironment @3                                    >>$@
-    @echo uno_ext_getMapping @4					    >>$@
-    @echo component_canUnload @5					    >>$@
 
