@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-19 18:07:26 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:26:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ TabPage TP_ENV_ENV
         Text[ chinese_traditional ] = "è¡¨æ ¼";
         Text[ arabic ] = "ÇáÌÏæá";
         Text[ greek ] = "Ðßíáêáò";
-        Text[ korean ] = "í‘œ";
+        Text[ korean ] = "ì‹œíŠ¸";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tabla";
@@ -485,6 +485,7 @@ String STR_DOC_TITLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sobre";
 };
+
 
 
 
