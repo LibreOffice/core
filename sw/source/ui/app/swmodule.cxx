@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-27 14:50:28 $
+ *  last change: $Author: tl $ $Date: 2001-03-30 14:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,9 @@
 #endif
 #ifndef _SVX_GRAFCTRL_HXX
 #include <svx/grafctrl.hxx>
+#endif
+#ifndef _SVX_CLIPBOARDCTL_HXX_
+#include <svx/clipboardctl.hxx>
 #endif
 #ifndef _SVX_DLG_HYPERLINK_HXX //autogen
 #include <offmgr/hyprlink.hxx>
@@ -543,6 +546,8 @@ void SwDLL::RegisterControls()
     SwTbxInsertCtrl::RegisterControl(FN_INSERT_OBJ_CTRL, pMod );
     SwTbxAutoTextCtrl::RegisterControl(FN_INSERT_FIELD_CTRL, pMod );
     SwTbxAutoTextCtrl::RegisterControl(FN_GLOSSARY_DLG, pMod );
+
+    SvxClipBoardControl::RegisterControl(SID_PASTE, pMod );
 
     SvxFillToolBoxControl::RegisterControl(SID_ATTR_FILL_STYLE, pMod );
     SvxLineStyleToolBoxControl::RegisterControl(SID_ATTR_LINE_STYLE, pMod );
