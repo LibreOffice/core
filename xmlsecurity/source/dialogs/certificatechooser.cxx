@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificatechooser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:04:16 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< dcss::
             // Check if we have a private key for this...
             long nCertificateCharacters = mxSecurityEnvironment->getCertificateCharacters( xCert );
 
-            if ( !( nCertificateCharacters & security::CertificateCharacters::CERT_CHARACTER_HAS_PRIVATE_KEY ) )
+            if ( !( nCertificateCharacters & security::CertificateCharacters::HAS_PRIVATE_KEY ) )
                 bIgnoreThis = true;
 
         }
@@ -175,9 +175,9 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< dcss::
     {
         String sEntry( XmlSec::GetContentPart( maCerts[ nC ]->getSubjectName() ) );
         sEntry += '\t';
-        sEntry += XmlSec::GetDateString( maCerts[ nC ]->getNotAfter() );
-        sEntry += '\t';
         sEntry += XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName() );
+        sEntry += '\t';
+        sEntry += XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() );
         SvLBoxEntry* pEntry = maCertLB.InsertEntry( sEntry );
         pEntry->SetUserData( ( void* )nC ); // missuse user data as index
     }
