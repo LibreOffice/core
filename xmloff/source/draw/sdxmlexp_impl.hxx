@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 16:11:05 $
+ *  last change: $Author: cl $ $Date: 2001-01-18 14:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,8 @@ class SdXMLExport : public SvXMLExport
         sal_Int32 nFeatures = SEF_DEFAULT,
         com::sun::star::awt::Point* pRefPoint = NULL
     );
+
+    void exportFormsElement( com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xDrawPage );
 
 public:
     static void ImpWriteSingleShapeStyleInfo(SvXMLExport& rExp,

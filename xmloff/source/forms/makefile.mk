@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
+#   last change: $Author: cl $ $Date: 2001-01-18 14:53:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
+        formsimp.cxx\
         formevents.cxx \
         eventimport.cxx \
         eventexport.cxx \
@@ -98,6 +99,7 @@ CXXFILES = \
         strings.cxx
 
 SLOFILES =	\
+        $(SLO)$/formsimp.obj \
         $(SLO)$/formevents.obj \
         $(SLO)$/eventimport.obj \
         $(SLO)$/eventexport.obj \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-08 14:55:37 $
+ *  last change: $Author: cl $ $Date: 2001-01-18 14:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include <tools/debug.hxx>
+
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
@@ -83,6 +85,14 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_XCONTROLMODEL_HPP_
+#include <com/sun/star/awt/XControlModel.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
+#include <com/sun/star/drawing/XControlShape.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
@@ -1025,6 +1035,21 @@ SdXMLControlShapeContext::~SdXMLControlShapeContext()
 
 //////////////////////////////////////////////////////////////////////////////
 
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLControlShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    if( XML_NAMESPACE_FORM == nPrefix )
+    {
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_id)) )
+        {
+            maFormId = rValue;
+            return;
+        }
+    }
+
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
+}
+
 void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     // create Control shape
@@ -1036,8 +1061,19 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
         // set parameters on shape
         SetSizeAndPosition();
-        SetRotation();
 
+        DBG_ASSERT( maFormId.getLength(), "draw:control without a form:id attribute!" );
+        if( maFormId.getLength() )
+        {
+            uno::Reference< awt::XControlModel > xControlModel( GetImport().GetFormImport()->lookupControl( maFormId ), uno::UNO_QUERY );
+            if( xControlModel.is() )
+            {
+                uno::Reference< drawing::XControlShape > xControl( mxShape, uno::UNO_QUERY );
+                if( xControl.is() )
+                    xControl->setControl(  xControlModel );
+
+            }
+        }
         SdXMLShapeContext::StartElement(xAttrList);
     }
 }

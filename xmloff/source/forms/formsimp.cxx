@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: ximppage.cxx,v $
+ *  $RCSfile: formsimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-18 14:49:52 $
+ *  last change: $Author: cl $ $Date: 2001-01-18 14:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,89 +59,41 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
+#include <com/sun/star/xml/sax/XAttributeList.hpp>
+#endif
 
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLIMP_HXX
+#include "xmlimp.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XIMPPAGE_HXX
-#include "ximppage.hxx"
-#endif
-
-#ifndef _XIMPSHAPE_HXX
-#include "ximpshap.hxx"
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include "nmspmap.hxx"
 #endif
 
 #ifndef _XMLOFF_ANIMIMP_HXX
-#include "animimp.hxx"
-#endif
-
-#ifndef _XMLOFF_FORMSIMP_HXX
 #include "formsimp.hxx"
 #endif
 
 using namespace ::rtl;
-using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+TYPEINIT1( XMLFormsContext, SvXMLImportContext );
 
-TYPEINIT1( SdXMLGenericPageContext, SvXMLImportContext );
-
-SdXMLGenericPageContext::SdXMLGenericPageContext(
-    SvXMLImport& rImport,
-    USHORT nPrfx, const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes)
-:   SvXMLImportContext( rImport, nPrfx, rLocalName ),
-    mxShapes( rShapes )
-{
-    GetImport().GetShapeImport()->pushGroupForSorting( rShapes );
-    GetImport().GetFormImport()->startPage( uno::Reference< drawing::XDrawPage >::query( mxShapes ) );
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-SdXMLGenericPageContext::~SdXMLGenericPageContext()
+XMLFormsContext::XMLFormsContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName )
+: SvXMLImportContext(rImport, nPrfx, rLocalName)
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( USHORT nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList>& xAttrList )
+XMLFormsContext::~XMLFormsContext()
 {
-    SvXMLImportContext* pContext = 0L;
-
-    if( nPrefix == XML_NAMESPACE_PRESENTATION && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_animations ) ) )
-    {
-        pContext = new XMLAnimationsContext( GetImport(), nPrefix, rLocalName, xAttrList );
-    }
-    else if( nPrefix == XML_NAMESPACE_OFFICE && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_forms ) ) )
-    {
-        pContext = new XMLFormsContext( GetImport(), nPrefix, rLocalName );
-    }
-    else
-    {
-        // call GroupChildContext function at common ShapeImport
-        pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList, mxShapes);
-    }
-
-    // call parent when no own context was created
-    if(!pContext)
-        pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
-
-    return pContext;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-void SdXMLGenericPageContext::EndElement()
+SvXMLImportContext * XMLFormsContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
-    GetImport().GetShapeImport()->popGroupAndSort();
-    GetImport().GetFormImport()->endPage();
+    return GetImport().GetFormImport()->createContext( nPrefix, rLocalName, xAttrList );
 }

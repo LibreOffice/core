@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 22:03:48 $
+ *  last change: $Author: cl $ $Date: 2001-01-18 14:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1116,6 +1116,10 @@ void SdXMLStylesContext::EndElement()
 
         // AutoStyles for chart
         GetImport().GetChartImport()->SetAutoStylesContext( this );
+
+        // AutoStyles for Forms
+        GetImport().GetFormImport()->setAutoStyleContext( this );
+
 
         // associate AutoStyles with styles in preparation to setting Styles on shapes
         for(sal_uInt32 a(0L); a < GetStyleCount(); a++)

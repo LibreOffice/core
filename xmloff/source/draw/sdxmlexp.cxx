@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 22:03:48 $
+ *  last change: $Author: cl $ $Date: 2001-01-18 14:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,10 @@
 #include <com/sun/star/style/XStyle.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FORM_XFORMSUPPLIER_HPP_
+#include <com/sun/star/form/XFormsSupplier.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_PRESENTATION_XPRESENTATIONPAGE_HPP_
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #endif
@@ -147,6 +151,10 @@
 
 #ifndef _COM_SUN_STAR_DRAWING_CONNECTORTYPE_HPP_
 #include <com/sun/star/drawing/ConnectorType.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
+#include <com/sun/star/drawing/XControlShape.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
@@ -1621,6 +1629,9 @@ void SdXMLExport::_ExportContent()
             // write page
             SvXMLElementExport aDPG(*this, XML_NAMESPACE_DRAW, sXML_page, sal_True, sal_True);
 
+            // write optional office:forms
+            exportFormsElement( xDrawPage );
+
             // prepare animations exporter if impress
             if(IsImpress())
             {
@@ -1659,6 +1670,9 @@ void SdXMLExport::_ExportContent()
                         {
                             // write presentation notes
                             SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, sXML_notes, sal_True, sal_True);
+
+                            // write optional office:forms
+                            exportFormsElement( xNotesPage );
 
                             // write shapes per se
                             ImpWriteSingleShapeStyleInfos(xShapes);
@@ -2595,6 +2609,63 @@ void SdXMLExport::ImpExportControlShape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
+    OUString aStr;
+    OUStringBuffer sStringBuffer;
+
+    // rectangle, prepare parameters
+    awt::Point aPoint = xShape->getPosition();
+    if( pRefPoint )
+    {
+        aPoint.X -= pRefPoint->X;
+        aPoint.Y -= pRefPoint->Y;
+    }
+
+    awt::Size aSize = xShape->getSize();
+
+    if( nFeatures & SEF_EXPORT_X )
+    {
+        // svg: x
+        rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.X);
+        aStr = sStringBuffer.makeStringAndClear();
+        rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_x, aStr);
+    }
+
+    if( nFeatures & SEF_EXPORT_Y )
+    {
+        // svg: y
+        rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.Y);
+        aStr = sStringBuffer.makeStringAndClear();
+        rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_y, aStr);
+    }
+
+    if( nFeatures & SEF_EXPORT_WIDTH )
+    {
+        // svg: width
+        rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aSize.Width);
+        aStr = sStringBuffer.makeStringAndClear();
+        rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_width, aStr);
+    }
+
+    if( nFeatures & SEF_EXPORT_HEIGHT )
+    {
+        // svg: height
+        rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aSize.Height);
+        aStr = sStringBuffer.makeStringAndClear();
+        rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_height, aStr);
+    }
+
+    uno::Reference< drawing::XControlShape > xControl( xShape, uno::UNO_QUERY );
+    DBG_ASSERT( xControl.is(), "Control shape is not supporting XControlShape" );
+    if( xControl.is() )
+    {
+        uno::Reference< beans::XPropertySet > xControlModel( xControl->getControl(), uno::UNO_QUERY );
+        DBG_ASSERT( xControlModel.is(), "Control shape has not XControlModel" );
+        if( xControlModel.is() )
+        {
+            rExp.AddAttribute( XML_NAMESPACE_FORM, sXML_id, rExp.GetFormExport()->getControlId( xControlModel ) );
+        }
+    }
+
     // this is a control shape, in this place the database team
     // would have to export the control abilities. Add Export later
     SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DRAW, sXML_control, sal_True, sal_True);
@@ -4003,8 +4074,11 @@ void SdXMLExport::_ExportAutoStyles()
         uno::Any aAny(mxDocMasterPages->getByIndex(nMPageId));
         uno::Reference< drawing::XDrawPage > xMasterPage;
 
-        if(aAny >>= xMasterPage)
+        if((aAny >>= xMasterPage) && xMasterPage.is() )
         {
+            // collect layer information
+            GetFormExport()->examineForms( xMasterPage );
+
             // get MasterPage Name
             OUString aMasterPageNamePrefix;
             uno::Reference < container::XNamed > xNamed(xMasterPage, uno::UNO_QUERY);
@@ -4029,6 +4103,9 @@ void SdXMLExport::_ExportAutoStyles()
                     uno::Reference< drawing::XDrawPage > xNotesPage(xPresPage->getNotesPage());
                     if(xNotesPage.is())
                     {
+                        // collect layer information
+                        GetFormExport()->examineForms( xNotesPage );
+
                         uno::Reference< container::XIndexAccess > xShapes(xNotesPage, uno::UNO_QUERY);
                         if(xShapes.is() && xShapes->getCount())
                             ImpPrepSingleShapeStyleInfos(xShapes, aMasterPageNamePrefix);
@@ -4044,8 +4121,11 @@ void SdXMLExport::_ExportAutoStyles()
         uno::Any aAny(mxDocDrawPages->getByIndex(nPageInd));
         uno::Reference<drawing::XDrawPage> xDrawPage;
 
-        if(aAny >>= xDrawPage)
+        if((aAny >>= xDrawPage) && xDrawPage.is() )
         {
+            // collect layer information
+            GetFormExport()->examineForms( xDrawPage );
+
             // get MasterPage Name
             OUString aMasterPageNamePrefix;
             uno::Reference < drawing::XMasterPageTarget > xMasterPageInt(xDrawPage, uno::UNO_QUERY);
@@ -4080,6 +4160,9 @@ void SdXMLExport::_ExportAutoStyles()
                     uno::Reference< drawing::XDrawPage > xNotesPage(xPresPage->getNotesPage());
                     if(xNotesPage.is())
                     {
+                        // collect layer information
+                        GetFormExport()->examineForms( xNotesPage );
+
                         uno::Reference< container::XIndexAccess > xShapes(xNotesPage, uno::UNO_QUERY);
                         if(xShapes.is() && xShapes->getCount())
                             ImpPrepSingleShapeStyleInfos(xShapes, aMasterPageNamePrefix);
@@ -4096,6 +4179,9 @@ void SdXMLExport::_ExportAutoStyles()
 
     // ...for chart
     GetChartExport()->exportAutoStyles();
+
+    // .. for forms
+    GetFormExport()->exportAutoStyles();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -4108,7 +4194,7 @@ void SdXMLExport::_ExportMasterStyles()
         uno::Any aAny(mxDocMasterPages->getByIndex(nMPageId));
         uno::Reference< drawing::XDrawPage > xMasterPage;
 
-        if(aAny >>= xMasterPage)
+        if((aAny >>= xMasterPage) && xMasterPage.is())
         {
             // prepare masterpage attributes
             OUString sMasterPageName;
@@ -4133,6 +4219,9 @@ void SdXMLExport::_ExportMasterStyles()
             // write masterpage
             SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, sXML_master_page, sal_True, sal_True);
 
+            // write optional office:forms
+            exportFormsElement( xMasterPage );
+
             // write graphic objects on this master page (if any)
             uno::Reference< container::XIndexAccess > xShapes(xMasterPage, uno::UNO_QUERY);
             if(xShapes.is() && xShapes->getCount())
@@ -4153,6 +4242,9 @@ void SdXMLExport::_ExportMasterStyles()
                             // write presentation notes
                             SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, sXML_notes, sal_True, sal_True);
 
+                            // write optional office:forms
+                            exportFormsElement( xNotesPage );
+
                             // write shapes per se
                             ImpWriteSingleShapeStyleInfos(xShapes);
                         }
@@ -4163,7 +4255,26 @@ void SdXMLExport::_ExportMasterStyles()
     }
 }
 
+void SdXMLExport::exportFormsElement( uno::Reference< drawing::XDrawPage > xDrawPage )
+{
+    if( xDrawPage.is() )
+    {
+        uno::Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
+        if( xFormsSupplier.is() )
+        {
+            uno::Reference< container::XNameContainer > xForms( xFormsSupplier->getForms() );
+            if( xForms.is() && xForms->hasElements() )
+            {
+                // write masterpage
+                SvXMLElementExport aForms(*this, XML_NAMESPACE_OFFICE, sXML_forms, sal_True, sal_True);
+                GetFormExport()->exportForms( xDrawPage );
+            }
+        }
 
+        sal_Bool bRet = GetFormExport()->seekPage( xDrawPage );
+        DBG_ASSERT( bRet, "OFormLayerXMLExport::seekPage failed!" );
+    }
+}
 //////////////////////////////////////////////////////////////////////////////
 
 uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_getSupportedServiceNames() throw()
