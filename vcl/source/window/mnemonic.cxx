@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:23:36 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,8 +281,8 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
         if ( !bChanged )
         {
             USHORT      nBestCount = 0xFFFF;
-            USHORT      nBestMnemonicIndex;
-            xub_StrLen  nBestIndex;
+            USHORT      nBestMnemonicIndex = 0;
+            xub_StrLen  nBestIndex = 0;
             nIndex = 0;
             do
             {
