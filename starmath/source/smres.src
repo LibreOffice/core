@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-13 22:43:41 $
+ *  last change: $Author: obo $ $Date: 2001-11-23 22:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ polish ] = "Domy�lnie";
         Text[ portuguese_brazilian ] = "~Tamanho de base:";
         Text[ japanese ] = "基本ｻｲｽﾞ(~S)";
-        Text[ korean ] = "기본 크기(~S):";
+        Text[ korean ] = "기본 크기(~S)";
         Text[ chinese_simplified ] = "基本大小(~S)";
         Text[ chinese_traditional ] = "基本大小(~S)";
         Text[ turkish ] = "Temel boyut:";
@@ -2848,7 +2848,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ swedish ] = "~Ignorera ~~ och ` vid radslutet";
         Text[ polish ] = "~Ignoruj ~~i na ' ko�cu wiersza";
         Text[ portuguese_brazilian ] = "~Ignore ~~ and ` at ~lineend";
-        Text[ japanese ] = "~~ と ` は行末では無視する(~N)";
+        Text[ japanese ] = "~~ と ` は行末では無視する";
         Text[ chinese_simplified ] = "忽略行末的符合 ~~ 和 `";
         Text[ chinese_traditional ] = "忽略行末的符號 ~~ 和 `";
         Text[ arabic ] = "����� ~~ � ` ��� ����� �����";
@@ -11329,6 +11329,7 @@ String RID_MATH_TOOLBOX
     Text[ catalan ] = "Barra de herramientas";
     Text[ finnish ] = "P��ty�kalurivi";
 };
+
 
 
 
