@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:56:48 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 14:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,8 @@ public:
     ScTokenArray* CompileString( const String& rFormula );
     BOOL  CompileTokenArray();
     short GetNumFormatType() { return nNumFmt; }
+
+    static const String& GetStringFromOpCode( OpCode eOpCode, bool bEnglish = false );
 
     ScToken* CreateStringFromToken( String& rFormula, ScToken* pToken,
                                     BOOL bAllowArrAdvance = FALSE );
