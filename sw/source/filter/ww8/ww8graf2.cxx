@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-12 09:54:01 $
+ *  last change: $Author: cmc $ $Date: 2002-12-12 10:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ void wwZOrderer::OutsideEscher()
 void wwZOrderer::InsertEscherObject(SdrObject* pObject, ULONG nSpId)
 {
     ULONG nInsertPos = GetEscherObjectPos(nSpId);
-    mpDrawPg->InsertObject(pObject,nInsertPos + mnNoInitialObjects + mnInlines);
+    InsertObject(pObject, nInsertPos + mnNoInitialObjects + mnInlines);
 }
 
 wwZOrderer::myeiter wwZOrderer::MapEscherIdxToIter(ULONG nIdx)
@@ -264,14 +264,14 @@ void wwZOrderer::InsertDrawingObject(SdrObject* pObj, short nWwHeight)
     else
         pObj->SetLayer(mnHell);
 
-    mpDrawPg->InsertObject(pObj, nPos + mnNoInitialObjects + mnInlines);
+    InsertObject(pObj, nPos + mnNoInitialObjects + mnInlines);
 }
 
 void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
 {
     if (maIndexes.empty())
     {
-        mpDrawPg->InsertObject(pObject, mnNoInitialObjects + mnInlines);
+        InsertObject(pObject, mnNoInitialObjects + mnInlines);
         ++mnInlines;
     }
     else
@@ -291,8 +291,7 @@ void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
 
         aEnd->mnNoInlines++;
         nInsertPos += aEnd->mnNoInlines;
-        mpDrawPg->InsertObject(pObject,
-            mnNoInitialObjects + mnInlines + nInsertPos);
+        InsertObject(pObject, mnNoInitialObjects + mnInlines + nInsertPos);
     }
 }
 
@@ -316,6 +315,16 @@ ULONG wwZOrderer::GetDrawingObjectPos(short nWwHeight)
 
     aIter = maDrawHeight.insert(aIter, nWwHeight);
     return std::distance(maDrawHeight.begin(), aIter);
+}
+
+bool wwZOrderer::InsertObject(SdrObject* pObject, ULONG nPos)
+{
+    if (!mpDrawPg->IsInserted())
+    {
+        mpDrawPg->InsertObject(pObject, nPos);
+        return true;
+    }
+    return false;
 }
 
 #ifdef __WW8_NEEDS_COPY

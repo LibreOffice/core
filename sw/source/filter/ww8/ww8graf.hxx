@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:16 $
+ *  last change: $Author: cmc $ $Date: 2002-12-12 10:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ private:
     myeiter MapEscherIdxToIter(ULONG nIdx);
     ULONG GetEscherObjectPos(ULONG nSpId);
     ULONG GetDrawingObjectPos(short nWwHeight);
+    bool InsertObject(SdrObject *pObject, ULONG nPos);
 public:
     wwZOrderer(SdrPage* pDrawPg, const SvxMSDffShapeOrders *pShapeOrders,
         sal_Int8 nHeaven, sal_Int8 nHell);
