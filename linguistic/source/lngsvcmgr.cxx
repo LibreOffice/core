@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-30 14:38:44 $
+ *  last change: $Author: tl $ $Date: 2000-12-08 14:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,17 +262,23 @@ class LngSvcMgrListenerHelper :
         XDictionaryListEventListener
     >
 {
+    Timer aLaunchTimer;
+
     //cppu::OMultiTypeInterfaceContainerHelper  aListeners;
     ::cppu::OInterfaceContainerHelper           aLngSvcMgrListeners;
     ::cppu::OInterfaceContainerHelper           aLngSvcEvtBroadcasters;
     Reference< XDictionaryList >                xDicList;
     Reference< XInterface >                     xMyEvtObj;
 
+    INT16   nCombinedLngSvcEvt;
+
     // disallow copy-constructor and assignment-operator for now
     LngSvcMgrListenerHelper(const LngSvcMgrListenerHelper &);
     LngSvcMgrListenerHelper & operator = (const LngSvcMgrListenerHelper &);
 
     void    LaunchEvent( INT16 nLngSvcEvtFlags );
+
+    DECL_LINK( TimeOut, Timer* );
 
 public:
     LngSvcMgrListenerHelper( const Reference< XInterface > &rxSource,
@@ -319,6 +325,16 @@ LngSvcMgrListenerHelper::LngSvcMgrListenerHelper(
         xDicList->addDictionaryListEventListener(
             (XDictionaryListEventListener *) this, FALSE );
     }
+
+    //! The timer is used to 'sum up' different events in order to reduce the
+    //! number of events forwarded.
+    //! (This may happen already if a property was changed that has several
+    //! listeners, and each of them is launching an event of it's own!)
+    //! Thus this behaviour is necessary to avoid unecessary actions of
+    //! this objects listeners!
+    aLaunchTimer.SetTimeout( 2000 );
+    aLaunchTimer.SetTimeoutHdl( LINK( this, LngSvcMgrListenerHelper, TimeOut ) );
+    nCombinedLngSvcEvt = 0;
 }
 
 
@@ -338,6 +354,31 @@ void SAL_CALL LngSvcMgrListenerHelper::disposing( const EventObject& rSource )
 }
 
 
+IMPL_LINK( LngSvcMgrListenerHelper, TimeOut, Timer*, pTimer )
+{
+    MutexGuard  aGuard( GetLinguMutex() );
+
+    if (&aLaunchTimer == pTimer)
+    {
+        // change event source to LinguServiceManager since the listeners
+        // probably do not know (and need not to know) about the specific
+        // SpellChecker's or Hyphenator's.
+        LinguServiceEvent aEvtObj( xMyEvtObj, nCombinedLngSvcEvt );
+        nCombinedLngSvcEvt = 0;
+
+        // pass event on to XLinguServiceEventListener's
+        cppu::OInterfaceIteratorHelper aIt( aLngSvcMgrListeners );
+        while (aIt.hasMoreElements())
+        {
+            Reference< XLinguServiceEventListener > xRef( aIt.next(), UNO_QUERY );
+            if (xRef.is())
+                xRef->processLinguServiceEvent( aEvtObj );
+        }
+    }
+    return 0;
+}
+
+
 void SAL_CALL
     LngSvcMgrListenerHelper::processLinguServiceEvent(
             const LinguServiceEvent& rLngSvcEvent )
@@ -345,20 +386,8 @@ void SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    // change event source to LinguServiceManager since the listeners
-    // probably do not know (and need not to know) about the specific
-    // SpellChecker's or Hyphenator's.
-    LinguServiceEvent aEvtObj( rLngSvcEvent );
-    aEvtObj.Source = xMyEvtObj;
-
-    // pass event on to XLinguServiceEventListener's
-    cppu::OInterfaceIteratorHelper aIt( aLngSvcMgrListeners );
-    while (aIt.hasMoreElements())
-    {
-        Reference< XLinguServiceEventListener > xRef( aIt.next(), UNO_QUERY );
-        if (xRef.is())
-            xRef->processLinguServiceEvent( aEvtObj );
-    }
+    nCombinedLngSvcEvt |= rLngSvcEvent.nEvent;
+    aLaunchTimer.Start();
 }
 
 
