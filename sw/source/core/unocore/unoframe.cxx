@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-15 11:26:06 $
+ *  last change: $Author: os $ $Date: 2001-01-25 10:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2508,7 +2508,7 @@ uno::Sequence< OUString > SwXTextGraphicObject::getSupportedServiceNames(void)
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.text.TextContent");
     pArray[1] = C2U("com.sun.star.document.LinkTarget");
-    pArray[2] = C2U("com.sun.star.text.GraphicObject");
+    pArray[2] = C2U("com.sun.star.text.TextGraphicObject");
 
     return aRet;
 }
