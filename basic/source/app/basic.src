@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:24:06 $
+ *  last change: $Author: gh $ $Date: 2002-03-18 15:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ ModalDialog RID_CALLDLG {
     Text[ chinese_traditional ] = "Dynamic Link No. ";
     Text[ arabic ] = "Dynamic Link No. ";
     Text[ turkish ] = "Dinamik ba�lant� no. ";
-    Text[ catalan ] = "V�nculo din�mico n�m.: ";
+    Text[ catalan ] = "Enlla� din�mic n�m.";
     Text[ finnish ] = "Dynaaminen linkki numero ";
 };
 
@@ -218,7 +218,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
         TEXT[ chinese_traditional ] = "Version 1.0";
         TEXT[ arabic ] = "Version 1.0";
         TEXT[ turkish ] = "S�r�m 1.0";
-        TEXT[ catalan ] = "Versi�n 1.0";
+        TEXT[ catalan ] = "Versi� 1.0";
         TEXT[ finnish ] = "versio 1.0";
     };
     FixedText RID_VERSIONSTRING {
@@ -244,14 +244,14 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
         TEXT[ swedish ] = "�1995-1998 Sun Microsystems, Inc.";
         TEXT[ polish ] = "�1995-1998 Sun Microsystems, Inc.";
         TEXT[ portuguese_brazilian ] = "?1995-1998 Sun Microsystems, Inc.";
-        TEXT[ japanese ] = "ｮ1995-1998 Sun Microsystems, Inc.";
-        TEXT[ korean ] = "1995-1998 Sun Microsystems, Inc.";
+        TEXT[ japanese ] = "ョ1995-1998 Sun Microsystems, Inc.";
+        TEXT[ korean ] = "®1995-1998 Sun Microsystems, Inc.";
         TEXT[ chinese_simplified ] = "?995-1998 Sun Microsystems, Inc.";
         TEXT[ chinese_traditional ] = "1995-1998 Sun Microsystems, Inc.";
         TEXT[ arabic ] = "�1995-1998 Sun Microsystems, Inc.";
         TEXT[ turkish ] = "�1995-1998 Sun Microsystems, Inc.";
         TEXT[ catalan ] = "�1995-1998 Sun Microsystems, Inc.";
-        TEXT[ finnish ] = "(r)1995-1998 Sun Microsystems Inc.";
+        TEXT[ finnish ] = "�(r)1995-1998 Sun Microsystems Inc.";
     };
 //  FixedIcon RID_ICON {
 //          Pos = MAP_APPFONT( 20, 26 );
@@ -298,7 +298,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ chinese_traditional ] = "~Text";
         TEXT[ arabic ] = "~Text";
         TEXT[ turkish ] = "~Metin";
-        TEXT[ catalan ] = "Te~xto";
+        TEXT[ catalan ] = "~Text";
         TEXT[ finnish ] = "~Teksti";
     };
     Edit RID_FIND {
@@ -331,7 +331,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ chinese_traditional ] = "~Find";
         TEXT[ arabic ] = "~Find";
         TEXT[ turkish ] = "~Ara";
-        TEXT[ catalan ] = "~Buscar";
+        TEXT[ catalan ] = "~Cerca";
         TEXT[ finnish ] = "~Etsi";
     };
     CancelButton RID_CANCEL {
@@ -351,13 +351,13 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ swedish ] = "~Cancel";
         TEXT[ polish ] = "~Cancel";
         TEXT[ portuguese_brazilian ] = "~Abbruch";
-        TEXT[ japanese ] = "ｷｬﾝｾﾙ(~C)";
+        TEXT[ japanese ] = "キャンセル(~C)";
         TEXT[ korean ] = "취소(~C)";
         TEXT[ chinese_simplified ] = "~Cancel";
         TEXT[ chinese_traditional ] = "~Cancel";
         TEXT[ arabic ] = "~Cancel";
         TEXT[ turkish ] = "~�ptal";
-        TEXT[ catalan ] = "~Cancelar";
+        TEXT[ catalan ] = "~Cancel�la";
         TEXT[ finnish ] = "~Peruuta";
     };
     TEXT[ portuguese ] = "StarBasic: Localizar texto";
@@ -372,13 +372,13 @@ ModalDialog IDD_FIND_DIALOG {
     TEXT[ polish ] = "Testtool: Find Text";
     TEXT[ portuguese_brazilian ] = "StarBasic: Text suchen";
     TEXT[ japanese ] = "Testtool: 文字列の検索";
-    TEXT[ korean ] = "테스트툴: 텍스트 찾기";
-    TEXT[ chinese_simplified ] = "StarBasic: Find Text";
+    TEXT[ korean ] = "테스트 도구: 텍스트 찾기";
+    TEXT[ chinese_simplified ] = "Testtool: Find Text";
     TEXT[ chinese_traditional ] = "Testtool: Find Text";
     TEXT[ arabic ] = "Testtool: Find Text";
     TEXT[ turkish ] = "StarBasic: Metni ara";
-    TEXT[ catalan ] = "StarBasic: Buscar texto";
-    TEXT[ finnish ] = "StarBasic: Find Text";
+    TEXT[ catalan ] = "Texttool: Cerca text";
+    TEXT[ finnish ] = "Testity�kalu: Etsi teksti";
 };
 
 ModalDialog IDD_REPLACE_DIALOG {
@@ -411,7 +411,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ chinese_traditional ] = "~Previous text";
         TEXT[ arabic ] = "~Previous text";
         TEXT[ turkish ] = "~Eski metin";
-        TEXT[ catalan ] = "~Antiguo texto";
+        TEXT[ catalan ] = "~Text anterior";
         TEXT[ finnish ] = "~Edellinen teksti";
     };
     FixedText RID_FIXEDTEXT2 {
@@ -436,7 +436,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ chinese_traditional ] = "~New text";
         TEXT[ arabic ] = "~New text";
         TEXT[ turkish ] = "~Yeni metin";
-        TEXT[ catalan ] = "~Nuevo texto";
+        TEXT[ catalan ] = "~Text nou";
         TEXT[ finnish ] = "~Uusi teksti";
     };
     Edit RID_FIND {
@@ -475,7 +475,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ chinese_traditional ] = "~Replace";
         TEXT[ arabic ] = "~Replace";
         TEXT[ turkish ] = "~De�i�tir";
-        TEXT[ catalan ] = "~Sustituir";
+        TEXT[ catalan ] = "~Reempla�a";
         TEXT[ finnish ] = "~Korvaa";
     };
     CancelButton RID_CANCEL {
@@ -495,13 +495,13 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ swedish ] = "~Cancel";
         TEXT[ polish ] = "~Cancel ";
         TEXT[ portuguese_brazilian ] = "~Abbruch";
-        TEXT[ japanese ] = "ｷｬﾝｾﾙ(~C)";
+        TEXT[ japanese ] = "キャンセル(~C)";
         TEXT[ korean ] = "취소(~C)";
         TEXT[ chinese_simplified ] = "~Cancel";
         TEXT[ chinese_traditional ] = "~Cancel";
         TEXT[ arabic ] = "~Cancel";
         TEXT[ turkish ] = "�ptal";
-        TEXT[ catalan ] = "~Cancelar";
+        TEXT[ catalan ] = "~Cancel�la";
         TEXT[ finnish ] = "~Peruuta";
     };
     TEXT[ portuguese ] = "StarBasic: Substituir texto";
@@ -516,13 +516,13 @@ ModalDialog IDD_REPLACE_DIALOG {
     TEXT[ polish ] = "Testtool: Replace Text";
     TEXT[ portuguese_brazilian ] = "StarBasic: Text ersetzen";
     TEXT[ japanese ] = "Testtool: 文字列の置換";
-    TEXT[ korean ] = "테스트툴: 텍스트 바꾸기";
+    TEXT[ korean ] = "테스트 도구: 텍스트 바꾸기";
     TEXT[ chinese_simplified ] = "Testtool: Replace Text";
     TEXT[ chinese_traditional ] = "Testtool：Replace Text";
     TEXT[ arabic ] = "Testtool: Replace Text";
     TEXT[ turkish ] = "StarBasic: Metni de�i�tir";
-    TEXT[ catalan ] = "StarBasic: Sustituir texto";
-    TEXT[ finnish ] = "StarBasic: Replace Text";
+    TEXT[ catalan ] = "Testtool: Reempla�a text";
+    TEXT[ finnish ] = "Testity�kalu: Korvaa teksti";
 };
 
 InfoBox IDS_NOPRINTERERROR {
@@ -539,13 +539,13 @@ InfoBox IDS_NOPRINTERERROR {
     MESSAGE[ swedish ] = "The print function is not available!";
     MESSAGE[ polish ] = "The print function is not available! ";
     MESSAGE[ portuguese_brazilian ] = "Drucken steht nicht zur Verf?ung!";
-    MESSAGE[ japanese ] = "ﾌﾟﾘﾝﾀがありません";
+    MESSAGE[ japanese ] = "プリンタがありません";
     MESSAGE[ korean ] = "인쇄 불가능!";
     MESSAGE[ chinese_simplified ] = "The print function is not available!";
     MESSAGE[ chinese_traditional ] = "The print function is not available!";
     MESSAGE[ arabic ] = "The print function is not available";
     MESSAGE[ turkish ] = "Yazd�rma i�levi kullan�lamaz!";
-    MESSAGE[ catalan ] = "�No disponible la funci�n para imprimir!";
+    MESSAGE[ catalan ] = "La funci� d'imprimir no est� disponible!";
     MESSAGE[ finnish ] = "Tulostustoiminto ei ole k�ytett�viss�.";
 };
 ErrorBox IDS_CANTLOAD {
@@ -564,7 +564,7 @@ ErrorBox IDS_CANTLOAD {
     MESSAGE[ swedish ] = "Library cannot be loaded!";
     MESSAGE[ polish ] = "Library cannot be loaded!";
     MESSAGE[ portuguese_brazilian ] = "Library kann nicht geladen werden!";
-    MESSAGE[ japanese ] = "ﾗｲﾌﾞﾗﾘは読み込みできません。";
+    MESSAGE[ japanese ] = "ライブラリは読み込みできません。";
     MESSAGE[ korean ] = "라이브러리를 로드할 수 없습니다!";
     MESSAGE[ chinese_simplified ] = "Library cannot be loaded!";
     MESSAGE[ chinese_traditional ] = "Library cannot be loaded!";
@@ -580,17 +580,17 @@ ErrorBox IDS_CANTLOAD {
     Title[ swedish ] = "Testtool error";
     Title[ polish ] = "Testtool Error";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
-    Title[ japanese ] = "Testtool ｴﾗｰ";
-    Title[ korean ] = "Testtool-오류!";
+    Title[ japanese ] = "Testtool エラー";
+    Title[ korean ] = "테스트 툴-오류";
     Title[ chinese_simplified ] = "Testtool Error";
     Title[ chinese_traditional ] = "StarBasic Error";
     Title[ arabic ] = "Testtool Error";
     MESSAGE[ turkish ] = "Kitapl�k y�klenemiyor!";
     Title[ turkish ] = "StarBasic-Fehler";
-    MESSAGE[ catalan ] = "�No se puede cargar la biblioteca!";
+    MESSAGE[ catalan ] = "No es pot carregar la biblioteca!";
     Title[ catalan ] = "Error de StarBasic";
-    MESSAGE[ finnish ] = "Library cannot be loaded!";
-    Title[ finnish ] = "StarBasic Error";
+    MESSAGE[ finnish ] = "Kirjaston lataaminen ei onnistu.";
+    Title[ finnish ] = "Testity�kalun virhe";
 };
 ErrorBox IDS_CANTSAVE {
     TITLE = "Testtool-Fehler";
@@ -608,7 +608,7 @@ ErrorBox IDS_CANTSAVE {
     MESSAGE[ swedish ] = "Library cannot be saved!";
     MESSAGE[ polish ] = "Library cannot be saved! ";
     MESSAGE[ portuguese_brazilian ] = "Library kann nicht gespeichert werden!";
-    MESSAGE[ japanese ] = "ﾗｲﾌﾞﾗﾘは保存できません。";
+    MESSAGE[ japanese ] = "ライブラリは保存できません。";
     MESSAGE[ korean ] = "라이브러리를 저장할 수 없습니다!";
     MESSAGE[ chinese_simplified ] = "Library cannot be saved!";
     MESSAGE[ chinese_traditional ] = "Library cannot be saved!";
@@ -624,17 +624,17 @@ ErrorBox IDS_CANTSAVE {
     Title[ swedish ] = "Testtool error";
     Title[ polish ] = "Testtool Error";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
-    Title[ japanese ] = "Testtool ｴﾗｰ";
-    Title[ korean ] = "Testtool-오류!";
+    Title[ japanese ] = "Testtool エラー";
+    Title[ korean ] = "테스트 툴-오류";
     Title[ chinese_simplified ] = "Testtool Error";
     Title[ chinese_traditional ] = "Testtool Error";
     Title[ arabic ] = "Testtool Error";
     MESSAGE[ turkish ] = "Kitapl�k kaydedilemiyor!";
     Title[ turkish ] = "StarBasic-Fehler";
-    MESSAGE[ catalan ] = "�No se puede guardar la biblioteca!";
+    MESSAGE[ catalan ] = "No es pot desar la biblioteca!";
     Title[ catalan ] = "Error de StarBasic";
-    MESSAGE[ finnish ] = "Library cannot be saved!";
-    Title[ finnish ] = "StarBasic Error";
+    MESSAGE[ finnish ] = "Kirjaston tallentaminen ei onnistu.";
+    Title[ finnish ] = "Testity�kalun virhe";
 };
 ErrorBox IDS_NOMAINPGM {
     TITLE = "Testtool-Fehler";
@@ -652,8 +652,8 @@ ErrorBox IDS_NOMAINPGM {
     MESSAGE[ swedish ] = "This window does not contain a main program!";
     MESSAGE[ polish ] = "This window does not contain a main program! ";
     MESSAGE[ portuguese_brazilian ] = "Dieses Fenster enth?lt kein Hauptprogramm!";
-    MESSAGE[ japanese ] = "このｳｨﾝﾄﾞｳにﾒｲﾝﾌﾟﾛｸﾞﾗﾑは含まれていません。";
-    MESSAGE[ korean ] = "이 윈도우는 메인 프로그램을 포함하고 있지 않습니다!";
+    MESSAGE[ japanese ] = "このウィンドウにメインプログラムは含まれていません。";
+    MESSAGE[ korean ] = "이 창은 주 프로그램을 포함하지 않습니다!";
     MESSAGE[ chinese_simplified ] = "This window does not contain a main program!";
     MESSAGE[ chinese_traditional ] = "This window does not contain a main program!";
     MESSAGE[ arabic ] = "This window does not contain a main program!";
@@ -668,17 +668,17 @@ ErrorBox IDS_NOMAINPGM {
     Title[ swedish ] = "Testtool error";
     Title[ polish ] = "Testtool Error";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
-    Title[ japanese ] = "Testtool ｴﾗｰ";
-    Title[ korean ] = "Testtool-오류!";
+    Title[ japanese ] = "Testtool エラー";
+    Title[ korean ] = "테스트 툴-오류";
     Title[ chinese_simplified ] = "Testtool Error";
     Title[ chinese_traditional ] = "Testtool Error";
     Title[ arabic ] = "Testtool Error";
     MESSAGE[ turkish ] = "Bu pencere ana program i�ermiyor!";
     Title[ turkish ] = "StarBasic-Fehler";
-    MESSAGE[ catalan ] = "�Esta ventana no contiene ning�n programa principal!";
+    MESSAGE[ catalan ] = "Aquesta finestra no cont� cap programa principal!";
     Title[ catalan ] = "Error de StarBasic";
-    MESSAGE[ finnish ] = "This window does not contain a main program!";
-    Title[ finnish ] = "StarBasic Error";
+    MESSAGE[ finnish ] = "T�ss� ikkunassa ei ole p��ohjelmaa.";
+    Title[ finnish ] = "Testity�kalun virhe";
 };
 ErrorBox IDS_READERROR {
     TITLE = "Testtool-Fehler";
@@ -696,7 +696,7 @@ ErrorBox IDS_READERROR {
     MESSAGE[ swedish ] = "File cannot be read!";
     MESSAGE[ polish ] = "File cannot be read!";
     MESSAGE[ portuguese_brazilian ] = "Datei kann nicht eingelesen werden!";
-    MESSAGE[ japanese ] = "ﾌｧｲﾙは読み取れません。";
+    MESSAGE[ japanese ] = "ファイルは読み取れません。";
     MESSAGE[ korean ] = "파일을 읽을 수 없습니다!";
     MESSAGE[ chinese_simplified ] = "File cannot be read!";
     MESSAGE[ chinese_traditional ] = "File cannot be read!";
@@ -712,17 +712,17 @@ ErrorBox IDS_READERROR {
     Title[ swedish ] = "Testtool error";
     Title[ polish ] = "Testtool Error";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
-    Title[ japanese ] = "Testtool ｴﾗｰ";
-    Title[ korean ] = "Testtool-오류!";
+    Title[ japanese ] = "Testtool エラー";
+    Title[ korean ] = "테스트 툴-오류";
     Title[ chinese_simplified ] = "Testtool Error";
     Title[ chinese_traditional ] = "Testtool Error";
     Title[ arabic ] = "Testtool Error";
     MESSAGE[ turkish ] = "Dosya okunam�yor!";
     Title[ turkish ] = "StarBasic-Fehler";
-    MESSAGE[ catalan ] = "�No se puede leer el archivo!";
+    MESSAGE[ catalan ] = "No es pot llegir el fitxer!";
     Title[ catalan ] = "Error de StarBasic";
-    MESSAGE[ finnish ] = "File cannot be read!";
-    Title[ finnish ] = "StarBasic Error";
+    MESSAGE[ finnish ] = "Tiedoston lukeminen ei onnistu.";
+    Title[ finnish ] = "Testity�kalun virhe";
 };
 ErrorBox IDS_WRITEERROR {
     TITLE = "Testtool-Fehler";
@@ -733,14 +733,14 @@ ErrorBox IDS_WRITEERROR {
     MESSAGE[ russian ] = "File cannot be saved!";
     MESSAGE[ greek ] = "File cannot be saved!";
     MESSAGE[ dutch ] = "Bestand kan niet worden opgeslagen!";
-    MESSAGE[ french ] = "Impossible d'enregister le fichier !";
+    MESSAGE[ french ] = "Impossible d'enregistrer le fichier !";
     MESSAGE[ spanish ] = "�No se puede guardar el archivo!";
     MESSAGE[ italian ] = "Impossibile salvare il file";
     MESSAGE[ danish ] = "File cannot be saved!";
     MESSAGE[ swedish ] = "File cannot be saved!";
     MESSAGE[ polish ] = "File cannot be saved!";
     MESSAGE[ portuguese_brazilian ] = "Datei kann nicht abgespeichert werden!";
-    MESSAGE[ japanese ] = "ﾌｧｲﾙは保存できません。";
+    MESSAGE[ japanese ] = "ファイルは保存できません。";
     MESSAGE[ korean ] = "파일을 저장할 수 없습니다 !";
     MESSAGE[ chinese_simplified ] = "File cannot be saved!";
     MESSAGE[ chinese_traditional ] = "File cannot be saved!";
@@ -756,17 +756,17 @@ ErrorBox IDS_WRITEERROR {
     Title[ swedish ] = "Testtool error";
     Title[ polish ] = "Testtool Error";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
-    Title[ japanese ] = "Testtool ｴﾗｰ";
-    Title[ korean ] = "Testtool-오류!";
+    Title[ japanese ] = "Testtool エラー";
+    Title[ korean ] = "테스트 툴-오류";
     Title[ chinese_simplified ] = "Testtool Error";
     Title[ chinese_traditional ] = "Testtool Error";
     Title[ arabic ] = "Testtool Error";
     MESSAGE[ turkish ] = "Dosya kaydedilemiyor!";
     Title[ turkish ] = "StarBasic-Fehler";
-    MESSAGE[ catalan ] = "�No se puede guardar el archivo!";
+    MESSAGE[ catalan ] = "No es pot desar el fitxer!";
     Title[ catalan ] = "Error de StarBasic";
-    MESSAGE[ finnish ] = "File cannot be saved!";
-    Title[ finnish ] = "StarBasic Error";
+    MESSAGE[ finnish ] = "Tiedoston tallentaminen ei onnistu.";
+    Title[ finnish ] = "Testity�kalun virhe";
 };
 ErrorBox IDS_PATTERNNOTFOUND {
     TITLE = "Testtool-Fehler";
@@ -784,7 +784,7 @@ ErrorBox IDS_PATTERNNOTFOUND {
     MESSAGE[ swedish ] = "Search term not found!";
     MESSAGE[ polish ] = "Search key not found!";
     MESSAGE[ portuguese_brazilian ] = "Suchbegriff nicht gefunden!";
-    MESSAGE[ japanese ] = "検索ｷｰは見つかりません。";
+    MESSAGE[ japanese ] = "検索キーは見つかりません。";
     MESSAGE[ korean ] = "검색용어를 찾지 못했습니다!";
     MESSAGE[ chinese_simplified ] = "Search key not found!";
     MESSAGE[ chinese_traditional ] = "Search key not found!";
@@ -800,17 +800,17 @@ ErrorBox IDS_PATTERNNOTFOUND {
     Title[ swedish ] = "Testtool error";
     Title[ polish ] = "Testtool Error";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
-    Title[ japanese ] = "Testtool ｴﾗｰ";
-    Title[ korean ] = "Testtool-오류!";
+    Title[ japanese ] = "Testtool エラー";
+    Title[ korean ] = "테스트 툴-오류";
     Title[ chinese_simplified ] = "Testtool Error";
     Title[ chinese_traditional ] = "Testtool Error";
     Title[ arabic ] = "Testtool Error";
     MESSAGE[ turkish ] = "Arama terimi bulunamad�!";
     Title[ turkish ] = "StarBasic-Fehler";
-    MESSAGE[ catalan ] = "�No se encontr� el t�rmino buscado!";
+    MESSAGE[ catalan ] = "No es troba la clau de cerca!";
     Title[ catalan ] = "Error de StarBasic";
-    MESSAGE[ finnish ] = "Search key not found!";
-    Title[ finnish ] = "StarBasic Error";
+    MESSAGE[ finnish ] = "Hakuavainta ei l�ytynyt.";
+    Title[ finnish ] = "Testity�kalun virhe";
 };
 ErrorBox IDS_INVALID_VALUE {
     TITLE = "Testtool-Fehler";
@@ -844,17 +844,17 @@ ErrorBox IDS_INVALID_VALUE {
     Title[ swedish ] = "Testtool Error";
     Title[ polish ] = "Testtool Error";
     Title[ portuguese_brazilian ] = "StarBasic Error";
-    Title[ japanese ] = "Testtool ｴﾗｰ";
-    Title[ korean ] = "Testtool－오류!";
+    Title[ japanese ] = "Testtool エラー";
+    Title[ korean ] = "테스트 툴－오류";
     Title[ chinese_simplified ] = "Testtool Error";
     Title[ chinese_traditional ] = "Testtool Error";
     Title[ arabic ] = "Testtool Error";
     MESSAGE[ turkish ] = "Bu de�er ge�ersiz oldu�u i�in belirlenemez.";
     Title[ turkish ] = "StarBasic-Fehler";
-    MESSAGE[ catalan ] = "Valor incorrecto; no se puede aplicar.";
+    MESSAGE[ catalan ] = "El valor no �s v�lid i no es pot definir.";
     Title[ catalan ] = "StarBasic Error";
-    MESSAGE[ finnish ] = "The value is invalid and cannot be set.";
-    Title[ finnish ] = "StarBasic Error";
+    MESSAGE[ finnish ] = "Arvo on virheellinen eik� sit� voi asettaa.";
+    Title[ finnish ] = "Testity�kalun virhe";
 };
 
 QueryBox IDS_ASKSAVEERROR {
@@ -874,8 +874,8 @@ QueryBox IDS_ASKSAVEERROR {
     MESSAGE[ swedish ] = "Error saving files! Run anyway?";
     MESSAGE[ polish ] = "Error saving files! Run anyway? ";
     MESSAGE[ portuguese_brazilian ] = "Fehler beim Speichern der Dateien! Trotzdem ausf?ren?";
-    MESSAGE[ japanese ] = "ﾌｧｲﾙ保存時のｴﾗｰです。実行してもかまいませんか。";
-    MESSAGE[ korean ] = "파일 저장시 오류가 발생했습니다! 계속 실행하시겠습니까?";
+    MESSAGE[ japanese ] = "ファイル保存時のエラーです。実行してもかまいませんか。";
+    MESSAGE[ korean ] = "파일 저장시 오류가 발생했습니다! 계속 실행하겠습니까?";
     MESSAGE[ chinese_simplified ] = "Error saving files! Run anyway?";
     MESSAGE[ chinese_traditional ] = "Error saving files! Run anyway?";
     MESSAGE[ arabic ] = "Error saving files! Run anyway?";
@@ -891,16 +891,16 @@ QueryBox IDS_ASKSAVEERROR {
     Title[ polish ] = "Testtool";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool";
-    Title[ korean ] = "Testtool!";
+    Title[ korean ] = "테스트 툴";
     Title[ chinese_simplified ] = "Testtool";
     Title[ chinese_traditional ] = "Testtool";
     Title[ arabic ] = "Testtool";
     MESSAGE[ turkish ] = "Dosya kayd� s�ras�nda bir hata ortaya ��kt�! ��lem yine de y�r�t�ls�n m�?";
     Title[ turkish ] = "StarBasic";
-    MESSAGE[ catalan ] = "�Error al guardar los archivos! �Ejecutar de todas formas?";
+    MESSAGE[ catalan ] = "S'ha produ�t un error en desar els fitxers. Voleu continuar igualment?";
     Title[ catalan ] = "StarBasic";
-    MESSAGE[ finnish ] = "Error saving files! Run anyway?";
-    Title[ finnish ] = "StarBasic";
+    MESSAGE[ finnish ] = "On ilmennyt virhe tallennettaessa tiedostoja! Suoritetaanko ohjelma?";
+    Title[ finnish ] = "Testity�kalu";
 };
 QueryBox IDS_ASK_DIRTY_SAVE {
     TITLE = "Testtool";
@@ -919,8 +919,8 @@ QueryBox IDS_ASK_DIRTY_SAVE {
     MESSAGE[ swedish ] = "File has been changed. Save?";
     MESSAGE[ polish ] = "File has been changed. Save?";
     MESSAGE[ portuguese_brazilian ] = "Datei ist ge?ndert worden. Abspeichern?";
-    MESSAGE[ japanese ] = "ﾌｧｲﾙに変更があります。保存しますか。";
-    MESSAGE[ korean ] = "파일이 변경되었습니다. 저장하시겠습니까?";
+    MESSAGE[ japanese ] = "ファイルに変更があります。保存しますか。";
+    MESSAGE[ korean ] = "파일이 변경되었습니다. 저장하겠습니까?";
     MESSAGE[ chinese_simplified ] = "File has been changed. Save?";
     MESSAGE[ chinese_traditional ] = "File has been changed. Save?";
     MESSAGE[ arabic ] = "File has been changed. Save?";
@@ -936,16 +936,16 @@ QueryBox IDS_ASK_DIRTY_SAVE {
     Title[ polish ] = "Testtool";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool";
-    Title[ korean ] = "Testtool!";
+    Title[ korean ] = "테스트 툴";
     Title[ chinese_simplified ] = "Testtool";
     Title[ chinese_traditional ] = "Testtool";
     Title[ arabic ] = "Testtool";
     MESSAGE[ turkish ] = "Dosya de�i�tirildi. De�i�iklikler kaydedilsin mi?";
     Title[ turkish ] = "StarBasic";
-    MESSAGE[ catalan ] = "El archivo ha sido modificado. �Guardar?";
+    MESSAGE[ catalan ] = "S'ha canviat el fitxer. El voleu desar?";
     Title[ catalan ] = "StarBasic";
-    MESSAGE[ finnish ] = "File has been changed. Save?";
-    Title[ finnish ] = "StarBasic";
+    MESSAGE[ finnish ] = "Tiedostoa on muutettu. Tallennetaanko se?";
+    Title[ finnish ] = "Testity�kalu";
 };
 QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     TITLE = "Testtool";
@@ -961,11 +961,11 @@ QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     MESSAGE[ spanish ] = "El archivo se ha modificado en el disco\ny en el editor. �Desea guardarlo?";
     MESSAGE[ italian ] = "File has been changed on data medium\nand in the Editor. Save?";
     MESSAGE[ danish ] = "File has been changed on data medium\nand in the Editor. Save?";
-    MESSAGE[ swedish ] = "File has been changed on data mediumim Editor ge�ndert worden. Save?";
+    MESSAGE[ swedish ] = "File has been changed on data medium\nand in the Editor. Save?";
     MESSAGE[ polish ] = "File has been changed on data medium\nand in the Editor. Save?";
     MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datentr?ger und\nim Editor ge?ndert worden. Abspeichern?";
-    MESSAGE[ japanese ] = "ﾌｧｲﾙは媒体上と\nｴﾃﾞｨﾀで変更されています。保存しますか。";
-    MESSAGE[ korean ] = "데이터 매체상의 파일이 변경되었습니다. 저장하시겠습니까?";
+    MESSAGE[ japanese ] = "ファイルは媒体上と\nエディタで変更されています。保存しますか。";
+    MESSAGE[ korean ] = "데이터 매체상의 파일이 변경되었습니다. 저장하겠습니까?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium\nand in the Editor. Save?";
     MESSAGE[ chinese_traditional ] = "File has been changed on data medium\nand in the Editor. Save?";
     MESSAGE[ arabic ] = "File has been changed on data medium\nand in the Editor. Save?";
@@ -981,16 +981,16 @@ QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     Title[ polish ] = "Testtool";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool";
-    Title[ korean ] = "Testtool!";
+    Title[ korean ] = "테스트 툴";
     Title[ chinese_simplified ] = "Testtool";
     Title[ chinese_traditional ] = "Testtool";
     Title[ arabic ] = "Testtool";
     MESSAGE[ turkish ] = "Dosya, veri kay�t ortam�nda\nve edit�rde de�i�tirildi. Kaydedilsin mi?";
     Title[ turkish ] = "StarBasic";
-    MESSAGE[ catalan ] = "El archivo se ha modificado en el disco\ny en el editor. �Desea guardarlo?";
+    MESSAGE[ catalan ] = "S'ha canviat el fitxer al suport de dades\ni a l'editor. El voleu desar?";
     Title[ catalan ] = "StarBasic";
-    MESSAGE[ finnish ] = "File has been changed on data medium\nand in the Editor. Save?";
-    Title[ finnish ] = "StarBasic";
+    MESSAGE[ finnish ] = "Tallennusv�lineen ja editorin tiedostoa\non muokattu. Tallennetaanko se?";
+    Title[ finnish ] = "Testity�kalu";
 };
 QueryBox IDS_ASK_DISKCHANGE_SAVE {
     TITLE = "Testtool";
@@ -1006,15 +1006,15 @@ QueryBox IDS_ASK_DISKCHANGE_SAVE {
     MESSAGE[ spanish ] = "El archivo en el disco se ha modificado\n�Desea sobrescribirlo?";
     MESSAGE[ italian ] = "File has been changed on data medium.\nOverwrite?";
     MESSAGE[ danish ] = "File has been changed on data medium.\nOverwrite?";
-    MESSAGE[ swedish ] = "File has been changed on data medium. Skriva �ver?";
+    MESSAGE[ swedish ] = "File has been changed on data medium.\nOverwrite?";
     MESSAGE[ polish ] = "File has been changed on data medium.\nOverwrite?";
     MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datentr?ger ge?ndert worden.\n?berschreiben?";
-    MESSAGE[ japanese ] = "ﾌｧｲﾙは媒体上で変更されています。\n上書きしますか。";
-    MESSAGE[ korean ] = "데이터 매체상의 파일이 변경되었습니다.\n덮어씌우시겠습니까??";
+    MESSAGE[ japanese ] = "ファイルは媒体上で変更されています。\n上書きしますか。";
+    MESSAGE[ korean ] = "데이터 매체상의 파일이 변경되었습니다.\n덮어쓰겠습니까??";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium.\nOverwrite?";
     MESSAGE[ chinese_traditional ] = "File has been changed on data medium.\nOverwrite?";
     MESSAGE[ arabic ] = "File has been changed on data medium.\nOverwrite?";
-    Title[ portuguese ] = "StarBasic!";
+    Title[ portuguese ] = "StarBasic";
     Title[ russian ] = "Testtool";
     Title[ greek ] = "StarBasic";
     Title[ dutch ] = "Testtool";
@@ -1026,16 +1026,16 @@ QueryBox IDS_ASK_DISKCHANGE_SAVE {
     Title[ polish ] = "Testtool";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool";
-    Title[ korean ] = "Testtool!";
+    Title[ korean ] = "테스트 툴";
     Title[ chinese_simplified ] = "Testtool";
     Title[ chinese_traditional ] = "Testtool";
     Title[ arabic ] = "Testtool";
     MESSAGE[ turkish ] = "Dosya, veri ortam�nda de�i�tirildi.\nKaydedilsin mi?";
     Title[ turkish ] = "StarBasic";
-    MESSAGE[ catalan ] = "El archivo en el disco se ha modificado\n�Desea sobrescribirlo?";
+    MESSAGE[ catalan ] = "S'ha canviat el fitxer al suport de dades.\nEl voleu sobreescriure?";
     Title[ catalan ] = "StarBasic";
-    MESSAGE[ finnish ] = "File has been changed on data medium.\nOverwrite?";
-    Title[ finnish ] = "StarBasic";
+    MESSAGE[ finnish ] = "Tallennusv�lineen tiedostoa on muokattu.\nKorvataanko se?";
+    Title[ finnish ] = "Testity�kalu";
 };
 QueryBox IDS_ASKRELOAD {
     TITLE = "Testtool";
@@ -1054,8 +1054,8 @@ QueryBox IDS_ASKRELOAD {
     MESSAGE[ swedish ] = "File has been changed on data medium. Reload?";
     MESSAGE[ polish ] = "File has been changed on data medium. Reload?";
     MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datentr?ger ge?ndert worden. Erneut Laden?";
-    MESSAGE[ japanese ] = "ﾌｧｲﾙは媒体上で変更されています。読み込みなおし";
-    MESSAGE[ korean ] = "데이터 매체상의 파일이 변경되었습니다. 다시 로드하시겠습니까?";
+    MESSAGE[ japanese ] = "ファイルは媒体上で変更されています。読み込みなおし";
+    MESSAGE[ korean ] = "데이터 매체상의 파일이 변경되었습니다. 다시 로드하겠습니까?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium. Reload?";
     MESSAGE[ chinese_traditional ] = "File has been changed on data medium. Reload?";
     MESSAGE[ arabic ] = "File has been changed on data medium. Reload?";
@@ -1071,16 +1071,16 @@ QueryBox IDS_ASKRELOAD {
     Title[ polish ] = "Testtool";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool";
-    Title[ korean ] = "Testtool!";
+    Title[ korean ] = "테스트 툴";
     Title[ chinese_simplified ] = "Testtool";
     Title[ chinese_traditional ] = "Testtool";
     Title[ arabic ] = "Testtool";
     MESSAGE[ turkish ] = "Dosya, veri ortam�nda de�i�tirildi. Yeniden y�klensin mi?";
     Title[ turkish ] = "StarBasic";
-    MESSAGE[ catalan ] = "Se ha modificado el archivo en el disco. �Desea recargarlo?";
+    MESSAGE[ catalan ] = "S'ha canviat el fitxer al suport de dades\nEl voleu tornar a carregar?";
     Title[ catalan ] = "StarBasic";
-    MESSAGE[ finnish ] = "File has been changed on data medium. Reload?";
-    Title[ finnish ] = "StarBasic";
+    MESSAGE[ finnish ] = "Tallennusv�lineen tiedostoa on muokattu. Ladataanko se uudelleen?";
+    Title[ finnish ] = "Testity�kalu";
 };
 QueryBox IDS_ASKDIRTYRELOAD {
     TITLE = "Testtool";
@@ -1096,11 +1096,11 @@ QueryBox IDS_ASKDIRTYRELOAD {
     MESSAGE[ spanish ] = "Se ha modificado el archivo en el disco y\nen el editor. �Desea recargarlo?";
     MESSAGE[ italian ] = "File has been changed on data medium\nand in the Editor. Reload?";
     MESSAGE[ danish ] = "File has been changed on data medium\nand in the Editor. Reload?";
-    MESSAGE[ swedish ] = "File has been changed on data mediumim Editor ge�ndert worden. Reload?";
+    MESSAGE[ swedish ] = "File has been changed on data medium\nand in the Editor. Reload?";
     MESSAGE[ polish ] = "File has been changed on data medium\nand in the Editor. Reload?";
     MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datentr?ger und\nim Editor ge?ndert worden. Erneut Laden?";
-    MESSAGE[ japanese ] = "ﾌｧｲﾙは媒体上と\nｴﾃﾞｨﾀで変更されています。読み込みなおしますか。";
-    MESSAGE[ korean ] = "데이터 매체와 편집기상의 파일이　변경되었습니다.\n다시 로드하시겠습니까?";
+    MESSAGE[ japanese ] = "ファイルは媒体上と\nエディタで変更されています。読み込みなおしますか。";
+    MESSAGE[ korean ] = "데이터 매체와 편집기상의 파일이　변경되었습니다.\n다시 로드하겠습니까?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium\nand in the Editor. Reload?";
     MESSAGE[ chinese_traditional ] = "File has been changed on data medium\nand in the Editor. Reload?";
     MESSAGE[ arabic ] = "File has been changed on data medium\nand in the Editor. Reload?";
@@ -1116,16 +1116,16 @@ QueryBox IDS_ASKDIRTYRELOAD {
     Title[ polish ] = "Testtool";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool";
-    Title[ korean ] = "Testtool!";
+    Title[ korean ] = "테스트 툴";
     Title[ chinese_simplified ] = "Testtool";
     Title[ chinese_traditional ] = "Testtool";
     Title[ arabic ] = "Testtool";
     MESSAGE[ turkish ] = "Dosya, veri ortam�nda ve\nedit�rde de�i�tirildi de�i�tirildi. Yeniden y�klensin mi?";
     Title[ turkish ] = "StarBasic";
-    MESSAGE[ catalan ] = "Se ha modificado el archivo en el disco y\nen el editor. �Desea recargarlo?";
+    MESSAGE[ catalan ] = "S'ha canviat el fitxer al suport de dades\ni a l'editor. El voleu tornar a carregar?";
     Title[ catalan ] = "StarBasic";
-    MESSAGE[ finnish ] = "File has been changed on data medium\nand in the Editor. Reload?";
-    Title[ finnish ] = "StarBasic";
+    MESSAGE[ finnish ] = "Tallennusv�lineen ja editorin tiedostoa\non muokattu. Ladataanko se uudelleen?";
+    Title[ finnish ] = "Testity�kalu";
 };
 QueryBox IDS_RUNNING {
     TITLE = "Testtool";
@@ -1144,8 +1144,8 @@ QueryBox IDS_RUNNING {
     MESSAGE[ swedish ] = "BASIC is still running! Exit anyway?";
     MESSAGE[ polish ] = "BASIC is still running! Exit anyway?";
     MESSAGE[ portuguese_brazilian ] = "BASIC-Programm ist noch aktiv! Dennoch beenden?";
-    MESSAGE[ japanese ] = "BASIC ﾌﾟﾛｸﾞﾗﾑはまだ起動中です。そのまま終了してもかまいませんか。";
-    MESSAGE[ korean ] = "BASIC 프로그램이 아직 작동중입니다! 그래도 종료하시겠습니까??";
+    MESSAGE[ japanese ] = "BASIC プログラムはまだ起動中です。そのまま終了してもかまいませんか。";
+    MESSAGE[ korean ] = "BASIC 프로그램이 아직 작동중입니다! 그래도 종료하겠습니까??";
     MESSAGE[ chinese_simplified ] = "BASIC is still running! Exit anyway?";
     MESSAGE[ chinese_traditional ] = "BASIC is still running! Exit anyway?";
     MESSAGE[ arabic ] = "BASIC is still running! Exit anyway?";
@@ -1161,16 +1161,16 @@ QueryBox IDS_RUNNING {
     Title[ polish ] = "Testtool";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool";
-    Title[ korean ] = "Testtool!";
+    Title[ korean ] = "테스트 툴";
     Title[ chinese_simplified ] = "Testtool";
     Title[ chinese_traditional ] = "Testtool";
     Title[ arabic ] = "Testtool";
     MESSAGE[ turkish ] = "BASIC program� h�l� etkin. Yine de ��kmak istiyor musunuz?";
     Title[ turkish ] = "StarBasic";
-    MESSAGE[ catalan ] = "�El programa BASIC est� a�n activo! �Desea cerrar de todas formas?";
+    MESSAGE[ catalan ] = "Encara s'est� executant el BASIC. Voleu sortir igualment?";
     Title[ catalan ] = "StarBasic";
-    MESSAGE[ finnish ] = "BASIC is still running! Exit anyway?";
-    Title[ finnish ] = "StarBasic";
+    MESSAGE[ finnish ] = "BASIC on yh� k�ynniss�! Lopetetaanko?";
+    Title[ finnish ] = "Testity�kalu";
 };
 QueryBox IDS_LOSS_OF_INFORMATION {
     TITLE = "Testtool";
@@ -1190,7 +1190,7 @@ QueryBox IDS_LOSS_OF_INFORMATION {
     MESSAGE[ polish ] = "Saving in an external format causes information loss.";
     MESSAGE[ portuguese_brazilian ] = "BASIC is still running! Exit anyway?";
     MESSAGE[ japanese ] = "外部書式で保存すると、情報を失う可能性があります。";
-    MESSAGE[ korean ] = "외부 포맷에 저장하는 것은 정보 손실을 초래합니다.";
+    MESSAGE[ korean ] = "외부 형식으로 저장하는 것은 정보 손실을 초래합니다.";
     MESSAGE[ chinese_simplified ] = "Saving in an external format causes information loss.";
     MESSAGE[ chinese_traditional ] = "Saving in an external format causes information loss";
     MESSAGE[ arabic ] = "Saving in an external format causes information loss.";
@@ -1206,16 +1206,16 @@ QueryBox IDS_LOSS_OF_INFORMATION {
     Title[ polish ] = "Testtool";
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool";
-    Title[ korean ] = "Testtool!";
+    Title[ korean ] = "테스트 툴";
     Title[ chinese_simplified ] = "Testtool";
     Title[ chinese_traditional ] = "Testtool";
     Title[ arabic ] = "Testtool";
     MESSAGE[ turkish ] = "Yabanc� formatta kaydetmek bilgi kayb�na yol a�ar";
     Title[ turkish ] = "StarBasic";
-    MESSAGE[ catalan ] = "Al guardar en formato externo se perder� informaci�n";
+    MESSAGE[ catalan ] = "Si deseu en un format extern es poden provocar p�rdues d'informaci�";
     Title[ catalan ] = "StarBasic";
-    MESSAGE[ finnish ] = "Saving in an external format causes information loss.";
-    Title[ finnish ] = "StarBasic";
+    MESSAGE[ finnish ] = "Tietoja menetet��n, jos tallennat ulkoisessa muodossa.";
+    Title[ finnish ] = "Testity�kalu";
 };
 
 InfoBox IDS_NOT_YET_IMPLEMENTED
@@ -1239,7 +1239,7 @@ InfoBox IDS_NOT_YET_IMPLEMENTED
     MESSAGE[ chinese_traditional ] = "Not yet implemented";
     MESSAGE[ arabic ] = "Not yet implemented";
     MESSAGE[ turkish ] = "Hen�z uygulanmad�";
-    MESSAGE[ catalan ] = "Todav�a no implementado";
+    MESSAGE[ catalan ] = "Encara no est� implementat";
     MESSAGE[ finnish ] = "Ei viel� k�yt�ss�";
 };
 
@@ -1264,7 +1264,7 @@ String IDS_WARNING1 {
     TEXT[ chinese_traditional ] = "Warning ";
     TEXT[ arabic ] = "Warning ";
     TEXT[ turkish ] = "Uyar� ";
-    TEXT[ catalan ] = "Advertencia  ";
+    TEXT[ catalan ] = "Advert�ncia ";
     TEXT[ finnish ] = "Varoitus";
 };
 String IDS_ERROR1 {
@@ -1281,13 +1281,13 @@ String IDS_ERROR1 {
     TEXT[ swedish ] = "Error  ";
     TEXT[ polish ] = "Error  ";
     TEXT[ portuguese_brazilian ] = "Fehler ";
-    TEXT[ japanese ] = "ｴﾗｰ ";
+    TEXT[ japanese ] = "エラー ";
     TEXT[ korean ] = "오류 ";
     TEXT[ chinese_simplified ] = "Error ";
     TEXT[ chinese_traditional ] = "Error ";
     TEXT[ arabic ] = "Error ";
     TEXT[ turkish ] = "Hata ";
-    TEXT[ catalan ] = "Error ";
+    TEXT[ catalan ] = "Error";
     TEXT[ finnish ] = "Virhe";
 };
 String IDS_ERROR2 {
@@ -1310,7 +1310,7 @@ String IDS_ERROR2 {
     TEXT[ chinese_traditional ] = "in row ";
     TEXT[ arabic ] = "in row ";
     TEXT[ turkish ] = "Sat�r: ";
-    TEXT[ catalan ] = "en fila ";
+    TEXT[ catalan ] = "en la fila";
     TEXT[ finnish ] = "rivill� ";
 };
 String IDS_NO_LONGNAME {
@@ -1333,7 +1333,7 @@ String IDS_NO_LONGNAME {
     TEXT[ chinese_traditional ] = "No entries in Hid.Lst";
     TEXT[ arabic ] = "No entries in Hid.Lst";
     TEXT[ turkish ] = "Hid.Lst'te giri� yok";
-    TEXT[ catalan ] = "Ninguna entrada en Hid.Lst";
+    TEXT[ catalan ] = "No hi ha cap entrada a Hid.Lst";
     TEXT[ finnish ] = "Ei merkint�j� piiloluettelossa";
 };
 String IDS_WARNING_PREFIX
@@ -1357,7 +1357,7 @@ String IDS_WARNING_PREFIX
     Text[ chinese_traditional ] = "Warning: ";
     Text[ arabic ] = "Warning: ";
     Text[ turkish ] = "Uyar�: ";
-    Text[ catalan ] = "Advertencia: ";
+    Text[ catalan ] = "Advert�ncia: ";
     Text[ finnish ] = "Varoitus: ";
 };
 String IDS_OBJECT
@@ -1376,13 +1376,13 @@ String IDS_OBJECT
     Text[ swedish ] = "Object";
     Text[ polish ] = "Object";
     Text[ portuguese_brazilian ] = "Object";
-    Text[ japanese ] = "ｵﾌﾞｼﾞｪｸﾄ";
+    Text[ japanese ] = "オブジェクト";
     Text[ korean ] = "개체";
     Text[ chinese_simplified ] = "Object";
     Text[ chinese_traditional ] = "Object";
     Text[ arabic ] = "Object";
     Text[ turkish ] = "Nesne";
-    Text[ catalan ] = "Objeto";
+    Text[ catalan ] = "Objecte";
     Text[ finnish ] = "Objekti";
 };
 String IDS_EDIT_VAR
@@ -1407,7 +1407,7 @@ String IDS_EDIT_VAR
     Text[ chinese_traditional ] = "Edit ($Arg1)";
     Text[ arabic ] = "Edit ($Arg1)";
     Text[ turkish ] = "($Arg1) D�zenle";
-    Text[ catalan ] = "Editar ($Arg1)";
+    Text[ catalan ] = "Edita ($Arg1)";
     Text[ finnish ] = "Muokkaa ($Arg1)";
 };
 
@@ -1426,13 +1426,13 @@ String IDS_APPNAME {
     TEXT[ polish ] = "Testtool";
     TEXT[ portuguese_brazilian ] = "StarBasic";
     TEXT[ japanese ] = "Testtool";
-    TEXT[ korean ] = "테스트툴";
+    TEXT[ korean ] = "테스트 도구";
     TEXT[ chinese_simplified ] = "Testtool";
     TEXT[ chinese_traditional ] = "Testtool";
     TEXT[ arabic ] = "Testtool";
     TEXT[ turkish ] = "%PRODUCTNAME Basic";
-    TEXT[ catalan ] = "StarBasic";
-    TEXT[ finnish ] = "StarBasic";
+    TEXT[ catalan ] = "Testtool";
+    TEXT[ finnish ] = "Testity�kalu";
 };
 String IDS_APPNAME2 {
     TEXT = "StarTestTool";
@@ -1477,7 +1477,7 @@ String IDS_APPMODE_BREAK {
     text[ chinese_traditional ] = "Break";
     text[ arabic ] = "Break";
     text[ turkish ] = "Break";
-    text[ catalan ] = "Break";
+    text[ catalan ] = "Salt";
     text[ finnish ] = "Keskeytys";
 };
 String IDS_APPMODE_RUN {
@@ -1500,7 +1500,7 @@ String IDS_APPMODE_RUN {
     text[ chinese_traditional ] = "Run";
     text[ arabic ] = "Run";
     text[ turkish ] = "Run";
-    text[ catalan ] = "Run";
+    text[ catalan ] = "Executa";
     text[ finnish ] = "Suorita";
 };
 String IDS_NONAME {
@@ -1523,7 +1523,7 @@ String IDS_NONAME {
     TEXT[ chinese_traditional ] = "Unnamed";
     TEXT[ arabic ] = "Unnamed";
     TEXT[ turkish ] = "Ads�z";
-    TEXT[ catalan ] = "Desconocido";
+    TEXT[ catalan ] = "Sense nom";
     TEXT[ finnish ] = "Nimet�n";
 };
 
@@ -1577,14 +1577,14 @@ String IDS_LOADDLG {
     TEXT[ swedish ] = "Testtool: Load File";
     TEXT[ polish ] = "Testtool: Load File";
     TEXT[ portuguese_brazilian ] = "StarBasic: Datei einlesen";
-    TEXT[ japanese ] = "Testtool: ﾌｧｲﾙの読み取り";
-    TEXT[ korean ] = "테스트툴: 파일 판독";
+    TEXT[ japanese ] = "Testtool: ファイルの読み取り";
+    TEXT[ korean ] = "테스트 도구: 파일 읽기";
     TEXT[ chinese_simplified ] = "Testtool: Load File";
     TEXT[ chinese_traditional ] = "Testtool：Load File";
     TEXT[ arabic ] = "Testtool: Load File";
     TEXT[ turkish ] = "StarBasic: Dosyay� y�kle";
-    TEXT[ catalan ] = "StarBasic: Leer archivo";
-    TEXT[ finnish ] = "StarBasic: Load File";
+    TEXT[ catalan ] = "Testool: Carrega l'arxiu";
+    TEXT[ finnish ] = "Testity�kalu: Lataa tiedosto";
 };
 String IDS_SAVEDLG {
     TEXT = "Testtool: Datei speichern";
@@ -1600,14 +1600,14 @@ String IDS_SAVEDLG {
     TEXT[ swedish ] = "Testtool: Save File";
     TEXT[ polish ] = "Testtool: Save File";
     TEXT[ portuguese_brazilian ] = "StarBasic: Datei speichern";
-    TEXT[ japanese ] = "Testtool: ﾌｧｲﾙの保存";
-    TEXT[ korean ] = "테스트툴: 파일 저장";
+    TEXT[ japanese ] = "Testtool: ファイルの保存";
+    TEXT[ korean ] = "테스트 도구: 파일 저장";
     TEXT[ chinese_simplified ] = "Testtool: Save File";
     TEXT[ chinese_traditional ] = "Testtool: Save File";
     TEXT[ arabic ] = "Testtool: Save File";
     TEXT[ turkish ] = "StarBasic: Dosyay� kaydet";
-    TEXT[ catalan ] = "StarBasic: Guardar archivo";
-    TEXT[ finnish ] = "StarBasic: Save File";
+    TEXT[ catalan ] = "Testool: Desa l'arxiu ";
+    TEXT[ finnish ] = "Testity�kalu: Tallenna tiedosto";
 };
 String IDS_BASFILTER {
     TEXT = "Quelltexte (*.BAS)";
@@ -1623,13 +1623,13 @@ String IDS_BASFILTER {
     TEXT[ swedish ] = "Source text (*.BAS)";
     TEXT[ polish ] = "Source text (*.BAS) ";
     TEXT[ portuguese_brazilian ] = "Quelltexte (*.BAS)";
-    TEXT[ japanese ] = "ｿｰｽﾃｷｽﾄ(*.BAS)";
+    TEXT[ japanese ] = "ソーステキスト(*.BAS)";
     TEXT[ korean ] = "소스텍스트 (*.BAS)";
     TEXT[ chinese_simplified ] = "Source text (*.BAS)";
     TEXT[ chinese_traditional ] = "Source text(*.BAS)";
     TEXT[ arabic ] = "Source text (*.BAS)";
     TEXT[ turkish ] = "Kaynak metinler (*.BAS)";
-    TEXT[ catalan ] = "Textos fuente (*.BAS)";
+    TEXT[ catalan ] = "Text font (*.BAS)";
     TEXT[ finnish ] = "L�hdeteksti (*.BAS)";
 };
 String IDS_INCFILTER {
@@ -1652,7 +1652,7 @@ String IDS_INCFILTER {
     TEXT[ chinese_traditional ] = "Include files(*.INC)";
     TEXT[ arabic ] = "Include files (*.INC)";
     TEXT[ turkish ] = "Include dosyalar� (*.INC)";
-    TEXT[ catalan ] = "Archivos \"Include\" (*.INC)";
+    TEXT[ catalan ] = "Fitxers d'inclusi� (*.INC)";
     TEXT[ finnish ] = "Include- tiedostot (*.INC)";
 };
 String IDS_LIBFILTER {
@@ -1669,13 +1669,13 @@ String IDS_LIBFILTER {
     TEXT[ swedish ] = "Libraries (*.SB)";
     TEXT[ polish ] = "Libraries (*.SB) ";
     TEXT[ portuguese_brazilian ] = "Libraries (*.SB)";
-    TEXT[ japanese ] = "ﾗｲﾌﾞﾗﾘ(*.SB)";
+    TEXT[ japanese ] = "ライブラリ(*.SB)";
     TEXT[ korean ] = "라이브러리 (*.SB)";
     TEXT[ chinese_simplified ] = "Libraries (*.SB)";
     TEXT[ chinese_traditional ] = "Libraries(*.SB)";
     TEXT[ arabic ] = "Libraries (*.SB)";
     TEXT[ turkish ] = "Kitapl�klar (*.SB)";
-    TEXT[ catalan ] = "Bibliotecas (*.SB)";
+    TEXT[ catalan ] = "Biblioteques (*.SB)";
     TEXT[ finnish ] = "Kirjastot (*.SB)";
 };
 String IDS_RESFILTER {
@@ -1698,7 +1698,7 @@ String IDS_RESFILTER {
     TEXT[ chinese_traditional ] = "Results(*.RES)";
     TEXT[ arabic ] = "Results (*.RES)";
     TEXT[ turkish ] = "Sonu�lar (*.RES)";
-    TEXT[ catalan ] = "Resultados (*.RES)";
+    TEXT[ catalan ] = "Resultats (*.RES)";
     TEXT[ finnish ] = "Tulokset (*.RES)";
 };
 String IDS_TXTFILTER {
@@ -1715,13 +1715,13 @@ String IDS_TXTFILTER {
     TEXT[ swedish ] = "Results as text file (*.TXT)";
     TEXT[ polish ] = "Results as text file (*.TXT) ";
     TEXT[ portuguese_brazilian ] = "Results als Textdatei (*.TXT)";
-    TEXT[ japanese ] = "文書ﾌｧｲﾙとしての結果(*.TXT)";
+    TEXT[ japanese ] = "文書ファイルとしての結果(*.TXT)";
     TEXT[ korean ] = "텍스트 파일 결과 (*.TXT)";
     TEXT[ chinese_simplified ] = "Results as text file (*.TXT)";
     TEXT[ chinese_traditional ] = "Results as text file(*.TXT)";
     TEXT[ arabic ] = "Results as text file (*.TXT)";
     TEXT[ turkish ] = "Metin dosyas� olarak sonu�lar (*.TXT)";
-    TEXT[ catalan ] = "Resultados como archivo de texto (*.TXT)";
+    TEXT[ catalan ] = "Resultats com a fitxers de text (*.TXT)";
     TEXT[ finnish ] = "Tulokset tekstitiedostona (*.TXT)";
 };
 String IDS_PAGE {
@@ -1738,13 +1738,13 @@ String IDS_PAGE {
     TEXT[ swedish ] = "Page  ";
     TEXT[ polish ] = "Page";
     TEXT[ portuguese_brazilian ] = "Seite ";
-    TEXT[ japanese ] = "ﾍﾟｰｼﾞ ";
+    TEXT[ japanese ] = "ページ ";
     TEXT[ korean ] = "페이지 ";
     TEXT[ chinese_simplified ] = "page ";
     TEXT[ chinese_traditional ] = "Page ";
     TEXT[ arabic ] = "Page  ";
     TEXT[ turkish ] = "Sayfa ";
-    TEXT[ catalan ] = "P�gina ";
+    TEXT[ catalan ] = "P�gina";
     TEXT[ finnish ] = "Sivu ";
 };
 String IDS_PRINTMSG {
@@ -1767,7 +1767,7 @@ String IDS_PRINTMSG {
     TEXT[ chinese_traditional ] = "Printout from ";
     TEXT[ arabic ] = "Printout from ";
     TEXT[ turkish ] = "��kt� kayna��: ";
-    TEXT[ catalan ] = "Imprimir ";
+    TEXT[ catalan ] = "Sortida d'impressi� des de ";
     TEXT[ finnish ] = "Tuloste kohteesta";
 };
 String IDS_CONTINUE {
@@ -1790,7 +1790,7 @@ String IDS_CONTINUE {
     TEXT[ chinese_traditional ] = "Contiune";
     TEXT[ arabic ] = "Continue";
     TEXT[ turkish ] = "�leri";
-    TEXT[ catalan ] = "Avanzar";
+    TEXT[ catalan ] = "Continua";
     TEXT[ finnish ] = "Jatka";
 };
 String IDS_CANCEL {
@@ -1807,13 +1807,13 @@ String IDS_CANCEL {
     TEXT[ swedish ] = "Cancel";
     TEXT[ polish ] = "Cancel ";
     TEXT[ portuguese_brazilian ] = "Abbruch";
-    TEXT[ japanese ] = "ｷｬﾝｾﾙ";
+    TEXT[ japanese ] = "キャンセル";
     TEXT[ korean ] = "취소";
     TEXT[ chinese_simplified ] = "Cancel";
     TEXT[ chinese_traditional ] = "Cancel";
     TEXT[ arabic ] = "Cancel";
     TEXT[ turkish ] = "�ptal";
-    TEXT[ catalan ] = "Cancelar";
+    TEXT[ catalan ] = "Cancel�la";
     TEXT[ finnish ] = "Peruuta";
 };
 String IDS_DISASWIN {
@@ -1831,12 +1831,12 @@ String IDS_DISASWIN {
     TEXT[ polish ] = "Disassembly ";
     TEXT[ portuguese_brazilian ] = "Disassembly";
     TEXT[ japanese ] = "Disassembly";
-    TEXT[ korean ] = "역어셈블리";
+    TEXT[ korean ] = "디스어셈블리";
     TEXT[ chinese_simplified ] = "Disassembly";
     TEXT[ chinese_traditional ] = "Disassembly";
     TEXT[ arabic ] = "Disassembly";
     TEXT[ turkish ] = "Disassembly";
-    TEXT[ catalan ] = "Desensamblar";
+    TEXT[ catalan ] = "Desassemblatge";
     TEXT[ finnish ] = "Purkaminen";
 };
 //Icon RID_APPICON {
@@ -1879,13 +1879,13 @@ Menu RID_APPMENUBAR {
             TEXT[ swedish ] = "~File";
             TEXT[ polish ] = "~File ";
             TEXT[ portuguese_brazilian ] = "~Datei";
-            TEXT[ japanese ] = "ﾌｧｲﾙ(~F)";
+            TEXT[ japanese ] = "ファイル(~F)";
             TEXT[ korean ] = "파일(~F)";
             TEXT[ chinese_simplified ] = "~File";
             TEXT[ chinese_traditional ] = "~File";
             TEXT[ arabic ] = "~File";
             TEXT[ turkish ] = "~Dosya";
-            TEXT[ catalan ] = "~Archivo";
+            TEXT[ catalan ] = "~Fitxer";
             TEXT[ finnish ] = "~Tiedosto";
         };
     MenuItem  {
@@ -1912,7 +1912,7 @@ Menu RID_APPMENUBAR {
             TEXT[ chinese_traditional ] = "~Edit";
             TEXT[ arabic ] = "~Edit";
             TEXT[ turkish ] = "D�~zenle";
-            TEXT[ catalan ] = "~Editar";
+            TEXT[ catalan ] = "~Edita";
             TEXT[ finnish ] = "~Muokkaa";
         };
     MenuItem  {
@@ -1933,7 +1933,7 @@ Menu RID_APPMENUBAR {
             TEXT[ swedish ] = "~Program";
             TEXT[ polish ] = "~Program ";
             TEXT[ portuguese_brazilian ] = "~Programm";
-            TEXT[ japanese ] = "ﾌﾟﾛｸﾞﾗﾑ(~P)";
+            TEXT[ japanese ] = "プログラム(~P)";
             TEXT[ korean ] = "프로그램(~P)";
             TEXT[ chinese_simplified ] = "~Program";
             TEXT[ chinese_traditional ] = "~Program";
@@ -1960,13 +1960,13 @@ Menu RID_APPMENUBAR {
             TEXT[ swedish ] = "~Window";
             TEXT[ polish ] = "~Window ";
             TEXT[ portuguese_brazilian ] = "~Fenster";
-            TEXT[ japanese ] = "ｳｨﾝﾄﾞｳ(~W)";
+            TEXT[ japanese ] = "ウィンドウ(~W)";
             TEXT[ korean ] = "창(~W)";
             TEXT[ chinese_simplified ] = "~Windows";
             TEXT[ chinese_traditional ] = "~Window";
             TEXT[ arabic ] = "~Window";
             TEXT[ turkish ] = "~Pencere";
-            TEXT[ catalan ] = "~Ventana";
+            TEXT[ catalan ] = "~Finestra";
             TEXT[ finnish ] = "~Ikkuna";
         };
     MenuItem  {
@@ -1991,13 +1991,13 @@ Menu RID_APPMENUBAR {
             TEXT[ swedish ] = "~Help";
             TEXT[ polish ] = "~Help ";
             TEXT[ portuguese_brazilian ] = "~Hilfe";
-            TEXT[ japanese ] = "ﾍﾙﾌﾟ(~H)";
+            TEXT[ japanese ] = "ヘルプ(~H)";
             TEXT[ korean ] = "도움말(~H)";
             TEXT[ chinese_simplified ] = "~Help";
             TEXT[ chinese_traditional ] = "~Help";
             TEXT[ arabic ] = "~Help";
             TEXT[ turkish ] = "~Yard�m";
-            TEXT[ catalan ] = "~Ayuda";
+            TEXT[ catalan ] = "~Ajuda";
             TEXT[ finnish ] = "~Ohje";
         };
     };
@@ -2028,7 +2028,7 @@ Menu RID_FILE {
             TEXT[ chinese_traditional ] = "~New";
             TEXT[ arabic ] = "~New";
             TEXT[ turkish ] = "Y~eni";
-            TEXT[ catalan ] = "~Nuevo";
+            TEXT[ catalan ] = "~Nou";
             TEXT[ finnish ] = "~Uusi";
         };
     MenuItem  {
@@ -2055,7 +2055,7 @@ Menu RID_FILE {
             TEXT[ chinese_traditional ] = "~Open...";
             TEXT[ arabic ] = "~Open...";
             TEXT[ turkish ] = "~A�...";
-            TEXT[ catalan ] = "A~brir...";
+            TEXT[ catalan ] = "~Obre...";
             TEXT[ finnish ] = "~Avaa";
         };
     MenuItem  {
@@ -2084,7 +2084,7 @@ Menu RID_FILE {
             TEXT[ chinese_traditional ] = "~Close";
             TEXT[ arabic ] = "~Close";
             TEXT[ turkish ] = "Kapa~t";
-            TEXT[ catalan ] = "~Cerrar";
+            TEXT[ catalan ] = "~Tanca...";
             TEXT[ finnish ] = "~Sulje";
         };
     MenuItem  {
@@ -2111,7 +2111,7 @@ Menu RID_FILE {
             TEXT[ chinese_traditional ] = "~Save";
             TEXT[ arabic ] = "~Save";
             TEXT[ turkish ] = "Kay~det";
-            TEXT[ catalan ] = "~Guardar";
+            TEXT[ catalan ] = "~Desa";
             TEXT[ finnish ] = "~Tallenna";
         };
     MenuItem  {
@@ -2132,13 +2132,13 @@ Menu RID_FILE {
             TEXT[ swedish ] = "Save ~As...";
             TEXT[ polish ] = "Save~ As... ";
             TEXT[ portuguese_brazilian ] = "Speichern ~unter...";
-            TEXT[ japanese ] = "名前を付けて保存(~U)...";
-            TEXT[ korean ] = "다른 이름으로 저장(~ )...";
-            TEXT[ chinese_simplified ] = "Save ~As...";
-            TEXT[ chinese_traditional ] = "Save ~as...";
+            TEXT[ japanese ] = "名前を付けて保存...";
+            TEXT[ korean ] = "다른 이름으로 저장(~)...";
+            TEXT[ chinese_simplified ] = "Save As...";
+            TEXT[ chinese_traditional ] = "Save as...";
             TEXT[ arabic ] = "Save~ As...";
             TEXT[ turkish ] = "~Farkl� kaydet...";
-            TEXT[ catalan ] = "Guardar ~como...";
+            TEXT[ catalan ] = "Anomena~ i desa...";
             TEXT[ finnish ] = "Tallenna~ nimell�";
         };
     MenuItem  {
@@ -2161,13 +2161,13 @@ Menu RID_FILE {
             TEXT[ swedish ] = "~Load Library...";
             TEXT[ polish ] = "~Load Library...";
             TEXT[ portuguese_brazilian ] = "~Library laden...";
-            TEXT[ japanese ] = "ﾗｲﾌﾞﾗﾘの読み込み(~L)...";
+            TEXT[ japanese ] = "ライブラリの読み込み(~L)...";
             TEXT[ korean ] = "라이브러리 로드(~L)...";
             TEXT[ chinese_simplified ] = "~Load Library...";
             TEXT[ chinese_traditional ] = "~Load Library...";
             TEXT[ arabic ] = "~Load Library...";
             TEXT[ turkish ] = "~Kitapl��� y�kle";
-            TEXT[ catalan ] = "Cargar ~Biblioteca...";
+            TEXT[ catalan ] = "~Carrega la biblioteca...";
             TEXT[ finnish ] = "~Lataa kirjasto";
         };
     MenuItem  {
@@ -2187,13 +2187,13 @@ Menu RID_FILE {
             TEXT[ swedish ] = "Save Li~brary...";
             TEXT[ polish ] = "Save Li~brary... ";
             TEXT[ portuguese_brazilian ] = "Li~brary speichern...";
-            TEXT[ japanese ] = "ﾗｲﾌﾞﾗﾘの保存(~B)...";
+            TEXT[ japanese ] = "ライブラリの保存(~B)...";
             TEXT[ korean ] = "라이브러리 저장(~B)...";
             TEXT[ chinese_simplified ] = "Save Li~brary...";
             TEXT[ chinese_traditional ] = "Save Li~brary...";
             TEXT[ arabic ] = "Save Li~brary...";
             TEXT[ turkish ] = "Kitapl��� kaydet...";
-            TEXT[ catalan ] = "Guardar Bibli~oteca...";
+            TEXT[ catalan ] = "~Desa la biblioteca...";
             TEXT[ finnish ] = "Tallenna kir~jasto";
         };
     MenuItem  {
@@ -2222,7 +2222,7 @@ Menu RID_FILE {
             TEXT[ chinese_traditional ] = "~Print";
             TEXT[ arabic ] = "~Print";
             TEXT[ turkish ] = "~Yazd�r";
-            TEXT[ catalan ] = "~Imprimir";
+            TEXT[ catalan ] = "~Imprimeix";
             TEXT[ finnish ] = "~Tulosta";
         };
     MenuItem  {
@@ -2235,20 +2235,20 @@ Menu RID_FILE {
             TEXT[ russian ] = "P~rinter Setup...";
             TEXT[ greek ] = "P~rinter Setup...";
             TEXT[ dutch ] = "Printerinstellin~g...";
-            TEXT[ french ] = "Para~m�trage de l'imprimante...";
+            TEXT[ french ] = "Param�tra~ge de l'imprimante...";
             TEXT[ spanish ] = "~Configuraci�n de impresora...";
             TEXT[ italian ] = "P~rinter Setup...";
             TEXT[ danish ] = "P~rinter Setup...";
             TEXT[ swedish ] = "P~rinter Setup...";
             TEXT[ polish ] = "P~rinter Setup...";
             TEXT[ portuguese_brazilian ] = "Druckereinstellun~g...";
-            TEXT[ japanese ] = "ﾌﾟﾘﾝﾀの設定(~R)...";
+            TEXT[ japanese ] = "プリンタの設定(~R)...";
             TEXT[ korean ] = "프린터 설정(~R)...";
             TEXT[ chinese_simplified ] = "P~rinter Setting...";
             TEXT[ chinese_traditional ] = "P~rinter Setup...";
             TEXT[ arabic ] = "P~rinter Setup...";
             TEXT[ turkish ] = "Yaz�c� ayarlar�...";
-            TEXT[ catalan ] = "~Configuraci�n de impresora...";
+            TEXT[ catalan ] = "Par�metres de l'imp~ressora...";
             TEXT[ finnish ] = "Tu~lostinasetukset";
         };
     MenuItem  {
@@ -2278,7 +2278,7 @@ Menu RID_FILE {
             TEXT[ chinese_traditional ] = "~Exit";
             TEXT[ arabic ] = "~Exit";
             TEXT[ turkish ] = "��~k��";
-            TEXT[ catalan ] = "~Terminar";
+            TEXT[ catalan ] = "~Surt";
             TEXT[ finnish ] = "~Lopeta";
         };
     };
@@ -2304,12 +2304,12 @@ Menu RID_EDIT {
             TEXT[ polish ] = "~Undo ";
             TEXT[ portuguese_brazilian ] = "~R?kg?ngig";
             TEXT[ japanese ] = "元に戻す(~U)";
-            TEXT[ korean ] = "실행취소(~U)";
+            TEXT[ korean ] = "실행 취소(~U)";
             TEXT[ chinese_simplified ] = "~Undo";
             TEXT[ chinese_traditional ] = "~Undo";
             TEXT[ arabic ] = "~Undo";
             TEXT[ turkish ] = "Geri ~al";
-            TEXT[ catalan ] = "~Deshacer";
+            TEXT[ catalan ] = "~Desf�s";
             TEXT[ finnish ] = "~Peruuta";
         };
     MenuItem  {
@@ -2331,12 +2331,12 @@ Menu RID_EDIT {
             TEXT[ polish ] = "~Repeat ";
             TEXT[ portuguese_brazilian ] = "~Wiederholen";
             TEXT[ japanese ] = "やり直し(~R)";
-            TEXT[ korean ] = "재실행(~R)";
+            TEXT[ korean ] = "다시 실행(~R)";
             TEXT[ chinese_simplified ] = "~Repeat";
             TEXT[ chinese_traditional ] = "~Repeat";
             TEXT[ arabic ] = "~Repeat";
             TEXT[ turkish ] = "~Yinele";
-            TEXT[ catalan ] = "~Repetir";
+            TEXT[ catalan ] = "~Repeteix";
             TEXT[ finnish ] = "~Toista";
         };
     MenuItem  {
@@ -2366,7 +2366,7 @@ Menu RID_EDIT {
             TEXT[ chinese_traditional ] = "~Cut";
             TEXT[ arabic ] = "~Cut";
             TEXT[ turkish ] = "Kes";
-            TEXT[ catalan ] = "~Cortar";
+            TEXT[ catalan ] = "~Retalla";
             TEXT[ finnish ] = "~Leikkaa";
         };
     MenuItem  {
@@ -2387,13 +2387,13 @@ Menu RID_EDIT {
             TEXT[ swedish ] = "~Copy";
             TEXT[ polish ] = "~Copy ";
             TEXT[ portuguese_brazilian ] = "~Kopieren";
-            TEXT[ japanese ] = "ｺﾋﾟｰ(~C)";
+            TEXT[ japanese ] = "コピー(~C)";
             TEXT[ korean ] = "복사(~C)";
             TEXT[ chinese_simplified ] = "~Copy";
             TEXT[ chinese_traditional ] = "~Copy";
             TEXT[ arabic ] = "~Copy";
             TEXT[ turkish ] = "Kopyala";
-            TEXT[ catalan ] = "Copiar";
+            TEXT[ catalan ] = "~Copia";
             TEXT[ finnish ] = "~Kopioi";
         };
     MenuItem  {
@@ -2415,12 +2415,12 @@ Menu RID_EDIT {
             TEXT[ polish ] = "~Paste ";
             TEXT[ portuguese_brazilian ] = "E~inf?en";
             TEXT[ japanese ] = "貼り付け(~P)";
-            TEXT[ korean ] = "붙여넣기(~P)";
+            TEXT[ korean ] = "삽입(~P)";
             TEXT[ chinese_simplified ] = "~Paste";
             TEXT[ chinese_traditional ] = "~Paste";
             TEXT[ arabic ] = "~Insert";
             TEXT[ turkish ] = "Ekle";
-            TEXT[ catalan ] = "In~sertar";
+            TEXT[ catalan ] = "~Enganxa";
             TEXT[ finnish ] = "L~iit�";
         };
     MenuItem  {
@@ -2447,7 +2447,7 @@ Menu RID_EDIT {
             TEXT[ chinese_traditional ] = "~Delete";
             TEXT[ arabic ] = "~Delete";
             TEXT[ turkish ] = "Sil";
-            TEXT[ catalan ] = "~Eliminar";
+            TEXT[ catalan ] = "~Suprimeix";
             TEXT[ finnish ] = "~Poista";
         };
     MenuItem  {
@@ -2477,7 +2477,7 @@ Menu RID_EDIT {
             TEXT[ chinese_traditional ] = "~Find...";
             TEXT[ arabic ] = "~Find...";
             TEXT[ turkish ] = "Ara...";
-            TEXT[ catalan ] = "~Buscar...";
+            TEXT[ catalan ] = "~Cerca...";
             TEXT[ finnish ] = "~Etsi";
         };
     MenuItem  {
@@ -2503,7 +2503,7 @@ Menu RID_EDIT {
             TEXT[ chinese_traditional ] = "~Replace...";
             TEXT[ arabic ] = "~Replace...";
             TEXT[ turkish ] = "De�i�tir...";
-            TEXT[ catalan ] = "~Sustituir...";
+            TEXT[ catalan ] = "~Reempla�a...";
             TEXT[ finnish ] = "~Korvaa";
         };
     MenuItem  {
@@ -2531,7 +2531,7 @@ Menu RID_EDIT {
             TEXT[ chinese_traditional ] = "Repeat S~earch";
             TEXT[ arabic ] = "Repeat S~earch";
             TEXT[ turkish ] = "Yeniden ara";
-            TEXT[ catalan ] = "~Repetir b�squeda";
+            TEXT[ catalan ] = "Repeteix la c~erca";
             TEXT[ finnish ] = "Toista ~haku";
         };
     };
@@ -2556,13 +2556,13 @@ Menu RID_RUN {
             TEXT[ swedish ] = "~Compile";
             TEXT[ polish ] = "~Compile ";
             TEXT[ portuguese_brazilian ] = "~Compilieren";
-            TEXT[ japanese ] = "ｺﾝﾊﾟｲﾙを行う(~C)";
+            TEXT[ japanese ] = "コンパイルを行う(~C)";
             TEXT[ korean ] = "컴파일(~C)";
             TEXT[ chinese_simplified ] = "~Compile";
             TEXT[ chinese_traditional ] = "~Compile";
             TEXT[ arabic ] = "~Compile";
             TEXT[ turkish ] = "~Derle";
-            TEXT[ catalan ] = "~Compilar";
+            TEXT[ catalan ] = "~Compila";
             TEXT[ finnish ] = "~Kokoa";
         };
     MenuItem  {
@@ -2588,7 +2588,7 @@ Menu RID_RUN {
             TEXT[ chinese_traditional ] = "~Disassemble";
             TEXT[ arabic ] = "~Disassemble";
             TEXT[ turkish ] = "~Disassemble";
-            TEXT[ catalan ] = "~Desensamblar";
+            TEXT[ catalan ] = "~Desassembla";
             TEXT[ finnish ] = "~Pura";
         };
     MenuItem  {
@@ -2609,13 +2609,13 @@ Menu RID_RUN {
             TEXT[ swedish ] = "~Start";
             TEXT[ polish ] = "~Start";
             TEXT[ portuguese_brazilian ] = "~Start";
-            TEXT[ japanese ] = "ｽﾀｰﾄ(~S)";
+            TEXT[ japanese ] = "スタート(~S)";
             TEXT[ korean ] = "시작(~S)";
             TEXT[ chinese_simplified ] = "~Start";
             TEXT[ chinese_traditional ] = "~Start";
             TEXT[ arabic ] = "~Start";
             TEXT[ turkish ] = "~Ba�lat";
-            TEXT[ catalan ] = "~Iniciar";
+            TEXT[ catalan ] = "~Inici";
             TEXT[ finnish ] = "~Aloita";
         };
     MenuItem  {
@@ -2642,7 +2642,7 @@ Menu RID_RUN {
             TEXT[ chinese_traditional ] = "~Single Stepping";
             TEXT[ arabic ] = "~Single Stepping";
             TEXT[ turkish ] = "~Tek ad�m";
-            TEXT[ catalan ] = "~Paso a paso";
+            TEXT[ catalan ] = "~Pas simple";
             TEXT[ finnish ] = "~Askel kerrallaan";
         };
     MenuItem  {
@@ -2669,7 +2669,7 @@ Menu RID_RUN {
             TEXT[ chinese_traditional ] = "Si~ngle Step over Procedure";
             TEXT[ arabic ] = "Si~ngle Step over Procedure";
             TEXT[ turkish ] = "Si~ngle Step over Procedure";
-            TEXT[ catalan ] = "Procesos ~paso a paso";
+            TEXT[ catalan ] = "Pa~s simple durant el procediment";
             TEXT[ finnish ] = "As~kel kerrallaan toiminnoissa";
         };
 //  MenuItem  {
@@ -2704,7 +2704,7 @@ Menu RID_RUN {
             TEXT[ chinese_traditional ] = "Set / Delete Break Point";
             TEXT[ arabic ] = "Set / Delete Break Point";
             TEXT[ turkish ] = "Set / Delete Break Point";
-            TEXT[ catalan ] = "Poner/eliminar punto de detenci�n";
+            TEXT[ catalan ] = "Defineix / Suprimeix el punt de ruptura";
             TEXT[ finnish ] = "Aseta/poista keskeytyspiste";
         };
     MenuItem  {
@@ -2731,7 +2731,7 @@ Menu RID_RUN {
             TEXT[ chinese_traditional ] = "~Interrupt";
             TEXT[ arabic ] = "~Interrupt";
             TEXT[ turkish ] = "~Duraklat";
-            TEXT[ catalan ] = "Interru~mpir";
+            TEXT[ catalan ] = "~Interromp";
             TEXT[ finnish ] = "~Keskeyt�";
         };
     MenuItem  {
@@ -2751,13 +2751,13 @@ Menu RID_RUN {
             TEXT[ swedish ] = "~Cancel";
             TEXT[ polish ] = "~Cancel";
             TEXT[ portuguese_brazilian ] = "~Abbrechen";
-            TEXT[ japanese ] = "ｷｬﾝｾﾙ(~C)";
+            TEXT[ japanese ] = "キャンセル(~C)";
             TEXT[ korean ] = "취소(~C)";
             TEXT[ chinese_simplified ] = "~Cancel";
             TEXT[ chinese_traditional ] = "~Cancel";
             TEXT[ arabic ] = "~Cancel";
             TEXT[ turkish ] = "~�ptal";
-            TEXT[ catalan ] = "~Cancelar";
+            TEXT[ catalan ] = "~Cancel�la";
             TEXT[ finnish ] = "~Peruuta";
         };
     MenuItem  {
@@ -2778,13 +2778,13 @@ Menu RID_RUN {
             TEXT[ swedish ] = "~Next Error";
             TEXT[ polish ] = "~Next Error";
             TEXT[ portuguese_brazilian ] = "~N?chster Fehler";
-            TEXT[ japanese ] = "次のｴﾗｰ(~N)";
+            TEXT[ japanese ] = "次のエラー(~N)";
             TEXT[ korean ] = "다음 오류(~N)";
             TEXT[ chinese_simplified ] = "~Next Error";
             TEXT[ chinese_traditional ] = "~Next Error";
             TEXT[ arabic ] = "~Next Error";
             TEXT[ turkish ] = "~Sonraki hata";
-            TEXT[ catalan ] = "~Error siguiente";
+            TEXT[ catalan ] = "~Error seg�ent";
             TEXT[ finnish ] = "~Seuraava virhe";
         };
     MenuItem  {
@@ -2805,13 +2805,13 @@ Menu RID_RUN {
             TEXT[ swedish ] = "~Previous Error";
             TEXT[ polish ] = "~Previous Error";
             TEXT[ portuguese_brazilian ] = "~Vorheriger Fehler";
-            TEXT[ japanese ] = "前のｴﾗｰ(~P)";
+            TEXT[ japanese ] = "前のエラー(~P)";
             TEXT[ korean ] = "이전 오류(~P)";
             TEXT[ chinese_simplified ] = "~Previous Error";
             TEXT[ chinese_traditional ] = "~Previous Error";
             TEXT[ arabic ] = "~Previous Error";
             TEXT[ turkish ] = "~�nceki hata";
-            TEXT[ catalan ] = "Error ~anterior";
+            TEXT[ catalan ] = "~Error anterior";
             TEXT[ finnish ] = "~Edellinen virhe";
         };
     MenuItem  {
@@ -2843,7 +2843,7 @@ String RID_TT_EXTRAS_NAME
     Text[ chinese_traditional ] = "E~xtras";
     Text[ arabic ] = "E~xtras";
     Text[ turkish ] = "Ara�lar";
-    Text[ catalan ] = "~Opciones";
+    Text[ catalan ] = "E~xtres";
     Text[ finnish ] = "Li~s�objektit";
 };
 
@@ -2872,7 +2872,7 @@ Menu RID_TT_EXTRAS {
             TEXT[ chinese_traditional ] = "~Settings";
             TEXT[ arabic ] = "~Settings";
             TEXT[ turkish ] = "~Ayarlar";
-            TEXT[ catalan ] = "~Configuraci�n";
+            TEXT[ catalan ] = "~Par�metres";
             TEXT[ finnish ] = "~Asetukset";
         };
     MenuItem  {
@@ -2893,12 +2893,12 @@ Menu RID_TT_EXTRAS {
             TEXT[ polish ] = "~Include Dialogs";
             TEXT[ portuguese_brazilian ] = "~Dialoge aufnehmen";
             TEXT[ japanese ] = "~Include Dialogs";
-            TEXT[ korean ] = "다이얼로그 포함(~I)";
+            TEXT[ korean ] = "대화 상자 추가(~I)";
             TEXT[ chinese_simplified ] = "~Include Dialogs";
             TEXT[ chinese_traditional ] = "~Include Dialogs";
             TEXT[ arabic ] = "~Include Dialogs";
             TEXT[ turkish ] = "~Pencereleri ekle";
-            TEXT[ catalan ] = "In~cluir di�logos";
+            TEXT[ catalan ] = "~Inclou di�legs";
             TEXT[ finnish ] = "~My�s valintaikkunat";
         };
     };
@@ -2928,7 +2928,7 @@ Menu RID_WINDOW {
             TEXT[ chinese_traditional ] = "~Overlapping";
             TEXT[ arabic ] = "~Overlapping";
             TEXT[ turkish ] = "B~asamakla";
-            TEXT[ catalan ] = "~Cascada";
+            TEXT[ catalan ] = "~Superposici�";
             TEXT[ finnish ] = "~P��llekk�in";
         };
     MenuItem  {
@@ -2954,7 +2954,7 @@ Menu RID_WINDOW {
             TEXT[ chinese_traditional ] = "~Tiled";
             TEXT[ arabic ] = "~Tiled";
             TEXT[ turkish ] = "~Yan yana";
-            TEXT[ catalan ] = "~Mosaico";
+            TEXT[ catalan ] = "~Mosaic";
             TEXT[ finnish ] = "~Vierekk�in";
         };
     MenuItem  {
@@ -2980,7 +2980,7 @@ Menu RID_WINDOW {
             TEXT[ chinese_traditional ] = "~Arrange Horizontally";
             TEXT[ arabic ] = "~Arrange Horizontally";
             TEXT[ turkish ] = "~Yatay yerle�tir";
-            TEXT[ catalan ] = "~Horizontal";
+            TEXT[ catalan ] = "~Organitza horitzontalment";
             TEXT[ finnish ] = "~J�rjest� vaakatasossa";
         };
     MenuItem  {
@@ -3006,7 +3006,7 @@ Menu RID_WINDOW {
             TEXT[ chinese_traditional ] = "~Arrange Vertically";
             TEXT[ arabic ] = "~Arrange Vertically";
             TEXT[ turkish ] = "~Dikey yerle�tir";
-            TEXT[ catalan ] = "~Vertical";
+            TEXT[ catalan ] = "~Organitza verticalment";
             TEXT[ finnish ] = "~J�rjest� pystytasossa";
         };
     };
@@ -3074,7 +3074,7 @@ Menu RID_HELP {
             TEXT[ chinese_traditional ] = "~About...";
             TEXT[ arabic ] = "~About...";
             TEXT[ turkish ] = "~Bilgi...";
-            TEXT[ catalan ] = "~Informaci�n...";
+            TEXT[ catalan ] = "~Quant a...";
             TEXT[ finnish ] = "~Tietoja";
         };
     };
@@ -3109,7 +3109,7 @@ ModelessDialog IDD_PRINT_DIALOG {
         TEXT[ chinese_traditional ] = "Print from ";
         TEXT[ arabic ] = "Print from ";
         TEXT[ turkish ] = "��kt� kayna�� ";
-        TEXT[ catalan ] = "Imprimir ";
+        TEXT[ catalan ] = "Imprimeix des de";
         TEXT[ finnish ] = "Tulosta kohteesta ";
     };
     CancelButton RID_CANCEL {
@@ -3128,13 +3128,13 @@ ModelessDialog IDD_PRINT_DIALOG {
         TEXT[ swedish ] = "Cancel";
         TEXT[ polish ] = "Cancel";
         TEXT[ portuguese_brazilian ] = "Abbruch";
-        TEXT[ japanese ] = "ｷｬﾝｾﾙ";
+        TEXT[ japanese ] = "キャンセル";
         TEXT[ korean ] = "취소";
         TEXT[ chinese_simplified ] = "Cancel";
         TEXT[ chinese_traditional ] = "Cancel";
         TEXT[ arabic ] = "Cancel";
         TEXT[ turkish ] = "�ptal";
-        TEXT[ catalan ] = "Cancelar";
+        TEXT[ catalan ] = "Cancel�la";
         TEXT[ finnish ] = "Peruuta";
     };
     TEXT[ portuguese ] = "StarBasic: imprimir ficheiro";
@@ -3148,14 +3148,14 @@ ModelessDialog IDD_PRINT_DIALOG {
     TEXT[ swedish ] = "Testtool: Print File";
     TEXT[ polish ] = "Testtool: Print File";
     TEXT[ portuguese_brazilian ] = "StarBasic: Datei drucken";
-    TEXT[ japanese ] = "Testtool: ﾌｧｲﾙの印刷";
-    TEXT[ korean ] = "테스트툴: 파일 인쇄";
+    TEXT[ japanese ] = "Testtool: ファイルの印刷";
+    TEXT[ korean ] = "테스트 도구: 파일 인쇄";
     TEXT[ chinese_simplified ] = "Testtool: Print File";
     TEXT[ chinese_traditional ] = "Testtool: Print File";
     TEXT[ arabic ] = "Testtool: Print File";
     TEXT[ turkish ] = "StarBasic: Dosyay� yazd�r";
-    TEXT[ catalan ] = "StarBasic: Imprimir archivo";
-    TEXT[ finnish ] = "StarBasic: Print File";
+    TEXT[ catalan ] = "Testool: Imprimeix el fitxer";
+    TEXT[ finnish ] = "Testity�kalu: Tulosta tiedosto";
 };
 
 
@@ -3198,7 +3198,7 @@ ModelessDialog IDD_OPTIONS_DLG
                 Text[ chinese_traditional ] = "Generic";
                 Text[ arabic ] = "Generic";
                 Text[ turkish ] = "Genel";
-                Text[ catalan ] = "Gen�rico";
+                Text[ catalan ] = "Gen�ric";
                 Text[ finnish ] = "Yleinen";
             };
             PageItem
@@ -3223,7 +3223,7 @@ ModelessDialog IDD_OPTIONS_DLG
                 Text[ chinese_traditional ] = "Specialized";
                 Text[ arabic ] = "Specialized";
                 Text[ turkish ] = "�zel";
-                Text[ catalan ] = "Especial";
+                Text[ catalan ] = "Especialitzat";
                 Text[ finnish ] = "Erikoinen";
             };
         };
@@ -3256,7 +3256,7 @@ ModelessDialog IDD_OPTIONS_DLG
     Text[ chinese_traditional ] = "Settings";
     Text[ arabic ] = "Settings";
     Text[ turkish ] = "Ayarlar";
-    Text[ catalan ] = "Configuraci�n";
+    Text[ catalan ] = "Par�metres";
     Text[ finnish ] = "Asetukset";
 };
 
@@ -3323,7 +3323,7 @@ TabPage RID_TP_GENERIC {
         Text[ chinese_traditional ] = "New";
         Text[ arabic ] = "New";
         Text[ turkish ] = "Yeni";
-        Text[ catalan ] = "Nuevo";
+        Text[ catalan ] = "Nou";
         Text[ finnish ] = "Uusi";
     };
     PushButton RID_PD_DEL_AREA {
@@ -3344,12 +3344,12 @@ TabPage RID_TP_GENERIC {
         Text[ polish ] = "Delete";
         Text[ portuguese_brazilian ] = "L?chen";
         Text[ japanese ] = "削除";
-        Text[ korean ] = "지우기";
+        Text[ korean ] = "삭제";
         Text[ chinese_simplified ] = "Delete";
         Text[ chinese_traditional ] = "Delete";
         Text[ arabic ] = "Delete";
         Text[ turkish ] = "Sil";
-        Text[ catalan ] = "Eliminar";
+        Text[ catalan ] = "Suprimeix";
         Text[ finnish ] = "Poista";
     };
     FixedLine RID_FL_VALUE {
@@ -3374,7 +3374,7 @@ TabPage RID_TP_GENERIC {
         Text[ chinese_traditional ] = "Settings";
         Text[ arabic ] = "Setting";
         Text[ turkish ] = "Ayarlar";
-        Text[ catalan ] = "Configuraci�n";
+        Text[ catalan ] = "Configuraci�";
         Text[ finnish ] = "Asetus";
     };
     ComboBox RID_CB_VALUE {
@@ -3409,7 +3409,7 @@ TabPage RID_TP_GENERIC {
         Text[ chinese_traditional ] = "New";
         Text[ arabic ] = "New";
         Text[ turkish ] = "Yeni";
-        Text[ catalan ] = "Nuevo";
+        Text[ catalan ] = "Nou";
         Text[ finnish ] = "Uusi";
     };
     PushButton RID_PB_DEL_VALUE {
@@ -3430,12 +3430,12 @@ TabPage RID_TP_GENERIC {
         Text[ polish ] = "Delete";
         Text[ portuguese_brazilian ] = "L?chen";
         Text[ japanese ] = "削除";
-        Text[ korean ] = "지우기";
+        Text[ korean ] = "삭제";
         Text[ chinese_simplified ] = "Delete";
         Text[ chinese_traditional ] = "Delete";
         Text[ arabic ] = "Delete";
         Text[ turkish ] = "Sil";
-        Text[ catalan ] = "Eliminar";
+        Text[ catalan ] = "Suprimeix";
         Text[ finnish ] = "Poista";
     };
 };
@@ -3461,13 +3461,13 @@ TabPage RID_TP_SPECIAL {
         Text[ swedish ] = "Directories";
         Text[ polish ] = "Directories";
         Text[ portuguese_brazilian ] = "Verzeichnisse";
-        Text[ japanese ] = "ﾃﾞｨﾚｸﾄﾘ";
+        Text[ japanese ] = "ディレクトリ";
         Text[ korean ] = "디렉토리";
         Text[ chinese_simplified ] = "Directories";
         Text[ chinese_traditional ] = "Directories";
         Text[ arabic ] = "Directories";
         Text[ turkish ] = "Dizinler";
-        Text[ catalan ] = "Directorios";
+        Text[ catalan ] = "Directoris";
         Text[ finnish ] = "Hakemistot";
     };
     FixedText LOG_TEXT {
@@ -3492,7 +3492,7 @@ TabPage RID_TP_SPECIAL {
         Text[ chinese_traditional ] = "Log home directory";
         Text[ arabic ] = "Log home directory";
         Text[ turkish ] = "Log ana dizin";
-        Text[ catalan ] = "Directorio base de Log";
+        Text[ catalan ] = "Directori inicial de registre";
         Text[ finnish ] = "Lokihakemisto";
     };
     FixedText BASIS_TEXT {
@@ -3517,7 +3517,7 @@ TabPage RID_TP_SPECIAL {
         Text[ chinese_traditional ] = "Home directory";
         Text[ arabic ] = "Home directory";
         Text[ turkish ] = "Ana dizin";
-        Text[ catalan ] = "Directorio base";
+        Text[ catalan ] = "Directori inicial";
         Text[ finnish ] = "Kotihakemisto";
     };
     FixedText HID_TEXT {
@@ -3542,7 +3542,7 @@ TabPage RID_TP_SPECIAL {
         Text[ chinese_traditional ] = "HID directory";
         Text[ arabic ] = "HID directory";
         Text[ turkish ] = "HID diziniz";
-        Text[ catalan ] = "Directorio HID";
+        Text[ catalan ] = "Directori HID";
         Text[ finnish ] = "HID-hakemisto";
     };
     Edit LOG_NAME {
@@ -3663,7 +3663,7 @@ TabPage RID_TP_SPECIAL {
         Text[ chinese_traditional ] = "Ohter settings";
         Text[ arabic ] = "Other settings";
         Text[ turkish ] = "Di�er ayarlar";
-        Text[ catalan ] = "Otra configuraci�n";
+        Text[ catalan ] = "Una altre configuraci�";
         Text[ finnish ] = "Muut asetukset";
     };
     FixedText TIMEOUT_TEXT {
@@ -3683,12 +3683,12 @@ TabPage RID_TP_SPECIAL {
         Text[ polish ] = "Server Timeout";
         Text[ portuguese_brazilian ] = "Server Timeout";
         Text[ japanese ] = "Server Timeout";
-        Text[ korean ] = "서버 타임아웃";
+        Text[ korean ] = "서버 시간 초과";
         Text[ chinese_simplified ] = "Server Timeout";
         Text[ chinese_traditional ] = "Server Timeout";
         Text[ arabic ] = "Server Timeout";
         Text[ turkish ] = "Sunucu zaman a��m�";
-        Text[ catalan ] = "Desconexi�n temporal del servidor";
+        Text[ catalan ] = "Temps excedit al servidor";
         Text[ finnish ] = "Palvelimen aikakatkaisu";
     };
     TimeField SERVER_TIMEOUT {
@@ -3718,20 +3718,27 @@ TabPage RID_TP_SPECIAL {
         Text[ polish ] = "AutoReload";
         Text[ portuguese_brazilian ] = "Automatischer Reload";
         Text[ japanese ] = "AutoReload";
-        Text[ korean ] = "자동로드";
+        Text[ korean ] = "자동 다시 로드";
         Text[ chinese_simplified ] = "AutoReload";
         Text[ chinese_traditional ] = "AutoReload";
         Text[ arabic ] = "AutoReload";
         Text[ turkish ] = "Otomatik yeniden y�kleme";
-        Text[ catalan ] = "Recarga autom�tica";
+        Text[ catalan ] = "Rec�rrega autom�tica";
         Text[ finnish ] = "Automaattinen uudelleenlataus";
     };
-//  CheckBox 5555 {
+// Unbenutzt aber Positioniert
+//  CheckBox CB_AUTOSAVE {
 //          Pos = MAP_APPFONT( 127, 70 );
 //          Size = MAP_APPFONT( 103, 12 );
 //          Text = "Unbenutzt aber Positioniert";
 //          Text [ english_us ] = "Unbenutzt aber Positioniert";
 //      };
+    CheckBox CB_AUTOSAVE {
+            Pos = MAP_APPFONT( 127, 83 );
+            Size = MAP_APPFONT( 103, 12 );
+            Text = "Speichern vor Ausf�hren";
+            Text [ english_us ] = "Save before execute";
+        };
 };
 
 
@@ -3782,7 +3789,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ chinese_traditional ] = "Controls";
         Text[ arabic ] = "Controls";
         Text[ turkish ] = "Denetimler";
-        Text[ catalan ] = "Controles";
+        Text[ catalan ] = "Controls";
         Text[ finnish ] = "Ohjaimet";
     };
     MultiListBox RID_MLB_CONTROLS {
@@ -3809,12 +3816,12 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ polish ] = "Slots";
         Text[ portuguese_brazilian ] = "Slots";
         Text[ japanese ] = "Slots";
-        Text[ korean ] = "Slots";
+        Text[ korean ] = "슬롯";
         Text[ chinese_simplified ] = "Slots";
         Text[ chinese_traditional ] = "Slots";
         Text[ arabic ] = "Slots";
         Text[ turkish ] = "Yuvalar";
-        Text[ catalan ] = "Puertos (slots)";
+        Text[ catalan ] = "Ranures";
         Text[ finnish ] = "Paikat";
     };
     MultiListBox RID_MLB_SLOTS {
@@ -3847,7 +3854,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ chinese_traditional ] = "Copy";
         Text[ arabic ] = "Copy";
         Text[ turkish ] = "Kopyala";
-        Text[ catalan ] = "Copiar";
+        Text[ catalan ] = "Copia";
         Text[ finnish ] = "Kopioi";
     };
     PushButton RID_PB_BENENNEN {
@@ -3874,7 +3881,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ chinese_traditional ] = "Name";
         Text[ arabic ] = "Name";
         Text[ turkish ] = "Adland�r";
-        Text[ catalan ] = "Nombrar";
+        Text[ catalan ] = "Nom";
         Text[ finnish ] = "Nimi";
     };
     PushButton RID_PB_SELECTALL {
@@ -3895,12 +3902,12 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ polish ] = "Select all";
         Text[ portuguese_brazilian ] = "Alle Markieren";
         Text[ japanese ] = "Select all";
-        Text[ korean ] = "모두 마킹";
+        Text[ korean ] = "모두 선택 표시";
         Text[ chinese_simplified ] = "Select all";
         Text[ chinese_traditional ] = "Select all";
         Text[ arabic ] = "Select all";
         Text[ turkish ] = "T�m�n� se�";
-        Text[ catalan ] = "Seleccionar todos";
+        Text[ catalan ] = "Selecciona-ho tot";
         Text[ finnish ] = "Valitse kaikki";
     };
     OKButton RID_OK_CLOSE {
@@ -3926,7 +3933,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ chinese_traditional ] = "Close";
         Text[ arabic ] = "Close";
         Text[ turkish ] = "Kapat";
-        Text[ catalan ] = "Cerrar";
+        Text[ catalan ] = "Tanca";
         Text[ finnish ] = "Sulje";
     };
     Text[ portuguese ] = "Mostrar HId";
@@ -3946,7 +3953,7 @@ FloatingWindow IDD_DISPLAY_HID {
     Text[ chinese_traditional ] = "Display HId";
     Text[ arabic ] = "Display HId";
     Text[ turkish ] = "G�r�nt�le: HId";
-    Text[ catalan ] = "Mostrar HId";
+    Text[ catalan ] = "Visualitza l'HId";
     Text[ finnish ] = "N�yt� piilotunnus";
 };
 
@@ -4081,7 +4088,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ chinese_traditional ] = "Name";
         Text[ arabic ] = "Name";
         Text[ turkish ] = "Ad";
-        Text[ catalan ] = "Nombre";
+        Text[ catalan ] = "Nom";
         Text[ finnish ] = "Nimi";
     };
     FixedText RID_FT_CONTENT {
@@ -4106,7 +4113,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ chinese_traditional ] = "Content";
         Text[ arabic ] = "Content";
         Text[ turkish ] = "��erik";
-        Text[ catalan ] = "Contenido";
+        Text[ catalan ] = "Contingut";
         Text[ finnish ] = "Sis�lt�";
     };
     FixedText RID_FT_NEW_CONTENT {
@@ -4131,7 +4138,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ chinese_traditional ] = "New content";
         Text[ arabic ] = "New content";
         Text[ turkish ] = "Yeni i�erik";
-        Text[ catalan ] = "Nuevo contenido";
+        Text[ catalan ] = "Nou contingut";
         Text[ finnish ] = "Uusi sis�lt�";
     };
     FixedText RID_FT_NAME_VALUE {
@@ -4151,12 +4158,12 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ polish ] = "Name of variable";
         Text[ portuguese_brazilian ] = "name der variablen";
         Text[ japanese ] = "Name of variable";
-        Text[ korean ] = "변수 명";
+        Text[ korean ] = "변수 이름";
         Text[ chinese_simplified ] = "Name of variable";
         Text[ chinese_traditional ] = "name of variable";
         Text[ arabic ] = "Name of variable";
         Text[ turkish ] = "De�i�ken ad�";
-        Text[ catalan ] = "nombre de variables";
+        Text[ catalan ] = "Nom de variables";
         Text[ finnish ] = "Muuttujan nimi";
     };
     FixedText RID_FT_CONTENT_VALUE {
@@ -4181,7 +4188,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ chinese_traditional ] = "Previous content";
         Text[ arabic ] = "Previous contents";
         Text[ turkish ] = "Eski i�erik";
-        Text[ catalan ] = "Contenido antiguo";
+        Text[ catalan ] = "Contingut vell";
         Text[ finnish ] = "Edellinen sis�lt�";
     };
     RadioButton RID_RB_NEW_BOOL_T {
@@ -4208,7 +4215,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ chinese_traditional ] = "True";
         Text[ arabic ] = "True";
         Text[ turkish ] = "Do�ru";
-        Text[ catalan ] = "Verdadero";
+        Text[ catalan ] = "Veritable";
         Text[ finnish ] = "Tosi";
     };
     RadioButton RID_RB_NEW_BOOL_F {
@@ -4235,7 +4242,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ chinese_traditional ] = "False";
         Text[ arabic ] = "False";
         Text[ turkish ] = "Yanl��";
-        Text[ catalan ] = "Falso";
+        Text[ catalan ] = "Fals";
         Text[ finnish ] = "Ep�tosi";
     };
     NumericField RID_NF_NEW_INTEGER {
@@ -4291,7 +4298,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ chinese_traditional ] = "Edit";
         Text[ arabic ] = "Edit";
         Text[ turkish ] = "D�zenle";
-        Text[ catalan ] = "Editar";
+        Text[ catalan ] = "Edita";
         Text[ finnish ] = "Muokkaa";
     };
     OKButton RID_OK {
@@ -4378,12 +4385,12 @@ FloatingWindow LOAD_CONF {
         Text[ polish ] = "File.win";
         Text[ portuguese_brazilian ] = "Datei.win";
         Text[ japanese ] = "File.win";
-        Text[ korean ] = "File.win";
+        Text[ korean ] = "파일.win";
         Text[ chinese_simplified ] = "File.win";
         Text[ chinese_traditional ] = "File.win";
         Text[ arabic ] = "File.win";
         Text[ turkish ] = "File.win";
-        Text[ catalan ] = "Archivo.win";
+        Text[ catalan ] = "Fitxer.win";
         Text[ finnish ] = "Tiedosto.win";
     };
     Text[ portuguese ] = "A ler ficheiros de configura��o";
@@ -4398,14 +4405,17 @@ FloatingWindow LOAD_CONF {
     Text[ polish ] = "Reading Configuration Files";
     Text[ portuguese_brazilian ] = "Lese Konfigurationsdateien";
     Text[ japanese ] = "Reading Configuration Files";
-    Text[ korean ] = "컨피규레이션 파일 읽기";
+    Text[ korean ] = "구성 파일 읽기";
     Text[ chinese_simplified ] = "Reading Configuration Files";
-    Text[ chinese_traditional ] = "讀取配置文件";
+    Text[ chinese_traditional ] = "Reading Configuration Files";
     Text[ arabic ] = "Reading Configuration Files";
     Text[ turkish ] = "Konfig�rasyon dosyalar� okunuyor";
-    Text[ catalan ] = "Leyendo archivos de configuraci�n";
+    Text[ catalan ] = "S'estan llegint els fitxers de configuraci�";
     Text[ finnish ] = "Luetaan kokoonpanotiedostoja";
 };
+
+
+
 
 
 
