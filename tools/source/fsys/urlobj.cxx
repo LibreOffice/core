@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:45:17 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2973,7 +2973,7 @@ bool INetURLObject::insertName(UniString const & rTheName, bool bOctets,
         return false;
 
     sal_Unicode const * pPrefixEnd;
-    sal_Unicode const * pSuffixBegin;
+    sal_Unicode const * pSuffixBegin = 0;
     bool bPrefixSlash = true;
     if (nIndex == LAST_SEGMENT)
     {
@@ -3814,9 +3814,9 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin,
                  STATE_IP6_HEXSEQ2_COLON, STATE_IP6_HEXSEQ2_MAYBE_IP4,
                  STATE_IP6_IP4, STATE_IP6_IP4_DOT, STATE_IP6_DONE };
     UniString aTheCanonic;
-    sal_uInt32 nNumber;
-    int nDigits;
-    int nOctets;
+    sal_uInt32 nNumber = 0;
+    int nDigits = 0;
+    int nOctets = 0;
     State eState = STATE_INITIAL;
     sal_Unicode const * p = rBegin;
     for (; p != pEnd; ++p)
@@ -4984,7 +4984,7 @@ void INetURLObject::appendUCS4(UniString & rTheText, sal_uInt32 nUCS4,
                                bool bKeepVisibleEscapes)
 {
     bool bEscape;
-    rtl_TextEncoding eTargetCharset;
+    rtl_TextEncoding eTargetCharset = RTL_TEXTENCODING_DONTKNOW;
     switch (eEscapeType)
     {
         case ESCAPE_NO:
@@ -5017,6 +5017,8 @@ void INetURLObject::appendUCS4(UniString & rTheText, sal_uInt32 nUCS4,
             else
                 bEscape = false;
             break;
+        default:
+            bEscape = false;
     }
     if (bEscape)
         switch (eTargetCharset)
